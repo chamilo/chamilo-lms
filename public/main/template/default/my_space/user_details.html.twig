@@ -1,186 +1,189 @@
 {% import '@ChamiloCore/Macros/box.html.twig' as display %}
 
 {% autoescape false %}
-{% if title is defined %}
-    <h2 class="details-title">{{ 'ObjectIcon::COURSE'|mdi_icon(32) }} {{ title }}</h2>
-{% endif %}
-<!-- NO DETAILS -->
-{% if details != true %}
+    {% if title is defined %}
+        <h2 class="details-title">{{ 'ObjectIcon::COURSE'|mdi_icon(32) }} {{ title }}</h2>
+    {% endif %}
+    <!-- NO DETAILS -->
+    {% if details != true %}
 
-    <div class="bg-white p-6 shadow-lg rounded-lg mb-10">
-        <div class="flex flex-wrap">
-            <div class="flex flex-auto lg:flex-1/3 items-start justify-left px-4 text-center lg:text-left">
-                <div class="text-center">
-                    <img class="w-36 h-36 rounded-full mb-4 m-auto" src="{{ user | illustration }}" alt="Avatar">
-                    <h3 class="text-lg font-semibold">{{ user.getFullName }} ({{ user.username }})</h3>
-                    <p class="text-gray-600">{{ user.email }}</p>
+        <div class="bg-white p-6 shadow-lg rounded-lg mb-10">
+            <div class="flex flex-wrap gap-4">
+                <div class="flex flex-auto lg:flex-1/3 items-start justify-left text-center lg:text-left">
+                    <div class="text-center">
+                        <img class="w-36 h-36 rounded-full mb-4 m-auto" src="{{ user | illustration }}" alt="Avatar">
+                        <h3 class="text-lg font-semibold">{{ user.getFullName }} ({{ user.username }})</h3>
+                        <p class="text-gray-600">{{ user.email }}</p>
+                    </div>
                 </div>
-            </div>
-            <div class="flex-auto lg:flex-1/3 px-4">
-                {{ display.reporting_user_details(user) }}
-                {% if user_extra.boss_list %}
-                    <h3 class="font-semibold mt-4">{{ 'Student\'s superior'|trans }}</h3>
-                    {% for boss in user_extra.boss_list %}
-                        <p>{{ boss }}</p>
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <div class="flex-auto lg:flex-1/3 px-4">
-                {{ display.card_widget('First login in platform'|trans, user_extra.first_connection, 'calendar') }}
-                {{ display.card_widget('Latest login in platform'|trans, user_extra.last_connection, 'calendar') }}
+                <div class="flex-auto lg:flex-1/3">
+                    {{ display.reporting_user_details(user) }}
+                    {% if user_extra.boss_list %}
+                        <h3 class="font-semibold mt-4">{{ 'Student\'s superior'|trans }}</h3>
+                        {% for boss in user_extra.boss_list %}
+                            <p>{{ boss }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="flex flex-col lg:flex-1/3 gap-4">
+                    {{ display.card_widget('First login in platform'|trans, user_extra.first_connection, 'calendar') }}
+                    {{ display.card_widget('Latest login in platform'|trans, user_extra.last_connection, 'calendar') }}
 
-                {% if user_extra.legal is defined %}
-                    {{ display.card_widget(user_extra.legal.label, user_extra.legal.url_send, user_extra.legal.datetime) }}
-                {% endif %}
-                {% if user_extra.certificate is defined %}
-                    {{ display.card_widget(user_extra.certificate.label, user_extra.certificate.content) }}
-                {% endif %}
+                    {% if user_extra.legal is defined %}
+                        {{ display.card_widget(user_extra.legal.label, user_extra.legal.url_send, user_extra.legal.datetime) }}
+                    {% endif %}
+                    {% if user_extra.certificate is defined %}
+                        {{ display.card_widget(user_extra.certificate.label, user_extra.certificate.content) }}
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
-    <!-- DETAILS -->
-{% else %}
-    <div class="details bg-white p-6 shadow-lg rounded-lg mb-10">
-        <div class="flex flex-auto">
-            <div class="flex-auto lg:w-1/3 p-2">
-                <div class="flex flex-wrap">
-                    <div class="flex flex-auto lg:flex-1/3 items-start justify-left px-4 text-center lg:text-left">
-                        <div class="text-center">
-                            <img class="w-36 h-36 rounded-full mb-4 m-auto" src="{{ user | illustration }}" alt="Avatar">
-                            <h3 class="text-lg font-semibold">{{ user.getFullName }} ({{ user.username }})</h3>
-                            <p class="text-gray-600">{{ user.email }}</p>
+        <!-- DETAILS -->
+    {% else %}
+        <div class="details bg-white p-6 shadow-lg rounded-lg mb-10">
+            <div class="flex flex-auto">
+                <div class="flex-auto lg:w-1/3 p-2">
+                    <div class="flex flex-wrap">
+                        <div class="flex flex-auto lg:flex-1/3 items-start justify-left px-4 text-center lg:text-left">
+                            <div class="text-center">
+                                <img class="w-36 h-36 rounded-full mb-4 m-auto" src="{{ user | illustration }}"
+                                     alt="Avatar">
+                                <h3 class="text-lg font-semibold">{{ user.getFullName }} ({{ user.username }})</h3>
+                                <p class="text-gray-600">{{ user.email }}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex-auto lg:flex-1/3 px-4">
-                        <hr />
-                        {{ display.reporting_user_details(user) }}
-                        <hr />
-                        {% if user_extra.boss_list %}
-                            <h3 class="font-semibold mt-4">{{ 'Student\'s superior'|trans }}</h3>
-                            {% for boss in user_extra.boss_list %}
-                                <p>{{ boss }}</p>
-                            {% endfor %}
-                        {% endif %}
+                        <div class="flex-auto lg:flex-1/3 px-4">
+                            <hr />
+                            {{ display.reporting_user_details(user) }}
+                            <hr />
+                            {% if user_extra.boss_list %}
+                                <h3 class="font-semibold mt-4">{{ 'Student\'s superior'|trans }}</h3>
+                                {% for boss in user_extra.boss_list %}
+                                    <p>{{ boss }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="flex-auto lg:w-1/3 p-5">
-                <div class="flex flex-wrap">
-                    <div class="flex-auto lg:w-1/2 p-2">
-                        <div class="easy-donut text-center">
-                            <div id="easypiechart-blue" title="{{ 'Progress'|trans }}" class="easypiechart" data-percent="{{ user_extra.student_progress }}">
-                                <span class="percent">{{ user_extra.student_progress }}%</span>
-                            </div>
-                            <div class="easypiechart-legend">
-                                {{ 'Average progress in courses'|trans }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-auto lg:w-1/2 p-2">
-                        <div class="easy-donut text-center">
-                            <div id="easypiechart-red" title="{{ 'Score'|trans }}" class="easypiechart" data-percent="{{ user_extra.student_score }}">
-                                <span class="percent">{{ user_extra.student_score }} </span>
-                            </div>
+                <div class="flex-auto lg:w-1/3 p-5">
+                    <div class="flex flex-wrap">
+                        <div class="flex-auto lg:w-1/2 p-2">
                             <div class="easy-donut text-center">
-                                {{ 'Average progress in courses'|trans }}
+                                <div id="easypiechart-blue" title="{{ 'Progress'|trans }}" class="easypiechart"
+                                     data-percent="{{ user_extra.student_progress }}">
+                                    <span class="percent">{{ user_extra.student_progress }}%</span>
+                                </div>
+                                <div class="easypiechart-legend">
+                                    {{ 'Average progress in courses'|trans }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-auto lg:w-1/2 p-2">
+                            <div class="easy-donut text-center">
+                                <div id="easypiechart-red" title="{{ 'Score'|trans }}" class="easypiechart"
+                                     data-percent="{{ user_extra.student_score }}">
+                                    <span class="percent">{{ user_extra.student_score }} </span>
+                                </div>
+                                <div class="easy-donut text-center">
+                                    {{ 'Average progress in courses'|trans }}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="flex flex-wrap">
-                    <div class="flex-auto lg:w-1/2 p-2">
-                        <div class="card box-widget">
-                            <div class="card-body flex items-center justify-center text-center">
-                                <div class="stat-widget-five flex items-center">
-                                    <div>
-                                        <div class="text-lg font-semibold">
-                                            <i class="mdi mdi-earth text-2xl mr-2" aria-hidden="true"></i>
-                                            {{ user_extra.tools.links }}
-                                        </div>
-                                        <div class="box-name text-sm text-gray-500">
-                                            {{ 'Links accessed'|trans }}
+                    <div class="flex flex-wrap">
+                        <div class="flex-auto lg:w-1/2 p-2">
+                            <div class="card box-widget">
+                                <div class="card-body flex items-center justify-center text-center">
+                                    <div class="stat-widget-five flex items-center">
+                                        <div>
+                                            <div class="text-lg font-semibold">
+                                                <i class="mdi mdi-earth text-2xl mr-2" aria-hidden="true"></i>
+                                                {{ user_extra.tools.links }}
+                                            </div>
+                                            <div class="box-name text-sm text-gray-500">
+                                                {{ 'Links accessed'|trans }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="flex-auto lg:w-1/2 p-2">
-                        <div class="card box-widget">
-                            <div class="card-body flex items-center justify-center text-center">
-                                <div class="stat-widget-five flex items-center">
-                                    <div>
-                                        <div class="text-lg font-semibold">
-                                            <i class="mdi mdi-file-document text-2xl" aria-hidden="true"></i>
-                                            {{ user_extra.tools.documents }}
-                                        </div>
-                                        <div class="box-name text-sm text-gray-500">
-                                            {{ 'Documents'|trans }}
+                        <div class="flex-auto lg:w-1/2 p-2">
+                            <div class="card box-widget">
+                                <div class="card-body flex items-center justify-center text-center">
+                                    <div class="stat-widget-five flex items-center">
+                                        <div>
+                                            <div class="text-lg font-semibold">
+                                                <i class="mdi mdi-file-document text-2xl" aria-hidden="true"></i>
+                                                {{ user_extra.tools.documents }}
+                                            </div>
+                                            <div class="box-name text-sm text-gray-500">
+                                                {{ 'Documents'|trans }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="flex-auto lg:w-1/2 p-2">
-                        <div class="card box-widget">
-                            <div class="card-body flex items-center justify-center text-center">
-                                <div class="stat-widget-five flex items-center">
+                        <div class="flex-auto lg:w-1/2 p-2">
+                            <div class="card box-widget">
+                                <div class="card-body flex items-center justify-center text-center">
+                                    <div class="stat-widget-five flex items-center">
 
-                                    <div>
-                                        <div class="text-lg font-semibold">
-                                            <i class="mdi mdi-pencil text-2xl mr-2" aria-hidden="true"></i>
-                                            {{ user_extra.tools.tasks }}
-                                        </div>
-                                        <div class="box-name text-sm text-gray-500">
-                                            {{ 'Assignments'|trans }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-auto lg:w-1/2 p-2">
-                        <div class="card box-widget">
-                            <div class="card-body flex items-center justify-center text-center">
-                                <div class="stat-widget-five flex items-center">
-                                    <div>
-                                        <div class="text-lg font-semibold">
-                                            <i class="mdi mdi-message-text text-2xl mr-2" aria-hidden="true"></i>
-                                            {{ user_extra.tools.messages }}
-                                        </div>
-                                        <div class="box-name text-sm text-gray-500">
-                                            {{ 'Number of posts for this user'|trans }}
+                                        <div>
+                                            <div class="text-lg font-semibold">
+                                                <i class="mdi mdi-pencil text-2xl mr-2" aria-hidden="true"></i>
+                                                {{ user_extra.tools.tasks }}
+                                            </div>
+                                            <div class="box-name text-sm text-gray-500">
+                                                {{ 'Assignments'|trans }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="flex-auto lg:w-1/2 p-2">
-                        <div class="card box-widget">
-                            <div class="card-body flex items-center justify-center text-center">
-                                <div class="stat-widget-five flex items-center">
-                                    <div>
-                                        <div class="text-lg font-semibold">
-                                            <i class="mdi mdi-upload text-2xl mr-2" aria-hidden="true"></i>
-                                            {{ user_extra.tools.upload_documents }}
-                                        </div>
-                                        <div class="box-name text-sm text-gray-500">
-                                            {{ 'Uploaded documents'|trans }}
+                        <div class="flex-auto lg:w-1/2 p-2">
+                            <div class="card box-widget">
+                                <div class="card-body flex items-center justify-center text-center">
+                                    <div class="stat-widget-five flex items-center">
+                                        <div>
+                                            <div class="text-lg font-semibold">
+                                                <i class="mdi mdi-message-text text-2xl mr-2" aria-hidden="true"></i>
+                                                {{ user_extra.tools.messages }}
+                                            </div>
+                                            <div class="box-name text-sm text-gray-500">
+                                                {{ 'Number of posts for this user'|trans }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="flex-auto lg:w-1/2 p-2">
-                        <div class="card box-widget">
-                            <div class="card-body flex items-center justify-center text-center">
-                                <div class="stat-widget-five flex items-center">
-                                    <i class="mdi mdi-plug text-2xl mr-2" aria-hidden="true"></i>
-                                    <div>
-                                        <div class="text-lg font-semibold">
+                        <div class="flex-auto lg:w-1/2 p-2">
+                            <div class="card box-widget">
+                                <div class="card-body flex items-center justify-center text-center">
+                                    <div class="stat-widget-five flex items-center">
+                                        <div>
+                                            <div class="text-lg font-semibold">
+                                                <i class="mdi mdi-upload text-2xl mr-2" aria-hidden="true"></i>
+                                                {{ user_extra.tools.upload_documents }}
+                                            </div>
+                                            <div class="box-name text-sm text-gray-500">
+                                                {{ 'Uploaded documents'|trans }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-auto lg:w-1/2 p-2">
+                            <div class="card box-widget">
+                                <div class="card-body flex items-center justify-center text-center">
+                                    <div class="stat-widget-five flex items-center">
+                                        <i class="mdi mdi-plug text-2xl mr-2" aria-hidden="true"></i>
+                                        <div>
+                                            <div class="text-lg font-semibold">
                                         <span class="date" title="{{ user_extra.tools.chat_connection }}">
                                             {% if user_extra.tools.chat_connection != '' %}
                                                 {{ user_extra.tools.chat_connection }}
@@ -188,47 +191,47 @@
                                                 {{ 'Not Registered'|trans }}
                                             {% endif %}
                                         </span>
-                                        </div>
-                                        <div class="box-name text-sm text-gray-500">
-                                            {{ 'Latest chat connection'|trans }}
+                                            </div>
+                                            <div class="box-name text-sm text-gray-500">
+                                                {{ 'Latest chat connection'|trans }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="flex-auto lg:w-1/2 p-10">
-                {{ display.card_widget('First login in platform'|trans, user_extra.first_connection, 'calendar') }}
-                {{ display.card_widget('Latest login in platform'|trans, user_extra.last_connection, 'calendar') }}
-                {% if (user_extra.time_spent_course is defined) %}
-                    {{ display.card_widget('Time spent in the course'|trans, user_extra.time_spent_course, 'clock-o') }}
-                {% endif %}
-                {% if user_extra.legal is defined %}
-                    {{ display.card_widget('Legal accepted'|trans, user_extra.legal.datetime, 'gavel', user_extra.legal.icon) }}
-                {% endif %}
+                <div class="flex-auto lg:w-1/2 p-10">
+                    {{ display.card_widget('First login in platform'|trans, user_extra.first_connection, 'calendar') }}
+                    {{ display.card_widget('Latest login in platform'|trans, user_extra.last_connection, 'calendar') }}
+                    {% if (user_extra.time_spent_course is defined) %}
+                        {{ display.card_widget('Time spent in the course'|trans, user_extra.time_spent_course, 'clock-o') }}
+                    {% endif %}
+                    {% if user_extra.legal is defined %}
+                        {{ display.card_widget('Legal accepted'|trans, user_extra.legal.datetime, 'gavel', user_extra.legal.icon) }}
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
-{% endif %}
+    {% endif %}
 
-<script>
-    $(function () {
-        $('#easypiechart-blue').easyPieChart({
-            scaleColor: false,
-            barColor: '#30a5ff',
-            lineWidth: 8,
-            trackColor: '#f2f2f2'
-        });
+    <script>
+      $(function() {
+        $("#easypiechart-blue").easyPieChart({
+          scaleColor: false,
+          barColor: "#30a5ff",
+          lineWidth: 8,
+          trackColor: "#f2f2f2"
+        })
 
-        $('#easypiechart-red').easyPieChart({
-            scaleColor: false,
-            barColor: '#f9243f',
-            lineWidth: 8,
-            trackColor: '#f2f2f2'
-        });
-    });
-</script>
+        $("#easypiechart-red").easyPieChart({
+          scaleColor: false,
+          barColor: "#f9243f",
+          lineWidth: 8,
+          trackColor: "#f2f2f2"
+        })
+      })
+    </script>
 {% endautoescape %}

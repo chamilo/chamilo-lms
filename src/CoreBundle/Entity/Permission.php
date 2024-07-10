@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: PermissionRepository::class)]
-#[ORM\Table(name: 'permissions')]
+#[ORM\Table(name: 'permission')]
 /**
  * A Permission defines something a user role can do.
  * The permissions a role has is determined by the PermissionRelRole entity.

@@ -43,27 +43,27 @@ class ResourceLink implements Stringable
     protected ResourceNode $resourceNode;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: Course::class)]
+    #[ORM\ManyToOne(targetEntity: Course::class, cascade: ['persists'])]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'resourceLinks')]
+    #[ORM\ManyToOne(targetEntity: Session::class, cascade: ['persists'], inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: Usergroup::class)]
+    #[ORM\ManyToOne(targetEntity: Usergroup::class, cascade: ['persists'])]
     #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Usergroup $userGroup = null;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: CGroup::class)]
+    #[ORM\ManyToOne(targetEntity: CGroup::class, cascade: ['persists'])]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CGroup $group = null;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persists'])]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     protected ?User $user = null;
 

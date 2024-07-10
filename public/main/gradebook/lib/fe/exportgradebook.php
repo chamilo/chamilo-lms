@@ -98,8 +98,7 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
  */
 function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf)
 {
-    $headers_in_pdf = '<img src="'.api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/images/header-logo.png">';
-
+    $header = '';
     if (is_array($headers_pdf)) {
         // preparing headers pdf
         $header = '<br/><br/>
@@ -180,7 +179,6 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
     }
     $pdf = new PDF();
     $pdf->set_custom_footer($footer);
-    $pdf->set_custom_header($headers_in_pdf);
     $pdf->content_to_pdf($header.$content_table, $css, $title_pdf);
     exit;
 }

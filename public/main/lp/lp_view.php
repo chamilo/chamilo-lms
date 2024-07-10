@@ -86,8 +86,7 @@ if (!api_is_allowed_to_edit(null, true)) {
     }
 }
 
-$platform_theme = api_get_setting('stylesheets');
-$my_style = $platform_theme;
+$my_style = Container::getThemeHelper()->getVisualTheme();
 $ajaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_item_prerequisites&'.api_get_cidreq();
 $htmlHeadXtra[] = '<script>
 $(function() {

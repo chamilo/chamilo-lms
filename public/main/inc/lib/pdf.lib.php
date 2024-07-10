@@ -399,7 +399,7 @@ class PDF
 
         // Formatting the pdf
         $courseInfo = api_get_course_info($courseCode);
-        self::format_pdf($courseInfo, $completeHeader, $disablePagination);
+        $this->format_pdf($courseInfo, $completeHeader, $disablePagination);
         $document_html = preg_replace($clean_search, '', $document_html);
 
         $document_html = str_replace('../../', '', $document_html);
@@ -697,16 +697,14 @@ class PDF
                 }
             }
 
-            $organization = ChamiloApi::getPlatformLogo('', [], true);
+            $logoSrc = Container::getThemeHelper()->getAssetBase64Encoded('images/header-logo.png');
             // Use custom logo image.
-            $pdfLogo = api_get_setting('pdf_logo_header');
+            $pdfLogo = api_get_setting('platform.pdf_logo_header');
             if ('true' === $pdfLogo) {
-                $visualTheme = api_get_visual_theme();
-                $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
-                if (file_exists($img)) {
-                    $organization = "<img src='$img'>";
-                }
+                $logoSrc = Container::getThemeHelper()->getAssetBase64Encoded('images/pdf_logo_header.png') ?: $logoSrc;
             }
+
+            $organization = "<img src='$logoSrc'>";
 
             $view = new Template('', false, false, false, true, false, false);
             $view->assign('teacher_name', $teachers);
@@ -789,7 +787,7 @@ class PDF
                 $this->pdf->SetHTMLFooter('');
             } else {
                 if (empty($this->custom_header)) {
-                    self::set_header($courseInfo);
+                    $this->set_header($courseInfo);
                 } else {
                     $this->pdf->SetHTMLHeader($this->custom_header, 'E');
                     $this->pdf->SetHTMLHeader($this->custom_header, 'O');

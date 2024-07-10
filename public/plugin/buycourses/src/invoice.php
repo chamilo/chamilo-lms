@@ -39,18 +39,6 @@ $htmlText .= '<link rel="stylesheet" type="text/css" href="plugin.css">';
 $htmlText .= '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CSS_PATH).'base.css">';
 $htmlText .= '<body>';
 
-$organization = ChamiloApi::getPlatformLogo('', [], true);
-// Use custom logo image.
-$pdfLogo = api_get_setting('pdf_logo_header');
-if ('true' === $pdfLogo) {
-    $visualTheme = api_get_visual_theme();
-    $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
-    if (file_exists($img)) {
-        $organization = "<img src='$img'>";
-    }
-}
-$htmlText .= $organization;
-
 // Seller and customer info
 $htmlText .= '<table width="100%">';
 $htmlText .= '<tr>';

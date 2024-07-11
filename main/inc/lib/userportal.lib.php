@@ -1151,7 +1151,7 @@ class IndexManager
             ];
         }
 
-        if (api_is_teacher()) {
+        if (api_is_teacher() || api_is_session_admin()) {
             if (api_get_configuration_value('my_courses_show_pending_work')) {
                 $items[] = [
                     'class' => 'list-pending-student-assignments',

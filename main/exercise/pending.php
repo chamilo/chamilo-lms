@@ -20,7 +20,7 @@ $action = $_REQUEST['a'] ?? null;
 api_block_anonymous_users();
 
 // Only teachers.
-if (false === api_is_teacher()) {
+if (false === api_is_teacher() && false === api_is_session_admin()) {
     api_not_allowed(true);
 }
 
@@ -60,7 +60,8 @@ if (!empty($_GET['path'])) {
 
 if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
     if (api_is_platform_admin() || api_is_course_admin() ||
-        api_is_course_tutor() || api_is_session_general_coach()
+        api_is_course_tutor() || api_is_session_general_coach() ||
+        api_is_session_admin()
     ) {
         $loadExtraData = false;
         if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {

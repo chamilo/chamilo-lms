@@ -642,7 +642,7 @@ switch ($action) {
         );
         break;
     case 'get_exercise_pending_results':
-        if (false === api_is_teacher()) {
+        if ((false === api_is_teacher()) && (false === api_is_session_admin())) {
             exit;
         }
 

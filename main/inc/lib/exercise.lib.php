@@ -2601,11 +2601,11 @@ HOTSPOT;
             }
         }
 
-        if (false === $searchAllTeacherCourses) {
+        if (false === $searchAllTeacherCourses && true === api_is_teacher()) {
             if (empty($courseInfo)) {
                 return [];
             }
-        } else {
+        } elseif (false === api_is_session_admin()) {
             $courses = CourseManager::get_courses_list_by_user_id(api_get_user_id(), $showAttemptsInSessions, false, false);
 
             if (empty($courses)) {
@@ -2669,7 +2669,7 @@ HOTSPOT;
             $sessionCondition = "";
         }
 
-        if (api_is_platform_admin() && $originPending) {
+        if ((api_is_platform_admin() || true === api_is_session_admin()) && $originPending) {
             $session_id_and = " AND (te.session_id = 0 OR $te_access_url_session_filter)";
             $sessionCondition = "";
             if (false !== $searchAllTeacherCourses) {

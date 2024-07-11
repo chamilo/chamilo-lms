@@ -240,24 +240,15 @@ switch ($action) {
         $pdf = new PDF('A4', 'P', ['margin_footer' => 4, 'top' => 40, 'bottom' => 25]);
 
         $table = new HTML_Table(['class' => 'table', 'style' => 'display: block; margin-bottom: 50px;']);
-        $logo = ChamiloApi::getPlatformLogo(
-            api_get_visual_theme(),
-            [
-                'title' => '',
-                'style' => 'max-width:180px, margin-bottom: 100px;',
-                'id' => 'header-logo',
-            ]
-        );
-        $table->setCellContents(0, 0, $logo);
 
         $addLogo = (isset($_GET['add_logo']) && 1 === (int) $_GET['add_logo']);
         if ($addLogo) {
             $secondLogo = api_get_path(SYS_PATH).'custompages/url-images/'.api_get_current_access_url_id().'_url_image_2.png';
             $logo2 = Display::img($secondLogo, null, ['style' => 'height:70px;']);
-            $table->setCellContents(0, 1, $logo2);
+            $table->setCellContents(0, 0, $logo2);
         }
 
-        $table->setCellAttributes(0, 1, ['style' => 'display:block;float:right;text-align:right']);
+        $table->setCellAttributes(0, 0, ['style' => 'display:block;float:right;text-align:right']);
         $pdf->set_custom_header($table->toHtml());
 
         $background = api_get_path(SYS_PATH).'custompages/url-images/'.api_get_current_access_url_id().'_pdf_background.png';

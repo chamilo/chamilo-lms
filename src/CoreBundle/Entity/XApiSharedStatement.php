@@ -28,7 +28,7 @@ class XApiSharedStatement
     #[ORM\Column]
     private ?bool $sent = null;
 
-    public function __construct(array $statement, string $uuid = null, bool $sent = false)
+    public function __construct(array $statement, ?string $uuid = null, bool $sent = false)
     {
         $this->statement = $statement;
         $this->uuid = Uuid::fromString($uuid);

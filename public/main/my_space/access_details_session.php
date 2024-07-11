@@ -378,7 +378,7 @@ if ($form->validate()) {
     @$pdf->setBackground($tpl->theme);
     @$pdf->content_to_pdf(
         $content,
-        '',
+        null,
         $pdfName,
         null,
         'D',
@@ -583,7 +583,7 @@ if ($formByDay->validate()) {
     @$pdf->setBackground($tpl->theme, true);
     @$pdf->content_to_pdf(
         $content,
-        '',
+        null,
         $pdfName,
         null,
         'D',

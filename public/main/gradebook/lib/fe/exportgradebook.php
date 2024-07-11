@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Prints an HTML page with a table containing the gradebook data.
  *
@@ -87,18 +89,17 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
 }
 
 /**
- * This function get a content html for export inside a pdf file.
- *
- * @param    array    table headers
- * @param    array    table body
- * @param    array    pdf headers
- * @param    array    pdf footers
+ * Allows to generate a PDF based on tabulated content.
  */
-function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf)
-{
-    $headers_in_pdf = '<img src="'.api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/images/header-logo.png">';
-
-    if (is_array($headers_pdf)) {
+function export_pdf_with_html(
+    array $headers_table,
+    array $data_table,
+    array $headers_pdf,
+    array $footers_pdf,
+    string $title_pdf
+): never {
+    $header = '';
+    if ($headers_pdf) {
         // preparing headers pdf
         $header = '<br/><br/>
                         <table width="100%" cellspacing="1" cellpadding="5" border="0" class="strong">
@@ -126,12 +127,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
     $footer .= '<div align="right" style="font-weight: bold;">{PAGENO}/{nb}</div>';
 
     // preparing content pdf
-    $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/print.css';
-    if (file_exists($css_file)) {
-        $css = @file_get_contents($css_file);
-    } else {
-        $css = '';
-    }
+    $css = Container::getThemeHelper()->getAssetContents('print.css');
     $items_per_page = 30;
     $count_pages = ceil(count($data_table) / $items_per_page);
     $content_table = '';
@@ -183,7 +179,6 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
     }
     $pdf = new PDF();
     $pdf->set_custom_footer($footer);
-    $pdf->set_custom_header($headers_in_pdf);
     $pdf->content_to_pdf($header.$content_table, $css, $title_pdf);
     exit;
 }

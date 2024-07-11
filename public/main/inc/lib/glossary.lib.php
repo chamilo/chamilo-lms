@@ -952,7 +952,7 @@ class GlossaryManager
         $html = $template->fetch($layout);
         $courseCode = api_get_course_id();
         $pdf = new PDF();
-        $pdf->content_to_pdf($html, '', get_lang('Glossary').'_'.$courseCode, $courseCode);
+        $pdf->content_to_pdf($html, null, get_lang('Glossary').'_'.$courseCode, $courseCode);
     }
 
     /**

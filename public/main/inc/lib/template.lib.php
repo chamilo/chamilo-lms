@@ -1269,7 +1269,12 @@ class Template
                 $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
             }
         } else {
-            $logo = ChamiloApi::getPlatformLogoPath($this->theme);
+            $logo = Container::getThemeHelper()->getThemeAssetUrl('images/header-logo.svg');
+
+            if (empty($logo)) {
+                $logo = Container::getThemeHelper()->getThemeAssetUrl('images/header-logo.png');
+            }
+
             if (!empty($logo)) {
                 $portalImageMeta = '<meta property="og:image" content="'.$logo.'" />'."\n";
                 $portalImageMeta .= '<meta property="twitter:image" content="'.$logo.'" />'."\n";

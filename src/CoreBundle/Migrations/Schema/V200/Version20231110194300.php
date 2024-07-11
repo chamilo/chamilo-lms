@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\Finder\Finder;
 
+use const DIRECTORY_SEPARATOR;
+
 final class Version20231110194300 extends AbstractMigrationChamilo
 {
     public function getDescription(): string

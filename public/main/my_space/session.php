@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Entity\Course;
 
 ob_start();
 $cidReset = true;
@@ -37,12 +38,14 @@ switch ($action) {
     case 'export_to_pdf':
         $allStudents = isset($_GET['all_students']) && 1 === (int) $_GET['all_students'] ? true : false;
         $sessionToExport = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
+        $sessionEntity = $sessionToExport ? api_get_session_entity($sessionToExport) : null;
         $type = isset($_GET['type']) ? $_GET['type'] : 'attendance';
-        $sessionInfo = api_get_session_info($sessionToExport);
-        if (empty($sessionInfo)) {
+        if (empty($sessionEntity)) {
             api_not_allowed(true);
         }
         $courses = Tracking::get_courses_list_from_session($sessionToExport);
+        /** @var array<int, Course> $courseEntityList */
+        $courseEntityList = array_map(fn(array $courseInfo) => api_get_course_entity($courseInfo['c_id']), $courses);
         $studentList = [$studentId];
         if ($allStudents) {
             $users = SessionManager::get_users_by_session($sessionToExport, 0);
@@ -61,15 +64,14 @@ switch ($action) {
             $timeSpentPerCourse = [];
             $progressPerCourse = [];
 
-            foreach ($courses as $course) {
-                $courseId = $course['c_id'];
-                $courseTimeSpent = Tracking::get_time_spent_on_the_course($studentId, $courseId, $sessionToExport);
-                $timeSpentPerCourse[$courseId] = $courseTimeSpent;
+            foreach ($courseEntityList as $course) {
+                $courseTimeSpent = Tracking::get_time_spent_on_the_course($studentId, $course->getId(), $sessionToExport);
+                $timeSpentPerCourse[$course->getId()] = $courseTimeSpent;
                 $timeSpent += $courseTimeSpent;
                 $sql = "SELECT DISTINCT count(course_access_id) as count
                         FROM $table
                         WHERE
-                            c_id = $courseId AND
+                            c_id = {$course->getId()} AND
                             session_id = $sessionToExport AND
                             user_id = $studentId";
                 $result = Database::query($sql);
@@ -77,11 +79,11 @@ switch ($action) {
                 $numberVisits += $row['count'];
                 $courseProgress = Tracking::get_avg_student_progress(
                     $studentId,
-                    $course['code'],
+                    $course,
                     [],
-                    $sessionToExport
+                    $sessionEntity
                 );
-                $progressPerCourse[$courseId] = $courseProgress;
+                $progressPerCourse[$course->getId()] = $courseProgress;
                 $progress += $courseProgress;
             }
 
@@ -139,10 +141,8 @@ switch ($action) {
                 $gradeBookTotal = [0, 0];
                 $totalEvaluations = '0/0 (0%)';
 
-                foreach ($courses as $course) {
-                    $courseId = $course['c_id'];
-                    $courseInfoItem = api_get_course_info_by_id($courseId);
-                    $courseId = $courseInfoItem['real_id'];
+                foreach ($courseEntityList as $course) {
+                    $courseInfoItem = api_get_course_info_by_id($course->getId());
                     $courseCodeItem = $courseInfoItem['code'];
 
                     $isSubscribed = CourseManager::is_user_subscribed_in_course(
@@ -153,17 +153,17 @@ switch ($action) {
                     );
 
                     if ($isSubscribed) {
-                        $timeInSeconds = $timeSpentPerCourse[$courseId];
+                        $timeInSeconds = $timeSpentPerCourse[$course->getId()];
                         $totalCourseTime += $timeInSeconds;
                         $time_spent_on_course = api_time_to_hms($timeInSeconds);
-                        $progress = $progressPerCourse[$courseId];
+                        $progress = $progressPerCourse[$course->getId()];
                         $totalProgress += $progress;
 
                         $bestScore = Tracking::get_avg_student_score(
                             $studentId,
-                            $courseCodeItem,
+                            $course,
                             [],
-                            $sessionToExport,
+                            $sessionEntity,
                             false,
                             false,
                             true
@@ -213,16 +213,13 @@ switch ($action) {
 
             $tpl = new Template('', false, false, false, true, false, false);
             $tpl->assign('title', $pdfTitle);
-            $tpl->assign('session_title', $sessionInfo['name']);
-            $tpl->assign('session_info', $sessionInfo);
+            $tpl->assign('session_title', $sessionEntity->getTitle());
+            $tpl->assign('session_info', $sessionEntity);
             $sessionCategoryTitle = '';
-            if (isset($sessionInfo['session_category_id'])) {
-                $sessionCategory = SessionManager::get_session_category($sessionInfo['session_category_id']);
-                if ($sessionCategory) {
-                    $sessionCategoryTitle = $sessionCategory['name'];
-                }
+            if ($sessionEntity->getCategory()) {
+                $sessionCategoryTitle = $sessionEntity->getCategory()->getTitle();
             }
-            $dateData = SessionManager::parseSessionDates($sessionInfo, false);
+            $dateData = SessionManager::parseSessionDates($sessionEntity, false);
             $dateToString = $dateData['access'];
             $tpl->assign('session_display_dates', $dateToString);
             $tpl->assign('session_category_title', $sessionCategoryTitle);
@@ -234,7 +231,7 @@ switch ($action) {
                 'subtitle',
                 sprintf(
                     get_lang('InSessionXYouHadTheFollowingResults'),
-                    $sessionInfo['name']
+                    $sessionEntity->getTitle()
                 )
             );
             $tpl->assign('table_course', $courseTable);
@@ -246,7 +243,7 @@ switch ($action) {
 
             $params = [
                 'pdf_title' => get_lang('Resume'),
-                'session_info' => $sessionInfo,
+                'session_info' => $sessionEntity,
                 'course_info' => '',
                 'pdf_date' => '',
                 'student_info' => $studentInfo,
@@ -259,7 +256,7 @@ switch ($action) {
             $pdf->setBackground($tpl->theme);
             $mode = 'D';
 
-            $pdfName = $sessionInfo['name'].'_'.$studentInfo['complete_name'];
+            $pdfName = $sessionEntity->getTitle().'_'.$studentInfo['complete_name'];
             if ($allStudents) {
                 $mode = 'F';
                 $pdfName = $studentInfo['complete_name'];
@@ -267,7 +264,7 @@ switch ($action) {
             $pdf->set_footer();
             $result = @$pdf->content_to_pdf(
                 $content,
-                '',
+                null,
                 $pdfName,
                 null,
                 $mode,
@@ -295,7 +292,7 @@ switch ($action) {
                 api_get_path(SYS_ARCHIVE_PATH)
             );
         }
-        $name = $sessionInfo['name'].'_'.api_get_utc_datetime().'.zip';
+        $name = $sessionEntity->getTitle().'_'.api_get_utc_datetime().'.zip';
         DocumentManager::file_send_for_download($tempZipFile, true, $name);
         exit;
         break;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
@@ -7,16 +9,15 @@ use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
+use const DIRECTORY_SEPARATOR;
+
 class Version20240704185300 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return "Fix stylesheet and theme settings and move theme directory during development";
+        return 'Fix stylesheet and theme settings and move theme directory during development';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $this->addSql("DELETE FROM settings WHERE variable IN ('stylesheets', 'theme')");
@@ -40,7 +41,7 @@ class Version20240704185300 extends AbstractMigrationChamilo
             if ($entry->isDir()) {
                 $this->write(
                     sprintf(
-                        "Moving theme directory: %s to %s",
+                        'Moving theme directory: %s to %s',
                         $entry->getRealPath(),
                         $themesDirectory.DIRECTORY_SEPARATOR
                     )

@@ -16,22 +16,7 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 <title>
 <?php echo get_lang('Allowed HTML tags'); ?>
 </title>
-<style type="text/css" media="screen, projection">
-/*<![CDATA[*/
-@import "<?php echo api_get_path(WEB_CSS_PATH); ?>chamilo/default.css";
-/*]]>*/
-</style>
-<?php
-if ('' != api_get_setting('stylesheets')) {
-    ?>
-	<style type="text/css" media="screen, projection">
-	/*<![CDATA[*/
-	@import "<?php echo api_get_path(WEB_CSS_PATH), api_get_setting('stylesheets'); ?>/default.css";
-	/*]]>*/
-	</style>
-<?php
-}
-?>
+  <link rel="stylesheet" href="/build/app.css">
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>">
 <div style="margin:10px;">

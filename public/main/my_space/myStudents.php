@@ -27,7 +27,7 @@ $export = $_GET['export'] ?? false;
 $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
 $action = $_GET['action'] ?? '';
 $origin = api_get_origin();
-$courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : '';
+$courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
 $course = api_get_course_entity($courseId);
 $courseCode = '';
 if (null !== $course) {
@@ -426,7 +426,7 @@ switch ($action) {
             $pdf->setBackground($tpl->theme);
             @$pdf->content_to_pdf(
                 $content,
-                '',
+                null,
                 '',
                 null,
                 'D',

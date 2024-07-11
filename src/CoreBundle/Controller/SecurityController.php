@@ -122,6 +122,7 @@ class SecurityController extends AbstractController
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $user = $this->userHelper->getCurrent();
             $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]);
+
             return new JsonResponse(['isAuthenticated' => true, 'user' => json_decode($data)], Response::HTTP_OK);
         }
 

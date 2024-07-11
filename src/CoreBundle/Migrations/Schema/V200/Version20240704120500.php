@@ -51,7 +51,7 @@ final class Version20240704120500 extends AbstractMigrationChamilo
 
                 $durationInSeconds = $workTime * 60;
 
-                $this->addSql("UPDATE c_student_publication SET duration = ? WHERE iid = ?", [$durationInSeconds, $id]);
+                $this->addSql('UPDATE c_student_publication SET duration = ? WHERE iid = ?', [$durationInSeconds, $id]);
             }
         }
     }
@@ -75,15 +75,15 @@ final class Version20240704120500 extends AbstractMigrationChamilo
             $newDuration = null;
 
             if (preg_match('/(\d+)([h:](\d+)?)?/', $duration, $matches)) {
-                $hours = (int)$matches[1];
+                $hours = (int) $matches[1];
                 $minutes = 0;
                 if (!empty($matches[3])) {
-                    $minutes = (int)$matches[3];
+                    $minutes = (int) $matches[3];
                 }
                 $newDuration = ($hours * 3600) + ($minutes * 60);
             }
 
-            if ($newDuration !== null) {
+            if (null !== $newDuration) {
                 $this->addSql('UPDATE c_attendance_calendar SET duration = ? WHERE iid = ?', [$newDuration, $id]);
             }
         }

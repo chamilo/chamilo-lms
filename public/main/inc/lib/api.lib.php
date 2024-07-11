@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\ServiceHelper\MailHelper;
+use Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -6347,15 +6348,9 @@ function api_get_roles()
 
 function api_get_user_roles(): array
 {
-    $roles = [
-        'ROLE_TEACHER',
-        'ROLE_STUDENT',
-        'ROLE_RRHH',
-        'ROLE_SESSION_MANAGER',
-        'ROLE_STUDENT_BOSS',
-        'ROLE_INVITEE',
-        'ROLE_USER',
-    ];
+    $permissionService = Container::$container->get(PermissionServiceHelper::class);
+
+    $roles = $permissionService->getUserRoles();
 
     return array_combine($roles, $roles);
 }
@@ -7472,4 +7467,18 @@ function api_protect_webservices()
         echo "To enable, add \$_configuration['disable_webservices'] = true; in configuration.php";
         exit;
     }
+}
+
+/**
+ * Checks if a set of roles have a specific permission.
+ *
+ * @param string $permissionSlug The slug of the permission to check.
+ * @param array  $roles          An array of role codes to check against.
+ * @return bool True if any of the roles have the permission, false otherwise.
+ */
+function api_get_permission(string $permissionSlug, array $roles): bool
+{
+    $permissionService = Container::$container->get(PermissionServiceHelper::class);
+
+    return $permissionService->hasPermission($permissionSlug, $roles);
 }

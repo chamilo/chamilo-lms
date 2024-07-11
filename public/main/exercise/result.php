@@ -120,7 +120,6 @@ switch ($action) {
         if ($allowExportPdf) {
             $allAnswers = $stats['all_answers_html'];
             @$pdf = new PDF();
-            $cssFile = api_get_path(SYS_CSS_PATH).'themes/chamilo/default.css';
             $title = get_lang('ResponseReport');
             $exerciseTitle = $objExercise->get_formated_title();
             $studentInfo = api_get_user_info($student_id);
@@ -138,7 +137,7 @@ switch ($action) {
                     $userHeader
                     $allAnswers
                     </body></html>",
-                file_get_contents($cssFile),
+                null,
                 $filename,
                 api_get_course_id(),
                 'D',

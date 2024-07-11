@@ -107,7 +107,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
         }
 
         $this->addSql('UPDATE c_forum_thread SET thread_date = NOW() WHERE thread_date is NULL OR thread_date = 0');
-	$this->addSql('UPDATE c_forum_thread SET forum_id = NULL WHERE forum_id IS NOT NULL AND forum_id NOT IN (SELECT iid FROM c_forum_forum) ');
+        $this->addSql('UPDATE c_forum_thread SET forum_id = NULL WHERE forum_id IS NOT NULL AND forum_id NOT IN (SELECT iid FROM c_forum_forum) ');
         $this->addSql('ALTER TABLE c_forum_thread CHANGE thread_date thread_date DATETIME NOT NULL');
 
         if (false === $table->hasColumn('resource_node_id')) {

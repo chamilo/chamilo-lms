@@ -8444,8 +8444,7 @@ class learnpath
             return '';
         }
 
-        $themeHelper = Container::$container->get(ThemeHelper::class);
-        $path = $themeHelper->getThemeAssetUrl("lp_icons/$icon");
+        $path = Container::getThemeHelper()->getThemeAssetUrl("lp_icons/$icon");
 
         return Display::img($path);
     }

@@ -16,6 +16,7 @@ use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
+use const DIRECTORY_SEPARATOR;
 use const PHP_EOL;
 
 final class ColorThemeStateProcessor implements ProcessorInterface
@@ -24,10 +25,13 @@ final class ColorThemeStateProcessor implements ProcessorInterface
         private readonly ProcessorInterface $persistProcessor,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly EntityManagerInterface $entityManager,
-        #[Autowire(service: 'oneup_flysystem.themes_filesystem')] private readonly FilesystemOperator $filesystem,
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
+        private readonly FilesystemOperator $filesystem,
     ) {}
 
     /**
+     * @param mixed $data
+     *
      * @throws FilesystemException
      */
     public function process($data, Operation $operation, array $uriVariables = [], array $context = [])

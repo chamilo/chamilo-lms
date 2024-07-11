@@ -4,8 +4,8 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Masterminds\HTML5;
+use Mpdf\HTMLParserMode;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
 
@@ -64,7 +64,7 @@ class PDF
         $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
 
         $params = [
-            'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf',
+            'tempDir' => Container::getParameter('kernel.cache_dir').'/mpdf',
             'mode' => 'utf-8',
             'format' => $pageFormat,
             'orientation' => $orientation,
@@ -77,9 +77,9 @@ class PDF
         ];
 
         // Default value is 96 set in the mpdf library file config.php
-        $value = api_get_setting('platform.pdf_img_dpi');
-        if (!empty($value)) {
-            $params['img_dpi'] = (int) $value;
+        $value = (int) api_get_setting('platform.pdf_img_dpi');
+        if ($value) {
+            $params['img_dpi'] = $value;
         }
         $this->pdf = new Mpdf($params);
     }
@@ -158,11 +158,7 @@ class PDF
             return $html;
         }
 
-        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.$tpl->theme.'/print.css';
-        if (!file_exists($css_file)) {
-            $css_file = api_get_path(SYS_CSS_PATH).'print.css';
-        }
-        $css = file_get_contents($css_file);
+        $css = Container::getThemeHelper()->getAssetContents('print.css');
 
         self::content_to_pdf(
             $html,
@@ -377,7 +373,7 @@ class PDF
      */
     public function content_to_pdf(
         $document_html,
-        $css = '',
+        ?string $css = null,
         $pdf_name = '',
         $courseCode = null,
         $outputMode = 'D',
@@ -403,12 +399,9 @@ class PDF
 
         // Formatting the pdf
         $courseInfo = api_get_course_info($courseCode);
-        self::format_pdf($courseInfo, $completeHeader, $disablePagination);
+        $this->format_pdf($courseInfo, $completeHeader, $disablePagination);
         $document_html = preg_replace($clean_search, '', $document_html);
 
-        //absolute path for frames.css //TODO: necessary?
-        $absolute_css_path = api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/frames.css';
-        $document_html = str_replace('href="./css/frames.css"', 'href="'.$absolute_css_path.'"', $document_html);
         $document_html = str_replace('../../', '', $document_html);
         $document_html = str_replace('../', '', $document_html);
         $document_html = str_replace(
@@ -417,10 +410,28 @@ class PDF
             $document_html
         );
 
-        if (!empty($courseInfo['path'])) {
-            $doc = new DOMDocument();
-            @$doc->loadHTML($document_html);
+        $basicStyles = [];
 
+        $doc = new DOMDocument();
+        @$doc->loadHTML($document_html);
+
+        $linksToRemove = [];
+
+        foreach ($doc->getElementsByTagName('link') as $link) {
+            if ($link->getAttribute('href') === './css/frames.css') {
+                $linksToRemove[] = $link;
+            }
+        }
+
+        foreach ($linksToRemove as $link) {
+            $link->parentNode->removeChild($link);
+        }
+
+        $basicStyles[] = Container::getThemeHelper()->getAssetContents('frames.css');
+
+        $document_html = $doc->saveHTML();
+
+        if (!empty($courseInfo['path'])) {
             //Fixing only images @todo do the same thing with other elements
             $elements = $doc->getElementsByTagName('img');
             $protocol = api_get_protocol();
@@ -474,17 +485,16 @@ class PDF
         }
 
         if (!empty($css)) {
-            $this->pdf->WriteHTML($css, 1);
+            $this->pdf->WriteHTML($css, HTMLParserMode::HEADER_CSS);
         }
 
         if ($addDefaultCss) {
-            $themeHelper = Container::$container->get(ThemeHelper::class);
-            $basicStyles = [
-                $themeHelper->getThemeAssetUrl('default.css'),
-            ];
-            foreach ($basicStyles as $style) {
-                $cssContent = file_get_contents($style);
-                @$this->pdf->WriteHTML($cssContent, 1);
+            $basicStyles[] = Container::getThemeHelper()->getAssetContents('default.css');
+        }
+
+        foreach ($basicStyles as $cssContent) {
+            if ($cssContent) {
+                @$this->pdf->WriteHTML($cssContent, HTMLParserMode::HEADER_CSS);
             }
         }
 
@@ -687,16 +697,14 @@ class PDF
                 }
             }
 
-            $organization = ChamiloApi::getPlatformLogo('', [], true);
+            $logoSrc = Container::getThemeHelper()->getAssetBase64Encoded('images/header-logo.png');
             // Use custom logo image.
-            $pdfLogo = api_get_setting('pdf_logo_header');
+            $pdfLogo = api_get_setting('platform.pdf_logo_header');
             if ('true' === $pdfLogo) {
-                $visualTheme = api_get_visual_theme();
-                $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
-                if (file_exists($img)) {
-                    $organization = "<img src='$img'>";
-                }
+                $logoSrc = Container::getThemeHelper()->getAssetBase64Encoded('images/pdf_logo_header.png') ?: $logoSrc;
             }
+
+            $organization = "<img src='$logoSrc'>";
 
             $view = new Template('', false, false, false, true, false, false);
             $view->assign('teacher_name', $teachers);
@@ -779,7 +787,7 @@ class PDF
                 $this->pdf->SetHTMLFooter('');
             } else {
                 if (empty($this->custom_header)) {
-                    self::set_header($courseInfo);
+                    $this->set_header($courseInfo);
                 } else {
                     $this->pdf->SetHTMLHeader($this->custom_header, 'E');
                     $this->pdf->SetHTMLHeader($this->custom_header, 'O');
@@ -807,15 +815,11 @@ class PDF
     {
         $this->template = $this->template ?: new Template('', false, false, false, false, false, false);
 
-        $cssFile = api_get_path(SYS_CSS_PATH).'themes/'.$this->template->theme.'/print.css';
-
-        if (!file_exists($cssFile)) {
-            $cssFile = api_get_path(SYS_CSS_PATH).'print.css';
-        }
+        $css = Container::getThemeHelper()->getAssetContents('print.css');
 
         $pdfPath = self::content_to_pdf(
             $html,
-            file_get_contents($cssFile),
+            $css,
             $fileName,
             $this->params['course_code'],
             'F'

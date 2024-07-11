@@ -23,7 +23,7 @@
 
 @layer components {
   .card {
-    @apply rounded shadow-lg w-full;
+    @apply rounded bg-white drop-shadow-lg w-full;
   }
 
   // Buttons with icons.
@@ -153,15 +153,6 @@
     }
   }
 
-  // Card
-  .card {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-    background-color: #fff;
-    margin-bottom: 20px;
-  }
-
   .card .flex {
     display: flex;
     justify-content: space-between;
@@ -185,7 +176,7 @@
     background-color: #f7f7f7;
   }
 
-  .card span {
+  .card span.float-right {
     float: right;
     margin-right: 15px;
     font-size: 14px;
@@ -706,6 +697,54 @@ form .field {
 
 .btn.btn--danger:hover {
   background-color: #dc3545;
+}
+
+.permissions-table {
+  width: 100%;
+  border-collapse: collapse;
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+  }
+  th {
+    background-color: #f9f9f9;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  tr:hover {
+    background-color: #e9e9e9;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #999;
+    color: white;
+  }
+  td {
+    padding: 12px;
+  }
+  input[type="checkbox"] {
+    transform: scale(1.2);
+  }
+  .save-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    margin: 20px 0;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+  }
+  .save-button:hover {
+    background-color: #45a049;
+  }
 }
 
 .filemanager-container {

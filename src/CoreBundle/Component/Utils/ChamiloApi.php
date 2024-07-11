@@ -69,6 +69,8 @@ class ChamiloApi
     /**
      * Get the platform logo path.
      *
+     * @deprecated
+     *
      * @throws Exception
      */
     public static function getPlatformLogoPath(
@@ -152,7 +154,12 @@ class ChamiloApi
         bool $getSysPath = false,
         bool $forcedGetter = false
     ): string {
-        $logoPath = self::getPlatformLogoPath($theme, $getSysPath, $forcedGetter);
+        $logoPath = Container::getThemeHelper()->getThemeAssetUrl('images/header-logo.svg');
+
+        if (empty($logo)) {
+            $logoPath = Container::getThemeHelper()->getThemeAssetUrl('images/header-logo.png');
+        }
+
         $institution = api_get_setting('Institution');
         $institutionUrl = api_get_setting('InstitutionUrl');
         $siteName = api_get_setting('siteName');

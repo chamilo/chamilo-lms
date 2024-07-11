@@ -24,13 +24,13 @@ final class Version20240702222600 extends AbstractMigrationChamilo
         if (!$tblResourceFile->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE resource_file ADD resource_node_id INT DEFAULT NULL');
 
-            $result = $this->connection->executeQuery("SELECT id, resource_file_id FROM resource_node");
+            $result = $this->connection->executeQuery('SELECT id, resource_file_id FROM resource_node');
             $resourceNodeRows = $result->fetchAllAssociative();
 
             foreach ($resourceNodeRows as $resourceNodeRow) {
                 $this->addSql(
                     sprintf(
-                        "UPDATE resource_file SET resource_node_id = %d WHERE id = %d",
+                        'UPDATE resource_file SET resource_node_id = %d WHERE id = %d',
                         $resourceNodeRow['id'],
                         $resourceNodeRow['resource_file_id']
                     )

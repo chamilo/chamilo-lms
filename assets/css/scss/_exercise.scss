@@ -290,6 +290,14 @@
   }
 }
 
+.feedback-green {
+  @apply text-success;
+}
+
+.feedback-red {
+  @apply text-danger line-through;
+}
+
 .question-list-description-block {
   background-color: #fff;
   border: 1px solid #ddd;

@@ -10,6 +10,8 @@
  * @license GNU/GPL
  */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Defines the "OpenofficeText" child of class "learnpath".
  */
@@ -78,13 +80,7 @@ class OpenofficeText extends OpenofficeDocument
         $header = preg_replace("|font\-family[^;]*;|i", '', $header);
 
         // Chamilo styles.
-        $my_style = api_get_setting('stylesheets');
-        if (empty($my_style)) {
-            $my_style = 'chamilo';
-        }
-        $style_to_import = "<style type=\"text/css\">\r\n";
-        $style_to_import .= '@import "'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/default.css";'."\n";
-        $style_to_import .= "</style>\r\n";
+        $style_to_import = Container::getThemeHelper()->getThemeAssetLinkTag('default.css');
         $header = preg_replace("|</head>|i", "\r\n$style_to_import\r\n\\0", $header);
 
         // Line break before and after picture.

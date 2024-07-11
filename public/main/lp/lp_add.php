@@ -15,7 +15,7 @@ use Chamilo\CoreBundle\Framework\Container;
  */
 $this_section = SECTION_COURSES;
 api_protect_course_script();
-$currentstyle = api_get_setting('stylesheets');
+
 $htmlHeadXtra[] = '<script>
 function activate_start_date() {
 	if(document.getElementById(\'start_date_div\').style.display == \'none\') {

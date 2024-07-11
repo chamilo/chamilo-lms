@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ThemeControllerTest extends WebTestCase
 {
-
     public function testValidAccess(): void
     {
         $client = static::createClient();
@@ -36,7 +35,6 @@ class ThemeControllerTest extends WebTestCase
         $client->request('GET', '/themes/chamilo/../../../../../../etc/passwd');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_INTERNAL_SERVER_ERROR);
-
 
         $client->request('GET', 'themes/chamilo/../../../.env');
 

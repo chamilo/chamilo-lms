@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
+use const DIRECTORY_SEPARATOR;
+
 #[Route('/themes')]
 class ThemeController extends AbstractController
 {
@@ -25,21 +27,22 @@ class ThemeController extends AbstractController
     public function index(
         string $name,
         string $path,
-        #[Autowire(service: 'oneup_flysystem.themes_filesystem')] FilesystemOperator $filesystem
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
+        FilesystemOperator $filesystem
     ): Response {
         $themeDir = basename($name);
 
         if (!$filesystem->directoryExists($themeDir)) {
-            throw $this->createNotFoundException("The folder name does not exist.");
+            throw $this->createNotFoundException('The folder name does not exist.');
         }
 
         $filePath = $themeDir.DIRECTORY_SEPARATOR.$path;
 
         if (!$filesystem->fileExists($filePath)) {
-            throw $this->createNotFoundException("The requested file does not exist.");
+            throw $this->createNotFoundException('The requested file does not exist.');
         }
 
-        $response = new StreamedResponse(function () use ($filesystem, $filePath) {
+        $response = new StreamedResponse(function () use ($filesystem, $filePath): void {
             $outputStream = fopen('php://output', 'wb');
 
             $fileStream = $filesystem->readStream($filePath);

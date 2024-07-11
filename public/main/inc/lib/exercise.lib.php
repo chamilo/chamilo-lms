@@ -4842,8 +4842,8 @@ EOT;
     {
         $em = Database::getManager();
 
-        $dql = 'SELECT DISTINCT te.exeUserId FROM ChamiloCoreBundle:TrackEExercise te WHERE te.exeExoId = :id AND te.course = :cId';
-        $dql .= api_get_session_condition($sessionId, true, false, 'te.sessionId');
+        $dql = 'SELECT DISTINCT u.id FROM ChamiloCoreBundle:TrackEExercise te JOIN te.user u WHERE te.quiz = :id AND te.course = :cId';
+        $dql .= api_get_session_condition($sessionId, true, false, 'te.session');
 
         $result = $em
             ->createQuery($dql)
@@ -4853,7 +4853,14 @@ EOT;
         $data = [];
 
         foreach ($result as $item) {
-            $data[] = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId);
+            $attempt = self::get_best_attempt_by_user($item['id'], $exerciseId, $courseId, $sessionId);
+            if (!empty($attempt) && isset($attempt['score']) && isset($attempt['exe_date'])) {
+                $data[] = $attempt;
+            }
+        }
+
+        if (empty($data)) {
+            return [];
         }
 
         usort(

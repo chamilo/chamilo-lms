@@ -34,14 +34,9 @@
       >
         <Column :header="$t('Title')" :sortable="true" field="resourceNode.title">
           <template #body="slotProps">
-            <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile">
-              <ResourceFileLink :resource="slotProps.data" />
-            </div>
-            <div v-else>
-              <a v-if="slotProps.data" class="cursor-pointer" @click="handleClickPersonalFile(slotProps.data)">
-                <v-icon icon="mdi-folder" class="mdi-icon" />
-                {{ slotProps.data.resourceNode.title }}
-              </a>
+            <div>
+              <span :class="['mdi', getIcon(slotProps.data)]" class="mdi-icon" />
+              {{ slotProps.data.resourceNode.title }}
             </div>
           </template>
         </Column>
@@ -83,8 +78,8 @@
 
     <div v-else>
       <div class="thumbnails">
-        <div v-for="file in personalFiles" :key="file.iid" class="thumbnail-item">
-          <div class="thumbnail-icon" @click="handleClickPersonalFile(file)">
+        <div v-for="file in personalFiles" :key="file.iid" class="thumbnail-item" @dblclick="handleDoubleClick(file)" @contextmenu.prevent="showContextMenu($event, file)">
+          <div class="thumbnail-icon">
             <template v-if="isImage(file)">
               <img :src="getFileUrl(file)" :alt="file.resourceNode.title" :title="file.resourceNode.title" class="thumbnail-image" />
             </template>
@@ -92,17 +87,26 @@
               <span :class="['mdi', getIcon(file)]" class="mdi-icon"></span>
             </template>
           </div>
-          <div class="thumbnail-actions">
-            <Button v-if="isAuthenticated" class="btn btn--danger" icon="pi pi-trash" @click="confirmDeleteItemPersonalFile(file)" />
-            <Button v-if="file.resourceNode.firstResourceFile" class="p-button-sm p-button p-mr-2" label="Select" @click="returnToEditor(file)" />
-          </div>
+          <div class="thumbnail-title">{{ file.resourceNode.title }}</div>
         </div>
       </div>
+      <BaseContextMenu :visible="contextMenuVisible" :position="contextMenuPosition" @close="contextMenuVisible = false">
+        <ul>
+          <li @click="selectFile(contextMenuFile)">
+            <span class="mdi mdi-file-check-outline"></span>
+            Select
+          </li>
+          <li @click="confirmDeleteItemPersonalFile(contextMenuFile)">
+            <span class="mdi mdi-delete-outline"></span>
+            Delete
+          </li>
+        </ul>
+      </BaseContextMenu>
     </div>
 
     <Dialog v-model:visible="personalFileDialog" :header="$t('New folder')" :modal="true" :style="{ width: '450px' }" class="p-fluid">
       <div class="p-field">
-        <label for="title">{{ $t("Name") }}</label>
+        <label for="title">{{ $t('Name') }}</label>
         <InputText id="title" v-model.trim="personalFileItem.title" :class="{ 'p-invalid': personalFileSubmitted && !personalFileItem.title }" autocomplete="off" autofocus required />
         <small v-if="personalFileSubmitted && !personalFileItem.title" class="p-error">{{ $t('Title is required') }}</small>
       </div>
@@ -126,7 +130,7 @@
     <Dialog v-model:visible="deleteMultiplePersonalFileDialog" :modal="true" :style="{ width: '450px' }" header="Confirm">
       <div class="confirmation-content">
         <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"></i>
-        <span>{{ $t("Are you sure you want to delete the selected items?") }}</span>
+        <span>{{ $t('Are you sure you want to delete the selected items?') }}</span>
       </div>
       <template #footer>
         <Button class="p-button-text" icon="pi pi-times" label="No" @click="deleteMultiplePersonalFileDialog = false" />
@@ -149,7 +153,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue"
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { storeToRefs } from 'pinia'
@@ -157,7 +161,7 @@ import { useSecurityStore } from '../../store/securityStore'
 import prettyBytes from 'pretty-bytes'
 import { useI18n } from 'vue-i18n'
 import { useFormatDate } from '../../composables/formatDate'
-import ResourceFileLink from "../documents/ResourceFileLink.vue"
+import BaseContextMenu from '../basecomponents/BaseContextMenu.vue'
 
 const { t } = useI18n()
 const { relativeDatetime } = useFormatDate()
@@ -184,12 +188,16 @@ const personalFileItem = ref({})
 const personalFileOptions = ref({ itemsPerPage: 10, page: 1, sortBy: '', sortDesc: false })
 const viewMode = ref('thumbnails') // Default to thumbnails
 
+const contextMenuVisible = ref(false)
+const contextMenuPosition = ref({ x: 0, y: 0 })
+const contextMenuFile = ref(null)
+
 const flattenFilters = (filters) => {
   return Object.keys(filters).reduce((acc, key) => {
-    acc[key] = filters[key];
-    return acc;
-  }, {});
-};
+    acc[key] = filters[key]
+    return acc
+  }, {})
+}
 
 const onUpdatePersonalFileOptions = async () => {
   const filters = flattenFilters({
@@ -198,7 +206,7 @@ const onUpdatePersonalFileOptions = async () => {
     sid: route.query.sid || '',
     gid: route.query.gid || '',
     type: route.query.type || ''
-  });
+  })
 
   await store.dispatch('personalfile/fetchAll', {
     page: personalFileOptions.value.page,
@@ -206,13 +214,13 @@ const onUpdatePersonalFileOptions = async () => {
     sortBy: personalFileOptions.value.sortBy,
     sortDesc: personalFileOptions.value.sortDesc,
     ...filters
-  });
+  })
 }
 
 const uploadDocumentHandler = () => {
-  const uploadRoute = 'FileManagerUploadFile';
-  router.push({ name: uploadRoute, query: route.query, params: { node: route.params.node } });
-};
+  const uploadRoute = 'FileManagerUploadFile'
+  router.push({ name: uploadRoute, query: route.query, params: { node: route.params.node } })
+}
 
 const openNewPersonalFile = () => {
   personalFileItem.value = {}
@@ -235,7 +243,7 @@ const savePersonalFileItem = async () => {
       if (route.params.node) {
         resourceNodeId = route.params.node
       }
-      personalFileItem.value.filetype = "folder"
+      personalFileItem.value.filetype = 'folder'
       personalFileItem.value.parentResourceNodeId = resourceNodeId
       personalFileItem.value.resourceLinkList = JSON.stringify([{
         gid: 0,
@@ -275,7 +283,7 @@ const deletePersonalFileItemButton = async () => {
       personalFileToDelete.value = null
       onUpdatePersonalFileOptions()
     } catch (error) {
-      console.error("An error occurred while deleting the item", error)
+      console.error('An error occurred while deleting the item', error)
     }
   }
 }
@@ -301,10 +309,10 @@ const handleClickPersonalFile = (data) => {
     returnToEditor(data)
   } else {
     const resourceId = data.resourceNode.id
-    personalFileFilters.value["resourceNode.parent"] = resourceId
+    personalFileFilters.value['resourceNode.parent'] = resourceId
 
     router.push({
-      name: "FileManagerList",
+      name: 'FileManagerList',
       params: { node: resourceId },
       query: route.query,
     })
@@ -322,20 +330,20 @@ const returnToEditor = (data) => {
     {
       url: url,
     },
-    "*"
+    '*'
   )
 
   if (parent.tinymce) {
     parent.tinymce.activeEditor.windowManager.close()
   }
 
-  function getUrlParam(paramName) {
-    const reParam = new RegExp("(?:[\\?&]|&amp;)" + paramName + "=([^&]+)", "i")
+  function getUrlParam (paramName) {
+    const reParam = new RegExp('(?:[\\?&]|&amp;)' + paramName + '=([^&]+)', 'i')
     const match = window.location.search.match(reParam)
-    return match && match.length > 1 ? match[1] : ""
+    return match && match.length > 1 ? match[1] : ''
   }
 
-  const funcNum = getUrlParam("CKEditorFuncNum")
+  const funcNum = getUrlParam('CKEditorFuncNum')
   if (window.opener.CKEDITOR) {
     window.opener.CKEDITOR.tools.callFunction(funcNum, url)
     window.close()
@@ -363,17 +371,44 @@ const getFileUrl = (file) => {
 }
 
 const getIcon = (file) => {
+  if (!file.resourceNode.firstResourceFile) {
+    return 'mdi-folder' // Assume it's a folder if no firstResourceFile is present
+  }
   const fileTypeIcons = {
-    'pdf': 'mdi-file-pdf',
-    'doc': 'mdi-file-word',
-    'docx': 'mdi-file-word',
-    'xls': 'mdi-file-excel',
-    'xlsx': 'mdi-file-excel',
+    'pdf': 'mdi-file-pdf-box', // Cambié a un ícono existente
+    'doc': 'mdi-file-word-box',
+    'docx': 'mdi-file-word-box',
+    'xls': 'mdi-file-excel-box',
+    'xlsx': 'mdi-file-excel-box',
     'zip': 'mdi-zip-box',
+    'jpeg': 'mdi-file-image-box',
+    'jpg': 'mdi-file-image-box',
+    'png': 'mdi-file-image-box',
+    'gif': 'mdi-file-image-box',
     'default': 'mdi-file'
   }
   const extension = file.resourceNode.title.split('.').pop().toLowerCase()
   return fileTypeIcons[extension] || fileTypeIcons['default']
+}
+
+const handleDoubleClick = (file) => {
+  selectFile(file)
+}
+
+const openContextMenu = (event) => {
+  contextMenuVisible.value = false
+}
+
+const showContextMenu = (event, file) => {
+  event.preventDefault()
+  contextMenuFile.value = file
+  contextMenuPosition.value = { x: event.clientX, y: event.clientY }
+  contextMenuVisible.value = true
+}
+
+const selectFile = (file) => {
+  returnToEditor(file)
+  contextMenuVisible.value = false
 }
 
 onMounted(() => {

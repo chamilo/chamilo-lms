@@ -32,3 +32,55 @@
     }
   }
 }
+
+.filemanager-container .mdi-icon {
+  @apply text-6xl;
+}
+
+.filemanager-container .thumbnails-container {
+  @apply flex justify-center;
+}
+
+.filemanager-container .thumbnails {
+  @apply flex flex-wrap gap-2.5 justify-center mb-12;
+}
+
+.filemanager-container .thumbnail-item {
+  @apply w-36 p-2 border border-gray-25 rounded-md text-center cursor-pointer;
+}
+
+.filemanager-container .thumbnail-item:hover {
+  @apply bg-gray-15;
+}
+
+.filemanager-container .thumbnail-icon {
+  @apply text-2xl w-24 h-24 object-cover flex items-center justify-center mx-auto;
+}
+
+.filemanager-container .thumbnail-title {
+  @apply mt-2 text-base break-words;
+}
+
+.filemanager-container .thumbnail-actions {
+  @apply mt-2 flex justify-center gap-1;
+}
+
+.filemanager-container .thumbnail-image {
+  @apply w-24 h-24 object-cover;
+}
+
+.context-menu ul {
+  @apply p-0 m-0 list-none;
+}
+
+.context-menu li {
+  @apply flex items-center p-2.5 cursor-pointer transition ease-in-out duration-200;
+}
+
+.context-menu li:hover {
+  @apply bg-gray-20 shadow-inner;
+}
+
+.context-menu li .mdi {
+  @apply mr-2;
+}

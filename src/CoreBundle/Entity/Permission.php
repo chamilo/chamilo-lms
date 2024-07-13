@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 #[ORM\Entity(repositoryClass: PermissionRepository::class)]
 #[ORM\Table(name: 'permission')]
 /**
@@ -49,6 +48,7 @@ class Permission implements Stringable
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -60,6 +60,7 @@ class Permission implements Stringable
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
         return $this;
     }
 
@@ -71,6 +72,7 @@ class Permission implements Stringable
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 

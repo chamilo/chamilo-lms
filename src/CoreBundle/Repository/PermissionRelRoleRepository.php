@@ -19,5 +19,4 @@ class PermissionRelRoleRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, PermissionRelRole::class);
     }
-
 }

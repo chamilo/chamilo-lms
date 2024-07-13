@@ -21,7 +21,7 @@ class PermissionServiceHelper
         $roles = $this->parameterBag->get('security.role_hierarchy.roles');
 
         return array_filter(array_keys($roles), function ($role) {
-            return !str_starts_with($role, 'ROLE_CURRENT_') && $role !== 'ROLE_ANONYMOUS';
+            return !str_starts_with($role, 'ROLE_CURRENT_') && 'ROLE_ANONYMOUS' !== $role;
         });
     }
 
@@ -34,10 +34,11 @@ class PermissionServiceHelper
             ->andWhere('prr.changeable = :changeable')
             ->setParameter('permissionSlug', $permissionSlug)
             ->setParameter('roles', $roles)
-            ->setParameter('changeable', true);
+            ->setParameter('changeable', true)
+        ;
 
         $results = $queryBuilder->getQuery()->getResult();
 
-        return count($results) > 0;
+        return \count($results) > 0;
     }
 }

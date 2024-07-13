@@ -71,7 +71,7 @@ final class Version20201216122012 extends AbstractMigrationChamilo
 
                 $this->entityManager->persist($resource);
 
-                if ($counter % self::BATCH_SIZE === 0) {
+                if (0 === $counter % self::BATCH_SIZE) {
                     $this->entityManager->flush();
                 }
 
@@ -128,7 +128,7 @@ final class Version20201216122012 extends AbstractMigrationChamilo
                 ;
                 $this->entityManager->persist($rootItem);
 
-                if ($counter % self::BATCH_SIZE === 0) {
+                if (0 === $counter % self::BATCH_SIZE) {
                     $this->entityManager->flush();
                 }
 

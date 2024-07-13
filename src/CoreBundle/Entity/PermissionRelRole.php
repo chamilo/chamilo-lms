@@ -7,14 +7,15 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PermissionRelRoleRepository::class)]
 #[ORM\Table(name: 'permission_rel_role')]
 /**
- * The PermissionRelRole entity makes the link between roles 
- * (defined in security.yaml) and permissions (defined by the 
+ * The PermissionRelRole entity makes the link between roles
+ * (defined in security.yaml) and permissions (defined by the
  * Permission entity) to define which user role can do what.
  */
 class PermissionRelRole
@@ -36,7 +37,7 @@ class PermissionRelRole
     private bool $changeable;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTime $updatedAt;
+    private DateTime $updatedAt;
 
     public function getId(): ?int
     {
@@ -51,6 +52,7 @@ class PermissionRelRole
     public function setPermission(Permission $permission): self
     {
         $this->permission = $permission;
+
         return $this;
     }
 
@@ -62,6 +64,7 @@ class PermissionRelRole
     public function setRoleCode(string $roleCode): self
     {
         $this->roleCode = $roleCode;
+
         return $this;
     }
 
@@ -73,17 +76,19 @@ class PermissionRelRole
     public function setChangeable(bool $changeable): self
     {
         $this->changeable = $changeable;
+
         return $this;
     }
 
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): self
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 }

@@ -2886,7 +2886,7 @@ function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
         return true;
     }
 
-    if ($allowDrh && $currentUser->hasRole('ROLE_RRHH')) {
+    if ($allowDrh && $currentUser->hasRole('ROLE_HR')) {
         return true;
     }
 
@@ -3155,7 +3155,7 @@ function api_is_session_admin(?User $user = null)
  */
 function api_is_drh()
 {
-    return api_user_has_role('ROLE_RRHH');
+    return api_user_has_role('ROLE_HR');
 }
 
 /**

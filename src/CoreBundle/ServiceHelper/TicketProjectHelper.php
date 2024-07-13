@@ -51,7 +51,7 @@ class TicketProjectHelper
         $roleMap = [
             1 => 'ROLE_TEACHER',
             17 => 'ROLE_STUDENT_BOSS',
-            4 => 'ROLE_RRHH',
+            4 => 'ROLE_HR',
             3 => 'ROLE_SESSION_MANAGER',
             // ... other mappings can be added as needed
         ];

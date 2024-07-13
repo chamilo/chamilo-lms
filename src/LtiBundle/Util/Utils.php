@@ -56,7 +56,7 @@ class Utils
      */
     public static function generateUserRoles(User $user)
     {
-        if ($user->hasRole('ROLE_RRHH')) {
+        if ($user->hasRole('ROLE_HR')) {
             return 'urn:lti:role:ims/lis/Mentor';
         }
 

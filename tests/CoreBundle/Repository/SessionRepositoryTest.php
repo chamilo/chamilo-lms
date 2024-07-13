@@ -275,7 +275,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $student = $this->createUser('student');
         $sessionAdmin = $this->createUser('session_admin');
         $generalCoach = $this->createUser('general_coach');
-        $drh = $this->createUser('drh', '', '', 'ROLE_RRHH');
+        $drh = $this->createUser('drh', '', '', 'ROLE_HR');
         $courseCoach = $this->createUser('course_coach', '', '', 'ROLE_TEACHER');
 
         // Add session admin + add course to session.

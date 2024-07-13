@@ -66,7 +66,7 @@ class GroupRepository extends ServiceEntityRepository
             [
                 'code' => 'RRHH',
                 'title' => 'Human resources manager',
-                'roles' => ['ROLE_RRHH'],
+                'roles' => ['ROLE_HR'],
             ],
             [
                 'code' => 'SESSION_MANAGER',

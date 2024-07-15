@@ -11183,7 +11183,7 @@ msgstr ""
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr ""
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "Nakalimutan ang iyong password ?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

@@ -11199,7 +11199,7 @@ msgstr "He leído y estoy de acuerdo con los"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "Al hacer clic en el botón 'Registrar' que aparece a continuación, acepta los Términos y Condiciones"
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "¿Ha olvidado su contraseña?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

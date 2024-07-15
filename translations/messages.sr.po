@@ -11183,7 +11183,7 @@ msgstr "Pročitao sam i prihvatam"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "Klikom na dugme 'Registrujte se' ispod, slažete se sa uslovima i načinom koriščenja"
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "Zaboravili ste lozinku?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

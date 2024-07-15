@@ -11183,7 +11183,7 @@ msgstr "Am citit si sunt de acord cu"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "Daca dati click pe butonul 'Registrare' ce va aparea in continuare,acepta Termenii si Conditiile"
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "¿Ati uitat pinul?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

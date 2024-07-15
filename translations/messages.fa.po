@@ -11183,7 +11183,7 @@ msgstr "من مطالعه کرده و موافقت می کنم"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "با کلیک بر روی گزینه \"ثبت نام\" شما با شرایط و ضوابط ما موافقت کرده اید"
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "کلمه عبور خود را فراموش کرده اید؟"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

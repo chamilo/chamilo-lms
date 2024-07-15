@@ -11183,7 +11183,7 @@ msgstr "Lleí y toi d'alcuerdu colos"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "Al calcar nel botón 'Rexistrar' qu'aparez de siguío, aceptes los Términos y Condiciones"
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "¿Escaeciste la contraseña?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

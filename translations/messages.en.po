@@ -11183,8 +11183,8 @@ msgstr "I have read and agree to the"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 
-msgid "Forgot your password ?"
-msgstr "Forgot your password ?"
+msgid "Forgot your password?"
+msgstr "Forgot your password?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."
 msgstr "Enter the username or the e-mail address with which you registered and we will send your password."

@@ -158,7 +158,7 @@ class PermissionFixtures extends Fixture implements FixtureGroupInterface
             'ROLE_ADMIN' => 'ADM',
             'ROLE_SUPER_ADMIN' => 'SUA',
             'ROLE_GLOBAL_ADMIN' => 'GLO',
-            'ROLE_RRHH' => 'HRM',
+            'ROLE_HR' => 'HRM',
             'ROLE_QUESTION_MANAGER' => 'QBM',
             'ROLE_SESSION_MANAGER' => 'SSM',
             'ROLE_STUDENT_BOSS' => 'STB',

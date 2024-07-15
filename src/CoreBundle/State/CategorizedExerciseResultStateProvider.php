@@ -436,7 +436,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
     private function isAllowedToSeeResults(): bool
     {
         $isStudentBoss = $this->security->isGranted('ROLE_STUDENT_BOSS');
-        $isHRM = $this->security->isGranted('ROLE_RRHH');
+        $isHRM = $this->security->isGranted('ROLE_HR');
         $isSessionAdmin = $this->security->isGranted('ROLE_SESSION_MANAGER');
         $isCourseTutor = $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER');
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);

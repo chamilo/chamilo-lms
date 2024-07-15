@@ -20,7 +20,7 @@ export const useSecurityStore = defineStore("security", () => {
 
   const isStudentBoss = computed(() => hasRole.value("ROLE_STUDENT_BOSS"))
 
-  const isHRM = computed(() => hasRole.value("ROLE_RRHH"))
+  const isHRM = computed(() => hasRole.value("ROLE_HR"))
 
   const isTeacher = computed(() => (isAdmin.value ? true : hasRole.value("ROLE_TEACHER")))
 

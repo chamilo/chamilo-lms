@@ -50,21 +50,23 @@ final class Version20230215072918 extends AbstractMigrationChamilo
 
                 if (!empty($items)) {
                     foreach ($items as $item) {
-                        $sessionId = $item['session_id'] ?? 0;
-                        $userId = $item['to_user_id'] ?? 0;
-                        $session = $sessionRepo->find($sessionId);
-                        $user = $userRepo->find($userId);
-                        $item = new CLpRelUser();
-                        $item
-                            ->setUser($user)
-                            ->setCourse($course)
-                            ->setLp($lp)
-                        ;
-                        if (!empty($session)) {
-                            $item->setSession($session);
+                        if (!($item['to_user_id'] === NULL || $item['to_user_id'] === 0)) {
+                            $sessionId = $item['session_id'] ?? 0;
+                            $userId = $item['to_user_id'] ?? 0;
+                            $session = $sessionRepo->find($sessionId);
+                            $user = $userRepo->find($userId);
+                            $item = new CLpRelUser();
+                            $item
+                                ->setUser($user)
+                                ->setCourse($course)
+                                ->setLp($lp)
+                            ;
+                            if (!empty($session)) {
+                                $item->setSession($session);
+                            }
+                            $this->entityManager->persist($item);
+                            $this->entityManager->flush();
                         }
-                        $this->entityManager->persist($item);
-                        $this->entityManager->flush();
                     }
                 }
             }

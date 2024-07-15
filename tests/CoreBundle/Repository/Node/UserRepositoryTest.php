@@ -101,7 +101,7 @@ class UserRepositoryTest extends AbstractApiTest
         $student = $this->createUser('student');
 
         $drh = $this->createUser('drh');
-        $drh->setRoles(['ROLE_RRHH']);
+        $drh->setRoles(['ROLE_HR']);
         $userRepo->update($drh);
 
         $student->addUserRelUser($drh, UserRelUser::USER_RELATION_TYPE_RRHH);
@@ -126,7 +126,7 @@ class UserRepositoryTest extends AbstractApiTest
 
         $this->assertSame('ROLE_TEACHER', User::getRoleFromStatus(1));
         $this->assertSame('ROLE_STUDENT', User::getRoleFromStatus(5));
-        $this->assertSame('ROLE_RRHH', User::getRoleFromStatus(4));
+        $this->assertSame('ROLE_HR', User::getRoleFromStatus(4));
         $this->assertSame('ROLE_SESSION_MANAGER', User::getRoleFromStatus(3));
         $this->assertSame('ROLE_STUDENT_BOSS', User::getRoleFromStatus(17));
         $this->assertSame('ROLE_INVITEE', User::getRoleFromStatus(20));

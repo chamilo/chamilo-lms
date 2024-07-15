@@ -27648,3 +27648,12 @@ msgstr "Some more elements"
 
 msgid "Student boss"
 msgstr "Student boss"
+
+msgid "All sessions"
+msgstr "All sessions"
+
+msgid "Closed sessions"
+msgstr "Closed sessions"
+
+msgid "Add training sessions to categories"
+msgstr "Add training sessions to categories"

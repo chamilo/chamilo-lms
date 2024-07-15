@@ -27647,3 +27647,12 @@ msgstr ""
 
 msgid "Student boss"
 msgstr ""
+
+msgid "All sessions"
+msgstr ""
+
+msgid "Closed sessions"
+msgstr ""
+
+msgid "Add training sessions to categories"
+msgstr ""

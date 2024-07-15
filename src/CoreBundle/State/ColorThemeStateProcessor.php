@@ -42,9 +42,15 @@ final class ColorThemeStateProcessor implements ProcessorInterface
         $colorTheme = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
         if ($colorTheme) {
-            $accessUrlRelColorTheme = (new AccessUrlRelColorTheme())->setColorTheme($colorTheme);
+            $accessUrl = $this->accessUrlHelper->getCurrent();
 
-            $this->accessUrlHelper->getCurrent()->addColorTheme($accessUrlRelColorTheme);
+            $accessUrlRelColorTheme = $accessUrl->getColorThemeByTheme($colorTheme);
+
+            if (!$accessUrlRelColorTheme) {
+                $accessUrlRelColorTheme = (new AccessUrlRelColorTheme())->setColorTheme($colorTheme);
+
+                $this->accessUrlHelper->getCurrent()->addColorTheme($accessUrlRelColorTheme);
+            }
 
             $this->entityManager->flush();
 

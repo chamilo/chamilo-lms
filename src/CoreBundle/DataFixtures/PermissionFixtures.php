@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\DataFixtures;
 
 use Chamilo\CoreBundle\Entity\Permission;
 use Chamilo\CoreBundle\Entity\PermissionRelRole;
+use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -40,12 +41,12 @@ class PermissionFixtures extends Fixture implements FixtureGroupInterface
             $manager->flush();
 
             foreach ($roles as $roleName => $roleCode) {
-                if (in_array($roleCode, $permissionsMapping[$permData['slug']])) {
+                if (\in_array($roleCode, $permissionsMapping[$permData['slug']])) {
                     $permRelRole = new PermissionRelRole();
                     $permRelRole->setPermission($permission);
                     $permRelRole->setRoleCode($roleName);
                     $permRelRole->setChangeable(true);
-                    $permRelRole->setUpdatedAt(new \DateTime());
+                    $permRelRole->setUpdatedAt(new DateTime());
                     $manager->persist($permRelRole);
                 }
             }

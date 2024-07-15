@@ -2135,9 +2135,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'access_to_personal_file_for_all',
                     'title' => 'Access to personal file for all',
-                    'comment' => "Allows all users to access, view, and manage their personal files within the system.",
+                    'comment' => 'Allows all users to access, view, and manage their personal files within the system.',
                 ],
-
             ],
             'language' => [
                 [

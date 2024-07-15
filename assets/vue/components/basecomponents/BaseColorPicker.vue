@@ -1,38 +1,27 @@
 <template>
-  <div class="flex flex-col justify-center gap-0">
-    <p
+  <div class="color-picker">
+    <label
       v-if="label"
-      class="text-body-2 mb-1.5"
       v-text="label"
     />
-    <div class="flex flex-row gap-2 h-10">
+    <InputGroup>
       <input
         :value="hexColor"
-        class="h-12 w-12 cursor-pointer rounded-lg"
         type="color"
         @input="inputColorPicked($event.target.value)"
       />
-      <BaseInputText
-        label=""
-        class="w-32"
-        input-class="mb-0"
+      <InputText
+        :invalid="inputHexError !== ''"
         :model-value="inputText"
-        :error-text="inputHexError"
-        :is-invalid="inputHexError !== ''"
-        :form-submitted="inputHexError !== ''"
         @update:model-value="inputColorPickedFromInputText"
       />
-    </div>
+    </InputGroup>
     <small
       v-if="error"
-      class="text-danger h-4"
+      class="p-error"
     >
       {{ error }}
     </small>
-    <div
-      v-else
-      class="h-4"
-    ></div>
   </div>
 </template>
 
@@ -40,7 +29,8 @@
 import Color from "colorjs.io"
 import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import BaseInputText from "./BaseInputText.vue"
+import InputGroup from "primevue/inputgroup"
+import InputText from "primevue/inputtext"
 
 const { t } = useI18n()
 

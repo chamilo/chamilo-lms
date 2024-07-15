@@ -147,7 +147,7 @@
                 </dd>
             </div>
             <div class="flex mb-2">
-                <dt class="w-1/3 font-semibold">{{ 'OnLine'|trans }}</dt>
+                <dt class="w-1/3 font-semibold">{{ 'Online'|trans }}</dt>
                 <dd class="w-2/3">
                     {#                {{ user.user_is_online }}#}
                     {#                {{ user.online }}#}
@@ -155,7 +155,7 @@
             </div>
             <div class="flex mb-2">
                 <dt class="w-1/3 font-semibold">{{ 'Tel'|trans }}</dt>
-                <dd class="w-2/3">{{ user.phone == '' ? 'NoTel'|trans : user.phone }}</dd>
+                <dd class="w-2/3">{{ user.phone == '' ? 'No tel'|trans : user.phone }}</dd>
             </div>
             {% if user.timezone is defined %}
                 <div class="flex mb-2">

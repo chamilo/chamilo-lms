@@ -151,7 +151,7 @@ class IndexBlocksController extends BaseController
             $items[] = [
                 'class' => 'item-user-import',
                 'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_import.php']),
-                'label' => $this->translator->trans('Import users listImport users list'),
+                'label' => $this->translator->trans('Import users list'),
             ];
             $items[] = [
                 'class' => 'item-user-import-update',
@@ -494,19 +494,19 @@ class IndexBlocksController extends BaseController
         $items[] = [
             'class' => 'item-lti-admin',
             'url' => $this->generateUrl('chamilo_lti_admin'),
-            'label' => $this->translator->trans('External tools'),
+            'label' => $this->translator->trans('External tools (LTI)'),
         ];
 
         $items[] = [
             'class' => 'item-contact-category-admin',
             'url' => $this->generateUrl('chamilo_contact_category_index'),
-            'label' => $this->translator->trans('Contact categories'),
+            'label' => $this->translator->trans('Contact form categories'),
         ];
 
         $items[] = [
             'class' => 'item-system-template-admin',
             'url' => $this->generateUrl('legacy_main', ['name' => 'admin/settings.php', 'category' => 'Templates']),
-            'label' => $this->translator->trans('System Templates'),
+            'label' => $this->translator->trans('System templates'),
         ];
 
         return $items;

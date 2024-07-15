@@ -27657,3 +27657,21 @@ msgstr "Closed sessions"
 
 msgid "Add training sessions to categories"
 msgstr "Add training sessions to categories"
+
+msgid "News from Chamilo"
+msgstr "News from Chamilo"
+
+msgid "System templates"
+msgstr "System templates"
+
+msgid "Contact form categories"
+msgstr "Contact form categories"
+
+msgid "External tools (LTI)"
+msgstr "External tools (LTI)"
+
+msgid "Add course"
+msgstr "Add course"
+
+msgid "Add a user to a course"
+msgstr "Add a user to a course"

@@ -368,7 +368,10 @@ switch ($action) {
         }
         break;
     case 'user_by_role':
-        api_block_anonymous_users(false);
+        if (!api_is_platform_admin()) {
+            api_not_allowed(false, null, 403);
+        }
+
 
         $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : DRH;
         $active = isset($_REQUEST['active']) ? (int) $_REQUEST['active'] : null;

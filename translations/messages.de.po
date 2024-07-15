@@ -50,6 +50,9 @@ msgstr "Badge erstellen"
 msgid "Badges"
 msgstr "Badges"
 
+msgid "Chamilo LMS"
+msgstr "Chamilo LMS"
+
 msgid "Students who acquired skill %s"
 msgstr "Studierende die Fähigkeiten erworben haben %s"
 

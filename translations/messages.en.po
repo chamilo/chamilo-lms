@@ -27523,6 +27523,9 @@ msgstr "Obtained the following skills"
 msgid "Certificate Footer"
 msgstr ""
 
+msgid "Chamilo LMS"
+msgstr "Chamilo LMS"
+
 msgid "The attempted oral questions are %s"
 msgstr "The attempted oral questions are %s"
 

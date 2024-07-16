@@ -469,7 +469,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $form->addElement('radio', 'keyword_subscribe', null, get_lang('This function is only available to trainers'), 0);
     $form->addElement('radio', 'keyword_subscribe', null, get_lang('All'), '%');
     $form->addElement('radio', 'keyword_unsubscribe', get_lang('Unsubscribe'), get_lang('Users are allowed to unsubscribe from this course'), 1);
-    $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('NotUsers are allowed to unsubscribe from this course'), 0);
+    $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('Users are not allowed to unsubscribe from this course'), 0);
     $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('All'), '%');
     $form->addButtonSearch(get_lang('Search courses'));
     $defaults['keyword_language'] = '%';

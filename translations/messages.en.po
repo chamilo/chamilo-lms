@@ -11183,8 +11183,8 @@ msgstr "I have read and agree to the"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 
-msgid "Forgot your password ?"
-msgstr "Forgot your password ?"
+msgid "Forgot your password?"
+msgstr "Forgot your password?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."
 msgstr "Enter the username or the e-mail address with which you registered and we will send your password."
@@ -27523,6 +27523,9 @@ msgstr "Obtained the following skills"
 msgid "Certificate Footer"
 msgstr ""
 
+msgid "Chamilo LMS"
+msgstr "Chamilo LMS"
+
 msgid "The attempted oral questions are %s"
 msgstr "The attempted oral questions are %s"
 
@@ -27642,3 +27645,33 @@ msgstr "Dialog example"
 
 msgid "Some more elements"
 msgstr "Some more elements"
+
+msgid "Student boss"
+msgstr "Student boss"
+
+msgid "All sessions"
+msgstr "All sessions"
+
+msgid "Closed sessions"
+msgstr "Closed sessions"
+
+msgid "Add training sessions to categories"
+msgstr "Add training sessions to categories"
+
+msgid "News from Chamilo"
+msgstr "News from Chamilo"
+
+msgid "System templates"
+msgstr "System templates"
+
+msgid "Contact form categories"
+msgstr "Contact form categories"
+
+msgid "External tools (LTI)"
+msgstr "External tools (LTI)"
+
+msgid "Add course"
+msgstr "Add course"
+
+msgid "Add a user to a course"
+msgstr "Add a user to a course"

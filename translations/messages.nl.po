@@ -11220,7 +11220,7 @@ msgstr "Ik heb het gelezen en ga akkoord met de"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "Door te klikken op 'registreer' hieronder, gaat u akkoord met de algemene termen en condities"
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "Wachtwoord vergeten?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

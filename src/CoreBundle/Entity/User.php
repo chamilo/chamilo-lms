@@ -1743,7 +1743,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return match ($status) {
             COURSEMANAGER => 'ROLE_TEACHER',
             STUDENT => 'ROLE_STUDENT',
-            DRH => 'ROLE_RRHH',
+            DRH => 'ROLE_HR',
             SESSIONADMIN => 'ROLE_SESSION_MANAGER',
             STUDENT_BOSS => 'ROLE_STUDENT_BOSS',
             INVITEE => 'ROLE_INVITEE',
@@ -1949,7 +1949,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function isHRM(): bool
     {
-        return $this->hasRole('ROLE_RRHH');
+        return $this->hasRole('ROLE_HR');
     }
 
     public function getStatus(): int

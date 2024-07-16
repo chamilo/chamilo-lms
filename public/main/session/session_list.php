@@ -355,7 +355,7 @@ $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php"
     Display::getMdiIcon('google-classroom', 'ch-tool-icon-gradient', null, 32, get_lang('Add a training session')).'</a>';
 if (api_is_platform_admin()) {
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
-        Display::getMdiIcon('tab-plus', 'ch-tool-icon-gradient', null, 32, get_lang('Add a training sessionsInCategories')).'</a>';
+        Display::getMdiIcon('tab-plus', 'ch-tool-icon-gradient', null, 32, get_lang('Add training sessions to categories')).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
         Display::getMdiIcon('file-tree-outline', 'ch-tool-icon-gradient', null, 32, get_lang('Sessions categories list')).'</a>';
 }

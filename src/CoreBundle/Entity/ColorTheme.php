@@ -46,7 +46,7 @@ class ColorTheme
     /**
      * @var array<string, mixed>
      */
-    #[Groups(['color_theme:write'])]
+    #[Groups(['color_theme:write', 'access_url_rel_color_theme:read'])]
     #[ORM\Column]
     private array $variables = [];
 

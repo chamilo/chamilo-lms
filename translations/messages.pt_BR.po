@@ -11183,7 +11183,7 @@ msgstr "Eu li e concodei com o"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "Clicando em 'Registrar' logo abaixo você está aceitando as Condições"
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "Esqueceu sua senha?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

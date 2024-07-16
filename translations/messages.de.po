@@ -50,6 +50,9 @@ msgstr "Badge erstellen"
 msgid "Badges"
 msgstr "Badges"
 
+msgid "Chamilo LMS"
+msgstr "Chamilo LMS"
+
 msgid "Students who acquired skill %s"
 msgstr "Studierende die Fähigkeiten erworben haben %s"
 
@@ -11239,7 +11242,7 @@ msgstr "Ich habe gelesen und stimme zu"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "Mit dem  Klick auf \"Registrieren\" stimmen Sie den Nutzungsbedingungen zu"
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

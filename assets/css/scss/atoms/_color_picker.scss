@@ -1,0 +1,29 @@
+.color-picker {
+  @apply flex flex-col flex-grow-0 flex-shrink-0 basis-0 justify-center gap-0 relative;
+
+  label {
+    @apply absolute -top-2.5 left-2 text-caption px-1 bg-white text-primary z-[2] max-w-full truncate;
+  }
+
+  input[type="color"] {
+    @apply h-auto w-12 cursor-pointer p-2 bg-white border-support-3 border border-r-0 transition-none;
+  }
+
+  .p-inputgroup .p-inputtext {
+    @apply w-24 transition-none grow-0 shrink-0;
+  }
+
+  &:hover {
+    input[type="color"],
+    .p-inputgroup .p-inputtext {
+      @apply border-primary;
+    }
+  }
+
+  &:has(.p-inputtext:focus) {
+    input[type="color"],
+    input[type="color"] {
+      @apply border-primary;
+    }
+  }
+}

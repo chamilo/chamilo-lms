@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\DataFixtures\PermissionFixtures;
 use Chamilo\CoreBundle\Entity\Permission;
 use Chamilo\CoreBundle\Entity\PermissionRelRole;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use DateTime;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20240709222700 extends AbstractMigrationChamilo
@@ -42,11 +43,11 @@ final class Version20240709222700 extends AbstractMigrationChamilo
             }
 
             foreach ($roles as $roleName => $roleCode) {
-                if (in_array($roleCode, $permissionsMapping[$permData['slug']])) {
+                if (\in_array($roleCode, $permissionsMapping[$permData['slug']])) {
                     $permissionRelRoleRepository = $this->entityManager->getRepository(PermissionRelRole::class);
                     $existingRelation = $permissionRelRoleRepository->findOneBy([
                         'permission' => $permission,
-                        'roleCode' => $roleName
+                        'roleCode' => $roleName,
                     ]);
 
                     if ($existingRelation) {
@@ -57,7 +58,7 @@ final class Version20240709222700 extends AbstractMigrationChamilo
                     $permissionRelRole->setPermission($permission);
                     $permissionRelRole->setRoleCode($roleName);
                     $permissionRelRole->setChangeable(true);
-                    $permissionRelRole->setUpdatedAt(new \DateTime());
+                    $permissionRelRole->setUpdatedAt(new DateTime());
 
                     $this->entityManager->persist($permissionRelRole);
                     $this->entityManager->flush();

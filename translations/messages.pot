@@ -11182,7 +11182,7 @@ msgstr ""
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr ""
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr ""
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."
@@ -27516,6 +27516,9 @@ msgstr ""
 msgid "Certificate Footer"
 msgstr ""
 
+msgid "Chamilo LMS"
+msgstr ""
+
 msgid "Select date .."
 msgstr ""
 
@@ -27640,4 +27643,34 @@ msgid "Dialog example"
 msgstr ""
 
 msgid "Some more elements"
+msgstr ""
+
+msgid "Student boss"
+msgstr ""
+
+msgid "All sessions"
+msgstr ""
+
+msgid "Closed sessions"
+msgstr ""
+
+msgid "Add training sessions to categories"
+msgstr ""
+
+msgid "News from Chamilo"
+msgstr ""
+
+msgid "System templates"
+msgstr ""
+
+msgid "Contact form categories"
+msgstr ""
+
+msgid "External tools (LTI)"
+msgstr ""
+
+msgid "Add course"
+msgstr ""
+
+msgid "Add a user to a course"
 msgstr ""

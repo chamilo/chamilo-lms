@@ -11412,7 +11412,7 @@ msgstr "J'ai lu et accepte les"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "En cliquant sur le bouton \"Valider mon inscription\" ci-dessous, vous marquez votre accord avec les conditions d'utilisation de ce site."
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "Mot de passe oublié ?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."
@@ -29216,6 +29216,9 @@ msgstr "a obtenu les compétences suivantes "
 
 msgid "Certificate Footer"
 msgstr ""
+
+msgid "Chamilo LMS"
+msgstr "Chamilo LMS"
 
 msgid "No course session for this user"
 msgstr "Pas de cours de session pour cet utilisateur"

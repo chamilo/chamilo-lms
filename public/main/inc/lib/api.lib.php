@@ -2886,7 +2886,7 @@ function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
         return true;
     }
 
-    if ($allowDrh && $currentUser->hasRole('ROLE_RRHH')) {
+    if ($allowDrh && $currentUser->hasRole('ROLE_HR')) {
         return true;
     }
 
@@ -3155,7 +3155,7 @@ function api_is_session_admin(?User $user = null)
  */
 function api_is_drh()
 {
-    return api_user_has_role('ROLE_RRHH');
+    return api_user_has_role('ROLE_HR');
 }
 
 /**
@@ -4370,11 +4370,11 @@ function api_get_status_langvars()
 {
     return [
         COURSEMANAGER => get_lang('Teacher'),
-        SESSIONADMIN => get_lang('SessionsAdmin'),
+        SESSIONADMIN => get_lang('Sessions administrator'),
         DRH => get_lang('Human Resources Manager'),
         STUDENT => get_lang('Learner'),
         ANONYMOUS => get_lang('Anonymous'),
-        STUDENT_BOSS => get_lang('RoleStudentBoss'),
+        STUDENT_BOSS => get_lang('Student boss'),
         INVITEE => get_lang('Invited'),
     ];
 }

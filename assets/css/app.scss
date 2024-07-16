@@ -272,12 +272,7 @@
     @apply w-auto;
   }
 
-  // Forms
-  input {
-    appearance: auto !important;
-    border-width: 1px !important;
-  }
-
+  // Form
   .has-error input, .has-error select {
     border-color: red !important;
   }

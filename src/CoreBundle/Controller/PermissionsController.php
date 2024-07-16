@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Form\PermissionType;
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
 use Chamilo\CoreBundle\Repository\PermissionRepository;
 use Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,7 +51,7 @@ class PermissionsController extends AbstractController
                             $permRelRole->setRoleCode($role);
                         }
                         $permRelRole->setChangeable(true);
-                        $permRelRole->setUpdatedAt(new \DateTime());
+                        $permRelRole->setUpdatedAt(new DateTime());
                         $em->persist($permRelRole);
                     } else {
                         if ($permRelRole) {
@@ -79,7 +80,7 @@ class PermissionsController extends AbstractController
         return $this->render('@ChamiloCore/Permission/index.html.twig', [
             'permissions' => $permissions,
             'forms' => $forms,
-            'roles' => $roles
+            'roles' => $roles,
         ]);
     }
 

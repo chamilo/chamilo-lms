@@ -31,7 +31,5 @@ final class Version20240715183456 extends AbstractMigration
         $this->addSql("DELETE FROM extra_field WHERE variable = 'special_course' AND item_type = $extraFieldType");
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

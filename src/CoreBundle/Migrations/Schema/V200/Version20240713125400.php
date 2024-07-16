@@ -25,9 +25,9 @@ final class Version20240713125400 extends AbstractMigrationChamilo
         foreach ($users as $user) {
             $roles = unserialize($user['roles']);
 
-            if ($roles !== false) {
+            if (false !== $roles) {
                 $updatedRoles = array_map(function ($role) {
-                    return $role === 'ROLE_RRHH' ? 'ROLE_HR' : $role;
+                    return 'ROLE_RRHH' === $role ? 'ROLE_HR' : $role;
                 }, $roles);
 
                 $newRolesSerialized = serialize($updatedRoles);
@@ -35,7 +35,6 @@ final class Version20240713125400 extends AbstractMigrationChamilo
                     'UPDATE user SET roles = ? WHERE id = ?',
                     [$newRolesSerialized, $user['id']]
                 );
-
             }
         }
     }
@@ -49,9 +48,9 @@ final class Version20240713125400 extends AbstractMigrationChamilo
         foreach ($users as $user) {
             $roles = unserialize($user['roles']);
 
-            if ($roles !== false) {
+            if (false !== $roles) {
                 $updatedRoles = array_map(function ($role) {
-                    return $role === 'ROLE_HR' ? 'ROLE_RRHH' : $role;
+                    return 'ROLE_HR' === $role ? 'ROLE_RRHH' : $role;
                 }, $roles);
 
                 $newRolesSerialized = serialize($updatedRoles);

@@ -227,7 +227,7 @@ $form->addText('department_name', get_lang('Department'), false, ['size' => '60'
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
-$form->addText('department_url', get_lang('DepartmentURL'), false, ['size' => '60']);
+$form->addText('department_url', get_lang('Department URL'), false, ['size' => '60']);
 $form->applyFilter('department_url', 'html_filter');
 $form->applyFilter('department_url', 'trim');
 
@@ -242,7 +242,7 @@ $form->addGroup($group, '', get_lang('Subscription'));
 
 $group = [];
 $group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscribe'), get_lang('Users are allowed to unsubscribe from this course'), 1);
-$group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotUsers are allowed to unsubscribe from this course'), 0);
+$group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('Users are not allowed to unsubscribe from this course'), 0);
 $form->addGroup($group, '', get_lang('Unsubscribe'));
 
 $form->addElement('text', 'disk_quota', [get_lang('Disk Space'), null, get_lang('MB')]);
@@ -250,7 +250,7 @@ $form->addRule('disk_quota', get_lang('Required field'), 'required');
 $form->addRule('disk_quota', get_lang('This field should be numeric'), 'numeric');
 
 $form->addText('video_url', get_lang('Video URL'), false);
-$form->addCheckBox('sticky', null, get_lang('Sticky'));
+$form->addCheckBox('sticky', null, get_lang('Special course'));
 
 if ('true' === api_get_setting('course.show_course_duration')) {
     $form->addElement('text', 'duration', get_lang('Duration (in minutes)'), [

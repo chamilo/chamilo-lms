@@ -11183,7 +11183,7 @@ msgstr "Прочетох и съм съгласен с"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "Като щракнете бутона \"Регистриране\" по-долу, Вие се съгласявате с условията за ползване."
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "Забравена парола?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

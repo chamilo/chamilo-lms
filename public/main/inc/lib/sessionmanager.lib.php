@@ -9745,7 +9745,7 @@ class SessionManager
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=close',
             ],
             [
-                'content' => get_lang('Custom sessions'),
+                'content' => get_lang('Custom list'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=custom',
             ],
             /*[

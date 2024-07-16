@@ -11183,7 +11183,7 @@ msgstr "Lín e estou de acordo con"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "Facendo click en 'Rexistro' acepta os Termos e Condicións"
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "Esquenceu o seu contrasinal?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

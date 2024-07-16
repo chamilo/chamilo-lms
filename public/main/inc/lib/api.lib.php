@@ -4370,11 +4370,11 @@ function api_get_status_langvars()
 {
     return [
         COURSEMANAGER => get_lang('Teacher'),
-        SESSIONADMIN => get_lang('SessionsAdmin'),
+        SESSIONADMIN => get_lang('Sessions administrator'),
         DRH => get_lang('Human Resources Manager'),
         STUDENT => get_lang('Learner'),
         ANONYMOUS => get_lang('Anonymous'),
-        STUDENT_BOSS => get_lang('RoleStudentBoss'),
+        STUDENT_BOSS => get_lang('Student boss'),
         INVITEE => get_lang('Invited'),
     ];
 }

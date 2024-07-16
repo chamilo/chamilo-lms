@@ -1215,7 +1215,7 @@ if ($classId) {
 }
 $form->addSelectAjax(
     'class_id',
-    get_lang('SocialGroup').' / '.get_lang('Class'),
+    get_lang('Social group').' / '.get_lang('Class'),
     $options,
     ['url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword']
 );

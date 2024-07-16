@@ -11183,7 +11183,7 @@ msgstr "Irakurri dut eta ados nago"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "Azpian duzun 'Erregistratu' botoian klikatzean, Terminoak eta Baldintzak onartzen ari zara"
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "Ahaztu al duzu pasahitza?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

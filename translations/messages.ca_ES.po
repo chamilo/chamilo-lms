@@ -11183,7 +11183,7 @@ msgstr "He llegit i estic d'acord amb els"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "Al fer clic en el botó 'Registrar' que apareix a continuació, accepta els Termes i Condicions"
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "Ha oblidat la seva contrasenya?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

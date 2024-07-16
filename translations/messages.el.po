@@ -11183,7 +11183,7 @@ msgstr "Διάβασα και συμφωνώ με"
 msgid "By clicking on 'Register' below you are agreeing to the Terms and Conditions"
 msgstr "Πατώντας 'Εγγραφή' συμφωνείτε με τους Όρους και τις Προυποθέσεις"
 
-msgid "Forgot your password ?"
+msgid "Forgot your password?"
 msgstr "Ξεχάσατε τον κωδικό σας?"
 
 msgid "Enter the username or the e-mail address with which you registered and we will send your password."

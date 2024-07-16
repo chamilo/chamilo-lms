@@ -4872,7 +4872,7 @@ msgid "Make unavailable"
 msgstr "Rendre indisponible"
 
 msgid "Style sheets"
-msgstr "feuille de style"
+msgstr "Feuille de style"
 
 msgid "Should the navigation menu show the different tool icons?"
 msgstr "Le menu de navigation devrait-il montrer les différentes icônes d'outil ?"

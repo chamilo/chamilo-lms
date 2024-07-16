@@ -58,10 +58,14 @@
   > small {
     @apply text-caption text-primary;
   }
+
+  &-group {
+    @apply flex gap-4 flex-wrap mb-4 items-start;
+  }
 }
 
 .p-error {
-  @apply text-error;
+  @apply text-error text-caption;
 }
 
 .p-disabled {

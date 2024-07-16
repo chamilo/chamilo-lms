@@ -546,5 +546,6 @@
     "Sender profile picture": "Absenderprofilbild",
     "Receiver profile picture": "Empf\u00e4ngerprofilbild",
     "Carbon copy receiver profile picture": "Empf\u00e4ngerprofilbild in Kopie",
-    "Explore more courses": "Erkunden Sie weitere Kurse"
+    "Explore more courses": "Erkunden Sie weitere Kurse",
+    "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:": "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:"
 }

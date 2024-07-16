@@ -96,7 +96,7 @@ if ($isTccEnabled) {
                         $("input[name=\'extra_terms_codepostal\']").val(monU.CP);
                         $("input[name=\'extra_terms_ville\']").val(monU.Ville);
                     } else {
-                        alert("'.get_lang("UnknownUser").'");
+                        alert("'.get_lang("Unknown user").'");
                     }
 
                 },
@@ -301,7 +301,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
     if ($checkPass) {
         $form->addRule(
             'pass1',
-            get_lang('PassTooEasy').': '.api_generate_password(),
+            get_lang('Password too easy to guess').': '.api_generate_password(),
             'callback',
             'api_check_password'
         );
@@ -357,14 +357,14 @@ if (false === $userAlreadyRegisteredShowTerms &&
         if (in_array('status', $allowedFields)) {
             $form->addRadio(
                 'status',
-                get_lang('RegistrationRoleWhatDoYouWantToDo'),
+                get_lang('What do you want to do?'),
                 [
-                    STUDENT => '<p class="caption">'.get_lang('RegistrationRoleFollowCourses').'</p>',
-                    COURSEMANAGER => '<p class="caption">'.get_lang('RegistrationRoleTeachCourses').'</p>',
+                    STUDENT => '<p class="caption">'.get_lang('Follow courses').'</p>',
+                    COURSEMANAGER => '<p class="caption">'.get_lang('Teach courses').'</p>',
                 ],
                 ['class' => 'register-profile']
             );
-            $form->addRule('status', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('status', get_lang('Required field'), 'required');
         }
     }
 
@@ -631,7 +631,7 @@ if ('approval' === api_get_setting('allow_registration')) {
 
 //if openid was not found
 if (!empty($_GET['openid_msg']) && 'idnotfound' == $_GET['openid_msg']) {
-    $content .= Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
+    $content .= Display::return_message(get_lang('This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID'));
 }
 
 $blockButton = false;
@@ -725,7 +725,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                 );
                 $form->addRule(
                     'legal_accept',
-                    get_lang('This field is required'),
+                    get_lang('Required field'),
                     'required'
                 );
             } else {
@@ -759,11 +759,11 @@ if (false === $userAlreadyRegisteredShowTerms) {
     $form->addCheckBox(
         'extra_platformuseconditions',
         null,
-        get_lang('PlatformUseConditions')
+        get_lang('Platform use conditions')
     );
     $form->addRule(
         'extra_platformuseconditions',
-        get_lang('ThisFieldIsRequired'),
+        get_lang('Required field'),
         'required'
     );
 }
@@ -775,7 +775,7 @@ if ($blockButton) {
     }
     $form->addButton(
         'submit',
-        get_lang('Register User Ok'),
+        get_lang('Register'),
         'check',
         'primary',
         null,
@@ -812,7 +812,7 @@ if ($blockButton) {
         $form->addButton('submit', get_lang('Register'), '', 'primary');
         $form->addHtml('</div>');
     } else {
-        $form->addButtonNext(get_lang('Register User Ok'));
+        $form->addButtonNext(get_lang('Register'));
     }
     $showTerms = true;
 }
@@ -1055,7 +1055,7 @@ if ($form->validate()) {
 
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('You need confirm your accountViae - mail to access the platform'),
+                        get_lang('You need confirm your account via e-mail to access the platform'),
                         'warning'
                     )
                 );

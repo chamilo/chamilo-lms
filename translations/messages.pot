@@ -27674,3 +27674,30 @@ msgstr ""
 
 msgid "Add a user to a course"
 msgstr ""
+
+msgid "Course maintenance"
+msgstr ""
+
+msgid "Customize"
+msgstr ""
+
+msgid "Sort"
+msgstr ""
+
+msgid "Platform use conditions"
+msgstr ""
+
+msgid "Password too easy to guess"
+msgstr ""
+
+msgid "You need confirm your account via e-mail to access the platform"
+msgstr ""
+
+msgid "Redirect to portal home"
+msgstr ""
+
+msgid "Test invisible in session"
+msgstr ""
+
+msgid "Display information about the next incomplete and the last completed topic"
+msgstr ""

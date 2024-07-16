@@ -439,5 +439,6 @@
     "Picture": "K\u00e9p",
     "Sender profile picture": "Sender profile picture",
     "Receiver profile picture": "Receiver profile picture",
-    "Carbon copy receiver profile picture": "Carbon copy receiver profile picture"
+    "Carbon copy receiver profile picture": "Carbon copy receiver profile picture",
+    "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:": "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:"
 }

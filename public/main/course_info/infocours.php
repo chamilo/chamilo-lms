@@ -317,21 +317,21 @@ $group[] = $form->createElement(
     'radio',
     'email_alert_to_teacher_on_new_user_in_course',
     get_lang('E-mail teacher when a new user auto-subscribes'),
-    get_lang('E-mail teacher when a new user auto-subscribesEnable'),
+    get_lang('Enable'),
     1
 );
 $group[] = $form->createElement(
     'radio',
     'email_alert_to_teacher_on_new_user_in_course',
     null,
-    get_lang('E-mail teacher when a new user auto-subscribesToTeacharAndTutor'),
+    get_lang('To teachar and tutor'),
     2
 );
 $group[] = $form->createElement(
     'radio',
     'email_alert_to_teacher_on_new_user_in_course',
     null,
-    get_lang('E-mail teacher when a new user auto-subscribesDisable'),
+    get_lang('Disable'),
     0
 );
 $globalGroup[get_lang('E-mail teacher when a new user auto-subscribes')] = $group;
@@ -341,21 +341,21 @@ $group[] = $form->createElement(
     'radio',
     'email_alert_students_on_new_homework',
     get_lang('E-mail students on assignment creation'),
-    get_lang('E-mail students on assignment creationEnable'),
+    get_lang('Enable'),
     1
 );
 $group[] = $form->createElement(
     'radio',
     'email_alert_students_on_new_homework',
     null,
-    get_lang('E-mail students on assignment creationToHrmEnable'),
+    get_lang('To HR only'),
     2
 );
 $group[] = $form->createElement(
     'radio',
     'email_alert_students_on_new_homework',
     null,
-    get_lang('E-mail students on assignment creationDisable'),
+    get_lang('Disable'),
     0
 );
 $globalGroup[get_lang('E-mail students on assignment creation')] = $group;
@@ -365,28 +365,28 @@ $group[] = $form->createElement(
     'radio',
     'email_alert_manager_on_new_doc',
     get_lang('E-mail on assignments submission by students'),
-    get_lang('E-mail on assignments submission by studentsActivate'),
+    get_lang('Enable'),
     1
 );
 $group[] = $form->createElement(
     'radio',
     'email_alert_manager_on_new_doc',
     null,
-    get_lang('E-mail on assignments submission by studentsActivateOnlyForTeachers'),
+    get_lang('Only for teachers'),
     3
 );
 $group[] = $form->createElement(
     'radio',
     'email_alert_manager_on_new_doc',
     null,
-    get_lang('E-mail on assignments submission by studentsActivateOnlyForStudents'),
+    get_lang('Only for students'),
     2
 );
 $group[] = $form->createElement(
     'radio',
     'email_alert_manager_on_new_doc',
     null,
-    get_lang('E-mail on assignments submission by studentsDeactivate'),
+    get_lang('Disable'),
     0
 );
 
@@ -397,14 +397,14 @@ $group[] = $form->createElement(
     'radio',
     'email_alert_on_new_doc_dropbox',
     get_lang('E-mail users on dropbox file reception'),
-    get_lang('E-mail users on dropbox file receptionActivate'),
+    get_lang('Enable'),
     1
 );
 $group[] = $form->createElement(
     'radio',
     'email_alert_on_new_doc_dropbox',
     null,
-    get_lang('E-mail users on dropbox file receptionDeactivate'),
+    get_lang('Disable'),
     0
 );
 
@@ -459,14 +459,14 @@ $group[] = $form->createElement(
     'radio',
     'allow_user_edit_agenda',
     get_lang('Allow learners to edit the agenda'),
-    get_lang('Allow learners to edit the agendaActivate'),
+    get_lang('Enable'),
     1
 );
 $group[] = $form->createElement(
     'radio',
     'allow_user_edit_agenda',
     null,
-    get_lang('Allow learners to edit the agendaDeactivate'),
+    get_lang('Disable'),
     0
 );
 
@@ -475,14 +475,14 @@ $group2[] = $form->createElement(
     'radio',
     'allow_user_edit_announcement',
     get_lang('Allow learners to edit announcements'),
-    get_lang('Allow learners to edit announcementsActivate'),
+    get_lang('Enable'),
     1
 );
 $group2[] = $form->createElement(
     'radio',
     'allow_user_edit_announcement',
     null,
-    get_lang('Allow learners to edit announcementsDeactivate'),
+    get_lang('Disable'),
     0
 );
 
@@ -491,14 +491,14 @@ $group3[] = $form->createElement(
     'radio',
     'allow_user_image_forum',
     get_lang('User picture in forum'),
-    get_lang('User picture in forumActivate'),
+    get_lang('Enable'),
     1
 );
 $group3[] = $form->createElement(
     'radio',
     'allow_user_image_forum',
     null,
-    get_lang('User picture in forumDeactivate'),
+    get_lang('Disable'),
     0
 );
 
@@ -507,14 +507,14 @@ $group4[] = $form->createElement(
     'radio',
     'allow_user_view_user_list',
     get_lang('Allow user view user list'),
-    get_lang('Allow user view user listActivate'),
+    get_lang('Enable'),
     1
 );
 $group4[] = $form->createElement(
     'radio',
     'allow_user_view_user_list',
     null,
-    get_lang('Allow user view user listDeactivate'),
+    get_lang('Disable'),
     0
 );
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
@@ -582,7 +582,7 @@ $group[] = $form->createElement(
     get_lang('Redirect to the learning paths list'),
     2
 );
-$group[] = $form->createElement('radio', 'enable_lp_auto_launch', null, get_lang('Deactivate'), 0);
+$group[] = $form->createElement('radio', 'enable_lp_auto_launch', null, get_lang('Disable'), 0);
 
 $globalGroup[get_lang('Enable learning path auto-launch')] = $group;
 
@@ -593,14 +593,14 @@ if ('true' === api_get_setting('allow_course_theme')) {
         'radio',
         'allow_learning_path_theme',
         get_lang('Enable course themes'),
-        get_lang('Enable course themesAllow'),
+        get_lang('Enable'),
         1
     );
     $group[] = $form->createElement(
         'radio',
         'allow_learning_path_theme',
         null,
-        get_lang('Enable course themesDisallow'),
+        get_lang('Disable'),
         0
     );
 
@@ -635,7 +635,7 @@ if ('true' === $allowLPReturnLink) {
             'radio',
             'lp_return_link',
             null,
-            get_lang('RedirectToPortalHome'),
+            get_lang('Redirect to portal home'),
             3
         ),
     ];
@@ -652,7 +652,7 @@ if ('true' === $exerciseInvisible &&
         $form->createElement(
             'radio',
             'exercise_invisible_in_session',
-            get_lang('TestinvisibleInSession'),
+            get_lang('Test invisible in session'),
             get_lang('Yes'),
             1
         ),
@@ -665,7 +665,7 @@ if ('true' === $exerciseInvisible &&
         ),
     ];
 
-    $globalGroup[get_lang("TestinvisibleInSession")] = $group;
+    $globalGroup[get_lang("Test invisible in session")] = $group;
 }
 
 if ($isEditable) {
@@ -706,7 +706,7 @@ if ('true' === api_get_setting('exercise.allow_exercise_auto_launch')) {
         get_lang('Redirect to the exercises list'),
         2
     );
-    $group[] = $form->createElement('radio', 'enable_exercise_auto_launch', null, get_lang('Deactivate'), 0);
+    $group[] = $form->createElement('radio', 'enable_exercise_auto_launch', null, get_lang('Disable'), 0);
 
     $globalGroup[get_lang("Auto-launch for exercises")] = $group;
 
@@ -750,7 +750,7 @@ $group[] = $form->createElement(
     'radio',
     'display_info_advance_inside_homecourse',
     null,
-    get_lang('Display information about the next uncompleted topicAndLastDoneAdvance'),
+    get_lang('Display information about the next incomplete and the last completed topic'),
     3
 );
 $group[] = $form->createElement(

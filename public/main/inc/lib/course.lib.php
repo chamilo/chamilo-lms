@@ -2714,53 +2714,37 @@ class CourseManager
     public static function get_special_course_list()
     {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_course_field = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $tbl_course_field_value = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
-        $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
-
         $courseList = [];
-        // get course list auto-register
 
-        $sql = "SELECT id FROM $tbl_course_field
-                WHERE item_type = $extraFieldType AND
-                variable = 'special_course'";
+        // Get list of special courses (appear to all)
+        $sql = "SELECT id FROM $courseTable WHERE sticky = 1";
         $result = Database::query($sql);
-        $courseList = [];
+        while ($row = Database::fetch_assoc($result)) {
+            $courseList[] = $row['id'];
+        }
 
-        if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_assoc($result);
-            // Get list of special courses (appear to all)
-            // Note: The value is better indexed as string, so
-            // using '1' instead of integer is more efficient
-            $sql = "SELECT DISTINCT(item_id) as cid
-                FROM $tbl_course_field_value
-                WHERE field_id = ".$row['id']." AND field_value = '1'";
-            $result = Database::query($sql);
-            while ($row = Database::fetch_assoc($result)) {
-                $courseList[] = $row['cid'];
+        if (count($courseList) < 1) {
+            return $courseList;
+        }
+
+        if (api_get_multiple_access_url()) {
+            // We filter the courses by the active URL
+            $coursesSelect = '';
+            if (1 == count($courseList)) {
+                $coursesSelect = $courseList[0];
+            } else {
+                $coursesSelect = implode(',', $courseList);
             }
-            if (count($courseList) < 1) {
-                return $courseList;
-            }
-            if (api_get_multiple_access_url()) {
-                //we filter the courses by the active URL
-                $coursesSelect = '';
-                if (1 == count($courseList)) {
-                    $coursesSelect = $courseList[0];
-                } else {
-                    $coursesSelect = implode(',', $courseList);
-                }
-                $access_url_id = api_get_current_access_url_id();
-                if (-1 != $access_url_id) {
-                    $sql = "SELECT c_id FROM $tbl_url_course
-                            WHERE access_url_id = $access_url_id
-                            AND c_id IN ($coursesSelect)";
-                    $result = Database::query($sql);
-                    while ($row = Database::fetch_assoc($result)) {
-                        $courseList[] = $row['c_id'];
-                    }
+            $access_url_id = api_get_current_access_url_id();
+            if (-1 != $access_url_id) {
+                $sql = "SELECT c_id FROM $tbl_url_course
+                    WHERE access_url_id = $access_url_id
+                    AND c_id IN ($coursesSelect)";
+                $result = Database::query($sql);
+                while ($row = Database::fetch_assoc($result)) {
+                    $courseList[] = $row['c_id'];
                 }
             }
         }
@@ -3470,16 +3454,14 @@ class CourseManager
      */
     public static function isSpecialCourse($courseId)
     {
-        $extraFieldValue = new ExtraFieldValue('course');
-        $result = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $courseId,
-            'special_course'
-        );
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
 
-        if (!empty($result)) {
-            if (1 == $result['field_value']) {
-                return true;
-            }
+        $sql = "SELECT sticky FROM $courseTable WHERE id = " . intval($courseId);
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        if (!empty($row) &&  1 === (int) $row['sticky']) {
+            return true;
         }
 
         return false;

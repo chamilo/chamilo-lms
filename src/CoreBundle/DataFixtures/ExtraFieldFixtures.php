@@ -77,14 +77,6 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],
             [
-                'variable' => 'special_course',
-                'display_text' => 'Special course',
-                'item_type' => ExtraField::COURSE_FIELD_TYPE,
-                'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
-            ],
-            [
                 'variable' => 'tags',
                 'display_text' => 'Tags',
                 'item_type' => ExtraField::COURSE_FIELD_TYPE,

@@ -8,6 +8,11 @@ defineProps({
     type: String,
     required: true,
   },
+  size: {
+    type: String,
+    required: false,
+    default: "2",
+  },
 })
 
 const cidReqStore = useCidReqStore()
@@ -16,11 +21,16 @@ const { course } = storeToRefs(cidReqStore)
 </script>
 
 <template>
-  <div class="section-header section-header--h2">
-    <h2
+  <div
+    class="section-header"
+    :class="`section-header--h${size}`"
+  >
+    <component
+      :is="`h${size}`"
       class="section-header__title"
-      v-text="title"
-    />
+    >
+      {{ title }}
+    </component>
 
     <div class="section-header__actions">
       <StudentViewButton v-if="course" />

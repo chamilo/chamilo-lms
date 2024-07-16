@@ -83,11 +83,22 @@ abstract class AbstractTool
     public function getTitleToShow(): string
     {
         $title = $this->getTitle();
-        // Exception for course settings (with an 's')
-        if ($title == 'course_setting') {
-            return 'Course settings';
-        } else {
-            return ucfirst(str_replace('_', ' ', $title));
+        // Exception for singular terms that need a plural (with an 's')
+        switch ($title) {
+            case 'course_setting':
+                return 'Course settings';
+            case 'member':
+                return 'Users';
+            case 'announcement':
+                return 'Announcements';
+            case 'attendance':
+                return 'Attendances';
+            case 'link':
+                return 'Links';
+            case 'survey':
+                return 'Surveys';
+            default:
+                return ucfirst(str_replace('_', ' ', $title));
         }
     }
 }

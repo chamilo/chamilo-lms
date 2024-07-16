@@ -764,7 +764,7 @@ class SystemAnnouncementManager
         $sql .= " AND email <>'' AND active = 1 ";
 
         // Expiration date
-        $sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
+        $sql .= " AND (expiration_date IS NULL OR expiration_date > '$now') ";
 
         if ((empty($teacher) || $teacher == '0') && (empty($student) || $student == '0')) {
             return true;

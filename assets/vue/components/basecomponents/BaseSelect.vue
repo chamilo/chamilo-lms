@@ -11,6 +11,7 @@
         :loading="isLoading"
         :show-clear="allowClear"
         @update:model-value="emit('update:modelValue', $event)"
+        @change="emit('change', $event)"
       >
         <template #emptyfilter>--</template>
         <template #empty>
@@ -84,7 +85,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(["update:modelValue"])
+const emit = defineEmits(["update:modelValue", "change"])
 
 const realOptions = computed(() => {
   if (props.hastEmptyValue) {

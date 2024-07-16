@@ -1,5 +1,5 @@
 .color-picker {
-  @apply flex flex-col justify-center gap-0 relative;
+  @apply flex flex-col flex-grow-0 flex-shrink-0 basis-0 justify-center gap-0 relative;
 
   label {
     @apply absolute -top-2.5 left-2 text-caption px-1 bg-white text-primary z-[2] max-w-full truncate;

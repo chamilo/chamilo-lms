@@ -50,7 +50,7 @@ final class Version20230215072918 extends AbstractMigrationChamilo
 
                 if (!empty($items)) {
                     foreach ($items as $item) {
-                        if (!($item['to_user_id'] === NULL || $item['to_user_id'] === 0)) {
+                        if (!(null === $item['to_user_id'] || 0 === $item['to_user_id'])) {
                             $sessionId = $item['session_id'] ?? 0;
                             $userId = $item['to_user_id'] ?? 0;
                             $session = $sessionRepo->find($sessionId);

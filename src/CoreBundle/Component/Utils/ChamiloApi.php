@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Component\Utils;
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Database;
 use DateInterval;
@@ -156,7 +157,7 @@ class ChamiloApi
     ): string {
         $logoPath = Container::getThemeHelper()->getThemeAssetUrl('images/header-logo.svg');
 
-        if (empty($logo)) {
+        if (empty($logoPath)) {
             $logoPath = Container::getThemeHelper()->getThemeAssetUrl('images/header-logo.png');
         }
 

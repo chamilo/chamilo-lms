@@ -1,6 +1,6 @@
 <script setup>
 import BaseSelect from "../basecomponents/BaseSelect.vue"
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import themeService from "../../services/colorThemeService"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
@@ -34,17 +34,26 @@ defineExpose({
   loadThemes,
 })
 
+const emit = defineEmits(["change"])
+
 loadThemes()
+
+function onChange({ value }) {
+  const themeSelected = serverThemes.value.find((accessUrlRelColorTheme) => accessUrlRelColorTheme["@id"] === value)
+
+  emit("change", themeSelected)
+}
 </script>
 
 <template>
   <BaseSelect
     v-model="modelValue"
     :is-loading="isServerThemesLoading"
-    :label="t('Color theme selected')"
+    :label="t('Theme title')"
     :options="serverThemes"
     allow-clear
     option-label="title"
     option-value="@id"
+    @change="onChange"
   />
 </template>

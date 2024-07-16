@@ -12,22 +12,29 @@ async function findAllByCurrentUrl() {
 }
 
 /**
- * Update or create a theme with the title
+ * Create a color theme
  *
- * @param {string|null} iri
  * @param {string} title
  * @param {Object} colors
  * @returns {Promise<Object>}
  */
-async function updateTheme({ iri = null, title, colors }) {
-  if (iri) {
-    return await baseService.put(iri, {
-      title,
-      variables: colors,
-    })
-  }
-
+async function create({ title, colors }) {
   return await baseService.post(url, {
+    title,
+    variables: colors,
+  })
+}
+
+/**
+ * Update a color theme
+ *
+ * @param {string} iri
+ * @param {string} title
+ * @param {Object} colors
+ * @returns {Promise<Object>}
+ */
+async function update({ iri, title, colors }) {
+  return await baseService.put(iri, {
     title,
     variables: colors,
   })
@@ -44,7 +51,8 @@ async function changePlatformColorTheme(iri) {
 }
 
 export default {
-  updateTheme,
+  create,
+  update,
   findAllByCurrentUrl,
   changePlatformColorTheme,
 }

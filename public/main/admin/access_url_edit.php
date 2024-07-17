@@ -6,6 +6,8 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 $cidReset = true;
@@ -57,6 +59,10 @@ if ($httpRequest->query->has('url_id')) {
     $submit_name = get_lang('Add URL');
 }
 
+$form->addHidden(
+    'parentResourceNodeId',
+    Container::$container->get(AccessUrlHelper::class)->getFirstAccessUrl()->resourceNode->getId()
+);
 $form->addButtonCreate($submit_name);
 
 //the first url with id = 1 will be always active

@@ -45,7 +45,7 @@ echo Display::toolbarAction(
 
 Display::page_subheader2($tool_name);
 
-if ($_POST['form_sent']) {
+if (!empty($_POST['form_sent'])) {
     $form_sent = $_POST['form_sent'];
     $users = is_array($_POST['user_list']) ? array_map('intval', $_POST['user_list']) : [];
     $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : [];

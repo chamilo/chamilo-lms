@@ -9,7 +9,6 @@
         />
         <label
           v-t="'Title'"
-          :class="{ 'p-error': v$.item.title.$invalid }"
           for="item_title"
         />
       </div>

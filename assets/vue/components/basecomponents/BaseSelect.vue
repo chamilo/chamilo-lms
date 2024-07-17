@@ -20,7 +20,6 @@
       </Dropdown>
       <label
         v-t="label"
-        :class="{ 'p-error': isInvalid }"
         :for="id"
       />
     </FloatLabel>

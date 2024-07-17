@@ -35,26 +35,23 @@
 </template>
 
 <script setup>
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
-import useVuelidate from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
-import { useI18n } from 'vue-i18n';
-import { computed } from 'vue';
+import InputText from "primevue/inputtext"
+import Button from "primevue/button"
+import useVuelidate from "@vuelidate/core"
+import { required } from "@vuelidate/validators"
+import { useI18n } from "vue-i18n"
+import { computed } from "vue"
 
-const { t } = useI18n();
+const { t } = useI18n()
 
 const props = defineProps({
   modelValue: {
     type: Object,
     default: () => {},
-  }
-});
+  },
+})
 
-const emit = defineEmits([
-  'update:modelValue',
-  'submit',
-]);
+const emit = defineEmits(["update:modelValue", "submit"])
 
 const v$ = useVuelidate(
   {
@@ -67,14 +64,14 @@ const v$ = useVuelidate(
   },
   {
     item: computed(() => props.modelValue),
-  }
-);
+  },
+)
 
-function btnSaveOnClick () {
-  const item = { ...props.modelValue, ...v$.value.item.$model };
+function btnSaveOnClick() {
+  const item = { ...props.modelValue, ...v$.value.item.$model }
 
-  emit('update:modelValue', item);
+  emit("update:modelValue", item)
 
-  emit('submit', item);
+  emit("submit", item)
 }
 </script>

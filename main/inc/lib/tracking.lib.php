@@ -2394,7 +2394,7 @@ class Tracking
                     null,
                     null,
                     null,
-                    $getCount
+                    false
                 );
             } else {
                 $studentList = UserManager::getUsersFollowedByUser(
@@ -2402,7 +2402,7 @@ class Tracking
                     STUDENT,
                     false,
                     false,
-                    $getCount,
+                    false,
                     null,
                     null,
                     null,
@@ -2415,15 +2415,14 @@ class Tracking
                 );
             }
 
-            if ($getCount) {
-                $studentCount = (int) $studentList;
-            } else {
-                $students = [];
-                if (is_array($studentList)) {
-                    foreach ($studentList as $studentData) {
-                        $students[] = $studentData['user_id'];
-                    }
+            $students = [];
+            if (is_array($studentList)) {
+                foreach ($studentList as $studentData) {
+                    $students[] = $studentData['user_id'];
                 }
+            }
+            if ($getCount) {
+                $studentCount = count($students);
             }
 
             $studentBossesList = UserManager::getUsersFollowedByUser(

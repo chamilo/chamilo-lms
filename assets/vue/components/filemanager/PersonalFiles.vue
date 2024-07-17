@@ -7,7 +7,14 @@
           <Button class="btn btn--primary" icon="fa fa-file-upload" label="Upload" @click="uploadDocumentHandler" />
           <Button v-if="selectedPersonalFiles.length" class="btn btn--danger" icon="pi pi-trash" label="Delete" @click="confirmDeleteMultiplePersonalFiles" />
           <Button class="btn btn--primary" :icon="viewModeIcon" @click="toggleViewMode" />
+          <Button v-if="previousFolders.length" class="btn btn--primary" icon="pi pi-arrow-left" label="Back" @click="goBack" />
         </div>
+      </div>
+      <div class="breadcrumbs">
+        <span v-for="(folder, index) in previousFolders" :key="index">
+          <span>{{ folder.title }}</span> /
+        </span>
+        <span>{{ currentFolderTitle }}</span>
       </div>
     </div>
 
@@ -27,16 +34,22 @@
         current-page-report-template="Showing {first} to {last} of {totalRecords}"
         data-key="iid"
         filter-display="menu"
-        paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+        paginator-template="CurrentPageReport FirstPageReportLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
         responsive-layout="scroll"
         @page="onPersonalFilesPage"
         @sort="sortingPersonalFilesChanged"
       >
         <Column :header="$t('Title')" :sortable="true" field="resourceNode.title">
+
           <template #body="slotProps">
             <div>
-              <span :class="['mdi', getIcon(slotProps.data)]" class="mdi-icon" />
-              {{ slotProps.data.resourceNode.title }}
+              <span
+                v-if="!slotProps.data.resourceNode.firstResourceFile" @click="handleClickPersonalFile(slotProps.data)">
+                {{ slotProps.data.resourceNode.title }} folder
+              </span>
+              <span v-else>
+                {{ slotProps.data.resourceNode.title }}
+              </span>
             </div>
           </template>
         </Column>
@@ -78,7 +91,7 @@
 
     <div v-else>
       <div class="thumbnails">
-        <div v-for="file in personalFiles" :key="file.iid" class="thumbnail-item" @dblclick="handleDoubleClick(file)" @contextmenu.prevent="showContextMenu($event, file)">
+        <div v-for="file in personalFiles" :key="file.iid" class="thumbnail-item" @click="handleClickPersonalFile(file)" @contextmenu.prevent="showContextMenu($event, file)">
           <div class="thumbnail-icon">
             <template v-if="isImage(file)">
               <img :src="getFileUrl(file)" :alt="file.resourceNode.title" :title="file.resourceNode.title" class="thumbnail-image" />
@@ -153,7 +166,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from "vue"
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { storeToRefs } from 'pinia'
@@ -162,6 +175,9 @@ import prettyBytes from 'pretty-bytes'
 import { useI18n } from 'vue-i18n'
 import { useFormatDate } from '../../composables/formatDate'
 import BaseContextMenu from '../basecomponents/BaseContextMenu.vue'
+import { useCidReq } from "../../composables/cidReq"
+import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
+import isEmpty from "lodash/isEmpty"
 
 const { t } = useI18n()
 const { relativeDatetime } = useFormatDate()
@@ -186,11 +202,14 @@ const personalFileFilters = ref({ shared: 0, loadNode: 1 })
 const personalFileSubmitted = ref(false)
 const personalFileItem = ref({})
 const personalFileOptions = ref({ itemsPerPage: 10, page: 1, sortBy: '', sortDesc: false })
-const viewMode = ref('thumbnails') // Default to thumbnails
+const viewMode = ref('thumbnails')
 
 const contextMenuVisible = ref(false)
 const contextMenuPosition = ref({ x: 0, y: 0 })
 const contextMenuFile = ref(null)
+const { cid, sid, gid } = useCidReq()
+const previousFolders = ref([]);
+const currentFolderTitle = ref('Root');
 
 const flattenFilters = (filters) => {
   return Object.keys(filters).reduce((acc, key) => {
@@ -199,28 +218,73 @@ const flattenFilters = (filters) => {
   }, {})
 }
 
-const onUpdatePersonalFileOptions = async () => {
-  const filters = flattenFilters({
+const onUpdatePersonalFileOptions = async (parentResourceNodeId = null) => {
+  if (!isEmpty(route.query.filetype) && route.query.filetype === "certificate") {
+    personalFileFilters.value.filetype = "certificate";
+  } else {
+    personalFileFilters.value.filetype = ["file", "folder"];
+  }
+
+  let filters = flattenFilters({
     ...personalFileFilters.value,
     cid: route.query.cid || '',
     sid: route.query.sid || '',
     gid: route.query.gid || '',
-    type: route.query.type || ''
-  })
+    type: route.query.type || '',
+  });
 
-  await store.dispatch('personalfile/fetchAll', {
-    page: personalFileOptions.value.page,
-    rows: personalFileOptions.value.itemsPerPage,
-    sortBy: personalFileOptions.value.sortBy,
-    sortDesc: personalFileOptions.value.sortDesc,
-    ...filters
-  })
-}
+  if (parentResourceNodeId) {
+    filters["resourceNode.parent"] = parentResourceNodeId;
+  } else if (filters.loadNode === 1 && route.params.node) {
+    filters["resourceNode.parent"] = route.params.node;
+  } else {
+    filters["resourceNode.parent"] = user.value.resourceNode.id;
+  }
 
-const uploadDocumentHandler = () => {
-  const uploadRoute = 'FileManagerUploadFile'
-  router.push({ name: uploadRoute, query: route.query, params: { node: route.params.node } })
-}
+  console.log('parentResourceNodeId :::: ', parentResourceNodeId);
+  console.log('filters["resourceNode.parent"] :::: ', filters["resourceNode.parent"]);
+  console.log('route.params.node :::: ', route.params.node);
+
+  isPersonalFilesLoading.value = true;
+
+  try {
+    const response = await fetch(`/api/personal_files?page=${personalFileOptions.value.page}&rows=${personalFileOptions.value.itemsPerPage}&sortBy=${personalFileOptions.value.sortBy}&sortDesc=${personalFileOptions.value.sortDesc}&shared=${filters.shared}&loadNode=${filters.loadNode}&resourceNode.parent=${filters['resourceNode.parent']}&cid=${filters.cid}&sid=${filters.sid}&gid=${filters.gid}&type=${filters.type}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+
+    const data = await response.json();
+
+    if (data['hydra:member']) {
+      personalFiles.value = data['hydra:member'];
+      totalPersonalFiles.value = data['hydra:totalItems'];
+    } else {
+      console.error('Error: Data format is not correct', data);
+    }
+  } catch (error) {
+    console.error('Error fetching personal files:', error);
+  } finally {
+    isPersonalFilesLoading.value = false;
+  }
+};
+
+const uploadDocumentHandler = async () => {
+  localStorage.setItem('previousFolders', JSON.stringify(previousFolders.value));
+  localStorage.setItem('currentFolderTitle', currentFolderTitle.value);
+
+  const uploadRoute = 'FileManagerUploadFile';
+  await router.push({
+    name: uploadRoute,
+    query: {
+      ...route.query,
+      parentResourceNodeId: personalFileFilters.value['resourceNode.parent'],
+      parent: personalFileFilters.value['resourceNode.parent'],
+      returnTo: route.name
+    },
+  });
+};
 
 const openNewPersonalFile = () => {
   personalFileItem.value = {}
@@ -236,9 +300,8 @@ const hidePersonalFileDialog = () => {
 const savePersonalFileItem = async () => {
   personalFileSubmitted.value = true
   if (personalFileItem.value.title.trim()) {
-    if (personalFileItem.value.id) {
-      // Update logic here
-    } else {
+    if (!personalFileItem.value.id) {
+
       let resourceNodeId = user.value.resourceNode.id
       if (route.params.node) {
         resourceNodeId = route.params.node
@@ -246,16 +309,22 @@ const savePersonalFileItem = async () => {
       personalFileItem.value.filetype = 'folder'
       personalFileItem.value.parentResourceNodeId = resourceNodeId
       personalFileItem.value.resourceLinkList = JSON.stringify([{
-        gid: 0,
-        sid: 0,
-        cid: 0,
-        visibility: 'RESOURCE_LINK_PUBLISHED'
+        gid,
+        sid,
+        cid,
+        visibility: RESOURCE_LINK_PUBLISHED
       }])
-      await store.dispatch('personalfile/createWithFormData', personalFileItem.value)
+
+      try {
+        await store.dispatch('personalfile/createWithFormData', personalFileItem.value);
+        await onUpdatePersonalFileOptions();
+      } catch (error) {
+        console.error('Error creating folder:', error);
+      }
     }
     personalFileDialog.value = false
     personalFileItem.value = {}
-    onUpdatePersonalFileOptions()
+    personalFileSubmitted.value = false
   }
 }
 
@@ -306,18 +375,17 @@ const sortingPersonalFilesChanged = (event) => {
 
 const handleClickPersonalFile = (data) => {
   if (data.resourceNode.firstResourceFile) {
-    returnToEditor(data)
+    returnToEditor(data);
   } else {
-    const resourceId = data.resourceNode.id
-    personalFileFilters.value['resourceNode.parent'] = resourceId
-
-    router.push({
-      name: 'FileManagerList',
-      params: { node: resourceId },
-      query: route.query,
-    })
+    previousFolders.value.push({
+      id: personalFileFilters.value["resourceNode.parent"],
+      title: currentFolderTitle.value
+    });
+    personalFileFilters.value["resourceNode.parent"] = data.resourceNode.id;
+    currentFolderTitle.value = data.resourceNode.title;
+    onUpdatePersonalFileOptions(data.resourceNode.id);
   }
-}
+};
 
 const closePersonalFileDetailsDialog = () => {
   detailsPersonalFileDialogVisible.value = false
@@ -337,7 +405,7 @@ const returnToEditor = (data) => {
     parent.tinymce.activeEditor.windowManager.close()
   }
 
-  function getUrlParam (paramName) {
+  function getUrlParam(paramName) {
     const reParam = new RegExp('(?:[\\?&]|&amp;)' + paramName + '=([^&]+)', 'i')
     const match = window.location.search.match(reParam)
     return match && match.length > 1 ? match[1] : ''
@@ -348,10 +416,6 @@ const returnToEditor = (data) => {
     window.opener.CKEDITOR.tools.callFunction(funcNum, url)
     window.close()
   }
-}
-
-const refreshPersonalFilesList = async () => {
-  await onUpdatePersonalFileOptions()
 }
 
 const toggleViewMode = () => {
@@ -372,10 +436,10 @@ const getFileUrl = (file) => {
 
 const getIcon = (file) => {
   if (!file.resourceNode.firstResourceFile) {
-    return 'mdi-folder' // Assume it's a folder if no firstResourceFile is present
+    return 'mdi-folder'
   }
   const fileTypeIcons = {
-    'pdf': 'mdi-file-pdf-box', // Cambié a un ícono existente
+    'pdf': 'mdi-file-pdf-box',
     'doc': 'mdi-file-word-box',
     'docx': 'mdi-file-word-box',
     'xls': 'mdi-file-excel-box',
@@ -391,14 +455,6 @@ const getIcon = (file) => {
   return fileTypeIcons[extension] || fileTypeIcons['default']
 }
 
-const handleDoubleClick = (file) => {
-  selectFile(file)
-}
-
-const openContextMenu = (event) => {
-  contextMenuVisible.value = false
-}
-
 const showContextMenu = (event, file) => {
   event.preventDefault()
   contextMenuFile.value = file
@@ -406,12 +462,53 @@ const showContextMenu = (event, file) => {
   contextMenuVisible.value = true
 }
 
+const goBack = () => {
+  if (previousFolders.value.length > 0) {
+    const previousFolder = previousFolders.value.pop();
+    personalFileFilters.value["resourceNode.parent"] = previousFolder.id;
+    currentFolderTitle.value = previousFolder.title;
+    onUpdatePersonalFileOptions();
+  } else {
+    personalFileFilters.value["resourceNode.parent"] = user.value.resourceNode.id;
+    currentFolderTitle.value = 'Root';
+    onUpdatePersonalFileOptions();
+  }
+};
+
 const selectFile = (file) => {
   returnToEditor(file)
   contextMenuVisible.value = false
 }
 
 onMounted(() => {
-  onUpdatePersonalFileOptions()
-})
+  if (route.query.parentResourceNodeId) {
+    personalFileFilters.value["resourceNode.parent"] = Number(route.query.parentResourceNodeId);
+  } else {
+    personalFileFilters.value["resourceNode.parent"] = user.value.resourceNode.id;
+  }
+
+  const savedPreviousFolders = localStorage.getItem('previousFolders');
+  const savedCurrentFolderTitle = localStorage.getItem('currentFolderTitle');
+
+  console.log('savedPreviousFolders ::: ', savedPreviousFolders)
+
+  if (savedPreviousFolders) {
+    previousFolders.value = JSON.parse(savedPreviousFolders);
+    localStorage.removeItem('previousFolders');
+  }
+  if (savedCurrentFolderTitle) {
+    currentFolderTitle.value = savedCurrentFolderTitle;
+    localStorage.removeItem('currentFolderTitle');
+  }
+
+  onUpdatePersonalFileOptions();
+
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'upload-personal-complete') {
+      personalFileFilters.value["resourceNode.parent"] = event.data.parentResourceNodeId;
+      onUpdatePersonalFileOptions();
+    }
+  });
+});
+
 </script>

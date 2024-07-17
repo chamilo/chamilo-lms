@@ -12,7 +12,7 @@
       </div>
       <div class="breadcrumbs">
         <span v-for="(folder, index) in previousFolders" :key="index">
-          <a @click="navigateToFolder(folder)">{{ folder.title }}</a> /
+          <span>{{ folder.title }}</span> /
         </span>
         <span>{{ currentFolderTitle }}</span>
       </div>
@@ -42,8 +42,13 @@
         <Column :header="$t('Title')" :sortable="true" field="resourceNode.title">
           <template #body="slotProps">
             <div>
-              <span :class="['mdi', getIcon(slotProps.data)]" class="mdi-icon" @click="handleClickDocument(slotProps.data)" />
-              {{ slotProps.data.resourceNode.title }}
+              <span
+                v-if="!slotProps.data.resourceNode.firstResourceFile" @click="handleClickDocument(slotProps.data)">
+                {{ slotProps.data.resourceNode.title }} folder
+              </span>
+              <span v-else>
+                {{ slotProps.data.resourceNode.title }}
+              </span>
             </div>
           </template>
         </Column>
@@ -171,6 +176,10 @@ import { useFormatDate } from "../../composables/formatDate";
 import { useCidReqStore } from "../../store/cidReq";
 import BaseContextMenu from "../basecomponents/BaseContextMenu.vue";
 import axios from "axios";
+import isEmpty from "lodash/isEmpty"
+import { useNotification } from "../../composables/notification"
+import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
+import { useCidReq } from "../../composables/cidReq"
 
 const { t } = useI18n();
 const { relativeDatetime } = useFormatDate();
@@ -212,6 +221,9 @@ const contextMenuFile = ref(null);
 const previousFolders = ref([]);
 const currentFolderTitle = ref('Root');
 
+const notification = useNotification()
+const { cid, sid, gid } = useCidReq()
+
 const flattenFilters = (filters) => {
   return Object.keys(filters).reduce((acc, key) => {
     acc[key] = filters[key];
@@ -220,7 +232,13 @@ const flattenFilters = (filters) => {
 };
 
 const onUpdateDocumentOptions = async () => {
-  const filters = flattenFilters({
+  if (!isEmpty(route.query.filetype) && route.query.filetype === "certificate") {
+    documentFilters.value.filetype = "certificate";
+  } else {
+    documentFilters.value.filetype = ["file", "folder"];
+  }
+
+  let filters = flattenFilters({
     ...documentFilters.value,
     cid: route.query.cid || '',
     sid: route.query.sid || '',
@@ -228,16 +246,33 @@ const onUpdateDocumentOptions = async () => {
     type: route.query.type || '',
   });
 
+  if (filters.loadNode === 1) {
+    filters["resourceNode.parent"] = documentFilters.value["resourceNode.parent"];
+  }
+
+  const params = {
+    ...filters,
+    page: documentOptions.value.page,
+    itemsPerPage: documentOptions.value.itemsPerPage,
+    sortBy: documentOptions.value.sortBy,
+    sortDesc: documentOptions.value.sortDesc ? "desc" : "asc",
+  };
+
   isDocumentsLoading.value = true;
 
   try {
-    const response = await fetch(`/api/documents?page=${documentOptions.value.page}&rows=${documentOptions.value.itemsPerPage}&sortBy=${documentOptions.value.sortBy}&sortDesc=${documentOptions.value.sortDesc}&shared=${filters.shared}&loadNode=${filters.loadNode}&resourceNode.parent=${filters['resourceNode.parent']}&cid=${filters.cid}&sid=${filters.sid}&gid=${filters.gid}&type=${filters.type}`);
+    const response = await fetch(`/api/documents?page=${params.page}&rows=${params.itemsPerPage}&sortBy=${params.sortBy}&sortDesc=${params.sortDesc}&shared=${params.shared}&loadNode=${params.loadNode}&resourceNode.parent=${params['resourceNode.parent']}&cid=${params.cid}&sid=${params.sid}&gid=${params.gid}&type=${params.type}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+
     const data = await response.json();
 
     if (data['hydra:member']) {
       documents.value = data['hydra:member'];
       totalDocuments.value = data['hydra:totalItems'];
-      console.log('Documents updated:', documents.value);
     } else {
       console.error('Error: Data format is not correct', data);
     }
@@ -269,13 +304,11 @@ const goBack = () => {
     documentFilters.value["resourceNode.parent"] = previousFolder.id;
     currentFolderTitle.value = previousFolder.title;
     onUpdateDocumentOptions();
+  } else {
+    documentFilters.value["resourceNode.parent"] = course.value.resourceNode.id;
+    currentFolderTitle.value = 'Root';
+    onUpdateDocumentOptions();
   }
-};
-
-const navigateToFolder = (folder) => {
-  documentFilters.value["resourceNode.parent"] = folder.id;
-  currentFolderTitle.value = folder.title;
-  onUpdateDocumentOptions();
 };
 
 const closeDocumentDetailsDialog = () => {
@@ -310,10 +343,6 @@ const returnToEditor = (data) => {
     window.opener.CKEDITOR.tools.callFunction(funcNum, url);
     window.close();
   }
-};
-
-const refreshDocumentsList = async () => {
-  await onUpdateDocumentOptions();
 };
 
 const toggleViewMode = () => {
@@ -353,10 +382,6 @@ const handleDoubleClick = (doc) => {
   selectFile(doc);
 };
 
-const openContextMenu = (event) => {
-  contextMenuVisible.value = false;
-};
-
 const showContextMenu = (event, doc) => {
   event.preventDefault();
   contextMenuFile.value = doc;
@@ -369,13 +394,18 @@ const selectFile = (file) => {
   contextMenuVisible.value = false;
 };
 
-const uploadDocumentHandler = () => {
+const uploadDocumentHandler = async () => {
+  localStorage.setItem('previousFolders', JSON.stringify(previousFolders.value));
+  localStorage.setItem('currentFolderTitle', currentFolderTitle.value);
+
   const uploadRoute = 'CourseDocumentsUploadFile';
-  router.push({
+  await router.push({
     name: uploadRoute,
     query: {
       ...route.query,
+      parentResourceNodeId: documentFilters.value['resourceNode.parent'],
       parent: documentFilters.value['resourceNode.parent'],
+      returnTo: route.name
     },
   });
 };
@@ -393,24 +423,33 @@ const hideDocumentDialog = () => {
 
 const saveDocumentItem = async () => {
   documentSubmitted.value = true;
-  if (documentItem.value.title.trim()) {
-    if (documentItem.value.id) {
-      // Update logic here
-    } else {
-      const resourceNodeId = documentFilters.value["resourceNode.parent"];
+  if (documentItem.value.title?.trim()) {
+    if (!documentItem.value.id) {
       documentItem.value.filetype = "folder";
-      documentItem.value.parentResourceNodeId = resourceNodeId;
-      documentItem.value.resourceLinkList = JSON.stringify([{
-        gid: 0,
-        sid: 0,
-        cid: 0,
-        visibility: 'RESOURCE_LINK_PUBLISHED'
-      }]);
-      await store.dispatch('documents/createWithFormData', documentItem.value);
+      documentItem.value.parentResourceNodeId = documentFilters.value["resourceNode.parent"];
+      documentItem.value.resourceLinkList = JSON.stringify([
+        {
+          gid,
+          sid,
+          cid,
+          visibility: RESOURCE_LINK_PUBLISHED, // visible by default
+        },
+      ]);
+
+      try {
+        await store.dispatch('documents/createWithFormData', documentItem.value);
+        notification.showSuccessNotification(t("Folder created successfully."));
+        await onUpdateDocumentOptions();
+      } catch (error) {
+        console.error('Error creating folder:', error);
+        notification.showErrorNotification(t("Error creating folder."));
+      }
     }
     documentDialog.value = false;
     documentItem.value = {};
-    await onUpdateDocumentOptions();
+    documentSubmitted.value = false;
+  } else {
+    notification.showErrorNotification(t("Title is required."));
   }
 };
 
@@ -479,8 +518,31 @@ const sortingDocumentsChanged = (event) => {
 };
 
 onMounted(() => {
-  documentFilters.value["resourceNode.parent"] = course.value.resourceNode.id;
+  if (route.query.parentResourceNodeId) {
+    documentFilters.value["resourceNode.parent"] = Number(route.query.parentResourceNodeId);
+  } else {
+    documentFilters.value["resourceNode.parent"] = course.value.resourceNode.id;
+  }
+
+  const savedPreviousFolders = localStorage.getItem('previousFolders');
+  const savedCurrentFolderTitle = localStorage.getItem('currentFolderTitle');
+
+  if (savedPreviousFolders) {
+    previousFolders.value = JSON.parse(savedPreviousFolders);
+    localStorage.removeItem('previousFolders');
+  }
+  if (savedCurrentFolderTitle) {
+    currentFolderTitle.value = savedCurrentFolderTitle;
+    localStorage.removeItem('currentFolderTitle');
+  }
 
   onUpdateDocumentOptions();
+
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'upload-complete') {
+      documentFilters.value["resourceNode.parent"] = event.data.parentResourceNodeId;
+      onUpdateDocumentOptions();
+    }
+  });
 });
 </script>

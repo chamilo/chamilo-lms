@@ -9,7 +9,7 @@
         }"
         @click="changeTab('personalFiles')"
       >
-        Personal Files
+        {{ t('Personal Files') }}
       </button>
       <button
         v-if="isAllowedToEdit"
@@ -20,7 +20,7 @@
         }"
         @click="changeTab('documents')"
       >
-        Documents
+        {{ t('Documents') }}
       </button>
     </div>
 
@@ -32,28 +32,23 @@
       <CourseDocuments />
     </div>
   </div>
-  <div v-else class="loading-screen">
-    <!-- Optional: Add a loading spinner or message here -->
-  </div>
 </template>
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useSecurityStore } from '../../store/securityStore'
 import PersonalFiles from "../../components/filemanager/PersonalFiles.vue"
 import CourseDocuments from "../../components/filemanager/CourseDocuments.vue"
-import { storeToRefs } from "pinia"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useI18n } from "vue-i18n"
 
-const securityStore = useSecurityStore()
-const { isAuthenticated } = storeToRefs(securityStore)
 const route = useRoute()
 const router = useRouter()
 
 const activeTab = ref(route.query.tab || 'personalFiles')
 const isAllowedToEdit = ref(false)
 const isLoading = ref(true)
+const { t } = useI18n()
 
 const changeTab = (tab) => {
   activeTab.value = tab
@@ -71,14 +66,3 @@ onMounted(async () => {
   isLoading.value = false
 })
 </script>
-
-<style scoped>
-.loading-screen {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-}
-</style>

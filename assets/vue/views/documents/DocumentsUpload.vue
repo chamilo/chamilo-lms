@@ -129,19 +129,19 @@ uppy.value = new Uppy()
     onCreated(response.body)
   })
   .on('complete', () => {
-    console.log("Upload complete, redirecting...");
+    window.parent.postMessage({ type: 'upload-complete', parentResourceNodeId: parentResourceNodeId.value }, '*');
     setTimeout(() => {
-      if (route.query.tab) {
+      if (route.query.returnTo) {
         router.push({
-          name: route.query.tab === 'documents' ? 'FileManagerList' : 'FileManagerList',
+          name: route.query.returnTo,
           params: { node: parentResourceNodeId.value },
-          query: { cid, sid, gid, filetype, tab: route.query.tab }
-        })
+          query: { ...route.query }
+        });
       } else {
-        router.back()
+        router.back();
       }
-    }, 2000); // 2 segundos de retraso
-  })
+    }, 2000);
+  });
 
 uppy.value.setMeta({
   filetype,
@@ -177,7 +177,7 @@ function back() {
   let queryParams = { cid, sid, gid, filetype, tab: route.query.tab }
   if (route.query.tab) {
     router.push({
-      name: route.query.tab === 'documents' ? 'FileManagerList' : 'FileManagerList',
+      name: 'FileManagerList',
       params: { node: parentResourceNodeId.value },
       query: queryParams
     })

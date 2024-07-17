@@ -264,17 +264,17 @@ $url_list = UrlManager::get_url_data();
     <?php if ($ajax_search) {
         ?>
         <button class="btn btn--plain" type="button" onclick="remove_item(document.getElementById('destination_users'))">
-            <em class="fa fa-arrow-left"></em>
+            <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
         </button>
     <?php
     } else {
         ?>
         <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" >
-            <em class="fa fa-arrow-right"></em>
+            <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
         </button>
         <br /><br />
         <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" >
-            <em class="fa fa-arrow-left"></em>
+            <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
 
         </button>
     <?php

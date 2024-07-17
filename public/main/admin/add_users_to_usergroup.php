@@ -437,11 +437,11 @@ echo Display::input('hidden', 'add_type', null);
     <div class="col-md-2">
         <div style="padding-top:54px;width:auto;text-align: center;">
         <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))">
-            <em class="fa fa-arrow-right"></em>
+            <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
         </button>
         <br /><br />
         <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))">
-            <em class="fa fa-arrow-left"></em>
+            <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
         </button>
         </div>
     </div>

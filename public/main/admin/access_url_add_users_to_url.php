@@ -45,7 +45,7 @@ echo Display::toolbarAction(
 
 Display::page_subheader2($tool_name);
 
-if ($_POST['form_sent']) {
+if (!empty($_POST['form_sent'])) {
     $form_sent = $_POST['form_sent'];
     $users = is_array($_POST['user_list']) ? array_map('intval', $_POST['user_list']) : [];
     $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : [];
@@ -80,9 +80,9 @@ $first_letter_user_lower = Database::escape_string(api_strtolower($first_letter_
 
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $target_name = 'lastname';
-$sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user
+$sql = "SELECT id, lastname, firstname, username FROM $tbl_user
 	    WHERE active <> ".USER_SOFT_DELETED." AND ".$target_name." LIKE '".$first_letter_user_lower."%' OR ".$target_name." LIKE '".$first_letter_user_lower."%'
-		ORDER BY ".(count($users) > 0 ? '(user_id IN('.implode(',', $users).')) DESC,' : '').' '.$target_name;
+		ORDER BY ".(count($users) > 0 ? '(id IN('.implode(',', $users).')) DESC,' : '').' '.$target_name;
 $result = Database::query($sql);
 $db_users = Database::store_result($result);
 unset($result);
@@ -119,7 +119,7 @@ unset($result);
         <?php
         foreach ($db_users as $user) {
             ?>
-            <option value="<?php echo $user['user_id']; ?>" <?php if (in_array($user['user_id'], $users)) {
+            <option value="<?php echo $user['id']; ?>" <?php if (in_array($user['id'], $users)) {
                 echo 'selected="selected"';
             } ?>>
             <?php echo api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'; ?>

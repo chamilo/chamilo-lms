@@ -212,17 +212,17 @@ echo Display::input('hidden', 'add_type', null);
   if ($ajax_search) {
       ?>
     <button class="btn btn--plain" type="button" onclick="remove_item(document.getElementById('session_in_promotion'))" >
-        <em class="fa fa-arrow-left"></em>
+        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
     </button>
   <?php
   } else {
       ?>
     <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))">
-        <em class="fa fa-arrow-right"></em>
+        <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
     </button>
     <br /><br />
     <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))">
-        <em class="fa fa-arrow-left"></em>
+        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
     </button>
     <?php
   }

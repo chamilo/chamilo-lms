@@ -248,17 +248,17 @@ echo Display::input('hidden', 'add_type', null);
   if ($ajax_search) {
       ?>
     <button class="btn btn--plain" type="button" onclick="remove_item(document.getElementById('elements_in'))" >
-        <em class="fa fa-arrow-left"></em>
+        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
     </button>
   <?php
   } else {
       ?>
     <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))">
-        <em class="fa fa-arrow-right"></em>
+        <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
     </button>
     <br /><br />
     <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))">
-        <em class="fa fa-arrow-left"></em>
+        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
     </button>
     <?php
   }

@@ -21,7 +21,7 @@ enum StateIcon: string
     // Active / Visible
     case ACTIVE = 'toggle-switch';
     // Inactive / Invisible
-    case INACTIVE = 'toggle-switch-off';
+    case INACTIVE = 'toggle-switch-off-outline';
     // Expired
     case EXPIRED = 'timer-alert-outline';
     // Error

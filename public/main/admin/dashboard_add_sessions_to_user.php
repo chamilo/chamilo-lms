@@ -258,7 +258,7 @@ $result = Database::query($sql);
                     ?>
                     <div class="separate-action">
                         <button class="btn btn--primary" type="button" onclick="remove_item(document.getElementById('destination'))">
-                            <em class="fa fa-arrow-left"></em>
+                            <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
                         </button>
                     </div>
                 <?php
@@ -266,12 +266,12 @@ $result = Database::query($sql);
                     ?>
                 <div class="separate-action">
                     <button class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
-                        <em class="fa fa-arrow-right"></em>
+                        <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
                     </button>
                 </div>
                 <div class="separate-action">
                     <button class="btn btn--primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
-                        <em class="fa fa-arrow-left"></em>
+                        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
                     </button>
                 </div>
 

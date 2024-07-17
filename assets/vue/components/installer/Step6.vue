@@ -229,11 +229,15 @@
         :closable="false"
         severity="warn"
       >
-        {{ t('The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.') }}
+        {{
+          t(
+            "The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.",
+          )
+        }}
       </Message>
     </div>
 
-    <hr>
+    <hr />
 
     <div class="formgroup-inline">
       <div class="field">
@@ -245,8 +249,17 @@
           name="step4"
           type="submit"
         />
-        <input id="is_executable" v-model="isExecutable" name="is_executable" type="hidden" />
-        <input type="hidden" name="step6" value="1" />
+        <input
+          id="is_executable"
+          v-model="isExecutable"
+          name="is_executable"
+          type="hidden"
+        />
+        <input
+          type="hidden"
+          name="step6"
+          value="1"
+        />
       </div>
       <Button
         id="button_step6"
@@ -295,7 +308,12 @@
       />
       <ProgressBar mode="indeterminate" />
     </Message>
-    <ProgressBar :value="progressPercentage" style="height: 22px"> {{ progressPercentage }}/100 </ProgressBar>
+    <ProgressBar
+      :value="progressPercentage"
+      style="height: 22px"
+    >
+      {{ progressPercentage }}/100</ProgressBar
+    >
     <div class="log-container">
       <div v-html="logTerminalContent"></div>
     </div>
@@ -303,51 +321,50 @@
 </template>
 
 <script setup>
-import { inject, ref} from 'vue';
-import { useI18n } from 'vue-i18n';
+import { inject, ref } from "vue"
+import { useI18n } from "vue-i18n"
 
-import Message from 'primevue/message';
-import Button from 'primevue/button';
-import ProgressBar from 'primevue/progressbar';
+import Message from "primevue/message"
+import Button from "primevue/button"
+import ProgressBar from "primevue/progressbar"
 
-const { t } = useI18n();
+const { t } = useI18n()
 
-const installerData = inject('installerData');
+const installerData = inject("installerData")
 
-const loading = ref(false);
-const isButtonDisabled = ref(installerData.value.isUpdateAvailable);
-const isExecutable = ref('');
+const loading = ref(false)
+const isButtonDisabled = ref(installerData.value.isUpdateAvailable)
+const isExecutable = ref("")
 
-
-const logTerminalContent = ref('');
-const progressPercentage = ref(0);
+const logTerminalContent = ref("")
+const progressPercentage = ref(0)
 
 function updateLog() {
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
+  var xhr = new XMLHttpRequest()
+  xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      logTerminalContent.value = response.log_terminal;
-      progressPercentage.value = response.progress_percentage;
-      scrollToBottom();
+      const response = JSON.parse(xhr.responseText)
+      logTerminalContent.value = response.log_terminal
+      progressPercentage.value = response.progress_percentage
+      scrollToBottom()
 
-      isButtonDisabled.value = false;
+      isButtonDisabled.value = false
     }
-  };
-  xhr.open('GET', installerData.value.logUrl, true);
-  xhr.send();
+  }
+  xhr.open("GET", installerData.value.logUrl, true)
+  xhr.send()
 }
 
 function btnStep6OnClick() {
-  loading.value = true;
-  isExecutable.value = 'step6';
-  document.getElementById('install_form').submit();
+  loading.value = true
+  isExecutable.value = "step6"
+  document.getElementById("install_form").submit()
 }
 
 function scrollToBottom() {
-  const logContainer = document.querySelector('.log-container');
-  logContainer.scrollTop = logContainer.scrollHeight;
+  const logContainer = document.querySelector(".log-container")
+  logContainer.scrollTop = logContainer.scrollHeight
 }
 
-setInterval(updateLog, 2000);
+setInterval(updateLog, 2000)
 </script>

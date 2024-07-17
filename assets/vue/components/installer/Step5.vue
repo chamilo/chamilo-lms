@@ -93,7 +93,7 @@
           v-model="installerData.stepData.loginForm"
           type="hidden"
           name="loginForm"
-        >
+        />
         {{ installerData.stepData.loginForm }}
       </div>
 
@@ -221,7 +221,7 @@
             v-model="installerData.stepData.languageForm"
             name="languageForm"
             type="hidden"
-          >
+          />
         </div>
       </div>
 
@@ -358,7 +358,7 @@
           v-model="installerData.stepData.encryptPassForm"
           type="hidden"
           name="encryptPassForm"
-        >
+        />
         {{ installerData.stepData.encryptPassForm }}
       </div>
 
@@ -409,7 +409,7 @@
           v-model="installerData.stepData.allowSelfReg"
           type="hidden"
           name="allowSelfReg"
-        >
+        />
         <span
           v-if="'true' === installerData.stepData.allowSelfReg"
           v-t="'Yes'"
@@ -459,7 +459,7 @@
           v-model="installerData.stepData.allowSelfRegProf"
           type="hidden"
           name="allowSelfRegProf"
-        >
+        />
         <span
           v-if="1 === installerData.stepData.allowSelfRegProf"
           v-t="'Yes'"
@@ -471,7 +471,7 @@
       </div>
     </div>
 
-    <hr>
+    <hr />
 
     <div class="formgroup-inline">
       <div class="field">
@@ -491,30 +491,30 @@
         name="step5"
         type="submit"
       />
-      
+
       <input
         id="is_executable"
         name="is_executable"
         type="hidden"
         value="-"
-      >
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { inject, } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { inject } from "vue"
+import { useI18n } from "vue-i18n"
 
-import InputText from 'primevue/inputtext';
-import Password from 'primevue/password';
-import Dropdown from 'primevue/dropdown';
-import Button from 'primevue/button';
-import RadioButton from 'primevue/radiobutton';
+import InputText from "primevue/inputtext"
+import Password from "primevue/password"
+import Dropdown from "primevue/dropdown"
+import Button from "primevue/button"
+import RadioButton from "primevue/radiobutton"
 
-import languages from '../../utils/languages';
+import languages from "../../utils/languages"
 
-const { t } = useI18n();
+const { t } = useI18n()
 
-const installerData = inject('installerData');
+const installerData = inject("installerData")
 </script>

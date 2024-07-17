@@ -4,7 +4,7 @@
       :alt="t('Install step 1')"
       class="install-icon w-36 mx-auto mb-4"
       src="/main/install/chamilo-install.svg"
-    >
+    />
     <h2
       class="install-title mb-8"
       v-text="t('Step 1 - Installation Language')"
@@ -25,25 +25,28 @@
           for="language_list"
         />
       </div>
-      <small v-text="t('Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator.')" />
+      <small
+        v-text="
+          t('Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator.')
+        "
+      />
     </div>
 
     <input
       v-model="installerData.langIso"
       name="language_list"
       type="hidden"
-    >
+    />
 
     <input
       v-model="installerData.stepData.installationProfile"
       type="hidden"
       name="installationProfile"
-    >
+    />
 
-    <hr>
+    <hr />
 
     <div class="formgroup">
-
       <Message
         v-if="installerData.isUpdateAvailable"
         id="pleasewait"
@@ -51,7 +54,7 @@
         severity="warn"
       >
         <p class="update-message-text">
-          {{ t('An update is available. Click the button below to proceed with the update.') }}
+          {{ t("An update is available. Click the button below to proceed with the update.") }}
         </p>
         <p>{{ installerData.checkMigrationStatus.message }}</p>
         <p v-if="installerData.checkMigrationStatus.current_migration">
@@ -60,7 +63,7 @@
         <p v-if="installerData.checkMigrationStatus.progress_percentage">
           Progress: {{ installerData.checkMigrationStatus.progress_percentage }}%
         </p>
-        <hr>
+        <hr />
       </Message>
       <Button
         :label="t('Next')"
@@ -80,16 +83,17 @@
 </template>
 
 <script setup>
-import { inject } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { inject } from "vue"
+import { useI18n } from "vue-i18n"
 
-import Dropdown from 'primevue/dropdown';
-import Button from 'primevue/button';
+import Dropdown from "primevue/dropdown"
+import Button from "primevue/button"
 
-import languages from '../../utils/languages';
+import languages from "../../utils/languages"
+
 const availableLanguages = languages.filter((language) => ["en_US", "fr_FR"].includes(language.isocode))
 
-const { t } = useI18n();
+const { t } = useI18n()
 
-const installerData = inject('installerData');
+const installerData = inject("installerData")
 </script>

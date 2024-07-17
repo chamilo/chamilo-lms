@@ -38,7 +38,7 @@
       />
     </div>
 
-    <hr>
+    <hr />
 
     <InlineMessage severity="info">
       <i18n-t
@@ -61,20 +61,30 @@
         class="mb-3"
       />
       <p
-        v-t="'You are about to start using one of the best open-source e-learning platform on the market. Like many other open-source project, this project is backed up by a large community of students, teachers, developers and content creators who would like to promote the project better.'"
+        v-t="
+          'You are about to start using one of the best open-source e-learning platform on the market. Like many other open-source project, this project is backed up by a large community of students, teachers, developers and content creators who would like to promote the project better.'
+        "
         class="mb-3"
       />
       <p
-        v-t="'By knowing a little bit more about you, one of our most important users, who will manage this e-learning system, we will be able to let people know that our software is used and let you know when we organize events that might be relevant to you.'"
+        v-t="
+          'By knowing a little bit more about you, one of our most important users, who will manage this e-learning system, we will be able to let people know that our software is used and let you know when we organize events that might be relevant to you.'
+        "
         class="mb-3"
       />
       <p
-        v-t="'By filling this form, you accept that the Chamilo association or its members might send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flow, with a permanent respect of your time and your privacy.'"
+        v-t="
+          'By filling this form, you accept that the Chamilo association or its members might send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flow, with a permanent respect of your time and your privacy.'
+        "
         class="mb-3"
       />
       <p
         class="mb-3"
-        v-html="t('Please note that you are <b>not required</b> to fill this form. If you want to remain anonymous, we will loose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click Next')"
+        v-html="
+          t(
+            'Please note that you are <b>not required</b> to fill this form. If you want to remain anonymous, we will loose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click Next',
+          )
+        "
       />
 
       <div class="field">
@@ -240,7 +250,7 @@
       </div>
     </Fieldset>
 
-    <hr>
+    <hr />
 
     <div class="formgroup-inline">
       <div class="field">
@@ -267,29 +277,29 @@
         name="is_executable"
         type="hidden"
         value="-"
-      >
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n';
-import { inject, reactive, ref } from 'vue';
-import axios from 'axios';
+import { useI18n } from "vue-i18n"
+import { inject, reactive, ref } from "vue"
+import axios from "axios"
 
-import Checkbox from 'primevue/checkbox';
-import InlineMessage from 'primevue/inlinemessage';
-import Fieldset from 'primevue/fieldset';
-import Dropdown from 'primevue/dropdown';
-import InputText from 'primevue/inputtext';
-import RadioButton from 'primevue/radiobutton';
-import Button from 'primevue/button';
+import Checkbox from "primevue/checkbox"
+import InlineMessage from "primevue/inlinemessage"
+import Fieldset from "primevue/fieldset"
+import Dropdown from "primevue/dropdown"
+import InputText from "primevue/inputtext"
+import RadioButton from "primevue/radiobutton"
+import Button from "primevue/button"
 
-const { t } = useI18n();
+const { t } = useI18n()
 
-const installerData = inject('installerData');
+const installerData = inject("installerData")
 
-const acceptLicence = ref(false);
+const acceptLicence = ref(false)
 
 const contact = reactive({
   personName: null,
@@ -301,58 +311,52 @@ const contact = reactive({
   companyCity: null,
   contactLanguage: null,
   financialDecision: true,
-});
+})
 
-const sendingContactInformation = ref(false);
+const sendingContactInformation = ref(false)
 
-const btnNext = ref(null);
+const btnNext = ref(null)
 
-async function sendContactInformation () {
+async function sendContactInformation() {
   if (!acceptLicence.value) {
-    alert(t('You must accept the licence'));
+    alert(t("You must accept the licence"))
 
-    return;
+    return
   }
 
-  sendingContactInformation.value = true;
+  sendingContactInformation.value = true
 
-  const formData = new FormData();
-  formData.append('person_name', contact.personName);
-  formData.append('person_email', contact.personEmail);
-  formData.append('company_name', contact.companyName);
-  formData.append('company_activity', contact.companyActivity);
-  formData.append('person_role', contact.jobRole);
-  formData.append('company_country', contact.companyCountry);
-  formData.append('company_city', contact.companyCity);
-  formData.append('language', contact.contactLanguage);
-  formData.append('financial_decision', contact.financialDecision * 1 + '');
+  const formData = new FormData()
+  formData.append("person_name", contact.personName)
+  formData.append("person_email", contact.personEmail)
+  formData.append("company_name", contact.companyName)
+  formData.append("company_activity", contact.companyActivity)
+  formData.append("person_role", contact.jobRole)
+  formData.append("company_country", contact.companyCountry)
+  formData.append("company_city", contact.companyCity)
+  formData.append("language", contact.contactLanguage)
+  formData.append("financial_decision", contact.financialDecision * 1 + "")
 
-  const { data } = await axios.post(
-    '/main/inc/ajax/install.ajax.php?a=send_contact_information',
-    formData,
-    {
-      headers: { 'content-type': 'application/x-www-form-urlencoded' }
-    }
-  );
+  const { data } = await axios.post("/main/inc/ajax/install.ajax.php?a=send_contact_information", formData, {
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+  })
 
-  if ('1' === data + '') {
-    alert(
-      t('Contact information has been sent')
-    );
+  if ("1" === data + "") {
+    alert(t("Contact information has been sent"))
 
-    btnNext.value.$el.click();
+    btnNext.value.$el.click()
 
-    return;
-  } else if ('required_field_error' === data) {
-    alert(
-      t('The form contains incorrect or incomplete data. Please check your input.')
-    );
+    return
+  } else if ("required_field_error" === data) {
+    alert(t("The form contains incorrect or incomplete data. Please check your input."))
   } else {
     alert(
-      t('Your contact information could not be sent. This is probably due to a temporary network problem. Please try again in a few seconds. If the problem remains, ignore this registration process and simply click the button to go to the next step.')
-    );
+      t(
+        "Your contact information could not be sent. This is probably due to a temporary network problem. Please try again in a few seconds. If the problem remains, ignore this registration process and simply click the button to go to the next step.",
+      ),
+    )
   }
 
-  sendingContactInformation.value = false;
+  sendingContactInformation.value = false
 }
 </script>

@@ -27637,8 +27637,8 @@ msgstr "This is the default form"
 msgid "This is a form with an error"
 msgstr "This is a form with an error"
 
-msgid "Show dialog'"
-msgstr "Show dialog'"
+msgid "Show dialog"
+msgstr "Show dialog"
 
 msgid "Dialog example"
 msgstr "Dialog example"

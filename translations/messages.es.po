@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-31 08:49+0000\n"
+"PO-Revision-Date: 2024-07-17 12:21+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -27443,3 +27443,129 @@ msgstr ""
 
 msgid "Skip generic data in learner self-tracking page"
 msgstr "Omita datos genéricos en la página de auto-seguimiento del alumno"
+
+msgid "If using career diagrams, show an extra field instead of the internal career ID."
+msgstr ""
+"Si utiliza diagramas de carrera, muestre un campo de perfil (de la carrera) "
+"en lugar del ID de carrera interno."
+
+msgid "Give an extra field label here. If this extra field is updated for any user, a process is triggered to check the access to this user to courses with the same given extra field."
+msgstr ""
+"Indique aquí una etiqueta de campo de perfil. Si este campo de perfil se "
+"actualiza para algún usuario, se activa un proceso para verificar el acceso "
+"de este usuario a los cursos con el mismo campo adicional proporcionado."
+
+msgid "Selective display of roles"
+msgstr "Visualización selectiva de roles"
+
+msgid "Set an extra field as trigger for registration as ex-learner"
+msgstr ""
+"Establezca un campo de perfil como disparador para el registro como ex-alumno"
+
+msgid "If you do not use web services, enable this to avoid any unnecessary security risk."
+msgstr ""
+"Si no utiliza servicios web, active esta opción para evitar cualquier riesgo "
+"de seguridad innecesario."
+
+msgid "Use external career ID in diagrams"
+msgstr "Utilizar el ID de carrera externo en diagramas"
+
+msgid "Hide 'never expires' option for users"
+msgstr "Ocultar la opción 'nunca caduca' para usuarios"
+
+msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgstr ""
+"Habilitar el uso de un arreglo para definir qué roles deben mostrarse "
+"claramente y cuáles deben ocultarse."
+
+msgid "An array of role = > number which represents the number of days an account has before expiration, depending on the role."
+msgstr ""
+"Un arreglo de rol => número que representa la cantidad de días que tiene una "
+"cuenta antes de la expiración, dependiendo del rol."
+
+msgid "If the user is not allowed to access a specific page, also hide the breadcrumb. This increases security by avoiding the display of unnecessary information."
+msgstr ""
+"Si el usuario no tiene permiso para acceder a una página específica, oculte "
+"también la navegación en miga de pan. Esto aumenta la seguridad al evitar "
+"mostrar información innecesaria."
+
+msgid "An array of role => true/false that defines whether that role should be shown or hidden."
+msgstr ""
+"Un arreglo de rol => true/false que define si ese rol debe mostrarse u "
+"ocultarse."
+
+msgid "Replaces the Chamilo logo by loading a (possibly remote) URL. Make sure this is allowed by your security policies."
+msgstr ""
+"Reemplaza el logo de Chamilo cargando una URL (posiblemente remota). "
+"Asegúrese de que esto esté permitido por sus políticas de seguridad."
+
+msgid "Some REST web services are marked for admins only and are disabled by default. Enable this feature to give access to these web services (to users with admin credentials, obviously)."
+msgstr ""
+"Algunos servicios web están marcados solo para administradores y están "
+"desactivados por defecto. Habilite esta función para dar acceso a estos "
+"servicios web (a usuarios con credenciales de administrador, obviamente)."
+
+msgid "Enable admin-only web services"
+msgstr "Activar servicios web reservados a los administradores"
+
+msgid "Enable this feature to let teachers manually update the time spent in the course by learners."
+msgstr ""
+"Active esta función para permitir que los profesores actualicen manualmente "
+"el tiempo invertido en el curso por los alumnos."
+
+msgid "Remove the option 'never expires' when creating/editing a user account."
+msgstr ""
+"Eliminar la opción 'nunca caduca' al crear/editar una cuenta de usuario."
+
+msgid "Hide breadcrumb if 'not allowed'"
+msgstr "Ocultar ruta de navegación si 'no permitido'"
+
+msgid "URL for alternative platform logo"
+msgstr "URL para el logotipo alternativo de la plataforma"
+
+msgid "Array defining host and port for the LDAP server."
+msgstr "Array que define el host y el puerto para el servidor LDAP."
+
+msgid "Enable edition of course work time"
+msgstr "Habilitar la edición del tiempo de trabajo del curso"
+
+msgid "Roles display options"
+msgstr "Opciones de visualización de roles"
+
+msgid "Default expiration days by role"
+msgstr "Días de expiración predeterminados por rol"
+
+msgid "LDAP connection configuration"
+msgstr "Configuración de conexión LDAP"
+
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgstr ""
+"Array que define los días ('days') y meses ('months') para establecer la "
+"fecha de expiración de la cuenta cuando el usuario se conecte por primera "
+"vez."
+
+msgid "Set expiration date on first login"
+msgstr "Establecer fecha de caducidad en la primera conexión"
+
+msgid "Disable web services"
+msgstr "Desactivar servicios web"
+
+msgid "Enable portfolio advanced sharing"
+msgstr "Activar el compartido avanzado de la herramienta portafolio"
+
+msgid "Avoid being too personal with users by using a 'bot' account to send e-mails to users when their account is disabled for some reason."
+msgstr ""
+"Evite ser demasiado personal con los usuarios utilizando una cuenta de 'bot' "
+"para enviar correos electrónicos a los usuarios cuando su cuenta esté "
+"deshabilitada por algún motivo."
+
+msgid "Decide who can view the posts and comments of the portfolio."
+msgstr "Decida quién puede ver las publicaciones y comentarios del portafolio."
+
+msgid "Redirect index.php to given URL for authenticated users"
+msgstr "Redirigir index.php a la URL proporcionada para usuarios autenticados"
+
+msgid "Internal ID of the user used to send disabled account notifications"
+msgstr ""
+"Identificación interna del usuario utilizada para enviar notificaciones de "
+"cuenta desactivada"

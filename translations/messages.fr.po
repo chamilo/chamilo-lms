@@ -29415,7 +29415,7 @@ msgstr "Couleur tertiaire"
 msgid "Save diagnosis changes"
 msgstr "Enregistrer les modifications du diagnostic"
 
-msgid "Show dialog'"
+msgid "Show dialog"
 msgstr "Afficher la boîte de dialogue"
 
 msgid "Closed sessions"

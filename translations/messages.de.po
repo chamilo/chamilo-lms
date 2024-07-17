@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-17 08:00+0000\n"
+"PO-Revision-Date: 2024-07-17 09:01+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -22723,7 +22723,7 @@ msgid "Kind regards,"
 msgstr "Mit freundlichen Grüßen,"
 
 msgid "Please do not reply"
-msgstr ""
+msgstr "Bitte nicht antworten"
 
 msgid "Results for the accomplished test"
 msgstr "Ergebnisse des absolvierten Tests"
@@ -23126,7 +23126,7 @@ msgid "Remove multiplicated questions"
 msgstr "Entfernen Sie vervielfachte Fragen"
 
 msgid "Multiplicate questions"
-msgstr ""
+msgstr "Fragen vervielfältigen"
 
 msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
 msgstr ""
@@ -23367,10 +23367,10 @@ msgstr ""
 "heutigen Tag erreicht. Bitte versuchen Sie es morgen erneut."
 
 msgid "Like"
-msgstr ""
+msgstr "Gefällt mir"
 
 msgid "Dislike"
-msgstr ""
+msgstr "Gefällt mir nicht"
 
 msgid "Generate statistics"
 msgstr "Generieren Sie Statistiken"
@@ -24483,7 +24483,7 @@ msgid "Latest login in a course"
 msgstr "Letzter Login in einem Kurs"
 
 msgid "The"
-msgstr ""
+msgstr "Der"
 
 msgid "Multiplicate questions by class"
 msgstr "Fragen nach Klasse vervielfachen"
@@ -28979,3 +28979,184 @@ msgstr ""
 
 msgid "The attempted oral questions are %s"
 msgstr "Die beantworteten mündlichen Fragen sind %s"
+
+msgid "Primary color hover/background"
+msgstr "Primärfarbe für hover/background"
+
+msgid "Primary color button text"
+msgstr "Primärfarbentext des Buttons"
+
+msgid "Primary color button alternative text"
+msgstr "Primärfarben-Schaltfläche Alternativtext"
+
+msgid "Secondary color"
+msgstr "Sekundärfarbe"
+
+msgid "Configure Chamilo colors"
+msgstr "Chamilo-Farben konfigurieren"
+
+msgid "Secondary color hover/background"
+msgstr "Sekundärfarbe für hover/background"
+
+msgid "Primary color"
+msgstr "Primärfarbe"
+
+msgid "Danger color hover/background"
+msgstr "Gefahrenfarbe für hover/background"
+
+msgid "Dropdowns"
+msgstr "Dropdown-Menüs"
+
+msgid "Success color hover/background"
+msgstr "Erfolgsfarbe für hover/background"
+
+msgid "Checkbox and radio buttons"
+msgstr "Kontrollkästchen und Optionsfelder"
+
+msgid "Add course"
+msgstr "Kurs hinzufügen"
+
+msgid "Warning"
+msgstr "Warnung"
+
+msgid "Tertiary"
+msgstr "Tertiär"
+
+msgid "Dialog example"
+msgstr "Beispiel für einen Dialog"
+
+msgid "Contact form categories"
+msgstr "Kontaktformular-Kategorien"
+
+msgid "This is a form with an error"
+msgstr "Dies ist ein Formular mit einem Fehler"
+
+msgid "Success color"
+msgstr "Erfolgsfarbe"
+
+msgid "Info color"
+msgstr "Informationsfarbe"
+
+msgid "Test invisible in session"
+msgstr "Test in der Session unsichtbar"
+
+msgid "Gradebook extra statistics"
+msgstr "Notenbuch-Zusatzstatistiken"
+
+msgid "Danger"
+msgstr "Gefahr"
+
+msgid "Form outline color"
+msgstr "Formularumrissfarbe"
+
+msgid "News from Chamilo"
+msgstr "Neuigkeiten von Chamilo"
+
+msgid "This is the default form"
+msgstr "Dies ist das Standardformular"
+
+msgid "Sort"
+msgstr "Sortieren"
+
+msgid "Success color button text"
+msgstr "Text für Schaltfläche in Erfolgsfarbe"
+
+msgid "Some more elements"
+msgstr "Einige weitere Elemente"
+
+msgid "Buttons"
+msgstr "Schaltflächen"
+
+msgid "Show advanced mode"
+msgstr "Erweiterten Modus anzeigen"
+
+msgid "Redirect to portal home"
+msgstr "Weiterleitung zur Portal-Startseite"
+
+msgid "Hide advanced mode"
+msgstr "Erweiterten Modus ausblenden"
+
+msgid "You can see examples of how chamilo will look here"
+msgstr "Sie können hier Beispiele dafür sehen, wie Chamilo aussehen wird"
+
+msgid "Warning color hover/background"
+msgstr "Warnfarbe für hover/background"
+
+msgid "Student boss"
+msgstr "Lernender Vorgesetzter"
+
+msgid "Info color hover/background"
+msgstr "Informationsfarbe für hover/background"
+
+msgid "Platform use conditions"
+msgstr "Nutzungsbedingungen der Plattform"
+
+msgid "Info color button text"
+msgstr "Informationstext der Schaltfläche Farbe"
+
+msgid "Tertiary color"
+msgstr "Tertiärfarbe"
+
+msgid "Show dialog"
+msgstr "Dialog anzeigen"
+
+msgid "Closed sessions"
+msgstr "Geschlossene Sessions"
+
+msgid "Customize"
+msgstr "Anpassen"
+
+msgid "Secondary color button text"
+msgstr "Sekundärfarbentext des Buttons"
+
+msgid "System templates"
+msgstr "Systemvorlagen"
+
+msgid "Course maintenance"
+msgstr "Kurspflege"
+
+msgid "Danger color"
+msgstr "Gefahrenfarbe"
+
+msgid "You need confirm your account via e-mail to access the platform"
+msgstr ""
+"Sie müssen Ihr Konto per E-Mail bestätigen, um Zugang zur Plattform zu "
+"erhalten"
+
+msgid "Toggle"
+msgstr "Umschalten"
+
+msgid "Display information about the next incomplete and the last completed topic"
+msgstr ""
+"Anzeigen von Informationen zum nächsten unvollständigen und zum zuletzt "
+"abgeschlossenen Thema"
+
+msgid "Add a user to a course"
+msgstr "Einen Benutzer einem Kurs hinzufügen"
+
+msgid "Primary alternative"
+msgstr "Primäre Alternative"
+
+msgid "Password too easy to guess"
+msgstr "Passwort zu leicht zu erraten"
+
+msgid "Warning color button text"
+msgstr "Warnfarbe Schaltflächentext"
+
+msgid "Warning color"
+msgstr "Warnfarbe"
+
+msgid "Hide all"
+msgstr "Alle ausblenden"
+
+msgid "Tertiary color hover/background"
+msgstr "Tertiärfarbe für hover/background"
+
+msgid "External tools (LTI)"
+msgstr "Externe Werkzeuge (LTI)"
+
+msgid "Add training sessions to categories"
+msgstr "Trainings-Sessions zu Kategorien hinzufügen"
+
+msgid "All sessions"
+msgstr "Alle Sessions"

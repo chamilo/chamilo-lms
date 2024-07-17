@@ -14,11 +14,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_global_admin_script();
 
-if (!api_get_multiple_access_url()) {
-    header('Location: index.php');
-    exit;
-}
-
 $httpRequest = HttpRequest::createFromGlobals();
 
 $form = new FormValidator('add_url');

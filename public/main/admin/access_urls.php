@@ -20,11 +20,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 //api_protect_admin_script();
 api_protect_global_admin_script();
 
-if (!api_get_multiple_access_url()) {
-    header('Location: index.php');
-    exit;
-}
-
 $httpRequest = HttpRequest::createFromGlobals();
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
@@ -122,30 +117,31 @@ if (-1 == $current_access_url_id) {
 }
 
 $actions = Display::url(
-    Display::getMdiIcon('new_link', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add URL')),
+    Display::getMdiIcon('web-plus', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add URL')),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit.php'
 );
-$actions .= Display::url(
-    Display::getMdiIcon('user', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage users')),
-    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
-);
-$actions .= Display::url(
-    Display::getMdiIcon('course', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage courses')),
-    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php'
-);
-
-$userGroup = new UserGroupModel();
-if ($userGroup->getUseMultipleUrl()) {
+if (api_get_multiple_access_url()) {
     $actions .= Display::url(
-        Display::getMdiIcon('class', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage user groups')),
-        api_get_path(WEB_CODE_PATH).'admin/access_url_edit_usergroup_to_url.php'
+        Display::getMdiIcon('account', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage users')),
+        api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
+    );
+    $actions .= Display::url(
+        Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage courses')),
+        api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php'
+    );
+
+    $userGroup = new UserGroupModel();
+    if ($userGroup->getUseMultipleUrl()) {
+        $actions .= Display::url(
+            Display::getMdiIcon('account-group', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage user groups')),
+            api_get_path(WEB_CODE_PATH).'admin/access_url_edit_usergroup_to_url.php'
+        );
+    }
+    $actions .= Display::url(
+        Display::getMdiIcon('file-tree-outline', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage course categories')),
+        api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
     );
 }
-
-$actions .= Display::url(
-    Display::getMdiIcon('folder', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage course categories')),
-    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
-);
 
 echo Display::toolbarAction('urls', [$actions]);
 

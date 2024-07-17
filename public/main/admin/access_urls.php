@@ -156,7 +156,7 @@ foreach ($data as $row) {
     //Status
     $active = $row['active'];
     $action = 'unlock';
-    $image = StateIcon::ACTIVE;
+    $image = StateIcon::INACTIVE;
     if ('1' == $active) {
         $action = 'lock';
         $image = StateIcon::ACTIVE;

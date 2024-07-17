@@ -37,7 +37,7 @@ use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '8.1');
+define('REQUIRED_PHP_VERSION', '8.2');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');

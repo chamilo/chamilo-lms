@@ -2,22 +2,65 @@
   @apply mb-4 shadow-sm rounded-md border-0;
 
   &-wrapper {
-    @apply gap-3.5 py-3 px-4;
+    @apply flex items-center; // gap-3.5;
+  }
+
+  & &-wrapper {
+    @apply py-3 px-4;
+  }
+
+  &-icon {
+    @apply shrink-0;
+  }
+
+  & &-icon {
+    @apply text-body-1 mr-2;
+
+    &:not(.p-message-close-icon) {
+      @apply w-6 h-6;
+    }
   }
 
   &-close {
-    @apply rounded-full transition duration-200 min-w-[1rem] min-h-[1rem];
+    @apply flex items-center justify-center shrink-0; // rounded-full transition duration-200 min-w-[1rem] min-h-[1rem];
 
-    &:hover {
-    }
-
-    &:focus {
-      @apply outline-none outline-offset-0 shadow-none;
+    &.p-link {
+      @apply ml-auto overflow-hidden relative;
     }
   }
 
-  &-text {
-    @apply w-full;
+  & &-close {
+    @apply w-8 h-8 rounded-full bg-transparent transition-none outline-transparent
+      hover:bg-white/50
+      focus-visible:outline-none focus-visible:outline-offset-0 focus-visible:drop-shadow-lg;
+  }
+
+  &-enter-from {
+    @apply opacity-0;
+  }
+
+  &-enter-active {
+    @apply transition-opacity duration-300;
+  }
+
+  &.p-message-leave-from {
+    @apply max-h-96;
+  }
+
+  &.p-message-leave-to {
+    @apply max-h-0 opacity-0 m-0;
+  }
+
+  &-leave-active {
+    @apply overflow-hidden transition;
+  }
+
+  &-leave-active &-close {
+    @apply hidden;
+  }
+
+  & &-text {
+    @apply text-body-2 w-full;
 
     a {
       @apply font-semibold;
@@ -29,7 +72,7 @@
   }
 
   &.p-message-info {
-    @apply bg-primary text-white;
+    @apply bg-info text-white;
 
     .p-message-icon,
     .p-message-close {

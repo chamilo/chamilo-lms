@@ -87,128 +87,69 @@
         "
       />
 
-      <div class="field">
-        <div class="p-float-label">
-          <InputText
-            id="person_name"
-            v-model="contact.personName"
-            size="30"
-            type="text"
-          />
-          <label
-            v-t="'Name'"
-            for="person_name"
-          />
-        </div>
-      </div>
+      <BaseInputText
+        id="person_name"
+        v-model="contact.personName"
+        :label="t('Name')"
+      />
 
-      <div class="field">
-        <div class="p-float-label">
-          <InputText
-            id="person_email"
-            v-model="contact.personEmail"
-            size="30"
-            type="email"
-          />
-          <label
-            v-t="'E-mail'"
-            for="person_email"
-          />
-        </div>
-      </div>
+      <BaseInputText
+        id="person_email"
+        v-model="contact.personEmail"
+        :label="t('E-mail')"
+      />
 
-      <div class="field">
-        <div class="p-float-label">
-          <InputText
-            id="company_name"
-            v-model="contact.companyName"
-            size="30"
-            type="text"
-          />
-          <label
-            v-t="'Your company\'s name'"
-            for="company_name"
-          />
-        </div>
-      </div>
+      <BaseInputText
+        id="company_name"
+        v-model="contact.companyName"
+        :label="t('Your company\'s name')"
+      />
 
-      <div class="field">
-        <div class="p-float-label">
-          <Dropdown
-            v-model="contact.companyActivity"
-            :options="installerData.stepData.activitiesList"
-            :placeholder="t('Select one')"
-            input-id="company_activity"
-          />
-          <label
-            v-t="'Your company\'s activity'"
-            for="company_activity"
-          />
-        </div>
-      </div>
-      <div class="field">
-        <div class="p-float-label">
-          <Dropdown
-            v-model="contact.jobRole"
-            :options="installerData.stepData.rolesList"
-            :placeholder="t('Select one')"
-            input-id="person_role"
-          />
-          <label
-            v-t="'Your job\'s description'"
-            for="person_role"
-          />
-        </div>
-      </div>
+      <BaseDropdown
+        v-model="contact.companyActivity"
+        :label="t('Your company\'s activity')"
+        :options="installerData.stepData.activitiesList"
+        input-id="company_activity"
+        name="company_activity"
+        option-label="0"
+        option-value="0"
+      />
 
-      <div class="field">
-        <div class="p-float-label">
-          <Dropdown
-            v-model="contact.companyCountry"
-            :filter="true"
-            :options="installerData.stepData.countriesList"
-            :placeholder="t('Select one')"
-            input-id="country"
-          />
-          <label
-            v-t="'Your company\'s home country'"
-            for="country"
-          />
-        </div>
-      </div>
+      <BaseDropdown
+        v-model="contact.jobRole"
+        :label="t('Your job\'s description')"
+        :options="installerData.stepData.rolesList"
+        input-id="person_role"
+        name="person_role"
+        option-label="0"
+        option-value="0"
+      />
 
-      <div class="field">
-        <div class="p-float-label">
-          <InputText
-            id="company_city"
-            v-model="contact.companyCity"
-            size="30"
-            type="text"
-          />
-          <label
-            v-t="'Company city'"
-            for="company_city"
-          />
-        </div>
-      </div>
+      <BaseDropdown
+        v-model="contact.companyCountry"
+        :label="t('Your company\'s home country')"
+        :options="installerData.stepData.countriesList"
+        input-id="country"
+        name="country"
+        option-label="0"
+        option-value="0"
+      />
 
-      <div class="field">
-        <div class="p-float-label">
-          <Dropdown
-            v-model="contact.contactLanguage"
-            :filter="true"
-            :options="installerData.stepData.languagesList"
-            :placeholder="t('Select one')"
-            input-id="language"
-            option-label="1"
-            option-value="0"
-          />
-          <label
-            v-t="'Preferred contact language'"
-            for="language"
-          />
-        </div>
-      </div>
+      <BaseInputText
+        id="company_city"
+        v-model="contact.companyCity"
+        :label="t('Company city')"
+      />
+
+      <BaseDropdown
+        v-model="contact.contactLanguage"
+        :label="t('Preferred contact language')"
+        :options="installerData.stepData.languagesList"
+        input-id="language"
+        name="country"
+        option-label="1"
+        option-value="0"
+      />
 
       <label v-t="'Do you have the power to take financial decisions on behalf of your company?'" />
       <div class="formgroup-inline">
@@ -294,6 +235,8 @@ import Dropdown from "primevue/dropdown"
 import InputText from "primevue/inputtext"
 import RadioButton from "primevue/radiobutton"
 import Button from "primevue/button"
+import BaseInputText from "../basecomponents/BaseInputText.vue"
+import BaseDropdown from "../basecomponents/BaseDropdown.vue"
 
 const { t } = useI18n()
 

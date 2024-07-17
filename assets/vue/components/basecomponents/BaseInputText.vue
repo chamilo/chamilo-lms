@@ -10,10 +10,7 @@
         type="text"
         @update:model-value="updateValue"
       />
-      <label
-        :for="id"
-        :class="{ 'p-error': isInvalid }"
-      >
+      <label :for="id">
         {{ label }}
       </label>
     </div>

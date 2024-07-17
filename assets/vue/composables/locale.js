@@ -84,8 +84,11 @@ export function useLocale() {
     window.location.href = newUrl.fullPath
   }
 
+  const appParentLocale = computed(() => useParentLocale(appLocale.value))
+
   return {
     appLocale,
+    appParentLocale,
     languageList,
     currentLanguageFromList,
     reloadWithLocale,

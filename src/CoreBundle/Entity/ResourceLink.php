@@ -43,7 +43,7 @@ class ResourceLink implements Stringable
     protected ResourceNode $resourceNode;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: Course::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 

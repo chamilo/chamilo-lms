@@ -27636,7 +27636,7 @@ msgstr ""
 msgid "This is a form with an error"
 msgstr ""
 
-msgid "Show dialog'"
+msgid "Show dialog"
 msgstr ""
 
 msgid "Dialog example"

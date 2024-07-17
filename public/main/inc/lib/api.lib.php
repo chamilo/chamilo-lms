@@ -37,7 +37,7 @@ use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '8.0');
+define('REQUIRED_PHP_VERSION', '8.1');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');
@@ -49,9 +49,9 @@ define('STUDENT', 5);
 define('COURSEMANAGER', 1);
 /** global status of a user: session admin */
 define('SESSIONADMIN', 3);
-/** global status of a user: human ressource manager */
+/** global status of a user: human resources manager */
 define('DRH', 4);
-/** global status of a user: human ressource manager */
+/** global status of a user: anonymous visitor */
 define('ANONYMOUS', 6);
 /** global status of a user: low security, necessary for inserting data from
  * the teacher through HTMLPurifier */

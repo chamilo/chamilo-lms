@@ -32,10 +32,10 @@
         <strong v-t="'Security advice'" />
 
         <i18n-t
-          keypath="To protect your site, make the whole {0} directory read-only (chmod -R 0555 on Linux) and delete the {1} directory."
+          keypath="To protect your site, make the whole %s directory read-only (chmod -R 0555 on Linux) and delete the %s directory."
           tag="p"
         >
-          <code>var/config/</code>
+          <code>config/</code>
           <code>main/install/</code>
         </i18n-t>
       </Message>

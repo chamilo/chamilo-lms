@@ -59,7 +59,7 @@ class UserGroupModel extends Model
         $this->access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $this->table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $this->useMultipleUrl = api_get_configuration_value('multiple_access_urls');
+        $this->useMultipleUrl = api_get_multiple_access_url();
         if ($this->allowTeachers()) {
             $this->columns[] = 'author_id';
         }

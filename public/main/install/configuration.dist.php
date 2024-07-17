@@ -49,12 +49,6 @@ $_configuration['hosting_total_size_limit'] = 0;
 
 // Security word for password recovery
 $_configuration['security_key'] = '{SECURITY_KEY}';
-// Activation for multi-url access
-// When enabling multi-url, settings can be configured by multi-url using a simple
-// sub-element. E.g. $_configuration['session_lifetime'][1] = true; could be turned into
-// something like $_configuration['session_lifetime'][2] = false; to affect only URL
-// with ID 2. The ID can be found in the access_url table.
-//$_configuration['multiple_access_urls'] = true;
 $_configuration['software_name'] = 'Chamilo';
 $_configuration['software_url'] = 'https://chamilo.org/';
 // Deny the elimination of users

@@ -441,14 +441,12 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Extra fields'),
         ];
 
-        if (!empty(api_get_configuration_value('multiple_access_urls'))) {
-            if (api_is_global_platform_admin()) {
-                $items[] = [
-                    'class' => 'item-access-url',
-                    'url' => $this->generateUrl('legacy_main', ['name' => 'admin/access_urls.php']),
-                    'label' => $this->translator->trans('Configure multiple access URL'),
-                ];
-            }
+        if (api_is_global_platform_admin()) {
+            $items[] = [
+                'class' => 'item-access-url',
+                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/access_urls.php']),
+                'label' => $this->translator->trans('Configure multiple access URL'),
+            ];
         }
 
         if ('true' === api_get_plugin_setting('dictionary', 'enable_plugin_dictionary')) {

@@ -716,9 +716,7 @@ function api_get_path($path = '', $configuration = [])
         );
     }
 
-    if (isset($configuration['multiple_access_urls']) &&
-        $configuration['multiple_access_urls']
-    ) {
+    if (api_get_multiple_access_url()) {
         // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
         if (isset($configuration['access_url']) && !empty($configuration['access_url'])) {
             // We look into the DB the function api_get_access_url
@@ -5970,16 +5968,23 @@ function api_get_course_url($courseId = null, $sessionId = null, $groupId = null
 }
 
 /**
- * Check if the current portal has the $_configuration['multiple_access_urls'] parameter on.
+ * Check if there is more than the default URL defined in the access_url table.
  */
 function api_get_multiple_access_url(): bool
 {
-    global $_configuration;
-    if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
-        return true;
+    static $accessUrlEnabled;
+    if (!isset($accessUrlEnabled)) {
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+        $sql = "SELECT id FROM $table";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 1) {
+            $accessUrlEnabled = true;
+        } else {
+            $accessUrlEnabled = false;
+        }
     }
 
-    return false;
+    return $accessUrlEnabled;
 }
 
 function api_is_multiple_url_enabled(): bool

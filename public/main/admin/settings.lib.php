@@ -1091,13 +1091,6 @@ function generateSettingsForm($settings, $settings_by_access_list)
     );
 
     $url_id = api_get_current_access_url_id();
-    /*
-    if (!empty($_configuration['multiple_access_urls']) && api_is_global_platform_admin() && $url_id == 1) {
-        $group = array();
-        $group[] = $form->createElement('button', 'mark_all', get_lang('Select all'));
-        $group[] = $form->createElement('button', 'unmark_all', get_lang('Unselect all'));
-        $form->addGroup($group, 'buttons_in_action_right');
-    }*/
 
     $default_values = [];
     $url_info = api_get_access_url($url_id);
@@ -1114,7 +1107,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
 
         $addedSettings[] = $row['variable'];
 
-        if (!empty($_configuration['multiple_access_urls'])) {
+        if (api_get_multiple_access_url()) {
             if (api_is_global_platform_admin()) {
                 if (0 == $row['access_url_locked']) {
                     if (1 == $url_id) {

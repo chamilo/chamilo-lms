@@ -120,4 +120,3 @@ $resU = Database::query($sqlU);
 echo "Table $tableAccessUrlRelUserGroup updated".PHP_EOL;
 
 echo "Database updated.".PHP_EOL;
-echo "Please set \$_configuration['multiple_access_urls'] to true in the app/config/configuration.php file".PHP_EOL;

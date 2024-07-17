@@ -377,10 +377,8 @@ if (api_is_platform_admin()) {
 
     $items[] = ['url' => 'extra_field_list.php', 'label' => get_lang('Extra fields')];
 
-    if (!empty($_configuration['multiple_access_urls'])) {
-        if (api_is_global_platform_admin()) {
-            $items[] = ['url' => 'access_urls.php', 'label' => get_lang('Configure multiple access URL')];
-        }
+    if (api_is_global_platform_admin()) {
+        $items[] = ['url' => 'access_urls.php', 'label' => get_lang('Configure multiple access URL')];
     }
 
     if ('true' == api_get_plugin_setting('dictionary', 'enable_plugin_dictionary')) {

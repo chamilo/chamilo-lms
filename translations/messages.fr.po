@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-27 08:58+0000\n"
+"PO-Revision-Date: 2024-07-17 08:17+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
 "messages/fr/>\n"
@@ -29225,3 +29225,285 @@ msgstr "Pas de cours de session pour cet utilisateur"
 
 msgid "The attempted oral questions are %s"
 msgstr "Les questions orales auxquelles il a répondu sont: %s"
+
+msgid "Session link"
+msgstr "Lien de la session"
+
+msgid "No link"
+msgstr "Aucun lien"
+
+msgid "Show to all users"
+msgstr "Afficher à tous les utilisateurs"
+
+msgid "Public"
+msgstr "Public"
+
+msgid "Icons text"
+msgstr "Texte des icônes"
+
+msgid "Ppt_to_lp"
+msgstr "Convertisseur de documents"
+
+msgid "Private"
+msgstr "Privé"
+
+msgid "Show glossary in documents is automatic"
+msgstr "Afficher le glossaire dans les documents : automatiquement"
+
+msgid "Session name and course title"
+msgstr "Nom de la session et titre du cours"
+
+msgid "Black list"
+msgstr "Liste noire"
+
+msgid "World"
+msgstr "Monde"
+
+msgid "Left"
+msgstr "Gauche"
+
+msgid "Show glossary in documents is none"
+msgstr "Afficher le glossaire dans les documents : non"
+
+msgid "Score average"
+msgstr "Moyenne des scores"
+
+msgid "Right"
+msgstr "Droite"
+
+msgid "None"
+msgstr "Aucun(e)"
+
+msgid "White list"
+msgstr "Liste blanche"
+
+msgid "Show glossary in documents is manual"
+msgstr "Afficher le glossaire dans les documents : manuellement"
+
+msgid "Danger color hover/background"
+msgstr "Couleur de danger en hover/background"
+
+msgid "Dropdowns"
+msgstr "Listes déroulantes"
+
+msgid "Success color hover/background"
+msgstr "Couleur de succès en hover/background"
+
+msgid "Show only courses"
+msgstr "Afficher uniquement les cours"
+
+msgid "Checkbox and radio buttons"
+msgstr "Cases à cocher et boutons radio"
+
+msgid "Add course"
+msgstr "Ajouter cours"
+
+msgid "Primary color hover/background"
+msgstr "Couleur principale en hover/background"
+
+msgid "Warning"
+msgstr "Avertissement"
+
+msgid "Tertiary"
+msgstr "Tertiaire"
+
+msgid "Dialog example"
+msgstr "Exemple de la boîte de dialogue"
+
+msgid "Contact form categories"
+msgstr "Catégories de formulaire de contact"
+
+msgid "This is a form with an error"
+msgstr "Il s'agit d'un formulaire avec une erreur"
+
+msgid "Success color"
+msgstr "Couleur de succès"
+
+msgid "Mail confirmation"
+msgstr "Confirmation de courriel"
+
+msgid "Info color"
+msgstr "Couleur d'information"
+
+msgid "Primary color button text"
+msgstr "Texte du bouton de couleur principale"
+
+msgid "Danger"
+msgstr "Danger"
+
+msgid "Search shows unlinked results"
+msgstr "La recherche affiche des résultats non liés"
+
+msgid "Score div percent"
+msgstr "Score en fraction et en pourcentage"
+
+msgid "Course registration code incorrect"
+msgstr "Code d'inscription au cours incorrect"
+
+msgid "Form outline color"
+msgstr "Couleur du contour du formulaire"
+
+msgid "News from Chamilo"
+msgstr "Nouvelles de Chamilo"
+
+msgid "Show only sessions"
+msgstr "Afficher uniquement les sessions"
+
+msgid "No reply email sender"
+msgstr "Expéditeur d'email sans réponse"
+
+msgid "This is the default form"
+msgstr "Il s'agit du formulaire par défaut"
+
+msgid "Show diagnosis"
+msgstr "Afficher le diagnostic"
+
+msgid "Sort"
+msgstr "Trier"
+
+msgid "Primary color button alternative text"
+msgstr "Texte alternatif pour le bouton de couleur principale"
+
+msgid "Campus homepage"
+msgstr "Page d'accueil du campus"
+
+msgid "Success color button text"
+msgstr "Couleur de succès pour les boutons"
+
+msgid "Score percent"
+msgstr "Pourcentage de score"
+
+msgid "Some more elements"
+msgstr "Quelques éléments supplémentaires"
+
+msgid "Buttons"
+msgstr "Boutons"
+
+msgid "Course catalogue"
+msgstr "Catalogue de cours"
+
+msgid "Show advanced mode"
+msgstr "Afficher le mode avancé"
+
+msgid "Hide advanced mode"
+msgstr "Masquer le mode avancé"
+
+msgid "You can see examples of how chamilo will look here"
+msgstr "Vous pouvez voir des exemples de l'apparence de Chamilo ici"
+
+msgid "Course coach email sender"
+msgstr "Expéditeur d'email du tuteur du cours"
+
+msgid "Warning color hover/background"
+msgstr "Couleur d'avertissement en hover/background"
+
+msgid "Student boss"
+msgstr "Supérieur d'apprenants"
+
+msgid "Info color hover/background"
+msgstr "Couleur d'information en hover/background"
+
+msgid "Platform use conditions"
+msgstr "Conditions d'utilisation de la plateforme"
+
+msgid "Info color button text"
+msgstr "Texte du bouton de couleur d'info"
+
+msgid "Tertiary color"
+msgstr "Couleur tertiaire"
+
+msgid "Save diagnosis changes"
+msgstr "Enregistrer les modifications du diagnostic"
+
+msgid "Show dialog'"
+msgstr "Afficher la boîte de dialogue"
+
+msgid "Closed sessions"
+msgstr "Sessions clôturées"
+
+msgid "Secondary color"
+msgstr "Couleur secondaire"
+
+msgid "Customize"
+msgstr "Personnaliser"
+
+msgid "Secondary color button text"
+msgstr "Texte du bouton de couleur secondaire"
+
+msgid "System templates"
+msgstr "Modèles système"
+
+msgid "Course maintenance"
+msgstr "Maintenance du cours"
+
+msgid "Hide catalogue"
+msgstr "Masquer le catalogue"
+
+msgid "Danger color"
+msgstr "Couleur de danger"
+
+msgid "Search hides unlinked results"
+msgstr "La recherche masque les résultats non liés"
+
+msgid "You need confirm your account via e-mail to access the platform"
+msgstr ""
+"Vous devez confirmer votre compte par e-mail pour accéder à la plateforme"
+
+msgid "Toggle"
+msgstr "Basculer"
+
+msgid "Configure Chamilo colors"
+msgstr "Configurer les couleurs de Chamilo"
+
+msgid "Add a user to a course"
+msgstr "Ajouter un utilisateur à un cours"
+
+msgid "Secondary color hover/background"
+msgstr "Couleur secondaire en hover/background"
+
+msgid "Primary alternative"
+msgstr "Alternative principale"
+
+msgid "Load diagnosis"
+msgstr "Chargement du diagnostic"
+
+msgid "Password too easy to guess"
+msgstr "Mot de passe trop facile à deviner"
+
+msgid "Warning color button text"
+msgstr "Texte du bouton de couleur d'avertissement"
+
+msgid "Warning color"
+msgstr "Couleur d'avertissement"
+
+msgid "Show courses and sessions"
+msgstr "Afficher les cours et les sessions"
+
+msgid "Hide all"
+msgstr "Masquer tout"
+
+msgid "Tertiary color hover/background"
+msgstr "Couleur tertiaire en hover/background"
+
+msgid "External tools (LTI)"
+msgstr "Outils externes (LTI)"
+
+msgid "Add training sessions to categories"
+msgstr "Ajouter des sessions de formation aux catégories"
+
+msgid "Primary color"
+msgstr "Couleur principale"
+
+msgid "All sessions"
+msgstr "Toutes les sessions"
+
+msgid "Test invisible in session"
+msgstr "Exercice invisible dans la session"
+
+msgid "Redirect to portal home"
+msgstr "Rediriger vers la page d'accueil du portail"
+
+msgid "Display information about the next incomplete and the last completed topic"
+msgstr ""
+"Afficher des informations sur le prochain sujet incomplet et le dernier "
+"sujet complété"

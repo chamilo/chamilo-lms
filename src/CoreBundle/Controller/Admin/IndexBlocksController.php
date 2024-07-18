@@ -566,6 +566,12 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Colors'),
         ];
 
+        $items[] = [
+            'class' => 'item-file-info',
+            'url' => '/admin/files_info',
+            'label' => $this->translator->trans('File info'),
+        ];
+
         return $items;
     }
 

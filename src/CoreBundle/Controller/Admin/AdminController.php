@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -50,52 +50,14 @@ class AdminController extends BaseController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/files_info', name: 'admin_files_info', methods: ['GET'])]
-    public function listFilesInfo(Request $request): Response
+    public function listFilesInfo(Request $request, ResourceFileRepository $resourceFileRepository): Response
     {
         $page = $request->query->getInt('page', 1);
         $search = $request->query->get('search', '');
         $offset = ($page - 1) * self::ITEMS_PER_PAGE;
 
-        $queryBuilder = $this->entityManager->getRepository(ResourceFile::class)->createQueryBuilder('rf')
-            ->leftJoin('rf.resourceNode', 'rn')
-            ->leftJoin('rn.resourceLinks', 'rl')
-            ->leftJoin('rl.course', 'c')
-            ->leftJoin('rl.user', 'u')
-            ->addSelect('rn', 'rl', 'c', 'u');
-
-        if ($search) {
-            $queryBuilder->where('rf.title LIKE :search')
-                ->orWhere('rf.originalName LIKE :search')
-                ->orWhere('c.title LIKE :search')
-                ->orWhere('u.username LIKE :search')
-                ->orWhere('rn.uuid LIKE :search')
-                ->setParameter('search', '%' . $search . '%');
-        }
-
-        $queryBuilder->orderBy('rf.id', 'DESC')
-            ->setFirstResult($offset)
-            ->setMaxResults(self::ITEMS_PER_PAGE);
-
-        $files = $queryBuilder->getQuery()->getResult();
-
-        $totalItemsQuery = $this->entityManager->getRepository(ResourceFile::class)
-            ->createQueryBuilder('rf')
-            ->leftJoin('rf.resourceNode', 'rn')
-            ->leftJoin('rn.resourceLinks', 'rl')
-            ->leftJoin('rl.course', 'c')
-            ->leftJoin('rl.user', 'u')
-            ->select('COUNT(rf.id)');
-
-        if ($search) {
-            $totalItemsQuery->where('rf.title LIKE :search')
-                ->orWhere('rf.originalName LIKE :search')
-                ->orWhere('c.title LIKE :search')
-                ->orWhere('u.username LIKE :search')
-                ->orWhere('rn.uuid LIKE :search')
-                ->setParameter('search', '%' . $search . '%');
-        }
-
-        $totalItems = $totalItemsQuery->getQuery()->getSingleScalarResult();
+        $files = $resourceFileRepository->searchFiles($search, $offset, self::ITEMS_PER_PAGE);
+        $totalItems = $resourceFileRepository->countFiles($search);
         $totalPages = ceil($totalItems / self::ITEMS_PER_PAGE);
 
         $fileUrls = [];
@@ -109,7 +71,7 @@ class AdminController extends BaseController
                 $fileUrls[$file->getId()] = null;
                 $creator = null;
             }
-            $filePaths[$file->getId()] = $this->resourceNodeRepository->getFilename($file);
+            $filePaths[$file->getId()] = '/upload/resources'.$this->resourceNodeRepository->getFilename($file);
         }
 
         return $this->render('@ChamiloCore/Admin/files_info.html.twig', [

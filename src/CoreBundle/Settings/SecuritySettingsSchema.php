@@ -42,6 +42,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 'allow_online_users_by_status' => '',
                 'security_session_cookie_samesite_none' => 'false',
                 'anonymous_autoprovisioning' => 'false',
+                'access_to_personal_file_for_all' => 'false',
             ]
         );
         $allowedTypes = [
@@ -161,6 +162,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             )
             ->add('security_session_cookie_samesite_none', YesNoType::class)
             ->add('anonymous_autoprovisioning', YesNoType::class)
+            ->add('access_to_personal_file_for_all', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

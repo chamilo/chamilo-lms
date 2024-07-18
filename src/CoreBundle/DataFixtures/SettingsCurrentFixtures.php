@@ -1302,6 +1302,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Time limit for password reset token',
                     'comment' => 'The number of seconds before the generated token automatically expires and cannot be used anymore (a new token needs to be generated).',
                 ],
+                [
+                    'name' => 'access_to_personal_file_for_all',
+                    'title' => 'Access to personal file for all',
+                    'comment' => 'Allows access to all personal files without restriction',
+                ],
             ],
             'tracking' => [
                 [

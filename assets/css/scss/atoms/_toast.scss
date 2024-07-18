@@ -1,5 +1,5 @@
 .p-toast {
-  @apply whitespace-pre-line break-words opacity-90 w-96;
+  @apply whitespace-pre-line break-words opacity-90 min-w-96;
 
   &.p-toast-top-center, &.p-toast-bottom-center {
     @apply -translate-x-1/2;
@@ -52,7 +52,7 @@
       @apply bg-warning text-gray-90 border-0;
 
       .p-toast-message-icon, .p-toast-icon-close {
-        @apply bg-gray-90;
+        @apply text-gray-90;
       }
     }
 
@@ -65,14 +65,14 @@
     }
 
     .p-toast-message-content {
-      @apply flex items-center p-4 border-0;
+      @apply flex items-start p-4 border-0;
 
       .p-toast-message-text {
-        @apply flex-auto m-0 ml-4;
+        @apply flex-auto m-0 ml-4 self-center;
       }
 
       .p-toast-message-icon {
-        @apply shrink-0 text-body-1;
+        @apply shrink-0 text-2xl;
 
         &.p-icon {
           @apply w-8 h-8;

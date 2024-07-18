@@ -163,13 +163,10 @@ class SessionManager
         global $_configuration;
 
         // Check portal limits
-        $accessUrlId = api_is_multiple_url_enabled()
-            ? (empty($accessUrlId) ? api_get_current_access_url_id() : (int) $accessUrlId)
-            : 1;
+        $accessUrlId = empty($accessUrlId) ? api_get_current_access_url_id() : (int) $accessUrlId;
 
-        if (isset($_configuration[$accessUrlId]) &&
+        if (isset($_configuration[$accessUrlId]['hosting_limit_sessions']) &&
             is_array($_configuration[$accessUrlId]) &&
-            isset($_configuration[$accessUrlId]['hosting_limit_sessions']) &&
             $_configuration[$accessUrlId]['hosting_limit_sessions'] > 0
         ) {
             $num = self::count_sessions();
@@ -395,50 +392,28 @@ class SessionManager
                                 ";
         }
 
-        $sql = "SELECT COUNT(id) as total_rows FROM (
-                SELECT DISTINCT
-                 IF (
-					(s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
-                    (s.access_start_date IS NULL AND s.access_end_date IS NULL ) OR
-					(s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
-					('$today' <= s.access_end_date AND s.access_start_date IS NULL)
-				, 1, 0) as session_active,
-                s.id
-                FROM $tbl_session s
-                LEFT JOIN $tbl_session_category sc
-                ON s.session_category_id = sc.id
-                INNER JOIN $tbl_user u
-                ON s.id_coach = u.id
-                $courseCondition
-                $extraJoin
-                $where $where_condition ) as session_table";
+        $access_url_id = api_get_current_access_url_id();
+        $where .= " AND ar.access_url_id = $access_url_id ";
 
-        if (api_is_multiple_url_enabled()) {
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $where .= " AND ar.access_url_id = $access_url_id ";
-
-                $sql = "SELECT count(id) as total_rows FROM (
-                SELECT DISTINCT
-                  IF (
-					(s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
+        $sql = "SELECT count(id) as total_rows FROM (
+            SELECT DISTINCT
+                IF (
+                    (s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
                     (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
-					(s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
-					('$today' <= s.access_end_date AND s.access_start_date IS NULL)
-				, 1, 0)
-				as session_active,
-				s.id
-                FROM $tbl_session s
-                    LEFT JOIN  $tbl_session_category sc
-                    ON s.session_category_id = sc.id
-                    INNER JOIN $tbl_user u ON s.id_coach = u.id
-                    INNER JOIN $table_access_url_rel_session ar
-                    ON ar.session_id = s.id
-                    $courseCondition
-                    $extraJoin
-                $where $where_condition) as session_table";
-            }
-        }
+                    (s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
+                    ('$today' <= s.access_end_date AND s.access_start_date IS NULL)
+                , 1, 0)
+                as session_active,
+                s.id
+            FROM $tbl_session s
+            LEFT JOIN  $tbl_session_category sc
+            ON s.session_category_id = sc.id
+            INNER JOIN $tbl_user u ON s.id_coach = u.id
+            INNER JOIN $table_access_url_rel_session ar
+            ON ar.session_id = s.id
+            $courseCondition
+            $extraJoin
+            $where $where_condition) as session_table";
 
         $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
 
@@ -604,20 +579,14 @@ class SessionManager
             $injectExtraFields = rtrim(trim($injectExtraFields), ',');
             $query .= ", $injectExtraFields";
         }
-        $query .= " FROM $tblSession s $sqlInjectJoins $where $sqlInjectWhere";
 
-        if (api_is_multiple_url_enabled()) {
-            $tblAccessUrlRelSession = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $accessUrlId = api_get_current_access_url_id();
+        $tblAccessUrlRelSession = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $accessUrlId = api_get_current_access_url_id();
 
-            if (-1 != $accessUrlId) {
-                $where .= " AND ar.access_url_id = $accessUrlId ";
-                $query = "$select
-                    FROM $tblSession s $sqlInjectJoins
-                    INNER JOIN $tblAccessUrlRelSession ar
-                    ON (ar.session_id = s.id) $where";
-            }
-        }
+        $where .= " AND ar.access_url_id = $accessUrlId ";
+        $query .= " FROM $tblSession s $sqlInjectJoins
+            INNER JOIN $tblAccessUrlRelSession ar
+            ON (ar.session_id = s.id) $where $sqlInjectWhere ";
 
         $date = api_get_utc_datetime();
 
@@ -3688,20 +3657,14 @@ class SessionManager
         $affected_rows = 0;
         // Deleting assigned sessions to hrm_id.
         if ($removeSessionsFromUser) {
-            if (api_is_multiple_url_enabled()) {
-                $sql = "SELECT s.session_id
-                        FROM $tbl_session_rel_user s
-                        INNER JOIN $tbl_session_rel_access_url a
-                        ON (a.session_id = s.session_id)
-                        WHERE
-                            s.user_id = $userId AND
-                            relation_type = ".Session::DRH." AND
-                            access_url_id = ".api_get_current_access_url_id();
-            } else {
-                $sql = "SELECT s.session_id
-                        FROM $tbl_session_rel_user s
-                        WHERE user_id = $userId AND relation_type=".Session::DRH;
-            }
+            $sql = "SELECT s.session_id
+                FROM $tbl_session_rel_user s
+                INNER JOIN $tbl_session_rel_access_url a
+                ON (a.session_id = s.session_id)
+                WHERE
+                    s.user_id = $userId AND
+                    relation_type = ".Session::DRH." AND
+                    access_url_id = ".api_get_current_access_url_id();
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
@@ -3769,27 +3732,15 @@ class SessionManager
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
 
-        $select = " SELECT * ";
-        if (api_is_multiple_url_enabled()) {
-            $sql = " $select FROM $tbl_session s
-                    INNER JOIN $tbl_session_rel_user sru ON (sru.session_id = s.id)
-                    LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
-                    WHERE
-                        sru.user_id = '$userId' AND
-                        sru.session_id = '$sessionId' AND
-                        sru.relation_type = '".Session::DRH."' AND
-                        access_url_id = ".api_get_current_access_url_id()."
-                    ";
-        } else {
-            $sql = "$select FROM $tbl_session s
-                     INNER JOIN $tbl_session_rel_user sru
-                     ON
-                        sru.session_id = s.id AND
-                        sru.user_id = '$userId' AND
-                        sru.session_id = '$sessionId' AND
-                        sru.relation_type = '".Session::DRH."'
-                    ";
-        }
+        $sql = "  SELECT * FROM $tbl_session s
+            INNER JOIN $tbl_session_rel_user sru ON (sru.session_id = s.id)
+            LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+            WHERE
+                sru.user_id = '$userId' AND
+                sru.session_id = '$sessionId' AND
+                sru.relation_type = '".Session::DRH."' AND
+                access_url_id = ".api_get_current_access_url_id()."
+            ";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
@@ -4399,16 +4350,12 @@ class SessionManager
             $whereConditions = "sru.user_id = $user_id AND sru.relation_type = ".Session::GENERAL_COACH;
         }
 
-        if (api_is_multiple_url_enabled()) {
-            $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $access_url_id = api_get_current_access_url_id();
+        $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $access_url_id = api_get_current_access_url_id();
 
-            if (-1 != $access_url_id) {
-                $innerJoin .= " INNER JOIN $tblSessionRelAccessUrl session_rel_url
-                    ON (s.id = access_url_rel_session.session_id)";
-                $whereConditions .= " AND access_url_rel_session.access_url_id = $access_url_id";
-            }
-        }
+        $innerJoin .= " INNER JOIN $tblSessionRelAccessUrl session_rel_url
+            ON (s.id = access_url_rel_session.session_id)";
+        $whereConditions .= " AND access_url_rel_session.access_url_id = $access_url_id";
         $sql = "SELECT s.* FROM $sessionTable AS s $innerJoin ";
         if (!empty($whereConditions)) {
             $sql .= "WHERE $whereConditions ";
@@ -7810,32 +7757,19 @@ class SessionManager
             return [];
         }
 
+        $sessionAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $accessUrlId = api_get_current_access_url_id();
+
         $sql = "SELECT DISTINCT s.*
-                FROM $sessionTable s
-                INNER JOIN $sessionUserTable sru
-                ON s.id = sru.id_session
-                WHERE
-                    (sru.id_user IN (".implode(', ', $userIdList).")
+            FROM $sessionTable s
+            INNER JOIN $sessionUserTable sru ON s.id = sru.id_session
+            INNER JOIN $sessionAccessUrlTable srau ON s.id = srau.session_id
+            WHERE
+                srau.access_url_id = $accessUrlId
+                AND (
+                    sru.id_user IN (".implode(', ', $userIdList).")
                     AND sru.relation_type = ".Session::STUDENT."
                 )";
-
-        if (api_is_multiple_url_enabled()) {
-            $sessionAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $accessUrlId = api_get_current_access_url_id();
-
-            if (-1 != $accessUrlId) {
-                $sql = "SELECT DISTINCT s.*
-                        FROM $sessionTable s
-                        INNER JOIN $sessionUserTable sru ON s.id = sru.id_session
-                        INNER JOIN $sessionAccessUrlTable srau ON s.id = srau.session_id
-                        WHERE
-                            srau.access_url_id = $accessUrlId
-                            AND (
-                                sru.id_user IN (".implode(', ', $userIdList).")
-                                AND sru.relation_type = ".Session::STUDENT."
-                            )";
-            }
-        }
 
         $result = Database::query($sql);
         while ($row = Database::fetch_assoc($result)) {
@@ -7943,26 +7877,17 @@ class SessionManager
                 $orderClause = 'ORDER BY ';
                 $orderClause .= api_sort_by_first_name() ? 'firstname, lastname, username' : 'lastname, firstname, username';
 
-                $sql = "SELECT id as user_id, lastname, firstname, username
-                        FROM $tbl_user
-                        WHERE active <> -1 AND status = '1' ".
-                        $orderClause;
-
-                if (api_is_multiple_url_enabled()) {
-                    $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-                    $accessUrlId = api_get_current_access_url_id();
-                    if (-1 != $accessUrlId) {
-                        $sql = "SELECT user.id as user_id, username, lastname, firstname
-                        FROM $tbl_user user
-                        INNER JOIN $userRelAccessUrlTable url_user
-                        ON (url_user.user_id = user.id)
-                        WHERE
-                            user.active <> -1 AND
-                            access_url_id = $accessUrlId AND
-                            status = 1 "
-                            .$orderClause;
-                    }
-                }
+                $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                $accessUrlId = api_get_current_access_url_id();
+                $sql = "SELECT user.id as user_id, username, lastname, firstname
+                FROM $tbl_user user
+                INNER JOIN $userRelAccessUrlTable url_user
+                ON (url_user.user_id = user.id)
+                WHERE
+                    user.active <> -1 AND
+                    access_url_id = $accessUrlId AND
+                    status = 1 "
+                    .$orderClause;
 
                 $result = Database::query($sql);
                 $coachesList = Database::store_result($result);
@@ -8350,43 +8275,31 @@ class SessionManager
         }
 
         $today = api_get_utc_datetime();
-        $query_rows = "SELECT count(*) as total_rows, c.title as course_title, s.title,
-                        IF (
-                            (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR
-                            (s.access_start_date = '0000-00-00 00:00:00' AND s.access_end_date = '0000-00-00 00:00:00' ) OR
-                            (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
-                            (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = s.access_end_date OR s.access_end_date IS NULL )) OR
-                            ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = s.access_start_date OR s.access_start_date IS NULL) )
-                        , 1, 0) as session_active
-                       FROM $extraFieldTables $tbl_session s
-                       LEFT JOIN  $tbl_session_category sc
-                       ON s.session_category_id = sc.id
-                       INNER JOIN $tblSessionRelUser sru
-                       ON s.id = sru.session_id
-                       INNER JOIN $tbl_user u
-                       ON sru.user_id = u.id
-                       INNER JOIN $sessionCourseUserTable scu
-                       ON s.id = scu.session_id
-                       INNER JOIN $courseTable c
-                       ON c.id = scu.c_id
-                       $where ";
 
-        if (api_is_multiple_url_enabled()) {
-            $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $where .= " AND ar.access_url_id = $access_url_id ";
-                $query_rows = "SELECT count(*) as total_rows
-                               FROM $tbl_session s
-                               LEFT JOIN  $tbl_session_category sc
-                               ON s.session_category_id = sc.id
-                               INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
-                               INNER JOIN $tbl_user u
-                               ON sru.user_id = u.id
-                               INNER JOIN $table_access_url_rel_session ar
-                               ON ar.session_id = s.id $where ";
-            }
-        }
+            $where .= " AND ar.access_url_id = $access_url_id ";
+            $query_rows = "SELECT count(*) as total_rows, c.title as course_title, s.title,
+                    IF (
+                        (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR
+                        (s.access_start_date = '0000-00-00 00:00:00' AND s.access_end_date = '0000-00-00 00:00:00' ) OR
+                        (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
+                        (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = s.access_end_date OR s.access_end_date IS NULL )) OR
+                        ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = s.access_start_date OR s.access_start_date IS NULL) )
+                    , 1, 0) as session_active
+                FROM $extraFieldTables $tbl_session s
+                LEFT JOIN  $tbl_session_category sc
+                ON s.session_category_id = sc.id
+                INNER JOIN $tblSessionRelUser sru
+                ON s.id = sru.session_id
+                INNER JOIN $tbl_user u
+                ON sru.user_id = u.id
+                INNER JOIN $sessionCourseUserTable scu
+                ON s.id = scu.session_id
+                INNER JOIN $courseTable c
+                ON c.id = scu.c_id
+                INNER JOIN $table_access_url_rel_session ar
+                ON ar.session_id = s.id $where ";
 
         $result = Database::query($query_rows);
         $num = 0;
@@ -9051,52 +8964,28 @@ class SessionManager
             $limit = ' LIMIT '.$options['limit'];
         }
 
-        $query = "$select FROM $tbl_session s
-                    LEFT JOIN $tbl_session_field_values fv
-                    ON (fv.item_id = s.id)
-                    LEFT JOIN $extraFieldTable f
-                    ON f.id = fv.field_id
-                    LEFT JOIN $tbl_session_field_options fvo
-                    ON (fv.field_id = fvo.field_id)
-                    LEFT JOIN $tbl_session_rel_course src
-                    ON (src.session_id = s.id)
-                    LEFT JOIN $tbl_course c
-                    ON (src.c_id = c.id)
-                    LEFT JOIN $tbl_session_category sc
-                    ON (s.session_category_id = sc.id)
-                    INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
-                    INNER JOIN $tbl_user u
-                    ON sru.user_id = u.id
-                    $where
-                    $limit
+        $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $access_url_id = api_get_current_access_url_id();
+        $query = "$select
+            FROM $tbl_session s
+            LEFT JOIN $tbl_session_field_values fv
+            ON (fv.item_id = s.id)
+            LEFT JOIN $tbl_session_field_options fvo
+            ON (fv.field_id = fvo.field_id)
+            LEFT JOIN $tbl_session_rel_course src
+            ON (src.session_id = s.id)
+            LEFT JOIN $tbl_course c
+            ON (src.c_id = c.id)
+            LEFT JOIN $tbl_session_category sc
+            ON (s.session_category_id = sc.id)
+            INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
+            INNER JOIN $tbl_user u
+            ON sru.user_id = u.id
+            INNER JOIN $table_access_url_rel_session ar
+            ON (ar.session_id = s.id AND ar.access_url_id = $access_url_id)
+            $where
+            $limit
         ";
-
-        if (api_is_multiple_url_enabled()) {
-            $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $query = "$select
-                    FROM $tbl_session s
-                    LEFT JOIN $tbl_session_field_values fv
-                    ON (fv.item_id = s.id)
-                    LEFT JOIN $tbl_session_field_options fvo
-                    ON (fv.field_id = fvo.field_id)
-                    LEFT JOIN $tbl_session_rel_course src
-                    ON (src.session_id = s.id)
-                    LEFT JOIN $tbl_course c
-                    ON (src.c_id = c.id)
-                    LEFT JOIN $tbl_session_category sc
-                    ON (s.session_category_id = sc.id)
-                    INNER JOIN $tblSessionRelUser sru ON s.id = sru.session_id
-                    INNER JOIN $tbl_user u
-                    ON sru.user_id = u.id
-                    INNER JOIN $table_access_url_rel_session ar
-                    ON (ar.session_id = s.id AND ar.access_url_id = $access_url_id)
-                    $where
-                    $limit
-                ";
-            }
-        }
 
         $query .= ') AS s';
 
@@ -9788,25 +9677,16 @@ class SessionManager
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        if (api_is_multiple_url_enabled()) {
-            $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-            $sql = "SELECT s.id FROM $tblSession s
-                INNER JOIN $tblSessionRelUser sru ON (sru.session_id = s.id)
-                LEFT JOIN $tblSessionRelAccessUrl a ON (s.id = a.session_id)
-                WHERE
-                    sru.user_id = '$userId' AND
-                    sru.session_id = '$sessionId' AND
-                    sru.relation_type = '".Session::DRH."' AND
-                    access_url_id = ".api_get_current_access_url_id();
-        } else {
-            $sql = "SELECT s.id FROM $tblSession s
-                INNER JOIN $tblSessionRelUser sru ON sru.session_id = s.id
-                WHERE
-                    sru.user_id = '$userId' AND
-                    sru.session_id = '$sessionId' AND
-                    sru.relation_type = '".Session::DRH."'";
-        }
+        $sql = "SELECT s.id FROM $tblSession s
+            INNER JOIN $tblSessionRelUser sru ON (sru.session_id = s.id)
+            LEFT JOIN $tblSessionRelAccessUrl a ON (s.id = a.session_id)
+            WHERE
+                sru.user_id = '$userId' AND
+                sru.session_id = '$sessionId' AND
+                sru.relation_type = '".Session::DRH."' AND
+                access_url_id = ".api_get_current_access_url_id();
 
         $result = Database::query($sql);
 

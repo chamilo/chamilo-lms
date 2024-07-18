@@ -73,11 +73,10 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     }
 
     $sql = "$select FROM $table course";
-    if (api_is_multiple_url_enabled()) {
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
-                  ON (course.id = url_rel_course.c_id)";
-    }
+
+    $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+    $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
+              ON (course.id = url_rel_course.c_id)";
 
     $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $sql .= "
@@ -119,9 +118,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     }
 
     // Adding the filter to see the user's only of the current access_url.
-    if (api_is_multiple_url_enabled()) {
-        $sql .= " AND url_rel_course.access_url_id = ".api_get_current_access_url_id();
-    }
+    $sql .= " AND url_rel_course.access_url_id = ".api_get_current_access_url_id();
 
     if ($addTeacherColumn) {
         $teachers = isset($_GET['course_teachers']) ? $_GET['course_teachers'] : [];

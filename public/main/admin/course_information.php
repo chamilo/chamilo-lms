@@ -138,17 +138,15 @@ echo Display::page_header(get_lang('Users'));
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT *, cu.status as course_status
-        FROM $table_course_user cu, $table_user u";
-if (api_is_multiple_url_enabled()) {
-    $sql .= " INNER JOIN ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER)." url_rel_user
-        ON
-            u.id = url_rel_user.user_id AND
-            url_rel_user.access_url_id = ".api_get_current_access_url_id();
-}
-$sql .= " WHERE
-            cu.user_id = u.id AND
-            cu.c_id = '".$courseId."' AND
-            cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH;
+    FROM $table_course_user cu, $table_user u
+    INNER JOIN ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER)." url_rel_user
+    ON
+        u.id = url_rel_user.user_id AND
+        url_rel_user.access_url_id = ".api_get_current_access_url_id()."
+    WHERE
+        cu.user_id = u.id AND
+        cu.c_id = '".$courseId."' AND
+        cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH;
 $res = Database::query($sql);
 $is_western_name_order = api_is_western_name_order();
 if (Database::num_rows($res) > 0) {

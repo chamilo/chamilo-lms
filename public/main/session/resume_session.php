@@ -126,11 +126,7 @@ $sessionTitle = Display::page_subheader(get_lang('General properties').$url);
 $sessionField = new ExtraField('session');
 $extraFieldData = $sessionField->getDataAndFormattedValues($sessionId);
 
-$urlList = [];
-$isMultipleUrl = api_is_multiple_url_enabled();
-if ($isMultipleUrl) {
-    $urlList = $session->getUrls();
-}
+$urlList = $session->getUrls();
 
 $url = Display::url(
     Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon-gradient', null, 32, get_lang('Add')),
@@ -330,13 +326,11 @@ if (!empty($sessionRelUsers)) {
         );
 
         $addUserToUrlLink = '';
-        /*if ($isMultipleUrl) {
-            if ($user['access_url_id'] != $url_id) {
-                $userLink .= ' '.Display::getMdiIcon(StateIcon::WARNING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Users not added to the URL'));
-                $add = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add a userToURL'));
-                $addUserToUrlLink = '<a href="resume_session.php?action=add_user_to_url&id_session='.$sessionId
-                    .'&user_id='.$user['user_id'].'">'.$add.'</a>';
-            }
+        /*if ($user['access_url_id'] != $url_id) {
+            $userLink .= ' '.Display::getMdiIcon(StateIcon::WARNING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Users not added to the URL'));
+            $add = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add a userToURL'));
+            $addUserToUrlLink = '<a href="resume_session.php?action=add_user_to_url&id_session='.$sessionId
+                .'&user_id='.$user['user_id'].'">'.$add.'</a>';
         }*/
 
         $editUrl = null;

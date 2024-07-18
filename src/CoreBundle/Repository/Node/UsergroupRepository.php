@@ -50,7 +50,7 @@ class UsergroupRepository extends ResourceRepository
         }
 
         $qb->innerJoin('g.urls', 'u')
-            ->andWhere('u.accessUrl = :urlId')
+            ->andWhere('u.url = :urlId')
             ->setParameter('urlId', $this->accessUrlHelper->getCurrent()->getId())
         ;
 

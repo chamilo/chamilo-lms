@@ -1,46 +1,101 @@
-$color_1: #01579B;
-$color_2: #1B5E20;
-$color_3: #7f6003;
-$color_4: #B71C1C;
-
 .p-toast {
-  @apply opacity-95;
+  @apply whitespace-pre-line break-words opacity-90 w-96;
 
-  &-message {
-    @apply rounded-md mb-3.5 shadow-gray-30 shadow-md;
+  &.p-toast-top-center, &.p-toast-bottom-center {
+    @apply -translate-x-1/2;
+  }
 
-    &-content {
-      @apply py-4 px-6 gap-2.5;
+  &.p-toast-center {
+    @apply min-w-5 -translate-x-1/2 -translate-y-1/2;
+  }
+
+  .p-toast-message {
+    @apply m-0 mb-4 drop-shadow-lg rounded-lg;
+
+    &.p-toast-message-enter-from {
+      @apply opacity-0 translate-y-1/2;
+    }
+
+    &.p-toast-message-leave-from {
+      @apply max-h-96;
+    }
+
+    &.p-toast-message-leave-to {
+      @apply max-h-0 opacity-0 mb-0 overflow-hidden;
+    }
+
+    &-enter-active {
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    &-leave-active {
+      transition: max-height 0.45s cubic-bezier(0, 1, 0, 1), opacity 0.3s, margin-bottom 0.3s;
+    }
+
+    &-info {
+      @apply bg-primary text-white border-0;
+
+      .p-toast-message-icon, .p-toast-icon-close {
+        @apply text-white;
+      }
+    }
+
+    &-success {
+      @apply bg-success text-white border-0;
+
+      .p-toast-message-icon, .p-toast-icon-close {
+        @apply text-white;
+      }
+    }
+
+    &-warn {
+      @apply bg-warning bg-gray-90 border-0;
+
+      .p-toast-message-icon, .p-toast-icon-close {
+        @apply bg-gray-90;
+      }
+    }
+
+    &-error {
+      @apply bg-error text-white border-0;
+
+      .p-toast-message-icon, .p-toast-icon-close {
+        @apply text-white;
+      }
+    }
+
+    .p-toast-message-content {
+      @apply flex items-center p-4 border-0;
 
       .p-toast-message-text {
-        @apply text-body-1;
+        @apply flex-auto m-0 ml-4;
       }
+
       .p-toast-message-icon {
+        @apply shrink-0 text-body-1;
+
+        &.p-icon {
+          @apply w-8 h-8;
+        }
       }
+
       .p-toast-summary {
         @apply font-semibold;
       }
-      .p-toast-detail {
+
+      .p-toast-summary + .p-toast-detail {
+        @apply m-0 mt-2;
       }
     }
 
     .p-toast-icon-close {
-      @apply rounded-full transition duration-200 w-4 h-6
-        focus:outline-none;
-    }
+      @apply flex items-center justify-center overflow-hidden relative w-8 h-8 rounded-lg bg-transparent transition-none outline-none
+        hover:bg-white/50
+        focus-visible:outline-none drop-shadow-none;
 
-    &.p-toast-message-info {
-      @apply bg-primary text-white;
-    }
-
-    &.p-toast-message-success {
-      @apply bg-success text-white;
-    }
-    &.p-toast-message-warn {
-      @apply bg-warning text-gray-90;
-    }
-    &.p-toast-message-error {
-      @apply bg-error text-white;
+      &.p-link {
+        @apply cursor-pointer;
+      }
     }
   }
 }

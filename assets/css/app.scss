@@ -742,6 +742,54 @@ form .field {
   }
 }
 
+.files-info-page {
+  .form-control {
+    @apply w-48 p-1 border border-gray-300 rounded;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-button-text p-1 rounded;
+  }
+
+  .btn-primary:hover {
+    @apply bg-secondary-hover;
+  }
+
+  .modal {
+    @apply hidden fixed z-10 left-0 top-0 w-full h-full overflow-auto bg-black bg-opacity-50 pt-16;
+  }
+
+  .modal-content {
+    @apply bg-white m-auto p-5 border border-gray-300 w-1/3;
+  }
+
+  .close-button {
+    @apply text-fontdisabled float-right text-2xl font-bold;
+  }
+
+  .close-button:hover,
+  .close-button:focus {
+    @apply text-black no-underline cursor-pointer;
+  }
+
+  .pagination {
+    @apply flex justify-center my-5;
+  }
+
+  .pagination a,
+  .pagination span {
+    @apply mx-1 px-4 py-2 text-primary border border-gray-25;
+  }
+
+  .pagination a:hover {
+    @apply bg-gray-15;
+  }
+
+  .pagination span {
+    @apply bg-primary text-white border-primary;
+  }
+}
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';

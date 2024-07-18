@@ -24,7 +24,7 @@ class ThemeControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/themes/chamilo/default.css');
+        $client->request('GET', '/themes/chamilo/nonexistent.css');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }

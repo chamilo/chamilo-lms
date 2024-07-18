@@ -132,10 +132,7 @@
       :closable="false"
       severity="warn"
     >
-      <i18n-t keypath="A database with the name {0}. It will be {1}.">
-        <b>already exists</b>
-        <b>deleted</b>
-      </i18n-t>
+      <span v-html="t('A database with the name already exists. It will be <b>deleted</b>.')" />
     </Message>
 
     <Message

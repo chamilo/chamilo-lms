@@ -1,0 +1,152 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <div class="files-info-page">
+        <h1>{{ 'File Information'|trans }}</h1>
+
+        <form method="get" action="{{ path('admin_files_info') }}" style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+            <input type="text" name="search" value="{{ search }}" placeholder="{{ 'Search...'|trans }}" class="form-control" style="margin-right: 10px;">
+            <button type="submit" class="btn btn--primary">{{ 'Search'|trans }}</button>
+        </form>
+
+        <table class="data_table">
+            <thead>
+            <tr>
+                <th>{{ 'Title'|trans }}</th>
+                <th>{{ 'Original Name'|trans }}</th>
+                <th>{{ 'Course'|trans }}</th>
+                <th>{{ 'User'|trans }}</th>
+                <th>{{ 'Actions'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for file in files %}
+                <tr>
+                    <td>{{ file.title }}</td>
+                    <td>{{ file.originalName }}</td>
+                    <td>
+                        {% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}
+                            {{ file.resourceNode.resourceLinks|first.course.title ?? 'N/A' }}
+                        {% else %}
+                            {{ 'N/A'|trans }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}
+                            {{ file.resourceNode.resourceLinks|first.user.username ?? 'N/A' }}
+                        {% elseif file.resourceNode and file.resourceNode.creator %}
+                            {{ file.resourceNode.creator.username ?? 'N/A' }}
+                        {% else %}
+                            {{ 'N/A'|trans }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="#" class="open-modal"
+                           data-title="{{ file.title }}"
+                           data-mime-type="{{ file.mimeType }}"
+                           data-original-name="{{ file.originalName }}"
+                           data-size="{{ file.size }}"
+                           data-course="{% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}{{ file.resourceNode.resourceLinks|first.course.title ?? 'N/A' }}{% else %}{{ 'N/A'|trans }}{% endif %}"
+                           data-user="{% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}{{ file.resourceNode.resourceLinks|first.user.username ?? 'N/A' }}{% elseif file.resourceNode and file.resourceNode.creator %}{{ file.resourceNode.creator.username ?? 'N/A' }}{% else %}{{ 'N/A'|trans }}{% endif %}"
+                           data-file-url="{{ fileUrls[file.id] }}"
+                           data-file-path="{{ filePaths[file.id] }}">
+                            {{ 'View'|trans }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            {% if currentPage > 1 %}
+                <a href="{{ path('admin_files_info', {'page': currentPage - 1, 'search': search}) }}">&laquo; {{ 'Previous'|trans }}</a>
+            {% endif %}
+
+            {% for i in max(1, currentPage - 2)..min(totalPages, currentPage + 2) %}
+                {% if i == currentPage %}
+                    <span>{{ i }}</span>
+                {% else %}
+                    <a href="{{ path('admin_files_info', {'page': i, 'search': search}) }}">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if currentPage < totalPages %}
+                <a href="{{ path('admin_files_info', {'page': currentPage + 1, 'search': search}) }}">{{ 'Next'|trans }} &raquo;</a>
+            {% endif %}
+        </div>
+
+        <!-- Modal -->
+        <div id="fileInfoModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>{{ 'File Information'|trans }}</h2>
+                <p class="mt-3 mb-3"><strong>{{ 'Title:'|trans }}</strong> <span id="file-title"></span></p>
+                <p class="mb-3"><strong>{{ 'MIME Type:'|trans }}</strong> <span id="file-mime-type"></span></p>
+                <p class="mb-3"><strong>{{ 'Original Name:'|trans }}</strong> <span id="file-original-name"></span></p>
+                <p class="mb-3"><strong>{{ 'Size:'|trans }}</strong> <span id="file-size"></span></p>
+                <p class="mb-3"><strong>{{ 'Course:'|trans }}</strong> <span id="file-course"></span></p>
+                <p class="mb-3"><strong>{{ 'User:'|trans }}</strong> <span id="file-user"></span></p>
+                <p class="mb-3"><strong>{{ 'File Path:'|trans }}</strong> <span id="file-path"></span>&nbsp;&nbsp;&nbsp;<button id="copy-path" class="mdi mdi-content-copy"></button></p>
+                <p class="mb-3"><strong>{{ 'File Link:'|trans }}</strong> <a href="#" id="file-url" target="_blank">{{ 'Open File'|trans }}</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var modal = document.getElementById("fileInfoModal");
+        var span = document.getElementsByClassName("close-button")[0];
+        var copyPathButton = document.getElementById('copy-path');
+
+        document.querySelectorAll('.open-modal').forEach(function(button) {
+          button.onclick = function(event) {
+            event.preventDefault();
+            var title = button.getAttribute('data-title');
+            var mimeType = button.getAttribute('data-mime-type');
+            var originalName = button.getAttribute('data-original-name');
+            var size = button.getAttribute('data-size');
+            var course = button.getAttribute('data-course');
+            var user = button.getAttribute('data-user');
+            var filePath = button.getAttribute('data-file-path');
+            var fileUrl = button.getAttribute('data-file-url');
+
+            document.getElementById('file-title').textContent = title;
+            document.getElementById('file-mime-type').textContent = mimeType;
+            document.getElementById('file-original-name').textContent = originalName;
+            document.getElementById('file-size').textContent = size + ' bytes';
+            document.getElementById('file-course').textContent = course;
+            document.getElementById('file-user').textContent = user;
+            document.getElementById('file-path').textContent = filePath;
+            document.getElementById('file-url').href = fileUrl;
+
+            modal.style.display = "block";
+          };
+        });
+
+        span.onclick = function() {
+          modal.style.display = "none";
+        };
+
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        };
+
+        copyPathButton.onclick = function() {
+          var filePath = document.getElementById('file-path').textContent;
+          navigator.clipboard.writeText(filePath).then(function() {
+            copyPathButton.classList.remove('mdi-content-copy');
+            copyPathButton.classList.add('mdi-check');
+            setTimeout(function() {
+              copyPathButton.classList.remove('mdi-check');
+              copyPathButton.classList.add('mdi-content-copy');
+            }, 2000);
+          }, function(err) {
+            alert('Failed to copy: ', err);
+          });
+        };
+      });
+    </script>
+{% endblock %}

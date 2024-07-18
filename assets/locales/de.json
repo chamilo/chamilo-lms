@@ -415,7 +415,7 @@
     "Checkbox 1": "Checkbox 1",
     "Checkbox 2": "Checkbox 2",
     "This is a text example": "This is a text example",
-    "Show dialog": "Show dialog",
+    "Show dialog": "Dialog anzeigen",
     "Dialog example": "Beispiel f\u00fcr einen Dialog",
     "Item 1": "Item 1",
     "Item 2": "Item 2",
@@ -553,5 +553,7 @@
     "Receiver profile picture": "Empf\u00e4ngerprofilbild",
     "Carbon copy receiver profile picture": "Empf\u00e4ngerprofilbild in Kopie",
     "Explore more courses": "Erkunden Sie weitere Kurse",
-    "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:": "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:"
+    "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:": "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:",
+    "A database with the same name <b>already exists</b>.": "Eine Datenbank mit dem gleichen Namen <b>existiert bereits</b>!",
+    "To protect your site, make the whole %s directory read-only (chmod -R 0555 on Linux) and delete the %s directory.": "Um Ihre Installation zu sch\u00fctzen, setzen Sie das Verzeichnis {0} auf nur-lesen (oder chmod 0555 auf Linux-basierenden Systemen). Anschlie\u00dfend bitte das Verzeichnis {1} l\u00f6schen."
 }

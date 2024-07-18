@@ -6,9 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Chamilo\CoreBundle\Entity\ResourceFile;
 
 class ResourceFileRepository extends ServiceEntityRepository
 {
@@ -31,7 +31,8 @@ class ResourceFileRepository extends ServiceEntityRepository
             ->leftJoin('rn.resourceLinks', 'rl')
             ->leftJoin('rl.course', 'c')
             ->leftJoin('rl.user', 'u')
-            ->addSelect('rn', 'rl', 'c', 'u');
+            ->addSelect('rn', 'rl', 'c', 'u')
+        ;
 
         if ($search) {
             $queryBuilder->where('rf.title LIKE :search')
@@ -39,13 +40,15 @@ class ResourceFileRepository extends ServiceEntityRepository
                 ->orWhere('c.title LIKE :search')
                 ->orWhere('u.username LIKE :search')
                 ->orWhere('rn.uuid = :uuid')
-                ->setParameter('search', '%' . $search . '%')
-                ->setParameter('uuid', $uuidBinary);
+                ->setParameter('search', '%'.$search.'%')
+                ->setParameter('uuid', $uuidBinary)
+            ;
         }
 
         $queryBuilder->orderBy('rf.id', 'DESC')
             ->setFirstResult($offset)
-            ->setMaxResults($limit);
+            ->setMaxResults($limit)
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -64,7 +67,8 @@ class ResourceFileRepository extends ServiceEntityRepository
             ->leftJoin('rn.resourceLinks', 'rl')
             ->leftJoin('rl.course', 'c')
             ->leftJoin('rl.user', 'u')
-            ->select('COUNT(rf.id)');
+            ->select('COUNT(rf.id)')
+        ;
 
         if ($search) {
             $queryBuilder->where('rf.title LIKE :search')
@@ -72,8 +76,9 @@ class ResourceFileRepository extends ServiceEntityRepository
                 ->orWhere('c.title LIKE :search')
                 ->orWhere('u.username LIKE :search')
                 ->orWhere('rn.uuid = :uuid')
-                ->setParameter('search', '%' . $search . '%')
-                ->setParameter('uuid', $uuidBinary);
+                ->setParameter('search', '%'.$search.'%')
+                ->setParameter('uuid', $uuidBinary)
+            ;
         }
 
         return $queryBuilder->getQuery()->getSingleScalarResult();

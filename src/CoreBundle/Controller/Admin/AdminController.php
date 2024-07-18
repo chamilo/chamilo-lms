@@ -11,12 +11,10 @@ use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Vich\UploaderBundle\Storage\StorageInterface;
 
 #[Route('/admin')]
 class AdminController extends BaseController
@@ -24,10 +22,8 @@ class AdminController extends BaseController
     private const ITEMS_PER_PAGE = 50;
 
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private ResourceNodeRepository $resourceNodeRepository,
-        private StorageInterface $storage,
-        private AccessUrlHelper $accessUrlHelper
+        private readonly ResourceNodeRepository $resourceNodeRepository,
+        private readonly AccessUrlHelper $accessUrlHelper
     ) {}
 
     #[IsGranted('ROLE_ADMIN')]

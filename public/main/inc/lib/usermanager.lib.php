@@ -387,14 +387,10 @@ class UserManager
                 $email_admin = api_get_setting('emailAdministrator');
 
                 $url = api_get_path(WEB_PATH);
-                if (api_is_multiple_url_enabled()) {
-                    $access_url_id = api_get_current_access_url_id();
-                    if (-1 != $access_url_id) {
-                        $urlInfo = api_get_access_url($access_url_id);
-                        if ($urlInfo) {
-                            $url = $urlInfo['url'];
-                        }
-                    }
+                $access_url_id = api_get_current_access_url_id();
+                $urlInfo = api_get_access_url($access_url_id);
+                if ($urlInfo) {
+                    $url = $urlInfo['url'];
                 }
 
                 // variables for the default template
@@ -966,14 +962,9 @@ class UserManager
                 PERSON_NAME_EMAIL_ADDRESS
             );
             $email_admin = api_get_setting('emailAdministrator');
-            $url = api_get_path(WEB_PATH);
-            if (api_is_multiple_url_enabled()) {
-                $access_url_id = api_get_current_access_url_id();
-                if (-1 != $access_url_id) {
-                    $url = api_get_access_url($access_url_id);
-                    $url = $url['url'];
-                }
-            }
+            $access_url_id = api_get_current_access_url_id();
+            $url = api_get_access_url($access_url_id);
+            $url = $url['url'];
 
             $tplContent = new Template(
                 null,
@@ -1381,18 +1372,14 @@ class UserManager
         $return_array = [];
         $sql = "SELECT user.*, user.id as user_id FROM $user_table user ";
 
-        if (api_is_multiple_url_enabled()) {
-            if ($idCampus) {
-                $urlId = $idCampus;
-            } else {
-                $urlId = api_get_current_access_url_id();
-            }
-            $sql .= " INNER JOIN $userUrlTable url_user
-                      ON (user.id = url_user.user_id)
-                      WHERE url_user.access_url_id = $urlId";
+        if ($idCampus) {
+            $urlId = $idCampus;
         } else {
-            $sql .= " WHERE 1=1 ";
+            $urlId = api_get_current_access_url_id();
         }
+        $sql .= " INNER JOIN $userUrlTable url_user
+            ON (user.id = url_user.user_id)
+            WHERE url_user.access_url_id = $urlId";
 
         if (count($conditions) > 0) {
             foreach ($conditions as $field => $value) {
@@ -1438,18 +1425,14 @@ class UserManager
             $sql = "SELECT count(user.id) count FROM $user_table user ";
         }
 
-        if (api_is_multiple_url_enabled()) {
-            if ($idCampus) {
-                $urlId = $idCampus;
-            } else {
-                $urlId = api_get_current_access_url_id();
-            }
-            $sql .= " INNER JOIN $userUrlTable url_user
-                      ON (user.user_id = url_user.user_id)
-                      WHERE url_user.access_url_id = $urlId";
+        if ($idCampus) {
+            $urlId = $idCampus;
         } else {
-            $sql .= " WHERE 1=1 ";
+            $urlId = api_get_current_access_url_id();
         }
+        $sql .= " INNER JOIN $userUrlTable url_user
+            ON (user.user_id = url_user.user_id)
+            WHERE url_user.access_url_id = $urlId";
 
         $sql .= " AND status <> ".ANONYMOUS." ";
 
@@ -1514,11 +1497,7 @@ class UserManager
         $tblAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $return_array = [];
         $sql_query = "SELECT user.id FROM $user_table user ";
-
-        if (api_is_multiple_url_enabled()) {
-            $sql_query .= " INNER JOIN $tblAccessUrlRelUser auru ON auru.user_id = user.id ";
-        }
-
+        $sql_query .= " INNER JOIN $tblAccessUrlRelUser auru ON auru.user_id = user.id ";
         $sql_query .= ' WHERE 1 = 1 ';
         if (count($conditions) > 0) {
             $temp_conditions = [];
@@ -1535,13 +1514,9 @@ class UserManager
                 $sql_query .= ' AND '.implode(' '.$condition.' ', $temp_conditions);
             }
 
-            if (api_is_multiple_url_enabled()) {
-                $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
-            }
+            $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
         } else {
-            if (api_is_multiple_url_enabled()) {
-                $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
-            }
+            $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
         }
 
         if (!empty($onlyThisUserList)) {
@@ -3379,18 +3354,12 @@ class UserManager
         $t_u = Database::get_main_table(TABLE_MAIN_USER);
         $t_a = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-        if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT count(u.id)
-                    FROM $t_u u
-                    INNER JOIN $t_a url_user
-                    ON (u.id = url_user.user_id)
-                    WHERE url_user.access_url_id = $access_url_id
-            ";
-        } else {
-            $sql = "SELECT count(u.id)
-                    FROM $t_u u
-                    WHERE 1 = 1 ";
-        }
+        $sql = "SELECT count(u.id)
+                FROM $t_u u
+                INNER JOIN $t_a url_user
+                ON (u.id = url_user.user_id)
+                WHERE url_user.access_url_id = $access_url_id
+        ";
 
         $status = (int) $status;
         if (!empty($status) && $status > 0) {

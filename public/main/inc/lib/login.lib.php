@@ -25,15 +25,9 @@ class Login
      */
     public static function get_user_account_list($user, $reset = false, $by_username = false)
     {
-        $portal_url = api_get_path(WEB_PATH);
-
-        if (api_is_multiple_url_enabled()) {
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $url = api_get_access_url($access_url_id);
-                $portal_url = $url['url'];
-            }
-        }
+        $access_url_id = api_get_current_access_url_id();
+        $url = api_get_access_url($access_url_id);
+        $portal_url = $url['url'];
 
         if ($reset) {
             if ($by_username) {
@@ -104,14 +98,9 @@ class Login
             $email_to = $user[0]['email'];
         }
 
-        $portal_url = api_get_path(WEB_PATH);
-        if (api_is_multiple_url_enabled()) {
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $url = api_get_access_url($access_url_id);
-                $portal_url = $url['url'];
-            }
-        }
+        $access_url_id = api_get_current_access_url_id();
+        $url = api_get_access_url($access_url_id);
+        $portal_url = $url['url'];
 
         $email_body = get_lang('This is your information to connect to')." ".$portal_url."\n\n$user_account_list";
         // SEND MESSAGE

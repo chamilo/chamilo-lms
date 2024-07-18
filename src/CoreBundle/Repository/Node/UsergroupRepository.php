@@ -49,14 +49,10 @@ class UsergroupRepository extends ResourceRepository
             }
         }
 
-        if ($this->accessUrlHelper->isMultipleEnabled()) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
-
-            $qb->innerJoin('g.urls', 'u')
-                ->andWhere('u.accessUrl = :urlId')
-                ->setParameter('urlId', $accessUrl->getId())
-            ;
-        }
+        $qb->innerJoin('g.urls', 'u')
+            ->andWhere('u.accessUrl = :urlId')
+            ->setParameter('urlId', $this->accessUrlHelper->getCurrent()->getId())
+        ;
 
         $qb->orderBy('g.createdAt', 'DESC');
         $query = $qb->getQuery();
@@ -81,21 +77,15 @@ class UsergroupRepository extends ResourceRepository
         $qb = $this->createQueryBuilder('g')
             ->select('g, COUNT(gu) AS HIDDEN memberCount')
             ->innerJoin('g.users', 'gu')
+            ->innerJoin('g.urls', 'u')
             ->where('g.groupType = :socialClass')
+            ->andWhere('u.accessUrl = :urlId')
             ->setParameter('socialClass', Usergroup::SOCIAL_CLASS)
+            ->setParameter('urlId', $this->accessUrlHelper->getCurrent()->getId())
             ->groupBy('g')
             ->orderBy('g.createdAt', 'DESC')
             ->setMaxResults($limit)
         ;
-
-        if ($this->accessUrlHelper->isMultipleEnabled()) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
-
-            $qb->innerJoin('g.urls', 'u')
-                ->andWhere('u.accessUrl = :urlId')
-                ->setParameter('urlId', $accessUrl->getId())
-            ;
-        }
 
         if (!empty($query)) {
             $qb->andWhere('g.title LIKE :query OR g.description LIKE :query')
@@ -111,7 +101,9 @@ class UsergroupRepository extends ResourceRepository
         $qb = $this->createQueryBuilder('g')
             ->select('g, COUNT(gu) as HIDDEN memberCount')
             ->innerJoin('g.users', 'gu')
+            ->innerJoin('g.urls', 'u')
             ->where('g.groupType = :socialClass')
+            ->andWhere('u.accessUrl = :urlId')
             ->setParameter('socialClass', Usergroup::SOCIAL_CLASS)
             ->andWhere('gu.relationType IN (:relationTypes)')
             ->setParameter('relationTypes', [
@@ -119,19 +111,11 @@ class UsergroupRepository extends ResourceRepository
                 Usergroup::GROUP_USER_PERMISSION_READER,
                 Usergroup::GROUP_USER_PERMISSION_HRM,
             ])
+            ->setParameter('urlId', $this->accessUrlHelper->getCurrent()->getId())
             ->groupBy('g')
             ->orderBy('memberCount', 'DESC')
             ->setMaxResults($limit)
         ;
-
-        if ($this->accessUrlHelper->isMultipleEnabled()) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
-
-            $qb->innerJoin('g.urls', 'u')
-                ->andWhere('u.accessUrl = :urlId')
-                ->setParameter('urlId', $accessUrl->getId())
-            ;
-        }
 
         return $qb->getQuery()->getResult();
     }
@@ -311,22 +295,17 @@ class UsergroupRepository extends ResourceRepository
             $qb->select('g.id, g.title, g.description, g.url, g.picture');
         }
 
-        if ($this->accessUrlHelper->isMultipleEnabled()) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
-
-            $qb->innerJoin('g.accessUrls', 'a', 'WITH', 'g.id = a.usergroup')
-                ->andWhere('a.accessUrl = :urlId')
-                ->setParameter('urlId', $accessUrl->getId())
-            ;
-        }
-
-        $qb->where(
-            $qb->expr()->orX(
-                $qb->expr()->like('g.title', ':tag'),
-                $qb->expr()->like('g.description', ':tag'),
-                $qb->expr()->like('g.url', ':tag')
+        $qb
+            ->innerJoin('g.accessUrls', 'a', 'WITH', 'g.id = a.usergroup')
+            ->where(
+                $qb->expr()->orX(
+                    $qb->expr()->like('g.title', ':tag'),
+                    $qb->expr()->like('g.description', ':tag'),
+                    $qb->expr()->like('g.url', ':tag')
+                )
             )
-        )
+            ->andWhere('a.accessUrl = :urlId')
+            ->setParameter('urlId', $this->accessUrlHelper->getCurrent()->getId())
             ->setParameter('tag', '%'.$tag.'%')
         ;
 

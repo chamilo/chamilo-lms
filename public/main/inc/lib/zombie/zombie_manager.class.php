@@ -58,29 +58,18 @@ class ZombieManager
                     user.active,
                     access.login_date';
 
-        if (api_is_multiple_url_enabled()) {
-            $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-            $current_url_id = api_get_current_access_url_id();
+        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $current_url_id = api_get_current_access_url_id();
 
-            $sql .= " FROM $user_table as user, $login_table as access, $access_url_rel_user_table as url
-                      WHERE
-                        access.login_date = (SELECT MAX(a.login_date)
-                                             FROM $login_table as a
-                                             WHERE a.login_user_id = user.user_id
-                                             ) AND
-                        access.login_date <= '$ceiling' AND
-                        user.user_id = access.login_user_id AND
-                        url.user_id = user.user_id AND url.access_url_id=$current_url_id";
-        } else {
-            $sql .= " FROM $user_table as user, $login_table as access
-                      WHERE
-                        access.login_date = (SELECT MAX(a.login_date)
-                                             FROM $login_table as a
-                                             WHERE a.login_user_id = user.user_id
-                                             ) AND
-                        access.login_date <= '$ceiling' AND
-                        user.user_id = access.login_user_id";
-        }
+        $sql .= " FROM $user_table as user, $login_table as access, $access_url_rel_user_table as url
+            WHERE
+                access.login_date = (SELECT MAX(a.login_date)
+                    FROM $login_table as a
+                    WHERE a.login_user_id = user.user_id
+                ) AND
+            access.login_date <= '$ceiling' AND
+            user.user_id = access.login_user_id AND
+            url.user_id = user.user_id AND url.access_url_id=$current_url_id";
 
         if ($active_only) {
             $sql .= ' AND user.active = 1';

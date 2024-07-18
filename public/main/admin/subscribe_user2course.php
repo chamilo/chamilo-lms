@@ -179,20 +179,11 @@ if ($use_extra_fields) {
         $final_result = $extra_field_result[0];
     }
 
-    if (api_is_multiple_url_enabled()) {
-        if (is_array($final_result) && count($final_result) > 0) {
-            $where_filter = " AND u.id IN  ('".implode("','", $final_result)."') ";
-        } else {
-            //no results
-            $where_filter = " AND u.id  = -1";
-        }
+    if (is_array($final_result) && count($final_result) > 0) {
+        $where_filter = " AND u.id IN  ('".implode("','", $final_result)."') ";
     } else {
-        if (is_array($final_result) && count($final_result) > 0) {
-            $where_filter = " AND id IN  ('".implode("','", $final_result)."') ";
-        } else {
-            //no results
-            $where_filter = " AND id  = -1";
-        }
+        //no results
+        $where_filter = " AND u.id  = -1";
     }
 }
 
@@ -205,51 +196,33 @@ if ('true' === $orderListByOfficialCode) {
     $orderBy = " official_code, lastname, firstname";
 }
 
-$sql = "SELECT id as user_id, lastname, firstname, username, official_code
-        FROM $tbl_user
-        WHERE id <>2 AND ".$target_name." LIKE '".$first_letter_user."%' $where_filter
-        ORDER BY ".(count($users) > 0 ? "(id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
-
-if (api_is_multiple_url_enabled()) {
-    $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $access_url_id = api_get_current_access_url_id();
-    if (-1 != $access_url_id) {
-        $sql = "SELECT u.id as user_id,lastname,firstname,username, official_code
-                FROM $tbl_user u
-                INNER JOIN $tbl_user_rel_access_url user_rel_url
-                ON (user_rel_url.user_id = u.id)
-                WHERE
-                    u.id <> 2 AND
-                    access_url_id =  $access_url_id AND
-                    (".$target_name." LIKE '".$first_letter_user."%' )
-                    $where_filter
-                ORDER BY ".(count($users) > 0 ? "(u.id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
-    }
-}
+$tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$access_url_id = api_get_current_access_url_id();
+$sql = "SELECT u.id as user_id,lastname,firstname,username, official_code
+    FROM $tbl_user u
+    INNER JOIN $tbl_user_rel_access_url user_rel_url
+    ON (user_rel_url.user_id = u.id)
+    WHERE
+        u.id <> 2 AND
+        access_url_id =  $access_url_id AND
+        (".$target_name." LIKE '".$first_letter_user."%' )
+        $where_filter
+    ORDER BY ".(count($users) > 0 ? "(u.id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
 
 $result = Database::query($sql);
 $db_users = Database::store_result($result);
 unset($result);
 
-$sql = "SELECT code,visual_code,title
-        FROM $tbl_course
-        WHERE visual_code LIKE '".$first_letter_course."%'
-        ORDER BY ".(count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
-
-if (api_is_multiple_url_enabled()) {
-    $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-    $access_url_id = api_get_current_access_url_id();
-    if (-1 != $access_url_id) {
-        $sql = "SELECT code, visual_code, title
-                FROM $tbl_course as course
-                INNER JOIN $tbl_course_rel_access_url course_rel_url
-                ON (course_rel_url.c_id = course.id)
-                WHERE
-                    access_url_id =  $access_url_id  AND
-                    (visual_code LIKE '".$first_letter_course."%' )
-                ORDER BY ".(count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
-    }
-}
+$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+$access_url_id = api_get_current_access_url_id();
+$sql = "SELECT code, visual_code, title
+    FROM $tbl_course as course
+    INNER JOIN $tbl_course_rel_access_url course_rel_url
+    ON (course_rel_url.c_id = course.id)
+    WHERE
+        access_url_id =  $access_url_id  AND
+        (visual_code LIKE '".$first_letter_course."%' )
+    ORDER BY ".(count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
 
 $result = Database::query($sql);
 $db_courses = Database::store_result($result);

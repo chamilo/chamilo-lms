@@ -39,36 +39,24 @@ if (isset($_POST['formSent'])) {
     $file_type = isset($_POST['file_type']) ? $_POST['file_type'] : 'csv';
     $session_id = $_POST['session_id'];
     if (empty($session_id)) {
+        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $access_url_id = api_get_current_access_url_id();
         $sql = "SELECT
-                    s.id,
-                    s.title,
-                    u.username,
-                    s.access_start_date,
-                    s.access_end_date,
-                    s.visibility,
-                    s.session_category_id
-                FROM $tblSession s
-                INNER JOIN $tblSessionRelUser sru
-                    ON (s.id = sru.session_id AND sru.relation_type = ".Session::GENERAL_COACH.")
-                INNER JOIN $tblUser u
-                ON u.id = sru.user_id
-                ORDER BY s.id";
-
-        if (api_is_multiple_url_enabled()) {
-            $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $sql = "SELECT s.id, s.title, u.username,s.access_start_date,s.access_end_date,s.visibility,s.session_category_id
-                    FROM $tblSession s
-                    INNER JOIN $tbl_session_rel_access_url as session_rel_url
-                    ON (s.id= session_rel_url.session_id)
-                    INNER JOIN $tblSessionRelUser sru
-                        ON (s.id = sru.session_id AND sru.relation_type = ".Session::GENERAL_COACH.")
-                    INNER JOIN $tblUser u ON (u.id = sru.user_id)
-                    WHERE session_rel_url.access_url_id = $access_url_id
-                    ORDER BY s.id";
-            }
-        }
+                s.id,
+                s.title,
+                u.username,
+                s.access_start_date,
+                s.access_end_date,
+                s.visibility,
+                s.session_category_id
+            FROM $tblSession s
+            INNER JOIN $tbl_session_rel_access_url as session_rel_url
+            ON (s.id= session_rel_url.session_id)
+            INNER JOIN $tblSessionRelUser sru
+                ON (s.id = sru.session_id AND sru.relation_type = ".Session::GENERAL_COACH.")
+            INNER JOIN $tblUser u ON (u.id = sru.user_id)
+            WHERE session_rel_url.access_url_id = $access_url_id
+            ORDER BY s.id";
 
         $result = Database::query($sql);
     } else {
@@ -278,19 +266,13 @@ if (isset($_POST['formSent'])) {
 Display::display_header($tool_name);
 
 //select of sessions
-$sql = "SELECT id, title FROM $tblSession ORDER BY title";
-
-if (api_is_multiple_url_enabled()) {
-    $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-    $access_url_id = api_get_current_access_url_id();
-    if (-1 != $access_url_id) {
-        $sql = "SELECT s.id, title FROM $tblSession s
-                INNER JOIN $tbl_session_rel_access_url as session_rel_url
-                ON (s.id = session_rel_url.session_id)
-                WHERE access_url_id = $access_url_id
-                ORDER BY title";
-    }
-}
+$tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+$access_url_id = api_get_current_access_url_id();
+$sql = "SELECT s.id, title FROM $tblSession s
+    INNER JOIN $tbl_session_rel_access_url as session_rel_url
+    ON (s.id = session_rel_url.session_id)
+    WHERE access_url_id = $access_url_id
+    ORDER BY title";
 $result = Database::query($sql);
 $sessions = Database::store_result($result);
 

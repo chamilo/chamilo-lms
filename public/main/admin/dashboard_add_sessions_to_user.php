@@ -74,17 +74,12 @@ function search_sessions($needle, $type)
             $without_assigned_sessions = ' AND s.id NOT IN('.implode(',', $assigned_sessions_id).')';
         }
 
-        if (api_is_multiple_url_enabled()) {
-            $sql = " SELECT s.id, s.title FROM $tbl_session s
-                     LEFT JOIN $tbl_session_rel_access_url a
-                     ON (s.id = a.session_id)
-                     WHERE
-                        s.title LIKE '$needle%' $without_assigned_sessions AND
-                        access_url_id = ".api_get_current_access_url_id();
-        } else {
-            $sql = "SELECT s.id, s.title FROM $tbl_session s
-                    WHERE  s.title LIKE '$needle%' $without_assigned_sessions ";
-        }
+        $sql = " SELECT s.id, s.title FROM $tbl_session s
+            LEFT JOIN $tbl_session_rel_access_url a
+            ON (s.id = a.session_id)
+            WHERE
+                s.title LIKE '$needle%' $without_assigned_sessions AND
+                access_url_id = ".api_get_current_access_url_id();
         $rs = Database::query($sql);
         $return .= '<select class="form-control" id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20">';
         while ($session = Database :: fetch_array($rs)) {
@@ -204,19 +199,13 @@ if (!empty($firstLetterSession)) {
     $needle = Database::escape_string($firstLetterSession.'%');
 }
 
-if (api_is_multiple_url_enabled()) {
-    $sql = "SELECT s.id, s.title
-	        FROM $tbl_session s
-            LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
-            WHERE
-                s.title LIKE '$needle%' $without_assigned_sessions AND
-                access_url_id = ".api_get_current_access_url_id().'
-            ORDER BY s.title';
-} else {
-    $sql = "SELECT s.id, s.title FROM $tbl_session s
-		    WHERE  s.title LIKE '$needle%' $without_assigned_sessions
-            ORDER BY s.title";
-}
+$sql = "SELECT s.id, s.title
+    FROM $tbl_session s
+    LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
+    WHERE
+        s.title LIKE '$needle%' $without_assigned_sessions AND
+        access_url_id = ".api_get_current_access_url_id().'
+    ORDER BY s.title';
 $result = Database::query($sql);
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id; ?>" style="margin:0px;" <?php if ($ajax_search) {

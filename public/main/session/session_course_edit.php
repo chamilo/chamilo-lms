@@ -113,26 +113,17 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
-if (api_is_multiple_url_enabled()) {
-    $tbl_access_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $access_url_id = api_get_current_access_url_id();
-    $sql = "SELECT u.id as user_id,lastname,firstname,username
-            FROM $tblUser u
-            LEFT JOIN $tbl_access_rel_user  a
-            ON(u.id= a.user_id)
-            WHERE
-                status='1' AND
-                active = 1 AND
-                access_url_id = $access_url_id ".
-            $order_clause;
-} else {
-    $sql = "SELECT id as user_id,lastname,firstname,username
-            FROM $tblUser
-            WHERE
-                status = '1' AND
-                active = 1 ".
-            $order_clause;
-}
+$tbl_access_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$access_url_id = api_get_current_access_url_id();
+$sql = "SELECT u.id as user_id,lastname,firstname,username
+    FROM $tblUser u
+    LEFT JOIN $tbl_access_rel_user  a
+    ON(u.id= a.user_id)
+    WHERE
+        status='1' AND
+        active = 1 AND
+        access_url_id = $access_url_id ".
+    $order_clause;
 
 $result = Database::query($sql);
 $coaches = Database::store_result($result);

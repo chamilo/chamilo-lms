@@ -96,12 +96,10 @@ if ($debug) {
     echo count($dbUsers) . " users with id > 1 found in internal database\n";
 }
 
-if (api_is_multiple_url_enabled()) {
-    $accessUrls = api_get_access_urls(0,100000,'id');
-    $multipleUrlLDAPConfig = true;
-    if (!empty($extldap_config) && array_key_exists('host', $extldap_config) && !empty($extldap_config['host'])) {
-        $multipleUrlLDAPConfig = false;
-    }
+$accessUrls = api_get_access_urls(0,100000,'id');
+$multipleUrlLDAPConfig = true;
+if (!empty($extldap_config) && array_key_exists('host', $extldap_config) && !empty($extldap_config['host'])) {
+    $multipleUrlLDAPConfig = false;
 }
 
 if (!$multipleUrlLDAPConfig) {
@@ -339,9 +337,6 @@ foreach ($accessUrls as $accessUrl) {
                 }
                 if ($multipleUrlLDAPConfig) {
                     UrlManager::add_user_to_url($user->getId(), $accessUrlId);
-                } elseif (!api_is_multiple_url_enabled()) {
-                    //we are adding by default the access_url_user table with access_url_id = 1
-                    UrlManager::add_user_to_url($user->getId(), 1);
                 }
             }
         }

@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
+use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
@@ -74,7 +75,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ]
 )]
 #[ORM\Table(name: 'resource_file')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ResourceFileRepository::class)]
 #[ApiFilter(filterClass: PropertyFilter::class)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['name' => 'partial'])]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'name', 'size', 'updatedAt'])]

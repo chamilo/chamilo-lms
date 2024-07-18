@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession;
 use Laminas\Permissions\Acl\Acl;
@@ -41,14 +42,11 @@ class ResourceNodeVoter extends Voter
     public const ROLE_CURRENT_COURSE_SESSION_TEACHER = 'ROLE_CURRENT_COURSE_SESSION_TEACHER';
     public const ROLE_CURRENT_COURSE_SESSION_STUDENT = 'ROLE_CURRENT_COURSE_SESSION_STUDENT';
 
-    private RequestStack $requestStack;
-    private Security $security;
-
-    public function __construct(Security $security, RequestStack $requestStack)
-    {
-        $this->security = $security;
-        $this->requestStack = $requestStack;
-    }
+    public function __construct(
+        private Security $security,
+        private RequestStack $requestStack,
+        private SettingsManager $settingsManager
+    ) {}
 
     public static function getReaderMask(): int
     {
@@ -169,6 +167,11 @@ class ResourceNodeVoter extends Voter
             }
             if (0 === $groupId && $firstLink->getGroup() instanceof CGroup) {
                 $groupId = (int) $firstLink->getGroup()->getIid();
+            }
+            if ($firstLink->getUser() instanceof UserInterface
+                && 'true' === $this->settingsManager->getSetting('security.access_to_personal_file_for_all')
+            ) {
+                return true;
             }
         }
 

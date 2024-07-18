@@ -735,7 +735,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->biography = '';
         $this->website = '';
         $this->locale = 'en';
-        $this->timezone = 'Europe\\Paris';
+        $this->timezone = 'Europe\Paris';
         $this->authSource = 'platform';
         $this->status = CourseRelUser::STUDENT;
         $this->salt = sha1(uniqid('', true));
@@ -806,7 +806,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return [
             new Assert\Length(['min' => 5]),
             // Alpha numeric + "_" or "-"
-            new Assert\Regex(['pattern' => '/^[a-z\\-_0-9]+$/i', 'htmlPattern' => '/^[a-z\\-_0-9]+$/i']),
+            new Assert\Regex(['pattern' => '/^[a-z\-_0-9]+$/i', 'htmlPattern' => '/^[a-z\-_0-9]+$/i']),
             // Min 3 letters - not needed
             /*new Assert\Regex(array(
                   'pattern' => '/[a-z]{3}/i',

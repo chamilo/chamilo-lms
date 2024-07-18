@@ -358,7 +358,7 @@ class ResourceNode implements Stringable
               $pathForDisplay = substr_replace($pathForDisplay, '', -3);
           }
           */
-        $pathForDisplay = preg_replace('/-\\d+\\'.self::PATH_SEPARATOR.'/', '/', $path);
+        $pathForDisplay = preg_replace('/-\d+\\'.self::PATH_SEPARATOR.'/', '/', $path);
         if (null !== $pathForDisplay && '' !== $pathForDisplay) {
             $pathForDisplay = substr_replace($pathForDisplay, '', -1);
         }

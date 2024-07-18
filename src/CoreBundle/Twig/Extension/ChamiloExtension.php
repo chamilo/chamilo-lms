@@ -172,7 +172,7 @@ class ChamiloExtension extends AbstractExtension
         if ($minRequirements['specials'] > 0) {
             $options['rules'][] = [
                 'minChar' => $minRequirements['specials'],
-                'pattern' => '[!"#$%&\'()*+,\-./\\\:;<=>?@[\\]^_`{|}~]',
+                'pattern' => '[!"#$%&\'()*+,\-./\\\:;<=>?@[\]^_`{|}~]',
                 'helpText' => sprintf(
                     get_lang('Minimum %s special characters'),
                     $minRequirements['specials']

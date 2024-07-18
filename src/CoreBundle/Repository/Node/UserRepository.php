@@ -295,7 +295,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ];
 
         foreach ($relations as $relation) {
-            $entityClass = 'Chamilo\\'.$relation['bundle'].'\\Entity\\'.$relation['entity'];
+            $entityClass = 'Chamilo\\'.$relation['bundle'].'\Entity\\'.$relation['entity'];
             $repository = $em->getRepository($entityClass);
             $records = $repository->findBy([$relation['field'] => $userToDelete]);
 

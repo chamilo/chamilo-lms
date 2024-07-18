@@ -61,7 +61,8 @@ class AdminController extends BaseController
             ->leftJoin('rn.resourceLinks', 'rl')
             ->leftJoin('rl.course', 'c')
             ->leftJoin('rl.user', 'u')
-            ->addSelect('rn', 'rl', 'c', 'u');
+            ->addSelect('rn', 'rl', 'c', 'u')
+        ;
 
         if ($search) {
             $queryBuilder->where('rf.title LIKE :search')
@@ -69,12 +70,14 @@ class AdminController extends BaseController
                 ->orWhere('c.title LIKE :search')
                 ->orWhere('u.username LIKE :search')
                 ->orWhere('rn.uuid LIKE :search')
-                ->setParameter('search', '%' . $search . '%');
+                ->setParameter('search', '%'.$search.'%')
+            ;
         }
 
         $queryBuilder->orderBy('rf.id', 'DESC')
             ->setFirstResult($offset)
-            ->setMaxResults(self::ITEMS_PER_PAGE);
+            ->setMaxResults(self::ITEMS_PER_PAGE)
+        ;
 
         $files = $queryBuilder->getQuery()->getResult();
 
@@ -84,7 +87,8 @@ class AdminController extends BaseController
             ->leftJoin('rn.resourceLinks', 'rl')
             ->leftJoin('rl.course', 'c')
             ->leftJoin('rl.user', 'u')
-            ->select('COUNT(rf.id)');
+            ->select('COUNT(rf.id)')
+        ;
 
         if ($search) {
             $totalItemsQuery->where('rf.title LIKE :search')
@@ -92,7 +96,8 @@ class AdminController extends BaseController
                 ->orWhere('c.title LIKE :search')
                 ->orWhere('u.username LIKE :search')
                 ->orWhere('rn.uuid LIKE :search')
-                ->setParameter('search', '%' . $search . '%');
+                ->setParameter('search', '%'.$search.'%')
+            ;
         }
 
         $totalItems = $totalItemsQuery->getQuery()->getSingleScalarResult();

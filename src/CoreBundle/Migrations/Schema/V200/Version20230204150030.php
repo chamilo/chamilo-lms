@@ -29,7 +29,7 @@ class Version20230204150030 extends AbstractMigrationChamilo
 
         $batchSize = self::BATCH_SIZE;
         $counter = 1;
-        $dql = 'SELECT v FROM Chamilo\\CoreBundle\\Entity\\ExtraFieldValues v';
+        $dql = 'SELECT v FROM Chamilo\CoreBundle\Entity\ExtraFieldValues v';
         $dql .= ' JOIN v.field f';
         $dql .= ' WHERE f.variable = :variable AND f.itemType = :itemType';
         $q = $this->entityManager->createQuery($dql);

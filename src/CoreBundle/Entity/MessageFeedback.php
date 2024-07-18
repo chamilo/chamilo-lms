@@ -23,11 +23,11 @@ class MessageFeedback
     #[ORM\GeneratedValue()]
     private int $id;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\\CoreBundle\\Entity\\Message', inversedBy: 'likes')]
+    #[ORM\ManyToOne(targetEntity: Message::class, inversedBy: 'likes')]
     #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private Message $message;
 
-    #[ORM\ManyToOne(targetEntity: 'Chamilo\\CoreBundle\\Entity\\User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private User $user;
 

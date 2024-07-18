@@ -135,8 +135,8 @@ final class Version20240122221400 extends AbstractMigrationChamilo
                 $englishTranslation .= '"';
             }
 
-            $search = ['\\{', '\\}', '\\(', '\\)', '\\;'];
-            $replace = ['\\\\{', '\\\\}', '\\\\(', '\\\\)', '\\\\;'];
+            $search = ['\{', '\}', '\(', '\)', '\;'];
+            $replace = ['\\\{', '\\\}', '\\\(', '\\\)', '\\\;'];
             $englishTranslation = str_replace($search, $replace, $englishTranslation);
             if (preg_match('/\\\$/', $translatedTerm)) {
                 $translatedTerm .= '"';

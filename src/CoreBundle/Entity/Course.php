@@ -50,6 +50,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_USER')"
 )]
 #[ORM\Table(name: 'course')]
+#[ORM\Index(columns: ['sticky'], name: 'idx_course_sticky')]
 #[UniqueEntity('code')]
 #[UniqueEntity('visualCode')]
 #[ORM\Entity(repositoryClass: CourseRepository::class)]

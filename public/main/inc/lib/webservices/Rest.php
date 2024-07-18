@@ -1339,19 +1339,10 @@ class Rest extends WebService
             throw new Exception(get_lang('UserNotRegistered'));
         }
 
-        if (api_is_multiple_url_enabled()) {
-            if (-1 != api_get_current_access_url_id()) {
-                UrlManager::add_user_to_url(
-                    $userId,
-                    api_get_current_access_url_id()
-                );
-            } else {
-                UrlManager::add_user_to_url($userId, 1);
-            }
-        } else {
-            // We add by default the access_url_user table with access_url_id = 1
-            UrlManager::add_user_to_url($userId, 1);
-        }
+        UrlManager::add_user_to_url(
+            $userId,
+            api_get_current_access_url_id()
+        );
 
         // Save new field label into user_field table.
         UserManager::create_extra_field(
@@ -1625,12 +1616,7 @@ class Rest extends WebService
         $modelSession = SessionManager::fetch($modelSessionId);
         $generalCoachesId = SessionManager::getGeneralCoachesIdForSession($modelSessionId);
 
-        $modelSession['accessUrlId'] = 1;
-        if (api_is_multiple_url_enabled()) {
-            if (-1 != api_get_current_access_url_id()) {
-                $modelSession['accessUrlId'] = api_get_current_access_url_id();
-            }
-        }
+        $modelSession['accessUrlId'] = api_get_current_access_url_id();
 
         $newSessionId = SessionManager::create_session(
             $sessionName,
@@ -1690,18 +1676,10 @@ class Rest extends WebService
             throw new Exception(get_lang('CoursesNotAddedToSession'));
         }
 
-        if (api_is_multiple_url_enabled()) {
-            if (-1 != api_get_current_access_url_id()) {
-                UrlManager::add_session_to_url(
-                    $newSessionId,
-                    api_get_current_access_url_id()
-                );
-            } else {
-                UrlManager::add_session_to_url($newSessionId, 1);
-            }
-        } else {
-            UrlManager::add_session_to_url($newSessionId, 1);
-        }
+        UrlManager::add_session_to_url(
+            $newSessionId,
+            api_get_current_access_url_id()
+        );
 
         return $newSessionId;
     }

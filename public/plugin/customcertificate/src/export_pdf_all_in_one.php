@@ -31,22 +31,18 @@ $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : null;
 $dateBegin = isset($_GET['date_begin']) ? strtotime($_GET['date_begin']) : null;
 $dateEnd = isset($_GET['date_end']) ? strtotime($_GET['date_end'].' 23:59:59') : null;
 
-if (api_is_multiple_url_enabled()) {
-    if (-1 != $accessUrlId) {
-        $result = Database::select(
-            '*',
-            "$tblSessionRelAccessUrl",
-            [
-                'where' => [
-                    "access_url_id = ? AND session_id = ?" => [$accessUrlId, $sessionId],
-                ],
-            ]
-        );
+$result = Database::select(
+    '*',
+    "$tblSessionRelAccessUrl",
+    [
+        'where' => [
+            "access_url_id = ? AND session_id = ?" => [$accessUrlId, $sessionId],
+        ],
+    ]
+);
 
-        if (empty($result)) {
-            api_not_allowed();
-        }
-    }
+if (empty($result)) {
+    api_not_allowed();
 }
 
 $exportAllInOne = isset($_GET['export_pdf']) ? (int) $_GET['export_pdf'] : false;

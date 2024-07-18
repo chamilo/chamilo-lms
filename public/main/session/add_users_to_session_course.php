@@ -186,59 +186,57 @@ function search_users($needle, $type)
                 break;
         }
 
-        if (api_is_multiple_url_enabled()) {
-            $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                switch ($type) {
-                    case 'single':
-                        $sql = "
-                            SELECT user.id, username, lastname, firstname, official_code
-                            FROM $tbl_user user
-                            INNER JOIN $tbl_user_rel_access_url url_user
+        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $access_url_id = api_get_current_access_url_id();
+        if (-1 != $access_url_id) {
+            switch ($type) {
+                case 'single':
+                    $sql = "
+                        SELECT user.id, username, lastname, firstname, official_code
+                        FROM $tbl_user user
+                        INNER JOIN $tbl_user_rel_access_url url_user
+                        ON (url_user.user_id = user.id)
+                        WHERE
+                            access_url_id = '$access_url_id'
+                            AND (
+                                username LIKE '$needle%'
+                                OR lastname LIKE '$needle%'
+                                OR firstname LIKE '$needle%'
+                            )
+                            AND user.status <> 6
+                            AND user.status <> ".DRH."
+                        $order_clause LIMIT 11
+                    ";
+                    break;
+                case 'multiple':
+                    $sql = "
+                        SELECT user.id, username, lastname, firstname, official_code
+                        FROM $tbl_user user
+                        INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=user.id)
+                        WHERE
+                            access_url_id = $access_url_id
+                            AND lastname LIKE '$needle%'
+                            AND user.status <> ".DRH."
+                            AND user.status <> 6 $cond_user_id
+                        $order_clause
+                    ";
+                    break;
+                case 'any_session':
+                    $sql = "
+                        SELECT DISTINCT user.id, username, lastname, firstname, official_code
+                        FROM $tbl_user user
+                        LEFT OUTER JOIN $tbl_session_rel_user s
+                            ON (s.user_id = user.id)
+                        INNER JOIN $tbl_user_rel_access_url url_user
                             ON (url_user.user_id = user.id)
-                            WHERE
-                                access_url_id = '$access_url_id'
-                                AND (
-                                    username LIKE '$needle%'
-                                    OR lastname LIKE '$needle%'
-                                    OR firstname LIKE '$needle%'
-                                )
-                                AND user.status <> 6
-                                AND user.status <> ".DRH."
-                            $order_clause LIMIT 11
-                        ";
-                        break;
-                    case 'multiple':
-                        $sql = "
-                            SELECT user.id, username, lastname, firstname, official_code
-                            FROM $tbl_user user
-                            INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=user.id)
-                            WHERE
-                                access_url_id = $access_url_id
-                                AND lastname LIKE '$needle%'
-                                AND user.status <> ".DRH."
-                                AND user.status <> 6 $cond_user_id
-                            $order_clause
-                        ";
-                        break;
-                    case 'any_session':
-                        $sql = "
-                            SELECT DISTINCT user.id, username, lastname, firstname, official_code
-                            FROM $tbl_user user
-                            LEFT OUTER JOIN $tbl_session_rel_user s
-                                ON (s.user_id = user.id)
-                            INNER JOIN $tbl_user_rel_access_url url_user
-                                ON (url_user.user_id = user.id)
-                            WHERE
-                                access_url_id = $access_url_id
-                                AND s.user_id IS null
-                                AND user.status <> ".DRH."
-                                AND user.status <> 6 $cond_user_id
-                            $order_clause
-                        ";
-                        break;
-                }
+                        WHERE
+                            access_url_id = $access_url_id
+                            AND s.user_id IS null
+                            AND user.status <> ".DRH."
+                            AND user.status <> 6 $cond_user_id
+                        $order_clause
+                    ";
+                    break;
             }
         }
 
@@ -387,47 +385,27 @@ if ('true' === $orderListByOfficialCode) {
 }
 
 if ($ajax_search) {
+    $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $access_url_id = api_get_current_access_url_id();
     $sql = "
         SELECT u.id, u.lastname, u.firstname, u.username, su.session_id, u.official_code
-        FROM $tbl_session_rel_user su
+        FROM $tbl_user u
+        INNER JOIN $tbl_session_rel_user su
+        ON
+            su.user_id = u.id AND
+            su.relation_type = ".Session::STUDENT." AND
+            su.session_id = ".intval($id_session)."
+        INNER JOIN $tbl_user_rel_access_url url_user
+        ON (url_user.user_id = u.id)
         INNER JOIN $tableRelSessionCourseUser sc
         ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-        INNER JOIN $tbl_user u
-        ON su.user_id = u.id
         WHERE
-            su.session_id = ".intval($id_session)." AND
-            su.relation_type = ".Session::STUDENT." AND
+            access_url_id = $access_url_id AND
             sc.c_id = $courseId AND
-            u.status<>".DRH." AND
+            u.status <> ".DRH." AND
             u.status <> 6
         $order_clause
     ";
-
-    if (api_is_multiple_url_enabled()) {
-        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $access_url_id = api_get_current_access_url_id();
-        if (-1 != $access_url_id) {
-            $sql = "
-                SELECT u.id, u.lastname, u.firstname, u.username, su.session_id, u.official_code
-                FROM $tbl_user u
-                INNER JOIN $tbl_session_rel_user su
-                ON
-                    su.user_id = u.id AND
-                    su.relation_type = ".Session::STUDENT." AND
-                    su.session_id = ".intval($id_session)."
-                INNER JOIN $tbl_user_rel_access_url url_user
-                ON (url_user.user_id = u.id)
-                INNER JOIN $tableRelSessionCourseUser sc
-                ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-                WHERE
-                    access_url_id = $access_url_id AND
-                    sc.c_id = $courseId AND
-                    u.status <> ".DRH." AND
-                    u.status <> 6
-                $order_clause
-            ";
-        }
-    }
     $result = Database::query($sql);
     $users = Database::store_result($result);
     foreach ($users as $user) {
@@ -493,20 +471,11 @@ if ($ajax_search) {
             $final_result = $extra_field_result[0];
         }
 
-        if (api_is_multiple_url_enabled()) {
-            if (is_array($final_result) && count($final_result) > 0) {
-                $where_filter = " AND u.id IN  ('".implode("','", $final_result)."') ";
-            } else {
-                //no results
-                $where_filter = " AND u.id  = -1";
-            }
+        if (is_array($final_result) && count($final_result) > 0) {
+            $where_filter = " AND u.id IN  ('".implode("','", $final_result)."') ";
         } else {
-            if (is_array($final_result) && count($final_result) > 0) {
-                $where_filter = " WHERE u.id IN  ('".implode("','", $final_result)."') ";
-            } else {
-                //no results
-                $where_filter = " WHERE u.id  = -1";
-            }
+            //no results
+            $where_filter = " AND u.id  = -1";
         }
     }
     if (api_is_session_admin() && 'true' === api_get_setting('prevent_session_admins_to_manage_all_users')) {
@@ -542,29 +511,25 @@ if ($ajax_search) {
             $order_clause
         ";
     }
-    if (api_is_multiple_url_enabled()) {
-        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $access_url_id = api_get_current_access_url_id();
-        if (-1 != $access_url_id) {
-            $sql = "
-                SELECT  u.id, lastname, firstname, username, su.session_id, official_code
-                FROM $tbl_user u
-                LEFT JOIN $tbl_session_rel_user su
-                    ON su.user_id = u.id
-                    AND su.session_id = $id_session
-                    AND su.relation_type = ".Session::STUDENT."
-                INNER JOIN $tbl_user_rel_access_url url_user
-                ON (url_user.user_id = u.id)
+    $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $access_url_id = api_get_current_access_url_id();
+    $sql = "
+        SELECT  u.id, lastname, firstname, username, su.session_id, official_code
+        FROM $tbl_user u
+        LEFT JOIN $tbl_session_rel_user su
+            ON su.user_id = u.id
+            AND su.session_id = $id_session
+            AND su.relation_type = ".Session::STUDENT."
+        INNER JOIN $tbl_user_rel_access_url url_user
+        ON (url_user.user_id = u.id)
 
-                WHERE
-                    access_url_id = $access_url_id
-                    $where_filter
-                    AND u.status <> ".DRH."
-                    AND u.status<>6
-                $order_clause
-            ";
-        }
-    }
+        WHERE
+            access_url_id = $access_url_id
+            $where_filter
+            AND u.status <> ".DRH."
+            AND u.status<>6
+        $order_clause
+    ";
 
     $result = Database::query($sql);
     $users = Database::store_result($result, 'ASSOC');
@@ -582,6 +547,8 @@ if ($ajax_search) {
     unset($users); //clean to free memory
 
     // filling the correct users in list
+    $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $access_url_id = api_get_current_access_url_id();
     $sql = "
         SELECT  u.id, lastname, firstname, username, su.session_id, official_code
         FROM $tbl_user u
@@ -589,38 +556,17 @@ if ($ajax_search) {
         ON su.user_id = u.id
         AND su.session_id = $id_session
         AND su.relation_type = ".Session::STUDENT."
+        INNER JOIN $tbl_user_rel_access_url url_user
+        ON (url_user.user_id = u.id)
         INNER JOIN $tableRelSessionCourseUser sc
         ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
         WHERE
             sc.c_id = $courseId AND
-            u.status <> ".DRH." AND u.status <> 6
+            access_url_id = $access_url_id AND
+            u.status <> ".DRH." AND
+            u.status <> 6
         $order_clause
     ";
-
-    if (api_is_multiple_url_enabled()) {
-        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $access_url_id = api_get_current_access_url_id();
-        if (-1 != $access_url_id) {
-            $sql = "
-                SELECT  u.id, lastname, firstname, username, su.session_id, official_code
-                FROM $tbl_user u
-                LEFT JOIN $tbl_session_rel_user su
-                ON su.user_id = u.id
-                AND su.session_id = $id_session
-                AND su.relation_type = ".Session::STUDENT."
-                INNER JOIN $tbl_user_rel_access_url url_user
-                ON (url_user.user_id = u.id)
-                INNER JOIN $tableRelSessionCourseUser sc
-                ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-                WHERE
-                    sc.c_id = $courseId AND
-                    access_url_id = $access_url_id AND
-                    u.status <> ".DRH." AND
-                    u.status <> 6
-                $order_clause
-            ";
-        }
-    }
 
     $result = Database::query($sql);
     $users = Database::store_result($result, 'ASSOC');

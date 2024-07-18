@@ -36,6 +36,10 @@ class Version20191101132000 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE course ADD sticky TINYINT(1) NOT NULL');
         }
 
+        if (!$table->hasIndex('idx_course_sticky')) {
+            $this->addSql('CREATE INDEX idx_course_sticky ON course (sticky)');
+        }
+
         if (!$table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE course ADD COLUMN resource_node_id INT DEFAULT NULL;');
             $this->addSql(

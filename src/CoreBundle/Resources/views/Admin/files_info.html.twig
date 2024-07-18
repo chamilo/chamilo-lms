@@ -9,72 +9,78 @@
             <button type="submit" class="btn btn--primary">{{ 'Search'|trans }}</button>
         </form>
 
-        <table class="data_table">
-            <thead>
-            <tr>
-                <th>{{ 'Title'|trans }}</th>
-                <th>{{ 'Original Name'|trans }}</th>
-                <th>{{ 'Course'|trans }}</th>
-                <th>{{ 'User'|trans }}</th>
-                <th>{{ 'Actions'|trans }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for file in files %}
+        {% if files is empty %}
+            <p>{{ 'No results found.'|trans }}</p>
+        {% else %}
+            <table class="data_table">
+                <thead>
                 <tr>
-                    <td>{{ file.title }}</td>
-                    <td>{{ file.originalName }}</td>
-                    <td>
-                        {% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}
-                            {{ file.resourceNode.resourceLinks|first.course.title ?? 'N/A' }}
-                        {% else %}
-                            {{ 'N/A'|trans }}
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}
-                            {{ file.resourceNode.resourceLinks|first.user.username ?? 'N/A' }}
-                        {% elseif file.resourceNode and file.resourceNode.creator %}
-                            {{ file.resourceNode.creator.username ?? 'N/A' }}
-                        {% else %}
-                            {{ 'N/A'|trans }}
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="#" class="open-modal"
-                           data-title="{{ file.title }}"
-                           data-mime-type="{{ file.mimeType }}"
-                           data-original-name="{{ file.originalName }}"
-                           data-size="{{ file.size }}"
-                           data-course="{% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}{{ file.resourceNode.resourceLinks|first.course.title ?? 'N/A' }}{% else %}{{ 'N/A'|trans }}{% endif %}"
-                           data-user="{% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}{{ file.resourceNode.resourceLinks|first.user.username ?? 'N/A' }}{% elseif file.resourceNode and file.resourceNode.creator %}{{ file.resourceNode.creator.username ?? 'N/A' }}{% else %}{{ 'N/A'|trans }}{% endif %}"
-                           data-file-url="{{ fileUrls[file.id] }}"
-                           data-file-path="{{ filePaths[file.id] }}">
-                            {{ 'View'|trans }}
-                        </a>
-                    </td>
+                    <th>{{ 'Title'|trans }}</th>
+                    <th>{{ 'Original Name'|trans }}</th>
+                    <th>{{ 'Course'|trans }}</th>
+                    <th>{{ 'User'|trans }}</th>
+                    <th>{{ 'Actions'|trans }}</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for file in files %}
+                    <tr>
+                        <td>{{ file.title }}</td>
+                        <td>{{ file.originalName }}</td>
+                        <td>
+                            {% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}
+                                {{ file.resourceNode.resourceLinks|first.course.title ?? 'N/A' }}
+                            {% else %}
+                                {{ 'N/A'|trans }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}
+                                {{ file.resourceNode.resourceLinks|first.user.username ?? 'N/A' }}
+                            {% elseif file.resourceNode and file.resourceNode.creator %}
+                                {{ file.resourceNode.creator.username ?? 'N/A' }}
+                            {% else %}
+                                {{ 'N/A'|trans }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="#" class="open-modal"
+                               data-title="{{ file.title }}"
+                               data-mime-type="{{ file.mimeType }}"
+                               data-original-name="{{ file.originalName }}"
+                               data-size="{{ file.size }}"
+                               data-course="{% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}{{ file.resourceNode.resourceLinks|first.course.title ?? 'N/A' }}{% else %}{{ 'N/A'|trans }}{% endif %}"
+                               data-user="{% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}{{ file.resourceNode.resourceLinks|first.user.username ?? 'N/A' }}{% elseif file.resourceNode and file.resourceNode.creator %}{{ file.resourceNode.creator.username ?? 'N/A' }}{% else %}{{ 'N/A'|trans }}{% endif %}"
+                               data-file-url="{{ fileUrls[file.id] }}"
+                               data-file-path="{{ filePaths[file.id] }}"
+                               data-resource-node-id="{{ file.resourceNode ? file.resourceNode.id : 'N/A' }}"
+                               data-resource-file-id="{{ file.id }}">
+                                {{ 'View'|trans }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
-        <div class="pagination">
-            {% if currentPage > 1 %}
-                <a href="{{ path('admin_files_info', {'page': currentPage - 1, 'search': search}) }}">&laquo; {{ 'Previous'|trans }}</a>
-            {% endif %}
-
-            {% for i in max(1, currentPage - 2)..min(totalPages, currentPage + 2) %}
-                {% if i == currentPage %}
-                    <span>{{ i }}</span>
-                {% else %}
-                    <a href="{{ path('admin_files_info', {'page': i, 'search': search}) }}">{{ i }}</a>
+            <div class="pagination">
+                {% if currentPage > 1 %}
+                    <a href="{{ path('admin_files_info', {'page': currentPage - 1, 'search': search}) }}">&laquo; {{ 'Previous'|trans }}</a>
                 {% endif %}
-            {% endfor %}
 
-            {% if currentPage < totalPages %}
-                <a href="{{ path('admin_files_info', {'page': currentPage + 1, 'search': search}) }}">{{ 'Next'|trans }} &raquo;</a>
-            {% endif %}
-        </div>
+                {% for i in max(1, currentPage - 2)..min(totalPages, currentPage + 2) %}
+                    {% if i == currentPage %}
+                        <span>{{ i }}</span>
+                    {% else %}
+                        <a href="{{ path('admin_files_info', {'page': i, 'search': search}) }}">{{ i }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if currentPage < totalPages %}
+                    <a href="{{ path('admin_files_info', {'page': currentPage + 1, 'search': search}) }}">{{ 'Next'|trans }} &raquo;</a>
+                {% endif %}
+            </div>
+        {% endif %}
 
         <!-- Modal -->
         <div id="fileInfoModal" class="modal">
@@ -87,6 +93,8 @@
                 <p class="mb-3"><strong>{{ 'Size:'|trans }}</strong> <span id="file-size"></span></p>
                 <p class="mb-3"><strong>{{ 'Course:'|trans }}</strong> <span id="file-course"></span></p>
                 <p class="mb-3"><strong>{{ 'User:'|trans }}</strong> <span id="file-user"></span></p>
+                <p class="mb-3"><strong>{{ 'Resource Node ID:'|trans }}</strong> <span id="resource-node-id"></span></p>
+                <p class="mb-3"><strong>{{ 'Resource File ID:'|trans }}</strong> <span id="resource-file-id"></span></p>
                 <p class="mb-3"><strong>{{ 'File Path:'|trans }}</strong> <span id="file-path"></span>&nbsp;&nbsp;&nbsp;<button id="copy-path" class="mdi mdi-content-copy"></button></p>
                 <p class="mb-3"><strong>{{ 'File Link:'|trans }}</strong> <a href="#" id="file-url" target="_blank">{{ 'Open File'|trans }}</a></p>
             </div>
@@ -110,6 +118,8 @@
             var user = button.getAttribute('data-user');
             var filePath = button.getAttribute('data-file-path');
             var fileUrl = button.getAttribute('data-file-url');
+            var resourceNodeId = button.getAttribute('data-resource-node-id');
+            var resourceFileId = button.getAttribute('data-resource-file-id');
 
             document.getElementById('file-title').textContent = title;
             document.getElementById('file-mime-type').textContent = mimeType;
@@ -119,6 +129,8 @@
             document.getElementById('file-user').textContent = user;
             document.getElementById('file-path').textContent = filePath;
             document.getElementById('file-url').href = fileUrl;
+            document.getElementById('resource-node-id').textContent = resourceNodeId;
+            document.getElementById('resource-file-id').textContent = resourceFileId;
 
             modal.style.display = "block";
           };

@@ -58,7 +58,7 @@ class AdminController extends BaseController
 
         $files = $resourceFileRepository->searchFiles($search, $offset, self::ITEMS_PER_PAGE);
         $totalItems = $resourceFileRepository->countFiles($search);
-        $totalPages = ceil($totalItems / self::ITEMS_PER_PAGE);
+        $totalPages = $totalItems > 0 ? ceil($totalItems / self::ITEMS_PER_PAGE) : 1;
 
         $fileUrls = [];
         $filePaths = [];

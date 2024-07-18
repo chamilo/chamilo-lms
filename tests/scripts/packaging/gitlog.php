@@ -46,6 +46,19 @@ if (!empty($argv[1])) {
         echo "An initial commit has been defined as ".$endCommit.PHP_EOL;
     }
 }
+// List if prefixes that can be skipped when creating a simplified, communication-focused changelog
+$skipTechnicalPrefixes = [
+    'QA',
+    'Internal',
+    'Vendor',
+    'Display',
+    'Fix',
+    'Minor',
+    'Documentation',
+    'Refactor',
+    'Migration',
+    'UI',
+];
 
 $git = new \YWarnier\PHPGit\Git($repository);
 echo "Log from branch: ".$git->getCurrentBranch().PHP_EOL;

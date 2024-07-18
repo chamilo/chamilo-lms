@@ -49,7 +49,7 @@
     }
 
     &-warn {
-      @apply bg-warning bg-gray-90 border-0;
+      @apply bg-warning text-gray-90 border-0;
 
       .p-toast-message-icon, .p-toast-icon-close {
         @apply bg-gray-90;

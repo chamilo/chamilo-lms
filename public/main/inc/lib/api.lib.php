@@ -716,7 +716,7 @@ function api_get_path($path = '', $configuration = [])
         );
     }
 
-    if (api_get_multiple_access_url()) {
+    /*if (api_get_multiple_access_url()) {
         // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
         if (isset($configuration['access_url']) && !empty($configuration['access_url'])) {
             // We look into the DB the function api_get_access_url
@@ -727,7 +727,7 @@ function api_get_path($path = '', $configuration = [])
                 $root_web = 1 == $urlInfo['active'] ? $urlInfo['url'] : $configuration['root_web'];
             }
         }
-    }
+    }*/
 
     $paths = [
         WEB_PATH => $root_web,

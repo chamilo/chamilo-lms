@@ -557,7 +557,7 @@
     "A database with the same name <b>already exists<\/b>.": "A database with the same name <b>already exists<\/b>.",
     "To protect your site, make the whole %s directory read-only (chmod -R 0555 on Linux) and delete the %s directory.": "To protect your site, make the whole {0} directory read-only (chmod -R 0555 on Linux) and delete the {1} directory.",
     "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator.": "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator.",
-    "Please read the following requirements thoroughly.": "",
+    "Please read the following requirements thoroughly.": "Please read the following requirements thoroughly.",
     "Recommended settings for your server configuration. These settings are set in the php.ini configuration file on your server.": "Recommended settings for your server configuration. These settings are set in the php.ini configuration file on your server.",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)": "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)",
     "Chamilo is free software distributed under the GNU General Public licence (GPL).": "Chamilo is free software distributed under the GNU General Public licence (GPL).",

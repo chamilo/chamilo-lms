@@ -27719,7 +27719,7 @@ msgid "Step 2 - Requirements"
 msgstr "Step 2 - Requirements"
 
 msgid "Please read the following requirements thoroughly."
-msgstr ""
+msgstr "Please read the following requirements thoroughly."
 
 msgid "For more details %s"
 msgstr "For more details %s"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-07-17 09:01+0000\n"
+"PO-Revision-Date: 2024-07-19 21:50+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -3275,7 +3275,7 @@ msgid "ex."
 msgstr "z. B."
 
 msgid "Database Host"
-msgstr "Datenbank-Server"
+msgstr "Datenbankhost"
 
 msgid "Database Login"
 msgstr "DB Username"
@@ -14416,6 +14416,7 @@ msgstr "Als Kursleiter wurden Sie selbst eingetragen. Sie können diese Einstell
 msgid "Installation language"
 msgstr "Sprache für die Installation"
 
+#, fuzzy
 msgid "Please read the following requirements thoroughly."
 msgstr "Bitte sorgfältig lesen"
 
@@ -15182,7 +15183,7 @@ msgid "Installation"
 msgstr "Installation"
 
 msgid "Read the installation guide"
-msgstr "Die Installationsanweisung lesen"
+msgstr "lesen Sie die Installationsanleitung"
 
 msgid "See blog"
 msgstr "Projekt(e) anzeigen"
@@ -29154,3 +29155,36 @@ msgstr "Trainings-Sessions zu Kategorien hinzufügen"
 
 msgid "All sessions"
 msgstr "Alle Sessions"
+
+msgid "Step 3 - License"
+msgstr "Schritt 3 - Lizenz"
+
+msgid "Chamilo's installation wizard"
+msgstr "Installationsassistent von Chamilo"
+
+msgid "No course sessions for this user"
+msgstr "Für diesen Benutzer gibt es keine Kurs-Sessions"
+
+msgid "Step 1 - Installation Language"
+msgstr "Schritt 1 - Installationssprache"
+
+msgid "Database settings"
+msgstr "Datenbankeinstellungen"
+
+msgid "For more details %s"
+msgstr "Für weitere Einzelheiten %s"
+
+msgid "Please select installation language"
+msgstr "Bitte wählen Sie die Installationssprache"
+
+msgid "Database host"
+msgstr "Datenbankhost"
+
+msgid "Step 2 - Requirements"
+msgstr "Schritt 2 - Anforderungen"
+
+msgid "read the installation guide"
+msgstr "lesen Sie die Installationsanleitung"
+
+msgid "Step 4 - Database settings"
+msgstr "Schritt 4 - Datenbankeinstellungen"

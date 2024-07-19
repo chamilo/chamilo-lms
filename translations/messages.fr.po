@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-07-17 08:17+0000\n"
+"PO-Revision-Date: 2024-07-19 21:51+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
 "messages/fr/>\n"
@@ -3305,7 +3305,7 @@ msgid "ex."
 msgstr "par ex."
 
 msgid "Database Host"
-msgstr "Hôte base de données"
+msgstr "Hôte du serveur de bases de données"
 
 msgid "Database Login"
 msgstr "Utilisateur base de données"
@@ -14811,7 +14811,7 @@ msgid "Installation language"
 msgstr "Langue d'installation"
 
 msgid "Please read the following requirements thoroughly."
-msgstr "À lire attentivement"
+msgstr "Pré-requis suivants à lire attentivement."
 
 msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
 msgstr "Attention ! Une installation de Chamilo existe déjà sur votre système."
@@ -15630,7 +15630,7 @@ msgid "Installation"
 msgstr "Installation"
 
 msgid "Read the installation guide"
-msgstr "Lire le guide d'installation"
+msgstr "consultez le guide d'installation"
 
 msgid "See blog"
 msgstr "Voir le blog"
@@ -29501,3 +29501,36 @@ msgid "Display information about the next incomplete and the last completed topi
 msgstr ""
 "Afficher des informations sur le prochain sujet incomplet et le dernier "
 "sujet complété"
+
+msgid "Step 3 - License"
+msgstr "Étape 3 - Licence"
+
+msgid "Chamilo's installation wizard"
+msgstr "Assistant d'installation de Chamilo"
+
+msgid "No course sessions for this user"
+msgstr "Aucune session de formation pour cet utilisateur"
+
+msgid "Step 1 - Installation Language"
+msgstr "Étape 1 - Langue d'installation"
+
+msgid "Database settings"
+msgstr "Paramètres de base de données"
+
+msgid "For more details %s"
+msgstr "Pour plus de détails %s"
+
+msgid "Please select installation language"
+msgstr "Sélectionnez une langue d'installation"
+
+msgid "Database host"
+msgstr "Hôte du serveur de bases de données"
+
+msgid "Step 2 - Requirements"
+msgstr "Étape 2 - Pré-requis"
+
+msgid "read the installation guide"
+msgstr "consultez le guide d'installation"
+
+msgid "Step 4 - Database settings"
+msgstr "Étape 4 - Paramètres de base de données"

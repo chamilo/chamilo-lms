@@ -36,22 +36,4 @@ class AccessUrlRepository extends ResourceRepository
             return 0;
         }
     }
-
-    /**
-     * Check if there are multiple AccessUrl entries.
-     */
-    public function hasMultipleAccessUrls(): bool
-    {
-        $qb = $this->createQueryBuilder('a');
-        $qb->select('COUNT(a.id)');
-
-        $q = $qb->getQuery();
-
-        try {
-            $count = (int) $q->getSingleScalarResult();
-            return $count > 1;
-        } catch (NonUniqueResultException|NoResultException $e) {
-            return false;
-        }
-    }
 }

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -34,6 +35,7 @@ class LegacyListener
         private readonly TokenStorageInterface $tokenStorage,
         private readonly AccessUrlRepository $accessUrlRepository,
         private readonly RouterInterface $router,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly ParameterBagInterface $parameterBag,
         private readonly SettingsManager $settingsManager,
         private readonly ContainerInterface $container,
@@ -147,16 +149,9 @@ class LegacyListener
             $session->set('cid_reset', false);
         }
 
-        $urlId = $this->accessUrlRepository->getFirstId();
-
-        if (1 === (int) $this->parameterBag->get('multiple_access_url')) {
-            $url = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
-            $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $url]);
-            if (null !== $accessUrl) {
-                $urlId = $accessUrl->getId();
-            }
-        }
-
-        $session->set('access_url_id', $urlId);
+        $session->set(
+            'access_url_id',
+            $this->accessUrlHelper->getCurrent()->getId()
+        );
     }
 }

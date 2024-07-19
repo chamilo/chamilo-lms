@@ -49,7 +49,7 @@ class UsergroupRepository extends ResourceRepository
             }
         }
 
-        if ($this->accessUrlHelper->isMultipleEnabled()) {
+        if ($this->accessUrlHelper->isMultiple()) {
             $accessUrl = $this->accessUrlHelper->getCurrent();
 
             $qb->innerJoin('g.urls', 'u')
@@ -88,7 +88,7 @@ class UsergroupRepository extends ResourceRepository
             ->setMaxResults($limit)
         ;
 
-        if ($this->accessUrlHelper->isMultipleEnabled()) {
+        if ($this->accessUrlHelper->isMultiple()) {
             $accessUrl = $this->accessUrlHelper->getCurrent();
 
             $qb->innerJoin('g.urls', 'u')
@@ -124,7 +124,7 @@ class UsergroupRepository extends ResourceRepository
             ->setMaxResults($limit)
         ;
 
-        if ($this->accessUrlHelper->isMultipleEnabled()) {
+        if ($this->accessUrlHelper->isMultiple()) {
             $accessUrl = $this->accessUrlHelper->getCurrent();
 
             $qb->innerJoin('g.urls', 'u')
@@ -311,7 +311,7 @@ class UsergroupRepository extends ResourceRepository
             $qb->select('g.id, g.title, g.description, g.url, g.picture');
         }
 
-        if ($this->accessUrlHelper->isMultipleEnabled()) {
+        if ($this->accessUrlHelper->isMultiple()) {
             $accessUrl = $this->accessUrlHelper->getCurrent();
 
             $qb->innerJoin('g.accessUrls', 'a', 'WITH', 'g.id = a.usergroup')

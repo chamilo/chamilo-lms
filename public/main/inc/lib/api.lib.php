@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\MailHelper;
 use Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
@@ -5972,21 +5973,12 @@ function api_get_course_url($courseId = null, $sessionId = null, $groupId = null
  */
 function api_get_multiple_access_url(): bool
 {
-    static $accessUrlEnabled;
-    if (!isset($accessUrlEnabled)) {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT id FROM $table";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 1) {
-            $accessUrlEnabled = true;
-        } else {
-            $accessUrlEnabled = false;
-        }
-    }
-
-    return $accessUrlEnabled;
+    return Container::$container->get(AccessUrlHelper::class)->isMultiple();
 }
 
+/**
+ * @deprecated Use AccessUrlHelper::isMultiple
+ */
 function api_is_multiple_url_enabled(): bool
 {
     return api_get_multiple_access_url();

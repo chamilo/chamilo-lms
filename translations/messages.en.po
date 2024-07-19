@@ -27517,11 +27517,11 @@ msgstr "The following contents have been validated"
 msgid "Obtained the following skills"
 msgstr "Obtained the following skills"
 
-msgid "Certificate Footer"
-msgstr ""
-
 msgid "Chamilo LMS"
 msgstr "Chamilo LMS"
+
+msgid "No course sessions for this user"
+msgstr "No course sessions for this user"
 
 msgid "The attempted oral questions are %s"
 msgstr "The attempted oral questions are %s"

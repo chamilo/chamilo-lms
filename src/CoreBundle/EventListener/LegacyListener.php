@@ -15,6 +15,7 @@ use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -34,10 +35,10 @@ class LegacyListener
         private readonly TokenStorageInterface $tokenStorage,
         private readonly AccessUrlRepository $accessUrlRepository,
         private readonly RouterInterface $router,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly ParameterBagInterface $parameterBag,
         private readonly SettingsManager $settingsManager,
         private readonly ContainerInterface $container,
-        private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
     public function __invoke(RequestEvent $event): void

@@ -510,25 +510,40 @@ class MySpace
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $sqlCoachs = "SELECT DISTINCT
+                        scu.user_id as id_coach,
+                        u.id as user_id,
+                        lastname,
+                        firstname,
+                        MAX(login_date) as login_date
+                        FROM $tbl_user u, $tbl_session_course_user scu, $tbl_track_login
+                        WHERE
+                            u.active <> ".USER_SOFT_DELETED." AND scu.user_id = u.id AND scu.status=".SessionEntity::COURSE_COACH." AND login_user_id=u.id
+                        GROUP BY user_id ";
+
+        if (api_is_multiple_url_enabled()) {
+            $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
-            $sqlCoachs = "SELECT DISTINCT
-                    scu.user_id as id_coach,
-                    u.id as user_id,
-                    lastname,
-                    firstname,
-                    MAX(login_date) as login_date
-                FROM $tbl_user u,
-                $tbl_session_course_user scu,
-                $tbl_track_login ,
-                $tbl_session_rel_access_url session_rel_url
-                WHERE
-                    scu.user_id = u.id AND
-                    scu.status = ".SessionEntity::COURSE_COACH." AND
-                    login_user_id = u.id AND
-                    access_url_id = $access_url_id AND
-                    session_rel_url.session_id = scu.session_id
-                GROUP BY u.id";
+            if (-1 != $access_url_id) {
+                $sqlCoachs = "SELECT DISTINCT
+                                    scu.user_id as id_coach,
+                                    u.id as user_id,
+                                    lastname,
+                                    firstname,
+                                    MAX(login_date) as login_date
+                                FROM $tbl_user u,
+                                $tbl_session_course_user scu,
+                                $tbl_track_login ,
+                                $tbl_session_rel_access_url session_rel_url
+                                WHERE
+                                    scu.user_id = u.id AND
+                                    scu.status = ".SessionEntity::COURSE_COACH." AND
+                                    login_user_id = u.id AND
+                                    access_url_id = $access_url_id AND
+                                    session_rel_url.session_id = scu.session_id
+                                GROUP BY u.id";
+            }
+        }
         if (!empty($order[$tracking_column])) {
             $sqlCoachs .= " ORDER BY `".$order[$tracking_column]."` ".$tracking_direction;
         }
@@ -539,19 +554,32 @@ class MySpace
             $global_coaches[$coach['user_id']] = $coach;
         }
 
-        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $access_url_id = api_get_current_access_url_id();
         $sql_session_coach = "SELECT u.id AS user_id, u.lastname, u.firstname, MAX(tel.login_date) AS login_date
-            FROM $tbl_user u
-            INNER JOIN $tbl_track_login  tel
-            ON tel.login_user_id = u.id
-            INNER JOIN $tblSessionRelUser sru
-            ON (u.id = sru.user_id AND sru.relation_type = ".SessionEntity::GENERAL_COACH.")
-            INNER JOIN $tbl_session_rel_access_url aurs
-            ON sru.session_id = aurs.session_id
-            WHERE aurs.access_url_id = $access_url_id
-            GROUP BY u.id
-            ORDER BY login_date $tracking_direction";
+                                FROM $tbl_user u
+                                INNER JOIN $tbl_track_login tel
+                                ON tel.login_user_id = u.id
+                                INNER JOIN $tblSessionRelUser sru
+                                ON (u.id = sru.user_id AND sru.relation_type = ".SessionEntity::GENERAL_COACH.")
+                                GROUP BY u.id
+                                ORDER BY login_date $tracking_direction";
+
+        if (api_is_multiple_url_enabled()) {
+            $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $access_url_id = api_get_current_access_url_id();
+            if (-1 != $access_url_id) {
+                $sql_session_coach = "SELECT u.id AS user_id, u.lastname, u.firstname, MAX(tel.login_date) AS login_date
+                    FROM $tbl_user u
+                    INNER JOIN $tbl_track_login  tel
+                    ON tel.login_user_id = u.id
+                    INNER JOIN $tblSessionRelUser sru
+                    ON (u.id = sru.user_id AND sru.relation_type = ".SessionEntity::GENERAL_COACH.")
+                    INNER JOIN $tbl_session_rel_access_url aurs
+                    ON sru.session_id = aurs.session_id
+                    WHERE aurs.access_url_id = $access_url_id
+                    GROUP BY u.id
+					ORDER BY login_date $tracking_direction";
+            }
+        }
 
         $result_sessions_coach = Database::query($sql_session_coach);
         //$total_no_coaches += Database::num_rows($result_sessions_coach);

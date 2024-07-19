@@ -2386,9 +2386,15 @@ class CourseManager
             return false;
         }
 
-        $url_id = api_get_current_access_url_id();
-        UrlManager::delete_url_rel_course($courseId, $url_id);
-        $count = UrlManager::getCountUrlRelCourse($courseId);
+        $count = 0;
+        if (api_is_multiple_url_enabled()) {
+            $url_id = 1;
+            if (-1 != api_get_current_access_url_id()) {
+                $url_id = api_get_current_access_url_id();
+            }
+            UrlManager::delete_url_rel_course($courseId, $url_id);
+            $count = UrlManager::getCountUrlRelCourse($courseId);
+        }
 
         if (0 === $count) {
             // Cleaning group categories
@@ -3240,13 +3246,18 @@ class CourseManager
         $affected_rows = 0;
 
         //Deleting assigned courses to hrm_id
-        $sql = "SELECT s.c_id FROM $tbl_course_rel_user s
-            INNER JOIN $tbl_course_rel_access_url a
-            ON (a.c_id = s.c_id)
-            WHERE
-                user_id = $hr_manager_id AND
-                relation_type = ".COURSE_RELATION_TYPE_RRHH." AND
-                access_url_id = ".api_get_current_access_url_id();
+        if (api_is_multiple_url_enabled()) {
+            $sql = "SELECT s.c_id FROM $tbl_course_rel_user s
+                    INNER JOIN $tbl_course_rel_access_url a
+                    ON (a.c_id = s.c_id)
+                    WHERE
+                        user_id = $hr_manager_id AND
+                        relation_type = ".COURSE_RELATION_TYPE_RRHH." AND
+                        access_url_id = ".api_get_current_access_url_id();
+        } else {
+            $sql = "SELECT c_id FROM $tbl_course_rel_user
+                    WHERE user_id = $hr_manager_id AND relation_type = ".COURSE_RELATION_TYPE_RRHH;
+        }
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
@@ -5955,18 +5966,30 @@ class CourseManager
             return [];
         }
 
-        $courseAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $accessUrlId = api_get_current_access_url_id();
-
         $sql = "SELECT DISTINCT(c.id), c.title
-            FROM $courseTable c
-            INNER JOIN $courseUserTable cru ON c.id = cru.c_id
-            INNER JOIN $courseAccessUrlTable crau ON c.id = crau.c_id
-            WHERE crau.access_url_id = $accessUrlId
-                AND (
-                cru.id_user IN (".implode(', ', $userIdList).") AND
-                cru.relation_type = 0
-            )";
+                FROM $courseTable c
+                INNER JOIN $courseUserTable cru ON c.id = cru.c_id
+                WHERE (
+                    cru.user_id IN (".implode(', ', $userIdList).")
+                    AND cru.relation_type = 0
+                )";
+
+        if (api_is_multiple_url_enabled()) {
+            $courseAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+            $accessUrlId = api_get_current_access_url_id();
+
+            if (-1 != $accessUrlId) {
+                $sql = "SELECT DISTINCT(c.id), c.title
+                        FROM $courseTable c
+                        INNER JOIN $courseUserTable cru ON c.id = cru.c_id
+                        INNER JOIN $courseAccessUrlTable crau ON c.id = crau.c_id
+                        WHERE crau.access_url_id = $accessUrlId
+                            AND (
+                            cru.id_user IN (".implode(', ', $userIdList).") AND
+                            cru.relation_type = 0
+                        )";
+            }
+        }
 
         $result = Database::query($sql);
         while ($row = Database::fetch_assoc($result)) {

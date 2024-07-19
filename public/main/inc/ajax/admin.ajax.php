@@ -46,13 +46,18 @@ switch ($action) {
 
         /** @var Filesystem $fileSystem */
         $fileSystem = Container::$container->get('home_filesystem');
+        $dir = 'admin/';
 
-        $accessUrlId = api_get_current_access_url_id();
+        if (api_is_multiple_url_enabled()) {
+            $accessUrlId = api_get_current_access_url_id();
 
-        $urlInfo = api_get_access_url($accessUrlId);
-        $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
-        $cleanUrl = str_replace('/', '-', $url);
-        $dir = "$cleanUrl/admin/";
+            if (-1 != $accessUrlId) {
+                $urlInfo = api_get_access_url($accessUrlId);
+                $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
+                $cleanUrl = str_replace('/', '-', $url);
+                $dir = "$cleanUrl/admin/";
+            }
+        }
 
         $filePath = $dir.$blockName.'_extra.html';
 

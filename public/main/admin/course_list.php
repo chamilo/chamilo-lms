@@ -80,7 +80,9 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
             INNER JOIN $tblCourseCategory category ON course_rel_category.course_category_id = category.id ";
     }
 
-    if ((api_is_platform_admin() || api_is_session_admin())) {
+    if ((api_is_platform_admin() || api_is_session_admin()) &&
+        api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
+    ) {
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
                  ON (course.id = url_rel_course.c_id)";
@@ -119,7 +121,9 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     }
 
     // Adding the filter to see the user's only of the current access_url.
-    if ((api_is_platform_admin() || api_is_session_admin())) {
+    if ((api_is_platform_admin() || api_is_session_admin()) &&
+        api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
+    ) {
         $sql .= ' AND url_rel_course.access_url_id='.api_get_current_access_url_id();
     }
 

@@ -18,6 +18,17 @@ class AccessUrlHelper
         private readonly RouterInterface $router,
     ) {}
 
+    public function isMultiple(): bool
+    {
+        static $accessUrlEnabled;
+
+        if (!isset($accessUrlEnabled)) {
+            $accessUrlEnabled = $this->accessUrlRepository->count([]) > 1;
+        }
+
+        return $accessUrlEnabled;
+    }
+
     public function getFirstAccessUrl(): AccessUrl
     {
         $urlId = $this->accessUrlRepository->getFirstId();
@@ -33,13 +44,13 @@ class AccessUrlHelper
             return $accessUrl;
         }
 
-        $url = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $accessUrl = $this->getFirstAccessUrl();
 
-        /** @var AccessUrl $accessUrl */
-        $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $url]);
+        if ($this->isMultiple()) {
+            $url = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        if (!$accessUrl) {
-            $accessUrl = $this->getFirstAccessUrl();
+            /** @var AccessUrl $accessUrl */
+            $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $url]);
         }
 
         return $accessUrl;

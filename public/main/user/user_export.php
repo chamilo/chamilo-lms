@@ -47,11 +47,17 @@ if (is_array($courseSessionValue) && isset($courseSessionValue[1])) {
     $sessionInfo = api_get_session_info($sessionId);
 }
 
-$tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-$access_url_id = api_get_current_access_url_id();
-$extraUrlJoin = " INNER JOIN $tbl_user_rel_access_url as user_rel_url
-               ON (u.id = user_rel_url.user_id) ";
-$extraUrlCondition = " AND access_url_id = $access_url_id";
+$extraUrlJoin = '';
+$extraUrlCondition = '';
+if (api_is_multiple_url_enabled()) {
+    $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $access_url_id = api_get_current_access_url_id();
+    if (-1 != $access_url_id) {
+        $extraUrlJoin .= " INNER JOIN $tbl_user_rel_access_url as user_rel_url
+				           ON (u.id = user_rel_url.user_id) ";
+        $extraUrlCondition = " AND access_url_id = $access_url_id";
+    }
+}
 
 $sql = "SELECT
             u.id 	AS UserId,
@@ -101,13 +107,19 @@ if (strlen($course_code) > 0) {
 					ORDER BY lastname,firstname";
     $filename = 'export_users_'.$sessionInfo['name'].'_'.api_get_local_time();
 } else {
-    $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $access_url_id = api_get_current_access_url_id();
-    $sql .= " FROM $userTable u
-            INNER JOIN $tbl_user_rel_access_url as user_rel_url
-            ON (u.id = user_rel_url.user_id)
-        WHERE u.active <> ".USER_SOFT_DELETED." AND access_url_id = $access_url_id
-        ORDER BY lastname,firstname";
+    if (api_is_multiple_url_enabled()) {
+        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $access_url_id = api_get_current_access_url_id();
+        if (-1 != $access_url_id) {
+            $sql .= " FROM $userTable u
+					INNER JOIN $tbl_user_rel_access_url as user_rel_url
+                    ON (u.id = user_rel_url.user_id)
+				WHERE u.active <> ".USER_SOFT_DELETED." AND access_url_id = $access_url_id
+				ORDER BY lastname,firstname";
+        }
+    } else {
+        $sql .= " FROM $userTable u WHERE u.active <> ".USER_SOFT_DELETED." ORDER BY lastname,firstname";
+    }
     $filename = 'export_users_'.api_get_local_time();
 }
 $data = [];

@@ -26,15 +26,20 @@ $coursesSessions = array_merge($coursesSessions, $allCoursesFromSessions);
 
 $courses = [];
 $courses[''] = '--';
+$sql = "SELECT code,visual_code,title FROM $course_table ORDER BY visual_code";
 
-$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-$access_url_id = api_get_current_access_url_id();
-$sql = "SELECT code,visual_code,title
-    FROM $course_table as c
-    INNER JOIN $tbl_course_rel_access_url as course_rel_url
-    ON (c.id = course_rel_url.c_id)
-    WHERE access_url_id = $access_url_id
-    ORDER BY visual_code";
+if (api_is_multiple_url_enabled()) {
+    $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+    $access_url_id = api_get_current_access_url_id();
+    if (-1 != $access_url_id) {
+        $sql = "SELECT code,visual_code,title
+            FROM $course_table as c
+            INNER JOIN $tbl_course_rel_access_url as course_rel_url
+            ON (c.id = course_rel_url.c_id)
+            WHERE access_url_id = $access_url_id
+            ORDER BY visual_code";
+    }
+}
 $result = Database::query($sql);
 while ($course = Database::fetch_object($result)) {
     $courses[$course->code] = $course->visual_code.' - '.$course->title;
@@ -109,13 +114,19 @@ if ($form->validate()) {
                     ORDER BY lastname,firstname";
         $filename = 'export_users_'.$courseSessionCode.'_'.$sessionInfo['name'].'_'.api_get_local_time();
     } else {
-        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $access_url_id = api_get_current_access_url_id();
-        $sql .= " FROM $user_table u
-            INNER JOIN $tbl_user_rel_access_url as user_rel_url
-            ON (u.user_id= user_rel_url.user_id)
-            WHERE access_url_id = $access_url_id
-            ORDER BY lastname,firstname";
+        if (api_is_multiple_url_enabled()) {
+            $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $access_url_id = api_get_current_access_url_id();
+            if (-1 != $access_url_id) {
+                $sql .= " FROM $user_table u
+                          INNER JOIN $tbl_user_rel_access_url as user_rel_url
+                          ON (u.user_id= user_rel_url.user_id)
+                          WHERE access_url_id = $access_url_id
+                          ORDER BY lastname,firstname";
+            }
+        } else {
+            $sql .= " FROM $user_table u ORDER BY lastname,firstname";
+        }
         $filename = 'export_users_'.api_get_local_time();
     }
     $data = [];

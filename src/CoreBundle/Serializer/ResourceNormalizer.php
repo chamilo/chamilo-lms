@@ -117,4 +117,12 @@ final class ResourceNormalizer implements NormalizerInterface, NormalizerAwareIn
 
         return $data instanceof AbstractResource || $data instanceof User;
     }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+            AbstractResource::class => false,
+            User::class => false,
+        ];
+    }
 }

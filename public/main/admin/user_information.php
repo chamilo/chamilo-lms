@@ -499,30 +499,32 @@ if (count($courseRelUserList) > 0) {
  * Show the URL in which this user is subscribed.
  */
 $urlInformation = '';
-$urlList = UrlManager::get_access_url_from_user($userId);
-if (count($urlList) > 0) {
-    $header = [];
-    $header[] = ['URL', true];
-    $data = [];
-    $csvContent[] = [];
-    $csvContent[] = ['Url'];
-    foreach ($urlList as $url) {
-        $row = [];
-        $row[] = Display::url($url['url'], $url['url']);
-        $csvContent[] = array_map('strip_tags', $row);
-        $data[] = $row;
-    }
+if (api_is_multiple_url_enabled()) {
+    $urlList = UrlManager::get_access_url_from_user($userId);
+    if (count($urlList) > 0) {
+        $header = [];
+        $header[] = ['URL', true];
+        $data = [];
+        $csvContent[] = [];
+        $csvContent[] = ['Url'];
+        foreach ($urlList as $url) {
+            $row = [];
+            $row[] = Display::url($url['url'], $url['url']);
+            $csvContent[] = array_map('strip_tags', $row);
+            $data[] = $row;
+        }
 
-    $urlInformation = Display::page_subheader(get_lang('URL list'));
-    $urlInformation .= Display::return_sortable_table(
-        $header,
-        $data,
-        [],
-        [],
-        ['user_id' => $userId]
-    );
-} else {
-    $urlInformation = '<p>'.get_lang('This user doesn\'t have a related URL.').'</p>';
+        $urlInformation = Display::page_subheader(get_lang('URL list'));
+        $urlInformation .= Display::return_sortable_table(
+            $header,
+            $data,
+            [],
+            [],
+            ['user_id' => $userId]
+        );
+    } else {
+        $urlInformation = '<p>'.get_lang('This user doesn\'t have a related URL.').'</p>';
+    }
 }
 
 if (isset($_GET['action'])) {

@@ -61,7 +61,7 @@ class DatePicker extends HTML_QuickForm_text
         <div>'.$requiredSymbol.$label.'</div>
         <div id="'.$id.'" class="flex items-center mt-1 flatpickr-wrapper" data-wrap="true">
             <input '.$this->_getAttrString($this->_attributes).'
-                class="form-control border flex-grow" type="text" value="'.$value.'" placeholder="'.get_lang('Select date ..').'" data-input>
+                class="form-control border flex-grow" type="text" value="'.$value.'" placeholder="'.get_lang('Select date').'" data-input>
             <div class="flex space-x-1 ml-2" id="button-addon3">
                 <button class="btn btn--secondary-outline mr-2" type="button" data-toggle>
                     <i class="pi pi-calendar pi-lg"></i>

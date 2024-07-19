@@ -29211,9 +29211,6 @@ msgstr "Les contenus suivants ont été validés "
 msgid "Obtained the following skills"
 msgstr "a obtenu les compétences suivantes "
 
-msgid "Certificate Footer"
-msgstr ""
-
 msgid "Chamilo LMS"
 msgstr "Chamilo LMS"
 

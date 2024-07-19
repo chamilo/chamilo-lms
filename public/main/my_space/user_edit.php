@@ -131,9 +131,14 @@ if ($form->validate()) {
 
         if (!empty($email) && $send_mail) {
             $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('Your registration on').' '.api_get_setting('siteName');
-            $access_url_id = api_get_current_access_url_id();
-            $url = api_get_access_url($access_url_id);
-            $portal_url = $url['url'];
+            $portal_url = api_get_path(WEB_PATH);
+            if (api_is_multiple_url_enabled()) {
+                $access_url_id = api_get_current_access_url_id();
+                if (-1 != $access_url_id) {
+                    $url = api_get_access_url($access_url_id);
+                    $portal_url = $url['url'];
+                }
+            }
 
             $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($userInfo['firstname'], $userInfo['lastname'])).",\n\n".
                 get_lang('You are registered to')." ".api_get_setting('siteName')." ".get_lang('with the following settings:')."\n\n".

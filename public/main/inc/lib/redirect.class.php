@@ -116,11 +116,18 @@ class Redirect
             $redirect = api_get_setting('redirect_admin_to_courses_list');
             if ('true' !== $redirect) {
                 // If the user is a platform admin, redirect to the main admin page
-                // if multiple URLs are enabled, make sure he's admin of the
-                // current URL before redirecting
-                $url = api_get_current_access_url_id();
-                if (api_is_platform_admin_by_id($userId, $url)) {
-                    self::navigate(api_get_path(WEB_CODE_PATH).'admin/index.php');
+                if (api_is_multiple_url_enabled()) {
+                    // if multiple URLs are enabled, make sure he's admin of the
+                    // current URL before redirecting
+                    $url = api_get_current_access_url_id();
+                    if (api_is_platform_admin_by_id($userId, $url)) {
+                        self::navigate(api_get_path(WEB_CODE_PATH).'admin/index.php');
+                    }
+                } else {
+                    // if no multiple URL, then it's enough to be platform admin
+                    if (api_is_platform_admin_by_id($userId)) {
+                        self::navigate(api_get_path(WEB_CODE_PATH).'admin/index.php');
+                    }
                 }
             }
             $page_after_login = api_get_setting('page_after_login');

@@ -5100,10 +5100,39 @@ function api_request_uri()
  * @return int access_url_id of the current Chamilo Installation
  *
  * @author Julio Montoya <gugli100@gmail.com>
+ * @throws Exception
  */
 function api_get_current_access_url_id(): int
 {
-    return Container::$container->get(AccessUrlHelper::class)->getCurrent()->getId();
+    if (false === api_get_multiple_access_url()) {
+        return 1;
+    }
+
+    static $id;
+    if (!empty($id)) {
+        return $id;
+    }
+
+    $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+    $path = Database::escape_string(api_get_path(WEB_PATH));
+    $sql = "SELECT id FROM $table WHERE url = '".$path."'";
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $id = Database::result($result, 0, 0);
+        if (false === $id) {
+            return -1;
+        }
+
+        return (int) $id;
+    }
+
+    $id = 1;
+
+    //if the url in WEB_PATH was not found, it can only mean that there is
+    // either a configuration problem or the first URL has not been defined yet
+    // (by default it is http://localhost/). Thus the more sensible thing we can
+    // do is return 1 (the main URL) as the user cannot hack this value anyway
+    return 1;
 }
 
 /**
@@ -5944,19 +5973,15 @@ function api_get_course_url($courseId = null, $sessionId = null, $groupId = null
  */
 function api_get_multiple_access_url(): bool
 {
-    static $accessUrlEnabled;
-    if (!isset($accessUrlEnabled)) {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT id FROM $table";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 1) {
-            $accessUrlEnabled = true;
-        } else {
-            $accessUrlEnabled = false;
-        }
-    }
+    return Container::$container->get(AccessUrlHelper::class)->isMultiple();
+}
 
-    return $accessUrlEnabled;
+/**
+ * @deprecated Use AccessUrlHelper::isMultiple
+ */
+function api_is_multiple_url_enabled(): bool
+{
+    return api_get_multiple_access_url();
 }
 
 /**

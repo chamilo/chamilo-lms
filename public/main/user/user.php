@@ -228,12 +228,19 @@ if (isset($_GET['action'])) {
                             active
                             $legal
                         FROM $table_session_course_user as session_course_user,
-                        $table_users as user, "
-                    .Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER)." au
+                        $table_users as user ";
+                if (api_is_multiple_url_enabled()) {
+                    $sql .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
+                }
+                $sql .= "
                     WHERE user.active <> ".USER_SOFT_DELETED." AND c_id = $courseId
                         AND session_course_user.user_id = user.id
                         AND session_id = $sessionId
-                        AND user.id = au.user_id AND access_url_id =  $current_access_url_id  ";
+                ";
+
+                if (api_is_multiple_url_enabled()) {
+                    $sql .= " AND user.id = au.user_id AND access_url_id =  $current_access_url_id  ";
+                }
 
                 // only users no coaches/teachers
                 if (COURSEMANAGER == $type) {
@@ -309,14 +316,19 @@ if (isset($_GET['action'])) {
                             phone,
                             user.official_code,
                             active $legal
-                        FROM $table_course_user as course_user, $table_users as user,
-                        ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER)." au
-                    WHERE
+                        FROM $table_course_user as course_user, $table_users as user ";
+                if (api_is_multiple_url_enabled()) {
+                    $sql .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
+                }
+                $sql .= " WHERE
                         user.active <> ".USER_SOFT_DELETED." AND
                         c_id = '$courseId' AND
                         course_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                        course_user.user_id = user.id
-                        AND user.id = au.user_id  AND access_url_id =  $current_access_url_id  ";
+                        course_user.user_id = user.id ";
+
+                if (api_is_multiple_url_enabled()) {
+                    $sql .= " AND user.id = au.user_id  AND access_url_id =  $current_access_url_id  ";
+                }
 
                 // only users no teachers/coaches
                 if (COURSEMANAGER == $type) {

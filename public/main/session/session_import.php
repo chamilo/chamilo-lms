@@ -376,8 +376,13 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         }
 
                         // Associate the session with access_url.
-                        $accessUrlId = api_get_current_access_url_id();
-                        UrlManager::add_session_to_url($sessionId, $accessUrlId);
+                        if (api_is_multiple_url_enabled()) {
+                            $accessUrlId = api_get_current_access_url_id();
+                            UrlManager::add_session_to_url($sessionId, $accessUrlId);
+                        } else {
+                            // We fill by default the access_url_rel_session table.
+                            UrlManager::add_session_to_url($sessionId, 1);
+                        }
 
                         // Adding users to the new session.
                         foreach ($nodeSession->User as $nodeUser) {

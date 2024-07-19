@@ -39,22 +39,35 @@ function search_coachs($needle)
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
         // search users where username or firstname or lastname begins likes $needle
-        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $access_url_id = api_get_current_access_url_id();
         $sql = 'SELECT username, lastname, firstname
-            FROM '.$tbl_user.' user
-            INNER JOIN '.$tbl_user_rel_access_url.' url_user
-            ON (url_user.user_id=user.user_id)
-            WHERE
-                access_url_id = '.$access_url_id.'  AND
-                (
-                    username LIKE "'.$needle.'%" OR
-                    firstname LIKE "'.$needle.'%" OR
-                    lastname LIKE "'.$needle.'%"
-                )
+                FROM '.$tbl_user.' user
+                WHERE (username LIKE "'.$needle.'%"
+                OR firstname LIKE "'.$needle.'%"
+                OR lastname LIKE "'.$needle.'%")
                 AND status=1'.
-            $order_clause.'
-            LIMIT 10';
+            $order_clause.
+            ' LIMIT 10';
+
+        if (api_is_multiple_url_enabled()) {
+            $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $access_url_id = api_get_current_access_url_id();
+            if (-1 != $access_url_id) {
+                $sql = 'SELECT username, lastname, firstname
+                        FROM '.$tbl_user.' user
+                        INNER JOIN '.$tbl_user_rel_access_url.' url_user
+                        ON (url_user.user_id=user.user_id)
+                        WHERE
+                            access_url_id = '.$access_url_id.'  AND
+                            (
+                                username LIKE "'.$needle.'%" OR
+                                firstname LIKE "'.$needle.'%" OR
+                                lastname LIKE "'.$needle.'%"
+                            )
+                            AND status=1'.
+                    $order_clause.'
+                        LIMIT 10';
+            }
+        }
 
         $rs = Database::query($sql);
         while ($user = Database :: fetch_array($rs)) {

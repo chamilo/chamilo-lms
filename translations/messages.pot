@@ -27510,13 +27510,7 @@ msgstr ""
 msgid "Obtained the following skills"
 msgstr ""
 
-msgid "Certificate Footer"
-msgstr ""
-
 msgid "Chamilo LMS"
-msgstr ""
-
-msgid "Select date .."
 msgstr ""
 
 msgid "No course sessions for this user"

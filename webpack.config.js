@@ -1,6 +1,6 @@
 const Encore = require("@symfony/webpack-encore")
-const dotenv = require('dotenv');
-const webpack = require('webpack');
+const dotenv = require("dotenv")
+const webpack = require("webpack")
 
 const env = dotenv.config()
 
@@ -9,7 +9,7 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 }
 
 Encore.setOutputPath("public/build/")
-  .setManifestKeyPrefix("public/build/")
+  //.setManifestKeyPrefix("public/build/")
   .setPublicPath("/build")
   .cleanupOutputBeforeBuild()
   .enableBuildNotifications()
@@ -106,9 +106,12 @@ Encore.setOutputPath("public/build/")
   ])
   .addPlugin(
     new webpack.DefinePlugin({
-      'ENV_CUSTOM_VUE_TEMPLATE': JSON.stringify(env.parsed?.APP_CUSTOM_VUE_TEMPLATE),
-    })
+      ENV_CUSTOM_VUE_TEMPLATE: JSON.stringify(env.parsed?.APP_CUSTOM_VUE_TEMPLATE),
+    }),
   )
+  .configureDevServerOptions((options) => {
+    options.host = "0.0.0.0"
+  })
 
 Encore.copyFiles({
   from: "./node_modules/mediaelement/build",

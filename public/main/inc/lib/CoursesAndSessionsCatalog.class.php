@@ -158,7 +158,10 @@ class CoursesAndSessionsCatalog
 
     public static function getCourseCategoriesTree()
     {
-        $urlId = api_get_current_access_url_id();
+        $urlId = 1;
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+        }
 
         $countCourses = self::countAvailableCoursesToShowInCatalog($urlId);
         $categories = [];
@@ -251,34 +254,49 @@ class CoursesAndSessionsCatalog
         if (!empty($randomValue)) {
             $randomValue = (int) $randomValue;
 
-            $urlId = api_get_current_access_url_id();
-            $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-
-            $urlCondition = ' access_url_id = '.$urlId.' ';
-            $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
-            if ($allowBaseCategories) {
-                $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1)  ';
-            }
-
-            $sql = "SELECT COUNT(*)
-                    FROM $tbl_course course
-                    INNER JOIN $tbl_url_rel_course as url_rel_course
-                    ON (url_rel_course.c_id = course.id)
-                    WHERE access_url_id = $urlId";
+            $sql = "SELECT COUNT(*) FROM $tbl_course";
             $result = Database::query($sql);
             list($num_records) = Database::fetch_row($result);
 
-            $sql = "SELECT course.id, course.id as real_id
-                    FROM $tbl_course course
-                    INNER JOIN $tbl_url_rel_course as url_rel_course
-                    ON (url_rel_course.c_id = course.id)
-                    WHERE
-                        $urlCondition AND
-                        RAND()*$num_records< $randomValue
-                        $avoidCoursesCondition
-                        $visibilityCondition
-                    ORDER BY RAND()
-                    LIMIT 0, $randomValue";
+            if (api_is_multiple_url_enabled()) {
+                $urlId = api_get_current_access_url_id();
+                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+
+                $urlCondition = ' access_url_id = '.$urlId.' ';
+                $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
+                if ($allowBaseCategories) {
+                    $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1)  ';
+                }
+
+                $sql = "SELECT COUNT(*)
+                        FROM $tbl_course course
+                        INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.c_id = course.id)
+                        WHERE access_url_id = $urlId";
+                $result = Database::query($sql);
+                list($num_records) = Database::fetch_row($result);
+
+                $sql = "SELECT course.id, course.id as real_id
+                        FROM $tbl_course course
+                        INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.c_id = course.id)
+                        WHERE
+                            $urlCondition AND
+                            RAND()*$num_records< $randomValue
+                            $avoidCoursesCondition
+                            $visibilityCondition
+                        ORDER BY RAND()
+                        LIMIT 0, $randomValue";
+            } else {
+                $sql = "SELECT id, id as real_id
+                        FROM $tbl_course course
+                        WHERE
+                            RAND()*$num_records< $randomValue
+                            $avoidCoursesCondition
+                            $visibilityCondition
+                        ORDER BY RAND()
+                        LIMIT 0, $randomValue";
+            }
 
             $result = Database::query($sql);
             $id_in = null;
@@ -312,31 +330,50 @@ class CoursesAndSessionsCatalog
                 $conditionCode .= " category_code='$categoryCode' ";
             }
 
-            // Showing only the courses of the current Chamilo access_url_id
-            $urlId = api_get_current_access_url_id();
-            $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-
-            $urlCondition = ' access_url_id = '.$urlId.' ';
             if (empty($categoryCode) || 'ALL' === $categoryCode) {
-                $sql = "SELECT *, course.id real_id
-                    FROM $tbl_course as course
-                    INNER JOIN $tbl_url_rel_course as url_rel_course
-                    ON (url_rel_course.c_id = course.id)
-                    WHERE
-                        $urlCondition AND
-                        $conditionCode
-                        $avoidCoursesCondition
-                        $visibilityCondition
-                    ORDER BY title $limitFilter";
+                $sql = "SELECT *, id as real_id
+                        FROM $tbl_course course
+                        WHERE
+                          1=1
+                          $avoidCoursesCondition
+                          $visibilityCondition
+                    ORDER BY title $limitFilter ";
             } else {
-                $sql = "SELECT *, course.id real_id FROM $tbl_course as course
-                    INNER JOIN $tbl_url_rel_course as url_rel_course
-                    ON (url_rel_course.c_id = course.id)
-                    WHERE
-                        $urlCondition
-                        $avoidCoursesCondition
-                        $visibilityCondition
-                    ORDER BY title $limitFilter";
+                $sql = "SELECT *, id as real_id FROM $tbl_course course
+                        WHERE
+                            $conditionCode
+                            $avoidCoursesCondition
+                            $visibilityCondition
+                        ORDER BY title $limitFilter ";
+            }
+
+            // Showing only the courses of the current Chamilo access_url_id
+            if (api_is_multiple_url_enabled()) {
+                $urlId = api_get_current_access_url_id();
+                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+
+                $urlCondition = ' access_url_id = '.$urlId.' ';
+                if ('ALL' !== $categoryCode) {
+                    $sql = "SELECT *, course.id real_id
+                            FROM $tbl_course as course
+                            INNER JOIN $tbl_url_rel_course as url_rel_course
+                            ON (url_rel_course.c_id = course.id)
+                            WHERE
+                                $urlCondition AND
+                                $conditionCode
+                                $avoidCoursesCondition
+                                $visibilityCondition
+                            ORDER BY title $limitFilter";
+                } else {
+                    $sql = "SELECT *, course.id real_id FROM $tbl_course as course
+                            INNER JOIN $tbl_url_rel_course as url_rel_course
+                            ON (url_rel_course.c_id = course.id)
+                            WHERE
+                                $urlCondition
+                                $avoidCoursesCondition
+                                $visibilityCondition
+                            ORDER BY title $limitFilter";
+                }
             }
         }
 
@@ -420,34 +457,56 @@ class CoursesAndSessionsCatalog
             $categoryFilter = ' AND category_code = "'.$categoryCode.'" ';
         }
 
-        $urlId = api_get_current_access_url_id();
-        $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $urlCondition = ' access_url_id = '.$urlId.' AND';
-        $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
-        if ($allowBaseCategories) {
-            $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1) AND ';
-        }
-
+        //$sql = "SELECT DISTINCT course.*, $injectExtraFields
         $sql = "SELECT DISTINCT(course.id)
-            FROM $courseTable as course
-            INNER JOIN $tbl_url_rel_course as url_rel_course
-            ON (url_rel_course.c_id = course.id)
-            $sqlInjectJoins
-            WHERE
-                access_url_id = $urlId AND
-                (
-                    code LIKE '%".$keyword."%' OR
-                    title LIKE '%".$keyword."%' OR
-                    tutor_name LIKE '%".$keyword."%'
-                )
-                $where
-                $categoryFilter
-                $sqlInjectWhere
-                $avoidCoursesCondition
-                $visibilityCondition
-            ORDER BY title, visual_code ASC
-            $limitFilter
-           ";
+                FROM $courseTable course
+                $sqlInjectJoins
+                WHERE (
+                        course.code LIKE '%".$keyword."%' OR
+                        course.title LIKE '%".$keyword."%' OR
+                        course.tutor_name LIKE '%".$keyword."%'
+                    )
+                    $where
+                    $categoryFilter
+                    $sqlInjectWhere
+                    $avoidCoursesCondition
+                    $visibilityCondition
+                ORDER BY title, visual_code ASC
+                $limitFilter
+                ";
+
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+            if (-1 != $urlId) {
+                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $urlCondition = ' access_url_id = '.$urlId.' AND';
+                $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
+                if ($allowBaseCategories) {
+                    $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1) AND ';
+                }
+
+                $sql = "SELECT DISTINCT(course.id)
+                        FROM $courseTable as course
+                        INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.c_id = course.id)
+                        $sqlInjectJoins
+                        WHERE
+                            access_url_id = $urlId AND
+                            (
+                                code LIKE '%".$keyword."%' OR
+                                title LIKE '%".$keyword."%' OR
+                                tutor_name LIKE '%".$keyword."%'
+                            )
+                            $where
+                            $categoryFilter
+                            $sqlInjectWhere
+                            $avoidCoursesCondition
+                            $visibilityCondition
+                        ORDER BY title, visual_code ASC
+                        $limitFilter
+                       ";
+            }
+        }
 
         $result = Database::query($sql);
         $courses = [];

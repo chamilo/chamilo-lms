@@ -1,74 +1,62 @@
-$color_1: #3f3f46;
-$background-color_2: #fafafa;
-$border-color_1: #d4d4d8;
-
 .p-radiobutton {
-  @apply h-4 w-4;
+  @apply relative inline-flex select-none align-bottom w-4 h-4;
 
-  .p-radiobutton-box {
-    @apply bg-white border border-solid border-gray-50 rounded-full h-4 w-4;
-    color: $color_1;
-
-    &:not(.p-disabled) {
-      &:not(.p-highlight) {
-        &:hover {
-          border-color: $border-color_1;
-        }
-      }
-    }
-
-    &:not(.p-disabled).p-focus {
-      @apply outline-none outline-offset-0 border-primary;
-    }
-
-    .p-radiobutton-icon {
-      width: 6px;
-      height: 6px;
-      @apply bg-white duration-200;
-    }
-
-    &.p-highlight {
-      @apply bg-primary border-primary;
-
-      &:not(.p-disabled) {
-        &:hover {
-          @apply bg-primary border-primary text-white;
-        }
-      }
-    }
+  &-input {
+    @apply cursor-pointer;
   }
 
-  &:focus {
-    @apply outline-none;
+  &-box {
+    @apply flex justify-center items-center;
   }
 
-  &.p-invalid {
-    > .p-radiobutton-box {
-      @apply border-error;
-    }
+  &-icon {
+    @apply rounded-full invisible;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0) scale(0.1);
   }
-}
 
-.p-input-filled {
-  .p-radiobutton {
+  &:has(&-input--legacy:checked) &-icon,
+  &.p-highlight &-icon {
+    @apply visible;
+    transform: translateZ(0) scale(1, 1);
+  }
+
+  & &-input {
+    @apply appearance-none absolute top-0 left-0 w-full h-full p-0 m-0 opacity-0 z-[1] outline-none border-2 border-support-3;
+  }
+
+  & &-box {
+    @apply border-2 border-support-3 bg-white w-4 h-4 text-primary rounded-full transition-none outline-none;
+  }
+
+  & &-box &-icon {
+    @apply w-1.5 h-1.5 duration-200 bg-white;
+  }
+
+  &:has(&-input--legacy:checked) &-box,
+  &.p-highlight &-box {
+    @apply border-primary bg-primary;
+  }
+
+  &:not(.p-disabled):has(&-input:hover) {
     .p-radiobutton-box {
-      background-color: $background-color_2;
-
-      &:not(.p-disabled) {
-        &:hover {
-          background-color: $background-color_2;
-        }
-      }
-
-      &.p-highlight {
-        @apply bg-primary;
-
-        &:not(.p-disabled) {
-          &:hover {
-            @apply bg-primary;
-          }
-        }
-      }
+      @apply border-primary;
     }
+
+    &:has(.p-radiobutton-input--legacy:checked) .p-radiobutton-box,
+    &.p-highlight .p-radiobutton-box {
+      @apply border-primary bg-primary text-white;
+    }
+  }
+
+  &:not(.p-disabled):has(&-input:focus-visible) {
+    .p-radiobutton-box {
+      @apply outline-none drop-shadow-lg bg-primary;
+    }
+  }
+
+  &.p-invalid > &-box {
+    @apply border-error;
   }
 }

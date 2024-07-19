@@ -59,14 +59,19 @@ while ($obj = Database::fetch_object($res)) {
 }
 
 // Get all possible teachers without the course teachers
-$access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-$sql = "SELECT u.id as user_id,lastname,firstname
-    FROM $table_user as u
-    INNER JOIN $access_url_rel_user_table url_rel_user
-    ON (u.id=url_rel_user.user_id)
-    WHERE
-        url_rel_user.access_url_id = $urlId AND
-        status = 1".$order_clause;
+if (api_is_multiple_url_enabled()) {
+    $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $sql = "SELECT u.id as user_id,lastname,firstname
+            FROM $table_user as u
+            INNER JOIN $access_url_rel_user_table url_rel_user
+            ON (u.id=url_rel_user.user_id)
+            WHERE
+                url_rel_user.access_url_id = $urlId AND
+                status = 1".$order_clause;
+} else {
+    $sql = "SELECT id as user_id, lastname, firstname
+            FROM $table_user WHERE status='1'".$order_clause;
+}
 $courseInfo['tutor_name'] = null;
 
 $res = Database::query($sql);

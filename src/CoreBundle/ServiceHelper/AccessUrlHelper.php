@@ -55,9 +55,4 @@ class AccessUrlHelper
 
         return $accessUrl;
     }
-
-    public function hasMultipleAccessUrls(): bool
-    {
-        return $this->accessUrlRepository->hasMultipleAccessUrls();
-    }
 }

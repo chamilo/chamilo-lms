@@ -34,7 +34,7 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
            return;
         }
 
-        if ($this->accessUrlHelper->hasMultipleAccessUrls()) {
+        if ($this->accessUrlHelper->isMultiple()) {
             $accessUrl = $this->accessUrlHelper->getCurrent();
             $rootAlias = $queryBuilder->getRootAliases()[0];
 

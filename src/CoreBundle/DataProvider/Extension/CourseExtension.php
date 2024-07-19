@@ -51,7 +51,7 @@ final class CourseExtension implements QueryCollectionExtensionInterface
             throw new AccessDeniedException('Access Denied.');
         }
 
-        if ($this->accessUrlHelper->hasMultipleAccessUrls()) {
+        if ($this->accessUrlHelper->isMultiple()) {
             $accessUrl = $this->accessUrlHelper->getCurrent();
             $rootAlias = $queryBuilder->getRootAliases()[0];
 

@@ -25,6 +25,7 @@
     }
   }
 
+  &:has(&-input--legacy:checked) &-box,
   &.p-highlight &-box {
     @apply border-primary bg-primary;
   }
@@ -34,6 +35,7 @@
       @apply border-primary;
     }
 
+    &:has(.p-checkbox-input--legacy:checked) .p-checkbox-box,
     &.p-highlight .p-checkbox-box {
       @apply border-primary bg-primary text-white;
     }

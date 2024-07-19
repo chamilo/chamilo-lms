@@ -111,6 +111,14 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      */
     public function toHtml()
     {
+        $extraClass = "p-radiobutton-input p-radiobutton-input--legacy";
+
+        if (isset($this->_attributes['class'])) {
+            $this->_attributes['class'] .= $extraClass;
+        } else {
+            $this->_attributes['class'] = $extraClass;
+        }
+
         if (0 == strlen($this->_text)) {
             $label = '';
         } elseif ($this->isFrozen()) {
@@ -126,7 +134,12 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
             $id = $this->getAttribute('id');
 
             return '<div class="'.$radioClass.'">
-                '.parent::toHtml().'
+                <div class="p-radiobutton p-component">
+                    '.parent::toHtml().'
+                    <div class="p-radiobutton-box" data-pc-section="box">
+                        <div class="p-radiobutton-icon" data-pc-section="icon"></div>
+                    </div>
+                </div>
                 <label for="'.$id.'" class="'.$labelClass.'">'.$this->_text.'</label>
                 </div>';
         }

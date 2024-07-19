@@ -114,12 +114,14 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      */
     public function toHtml()
     {
-        $extraClass = "appearance-none checked:bg-support-4 outline-none";
+        $extraClass = "p-checkbox-input p-checkbox-input--legacy";
+
         if (isset($this->_attributes['class'])) {
             $this->_attributes['class'] .= $extraClass;
         } else {
             $this->_attributes['class'] = $extraClass;
         }
+
         if (0 == strlen($this->_text)) {
             $label = '';
         } elseif ($this->_flagFrozen) {
@@ -131,7 +133,14 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
             $id = $this->getAttribute('id');
 
             return '<div id="'.$name.'" class="'.$checkClass.'">
+                <div class="p-checkbox p-component">
                     '.parent::toHtml().'
+                    <div class="p-checkbox-box" data-pc-section="box">
+                        <div class="p-checkbox-icon" data-pc-section="icon">
+                            <span class="mdi mdi-check" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
                     <label for="'.$id.'" class="'.$labelClass.'">
                         '.$this->_text.
                     '</label>

@@ -16,6 +16,7 @@
     transform: translateZ(0) scale(0.1);
   }
 
+  &:has(&-input--legacy:checked) &-icon,
   &.p-highlight &-icon {
     @apply visible;
     transform: translateZ(0) scale(1, 1);
@@ -33,6 +34,7 @@
     @apply w-1.5 h-1.5 duration-200 bg-white;
   }
 
+  &:has(&-input--legacy:checked) &-box,
   &.p-highlight &-box {
     @apply border-primary bg-primary;
   }
@@ -42,6 +44,7 @@
       @apply border-primary;
     }
 
+    &:has(.p-radiobutton-input--legacy:checked) .p-radiobutton-box,
     &.p-highlight .p-radiobutton-box {
       @apply border-primary bg-primary text-white;
     }

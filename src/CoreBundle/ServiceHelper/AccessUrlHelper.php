@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -15,8 +16,14 @@ class AccessUrlHelper
 {
     public function __construct(
         private readonly AccessUrlRepository $accessUrlRepository,
+        private readonly ParameterBagInterface $parameterBag,
         private readonly RouterInterface $router,
     ) {}
+
+    public function isMultipleEnabled(): bool
+    {
+        return 1 === (int) $this->parameterBag->get('multiple_access_url');
+    }
 
     public function getFirstAccessUrl(): AccessUrl
     {
@@ -33,13 +40,13 @@ class AccessUrlHelper
             return $accessUrl;
         }
 
-        $url = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $accessUrl = $this->getFirstAccessUrl();
 
-        /** @var AccessUrl $accessUrl */
-        $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $url]);
+        if ($this->isMultipleEnabled()) {
+            $url = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        if (!$accessUrl) {
-            $accessUrl = $this->getFirstAccessUrl();
+            /** @var AccessUrl $accessUrl */
+            $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $url]);
         }
 
         return $accessUrl;

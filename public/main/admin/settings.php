@@ -71,16 +71,18 @@ if (!empty($_GET['category']) &&
         $mark_all = false;
         $un_mark_all = false;
 
-        if (isset($values['buttons_in_action_right']) &&
-            isset($values['buttons_in_action_right']['mark_all'])
-        ) {
-            $mark_all = true;
-        }
+        if (api_is_multiple_url_enabled()) {
+            if (isset($values['buttons_in_action_right']) &&
+                isset($values['buttons_in_action_right']['mark_all'])
+            ) {
+                $mark_all = true;
+            }
 
-        if (isset($values['buttons_in_action_right']) &&
-            isset($values['buttons_in_action_right']['unmark_all'])
-        ) {
-            $un_mark_all = true;
+            if (isset($values['buttons_in_action_right']) &&
+                isset($values['buttons_in_action_right']['unmark_all'])
+            ) {
+                $un_mark_all = true;
+            }
         }
 
         if ($mark_all || $un_mark_all) {

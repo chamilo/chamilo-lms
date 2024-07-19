@@ -9,12 +9,12 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -37,7 +37,6 @@ class LegacyListener
         private readonly ParameterBagInterface $parameterBag,
         private readonly SettingsManager $settingsManager,
         private readonly ContainerInterface $container,
-        private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
     public function __invoke(RequestEvent $event): void
@@ -148,9 +147,16 @@ class LegacyListener
             $session->set('cid_reset', false);
         }
 
-        $session->set(
-            'access_url_id',
-            $this->accessUrlHelper->getCurrent()->getId()
-        );
+        $urlId = $this->accessUrlRepository->getFirstId();
+
+        if (1 === (int) $this->parameterBag->get('multiple_access_url')) {
+            $url = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $url]);
+            if (null !== $accessUrl) {
+                $urlId = $accessUrl->getId();
+            }
+        }
+
+        $session->set('access_url_id', $urlId);
     }
 }

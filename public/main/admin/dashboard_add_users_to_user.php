@@ -99,17 +99,29 @@ function search_users($needle, $type = 'multiple')
             $without_assigned_users = ' AND user.id NOT IN('.implode(',', $assigned_users_id).')';
         }
 
-        $sql = "SELECT user.id as user_id, username, lastname, firstname
-            FROM $tbl_user user
-            LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.id)
-            WHERE user.active <> ".USER_SOFT_DELETED." AND
-                ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
-                status NOT IN(".DRH.', '.SESSIONADMIN.', '.STUDENT_BOSS.") AND
-                user.id NOT IN ($user_anonymous, $current_user_id, $user_id)
-                $without_assigned_users AND
-                access_url_id = ".api_get_current_access_url_id()."
-            $order_clause
+        if (api_is_multiple_url_enabled()) {
+            $sql = "SELECT user.id as user_id, username, lastname, firstname
+                    FROM $tbl_user user
+                    LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.id)
+                    WHERE user.active <> ".USER_SOFT_DELETED." AND
+                        ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
+                        status NOT IN(".DRH.', '.SESSIONADMIN.', '.STUDENT_BOSS.") AND
+                        user.id NOT IN ($user_anonymous, $current_user_id, $user_id)
+                        $without_assigned_users AND
+                        access_url_id = ".api_get_current_access_url_id()."
+                    $order_clause
+                    ";
+        } else {
+            $sql = "SELECT id as user_id, username, lastname, firstname
+                    FROM $tbl_user user
+                    WHERE user.active <> ".USER_SOFT_DELETED." AND
+                        ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
+                        status NOT IN(".DRH.', '.SESSIONADMIN.', '.STUDENT_BOSS.") AND
+                        id NOT IN ($user_anonymous, $current_user_id, $user_id)
+                    $without_assigned_users
+                    $order_clause
             ";
+        }
         $rs = Database::query($sql);
         $xajax_response->addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
 
@@ -383,17 +395,29 @@ if (!empty($conditions)) {
     }
 }
 
-$sql = "SELECT user.id as user_id, username, lastname, firstname
-    FROM $tbl_user user
-    LEFT JOIN $tbl_access_url_rel_user au
-    ON (au.user_id = user.id)
-    WHERE user.active <> ".USER_SOFT_DELETED." AND
-        $without_assigned_users
-        user.id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
-        status NOT IN(".DRH.', '.SESSIONADMIN.', '.ANONYMOUS.") $search_user AND
-        access_url_id = ".api_get_current_access_url_id()."
-        $sqlConditions
-    ORDER BY firstname";
+if (api_is_multiple_url_enabled()) {
+    $sql = "SELECT user.id as user_id, username, lastname, firstname
+            FROM $tbl_user user
+            LEFT JOIN $tbl_access_url_rel_user au
+            ON (au.user_id = user.id)
+            WHERE user.active <> ".USER_SOFT_DELETED." AND
+                $without_assigned_users
+                user.id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
+                status NOT IN(".DRH.', '.SESSIONADMIN.', '.ANONYMOUS.") $search_user AND
+                access_url_id = ".api_get_current_access_url_id()."
+                $sqlConditions
+            ORDER BY firstname";
+} else {
+    $sql = "SELECT id as user_id, username, lastname, firstname
+            FROM $tbl_user user
+            WHERE user.active <> -1 AND
+                $without_assigned_users
+                id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
+                status NOT IN(".DRH.', '.SESSIONADMIN.', '.ANONYMOUS.")
+                $search_user
+                $sqlConditions
+            ORDER BY firstname ";
+}
 $result = Database::query($sql);
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id; ?>" class="form-horizontal" <?php if ($ajax_search) {

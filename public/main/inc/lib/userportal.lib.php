@@ -283,25 +283,29 @@ class IndexManager
         }
 
         // Showing only the courses of the current access_url_id.
-        $url_access_id = api_get_current_access_url_id();
-        $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT * FROM $main_course_table as course
-            INNER JOIN $tbl_url_rel_course as url_rel_course
-            ON (url_rel_course.c_id = course.id)
-            WHERE
-                access_url_id = $url_access_id AND
-                category_id IS NULL
-            ORDER BY title, UPPER(visual_code)";
+        if (api_is_multiple_url_enabled()) {
+            $url_access_id = api_get_current_access_url_id();
+            if (-1 != $url_access_id) {
+                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $sql = "SELECT * FROM $main_course_table as course
+                        INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.c_id = course.id)
+                        WHERE
+                            access_url_id = $url_access_id AND
+                            category_id IS NULL
+                        ORDER BY title, UPPER(visual_code)";
 
-        if (!empty($category)) {
-            $sql = "SELECT * FROM $main_course_table as course
-                INNER  JOIN $main_category_table course_category ON course.category_id = course_category.id
-                INNER JOIN $tbl_url_rel_course as url_rel_course
-                ON (url_rel_course.c_id = course.id)
-                WHERE
-                    access_url_id = $url_access_id AND
-                    course_category.code = '$category'
-                ORDER BY course.title, UPPER(visual_code)";
+                if (!empty($category)) {
+                    $sql = "SELECT * FROM $main_course_table as course
+                        INNER  JOIN $main_category_table course_category ON course.category_id = course_category.id
+                        INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.c_id = course.id)
+                        WHERE
+                            access_url_id = $url_access_id AND
+                            course_category.code = '$category'
+                        ORDER BY course.title, UPPER(visual_code)";
+                }
+            }
         }
 
         // Removed: AND cours.visibility='".COURSE_VISIBILITY_OPEN_WORLD."'
@@ -325,30 +329,47 @@ class IndexManager
                 $platform_visible_courses = "  AND (t3.visibility='".COURSE_VISIBILITY_OPEN_WORLD."' )";
             }
         }
+        $sqlGetSubCatList = "
+                    SELECT  t1.name,
+                            t1.code,
+                            t1.parent_id,
+                            t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
+                    FROM $main_category_table t1
+                    LEFT JOIN $main_category_table t2
+                    ON t1.code=t2.parent_id
+                    LEFT JOIN $main_course_table t3
+                    ON (t3.category_id = t1.id $platform_visible_courses)
+                    WHERE t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
+                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count
+                    ORDER BY t1.tree_pos, t1.name";
 
         // Showing only the category of courses of the current access_url_id
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $courseCategoryCondition = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
+        if (api_is_multiple_url_enabled()) {
+            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+            $courseCategoryCondition = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
 
-        $url_access_id = api_get_current_access_url_id();
-        $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sqlGetSubCatList = "
-            SELECT t1.name,
-                t1.code,
-                t1.parent_id,
-                t1.children_count,
-                COUNT(DISTINCT t3.code) AS nbCourse
-            FROM $main_category_table t1
-            $courseCategoryCondition
-            LEFT JOIN $main_category_table t2 ON t1.code = t2.parent_id
-            LEFT JOIN $main_course_table t3 ON (t3.category_id = t1.id $platform_visible_courses)
-            INNER JOIN $tbl_url_rel_course as url_rel_course
-            ON (url_rel_course.c_id = t3.id)
-            WHERE
-                url_rel_course.access_url_id = $url_access_id AND
-                t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
-            GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count
-            ORDER BY t1.tree_pos, t1.name";
+            $url_access_id = api_get_current_access_url_id();
+            if (-1 != $url_access_id) {
+                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $sqlGetSubCatList = "
+                    SELECT t1.name,
+                            t1.code,
+                            t1.parent_id,
+                            t1.children_count,
+                            COUNT(DISTINCT t3.code) AS nbCourse
+                    FROM $main_category_table t1
+                    $courseCategoryCondition
+                    LEFT JOIN $main_category_table t2 ON t1.code = t2.parent_id
+                    LEFT JOIN $main_course_table t3 ON (t3.category_id = t1.id $platform_visible_courses)
+                    INNER JOIN $tbl_url_rel_course as url_rel_course
+                    ON (url_rel_course.c_id = t3.id)
+                    WHERE
+                        url_rel_course.access_url_id = $url_access_id AND
+                        t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
+                    GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count
+                    ORDER BY t1.tree_pos, t1.name";
+            }
+        }
 
         $resCats = Database::query($sqlGetSubCatList);
         $thereIsSubCat = false;

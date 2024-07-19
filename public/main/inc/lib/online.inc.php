@@ -474,10 +474,14 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     $from = (int) $from;
     $number_of_items = (int) $number_of_items;
 
-    $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $urlId = api_get_current_access_url_id();
-    $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
-    $urlCondition = " AND a.access_url_id = $urlId ";
+    $urlCondition = '';
+    $urlJoin = '';
+    if (api_is_multiple_url_enabled()) {
+        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $urlId = api_get_current_access_url_id();
+        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
+        $urlCondition = " AND a.access_url_id = $urlId ";
+    }
 
     $query = "SELECT o.login_user_id, o.login_date
               FROM $track_online_table o
@@ -528,10 +532,14 @@ function who_is_online_in_this_course_count(
         return false;
     }
 
-    $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $urlId = api_get_current_access_url_id();
-    $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
-    $urlCondition = " AND a.access_url_id = $urlId ";
+    $urlCondition = '';
+    $urlJoin = '';
+    if (api_is_multiple_url_enabled()) {
+        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $urlId = api_get_current_access_url_id();
+        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
+        $urlCondition = " AND a.access_url_id = $urlId ";
+    }
 
     $query = "SELECT count(login_user_id) as count
               FROM $track_online_table o
@@ -574,10 +582,14 @@ function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)
     $online_time = time() - $timeLimit * 60;
     $current_date = api_get_utc_datetime($online_time);
 
-    $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $urlId = api_get_current_access_url_id();
-    $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
-    $urlCondition = " AND a.access_url_id = $urlId ";
+    $urlCondition = '';
+    $urlJoin = '';
+    if (api_is_multiple_url_enabled()) {
+        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $urlId = api_get_current_access_url_id();
+        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
+        $urlCondition = " AND a.access_url_id = $urlId ";
+    }
 
     $query = "SELECT count(login_user_id) as count
               FROM $tblTrackOnline o

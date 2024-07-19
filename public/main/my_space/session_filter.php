@@ -43,15 +43,24 @@ if (api_is_drh()) {
 }
 
 // Select of sessions.
-$tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-$accessUrlId = api_get_current_access_url_id();
 $sql = "SELECT s.id, name FROM $tblSession s
-    INNER JOIN $tblSessionRelAccessUrl as session_rel_url
-    ON (s.id = session_rel_url.session_id)
-    $innerJoinSessionRelUser
-    WHERE access_url_id = $accessUrlId
-    $whereCondictionMultiUrl
-    ORDER BY name";
+        $innerJoinSessionRelUser
+        $whereCondictionDRH
+        ORDER BY name";
+
+if (api_is_multiple_url_enabled()) {
+    $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+    $accessUrlId = api_get_current_access_url_id();
+    if (-1 != $accessUrlId) {
+        $sql = "SELECT s.id, name FROM $tblSession s
+                INNER JOIN $tblSessionRelAccessUrl as session_rel_url
+                ON (s.id = session_rel_url.session_id)
+                $innerJoinSessionRelUser
+                WHERE access_url_id = $accessUrlId
+                $whereCondictionMultiUrl
+                ORDER BY name";
+    }
+}
 $result = Database::query($sql);
 $Sessions = Database::store_result($result);
 $options = [];

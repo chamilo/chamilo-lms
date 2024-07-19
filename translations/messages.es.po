@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-07-17 12:21+0000\n"
+"PO-Revision-Date: 2024-07-19 21:51+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -3229,7 +3229,7 @@ msgid "ex."
 msgstr "ej."
 
 msgid "Database Host"
-msgstr "Servidor de base de datos"
+msgstr "Host de la base de datos"
 
 msgid "Database Login"
 msgstr "Nombre de usuario de la base de datos"
@@ -8995,7 +8995,7 @@ msgid "Portal Admin"
 msgstr "Administración de la plataforma"
 
 msgid "none"
-msgstr "Ninguna"
+msgstr "Ninguno/a"
 
 msgid "First select a course"
 msgstr "Seleccione primero un curso"
@@ -14373,6 +14373,7 @@ msgstr "Por ahora, Ud está definido como profesor. Podrá cambiar el profesor e
 msgid "Installation language"
 msgstr "Idioma de instalación"
 
+#, fuzzy
 msgid "Please read the following requirements thoroughly."
 msgstr "Lea con atención"
 
@@ -15139,7 +15140,7 @@ msgid "Installation"
 msgstr "Instalación"
 
 msgid "Read the installation guide"
-msgstr "Leer la guía de instalación"
+msgstr "consulte la guía de instalación"
 
 msgid "See blog"
 msgstr "Ver blog"
@@ -27566,3 +27567,510 @@ msgid "Internal ID of the user used to send disabled account notifications"
 msgstr ""
 "Identificación interna del usuario utilizada para enviar notificaciones de "
 "cuenta desactivada"
+
+msgid "Danger color hover/background"
+msgstr "Color de peligro para el efecto hover/background"
+
+msgid "Show language flag next to avatar in social network"
+msgstr "Mostrar la bandera del idioma junto al avatar en la red social"
+
+msgid "Hide survey reporting button"
+msgstr "Ocultar botón de reporte de encuesta"
+
+msgid "Enable 'previous question' button in surveys"
+msgstr "Activar botón de 'pregunta anterior' en encuestas"
+
+msgid "Force download of document before assignment upload"
+msgstr "Forzar la descarga de un documento antes de subir la tarea"
+
+msgid "Step 3 - License"
+msgstr "Paso 3 - Licencia"
+
+msgid "Access by role to ticket projects"
+msgstr "Acceso por rol a proyectos de tickets"
+
+msgid "Dropdowns"
+msgstr "Desplegables"
+
+msgid "Display surveys from base course in all session courses"
+msgstr "Mostrar encuestas del curso base en todas las sesiones de cursos"
+
+msgid "Session link"
+msgstr "Enlace de la sesión"
+
+msgid "Students can only upload one assignment"
+msgstr "Los alumnos solo pueden subir una tarea"
+
+msgid "Allow ticket projects to be accesses by specific user roles. Example: ['permissions' => [1 => [17]] where project_id = 1, STUDENT_BOSS = 17."
+msgstr ""
+"Permitir que los proyectos de tickets sean accedidos por roles específicos "
+"de usuario. Ejemplo: ['permissions' => [1 => [17]] donde project_id = 1, "
+"STUDENT_BOSS = 17."
+
+msgid "Success color hover/background"
+msgstr "Color de éxito para hover/background"
+
+msgid "No link"
+msgstr "Ningún enlace"
+
+msgid "Show only courses"
+msgstr "Mostrar solo cursos"
+
+msgid "Prevent survey edition"
+msgstr "Evitar la edición de encuestas"
+
+msgid "Checkbox and radio buttons"
+msgstr "Casilla de verificación y botones de opción"
+
+msgid "Allow teachers to see which learners have already answered an anonymous survey. This only appears once more than one user has answered, so it remains difficult to identify who answered what."
+msgstr ""
+"Permite que los tutores vean qué alumnos ya han respondido una encuesta "
+"anónima (más no lo que han respondido). Esta funcionalidad solo aparece una "
+"vez que más de un usuario ha respondido, por lo que sigue siendo difícil "
+"identificar quién respondió qué cosa."
+
+msgid "Add course"
+msgstr "Añadir lección"
+
+msgid "Primary color hover/background"
+msgstr "Color primario para hover/background"
+
+msgid "Allow teachers to edit survey questions after students answered"
+msgstr ""
+"Permitir que los tutores editen las preguntas de las encuestas después de "
+"que los alumnos hayan respondido"
+
+msgid "Order by student name when using survey duplication feature"
+msgstr ""
+"Ordenar por nombre del alumno al utilizar la función de duplicación de "
+"encuestas"
+
+msgid "Sender profile picture"
+msgstr "Foto de perfil del remitente"
+
+msgid "Warning"
+msgstr "Advertencia"
+
+msgid "Chamilo's installation wizard"
+msgstr "Asistente de instalación de Chamilo"
+
+msgid "Prevent editing surveys for all surveys listed here (by code). Use * to prevent edition of all surveys."
+msgstr ""
+"Evite la edición de encuestas para todas las encuestas listadas aquí (por "
+"código). Utilice * para evitar la edición de todas las encuestas."
+
+msgid "Show to all users"
+msgstr "Mostrar a todos los usuarios"
+
+msgid "Tertiary"
+msgstr "Terciario"
+
+msgid "Dialog example"
+msgstr "Ejemplo de diálogo"
+
+msgid "Contact form categories"
+msgstr "Categorías del formulario de contacto"
+
+msgid "This is a form with an error"
+msgstr "Este es un formulario con un error"
+
+msgid "Success color"
+msgstr "Color de éxito"
+
+msgid "Mail confirmation"
+msgstr "Confirmación de correo electrónico"
+
+msgid "Info color"
+msgstr "Color de información"
+
+msgid "Test invisible in session"
+msgstr "Ejercicio invisible en sesión"
+
+msgid "This enables a major feature that enables any item to be linked to (and as such to allow acquisition of) a skill. The feature still requires the teacher to confirm the acquisition of the skill, so the acquisition is not automatic."
+msgstr ""
+"Esta opción permite que cualquier ítem pueda estar vinculado a (y como tal "
+"permitir la adquisición de) una competencia. Sin embargo, la función todavía "
+"requiere que el tutor confirme la adquisición de la competencia, por lo que "
+"la adquisición no es automática."
+
+msgid "Obtained the following skills"
+msgstr "Adquirió las siguientes competencias"
+
+msgid "Define names for levels of skills as an array of id => name."
+msgstr ""
+"Defina nombres para los niveles de competencias como un arreglo de id => "
+"nombre."
+
+msgid "Primary color button text"
+msgstr "Texto de botones de color primario"
+
+msgid "Danger"
+msgstr "Peligro"
+
+msgid "Redirect to assignments list after uploading an assignment or a adding a comment"
+msgstr ""
+"Redirigir a la lista de tareas después de subir una tarea o añadir un "
+"comentario"
+
+msgid "Public"
+msgstr "Público"
+
+msgid "Search shows unlinked results"
+msgstr "La búsqueda muestra resultados no vinculados"
+
+msgid "Icons text"
+msgstr "Texto de iconos"
+
+msgid "Score div percent"
+msgstr "Puntuación fracción porcentaje"
+
+msgid "Course registration code incorrect"
+msgstr "Código de registro del curso incorrecto"
+
+msgid "Form outline color"
+msgstr "Color del contorno del formulario"
+
+msgid "No course sessions for this user"
+msgstr "No hay sesiones de curso para este usuario"
+
+msgid "News from Chamilo"
+msgstr "Noticias de Chamilo"
+
+msgid "Teachers and admins see students as friends on social network"
+msgstr ""
+"Los tutores y administradores ven a los alumnos como amigos en la red social"
+
+msgid "Ppt_to_lp"
+msgstr "Convertidor de documentos"
+
+msgid "Show only sessions"
+msgstr "Mostrar solo sesiones"
+
+msgid "No reply email sender"
+msgstr "Remitente de email de no respuesta"
+
+msgid "Private"
+msgstr "Privado"
+
+msgid "This is the default form"
+msgstr "Este es el formulario predeterminado"
+
+msgid "Display link to 'pending' assignments from My courses page"
+msgstr "Mostrar enlace a tareas 'pendientes' desde la página Mis cursos"
+
+msgid "Show diagnosis"
+msgstr "Mostrar diagnóstico"
+
+msgid "Sort"
+msgstr "Ordenar"
+
+msgid "Primary color button alternative text"
+msgstr "Color alternativo para texto de botón primario"
+
+msgid "Step 1 - Installation Language"
+msgstr "Paso 1 - Idioma de instalación"
+
+msgid "Campus homepage"
+msgstr "Página principal del campus"
+
+msgid "Success color button text"
+msgstr "Texto del botón de color de éxito"
+
+msgid "Score percent"
+msgstr "Porcentaje de puntuación"
+
+msgid "Show glossary in documents is automatic"
+msgstr "Mostrar el glosario en documentos: automático"
+
+msgid "Some more elements"
+msgstr "Algunos elementos más"
+
+msgid "Buttons"
+msgstr "Botones"
+
+msgid "Prevent teacher from modifying assignment scores"
+msgstr "Evitar que el tutor modifique las puntuaciones de tareas"
+
+msgid "Course catalogue"
+msgstr "Catálogo de cursos"
+
+msgid "Session name and course title"
+msgstr "Nombre de la sesión y título del curso"
+
+msgid "Show skills as a hierarchical table"
+msgstr "Mostrar las competencias en una tabla jerárquica"
+
+msgid "Show advanced mode"
+msgstr "Mostrar modo avanzado"
+
+msgid "Black list"
+msgstr "Lista negra"
+
+msgid "Redirect to portal home"
+msgstr "Redirigir al inicio del portal"
+
+msgid "Hide advanced mode"
+msgstr "Ocultar modo avanzado"
+
+msgid "Add actions (usually connected to plugins) in the list of surveys. Use array syntax ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]."
+msgstr ""
+"Añade acciones (usualmente conectadas a plugins) en la lista de encuestas. "
+"Utilice la sintaxis de arreglo ['myplugin' => ['MyPlugin', "
+"'urlGeneratorCallback']]."
+
+msgid "You can see examples of how chamilo will look here"
+msgstr "Puede ver ejemplos de cómo se verá Chamilo aquí"
+
+msgid "World"
+msgstr "Mundo"
+
+msgid "Database settings"
+msgstr "Configuración de la base de datos"
+
+msgid "Course coach email sender"
+msgstr "Remitente de correo del tutor del curso"
+
+msgid "Warning color hover/background"
+msgstr "Color de advertencia para hover/background"
+
+msgid "For more details %s"
+msgstr "Para obtener más detalles %s"
+
+msgid "Enable My assignments page"
+msgstr "Activar la página Mis tareas"
+
+msgid "Show dialog"
+msgstr "Mostrar diálogo"
+
+msgid "Student boss"
+msgstr "Jefe de estudiantes"
+
+msgid "Info color hover/background"
+msgstr "Color hover/background para elementos de información"
+
+msgid "Platform use conditions"
+msgstr "Condiciones de uso de la plataforma"
+
+msgid "Recording help"
+msgstr "Ayuda para grabar"
+
+msgid "Info color button text"
+msgstr "Color del texto de botón info"
+
+msgid "Add additional actions (as links) to survey lists for teachers"
+msgstr ""
+"Añada acciones adicionales (como enlaces) a las listas de encuestas para "
+"tutores"
+
+msgid "Tertiary color"
+msgstr "Color terciario"
+
+msgid "Prevent assignments edition"
+msgstr "Evitar la edición de tareas"
+
+msgid "Prevent adding documents to assignments"
+msgstr "Evitar la adición de documentos en tareas"
+
+msgid "Left"
+msgstr "Izquierda"
+
+msgid "Show glossary in documents is none"
+msgstr "Mostrar glosario en documentos: ninguno"
+
+msgid "Save diagnosis changes"
+msgstr "Guardar cambios de diagnóstico"
+
+msgid "Closed sessions"
+msgstr "Sesiones cerradas"
+
+msgid "Secondary color"
+msgstr "Color secundario"
+
+msgid "Customize"
+msgstr "Personalizar"
+
+msgid "Secondary color button text"
+msgstr "Texto del botón de color secundario"
+
+msgid "System templates"
+msgstr "Plantillas de sistema"
+
+msgid "Score average"
+msgstr "Promedio de puntuación"
+
+msgid "Course maintenance"
+msgstr "Mantenimiento del curso"
+
+msgid "Hide catalogue"
+msgstr "Ocultar catálogo"
+
+msgid "Danger color"
+msgstr "Color de peligro"
+
+msgid "Right"
+msgstr "Derecha"
+
+msgid "Search hides unlinked results"
+msgstr "La búsqueda oculta resultados no vinculados"
+
+msgid "Force users to download the provided document in the assignment definition before they can upload their assignment."
+msgstr ""
+"Obliga los usuarios a descargar el documento proporcionado en la definición "
+"de la tarea antes de que puedan subir su tarea."
+
+msgid "Enable linking skills to items"
+msgstr "Habilite la vinculación de competencias a elementos"
+
+msgid "Allow teachers to see who answered in anonymous surveys"
+msgstr "Permitir a los tutores ver quién respondió en encuestas anónimas"
+
+msgid "Please select installation language"
+msgstr "Por favor, seleccione el idioma de instalación"
+
+msgid "You need confirm your account via e-mail to access the platform"
+msgstr ""
+"Necesita confirmar su cuenta a través del correo electrónico para acceder a "
+"la plataforma"
+
+msgid "Toggle"
+msgstr "Alternar"
+
+msgid "This preparation corresponds to a volume of approximately %s training hours."
+msgstr ""
+"Esta preparación corresponde a un volumen de aproximadamente %s horas de "
+"formación."
+
+msgid "Certificate of participation"
+msgstr "Certificado de participación"
+
+msgid "Display information about the next incomplete and the last completed topic"
+msgstr ""
+"Muestra información sobre el próximo tema incompleto y el último tema "
+"completado"
+
+msgid "Configure Chamilo colors"
+msgstr "Configurar colores de Chamilo"
+
+msgid "Allows admins to hide survey reporting button if surveys are used to survey teachers."
+msgstr ""
+"Permite a los administradores ocultar el botón de informes de la encuesta si "
+"las encuestas se utilizan para evaluar a los tutores."
+
+msgid "Add a user to a course"
+msgstr "Añadir un usuario en un curso"
+
+msgid "The following contents have been validated"
+msgstr "Los siguientes contenidos han sido validados"
+
+msgid "None"
+msgstr "Ninguno/a"
+
+msgid "Carbon copy receiver profile picture"
+msgstr "Perfil del destinatario de copia carboncílica"
+
+msgid "This will allow teachers to give an estimated time effort (in hh:mm:ss format) to complete the assignment. Upon submission of the assignment and approval by the teacher (the assignment is given a score), the learner will automatically be assigned the corresponding time."
+msgstr ""
+"Permite a los tutores dar un tiempo estimado de esfuerzo (en formato "
+"hh:mm:ss) para completar el trabajo. Tras la entrega del trabajo y la "
+"aprobación por parte del tutor (el trabajo recibe una puntuación), al alumno "
+"se le asignará automáticamente el tiempo correspondiente."
+
+msgid "Secondary color hover/background"
+msgstr "Color secundario para hover/background"
+
+msgid "Primary alternative"
+msgstr "Alternativa principal"
+
+msgid "Load diagnosis"
+msgstr "Cargar diagnóstico"
+
+msgid "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on “Stop recording” then select “End exercise”. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page."
+msgstr ""
+"Mientras graba, puede pausar cuando quiera. Si no está satisfecho, grabe de "
+"nuevo. Esto sobrescribirá la versión anterior. ¿Satisfecho? Para enviar la "
+"grabación a su tutor, haga clic en \"Detener grabación\" y luego seleccione "
+"\"Finalizar ejercicio\". ¡El tutor podrá escuchar su grabación y darle "
+"retroalimentación! Todas sus grabaciones transmitidas se pueden ver en la "
+"página de inicio del ejercicio."
+
+msgid "Skill levels names"
+msgstr "Nombres de los niveles de competencia"
+
+#, fuzzy
+msgid "User has participate at a training session on the platforme %s from %s until %s"
+msgstr ""
+"El usuario ha participado en una sesión de formación en la plataforma %s "
+"desde %s hasta %s"
+
+msgid "Prevent duplicate uploads in assignments"
+msgstr "Evitar cargas duplicadas en tareas"
+
+msgid "Password too easy to guess"
+msgstr "Contraseña demasiado fácil de adivinar"
+
+msgid "Enable time effort for assignments"
+msgstr "Activar tiempo de trabajo para las tareas"
+
+msgid "Database host"
+msgstr "Host de la base de datos"
+
+msgid "Warning color button text"
+msgstr "Color del texto del botón de advertencia"
+
+msgid "Warning color"
+msgstr "Color de advertencia"
+
+msgid "Show courses and sessions"
+msgstr "Mostrar cursos y sesiones"
+
+msgid "Hide all"
+msgstr "Ocultar todo"
+
+msgid "Mark all survey questions as 'required' by default"
+msgstr ""
+"Marcar todas las preguntas de la encuesta como 'obligatorias' por defecto"
+
+msgid "White list"
+msgstr "Lista blanca"
+
+msgid "Redirect to assigment tool homepage after upload or comment"
+msgstr ""
+"Redirigir a la página principal de la herramienta de tareas después de subir "
+"o comentar"
+
+msgid "Tertiary color hover/background"
+msgstr "Color terciario para hover/background"
+
+msgid "Step 2 - Requirements"
+msgstr "Paso 2 - Requisitos"
+
+msgid "Show glossary in documents is manual"
+msgstr "Mostrar glosario en documentos: manual"
+
+msgid "read the installation guide"
+msgstr "consulte la guía de instalación"
+
+msgid "External tools (LTI)"
+msgstr "Herramientas externas (LTI)"
+
+msgid "Add training sessions to categories"
+msgstr "Añadir sesiones a categorías"
+
+msgid "Receiver profile picture"
+msgstr "Foto de perfil del destinatario"
+
+msgid "Primary color"
+msgstr "Color primario"
+
+msgid "All sessions"
+msgstr "Todas las sesiones"
+
+msgid "Step 4 - Database settings"
+msgstr "Paso 4 - Configuración de la base de datos"
+
+msgid "The survey duplication feature is oriented towards teachers and is meant to ask teachers to give their appreciation about each student in order. This option will order the questions by learner's lastname."
+msgstr ""
+"La función de duplicación de la encuesta está orientada a los tutores y "
+"tiene como objetivo solicitar a los tutores que den su apreciación sobre "
+"cada alumno en orden. Esta opción ordenará las preguntas por el apellido del "
+"alumno."

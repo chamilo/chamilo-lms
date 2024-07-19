@@ -3284,7 +3284,7 @@ msgstr "Parámetros de les bases de datos MySQL"
 msgid "Main language"
 msgstr "Idioma d'entamu"
 
-msgid "Licence"
+msgid "License"
 msgstr "Llicencia"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr "Nuevu cursu criáu en"
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "El mayestru ta definíu como Ud. Va poder cambialo na páxina de configuración del cursu."
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Idioma d'instalación"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "La estensión GD nun ta disponible"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo ye software llibre distribuíu con GNU General Public Licence (GPL)"
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Aceuto"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "Estensión MBString nun disponible"
 
 msgid "MySQL extension not available"
 msgstr "Estensión MySQL non disponible"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Les imáxenes y les galeríes de medios de Chamilo usen imáxenes y iconos de Nuvola, Crystal Clear y Tango. Otres imáxenes y medios, como diagrames y animaciones flash, apañárense como emprestu en Wikimedia y nos cursos d'Ali Pakdel y Denis Hoa col so asentimientu. Tán espublizaes según la llicencia BY-SA Creative Commons. Pue atopar los detalles de la llicencia en <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">la web de CC</a>, nun enllaz a la parte embaxo la páxina que lu lleva al testu completu de la mesma."
 
 msgid "Optional parameters"
 msgstr "Parámetros opcionales"

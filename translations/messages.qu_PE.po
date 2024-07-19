@@ -3284,7 +3284,7 @@ msgstr "Parámetros de las bases de datos MySQL"
 msgid "Main language"
 msgstr "Idioma principal"
 
-msgid "Licence"
+msgid "License"
 msgstr "Licencia"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr ""
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr ""
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Idioma de instalación"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "Extensión GD no disponible"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo es software libre distribuido bajo GNU General Public licence (GPL)"
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Acepto"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "Extensión MBString no disponible"
 
 msgid "MySQL extension not available"
 msgstr "Extensión MySQL no disponible"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Las imágenes y las galerías de medios de Chamilo utilizan imágenes e iconos de Nuvola, Crystal Clear y Tango. Otras imágenes y medios, como diagramas y animaciones flash, se han tomado prestadas de Wikimedia y de los cursos de Ali Pakdel y de Denis Hoa con su consentimiento y publicadas bajo licencia BY-SA Creative Commons. Puede encontrar los detalles de la licencia en <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">la web de CC</a>, donde un enlace al pie de la página le dará acceso al texto completo de la licencia."
 
 msgid "Optional parameters"
 msgstr "Parámetros opcionales"

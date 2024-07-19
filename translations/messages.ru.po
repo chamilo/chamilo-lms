@@ -3284,7 +3284,7 @@ msgstr "Настройки базы данных MySQL"
 msgid "Main language"
 msgstr "Основной язык"
 
-msgid "Licence"
+msgid "License"
 msgstr "Лицензия"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr ""
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr ""
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Язык установки"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "GD расширение не доступно"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo - компьютерная программа в свободном доступе, распространяемая под контролем GNU General Public licence (GPL)."
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Я принимаю"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "Расширение MBString не доступно"
 
 msgid "MySQL extension not available"
 msgstr "Расширение MySQL не доступно"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Галереи изображений и мультимедийных файлов Chamilo используют иконки изображений из Nuvola, Crystal Clear и Tango. Другие изображения и мультимедийные файлы, такие как диаграммы или Флэш анимация позаимствованы из курсов Wikimedia и Ali Pakdel's и Denis Hoa's вместе с их договором и  под лицензией BY-SA Creative Commons. Вы можети найти подробности лицензии на сайте <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, где внизу страницы дана ссылка на полный текст лицензии."
 
 msgid "Optional parameters"
 msgstr "Необязательные параметры"

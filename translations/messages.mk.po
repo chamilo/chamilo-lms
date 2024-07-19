@@ -3284,7 +3284,7 @@ msgstr "Поставки на MySQL"
 msgid "Main language"
 msgstr "Главен јазик"
 
-msgid "Licence"
+msgid "License"
 msgstr "Лиценца"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr ""
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr ""
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Јазик при инсталирањето"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "Екстензијата GD не е достапна"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo е слободен софтвер дистрибуиран под GNU General Public licence (GPL)."
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Прифаќам"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "MBString екстензијата не е достапна"
 
 msgid "MySQL extension not available"
 msgstr "MySQL екстензијата не е достапна"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Галериите за слики и медиуми од Chamilo користат слики од Nuvola, Crystal Clear и Tango галериите за икони. Други слики и медиуми како дијаграми и анимации од Flash се позајмени од Wikimedia и курсевите на Ali Pakdel и Denis Hoa со нивна согласност и реализирани под лиценца на BY-SA Creative Commons. Можете да најдете детали за лиценцата на <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, каде врската до комплетниот текст  на лиценцата е ставена на дното од страницата."
 
 msgid "Optional parameters"
 msgstr ""

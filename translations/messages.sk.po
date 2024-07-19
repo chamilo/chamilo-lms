@@ -3284,7 +3284,7 @@ msgstr "Nastavenia MySQL databázy"
 msgid "Main language"
 msgstr "Hlavný jazyk"
 
-msgid "Licence"
+msgid "License"
 msgstr "Licencia"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr "Nový kurz vytvorený v"
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Lektor je nastavený teraz ako vy. Toto nastavenie môžete zmeniť neskôr v nastavení konfigurácie kurzu"
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Jazyk inštalácie"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "GD rozšírenie nedostupné"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo je free softvér distribuovaný pod licenciou GNU General Public licence (GPL)."
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Súhlasím"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "MBString rozšírenie nedostupné"
 
 msgid "MySQL extension not available"
 msgstr "MySQL rozšírenie nedostupné"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Obrázky a mediálne galérie Chamilo používajú obrázky z Nuvola, Crystal Clear a Tango ikon galérií. Ďalšie obrázky a médiá, ako sú diagramy a Flash animácie sú požičané od Wikimedia a Ali Pakdel a Denis Hoa kurzy s ich súhlasom, a je uvoľnený pod BY-SA Creative Commons licencie. Podrobnosti o licencii môžete nájsť na <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\" target=\"_blank\">CC webových stránkach</a>, kde je plné znenie licencie poskytované v dolnej časti stránky."
 
 msgid "Optional parameters"
 msgstr "Nepovinné parametre"

@@ -3284,7 +3284,7 @@ msgstr "MySQL datubāzes iestatījumi"
 msgid "Main language"
 msgstr "Pamata saziņas valoda"
 
-msgid "Licence"
+msgid "License"
 msgstr "Licenze"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr "Ir izveidots jauns kurss, vidē:"
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Patreiz, kā kursa veidotājs, esat noteikts Jūs. Vēlāk, Jūs varat mainīt šo iestatījumu, mācību kursa konfigurācijas uzstādījumos, sadaļā <b>Administrācija / Kursa iestatījumi</b>"
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Instalācijas valoda"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "GD paplašinājumi nav pieejami"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo ir bezmaksas programmatūra, ko izplata saskaņā ar GNU General Public Licence (GPL)"
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Piekrītu"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "MBString papla"
 
 msgid "MySQL extension not available"
 msgstr "MySQL papla"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Attēli un mediju galerijās, Chamilo izmantot attēlus no Nuvola, Crystal Clear un Tango ikonu galerijas. Citi attēli un mediji, piemēram, diagrammas un Flash animācijas aizgūti no Wikimedia un Ali Pakdel's un Deniss Hoa kursiem ar viņu piekrišanu un atbrīvoti saskaņā BY-SA Creative Commons licenci. Jūs varat atrast licences detaļas <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC mājaslapā</a>, kur saite, uz pilnu licences tekstu, ir sniegta lapas apakšā."
 
 msgid "Optional parameters"
 msgstr "Izvēles parametri"

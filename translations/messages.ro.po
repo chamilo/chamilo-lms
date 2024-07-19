@@ -3284,7 +3284,7 @@ msgstr "Setarile pentru baza de date MySQL"
 msgid "Main language"
 msgstr "Limba principala"
 
-msgid "Licence"
+msgid "License"
 msgstr "Licenta"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr "Noul curs creat in"
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Pentru moment,dumneavoastra sunteti definit ca profesor.Veti putea aschimba profesorul in pagina de configuratie a cursului"
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Limba de Instalare"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "Extensia GD nu este disponibila"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo este un program gratis distribuit sub licenta Generala Publica GNU (GPL)"
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Accept"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "Extensia MBString nu este disponibila"
 
 msgid "MySQL extension not available"
 msgstr "Extensia MySQL nu este disponibila"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Imaginea si galeriile mass-media Chamilo utilizeaza imaginii de la Nuvalo, Crystal Clear si Tango. Alte fotografii si mass-media, cum ar fi diagrame si animatii Flash  sunt provenite de la Wikimedia sau de la Cursul Ali Pakdel şi Denis Hoa, care pun la dispozitie material sub licenta Creative Commons BY-SA licenta. Puteti  gasi mai multe informatii despre aceasta licenta <a href=\"http://creativecommons.org/licenses/by-sa/3.0/deed.nl\">pe site-ul de la Creative Commons</a> Textul integral al acestei licente il puteti citi, prin link-ul din partea de jos a paginii."
 
 msgid "Optional parameters"
 msgstr "Parametrii optionali"

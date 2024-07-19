@@ -3283,7 +3283,7 @@ msgstr ""
 msgid "Main language"
 msgstr ""
 
-msgid "Licence"
+msgid "License"
 msgstr ""
 
 msgid "Last check before install"
@@ -14353,7 +14353,7 @@ msgstr ""
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr ""
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr ""
 
 msgid "Please read the following requirements thoroughly."
@@ -14425,7 +14425,7 @@ msgstr ""
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr ""
 
-msgid "I Accept"
+msgid "I accept"
 msgstr ""
 
 msgid "The following values will be written into your configuration file"
@@ -14498,9 +14498,6 @@ msgid "MBString extension not available"
 msgstr ""
 
 msgid "MySQL extension not available"
-msgstr ""
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
 msgstr ""
 
 msgid "Optional parameters"
@@ -27700,4 +27697,40 @@ msgid "Test invisible in session"
 msgstr ""
 
 msgid "Display information about the next incomplete and the last completed topic"
+msgstr ""
+
+msgid "Database settings"
+msgstr ""
+
+msgid "Chamilo's installation wizard"
+msgstr ""
+
+msgid "Step 1 - Installation Language"
+msgstr ""
+
+msgid "Please select installation language"
+msgstr ""
+
+msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
+msgstr ""
+
+msgid "Step 2 - Requirements"
+msgstr ""
+
+msgid "Please read the following requirements thoroughly."
+msgstr ""
+
+msgid "For more details %s"
+msgstr ""
+
+msgid "read the installation guide"
+msgstr ""
+
+msgid "Step 3 - License"
+msgstr ""
+
+msgid "Step 4 - Database settings"
+msgstr ""
+
+msgid "Database host"
 msgstr ""

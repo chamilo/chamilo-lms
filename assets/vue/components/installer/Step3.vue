@@ -1,7 +1,7 @@
 <template>
   <div class="install-step">
     <h2
-      v-t="'Step 3 - Licence'"
+      v-t="'Step 3 - License'"
       class="install-title mb-8"
     />
 
@@ -39,17 +39,6 @@
     </div>
 
     <hr />
-
-    <InlineMessage severity="info">
-      <i18n-t
-        keypath="The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at the {0}, where a link to the full text of the license is provided at the bottom of the page."
-      >
-        <a
-          v-t="'CC website'"
-          href="https://creativecommons.org/licenses/by-sa/3.0/"
-        />
-      </i18n-t>
-    </InlineMessage>
 
     <Fieldset
       :legend="t('Contact information')"

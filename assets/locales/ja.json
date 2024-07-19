@@ -124,7 +124,6 @@
     "Your browser does not support Javascript": "Your browser does not support Javascript",
     "Email reply header": "The {0}, {1} ({2}) wrote:",
     "My files": "\u30d5\u30a1\u30a4\u30eb",
-    "Installation language": "Installation language",
     "Database settings": "Database settings",
     "Chamilo\\'s installation wizard": "Chamilo\\'s installation wizard",
     "Assignment name": "\u8ab2\u984c\u540d",
@@ -173,10 +172,8 @@
     "read the installation guide": "read the installation guide",
     "Warning!": "Warning!",
     "Contact information": "\u9023\u7d61\u5148\u60c5\u5831",
-    "Step 3 - Licence": "Step 3 - Licence",
-    "I accept": "I accept",
+    "Step 3 - License": "Step 3 - License",
     "CC website": "CC website",
-    "Your company\\'s name": "Your company\\'s name",
     "Your company\\'s activity": "Your company\\'s activity",
     "Your job\\'s description": "Your job\\'s description",
     "Your company\\'s home country": "Your company\\'s home country",
@@ -365,5 +362,6 @@
     "Sender profile picture": "Sender profile picture",
     "Receiver profile picture": "Receiver profile picture",
     "Carbon copy receiver profile picture": "Carbon copy receiver profile picture",
-    "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:": "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:"
+    "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:": "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:",
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)": "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)"
 }

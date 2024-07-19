@@ -3284,7 +3284,7 @@ msgstr "MySQL adatbázis beállításai"
 msgid "Main language"
 msgstr "Elsődleges nyelv"
 
-msgid "Licence"
+msgid "License"
 msgstr "Licensz"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr ""
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr ""
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Telepítési nyelv"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "A GD bővítmény nem áll rendelkezésre"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "A Chamilo egy GNU Általános Nyilvános Licensz (General Public Licence) alapján terjesztett szabad szofter."
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Elfogadom"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "Az MBString kiterjesztés nem használható"
 
 msgid "MySQL extension not available"
 msgstr "A MySQL kiterjesztés nem érhető el"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "A Chamiloban felhasznált és látható képek a Nuvola, Crystal Clear és Tango ikongyűjteményből származnak. Más képek, mint például a táblázatok és Flash animációk a Wikimedia és Ali Pakdel, Denis Hoa kurzusaiból származnak az engedélyükkel a BY-SA Creative Commons licensz oltalma alatt. A licensz réslzeteiről angolul <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">a CC weboldalán olvashat</a>, ahol elolvashatja a licensz teljes szövegét."
 
 msgid "Optional parameters"
 msgstr "Opcionális paraméterek"

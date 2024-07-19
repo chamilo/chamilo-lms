@@ -123,8 +123,7 @@
     "Sessions catalogue": "Sessions catalogue",
     "Your browser does not support Javascript": "Your browser does not support Javascript",
     "Email reply header": "The {0}, {1} ({2}) wrote:",
-    "Installation language": "Installation language",
-    "Licence": "Licenca",
+    "License": "Licenca",
     "Database settings": "Database settings",
     "Config settings": "Konfiguraciona pode\u0161avanja",
     "New installation": "Nova Instalacija",
@@ -180,11 +179,9 @@
     "Step 2 - Requirements": "Step 2 - Requirements",
     "read the installation guide": "read the installation guide",
     "Warning!": "Warning!",
-    "Step 3 - Licence": "Step 3 - Licence",
+    "Step 3 - License": "Step 3 - License",
     "Printable version": "Verzija za \u0161tampu",
-    "I accept": "I accept",
     "CC website": "CC website",
-    "Your company\\'s name": "Your company\\'s name",
     "Your company\\'s activity": "Your company\\'s activity",
     "Your job\\'s description": "Your job\\'s description",
     "Your company\\'s home country": "Your company\\'s home country",
@@ -395,5 +392,8 @@
     "Sender profile picture": "Sender profile picture",
     "Receiver profile picture": "Receiver profile picture",
     "Carbon copy receiver profile picture": "Carbon copy receiver profile picture",
-    "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:": "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:"
+    "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:": "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of Chamilo course, total number of Chamilo users, ...) (see {0}). When registering you will also appear on the worldwide list ({1}). If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button:",
+    "Please read the following requirements thoroughly.": "Pro\u010ditajte pa\u017eljivo.",
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)": "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)",
+    "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.": "Instalacioni skript \u0107e da kreira Chamiloovu glavnu bazu. Molim Vas, obratite pa\u017enju da \u0107e Chamilo morati da kreira vi\u0161e baza. Ako Vam va\u0161 Hosting servis dozvoljava da koristite samo jednu bazu Chamilo ne\u0107e raditi osim ako ne odaberete opciju \u201eJedna baza\"."
 }

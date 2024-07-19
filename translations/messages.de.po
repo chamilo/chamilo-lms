@@ -3343,7 +3343,7 @@ msgstr "MySQL Datenbankeinstellungen"
 msgid "Main language"
 msgstr "Haupt-Sprache"
 
-msgid "Licence"
+msgid "License"
 msgstr "Lizenz"
 
 msgid "Last check before install"
@@ -14413,7 +14413,7 @@ msgstr "Neuer Kurs erstellt in"
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Als Kursleiter wurden Sie selbst eingetragen. Sie können diese Einstellung später in den Kurseinstellungen ändern."
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Sprache für die Installation"
 
 msgid "Please read the following requirements thoroughly."
@@ -14485,7 +14485,7 @@ msgstr "GD Erweiterung ist nicht verfügbar"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo ist freie Software, die unter der GNU General Public Licence angeboten wird."
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Ich akzeptiere"
 
 msgid "The following values will be written into your configuration file"
@@ -14559,9 +14559,6 @@ msgstr "MB String Extension ist nicht verfügbar"
 
 msgid "MySQL extension not available"
 msgstr "MySQL Erweiterung ist nicht verfügbar"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Die Bilder und Medien Galerien in Chamilo nutzen Bilder der Nuvola, Crystal Clear und Tango Icongallerien. Andere Bilder und Medien wie Diagramme und Flash Animationen wurden entlehnt von Wikimedia und Ali Pakdels und Denis Hoas Kursen mit deren Erlaubnis und werden veröffentlicht unter BY-SA Creative Commons Lizenz. Die Lizenz Details gibt es auf der <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">CC Webseite</a>."
 
 msgid "Optional parameters"
 msgstr "Optionale Einstellungen"

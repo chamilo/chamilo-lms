@@ -3284,7 +3284,7 @@ msgstr "数据库设置"
 msgid "Main language"
 msgstr "首选语言"
 
-msgid "Licence"
+msgid "License"
 msgstr "软件许可"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr "新课程创建在"
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "暂时预定此教师, 你可以稍后通过课程设置改更"
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "安装语言"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr ""
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr ""
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "我接受"
 
 msgid "The following values will be written into your configuration file"
@@ -14499,9 +14499,6 @@ msgid "MBString extension not available"
 msgstr ""
 
 msgid "MySQL extension not available"
-msgstr ""
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
 msgstr ""
 
 msgid "Optional parameters"

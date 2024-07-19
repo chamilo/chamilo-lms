@@ -3379,8 +3379,8 @@ msgstr "Paramètres de MySQL"
 msgid "Main language"
 msgstr "Langue principale"
 
-msgid "Licence"
-msgstr "Licence"
+msgid "License"
+msgstr "License"
 
 msgid "Last check before install"
 msgstr "Dernière vérification avant installation"
@@ -14807,7 +14807,7 @@ msgstr "Nouveau cours créé dans"
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Vous êtes considéré comme formateur pour l'instant. Vous pourrez modifier ce paramètre plus tard dans la page de configuration des paramètres du cours."
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Langue d'installation"
 
 msgid "Please read the following requirements thoroughly."
@@ -14879,7 +14879,7 @@ msgstr "Extension GD non disponible"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo est un logiciel libre distribué sous la licence GNU General Public Licence (GPL)."
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "J'accepte"
 
 msgid "The following values will be written into your configuration file"
@@ -14959,9 +14959,6 @@ msgstr "Extension MBString non disponible"
 
 msgid "MySQL extension not available"
 msgstr "Extension MySQL non disponible"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Les images et galeries de média dans Chamilo utilisent des images provenant des galeries d'icônes de Nuvola, Crystal Clear et Tango. D'autres images et média comme les diagrammes et les animations Flash sont empruntées de Wikimedia et des cours d'Ali Pakdel et de Denis Hoa avec leur consentement et publiés sous la licence BY-SA Creative Commons. Vous pouvez trouvez les détails sur cette licence sur <a href=\"http://creativecommons.org/licenses/by-sa/3.0/deed.fr\">le site de CC</a>, où un lien en bas de page vous permet également de consulter le texte intégral de la licence."
 
 msgid "Optional parameters"
 msgstr "Paramètres facultatifs"

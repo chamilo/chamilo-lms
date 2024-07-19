@@ -3284,7 +3284,7 @@ msgstr "Detalls de la base de dades MySQL"
 msgid "Main language"
 msgstr "Idioma principal"
 
-msgid "Licence"
+msgid "License"
 msgstr "Llicència"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr "Curs nou creat en"
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Per ara, està definit com professor. Podreu canviar el professor a la pàgina de configuració del curs"
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Idioma d'instal·lació"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "Extensió GD no disponible"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamiño és un programari lliure distribuït sota GNU General Public licence (GPL)."
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Accepto"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "Extensió MBString no disponible"
 
 msgid "MySQL extension not available"
 msgstr "Extensió MySQL no disponible"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Les imatges i les galeries d'imatges de Chamilo utilitzen imatges i icones de Nuvola, Crstal Clear i Tango. Altres imatges i galeries, como diagrames i animacions Flash, s'han agafat prestades de Wikimedia i dels cursos de Ali Pakdel i de Denis Hoa amb el seu consentiment i publicades sota llicència BY-SA de Creative Commons. Podeu trobar els detalls de la llicència <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">al web de Creative Commons</a> on trobareu un enllaç al peu de la pàgina donant-li accés al text complet de les llicències."
 
 msgid "Optional parameters"
 msgstr "Paràmetres opcionals"

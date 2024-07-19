@@ -3284,7 +3284,7 @@ msgstr "Ustawienia bazy danych MySQL"
 msgid "Main language"
 msgstr "Główny język"
 
-msgid "Licence"
+msgid "License"
 msgstr "Licencja"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr "Nowy kurs utworzony w"
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Jesteś teraz zapisany/ustawiony jako nauczyciel. Możesz zmienić to ustawienie później w ustawieniach konfiguracyjnych kursu"
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Język instalacji"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "Rozszerzenie GD jest niedostępne"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo to darmowe oprogramowanie rozpowszechniane na zasadach GNU General Public License (GPL)."
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Akceptuję"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "Rozszerzenia MBString są niedostępne"
 
 msgid "MySQL extension not available"
 msgstr "Rozszerzenie MySQL jest niedostępne"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Ilustracje i galerie mediów  Chamilo używają obrazów z ikon Nuvola, Crystal Clear i Tango. Inne zdjęcia i media, takie jak wykresy i animacje Flash są zapożyczone z Wikimedia i Ali Pakdel oraz Denis Hoa  za ich zgodą i wydane na licencji BY-SA Creative Commons. Możesz znaleźć szczegóły licencji na stronie CC, gdzie znajduje się link do pełnego tekstu licencji na dole strony."
 
 msgid "Optional parameters"
 msgstr "Parametry opcjonalne"

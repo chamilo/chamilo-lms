@@ -3284,7 +3284,7 @@ msgstr "MyQSL datu basearen ezarpenak"
 msgid "Main language"
 msgstr "Hizkuntza nagusia"
 
-msgid "Licence"
+msgid "License"
 msgstr "Lizentzia"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr "Ikastaro berri bat sortu da honakoan:"
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Oraingoz, zu zaude irakasletzat. Irakaslea aldatu dezakezu ikastaroaren ezarpenak zehazteko orrian."
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Instalazioaren hizkuntza"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "GD luzapena ez dago erabilgarri"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo software librea da, GNU General Public Lizentziapean (GPL) banatua."
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Onartzen dut"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "MBString luzapena ez dago erabilgarri"
 
 msgid "MySQL extension not available"
 msgstr "MySQL luzapena ez dago erabilgarri"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Chamiloren irudiek eta media galeriek Nuvola, Crystal Clear eta Tango ikono galeriatatik hartutako irudiak erabiltzen ditu. Diagramak eta Flash animazioak bezalako beste irudi eta media batzuk  maileguan hartu dira Wikimediatik eta Ali Pakdelen eta Denis Hoaren ikastaroetatik, horretarako adostasuna adierazi dutelarik, eta BY-SA Creative Commons lizentziapean argitaratu dira. Lizentziaren xehetasunak CC webgunean aurkitu ditzakezu, eta bertan pantailako behealdean dagoen loturak lizentziaren testu osora eramango zaitu."
 
 msgid "Optional parameters"
 msgstr "Aukerako parametroak"

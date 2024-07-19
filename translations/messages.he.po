@@ -3284,7 +3284,7 @@ msgstr "הגדרות מסד נתונים של MySQL"
 msgid "Main language"
 msgstr "שפה ראשית"
 
-msgid "Licence"
+msgid "License"
 msgstr "רישיון"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr "קורס חדש נוצר ב"
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "המורה מוגדר כמוך לעת עתה. אתה יכול לשנות הגדרה זו מאוחר יותר בהגדרות תצורת הקורס"
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "שפת התקנה"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "תוסף GD אינו זמין"
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo היא תוכנה חופשית המופצת תחת רישיון GNU General Public (GPL)."
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "אני מאשר"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "תוסף MBString לא זמין"
 
 msgid "MySQL extension not available"
 msgstr "תוסף MySQL אינו זמין"
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "התמונות וגלריות המדיה של Chamilo משתמשות בתמונות מגלריות אייקוני Nuvola, Crystal Clear ו-Tango. תמונות ומדיה אחרים כמו דיאגרמות ואנימציות פלאש מושאלות מהקורסים של ויקימדיה ושל עלי פקדל ודניס הואה בהסכמתם ומשוחררות תחת BY -SA Creative Commons רישיון. תוכל למצוא את פרטי הרישיון ב<a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">אתר CC</a>, שבו קישור אל הטקסט המלא של הרישיון מסופק בתחתית העמוד."
 
 msgid "Optional parameters"
 msgstr "פרמטרים אופציונליים"

@@ -3284,7 +3284,7 @@ msgstr "Настройки на MySQL"
 msgid "Main language"
 msgstr "Основен език"
 
-msgid "Licence"
+msgid "License"
 msgstr "Лиценз"
 
 msgid "Last check before install"
@@ -14354,7 +14354,7 @@ msgstr "Нов курс създаден в"
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Вие сте преподавател в курса. Можете да промените преподавателя в страницата за настройки на курса."
 
-msgid "Installation Language"
+msgid "Installation language"
 msgstr "Език при инсталирането"
 
 msgid "Please read the following requirements thoroughly."
@@ -14426,7 +14426,7 @@ msgstr "Модулът GD не е инсталиран."
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
 msgstr "Chamilo е свободен софтуер, който се разпространява под GNU General Public licence (GPL). Моля, прочетете лиценза и щракнете бутона \"Приемам\"."
 
-msgid "I Accept"
+msgid "I accept"
 msgstr "Приемам"
 
 msgid "The following values will be written into your configuration file"
@@ -14500,9 +14500,6 @@ msgstr "Модулът MBString не е инсталиран."
 
 msgid "MySQL extension not available"
 msgstr "Модулът MySQL не е инсталиран."
-
-msgid "The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel's and Denis Hoa's courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page."
-msgstr "Системата Chamilo използва изображения и мултимедийни файлове от Nuvola, Crystal Clear и Tango. Други избражения и мултимедия като диаграми и флаш-анимации са заимствани от Wikimedia и курсовете на Ali Pakdel и Denis Hoa, с тяхно съгласие и под лиценза BY-SA Creative Commons. Можете да прочетете лиценза на адрес <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\" target=\"_blank\">http://creativecommons.org/licenses/by-sa/3.0/</a>, където в началото на страницата е дадена връзка към пълния текст на лиценза."
 
 msgid "Optional parameters"
 msgstr "Незадължителни параметри"

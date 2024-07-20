@@ -26,9 +26,7 @@
         />
       </div>
       <small
-        v-text="
-          t('Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator.')
-        "
+        v-t="'Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator.'"
       />
     </div>
 

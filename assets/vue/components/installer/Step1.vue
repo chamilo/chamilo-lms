@@ -89,7 +89,7 @@ import Button from "primevue/button"
 
 import languages from "../../utils/languages"
 
-const availableLanguages = languages.filter((language) => ["en_US", "fr_FR"].includes(language.isocode))
+const availableLanguages = languages.filter((language) => ["en_US", "fr_FR", "es", "de"].includes(language.isocode))
 
 const { t } = useI18n()
 

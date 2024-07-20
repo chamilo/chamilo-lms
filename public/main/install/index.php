@@ -82,11 +82,6 @@ if (!empty($_POST['language_list']) && !ChamiloSession::has('install_language'))
 // Set translation
 $translator = new Translator($installationLanguage);
 $translator->addLoader('po', new PoFileLoader());
-$translator->addResource(
-    'po',
-    "../../../var/translations/installation.$installationLanguage.po",
-    $installationLanguage
-);
 Container::$translator = $translator;
 
 // The function api_get_setting() might be called within the installation scripts.

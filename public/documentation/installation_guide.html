@@ -14,7 +14,7 @@
         p {margin-bottom: 0.5em; margin-top: 0.5em;}
         ul {list-style-type: circle; margin-left: 1em; margin-top: 0.5em; margin-bottom: 0.8em;}
         table {margin: 1em;}
-        pre {border: 1px solid #333; background-color: #bbb; padding: 0.8em;}
+        pre {border: 1px solid #333; background-color: #bbb; padding: 0.8em; margin: 0.5em;}
     </style>
 </head>
 <body>
@@ -26,7 +26,7 @@
 This version of Chamilo requires the following software stack.
   It might be installed in other contexts as PHP is very portable, but the following has been thoroughly tested for production environments.
   <ul>
-      <li>Apache 2.4+</li>
+      <li>Apache 2.4+ (with mod-rewrite enabled)</li>
       <li>MariaDB 10+ or MySQL 5+</li>
       <li>PHP 8.2+</li>
       <li>A local Redis server (optional)</li>
@@ -104,6 +104,7 @@ This version of Chamilo requires the following software stack.
 sudo -s
 apt update && apt -y upgrade
 apt -y install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis-server php8.3-{bcmath,curl,exif,gd,iconv,intl,json,mbstring,mysql,opcache,pcre,soap,xml,zip,zlib,redis}
+a2enmod rewrite
 cd /var/www/
 mkdir chamilo
 wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-alpha.1/chamilo2.0.0-alpha.1.tar.gz
@@ -154,6 +155,9 @@ vim [my.chamilo.local].conf
     CustomLog /var/log/apache2/[my.chamilo.local]-access.log combined
     DirectoryIndex index.php index.html
     Options Indexes FollowSymLinks
+    &lt;Directory [/var/www/chamilo/public]&gt;
+      AllowOverride all
+    &lt;/Directory&gt;
     php_value display_errors Off
     php_value file_uploads On
     php_value session.auto_start Off
@@ -164,13 +168,11 @@ vim [my.chamilo.local].conf
     php_value memory_limit 128M
     php_value session.save_handler "redis"
     php_value session.save_path "tcp://127.0.0.1:6379"
-&lt;/VirtualHost&gt;
-  </pre>
+&lt;/VirtualHost&gt;</pre>
 After setting up this virtual host, don't forget to enable it (example here on Debian/Ubuntu's command line):
   <pre>
 a2ensite [my.chamilo.local]
-systemctl reload apache2
-  </pre>
+systemctl restart apache2</pre>
     <h3>Files permissions</h3>
     Make sure the following files and folders are writeable by the web server. Set permissions to 0770 for example:
     <ul>

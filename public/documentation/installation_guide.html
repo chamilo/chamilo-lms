@@ -183,13 +183,11 @@ systemctl restart apache2</pre>
     Assuming your web server user is <em>www-data</em>, you can do that quickly with the following from inside the Chamilo root directory (already done in first example commands list for Ubuntu):
     <pre>
 sudo touch .env
-sudo chown -R www-data:www-data var/ config/ .env
-    </pre>
+sudo chown -R www-data:www-data var/ config/ .env</pre>
     <h3>PHP settings</h3>
     Some PHP settings are recommended, but the default values should be enough to get you started.<br>
     See vhost config's "php_value" section above for details.
-    <pre>
-    </pre>
+
   <h3>Installation wizard</h3>
   You should now be able to direct your browser to your URL (e.g. <em>[http://my.chamilo.local]</em>).<br>
   Chamilo will pick it up from there and offer the installation wizard to help guide you through the rest of the process.

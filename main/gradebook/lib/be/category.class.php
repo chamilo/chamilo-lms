@@ -928,7 +928,7 @@ class Category implements GradebookItem
         $stud_id = null,
         $type = null,
         $course_code = '',
-        $session_id = null
+        $session_id = null,
         $forCertificate = 1
     ) {
         $key = 'category:'.$this->id.'student:'.(int) $stud_id.'type:'.$type.'course:'.$course_code.'session:'.(int) $session_id;
@@ -955,8 +955,8 @@ class Category implements GradebookItem
                 $links = $this->get_links($stud_id, false, $course_code, $session_id, $forCertificate);
             } else {
                 $cats = $this->get_subcategories($stud_id, '', $session_id, null, $forCertificate);
-                $evals = $this->get_evaluations($stud_id, false, '', $session_id, $forCertificate));
-                $links = $this->get_links($stud_id, false, '', $session_id, $forCertificate));
+                $evals = $this->get_evaluations($stud_id, false, '', $session_id, $forCertificate);
+                $links = $this->get_links($stud_id, false, '', $session_id, $forCertificate);
             }
 
             // Calculate score

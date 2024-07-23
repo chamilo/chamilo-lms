@@ -1,17 +1,13 @@
-{% extends '@ChamiloCore/Layout/base-layout.html.twig' %}
+{% extends '@ChamiloCore/Layout/layout_one_col.html.twig' %}
 
-{% block page_content %}
-    <div
-        id="app"
-    >
-    </div>
-    <section id="sectionMainContent" class="section-content">
-        <div class="alert alert-danger" style="width: 60%; padding: 20px; margin: 10% auto; text-align: center;">
-            <h4 class="alert-heading">{{ 'Oops! Something went wrong.'|trans }}</h4>
-            <hr />
-            <p>{{ exception.message }}</p>
-            <hr>
-            <p class="mb-0">{{ 'If the problem persists, please contact support.'|trans }}</p>
+{% block content %}
+    <div class="p-message p-component p-message-error my-10 mx-auto p-5 md:w-3/4 lg:w-1/2">
+        <div class="p-message-wrapper">
+            <div class="p-message-text p-message-text text-center">
+                <p class="text-h4 text-white">{{ 'Oops! Something went wrong.'|trans }}</p>
+                <p class="text-2xl my-6">{{ exception.message }}</p>
+                <p class="text-lg">{{ 'If the problem persists, please contact support.'|trans }}</p>
+            </div>
         </div>
-    </section>
+    </div>
 {% endblock %}

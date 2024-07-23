@@ -21,7 +21,7 @@
       :url="tool.url"
       class="course-tool__title"
     >
-      {{ tool.tool.titleToShow }}
+      {{ $t(tool.tool.titleToShow) }}
     </BaseAppLink>
 
     <div class="course-tool__options">
@@ -54,28 +54,21 @@
           size="small"
         />
       </a>
-
-      <!-- a
-        v-if="securityStore.isCurrentTeacher"
-        :href="goToSettingCourseTool(tool)"
-      >
-        <BaseIcon
-          icon="cog"
-          size="lg"
-        />
-      </a -->
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed, inject } from "vue"
+import { useI18n } from "vue-i18n"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
+
+const { t } = useI18n()
 
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()

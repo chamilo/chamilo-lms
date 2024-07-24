@@ -201,16 +201,21 @@ class CkEditor extends Editor
 
         if ($onlyPersonalfiles) {
             if (null !== $user) {
+                $cidReqQuery = '';
+                if (null !== $course) {
+                    $parentResourceNodeId = $course->getResourceNode()->getId();
+                    $cidReqQuery = '&'.api_get_cidreq().'&parentResourceNodeId='.$parentResourceNodeId;
+                }
                 $resourceNodeId = $user->getResourceNode()->getId();
-                $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId;
+                $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId.'?loadNode=1'.$cidReqQuery;
             }
         } else {
             if (null !== $course) {
                 $resourceNodeId = $course->getResourceNode()->getId();
-                $url = api_get_path(WEB_PATH).'resources/document/'.$resourceNodeId.'/manager?'.api_get_cidreq().'&type=images';
+                $url = api_get_path(WEB_PATH).'resources/document/'.$resourceNodeId.'/manager?'.api_get_cidreq();
             } elseif (null !== $user) {
                 $resourceNodeId = $user->getResourceNode()->getId();
-                $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId;
+                $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId.'?loadNode=1';
             }
         }
 
@@ -225,16 +230,16 @@ class CkEditor extends Editor
                 let fileManagerUrl = "'.$url.'";
 
                 if (fileType === "image") {
-                    fileManagerUrl += "?type=images";
+                    fileManagerUrl += "&type=images";
                 } else if (fileType === "file") {
-                    fileManagerUrl += "?type=files";
+                    fileManagerUrl += "&type=files";
                 }
 
                 tinymce.activeEditor.windowManager.openUrl({
                     title: "File Manager",
                     url: fileManagerUrl,
-                    width: 950,
-                    height: 450
+                    width: 980,
+                    height: 600
                 });
             }
         ';

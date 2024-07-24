@@ -45,7 +45,6 @@ class TwigListener
         $languages = $this->languageRepository->getAllAvailable()->getQuery()->getArrayResult();
 
         // $this->twig->addGlobal('text_direction', api_get_text_direction());
-        $this->twig->addGlobal('from_vue', $request->request->get('from_vue') ? 1 : 0);
         $this->twig->addGlobal('is_authenticated', json_encode($isAuth));
         $this->twig->addGlobal('user_json', $data ?? json_encode([]));
         $this->twig->addGlobal('access_url_id', $request->getSession()->get('access_url_id'));

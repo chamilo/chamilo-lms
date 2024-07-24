@@ -4,28 +4,24 @@
 {% import "@ChamiloCore/Macros/image.html.twig" as macro_image %}
 {% import '@ChamiloCore/Macros/headers.html.twig' as macro_headers %}
 {% import '@ChamiloCore/Macros/modals.html.twig' as macro_modals %}
-
 {% set modals_block = macro_modals.global_modal('') %}
-{% if not from_vue %}
-    <!DOCTYPE html>
-    <html lang="{{ app.request.locale }}" class="no-js h-100">
-    {% block chamilo_head %}
-        {%- include "@ChamiloCore/Layout/head.html.twig" %}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}" class="no-js h-100">
+{% block chamilo_head %}
+    {%- include "@ChamiloCore/Layout/head.html.twig" %}
+{% endblock %}
+<body class="font-sans antialiased {{ section_name }}">
+<noscript>{{ "Your browser does not support Javascript"|trans }}</noscript>
+{%- block chamilo_wrap -%}
+    {%- block page_content %}
     {% endblock %}
-    <body class="font-sans antialiased {{ section_name }}">
-    <noscript>{{ "Your browser does not support Javascript"|trans }}</noscript>
-    {%- block chamilo_wrap -%}
-        {%- block page_content %}
-        {% endblock %}
-    {% endblock -%}
-    {%- block chamilo_footer -%}
-    {% endblock -%}
-    {{ modals_block }}
+{% endblock -%}
 
-    {% include "@ChamiloCore/Layout/foot.html.twig" %}
-    </body>
-    </html>
-{% else %}
-    {{ block('page_content') }}
-    {{ modals_block }}
-{% endif %}
+{%- block chamilo_footer -%}
+{% endblock -%}
+
+{{ modals_block }}
+
+{% include "@ChamiloCore/Layout/foot.html.twig" %}
+</body>
+</html>

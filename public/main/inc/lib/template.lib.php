@@ -718,7 +718,6 @@ class Template
             $encoded = json_encode($user);
         }
         $params['user'] = $encoded;*/
-        $params['from_vue'] = isset($_REQUEST['from_vue']) ? 1 : 0;
     }
 
     /**

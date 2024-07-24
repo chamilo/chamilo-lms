@@ -73,7 +73,7 @@
 </template>
 
 <script setup>
-import { inject, ref, onMounted } from "vue"
+import { ref, onMounted, watch } from "vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import Skeleton from "primevue/skeleton"
@@ -84,10 +84,10 @@ import { useConfirm } from "primevue/useconfirm"
 import userRelUserService from "../../services/userreluser"
 import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
+import { useSocialInfo } from "../../composables/useSocialInfo"
 
+const { user, isCurrentUser } = useSocialInfo()
 const { t } = useI18n()
-const user = inject('social-user')
-const isCurrentUser = inject('is-current-user')
 const items = ref([])
 const loadingFriends = ref(true)
 const notification = useNotification()
@@ -98,20 +98,38 @@ const confirm = useConfirm()
 const requestList = ref()
 
 function reloadHandler() {
+  if (!user.value) {
+    console.log('User not defined yet');
+    return;
+  }
+
   loadingFriends.value = true
   items.value = []
 
   Promise.all([
-    userRelUserService.findAll({ params: { user: user.id, relationType: 3 } }),
-    userRelUserService.findAll({ params: { friend: user.id, relationType: 3 } }),
+    userRelUserService.findAll({ params: { user: user.value.id, relationType: 3 } }),
+    userRelUserService.findAll({ params: { friend: user.value.id, relationType: 3 } }),
   ])
-    .then(([friendshipResponse, friendshipBackResponse]) =>
-      Promise.all([friendshipResponse.json(), friendshipBackResponse.json()])
-    )
-    .then(([friendshipJson, friendshipBackJson]) => {
-      items.value.push(...friendshipJson["hydra:member"], ...friendshipBackJson["hydra:member"])
+    .then(([friendshipResponse, friendshipBackResponse]) => {
+      return Promise.all([friendshipResponse.json(), friendshipBackResponse.json()])
     })
-    .catch((e) => notification.showErrorNotification(e))
+    .then(([friendshipJson, friendshipBackJson]) => {
+      const friendsSet = new Set()
+      items.value = [...friendshipJson["hydra:member"], ...friendshipBackJson["hydra:member"]]
+        .filter(friend => {
+          const friendId = friend.user['@id'] === user.value['@id'] ? friend.friend['@id'] : friend.user['@id']
+          if (friendsSet.has(friendId)) {
+            return false
+          } else {
+            friendsSet.add(friendId)
+            return true
+          }
+        })
+    })
+    .catch((e) => {
+      console.error('Error occurred', e);
+      notification.showErrorNotification(e);
+    })
     .finally(() => {
       loadingFriends.value = false
       if (requestList.value) {
@@ -120,8 +138,16 @@ function reloadHandler() {
     })
 }
 
+watch(user, (newValue) => {
+  if (newValue && newValue.id) {
+    reloadHandler()
+  }
+})
+
 onMounted(() => {
-  reloadHandler()
+  if (user.value && user.value.id) {
+    reloadHandler()
+  }
 })
 
 const goToAdd = () => {

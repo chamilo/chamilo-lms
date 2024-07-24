@@ -18,7 +18,7 @@
       </BaseCard>
     </div>
     <div class="md:basis-3/4 lg:basis-5/6 2xl:basis-7/8">
-      <router-view></router-view>
+      <router-view @friend-request-sent="reloadRequestsList"></router-view>
     </div>
   </div>
 </template>
@@ -78,6 +78,12 @@ const reloadHandler = async () => {
       await nextTick()
       requestList.value.loadRequests()
     }
+  }
+}
+
+const reloadRequestsList = () => {
+  if (requestList.value) {
+    requestList.value.loadRequests();
   }
 }
 

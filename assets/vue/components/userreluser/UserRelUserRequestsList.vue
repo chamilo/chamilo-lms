@@ -38,7 +38,16 @@
         icon="user-add"
         only-icon
         type="black"
-        @click="addFriend(request)"
+        :tooltip="t('Accept invitation')"
+        @click="acceptFriendRequest(request)"
+      />
+      <BaseButton
+        class="ml-2"
+        icon="user-delete"
+        only-icon
+        type="danger"
+        :tooltip="t('Reject invitation')"
+        @click="rejectFriendRequest(request)"
       />
     </div>
 
@@ -100,15 +109,11 @@ const loadRequests = () => {
   waitingRequests.value = []
 
   Promise.all([
-    userRelUserService.findAll({
-      params: friendRequestFilter,
-    }),
-    userRelUserService.findAll({
-      params: waitingFilter,
-    }),
+    userRelUserService.findAll({ params: friendRequestFilter }),
+    userRelUserService.findAll({ params: waitingFilter }),
   ])
     .then(([sentRequestsResponse, waitingRequestsRespose]) =>
-      Promise.all([sentRequestsResponse.json(), waitingRequestsRespose.json()]),
+      Promise.all([sentRequestsResponse.json(), waitingRequestsRespose.json()])
     )
     .then(([sentRequestsJson, waitingRequestsJson]) => {
       friendRequests.value = sentRequestsJson["hydra:member"]
@@ -118,19 +123,26 @@ const loadRequests = () => {
     .finally(() => (loading.value = false))
 }
 
-function addFriend(friend) {
-  // Change from request to friend
+function acceptFriendRequest(request) {
   axios
-    .put(friend["@id"], {
-      relationType: 3,
-    })
+    .put(request["@id"], { relationType: 3 })
     .then(() => {
-      emit("accept-friend", friend)
+      emit("accept-friend", request)
+      notification.showSuccessNotification(t("Friend added successfully"))
+      loadRequests()
     })
     .catch((e) => notification.showErrorNotification(e))
 }
 
-defineExpose({
-  loadRequests,
-})
+function rejectFriendRequest(request) {
+  axios
+    .delete(request["@id"])
+    .then(() => {
+      notification.showSuccessNotification(t("Friend request rejected"))
+      loadRequests()
+    })
+    .catch((e) => notification.showErrorNotification(e))
+}
+
+defineExpose({ loadRequests })
 </script>

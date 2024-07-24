@@ -11,7 +11,7 @@
     :severity="primeSeverityProperty"
     :size="size"
     :text="onlyIcon"
-    :title="onlyIcon ? label : undefined"
+    :title="tooltip || (onlyIcon ? label : undefined)"
     :type="isSubmit ? 'submit' : 'button'"
     :loading="isLoading"
     @click="$emit('click', $event)"
@@ -44,8 +44,7 @@ const props = defineProps({
     required: true,
     validator: buttonTypeValidator,
   },
-  // associate this button to a popup through its identifier, this will make this button toggle the popup
-  popupIdentifier: {
+  tooltip: {
     type: String,
     default: "",
   },
@@ -66,6 +65,10 @@ const props = defineProps({
   isLoading: {
     type: Boolean,
     default: false,
+  },
+  popupIdentifier: {
+    type: String,
+    default: "",  // This ensures that popupIdentifier is still present
   },
 })
 

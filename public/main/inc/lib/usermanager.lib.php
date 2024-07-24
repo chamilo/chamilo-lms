@@ -315,6 +315,7 @@ class UserManager
         $userId = $user->getId();
 
         if (!empty($userId)) {
+            $userLocale = $user->getLocale();
             if ($isAdmin) {
                 self::addUserAsAdmin($user);
             }
@@ -377,7 +378,7 @@ class UserManager
                     PERSON_NAME_EMAIL_ADDRESS
                 );
                 $tpl = Container::getTwig();
-                $emailSubject = $tpl->render('@ChamiloCore/Mailer/Legacy/subject_registration_platform.html.twig');
+                $emailSubject = $tpl->render('@ChamiloCore/Mailer/Legacy/subject_registration_platform.html.twig', ['locale' => $userLocale]);
                 $sender_name = api_get_person_name(
                     api_get_setting('administratorName'),
                     api_get_setting('administratorSurname'),
@@ -405,6 +406,7 @@ class UserManager
                     'mailWebPath' => $url,
                     'new_user' => $user,
                     'search_link' => $url,
+                    'locale' => $userLocale,
                 ];
 
                 // ofaj

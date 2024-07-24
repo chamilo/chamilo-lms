@@ -1,1 +1,4 @@
-{{ '['~ 'platform.site_name' | api_get_setting ~ '] ' ~ 'Your Reg'|trans ~ ' ' ~ 'platform.site_name' | api_get_setting }}
+{% set user_locale = locale is defined ? locale : 'en' %}
+{% trans_default_domain 'messages' %}
+
+{{ '['~ 'platform.site_name' | api_get_setting ~ '] ' ~ 'Your Reg'|trans({}, 'messages', user_locale) ~ ' ' ~ 'platform.site_name' | api_get_setting }}

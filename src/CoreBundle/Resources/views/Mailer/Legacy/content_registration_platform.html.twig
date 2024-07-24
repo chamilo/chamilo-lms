@@ -1,21 +1,24 @@
-{% autoescape false %}
-    <p>{{ 'Dear'|trans }} {{ complete_name }},</p>
-    <p>{{ 'Welcome to this platform'|trans }}</p>
-    <p>{{ 'You are registered to'|trans }} {{ 'platform.site_name' | api_get_setting }} {{ 'with the following settings:'|trans }}</p>
-    <p>{{ 'Username'|trans }} : {{ login_name }}<br>
-        {{ 'Pass'|trans }} : {{ original_password }}</p>
-    <p>{{ 'For more details visit %s'|trans|format(search_link) }}</p>
-    <p>{{ 'In case of trouble, contact us.'|trans }}</p>
+{% set user_locale = locale is defined ? locale : 'en' %}
+{% trans_default_domain 'messages' %}
 
-    <p>{{ 'Sincerely'|trans }}</p>
+{% autoescape false %}
+    <p>{{ 'Dear'|trans({}, 'messages', user_locale) }} {{ complete_name }},</p>
+    <p>{{ 'Welcome to this platform'|trans({}, 'messages', user_locale) }}</p>
+    <p>{{ 'You are registered to'|trans({}, 'messages', user_locale) }} {{ 'platform.site_name' | api_get_setting }} {{ 'with the following settings:'|trans({}, 'messages', user_locale) }}</p>
+    <p>{{ 'Username'|trans({}, 'messages', user_locale) }} : {{ login_name }}<br>
+        {{ 'Pass'|trans({}, 'messages', user_locale) }} : {{ original_password }}</p>
+    <p>{{ 'For more details visit %s'|trans({'%s': search_link}, 'messages', user_locale) }}</p>
+    <p>{{ 'In case of trouble, contact us.'|trans({}, 'messages', user_locale) }}</p>
+
+    <p>{{ 'Sincerely'|trans({}, 'messages', user_locale) }}</p>
     <p>{{ 'admin.administrator_name' | api_get_setting }} {{ 'admin.administrator_surname' | api_get_setting }}<br />
-        {{ 'Manager'|trans }} {{ 'platform.site_name' | api_get_setting }}<br />
+        {{ 'Manager'|trans({}, 'messages', user_locale) }} {{ 'platform.site_name' | api_get_setting }}<br />
 
         {% if 'admin.administrator_phone' | api_get_setting %}
             {{ 'T. ' ~ 'admin.administrator_phone' | api_get_setting }}<br />
         {% endif %}
         {% if 'admin.administrator_email' | api_get_setting %}
-            {{ 'Email'|trans ~ ': ' ~ 'admin.administrator_email' | api_get_setting }}
+            {{ 'Email'|trans({}, 'messages', user_locale) ~ ': ' ~ 'admin.administrator_email' | api_get_setting }}
         {% endif %}
     </p>
 {% endautoescape %}

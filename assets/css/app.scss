@@ -790,6 +790,49 @@ form .field {
   }
 }
 
+.filemanager-container {
+  .mdi-icon {
+    font-size: 48px;
+  }
+
+  .thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .thumbnail-item {
+    width: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .thumbnail-icon {
+    font-size: 2rem;
+  }
+
+  .thumbnail-title {
+    margin-top: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .thumbnail-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .thumbnail-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+}
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';

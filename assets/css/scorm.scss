@@ -727,7 +727,7 @@ See https://support.chamilo.org/issues/6976
         @apply bg-no-repeat bg-transparent bg-left;
 
         a.items-list {
-            @apply py-3 pr-4 relative
+            @apply py-4 pr-10 relative
                 after:block after:absolute after:bottom-0 after:left-0 after:right-0 after:mr-4 after:border-b after:border-gray-25
             ;
         }

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-07-19 21:51+0000\n"
+"PO-Revision-Date: 2024-07-25 13:12+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -28074,3 +28074,658 @@ msgstr ""
 "tiene como objetivo solicitar a los tutores que den su apreciación sobre "
 "cada alumno en orden. Esta opción ordenará las preguntas por el apellido del "
 "alumno."
+
+msgid "Hide username when already showing complete name"
+msgstr "Ocultar nombre de usuario cuando ya se muestra el nombre completo"
+
+msgid "Fields users are allowed to change in their profile"
+msgstr "Campos que los usuarios pueden cambiar en su perfil"
+
+msgid "In the course chat, hide the username. Only display people's names."
+msgstr ""
+"En el chat del curso, ocultar el nombre de usuario. Mostrar solo los nombres "
+"de las personas."
+
+msgid "Add subject and body in the mailto: footer."
+msgstr "Añadir asunto y cuerpo en el mailto: del pie de página."
+
+msgid "Hide username in course chat"
+msgstr "Ocultar nombre de usuario en el chat del curso"
+
+msgid "Add helper to add two names in registration"
+msgstr "Añadir asistente para agregar dos nombres en el registro"
+
+msgid "Set your own URL to a password reset page. Useful when using a federated account management system."
+msgstr ""
+"Use su propia URL para la página de restablecimiento de contraseña. Útil "
+"cuando se utiliza un sistema federado de gestión de cuentas."
+
+msgid "Career diagrams allow you to display diagrams of careers, skills and courses."
+msgstr ""
+"Los diagramas de carrera le permiten mostrar diagramas de carreras, "
+"competencias y cursos."
+
+msgid "Add help text for users to enter two names in the registration form when double lastnames are common."
+msgstr ""
+"Agregue texto de ayuda para que los usuarios ingresen dos apellidos en el "
+"formulario de registro cuando los apellidos compuestos son comunes."
+
+msgid "Custom page for password reminder"
+msgstr "Página personalizada para recordatorio de contraseña"
+
+msgid "Pre-fill the mail with user and course info in footer contact"
+msgstr ""
+"Rellene previamente el correo en el contacto del pie de página con la "
+"información del usuario y del curso"
+
+#, fuzzy
+msgid "If you already manage your personal data protection declaration to users elsewhere, you can safely disable this feature."
+msgstr ""
+"Si ya gestiona su declaración de protección de datos personales para los "
+"usuarios en otro lugar, puede desactivar esta función con seguridad."
+
+msgid "Default number of items per page in mySpace"
+msgstr "Número predeterminado de elementos por página en mySpace"
+
+msgid "Enable career diagrams"
+msgstr "Activar diagramas de carrera"
+
+msgid "Some internal functions will return the username when returning the user's complete name. With this option enabled, you ensure the username will not appear."
+msgstr ""
+"Algunas funciones internas devolverán el nombre de usuario al mostrar el "
+"nombre completo del usuario. Con esta opción activada, se asegura de que el "
+"nombre de usuario no aparezca."
+
+msgid "Define the default sub-elements of the 'Courses' entry to display if user is not registered to any course nor session."
+msgstr ""
+"Defina los subelementos predeterminados de la entrada 'Cursos' para mostrar "
+"si el usuario no está registrado en ningún curso ni sesión."
+
+msgid "If you do not want to use the index page (announcements, popular courses, etc), you can define here the script (from the document root) where users will be redirected when trying to load the index."
+msgstr ""
+"Si no desea utilizar la página de inicio (anuncios, cursos populares, etc.), "
+"puede definir aquí el script (desde la raíz del documento) donde los "
+"usuarios serán redirigidos al intentar cargar la página de inicio."
+
+msgid "Allow teachers to filter the users based on extra fields on the page to subscribe users to their course."
+msgstr ""
+"Permita a los tutores filtrar a los alumnos en función de campos de perfil "
+"adicionales en la página para inscribir usuarios en su curso."
+
+msgid "Default menu entry for courses"
+msgstr "Entrada de menú predeterminada para cursos"
+
+msgid "Select the fields users will be able to change on their profile page."
+msgstr ""
+"Seleccione los campos que los usuarios podrán modificar en su página de "
+"perfil."
+
+msgid "Avoid anyone making the 'users' tool visible in a public course."
+msgstr ""
+"Evite que alguien haga visible la herramienta 'usuarios' en un curso público."
+
+msgid "Data protection officer name"
+msgstr "Nombre del responsable de protección de datos"
+
+msgid "Filter users on profile fields on subscription to course"
+msgstr "Filtrar usuarios por campos de perfil al inscribirse en el curso"
+
+msgid "Disable GDPR features"
+msgstr "Desactivar funciones del RGPD"
+
+msgid "Disable making tool users visible in public courses"
+msgstr "Desactivar visibilidad de herramienta usuarios en cursos públicos"
+
+msgid "Send email notification to admin when a user is created."
+msgstr ""
+"Enviar notificación por correo electrónico al administrador cuando se crea "
+"un usuario."
+
+msgid "This setting allows you to experiment by reporting but not enforcing some Content Security Policy."
+msgstr ""
+"Esta configuración le permite experimentar reportando, pero sin aplicar, "
+"algunas políticas de seguridad de contenido (CSP)."
+
+msgid "X-Frame-Options tells the browser whether you want to allow your site to be framed or not. By preventing a browser from framing your site you can defend against attacks like clickjacking. If defining a URL here, it should define the URL(s) from which your content should be visible, not the URLs from which your site accepts content. For example, if your main URL (root_web above) is https://11.chamilo.org/, then this setting should be: 'ALLOW-FROM https://11.chamilo.org'. These headers only apply to pages where Chamilo is responsible of the HTTP headers generation (i.e. '.php' files). It does not apply to static files. If playing with this feature, make sure you also update your web server configuration to add the right headers for static files. See CDN configuration documentation above (search for 'add_header') for more information. Recommended (strict) value for this setting, if enabled: 'SAMEORIGIN'."
+msgstr ""
+"X-Frame-Options indica al navegador si desea permitir que su sitio sea "
+"enmarcado o no. Al evitar que un navegador enmarque su sitio, puede "
+"defenderse contra ataques como el clickjacking. Si define una URL aquí, debe "
+"especificar la(s) URL(s) desde donde su contenido debe ser visible, no las "
+"URL(s) desde donde su sitio acepta contenido. Por ejemplo, si su URL "
+"principal (root_web arriba) es https://11.chamilo.org/, entonces esta "
+"configuración debería ser: 'ALLOW-FROM https://11.chamilo.org'. Estas "
+"cabeceras solo se aplican a páginas donde Chamilo es responsable de la "
+"generación de cabeceras HTTP (es decir, archivos '.php'). No se aplica a "
+"archivos estáticos. Si experimenta con esta función, asegúrese de actualizar "
+"también la configuración de su servidor web para agregar las cabeceras "
+"correctas para archivos estáticos. Consulte la documentación de "
+"configuración de CDN arriba (busque 'add_header') para obtener más "
+"información. Valor recomendado (estricto) para esta configuración, si está "
+"habilitado: 'SAMEORIGIN'."
+
+msgid "Display a legend below the career diagram"
+msgstr "Mostrar una leyenda debajo del diagrama de carrera"
+
+msgid "Show multiple conditions to user during sign up process. Provide an array with each element containing 'variable' (internal extra field name), 'display_text' (simple text for a checkbox), 'text_area' (long text of conditions)."
+msgstr ""
+"Mostrar multiples condiciones al usuario durante su registro. Proporcione un "
+"array con cada elemento que contenga 'variable' (nombre interno del campo de "
+"perfil), 'display_text' (texto simple para una casilla de verificación), "
+"'text_area' (texto largo de las condiciones)."
+
+msgid "Options for user import"
+msgstr "Opciones para la importación de usuarios"
+
+msgid "Naturally include the given extra fields (array of extra fields labels) in the user searches."
+msgstr ""
+"Incluya naturalmente los campos de perfil adicionales (defina un arreglo de "
+"etiquetas de campos de perfil adicionales) en las búsquedas de usuarios."
+
+msgid "If you only want to show some of the available profile field, your can complete the array here with sub-elements 'fields' and 'extra_fields' containing arrays with a list of the fields to show."
+msgstr ""
+"Si solo desea mostrar algunos de los campos de perfil disponibles, puede "
+"completar el arreglo aquí con sub-elementos 'fields' y 'extra_fields' que "
+"contienen arreglos con una lista de los campos a mostrar."
+
+msgid "Show number of users in sessions list"
+msgstr "Mostrar número de usuarios en la lista de sesiones"
+
+msgid "Users geolocation on a map"
+msgstr "Ubicación geográfica de los usuarios en un mapa"
+
+msgid "Show specific registration conditions"
+msgstr "Mostrar las condiciones específicas de registro"
+
+msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
+msgstr ""
+"Habilite el parámetro samesite:None para la cookie de sesión. Más "
+"información: https://www.chromium.org/updates/same-site y https://developers."
+"google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
+
+msgid "Add a disclaimer below the career diagram. A language variable called 'Career diagram disclaimer' must exist in your sub-language."
+msgstr ""
+"Añada un aviso debajo del diagrama de carrera. Debe existir una variable de "
+"idioma llamada 'Career diagram disclaimer' en su sub-idioma."
+
+msgid "Array of fields and whether (boolean) they are visible or not on the user's profile page (also works with extra fields labels)."
+msgstr ""
+"Array de campos y si son (booleano) visibles o no en la página de perfil del "
+"usuario (también funciona con campos de perfil extra)."
+
+msgid "X-Content-Type-Options stops a browser from trying to MIME-sniff the content type and forces it to stick with the declared content-type. The only valid value for this header is 'nosniff'."
+msgstr ""
+"Las X-Content-Type-Options detienen que un navegador intente detectar el "
+"tipo MIME del contenido y lo fuerza a mantenerse con el tipo de contenido "
+"declarado. El único valor válido para este encabezado es 'nosniff'."
+
+msgid "Enable the display of a map in the social network allowing you to locate other users. This includes several positions (current and destination) which have to be defined as addresses or coordinates in separate extra fields. The extra fields must be set as an array here."
+msgstr ""
+"Habilitar la visualización de un mapa en la red social que le permita "
+"localizar a otros usuarios. Esto incluye varias posiciones (actual y destino)"
+" que deben definirse como direcciones o coordenadas en campos de perfil "
+"adicionales. Los campos de perfil a usar deben configurarse como un arreglo "
+"aquí."
+
+msgid "Send the welcome message to e-mail and inbox"
+msgstr ""
+"Enviar el mensaje de bienvenida al correo electrónico y al buzón interno"
+
+msgid "When sharing a badge on LinkedIn, LinkedIn allows you to set an organization ID that will link to the LinkedIn's page of your organization (to link the organization attributing the badge)."
+msgstr ""
+"Al compartir una insignia en LinkedIn, LinkedIn permite establecer un ID de "
+"organización que se vinculará a la página de LinkedIn de su organización ("
+"para enlazar la organización que otorga la insignia)."
+
+msgid "Hide fields from users list in course"
+msgstr "Ocultar campos de la lista de usuarios en los cursos"
+
+msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
+msgstr ""
+"HTTP Strict Transport Security es una excelente funcionalidad para soportar "
+"en su sitio. Fortalece su implementación de TLS al hacer que el Agente de "
+"Usuario (User Agent) aplique forzosamente el uso de HTTPS. Valor recomendado:"
+" 'strict-transport-security: max-age=63072000; includeSubDomains'. Consulte "
+"https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-"
+"Security. Puede incluir el sufijo 'preload', pero esto tiene consecuencias "
+"en el dominio de nivel superior (TLD), por lo que probablemente no deba ser "
+"hecho a la ligera. Consulte https://hstspreload.org/. Deje en blanco para "
+"desactivar."
+
+msgid "Send mail to admin when user created"
+msgstr "Enviar correo al administrador cuando se cree un usuario"
+
+msgid "Redirect to session after registration in session's 'About' page"
+msgstr ""
+"Redirigir a la sesión después de registrarse en la página 'Acerca de' de la "
+"sesión"
+
+msgid "Session cookie samesite"
+msgstr "Cookie de sesión samesite"
+
+msgid "If career diagrams are enabled, users can only see them (and only the diagrams that correspond to their studies) if you enable this option."
+msgstr ""
+"Si los diagramas de carrera están habilitados, los usuarios solo pueden "
+"verlos (y solo los diagramas que corresponden a sus estudios) si activa esta "
+"opción."
+
+msgid "Required fields during registration"
+msgstr "Campos obligatorios durante el registro"
+
+msgid "Hide link to session page"
+msgstr "Ocultar enlace a la página de la sesión"
+
+msgid "LinkedIn Orgnization ID"
+msgstr "ID de organización en LinkedIn"
+
+msgid "Enable career diagrams for users"
+msgstr "Habilitar diagramas de carrera para usuarios"
+
+msgid "Content Security Policy report only"
+msgstr "Política de Seguridad de Contenido 'solo informes'"
+
+msgid "The admin can see the number of users in each session. This adds additional weight to the sessions list, so if you use it often, consider carefully whether you want the extra waiting time."
+msgstr ""
+"El administrador puede ver el número de usuarios en cada sesión. Esto añade "
+"un peso adicional a la lista de sesiones, así que si la utiliza con "
+"frecuencia, considere cuidadosamente si desea el tiempo de espera adicional."
+
+msgid "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
+msgstr ""
+"Referrer Policy es un encabezado que permite a un sitio controlar cuánta "
+"información el navegador incluye al navegar fuera de un documento y debe ser "
+"configurado por todos los sitios."
+
+msgid "Session admins can access all course content"
+msgstr ""
+"Los administradores de sesión pueden acceder a todo el contenido del curso"
+
+msgid "By default, the welcome message (with credentials) is sent only by e-mail. Enable this option to send it to the user's Chamilo inbox as well."
+msgstr ""
+"Por defecto, el mensaje de bienvenida (con credenciales) solo se envía por "
+"correo electrónico. Active esta opción para enviarlo también a la bandeja de "
+"entrada del usuario en Chamilo."
+
+msgid "HTTP Public Key Pinning report only"
+msgstr "HTTP Public Key Pinning 'solo informes'"
+
+msgid "Data protection officer role"
+msgstr "Rol del responsable de protección de datos"
+
+msgid "HTTP Strict Transport Security"
+msgstr "HTTP Strict Transport Security (HSTS)"
+
+msgid "Session admins can disable users"
+msgstr "Los administradores de sesión pueden deshabilitar usuarios"
+
+msgid "Display a disclaimer below the career diagram"
+msgstr "Mostrar un aviso legal debajo del diagrama de carrera"
+
+msgid "X-Content-Type-Options"
+msgstr "Opciones de Tipo de Contenido (X-Content-Type-Options)"
+
+msgid "Allow teachers to manage classes"
+msgstr "Permitir a los profesores gestionar clases"
+
+msgid "Search users by extra fields in users list for admins"
+msgstr ""
+"Buscar usuarios por campos de perfil en la lista de usuarios para "
+"administradores"
+
+msgid "Hide tabs on the session page"
+msgstr "Ocultar pestañas en la página de sesión"
+
+msgid "Provide an array of user IDs that will be considered community managers in the special course designated as global forum. Community managers have additional privileges on the global forum."
+msgstr ""
+"Proporcione un arreglo de identificadores de usuario que se considerarán "
+"gestores de comunidad en el curso especial designado como foro global. Los "
+"gestores de la comunidad tienen privilegios adicionales en el foro global."
+
+msgid "Community managers list"
+msgstr "Lista de gestores de comunidad"
+
+msgid "Array of options to apply as default parameters in the CSV/XML user import."
+msgstr ""
+"Conjunto de opciones para aplicar como parámetros predeterminados en la "
+"importación de usuarios por CSV/XML."
+
+msgid "Enable sessions search diagnosis"
+msgstr "Activar el diagnóstico de búsqueda de sesiones"
+
+msgid "Allow tutors to get a diagnosis that will allow them to search for the best sessions for learners."
+msgstr ""
+"Permita que los tutores obtengan un diagnóstico que les permitirá buscar las "
+"mejores sesiones para los alumnos."
+
+msgid "Data protection officer e-mail address"
+msgstr "Dirección de correo electrónico del responsable de protección de datos"
+
+msgid "Session admins can delete users"
+msgstr "Los administradores de sesión pueden eliminar usuarios"
+
+msgid "Restrict fields shown during registration"
+msgstr "Restringir campos mostrados durante el registro"
+
+msgid "Session admins can 'login as' teachers"
+msgstr "Los administradores de la sesión pueden \"iniciar sesión como\" tutores"
+
+msgid "Hide search form in sessions list"
+msgstr "Ocultar formulario de búsqueda en la lista de sesiones"
+
+msgid "Add a career legend below the career diagram. A language variable called 'Career diagram legend' must exist in your sub-language."
+msgstr ""
+"Agregar una leyenda de carrera debajo del diagrama de carrera. Debe existir "
+"una variable de idioma llamada 'Career diagram legend' en su sub-idioma."
+
+msgid "X-Frame-Options"
+msgstr "X-Frame-Options"
+
+msgid "X-XSS-Protection"
+msgstr "Protección X-XSS (X-XSS-Protection)"
+
+msgid "Immediately block users who have been disabled by the admin through users management. Otherwise, users who have been disabled will keep their previous privileges until they logout."
+msgstr ""
+"Bloquee de inmediato a los usuarios que hayan sido desactivados por el "
+"administrador a través de la gestión de usuarios. De lo contrario, los "
+"usuarios desactivados mantendrán sus privilegios anteriores hasta que "
+"cierren sesión."
+
+msgid "Fields visible on profile page"
+msgstr "Campos visibles en la página de perfil"
+
+msgid "Session admins can edit course content"
+msgstr "Los administradores de sesión pueden editar contenido de cursos"
+
+msgid "HTTP Public Key Pinning"
+msgstr "Clavado de Claves Públicas HTTP (HPKP)"
+
+msgid "Hide link to the session page from the sessions list."
+msgstr "Ocultar enlace a la página de la sesión desde la lista de sesiones."
+
+msgid "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
+msgstr ""
+"La Política de Seguridad de Contenido (CSP) es una medida efectiva para "
+"proteger su sitio de ataques XSS. Al crear una lista blanca de fuentes de "
+"contenido aprobado, puede evitar que el navegador cargue activos maliciosos. "
+"Esta configuración es particularmente complicada de establecer con editores "
+"WYSIWYG, pero si agrega todos los dominios que desea autorizar para la "
+"inclusión de iframes en la declaración child-src, este ejemplo debería "
+"funcionar para usted. Puede evitar que JavaScript se ejecute desde fuentes "
+"externas (incluyendo dentro de imágenes SVG) utilizando una lista estricta "
+"en el argumento 'script-src'. Deje en blanco para desactivar. Ejemplo de "
+"configuración: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-"
+"inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com "
+"yt.be *.vimeo.com *.slideshare.com;"
+
+msgid "Session admins are forbidden access to the users list"
+msgstr ""
+"Los administradores de sesión no tienen acceso permitido a la lista de "
+"usuarios"
+
+msgid "This setting allows you to experiment by reporting but not enforcing some HTTP Public Key Pinning."
+msgstr ""
+"Esta configuración le permite experimentar reportando pero sin aplicar el "
+"HTTP Public Key Pinning."
+
+msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
+msgstr ""
+"El HTTP Public Key Pinning protege su sitio de ataques MiTM utilizando "
+"certificados X.509 no autorizados. Al incluir en la lista blanca solo las "
+"identidades en las cuales el navegador debería confiar, sus usuarios estarán "
+"protegidos en caso de que se vea comprometida una autoridad de certificación."
+
+msgid "X-XSS-Protection sets the configuration for the cross-site scripting filter built into most browsers. Recommended value '1; mode=block'."
+msgstr ""
+"La configuración X-XSS-Protection establece la configuración para el filtro "
+"de scripting entre sitios incorporado en la mayoría de los navegadores. "
+"Valor recomendado '1; mode=block'."
+
+msgid "By default, we show all data from users in the users tool in the course. This array allows you to specify which fields you do not want to display. Only affects main fields (not extra fields)."
+msgstr ""
+"De forma predeterminada, mostramos todos los datos de los usuarios en la "
+"herramienta de usuarios en el curso. Este arreglo le permite especificar qué "
+"campos no desea mostrar. Solo afecta a los campos principales (no a los "
+"campos de perfil)."
+
+msgid "Security Referrer Policy"
+msgstr "Política de Referencia de Seguridad ( Security Referrer Policy)"
+
+msgid "Check password strength"
+msgstr "Comprobar la fortaleza de la contraseña"
+
+msgid "Content Security Policy"
+msgstr "Política de Seguridad de Contenido (CSP)"
+
+msgid "Admins can set users passwords manually"
+msgstr ""
+"Los administradores pueden establecer las contraseñas de los usuarios "
+"manualmente"
+
+msgid "Required extra fields during registration"
+msgstr "Campos de perfil adicionales requeridos durante el registro"
+
+msgid "Block disabled users immediately"
+msgstr "Bloquear usuarios deshabilitados de inmediato"
+
+msgid "Session admins can view careers"
+msgstr "Los responsables de sesión pueden ver las careras"
+
+msgid "Prevent emptying the subscribed users in session subscription"
+msgstr "Evitar vaciar los usuarios suscritos en la suscripción a sesión"
+
+msgid "Hide skills from learners"
+msgstr "Ocultar competencias de los alumnos"
+
+msgid "Auto-create single-user session on course auto-subscription"
+msgstr ""
+"Crear automáticamente una sesión individual al suscribirse automáticamente "
+"al curso"
+
+msgid "Base course teacher can see assignments from all sessions"
+msgstr "El profesor del curso base puede ver los trabajos de todas las sesiones"
+
+msgid "Restrict the list of students to subscribe in the course session. And disable registration for users in all courses from Resume Session page."
+msgstr ""
+"Restringe la lista de alumnos para inscribirse en la sesión del curso. Y "
+"deshabilita la inscripción para usuarios en todos los cursos desde la página "
+"de Reanudar sesión."
+
+msgid "Set course read-only in session"
+msgstr "Establecer el curso como solo lectura en la sesión"
+
+msgid "By default, only admins can decide which skills can be acquired through which course."
+msgstr ""
+"De forma predeterminada, solo los administradores pueden decidir qué "
+"competencias pueden adquirirse a través de qué curso."
+
+msgid "Add username to e-mail notification of subscription to session"
+msgstr ""
+"Añadir nombre de usuario a la notificación por correo electrónico de la "
+"suscripción a la sesión"
+
+msgid "When using the multiple learners subscription to a session, prevent the normal behaviour which is to unsubscribe users who are not in the right panel when clicking submit. Keep all users there."
+msgstr ""
+"Al utilizar la suscripción de varios alumnos a una sesión, evite el "
+"comportamiento normal que consiste en dar de baja a los usuarios que no "
+"están en el panel correcto al hacer clic en enviar. Mantenga a todos los "
+"usuarios allí."
+
+msgid "Only display users from active sessions in tracking"
+msgstr "Solo mostrar usuarios de sesiones activas en seguimiento"
+
+msgid "Limit subscriptions to course to only users of the session"
+msgstr "Limitar las inscripciones al curso solo a usuarios de la sesión"
+
+msgid "Set the user to use as creator of the automatically-created sessions (to avoid assigning every session to user '1' which is often the portal administrator)."
+msgstr ""
+"Establezca el usuario para usar como creador de las sesiones creadas "
+"automáticamente (para evitar asignar cada sesión al usuario '1', que a "
+"menudo es el administrador del portal)."
+
+msgid "Auto-created sessions duration"
+msgstr "Duración de sesiones creadas automáticamente"
+
+msgid "Sessions that include the course are listed in the reporting tool inside the course itself, which can add considerable weight if the same course is used in hundreds of sessions. This option removes that list."
+msgstr ""
+"Las sesiones que incluyen el curso se enumeran en la herramienta de informes "
+"dentro del mismo curso, lo que puede aumentar considerablemente el peso si "
+"el mismo curso se utiliza en cientos de sesiones. Esta opción elimina esa "
+"lista."
+
+msgid "Sessions by duration always available to coaches"
+msgstr "Sesiones por duración siempre disponibles para tutores"
+
+msgid "Sort session templates by id in session creation form"
+msgstr ""
+"Ordenar las plantillas de sesión por id (en vez de alfabéticamente) en el "
+"formulario de creación de sesión"
+
+msgid "When a user subscribes to an open course through the courses catalogue, create a single-user session instead of subscribing him/her to the base course."
+msgstr ""
+"Cuando un usuario se suscribe a un curso abierto a través del catálogo de "
+"cursos, cree una sesión individual en lugar de suscribirlo al curso base."
+
+msgid "Customize course-session tracking columns"
+msgstr "Personalizar las columnas de seguimiento del curso-sesión"
+
+msgid "By default, sessions are ordered by start date. Change this by providing an array of type ['field' => 'end_date', 'order' => 'desc']."
+msgstr ""
+"De forma predeterminada, las sesiones se ordenan por fecha de inicio. Cambie "
+"esto proporcionando un arreglo del tipo ['field' => 'end_date', 'order' => "
+"'desc']."
+
+msgid "Let teachers set some courses in read-only mode when opened through sessions. In the course properties, check the 'Lock course in session' option."
+msgstr ""
+"Permita que los tutores establezcan algunos cursos en modo de solo lectura "
+"cuando se acceda a través de sesiones. En las propiedades del curso, marque "
+"la opción 'Bloquear curso en sesión'."
+
+msgid "Array of options to apply as default parameters in the CSV/XML session import."
+msgstr ""
+"Conjunto de opciones para aplicar como parámetros predeterminados en la "
+"importación de sesiones por CSV/XML."
+
+msgid "Select the default tab you want to see when opening the sessions list as admin."
+msgstr ""
+"Seleccione la pestaña predeterminada que desea ver al abrir la lista de "
+"sesiones como administrador."
+
+msgid "Allow user to collapse sessions in My sessions"
+msgstr "Permitir al usuario contraer sesiones en Mis sesiones"
+
+msgid "Auto-created session's creator ID"
+msgstr "ID del creador de la sesión creada automáticamente"
+
+msgid "Default sessions list view"
+msgstr "Vista predeterminada de la lista de sesiones"
+
+msgid "Define an array of columns for the following reports: 'course_session', 'my_students_lp', 'my_progress_lp', 'my_progress_courses'."
+msgstr ""
+"Defina un array de columnas para los siguientes informes: 'course_session', "
+"'my_students_lp', 'my_progress_lp', 'my_progress_courses'."
+
+msgid "Duration (in days) of the single-user, auto-created sessions. After expiry, the user cannot register to the same course (no other session is created)."
+msgstr ""
+"Duración (en días) de las sesiones creadas automáticamente para un solo "
+"usuario. Tras su expiración, el usuario no puede inscribirse al mismo curso ("
+"no se crea ninguna otra sesión)."
+
+msgid "Show all learner publications (from base course and from all sessions) in the work/pending.php page of the base course."
+msgstr ""
+"Mostrar todas las publicaciones de alumnos (del curso base y de todas sus "
+"sesiones) en la página work/pending.php del curso base."
+
+msgid "Allow teachers to set which skills are acquired through their courses"
+msgstr ""
+"Permitir que los profesores establezcan qué competencias se adquieren a "
+"través de sus cursos"
+
+msgid "Sessions support manual sorting"
+msgstr "Las sesiones admiten ordenación manual"
+
+msgid "Fields to search by in catalogue"
+msgstr "Campos de búsqueda en el catálogo"
+
+msgid "Change the default sorting of session in My sessions"
+msgstr "Cambie el orden predeterminado de las sesiones en Mis sesiones"
+
+msgid "Hide sessions list in reporting tool"
+msgstr "Ocultar la lista de sesiones en la herramienta de informes"
+
+msgid "Set mandatory extra fields in session creation form"
+msgstr ""
+"Establecer campos de perfil obligatorios en el formulario de creación de "
+"sesión"
+
+msgid "Session admin can access batch user import, update and export"
+msgstr ""
+"El administrador de la sesión puede acceder a la importación, actualización "
+"y exportación de usuarios por lotes"
+
+msgid "Set preferences for the courses and sessions catalogues search options. If defined, this array will be used as a strict list of fields to let users search by."
+msgstr ""
+"Establezca preferencias para las opciones de búsqueda en los catálogos de "
+"cursos y sesiones. Si se define, este arreglo se utilizará como una lista "
+"estricta de campos para permitir que los usuarios busquen."
+
+msgid "Disable add class in session course for non-admin"
+msgstr "Desactivar añadir clase en curso-sesión para no administradores"
+
+msgid "My progress: show course details in session"
+msgstr "Mi progreso: mostrar detalles del curso en la sesión"
+
+msgid "Array of relationships between user extra fields and session extra fields, so the session can be pre-filled with data matching the user's data."
+msgstr ""
+"Array de relaciones entre campos de perfil adicionales del usuario y campos "
+"de perfil adicionales de la sesión, para que la sesión pueda ser pre-llenada "
+"con datos que coincidan con los datos del usuario."
+
+msgid "Send notification to learner when a skill/badge has been acquired"
+msgstr ""
+"Envíe una notificación al alumno cuando se haya adquirido una competencia/"
+"insignia"
+
+msgid "Pre-fill session fields with user fields"
+msgstr ""
+"Rellenar automáticamente los campos de la sesión con los campos del usuario"
+
+msgid "If enabled, skills can only be visible for admins, teachers (related to a user via a course), and HRM users (if related to a user)."
+msgstr ""
+"Si está activado, las competencias solo pueden ser visibles para "
+"administradores, profesores (relacionados con un usuario a través de un "
+"curso) y responsables de RRHH (si están relacionados con un usuario)."
+
+msgid "Hide session chart in My progress"
+msgstr "Ocultar el gráfico de la sesión en Mi progreso"
+
+msgid "Require the listed fields during session creation."
+msgstr "Exigir los campos enumerados durante la creación de la sesión."
+
+msgid "Add reset password link to e-mail notification of subscription to session"
+msgstr ""
+"Agregar enlace para restablecer contraseña en la notificación por correo "
+"electrónico de suscripción a la sesión"
+
+msgid "Options for session import"
+msgstr "Opciones para la importación de sesiones"
+
+msgid "Allow teachers to access learners' skills"
+msgstr "Permitir a los profesores acceder a las competencias de los alumnos"
+
+msgid "Display all details of each course in session when clicking on session details."
+msgstr ""
+"Muestre todos los detalles de cada curso en la sesión al hacer clic en "
+"detalles de la sesión."
+
+msgid "Otherwise, session coaches only have access to sessions by duration during the active duration."
+msgstr ""
+"De lo contrario, los tutores de la sesión solo tienen acceso a las sesiones "
+"por duración durante el período activo."
+
+msgid "Hide skill levels feature"
+msgstr "Ocultar la función de niveles de competencia"
+
+msgid "Disable tab to add classes in session course for non-admins."
+msgstr ""
+"Desactivar la pestaña para agregar clases en el curso de la sesión para "
+"usuarios que no son administradores."

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-07-19 21:51+0000\n"
+"PO-Revision-Date: 2024-07-25 12:36+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
 "messages/fr/>\n"
@@ -1848,7 +1848,7 @@ msgid "Trainer"
 msgstr "Responsable"
 
 msgid "Description"
-msgstr "Description de ce cours"
+msgstr "Description"
 
 msgid "Course backup"
 msgstr "Archivage de ce cours"
@@ -26004,7 +26004,7 @@ msgid "Text appearing at the end of the test when the user has failed."
 msgstr "Texte apparaissant à la fin du test lorsque l'utilisateur a échoué."
 
 msgid "Course management"
-msgstr "Gestion des courss"
+msgstr "Gestion des cours"
 
 msgid "Platform management"
 msgstr "Gestion de la plateforme"

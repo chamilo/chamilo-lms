@@ -72,7 +72,7 @@ class MessageRelUser
     #[ORM\Column(name: 'receiver_type', type: 'smallint', nullable: false)]
     protected int $receiverType;
 
-    #[Groups(['message:read', 'message:write', 'message_rel_user:read'])]
+    #[Groups(['message:read', 'message:write', 'message_rel_user:read', 'message_rel_user:write'])]
     #[ORM\Column(name: 'starred', type: 'boolean', nullable: false)]
     protected bool $starred;
 

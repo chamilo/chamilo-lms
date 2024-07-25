@@ -148,6 +148,7 @@ import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.v
 import { useFormatDate } from "../../composables/formatDate"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 import messageTagService from "../../services/messageTagService"
+import messageRelUserService from "../../services/messagereluser"
 import { useSecurityStore } from "../../store/securityStore"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import MessageCommunicationParty from "./MessageCommunicationParty.vue"
@@ -186,11 +187,8 @@ store.dispatch("message/load", id).then((responseItem) => {
 
   // Change to read.
   if (myReceiver.value && false === myReceiver.value.read) {
-    store
-      .dispatch("messagereluser/update", {
-        "@id": myReceiver.value["@id"],
-        read: true,
-      })
+    messageRelUserService
+      .update(myReceiver.value["@id"], { read: true })
       .then(() => messageRelUserStore.findUnreadCount())
   }
 })
@@ -213,11 +211,7 @@ function getTagIndex(tag) {
   return myReceiver.value.tags.findIndex((receiverTag) => receiverTag["@id"] === tag["@id"])
 }
 
-function mapTagsToIds() {
-  return myReceiver.value.tags.map((receiverTag) => receiverTag["@id"])
-}
-
-async function onRemoveTagFromMessage(tag) {
+function onRemoveTagFromMessage(tag) {
   const index = getTagIndex(tag)
 
   if (index < 0) {
@@ -226,12 +220,12 @@ async function onRemoveTagFromMessage(tag) {
 
   myReceiver.value.tags.splice(index, 1)
 
-  const newTagIds = mapTagsToIds()
-
-  await store.dispatch("messagereluser/update", {
-    "@id": myReceiver.value["@id"],
-    tags: newTagIds,
-  })
+  messageRelUserService
+    .update(myReceiver.value["@id"], {
+      tags: myReceiver.value.tags,
+    })
+    .then(({ tags: newTagList }) => (myReceiver.value.tags = newTagList))
+    .catch((e) => console.log(e))
 }
 
 function reply() {
@@ -264,36 +258,28 @@ async function onSearchTags(query) {
 }
 
 async function onItemSelect({ value }) {
-  const newTag = computed(() => store.state.messagetag.created)
-
   if (!value["@id"]) {
-    try {
-      await store.dispatch("messagetag/create", {
-        user: securityStore.user["@id"],
-        tag: value.tag,
-      })
-    } catch (e) {
-      return
-    }
+    myReceiver.value.tags.push({
+      user: securityStore.user["@id"],
+      tag: value.tag,
+    })
   } else {
     const existingIndex = getTagIndex(value) >= 0
 
     if (existingIndex) {
       return
     }
+
+    myReceiver.value.tags.push(value)
   }
+
+  messageRelUserService
+    .update(myReceiver.value["@id"], {
+      tags: myReceiver.value.tags,
+    })
+    .then(({ tags: newTagList }) => (myReceiver.value.tags = newTagList))
+    .catch((e) => console.log(e))
 
   foundTag.value = ""
-
-  if (myReceiver.value && newTag.value) {
-    myReceiver.value.tags.push(newTag.value)
-
-    const newTagIds = mapTagsToIds()
-
-    await store.dispatch("messagereluser/update", {
-      "@id": myReceiver.value["@id"],
-      tags: newTagIds,
-    })
-  }
 }
 </script>

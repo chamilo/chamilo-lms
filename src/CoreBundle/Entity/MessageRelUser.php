@@ -16,7 +16,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['message_rel_user:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['message_rel_user:write'],
+    ],
+)]
 #[UniqueEntity(
     fields: ['message', 'receiver'],
     message: 'This message-receiver relation is already used.',
@@ -40,22 +47,24 @@ class MessageRelUser
     public const TYPE_TO = 1;
     public const TYPE_CC = 2;
 
+    #[Groups(['message_rel_user:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
+    #[Groups(['message_rel_user:read'])]
     #[ORM\ManyToOne(targetEntity: Message::class, cascade: ['persist'], inversedBy: 'receivers')]
     #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', nullable: false)]
     protected Message $message;
 
     #[Assert\NotNull]
-    #[Groups(['message:read', 'message:write'])]
+    #[Groups(['message:read', 'message:write', 'message_rel_user:read'])]
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'receivedMessages')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $receiver;
 
-    #[Groups(['message:read', 'message:write'])]
+    #[Groups(['message:read', 'message:write', 'message_rel_user:read', 'message_rel_user:write'])]
     #[ORM\Column(name: 'msg_read', type: 'boolean', nullable: false)]
     protected bool $read;
 
@@ -63,7 +72,7 @@ class MessageRelUser
     #[ORM\Column(name: 'receiver_type', type: 'smallint', nullable: false)]
     protected int $receiverType;
 
-    #[Groups(['message:read', 'message:write'])]
+    #[Groups(['message:read', 'message:write', 'message_rel_user:read'])]
     #[ORM\Column(name: 'starred', type: 'boolean', nullable: false)]
     protected bool $starred;
 
@@ -71,7 +80,7 @@ class MessageRelUser
      * @var Collection<int, MessageTag>
      */
     #[Assert\Valid]
-    #[Groups(['message:read'])]
+    #[Groups(['message:read', 'message_rel_user:read', 'message_rel_user:write'])]
     #[ORM\JoinTable(name: 'message_rel_user_rel_tags')]
     #[ORM\ManyToMany(targetEntity: MessageTag::class, inversedBy: 'messageRelUsers', cascade: ['persist', 'remove'])]
     protected Collection $tags;

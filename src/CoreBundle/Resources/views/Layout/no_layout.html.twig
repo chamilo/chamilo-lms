@@ -2,9 +2,7 @@
 {# overrides everything inside body no-footer no-header #}
 {% block chamilo_wrap %}
     {%- autoescape %}
-        {% if not from_vue %}
-            <div id="app" data-flashes="{{ app.flashes()|json_encode }}"></div>
-        {% endif %}
+        {%- include '@ChamiloCore/Layout/vue_setup.html.twig' %}
     {% endautoescape -%}
     {% autoescape false %}
         <section id="sectionMainContent" class="section-content">

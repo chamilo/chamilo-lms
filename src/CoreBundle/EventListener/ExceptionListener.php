@@ -57,7 +57,6 @@ class ExceptionListener
         $message = $this->twig->render(
             '@ChamiloCore/Exception/error.html.twig',
             [
-                'from_vue' => false,
                 'exception' => $exception,
             ]
         );

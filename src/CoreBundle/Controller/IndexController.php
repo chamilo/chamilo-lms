@@ -33,7 +33,7 @@ class IndexController extends BaseController
     #[Route('/p/{slug}', name: 'public_page')]
     public function index(): Response
     {
-        return $this->render('@ChamiloCore/Index/vue.html.twig');
+        return $this->render('@ChamiloCore/Layout/no_layout.html.twig', ['content' => '']);
     }
 
     /**

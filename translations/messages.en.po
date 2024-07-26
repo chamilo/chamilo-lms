@@ -27735,3 +27735,10 @@ msgstr "Step 4 - Database settings"
 
 msgid "Database host"
 msgstr "Database host"
+
+msgid "Step 7 - Installation process execution"
+msgstr "Step 7 - Installation process execution"
+
+msgid "Step 7 - Update process execution"
+msgstr "Step 7 - Update process execution"
+

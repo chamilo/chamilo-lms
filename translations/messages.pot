@@ -27728,3 +27728,10 @@ msgstr ""
 
 msgid "Database host"
 msgstr ""
+
+msgid "Step 7 - Installation process execution"
+msgstr ""
+
+msgid "Step 7 - Update process execution"
+msgstr ""
+

@@ -9,7 +9,7 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 }
 
 Encore.setOutputPath("public/build/")
-  //.setManifestKeyPrefix("public/build/")
+  .setManifestKeyPrefix("public/build/")
   .setPublicPath("/build")
   .cleanupOutputBeforeBuild()
   .enableBuildNotifications()

@@ -5,7 +5,7 @@ framework:
 when@dev:
     framework:
         mailer:
-            dsn: '%env(MAILER_DSN)%'
+            dsn: 'null://null'
 
 when@test:
     framework:

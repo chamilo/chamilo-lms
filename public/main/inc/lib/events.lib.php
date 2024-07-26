@@ -229,13 +229,9 @@ class Event
         $user = api_get_user_entity();
         $course = api_get_course_entity();
 
-        $em = Database::getManager();
-
-        $repository = $em->getRepository(TrackEDownloads::class);
-
-        $resourceLinkId = $course->getFirstResourceLink()->getId();
-
-        return $repository->saveDownload($user->getId(), $resourceLinkId, $documentUrl);
+        return Container::getTrackEDownloadsRepository()
+            ->saveDownload($user, $course->getFirstResourceLink(), $documentUrl)
+        ;
     }
 
     /**

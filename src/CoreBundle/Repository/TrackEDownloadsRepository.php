@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\TrackEDownloads;
+use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,17 +23,13 @@ class TrackEDownloadsRepository extends ServiceEntityRepository
     /**
      * Save record of a resource being downloaded in track_e_downloads.
      */
-    public function saveDownload(int $userId, int $resourceLinkId, string $documentUrl): int
+    public function saveDownload(User $user, ?ResourceLink $resourceLink, string $documentUrl): int
     {
-        $download = new TrackEDownloads();
-        $download->setDownDocPath($documentUrl);
-        $download->setDownUserId($userId);
-        $download->setDownDate(new DateTime());
-
-        $resourceLink = $this->_em->getRepository(ResourceLink::class)->find($resourceLinkId);
-        if ($resourceLink) {
-            $download->setResourceLink($resourceLink);
-        }
+        $download = (new TrackEDownloads())
+            ->setDownDocPath($documentUrl)
+            ->setDownUserId($user->getId())
+            ->setDownDate(new DateTime())
+            ->setResourceLink($resourceLink);
 
         $this->_em->persist($download);
         $this->_em->flush();

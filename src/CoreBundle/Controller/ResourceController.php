@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEDownloads;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
+use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -134,7 +135,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * View file of a resource node.
      */
     #[Route('/{tool}/{type}/{id}/view', name: 'chamilo_core_resource_view', methods: ['GET'])]
-    public function view(Request $request, EntityManagerInterface $entityManager): Response
+    public function view(Request $request, TrackEDownloadsRepository $trackEDownloadsRepository): Response
     {
         $id = $request->get('id');
         $filter = (string) $request->get('filter'); // See filters definitions in /config/services.yml.
@@ -148,10 +149,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $firstResourceLink = $resourceNode->getResourceLinks()->first();
         $firstResourceFile = $resourceNode->getResourceFiles()->first();
         if ($firstResourceLink && $user && $firstResourceFile) {
-            $resourceLinkId = $firstResourceLink->getId();
             $url = $firstResourceFile->getOriginalName();
-            $downloadRepository = $entityManager->getRepository(TrackEDownloads::class);
-            $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
+            $trackEDownloadsRepository->saveDownload($user, $firstResourceLink, $url);
         }
 
         $cid = (int) $request->query->get('cid');
@@ -210,11 +209,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     /**
      * Download file of a resource node.
-     *
-     * @return RedirectResponse|StreamedResponse
      */
     #[Route('/{tool}/{type}/{id}/download', name: 'chamilo_core_resource_download', methods: ['GET'])]
-    public function download(Request $request, EntityManagerInterface $entityManager)
+    public function download(Request $request, TrackEDownloadsRepository $trackEDownloadsRepository): Response
     {
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
@@ -236,10 +233,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $user = $this->userHelper->getCurrent();
             $firstResourceLink = $resourceNode->getResourceLinks()->first();
             if ($firstResourceLink) {
-                $resourceLinkId = $firstResourceLink->getId();
                 $url = $resourceNode->getResourceFiles()->first()->getOriginalName();
-                $downloadRepository = $entityManager->getRepository(TrackEDownloads::class);
-                $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
+                $trackEDownloadsRepository->saveDownload($user, $firstResourceLink, $url);
             }
 
             // Redirect to download single file.

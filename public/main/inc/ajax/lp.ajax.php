@@ -170,9 +170,9 @@ switch ($action) {
         }
 
         foreach (['video', 'audio'] as $type) {
-            if (isset($_FILES["${type}-blob"])) {
-                $fileName = $_POST["${type}-filename"];
-                $file = $_FILES["${type}-blob"];
+            if (isset($_FILES["{$type}-blob"])) {
+                $fileName = $_POST["{$type}-filename"];
+                $file = $_FILES["{$type}-blob"];
                 $title = $_POST['audio-title'];
                 $fileInfo = pathinfo($fileName);
 

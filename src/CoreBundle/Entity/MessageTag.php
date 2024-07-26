@@ -56,21 +56,21 @@ class MessageTag
 {
     use TimestampableTypedEntity;
 
-    #[Groups(['message_tag:read', 'message:read'])]
+    #[Groups(['message_tag:read', 'message:read', 'message_rel_user:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
     #[Assert\NotBlank]
-    #[Groups(['message_tag:read', 'message_tag:write'])]
+    #[Groups(['message_tag:read', 'message_tag:write', 'message_rel_user:write'])]
     #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'messageTags')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'cascade')]
     protected User $user;
 
     #[Assert\NotBlank]
-    #[Groups(['message_tag:read', 'message_tag:write', 'message:read'])]
+    #[Groups(['message_tag:read', 'message_tag:write', 'message:read', 'message_rel_user:read', 'message_rel_user:write'])]
     #[ORM\Column(name: 'tag', type: 'string', nullable: false)]
     protected string $tag;
 

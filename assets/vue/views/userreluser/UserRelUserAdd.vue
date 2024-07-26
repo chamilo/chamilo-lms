@@ -37,7 +37,7 @@
   </div>
 </template>
 <script setup>
-import { onMounted, ref, defineEmits } from "vue"
+import { onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"

@@ -79,7 +79,6 @@ final class ThemeHelper
     public function getThemeAssetUrl(string $path, bool $absoluteUrl = false): string
     {
         $themeName = $this->getVisualTheme();
-        error_log("angelfqc ".$themeName);
 
         try {
             if (!$this->filesystem->fileExists($themeName.DIRECTORY_SEPARATOR.$path)) {

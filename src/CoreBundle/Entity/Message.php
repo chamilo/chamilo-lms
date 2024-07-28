@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Filter\SearchOrFilter;
@@ -51,6 +52,20 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: MessageByGroupStateProvider::class
         ),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
+        new Patch(
+            uriTemplate: '/messages/{id}/delete-for-user',
+            inputFormats: ['json' => ['application/json']],
+            security: "is_granted('ROLE_USER')",
+            output: false,
+            processor: MessageProcessor::class,
+        ),
+        new Patch(
+            uriTemplate: '/messages/{id}/check-and-update-status',
+            inputFormats: ['json' => ['application/json']],
+            security: "is_granted('ROLE_USER')",
+            output: false,
+            processor: MessageProcessor::class,
+        ),
     ],
     normalizationContext: [
         'groups' => ['message:read'],
@@ -62,17 +77,15 @@ use Symfony\Component\Validator\Constraints as Assert;
     processor: MessageProcessor::class,
 )]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['title', 'sendDate'])]
-#[ApiFilter(
-    filterClass: SearchFilter::class,
-    properties: [
-        'msgType' => 'exact',
-        'status' => 'exact',
-        'sender' => 'exact',
-        'receivers.receiver' => 'exact',
-        'receivers.tags.tag' => 'exact',
-        'parent' => 'exact',
-    ]
-)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'msgType' => 'exact',
+    'status' => 'exact',
+    'sender' => 'exact',
+    'receivers.receiver' => 'exact',
+    'receivers.receiverType' => 'exact',
+    'receivers.tags.tag' => 'exact',
+    'parent' => 'exact',
+])]
 #[ApiFilter(
     BooleanFilter::class,
     properties: ['receivers.read']
@@ -85,7 +98,7 @@ class Message
     public const MESSAGE_TYPE_INVITATION = 6;
     public const MESSAGE_TYPE_CONVERSATION = 7;
     // status
-    public const MESSAGE_STATUS_DELETED = 3;
+    public const MESSAGE_STATUS_SENDER_DELETED = 3;
     public const MESSAGE_STATUS_DRAFT = 4;
     public const MESSAGE_STATUS_INVITATION_PENDING = 5;
     public const MESSAGE_STATUS_INVITATION_ACCEPTED = 6;

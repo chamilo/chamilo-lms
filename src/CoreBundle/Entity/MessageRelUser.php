@@ -46,6 +46,7 @@ class MessageRelUser
 {
     public const TYPE_TO = 1;
     public const TYPE_CC = 2;
+    public const TYPE_SENDER = 8;
 
     #[Groups(['message_rel_user:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]

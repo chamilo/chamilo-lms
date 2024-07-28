@@ -10699,3 +10699,22 @@ function api_encrypt_hash($data, $secret)
 
   return base64_encode($iv) . base64_encode($encrypted . $tag);
 }
+
+/**
+ * Check existence of a user extra field with a specific value
+
+ *
+ * @param string $extraField       The name of the extra field to check.
+ * @param string $extraFieldValue  The value of the extra field to validate against.
+ *
+ * @return bool True if the extra field with the specified value exists, false otherwise.
+ */
+function api_user_extra_field_validation($extraField, $extraFieldValue) {
+    $fieldValue = new ExtraFieldValue('user');
+    $data = $fieldValue->get_item_id_from_field_variable_and_field_value($extraField, $extraFieldValue, false, true);
+
+    if ($data) {
+        return true;
+    }
+    return false;
+}

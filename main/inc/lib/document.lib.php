@@ -3758,7 +3758,7 @@ class DocumentManager
         $return = '';
         if (!empty($documents)) {
             foreach ($documents as $key => $resource) {
-                if (isset($resource['id']) && is_int($resource['id'])) {
+                if (isset($resource['id']) && 0 === (int) $resource['id']) {
                     $mainFolderResource = [
                         'id' => $resource['id'],
                         'title' => $key,
@@ -3778,7 +3778,7 @@ class DocumentManager
                             $target,
                             $add_move_button,
                             $overwrite_url,
-                            null,
+                            false,
                             $addAudioPreview
                         );
                     }

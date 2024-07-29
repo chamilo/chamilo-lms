@@ -634,7 +634,7 @@ class ScoreDisplay
             $highest = 0;
             foreach ($custom_display as $element) {
                 if ($element['score'] > $highest) {
-                    $highest = $element['score'];
+                    $highest = (float) $element['score'];
                 }
                 $converted[] = $element;
             }
@@ -648,7 +648,7 @@ class ScoreDisplay
             foreach ($converted as $element) {
                 $newelement = [];
                 if (isset($highest) && !empty($highest) && $highest > 0) {
-                    $newelement['score'] = $element['score'] / $highest;
+                    $newelement['score'] = (float) $element['score'] / $highest;
                 } else {
                     $newelement['score'] = 0;
                 }

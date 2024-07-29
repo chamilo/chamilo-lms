@@ -9,6 +9,7 @@
 //@import '~jquery-ui/themes/base/all.css';
 
 @import "tinymce/skins/ui/oxide/skin.css";
+@import './editor_content.css';
 
 @layer utilities {
   .border-gray-300 {

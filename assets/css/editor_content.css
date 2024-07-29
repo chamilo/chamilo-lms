@@ -2,6 +2,33 @@
 Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
 */
 
+/* Reset styles */
+.tiny-content {
+    all: initial;
+    display: block;
+    width: 100%;
+}
+
+.tiny-content * {
+    all: revert;
+    box-sizing: border-box;
+}
+
+/* Specific styles for TinyMCE content */
+.tiny-content img {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+.tiny-content table {
+    margin: auto !important;
+    width: auto !important;
+}
+
+
 /* Hack for show Bootstrap alerts in CKEditor' style select */
 .cke_panel_listItem a > :first-child {
     margin-bottom: 0;

@@ -3763,9 +3763,13 @@ class DocumentManager
                         'id' => $resource['id'],
                         'title' => $key,
                     ];
+                    $close = false;
 
                     if ($folderId === false) {
-                        $return .= self::parseFolder($folderId, $mainFolderResource, $lp_id);
+                        $parsedFolder = self::parseFolder($folderId, $mainFolderResource, $lp_id);
+                        $close = (bool) $parsedFolder;
+
+                        $return .= $parsedFolder;
                     }
 
                     if (isset($resource['files'])) {
@@ -3782,8 +3786,11 @@ class DocumentManager
                             $addAudioPreview
                         );
                     }
-                    $return .= '</div>';
-                    $return .= '</ul>';
+
+                    if ($close) {
+                        $return .= '</div>';
+                        $return .= '</ul>';
+                    }
                 } else {
                     if ($resource['filetype'] === 'folder') {
                         $return .= self::parseFolder($folderId, $resource, $lp_id);

@@ -7237,7 +7237,7 @@ class DocumentManager
         // if in LP, hidden folder are displayed in grey
         $folder_class_hidden = '';
         if ($lp_id) {
-            if (isset($resource['visible']) && $resource['visible'] == 0) {
+            if (isset($resource['visibility']) && $resource['visibility'] == 0) {
                 $folder_class_hidden = ' doc_folder_hidden'; // in base.css
             }
         }

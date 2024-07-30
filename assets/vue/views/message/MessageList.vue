@@ -217,7 +217,7 @@ import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import { useConfirm } from "primevue/useconfirm"
 import { useQuery } from "@vue/apollo-composable"
-import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX } from "../../components/message/constants"
+import { MESSAGE_STATUS_SENDER_DELETED, MESSAGE_TYPE_INBOX, MESSAGE_TYPE_SENDER } from "../../components/message/constants"
 import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag"
 import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
@@ -226,6 +226,7 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import InputGroup from "primevue/inputgroup"
 import InputText from "primevue/inputtext"
 import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
+import { messageService } from "../../services/message"
 
 const route = useRoute()
 const router = useRouter()
@@ -367,6 +368,8 @@ function showInbox() {
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
+    'receivers.receiver': securityStore.user["@id"],
+    'receivers.receiverType': MESSAGE_TYPE_INBOX,
   }
 
   loadMessages()
@@ -381,6 +384,7 @@ function showInboxByTag(tag) {
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
+    'receivers.receiverType': MESSAGE_TYPE_INBOX,
   }
 
   loadMessages()
@@ -396,6 +400,7 @@ function showUnread() {
     "receivers.read": false,
     itemsPerPage: initialRowsPerPage,
     page: 1,
+    'receivers.receiverType': MESSAGE_TYPE_INBOX,
   }
 
   loadMessages()
@@ -408,6 +413,7 @@ function showSent() {
 
   fetchPayload = {
     sender: securityStore.user["@id"],
+    "receivers.receiverType": MESSAGE_TYPE_SENDER,
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
@@ -449,17 +455,26 @@ function findMyReceiver(message) {
   return receivers.find(({ receiver }) => receiver["@id"] === securityStore.user["@id"])
 }
 
+function extractUserId(apiId) {
+  return apiId.split('/').pop()
+}
+
 async function deleteMessage(message) {
   try {
+    const userId = extractUserId(securityStore.user["@id"])
+    const messageId = extractUserId(message["@id"])
+
     if (message.sender["@id"] === securityStore.user["@id"]) {
-      message.status = MESSAGE_STATUS_DELETED
-      await store.dispatch("message/update", message)
+      await messageService.deleteMessageForUser(messageId, userId)
     } else {
       const myReceiver = findMyReceiver(message)
       if (myReceiver) {
         await store.dispatch("messagereluser/del", myReceiver)
       }
     }
+
+    await messageService.checkAndUpdateMessageStatus(messageId)
+
     notification.showSuccessNotification(t("Message deleted"))
     await messageRelUserStore.findUnreadCount()
     loadMessages()

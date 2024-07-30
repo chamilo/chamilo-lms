@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\DeleteOperationInterface;
 use ApiPlatform\Metadata\Operation;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\Message;
@@ -16,6 +17,8 @@ use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Notification;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Vich\UploaderBundle\Storage\FlysystemStorage;
 
 final class MessageProcessor implements ProcessorInterface
@@ -26,12 +29,22 @@ final class MessageProcessor implements ProcessorInterface
         private readonly FlysystemStorage $storage,
         private readonly EntityManagerInterface $entityManager,
         private readonly ResourceNodeRepository $resourceNodeRepository,
+        private readonly Security $security,
+        private readonly RequestStack $requestStack
     ) {}
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         if ($operation instanceof DeleteOperationInterface) {
             return $this->removeProcessor->process($data, $operation, $uriVariables, $context);
+        }
+
+        if ($operation instanceof Patch && str_contains($operation->getUriTemplate(), 'delete-for-user')) {
+            return $this->processDeleteForUser($data);
+        }
+
+        if ($operation instanceof Patch && str_contains($operation->getUriTemplate(), 'check-and-update-status')) {
+            return $this->checkAndUpdateMessageStatus($data);
         }
 
         /** @var Message $message */
@@ -47,12 +60,66 @@ final class MessageProcessor implements ProcessorInterface
             }
         }
 
+        $user = $this->security->getUser();
+        if (!$user) {
+            throw new \LogicException('User not found.');
+        }
+        $messageRelUser = new MessageRelUser();
+        $messageRelUser->setMessage($message);
+        $messageRelUser->setReceiver($user);
+        $messageRelUser->setReceiverType(MessageRelUser::TYPE_SENDER);
+        $this->entityManager->persist($messageRelUser);
+
+        if ($message->getMsgType() === Message::MESSAGE_TYPE_INBOX) {
+            $this->saveNotificationForInboxMessage($message);
+        }
+
         $this->entityManager->flush();
 
-        if ($operation instanceof Post) {
-            if (Message::MESSAGE_TYPE_INBOX === $message->getMsgType()) {
-                $this->saveNotificationForInboxMessage($message);
-            }
+        return $message;
+    }
+
+    private function processDeleteForUser($data): Message
+    {
+        /** @var Message $message */
+        $message = $data;
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request) {
+            throw new \LogicException('Cannot get current request');
+        }
+
+        $requestData = json_decode($request->getContent(), true);
+        if (!isset($requestData['userId'])) {
+            throw new \InvalidArgumentException('The field userId is required.');
+        }
+
+        $userId = $requestData['userId'];
+        $messageRelUserRepository = $this->entityManager->getRepository(MessageRelUser::class);
+        $messageRelUser = $messageRelUserRepository->findOneBy([
+            'message' => $message,
+            'receiver' => $userId,
+        ]);
+
+        if ($messageRelUser) {
+            $this->entityManager->remove($messageRelUser);
+            $this->entityManager->flush();
+        }
+
+        return $message;
+    }
+
+    private function checkAndUpdateMessageStatus($data): Message
+    {
+        /** @var Message $message */
+        $message = $data;
+
+        $messageRelUserRepository = $this->entityManager->getRepository(MessageRelUser::class);
+        $remainingReceivers = $messageRelUserRepository->count(['message' => $message]);
+
+        if ($remainingReceivers === 0) {
+            $message->setStatus(Message::MESSAGE_STATUS_SENDER_DELETED);
+            $this->entityManager->flush();
         }
 
         return $message;

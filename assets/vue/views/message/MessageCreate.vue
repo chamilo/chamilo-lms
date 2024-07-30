@@ -36,12 +36,18 @@ const message = ref({
 const isLoading = ref(false)
 
 const onSubmit = async (messageToSend) => {
+  if (!messageToSend.receivers || messageToSend.receivers.length === 0) {
+    notification.showErrorNotification("You must add at least one recipient.")
+    return
+  }
+
   isLoading.value = true
 
   try {
     await messageService.create(messageToSend)
+    notification.showSuccessNotification("Message sent succesfully.")
   } catch (error) {
-    notification.showErrorNotification(error)
+    notification.showErrorNotification(error.message || "Error sending message.")
   } finally {
     isLoading.value = false
   }

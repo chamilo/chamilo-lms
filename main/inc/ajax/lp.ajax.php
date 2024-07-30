@@ -43,7 +43,7 @@ switch ($action) {
         break;
     case 'get_documents':
         $courseInfo = api_get_course_info();
-        $folderId = isset($_GET['folder_id']) ? $_GET['folder_id'] : null;
+        $folderId = $_GET['folder_id'] ?? false;
         if (empty($folderId)) {
             exit;
         }

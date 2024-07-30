@@ -3758,7 +3758,7 @@ class DocumentManager
         $return = '';
         if (!empty($documents)) {
             foreach ($documents as $key => $resource) {
-                if (isset($resource['id']) && 0 === (int) $resource['id']) {
+                if (isset($resource['id']) && isset($resource['files'])) {
                     $mainFolderResource = [
                         'id' => $resource['id'],
                         'title' => $key,

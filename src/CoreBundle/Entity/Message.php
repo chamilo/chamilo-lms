@@ -98,7 +98,7 @@ class Message
     public const MESSAGE_TYPE_INVITATION = 6;
     public const MESSAGE_TYPE_CONVERSATION = 7;
     // status
-    public const MESSAGE_STATUS_SENDER_DELETED = 3;
+    public const MESSAGE_STATUS_DELETED = 3;
     public const MESSAGE_STATUS_DRAFT = 4;
     public const MESSAGE_STATUS_INVITATION_PENDING = 5;
     public const MESSAGE_STATUS_INVITATION_ACCEPTED = 6;

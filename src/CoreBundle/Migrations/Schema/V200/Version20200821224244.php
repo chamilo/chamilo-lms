@@ -66,7 +66,7 @@ final class Version20200821224244 extends AbstractMigrationChamilo
 
         $newTypeQueries[] = sprintf(
             'UPDATE message SET status = %d WHERE msg_type = %d',
-            Message::MESSAGE_STATUS_SENDER_DELETED,
+            Message::MESSAGE_STATUS_DELETED,
             self::OLD_MESSAGE_STATUS_DELETED
         );
         $newTypeQueries[] = sprintf(

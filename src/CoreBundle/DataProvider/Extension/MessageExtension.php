@@ -105,7 +105,7 @@ final class MessageExtension implements QueryCollectionExtensionInterface // , Q
 
         $qb->setParameters([
             'current' => $user,
-            'deleted' => Message::MESSAGE_STATUS_SENDER_DELETED,
+            'deleted' => Message::MESSAGE_STATUS_DELETED,
             // 'currentList' => [$user->getId()],
             'inbox' => Message::MESSAGE_TYPE_INBOX,
             // 'outbox' => Message::MESSAGE_TYPE_OUTBOX,

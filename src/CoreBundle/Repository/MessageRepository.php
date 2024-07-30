@@ -79,7 +79,7 @@ class MessageRepository extends ServiceEntityRepository
         $qb->where('m.group = :groupId')
             ->andWhere('m.status NOT IN (:excludedStatuses)')
             ->setParameter('groupId', $groupId)
-            ->setParameter('excludedStatuses', [Message::MESSAGE_STATUS_DRAFT, Message::MESSAGE_STATUS_SENDER_DELETED])
+            ->setParameter('excludedStatuses', [Message::MESSAGE_STATUS_DRAFT, Message::MESSAGE_STATUS_DELETED])
             ->orderBy('m.id', 'ASC')
         ;
 
@@ -304,7 +304,7 @@ class MessageRepository extends ServiceEntityRepository
 
         /** @var Message $message */
         foreach ($messages as $message) {
-            $message->setMsgType(Message::MESSAGE_STATUS_SENDER_DELETED);
+            $message->setMsgType(Message::MESSAGE_STATUS_DELETED);
             $entityManager->persist($message);
         }
 

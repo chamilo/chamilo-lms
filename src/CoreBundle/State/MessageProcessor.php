@@ -118,7 +118,7 @@ final class MessageProcessor implements ProcessorInterface
         $remainingReceivers = $messageRelUserRepository->count(['message' => $message]);
 
         if ($remainingReceivers === 0) {
-            $message->setStatus(Message::MESSAGE_STATUS_SENDER_DELETED);
+            $message->setStatus(Message::MESSAGE_STATUS_DELETED);
             $this->entityManager->flush();
         }
 

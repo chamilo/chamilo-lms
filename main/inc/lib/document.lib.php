@@ -7223,7 +7223,7 @@ class DocumentManager
         //hide some folders
         if (in_array(
             $path,
-            ['shared_folder', 'chat_files', 'HotPotatoes_files', 'css', 'certificates']
+            ['/shared_folder', '/chat_files', '/HotPotatoes_files', '/css', '/certificates']
         )) {
             return null;
         } elseif (preg_match('/_groupdocs/', $path)) {

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-03-27 08:56+0000\n"
+"PO-Revision-Date: 2024-07-31 13:02+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Dutch <https://translation.chamilo.org/projects/chamilo/"
 "messages/nl/>\n"
@@ -551,7 +551,7 @@ msgid "Modification date"
 msgstr "Bewerkingsdatum"
 
 msgid "Weep"
-msgstr ""
+msgstr "Weint"
 
 msgid "Latest changes"
 msgstr "Meest recente aanpassingen"
@@ -18552,6 +18552,11 @@ msgstr ""
 
 msgid "You do not seem to have Flash support enabled in your browser. Chamilo only relies on Flash for a few features and will not lock you out in any way if you don't have it, but if you want to benefit from the complete set of tools from Chamilo, we recommend you install the Flash Plugin and restart your browser."
 msgstr ""
+"Het lijkt erop dat u geen Flash-ondersteuning heeft ingeschakeld in uw "
+"browser. Chamilo is slechts voor enkele functies afhankelijk van Flash en "
+"zal u op geen enkele manier buitensluiten als u het niet heeft, maar als u "
+"wilt profiteren van de volledige set tools van Chamilo, raden we u aan de "
+"Flash Plugin te installeren en uw browser opnieuw te starten."
 
 msgid "There are no questions for this exercise"
 msgstr "Er zijn geen vragen voor deze oefening"
@@ -18567,15 +18572,24 @@ msgstr "Ga verder met de test"
 
 msgid "Your browser does not have the QuickTime plugin installed. You can still use the platform, but to run a larger number of media file types, we suggest you might want to install it."
 msgstr ""
+"Uw browser heeft de QuickTime-plugin niet geïnstalleerd. U kunt het platform "
+"nog steeds gebruiken, maar om een groter aantal mediatypebestanden uit te "
+"voeren, raden we u aan deze te installeren."
 
 msgid "Your browser doesn't seem to have the Sun Java plugin installed. You can still use the platform, but you will lose a few of its capabilities."
 msgstr ""
+"Uw browser lijkt de Sun Java-plugin niet geïnstalleerd te hebben. U kunt het "
+"platform nog steeds gebruiken, maar u verliest enkele functionaliteiten."
 
 msgid "Your browser does not support Java"
 msgstr "Uw browser ondersteunt geen Java"
 
 msgid "Your browser has a Java version not supported by this tool.\nTo use it you have to install a Java Sun version higher than 24"
 msgstr ""
+"Uw browser heeft een Java-versie die niet wordt ondersteund door dit "
+"hulpmiddel.\n"
+"Om het te gebruiken moet u een Java Sun-versie installeren die hoger is dan "
+"24"
 
 msgid "If you do not want to see this message again during this session, click here"
 msgstr "Als u deze boodschap  niet meer wenst te zien tijdens de sessie, klik hier"
@@ -19371,7 +19385,7 @@ msgid "Users added"
 msgstr "Gebruikers toegevoegd"
 
 msgid "Plugin area"
-msgstr ""
+msgstr "Plugin-Bereich"
 
 msgid "No configuration settings found for this plugin"
 msgstr "Geen configuratie-instellingen gevonden voor deze plug-in"
@@ -19387,10 +19401,10 @@ msgid "You have entered the course <b>%s</b> in <b>%s</b>"
 msgstr "Je bent ingeschreven voor de cursus <b>%s</b>(%s)"
 
 msgid "Use the email as username"
-msgstr ""
+msgstr "Gebruik het e-mailadres als gebruikersnaam"
 
 msgid "Use the email in order to login to the system"
-msgstr ""
+msgstr "Gebruik de e-mail om in te loggen op het systeem"
 
 msgid "Congratulations you passed the test!"
 msgstr "Gefeliciteerd. U bent geslaagd!"
@@ -19399,37 +19413,51 @@ msgid "You didn't reach the minimum score"
 msgstr "U hebt de minimumscore niet gehaald."
 
 msgid "Activate the browser sniffer"
-msgstr ""
+msgstr "Activeer de browser sniffer"
 
+#, fuzzy
 msgid "This will enable an investigator of the capabilities that support browsers that connect to Chamilo. Therefore will improve user experience by adapting responses to the type of browser platform that connects, but will slow initial page load of users every time that they enter to the platform."
 msgstr ""
+"Dit zal een onderzoeker in staat stellen de mogelijkheden te onderzoeken die "
+"browsers ondersteunen die verbinding maken met Chamilo. Hierdoor zal de "
+"gebruikerservaring verbeteren door reacties aan te passen aan het type "
+"browserplatform dat verbinding maakt, maar het zal de initiële paginalaad "
+"van gebruikers vertragen elke keer dat zij het platform betreden."
 
 msgid "End test"
 msgstr "Einde van de test"
 
+#, fuzzy
 msgid "Activate Wami-recorder"
-msgstr ""
+msgstr "Activeer Wami-recorder"
 
+#, fuzzy
 msgid "Wami-recorder is a voice record tool on Flash"
-msgstr ""
+msgstr "Wami-recorder is een spraakopnametool op Flash"
 
 msgid "Event type"
-msgstr ""
+msgstr "Soort evenement"
 
 msgid "It will display a dialog box which asks for your permission to access the microphone, answer yes and close the dialog box (if you do not want to appear again, before closing check remember)"
 msgstr ""
+"Er verschijnt een dialoogvenster dat om uw toestemming vraagt om de "
+"microfoon te gebruiken, antwoord ja en sluit het dialoogvenster (als u niet "
+"wilt dat het opnieuw verschijnt, vink dan 'onthouden' aan voordat u het "
+"sluit)."
 
 msgid "Start recording by pressing the microphone and stop it by pressing again. Each time you do this will generate a file."
 msgstr ""
+"Begin met opnemen door op de microfoon te drukken en stop door nogmaals te "
+"drukken. Elke keer dat u dit doet, wordt een bestand gegenereerd."
 
 msgid "Before you activate recording it is necessary a file name."
-msgstr ""
+msgstr "Voordat u de opname activeert, is een bestandsnaam nodig."
 
 msgid "Enter filename here"
-msgstr ""
+msgstr "Voer hier de bestandsnaam in"
 
 msgid "Reload"
-msgstr ""
+msgstr "Opnieuw laden"
 
 msgid "Select a calification model"
 msgstr "Selecteer een kwalificatie model"
@@ -19441,28 +19469,28 @@ msgid "Components"
 msgstr "Componenten"
 
 msgid "Change setting visibility for the other portals"
-msgstr ""
+msgstr "Instellingen zichtbaarheid wijzigen voor de andere portals"
 
 msgid "This option is enabled if you have any evaluations or categories"
 msgstr "Deze optie is ingeschakeld als u evaluaties of categorieën hebt"
 
 msgid "Allow HR skills management"
-msgstr ""
+msgstr "Toestaan van HR-vaardighedenbeheer"
 
 msgid "Allows HR to manage skills"
-msgstr ""
+msgstr "Stelt HR in staat om vaardigheden te beheren"
 
 msgid "Default weight in Gradebook"
 msgstr ""
 
 msgid "This weight will be use in all courses by default"
-msgstr ""
+msgstr "Dit gewicht zal standaard in alle cursussen gebruikt worden"
 
 msgid "Time spent the last %s days"
-msgstr ""
+msgstr "In de afgelopen %s dagen besteedde tijd"
 
 msgid "Time spent between %s and %s"
-msgstr ""
+msgstr "Tijd doorgebracht tussen %s en %s"
 
 msgid "Go to the course"
 msgstr "Meld je aan voor de cursus"
@@ -19474,7 +19502,7 @@ msgid "When editing the Gradebook settings"
 msgstr ""
 
 msgid "Subtotal"
-msgstr ""
+msgstr "Subtotaal"
 
 msgid "Regions"
 msgstr "Regio's"
@@ -19486,16 +19514,19 @@ msgid "First Name and Last Name"
 msgstr "Voornaam en achternaam"
 
 msgid "Last Name and First Name"
-msgstr ""
+msgstr "Achternaam en Voornaam"
 
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 msgid "Detailed"
-msgstr ""
+msgstr "Gedetailleerd"
 
 msgid "This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator."
 msgstr ""
+"Deze optie is niet beschikbaar omdat deze activiteit onderdeel is van een "
+"beoordeling die momenteel vergrendeld is. Om de beoordeling te ontgrendelen, "
+"vraag het uw platformbeheerder."
 
 msgid "This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt)."
 msgstr "Deze evaluatie werd vergrendeld. Je kan ze niet ontgrendelen. Als je ze echt wil ontgrendelen, contacteer dan de platform beheerder, leg hem/haar uit waarom je de evaluatie moet kunnen ontgrendelen (anders kan je evaluatie als frauduleus worden aanzien)"
@@ -19505,6 +19536,14 @@ msgstr ""
 
 msgid "Once enabled, this option will enable locking of any assessment by the teachers of the corresponding course. This, in turn, will prevent any modification of results by the teacher inside the resources used in the assessment: exams, learning paths, tasks, etc. The only role authorized to unlock a locked assessment is the administrator. The teacher will be informed of this possibility. The locking and unlocking of gradebooks will be registered in the system's report of important activities"
 msgstr ""
+"Eenmaal ingeschakeld, zal deze optie het vergrendelen van elke beoordeling "
+"door de trainers van de overeenkomstige cursus mogelijk maken. Dit zal op "
+"zijn beurt elke wijziging van resultaten door de trainer binnen de gebruikte "
+"middelen in de beoordeling voorkomen: examens, leerroutes, taken, enz. De "
+"enige rol die bevoegd is om een vergrendelde beoordeling te ontgrendelen, is "
+"de beheerder. De trainer zal over deze mogelijkheid worden geïnformeerd. Het "
+"vergrendelen en ontgrendelen van cahiers de notes zal worden geregistreerd "
+"in het systeemrapport van belangrijke activiteiten"
 
 msgid "    <div class=\"alert alert-info\">"
 msgstr ""

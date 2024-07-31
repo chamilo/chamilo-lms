@@ -64,11 +64,22 @@ final class MessageProcessor implements ProcessorInterface
         if (!$user) {
             throw new \LogicException('User not found.');
         }
-        $messageRelUser = new MessageRelUser();
-        $messageRelUser->setMessage($message);
-        $messageRelUser->setReceiver($user);
-        $messageRelUser->setReceiverType(MessageRelUser::TYPE_SENDER);
-        $this->entityManager->persist($messageRelUser);
+
+        // Check if the relationship already exists
+        $messageRelUserRepository = $this->entityManager->getRepository(MessageRelUser::class);
+        $existingRelation = $messageRelUserRepository->findOneBy([
+            'message' => $message,
+            'receiver' => $user,
+            'receiverType' => MessageRelUser::TYPE_SENDER
+        ]);
+
+        if (!$existingRelation) {
+            $messageRelUser = new MessageRelUser();
+            $messageRelUser->setMessage($message);
+            $messageRelUser->setReceiver($user);
+            $messageRelUser->setReceiverType(MessageRelUser::TYPE_SENDER);
+            $this->entityManager->persist($messageRelUser);
+        }
 
         if ($message->getMsgType() === Message::MESSAGE_TYPE_INBOX) {
             $this->saveNotificationForInboxMessage($message);

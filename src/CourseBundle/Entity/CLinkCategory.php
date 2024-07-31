@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityLinkCategory;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -131,7 +132,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_link_category')]
 #[ORM\Entity(repositoryClass: CLinkCategoryRepository::class)]
 #[ORM\EntityListeners([ResourceListener::class])]
-class CLinkCategory extends AbstractResource implements ResourceInterface, Stringable
+class CLinkCategory extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[ApiProperty(identifier: true)]
     #[Groups(['link_category:read'])]

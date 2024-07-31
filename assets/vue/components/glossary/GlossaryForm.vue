@@ -126,7 +126,7 @@ const submitGlossaryForm = async () => {
     notification.showSuccessNotification(t("Glossary term saved"))
 
     await router.push({
-      title: "GlossaryList",
+      name: "GlossaryList",
       query: route.query,
     })
   } catch (error) {

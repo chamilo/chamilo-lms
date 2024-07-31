@@ -45,16 +45,16 @@ class GetLinksCollectionController extends BaseResourceFileAction
             foreach ($links as $link) {
                 $resourceNode = $link->getResourceNode();
 
-                $dataResponse['linksWithoutCategory'][] =
-                  [
-                      'id' => $link->getIid(),
-                      'title' => $link->getTitle(),
-                      'description' => $link->getDescription(),
-                      'url' => $link->getUrl(),
-                      'iid' => $link->getIid(),
-                      'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
-                      'position' => $resourceNode->getResourceLinkByContext($course, $session)?->getDisplayOrder(),
-                  ];
+                $dataResponse['linksWithoutCategory'][] = [
+                    'id' => $link->getIid(),
+                    'title' => $link->getTitle(),
+                    'description' => $link->getDescription(),
+                    'url' => $link->getUrl(),
+                    'iid' => $link->getIid(),
+                    'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
+                    'position' => $resourceNode->getResourceLinkByContext($course, $session)?->getDisplayOrder(),
+                    'sessionId' => $resourceNode->getResourceLinkByContext($course, $session)?->getSession()?->getId(),
+                ];
             }
         }
 
@@ -71,7 +71,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                 $categoryInfo = [
                     'id' => $categoryId,
                     'title' => $category->getTitle(),
-                    'descritption' => $category->getDescription(),
+                    'description' => $category->getDescription(),
                     'visible' => $category->getFirstResourceLink()->getVisibility(),
                 ];
                 $dataResponse['categories'][$categoryId]['info'] = $categoryInfo;
@@ -90,6 +90,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                             'iid' => $link->getIid(),
                             'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
                             'position' => $resourceNode->getResourceLinkByContext($course, $session)?->getDisplayOrder(),
+                            'sessionId' => $resourceNode->getResourceLinkByContext($course, $session)?->getSession()?->getId(),
                         ];
 
                         $dataResponse['categories'][$categoryId]['links'] = $items;

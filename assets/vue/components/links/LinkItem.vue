@@ -10,6 +10,13 @@
           {{ link.title }}
         </a>
         <BaseIcon
+          v-if="link.sessionId && link.sessionId === sid"
+          icon="session-star"
+          size="small"
+          class="mr-8"
+          title="Session Item"
+        />
+        <BaseIcon
           v-if="isLinkValid.isValid"
           icon="check"
           size="small"
@@ -25,7 +32,7 @@
         />
       </h6>
     </div>
-    <div class="flex gap-2" v-if="securityStore.isAuthenticated && isCurrentTeacher">
+    <div class="flex gap-2" v-if="securityStore.isAuthenticated && canEdit(link)">
       <BaseButton
         type="black"
         icon="check"
@@ -78,11 +85,16 @@ import { useI18n } from "vue-i18n"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { isVisible } from "./linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
+import { computed, onMounted, ref } from "vue"
+import { checkIsAllowedToEdit } from "../../composables/userPermissions";
+import { useRoute } from "vue-router"
+import { useCidReq } from "../../composables/cidReq"
 
 const securityStore = useSecurityStore()
-const isCurrentTeacher = securityStore.isCurrentTeacher
-
+const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
+const route = useRoute()
 const { t } = useI18n()
+const { cid, sid, gid } = useCidReq()
 
 defineProps({
   link: {
@@ -96,4 +108,21 @@ defineProps({
 });
 
 const emit = defineEmits(["check", "edit", "toggle", "moveUp", "moveDown", "delete"])
+
+const isAllowedToEdit = ref(false)
+
+const canEdit = (item) => {
+  const sessionId = item.sessionId;
+  const isSessionDocument = sessionId && sessionId === sid;
+  const isBaseCourse = !sessionId;
+
+  return (
+    (isSessionDocument && isAllowedToEdit.value) ||
+    (isBaseCourse && !sid && isCurrentTeacher.value)
+  );
+}
+
+onMounted(async () => {
+  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
+})
 </script>

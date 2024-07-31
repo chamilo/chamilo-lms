@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Controller\Api\ImportCGlossaryAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateCGlossaryAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -179,7 +180,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(OrderFilter::class, properties: ['iid', 'name', 'createdAt', 'updatedAt'])]
 #[ORM\Table(name: 'c_glossary')]
 #[ORM\Entity(repositoryClass: CGlossaryRepository::class)]
-class CGlossary extends AbstractResource implements ResourceInterface, Stringable
+class CGlossary extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[ApiProperty(identifier: true)]
     #[Groups(['glossary:read'])]

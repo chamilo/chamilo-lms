@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Controller\Api\UpdatePositionLink;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityLink;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -152,7 +153,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'resourceNode.parent' => 'exact'])]
 #[ORM\Table(name: 'c_link')]
 #[ORM\Entity(repositoryClass: CLinkRepository::class)]
-class CLink extends AbstractResource implements ResourceInterface, Stringable
+class CLink extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[ApiProperty(identifier: true)]
     #[Groups(['link:read'])]

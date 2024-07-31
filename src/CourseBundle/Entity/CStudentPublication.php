@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Filter\CidFilter;
@@ -69,7 +70,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(filterClass: CidFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
-class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
+class CStudentPublication extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[Groups(['c_student_publication:write'])]
     public bool $addToGradebook = false;

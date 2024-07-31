@@ -8888,6 +8888,7 @@ class Exercise
                     continue;
                 }
 
+                $sessionId = api_get_session_id();
                 $allowToEditBaseCourse = true;
                 $visibility = $visibilityInCourse = $exerciseEntity->isVisible($course);
                 $visibilityInSession = false;
@@ -8917,8 +8918,14 @@ class Exercise
                     $allowToEditBaseCourse = false;
                 }
 
+                $resourceLink = $exerciseEntity->getFirstResourceLink();
+                if ($resourceLink && !$sessionId && $resourceLink->getSession() === null) {
+                    $allowToEditBaseCourse = true;
+                }
+
+                $allowToEditSession = ($resourceLink && $resourceLink->getSession() && $resourceLink->getSession()->getId() === $sessionId);
                 $sessionStar = null;
-                if (!$isBaseCourseExercise) {
+                if ($allowToEditSession) {
                     $sessionStar = api_get_session_image($sessionId, $user);
                 }
 
@@ -9007,17 +9014,16 @@ class Exercise
                         style = "'.$style.';float:left;"
                         >
                          '.Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, ICON_SIZE_SMALL, $title).$title.
-                        '</a>';
+                        '</a>'.$sessionStar;
 
                     if (ExerciseLib::isQuizEmbeddable($exerciseEntity)) {
                         $embeddableIcon = Display::getMdiIcon('book-music-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ThisQuizCanBeEmbeddable'));
                         $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
                     }
 
-                    $currentRow['title'] = $url.' '.$sessionStar.$lp_blocked;
+                    $currentRow['title'] = $url.$lp_blocked;
                     $rowi = $exerciseEntity->getQuestions()->count();
-
-                    if ($repo->isGranted('EDIT', $exerciseEntity) && $allowToEditBaseCourse) {
+                    if ($allowToEditBaseCourse || $allowToEditSession) {
                         // Questions list
                         $actions = Display::url(
                             Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
@@ -9108,25 +9114,26 @@ class Exercise
                         $actions .= $clean;
                         // Visible / invisible
                         // Check if this exercise was added in a LP
-                        if ($exercise->exercise_was_added_in_lp) {
-                            $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
-                            );
-                        } else {
-                            if (!$exerciseEntity->isVisible($course, $session)) {
-                                $visibility = Display::url(
-                                    Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
-                                    ),
-                                    'exercise.php?'.api_get_cidreq(
-                                    ).'&action=enable&sec_token='.$token.'&exerciseId='.$exerciseId
+                        $visibility = '';
+                        if (api_is_platform_admin()) {
+                            if ($exercise->exercise_was_added_in_lp) {
+                                $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
                                 );
                             } else {
-                                // else if not active
-                                $visibility = Display::url(
-                                    Display::getMdiIcon(StateIcon::PUBLIC_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deactivate')
-                                    ),
-                                    'exercise.php?'.api_get_cidreq(
-                                    ).'&action=disable&sec_token='.$token.'&exerciseId='.$exerciseId
-                                );
+                                if (!$exerciseEntity->isVisible($course, $session)) {
+                                    $visibility = Display::url(
+                                        Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
+                                        ),
+                                        'exercise.php?' . api_get_cidreq() . '&action=enable&sec_token=' . $token . '&exerciseId=' . $exerciseId
+                                    );
+                                } else {
+                                    // else if not active
+                                    $visibility = Display::url(
+                                        Display::getMdiIcon(StateIcon::PUBLIC_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deactivate')
+                                        ),
+                                        'exercise.php?' . api_get_cidreq() . '&action=disable&sec_token=' . $token . '&exerciseId=' . $exerciseId
+                                    );
+                                }
                             }
                         }
 
@@ -9159,25 +9166,26 @@ class Exercise
                         );
 
                         // Check if this exercise was added in a LP
-                        if ($exercise->exercise_was_added_in_lp) {
-                            $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
-                            );
-                        } else {
-                            if (0 === $exerciseEntity->getActive() || 0 == $visibility) {
-                                $visibility = Display::url(
-                                    Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
-                                    ),
-                                    'exercise.php?'.api_get_cidreq(
-                                    ).'&action=enable&sec_token='.$token.'&exerciseId='.$exerciseId
+                        $visibility = '';
+                        if (api_is_platform_admin()) {
+                            if ($exercise->exercise_was_added_in_lp) {
+                                $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
                                 );
                             } else {
-                                // else if not active
-                                $visibility = Display::url(
-                                    Display::getMdiIcon(StateIcon::PUBLIC_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deactivate')
-                                    ),
-                                    'exercise.php?'.api_get_cidreq(
-                                    ).'&action=disable&sec_token='.$token.'&exerciseId='.$exerciseId
-                                );
+                                if (0 === $exerciseEntity->getActive() || 0 == $visibility) {
+                                    $visibility = Display::url(
+                                        Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
+                                        ),
+                                        'exercise.php?' . api_get_cidreq() . '&action=enable&sec_token=' . $token . '&exerciseId=' . $exerciseId
+                                    );
+                                } else {
+                                    // else if not active
+                                    $visibility = Display::url(
+                                        Display::getMdiIcon(StateIcon::PUBLIC_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deactivate')
+                                        ),
+                                        'exercise.php?' . api_get_cidreq() . '&action=disable&sec_token=' . $token . '&exerciseId=' . $exerciseId
+                                    );
+                                }
                             }
                         }
 

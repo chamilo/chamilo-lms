@@ -544,6 +544,9 @@ if (isset($_SESSION['user_language_choice']) && '' != $_SESSION['user_language_c
 } else {
     $defaults['language'] = api_get_setting('platformLanguage');
 }
+if (!empty($_POST['language'])) {
+    $defaults['language'] = Security::remove_XSS($_POST['language']);
+}
 if (!empty($_GET['username'])) {
     $defaults['username'] = Security::remove_XSS($_GET['username']);
 }

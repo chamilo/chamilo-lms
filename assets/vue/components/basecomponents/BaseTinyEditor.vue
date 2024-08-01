@@ -21,16 +21,13 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import TinyEditor from "../../components/Editor"
 import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import { useSecurityStore } from "../../store/securityStore"
 import FloatLabel from "primevue/floatlabel"
-
-//import contentUiCss from "css-loader!tinymce/skins/ui/oxide/content.css"
-//import contentCss from "css-loader!tinymce/skins/content/default/content.css"
 
 const modelValue = defineModel({
   type: String,
@@ -104,7 +101,6 @@ const toolbarTextDirection = "ltr rtl"
 const defaultEditorConfig = {
   skin: false,
   content_css: false,
-  //content_style: contentUiCss.toString() + "\n" + contentCss.toString(),
   branding: false,
   relative_urls: false,
   height: 500,
@@ -136,33 +132,30 @@ const defaultEditorConfig = {
     "visualblocks",
     "wordcount",
   ],
-  toolbar:
-    toolbarUndo +
-    " | " +
-    toolbarFormatText +
-    " | " +
-    toolbarInsertMedia +
-    " | " +
-    toolbarFontConfig +
-    " | " +
-    toolbarAlign +
-    " | " +
-    toolbarIndent +
-    " | " +
-    toolbarList +
-    " | " +
-    toolbarColor +
-    " | " +
-    toolbarPageBreak +
-    " | " +
-    toolbarSpecialSymbols +
-    " | " +
-    toolbarOther +
-    " | " +
-    toolbarCode +
-    " | " +
-    toolbarTextDirection,
+  toolbar: [
+    toolbarUndo,
+    toolbarFormatText,
+    toolbarInsertMedia,
+    toolbarFontConfig,
+    toolbarAlign,
+    toolbarIndent,
+    toolbarList,
+    toolbarColor,
+    toolbarPageBreak,
+    toolbarSpecialSymbols,
+    toolbarOther,
+    toolbarCode,
+    toolbarTextDirection
+  ].join(" | "),
   file_picker_callback: filePickerCallback,
+  content_style: ".tiny-content { font-family: Arial, sans-serif; font-size: 14px; }",
+  body_class: 'tiny-content',
+  setup: (editor) => {
+    editor.on('init', () => {
+      const body = editor.getBody();
+      body.classList.add('tiny-content');
+    });
+  }
 }
 
 if (props.fullPage) {
@@ -174,6 +167,12 @@ const editorConfig = computed(() => ({
   ...defaultEditorConfig,
   ...props.editorConfig,
 }))
+
+watch(modelValue, (newValue) => {
+  if (newValue && !newValue.includes('tiny-content')) {
+    modelValue.value = `<div class="tiny-content">${newValue}</div>`
+  }
+})
 
 async function filePickerCallback(callback, value, meta) {
   let url = getUrlForTinyEditor()

@@ -227,6 +227,7 @@ import InputGroup from "primevue/inputgroup"
 import InputText from "primevue/inputtext"
 import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import { messageService } from "../../services/message"
+import messageRelUserService from "../../services/messagereluser";
 
 const route = useRoute()
 const router = useRouter()
@@ -254,7 +255,7 @@ const mItemsMarkAs = ref([
 
         myReceiver.read = true
 
-        return store.dispatch("messagereluser/update", myReceiver)
+        return messageRelUserService.update(myReceiver["@id"], myReceiver)
       })
 
       Promise.all(promises)
@@ -275,7 +276,7 @@ const mItemsMarkAs = ref([
 
         myReceiver.read = false
 
-        return store.dispatch("messagereluser/update", myReceiver)
+        return messageRelUserService.update(myReceiver["@id"], myReceiver)
       })
 
       Promise.all(promises)

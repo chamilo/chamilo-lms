@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -21,7 +22,8 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private readonly Security $security,
-        private readonly AccessUrlHelper $accessUrlHelper
+        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly EntityManagerInterface $entityManager
     ) {}
 
     public function applyToCollection(
@@ -45,11 +47,14 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
                     ->andWhere('url_rel.url = :access_url_id')
                     ->setParameter('access_url_id', $accessUrl->getId());
             } else {
-                $queryBuilder
-                    ->innerJoin("$rootAlias.course", 'c')
-                    ->innerJoin('c.urls', 'url_rel')
-                    ->andWhere('url_rel.url = :access_url_id')
-                    ->setParameter('access_url_id', $accessUrl->getId());
+                $metaData = $this->entityManager->getClassMetadata($resourceClass);
+                if ($metaData->hasAssociation('course')) {
+                    $queryBuilder
+                        ->innerJoin("$rootAlias.course", 'c')
+                        ->innerJoin('c.urls', 'url_rel')
+                        ->andWhere('url_rel.url = :access_url_id')
+                        ->setParameter('access_url_id', $accessUrl->getId());
+                }
             }
         }
 

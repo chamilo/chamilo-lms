@@ -100,7 +100,7 @@ const toolbarTextDirection = "ltr rtl"
 
 const defaultEditorConfig = {
   skin: false,
-  content_css: false,
+  content_css: ['/build/css/editor_content.css'],
   branding: false,
   relative_urls: false,
   height: 500,
@@ -132,31 +132,35 @@ const defaultEditorConfig = {
     "visualblocks",
     "wordcount",
   ],
-  toolbar: [
-    toolbarUndo,
-    toolbarFormatText,
-    toolbarInsertMedia,
-    toolbarFontConfig,
-    toolbarAlign,
-    toolbarIndent,
-    toolbarList,
-    toolbarColor,
-    toolbarPageBreak,
-    toolbarSpecialSymbols,
-    toolbarOther,
-    toolbarCode,
-    toolbarTextDirection
-  ].join(" | "),
-  file_picker_callback: filePickerCallback,
-  content_style: ".tiny-content { font-family: Arial, sans-serif; font-size: 14px; }",
-  body_class: 'tiny-content',
-  setup: (editor) => {
-    editor.on('init', () => {
-      const body = editor.getBody();
-      body.classList.add('tiny-content');
-    });
-  }
-}
+  toolbar:
+    toolbarUndo +
+    " | " +
+    toolbarFormatText +
+    " | " +
+    toolbarInsertMedia +
+    " | " +
+    toolbarFontConfig +
+    " | " +
+    toolbarAlign +
+    " | " +
+    toolbarIndent +
+    " | " +
+    toolbarList +
+    " | " +
+    toolbarColor +
+    " | " +
+    toolbarPageBreak +
+    " | " +
+    toolbarSpecialSymbols +
+    " | " +
+    toolbarOther +
+    " | " +
+    toolbarCode +
+    " | " +
+    toolbarTextDirection,
+  content_style: ".tiny-content { font-family: Arial, sans-serif; }",
+  body_class: 'tiny-content'
+};
 
 if (props.fullPage) {
   defaultEditorConfig.plugins.push("fullpage")

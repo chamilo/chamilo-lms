@@ -25,6 +25,11 @@ Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
     border-collapse: collapse !important;
 }
 
+.tiny-content td {
+    font-size: 14px;
+    line-height: 16px;
+}
+
 .tiny-content td, .tiny-content th {
     padding: 5px !important;
 }
@@ -38,6 +43,14 @@ Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
     caption-side: top !important;
     text-align: center !important;
     font-weight: bold !important;
+}
+
+.tiny-content .font-arial {
+    font-family: Arial, sans-serif;
+}
+
+.tiny-content .font-times-new-roman {
+    font-family: 'Times New Roman', Times, serif;
 }
 
 /* Hack for show Bootstrap alerts in CKEditor' style select */

@@ -9120,8 +9120,8 @@ class Tracking
                     $user['firstname'],
                     $session['name'],
                     $course['title'],
-                    $row['login_course_date'],
-                    $row['logout_course_date'],
+                    api_get_local_time($row['login_course_date']),
+                    api_get_local_time($row['logout_course_date']),
                     gmdate('H:i:s', $row['time']),
                 ];
             } else if ($reportType == 'billing_report') {
@@ -9132,7 +9132,7 @@ class Tracking
                     $session['name'],
                     $course['title'],
                     $row['lp_name'],
-                    date('Y-m-d H:i:s', $row['start_time']),
+                    api_get_local_time(date('Y-m-d H:i:s', $row['start_time'])),
                     $extraFieldValue['value'] ?? '',
                 ];
             }

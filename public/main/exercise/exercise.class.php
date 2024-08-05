@@ -1847,7 +1847,7 @@ class Exercise
             $exerciseId,
             $this->sessionId
         );
-        if (false !== $linkInfo) {
+        if (!empty($linkInfo)) {
             GradebookUtils::remove_resource_from_course_gradebook($linkInfo['id']);
         }
 

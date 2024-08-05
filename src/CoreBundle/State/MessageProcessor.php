@@ -9,13 +9,14 @@ namespace Chamilo\CoreBundle\State;
 use ApiPlatform\Metadata\DeleteOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Post;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
+use LogicException;
 use Notification;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -62,7 +63,7 @@ final class MessageProcessor implements ProcessorInterface
 
         $user = $this->security->getUser();
         if (!$user) {
-            throw new \LogicException('User not found.');
+            throw new LogicException('User not found.');
         }
 
         // Check if the relationship already exists
@@ -70,7 +71,7 @@ final class MessageProcessor implements ProcessorInterface
         $existingRelation = $messageRelUserRepository->findOneBy([
             'message' => $message,
             'receiver' => $user,
-            'receiverType' => MessageRelUser::TYPE_SENDER
+            'receiverType' => MessageRelUser::TYPE_SENDER,
         ]);
 
         if (!$existingRelation) {
@@ -81,7 +82,7 @@ final class MessageProcessor implements ProcessorInterface
             $this->entityManager->persist($messageRelUser);
         }
 
-        if ($message->getMsgType() === Message::MESSAGE_TYPE_INBOX) {
+        if (Message::MESSAGE_TYPE_INBOX === $message->getMsgType()) {
             $this->saveNotificationForInboxMessage($message);
         }
 
@@ -97,12 +98,12 @@ final class MessageProcessor implements ProcessorInterface
 
         $request = $this->requestStack->getCurrentRequest();
         if (!$request) {
-            throw new \LogicException('Cannot get current request');
+            throw new LogicException('Cannot get current request');
         }
 
         $requestData = json_decode($request->getContent(), true);
         if (!isset($requestData['userId'])) {
-            throw new \InvalidArgumentException('The field userId is required.');
+            throw new InvalidArgumentException('The field userId is required.');
         }
 
         $userId = $requestData['userId'];
@@ -128,7 +129,7 @@ final class MessageProcessor implements ProcessorInterface
         $messageRelUserRepository = $this->entityManager->getRepository(MessageRelUser::class);
         $remainingReceivers = $messageRelUserRepository->count(['message' => $message]);
 
-        if ($remainingReceivers === 0) {
+        if (0 === $remainingReceivers) {
             $message->setStatus(Message::MESSAGE_STATUS_DELETED);
             $this->entityManager->flush();
         }

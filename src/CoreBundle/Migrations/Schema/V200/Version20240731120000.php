@@ -33,7 +33,7 @@ final class Version20240731120000 extends AbstractMigration
         ");
 
         // Update message status based on message_rel_user entries
-        $this->addSql("
+        $this->addSql('
             UPDATE message m
             LEFT JOIN (
                 SELECT message_id, COUNT(*) AS rel_count
@@ -45,7 +45,7 @@ final class Version20240731120000 extends AbstractMigration
                 WHEN mru.rel_count IS NULL THEN 3 -- Message::MESSAGE_STATUS_DELETED
                 ELSE 0 -- Set to 0 or whatever the default status should be
             END
-        ");
+        ');
     }
 
     public function down(Schema $schema): void

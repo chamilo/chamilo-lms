@@ -42,10 +42,11 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
                         AccessUrlRelCourse::class,
                         'url_rel',
                         'WITH',
-                        'url_rel.course = ' . $rootAlias
+                        'url_rel.course = '.$rootAlias
                     )
                     ->andWhere('url_rel.url = :access_url_id')
-                    ->setParameter('access_url_id', $accessUrl->getId());
+                    ->setParameter('access_url_id', $accessUrl->getId())
+                ;
             } else {
                 $metaData = $this->entityManager->getClassMetadata($resourceClass);
                 if ($metaData->hasAssociation('course')) {
@@ -53,7 +54,8 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
                         ->innerJoin("$rootAlias.course", 'c')
                         ->innerJoin('c.urls', 'url_rel')
                         ->andWhere('url_rel.url = :access_url_id')
-                        ->setParameter('access_url_id', $accessUrl->getId());
+                        ->setParameter('access_url_id', $accessUrl->getId())
+                    ;
                 }
             }
         }

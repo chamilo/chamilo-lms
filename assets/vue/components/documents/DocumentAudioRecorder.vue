@@ -54,7 +54,7 @@ import { useI18n } from "vue-i18n"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import AudioRecorder from "../AudioRecorder.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
-import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility"
+import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useCidReq } from "../../composables/cidReq"
 import documentsService from "../../services/documents"
 

@@ -374,7 +374,7 @@
 
 <script setup>
 import { useStore } from "vuex"
-import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
+import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { isEmpty } from "lodash"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"

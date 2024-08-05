@@ -117,8 +117,8 @@ import useVuelidate from "@vuelidate/core";
 import { computed, reactive, ref, watch, watchEffect } from "vue"
 import { maxValue, minValue, required } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
-import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility";
 import { useCidReq } from "../../composables/cidReq";
+import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useRoute } from "vue-router"
 
 const props = defineProps({

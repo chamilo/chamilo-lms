@@ -19,7 +19,7 @@ import UpdateMixin from "../../mixins/UpdateMixin"
 import { ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import useVuelidate from "@vuelidate/core"
-import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
+import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useCidReq } from "../../composables/cidReq"
 import cToolIntroService from "../../services/cToolIntroService"
 

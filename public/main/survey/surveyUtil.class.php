@@ -2963,7 +2963,7 @@ class SurveyUtil
      *
      * @version January 2007
      */
-    public static function modify_filter($survey_id, $drh = false)
+    public static function modify_filter($survey_id, $url_params, $row)
     {
         $repo = Container::getSurveyRepository();
         /** @var CSurvey|null $survey */
@@ -2991,7 +2991,7 @@ class SurveyUtil
             $codePath.'survey/reporting.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
 
-        if ($drh) {
+        if (!$row['can_edit']) {
             return $hideReportingButton ? '-' : $reportingLink;
         }
 
@@ -3265,29 +3265,23 @@ class SurveyUtil
      * @version January 2007
      */
     public static function get_survey_data(
-        $from,
-        $number_of_items,
-        $column,
-        $direction,
-        $isDrh = false
-    ) {
+        int    $from,
+        int    $number_of_items,
+        int    $column,
+        string $direction,
+        bool $isDrh = false
+    ): array {
         $repo = Container::getSurveyRepository();
         $course = api_get_course_entity();
+        $sessionId = api_get_session_id();
         $session = api_get_session_entity();
+
         $qb = $repo->findAllByCourse($course, $session);
         /** @var CSurvey[] $surveys */
         $surveys = $qb->getQuery()->getResult();
 
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $mandatoryAllowed = ('true' === api_get_setting('survey.allow_mandatory_survey'));
 
-        // Searching
-        $search_restriction = self::survey_search_restriction();
-        if ($search_restriction) {
-            $search_restriction = ' AND '.$search_restriction;
-        }
         $from = (int) $from;
         $number_of_items = (int) $number_of_items;
         $column = (int) $column;
@@ -3295,129 +3289,122 @@ class SurveyUtil
             $direction = 'asc';
         }
 
-        // Condition for the session
-        $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id);
-        $course_id = api_get_course_int_id();
-
-        $sql = "
-            SELECT
-                survey.iid AS col0,
-                survey.title AS col1,
-                survey.code AS col2,
-                count(survey_question.iid) AS col3, "
-                .(api_is_western_name_order()
-                ? "CONCAT(user.firstname, ' ', user.lastname)"
-                : "CONCAT(user.lastname, ' ', user.firstname)")
-                ."	AS col4,
-                survey.avail_from AS col5,
-                survey.avail_till AS col6,
-                survey.invited AS col7,
-                survey.anonymous AS col8,
-                survey.iid AS col9,
-                survey.session_id AS session_id,
-                survey.answered,
-                survey.invited,
-                survey.survey_type
-            FROM $table_survey survey
-            LEFT JOIN $table_survey_question survey_question
-            ON (survey.iid = survey_question.survey_id AND survey_question.c_id = $course_id)
-            LEFT JOIN $table_user user
-            ON (survey.author = user.id)
-            WHERE survey.c_id = $course_id
-            $search_restriction
-            $condition_session
-            GROUP BY survey.iid
-            ORDER BY col$column $direction
-            LIMIT $from,$number_of_items
-        ";
-
         $efv = new ExtraFieldValue('survey');
         $list = [];
-        foreach ($surveys as $survey) {
-            $array = [];
-            $surveyId = $survey->getIid();
-            $array[0] = $surveyId;
-            $type = $survey->getSurveyType();
 
-            $title = $survey->getTitle();
-            if (self::checkHideEditionToolsByCode($survey->getCode())) {
-                $array[1] = $title;
-            } else {
-                // Doodle
-                if (3 == $type) {
-                    $array[1] = Display::url(
-                        $title,
-                        api_get_path(WEB_CODE_PATH).'survey/meeting.php?survey_id='.$surveyId.'&'.api_get_cidreq()
-                    );
-                } else {
-                    $array[1] = Display::url(
-                        $title,
-                        api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq()
-                    );
+        if ($sessionId > 0) {
+            foreach ($surveys as $survey) {
+                $surveySession = $survey->getFirstResourceLink()->getSession();
+                if ($surveySession && $surveySession->getId() == $sessionId) {
+                    $list[] = self::prepare_survey_array($survey, $efv, $mandatoryAllowed, $isDrh);
                 }
             }
 
-            // Validation when belonging to a session
-            //$session_img = api_get_session_image($survey['session_id'], $_user['status']);
-            $session_img = '';
-            $array[2] = $survey->getCode();
-            $array[3] = $survey->getQuestions()->count();
-            $array[4] = UserManager::formatUserFullName($survey->getCreator());
-            // Dates
-            $array[5] = '';
-            $from = $survey->getAvailFrom() ? $survey->getAvailFrom()->format('Y-m-d H:i:s') : null;
-            if (null !== $from) {
-                $array[5] = api_convert_and_format_date(
-                    $from,
-                    DATE_TIME_FORMAT_LONG
-                );
-            }
-            $till = $survey->getAvailTill() ? $survey->getAvailTill()->format('Y-m-d H:i:s') : null;
-            $array[6] = '';
-            if (null !== $till) {
-                $array[6] = api_convert_and_format_date(
-                    $till,
-                    DATE_TIME_FORMAT_LONG
-                );
-            }
+            $lpRepo = Container::getLpRepository();
+            $lpsInSessionQb = $lpRepo->findAllByCourse($course, $session);
+            $lpsInSession = $lpsInSessionQb->getQuery()->getResult();
 
-            $array[7] =
-                Display::url(
-                    $survey->getAnswered(),
-                    api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$surveyId.'&'
-                        .api_get_cidreq()
-                ).' / '.
-                Display::url(
-                    $survey->getInvited(),
-                    api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$surveyId.'&'
-                        .api_get_cidreq()
-                );
-            // Anon
-            $array[8] = $survey->getAnonymous();
-            if ($mandatoryAllowed) {
-                $efvMandatory = $efv->get_values_by_handler_and_field_variable(
-                    $surveyId,
-                    'is_mandatory'
-                );
+            foreach ($lpsInSession as $lpInSession) {
+                $lpInSessionSession = $lpInSession->getFirstResourceLink()->getSession();
 
-                $array[9] = $efvMandatory ? $efvMandatory['value'] : 0;
-                // Survey id
-                $array[10] = $surveyId;
-            } else {
-                // Survey id
-                $array[9] = $surveyId;
+                if ($lpInSessionSession && $lpInSessionSession->getId() == $sessionId) {
+                    foreach ($lpInSession->getItems() as $sessionItem) {
+                        if ($sessionItem->getItemType() === 'survey') {
+                            $itemId = (int) $sessionItem->getPath();
+                            $survey = $repo->find($itemId);
+                            if ($survey && $survey->getFirstResourceLink()->getSession() == null) {
+                                $list[] = self::prepare_survey_array($survey, $efv, $mandatoryAllowed, $isDrh, false);
+                            }
+                        }
+                    }
+                }
             }
-
-            if ($isDrh) {
-                $array[1] = $title;
-                $array[7] = strip_tags($survey->getInvited());
+        } else {
+            foreach ($surveys as $survey) {
+                $list[] = self::prepare_survey_array($survey, $efv, $mandatoryAllowed, $isDrh);
             }
-
-            $list[] = $array;
         }
 
         return $list;
+    }
+
+
+    private static function prepare_survey_array($survey, $efv, $mandatoryAllowed, $isDrh, $canEdit = true) {
+        $array = [];
+        $surveyId = $survey->getIid();
+        $array[0] = $surveyId;
+        $type = $survey->getSurveyType();
+
+        $title = $survey->getTitle();
+        if (self::checkHideEditionToolsByCode($survey->getCode())) {
+            $array[1] = $title;
+        } else {
+            // Doodle
+            if (3 == $type) {
+                $array[1] = Display::url(
+                    $title,
+                    api_get_path(WEB_CODE_PATH).'survey/meeting.php?survey_id='.$surveyId.'&'.api_get_cidreq()
+                );
+            } else {
+                $array[1] = Display::url(
+                    $title,
+                    api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq()
+                );
+            }
+        }
+
+        $array[2] = $survey->getCode();
+        $array[3] = $survey->getQuestions()->count();
+        $array[4] = UserManager::formatUserFullName($survey->getCreator());
+
+        $array[5] = '';
+        $from = $survey->getAvailFrom() ? $survey->getAvailFrom()->format('Y-m-d H:i:s') : null;
+        if (null !== $from) {
+            $array[5] = api_convert_and_format_date(
+                $from,
+                DATE_TIME_FORMAT_LONG
+            );
+        }
+
+        $array[6] = '';
+        $till = $survey->getAvailTill() ? $survey->getAvailTill()->format('Y-m-d H:i:s') : null;
+        if (null !== $till) {
+            $array[6] = api_convert_and_format_date(
+                $till,
+                DATE_TIME_FORMAT_LONG
+            );
+        }
+
+        $array[7] = Display::url(
+                $survey->getAnswered(),
+                api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$surveyId.'&'.api_get_cidreq()
+            ).' / '.
+            Display::url(
+                $survey->getInvited(),
+                api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$surveyId.'&'.api_get_cidreq()
+            );
+
+        $array[8] = $survey->getAnonymous();
+        if ($mandatoryAllowed) {
+            $efvMandatory = $efv->get_values_by_handler_and_field_variable(
+                $surveyId,
+                'is_mandatory'
+            );
+
+            $array[9] = $efvMandatory ? $efvMandatory['value'] : 0;
+            $array[10] = $surveyId;
+        } else {
+            $array[9] = $surveyId;
+        }
+
+        if ($isDrh) {
+            $array[1] = $title;
+            $array[7] = strip_tags($survey->getInvited());
+        }
+
+        $array['can_edit'] = $canEdit;
+
+        return $array;
     }
 
     /**

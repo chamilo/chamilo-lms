@@ -5346,6 +5346,9 @@ class learnpath
         // Get all the forums.
         $forums = $this->get_forums();
 
+        // Get all surveys
+        $surveys = $this->getSurveys();
+
         // Get the final item form (see BT#11048) .
         $finish = $this->getFinalItemForm();
         $size = ICON_SIZE_MEDIUM; //ICON_SIZE_BIG
@@ -5356,6 +5359,7 @@ class learnpath
             Display::getMdiIcon('inbox-full', 'ch-tool-icon-gradient', '', 64, get_lang('Assignments')),
             Display::getMdiIcon('comment-quote', 'ch-tool-icon-gradient', '', 64, get_lang('Forums')),
             Display::getMdiIcon('bookmark-multiple', 'ch-tool-icon-gradient', '', 64, get_lang('Add section')),
+            Display::getMdiIcon('form-dropdown', 'ch-tool-icon-gradient', '', 64, get_lang('Add survey')),
             Display::getMdiIcon('certificate', 'ch-tool-icon-gradient', '', 64, get_lang('Certificate')),
         ];
         $content = '';
@@ -5375,6 +5379,7 @@ class learnpath
                 $works,
                 $forums,
                 $section,
+                $surveys,
                 $finish,
             ],
             'resource_tab',
@@ -6872,6 +6877,49 @@ class learnpath
             }
             $return .= '</div>';
         }
+        $return .= '</ul>';
+
+        return $return;
+    }
+
+    /**
+     * Creates a list with all the surveys in it.
+     *
+     * @return string
+     */
+    public function getSurveys()
+    {
+        $return = '<ul class="mt-2 bg-white list-group lp_resource">';
+
+        // First add link
+        $return .= '<li class="list-group-item lp_resource_element disable_drag">';
+        $return .= Display::getMdiIcon('clipboard-question-outline', 'ch-tool-icon', null, 32, get_lang('CreateNewSurvey'));
+        $return .= Display::url(
+            get_lang('Create a new survey'),
+            api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&'.http_build_query([
+                'action' => 'add',
+                'lp_id' => $this->lp_id,
+            ]),
+            ['title' => get_lang('Create a new survey')]
+        );
+        $return .= '</li>';
+
+        $surveys = SurveyManager::get_surveys(api_get_course_id(), api_get_session_id());
+        $moveIcon = Display::getMdiIcon('cursor-move', 'ch-tool-icon', '', 16, get_lang('Move'));
+
+        foreach ($surveys as $survey) {
+            if (!empty($survey['iid'])) {
+                $surveyTitle = strip_tags($survey['title']);
+                $return .= '<li class="list-group-item lp_resource_element" id="'.$survey['iid'].'" data-id="'.$survey['iid'].'">';
+                $return .= '<a class="moved" href="#">';
+                $return .= $moveIcon;
+                $return .= ' </a>';
+                $return .= Display::getMdiIcon('poll', 'ch-tool-icon', null, 16, get_lang('Survey'));
+                $return .= '<a class="moved link_with_id" data-id="'.$survey['iid'].'" data_type="'.TOOL_SURVEY.'" title="'.$surveyTitle.'" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_SURVEY.'&survey_id='.$survey['iid'].'&lp_id='.$this->lp_id.'" style="vertical-align:middle">'.$surveyTitle.'</a>';
+                $return .= '</li>';
+            }
+        }
+
         $return .= '</ul>';
 
         return $return;

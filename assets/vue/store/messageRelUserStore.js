@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import { useSecurityStore } from "./securityStore"
 import { messageService } from "../services/message"
-import { MESSAGE_TYPE_INBOX } from "../components/message/constants"
+import { MESSAGE_TYPE_INBOX } from "../constants/entity/message"
 
 export const useMessageRelUserStore = defineStore("messageRelUser", {
   state: () => ({

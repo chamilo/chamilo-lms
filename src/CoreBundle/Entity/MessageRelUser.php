@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use Chamilo\CoreBundle\Entity\Listener\MessageStatusListener;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,6 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'message_rel_user')]
 #[ORM\UniqueConstraint(name: 'message_receiver', columns: ['message_id', 'user_id'])]
 #[ORM\Entity]
+#[ORM\EntityListeners([MessageStatusListener::class])]
 #[ApiFilter(
     filterClass: SearchFilter::class,
     properties: [

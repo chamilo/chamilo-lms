@@ -44,10 +44,6 @@ final class MessageProcessor implements ProcessorInterface
             return $this->processDeleteForUser($data);
         }
 
-        if ($operation instanceof Patch && str_contains($operation->getUriTemplate(), 'check-and-update-status')) {
-            return $this->checkAndUpdateMessageStatus($data);
-        }
-
         /** @var Message $message */
         $message = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
@@ -115,22 +111,6 @@ final class MessageProcessor implements ProcessorInterface
 
         if ($messageRelUser) {
             $this->entityManager->remove($messageRelUser);
-            $this->entityManager->flush();
-        }
-
-        return $message;
-    }
-
-    private function checkAndUpdateMessageStatus($data): Message
-    {
-        /** @var Message $message */
-        $message = $data;
-
-        $messageRelUserRepository = $this->entityManager->getRepository(MessageRelUser::class);
-        $remainingReceivers = $messageRelUserRepository->count(['message' => $message]);
-
-        if (0 === $remainingReceivers) {
-            $message->setStatus(Message::MESSAGE_STATUS_DELETED);
             $this->entityManager->flush();
         }
 

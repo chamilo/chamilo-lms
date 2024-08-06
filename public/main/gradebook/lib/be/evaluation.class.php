@@ -300,9 +300,8 @@ class Evaluation implements GradebookItem
 
     /**
      * Insert this evaluation into the database.
-     * @throws \Doctrine\ORM\Exception\ORMException
      */
-    public function add()
+    public function add(): bool
     {
         if (isset($this->name) &&
             isset($this->user_id) &&
@@ -310,6 +309,13 @@ class Evaluation implements GradebookItem
             isset($this->eval_max) &&
             isset($this->visible)
         ) {
+
+            $user = api_get_user_entity($this->get_user_id());
+
+            if (null === $user) {
+                return false;
+            }
+
             if (empty($this->type)) {
                 $this->type = 'evaluation';
             }
@@ -328,7 +334,7 @@ class Evaluation implements GradebookItem
                 ->setCourse(api_get_course_entity($courseId))
                 ->setTitle($this->get_name())
                 ->setCategory($category)
-                ->setUser(api_get_user_entity($this->get_user_id()))
+                ->setUser($user)
                 ->setWeight(api_float_val($this->get_weight()))
                 ->setMax(api_float_val($this->get_max()))
                 ->setVisible($this->is_visible())
@@ -337,6 +343,8 @@ class Evaluation implements GradebookItem
             $em->persist($evaluation);
             $em->flush();
             $this->set_id($evaluation->getId());
+
+            return true;
         }
 
         return false;

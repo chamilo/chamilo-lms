@@ -139,7 +139,7 @@
             :data="slotProps.data"
           />
           <BaseIcon
-            v-if="isSessionDocument(slotProps.data)"
+            v-if="isAllowedToEdit && isSessionDocument(slotProps.data)"
             icon="session-star"
             class="mr-8"
           />

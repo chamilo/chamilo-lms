@@ -12,7 +12,7 @@
             <div class="flex items-center gap-2">
               <span>{{ term.title }}</span>
               <BaseIcon
-                v-if="term.sessionId && term.sessionId === sid"
+                v-if="isAllowedToEdit && (term.sessionId && term.sessionId === sid)"
                 icon="session-star"
                 size="small"
                 class="mr-8"

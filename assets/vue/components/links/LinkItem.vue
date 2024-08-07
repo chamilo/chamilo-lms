@@ -10,7 +10,7 @@
           {{ link.title }}
         </a>
         <BaseIcon
-          v-if="link.sessionId && link.sessionId === sid"
+          v-if="isAllowedToEdit && (link.sessionId && link.sessionId === sid)"
           icon="session-star"
           size="small"
           class="mr-8"

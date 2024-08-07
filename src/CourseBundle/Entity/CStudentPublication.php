@@ -47,7 +47,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(),
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Post(
-            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
             processor: CStudentPublicationPostStateProcessor::class
         ),
     ],

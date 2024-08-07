@@ -310,7 +310,7 @@ if ($form->validate()) {
     $visibility = $course['visibility'];
 
     if (isset($course['duration'])) {
-        $course['duration'] = $course['duration'] * 60;
+        $course['duration'] = (int) $course['duration'] * 60;
     }
 
     // @todo should be check in the CidReqListener

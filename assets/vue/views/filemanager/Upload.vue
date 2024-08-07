@@ -31,7 +31,6 @@ import Uppy from '@uppy/core'
 import Webcam from '@uppy/webcam'
 import { Dashboard } from '@uppy/vue'
 import { useRoute, useRouter } from 'vue-router'
-import { RESOURCE_LINK_PUBLISHED } from '../../components/resource_links/visibility'
 import { ENTRYPOINT } from '../../config/entrypoint'
 import { useCidReq } from '../../composables/cidReq'
 import { useUpload } from '../../composables/upload'
@@ -42,6 +41,7 @@ import BaseAdvancedSettingsButton from '../../components/basecomponents/BaseAdva
 import BaseButton from '../../components/basecomponents/BaseButton.vue'
 import BaseToolbar from '../../components/basecomponents/BaseToolbar.vue'
 import { useStore } from 'vuex'
+import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 
 const XHRUpload = require('@uppy/xhr-upload')
 const ImageEditor = require('@uppy/image-editor')

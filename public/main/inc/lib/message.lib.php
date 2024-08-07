@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
+use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\SocialPost;
 use Chamilo\CoreBundle\Entity\SocialPostFeedback;
 use Chamilo\CoreBundle\Entity\User;
@@ -328,6 +329,23 @@ class MessageManager
                         );
                     }
                 }
+            }
+
+            // Add the sender as a receiver with TYPE_SENDER
+            $messageRelUserRepository = $em->getRepository(MessageRelUser::class);
+            $existingRelation = $messageRelUserRepository->findOneBy([
+                'message' => $message,
+                'receiver' => $userSender,
+                'receiverType' => MessageRelUser::TYPE_SENDER
+            ]);
+
+            if (!$existingRelation) {
+                $messageRelUserSender = new MessageRelUser();
+                $messageRelUserSender->setMessage($message);
+                $messageRelUserSender->setReceiver($userSender);
+                $messageRelUserSender->setReceiverType(MessageRelUser::TYPE_SENDER);
+                $em->persist($messageRelUserSender);
+                $em->flush();
             }
 
             if ($sendEmail) {

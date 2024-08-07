@@ -154,6 +154,8 @@ import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import MessageCommunicationParty from "./MessageCommunicationParty.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
+import { messageService } from "../../services/message"
+import { useNotification } from "../../composables/notification"
 
 const confirm = useConfirm()
 const { t } = useI18n()
@@ -161,7 +163,6 @@ const { t } = useI18n()
 const isLoadingSelect = ref(false)
 const store = useStore()
 const securityStore = useSecurityStore()
-//const find = store.getters["message/find"];
 const route = useRoute()
 const router = useRouter()
 const messageRelUserStore = useMessageRelUserStore()
@@ -177,13 +178,12 @@ const isLoading = computed(() => store.state.message.isLoading)
 
 const item = ref(null)
 const myReceiver = ref(null)
+const notification = useNotification()
 
 store.dispatch("message/load", id).then((responseItem) => {
   item.value = responseItem
 
-  myReceiver.value = [...responseItem.receiversTo, ...responseItem.receiversCc].find(
-    ({ receiver }) => receiver["@id"] === securityStore.user["@id"],
-  )
+  myReceiver.value = findMyReceiver(responseItem, securityStore.user["@id"])
 
   // Change to read.
   if (myReceiver.value && false === myReceiver.value.read) {
@@ -193,16 +193,43 @@ store.dispatch("message/load", id).then((responseItem) => {
   }
 })
 
+function extractUserId(apiId) {
+  return apiId.split("/").pop()
+}
+
+function findMyReceiver(message, userId) {
+  const receivers = [...message.receiversTo, ...message.receiversCc]
+  return receivers.find(({ receiver }) => receiver["@id"] === userId)
+}
+
+async function deleteMessage(message) {
+  try {
+    const userId = extractUserId(securityStore.user["@id"])
+    const messageId = extractUserId(message["@id"])
+
+    if (message.sender["@id"] === securityStore.user["@id"]) {
+      await messageService.deleteMessageForUser(messageId, userId)
+    } else {
+      const myReceiver = findMyReceiver(message, securityStore.user["@id"])
+      if (myReceiver) {
+        await store.dispatch("messagereluser/del", myReceiver)
+      }
+    }
+
+    notification.showSuccessNotification(t("Message deleted"))
+    await messageRelUserStore.findUnreadCount()
+    await router.push({ name: "MessageList" })
+  } catch (e) {
+    notification.showErrorNotification(t("Error deleting message"))
+  }
+}
+
 function confirmDelete() {
   confirm.require({
     header: t("Confirmation"),
     message: t(`Are you sure you want to delete "${item.value.title}"?`),
     accept: async () => {
-      await store.dispatch("message/del", item)
-
-      await router.push({
-        name: "MessageList",
-      })
+      await deleteMessage(item.value)
     },
   })
 }

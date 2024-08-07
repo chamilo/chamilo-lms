@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use Chamilo\CoreBundle\Entity\Listener\MessageStatusListener;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,6 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'message_rel_user')]
 #[ORM\UniqueConstraint(name: 'message_receiver', columns: ['message_id', 'user_id'])]
 #[ORM\Entity]
+#[ORM\EntityListeners([MessageStatusListener::class])]
 #[ApiFilter(
     filterClass: SearchFilter::class,
     properties: [
@@ -44,8 +46,21 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class MessageRelUser
 {
+    // Type indicating the message is sent to the main recipient
     public const TYPE_TO = 1;
+    // Type indicating the message is sent as a carbon copy (CC) to the recipient
     public const TYPE_CC = 2;
+    // Type indicating the message is promoted
+    public const TYPE_PROMOTED = 3;
+    // Type indicating the message is posted on the user's wall
+    public const TYPE_WALL = 4;
+    // Type indicating the message is sent to a group
+    public const TYPE_GROUP = 5;
+    // Type indicating the message is an invitation
+    public const TYPE_INVITATION = 6;
+    // Type indicating the message is part of a conversation
+    public const TYPE_CONVERSATION = 7;
+    // Type indicating the message is sent by the sender and should appear in the sender's outbox
     public const TYPE_SENDER = 8;
 
     #[Groups(['message_rel_user:read'])]

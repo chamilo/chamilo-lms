@@ -33,17 +33,8 @@ async function deleteMessageForUser(messageId, userId) {
     })
 }
 
-async function checkAndUpdateMessageStatus(messageId) {
-  return await axios.patch(`/api/messages/${messageId}/check-and-update-status`, {}, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-}
-
 export const messageService = {
   create,
   countUnreadMessages,
   deleteMessageForUser,
-  checkAndUpdateMessageStatus,
 };

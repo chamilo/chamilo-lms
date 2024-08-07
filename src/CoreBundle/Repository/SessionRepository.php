@@ -219,6 +219,18 @@ class SessionRepository extends ServiceEntityRepository
             throw new Exception(sprintf('Cannot handle relationType %s', $relationType));
         }
 
+        $entityManager = $this->getEntityManager();
+        $existingRecord = $entityManager->getRepository(SessionRelUser::class)->findOneBy([
+            'session' => $session,
+            'user' => $user,
+            'relationType' => $relationType,
+        ]);
+
+        if ($existingRecord) {
+            $entityManager->remove($existingRecord);
+            $entityManager->flush();
+        }
+
         switch ($relationType) {
             case Session::DRH:
                 if ($user->hasRole('ROLE_HR')) {
@@ -249,7 +261,11 @@ class SessionRepository extends ServiceEntityRepository
 
                 break;
         }
+
+        $entityManager->persist($session);
+        $entityManager->flush();
     }
+
 
     /**
      * @return array<SessionRelCourse>

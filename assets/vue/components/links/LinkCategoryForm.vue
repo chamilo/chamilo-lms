@@ -30,7 +30,6 @@
 </template>
 
 <script setup>
-import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility";
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from "vue-i18n";
 import {ref, onMounted, reactive} from "vue";
@@ -41,6 +40,7 @@ import BaseButton from "../basecomponents/BaseButton.vue";
 import useVuelidate from "@vuelidate/core";
 import {required} from "@vuelidate/validators";
 import {useNotification} from "../../composables/notification";
+import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 
 const notification = useNotification();
 const route = useRoute();

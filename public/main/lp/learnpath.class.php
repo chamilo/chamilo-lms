@@ -5051,7 +5051,7 @@ class learnpath
 
         $title = disable_dangerous_file($title);
         $filename = $title;
-        $tmp_filename = $filename;
+        $tmp_filename = "$filename.$extension";
         /*$i = 0;
         while (file_exists($filepath.$tmp_filename.'.'.$extension)) {
             $tmp_filename = $filename.'_'.++$i;

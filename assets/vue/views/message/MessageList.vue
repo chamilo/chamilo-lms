@@ -217,7 +217,7 @@ import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import { useConfirm } from "primevue/useconfirm"
 import { useQuery } from "@vue/apollo-composable"
-import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX, MESSAGE_TYPE_SENDER } from "../../components/message/constants"
+import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX, MESSAGE_TYPE_SENDER } from "../../constants/entity/message"
 import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag"
 import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
@@ -227,6 +227,7 @@ import InputGroup from "primevue/inputgroup"
 import InputText from "primevue/inputtext"
 import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import { messageService } from "../../services/message"
+import messageRelUserService from "../../services/messagereluser"
 
 const route = useRoute()
 const router = useRouter()
@@ -254,7 +255,7 @@ const mItemsMarkAs = ref([
 
         myReceiver.read = true
 
-        return store.dispatch("messagereluser/update", myReceiver)
+        return messageRelUserService.update(myReceiver["@id"], myReceiver)
       })
 
       Promise.all(promises)
@@ -275,7 +276,7 @@ const mItemsMarkAs = ref([
 
         myReceiver.read = false
 
-        return store.dispatch("messagereluser/update", myReceiver)
+        return messageRelUserService.update(myReceiver["@id"], myReceiver)
       })
 
       Promise.all(promises)
@@ -368,8 +369,8 @@ function showInbox() {
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
-    'receivers.receiver': securityStore.user["@id"],
-    'receivers.receiverType': MESSAGE_TYPE_INBOX,
+    "receivers.receiver": securityStore.user["@id"],
+    "receivers.receiverType": MESSAGE_TYPE_INBOX,
   }
 
   loadMessages()
@@ -384,7 +385,7 @@ function showInboxByTag(tag) {
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
-    'receivers.receiverType': MESSAGE_TYPE_INBOX,
+    "receivers.receiverType": MESSAGE_TYPE_INBOX,
   }
 
   loadMessages()
@@ -400,7 +401,7 @@ function showUnread() {
     "receivers.read": false,
     itemsPerPage: initialRowsPerPage,
     page: 1,
-    'receivers.receiverType': MESSAGE_TYPE_INBOX,
+    "receivers.receiverType": MESSAGE_TYPE_INBOX,
   }
 
   loadMessages()
@@ -456,7 +457,7 @@ function findMyReceiver(message) {
 }
 
 function extractUserId(apiId) {
-  return apiId.split('/').pop()
+  return apiId.split("/").pop()
 }
 
 async function deleteMessage(message) {
@@ -472,8 +473,6 @@ async function deleteMessage(message) {
         await store.dispatch("messagereluser/del", myReceiver)
       }
     }
-
-    await messageService.checkAndUpdateMessageStatus(messageId)
 
     notification.showSuccessNotification(t("Message deleted"))
     await messageRelUserStore.findUnreadCount()

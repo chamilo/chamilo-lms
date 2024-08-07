@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "./visibility"
+import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()

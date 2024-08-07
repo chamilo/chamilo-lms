@@ -59,13 +59,6 @@ use Symfony\Component\Validator\Constraints as Assert;
             output: false,
             processor: MessageProcessor::class,
         ),
-        new Patch(
-            uriTemplate: '/messages/{id}/check-and-update-status',
-            inputFormats: ['json' => ['application/json']],
-            security: "is_granted('ROLE_USER')",
-            output: false,
-            processor: MessageProcessor::class,
-        ),
     ],
     normalizationContext: [
         'groups' => ['message:read'],

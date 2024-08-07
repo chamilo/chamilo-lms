@@ -613,7 +613,7 @@ $table->set_column_filter(10, 'requestTypeFilter');
 // Only show empty actions bar if delete users has been blocked
 $actionsList = [];
 if (api_is_platform_admin() &&
-    !api_get_configuration_value('deny_delete_users')
+    !api_get_env_variable('DENY_DELETE_USERS', false)
 ) {
     $actionsList['delete'] = get_lang('Remove from portal');
 }

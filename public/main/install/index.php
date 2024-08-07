@@ -479,6 +479,12 @@ if (isset($_POST['step2'])) {
                 '{{APP_INSTALLED}}' => 1,
                 '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
                 '{{APP_SECRET}}' => generateRandomToken(),
+                '{{DB_MANAGER_ENABLED}}' => '0',
+                '{{SECURITY_KEY}}' => generateRandomToken(),
+                '{{SOFTWARE_NAME}}' => 'Chamilo',
+                '{{SOFTWARE_URL}}' => $institutionUrlForm,
+                '{{DENY_DELETE_USERS}}' => '0',
+                '{{HOSTING_TOTAL_SIZE_LIMIT}}' => '0',
             ];
             error_log('Update env file');
             updateEnvFile($distFile, $envFile, $params);
@@ -568,6 +574,12 @@ if (isset($_POST['step2'])) {
             '{{APP_INSTALLED}}' => 1,
             '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
             '{{APP_SECRET}}' => generateRandomToken(),
+            '{{DB_MANAGER_ENABLED}}' => '0',
+            '{{SECURITY_KEY}}' => generateRandomToken(),
+            '{{SOFTWARE_NAME}}' => 'Chamilo',
+            '{{SOFTWARE_URL}}' => $institutionUrlForm,
+            '{{DENY_DELETE_USERS}}' => '0',
+            '{{HOSTING_TOTAL_SIZE_LIMIT}}' => '0',
         ];
 
         updateEnvFile($distFile, $envFile, $params);

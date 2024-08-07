@@ -24,6 +24,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Yaml\Yaml;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
@@ -4307,12 +4308,8 @@ function api_get_version()
  */
 function api_get_software_name()
 {
-    $name = api_get_configuration_value('software_name');
-    if (!empty($name)) {
-        return $name;
-    } else {
-        return 'Chamilo';
-    }
+    $name = api_get_env_variable('SOFTWARE_NAME', 'Chamilo');
+    return $name;
 }
 
 function api_get_status_list()
@@ -6814,6 +6811,73 @@ function api_get_configuration_value($variable)
     }
 
     return false;
+}
+
+/**
+ * Loads hosting limits from the YAML file.
+ *
+ * @return array The hosting limits.
+ */
+function load_hosting_limits(): array
+{
+    $filePath = api_get_path(SYS_PATH) . '/../config/hosting_limits.yml';
+
+    if (!file_exists($filePath)) {
+        return [];
+    }
+
+    $hostingLimits = Yaml::parseFile($filePath);
+
+    $formattedLimits = [];
+    foreach ($hostingLimits['hosting_limits']['urls'] as $urlId => $limits) {
+        $formattedLimits[$urlId] = [];
+        foreach ($limits as $limit) {
+            foreach ($limit as $key => $value) {
+                $formattedLimits[$urlId][$key] = $value;
+            }
+        }
+    }
+
+    return $formattedLimits;
+}
+
+/**
+ * Gets a specific hosting limit.
+ *
+ * @param int $urlId The URL ID.
+ * @param string $limitName The name of the limit.
+ * @return mixed The value of the limit, or null if not found.
+ */
+function get_hosting_limit(int $urlId, string $limitName): mixed
+{
+    $limits = load_hosting_limits();
+
+    return $limits[$urlId][$limitName] ?? null;
+}
+
+/**
+ * Retrieves an environment variable value with validation and handles boolean conversion.
+ *
+ * @param string $variable The name of the environment variable.
+ * @param mixed $default The default value to return if the variable is not set.
+ * @return mixed The value of the environment variable, converted to boolean if necessary, or the default value.
+ */
+function api_get_env_variable(string $variable, mixed $default = null): mixed
+{
+    if (isset($_ENV[$variable])) {
+        $value = $_ENV[$variable];
+
+        if ($value === '0') {
+            return false;
+        }
+        if ($value === '1') {
+            return true;
+        }
+
+        return $value;
+    }
+
+    return $default;
 }
 
 /**

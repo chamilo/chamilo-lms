@@ -1383,6 +1383,13 @@ function updateEnvFile($distFile, $envFile, $params)
         'DATABASE_PASSWORD',
         'APP_INSTALLED',
         'APP_ENCRYPT_METHOD',
+        'APP_SECRET',
+        'DB_MANAGER_ENABLED',
+        'SECURITY_KEY',
+        'SOFTWARE_NAME',
+        'SOFTWARE_URL',
+        'DENY_DELETE_USERS',
+        'HOSTING_TOTAL_SIZE_LIMIT',
     ];
 
     foreach ($requirements as $requirement) {

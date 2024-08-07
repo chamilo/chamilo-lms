@@ -474,8 +474,6 @@ async function deleteMessage(message) {
       }
     }
 
-    await messageService.checkAndUpdateMessageStatus(messageId)
-
     notification.showSuccessNotification(t("Message deleted"))
     await messageRelUserStore.findUnreadCount()
     loadMessages()

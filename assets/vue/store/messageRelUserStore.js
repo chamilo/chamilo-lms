@@ -16,6 +16,7 @@ export const useMessageRelUserStore = defineStore("messageRelUser", {
           "order[sendDate]": "desc",
           "receivers.read": false,
           "receivers.receiver": securityStore.user["@id"],
+          "receivers.receiverType": 1,
           itemsPerPage: 1,
           msgType: MESSAGE_TYPE_INBOX,
           status: 0,

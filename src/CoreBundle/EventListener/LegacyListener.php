@@ -148,9 +148,9 @@ class LegacyListener
             $session->set('cid_reset', false);
         }
 
-        $session->set(
-            'access_url_id',
-            $this->accessUrlHelper->getCurrent()->getId()
-        );
+        $currentAccessUrl = $this->accessUrlHelper->getCurrent();
+        if (null !== $currentAccessUrl) {
+            $session->set('access_url_id', $currentAccessUrl->getId());
+        }
     }
 }

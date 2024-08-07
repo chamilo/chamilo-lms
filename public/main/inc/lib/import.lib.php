@@ -41,7 +41,7 @@ class Import
      *
      * @return array returns an array (in the system encoding) that contains all data from the CSV-file
      */
-    public static function csvToArray($filename)
+    public static function csvToArray($filename, $delimiter = ';'): array
     {
         if (empty($filename)) {
             return [];
@@ -49,15 +49,7 @@ class Import
 
         $reader = Reader::createFromPath($filename, 'r');
         if ($reader) {
-            $reader->setDelimiter(';');
-            //$reader->stripBom(true);
-            /*$contents = $reader->__toString();
-            if (!Utf8::isUtf8($contents)) {
-                // If file is not in utf8 try converting to ISO-8859-15
-                if ($reader->getStreamFilterMode() == 1) {
-                    $reader->appendStreamFilter('convert.iconv.ISO-8859-15/UTF-8');
-                }
-            }*/
+            $reader->setDelimiter($delimiter);
             $reader->setHeaderOffset(0);
             $iterator = $reader->getRecords();
 

@@ -19,7 +19,7 @@ class UpdateCGlossaryAction extends BaseResourceFileAction
     public function __invoke(CGlossary $glossary, Request $request, CGlossaryRepository $repo, EntityManager $em): CGlossary
     {
         $data = json_decode($request->getContent(), true);
-        $title = $data['name'];
+        $title = $data['title'];
         $description = $data['description'];
         $parentResourceNodeId = $data['parentResourceNodeId'];
         $resourceLinkList = json_decode($data['resourceLinkList'], true);
@@ -37,7 +37,7 @@ class UpdateCGlossaryAction extends BaseResourceFileAction
 
         // Check if the term already exists
         $qb = $repo->getResourcesByCourse($course, $session)
-            ->andWhere('resource.name = :name')
+            ->andWhere('resource.title = :name')
             ->setParameter('name', $title)
         ;
         $existingGlossaryTerm = $qb->getQuery()->getOneOrNullResult();

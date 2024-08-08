@@ -1,57 +1,37 @@
 {% import '@ChamiloCore/Macros/box.html.twig' as macro %}
 {% block content %}
-{% autoescape false %}
-    {% for description in listing.descriptions %}
-        {% if not description is empty %}
-            <div id="description_{{ description.descriptionType }}" class="panel panel-default"
-                 data-id="{{ description.iid }}"
-{#                 data-c_id="{{ description.c_id }}" #}
-                 data-type="course_description"
-            >
-                <div class="">
-                    {% if is_allowed_to_edit %}
-                        <div class="float-right">
-                            {% if is_granted('EDIT', description.resourceNode) %}
-                                <a
-                                    href="{{ url('legacy_main', {'name': 'course_description/index.php' }) }}?action=edit&id={{ description.iid }}&{{ course_url_params }}"
-                                    title="{{ 'Edit'|get_lang }}">
-                                    {{ 'ActionIcon::EDIT'|mdi_icon }}
-                                </a>
+    {% autoescape false %}
+        {% for description in listing.descriptions %}
+            {% if not description is empty %}
+                <div id="description_{{ description.descriptionType }}" class="bg-white shadow-md rounded-lg mb-4" data-id="{{ description.iid }}" data-type="course_description">
+                    <div class="bg-gray-15 border-b border-gray-25 px-4 py-2 flex justify-between items-center">
+                        <div>
+                            {{ description.title }}
+                            {% if description.sessionId %}
+                                <i class="mdi mdi-star text-yellow-500"></i>
                             {% endif %}
-
-                            {% if is_granted('DELETE', description.resourceNode) %}
-                                <a href="{{ url('legacy_main', {'name': 'course_description/index.php' }) }}?action=delete&id={{ description.iid }}&{{ course_url_params }}"
-                                   onclick="javascript:return confirmation('{{ description.title | e('js')}}');"
-                                   title="{{ 'Delete'|get_lang }}">
-                                    {{ 'ActionIcon::DELETE'|mdi_icon }}
-                                </a>
-                            {% endif %}
-
-{#                            {% if session_id == description.session_id %}#}
-{#                                <a href="{{ _p.web_self }}?action=edit&amp;id={{ description.iid }}&amp;{{ _p.web_cid_query }}"#}
-{#                                   title="{{ 'Edit'|get_lang }}">#}
-{#                                    {{ 'ActionIcon::EDIT'|mdi_icon }}#}
-{#                                </a>#}
-{#                                <a href="{{ _p.web_self }}?action=delete&amp;id={{ description.iid }}&amp;{{ _p.web_cid_query }}"#}
-{#                                   onclick="javascript:return confirmation('{{ description.title | e(js)}}');"#}
-{#                                   title="{{ 'Delete'|get_lang }}">#}
-{#                                    {{ 'ActionIcon::DELETE'|mdi_icon }}#}
-{#                                </a>#}
-{#                            {% else %}#}
-{#                                {{ 'ActionIcon::EDIT'|mdi_icon_t(22, 'ch-tool-icon-disabled', 'EditionNotAvailableFromSession') }}#}
-{#                            {% endif %}#}
-
-
                         </div>
-                    {% endif %}
-                    {{ description.title }}
-                </div>
-                <div class="panel-body">
-                    {{ description.content }}
-                </div>
-            </div>
-        {% endif %}
-    {% endfor %}
+                        {% if is_allowed_to_edit %}
+                            <div class="space-x-2">
+                                {% if is_granted('EDIT', description.resourceNode) %}
+                                    <a href="{{ url('legacy_main', {'name': 'course_description/index.php' }) }}?action=edit&id={{ description.iid }}&{{ course_url_params }}" title="{{ 'Edit'|get_lang }}" class="text-primary hover:text-secondary">
+                                        {{ 'ActionIcon::EDIT'|mdi_icon }}
+                                    </a>
+                                {% endif %}
 
-{% endautoescape %}
+                                {% if is_granted('DELETE', description.resourceNode) %}
+                                    <a href="{{ url('legacy_main', {'name': 'course_description/index.php' }) }}?action=delete&id={{ description.iid }}&{{ course_url_params }}" onclick="javascript:return confirmation('{{ description.title | e('js')}}');" title="{{ 'Delete'|get_lang }}" class="text-danger hover:text-danger-dark">
+                                        {{ 'ActionIcon::DELETE'|mdi_icon }}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="p-4">
+                        {{ description.content }}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endautoescape %}
 {% endblock %}

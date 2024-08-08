@@ -113,4 +113,14 @@
       @apply border-gray-90;
     }
   }
+
+  &__horizontal-volume {
+    &-total {
+      @apply bg-gray-30 border-0 border-none rounded-lg;
+    }
+
+    &-current {
+      @apply bg-primary rounded-lg border-0 border-none;
+    }
+  }
 }

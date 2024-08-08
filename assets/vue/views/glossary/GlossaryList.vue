@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
+    <BaseToolbar v-if="securityStore.isAuthenticated && canEditGlossary">
       <BaseButton
         :label="t('Add new glossary term')"
         icon="plus"
@@ -120,6 +120,7 @@ import { debounce } from "lodash"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import Skeleton from "primevue/skeleton"
 import { useSecurityStore } from "../../store/securityStore"
+import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 
 const route = useRoute()
 const router = useRouter()
@@ -158,9 +159,17 @@ const termToDeleteString = computed(() => {
   return termToDelete.value.title
 })
 
-onMounted(() => {
+const isAllowedToEdit = ref(false)
+
+const canEditGlossary = computed(() => {
+  const sid = route.query.sid
+  return isAllowedToEdit.value || (isCurrentTeacher.value && !sid)
+})
+
+onMounted(async () => {
   isLoading.value = true
   fetchGlossaries()
+  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
 })
 
 const debouncedSearch = debounce(() => {

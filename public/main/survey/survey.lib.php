@@ -100,25 +100,16 @@ class SurveyManager
      * @return array
      * @assert ('') === false
      */
-    public static function get_surveys($course_code, $session_id = 0)
+    public static function get_surveys($courseCode, int $sessionId = 0)
     {
-        if (empty($course_code)) {
-            return false;
-        }
-        $course_info = api_get_course_info($course_code);
+        $courseId = api_get_course_int_id();
+        $repo = Container::getSurveyRepository();
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
 
-        if (empty($course_info)) {
-            return false;
-        }
+        $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
 
-        $sessionCondition = api_get_session_condition($session_id, true, true);
-
-        $table = Database::get_course_table(TABLE_SURVEY);
-        $sql = "SELECT * FROM $table
-                WHERE c_id = {$course_info['real_id']} $sessionCondition ";
-        $result = Database::query($sql);
-
-        return Database::store_result($result, 'ASSOC');
+        return $qb->getQuery()->getArrayResult();
     }
 
     /**

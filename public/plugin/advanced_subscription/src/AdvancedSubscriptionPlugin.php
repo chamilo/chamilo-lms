@@ -1291,7 +1291,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function generateHash($data)
     {
-        $key = sha1($this->get('secret_key'));
+        $key = hash('sha512', $this->get('secret_key'));
         // Prepare array to have specific type variables
         $dataPrepared['action'] = (string) ($data['action']);
         $dataPrepared['sessionId'] = (int) ($data['sessionId']);
@@ -1301,7 +1301,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $dataPrepared['newStatus'] = (int) ($data['newStatus']);
         $dataPrepared = serialize($dataPrepared);
 
-        return sha1($dataPrepared.$key);
+        return hash('sha512', $dataPrepared.$key);
     }
 
     /**

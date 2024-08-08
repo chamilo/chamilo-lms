@@ -1504,7 +1504,7 @@ class SurveyManager
      */
     public static function generate_survey_hash(int $survey_id, int $course_id, int $session_id, int $group_id): string
     {
-        $securityKey = api_get_env_variable('SECURITY_KEY', 'default_security_key');
+        $securityKey = api_get_env_variable('kernel.secret');
 
         return hash(
             'sha512',

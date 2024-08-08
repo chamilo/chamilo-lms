@@ -1385,7 +1385,6 @@ function updateEnvFile($distFile, $envFile, $params)
         'APP_ENCRYPT_METHOD',
         'APP_SECRET',
         'DB_MANAGER_ENABLED',
-        'SECURITY_KEY',
         'SOFTWARE_NAME',
         'SOFTWARE_URL',
         'DENY_DELETE_USERS',

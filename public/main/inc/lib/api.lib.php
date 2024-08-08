@@ -5210,7 +5210,7 @@ function api_is_valid_secret_key($original_key_secret, $security_key)
         return false;
     }
 
-    return (string) $original_key_secret === sha1($security_key);
+    return (string) $original_key_secret === hash('sha512', $security_key);
 }
 
 /**
@@ -6864,8 +6864,8 @@ function get_hosting_limit(int $urlId, string $limitName): mixed
  */
 function api_get_env_variable(string $variable, mixed $default = null): mixed
 {
-    if (isset($_ENV[$variable])) {
-        $value = $_ENV[$variable];
+    if (Container::$container->hasParameter($variable)) {
+        $value = Container::$container->getParameter($variable);
 
         if ($value === '0') {
             return false;
@@ -6879,7 +6879,6 @@ function api_get_env_variable(string $variable, mixed $default = null): mixed
 
     return $default;
 }
-
 /**
  * Retreives and returns a value in a hierarchical configuration array
  * api_get_configuration_sub_value('a/b/c') returns api_get_configuration_value('a')['b']['c'].

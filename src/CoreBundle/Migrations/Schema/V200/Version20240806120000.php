@@ -30,7 +30,6 @@ final class Version20240806120000 extends AbstractMigrationChamilo
         // Update .env and .env.local files
         $this->updateEnvFiles($rootPath, [
             "DB_MANAGER_ENABLED" => $_configuration['db_manager_enabled'] ? '1' : '0',
-            "SECURITY_KEY" => $_configuration['security_key'],
             "SOFTWARE_NAME" => $_configuration['software_name'],
             "SOFTWARE_URL" => $_configuration['software_url'],
             "DENY_DELETE_USERS" => $_configuration['deny_delete_users'] ? '1' : '0',

@@ -34,7 +34,7 @@
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { onMounted, reactive, ref } from "vue"
-import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility"
+import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import LayoutFormButtons from "../layout/LayoutFormButtons.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
@@ -126,7 +126,7 @@ const submitGlossaryForm = async () => {
     notification.showSuccessNotification(t("Glossary term saved"))
 
     await router.push({
-      title: "GlossaryList",
+      name: "GlossaryList",
       query: route.query,
     })
   } catch (error) {

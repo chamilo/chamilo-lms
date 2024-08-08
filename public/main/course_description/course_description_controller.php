@@ -74,7 +74,20 @@ class CourseDescriptionController
         $session_id = api_get_session_id();
         $data = [];
         $course_description->set_session_id($session_id);
-        $data['descriptions'] = $course_description->get_description_data();
+        $descriptions = $course_description->get_description_data();
+
+        foreach ($descriptions as $description) {
+            $description_data = [
+                'iid' => $description->getIid(),
+                'title' => $description->getTitle(),
+                'content' => $description->getContent(),
+                'descriptionType' => $description->getDescriptionType(),
+                'resourceNode' => $description->getResourceNode(),
+                'sessionId' => $description->getFirstResourceLink()->getSession() ? $description->getFirstResourceLink()->getSession()->getId() : null,
+            ];
+            $data['descriptions'][] = $description_data;
+        }
+
         $data['default_description_titles'] = $course_description->get_default_description_title();
         $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
         $data['default_description_icon'] = $course_description->get_default_description_icon();
@@ -85,26 +98,15 @@ class CourseDescriptionController
         // Prepare confirmation code for item deletion
         global $htmlHeadXtra;
         $htmlHeadXtra[] = "<script>
-        function confirmation(name) {
-            if (confirm(\" ".trim(get_lang('Are you sure to delete'))." \"+name+\"?\")) {
-                return true;
-            } else {
-                return false;
-            }
+    function confirmation(name) {
+        if (confirm(\" ".trim(get_lang('Are you sure to delete'))." \"+name+\"?\")) {
+            return true;
+        } else {
+            return false;
         }
-        </script>";
+    }
+    </script>";
 
-        /*foreach ($data['descriptions'] as $id => $description) {
-            if (!empty($description['content'])
-                && false !== strpos($description['content'], '<iframe')
-            ) {
-                header("X-XSS-Protection: 0");
-            }
-            // Add an escape version for the JS code of delete confirmation
-            if ($description) {
-                $data['descriptions'][$id]['title_js'] = addslashes(strip_tags($description['title']));
-            }
-        }*/
         $actions = self::getToolbar();
 
         $tpl = new Template(get_lang('Description'));

@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useSecurityStore } from '../store/securityStore';
 import { useCidReq } from './cidReq';
-import { RESOURCE_LINK_PUBLISHED } from '../components/resource_links/visibility';
+import { RESOURCE_LINK_PUBLISHED } from "../constants/entity/resourcelink"
 import { useCidReqStore } from "../store/cidReq"
 import axios from "axios"
 

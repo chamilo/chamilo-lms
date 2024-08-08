@@ -37,7 +37,7 @@ function onSubmit(publicationStudent) {
 
       showSuccessNotification(t("Assignment created"))
 
-      router.push({ name: "AssigmnentsList", query: { cid, sid, gid } })
+      router.push({ name: "AssignmentsList", query: { cid, sid, gid } })
     })
     .catch((error) => showErrorNotification(error))
     .finally(() => (isFormLoading.value = false))

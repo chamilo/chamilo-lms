@@ -6,22 +6,23 @@ export default {
   },
   name: "assignments",
   component: () => import("../components/assignments/AssignmentsLayout.vue"),
-  redirect: { name: "AssigmnentsList" },
+  redirect: { name: "AssignmentsList" },
   children: [
     {
-      name: "AssigmnentsList",
+      name: "AssignmentsList",
       path: "",
       component: () => import("../views/assignments/AssignmentsList.vue"),
     },
     {
-      name: "AssigmnentsCreate",
+      name: "AssignmentsCreate",
       path: "new",
       component: () => import("../views/assignments/AssignmentsCreate.vue"),
     },
     {
-      name: "AssigmnentsUpdate",
-      path: "edit",
+      name: "AssignmentsUpdate",
+      path: "edit/:id",
       component: () => import("../views/assignments/AssignmentsUpdate.vue"),
+      props: true,
     },
   ],
 };

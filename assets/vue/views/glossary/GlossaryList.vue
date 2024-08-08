@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
+    <BaseToolbar v-if="securityStore.isAuthenticated && canEditGlossary">
       <BaseButton
         :label="t('Add new glossary term')"
         icon="plus"
@@ -107,7 +107,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { computed, onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
+import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import GlossaryTermList from "../../components/glossary/GlossaryTermList.vue"
 import GlossaryTermTable from "../../components/glossary/GlossaryTermTable.vue"
@@ -120,6 +120,7 @@ import { debounce } from "lodash"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import Skeleton from "primevue/skeleton"
 import { useSecurityStore } from "../../store/securityStore"
+import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 
 const route = useRoute()
 const router = useRouter()
@@ -158,9 +159,17 @@ const termToDeleteString = computed(() => {
   return termToDelete.value.title
 })
 
-onMounted(() => {
+const isAllowedToEdit = ref(false)
+
+const canEditGlossary = computed(() => {
+  const sid = route.query.sid
+  return isAllowedToEdit.value || (isCurrentTeacher.value && !sid)
+})
+
+onMounted(async () => {
   isLoading.value = true
   fetchGlossaries()
+  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
 })
 
 const debouncedSearch = debounce(() => {

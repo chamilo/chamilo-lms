@@ -19,7 +19,7 @@ import DocumentsForm from "../../components/documents/Form.vue"
 import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
 import CreateMixin from "../../mixins/CreateMixin"
-import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
+import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 
 const servicePrefix = "Documents"
 

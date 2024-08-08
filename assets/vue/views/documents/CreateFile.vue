@@ -38,7 +38,7 @@ import DocumentsForm from "../../components/documents/FormNewDocument.vue"
 import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
 import CreateMixin from "../../mixins/CreateMixin"
-import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
+import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import Panel from "primevue/panel"
 import TemplateList from "../../components/documents/TemplateList.vue"
 import documentsService from "../../services/documents"
@@ -139,15 +139,37 @@ export default {
       this.isLoading = true
       this.errors = {}
       try {
-        let response = await documentsService.createWithFormData(payload)
-        let data = await response.json()
-        console.log(data)
+        let response = await documentsService.createWithFormData(payload);
+        let data = await response.json();
+        console.log(data);
+        this.onCreated(data);
       } catch (error) {
         console.error(error)
         this.errors = error.errors
       } finally {
         this.isLoading = false
       }
+    },
+    onCreated(item) {
+      let message;
+      if (item["resourceNode"]) {
+        message =
+          this.$i18n && this.$i18n.t
+            ? this.$t("{resource} created", { resource: item["resourceNode"].title })
+            : `${item["resourceNode"].title} created`;
+      } else {
+        message =
+          this.$i18n && this.$i18n.t ? this.$t("{resource} created", { resource: item.title }) : `${item.title} created`;
+      }
+
+      this.showMessage(message);
+      let folderParams = this.$route.query;
+
+      this.$router.push({
+        name: `${this.$options.servicePrefix}List`,
+        params: { id: item["@id"] },
+        query: folderParams,
+      });
     },
   },
   mounted() {

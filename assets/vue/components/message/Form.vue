@@ -80,7 +80,7 @@ import BaseUploader from "../basecomponents/BaseUploader.vue"
 import resourceFileService from "../../services/resourceFileService"
 import BaseAutocomplete from "../basecomponents/BaseAutocomplete.vue"
 import userService from "../../services/userService"
-import { MESSAGE_TYPE_INBOX } from "./constants"
+import { MESSAGE_TYPE_INBOX } from "../../constants/entity/message"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useSecurityStore } from "../../store/securityStore"
 import { MESSAGE_REL_USER_TYPE_CC, MESSAGE_REL_USER_TYPE_TO } from "../../constants/entity/messagereluser"
@@ -180,8 +180,8 @@ watch(
 async function asyncFind(query) {
   const { items } = await userService.findBySearchTerm(query)
   return items
-    .filter(member => member.active === 1)
-    .map(member => ({
+    .filter((member) => member.active === 1)
+    .map((member) => ({
       name: member.fullName,
       value: member["@id"],
     }))

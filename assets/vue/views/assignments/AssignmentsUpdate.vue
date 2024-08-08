@@ -28,8 +28,10 @@ const notification = useNotification()
 const assignment = ref(null)
 const isFormLoading = ref(true)
 
+const assignmentId = route.params.id
+
 cStudentPublicationService
-  .find(route.query.id)
+  .find(assignmentId)
   .then((response) => response.json())
   .then((json) => (assignment.value = json))
   .finally(() => (isFormLoading.value = false))
@@ -44,7 +46,7 @@ function onSubmit(publicationStudent) {
     .then(() => {
       notification.showSuccessNotification(t("Assignment updated"))
 
-      router.push({ name: "AssigmnentsList", query: route.query })
+      router.push({ name: "AssignmentsList", query: route.query })
     })
     .catch((e) => notification.showErrorNotification(e))
     .finally(() => (isFormLoading.value = false))

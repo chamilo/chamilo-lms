@@ -29,7 +29,8 @@ class TrackEDownloadsRepository extends ServiceEntityRepository
             ->setDownDocPath($documentUrl)
             ->setDownUserId($user->getId())
             ->setDownDate(new DateTime())
-            ->setResourceLink($resourceLink);
+            ->setResourceLink($resourceLink)
+        ;
 
         $this->_em->persist($download);
         $this->_em->flush();

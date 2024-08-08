@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-07-31 13:02+0000\n"
+"PO-Revision-Date: 2024-08-08 08:44+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Dutch <https://translation.chamilo.org/projects/chamilo/"
 "messages/nl/>\n"
@@ -19268,7 +19268,7 @@ msgid "Back to administration"
 msgstr "Terug naar beheer"
 
 msgid "Allow global chat"
-msgstr ""
+msgstr "Toestaan van globaal chat"
 
 msgid "Extra content in header"
 msgstr "Extra inhoud in headers"
@@ -19481,7 +19481,7 @@ msgid "Allows HR to manage skills"
 msgstr "Stelt HR in staat om vaardigheden te beheren"
 
 msgid "Default weight in Gradebook"
-msgstr ""
+msgstr "Standaardgewicht in puntenboekje"
 
 msgid "This weight will be use in all courses by default"
 msgstr "Dit gewicht zal standaard in alle cursussen gebruikt worden"
@@ -19496,10 +19496,10 @@ msgid "Go to the course"
 msgstr "Meld je aan voor de cursus"
 
 msgid "Teachers can change the Gradebook score settings"
-msgstr ""
+msgstr "Docenten kunnen de instellingen voor het puntenboekje wijzigen"
 
 msgid "When editing the Gradebook settings"
-msgstr ""
+msgstr "Bij het bewerken van de instellingen van het puntenboekje"
 
 msgid "Subtotal"
 msgstr "Subtotaal"
@@ -19532,7 +19532,7 @@ msgid "This assessment has been locked. You cannot unlock it. If you really need
 msgstr "Deze evaluatie werd vergrendeld. Je kan ze niet ontgrendelen. Als je ze echt wil ontgrendelen, contacteer dan de platform beheerder, leg hem/haar uit waarom je de evaluatie moet kunnen ontgrendelen (anders kan je evaluatie als frauduleus worden aanzien)"
 
 msgid "Enable locking of assessments by teachers"
-msgstr ""
+msgstr "Schakel het vergrendelen van beoordelingen door trainers in"
 
 msgid "Once enabled, this option will enable locking of any assessment by the teachers of the corresponding course. This, in turn, will prevent any modification of results by the teacher inside the resources used in the assessment: exams, learning paths, tasks, etc. The only role authorized to unlock a locked assessment is the administrator. The teacher will be informed of this possibility. The locking and unlocking of gradebooks will be registered in the system's report of important activities"
 msgstr ""
@@ -19545,80 +19545,108 @@ msgstr ""
 "vergrendelen en ontgrendelen van cahiers de notes zal worden geregistreerd "
 "in het systeemrapport van belangrijke activiteiten"
 
-msgid "    <div class=\"alert alert-info\">"
-msgstr ""
-
-msgid "<h3>Shibboleth authentication</h3>"
-msgstr ""
+msgid "Shibboleth authentication"
+msgstr "<h3>Shibboleth-authenticatie</h3>"
 
 msgid "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=Shibboleth'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus."
 msgstr ""
+"<p>Allereerst moet u Shibboleth configureren voor uw webserver.</p>Om het "
+"voor Chamilo te configureren<h5>bewerk het bestand main/auth/shibboleth/"
+"config/aai.class.php</h5><p>Wijzig object &#36;resultaatwaarden met de naam "
+"van uw Shibboleth-attributen</p><ul><li>&#36;resultaat-&gt;unique_id = "
+"'mail';</li><li>&#36;resultaat-&gt;firstname = "
+"'cn';</li><li>&#36;resultaat-&gt;lastname = "
+"'uid';</li><li>&#36;resultaat-&gt;email = 'mail';</li><li>&#36;resultaat-&gt;"
+"language = '-';</li><li>&#36;resultaat-&gt;gender = "
+"'-';</li><li>&#36;resultaat-&gt;address = '-';</li><li>&#36;resultaat-&gt;"
+"staff_category = '-';</li><li>&#36;resultaat-&gt;home_organization_type = "
+"'-'; </li><li>&#36;resultaat-&gt;home_organization = "
+"'-';</li><li>&#36;resultaat-&gt;affiliation = "
+"'-';</li><li>&#36;resultaat-&gt;persistent_id = '-';</li><li>...</li></ul><"
+"br/>Ga naar <a href='settings.php?category=Shibboleth'>Plugin</a> om een "
+"configureerbare 'Shibboleth Login'-knop toe te voegen voor uw Chamilo campus."
 
-msgid "<h3>LDAP autentication</h3>"
-msgstr ""
+msgid "LDAP authentication"
+msgstr "LDAP-authenticatie"
 
 msgid "Facebook authentication"
-msgstr ""
+msgstr "Facebook-authenticatie"
 
 msgid "<p><h5>Create your Facebook Application</h5>First of all, you have to create a Facebook Application (see <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) with your Facebook account. In the Facebook Apps settings, the site URL value should be the URL of this campus. Enable the Web OAuth Login option. And add the site URL of your campus to the Valid OAuth redirect URIs field</p><p>Uncomment the line <code>&#36;_configuration['facebook_auth'] = 1;</code> to enable the Facebook Auth.</p><p>Then, edit the <code>app/config/auth.conf.php</code> file and enter '<code>appId</code>' and '<code>secret</code>' values for <code>&#36;facebook_config</code>.</p><p>Go to <a href='settings.php?category=Plugins'>Plugins</a> to add a configurable <em>Facebook Login</em> button for your Chamilo campus.</p>"
 msgstr ""
+"<p><h5>Maak uw Facebook-applicatie aan</h5>Allereerst moet u een Facebook-"
+"applicatie aanmaken (zie <a href='https://developers.facebook.com/"
+"apps'>https://developers.facebook.com/apps</a>) met uw Facebook-account. In "
+"de instellingen van de Facebook Apps moet de site-URL-waarde de URL van deze "
+"campus zijn. Schakel de optie Web OAuth Login in. En voeg de site-URL van uw "
+"campus toe aan het veld Geldige OAuth-doorverwijzings-URI's</p><p>Haal het "
+"commentaar weg bij de regel <code>&#36;_configuration['facebook_auth'] = 1;</"
+"code> om de Facebook-authenticatie in te schakelen.</p><p>Bewerk vervolgens "
+"het bestand <code>app/config/auth.conf.php</code> en voer de waarden "
+"'<code>appId</code>' en '<code>secret</code>' in voor "
+"<code>&#36;facebook_config</code>.</p><p>Ga naar <a href='settings."
+"php?category=Plugins'>Plugins</a> om een configureerbare <em>Facebook "
+"Login</em>-knop toe te voegen voor uw Chamilo-campus.</p>"
 
 msgid "Announcement for a group"
 msgstr "Aankondiging voor een groep"
 
 msgid "Language priority 1"
-msgstr ""
+msgstr "Taalprioriteit 1"
 
 msgid "Language priority 2"
-msgstr ""
+msgstr "Taalprioriteit 2"
 
 msgid "Language priority 3"
-msgstr ""
+msgstr "Taalprioriteit 3"
 
 msgid "Language priority 4"
-msgstr ""
+msgstr "Taalprioriteit 4"
 
 msgid "Language priority 5"
-msgstr ""
+msgstr "Taalprioriteit 5"
 
 msgid "The language with the highest priority"
-msgstr ""
+msgstr "De taal met de hoogste prioriteit"
 
 msgid "The second language priority"
-msgstr ""
+msgstr "De tweede taalprioriteit"
 
 msgid "The third language priority"
-msgstr ""
+msgstr "De derde taalprioriteit"
 
 msgid "The fourth language priority"
-msgstr ""
+msgstr "De vierde taalprioriteit"
 
 msgid "The lowest language priority"
-msgstr ""
+msgstr "De laagste taalprioriteit"
 
 msgid "User language"
-msgstr ""
+msgstr "Gebruikerstaal"
 
 msgid "User selected language"
-msgstr ""
+msgstr "Gebruiker geselecteerde taal"
 
 msgid "Teachers can change the Gradebook model settings"
-msgstr ""
+msgstr "Docenten kunnen de instellingen van het puntenboekje wijzigen"
 
 msgid "When editing a Gradebook"
-msgstr ""
+msgstr "Bij het bewerken van een puntenboekje"
 
 msgid "Default grade model"
-msgstr ""
+msgstr "Standaard beoordelingsmodel"
 
 msgid "This value will be selected by default when creating a course"
 msgstr ""
+"Deze waarde wordt standaard geselecteerd bij het aanmaken van een cursus"
 
 msgid "Enable Gradebook model"
-msgstr ""
+msgstr "Activeer puntenboekje model"
 
 msgid "Enables the auto creation of gradebook categories inside a course depending of the gradebook models."
 msgstr ""
+"Activeert de automatische aanmaak van categorieën in het puntenboekje binnen "
+"een cursus, afhankelijk van de modellen van het puntenboekje."
 
 msgid "Are you sure you want to lock this item? After locking this item you can't edit the user results. To unlock it, you need to contact the platform administrator."
 msgstr ""

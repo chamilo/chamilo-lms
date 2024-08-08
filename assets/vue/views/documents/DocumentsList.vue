@@ -133,10 +133,17 @@
       field="resourceNode.title"
     >
       <template #body="slotProps">
-        <DocumentEntry
-          v-if="slotProps.data"
-          :data="slotProps.data"
-        />
+        <div style="display: flex; align-items: center;">
+          <DocumentEntry
+            v-if="slotProps.data"
+            :data="slotProps.data"
+          />
+          <BaseIcon
+            v-if="isAllowedToEdit && isSessionDocument(slotProps.data)"
+            icon="session-star"
+            class="mr-8"
+          />
+        </div>
       </template>
     </Column>
 
@@ -175,7 +182,7 @@
           />
 
           <BaseButton
-            v-if="securityStore.isAuthenticated && isCurrentTeacher"
+            v-if="canEdit(slotProps.data)"
             :icon="
               RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility
                 ? 'eye-on'
@@ -189,7 +196,7 @@
           />
 
           <BaseButton
-            v-if="securityStore.isAuthenticated && isCurrentTeacher"
+            v-if="canEdit(slotProps.data)"
             icon="edit"
             size="small"
             type="secondary"
@@ -197,14 +204,14 @@
           />
 
           <BaseButton
-            v-if="securityStore.isAuthenticated && isCurrentTeacher"
+            v-if="canEdit(slotProps.data)"
             icon="delete"
             size="small"
             type="danger"
             @click="confirmDeleteItem(slotProps.data)"
           />
           <BaseButton
-            v-if="isCertificateMode"
+            v-if="isCertificateMode && canEdit(slotProps.data)"
             :class="{ selected: slotProps.data.iid === defaultCertificateId }"
             :icon="slotProps.data.iid === defaultCertificateId ? 'certificate-selected' : 'certificate-not-selected'"
             size="small"
@@ -212,7 +219,7 @@
             @click="selectAsDefaultCertificate(slotProps.data)"
           />
           <BaseButton
-            v-if="securityStore.isAuthenticated && isCurrentTeacher && isHtmlFile(slotProps.data)"
+            v-if="securityStore.isAuthenticated && isCurrentTeacher && isHtmlFile(slotProps.data) && canEdit(slotProps.data)"
             :icon="getTemplateIcon(slotProps.data.iid)"
             size="small"
             type="secondary"
@@ -398,6 +405,7 @@ import prettyBytes from "pretty-bytes"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import { useDocumentActionButtons } from "../../composables/document/documentActionButtons"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
+import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 
 const store = useStore()
 const route = useRoute()
@@ -411,6 +419,7 @@ const { cid, sid, gid } = useCidReq()
 const { isImage, isHtml } = useFileUtils()
 
 const { relativeDatetime } = useFormatDate()
+const isAllowedToEdit = ref(false)
 
 const {
   showNewDocumentButton,
@@ -441,8 +450,6 @@ filters.value.loadNode = 1
 
 const selectedItems = ref([])
 
-const isCurrentTeacher = securityStore.isCurrentTeacher
-
 const items = computed(() => store.getters["documents/getRecents"])
 const isLoading = computed(() => store.getters["documents/isLoading"])
 
@@ -460,11 +467,27 @@ const isCertificateMode = computed(() => {
 
 const defaultCertificateId = ref(null)
 
-const isHtmlFile = (fileData) => {
-  return isHtml(fileData)
+const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
+
+const canEdit = (item) => {
+  const resourceLink = item.resourceLinkListFromEntity[0]
+  const isSessionDocument = resourceLink.session && resourceLink.session['@id'] === `/api/sessions/${sid}`
+  const isBaseCourse = !resourceLink.session
+  return (
+    (isSessionDocument && isAllowedToEdit.value) ||
+    (isBaseCourse && !sid && isCurrentTeacher.value)
+  )
 }
 
-onMounted(() => {
+const isSessionDocument = (item) => {
+  const resourceLink = item.resourceLinkListFromEntity[0]
+  return resourceLink.session && resourceLink.session['@id'] === `/api/sessions/${sid}`
+}
+
+const isHtmlFile = (fileData) => isHtml(fileData)
+
+onMounted(async () => {
+  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
   filters.value.loadNode = 1
 
   // Set resource node.
@@ -474,9 +497,9 @@ onMounted(() => {
     nodeId = route.query.node
   }
 
-  store.dispatch("resourcenode/findResourceNode", { id: `/api/resource_nodes/${nodeId}` })
+  await store.dispatch("resourcenode/findResourceNode", { id: `/api/resource_nodes/${nodeId}` })
 
-  loadDefaultCertificate()
+  await loadDefaultCertificate()
   onUpdateOptions(options.value)
 })
 

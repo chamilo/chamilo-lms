@@ -50,6 +50,7 @@ class GetGlossaryCollectionController extends BaseResourceFileAction
                         'id' => $item->getIid(),
                         'title' => $item->getTitle(),
                         'description' => $item->getDescription(),
+                        'sessionId' => $item->getFirstResourceLink()->getSession() ? $item->getFirstResourceLink()->getSession()->getId() : null,
                     ];
             }
         }

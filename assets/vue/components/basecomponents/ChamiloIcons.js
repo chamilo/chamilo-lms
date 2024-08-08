@@ -122,4 +122,5 @@ export const chamiloIconToClass = {
   "add-topic": "mdi mdi-forum-outline",
   "event-reminder": "mdi mdi-alarm",
   "add-event-reminder": "mdi mdi-alarm-plus",
+  "session-star": "mdi mdi-star",
 };

@@ -89,7 +89,7 @@
         </div>
 
         <BaseButton
-          v-if="securityStore.isCurrentTeacher && courseIntroEl?.introduction?.iid"
+          v-if="isAllowedToEdit && courseIntroEl?.introduction?.iid"
           :label="t('Edit introduction')"
           class="grow-0"
           icon="edit"

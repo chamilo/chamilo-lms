@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isLoading && item && isCurrentTeacher">
+  <div v-if="!isLoading && item && canEditItem">
     <!--    :handle-delete="del"-->
     <Toolbar
       :handle-back="handleBack"
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { ref, computed, onMounted } from 'vue'
 import { mapActions, mapGetters } from "vuex"
 import { mapFields } from "vuex-map-fields"
 import DocumentsForm from "../../components/documents/FormNewDocument.vue"
@@ -53,11 +54,11 @@ import EditLinks from "../../components/resource_links/EditLinks.vue"
 import TemplateList from "../../components/documents/TemplateList.vue"
 import axios from "axios"
 import Panel from "primevue/panel"
-import { storeToRefs } from "pinia"
+import { useRoute } from 'vue-router'
 import { useSecurityStore } from "../../store/securityStore"
+import { checkIsAllowedToEdit } from '../../composables/userPermissions'
 
 const servicePrefix = "Documents"
-const { isCurrentTeacher } = storeToRefs(useSecurityStore())
 
 export default {
   name: "DocumentsUpdate",
@@ -71,11 +72,32 @@ export default {
     Panel,
   },
   mixins: [UpdateMixin],
+  setup() {
+    const securityStore = useSecurityStore()
+    const isAllowedToEdit = ref(false)
+    const route = useRoute()
+
+    const checkEditPermissions = async () => {
+      isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
+    }
+
+    onMounted(() => {
+      checkEditPermissions()
+    })
+
+    return {
+      securityStore,
+      isAllowedToEdit,
+      route,
+      checkEditPermissions
+    }
+  },
   data() {
     const finalTags = this.getCertificateTags()
     return {
       templates: [],
       finalTags,
+      isAllowedToEdit: ref(false)
     }
   },
   computed: {
@@ -87,9 +109,21 @@ export default {
       violations: "violations",
     }),
     ...mapGetters("documents", ["find"]),
-    isCurrentTeacher: () => {
-      return isCurrentTeacher.value
+    isCurrentTeacher() {
+      return this.securityStore.isCurrentTeacher || this.isAllowedToEdit
     },
+    canEditItem() {
+      const resourceLink = this.item?.resourceLinkListFromEntity?.[0]
+      const sidFromResourceLink = resourceLink?.session?.['@id']
+      return (
+        (sidFromResourceLink && sidFromResourceLink === `/api/sessions/${this.$route.query.sid}` && this.isAllowedToEdit) ||
+        this.isCurrentTeacher
+      )
+    }
+  },
+  mounted() {
+    this.fetchTemplates()
+    this.checkEditPermissions()
   },
   methods: {
     handleBack() {
@@ -152,9 +186,6 @@ export default {
       updateWithFormData: "updateWithFormData",
       updateReset: "resetUpdate",
     }),
-  },
-  mounted() {
-    this.fetchTemplates()
-  },
+  }
 }
 </script>

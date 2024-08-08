@@ -608,9 +608,9 @@ function get_survey_data($from, $number_of_items, $column, $direction)
     return SurveyUtil::get_survey_data($from, $number_of_items, $column, $direction);
 }
 
-function modify_filter($survey_id)
+function modify_filter($survey_id, $url_params, $row)
 {
-    return SurveyUtil::modify_filter($survey_id, false);
+    return SurveyUtil::modify_filter($survey_id, $url_params, $row);
 }
 
 function modify_filter_drh($survey_id)

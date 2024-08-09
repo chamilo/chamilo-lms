@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -57,6 +58,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     public function __construct(
         private readonly UserHelper $userHelper,
+        private readonly ResourceNodeRepository $resourceNodeRepository,
     ) {}
 
     #[Route(path: '/{tool}/{type}/{id}/disk_space', methods: ['GET', 'POST'], name: 'chamilo_core_resource_disk_space')]
@@ -471,8 +473,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         $fileName = $resourceFile->getOriginalName();
+        $fileSize = $resourceFile->getSize();
         $mimeType = $resourceFile->getMimeType();
+        [$start, $end, $length] = $this->getRange($request, $fileSize);
         $resourceNodeRepo = $this->getResourceNodeRepository();
+
+        // Convert the file name to ASCII using iconv
+        $fileName = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $fileName);
 
         switch ($mode) {
             case 'download':
@@ -501,16 +508,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $params['crop'] = $crop;
                     }
 
-                    $fileName = $resourceNodeRepo->getFilename($resourceFile);
+                    $filePath = $resourceNodeRepo->getFilename($resourceFile);
 
-                    $response = $server->getImageResponse($fileName, $params);
-
-                    // Convert the file name to ASCII using iconv
-                    $fileName = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $fileName);
+                    $response = $server->getImageResponse($filePath, $params);
 
                     $disposition = $response->headers->makeDisposition(
                         ResponseHeaderBag::DISPOSITION_INLINE,
-                        basename($fileName)
+                        $fileName
                     );
                     $response->headers->set('Content-Disposition', $disposition);
 
@@ -526,9 +530,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $replacementValues = $allUserInfo[1];
                         $content = str_replace($tagsToReplace, $replacementValues, $content);
                     }
-
-                    // Convert the file name to ASCII using iconv
-                    $fileName = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $fileName);
 
                     $response = new Response();
                     $disposition = $response->headers->makeDisposition(
@@ -567,16 +568,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 break;
         }
 
-        $stream = $resourceNodeRepo->getResourceNodeFileStream($resourceNode);
-
         $response = new StreamedResponse(
-            function () use ($stream): void {
-                stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+            function () use ($resourceNode, $start, $length): void {
+                $this->streamFileContent($resourceNode, $start, $length);
             }
         );
-
-        // Convert the file name to ASCII using iconv
-        $fileName = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $fileName);
 
         $disposition = $response->headers->makeDisposition(
             $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
@@ -584,7 +580,53 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+        $response->headers->set('Content-Length', (string) $resourceFile->getSize());
+        $response->headers->set('Accept-Ranges', 'bytes');
+        $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
+        $response->setStatusCode(
+            $start > 0 || $end < $fileSize - 1 ? Response::HTTP_PARTIAL_CONTENT : Response::HTTP_OK
+        );
 
         return $response;
+    }
+
+    private function getRange(Request $request, int $fileSize): array
+    {
+        $range = $request->headers->get('Range');
+
+        if ($range) {
+            [, $range] = explode('=', $range, 2);
+            [$start, $end] = explode('-', $range);
+
+            $start = (int) $start;
+            $end = ($end === '') ? $fileSize - 1 : (int) $end;
+
+            $length = $end - $start + 1;
+        } else {
+            $start = 0;
+            $end = $fileSize - 1;
+            $length = $fileSize;
+        }
+
+        return [$start, $end, $length];
+    }
+
+    private function streamFileContent(ResourceNode $resourceNode, int $start, int $length): void
+    {
+        $stream = $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode);
+
+        fseek($stream, $start);
+
+        $bytesSent = 0;
+
+        while ($bytesSent < $length && !feof($stream)) {
+            $buffer = fread($stream, min(1024 * 8, $length - $bytesSent));
+
+            echo $buffer;
+
+            $bytesSent += strlen($buffer);
+        }
+
+        fclose($stream);
     }
 }

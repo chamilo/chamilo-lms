@@ -20,7 +20,7 @@ Session::erase('objExercise');
 Session::erase('objQuestion');
 Session::erase('objAnswer');
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin', 'name' => get_lang('Administration')];
 
 $form = new FormValidator('admin_questions', 'get');
 $form->addHeader(get_lang('Questions'));

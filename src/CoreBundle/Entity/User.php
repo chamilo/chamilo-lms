@@ -398,28 +398,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $gradeBookComments;
 
     /**
-     * @var Collection<int, GradebookEvaluation>
-     */
-    #[ORM\OneToMany(
-        mappedBy: 'user',
-        targetEntity: GradebookEvaluation::class,
-        cascade: ['persist', 'remove'],
-        orphanRemoval: true
-    )]
-    protected Collection $gradeBookEvaluations;
-
-    /**
-     * @var Collection<int, GradebookLink>
-     */
-    #[ORM\OneToMany(
-        mappedBy: 'user',
-        targetEntity: GradebookLink::class,
-        cascade: ['persist', 'remove'],
-        orphanRemoval: true
-    )]
-    protected Collection $gradeBookLinks;
-
-    /**
      * @var Collection<int, GradebookResult>
      */
     #[ORM\OneToMany(
@@ -758,8 +736,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->commentedUserSkills = new ArrayCollection();
         $this->gradeBookCategories = new ArrayCollection();
         $this->gradeBookComments = new ArrayCollection();
-        $this->gradeBookEvaluations = new ArrayCollection();
-        $this->gradeBookLinks = new ArrayCollection();
         $this->gradeBookResults = new ArrayCollection();
         $this->gradeBookResultLogs = new ArrayCollection();
         $this->gradeBookScoreLogs = new ArrayCollection();
@@ -781,7 +757,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->receivedMessages = new ArrayCollection();
         $this->surveyInvitations = new ArrayCollection();
         $this->logins = new ArrayCollection();
-        // $this->extraFields = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->updatedAt = new DateTime();
         $this->registrationDate = new DateTime();
@@ -805,40 +780,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     {
         return [
             new Assert\Length(['min' => 5]),
-            // Alpha numeric + "_" or "-"
             new Assert\Regex(['pattern' => '/^[a-z\-_0-9]+$/i', 'htmlPattern' => '/^[a-z\-_0-9]+$/i']),
-            // Min 3 letters - not needed
-            /*new Assert\Regex(array(
-                  'pattern' => '/[a-z]{3}/i',
-                  'htmlPattern' => '/[a-z]{3}/i')
-              ),*/
-            // Min 2 numbers
             new Assert\Regex(['pattern' => '/[0-9]{2}/', 'htmlPattern' => '/[0-9]{2}/']),
         ];
     }
 
     public static function loadValidatorMetadata(ClassMetadata $metadata): void
     {
-        // $metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
-        // $metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
-        // $metadata->addPropertyConstraint('email', new Assert\Email());
-        /*
-                $metadata->addPropertyConstraint('password',
-                    new Assert\Collection(self::getPasswordConstraints())
-                );*/
-        /*$metadata->addConstraint(new UniqueEntity(array(
-              'fields'  => 'username',
-              'message' => 'This value is already used.',
-          )));*/
-        /*$metadata->addPropertyConstraint(
-              'username',
-              new Assert\Length(array(
-                  'min'        => 2,
-                  'max'        => 50,
-                  'minMessage' => 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
-                  'maxMessage' => 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
-              ))
-          );*/
     }
 
     public function getUuid(): Uuid
@@ -897,15 +845,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    /*public function getDropBoxReceivedFiles()
-        {
-            return $this->dropBoxReceivedFiles;
-        }
-
-        public function setDropBoxReceivedFiles($value): void
-        {
-            $this->dropBoxReceivedFiles = $value;
-        }*/
     public function getCourses(): Collection
     {
         return $this->courses;
@@ -927,18 +866,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
         return $this;
     }
-
-    /*public function getCurriculumItems(): Collection
-        {
-            return $this->curriculumItems;
-        }
-
-        public function setCurriculumItems(array $items): self
-        {
-            $this->curriculumItems = $items;
-
-            return $this;
-        }*/
 
     /**
      * Get a bool on whether the user is active or not. Active can be "-1" which means pre-deleted, and is returned as false (not active).
@@ -1430,31 +1357,16 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function isAccountNonExpired(): bool
     {
-        /*if (true === $this->expired) {
-                    return false;
-                }
-
-                if (null !== $this->expiresAt && $this->expiresAt->getTimestamp() < time()) {
-                    return false;
-                }*/
         return true;
     }
 
     public function isAccountNonLocked(): bool
     {
         return true;
-        // return !$this->locked;
     }
 
     public function isCredentialsNonExpired(): bool
     {
-        /*if (true === $this->credentialsExpired) {
-                    return false;
-                }
-
-                if (null !== $this->credentialsExpireAt && $this->credentialsExpireAt->getTimestamp() < time()) {
-                    return false;
-                }*/
         return true;
     }
 
@@ -1983,22 +1895,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getGradeBookComments(): Collection
     {
         return $this->gradeBookComments;
-    }
-
-    /**
-     * @return Collection<int, GradebookEvaluation>
-     */
-    public function getGradeBookEvaluations(): Collection
-    {
-        return $this->gradeBookEvaluations;
-    }
-
-    /**
-     * @return Collection<int, GradebookLink>
-     */
-    public function getGradeBookLinks(): Collection
-    {
-        return $this->gradeBookLinks;
     }
 
     /**

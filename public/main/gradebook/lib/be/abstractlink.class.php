@@ -379,7 +379,6 @@ abstract class AbstractLink implements GradebookItem
         $this->add_linked_data();
         if (!empty($this->type) &&
             !empty($this->ref_id) &&
-            !empty($this->user_id) &&
             !empty($this->course_id) &&
             !empty($this->category)
         ) {
@@ -406,7 +405,6 @@ abstract class AbstractLink implements GradebookItem
                     ->setType($this->get_type())
                     ->setVisible($this->is_visible())
                     ->setWeight(api_float_val($this->get_weight()))
-                    ->setUser(api_get_user_entity($this->get_user_id()))
                     ->setRefId($this->get_ref_id())
                     ->setCategory($category)
                     ->setCourse(api_get_course_entity($this->course_id))
@@ -415,6 +413,15 @@ abstract class AbstractLink implements GradebookItem
                 $em->flush();
 
                 $this->set_id($link->getId());
+
+                Event::addEvent(
+                    'gradebook_link_created',
+                    'link',
+                    $link->getId(),
+                    null,
+                    api_get_user_id(),
+                    $this->course_id
+                );
 
                 return $link->getId();
             }
@@ -447,7 +454,6 @@ abstract class AbstractLink implements GradebookItem
         $link
             ->setType($this->get_type())
             ->setRefId($this->get_ref_id())
-            ->setUser(api_get_user_entity($this->get_user_id()))
             ->setCourse($course)
             ->setCategory($category)
             ->setWeight($this->get_weight())
@@ -768,7 +774,6 @@ abstract class AbstractLink implements GradebookItem
             $link->set_id($data['id']);
             $link->set_type($data['type']);
             $link->set_ref_id($data['ref_id']);
-            $link->set_user_id($data['user_id']);
             $link->setCourseId($data['c_id']);
             $link->set_category_id($data['category_id']);
             $link->set_date($data['created_at']);

@@ -246,45 +246,6 @@ function set_file_folder_permissions()
 }
 
 /**
- * Write the main system config file.
- *
- * @param string $path Path to the config file
- */
-function writeSystemConfigFile($path)
-{
-    $content = file_get_contents(__DIR__.'/'.SYSTEM_CONFIG_FILENAME);
-    $config['{DATE_GENERATED}'] = date('r');
-    $config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
-
-    foreach ($config as $key => $value) {
-        $content = str_replace($key, $value, $content);
-    }
-    $fp = @fopen($path, 'w');
-
-    if (!$fp) {
-        echo '<strong>
-                <font color="red">Your script doesn\'t have write access to the config directory</font></strong><br />
-                <em>('.str_replace('\\', '/', realpath($path)).')</em><br /><br />
-                You probably do not have write access on Chamilo root directory,
-                i.e. you should <em>CHMOD 777</em> or <em>755</em> or <em>775</em>.<br /><br />
-                Your problems can be related on two possible causes:<br />
-                <ul>
-                  <li>Permission problems.<br />Try initially with <em>chmod -R 777</em> and increase restrictions gradually.</li>
-                  <li>PHP is running in <a href="http://www.php.net/manual/en/features.safe-mode.php" target="_blank">Safe-Mode</a>.
-                  If possible, try to switch it off.</li>
-                </ul>
-                <a href="http://forum.chamilo.org/" target="_blank">Read about this problem in Support Forum</a><br /><br />
-                Please go back to step 5.
-                <p><input type="submit" name="step5" value="&lt; Back" /></p>
-                </td></tr></table></form></body></html>';
-        exit;
-    }
-
-    fwrite($fp, $content);
-    fclose($fp);
-}
-
-/**
  * This function returns the value of a parameter from the configuration file.
  *
  * WARNING - this function relies heavily on global variables $updateFromConfigFile
@@ -799,7 +760,7 @@ function display_requirements(
         'pathPermissions' => $pathPermissions,
         'step2_update_6' => isset($_POST['step2_update_6']),
         'notWritable' => $notWritable,
-        'existsConfigurationFile' => file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php'),
+        'existsConfigurationFile' => false,
         'deprecatedToRemove' => $deprecatedToRemove,
         'installError' => $error,
     ];
@@ -1735,22 +1696,20 @@ function checkCanCreateFile(string $file): bool
 /**
  * Checks if the update option is available.
  *
- * Checks the existence of the "app" folder and the "configuration.php" file
- * to determine if an update is available from version 1.11.x.
+ * This function checks the APP_INSTALLED environment variable to determine if the application is already installed.
+ * If the APP_INSTALLED variable is set to '1', it indicates that an update is available.
  *
- * @param string $baseDir The base directory.
- * @return bool True if the update is available, false otherwise.
+ * @return bool True if the application is already installed (APP_INSTALLED='1'), otherwise false.
  */
-function isUpdateAvailable(string $baseDir): bool
+function isUpdateAvailable(): bool
 {
-    // Path to the "app" folder
-    $appFolder = $baseDir.'/../app';
+    // Check if APP_INSTALLED is set and equals '1'
+    if (isset($_ENV['APP_INSTALLED']) && $_ENV['APP_INSTALLED'] === '1') {
+        return true;
+    }
 
-    // Path to the "configuration.php" file
-    $configFile = $baseDir.'/../app/config/configuration.php';
-
-    // Check the existence of the "app" folder and the "configuration.php" file
-    return is_dir($appFolder) && file_exists($configFile);
+    // If APP_INSTALLED is not found or not set to '1', assume the application is not installed
+    return false;
 }
 
 function checkMigrationStatus(): array

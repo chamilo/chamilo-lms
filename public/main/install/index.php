@@ -174,7 +174,7 @@ if (!empty($_POST['updatePath'])) {
 }
 
 $checkMigrationStatus = [];
-$isUpdateAvailable = isUpdateAvailable(api_get_path(SYS_PATH));
+$isUpdateAvailable = isUpdateAvailable();
 if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($_POST['step2_update_6'])) {
     if (isset($_POST['step2_install'])) {
         $installType = 'new';
@@ -630,7 +630,6 @@ if (isset($_POST['step2'])) {
                 $allowSelfRegProf,
                 $installationProfile
             );
-            writeSystemConfigFile(api_get_path(SYMFONY_SYS_PATH).'config/configuration.php');
             error_log('Finish installation');
         } else {
             error_log('ERROR during installation.');

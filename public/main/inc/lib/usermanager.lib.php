@@ -183,12 +183,11 @@ class UserManager
             }
         }
 
-        if (isset($_configuration[$access_url_id]) &&
-            is_array($_configuration[$access_url_id]) &&
-            isset($_configuration[$access_url_id]['hosting_limit_users']) &&
-            $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
+        $hostingLimitUsers = get_hosting_limit($access_url_id, 'hosting_limit_users');
+
+        if ($hostingLimitUsers !== null && $hostingLimitUsers > 0) {
             $num = self::get_number_of_users();
-            if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
+            if ($num >= $hostingLimitUsers) {
                 api_warn_hosting_contact('hosting_limit_users');
                 Display::addFlash(
                     Display::return_message(
@@ -201,23 +200,22 @@ class UserManager
             }
         }
 
-        if (1 === $status &&
-            isset($_configuration[$access_url_id]) &&
-            is_array($_configuration[$access_url_id]) &&
-            isset($_configuration[$access_url_id]['hosting_limit_teachers']) &&
-            $_configuration[$access_url_id]['hosting_limit_teachers'] > 0
-        ) {
-            $num = self::get_number_of_users(1);
-            if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('Sorry, this installation has a teachers limit, which has now been reached. To increase the number of teachers allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan.'),
-                        'warning'
-                    )
-                );
-                api_warn_hosting_contact('hosting_limit_teachers');
+        if (1 === $status) {
+            $hostingLimitTeachers = get_hosting_limit($access_url_id, 'hosting_limit_teachers');
 
-                return false;
+            if ($hostingLimitTeachers !== null && $hostingLimitTeachers > 0) {
+                $num = self::get_number_of_users(1);
+                if ($num >= $hostingLimitTeachers) {
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('Sorry, this installation has a teachers limit, which has now been reached. To increase the number of teachers allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan.'),
+                            'warning'
+                        )
+                    );
+                    api_warn_hosting_contact('hosting_limit_teachers');
+
+                    return false;
+                }
             }
         }
 
@@ -612,7 +610,7 @@ class UserManager
      */
     public static function canDeleteUser($user_id)
     {
-        $deny = api_get_configuration_value('deny_delete_users');
+        $deny = api_get_env_variable('DENY_DELETE_USERS', false);
 
         if ($deny) {
             return false;

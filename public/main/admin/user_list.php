@@ -718,7 +718,7 @@ function modify_filter($user_id, $url_params, $row): string
             );
         }
 
-        $deleteAllowed = !api_get_configuration_value('deny_delete_users');
+        $deleteAllowed = api_get_env_variable('DENY_DELETE_USERS', false);
         if ($deleteAllowed) {
             if ($user_id != $currentUserId &&
                 !$user_is_anonymous &&
@@ -1297,14 +1297,14 @@ if ($showDeletedUsers) {
     $table->set_column_filter(11, 'modify_deleted_filter');
     $actionsList['restore'] = get_lang('Restore');
     if (api_is_platform_admin() &&
-        !api_get_configuration_value('deny_delete_users')
+        !api_get_env_variable('DENY_DELETE_USERS', false)
     ) {
         $actionsList['destroy'] = get_lang('Destroy');
     }
 } else {
     $table->set_column_filter(11, 'modify_filter');
     if (api_is_platform_admin() &&
-        !api_get_configuration_value('deny_delete_users')
+        !api_get_env_variable('DENY_DELETE_USERS', false)
     ) {
         $actionsList['delete'] = get_lang('Remove from portal');
     }

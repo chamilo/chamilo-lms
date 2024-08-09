@@ -167,13 +167,11 @@ class SessionManager
             ? (empty($accessUrlId) ? api_get_current_access_url_id() : (int) $accessUrlId)
             : 1;
 
-        if (isset($_configuration[$accessUrlId]) &&
-            is_array($_configuration[$accessUrlId]) &&
-            isset($_configuration[$accessUrlId]['hosting_limit_sessions']) &&
-            $_configuration[$accessUrlId]['hosting_limit_sessions'] > 0
-        ) {
+        $hostingLimitSessions = get_hosting_limit($accessUrlId, 'hosting_limit_sessions');
+
+        if ($hostingLimitSessions !== null && $hostingLimitSessions > 0) {
             $num = self::count_sessions();
-            if ($num >= $_configuration[$accessUrlId]['hosting_limit_sessions']) {
+            if ($num >= $hostingLimitSessions) {
                 api_warn_hosting_contact('hosting_limit_sessions');
 
                 return get_lang('The number of sessions limit for this portal has been reached');

@@ -95,10 +95,8 @@ if ($isCli && $baseUrl) {
 }
 
 try {
-    // Load legacy configuration.php
-    if ($kernel->isInstalled()) {
-        require_once $kernel->getConfigurationFile();
-    } else {
+
+    if (!$kernel->isInstalled()) {
         throw new Exception('Chamilo is not installed');
     }
 

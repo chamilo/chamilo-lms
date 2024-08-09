@@ -949,15 +949,14 @@ if ($form->validate()) {
         $illustrationRepo->deleteIllustration($courseEntity);
     }
 
-    $limitCourses = api_get_configuration_value('hosting_limit_active_courses');
-    if ($limitCourses > 0) {
+    $access_url_id = api_get_current_access_url_id();
+
+    $limitCourses = get_hosting_limit($access_url_id, 'hosting_limit_active_courses');
+    if ($limitCourses !== null && $limitCourses > 0) {
         $courseInfo = api_get_course_info_by_id($courseId);
 
-        // Check if
-        if (COURSE_VISIBILITY_HIDDEN == $courseInfo['visibility'] &&
-            $visibility != $courseInfo['visibility']
-        ) {
-            $num = CourseManager::countActiveCourses($urlId);
+        if (COURSE_VISIBILITY_HIDDEN == $courseInfo['visibility'] && $visibility != $courseInfo['visibility']) {
+            $num = CourseManager::countActiveCourses($access_url_id);
             if ($num >= $limitCourses) {
                 api_warn_hosting_contact('hosting_limit_active_courses');
 

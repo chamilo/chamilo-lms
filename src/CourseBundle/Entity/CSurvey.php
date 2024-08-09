@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['code'], name: 'idx_survey_code')]
 #[Gedmo\Tree(type: 'nested')]
 #[ORM\Entity(repositoryClass: CSurveyRepository::class)]
-class CSurvey extends AbstractResource implements ResourceInterface, Stringable
+class CSurvey extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]

@@ -19352,16 +19352,13 @@ msgstr "Povoliť uzamknutie hodnotenia učiteľov"
 msgid "Once enabled, this option will enable locking of any assessment by the teachers of the corresponding course. This, in turn, will prevent any modification of results by the teacher inside the resources used in the assessment: exams, learning paths, tasks, etc. The only role authorized to unlock a locked assessment is the administrator. The teacher will be informed of this possibility. The locking and unlocking of gradebooks will be registered in the system's report of important activities"
 msgstr "Po aktivácii, bude táto voľba umožňovať zamknutie akéhokoľvek posúdenia učitelia zodpovedajúceho kurzu. Toto, podľa poradia, bude zabraňovať modifikácii výsledkov učiteľom vnútri zdrojov použitých pri posudzovaní: skúšky, učebnej osnovy, úlohy, atď. Iba rola správcu je oprávnená odomknúť hodnotenie. Učiteľ bude informovaný o tejto možnosti. Zamykanie a odomykanie klasifikačného hárku bude zapísané v systémových hláseniach dôležitých činností"
 
-msgid "    <div class=\"alert alert-info\">"
-msgstr "<div class='normal-message'>"
-
-msgid "<h3>Shibboleth authentication</h3>"
+msgid "Shibboleth authentication"
 msgstr "<h3>Shibboleth overovanie</h3>"
 
 msgid "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=Shibboleth'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus."
 msgstr "<p>Po prvé, budete musieť nakonfigurovať Shibboleth pre váš webový server.</p>Ak ho chcete nakonfigurovať pre Chamilo<h5>upravte súbor main/auth/shibboleth/config/aai.class.php</h5><p>Upravte hodnoty &#36;result objektu s názvom vašej Shibboleth atribútov</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Ísť na <a href='settings.php?category=Shibboleth'>Zásuvný modul</a> pridať konfigurovateľný 'Shibboleth Prihlásenie' tlačidlo pre vašu Chamilo školu."
 
-msgid "<h3>LDAP autentication</h3>"
+msgid "LDAP authentication"
 msgstr "<h3>LDAP overovanie</h3>"
 
 msgid "Facebook authentication"

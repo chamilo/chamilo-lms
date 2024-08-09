@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
+    <BaseToolbar v-if="securityStore.isAuthenticated && isAllowedToEdit">
       <BaseButton
         :label="t('Add a link')"
         icon="link-add"
@@ -28,7 +28,7 @@
       </div>
     </LinkCategoryCard>
 
-    <div v-if="!linksWithoutCategory.length && !categories.length">
+    <div v-if="!isLoading && !linksWithoutCategory.length && !categories.length">
       <!-- Render the image and create button -->
       <EmptyState
         :summary="t('Add your first link to this course')"
@@ -177,16 +177,21 @@ import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.v
 import Skeleton from "primevue/skeleton"
 import { isVisible, toggleVisibilityProperty, visibilityFromBoolean } from "../../components/links/linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
+import { useCidReq } from "../../composables/cidReq"
+import { checkIsAllowedToEdit } from "../../composables/userPermissions";
+
 
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
+const { cid, sid, gid } = useCidReq()
+const isAllowedToEdit = ref(false);
 
 const { t } = useI18n()
 
 const notifications = useNotification()
 
-const isCurrentTeacher = securityStore.isCurrentTeacher
+const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 
 const linksWithoutCategory = ref([])
 const categories = ref([])
@@ -210,10 +215,11 @@ const isLoading = ref(true)
 
 const linkValidationResults = ref({})
 
-onMounted(() => {
+onMounted(async () => {
+  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true);
   linksWithoutCategory.value = []
   categories.value = []
-  fetchLinks()
+  await fetchLinks()
 })
 
 function editLink(link) {
@@ -366,14 +372,14 @@ async function fetchLinks() {
   }
 
   try {
-    const data = await linkService.getLinks(params)
-    linksWithoutCategory.value = data.linksWithoutCategory
-    categories.value = data.categories
+    const data = await linkService.getLinks(params);
+    linksWithoutCategory.value = data.linksWithoutCategory || [];
+    categories.value = data.categories || [];
   } catch (error) {
-    console.error("Error fetching links:", error)
-    notifications.showErrorNotification(t("Could not retrieve links"))
+    console.error("Error fetching links:", error);
+    notifications.showErrorNotification(t("Could not retrieve links"));
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
 }
 </script>

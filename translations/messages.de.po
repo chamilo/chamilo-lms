@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-07-25 12:36+0000\n"
+"PO-Revision-Date: 2024-08-08 08:44+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -19412,16 +19412,14 @@ msgstr "Kursleitern das Sperren von Bewertungen erlauben"
 msgid "Once enabled, this option will enable locking of any assessment by the teachers of the corresponding course. This, in turn, will prevent any modification of results by the teacher inside the resources used in the assessment: exams, learning paths, tasks, etc. The only role authorized to unlock a locked assessment is the administrator. The teacher will be informed of this possibility. The locking and unlocking of gradebooks will be registered in the system's report of important activities"
 msgstr "Wenn diese Funktion aktiviert wird, können Kursleiter keinerlei Änderungen an Bewertungen mehr vornehmen (Übungen, Lernpfade, Aufgaben, etc.). Diese Sperre kann nur durch einen Administrator aufgehoben werden. Der Kursleiter wird explizit darauf hingewiesen, und eine Eintragung im Systemprotokoll verzeichnet"
 
-msgid "    <div class=\"alert alert-info\">"
-msgstr "<div class='normal-message'>"
-
-msgid "<h3>Shibboleth authentication</h3>"
+msgid "Shibboleth authentication"
 msgstr "Authentifizierung über Shibboleth"
 
 msgid "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=Shibboleth'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus."
 msgstr "Zuerst muß Shibboleth für die Nutzung mit Ihrem Webserver konfiguriert sein."
 
-msgid "<h3>LDAP autentication</h3>"
+#, fuzzy
+msgid "LDAP authentication"
 msgstr "LDAP Authentifizierung"
 
 msgid "Facebook authentication"

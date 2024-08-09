@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-07-25 13:12+0000\n"
+"PO-Revision-Date: 2024-08-08 08:44+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -19384,17 +19384,14 @@ msgstr "Activar bloqueo de Evaluaciones por los profesores"
 msgid "Once enabled, this option will enable locking of any assessment by the teachers of the corresponding course. This, in turn, will prevent any modification of results by the teacher inside the resources used in the assessment: exams, learning paths, tasks, etc. The only role authorized to unlock a locked assessment is the administrator. The teacher will be informed of this possibility. The locking and unlocking of gradebooks will be registered in the system's report of important activities"
 msgstr "Una vez activada, esta opción permitirá a los profesores bloquear cualquier evaluación dentro de su curso. Esto prohibirá al profesor cualquier modificación posterior de los resultados de sus alumnos en los recursos usados para esta evaluación: exámenes, lecciones, tareas, etc. El único rol autorizado a desbloquear una evaluación es el administrador. El profesor estará informado de esta posibilidad al intentar desbloquear la evaluación. El bloqueo como el desbloqueo estarán guardados en el registro de actividades importantes del sistema."
 
-msgid "    <div class=\"alert alert-info\">"
-msgstr "<div class=\"alert alert-info\">"
-
-msgid "<h3>Shibboleth authentication</h3>"
+msgid "Shibboleth authentication"
 msgstr "<h3>Autenticación Shibboleth</h3>"
 
 msgid "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=Shibboleth'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus."
 msgstr "En primer lugar, tiene que configurar Shibboleth para su servidor web."
 
-msgid "<h3>LDAP autentication</h3>"
-msgstr "<h3>Autentificacion LDAP</h3>"
+msgid "LDAP authentication"
+msgstr "Autentificacion LDAP"
 
 msgid "Facebook authentication"
 msgstr "Autenticación con Facebook"

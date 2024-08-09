@@ -23,7 +23,14 @@
       :header="t('Title')"
       :sortable="true"
       field="title"
-    />
+    >
+      <template #body="slotProps">
+        <div class="flex items-center">
+          <BaseIcon v-if="isAllowedToEdit && getSessionId(slotProps.data)" icon="session-star" size="small" class="mr-2" />
+          {{ slotProps.data.title }}
+        </div>
+      </template>
+    </Column>
     <Column
       :header="t('Send date')"
       :sortable="true"
@@ -55,43 +62,45 @@
       body-class="space-x-2"
     >
       <template #body="slotProps">
-        <BaseButton
-          :icon="
-            RESOURCE_LINK_PUBLISHED === slotProps.data.firstResourceLink.visibility
-              ? 'eye-on'
-              : RESOURCE_LINK_DRAFT === slotProps.data.firstResourceLink.visibility
-              ? 'eye-off'
-              : ''
-          "
-          :label="t('Visibility')"
-          only-icon
-          size="small"
-          type="black"
-          @click="onClickVisibility(slotProps.data)"
-        />
-        <BaseButton
-          :label="t('Upload corrections')"
-          icon="file-upload"
-          only-icon
-          size="small"
-          type="black"
-        />
-        <BaseButton
-          :disabled="0 === slotProps.data.uniqueStudentAttemptsTotal"
-          :label="t('Save')"
-          icon="download"
-          only-icon
-          size="small"
-          type="black"
-        />
-        <BaseButton
-          :label="t('Edit')"
-          icon="edit"
-          only-icon
-          size="small"
-          type="black"
-          @click="onClickEdit(slotProps.data)"
-        />
+        <div v-if="canEdit(slotProps.data)">
+          <BaseButton
+            :icon="
+              RESOURCE_LINK_PUBLISHED === slotProps.data.firstResourceLink.visibility
+                ? 'eye-on'
+                : RESOURCE_LINK_DRAFT === slotProps.data.firstResourceLink.visibility
+                ? 'eye-off'
+                : ''
+            "
+            :label="t('Visibility')"
+            only-icon
+            size="small"
+            type="black"
+            @click="onClickVisibility(slotProps.data)"
+          />
+          <BaseButton
+            :label="t('Upload corrections')"
+            icon="file-upload"
+            only-icon
+            size="small"
+            type="black"
+          />
+          <BaseButton
+            :disabled="0 === slotProps.data.uniqueStudentAttemptsTotal"
+            :label="t('Save')"
+            icon="download"
+            only-icon
+            size="small"
+            type="black"
+          />
+          <BaseButton
+            :label="t('Edit')"
+            icon="edit"
+            only-icon
+            size="small"
+            type="black"
+            @click="onClickEdit(slotProps.data)"
+          />
+        </div>
       </template>
     </Column>
 
@@ -110,20 +119,24 @@
 <script setup>
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
-import { onMounted, reactive, ref, watch } from "vue"
+import { onMounted, reactive, ref, watch, computed } from "vue"
 import { useI18n } from "vue-i18n"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import { useCidReq } from "../../composables/cidReq"
 import { useFormatDate } from "../../composables/formatDate"
 import BaseTag from "../basecomponents/BaseTag.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useNotification } from "../../composables/notification"
 import { useConfirm } from "primevue/useconfirm"
 import resourceLinkService from "../../services/resourcelink"
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
+import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
+const route = useRoute();
 const router = useRouter()
 
 const assignments = ref([])
@@ -136,6 +149,8 @@ const { cid, sid, gid } = useCidReq()
 const notification = useNotification()
 
 const confirm = useConfirm()
+const securityStore = useSecurityStore()
+const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 
 const { abbreviatedDatetime } = useFormatDate()
 
@@ -145,20 +160,33 @@ const loadParams = reactive({
   itemsPerPage: 10,
 })
 
-function loadData() {
+const isAllowedToEdit = ref(false)
+
+onMounted(async () => {
+  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
+  loadData()
+})
+
+watch(loadParams, () => {
+  loadData()
+})
+
+async function loadData() {
   loading.value = true
 
-  cStudentPublicationService
-    .findAll({
+  try {
+    const response = await cStudentPublicationService.findAll({
       params: { ...loadParams, cid, sid, gid },
     })
-    .then((response) => response.json())
-    .then((json) => {
-      assignments.value = json["hydra:member"]
-      totalRecords.value = json["hydra:totalItems"]
+    const json = await response.json()
 
-      loading.value = false
-    })
+    assignments.value = json["hydra:member"]
+    totalRecords.value = json["hydra:totalItems"]
+  } catch (error) {
+    notification.showErrorNotification(error)
+  } finally {
+    loading.value = false
+  }
 }
 
 const onPage = (event) => {
@@ -174,14 +202,6 @@ const onSort = (event) => {
     loadParams[`order[${sortItem.field}]`] = -1 === sortItem.order ? "desc" : "asc"
   })
 }
-
-onMounted(() => {
-  loadData()
-})
-
-watch(loadParams, () => {
-  loadData()
-})
 
 function onClickMultipleDelete() {
   confirm.require({
@@ -226,9 +246,37 @@ async function onClickVisibility(assignment) {
 }
 
 function onClickEdit(assignment) {
+  const assignmentId = parseInt(assignment["@id"].split('/').pop(), 10);
+
+  console.log('onClickEdit id :::', assignmentId);
+
   router.push({
-    name: "AssigmnentsUpdate",
-    query: { id: assignment["@id"], cid, sid, gid },
-  })
+    name: "AssignmentsUpdate",
+    params: { id: assignment["@id"] },
+    query: route.query,
+  });
+}
+
+const getSessionId = (item) => {
+  if (!item.firstResourceLink || !item.firstResourceLink.session) {
+    return null;
+  }
+
+  const sessionParts = item.firstResourceLink.session.split('/');
+  return parseInt(sessionParts[sessionParts.length - 1]);
+}
+
+const canEdit = (item) => {
+  const sessionId = getSessionId(item);
+
+  console.log('sessionId ::: ', sessionId)
+
+  const isSessionDocument = sessionId && sessionId === sid;
+  const isBaseCourse = !sessionId;
+
+  return (
+    (isSessionDocument && isAllowedToEdit.value) ||
+    (isBaseCourse && !sid && isCurrentTeacher.value)
+  );
 }
 </script>

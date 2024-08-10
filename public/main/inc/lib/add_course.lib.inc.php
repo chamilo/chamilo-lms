@@ -604,7 +604,6 @@ class AddCourse
 
         $gradebookLink->setType(1);
         $gradebookLink->setRefId($refId);
-        $gradebookLink->setUser(api_get_user_entity());
         $gradebookLink->setCourse($course);
         $gradebookLink->setCategory($childGradebookCategory);
         $gradebookLink->setCreatedAt(new \DateTime());

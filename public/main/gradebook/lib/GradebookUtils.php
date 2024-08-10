@@ -1501,7 +1501,7 @@ class GradebookUtils
         $cat = $cats[0];
         $allcat = $cats[0]->get_subcategories(
             $userId,
-            api_get_course_id(),
+            api_get_course_int_id(),
             api_get_session_id()
         );
         $alleval = $cats[0]->get_evaluations($userId);
@@ -1517,7 +1517,7 @@ class GradebookUtils
             $allcat,
             $alleval,
             $alllink,
-            null,
+            [],
             true,
             false,
             $userId,

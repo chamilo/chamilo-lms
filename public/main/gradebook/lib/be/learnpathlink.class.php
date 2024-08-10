@@ -173,7 +173,7 @@ class LearnpathLink extends AbstractLink
     {
         $data = $this->get_learnpath_data();
 
-        return $data['name'];
+        return $data['title'];
     }
 
     /**

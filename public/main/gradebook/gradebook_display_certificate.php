@@ -242,7 +242,7 @@ if (!empty($cats)) {
     $total_weight = $cats[0]->get_weight();
     $allcat = $cats[0]->get_subcategories(
         $stud_id,
-        api_get_course_id(),
+        api_get_course_int_id(),
         api_get_session_id()
     );
     $alleval = $cats[0]->get_evaluations($stud_id);

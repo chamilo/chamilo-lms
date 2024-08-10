@@ -303,7 +303,7 @@ class PDF
                 $documentHtml = preg_replace($clean_search, '', $documentHtml);
 
                 //absolute path for frames.css //TODO: necessary?
-                $absolute_css_path = api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css';
+                $absolute_css_path = api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets.stylesheets').'/frames.css';
                 $documentHtml = str_replace('href="./css/frames.css"', $absolute_css_path, $documentHtml);
                 if (!empty($courseInfo['path'])) {
                     $documentHtml = str_replace('../', '', $documentHtml);
@@ -316,7 +316,7 @@ class PDF
                     );
                 }
 
-                $documentHtml = self::fixImagesPaths($documentHtml, $courseInfo, $dirName);
+                //$documentHtml = self::fixImagesPaths($documentHtml, $courseInfo, $dirName);
                 // The library mPDF expects UTF-8 encoded input data.
                 api_set_encoding_html($documentHtml, 'UTF-8');
                 // TODO: Maybe it is better idea the title to be passed through
@@ -547,7 +547,7 @@ class PDF
     {
         $web_path = false;
         $urlId = api_get_current_access_url_id();
-        if (!empty($courseCode) && 'true' == api_get_setting('pdf_export_watermark_by_course')) {
+        if (!empty($courseCode) && 'true' == api_get_setting('document.pdf_export_watermark_by_course')) {
             $course_info = api_get_course_info($courseCode);
             // course path
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
@@ -576,7 +576,7 @@ class PDF
     public static function delete_watermark($courseCode = null)
     {
         $urlId = api_get_current_access_url_id();
-        if (!empty($courseCode) && 'true' === api_get_setting('pdf_export_watermark_by_course')) {
+        if (!empty($courseCode) && 'true' === api_get_setting('document.pdf_export_watermark_by_course')) {
             $course_info = api_get_course_info($courseCode);
             // course path
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
@@ -605,7 +605,7 @@ class PDF
     public static function upload_watermark($filename, $source_file, $courseCode = null)
     {
         $urlId = api_get_current_access_url_id();
-        if (!empty($courseCode) && 'true' === api_get_setting('pdf_export_watermark_by_course')) {
+        if (!empty($courseCode) && 'true' === api_get_setting('document.pdf_export_watermark_by_course')) {
             $course_info = api_get_course_info($courseCode);
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path']; // course path
             $web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';
@@ -754,7 +754,7 @@ class PDF
         // Add decoration only if not stated otherwise
         if ($complete) {
             // Adding watermark
-            if ('true' == api_get_setting('pdf_export_watermark_enable')) {
+            if ('true' == api_get_setting('document.pdf_export_watermark_enable')) {
                 $watermark_file = self::get_watermark($courseCode);
                 if ($watermark_file) {
                     $this->pdf->SetWatermarkImage($watermark_file);
@@ -766,9 +766,9 @@ class PDF
                         $this->pdf->showWatermarkImage = true;
                     }
                 }
-                $watermark_text = api_get_setting('pdf_export_watermark_text');
-                if ($courseCode && 'true' === api_get_setting('pdf_export_watermark_by_course')) {
-                    $courseWaterMark = api_get_course_setting('pdf_export_watermark_text');
+                $watermark_text = api_get_setting('document.pdf_export_watermark_text');
+                if ($courseCode && 'true' === api_get_setting('document.pdf_export_watermark_by_course')) {
+                    $courseWaterMark = api_get_course_setting('document.pdf_export_watermark_text');
                     if (!empty($courseWaterMark) && -1 != $courseWaterMark) {
                         $watermark_text = $courseWaterMark;
                     }

@@ -19,7 +19,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class GradebookLink
 {
     use CourseTrait;
-    use UserTrait;
 
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -33,10 +32,6 @@ class GradebookLink
     #[Assert\NotBlank]
     #[ORM\Column(name: 'ref_id', type: 'integer', nullable: false)]
     protected int $refId;
-
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookLinks')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected User $user;
 
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'gradebookLinks')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]

@@ -133,6 +133,12 @@ services:
         arguments:
             $pluginDir: '%kernel.project_dir%/public/plugin'
 
+    Google\Cloud\Storage\StorageClient:
+        arguments:
+            $config:
+                projectId: '%env(GOOGLE_STORAGE_CLOUD_PROJECT_ID)%'
+                keyFilePath: '%env(resolve:GOOGLE_STORAGE_KEY_FILE_PATH)%'
+
 cocur_slugify:
     lowercase: true
 

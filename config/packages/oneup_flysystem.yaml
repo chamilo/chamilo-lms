@@ -7,6 +7,18 @@ oneup_flysystem:
             local:
                 location: '%kernel.project_dir%/var/cache/assets'
 
+        asset_google_adapter:
+            googlecloudstorage:
+                client: 'Google\Cloud\Storage\StorageClient'
+                bucket: '%env(GOOGLE_STORAGE_ASSET_BUCKET)%'
+                prefix: '%env(GOOGLE_STORAGE_ASSET_PREFIX)%'
+
+        asset_cache_google_adapter:
+            googlecloudstorage:
+                client: 'Google\Cloud\Storage\StorageClient'
+                bucket: '%env(GOOGLE_STORAGE_ASSET_CACHE_BUCKET)%'
+                prefix: '%env(GOOGLE_STORAGE_ASSET_CACHE_PREFIX)%'
+
         resource_adapter:
             local:
                 location: '%kernel.project_dir%/var/upload/resource'
@@ -14,12 +26,30 @@ oneup_flysystem:
             local:
                 location: '%kernel.project_dir%/var/cache/resource'
 
+        resource_google_adapter:
+            googlecloudstorage:
+                client: 'Google\Cloud\Storage\StorageClient'
+                bucket: '%env(GOOGLE_STORAGE_RESOURCE_BUCKET)%'
+                prefix: '%env(GOOGLE_STORAGE_RESOURCE_PREFIX)%'
+
+        resource_cache_google_adapter:
+            googlecloudstorage:
+                client: 'Google\Cloud\Storage\StorageClient'
+                bucket: '%env(GOOGLE_STORAGE_RESOURCE_CACHE_BUCKET)%'
+                prefix: '%env(GOOGLE_STORAGE_RESOURCE_CACHE_PREFIX)%'
+
         themes_adapter:
             local:
                 location: '%kernel.project_dir%/var/themes'
         themes_cache_adapter:
             local:
                 location: '%kernel.project_dir%/var/cache/themes'
+
+        themes_google_adapter:
+            googlecloudstorage:
+                client: 'Google\Cloud\Storage\StorageClient'
+                bucket: '%env(GOOGLE_STORAGE_THEMES_BUCKET)%'
+                prefix: '%env(GOOGLE_STORAGE_THEMES_PREFIX)%'
 
     filesystems:
         asset:

@@ -124,7 +124,7 @@ $courseEntity = api_get_course_entity();
 $sessionEntity = api_get_session_entity();
 
 $forumIsVisible = $forum->isVisible($courseEntity);
-$categoryIsVisible = $category->isVisible($courseEntity);
+$categoryIsVisible = $category->isVisible($courseEntity) && !api_get_session_id();
 
 if (empty($post)) {
     api_not_allowed(true);

@@ -110,9 +110,10 @@ if (!empty($groupId)) {
         (
             ($category && false == $category->isVisible($courseEntity)) ||
             !$category->isVisible($courseEntity)
-        )
+        ) &&
+        !$sessionId
     ) {
-        api_not_allowed(true);
+      //  api_not_allowed(true);
     }
 } else {
     // Course
@@ -120,7 +121,8 @@ if (!empty($groupId)) {
         (
             ($category && false == $category->isVisible($courseEntity)) ||
             !$category->isVisible($courseEntity)
-        )
+        ) &&
+        !$sessionId
     ) {
         api_not_allowed(true);
     }

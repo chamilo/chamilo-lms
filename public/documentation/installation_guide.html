@@ -31,7 +31,7 @@ This version of Chamilo requires the following software stack.
       <li>PHP 8.2+</li>
       <li>A local Redis server (optional)</li>
   </ul>
-  Within PHP, Chamilo requires or benefits from the following extensions:<br/>
+  Within PHP, Chamilo requires or benefits from the following modules, which might already be included in PHP on your system:<br/>
   <ul>
       <li>bcmath</li>
       <li>curl</li>
@@ -103,7 +103,7 @@ This version of Chamilo requires the following software stack.
 <pre>
 sudo -s
 apt update && apt -y upgrade
-apt -y install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis-server php8.3-{bcmath,curl,exif,gd,iconv,intl,json,mbstring,mysql,opcache,pcre,soap,xml,zip,zlib,redis}
+apt -y install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis-server php8.3-{bcmath,curl,exif,gd,iconv,intl,mbstring,mysql,opcache,soap,xml,zip,redis}
 a2enmod rewrite
 cd /var/www/
 mkdir chamilo

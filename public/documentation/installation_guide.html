@@ -66,7 +66,6 @@ This version of Chamilo requires the following software stack.
   Make sure the following files and folders are writeable by the web server. Set permissions to 0770 for example:
   <ul>
       <li>var/</li>
-      <li>config/</li>
       <li>.env</li>
   </ul>
   The .env is the *file* where Chamilo will write the data collected during the installation.<br>
@@ -113,7 +112,7 @@ tar zxf chamilo2.0.0-alpha.1.tar.gz
 rm chamilo2.0.0-alpha.1.tar.gz
 cd chamilo
 touch .env
-chown -R www-data: var config .env
+chown -R www-data: var .env
 mysql -u root -e "GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost IDENTIFIED BY '[choose a password here]'";
 mysql -u root -e "FLUSH PRIVILEGES;"
 mysql_secure_installation
@@ -177,13 +176,12 @@ systemctl restart apache2</pre>
     Make sure the following files and folders are writeable by the web server. Set permissions to 0770 for example:
     <ul>
         <li>var/</li>
-        <li>config/</li>
         <li>.env</li>
     </ul>
     Assuming your web server user is <em>www-data</em>, you can do that quickly with the following from inside the Chamilo root directory (already done in first example commands list for Ubuntu):
     <pre>
 sudo touch .env
-sudo chown -R www-data:www-data var/ config/ .env</pre>
+sudo chown -R www-data:www-data var/ .env</pre>
     <h3>PHP settings</h3>
     Some PHP settings are recommended, but the default values should be enough to get you started.<br>
     See vhost config's "php_value" section above for details.

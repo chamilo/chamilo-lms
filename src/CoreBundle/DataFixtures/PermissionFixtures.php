@@ -146,6 +146,7 @@ class PermissionFixtures extends Fixture implements FixtureGroupInterface
             ['title' => 'Edit user', 'slug' => 'user:edit', 'description' => 'Edit users'],
             ['title' => 'Edit user Role', 'slug' => 'user:editrole', 'description' => 'Edit user roles'],
             ['title' => 'Login as user', 'slug' => 'user:loginas', 'description' => 'Login as another user'],
+            ['title' => 'Edit Course Settings', 'slug' => 'course:editsettings', 'description' => 'Edit settings of a course'],
         ];
     }
 
@@ -256,6 +257,7 @@ class PermissionFixtures extends Fixture implements FixtureGroupInterface
             'user:edit' => ['ADM', 'SUA', 'GLO'],
             'user:editrole' => ['ADM', 'SUA', 'GLO'],
             'user:loginas' => ['SUA', 'GLO'],
+            'course:editsettings' => ['TEA', 'ADM', 'SUA', 'GLO'],
         ];
     }
 }

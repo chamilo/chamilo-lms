@@ -342,7 +342,7 @@ if ($form->validate()) {
     $items = [$formUsers->toHtml(), $form->toHtml()];
 
     if ($allowUserGroups) {
-        $headers[] = get_lang('SubscribeClassesToLpCategory');
+        $headers[] = get_lang('Subscribe classes to category');
         $items[] = $formUserGroup->toHtml();
     }
     $tabs = Display::tabs($headers, $items);

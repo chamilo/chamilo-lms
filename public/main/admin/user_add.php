@@ -127,7 +127,7 @@ if (api_is_western_name_order()) {
 $form->addElement(
     'text',
     'official_code',
-    get_lang('Code'),
+    get_lang('Official code'),
     [
         'size' => '40',
         'id' => 'official_code',

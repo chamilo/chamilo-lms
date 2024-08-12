@@ -32,6 +32,8 @@ class Evaluation implements GradebookItem
      */
     public function __construct()
     {
+        $this->type = '';
+        $this->locked = 0;
     }
 
     /**
@@ -141,7 +143,7 @@ class Evaluation implements GradebookItem
 
     public function get_type()
     {
-        return $this->type;
+        return $this->type ?? '';
     }
 
     public function is_visible()
@@ -151,7 +153,7 @@ class Evaluation implements GradebookItem
 
     public function get_locked()
     {
-        return $this->locked;
+        return $this->locked ?? 0;
     }
 
     public function is_locked()
@@ -304,17 +306,10 @@ class Evaluation implements GradebookItem
     public function add(): bool
     {
         if (isset($this->name) &&
-            isset($this->user_id) &&
             isset($this->weight) &&
             isset($this->eval_max) &&
             isset($this->visible)
         ) {
-
-            $user = api_get_user_entity($this->get_user_id());
-
-            if (null === $user) {
-                return false;
-            }
 
             if (empty($this->type)) {
                 $this->type = 'evaluation';
@@ -334,7 +329,6 @@ class Evaluation implements GradebookItem
                 ->setCourse(api_get_course_entity($courseId))
                 ->setTitle($this->get_name())
                 ->setCategory($category)
-                ->setUser($user)
                 ->setWeight(api_float_val($this->get_weight()))
                 ->setMax(api_float_val($this->get_max()))
                 ->setVisible($this->is_visible())
@@ -343,6 +337,15 @@ class Evaluation implements GradebookItem
             $em->persist($evaluation);
             $em->flush();
             $this->set_id($evaluation->getId());
+
+            Event::addEvent(
+                'gradebook_evaluation_created',
+                'evaluation',
+                $evaluation->getId(),
+                api_get_utc_datetime(),
+                api_get_user_id(),
+                $courseId
+            );
 
             return true;
         }
@@ -964,15 +967,14 @@ class Evaluation implements GradebookItem
                 $eval->set_id($data['id']);
                 $eval->set_name($data['title']);
                 $eval->set_description($data['description']);
-                $eval->set_user_id($data['user_id']);
                 $eval->setCourseId($data['c_id']);
                 $eval->set_category_id($data['category_id']);
                 $eval->set_date(api_get_local_time($data['created_at']));
                 $eval->set_weight($data['weight']);
                 $eval->set_max($data['max']);
                 $eval->set_visible($data['visible']);
-                $eval->set_type($data['type']);
-                $eval->set_locked($data['locked']);
+                $eval->set_type($data['type'] ?? '');
+                $eval->set_locked($data['locked'] ?? 0);
                 $eval->setSessionId(api_get_session_id());
 
                 if ($allow) {

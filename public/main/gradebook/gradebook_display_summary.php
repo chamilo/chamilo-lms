@@ -57,13 +57,13 @@ switch ($action) {
         $cat = $cats[0];
         $allcat = $cat->get_subcategories(
             null,
-            api_get_course_id(),
+            api_get_course_int_id(),
             api_get_session_id()
         );
         $alleval = $cat->get_evaluations(
             null,
             true,
-            api_get_course_id(),
+            api_get_course_int_id(),
             api_get_session_id()
         );
         $alllink = $cat->get_links(
@@ -78,7 +78,7 @@ switch ($action) {
             $allcat,
             $alleval,
             $alllink,
-            null, // params
+            [], // params
             true, // $exportToPdf
             false, // showteacher
             null,

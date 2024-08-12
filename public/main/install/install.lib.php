@@ -694,10 +694,6 @@ function display_requirements(
         'status' => checkCanCreateFile($basePath.'.env'),
     ];
     $pathPermissions[] = [
-        'item' => $basePath.'config/',
-        'status' => is_writable($basePath.'config'),
-    ];
-    $pathPermissions[] = [
         'item' => get_lang('Permissions for new directories'),
         'status' => $dirPerm,
     ];

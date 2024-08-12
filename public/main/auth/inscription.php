@@ -340,7 +340,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
         $form->addElement(
             'text',
             'official_code',
-            get_lang('Code'),
+            get_lang('Official code'),
             ['size' => 40]
         );
         //if ('true' === api_get_setting('registration', 'officialcode')) {

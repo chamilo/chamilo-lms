@@ -508,6 +508,9 @@ switch ($action) {
                 $em->persist($message);
                 $em->flush();
 
+                $senderName = UserManager::formatUserFullName($currentUser);
+                $emailAdmin = api_get_setting('admin.administrator_email');
+
                 // Send also message to all student bosses
                 $bossList = UserManager::getStudentBossList($studentId);
 
@@ -517,20 +520,29 @@ switch ($action) {
 
                     foreach ($bossList as $boss) {
                         $studentFullName = UserManager::formatUserFullName($student);
-                        $content = sprintf(
+                        $contentBoss = sprintf(
                             get_lang('Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s'),
                             UserManager::formatUserFullName($currentUser),
                             $studentFullName,
                             $link
                         );
-                        $message = (new Message())
+                        $messageBoss = (new Message())
                             ->setTitle(sprintf(get_lang('Follow up message about student %s'), $studentFullName))
-                            ->setContent($content)
+                            ->setContent($contentBoss)
                             ->setSender(api_get_user_entity())
                             ->addReceiverTo(api_get_user_entity($boss['boss_id']))
                             ->setMsgType(Message::MESSAGE_TYPE_INBOX)
                         ;
-                        $em->persist($message);
+                        $em->persist($messageBoss);
+
+                        api_mail_html(
+                            UserManager::formatUserFullName(api_get_user_entity($boss['boss_id'])),
+                            api_get_user_entity($boss['boss_id'])->getEmail(),
+                            sprintf(get_lang('Follow up message about student %s'), $studentFullName),
+                            $contentBoss,
+                            $senderName,
+                            $emailAdmin
+                        );
                     }
 
                     $em->flush();

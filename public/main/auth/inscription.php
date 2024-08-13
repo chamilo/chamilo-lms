@@ -174,6 +174,16 @@ $course_code_redirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? $_REQU
 $exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? $_REQUEST['e'] : null;
 
 if (!empty($course_code_redirect)) {
+    if (!api_is_anonymous()) {
+        $course_info = api_get_course_info($course_code_redirect);
+        $subscribed = CourseManager::autoSubscribeToCourse($course_code_redirect);
+        if ($subscribed) {
+            header('Location: ' . api_get_path(WEB_PATH) . 'course/'.$course_info['real_id'].'/home?sid=0');
+        } else {
+            header('Location: ' . api_get_path(WEB_PATH) . 'course/'.$course_info['real_id'].'/about');
+        }
+        exit;
+    }
     Session::write('course_redirect', $course_code_redirect);
     Session::write('exercise_redirect', $exercise_redirect);
 }

@@ -125,7 +125,7 @@ if (!api_is_allowed_to_create_course() && //is a student
     (
         ($current_forum_category && false == $current_forum_category->isVisible($courseEntity)) ||
         false == $current_forum_category->isVisible($courseEntity)
-    )
+    ) && !api_get_session_id()
 ) {
     api_not_allowed(true);
 }

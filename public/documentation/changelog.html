@@ -112,12 +112,15 @@
         <li>Plugins: Many plugins that seemed either unused or were not maintained by their maintainers were removed. They could be included again later on, and their tables have not been removed in the database if they had been installed in your 1.11.*, but they are not available in the list of plugins.</li>
         <li>Plugins: Installing plugins is disabled in this alpha release. This should be fixed before beta 1.</li>
         <li>Display: The Bootstrap (CSS) library has been removed. Some code might still use it. Should be fixed before stable.</li>
-        <li>Blogs: The blogs tool is not available. It might be included again in future versions, but there were too many changes required to include it in v2.0.</li>
+        <li>Blogs: The blogs tool is not available. It might be included again in future versions, but there were too many changes required to include it in v2.0. The management of roles and permissions inside the blog were removed definitively to simplify it and allow for reasonable long-term maintenance. Tables like c_role* and c_permission* have been removed.</li>
         <li>Dropbox: The dropbox tool is not available. It might be included again in future versions, but there were too many changes required to include it in v2.0.</li>
         <li>Display: Upon migration, the stylesheets are reset to the default Chamilo stylesheet. You will have to redesign your stylesheets using the stylesheets tool in the admin UI.</li>
         <li>Courses list: Removed the ability to sort your own courses in a special list (too complex to support in combination with sessions).</li>
         <li>Course catalogue: Not working properly. Will be fixed before stable.</li>
         <li>Admin: Document templates have been removed. Previous templates were non-responsive. In this version, there will be no document templates by default, but you can add them easily in Admin > System templates.</li>
+        <li>Shared surveys: The data related to this feature in v1.* was removed. We don't know of anyone using it, and Chamilo 2.0 comes with the structure to make a survey span several courses. Although this is not implemented in the interface yet, it will allow, in practice, to share surveys between courses. Tables shared_survey* have been removed.</li>
+        <li>Userinfo: This feature allowed teachers to define kind of profile fields for users in the specific context of their courses. We believe this feature was non-accessible through the interface for at least 6 years. This has been removed in Chamilo 2.0 for maintainability. Tables c_userinfo_def and c_userinfo_content have been removed.</li>
+        <li>Browser tracking: The track_e_open table has been removed. To our knowledge, it served at one point to support a kind of analytics tool inside Chamilo (aware of browser details), but hasn't been used for at least 10 years. This has been removed in Chamilo 2.0 for maintainability.</li>
         <li></li>
     </ul>
 </div>

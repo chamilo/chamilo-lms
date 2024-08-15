@@ -500,7 +500,7 @@ class EvalForm extends FormValidator
             'hid_id' => $this->evaluation_object->get_id(),
             'name' => $this->evaluation_object->get_name(),
             'description' => $this->evaluation_object->get_description(),
-            'hid_user_id' => $this->evaluation_object->get_user_id(),
+            'hid_user_id' => $evaluation_object->user_id ?? 0,
             'hid_course_code' => $this->evaluation_object->get_course_code(),
             'hid_course_id' => $this->evaluation_object->getCourseId(),
             'hid_category_id' => $this->evaluation_object->get_category_id(),

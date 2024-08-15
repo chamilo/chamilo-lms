@@ -7,9 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -23,7 +25,8 @@ class SessionListener
 
     public function __construct(
         protected RequestStack $request,
-        protected Security $security
+        protected Security $security,
+        protected AssetRepository $assetRepository
     ) {}
 
     /**
@@ -44,6 +47,16 @@ class SessionListener
             $session->addAccessUrl($accessUrl);
         }
         // $this->checkLimit($repo, $url);
+    }
+
+    /**
+     * This code is executed when a session is loaded from the database.
+     */
+    public function postLoad(Session $session, LifecycleEventArgs $args): void
+    {
+        if ($session->getImage()) {
+            $session->setImageUrl($this->assetRepository->getAssetUrl($session->getImage()));
+        }
     }
 
     /**

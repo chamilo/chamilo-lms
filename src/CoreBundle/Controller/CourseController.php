@@ -466,19 +466,7 @@ class CourseController extends ToolBaseController
             $subscriptionUser = CourseManager::is_user_subscribed_in_course($user->getId(), $course->getCode());
         }
 
-        /*$allowSubscribe = false;
-        if ($course->getSubscribe() || api_is_platform_admin()) {
-            $allowSubscribe = true;
-        }
-        $plugin = \BuyCoursesPlugin::create();
-        $checker = $plugin->isEnabled();
-        $courseIsPremium = null;
-        if ($checker) {
-            $courseIsPremium = $plugin->getItemByProduct(
-                $courseId,
-                \BuyCoursesPlugin::PRODUCT_TYPE_COURSE
-            );
-        }*/
+        $allowSubscribe = CourseManager::canUserSubscribeToCourse($course->getCode());
 
         $image = Container::getIllustrationRepository()->getIllustrationUrl($course, 'course_picture_medium');
 
@@ -499,6 +487,7 @@ class CourseController extends ToolBaseController
             'is_premium' => '',
             'token' => '',
             'base_url' => $request->getSchemeAndHttpHost(),
+            'allow_subscribe' => $allowSubscribe,
         ];
 
         $metaInfo = '<meta property="og:url" content="'.$urlCourse.'" />';

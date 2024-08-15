@@ -685,6 +685,82 @@ class CourseManager
     }
 
     /**
+     * Checks if the current user can subscribe to a given course.
+     */
+    public static function canUserSubscribeToCourse(string $courseCode): bool
+    {
+        if (api_is_anonymous()) {
+            return false;
+        }
+
+        $course = Container::getCourseRepository()->findOneBy(['code' => $courseCode]);
+
+        if (null === $course) {
+            return false;
+        }
+
+        $visibility = (int) $course->getVisibility();
+
+        if (in_array($visibility, [
+            Course::CLOSED,
+            Course::HIDDEN,
+        ])) {
+            return false;
+        }
+
+        if (Course::REGISTERED === $visibility && false === $course->getSubscribe()) {
+            return false;
+        }
+
+        $userId = api_get_user_id();
+
+        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+            WHERE
+                user_id = $userId AND
+                relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
+                c_id = ".$course->getId();
+        if (Database::num_rows(Database::query($sql)) > 0) {
+            return false;
+        }
+
+        if (SUBSCRIBE_NOT_ALLOWED === (int) $course->getSubscribe()) {
+            return false;
+        }
+
+        $extraFieldValue = new ExtraFieldValue('course');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $course->getId(),
+            'max_subscribed_students'
+        );
+        if (!empty($value) && isset($value['value']) && '' !== $value['value']) {
+            $maxStudents = (int) $value['value'];
+            $count = CourseManager::get_user_list_from_course_code(
+                $courseCode,
+                0,
+                null,
+                null,
+                STUDENT,
+                true,
+                false
+            );
+
+            if ($count >= $maxStudents) {
+                return false;
+            }
+        }
+
+        if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
+            $user = api_get_user_entity($userId);
+            $sessions = $user->getCurrentlyAccessibleSessions();
+            if (empty($sessions) && $user->getSessionsAsStudent()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Subscribe a user to a course. No checks are performed here to see if
      * course subscription is allowed.
      *

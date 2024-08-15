@@ -95,7 +95,7 @@ $sessionEntity = api_get_session_entity();
 //$forumIsVisible = $forum->isVisible($courseEntity, $sessionEntity);
 
 $category = $forum->getForumCategory();
-$categoryIsVisible = $category->isVisible($courseEntity);
+$categoryIsVisible = $category->isVisible($courseEntity) && !api_get_session_id();
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [

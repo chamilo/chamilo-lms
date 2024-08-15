@@ -698,6 +698,7 @@ form .field {
 .permissions-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: auto;
   th, td {
     border: 1px solid #ccc;
     padding: 8px;
@@ -713,8 +714,12 @@ form .field {
     background-color: #e9e9e9;
   }
   th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    padding: 5px;
+    font-size: 0.9em;
+    white-space: normal;
+    word-wrap: break-word;
+    min-width: 100px;
+    vertical-align: top;
   }
   th {
     padding-top: 12px;
@@ -740,6 +745,10 @@ form .field {
   }
   .save-button:hover {
     background-color: #45a049;
+  }
+  input[type="checkbox"] {
+    transform: scale(1);
+    margin: 0 auto;
   }
 }
 

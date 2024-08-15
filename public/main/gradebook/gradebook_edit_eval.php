@@ -39,9 +39,6 @@ if ($form->validate()) {
     $evaluation->setTitle($values['name']);
     $evaluation->setDescription($values['description']);
 
-    $user = $entityManager->getRepository(User::class)->find($values['hid_user_id']);
-    $evaluation->setUser($user);
-
     $course = $entityManager->getRepository(Course::class)->findOneBy(['code' => $values['hid_course_code']]);
     $evaluation->setCourse($course);
 

@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Controller\Api\LikeSocialPostController;
 use Chamilo\CoreBundle\Controller\Api\SocialPostAttachmentsController;
 use Chamilo\CoreBundle\Filter\SocialWallFilter;
 use Chamilo\CoreBundle\Repository\SocialPostRepository;
+use Chamilo\CoreBundle\State\SocialPostStateProvider;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -65,7 +66,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     normalizationContext: ['groups' => ['social_post:read']],
     denormalizationContext: ['groups' => ['social_post:write']],
-    security: "is_granted('ROLE_USER')"
+    security: "is_granted('ROLE_USER')",
+    provider: SocialPostStateProvider::class,
 )]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['parent' => 'exact', 'type' => 'exact'])]
 #[ApiFilter(filterClass: ExistsFilter::class, properties: ['parent'])]

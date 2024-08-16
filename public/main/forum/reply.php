@@ -114,7 +114,7 @@ $current_forum_category = $forum->getForumCategory();
 // I have split this is several pieces for clarity.
 if (!api_is_allowed_to_create_course() &&
     (($current_forum_category && !$current_forum_category->isVisible($courseEntity)) ||
-        !$forum->isVisible($courseEntity))
+        !$forum->isVisible($courseEntity)) && !api_get_session_id()
 ) {
     api_not_allowed(true);
 }

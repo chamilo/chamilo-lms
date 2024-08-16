@@ -26,7 +26,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                     'hide_lp_time' => 'false',
                     'lp_category_accordion' => 'false',
                     'lp_view_accordion' => 'false',
-                    'disable_js_in_lp_view' => 'true',
+                    'disable_js_in_lp_view' => 'false',
                     'allow_teachers_to_access_blocked_lp_by_prerequisite' => 'false',
                     'allow_lp_chamilo_export' => 'false',
                     'hide_accessibility_label_on_lp_item' => 'true',

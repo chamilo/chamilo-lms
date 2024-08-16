@@ -599,7 +599,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             [$start, $end] = explode('-', $range);
 
             $start = (int) $start;
-            $end = ($end === '') ? $fileSize - 1 : (int) $end;
+            $end = ('' === $end) ? $fileSize - 1 : (int) $end;
 
             $length = $end - $start + 1;
         } else {
@@ -624,7 +624,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             echo $buffer;
 
-            $bytesSent += strlen($buffer);
+            $bytesSent += \strlen($buffer);
         }
 
         fclose($stream);

@@ -266,7 +266,6 @@ class SessionRepository extends ServiceEntityRepository
         $entityManager->flush();
     }
 
-
     /**
      * @return array<SessionRelCourse>
      */

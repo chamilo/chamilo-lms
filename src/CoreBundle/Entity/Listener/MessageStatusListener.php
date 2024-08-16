@@ -24,9 +24,10 @@ class MessageStatusListener
     {
         $message = $messageRelUser->getMessage();
         $remainingReceivers = $this->entityManager->getRepository(MessageRelUser::class)
-            ->count(['message' => $message]);
+            ->count(['message' => $message])
+        ;
 
-        if ($remainingReceivers === 0) {
+        if (0 === $remainingReceivers) {
             $message->setStatus(Message::MESSAGE_STATUS_DELETED);
             $this->entityManager->flush();
         }

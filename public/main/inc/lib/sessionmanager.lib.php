@@ -3562,37 +3562,33 @@ class SessionManager
         }
 
         if ($noCoach) {
-            // check if user_id exists in session_rel_user (if the user is
-            // subscribed to the session in any manner)
-            $sql = "SELECT count(user_id) count FROM $tblSessionRelUser
-                    WHERE
-                        session_id = $sessionId AND
-                        user_id = $userId";
-            $res = Database::query($sql);
-
-            if (Database::num_rows($res) > 0) {
-                $resultRow = Database::fetch_assoc($res);
-                // If the user is only connected to a course coach then deleted it.
-                if (1 === (int) $resultRow['count']) {
-                    $sql = "DELETE FROM $tblSessionRelUser
-                            WHERE
-                                session_id = $sessionId AND
-                                user_id = $userId ";
-                    Database::query($sql);
-                }
-            }
-
-            // The user is not subscribed to the session, so make sure
-            // he isn't subscribed to a course in this session either
-            // and then exit
+            // Delete the course-specific coach record
             $sql = "DELETE FROM $tblSessionRelCourseRelUser
+                WHERE
+                    session_id = $sessionId AND
+                    c_id = $courseId AND
+                    user_id = $userId AND
+                    status = ".Session::COURSE_COACH;
+            $result = Database::query($sql);
+
+            // Check if the user is still a coach for any course in this session
+            $sql = "SELECT COUNT(*) AS count FROM $tblSessionRelCourseRelUser
+                WHERE
+                    session_id = $sessionId AND
+                    user_id = $userId AND
+                    status = ".Session::COURSE_COACH;
+            $res = Database::query($sql);
+            $resultRow = Database::fetch_assoc($res);
+
+            // If the user is no longer a coach for any course in this session, remove the session relationship
+            if (0 === (int) $resultRow['count']) {
+                $sql = "DELETE FROM $tblSessionRelUser
                     WHERE
                         session_id = $sessionId AND
-                        c_id = $courseId AND
                         user_id = $userId AND
-                        status = ".Session::COURSE_COACH."
-                    ";
-            $result = Database::query($sql);
+                        relation_type = ".Session::COURSE_COACH;
+                Database::query($sql);
+            }
 
             return Database::affected_rows($result) > 0;
         }
@@ -3631,18 +3627,6 @@ class SessionManager
         );
 
         $sessionRepo->update($session);
-        /*
-        $em = Database::getManager();
-        $sessionRelCourseRelUser = new SessionRelCourseRelUser();
-        $sessionRelCourseRelUser
-            ->setSession(api_get_session_entity($sessionId))
-            ->setCourse(api_get_course_entity($courseId))
-            ->setUser(api_get_user_entity($userId))
-            ->setStatus(2)
-            ->setVisibility(1)
-        ;
-        $em->persist($sessionRelCourseRelUser);
-        $em->flush();*/
 
         return true;
     }

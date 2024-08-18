@@ -368,7 +368,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $image = null;
 
-    #[Groups(['user_subscriptions:sessions', 'session:read', 'session:item:read', 'session:basic'])]
+    #[Groups(['session:basic'])]
     private ?string $imageUrl = null;
 
     #[Groups(['user_subscriptions:sessions', 'session:read', 'session:item:read'])]
@@ -1197,7 +1197,16 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     public function getImageUrl(): ?string
     {
-        return $this->imageUrl;
+        $image = $this->getImage();
+
+        if ($image instanceof Asset) {
+            $category = $image->getCategory();
+            $filename = $image->getTitle();
+
+            return sprintf('/assets/%s/%s/%s', $category, $filename, $filename);
+        }
+
+        return null;
     }
 
     /**

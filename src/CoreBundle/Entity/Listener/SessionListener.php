@@ -50,16 +50,6 @@ class SessionListener
     }
 
     /**
-     * This code is executed when a session is loaded from the database.
-     */
-    public function postLoad(Session $session, LifecycleEventArgs $args): void
-    {
-        if ($session->getImage()) {
-            $session->setImageUrl($this->assetRepository->getAssetUrl($session->getImage()));
-        }
-    }
-
-    /**
      * This code is executed when a session is updated.
      */
     public function preUpdate(Session $session, PreUpdateEventArgs $args): void {}

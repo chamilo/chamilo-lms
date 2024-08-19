@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     errorPath: 'message'
 )]
 #[ORM\Table(name: 'message_rel_user')]
-#[ORM\UniqueConstraint(name: 'message_receiver', columns: ['message_id', 'user_id'])]
+#[ORM\UniqueConstraint(name: 'message_receiver', columns: ['message_id', 'user_id', 'receiver_type'])]
 #[ORM\Entity]
 #[ORM\EntityListeners([MessageStatusListener::class])]
 #[ApiFilter(

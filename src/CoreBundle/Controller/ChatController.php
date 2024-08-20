@@ -41,6 +41,8 @@ class ChatController extends AbstractResourceController implements CourseControl
             [
                 'restrict_to_coach' => ('true' === api_get_setting('chat.course_chat_restrict_to_coach')),
                 'user' => api_get_user_info(),
+                'emoji_smile' => '<span>&#128522;</span>',
+                'course_url_params' => api_get_cidreq(),
             ]
         );
     }

@@ -132,35 +132,51 @@ class SessionRepository extends ServiceEntityRepository
         $sessions = $this->getSubscribedSessionsOfUserInUrl($user, $url);
 
         $filterCurrentSessions = function (Session $session) use ($user, $url) {
-            $coursesAsCoach = $this->getSessionCoursesByStatusInCourseSubscription($user, $session, Session::COURSE_COACH, $url);
-            $coursesAsStudent = $this->getSessionCoursesByStatusInCourseSubscription($user, $session, Session::STUDENT, $url);
-            $validCourses = array_merge($coursesAsCoach, $coursesAsStudent);
 
-            if (empty($validCourses)) {
-                return false;
+            $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
+            if (!$userIsGeneralCoach) {
+                $coursesAsCoach = $this->getSessionCoursesByStatusInCourseSubscription($user, $session, Session::COURSE_COACH, $url);
+                $coursesAsStudent = $this->getSessionCoursesByStatusInCourseSubscription($user, $session, Session::STUDENT, $url);
+                $validCourses = array_merge($coursesAsCoach, $coursesAsStudent);
+
+                if (empty($validCourses)) {
+                    return false;
+                }
+                $session->setCourses(new ArrayCollection($validCourses));
             }
 
-            $session->setCourses(new ArrayCollection($validCourses));
+            $userIsCoach = $session->hasCoach($user);
 
             // Check if session has a duration
             if ($session->getDuration() > 0) {
                 $daysLeft = $session->getDaysLeftByUser($user);
 
-                return $daysLeft >= 0;
+                return $daysLeft >= 0 || $userIsCoach;
             }
 
+            // Determine the start date based on whether the user is a coach
+            $sessionStartDate = $userIsCoach && $session->getCoachAccessStartDate()
+                ? $session->getCoachAccessStartDate()
+                : $session->getAccessStartDate();
+
+            // If there is no start date, consider the session current
+            if (!$sessionStartDate) {
+                return true;
+            }
+
+            // Get the current date and time
             $now = new DateTime();
-            $sessionStartDate = $session->getAccessStartDate();
-            $sessionEndDate = $session->getAccessEndDate();
 
-            $isWithinDateRange = $now >= $sessionStartDate && (!$sessionEndDate || $now <= $sessionEndDate);
+            // Determine the end date based on whether the user is a coach
+            $sessionEndDate = $userIsCoach && $session->getCoachAccessEndDate()
+                ? $session->getCoachAccessEndDate()
+                : $session->getAccessEndDate();
 
-            return $isWithinDateRange;
+            // Check if the current date is within the start and end dates
+            return $now >= $sessionStartDate && (!$sessionEndDate || $now <= $sessionEndDate);
         };
 
-        $filteredSessions = array_filter($sessions, $filterCurrentSessions);
-
-        return $filteredSessions;
+        return array_filter($sessions, $filterCurrentSessions);
     }
 
     /**

@@ -114,13 +114,13 @@
                         buttonTitle = user.isConnected ? '{{ 'StartAChat'|get_lang }}' : '{{ 'LeaveAMessage'|get_lang }}';
 
                     html += '<li class="col-xs-12">' +
-                        '   <div class="chat-user" data-name="' + user.complete_name + '" data-user="' + user.id + '">' +
+                        '   <div class="chat-user" data-name="' + user.complete_name + '" data-user="' + user.user_id + '">' +
                         '       <img src="' + user.image_url + '" alt="' + user.complete_name + '" class="img-circle user-image-chat"/>' +
                         '       <ul class="list-unstyled">' +
                         '           <li>' + user.complete_name;
 
-                    if (user.id != {{ user.id }}) {
-                        html += '           <button type="button" class="btn btn-link btn-xs" title="' + buttonTitle + '" data-name="' + user.complete_name + '" data-user="' + user.id + '">' +
+                    if (user.user_id != {{ user.user_id }}) {
+                        html += '           <button type="button" class="btn btn-link btn-xs" title="' + buttonTitle + '" data-name="' + user.complete_name + '" data-user="' + user.user_id + '">' +
                             '               <i class="fa fa-comments text-' + buttonStatus + '"></i><span class="sr-only">' + buttonTitle + '</span>' +
                             '           </button>';
                     }
@@ -209,53 +209,6 @@
             $('[data-toggle="tab"][href="#tab1"]').show().tab('show');
         });
 
-        /*$('textarea#chat-writer').emojiarea({
-            button: '#emojis'
-        });*/
-
-        /*$('body').delay(1500).find('.emoji-wysiwyg-editor').textcomplete([{
-            match: /\B:([\-+\w]*)$/,
-            search: function (term, callback) {
-                var results = [];
-                var results2 = [];
-                var results3 = [];
-                $.each(emojiStrategy, function (shortname, data) {
-                    if (shortname.indexOf(term) > -1) {
-                        results.push(shortname);
-                    } else {
-                        if ((data.aliases !== null) && (data.aliases.indexOf(term) > -1)) {
-                            results2.push(shortname);
-                        } else if ((data.keywords !== null) && (data.keywords.indexOf(term) > -1)) {
-                            results3.push(shortname);
-                        }
-                    }
-                });
-
-                if (term.length >= 3) {
-                    results.sort(function (a, b) {
-                        return (a.length > b.length);
-                    });
-                    results2.sort(function (a, b) {
-                        return (a.length > b.length);
-                    });
-                    results3.sort();
-                }
-
-                var newResults = results.concat(results2).concat(results3);
-                callback(newResults);
-            },
-            template: function (shortname) {
-                return '<img class="emojione" src="{{ _p.web_lib }}javascript/emojione/png/'
-                    + emojiStrategy[shortname].unicode
-                    + '.png"> :' + shortname + ':';
-            },
-            replace: function (shortname) {
-                return ':' + shortname + ': ';
-            },
-            index: 1,
-            maxCount: 10
-        }], {});
-*/
         $('button#chat-send-message').on('click', ChChat.onSendMessageListener);
         $('#chat-users').on('click', 'div.chat-user', function (e) {
             e.preventDefault();

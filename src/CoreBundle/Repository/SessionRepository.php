@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -130,40 +131,36 @@ class SessionRepository extends ServiceEntityRepository
     {
         $sessions = $this->getSubscribedSessionsOfUserInUrl($user, $url);
 
-        $filterCurrentSessions = function (Session $session) use ($user) {
-            // Determine if the user is a coach
-            $userIsCoach = $session->hasCoach($user);
+        $filterCurrentSessions = function (Session $session) use ($user, $url) {
+            $coursesAsCoach = $this->getSessionCoursesByStatusInCourseSubscription($user, $session, Session::COURSE_COACH, $url);
+            $coursesAsStudent = $this->getSessionCoursesByStatusInCourseSubscription($user, $session, Session::STUDENT, $url);
+            $validCourses = array_merge($coursesAsCoach, $coursesAsStudent);
+
+            if (empty($validCourses)) {
+                return false;
+            }
+
+            $session->setCourses(new ArrayCollection($validCourses));
 
             // Check if session has a duration
             if ($session->getDuration() > 0) {
                 $daysLeft = $session->getDaysLeftByUser($user);
 
-                return $daysLeft >= 0 || $userIsCoach;
+                return $daysLeft >= 0;
             }
 
-            // Determine the start date based on whether the user is a coach
-            $sessionStartDate = $userIsCoach && $session->getCoachAccessStartDate()
-                ? $session->getCoachAccessStartDate()
-                : $session->getAccessStartDate();
-
-            // If there is no start date, consider the session current
-            if (!$sessionStartDate) {
-                return true;
-            }
-
-            // Get the current date and time
             $now = new DateTime();
+            $sessionStartDate = $session->getAccessStartDate();
+            $sessionEndDate = $session->getAccessEndDate();
 
-            // Determine the end date based on whether the user is a coach
-            $sessionEndDate = $userIsCoach && $session->getCoachAccessEndDate()
-                ? $session->getCoachAccessEndDate()
-                : $session->getAccessEndDate();
+            $isWithinDateRange = $now >= $sessionStartDate && (!$sessionEndDate || $now <= $sessionEndDate);
 
-            // Check if the current date is within the start and end dates
-            return $now >= $sessionStartDate && (!$sessionEndDate || $now <= $sessionEndDate);
+            return $isWithinDateRange;
         };
 
-        return array_filter($sessions, $filterCurrentSessions);
+        $filteredSessions = array_filter($sessions, $filterCurrentSessions);
+
+        return $filteredSessions;
     }
 
     /**

@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -130,8 +131,20 @@ class SessionRepository extends ServiceEntityRepository
     {
         $sessions = $this->getSubscribedSessionsOfUserInUrl($user, $url);
 
-        $filterCurrentSessions = function (Session $session) use ($user) {
-            // Determine if the user is a coach
+        $filterCurrentSessions = function (Session $session) use ($user, $url) {
+
+            $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
+            if (!$userIsGeneralCoach) {
+                $coursesAsCoach = $this->getSessionCoursesByStatusInCourseSubscription($user, $session, Session::COURSE_COACH, $url);
+                $coursesAsStudent = $this->getSessionCoursesByStatusInCourseSubscription($user, $session, Session::STUDENT, $url);
+                $validCourses = array_merge($coursesAsCoach, $coursesAsStudent);
+
+                if (empty($validCourses)) {
+                    return false;
+                }
+                $session->setCourses(new ArrayCollection($validCourses));
+            }
+
             $userIsCoach = $session->hasCoach($user);
 
             // Check if session has a duration

@@ -1,7 +1,7 @@
 <script>
-window.user = {{ user_json | raw }};
-window.access_url_id = {{ access_url_id }};
-window.languages = {{ languages_json | raw }};
+window.user = {{ user_json is defined ? user_json | raw : '{}' }};
+window.access_url_id = {{ access_url_id | default(1) }};
+window.languages = {{ languages_json is defined ? languages_json | raw : '{}' }};
 {% if legacy_breadcrumb is defined %}
 window.breadcrumb = {{ legacy_breadcrumb | raw }};
 {% else %}

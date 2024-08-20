@@ -85,8 +85,8 @@ class CourseController extends ToolBaseController
         ];
 
         if ($user && $user->hasRole('ROLE_STUDENT')
-            && 'true' === $settingsManager->getSetting('allow_terms_conditions')
-            && 'course' === $settingsManager->getSetting('load_term_conditions_section')
+            && 'true' === $settingsManager->getSetting('registration.allow_terms_conditions')
+            && 'course' === $settingsManager->getSetting('platform.load_term_conditions_section')
         ) {
             $termAndConditionStatus = false;
             $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());

@@ -345,8 +345,7 @@ if (is_array($forumCategories)) {
         } else {
         }*/
         //$forumCategoryInfo['extra_fields'] = $forumCategory['extra_fields'];
-        //$forumCategoryInfo['icon_session'] = api_get_session_image($categorySessionId, $_user['status']);
-        $forumCategoryInfo['icon_session'] = '';
+        $forumCategoryInfo['icon_session'] = api_get_session_image($forumCategory->getFirstResourceLink()->getSession()?->getId(), $user);
 
         // Validation when belongs to a session
         $forumCategoryInfo['description'] = $forumCategory->getCatComment();
@@ -450,11 +449,11 @@ if (is_array($forumCategories)) {
                             }
                         }*/
                         // Validation when belongs to a session
-                        /*$forumInfo['icon_session'] = api_get_session_image(
-                            $forum->getSessionId(),
+                        $forumInfo['icon_session'] = api_get_session_image(
+                            $forum->getFirstResourceLink()->getSession()?->getId(),
                             $user
-                        );*/
-                        $forumInfo['icon_session'] = '';
+                        );
+                        //$forumInfo['icon_session'] = '';
                         if ('0' != $forum->getForumOfGroup()) {
                             $forumOfGroup = $forum->getForumOfGroup();
                             $my_all_groups_forum_name = $all_groups[$forumOfGroup]['name'] ?? null;

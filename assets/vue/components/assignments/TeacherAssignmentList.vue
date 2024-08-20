@@ -26,7 +26,6 @@
     >
       <template #body="slotProps">
         <div class="flex items-center">
-          <BaseIcon v-if="isAllowedToEdit && getSessionId(slotProps.data)" icon="session-star" size="small" class="mr-2" />
           {{ slotProps.data.title }}
         </div>
       </template>

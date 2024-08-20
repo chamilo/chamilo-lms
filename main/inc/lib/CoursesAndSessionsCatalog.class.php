@@ -1853,7 +1853,16 @@ class CoursesAndSessionsCatalog
         $pageTop = min($pageTotal, $pageCurrent + 3);
 
         if ($pageBottom > 1) {
-            $pageDiv .= self::getPageNumberItem(1, $pageLength);
+            $pageDiv .= self::getPageNumberItem(
+                1,
+                $pageLength,
+       	        null,
+                '',
+                $categoryCode,
+                $action,
+               	$fields,
+               	$sortKeys
+            );
             if ($pageBottom > 2) {
                 $pageDiv .= self::getPageNumberItem(
                     $pageBottom - 1,

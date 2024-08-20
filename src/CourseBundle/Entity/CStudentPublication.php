@@ -70,7 +70,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(filterClass: CidFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
-class CStudentPublication extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
+class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {
     #[Groups(['c_student_publication:write'])]
     public bool $addToGradebook = false;

@@ -8,7 +8,7 @@
                         <div>
                             {{ description.title }}
                             {% if description.sessionId %}
-                                <i class="mdi mdi-star text-yellow-500"></i>
+                                {{ description.icon_session }}
                             {% endif %}
                         </div>
                         {% if is_allowed_to_edit %}

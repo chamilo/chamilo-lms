@@ -85,6 +85,7 @@ class CourseDescriptionController
                 'resourceNode' => $description->getResourceNode(),
                 'sessionId' => $description->getFirstResourceLink()->getSession() ? $description->getFirstResourceLink()->getSession()->getId() : null,
             ];
+            $description_data['icon_session'] = api_get_session_image($description->getFirstResourceLink()->getSession()?->getId(), api_get_user_entity());
             $data['descriptions'][] = $description_data;
         }
 
@@ -108,6 +109,8 @@ class CourseDescriptionController
     </script>";
 
         $actions = self::getToolbar();
+
+
 
         $tpl = new Template(get_lang('Description'));
         $tpl->assign('listing', $data);

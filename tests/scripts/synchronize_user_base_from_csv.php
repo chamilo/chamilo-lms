@@ -113,6 +113,7 @@ foreach ($accessUrls as $accessUrl) {
         continue;
     }
 
+    $urlUsersIdList = [];
     $CSVUsers = Import::csvToArray($filename, ',');
 
     if (!$CSVUsers) {
@@ -225,22 +226,9 @@ foreach ($accessUrls as $accessUrl) {
                         }
                     }
                 }
-
-                try {
-                    $entityManager->flush();
-                } catch (OptimisticLockException $e) {
-                    echo "Error processing user '{$username}': " . $e->getMessage() . "\n";
-                    error_log("Error processing user '{$username}': " . $e->getMessage());
-                    echo "Trace: " . $e->getTraceAsString() . "\n";
-                    continue;
-                }
-
-                if ($debug) {
-                    echo 'Sent to DB ' . $username . " with user id = " . $user->getId() . "\n";
-                }
-                UrlManager::add_user_to_url($user->getId(), $accessUrlId);
             }
 
+            $urlUsersIdList[] = $user->getId();
             $allCSVUsers[$username] = $user;
 
         } catch (Exception $e) {
@@ -250,6 +238,21 @@ foreach ($accessUrls as $accessUrl) {
             continue;
         }
     }
+    try {
+        $entityManager->flush();
+    } catch (OptimisticLockException $e) {
+        echo "Error processing users for URL '{$accessUrlId}': " . $e->getMessage() . "\n";
+        error_log("Error processing users for URL '{$accessUrlId}': " . $e->getMessage());
+        echo "Trace: " . $e->getTraceAsString() . "\n";
+        continue;
+    }
+    if ($debug) {
+        echo 'Sent users ' . print_r($urlUsersIdList,1) . ' to DB for URL ' . $accessUrlId . "\n";
+    }
+    $accessUrlList = []; 
+    $accessUrlList[] = $accessUrlId; 
+    UrlManager::add_users_to_urls($urlUsersIdList, $accessUrlList);
+
 }
 
 // Disable or delete user accounts not found in any CSV file depending on $deleteUsersNotFoundInCSV

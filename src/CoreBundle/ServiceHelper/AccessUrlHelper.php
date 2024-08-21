@@ -29,14 +29,14 @@ class AccessUrlHelper
         return $accessUrlEnabled;
     }
 
-    public function getFirstAccessUrl(): AccessUrl
+    public function getFirstAccessUrl(): ?AccessUrl
     {
         $urlId = $this->accessUrlRepository->getFirstId();
 
-        return $this->accessUrlRepository->find($urlId);
+        return $this->accessUrlRepository->find($urlId) ?: null;
     }
 
-    public function getCurrent(): AccessUrl
+    public function getCurrent(): ?AccessUrl
     {
         static $accessUrl;
 

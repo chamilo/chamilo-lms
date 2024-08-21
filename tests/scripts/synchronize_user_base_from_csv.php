@@ -6,7 +6,7 @@
 User account synchronisation from CSV file
 
 This script
-creates new user accounts found in the CSV files (if multiURL is enable, then we use 1 csv file per URL, the CSV file name contains the URL ID)
+creates new user accounts found in the CSV files (if multiURL is enable, then we use 1 csv file per URL, the CSV file name contains the URL ID in the form url_URLID_synchroUsers.csv replacing URLID by the real ID of the URL)
 disables user accounts not found in any CSV files (it disables the user for all URLs)
 or delete the user depending on the variable deleteUsersNotFoundInCSV (only if the user has auth_source === OpenId)
 updates existing user accounts found in the CSV, re-enabling them if disabled (it applies for all URLs) only if option reenableUsersFoundInCSV is set to true.
@@ -104,7 +104,7 @@ if ($firstAdmin) {
 $accessUrls = api_get_access_urls(0, 100000, 'id');
 foreach ($accessUrls as $accessUrl) {
     $accessUrlId = $accessUrl['id'];
-    $filename = $chamiloRoot . "/../tests/scripts/" . $accessUrlId . "_usersexample.csv";
+    $filename = $chamiloRoot . "/../tests/scripts/url_" . $accessUrlId . "_synchroUsers.csv";
 
     if (!file_exists($filename)) {
         if ($debug) {

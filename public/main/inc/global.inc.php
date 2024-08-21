@@ -142,5 +142,5 @@ try {
     define('DEFAULT_DOCUMENT_QUOTA', 100000000);
 } catch (Exception $e) {
     $controller = new ExceptionController();
-    $controller->showAction($e);
+    $controller->show($e);
 }

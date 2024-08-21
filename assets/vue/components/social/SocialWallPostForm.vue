@@ -1,10 +1,12 @@
 <template>
   <BaseCard plain>
     <form>
-      <BaseInputTextWithVuelidate
+      <BaseTinyEditor
         v-model="content"
-        :label="textPlaceholder"
-        :vuelidate-property="v$.content"
+        :editor-id="'content-editor'"
+        :required="true"
+        :title="textPlaceholder"
+        :editor-config="editorConfig"
         class="mb-2"
       />
 
@@ -56,11 +58,11 @@ import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
-import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
 import { useRoute } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
 import socialService from "../../services/socialService"
 import { useNotification } from "../../composables/notification"
+import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 
 const emit = defineEmits(["post-created"])
 const securityStore = useSecurityStore()
@@ -167,4 +169,11 @@ async function sendPost() {
     showErrorNotification("There was an error creating the post")
   }
 }
+
+// Editor configuration
+const editorConfig = computed(() => ({
+  height: 300,
+  plugins: "link code",
+  toolbar: "undo redo | formatselect | bold italic | alignleft aligncenter alignright | code",
+}))
 </script>

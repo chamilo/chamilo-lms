@@ -4,9 +4,11 @@ Stylesheet for HTML blocks created with CKEditor to embed in Chamilo pages.
 
 /* Reset styles */
 .tiny-content {
-    all: initial;
     display: block;
     width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
 }
 
 .tiny-content * {

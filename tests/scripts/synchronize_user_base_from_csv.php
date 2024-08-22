@@ -142,6 +142,7 @@ foreach ($accessUrls as $accessUrl) {
 
         try {
 
+            $newUser = false;
             $CSVuser = array_change_key_case($CSVuser); // Convert keys to lowercase
 
             if (empty($CSVuser['username'])) {
@@ -160,6 +161,7 @@ foreach ($accessUrls as $accessUrl) {
                     $dbUsers[$username] = $user;
                     $user->setUsername($username);
                     $user->setUsernameCanonical($username);
+                    $newUser = true;
                 }
                 if ($debug) {
                     echo 'Created ' . $username . "\n";
@@ -197,7 +199,7 @@ foreach ($accessUrls as $accessUrl) {
                     }
                 }
 
-                if (!$passwordSet) {
+                if (!$passwordSet && $newUser) {
                     $user->setPlainPassword(api_generate_password());
                 }
 

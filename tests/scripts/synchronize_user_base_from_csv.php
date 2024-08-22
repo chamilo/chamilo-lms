@@ -208,7 +208,7 @@ foreach ($accessUrls as $accessUrl) {
                 }
 
                 $user->setCreator($creator);
-                $userRepository->updateUser($user, true);
+                $userRepository->updateUser($user, false);
 
                 foreach ($CSVuser as $fieldName => $fieldValue) {
                     if (strpos($fieldName, EXTRA_KEY) === 0) {
@@ -295,14 +295,6 @@ foreach (array_diff(array_keys($dbUsers), array_keys($allCSVUsers)) as $username
                     $trackEDefault->setDefaultValueType(LOG_USER_ID);
                     $trackEDefault->setDefaultValue((string) $user->getId());
                     $entityManager->persist($trackEDefault);
-
-                    try {
-                        $entityManager->flush();
-                    } catch (OptimisticLockException $e) {
-                        error_log("Error processing user " . $e->getMessage());
-                        echo "Trace: " . $e->getTraceAsString() . "\n";
-                        continue;
-                    }
 
                     if ($debug) {
                         echo 'Disabled user ' . $usernameToDisable . "\n";

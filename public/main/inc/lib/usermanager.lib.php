@@ -1447,7 +1447,7 @@ class UserManager
                 $urlId = api_get_current_access_url_id();
             }
             $sql .= " INNER JOIN $userUrlTable url_user
-                      ON (user.user_id = url_user.user_id)
+                      ON (user.id = url_user.user_id)
                       WHERE url_user.access_url_id = $urlId";
         } else {
             $sql .= " WHERE 1=1 ";

@@ -843,6 +843,16 @@ form .field {
   }
 }
 
+.row {
+  @apply flex flex-wrap -mx-4;
+}
+.col-md-4 {
+  @apply w-full md:w-1/3 px-4;
+}
+.col-md-6 {
+  @apply w-full md:w-1/2 px-4;
+}
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';

@@ -1223,14 +1223,14 @@ class Statistics
                 url: "'.$url.'",
                 type: "POST",
                 success: function(data) {
-                    Chart.defaults.global.responsive = true;
+                    Chart.defaults.responsive = true;
                     var ctx = document.getElementById("'.$elementId.'").getContext("2d");
                     var chart = new Chart(ctx, {
                         type: "'.$type.'",
                         data: data,
                         options: {'.$options.'}
                     });
-                    var title = chart.options.title.text;
+                    var title = chart.options.plugins.title.text;
                     $("#'.$elementId.'_title").html(title);
                     $("#'.$elementId.'_table").html(data.table);
                 }
@@ -1241,14 +1241,18 @@ class Statistics
         return $chartCode;
     }
 
-    public static function getJSChartTemplateWithData($data, $type = 'pie', $options = '', $elementId = 'canvas')
+    public static function getJSChartTemplateWithData($data, $type = 'pie', $options = '', $elementId = 'canvas', $responsive = true)
     {
         $data = json_encode($data);
+        $responsiveValue = $responsive ? 'true' : 'false';
+
         $chartCode = '
         <script>
             $(function() {
-                Chart.defaults.global.responsive = true;
+                Chart.defaults.responsive = '.$responsiveValue.';
                 var ctx = document.getElementById("'.$elementId.'").getContext("2d");
+                ctx.canvas.width = 400;
+                ctx.canvas.height = 400;
                 var chart = new Chart(ctx, {
                     type: "'.$type.'",
                     data: '.$data.',

@@ -26,7 +26,7 @@ in_array(
     ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date']
 )
 ) {
-    //$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+    $htmlHeadXtra[] = api_get_build_js('libs/chartjs/chart.js');
     //$htmlHeadXtra[] = api_get_asset('chartjs-plugin-labels/build/chartjs-plugin-labels.min.js');
     // Prepare variables for the JS charts
     $url = $reportName = $reportType = $reportOptions = '';
@@ -828,7 +828,7 @@ switch ($report) {
 
                 $contract = false;
                 $legalAccept = $extraFieldValueUser->get_values_by_handler_and_field_variable($userId, 'legal_accept');
-                if ($legalAccept && isset($legalAccept['value'])) {
+                if ($legalAccept && !empty($legalAccept['value'])) {
                     list($legalId, $legalLanguageId, $legalTime) = explode(':', $legalAccept['value']);
                     if ($legalId) {
                         $contract = true;
@@ -925,7 +925,8 @@ switch ($report) {
                 $data['chart'],
                 'pie',
                 $reportOptions1,
-                'canvas1'
+                'canvas1',
+                false
             );
 
             $scoreDisplay = ScoreDisplay::instance();
@@ -1009,7 +1010,8 @@ switch ($report) {
                     $data['chart'],
                     'pie',
                     $reportOptions2,
-                    'canvas2'
+                    'canvas2',
+                    false
                 );
                 $extraTables .= $data['table'];
             }
@@ -1017,8 +1019,8 @@ switch ($report) {
             // graph 3
             $languages = api_get_languages();
             $all = [];
-            foreach ($languages as $language) {
-                $conditions = ['language' => $language];
+            foreach ($languages as $locale => $language) {
+                $conditions = ['locale' => $locale];
                 $key = $language;
                 if ('2' === substr($language, -1)) {
                     $key = str_replace(2, '', $language);
@@ -1044,7 +1046,8 @@ switch ($report) {
                 $data['chart'],
                 'pie',
                 $reportOptions3,
-                'canvas3'
+                'canvas3',
+                false
             );
             $extraTables .= $data['table'];
 
@@ -1092,7 +1095,8 @@ switch ($report) {
                     $data['chart'],
                     'pie',
                     $reportOptions4,
-                    'canvas4'
+                    'canvas4',
+                    false
                 );
                 $extraTables .= $data['table'];
             }
@@ -1160,7 +1164,8 @@ switch ($report) {
                     $data['chart'],
                     'pie',
                     $reportOptions8,
-                    'canvas8'
+                    'canvas8',
+                    false
                 );
                 $extraTables .= $data['table'];
             }
@@ -1211,7 +1216,8 @@ switch ($report) {
                     $data['chart'],
                     'pie',
                     $reportOptions5,
-                    'canvas5'
+                    'canvas5',
+                    false
                 );
                 $extraTables .= $data['table'];
             }
@@ -1253,7 +1259,8 @@ switch ($report) {
                     $data['chart'],
                     'pie',
                     $reportOptions6,
-                    'canvas6'
+                    'canvas6',
+                    false
                 );
                 $extraTables .= $data['table'];
             }
@@ -1294,12 +1301,13 @@ switch ($report) {
                     $data['chart'],
                     'pie',
                     $reportOptions7,
-                    'canvas7'
+                    'canvas7',
+                    false
                 );
                 $extraTables .= $data['table'];
             }
 
-            $header = Display::page_subheader2(get_lang('TotalNumberOfStudents').': '.$studentCount);
+            $header = Display::page_subheader2(get_lang('Total number of students').': '.$studentCount);
             $content = $header.$extraTables.$graph.$content;
         }
 
@@ -1321,7 +1329,7 @@ switch ($report) {
                 $counts[$minutes] = $row[0];
             }
         }
-        $content = '<div class="pull-left">'.get_lang('UsersOnline').'</div>
+        $content = '<div class="pull-left">'.get_lang('Users online').'</div>
         <div class="pull-right">'.api_get_local_time().'</div>
         <hr />
         <div class="tracking-course-summary">
@@ -1333,7 +1341,7 @@ switch ($report) {
                                 <i class="fa fa-thermometer-4" aria-hidden="true"></i>
                             </span>
                             <div class="tracking-info">
-                                <div class="tracking-text">'.get_lang('UsersOnline').' (3\')</div>
+                                <div class="tracking-text">'.get_lang('Users online').' (3\')</div>
                                 <div class="tracking-number">'.getOnlineUsersCount(3).'</div>
                             </div>
                         </div>
@@ -1346,7 +1354,7 @@ switch ($report) {
                                 <i class="fa fa-thermometer-3" aria-hidden="true"></i>
                             </span>
                             <div class="tracking-info">
-                                <div class="tracking-text">'.get_lang('UsersOnline').' (5\')</div>
+                                <div class="tracking-text">'.get_lang('Users online').' (5\')</div>
                                 <div class="tracking-number">'.getOnlineUsersCount(5).'</div>
                             </div>
                         </div>
@@ -1372,14 +1380,14 @@ switch ($report) {
                                 <i class="fa fa-thermometer-1" aria-hidden="true"></i>
                             </span>
                             <div class="tracking-info">
-                                <div class="tracking-text">'.get_lang('UsersOnline').' (120\')</div>
+                                <div class="tracking-text">'.get_lang('Users online').' (120\')</div>
                                 <div class="tracking-number">'.getOnlineUsersCount(120).'</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        <div class="pull-left">'.get_lang('UsersActiveInATest').'</div>
+        <div class="pull-left">'.get_lang('Users active in a test').'</div>
         <hr />
         <div class="row">
             <div class="col-lg-3 col-sm-3">

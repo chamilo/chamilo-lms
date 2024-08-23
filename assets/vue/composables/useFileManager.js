@@ -31,7 +31,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   const itemToDelete = ref(null);
   const item = ref({});
   const submitted = ref(false);
-  const filters = ref({ shared: 0, loadNode: 1 });
+  const filters = ref({ shared: 0, loadNode: 1, itemsPerPage: 10, page: 1, sortBy: '', sortDesc: false });
   const viewMode = ref('thumbnails');
   const contextMenuVisible = ref(false);
   const contextMenuPosition = ref({ x: 0, y: 0 });
@@ -48,7 +48,12 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   };
 
   const onUpdateOptions = async () => {
-    let flattenedFilters = flattenFilters({
+
+    if (!filters.value) {
+      filters.value = { shared: 0, loadNode: 1 };
+    }
+
+    const flattenedFilters = flattenFilters({
       ...filters.value,
       cid: route.query.cid || '',
       sid: route.query.sid || '',
@@ -58,16 +63,15 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
 
     const params = {
       ...flattenedFilters,
-      page: 1,
-      itemsPerPage: 10,
-      sortBy: '',
-      sortDesc: false,
+      page: filters.value.page || 1,
+      itemsPerPage: filters.value.itemsPerPage || 10,
+      [`order[${filters.value.sortBy}]`]: filters.value.sortDesc ? 'desc' : 'asc',
     };
 
     isLoading.value = true;
 
     try {
-      const response = await fetch(`${apiEndpoint}?page=${params.page}&rows=${params.itemsPerPage}&sortBy=${params.sortBy}&sortDesc=${params.sortDesc}&shared=${params.shared}&loadNode=${params.loadNode}&resourceNode.parent=${params['resourceNode.parent']}&cid=${params.cid}&sid=${params.sid}&gid=${params.gid}&type=${params.type}`, {
+      const response = await fetch(`${apiEndpoint}?${new URLSearchParams(params).toString()}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -260,7 +264,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   };
 
   const onFilesPage = (event) => {
-    filters.value.itemsPerPage = event.rows;
+    filters.value.itemsPerPage = event.rows || 10;
     filters.value.page = event.page + 1;
     filters.value.sortBy = event.sortField;
     filters.value.sortDesc = event.sortOrder === -1;
@@ -268,7 +272,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   };
 
   const sortingFilesChanged = (event) => {
-    filters.value.sortBy = event.sortField;
+    filters.value.sortBy = event.sortField || '';
     filters.value.sortDesc = event.sortOrder === -1;
     onUpdateOptions();
   };
@@ -337,6 +341,24 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     dialog.value = true;
   };
 
+  const totalPages = computed(() => {
+    return Math.ceil(totalFiles.value / filters.value.itemsPerPage);
+  });
+
+  const nextPage = () => {
+    if (filters.value.page < totalPages.value) {
+      filters.value.page++;
+      onUpdateOptions();
+    }
+  };
+
+  const previousPage = () => {
+    if (filters.value.page > 1) {
+      filters.value.page--;
+      onUpdateOptions();
+    }
+  };
+
   return {
     files,
     totalFiles,
@@ -383,6 +405,9 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     isAuthenticated,
     selectFile,
     showHandler,
-    editHandler
+    editHandler,
+    nextPage,
+    previousPage,
+    totalPages
   };
 }

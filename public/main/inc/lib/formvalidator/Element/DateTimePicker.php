@@ -134,7 +134,7 @@ class DateTimePicker extends HTML_QuickForm_text
         }
 
         $courseInfo = api_get_course_info();
-        if (isset($courseInfo)) {
+        if (!empty($courseInfo)) {
             $locale = $courseInfo['language'];
         }
 

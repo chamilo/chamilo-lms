@@ -59,16 +59,18 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => [
             'resource_node:read',
             'document:read',
+            'personal_file:read'
         ],
     ],
     denormalizationContext: [
         'groups' => [
             'resource_node:write',
             'document:write',
+            'personal_file:write'
         ],
     ]
 )]
-#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title', 'createdAt', 'updatedAt'])]
+#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title', 'createdAt', 'updatedAt', 'firstResourceFile.size'])]
 #[ApiFilter(filterClass: PropertyFilter::class)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial'])]
 class ResourceNode implements Stringable
@@ -186,7 +188,7 @@ class ResourceNode implements Stringable
      *
      * @var Collection<int, ResourceFile>
      */
-    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read'])]
+    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read', 'personal_file:read'])]
     #[ORM\OneToMany(
         mappedBy: 'resourceNode',
         targetEntity: ResourceFile::class,
@@ -648,7 +650,7 @@ class ResourceNode implements Stringable
         return $this;
     }
 
-    #[Groups(['resource_node:read', 'document:read', 'message:read'])]
+    #[Groups(['resource_node:read', 'document:read', 'message:read', 'personal_file:read'])]
     public function getFirstResourceFile(): ?ResourceFile
     {
         return $this->resourceFiles->first() ?: null;

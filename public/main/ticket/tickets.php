@@ -236,7 +236,7 @@ if (!empty($projectId)) {
     if ('true' === api_get_setting('ticket_allow_student_add') || api_is_platform_admin()) {
         $actionRight = Display::url(
             Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
-            api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId.'&'.api_get_cidReq(),
+            api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId,
             ['title' => get_lang('Add')]
         );
     }

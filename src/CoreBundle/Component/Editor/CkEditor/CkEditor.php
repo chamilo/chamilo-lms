@@ -194,7 +194,7 @@ class CkEditor extends Editor
      *
      * @return string javaScript function as string
      */
-    private function getFileManagerPicker($onlyPersonalfiles = true): string
+    private function getFileManagerPicker(bool $onlyPersonalfiles = true): string
     {
         $user = api_get_user_entity();
         $course = api_get_course_entity();

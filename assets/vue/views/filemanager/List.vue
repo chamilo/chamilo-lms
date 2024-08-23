@@ -12,7 +12,7 @@
         {{ t('Personal Files') }}
       </button>
       <button
-        v-if="isAllowedToEdit"
+        v-if="isAllowedToEdit && courseIsSet"
         class="px-4 py-2 -mb-px font-semibold border-b-2"
         :class="{
           'border-blue-500 text-blue-600': activeTab === 'documents',
@@ -28,7 +28,7 @@
       <PersonalFiles />
     </div>
 
-    <div v-if="activeTab === 'documents' && isAllowedToEdit" class="mt-4">
+    <div v-if="activeTab === 'documents' && isAllowedToEdit && courseIsSet" class="mt-4">
       <CourseDocuments />
     </div>
   </div>
@@ -41,6 +41,8 @@ import PersonalFiles from "../../components/filemanager/PersonalFiles.vue"
 import CourseDocuments from "../../components/filemanager/CourseDocuments.vue"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useI18n } from "vue-i18n"
+import { useCidReqStore } from "../../store/cidReq"
+import { storeToRefs } from 'pinia'
 
 const route = useRoute()
 const router = useRouter()
@@ -49,6 +51,10 @@ const activeTab = ref(route.query.tab || 'personalFiles')
 const isAllowedToEdit = ref(false)
 const isLoading = ref(true)
 const { t } = useI18n()
+
+const cidReqStore = useCidReqStore()
+const { course } = storeToRefs(cidReqStore)
+const courseIsSet = ref(false)
 
 const changeTab = (tab) => {
   activeTab.value = tab
@@ -63,6 +69,7 @@ watch(route, (newRoute) => {
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()
+  courseIsSet.value = !!course.value
   isLoading.value = false
 })
 </script>

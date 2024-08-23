@@ -170,6 +170,7 @@ if (props.fullPage) {
 const editorConfig = computed(() => ({
   ...defaultEditorConfig,
   ...props.editorConfig,
+  file_picker_callback: filePickerCallback,
 }))
 
 watch(modelValue, (newValue) => {
@@ -189,19 +190,16 @@ async function filePickerCallback(callback, value, meta) {
   window.addEventListener("message", function (event) {
     let data = event.data
     if (data.url) {
-      url = data.url
-      callback(url)
+      callback(data.url)
     }
   })
 
-  // tinymce is already in the global scope, set by backend and php
   window.tinymce.activeEditor.windowManager.openUrl({
     url: url,
-    title: "File manager",
+    title: "File Manager",
     onMessage: (api, message) => {
       if (message.mceAction === "fileSelected") {
-        const fileUrl = message.content
-        callback(fileUrl)
+        callback(message.content.url)
         api.close()
       }
     },
@@ -218,19 +216,11 @@ function getUrlForTinyEditor() {
     }).href
   }
 
-  let nodeId = course.value.resourceNode ? course.value.resourceNode.id : null
-
-  if (!nodeId) {
-    console.error("Resource node ID is not available.")
-    return
-  }
-
+  let queryParams = { cid: course.value.id, sid: 0, gid: 0, filetype: 'file' }
   return router.resolve({
-    name: "DocumentForHtmlEditor",
-    params: {
-      node: nodeId,
-    },
-    query: route.query,
+      name: 'FileManagerList',
+      params: { node: parentResourceNodeId.value },
+      query: queryParams,
   }).href
 }
 </script>

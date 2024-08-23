@@ -71,6 +71,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             'document:read',
             'media_object_read',
             'message:read',
+            'personal_file:read'
         ],
     ]
 )]
@@ -100,7 +101,7 @@ class ResourceFile implements Stringable
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read'])]
     #[ORM\Column(type: 'simple_array', nullable: true)]
     protected ?array $dimensions;
-    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read', 'personal_file:read'])]
     #[ORM\Column(type: 'integer')]
     protected ?int $size = 0;
 

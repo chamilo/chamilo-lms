@@ -102,6 +102,11 @@
           <div class="thumbnail-title">{{ file.resourceNode.title }}</div>
         </div>
       </div>
+      <div v-if="totalPages > 1" class="flex justify-center mt-4 space-x-4">
+        <button class="btn btn--plain px-4 py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-300" :disabled="filters.page === 1" @click="previousPage">Previous</button>
+        <span class="text-gray-700 font-semibold">Page {{ filters.page }} of {{ totalPages }}</span>
+        <button class="btn btn--plain px-4 py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-300" :disabled="filters.page === totalPages" @click="nextPage">Next</button>
+      </div>
       <BaseContextMenu :visible="contextMenuVisible" :position="contextMenuPosition" @close="contextMenuVisible = false">
         <ul>
           <li @click="selectFile(contextMenuFile)">
@@ -216,7 +221,10 @@ const {
   uploadDocumentHandler,
   onMountedCallback,
   isAuthenticated,
-  selectFile
+  selectFile,
+  nextPage,
+  previousPage,
+  totalPages
 } = useFileManager('documents', '/api/documents', 'CourseDocumentsUploadFile', true);
 
 onMountedCallback();

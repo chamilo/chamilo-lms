@@ -990,7 +990,7 @@ switch ($report) {
                     $sql = "SELECT count(id) count
                             FROM $extraFieldValueUser->table_field_values
                             WHERE
-                            value = '$value' AND
+                            field_value = '$value' AND
                             item_id IN ('$userIdListToString') AND
                             field_id = ".$extraField['id'];
                     $query = Database::query($sql);
@@ -1074,7 +1074,7 @@ switch ($report) {
                     $sql = "SELECT count(id) count
                             FROM $extraFieldValueUser->table_field_values
                             WHERE
-                            value = '$value' AND
+                            field_value = '$value' AND
                             item_id IN ('$userIdListToString') AND
                             field_id = ".$extraField['id'];
                     $query = Database::query($sql);
@@ -1117,7 +1117,7 @@ switch ($report) {
                 $all = [];
                 $total = count($users);
 
-                $sql = "SELECT value
+                $sql = "SELECT field_value
                         FROM $extraFieldValueUser->table_field_values
                         WHERE
                         item_id IN ('$userIdListToString') AND
@@ -1134,11 +1134,11 @@ switch ($report) {
 
                 while ($row = Database::fetch_array($query)) {
                     $usersFound++;
-                    if (!empty($row['value'])) {
-                        $validDate = DateTime::createFromFormat('Y-m-d', $row['value']);
-                        $validDate = $validDate && $validDate->format('Y-m-d') === $row['value'];
+                    if (!empty($row['field_value'])) {
+                        $validDate = DateTime::createFromFormat('Y-m-d', $row['field_value']);
+                        $validDate = $validDate && $validDate->format('Y-m-d') === $row['field_value'];
                         if ($validDate) {
-                            $date1 = new DateTime($row['value']);
+                            $date1 = new DateTime($row['field_value']);
                             $interval = $now->diff($date1);
                             $years = $interval->y;
 
@@ -1192,7 +1192,7 @@ switch ($report) {
                     $sql = "SELECT count(id) count
                             FROM $extraFieldValueUser->table_field_values
                             WHERE
-                            value = '$value' AND
+                            field_value = '$value' AND
                             item_id IN ('$userIdListToString') AND
                             field_id = ".$extraField['id'];
                     $query = Database::query($sql);
@@ -1238,7 +1238,7 @@ switch ($report) {
                 $sql = "SELECT count(id) count
                         FROM $extraFieldValueUser->table_field_values
                         WHERE
-                        value = 1 AND
+                        field_value = 1 AND
                         item_id IN ('$userIdListToString') AND
                         field_id = ".$extraField['id'];
                 $query = Database::query($sql);

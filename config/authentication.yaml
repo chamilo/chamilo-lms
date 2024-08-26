@@ -2,7 +2,7 @@
 # Access URL Id / authentication method / params
 parameters:
     authentication:
-        1:
+        default:
             generic:
                 enabled: false
                 client_id: ''

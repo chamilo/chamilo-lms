@@ -23,15 +23,19 @@ readonly class AuthenticationConfigHelper
 
         $authentication = $this->parameterBag->get('authentication');
 
-        if (!isset($authentication[$urlId])) {
-            throw new InvalidArgumentException('Invalid access URL Id');
+        if (isset($authentication[$urlId])) {
+            $urlParams = $authentication[$urlId];
+        } elseif (isset($authentication['default'])) {
+            $urlParams = $authentication['default'];
+        } else {
+            throw new InvalidArgumentException('Invalid access URL configuration');
         }
 
-        if (!isset($authentication[$urlId][$providerName])) {
-            throw new InvalidArgumentException('Invalid authentication source');
+        if (!isset($urlParams[$providerName])) {
+            throw new InvalidArgumentException('Invalid authentication provider for access URL');
         }
 
-        return $authentication[$urlId][$providerName];
+        return $urlParams[$providerName];
     }
 
     public function isEnabled(string $methodName, ?AccessUrl $url = null): bool

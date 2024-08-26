@@ -13,6 +13,7 @@ use KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Facebook;
 use League\OAuth2\Client\Provider\GenericProvider;
+use Stevenmaguire\OAuth2\Client\Provider\Keycloak;
 use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 use Symfony\Component\DependencyInjection\Attribute\AutowireDecorated;
 
@@ -35,6 +36,7 @@ readonly class OAuth2ProviderFactoryDecorator
         $options = match ($class) {
             GenericProvider::class => $this->getProviderOptions('generic'),
             Facebook::class => $this->getProviderOptions('facebook'),
+            Keycloak::class => $this->getProviderOptions('keycloak'),
         };
 
         return $this->inner->createProvider($class, $options, $redirectUri, $redirectParams, $collaborators);

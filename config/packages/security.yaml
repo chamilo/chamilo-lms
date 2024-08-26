@@ -117,6 +117,7 @@ security:
             custom_authenticators:
                 - Chamilo\CoreBundle\Security\Authenticator\OAuth2\GenericAuthenticator
                 - Chamilo\CoreBundle\Security\Authenticator\OAuth2\FacebookAuthenticator
+                - Chamilo\CoreBundle\Security\Authenticator\OAuth2\KeycloakAuthenticator
 
     access_control:
         - {path: ^/login, roles: PUBLIC_ACCESS}

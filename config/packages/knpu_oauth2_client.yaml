@@ -15,4 +15,13 @@ knpu_oauth2_client:
             graph_api_version: ''
             redirect_params: { }
 
+        keycloak:
+            type: keycloak
+            client_id: ''
+            client_secret: ''
+            redirect_route: chamilo.oauth2_keycloak_check
+            redirect_params: { }
+            auth_server_url: null
+            realm: null
+
         # configure your clients as described here: https://github.com/knpuniversity/oauth2-client-bundle#configuration

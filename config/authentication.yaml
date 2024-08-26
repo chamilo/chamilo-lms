@@ -34,3 +34,15 @@ parameters:
                 client_secret: ''
                 graph_api_version: 'v20.0'
                 redirect_params: { }
+
+            keycloak:
+                enabled: false
+                client_id: ''
+                client_secret: ''
+                auth_server_url: ''
+                realm: ''
+                version: ''
+                encryption_algorithm: null
+                encryption_key_path: null
+                encryption_key: null
+                redirect_params: { }

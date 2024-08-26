@@ -117,6 +117,7 @@
         "sensio/framework-extra-bundle": "~6.1",
         "simpod/doctrine-utcdatetime": "^0.1.2",
         "sonata-project/exporter": "^2.2",
+        "stevenmaguire/oauth2-keycloak": "^5.1",
         "stof/doctrine-extensions-bundle": "^1.10",
         "sunra/php-simple-html-dom-parser": "~1.5",
         "symfony/apache-pack": "^1.0",

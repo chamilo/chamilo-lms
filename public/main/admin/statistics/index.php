@@ -813,6 +813,7 @@ switch ($report) {
             );
 
             $extraFieldValueUser = new ExtraFieldValue('user');
+            $languages = api_get_languages();
             foreach ($users as $user) {
                 $userId = $user['user_id'];
                 $userInfo = api_get_user_info($userId);
@@ -840,8 +841,8 @@ switch ($report) {
                 $birthDate = isset($extraFields['terms_datedenaissance']) ? $extraFields['terms_datedenaissance'] : '';
 
                 $userLanguage = '';
-                if (!empty($user['language'])) {
-                    $userLanguage = get_lang(ucfirst(str_replace(2, '', $user['language'])));
+                if (!empty($user['locale'])) {
+                    $userLanguage = $languages[$user['locale']];
                 }
 
                 $languageTarget = '';

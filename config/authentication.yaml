@@ -12,7 +12,10 @@ parameters:
                     urlAccessToken: ''
                     urlResourceOwnerDetails: ''
                     responseResourceOwnerId: 'sub'
-                    accessTokenMethod: 'POST'
+                    # accessTokenMethod: 'POST'
+                    # responseError: 'error'
+                    # responseCode: ''
+                    # scopeSeparator: ' '
                     scopes:
                         - openid
                 allow_create_new_users: true
@@ -27,6 +30,7 @@ parameters:
                 resource_owner_hr_status_field: null
                 resource_owner_status_status_field: null
                 resource_owner_anon_status_field: null
+                resource_owner_urls_field: null
 
             facebook:
                 enabled: false

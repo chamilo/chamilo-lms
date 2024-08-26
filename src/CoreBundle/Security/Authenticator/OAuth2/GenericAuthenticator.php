@@ -6,12 +6,16 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security\Authenticator\OAuth2;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\GenericResourceOwner;
@@ -38,6 +42,8 @@ class GenericAuthenticator extends AbstractAuthenticator
         AccessUrlHelper $urlHelper,
         protected readonly ExtraFieldRepository $extraFieldRepository,
         protected readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
+        protected readonly AccessUrlRepository $accessUrlRepository,
+        protected readonly EntityManagerInterface $entityManager,
     ) {
         parent::__construct(
             $clientRegistry,
@@ -108,6 +114,8 @@ class GenericAuthenticator extends AbstractAuthenticator
                 $user,
                 $resourceOwnerId
             );
+
+            $this->updateUrls($user, $resourceOwnerData, $providerParams);
         } else {
             /** @var User $user */
             $user = $this->userRepository->find(
@@ -116,6 +124,8 @@ class GenericAuthenticator extends AbstractAuthenticator
 
             if ($providerParams['allow_update_user_info']) {
                 $this->saveUserInfo($user, $resourceOwnerData, $providerParams);
+
+                $this->updateUrls($user, $resourceOwnerData, $providerParams);
             }
         }
 
@@ -202,5 +212,62 @@ class GenericAuthenticator extends AbstractAuthenticator
         $map = array_flip($responseStatus);
 
         return $map[$status] ?? $status;
+    }
+
+    private function updateUrls(User $user, array $resourceOwnerData, array $providerParams): void
+    {
+        if (!($urlsField = $providerParams['resource_owner_urls_field'])) {
+            return;
+        }
+
+        $availableUrls = [];
+
+        $urls = $this->accessUrlRepository->findAll();
+
+        /** @var AccessUrl $existingUrl */
+        foreach ($urls as $existingUrl) {
+            $availableUrls[(string) $existingUrl->getId()] = $existingUrl->getId();
+            $availableUrls[$existingUrl->getUrl()] = $existingUrl->getId();
+        }
+
+        $allowedUrlIds = [];
+
+        foreach ($this->getValueByKey($resourceOwnerData, $urlsField) as $value) {
+            if (array_key_exists($value, $availableUrls)) {
+                $allowedUrlIds[] = $availableUrls[$value];
+            } else {
+                $newValue = ($value[-1] === '/') ? substr($value, 0, -1) : $value.'/';
+
+                if (array_key_exists($newValue, $availableUrls)) {
+                    $allowedUrlIds[] = $availableUrls[$newValue];
+                }
+            }
+        }
+
+        $grantedUrlIds = [];
+
+        foreach ($this->accessUrlRepository->findByUser($user) as $grantedUrl) {
+            $grantedUrlIds[] = $grantedUrl->getId();
+        }
+
+        $urlRelUserRepo = $this->entityManager->getRepository(AccessUrlRelUser::class);
+
+        foreach (array_diff($grantedUrlIds, $allowedUrlIds) as $extraUrlId) {
+            $urlRelUser = $urlRelUserRepo->findOneBy(['user' => $user, 'url' => $extraUrlId]);
+
+            if ($urlRelUser) {
+                $this->entityManager->remove($urlRelUser);
+            }
+        }
+
+        $this->entityManager->flush();
+
+        foreach (array_diff($allowedUrlIds, $grantedUrlIds) as $missingUrlId) {
+            /** @var AccessUrl $missingUrl */
+            $missingUrl = $this->accessUrlRepository->find($missingUrlId);
+            $missingUrl->addUser($user);
+        }
+
+        $this->entityManager->flush();
     }
 }

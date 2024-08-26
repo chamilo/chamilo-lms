@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldItemInterface;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -140,5 +141,42 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             'itemId' => $result->getItemId(),
             'value' => $result->getFieldValue(),
         ];
+    }
+
+    /**
+     * @return ExtraFieldValues|array<ExtraFieldValues>|null
+     * @throws NonUniqueResultException
+     */
+    public function findByVariableAndValue(
+        ExtraField $extraField,
+        string|int $value,
+        bool $last = false,
+        bool $all = false,
+        bool $useLike = false,
+    ): ExtraFieldValues|array|null {
+        $qb = $this->createQueryBuilder('s');
+
+        if ($useLike) {
+            $qb->andWhere($qb->expr()->like('s.fieldValue', ':value'));
+            $value = "%$value%";
+        } else {
+            $qb->andWhere($qb->expr()->eq('s.fieldValue', ':value'));
+        }
+
+        $query = $qb
+            ->andWhere(
+                $qb->expr()->eq('s.field', ':f')
+            )
+            ->orderBy('s.itemId', $last ? 'DESC' : 'ASC')
+            ->setParameter('value', "$value")
+            ->setParameter('f', $extraField)
+            ->getQuery()
+        ;
+
+        if ($all) {
+            return $query->getResult();
+        }
+
+        return $query->getOneOrNullResult();
     }
 }

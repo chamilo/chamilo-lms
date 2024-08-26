@@ -74,4 +74,9 @@ class ExtraFieldRepository extends ServiceEntityRepository
 
         return $fieldInfo;
     }
+
+    public function findByVariable(int $itemType, string $variable): ?ExtraField
+    {
+        return $this->findOneBy(['variable' => $variable, 'itemType' => $itemType]);
+    }
 }

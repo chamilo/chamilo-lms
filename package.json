@@ -39,7 +39,7 @@
     "blueimp-load-image": "^5.16.0",
     "bootstrap-daterangepicker": "^3.1.0",
     "bootstrap-select": "^1.13.18",
-    "chart.js": "^3.9.1",
+    "chart.js": "^4.0.0",
     "colorjs.io": "^0.5.0",
     "cropper": "^4.1.0",
     "datepair.js": "^0.4.17",

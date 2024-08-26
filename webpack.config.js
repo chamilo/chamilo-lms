@@ -49,8 +49,6 @@ Encore.setOutputPath("public/build/")
   .enableSassLoader()
   .enableTypeScriptLoader(function (tsConfig) {
     tsConfig.transpileOnly = true
-    //tsConfig.configFile = './tsconfig.json';
-    //tsConfig.exclude = ['/node_modules(?!\\/vuex-composition-helpers)/'];
   })
   .enableVueLoader(() => {}, { version: 3, runtimeCompilerBuild: false })
   .autoProvidejQuery()
@@ -97,12 +95,11 @@ Encore.setOutputPath("public/build/")
       from: "./node_modules/flatpickr/dist/l10n",
       to: "flatpickr/l10n/[name].[ext]",
     },
-    /*,
     {
-        from: './node_modules/mathjax/',
-        pattern: /(MathJax.js)$/,
-        to: 'libs/mathjax/MathJax.js'
-    },*/
+      from: "./node_modules/chart.js/dist/",
+      to: "libs/chartjs/[name].[ext]",
+      pattern: /\.(js|css)$/,
+    }
   ])
   .addPlugin(
     new webpack.DefinePlugin({
@@ -137,21 +134,6 @@ Encore.copyFiles({
   from: "./node_modules/select2/dist/js",
   to: "libs/select2/js/[name].[ext]",
 })
-
-// Fix free-jqgrid languages files
-// Encore.addPlugin(new FileManagerPlugin({
-//     onEnd: {
-//         move: [
-//             {
-//                 source: './public/public/build/free-jqgrid/',
-//                 destination: './public/build/free-jqgrid/'
-//             }
-//         ],
-//         delete: [
-//             './public/public/'
-//         ]
-//     }
-// }));
 
 const config = Encore.getWebpackConfig()
 

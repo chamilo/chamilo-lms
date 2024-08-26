@@ -145,6 +145,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
 
     /**
      * @return ExtraFieldValues|array<ExtraFieldValues>|null
+     *
      * @throws NonUniqueResultException
      */
     public function findByVariableAndValue(

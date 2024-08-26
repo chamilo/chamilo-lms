@@ -90,7 +90,7 @@ class GenericAuthenticator extends AbstractAuthenticator
                 $user = (new User())
                     ->setFirstname('OAuth2 User default firstname')
                     ->setLastname('OAuth2 User default firstname')
-                    ->setEmail('oauth2user_'.$resourceOwnerId.'@'.(gethostname() or 'localhost'))
+                    ->setEmail('oauth2user_'.$resourceOwnerId.'@'.(gethostname() ?: 'localhost'))
                     ->setUsername($username)
                     ->setPlainPassword($username)
                     ->setStatus(STUDENT)
@@ -120,7 +120,7 @@ class GenericAuthenticator extends AbstractAuthenticator
     }
 
     /**
-     * Set user information from the resource owner's data or the user itself
+     * Set user information from the resource owner's data or the user itself.
      */
     public function saveUserInfo(User $user, array $resourceOwnerData, array $providerParams): void
     {

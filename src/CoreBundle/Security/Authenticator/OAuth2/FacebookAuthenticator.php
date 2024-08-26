@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use Cocur\Slugify\SlugifyInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
 use League\OAuth2\Client\Provider\FacebookUser;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +51,7 @@ class FacebookAuthenticator extends AbstractAuthenticator
         $user
             ->setFirstname($resourceOwner->getFirstName())
             ->setLastname($resourceOwner->getLastName())
-            //->setLocale($resourceOwner->getLocale())
+            // ->setLocale($resourceOwner->getLocale())
             ->setEmail($resourceOwner->getEmail())
             ->setUsername($this->changeToValidChamiloLogin($resourceOwner->getEmail()))
             ->setPlainPassword('facebook')

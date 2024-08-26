@@ -1,0 +1,131 @@
+<?php
+
+declare(strict_types=1);
+
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\CoreBundle\Migrations\Schema\V200;
+
+use Doctrine\DBAL\Schema\Schema;
+use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+
+final class Version20240811221950 extends AbstractMigrationChamilo
+{
+    public function getDescription(): string
+    {
+        return 'Migration to consolidate schema changes and handle foreign keys, indexes, columns with proper validations.';
+    }
+
+    public function up(Schema $schema): void
+    {
+        $this->dropForeignKeyIfExists($schema, 'c_survey_question_option', 'FK_C4B6F5F1E27F6BF');
+        $this->dropIndexIfExists($schema, 'block', 'path');
+        $this->dropColumnIfExists($schema, 'c_survey_question_option', 'c_id');
+        $this->dropColumnIfExists($schema, 'c_survey_question_option', 'question_option_id');
+
+        // Drop and recreate foreign keys and indexes for notification_event_rel_user
+        $this->dropIndexIfExists($schema, 'notification_event_rel_user', 'fk_event');
+        $this->dropIndexIfExists($schema, 'notification_event_rel_user', 'fk_user');
+        $this->dropForeignKeyIfExists($schema, 'notification_event_rel_user', 'FK_9F7995A671F7E88B');
+        $this->dropForeignKeyIfExists($schema, 'notification_event_rel_user', 'FK_9F7995A6A76ED395');
+
+        $this->addIndexIfNotExists($schema, 'notification_event_rel_user', 'IDX_9F7995A671F7E88B', ['event_id']);
+        $this->addIndexIfNotExists($schema, 'notification_event_rel_user', 'IDX_9F7995A6A76ED395', ['user_id']);
+        $this->addForeignKeyIfNotExists($schema, 'notification_event_rel_user', 'FK_9F7995A671F7E88B', 'event_id', 'notification_event', 'id');
+        $this->addForeignKeyIfNotExists($schema, 'notification_event_rel_user', 'FK_9F7995A6A76ED395', 'user_id', 'user', 'id');
+
+        // Other table modifications
+        $this->dropIndexIfExists($schema, 'course_rel_user_catalogue', 'IDX_79CA412EA76ED395');
+        $this->dropIndexIfExists($schema, 'course_rel_user_catalogue', 'IDX_79CA412E91D79BD3');
+
+        if ($this->indexExists($schema, 'gradebook_category', 'FK_96A4C705C33F7837')) {
+            $this->addSql('ALTER TABLE gradebook_category DROP INDEX FK_96A4C705C33F7837, ADD UNIQUE INDEX UNIQ_96A4C705C33F7837 (document_id);');
+        }
+
+        if ($this->columnExists($schema, 'notification_event', 'title') &&
+            $this->columnExists($schema, 'notification_event', 'content') &&
+            $this->columnExists($schema, 'notification_event', 'link') &&
+            $this->columnExists($schema, 'notification_event', 'event_type')) {
+            $this->addSql('ALTER TABLE notification_event CHANGE title title VARCHAR(255) NOT NULL, CHANGE content content LONGTEXT DEFAULT NULL, CHANGE link link LONGTEXT DEFAULT NULL, CHANGE event_type event_type VARCHAR(255) NOT NULL;');
+        }
+
+        if ($this->foreignKeyExists($schema, 'c_survey_question_option', 'FK_C4B6F5F1E27F6BF')) {
+            $this->addSql('ALTER TABLE c_survey_question_option ADD CONSTRAINT FK_C4B6F5F1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid) ON DELETE SET NULL;');
+        }
+
+
+        $this->dropIndexIfExists($schema, 'c_blog_task_rel_user', 'user');
+        $this->dropIndexIfExists($schema, 'c_blog_task_rel_user', 'task');
+    }
+
+    private function dropColumnIfExists(Schema $schema, string $tableName, string $columnName): void
+    {
+        if ($this->columnExists($schema, $tableName, $columnName)) {
+            $this->addSql(sprintf('ALTER TABLE %s DROP COLUMN %s;', $tableName, $columnName));
+        }
+    }
+
+    private function dropIndexIfExists(Schema $schema, string $tableName, string $indexName): void
+    {
+        if ($this->indexExists($schema, $tableName, $indexName)) {
+            $this->addSql(sprintf('DROP INDEX %s ON %s;', $indexName, $tableName));
+        }
+    }
+
+    private function dropForeignKeyIfExists(Schema $schema, string $tableName, string $foreignKeyName): void
+    {
+        if ($this->foreignKeyExists($schema, $tableName, $foreignKeyName)) {
+            $this->addSql(sprintf('ALTER TABLE %s DROP FOREIGN KEY %s;', $tableName, $foreignKeyName));
+        }
+    }
+
+    private function addIndexIfNotExists(Schema $schema, string $tableName, string $indexName, array $columns): void
+    {
+        if (!$this->indexExists($schema, $tableName, $indexName)) {
+            $this->addSql(sprintf('CREATE INDEX %s ON %s (%s);', $indexName, $tableName, implode(',', $columns)));
+        }
+    }
+
+    private function addForeignKeyIfNotExists(Schema $schema, string $tableName, string $foreignKeyName, string $localColumn, string $referencedTable, string $referencedColumn): void
+    {
+        if (!$this->foreignKeyExists($schema, $tableName, $foreignKeyName)) {
+            $this->addSql(sprintf(
+                'ALTER TABLE %s ADD CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s);',
+                $tableName,
+                $foreignKeyName,
+                $localColumn,
+                $referencedTable,
+                $referencedColumn
+            ));
+        }
+    }
+
+    private function columnExists(Schema $schema, string $tableName, string $columnName): bool
+    {
+        return $this->connection->fetchOne(sprintf(
+                "SELECT COUNT(1) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = DATABASE() AND table_name='%s' AND column_name='%s';",
+                $tableName,
+                $columnName
+            )) > 0;
+    }
+
+    private function indexExists(Schema $schema, string $tableName, string $indexName): bool
+    {
+        return $this->connection->fetchOne(sprintf(
+                "SELECT COUNT(1) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = DATABASE() AND table_name='%s' AND index_name='%s';",
+                $tableName,
+                $indexName
+            )) > 0;
+    }
+
+    private function foreignKeyExists(Schema $schema, string $tableName, string $foreignKeyName): bool
+    {
+        return $this->connection->fetchOne(sprintf(
+                "SELECT COUNT(1) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema = DATABASE() AND table_name='%s' AND constraint_name='%s';",
+                $tableName,
+                $foreignKeyName
+            )) > 0;
+    }
+
+    public function down(Schema $schema): void {}
+}

@@ -39,27 +39,10 @@ final class Version20170524110000 extends AbstractMigrationChamilo
                 'ALTER TABLE track_e_hotpotatoes CHANGE exe_name title VARCHAR(255) NOT NULL'
             );
         }
-
-        if ($schema->hasTable('lti_external_tool')) {
-            $this->addSql(
-                'ALTER TABLE lti_external_tool CHANGE name title VARCHAR(255) NOT NULL'
-            );
-        }
-
-        if ($schema->hasTable('plugin_ims_lti_tool')) {
-            $this->addSql(
-                'ALTER TABLE plugin_ims_lti_tool CHANGE name title VARCHAR(255) NOT NULL'
-            );
-        }
     }
 
     public function down(Schema $schema): void
     {
-        $table = $schema->getTable('lti_external_tool');
-        if ($table->hasColumn('title')) {
-            $this->addSql('ALTER TABLE lti_external_tool CHANGE title name VARCHAR(255) NOT NULL');
-        }
-
         $table = $schema->getTable('track_e_hotpotatoes');
         if ($table->hasColumn('title')) {
             $this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE title exe_name VARCHAR(255) NOT NULL');

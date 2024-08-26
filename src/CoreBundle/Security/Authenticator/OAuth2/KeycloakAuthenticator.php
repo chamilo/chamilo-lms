@@ -49,7 +49,9 @@ class KeycloakAuthenticator extends AbstractAuthenticator
         ;
 
         $this->userRepository->updateUser($user);
-        // updateAccessUrls ?
+
+        $url = $this->urlHelper->getCurrent();
+        $url->addUser($user);
 
         return $user;
     }

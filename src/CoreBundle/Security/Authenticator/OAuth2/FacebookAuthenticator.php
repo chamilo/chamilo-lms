@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Security\Authenticator\OAuth2;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use Cocur\Slugify\SlugifyInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -25,9 +26,16 @@ class FacebookAuthenticator extends AbstractAuthenticator
         RouterInterface $router,
         UserRepository $userRepository,
         AuthenticationConfigHelper $authenticationConfigHelper,
+        AccessUrlHelper $urlHelper,
         protected readonly SlugifyInterface $slugify,
     ) {
-        parent::__construct($clientRegistry, $router, $userRepository, $authenticationConfigHelper);
+        parent::__construct(
+            $clientRegistry,
+            $router,
+            $userRepository,
+            $authenticationConfigHelper,
+            $urlHelper,
+        );
     }
 
     public function supports(Request $request): ?bool
@@ -61,7 +69,9 @@ class FacebookAuthenticator extends AbstractAuthenticator
         ;
 
         $this->userRepository->updateUser($user);
-        // updateAccessUrls ?
+
+        $url = $this->urlHelper->getCurrent();
+        $url->addUser($user);
 
         return $user;
     }

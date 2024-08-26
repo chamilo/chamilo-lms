@@ -1,3 +1,10 @@
 knpu_oauth2_client:
     clients:
+        generic:
+            type: generic
+            provider_class: League\OAuth2\Client\Provider\GenericProvider
+            client_id: ''
+            client_secret: ''
+            redirect_route: chamilo.oauth2_generic_check
+
         # configure your clients as described here: https://github.com/knpuniversity/oauth2-client-bundle#configuration

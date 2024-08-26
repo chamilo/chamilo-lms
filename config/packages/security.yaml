@@ -114,6 +114,9 @@ security:
                 # username_path: security.credentials.login
                 # password_path: security.credentials.password
 
+            custom_authenticators:
+                - Chamilo\CoreBundle\Security\Authenticator\OAuth2\GenericAuthenticator
+
     access_control:
         - {path: ^/login, roles: PUBLIC_ACCESS}
         - {path: ^/api/authentication_token, roles: PUBLIC_ACCESS}

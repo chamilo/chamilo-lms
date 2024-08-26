@@ -7,4 +7,12 @@ knpu_oauth2_client:
             client_secret: ''
             redirect_route: chamilo.oauth2_generic_check
 
+        facebook:
+            type: facebook
+            client_id: ''
+            client_secret: ''
+            redirect_route: chamilo.oauth2_facebook_check
+            graph_api_version: ''
+            redirect_params: { }
+
         # configure your clients as described here: https://github.com/knpuniversity/oauth2-client-bundle#configuration

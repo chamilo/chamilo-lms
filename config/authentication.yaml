@@ -27,3 +27,10 @@ parameters:
                 resource_owner_hr_status_field: null
                 resource_owner_status_status_field: null
                 resource_owner_anon_status_field: null
+
+            facebook:
+                enabled: false
+                client_id: ''
+                client_secret: ''
+                graph_api_version: 'v20.0'
+                redirect_params: { }

@@ -97,6 +97,7 @@
         "league/glide-symfony": "^2.0",
         "league/html-to-markdown": "^5.1",
         "league/mime-type-detection": "^1.7",
+        "league/oauth2-facebook": "^2.2",
         "lexik/jwt-authentication-bundle": "^2.20",
         "maennchen/zipstream-php": "^2.1",
         "masterminds/html5": "^2.0",

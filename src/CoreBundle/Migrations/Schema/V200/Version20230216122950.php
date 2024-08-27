@@ -60,15 +60,6 @@ final class Version20230216122950 extends AbstractMigrationChamilo
             }
         }
 
-        if (!$schema->hasTable('notification_event_rel_user')) {
-            $this->addSql('CREATE TABLE notification_event_rel_user (
-                id INT UNSIGNED AUTO_INCREMENT NOT NULL,
-                event_id INT UNSIGNED,
-                user_id INT,
-                PRIMARY KEY (id)
-            )');
-        }
-
         if (!$schema->hasTable('message_feedback')) {
             $this->addSql(
                 'CREATE TABLE message_feedback (id INT AUTO_INCREMENT NOT NULL, message_id INT NOT NULL, user_id INT NOT NULL, liked TINYINT(1) DEFAULT 0 NOT NULL, disliked TINYINT(1) DEFAULT 0 NOT NULL, updated_at DATETIME NOT NULL COMMENT "(DC2Type:datetime)", INDEX IDX_DB0F8049537A1329 (message_id), INDEX IDX_DB0F8049A76ED395 (user_id), INDEX idx_message_feedback_uid_mid (message_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
@@ -163,12 +154,6 @@ final class Version20230216122950 extends AbstractMigrationChamilo
         if ($schema->hasTable('message_feedback')) {
             $this->addSql(
                 'DROP TABLE message_feedback'
-            );
-        }
-
-        if ($schema->hasTable('notification_event_rel_user')) {
-            $this->addSql(
-                'DROP TABLE notification_event_rel_user'
             );
         }
 

@@ -23,18 +23,6 @@ final class Version20240811221950 extends AbstractMigrationChamilo
         $this->dropColumnIfExists($schema, 'c_survey_question_option', 'c_id');
         $this->dropColumnIfExists($schema, 'c_survey_question_option', 'question_option_id');
 
-        // Drop and recreate foreign keys and indexes for notification_event_rel_user
-        $this->dropIndexIfExists($schema, 'notification_event_rel_user', 'fk_event');
-        $this->dropIndexIfExists($schema, 'notification_event_rel_user', 'fk_user');
-        $this->dropForeignKeyIfExists($schema, 'notification_event_rel_user', 'FK_9F7995A671F7E88B');
-        $this->dropForeignKeyIfExists($schema, 'notification_event_rel_user', 'FK_9F7995A6A76ED395');
-
-        $this->addIndexIfNotExists($schema, 'notification_event_rel_user', 'IDX_9F7995A671F7E88B', ['event_id']);
-        $this->addIndexIfNotExists($schema, 'notification_event_rel_user', 'IDX_9F7995A6A76ED395', ['user_id']);
-        $this->addForeignKeyIfNotExists($schema, 'notification_event_rel_user', 'FK_9F7995A671F7E88B', 'event_id', 'notification_event', 'id');
-        $this->addForeignKeyIfNotExists($schema, 'notification_event_rel_user', 'FK_9F7995A6A76ED395', 'user_id', 'user', 'id');
-
-        // Other table modifications
         $this->dropIndexIfExists($schema, 'course_rel_user_catalogue', 'IDX_79CA412EA76ED395');
         $this->dropIndexIfExists($schema, 'course_rel_user_catalogue', 'IDX_79CA412E91D79BD3');
 
@@ -52,7 +40,6 @@ final class Version20240811221950 extends AbstractMigrationChamilo
         if ($this->foreignKeyExists($schema, 'c_survey_question_option', 'FK_C4B6F5F1E27F6BF')) {
             $this->addSql('ALTER TABLE c_survey_question_option ADD CONSTRAINT FK_C4B6F5F1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid) ON DELETE SET NULL;');
         }
-
 
         $this->dropIndexIfExists($schema, 'c_blog_task_rel_user', 'user');
         $this->dropIndexIfExists($schema, 'c_blog_task_rel_user', 'task');
@@ -76,27 +63,6 @@ final class Version20240811221950 extends AbstractMigrationChamilo
     {
         if ($this->foreignKeyExists($schema, $tableName, $foreignKeyName)) {
             $this->addSql(sprintf('ALTER TABLE %s DROP FOREIGN KEY %s;', $tableName, $foreignKeyName));
-        }
-    }
-
-    private function addIndexIfNotExists(Schema $schema, string $tableName, string $indexName, array $columns): void
-    {
-        if (!$this->indexExists($schema, $tableName, $indexName)) {
-            $this->addSql(sprintf('CREATE INDEX %s ON %s (%s);', $indexName, $tableName, implode(',', $columns)));
-        }
-    }
-
-    private function addForeignKeyIfNotExists(Schema $schema, string $tableName, string $foreignKeyName, string $localColumn, string $referencedTable, string $referencedColumn): void
-    {
-        if (!$this->foreignKeyExists($schema, $tableName, $foreignKeyName)) {
-            $this->addSql(sprintf(
-                'ALTER TABLE %s ADD CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s);',
-                $tableName,
-                $foreignKeyName,
-                $localColumn,
-                $referencedTable,
-                $referencedColumn
-            ));
         }
     }
 

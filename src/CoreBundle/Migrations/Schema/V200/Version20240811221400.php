@@ -46,16 +46,6 @@ final class Version20240811221400 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE system_template CHANGE language language VARCHAR(40) DEFAULT NULL');
         }
 
-        // notification_event_rel_user
-        $this->addSql('ALTER TABLE notification_event_rel_user CHANGE id id INT AUTO_INCREMENT NOT NULL');
-        $this->addSql('ALTER TABLE notification_event_rel_user CHANGE event_id event_id INT NOT NULL');
-        $this->addSql('ALTER TABLE notification_event_rel_user CHANGE user_id user_id INT NOT NULL');
-
-        $this->addSql('ALTER TABLE notification_event_rel_user DROP FOREIGN KEY IF EXISTS FK_9F7995A671F7E88B');
-        $this->addSql('ALTER TABLE notification_event_rel_user DROP FOREIGN KEY IF EXISTS FK_9F7995A6A76ED395');
-        $this->addSql('ALTER TABLE notification_event_rel_user ADD CONSTRAINT FK_9F7995A671F7E88B FOREIGN KEY (event_id) REFERENCES notification_event (id)');
-        $this->addSql('ALTER TABLE notification_event_rel_user ADD CONSTRAINT FK_9F7995A6A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
-
         // session_rel_course_rel_user
         $this->addSql('ALTER TABLE session_rel_course_rel_user DROP FOREIGN KEY IF EXISTS FK_720167EA76ED395');
         $this->addSql('ALTER TABLE session_rel_course_rel_user DROP FOREIGN KEY IF EXISTS FK_720167E613FECDF');

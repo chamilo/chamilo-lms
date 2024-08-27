@@ -23,24 +23,37 @@ class Version20240416110300 extends AbstractMigrationChamilo
         $extraFields = ExtraFieldFixtures::getExtraFields();
 
         foreach ($extraFields as $field) {
-            $count = $this->connection->executeQuery(
-                'SELECT COUNT(*) FROM extra_field WHERE variable = :variable AND item_type = :item_type',
+            $existingField = $this->connection->executeQuery(
+                'SELECT * FROM extra_field WHERE variable = :variable AND item_type = :item_type',
                 [
                     'variable' => $field['variable'],
                     'item_type' => $field['item_type'],
                 ]
-            )->fetchOne();
+            )->fetchAssociative();
 
-            if (0 == $count) {
+            if (!$existingField) {
+                // Insert new field if it does not exist
                 $this->connection->insert('extra_field', [
                     'item_type' => $field['item_type'],
                     'value_type' => $field['value_type'],
                     'variable' => $field['variable'],
                     'display_text' => $field['display_text'],
-                    'visible_to_self' => $field['visible_to_self'] ? 1 : 0,
-                    'changeable' => $field['changeable'] ? 1 : 0,
-                    'filter' => 1,
+                    'visible_to_self' => $field['visible_to_self'] ?? 0,
+                    'visible_to_others' => $field['visible_to_others'] ?? 0,
+                    'changeable' => $field['changeable'] ?? 0,
+                    'filter' => $field['filter'] ?? 0,
                     'created_at' => (new DateTime())->format('Y-m-d H:i:s'),
+                ]);
+            } else {
+                // Update existing field
+                $this->connection->update('extra_field', [
+                    'display_text' => $field['display_text'],
+                    'visible_to_self' => $field['visible_to_self'] ?? 0,
+                    'visible_to_others' => $field['visible_to_others'] ?? 0,
+                    'changeable' => $field['changeable'] ?? 0,
+                    'filter' => $field['filter'] ?? 0,
+                ], [
+                    'id' => $existingField['id'],
                 ]);
             }
         }

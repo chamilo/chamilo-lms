@@ -355,11 +355,6 @@ final class Version20240112131200 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_exercise_category CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE resource_node_id resource_node_id INT DEFAULT NULL;');
         }
 
-        if ($schema->hasTable('lti_external_tool')) {
-            // error_log('Perform the changes in the lti_external_tool table');
-            // $this->addSql('ALTER TABLE lti_external_tool CHANGE resource_node_id resource_node_id INT DEFAULT NULL;');
-        }
-
         if ($schema->hasTable('message')) {
             error_log('Perform the changes in the message table');
             $this->addSql('ALTER TABLE message CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE parent_id parent_id INT DEFAULT NULL;');

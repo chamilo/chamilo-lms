@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use Cocur\Slugify\SlugifyInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\FacebookUser;
 use League\OAuth2\Client\Token\AccessToken;
@@ -27,6 +28,7 @@ class FacebookAuthenticator extends AbstractAuthenticator
         UserRepository $userRepository,
         AuthenticationConfigHelper $authenticationConfigHelper,
         AccessUrlHelper $urlHelper,
+        EntityManagerInterface $entityManager,
         protected readonly SlugifyInterface $slugify,
     ) {
         parent::__construct(
@@ -35,6 +37,7 @@ class FacebookAuthenticator extends AbstractAuthenticator
             $userRepository,
             $authenticationConfigHelper,
             $urlHelper,
+            $entityManager,
         );
     }
 
@@ -72,6 +75,8 @@ class FacebookAuthenticator extends AbstractAuthenticator
 
         $url = $this->urlHelper->getCurrent();
         $url->addUser($user);
+
+        $this->entityManager->flush();
 
         return $user;
     }

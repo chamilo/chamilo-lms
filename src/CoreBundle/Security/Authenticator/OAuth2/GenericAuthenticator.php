@@ -40,10 +40,10 @@ class GenericAuthenticator extends AbstractAuthenticator
         UserRepository $userRepository,
         AuthenticationConfigHelper $authenticationConfigHelper,
         AccessUrlHelper $urlHelper,
+        EntityManagerInterface $entityManager,
         protected readonly ExtraFieldRepository $extraFieldRepository,
         protected readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         protected readonly AccessUrlRepository $accessUrlRepository,
-        protected readonly EntityManagerInterface $entityManager,
     ) {
         parent::__construct(
             $clientRegistry,
@@ -51,6 +51,7 @@ class GenericAuthenticator extends AbstractAuthenticator
             $userRepository,
             $authenticationConfigHelper,
             $urlHelper,
+            $entityManager,
         );
     }
 
@@ -177,6 +178,8 @@ class GenericAuthenticator extends AbstractAuthenticator
 
         $url = $this->urlHelper->getCurrent();
         $url->addUser($user);
+
+        $this->entityManager->flush();
     }
 
     private function getUserStatus(array $resourceOwnerData, int $defaultStatus, array $providerParams): int

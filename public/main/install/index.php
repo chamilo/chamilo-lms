@@ -582,6 +582,10 @@ if (isset($_POST['step2'])) {
             '{{SOFTWARE_URL}}' => $institutionUrlForm,
             '{{DENY_DELETE_USERS}}' => '0',
             '{{HOSTING_TOTAL_SIZE_LIMIT}}' => '0',
+            '{{THEME_FALLBACK}}' => 'chamilo',
+            '{{PACKAGER}}' => 'chamilo',
+            '{{DEFAULT_TEMPLATE}}' => 'default',
+            '{{ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE}}' => '0',
         ];
 
         updateEnvFile($distFile, $envFile, $params);

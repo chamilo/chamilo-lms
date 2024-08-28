@@ -24,13 +24,12 @@ class Version20240819120200 extends AbstractMigrationChamilo
         }
         $this->addSql('ALTER TABLE message_rel_user ADD UNIQUE INDEX message_receiver (message_id, user_id, receiver_type)');
     }
-    public function down(Schema $schema): void 
+    public function down(Schema $schema): void
     {
         $table = $schema->getTable('message_rel_user');
         if ($table->hasIndex('message_receiver')) {
             $this->addSql('ALTER TABLE message_rel_user DROP INDEX message_receiver');
         }
         $this->addSql('ALTER TABLE message_rel_user ADD UNIQUE INDEX message_receiver (message_id, user_id)');
-
     }
 }

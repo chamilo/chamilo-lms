@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Doctrine\DBAL\Schema\Schema;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Doctrine\DBAL\Schema\Schema;
 
 final class Version20240811221950 extends AbstractMigrationChamilo
 {
@@ -30,10 +30,10 @@ final class Version20240811221950 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE gradebook_category DROP INDEX FK_96A4C705C33F7837, ADD UNIQUE INDEX UNIQ_96A4C705C33F7837 (document_id);');
         }
 
-        if ($this->columnExists($schema, 'notification_event', 'title') &&
-            $this->columnExists($schema, 'notification_event', 'content') &&
-            $this->columnExists($schema, 'notification_event', 'link') &&
-            $this->columnExists($schema, 'notification_event', 'event_type')) {
+        if ($this->columnExists($schema, 'notification_event', 'title')
+            && $this->columnExists($schema, 'notification_event', 'content')
+            && $this->columnExists($schema, 'notification_event', 'link')
+            && $this->columnExists($schema, 'notification_event', 'event_type')) {
             $this->addSql('ALTER TABLE notification_event CHANGE title title VARCHAR(255) NOT NULL, CHANGE content content LONGTEXT DEFAULT NULL, CHANGE link link LONGTEXT DEFAULT NULL, CHANGE event_type event_type VARCHAR(255) NOT NULL;');
         }
 
@@ -48,49 +48,49 @@ final class Version20240811221950 extends AbstractMigrationChamilo
     private function dropColumnIfExists(Schema $schema, string $tableName, string $columnName): void
     {
         if ($this->columnExists($schema, $tableName, $columnName)) {
-            $this->addSql(sprintf('ALTER TABLE %s DROP COLUMN %s;', $tableName, $columnName));
+            $this->addSql(\sprintf('ALTER TABLE %s DROP COLUMN %s;', $tableName, $columnName));
         }
     }
 
     private function dropIndexIfExists(Schema $schema, string $tableName, string $indexName): void
     {
         if ($this->indexExists($schema, $tableName, $indexName)) {
-            $this->addSql(sprintf('DROP INDEX %s ON %s;', $indexName, $tableName));
+            $this->addSql(\sprintf('DROP INDEX %s ON %s;', $indexName, $tableName));
         }
     }
 
     private function dropForeignKeyIfExists(Schema $schema, string $tableName, string $foreignKeyName): void
     {
         if ($this->foreignKeyExists($schema, $tableName, $foreignKeyName)) {
-            $this->addSql(sprintf('ALTER TABLE %s DROP FOREIGN KEY %s;', $tableName, $foreignKeyName));
+            $this->addSql(\sprintf('ALTER TABLE %s DROP FOREIGN KEY %s;', $tableName, $foreignKeyName));
         }
     }
 
     private function columnExists(Schema $schema, string $tableName, string $columnName): bool
     {
-        return $this->connection->fetchOne(sprintf(
-                "SELECT COUNT(1) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = DATABASE() AND table_name='%s' AND column_name='%s';",
-                $tableName,
-                $columnName
-            )) > 0;
+        return $this->connection->fetchOne(\sprintf(
+            "SELECT COUNT(1) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = DATABASE() AND table_name='%s' AND column_name='%s';",
+            $tableName,
+            $columnName
+        )) > 0;
     }
 
     private function indexExists(Schema $schema, string $tableName, string $indexName): bool
     {
-        return $this->connection->fetchOne(sprintf(
-                "SELECT COUNT(1) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = DATABASE() AND table_name='%s' AND index_name='%s';",
-                $tableName,
-                $indexName
-            )) > 0;
+        return $this->connection->fetchOne(\sprintf(
+            "SELECT COUNT(1) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_schema = DATABASE() AND table_name='%s' AND index_name='%s';",
+            $tableName,
+            $indexName
+        )) > 0;
     }
 
     private function foreignKeyExists(Schema $schema, string $tableName, string $foreignKeyName): bool
     {
-        return $this->connection->fetchOne(sprintf(
-                "SELECT COUNT(1) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema = DATABASE() AND table_name='%s' AND constraint_name='%s';",
-                $tableName,
-                $foreignKeyName
-            )) > 0;
+        return $this->connection->fetchOne(\sprintf(
+            "SELECT COUNT(1) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_schema = DATABASE() AND table_name='%s' AND constraint_name='%s';",
+            $tableName,
+            $foreignKeyName
+        )) > 0;
     }
 
     public function down(Schema $schema): void {}

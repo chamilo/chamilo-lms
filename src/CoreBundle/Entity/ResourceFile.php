@@ -71,7 +71,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             'document:read',
             'media_object_read',
             'message:read',
-            'personal_file:read'
+            'personal_file:read',
         ],
     ]
 )]
@@ -223,31 +223,28 @@ class ResourceFile implements Stringable
     }
 
     /*public function isEnabled(): bool
-        {
-            return $this->enabled;
-        }
-
-        public function setEnabled(bool $enabled): self
-        {
-            $this->enabled = $enabled;
-
-            return $this;
-        }*/
+     * {
+     * return $this->enabled;
+     * }
+     * public function setEnabled(bool $enabled): self
+     * {
+     * $this->enabled = $enabled;
+     * return $this;
+     * }*/
     public function getId(): ?int
     {
         return $this->id;
     }
+
     /*public function getDescription(): string
-        {
-            return $this->description;
-        }
-
-        public function setDescription(string $description): self
-        {
-            $this->description = $description;
-
-            return $this;
-        }*/
+     * {
+     * return $this->description;
+     * }
+     * public function setDescription(string $description): self
+     * {
+     * $this->description = $description;
+     * return $this;
+     * }*/
     public function getMimeType(): ?string
     {
         return $this->mimeType;

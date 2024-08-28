@@ -126,7 +126,7 @@ class SettingsManager implements SettingsManagerInterface
         $settings = $this->load($category);
 
         if (!$settings->has($name)) {
-            $message = sprintf("Parameter %s doesn't exists.", $name);
+            $message = \sprintf("Parameter %s doesn't exists.", $name);
 
             throw new InvalidArgumentException($message);
         }
@@ -169,7 +169,7 @@ class SettingsManager implements SettingsManagerInterface
             return null;
         }
 
-        throw new InvalidArgumentException(sprintf('Category %s not found', $category));
+        throw new InvalidArgumentException(\sprintf('Category %s not found', $category));
     }
 
     public function loadAll(): void
@@ -463,14 +463,11 @@ class SettingsManager implements SettingsManagerInterface
         //            }
         //        }
         /*$parameters = $settingsBuilder->resolve($settings->getParameters());
-        $settings->setParameters($parameters);
-
-        $this->eventDispatcher->dispatch(SettingsEvent::PRE_SAVE, new SettingsEvent($settings));
-
-        $this->manager->persist($settings);
-        $this->manager->flush();
-
-        $this->eventDispatcher->dispatch(SettingsEvent::POST_SAVE, new SettingsEvent($settings));*/
+         * $settings->setParameters($parameters);
+         * $this->eventDispatcher->dispatch(SettingsEvent::PRE_SAVE, new SettingsEvent($settings));
+         * $this->manager->persist($settings);
+         * $this->manager->flush();
+         * $this->eventDispatcher->dispatch(SettingsEvent::POST_SAVE, new SettingsEvent($settings));*/
     }
 
     /**
@@ -547,7 +544,7 @@ class SettingsManager implements SettingsManagerInterface
                 );
                 $name = $category.'.'.$name;
             } else {
-                $message = sprintf('Parameter must be in format "category.name", "%s" given.', $name);
+                $message = \sprintf('Parameter must be in format "category.name", "%s" given.', $name);
 
                 throw new InvalidArgumentException($message);
             }
@@ -590,17 +587,15 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /*private function transformParameters(SettingsBuilder $settingsBuilder, array $parameters)
-    {
-        $transformedParameters = $parameters;
-
-        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (array_key_exists($parameter, $parameters)) {
-                $transformedParameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
-            }
-        }
-
-        return $transformedParameters;
-    }*/
+     * {
+     * $transformedParameters = $parameters;
+     * foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
+     * if (array_key_exists($parameter, $parameters)) {
+     * $transformedParameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
+     * }
+     * }
+     * return $transformedParameters;
+     * }*/
 
     /**
      * Get variables and categories as in 1.11.x.

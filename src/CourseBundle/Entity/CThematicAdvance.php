@@ -167,18 +167,16 @@ class CThematicAdvance implements Stringable // extends AbstractResource impleme
     }
 
     /*
-    public function getResourceIdentifier(): int
-    {
-        return $this->getIid();
-    }
-
-    public function getResourceName(): string
-    {
-        return (string) $this->getContent();
-    }
-
-    public function setResourceName(string $name): self
-    {
-        return $this->setContent($name);
-    }*/
+     * public function getResourceIdentifier(): int
+     * {
+     * return $this->getIid();
+     * }
+     * public function getResourceName(): string
+     * {
+     * return (string) $this->getContent();
+     * }
+     * public function setResourceName(string $name): self
+     * {
+     * return $this->setContent($name);
+     * }*/
 }

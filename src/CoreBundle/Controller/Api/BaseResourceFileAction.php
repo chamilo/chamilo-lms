@@ -49,7 +49,7 @@ class BaseResourceFileAction
                         $linkSet = true;
                         $resourceLink->setCourse($course);
                     } else {
-                        throw new InvalidArgumentException(sprintf('Course #%s does not exists', $link['cid']));
+                        throw new InvalidArgumentException(\sprintf('Course #%s does not exists', $link['cid']));
                     }
                 }
 
@@ -59,7 +59,7 @@ class BaseResourceFileAction
                         $linkSet = true;
                         $resourceLink->setSession($session);
                     } else {
-                        throw new InvalidArgumentException(sprintf('Session #%s does not exists', $link['sid']));
+                        throw new InvalidArgumentException(\sprintf('Session #%s does not exists', $link['sid']));
                     }
                 }
 
@@ -69,7 +69,7 @@ class BaseResourceFileAction
                         $linkSet = true;
                         $resourceLink->setGroup($group);
                     } else {
-                        throw new InvalidArgumentException(sprintf('Group #%s does not exists', $link['gid']));
+                        throw new InvalidArgumentException(\sprintf('Group #%s does not exists', $link['gid']));
                     }
                 }
 
@@ -79,7 +79,7 @@ class BaseResourceFileAction
                         $linkSet = true;
                         $resourceLink->setUser($user);
                     } else {
-                        throw new InvalidArgumentException(sprintf('User #%s does not exists', $link['uid']));
+                        throw new InvalidArgumentException(\sprintf('User #%s does not exists', $link['uid']));
                     }
                 }
 
@@ -104,25 +104,23 @@ class BaseResourceFileAction
             // error_log('$resource->getResourceLinkEntityList()');
             foreach ($links as $link) {
                 /*$rights = [];
-                switch ($link->getVisibility()) {
-                    case ResourceLink::VISIBILITY_PENDING:
-                    case ResourceLink::VISIBILITY_DRAFT:
-                        $editorMask = ResourceNodeVoter::getEditorMask();
-                        $resourceRight = new ResourceRight();
-                        $resourceRight
-                            ->setMask($editorMask)
-                            ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                        ;
-                        $rights[] = $resourceRight;
-
-                        break;
-                }
-
-                if (!empty($rights)) {
-                    foreach ($rights as $right) {
-                        $link->addResourceRight($right);
-                    }
-                }*/
+                 * switch ($link->getVisibility()) {
+                 * case ResourceLink::VISIBILITY_PENDING:
+                 * case ResourceLink::VISIBILITY_DRAFT:
+                 * $editorMask = ResourceNodeVoter::getEditorMask();
+                 * $resourceRight = new ResourceRight();
+                 * $resourceRight
+                 * ->setMask($editorMask)
+                 * ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                 * ;
+                 * $rights[] = $resourceRight;
+                 * break;
+                 * }
+                 * if (!empty($rights)) {
+                 * foreach ($rights as $right) {
+                 * $link->addResourceRight($right);
+                 * }
+                 * }*/
                 // error_log('link adding to node: '.$resource->getResourceNode()->getId());
                 // error_log('link with user : '.$link->getUser()->getUsername());
                 $resource->getResourceNode()->addResourceLink($link);

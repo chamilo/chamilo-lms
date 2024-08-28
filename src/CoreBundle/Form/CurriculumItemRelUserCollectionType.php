@@ -21,8 +21,6 @@ class CurriculumItemRelUserCollectionType extends AbstractType
     public $itemId;
 
     /**
-     * CurriculumItemRelUserCollectionType constructor.
-     *
      * @param null $itemId
      */
     public function __construct($itemId = null)

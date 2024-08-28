@@ -39,12 +39,11 @@ class PluginsController extends BaseController
         $allPluginsList = [];
         foreach ($allPlugins as $pluginName) {
             /*$file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
-
-            if (is_file($file)) {
-                $pluginInfo = require $file;
-                var_dump($pluginInfo);exit;
-                $allPluginsList[] = $pluginInfo;
-            }*/
+             * if (is_file($file)) {
+             * $pluginInfo = require $file;
+             * var_dump($pluginInfo);exit;
+             * $allPluginsList[] = $pluginInfo;
+             * }*/
         }
 
         $installedPlugins = $appPlugin->getInstalledPlugins();

@@ -11,8 +11,6 @@ use SimpleXMLElement;
 class OutcomeReadResponse extends OutcomeResponse
 {
     /**
-     * OutcomeReadResponse constructor.
-     *
      * @param mixed|null $bodyParam
      */
     public function __construct(OutcomeResponseStatus $statusInfo, $bodyParam = null)

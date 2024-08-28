@@ -86,7 +86,7 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         ?Session $session,
         ?CGroup $group,
     ): CCalendarEvent {
-        $eventTitle = sprintf(
+        $eventTitle = \sprintf(
             $this->translator->trans('Handing over of task %s'),
             $publication->getTitle()
         );
@@ -102,7 +102,7 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
             ]
         );
 
-        $content = sprintf(
+        $content = \sprintf(
             '<div><a href="%s">%s</a></div> %s',
             $publicationUrl,
             $publication->getTitle(),

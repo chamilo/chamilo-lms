@@ -129,7 +129,7 @@ class ChamiloExtension extends AbstractExtension
             $options['rules'][] = [
                 'minChar' => $minRequirements['length'],
                 'pattern' => '.',
-                'helpText' => sprintf(
+                'helpText' => \sprintf(
                     get_lang('Minimum %s characters in total'),
                     $minRequirements['length']
                 ),
@@ -140,7 +140,7 @@ class ChamiloExtension extends AbstractExtension
             $options['rules'][] = [
                 'minChar' => $minRequirements['lowercase'],
                 'pattern' => '[a-z]',
-                'helpText' => sprintf(
+                'helpText' => \sprintf(
                     get_lang('Minimum %s lowercase characters'),
                     $minRequirements['lowercase']
                 ),
@@ -151,7 +151,7 @@ class ChamiloExtension extends AbstractExtension
             $options['rules'][] = [
                 'minChar' => $minRequirements['uppercase'],
                 'pattern' => '[A-Z]',
-                'helpText' => sprintf(
+                'helpText' => \sprintf(
                     get_lang('Minimum %s uppercase characters'),
                     $minRequirements['uppercase']
                 ),
@@ -162,7 +162,7 @@ class ChamiloExtension extends AbstractExtension
             $options['rules'][] = [
                 'minChar' => $minRequirements['numeric'],
                 'pattern' => '[0-9]',
-                'helpText' => sprintf(
+                'helpText' => \sprintf(
                     get_lang('Minimum %s numerical (0-9) characters'),
                     $minRequirements['numeric']
                 ),
@@ -173,7 +173,7 @@ class ChamiloExtension extends AbstractExtension
             $options['rules'][] = [
                 'minChar' => $minRequirements['specials'],
                 'pattern' => '[!"#$%&\'()*+,\-./\\\:;<=>?@[\]^_`{|}~]',
-                'helpText' => sprintf(
+                'helpText' => \sprintf(
                     get_lang('Minimum %s special characters'),
                     $minRequirements['specials']
                 ),

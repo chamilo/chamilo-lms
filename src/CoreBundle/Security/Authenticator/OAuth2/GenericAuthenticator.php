@@ -236,12 +236,12 @@ class GenericAuthenticator extends AbstractAuthenticator
         $allowedUrlIds = [];
 
         foreach ($this->getValueByKey($resourceOwnerData, $urlsField) as $value) {
-            if (array_key_exists($value, $availableUrls)) {
+            if (\array_key_exists($value, $availableUrls)) {
                 $allowedUrlIds[] = $availableUrls[$value];
             } else {
-                $newValue = ($value[-1] === '/') ? substr($value, 0, -1) : $value.'/';
+                $newValue = ('/' === $value[-1]) ? substr($value, 0, -1) : $value.'/';
 
-                if (array_key_exists($newValue, $availableUrls)) {
+                if (\array_key_exists($newValue, $availableUrls)) {
                     $allowedUrlIds[] = $availableUrls[$newValue];
                 }
             }

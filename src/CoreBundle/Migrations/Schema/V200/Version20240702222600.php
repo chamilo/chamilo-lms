@@ -29,7 +29,7 @@ final class Version20240702222600 extends AbstractMigrationChamilo
 
             foreach ($resourceNodeRows as $resourceNodeRow) {
                 $this->addSql(
-                    sprintf(
+                    \sprintf(
                         'UPDATE resource_file SET resource_node_id = %d WHERE id = %d',
                         $resourceNodeRow['id'],
                         $resourceNodeRow['resource_file_id']

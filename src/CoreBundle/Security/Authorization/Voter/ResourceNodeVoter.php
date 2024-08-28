@@ -250,10 +250,9 @@ class ResourceNodeVoter extends Voter
             }
 
             /*if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
-                $linkFound = true;
-
-                break;
-            }*/
+             * $linkFound = true;
+             * break;
+             * }*/
         }
 
         // No link was found.

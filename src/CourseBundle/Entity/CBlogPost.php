@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'c_blog_post')]
@@ -25,7 +26,7 @@ class CBlogPost
     protected string $fullText;
 
     #[ORM\Column(name: 'date_creation', type: 'datetime', nullable: false)]
-    protected \DateTime $dateCreation;
+    protected DateTime $dateCreation;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -64,12 +65,12 @@ class CBlogPost
         return $this;
     }
 
-    public function getDateCreation(): \DateTime
+    public function getDateCreation(): DateTime
     {
         return $this->dateCreation;
     }
 
-    public function setDateCreation(\DateTime $dateCreation): self
+    public function setDateCreation(DateTime $dateCreation): self
     {
         $this->dateCreation = $dateCreation;
 

@@ -82,13 +82,11 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         /*
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_thematic_advance ADD resource_node_id INT DEFAULT NULL');
-
-            //$this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E971BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_62798E971BAD783F ON c_thematic_advance (resource_node_id)');
-        }*/
-
+         * if (false === $table->hasColumn('resource_node_id')) {
+         * $this->addSql('ALTER TABLE c_thematic_advance ADD resource_node_id INT DEFAULT NULL');
+         * //$this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E971BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+         * $this->addSql('CREATE UNIQUE INDEX UNIQ_62798E971BAD783F ON c_thematic_advance (resource_node_id)');
+         * }*/
         $table = $schema->getTable('c_thematic_plan');
         $this->addSql('ALTER TABLE c_thematic_plan CHANGE thematic_id thematic_id INT DEFAULT NULL');
 
@@ -110,12 +108,11 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         /*
-        if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_thematic_plan ADD resource_node_id INT DEFAULT NULL');
-
-            $this->addSql('ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_1197487C1BAD783F ON c_thematic_plan (resource_node_id)');
-        }*/
+         * if (false === $table->hasColumn('resource_node_id')) {
+         * $this->addSql('ALTER TABLE c_thematic_plan ADD resource_node_id INT DEFAULT NULL');
+         * $this->addSql('ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+         * $this->addSql('CREATE UNIQUE INDEX UNIQ_1197487C1BAD783F ON c_thematic_plan (resource_node_id)');
+         * }*/
 
         // CLink
         $table = $schema->getTable('c_link');

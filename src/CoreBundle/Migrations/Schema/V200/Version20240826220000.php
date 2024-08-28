@@ -91,16 +91,16 @@ final class Version20240826220000 extends AbstractMigrationChamilo
         // Drop foreign key constraints
         if ($schemaManager->tablesExist(['justification_document_rel_users'])) {
             $foreignKeys = $schemaManager->listTableForeignKeys('justification_document_rel_users');
-            $foreignKeyNames = array_map(fn($fk) => $fk->getName(), $foreignKeys);
+            $foreignKeyNames = array_map(fn ($fk) => $fk->getName(), $foreignKeys);
 
-            if (in_array('FK_D1BB19421F2B6144', $foreignKeyNames, true)) {
+            if (\in_array('FK_D1BB19421F2B6144', $foreignKeyNames, true)) {
                 $this->addSql('
                     ALTER TABLE justification_document_rel_users
                     DROP FOREIGN KEY FK_D1BB19421F2B6144;
                 ');
             }
 
-            if (in_array('FK_D1BB1942A76ED395', $foreignKeyNames, true)) {
+            if (\in_array('FK_D1BB1942A76ED395', $foreignKeyNames, true)) {
                 $this->addSql('
                     ALTER TABLE justification_document_rel_users
                     DROP FOREIGN KEY FK_D1BB1942A76ED395;

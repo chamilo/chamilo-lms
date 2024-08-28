@@ -73,68 +73,62 @@ final class Version20201216105331 extends AbstractMigrationChamilo
 
             // c_thematic_advance.
             /*$sql = "SELECT * FROM c_thematic_advance WHERE c_id = $courseId
-                    ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            foreach ($items as $itemData) {
-                $id = $itemData['iid'];
-                // @var CThematicAdvance $resource
-                $resource = $thematicAdvanceRepo->find($id);
-                if ($resource->hasResourceNode()) {
-                    continue;
-                }
-
-                $course = $courseRepo->find($courseId);
-                $result = $this->fixItemProperty(
-                    'thematic_advance',
-                    $thematicAdvanceRepo,
-                    $course,
-                    $admin,
-                    $resource,
-                    $course
-                );
-
-                if (false === $result) {
-                    continue;
-                }
-
-                $this->entityManager->persist($resource);
-                $this->entityManager->flush();
-            }
-
-            $this->entityManager->flush();
-            $this->entityManager->clear();*/
+             * ORDER BY iid";
+             * $result = $this->connection->executeQuery($sql);
+             * $items = $result->fetchAllAssociative();
+             * foreach ($items as $itemData) {
+             * $id = $itemData['iid'];
+             * // @var CThematicAdvance $resource
+             * $resource = $thematicAdvanceRepo->find($id);
+             * if ($resource->hasResourceNode()) {
+             * continue;
+             * }
+             * $course = $courseRepo->find($courseId);
+             * $result = $this->fixItemProperty(
+             * 'thematic_advance',
+             * $thematicAdvanceRepo,
+             * $course,
+             * $admin,
+             * $resource,
+             * $course
+             * );
+             * if (false === $result) {
+             * continue;
+             * }
+             * $this->entityManager->persist($resource);
+             * $this->entityManager->flush();
+             * }
+             * $this->entityManager->flush();
+             * $this->entityManager->clear();*/
 
             // c_thematic_plan.
             /*$sql = "SELECT * FROM c_thematic_plan WHERE c_id = $courseId
-                    ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            foreach ($items as $itemData) {
-                $id = $itemData['iid'];
-                // @var CThematicPlan $resource
-                $resource = $thematicPlanRepo->find($id);
-                if ($resource->hasResourceNode()) {
-                    continue;
-                }
-                $result = $this->fixItemProperty(
-                    'thematic_plan',
-                    $thematicPlanRepo,
-                    $course,
-                    $admin,
-                    $resource,
-                    $course
-                );
-
-                if (false === $result) {
-                    continue;
-                }
-
-                $this->entityManager->persist($resource);
-                $this->entityManager->flush();
-            }
-            $this->entityManager->flush();
-            $this->entityManager->clear();*/
+             * ORDER BY iid";
+             * $result = $this->connection->executeQuery($sql);
+             * $items = $result->fetchAllAssociative();
+             * foreach ($items as $itemData) {
+             * $id = $itemData['iid'];
+             * // @var CThematicPlan $resource
+             * $resource = $thematicPlanRepo->find($id);
+             * if ($resource->hasResourceNode()) {
+             * continue;
+             * }
+             * $result = $this->fixItemProperty(
+             * 'thematic_plan',
+             * $thematicPlanRepo,
+             * $course,
+             * $admin,
+             * $resource,
+             * $course
+             * );
+             * if (false === $result) {
+             * continue;
+             * }
+             * $this->entityManager->persist($resource);
+             * $this->entityManager->flush();
+             * }
+             * $this->entityManager->flush();
+             * $this->entityManager->clear();*/
         }
     }
 }

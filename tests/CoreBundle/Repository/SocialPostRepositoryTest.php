@@ -216,7 +216,7 @@ class SocialPostRepositoryTest extends AbstractApiTest
         // student1 views student2's wall
         $clientForStudent1->request(
             'GET',
-            sprintf('/api/social_posts?socialwall_wallOwner=%d', $student2->getId())
+            \sprintf('/api/social_posts?socialwall_wallOwner=%d', $student2->getId())
         );
 
         $this->assertResponseIsSuccessful();

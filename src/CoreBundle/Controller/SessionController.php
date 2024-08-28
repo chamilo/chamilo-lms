@@ -187,19 +187,17 @@ class SessionController extends AbstractController
         $sessionDates = SessionManager::parseSessionDates($session, true);
 
         $hasRequirements = false;
+
         /*$sessionRequirements = $sequenceResourceRepo->getRequirements(
-            $session->getId(),
-            SequenceResource::SESSION_TYPE
-        );
-
-        foreach ($sessionRequirements as $sequence) {
-            if (!empty($sequence['requirements'])) {
-                $hasRequirements = true;
-
-                break;
-            }
-        }*/
-
+         * $session->getId(),
+         * SequenceResource::SESSION_TYPE
+         * );
+         * foreach ($sessionRequirements as $sequence) {
+         * if (!empty($sequence['requirements'])) {
+         * $hasRequirements = true;
+         * break;
+         * }
+         * }*/
         $plugin = BuyCoursesPlugin::create();
         $checker = $plugin->isEnabled();
         $sessionIsPremium = null;
@@ -235,7 +233,7 @@ class SessionController extends AbstractController
             // 'sequences' => $sessionRequirements,
             'is_premium' => $sessionIsPremium,
             'show_tutor' => 'true' === api_get_setting('show_session_coach'),
-            'page_url' => api_get_path(WEB_PATH).sprintf('sessions/%s/about/', $session->getId()),
+            'page_url' => api_get_path(WEB_PATH).\sprintf('sessions/%s/about/', $session->getId()),
             'session_date' => $sessionDates,
             'is_subscribed' => SessionManager::isUserSubscribedAsStudent(
                 $session->getId(),

@@ -72,8 +72,6 @@ class TrackEAttemptQualify
     /**
      * Set exeId.
      *
-     * @param ?TrackEExercise $trackExercise
-     *
      * @return TrackEAttemptQualify
      */
     public function setTrackExercise(?TrackEExercise $trackExercise): static

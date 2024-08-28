@@ -96,7 +96,7 @@ class OutcomeReplaceRequest extends OutcomeRequest
             ->setSeverity(OutcomeResponseStatus::SEVERITY_STATUS)
             ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_SUCCESS)
             ->setDescription(
-                sprintf(
+                \sprintf(
                     $this->translator->trans('Score for user %d is %s'),
                     $user->getId(),
                     $resultScore

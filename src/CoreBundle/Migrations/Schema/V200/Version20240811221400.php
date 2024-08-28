@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -8,7 +9,6 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20240811221400 extends AbstractMigrationChamilo
 {
-
     public function getDescription(): string
     {
         return 'Migration to update foreign key constraints, drop and create indexes, and alter table structures to ensure data consistency and prevent errors during execution.';
@@ -16,7 +16,6 @@ final class Version20240811221400 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-
         $this->addSql('SET FOREIGN_KEY_CHECKS = 0;');
 
         // resource_node
@@ -599,6 +598,5 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         $this->addSql('SET FOREIGN_KEY_CHECKS = 1;');
     }
 
-    public function down(Schema $schema): void
-    {}
+    public function down(Schema $schema): void {}
 }

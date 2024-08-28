@@ -31,29 +31,24 @@ class CourseListener
     }
 
     /*protected function checkLimit(CourseRepository $repo, Course $course, AccessUrl $url): void
-    {
-        $limit = $url->getLimitCourses();
-
-        if (!empty($limit)) {
-            $count = $repo->getCountCoursesByUrl($url);
-            if ($count >= $limit) {
-                api_warn_hosting_contact('hosting_limit_courses', $limit);
-
-                throw new \Exception('PortalCoursesLimitReached');
-            }
-        }
-
-        if (COURSE_VISIBILITY_HIDDEN != $course->getVisibility()) {
-            $limit = $url->getLimitActiveCourses();
-
-            if (!empty($limit)) {
-                $count = $repo->getCountActiveCoursesByUrl($url);
-                if ($count >= $limit) {
-                    api_warn_hosting_contact('hosting_limit_active_courses', $limit);
-
-                    throw new \Exception('PortalActiveCoursesLimitReached');
-                }
-            }
-        }
-    }*/
+     * {
+     * $limit = $url->getLimitCourses();
+     * if (!empty($limit)) {
+     * $count = $repo->getCountCoursesByUrl($url);
+     * if ($count >= $limit) {
+     * api_warn_hosting_contact('hosting_limit_courses', $limit);
+     * throw new \Exception('PortalCoursesLimitReached');
+     * }
+     * }
+     * if (COURSE_VISIBILITY_HIDDEN != $course->getVisibility()) {
+     * $limit = $url->getLimitActiveCourses();
+     * if (!empty($limit)) {
+     * $count = $repo->getCountActiveCoursesByUrl($url);
+     * if ($count >= $limit) {
+     * api_warn_hosting_contact('hosting_limit_active_courses', $limit);
+     * throw new \Exception('PortalActiveCoursesLimitReached');
+     * }
+     * }
+     * }
+     * }*/
 }

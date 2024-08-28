@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -29,7 +30,7 @@ class JustificationDocumentRelUsers
     private ?User $user = null;
 
     #[ORM\Column(type: 'date', nullable: true)]
-    private ?\DateTime $dateValidity = null;
+    private ?DateTime $dateValidity = null;
 
     public function getId(): ?int
     {
@@ -72,12 +73,12 @@ class JustificationDocumentRelUsers
         return $this;
     }
 
-    public function getDateValidity(): ?\DateTime
+    public function getDateValidity(): ?DateTime
     {
         return $this->dateValidity;
     }
 
-    public function setDateValidity(?\DateTime $dateValidity): self
+    public function setDateValidity(?DateTime $dateValidity): self
     {
         $this->dateValidity = $dateValidity;
 

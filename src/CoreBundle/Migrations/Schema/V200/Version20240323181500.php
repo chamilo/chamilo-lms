@@ -121,7 +121,7 @@ class Version20240323181500 extends AbstractMigrationChamilo
             if (\array_key_exists($oldEventId, $oldNewEventIdMap)) {
                 $newEvent = $oldNewEventIdMap[$oldEventId];
                 $this->addSql(
-                    sprintf(
+                    \sprintf(
                         'UPDATE agenda_reminder SET event_id = %d WHERE id = %d',
                         $newEvent->getIid(),
                         $reminder['id']

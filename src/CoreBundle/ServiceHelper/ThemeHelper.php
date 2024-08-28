@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 use const DIRECTORY_SEPARATOR;
+use const PHP_SAPI;
 
 final class ThemeHelper
 {
@@ -107,7 +108,7 @@ final class ThemeHelper
             return '';
         }
 
-        return sprintf('<link rel="stylesheet" href="%s">', $url);
+        return \sprintf('<link rel="stylesheet" href="%s">', $url);
     }
 
     public function getAssetContents(string $path): string

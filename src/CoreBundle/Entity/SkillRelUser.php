@@ -261,7 +261,7 @@ class SkillRelUser
     {
         $source = '';
         if (null !== $this->session) {
-            $source .= sprintf('[%s] ', $this->session->getTitle());
+            $source .= \sprintf('[%s] ', $this->session->getTitle());
         }
 
         if (null !== $this->course) {
@@ -278,7 +278,7 @@ class SkillRelUser
      */
     public function getIssueUrl()
     {
-        return api_get_path(WEB_PATH).sprintf('badge/%s', $this->id);
+        return api_get_path(WEB_PATH).\sprintf('badge/%s', $this->id);
     }
 
     /**
@@ -288,7 +288,7 @@ class SkillRelUser
      */
     public function getIssueUrlAll()
     {
-        return api_get_path(WEB_PATH).sprintf('skill/%s/user/%s', $this->skill->getId(), $this->user->getId());
+        return api_get_path(WEB_PATH).\sprintf('skill/%s/user/%s', $this->skill->getId(), $this->user->getId());
     }
 
     /**

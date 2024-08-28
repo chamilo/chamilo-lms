@@ -278,7 +278,7 @@ class ResourceLink implements Stringable
     public function setVisibility(int $visibility): self
     {
         if (!\in_array($visibility, self::getVisibilityList(), true)) {
-            $message = sprintf(
+            $message = \sprintf(
                 'The visibility is not valid. Valid options: %s',
                 print_r(self::getVisibilityList(), true)
             );

@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -55,16 +54,14 @@ class SessionListener
     public function preUpdate(Session $session, PreUpdateEventArgs $args): void {}
 
     /*protected function checkLimit(SessionRepository $repo, AccessUrl $url): void
-    {
-        $limit = $url->getLimitSessions();
-
-        if (!empty($limit)) {
-            $count = $repo->getCountSessionByUrl($url);
-            if ($count >= $limit) {
-                api_warn_hosting_contact('hosting_limit_sessions', $limit);
-
-                throw new \Exception('PortalSessionsLimitReached');
-            }
-        }
-    }*/
+     * {
+     * $limit = $url->getLimitSessions();
+     * if (!empty($limit)) {
+     * $count = $repo->getCountSessionByUrl($url);
+     * if ($count >= $limit) {
+     * api_warn_hosting_contact('hosting_limit_sessions', $limit);
+     * throw new \Exception('PortalSessionsLimitReached');
+     * }
+     * }
+     * }*/
 }

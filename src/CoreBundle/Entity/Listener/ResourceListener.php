@@ -112,7 +112,7 @@ class ResourceListener
         ]);
 
         if (null === $resourceType) {
-            throw new InvalidArgumentException(sprintf('ResourceType: "%s" not found for entity "%s"', $name, $entityClass));
+            throw new InvalidArgumentException(\sprintf('ResourceType: "%s" not found for entity "%s"', $name, $entityClass));
         }
 
         // 4. Set ResourceNode parent.
@@ -179,7 +179,7 @@ class ResourceListener
         }
 
         if (null === $parentNode && !$resource instanceof AccessUrl) {
-            $msg = sprintf('Resource %s needs a parent', $resource->getResourceName());
+            $msg = \sprintf('Resource %s needs a parent', $resource->getResourceName());
 
             throw new InvalidArgumentException($msg);
         }
@@ -192,7 +192,7 @@ class ResourceListener
                      || $parentNode->getId() === $currentUser->getResourceNode()->getId();
 
             if (!$valid) {
-                $msg = sprintf('User %s cannot add a file to another user', $currentUser->getUsername());
+                $msg = \sprintf('User %s cannot add a file to another user', $currentUser->getUsername());
 
                 throw new InvalidArgumentException($msg);
             }
@@ -252,7 +252,7 @@ class ResourceListener
 
         // All resources should have a parent, except AccessUrl.
         if (!($resource instanceof AccessUrl) && null === $resourceNode->getParent()) {
-            $message = sprintf(
+            $message = \sprintf(
                 'ResourceListener: Resource %s, has a resource node, but this resource node must have a parent',
                 $resource->getResourceName()
             );

@@ -38,7 +38,7 @@ class SkillRelUserListener
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        $message = sprintf(
+        $message = \sprintf(
             $this->translator->trans('Hi, %s. You have achieved the skill "%s". To see the details go here: %s.'),
             $user->getFirstname(),
             $skill->getTitle(),

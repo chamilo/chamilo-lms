@@ -107,7 +107,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                     $this->slugify->slugify($originalExtension)
                 );*/
 
-                $newOriginalName = sprintf('%s.%s', $resourceName, $originalExtension);
+                $newOriginalName = \sprintf('%s.%s', $resourceName, $originalExtension);
                 $resourceFile->setOriginalName($newOriginalName);
 
                 $em->persist($resourceFile);
@@ -638,7 +638,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         } else {
             $originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
             $originalBasename = basename($resourceName, $originalExtension);
-            $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
+            $slug = \sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         }
 
         $resourceNode = new ResourceNode();

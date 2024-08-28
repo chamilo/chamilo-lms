@@ -112,23 +112,20 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         $this->addSql('UPDATE message SET user_receiver_id = NULL WHERE user_receiver_id = 0');
 
         /*
-        $result = $this->connection->executeQuery('SELECT * FROM message WHERE user_receiver_id IS NOT NULL');
-        $messages = $result->fetchAllAssociative();
-
-        if ($messages) {
-            foreach ($messages as $message) {
-                $messageId = $message['id'];
-                $receiverId = $message['user_receiver_id'];
-
-                $result = $this->connection->executeQuery(" SELECT * FROM message_rel_user WHERE message_id = $messageId AND user_id = $receiverId");
-                $exists = $result->fetchAllAssociative();
-
-                if (empty($exists)) {
-                    $this->addSql("INSERT INTO message_rel_user (message_id, user_id, msg_read, starred) VALUES('$messageId', '$receiverId', 1, 0) ");
-                }
-                //$this->addSql("UPDATE message SET user_receiver_id = NULL WHERE id = $messageId");
-            }
-        }*/
+         * $result = $this->connection->executeQuery('SELECT * FROM message WHERE user_receiver_id IS NOT NULL');
+         * $messages = $result->fetchAllAssociative();
+         * if ($messages) {
+         * foreach ($messages as $message) {
+         * $messageId = $message['id'];
+         * $receiverId = $message['user_receiver_id'];
+         * $result = $this->connection->executeQuery(" SELECT * FROM message_rel_user WHERE message_id = $messageId AND user_id = $receiverId");
+         * $exists = $result->fetchAllAssociative();
+         * if (empty($exists)) {
+         * $this->addSql("INSERT INTO message_rel_user (message_id, user_id, msg_read, starred) VALUES('$messageId', '$receiverId', 1, 0) ");
+         * }
+         * //$this->addSql("UPDATE message SET user_receiver_id = NULL WHERE id = $messageId");
+         * }
+         * }*/
 
         if (!$table->hasForeignKey('FK_B6BD307FF6C43E79')) {
             $this->addSql(

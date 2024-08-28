@@ -93,7 +93,7 @@ class ToolChainTest extends AbstractApiTest
             $link = $tool->getLink();
             $this->assertNotEmpty($tool->getCategory());
             $this->assertNotEmpty($tool->getIcon());
-            $this->assertNotEmpty($link, sprintf('Link for tool %s is empty', $name));
+            $this->assertNotEmpty($link, \sprintf('Link for tool %s is empty', $name));
 
             $types = $tool->getResourceTypes();
             // $icon = $tool->getIcon();

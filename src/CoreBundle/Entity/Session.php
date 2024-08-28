@@ -1203,7 +1203,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             $category = $image->getCategory();
             $filename = $image->getTitle();
 
-            return sprintf('/assets/%s/%s/%s', $category, $filename, $filename);
+            return \sprintf('/assets/%s/%s/%s', $category, $filename, $filename);
         }
 
         return null;

@@ -64,38 +64,38 @@ final class Version20200821224244 extends AbstractMigrationChamilo
 
         $newTypeQueries = [];
 
-        $newTypeQueries[] = sprintf(
+        $newTypeQueries[] = \sprintf(
             'UPDATE message SET status = %d WHERE msg_type = %d',
             Message::MESSAGE_STATUS_DELETED,
             self::OLD_MESSAGE_STATUS_DELETED
         );
-        $newTypeQueries[] = sprintf(
+        $newTypeQueries[] = \sprintf(
             'UPDATE message SET msg_type = %d WHERE msg_type = %d',
             Message::MESSAGE_TYPE_INBOX,
             self::OLD_MESSAGE_STATUS_OUTBOX
         );
-        $newTypeQueries[] = sprintf(
+        $newTypeQueries[] = \sprintf(
             'UPDATE message SET msg_type = %d WHERE msg_type = %d',
             Message::MESSAGE_TYPE_CONVERSATION,
             self::OLD_MESSAGE_STATUS_CONVERSATION
         );
 
-        $newTypeQueries[] = sprintf(
+        $newTypeQueries[] = \sprintf(
             'UPDATE message SET status = %d WHERE msg_type = %d',
             Message::MESSAGE_STATUS_INVITATION_PENDING,
             self::OLD_MESSAGE_STATUS_INVITATION_PENDING
         );
-        $newTypeQueries[] = sprintf(
+        $newTypeQueries[] = \sprintf(
             'UPDATE message SET status = %d WHERE msg_type = %d',
             Message::MESSAGE_STATUS_INVITATION_ACCEPTED,
             self::OLD_MESSAGE_STATUS_INVITATION_ACCEPTED
         );
-        $newTypeQueries[] = sprintf(
+        $newTypeQueries[] = \sprintf(
             'UPDATE message SET status = %d WHERE msg_type = %d',
             Message::MESSAGE_STATUS_INVITATION_DENIED,
             self::OLD_MESSAGE_STATUS_INVITATION_DENIED
         );
-        $newTypeQueries[] = sprintf(
+        $newTypeQueries[] = \sprintf(
             'UPDATE message SET msg_type = %d WHERE status IN (%d, %d, %d)',
             Message::MESSAGE_TYPE_INVITATION,
             Message::MESSAGE_STATUS_INVITATION_PENDING,
@@ -103,13 +103,13 @@ final class Version20200821224244 extends AbstractMigrationChamilo
             Message::MESSAGE_STATUS_INVITATION_DENIED
         );
 
-        $newTypeQueries[] = sprintf(
+        $newTypeQueries[] = \sprintf(
             'UPDATE message SET msg_type = %d WHERE msg_type = %d',
             Message::MESSAGE_TYPE_INBOX,
             self::OLD_MESSAGE_STATUS_NEW
         );
 
-        $newTypeQueries[] = sprintf(
+        $newTypeQueries[] = \sprintf(
             'UPDATE message SET msg_type = %d WHERE group_id IS NOT NULL',
             Message::MESSAGE_TYPE_GROUP
         );

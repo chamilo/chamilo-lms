@@ -16,8 +16,6 @@ class Toolbar
     public array $defaultPlugins = [];
 
     /**
-     * Toolbar constructor.
-     *
      * @param RouterInterface $urlGenerator
      * @param null            $toolbar
      * @param array           $config

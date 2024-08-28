@@ -87,7 +87,7 @@ class UserListener
         $now = api_get_utc_datetime();
 
         $messages = $user->getSentMessages();
-        $newContent = sprintf(
+        $newContent = \sprintf(
             $this->translator->trans('This message was deleted when the user was removed from the platform on %s'),
             api_get_local_time($now)
         );

@@ -47,7 +47,8 @@ class Version20181126174500 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void {
+    public function down(Schema $schema): void
+    {
         $this->addSql('DROP TABLE IF EXISTS lti_external_tool;');
     }
 }

@@ -28,20 +28,18 @@ final class IllustrationRepository extends ResourceRepository
     }
 
     /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
-    {
-        $qb = $this->createQueryBuilder('resource')
-            ->select('resource')
-            ->innerJoin(
-                'resource.resourceNode',
-                'node'
-            )
-        ;
-
-        $qb->andWhere('node.creator = :creator');
-        $qb->setParameter('creator', $user);
-
-        return $qb;
-    }*/
+     * {
+     * $qb = $this->createQueryBuilder('resource')
+     * ->select('resource')
+     * ->innerJoin(
+     * 'resource.resourceNode',
+     * 'node'
+     * )
+     * ;
+     * $qb->andWhere('node.creator = :creator');
+     * $qb->setParameter('creator', $user);
+     * return $qb;
+     * }*/
 
     /**
      * @param ResourceInterface|User $resource

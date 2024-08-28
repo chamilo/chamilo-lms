@@ -129,18 +129,16 @@ class CStudentPublicationAssignment implements Stringable
     }
 
     /*
-    public function getResourceIdentifier(): int
-    {
-        return $this->getIid();
-    }
-
-    public function getResourceName(): string
-    {
-        return (string) $this->getIid();
-    }
-
-    public function setResourceName(string $name): self
-    {
-        //return $this->setTitle($name);
-    }*/
+     * public function getResourceIdentifier(): int
+     * {
+     * return $this->getIid();
+     * }
+     * public function getResourceName(): string
+     * {
+     * return (string) $this->getIid();
+     * }
+     * public function setResourceName(string $name): self
+     * {
+     * //return $this->setTitle($name);
+     * }*/
 }

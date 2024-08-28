@@ -21,9 +21,6 @@ class PriorityMigrationHelper
     private Connection $connection;
     private LoggerInterface $logger;
 
-    /**
-     * Constructor.
-     */
     public function __construct(Connection $connection, LoggerInterface $logger)
     {
         $this->connection = $connection;

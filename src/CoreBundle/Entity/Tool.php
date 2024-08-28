@@ -53,21 +53,19 @@ class Tool implements Stringable
     }*/
 
     /*public function setToolResourceRight($toolResourceRight)
-    {
-        $this->toolResourceRight = new ArrayCollection();
-
-        foreach ($toolResourceRight as $item) {
-            $this->addToolResourceRight($item);
-        }
-    }*/
+     * {
+     * $this->toolResourceRight = new ArrayCollection();
+     * foreach ($toolResourceRight as $item) {
+     * $this->addToolResourceRight($item);
+     * }
+     * }*/
 
     /*public function addToolResourceRight(ToolResourceRight $toolResourceRight)
-    {
-        $toolResourceRight->setTool($this);
-        $this->toolResourceRight[] = $toolResourceRight;
-
-        return $this;
-    }*/
+     * {
+     * $toolResourceRight->setTool($this);
+     * $this->toolResourceRight[] = $toolResourceRight;
+     * return $this;
+     * }*/
 
     /*public function getResourceNodes()
     {
@@ -75,12 +73,10 @@ class Tool implements Stringable
     }*/
 
     /*public function setResourceNodes($resourceNodes)
-    {
-        $this->resourceNodes = $resourceNodes;
-
-        return $this;
-    }*/
-
+     * {
+     * $this->resourceNodes = $resourceNodes;
+     * return $this;
+     * }*/
     public function getId(): int
     {
         return $this->id;
@@ -128,9 +124,8 @@ class Tool implements Stringable
     }
 
     /*public function getResourceTypeByName(string $title): ?ResourceType
-    {
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('title', $title));
-
-        return $this->getResourceTypes()->matching($criteria)->first();
-    }*/
+     * {
+     * $criteria = Criteria::create()->where(Criteria::expr()->eq('title', $title));
+     * return $this->getResourceTypes()->matching($criteria)->first();
+     * }*/
 }

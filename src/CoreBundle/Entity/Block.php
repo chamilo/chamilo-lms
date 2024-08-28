@@ -58,6 +58,7 @@ class Block
     public function setTitle(?string $title): self
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -69,6 +70,7 @@ class Block
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -80,6 +82,7 @@ class Block
     public function setPath(string $path): self
     {
         $this->path = $path;
+
         return $this;
     }
 
@@ -91,6 +94,7 @@ class Block
     public function setController(string $controller): self
     {
         $this->controller = $controller;
+
         return $this;
     }
 
@@ -102,6 +106,7 @@ class Block
     public function setActive(bool $active): self
     {
         $this->active = $active;
+
         return $this;
     }
 
@@ -113,6 +118,7 @@ class Block
     public function setUser(User $user): self
     {
         $this->user = $user;
+
         return $this;
     }
 }

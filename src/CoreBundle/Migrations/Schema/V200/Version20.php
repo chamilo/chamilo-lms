@@ -315,22 +315,20 @@ class Version20 extends AbstractMigrationChamilo
         // $this->addSql('ALTER TABLE c_tool_intro CHANGE id tool VARCHAR(255) NOT NULL');
 
         /*$table = $schema->getTable('course_rel_class');
-        if (!$table->hasColumn('c_id')) {
-            $this->addSql("ALTER TABLE course_rel_class ADD c_id int NOT NULL");
-        }
-        if ($table->hasColumn('course_code')) {
-            $this->addSql("
-                UPDATE course_rel_class cc
-                SET cc.c_id = (SELECT id FROM course WHERE code = cc.course_code)
-            ");
-
-            $this->addSql("ALTER TABLE course_rel_class DROP course_code");
-            $this->addSql("ALTER TABLE course_rel_class DROP PRIMARY KEY");
-            $this->addSql("ALTER TABLE course_rel_class MODIFY COLUMN class_id INT DEFAULT NULL");
-            $this->addSql("ALTER TABLE course_rel_class ADD PRIMARY KEY (class_id, c_id)");
-            $this->addSql("ALTER TABLE course_rel_class ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT");
-        }*/
-
+         * if (!$table->hasColumn('c_id')) {
+         * $this->addSql("ALTER TABLE course_rel_class ADD c_id int NOT NULL");
+         * }
+         * if ($table->hasColumn('course_code')) {
+         * $this->addSql("
+         * UPDATE course_rel_class cc
+         * SET cc.c_id = (SELECT id FROM course WHERE code = cc.course_code)
+         * ");
+         * $this->addSql("ALTER TABLE course_rel_class DROP course_code");
+         * $this->addSql("ALTER TABLE course_rel_class DROP PRIMARY KEY");
+         * $this->addSql("ALTER TABLE course_rel_class MODIFY COLUMN class_id INT DEFAULT NULL");
+         * $this->addSql("ALTER TABLE course_rel_class ADD PRIMARY KEY (class_id, c_id)");
+         * $this->addSql("ALTER TABLE course_rel_class ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT");
+         * }*/
         $tables = [
             'shared_survey',
             'specific_field_values',
@@ -340,29 +338,27 @@ class Version20 extends AbstractMigrationChamilo
         foreach ($tables as $table) {
             // $tableObj = $schema->getTable($table);
             /*if (!$tableObj->hasColumn('c_id')) {
-                $this->addSql("ALTER TABLE $table ADD c_id int NOT NULL");
-
-                if ($tableObj->hasColumn('course_code')) {
-                    $this->addSql("
-                      UPDATE $table t
-                      SET t.c_id = (SELECT id FROM course WHERE code = t.course_code)
-                    ");
-                    $this->addSql("ALTER TABLE $table DROP course_code");
-                }
-            }*/
+             * $this->addSql("ALTER TABLE $table ADD c_id int NOT NULL");
+             * if ($tableObj->hasColumn('course_code')) {
+             * $this->addSql("
+             * UPDATE $table t
+             * SET t.c_id = (SELECT id FROM course WHERE code = t.course_code)
+             * ");
+             * $this->addSql("ALTER TABLE $table DROP course_code");
+             * }
+             * }*/
             /*$this->addSql("
                 ALTER TABLE $table ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT
             ");*/
         }
         /*
-                $this->addSql("ALTER TABLE personal_agenda DROP course");
-
-                $this->addSql("
-                    ALTER TABLE specific_field_values
-                    ADD c_id int(11) NOT NULL,
-                    ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT;
-                ");
-        */
+         * $this->addSql("ALTER TABLE personal_agenda DROP course");
+         * $this->addSql("
+         * ALTER TABLE specific_field_values
+         * ADD c_id int(11) NOT NULL,
+         * ADD FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE RESTRICT;
+         * ");
+         */
 
         // Create tables.
         $this->addSql(

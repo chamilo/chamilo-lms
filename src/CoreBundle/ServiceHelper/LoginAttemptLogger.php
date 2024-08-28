@@ -57,7 +57,7 @@ class LoginAttemptLogger
         $clientText = $this->translator->trans('client');
         $loginMessage = $this->translator->trans('Login %status% for username %username%', ['%status%' => $statusText, '%username%' => $username]);
 
-        $logMessage = sprintf(
+        $logMessage = \sprintf(
             "[%s] [%s] [%s %s] %s\n",
             $date->format('Y-m-d H:i:s'),
             $infoText,

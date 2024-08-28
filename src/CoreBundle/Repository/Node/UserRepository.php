@@ -369,7 +369,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ]);
 
         if (null === $user) {
-            throw new UserNotFoundException(sprintf("User with id '%s' not found.", $username));
+            throw new UserNotFoundException(\sprintf("User with id '%s' not found.", $username));
         }
 
         return $user;

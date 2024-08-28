@@ -1266,7 +1266,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getFullname(): string
     {
         if (empty($this->fullName)) {
-            return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
+            return \sprintf('%s %s', $this->getFirstname(), $this->getLastname());
         }
 
         return $this->fullName;
@@ -2123,7 +2123,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     {
         $size = empty($size) ? 32 : $size;
 
-        return sprintf('/img/icons/%s/unknown.png', $size);
+        return \sprintf('/img/icons/%s/unknown.png', $size);
     }
 
     public function getAdmin(): ?Admin

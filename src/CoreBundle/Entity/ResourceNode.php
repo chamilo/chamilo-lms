@@ -59,14 +59,14 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => [
             'resource_node:read',
             'document:read',
-            'personal_file:read'
+            'personal_file:read',
         ],
     ],
     denormalizationContext: [
         'groups' => [
             'resource_node:write',
             'document:write',
-            'personal_file:write'
+            'personal_file:write',
         ],
     ]
 )]
@@ -553,7 +553,7 @@ class ResourceNode implements Stringable
             ];
             $url = $router->generate('chamilo_core_resource_view', $params);
 
-            return sprintf("<img src='%s'/>", $url);
+            return \sprintf("<img src='%s'/>", $url);
         }
 
         return $this->getIcon('fa-3x');

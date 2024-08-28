@@ -58,7 +58,7 @@ final class SessionRelUserExtension implements QueryCollectionExtensionInterface
             throw new AccessDeniedException('Access Denied SessionRelUser');
         }
 
-        $qb->andWhere(sprintf('%s.user = :current_user', $alias));
+        $qb->andWhere(\sprintf('%s.user = :current_user', $alias));
         $qb->setParameter('current_user', $user->getId());
     }
 }

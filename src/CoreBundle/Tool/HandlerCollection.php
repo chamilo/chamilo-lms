@@ -28,7 +28,7 @@ class HandlerCollection
             }
         }
 
-        throw new InvalidArgumentException(sprintf('Cannot handle tool "%s"', $title));
+        throw new InvalidArgumentException(\sprintf('Cannot handle tool "%s"', $title));
     }
 
     /**

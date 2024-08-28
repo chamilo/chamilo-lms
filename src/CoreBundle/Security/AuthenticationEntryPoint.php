@@ -30,11 +30,10 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
         // $session->getFlashBag()->add('warning', $message);
 
         /*$data = [
-            // you might translate this message
-            'message' => 'Authentication Required',
-        ];
-
-        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);*/
+         * // you might translate this message
+         * 'message' => 'Authentication Required',
+         * ];
+         * return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);*/
 
         return new RedirectResponse($this->urlGenerator->generate('login'));
     }

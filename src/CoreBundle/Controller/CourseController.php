@@ -280,27 +280,22 @@ class CourseController extends ToolBaseController
     }
 
     /*public function redirectToShortCut(string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse
-    {
-        $tool = $repo->findOneBy([
-            'name' => $toolName,
-        ]);
-
-        if (null === $tool) {
-            throw new NotFoundHttpException($this->trans('Tool not found'));
-        }
-
-        $tool = $toolChain->getToolFromName($tool->getTool()->getTitle());
-        $link = $tool->getLink();
-
-        if (strpos($link, 'nodeId')) {
-            $nodeId = (string) $this->getCourse()->getResourceNode()->getId();
-            $link = str_replace(':nodeId', $nodeId, $link);
-        }
-
-        $url = $link.'?'.$this->getCourseUrlQuery();
-
-        return $this->redirect($url);
-    }*/
+     * {
+     * $tool = $repo->findOneBy([
+     * 'name' => $toolName,
+     * ]);
+     * if (null === $tool) {
+     * throw new NotFoundHttpException($this->trans('Tool not found'));
+     * }
+     * $tool = $toolChain->getToolFromName($tool->getTool()->getTitle());
+     * $link = $tool->getLink();
+     * if (strpos($link, 'nodeId')) {
+     * $nodeId = (string) $this->getCourse()->getResourceNode()->getId();
+     * $link = str_replace(':nodeId', $nodeId, $link);
+     * }
+     * $url = $link.'?'.$this->getCourseUrlQuery();
+     * return $this->redirect($url);
+     * }*/
 
     /**
      * Edit configuration with given namespace.
@@ -376,7 +371,7 @@ class CourseController extends ToolBaseController
 
         $courseValues = new ExtraFieldValue('course');
 
-        $urlCourse = api_get_path(WEB_PATH).sprintf('course/%s/about', $courseId);
+        $urlCourse = api_get_path(WEB_PATH).\sprintf('course/%s/about', $courseId);
         $courseTeachers = $course->getTeachersSubscriptions();
         $teachersData = [];
 
@@ -789,7 +784,7 @@ class CourseController extends ToolBaseController
                         // Redirecting to the LP
                         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
                         $_SESSION[$session_key] = true;
-                        header(sprintf('Location: %s', $url));
+                        header(\sprintf('Location: %s', $url));
 
                         exit;
                     }
@@ -826,7 +821,7 @@ class CourseController extends ToolBaseController
                                     'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['iid'];
 
                                 $_SESSION[$session_key] = true;
-                                header(sprintf('Location: %s', $url));
+                                header(\sprintf('Location: %s', $url));
 
                                 exit;
                             }
@@ -852,7 +847,7 @@ class CourseController extends ToolBaseController
                 }
             } else {
                 $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
-                header(sprintf('Location: %s', $url));
+                header(\sprintf('Location: %s', $url));
 
                 exit;
             }
@@ -870,7 +865,7 @@ class CourseController extends ToolBaseController
                 } else {
                     // Redirecting to the document
                     $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
-                    header(sprintf('Location: %s', $url));
+                    header(\sprintf('Location: %s', $url));
 
                     exit;
                 }
@@ -906,7 +901,7 @@ class CourseController extends ToolBaseController
                         $exerciseId = $row['iid'];
                         $url = api_get_path(WEB_CODE_PATH).
                             'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
-                        header(sprintf('Location: %s', $url));
+                        header(\sprintf('Location: %s', $url));
 
                         exit;
                     }

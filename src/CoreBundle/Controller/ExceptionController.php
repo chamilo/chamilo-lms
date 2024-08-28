@@ -29,16 +29,16 @@ class ExceptionController extends AbstractController
         $format = 'html';
         $loader = $this->container->get('twig')->getLoader();
 
-        $templateToLoad = sprintf('@ChamiloCore/Exception/%s.html.twig', 'exception_full');
+        $templateToLoad = \sprintf('@ChamiloCore/Exception/%s.html.twig', 'exception_full');
 
         // when not in debug, try to find a template for the specific HTTP status code and format
-        $template = sprintf('@ChamiloCore/Exception/%s%s.%s.twig', $name, $code, $format);
+        $template = \sprintf('@ChamiloCore/Exception/%s%s.%s.twig', $name, $code, $format);
         if ($loader->exists($template)) {
             $templateToLoad = $template;
         }
 
         // try to find a template for the given format
-        $template = sprintf('@ChamiloCore/Exception/%s.%s.twig', $name, $format);
+        $template = \sprintf('@ChamiloCore/Exception/%s.%s.twig', $name, $format);
         if ($loader->exists($template)) {
             $templateToLoad = $template;
         }
@@ -68,18 +68,18 @@ class ExceptionController extends AbstractController
         $format = 'html';
         $loader = $this->container->get('twig')->getLoader();
 
-        $templateToLoad = sprintf('@ChamiloCore/Exception/%s.html.twig', 'exception_full');
+        $templateToLoad = \sprintf('@ChamiloCore/Exception/%s.html.twig', 'exception_full');
 
         // when not in debug, try to find a template for the specific HTTP status code and format
         // if (!$showException) {
-        $template = sprintf('@ChamiloCore/Exception/%s%s.%s.twig', $name, $code, $format);
+        $template = \sprintf('@ChamiloCore/Exception/%s%s.%s.twig', $name, $code, $format);
         if ($loader->exists($template)) {
             $templateToLoad = $template;
         }
         // }
 
         // try to find a template for the given format
-        $template = sprintf('@ChamiloCore/Exception/%s.%s.twig', $name, $format);
+        $template = \sprintf('@ChamiloCore/Exception/%s.%s.twig', $name, $format);
         if ($loader->exists($template)) {
             $templateToLoad = $template;
         }

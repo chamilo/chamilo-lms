@@ -207,7 +207,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 }
 
                 if (empty(trim($resource->getTitle()))) {
-                    $resource->setTitle(sprintf('Post #%s', $resource->getIid()));
+                    $resource->setTitle(\sprintf('Post #%s', $resource->getIid()));
                 }
 
                 $threadId = (int) $itemData['thread_id'];

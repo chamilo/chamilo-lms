@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'c_blog_task_rel_user')]
@@ -22,7 +23,7 @@ class CBlogTaskRelUser
     protected ?int $iid = null;
 
     #[ORM\Column(name: 'target_date', type: 'date', nullable: false)]
-    protected \DateTime $targetDate;
+    protected DateTime $targetDate;
 
     #[ORM\ManyToOne(targetEntity: CBlogTask::class)]
     #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
@@ -41,12 +42,12 @@ class CBlogTaskRelUser
         return $this->iid;
     }
 
-    public function getTargetDate(): \DateTime
+    public function getTargetDate(): DateTime
     {
         return $this->targetDate;
     }
 
-    public function setTargetDate(\DateTime $targetDate): self
+    public function setTargetDate(DateTime $targetDate): self
     {
         $this->targetDate = $targetDate;
 

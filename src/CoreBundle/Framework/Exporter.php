@@ -61,7 +61,7 @@ class Exporter
 
         return new StreamedResponse($callback, Response::HTTP_OK, [
             'Content-Type' => $contentType,
-            'Content-Disposition' => sprintf('attachment; filename=%s', $filename),
+            'Content-Disposition' => \sprintf('attachment; filename=%s', $filename),
         ]);
     }
 }

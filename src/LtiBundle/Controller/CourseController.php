@@ -329,7 +329,7 @@ class CourseController extends ToolBaseController
 
                 $this->addFlash(
                     'success',
-                    sprintf(
+                    \sprintf(
                         $this->trans('External tool added: %s'),
                         $newTool->getTitle()
                     )

@@ -44,20 +44,18 @@ class ResourceNodeRepository extends MaterializedPathRepository
     }
 
     /*public function create(ResourceNode $node): void
-    {
-        $this->getEntityManager()->persist($node);
-        $this->getEntityManager()->flush();
-    }
-
-    public function update(ResourceNode $node, bool $andFlush = true): void
-    {
-        //$node->setUpdatedAt(new \DateTime());
-        $this->getEntityManager()->persist($node);
-        if ($andFlush) {
-            $this->getEntityManager()->flush();
-        }
-    }*/
-
+     * {
+     * $this->getEntityManager()->persist($node);
+     * $this->getEntityManager()->flush();
+     * }
+     * public function update(ResourceNode $node, bool $andFlush = true): void
+     * {
+     * //$node->setUpdatedAt(new \DateTime());
+     * $this->getEntityManager()->persist($node);
+     * if ($andFlush) {
+     * $this->getEntityManager()->flush();
+     * }
+     * }*/
     public function getFileSystem(): FilesystemOperator
     {
         return $this->filesystem;

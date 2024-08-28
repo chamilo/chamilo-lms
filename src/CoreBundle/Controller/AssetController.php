@@ -75,6 +75,6 @@ class AssetController
             return $response;
         }
 
-        throw new FileNotFoundException(sprintf('File not found: %s', $path));
+        throw new FileNotFoundException(\sprintf('File not found: %s', $path));
     }
 }

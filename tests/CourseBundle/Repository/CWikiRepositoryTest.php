@@ -22,30 +22,27 @@ class CWikiRepositoryTest extends AbstractApiTest
 
         $this->assertSame(0, $repo->count([]));
         /*
-        $course = $this->createCourse('new');
-        $teacher = $this->createUser('teacher');
-
-        $item = (new CWiki())
-            ->setTitle('wiki')
-            ->setContent('wiki content')
-            ->setReflink('wiki')
-            ->setUserId($teacher->getId())
-            ->setAddlock(0)
-            ->setEditlock(0)
-            ->setVisibility(0)
-
-            ->setVisibilityDisc(0)
-            ->setAddlockDisc(0)
-            ->setRatinglockDisc(0)
-            ->setParent($course)
-            ->setCreator($teacher)
-            ->setCId($course->getId())
-        ;
-        $this->assertHasNoEntityViolations($item);
-        $em->persist($item);
-        $em->flush();
-
-        $this->assertSame('wiki', (string) $item);
-        $this->assertSame(1, $repo->count([]));*/
+         * $course = $this->createCourse('new');
+         * $teacher = $this->createUser('teacher');
+         * $item = (new CWiki())
+         * ->setTitle('wiki')
+         * ->setContent('wiki content')
+         * ->setReflink('wiki')
+         * ->setUserId($teacher->getId())
+         * ->setAddlock(0)
+         * ->setEditlock(0)
+         * ->setVisibility(0)
+         * ->setVisibilityDisc(0)
+         * ->setAddlockDisc(0)
+         * ->setRatinglockDisc(0)
+         * ->setParent($course)
+         * ->setCreator($teacher)
+         * ->setCId($course->getId())
+         * ;
+         * $this->assertHasNoEntityViolations($item);
+         * $em->persist($item);
+         * $em->flush();
+         * $this->assertSame('wiki', (string) $item);
+         * $this->assertSame(1, $repo->count([]));*/
     }
 }

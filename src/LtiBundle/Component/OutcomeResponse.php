@@ -18,8 +18,6 @@ abstract class OutcomeResponse
     private OutcomeResponseStatus $statusInfo;
 
     /**
-     * OutcomeResponse constructor.
-     *
      * @param null|mixed $bodyParam
      */
     public function __construct(OutcomeResponseStatus $statusInfo, $bodyParam = null)

@@ -124,7 +124,7 @@ class CourseRepositoryTest extends AbstractApiTest
             $this->assertSame(
                 1,
                 $tool->getResourceNode()->getResourceLinks()->count(),
-                sprintf("Tool '%s' needs a ResourceLink ", $tool->getResourceNode()->getTitle())
+                \sprintf("Tool '%s' needs a ResourceLink ", $tool->getResourceNode()->getTitle())
             );
         }
 
@@ -225,7 +225,7 @@ class CourseRepositoryTest extends AbstractApiTest
         $this->assertSame(0, $course->getTeachersSubscriptions()->count());
 
         $this->getClientWithGuiCredentials('student', 'student');
-        $client->request('GET', sprintf('/course/%s/home', $course->getId()));
+        $client->request('GET', \sprintf('/course/%s/home', $course->getId()));
         $this->assertResponseIsSuccessful();
     }
 
@@ -267,7 +267,7 @@ class CourseRepositoryTest extends AbstractApiTest
 
         $this
             ->getClientWithGuiCredentials('teacher', 'teacher')
-            ->request('GET', sprintf('/course/%s/home', $course->getId()))
+            ->request('GET', \sprintf('/course/%s/home', $course->getId()))
         ;
         $this->assertResponseIsSuccessful();
     }
@@ -293,7 +293,7 @@ class CourseRepositoryTest extends AbstractApiTest
 
         $this
             ->getClientWithGuiCredentials('student', 'student')
-            ->request('GET', sprintf('/course/%s/home', $course->getId()))
+            ->request('GET', \sprintf('/course/%s/home', $course->getId()))
         ;
         $this->assertResponseIsSuccessful();
     }

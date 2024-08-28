@@ -67,7 +67,7 @@ class OutcomeReadRequest extends OutcomeRequest
                 $ltiScore = $result->get_score() / $evaluation->getMax();
             }
 
-            $responseDescription = sprintf(
+            $responseDescription = \sprintf(
                 $this->translator->trans('Score for user %d is %s'),
                 $user->getId(),
                 $ltiScore

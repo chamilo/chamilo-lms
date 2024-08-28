@@ -45,7 +45,7 @@ class AssetFileNameNamer implements NamerInterface
                 $titleSlug = $this->slugify($templateTitle);
                 $extension = pathinfo($mapping->getFileName($object), PATHINFO_EXTENSION);
 
-                return sprintf('%s-%s.%s', $templateId, $titleSlug, $extension);
+                return \sprintf('%s-%s.%s', $templateId, $titleSlug, $extension);
             }
         }
 

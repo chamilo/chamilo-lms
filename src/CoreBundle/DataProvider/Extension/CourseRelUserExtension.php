@@ -72,7 +72,7 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
                 }
 
                 $rootAlias = $queryBuilder->getRootAliases()[0];
-                $queryBuilder->andWhere(sprintf('%s.user = :current_user', $rootAlias));
+                $queryBuilder->andWhere(\sprintf('%s.user = :current_user', $rootAlias));
                 $queryBuilder->setParameter('current_user', $user->getId());
             }
         }

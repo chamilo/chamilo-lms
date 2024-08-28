@@ -11,8 +11,6 @@ use SimpleXMLElement;
 class OutcomeUnsupportedRequest extends OutcomeRequest
 {
     /**
-     * OutcomeUnsupportedRequest constructor.
-     *
      * @param string $name
      */
     public function __construct(SimpleXMLElement $xml, $name)

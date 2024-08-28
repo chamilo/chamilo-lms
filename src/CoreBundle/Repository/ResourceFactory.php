@@ -28,13 +28,13 @@ class ResourceFactory
         $tool = $this->toolChain->getToolFromName($toolName);
 
         if (!$tool instanceof AbstractTool) {
-            throw new InvalidArgumentException(sprintf('Tool %s not found', $toolName));
+            throw new InvalidArgumentException(\sprintf('Tool %s not found', $toolName));
         }
 
         $entityClass = $tool->getEntityByResourceType($type);
 
         if (null === $entityClass) {
-            throw new InvalidArgumentException(sprintf('Entity not found for tool "%s" and type "%s" ', $toolName, $type));
+            throw new InvalidArgumentException(\sprintf('Entity not found for tool "%s" and type "%s" ', $toolName, $type));
         }
 
         return $this->entityManager->getRepository($entityClass);

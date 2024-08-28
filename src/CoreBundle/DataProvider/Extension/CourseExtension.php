@@ -58,11 +58,11 @@ final class CourseExtension implements QueryCollectionExtensionInterface
         $rootAlias = $queryBuilder->getRootAliases()[0];
 
         $queryBuilder
-            ->andWhere(sprintf('%s.visibility <> :visibility_hidden', $rootAlias))
+            ->andWhere(\sprintf('%s.visibility <> :visibility_hidden', $rootAlias))
             ->setParameter('visibility_hidden', Course::HIDDEN)
         ;
         $queryBuilder
-            ->andWhere(sprintf('%s.visibility <> :visibility_closed', $rootAlias))
+            ->andWhere(\sprintf('%s.visibility <> :visibility_closed', $rootAlias))
             ->setParameter('visibility_closed', Course::CLOSED)
         ;
     }

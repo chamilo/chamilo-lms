@@ -212,11 +212,11 @@ class SocialController extends AbstractController
         if (!empty($bossList)) {
             $bossList = array_column($bossList, 'boss_id');
             foreach ($bossList as $bossId) {
-                $subjectEmail = sprintf(
+                $subjectEmail = \sprintf(
                     $translator->trans('User %s signed the agreement'),
                     $user->getFullname()
                 );
-                $contentEmail = sprintf(
+                $contentEmail = \sprintf(
                     $translator->trans('User %s signed the agreement.TheDateY'),
                     $user->getFullname(),
                     api_get_local_time()
@@ -286,12 +286,12 @@ class SocialController extends AbstractController
             $fieldToUpdate = 'request_for_delete_account';
             $justificationFieldToUpdate = 'request_for_delete_account_justification';
             $emailSubject = $translator->trans('Request for account deletion');
-            $emailContent = sprintf($translator->trans('User %s asked for the deletion of his/her account, explaining that : ').$explanation, $user->getFullName());
+            $emailContent = \sprintf($translator->trans('User %s asked for the deletion of his/her account, explaining that : ').$explanation, $user->getFullName());
         } elseif ('delete_legal' === $requestType) {
             $fieldToUpdate = 'request_for_legal_agreement_consent_removal';
             $justificationFieldToUpdate = 'request_for_legal_agreement_consent_removal_justification';
             $emailSubject = $translator->trans('Request for consent withdrawal on legal terms');
-            $emailContent = sprintf($translator->trans('User %s asked for the removal of his/her consent to our legal terms, explaining that: ').$explanation, $user->getFullName());
+            $emailContent = \sprintf($translator->trans('User %s asked for the removal of his/her consent to our legal terms, explaining that: ').$explanation, $user->getFullName());
         } else {
             return $this->json(['success' => false, 'message' => 'Invalid action type']);
         }

@@ -126,7 +126,7 @@ class CourseCategory implements Stringable
     {
         $name = strip_tags($this->title);
 
-        return sprintf('%s (%s)', $name, $this->code);
+        return \sprintf('%s (%s)', $name, $this->code);
     }
 
     /**

@@ -132,7 +132,6 @@ class SessionRepository extends ServiceEntityRepository
         $sessions = $this->getSubscribedSessionsOfUserInUrl($user, $url);
 
         $filterCurrentSessions = function (Session $session) use ($user, $url) {
-
             $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
             if (!$userIsGeneralCoach) {
                 $coursesAsCoach = $this->getSessionCoursesByStatusInCourseSubscription($user, $session, Session::COURSE_COACH, $url);
@@ -223,13 +222,13 @@ class SessionRepository extends ServiceEntityRepository
         }
 
         if (!$session->hasCourse($course)) {
-            $msg = sprintf('Course %s is not subscribed to the session %s', $course->getTitle(), $session->getTitle());
+            $msg = \sprintf('Course %s is not subscribed to the session %s', $course->getTitle(), $session->getTitle());
 
             throw new Exception($msg);
         }
 
         if (!\in_array($relationType, Session::getRelationTypeList(), true)) {
-            throw new Exception(sprintf('Cannot handle relationType %s', $relationType));
+            throw new Exception(\sprintf('Cannot handle relationType %s', $relationType));
         }
 
         $entityManager = $this->getEntityManager();

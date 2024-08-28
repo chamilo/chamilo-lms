@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,7 +32,7 @@ class CBlog extends AbstractResource implements ResourceInterface, Stringable
     protected ?string $blogSubtitle = null;
 
     #[ORM\Column(name: 'date_creation', type: 'datetime', nullable: false)]
-    protected \DateTime $dateCreation;
+    protected DateTime $dateCreation;
 
     #[ORM\OneToMany(mappedBy: 'blog', targetEntity: CBlogAttachment::class, cascade: ['persist', 'remove'])]
     private Collection $attachments;
@@ -54,6 +55,7 @@ class CBlog extends AbstractResource implements ResourceInterface, Stringable
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -65,17 +67,19 @@ class CBlog extends AbstractResource implements ResourceInterface, Stringable
     public function setBlogSubtitle(?string $blogSubtitle): self
     {
         $this->blogSubtitle = $blogSubtitle;
+
         return $this;
     }
 
-    public function getDateCreation(): \DateTime
+    public function getDateCreation(): DateTime
     {
         return $this->dateCreation;
     }
 
-    public function setDateCreation(\DateTime $dateCreation): self
+    public function setDateCreation(DateTime $dateCreation): self
     {
         $this->dateCreation = $dateCreation;
+
         return $this;
     }
 

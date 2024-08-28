@@ -35,15 +35,14 @@ final class MessageExtension implements QueryCollectionExtensionInterface // , Q
             return;
         }*/
         /*
-        if ('collection_query' === $operationName) {
-            if (null === $user = $this->security->getUser()) {
-                throw new AccessDeniedException('Access Denied.');
-            }
-
-            $rootAlias = $queryBuilder->getRootAliases()[0];
-            $queryBuilder->andWhere(sprintf('%s.user = :current_user', $rootAlias));
-            $queryBuilder->setParameter('current_user', $user);
-        }*/
+         * if ('collection_query' === $operationName) {
+         * if (null === $user = $this->security->getUser()) {
+         * throw new AccessDeniedException('Access Denied.');
+         * }
+         * $rootAlias = $queryBuilder->getRootAliases()[0];
+         * $queryBuilder->andWhere(sprintf('%s.user = :current_user', $rootAlias));
+         * $queryBuilder->setParameter('current_user', $user);
+         * }*/
 
         $this->addWhere($queryBuilder, $resourceClass);
     }

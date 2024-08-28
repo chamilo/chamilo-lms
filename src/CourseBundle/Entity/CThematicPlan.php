@@ -100,18 +100,16 @@ class CThematicPlan implements Stringable // extends AbstractResource implements
     }
 
     /*
-    public function getResourceIdentifier(): int
-    {
-        return $this->getIid();
-    }
-
-    public function getResourceName(): string
-    {
-        return $this->getTitle();
-    }
-
-    public function setResourceName(string $name): self
-    {
-        return $this->setTitle($name);
-    }*/
+     * public function getResourceIdentifier(): int
+     * {
+     * return $this->getIid();
+     * }
+     * public function getResourceName(): string
+     * {
+     * return $this->getTitle();
+     * }
+     * public function setResourceName(string $name): self
+     * {
+     * return $this->setTitle($name);
+     * }*/
 }

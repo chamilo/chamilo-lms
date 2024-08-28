@@ -40,7 +40,7 @@ class Version20240704185300 extends AbstractMigrationChamilo
         foreach ($finder as $entry) {
             if ($entry->isDir()) {
                 $this->write(
-                    sprintf(
+                    \sprintf(
                         'Moving theme directory: %s to %s',
                         $entry->getRealPath(),
                         $themesDirectory.DIRECTORY_SEPARATOR

@@ -256,7 +256,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $qbAlias = $qb->getRootAliases()[0];
 
         $qb
-            ->leftJoin(sprintf('%s.resourceFiles', $qbAlias), 'resourceFiles') // must have a file
+            ->leftJoin(\sprintf('%s.resourceFiles', $qbAlias), 'resourceFiles') // must have a file
             ->addCriteria($criteria)
         ;
 

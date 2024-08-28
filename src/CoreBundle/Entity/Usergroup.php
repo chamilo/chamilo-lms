@@ -401,7 +401,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     {
         $size = empty($size) ? 32 : $size;
 
-        return sprintf('/img/icons/%s/group_na.png', $size);
+        return \sprintf('/img/icons/%s/group_na.png', $size);
     }
     public function getResourceIdentifier(): int
     {

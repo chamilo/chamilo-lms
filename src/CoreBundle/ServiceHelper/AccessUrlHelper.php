@@ -8,14 +8,13 @@ namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class AccessUrlHelper
 {
     public function __construct(
         private readonly AccessUrlRepository $accessUrlRepository,
-        private readonly RouterInterface $router,
+        private readonly RequestStack $requestStack,
     ) {}
 
     public function isMultiple(): bool
@@ -47,7 +46,7 @@ class AccessUrlHelper
         $accessUrl = $this->getFirstAccessUrl();
 
         if ($this->isMultiple()) {
-            $url = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $url = $this->requestStack->getMainRequest()->getSchemeAndHttpHost().'/';
 
             /** @var AccessUrl $accessUrl */
             $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $url]);

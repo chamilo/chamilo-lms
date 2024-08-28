@@ -1642,11 +1642,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'admin' => [
                 [
-                    'name' => 'admin_chamilo_announcements_disable',
-                    'title' => 'Disable editor announcements',
-                    'comment' => "Choose 'Yes' to stop announcements from the software editor to appear on the administrative homepage (only admins see it). This will also remove security update announcements.",
-                ],
-                [
                     'name' => 'drh_allow_access_to_all_students',
                     'title' => 'HRM can access all students from reporting pages',
                     'comment' => '',
@@ -1872,11 +1867,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Provide link to a bug reporting platform if not using the internal ticket manager.',
                 ],
                 [
-                    'name' => 'default_template',
-                    'title' => 'Layout template',
-                    'comment' => 'Provide the name of the template folder from main/template/ to change the appearance and structure of this portal.',
-                ],
-                [
                     'name' => 'disable_copy_paste',
                     'title' => 'Disable copy-pasting',
                     'comment' => 'When enabled, this option disables as well as possible the copy-pasting mechanisms. Useful in restrictive exams setups.',
@@ -1962,11 +1952,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'platform' => [
-                [
-                    'name' => 'default_template',
-                    'title' => 'Layout template',
-                    'comment' => 'Provide the name of the template folder from main/template/ to change the appearance and structure of this portal.',
-                ],
                 [
                     'name' => 'allow_double_validation_in_registration',
                     'title' => 'Double validation for registration process',

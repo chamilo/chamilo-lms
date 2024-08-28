@@ -1346,6 +1346,10 @@ function updateEnvFile($distFile, $envFile, $params)
         'SOFTWARE_URL',
         'DENY_DELETE_USERS',
         'HOSTING_TOTAL_SIZE_LIMIT',
+        'THEME_FALLBACK',
+        'PACKAGER',
+        'DEFAULT_TEMPLATE',
+        'ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE',
     ];
 
     foreach ($requirements as $requirement) {

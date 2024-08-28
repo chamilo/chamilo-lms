@@ -79,7 +79,10 @@ try {
         throw new Exception('The mail field is empty in Azure AD and is needed to set the organisation email for this user.');
     }
     if (empty($me['mailNickname'])) {
-        throw new Exception('The mailNickname field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
+        throw new Exception('The mailNickname field is empty in Azure AD and is needed to set the unique username for this user.');
+    }
+    if (empty($me['objectId'])) {
+        throw new Exception('The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
     }
 
     $extraFieldValue = new ExtraFieldValue('user');
@@ -90,6 +93,10 @@ try {
     $azureValue = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
         AzureActiveDirectory::EXTRA_FIELD_AZURE_ID,
         $me['mailNickname']
+    );
+    $uidValue = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+        AzureActiveDirectory::EXTRA_FIELD_AZURE_UID,
+        $me['objectId']
     );
 
     $userId = null;
@@ -104,6 +111,14 @@ try {
         // EXTRA_FIELD_AZURE_ID
         if (!empty($azureValue) && isset($azureValue['item_id'])) {
             $userId = $azureValue['item_id'];
+        }
+    }
+
+    if (empty($userId)) {
+        // If the previous step didn't work, get the user ID from
+        // EXTRA_FIELD_AZURE_UID
+        if (!empty($uidValue) && isset($uidValue['item_id'])) {
+            $userId = $uidValue['item_id'];
         }
     }
 
@@ -155,6 +170,7 @@ try {
                 [
                     'extra_'.AzureActiveDirectory::EXTRA_FIELD_ORGANISATION_EMAIL => $me['mail'],
                     'extra_'.AzureActiveDirectory::EXTRA_FIELD_AZURE_ID => $me['mailNickname'],
+                    'extra_'.AzureActiveDirectory::EXTRA_FIELD_AZURE_UID => $me['id'],
                 ],
                 null,
                 null,
@@ -164,7 +180,7 @@ try {
                 throw new Exception(get_lang('UserNotAdded').' '.$me['mailNickname']);
             }
         } else {
-            throw new Exception('User not found when checking the extra fields from '.$me['mail'].' or '.$me['mailNickname'].'.');
+            throw new Exception('User not found when checking the extra fields from '.$me['mail'].' or '.$me['mailNickname'].' or '.$me['id'].'.');
         }
     }
 

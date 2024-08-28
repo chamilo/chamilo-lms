@@ -12,6 +12,16 @@ if ($uData['auth_source'] === 'azure') {
         api_not_allowed(true);
     }
 
+    $uidField = new ExtraFieldValue('user');
+    $uidValue = $uidField->get_values_by_handler_and_field_variable(
+        $uData['user_id'],
+        AzureActiveDirectory::EXTRA_FIELD_AZURE_UID
+    );
+
+    if (empty($uidValue) || empty($uidValue['value'])) {
+        api_not_allowed(true);
+    }
+
     $azureIdField = new ExtraFieldValue('user');
     $azureIdValue = $azureIdField->get_values_by_handler_and_field_variable(
         $uData['user_id'],

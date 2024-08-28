@@ -24,6 +24,7 @@ $strings['management_login_name'] = 'Naam voor de beheeraanmelding';
 $strings['management_login_name_help'] = 'De standaardinstelling is "Beheer login".';
 $strings['OrganisationEmail'] = 'Organisatie e-mail';
 $strings['AzureId'] = 'Azure ID (mailNickname)';
+$strings['AzureUid'] = 'Azure UID (internal ID)';
 $strings['ManagementLogin'] = 'Beheer Login';
 $strings['InvalidId'] = 'Deze identificatie is niet geldig (verkeerde log-in of wachtwoord). Errocode: AZMNF';
 $strings['provisioning'] = 'Geautomatiseerde inrichting';

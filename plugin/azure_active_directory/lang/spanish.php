@@ -24,6 +24,7 @@ $strings['management_login_name'] = 'Nombre del bloque de login de gestión';
 $strings['management_login_name_help'] = 'El nombre por defecto es "Login de gestión".';
 $strings['OrganisationEmail'] = 'E-mail profesional';
 $strings['AzureId'] = 'ID Azure (mailNickname)';
+$strings['AzureUid'] = 'UID Azure (ID interno)';
 $strings['ManagementLogin'] = 'Login de gestión';
 $strings['InvalidId'] = 'Problema en el login - nombre de usuario o contraseña incorrecto. Errocode: AZMNF';
 $strings['provisioning'] = 'Creación automatizada';

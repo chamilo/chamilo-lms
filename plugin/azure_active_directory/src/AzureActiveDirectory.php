@@ -29,6 +29,7 @@ class AzureActiveDirectory extends Plugin
 
     public const EXTRA_FIELD_ORGANISATION_EMAIL = 'organisationemail';
     public const EXTRA_FIELD_AZURE_ID = 'azure_id';
+    public const EXTRA_FIELD_AZURE_UID = 'azure_uid';
 
     /**
      * AzureActiveDirectory constructor.
@@ -121,6 +122,12 @@ class AzureActiveDirectory extends Plugin
             self::EXTRA_FIELD_AZURE_ID,
             ExtraField::FIELD_TYPE_TEXT,
             $this->get_lang('AzureId'),
+            ''
+        );
+        UserManager::create_extra_field(
+            self::EXTRA_FIELD_AZURE_UID,
+            ExtraField::FIELD_TYPE_TEXT,
+            $this->get_lang('AzureUid'),
             ''
         );
     }

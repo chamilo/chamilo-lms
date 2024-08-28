@@ -29531,3 +29531,6 @@ msgstr "consultez le guide d'installation"
 
 msgid "Step 4 - Database settings"
 msgstr "Étape 4 - Paramètres de base de données"
+
+msgid "Continue with %s"
+msgstr "Continuer avec %s"

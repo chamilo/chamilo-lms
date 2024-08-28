@@ -28726,3 +28726,6 @@ msgid "Disable tab to add classes in session course for non-admins."
 msgstr ""
 "Desactivar la pestaña para agregar clases en el curso de la sesión para "
 "usuarios que no son administradores."
+
+msgid "Continue with %s"
+msgstr "Seguir con %s"

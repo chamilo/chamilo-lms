@@ -27732,3 +27732,6 @@ msgstr ""
 msgid "Step 7 - Update process execution"
 msgstr ""
 
+msgid "Continue with %s"
+msgstr ""
+

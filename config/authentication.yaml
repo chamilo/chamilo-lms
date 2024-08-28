@@ -5,6 +5,7 @@ parameters:
         default:
             generic:
                 enabled: false
+                title: 'External'
                 client_id: ''
                 client_secret: ''
                 provider_options:
@@ -34,6 +35,7 @@ parameters:
 
             facebook:
                 enabled: false
+                title: 'Facebook'
                 client_id: ''
                 client_secret: ''
                 graph_api_version: 'v20.0'
@@ -41,6 +43,7 @@ parameters:
 
             keycloak:
                 enabled: false
+                title: 'Keycloak'
                 client_id: ''
                 client_secret: ''
                 auth_server_url: ''

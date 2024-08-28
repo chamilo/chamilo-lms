@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use bbb;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CoreBundle\ServiceHelper\TicketProjectHelper;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
@@ -29,6 +30,7 @@ class PlatformConfigurationController extends AbstractController
         private readonly TicketProjectHelper $ticketProjectHelper,
         private readonly UserHelper $userHelper,
         private readonly ThemeHelper $themeHelper,
+        private readonly AuthenticationConfigHelper $authenticationConfigHelper,
     ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
@@ -41,6 +43,7 @@ class PlatformConfigurationController extends AbstractController
             'studentview' => $requestSession->get('studentview'),
             'plugins' => [],
             'visual_theme' => $this->themeHelper->getVisualTheme(),
+            'external_authentication' => $this->authenticationConfigHelper->getEnabledProviders(),
         ];
         $variables = [];
 

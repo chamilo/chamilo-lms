@@ -178,10 +178,7 @@ function check_system_version()
 
         // The number of sessions
         $number_of_sessions = SessionManager::count_sessions(api_get_current_access_url_id());
-        $packager = api_get_setting('platform.packager');
-        if (empty($packager)) {
-            $packager = 'chamilo';
-        }
+        $packager = api_get_env_variable('PACKAGER', 'chamilo');
 
         $uniqueId = '';
         $entityManager = Database::getManager();

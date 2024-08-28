@@ -136,7 +136,7 @@ class Template
         //$this->set_footer($show_footer);
         //$this->set_header($show_header);
 
-        $defaultStyle = api_get_setting('display.default_template');
+        $defaultStyle = api_get_env_variable('DEFAULT_TEMPLATE', 'default');
         if (!empty($defaultStyle)) {
             $this->templateFolder = $defaultStyle;
         }
@@ -386,7 +386,7 @@ class Template
             return "overrides/$name";
         }
 
-        $defaultFolder = api_get_configuration_value('default_template');
+        $defaultFolder = api_get_env_variable('DEFAULT_TEMPLATE', 'default');
 
         // If a template folder has been manually defined, search for the right
         // file, and if not found, go for the same file in the default template

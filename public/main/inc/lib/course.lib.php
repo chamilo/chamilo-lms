@@ -6709,20 +6709,22 @@ class CourseManager
      *
      * @return bool|string
      */
-    private static function checkCreateCourseAccessUrlParam($_configuration, $accessUrlId, $param, $msgLabel)
+    private static function checkCreateCourseAccessUrlParam($accessUrlId, $param, $msgLabel)
     {
-        if (isset($_configuration[$accessUrlId][$param]) && $_configuration[$accessUrlId][$param] > 0) {
+        $hostingLimit = get_hosting_limit($accessUrlId, $param);
+
+        if ($hostingLimit !== null && $hostingLimit > 0) {
             $num = null;
             switch ($param) {
                 case 'hosting_limit_courses':
-            $num = self::count_courses($accessUrlId);
+                    $num = self::count_courses($accessUrlId);
                     break;
                 case 'hosting_limit_active_courses':
                     $num = self::countActiveCourses($accessUrlId);
                     break;
             }
 
-            if ($num && $num >= $_configuration[$accessUrlId][$param]) {
+            if ($num && $num >= $hostingLimit) {
                 api_warn_hosting_contact($param);
 
                 Display::addFlash(

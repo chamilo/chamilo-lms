@@ -28,7 +28,7 @@ $response = $client->call(
     'import_users',
     [
         'filepath' => api_get_path(SYS_UPLOAD_PATH)."users_import.csv",
-        'security_key' => api_get_configuration_value('security_key'),
+        'security_key' => api_get_env_variable('kernel.secret'),
     ]
 );
 echo $response;

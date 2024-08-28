@@ -1764,6 +1764,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kurkle/color@npm:^0.3.0":
+  version: 0.3.2
+  resolution: "@kurkle/color@npm:0.3.2"
+  checksum: 10c0/a9e8e3e35dcd59dec4dd4f0105919c05e24823a96347bcf152965c29e48d6290b66d5fb96c071875db752e10930724c48ce6d338fefbd65e0ce5082d5c78970e
+  languageName: node
+  linkType: hard
+
 "@leichtgewicht/ip-codec@npm:^2.0.1":
   version: 2.0.5
   resolution: "@leichtgewicht/ip-codec@npm:2.0.5"
@@ -3810,7 +3817,7 @@ __metadata:
     blueimp-load-image: "npm:^5.16.0"
     bootstrap-daterangepicker: "npm:^3.1.0"
     bootstrap-select: "npm:^1.13.18"
-    chart.js: "npm:^3.9.1"
+    chart.js: "npm:^4.0.0"
     colorjs.io: "npm:^0.5.0"
     core-js: "npm:3.37.1"
     cropper: "npm:^4.1.0"
@@ -3897,16 +3904,18 @@ __metadata:
     vue-toastification: "npm:^2.0.0-rc.5"
     vuex: "npm:^4.1.0"
     vuex-map-fields: "npm:^1.4.1"
-    webpack: "npm:^5.92.1"
+    webpack: "npm:^5.94.0"
     webpack-cli: "npm:^5.1.4"
     webpack-notifier: "npm:^1.15.0"
   languageName: unknown
   linkType: soft
 
-"chart.js@npm:^3.9.1":
-  version: 3.9.1
-  resolution: "chart.js@npm:3.9.1"
-  checksum: 10c0/a31342233403faaa53bebc1019aeb7b849d6d2cd4108c10f1dd73b36c4fcfc7c21bce8986f2f6eb00a28801fddc68a287b8c9f65e9758c50db6efef955b4e991
+"chart.js@npm:^4.0.0":
+  version: 4.4.4
+  resolution: "chart.js@npm:4.4.4"
+  dependencies:
+    "@kurkle/color": "npm:^0.3.0"
+  checksum: 10c0/9fa3206403a6103916f7762c2665d322c42b0cc07fba91526b1d033ddb887c1ba74b3ebc0bd0748a9e55abd1017f25fdb2292cdd6579d8c2d3bcb1c58f71281c
   languageName: node
   linkType: hard
 
@@ -4918,13 +4927,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.17.0":
-  version: 5.17.0
-  resolution: "enhanced-resolve@npm:5.17.0"
+"enhanced-resolve@npm:^5.17.1":
+  version: 5.17.1
+  resolution: "enhanced-resolve@npm:5.17.1"
   dependencies:
     graceful-fs: "npm:^4.2.4"
     tapable: "npm:^2.2.0"
-  checksum: 10c0/90065e58e4fd08e77ba47f827eaa17d60c335e01e4859f6e644bb3b8d0e32b203d33894aee92adfa5121fa262f912b48bdf0d0475e98b4a0a1132eea1169ad37
+  checksum: 10c0/81a0515675eca17efdba2cf5bad87abc91a528fc1191aad50e275e74f045b41506167d420099022da7181c8d787170ea41e4a11a0b10b7a16f6237daecb15370
   languageName: node
   linkType: hard
 
@@ -10931,11 +10940,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.92.1":
-  version: 5.92.1
-  resolution: "webpack@npm:5.92.1"
+"webpack@npm:^5.94.0":
+  version: 5.94.0
+  resolution: "webpack@npm:5.94.0"
   dependencies:
-    "@types/eslint-scope": "npm:^3.7.3"
     "@types/estree": "npm:^1.0.5"
     "@webassemblyjs/ast": "npm:^1.12.1"
     "@webassemblyjs/wasm-edit": "npm:^1.12.1"
@@ -10944,7 +10952,7 @@ __metadata:
     acorn-import-attributes: "npm:^1.9.5"
     browserslist: "npm:^4.21.10"
     chrome-trace-event: "npm:^1.0.2"
-    enhanced-resolve: "npm:^5.17.0"
+    enhanced-resolve: "npm:^5.17.1"
     es-module-lexer: "npm:^1.2.1"
     eslint-scope: "npm:5.1.1"
     events: "npm:^3.2.0"
@@ -10964,7 +10972,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 10c0/43ca7c76b9c1005bd85f05303d048f918bac10276a209e3ef5e359353fbfef4e5fcee876265e6bc305bf5ef326576e02df63bc7e5af878fb7f06d7e1795b811a
+  checksum: 10c0/b4d1b751f634079bd177a89eef84d80fa5bb8d6fc15d72ab40fc2b9ca5167a79b56585e1a849e9e27e259803ee5c4365cb719e54af70a43c06358ec268ff4ebf
   languageName: node
   linkType: hard
 

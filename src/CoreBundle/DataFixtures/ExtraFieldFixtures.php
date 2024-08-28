@@ -133,64 +133,42 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'display_text' => 'Skype',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'linkedin_url',
                 'display_text' => 'LinkedInUrl',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
-            ],
-            [
-                'variable' => 'tags',
-                'display_text' => 'Tags',
-                'item_type' => ExtraField::SKILL_FIELD_TYPE,
-                'value_type' => ExtraField::FIELD_TYPE_TAG,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'send_notification_at_a_specific_date',
                 'display_text' => 'Send notification at a specific date',
                 'item_type' => ExtraField::COURSE_ANNOUNCEMENT,
                 'value_type' => ExtraField::FIELD_TYPE_DATE,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'date_to_send_notification',
                 'display_text' => 'Date to send notification',
                 'item_type' => ExtraField::COURSE_ANNOUNCEMENT,
                 'value_type' => ExtraField::FIELD_TYPE_DATE,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'send_to_users_in_session',
                 'display_text' => 'Send to users in session',
                 'item_type' => ExtraField::SESSION_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'session_courses_read_only_mode',
                 'display_text' => 'Lock course in session',
                 'item_type' => ExtraField::COURSE_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'is_mandatory',
                 'display_text' => 'Is mandatory',
                 'item_type' => ExtraField::SURVEY_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'show_in_catalogue',
@@ -213,280 +191,210 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'display_text' => 'Acquisition',
                 'item_type' => ExtraField::LP_VIEW_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_RADIO,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'invisible',
                 'display_text' => 'Invisible',
                 'item_type' => ExtraField::LP_VIEW_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'start_date',
                 'display_text' => 'Start date',
                 'item_type' => ExtraField::LP_ITEM_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_DATETIME,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'end_date',
                 'display_text' => 'End date',
                 'item_type' => ExtraField::LP_ITEM_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_DATETIME,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'attachment',
                 'display_text' => 'Attachment',
                 'item_type' => ExtraField::SCHEDULED_ANNOUNCEMENT,
                 'value_type' => ExtraField::FIELD_TYPE_FILE,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'send_to_coaches',
                 'display_text' => 'Send to coaches',
                 'item_type' => ExtraField::SCHEDULED_ANNOUNCEMENT,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'work_time',
                 'display_text' => 'Considered working time',
                 'item_type' => ExtraField::WORK_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_INTEGER,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'address',
                 'display_text' => 'User address',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'advancedcourselist',
                 'display_text' => 'Advanced courses list',
                 'item_type' => ExtraField::EXERCISE_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'ask_for_revision',
                 'display_text' => 'Ask for revision',
                 'item_type' => ExtraField::FORUM_POST_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'ask_new_password',
                 'display_text' => 'Ask for new password',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => false,
-                'changeable' => false,
             ],
             [
                 'variable' => 'authenticationDate',
                 'display_text' => 'Authentication date',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_DATETIME,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'authenticationMethod',
                 'display_text' => 'Authentication method',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'azure_id',
                 'display_text' => 'Azure ID',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'birthday',
                 'display_text' => 'Birthday',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_DATE,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'block_category',
                 'display_text' => 'Block Category',
                 'item_type' => ExtraField::EXERCISE_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'buycourses_company',
                 'display_text' => 'Buyer\'s company',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'buycourses_vat',
                 'display_text' => 'Buyer\'s VAT/Tax ID',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'buycourses_address',
                 'display_text' => 'Buyer\'s address',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'cas_user',
                 'display_text' => 'CAS user',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'careerid',
                 'display_text' => 'Career ID',
                 'item_type' => ExtraField::CAREER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_INTEGER,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'career_urls',
                 'display_text' => 'Career URLs',
                 'item_type' => ExtraField::CAREER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'career_diagram',
                 'display_text' => 'Career diagram',
                 'item_type' => ExtraField::CAREER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'collapsed',
                 'display_text' => 'Collapsed',
                 'item_type' => ExtraField::SESSION_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'created_by',
                 'display_text' => 'Created by',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'credentialType',
                 'display_text' => 'Credentials type',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'differentiation',
                 'display_text' => 'Differentiation',
                 'item_type' => ExtraField::QUESTION_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'disable_emails',
                 'display_text' => 'Disable all emails',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'disable_import_calendar',
                 'display_text' => 'Disable import calendar',
                 'item_type' => ExtraField::COURSE_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'downloaded_at',
                 'display_text' => 'Downloaded at',
                 'item_type' => ExtraField::USER_CERTIFICATE,
                 'value_type' => ExtraField::FIELD_TYPE_DATETIME,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'drupal_user_id',
                 'display_text' => 'Drupal user ID',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'state',
                 'display_text' => 'State',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'end_pause_date',
                 'display_text' => 'End pause date',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_DATETIME,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'gdpr',
                 'display_text' => 'GDPR compliance',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'isFromNewLogin',
                 'display_text' => 'Is from new login',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'language',
@@ -501,16 +409,12 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'display_text' => 'Long term authentication request token used',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'moodle_password',
                 'display_text' => 'Moodle password',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'my_terms',
@@ -525,168 +429,126 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'display_text' => 'Use alternate tracking system',
                 'item_type' => ExtraField::COURSE_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'level',
                 'display_text' => 'Level',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'no_automatic_validation',
                 'display_text' => 'Skip automatic validation',
                 'item_type' => ExtraField::LP_ITEM_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'notification_event',
                 'display_text' => 'Event notifications',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'notifications',
                 'display_text' => 'Notifications',
                 'item_type' => ExtraField::EXERCISE_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'number_of_days_for_completion',
                 'display_text' => 'Number of days for completion',
                 'item_type' => ExtraField::LP_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'oauth2_id',
                 'display_text' => 'OAuth2 ID',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'office_address',
                 'display_text' => 'Office address',
                 'item_type' => ExtraField::COURSE_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'office_phone_extension',
                 'display_text' => 'Office phone extension',
                 'item_type' => ExtraField::COURSE_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'organisationemail',
                 'display_text' => 'Organisational email',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'pause_formation',
                 'display_text' => 'Pause training',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'popular_courses',
                 'display_text' => 'Popular courses',
                 'item_type' => ExtraField::COURSE_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'quality',
                 'display_text' => 'Quality',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'remedialcourselist',
                 'display_text' => 'Remedial courses list',
                 'item_type' => ExtraField::COURSE_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'request_for_delete_account',
                 'display_text' => 'Request account deletion',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'request_for_delete_account_justification',
                 'display_text' => 'Justification for account deletion',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXTAREA,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'request_for_legal_agreement_consent_removal',
                 'display_text' => 'Request for legal agreement\'s consent removal',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'request_for_legal_agreement_consent_removal_justification',
                 'display_text' => 'Justification for consent removal',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXTAREA,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'revision_language',
                 'display_text' => 'Revision Language',
                 'item_type' => ExtraField::FORUM_POST_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'session_career',
                 'display_text' => 'Session career link',
                 'item_type' => ExtraField::SESSION_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_INTEGER,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'successful_AuthenticationHandlers',
                 'display_text' => 'Successful authentication handlers',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
             [
                 'variable' => 'termactivated',
@@ -701,8 +563,6 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'display_text' => 'City of internship\'s terms',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => false,
-                'changeable' => true,
             ],
 
             [
@@ -710,8 +570,6 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'display_text' => 'Timezone',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'uid',
@@ -726,24 +584,18 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'display_text' => 'Use score as progress',
                 'item_type' => ExtraField::LP_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'terms_ville',
                 'display_text' => 'City\'s terms',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
             [
                 'variable' => 'time',
                 'display_text' => 'Time',
                 'item_type' => ExtraField::QUESTION_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_INTEGER,
-                'visible_to_self' => true,
-                'changeable' => true,
             ],
         ];
     }
@@ -753,40 +605,43 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
         $list = self::getExtraFields();
 
         foreach ($list as $data) {
-            $existingField = $manager->getRepository(ExtraField::class)->findOneBy([
+            $extraField = $manager->getRepository(ExtraField::class)->findOneBy([
                 'variable' => $data['variable'],
                 'itemType' => $data['item_type'],
             ]);
 
-            if (!$existingField) {
+            if (!$extraField) {
                 $extraField = new ExtraField();
-                $extraField->setVariable($data['variable'])
-                    ->setDisplayText($data['display_text'])
-                    ->setItemType($data['item_type'])
-                    ->setValueType($data['value_type'])
-                    ->setChangeable($data['changeable'] ?? false)
-                    ->setVisibleToSelf($data['visible_to_self'] ?? false)
-                ;
-
-                if (isset($data['default_value'])) {
-                    $extraField->setDefaultValue((string) $data['default_value']);
-                }
-
-                if (isset($data['add_options']) && $data['add_options']) {
-                    $options = ['At once', 'Daily', 'No'];
-                    foreach ($options as $option) {
-                        $extraFieldOption = new ExtraFieldOptions();
-                        $extraFieldOption->setField($extraField)
-                            ->setDisplayText($option)
-                            ->setOptionOrder(array_search($option, $options) + 1)
-                        ;
-
-                        $manager->persist($extraFieldOption);
-                    }
-                }
-
-                $manager->persist($extraField);
             }
+
+            $extraField->setVariable($data['variable'])
+                ->setDisplayText($data['display_text'])
+                ->setItemType($data['item_type'])
+                ->setValueType($data['value_type'])
+                ->setChangeable($data['changeable'] ?? false)
+                ->setVisibleToSelf($data['visible_to_self'] ?? false)
+                ->setVisibleToOthers($data['visible_to_others'] ?? false)
+                ->setFilter($data['filter'] ?? false)
+            ;
+
+            if (isset($data['default_value'])) {
+                $extraField->setDefaultValue((string) $data['default_value']);
+            }
+
+            if (isset($data['add_options']) && $data['add_options']) {
+                $options = ['At once', 'Daily', 'No'];
+                foreach ($options as $option) {
+                    $extraFieldOption = new ExtraFieldOptions();
+                    $extraFieldOption->setField($extraField)
+                        ->setDisplayText($option)
+                        ->setOptionOrder(array_search($option, $options) + 1)
+                    ;
+
+                    $manager->persist($extraFieldOption);
+                }
+            }
+
+            $manager->persist($extraField);
         }
 
         $manager->flush();

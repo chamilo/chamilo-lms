@@ -1,0 +1,11 @@
+parameters:
+  hosting_limits:
+    urls:
+      1:
+        - hosting_limit_users: 0
+        - hosting_limit_teachers: 0
+        - hosting_limit_courses: 0
+        - hosting_limit_sessions: 0
+        - hosting_limit_disk_space: 0
+        - hosting_limit_active_courses: 0
+        - hosting_total_size_limit: 0

@@ -48,17 +48,16 @@ if (is_file(api_get_path(WEB_CODE_PATH).'webservices/webservice-auth-ip.conf.php
     }
 }
 
-global $_configuration;
 if ($check_ip) {
-    $security_key = $_configuration['security_key'];
+    $security_key = api_get_env_variable('kernel.secret');
 } else {
-    $security_key = $ip.$_configuration['security_key'];
+    $security_key = $ip.api_get_env_variable('kernel.secret');;
     //error_log($secret_key.'-'.$security_key);
 }
 /*
  * End WSHelperVerifyKey.
  */
-$params['secret_key'] = sha1($security_key);
+$params['secret_key'] = hash('sha512', $security_key);
 
 // Registration soap wsdl
 $wsUrl = api_get_path(WEB_CODE_PATH).'webservices/registration.soap.php?wsdl';

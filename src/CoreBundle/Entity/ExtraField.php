@@ -104,13 +104,13 @@ class ExtraField
     #[ORM\Column(name: 'field_order', type: 'integer', nullable: true, unique: false)]
     protected ?int $fieldOrder = null;
     #[ORM\Column(name: 'visible_to_self', type: 'boolean', nullable: true, unique: false)]
-    protected ?bool $visibleToSelf;
+    protected ?bool $visibleToSelf = false;
     #[ORM\Column(name: 'visible_to_others', type: 'boolean', nullable: true, unique: false)]
-    protected ?bool $visibleToOthers;
+    protected ?bool $visibleToOthers = false;
     #[ORM\Column(name: 'changeable', type: 'boolean', nullable: true, unique: false)]
-    protected ?bool $changeable = null;
+    protected ?bool $changeable = false;
     #[ORM\Column(name: 'filter', type: 'boolean', nullable: true, unique: false)]
-    protected ?bool $filter = null;
+    protected ?bool $filter = false;
 
     /**
      * @var Collection<int, ExtraFieldOptions>

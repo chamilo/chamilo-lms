@@ -118,3 +118,4 @@ imports:
     - {resource: ../src/CoreBundle/Resources/config/services.yml}
     - {resource: ../src/LtiBundle/Resources/config/services.yml}
     - { resource: ./authentication.yaml }
+    - {resource: ./hosting_limits.yml}

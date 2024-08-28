@@ -7,9 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 class AccessUrlRepository extends ResourceRepository
@@ -35,5 +37,22 @@ class AccessUrlRepository extends ResourceRepository
         } catch (NonUniqueResultException|NoResultException $e) {
             return 0;
         }
+    }
+
+    /**
+     * @return array<int, AccessUrl>
+     */
+    public function findByUser(User $user): array
+    {
+        /** @var QueryBuilder $qb */
+        $qb = $this->createQueryBuilder('url');
+
+        return $qb
+            ->join('url.users', 'users')
+            ->where($qb->expr()->eq('users.user', ':user'))
+            ->setParameter('user', $user->getId())
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

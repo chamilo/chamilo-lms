@@ -66,6 +66,8 @@
         />
       </div>
     </form>
+
+    <ExternalLoginButtons />
   </div>
 </template>
 
@@ -77,6 +79,7 @@ import Password from "primevue/password"
 import InputSwitch from "primevue/inputswitch"
 import { useI18n } from "vue-i18n"
 import { useLogin } from "../composables/auth/login"
+import ExternalLoginButtons from "./login/LoginExternalButtons.vue"
 
 const { t } = useI18n()
 

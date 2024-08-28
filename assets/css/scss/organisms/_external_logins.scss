@@ -1,0 +1,15 @@
+.external-logins {
+  @apply flex flex-col gap-2 items-center;
+
+  &__divider {
+    @apply w-60 mx-auto uppercase;
+  }
+
+  &__button-list {
+    @apply space-y-4;
+  }
+
+  &__button {
+    @apply border border-gray-25 bg-white rounded-lg text-gray-90 py-4 px-12 block font-semibold;
+  }
+}

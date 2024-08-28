@@ -1,0 +1,55 @@
+# authentication configuration for each Access URL
+# Access URL Id / authentication method / params
+parameters:
+    authentication:
+        default:
+            generic:
+                enabled: false
+                title: 'External'
+                client_id: ''
+                client_secret: ''
+                provider_options:
+                    urlAuthorize: ''
+                    urlAccessToken: ''
+                    urlResourceOwnerDetails: ''
+                    responseResourceOwnerId: 'sub'
+                    # accessTokenMethod: 'POST'
+                    # responseError: 'error'
+                    # responseCode: ''
+                    # scopeSeparator: ' '
+                    scopes:
+                        - openid
+                allow_create_new_users: true
+                allow_update_user_info: false
+                resource_owner_username_field: null
+                resource_owner_firstname_field: null
+                resource_owner_lastname_field: null
+                resource_owner_email_field: null
+                resource_owner_status_field: null
+                resource_owner_teacher_status_field: null
+                resource_owner_sessadmin_status_field: null
+                resource_owner_hr_status_field: null
+                resource_owner_status_status_field: null
+                resource_owner_anon_status_field: null
+                resource_owner_urls_field: null
+
+            facebook:
+                enabled: false
+                title: 'Facebook'
+                client_id: ''
+                client_secret: ''
+                graph_api_version: 'v20.0'
+                redirect_params: { }
+
+            keycloak:
+                enabled: false
+                title: 'Keycloak'
+                client_id: ''
+                client_secret: ''
+                auth_server_url: ''
+                realm: ''
+                version: ''
+                encryption_algorithm: null
+                encryption_key_path: null
+                encryption_key: null
+                redirect_params: { }

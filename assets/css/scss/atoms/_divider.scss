@@ -12,7 +12,7 @@
 
   &[aria-orientation="horizontal"] {
     @apply before:absolute before:block before:left-0 before:w-full before:top-1/2 before:content-[""] before:border-t before:border-solid before:border-gray-25
-      flex w-full relative items-center my-4 px-2;
+      flex relative items-center my-4 px-2;
 
     div {
       @apply first:px-2;

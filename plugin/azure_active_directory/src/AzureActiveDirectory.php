@@ -23,6 +23,7 @@ class AzureActiveDirectory extends Plugin
     public const SETTING_GROUP_ID_ADMIN = 'group_id_admin';
     public const SETTING_GROUP_ID_SESSION_ADMIN = 'group_id_session_admin';
     public const SETTING_GROUP_ID_TEACHER = 'group_id_teacher';
+    public const SETTING_EXISTING_USER_VERIFICATION_ORDER = 'existing_user_verification_order';
 
     public const URL_TYPE_AUTHORIZE = 'login';
     public const URL_TYPE_LOGOUT = 'logout';
@@ -48,6 +49,7 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_GROUP_ID_ADMIN => 'text',
             self::SETTING_GROUP_ID_SESSION_ADMIN => 'text',
             self::SETTING_GROUP_ID_TEACHER => 'text',
+            self::SETTING_EXISTING_USER_VERIFICATION_ORDER => 'text',
         ];
 
         parent::__construct('2.3', 'Angel Fernando Quiroz Campos, Yannick Warnier', $settings);
@@ -130,5 +132,60 @@ class AzureActiveDirectory extends Plugin
             $this->get_lang('AzureUid'),
             ''
         );
+    }
+
+    public function getExistingUserVerificationOrder(): array
+    {
+        $defaultOrder = [1, 2, 3];
+
+        $settingValue = $this->get(self::SETTING_EXISTING_USER_VERIFICATION_ORDER);
+        $selectedOrder = array_filter(
+            array_map(
+                'trim',
+                explode(',', $settingValue)
+            )
+        );
+        $selectedOrder = array_map('intval', $selectedOrder);
+        $selectedOrder = array_filter(
+            $selectedOrder,
+            function ($position) use ($defaultOrder): bool {
+                return in_array($position, $defaultOrder);
+            }
+        );
+
+        if ($selectedOrder) {
+            return $selectedOrder;
+        }
+
+        return $defaultOrder;
+    }
+
+    public function getUserIdByVerificationOrder(array $azureUserData): ?int
+    {
+        $selectedOrder = $this->getExistingUserVerificationOrder();
+
+        $extraFieldValue = new ExtraFieldValue('user');
+        $positionsAndFields = [
+            1 => $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                AzureActiveDirectory::EXTRA_FIELD_ORGANISATION_EMAIL,
+                $azureUserData['mail']
+            ),
+            2 => $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                AzureActiveDirectory::EXTRA_FIELD_AZURE_ID,
+                $azureUserData['mailNickname']
+            ),
+            3 => $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                AzureActiveDirectory::EXTRA_FIELD_AZURE_UID,
+                $azureUserData['objectId']
+            ),
+        ];
+
+        foreach ($selectedOrder as $position) {
+            if (!empty($positionsAndFields[$position]) && isset($positionsAndFields[$position]['item_id'])) {
+                return (int) $positionsAndFields[$position]['item_id'];
+            }
+        }
+
+        return null;
     }
 }

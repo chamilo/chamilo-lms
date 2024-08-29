@@ -22,6 +22,10 @@ $strings['management_login_enable_help'] = 'Désactiver le login de Chamilo et p
     .'Vous devez, pour cela, copier le fichier <code>/plugin/azure_active_directory/layout/login_form.tpl</code> dans le répertoire <code>/main/template/overrides/layout/</code>.';
 $strings['management_login_name'] = 'Nom du login de gestion';
 $strings['management_login_name_help'] = 'Le nom par défaut est "Login de gestion".';
+$strings['existing_user_verification_order'] = 'Existing user verification order';
+$strings['existing_user_verification_order_help'] = 'This value indicates the order in which the user will be searched in Chamilo to verify its existence. '
+    .'By default is <code>1, 2, 3</code>.'
+    .'<ol><li>EXTRA_FIELD_ORGANISATION_EMAIL (<code>mail</code>)</li><li>EXTRA_FIELD_AZURE_ID (<code>mailNickname</code>)</li><li>EXTRA_FIELD_AZURE_UID (<code>id</code> ou <code>objectId</code>)</li></ol>';
 $strings['OrganisationEmail'] = 'E-mail professionnel';
 $strings['AzureId'] = 'ID Azure (mailNickname)';
 $strings['AzureUid'] = 'Azure UID (internal ID)';

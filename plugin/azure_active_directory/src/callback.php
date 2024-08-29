@@ -85,42 +85,7 @@ try {
         throw new Exception('The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
     }
 
-    $extraFieldValue = new ExtraFieldValue('user');
-    $organisationValue = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
-        AzureActiveDirectory::EXTRA_FIELD_ORGANISATION_EMAIL,
-        $me['mail']
-    );
-    $azureValue = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
-        AzureActiveDirectory::EXTRA_FIELD_AZURE_ID,
-        $me['mailNickname']
-    );
-    $uidValue = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
-        AzureActiveDirectory::EXTRA_FIELD_AZURE_UID,
-        $me['objectId']
-    );
-
-    $userId = null;
-    // Get the user ID (if any) from the EXTRA_FIELD_ORGANISATION_EMAIL extra
-    // field
-    if (!empty($organisationValue) && isset($organisationValue['item_id'])) {
-        $userId = $organisationValue['item_id'];
-    }
-
-    if (empty($userId)) {
-        // If the previous step didn't work, get the user ID from
-        // EXTRA_FIELD_AZURE_ID
-        if (!empty($azureValue) && isset($azureValue['item_id'])) {
-            $userId = $azureValue['item_id'];
-        }
-    }
-
-    if (empty($userId)) {
-        // If the previous step didn't work, get the user ID from
-        // EXTRA_FIELD_AZURE_UID
-        if (!empty($uidValue) && isset($uidValue['item_id'])) {
-            $userId = $uidValue['item_id'];
-        }
-    }
+    $userId = $plugin->getUserIdByVerificationOrder($me);
 
     if (empty($userId)) {
         // If we didn't find the user

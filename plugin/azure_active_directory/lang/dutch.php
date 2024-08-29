@@ -22,6 +22,10 @@ $strings['management_login_enable_help'] = 'Schakel de chamilo-login uit en scha
     .'U zult moeten kopiëren de <code>/plugin/azure_active_directory/layout/login_form.tpl</code> bestand in het <code>/main/template/overrides/layout/</code> dossier.';
 $strings['management_login_name'] = 'Naam voor de beheeraanmelding';
 $strings['management_login_name_help'] = 'De standaardinstelling is "Beheer login".';
+$strings['existing_user_verification_order'] = 'Existing user verification order';
+$strings['existing_user_verification_order_help'] = 'This value indicates the order in which the user will be searched in Chamilo to verify its existence. '
+    .'By default is <code>1, 2, 3</code>.'
+    .'<ol><li>EXTRA_FIELD_ORGANISATION_EMAIL (<code>mail</code>)</li><li>EXTRA_FIELD_AZURE_ID (<code>mailNickname</code>)</li><li>EXTRA_FIELD_AZURE_UID (<code>id</code> of <code>objectId</code>)</li></ol>';
 $strings['OrganisationEmail'] = 'Organisatie e-mail';
 $strings['AzureId'] = 'Azure ID (mailNickname)';
 $strings['AzureUid'] = 'Azure UID (internal ID)';

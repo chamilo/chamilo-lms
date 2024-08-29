@@ -29,6 +29,7 @@ use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -172,9 +173,9 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     #[ORM\Column(name: 'template', type: 'boolean', nullable: false)]
     protected bool $template;
 
-    #[ORM\OneToMany(mappedBy: 'document', targetEntity: GradebookCategory::class)]
     #[Groups(['document:read'])]
-    protected Collection $gradebookCategories;
+    #[ORM\OneToMany(mappedBy: 'document', targetEntity: GradebookCategory::class)]
+    private Collection $gradebookCategories;
 
     public function __construct()
     {
@@ -276,5 +277,27 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     public function getGradebookCategories(): Collection
     {
         return $this->gradebookCategories;
+    }
+
+    public function addGradebookCategory(GradebookCategory $gradebookCategory): static
+    {
+        if (!$this->gradebookCategories->contains($gradebookCategory)) {
+            $this->gradebookCategories->add($gradebookCategory);
+            $gradebookCategory->setDocument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGradebookCategory(GradebookCategory $gradebookCategory): static
+    {
+        if ($this->gradebookCategories->removeElement($gradebookCategory)) {
+            // set the owning side to null (unless already changed)
+            if ($gradebookCategory->getDocument() === $this) {
+                $gradebookCategory->setDocument(null);
+            }
+        }
+
+        return $this;
     }
 }

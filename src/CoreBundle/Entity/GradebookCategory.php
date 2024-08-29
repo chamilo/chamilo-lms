@@ -112,10 +112,10 @@ class GradebookCategory
     #[ORM\Column(name: 'certif_min_score', type: 'integer', nullable: true)]
     protected ?int $certifMinScore = null;
 
-    #[ORM\ManyToOne(inversedBy: 'gradebookCategory', targetEntity: CDocument::class)]
-    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: 'set null')]
     #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
-    protected ?CDocument $document = null;
+    #[ORM\ManyToOne(targetEntity: CDocument::class, inversedBy: 'gradebookCategories')]
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: 'set null')]
+    private ?CDocument $document = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
@@ -242,26 +242,14 @@ class GradebookCategory
         return $this->certifMinScore;
     }
 
-    /**
-     * Set documentId.
-     *
-     * @param mixed $document
-     *
-     * @return GradebookCategory
-     */
-    public function setDocument($document)
+    public function setDocument(?CDocument $document): static
     {
         $this->document = $document;
 
         return $this;
     }
 
-    /**
-     * Get documentId.
-     *
-     * @return CDocument|null
-     */
-    public function getDocument()
+    public function getDocument(): ?CDocument
     {
         return $this->document;
     }

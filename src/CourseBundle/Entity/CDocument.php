@@ -171,9 +171,9 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     #[ORM\Column(name: 'template', type: 'boolean', nullable: false)]
     protected bool $template;
 
-    #[ORM\OneToOne(mappedBy: 'document', targetEntity: GradebookCategory::class)]
+    #[ORM\OneToMany(mappedBy: 'document', targetEntity: GradebookCategory::class)]
     #[Groups(['document:read'])]
-    protected ?GradebookCategory $gradebookCategory = null;
+    protected Collection $gradebookCategories = null;
 
     public function __construct()
     {

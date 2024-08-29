@@ -112,7 +112,7 @@ class GradebookCategory
     #[ORM\Column(name: 'certif_min_score', type: 'integer', nullable: true)]
     protected ?int $certifMinScore = null;
 
-    #[ORM\OneToOne(inversedBy: 'gradebookCategory', targetEntity: CDocument::class)]
+    #[ORM\ManyToOne(inversedBy: 'gradebookCategory', targetEntity: CDocument::class)]
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: 'set null')]
     #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
     protected ?CDocument $document = null;

@@ -66,10 +66,10 @@ final class Version20240826220000 extends AbstractMigrationChamilo
 
             $this->addSql('DROP INDEX IF EXISTS IDX_D1BB19421F2B6144 ON justification_document_rel_users;');
             $this->addSql('DROP INDEX IF EXISTS IDX_D1BB1942A76ED395 ON justification_document_rel_users;');
-        }
 
-        $this->addSql('CREATE INDEX IDX_D1BB19421F2B6144 ON justification_document_rel_users (justification_document_id);');
-        $this->addSql('CREATE INDEX IDX_D1BB1942A76ED395 ON justification_document_rel_users (user_id);');
+            $this->addSql('CREATE INDEX IDX_D1BB19421F2B6144 ON justification_document_rel_users (justification_document_id);');
+            $this->addSql('CREATE INDEX IDX_D1BB1942A76ED395 ON justification_document_rel_users (user_id);');
+        }
 
         $this->addSql('
             ALTER TABLE justification_document_rel_users

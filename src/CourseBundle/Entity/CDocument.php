@@ -270,8 +270,11 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
         return $this->setTitle($name);
     }
 
-    public function getGradebookCategory(): ?GradebookCategory
+    /**
+     * @return Collection<int, GradebookCategory>
+     */
+    public function getGradebookCategories(): Collection
     {
-        return $this->gradebookCategory;
+        return $this->gradebookCategories;
     }
 }

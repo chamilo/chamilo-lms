@@ -28,6 +28,7 @@ use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -173,7 +174,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
 
     #[ORM\OneToMany(mappedBy: 'document', targetEntity: GradebookCategory::class)]
     #[Groups(['document:read'])]
-    protected Collection $gradebookCategories = null;
+    protected Collection $gradebookCategories;
 
     public function __construct()
     {
@@ -181,6 +182,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
         $this->filetype = 'folder';
         $this->readonly = false;
         $this->template = false;
+        $this->gradebookCategories = new ArrayCollection();
     }
 
     public function __toString(): string

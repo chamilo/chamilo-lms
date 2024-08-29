@@ -27,7 +27,7 @@ final class Version20240811221950 extends AbstractMigrationChamilo
         $this->dropIndexIfExists($schema, 'course_rel_user_catalogue', 'IDX_79CA412E91D79BD3');
 
         if ($this->indexExists($schema, 'gradebook_category', 'FK_96A4C705C33F7837')) {
-            $this->addSql('ALTER TABLE gradebook_category DROP INDEX FK_96A4C705C33F7837, ADD UNIQUE INDEX UNIQ_96A4C705C33F7837 (document_id);');
+            $this->addSql('ALTER TABLE gradebook_category DROP INDEX FK_96A4C705C33F7837, ADD INDEX IDX_96A4C705C33F7837 (document_id);');
         }
 
         if ($this->columnExists($schema, 'notification_event', 'title')

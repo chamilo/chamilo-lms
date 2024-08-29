@@ -24,26 +24,33 @@ final class Version20240811221900 extends AbstractMigrationChamilo
 
         $this->addSql('DROP INDEX course ON c_blog_attachment;');
         $this->addSql('ALTER TABLE c_blog_attachment DROP id, DROP c_id, DROP post_id, DROP comment_id, CHANGE blog_id blog_id INT DEFAULT NULL;');
+        $this->addSql('DELETE FROM c_blog_attachment WHERE blog_id NOT IN (SELECT iid FROM c_blog);');
         $this->addSql('ALTER TABLE c_blog_attachment ADD CONSTRAINT FK_E769AADCDAE07E97 FOREIGN KEY (blog_id) REFERENCES c_blog (iid) ON DELETE CASCADE;');
         $this->addSql('CREATE INDEX IDX_E769AADCDAE07E97 ON c_blog_attachment (blog_id);');
 
         $this->addSql('DROP INDEX course ON c_blog_rating;');
         $this->addSql('ALTER TABLE c_blog_rating DROP rating_id, DROP c_id, DROP item_id, CHANGE blog_id blog_id INT DEFAULT NULL, CHANGE user_id user_id INT DEFAULT NULL;');
+        $this->addSql('DELETE FROM c_blog_rating WHERE blog_id NOT IN (SELECT iid FROM c_blog);');
         $this->addSql('ALTER TABLE c_blog_rating ADD CONSTRAINT FK_D4E30760DAE07E97 FOREIGN KEY (blog_id) REFERENCES c_blog (iid) ON DELETE CASCADE;');
+        $this->addSql('DELETE FROM c_blog_rating WHERE user_id NOT IN (SELECT id FROM user);');
         $this->addSql('ALTER TABLE c_blog_rating ADD CONSTRAINT FK_D4E30760A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;');
         $this->addSql('CREATE INDEX IDX_D4E30760DAE07E97 ON c_blog_rating (blog_id);');
         $this->addSql('CREATE INDEX IDX_D4E30760A76ED395 ON c_blog_rating (user_id);');
 
         $this->addSql('DROP INDEX course ON c_blog_post;');
         $this->addSql('ALTER TABLE c_blog_post DROP c_id, DROP post_id, CHANGE blog_id blog_id INT DEFAULT NULL, CHANGE author_id author_id INT DEFAULT NULL;');
+        $this->addSql('DELETE FROM c_blog_post WHERE author_id NOT IN (SELECT id FROM user);');
         $this->addSql('ALTER TABLE c_blog_post ADD CONSTRAINT FK_B6FD68A3F675F31B FOREIGN KEY (author_id) REFERENCES user (id) ON DELETE CASCADE;');
+        $this->addSql('DELETE FROM c_blog_post WHERE blog_id NOT IN (SELECT iid FROM c_blog);');
         $this->addSql('ALTER TABLE c_blog_post ADD CONSTRAINT FK_B6FD68A3DAE07E97 FOREIGN KEY (blog_id) REFERENCES c_blog (iid) ON DELETE CASCADE;');
         $this->addSql('CREATE INDEX IDX_B6FD68A3F675F31B ON c_blog_post (author_id);');
         $this->addSql('CREATE INDEX IDX_B6FD68A3DAE07E97 ON c_blog_post (blog_id);');
 
         $this->addSql('DROP INDEX course ON c_blog_rel_user;');
         $this->addSql('ALTER TABLE c_blog_rel_user DROP c_id, CHANGE blog_id blog_id INT DEFAULT NULL, CHANGE user_id user_id INT DEFAULT NULL;');
+        $this->addSql('DELETE FROM c_blog_rel_user WHERE blog_id NOT IN (SELECT iid FROM c_blog);');
         $this->addSql('ALTER TABLE c_blog_rel_user ADD CONSTRAINT FK_B55D851BDAE07E97 FOREIGN KEY (blog_id) REFERENCES c_blog (iid) ON DELETE CASCADE;');
+        $this->addSql('DELETE FROM c_blog_rel_user WHERE user_id NOT IN (SELECT id FROM user);');
         $this->addSql('ALTER TABLE c_blog_rel_user ADD CONSTRAINT FK_B55D851BA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;');
         $this->addSql('CREATE INDEX IDX_B55D851BDAE07E97 ON c_blog_rel_user (blog_id);');
         $this->addSql('CREATE INDEX IDX_B55D851BA76ED395 ON c_blog_rel_user (user_id);');
@@ -52,8 +59,11 @@ final class Version20240811221900 extends AbstractMigrationChamilo
         $this->addSql('DROP INDEX user ON c_blog_task_rel_user;');
         $this->addSql('DROP INDEX task ON c_blog_task_rel_user;');
         $this->addSql('ALTER TABLE c_blog_task_rel_user DROP c_id, CHANGE blog_id blog_id INT DEFAULT NULL, CHANGE user_id user_id INT DEFAULT NULL, CHANGE task_id task_id INT DEFAULT NULL;');
+        $this->addSql('DELETE FROM c_blog_task_rel_user WHERE task_id NOT IN (SELECT iid FROM c_blog_task);');
         $this->addSql('ALTER TABLE c_blog_task_rel_user ADD CONSTRAINT FK_FD8B3C738DB60186 FOREIGN KEY (task_id) REFERENCES c_blog_task (iid) ON DELETE CASCADE;');
+        $this->addSql('DELETE FROM c_blog_task_rel_user WHERE blog_id NOT IN (SELECT iid FROM c_blog);');
         $this->addSql('ALTER TABLE c_blog_task_rel_user ADD CONSTRAINT FK_FD8B3C73DAE07E97 FOREIGN KEY (blog_id) REFERENCES c_blog (iid) ON DELETE CASCADE;');
+        $this->addSql('DELETE FROM c_blog_task_rel_user WHERE user_id NOT IN (SELECT id FROM user);');
         $this->addSql('ALTER TABLE c_blog_task_rel_user ADD CONSTRAINT FK_FD8B3C73A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;');
         $this->addSql('CREATE INDEX IDX_FD8B3C73DAE07E97 ON c_blog_task_rel_user (blog_id);');
         $this->addSql('CREATE INDEX IDX_FD8B3C738DB60186 ON c_blog_task_rel_user (task_id);');
@@ -68,12 +78,15 @@ final class Version20240811221900 extends AbstractMigrationChamilo
 
         $this->addSql('DROP INDEX course ON c_blog_task;');
         $this->addSql('ALTER TABLE c_blog_task DROP c_id, CHANGE blog_id blog_id INT DEFAULT NULL;');
+        $this->addSql('DELETE FROM c_blog_task WHERE blog_id NOT IN (SELECT iid FROM c_blog);');
         $this->addSql('ALTER TABLE c_blog_task ADD CONSTRAINT FK_BE09DF0BDAE07E97 FOREIGN KEY (blog_id) REFERENCES c_blog (iid) ON DELETE CASCADE;');
         $this->addSql('CREATE INDEX IDX_BE09DF0BDAE07E97 ON c_blog_task (blog_id);');
 
         $this->addSql('DROP INDEX course ON c_blog_comment;');
         $this->addSql('ALTER TABLE c_blog_comment DROP c_id, DROP post_id, DROP task_id, DROP parent_comment_id, CHANGE author_id author_id INT DEFAULT NULL, CHANGE blog_id blog_id INT DEFAULT NULL;');
+        $this->addSql('DELETE FROM c_blog_comment WHERE author_id NOT IN (SELECT id FROM user);');
         $this->addSql('ALTER TABLE c_blog_comment ADD CONSTRAINT FK_CAA18F1F675F31B FOREIGN KEY (author_id) REFERENCES user (id) ON DELETE CASCADE;');
+        $this->addSql('DELETE FROM c_blog_comment WHERE blog_id NOT IN (SELECT iid FROM c_blog);');
         $this->addSql('ALTER TABLE c_blog_comment ADD CONSTRAINT FK_CAA18F1DAE07E97 FOREIGN KEY (blog_id) REFERENCES c_blog (iid) ON DELETE CASCADE;');
         $this->addSql('CREATE INDEX IDX_CAA18F1F675F31B ON c_blog_comment (author_id);');
         $this->addSql('CREATE INDEX IDX_CAA18F1DAE07E97 ON c_blog_comment (blog_id);');

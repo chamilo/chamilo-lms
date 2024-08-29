@@ -22,6 +22,9 @@ exit;
 // Change this to the absolute path to chamilo root folder if you move the script out of tests/scripts
 $chamiloRoot = __DIR__.'/../../public';
 
+// Change this to the absolute path to the folder of the csv files (by default it is in the same folder as the script)
+$CSVFilesPath = '.';
+
 // Set to true in order to get a trace of changes made by this script
 $debug = true;
 
@@ -104,7 +107,7 @@ if ($firstAdmin) {
 $accessUrls = api_get_access_urls(0, 100000, 'id');
 foreach ($accessUrls as $accessUrl) {
     $accessUrlId = $accessUrl['id'];
-    $filename = $chamiloRoot . "/../tests/scripts/url_" . $accessUrlId . "_synchroUsers.csv";
+    $filename = $CSVFilesPath . "/url_" . $accessUrlId . "_synchroUsers.csv";
 
     if (!file_exists($filename)) {
         if ($debug) {
@@ -135,6 +138,7 @@ foreach ($accessUrls as $accessUrl) {
         'active' => 'setActive',
         'language' => 'setLocale',
         'password' => 'setPlainPassword'
+        'authsource' => 'setAuthSource'
     ];
 
     // Create new user accounts found in the CSV and update the existing ones, re-enabling if necessary

@@ -18,8 +18,10 @@ final class Version20240811221980 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE notification_event_rel_user DROP FOREIGN KEY IF EXISTS FK_9F7995A671F7E88B;');
-        $this->addSql('ALTER TABLE notification_event_rel_user DROP FOREIGN KEY IF EXISTS FK_9F7995A6A76ED395;');
+        if ($schema->hasTable('notification_event_rel_user')) {
+            $this->addSql('ALTER TABLE notification_event_rel_user DROP FOREIGN KEY IF EXISTS FK_9F7995A671F7E88B;');
+            $this->addSql('ALTER TABLE notification_event_rel_user DROP FOREIGN KEY IF EXISTS FK_9F7995A6A76ED395;');
+        }
 
         $this->addSql('DROP TABLE IF EXISTS notification_event_rel_user;');
 
@@ -44,7 +46,9 @@ final class Version20240811221980 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE notification_event_rel_user ADD CONSTRAINT FK_9F7995A671F7E88B FOREIGN KEY (event_id) REFERENCES notification_event (id);');
         $this->addSql('ALTER TABLE notification_event_rel_user ADD CONSTRAINT FK_9F7995A6A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
 
-        $this->addSql('ALTER TABLE justification_document_rel_users CHANGE justification_document_id justification_document_id INT DEFAULT NULL;');
+        if ($schema->hasTable('justification_document_rel_users')) {
+            $this->addSql('ALTER TABLE justification_document_rel_users CHANGE justification_document_id justification_document_id INT DEFAULT NULL;');
+        }
 
         $this->addSql('ALTER TABLE lti_external_tool DROP INDEX IF EXISTS FK_DB0E04E41BAD783F, ADD UNIQUE INDEX UNIQ_DB0E04E41BAD783F (resource_node_id);');
         $this->addSql('ALTER TABLE lti_external_tool DROP FOREIGN KEY IF EXISTS FK_DB0E04E482F80D8B;');

@@ -35,39 +35,52 @@ if ($debug) {
     Debug::enable();
 }
 
-$kernel = new Chamilo\Kernel($env, $debug);
-// Loading Request from Sonata. In order to use Sonata Pages Bundle.
-$request = Request::createFromGlobals();
-// This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
-// and not called from a symfony controller from public/
-$request->request->set('load_legacy', true);
-$currentBaseUrl = $request->getBaseUrl();
-
-if (empty($currentBaseUrl)) {
-    $currentBaseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
-}
-
-$response = $kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
-
-$container = $kernel->getContainer();
-$router = $container->get('router');
-$context = $router->getContext();
-$router->setContext($context);
-
-$context = Container::getRouter()->getContext();
-
-$isCli =  'cli' === php_sapi_name();
-$baseUrl = null;
+$isCli = php_sapi_name() === 'cli';
 if ($isCli) {
+
+    $kernel = new Chamilo\Kernel($env, $debug);
+    $kernel->boot();
+
+    if (!$kernel->isInstalled()) {
+        throw new Exception('Chamilo is not installed');
+    }
+
+    $container = $kernel->getContainer();
+    $router = $container->get('router');
+    $context = $router->getContext();
+    $router->setContext($context);
+    Database::setManager($container->get('doctrine.orm.entity_manager'));
+
     $cliOptions = getopt('', ['url:']);
     if (!empty($cliOptions['url'])) {
         $baseUrl = $cliOptions['url'];
+        $context->setBaseUrl($baseUrl);
     }
-}
 
-if ($isCli && $baseUrl) {
-    $context->setBaseUrl($baseUrl);
+    echo "CLI mode: EntityManager initialized.\n";
+
 } else {
+    $kernel = new Chamilo\Kernel($env, $debug);
+    // Loading Request from Sonata. In order to use Sonata Pages Bundle.
+    $request = Request::createFromGlobals();
+    // This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
+    // and not called from a symfony controller from public/
+    $request->request->set('load_legacy', true);
+    $currentBaseUrl = $request->getBaseUrl();
+
+    if (empty($currentBaseUrl)) {
+        $currentBaseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
+    }
+
+    $response = $kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
+
+    $container = $kernel->getContainer();
+    $router = $container->get('router');
+    $context = $router->getContext();
+    $router->setContext($context);
+
+    $context = Container::getRouter()->getContext();
+
     $currentUri = $request->getRequestUri();
 
     $fullUrl = $currentBaseUrl . $currentUri;
@@ -92,53 +105,34 @@ if ($isCli && $baseUrl) {
     }
 
     $context->setBaseUrl($newBaseUrl);
-}
 
-try {
+    try {
+        // Do not over-use this variable. It is only for this script's local use.
+        $libraryPath = __DIR__.'/lib/';
+        $container = $kernel->getContainer();
 
-    if (!$kernel->isInstalled()) {
-        throw new Exception('Chamilo is not installed');
-    }
+        // Symfony uses request_stack now
+        $container->get('request_stack')->push($request);
+        $container->get('translator')->setLocale($request->getLocale());
 
-    // Do not over-use this variable. It is only for this script's local use.
-    $libraryPath = __DIR__.'/lib/';
-    $container = $kernel->getContainer();
+        /** @var FlashBag $flashBag */
+        $flashBag = $request->getSession()->getFlashBag();
+        $saveFlashBag = !empty($flashBag->keys()) ? $flashBag->all() : null;
 
-    // Symfony uses request_stack now
-    $container->get('request_stack')->push($request);
-    $container->get('translator')->setLocale($request->getLocale());
-
-    /** @var FlashBag $flashBag */
-    $flashBag = $request->getSession()->getFlashBag();
-    $saveFlashBag = !empty($flashBag->keys()) ? $flashBag->all() : null;
-
-    if (!empty($saveFlashBag)) {
-        foreach ($saveFlashBag as $typeMessage => $messageList) {
-            foreach ($messageList as $message) {
-                Container::getSession()->getFlashBag()->add($typeMessage, $message);
+        if (!empty($saveFlashBag)) {
+            foreach ($saveFlashBag as $typeMessage => $messageList) {
+                foreach ($messageList as $message) {
+                    Container::getSession()->getFlashBag()->add($typeMessage, $message);
+                }
             }
         }
-    }
 
-    // Connect Chamilo with the Symfony container
-    // Container::setContainer($container);
-    // Container::setLegacyServices($container);
-
-    // The code below is not needed. The connections is now made in the file:
-    // src/CoreBundle/EventListener/LegacyListener.php
-    // This is called when when doing the $kernel->handle
-    $charset = 'UTF-8';
-    ini_set('log_errors', '1');
-    $this_section = SECTION_GLOBAL;
-    //Default quota for the course documents folder
-    /*$default_quota = api_get_setting('default_document_quotum');
-    //Just in case the setting is not correctly set
-    if (empty($default_quota)) {
-        $default_quota = 100000000;
+        $charset = 'UTF-8';
+        ini_set('log_errors', '1');
+        $this_section = SECTION_GLOBAL;
+        define('DEFAULT_DOCUMENT_QUOTA', 100000000);
+    } catch (Exception $e) {
+        $controller = new ExceptionController();
+        $controller->show($e);
     }
-    define('DEFAULT_DOCUMENT_QUOTA', $default_quota);*/
-    define('DEFAULT_DOCUMENT_QUOTA', 100000000);
-} catch (Exception $e) {
-    $controller = new ExceptionController();
-    $controller->show($e);
 }

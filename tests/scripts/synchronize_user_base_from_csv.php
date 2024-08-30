@@ -137,7 +137,7 @@ foreach ($accessUrls as $accessUrl) {
         'expirydate' => 'setExpirationDate',
         'active' => 'setActive',
         'language' => 'setLocale',
-        'password' => 'setPlainPassword'
+        'password' => 'setPlainPassword',
         'authsource' => 'setAuthSource'
     ];
 

@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -2767,7 +2768,7 @@ class learnpath
             // then change the lp type to thread it as a normal Chamilo LP not a SCO.
             if (in_array(
                 $lp_item_type,
-                ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication']
+                ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication', 'survey']
             )
             ) {
                 $lp_type = CLp::LP_TYPE;
@@ -8015,6 +8016,27 @@ class learnpath
                 }
 
                 return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;
+            case TOOL_SURVEY:
+
+                $surveyId = (int) $id;
+                $repo = Container::getSurveyRepository();
+                if (!empty($surveyId)) {
+                    /** @var CSurvey $survey */
+                    $survey = $repo->find($surveyId);
+                    $autoSurveyLink = SurveyUtil::generateFillSurveyLink(
+                        $survey,
+                        'auto',
+                        api_get_course_entity($course_id),
+                        $session_id
+                    );
+                    $lpParams = [
+                        'lp_id' => $learningPathId,
+                        'lp_item_id' => $id_in_path,
+                        'origin' => 'learnpath',
+                    ];
+
+                    return $autoSurveyLink.'&'.http_build_query($lpParams).'&'.$extraParams;
+                }
         }
 
         return $link;

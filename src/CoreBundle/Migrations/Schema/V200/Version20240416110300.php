@@ -38,20 +38,20 @@ class Version20240416110300 extends AbstractMigrationChamilo
                     'value_type' => $field['value_type'],
                     'variable' => $field['variable'],
                     'display_text' => $field['display_text'],
-                    'visible_to_self' => $field['visible_to_self'] ?? 0,
-                    'visible_to_others' => $field['visible_to_others'] ?? 0,
-                    'changeable' => $field['changeable'] ?? 0,
-                    'filter' => $field['filter'] ?? 0,
+                    'visible_to_self' => isset($field['visible_to_self']) ? (int) $field['visible_to_self'] : 0,
+                    'visible_to_others' => isset($field['visible_to_others']) ? (int) $field['visible_to_others'] : 0,
+                    'changeable' => isset($field['changeable']) ? (int) $field['changeable'] : 0,
+                    'filter' => isset($field['filter']) ? (int) $field['filter'] : 0,
                     'created_at' => (new DateTime())->format('Y-m-d H:i:s'),
                 ]);
             } else {
                 // Update existing field
                 $this->connection->update('extra_field', [
                     'display_text' => $field['display_text'],
-                    'visible_to_self' => $field['visible_to_self'] ?? 0,
-                    'visible_to_others' => $field['visible_to_others'] ?? 0,
-                    'changeable' => $field['changeable'] ?? 0,
-                    'filter' => $field['filter'] ?? 0,
+                    'visible_to_self' => isset($field['visible_to_self']) ? (int) $field['visible_to_self'] : 0,
+                    'visible_to_others' => isset($field['visible_to_others']) ? (int) $field['visible_to_others'] : 0,
+                    'changeable' => isset($field['changeable']) ? (int) $field['changeable'] : 0,
+                    'filter' => isset($field['filter']) ? (int) $field['filter'] : 0,
                 ], [
                     'id' => $existingField['id'],
                 ]);

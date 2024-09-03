@@ -46,6 +46,8 @@ try {
 
 printf("%s - Number of users obtained %d".PHP_EOL, time(), count($azureUsersInfo));
 
+$existingUsers = [];
+
 /** @var array $user */
 foreach ($azureUsersInfo as $azureUserInfo) {
     try {
@@ -58,6 +60,8 @@ foreach ($azureUsersInfo as $azureUserInfo) {
             'id'
         );
 
+        $existingUsers[] = $userId;
+
         $userInfo = api_get_user_info($userId);
 
         printf("%s - UserInfo %s".PHP_EOL, time(), serialize($userInfo));
@@ -66,4 +70,26 @@ foreach ($azureUsersInfo as $azureUserInfo) {
 
         continue;
     }
+}
+
+if ('true' === $plugin->get(AzureActiveDirectory::SETTING_DEACTIVATE_NONEXISTING_USERS)) {
+    echo '----------------'.PHP_EOL;
+    printf('Trying deactivate non-existing users in Azure.'.PHP_EOL, time());
+
+    $users = UserManager::getRepository()->findByAuthSource('azure');
+    $userIdList = array_map(
+        function ($user) {
+            return $user->getId();
+        },
+        $users
+    );
+
+    $nonExistingUsers = array_diff($userIdList, $existingUsers);
+
+    UserManager::deactivate_users($nonExistingUsers);
+    printf(
+        "%d - Deactivated users IDs: %s".PHP_EOL,
+        time(),
+        implode(', ', $nonExistingUsers)
+    );
 }

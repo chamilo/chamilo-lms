@@ -44,3 +44,5 @@ $strings['group_id_teacher_help'] = 'De groeps-ID voor docenten. Indien leeg, wo
 $strings['additional_interaction_required'] = 'Er is aanvullende interactie vereist om u te authenticeren. Log rechtstreeks in via <a href="https://login.microsoftonline.com" target="_blank">uw authenticatiesysteem</a> en kom dan terug naar deze pagina om in te loggen.';
 $strings['tenant_id'] = 'Mandanten-ID';
 $strings['tenant_id_help'] = 'Required to run scripts.';
+$strings['deactivate_nonexisting_users'] = 'Deactivate non-existing users';
+$strings['deactivate_nonexisting_users_help'] = 'Compare registered users in Chamilo with those in Azure and deactivate accounts in Chamilo that do not exist in Azure.';

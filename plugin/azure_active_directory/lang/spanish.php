@@ -44,3 +44,5 @@ $strings['group_id_teacher_help'] = 'El ID de grupo para profesores. Si deja est
 $strings['additional_interaction_required'] = 'Alguna interacción adicional es necesaria para identificarlo/a. Por favor conéctese primero a través de su <a href="https://login.microsoftonline.com" target="_blank">sistema de autenticación</a>, luego regrese aquí para logearse.';
 $strings['tenant_id'] = 'Id. del inquilino';
 $strings['tenant_id_help'] = 'Necesario para ejecutar scripts.';
+$strings['deactivate_nonexisting_users'] = 'Desactivar usuarios no existentes';
+$strings['deactivate_nonexisting_users_help'] = 'Compara los usuarios registrados en Chamilo con los de Azure y desactiva las cuentas en Chamilo que no existan en Azure.';

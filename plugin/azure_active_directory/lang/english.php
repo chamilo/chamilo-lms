@@ -44,3 +44,5 @@ $strings['group_id_teacher_help'] = 'The group ID for teachers. If empty, no use
 $strings['additional_interaction_required'] = 'Some additional interaction is required to authenticate you. Please login directly through <a href="https://login.microsoftonline.com" target="_blank">your authentication system</a>, then come back to this page to login.';
 $strings['tenant_id'] = 'Tenant ID';
 $strings['tenant_id_help'] = 'Required to run scripts.';
+$strings['deactivate_nonexisting_users'] = 'Deactivate non-existing users';
+$strings['deactivate_nonexisting_users_help'] = 'Compare registered users in Chamilo with those in Azure and deactivate accounts in Chamilo that do not exist in Azure.';

@@ -27,6 +27,7 @@ class AzureActiveDirectory extends Plugin
     public const SETTING_GROUP_ID_TEACHER = 'group_id_teacher';
     public const SETTING_EXISTING_USER_VERIFICATION_ORDER = 'existing_user_verification_order';
     public const SETTING_TENANT_ID = 'tenant_id';
+    public const SETTING_DEACTIVATE_NONEXISTING_USERS = 'deactivate_nonexisting_users';
 
     public const URL_TYPE_AUTHORIZE = 'login';
     public const URL_TYPE_LOGOUT = 'logout';
@@ -55,6 +56,7 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_GROUP_ID_TEACHER => 'text',
             self::SETTING_EXISTING_USER_VERIFICATION_ORDER => 'text',
             self::SETTING_TENANT_ID => 'text',
+            self::SETTING_DEACTIVATE_NONEXISTING_USERS => 'boolean',
         ];
 
         parent::__construct('2.3', 'Angel Fernando Quiroz Campos, Yannick Warnier', $settings);

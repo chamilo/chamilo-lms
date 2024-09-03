@@ -42,3 +42,5 @@ $strings['group_id_session_admin_help'] = 'De groeps-ID voor sessiebeheerders. I
 $strings['group_id_teacher'] = 'Groeps-ID voor docenten';
 $strings['group_id_teacher_help'] = 'De groeps-ID voor docenten. Indien leeg, wordt er automatisch geen gebruiker aangemaakt als docent.';
 $strings['additional_interaction_required'] = 'Er is aanvullende interactie vereist om u te authenticeren. Log rechtstreeks in via <a href="https://login.microsoftonline.com" target="_blank">uw authenticatiesysteem</a> en kom dan terug naar deze pagina om in te loggen.';
+$strings['tenant_id'] = 'Mandanten-ID';
+$strings['tenant_id_help'] = 'Required to run scripts.';

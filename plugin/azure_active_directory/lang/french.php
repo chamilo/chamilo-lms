@@ -42,3 +42,5 @@ $strings['group_id_session_admin_help'] = 'The group ID for session admins. Si c
 $strings['group_id_teacher'] = 'ID du groupe enseignant';
 $strings['group_id_teacher_help'] = 'The group ID for teachers. Si ce champ est laissé vide, aucun utilisateur ne sera créé en tant qu\'enseignant.';
 $strings['additional_interaction_required'] = 'Une interaction supplémentaire est nécessaire pour vous authentifier. Veuillez vous connecter directement auprès de <a href="https://login.microsoftonline.com" target="_blank">votre système d\'authentification</a>, puis revenir ici pour vous connecter.';
+$strings['tenant_id'] = 'ID du client';
+$strings['tenant_id_help'] = 'Nécessaire pour exécuter des scripts.';

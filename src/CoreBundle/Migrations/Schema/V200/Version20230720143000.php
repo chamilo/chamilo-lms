@@ -53,7 +53,7 @@ final class Version20230720143000 extends AbstractMigrationChamilo
                 $path = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
             }
 
-            $baseDir = $rootPath.'/app/upload/'.$path;
+            $baseDir = $this->getUpdateRootPath().'/app/upload/'.$path;
 
             // Check if the base directory exists, if not, continue to the next user
             if (!is_dir($baseDir)) {

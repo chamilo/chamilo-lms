@@ -124,7 +124,7 @@ final class Version20201215072920 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/calendar/'.$attachmentPath;
+                $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/upload/calendar/'.$attachmentPath;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $eventAttachmentRepo, $attachment, $id, $fileName);
                 $this->entityManager->persist($attachment);

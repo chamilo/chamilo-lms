@@ -232,7 +232,6 @@ class Version20 extends AbstractMigrationChamilo
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_4B019DDB5E237E06 ON fos_group (name);');
         }
-        $this->addSql('ALTER TABLE fos_group CHANGE name title VARCHAR(255) NOT NULL');
 
         $table = $schema->getTable('fos_user_user_group');
         if ($table->hasForeignKey('FK_B3C77447A76ED395')) {

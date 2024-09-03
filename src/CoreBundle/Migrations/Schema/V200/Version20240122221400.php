@@ -37,7 +37,7 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         $this->executeVueTranslationsUpdate();
 
         // Delete the 'import' folder at the end of the process.
-        $this->deleteImportFolder();
+        //$this->deleteImportFolder();
     }
 
     private function updateAndGenerateSubLanguage(array $sublanguage): string
@@ -80,11 +80,11 @@ final class Version20240122221400 extends AbstractMigrationChamilo
     private function generatePoFileFromTrad4All(string $englishName, string $isocode): void
     {
         $kernel = $this->container->get('kernel');
-        $rootPath = $kernel->getProjectDir();
+        $updateRootPath = $this->getUpdateRootPath();
 
-        $langPath = $rootPath.'/var/translations/import/'.$englishName.'/trad4all.inc.php';
-        $destinationFilePath = $rootPath.'/var/translations/messages.'.$isocode.'.po';
-        $originalFile = $rootPath.'/var/translations/import/english/trad4all.inc.php';
+        $langPath = $updateRootPath.'/main/lang/'.$englishName.'/trad4all.inc.php';
+        $destinationFilePath = $kernel->getProjectDir().'/var/translations/messages.'.$isocode.'.po';
+        $originalFile = $updateRootPath.'/main/lang/english/trad4all.inc.php';
 
         if (!file_exists($langPath)) {
             error_log("Original file not found: $langPath");
@@ -159,10 +159,10 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new RuntimeException($process->getErrorOutput());
+            //throw new RuntimeException($process->getErrorOutput());
         }
 
-        echo $process->getOutput();
+        error_log($process->getOutput());
     }
 
     private function generateSublanguageCode(string $parentCode, string $variant, int $maxLength = 10): string

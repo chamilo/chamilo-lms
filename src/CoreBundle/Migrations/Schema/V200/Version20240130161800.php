@@ -43,7 +43,7 @@ class Version20240130161800 extends AbstractMigrationChamilo
 
             if ($courseRow) {
                 $directory = $courseRow['directory'];
-                $thumbPath = $rootPath.'/app/courses/'.$directory.'/upload/template_thumbnails/'.$imagePath;
+                $thumbPath = $this->getUpdateRootPath().'/app/courses/'.$directory.'/upload/template_thumbnails/'.$imagePath;
 
                 if (file_exists($thumbPath)) {
                     $mimeType = mime_content_type($thumbPath);

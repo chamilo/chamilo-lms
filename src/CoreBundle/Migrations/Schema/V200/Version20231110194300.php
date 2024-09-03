@@ -60,7 +60,7 @@ final class Version20231110194300 extends AbstractMigrationChamilo
 
         $defaulThemesFolders = $this->getDefaultThemeNames();
 
-        $sourceDir = $rootPath.'/app/Resources/public/css/themes';
+        $sourceDir = $this->getUpdateRootPath().'/app/Resources/public/css/themes';
 
         if (!is_dir($sourceDir)) {
             return;

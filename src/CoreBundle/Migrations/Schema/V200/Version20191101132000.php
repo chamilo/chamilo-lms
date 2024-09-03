@@ -149,7 +149,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
                         continue;
                     }
 
-                    $filePath = $rootPath.'/app/upload/course_category/'.$category['image'];
+                    $filePath = $this->getUpdateRootPath().'/app/upload/course_category/'.$category['image'];
                     error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                     if ($this->fileExists($filePath)) {
                         $fileName = basename($filePath);

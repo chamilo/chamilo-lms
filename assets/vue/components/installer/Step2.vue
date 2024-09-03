@@ -328,7 +328,7 @@
             icon="mdi mdi-page-next"
             name="step2_install"
             type="submit"
-            :disabled="installerData.stepData.installError"
+            :disabled="installerData.stepData.installError || installerData.isUpdateAvailable"
           />
         </div>
         <Button
@@ -336,8 +336,8 @@
           class="p-button-secondary"
           icon="mdi mdi-page-next"
           name="step2_update_8"
-          type="submit"
-          :disabled="!installerData.stepData.installError"
+          type="button"
+          @click.prevent="goToUpgrade"
         />
         <input
           id="is_executable"
@@ -362,6 +362,10 @@ import Button from "primevue/button"
 const { t } = useI18n()
 
 const installerData = inject("installerData")
+
+function goToUpgrade() {
+  window.location = `/main/install/index.php?running=1&installType=${installerData.installType || "update"}&step=step2_update_8`
+}
 
 function goToIndex() {
   window.location = "index.php"

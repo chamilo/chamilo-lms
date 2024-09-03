@@ -58,7 +58,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $path = str_replace('//', '/', $path);
                 $path = str_replace('/../exercises/teacher_audio/', '', $path);
 
-                $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/exercises/teacher_audio/'.$path;
+                $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/exercises/teacher_audio/'.$path;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 if ($this->fileExists($filePath)) {
                     preg_match('#/(.*)/#', '/'.$path, $matches);
@@ -130,7 +130,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $path = str_replace('//', '/', $path);
                 $path = str_replace('/../exercises/', '', $path);
 
-                $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/exercises/'.$path;
+                $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/exercises/'.$path;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 if ($this->fileExists($filePath)) {
                     $fileName = basename($filePath);
@@ -238,7 +238,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     continue;
                 }
                 $documentPath = ltrim($documentPath, '/');
-                $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/document/'.$documentPath;
+                $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/document/'.$documentPath;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $documentRepo, $document, $documentId);
                 $this->entityManager->persist($document);

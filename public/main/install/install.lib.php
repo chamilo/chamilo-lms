@@ -1877,10 +1877,11 @@ function executeMigration(): array
         'current_migration' => '',
     ];
 
+    Database::setManager(initializeEntityManager());
+    $manager = Database::getManager();
+    $connection = $manager->getConnection();
+
     try {
-        Database::setManager(initializeEntityManager());
-        $manager = Database::getManager();
-        $connection = $manager->getConnection();
         $config = new PhpFile(api_get_path(SYS_CODE_PATH) . 'install/migrations.php');
         $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
 
@@ -1920,6 +1921,7 @@ function executeMigration(): array
         $resultStatus['current_migration'] = getLastExecutedMigration($connection);
 
     } catch (Exception $e) {
+        $resultStatus['current_migration'] = getLastExecutedMigration($connection);
         $resultStatus['message'] = 'Migration failed: ' . $e->getMessage();
     }
 

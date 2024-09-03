@@ -314,11 +314,14 @@
     <div class="p-d-flex p-ai-center p-jc-center">
       <p class="text-error">{{ errorMessage }}</p>
     </div>
+    <div v-if="currentMigration" class="p-d-flex p-ai-center p-jc-center mt-4">
+      <p class="text-body-2">{{ t('The last migration executed successfully was:') }} <br /><strong>{{ currentMigration }}</strong></p>
+    </div>
     <div class="formgroup-inline">
       <div class="field">
         <Button
           :label="t('Contact Support')"
-          class="p-button-danger"
+          class="p-button-danger mt-4"
           type="button"
           @click="btnSupportOnClick"
         />
@@ -358,7 +361,7 @@ function btnStep6OnClick() {
 
   if (installerData.value.installType === 'update') {
     startMigration(updatePath)
-    setTimeout(pollMigrationStatus, 7000)
+    setTimeout(pollMigrationStatus, 5000)
   } else {
     isExecutable.value = "step6"
     document.getElementById("install_form").submit()
@@ -372,7 +375,9 @@ function startMigration(updatePath) {
       loading.value = false
       isButtonDisabled.value = false
       errorDialogVisible.value = true
-      errorMessage.value = `${t('Migration request failed with status:')} ${xhr.status}`
+      errorMessage.value = `
+        ${t('Please check the following error:')} ${xhr.status} - ${xhr.statusText}.
+      `
     }
   };
 
@@ -401,7 +406,7 @@ function pollMigrationStatus() {
         loading.value = false
         isButtonDisabled.value = false
         errorDialogVisible.value = true
-        errorMessage.value = `${t('Migration request failed with status:')} ${xhr.status}`
+        errorMessage.value = `${t('Please check the following error:')} ${xhr.status} - ${xhr.statusText}`
       }
     };
 

@@ -21,6 +21,10 @@ if (file_exists($logFile)) {
     $logContent = file_get_contents($logFile);
 }
 
+if (!$response['status']) {
+    http_response_code(500); // Return a 500 Internal Server Error if migration failed
+}
+
 $response = [
     'log_terminal' => '<pre class="terminal">' . $logContent . '</pre>',
     'progress_percentage' => $response['progress_percentage'],

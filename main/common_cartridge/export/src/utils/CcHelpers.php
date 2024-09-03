@@ -88,8 +88,6 @@ abstract class CcHelpers
     /**
      * Get list of embedded files.
      *
-     * @param string $html
-     *
      * @return multitype:mixed
      */
     public static function embeddedFiles(string $html, string $courseDir = null)
@@ -114,11 +112,13 @@ abstract class CcHelpers
     }
 
     /**
-     * Return an array of static media dependencies found in a given document file or a document and its neighbours in the same folder
+     * Return an array of static media dependencies found in a given document file or a document and its neighbours in the same folder.
+     *
      * @param $packageroot
      * @param $contextid
      * @param $folder
      * @param $docfilepath
+     *
      * @return array
      */
     public static function embeddedMapping($packageroot, $contextid = null, $folder = null, $docfilepath = null)
@@ -260,13 +260,15 @@ abstract class CcHelpers
     }
 
     /**
-     * Detect embedded files in the given HTML string
-     * @param string      $content The HTML string content
-     * @param CcIManifest $manifest Manifest object (usually empty at this point) that will be filled
+     * Detect embedded files in the given HTML string.
+     *
+     * @param string      $content     The HTML string content
+     * @param CcIManifest $manifest    Manifest object (usually empty at this point) that will be filled
      * @param             $packageroot
      * @param             $contextid
      * @param             $outdir
      * @param             $webcontent
+     *
      * @return array
      */
     public static function processLinkedFiles(
@@ -276,8 +278,7 @@ abstract class CcHelpers
         $contextid,
         $outdir,
         $webcontent = false
-    )
-    {
+    ) {
         // Detect all embedded files
         // copy all files in the cc package stripping any spaces and using only lowercase letters
         // add those files as resources of the type webcontent to the manifest

@@ -21,6 +21,7 @@ class CcAssesmentRenderFibtype extends CcQuestionMetadataBase
         $this->setSetting(CcQtiTags::FIBTYPE, CcQtiValues::STRING);
         $this->qtype = CcQtiProfiletype::FIELD_ENTRY;
     }
+
     public function add_material(CcAssesmentMaterial $object)
     {
         $this->materials[] = $object;

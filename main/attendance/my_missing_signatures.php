@@ -76,7 +76,6 @@ foreach ($calendars as $calendar) {
     $presences[$calendar['courseId']]['calendars'][$calendar['calendarId']]['date_time'] = api_convert_and_format_date($calendar['date_time'], null, date_default_timezone_get());
 }
 
-
 $template = new Template(get_lang('MyMissingSignatures'));
 $template->assign('presences', $presences);
 $content = $template->fetch($template->get_template('/attendance/my_missing_signatures.tpl'));

@@ -2579,6 +2579,7 @@ class Rest extends WebService
      * Updates a user identified by its login name.
      *
      * @throws Exception on failure
+     *
      * @todo make a safe version for use by the final user on its account
      */
     public function updateUserFromUserName(array $parameters): bool
@@ -4236,26 +4237,8 @@ class Rest extends WebService
     }
 
     /**
-     * Encode the given parameters (structured array) in JSON format
-     * @param array $additionalParams Optional
-     *
-     * @return string
-     */
-    private function encodeParams(array $additionalParams = [])
-    {
-        $params = array_merge(
-            $additionalParams,
-            [
-                'api_key' => $this->apiKey,
-                'username' => $this->user->getUsername(),
-            ]
-        );
-
-        return json_encode($params);
-    }
-
-    /**
      * Get audit items from track_e_default.
+     *
      * @throws Exception
      */
     public function getAuditItems(
@@ -4283,7 +4266,7 @@ class Rest extends WebService
     }
 
     /**
-     * Generate an API key for webservices access for the given user ID
+     * Generate an API key for webservices access for the given user ID.
      */
     protected static function generateApiKeyForUser(int $userId): string
     {
@@ -4295,8 +4278,28 @@ class Rest extends WebService
     }
 
     /**
+     * Encode the given parameters (structured array) in JSON format.
+     *
+     * @param array $additionalParams Optional
+     *
+     * @return string
+     */
+    private function encodeParams(array $additionalParams = [])
+    {
+        $params = array_merge(
+            $additionalParams,
+            [
+                'api_key' => $this->apiKey,
+                'username' => $this->user->getUsername(),
+            ]
+        );
+
+        return json_encode($params);
+    }
+
+    /**
      * Helper generating a query URL (to the current script) from an array of parameters
-     * (course, session, api_key and username) commonly used in webservice calls
+     * (course, session, api_key and username) commonly used in webservice calls.
      */
     private function generateUrl(array $additionalParams = []): string
     {

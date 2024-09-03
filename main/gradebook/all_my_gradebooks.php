@@ -46,7 +46,7 @@ Display::display_header(get_lang('GlobalGradebook'));
 api_block_anonymous_users();
 
 $user_id = api_get_user_id();
-$userCoursesList = CourseManager::get_courses_list_by_user_id ($user_id, true, false, false, [], true, true);
+$userCoursesList = CourseManager::get_courses_list_by_user_id($user_id, true, false, false, [], true, true);
 
 foreach ($userCoursesList as $course) {
     $course_code = $course['code'];
@@ -60,9 +60,9 @@ foreach ($userCoursesList as $course) {
     $courseInfo = api_get_course_info($course_code);
 
     if (!empty($course['session_name'])) {
-        $title = "<h2>" . $courseInfo['title'] . " (" . $course['session_name'] . ")</h2>";
+        $title = "<h2>".$courseInfo['title']." (".$course['session_name'].")</h2>";
     } else {
-        $title = "<h2>" . $courseInfo['title'] . "</h2>";
+        $title = "<h2>".$courseInfo['title']."</h2>";
     }
 
     $cats = Category::load(
@@ -75,18 +75,18 @@ foreach ($userCoursesList as $course) {
         false
     );
 
-$showTitle = true;
+    $showTitle = true;
     foreach ($cats as $cat) {
         $allcat = $cat->get_subcategories($stud_id, $course_code, $session_id);
         $alleval = $cat->get_evaluations($stud_id, false, $course_code, $session_id);
         $alllink = $cat->get_links($stud_id, true, $course_code, $session_id);
-        
+
         if ($cat->get_parent_id() != 0) {
             $i++;
-	} else {
-        if (empty($allcat) && empty($alleval) && empty($alllink)) {
-            continue;
-        }
+        } else {
+            if (empty($allcat) && empty($alleval) && empty($alllink)) {
+                continue;
+            }
             if ($showTitle) {
                 echo $title;
                 $showTitle = false;
@@ -126,4 +126,3 @@ $showTitle = true;
 }
 
 Display::display_footer();
-

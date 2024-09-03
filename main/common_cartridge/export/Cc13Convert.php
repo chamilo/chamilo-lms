@@ -4,14 +4,15 @@
 class Cc13Convert
 {
     /**
-     * Converts a course object into a CC13 package and writes it to disk
-     * @param string $packagedir
-     * @param string $outdir
+     * Converts a course object into a CC13 package and writes it to disk.
+     *
      * @param \Chamilo\CourseBundle\Component\CourseCopy\Course $objCourse The Course object is "augmented" with info from the api_get_course_info() function, into the "$objCourse->info" array attribute.
-     * @return bool
+     *
      * @throws Exception
+     *
+     * @return bool
      */
-    public static function convert(string $packagedir, string $outdir, \Chamilo\CourseBundle\Component\CourseCopy\Course $objCourse)
+    public static function convert(string $packagedir, string $outdir, Chamilo\CourseBundle\Component\CourseCopy\Course $objCourse)
     {
         $dir = realpath($packagedir);
         if (empty($dir)) {
@@ -131,12 +132,11 @@ class Cc13Convert
     }
 
     /**
-     * Return array of type $sections[1]['quiz', [sequence]] where sequence is the result of a call to getSequence()
-     * @param array $itemData
-     * @param string $itemType
-     * @param int $count
-     * @param string $courseCode The course code litteral
+     * Return array of type $sections[1]['quiz', [sequence]] where sequence is the result of a call to getSequence().
+     *
+     * @param string $courseCode     The course code litteral
      * @param ?array $itmesExtraData If defined, represents the items IDs selected in the course export form
+     *
      * @return array
      * @reference self::getSequence()
      */
@@ -192,11 +192,13 @@ class Cc13Convert
     /**
      * Return array of items by category and item ID ("test" level, not "question" level) with details like title,
      * comment (description), type, questions, max_attempt, etc.
-     * @param array $objItems Array of item objects as returned by the course backup code
-     * @param ?int $categoryId
+     *
+     * @param array   $objItems      Array of item objects as returned by the course backup code
+     * @param ?int    $categoryId
      * @param ?string $itemType
      * @param ?string $coursecode
-     * @param ?array $itemQuestions
+     * @param ?array  $itemQuestions
+     *
      * @return array|mixed
      */
     protected static function getSequence(array $objItems, ?int $categoryId = null, ?string $itemType = null, ?string $coursecode = null, ?array $itemQuestions = null)
@@ -309,11 +311,7 @@ class Cc13Convert
      * Process the different types of activities exported from the course.
      * When dealing with tests, the "sequence" provided here is a test, not a question.
      * For each sequence, call the corresponding CcConverter[Type] object instantiation method in export/src/converter/.
-     * @param CcIItem     $item
-     * @param CcIManifest $manifest
-     * @param array       $sequence
-     * @param string      $packageroot
-     * @param string      $outdir
+     *
      * @return void
      */
     protected static function processSequence(CcIItem &$item, CcIManifest &$manifest, array $sequence, string $packageroot, string $outdir)

@@ -577,9 +577,9 @@ class UserManager
                     false,
                     false,
                     false
-		);
-		// the complete_name is not used in the default Chamilo template but used in a specific template -refs BT#21334
-		$tplSubject->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
+        );
+                // the complete_name is not used in the default Chamilo template but used in a specific template -refs BT#21334
+                $tplSubject->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
                 $layoutSubject = $tplSubject->get_template('mail/subject_registration_platform.tpl');
                 $emailSubject = $tplSubject->fetch($layoutSubject);
                 $sender_name = api_get_person_name(
@@ -2407,10 +2407,9 @@ class UserManager
 
         $sql_query .= ' WHERE 1 = 1 ';
         if (count($conditions) > 0) {
-
             $andActive = "";
             if (isset($conditions['active'])) {
-                $andActive = " AND active = " . (int) $conditions['active'];
+                $andActive = " AND active = ".(int) $conditions['active'];
                 unset($conditions['active']);
             }
 
@@ -8132,6 +8131,44 @@ SQL;
     }
 
     /**
+     * return user hash based on user_id and loggedin user's salt.
+     *
+     * @param int user_id id of the user for whom we need the hash
+     *
+     * @return string containing the hash
+     */
+    public static function generateUserHash(int $user_id): string
+    {
+        $currentUserId = api_get_user_id();
+        $userManager = self::getManager();
+        /** @var User $user */
+        $user = self::getRepository()->find($currentUserId);
+        if (empty($user)) {
+            return false;
+        }
+
+        return rawurlencode(api_encrypt_hash($user_id, $user->getSalt()));
+    }
+
+    /**
+     * return decrypted hash or false.
+     *
+     * @param string hash    hash that is to be decrypted
+     */
+    public static function decryptUserHash(string $hash): string
+    {
+        $currentUserId = api_get_user_id();
+        $userManager = self::getManager();
+        /** @var User $user */
+        $user = self::getRepository()->find($currentUserId);
+        if (empty($user)) {
+            return false;
+        }
+
+        return api_decrypt_hash(rawurldecode($hash), $user->getSalt());
+    }
+
+    /**
      * @return EncoderFactory
      */
     private static function getEncoderFactory()
@@ -8223,43 +8260,5 @@ SQL;
         }
 
         return $url;
-    }
-
-   /**
-    * return user hash based on user_id and loggedin user's salt
-    *
-    * @param int user_id id of the user for whom we need the hash
-    *
-    * @return string containing the hash
-    */
-    public static function generateUserHash(int $user_id): string
-    {
-        $currentUserId = api_get_user_id();
-        $userManager = self::getManager();
-        /** @var User $user */
-        $user = self::getRepository()->find($currentUserId);
-        if (empty($user)) {
-            return false;
-        }
-        return rawurlencode(api_encrypt_hash($user_id, $user->getSalt()));
-    }
-
-   /**
-    * return decrypted hash or false
-    *
-    * @param string hash    hash that is to be decrypted
-    *
-    * @return string
-    */
-    public static function decryptUserHash(string $hash): string
-    {
-        $currentUserId = api_get_user_id();
-        $userManager = self::getManager();
-        /** @var User $user */
-        $user = self::getRepository()->find($currentUserId);
-        if (empty($user)) {
-            return false;
-        }
-        return api_decrypt_hash(rawurldecode($hash), $user->getSalt());
     }
 }

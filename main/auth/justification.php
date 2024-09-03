@@ -87,7 +87,7 @@ switch ($action) {
         $notificationEmailSubject = $plugin->get_lang('JustificationsCompleted').': '.$userInfo['complete_name'];
         $notificationEmailContent = $notificationEmailSubject.' <br /><br />'.'<a href="'.$link.'">'.$link.'</a>';
         if (api_get_plugin_setting('justification', 'notification_to_creator_only') === 'true') {
-            $sql = "select creator_id from user where user_id = " . api_get_user_id();
+            $sql = "select creator_id from user where user_id = ".api_get_user_id();
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 $row = Database::fetch_array($result);

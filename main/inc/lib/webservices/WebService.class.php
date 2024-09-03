@@ -128,7 +128,8 @@ class WebService
     }
 
     /**
-     * Prevent access to this webservice if the user is not a platform admin
+     * Prevent access to this webservice if the user is not a platform admin.
+     *
      * @throws Exception
      */
     protected static function protectAdminEndpoint()

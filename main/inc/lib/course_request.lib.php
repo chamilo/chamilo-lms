@@ -138,7 +138,7 @@ class CourseRequestManager
         $last_insert_id = Database::insert_id();
 
         // E-mail notifications.
-        
+
         $email_language = $user_info['language'];
         $email_language_admin = api_get_setting('platformLanguage');
 
@@ -156,13 +156,13 @@ class CourseRequestManager
         $email_body .= get_lang('Ln', null, $email_language).': '.$course_language."\n";
         $email_body .= get_lang('FillWithExemplaryContent', null, $email_language).': '.($exemplary_content ? get_lang('Yes', null, $email_language) : get_lang('No', null, $email_language))."\n";
         $email_body = nl2br($email_body);
-        
+
         // Sending an e-mail to the platform administrator.
         $email_body_admin = $email_body;
         $email_body_admin .= "\n".get_lang('CourseRequestPageForApproval', null, $email_language_admin).' '.api_get_path(WEB_CODE_PATH).'admin/course_request_edit.php?id='.$last_insert_id."\n";
         $email_body_admin .= "\n".get_lang('CourseRequestLegalNote', null, $email_language_admin)."\n";
         $email_body_admin = nl2br($email_body_admin);
-        
+
         $sender_name_teacher = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
         $sender_email_teacher = $user_info['mail'];
         $recipient_name_admin = api_get_person_name(
@@ -212,7 +212,7 @@ class CourseRequestManager
         $email_body_teacher .= get_lang('Email', null, $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
         $email_body_teacher .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
         $email_body_teacher = nl2br($email_body_teacher);
-        
+
         // Swap the sender and the recipient.
         $sender_name_admin = $recipient_name_admin;
         $sender_email_admin = $recipient_email_admin;
@@ -532,7 +532,7 @@ class CourseRequestManager
             $email_body .= get_lang('Email', null, $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
             $email_body .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
             $email_body = nl2br($email_body);
-            
+
             $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
             $sender_email = api_get_setting('emailAdministrator');
             $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
@@ -615,7 +615,7 @@ class CourseRequestManager
         $email_body .= get_lang('Email', null, $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
         $email_body .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
         $email_body = nl2br($email_body);
-        
+
         $sender_name = api_get_person_name(
             api_get_setting('administratorName'),
             api_get_setting('administratorSurname'),
@@ -704,7 +704,7 @@ class CourseRequestManager
         $email_body .= get_lang('Email', null, $email_language).': '.api_get_setting('emailAdministrator')."\n";
         $email_body .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
         $email_body = nl2br($email_body);
-        
+
         $sender_name = api_get_person_name(
             api_get_setting('administratorName'),
             api_get_setting('administratorSurname'),

@@ -34,8 +34,7 @@ class Cc1p3Convert extends CcBase
     }
 
     /**
-     * Scan the imsmanifest.xml structure to find elements to import to documents, links, forums, quizzes
-     * @return void
+     * Scan the imsmanifest.xml structure to find elements to import to documents, links, forums, quizzes.
      */
     public function generateImportData(): void
     {
@@ -47,7 +46,7 @@ class Cc1p3Convert extends CcBase
 
         // Scan for organization items or resources that are tests (question banks)
         $items = $xpath->query('/imscc:manifest/imscc:organizations/imscc:organization/imscc:item | /imscc:manifest/imscc:resources/imscc:resource[@type="'.static::CC_TYPE_QUESTION_BANK.'"]');
-        $this->createInstances($items, 0,$countInstances);
+        $this->createInstances($items, 0, $countInstances);
 
         $resources = new Cc13Resource();
         $forums = new Cc13Forum();

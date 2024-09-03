@@ -324,8 +324,8 @@ if ($skipData === false) {
         // average assignments
         $numberAssignments = $countAssignments / $numberStudents;
         $avg_courses_per_student = $countCourses / $numberStudents;
-	$totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds, 'ever');
-	$averageTimeSpentPerStudent = $totalTimeSpent / $numberStudents;
+        $totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds, 'ever');
+        $averageTimeSpentPerStudent = $totalTimeSpent / $numberStudents;
         $posts = Tracking::count_student_messages($studentIds);
         $averageScore = Tracking::getAverageStudentScore($studentIds);
     }

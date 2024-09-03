@@ -394,13 +394,13 @@ class CourseSelectForm
                                 'warning'
                             );
                             if ($enableScormSelection) {
-                                 echo Display::return_message(
+                                echo Display::return_message(
                                      get_lang(
                                          'IfYourLPsAreScormsYouShouldSelectThemFromTheScorms'
                                      ),
                                      'warning'
                                  );
-                             }
+                            }
                         }
 
                         if ($type == RESOURCE_DOCUMENT) {

@@ -317,10 +317,9 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * @param string $categoryCode
-     * @param int    $randomValue
-     * @param array  $limit        will be used if $randomValue is not set.
-     *                             This array should contain 'start' and 'length' keys
+     * @param int   $randomValue
+     * @param array $limit       will be used if $randomValue is not set.
+     *                           This array should contain 'start' and 'length' keys
      *
      * @return array
      */
@@ -1856,12 +1855,12 @@ class CoursesAndSessionsCatalog
             $pageDiv .= self::getPageNumberItem(
                 1,
                 $pageLength,
-       	        null,
+                   null,
                 '',
                 $categoryCode,
                 $action,
-               	$fields,
-               	$sortKeys
+                   $fields,
+                   $sortKeys
             );
             if ($pageBottom > 2) {
                 $pageDiv .= self::getPageNumberItem(

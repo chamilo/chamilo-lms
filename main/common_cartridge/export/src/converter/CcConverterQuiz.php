@@ -12,9 +12,11 @@ class CcConverterQuiz extends CcConverters
     }
 
     /**
-     * Convert a quiz to a CC XML file (.xml) in a subfolder of the whole CC archive
+     * Convert a quiz to a CC XML file (.xml) in a subfolder of the whole CC archive.
+     *
      * @param $outdir
      * @param $objQuizz
+     *
      * @return bool true
      */
     public function convert($outdir, $objQuizz): bool

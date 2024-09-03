@@ -372,7 +372,6 @@ switch ($action) {
             api_not_allowed(false, null, 403);
         }
 
-
         $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : DRH;
         $active = isset($_REQUEST['active']) ? (int) $_REQUEST['active'] : null;
 

@@ -102,7 +102,7 @@ abstract class CcAssesmentHelper
      * @param cc_assesment_section $section
      * @param unknown_type         $rootpath
      * @param unknown_type         $contextid
-     * @param string         $outdir
+     * @param string               $outdir
      */
     public static function processQuestions(&$objQuizz, &$manifest, CcAssesmentSection &$section, $rootpath, $contextid, $outdir)
     {

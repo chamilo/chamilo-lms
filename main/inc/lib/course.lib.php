@@ -2341,7 +2341,7 @@ class CourseManager
                     : '';
                 $userIdHash = UserManager::generateUserHash($row['user_id']);
                 $row['url'] = $url.'&hash='.$userIdHash;
-                $row['hash'] = $userIdHash; 
+                $row['hash'] = $userIdHash;
 
                 $coaches[] = $row;
             }

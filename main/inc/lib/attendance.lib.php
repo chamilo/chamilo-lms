@@ -2916,7 +2916,7 @@ class Attendance
         $attendanceCalendarId,
         $file,
         $attendanceId,
-        $courseId = NULL
+        $courseId = null
     ) {
         $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
         if (!$allowSignature) {

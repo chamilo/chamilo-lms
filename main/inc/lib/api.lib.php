@@ -9443,9 +9443,9 @@ function api_site_use_cookie_warning_cookie_exist()
  *
  * @param int    $time         The time in seconds
  * @param string $originFormat Optional.
- * PHP (used for scorm)
- * JS (used in most cases and understood by excel)
- * LANG (used to present unit in the user language)
+ *                             PHP (used for scorm)
+ *                             JS (used in most cases and understood by excel)
+ *                             LANG (used to present unit in the user language)
  *
  * @return string (00h00'00")
  */
@@ -9685,7 +9685,7 @@ function api_mail_html(
                 api_get_setting('siteName'),
                 [
                     'id' => 'header-logo',
-                    'class' => 'img-responsive'
+                    'class' => 'img-responsive',
                 ]
             );
             $logoTag = \Display::url($imgTag, api_get_path(WEB_PATH));
@@ -10641,11 +10641,11 @@ function api_decrypt_ldap_password(string $encryptedText): string
         return false;
     }
 
-    return api_decrypt_hash($encryptedText,$secret);
+    return api_decrypt_hash($encryptedText, $secret);
 }
 
 /**
- * Decrypt sent hash encoded with secret
+ * Decrypt sent hash encoded with secret.
  *
  * @param $encryptedText The hash text to be decrypted
  * @param $secret        The secret used to encoded the hash
@@ -10674,7 +10674,7 @@ function api_decrypt_hash(string $encryptedHash, string $secret): string
 }
 
 /**
- * Encrypt sent data with secret
+ * Encrypt sent data with secret.
  *
  * @param $data   The text to be encrypted
  * @param $secret The secret to use encode data
@@ -10683,10 +10683,10 @@ function api_decrypt_hash(string $encryptedHash, string $secret): string
  */
 function api_encrypt_hash($data, $secret)
 {
-  $iv = random_bytes(12);
-  $tag = '';
+    $iv = random_bytes(12);
+    $tag = '';
 
-  $encrypted = openssl_encrypt(
+    $encrypted = openssl_encrypt(
     $data,
     'aes-256-gcm',
     $secret,
@@ -10697,5 +10697,5 @@ function api_encrypt_hash($data, $secret)
     16
   );
 
-  return base64_encode($iv) . base64_encode($encrypted . $tag);
+    return base64_encode($iv).base64_encode($encrypted.$tag);
 }

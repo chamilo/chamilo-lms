@@ -32,7 +32,7 @@ class CcAssesmentQuestionFib extends CcAssesmentQuestionProcBase
                 'ponderation' => $answerScore,
                 'comment' => $answer['comment'],
             ];
-            $questionScore ++;
+            $questionScore++;
         }
         if (count($correctAnswerNodes) == 0) {
             throw new RuntimeException('No correct answer!');

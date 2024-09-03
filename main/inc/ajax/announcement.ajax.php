@@ -54,7 +54,7 @@ switch ($action) {
             if ($groupProperties['announcements_state'] == GroupManager::TOOL_PRIVATE_BETWEEN_USERS) {
                 // check if user is a group member to give access
                 $groupInfo = GroupManager::get_group_properties($groupId);
-                if (array_key_exists($currentUserId,GroupManager::get_subscribed_users($groupInfo))) {
+                if (array_key_exists($currentUserId, GroupManager::get_subscribed_users($groupInfo))) {
                     $allowToEdit = true;
                 }
             }

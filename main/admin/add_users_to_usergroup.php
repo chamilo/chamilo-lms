@@ -371,11 +371,11 @@ echo '<a href="'.api_get_self().'?id='.$id.'&action=export">'.
 
 $isActiveUser = !empty($activeUser);
 $activeUsersParam = $isActiveUser ? '0' : '1';
-$newUrl = api_get_self() . '?id=' . $id . '&active_users=' . $activeUsersParam;
+$newUrl = api_get_self().'?id='.$id.'&active_users='.$activeUsersParam;
 $buttonLabelKey = $isActiveUser ? 'ShowAllUsers' : 'OnlyShowActiveUsers';
 $buttonLabel = get_lang($buttonLabelKey);
 
-echo '<a href="#" onclick="activeUsers(\'' . htmlspecialchars($newUrl) . '\'); return false;" class="btn btn-default">' . $buttonLabel . '</a>';
+echo '<a href="#" onclick="activeUsers(\''.htmlspecialchars($newUrl).'\'); return false;" class="btn btn-default">'.$buttonLabel.'</a>';
 
 echo '</div>';
 

@@ -2511,7 +2511,7 @@ class Wiki
         <!-- defines the headers/footers - this must occur before the headers/footers are set -->
 
         <!--mpdf
-        <pageheader name="odds" content-left="'.htmlspecialchars($title_pdf,ENT_QUOTES).'"  header-style-left="color: #880000; font-style: italic;"  line="1" />
+        <pageheader name="odds" content-left="'.htmlspecialchars($title_pdf, ENT_QUOTES).'"  header-style-left="color: #880000; font-style: italic;"  line="1" />
         <pagefooter name="odds" content-right="{PAGENO}/{nb}" line="1" />
 
         <!-- set the headers/footers - they will occur from here on in the document -->

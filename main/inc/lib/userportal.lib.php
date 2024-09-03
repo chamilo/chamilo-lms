@@ -1170,7 +1170,7 @@ class IndexManager
                 ];
             }
         }
- 
+
         if (!api_is_student()) {
             $items[] = [
                 'class' => 'time-report',

@@ -7552,6 +7552,7 @@ class DocumentManager
             // If </body> tag not found, just append the script tag at the end
             $content .= $scriptTag;
         }
+
         return $content;
     }
 }

@@ -829,8 +829,8 @@ class UserGroup extends Model
         }
 
         if (!empty($order)) {
-            $conditions['order'] = implode(', ', array_map(function($item) {
-                return $item . ' ASC';
+            $conditions['order'] = implode(', ', array_map(function ($item) {
+                return $item.' ASC';
             }, $order));
         }
 

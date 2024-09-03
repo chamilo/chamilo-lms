@@ -36,8 +36,10 @@ class Imscc13Import
     }
 
     /**
-     * Read the imsmanifest.xml file in the app/cache/imsccImport temp folder
+     * Read the imsmanifest.xml file in the app/cache/imsccImport temp folder.
+     *
      * @param $filepath
+     *
      * @return void
      */
     public function execute($filepath)

@@ -491,7 +491,7 @@ class SessionManager
 
         $userId = (int) $userId;
 
-	if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_teacher()) {
+        if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_teacher()) {
             api_not_allowed(true);
         }
 
@@ -4905,12 +4905,6 @@ class SessionManager
     }
 
     /**
-     * @param int $courseId
-     * @param string|null $startDate
-     * @param string|null $endDate
-     *
-     * @return array
-     *
      * @todo Add param to get only active sessions (not expires ones)
      */
     public static function get_session_by_course(int $courseId, ?string $startDate = null, ?string $endDate = null): array

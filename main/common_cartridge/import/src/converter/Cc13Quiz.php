@@ -4,7 +4,8 @@
 class Cc13Quiz extends Cc13Entities
 {
     /**
-     * Get all data from the object instance (coming from the xml file) into a clean array
+     * Get all data from the object instance (coming from the xml file) into a clean array.
+     *
      * @return array
      */
     public function generateData()
@@ -23,8 +24,10 @@ class Cc13Quiz extends Cc13Entities
     }
 
     /**
-     * Create a quiz based on the information available in the assessment structure
+     * Create a quiz based on the information available in the assessment structure.
+     *
      * @param $quiz
+     *
      * @return void
      */
     public function storeQuiz($quiz)
@@ -272,6 +275,7 @@ class Cc13Quiz extends Cc13Entities
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
         $fieldEntry = $xpath->query('/xmlns:questestinterop/xmlns:assessment/xmlns:rubric/xmlns:material/xmlns:mattext');
         $response = !empty($fieldEntry->item(0)->nodeValue) ? $fieldEntry->item(0)->nodeValue : '';
+
         return $response;
     }
 

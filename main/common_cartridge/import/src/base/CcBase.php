@@ -67,8 +67,10 @@ class CcBase
     }
 
     /**
-     * Find the imsmanifest.xml file inside the given folder and return its path
+     * Find the imsmanifest.xml file inside the given folder and return its path.
+     *
      * @param string $folder Full path name of the folder in which we expect to find imsmanifest.xml
+     *
      * @return false|string
      */
     public static function getManifest(string $folder)

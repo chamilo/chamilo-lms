@@ -42,7 +42,7 @@ foreach ($userList as $user) {
 }
 $formValidator->addElement('select', 'users', get_lang('SelectUsers'), $userOptions, [
     'multiple' => 'multiple',
-    'id' => 'user_selector'
+    'id' => 'user_selector',
 ]);
 
 $htmlHeadXtra[] = '
@@ -52,7 +52,7 @@ $htmlHeadXtra[] = '
         var userSelector = $("#user_selector");
 
         userSelector.select2({
-            placeholder: "' . get_lang('SelectAnOption') . '",
+            placeholder: "'.get_lang('SelectAnOption').'",
             allowClear: true,
             width: "100%"
         });
@@ -79,7 +79,7 @@ $formValidator->addDatePicker('end_date', get_lang('EndDate'));
 // Report type selector
 $reportTypeValues = [
     'time_report' => get_lang('TimeReport'),
-    'billing_report' => get_lang('BillingReport')
+    'billing_report' => get_lang('BillingReport'),
 ];
 $formValidator->addElement('select', 'report_type', get_lang('ReportType'), $reportTypeValues);
 

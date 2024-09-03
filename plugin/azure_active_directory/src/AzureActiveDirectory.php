@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
+use League\OAuth2\Client\Token\AccessTokenInterface;
 use TheNetworg\OAuth2\Client\Provider\Azure;
 
 /**
@@ -160,8 +161,7 @@ class AzureActiveDirectory extends Plugin
         return $defaultOrder;
     }
 
-    public function getUserIdByVerificationOrder(array $azureUserData): ?int
-    {
+    public function getUserIdByVerificationOrder(array $azureUserData, string $azureUidKey = 'objectId'): ?int {
         $selectedOrder = $this->getExistingUserVerificationOrder();
 
         $extraFieldValue = new ExtraFieldValue('user');
@@ -176,7 +176,7 @@ class AzureActiveDirectory extends Plugin
             ),
             3 => $extraFieldValue->get_item_id_from_field_variable_and_field_value(
                 AzureActiveDirectory::EXTRA_FIELD_AZURE_UID,
-                $azureUserData['objectId']
+                $azureUserData[$azureUidKey]
             ),
         ];
 
@@ -187,5 +187,109 @@ class AzureActiveDirectory extends Plugin
         }
 
         return null;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function registerUser(
+        AccessTokenInterface $token,
+        Azure $provider,
+        array $azureUserInfo,
+        string $apiGroupsRef = 'me/memberOf',
+        string $objectIdKey = 'objectId',
+        string $azureUidKey = 'objectId'
+    ) {
+        if (empty($azureUserInfo)) {
+            throw new Exception('Groups info not found.');
+        }
+
+        $userId = $this->getUserIdByVerificationOrder($azureUserInfo, $azureUidKey);
+
+        if (empty($userId)) {
+            // If we didn't find the user
+            if ($this->get(self::SETTING_PROVISION_USERS) === 'true') {
+                [$userRole, $isAdmin] = $this->getUserRoleAndCheckIsAdmin(
+                    $token,
+                    $provider,
+                    $apiGroupsRef,
+                    $objectIdKey
+                );
+
+                $phone = null;
+
+                if (isset($azureUserInfo['telephoneNumber'])) {
+                    $phone = $azureUserInfo['telephoneNumber'];
+                } elseif (isset($azureUserInfo['businessPhones'][0])) {
+                    $phone = $azureUserInfo['businessPhones'][0];
+                } elseif (isset($azureUserInfo['mobilePhone'])) {
+                    $phone = $azureUserInfo['mobilePhone'];
+                }
+
+                // If the option is set to create users, create it
+                $userId = UserManager::create_user(
+                    $azureUserInfo['givenName'],
+                    $azureUserInfo['surname'],
+                    $userRole,
+                    $azureUserInfo['mail'],
+                    $azureUserInfo['userPrincipalName'],
+                    '',
+                    null,
+                    null,
+                    $phone,
+                    null,
+                    'azure',
+                    null,
+                    ($azureUserInfo['accountEnabled'] ? 1 : 0),
+                    null,
+                    [
+                        'extra_'.self::EXTRA_FIELD_ORGANISATION_EMAIL => $azureUserInfo['mail'],
+                        'extra_'.self::EXTRA_FIELD_AZURE_ID => $azureUserInfo['mailNickname'],
+                        'extra_'.self::EXTRA_FIELD_AZURE_UID => $azureUserInfo[$azureUidKey],
+                    ],
+                    null,
+                    null,
+                    $isAdmin
+                );
+                if (!$userId) {
+                    throw new Exception(get_lang('UserNotAdded').' '.$azureUserInfo['userPrincipalName']);
+                }
+            } else {
+                throw new Exception('User not found when checking the extra fields from '.$azureUserInfo['mail'].' or '.$azureUserInfo['mailNickname'].' or '.$azureUserInfo[$azureUidKey].'.');
+            }
+        }
+
+        return $userId;
+    }
+
+    private function getUserRoleAndCheckIsAdmin(
+        AccessTokenInterface $token,
+        Azure $provider = null,
+        string $apiRef = 'me/memberOf',
+        string $objectIdKey = 'objectId'
+    ): array {
+        $provider = $provider ?: $this->getProvider();
+
+        $groups = $provider->get($apiRef, $token);
+
+        // If any specific group ID has been defined for a specific role, use that
+        // ID to give the user the right role
+        $givenAdminGroup = $this->get(self::SETTING_GROUP_ID_ADMIN);
+        $givenSessionAdminGroup = $this->get(self::SETTING_GROUP_ID_SESSION_ADMIN);
+        $givenTeacherGroup = $this->get(self::SETTING_GROUP_ID_TEACHER);
+        $userRole = STUDENT;
+        $isAdmin = false;
+        foreach ($groups as $group) {
+            if ($givenAdminGroup == $group[$objectIdKey]) {
+                $userRole = COURSEMANAGER;
+                $isAdmin = true;
+            } elseif ($givenSessionAdminGroup == $group[$objectIdKey]) {
+                $userRole = SESSIONADMIN;
+            } elseif ($userRole != SESSIONADMIN && $givenTeacherGroup == $group[$objectIdKey]) {
+                $userRole = COURSEMANAGER;
+            }
+        }
+
+        return [$userRole, $isAdmin];
     }
 }

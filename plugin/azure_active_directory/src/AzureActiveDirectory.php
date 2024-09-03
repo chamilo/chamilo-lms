@@ -98,6 +98,17 @@ class AzureActiveDirectory extends Plugin
         return $provider;
     }
 
+    public function getProviderForApiGraph(): Azure
+    {
+        $provider = $this->getProvider();
+        $provider->urlAPI = "https://graph.microsoft.com/v1.0/";
+        $provider->resource = "https://graph.microsoft.com/";
+        $provider->tenant = $this->get(AzureActiveDirectory::SETTING_TENANT_ID);
+        $provider->authWithResource = false;
+
+        return $provider;
+    }
+
     /**
      * @param string $urlType Type of URL to generate
      *

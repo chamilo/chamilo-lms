@@ -9,11 +9,7 @@ if (PHP_SAPI !== 'cli') {
 
 $plugin = AzureActiveDirectory::create();
 
-$provider = $plugin->getProvider();
-$provider->urlAPI = "https://graph.microsoft.com/v1.0/";
-$provider->resource = "https://graph.microsoft.com/";
-$provider->tenant = $plugin->get(AzureActiveDirectory::SETTING_TENANT_ID);
-$provider->authWithResource = false;
+$provider = $plugin->getProviderForApiGraph();
 
 echo 'Synchronizing users from Azure.'.PHP_EOL;
 

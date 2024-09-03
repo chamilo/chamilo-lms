@@ -339,8 +339,8 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         // c_attendance_calendar
         $this->addSql('ALTER TABLE c_attendance_calendar DROP COLUMN IF EXISTS id');
         $this->addSql('ALTER TABLE c_attendance_calendar DROP COLUMN IF EXISTS c_id');
-        $this->addSql('ALTER TABLE c_attendance_calendar CHANGE blocked blocked TINYINT(1) NOT NULL');
         $this->addSql('UPDATE c_attendance_calendar SET blocked = 0 WHERE blocked IS NULL');
+        $this->addSql('ALTER TABLE c_attendance_calendar CHANGE blocked blocked TINYINT(1) NOT NULL');
 
         // c_thematic_plan
         $this->addSql('ALTER TABLE c_thematic_plan DROP COLUMN IF EXISTS c_id');

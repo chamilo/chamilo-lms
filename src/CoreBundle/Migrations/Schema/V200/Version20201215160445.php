@@ -79,7 +79,6 @@ final class Version20201215160445 extends AbstractMigrationChamilo
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
 
             // Forums.
             $sql = "SELECT * FROM c_forum_forum WHERE c_id = {$courseId}
@@ -139,7 +138,6 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 $this->entityManager->flush();
             }
             $this->entityManager->flush();
-            $this->entityManager->clear();
 
             // Threads.
             $sql = "SELECT * FROM c_forum_thread WHERE c_id = {$courseId}
@@ -188,7 +186,6 @@ final class Version20201215160445 extends AbstractMigrationChamilo
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
 
             // Posts.
             $sql = "SELECT * FROM c_forum_post WHERE c_id = {$courseId}
@@ -250,7 +247,6 @@ final class Version20201215160445 extends AbstractMigrationChamilo
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
 
             // Post attachments
             $sql = "SELECT * FROM c_forum_attachment WHERE c_id = {$courseId}
@@ -282,7 +278,6 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 }
             }
             $this->entityManager->flush();
-            $this->entityManager->clear();
         }
     }
 }

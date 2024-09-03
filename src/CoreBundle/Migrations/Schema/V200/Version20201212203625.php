@@ -100,11 +100,9 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 }
             }
             $this->entityManager->flush();
-            $this->entityManager->clear();
         }
 
         $this->entityManager->flush();
-        $this->entityManager->clear();
 
         // Migrate student exercise audio
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
@@ -177,11 +175,9 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 }
             }
             $this->entityManager->flush();
-            $this->entityManager->clear();
         }
 
         $this->entityManager->flush();
-        $this->entityManager->clear();
 
         // Migrate normal documents.
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
@@ -245,16 +241,13 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
                 if (($counter % $batchSize) === 0) {
                     $this->entityManager->flush();
-                    $this->entityManager->clear();
                 }
                 $counter++;
             }
             $this->entityManager->flush();
-            $this->entityManager->clear();
         }
 
         $this->entityManager->flush();
-        $this->entityManager->clear();
     }
 
     public function down(Schema $schema): void {}

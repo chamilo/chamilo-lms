@@ -68,13 +68,11 @@ final class Version20201212195112 extends AbstractMigrationChamilo
                 $this->entityManager->persist($category);
                 if (($counter % $batchSize) === 0) {
                     $this->entityManager->flush();
-                    $this->entityManager->clear();
                 }
                 $counter++;
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
 
             // Groups
             $counter = 1;
@@ -108,12 +106,10 @@ final class Version20201212195112 extends AbstractMigrationChamilo
                 $this->entityManager->persist($group);
                 if (($counter % $batchSize) === 0) {
                     $this->entityManager->flush();
-                    $this->entityManager->clear();
                 }
                 $counter++;
             }
         }
         $this->entityManager->flush();
-        $this->entityManager->clear();
     }
 }

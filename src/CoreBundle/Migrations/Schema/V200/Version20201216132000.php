@@ -76,13 +76,11 @@ final class Version20201216132000 extends AbstractMigrationChamilo
             learnpath::sortItemByOrderList($rootItem, $orderList, true, $lpItemRepo, $this->entityManager);
             if (($counter % $batchSize) === 0) {
                 $this->entityManager->flush();
-                $this->entityManager->clear(); // Detaches all objects from Doctrine!
             }
             $counter++;
             $this->entityManager->flush();
         }
 
         $this->entityManager->flush();
-        $this->entityManager->clear();
     }
 }

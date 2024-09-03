@@ -69,7 +69,6 @@ final class Version20201216105331 extends AbstractMigrationChamilo
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
 
             // c_thematic_advance.
             /*$sql = "SELECT * FROM c_thematic_advance WHERE c_id = $courseId
@@ -98,8 +97,7 @@ final class Version20201216105331 extends AbstractMigrationChamilo
              * $this->entityManager->persist($resource);
              * $this->entityManager->flush();
              * }
-             * $this->entityManager->flush();
-             * $this->entityManager->clear();*/
+             * $this->entityManager->flush();*/
 
             // c_thematic_plan.
             /*$sql = "SELECT * FROM c_thematic_plan WHERE c_id = $courseId
@@ -127,8 +125,7 @@ final class Version20201216105331 extends AbstractMigrationChamilo
              * $this->entityManager->persist($resource);
              * $this->entityManager->flush();
              * }
-             * $this->entityManager->flush();
-             * $this->entityManager->clear();*/
+             * $this->entityManager->flush();*/
         }
     }
 }

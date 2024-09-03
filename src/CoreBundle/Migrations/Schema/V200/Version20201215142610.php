@@ -104,7 +104,6 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
 
             // Question categories.
             $sql = "SELECT * FROM c_quiz_question_category WHERE c_id = {$courseId}
@@ -138,7 +137,6 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
 
             $sql = "SELECT * FROM c_quiz_question WHERE c_id = {$courseId}
                     ORDER BY iid";
@@ -179,7 +177,6 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                 $this->entityManager->flush();
             }
             $this->entityManager->flush();
-            $this->entityManager->clear();
         }
     }
 }

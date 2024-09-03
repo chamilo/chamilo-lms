@@ -53,7 +53,6 @@ final class Version20240507160300 extends AbstractMigrationChamilo
         }
 
         $this->entityManager->flush();
-        $this->entityManager->clear();
     }
 
     private function determinePath(int $userId, string $picture): string

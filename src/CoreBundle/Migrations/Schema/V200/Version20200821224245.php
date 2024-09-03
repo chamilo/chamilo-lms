@@ -59,8 +59,6 @@ final class Version20200821224245 extends AbstractMigrationChamilo
             }
         }
 
-        $this->entityManager->clear();
-
         $this->removeFile(Version20200821224230::INBOX_TAGS_FILE);
     }
 }

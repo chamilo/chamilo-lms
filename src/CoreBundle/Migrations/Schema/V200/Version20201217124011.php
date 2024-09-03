@@ -84,7 +84,6 @@ final class Version20201217124011 extends AbstractMigrationChamilo
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
 
             // Assignments files.
             $sql = "SELECT * FROM c_student_publication
@@ -130,7 +129,6 @@ final class Version20201217124011 extends AbstractMigrationChamilo
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
 
             $admin = $this->getAdmin();
 
@@ -170,7 +168,6 @@ final class Version20201217124011 extends AbstractMigrationChamilo
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
 
             // Comments.
             $sql = "SELECT * FROM c_student_publication_comment WHERE c_id = {$courseId}

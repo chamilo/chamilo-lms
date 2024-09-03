@@ -62,13 +62,11 @@ final class Version20210205082253 extends AbstractMigrationChamilo
 
             if (($counter % $batchSize) === 0) {
                 $this->entityManager->flush();
-                $this->entityManager->clear(); // Detaches all objects from Doctrine!
             }
             $counter++;
         }
 
         $this->entityManager->flush();
-        $this->entityManager->clear();
 
         // Migrate Usergroup.
         $counter = 1;
@@ -102,7 +100,6 @@ final class Version20210205082253 extends AbstractMigrationChamilo
             $this->entityManager->persist($userGroup);
             $this->entityManager->flush();
         }
-        $this->entityManager->clear();
 
         // Migrate Usergroup images.
         $q = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\Usergroup u');
@@ -132,12 +129,10 @@ final class Version20210205082253 extends AbstractMigrationChamilo
 
             if (($counter % $batchSize) === 0) {
                 $this->entityManager->flush();
-                $this->entityManager->clear(); // Detaches all objects from Doctrine!
             }
             $counter++;
         }
 
         $this->entityManager->flush();
-        $this->entityManager->clear();
     }
 }

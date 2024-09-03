@@ -81,8 +81,6 @@ final class Version20240515124400 extends AbstractMigrationChamilo
                 echo "Failed for download ID {$download->getDownId()}: ".$e->getMessage()."\n";
 
                 break;
-            } finally {
-                $this->entityManager->clear();
             }
 
             $offset += $batchSize;

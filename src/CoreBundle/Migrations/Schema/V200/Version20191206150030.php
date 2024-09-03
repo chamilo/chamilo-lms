@@ -61,11 +61,9 @@ class Version20191206150030 extends AbstractMigrationChamilo
 
             if (($counter % $batchSize) === 0) {
                 $em->flush();
-                $em->clear(); // Detaches all objects from Doctrine!
             }
             $counter++;
         }
         $em->flush();
-        $em->clear();
     }
 }

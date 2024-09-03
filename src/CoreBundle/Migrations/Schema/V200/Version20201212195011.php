@@ -66,14 +66,12 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                 // $course = $course->getGroups();
                 if (($counter % $batchSize) === 0) {
                     $this->entityManager->flush();
-                    $this->entityManager->clear(); // Detaches all objects from Doctrine!
                 }
                 $counter++;
             }
         }
 
         $this->entityManager->flush();
-        $this->entityManager->clear();
 
         // Special course.
         $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
@@ -132,12 +130,10 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                 $this->entityManager->persist($tool);
                 if (($counter % $batchSize) === 0) {
                     $this->entityManager->flush();
-                    $this->entityManager->clear(); // Detaches all objects from Doctrine!
                 }
                 $counter++;
             }
         }
         $this->entityManager->flush();
-        $this->entityManager->clear();
     }
 }

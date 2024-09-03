@@ -116,7 +116,6 @@ final class Version20210930130343 extends AbstractMigrationChamilo
             }
 
             $this->entityManager->flush();
-            $this->entityManager->clear();
         }
     }
 

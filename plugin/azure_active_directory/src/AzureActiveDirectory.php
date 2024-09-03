@@ -21,6 +21,7 @@ class AzureActiveDirectory extends Plugin
     public const SETTING_MANAGEMENT_LOGIN_ENABLE = 'management_login_enable';
     public const SETTING_MANAGEMENT_LOGIN_NAME = 'management_login_name';
     public const SETTING_PROVISION_USERS = 'provisioning';
+    public const SETTING_UPDATE_USERS = 'update_users';
     public const SETTING_GROUP_ID_ADMIN = 'group_id_admin';
     public const SETTING_GROUP_ID_SESSION_ADMIN = 'group_id_session_admin';
     public const SETTING_GROUP_ID_TEACHER = 'group_id_teacher';
@@ -47,6 +48,7 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_MANAGEMENT_LOGIN_ENABLE => 'boolean',
             self::SETTING_MANAGEMENT_LOGIN_NAME => 'text',
             self::SETTING_PROVISION_USERS => 'boolean',
+            self::SETTING_UPDATE_USERS => 'boolean',
             self::SETTING_GROUP_ID_ADMIN => 'text',
             self::SETTING_GROUP_ID_SESSION_ADMIN => 'text',
             self::SETTING_GROUP_ID_TEACHER => 'text',
@@ -209,44 +211,36 @@ class AzureActiveDirectory extends Plugin
         if (empty($userId)) {
             // If we didn't find the user
             if ($this->get(self::SETTING_PROVISION_USERS) === 'true') {
-                [$userRole, $isAdmin] = $this->getUserRoleAndCheckIsAdmin(
-                    $token,
-                    $provider,
-                    $apiGroupsRef,
-                    $objectIdKey
-                );
-
-                $phone = null;
-
-                if (isset($azureUserInfo['telephoneNumber'])) {
-                    $phone = $azureUserInfo['telephoneNumber'];
-                } elseif (isset($azureUserInfo['businessPhones'][0])) {
-                    $phone = $azureUserInfo['businessPhones'][0];
-                } elseif (isset($azureUserInfo['mobilePhone'])) {
-                    $phone = $azureUserInfo['mobilePhone'];
-                }
+                [
+                    $firstNme,
+                    $lastName,
+                    $username,
+                    $email,
+                    $phone,
+                    $authSource,
+                    $active,
+                    $extra,
+                    $userRole,
+                    $isAdmin,
+                ] = $this->formatUserData($token, $provider, $azureUserInfo, $apiGroupsRef, $objectIdKey, $azureUidKey);
 
                 // If the option is set to create users, create it
                 $userId = UserManager::create_user(
-                    $azureUserInfo['givenName'],
-                    $azureUserInfo['surname'],
+                    $firstNme,
+                    $lastName,
                     $userRole,
-                    $azureUserInfo['mail'],
-                    $azureUserInfo['userPrincipalName'],
+                    $email,
+                    $username,
                     '',
                     null,
                     null,
                     $phone,
                     null,
-                    'azure',
+                    $authSource,
                     null,
-                    ($azureUserInfo['accountEnabled'] ? 1 : 0),
+                    $active,
                     null,
-                    [
-                        'extra_'.self::EXTRA_FIELD_ORGANISATION_EMAIL => $azureUserInfo['mail'],
-                        'extra_'.self::EXTRA_FIELD_AZURE_ID => $azureUserInfo['mailNickname'],
-                        'extra_'.self::EXTRA_FIELD_AZURE_UID => $azureUserInfo[$azureUidKey],
-                    ],
+                    $extra,
                     null,
                     null,
                     $isAdmin
@@ -257,9 +251,99 @@ class AzureActiveDirectory extends Plugin
             } else {
                 throw new Exception('User not found when checking the extra fields from '.$azureUserInfo['mail'].' or '.$azureUserInfo['mailNickname'].' or '.$azureUserInfo[$azureUidKey].'.');
             }
+        } else {
+            if ($this->get(self::SETTING_UPDATE_USERS) === 'true') {
+                [
+                    $firstNme,
+                    $lastName,
+                    $username,
+                    $email,
+                    $phone,
+                    $authSource,
+                    $active,
+                    $extra,
+                    $userRole,
+                    $isAdmin,
+                ] = $this->formatUserData($token, $provider, $azureUserInfo, $apiGroupsRef, $objectIdKey, $azureUidKey);
+
+                $userId = UserManager::update_user(
+                    $userId,
+                    $firstNme,
+                    $lastName,
+                    $username,
+                    '',
+                    $authSource,
+                    $email,
+                    $userRole,
+                    null,
+                    $phone,
+                    null,
+                    null,
+                    $active,
+                    null,
+                    0,
+                    $extra
+                );
+
+                if (!$userId) {
+                    throw new Exception(get_lang('CouldNotUpdateUser').' '.$azureUserInfo['userPrincipalName']);
+                }
+            }
         }
 
         return $userId;
+    }
+
+    private function formatUserData(
+        AccessTokenInterface $token,
+        Azure $provider,
+        array $azureUserInfo,
+        string $apiGroupsRef,
+        string $objectIdKey,
+        string $azureUidKey
+    ): array {
+        [$userRole, $isAdmin] = $this->getUserRoleAndCheckIsAdmin(
+            $token,
+            $provider,
+            $apiGroupsRef,
+            $objectIdKey
+        );
+
+        $phone = null;
+
+        if (isset($azureUserInfo['telephoneNumber'])) {
+            $phone = $azureUserInfo['telephoneNumber'];
+        } elseif (isset($azureUserInfo['businessPhones'][0])) {
+            $phone = $azureUserInfo['businessPhones'][0];
+        } elseif (isset($azureUserInfo['mobilePhone'])) {
+            $phone = $azureUserInfo['mobilePhone'];
+        }
+
+        // If the option is set to create users, create it
+        $firstNme = $azureUserInfo['givenName'];
+        $lastName = $azureUserInfo['surname'];
+        $email = $azureUserInfo['mail'];
+        $username = $azureUserInfo['userPrincipalName'];
+        $authSource = 'azure';
+        $active = ($azureUserInfo['accountEnabled'] ? 1 : 0);
+        $extra = [
+            'extra_'.self::EXTRA_FIELD_ORGANISATION_EMAIL => $azureUserInfo['mail'],
+            'extra_'.self::EXTRA_FIELD_AZURE_ID => $azureUserInfo['mailNickname'],
+            'extra_'.self::EXTRA_FIELD_AZURE_UID => $azureUserInfo[$azureUidKey],
+        ];
+
+        return [
+            $firstNme,
+            $lastName,
+            $username,
+            $email,
+            $phone,
+            $authSource,
+            $active,
+            $extra,
+            $userRole,
+            $isAdmin,
+        ];
     }
 
     private function getUserRoleAndCheckIsAdmin(

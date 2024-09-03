@@ -59,7 +59,7 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_DEACTIVATE_NONEXISTING_USERS => 'boolean',
         ];
 
-        parent::__construct('2.3', 'Angel Fernando Quiroz Campos, Yannick Warnier', $settings);
+        parent::__construct('2.4', 'Angel Fernando Quiroz Campos, Yannick Warnier', $settings);
     }
 
     /**

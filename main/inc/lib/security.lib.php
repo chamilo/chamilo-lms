@@ -44,7 +44,7 @@ class Security
     public const CHAR_DIGITS = '0123456789';
     public const CHAR_SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~';
 
-    public static array $clean = [];
+    public static $clean = [];
 
     /**
      * Checks if the absolute path (directory) given is really under the

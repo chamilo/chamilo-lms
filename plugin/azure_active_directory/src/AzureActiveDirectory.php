@@ -227,104 +227,116 @@ class AzureActiveDirectory extends Plugin
 
         if (empty($userId)) {
             // If we didn't find the user
-            if ($this->get(self::SETTING_PROVISION_USERS) === 'true') {
-                [
-                    $firstNme,
-                    $lastName,
-                    $username,
-                    $email,
-                    $phone,
-                    $authSource,
-                    $active,
-                    $extra,
-                    $userRole,
-                    $isAdmin,
-                ] = $this->formatUserData($token, $provider, $azureUserInfo, $apiGroupsRef, $objectIdKey, $azureUidKey);
-
-                // If the option is set to create users, create it
-                $userId = UserManager::create_user(
-                    $firstNme,
-                    $lastName,
-                    $userRole,
-                    $email,
-                    $username,
-                    '',
-                    null,
-                    null,
-                    $phone,
-                    null,
-                    $authSource,
-                    null,
-                    $active,
-                    null,
-                    $extra,
-                    null,
-                    null,
-                    $isAdmin
-                );
-                if (!$userId) {
-                    throw new Exception(get_lang('UserNotAdded').' '.$azureUserInfo['userPrincipalName']);
-                }
-            } else {
-                throw new Exception('User not found when checking the extra fields from '.$azureUserInfo['mail'].' or '.$azureUserInfo['mailNickname'].' or '.$azureUserInfo[$azureUidKey].'.');
+            if ($this->get(self::SETTING_PROVISION_USERS) !== 'true') {
+                throw new Exception('User not found when checking the extra fields from ' . $azureUserInfo['mail'] . ' or ' . $azureUserInfo['mailNickname'] . ' or ' . $azureUserInfo[$azureUidKey] . '.');
             }
-        } else {
-            if ($this->get(self::SETTING_UPDATE_USERS) === 'true') {
-                [
-                    $firstNme,
-                    $lastName,
-                    $username,
-                    $email,
-                    $phone,
-                    $authSource,
-                    $active,
-                    $extra,
-                    $userRole,
-                    $isAdmin,
-                ] = $this->formatUserData($token, $provider, $azureUserInfo, $apiGroupsRef, $objectIdKey, $azureUidKey);
 
-                $userId = UserManager::update_user(
-                    $userId,
-                    $firstNme,
-                    $lastName,
-                    $username,
-                    '',
-                    $authSource,
-                    $email,
-                    $userRole,
-                    null,
-                    $phone,
-                    null,
-                    null,
-                    $active,
-                    null,
-                    0,
-                    $extra
-                );
+            [
+                $firstNme,
+                $lastName,
+                $username,
+                $email,
+                $phone,
+                $authSource,
+                $active,
+                $extra,
+                $userRole,
+                $isAdmin,
+            ] = $this->formatUserData($token, $provider, $azureUserInfo, $apiGroupsRef, $objectIdKey, $azureUidKey);
 
-                if (!$userId) {
-                    throw new Exception(get_lang('CouldNotUpdateUser').' '.$azureUserInfo['userPrincipalName']);
-                }
+            // If the option is set to create users, create it
+            $userId = UserManager::create_user(
+                $firstNme,
+                $lastName,
+                $userRole,
+                $email,
+                $username,
+                '',
+                null,
+                null,
+                $phone,
+                null,
+                $authSource,
+                null,
+                $active,
+                null,
+                $extra,
+                null,
+                null,
+                $isAdmin
+            );
+
+            if (!$userId) {
+                throw new Exception(get_lang('UserNotAdded') . ' ' . $azureUserInfo['userPrincipalName']);
+            }
+
+            return $userId;
+        }
+
+        if ($this->get(self::SETTING_UPDATE_USERS) === 'true') {
+            [
+                $firstNme,
+                $lastName,
+                $username,
+                $email,
+                $phone,
+                $authSource,
+                $active,
+                $extra,
+                $userRole,
+                $isAdmin,
+            ] = $this->formatUserData($token, $provider, $azureUserInfo, $apiGroupsRef, $objectIdKey, $azureUidKey);
+
+            $userId = UserManager::update_user(
+                $userId,
+                $firstNme,
+                $lastName,
+                $username,
+                '',
+                $authSource,
+                $email,
+                $userRole,
+                null,
+                $phone,
+                null,
+                null,
+                $active,
+                null,
+                0,
+                $extra
+            );
+
+            if (!$userId) {
+                throw new Exception(get_lang('CouldNotUpdateUser').' '.$azureUserInfo['userPrincipalName']);
             }
         }
 
         return $userId;
     }
 
+    /**
+     * @throws Exception
+     */
     private function formatUserData(
         AccessTokenInterface $token,
         Azure $provider,
         array $azureUserInfo,
         string $apiGroupsRef,
-        string $objectIdKey,
+        string $groupObjectIdKey,
         string $azureUidKey
     ): array {
-        [$userRole, $isAdmin] = $this->getUserRoleAndCheckIsAdmin(
-            $token,
-            $provider,
-            $apiGroupsRef,
-            $objectIdKey
-        );
+        try {
+            [$userRole, $isAdmin] = $this->getUserRoleAndCheckIsAdmin(
+                $token,
+                $provider,
+                $apiGroupsRef,
+                $groupObjectIdKey
+            );
+        } catch (Exception $e) {
+            throw new Exception(
+                'Exception when formatting user '.$azureUserInfo[$azureUidKey].' data: '.$e->getMessage()
+            );
+        }
 
         $phone = null;
 
@@ -363,15 +375,20 @@ class AzureActiveDirectory extends Plugin
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     private function getUserRoleAndCheckIsAdmin(
         AccessTokenInterface $token,
-        Azure $provider = null,
+        Azure $provider,
         string $apiRef = 'me/memberOf',
-        string $objectIdKey = 'objectId'
+        string $groupObjectIdKey = 'objectId'
     ): array {
-        $provider = $provider ?: $this->getProvider();
-
-        $groups = $provider->get($apiRef, $token);
+        try {
+            $groups = $provider->get($apiRef, $token);
+        } catch (Exception $e) {
+            throw new Exception('Exception when requesting user groups from Azure: '.$e->getMessage());
+        }
 
         // If any specific group ID has been defined for a specific role, use that
         // ID to give the user the right role
@@ -381,12 +398,12 @@ class AzureActiveDirectory extends Plugin
         $userRole = STUDENT;
         $isAdmin = false;
         foreach ($groups as $group) {
-            if ($givenAdminGroup == $group[$objectIdKey]) {
+            if ($givenAdminGroup == $group[$groupObjectIdKey]) {
                 $userRole = COURSEMANAGER;
                 $isAdmin = true;
-            } elseif ($givenSessionAdminGroup == $group[$objectIdKey]) {
+            } elseif ($givenSessionAdminGroup == $group[$groupObjectIdKey]) {
                 $userRole = SESSIONADMIN;
-            } elseif ($userRole != SESSIONADMIN && $givenTeacherGroup == $group[$objectIdKey]) {
+            } elseif ($userRole != SESSIONADMIN && $givenTeacherGroup == $group[$groupObjectIdKey]) {
                 $userRole = COURSEMANAGER;
             }
         }

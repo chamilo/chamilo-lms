@@ -478,7 +478,7 @@ final class Version20240811221400 extends AbstractMigrationChamilo
 
         // c_lp_category_rel_user
         $this->addSql('ALTER TABLE c_lp_category_rel_user DROP FOREIGN KEY IF EXISTS FK_83D35829A76ED395');
-        $this->addSql('ALTER TABLE c_lp_category_rel_user ADD CONSTRAINT FK_83D35829A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE c_lp_category_rel_user ADD CONSTRAINT FK_83D35829A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL');
         $this->addSql('DROP INDEX IF EXISTS idx_61f042712469de2 ON c_lp_category_rel_user');
         $this->addSql('CREATE INDEX IF NOT EXISTS IDX_83D3582912469DE2 ON c_lp_category_rel_user (category_id)');
         $this->addSql('DROP INDEX IF EXISTS idx_61f0427a76ed395 ON c_lp_category_rel_user');

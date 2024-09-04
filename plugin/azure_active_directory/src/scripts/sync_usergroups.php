@@ -7,6 +7,9 @@ if (PHP_SAPI !== 'cli') {
     exit('Run this script through the command line or comment this line in the code');
 }
 
+// Uncomment to indicate the access url to get the plugin settings when using multi-url
+//$_configuration['access_url'] = 1;
+
 $command = new AzureSyncUsergroupsCommand();
 
 try {

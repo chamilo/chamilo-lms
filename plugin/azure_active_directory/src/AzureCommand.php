@@ -18,6 +18,7 @@ class AzureCommand
     public function __construct()
     {
         $this->plugin = AzureActiveDirectory::create();
+        $this->plugin->get_settings(true);
         $this->provider = $this->plugin->getProviderForApiGraph();
     }
 }

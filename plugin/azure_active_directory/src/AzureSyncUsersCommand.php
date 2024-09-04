@@ -7,8 +7,9 @@ use League\OAuth2\Client\Token\AccessTokenInterface;
 class AzureSyncUsersCommand extends AzureCommand
 {
     /**
-     * @return Generator<int, string>
      * @throws Exception
+     *
+     * @return Generator<int, string>
      */
     public function __invoke(): Generator
     {
@@ -27,7 +28,7 @@ class AzureSyncUsersCommand extends AzureCommand
                     $token,
                     $this->provider,
                     $azureUserInfo,
-                    'users/' . $azureUserInfo['id'] . '/memberOf',
+                    'users/'.$azureUserInfo['id'].'/memberOf',
                     'id',
                     'id'
                 );
@@ -69,8 +70,9 @@ class AzureSyncUsersCommand extends AzureCommand
     }
 
     /**
-     * @return Generator<int, array<string, string>>
      * @throws Exception
+     *
+     * @return Generator<int, array<string, string>>
      */
     private function getAzureUsers(AccessTokenInterface $token): Generator
     {
@@ -83,7 +85,7 @@ class AzureSyncUsersCommand extends AzureCommand
             'mobilePhone',
             'accountEnabled',
             'mailNickname',
-            'id'
+            'id',
         ];
 
         $query = sprintf(

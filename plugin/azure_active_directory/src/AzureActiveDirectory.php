@@ -180,7 +180,8 @@ class AzureActiveDirectory extends Plugin
         return $defaultOrder;
     }
 
-    public function getUserIdByVerificationOrder(array $azureUserData, string $azureUidKey = 'objectId'): ?int {
+    public function getUserIdByVerificationOrder(array $azureUserData, string $azureUidKey = 'objectId'): ?int
+    {
         $selectedOrder = $this->getExistingUserVerificationOrder();
 
         $extraFieldValue = new ExtraFieldValue('user');
@@ -228,7 +229,7 @@ class AzureActiveDirectory extends Plugin
         if (empty($userId)) {
             // If we didn't find the user
             if ($this->get(self::SETTING_PROVISION_USERS) !== 'true') {
-                throw new Exception('User not found when checking the extra fields from ' . $azureUserInfo['mail'] . ' or ' . $azureUserInfo['mailNickname'] . ' or ' . $azureUserInfo[$azureUidKey] . '.');
+                throw new Exception('User not found when checking the extra fields from '.$azureUserInfo['mail'].' or '.$azureUserInfo['mailNickname'].' or '.$azureUserInfo[$azureUidKey].'.');
             }
 
             [
@@ -267,7 +268,7 @@ class AzureActiveDirectory extends Plugin
             );
 
             if (!$userId) {
-                throw new Exception(get_lang('UserNotAdded') . ' ' . $azureUserInfo['userPrincipalName']);
+                throw new Exception(get_lang('UserNotAdded').' '.$azureUserInfo['userPrincipalName']);
             }
 
             return $userId;
@@ -333,9 +334,7 @@ class AzureActiveDirectory extends Plugin
                 $groupObjectIdKey
             );
         } catch (Exception $e) {
-            throw new Exception(
-                'Exception when formatting user '.$azureUserInfo[$azureUidKey].' data: '.$e->getMessage()
-            );
+            throw new Exception('Exception when formatting user '.$azureUserInfo[$azureUidKey].' data: '.$e->getMessage());
         }
 
         $phone = null;

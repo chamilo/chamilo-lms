@@ -7,8 +7,9 @@ use League\OAuth2\Client\Token\AccessTokenInterface;
 class AzureSyncUsergroupsCommand extends AzureCommand
 {
     /**
-     * @return Generator<int, string>
      * @throws Exception
+     *
+     * @return Generator<int, string>
      */
     public function __invoke(): Generator
     {
@@ -60,8 +61,9 @@ class AzureSyncUsergroupsCommand extends AzureCommand
     }
 
     /**
-     * @return Generator<int, array<string, string>>
      * @throws Exception
+     *
+     * @return Generator<int, array<string, string>>
      */
     private function getAzureGroups(AccessTokenInterface $token): Generator
     {
@@ -96,19 +98,20 @@ class AzureSyncUsergroupsCommand extends AzureCommand
                 $hasNextLink = true;
                 $query = parse_url($azureGroupsRequest['@odata.nextLink'], PHP_URL_QUERY);
             }
-        } while($hasNextLink);
+        } while ($hasNextLink);
     }
 
     /**
-     * @return Generator<int, array<string, string>>
      * @throws Exception
+     *
+     * @return Generator<int, array<string, string>>
      */
     private function getAzureGroupMembers(AccessTokenInterface $token, string $groupObjectId): Generator
     {
         $userFields = [
             'mail',
             'mailNickname',
-            'id'
+            'id',
         ];
         $query = sprintf(
             '$top=%d&$select=%s',

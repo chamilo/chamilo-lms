@@ -50,6 +50,7 @@ final class Version20240811221980 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE justification_document_rel_users CHANGE justification_document_id justification_document_id INT DEFAULT NULL;');
         }
 
+        $this->addSql('ALTER TABLE lti_external_tool DROP FOREIGN KEY IF EXISTS FK_DB0E04E41BAD783F;');
         $this->addSql('ALTER TABLE lti_external_tool DROP INDEX IF EXISTS FK_DB0E04E41BAD783F;');
         $table = $schema->getTable('lti_external_tool');
         if (false === $table->hasIndex('UNIQ_DB0E04E41BAD783F')) {

@@ -103,7 +103,11 @@ if (isset($_GET['id'])) {
 } else {
     // Create a new category
     $action = 'add_category';
-    $form = new FormValidator('group_category');
+    $form = new FormValidator(
+        'group_category', 
+        'post', 
+        api_get_self().'?'.api_get_cidreq()
+    );
 }
 
 $form->addElement('header', $nameTools);

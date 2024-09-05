@@ -383,7 +383,7 @@
     "Switch to student view": "Passer en vue apprenant",
     "Switch to teacher view": "Passer en vue prof",
     "Waiting": "En attente",
-    "Requests": "Requests",
+    "Requests": "Demandes",
     "Deleted": "Supprim\u00e9s",
     "{resource} updated": "{resource} updated",
     "Courses catalogue": "Catalogue de cours",
@@ -535,8 +535,8 @@
     "Delete Account": "Delete Account",
     "Friend request sent successfully": "Friend request sent successfully",
     "Failed to send friend request": "Failed to send friend request",
-    "Add friends": "Add friends",
-    "Add friend": "Add friend",
+    "Add friends": "Ajouter des amis",
+    "Add friend": "Ajouter un ami",
     "Refresh": "Rafra\u00eechir",
     "Are you sure to delete the friendship?": "Are you sure to delete the friendship?",
     "Friends": "Amis",
@@ -564,5 +564,8 @@
     "Dear user,<br />\n<br />You are about to start using one of the best open-source e-learning platform on the market. Like many other open-source project, this project is backed up by a large community of students, teachers, developers and content creators who would like to promote the project better.<br />\n<br />\nBy knowing a little bit more about you, one of our most important users, who will manage this e-learning system, we will be able to let people know that our software is used and let you know when we organize events that might be relevant to you.<br />\n<br />\nBy filling this form, you accept that the Chamilo association or its members might send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flow, with a permanent respect of your time and your privacy.<br />\n<br />\nPlease note that you are <b>not required</b> to fill this form. If you want to remain anonymous, we will loose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click \"Next\".<br /><br />": "Cher utilisateur,<br />",
     "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.": "Le script d'installation cr\u00e9era (ou utilisera) la base de donn\u00e9es de Chamilo avec le nom donn\u00e9 ici. Merci de vous assurer que l'utilisateur indiqu\u00e9 dispose des droits suffisants pour cr\u00e9er la base de donn\u00e9es. Si une base de donn\u00e9es de ce nom existe d\u00e9j\u00e0, ses donn\u00e9es seront \u00e9cras\u00e9es. N'utilisez pas l'utilisateur root comme utilisateur de base de donn\u00e9es pour Chamilo\u202f: cela peut ouvrir la porte \u00e0 de s\u00e9rieux probl\u00e8mes de s\u00e9curit\u00e9.",
     "The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.": "Le script d'installation va supprimer toutes les tables de la base de donn\u00e9es s\u00e9lectionn\u00e9e. Nous recommandons avec insistance que vous fassiez une copie de sauvegarde compl\u00e8te de celles-ci avant de confirmer cette derni\u00e8re \u00e9tape de l'installation.",
-    "Continue with %s": "Continuer avec {0}"
+    "Continue with %s": "Continuer avec {0}",
+    "Change Password": "Changer de mot de passe",
+    "All Messages": "Tous les messages",
+    "Promoted Messages": "Messages promus"
 }

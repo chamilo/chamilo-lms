@@ -27748,3 +27748,33 @@ msgstr "Step 7 - Update process execution"
 
 msgid "Continue with %s"
 msgstr "Continue with %s"
+
+msgid "As read"
+msgstr "As read"
+
+msgid "As unread"
+msgstr "As unread"
+
+msgid "Message deleted"
+msgstr "Message deleted"
+
+msgid "Messages deleted"
+msgstr "Messages deleted"
+
+msgid "Change Password"
+msgstr "Change Password"
+
+msgid "All Messages"
+msgstr "All Messages"
+
+msgid "Promoted Messages"
+msgstr "Promoted Messages"
+
+msgid "Requests"
+msgstr "Requests"
+
+msgid "Add friends"
+msgstr "Add friends"
+
+msgid "Add friend"
+msgstr "Add friend"

@@ -28729,3 +28729,33 @@ msgstr ""
 
 msgid "Continue with %s"
 msgstr "Seguir con %s"
+
+msgid "As read"
+msgstr "Leído"
+
+msgid "As unread"
+msgstr "No leído"
+
+msgid "Message deleted"
+msgstr "Mensaje eliminado"
+
+msgid "Messages deleted"
+msgstr "Mensajes eliminados"
+
+msgid "Change Password"
+msgstr "Cambiar de contraseña"
+
+msgid "All Messages"
+msgstr "Todos los mensajes"
+
+msgid "Promoted Messages"
+msgstr "Mensajes promocionados"
+
+msgid "Requests"
+msgstr "Solicitudes"
+
+msgid "Add friends"
+msgstr "Agregar amigos"
+
+msgid "Add friend"
+msgstr "Agregar amigo"

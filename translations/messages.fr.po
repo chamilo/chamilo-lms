@@ -29534,3 +29534,33 @@ msgstr "Étape 4 - Paramètres de base de données"
 
 msgid "Continue with %s"
 msgstr "Continuer avec %s"
+
+msgid "As read"
+msgstr "Lu"
+
+msgid "As unread"
+msgstr "Non lu"
+
+msgid "Message deleted"
+msgstr "Message supprimé"
+
+msgid "Messages deleted"
+msgstr "Messages supprimés"
+
+msgid "Change Password"
+msgstr "Changer de mot de passe"
+
+msgid "All Messages"
+msgstr "Tous les messages"
+
+msgid "Promoted Messages"
+msgstr "Messages promus"
+
+msgid "Requests"
+msgstr "Demandes"
+
+msgid "Add friends"
+msgstr "Ajouter des amis"
+
+msgid "Add friend"
+msgstr "Ajouter un ami"

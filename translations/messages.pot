@@ -27735,3 +27735,32 @@ msgstr ""
 msgid "Continue with %s"
 msgstr ""
 
+msgid "As read"
+msgstr ""
+
+msgid "As unread"
+msgstr ""
+
+msgid "Message deleted"
+msgstr ""
+
+msgid "Messages deleted"
+msgstr ""
+
+msgid "Change Password"
+msgstr ""
+
+msgid "All Messages"
+msgstr ""
+
+msgid "Promoted Messages"
+msgstr ""
+
+msgid "Requests"
+msgstr ""
+
+msgid "Add friends"
+msgstr ""
+
+msgid "Add friend"
+msgstr ""

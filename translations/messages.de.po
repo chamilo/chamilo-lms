@@ -29186,3 +29186,33 @@ msgstr "lesen Sie die Installationsanleitung"
 
 msgid "Step 4 - Database settings"
 msgstr "Schritt 4 - Datenbankeinstellungen"
+
+msgid "As read"
+msgstr "Lesen"
+
+msgid "As unread"
+msgstr "Ungelesen"
+
+msgid "Message deleted"
+msgstr "Nachricht gelöscht"
+
+msgid "Messages deleted"
+msgstr "Nachrichten gelöscht"
+
+msgid "Change Password"
+msgstr "Kennwort ändern"
+
+msgid "All Messages"
+msgstr "Alle Nachrichten"
+
+msgid "Promoted Messages"
+msgstr "Gesponserte Nachrichten"
+
+msgid "Requests"
+msgstr "Anfragen"
+
+msgid "Add friends"
+msgstr "Freund hinzufügen"
+
+msgid "Add friend"
+msgstr "Freunde hinzufügen"

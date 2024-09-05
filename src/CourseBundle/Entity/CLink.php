@@ -84,7 +84,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                                     'url' => ['type' => 'string'],
                                     'title' => ['type' => 'string'],
                                     'description' => ['type' => 'string'],
-                                    'category_id' => ['type' => 'int'],
+                                    'category_id' => ['type' => 'integer'],
                                     'target' => ['type' => 'string'],
                                     'parentResourceNodeId' => ['type' => 'integer'],
                                     'resourceLinkList' => [

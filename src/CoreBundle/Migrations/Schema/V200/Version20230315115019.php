@@ -39,7 +39,7 @@ final class Version20230315115019 extends AbstractMigrationChamilo
                         continue;
                     }
 
-                    $filePath = $rootPath.'/app/home/default_platform_document/template_thumb/'.$systemTemplate['image'];
+                    $filePath = $this->getUpdateRootPath().'/app/home/default_platform_document/template_thumb/'.$systemTemplate['image'];
                     if ($this->fileExists($filePath)) {
                         $fileName = basename($filePath);
                         $mimeType = mime_content_type($filePath);

@@ -44,8 +44,7 @@
       <h1
         v-else-if="'update' === installerData.installType"
         v-t="{
-          path: 'Update from Chamilo {versions}',
-          args: { versions: installerData.upgradeFromVersion.join(' | ') },
+        path: 'Update from Chamilo ' + installerData.upgradeFromVersion.join(' | ')
         }"
         class="mb-4"
       />

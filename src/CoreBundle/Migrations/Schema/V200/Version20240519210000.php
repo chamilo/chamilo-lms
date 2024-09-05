@@ -45,7 +45,7 @@ final class Version20240519210000 extends AbstractMigrationChamilo
             $courseDir = $this->findCourseDirectory($pathPattern);
 
             if ($courseDir) {
-                $filePath = "app/courses/{$courseDir}/exercises/{$pathPattern}";
+                $filePath = $this->getUpdateRootPath()."app/courses/{$courseDir}/exercises/{$pathPattern}";
                 $this->processFile($filePath, $attemptRepo, $attemptData);
             } else {
                 error_log('MIGRATIONS :: File not found for pattern: '.$pathPattern);
@@ -58,7 +58,7 @@ final class Version20240519210000 extends AbstractMigrationChamilo
     private function findCourseDirectory(string $pathPattern): ?string
     {
         $kernel = $this->container->get('kernel');
-        $rootPath = $kernel->getProjectDir().'/app/courses/';
+        $rootPath = $this->getUpdateRootPath().'/app/courses/';
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootPath));
 
         foreach ($iterator as $file) {

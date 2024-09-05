@@ -50,7 +50,7 @@ final class Version20231026231100 extends AbstractMigrationChamilo
             if ($message) {
                 $messageId = $message->getId();
                 $filename = $attachment->getFilename();
-                $rootDir = $rootPath.'/app/upload/users';
+                $rootDir = $this->getUpdateRootPath().'/app/upload/users';
                 $targetFile = $attachment->getPath();
                 $foundFilePath = $this->findFileRecursively($rootDir, $targetFile);
                 $sender = $message->getSender();

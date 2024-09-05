@@ -301,6 +301,32 @@ if (isset($_POST['step2'])) {
     $current_step = 5;
     // STEP 5 : CONFIGURATION SETTINGS
     if ('update' === $installType) {
+        // Create .env file
+        $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
+        $distFile = api_get_path(SYMFONY_SYS_PATH) . '.env.dist';
+        $params = [
+            '{{DATABASE_HOST}}' => $dbHostForm,
+            '{{DATABASE_PORT}}' => $dbPortForm,
+            '{{DATABASE_NAME}}' => $dbNameForm,
+            '{{DATABASE_USER}}' => $dbUsernameForm,
+            '{{DATABASE_PASSWORD}}' => $dbPassForm,
+            '{{APP_INSTALLED}}' => 1,
+            '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
+            '{{APP_SECRET}}' => generateRandomToken(),
+            '{{DB_MANAGER_ENABLED}}' => '0',
+            '{{SOFTWARE_NAME}}' => 'Chamilo',
+            '{{SOFTWARE_URL}}' => $institutionUrlForm,
+            '{{DENY_DELETE_USERS}}' => '0',
+            '{{HOSTING_TOTAL_SIZE_LIMIT}}' => '0',
+            '{{THEME_FALLBACK}}' => 'chamilo',
+            '{{PACKAGER}}' => 'chamilo',
+            '{{DEFAULT_TEMPLATE}}' => 'default',
+            '{{ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE}}' => '0',
+        ];
+        error_log('Update env file');
+        updateEnvFile($distFile, $envFile, $params);
+        (new Dotenv())->load($envFile);
+
         $db_name = $dbNameForm;
         connectToDatabase(
             $dbHostForm,
@@ -421,15 +447,7 @@ if (isset($_POST['step2'])) {
     $stepData['institutionUrlForm'] = $institutionUrlForm;
     $stepData['encryptPassForm'] = $encryptPassForm;
 
-    $isPendingMigration = false;
-
     if ($isUpdateAvailable) {
-        $checkMigrationStatus = checkMigrationStatus();
-
-        $isPendingMigration = false === $checkMigrationStatus['status'];
-    }
-
-    if ($isPendingMigration) {
         $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
         $dotenv = new Dotenv();
         $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
@@ -451,79 +469,11 @@ if (isset($_POST['step2'])) {
     $current_step = 7;
 
     if ('update' === $installType) {
-        connectToDatabase(
-            $dbHostForm,
-            $dbUsernameForm,
-            $dbPassForm,
-            $dbNameForm,
-            $dbPortForm
-        );
-        $manager = Database::getManager();
-        //$perm = api_get_permissions_for_new_directories();
-        //$perm_file = api_get_permissions_for_new_files();
-        // @todo fix permissions.
-        $perm = octdec('0777');
-        $perm_file = octdec('0777');
+        // The migration process for updates has been moved to migrate.php and is now
+        // handled via AJAX requests from Vue.js. This section of the code is no longer
+        // necessary and has been removed to streamline the update process.
 
-        if (!$isUpdateAvailable) {
-            $installType = 'update';
-            // Create .env file
-            $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
-            $distFile = api_get_path(SYMFONY_SYS_PATH) . '.env.dist';
-            $params = [
-                '{{DATABASE_HOST}}' => $dbHostForm,
-                '{{DATABASE_PORT}}' => $dbPortForm,
-                '{{DATABASE_NAME}}' => $dbNameForm,
-                '{{DATABASE_USER}}' => $dbUsernameForm,
-                '{{DATABASE_PASSWORD}}' => $dbPassForm,
-                '{{APP_INSTALLED}}' => 1,
-                '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
-                '{{APP_SECRET}}' => generateRandomToken(),
-                '{{DB_MANAGER_ENABLED}}' => '0',
-                '{{SOFTWARE_NAME}}' => 'Chamilo',
-                '{{SOFTWARE_URL}}' => $institutionUrlForm,
-                '{{DENY_DELETE_USERS}}' => '0',
-                '{{HOSTING_TOTAL_SIZE_LIMIT}}' => '0',
-                '{{THEME_FALLBACK}}' => 'chamilo',
-                '{{PACKAGER}}' => 'chamilo',
-                '{{DEFAULT_TEMPLATE}}' => 'default',
-                '{{ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE}}' => '0',
-            ];
-            error_log('Update env file');
-            updateEnvFile($distFile, $envFile, $params);
-            (new Dotenv())->load($envFile);
-
-        } else {
-            $dotenv = new Dotenv();
-            $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
-            $dotenv->loadEnv($envFile);
-        }
-
-        // Load Symfony Kernel
-        $kernel = new Kernel('dev', true);
-        $application = new Application($kernel);
-        error_log('Set Kernel');
-
-        session_unset();
-        $_SESSION = [];
-        session_destroy();
-
-        // No errors
-        //if ($result == 0) {
-        // Boot kernel and get the doctrine from Symfony container
-        $kernel->boot();
-        error_log('Boot');
-        $container = $kernel->getContainer();
-
-        Container::setContainer($container);
-        Container::setLegacyServices($container);
-
-        $manager = $container->get('doctrine')->getManager();
-
-        migrateSwitch($my_old_version, $manager);
-        upgradeWithContainer($container);
-        error_log('Set upgradeWithContainer');
-        error_log('------------------------------');
+        error_log('Migration process moved to migrate.php');
         error_log('Upgrade 2.0.0 process concluded!  ('.date('Y-m-d H:i:s').')');
     } else {
         error_log('------------------------------');

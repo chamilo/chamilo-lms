@@ -46,7 +46,7 @@ class Version20230204150030 extends AbstractMigrationChamilo
             if (empty($path)) {
                 continue;
             }
-            $filePath = $rootPath.'/app/upload/'.$path;
+            $filePath = $this->getUpdateRootPath().'/app/upload/'.$path;
             error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
             if ($this->fileExists($filePath)) {
                 $fileName = basename($path);

@@ -37,7 +37,7 @@ final class Version20240507160300 extends AbstractMigrationChamilo
                 }
 
                 $path = $this->determinePath($userEntity->getId(), $picture);
-                $picturePath = $rootPath.'/app/upload/'.$path.$picture;
+                $picturePath = $this->getUpdateRootPath().'/app/upload/'.$path.$picture;
 
                 if (file_exists($picturePath)) {
                     $mimeType = mime_content_type($picturePath);

@@ -53,7 +53,7 @@ final class Version20230720222140 extends AbstractMigrationChamilo
                         $filename = $matches[3];
 
                         // Get the full file path
-                        $filePath = $rootPath."/app/upload/users/{$folderId}/{$userId}/my_files/{$filename}";
+                        $filePath = $this->getUpdateRootPath()."/app/upload/users/{$folderId}/{$userId}/my_files/{$filename}";
 
                         // Check if the path corresponds to a file
                         if (is_file($filePath)) {

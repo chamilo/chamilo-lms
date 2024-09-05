@@ -125,7 +125,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
 
                 $forumImage = $itemData['forum_image'];
                 if (!empty($forumImage)) {
-                    $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/forum/images/'.$forumImage;
+                    $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/upload/forum/images/'.$forumImage;
                     error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                     if ($this->fileExists($filePath)) {
                         $this->addLegacyFileToResource($filePath, $forumRepo, $resource, $id, $forumImage);
@@ -272,7 +272,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 }
 
                 if (!empty($fileName) && !empty($path)) {
-                    $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/forum/'.$path;
+                    $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/upload/forum/'.$path;
                     error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                     if ($this->fileExists($filePath)) {
                         $this->addLegacyFileToResource($filePath, $forumPostRepo, $post, $id, $fileName);

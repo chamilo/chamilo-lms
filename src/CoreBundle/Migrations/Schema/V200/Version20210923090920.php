@@ -39,7 +39,7 @@ final class Version20210923090920 extends AbstractMigrationChamilo
                 continue;
             }
 
-            $picturePath = $rootPath.'/app/courses/'.$directory.'/course-pic.png';
+            $picturePath = $this->getUpdateRootPath().'/app/courses/'.$directory.'/course-pic.png';
             error_log('MIGRATIONS :: $filePath -- '.$picturePath.' ...');
             if ($this->fileExists($picturePath)) {
                 $admin = $this->getAdmin();

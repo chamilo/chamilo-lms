@@ -7,10 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\Migrations\AbstractMigration;
 
-final class Version20240715183456 extends AbstractMigration
+final class Version20240715183456 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {

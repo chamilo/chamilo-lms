@@ -50,19 +50,35 @@ final class Version20240811221980 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE justification_document_rel_users CHANGE justification_document_id justification_document_id INT DEFAULT NULL;');
         }
 
-        $this->addSql('ALTER TABLE lti_external_tool DROP INDEX IF EXISTS FK_DB0E04E41BAD783F, ADD UNIQUE INDEX UNIQ_DB0E04E41BAD783F (resource_node_id);');
+        $this->addSql('ALTER TABLE lti_external_tool DROP INDEX IF EXISTS FK_DB0E04E41BAD783F;');
+        $table = $schema->getTable('lti_external_tool');
+        if (false === $table->hasIndex('UNIQ_DB0E04E41BAD783F')) {
+            $this->addSql('ALTER TABLE lti_external_tool ADD UNIQUE INDEX UNIQ_DB0E04E41BAD783F (resource_node_id);');
+        }
         $this->addSql('ALTER TABLE lti_external_tool DROP FOREIGN KEY IF EXISTS FK_DB0E04E482F80D8B;');
         $this->addSql('ALTER TABLE lti_external_tool DROP FOREIGN KEY IF EXISTS FK_DB0E04E491D79BD3;');
         $this->addSql('ALTER TABLE lti_external_tool DROP FOREIGN KEY IF EXISTS FK_DB0E04E4727ACA70;');
         $this->addSql('DROP INDEX IF EXISTS fk_db0e04e491d79bd3 ON lti_external_tool;');
-        $this->addSql('CREATE INDEX IDX_DB0E04E491D79BD3 ON lti_external_tool (c_id);');
+        if (false === $table->hasIndex('IDX_DB0E04E491D79BD3')) {
+            $this->addSql('CREATE INDEX IDX_DB0E04E491D79BD3 ON lti_external_tool (c_id);');
+        }
         $this->addSql('DROP INDEX IF EXISTS fk_db0e04e482f80d8b ON lti_external_tool;');
-        $this->addSql('CREATE INDEX IDX_DB0E04E482F80D8B ON lti_external_tool (gradebook_eval_id);');
+        if (false === $table->hasIndex('IDX_DB0E04E482F80D8B')) {
+            $this->addSql('CREATE INDEX IDX_DB0E04E482F80D8B ON lti_external_tool (gradebook_eval_id);');
+        }
         $this->addSql('DROP INDEX IF EXISTS fk_db0e04e4727aca70 ON lti_external_tool;');
-        $this->addSql('CREATE INDEX IDX_DB0E04E4727ACA70 ON lti_external_tool (parent_id);');
-        $this->addSql('ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E482F80D8B FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id) ON DELETE SET NULL;');
-        $this->addSql('ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');
-        $this->addSql('ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E4727ACA70 FOREIGN KEY (parent_id) REFERENCES lti_external_tool (id);');
+        if (false === $table->hasIndex('IDX_DB0E04E4727ACA70')) {
+            $this->addSql('CREATE INDEX IDX_DB0E04E4727ACA70 ON lti_external_tool (parent_id);');
+        }
+        if (!$table->hasForeignKey('FK_DB0E04E482F80D8B')) {
+           $this->addSql('ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E482F80D8B FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id) ON DELETE SET NULL;');
+        }
+        if (!$table->hasForeignKey('FK_DB0E04E491D79BD3')) {
+            $this->addSql('ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');
+        }
+        if (!$table->hasForeignKey('FK_DB0E04E4727ACA70')) {
+            $this->addSql('ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E4727ACA70 FOREIGN KEY (parent_id) REFERENCES lti_external_tool (id);');
+        }
     }
 
     public function down(Schema $schema): void {}

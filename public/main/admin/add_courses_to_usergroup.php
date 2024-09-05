@@ -186,7 +186,7 @@ $actions = Display::url(
 $actions .= Display::url(get_lang('Advanced search'), '#', ['class' => 'advanced_options btn', 'id' => 'advanced_search']);
 
 echo Display::toolbarAction('add_users', [$actions]);
-echo Display::page_header($data['name'].': '.$tool_name);
+echo Display::page_header($data['title'].': '.$tool_name);
 
 echo '<div id="advanced_search_options" style="display:none">';
 $searchForm->display();

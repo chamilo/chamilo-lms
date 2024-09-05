@@ -400,7 +400,7 @@ class GroupManager
         foreach ($classes as $class) {
             $userList = $obj->get_users_by_usergroup($class['id']);
             $groupId = self::create_group(
-                $class['name'],
+                $class['title'],
                 $categoryId,
                 0,
                 null

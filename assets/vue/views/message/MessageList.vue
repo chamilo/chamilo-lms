@@ -485,7 +485,7 @@ async function deleteMessage(message) {
 function showDlgConfirmDeleteSingle({ data }) {
   confirm.require({
     header: t("Confirmation"),
-    message: t(`Are you sure you want to delete "${data.title}"?`),
+    message: t("Are you sure you want to delete %s?", [ data.title ]),
     accept: async () => {
       await deleteMessage(data)
     },

@@ -567,5 +567,6 @@
     "Continue with %s": "Continue with {0}",
     "Change Password": "Change Password",
     "All Messages": "All Messages",
-    "Promoted Messages": "Promoted Messages"
+    "Promoted Messages": "Promoted Messages",
+    "Are you sure you want to delete %s?": "Are you sure you want to delete {0}?"
 }

@@ -532,5 +532,9 @@
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)": "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)",
     "Chamilo is free software distributed under the GNU General Public licence (GPL).": "Chamilo este un program gratis distribuit sub licenta Generala Publica GNU (GPL)",
     "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.": "Scriptul instala va crea baza/bazele de date Chamilo. Va rugam sa tineti cont ca Chamilo va trebui sa creeze mai multe baze de date. Daca va este permis sa folositi o singura baza de date de Serviciul de Gaduire, Chamilo nu va functiona, doar daca alegeti optiunea \"O singura baza de date\".",
-    "The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.": "Instalatia va anula tabelele din banca de date selectate. E foarte important ca prima data sa faceti un backup a tabelelor/bancii de date inainte de a definitiva ultimul pas."
+    "The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.": "Instalatia va anula tabelele din banca de date selectate. E foarte important ca prima data sa faceti un backup a tabelelor/bancii de date inainte de a definitiva ultimul pas.",
+    "Continue with %s": "Continue with {0}",
+    "Change Password": "Change Password",
+    "All Messages": "All Messages",
+    "Promoted Messages": "Promoted Messages"
 }

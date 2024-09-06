@@ -28,7 +28,7 @@ if (!empty($groupId)) {
 switch ($action) {
     case 'preview':
         $userInCourse = false;
-        if (CourseManager::is_user_subscribed_in_course($currentUserId, CourseManager::get_course_code_from_course_id($courseId), $sessionId)) {
+        if ($courseId != 0 && CourseManager::is_user_subscribed_in_course($currentUserId, CourseManager::get_course_code_from_course_id($courseId), $sessionId)) {
             $userInCourse = true;
         }
         $allowToEdit = (

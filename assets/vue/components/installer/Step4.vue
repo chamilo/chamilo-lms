@@ -142,6 +142,7 @@
       severity="success"
     >
       <table>
+        <tbody>
         <tr>
           <td v-t="'Database host'" />
           <td v-text="installerData.stepData.connParams.host" />
@@ -154,20 +155,23 @@
           <td v-t="'Database driver'" />
           <td v-text="installerData.stepData.connParams.driver" />
         </tr>
+        </tbody>
       </table>
       <table v-if="'update' === installerData.installType">
-        <tr>
-          <td v-t="'CREATE TABLE works'" />
-          <td v-t="'OK'" />
-        </tr>
-        <tr>
-          <td v-t="'ALTER TABLE works'" />
-          <td v-t="'OK'" />
-        </tr>
-        <tr>
-          <td v-t="'DROP COLUMN works'" />
-          <td v-t="'OK'" />
-        </tr>
+        <tbody>
+          <tr>
+            <td v-t="'CREATE TABLE works'" />
+            <td v-t="'OK'" />
+          </tr>
+          <tr>
+            <td v-t="'ALTER TABLE works'" />
+            <td v-t="'OK'" />
+          </tr>
+          <tr>
+            <td v-t="'DROP COLUMN works'" />
+            <td v-t="'OK'" />
+          </tr>
+        </tbody>
       </table>
     </Message>
     <Message

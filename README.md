@@ -36,7 +36,7 @@ sudo apt -y upgrade
 sudo apt -y install ca-certificates curl gnupg software-properties-common
 sudo add-apt-repository ppa:ondrej/php
 sudo apt update
-sudo apt install apache2 libapache2-mod-php8.1 mariadb-client mariadb-server php-pear php8.1-{dev,gd,curl,intl,mysql,mbstring,zip,xml,cli,apcu,bcmath,soap} git unzip
+sudo apt install apache2 libapache2-mod-php8.2 mariadb-client mariadb-server php-pear php8.2-{dev,gd,curl,intl,mysql,mbstring,zip,xml,cli,apcu,bcmath,soap} git unzip
 ~~~~
 If you already have nodejs installed, check the version with `node -v`
 Otherwise, install node 18 or above:

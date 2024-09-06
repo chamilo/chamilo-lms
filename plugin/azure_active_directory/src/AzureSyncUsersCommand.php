@@ -15,15 +15,14 @@ class AzureSyncUsersCommand extends AzureCommand
     {
         yield 'Synchronizing users from Azure.';
 
-        $token = $this->provider->getAccessToken(
-            'client_credentials',
-            ['resource' => $this->provider->resource]
-        );
+        $token = $this->getToken();
 
         $existingUsers = [];
 
         foreach ($this->getAzureUsers($token) as $azureUserInfo) {
             try {
+                $token = $this->getToken($token);
+
                 $userId = $this->plugin->registerUser(
                     $token,
                     $this->provider,
@@ -95,8 +94,14 @@ class AzureSyncUsersCommand extends AzureCommand
         );
 
         do {
+            $token = $this->getToken($token);
+
             try {
-                $azureUsersRequest = $this->provider->request('get', "users?$query", $token);
+                $azureUsersRequest = $this->provider->request(
+                    'get',
+                    "users?$query",
+                    $token
+                );
             } catch (Exception $e) {
                 throw new Exception('Exception when requesting users from Azure: '.$e->getMessage());
             }

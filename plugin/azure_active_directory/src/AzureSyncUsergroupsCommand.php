@@ -15,10 +15,7 @@ class AzureSyncUsergroupsCommand extends AzureCommand
     {
         yield 'Synchronizing groups from Azure.';
 
-        $token = $this->provider->getAccessToken(
-            'client_credentials',
-            ['resource' => $this->provider->resource]
-        );
+        $token = $this->getToken();
 
         foreach ($this->getAzureGroups($token) as $azureGroupInfo) {
             $usergroup = new UserGroup();
@@ -80,6 +77,8 @@ class AzureSyncUsergroupsCommand extends AzureCommand
         );
 
         do {
+            $token = $this->getToken($token);
+
             try {
                 $azureGroupsRequest = $this->provider->request('get', "groups?$query", $token);
             } catch (Exception $e) {
@@ -121,6 +120,8 @@ class AzureSyncUsergroupsCommand extends AzureCommand
         $hasNextLink = false;
 
         do {
+            $token = $this->getToken($token);
+
             try {
                 $azureGroupMembersRequest = $this->provider->request(
                     'get',

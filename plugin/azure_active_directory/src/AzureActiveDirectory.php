@@ -213,7 +213,7 @@ class AzureActiveDirectory extends Plugin
      * @throws Exception
      */
     public function registerUser(
-        AccessTokenInterface $token,
+        AccessTokenInterface &$token,
         Azure $provider,
         array $azureUserInfo,
         string $apiGroupsRef = 'me/memberOf',
@@ -319,7 +319,7 @@ class AzureActiveDirectory extends Plugin
      * @throws Exception
      */
     private function formatUserData(
-        AccessTokenInterface $token,
+        AccessTokenInterface &$token,
         Azure $provider,
         array $azureUserInfo,
         string $apiGroupsRef,
@@ -378,7 +378,7 @@ class AzureActiveDirectory extends Plugin
      * @throws Exception
      */
     private function getUserRoleAndCheckIsAdmin(
-        AccessTokenInterface $token,
+        AccessTokenInterface &$token,
         Azure $provider,
         string $apiRef = 'me/memberOf',
         string $groupObjectIdKey = 'objectId'

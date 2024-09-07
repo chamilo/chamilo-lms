@@ -9065,4 +9065,8 @@ $StartingAccessDate = "Starting access date";
 $EndingAccessDate = "Ending access date";
 $TimeReport = "Time report";
 $BillingReport = "Billing report";
+$ExportToMoodle = "Export to Moodle";
+$ExportToMoodleInfo = "Export the course contents directly to Moodle's .mbz format, ready for import into a Moodle portal";
+$MoodleExportCreated = "Moodle export successfully created";
+$MoodleVersion = "Moodle version";
 ?>

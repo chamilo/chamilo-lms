@@ -702,7 +702,7 @@ class SessionManager
                         0,
                         true
                     );
-                    $usersLang = self::getCountUsersLangBySession($session['id']);
+                    $usersLang = self::getCountUsersLangBySession($session['id'], api_get_current_access_url_id(), Session::STUDENT);
                     $tooltipUserLangs = '';
                     if (!empty($usersLang)) {
                         $tooltipUserLangs = implode(' | ', $usersLang);

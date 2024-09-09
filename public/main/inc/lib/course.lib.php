@@ -458,6 +458,7 @@ class CourseManager
                 }
             }
 
+            $user_id = api_get_user_id();
             Event::addEvent(
                 LOG_UNSUBSCRIBE_USER_FROM_COURSE,
                 LOG_COURSE_CODE,

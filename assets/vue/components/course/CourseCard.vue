@@ -91,7 +91,7 @@ const props = defineProps({
 })
 
 const platformConfigStore = usePlatformConfig()
-const showCourseDuration = computed(() => 'true' === platformConfigStore.getSetting("course.show_course_duration"))
+const showCourseDuration = computed(() => "true" === platformConfigStore.getSetting("course.show_course_duration"))
 
 const teachers = computed(() => {
   if (props.session?.courseCoachesSubscriptions) {

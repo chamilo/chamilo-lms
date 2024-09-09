@@ -173,7 +173,6 @@ import Button from "primevue/button"
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import Rating from "primevue/rating"
-import TeacherBar from "../../components/TeacherBar.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 
 const status = ref(null)

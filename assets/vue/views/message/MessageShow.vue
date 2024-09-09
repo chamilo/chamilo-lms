@@ -60,11 +60,9 @@
 
     <div class="field space-x-4">
       <span>{{ t("From") }}</span>
-      <MessageCommunicationParty
+      <BaseAvatarList
         v-if="item.sender"
-        :username="item.sender.username"
-        :full-name="item.sender.fullName"
-        :profile-image-url="item.sender.illustrationUrl"
+        :users="[item.sender]"
       />
       <span
         v-else
@@ -74,23 +72,17 @@
 
     <div class="field space-x-4">
       <span>{{ t("To") }}</span>
-      <MessageCommunicationParty
-        v-for="receiver in item.receiversTo"
-        :key="receiver.receiver.id"
-        :username="receiver.receiver.username"
-        :full-name="receiver.receiver.fullName"
-        :profile-image-url="receiver.receiver.illustrationUrl"
+      <BaseAvatarList
+        :users="mapReceiverListToUsers(item.receiversTo)"
+        :short-several="false"
       />
     </div>
 
     <div class="field space-x-4">
       <span>{{ t("Cc") }}</span>
-      <MessageCommunicationParty
-        v-for="receiver in item.receiversCc"
-        :key="receiver.receiver.id"
-        :username="receiver.receiver.username"
-        :full-name="receiver.receiver.fullName"
-        :profile-image-url="receiver.receiver.illustrationUrl"
+      <BaseAvatarList
+        :users="mapReceiverListToUsers(item.receiversCc)"
+        :short-several="false"
       />
     </div>
 
@@ -151,11 +143,12 @@ import messageTagService from "../../services/messageTagService"
 import messageRelUserService from "../../services/messagereluser"
 import { useSecurityStore } from "../../store/securityStore"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
-import MessageCommunicationParty from "./MessageCommunicationParty.vue"
+import BaseAvatarList from "../../components/basecomponents/BaseAvatarList.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { messageService } from "../../services/message"
 import { useNotification } from "../../composables/notification"
+import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 
 const confirm = useConfirm()
 const { t } = useI18n()
@@ -168,6 +161,8 @@ const router = useRouter()
 const messageRelUserStore = useMessageRelUserStore()
 
 const { abbreviatedDatetime } = useFormatDate()
+
+const { mapReceiverListToUsers } = useMessageReceiverFormatter()
 
 let id = route.params.id
 if (isEmpty(id)) {

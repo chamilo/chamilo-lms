@@ -121,42 +121,18 @@
       <Column selection-mode="multiple" />
       <Column :header="showingInbox ? t('From') : t('To')">
         <template #body="slotProps">
-          <div
+          <BaseAvatarList
             v-if="showingInbox && slotProps.data.sender"
-            class="flex items-center gap-2"
-          >
-            <MessageCommunicationParty
-              :username="slotProps.data.sender.username"
-              :full-name="slotProps.data.sender.fullName"
-              :profile-image-url="slotProps.data.sender.illustrationUrl"
-            />
-          </div>
+            :users="[slotProps.data.sender]"
+          />
           <div
             v-else-if="showingInbox && !slotProps.data.sender"
-            v-t="'No sender'"
+            v-text="t('No sender')"
           />
-          <div v-else-if="!showingInbox">
-            <div
-              v-for="receiverTo in slotProps.data.receiversTo"
-              :key="receiverTo['@id']"
-            >
-              <MessageCommunicationParty
-                :username="receiverTo.receiver.username"
-                :full-name="receiverTo.receiver.fullName"
-                :profile-image-url="receiverTo.receiver.illustrationUrl"
-              />
-            </div>
-            <div
-              v-for="receiverCc in slotProps.data.receiversCc"
-              :key="receiverCc['@id']"
-            >
-              <MessageCommunicationParty
-                :username="receiverCc.receiver.username"
-                :full-name="receiverCc.receiver.fullName"
-                :profile-image-url="receiverCc.receiver.illustrationUrl"
-              />
-            </div>
-          </div>
+          <BaseAvatarList
+            v-else-if="!showingInbox"
+            :users="mapReceiverMixToUsers(slotProps.data)"
+          />
         </template>
       </Column>
       <Column
@@ -211,7 +187,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useFormatDate } from "../../composables/formatDate"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
-import MessageCommunicationParty from "./MessageCommunicationParty.vue"
+import BaseAvatarList from "../../components/basecomponents/BaseAvatarList.vue"
 import BaseTag from "../../components/basecomponents/BaseTag.vue"
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
@@ -228,6 +204,7 @@ import InputText from "primevue/inputtext"
 import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import { messageService } from "../../services/message"
 import messageRelUserService from "../../services/messagereluser"
+import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 
 const route = useRoute()
 const router = useRouter()
@@ -241,6 +218,8 @@ const notification = useNotification()
 const messageRelUserStore = useMessageRelUserStore()
 
 const { abbreviatedDatetime } = useFormatDate()
+
+const { mapReceiverMixToUsers } = useMessageReceiverFormatter()
 
 const mItemsMarkAs = ref([
   {

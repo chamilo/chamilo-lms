@@ -7534,6 +7534,66 @@ class DocumentManager
     }
 
     /**
+     * Retrieves all documents in a course by their parent folder ID.
+     *
+     * @param array  $courseInfo      Information about the course.
+     * @param int    $parentId        The ID of the parent folder.
+     * @param int    $toGroupId       (Optional) The ID of the group to filter by. Default is 0.
+     * @param int|null $toUserId      (Optional) The ID of the user to filter by. Default is null.
+     * @param bool   $canSeeInvisible (Optional) Whether to include invisible documents. Default is false.
+     * @param bool   $search          (Optional) Whether to perform a search or fetch all documents. Default is true.
+     * @param int    $sessionId       (Optional) The session ID to filter by. Default is 0.
+     *
+     * @return array List of documents that match the criteria.
+     */
+    public static function getAllDocumentsByParentId(
+        $courseInfo,
+        $parentId,
+        $toGroupId = 0,
+        $toUserId = null,
+        $canSeeInvisible = false,
+        $search = true,
+        $sessionId = 0
+    ) {
+        if (empty($courseInfo)) {
+            return [];
+        }
+
+        $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
+
+        $parentId = (int) $parentId;
+
+        $sql = "SELECT path, filetype
+            FROM $tblDocument
+            WHERE id = $parentId
+              AND c_id = {$courseInfo['real_id']}";
+
+        $result = Database::query($sql);
+
+        if ($result === false || Database::num_rows($result) == 0) {
+            return [];
+        }
+
+        $parentRow = Database::fetch_array($result, 'ASSOC');
+        $parentPath = $parentRow['path'];
+        $filetype = $parentRow['filetype'];
+
+        if ($filetype !== 'folder') {
+            return [];
+        }
+
+        return self::getAllDocumentData(
+            $courseInfo,
+            $parentPath,
+            $toGroupId,
+            $toUserId,
+            $canSeeInvisible,
+            $search,
+            $sessionId
+        );
+    }
+
+    /**
      * Include MathJax script in document.
      *
      * @param string file content $content

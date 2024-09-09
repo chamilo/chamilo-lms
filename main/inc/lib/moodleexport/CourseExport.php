@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace moodleexport;
@@ -27,21 +28,17 @@ class CourseExport
         }
     }
 
-
     /**
      * Export the course-related files to the appropriate directory.
-     *
-     * @param string $exportDir The main export directory (where `course/` will be created).
      */
-    public function exportCourse($exportDir)
+    public function exportCourse(string $exportDir): void
     {
-        // Create the course directory if it doesn't exist
         $courseDir = $exportDir . '/course';
         if (!is_dir($courseDir)) {
             mkdir($courseDir, api_get_permissions_for_new_directories(), true);
         }
 
-        $this->createCourseXml($this->courseInfo, $courseDir);
+        $this->createCourseXml($courseDir);
         $this->createEnrolmentsXml($this->courseInfo['enrolments'] ?? [], $courseDir);
         $this->createInforefXml($courseDir);
         $this->createRolesXml($this->courseInfo['roles'] ?? [], $courseDir);
@@ -55,21 +52,18 @@ class CourseExport
 
     /**
      * Create course.xml based on the course data from MoodleExport.
-     *
-     * @param array $courseInfo The course data passed from MoodleExport.
-     * @param string $destinationDir The directory where the XML will be saved.
      */
-    private function createCourseXml($courseInfo, $destinationDir)
+    private function createCourseXml(string $destinationDir): void
     {
-        $courseId = $courseInfo['id'] ?? 0;
-        $contextId = $courseInfo['id'] ?? 1;
-        $shortname = $courseInfo['code'] ?? 'Unknown Course';
-        $fullname = $courseInfo['title'] ?? 'Unknown Fullname';
-        $showgrades = $courseInfo['showgrades'] ?? 0;
-        $startdate = $courseInfo['startdate'] ?? time();
-        $enddate = $courseInfo['enddate'] ?? time() + (60 * 60 * 24 * 365);
-        $visible = $courseInfo['visible'] ?? 1;
-        $enablecompletion = $courseInfo['enablecompletion'] ?? 0;
+        $courseId = $this->courseInfo['real_id'] ?? 0;
+        $contextId = $this->courseInfo['real_id'] ?? 1;
+        $shortname = $this->courseInfo['code'] ?? 'Unknown Course';
+        $fullname = $this->courseInfo['title'] ?? 'Unknown Fullname';
+        $showgrades = $this->courseInfo['showgrades'] ?? 0;
+        $startdate = $this->courseInfo['startdate'] ?? time();
+        $enddate = $this->courseInfo['enddate'] ?? time() + (60 * 60 * 24 * 365);
+        $visible = $this->courseInfo['visible'] ?? 1;
+        $enablecompletion = $this->courseInfo['enablecompletion'] ?? 0;
 
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<course id="' . $courseId . '" contextid="' . $contextId . '">' . PHP_EOL;
@@ -91,11 +85,8 @@ class CourseExport
 
     /**
      * Create enrolments.xml based on the course data from MoodleExport.
-     *
-     * @param array $enrolmentsData The enrolments data passed from MoodleExport.
-     * @param string $destinationDir The directory where the XML will be saved.
      */
-    private function createEnrolmentsXml($enrolmentsData, $destinationDir)
+    private function createEnrolmentsXml(array $enrolmentsData, string $destinationDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<enrolments>' . PHP_EOL;
@@ -116,12 +107,8 @@ class CourseExport
 
     /**
      * Creates the inforef.xml file with file references and question categories.
-     *
-     * @param string $destinationDir The directory where the XML file will be saved.
-     *
-     * @return void
      */
-    private function createInforefXml($destinationDir)
+    private function createInforefXml(string $destinationDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<inforef>' . PHP_EOL;
@@ -154,13 +141,8 @@ class CourseExport
 
     /**
      * Creates the roles.xml file.
-     *
-     * @param array  $rolesData       Role data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
      */
-    private function createRolesXml($rolesData, $destinationDir)
+    private function createRolesXml(array $rolesData, string $destinationDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<roles>' . PHP_EOL;
@@ -177,13 +159,8 @@ class CourseExport
 
     /**
      * Creates the calendar.xml file.
-     *
-     * @param array  $calendarData    Calendar event data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
      */
-    private function createCalendarXml($calendarData, $destinationDir)
+    private function createCalendarXml(array $calendarData, string $destinationDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<calendar>' . PHP_EOL;
@@ -205,13 +182,8 @@ class CourseExport
 
     /**
      * Creates the comments.xml file.
-     *
-     * @param array  $commentsData    Comment data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
      */
-    private function createCommentsXml($commentsData, $destinationDir)
+    private function createCommentsXml(array $commentsData, string $destinationDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<comments>' . PHP_EOL;
@@ -231,13 +203,8 @@ class CourseExport
 
     /**
      * Creates the competencies.xml file.
-     *
-     * @param array  $competenciesData Competency data.
-     * @param string $destinationDir   Directory where the XML will be saved.
-     *
-     * @return void
      */
-    private function createCompetenciesXml($competenciesData, $destinationDir)
+    private function createCompetenciesXml(array $competenciesData, string $destinationDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<competencies>' . PHP_EOL;
@@ -254,13 +221,8 @@ class CourseExport
 
     /**
      * Creates the completiondefaults.xml file.
-     *
-     * @param array  $completionData  Completion data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
      */
-    private function createCompletionDefaultsXml($completionData, $destinationDir)
+    private function createCompletionDefaultsXml(array $completionData, string $destinationDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<completiondefaults>' . PHP_EOL;
@@ -277,13 +239,8 @@ class CourseExport
 
     /**
      * Creates the contentbank.xml file.
-     *
-     * @param array  $contentBankData Content bank data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
      */
-    private function createContentBankXml($contentBankData, $destinationDir)
+    private function createContentBankXml(array $contentBankData, string $destinationDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<contentbank>' . PHP_EOL;
@@ -299,13 +256,8 @@ class CourseExport
 
     /**
      * Creates the filters.xml file.
-     *
-     * @param array  $filtersData     Filter data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
      */
-    private function createFiltersXml($filtersData, $destinationDir)
+    private function createFiltersXml(array $filtersData, string $destinationDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<filters>' . PHP_EOL;

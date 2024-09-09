@@ -1,10 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace moodleexport;
 
+use Exception;
+
 /**
  * Class FileExport.
+ * Handles the export of files and metadata from Moodle courses.
  *
  * @package moodleexport
  */
@@ -12,122 +16,253 @@ class FileExport
 {
     private $course;
 
+    /**
+     * Constructor to initialize course data.
+     *
+     * @param object $course Course object containing resources and path data.
+     */
     public function __construct($course)
     {
         $this->course = $course;
     }
 
     /**
-     * Export the files and their metadata from files.xml.
-     *
-     * @param array $filesData The data from files.xml.
-     * @param string $exportDir The directory where the files will be stored.
+     * Export files and metadata from files.xml to the specified directory.
      */
-    public function exportFiles($filesData, $exportDir)
+    public function exportFiles(array $filesData, string $exportDir): void
     {
-        // Directory for storing files
         $filesDir = $exportDir . '/files';
 
-        // Check if the directory exists, if not, create it
         if (!is_dir($filesDir)) {
             mkdir($filesDir, api_get_permissions_for_new_directories(), true);
         }
 
-        // Create a placeholder index.html file to prevent an empty directory
-        $placeholderFile = $filesDir . '/index.html';
-        file_put_contents($placeholderFile, "<!-- Placeholder file to ensure the directory is not empty -->");
+        // Create placeholder index.html
+        $this->createPlaceholderFile($filesDir);
 
-        // Create files.xml in the root export directory
+        // Export each file
+        foreach ($filesData['files'] as $file) {
+            $this->copyFileToExportDir($file, $filesDir);
+        }
+
+        // Create files.xml in the export directory
         $this->createFilesXml($filesData, $exportDir);
     }
 
+    /**
+     * Create a placeholder index.html file to prevent an empty directory.
+     */
+    private function createPlaceholderFile(string $filesDir): void
+    {
+        $placeholderFile = $filesDir . '/index.html';
+        file_put_contents($placeholderFile, "<!-- Placeholder file to ensure the directory is not empty -->");
+    }
 
     /**
-     * Create the files.xml based on the provided data.
-     *
-     * @param array $filesData The data from files.xml.
-     * @param string $destinationDir The directory where the files.xml will be stored (root export directory).
+     * Copy a file to the export directory using its contenthash.
      */
-    private function createFilesXml($filesData, $destinationDir)
+    private function copyFileToExportDir(array $file, string $filesDir): void
+    {
+        if ($file['filepath'] === '.') {
+            return;
+        }
+
+        $contenthash = $file['contenthash'];
+        $subDir = substr($contenthash, 0, 2);
+        $filePath = $this->course->path . $file['documentpath'];
+        $exportSubDir = $filesDir . '/' . $subDir;
+
+        // Ensure the subdirectory exists
+        if (!is_dir($exportSubDir)) {
+            mkdir($exportSubDir, api_get_permissions_for_new_directories(), true);
+        }
+
+        // Copy the file to the export directory
+        $destinationFile = $exportSubDir . '/' . $contenthash;
+        if (file_exists($filePath)) {
+            copy($filePath, $destinationFile);
+        } else {
+            throw new Exception("File {$filePath} not found.");
+        }
+    }
+
+    /**
+     * Create the files.xml with the provided file data.
+     */
+    private function createFilesXml(array $filesData, string $destinationDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<files>' . PHP_EOL;
 
         foreach ($filesData['files'] as $file) {
-            $xmlContent .= '  <file id="' . $file['id'] . '">' . PHP_EOL;
-            $xmlContent .= '    <contenthash>' . htmlspecialchars($file['contenthash']) . '</contenthash>' . PHP_EOL;
-            $xmlContent .= '    <contextid>' . $file['contextid'] . '</contextid>' . PHP_EOL;
-            $xmlContent .= '    <component>' . htmlspecialchars($file['component']) . '</component>' . PHP_EOL;
-            $xmlContent .= '    <filearea>' . htmlspecialchars($file['filearea']) . '</filearea>' . PHP_EOL;
-            $xmlContent .= '    <itemid>' . $file['itemid'] . '</itemid>' . PHP_EOL;
-            $xmlContent .= '    <filepath>' . htmlspecialchars($file['filepath']) . '</filepath>' . PHP_EOL;
-            $xmlContent .= '    <filename>' . htmlspecialchars($file['filename']) . '</filename>' . PHP_EOL;
-            $xmlContent .= '    <userid>' . $file['userid'] . '</userid>' . PHP_EOL;
-            $xmlContent .= '    <filesize>' . $file['filesize'] . '</filesize>' . PHP_EOL;
-            $xmlContent .= '    <mimetype>' . htmlspecialchars($file['mimetype']) . '</mimetype>' . PHP_EOL;
-            $xmlContent .= '    <status>' . $file['status'] . '</status>' . PHP_EOL;
-            $xmlContent .= '    <timecreated>' . $file['timecreated'] . '</timecreated>' . PHP_EOL;
-            $xmlContent .= '    <timemodified>' . $file['timemodified'] . '</timemodified>' . PHP_EOL;
-            $xmlContent .= '    <source>' . htmlspecialchars($file['source']) . '</source>' . PHP_EOL;
-            $xmlContent .= '    <author>' . htmlspecialchars($file['author']) . '</author>' . PHP_EOL;
-            $xmlContent .= '    <license>' . htmlspecialchars($file['license']) . '</license>' . PHP_EOL;
-            $xmlContent .= '  </file>' . PHP_EOL;
+            $xmlContent .= $this->createFileXmlEntry($file);
         }
 
         $xmlContent .= '</files>' . PHP_EOL;
-
-        $xmlFile = $destinationDir . '/files.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($destinationDir . '/files.xml', $xmlContent);
     }
 
     /**
-     * Get the file data for testing purposes. Later will be dynamic.
-     *
-     * @return array The file data related to activities.
+     * Create an XML entry for a file.
      */
-    public function getFilesData()
+    private function createFileXmlEntry(array $file): string
+    {
+        return '  <file id="' . $file['id'] . '">' . PHP_EOL .
+            '    <contenthash>' . htmlspecialchars($file['contenthash']) . '</contenthash>' . PHP_EOL .
+            '    <contextid>' . $file['contextid'] . '</contextid>' . PHP_EOL .
+            '    <component>' . htmlspecialchars($file['component']) . '</component>' . PHP_EOL .
+            '    <filearea>' . htmlspecialchars($file['filearea']) . '</filearea>' . PHP_EOL .
+            '    <itemid>0</itemid>' . PHP_EOL .
+            '    <filepath>' . htmlspecialchars($file['filepath']) . '</filepath>' . PHP_EOL .
+            '    <filename>' . htmlspecialchars($file['filename']) . '</filename>' . PHP_EOL .
+            '    <userid>' . $file['userid'] . '</userid>' . PHP_EOL .
+            '    <filesize>' . $file['filesize'] . '</filesize>' . PHP_EOL .
+            '    <mimetype>' . htmlspecialchars($file['mimetype']) . '</mimetype>' . PHP_EOL .
+            '    <status>' . $file['status'] . '</status>' . PHP_EOL .
+            '    <timecreated>' . $file['timecreated'] . '</timecreated>' . PHP_EOL .
+            '    <timemodified>' . $file['timemodified'] . '</timemodified>' . PHP_EOL .
+            '    <source>' . htmlspecialchars($file['source']) . '</source>' . PHP_EOL .
+            '    <author>' . htmlspecialchars($file['author']) . '</author>' . PHP_EOL .
+            '    <license>' . htmlspecialchars($file['license']) . '</license>' . PHP_EOL .
+            '    <sortorder>0</sortorder>' . PHP_EOL .
+            '    <repositorytype>$@NULL@$</repositorytype>' . PHP_EOL .
+            '    <repositoryid>$@NULL@$</repositoryid>' . PHP_EOL .
+            '    <reference>$@NULL@$</reference>' . PHP_EOL .
+            '  </file>' . PHP_EOL;
+    }
+
+    /**
+     * Get file data from course resources. This is for testing purposes.
+     */
+    public function getFilesData(): array
+    {
+        $filesData = ['files' => []];
+
+        foreach ($this->course->resources[RESOURCE_DOCUMENT] as $document) {
+            $filesData = $this->processDocument($filesData, $document);
+        }
+
+        return $filesData;
+    }
+
+    /**
+     * Process a document or folder and add its data to the files array.
+     */
+    private function processDocument(array $filesData, object $document): array
+    {
+        if ($document->file_type === 'file') {
+            $filesData['files'][] = $this->getFileData($document);
+        } elseif ($document->file_type === 'folder') {
+            $folderFiles = \DocumentManager::getAllDocumentsByParentId($this->course->info, $document->source_id);
+            foreach ($folderFiles as $file) {
+                $filesData['files'][] = $this->getFolderFileData($file, (int) $document->source_id);
+            }
+        }
+        return $filesData;
+    }
+
+    /**
+     * Get file data for a single document.
+     */
+    private function getFileData(object $document): array
+    {
+        $contenthash = hash('sha1', basename($document->path));
+        $mimetype = $this->getMimeType($document->path);
+
+        return [
+            'id' => $document->source_id,
+            'contenthash' => $contenthash,
+            'contextid' => $document->source_id,
+            'component' => 'mod_resource',
+            'filearea' => 'content',
+            'itemid' => (int) $document->source_id,
+            'filepath' => '/',
+            'documentpath' => $document->path,
+            'filename' => basename($document->path),
+            'userid' => api_get_user_id(),
+            'filesize' => $document->size,
+            'mimetype' => $mimetype,
+            'status' => 0,
+            'timecreated' => time() - 3600,
+            'timemodified' => time(),
+            'source' => $document->title,
+            'author' => 'Unknown',
+            'license' => 'allrightsreserved',
+        ];
+    }
+
+    /**
+     * Get file data for files inside a folder.
+     */
+    private function getFolderFileData(array $file, int $sourceId): array
+    {
+        $contenthash = hash('sha1', basename($file['path']));
+        $mimetype = $this->getMimeType($file['path']);
+        $filename = basename($file['path']);
+        $filepath = $this->ensureTrailingSlash(dirname($file['path']));
+
+        return [
+            'id' => $file['id'],
+            'contenthash' => $contenthash,
+            'contextid' => $sourceId,
+            'component' => 'mod_folder',
+            'filearea' => 'content',
+            'itemid' => (int) $file['id'],
+            'filepath' => $filepath,
+            'documentpath' => 'document/'.$file['path'],
+            'filename' => $filename,
+            'userid' => api_get_user_id(),
+            'filesize' => $file['size'],
+            'mimetype' => $mimetype,
+            'status' => 0,
+            'timecreated' => time() - 3600,
+            'timemodified' => time(),
+            'source' => $file['title'],
+            'author' => 'Unknown',
+            'license' => 'allrightsreserved',
+        ];
+    }
+
+    /**
+     * Ensure the directory path has a trailing slash.
+     */
+    private function ensureTrailingSlash($path): string
+    {
+        return empty($path) || $path === '.' || $path === '/' ? '/' : rtrim($path, '/') . '/';
+    }
+
+    /**
+     * Get MIME type based on the file extension.
+     */
+    private function getMimeType($filePath): string
+    {
+        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+        $mimeTypes = $this->getMimeTypes();
+
+        return $mimeTypes[$extension] ?? 'application/octet-stream';
+    }
+
+    /**
+     * Get an array of file extensions and their corresponding MIME types.
+     */
+    private function getMimeTypes(): array
     {
         return [
-            'files' => [
-                [
-                    'id' => 1,
-                    'contenthash' => 'abcd1234efgh5678ijkl',
-                    'contextid' => 26,
-                    'component' => 'mod_assign',
-                    'filearea' => 'submission_files',
-                    'itemid' => 3,
-                    'filepath' => '/',
-                    'filename' => 'assignment_submission_001.pdf',
-                    'userid' => 5,
-                    'filesize' => 204800,
-                    'mimetype' => 'application/pdf',
-                    'status' => 0,
-                    'timecreated' => time() - 3600,
-                    'timemodified' => time(),
-                    'source' => 'Original Submission',
-                    'author' => 'Student Name',
-                    'license' => 'allrightsreserved',
-                ],
-                [
-                    'id' => 2,
-                    'contenthash' => 'ijkl1234mnop5678qrst',
-                    'contextid' => 26,
-                    'component' => 'mod_quiz',
-                    'filearea' => 'feedback_files',
-                    'itemid' => 7,
-                    'filepath' => '/',
-                    'filename' => 'quiz_feedback_001.pdf',
-                    'userid' => 6,
-                    'filesize' => 102400,
-                    'mimetype' => 'application/pdf',
-                    'status' => 0,
-                    'timecreated' => time() - 7200,
-                    'timemodified' => time(),
-                    'source' => 'Quiz Feedback',
-                    'author' => 'Teacher Name',
-                    'license' => 'allrightsreserved',
-                ],
-            ]
+            'pdf' => 'application/pdf',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'html' => 'text/html',
+            'txt' => 'text/plain',
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xls' => 'application/vnd.ms-excel',
+            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'ppt' => 'application/vnd.ms-powerpoint',
+            'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'zip' => 'application/zip',
+            'rar' => 'application/x-rar-compressed',
         ];
     }
 }

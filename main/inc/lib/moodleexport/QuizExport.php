@@ -5,42 +5,34 @@
 namespace moodleexport;
 
 use Exception;
+use FillBlanks;
 
 /**
  * Class QuizExport.
  *
- * @package moodleexport
+ * Handles the export of quizzes within a course.
  */
-class QuizExport
+class QuizExport extends ActivityExport
 {
-
-    private $course;
-
-    public function __construct($course)
-    {
-        $this->course = $course;
-    }
-
     /**
      * Export a quiz to the specified directory.
      *
-     * @param int $quizId The ID of the quiz.
+     * @param int $activityId The ID of the quiz.
      * @param string $exportDir The directory where the quiz will be exported.
      * @param int $moduleId The ID of the module.
      * @param int $sectionId The ID of the section.
      */
-    public function exportQuiz($quizId, $exportDir, $moduleId, $sectionId)
+    public function export($activityId, $exportDir, $moduleId, $sectionId): void
     {
-        // Directory where the quiz export will be saved (activities/quiz_XXX)
-        $quizDir = $exportDir . "/activities/quiz_{$moduleId}";
+        // Prepare the directory where the quiz export will be saved
+        $quizDir = $this->prepareActivityDirectory($exportDir, 'quiz', $moduleId);
 
-        if (!is_dir($quizDir)) {
-            mkdir($quizDir, api_get_permissions_for_new_directories(), true);
-        }
+        // Retrieve quiz data
+        $quizData = $this->getQuizData($activityId, $sectionId);
 
-        $quizData = $this->getQuizData($quizId, $sectionId);
-
+        // Generate XML files
         $this->createQuizXml($quizData, $quizDir);
+        $this->createModuleXml($quizData, $quizDir);
         $this->createGradesXml($quizData, $quizDir);
         $this->createCompletionXml($quizData, $quizDir);
         $this->createCommentsXml($quizData, $quizDir);
@@ -48,20 +40,14 @@ class QuizExport
         $this->createFiltersXml($quizData, $quizDir);
         $this->createGradeHistoryXml($quizData, $quizDir);
         $this->createInforefXml($quizData, $quizDir);
-        $this->createRolesXml($quizData, $quizDir);
+        $this->createRolesXml($quizDir);
         $this->createCalendarXml($quizData, $quizDir);
-        $this->createModuleXml($quizData, $quizDir);
     }
 
     /**
      * Retrieves the quiz data.
-     *
-     * @param int $quizId The ID of the quiz.
-     * @param int $sectionId The ID of the section.
-     *
-     * @return array Quiz data.
      */
-    public function getQuizData($quizId, $sectionId)
+    public function getQuizData(int $quizId, int $sectionId): array
     {
         $quizResources = $this->course->resources[RESOURCE_QUIZ];
 
@@ -119,52 +105,26 @@ class QuizExport
             }
         }
 
-        return null;
-    }
-
-    /**
-     * Gets the section ID for a given quiz ID.
-     *
-     * @param int $quizId The ID of the quiz.
-     *
-     * @return int The section ID or 0 if not found.
-     */
-    public function getSectionIdForQuiz($quizId)
-    {
-        foreach ($this->course->resources[RESOURCE_LEARNPATH] as $learnpath) {
-            foreach ($learnpath->items as $item) {
-                if ($item['item_type'] == 'quiz' && $item['path'] == $quizId) {
-                    return $learnpath->source_id;
-                }
-            }
-        }
-
-        return 0;
+        return [];
     }
 
     /**
      * Retrieves the questions for a specific quiz.
-     *
-     * @param int $quizId The ID of the quiz.
-     *
-     * @return array List of questions related to the quiz.
      */
-    private function getQuestionsForQuiz($quizId)
+    private function getQuestionsForQuiz(int $quizId): array
     {
         $questions = [];
-        $quizResources = $this->course->resources[RESOURCE_QUIZQUESTION] ?? []; // Get quiz questions
+        $quizResources = $this->course->resources[RESOURCE_QUIZQUESTION] ?? [];
 
-        // Loop through quiz questions
         foreach ($quizResources as $questionId => $questionData) {
-            // Check if question is part of the quiz
             if (in_array($questionId, $this->course->resources[RESOURCE_QUIZ][$quizId]->obj->question_ids)) {
                 $questions[] = [
-                    'id' => $questionData->source_id ?? $questionId, // Question ID
-                    'questiontext' => $questionData->question ?? '', // Question text
-                    'qtype' => $this->mapQuizType($questionData->quiz_type ?? '0'), // Question type
-                    'questioncategoryid' => $questionData->question_category ?? 0, // Category ID
-                    'answers' => $this->getAnswersForQuestion($questionData->source_id ?? $questionId), // Answers
-                    'maxmark' => $questionData->ponderation ?? 0, // Maximum mark
+                    'id' => $questionData->source_id,
+                    'questiontext' => $questionData->question,
+                    'qtype' => $this->mapQuestionType($questionData->quiz_type),
+                    'questioncategoryid' => $questionData->question_category ?? 0,
+                    'answers' => $this->getAnswersForQuestion($questionData->source_id),
+                    'maxmark' => $questionData->ponderation ?? 1,
                 ];
             }
         }
@@ -173,63 +133,47 @@ class QuizExport
     }
 
     /**
-     * Retrieves the answers for a specific question ID.
-     *
-     * @param int $questionId The ID of the question.
-     *
-     * @return array List of answers for the question.
+     * Maps the quiz type code to a descriptive string.
      */
-    private function getAnswersForQuestion($questionId)
+    private function mapQuestionType(string $quizType): string
+    {
+        switch ($quizType) {
+            case UNIQUE_ANSWER: return 'multichoice';
+            case MULTIPLE_ANSWER: return 'multichoice_nosingle';
+            case FILL_IN_BLANKS: return 'match';
+            case FREE_ANSWER: return 'shortanswer';
+            case CALCULATED_ANSWER: return 'calculated';
+            case UPLOAD_ANSWER: return 'fileupload';
+            default: return 'unknown';
+        }
+    }
+
+    /**
+     * Retrieves the answers for a specific question ID.
+     */
+    private function getAnswersForQuestion(int $questionId): array
     {
         $answers = [];
-        $quizResources = $this->course->resources[RESOURCE_QUIZQUESTION] ?? []; // Get quiz questions
+        $quizResources = $this->course->resources[RESOURCE_QUIZQUESTION] ?? [];
 
-        // Loop through quiz resources
         foreach ($quizResources as $questionData) {
-            // Check if the question ID matches
             if ($questionData->source_id == $questionId) {
                 foreach ($questionData->answers as $answer) {
                     $answers[] = [
-                        'text' => $answer['answer'] ?? '', // Answer text
-                        'fraction' => $answer['correct'] == '1' ? 1.0000000 : 0.0000000, // Answer fraction
-                        'feedback' => $answer['comment'] ?? '', // Feedback text
+                        'text' => $answer['answer'],
+                        'fraction' => $answer['correct'] == '1' ? 100 : 0,
+                        'feedback' => $answer['comment'],
                     ];
                 }
             }
         }
-
         return $answers;
-    }
-
-
-    /**
-     * Maps the quiz type code to a descriptive string.
-     *
-     * @param string $quizType The code for the quiz type.
-     *
-     * @return string The descriptive quiz type.
-     */
-    private function mapQuizType($quizType)
-    {
-        // Maps the quiz type code to a descriptive string.
-        switch ($quizType) {
-            case '1':
-                return 'multichoice'; // Multiple choice questions.
-            case '2':
-                return 'truefalse'; // True/false questions.
-            // Add other types as needed.
-            default:
-                return 'unknown'; // Unknown quiz type.
-        }
     }
 
     /**
      * Retrieves feedbacks for a specific quiz.
-     *
-     * @param int $quizId The ID of the quiz.
-     * @return array Feedbacks associated with the quiz.
      */
-    private function getFeedbacksForQuiz($quizId)
+    private function getFeedbacksForQuiz(int $quizId): array
     {
         $feedbacks = [];
         $quizResources = $this->course->resources[RESOURCE_QUIZ] ?? [];
@@ -249,13 +193,8 @@ class QuizExport
 
     /**
      * Creates the quiz.xml file.
-     *
-     * @param array  $quizData        Quiz data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
      */
-    private function createQuizXml($quizData, $destinationDir)
+    private function createQuizXml(array $quizData, string $destinationDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<activity id="' . $quizData['id'] . '" moduleid="' . $quizData['moduleid'] . '" modulename="quiz" contextid="' . $quizData['contextid'] . '">' . PHP_EOL;
@@ -365,293 +304,182 @@ class QuizExport
     }
 
     /**
-     * Creates the module.xml file.
-     *
-     * @param array  $quizData        Quiz data.
-     * @param int    $sectionId       ID of the section related to the quiz.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
+     * Exports a question in XML format.
      */
-    private function createModuleXml($quizData, $destinationDir)
+    public function exportQuestion(array $question): string
     {
+        $xmlContent = '      <question id="' . ($question['id'] ?? '0') . '">' . PHP_EOL;
+        $xmlContent .= '        <parent>0</parent>' . PHP_EOL;
+        $xmlContent .= '        <name>' . htmlspecialchars($question['questiontext'] ?? 'No question text') . '</name>' . PHP_EOL;
+        $xmlContent .= '        <questiontext>' . htmlspecialchars($question['questiontext'] ?? 'No question text') . '</questiontext>' . PHP_EOL;
+        $xmlContent .= '        <questiontextformat>1</questiontextformat>' . PHP_EOL;
+        $xmlContent .= '        <generalfeedback></generalfeedback>' . PHP_EOL;
+        $xmlContent .= '        <generalfeedbackformat>1</generalfeedbackformat>' . PHP_EOL;
+        $xmlContent .= '        <defaultmark>' . ($question['maxmark'] ?? '0') . '</defaultmark>' . PHP_EOL;
+        $xmlContent .= '        <penalty>0.3333333</penalty>' . PHP_EOL;
+        $xmlContent .= '        <qtype>' . htmlspecialchars(str_replace('_nosingle', '', $question['qtype']) ?? 'unknown') . '</qtype>' . PHP_EOL;
+        $xmlContent .= '        <length>1</length>' . PHP_EOL;
+        $xmlContent .= '        <stamp>my.moodle3.com+' . time() . '+QUESTIONSTAMP</stamp>' . PHP_EOL;
+        $xmlContent .= '        <version>my.moodle3.com+' . time() . '+VERSIONSTAMP</version>' . PHP_EOL;
+        $xmlContent .= '        <hidden>0</hidden>' . PHP_EOL;
+        $xmlContent .= '        <timecreated>' . time() . '</timecreated>' . PHP_EOL;
+        $xmlContent .= '        <timemodified>' . time() . '</timemodified>' . PHP_EOL;
+        $xmlContent .= '        <createdby>2</createdby>' . PHP_EOL;
+        $xmlContent .= '        <modifiedby>2</modifiedby>' . PHP_EOL;
 
-        $section = new SectionExport($this->course);
-        $learnpath = $section->getLearnpathById($quizData['sectionid']);
-        $sectionData = $section->getSectionData($learnpath);
-
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<module id="' . $quizData['moduleid'] . '" version="2021051700">' . PHP_EOL;
-        $xmlContent .= '  <modulename>'.$quizData['modulename'].'</modulename>' . PHP_EOL;
-        $xmlContent .= '  <sectionid>' . $quizData['sectionid'] . '</sectionid>' . PHP_EOL;
-        $xmlContent .= '  <sectionnumber>'.$sectionData['number'] .'</sectionnumber>' . PHP_EOL;
-        $xmlContent .= '  <idnumber></idnumber>' . PHP_EOL;
-        $xmlContent .= '  <added>' . time() . '</added>' . PHP_EOL;
-        $xmlContent .= '  <score>0</score>' . PHP_EOL;
-        $xmlContent .= '  <indent>0</indent>' . PHP_EOL;
-        $xmlContent .= '  <visible>1</visible>' . PHP_EOL;
-        $xmlContent .= '  <visibleoncoursepage>1</visibleoncoursepage>' . PHP_EOL;
-        $xmlContent .= '  <visibleold>1</visibleold>' . PHP_EOL;
-        $xmlContent .= '  <groupmode>0</groupmode>' . PHP_EOL;
-        $xmlContent .= '  <groupingid>0</groupingid>' . PHP_EOL;
-        $xmlContent .= '  <completion>1</completion>' . PHP_EOL;
-        $xmlContent .= '  <completiongradeitemnumber>$@NULL@$</completiongradeitemnumber>' . PHP_EOL;
-        $xmlContent .= '  <completionview>0</completionview>' . PHP_EOL;
-        $xmlContent .= '  <completionexpected>0</completionexpected>' . PHP_EOL;
-        $xmlContent .= '  <availability>$@NULL@$</availability>' . PHP_EOL;
-        $xmlContent .= '  <showdescription>0</showdescription>' . PHP_EOL;
-        $xmlContent .= '  <tags></tags>' . PHP_EOL;
-        $xmlContent .= '</module>' . PHP_EOL;
-
-        $xmlFile = $destinationDir . '/module.xml';
-        if (file_put_contents($xmlFile, $xmlContent) === false) {
-            throw new Exception('Error creating module.xml');
+        // Add question type-specific content
+        switch ($question['qtype']) {
+            case 'multichoice':
+                $xmlContent .= $this->exportMultichoiceQuestion($question);
+                break;
+            case 'multichoice_nosingle':
+                $xmlContent .= $this->exportMultichoiceNosingleQuestion($question);
+                break;
+            case 'truefalse':
+                $xmlContent .= $this->exportTrueFalseQuestion($question);
+                break;
+            case 'shortanswer':
+                $xmlContent .= $this->exportShortAnswerQuestion($question);
+                break;
+            case 'match':
+                $xmlContent .= $this->exportMatchQuestion($question);
+                break;
         }
+
+        $xmlContent .= '      </question>' . PHP_EOL;
+
+        return $xmlContent;
     }
 
     /**
-     * Creates the grades.xml file.
-     *
-     * @param array  $quizData        Quiz data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
+     * Exports a multiple-choice question in XML format.
      */
-    private function createGradesXml($quizData, $destinationDir)
+    private function exportMultichoiceQuestion(array $question): string
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<activity_gradebook>' . PHP_EOL;
-        $xmlContent .= '  <grade_items>' . PHP_EOL;
-        $xmlContent .= '    <grade_item id="' . $quizData['id'] . '">' . PHP_EOL;
-        $xmlContent .= '      <categoryid>1</categoryid>' . PHP_EOL;
-        $xmlContent .= '      <itemname>' . htmlspecialchars($quizData['name']) . '</itemname>' . PHP_EOL;
-        $xmlContent .= '      <itemtype>mod</itemtype>' . PHP_EOL;
-        $xmlContent .= '      <itemmodule>quiz</itemmodule>' . PHP_EOL;
-        $xmlContent .= '      <iteminstance>' . $quizData['id'] . '</iteminstance>' . PHP_EOL;
-        $xmlContent .= '      <itemnumber>0</itemnumber>' . PHP_EOL;
-        $xmlContent .= '      <iteminfo>$@NULL@$</iteminfo>' . PHP_EOL;
-        $xmlContent .= '      <idnumber></idnumber>' . PHP_EOL;
-        $xmlContent .= '      <calculation>$@NULL@$</calculation>' . PHP_EOL;
-        $xmlContent .= '      <gradetype>1</gradetype>' . PHP_EOL;
-        $xmlContent .= '      <grademax>' . $quizData['grade'] . '</grademax>' . PHP_EOL;
-        $xmlContent .= '      <grademin>0.00000</grademin>' . PHP_EOL;
-        $xmlContent .= '      <scaleid>$@NULL@$</scaleid>' . PHP_EOL;
-        $xmlContent .= '      <outcomeid>$@NULL@$</outcomeid>' . PHP_EOL;
-        $xmlContent .= '      <gradepass>0.00000</gradepass>' . PHP_EOL;
-        $xmlContent .= '      <multfactor>1.00000</multfactor>' . PHP_EOL;
-        $xmlContent .= '      <plusfactor>0.00000</plusfactor>' . PHP_EOL;
-        $xmlContent .= '      <aggregationcoef>0.00000</aggregationcoef>' . PHP_EOL;
-        $xmlContent .= '      <aggregationcoef2>0.09091</aggregationcoef2>' . PHP_EOL;
-        $xmlContent .= '      <weightoverride>0</weightoverride>' . PHP_EOL;
-        $xmlContent .= '      <sortorder>3</sortorder>' . PHP_EOL;
-        $xmlContent .= '      <display>0</display>' . PHP_EOL;
-        $xmlContent .= '      <decimals>$@NULL@$</decimals>' . PHP_EOL;
-        $xmlContent .= '      <hidden>0</hidden>' . PHP_EOL;
-        $xmlContent .= '      <locked>0</locked>' . PHP_EOL;
-        $xmlContent .= '      <locktime>0</locktime>' . PHP_EOL;
-        $xmlContent .= '      <needsupdate>0</needsupdate>' . PHP_EOL;
-        $xmlContent .= '      <timecreated>' . time() . '</timecreated>' . PHP_EOL;
-        $xmlContent .= '      <timemodified>' . time() . '</timemodified>' . PHP_EOL;
-        $xmlContent .= '      <grade_grades>' . PHP_EOL;
-        $xmlContent .= '      </grade_grades>' . PHP_EOL;
-        $xmlContent .= '    </grade_item>' . PHP_EOL;
-        $xmlContent .= '  </grade_items>' . PHP_EOL;
-        $xmlContent .= '  <grade_letters>' . PHP_EOL;
-        $xmlContent .= '  </grade_letters>' . PHP_EOL;
-        $xmlContent .= '</activity_gradebook>' . PHP_EOL;
-
-        $xmlFile = $destinationDir . '/grades.xml';
-        if (file_put_contents($xmlFile, $xmlContent) === false) {
-            throw new Exception(get_lang('ErrorCreatingGradesXml'));
+        $xmlContent = '        <plugin_qtype_multichoice_question>' . PHP_EOL;
+        $xmlContent .= '          <answers>' . PHP_EOL;
+        foreach ($question['answers'] as $answer) {
+            $xmlContent .= $this->exportAnswer($answer);
         }
+        $xmlContent .= '          </answers>' . PHP_EOL;
+        $xmlContent .= '          <multichoice id="' . ($question['id'] ?? '0') . '">' . PHP_EOL;
+        $xmlContent .= '            <layout>0</layout>' . PHP_EOL;
+        $xmlContent .= '            <single>1</single>' . PHP_EOL;
+        $xmlContent .= '            <shuffleanswers>1</shuffleanswers>' . PHP_EOL;
+        $xmlContent .= '            <correctfeedback>Your answer is correct.</correctfeedback>' . PHP_EOL;
+        $xmlContent .= '            <correctfeedbackformat>1</correctfeedbackformat>' . PHP_EOL;
+        $xmlContent .= '            <partiallycorrectfeedback>Your answer is partially correct.</partiallycorrectfeedback>' . PHP_EOL;
+        $xmlContent .= '            <partiallycorrectfeedbackformat>1</partiallycorrectfeedbackformat>' . PHP_EOL;
+        $xmlContent .= '            <incorrectfeedback>Your answer is incorrect.</incorrectfeedback>' . PHP_EOL;
+        $xmlContent .= '            <incorrectfeedbackformat>1</incorrectfeedbackformat>' . PHP_EOL;
+        $xmlContent .= '            <answernumbering>abc</answernumbering>' . PHP_EOL;
+        $xmlContent .= '            <shownumcorrect>1</shownumcorrect>' . PHP_EOL;
+        $xmlContent .= '          </multichoice>' . PHP_EOL;
+        $xmlContent .= '        </plugin_qtype_multichoice_question>' . PHP_EOL;
+
+        return $xmlContent;
     }
 
     /**
-     * Creates the completion.xml file.
-     *
-     * @param array  $quizData        Quiz data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
+     * Exports a multiple-choice question with single=0 in XML format.
      */
-    private function createCompletionXml($quizData, $destinationDir)
+    private function exportMultichoiceNosingleQuestion(array $question): string
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<completion>' . PHP_EOL;
-        $xmlContent .= '  <completiondata>' . PHP_EOL;
-        $xmlContent .= '    <completion>' . PHP_EOL;
-        $xmlContent .= '      <timecompleted>0</timecompleted>' . PHP_EOL;
-        $xmlContent .= '      <completionstate>1</completionstate>' . PHP_EOL;
-        $xmlContent .= '    </completion>' . PHP_EOL;
-        $xmlContent .= '  </completiondata>' . PHP_EOL;
-        $xmlContent .= '</completion>' . PHP_EOL;
-
-        $xmlFile = $destinationDir . '/completion.xml';
-        if (file_put_contents($xmlFile, $xmlContent) === false) {
-            throw new Exception(get_lang('ErrorCreatingCompletionXml'));
-        }
+        // Similar structure to exportMultichoiceQuestion, but with single=0
+        $xmlContent = str_replace('<single>1</single>', '<single>0</single>', $this->exportMultichoiceQuestion($question));
+        return $xmlContent;
     }
 
     /**
-     * Creates the comments.xml file.
-     *
-     * @param array  $quizData        Quiz data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
+     * Exports a true/false question in XML format.
      */
-    private function createCommentsXml($quizData, $destinationDir)
+    private function exportTrueFalseQuestion(array $question): string
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<comments>' . PHP_EOL;
-        $xmlContent .= '  <comment>' . PHP_EOL;
-        $xmlContent .= '    <content>This is a sample comment</content>' . PHP_EOL;
-        $xmlContent .= '    <author>Professor</author>' . PHP_EOL;
-        $xmlContent .= '  </comment>' . PHP_EOL;
-        $xmlContent .= '</comments>' . PHP_EOL;
-
-        $xmlFile = $destinationDir . '/comments.xml';
-        if (file_put_contents($xmlFile, $xmlContent) === false) {
-            throw new Exception(get_lang('ErrorCreatingCommentsXml'));
+        $xmlContent = '        <plugin_qtype_truefalse_question>' . PHP_EOL;
+        $xmlContent .= '          <answers>' . PHP_EOL;
+        foreach ($question['answers'] as $answer) {
+            $xmlContent .= $this->exportAnswer($answer);
         }
+        $xmlContent .= '          </answers>' . PHP_EOL;
+        $xmlContent .= '          <truefalse id="' . ($question['id'] ?? '0') . '">' . PHP_EOL;
+        $xmlContent .= '            <trueanswer>' . ($question['answers'][0]['id'] ?? '0') . '</trueanswer>' . PHP_EOL;
+        $xmlContent .= '            <falseanswer>' . ($question['answers'][1]['id'] ?? '0') . '</falseanswer>' . PHP_EOL;
+        $xmlContent .= '          </truefalse>' . PHP_EOL;
+        $xmlContent .= '        </plugin_qtype_truefalse_question>' . PHP_EOL;
+
+        return $xmlContent;
     }
 
     /**
-     * Creates the competencies.xml file.
-     *
-     * @param array  $quizData        Quiz data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
+     * Exports a short answer question in XML format.
      */
-    private function createCompetenciesXml($quizData, $destinationDir)
+    private function exportShortAnswerQuestion(array $question): string
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<competencies>' . PHP_EOL;
-        $xmlContent .= '  <competency>' . PHP_EOL;
-        $xmlContent .= '    <name>Sample Competency</name>' . PHP_EOL;
-        $xmlContent .= '  </competency>' . PHP_EOL;
-        $xmlContent .= '</competencies>' . PHP_EOL;
-
-        $xmlFile = $destinationDir . '/competencies.xml';
-        if (file_put_contents($xmlFile, $xmlContent) === false) {
-            throw new Exception(get_lang('ErrorCreatingCompetenciesXml'));
+        $xmlContent = '        <plugin_qtype_shortanswer_question>' . PHP_EOL;
+        $xmlContent .= '          <answers>' . PHP_EOL;
+        foreach ($question['answers'] as $answer) {
+            $xmlContent .= $this->exportAnswer($answer);
         }
+        $xmlContent .= '          </answers>' . PHP_EOL;
+        $xmlContent .= '          <shortanswer id="' . ($question['id'] ?? '0') . '">' . PHP_EOL;
+        $xmlContent .= '            <usecase>0</usecase>' . PHP_EOL;
+        $xmlContent .= '          </shortanswer>' . PHP_EOL;
+        $xmlContent .= '        </plugin_qtype_shortanswer_question>' . PHP_EOL;
+
+        return $xmlContent;
     }
 
     /**
-     * Creates the filters.xml file.
-     *
-     * @param array  $quizData        Quiz data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
+     * Exports a matching question in XML format.
      */
-    private function createFiltersXml($quizData, $destinationDir)
+    private function exportMatchQuestion(array $question): string
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<filters>' . PHP_EOL;
-        $xmlContent .= '  <filter>' . PHP_EOL;
-        $xmlContent .= '    <filtername>filter_example</filtername>' . PHP_EOL;
-        $xmlContent .= '    <active>1</active>' . PHP_EOL;
-        $xmlContent .= '  </filter>' . PHP_EOL;
-        $xmlContent .= '</filters>' . PHP_EOL;
+        $xmlContent = '        <plugin_qtype_match_question>' . PHP_EOL;
+        $xmlContent .= '          <matchoptions id="' . htmlspecialchars($question['id'] ?? '0') . '">' . PHP_EOL;
+        $xmlContent .= '            <shuffleanswers>1</shuffleanswers>' . PHP_EOL;
+        $xmlContent .= '            <correctfeedback>' . htmlspecialchars($question['correctfeedback'] ?? '') . '</correctfeedback>' . PHP_EOL;
+        $xmlContent .= '            <correctfeedbackformat>0</correctfeedbackformat>' . PHP_EOL;
+        $xmlContent .= '            <partiallycorrectfeedback>' . htmlspecialchars($question['partiallycorrectfeedback'] ?? '') . '</partiallycorrectfeedback>' . PHP_EOL;
+        $xmlContent .= '            <partiallycorrectfeedbackformat>0</partiallycorrectfeedbackformat>' . PHP_EOL;
+        $xmlContent .= '            <incorrectfeedback>' . htmlspecialchars($question['incorrectfeedback'] ?? '') . '</incorrectfeedback>' . PHP_EOL;
+        $xmlContent .= '            <incorrectfeedbackformat>0</incorrectfeedbackformat>' . PHP_EOL;
+        $xmlContent .= '            <shownumcorrect>0</shownumcorrect>' . PHP_EOL;
+        $xmlContent .= '          </matchoptions>' . PHP_EOL;
+        $xmlContent .= '          <matches>' . PHP_EOL;
 
-        $xmlFile = $destinationDir . '/filters.xml';
-        if (file_put_contents($xmlFile, $xmlContent) === false) {
-            throw new Exception(get_lang('ErrorCreatingFiltersXml'));
+        $res = FillBlanks::getAnswerInfo($question['answers'][0]['text']);
+        $words = $res['words'];
+        $common_words = $res['common_words'];
+
+        for ($i = 0; $i < count($common_words); $i++) {
+            $answer = htmlspecialchars(trim(strip_tags($common_words[$i])));
+            if (!empty(trim($answer))) {
+                $xmlContent .= '            <match id="' . ($i + 1) . '">' . PHP_EOL;
+                $xmlContent .= '              <questiontext>' . $answer . '</questiontext>' . PHP_EOL;
+                $xmlContent .= '              <questiontextformat>0</questiontextformat>' . PHP_EOL;
+                $xmlContent .= '              <answertext>' . htmlspecialchars(explode('|', $words[$i])[0]) . '</answertext>' . PHP_EOL;
+                $xmlContent .= '            </match>' . PHP_EOL;
+            }
         }
+
+        $xmlContent .= '          </matches>' . PHP_EOL;
+        $xmlContent .= '        </plugin_qtype_match_question>' . PHP_EOL;
+
+        return $xmlContent;
     }
 
     /**
-     * Creates the grade_history.xml file.
-     *
-     * @param array  $quizData        Quiz data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
+     * Exports an answer in XML format.
      */
-    private function createGradeHistoryXml($quizData, $destinationDir)
+    private function exportAnswer(array $answer): string
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<grade_history>' . PHP_EOL;
-        $xmlContent .= '  <history>' . PHP_EOL;
-        $xmlContent .= '    <grade>' . $quizData['grade'] . '</grade>' . PHP_EOL;
-        $xmlContent .= '    <timestamp>' . time() . '</timestamp>' . PHP_EOL;
-        $xmlContent .= '  </history>' . PHP_EOL;
-        $xmlContent .= '</grade_history>' . PHP_EOL;
-
-        $xmlFile = $destinationDir . '/grade_history.xml';
-        if (file_put_contents($xmlFile, $xmlContent) === false) {
-            throw new Exception(get_lang('ErrorCreatingGradeHistoryXml'));
-        }
-    }
-
-    /**
-     * Creates the inforef.xml file.
-     *
-     * @param array  $quizData        Quiz data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
-     */
-    private function createInforefXml($quizData, $destinationDir)
-    {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<inforef>' . PHP_EOL;
-        $xmlContent .= '  <file id="1">/path/to/file.pdf</file>' . PHP_EOL;
-        $xmlContent .= '</inforef>' . PHP_EOL;
-
-        $xmlFile = $destinationDir . '/inforef.xml';
-        if (file_put_contents($xmlFile, $xmlContent) === false) {
-            throw new Exception(get_lang('ErrorCreatingInforefXml'));
-        }
-    }
-
-    /**
-     * Creates the roles.xml file.
-     *
-     * @param array  $quizData        Quiz data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
-     */
-    private function createRolesXml($quizData, $destinationDir)
-    {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<roles>' . PHP_EOL;
-        $xmlContent .= '  <role>' . PHP_EOL;
-        $xmlContent .= '    <name>Professor</name>' . PHP_EOL;
-        $xmlContent .= '  </role>' . PHP_EOL;
-        $xmlContent .= '</roles>' . PHP_EOL;
-
-        $xmlFile = $destinationDir . '/roles.xml';
-        if (file_put_contents($xmlFile, $xmlContent) === false) {
-            throw new Exception(get_lang('ErrorCreatingRolesXml'));
-        }
-    }
-
-    /**
-     * Creates the calendar.xml file.
-     *
-     * @param array  $quizData        Quiz data.
-     * @param string $destinationDir  Directory where the XML will be saved.
-     *
-     * @return void
-     */
-    private function createCalendarXml($quizData, $destinationDir)
-    {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<calendar>' . PHP_EOL;
-        $xmlContent .= '  <event>' . PHP_EOL;
-        $xmlContent .= '    <name>Due Date</name>' . PHP_EOL;
-        $xmlContent .= '    <timestart>' . time() . '</timestart>' . PHP_EOL;
-        $xmlContent .= '  </event>' . PHP_EOL;
-        $xmlContent .= '</calendar>' . PHP_EOL;
-
-        $xmlFile = $destinationDir . '/calendar.xml';
-        if (file_put_contents($xmlFile, $xmlContent) === false) {
-            throw new Exception(get_lang('ErrorCreatingCalendarXml'));
-        }
+        return '            <answer id="' . ($answer['id'] ?? '0') . '">' . PHP_EOL .
+            '              <answertext>' . htmlspecialchars($answer['text'] ?? 'No answer text') . '</answertext>' . PHP_EOL .
+            '              <answerformat>1</answerformat>' . PHP_EOL .
+            '              <fraction>' . ($answer['fraction'] ?? '0') . '</fraction>' . PHP_EOL .
+            '              <feedback>' . htmlspecialchars($answer['feedback'] ?? '') . '</feedback>' . PHP_EOL .
+            '              <feedbackformat>1</feedbackformat>' . PHP_EOL .
+            '            </answer>' . PHP_EOL;
     }
 }
+

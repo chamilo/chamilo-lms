@@ -99,12 +99,8 @@ if (Security::check_token('post') &&
         'post',
         api_get_self().'?'.api_get_cidreq()
     );
-    $form->addElement('header', get_lang('SelectOptionForExport'));
     $form->addElement('radio', 'export_option', '', get_lang('CreateFullExport'), 'full_export');
     $form->addElement('radio', 'export_option', '', get_lang('LetMeSelectItems'), 'select_items');
-
-    // Add Moodle version selection
-    $form->addElement('header', get_lang('SelectMoodleVersion'));
     $form->addElement('select', 'moodle_version', get_lang('MoodleVersion'), [
         '3' => 'Moodle 3.x',
         '4' => 'Moodle 4.x',

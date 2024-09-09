@@ -5,55 +5,51 @@
 namespace moodleexport;
 
 use Exception;
+use FillBlanks;
 use ZipArchive;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 
 /**
  * Class MoodleExport.
+ * Handles the export of a Moodle course in .mbz format.
  *
  * @package moodleexport
  */
 class MoodleExport
 {
-
     private $course;
 
-    public function __construct($course)
+    /**
+     * Constructor to initialize the course object.
+     */
+    public function __construct(object $course)
     {
         $this->course = $course;
     }
 
     /**
-     * Export a course in Moodle format (.mbz).
-     *
-     * @param int $courseId    The ID of the course to be exported.
-     * @param string $exportDir   The directory where the export will be created.
-     * @param string $version     The version of Moodle (3 or 4).
-     *
-     * @return bool|string        Returns the path of the exported file or false in case of error.
-     * @throws Exception          If an error occurs during export.
+     * Export the Moodle course in .mbz format.
      */
-    public function export($courseId, $exportDir, $version)
+    public function export(string $courseId, string $exportDir, string $version)
     {
-        // Temporary directory where the export will be saved
         $tempDir = api_get_path(SYS_ARCHIVE_PATH) . $exportDir;
 
-        // Create the export directory if it doesn't exist
         if (!is_dir($tempDir)) {
             if (!mkdir($tempDir, api_get_permissions_for_new_directories(), true)) {
                 throw new Exception(get_lang('ErrorCreatingDirectory'));
             }
         }
 
-        // Get course information
         $courseInfo = api_get_course_info($courseId);
         if (!$courseInfo) {
             throw new Exception(get_lang('CourseNotFound'));
         }
 
+        // Generate the moodle_backup.xml
         $this->createMoodleBackupXml($tempDir, $version);
 
+        // Get the activities from the course
         $activities = $this->getActivities();
 
         // Export course-related files
@@ -74,25 +70,16 @@ class MoodleExport
         // Compress everything into a .mbz (ZIP) file
         $exportedFile = $this->createMbzFile($tempDir);
 
-        // Clean up temporary directory if necessary
+        // Clean up temporary directory
         $this->cleanupTempDir($tempDir);
 
         return $exportedFile;
     }
 
-
     /**
-     * Export all root XML files for the course.
-     *
-     * This method generates XML files for various aspects of the course including badges, completion, gradebook,
-     * grade history, groups, outcomes, and questions. It dynamically retrieves activities and quizzes, and exports
-     * questions associated with each quiz.
-     *
-     * @param string $exportDir The directory where XML files will be saved.
-     *
-     * @return void
+     * Export root XML files such as badges, completion, gradebook, etc.
      */
-    private function exportRootXmlFiles($exportDir)
+    private function exportRootXmlFiles(string $exportDir): void
     {
         $this->exportBadgesXml($exportDir);
         $this->exportCompletionXml($exportDir);
@@ -101,9 +88,9 @@ class MoodleExport
         $this->exportGroupsXml($exportDir);
         $this->exportOutcomesXml($exportDir);
 
+        // Export quizzes and their questions
         $activities = $this->getActivities();
         $questionsData = [];
-
         foreach ($activities as $activity) {
             if ($activity['modulename'] === 'quiz') {
                 $quizExport = new QuizExport($this->course);
@@ -111,7 +98,6 @@ class MoodleExport
                 $questionsData[] = $quizData;
             }
         }
-
         $this->exportQuestionsXml($questionsData, $exportDir);
 
         $this->exportRolesXml($exportDir);
@@ -119,22 +105,18 @@ class MoodleExport
         $this->exportUsersXml($exportDir);
     }
 
-
     /**
-     * Creates the moodle_backup.xml file with activities, sections, and settings.
-     *
-     * @param string $destinationDir  The directory where the XML will be saved.
-     * @param string $version         The Moodle version (3 or 4).
-     *
-     * @return bool                   Returns true if the file was created successfully.
+     * Create the moodle_backup.xml file with the required course details.
      */
-    private function createMoodleBackupXml($destinationDir, $version)
+    private function createMoodleBackupXml(string $destinationDir, string $version): void
     {
+        // Generate course information and backup metadata
         $courseInfo = api_get_course_info($this->course->code);
-
         $backupId = md5(uniqid(mt_rand(), true));
         $siteHash = md5(uniqid(mt_rand(), true));
+        $wwwRoot = api_get_path(WEB_PATH);
 
+        // Build the XML content for the backup
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<moodle_backup>' . PHP_EOL;
         $xmlContent .= '  <information>' . PHP_EOL;
@@ -229,53 +211,96 @@ class MoodleExport
         $xmlContent .= '</moodle_backup>';
 
         $xmlFile = $destinationDir . '/moodle_backup.xml';
-        return file_put_contents($xmlFile, $xmlContent) !== false;
+        file_put_contents($xmlFile, $xmlContent) !== false;
     }
 
     /**
-     * Retrieve all sections from the course.
-     *
-     * This method fetches and returns sections from the course resources where the learnpath type is '1'.
-     * It uses the SectionExport class to get section data based on each learnpath.
-     *
-     * @return array An array of section data.
+     * Get all sections from the course.
      */
-    private function getSections()
+    private function getSections(): array
     {
         $sectionExport = new SectionExport($this->course);
         $sections = [];
+
         foreach ($this->course->resources[RESOURCE_LEARNPATH] as $learnpath) {
             if ($learnpath->lp_type == '1') {
                 $sections[] = $sectionExport->getSectionData($learnpath);
             }
         }
+
+        // Add a general section for resources without a lesson
+        $sections[] = [
+            'id' => 0,
+            'number' => 0,
+            'name' => get_lang('General'),
+            'summary' => get_lang('GeneralResourcesCourse'),
+            'sequence' => 0,
+            'visible' => 1,
+            'timemodified' => time(),
+            'activities' => $sectionExport->getActivitiesForGeneral(),
+        ];
+
         return $sections;
     }
 
     /**
-     * Retrieve all activities from the course.
-     *
-     * @return array An array of activities.
+     * Get all activities from the course.
      */
-    private function getActivities()
+    private function getActivities(): array
     {
         $activities = [];
 
         foreach ($this->course->resources as $resourceType => $resources) {
             foreach ($resources as $resource) {
-                if ($resource->obj->iid > 0) {
-                    if ($resourceType === RESOURCE_QUIZ) {
-                        $quizExport = new QuizExport($this->course);
-                        $activities[] = [
-                            'id' => $resource->obj->iid,
-                            'sectionid' => $quizExport->getSectionIdForQuiz($resource->obj->iid),
-                            'modulename' => 'quiz',
-                            'moduleid' => $resource->obj->iid,
-                            'title' => $resource->obj->title,
-                        ];
-                    }
+                // Handle quizzes
+                if ($resourceType === RESOURCE_QUIZ && $resource->obj->iid > 0) {
+                    $quizExport = new QuizExport($this->course);
+                    $activities[] = [
+                        'id' => $resource->obj->iid,
+                        'sectionid' => $quizExport->getSectionIdForActivity($resource->obj->iid, RESOURCE_QUIZ),
+                        'modulename' => 'quiz',
+                        'moduleid' => $resource->obj->iid,
+                        'title' => $resource->obj->title,
+                    ];
+                }
 
-                    // Add more cases for other types of resources as needed
+                if ($resourceType === RESOURCE_DOCUMENT && $resource->source_id > 0) {
+                    $document = \DocumentManager::get_document_data_by_id($resource->source_id, $this->course->code);
+                    // Handle documents (HTML pages)
+                    if ('html' === pathinfo($document['path'], PATHINFO_EXTENSION)) {
+                        $pageExport = new PageExport($this->course);
+                        $activities[] = [
+                            'id' => $resource->source_id,
+                            'sectionid' => $pageExport->getSectionIdForActivity($resource->source_id, RESOURCE_DOCUMENT),
+                            'modulename' => 'page',
+                            'moduleid' => $resource->source_id,
+                            'title' => $document['title'],
+                        ];
+                    } else {
+                        // Handle files (resources with file_type 'file')
+                        if ($resourceType === RESOURCE_DOCUMENT && $resource->file_type === 'file') {
+                            $resourceExport = new ResourceExport($this->course);
+                            $activities[] = [
+                                'id' => $resource->source_id,
+                                'sectionid' => $resourceExport->getSectionIdForActivity($resource->source_id, RESOURCE_DOCUMENT),
+                                'modulename' => 'resource',
+                                'moduleid' => $resource->source_id,
+                                'title' => $resource->title,
+                            ];
+                        }
+
+                        // Handle folders
+                        if ($resourceType === RESOURCE_DOCUMENT && $resource->file_type === 'folder') {
+                            $folderExport = new FolderExport($this->course);
+                            $activities[] = [
+                                'id' => $resource->source_id,
+                                'sectionid' => $folderExport->getSectionIdForActivity($resource->source_id, RESOURCE_DOCUMENT),
+                                'modulename' => 'folder',
+                                'moduleid' => $resource->source_id,
+                                'title' => $resource->title,
+                            ];
+                        }
+                    }
                 }
             }
         }
@@ -284,110 +309,151 @@ class MoodleExport
     }
 
     /**
-     * Export badges data to XML file.
-     *
-     * @param string $exportDir Directory to save the XML file.
+     * Export the sections of the course.
      */
-    private function exportBadgesXml($exportDir)
+    private function exportSections(string $exportDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<badges>' . PHP_EOL;
-        // Populate badges
-        $xmlContent .= '</badges>';
-        $xmlFile = $exportDir . '/badges.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        $sections = $this->getSections();
+
+        foreach ($sections as $section) {
+            $sectionExport = new SectionExport($this->course);
+            $sectionExport->exportSection($section['id'], $exportDir);
+        }
     }
 
     /**
-     * Export completion data to XML file.
-     *
-     * @param string $exportDir Directory to save the XML file.
+     * Create a .mbz (ZIP) file from the exported data.
      */
-    private function exportCompletionXml($exportDir)
+    private function createMbzFile(string $sourceDir): string
+    {
+        $zip = new ZipArchive();
+        $zipFile = $sourceDir . '.mbz';
+
+        if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            throw new Exception(get_lang('ErrorCreatingZip'));
+        }
+
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($sourceDir),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach ($files as $file) {
+            if (!$file->isDir()) {
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($sourceDir) + 1);
+
+                if (!$zip->addFile($filePath, $relativePath)) {
+                    throw new Exception(get_lang('ErrorAddingFileToZip') . ": $relativePath");
+                }
+            }
+        }
+
+        if (!$zip->close()) {
+            throw new Exception(get_lang('ErrorClosingZip'));
+        }
+
+        return $zipFile;
+    }
+
+    /**
+     * Clean up the temporary directory used for export.
+     */
+    private function cleanupTempDir(string $dir): void
+    {
+        $this->recursiveDelete($dir);
+    }
+
+    /**
+     * Recursively delete a directory and its contents.
+     */
+    private function recursiveDelete(string $dir): void
+    {
+        $files = array_diff(scandir($dir), ['.', '..']);
+        foreach ($files as $file) {
+            $path = "$dir/$file";
+            is_dir($path) ? $this->recursiveDelete($path) : unlink($path);
+        }
+        rmdir($dir);
+    }
+
+    /**
+     * Export badges data to XML file.
+     */
+    private function exportBadgesXml(string $exportDir): void
+    {
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
+        $xmlContent .= '<badges>' . PHP_EOL;
+        $xmlContent .= '</badges>';
+        file_put_contents($exportDir . '/badges.xml', $xmlContent);
+    }
+
+    /**
+     * Export course completion data to XML file.
+     */
+    private function exportCompletionXml(string $exportDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<completions>' . PHP_EOL;
-        // Populate completion data
         $xmlContent .= '</completions>';
-        $xmlFile = $exportDir . '/completion.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($exportDir . '/completion.xml', $xmlContent);
     }
 
     /**
      * Export gradebook data to XML file.
-     *
-     * @param string $exportDir Directory to save the XML file.
      */
-    private function exportGradebookXml($exportDir)
+    private function exportGradebookXml(string $exportDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<gradebook>' . PHP_EOL;
-        // Populate gradebook data
         $xmlContent .= '</gradebook>';
-        $xmlFile = $exportDir . '/gradebook.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($exportDir . '/gradebook.xml', $xmlContent);
     }
 
     /**
      * Export grade history data to XML file.
-     *
-     * @param string $exportDir Directory to save the XML file.
      */
-    private function exportGradeHistoryXml($exportDir)
+    private function exportGradeHistoryXml(string $exportDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<grade_history>' . PHP_EOL;
-        // Populate grade history data
         $xmlContent .= '</grade_history>';
-        $xmlFile = $exportDir . '/grade_history.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($exportDir . '/grade_history.xml', $xmlContent);
     }
 
     /**
      * Export groups data to XML file.
-     *
-     * @param string $exportDir Directory to save the XML file.
      */
-    private function exportGroupsXml($exportDir)
+    private function exportGroupsXml(string $exportDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<groups>' . PHP_EOL;
-        // Populate groups data
         $xmlContent .= '</groups>';
-        $xmlFile = $exportDir . '/groups.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($exportDir . '/groups.xml', $xmlContent);
     }
 
     /**
      * Export outcomes data to XML file.
-     *
-     * @param string $exportDir Directory to save the XML file.
      */
-    private function exportOutcomesXml($exportDir)
+    private function exportOutcomesXml(string $exportDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<outcomes>' . PHP_EOL;
-        // Populate outcomes data
         $xmlContent .= '</outcomes>';
-        $xmlFile = $exportDir . '/outcomes.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($exportDir . '/outcomes.xml', $xmlContent);
     }
 
     /**
-     * Export the questions to questions.xml.
-     *
-     * @param array $questionsData The data of the questions (from getQuizData).
-     * @param string $exportDir The directory where the XML will be saved.
+     * Export questions data to XML file.
      */
-    private function exportQuestionsXml($questionsData, $exportDir)
+    public function exportQuestionsXml(array $questionsData, string $exportDir): void
     {
+        $quizExport = new QuizExport($this->course);
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<question_categories>' . PHP_EOL;
 
-        // Iterate through each quiz to extract questions
         foreach ($questionsData as $quiz) {
-            // Assuming each entry in $questionsData represents a quiz
-            $categoryId = $quiz['questions'][0]['questioncategoryid'] ?? 'default_category_id'; // Use a default value if category is not set
+            $categoryId = $quiz['questions'][0]['questioncategoryid'] ?? '0';
 
             $xmlContent .= '  <question_category id="' . $categoryId . '">' . PHP_EOL;
             $xmlContent .= '    <name>Default for ' . htmlspecialchars($quiz['name'] ?? 'Unknown') . '</name>' . PHP_EOL;
@@ -402,59 +468,8 @@ class MoodleExport
             $xmlContent .= '    <idnumber>$@NULL@$</idnumber>' . PHP_EOL;
             $xmlContent .= '    <questions>' . PHP_EOL;
 
-            // Extract each question from the quiz
             foreach ($quiz['questions'] as $question) {
-                $xmlContent .= '      <question id="' . ($question['id'] ?? '0') . '">' . PHP_EOL;
-                $xmlContent .= '        <parent>0</parent>' . PHP_EOL;
-                $xmlContent .= '        <name>' . htmlspecialchars($question['questiontext'] ?? 'No question text') . '</name>' . PHP_EOL;
-                $xmlContent .= '        <questiontext>' . htmlspecialchars($question['questiontext'] ?? 'No question text') . '</questiontext>' . PHP_EOL;
-                $xmlContent .= '        <questiontextformat>1</questiontextformat>' . PHP_EOL;
-                $xmlContent .= '        <generalfeedback></generalfeedback>' . PHP_EOL;
-                $xmlContent .= '        <generalfeedbackformat>1</generalfeedbackformat>' . PHP_EOL;
-                $xmlContent .= '        <defaultmark>' . ($question['maxmark'] ?? '0') . '</defaultmark>' . PHP_EOL;
-                $xmlContent .= '        <penalty>0.3333333</penalty>' . PHP_EOL;
-                $xmlContent .= '        <qtype>' . htmlspecialchars($question['qtype'] ?? 'unknown') . '</qtype>' . PHP_EOL;
-                $xmlContent .= '        <length>1</length>' . PHP_EOL;
-                $xmlContent .= '        <stamp>my.moodle3.com+' . time() . '+QUESTIONSTAMP</stamp>' . PHP_EOL;
-                $xmlContent .= '        <version>my.moodle3.com+' . time() . '+VERSIONSTAMP</version>' . PHP_EOL;
-                $xmlContent .= '        <hidden>0</hidden>' . PHP_EOL;
-                $xmlContent .= '        <timecreated>' . time() . '</timecreated>' . PHP_EOL;
-                $xmlContent .= '        <timemodified>' . time() . '</timemodified>' . PHP_EOL;
-                $xmlContent .= '        <createdby>2</createdby>' . PHP_EOL;
-                $xmlContent .= '        <modifiedby>2</modifiedby>' . PHP_EOL;
-
-                // Check if the question type is multichoice and add answers
-                if ($question['qtype'] === 'multichoice') {
-                    $xmlContent .= '        <plugin_qtype_multichoice_question>' . PHP_EOL;
-                    $xmlContent .= '          <answers>' . PHP_EOL;
-                    foreach ($question['answers'] as $answer) {
-                        $xmlContent .= '            <answer id="' . ($answer['id'] ?? '0') . '">' . PHP_EOL;
-                        $xmlContent .= '              <answertext>' . htmlspecialchars($answer['text'] ?? 'No answer text') . '</answertext>' . PHP_EOL;
-                        $xmlContent .= '              <answerformat>1</answerformat>' . PHP_EOL;
-                        $xmlContent .= '              <fraction>' . ($answer['fraction'] ?? '0') . '</fraction>' . PHP_EOL;
-                        $xmlContent .= '              <feedback>' . htmlspecialchars($answer['feedback'] ?? '') . '</feedback>' . PHP_EOL;
-                        $xmlContent .= '              <feedbackformat>1</feedbackformat>' . PHP_EOL;
-                        $xmlContent .= '            </answer>' . PHP_EOL;
-                    }
-                    $xmlContent .= '          </answers>' . PHP_EOL;
-                    $xmlContent .= '          <multichoice id="' . ($question['id'] ?? '0') . '">' . PHP_EOL;
-                    $xmlContent .= '            <layout>0</layout>' . PHP_EOL;
-                    $xmlContent .= '            <single>1</single>' . PHP_EOL;
-                    $xmlContent .= '            <shuffleanswers>1</shuffleanswers>' . PHP_EOL;
-                    $xmlContent .= '            <correctfeedback>Your answer is correct.</correctfeedback>' . PHP_EOL;
-                    $xmlContent .= '            <correctfeedbackformat>1</correctfeedbackformat>' . PHP_EOL;
-                    $xmlContent .= '            <partiallycorrectfeedback>Your answer is partially correct.</partiallycorrectfeedback>' . PHP_EOL;
-                    $xmlContent .= '            <partiallycorrectfeedbackformat>1</partiallycorrectfeedbackformat>' . PHP_EOL;
-                    $xmlContent .= '            <incorrectfeedback>Your answer is incorrect.</incorrectfeedback>' . PHP_EOL;
-                    $xmlContent .= '            <incorrectfeedbackformat>1</incorrectfeedbackformat>' . PHP_EOL;
-                    $xmlContent .= '            <answernumbering>abc</answernumbering>' . PHP_EOL;
-                    $xmlContent .= '            <shownumcorrect>1</shownumcorrect>' . PHP_EOL;
-                    $xmlContent .= '            <showstandardinstruction>0</showstandardinstruction>' . PHP_EOL;
-                    $xmlContent .= '          </multichoice>' . PHP_EOL;
-                    $xmlContent .= '        </plugin_qtype_multichoice_question>' . PHP_EOL;
-                }
-
-                $xmlContent .= '      </question>' . PHP_EOL;
+                $xmlContent .= $quizExport->exportQuestion($question);
             }
 
             $xmlContent .= '    </questions>' . PHP_EOL;
@@ -462,158 +477,52 @@ class MoodleExport
         }
 
         $xmlContent .= '</question_categories>';
-
-        $xmlFile = $exportDir . '/questions.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($exportDir . '/questions.xml', $xmlContent);
     }
 
     /**
      * Export roles data to XML file.
-     *
-     * @param string $exportDir Directory to save the XML file.
      */
-    private function exportRolesXml($exportDir)
+    private function exportRolesXml(string $exportDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<roles>' . PHP_EOL;
-        // Populate roles data
         $xmlContent .= '</roles>';
-        $xmlFile = $exportDir . '/roles.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($exportDir . '/roles.xml', $xmlContent);
     }
 
     /**
      * Export scales data to XML file.
-     *
-     * @param string $exportDir Directory to save the XML file.
      */
-    private function exportScalesXml($exportDir)
+    private function exportScalesXml(string $exportDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<scales>' . PHP_EOL;
-        // Populate scales data
         $xmlContent .= '</scales>';
-        $xmlFile = $exportDir . '/scales.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($exportDir . '/scales.xml', $xmlContent);
     }
 
     /**
      * Export users data to XML file.
-     *
-     * @param string $exportDir Directory to save the XML file.
      */
-    private function exportUsersXml($exportDir)
+    private function exportUsersXml(string $exportDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<users>' . PHP_EOL;
-        // Populate users data
         $xmlContent .= '</users>';
-        $xmlFile = $exportDir . '/users.xml';
-        file_put_contents($xmlFile, $xmlContent);
+        file_put_contents($exportDir . '/users.xml', $xmlContent);
     }
 
     /**
-     * Exports the course sections.
-     *
-     * @param int $courseId    The ID of the course.
-     * @param string $exportDir The directory where the sections will be saved.
-     *
-     * @return void
+     * Export the backup settings.
      */
-    private function exportSections($exportDir)
+    private function exportBackupSettings(): array
     {
-        $sections = $this->getSections();
-        foreach ($sections as $section) {
-            $sectionExport = new SectionExport($this->course);
-            $sectionExport->exportSection($section['id'], $exportDir);
-        }
-    }
-
-    /**
-     * Export backup settings dynamically for the course.
-     *
-     * @return array
-     */
-    private function exportBackupSettings()
-    {
-        // this should be pulled from a configuration
         return [
             ['level' => 'root', 'name' => 'users', 'value' => '1'],
             ['level' => 'root', 'name' => 'anonymize', 'value' => '0'],
             ['level' => 'root', 'name' => 'activities', 'value' => '1'],
             // Add more settings as needed
         ];
-    }
-
-    /**
-     * Compresses the exported course into an .mbz (ZIP) file.
-     *
-     * @param string $sourceDir  Directory to compress.
-     *
-     * @return string            The path of the exported .mbz file.
-     * @throws Exception         If an error occurs while creating the ZIP.
-     */
-    private function createMbzFile($sourceDir)
-    {
-        $zip = new ZipArchive();
-        $zipFile = $sourceDir . '.mbz';
-
-        if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-            throw new Exception(get_lang('ErrorCreatingZip'));
-        }
-
-        $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($sourceDir),
-            RecursiveIteratorIterator::LEAVES_ONLY
-        );
-
-        foreach ($files as $name => $file) {
-            // Skip directories
-            if (!$file->isDir()) {
-                $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strlen($sourceDir) + 1);
-
-                // Add the file to the ZIP
-                if (!$zip->addFile($filePath, $relativePath)) {
-                    throw new Exception(get_lang('ErrorAddingFileToZip') . ": $relativePath");
-                }
-            }
-        }
-
-        // Close the ZIP file
-        if (!$zip->close()) {
-            throw new Exception(get_lang('ErrorClosingZip'));
-        }
-
-        return $zipFile;
-    }
-
-    /**
-     * Cleans up the temporary directory used for export.
-     *
-     * @param string $dir  Directory to delete.
-     *
-     * @return void
-     */
-    private function cleanupTempDir($dir)
-    {
-        $this->recursiveDelete($dir);
-    }
-
-    /**
-     * Recursively deletes a directory and its contents.
-     *
-     * @param string $dir  Directory to delete.
-     *
-     * @return void
-     */
-    private function recursiveDelete($dir)
-    {
-        $files = array_diff(scandir($dir), ['.', '..']);
-        foreach ($files as $file) {
-            $path = "$dir/$file";
-            (is_dir($path)) ? $this->recursiveDelete($path) : unlink($path);
-        }
-        rmdir($dir);
     }
 }

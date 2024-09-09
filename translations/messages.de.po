@@ -9965,7 +9965,7 @@ msgid "IP"
 msgstr "IP"
 
 msgid "Grade activity"
-msgstr "Aktivität kennzeichnen"
+msgstr "Berwerten"
 
 msgid "Words"
 msgstr "Wörter"
@@ -10424,7 +10424,7 @@ msgid "Choose test"
 msgstr "Test auswählen"
 
 msgid "Grade learners"
-msgstr "Kursteilnehmer auswählen"
+msgstr "Bewertung speichern"
 
 msgid "Back to folder view"
 msgstr "Zurück zur Übersicht"

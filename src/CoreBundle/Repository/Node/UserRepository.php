@@ -238,8 +238,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ['bundle' => 'CoreBundle', 'entity' => 'GradebookCategory', 'field' => 'user', 'type' => 'object', 'action' => 'convert'],
             ['bundle' => 'CoreBundle', 'entity' => 'GradebookCertificate', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'GradebookComment', 'field' => 'user', 'type' => 'object', 'action' => 'convert'],
-            ['bundle' => 'CoreBundle', 'entity' => 'GradebookEvaluation', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
-            ['bundle' => 'CoreBundle', 'entity' => 'GradebookLink', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'GradebookLinkevalLog', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'GradebookResult', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'GradebookResultLog', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],

@@ -39,7 +39,7 @@ const { t } = useI18n()
     >
       <BaseUserAvatar
         :image-url="user.illustrationUrl"
-        :alt="t('%s\'s user picture', [user.username])"
+        :alt="t('%s\'s picture', [user.username])"
       />
       <div class="avatar-info">
         <p v-text="user.fullName" />

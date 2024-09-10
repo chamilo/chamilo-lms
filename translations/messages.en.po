@@ -27778,3 +27778,6 @@ msgstr "Add friends"
 
 msgid "Add friend"
 msgstr "Add friend"
+
+msgid "%s's picture"
+msgstr "%s's picture"

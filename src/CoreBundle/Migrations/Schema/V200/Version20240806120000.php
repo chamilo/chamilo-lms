@@ -44,7 +44,7 @@ final class Version20240806120000 extends AbstractMigrationChamilo
         $hostingLimits = ['hosting_limits' => ['urls' => []]];
 
         // Prepare hosting limits
-        if (is_array($_configuration)) {
+        if (\is_array($_configuration)) {
             foreach ($_configuration as $key => $config) {
                 if (is_numeric($key) && \is_array($config)) {
                     // Handle configurations specific to URL IDs

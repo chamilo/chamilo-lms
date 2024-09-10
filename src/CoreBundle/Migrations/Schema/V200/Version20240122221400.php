@@ -37,7 +37,7 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         $this->executeVueTranslationsUpdate();
 
         // Delete the 'import' folder at the end of the process.
-        //$this->deleteImportFolder();
+        // $this->deleteImportFolder();
     }
 
     private function updateAndGenerateSubLanguage(array $sublanguage): string
@@ -159,7 +159,7 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         $process->run();
 
         if (!$process->isSuccessful()) {
-            //throw new RuntimeException($process->getErrorOutput());
+            // throw new RuntimeException($process->getErrorOutput());
         }
 
         error_log($process->getOutput());

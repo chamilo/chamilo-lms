@@ -423,7 +423,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $updateRootPath = getenv('UPDATE_PATH');
 
         if (!empty($updateRootPath)) {
-
             error_log('getUpdateRootPath ::: '.$updateRootPath);
 
             return rtrim($updateRootPath, '/');

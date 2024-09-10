@@ -66,24 +66,23 @@ class SectionExport
      */
     private function exportActivities(array $activities, string $exportDir, int $sectionId): void
     {
+        $exportClasses = [
+            'quiz' => QuizExport::class,
+            'glossary' => GlossaryExport::class,
+            'url' => UrlExport::class,
+            'assign' => AssignExport::class,
+            'page' => PageExport::class,
+            'resource' => ResourceExport::class,
+            'folder' => FolderExport::class,
+        ];
+
         foreach ($activities as $activity) {
-            switch ($activity['modulename']) {
-                case 'quiz':
-                    $quizExport = new QuizExport($this->course);
-                    $quizExport->export($activity['id'], $exportDir, $activity['moduleid'], $sectionId);
-                    break;
-                case 'page':
-                    $pageExport = new PageExport($this->course);
-                    $pageExport->export($activity['id'], $exportDir, $activity['moduleid'], $sectionId);
-                    break;
-                case 'resource':
-                    $resourceExport = new ResourceExport($this->course);
-                    $resourceExport->export($activity['id'], $exportDir, $activity['moduleid'], $sectionId);
-                    break;
-                case 'folder':
-                    $folderExport = new FolderExport($this->course);
-                    $folderExport->export($activity['id'], $exportDir, $activity['moduleid'], $sectionId);
-                    break;
+            $moduleName = $activity['modulename'];
+            if (isset($exportClasses[$moduleName])) {
+                $exportClass = new $exportClasses[$moduleName]($this->course);
+                $exportClass->export($activity['id'], $exportDir, $activity['moduleid'], $sectionId);
+            } else {
+                throw new \Exception("Export for module '$moduleName' is not supported.");
             }
         }
     }
@@ -95,28 +94,29 @@ class SectionExport
     {
         $generalItems = [];
 
-        if (!empty($this->course->resources[RESOURCE_DOCUMENT])) {
-            foreach ($this->course->resources[RESOURCE_DOCUMENT] as $document) {
-                if (!$this->isItemInLearnpath($document, RESOURCE_DOCUMENT)) {
-                    $generalItems[] = [
-                        'id' => $document->source_id,
-                        'item_type' => 'document',
-                        'path' => $document->source_id,
-                        'title' => $document->title,
-                    ];
-                }
-            }
-        }
+        // List of resource types and their corresponding ID keys
+        $resourceTypes = [
+            RESOURCE_DOCUMENT => 'source_id',
+            RESOURCE_QUIZ => 'source_id',
+            RESOURCE_GLOSSARY => 'glossary_id',
+            RESOURCE_LINK => 'source_id',
+            RESOURCE_WORK => 'source_id',
+        ];
 
-        if (!empty($this->course->resources[RESOURCE_QUIZ])) {
-            foreach ($this->course->resources[RESOURCE_QUIZ] as $id => $quiz) {
-                if (!$this->isItemInLearnpath($quiz, RESOURCE_QUIZ)) {
-                    $generalItems[] = [
-                        'id' => $quiz->source_id,
-                        'item_type' => 'quiz',
-                        'path' => $id,
-                        'title' => $quiz->title,
-                    ];
+        foreach ($resourceTypes as $resourceType => $idKey) {
+            if (!empty($this->course->resources[$resourceType])) {
+                foreach ($this->course->resources[$resourceType] as $id => $resource) {
+                    if (!$this->isItemInLearnpath($resource, $resourceType)) {
+                        $title = $resourceType === RESOURCE_WORK
+                            ? ($resource->params['title'] ?? '')
+                            : ($resource->title ?? $resource->name);
+                        $generalItems[] = [
+                            'id' => $resource->$idKey,
+                            'item_type' => $resourceType,
+                            'path' => $id,
+                            'title' => $title,
+                        ];
+                    }
                 }
             }
         }
@@ -197,75 +197,81 @@ class SectionExport
         $sectionId = $isGeneral ? 0 : $learnpath->source_id;
 
         foreach ($learnpath->items as $item) {
-            switch ($item['item_type']) {
-                case 'quiz':
-                    $quizId = (int) $item['path'];
-                    $quizExport = new QuizExport($this->course);
-                    $quizData = $quizExport->getQuizData($quizId, $sectionId);
-
-                    $activities[] = [
-                        'id' => $quizData['id'],
-                        'moduleid' => $quizData['moduleid'],
-                        'type' => 'quiz',
-                        'modulename' => $quizData['modulename'],
-                        'name' => $quizData['name'],
-                    ];
-                    break;
-
-                case 'document':
-                    $documentId = (int) $item['path'];
-                    $document = \DocumentManager::get_document_data_by_id($documentId, $this->course->code);
-
-                    // Handle HTML files (pages)
-                    if ('html' === pathinfo($document['path'], PATHINFO_EXTENSION)) {
-                        $pageId = $item['path'];
-                        $pageExport = new PageExport($this->course);
-                        $pageData = $pageExport->getPageData($pageId, $sectionId);
-
-                        $activities[] = [
-                            'id' => $pageData['id'],
-                            'moduleid' => $pageData['moduleid'],
-                            'type' => 'page',
-                            'modulename' => 'page',
-                            'name' => $pageData['name'],
-                        ];
-                    }
-                    // Handle file-type documents (resources)
-                    elseif ('file' === $document['filetype']) {
-                        $resourceId = $item['path'];
-                        $resourceExport = new ResourceExport($this->course);
-                        $resourceData = $resourceExport->getResourceData($resourceId, $sectionId);
-
-                        $activities[] = [
-                            'id' => $resourceData['id'],
-                            'moduleid' => $resourceData['moduleid'],
-                            'type' => 'resource',
-                            'modulename' => 'resource',
-                            'name' => $resourceData['name'],
-                        ];
-                    }
-                    // Handle folder-type documents
-                    elseif ('folder' === $document['filetype']) {
-                        $folderId = $item['path'];
-                        $folderExport = new FolderExport($this->course);
-                        $folderData = $folderExport->getFolderData($folderId, $sectionId);
-
-                        $activities[] = [
-                            'id' => $folderData['id'],
-                            'moduleid' => $folderData['moduleid'],
-                            'type' => 'folder',
-                            'modulename' => 'folder',
-                            'name' => $folderData['name'],
-                        ];
-                    }
-                    break;
-
-                default:
-                    break;
-            }
+            $this->addActivityToList($item, $sectionId, $activities);
         }
 
         return $activities;
+    }
+
+    /**
+     * Add an activity to the activities list.
+     */
+    private function addActivityToList(array $item, int $sectionId, array &$activities): void
+    {
+        $activityData = null;
+        $activityClassMap = [
+            'quiz' => QuizExport::class,
+            'glossary' => GlossaryExport::class,
+            'url' => UrlExport::class,
+            'assign' => AssignExport::class,
+            'page' => PageExport::class,
+            'resource' => ResourceExport::class,
+            'folder' => FolderExport::class,
+        ];
+
+        $itemType = $item['item_type'] === 'link' ? 'url' : ($item['item_type'] === 'work' ? 'assign' : $item['item_type']);
+
+        switch ($itemType) {
+            case 'quiz':
+            case 'glossary':
+            case 'assign':
+            case 'url':
+                $activityId = $itemType === 'glossary' ? 1 : (int) $item['path'];
+                $exportClass = $activityClassMap[$itemType];
+                $exportInstance = new $exportClass($this->course);
+                $activityData = $exportInstance->getData($activityId, $sectionId);
+                break;
+
+            case 'document':
+                $documentId = (int) $item['path'];
+                $document = \DocumentManager::get_document_data_by_id($documentId, $this->course->code);
+
+                // Determine the type of document and get the corresponding export class
+                $documentType = $this->getDocumentType($document['filetype'], $document['path']);
+                if ($documentType) {
+                    $activityClass = $activityClassMap[$documentType];
+                    $exportInstance = new $activityClass($this->course);
+                    $activityData = $exportInstance->getData($item['path'], $sectionId);
+                }
+                break;
+        }
+
+        // Add the activity to the list if the data exists
+        if ($activityData) {
+            $activities[] = [
+                'id' => $activityData['id'],
+                'moduleid' => $activityData['moduleid'],
+                'type' => $item['item_type'],
+                'modulename' => $activityData['modulename'],
+                'name' => $activityData['name'],
+            ];
+        }
+    }
+
+    /**
+     * Determine the document type based on filetype and path.
+     */
+    private function getDocumentType(string $filetype, string $path): ?string
+    {
+        if ('html' === pathinfo($path, PATHINFO_EXTENSION)) {
+            return 'page';
+        } elseif ('file' === $filetype) {
+            return 'resource';
+        } elseif ('folder' === $filetype) {
+            return 'folder';
+        }
+
+        return null;
     }
 
     /**

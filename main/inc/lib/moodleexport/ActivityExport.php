@@ -116,22 +116,35 @@ abstract class ActivityExport
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<inforef>' . PHP_EOL;
-        $xmlContent .= '  <fileref>' . PHP_EOL;
-        if (is_array($files)) {
-            if (isset($files['modulename']) && in_array($files['modulename'], ['quiz'])) {
-                $xmlContent .= '  <file><id>0</id></file>' . PHP_EOL;
-            } else {
-                if (isset($files['id'])) {
-                    $files = [$files];
-                }
-                foreach ($files as $file) {
-                    $xmlContent .= '  <file>' . PHP_EOL;
-                    $xmlContent .= '    <id>' . $file['id'] . '</id>' . PHP_EOL;
-                    $xmlContent .= '  </file>' . PHP_EOL;
+
+        // Handle different module types
+        if (isset($files['modulename']) && $files['modulename'] === 'glossary') {
+            // For glossary, include user references
+            $xmlContent .= '  <userref>' . PHP_EOL;
+            $xmlContent .= '    <user>' . PHP_EOL;
+            $xmlContent .= '      <id>' . $files['userid'] . '</id>' . PHP_EOL;
+            $xmlContent .= '    </user>' . PHP_EOL;
+            $xmlContent .= '  </userref>' . PHP_EOL;
+        } else {
+            // Default handling for other modules (e.g., quiz, documents)
+            $xmlContent .= '  <fileref>' . PHP_EOL;
+            if (is_array($files)) {
+                if (isset($files['modulename']) && in_array($files['modulename'], ['quiz'])) {
+                    $xmlContent .= '  <file><id>0</id></file>' . PHP_EOL;
+                } else {
+                    if (isset($files['id'])) {
+                        $files = [$files];
+                    }
+                    foreach ($files as $file) {
+                        $xmlContent .= '  <file>' . PHP_EOL;
+                        $xmlContent .= '    <id>' . $file['id'] . '</id>' . PHP_EOL;
+                        $xmlContent .= '  </file>' . PHP_EOL;
+                    }
                 }
             }
+            $xmlContent .= '  </fileref>' . PHP_EOL;
         }
-        $xmlContent .= '  </fileref>' . PHP_EOL;
+
         $xmlContent .= '</inforef>' . PHP_EOL;
 
         $this->createXmlFile('inforef', $xmlContent, $directory);
@@ -140,7 +153,7 @@ abstract class ActivityExport
     /**
      * Creates the roles.xml file.
      */
-    protected function createRolesXml(string $directory): void
+    protected function createRolesXml(array $activityData, string $directory): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<roles></roles>' . PHP_EOL;

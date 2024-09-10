@@ -94,7 +94,7 @@ class MoodleExport
         foreach ($activities as $activity) {
             if ($activity['modulename'] === 'quiz') {
                 $quizExport = new QuizExport($this->course);
-                $quizData = $quizExport->getQuizData($activity['id'], $activity['sectionid']);
+                $quizData = $quizExport->getData($activity['id'], $activity['sectionid']);
                 $questionsData[] = $quizData;
             }
         }
@@ -249,58 +249,75 @@ class MoodleExport
     private function getActivities(): array
     {
         $activities = [];
+        $glossaryAdded = false;
 
         foreach ($this->course->resources as $resourceType => $resources) {
             foreach ($resources as $resource) {
+                $exportClass = null;
+                $moduleName = '';
+                $title = '';
+                $id = 0;
+
                 // Handle quizzes
                 if ($resourceType === RESOURCE_QUIZ && $resource->obj->iid > 0) {
-                    $quizExport = new QuizExport($this->course);
-                    $activities[] = [
-                        'id' => $resource->obj->iid,
-                        'sectionid' => $quizExport->getSectionIdForActivity($resource->obj->iid, RESOURCE_QUIZ),
-                        'modulename' => 'quiz',
-                        'moduleid' => $resource->obj->iid,
-                        'title' => $resource->obj->title,
-                    ];
+                    $exportClass = QuizExport::class;
+                    $moduleName = 'quiz';
+                    $id = $resource->obj->iid;
+                    $title = $resource->obj->title;
+                }
+                // Handle links
+                if ($resourceType === RESOURCE_LINK && $resource->source_id > 0) {
+                    $exportClass = UrlExport::class;
+                    $moduleName = 'url';
+                    $id = $resource->source_id;
+                    $title = $resource->title;
+                }
+                // Handle glossaries
+                elseif ($resourceType === RESOURCE_GLOSSARY && $resource->glossary_id > 0 && !$glossaryAdded) {
+                    $exportClass = GlossaryExport::class;
+                    $moduleName = 'glossary';
+                    $id = 1;
+                    $title = get_lang('Glossary');
+                    $glossaryAdded = true;
+                }
+                // Handle documents (HTML pages)
+                elseif ($resourceType === RESOURCE_DOCUMENT && $resource->source_id > 0) {
+                    $document = \DocumentManager::get_document_data_by_id($resource->source_id, $this->course->code);
+                    if ('html' === pathinfo($document['path'], PATHINFO_EXTENSION)) {
+                        $exportClass = PageExport::class;
+                        $moduleName = 'page';
+                        $id = $resource->source_id;
+                        $title = $document['title'];
+                    } elseif ('file' === $resource->file_type) {
+                        $exportClass = ResourceExport::class;
+                        $moduleName = 'resource';
+                        $id = $resource->source_id;
+                        $title = $resource->title;
+                    } elseif ('folder' === $resource->file_type) {
+                        $exportClass = FolderExport::class;
+                        $moduleName = 'folder';
+                        $id = $resource->source_id;
+                        $title = $resource->title;
+                    }
+                }
+                // Handle assignments (work)
+                elseif ($resourceType === RESOURCE_WORK && $resource->source_id > 0) {
+                    $exportClass = AssignExport::class;
+                    $moduleName = 'assign';
+                    $id = $resource->source_id;
+                    $title = $resource->params['title'] ?? '';
                 }
 
-                if ($resourceType === RESOURCE_DOCUMENT && $resource->source_id > 0) {
-                    $document = \DocumentManager::get_document_data_by_id($resource->source_id, $this->course->code);
-                    // Handle documents (HTML pages)
-                    if ('html' === pathinfo($document['path'], PATHINFO_EXTENSION)) {
-                        $pageExport = new PageExport($this->course);
-                        $activities[] = [
-                            'id' => $resource->source_id,
-                            'sectionid' => $pageExport->getSectionIdForActivity($resource->source_id, RESOURCE_DOCUMENT),
-                            'modulename' => 'page',
-                            'moduleid' => $resource->source_id,
-                            'title' => $document['title'],
-                        ];
-                    } else {
-                        // Handle files (resources with file_type 'file')
-                        if ($resourceType === RESOURCE_DOCUMENT && $resource->file_type === 'file') {
-                            $resourceExport = new ResourceExport($this->course);
-                            $activities[] = [
-                                'id' => $resource->source_id,
-                                'sectionid' => $resourceExport->getSectionIdForActivity($resource->source_id, RESOURCE_DOCUMENT),
-                                'modulename' => 'resource',
-                                'moduleid' => $resource->source_id,
-                                'title' => $resource->title,
-                            ];
-                        }
-
-                        // Handle folders
-                        if ($resourceType === RESOURCE_DOCUMENT && $resource->file_type === 'folder') {
-                            $folderExport = new FolderExport($this->course);
-                            $activities[] = [
-                                'id' => $resource->source_id,
-                                'sectionid' => $folderExport->getSectionIdForActivity($resource->source_id, RESOURCE_DOCUMENT),
-                                'modulename' => 'folder',
-                                'moduleid' => $resource->source_id,
-                                'title' => $resource->title,
-                            ];
-                        }
-                    }
+                // Add the activity if the class and module name are set
+                if ($exportClass && $moduleName) {
+                    $exportInstance = new $exportClass($this->course);
+                    $activities[] = [
+                        'id' => $id,
+                        'sectionid' => $exportInstance->getSectionIdForActivity($id, $resourceType),
+                        'modulename' => $moduleName,
+                        'moduleid' => $id,
+                        'title' => $title,
+                    ];
                 }
             }
         }

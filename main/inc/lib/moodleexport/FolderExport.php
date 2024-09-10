@@ -25,7 +25,7 @@ class FolderExport extends ActivityExport
         $folderDir = $this->prepareActivityDirectory($exportDir, 'folder', $moduleId);
 
         // Retrieve folder data
-        $folderData = $this->getFolderData($activityId, $sectionId);
+        $folderData = $this->getData($activityId, $sectionId);
 
         // Generate XML files
         $this->createFolderXml($folderData, $folderDir);
@@ -34,7 +34,7 @@ class FolderExport extends ActivityExport
         $this->createFiltersXml($folderData, $folderDir);
         $this->createGradeHistoryXml($folderData, $folderDir);
         $this->createInforefXml($this->getFilesForFolder($activityId), $folderDir);
-        $this->createRolesXml($folderDir);
+        $this->createRolesXml($folderData, $folderDir);
     }
 
     /**
@@ -63,7 +63,7 @@ class FolderExport extends ActivityExport
     /**
      * Get folder data dynamically from the course.
      */
-    public function getFolderData(int $folderId, int $sectionId): array
+    public function getData(int $folderId, int $sectionId): array
     {
         $folder = $this->course->resources['document'][$folderId];
 

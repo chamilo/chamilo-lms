@@ -4,6 +4,7 @@
 
 namespace moodleexport;
 
+use DocumentManager;
 use Exception;
 
 /**
@@ -140,6 +141,38 @@ class FileExport
 
         foreach ($this->course->resources[RESOURCE_DOCUMENT] as $document) {
             $filesData = $this->processDocument($filesData, $document);
+        }
+
+        foreach ($this->course->resources[RESOURCE_WORK] as $work) {
+            $workFiles = getAllDocumentToWork($work->params['id'], $this->course->info['real_id']);
+
+            if (!empty($workFiles)) {
+                foreach ($workFiles as $file) {
+                    $docData = DocumentManager::get_document_data_by_id($file['document_id'], $this->course->info['code']);
+                    if (!empty($docData)) {
+                        $filesData['files'][] = [
+                            'id' => $file['document_id'],
+                            'contenthash' => hash('sha1', basename($docData['path'])),
+                            'contextid' => $this->course->info['real_id'],
+                            'component' => 'mod_assign',
+                            'filearea' => 'introattachment',
+                            'itemid' => (int) $work->params['id'],
+                            'filepath' => '/',
+                            'documentpath' =>  'document/'.$docData['path'],
+                            'filename' => basename($docData['path']),
+                            'userid' => api_get_user_id(),
+                            'filesize' => $docData['size'],
+                            'mimetype' => $this->getMimeType($docData['path']),
+                            'status' => 0,
+                            'timecreated' => time() - 3600,
+                            'timemodified' => time(),
+                            'source' => $docData['title'],
+                            'author' => 'Unknown',
+                            'license' => 'allrightsreserved',
+                        ];
+                    }
+                }
+            }
         }
 
         return $filesData;

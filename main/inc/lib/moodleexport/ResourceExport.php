@@ -25,7 +25,7 @@ class ResourceExport extends ActivityExport
         $resourceDir = $this->prepareActivityDirectory($exportDir, 'resource', $moduleId);
 
         // Retrieve resource data
-        $resourceData = $this->getResourceData($activityId, $sectionId);
+        $resourceData = $this->getData($activityId, $sectionId);
 
         // Generate XML files
         $this->createResourceXml($resourceData, $resourceDir);
@@ -34,7 +34,7 @@ class ResourceExport extends ActivityExport
         $this->createFiltersXml($resourceData, $resourceDir);
         $this->createGradeHistoryXml($resourceData, $resourceDir);
         $this->createInforefXml($resourceData, $resourceDir);
-        $this->createRolesXml($resourceDir);
+        $this->createRolesXml($resourceData, $resourceDir);
     }
 
     /**
@@ -65,7 +65,7 @@ class ResourceExport extends ActivityExport
     /**
      * Get resource data dynamically from the course.
      */
-    public function getResourceData(int $resourceId, int $sectionId): array
+    public function getData(int $resourceId, int $sectionId): array
     {
         $resource = $this->course->resources[RESOURCE_DOCUMENT][$resourceId];
 

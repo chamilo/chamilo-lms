@@ -25,7 +25,7 @@ class PageExport extends ActivityExport
         $pageDir = $this->prepareActivityDirectory($exportDir, 'page', $moduleId);
 
         // Retrieve page data
-        $pageData = $this->getPageData($activityId, $sectionId);
+        $pageData = $this->getData($activityId, $sectionId);
 
         // Generate XML files
         $this->createPageXml($pageData, $pageDir);
@@ -34,7 +34,7 @@ class PageExport extends ActivityExport
         $this->createFiltersXml($pageData, $pageDir);
         $this->createGradeHistoryXml($pageData, $pageDir);
         $this->createInforefXml($pageData, $pageDir);
-        $this->createRolesXml($pageDir);
+        $this->createRolesXml($pageData, $pageDir);
     }
 
     /**
@@ -64,7 +64,7 @@ class PageExport extends ActivityExport
     /**
      * Get page data dynamically from the course.
      */
-    public function getPageData(int $pageId, int $sectionId): ?array
+    public function getData(int $pageId, int $sectionId): ?array
     {
         $pageResources = $this->course->resources[RESOURCE_DOCUMENT];
 

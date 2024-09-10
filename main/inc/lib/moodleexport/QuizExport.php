@@ -28,7 +28,7 @@ class QuizExport extends ActivityExport
         $quizDir = $this->prepareActivityDirectory($exportDir, 'quiz', $moduleId);
 
         // Retrieve quiz data
-        $quizData = $this->getQuizData($activityId, $sectionId);
+        $quizData = $this->getData($activityId, $sectionId);
 
         // Generate XML files
         $this->createQuizXml($quizData, $quizDir);
@@ -40,14 +40,14 @@ class QuizExport extends ActivityExport
         $this->createFiltersXml($quizData, $quizDir);
         $this->createGradeHistoryXml($quizData, $quizDir);
         $this->createInforefXml($quizData, $quizDir);
-        $this->createRolesXml($quizDir);
+        $this->createRolesXml($quizData, $quizDir);
         $this->createCalendarXml($quizData, $quizDir);
     }
 
     /**
      * Retrieves the quiz data.
      */
-    public function getQuizData(int $quizId, int $sectionId): array
+    public function getData(int $quizId, int $sectionId): array
     {
         $quizResources = $this->course->resources[RESOURCE_QUIZ];
 

@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\ServiceHelper;
 
+use Symfony\Component\HttpFoundation\Session\SessionFactoryInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -19,6 +21,7 @@ class ContainerHelper
     private KernelInterface $kernel;
     private MessageBusInterface $messengerBus;
     private ValidatorInterface $validator;
+    private SessionFactoryInterface $sessionFactory;
 
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
     {
@@ -68,5 +71,17 @@ class ContainerHelper
     public function setValidator(ValidatorInterface $validator): void
     {
         $this->validator = $validator;
+    }
+
+    public function getSession(): SessionInterface
+    {
+        return $this->sessionFactory->createSession();
+    }
+
+    public function setSessionFactory(SessionFactoryInterface $sessionFactory): ContainerHelper
+    {
+        $this->sessionFactory = $sessionFactory;
+
+        return $this;
     }
 }

@@ -46,6 +46,7 @@ if ($isCli) {
     }
 
     $container = $kernel->getContainer();
+    Container::setContainer($container);
     $router = $container->get('router');
     $context = $router->getContext();
     $router->setContext($context);

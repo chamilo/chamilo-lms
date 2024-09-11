@@ -24,6 +24,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Yaml\Yaml;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
@@ -2685,35 +2686,6 @@ function api_get_session_condition(
  */
 function api_get_setting($variable, $isArray = false, $key = null)
 {
-    if ('cli' === php_sapi_name()) {
-        $entityManager = Database::getManager();
-        if (false !== strpos($variable, '.')) {
-            [$category, $variable] = explode('.', $variable, 2);
-            $repository = $entityManager->getRepository(SettingsCurrent::class);
-            $setting = $repository->findOneBy([
-                'category' => $category,
-                'variable' => $variable
-            ]);
-        } else {
-            $repository = $entityManager->getRepository(SettingsCurrent::class);
-            $setting = $repository->findOneBy(['variable' => $variable]);
-        }
-
-        if ($setting) {
-            $settingValue = $setting->getSelectedValue();
-            if (is_string($settingValue) && $isArray && !empty($settingValue)) {
-                $decodedValue = json_decode($settingValue, true);
-                if (is_array($decodedValue)) {
-                    return $decodedValue;
-                }
-            }
-
-            return $settingValue;
-        }
-
-        return '';
-    }
-
     $settingsManager = Container::getSettingsManager();
     if (empty($settingsManager)) {
         return '';

@@ -110,6 +110,7 @@ services:
             - setKernel: [ '@kernel' ]
             - setMessengerBus: [ '@messenger.bus.default' ]
             - setValidator: [ '@validator' ]
+            - setSessionFactory: [ '@session.factory' ]
 
 cocur_slugify:
     lowercase: true

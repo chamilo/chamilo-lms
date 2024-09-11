@@ -853,6 +853,10 @@ form .field {
   @apply w-full md:w-1/2 px-4;
 }
 
+.section-header__title {
+  @apply mt-4;
+}
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';

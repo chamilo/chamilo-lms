@@ -417,21 +417,28 @@ class SortableTable extends HTML_Table
             }
         }
         $html .= '<input type="hidden" name="action">';
-        $html .= '<div class="q-card p-2 mb-4 sortable-buttons-actions">';
-        $html .= '<div class="flex flex-row justify-between">';
+        $html .= '<div class="flex q-card p-2 mb-4 sortable-buttons-actions">';
+        $html .= '<div class="flex w-1/2 flex-wrap items-center justify-between">';
+
+        if (count($this->actionButtons) > 0) {
+            $html .= '<div class="btn-toolbar flex space-x-2">';
+            $html .= '<div class="btn-group">';
+
+            foreach ($this->actionButtons as $action => $data) {
+                $label = $data['label'];
+                $icon = $data['icon'];
+                $html .= '<a class="btn btn-default" href="?'.$params.'&action_table='.$action.'">'.$icon.'&nbsp;'.$label.'</a>';
+            }
+            $html .= '</div>';
+            $html .= '</div>';
+        }
 
         if (count($this->form_actions) > 0) {
-            $html .= '<div class="flex flex-row justify-between" role="group">';
-            $html .= '<a
-                class="btn btn--action mr-2"
-                href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1"
-                onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.
-                get_lang('Select all').'</a>';
-            $html .= '<a
-                class="btn btn--action mr-2"
-                href="?'.$params.'"
-                onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.
-                get_lang('Deselect all').'</a> ';
+            $html .= '<div class="flex space-x-2">';
+            $html .= '<a class="btn btn--action mr-2" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'
+                .get_lang('Select all').'</a>';
+            $html .= '<a class="btn btn--action mr-2" href="?'.$params.'" onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'
+                .get_lang('Deselect all').'</a>';
 
             $items = [];
             foreach ($this->form_actions as $action => $label) {
@@ -451,13 +458,13 @@ class SortableTable extends HTML_Table
 
         // Pagination
         if ($this->get_total_number_of_items() > $this->default_items_per_page) {
-            $html .= '<div class="col-12 col-md-6">';
+            $html .= '<div class="flex justify-end mt-4 w-1/2">';
             $html .= '<div class="page-nav pb-2 pt-2">'.$nav.'</div>';
             $html .= '</div>';
         }
 
-        $html .= '</div>'; //btn-group
-        $html .= '</div>';
+        $html .= '</div>'; // btn-group
+        $html .= '</div>'; // sortable-buttons-actions
         if (count($this->form_actions) > 0) {
             $html .= '</form>';
         }

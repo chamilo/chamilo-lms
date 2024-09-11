@@ -486,10 +486,10 @@ switch ($report) {
 
             $content .= $table->toHtml();
 
-            $content .= '<div class="row">';
-            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas1_title"></h4><div id="canvas1_table"></div></div>';
-            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas2_title"></h4><div id="canvas2_table"></div></div>';
-            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
+            $content .= '<div class="grid grid-cols-3 gap-4">';
+            $content .= '<div><h4 class="text-center" id="canvas1_title"></h4><div id="canvas1_table"></div></div>';
+            $content .= '<div><h4 class="text-center" id="canvas2_title"></h4><div id="canvas2_table"></div></div>';
+            $content .= '<div><h4 class="text-center" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
             $content .= '</div>';
 
             $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
@@ -518,15 +518,14 @@ switch ($report) {
 
             $content .= $tableCourse->toHtml();
 
-            $content .= '<div class="row">';
-            $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-            $content .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-            $content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
-
+            $content .= '<div class="grid grid-cols-3 gap-4">';
+            $content .= '<div><canvas id="canvas1" class="mb-5"></canvas></div>';
+            $content .= '<div><canvas id="canvas2" class="mb-5"></canvas></div>';
+            $content .= '<div><canvas id="canvas3" class="mb-5"></canvas></div>';
             $content .= '</div>';
 
-            $content .= '<div class="row">';
-            $content .= '<div class="col-md-12"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '<div class="grid grid-cols-1">';
+            $content .= '<div><canvas id="canvas4" class="mb-5"></canvas></div>';
             $content .= '</div>';
         }
 
@@ -720,24 +719,24 @@ switch ($report) {
             $startDate = $values['daterange_start'];
             $endDate = $values['daterange_end'];
 
-            $graph = '<div class="row">';
-            $graph .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-            $graph .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-            $graph .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+            $graph = '<div class="grid grid-cols-3 gap-4">';
+            $graph .= '<div><canvas id="canvas1" class="mb-5 mt-5 mx-auto"></canvas></div>';
+            $graph .= '<div><canvas id="canvas2" class="mb-5 mt-5 mx-auto"></canvas></div>';
+            $graph .= '<div><canvas id="canvas3" class="mb-5 mt-5 mx-auto"></canvas></div>';
             $graph .= '</div>';
 
-            $graph .= '<div class="row">';
-            $graph .= '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
-            $graph .= '<div class="col-md-6"><canvas id="canvas8" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="grid grid-cols-2 gap-4">';
+            $graph .= '<div><canvas id="canvas4" class="mb-5 mt-5 mx-auto"></canvas></div>';
+            $graph .= '<div><canvas id="canvas8" class="mb-5 mt-5 mx-auto"></canvas></div>';
             $graph .= '</div>';
 
-            $graph .= '<div class="row">';
-            $graph .= '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
-            $graph .= '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="grid grid-cols-2 gap-4">';
+            $graph .= '<div><canvas id="canvas5" class="mb-5 mt-5 mx-auto"></canvas></div>';
+            $graph .= '<div><canvas id="canvas6" class="mb-5 mt-5 mx-auto"></canvas></div>';
             $graph .= '</div>';
 
-            $graph .= '<div class="row">';
-            $graph .= '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="grid grid-cols-2 gap-4">';
+            $graph .= '<div><canvas id="canvas7" class="mb-5 mt-5 mx-auto"></canvas></div>';
             $graph .= '</div>';
 
             $conditions = [];
@@ -769,7 +768,7 @@ switch ($report) {
 
             $table->actionButtons = [
                 'export' => [
-                    'label' => get_lang('ExportAsXLS'),
+                    'label' => get_lang('Export As XLS'),
                     'icon' => Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET,'ch-tool-icon'),
                 ],
             ];
@@ -842,7 +841,7 @@ switch ($report) {
 
                 $userLanguage = '';
                 if (!empty($user['locale'])) {
-                    $userLanguage = $languages[$user['locale']];
+                    $userLanguage = $languages[$user['locale']] ?? 'en';
                 }
 
                 $languageTarget = '';
@@ -1447,12 +1446,12 @@ switch ($report) {
         </div>';
         break;
     case 'users':
-        $content .= '<div class="row">';
-        $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-        $content .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-        $content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
-
+        $content .= '<div class="grid grid-cols-3 gap-4">';
+        $content .= '<div><canvas id="canvas1" class="mb-5"></canvas></div>';
+        $content .= '<div><canvas id="canvas2" class="mb-5"></canvas></div>';
+        $content .= '<div><canvas id="canvas3" class="mb-5"></canvas></div>';
         $content .= '</div>';
+
         // total amount of users
         $teachers = $students = [];
         $countInvisible = isset($_GET['count_invisible_courses']) ? intval($_GET['count_invisible_courses']) : null;

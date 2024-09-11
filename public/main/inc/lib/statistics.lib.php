@@ -1223,12 +1223,19 @@ class Statistics
                 url: "'.$url.'",
                 type: "POST",
                 success: function(data) {
-                    Chart.defaults.responsive = true;
+                    Chart.defaults.responsive = false;
                     var ctx = document.getElementById("'.$elementId.'").getContext("2d");
+                    ctx.canvas.width = 420;
+                    ctx.canvas.height = 420;
                     var chart = new Chart(ctx, {
                         type: "'.$type.'",
                         data: data,
-                        options: {'.$options.'}
+                        options: {
+                            plugins: {
+                                '.$options.'
+                            },
+                            cutout: "25%"
+                        }
                     });
                     var title = chart.options.plugins.title.text;
                     $("#'.$elementId.'_title").html(title);
@@ -1251,13 +1258,21 @@ class Statistics
             $(function() {
                 Chart.defaults.responsive = '.$responsiveValue.';
                 var ctx = document.getElementById("'.$elementId.'").getContext("2d");
-                ctx.canvas.width = 400;
-                ctx.canvas.height = 400;
+                ctx.canvas.width = 420;
+                ctx.canvas.height = 420;
                 var chart = new Chart(ctx, {
                     type: "'.$type.'",
                     data: '.$data.',
-                    options: {'.$options.'}
+                    options: {
+                        plugins: {
+                            '.$options.'
+                        },
+                        cutout: "25%"
+                    }
                 });
+                var title = chart.options.plugins.title.text;
+                $("#'.$elementId.'_title").html(title);
+                $("#'.$elementId.'_table").html(chart.data.datasets[0].data);
             });
         </script>';
 

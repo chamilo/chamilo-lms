@@ -72,13 +72,15 @@ class DateTimePicker extends HTML_QuickForm_text
         $localeCode = $this->getLocaleCode();
         $id = $this->getAttribute('id');
 
+        $altFormat = ($localeCode === 'en') ? 'F d, Y - H:i' : 'd F, Y - H:i';
+
         $js = "<script>
         document.addEventListener('DOMContentLoaded', function () {
             function initializeFlatpickr() {
                 const fp = flatpickr('#{$id}', {
                     locale: '{$localeCode}',
                     altInput: true,
-                    altFormat: '".get_lang('F d, Y')." ".get_lang('at')." H:i',
+                    altFormat: '{$altFormat}',
                     enableTime: true,
                     dateFormat: 'Y-m-d H:i',
                     time_24hr: true,

@@ -646,6 +646,13 @@ if ($form->validate()) {
                 continue;
             }
             if (!empty($value)) {
+                if (is_array($value)) {
+                    $valueArray = $value;
+                    $filtered_value = array_filter($valueArray, function($valueFilter) {
+                        return $valueFilter !== null && $valueFilter !== "";
+                    });
+                    $value = $filtered_value;
+                }
                 $filters[$key] = $value;
             }
         }

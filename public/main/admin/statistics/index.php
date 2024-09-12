@@ -768,7 +768,7 @@ switch ($report) {
 
             $table->actionButtons = [
                 'export' => [
-                    'label' => get_lang('Export As XLS'),
+                    'label' => get_lang('Export to XLS'),
                     'icon' => Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET,'ch-tool-icon'),
                 ],
             ];

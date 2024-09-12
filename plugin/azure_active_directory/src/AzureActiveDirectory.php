@@ -36,7 +36,7 @@ class AzureActiveDirectory extends Plugin
     public const EXTRA_FIELD_AZURE_ID = 'azure_id';
     public const EXTRA_FIELD_AZURE_UID = 'azure_uid';
 
-    public const API_PAGE_SIZE = 100;
+    public const API_PAGE_SIZE = 999;
 
     /**
      * AzureActiveDirectory constructor.

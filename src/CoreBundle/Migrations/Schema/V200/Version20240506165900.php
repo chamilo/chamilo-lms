@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -22,6 +23,8 @@ final class Version20240506165900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $this->entityManager->clear();
+
         $updateConfigurations = [
             ['table' => 'c_tool_intro', 'field' => 'intro_text'],
             ['table' => 'c_course_description', 'field' => 'content'],

@@ -16,6 +16,10 @@ class AzureCommand
      * @var Azure
      */
     protected $provider;
+    /**
+     * @var AccessTokenInterface
+     */
+    private $token;
 
     public function __construct()
     {

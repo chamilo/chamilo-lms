@@ -383,27 +383,35 @@ class AzureActiveDirectory extends Plugin
         string $apiRef = 'me/memberOf',
         string $groupObjectIdKey = 'objectId'
     ): array {
-        try {
-            $groups = $provider->get($apiRef, $token);
-        } catch (Exception $e) {
-            throw new Exception('Exception when requesting user groups from Azure: '.$e->getMessage());
-        }
-
         // If any specific group ID has been defined for a specific role, use that
         // ID to give the user the right role
-        $givenAdminGroup = $this->get(self::SETTING_GROUP_ID_ADMIN);
-        $givenSessionAdminGroup = $this->get(self::SETTING_GROUP_ID_SESSION_ADMIN);
-        $givenTeacherGroup = $this->get(self::SETTING_GROUP_ID_TEACHER);
         $userRole = STUDENT;
         $isAdmin = false;
-        foreach ($groups as $group) {
-            if ($givenAdminGroup == $group[$groupObjectIdKey]) {
-                $userRole = COURSEMANAGER;
-                $isAdmin = true;
-            } elseif ($givenSessionAdminGroup == $group[$groupObjectIdKey]) {
-                $userRole = SESSIONADMIN;
-            } elseif ($userRole != SESSIONADMIN && $givenTeacherGroup == $group[$groupObjectIdKey]) {
-                $userRole = COURSEMANAGER;
+
+        $groupRoles = [
+            'admin' => $this->get(self::SETTING_GROUP_ID_ADMIN),
+            'sessionAdmin' => $this->get(self::SETTING_GROUP_ID_SESSION_ADMIN),
+            'teacher' => $this->get(self::SETTING_GROUP_ID_TEACHER),
+        ];
+
+        if ($groupRoles = array_filter($groupRoles)) {
+            try {
+                $groups = $provider->get($apiRef, $token);
+            } catch (Exception $e) {
+                throw new Exception('Exception when requesting user groups from Azure: '.$e->getMessage());
+            }
+
+            foreach ($groups as $group) {
+                $groupId = $group[$groupObjectIdKey];
+
+                if (isset($groupRoles['admin']) && $groupRoles['admin'] === $groupId) {
+                    $userRole = COURSEMANAGER;
+                    $isAdmin = true;
+                } elseif (isset($groupRoles['sessionAdmin']) && $groupRoles['sessionAdmin'] === $groupId) {
+                    $userRole = SESSIONADMIN;
+                } elseif (isset($groupRoles['teacher']) && $groupRoles['teacher'] === $groupId && $userRole !== SESSIONADMIN) {
+                    $userRole = COURSEMANAGER;
+                }
             }
         }
 

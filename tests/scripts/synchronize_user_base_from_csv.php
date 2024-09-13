@@ -212,7 +212,7 @@ foreach ($accessUrls as $accessUrl) {
                 }
 
                 $user->setCreator($creator);
-                $userRepository->updateUser($user, false);
+                $userRepository->updateUser($user, $newUser);
 
                 foreach ($CSVuser as $fieldName => $fieldValue) {
                     if (strpos($fieldName, EXTRA_KEY) === 0) {

@@ -101,6 +101,8 @@ class QuizExport extends ActivityExport
                     'completionpass' => $quiz->obj->completionpass ?? 0,
                     'completionminattempts' => $quiz->obj->completionminattempts ?? 0,
                     'allowofflineattempts' => $quiz->obj->allowofflineattempts ?? 0,
+                    'users' => [],
+                    'files' => [],
                 ];
             }
         }

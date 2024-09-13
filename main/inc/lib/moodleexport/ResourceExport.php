@@ -35,6 +35,8 @@ class ResourceExport extends ActivityExport
         $this->createGradeHistoryXml($resourceData, $resourceDir);
         $this->createInforefXml($resourceData, $resourceDir);
         $this->createRolesXml($resourceData, $resourceDir);
+        $this->createCommentsXml($resourceData, $resourceDir);
+        $this->createCalendarXml($resourceData, $resourceDir);
     }
 
     /**
@@ -63,6 +65,29 @@ class ResourceExport extends ActivityExport
     }
 
     /**
+     * Creates the inforef.xml file, referencing users and files associated with the activity.
+     *
+     * @param array $references Contains 'users' and 'files' arrays to reference in the XML.
+     * @param string $directory The directory where the XML file will be saved.
+     */
+    protected function createInforefXml(array $references, string $directory): void
+    {
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
+        $xmlContent .= '<inforef>' . PHP_EOL;
+
+        $xmlContent .= '  <fileref>' . PHP_EOL;
+        $xmlContent .= '    <file>' . PHP_EOL;
+        $xmlContent .= '      <id>' . htmlspecialchars($references['id']) . '</id>' . PHP_EOL;
+        $xmlContent .= '    </file>' . PHP_EOL;
+        $xmlContent .= '  </fileref>' . PHP_EOL;
+
+        $xmlContent .= '</inforef>' . PHP_EOL;
+
+        // Save the XML content to the directory
+        $this->createXmlFile('inforef', $xmlContent, $directory);
+    }
+
+    /**
      * Get resource data dynamically from the course.
      */
     public function getData(int $resourceId, int $sectionId): array
@@ -79,6 +104,8 @@ class ResourceExport extends ActivityExport
             'sectionid' => $sectionId,
             'sectionnumber' => 1,
             'timemodified' => time(),
+            'users' => [],
+            'files' => [],
         ];
     }
 }

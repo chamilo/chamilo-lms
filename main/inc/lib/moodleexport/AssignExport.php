@@ -37,6 +37,9 @@ class AssignExport extends ActivityExport
         $this->createInforefXml($assignData, $assignDir);
         $this->createGradeHistoryXml($assignData, $assignDir);
         $this->createRolesXml($assignData, $assignDir);
+        $this->createCommentsXml($assignData, $assignDir);
+        $this->createCalendarXml($assignData, $assignDir);
+        $this->createFiltersXml($assignData, $assignDir);
     }
 
     /**
@@ -148,37 +151,6 @@ class AssignExport extends ActivityExport
     }
 
     /**
-     * Create the inforef.xml file for the assign activity.
-     * This method can be customized to handle attachments.
-     */
-    protected function createInforefXml(array $files, string $directory): void
-    {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<inforef>' . PHP_EOL;
-
-        if (!empty($files['files'])) {
-            $xmlContent .= '  <fileref>' . PHP_EOL;
-            foreach ($files['files'] as $file) {
-                $xmlContent .= '    <file>' . PHP_EOL;
-                $xmlContent .= '      <id>' . $file['id'] . '</id>' . PHP_EOL;
-                $xmlContent .= '    </file>' . PHP_EOL;
-            }
-            $xmlContent .= '  </fileref>' . PHP_EOL;
-        }
-
-        $xmlContent .= '  <grade_itemref>' . PHP_EOL;
-        $xmlContent .= '    <grade_item>' . PHP_EOL;
-        $xmlContent .= '      <id>' . $files['grade_item_id'] . '</id>' . PHP_EOL;
-        $xmlContent .= '    </grade_item>' . PHP_EOL;
-        $xmlContent .= '  </grade_itemref>' . PHP_EOL;
-
-        $xmlContent .= '</inforef>';
-
-        $this->createXmlFile('inforef', $xmlContent, $directory);
-    }
-
-
-    /**
      * Get all the data related to the assign activity.
      */
     public function getData(int $assignId, int $sectionId): ?array
@@ -199,6 +171,9 @@ class AssignExport extends ActivityExport
             }
         }
 
+        $adminData = MoodleExport::getAdminUserData();
+        $adminId = $adminData['id'];
+
         return [
             'id' => (int) $work->params['id'],
             'moduleid' => (int) $work->params['id'],
@@ -214,6 +189,7 @@ class AssignExport extends ActivityExport
             'timemodified' => time(),
             'grade_item_id' => 0,
             'files' => $files,
+            'users' => [$adminId],
             'area_id' => 0
         ];
     }

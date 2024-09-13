@@ -35,6 +35,8 @@ class FolderExport extends ActivityExport
         $this->createGradeHistoryXml($folderData, $folderDir);
         $this->createInforefXml($this->getFilesForFolder($activityId), $folderDir);
         $this->createRolesXml($folderData, $folderDir);
+        $this->createCommentsXml($folderData, $folderDir);
+        $this->createCalendarXml($folderData, $folderDir);
     }
 
     /**
@@ -99,7 +101,7 @@ class FolderExport extends ActivityExport
             }
         }
 
-        return $files;
+        return ['files' => $files];
     }
 
     /**

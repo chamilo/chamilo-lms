@@ -80,7 +80,7 @@ class GlossaryExport extends ActivityExport
             $xmlContent .= '      <entry id="' . $entry['id'] . '">' . PHP_EOL;
             $xmlContent .= '        <userid>' . $entry['userid'] . '</userid>' . PHP_EOL;
             $xmlContent .= '        <concept>' . htmlspecialchars($entry['concept']) . '</concept>' . PHP_EOL;
-            $xmlContent .= '        <definition>' . $entry['definition'] . '></definition>' . PHP_EOL;
+            $xmlContent .= '        <definition><![CDATA[' . $entry['definition'] . ']]></definition>' . PHP_EOL;
             $xmlContent .= '        <definitionformat>1</definitionformat>' . PHP_EOL;
             $xmlContent .= '        <definitiontrust>0</definitiontrust>' . PHP_EOL;
             $xmlContent .= '        <attachment></attachment>' . PHP_EOL;
@@ -110,13 +110,16 @@ class GlossaryExport extends ActivityExport
      */
     public function getData(int $glossaryId, int $sectionId): ?array
     {
+        $adminData = MoodleExport::getAdminUserData();
+        $adminId = $adminData['id'];
+
         $glossaryEntries = [];
         foreach ($this->course->resources['glossary'] as $glossary) {
             $glossaryEntries[] = [
                 'id' => $glossary->glossary_id,
-                'userid' => api_get_user_id(),
-                'concept' => 'Concept',
-                'definition' => 'Definition',
+                'userid' => $adminId,
+                'concept' => $glossary->name,
+                'definition' => $glossary->description,
                 'timecreated' => time(),
                 'timemodified' => time(),
             ];
@@ -134,8 +137,10 @@ class GlossaryExport extends ActivityExport
             'timemodified' => time(),
             'sectionid' => $sectionId,
             'sectionnumber' => 0,
-            'userid' => api_get_user_id(),
+            'userid' => $adminId,
             'entries' => $glossaryEntries,
+            'users' => [$adminId],
+            'files' => [],
         ];
     }
 }

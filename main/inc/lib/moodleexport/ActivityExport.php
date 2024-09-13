@@ -110,37 +110,32 @@ abstract class ActivityExport
     }
 
     /**
-     * Creates the inforef.xml file, referencing the files associated with the activity.
+     * Creates the inforef.xml file, referencing users and files associated with the activity.
      */
-    protected function createInforefXml(array $files, string $directory): void
+    protected function createInforefXml(array $references, string $directory): void
     {
+        // Start the XML content
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<inforef>' . PHP_EOL;
 
-        // Handle different module types
-        if (isset($files['modulename']) && $files['modulename'] === 'glossary') {
-            // For glossary, include user references
+        // Add user references if provided
+        if (isset($references['users']) && is_array($references['users'])) {
             $xmlContent .= '  <userref>' . PHP_EOL;
-            $xmlContent .= '    <user>' . PHP_EOL;
-            $xmlContent .= '      <id>' . $files['userid'] . '</id>' . PHP_EOL;
-            $xmlContent .= '    </user>' . PHP_EOL;
+            foreach ($references['users'] as $userId) {
+                $xmlContent .= '    <user>' . PHP_EOL;
+                $xmlContent .= '      <id>' . htmlspecialchars($userId) . '</id>' . PHP_EOL;
+                $xmlContent .= '    </user>' . PHP_EOL;
+            }
             $xmlContent .= '  </userref>' . PHP_EOL;
-        } else {
-            // Default handling for other modules (e.g., quiz, documents)
+        }
+
+        // Add file references if provided
+        if (isset($references['files']) && is_array($references['files'])) {
             $xmlContent .= '  <fileref>' . PHP_EOL;
-            if (is_array($files)) {
-                if (isset($files['modulename']) && in_array($files['modulename'], ['quiz'])) {
-                    $xmlContent .= '  <file><id>0</id></file>' . PHP_EOL;
-                } else {
-                    if (isset($files['id'])) {
-                        $files = [$files];
-                    }
-                    foreach ($files as $file) {
-                        $xmlContent .= '  <file>' . PHP_EOL;
-                        $xmlContent .= '    <id>' . $file['id'] . '</id>' . PHP_EOL;
-                        $xmlContent .= '  </file>' . PHP_EOL;
-                    }
-                }
+            foreach ($references['files'] as $file) {
+                $xmlContent .= '    <file>' . PHP_EOL;
+                $xmlContent .= '      <id>' . htmlspecialchars($file['id']) . '</id>' . PHP_EOL;
+                $xmlContent .= '    </file>' . PHP_EOL;
             }
             $xmlContent .= '  </fileref>' . PHP_EOL;
         }

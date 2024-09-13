@@ -34,6 +34,9 @@ class UrlExport extends ActivityExport
         $this->createGradeHistoryXml($urlData, $urlDir);
         $this->createInforefXml($urlData, $urlDir);
         $this->createRolesXml($urlData, $urlDir);
+        $this->createCommentsXml($urlData, $urlDir);
+        $this->createCalendarXml($urlData, $urlDir);
+        $this->createFiltersXml($urlData, $urlDir);
     }
 
     /**
@@ -79,6 +82,8 @@ class UrlExport extends ActivityExport
             'timemodified' => time(),
             'sectionid' => $sectionId,
             'sectionnumber' => 0,
+            'users' => [],
+            'files' => [],
         ];
     }
 }

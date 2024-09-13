@@ -35,6 +35,8 @@ class PageExport extends ActivityExport
         $this->createGradeHistoryXml($pageData, $pageDir);
         $this->createInforefXml($pageData, $pageDir);
         $this->createRolesXml($pageData, $pageDir);
+        $this->createCommentsXml($pageData, $pageDir);
+        $this->createCalendarXml($pageData, $pageDir);
     }
 
     /**
@@ -84,6 +86,8 @@ class PageExport extends ActivityExport
                     'sectionnumber' => 1,
                     'display' => 0,
                     'timemodified' => time(),
+                    'users' => [],
+                    'files' => [],
                 ];
             }
         }

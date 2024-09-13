@@ -137,6 +137,9 @@ class FileExport
      */
     public function getFilesData(): array
     {
+        $adminData = MoodleExport::getAdminUserData();
+        $adminId = $adminData['id'];
+
         $filesData = ['files' => []];
 
         foreach ($this->course->resources[RESOURCE_DOCUMENT] as $document) {
@@ -160,7 +163,7 @@ class FileExport
                             'filepath' => '/',
                             'documentpath' =>  'document/'.$docData['path'],
                             'filename' => basename($docData['path']),
-                            'userid' => api_get_user_id(),
+                            'userid' => $adminId,
                             'filesize' => $docData['size'],
                             'mimetype' => $this->getMimeType($docData['path']),
                             'status' => 0,
@@ -199,6 +202,8 @@ class FileExport
      */
     private function getFileData(object $document): array
     {
+        $adminData = MoodleExport::getAdminUserData();
+        $adminId = $adminData['id'];
         $contenthash = hash('sha1', basename($document->path));
         $mimetype = $this->getMimeType($document->path);
 
@@ -212,7 +217,7 @@ class FileExport
             'filepath' => '/',
             'documentpath' => $document->path,
             'filename' => basename($document->path),
-            'userid' => api_get_user_id(),
+            'userid' => $adminId,
             'filesize' => $document->size,
             'mimetype' => $mimetype,
             'status' => 0,
@@ -229,6 +234,8 @@ class FileExport
      */
     private function getFolderFileData(array $file, int $sourceId): array
     {
+        $adminData = MoodleExport::getAdminUserData();
+        $adminId = $adminData['id'];
         $contenthash = hash('sha1', basename($file['path']));
         $mimetype = $this->getMimeType($file['path']);
         $filename = basename($file['path']);
@@ -244,7 +251,7 @@ class FileExport
             'filepath' => $filepath,
             'documentpath' => 'document/'.$file['path'],
             'filename' => $filename,
-            'userid' => api_get_user_id(),
+            'userid' => $adminId,
             'filesize' => $file['size'],
             'mimetype' => $mimetype,
             'status' => 0,

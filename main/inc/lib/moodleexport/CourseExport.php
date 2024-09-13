@@ -69,15 +69,53 @@ class CourseExport
         $xmlContent .= '<course id="' . $courseId . '" contextid="' . $contextId . '">' . PHP_EOL;
         $xmlContent .= '  <shortname>' . htmlspecialchars($shortname) . '</shortname>' . PHP_EOL;
         $xmlContent .= '  <fullname>' . htmlspecialchars($fullname) . '</fullname>' . PHP_EOL;
+        $xmlContent .= '  <idnumber></idnumber>' . PHP_EOL;
+        $xmlContent .= '  <summary></summary>' . PHP_EOL;
+        $xmlContent .= '  <summaryformat>1</summaryformat>' . PHP_EOL;
         $xmlContent .= '  <format>topics</format>' . PHP_EOL;
         $xmlContent .= '  <showgrades>' . $showgrades . '</showgrades>' . PHP_EOL;
+        $xmlContent .= '  <newsitems>5</newsitems>' . PHP_EOL;
         $xmlContent .= '  <startdate>' . $startdate . '</startdate>' . PHP_EOL;
         $xmlContent .= '  <enddate>' . $enddate . '</enddate>' . PHP_EOL;
+        $xmlContent .= '  <marker>0</marker>' . PHP_EOL;
+        $xmlContent .= '  <maxbytes>0</maxbytes>' . PHP_EOL;
+        $xmlContent .= '  <legacyfiles>0</legacyfiles>' . PHP_EOL;
+        $xmlContent .= '  <showreports>0</showreports>' . PHP_EOL;
         $xmlContent .= '  <visible>' . $visible . '</visible>' . PHP_EOL;
+        $xmlContent .= '  <groupmode>0</groupmode>' . PHP_EOL;
+        $xmlContent .= '  <groupmodeforce>0</groupmodeforce>' . PHP_EOL;
+        $xmlContent .= '  <defaultgroupingid>0</defaultgroupingid>' . PHP_EOL;
+        $xmlContent .= '  <lang></lang>' . PHP_EOL;
+        $xmlContent .= '  <theme></theme>' . PHP_EOL;
+        $xmlContent .= '  <timecreated>' . time() . '</timecreated>' . PHP_EOL;
+        $xmlContent .= '  <timemodified>' . time() . '</timemodified>' . PHP_EOL;
+        $xmlContent .= '  <requested>0</requested>' . PHP_EOL;
+        $xmlContent .= '  <showactivitydates>1</showactivitydates>' . PHP_EOL;
+        $xmlContent .= '  <showcompletionconditions>1</showcompletionconditions>' . PHP_EOL;
         $xmlContent .= '  <enablecompletion>' . $enablecompletion . '</enablecompletion>' . PHP_EOL;
+        $xmlContent .= '  <completionnotify>0</completionnotify>' . PHP_EOL;
         $xmlContent .= '  <category id="1">' . PHP_EOL;
         $xmlContent .= '    <name>Miscellaneous</name>' . PHP_EOL;
+        $xmlContent .= '    <description>$@NULL@$</description>' . PHP_EOL;
         $xmlContent .= '  </category>' . PHP_EOL;
+        $xmlContent .= '  <tags>' . PHP_EOL;
+        $xmlContent .= '  </tags>' . PHP_EOL;
+        $xmlContent .= '  <customfields>' . PHP_EOL;
+        $xmlContent .= '  </customfields>' . PHP_EOL;
+        $xmlContent .= '  <courseformatoptions>' . PHP_EOL;
+        $xmlContent .= '    <courseformatoption>' . PHP_EOL;
+        $xmlContent .= '      <format>topics</format>' . PHP_EOL;
+        $xmlContent .= '      <sectionid>0</sectionid>' . PHP_EOL;
+        $xmlContent .= '      <name>hiddensections</name>' . PHP_EOL;
+        $xmlContent .= '      <value>0</value>' . PHP_EOL;
+        $xmlContent .= '    </courseformatoption>' . PHP_EOL;
+        $xmlContent .= '    <courseformatoption>' . PHP_EOL;
+        $xmlContent .= '      <format>topics</format>' . PHP_EOL;
+        $xmlContent .= '      <sectionid>0</sectionid>' . PHP_EOL;
+        $xmlContent .= '      <name>coursedisplay</name>' . PHP_EOL;
+        $xmlContent .= '      <value>0</value>' . PHP_EOL;
+        $xmlContent .= '    </courseformatoption>' . PHP_EOL;
+        $xmlContent .= '  </courseformatoptions>' . PHP_EOL;
         $xmlContent .= '</course>';
 
         file_put_contents($destinationDir . '/course.xml', $xmlContent);
@@ -106,7 +144,7 @@ class CourseExport
     }
 
     /**
-     * Creates the inforef.xml file with file references and question categories.
+     * Creates the inforef.xml file with file references, question categories, and role references.
      */
     private function createInforefXml(string $destinationDir): void
     {
@@ -127,13 +165,23 @@ class CourseExport
             }
         }
 
-        $xmlContent .= '  <question_categoryref>' . PHP_EOL;
-        foreach ($questionCategories as $categoryId) {
-            $xmlContent .= '    <question_category>' . PHP_EOL;
-            $xmlContent .= '      <id>' . $categoryId . '</id>' . PHP_EOL;
-            $xmlContent .= '    </question_category>' . PHP_EOL;
+        if (!empty($questionCategories)) {
+            $xmlContent .= '  <question_categoryref>' . PHP_EOL;
+            foreach ($questionCategories as $categoryId) {
+                $xmlContent .= '    <question_category>' . PHP_EOL;
+                $xmlContent .= '      <id>' . $categoryId . '</id>' . PHP_EOL;
+                $xmlContent .= '    </question_category>' . PHP_EOL;
+            }
+            $xmlContent .= '  </question_categoryref>' . PHP_EOL;
         }
-        $xmlContent .= '  </question_categoryref>' . PHP_EOL;
+
+        // Add role references
+        $xmlContent .= '  <roleref>' . PHP_EOL;
+        $xmlContent .= '    <role>' . PHP_EOL;
+        $xmlContent .= '      <id>5</id>' . PHP_EOL;
+        $xmlContent .= '    </role>' . PHP_EOL;
+        $xmlContent .= '  </roleref>' . PHP_EOL;
+
         $xmlContent .= '</inforef>' . PHP_EOL;
 
         file_put_contents($destinationDir . '/inforef.xml', $xmlContent);

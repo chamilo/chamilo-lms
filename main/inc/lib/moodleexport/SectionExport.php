@@ -71,6 +71,7 @@ class SectionExport
             'glossary' => GlossaryExport::class,
             'url' => UrlExport::class,
             'assign' => AssignExport::class,
+            'forum' => ForumExport::class,
             'page' => PageExport::class,
             'resource' => ResourceExport::class,
             'folder' => FolderExport::class,
@@ -101,6 +102,7 @@ class SectionExport
             RESOURCE_GLOSSARY => 'glossary_id',
             RESOURCE_LINK => 'source_id',
             RESOURCE_WORK => 'source_id',
+            RESOURCE_FORUM => 'source_id',
         ];
 
         foreach ($resourceTypes as $resourceType => $idKey) {
@@ -214,6 +216,7 @@ class SectionExport
             'glossary' => GlossaryExport::class,
             'url' => UrlExport::class,
             'assign' => AssignExport::class,
+            'forum' => ForumExport::class,
             'page' => PageExport::class,
             'resource' => ResourceExport::class,
             'folder' => FolderExport::class,
@@ -226,6 +229,7 @@ class SectionExport
             case 'glossary':
             case 'assign':
             case 'url':
+            case 'forum':
                 $activityId = $itemType === 'glossary' ? 1 : (int) $item['path'];
                 $exportClass = $activityClassMap[$itemType];
                 $exportInstance = new $exportClass($this->course);

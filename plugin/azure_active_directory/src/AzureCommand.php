@@ -6,7 +6,7 @@ use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 use TheNetworg\OAuth2\Client\Provider\Azure;
 
-class AzureCommand
+abstract class AzureCommand
 {
     /**
      * @var AzureActiveDirectory
@@ -27,21 +27,6 @@ class AzureCommand
     /**
      * @throws IdentityProviderException
      */
-    protected function getToken(?AccessTokenInterface $currentToken = null): AccessTokenInterface
-    {
-        if (!$currentToken || ($currentToken->getExpires() && !$currentToken->getRefreshToken())) {
-            return $this->provider->getAccessToken(
-                'client_credentials',
-                ['resource' => $this->provider->resource]
-            );
-        }
-
-        return $currentToken;
-    }
-
-    /**
-     * @throws IdentityProviderException
-     */
     protected function generateOrRefreshToken(?AccessTokenInterface &$token)
     {
         if (!$token || ($token->getExpires() && !$token->getRefreshToken())) {
@@ -50,5 +35,54 @@ class AzureCommand
                 ['resource' => $this->provider->resource]
             );
         }
+    }
+
+    /**
+     * @return Generator<int, array<string, string>>
+     *
+     * @throws Exception
+     */
+    protected function getAzureGroupMembers(string $groupUid): Generator
+    {
+        $userFields = [
+            'mail',
+            'mailNickname',
+            'id',
+        ];
+
+        $query = sprintf(
+            '$top=%d&$select=%s',
+            AzureActiveDirectory::API_PAGE_SIZE,
+            implode(',', $userFields)
+        );
+
+        $token = null;
+
+        do {
+            $this->generateOrRefreshToken($token);
+
+            try {
+                $azureGroupMembersRequest = $this->provider->request(
+                    'get',
+                    "groups/$groupUid/members?$query",
+                    $token
+                );
+            } catch (Exception $e) {
+                throw new Exception('Exception when requesting group members from Azure: '.$e->getMessage());
+            }
+
+            $azureGroupMembers = $azureGroupMembersRequest['value'] ?? [];
+
+            foreach ($azureGroupMembers as $azureGroupMember) {
+                yield $azureGroupMember;
+            }
+
+            $hasNextLink = false;
+
+            if (!empty($azureGroupMembersRequest['@odata.nextLink'])) {
+                $hasNextLink = true;
+                $query = parse_url($azureGroupMembersRequest['@odata.nextLink'], PHP_URL_QUERY);
+            }
+        } while ($hasNextLink);
     }
 }

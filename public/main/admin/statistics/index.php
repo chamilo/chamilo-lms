@@ -930,7 +930,7 @@ switch ($report) {
             );
 
             $scoreDisplay = ScoreDisplay::instance();
-            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table stats_table']);
             $headers = [
                 get_lang('Name'),
                 get_lang('Count'),

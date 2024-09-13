@@ -464,7 +464,7 @@ class Statistics
         $isFileSize = false
     ) {
         $total = 0;
-        $content = '<table class="table table-hover table-striped data_table" cellspacing="0" cellpadding="3" width="90%">
+        $content = '<table class="table table-hover table-striped data_table stats_table" cellspacing="0" cellpadding="3" width="90%">
             <thead><tr><th colspan="'.($showTotal ? '4' : '3').'">'.$title.'</th></tr></thead><tbody>';
         $i = 0;
         foreach ($stats as $subtitle => $number) {
@@ -1299,7 +1299,7 @@ class Statistics
         }
 
         $scoreDisplay = ScoreDisplay::instance();
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'data_table stats_table']);
         $headers = [
             get_lang('Name'),
             get_lang('Count'),
@@ -1382,7 +1382,7 @@ class Statistics
                 );
             }
 
-            $table = new HTML_Table(['class' => 'data_table']);
+            $table = new HTML_Table(['class' => 'data_table stats_table']);
             $table->setHeaderContents(0, 0, get_lang('Username'));
             $table->setHeaderContents(0, 1, get_lang('First name'));
             $table->setHeaderContents(0, 2, get_lang('Last name'));

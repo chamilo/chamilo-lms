@@ -857,6 +857,12 @@ form .field {
   @apply mt-4;
 }
 
+.stats_table {
+  thead th {
+    @apply bg-gray-20 text-gray-90 font-semibold text-left px-4 py-3 border-b border-gray-30;
+  }
+}
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';

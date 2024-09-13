@@ -138,9 +138,9 @@ abstract class AzureCommand
     }
 
     /**
-     * @return Generator<int, array<string, string>>
-     *
      * @throws Exception
+     *
+     * @return Generator<int, array<string, string>>
      */
     protected function getAzureGroupMembers(string $groupUid): Generator
     {

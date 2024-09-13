@@ -2,8 +2,6 @@
 
 /* For license terms, see /license.txt */
 
-use League\OAuth2\Client\Token\AccessTokenInterface;
-
 class AzureSyncUsergroupsCommand extends AzureCommand
 {
     /**

@@ -307,6 +307,44 @@ class AzureActiveDirectory extends Plugin
     }
 
     /**
+     * @return array<string, string|false>
+     */
+    public function getGroupUidByRole(): array
+    {
+        $groupUidList = [
+            'admin' => $this->get(self::SETTING_GROUP_ID_ADMIN),
+            'sessionAdmin' => $this->get(self::SETTING_GROUP_ID_SESSION_ADMIN),
+            'teacher' => $this->get(self::SETTING_GROUP_ID_TEACHER),
+        ];
+
+        return array_filter($groupUidList);
+    }
+
+    /**
+     * @return array<string, callable>
+     */
+    public function getUpdateActionByRole(): array
+    {
+        return [
+            'admin' => function (User $user) {
+                $user->setStatus(COURSEMANAGER);
+
+                UserManager::addUserAsAdmin($user, false);
+            },
+            'sessionAdmin' => function (User $user) {
+                $user->setStatus(SESSIONADMIN);
+
+                UserManager::removeUserAdmin($user, false);
+            },
+            'teacher' => function (User $user) {
+                $user->setStatus(COURSEMANAGER);
+
+                UserManager::removeUserAdmin($user, false);
+            },
+        ];
+    }
+
+    /**
      * @throws Exception
      */
     private function formatUserData(
@@ -345,44 +383,6 @@ class AzureActiveDirectory extends Plugin
             $authSource,
             $active,
             $extra,
-        ];
-    }
-
-    /**
-     * @return array<string, string|false>
-     */
-    public function getGroupUidByRole(): array
-    {
-        $groupUidList = [
-            'admin' => $this->get(self::SETTING_GROUP_ID_ADMIN),
-            'sessionAdmin' => $this->get(self::SETTING_GROUP_ID_SESSION_ADMIN),
-            'teacher' => $this->get(self::SETTING_GROUP_ID_TEACHER),
-        ];
-
-        return array_filter($groupUidList);
-    }
-
-    /**
-     * @return array<string, callable>
-     */
-    public function getUpdateActionByRole(): array
-    {
-        return [
-            'admin' => function (User $user) {
-                $user->setStatus(COURSEMANAGER);
-
-                UserManager::addUserAsAdmin($user, false);
-            },
-            'sessionAdmin' => function (User $user) {
-                $user->setStatus(SESSIONADMIN);
-
-                UserManager::removeUserAdmin($user, false);
-            },
-            'teacher' => function (User $user) {
-                $user->setStatus(COURSEMANAGER);
-
-                UserManager::removeUserAdmin($user, false);
-            },
         ];
     }
 }

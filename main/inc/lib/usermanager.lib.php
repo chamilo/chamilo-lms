@@ -6250,7 +6250,7 @@ class UserManager
         return $icon_link;
     }
 
-    public static function addUserAsAdmin(User $user)
+    public static function addUserAsAdmin(User $user, bool $andFlush = true)
     {
         if ($user) {
             $userId = $user->getId();
@@ -6261,11 +6261,11 @@ class UserManager
             }
 
             $user->addRole('ROLE_SUPER_ADMIN');
-            self::getManager()->updateUser($user, true);
+            self::getManager()->updateUser($user, $andFlush);
         }
     }
 
-    public static function removeUserAdmin(User $user)
+    public static function removeUserAdmin(User $user, bool $andFlush = true)
     {
         $userId = (int) $user->getId();
         if (self::is_admin($userId)) {
@@ -6273,7 +6273,7 @@ class UserManager
             $sql = "DELETE FROM $table WHERE user_id = $userId";
             Database::query($sql);
             $user->removeRole('ROLE_SUPER_ADMIN');
-            self::getManager()->updateUser($user, true);
+            self::getManager()->updateUser($user, $andFlush);
         }
     }
 

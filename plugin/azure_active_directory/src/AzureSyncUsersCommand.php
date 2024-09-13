@@ -2,7 +2,7 @@
 
 /* For license terms, see /license.txt */
 
-use League\OAuth2\Client\Token\AccessTokenInterface;
+use Chamilo\UserBundle\Entity\User;
 
 class AzureSyncUsersCommand extends AzureCommand
 {
@@ -15,33 +15,54 @@ class AzureSyncUsersCommand extends AzureCommand
     {
         yield 'Synchronizing users from Azure.';
 
-        $token = $this->getToken();
-
+        /** @var array<string, int> $existingUsers */
         $existingUsers = [];
 
-        foreach ($this->getAzureUsers($token) as $azureUserInfo) {
+        foreach ($this->getAzureUsers() as $azureUserInfo) {
             try {
-                $token = $this->getToken($token);
-
-                $userId = $this->plugin->registerUser(
-                    $token,
-                    $this->provider,
-                    $azureUserInfo,
-                    'users/'.$azureUserInfo['id'].'/memberOf',
-                    'id',
-                    'id'
-                );
+                $userId = $this->plugin->registerUser($azureUserInfo, 'id');
             } catch (Exception $e) {
                 yield $e->getMessage();
 
                 continue;
             }
 
-            $existingUsers[] = $userId;
+            $existingUsers[$azureUserInfo['id']] = $userId;
 
-            $userInfo = api_get_user_info($userId);
+            yield sprintf('User (ID %d) with received info: %s ', $userId, serialize($azureUserInfo));
+        }
 
-            yield sprintf('User info: %s', serialize($userInfo));
+        yield '----------------';
+        yield 'Updating users status';
+
+        $roleGroups = $this->plugin->getGroupUidByRole();
+        $roleActions = $this->plugin->getUpdateActionByRole();
+
+        $userManager = UserManager::getManager();
+        $em = Database::getManager();
+
+        foreach ($roleGroups as $userRole => $groupUid) {
+            $azureGroupMembersInfo = iterator_to_array($this->getAzureGroupMembers($groupUid));
+            $azureGroupMembersUids = array_column($azureGroupMembersInfo, 'id');
+
+            foreach ($azureGroupMembersUids as $azureGroupMembersUid) {
+                $userId = $existingUsers[$azureGroupMembersUid] ?? null;
+
+                if (!$userId) {
+                    continue;
+                }
+
+                if (isset($roleActions[$userRole])) {
+                    /** @var User $user */
+                    $user = $userManager->find($userId);
+
+                    $roleActions[$userRole]($user);
+
+                    yield sprintf('User (ID %d) status %s', $userId, $userRole);
+                }
+            }
+
+            $em->flush();
         }
 
         if ('true' === $this->plugin->get(AzureActiveDirectory::SETTING_DEACTIVATE_NONEXISTING_USERS)) {
@@ -73,7 +94,7 @@ class AzureSyncUsersCommand extends AzureCommand
      *
      * @return Generator<int, array<string, string>>
      */
-    private function getAzureUsers(AccessTokenInterface $token): Generator
+    private function getAzureUsers(): Generator
     {
         $userFields = [
             'givenName',
@@ -93,8 +114,10 @@ class AzureSyncUsersCommand extends AzureCommand
             implode(',', $userFields)
         );
 
+        $token = null;
+
         do {
-            $token = $this->getToken($token);
+            $this->generateOrRefreshToken($token);
 
             try {
                 $azureUsersRequest = $this->provider->request(
@@ -117,6 +140,51 @@ class AzureSyncUsersCommand extends AzureCommand
             if (!empty($azureUsersRequest['@odata.nextLink'])) {
                 $hasNextLink = true;
                 $query = parse_url($azureUsersRequest['@odata.nextLink'], PHP_URL_QUERY);
+            }
+        } while ($hasNextLink);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getAzureGroupMembers(string $groupUid): Generator
+    {
+        $userFields = [
+            'id',
+        ];
+
+        $query = sprintf(
+            '$top=%d&$select=%s',
+            AzureActiveDirectory::API_PAGE_SIZE,
+            implode(',', $userFields)
+        );
+
+        $token = null;
+
+        do {
+            $this->generateOrRefreshToken($token);
+
+            try {
+                $azureGroupMembersRequest = $this->provider->request(
+                    'get',
+                    "groups/$groupUid/members?$query",
+                    $token
+                );
+            } catch (Exception $e) {
+                throw new Exception('Exception when requesting group members from Azure: '.$e->getMessage());
+            }
+
+            $azureGroupMembers = $azureGroupMembersRequest['value'] ?? [];
+
+            foreach ($azureGroupMembers as $azureGroupMember) {
+                yield $azureGroupMember;
+            }
+
+            $hasNextLink = false;
+
+            if (!empty($azureGroupMembersRequest['@odata.nextLink'])) {
+                $hasNextLink = true;
+                $query = parse_url($azureGroupMembersRequest['@odata.nextLink'], PHP_URL_QUERY);
             }
         } while ($hasNextLink);
     }

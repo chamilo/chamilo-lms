@@ -4,6 +4,9 @@
  * Callback script for Azure. The URL of this file is sent to Azure as a
  * point of contact to send particular signals.
  */
+
+use Chamilo\UserBundle\Entity\User;
+
 require __DIR__.'/../../../main/inc/global.inc.php';
 
 if (!empty($_GET['error']) && !empty($_GET['state'])) {
@@ -85,17 +88,33 @@ try {
         throw new Exception('The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
     }
 
-    $userId = $plugin->registerUser(
-        $token,
-        $provider,
-        $me
-    );
+    $userId = $plugin->registerUser($me);
+
+    if ($roleGroups = $plugin->getGroupUidByRole()) {
+        $roleActions = $plugin->getUpdateActionByRole();
+        /** @var User $user */
+        $user = UserManager::getManager()->find($userId);
+
+        $azureGroups = $provider->get('me/memberOf', $token);
+
+        foreach ($azureGroups as $azureGroup) {
+            $azureGroupUid = $azureGroup['objectId'];
+
+            foreach ($roleGroups as $userRole => $groupUid) {
+                if ($azureGroupUid === $groupUid) {
+                    $roleActions[$userRole]($user);
+
+                    break 2;
+                }
+            }
+        }
+
+        Database::getManager()->flush();
+    }
 
     $userInfo = api_get_user_info($userId);
 
-    //TODO add user update management for groups
-
-    //TODO add support if user exists in another URL but is validated in this one, add the user to access_url_rel_user
+    /* @TODO add support if user exists in another URL but is validated in this one, add the user to access_url_rel_user */
 
     if (empty($userInfo)) {
         throw new Exception('User '.$userId.' not found.');

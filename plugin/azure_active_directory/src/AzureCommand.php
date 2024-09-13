@@ -16,10 +16,6 @@ class AzureCommand
      * @var Azure
      */
     protected $provider;
-    /**
-     * @var AccessTokenInterface
-     */
-    private $token;
 
     public function __construct()
     {
@@ -41,5 +37,18 @@ class AzureCommand
         }
 
         return $currentToken;
+    }
+
+    /**
+     * @throws IdentityProviderException
+     */
+    protected function generateOrRefreshToken(?AccessTokenInterface &$token)
+    {
+        if (!$token || ($token->getExpires() && !$token->getRefreshToken())) {
+            $token = $this->provider->getAccessToken(
+                'client_credentials',
+                ['resource' => $this->provider->resource]
+            );
+        }
     }
 }

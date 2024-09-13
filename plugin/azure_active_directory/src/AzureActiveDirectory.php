@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use League\OAuth2\Client\Token\AccessTokenInterface;
+use Chamilo\UserBundle\Entity\User;
 use TheNetworg\OAuth2\Client\Provider\Azure;
 
 /**
@@ -213,11 +213,7 @@ class AzureActiveDirectory extends Plugin
      * @throws Exception
      */
     public function registerUser(
-        AccessTokenInterface &$token,
-        Azure $provider,
         array $azureUserInfo,
-        string $apiGroupsRef = 'me/memberOf',
-        string $objectIdKey = 'objectId',
         string $azureUidKey = 'objectId'
     ) {
         if (empty($azureUserInfo)) {
@@ -241,15 +237,13 @@ class AzureActiveDirectory extends Plugin
                 $authSource,
                 $active,
                 $extra,
-                $userRole,
-                $isAdmin,
-            ] = $this->formatUserData($token, $provider, $azureUserInfo, $apiGroupsRef, $objectIdKey, $azureUidKey);
+            ] = $this->formatUserData($azureUserInfo, $azureUidKey);
 
             // If the option is set to create users, create it
             $userId = UserManager::create_user(
                 $firstNme,
                 $lastName,
-                $userRole,
+                STUDENT,
                 $email,
                 $username,
                 '',
@@ -263,8 +257,7 @@ class AzureActiveDirectory extends Plugin
                 null,
                 $extra,
                 null,
-                null,
-                $isAdmin
+                null
             );
 
             if (!$userId) {
@@ -284,9 +277,7 @@ class AzureActiveDirectory extends Plugin
                 $authSource,
                 $active,
                 $extra,
-                $userRole,
-                $isAdmin,
-            ] = $this->formatUserData($token, $provider, $azureUserInfo, $apiGroupsRef, $objectIdKey, $azureUidKey);
+            ] = $this->formatUserData($azureUserInfo, $azureUidKey);
 
             $userId = UserManager::update_user(
                 $userId,
@@ -296,7 +287,7 @@ class AzureActiveDirectory extends Plugin
                 '',
                 $authSource,
                 $email,
-                $userRole,
+                STUDENT,
                 null,
                 $phone,
                 null,
@@ -319,24 +310,9 @@ class AzureActiveDirectory extends Plugin
      * @throws Exception
      */
     private function formatUserData(
-        AccessTokenInterface &$token,
-        Azure $provider,
         array $azureUserInfo,
-        string $apiGroupsRef,
-        string $groupObjectIdKey,
         string $azureUidKey
     ): array {
-        try {
-            [$userRole, $isAdmin] = $this->getUserRoleAndCheckIsAdmin(
-                $token,
-                $provider,
-                $apiGroupsRef,
-                $groupObjectIdKey
-            );
-        } catch (Exception $e) {
-            throw new Exception('Exception when formatting user '.$azureUserInfo[$azureUidKey].' data: '.$e->getMessage());
-        }
-
         $phone = null;
 
         if (isset($azureUserInfo['telephoneNumber'])) {
@@ -369,52 +345,44 @@ class AzureActiveDirectory extends Plugin
             $authSource,
             $active,
             $extra,
-            $userRole,
-            $isAdmin,
         ];
     }
 
     /**
-     * @throws Exception
+     * @return array<string, string|false>
      */
-    private function getUserRoleAndCheckIsAdmin(
-        AccessTokenInterface &$token,
-        Azure $provider,
-        string $apiRef = 'me/memberOf',
-        string $groupObjectIdKey = 'objectId'
-    ): array {
-        // If any specific group ID has been defined for a specific role, use that
-        // ID to give the user the right role
-        $userRole = STUDENT;
-        $isAdmin = false;
-
-        $groupRoles = [
+    public function getGroupUidByRole(): array
+    {
+        $groupUidList = [
             'admin' => $this->get(self::SETTING_GROUP_ID_ADMIN),
             'sessionAdmin' => $this->get(self::SETTING_GROUP_ID_SESSION_ADMIN),
             'teacher' => $this->get(self::SETTING_GROUP_ID_TEACHER),
         ];
 
-        if ($groupRoles = array_filter($groupRoles)) {
-            try {
-                $groups = $provider->get($apiRef, $token);
-            } catch (Exception $e) {
-                throw new Exception('Exception when requesting user groups from Azure: '.$e->getMessage());
-            }
+        return array_filter($groupUidList);
+    }
 
-            foreach ($groups as $group) {
-                $groupId = $group[$groupObjectIdKey];
+    /**
+     * @return array<string, callable>
+     */
+    public function getUpdateActionByRole(): array
+    {
+        return [
+            'admin' => function (User $user) {
+                $user->setStatus(COURSEMANAGER);
 
-                if (isset($groupRoles['admin']) && $groupRoles['admin'] === $groupId) {
-                    $userRole = COURSEMANAGER;
-                    $isAdmin = true;
-                } elseif (isset($groupRoles['sessionAdmin']) && $groupRoles['sessionAdmin'] === $groupId) {
-                    $userRole = SESSIONADMIN;
-                } elseif (isset($groupRoles['teacher']) && $groupRoles['teacher'] === $groupId && $userRole !== SESSIONADMIN) {
-                    $userRole = COURSEMANAGER;
-                }
-            }
-        }
+                UserManager::addUserAsAdmin($user, false);
+            },
+            'sessionAdmin' => function (User $user) {
+                $user->setStatus(SESSIONADMIN);
 
-        return [$userRole, $isAdmin];
+                UserManager::removeUserAdmin($user, false);
+            },
+            'teacher' => function (User $user) {
+                $user->setStatus(COURSEMANAGER);
+
+                UserManager::removeUserAdmin($user, false);
+            },
+        ];
     }
 }

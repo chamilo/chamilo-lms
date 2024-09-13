@@ -67,49 +67,4 @@ class AzureSyncUsergroupsCommand extends AzureCommand
             }
         }
     }
-
-    /**
-     * @throws Exception
-     *
-     * @return Generator<int, array<string, string>>
-     */
-    private function getAzureGroups(): Generator
-    {
-        $groupFields = [
-            'id',
-            'displayName',
-            'description',
-        ];
-
-        $query = sprintf(
-            '$top=%d&$select=%s',
-            AzureActiveDirectory::API_PAGE_SIZE,
-            implode(',', $groupFields)
-        );
-
-        $token = null;
-
-        do {
-            $this->generateOrRefreshToken($token);
-
-            try {
-                $azureGroupsRequest = $this->provider->request('get', "groups?$query", $token);
-            } catch (Exception $e) {
-                throw new Exception('Exception when requesting groups from Azure: '.$e->getMessage());
-            }
-
-            $azureGroupsInfo = $azureGroupsRequest['value'] ?? [];
-
-            foreach ($azureGroupsInfo as $azureGroupInfo) {
-                yield $azureGroupInfo;
-            }
-
-            $hasNextLink = false;
-
-            if (!empty($azureGroupsRequest['@odata.nextLink'])) {
-                $hasNextLink = true;
-                $query = parse_url($azureGroupsRequest['@odata.nextLink'], PHP_URL_QUERY);
-            }
-        } while ($hasNextLink);
-    }
 }

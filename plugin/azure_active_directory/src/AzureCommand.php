@@ -38,6 +38,106 @@ abstract class AzureCommand
     }
 
     /**
+     * @throws Exception
+     *
+     * @return Generator<int, array<string, string>>
+     */
+    protected function getAzureUsers(): Generator
+    {
+        $userFields = [
+            'givenName',
+            'surname',
+            'mail',
+            'userPrincipalName',
+            'businessPhones',
+            'mobilePhone',
+            'accountEnabled',
+            'mailNickname',
+            'id',
+        ];
+
+        $query = sprintf(
+            '$top=%d&$select=%s',
+            AzureActiveDirectory::API_PAGE_SIZE,
+            implode(',', $userFields)
+        );
+
+        $token = null;
+
+        do {
+            $this->generateOrRefreshToken($token);
+
+            try {
+                $azureUsersRequest = $this->provider->request(
+                    'get',
+                    "users?$query",
+                    $token
+                );
+            } catch (Exception $e) {
+                throw new Exception('Exception when requesting users from Azure: '.$e->getMessage());
+            }
+
+            $azureUsersInfo = $azureUsersRequest['value'] ?? [];
+
+            foreach ($azureUsersInfo as $azureUserInfo) {
+                yield $azureUserInfo;
+            }
+
+            $hasNextLink = false;
+
+            if (!empty($azureUsersRequest['@odata.nextLink'])) {
+                $hasNextLink = true;
+                $query = parse_url($azureUsersRequest['@odata.nextLink'], PHP_URL_QUERY);
+            }
+        } while ($hasNextLink);
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @return Generator<int, array<string, string>>
+     */
+    protected function getAzureGroups(): Generator
+    {
+        $groupFields = [
+            'id',
+            'displayName',
+            'description',
+        ];
+
+        $query = sprintf(
+            '$top=%d&$select=%s',
+            AzureActiveDirectory::API_PAGE_SIZE,
+            implode(',', $groupFields)
+        );
+
+        $token = null;
+
+        do {
+            $this->generateOrRefreshToken($token);
+
+            try {
+                $azureGroupsRequest = $this->provider->request('get', "groups?$query", $token);
+            } catch (Exception $e) {
+                throw new Exception('Exception when requesting groups from Azure: '.$e->getMessage());
+            }
+
+            $azureGroupsInfo = $azureGroupsRequest['value'] ?? [];
+
+            foreach ($azureGroupsInfo as $azureGroupInfo) {
+                yield $azureGroupInfo;
+            }
+
+            $hasNextLink = false;
+
+            if (!empty($azureGroupsRequest['@odata.nextLink'])) {
+                $hasNextLink = true;
+                $query = parse_url($azureGroupsRequest['@odata.nextLink'], PHP_URL_QUERY);
+            }
+        } while ($hasNextLink);
+    }
+
+    /**
      * @return Generator<int, array<string, string>>
      *
      * @throws Exception

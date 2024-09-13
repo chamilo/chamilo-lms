@@ -28,6 +28,7 @@ import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import { useSecurityStore } from "../../store/securityStore"
 import FloatLabel from "primevue/floatlabel"
+import { useLocale } from "../../composables/locale"
 
 const modelValue = defineModel({
   type: String,
@@ -84,6 +85,46 @@ if (route.params.node) {
   parentResourceNodeId.value = Number(route.params.node)
 }
 
+const supportedLanguages = {
+  ar: 'ar.js',
+  de: 'de.js',
+  en: 'en.js',
+  es: 'es.js',
+  fr_FR: 'fr_FR.js',
+  it: 'it.js',
+  nl: 'nl.js',
+  pt_PT: 'pt_PT.js',
+  ru: 'ru.js',
+  zh_CN: 'zh_CN.js',
+};
+
+const { appLocale } = useLocale()
+
+function getLanguageConfig(locale) {
+  const defaultLang = 'en'
+  const url = '/libs/editor/langs/'
+  const isoCode = locale.split('_')[0]
+  let languageFile = supportedLanguages[isoCode]
+  let finalLanguage = isoCode
+
+  if (!languageFile) {
+    const regionalMatch = Object.entries(supportedLanguages).find(([key, value]) => key.startsWith(isoCode))
+    if (regionalMatch) {
+      languageFile = regionalMatch[1]
+      finalLanguage = regionalMatch[0]
+    } else {
+      languageFile = `${defaultLang}.js`
+      finalLanguage = defaultLang
+    }
+  }
+
+  return {
+    language: finalLanguage,
+    language_url: `${url}${languageFile}`,
+  };
+}
+
+const languageConfig = getLanguageConfig(appLocale.value)
 const toolbarUndo = "undo redo"
 const toolbarFormatText = "bold italic underline strikethrough"
 const toolbarInsertMedia = "image media template link"
@@ -106,6 +147,8 @@ const defaultEditorConfig = {
   height: 500,
   toolbar_mode: "sliding",
   autosave_ask_before_unload: true,
+  language: languageConfig.language,
+  language_url: languageConfig.language_url,
   plugins: [
     "advlist",
     "anchor",

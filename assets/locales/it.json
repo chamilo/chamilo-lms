@@ -552,5 +552,7 @@
     "Change Password": "Change Password",
     "All Messages": "All Messages",
     "Promoted Messages": "Promoted Messages",
-    "Are you sure you want to delete %s?": "Sei sicuro di voler cancellare {0}?"
+    "Are you sure you want to delete %s?": "Sei sicuro di voler cancellare {0}?",
+    "%s's picture": "{0}'s picture",
+    "+%d": "+{0}"
 }

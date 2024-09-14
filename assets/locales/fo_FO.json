@@ -301,5 +301,7 @@
     "Continue with %s": "Continue with {0}",
     "Change Password": "Change Password",
     "All Messages": "All Messages",
-    "Promoted Messages": "Promoted Messages"
+    "Promoted Messages": "Promoted Messages",
+    "%s's picture": "{0}'s picture",
+    "+%d": "+{0}"
 }

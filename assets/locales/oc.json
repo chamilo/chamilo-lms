@@ -568,5 +568,7 @@
     "Change Password": "Changer de mot de passe",
     "All Messages": "Tous les messages",
     "Promoted Messages": "Messages promus",
-    "Are you sure you want to delete %s?": "\u00cates-vous certains de vouloir supprimer {0}\u202f?"
+    "Are you sure you want to delete %s?": "\u00cates-vous certains de vouloir supprimer {0}\u202f?",
+    "%s's picture": "{0}'s picture",
+    "+%d": "+{0}"
 }

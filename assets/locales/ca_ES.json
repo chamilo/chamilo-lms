@@ -547,5 +547,7 @@
     "Change Password": "Cambiar de contrase\u00f1a",
     "All Messages": "Todos los mensajes",
     "Promoted Messages": "Mensajes promocionados",
-    "Are you sure you want to delete %s?": "\u00bfEst\u00e0 segur que vol esborrar {0}?"
+    "Are you sure you want to delete %s?": "\u00bfEst\u00e0 segur que vol esborrar {0}?",
+    "%s's picture": "Imagen de {0}",
+    "+%d": "+{0}"
 }

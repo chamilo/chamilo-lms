@@ -27767,3 +27767,6 @@ msgstr ""
 
 msgid "%s's picture"
 msgstr ""
+
+msgid "+%d"
+msgstr ""

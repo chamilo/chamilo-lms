@@ -567,5 +567,7 @@
     "Change Password": "Change Password",
     "All Messages": "All Messages",
     "Promoted Messages": "Promoted Messages",
-    "Are you sure you want to delete %s?": "Ste prepri\u010dani, da \u017eelite odstraniti {0}?"
+    "Are you sure you want to delete %s?": "Ste prepri\u010dani, da \u017eelite odstraniti {0}?",
+    "%s's picture": "{0}'s picture",
+    "+%d": "+{0}"
 }

@@ -545,5 +545,7 @@
     "Change Password": "Change Password",
     "All Messages": "All Messages",
     "Promoted Messages": "Promoted Messages",
-    "Are you sure you want to delete %s?": "Ste si ist\u00ed, \u017ee chcete zmaza\u0165 {0}?"
+    "Are you sure you want to delete %s?": "Ste si ist\u00ed, \u017ee chcete zmaza\u0165 {0}?",
+    "%s's picture": "{0}'s picture",
+    "+%d": "+{0}"
 }

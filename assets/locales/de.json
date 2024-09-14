@@ -568,5 +568,7 @@
     "Change Password": "Kennwort \u00e4ndern",
     "All Messages": "Alle Nachrichten",
     "Promoted Messages": "Gesponserte Nachrichten",
-    "Are you sure you want to delete %s?": "Sind Sie sicher, dass Sie {0} l\u00f6schen m\u00f6chten?"
+    "Are you sure you want to delete %s?": "Sind Sie sicher, dass Sie {0} l\u00f6schen m\u00f6chten?",
+    "%s's picture": "{0}'s picture",
+    "+%d": "+{0}"
 }

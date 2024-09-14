@@ -562,5 +562,7 @@
     "Change Password": "Change Password",
     "All Messages": "All Messages",
     "Promoted Messages": "Promoted Messages",
-    "Are you sure you want to delete %s?": "\u05d4\u05d0\u05dd \u05d0\u05ea\u05d4 \u05d1\u05d8\u05d5\u05d7 \u05e9\u05d1\u05e8\u05e6\u05d5\u05e0\u05da \u05dc\u05de\u05d7\u05d5\u05e7 \u05d0\u05ea {0}?"
+    "Are you sure you want to delete %s?": "\u05d4\u05d0\u05dd \u05d0\u05ea\u05d4 \u05d1\u05d8\u05d5\u05d7 \u05e9\u05d1\u05e8\u05e6\u05d5\u05e0\u05da \u05dc\u05de\u05d7\u05d5\u05e7 \u05d0\u05ea {0}?",
+    "%s's picture": "{0}'s picture",
+    "+%d": "+{0}"
 }

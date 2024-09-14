@@ -472,5 +472,7 @@
     "Continue with %s": "Seguir con {0}",
     "Change Password": "Cambiar de contrase\u00f1a",
     "All Messages": "Todos los mensajes",
-    "Promoted Messages": "Mensajes promocionados"
+    "Promoted Messages": "Mensajes promocionados",
+    "%s's picture": "Imagen de {0}",
+    "+%d": "+{0}"
 }

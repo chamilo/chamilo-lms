@@ -75,6 +75,7 @@ class SectionExport
             'page' => PageExport::class,
             'resource' => ResourceExport::class,
             'folder' => FolderExport::class,
+            'feedback' => FeedbackExport::class,
         ];
 
         foreach ($activities as $activity) {
@@ -103,6 +104,7 @@ class SectionExport
             RESOURCE_LINK => 'source_id',
             RESOURCE_WORK => 'source_id',
             RESOURCE_FORUM => 'source_id',
+            RESOURCE_SURVEY => 'source_id',
         ];
 
         foreach ($resourceTypes as $resourceType => $idKey) {
@@ -220,9 +222,10 @@ class SectionExport
             'page' => PageExport::class,
             'resource' => ResourceExport::class,
             'folder' => FolderExport::class,
+            'feedback' => FeedbackExport::class,
         ];
 
-        $itemType = $item['item_type'] === 'link' ? 'url' : ($item['item_type'] === 'work' ? 'assign' : $item['item_type']);
+        $itemType = $item['item_type'] === 'link' ? 'url' : ($item['item_type'] === 'work' ? 'assign' : ($item['item_type'] === 'survey' ? 'feedback' : $item['item_type']));
 
         switch ($itemType) {
             case 'quiz':
@@ -230,6 +233,7 @@ class SectionExport
             case 'assign':
             case 'url':
             case 'forum':
+            case 'feedback':
                 $activityId = $itemType === 'glossary' ? 1 : (int) $item['path'];
                 $exportClass = $activityClassMap[$itemType];
                 $exportInstance = new $exportClass($this->course);

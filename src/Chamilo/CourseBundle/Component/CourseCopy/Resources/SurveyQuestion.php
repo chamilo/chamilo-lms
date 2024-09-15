@@ -52,6 +52,8 @@ class SurveyQuestion extends Resource
      */
     public $is_required;
 
+    public $id;
+
     /**
      * Create a new SurveyQuestion.
      *
@@ -79,6 +81,7 @@ class SurveyQuestion extends Resource
         $is_required = false
     ) {
         parent::__construct($id, RESOURCE_SURVEYQUESTION);
+        $this->id = $id;
         $this->survey_id = $survey_id;
         $this->survey_question = $survey_question;
         $this->survey_question_comment = $survey_question_comment;

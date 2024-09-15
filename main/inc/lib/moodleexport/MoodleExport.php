@@ -319,6 +319,13 @@ class MoodleExport
                     $id = $resource->source_id;
                     $title = $resource->params['title'] ?? '';
                 }
+                // Handle feedback (survey)
+                elseif ($resourceType === RESOURCE_SURVEY && $resource->source_id > 0) {
+                    $exportClass = FeedbackExport::class;
+                    $moduleName = 'feedback';
+                    $id = $resource->source_id;
+                    $title = $resource->params['title'] ?? '';
+                }
 
                 // Add the activity if the class and module name are set
                 if ($exportClass && $moduleName) {

@@ -78,7 +78,7 @@ class ContainerHelper
         return $this->sessionFactory->createSession();
     }
 
-    public function setSessionFactory(SessionFactoryInterface $sessionFactory): ContainerHelper
+    public function setSessionFactory(SessionFactoryInterface $sessionFactory): self
     {
         $this->sessionFactory = $sessionFactory;
 

@@ -1054,10 +1054,10 @@ switch ($action) {
         $result = $calendarPlugin->getUsersPerCalendar($id);
         break;
     case 'get_usergroups_users':
-        $columns = ['name', 'actions'];
+        $columns = ['title', 'actions'];
         if ('true' === api_get_plugin_setting('learning_calendar', 'enabled')) {
             $columns = [
-                'name',
+                'title',
                 'calendar',
                 'gradebook_items',
                 'time_spent',

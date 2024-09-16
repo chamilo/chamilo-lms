@@ -407,7 +407,7 @@ echo Display::input('hidden', 'add_type', null);
                 <div class="multiple_select_header">
                     <b><?php echo get_lang('Users on platform'); ?> :</b>
                     <?php echo get_lang('First letter (last name)'); ?> :
-                    <select id="first_letter_user" name="firstLetterUser" onchange="change_select();">
+                    <select id="first_letter_user" name="firstLetterUser" onchange="change_select();" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         <option value = "%">--</option>
                         <?php
                         echo Display :: get_alphabet_options($first_letter_user);
@@ -420,7 +420,7 @@ echo Display::input('hidden', 'add_type', null);
                     $elements_not_in,
                     '',
                     [
-                        'class' => 'form-control',
+                        'class' => 'form-multiselect block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm',
                         'multiple' => 'multiple',
                         'id' => 'elements_not_in',
                         'size' => '15px',
@@ -457,7 +457,7 @@ echo Display::input('hidden', 'add_type', null);
                     $elements_in,
                     '',
                     [
-                        'class' => 'form-control',
+                        'class' => 'form-multiselect block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm',
                         'multiple' => 'multiple',
                         'id' => 'elements_in',
                         'size' => '15px',

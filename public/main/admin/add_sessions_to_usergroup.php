@@ -97,15 +97,15 @@ if ($usergroup->allowTeachers()) {
         $onlyThisSessionList = array_column($sessionList, 'id');
     }
 }
-$session_list = SessionManager::get_sessions_list([], ['name'], null, null, 0, $onlyThisSessionList);
+$session_list = SessionManager::get_sessions_list([], ['title'], null, null, 0, $onlyThisSessionList);
 $elements_not_in = $elements_in = [];
 
 if (!empty($session_list)) {
     foreach ($session_list as $session) {
         if (in_array($session['id'], $session_list_in)) {
-            $elements_in[$session['id']] = $session['name'];
+            $elements_in[$session['id']] = $session['title'];
         } else {
-            $elements_not_in[$session['id']] = $session['name'];
+            $elements_not_in[$session['id']] = $session['title'];
         }
     }
 }
@@ -132,7 +132,7 @@ function search_usergroup_sessions($needle, $type)
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
             foreach ($session_list as $row) {
                 if (!in_array($row['id'], array_keys($elements_in))) {
-                    $return .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+                    $return .= '<option value="'.$row['id'].'">'.$row['title'].'</option>';
                 }
             }
             $return .= '</select>';
@@ -178,7 +178,7 @@ echo '<div id="advancedSearch" style="display: none">
             onchange="xajax_search_usergroup_sessions(this.value,\'searchbox\')" onkeyup="this.onchange()">
      </div>';
 
-echo Display::page_header($data['name'].': '.$tool_name);
+echo Display::page_header($data['title'].': '.$tool_name);
 
 $extra = '';
 if (!empty($_GET['add'])) {

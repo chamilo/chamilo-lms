@@ -11,7 +11,7 @@
         <input
           type="search"
           class="flex-grow p-2 h-[44px] border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Search"
+          :placeholder="t('Search')"
           v-model="searchQuery"
           @input="fetchFriends"
         >

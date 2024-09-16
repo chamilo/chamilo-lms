@@ -37,7 +37,7 @@ $columns = [
 
 //Column config
 $column_model = [
-    ['name' => 'title', 'index' => 'title', 'align' => 'left'],
+    ['name' => 'title', 'index' => 'title', 'align' => 'left', 'width' => '400'],
     ['name' => 'users', 'index' => 'users', 'align' => 'left', 'search' => 'false'],
     ['name' => 'courses', 'index' => 'courses', 'align' => 'left', 'search' => 'false'],
     ['name' => 'sessions', 'index' => 'sessions', 'align' => 'left', 'search' => 'false'],
@@ -45,7 +45,7 @@ $column_model = [
     [
         'name' => 'actions',
         'index' => 'actions',
-        'width' => '170',
+        'width' => '250',
         'align' => 'center',
         'sortable' => 'false',
         'formatter' => 'action_formatter',

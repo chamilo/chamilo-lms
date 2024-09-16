@@ -580,7 +580,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
-        $response->headers->set('Content-Length', (string) $resourceFile->getSize());
+        $response->headers->set('Content-Length', (string) $length);
         $response->headers->set('Accept-Ranges', 'bytes');
         $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
         $response->setStatusCode(

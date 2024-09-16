@@ -3,7 +3,7 @@ import "mediaelement/full"
 
 import iconSprite from "../../css/scss/libs/mediaelementjs/icons.svg"
 
-const videoSelector = "video:not(.skip, .uppy-Webcam-video), audio:not(.skip)"
+const videoSelector = "video:not(.skip, .uppy-Webcam-video, .fancybox-content video), audio:not(.skip)"
 
 const mejsOptions = {
   iconSprite,

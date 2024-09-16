@@ -5,7 +5,7 @@
       <div class="p-inputgroup">
         <BaseInputText
           v-model="searchTerm"
-          placeholder="Search term..."
+          :placeholder="t('Search')"
           class="search-term-input"
           label="Search term ..."/>
         <BaseButton

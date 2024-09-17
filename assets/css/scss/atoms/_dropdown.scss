@@ -1,7 +1,8 @@
 .p-dropdown, .p-multiselect {
   @apply inline-flex cursor-pointer relative select-none
       border border-support-3 bg-white rounded-lg transition w-full duration-200
-    hover:border-primary hover:text-gray-90 hover:outline-0 hover:outline-none;
+    hover:border-primary hover:text-gray-90 hover:outline-0 hover:outline-none
+    focus:border-primary focus:text-gray-90 focus:outline-0 focus:outline-none;
 
   .p-dropdown-panel, .p-multiselect-panel {
     @apply min-w-full;

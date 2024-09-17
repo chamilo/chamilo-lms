@@ -104,8 +104,8 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
         '4' => 'Moodle 4.x',
     ]);
 
-    $form->addElement('text', 'admin_id', get_lang('AdminID'), ['maxlength' => 10, 'size' => 10]);
-    $form->addElement('text', 'admin_username', get_lang('AdminUsername'), ['maxlength' => 100, 'size' => 50]);
+    $form->addElement('text', 'admin_id', [get_lang('AdminID'), get_lang('MoodleExportAdminIDComment')], ['maxlength' => 10, 'size' => 10]);
+    $form->addElement('text', 'admin_username', get_lang('AdminLogin'), ['maxlength' => 100, 'size' => 50]);
     $form->addElement('text', 'admin_email', get_lang('AdminEmail'), ['maxlength' => 100, 'size' => 50]);
 
     // Add validation rules

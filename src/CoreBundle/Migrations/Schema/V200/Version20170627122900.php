@@ -276,6 +276,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
             'timezone' => 'platform',
             'enable_profile_user_address_geolocalization' => 'profile',
             'exercise_hide_label' => 'exercise',
+            'changeable_options' => 'profile',
         ];
 
         foreach ($settings as $variable => $category) {

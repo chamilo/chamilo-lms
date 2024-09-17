@@ -5438,7 +5438,7 @@ msgid "The main/install directory of your Chamilo system is still accessible to 
 msgstr "Das Installations-Verzeichnis Ihrer Installation (./main/install) ist noch immer für Web-Benutzer erreichbar. Das könnte ein Sicherheitsrisiko für Ihre Installation darstellen. Wir raten Ihnen, dieses Verzeichnis zu löschen oder die Berechtigungen so zu ändern, dass Web Benutzer die Scripts in diesem Verzeichnis nicht benutzen können."
 
 msgid "Assessments tool activation"
-msgstr "Berwertungen"
+msgstr "Bewertungen"
 
 msgid "The Assessments tool allows you to assess competences in your organization by merging classroom and online activities evaluations into Performance reports. Do you want to activate it?"
 msgstr " ermöglicht, Lernziele mit Noten festzulegen; falls es nicht benötigt wird, könnte es die Benutzeroberfläche zu komplex machen. Soll dieses Werkzeug aktiviert werden?"
@@ -9965,7 +9965,7 @@ msgid "IP"
 msgstr "IP"
 
 msgid "Grade activity"
-msgstr "Berwerten"
+msgstr "Bewerten"
 
 msgid "Words"
 msgstr "Wörter"

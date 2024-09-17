@@ -67,9 +67,6 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
             exit();
         }
 
-        $adminUsername = Security::remove_XSS($adminUsername);
-        $adminEmail = Security::remove_XSS($adminEmail);
-
         $exporter = new MoodleExport($course);
         $exporter->setAdminUserData($adminId, $adminUsername, $adminEmail);
 

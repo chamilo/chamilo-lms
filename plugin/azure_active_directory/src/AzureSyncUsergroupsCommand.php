@@ -48,10 +48,16 @@ class AzureSyncUsergroupsCommand extends AzureCommand
 
             yield sprintf('Obtaining members for group (ID %d)', $groupId);
 
-            foreach ($this->getAzureGroupMembers($azureGroupUid) as $azureGroupMember) {
-                if ($userId = $this->plugin->getUserIdByVerificationOrder($azureGroupMember, 'id')) {
-                    $newGroupMembers[] = $userId;
+            try {
+                foreach ($this->getAzureGroupMembers($azureGroupUid) as $azureGroupMember) {
+                    if ($userId = $this->plugin->getUserIdByVerificationOrder($azureGroupMember, 'id')) {
+                        $newGroupMembers[] = $userId;
+                    }
                 }
+            } catch (Exception $e) {
+                yield $e->getMessage();
+
+                continue;
             }
 
             if ($newGroupMembers) {

@@ -42,7 +42,14 @@ class AzureSyncUsersCommand extends AzureCommand
         $em = Database::getManager();
 
         foreach ($roleGroups as $userRole => $groupUid) {
-            $azureGroupMembersInfo = iterator_to_array($this->getAzureGroupMembers($groupUid));
+            try {
+                $azureGroupMembersInfo = iterator_to_array($this->getAzureGroupMembers($groupUid));
+            } catch (Exception $e) {
+                yield $e->getMessage();
+
+                continue;
+            }
+
             $azureGroupMembersUids = array_column($azureGroupMembersInfo, 'id');
 
             foreach ($azureGroupMembersUids as $azureGroupMembersUid) {

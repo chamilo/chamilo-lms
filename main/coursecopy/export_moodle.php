@@ -55,8 +55,20 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
 
         // Get admin details
         $adminId = (int) $_POST['admin_id'];
-        $adminUsername = $_POST['admin_username'];
-        $adminEmail = $_POST['admin_email'];
+        $adminUsername = filter_var($_POST['admin_username'], FILTER_SANITIZE_STRING);
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $adminUsername)) {
+            echo Display::return_message(get_lang('PleaseEnterValidLogin'), 'error');
+            exit();
+        }
+
+        $adminEmail = filter_var($_POST['admin_email'], FILTER_SANITIZE_EMAIL);
+        if (!filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
+            echo Display::return_message(get_lang('PleaseEnterValidEmail'), 'error');
+            exit();
+        }
+
+        $adminUsername = Security::remove_XSS($adminUsername);
+        $adminEmail = Security::remove_XSS($adminEmail);
 
         $exporter = new MoodleExport($course);
         $exporter->setAdminUserData($adminId, $adminUsername, $adminEmail);

@@ -9068,5 +9068,8 @@ $BillingReport = "Billing report";
 $ExportToMoodle = "Export to Moodle";
 $ExportToMoodleInfo = "Export the course contents directly to Moodle's .mbz format, ready for import into a Moodle portal";
 $MoodleExportCreated = "Moodle export successfully created";
+$ AdminID = "Admin ID";
 $MoodleVersion = "Moodle version";
+$CreateExport = "Create export file";
+$MoodleExportAdminIDComment = "Moodle requires a user identification to be stored inside some XML files of the .mbz format. Please provide an internal (integer) ID of the user exporting this course or Moodle's internal user ID of the user that will be the owner of the imported resources. If you're in doubt, just write '1' and some fake data ton continue.";
 ?>

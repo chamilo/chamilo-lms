@@ -321,8 +321,8 @@ class QuizExport extends ActivityExport
         $xmlContent .= '        <penalty>0.3333333</penalty>' . PHP_EOL;
         $xmlContent .= '        <qtype>' . htmlspecialchars(str_replace('_nosingle', '', $question['qtype']) ?? 'unknown') . '</qtype>' . PHP_EOL;
         $xmlContent .= '        <length>1</length>' . PHP_EOL;
-        $xmlContent .= '        <stamp>my.moodle3.com+' . time() . '+QUESTIONSTAMP</stamp>' . PHP_EOL;
-        $xmlContent .= '        <version>my.moodle3.com+' . time() . '+VERSIONSTAMP</version>' . PHP_EOL;
+        $xmlContent .= '        <stamp>moodle+' . time() . '+QUESTIONSTAMP</stamp>' . PHP_EOL;
+        $xmlContent .= '        <version>moodle+' . time() . '+VERSIONSTAMP</version>' . PHP_EOL;
         $xmlContent .= '        <hidden>0</hidden>' . PHP_EOL;
         $xmlContent .= '        <timecreated>' . time() . '</timecreated>' . PHP_EOL;
         $xmlContent .= '        <timemodified>' . time() . '</timemodified>' . PHP_EOL;

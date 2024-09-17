@@ -32,7 +32,7 @@ class MoodleExport
     /**
      * Export the Moodle course in .mbz format.
      */
-    public function export(string $courseId, string $exportDir, string $version)
+    public function export(string $courseId, string $exportDir, int $version)
     {
         $tempDir = api_get_path(SYS_ARCHIVE_PATH) . $exportDir;
 
@@ -109,7 +109,7 @@ class MoodleExport
     /**
      * Create the moodle_backup.xml file with the required course details.
      */
-    private function createMoodleBackupXml(string $destinationDir, string $version): void
+    private function createMoodleBackupXml(string $destinationDir, int $version): void
     {
         // Generate course information and backup metadata
         $courseInfo = api_get_course_info($this->course->code);
@@ -123,10 +123,10 @@ class MoodleExport
         $xmlContent .= '  <information>' . PHP_EOL;
 
         $xmlContent .= '    <name>backup-' . htmlspecialchars($courseInfo['code']) . '.mbz</name>' . PHP_EOL;
-        $xmlContent .= '    <moodle_version>' . ($version === '3' ? '2021051718' : '2022041900') . '</moodle_version>' . PHP_EOL;
-        $xmlContent .= '    <moodle_release>' . ($version === '3' ? '3.11.18 (Build: 20231211)' : '4.x version here') . '</moodle_release>' . PHP_EOL;
-        $xmlContent .= '    <backup_version>' . ($version === '3' ? '2021051700' : '2022041900') . '</backup_version>' . PHP_EOL;
-        $xmlContent .= '    <backup_release>' . ($version === '3' ? '3.11' : '4.x') . '</backup_release>' . PHP_EOL;
+        $xmlContent .= '    <moodle_version>' . ($version === 3 ? '2021051718' : '2022041900') . '</moodle_version>' . PHP_EOL;
+        $xmlContent .= '    <moodle_release>' . ($version === 3 ? '3.11.18 (Build: 20231211)' : '4.x version here') . '</moodle_release>' . PHP_EOL;
+        $xmlContent .= '    <backup_version>' . ($version === 3 ? '2021051700' : '2022041900') . '</backup_version>' . PHP_EOL;
+        $xmlContent .= '    <backup_release>' . ($version === 3 ? '3.11' : '4.x') . '</backup_release>' . PHP_EOL;
         $xmlContent .= '    <backup_date>' . time() . '</backup_date>' . PHP_EOL;
         $xmlContent .= '    <mnet_remoteusers>0</mnet_remoteusers>' . PHP_EOL;
         $xmlContent .= '    <include_files>1</include_files>' . PHP_EOL;
@@ -498,7 +498,7 @@ class MoodleExport
             $xmlContent .= '    <contextinstanceid>' . ($quiz['moduleid'] ?? '0') . '</contextinstanceid>' . PHP_EOL;
             $xmlContent .= '    <info>The default category for questions shared in context "' . htmlspecialchars($quiz['name'] ?? 'Unknown') . '".</info>' . PHP_EOL;
             $xmlContent .= '    <infoformat>0</infoformat>' . PHP_EOL;
-            $xmlContent .= '    <stamp>my.moodle3.com+' . time() . '+CATEGORYSTAMP</stamp>' . PHP_EOL;
+            $xmlContent .= '    <stamp>moodle+' . time() . '+CATEGORYSTAMP</stamp>' . PHP_EOL;
             $xmlContent .= '    <parent>0</parent>' . PHP_EOL;
             $xmlContent .= '    <sortorder>999</sortorder>' . PHP_EOL;
             $xmlContent .= '    <idnumber>$@NULL@$</idnumber>' . PHP_EOL;
@@ -563,8 +563,8 @@ class MoodleExport
             'institution' => '',
             'department' => '',
             'address' => '',
-            'city' => 'Lima',
-            'country' => 'PE',
+            'city' => 'London',
+            'country' => 'GB',
             'lastip' => '127.0.0.1',
             'picture' => '0',
             'description' => '',
@@ -694,7 +694,7 @@ class MoodleExport
     {
         // root-level settings
         $settings = [
-            ['level' => 'root', 'name' => 'filename', 'value' => 'backup-moodle2-course-' . time() . '.mbz'],
+            ['level' => 'root', 'name' => 'filename', 'value' => 'backup-moodle-course-' . time() . '.mbz'],
             ['level' => 'root', 'name' => 'imscc11', 'value' => '0'],
             ['level' => 'root', 'name' => 'users', 'value' => '1'],
             ['level' => 'root', 'name' => 'anonymize', 'value' => '0'],

@@ -77,7 +77,7 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
         $courseId = api_get_course_id();
         $exportDir = 'moodle_export_' . $courseId;
         try {
-            $moodleVersion = isset($_POST['moodle_version']) ? $_POST['moodle_version'] : '3';
+            $moodleVersion = isset($_POST['moodle_version']) ? (int) $_POST['moodle_version'] : 3;
             $mbzFile = $exporter->export($courseId, $exportDir, $moodleVersion);
 
             echo Display::return_message(get_lang('MoodleExportCreated'), 'confirm');

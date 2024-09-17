@@ -95,7 +95,7 @@ class FolderExport extends ActivityExport
                     'contenthash' => 'hash' . $doc['id'],
                     'filename' => $doc['basename'],
                     'filepath' => $doc['path'],
-                    'filesize' => (int)$doc['size'],
+                    'filesize' => (int) $doc['size'],
                     'mimetype' => $this->getMimeType($doc['basename']),
                 ];
             }

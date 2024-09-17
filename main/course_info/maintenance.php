@@ -47,6 +47,12 @@ echo Display::page_header($nameTools);
             </a><br/>
             <?php echo get_lang('ImportFromMoodleInfo'); ?>
         </li>
+        <li>
+            <a href="../coursecopy/export_moodle.php?<?php echo api_get_cidreq(); ?>">
+                <?php echo get_lang('ExportToMoodle'); ?>
+            </a><br/>
+            <?php echo get_lang('ExportToMoodleInfo'); ?>
+        </li>
     </ul>
 </div>
 

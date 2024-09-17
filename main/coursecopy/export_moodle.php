@@ -97,7 +97,7 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
         'post',
         api_get_self().'?'.api_get_cidreq()
     );
-    $form->addElement('radio', 'export_option', '', get_lang('CreateFullExport'), 'full_export');
+    $form->addElement('radio', 'export_option', '', get_lang('CreateFullBackup'), 'full_export');
     $form->addElement('radio', 'export_option', '', get_lang('LetMeSelectItems'), 'select_items');
     $form->addElement('select', 'moodle_version', get_lang('MoodleVersion'), [
         '3' => 'Moodle 3.x',

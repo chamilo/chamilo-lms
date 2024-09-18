@@ -146,7 +146,6 @@ import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseAvatarList from "../../components/basecomponents/BaseAvatarList.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
-import { messageService } from "../../services/message"
 import { useNotification } from "../../composables/notification"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 
@@ -178,7 +177,7 @@ const notification = useNotification()
 store.dispatch("message/load", id).then((responseItem) => {
   item.value = responseItem
 
-  myReceiver.value = findMyReceiver(responseItem, securityStore.user["@id"])
+  myReceiver.value = findMyReceiver(responseItem)
 
   // Change to read.
   if (myReceiver.value && false === myReceiver.value.read) {
@@ -188,30 +187,21 @@ store.dispatch("message/load", id).then((responseItem) => {
   }
 })
 
-function extractUserId(apiId) {
-  return apiId.split("/").pop()
-}
-
-function findMyReceiver(message, userId) {
+function findMyReceiver(message) {
   const receivers = [...message.receiversTo, ...message.receiversCc]
-  return receivers.find(({ receiver }) => receiver["@id"] === userId)
+  return receivers.find(({ receiver }) => receiver["@id"] === securityStore.user["@id"])
 }
 
 async function deleteMessage(message) {
   try {
-    const userId = extractUserId(securityStore.user["@id"])
-    const messageId = extractUserId(message["@id"])
+    const myReceiver = findMyReceiver(message)
 
-    if (message.sender["@id"] === securityStore.user["@id"]) {
-      await messageService.deleteMessageForUser(messageId, userId)
-    } else {
-      const myReceiver = findMyReceiver(message, securityStore.user["@id"])
-      if (myReceiver) {
-        await store.dispatch("messagereluser/del", myReceiver)
-      }
+    if (myReceiver) {
+      await store.dispatch("messagereluser/del", myReceiver)
+
+      notification.showSuccessNotification(t("Message deleted"))
     }
 
-    notification.showSuccessNotification(t("Message deleted"))
     await messageRelUserStore.findUnreadCount()
     await router.push({ name: "MessageList" })
   } catch (e) {

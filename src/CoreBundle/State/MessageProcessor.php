@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\DeleteOperationInterface;
 use ApiPlatform\Metadata\Operation;
-use ApiPlatform\Metadata\Patch;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
@@ -38,10 +37,6 @@ final class MessageProcessor implements ProcessorInterface
     {
         if ($operation instanceof DeleteOperationInterface) {
             return $this->removeProcessor->process($data, $operation, $uriVariables, $context);
-        }
-
-        if ($operation instanceof Patch && str_contains($operation->getUriTemplate(), 'delete-for-user')) {
-            return $this->processDeleteForUser($data);
         }
 
         /** @var Message $message */

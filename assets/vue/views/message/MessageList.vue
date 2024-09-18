@@ -202,7 +202,6 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import InputGroup from "primevue/inputgroup"
 import InputText from "primevue/inputtext"
 import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
-import { messageService } from "../../services/message"
 import messageRelUserService from "../../services/messagereluser"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 
@@ -435,25 +434,15 @@ function findMyReceiver(message) {
   return receivers.find(({ receiver }) => receiver["@id"] === securityStore.user["@id"])
 }
 
-function extractUserId(apiId) {
-  return apiId.split("/").pop()
-}
-
 async function deleteMessage(message) {
   try {
-    const userId = extractUserId(securityStore.user["@id"])
-    const messageId = extractUserId(message["@id"])
+    const myReceiver = findMyReceiver(message)
 
-    if (message.sender["@id"] === securityStore.user["@id"]) {
-      await messageService.deleteMessageForUser(messageId, userId)
-    } else {
-      const myReceiver = findMyReceiver(message)
-      if (myReceiver) {
-        await store.dispatch("messagereluser/del", myReceiver)
-      }
+    if (myReceiver) {
+      await store.dispatch("messagereluser/del", myReceiver)
+
+      notification.showSuccessNotification(t("Message deleted"))
     }
-
-    notification.showSuccessNotification(t("Message deleted"))
     await messageRelUserStore.findUnreadCount()
     loadMessages()
   } catch (e) {
@@ -464,7 +453,7 @@ async function deleteMessage(message) {
 function showDlgConfirmDeleteSingle({ data }) {
   confirm.require({
     header: t("Confirmation"),
-    message: t("Are you sure you want to delete %s?", [ data.title ]),
+    message: t("Are you sure you want to delete %s?", [data.title]),
     accept: async () => {
       await deleteMessage(data)
     },

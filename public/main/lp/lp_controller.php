@@ -203,6 +203,26 @@ if (isset($_POST['title'])) {
 $redirectTo = '';
 
 switch ($action) {
+    case 'recalculate':
+        if (!isset($oLP) || !$lp_found) {
+            Display::addFlash(Display::return_message(get_lang('NoLpFound'), 'error'));
+            header("Location: $listUrl");
+            exit;
+        }
+
+        $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+
+        if (0 === $userId) {
+            Display::addFlash(Display::return_message(get_lang('NoUserIdProvided'), 'error'));
+            header("Location: $listUrl");
+            exit;
+        }
+
+        $oLP->recalculateResultsForLp($userId);
+
+        $url = api_get_self().'?action=report&lp_id='.$lpId.'&'.api_get_cidreq();
+        header("Location: $url");
+        exit;
     case 'author_view':
         $teachers = [];
         $field = new ExtraField('user');

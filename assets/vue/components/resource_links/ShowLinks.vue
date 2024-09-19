@@ -6,7 +6,16 @@
   >
     <div v-if="link.course" :class="{ 'text-right text-body-2': editStatus }">
       <span class="mdi mdi-book"></span>
-      {{ $t("Course") }}: {{ link.course.resourceNode.title }}
+      <BaseAppLink
+        v-if="clickableCourse"
+        :to="{
+          name: 'CourseHome',
+          params: { id: courseId(link.course) }
+        }"
+      >
+        {{ $t("Course") }}: {{ link.course.resourceNode.title }}
+      </BaseAppLink>
+      <span v-else>{{ $t("Course") }}: {{ link.course.resourceNode.title }}</span>
     </div>
 
     <div
@@ -56,6 +65,7 @@
 <script setup>
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useI18n } from "vue-i18n"
+import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const { t } = useI18n()
 
@@ -77,7 +87,16 @@ defineProps({
     required: false,
     default: false,
   },
+  clickableCourse: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 })
+
+const courseId = (course) => {
+  return course['@id'] ? course['@id'].split('/').pop() : null;
+}
 
 const visibilityOptions = [
   { value: RESOURCE_LINK_PUBLISHED, label: t("Published") },

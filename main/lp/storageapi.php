@@ -86,11 +86,7 @@ function storage_get($sv_user, $sv_course, $sv_sco, $sv_key)
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_assoc($res);
-        if (get_magic_quotes_gpc()) {
-            return stripslashes($row['sv_value']);
-        } else {
-            return $row['sv_value'];
-        }
+        return Security::remove_XSS($row['sv_value']);
     } else {
         return null;
     }
@@ -125,6 +121,7 @@ function storage_get_leaders($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $s
         //			if ($dataRow["user_id"] = $row["user_id"])
         //				$row["values"][$dataRow["variable"]] = $dataRow["value"];
         //		}
+        $row['sv_value'] = Security::remove_XSS($row['sv_value']);
         $result[] = $row;
     }
 
@@ -177,9 +174,8 @@ function storage_getall($sv_user, $sv_course, $sv_sco)
     $res = Database::query($sql);
     $data = [];
     while ($row = Database::fetch_assoc($res)) {
-        if (get_magic_quotes_gpc()) {
-            $row['sv_value'] = stripslashes($row['sv_value']);
-        }
+        $row['sv_value'] = Security::remove_XSS($row['sv_value']);
+        $row['sv_key'] = Security::remove_XSS($row['sv_key']);
         $data[] = $row;
     }
 
@@ -240,11 +236,7 @@ function storage_stack_pop($sv_user, $sv_course, $sv_sco, $sv_key)
     $resdelete = Database::query($sqldelete);
     if ($resselect && $resdelete) {
         Database::query("commit");
-        if (get_magic_quotes_gpc()) {
-            return stripslashes($rowselect['sv_value']);
-        } else {
-            return $rowselect['sv_value'];
-        }
+        return Security::remove_XSS($rowselect['sv_value']);
     } else {
         Database::query("rollback");
 
@@ -290,9 +282,7 @@ function storage_stack_getall($sv_user, $sv_course, $sv_sco, $sv_key)
     $res = Database::query($sql);
     $results = [];
     while ($row = Database::fetch_assoc($res)) {
-        if (get_magic_quotes_gpc()) {
-            $row['value'] = stripslashes($row['value']);
-        }
+        $row['value'] = Security::remove_XSS($row['value']);
         $results[] = $row;
     }
 

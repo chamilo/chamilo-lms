@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
@@ -8795,5 +8796,66 @@ class learnpath
         $document = $repo->find($finalItem->path);
 
         return $document ? $repo->getResourceFileContent($document) : '';
+    }
+
+    /**
+     * Recalculates the results for all exercises associated with the learning path (LP) for the given user.
+     */
+    public function recalculateResultsForLp(int $userId): void
+    {
+        $em = Database::getManager();
+        $lpItemRepo = $em->getRepository(CLpItem::class);
+        $lpItems = $lpItemRepo->findBy(['lp' => $this->lp_id]);
+
+        if (empty($lpItems)) {
+            Display::addFlash(Display::return_message(get_lang('No items found'), 'error'));
+            return;
+        }
+
+        $lpItemIds = array_map(fn($item) => $item->getIid(), $lpItems);
+        $lpItemViewRepo = $em->getRepository(CLpItemView::class);
+        $lpItemViews = $lpItemViewRepo->createQueryBuilder('v')
+            ->where('v.item IN (:lpItemIds)')
+            ->setParameter('lpItemIds', $lpItemIds)
+            ->getQuery()
+            ->getResult();
+
+        if (empty($lpItemViews)) {
+            Display::addFlash(Display::return_message(get_lang('No item views found'), 'error'));
+            return;
+        }
+
+        $lpViewIds = array_map(fn($view) => $view->getIid(), $lpItemViews);
+        $trackEExerciseRepo = $em->getRepository(TrackEExercise::class);
+        $trackExercises = $trackEExerciseRepo->createQueryBuilder('te')
+            ->where('te.origLpId = :lpId')
+            ->andWhere('te.origLpItemId IN (:lpItemIds)')
+            ->andWhere('te.origLpItemViewId IN (:lpViewIds)')
+            ->andWhere('te.user = :userId')
+            ->setParameter('lpId', $this->lp_id)
+            ->setParameter('lpItemIds', $lpItemIds)
+            ->setParameter('lpViewIds', $lpViewIds)
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+
+        if (empty($trackExercises)) {
+            Display::addFlash(Display::return_message(get_lang('No exercise attempts found'), 'error'));
+            return;
+        }
+
+        foreach ($trackExercises as $trackExercise) {
+            $exeId = $trackExercise->getExeId();
+            $exerciseId = $trackExercise->getQuiz()->getIid();
+            $courseId = $trackExercise->getCourse()->getId();
+
+            $result = ExerciseLib::recalculateResult($exeId, $userId, $exerciseId, $courseId);
+
+            if ($result) {
+                Display::addFlash(Display::return_message(get_lang('Results recalculated'), 'success'));
+            } else {
+                Display::addFlash(Display::return_message(get_lang('Error recalculating results'), 'error'));
+            }
+        }
     }
 }

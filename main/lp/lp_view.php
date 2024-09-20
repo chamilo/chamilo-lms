@@ -249,7 +249,7 @@ $htmlHeadXtra[] = '<script>
 var sv_user = \''.api_get_user_id().'\';
 var sv_course = chamilo_courseCode;
 var sv_sco = \''.$lp_id.'\';
-</script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
+</script>'; // FIXME fetch sco and userid from a more reliable source directly in storageapi.js
 $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 
 /**

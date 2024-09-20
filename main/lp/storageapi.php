@@ -67,7 +67,7 @@ switch ($_REQUEST['action']) {
 function storage_can_set($sv_user)
 {
     // platform admin can change any user's stored values, other users can only change their own values
-    $allowed = ((api_is_platform_admin()) || ($sv_user == api_get_user_id()));
+    $allowed = ((api_is_platform_admin()) || (!empty($sv_user) && $sv_user == api_get_user_id()));
     if (!$allowed) {
         echo "ERROR : Not allowed";
     }

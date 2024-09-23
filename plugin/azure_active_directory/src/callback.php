@@ -97,10 +97,9 @@ try {
 
         $azureGroups = $provider->get('me/memberOf', $token);
 
-        foreach ($azureGroups as $azureGroup) {
-            $azureGroupUid = $azureGroup['objectId'];
-
-            foreach ($roleGroups as $userRole => $groupUid) {
+        foreach ($roleGroups as $userRole => $groupUid) {
+            foreach ($azureGroups as $azureGroup) {
+                $azureGroupUid = $azureGroup['objectId'];
                 if ($azureGroupUid === $groupUid) {
                     $roleActions[$userRole]($user);
 

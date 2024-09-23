@@ -4,6 +4,9 @@
  * Callback script for Azure. The URL of this file is sent to Azure as a
  * point of contact to send particular signals.
  */
+
+use Chamilo\UserBundle\Entity\User;
+
 require __DIR__.'/../../../main/inc/global.inc.php';
 
 if (!empty($_GET['error']) && !empty($_GET['state'])) {
@@ -79,100 +82,38 @@ try {
         throw new Exception('The mail field is empty in Azure AD and is needed to set the organisation email for this user.');
     }
     if (empty($me['mailNickname'])) {
-        throw new Exception('The mailNickname field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
+        throw new Exception('The mailNickname field is empty in Azure AD and is needed to set the unique username for this user.');
+    }
+    if (empty($me['objectId'])) {
+        throw new Exception('The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
     }
 
-    $extraFieldValue = new ExtraFieldValue('user');
-    $organisationValue = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
-        AzureActiveDirectory::EXTRA_FIELD_ORGANISATION_EMAIL,
-        $me['mail']
-    );
-    $azureValue = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
-        AzureActiveDirectory::EXTRA_FIELD_AZURE_ID,
-        $me['mailNickname']
-    );
+    $userId = $plugin->registerUser($me);
 
-    $userId = null;
-    // Get the user ID (if any) from the EXTRA_FIELD_ORGANISATION_EMAIL extra
-    // field
-    if (!empty($organisationValue) && isset($organisationValue['item_id'])) {
-        $userId = $organisationValue['item_id'];
-    }
+    if ($roleGroups = $plugin->getGroupUidByRole()) {
+        $roleActions = $plugin->getUpdateActionByRole();
+        /** @var User $user */
+        $user = UserManager::getManager()->find($userId);
 
-    if (empty($userId)) {
-        // If the previous step didn't work, get the user ID from
-        // EXTRA_FIELD_AZURE_ID
-        if (!empty($azureValue) && isset($azureValue['item_id'])) {
-            $userId = $azureValue['item_id'];
-        }
-    }
+        $azureGroups = $provider->get('me/memberOf', $token);
 
-    if (empty($userId)) {
-        // If we didn't find the user
-        if ($plugin->get(AzureActiveDirectory::SETTING_PROVISION_USERS) === 'true') {
-            // Get groups info, if any
-            $groups = $provider->get('me/memberOf', $token);
-            if (empty($me)) {
-                throw new Exception('Groups info not found.');
-            }
-            // If any specific group ID has been defined for a specific role, use that
-            // ID to give the user the right role
-            $givenAdminGroup = $plugin->get(AzureActiveDirectory::SETTING_GROUP_ID_ADMIN);
-            $givenSessionAdminGroup = $plugin->get(AzureActiveDirectory::SETTING_GROUP_ID_SESSION_ADMIN);
-            $givenTeacherGroup = $plugin->get(AzureActiveDirectory::SETTING_GROUP_ID_TEACHER);
-            $userRole = STUDENT;
-            $isAdmin = false;
-            foreach ($groups as $group) {
-                if ($isAdmin) {
-                    break;
-                }
-                if ($givenAdminGroup == $group['objectId']) {
-                    $userRole = COURSEMANAGER;
-                    $isAdmin = true;
-                } elseif (!$isAdmin && $givenSessionAdminGroup == $group['objectId']) {
-                    $userRole = SESSIONADMIN;
-                } elseif (!$isAdmin && $userRole != SESSIONADMIN && $givenTeacherGroup == $group['objectId']) {
-                    $userRole = COURSEMANAGER;
+        foreach ($roleGroups as $userRole => $groupUid) {
+            foreach ($azureGroups as $azureGroup) {
+                $azureGroupUid = $azureGroup['objectId'];
+                if ($azureGroupUid === $groupUid) {
+                    $roleActions[$userRole]($user);
+
+                    break 2;
                 }
             }
-
-            // If the option is set to create users, create it
-            $userId = UserManager::create_user(
-                $me['givenName'],
-                $me['surname'],
-                $userRole,
-                $me['mail'],
-                $me['mailNickname'],
-                '',
-                null,
-                null,
-                $me['telephoneNumber'],
-                null,
-                'azure',
-                null,
-                ($me['accountEnabled'] ? 1 : 0),
-                null,
-                [
-                    'extra_'.AzureActiveDirectory::EXTRA_FIELD_ORGANISATION_EMAIL => $me['mail'],
-                    'extra_'.AzureActiveDirectory::EXTRA_FIELD_AZURE_ID => $me['mailNickname'],
-                ],
-                null,
-                null,
-                $isAdmin
-            );
-            if (!$userId) {
-                throw new Exception(get_lang('UserNotAdded').' '.$me['mailNickname']);
-            }
-        } else {
-            throw new Exception('User not found when checking the extra fields from '.$me['mail'].' or '.$me['mailNickname'].'.');
         }
+
+        Database::getManager()->flush();
     }
 
     $userInfo = api_get_user_info($userId);
 
-    //TODO add user update management for groups
-
-    //TODO add support if user exists in another URL but is validated in this one, add the user to access_url_rel_user
+    /* @TODO add support if user exists in another URL but is validated in this one, add the user to access_url_rel_user */
 
     if (empty($userInfo)) {
         throw new Exception('User '.$userId.' not found.');

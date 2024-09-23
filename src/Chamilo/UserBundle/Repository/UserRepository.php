@@ -1382,4 +1382,9 @@ class UserRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findByAuthSource(string $authSource): array
+    {
+        return $this->findBy(['authSource' => $authSource]);
+    }
 }

@@ -223,6 +223,17 @@ class Message
     }
 
     #[Groups(['message:read'])]
+    public function getReceiversSender(): array
+    {
+        return $this->receivers
+            ->filter(
+                fn (MessageRelUser $messageRelUser) => MessageRelUser::TYPE_SENDER === $messageRelUser->getReceiverType()
+            )
+            ->getValues()
+        ;
+    }
+
+    #[Groups(['message:read'])]
     public function getFirstReceiver(): ?MessageRelUser
     {
         if ($this->receivers->count() > 0) {

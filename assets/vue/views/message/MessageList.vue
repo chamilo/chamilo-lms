@@ -429,7 +429,7 @@ function sortingChanged(event) {
 }
 
 function findMyReceiver(message) {
-  const receivers = [...message.receiversTo, ...message.receiversCc]
+  const receivers = [...message.receiversTo, ...message.receiversCc, ...message.receiversSender]
 
   return receivers.find(({ receiver }) => receiver["@id"] === securityStore.user["@id"])
 }

@@ -82,36 +82,6 @@ final class MessageProcessor implements ProcessorInterface
         return $message;
     }
 
-    private function processDeleteForUser($data): Message
-    {
-        /** @var Message $message */
-        $message = $data;
-
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request) {
-            throw new LogicException('Cannot get current request');
-        }
-
-        $requestData = json_decode($request->getContent(), true);
-        if (!isset($requestData['userId'])) {
-            throw new InvalidArgumentException('The field userId is required.');
-        }
-
-        $userId = $requestData['userId'];
-        $messageRelUserRepository = $this->entityManager->getRepository(MessageRelUser::class);
-        $messageRelUser = $messageRelUserRepository->findOneBy([
-            'message' => $message,
-            'receiver' => $userId,
-        ]);
-
-        if ($messageRelUser) {
-            $this->entityManager->remove($messageRelUser);
-            $this->entityManager->flush();
-        }
-
-        return $message;
-    }
-
     private function saveNotificationForInboxMessage(Message $message): void
     {
         $sender_info = api_get_user_info(

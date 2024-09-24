@@ -152,16 +152,39 @@
       >
         <template #body="{ data }">
           <router-link
-            v-slot="{ navigate }"
+            v-if="data.visibility === 3"
             :to="{ name: 'CourseHome', params: { id: data.id } }"
           >
             <Button
               :label="$t('Go to the course')"
               class="btn btn--primary text-white"
               icon="pi pi-external-link"
-              @click="navigate"
             />
           </router-link>
+          <router-link
+            v-else-if="data.visibility === 2 && isUserInCourse(data)"
+            :to="{ name: 'CourseHome', params: { id: data.id } }"
+          >
+            <Button
+              :label="$t('Go to the course')"
+              class="btn btn--primary text-white"
+              icon="pi pi-external-link"
+            />
+          </router-link>
+          <Button
+            v-else-if="data.visibility === 2 && !isUserInCourse(data)"
+            :label="$t('Not subscribed')"
+            class="btn btn--primary text-white"
+            icon="pi pi-times"
+            disabled
+          />
+          <Button
+            v-else
+            :label="$t('Private course')"
+            class="btn btn--primary text-white"
+            icon="pi pi-lock"
+            disabled
+          />
         </template>
       </Column>
       <template #footer>
@@ -180,10 +203,13 @@ import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import Rating from "primevue/rating"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useSecurityStore } from "../../store/securityStore"
 
+const securityStore = useSecurityStore()
 const status = ref(null)
 const courses = ref([])
 const filters = ref(null)
+const currentUserId = securityStore.user.id
 
 const platformConfigStore = usePlatformConfig()
 const showCourseDuration = "true" === platformConfigStore.getSetting("course.show_course_duration")
@@ -255,6 +281,10 @@ const newRating = function (courseId, value) {
     .catch(function (error) {
       console.log(error)
     })
+}
+
+const isUserInCourse = (course) => {
+  return course.users.some((user) => user.user.id === currentUserId)
 }
 
 const clearFilter = function () {

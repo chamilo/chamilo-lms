@@ -1248,31 +1248,75 @@ class Statistics
         return $chartCode;
     }
 
-    public static function getJSChartTemplateWithData($data, $type = 'pie', $options = '', $elementId = 'canvas', $responsive = true)
-    {
+    public static function getJSChartTemplateWithData(
+        $data,
+        $type = 'pie',
+        $options = '',
+        $elementId = 'canvas',
+        $responsive = true,
+        $onClickHandler = '',
+        $extraButtonHandler = '',
+        $canvasDimensions = ['width' => 420, 'height' => 420]
+    ): string {
         $data = json_encode($data);
         $responsiveValue = $responsive ? 'true' : 'false';
+
+        $indexAxisOption = '';
+        if ($type === 'bar') {
+            $indexAxisOption = 'indexAxis: "y",';
+        }
+
+        $onClickScript = '';
+        if (!empty($onClickHandler)) {
+            $onClickScript = '
+                onClick: function(evt) {
+                    '.$onClickHandler.'
+                },
+            ';
+        }
+
+        $canvasSize = '';
+        if ($responsiveValue === 'false') {
+            $canvasSize = '
+            ctx.canvas.width = '.$canvasDimensions['width'].';
+            ctx.canvas.height = '.$canvasDimensions['height'].';
+            ';
+        }
 
         $chartCode = '
         <script>
             $(function() {
                 Chart.defaults.responsive = '.$responsiveValue.';
                 var ctx = document.getElementById("'.$elementId.'").getContext("2d");
-                ctx.canvas.width = 420;
-                ctx.canvas.height = 420;
+                '.$canvasSize.'
                 var chart = new Chart(ctx, {
                     type: "'.$type.'",
                     data: '.$data.',
                     options: {
                         plugins: {
-                            '.$options.'
+                            '.$options.',
+                            datalabels: {
+                                anchor: "end",
+                                align: "left",
+                                formatter: function(value) {
+                                    return value;
+                                },
+                                color: "#000"
+                            },
                         },
-                        cutout: "25%"
+                        '.$indexAxisOption.'
+                        scales: {
+                            x: { beginAtZero: true },
+                            y: { barPercentage: 0.5 }
+                        },
+                        '.$onClickScript.'
                     }
                 });
                 var title = chart.options.plugins.title.text;
                 $("#'.$elementId.'_title").html(title);
                 $("#'.$elementId.'_table").html(chart.data.datasets[0].data);
+
+                '.$extraButtonHandler.'
             });
         </script>';
 
@@ -1498,5 +1542,116 @@ class Statistics
         $stmt = Database::query($sql);
 
         return Database::store_result($stmt, 'ASSOC');
+    }
+
+    /**
+     * Gets the number of new users registered between two dates.
+     */
+    public static function getNewUserRegistrations(string $startDate, string $endDate): array
+    {
+        $sql = "SELECT DATE_FORMAT(registration_date, '%Y-%m-%d') as reg_date, COUNT(*) as user_count
+            FROM user
+            WHERE registration_date BETWEEN '$startDate' AND '$endDate'
+            GROUP BY reg_date";
+
+        $result = Database::query($sql);
+        $data = [];
+        while ($row = Database::fetch_array($result)) {
+            $userCount = is_numeric($row['user_count']) ? (int) $row['user_count'] : 0;
+            $data[] = ['date' => $row['reg_date'], 'count' => $userCount];
+        }
+
+        return $data;
+    }
+
+    /**
+     * Gets the number of users registered by creator (creator_id) between two dates.
+     */
+    public static function getUserRegistrationsByCreator(string $startDate, string $endDate): array
+    {
+        $sql = "SELECT u.creator_id, COUNT(u.id) as user_count, c.firstname, c.lastname
+                FROM user u
+                LEFT JOIN user c ON u.creator_id = c.id
+                WHERE u.registration_date BETWEEN '$startDate' AND '$endDate'
+                AND u.creator_id IS NOT NULL
+                GROUP BY u.creator_id";
+
+        $result = Database::query($sql);
+        $data = [];
+        while ($row = Database::fetch_array($result)) {
+            $userCount = is_numeric($row['user_count']) ? (int) $row['user_count'] : 0;
+            $name = trim($row['firstname'] . ' ' . $row['lastname']);
+            if (!empty($name)) {
+                $data[] = [
+                    'name' => $name,
+                    'count' => $userCount
+                ];
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Initializes an array with dates between two given dates, setting each date's value to 0.
+     */
+    public static function initializeDateRangeArray(string $startDate, string $endDate): array
+    {
+        $dateRangeArray = [];
+        $currentDate = new DateTime($startDate);
+        $endDate = new DateTime($endDate);
+
+        // Loop through the date range and initialize each date with 0
+        while ($currentDate <= $endDate) {
+            $formattedDate = $currentDate->format('Y-m-d');
+            $dateRangeArray[$formattedDate] = 0;
+            $currentDate->modify('+1 day');
+        }
+
+        return $dateRangeArray;
+    }
+
+    /**
+     * Checks if the difference between two dates is more than one month.
+     */
+    public static function isMoreThanAMonth(string $dateStart, string $dateEnd): bool
+    {
+        $startDate = new DateTime($dateStart);
+        $endDate = new DateTime($dateEnd);
+
+        $diff = $startDate->diff($endDate);
+
+        if ($diff->y >= 1) {
+            return true;
+        }
+
+        if ($diff->m > 1) {
+            return true;
+        }
+
+        if ($diff->m == 1) {
+            return $diff->d > 0;
+        }
+
+        return false;
+    }
+
+    /**
+     * Groups registration data by month.
+     */
+    public static function groupByMonth(array $registrations): array
+    {
+        $groupedData = [];
+
+        foreach ($registrations as $registration) {
+            $monthYear = (new DateTime($registration['date']))->format('Y-m');
+            if (isset($groupedData[$monthYear])) {
+                $groupedData[$monthYear] += $registration['count'];
+            } else {
+                $groupedData[$monthYear] = $registration['count'];
+            }
+        }
+
+        return $groupedData;
     }
 }

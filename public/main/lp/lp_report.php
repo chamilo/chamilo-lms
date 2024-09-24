@@ -359,6 +359,12 @@ if (!empty($users)) {
             ['data-id' => $userId, 'data-username' => $userInfo['username'], 'class' => 'delete_attempt']
         );
 
+        $actions .= Display::url(
+            Display::getMdiIcon('file-document-refresh', 'ch-tool-icon', null, 32, get_lang('Recalculate result')),
+            api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?'.api_get_cidreq().'&action=recalculate&user_id='.$userId.'&lp_id='.$lpId,
+            ['title' => get_lang('Recalculate result')]
+        );
+
         $row[] = $actions;
         $row['username'] = $userInfo['username'];
         $userList[] = $row;

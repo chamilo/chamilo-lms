@@ -25,6 +25,7 @@
       v-else
       :item="event"
       :show-status="false"
+      :clickable-course="true"
     />
 
     <CalendarRemindersInfo :event="event" />

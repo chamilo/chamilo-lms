@@ -1,10 +1,23 @@
 <template>
   <div v-if="isFile">
     <BaseAppLink
+      v-if="isPreviewable"
       :data-type="dataType"
       :url="data.contentUrl"
       class="flex align-center"
       data-fancybox="gallery"
+    >
+      <ResourceIcon
+        :resource-data="data"
+        class="mr-2"
+      />
+      {{ data.title }}
+    </BaseAppLink>
+    <BaseAppLink
+      v-else
+      :data-type="dataType"
+      :url="data.contentUrl"
+      class="flex align-center"
     >
       <ResourceIcon
         :resource-data="data"
@@ -60,7 +73,7 @@ const dataType = computed(() => {
     return "video"
   }
   if (isAudio(props.data)) {
-    return "video"
+    return "audio"
   }
 
   return "iframe"
@@ -68,5 +81,9 @@ const dataType = computed(() => {
 
 const isFile = computed(() => {
   return props.data && utilsIsFile(props.data)
+})
+
+const isPreviewable = computed(() => {
+  return useFileUtils().isPreviewable(props.data)
 })
 </script>

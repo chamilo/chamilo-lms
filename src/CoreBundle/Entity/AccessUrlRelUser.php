@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -15,6 +17,9 @@ use Stringable;
 #[ORM\Index(name: 'idx_access_url_rel_user_access_url', columns: ['access_url_id'])]
 #[ORM\Index(name: 'idx_access_url_rel_user_access_url_user', columns: ['user_id', 'access_url_id'])]
 #[ORM\Entity]
+#[ApiResource(
+    security: "is_granted('ROLE_ADMIN')"
+)]
 class AccessUrlRelUser implements EntityAccessUrlInterface, Stringable
 {
     use UserTrait;

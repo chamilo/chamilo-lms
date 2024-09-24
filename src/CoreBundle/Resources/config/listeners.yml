@@ -102,7 +102,4 @@ services:
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
-    Chamilo\CoreBundle\Entity\Listener\MessageStatusListener:
-        arguments: [ '@doctrine.orm.entity_manager' ]
-        tags:
-            - { name: doctrine.orm.entity_listener, entity_manager: default, lazy: true }
+    Chamilo\CoreBundle\EventListener\MessageStatusListener: ~

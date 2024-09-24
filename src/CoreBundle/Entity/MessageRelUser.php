@@ -13,7 +13,6 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Put;
-use Chamilo\CoreBundle\Entity\Listener\MessageStatusListener;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -45,7 +44,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'message_rel_user')]
 #[ORM\UniqueConstraint(name: 'message_receiver', columns: ['message_id', 'user_id', 'receiver_type'])]
 #[ORM\Entity]
-#[ORM\EntityListeners([MessageStatusListener::class])]
 #[Gedmo\SoftDeleteable(timeAware: true)]
 #[ApiFilter(
     filterClass: SearchFilter::class,

@@ -592,7 +592,7 @@ class DisplayGradebook
         $alllinks = $catcourse[0]->get_links(
             $userId,
             true,
-            api_get_course_id()
+            api_get_course_int_id()
         );
         $evals_links = array_merge($allevals, $alllinks);
         $item_value = 0;

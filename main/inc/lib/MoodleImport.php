@@ -301,7 +301,22 @@ class MoodleImport
                     $moduleDir = $currentItem['directory'];
                     $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                     $questionsXml = @file_get_contents($destinationDir.'/questions.xml');
-                    $moduleValues = $this->readQuizModule($moduleXml);
+
+                    // Detect version of Moodle.
+                    $version = $this->detectMoodleVersion($destinationDir);
+                    if ($version === 4) {
+                        // If version is 4, use the V4 method to read quiz and questions.
+                        $moduleValues = $this->readQuizModuleV4($moduleXml);
+                        $questionValuesList = $this->readMainQuestionsXmlV4($questionsXml, $moduleXml);
+                    } else {
+                        // Otherwise use the standard method for older versions.
+                        $moduleValues = $this->readQuizModule($moduleXml);
+                        $questionValuesList = [];
+                        foreach ($moduleValues['question_instances'] as $index => $question) {
+                            $questionValuesList[] = $this->readMainQuestionsXml($questionsXml, $question['questionid']);
+                        }
+                    }
+
                     $sectionPath = isset($sectionLpValues[$currentItem['sectionid']]) ? $sectionLpValues[$currentItem['sectionid']]['sectionPath'] : '';
                     $contextId = $moduleValues['attributes']['contextid'];
                     if (isset($allFiles[$contextId])) {
@@ -311,6 +326,7 @@ class MoodleImport
                     // $moduleValues variable contains all the necesary info to the quiz import
                     // var_dump($moduleValues); // <-- uncomment this to see the final array
 
+                    // Create exercise (quiz)
                     $exercise = new Exercise($courseInfo['real_id']);
                     if ($debug) {
                         error_log('quiz:'.$moduleValues['name']);
@@ -321,6 +337,8 @@ class MoodleImport
                     $introText = $this->replaceMoodleChamiloCoursePath($moduleValues['intro'], $sectionPath);
                     $exercise->updateDescription($introText);
                     $exercise->updateAttempts($moduleValues['attempts_number']);
+
+                    // Set feedback type depending on behavior
                     $feedbackType = 2;
                     if (in_array($moduleValues['preferredbehaviour'], ['adaptive', 'adaptivenopenalty'])) {
                         $feedbackType = 1;
@@ -331,65 +349,43 @@ class MoodleImport
                     }
                     $exercise->updateFeedbackType($feedbackType);
 
-                    // Match shuffle question with chamilo
-                    if (isset($moduleValues['shufflequestions']) &&
-                        (int) $moduleValues['shufflequestions'] === 1
-                    ) {
-                        $exercise->setRandom(-1);
-                    } else {
-                        $exercise->setRandom(0);
-                    }
+                    // Shuffle questions and answers
+                    $exercise->setRandom((int)$moduleValues['shufflequestions'] === 1 ? -1 : 0);
                     $exercise->updateRandomAnswers(!empty($moduleValues['shuffleanswers']));
-                    $limeLimit = 0;
-                    if (!empty($moduleValues['timelimit'])) {
-                        $limeLimit = round($moduleValues['timelimit'] / 60);
-                    }
-                    $exercise->updateExpiredTime((int) $limeLimit);
+
+                    // Set time limit and grading
+                    $limeLimit = !empty($moduleValues['timelimit']) ? round($moduleValues['timelimit'] / 60) : 0;
+                    $exercise->updateExpiredTime((int)$limeLimit);
+
                     $gradesXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/grades.xml');
                     $gradeQuizValues = $this->readQuizGradeModule($gradesXml, $moduleValues['quiz_id']);
-                    $exercise->pass_percentage = 0;
-                    if (!empty($gradeQuizValues['grademax'])) {
-                        $gradeMax = (int) $gradeQuizValues['grademax'];
-                        $gradePass = (int) $gradeQuizValues['gradepass'];
-                        $exercise->pass_percentage = round(($gradePass * 100) / $gradeMax);
-                    }
+                    $exercise->pass_percentage = !empty($gradeQuizValues['grademax']) ? round(($gradeQuizValues['gradepass'] * 100) / $gradeQuizValues['grademax']) : 0;
 
-                    if ($moduleValues['questionsperpage'] == 1) {
-                        $exercise->updateType(2);
-                    } else {
-                        $exercise->updateType(1);
-                    }
-                    $exercise->start_time = null;
-                    if (!empty($moduleValues['timeopen'])) {
-                        $exercise->start_time = api_get_utc_datetime($moduleValues['timeopen']);
-                    }
-                    $exercise->end_time = null;
-                    if (!empty($moduleValues['timeclose'])) {
-                        $exercise->end_time = api_get_utc_datetime($moduleValues['timeclose']);
-                    }
+                    // Set type (single question per page or all in one)
+                    $exercise->updateType((int)$moduleValues['questionsperpage'] === 1 ? 2 : 1);
 
-                    // Create the new Quiz
+                    // Set start and end times
+                    $exercise->start_time = !empty($moduleValues['timeopen']) ? api_get_utc_datetime($moduleValues['timeopen']) : null;
+                    $exercise->end_time = !empty($moduleValues['timeclose']) ? api_get_utc_datetime($moduleValues['timeclose']) : null;
+
+                    // Save the quiz
                     $exercise->save();
 
-                    // Ok, we got the Quiz and create it, now its time to add the Questions
-                    foreach ($moduleValues['question_instances'] as $index => $question) {
-                        $questionsValues = $this->readMainQuestionsXml($questionsXml, $question['questionid']);
-                        $moduleValues['question_instances'][$index] = $questionsValues;
+                    // Process and import questions (shared code for both versions)
+                    foreach ($questionValuesList as $index => $questionValues) {
                         // Set Question Type from Moodle XML element <qtype>
-                        $qType = $questionsValues['qtype'];
-                        $questionType = $this->matchMoodleChamiloQuestionTypes($questionsValues);
+                        $qType = $questionValues['qtype'];
+                        $questionType = $this->matchMoodleChamiloQuestionTypes($questionValues);
                         $questionInstance = Question::getInstance($questionType);
                         if (empty($questionInstance)) {
                             continue;
                         }
                         if ($debug) {
-                            error_log('question: '.$question['questionid']);
+                            error_log('question: '.$questionValues['questionid']);
                         }
 
-                        $questionInstance->updateTitle($questionsValues['name']);
-                        $questionText = $questionsValues['questiontext'];
-
-                        $questionText = $this->replaceMoodleChamiloCoursePath($questionText, $sectionPath);
+                        $questionInstance->updateTitle($questionValues['name']);
+                        $questionText = $this->replaceMoodleChamiloCoursePath($questionValues['questiontext'], $sectionPath);
 
                         if ($importedFiles) {
                             $this->fixPathInText($importedFiles, $questionText);
@@ -407,20 +403,12 @@ class MoodleImport
                             $exercise->update_question_positions();
                         }
 
-                        $questionList = $moduleValues['question_instances'][$index]['plugin_qtype_'.$qType.'_question'];
-                        $currentQuestion = $moduleValues['question_instances'][$index];
-
-                        $this->processAnswers(
-                            $exercise,
-                            $questionList,
-                            $qType,
-                            $questionInstance,
-                            $currentQuestion,
-                            $importedFiles,
-                            $sectionPath
-                        );
+                        // Now process the answers for the question
+                        $questionList = $questionValues['plugin_qtype_'.$qType.'_question'];
+                        $this->processAnswers($exercise, $questionList, $qType, $questionInstance, $questionValues, $importedFiles, $sectionPath);
                     }
-                    // It is added as item in Learnpath
+
+                    // Add to learnpath if applicable
                     if (!empty($currentItem['sectionid']) && !empty($exercise->iid)) {
                         $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'quiz', $exercise->iid, $title, $n);
                         $n++;
@@ -575,6 +563,28 @@ class MoodleImport
         unlink($filePath);
 
         return true;
+    }
+
+    /**
+     * Detects the Moodle version from the backup XML file.
+     *
+     * @param string $destinationDir The directory where the moodle_backup.xml is located.
+     * @return int Returns 4 if the Moodle version is 4 or higher, otherwise returns 3.
+     */
+    public function detectMoodleVersion($destinationDir): int
+    {
+        $moodleBackupXmlPath = $destinationDir . '/moodle_backup.xml';
+        $xml = file_get_contents($moodleBackupXmlPath);
+
+        $doc = new DOMDocument();
+        $doc->loadXML($xml);
+        $backupRelease = $doc->getElementsByTagName('backup_release');
+        $version = null;
+        foreach ($backupRelease as $release) {
+            $version = (float)$release->nodeValue;
+        }
+
+        return $version >= 4 ? 4 : 3;
     }
 
     /**
@@ -1825,6 +1835,242 @@ class MoodleImport
         $currentItem['attributes'] = $attributes;
 
         return $currentItem;
+    }
+
+    /**
+     * Reads and parses the quiz module XML for Moodle version 4.
+     *
+     * @param string $moduleXml The XML content of the quiz module.
+     * @return array Returns an array with quiz data and question instances.
+     */
+    public function readQuizModuleV4($moduleXml)
+    {
+        $moduleDoc = new DOMDocument();
+        @$moduleDoc->loadXML($moduleXml);
+
+        $quizData = [];
+        $quizNodes = $moduleDoc->getElementsByTagName('quiz');
+        foreach ($quizNodes as $quizNode) {
+            foreach ($quizNode->childNodes as $child) {
+                $quizData[$child->nodeName] = $child->nodeValue;
+            }
+            $quizData['quiz_id'] = $quizNode->getAttribute('id');
+        }
+
+        $quizData['question_instances'] = [];
+        $questionInstances = $moduleDoc->getElementsByTagName('question_instance');
+        foreach ($questionInstances as $questionInstance) {
+            $questionId = $questionInstance->getAttribute('id');
+            foreach ($questionInstance->childNodes as $child) {
+                $quizData['question_instances'][] = [
+                    'questionid' => $questionId,
+                    $child->nodeName => $child->nodeValue,
+                ];
+            }
+        }
+
+        return $quizData;
+    }
+
+    /**
+     * Reads and processes quiz questions for Moodle version 4.
+     *
+     * @param string $questionsXml The XML content containing question data.
+     * @param string $quizXml The XML content containing quiz data.
+     * @return array Returns an array of processed questions, either by category or by question bank reference.
+     */
+    public function readMainQuestionsXmlV4($questionsXml, $quizXml)
+    {
+        $questionsDoc = new DOMDocument();
+        @$questionsDoc->loadXML($questionsXml);
+
+        $quizDoc = new DOMDocument();
+        @$quizDoc->loadXML($quizXml);
+
+        $isByCategory = $quizDoc->getElementsByTagName('question_set_reference')->length > 0;
+        $isByBankReference = $quizDoc->getElementsByTagName('question_reference')->length > 0;
+
+        if ($isByCategory) {
+            return $this->processByCategory($questionsDoc, $quizDoc);
+        } elseif ($isByBankReference) {
+            return $this->processByBankReference($questionsDoc, $quizDoc);
+        }
+
+        return [];
+    }
+
+    /**
+     * Processes quiz questions organized by category.
+     *
+     * @param DOMDocument $questionsDoc The document containing the questions XML.
+     * @param DOMDocument $quizDoc The document containing the quiz XML.
+     * @return array Returns an array of processed questions filtered by category.
+     */
+    protected function processByCategory($questionsDoc, $quizDoc)
+    {
+        $questionInstances = $quizDoc->getElementsByTagName('question_instance');
+        $questionSetReferences = [];
+
+        foreach ($questionInstances as $instance) {
+            $questionSetReference = $instance->getElementsByTagName('question_set_reference')->item(0);
+            if ($questionSetReference) {
+                $filterCondition = $questionSetReference->getElementsByTagName('filtercondition')->item(0)->nodeValue;
+                $filterCondition = json_decode($filterCondition, true);
+
+                if (isset($filterCondition['questioncategoryid'])) {
+                    $categoryId = $filterCondition['questioncategoryid'];
+                    $questionSetReferences[] = $categoryId;
+                }
+            }
+        }
+
+        if (empty($questionSetReferences)) {
+            return [];
+        }
+
+        $processedQuestions = [];
+        $questionsCount = 0;
+
+        foreach ($questionSetReferences as $categoryId) {
+            $xpath = new DOMXPath($questionsDoc);
+            $query = "//question_bank_entry[questioncategoryid='$categoryId']/question_version/question_versions/questions/question";
+            $entries = $xpath->query($query);
+
+            foreach ($entries as $question) {
+                if ($questionsCount >= count($questionInstances)) {
+                    break;
+                }
+
+                $currentItem = $this->processQuestionV4($question);
+                if (!empty($currentItem)) {
+                    $processedQuestions[] = $currentItem;
+                    $questionsCount++;
+                }
+            }
+        }
+
+        return $processedQuestions;
+    }
+
+    /**
+     * Processes quiz questions based on question bank references.
+     *
+     * @param DOMDocument $questionsDoc The document containing the questions XML.
+     * @param DOMDocument $quizDoc The document containing the quiz XML.
+     * @return array Returns an array of processed questions from the question bank.
+     */
+    protected function processByBankReference($questionsDoc, $quizDoc)
+    {
+        $questionInstances = $quizDoc->getElementsByTagName('question_instance');
+        $questionBankEntries = [];
+
+        foreach ($questionInstances as $instance) {
+            $questionReference = $instance->getElementsByTagName('question_reference')->item(0);
+            if ($questionReference) {
+                $questionBankEntryId = $questionReference->getElementsByTagName('questionbankentryid')->item(0)->nodeValue;
+                $questionBankEntries[] = $questionBankEntryId;
+            }
+        }
+
+        if (empty($questionBankEntries)) {
+            return [];
+        }
+
+        $processedQuestions = [];
+        $xpath = new DOMXPath($questionsDoc);
+
+        foreach ($questionBankEntries as $entryId) {
+            $query = "//question_bank_entry[@id='$entryId']/question_version/question_versions/questions/question";
+            $entries = $xpath->query($query);
+
+            foreach ($entries as $question) {
+                $processedQuestions[] = $this->processQuestionV4($question);
+            }
+        }
+
+        return $processedQuestions;
+    }
+
+    /**
+     * Processes individual quiz question data for Moodle version 4.
+     *
+     * @param DOMElement $question The DOM element representing a question in the XML.
+     * @return array Returns an associative array containing question data, including type, text, and answers.
+     */
+    protected function processQuestionV4($question)
+    {
+        $currentItem = [
+            "questionid" => $question->getAttribute('id'),
+            "name" => '',
+            "questiontext" => '',
+            "generalfeedback" => '',
+            "defaultmark" => "1.0000000",
+            "penalty" => "0.3333333",
+            "qtype" => '',
+            "plugin_qtype_question" => [],
+        ];
+
+        $questionType = '';
+        foreach ($question->childNodes as $item) {
+            switch ($item->nodeName) {
+                case 'name':
+                    $currentItem['name'] = htmlspecialchars_decode($item->nodeValue);
+                    break;
+                case 'questiontext':
+                    $currentItem['questiontext'] = htmlspecialchars_decode($item->nodeValue);
+                    break;
+                case 'generalfeedback':
+                    $currentItem['generalfeedback'] = htmlspecialchars_decode($item->nodeValue);
+                    break;
+                case 'qtype':
+                    $questionType = $item->nodeValue;
+                    $currentItem['qtype'] = $questionType;
+                    break;
+                case 'plugin_qtype_' . $questionType . '_question':
+                    $currentItem['plugin_qtype_' . $questionType . '_question'] = $this->processAnswersV4($item);
+                    break;
+            }
+        }
+
+        return !empty($currentItem['name']) ? $currentItem : [];
+    }
+
+    /**
+     * Processes the answers for a given quiz question in Moodle version 4.
+     *
+     * @param DOMElement $item The DOM element containing answer data.
+     * @return array Returns an array of processed answers, each containing details like answer text and fraction.
+     */
+    protected function processAnswersV4($item)
+    {
+        $answersList = [];
+        $answers = $item->getElementsByTagName('answer');
+
+        foreach ($answers as $i => $answer) {
+            $answerData = [
+                'answerid' => $answer->getAttribute('id'),
+                'answertext' => '',
+                'fraction' => '0.0000000',
+            ];
+
+            foreach ($answer->childNodes as $properties) {
+                switch ($properties->nodeName) {
+                    case 'answertext':
+                        $answerData['answertext'] = htmlspecialchars_decode($properties->nodeValue);
+                        break;
+                    case 'fraction':
+                        $answerData['fraction'] = $properties->nodeValue;
+                        break;
+                    case 'feedback':
+                        $answerData['feedback'] = htmlspecialchars_decode($properties->nodeValue);
+                        break;
+                }
+            }
+
+            $answersList[$i] = $answerData;
+        }
+
+        return $answersList;
     }
 
     /**

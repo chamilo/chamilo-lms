@@ -260,11 +260,11 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
     protected ?int $duration = null;
 
-    #[Groups(['session:basic', 'session:read'])]
+    #[Groups(['session:basic', 'session:read', 'session:write'])]
     #[ORM\Column(name: 'nbr_courses', type: 'integer', unique: false, nullable: false)]
     protected int $nbrCourses;
 
-    #[Groups(['session:basic', 'session:read'])]
+    #[Groups(['session:basic', 'session:read', 'session:write'])]
     #[ORM\Column(name: 'nbr_users', type: 'integer', unique: false, nullable: false)]
     protected int $nbrUsers;
 

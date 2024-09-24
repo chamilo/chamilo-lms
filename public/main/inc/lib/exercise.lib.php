@@ -2757,15 +2757,13 @@ HOTSPOT;
     {
         $modelList = self::getScoreModels();
 
-
-
         if (empty($modelList)) {
             return [];
         }
 
         $courseInfo = api_get_course_info();
         if (!empty($courseInfo)) {
-            $scoreModelId = 1; //api_get_course_setting('score_model_id');
+            $scoreModelId = api_get_course_setting('score_model_id');
             if (-1 != $scoreModelId) {
                 $modelIdList = array_column($modelList['models'], 'id');
                 if (in_array($scoreModelId, $modelIdList)) {

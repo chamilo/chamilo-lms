@@ -2722,7 +2722,7 @@ HOTSPOT;
      */
     public static function getModelStyle($model, $percentage)
     {
-        return '<span class="'.$model['css_class'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+        return '<span class="'.$model['css_class'].' p-2">'.$model['name'].'</span>';
     }
 
     /**
@@ -2756,13 +2756,16 @@ HOTSPOT;
     public static function getCourseScoreModel()
     {
         $modelList = self::getScoreModels();
+
+
+
         if (empty($modelList)) {
             return [];
         }
 
         $courseInfo = api_get_course_info();
         if (!empty($courseInfo)) {
-            $scoreModelId = api_get_course_setting('score_model_id');
+            $scoreModelId = 1; //api_get_course_setting('score_model_id');
             if (-1 != $scoreModelId) {
                 $modelIdList = array_column($modelList['models'], 'id');
                 if (in_array($scoreModelId, $modelIdList)) {

@@ -120,6 +120,10 @@
           .p-menuitem-link {
             @apply pl-8 py-3 pr-6;
 
+            .p-menuitem-icon {
+              @apply mr-2 leading-none;
+            }
+
             .p-menuitem-text {
               @apply text-body-2
                 hover:text-primary;
@@ -127,7 +131,8 @@
           }
         }
 
-        &.p-highlight {
+        &.p-highlight,
+        &.p-focus {
 
           > .p-menuitem-content {
 

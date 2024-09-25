@@ -2406,4 +2406,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
         return $match->count() > 0 ? $match->first() : null;
     }
+
+    public function isCourseTutor(?Course $course = null, ?Session $session = null): bool
+    {
+        return $session?->hasCoachInCourseList($user) || $course?->getSubscriptionByUser($user)?->isTutor();
+    }
 }

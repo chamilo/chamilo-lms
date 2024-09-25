@@ -2722,7 +2722,7 @@ HOTSPOT;
      */
     public static function getModelStyle($model, $percentage)
     {
-        return '<span class="'.$model['css_class'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+        return '<span class="'.$model['css_class'].' p-2">'.$model['name'].'</span>';
     }
 
     /**
@@ -2756,6 +2756,7 @@ HOTSPOT;
     public static function getCourseScoreModel()
     {
         $modelList = self::getScoreModels();
+
         if (empty($modelList)) {
             return [];
         }

@@ -11,7 +11,6 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\ServiceHelper\IsAllowedToEditHelper;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,14 +19,13 @@ readonly class TrackEAttemptQualifyExtension implements QueryCollectionExtension
 {
     public function __construct(
         private Security $security,
-        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        Operation $operation = null,
+        ?Operation $operation = null,
         array $context = []
     ): void {
         if (TrackEAttemptQualify::class !== $resourceClass) {
@@ -44,7 +42,7 @@ readonly class TrackEAttemptQualifyExtension implements QueryCollectionExtension
             return;
         }
 
-        assert($user instanceof User);
+        \assert($user instanceof User);
 
         $alias = $queryBuilder->getRootAliases()[0];
 

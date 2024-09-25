@@ -26,9 +26,6 @@ class TrackEAttemptQualifyVoter extends Voter
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
-    /**
-     * @inheritDoc
-     */
     protected function supports(string $attribute, mixed $subject): bool
     {
         $allowed = [
@@ -38,9 +35,6 @@ class TrackEAttemptQualifyVoter extends Voter
         return $subject instanceof TrackEAttemptQualify && \in_array($attribute, $allowed);
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
@@ -53,8 +47,8 @@ class TrackEAttemptQualifyVoter extends Voter
             return true;
         }
 
-        assert($user instanceof User);
-        assert($subject instanceof TrackEAttemptQualify);
+        \assert($user instanceof User);
+        \assert($subject instanceof TrackEAttemptQualify);
 
         $trackExercise = $subject->getTrackExercise();
         $session = $trackExercise->getSession();

@@ -16,9 +16,6 @@ final class Version20240918002830 extends AbstractMigrationChamilo
         return 'Make soft-deleteable message_rel_user';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $this->addSql("ALTER TABLE message_rel_user ADD deleted_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)'");

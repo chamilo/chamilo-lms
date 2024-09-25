@@ -67,14 +67,12 @@ final class Version20240924120200 extends AbstractMigrationChamilo
     {
         $pattern = '/(src=["\'])(https?:\/\/[^\/]+\/)?(\/?web\/assets\/ckeditor\/plugins\/smiley\/images\/([a-zA-Z0-9_\-]+))\.(gif|png)(["\'])/i';
 
-        $content = preg_replace_callback($pattern, function ($matches) {
+        return preg_replace_callback($pattern, function ($matches) {
             $prefix = $matches[1];
             $filename = $matches[4];
             $extension = 'png';
 
             return "{$prefix}/img/legacy/{$filename}.{$extension}{$matches[6]}";
         }, $content);
-
-        return $content;
     }
 }

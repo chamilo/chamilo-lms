@@ -21,12 +21,11 @@ class MessageRelUserVoter extends Voter
 
     public function __construct(
         private readonly Security $security
-    ) {
-    }
+    ) {}
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::DELETE, self::VIEW, self::EDIT])
+        return \in_array($attribute, [self::DELETE, self::VIEW, self::EDIT])
             && $subject instanceof MessageRelUser;
     }
 
@@ -42,8 +41,8 @@ class MessageRelUserVoter extends Voter
             return true;
         }
 
-        assert($user instanceof User);
-        assert($subject instanceof MessageRelUser);
+        \assert($user instanceof User);
+        \assert($subject instanceof MessageRelUser);
 
         $message = $subject->getMessage();
         $isReceiver = $message->hasUserReceiver($user);

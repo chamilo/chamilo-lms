@@ -21,8 +21,7 @@ readonly class IsAllowedToEditHelper
         private Security $security,
         private RequestStack $requestStack,
         private CidReqHelper $cidReqHelper,
-    ) {
-    }
+    ) {}
 
     public function check(
         bool $tutor = false,
@@ -55,7 +54,8 @@ readonly class IsAllowedToEditHelper
                 ->get_values_by_handler_and_field_variable(
                     $course->getId(),
                     'session_courses_read_only_mode'
-                );
+                )
+            ;
 
             if (!empty($lockExrafieldField['value'])) {
                 return false;

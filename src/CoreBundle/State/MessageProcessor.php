@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use InvalidArgumentException;
 use LogicException;
 use Notification;
 use Symfony\Bundle\SecurityBundle\Security;

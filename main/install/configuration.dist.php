@@ -19,8 +19,6 @@ $_configuration['db_port'] = '{DATABASE_PORT}';
 $_configuration['main_database'] = '{DATABASE_MAIN}';
 $_configuration['db_user'] = '{DATABASE_USER}';
 $_configuration['db_password'] = '{DATABASE_PASSWORD}';
-// Enable access to database management for platform admins.
-$_configuration['db_manager_enabled'] = false;
 
 /**
  * Directory settings.

@@ -586,34 +586,54 @@ class nusoap_server extends nusoap_base
 		$this->appendDebug($this->varDump($this->methodparams));
 		$this->debug("in invoke_method, calling '$this->methodname'");
 		if (!function_exists('call_user_func_array')) {
-			if ($class == '') {
-				$this->debug('in invoke_method, calling function using eval()');
-				$funcCall = "\$this->methodreturn = $this->methodname(";
-			} else {
-				if ($delim == '..') {
-					$this->debug('in invoke_method, calling class method using eval()');
-					$funcCall = "\$this->methodreturn = ".$class."::".$method."(";
-				} else {
-					$this->debug('in invoke_method, calling instance method using eval()');
-					// generate unique instance name
-					$instname = "\$inst_".time();
-					$funcCall = $instname." = new ".$class."(); ";
-					$funcCall .= "\$this->methodreturn = ".$instname."->".$method."(";
-				}
-			}
-			if ($this->methodparams) {
-				foreach ($this->methodparams as $param) {
-					if (is_array($param) || is_object($param)) {
-						$this->fault('SOAP-ENV:Client', 'NuSOAP does not handle complexType parameters correctly when using eval; call_user_func_array must be available');
+			try {
+				if ($class == '') {
+					$this->debug('in invoke_method, calling function using eval()');
+					$reflectionFunction = new ReflectionFunction($this->methodname);
+					$params = $reflectionFunction->getParameters();
+
+					if (count($params) !== count($this->methodparams)) {
+						$this->fault('SOAP-ENV:Client', "Paremeter count mismatch");
 						return;
 					}
-					$funcCall .= "\"$param\",";
+
+					$this->methodreturn = $reflectionFunction->invokeArgs(array_values($this->methodparams));
+				} else {
+					$reflectionMethod = new ReflectionMethod($class, $method);
+					$params = $reflectionMethod->getParameters();
+
+					if (count($params) !== count($this->methodparams)) {
+						$this->fault('SOAP-ENV:Client', "Paremeter count mismatch");
+						return;
+					}
+
+					$instance = null;
+
+					if ($delim == '..') {
+						if (!$reflectionMethod->isStatic()) {
+							throw new Exception("Method '$method' is not static");
+						}
+					} else {
+						if ($reflectionMethod->isStatic()) {
+							throw new Exception("Method '$method' is static");
+						}
+
+						$instance = new $class();
+					}
+
+					$this->methodreturn = $reflectionMethod->invokeArgs($instance, array_values($this->methodparams));
 				}
-				$funcCall = substr($funcCall, 0, -1);
+
+				$this->debug('in invoke_method, methodreturn: ' . $this->varDump($this->methodreturn));
+			} catch (ReflectionException $e) {
+				$this->fault('SOAP-ENV:Client', 'Error invoking method: '.$e->getMessage());
+
+				return;
+			} catch (Exception $e) {
+				$this->fault('SOAP-ENV:Client', $e->getMessage());
+
+				return;
 			}
-			$funcCall .= ');';
-			$this->debug('in invoke_method, function call: '.$funcCall);
-			@eval($funcCall);
 		} else {
 			if ($class == '') {
 				$this->debug('in invoke_method, calling function using call_user_func_array()');

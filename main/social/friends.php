@@ -17,6 +17,8 @@ if (api_get_setting('allow_social_tool') != 'true') {
 $this_section = SECTION_SOCIAL;
 
 $htmlHeadXtra[] = '<script>
+var socialSecToken = "'.Security::get_token('social').'";
+
 function delete_friend (element_div) {
 	id_image = $(element_div).attr("id");
 	user_id = id_image.split("_");
@@ -26,8 +28,14 @@ function delete_friend (element_div) {
 			type: "POST",
 			url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=delete_friend",
 			data: "delete_friend_id="+user_id[1],
-			success: function(datos) {			
+			data: {
+			    "delete_friend_id": user_id[1],
+			    "social_sec_token": socialSecToken,
+			},
+			success: function(data) {
 			    $("#user_card_"+user_id[1]).hide("slow");
+
+			    socialSecToken = data.secToken;
 			}
 		});
 	}

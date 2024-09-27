@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageFeedback;
 use ChamiloSession as Session;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Responses to AJAX calls.
@@ -61,9 +62,19 @@ switch ($action) {
             echo '';
             break;
         }
-        $my_delete_friend = (int) $_POST['delete_friend_id'];
+
+        if (!Security::check_token('post', null, 'social')) {
+            exit;
+        }
+
         if (isset($_POST['delete_friend_id'])) {
+            $my_delete_friend = (int) $_POST['delete_friend_id'];
             SocialManager::remove_user_rel_user($my_delete_friend);
+
+            JsonResponse::create([
+                'secToken' => Security::get_token('social'),
+            ])->send();
+            break;
         }
         break;
     case 'show_my_friends':

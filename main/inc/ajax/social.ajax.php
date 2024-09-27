@@ -220,6 +220,10 @@ switch ($action) {
             exit;
         }
 
+        if (!Security::check_token('get', null, 'wall')) {
+            exit;
+        }
+
         $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
         if (empty($messageId)) {
@@ -240,7 +244,10 @@ switch ($action) {
                 );
                 if ($messageId) {
                     $messageInfo = MessageManager::get_message_by_id($messageId);
-                    echo SocialManager::processPostComment($messageInfo);
+                    JsonResponse::create([
+                        'secToken' => Security::get_token('wall'),
+                        'postHTML' => SocialManager::processPostComment($messageInfo),
+                    ])->send();
                 }
             }
         }

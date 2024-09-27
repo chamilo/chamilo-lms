@@ -1891,7 +1891,7 @@ class SocialManager extends UserManager
 
         $formattedList .= '</div>';
         $formattedList .= '<div class="mediapost-form row">';
-        $formattedList .= '<form class="form-horizontal" id="form_comment_'.$messageId.'" name="post_comment" method="POST">
+        $formattedList .= '<form class="form-horizontal" id="form_comment_'.$messageId.'" name="post_comment" method="POST" data-sec-token="'.Security::get_existing_token('wall').'">
                 <div class="col-sm-9">
                 <label for="comment" class="hide">'.get_lang('SocialWriteNewComment').'</label>
                 <input type="hidden" name = "messageId" value="'.$messageId.'" />
@@ -1902,6 +1902,7 @@ class SocialManager extends UserManager
                     <em class="fa fa-pencil"></em> '.get_lang('Post').'
                 </a>
                 </div>
+                <input type="hidden" name="wall_sec_token" value="'.Security::get_existing_token('wall').'">
                 </form>';
         $formattedList .= '</div>';
 
@@ -3021,15 +3022,18 @@ class SocialManager extends UserManager
         $htmlHeadXtra[] = '<script>
             function submitComment(messageId)
             {
-                var data = $("#form_comment_"+messageId).serializeArray();
+                var $form = $("#form_comment_"+messageId);
+                var data = $form.serializeArray();
                 $.ajax({
                     type : "POST",
-                    url: "'.$socialAjaxUrl.'?a=send_comment" + "&id=" + messageId,
+                    url: "'.$socialAjaxUrl.'?a=send_comment" + "&id=" + messageId + "&wall_sec_token=" + $form.data("sec-token"),
                     data: data,
                     success: function (result) {
                         if (result) {
+                            $(".mediapost-form form").data({ "sec-token": result.secToken });
+
                             $("#post_" + messageId + " textarea").val("");
-                            $("#post_" + messageId + " .sub-mediapost").prepend(result);
+                            $("#post_" + messageId + " .sub-mediapost").prepend(result.postHTML);
                             $("#post_" + messageId + " .sub-mediapost").append(
                                 $(\'<div id=result_\' + messageId +\'>'.addslashes(get_lang('Saved')).'</div>\')
                             );

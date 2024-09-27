@@ -159,6 +159,7 @@ class FeatureContext extends MinkContext
                     'a' => 'add_friend',
                     'friend_id' => $adminId,
                     'is_my_friend' => 'friend',
+                    'invitation_sec_token' => Security::get_token('invitation'),
                 ]
             );
 

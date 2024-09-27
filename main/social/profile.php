@@ -204,6 +204,7 @@ if ($show_full_profile) {
                             'a' => 'add_friend',
                             'friend_id' => $user_invitation_id,
                             'is_my_friend' => 'friend',
+                            'invitation_sec_token' => Security::get_token('invitation'),
                         ]),
                         'plus',
                         'default',

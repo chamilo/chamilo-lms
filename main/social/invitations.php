@@ -135,6 +135,7 @@ if ($numberLoop != 0) {
                 'a' => 'add_friend',
                 'friend_id' => $sender_user_id,
                 'is_my_friend' => 'friend',
+                'invitation_sec_token' => Security::get_existing_token('invitation'),
             ]),
             'check',
             'primary',
@@ -145,7 +146,7 @@ if ($numberLoop != 0) {
             api_get_path(WEB_AJAX_PATH).'social.ajax.php?'.http_build_query([
                 'a' => 'deny_friend',
                 'denied_friend_id' => $sender_user_id,
-                'invitation_sec_token' => Security::get_token('invitation'),
+                'invitation_sec_token' => Security::get_existing_token('invitation'),
             ]),
             'times',
             'danger',

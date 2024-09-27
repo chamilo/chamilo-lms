@@ -20,24 +20,26 @@ switch ($action) {
             echo '';
             break;
         }
-        $relation_type = USER_RELATION_TYPE_UNKNOWN; //Unknown contact
-        if (isset($_GET['is_my_friend'])) {
-            $relation_type = USER_RELATION_TYPE_FRIEND; //My friend
+
+        if (Security::check_token('get', null, 'invitation')) {
+            $relation_type = USER_RELATION_TYPE_UNKNOWN; //Unknown contact
+            if (isset($_GET['is_my_friend'])) {
+                $relation_type = USER_RELATION_TYPE_FRIEND; //My friend
+            }
+
+            if (isset($_GET['friend_id'])) {
+                $my_current_friend = $_GET['friend_id'];
+                UserManager::relate_users($current_user_id, $my_current_friend, $relation_type);
+                UserManager::relate_users($my_current_friend, $current_user_id, $relation_type);
+                SocialManager::invitation_accepted($my_current_friend, $current_user_id);
+                Display::addFlash(
+                    Display::return_message(get_lang('AddedContactToList'), 'success')
+                );
+            }
         }
 
-        if (isset($_GET['friend_id'])) {
-            $my_current_friend = $_GET['friend_id'];
-            UserManager::relate_users($current_user_id, $my_current_friend, $relation_type);
-            UserManager::relate_users($my_current_friend, $current_user_id, $relation_type);
-            SocialManager::invitation_accepted($my_current_friend, $current_user_id);
-            Display::addFlash(
-                Display::return_message(get_lang('AddedContactToList'), 'success')
-            );
-
-            header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
-            exit;
-        }
-        break;
+        header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
+        exit;
     case 'deny_friend':
         if (api_is_anonymous()) {
             echo '';

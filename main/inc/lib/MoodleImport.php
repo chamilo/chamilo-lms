@@ -153,7 +153,9 @@ class MoodleImport
         if ($debug) {
             error_log('Loading activities: '.count($activities));
         }
-        $n = 1;
+
+        $previousItemId = 0;
+        $lpItemId = null;
         foreach ($activities as $activity) {
             if (empty($activity->childNodes->length)) {
                 continue;
@@ -185,8 +187,7 @@ class MoodleImport
 
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($assignId)) {
-                        $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'student_publication', $assignId, $moduleValues['name'], $n);
-                        $n++;
+                        $lpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'student_publication', $assignId, $moduleValues['name'], $previousItemId);
                     }
                     break;
                 case 'scorm':
@@ -202,6 +203,44 @@ class MoodleImport
                     $this->processGlossary($moduleValues, $currentItem['moduleid'], $allFiles, '');
                     break;
                 case 'label':
+                    $moduleDir = $currentItem['directory'];
+                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleValues = $this->readHtmlModule($moduleXml, $moduleName);
+                    $sectionPath = isset($currentItem['sectionid']) ? '/'.$sectionLpValues[$currentItem['sectionid']]['sectionPath'].'/' : '/';
+                    $contextId = $moduleValues['attributes']['contextid'];
+                    if (isset($currentItem['sectionid'])) {
+                        $sectionLp = $sectionLpValues[$currentItem['sectionid']];
+                        $lpId = $sectionLp['lpId'];
+                        $chapterTitle = $moduleValues['name'] ?? 'Capítulo sin título';
+                        if (!empty($lpId)) {
+                            $lp = new \learnpath(
+                                api_get_course_id(),
+                                $lpId,
+                                api_get_user_id()
+                            );
+                            $lpItemId = $lp->add_item(
+                                0,
+                                $previousItemId,
+                                'dir',
+                                0,
+                                $chapterTitle,
+                                '',
+                                0,
+                                0,
+                                0,
+                                0
+                            );
+                        }
+                    } else {
+                        if (isset($allFiles[$contextId])) {
+                            $importedFiles = $this->processSectionMultimedia($allFiles[$contextId], $sectionPath);
+                        }
+                        $documentId = $this->processHtmlDocument($moduleValues, $moduleName, $importedFiles, $sectionPath);
+                        if (!empty($currentItem['sectionid']) && !empty($documentId)) {
+                            $lpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'document', $documentId, $moduleValues['name'], $previousItemId);
+                        }
+                    }
+                    break;
                 case 'page':
                     $moduleDir = $currentItem['directory'];
                     $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
@@ -215,8 +254,7 @@ class MoodleImport
 
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($documentId)) {
-                        $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'document', $documentId, $moduleValues['name'], $n);
-                        $n++;
+                        $lpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'document', $documentId, $moduleValues['name'], $previousItemId);
                     }
                     break;
                 case 'forum':
@@ -288,8 +326,7 @@ class MoodleImport
                     }
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($forumId)) {
-                        $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'forum', $forumId, $moduleValues['name'], $n);
-                        $n++;
+                        $lpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'forum', $forumId, $moduleValues['name'], $previousItemId);
                     }
                     break;
                 case 'quiz':
@@ -410,8 +447,7 @@ class MoodleImport
 
                     // Add to learnpath if applicable
                     if (!empty($currentItem['sectionid']) && !empty($exercise->iid)) {
-                        $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'quiz', $exercise->iid, $title, $n);
-                        $n++;
+                        $lpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'quiz', $exercise->iid, $title, $previousItemId);
                     }
                     break;
                 case 'folder':
@@ -445,8 +481,7 @@ class MoodleImport
                     }
                     $sectionPath = isset($sectionLpValues[$currentItem['sectionid']]) ? $sectionLpValues[$currentItem['sectionid']]['sectionPath'] : '';
                     $lpId = (int) $sectionLpValues[$currentItem['sectionid']]['lpId'];
-                    $this->processSectionFolderModule($mainFileModuleValues, $sectionPath, $moduleValues['name'], $resourcesFiles, $lpId, $n);
-                    $n++;
+                    $this->processSectionFolderModule($mainFileModuleValues, $sectionPath, $moduleValues['name'], $resourcesFiles, $lpId, $previousItemId);
 
                     break;
                 case 'resource':
@@ -487,8 +522,7 @@ class MoodleImport
                         if (!empty($currentItem['sectionid'])) {
                             $lpId = $sectionLpValues[$currentItem['sectionid']]['lpId'];
                         }
-                        $importedFiles = $this->processSectionMultimedia($resourcesFiles, $sectionPath, $lpId, $n);
-                        $n++;
+                        $importedFiles = $this->processSectionMultimedia($resourcesFiles, $sectionPath, $lpId, $previousItemId);
                     }
 
                     break;
@@ -527,11 +561,16 @@ class MoodleImport
                     $linkId = Link::addlinkcategory('link');
                     // It is added as item in Learnpath
                     if (!empty($currentItem['sectionid']) && !empty($linkId)) {
-                        $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'link', $linkId, $moduleValues['name'], $n);
-                        $n++;
+                        $lpItemId = $this->processSectionItem($sectionLpValues[$currentItem['sectionid']]['lpId'], 'link', $linkId, $moduleValues['name'], $previousItemId);
                     }
                     break;
             }
+
+            if (!empty($previousItemId)) {
+                $this->updateLpItemNextId($previousItemId, $lpItemId);
+                $this->updateLpItemPreviousId($lpItemId, $previousItemId);
+            }
+            $previousItemId = $lpItemId;
         }
 
         if (!empty($sectionLpValues)) {
@@ -612,17 +651,17 @@ class MoodleImport
     }
 
     /**
-     * It adds module item by section as learnpath item.
+     * Adds an item to a learning path section and processes its relationships.
      *
-     * @param $lpId
-     * @param $itemType
-     * @param $itemId
-     * @param $itemTitle
-     * @param int $dspOrder
+     * @param int $lpId The ID of the learning path.
+     * @param string $itemType The type of the item (e.g., quiz, document).
+     * @param int $itemId The ID of the item to be added.
+     * @param string $itemTitle The title of the item.
+     * @param int|null $previousItemId The ID of the previous item (optional).
      *
-     * @return void
+     * @return int The ID of the newly added learning path item.
      */
-    public function processSectionItem($lpId, $itemType, $itemId, $itemTitle, $dspOrder = 0)
+    public function processSectionItem($lpId, $itemType, $itemId, $itemTitle, $previousItemId = null): int
     {
         $lp = new \learnpath(
             api_get_course_id(),
@@ -632,7 +671,7 @@ class MoodleImport
 
         $lpItemId = $lp->add_item(
             0,
-            0,
+            $previousItemId,
             $itemType,
             $itemId,
             $itemTitle,
@@ -640,8 +679,10 @@ class MoodleImport
             0,
             0,
             0,
-            $dspOrder
+            0
         );
+
+        return $lpItemId;
     }
 
     /**
@@ -1178,7 +1219,7 @@ class MoodleImport
      *
      * @return array
      */
-    public function processSectionMultimedia($files, $sectionPath, $lpId = 0, $n = 0)
+    public function processSectionMultimedia($files, $sectionPath, $lpId = 0, $previousItemId = 0)
     {
         $importedFiles = [];
         if (!empty($files)) {
@@ -1220,7 +1261,13 @@ class MoodleImport
                     $importedFiles[$file['file']['name']] = basename($data['path']);
                     // It is added as item in Learnpath
                     if (!empty($lpId) && !empty($data['iid'])) {
-                        $this->processSectionItem($lpId, 'document', $data['iid'], $title, $n);
+                        $currentItemId = $this->processSectionItem($lpId, 'document', $data['iid'], $title, $previousItemId);
+                        if (!empty($previousItemId)) {
+                            $this->updateLpItemNextId($previousItemId, $currentItemId);
+                            $this->updateLpItemPreviousId($currentItemId, $previousItemId);
+                        }
+
+                        $previousItemId = $currentItemId;
                     }
                 }
             }
@@ -1290,7 +1337,7 @@ class MoodleImport
                             $pageValues['content'] = $item['contents'];
                             $sectionPath = '/'.$dirName.'/';
                             $documentId = $this->processHtmlDocument($pageValues, 'page', $importedFiles, $sectionPath);
-                            $this->processSectionItem($lpId, 'document', $documentId, $pageValues['name']);
+                            $lpItemId = $this->processSectionItem($lpId, 'document', $documentId, $pageValues['name']);
                             break;
                         case 'essay':
                         case 'match':
@@ -1344,7 +1391,7 @@ class MoodleImport
                 // Create the new Quiz
                 $exercise->save();
 
-                $this->processSectionItem($lpId, 'quiz', $exercise->iid, $quizLpName);
+                $lpItemId = $this->processSectionItem($lpId, 'quiz', $exercise->iid, $quizLpName);
 
                 // Ok, we got the Quiz and create it, now its time to add the Questions
                 foreach ($questionList as $question) {
@@ -2584,7 +2631,7 @@ class MoodleImport
         $importedFiles,
         $sectionPath = ''
     ) {
-        $correct = (int) $answerValues['fraction'] ? (int) $answerValues['fraction'] : 0;
+        $correct = isset($answerValues['fraction']) ? (int) $answerValues['fraction'] : 0;
         $answer = $answerValues['answertext'];
         $comment = $answerValues['feedback'];
         $weighting = $answerValues['fraction'];
@@ -2603,10 +2650,7 @@ class MoodleImport
             $goodAnswer,
             $comment,
             $weighting,
-            $position,
-            null,
-            null,
-            ''
+            $position
         );
     }
 
@@ -2699,6 +2743,32 @@ class MoodleImport
             default:
                 return false;
         }
+    }
+
+    /**
+     * Updates the previous item ID for a given learning path item.
+     *
+     * @param int $currentItemId The ID of the current item.
+     * @param int $previousItemId The ID of the previous item to be set.
+     */
+    public function updateLpItemPreviousId($currentItemId, $previousItemId)
+    {
+        $table = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "UPDATE $table SET previous_item_id = $previousItemId WHERE id = $currentItemId";
+        Database::query($sql);
+    }
+
+    /**
+     * Updates the next item ID for a given learning path item.
+     *
+     * @param int $previousItemId The ID of the previous item.
+     * @param int $currentItemId The ID of the current item to be set as next.
+     */
+    public function updateLpItemNextId($previousItemId, $currentItemId)
+    {
+        $table = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "UPDATE $table SET next_item_id = $currentItemId WHERE id = $previousItemId";
+        Database::query($sql);
     }
 
     /**

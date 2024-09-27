@@ -65,6 +65,7 @@ $formDefaults = [
     'coach_access_start_date' => $session->getCoachAccessStartDate() ? api_get_local_time($session->getCoachAccessStartDate()) : null,
     'coach_access_end_date' => $session->getCoachAccessEndDate() ? api_get_local_time($session->getCoachAccessEndDate()) : null,
     'send_subscription_notification' => $session->getSendSubscriptionNotification(),
+    'notify_boss' => $session->getNotifyBoss(),
     'coach_username' => array_map(
         function (User $user) {
             return $user->getId();
@@ -110,6 +111,7 @@ if ($form->validate()) {
     }
 
     $status = $params['status'] ?? 0;
+    $notifyBoss = isset($params['notify_boss']) ? 1 : 0;
 
     $return = SessionManager::edit_session(
         $id,
@@ -129,7 +131,8 @@ if ($form->validate()) {
         $extraFields,
         null,
         $sendSubscriptionNotification,
-        $status
+        $status,
+        $notifyBoss
     );
 
     if ($return) {

@@ -237,6 +237,7 @@ if (!$formSent) {
             'coach_access_start_date' => $session->getCoachAccessStartDate() ? api_get_local_time($session->getCoachAccessStartDate()) : null,
             'coach_access_end_date' => $session->getCoachAccessEndDate() ? api_get_local_time($session->getCoachAccessEndDate()) : null,
             'send_subscription_notification' => $session->getSendSubscriptionNotification(),
+            'notify_boss' => $session->getNotifyBoss(),
             'coach_username' => array_map(
                 function (User $user) {
                     return $user->getId();
@@ -274,6 +275,7 @@ if ($form->validate()) {
     $sendSubscriptionNotification = isset($params['send_subscription_notification']);
     $isThisImageCropped = isset($params['picture_crop_result']);
     $status = isset($params['status']) ? $params['status'] : 0;
+    $notifyBoss = isset($params['notify_boss']) ? 1 : 0;
 
     $extraFields = [];
     foreach ($params as $key => $value) {
@@ -329,7 +331,8 @@ if ($form->validate()) {
         null,
         $sendSubscriptionNotification,
         api_get_current_access_url_id(),
-        $status
+        $status,
+        $notifyBoss
     );
 
     if ($return == strval(intval($return))) {

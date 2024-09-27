@@ -145,6 +145,7 @@ if ($numberLoop != 0) {
             api_get_path(WEB_AJAX_PATH).'social.ajax.php?'.http_build_query([
                 'a' => 'deny_friend',
                 'denied_friend_id' => $sender_user_id,
+                'invitation_sec_token' => Security::get_token('invitation'),
             ]),
             'times',
             'danger',

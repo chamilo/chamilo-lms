@@ -43,20 +43,22 @@ switch ($action) {
             echo '';
             break;
         }
-        $relation_type = USER_RELATION_TYPE_UNKNOWN; //Contact unknown
-        if (isset($_GET['is_my_friend'])) {
-            $relation_type = USER_RELATION_TYPE_FRIEND; //my friend
-        }
-        if (isset($_GET['denied_friend_id'])) {
-            SocialManager::invitation_denied($_GET['denied_friend_id'], $current_user_id);
-            Display::addFlash(
-                Display::return_message(get_lang('InvitationDenied'), 'success')
-            );
 
-            header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
-            exit;
+        if (Security::check_token('get', null, 'invitation')) {
+            $relation_type = USER_RELATION_TYPE_UNKNOWN; //Contact unknown
+            if (isset($_GET['is_my_friend'])) {
+                $relation_type = USER_RELATION_TYPE_FRIEND; //my friend
+            }
+            if (isset($_GET['denied_friend_id'])) {
+                SocialManager::invitation_denied($_GET['denied_friend_id'], $current_user_id);
+                Display::addFlash(
+                    Display::return_message(get_lang('InvitationDenied'), 'success')
+                );
+            }
         }
-        break;
+
+        header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
+        exit;
     case 'delete_friend':
         if (api_is_anonymous()) {
             echo '';

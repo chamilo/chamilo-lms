@@ -96,11 +96,17 @@ $(function() {
 });
 </script>';
 
-// jqgrid will use this URL to do the selects
-if (!empty($courseId)) {
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&course_id='.$courseId;
-} else {
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
+switch ($listType) {
+    case 'replication':
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&list_type=replication';
+        break;
+    default:
+        if (!empty($courseId)) {
+            $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&course_id='.$courseId;
+        } else {
+            $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
+        }
+        break;
 }
 
 if (isset($_REQUEST['keyword'])) {

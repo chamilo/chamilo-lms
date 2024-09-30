@@ -374,6 +374,18 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[Groups(['user_subscriptions:sessions', 'session:read', 'session:item:read'])]
     private int $accessVisibility = 0;
 
+    #[ORM\Column(name: 'parent_id', type: 'integer', nullable: true)]
+    protected ?int $parentId = null;
+
+    #[ORM\Column(name: 'days_to_reinscription', type: 'integer', nullable: true)]
+    protected ?int $daysToReinscription = null;
+
+    #[ORM\Column(name: 'last_repetition', type: 'boolean', nullable: false, options: ['default' => false])]
+    protected bool $lastRepetition = false;
+
+    #[ORM\Column(name: 'days_to_new_repetition', type: 'integer', nullable: true)]
+    protected ?int $daysToNewRepetition = null;
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();
@@ -1447,5 +1459,49 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             $sessionRelCourse->getCourse()->getVisibility(),
             $closedVisibilities
         ));
+    }
+
+    public function getParentId(): ?int
+    {
+        return $this->parentId;
+    }
+
+    public function setParentId(?int $parentId): self
+    {
+        $this->parentId = $parentId;
+        return $this;
+    }
+
+    public function getDaysToReinscription(): ?int
+    {
+        return $this->daysToReinscription;
+    }
+
+    public function setDaysToReinscription(?int $daysToReinscription): self
+    {
+        $this->daysToReinscription = $daysToReinscription;
+        return $this;
+    }
+
+    public function getLastRepetition(): bool
+    {
+        return $this->lastRepetition;
+    }
+
+    public function setLastRepetition(bool $lastRepetition): self
+    {
+        $this->lastRepetition = $lastRepetition;
+        return $this;
+    }
+
+    public function getDaysToNewRepetition(): ?int
+    {
+        return $this->daysToNewRepetition;
+    }
+
+    public function setDaysToNewRepetition(?int $daysToNewRepetition): self
+    {
+        $this->daysToNewRepetition = $daysToNewRepetition;
+        return $this;
     }
 }

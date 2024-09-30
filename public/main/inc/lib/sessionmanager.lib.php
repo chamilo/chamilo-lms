@@ -521,6 +521,10 @@ class SessionManager
             }
             $select .= ', status';
 
+            if ('replication' === $listType) {
+                $select .= ', parent_id';
+            }
+
             if (isset($options['order'])) {
                 $isMakingOrder = 0 === strpos($options['order'], 'category_name');
             }
@@ -652,6 +656,11 @@ class SessionManager
                     )
                 )";
                 break;
+            case 'replication':
+                $formatted = false;
+                $query .= "AND s.days_to_new_repetition IS NOT NULL
+               AND (SELECT COUNT(id) FROM session AS child WHERE child.parent_id = s.id) <= 1";
+                break;
         }
 
         $query .= $order;
@@ -666,6 +675,23 @@ class SessionManager
                     $session['users'] = Database::fetch_assoc($result)['nbr'];
                 }
             }
+
+            if ('replication' === $listType) {
+                $formattedSessions = [];
+                foreach ($sessions as $session) {
+                    $formattedSessions[] = $session;
+                    if (isset($session['id'])) {
+                        $childSessions = array_filter($sessions, fn($s) => isset($s['parent_id']) && $s['parent_id'] === $session['id']);
+                        foreach ($childSessions as $childSession) {
+                            $childSession['title'] = '-- ' . $childSession['title'];
+                            $formattedSessions[] = $childSession;
+                        }
+                    }
+                }
+
+                return $formattedSessions;
+            }
+
             if ('all' === $listType) {
                 if ($getCount) {
                     return $sessions[0]['total_rows'];
@@ -8699,7 +8725,7 @@ class SessionManager
                 ];
 
                 break;
-
+            case 'replication':
             case 'custom':
                 $columns = [
                     '#',
@@ -8718,7 +8744,7 @@ class SessionManager
                     [
                         'name' => 'title',
                         'index' => 's.title',
-                        'width' => '160',
+                        'width' => '260px',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -9709,9 +9735,9 @@ class SessionManager
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public static function getSessionListTabs($listType)
+    public static function getSessionListTabs($listType): string
     {
         $tabs = [
             [
@@ -9730,10 +9756,10 @@ class SessionManager
                 'content' => get_lang('Custom list'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=custom',
             ],
-            /*[
-                'content' => get_lang('Complete'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php?list_type=complete',
-            ],*/
+            [
+                'content' => get_lang('Replication'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=replication',
+            ],
         ];
         $default = null;
         switch ($listType) {
@@ -9748,6 +9774,9 @@ class SessionManager
                 break;
             case 'custom':
                 $default = 4;
+                break;
+            case 'replication':
+                $default = 5;
                 break;
         }
 

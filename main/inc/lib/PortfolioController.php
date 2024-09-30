@@ -505,7 +505,7 @@ class PortfolioController
             $form->applyFilter('title', 'trim');
         }
         $editorConfig = [
-            'ToolbarSet' => 'NotebookStudent',
+            'ToolbarSet' => 'Documents',
             'Width' => '100%',
             'Height' => '400',
             'cols-size' => [2, 10, 0],
@@ -757,7 +757,7 @@ class PortfolioController
             }
         }
         $editorConfig = [
-            'ToolbarSet' => 'NotebookStudent',
+            'ToolbarSet' => 'Documents',
             'Width' => '100%',
             'Height' => '400',
             'cols-size' => [2, 10, 0],

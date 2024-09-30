@@ -635,6 +635,11 @@ ALTER TABLE sys_announcement ADD COLUMN visible_boss INT DEFAULT 0;
 // More info: https://www.chromium.org/updates/same-site
 // Also: https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure
 //$_configuration['security_session_cookie_samesite_none'] = false;
+//
+// Enable Permissions-Policy header
+// More info: https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/
+// and also:  https://scotthelme.co.uk/a-new-security-header-feature-policy/
+//$_configuration['security_permissions_policy'] = 'geolocation=(self "https://example.com"), microphone=()';
 // ------ HTTP headers security section ends here
 //
 // ------ Survey configuration settings

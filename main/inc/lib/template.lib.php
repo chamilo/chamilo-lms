@@ -1940,6 +1940,11 @@ class Template
         if (!empty($setting)) {
             header('Referrer-Policy: '.$setting);
         }
+        // Permissions-Policy
+        $setting = api_get_configuration_value('security_permissions_policy');
+        if (!empty($setting)) {
+            header('Permissions-Policy: '.$setting);
+        }
         // end of HTTP headers security block
     }
 

@@ -180,4 +180,19 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
 
         return $query->getOneOrNullResult();
     }
+
+    /**
+     * Retrieves the LP IDs that have a value for 'number_of_days_for_completion'.
+     */
+    public function getLpIdWithDaysForCompletion(): array
+    {
+        $qb = $this->createQueryBuilder('efv')
+            ->select('efv.itemId as lp_id, efv.fieldValue as ndays')
+            ->innerJoin('efv.field', 'ef')
+            ->where('ef.variable = :variable')
+            ->andWhere('efv.fieldValue > 0')
+            ->setParameter('variable', 'number_of_days_for_completion');
+
+        return $qb->getQuery()->getResult();
+    }
 }

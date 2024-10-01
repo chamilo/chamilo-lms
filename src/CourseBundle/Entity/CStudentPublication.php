@@ -176,6 +176,19 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
     protected ?int $duration = null;
 
+    #[ORM\ManyToOne(targetEntity: CGroupCategory::class)]
+    #[ORM\JoinColumn(name: 'group_category_id', referencedColumnName: 'iid', nullable: true)]
+    protected ?CGroupCategory $groupCategory = null;
+
+    #[ORM\Column(name: 'student_delete_own_publication', type: 'boolean', nullable: true, options: ['default' => 0])]
+    protected ?bool $studentDeleteOwnPublication = null;
+
+    #[ORM\Column(name: 'default_visibility', type: 'boolean', nullable: true, options: ['default' => 0])]
+    protected ?bool $defaultVisibility = null;
+
+    #[ORM\Column(name: 'extensions', type: 'text', nullable: true)]
+    protected ?string $extensions = null;
+
     public function __construct()
     {
         $this->description = '';
@@ -514,6 +527,54 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     public function setDuration(?int $duration): self
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getGroupCategory(): ?CGroupCategory
+    {
+        return $this->groupCategory;
+    }
+
+    public function setGroupCategory(?CGroupCategory $groupCategory): self
+    {
+        $this->groupCategory = $groupCategory;
+
+        return $this;
+    }
+
+    public function getStudentDeleteOwnPublication(): ?bool
+    {
+        return $this->studentDeleteOwnPublication;
+    }
+
+    public function setStudentDeleteOwnPublication(?bool $studentDeleteOwnPublication): self
+    {
+        $this->studentDeleteOwnPublication = $studentDeleteOwnPublication;
+
+        return $this;
+    }
+
+    public function getDefaultVisibility(): ?bool
+    {
+        return $this->defaultVisibility;
+    }
+
+    public function setDefaultVisibility(?bool $defaultVisibility): self
+    {
+        $this->defaultVisibility = $defaultVisibility;
+
+        return $this;
+    }
+
+    public function getExtensions(): ?string
+    {
+        return $this->extensions;
+    }
+
+    public function setExtensions(?string $extensions): self
+    {
+        $this->extensions = $extensions;
 
         return $this;
     }

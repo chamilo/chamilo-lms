@@ -29,7 +29,7 @@ class CLpRelUser
     protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CLp::class)]
-    #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid')]
+    #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
     protected CLp $lp;
 
     #[ORM\ManyToOne(targetEntity: Course::class)]
@@ -51,6 +51,67 @@ class CLpRelUser
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?User $creatorUser;
+
+    #[ORM\ManyToOne(targetEntity: CGroup::class)]
+    #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
+    protected ?CGroup $group = null;
+
+    #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
+    protected ?\DateTimeInterface $startDate = null;
+
+    #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
+    protected ?\DateTimeInterface $endDate = null;
+
+    #[ORM\Column(name: 'is_open_without_date', type: 'boolean', nullable: false, options: ['default' => 0])]
+    protected bool $isOpenWithoutDate = false;
+
+    public function getGroup(): ?CGroup
+    {
+        return $this->group;
+    }
+
+    public function setGroup(?CGroup $group): self
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    public function getStartDate(): ?\DateTimeInterface
+    {
+        return $this->startDate;
+    }
+
+    public function setStartDate(?\DateTimeInterface $startDate): self
+    {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    public function getEndDate(): ?\DateTimeInterface
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(?\DateTimeInterface $endDate): self
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    public function getIsOpenWithoutDate(): bool
+    {
+        return $this->isOpenWithoutDate;
+    }
+
+    public function setIsOpenWithoutDate(bool $isOpenWithoutDate): self
+    {
+        $this->isOpenWithoutDate = $isOpenWithoutDate;
+
+        return $this;
+    }
 
     public function getIid(): ?int
     {

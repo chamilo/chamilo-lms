@@ -14,7 +14,7 @@
 require_once 'openid.lib.php';
 require_once 'xrds.lib.php';
 
-function openid_form()
+function openid_form(): FormValidator
 {
     $form = new FormValidator(
         'openid_login',
@@ -25,8 +25,10 @@ function openid_form()
     );
     $form -> addElement('text', 'openid_url', array(get_lang('OpenIDURL'), Display::url(get_lang('OpenIDWhatIs'), 'main/auth/openid/whatis.php')), array('class' => 'openid_input'));
     $form -> addElement('button', 'submit', get_lang('Login'));
+    $form->applyFilter('openid_url', 'trim');
+    $form->protect();
 
-    return $form->returnForm();
+    return $form;
 }
 
 /**

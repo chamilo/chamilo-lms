@@ -53,6 +53,9 @@ class ThemeController extends AbstractController
             $fileStream = $filesystem->readStream($filePath);
 
             stream_copy_to_stream($fileStream, $outputStream);
+
+            fclose($outputStream);
+            fclose($fileStream);
         });
 
         $mimeType = $filesystem->mimeType($filePath);

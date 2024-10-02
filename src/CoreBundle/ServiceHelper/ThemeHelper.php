@@ -139,7 +139,11 @@ final class ThemeHelper
             if ($fullPath = $this->getFileLocation($path)) {
                 $stream = $this->filesystem->readStream($fullPath);
 
-                return stream_get_contents($stream);
+                $contents = stream_get_contents($stream);
+
+                fclose($stream);
+
+                return $contents;
             }
         } catch (FilesystemException|UnableToReadFile) {
             return '';

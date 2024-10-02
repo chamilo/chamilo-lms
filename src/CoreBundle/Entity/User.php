@@ -705,6 +705,21 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: SocialPostFeedback::class, orphanRemoval: true)]
     private Collection $socialPostsFeedbacks;
 
+    #[ORM\Column(name: 'mfa_enabled', type: 'boolean', options: ['default' => false])]
+    protected bool $mfaEnabled = false;
+
+    #[ORM\Column(name: 'mfa_service', type: 'string', length: 255, nullable: true)]
+    protected ?string $mfaService = null;
+
+    #[ORM\Column(name: 'mfa_secret', type: 'string', length: 255, nullable: true)]
+    protected ?string $mfaSecret = null;
+
+    #[ORM\Column(name: 'mfa_backup_codes', type: 'text', nullable: true)]
+    protected ?string $mfaBackupCodes = null;
+
+    #[ORM\Column(name: 'mfa_last_used', type: 'datetime', nullable: true)]
+    protected ?\DateTimeInterface $mfaLastUsed = null;
+
     public function __construct()
     {
         $this->skipResourceNode = false;
@@ -2410,5 +2425,60 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function isCourseTutor(?Course $course = null, ?Session $session = null): bool
     {
         return $session?->hasCoachInCourseList($user) || $course?->getSubscriptionByUser($user)?->isTutor();
+    }
+
+    public function getMfaEnabled(): bool
+    {
+        return $this->mfaEnabled;
+    }
+
+    public function setMfaEnabled(bool $mfaEnabled): self
+    {
+        $this->mfaEnabled = $mfaEnabled;
+        return $this;
+    }
+
+    public function getMfaService(): ?string
+    {
+        return $this->mfaService;
+    }
+
+    public function setMfaService(?string $mfaService): self
+    {
+        $this->mfaService = $mfaService;
+        return $this;
+    }
+
+    public function getMfaSecret(): ?string
+    {
+        return $this->mfaSecret;
+    }
+
+    public function setMfaSecret(?string $mfaSecret): self
+    {
+        $this->mfaSecret = $mfaSecret;
+        return $this;
+    }
+
+    public function getMfaBackupCodes(): ?string
+    {
+        return $this->mfaBackupCodes;
+    }
+
+    public function setMfaBackupCodes(?string $mfaBackupCodes): self
+    {
+        $this->mfaBackupCodes = $mfaBackupCodes;
+        return $this;
+    }
+
+    public function getMfaLastUsed(): ?\DateTimeInterface
+    {
+        return $this->mfaLastUsed;
+    }
+
+    public function setMfaLastUsed(?\DateTimeInterface $mfaLastUsed): self
+    {
+        $this->mfaLastUsed = $mfaLastUsed;
+        return $this;
     }
 }

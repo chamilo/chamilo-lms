@@ -28,6 +28,14 @@
         />
       </div>
 
+      <div v-if="requires2FA" class="field">
+        <InputText
+          v-model="totp"
+          :placeholder="t('Enter TOTP code')"
+          type="text"
+        />
+      </div>
+
       <div class="field login-section__remember-me">
         <InputSwitch
           v-model="remember"
@@ -43,7 +51,7 @@
 
       <div class="field login-section__buttons">
         <Button
-          :label="t('Sign in')"
+          :label="requires2FA ? t('Submit TOTP') : t('Sign in')"
           :loading="isLoading"
           type="submit"
         />
@@ -87,15 +95,24 @@ const { redirectNotAuthenticated, performLogin, isLoading } = useLogin()
 
 const login = ref("")
 const password = ref("")
+const totp = ref("")
 const remember = ref(false)
+const requires2FA = ref(false)
 
 redirectNotAuthenticated()
 
-function onSubmitLoginForm() {
-  performLogin({
+async function onSubmitLoginForm() {
+  const response = await performLogin({
     login: login.value,
     password: password.value,
+    totp: requires2FA.value ? totp.value : null,
     _remember_me: remember.value,
   })
+
+  if (response.requires2FA) {
+    requires2FA.value = true
+  } else {
+    router.replace({ name: "Home" })
+  }
 }
 </script>

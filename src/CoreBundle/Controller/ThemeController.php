@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +21,10 @@ use const DIRECTORY_SEPARATOR;
 #[Route('/themes')]
 class ThemeController extends AbstractController
 {
+    public function __construct(
+        private readonly ThemeHelper $themeHelper
+    ) {}
+
     /**
      * @throws FilesystemException
      */
@@ -36,9 +41,9 @@ class ThemeController extends AbstractController
             throw $this->createNotFoundException('The folder name does not exist.');
         }
 
-        $filePath = $themeDir.DIRECTORY_SEPARATOR.$path;
+        $filePath = $this->themeHelper->getFileLocation($path);
 
-        if (!$filesystem->fileExists($filePath)) {
+        if (!$filePath) {
             throw $this->createNotFoundException('The requested file does not exist.');
         }
 

@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-use const DIRECTORY_SEPARATOR;
-
 #[Route('/themes')]
 class ThemeController extends AbstractController
 {

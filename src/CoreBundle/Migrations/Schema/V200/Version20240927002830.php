@@ -18,7 +18,7 @@ final class Version20240927002830 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $this->addSql("
+        $this->addSql('
             CREATE TABLE ticket_rel_user (
                 user_id INT NOT NULL,
                 ticket_id INT NOT NULL,
@@ -27,11 +27,11 @@ final class Version20240927002830 extends AbstractMigrationChamilo
                 CONSTRAINT FK_ticket_rel_user_user_id FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
                 CONSTRAINT FK_ticket_rel_user_ticket_id FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id) ON DELETE CASCADE
             )
-        ");
+        ');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql("DROP TABLE ticket_rel_user");
+        $this->addSql('DROP TABLE ticket_rel_user');
     }
 }

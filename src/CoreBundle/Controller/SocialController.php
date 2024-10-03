@@ -528,7 +528,7 @@ class SocialController extends AbstractController
         }
 
         $fieldVisibilityConfig = $settingsManager->getSetting('profile.profile_fields_visibility');
-        $fieldVisibility = $fieldVisibilityConfig ? json_decode($fieldVisibilityConfig, true)['options'] : [];
+        $fieldVisibility = ($fieldVisibilityConfig && 'false' !== $fieldVisibilityConfig) ? json_decode($fieldVisibilityConfig, true)['options'] : [];
 
         $extraUserData = $userRepository->getExtraUserData($userId);
         $extraFieldsFormatted = [];

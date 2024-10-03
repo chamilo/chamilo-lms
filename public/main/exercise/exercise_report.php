@@ -699,7 +699,7 @@ if ($is_allowedToEdit || $is_tutor) {
         ['name' => 'duration', 'index' => 'exe_duration', 'width' => '150', 'align' => 'left', 'search' => 'true'],
         ['name' => 'start_date', 'index' => 'start_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
         ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'score', 'index' => 'score', 'width' => '100', 'align' => 'center', 'search' => 'true'],
+        ['name' => 'score', 'index' => 'score', 'width' => '120', 'align' => 'center', 'search' => 'true'],
         ['name' => 'ip', 'index' => 'user_ip', 'width' => '120', 'align' => 'center', 'search' => 'true'],
         [
             'name' => 'status',
@@ -721,7 +721,7 @@ if ($is_allowedToEdit || $is_tutor) {
             ],
         ],
         ['name' => 'lp', 'index' => 'orig_lp_id', 'width' => '150', 'align' => 'left', 'search' => 'false'],
-        ['name' => 'actions', 'index' => 'actions', 'width' => '120', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
+        ['name' => 'actions', 'index' => 'actions', 'width' => '180', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
     ];
 
     if ('true' === $officialCodeInList) {

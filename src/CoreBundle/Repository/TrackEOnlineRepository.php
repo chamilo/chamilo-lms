@@ -8,24 +8,27 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class TrackEOnlineRepository extends ServiceEntityRepository
 {
     public function __construct(
         ManagerRegistry $registry,
-        private readonly SettingsManager $settingsManager
+        private readonly SettingsManager $settingsManager,
+        private readonly AccessUrlHelper $accessUrlHelper,
     ) {
         parent::__construct($registry, TrackEOnline::class);
     }
 
     public function isUserOnline(int $userId): bool
     {
-        $accessUrlId = 1;
+        $accessUrl = $this->accessUrlHelper->getCurrent();
         $timeLimit = $this->settingsManager->getSetting('display.time_limit_whosonline');
 
         $onlineTime = new DateTime();
@@ -37,7 +40,7 @@ class TrackEOnlineRepository extends ServiceEntityRepository
             ->andWhere('t.accessUrlId = :accessUrlId')
             ->andWhere('t.loginDate >= :limitDate')
             ->setParameter('userId', $userId)
-            ->setParameter('accessUrlId', $accessUrlId)
+            ->setParameter('accessUrlId', $accessUrl->getId())
             ->setParameter('limitDate', $onlineTime)
             ->setMaxResults(1)
         ;
@@ -46,8 +49,7 @@ class TrackEOnlineRepository extends ServiceEntityRepository
             $count = $qb->getQuery()->getSingleScalarResult();
 
             return $count > 0;
-        } catch (NonUniqueResultException $e) {
-            // Handle exception
+        } catch (NonUniqueResultException|NoResultException) {
             return false;
         }
     }

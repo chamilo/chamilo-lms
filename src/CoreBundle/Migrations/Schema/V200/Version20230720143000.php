@@ -26,89 +26,106 @@ final class Version20230720143000 extends AbstractMigrationChamilo
         $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $q = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
+        $fallbackUser = $this->getFallbackUser();
+        $directory = $this->getUpdateRootPath().'/app/upload/users/';
 
-        /** @var User $userEntity */
-        foreach ($q->toIterable() as $userEntity) {
-            $id = $userEntity->getId();
-            $path = "users/{$id}/";
+        $variable = 'split_users_upload_directory';
+        $query = $this->entityManager->createQuery('SELECT s.selectedValue FROM Chamilo\CoreBundle\Entity\SettingsCurrent s WHERE s.variable = :variable')
+            ->setParameter('variable', $variable);
+        $result = $query->getOneOrNullResult();
+        $splitUsersUploadDirectory = $result['selectedValue'] ?? 'false';
 
-            $variable = 'split_users_upload_directory';
-            // Query the 'selected_value' from the 'settings' table where the 'variable' is 'split_users_upload_directory'
-            $query = $this->entityManager->createQuery('SELECT s.selectedValue FROM Chamilo\CoreBundle\Entity\SettingsCurrent s WHERE s.variable = :variable')
-                ->setParameter('variable', $variable)
-            ;
+        if ('true' === $splitUsersUploadDirectory) {
+            $parentDirectories = glob($directory.'*', GLOB_ONLYDIR);
 
-            // Get the result of the query (it should return a single row with the 'selected_value' column)
-            $result = $query->getOneOrNullResult();
-            $settingValueAsString = 'false';
-            if (null !== $result) {
-                // Convert the 'selected_value' to a string and store it in $settingValueAsString
-                $settingValue = $result['selectedValue'];
-                $settingValueAsString = (string) $settingValue;
+            foreach ($parentDirectories as $parentDir) {
+                $firstDigit = basename($parentDir);
+                $subDirectories = glob($parentDir.'/*', GLOB_ONLYDIR);
+                foreach ($subDirectories as $userDir) {
+                    $userId = basename($userDir);
+                    $this->processUserDirectory($userId, $userDir, $fallbackUser, true);
+                }
             }
-
-            // If the 'split_users_upload_directory' setting is 'true', adjust the path accordingly
-            if ('true' === $settingValueAsString) {
-                $path = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
+        } else {
+            $userDirectories = glob($directory.'*', GLOB_ONLYDIR);
+            foreach ($userDirectories as $userDir) {
+                $userId = basename($userDir);
+                $this->processUserDirectory($userId, $userDir, $fallbackUser, false);
             }
+        }
+    }
 
-            $baseDir = $this->getUpdateRootPath().'/app/upload/'.$path;
+    private function processUserDirectory(string $userId, string $userDir, User $fallbackUser, bool $splitUsersUploadDirectory): void
+    {
+        $userEntity = $this->entityManager->getRepository(User::class)->find($userId);
+        $userToAssign = $userEntity ?? $fallbackUser;
 
-            // Check if the base directory exists, if not, continue to the next user
-            if (!is_dir($baseDir)) {
+        if ($userEntity === null) {
+            error_log("User with ID {$userId} not found. Using fallback_user.");
+        } else {
+            error_log("Processing files for user with ID {$userId}.");
+        }
+
+        if ($splitUsersUploadDirectory) {
+            $baseDir = $userDir.'/';
+        } else {
+            $baseDir = $this->getUpdateRootPath().'/app/upload/users/'.$userId.'/';
+        }
+
+        error_log("Final path to check: {$baseDir}");
+
+        if (!is_dir($baseDir)) {
+            error_log("Directory not found for user with ID {$userId}. Skipping.");
+            return;
+        }
+
+        $myFilesDir = $baseDir.'my_files/';
+        $files = glob($myFilesDir.'*');
+
+        foreach ($files as $file) {
+            if (!is_file($file)) {
                 continue;
             }
 
-            // Get all the files in the 'my_files' directory
-            $myFilesDir = $baseDir.'my_files/';
-            $files = glob($myFilesDir.'*');
+            $title = basename($file);
+            error_log("Processing file: {$file} for user with ID {$userToAssign->getId()}.");
 
-            // $files now contains a list of all files in the 'my_files' directory
-            foreach ($files as $file) {
-                if (!is_file($file)) {
-                    continue;
-                }
+            $queryBuilder = $this->entityManager->createQueryBuilder();
+            $queryBuilder
+                ->select('p')
+                ->from(ResourceNode::class, 'n')
+                ->innerJoin(PersonalFile::class, 'p', Join::WITH, 'p.resourceNode = n.id')
+                ->where('n.title = :title')
+                ->andWhere('n.creator = :creator')
+                ->setParameter('title', $title)
+                ->setParameter('creator', $userToAssign->getId());
 
-                $title = basename($file);
-                $queryBuilder = $this->entityManager->createQueryBuilder();
+            $result = $queryBuilder->getQuery()->getOneOrNullResult();
 
-                // Build the query to join the ResourceNode and PersonalFile tables
-                $queryBuilder
-                    ->select('p')
-                    ->from(ResourceNode::class, 'n')
-                    ->innerJoin(PersonalFile::class, 'p', Join::WITH, 'p.resourceNode = n.id')
-                    ->where('n.title = :title')
-                    ->andWhere('n.creator = :creator')
-                    ->setParameter('title', $title)
-                    ->setParameter('creator', $id)
-                ;
-
-                $result = $queryBuilder->getQuery()->getOneOrNullResult();
-
-                if ($result) {
-                    // Skip creating a new entity and log a message
-                    error_log('MIGRATIONS :: $file -- '.$file.' (Skipped: Already exists) ...');
-
-                    continue;
-                }
-
-                error_log('MIGRATIONS :: $file -- '.$file.' ...');
-                // Create a new PersonalFile entity if it doesn't already exist
-                $personalFile = new PersonalFile();
-                $personalFile->setTitle($title); // Set the file name as the title
-                $personalFile->setCreator($userEntity);
-                $personalFile->setParentResourceNode($userEntity->getResourceNode()->getId());
-                $personalFile->setResourceName($title);
-                $mimeType = mime_content_type($file);
-                $uploadedFile = new UploadedFile($file, $title, $mimeType, null, true);
-                $personalFile->setUploadFile($uploadedFile);
-                $personalFile->addUserLink($userEntity);
-
-                // Save the object to the database
-                $this->entityManager->persist($personalFile);
-                $this->entityManager->flush();
+            if ($result) {
+                error_log('MIGRATIONS :: '.$file.' (Skipped: Already exists) ...');
+                continue;
             }
+
+            error_log("MIGRATIONS :: Associating file {$file} to user with ID {$userToAssign->getId()}.");
+            $personalFile = new PersonalFile();
+            $personalFile->setTitle($title);
+            $personalFile->setCreator($userToAssign);
+            $personalFile->setParentResourceNode($userToAssign->getResourceNode()->getId());
+            $personalFile->setResourceName($title);
+            $mimeType = mime_content_type($file);
+            $uploadedFile = new UploadedFile($file, $title, $mimeType, null, true);
+            $personalFile->setUploadFile($uploadedFile);
+            $personalFile->addUserLink($userToAssign);
+
+            // Save the object to the database
+            $this->entityManager->persist($personalFile);
+            $this->entityManager->flush();
         }
+    }
+
+    private function getFallbackUser(): ?User
+    {
+        return $this->entityManager->getRepository(User::class)->findOneBy(['status' => User::ROLE_FALLBACK], ['id' => 'ASC']);
     }
 }

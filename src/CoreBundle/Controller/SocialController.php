@@ -42,6 +42,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use UserManager;
 
@@ -463,6 +464,7 @@ class SocialController extends AbstractController
         return $this->json(['invitedUsers' => $invitedUsersList]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/user-profile/{userId}', name: 'chamilo_core_social_user_profile')]
     public function getUserProfile(
         int $userId,
@@ -476,7 +478,7 @@ class SocialController extends AbstractController
     ): JsonResponse {
         $user = $userRepository->find($userId);
         if (!$user) {
-            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+            return $this->createNotFoundException('User not found');
         }
 
         $baseUrl = $requestStack->getCurrentRequest()->getBaseUrl();

@@ -131,7 +131,7 @@ final class Version20241003120000 extends AbstractMigrationChamilo
             $attribute = $matches[1];      // Capture whether it's a `href` or `src`
             $folderId = (int)$matches[2];  // Capture the first digit of the userId (folderId)
             $userId = (int)$matches[3];    // Capture the full userId
-            $filename = $matches[4];       // Capture the filename
+            $filename = urldecode($matches[4]);  // Decode the filename
 
             error_log("Processing file: $filename for userId: $userId (Folder ID: $folderId)");
 

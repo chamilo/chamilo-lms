@@ -12,7 +12,19 @@ $auth = new Auth();
 $user_course_categories = CourseManager::get_user_course_categories(api_get_user_id());
 $courses_in_category = $auth->getCoursesInCategory(false);
 
-$action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : '';
+// Only authorized actions
+$authorizedActions = [
+    'edit_category',
+    'edit_course_category',
+    'deletecoursecategory',
+    'createcoursecategory',
+    'set_collapsable',
+    'unsubscribe'
+];
+if (in_array(trim($_REQUEST['action']), $authorizedActions)) {
+    $action = trim($_REQUEST['action']);
+}
+
 $currentUrl = api_get_self();
 
 $interbreadcrumb[] = [

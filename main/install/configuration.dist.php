@@ -2565,6 +2565,13 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // Define the default time in seconds to be registered if the user does logout from a course and there is no recent entry in track_e_course_access.
 //$_configuration['tracking_default_course_extra_time_on_logout'] = 600;
 
+// Set to true to hide lp creation icon on lp list if in a session
+//$_configuration['session_hide_lp_creation'] = false;
+// Set to true to hide lp copy icon on lp list if in a session
+//$_configuration['session_hide_lp_copy'] = false;
+// Set to true to hide document upload icon on document list if in a session
+//$_configuration['session_hide_document_upload'] = false;
+
 // Define a special path token for the Common Cartridge export content.
 // Due to changes in naming by the responsible organization, the Chamilo default
 // is '$1EdTech-CC-FILEBASE$' (the latest), but previous versions of the standard

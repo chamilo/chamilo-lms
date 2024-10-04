@@ -113,6 +113,44 @@ function change_select(reset) {
 }
 
 </script>';
+$htmlHeadXtra[] = '
+<script>
+$(document).ready(function() {
+    function showLastTenUsers() {
+        var selectedUsers = [];
+        $("#elements_in option").each(function() {
+            selectedUsers.push($(this).val());
+        });
+
+        var groupId = "'.$id.'";
+        $.ajax({
+            type: "POST",
+            url: "'.api_get_self().'",
+            data: {
+                action: "get_last_ten_users",
+                excludedUsers: selectedUsers,
+                id: groupId
+            },
+            dataType: "json",
+            success: function(data) {
+                var select = document.getElementById("elements_not_in");
+                select.innerHTML = "";
+
+                $.each(data, function(index, user) {
+                    select.append(new Option(user.username + " - " + user.firstname + " " + user.lastname, user.id));
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud AJAX: " + status + " - " + error);
+            }
+        });
+    }
+
+    $("#show_last_ten_users_button").click(function() {
+        showLastTenUsers();
+    });
+});
+</script>';
 
 $form_sent = 0;
 $extra_field_list = UserManager::get_extra_fields();
@@ -131,6 +169,35 @@ if (is_array($extra_field_list)) {
 
 if (empty($id)) {
     api_not_allowed(true);
+}
+
+if (ChamiloApi::isAjaxRequest() && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'get_last_ten_users') {
+    $excludedUsers = isset($_POST['excludedUsers']) ? $_POST['excludedUsers'] : [];
+    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+
+    $excludedIds = !empty($excludedUsers) ? implode(",", array_map('intval', $excludedUsers)) : '0';
+    $sql = 'SELECT id, username, firstname, lastname
+            FROM user
+            WHERE status != '.ANONYMOUS.'
+            AND id NOT IN ('.$excludedIds.')
+            ORDER BY id DESC
+            LIMIT 10';
+
+    $result = Database::query($sql);
+    $users = [];
+
+    while ($user = Database::fetch_array($result)) {
+        $users[] = [
+            'id' => $user['id'],
+            'username' => $user['username'],
+            'firstname' => $user['firstname'],
+            'lastname' => $user['lastname']
+        ];
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($users);
+    die();
 }
 
 $first_letter_user = '';
@@ -453,13 +520,18 @@ echo '</div>';
                                placeholder="<?php echo get_lang('Search'); ?>"
                                onkeydown="return 13 !== event.keyCode;">
                         <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" onclick="change_select();">
-                        <?php echo get_lang('Filter'); ?>
-                    </button>
-                    <button class="btn btn-default" type="button" onclick="change_select(true);">
-                        <?php echo get_lang('Reset'); ?>
-                    </button>
-                </span>
+                            <button class="btn btn-default" type="button" onclick="change_select();">
+                                <?php echo get_lang('Filter'); ?>
+                            </button>
+                            <button class="btn btn-default" type="button" onclick="change_select(true);">
+                                <?php echo get_lang('Reset'); ?>
+                            </button>
+                        </span>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="show_last_ten_users_button" title="<?php echo get_lang('ShowLastTenUsers') ?>">
+                                <i class="fa fa-clock-o"></i>
+                            </button>
+                        </span>
                     </div>
                 </div>
                 <?php

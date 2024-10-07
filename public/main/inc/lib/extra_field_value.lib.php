@@ -291,28 +291,22 @@ class ExtraFieldValue extends Model
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
-                    $cleanedName = api_replace_dangerous_char($value['name']);
-                    $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
+                    if (isset($value['name']) && !empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
+                        $cleanedName = api_replace_dangerous_char($value['name']);
+                        $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
 
-                    if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
                         $mimeType = mime_content_type($value['tmp_name']);
                         $file = new UploadedFile($value['tmp_name'], $fileName, $mimeType, null, true);
                         $asset = (new Asset())
                             ->setCategory(Asset::EXTRA_FIELD)
                             ->setTitle($fileName)
-                            ->setFile($file)
-                        ;
+                            ->setFile($file);
+
                         $em->persist($asset);
                         $em->flush();
                         $assetId = $asset->getId();
 
                         if ($assetId) {
-                            /*$new_params = [
-                                'item_id' => $params['item_id'],
-                                'field_id' => $extraFieldInfo['id'],
-                                'value' => $assetId,
-                                'asset_id' => $assetId,
-                            ];*/
                             $field = Container::getExtraFieldRepository()->find($extraFieldInfo['id']);
                             $extraFieldValues = (new ExtraFieldValues())
                                 ->setItemId((int) $params['item_id'])
@@ -323,7 +317,6 @@ class ExtraFieldValue extends Model
                             ;
                             $em->persist($extraFieldValues);
                             $em->flush();
-                            //$this->save($new_params);
                         }
                     }
                     break;

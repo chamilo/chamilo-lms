@@ -355,9 +355,9 @@ class ScheduledAnnouncement extends Model
                             if (!empty($sessionInfo) && !empty($courseInfo)) {
                                 $progress = Tracking::get_avg_student_progress(
                                     $user['user_id'],
-                                    $courseInfo['code'],
+                                    api_get_course_entity($courseInfo['real_id']),
                                     [],
-                                    $sessionId
+                                    api_get_session_entity($sessionId)
                                 );
                             }
 

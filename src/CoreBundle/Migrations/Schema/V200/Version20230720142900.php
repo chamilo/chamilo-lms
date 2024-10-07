@@ -13,7 +13,7 @@ use Doctrine\DBAL\Schema\Schema;
 
 use const PASSWORD_DEFAULT;
 
-class Version20240310160200 extends AbstractMigrationChamilo
+class Version20230720142900 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
@@ -24,6 +24,16 @@ class Version20240310160200 extends AbstractMigrationChamilo
     {
         $repo = $this->container->get(UserRepository::class);
 
+        // Check if fallback user already exists
+        $existingFallbackUser = $repo->findOneBy(['username' => 'fallback_user']);
+
+        if ($existingFallbackUser) {
+            // User already exists, no need to create it again
+            error_log('Fallback user already exists: ' . $existingFallbackUser->getFullname());
+            return;
+        }
+
+        // Create fallback user if not exists
         $plainPassword = 'fallback_user';
         $encodedPassword = password_hash($plainPassword, PASSWORD_DEFAULT);
 
@@ -43,9 +53,11 @@ class Version20240310160200 extends AbstractMigrationChamilo
             ->setActive(User::SOFT_DELETED)
             ->setTimezone('UTC')
         ;
+
+        $this->entityManager->persist($fallbackUser);
         $this->entityManager->flush();
 
-        error_log($fallbackUser->getFullname());
+        error_log('Fallback user created: ' . $fallbackUser->getFullname());
 
         $repo->updateUser($fallbackUser);
     }

@@ -81,6 +81,19 @@ class CGroupCategory extends AbstractResource implements ResourceInterface, Stri
     #[ORM\Column(name: 'only_me', type: 'boolean', options: ['default' => 0])]
     protected bool $onlyMe = false;
 
+    #[ORM\ManyToOne(targetEntity: CPeerAssessment::class)]
+    #[ORM\JoinColumn(name: 'peer_assessment', referencedColumnName: 'id', nullable: true)]
+    protected ?CPeerAssessment $peerAssessment = null;
+
+    #[ORM\Column(name: 'allow_coach_change_options_groups', type: 'boolean', options: ['default' => 0])]
+    protected bool $allowCoachChangeOptionsGroups = false;
+
+    #[ORM\Column(name: 'allow_change_group_name', type: 'integer', nullable: true, options: ['default' => 1])]
+    protected ?int $allowChangeGroupName = 1;
+
+    #[ORM\Column(name: 'allow_autogroup', type: 'boolean', options: ['default' => 0])]
+    protected bool $allowAutogroup = false;
+
     public function __construct()
     {
         $this->maxStudent = 0;
@@ -375,6 +388,54 @@ class CGroupCategory extends AbstractResource implements ResourceInterface, Stri
     public function setOnlyMe(bool $onlyMe): self
     {
         $this->onlyMe = $onlyMe;
+
+        return $this;
+    }
+
+    public function getPeerAssessment(): ?CPeerAssessment
+    {
+        return $this->peerAssessment;
+    }
+
+    public function setPeerAssessment(?CPeerAssessment $peerAssessment): self
+    {
+        $this->peerAssessment = $peerAssessment;
+
+        return $this;
+    }
+
+    public function getAllowCoachChangeOptionsGroups(): bool
+    {
+        return $this->allowCoachChangeOptionsGroups;
+    }
+
+    public function setAllowCoachChangeOptionsGroups(bool $allowCoachChangeOptionsGroups): self
+    {
+        $this->allowCoachChangeOptionsGroups = $allowCoachChangeOptionsGroups;
+
+        return $this;
+    }
+
+    public function getAllowChangeGroupName(): ?int
+    {
+        return $this->allowChangeGroupName;
+    }
+
+    public function setAllowChangeGroupName(?int $allowChangeGroupName): self
+    {
+        $this->allowChangeGroupName = $allowChangeGroupName;
+
+        return $this;
+    }
+
+    public function getAllowAutogroup(): bool
+    {
+        return $this->allowAutogroup;
+    }
+
+    public function setAllowAutogroup(bool $allowAutogroup): self
+    {
+        $this->allowAutogroup = $allowAutogroup;
 
         return $this;
     }

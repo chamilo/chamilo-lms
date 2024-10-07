@@ -232,7 +232,11 @@ final class Version20241001155300 extends AbstractMigrationChamilo
             ADD IF NOT EXISTS min_student INT DEFAULT NULL,
             ADD IF NOT EXISTS begin_inscription_date DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)',
             ADD IF NOT EXISTS end_inscription_date DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)',
-            ADD IF NOT EXISTS only_me TINYINT(1) DEFAULT 0 NOT NULL
+            ADD IF NOT EXISTS only_me TINYINT(1) DEFAULT 0 NOT NULL,
+            ADD COLUMN peer_assessment INT (11) DEFAULT '0',
+            ADD COLUMN allow_coach_change_options_groups TINYINT(1) DEFAULT 0 NOT NULL AFTER peer_assessment,
+            ADD COLUMN allow_change_group_name INT(11) DEFAULT 1 NULL AFTER allow_coach_change_options_groups,
+            ADD COLUMN allow_autogroup TINYINT(1) DEFAULT 0 NOT NULL AFTER allow_change_group_name
         ");
 
         $this->addSql("
@@ -247,6 +251,16 @@ final class Version20241001155300 extends AbstractMigrationChamilo
             ADD IF NOT EXISTS start_date DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)',
             ADD IF NOT EXISTS end_date DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)',
             ADD IF NOT EXISTS is_open_without_date TINYINT(1) DEFAULT 0 NOT NULL
+        ");
+
+        $this->addSql("
+            ALTER TABLE c_group_rel_user
+            ADD COLUMN ready_autogroup TINYINT(1) NOT NULL AFTER role
+        ");
+
+        $this->addSql("
+            ALTER TABLE c_student_publication
+            ADD COLUMN group_category_id INT DEFAULT 0 NULL AFTER post_group_id
         ");
 
         $this->addSql("
@@ -303,11 +317,21 @@ final class Version20241001155300 extends AbstractMigrationChamilo
 
         $this->addSql("
             ALTER TABLE c_group_category
-            DROP IF EXISTS min_student,
-            DROP IF EXISTS begin_inscription_date,
-            DROP IF EXISTS end_inscription_date,
-            DROP IF EXISTS only_me
+            DROP COLUMN min_student,
+            DROP COLUMN begin_inscription_date,
+            DROP COLUMN end_inscription_date,
+            DROP COLUMN only_me,
+            DROP COLUMN peer_assessment,
+            DROP COLUMN allow_coach_change_options_groups,
+            DROP COLUMN allow_change_group_name,
+            DROP COLUMN allow_autogroup
         ");
+
+        $this->addSql("
+            ALTER TABLE c_group_rel_user
+            DROP COLUMN ready_autogroup
+        ");
+
 
         $this->addSql("
             ALTER TABLE c_lp

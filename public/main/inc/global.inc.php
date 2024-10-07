@@ -46,19 +46,21 @@ if ($isCli) {
     }
 
     $container = $kernel->getContainer();
+    Container::setContainer($container);
+    $session = Container::getLegacyHelper()->getSession();
+    $request = Request::create('/');
+    $request->setSession($session);
+    $container->get('request_stack')->push($request);
+    Container::setLegacyServices($container);
     $router = $container->get('router');
     $context = $router->getContext();
     $router->setContext($context);
-    Database::setManager($container->get('doctrine.orm.entity_manager'));
 
     $cliOptions = getopt('', ['url:']);
     if (!empty($cliOptions['url'])) {
         $baseUrl = $cliOptions['url'];
         $context->setBaseUrl($baseUrl);
     }
-
-    echo "CLI mode: EntityManager initialized.\n";
-
 } else {
     $kernel = new Chamilo\Kernel($env, $debug);
     // Loading Request from Sonata. In order to use Sonata Pages Bundle.

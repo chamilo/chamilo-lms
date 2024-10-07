@@ -1,6 +1,5 @@
 import makeService from "./api"
 import baseService from "./baseService"
-import axios from "axios"
 
 // MIGRATION IN PROGRESS. makeService is deprecated
 // if you use some method in this service you should try to refactor it with new baseService defining async functions
@@ -23,18 +22,7 @@ async function countUnreadMessages(params) {
   return await baseService.get(`/api/messages?${queryParams}`)
 }
 
-async function deleteMessageForUser(messageId, userId) {
-  return await axios.patch(`/api/messages/${messageId}/delete-for-user`,
-    { userId: userId },
-    {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-}
-
 export const messageService = {
   create,
   countUnreadMessages,
-  deleteMessageForUser,
-};
+}

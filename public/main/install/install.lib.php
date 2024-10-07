@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Tool\ToolChain;
+use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
@@ -16,6 +17,9 @@ use Doctrine\Migrations\Query\Query;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
 use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 
 /*
  * Chamilo LMS
@@ -306,10 +310,19 @@ function get_config_param_from_db($param = '')
 {
     $param = Database::escape_string($param);
 
-    if (false !== ($res = Database::query("SELECT * FROM settings WHERE variable = '$param'"))) {
+    $schemaManager = Database::getConnection()->createSchemaManager();
+
+    if ($schemaManager->tablesExist('settings_current')) {
+        $query = "SELECT * FROM settings_current WHERE variable = '$param'";
+    } elseif ($schemaManager->tablesExist('settings')) {
+        $query = "SELECT * FROM settings WHERE variable = '$param'";
+    } else {
+        return null;
+    }
+
+    if (false !== ($res = Database::query($query))) {
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
-
             return $row['selected_value'];
         }
     }
@@ -688,6 +701,10 @@ function display_requirements(
     $pathPermissions[] = [
         'item' => $basePath.'var/',
         'status' => is_writable($basePath.'var'),
+    ];
+    $pathPermissions[] = [
+        'item' => $basePath.'config/',
+        'status' => is_writable($basePath.'config'),
     ];
     $pathPermissions[] = [
         'item' => $basePath.'.env',
@@ -1703,6 +1720,10 @@ function checkCanCreateFile(string $file): bool
  */
 function isUpdateAvailable(): bool
 {
+    $dotenv = new Dotenv();
+    $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
+    $dotenv->loadEnv($envFile);
+
     // Check if APP_INSTALLED is set and equals '1'
     if (isset($_ENV['APP_INSTALLED']) && $_ENV['APP_INSTALLED'] === '1') {
         return true;
@@ -1712,91 +1733,196 @@ function isUpdateAvailable(): bool
     return false;
 }
 
+/**
+ * Check the current migration status.
+ *
+ * This function calculates the progress of the database migration by comparing the number of executed migrations
+ * with the total number of migration files available in the system. It also retrieves the latest executed migration version.
+ *
+ * @return array {
+ *     An array containing the following keys:
+ *
+ *     @type int    $progress_percentage The percentage of migrations that have been executed.
+ *     @type string $current_migration   The version of the last executed migration, or null if no migrations have been executed.
+ * }
+ */
 function checkMigrationStatus(): array
 {
-    $resultStatus = [
-        'status' => false,
-        'message' => 'Error executing migrations status command.',
-        'current_migration' => null,
-        'progress_percentage' => 0
-    ];
+    Database::setManager(initializeEntityManager());
+    $manager = Database::getManager();
+    $connection = $manager->getConnection();
 
+    $migrationFiles = glob(__DIR__ . '/../../../src/CoreBundle/Migrations/Schema/V200/Version*.php');
+    $totalMigrations = count($migrationFiles);
+
+    $executedMigrations = $connection->createQueryBuilder()
+        ->select('COUNT(*) as count')
+        ->from('version')
+        ->execute()
+        ->fetchOne();
+
+    $progress_percentage = 0;
+    if ($totalMigrations > 0) {
+        $progress_percentage = ($executedMigrations / $totalMigrations) * 100;
+    }
+
+    $current_migration = $connection->createQueryBuilder()
+        ->select('version')
+        ->from('version')
+        ->orderBy('executed_at', 'DESC')
+        ->setMaxResults(1)
+        ->execute()
+        ->fetchOne();
+
+    return [
+        'progress_percentage' => ceil($progress_percentage),
+        'current_migration' => $current_migration,
+    ];
+}
+
+/**
+ * Initializes the EntityManager by loading environment variables and connecting to the database.
+ *
+ * @return EntityManager The initialized EntityManager
+ */
+function initializeEntityManager(): EntityManager
+{
     $dotenv = new Dotenv();
     $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
     $dotenv->loadEnv($envFile);
 
+    connectToDatabase(
+        $_ENV['DATABASE_HOST'],
+        $_ENV['DATABASE_USER'],
+        $_ENV['DATABASE_PASSWORD'],
+        $_ENV['DATABASE_NAME'],
+        $_ENV['DATABASE_PORT']
+    );
+
+    $manager = Database::getManager();
+
+    return $manager;
+}
+
+/**
+ * Checks if the version table in the database is valid.
+ *
+ * @param Connection $connection The database connection
+ *
+ * @return bool True if the version table is valid, false otherwise
+ */
+function isVersionTableValid($connection): bool
+{
+    $schema = $connection->createSchemaManager();
+    if ($schema->tablesExist('version')) {
+        $columns = $schema->listTableColumns('version');
+
+        $requiredColumns = ['version', 'executed_at', 'execution_time'];
+        foreach ($requiredColumns as $column) {
+            if (!isset($columns[$column])) {
+                return false;
+            }
+        }
+
+        $query = $connection->createQueryBuilder()
+            ->select('*')
+            ->from('version')
+            ->orderBy('executed_at', 'DESC')
+            ->setMaxResults(1);
+        $result = $query->execute()->fetchAll();
+
+        if (!empty($result)) {
+            $latestMigrationDate = new DateTime($result[0]['executed_at']);
+            $now = new DateTime();
+
+            if ($latestMigrationDate->diff($now)->days < 1) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Retrieves the last executed migration version from the database.
+ *
+ * @param Connection $connection The database connection
+ *
+ * @return string The last executed migration version
+ */
+function getLastExecutedMigration(Connection $connection): string
+{
+    $query = $connection->createQueryBuilder()
+        ->select('version')
+        ->from('version')
+        ->orderBy('executed_at', 'DESC')
+        ->setMaxResults(1);
+    $result = $query->execute()->fetchAssociative();
+    return $result['version'] ?? '';
+}
+
+
+/**
+ * Executes the database migration and returns the status.
+ *
+ * @return array The result status of the migration
+ */
+function executeMigration(): array
+{
+    $resultStatus = [
+        'status' => false,
+        'message' => 'Error executing migration.',
+        'progress_percentage' => 0,
+        'current_migration' => '',
+    ];
+
+    Database::setManager(initializeEntityManager());
+    $manager = Database::getManager();
+    $connection = $manager->getConnection();
+
     try {
-        connectToDatabase(
-            $_ENV['DATABASE_HOST'],
-            $_ENV['DATABASE_USER'],
-            $_ENV['DATABASE_PASSWORD'],
-            $_ENV['DATABASE_NAME'],
-            $_ENV['DATABASE_PORT']
-        );
-
-        $manager = Database::getManager();
-
-        $connection = $manager->getConnection();
-
-        // Loading migration configuration.
-        $config = new PhpFile('./migrations.php');
+        $config = new PhpFile(api_get_path(SYS_CODE_PATH) . 'install/migrations.php');
         $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
 
-        // Check if old "version" table exists from 1.11.x, use new version.
-        $schema = $manager->getConnection()->createSchemaManager();
-        $hasOldVersionTable = false;
-        $anyVersionYet = !$schema->tablesExist('version');
-        $isVersionEmpty = false;
-        $executedMigrations = 0;
-        $currentMigration = '';
-        if ($schema->tablesExist('version')) {
-            $columns = $schema->listTableColumns('version');
-            if (in_array('id', array_keys($columns), true)) {
-                $hasOldVersionTable = true;
-            }
-            $query = $connection->createQueryBuilder()
-                ->select('*')
-                ->from('version');
-            $result = $query->execute();
-            $executedMigrations = $result->rowCount();
-            $isVersionEmpty = ($executedMigrations == 0);
-            if (!$isVersionEmpty) {
-                $query = $connection->createQueryBuilder()
-                    ->select('*')
-                    ->from('version')
-                    ->orderBy('executed_at', 'DESC')
-                    ->setMaxResults(1);
-                $result = $query->execute()->fetch();
-                $currentMigration = $result['version'];
-            }
+        if (!isVersionTableValid($connection)) {
+            $schema = $connection->createSchemaManager();
+            $schema->dropTable('version');
         }
 
-        if (!$hasOldVersionTable) {
-            // Loading migrations.
-            $migratorConfigurationFactory = $dependency->getConsoleInputMigratorConfigurationFactory();
-            $result = '';
-            $input = new Symfony\Component\Console\Input\StringInput($result);
-            $planCalculator = $dependency->getMigrationPlanCalculator();
-            $migrations = $planCalculator->getMigrations();
-            $totalMigrations = $migrations->count();
-            $lastVersion = $migrations->getLast();
+        $dependency->getMetadataStorage()->ensureInitialized();
 
-            if ($anyVersionYet || $isVersionEmpty) {
-                $currentMigration = '';
-                $executedMigrations = 0;
-            }
+        $env = $_SERVER['APP_ENV'] ?? 'dev';
+        $kernel = new Chamilo\Kernel($env, false);
+        $kernel->boot();
 
-            // Calculate progress percentage
-            $progressPercentage = ceil(($executedMigrations / $totalMigrations) * 100);
-            $resultStatus = [
-                'status' => ($progressPercentage >= 100),
-                'message' => ($progressPercentage >= 100) ? 'All migrations have been executed.' : 'Migrations are pending.',
-                'current_migration' => ($progressPercentage >= 100) ? null : $currentMigration,
-                'progress_percentage' => $progressPercentage
-            ];
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'doctrine:migrations:migrate',
+            '--no-interaction' => true,
+        ]);
+
+        $output = new BufferedOutput();
+        $application->run($input, $output);
+
+        $result = $output->fetch();
+
+        if (strpos($result, '[OK] Successfully migrated to version') !== false) {
+            $resultStatus['status'] = true;
+            $resultStatus['message'] = 'Migration completed successfully.';
+            $resultStatus['progress_percentage'] = 100;
+        } else {
+            $resultStatus['message'] = 'Migration completed with errors.';
+            $resultStatus['progress_percentage'] = 0;
         }
-    } catch (Exception) {
-        return $resultStatus;
+
+        $resultStatus['current_migration'] = getLastExecutedMigration($connection);
+
+    } catch (Exception $e) {
+        $resultStatus['current_migration'] = getLastExecutedMigration($connection);
+        $resultStatus['message'] = 'Migration failed: ' . $e->getMessage();
     }
 
     return $resultStatus;

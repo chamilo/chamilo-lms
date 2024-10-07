@@ -23,7 +23,7 @@ $validated = false;
 if (
 in_array(
     $report,
-    ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date']
+    ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date', 'new_user_registrations']
 )
 ) {
     $htmlHeadXtra[] = api_get_build_js('libs/chartjs/chart.js');
@@ -349,6 +349,7 @@ $tools = [
         'report=zombies' => get_lang('Zombies'),
         'report=users_active' => get_lang('Users statistics'),
         'report=users_online' => get_lang('Users online'),
+        'report=new_user_registrations' => get_lang('New users registrations'),
     ],
     get_lang('System') => [
         'report=activities' => get_lang('ImportantActivities'),
@@ -486,10 +487,10 @@ switch ($report) {
 
             $content .= $table->toHtml();
 
-            $content .= '<div class="row">';
-            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas1_title"></h4><div id="canvas1_table"></div></div>';
-            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas2_title"></h4><div id="canvas2_table"></div></div>';
-            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
+            $content .= '<div class="grid grid-cols-3 gap-4">';
+            $content .= '<div><h4 class="text-center" id="canvas1_title"></h4><div id="canvas1_table"></div></div>';
+            $content .= '<div><h4 class="text-center" id="canvas2_title"></h4><div id="canvas2_table"></div></div>';
+            $content .= '<div><h4 class="text-center" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
             $content .= '</div>';
 
             $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
@@ -518,15 +519,14 @@ switch ($report) {
 
             $content .= $tableCourse->toHtml();
 
-            $content .= '<div class="row">';
-            $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-            $content .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-            $content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
-
+            $content .= '<div class="grid grid-cols-3 gap-4">';
+            $content .= '<div><canvas id="canvas1" class="mb-5"></canvas></div>';
+            $content .= '<div><canvas id="canvas2" class="mb-5"></canvas></div>';
+            $content .= '<div><canvas id="canvas3" class="mb-5"></canvas></div>';
             $content .= '</div>';
 
-            $content .= '<div class="row">';
-            $content .= '<div class="col-md-12"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '<div class="grid grid-cols-1">';
+            $content .= '<div><canvas id="canvas4" class="mb-5"></canvas></div>';
             $content .= '</div>';
         }
 
@@ -720,24 +720,24 @@ switch ($report) {
             $startDate = $values['daterange_start'];
             $endDate = $values['daterange_end'];
 
-            $graph = '<div class="row">';
-            $graph .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-            $graph .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-            $graph .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+            $graph = '<div class="grid grid-cols-3 gap-4">';
+            $graph .= '<div><canvas id="canvas1" class="mb-5 mt-5 mx-auto"></canvas></div>';
+            $graph .= '<div><canvas id="canvas2" class="mb-5 mt-5 mx-auto"></canvas></div>';
+            $graph .= '<div><canvas id="canvas3" class="mb-5 mt-5 mx-auto"></canvas></div>';
             $graph .= '</div>';
 
-            $graph .= '<div class="row">';
-            $graph .= '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
-            $graph .= '<div class="col-md-6"><canvas id="canvas8" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="grid grid-cols-2 gap-4">';
+            $graph .= '<div><canvas id="canvas4" class="mb-5 mt-5 mx-auto"></canvas></div>';
+            $graph .= '<div><canvas id="canvas8" class="mb-5 mt-5 mx-auto"></canvas></div>';
             $graph .= '</div>';
 
-            $graph .= '<div class="row">';
-            $graph .= '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
-            $graph .= '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="grid grid-cols-2 gap-4">';
+            $graph .= '<div><canvas id="canvas5" class="mb-5 mt-5 mx-auto"></canvas></div>';
+            $graph .= '<div><canvas id="canvas6" class="mb-5 mt-5 mx-auto"></canvas></div>';
             $graph .= '</div>';
 
-            $graph .= '<div class="row">';
-            $graph .= '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="grid grid-cols-2 gap-4">';
+            $graph .= '<div><canvas id="canvas7" class="mb-5 mt-5 mx-auto"></canvas></div>';
             $graph .= '</div>';
 
             $conditions = [];
@@ -769,7 +769,7 @@ switch ($report) {
 
             $table->actionButtons = [
                 'export' => [
-                    'label' => get_lang('ExportAsXLS'),
+                    'label' => get_lang('Export to XLS'),
                     'icon' => Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET,'ch-tool-icon'),
                 ],
             ];
@@ -842,7 +842,7 @@ switch ($report) {
 
                 $userLanguage = '';
                 if (!empty($user['locale'])) {
-                    $userLanguage = $languages[$user['locale']];
+                    $userLanguage = $languages[$user['locale']] ?? 'en';
                 }
 
                 $languageTarget = '';
@@ -931,7 +931,7 @@ switch ($report) {
             );
 
             $scoreDisplay = ScoreDisplay::instance();
-            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table stats_table']);
             $headers = [
                 get_lang('Name'),
                 get_lang('Count'),
@@ -1446,13 +1446,150 @@ switch ($report) {
 
         </div>';
         break;
-    case 'users':
-        $content .= '<div class="row">';
-        $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
-        $content .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
-        $content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+    case 'new_user_registrations':
+        $form = new FormValidator('new_user_registrations', 'get', api_get_self());
+        $form->addDateRangePicker('daterange', get_lang('Date range'), true, [
+            'format' => 'YYYY-MM-DD',
+            'timePicker' => 'false',
+            'validate_format' => 'Y-m-d'
+        ]);
+        $form->addHidden('report', 'new_user_registrations');
+        $form->addButtonSearch(get_lang('Search'));
 
+        $validated = $form->validate() || isset($_REQUEST['daterange']);
+        $chartContent = '';
+        $chartCreatorContent = '';
+        $textChart = '';
+        if ($validated) {
+            $values = $form->getSubmitValues();
+            $dateStart = Security::remove_XSS($values['daterange_start']);
+            $dateEnd = Security::remove_XSS($values['daterange_end']);
+
+            $all = Statistics::initializeDateRangeArray($dateStart, $dateEnd);
+            $registrations = Statistics::getNewUserRegistrations($dateStart, $dateEnd);
+
+            if (empty($registrations)) {
+                $content .= '<div class="alert alert-info">' . get_lang('No data available for the selected date range') . '</div>';
+            } else {
+                if (Statistics::isMoreThanAMonth($dateStart, $dateEnd)) {
+                    $textChart = get_lang('User registrations by month');
+                    $all = Statistics::groupByMonth($registrations);
+                    $chartData = Statistics::buildJsChartData($all, get_lang('User Registrations by Month'));
+
+                    // Allow clicks only when showing by month
+                    $onClickHandler = '
+                    var activePoints = chart.getElementsAtEventForMode(evt, "nearest", { intersect: true }, false);
+                    if (activePoints.length > 0) {
+                        var firstPoint = activePoints[0];
+                        var label = chart.data.labels[firstPoint.index];
+                        var yearMonth = label.split("-");
+                        var year = yearMonth[0];
+                        var month = yearMonth[1];
+                        $.ajax({
+                            url: "/main/inc/ajax/statistics.ajax.php?a=get_user_registration_by_day",
+                            type: "POST",
+                            data: { year: year, month: month },
+                            success: function(response) {
+                                var dailyData = JSON.parse(response);
+                                chart.data.labels = dailyData.labels;
+                                chart.data.datasets[0].data = dailyData.data;
+                                chart.data.datasets[0].label = "User Registrations for " + year + "-" + month;
+                                chart.update();
+
+                                $("#backButton").show();
+                            }
+                        });
+                    }';
+                } else {
+                    $textChart = get_lang('User registrations by days');
+                    foreach ($registrations as $registration) {
+                        $date = $registration['date'];
+                        if (isset($all[$date])) {
+                            $all[$date] += $registration['count'];
+                        }
+                    }
+                    $chartData = Statistics::buildJsChartData($all, $textChart);
+                    $onClickHandler = '';
+                }
+
+                $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                    $chartData['chart'],
+                    'bar',
+                    'title: { text: "'.$textChart.'", display: true },
+                            scales: {
+                                x: { beginAtZero: true },
+                                y: { barPercentage: 0.4, categoryPercentage: 0.5, barThickness: 10, maxBarThickness: 15 }
+                            },
+                            layout: {
+                                padding: { left: 10, right: 10, top: 10, bottom: 10 }
+                            }',
+                    'user_registration_chart',
+                    true,
+                    $onClickHandler,
+                    '
+                            $("#backButton").click(function() {
+                                $.ajax({
+                                    url: "/main/inc/ajax/statistics.ajax.php?a=get_user_registration_by_month",
+                                    type: "POST",
+                                    data: { date_start: "'.$dateStart.'", date_end: "'.$dateEnd.'" },
+                                    success: function(response) {
+                                        var monthlyData = JSON.parse(response);
+                                        chart.data.labels = monthlyData.labels;
+                                        chart.data.datasets[0].data = monthlyData.data;
+                                        chart.data.datasets[0].label = "'.get_lang('User Registrations by month').'";
+                                        chart.update();
+                                        $("#backButton").hide();
+                                    }
+                                });
+                            });
+                        '
+                );
+
+                $chartContent .= '<canvas id="user_registration_chart"></canvas>';
+                $chartContent .= '<button id="backButton" style="display:none;" class="btn btn--info">'.get_lang('Back to Months').'</button>';
+
+                $creators = Statistics::getUserRegistrationsByCreator($dateStart, $dateEnd);
+                if (!empty($creators)) {
+                    $chartCreatorContent = '<hr />';
+                    $creatorLabels = [];
+                    $creatorData = [];
+                    foreach ($creators as $creator) {
+                        $creatorLabels[] = $creator['name'];
+                        $creatorData[] = $creator['count'];
+                    }
+
+                    $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                        ['labels' => $creatorLabels, 'datasets' => [['label' => get_lang('Registrations by Creator'), 'data' => $creatorData]]],
+                        'pie',
+                        'title: { text: "'.get_lang('User Registrations by Creator').'", display: true },
+                        legend: { position: "top" },
+                        layout: {
+                            padding: { left: 10, right: 10, top: 10, bottom: 10 }
+                        }',
+                        'user_registration_by_creator_chart',
+                        false,
+                        '',
+                        '',
+                        ['width' => 700, 'height' => 700]
+                    );
+
+                    $chartCreatorContent .= '<canvas id="user_registration_by_creator_chart"></canvas>';
+            }
+        }
+    }
+
+    $content .= $form->returnForm();
+    $content .= $chartContent;
+    $content .= $chartCreatorContent;
+
+    break;
+    case 'users':
+        $content .= '<div class="grid grid-cols-3 gap-4">';
+        $content .= '<div><canvas id="canvas1" class="mb-5"></canvas></div>';
+        $content .= '<div><canvas id="canvas2" class="mb-5"></canvas></div>';
+        $content .= '<div><canvas id="canvas3" class="mb-5"></canvas></div>';
         $content .= '</div>';
+
         // total amount of users
         $teachers = $students = [];
         $countInvisible = isset($_GET['count_invisible_courses']) ? intval($_GET['count_invisible_courses']) : null;

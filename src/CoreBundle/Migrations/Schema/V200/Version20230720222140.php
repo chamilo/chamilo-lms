@@ -27,6 +27,7 @@ final class Version20230720222140 extends AbstractMigrationChamilo
 
         $userRepo = $this->container->get(UserRepository::class);
         $personalRepo = $this->container->get(PersonalFileRepository::class);
+        $fallbackUser = $userRepo->findOneBy(['status' => User::ROLE_FALLBACK], ['id' => 'ASC']);
 
         $q = $this->entityManager->createQuery('SELECT s FROM Chamilo\CoreBundle\Entity\SocialPost s');
 
@@ -53,13 +54,18 @@ final class Version20230720222140 extends AbstractMigrationChamilo
                         $filename = $matches[3];
 
                         // Get the full file path
-                        $filePath = $rootPath."/app/upload/users/{$folderId}/{$userId}/my_files/{$filename}";
+                        $filePath = $this->getUpdateRootPath()."/app/upload/users/{$folderId}/{$userId}/my_files/{$filename}";
 
                         // Check if the path corresponds to a file
                         if (is_file($filePath)) {
                             // Output the user id, folder id, and filename
                             error_log('User ID: '.$userId.', Folder ID: '.$folderId.', Filename: '.$filename);
                             $user = $userRepo->find($userId);
+
+                            if (!$user) {
+                                $user = $fallbackUser;
+                            }
+
                             $personalFile = $personalRepo->getResourceByCreatorFromTitle(
                                 $filename,
                                 $user,

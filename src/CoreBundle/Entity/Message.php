@@ -14,9 +14,9 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Entity\Listener\MessageListener;
 use Chamilo\CoreBundle\Filter\SearchOrFilter;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\State\MessageByGroupStateProvider;
@@ -35,6 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['group_id'], name: 'idx_message_group')]
 #[ORM\Index(columns: ['msg_type'], name: 'idx_message_type')]
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
+#[ORM\EntityListeners([MessageListener::class])]
 #[ApiResource(
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
@@ -52,13 +53,6 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: MessageByGroupStateProvider::class
         ),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
-        new Patch(
-            uriTemplate: '/messages/{id}/delete-for-user',
-            inputFormats: ['json' => ['application/json']],
-            security: "is_granted('ROLE_USER')",
-            output: false,
-            processor: MessageProcessor::class,
-        ),
     ],
     normalizationContext: [
         'groups' => ['message:read'],
@@ -200,6 +194,13 @@ class Message
         return $this->receivers;
     }
 
+    public function setReceiversFromArray(array $receivers): self
+    {
+        $this->receivers = new ArrayCollection($receivers);
+
+        return $this;
+    }
+
     #[Groups(['message:read'])]
     public function getReceiversTo(): array
     {
@@ -216,6 +217,17 @@ class Message
         return $this->receivers
             ->filter(
                 fn (MessageRelUser $messageRelUser) => MessageRelUser::TYPE_CC === $messageRelUser->getReceiverType()
+            )
+            ->getValues()
+        ;
+    }
+
+    #[Groups(['message:read'])]
+    public function getReceiversSender(): array
+    {
+        return $this->receivers
+            ->filter(
+                fn (MessageRelUser $messageRelUser) => MessageRelUser::TYPE_SENDER === $messageRelUser->getReceiverType()
             )
             ->getValues()
         ;

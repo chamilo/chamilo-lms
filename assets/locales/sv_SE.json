@@ -432,5 +432,11 @@
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)": "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)",
     "Chamilo is free software distributed under the GNU General Public licence (GPL).": "Chamilo \u00e4r ett fritt program distribuerat under GNU General Public license (GPL)",
     "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.": "\t\t\t\tInstallationsscriptet kommer att skapa huvuddatabasen f\u00f6r claroline. Var sn\u00e4ll och notera att Claroline \t\t\t\tbeh\u00f6ver skapa m\u00e5nga databaser. Om du bara \u00e4r till\u00e5ten f\u00f6r en  \t\t\t\tDB f\u00f6r din webbsajt av din V\u00e4rdservice, kommer Claroline inte att fungera.",
-    "The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.": "Installationsprogrammet kommer ta bort alla tabeller i den valda databasen. Vi rekommenderar verkligen att du g\u00f6r en fullst\u00e4ndig s\u00e4kerhetskopia av dem innan du bekr\u00e4ftar detta sista installationssteg, annars f\u00f6rlorar du alla data i tabellerna."
+    "The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.": "Installationsprogrammet kommer ta bort alla tabeller i den valda databasen. Vi rekommenderar verkligen att du g\u00f6r en fullst\u00e4ndig s\u00e4kerhetskopia av dem innan du bekr\u00e4ftar detta sista installationssteg, annars f\u00f6rlorar du alla data i tabellerna.",
+    "Continue with %s": "Continue with {0}",
+    "Change Password": "Change Password",
+    "All Messages": "All Messages",
+    "Promoted Messages": "Promoted Messages",
+    "%s's picture": "{0}'s picture",
+    "+%d": "+{0}"
 }

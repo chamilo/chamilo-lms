@@ -1,7 +1,7 @@
 .p-skeleton {
-  @apply bg-gray-30 rounded-lg w-full;
+  @apply overflow-hidden bg-gray-25 rounded-lg animate-pulse;
 
-  &:after {
-    @apply bg-gradient-to-r from-transparent via-gray-15 to-transparent;
+  &-circle {
+    @apply rounded-full;
   }
 }

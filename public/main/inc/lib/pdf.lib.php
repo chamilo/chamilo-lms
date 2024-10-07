@@ -137,6 +137,10 @@ class PDF
             }
         }
 
+        if (!empty($this->params['session_info']['title'])) {
+            $this->params['session_info']['title'] = preg_replace('/[\x{2600}-\x{26FF}]/u', '', $this->params['session_info']['title']);
+        }
+
         $tpl->assign('pdf_course', $this->params['course_code']);
         $tpl->assign('pdf_course_info', $this->params['course_info']);
         $tpl->assign('pdf_session_info', $this->params['session_info']);
@@ -413,7 +417,7 @@ class PDF
         $basicStyles = [];
 
         $doc = new DOMDocument();
-        @$doc->loadHTML($document_html);
+        @$doc->loadHTML('<?xml encoding="UTF-8">' . $document_html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
         $linksToRemove = [];
 
@@ -476,7 +480,7 @@ class PDF
             $document_html
         );
         $document_html = str_replace(api_get_path(WEB_ARCHIVE_PATH), api_get_path(SYS_ARCHIVE_PATH), $document_html);
-
+        $document_html = str_replace('<?xml encoding="UTF-8">', '', $document_html);
         // The library mPDF expects UTF-8 encoded input data.
         api_set_encoding_html($document_html, 'UTF-8');
         // At the moment the title is retrieved from the html document itself.

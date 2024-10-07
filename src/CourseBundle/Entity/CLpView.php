@@ -51,6 +51,11 @@ class CLpView
     #[ORM\Column(name: 'progress', type: 'integer', nullable: true)]
     protected ?int $progress = null;
 
+    public function getIid(): ?int
+    {
+        return $this->iid;
+    }
+
     public function setViewCount(int $viewCount): self
     {
         $this->viewCount = $viewCount;

@@ -24,17 +24,18 @@ final class Version20240806120000 extends AbstractMigrationChamilo
         global $_configuration;
 
         $rootPath = $this->getRootPath();
-        $oldConfigPath = $rootPath.'/app/config/configuration.php';
+        $updateRootPath = $this->getUpdateRootPath();
+        $oldConfigPath = $updateRootPath.'/app/config/configuration.php';
         if (!\in_array($oldConfigPath, get_included_files(), true)) {
             include_once $oldConfigPath;
         }
 
         // Update .env and .env.local files
         $this->updateEnvFiles($rootPath, [
-            'DB_MANAGER_ENABLED' => $_configuration['db_manager_enabled'] ? '1' : '0',
-            'SOFTWARE_NAME' => $_configuration['software_name'],
-            'SOFTWARE_URL' => $_configuration['software_url'],
-            'DENY_DELETE_USERS' => $_configuration['deny_delete_users'] ? '1' : '0',
+            'DB_MANAGER_ENABLED' => !empty($_configuration['db_manager_enabled']) ? '1' : '0',
+            'SOFTWARE_NAME' => $_configuration['software_name'] ?? '',
+            'SOFTWARE_URL' => $_configuration['software_url'] ?? '',
+            'DENY_DELETE_USERS' => !empty($_configuration['deny_delete_users']) ? '1' : '0',
             'HOSTING_TOTAL_SIZE_LIMIT' => $_configuration['hosting_total_size_limit'] ?? 0,
         ]);
 
@@ -43,18 +44,20 @@ final class Version20240806120000 extends AbstractMigrationChamilo
         $hostingLimits = ['hosting_limits' => ['urls' => []]];
 
         // Prepare hosting limits
-        foreach ($_configuration as $key => $config) {
-            if (is_numeric($key) && \is_array($config)) {
-                // Handle configurations specific to URL IDs
-                $hostingLimits['hosting_limits']['urls'][$key] = [
-                    ['hosting_limit_users' => $config['hosting_limit_users'] ?? 0],
-                    ['hosting_limit_teachers' => $config['hosting_limit_teachers'] ?? 0],
-                    ['hosting_limit_courses' => $config['hosting_limit_courses'] ?? 0],
-                    ['hosting_limit_sessions' => $config['hosting_limit_sessions'] ?? 0],
-                    ['hosting_limit_disk_space' => $config['hosting_limit_disk_space'] ?? 0],
-                    ['hosting_limit_active_courses' => $config['hosting_limit_active_courses'] ?? 0],
-                    ['hosting_total_size_limit' => $_configuration['hosting_total_size_limit'] ?? 0],
-                ];
+        if (\is_array($_configuration)) {
+            foreach ($_configuration as $key => $config) {
+                if (is_numeric($key) && \is_array($config)) {
+                    // Handle configurations specific to URL IDs
+                    $hostingLimits['hosting_limits']['urls'][$key] = [
+                        ['hosting_limit_users' => $config['hosting_limit_users'] ?? 0],
+                        ['hosting_limit_teachers' => $config['hosting_limit_teachers'] ?? 0],
+                        ['hosting_limit_courses' => $config['hosting_limit_courses'] ?? 0],
+                        ['hosting_limit_sessions' => $config['hosting_limit_sessions'] ?? 0],
+                        ['hosting_limit_disk_space' => $config['hosting_limit_disk_space'] ?? 0],
+                        ['hosting_limit_active_courses' => $config['hosting_limit_active_courses'] ?? 0],
+                        ['hosting_total_size_limit' => $_configuration['hosting_total_size_limit'] ?? 0],
+                    ];
+                }
             }
         }
 
@@ -82,7 +85,7 @@ final class Version20240806120000 extends AbstractMigrationChamilo
 
     private function updateEnvFiles(string $rootPath, array $envSettings): void
     {
-        $envFiles = [$rootPath.'/.env', $rootPath.'/.env.local'];
+        $envFiles = [$rootPath.'/.env'];
 
         foreach ($envFiles as $envFile) {
             if (file_exists($envFile)) {

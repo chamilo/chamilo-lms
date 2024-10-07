@@ -38,7 +38,7 @@ class SettingsController extends BaseController
     {
         $manager = $this->getSettingsManager();
         $formList = [];
-        $keyword = $request->get('keyword');
+        $keyword = $request->query->get('keyword');
 
         $searchForm = $this->getSearchForm();
         $searchForm->handleRequest($request);
@@ -56,6 +56,10 @@ class SettingsController extends BaseController
         $settings = [];
         if (!empty($settingsFromKeyword)) {
             foreach ($settingsFromKeyword as $category => $parameterList) {
+                if (empty($category)) {
+                    continue;
+                }
+
                 $list = [];
                 foreach ($parameterList as $parameter) {
                     $list[] = $parameter->getVariable();

@@ -121,42 +121,18 @@
       <Column selection-mode="multiple" />
       <Column :header="showingInbox ? t('From') : t('To')">
         <template #body="slotProps">
-          <div
+          <BaseAvatarList
             v-if="showingInbox && slotProps.data.sender"
-            class="flex items-center gap-2"
-          >
-            <MessageCommunicationParty
-              :username="slotProps.data.sender.username"
-              :full-name="slotProps.data.sender.fullName"
-              :profile-image-url="slotProps.data.sender.illustrationUrl"
-            />
-          </div>
+            :users="[slotProps.data.sender]"
+          />
           <div
             v-else-if="showingInbox && !slotProps.data.sender"
-            v-t="'No sender'"
+            v-text="t('No sender')"
           />
-          <div v-else-if="!showingInbox">
-            <div
-              v-for="receiverTo in slotProps.data.receiversTo"
-              :key="receiverTo['@id']"
-            >
-              <MessageCommunicationParty
-                :username="receiverTo.receiver.username"
-                :full-name="receiverTo.receiver.fullName"
-                :profile-image-url="receiverTo.receiver.illustrationUrl"
-              />
-            </div>
-            <div
-              v-for="receiverCc in slotProps.data.receiversCc"
-              :key="receiverCc['@id']"
-            >
-              <MessageCommunicationParty
-                :username="receiverCc.receiver.username"
-                :full-name="receiverCc.receiver.fullName"
-                :profile-image-url="receiverCc.receiver.illustrationUrl"
-              />
-            </div>
-          </div>
+          <BaseAvatarList
+            v-else-if="!showingInbox"
+            :users="mapReceiverMixToUsers(slotProps.data)"
+          />
         </template>
       </Column>
       <Column
@@ -211,7 +187,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useFormatDate } from "../../composables/formatDate"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
-import MessageCommunicationParty from "./MessageCommunicationParty.vue"
+import BaseAvatarList from "../../components/basecomponents/BaseAvatarList.vue"
 import BaseTag from "../../components/basecomponents/BaseTag.vue"
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
@@ -226,8 +202,8 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import InputGroup from "primevue/inputgroup"
 import InputText from "primevue/inputtext"
 import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
-import { messageService } from "../../services/message"
 import messageRelUserService from "../../services/messagereluser"
+import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 
 const route = useRoute()
 const router = useRouter()
@@ -241,6 +217,8 @@ const notification = useNotification()
 const messageRelUserStore = useMessageRelUserStore()
 
 const { abbreviatedDatetime } = useFormatDate()
+
+const { mapReceiverMixToUsers } = useMessageReceiverFormatter()
 
 const mItemsMarkAs = ref([
   {
@@ -451,30 +429,20 @@ function sortingChanged(event) {
 }
 
 function findMyReceiver(message) {
-  const receivers = [...message.receiversTo, ...message.receiversCc]
+  const receivers = [...message.receiversTo, ...message.receiversCc, ...message.receiversSender]
 
   return receivers.find(({ receiver }) => receiver["@id"] === securityStore.user["@id"])
 }
 
-function extractUserId(apiId) {
-  return apiId.split("/").pop()
-}
-
 async function deleteMessage(message) {
   try {
-    const userId = extractUserId(securityStore.user["@id"])
-    const messageId = extractUserId(message["@id"])
+    const myReceiver = findMyReceiver(message)
 
-    if (message.sender["@id"] === securityStore.user["@id"]) {
-      await messageService.deleteMessageForUser(messageId, userId)
-    } else {
-      const myReceiver = findMyReceiver(message)
-      if (myReceiver) {
-        await store.dispatch("messagereluser/del", myReceiver)
-      }
+    if (myReceiver) {
+      await store.dispatch("messagereluser/del", myReceiver)
+
+      notification.showSuccessNotification(t("Message deleted"))
     }
-
-    notification.showSuccessNotification(t("Message deleted"))
     await messageRelUserStore.findUnreadCount()
     loadMessages()
   } catch (e) {
@@ -485,7 +453,7 @@ async function deleteMessage(message) {
 function showDlgConfirmDeleteSingle({ data }) {
   confirm.require({
     header: t("Confirmation"),
-    message: t(`Are you sure you want to delete "${data.title}"?`),
+    message: t("Are you sure you want to delete %s?", [data.title]),
     accept: async () => {
       await deleteMessage(data)
     },

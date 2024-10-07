@@ -39,6 +39,12 @@ final class Version20170524110000 extends AbstractMigrationChamilo
                 'ALTER TABLE track_e_hotpotatoes CHANGE exe_name title VARCHAR(255) NOT NULL'
             );
         }
+
+        if ($schema->hasTable('fos_group')) {
+            $this->addSql(
+                'ALTER TABLE fos_group CHANGE name title VARCHAR(255) NOT NULL'
+            );
+        }
     }
 
     public function down(Schema $schema): void

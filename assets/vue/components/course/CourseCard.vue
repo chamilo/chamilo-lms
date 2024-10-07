@@ -51,14 +51,14 @@
       </div>
     </template>
     <template #footer>
-      <TeacherBar :teachers="teachers" />
+      <BaseAvatarList :users="teachers" />
     </template>
   </Card>
 </template>
 
 <script setup>
 import Card from "primevue/card"
-import TeacherBar from "../TeacherBar"
+import BaseAvatarList from "../basecomponents/BaseAvatarList.vue"
 import { computed } from "vue"
 import { isEmpty } from "lodash"
 import { useFormatDate } from "../../composables/formatDate"
@@ -91,7 +91,7 @@ const props = defineProps({
 })
 
 const platformConfigStore = usePlatformConfig()
-const showCourseDuration = computed(() => 'true' === platformConfigStore.getSetting("course.show_course_duration"))
+const showCourseDuration = computed(() => "true" === platformConfigStore.getSetting("course.show_course_duration"))
 
 const teachers = computed(() => {
   if (props.session?.courseCoachesSubscriptions) {

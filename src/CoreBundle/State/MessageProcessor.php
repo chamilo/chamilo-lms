@@ -8,14 +8,12 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\DeleteOperationInterface;
 use ApiPlatform\Metadata\Operation;
-use ApiPlatform\Metadata\Patch;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use InvalidArgumentException;
 use LogicException;
 use Notification;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -38,10 +36,6 @@ final class MessageProcessor implements ProcessorInterface
     {
         if ($operation instanceof DeleteOperationInterface) {
             return $this->removeProcessor->process($data, $operation, $uriVariables, $context);
-        }
-
-        if ($operation instanceof Patch && str_contains($operation->getUriTemplate(), 'delete-for-user')) {
-            return $this->processDeleteForUser($data);
         }
 
         /** @var Message $message */
@@ -83,36 +77,6 @@ final class MessageProcessor implements ProcessorInterface
         }
 
         $this->entityManager->flush();
-
-        return $message;
-    }
-
-    private function processDeleteForUser($data): Message
-    {
-        /** @var Message $message */
-        $message = $data;
-
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request) {
-            throw new LogicException('Cannot get current request');
-        }
-
-        $requestData = json_decode($request->getContent(), true);
-        if (!isset($requestData['userId'])) {
-            throw new InvalidArgumentException('The field userId is required.');
-        }
-
-        $userId = $requestData['userId'];
-        $messageRelUserRepository = $this->entityManager->getRepository(MessageRelUser::class);
-        $messageRelUser = $messageRelUserRepository->findOneBy([
-            'message' => $message,
-            'receiver' => $userId,
-        ]);
-
-        if ($messageRelUser) {
-            $this->entityManager->remove($messageRelUser);
-            $this->entityManager->flush();
-        }
 
         return $message;
     }

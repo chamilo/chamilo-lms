@@ -369,7 +369,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         global $platform_email;
 
         $rootPath = $this->container->get('kernel')->getProjectDir();
-        $oldConfigPath = $rootPath.'/app/config/mail.conf.php';
+        $oldConfigPath = $this->getUpdateRootPath().'/app/config/mail.conf.php';
 
         $configFileLoaded = \in_array($oldConfigPath, get_included_files(), true);
 
@@ -416,5 +416,18 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
 
         $fs = new Filesystem();
         $fs->remove($fullFilename);
+    }
+
+    protected function getUpdateRootPath(): string
+    {
+        $updateRootPath = getenv('UPDATE_PATH');
+
+        if (!empty($updateRootPath)) {
+            error_log('getUpdateRootPath ::: '.$updateRootPath);
+
+            return rtrim($updateRootPath, '/');
+        }
+
+        return $this->container->getParameter('kernel.project_dir');
     }
 }

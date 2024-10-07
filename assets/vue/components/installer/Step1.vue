@@ -67,7 +67,7 @@
         :label="t('Next')"
         :class="[installerData.isUpdateAvailable ? 'p-button-secondary' : 'p-button-success']"
         icon="mdi mdi-page-next"
-        :name="installerData.isUpdateAvailable ? 'step5' : 'step1'"
+        :name="'step1'"
         type="submit"
       />
       <input

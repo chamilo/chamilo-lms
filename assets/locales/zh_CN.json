@@ -443,5 +443,11 @@
     "Please read the following requirements thoroughly.": "\u8be6\u7ec6\u9605\u8bfb",
     "Recommended settings for your server configuration. These settings are set in the php.ini configuration file on your server.": "\u670d\u52a1\u5668\u7684\u63a8\u8350\u8bbe\u5b9a\u3002\u8fd9\u4e9b\u8bbe\u5b9a\u5df2\u51fa\u73b0\u5728\u60a8\u7684\u670d\u52a1\u5668\u91cc\u7684php.ini\u6587\u4ef6\u3002",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)": "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)",
-    "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.": "\u5b89\u88c5\u811a\u672c\u5c06\u521b\u5efa IILearn \u7684\u6570\u636e\u5e93\uff0c\u7cfb\u7edf\u9ed8\u8ba4\u5c06\u4f7f\u7528\u591a\u6570\u636e\u5e93\u6a21\u5f0f\uff0c\u5982\u679c\u4f60\u7684\u4e3b\u673a\u670d\u52a1\u5546\u53ea\u5141\u8bb8\u4f7f\u7528\u4e00\u4e2a\u6570\u636e\u5e93\uff0c\u60a8\u5e94\u9009\u62e9\u4e00\u4e2a\u6570\u636e\u5e93\u7684\u6a21\u5f0f\u3002"
+    "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.": "\u5b89\u88c5\u811a\u672c\u5c06\u521b\u5efa IILearn \u7684\u6570\u636e\u5e93\uff0c\u7cfb\u7edf\u9ed8\u8ba4\u5c06\u4f7f\u7528\u591a\u6570\u636e\u5e93\u6a21\u5f0f\uff0c\u5982\u679c\u4f60\u7684\u4e3b\u673a\u670d\u52a1\u5546\u53ea\u5141\u8bb8\u4f7f\u7528\u4e00\u4e2a\u6570\u636e\u5e93\uff0c\u60a8\u5e94\u9009\u62e9\u4e00\u4e2a\u6570\u636e\u5e93\u7684\u6a21\u5f0f\u3002",
+    "Continue with %s": "Continue with {0}",
+    "Change Password": "Change Password",
+    "All Messages": "All Messages",
+    "Promoted Messages": "Promoted Messages",
+    "%s's picture": "{0}'s picture",
+    "+%d": "+{0}"
 }

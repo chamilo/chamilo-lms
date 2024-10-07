@@ -6,8 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -15,8 +18,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ApiResource(
     operations: [
         new Get(security: 'is_granted("VIEW", object)'),
+        new GetCollection(security: 'is_granted("ROLE_USER")'),
     ],
     security: 'is_granted("ROLE_USER")'
+)]
+#[ApiFilter(
+    SearchFilter::class,
+    strategy: 'exact',
+    properties: ['questionId', 'trackExercise', 'trackExercise.user'],
 )]
 #[ORM\Table(name: 'track_e_attempt_qualify')]
 #[ORM\Index(columns: ['exe_id'], name: 'exe_id')]

@@ -122,7 +122,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/'.$path;
+                $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/'.$path;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $studentPublicationRepo, $resource, $id, $title);
                 $this->entityManager->persist($resource);
@@ -162,7 +162,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                 $studentPublicationCorrectionRepo->addResourceNode($correction, $admin, $studentPublication);
                 $this->entityManager->persist($correction);
 
-                $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/'.$path;
+                $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/'.$path;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $studentPublicationCorrectionRepo, $correction, null, $title);
                 $this->entityManager->persist($correction);
@@ -202,7 +202,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                 $resource->setParent($parent);
                 $resource->addCourseLink($course, $session, $group, ResourceLink::VISIBILITY_PUBLISHED);
 
-                $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/'.$file;
+                $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/'.$file;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $studentPublicationRepo, $resource, $id, $title);
                 $this->entityManager->persist($resource);

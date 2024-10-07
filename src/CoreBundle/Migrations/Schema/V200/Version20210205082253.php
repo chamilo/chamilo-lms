@@ -52,7 +52,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
             if (!empty($setting) && 'true' === $setting['selected_value']) {
                 $path = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
             }
-            $picturePath = $rootPath.'/app/upload/'.$path.'/'.$picture;
+            $picturePath = $this->getUpdateRootPath().'/app/upload/'.$path.'/'.$picture;
             error_log('MIGRATIONS :: $filePath -- '.$picturePath.' ...');
             if ($this->fileExists($picturePath)) {
                 $mimeType = mime_content_type($picturePath);
@@ -122,7 +122,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
             if (!empty($setting) && 'true' === $setting['selected_value']) {
                 $path = 'groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
             }
-            $picturePath = $rootPath.'/app/upload/'.$path.'/'.$picture;
+            $picturePath = $this->getUpdateRootPath().'/app/upload/'.$path.'/'.$picture;
             error_log('MIGRATIONS :: $filePath -- '.$picturePath.' ...');
             if ($this->fileExists($picturePath)) {
                 $mimeType = mime_content_type($picturePath);

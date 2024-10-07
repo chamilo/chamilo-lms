@@ -49,15 +49,43 @@
   }
 }
 
-.basic-user-info {
-  @apply inline-flex items-center gap-2;
+.avatar-list {
+  @apply flex flex-row flex-wrap gap-4;
 
-  &__caption {
-    div {
-      @apply text-caption
-        first:font-semibold
-      ;
+  .avatar-container {
+    @apply flex flex-row gap-2;
+
+    .p-avatar {
+      @apply flex-shrink-0 flex-grow-0;
+    }
+
+    .avatar-info {
+      p {
+        @apply text-caption
+        first:font-semibold;
+      }
     }
   }
-}
 
+  &--several {
+    @apply gap-3;
+
+    .avatar-container {
+      @apply flex-col w-16 text-center;
+
+      .p-avatar {
+        @apply mx-auto;
+      }
+
+      .avatar-info {
+        p {
+          @apply text-tiny text-nowrap text-ellipsis overflow-hidden;
+        }
+      }
+    }
+  }
+
+  .field & {
+    @apply inline-flex align-middle;
+  }
+}

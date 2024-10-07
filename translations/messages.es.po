@@ -25293,7 +25293,7 @@ msgid "Signed in as"
 msgstr "Conectado como"
 
 msgid "Contact Us"
-msgstr "Contactanos"
+msgstr "Contáctanos"
 
 msgid "Disable editor announcements"
 msgstr "Desactivar anuncios del editor"
@@ -28759,3 +28759,6 @@ msgstr "Agregar amigos"
 
 msgid "Add friend"
 msgstr "Agregar amigo"
+
+msgid "%s's picture"
+msgstr "Imagen de %s"

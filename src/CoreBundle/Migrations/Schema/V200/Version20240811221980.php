@@ -50,6 +50,7 @@ final class Version20240811221980 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE justification_document_rel_users CHANGE justification_document_id justification_document_id INT DEFAULT NULL;');
         }
 
+        $this->addSql('ALTER TABLE lti_external_tool DROP FOREIGN KEY IF EXISTS FK_DB0E04E41BAD783F;');
         $this->addSql('ALTER TABLE lti_external_tool DROP INDEX IF EXISTS FK_DB0E04E41BAD783F;');
         $table = $schema->getTable('lti_external_tool');
         if (false === $table->hasIndex('UNIQ_DB0E04E41BAD783F')) {
@@ -71,7 +72,7 @@ final class Version20240811221980 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_DB0E04E4727ACA70 ON lti_external_tool (parent_id);');
         }
         if (!$table->hasForeignKey('FK_DB0E04E482F80D8B')) {
-           $this->addSql('ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E482F80D8B FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id) ON DELETE SET NULL;');
+            $this->addSql('ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E482F80D8B FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id) ON DELETE SET NULL;');
         }
         if (!$table->hasForeignKey('FK_DB0E04E491D79BD3')) {
             $this->addSql('ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');

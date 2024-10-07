@@ -32,7 +32,7 @@ final class Version20240128205500 extends AbstractMigrationChamilo
             $id = $userEntity->getId();
             $path = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
 
-            $certificateDir = $rootPath.'/app/upload/'.$path.'certificate/';
+            $certificateDir = $this->getUpdateRootPath().'/app/upload/'.$path.'certificate/';
 
             if (!is_dir($certificateDir)) {
                 continue;

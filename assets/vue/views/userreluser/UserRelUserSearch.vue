@@ -17,7 +17,7 @@
       <input
         v-model="searchQuery"
         class="search-input mr-3"
-        placeholder="Search Users"
+        :placeholder="t('Search')"
         type="text"
       />
       <BaseButton

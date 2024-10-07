@@ -27764,3 +27764,9 @@ msgstr ""
 
 msgid "Add friend"
 msgstr ""
+
+msgid "%s's picture"
+msgstr ""
+
+msgid "+%d"
+msgstr ""

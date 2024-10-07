@@ -511,10 +511,10 @@
     "Could not retrieve links": "Could not retrieve links",
     "Update link": "Update link",
     "Unread": "Non lu",
-    "As read": "As read",
-    "As unread": "As unread",
-    "Message deleted": "Message deleted",
-    "Messages deleted": "Messages deleted",
+    "As read": "Lu",
+    "As unread": "Non lu",
+    "Message deleted": "Message supprim\u00e9",
+    "Messages deleted": "Messages supprim\u00e9s",
     "No sender": "No sender",
     "Tags": "Tags",
     "New page": "New page",
@@ -567,5 +567,8 @@
     "Continue with %s": "Continuer avec {0}",
     "Change Password": "Changer de mot de passe",
     "All Messages": "Tous les messages",
-    "Promoted Messages": "Messages promus"
+    "Promoted Messages": "Messages promus",
+    "Are you sure you want to delete %s?": "\u00cates-vous certains de vouloir supprimer {0}\u202f?",
+    "%s's picture": "{0}'s picture",
+    "+%d": "+{0}"
 }

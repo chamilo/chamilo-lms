@@ -99,7 +99,7 @@ final class Version20201215153517 extends AbstractMigrationChamilo
                 $this->entityManager->persist($resource);
                 $this->entityManager->flush();
 
-                $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/announcements/'.$path;
+                $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/upload/announcements/'.$path;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $announcementAttachmentRepo, $resource, $id, $fileName);
                 $this->entityManager->persist($resource);

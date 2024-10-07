@@ -9,15 +9,26 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use Chamilo\CoreBundle\Entity\Listener\MessageStatusListener;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    operations: [
+        new Get(security: "is_granted('VIEW', object)"),
+        new Put(security: "is_granted('EDIT', object)"),
+        new Patch(security: "is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('DELETE', object)"),
+    ],
     normalizationContext: [
         'groups' => ['message_rel_user:read'],
     ],
@@ -33,7 +44,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'message_rel_user')]
 #[ORM\UniqueConstraint(name: 'message_receiver', columns: ['message_id', 'user_id', 'receiver_type'])]
 #[ORM\Entity]
-#[ORM\EntityListeners([MessageStatusListener::class])]
+#[Gedmo\SoftDeleteable(timeAware: true)]
 #[ApiFilter(
     filterClass: SearchFilter::class,
     properties: [
@@ -46,6 +57,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class MessageRelUser
 {
+    use SoftDeleteableEntity;
+
     // Type indicating the message is sent to the main recipient
     public const TYPE_TO = 1;
     // Type indicating the message is sent as a carbon copy (CC) to the recipient

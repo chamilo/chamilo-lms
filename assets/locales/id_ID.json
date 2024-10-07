@@ -382,5 +382,11 @@
     "Recommended settings for your server configuration. These settings are set in the php.ini configuration file on your server.": "Seting anjuran untuk konfigurasi server anda.  Seting ini di set dalam file konfigurasi php.ini pada server anda.",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)": "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)",
     "Chamilo is free software distributed under the GNU General Public licence (GPL).": "Chamilo merupakan software gratis yang didistribusikan oleh GNU General Public licence (GPL).",
-    "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.": "\t\t\t\tSkrip Instalasi akan membuat DB utama. Software akan butuh membuat banyak DB (kecuali anda pilih  \"One\" di bawah ini). Jika anda hanya diijinkan satu DB untuk situs anda oleh Hosting Services, Software tidak dapat bekerja."
+    "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.": "\t\t\t\tSkrip Instalasi akan membuat DB utama. Software akan butuh membuat banyak DB (kecuali anda pilih  \"One\" di bawah ini). Jika anda hanya diijinkan satu DB untuk situs anda oleh Hosting Services, Software tidak dapat bekerja.",
+    "Continue with %s": "Continue with {0}",
+    "Change Password": "Change Password",
+    "All Messages": "All Messages",
+    "Promoted Messages": "Promoted Messages",
+    "%s's picture": "{0}'s picture",
+    "+%d": "+{0}"
 }

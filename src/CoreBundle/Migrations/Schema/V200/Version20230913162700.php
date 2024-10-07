@@ -230,7 +230,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
 
                 return $document;
             }
-            $generalCoursesPath = $rootPath.'/app/courses/';
+            $generalCoursesPath = $this->getUpdateRootPath().'/app/courses/';
             $foundPath = $this->recursiveFileSearch($generalCoursesPath, $title);
             if ($foundPath) {
                 $document = new CDocument();

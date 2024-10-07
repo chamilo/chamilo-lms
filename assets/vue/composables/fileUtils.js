@@ -1,4 +1,8 @@
 export function useFileUtils() {
+  const isFile = (fileData) => {
+    return fileData.resourceNode && fileData.resourceNode.firstResourceFile
+  }
+
   const isImage = (fileData) => {
     return isFile(fileData) && fileData.resourceNode.firstResourceFile.image
   }
@@ -21,8 +25,9 @@ export function useFileUtils() {
     return mimeType.split("/")[1].toLowerCase() === "html"
   }
 
-  const isFile = (fileData) => {
-    return fileData.resourceNode && fileData.resourceNode.firstResourceFile
+  const isPreviewable = (fileData) => {
+    const mimeType = fileData.resourceNode.firstResourceFile.mimeType.toLowerCase()
+    return isImage(fileData) || isVideo(fileData) || isAudio(fileData) || isHtml(fileData) || mimeType === "application/pdf"
   }
 
   return {
@@ -31,5 +36,6 @@ export function useFileUtils() {
     isVideo,
     isAudio,
     isHtml,
+    isPreviewable,
   }
 }

@@ -265,7 +265,6 @@
         id="button_step6"
         :label="installerData.isUpdateAvailable ? t('Update Chamilo') : t('Install Chamilo')"
         :loading="loading"
-        :disabled="isButtonDisabled"
         class="p-button-success"
         icon="mdi mdi-progress-download"
         name="button_step6"
@@ -275,49 +274,60 @@
     </div>
   </div>
 
-  <div
-    v-show="loading"
-    class="install-step"
-  >
-    <h2
-      v-if="'update' !== installerData.installType"
-      v-t="'Step 7 - Installation process execution'"
-      class="RequirementHeading mb-8"
-    />
-    <h2
-      v-else
-      v-t="'Step 7 - Update process execution'"
-      class="RequirementHeading mb-8"
-    />
+  <div v-show="loading" class="install-step">
+    <h2 v-if="'update' !== installerData.installType" v-t="'Step 7 - Installation process execution'" class="RequirementHeading mb-8" />
+    <h2 v-else v-t="'Step 7 - Update process execution'" class="RequirementHeading mb-8" />
 
-    <p>
-      <strong
-        v-if="installerData.installationProfile"
-        v-text="installerData.installationProfile"
-      />
-    </p>
-
-    <Message
-      id="pleasewait"
-      :closable="false"
-      severity="success"
-    >
-      <p
-        v-t="'Please wait. This could take a while...'"
-        class="mb-3"
-      />
-      <ProgressBar mode="indeterminate" />
+    <Message id="pleasewait" :closable="false" severity="success">
+      <p v-t="'Please wait. This could take a while...'" class="mb-3" />
     </Message>
-    <ProgressBar
-      :value="progressPercentage"
-      style="height: 22px"
-    >
-      {{ progressPercentage }}/100</ProgressBar
-    >
-    <div class="log-container">
-      <div v-html="logTerminalContent"></div>
+
+    <div v-if="'update' === installerData.installType">
+      <ProgressBar :value="progressPercentage" style="height: 22px">{{ progressPercentage }}%</ProgressBar>
+      <p class="current-migration">
+        <strong>{{ t('Verifying migration:') }}</strong> {{ currentMigration }}
+      </p>
     </div>
+
   </div>
+
+  <Dialog v-model:visible="successDialogVisible" :closable="false" :modal="true" :show-header="false">
+    <div class="p-d-flex p-ai-center p-jc-center">
+      <h3 v-t="'Migration completed successfully!'" class="mb-4" />
+    </div>
+    <div class="formgroup-inline">
+      <div class="field">
+        <Button
+          :label="t('Go to your newly created portal.')"
+          class="p-button-success"
+          type="button"
+          @click="btnFinishOnClick"
+        />
+      </div>
+    </div>
+  </Dialog>
+
+  <Dialog v-model:visible="errorDialogVisible" :closable="false" :modal="true" :show-header="false">
+    <div class="p-d-flex p-ai-center p-jc-center">
+      <h3 v-t="'Migration failed!'" class="mb-4 text-error" />
+    </div>
+    <div class="p-d-flex p-ai-center p-jc-center">
+      <p class="text-error">{{ errorMessage }}</p>
+    </div>
+    <div v-if="currentMigration" class="p-d-flex p-ai-center p-jc-center mt-4">
+      <p class="text-body-2">{{ t('The last migration executed successfully was:') }} <br /><strong>{{ currentMigration }}</strong></p>
+    </div>
+    <div class="formgroup-inline">
+      <div class="field">
+        <Button
+          :label="t('Contact Support')"
+          class="p-button-danger mt-4"
+          type="button"
+          @click="btnSupportOnClick"
+        />
+      </div>
+    </div>
+  </Dialog>
 </template>
 
 <script setup>
@@ -327,6 +337,7 @@ import { useI18n } from "vue-i18n"
 import Message from "primevue/message"
 import Button from "primevue/button"
 import ProgressBar from "primevue/progressbar"
+import Dialog from "primevue/dialog"
 
 const { t } = useI18n()
 
@@ -336,35 +347,79 @@ const loading = ref(false)
 const isButtonDisabled = ref(installerData.value.isUpdateAvailable)
 const isExecutable = ref("")
 
-const logTerminalContent = ref("")
 const progressPercentage = ref(0)
-
-function updateLog() {
-  var xhr = new XMLHttpRequest()
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText)
-      logTerminalContent.value = response.log_terminal
-      progressPercentage.value = response.progress_percentage
-      scrollToBottom()
-
-      isButtonDisabled.value = false
-    }
-  }
-  xhr.open("GET", installerData.value.logUrl, true)
-  xhr.send()
-}
+const currentMigration = ref("")
+const successDialogVisible = ref(false)
+const errorDialogVisible = ref(false)
+const errorMessage = ref('')
 
 function btnStep6OnClick() {
   loading.value = true
-  isExecutable.value = "step6"
-  document.getElementById("install_form").submit()
+  isButtonDisabled.value = true
+
+  const updatePath = installerData.value.updatePath || '';
+
+  if (installerData.value.installType === 'update') {
+    startMigration(updatePath)
+    setTimeout(pollMigrationStatus, 5000)
+  } else {
+    isExecutable.value = "step6"
+    document.getElementById("install_form").submit()
+  }
 }
 
-function scrollToBottom() {
-  const logContainer = document.querySelector(".log-container")
-  logContainer.scrollTop = logContainer.scrollHeight
+function startMigration(updatePath) {
+  var xhr = new XMLHttpRequest()
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status !== 200) {
+      loading.value = false
+      isButtonDisabled.value = false
+      errorDialogVisible.value = true
+      errorMessage.value = `
+        ${t('Please check the following error:')} ${xhr.status} - ${xhr.statusText}.
+      `
+    }
+  };
+
+  const url = `/main/install/migrate.php?updatePath=${encodeURIComponent(updatePath)}`
+  xhr.open("POST", url, true)
+  xhr.send()
 }
 
-setInterval(updateLog, 2000)
+function pollMigrationStatus() {
+  setTimeout(() => {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        const response = JSON.parse(xhr.responseText)
+        progressPercentage.value = response.progress_percentage
+        currentMigration.value = response.current_migration
+
+        if (response.progress_percentage < 100) {
+          pollMigrationStatus()
+        } else {
+          loading.value = false
+          isButtonDisabled.value = false
+          successDialogVisible.value = true
+        }
+      } else if (xhr.readyState === 4 && xhr.status !== 200) {
+        loading.value = false
+        isButtonDisabled.value = false
+        errorDialogVisible.value = true
+        errorMessage.value = `${t('Please check the following error:')} ${xhr.status} - ${xhr.statusText}`
+      }
+    };
+
+    xhr.open("GET", "/main/install/get_migration_status.php", true)
+    xhr.send()
+  }, 2000)
+}
+
+function btnFinishOnClick() {
+  window.location = "../../"
+}
+
+function btnSupportOnClick() {
+  alert(t('Please contact support with the error details.'))
+}
 </script>

@@ -37,7 +37,7 @@ if (empty($courseInfo)) {
 } else {
     $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq(), 'name' => get_lang('Classes')];
 }
-$interbreadcrumb[] = ['url' => '#', 'name' => $userGroupInfo['name']];
+$interbreadcrumb[] = ['url' => '#', 'name' => $userGroupInfo['title']];
 
 if (!empty($action)) {
     $usergroup->protectScript($userGroupInfo);
@@ -137,11 +137,11 @@ $columns = [
 
 // Column config
 $column_model = [
-    ['name' => 'name', 'index' => 'name', 'width' => '35', 'align' => 'left', 'sortable' => 'false'],
+    ['name' => 'name', 'index' => 'name', 'width' => '400', 'align' => 'left', 'sortable' => 'false'],
     [
         'name' => 'actions',
         'index' => 'actions',
-        'width' => '20',
+        'width' => '250',
         'align' => 'center',
         'sortable' => 'false',
         'formatter' => 'action_formatter',

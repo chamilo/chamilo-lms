@@ -2158,12 +2158,7 @@ class SessionManager
         }
 
         if ($session->getSendSubscriptionNotification() && is_array($userList)) {
-            // Sending emails only
             foreach ($userList as $user_id) {
-                if (in_array($user_id, $existingUsers)) {
-                    continue;
-                }
-
                 $tplSubject = new Template(
                     null,
                     false,
@@ -2198,6 +2193,7 @@ class SessionManager
                 );
                 $content = $tplContent->fetch($layoutContent);
 
+                // Send email
                 api_mail_html(
                     $user_info['complete_name'],
                     $user_info['mail'],
@@ -2208,6 +2204,16 @@ class SessionManager
                         api_get_setting('administratorSurname')
                     ),
                     api_get_setting('emailAdministrator')
+                );
+
+                // Record message in system
+                MessageManager::send_message_simple(
+                    $user_id,
+                    $subject,
+                    $content,
+                    api_get_user_id(),
+                    false,
+                    true
                 );
             }
         }

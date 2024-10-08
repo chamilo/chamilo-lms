@@ -40,8 +40,16 @@ class TrackEDefaultRepository extends ServiceEntityRepository
             $qb->andWhere('te.sessionId = :sessionId')
                 ->setParameter('sessionId', $sessionId);
         }
+        else if ($sessionId === 0) {
+            $qb->andWhere('te.sessionId = 0');
+        }
+        else {
+            $qb->andWhere('te.sessionId IS NULL');
+        }
 
-        $result = $qb->getQuery()->getOneOrNullResult();
+        $qb->setMaxResults(1);
+        $query = $qb->getQuery();
+        $result = $query->getOneOrNullResult();
 
         return $result ? $result['defaultDate'] : null;
     }

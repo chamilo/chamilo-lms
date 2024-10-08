@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldItemInterface;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CourseBundle\Entity\CLp;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
@@ -189,6 +190,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('efv')
             ->select('efv.itemId as lp_id, efv.fieldValue as ndays')
             ->innerJoin('efv.field', 'ef')
+            ->innerJoin(CLp::class, 'lp', 'WITH', 'lp.iid = efv.itemId')
             ->where('ef.variable = :variable')
             ->andWhere('efv.fieldValue > 0')
             ->setParameter('variable', 'number_of_days_for_completion');

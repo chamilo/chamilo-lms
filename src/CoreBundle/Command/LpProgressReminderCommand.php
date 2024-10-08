@@ -26,6 +26,8 @@ class LpProgressReminderCommand extends Command
 {
     protected static $defaultName = 'app:lp-progress-reminder';
 
+    private const NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION = 3;
+
     public function __construct(
         private CourseRepository $courseRepository,
         private CourseRelUserRepository $courseRelUserRepository,
@@ -81,8 +83,9 @@ class LpProgressReminderCommand extends Command
                 $output->writeln('Processing course ID: ' . $courseId);
             }
 
-            // Retrieve users for the course and session
-            $courseUsers = $this->courseRelUserRepository->getCourseUsers($courseId, array_keys($lpItems), false);
+            // Retrieve users for the course (without session)
+            $courseUsers = $this->courseRelUserRepository->getCourseUsers($courseId, array_keys($lpItems));
+            // Retrieve users for the course session
             $sessionCourseUsers = $this->courseRelUserRepository->getCourseUsers($courseId, array_keys($lpItems), true);
 
             if ($debugMode) {
@@ -90,11 +93,11 @@ class LpProgressReminderCommand extends Command
                 $output->writeln('Session users retrieved: ' . count($sessionCourseUsers));
             }
 
-            // Process users from the main course
-            $this->processCourseUsers($courseUsers, $lpItems, $courseId, $debugMode);
+            // Process users from the main course (sessionId = 0 or null)
+            $this->processCourseUsers($courseUsers, $lpItems, $courseId);
 
-            // Process users from the course session
-            $this->processCourseUsers($sessionCourseUsers, $lpItems, $courseId, $debugMode, true);
+            // Process users from the course session (sessionId > 0)
+            $this->processCourseUsers($sessionCourseUsers, $lpItems, $courseId, true);
         }
 
         $output->writeln('LP progress reminder process finished.');
@@ -112,7 +115,13 @@ class LpProgressReminderCommand extends Command
             $lpId = $user['lpId'];
             $progress = (int) $user['progress'];
             $nbDaysForLpCompletion = (int) $lpItems[$lpId]['ndays'];
-            $sessionId = $checkSession && isset($user['session_id']) ? $user['session_id'] : null;
+
+            if ($checkSession && isset($user['session_id']) && $user['session_id'] > 0) {
+                $sessionId = $user['session_id'];
+            } else {
+                $sessionId = 0;
+            }
+
             $registrationDate = $this->trackEDefaultRepository->getUserCourseRegistrationAt($courseId, $userId, $sessionId);
 
             if ($registrationDate && $this->isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion)) {
@@ -135,7 +144,7 @@ class LpProgressReminderCommand extends Command
         $interval = $date1->diff($date2);
         $diffDays = (int) $interval->format('%a');
 
-        return (int) ceil($diffDays / 3) + 1;
+        return (int) ceil($diffDays / self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION) + 1;
     }
 
     /**
@@ -153,7 +162,7 @@ class LpProgressReminderCommand extends Command
         if ($startDate < $now) {
             $interval = $date1->diff($date2);
             $diffDays = (int) $interval->format('%a');
-            return (0 === $diffDays % 3);
+            return (0 === $diffDays % self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION);
         }
 
         return $startDate === $now;

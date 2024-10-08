@@ -8661,10 +8661,10 @@ class Tracking
                 ];
                 $sql = "SELECT user_id, session_id, c_id, login_course_date, logout_course_date, (UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) AS time
                     FROM $tblTrackCourseAccess
-                    WHERE login_course_date >= '$startDate'
-                      AND login_course_date <= '$endDate'
-                      AND logout_course_date >= '$startDate'
-                      AND logout_course_date <= '$endDate'
+                    WHERE login_course_date >= '$startDate 00:00:00'
+                      AND login_course_date <= '$endDate 23:59:59'
+                      AND logout_course_date >= '$startDate 00:00:00'
+                      AND logout_course_date <= '$endDate 23:59:59'
                       AND user_id IN (".implode(',', $selectedUserList).")
                     ORDER BY user_id, login_course_date";
                 break;
@@ -8687,8 +8687,8 @@ class Tracking
                     INNER JOIN $tblLpItem li ON li.iid = liv.lp_item_id
                     INNER JOIN $tblLp l ON l.id = li.lp_id
                     WHERE lv.user_id IN (".implode(',', $selectedUserList).")
-                      AND liv.start_time >= UNIX_TIMESTAMP('$startDate')
-                      AND liv.start_time <= UNIX_TIMESTAMP('$endDate')
+                      AND liv.start_time >= UNIX_TIMESTAMP('$startDate 00:00:00')
+                      AND liv.start_time <= UNIX_TIMESTAMP('$endDate 23:59:59')
                       AND lv.progress = 100
                       AND li.item_type = '".TOOL_LP_FINAL_ITEM."'
                     ORDER BY lv.user_id, liv.start_time";

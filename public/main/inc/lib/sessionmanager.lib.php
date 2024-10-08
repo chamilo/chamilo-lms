@@ -2355,6 +2355,7 @@ class SessionManager
             ]
         );
 
+        // Send email
         api_mail_html(
             $boss->getFullname(),
             $boss->getEmail(),
@@ -2362,6 +2363,16 @@ class SessionManager
             $content,
             api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')),
             api_get_setting('emailAdministrator')
+        );
+
+        // Record message in system
+        MessageManager::send_message_simple(
+            $boss->getId(),
+            $subject,
+            $content,
+            api_get_user_id(),
+            false,
+            true
         );
     }
 

@@ -4391,7 +4391,7 @@ class learnpath
             if (api_is_allowed_to_edit() ||
                 api_is_platform_admin(true) ||
                 api_is_drh() ||
-                api_is_coach(api_get_session_id(), api_get_course_int_id())
+                api_is_coach(api_get_session_id(), api_get_course_int_id(), false)
             ) {
                 return true;
             }

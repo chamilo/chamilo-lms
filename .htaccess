@@ -124,3 +124,7 @@ RedirectMatch 403 ^/main/inc/lib/javascript/bigupload/files
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options nosniff
 </IfModule>
+
+<Files "web.config">
+    Require all denied
+</Files>

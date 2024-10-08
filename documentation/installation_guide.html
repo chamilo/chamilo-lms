@@ -757,11 +757,22 @@ If you have issues with files taking a long time to download, make sure you reco
     RewriteRule ^(tests|.git) - [F,L,NC]
   &lt;/Directory&gt;
 
-    AddType application/font-woff .woff .woff2
-    &lt;IfModule mod_expires.c&gt;
-      ExpiresActive On
-      ExpiresByType application/font-woff "access plus 1 month"
-    &lt;/IfModule&gt;
+  AddType application/font-woff .woff .woff2
+  &lt;IfModule mod_expires.c&gt;
+    ExpiresActive On
+    ExpiresByType application/font-woff "access plus 1 month"
+  &lt;/IfModule&gt;
+  # Disallow direct access to /main/inc/lib/javascript/bigupload/files
+  RedirectMatch 403 ^/main/inc/lib/javascript/bigupload/files
+
+  # Disallow MIME sniffing to prevent XSS from unknown/incorrect file extensions
+  <IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+  </IfModule>
+
+  <Files "web.config">
+    Require all denied
+  </Files>
     </pre>
 
     <h4>Special note on sharing questions between courses</h4>
@@ -856,6 +867,10 @@ If you have issues with files taking a long time to download, make sure you reco
   }
   location ^~ /tests/ {
     deny all;
+  }
+  location ~* /web.config$ {
+    deny all;
+    return 403;
   }
     </pre>
 

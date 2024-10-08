@@ -1,0 +1,105 @@
+{% if exercisefocused.show_region %}
+    {% set enable_time_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_time_limit') %}
+    {% set time_limit = exercisefocused.plugin_info.obj.get('time_limit') %}
+    {% set enable_outfocused_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_outfocused_limit') %}
+    {% set outfocused_limit = exercisefocused.plugin_info.obj.get('outfocused_limit') %}
+
+    <div id="exercisefocused-block" style="display: none;">
+        <div class="exercisefocused-block__container">
+            <div class="exercisefocused-block__message card">
+                <p class="h3 text-danger">{{ 'YouHaveLeftTheExercise'|get_plugin_lang('ExerciseFocusedPlugin') }}</p>
+
+                {% if enable_time_limit %}
+                    <div id="time-limit-block">
+                        <p class="h4">
+                            {{ 'YouHaveXTimeToReturn'|get_plugin_lang('ExerciseFocusedPlugin')|format(time_limit) }}
+                        </p>
+                    </div>
+                {% endif %}
+
+                {% if enable_outfocused_limit %}
+                    <div id="outfocused-limit-block">
+                        <p class="h4">{{ 'YouAreAllowedXOutfocused'|get_plugin_lang('ExerciseFocusedPlugin')|format(outfocused_limit) }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <style>
+        #exercisefocused-block {
+            background-color: #CCCC;
+            border: 1px solid #DDD;
+            bottom: 0;
+            left: 0;
+            min-height: 100%;
+            min-width: 100%;
+            position: fixed;
+            right: 0;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            top: 0;
+            z-index: 1010;
+        }
+        .exercisefocused-block__container {
+            left: 50%;
+            position: absolute;
+            text-align: center;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+        }
+        .exercisefocused-block__message {
+            margin-bottom: 0;
+            padding: 20px;
+        }
+        .exercisefocused-block__message p,
+        .exercisefocused-block__message span {
+            font-weight: bold;
+        }
+
+        .exercisefocused-backdrop {
+            background-color: rgba(0, 0, 0, 0.02);
+            cursor: not-allowed;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            user-select: none;
+            width: 100%;
+            z-index: 1000;
+        }
+        .exercisefocused-backdrop::before {
+            background-color: #FFF;
+            border-radius: 6px;
+            box-shadow: 0 2px 2px rgba(204, 197, 185, 0.5);
+            content: attr(data-alert);
+            display: block;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 50px auto;
+            opacity: 0;
+            padding: 10px;
+            position: relative;
+            text-align: center;
+            width: 340px;
+            transition: opacity 0s ease-in-out;
+        }
+        .exercisefocused-backdrop:hover::before {
+            opacity: 1;
+        }
+
+        .exercisefocused-backdrop.inmediate::before {
+            transition-delay: 3.5s !important;
+        }
+        .exercisefocused-backdrop.out::before {
+            transition-delay: 0s !important;
+        }
+
+        form#exercise_form {
+            background-color: #FFF;
+            position: relative;
+            z-index: 1005;
+        }
+    </style>
+{% endif %}

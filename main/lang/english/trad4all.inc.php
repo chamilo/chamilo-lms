@@ -9072,4 +9072,5 @@ $AdminID = "Admin ID";
 $MoodleVersion = "Moodle version";
 $CreateExport = "Create export file";
 $MoodleExportAdminIDComment = "Moodle requires a user identification to be stored inside some XML files of the .mbz format. Please provide an internal (integer) ID of the user exporting this course or Moodle's internal user ID of the user that will be the owner of the imported resources. If you're in doubt, just write '1' and some fake data ton continue.";
+$DropboxVulnerabilityWarning = "Remember to only download files sent by people you trust. If in doubt, please use a anti-virus tool on your computer to mitigate the risk of harm to your data.";
 ?>

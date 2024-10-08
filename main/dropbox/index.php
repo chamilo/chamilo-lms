@@ -274,6 +274,7 @@ if (!in_array($action, ['add', 'send_other_users'])) {
                 echo '</div>';
             }
         }
+        echo Display::return_message(get_lang('DropboxVulnerabilityWarning'), 'w', false);
     }
 
     if (!$view || $view == 'sent' || !$showSentReceivedTabs) {

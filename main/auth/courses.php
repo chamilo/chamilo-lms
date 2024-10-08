@@ -67,14 +67,23 @@ switch ($action) {
         }
         if (Security::check_token('get')) {
             $courseInfo = api_get_course_info($courseCodeToSubscribe);
-            CourseManager::autoSubscribeToCourse($courseCodeToSubscribe);
-            $redirectionTarget = CoursesAndSessionsCatalog::generateRedirectUrlAfterSubscription(
-                $courseInfo['course_public_url']
-            );
+            if (!empty($courseInfo)) {
+                CourseManager::autoSubscribeToCourse($courseCodeToSubscribe);
+                $redirectionTarget = CoursesAndSessionsCatalog::generateRedirectUrlAfterSubscription(
+                    $courseInfo['course_public_url']
+                );
 
-            header("Location: $redirectionTarget");
-            exit;
+                header("Location: $redirectionTarget");
+                exit;
+            }
         }
+        Display::addFlash(
+            Display::return_message(get_lang('NoResults'), 'warning')
+        );
+        CoursesAndSessionsCatalog::displayCoursesList('search_course', $searchTerm, $categoryCode);
+
+        exit;
+
         break;
     case 'subscribe_course_validation':
         $toolTitle = get_lang('Subscribe');

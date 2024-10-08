@@ -126,5 +126,9 @@ RedirectMatch 403 ^/main/inc/lib/javascript/bigupload/files
 </IfModule>
 
 <Files "web.config">
-    Require all denied
+  Require all denied
 </Files>
+
+<IfModule mod_autoindex.c>
+  Options -Indexes
+</IfModule>

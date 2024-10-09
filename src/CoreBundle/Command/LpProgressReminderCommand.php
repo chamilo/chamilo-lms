@@ -61,7 +61,7 @@ class LpProgressReminderCommand extends Command
 
         // Retrieve LPs with completion days
         $lpItems = $this->extraFieldValuesRepository->getLpIdWithDaysForCompletion();
-        if ($debugMode) {
+        if ($debugMode && !empty($lpItems)) {
             $output->writeln('LP Items retrieved: ' . print_r($lpItems, true));
         }
 
@@ -70,34 +70,42 @@ class LpProgressReminderCommand extends Command
             return Command::SUCCESS;
         }
 
+        $lpMap = [];
+        foreach ($lpItems as $lpItem) {
+            $lpMap[$lpItem['lp_id']] = $lpItem['ndays'];
+        }
+        $lpIds = array_keys($lpMap);
+
         // Retrieve all courses from the CourseRepository
         $courses = $this->courseRepository->findAll();
-        if ($debugMode) {
+        if ($debugMode && !empty($courses)) {
             $output->writeln('Courses retrieved: ' . count($courses));
         }
 
         foreach ($courses as $course) {
             $courseId = $course->getId();
 
-            if ($debugMode) {
-                $output->writeln('Processing course ID: ' . $courseId);
-            }
-
             // Retrieve users for the course (without session)
-            $courseUsers = $this->courseRelUserRepository->getCourseUsers($courseId, array_keys($lpItems));
+            $courseUsers = $this->courseRelUserRepository->getCourseUsers($courseId, $lpIds);
             // Retrieve users for the course session
-            $sessionCourseUsers = $this->courseRelUserRepository->getCourseUsers($courseId, array_keys($lpItems), true);
+            $sessionCourseUsers = $this->courseRelUserRepository->getCourseUsers($courseId, $lpIds, true);
 
-            if ($debugMode) {
-                $output->writeln('Course users retrieved: ' . count($courseUsers));
-                $output->writeln('Session users retrieved: ' . count($sessionCourseUsers));
+            if ($debugMode && (!empty($courseUsers) || !empty($sessionCourseUsers))) {
+                $output->writeln('Processing course ID: ' . $courseId);
+                if (!empty($courseUsers)) {
+                    $output->writeln('Course users retrieved: ' . count($courseUsers));
+                }
+                if (!empty($sessionCourseUsers)) {
+                    $output->writeln('Session users retrieved: ' . count($sessionCourseUsers));
+                    $output->writeln('Session retrieved: ' . print_r($sessionCourseUsers, true));
+                }
             }
 
             // Process users from the main course (sessionId = 0 or null)
-            $this->processCourseUsers($courseUsers, $lpItems, $courseId);
+            $this->processCourseUsers($courseUsers, $lpMap, $courseId, $debugMode);
 
             // Process users from the course session (sessionId > 0)
-            $this->processCourseUsers($sessionCourseUsers, $lpItems, $courseId, true);
+            $this->processCourseUsers($sessionCourseUsers, $lpMap, $courseId, $debugMode, true);
         }
 
         $output->writeln('LP progress reminder process finished.');
@@ -107,27 +115,60 @@ class LpProgressReminderCommand extends Command
     /**
      * Processes users from a course or session to check if a reminder needs to be sent.
      */
-    private function processCourseUsers(array $users, array $lpItems, int $courseId, bool $checkSession = false): void
+    private function processCourseUsers(array $users, array $lpItems, int $courseId, bool $debugMode = false, bool $checkSession = false): void
     {
         foreach ($users as $user) {
             $userId = $user['userId'];
             $courseTitle = $user['courseTitle'];
             $lpId = $user['lpId'];
             $progress = (int) $user['progress'];
-            $nbDaysForLpCompletion = (int) $lpItems[$lpId]['ndays'];
 
-            if ($checkSession && isset($user['session_id']) && $user['session_id'] > 0) {
-                $sessionId = $user['session_id'];
-            } else {
-                $sessionId = 0;
+            if (!isset($lpItems[$lpId])) {
+                continue;
+            }
+
+            $sessionId = 0;
+            if ($checkSession && isset($user['sessionId']) && $user['sessionId'] > 0) {
+                $sessionId = $user['sessionId'];
             }
 
             $registrationDate = $this->trackEDefaultRepository->getUserCourseRegistrationAt($courseId, $userId, $sessionId);
+            $nbDaysForLpCompletion = $lpItems[$lpId];
 
-            if ($registrationDate && $this->isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion)) {
-                $nbRemind = $this->getNbReminder($registrationDate, $nbDaysForLpCompletion);
-                $this->sendLpReminder($userId, $courseTitle, $progress, $registrationDate, $nbRemind);
+            if ($registrationDate) {
+                if ($debugMode) {
+                    $sessionInfo = $sessionId > 0 ? "in session ID $sessionId" : "without a session";
+                    echo "Registration date: {$registrationDate->format('Y-m-d H:i:s')}, Days for completion: $nbDaysForLpCompletion, $sessionInfo\n";
+                }
+                if ($this->isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion)) {
+                    $nbRemind = $this->getNbReminder($registrationDate, $nbDaysForLpCompletion);
+                    if ($debugMode) {
+                        echo "Sending reminder to user $userId for course $courseTitle $sessionInfo\n";
+                        $this->logReminderSent($userId, $courseTitle, $nbRemind, $debugMode, $sessionId);
+                    }
+                    $this->sendLpReminder($userId, $courseTitle, $progress, $registrationDate, $nbRemind);
+                }
+            } elseif ($debugMode) {
+                $sessionInfo = $sessionId > 0 ? "in session ID $sessionId" : "without a session";
+                echo "No registration date found for user $userId in course $courseTitle $sessionInfo\n";
             }
+        }
+    }
+
+    /**
+     * Logs the reminder details if debug mode is enabled.
+     */
+    private function logReminderSent(int $userId, string $courseTitle, int $nbRemind, bool $debugMode, int $sessionId = 0): void
+    {
+        if ($debugMode) {
+            $sessionInfo = $sessionId > 0 ? sprintf("in session ID %d", $sessionId) : "without a session";
+            echo sprintf(
+                "Reminder number %d sent to user ID %d for the course %s %s.\n",
+                $nbRemind,
+                $userId,
+                $courseTitle,
+                $sessionInfo
+            );
         }
     }
 

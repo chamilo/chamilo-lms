@@ -38,8 +38,8 @@ class CourseRelUserRepository extends ServiceEntityRepository
             ->andWhere('(lpv.progress < 100 OR lpv.progress IS NULL)');
 
         if ($checkSession) {
-            $qb->from(SessionRelCourseRelUser::class, 'scu')
-                ->andWhere('scu.course = :courseId')
+            $qb->addSelect('IDENTITY(scu.session) AS sessionId')
+                ->leftJoin(SessionRelCourseRelUser::class, 'scu', 'WITH', 'scu.user = u AND scu.course = cu.course')
                 ->andWhere('scu.session IS NOT NULL');
         }
 

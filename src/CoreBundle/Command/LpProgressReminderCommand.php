@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\SessionRelCourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use DateTime;
 use DateTimeZone;
@@ -31,6 +32,7 @@ class LpProgressReminderCommand extends Command
     public function __construct(
         private CourseRepository $courseRepository,
         private CourseRelUserRepository $courseRelUserRepository,
+        private SessionRelCourseRelUserRepository $sessionRelCourseRelUserRepository,
         private ExtraFieldValuesRepository $extraFieldValuesRepository,
         private TrackEDefaultRepository $trackEDefaultRepository,
         private UserRepository $userRepository,
@@ -88,17 +90,17 @@ class LpProgressReminderCommand extends Command
             // Retrieve users for the course (without session)
             $courseUsers = $this->courseRelUserRepository->getCourseUsers($courseId, $lpIds);
             // Retrieve users for the course session
-            $sessionCourseUsers = $this->courseRelUserRepository->getCourseUsers($courseId, $lpIds, true);
+            $sessionCourseUsers = $this->sessionRelCourseRelUserRepository->getSessionCourseUsers($courseId, $lpIds);
 
             if ($debugMode && (!empty($courseUsers) || !empty($sessionCourseUsers))) {
                 $output->writeln('Processing course ID: ' . $courseId);
                 if (!empty($courseUsers)) {
                     $output->writeln('Course users retrieved: ' . count($courseUsers));
-                    $output->writeln('Course retrieved: ' . print_r($courseUsers, true));
+                    //$output->writeln('Course retrieved: ' . print_r($courseUsers, true));
                 }
                 if (!empty($sessionCourseUsers)) {
                     $output->writeln('Session users retrieved: ' . count($sessionCourseUsers));
-                    $output->writeln('Session retrieved: ' . print_r($sessionCourseUsers, true));
+                    //$output->writeln('Session retrieved: ' . print_r($sessionCourseUsers, true));
                 }
             }
 
@@ -149,9 +151,6 @@ class LpProgressReminderCommand extends Command
                     }
                     $this->sendLpReminder($userId, $courseTitle, $progress, $registrationDate, $nbRemind);
                 }
-            } elseif ($debugMode) {
-                $sessionInfo = $sessionId > 0 ? "in session ID $sessionId" : "without a session";
-                echo "No registration date found for user $userId in course $courseTitle (LP ID: $lpId) $sessionInfo\n";
             }
         }
     }

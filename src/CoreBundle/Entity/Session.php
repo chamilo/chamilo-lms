@@ -374,6 +374,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[Groups(['user_subscriptions:sessions', 'session:read', 'session:item:read'])]
     private int $accessVisibility = 0;
 
+    #[ORM\Column(name: 'notify_boss', type: 'boolean', options: ['default' => false])]
+    protected bool $notifyBoss = false;
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();
@@ -1447,5 +1450,17 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             $sessionRelCourse->getCourse()->getVisibility(),
             $closedVisibilities
         ));
+    }
+
+    public function getNotifyBoss(): bool
+    {
+        return $this->notifyBoss;
+    }
+
+    public function setNotifyBoss(bool $notifyBoss): self
+    {
+        $this->notifyBoss = $notifyBoss;
+
+        return $this;
     }
 }

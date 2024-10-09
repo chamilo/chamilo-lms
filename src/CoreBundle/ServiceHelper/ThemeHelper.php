@@ -81,17 +81,39 @@ final class ThemeHelper
         return $visualTheme;
     }
 
-    public function getThemeAssetUrl(string $path, bool $absoluteUrl = false): string
+    /**
+     * @throws FilesystemException
+     * @throws UnableToCheckExistence
+     */
+    public function getFileLocation(string $path): ?string
     {
         $themeName = $this->getVisualTheme();
 
+        $locations = [
+            $themeName.DIRECTORY_SEPARATOR.$path,
+            self::DEFAULT_THEME.DIRECTORY_SEPARATOR.$path,
+        ];
+
+        foreach ($locations as $location) {
+            if ($this->filesystem->fileExists($location)) {
+                return $location;
+            }
+        }
+
+        return null;
+    }
+
+    public function getThemeAssetUrl(string $path, bool $absoluteUrl = false): string
+    {
         try {
-            if (!$this->filesystem->fileExists($themeName.DIRECTORY_SEPARATOR.$path)) {
+            if (!$this->getFileLocation($path)) {
                 return '';
             }
         } catch (FilesystemException) {
             return '';
         }
+
+        $themeName = $this->getVisualTheme();
 
         return $this->router->generate(
             'theme_asset',
@@ -113,14 +135,15 @@ final class ThemeHelper
 
     public function getAssetContents(string $path): string
     {
-        $themeName = $this->getVisualTheme();
-        $fullPath = $themeName.DIRECTORY_SEPARATOR.$path;
-
         try {
-            if ($this->filesystem->fileExists($fullPath)) {
+            if ($fullPath = $this->getFileLocation($path)) {
                 $stream = $this->filesystem->readStream($fullPath);
 
-                return stream_get_contents($stream);
+                $contents = stream_get_contents($stream);
+
+                fclose($stream);
+
+                return $contents;
             }
         } catch (FilesystemException|UnableToReadFile) {
             return '';
@@ -131,11 +154,8 @@ final class ThemeHelper
 
     public function getAssetBase64Encoded(string $path): string
     {
-        $visualTheme = $this->getVisualTheme();
-        $fullPath = $visualTheme.DIRECTORY_SEPARATOR.$path;
-
         try {
-            if ($this->filesystem->fileExists($fullPath)) {
+            if ($fullPath = $this->getFileLocation($path)) {
                 $detector = new ExtensionMimeTypeDetector();
                 $mimeType = (string) $detector->detectMimeTypeFromFile($fullPath);
 

@@ -1033,4 +1033,26 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
         return $url.$paramsToString;
     }
+
+    /**
+     * Retrieves the list of DRH (HR) users related to a specific user and access URL.
+     */
+    public function getDrhListFromUser(int $userId, int $accessUrlId): array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
+
+        $qb->select('u.id, u.username, u.firstname, u.lastname')
+            ->innerJoin('u.friends', 'uru', Join::WITH, 'uru.friend = u.id')
+            ->where('uru.user = :userId')
+            ->andWhere('uru.relationType = :relationType')
+            ->setParameter('userId', $userId)
+            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_RRHH);
+
+        $qb->orderBy('u.lastname', 'ASC')
+            ->addOrderBy('u.firstname', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
 }

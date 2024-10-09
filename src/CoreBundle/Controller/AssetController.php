@@ -58,11 +58,15 @@ class AssetController
                 return $server->getImageResponse($filePath, $params);
             }
 
-            $stream = $assetRepository->getFileSystem()->readStream($filePath);
-
             $response = new StreamedResponse(
-                function () use ($stream): void {
-                    stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+                function () use ($assetRepository, $filePath): void {
+                    $outputStream = fopen('php://output', 'wb');
+                    $stream = $assetRepository->getFileSystem()->readStream($filePath);
+
+                    stream_copy_to_stream($stream, $outputStream);
+
+                    fclose($outputStream);
+                    fclose($fileStream);
                 }
             );
             $disposition = $response->headers->makeDisposition(

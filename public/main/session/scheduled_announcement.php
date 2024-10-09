@@ -89,6 +89,7 @@ switch ($action) {
                     break;
             }
 
+            $values['sent'] = isset($values['sent']) ? (int) $values['sent'] : 0;
             $res = $object->save($values);
 
             if ($res) {
@@ -129,7 +130,7 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->getSubmitValues();
             $values['id'] = $id;
-            $values['sent'] = isset($values['sent']) ? 1 : '';
+            $values['sent'] = isset($values['sent']) ? (int)$values['sent'] : 0;
             $values['date'] = api_get_utc_datetime($values['date']);
             $res = $object->update($values);
 
@@ -141,13 +142,15 @@ switch ($action) {
                 get_lang('Update successful'),
                 'confirmation'
             ));
-            header("Location: $url");
-            exit;
+
+            $content = $object->getGrid($sessionId);
+        } else {
+            $item = $object->get($id);
+            $item['date'] = api_get_local_time($item['date']);
+            $form->setDefaults($item);
+            $content = $form->returnForm();
         }
-        $item = $object->get($id);
-        $item['date'] = api_get_local_time($item['date']);
-        $form->setDefaults($item);
-        $content = $form->returnForm();
+
         break;
     case 'delete':
         $object->delete($id);
@@ -171,27 +174,25 @@ $columnModel = [
     [
         'name' => 'subject',
         'index' => 'subject',
-        'width' => '250',
+        'width' => '350',
         'align' => 'left',
     ],
     [
         'name' => 'date',
         'index' => 'date',
-        //'width' => '90',
-        //'align' => 'left',
+        'width' => '190',
+        'align' => 'left',
         'sortable' => 'true',
     ],
     [
         'name' => 'sent',
         'index' => 'sent',
-        //'width' => '90',
-        //'align' => 'left',
         'sortable' => 'true',
     ],
     [
         'name' => 'actions',
         'index' => 'actions',
-        'width' => '100',
+        'width' => '200',
         'align' => 'left',
         'formatter' => 'action_formatter',
         'sortable' => 'false',

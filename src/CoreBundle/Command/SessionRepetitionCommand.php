@@ -96,7 +96,7 @@ class SessionRepetitionCommand extends Command
         // Create a new session with the same details as the original session
         $newSession = new Session();
         $newSession
-            ->setTitle($session->getTitle() . ' (Repetition ' . $session->getId() . ')')
+            ->setTitle($session->getTitle() . ' (Repetition ' . $session->getId() . ' - ' . time() . ')')
             ->setAccessStartDate($newStartDate)
             ->setAccessEndDate($newEndDate)
             ->setDisplayStartDate($newStartDate)
@@ -106,7 +106,7 @@ class SessionRepetitionCommand extends Command
             ->setVisibility($session->getVisibility())
             ->setDuration($session->getDuration())
             ->setDescription($session->getDescription() ?? '')
-            ->setShowDescription($session->getShowDescription())
+            ->setShowDescription($session->getShowDescription() ?? false)
             ->setCategory($session->getCategory())
             ->setPromotion($session->getPromotion())
             ->setLastRepetition(false);

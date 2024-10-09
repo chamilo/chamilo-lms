@@ -38,7 +38,7 @@ function search_coachs($needle)
     if (!empty($needle)) {
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
-        // search users where username or firstname or lastname begins likes $needle
+        // search users where username or firstname or lastname begins like $needle
         $sql = 'SELECT username, lastname, firstname
                 FROM '.$tbl_user.' user
                 WHERE (username LIKE "'.$needle.'%"
@@ -57,7 +57,7 @@ function search_coachs($needle)
                         INNER JOIN '.$tbl_user_rel_access_url.' url_user
                         ON (url_user.user_id=user.user_id)
                         WHERE
-                            access_url_id = '.$access_url_id.'  AND
+                            access_url_id = '.$access_url_id.' AND
                             (
                                 username LIKE "'.$needle.'%" OR
                                 firstname LIKE "'.$needle.'%" OR
@@ -260,15 +260,12 @@ if ($form->validate()) {
     $endDate = $params['access_end_date'];
     $displayStartDate = $params['display_start_date'];
     $displayEndDate = $params['display_end_date'];
-    $coachStartDate = $params['coach_access_start_date'];
-    if (empty($coachStartDate)) {
-        $coachStartDate = $displayStartDate;
-    }
+    $coachStartDate = $params['coach_access_start_date'] ?? $displayStartDate;
     $coachEndDate = $params['coach_access_end_date'];
     $coachUsername = $params['coach_username'];
     $id_session_category = (int) $params['session_category'];
     $id_visibility = $params['session_visibility'];
-    $duration = isset($params['duration']) ? $params['duration'] : null;
+    $duration = $params['duration'] ?? null;
     $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1 : 0;
     $sendSubscriptionNotification = isset($params['send_subscription_notification']);
@@ -309,6 +306,12 @@ if ($form->validate()) {
             }
         }
     }
+    $status = $params['status'] ?? 0;
+
+    $parentId = $params['parent_id'] ?? null;
+    $daysBeforeFinishingForReinscription = $params['days_before_finishing_for_reinscription'] ?? null;
+    $lastRepetition = isset($params['last_repetition']) ? true : false;
+    $daysBeforeFinishingToCreateNewRepetition = $params['days_before_finishing_to_create_new_repetition'] ?? null;
 
     $return = SessionManager::create_session(
         $title,
@@ -321,6 +324,10 @@ if ($form->validate()) {
         $coachUsername,
         $id_session_category,
         $id_visibility,
+        $parentId,
+        $daysBeforeFinishingForReinscription,
+        $lastRepetition,
+        $daysBeforeFinishingToCreateNewRepetition,
         false,
         $duration,
         $description,

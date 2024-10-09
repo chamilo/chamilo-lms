@@ -71,6 +71,10 @@ $formDefaults = [
         },
         $session->getGeneralCoaches()->getValues()
     ),
+    'days_before_finishing_for_reinscription' => $session->getDaysToReinscription() ?? '',
+    'days_before_finishing_to_create_new_repetition' => $session->getDaysToNewRepetition() ?? '',
+    'last_repetition' => $session->getLastRepetition(),
+    'parent_id' => $session->getParentId() ?? 0,
 ];
 
 $form->setDefaults($formDefaults);
@@ -111,6 +115,11 @@ if ($form->validate()) {
 
     $status = $params['status'] ?? 0;
 
+    $parentId = $params['parent_id'] ?? 0;
+    $daysBeforeFinishingForReinscription = $params['days_before_finishing_for_reinscription'] ?? null;
+    $daysBeforeFinishingToCreateNewRepetition = $params['days_before_finishing_to_create_new_repetition'] ?? null;
+    $lastRepetition = isset($params['last_repetition']);
+
     $return = SessionManager::edit_session(
         $id,
         $name,
@@ -129,7 +138,11 @@ if ($form->validate()) {
         $extraFields,
         null,
         $sendSubscriptionNotification,
-        $status
+        $status,
+        $parentId,
+        $daysBeforeFinishingForReinscription,
+        $daysBeforeFinishingToCreateNewRepetition,
+        $lastRepetition
     );
 
     if ($return) {

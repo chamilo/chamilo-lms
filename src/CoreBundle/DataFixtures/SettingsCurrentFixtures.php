@@ -3292,6 +3292,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => '',
                 ],
                 [
+                    'name' => 'enable_auto_reinscription',
+                    'title' => 'Enable Automatic Reinscription',
+                    'comment' => 'Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated.',
+                ],
+                [
+                    'name' => 'enable_session_replication',
+                    'title' => 'Enable Session Replication',
+                    'comment' => 'Enable or disable automatic session replication. The related cron job must also be activated.',
+                ],
+                [
                     'name' => 'session_multiple_subscription_students_list_avoid_emptying',
                     'title' => 'Prevent emptying the subscribed users in session subscription',
                     'comment' => 'When using the multiple learners subscription to a session, prevent the normal behaviour which is to unsubscribe users who are not in the right panel when clicking submit. Keep all users there.',

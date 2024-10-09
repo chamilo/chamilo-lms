@@ -449,7 +449,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     public function getShowDescription(): bool
     {
-        return $this->showDescription;
+        return $this->showDescription ?? false;
     }
 
     public function setShowDescription(bool $showDescription): self

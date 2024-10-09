@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpView;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -29,8 +30,8 @@ class CourseRelUserRepository extends ServiceEntityRepository
             ->select('u.id AS userId, c.title AS courseTitle, lp.iid AS lpId, lpv.progress')
             ->innerJoin('cu.user', 'u')
             ->innerJoin('cu.course', 'c')
-            ->innerJoin(CLpView::class, 'lpv', 'WITH', 'lpv.course = c AND lpv.user = u.id')
-            ->innerJoin('lpv.lp', 'lp')
+            ->leftJoin(CLpView::class, 'lpv', 'WITH', 'lpv.user = u.id')
+            ->leftJoin(CLp::class, 'lp', 'WITH', 'lp.iid = lpv.lp')
             ->where('cu.course = :courseId')
             ->andWhere('lp.iid IN (:lpIds)')
             ->setParameter('courseId', $courseId)

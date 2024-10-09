@@ -94,6 +94,7 @@ class LpProgressReminderCommand extends Command
                 $output->writeln('Processing course ID: ' . $courseId);
                 if (!empty($courseUsers)) {
                     $output->writeln('Course users retrieved: ' . count($courseUsers));
+                    $output->writeln('Course retrieved: ' . print_r($courseUsers, true));
                 }
                 if (!empty($sessionCourseUsers)) {
                     $output->writeln('Session users retrieved: ' . count($sessionCourseUsers));
@@ -133,24 +134,24 @@ class LpProgressReminderCommand extends Command
             }
 
             $registrationDate = $this->trackEDefaultRepository->getUserCourseRegistrationAt($courseId, $userId, $sessionId);
-            $nbDaysForLpCompletion = $lpItems[$lpId];
+            $nbDaysForLpCompletion = (int) $lpItems[$lpId];
 
             if ($registrationDate) {
                 if ($debugMode) {
                     $sessionInfo = $sessionId > 0 ? "in session ID $sessionId" : "without a session";
-                    echo "Registration date: {$registrationDate->format('Y-m-d H:i:s')}, Days for completion: $nbDaysForLpCompletion, $sessionInfo\n";
+                    echo "Registration date: {$registrationDate->format('Y-m-d H:i:s')}, Days for completion: $nbDaysForLpCompletion, LP ID: $lpId, $sessionInfo\n";
                 }
                 if ($this->isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion)) {
                     $nbRemind = $this->getNbReminder($registrationDate, $nbDaysForLpCompletion);
                     if ($debugMode) {
-                        echo "Sending reminder to user $userId for course $courseTitle $sessionInfo\n";
-                        $this->logReminderSent($userId, $courseTitle, $nbRemind, $debugMode, $sessionId);
+                        echo "Sending reminder to user $userId for course $courseTitle (LP ID: $lpId) $sessionInfo\n";
+                        $this->logReminderSent($userId, $courseTitle, $nbRemind, $debugMode, $sessionId, $lpId);
                     }
                     $this->sendLpReminder($userId, $courseTitle, $progress, $registrationDate, $nbRemind);
                 }
             } elseif ($debugMode) {
                 $sessionInfo = $sessionId > 0 ? "in session ID $sessionId" : "without a session";
-                echo "No registration date found for user $userId in course $courseTitle $sessionInfo\n";
+                echo "No registration date found for user $userId in course $courseTitle (LP ID: $lpId) $sessionInfo\n";
             }
         }
     }
@@ -158,15 +159,16 @@ class LpProgressReminderCommand extends Command
     /**
      * Logs the reminder details if debug mode is enabled.
      */
-    private function logReminderSent(int $userId, string $courseTitle, int $nbRemind, bool $debugMode, int $sessionId = 0): void
+    private function logReminderSent(int $userId, string $courseTitle, int $nbRemind, bool $debugMode, int $sessionId = 0, int $lpId): void
     {
         if ($debugMode) {
             $sessionInfo = $sessionId > 0 ? sprintf("in session ID %d", $sessionId) : "without a session";
             echo sprintf(
-                "Reminder number %d sent to user ID %d for the course %s %s.\n",
+                "Reminder number %d sent to user ID %d for the course %s (LP ID: %d) %s.\n",
                 $nbRemind,
                 $userId,
                 $courseTitle,
+                $lpId,
                 $sessionInfo
             );
         }

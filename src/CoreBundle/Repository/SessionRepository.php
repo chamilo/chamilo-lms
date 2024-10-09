@@ -463,4 +463,107 @@ class SessionRepository extends ServiceEntityRepository
 
         return array_filter($sessions, $filterSessions);
     }
+
+    /**
+     * Finds a valid child session based on access dates and reinscription days.
+     *
+     * @param Session $session
+     * @return Session|null
+     */
+    public function findValidChildSession(Session $session): ?Session
+    {
+        $childSessions = $this->findChildSessions($session);
+        foreach ($childSessions as $childSession) {
+            $now = new \DateTime();
+            $startDate = $childSession->getAccessStartDate();
+            $endDate = $childSession->getAccessEndDate();
+            $daysToReinscription = $childSession->getDaysToReinscription();
+
+            // Skip if days to reinscription is not set
+            if ($daysToReinscription === null || $daysToReinscription === '') {
+                continue;
+            }
+
+            // Adjust the end date by days to reinscription
+            $endDate = $endDate->modify('-' . $daysToReinscription . ' days');
+
+            // Check if the current date falls within the session's validity period
+            if ($startDate <= $now && $endDate >= $now) {
+                return $childSession;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Finds a valid parent session based on access dates and reinscription days.
+     */
+    public function findValidParentSession(Session $session): ?Session
+    {
+        $parentSession = $this->findParentSession($session);
+        if ($parentSession) {
+            $now = new \DateTime();
+            $startDate = $parentSession->getAccessStartDate();
+            $endDate = $parentSession->getAccessEndDate();
+            $daysToReinscription = $parentSession->getDaysToReinscription();
+
+            // Return null if days to reinscription is not set
+            if ($daysToReinscription === null || $daysToReinscription === '') {
+                return null;
+            }
+
+            // Adjust the end date by days to reinscription
+            $endDate = $endDate->modify('-' . $daysToReinscription . ' days');
+
+            // Check if the current date falls within the session's validity period
+            if ($startDate <= $now && $endDate >= $now) {
+                return $parentSession;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Finds child sessions based on the parent session.
+     */
+    public function findChildSessions(Session $parentSession): array
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.parentId = :parentId')
+            ->setParameter('parentId', $parentSession->getId())
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Finds the parent session for a given session.
+     */
+    public function findParentSession(Session $session): ?Session
+    {
+        if ($session->getParentId()) {
+            return $this->find($session->getParentId());
+        }
+
+        return null;
+    }
+
+    /**
+     * Find sessions without child and ready for repetition.
+     *
+     * @return Session[]
+     */
+    public function findSessionsWithoutChildAndReadyForRepetition()
+    {
+        $currentDate = new \DateTime();
+
+        $qb = $this->createQueryBuilder('s')
+            ->where('s.parentId IS NULL')
+            ->andWhere('s.daysToNewRepetition IS NOT NULL')
+            ->andWhere('s.lastRepetition = :false')
+            ->andWhere(':currentDate BETWEEN DATE_SUB(s.accessEndDate, s.daysToNewRepetition, \'DAY\') AND s.accessEndDate')
+            ->setParameter('false', false)
+            ->setParameter('currentDate', $currentDate);
+
+        return $qb->getQuery()->getResult();
+    }
 }

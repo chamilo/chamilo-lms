@@ -677,7 +677,7 @@ switch ($action) {
         $count = ExerciseLib::get_count_exam_results(
             $exerciseId,
             $whereCondition,
-            '',
+            $courseId,
             false,
             true,
             $status
@@ -839,6 +839,7 @@ switch ($action) {
                     ['where' => $whereCondition, 'extra' => $extra_fields]
                 );
                 break;
+            case 'replication':
             case 'custom':
             case 'simple':
                 $count = SessionManager::getSessionsForAdmin(
@@ -1981,6 +1982,7 @@ switch ($action) {
                 break;
             case 'custom':
             case 'simple':
+            case 'replication':
                 $result = SessionManager::getSessionsForAdmin(
                     api_get_user_id(),
                     [

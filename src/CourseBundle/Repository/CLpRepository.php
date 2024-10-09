@@ -103,4 +103,33 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
 
         return $qb;
     }
+
+    public function getLpSessionId(int $lpId): ?int
+    {
+        $lp = $this->find($lpId);
+
+        if (!$lp) {
+            return null;
+        }
+
+        $resourceNode = $lp->getResourceNode();
+        if ($resourceNode) {
+            $link = $resourceNode->getResourceLinks()->first();
+
+            if ($link && $link->getSession()) {
+
+                return (int) $link->getSession()->getId();
+            }
+        }
+
+        return null;
+    }
+
+    public function findWithValidity(): array
+    {
+        return $this->createQueryBuilder('lp')
+            ->where('lp.validityInDays > 0')
+            ->getQuery()
+            ->getResult();
+    }
 }

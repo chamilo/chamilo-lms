@@ -137,6 +137,21 @@ $form->addRule(
     ['jpg', 'jpeg', 'png', 'gif']
 );
 
+$showValidityField = 'true' === api_get_setting('session.enable_auto_reinscription') || 'true' === api_get_setting('session.enable_session_replication');
+if ($showValidityField) {
+    $form->addElement(
+        'number',
+        'validity_in_days',
+        get_lang('Validity in days'),
+        [
+            'min' => 0,
+            'max' => 365,
+            'step' => 1,
+            'placeholder' => get_lang('Enter the number of days'),
+        ]
+    );
+}
+
 // Search terms (only if search is activated).
 if ('true' === api_get_setting('search_enabled')) {
     $specific_fields = get_specific_field_list();
@@ -166,6 +181,7 @@ $defaults['lp_author'] = Security::remove_XSS($lp->getAuthor());
 $defaults['hide_toc_frame'] = $hideTableOfContents;
 $defaults['category_id'] = $learnPath->getCategoryId();
 $defaults['accumulate_scorm_time'] = $learnPath->getAccumulateScormTime();
+$defaults['validity_in_days'] = $lp->getValidityInDays() ?? null;
 
 $expired_on = $learnPath->expired_on;
 $published_on = $learnPath->published_on;
@@ -363,6 +379,7 @@ if ($form->validate()) {
         ->setExpiredOn(api_get_utc_datetime($expired_on, true, true))
         ->setCategory($category)
         ->setSubscribeUsers(isset($_REQUEST['subscribe_users']) ? 1 : 0)
+        ->setValidityInDays($_REQUEST['validity_in_days'] ?? null)
     ;
 
     $extraFieldValue = new ExtraFieldValue('lp');

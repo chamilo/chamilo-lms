@@ -237,6 +237,7 @@ if (!$formSent) {
             'coach_access_start_date' => $session->getCoachAccessStartDate() ? api_get_local_time($session->getCoachAccessStartDate()) : null,
             'coach_access_end_date' => $session->getCoachAccessEndDate() ? api_get_local_time($session->getCoachAccessEndDate()) : null,
             'send_subscription_notification' => $session->getSendSubscriptionNotification(),
+            'notify_boss' => $session->getNotifyBoss(),
             'coach_username' => array_map(
                 function (User $user) {
                     return $user->getId();
@@ -244,6 +245,10 @@ if (!$formSent) {
                 $session->getGeneralCoaches()->getValues()
             ),
             'session_template' => $session->getTitle(),
+            'days_before_finishing_for_reinscription' => $session->getDaysToReinscription() ?? '',
+            'days_before_finishing_to_create_new_repetition' => $session->getDaysToNewRepetition() ?? '',
+            'last_repetition' => $session->getLastRepetition(),
+            'parent_id' => $session->getParentId() ?? 0,
         ];
     } else {
         $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
@@ -271,6 +276,7 @@ if ($form->validate()) {
     $sendSubscriptionNotification = isset($params['send_subscription_notification']);
     $isThisImageCropped = isset($params['picture_crop_result']);
     $status = isset($params['status']) ? $params['status'] : 0;
+    $notifyBoss = isset($params['notify_boss']) ? 1 : 0;
 
     $extraFields = [];
     foreach ($params as $key => $value) {
@@ -324,19 +330,20 @@ if ($form->validate()) {
         $coachUsername,
         $id_session_category,
         $id_visibility,
-        $parentId,
-        $daysBeforeFinishingForReinscription,
-        $lastRepetition,
-        $daysBeforeFinishingToCreateNewRepetition,
         false,
         $duration,
         $description,
         $showDescription,
         $extraFields,
-        null,
+        0,
         $sendSubscriptionNotification,
         api_get_current_access_url_id(),
-        $status
+        $status,
+        $notifyBoss,
+        $parentId,
+        $daysBeforeFinishingForReinscription,
+        $lastRepetition,
+        $daysBeforeFinishingToCreateNewRepetition
     );
 
     if ($return == strval(intval($return))) {

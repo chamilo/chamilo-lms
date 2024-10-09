@@ -1,0 +1,5 @@
+<p>{{ 'Dear'|trans({}, 'messages', locale) }} {{ boss_name }},</p>
+<p>{{ 'We would like to inform you that your student, '|trans({}, 'messages', locale) }} {{ student_name }}, {{ 'has been registered to the session'|trans({}, 'messages', locale) }} {{ session_name }}.</p>
+<p>{{ 'You can check the session details in the platform.'|trans({}, 'messages', locale) }}</p>
+<p>{{ 'Best regards,'|trans({}, 'messages', locale) }}</p>
+{% include '@ChamiloCore/Mailer/Legacy/_admin_signature_footer.html.twig' %}

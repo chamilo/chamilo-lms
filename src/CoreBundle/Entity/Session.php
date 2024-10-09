@@ -386,6 +386,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\Column(name: 'days_to_new_repetition', type: 'integer', nullable: true)]
     protected ?int $daysToNewRepetition = null;
 
+    #[ORM\Column(name: 'notify_boss', type: 'boolean', options: ['default' => false])]
+    protected bool $notifyBoss = false;
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();
@@ -1469,6 +1472,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function setParentId(?int $parentId): self
     {
         $this->parentId = $parentId;
+
         return $this;
     }
 
@@ -1480,6 +1484,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function setDaysToReinscription(?int $daysToReinscription): self
     {
         $this->daysToReinscription = $daysToReinscription;
+
         return $this;
     }
 
@@ -1491,6 +1496,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function setLastRepetition(bool $lastRepetition): self
     {
         $this->lastRepetition = $lastRepetition;
+
         return $this;
     }
 
@@ -1502,6 +1508,19 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function setDaysToNewRepetition(?int $daysToNewRepetition): self
     {
         $this->daysToNewRepetition = $daysToNewRepetition;
+
+        return $this;
+    }
+
+    public function getNotifyBoss(): bool
+    {
+        return $this->notifyBoss;
+    }
+
+    public function setNotifyBoss(bool $notifyBoss): self
+    {
+        $this->notifyBoss = $notifyBoss;
+
         return $this;
     }
 }

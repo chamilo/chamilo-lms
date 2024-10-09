@@ -150,10 +150,6 @@ class SessionManager
         array $coachesId,
         $sessionCategoryId,
         $visibility = 1,
-        $parentId = null,
-        $daysBeforeFinishingForReinscription = null,
-        $lastRepetition = false,
-        $daysBeforeFinishingToCreateNewRepetition = null,
         $fixSessionNameIfExists = false,
         $duration = null,
         $description = null,
@@ -162,7 +158,12 @@ class SessionManager
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false,
         $accessUrlId = 0,
-        $status = 0
+        $status = 0,
+        $notifyBoss = false,
+        $parentId = null,
+        $daysBeforeFinishingForReinscription = null,
+        $lastRepetition = false,
+        $daysBeforeFinishingToCreateNewRepetition = null
     ) {
         global $_configuration;
 
@@ -229,6 +230,7 @@ class SessionManager
                     ->setDescription($description)
                     ->setShowDescription(1 === $showDescription)
                     ->setSendSubscriptionNotification((bool) $sendSubscriptionNotification)
+                    ->setNotifyBoss((bool) $notifyBoss)
                     ->setParentId($parentId)
                     ->setDaysToReinscription($daysBeforeFinishingForReinscription)
                     ->setLastRepetition($lastRepetition)
@@ -1800,6 +1802,7 @@ class SessionManager
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false,
         $status = 0,
+        $notifyBoss = 0,
         $parentId = 0,
         $daysBeforeFinishingForReinscription = null,
         $daysBeforeFinishingToCreateNewRepetition = null,
@@ -1872,6 +1875,11 @@ class SessionManager
                     ->setShowDescription(1 === $showDescription)
                     ->setVisibility($visibility)
                     ->setSendSubscriptionNotification((bool) $sendSubscriptionNotification)
+                    ->setNotifyBoss((bool) $notifyBoss)
+                    ->setParentId($parentId)
+                    ->setDaysToReinscription($daysBeforeFinishingForReinscription)
+                    ->setLastRepetition($lastRepetition)
+                    ->setDaysToNewRepetition($daysBeforeFinishingToCreateNewRepetition)
                     ->setAccessStartDate(null)
                     ->setAccessStartDate(null)
                     ->setDisplayStartDate(null)
@@ -2177,12 +2185,7 @@ class SessionManager
         }
 
         if ($session->getSendSubscriptionNotification() && is_array($userList)) {
-            // Sending emails only
             foreach ($userList as $user_id) {
-                if (in_array($user_id, $existingUsers)) {
-                    continue;
-                }
-
                 $tplSubject = new Template(
                     null,
                     false,
@@ -2217,6 +2220,7 @@ class SessionManager
                 );
                 $content = $tplContent->fetch($layoutContent);
 
+                // Send email
                 api_mail_html(
                     $user_info['complete_name'],
                     $user_info['mail'],
@@ -2228,6 +2232,30 @@ class SessionManager
                     ),
                     api_get_setting('emailAdministrator')
                 );
+
+                // Record message in system
+                MessageManager::send_message_simple(
+                    $user_id,
+                    $subject,
+                    $content,
+                    api_get_user_id(),
+                    false,
+                    true
+                );
+            }
+        }
+
+        if ($session->getNotifyBoss()) {
+            foreach ($userList as $user_id) {
+                $studentBossList = UserManager::getStudentBossList($user_id);
+
+                if (!empty($studentBossList)) {
+                    $studentBossList = array_column($studentBossList, 'boss_id');
+                    foreach ($studentBossList as $bossId) {
+                        $boss = api_get_user_entity($bossId);
+                        self::notifyBossOfInscription($boss, $session, $user_id);
+                    }
+                }
             }
         }
 
@@ -2325,6 +2353,60 @@ class SessionManager
         Database::query($sql);
 
         return true;
+    }
+
+    /**
+     * Sends a notification email to the student's boss when the student is enrolled in a session.
+     *
+     * @param User $boss The boss of the student to be notified.
+     * @param Session $session The session the student has been enrolled in.
+     * @param int $userId The ID of the student being enrolled.
+     */
+    public static function notifyBossOfInscription(User $boss, Session $session, int $userId): void
+    {
+        $tpl = Container::getTwig();
+
+        $user_info = api_get_user_info($userId);
+
+        $subject = $tpl->render(
+            '@ChamiloCore/Mailer/Legacy/subject_subscription_to_boss_notification.html.twig',
+            [
+                'locale' => $boss->getLocale(),
+                'boss_name' => $boss->getFullname(),
+                'student_name' => $user_info['complete_name'],
+                'session_name' => $session->getTitle(),
+            ]
+        );
+
+        $content = $tpl->render(
+            '@ChamiloCore/Mailer/Legacy/content_subscription_to_boss_notification.html.twig',
+            [
+                'locale' => $boss->getLocale(),
+                'boss_name' => $boss->getFullname(),
+                'student_name' => $user_info['complete_name'],
+                'session_name' => $session->getTitle(),
+            ]
+        );
+
+        // Send email
+        api_mail_html(
+            $boss->getFullname(),
+            $boss->getEmail(),
+            $subject,
+            $content,
+            api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')),
+            api_get_setting('emailAdministrator')
+        );
+
+        // Record message in system
+        MessageManager::send_message_simple(
+            $boss->getId(),
+            $subject,
+            $content,
+            api_get_user_id(),
+            false,
+            true
+        );
     }
 
     /**
@@ -8185,6 +8267,11 @@ class SessionManager
             get_lang('Send an email when a user being subscribed to session'),
         );
 
+        $form->addCheckBox(
+            'notify_boss',
+            get_lang('Notify inscription of user to student boss')
+        );
+
         // Picture
         $form->addFile(
             'picture',
@@ -8211,12 +8298,11 @@ class SessionManager
         $extra_field = new ExtraFieldModel('session');
         $extra = $extra_field->addElements($form, $session ? $session->getId() : 0, ['image']);
 
-
         if ('true' === api_get_setting('session.enable_auto_reinscription')) {
             $form->addElement(
                 'text',
                 'days_before_finishing_for_reinscription',
-                get_lang('DaysBeforeFinishingForReinscription'),
+                get_lang('Days before finishing for reinscription'),
                 ['maxlength' => 5]
             );
         }
@@ -8225,7 +8311,7 @@ class SessionManager
             $form->addElement(
                 'text',
                 'days_before_finishing_to_create_new_repetition',
-                get_lang('DaysBeforeFinishingToCreateNewRepetition'),
+                get_lang('Days before finishing to create new repetition'),
                 ['maxlength' => 5]
             );
         }
@@ -8234,7 +8320,7 @@ class SessionManager
             $form->addElement(
                 'checkbox',
                 'last_repetition',
-                get_lang('LastRepetition')
+                get_lang('Last repetition')
             );
         }
 
@@ -8242,7 +8328,7 @@ class SessionManager
         $element = $form->createElement(
             'select',
             'parent_id',
-            get_lang('ParentSession'),
+            get_lang('Parent session'),
             [],
             ['class' => 'form-control']
         );

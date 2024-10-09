@@ -169,9 +169,6 @@ class Message
     )]
     protected Collection $attachments;
 
-    #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageFeedback::class, orphanRemoval: true)]
-    protected Collection $likes;
-
     public function __construct()
     {
         $this->sendDate = new DateTime('now');
@@ -181,7 +178,6 @@ class Message
         $this->attachments = new ArrayCollection();
         $this->children = new ArrayCollection();
         $this->receivers = new ArrayCollection();
-        $this->likes = new ArrayCollection();
         $this->votes = 0;
         $this->status = 0;
     }
@@ -476,10 +472,5 @@ class Message
         $this->status = $status;
 
         return $this;
-    }
-
-    public function getLikes(): Collection
-    {
-        return $this->likes;
     }
 }

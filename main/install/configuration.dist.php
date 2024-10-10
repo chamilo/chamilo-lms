@@ -2260,6 +2260,12 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 // Salt to use for admin ldap password decryption
 //$_configuration['ldap_admin_password_salt'] = 'salt';
 
+// Limit providers for OpenID (classic) authentication
+/*$_configuration['auth_openid_allowed_providers'] = [
+    'example.com',
+    '*.example.com',
+];*/
+
 // Option to hide the teachers info on courses about info page.
 //$_configuration['course_about_teacher_name_hide'] = false;
 

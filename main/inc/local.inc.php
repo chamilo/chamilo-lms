@@ -975,9 +975,14 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         $openidForm = openid_form();
         if ($openidForm->validate() && $openidForm->isSubmitted()) {
             $openidUrl = $openidForm->exportValue('openid_url');
-            openid_begin($openidUrl, api_get_path(WEB_PATH).'index.php');
-            //this last function should trigger a redirect, so we can die here safely
-            exit('Openid login redirection should be in progress');
+
+            if (openid_is_allowed_provider($openidUrl)) {
+                openid_begin($openidUrl, api_get_path(WEB_PATH).'index.php');
+                //this last function should trigger a redirect, so we can die here safely
+                exit('Openid login redirection should be in progress');
+            } else {
+                $loginFailed = true;
+            }
         } elseif (!empty($_GET['openid_identity'])) { //it's usual for PHP to replace '.' (dot) by '_' (underscore) in URL parameters
             $res = openid_complete($_GET);
             if ($res['status'] == 'success') {

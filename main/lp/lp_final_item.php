@@ -70,7 +70,8 @@ $finalItemTemplate = '';
 // Check prerequisites and total completion of the learning path
 $lp = new Learnpath($courseCode, $lpId, $userId);
 $count = $lp->getTotalItemsCountWithoutDirs();
-$completed = $lp->get_complete_items_count(true);
+$excludeFailedStatus = !(true === api_get_configuration_value('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached'));
+$completed = $lp->get_complete_items_count($excludeFailedStatus);
 $currentItemId = $lp->get_current_item_id();
 $currentItem = $lp->items[$currentItemId];
 $currentItemStatus = $currentItem->get_status();

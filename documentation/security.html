@@ -174,6 +174,16 @@ This will prevent direct access to your settings and make it seem totally the sa
         we highly recommend the <a href="https://securityheaders.io/">securityheaders.io</a>
         website. If you want to read more about CSP and all related headers
         security techniques, check <a href="https://scotthelme.co.uk/">Scott Helme's blog</a>.
+    </p>
+    <p>As per reported vulnerabilities #175 and #176 on
+        <a href="https://github.com/chamilo/chamilo-lms/wiki/security-issues">our Security Issues page</a>,
+        we highly recommend setting <em>$_configuration['security_content_policy']</em>, in particular for
+        elements like 'script-src', 'style-src' and 'form-action' to 'self' or to a limited number of trusted URLs.<br>
+        In particular, the social wall and the course chat spaces could be abused by some users to trick others
+        into filling forms that will send personal data to external sites. Letting users edit HTML is useful
+        but dangerous if you cannot trust people using these features. These features cannot be used by anonymous
+        users, but portals allowing for open registration could be particularly vulnerable.
+    </p>
     <br />
 <hr />
 <h2><a id="7.Direct-web-access">Direct web access to files</a></h2>

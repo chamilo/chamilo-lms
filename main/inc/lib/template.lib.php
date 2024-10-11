@@ -1318,7 +1318,7 @@ class Template
         $html = $form->returnForm();
         if (api_get_setting('openid_authentication') == 'true') {
             include_once api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
-            $html .= '<div>'.openid_form().'</div>';
+            $html .= '<div>'.openid_form()->returnForm().'</div>';
         }
 
         $pluginKeycloak = api_get_plugin_setting('keycloak', 'tool_enable') === 'true';

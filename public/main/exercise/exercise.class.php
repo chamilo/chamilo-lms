@@ -237,7 +237,7 @@ class Exercise
                 $this->lpList = $list;
             }
 
-            $this->force_edit_exercise_in_lp = api_get_configuration_value('force_edit_exercise_in_lp');
+            $this->force_edit_exercise_in_lp = api_get_setting('lp.force_edit_exercise_in_lp');
             $this->edit_exercise_in_lp = true;
             if ($this->exercise_was_added_in_lp) {
                 $this->edit_exercise_in_lp = true == $this->force_edit_exercise_in_lp;

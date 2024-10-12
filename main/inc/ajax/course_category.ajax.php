@@ -31,7 +31,8 @@ switch ($action) {
             $result = '';
             foreach ($courses as $course) {
                 $row++;
-                $table->setCellContents($row, 0, $course['title']);
+                $courseLink = '<a href="'.api_get_path(WEB_PATH).'courses/'.$course['code'].'/index.php">'.$course['title'].'</a>';
+                $table->setCellContents($row, 0, $courseLink);
             }
 
             echo $table->toHtml();

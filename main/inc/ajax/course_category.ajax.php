@@ -31,7 +31,7 @@ switch ($action) {
             $result = '';
             foreach ($courses as $course) {
                 $row++;
-                $courseLink = '<a href="'.api_get_path(WEB_PATH).'courses/'.$course['code'].'/index.php">'.$course['title'].'</a>';
+                $courseLink = '<a href="'.api_get_path(WEB_PATH).'courses/'.$course['directory'].'/index.php">'.$course['title'].'</a>';
                 $table->setCellContents($row, 0, $courseLink);
             }
 

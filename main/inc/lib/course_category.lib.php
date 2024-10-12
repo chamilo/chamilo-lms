@@ -728,7 +728,7 @@ class CourseCategory
 
         $urlCondition = ' access_url_id = '.api_get_current_access_url_id().' AND';
         $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $select = " DISTINCT course.id, course.code, course.title, course.category_code ";
+        $select = " DISTINCT course.id, course.code, course.title, course.category_code, course.directory ";
         if ($getCount) {
             $select = "count(DISTINCT course.id) as count";
         }

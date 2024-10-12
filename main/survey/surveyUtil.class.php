@@ -1604,13 +1604,15 @@ class SurveyUtil
                 } else {
                     foreach ($possible_option as $option_id => $value) {
                         if ($questions[$question_id]['type'] === 'multiplechoiceother') {
-                            foreach ($answers_of_user[$question_id] as $key => $newValue) {
-                                $parts = ch_multiplechoiceother::decodeOptionValue($key);
-                                if (isset($parts[0])) {
-                                    $data = $answers_of_user[$question_id][$key];
-                                    unset($answers_of_user[$question_id][$key]);
-                                    $newKey = $parts[0];
-                                    $answers_of_user[$question_id][$newKey] = $data;
+                            if (isset($answers_of_user[$question_id])) {
+                                foreach ($answers_of_user[$question_id] as $key => $newValue) {
+                                    $parts = ch_multiplechoiceother::decodeOptionValue($key);
+                                    if (isset($parts[0])) {
+                                        $data = $answers_of_user[$question_id][$key];
+                                        unset($answers_of_user[$question_id][$key]);
+                                        $newKey = $parts[0];
+                                        $answers_of_user[$question_id][$newKey] = $data;
+                                    }
                                 }
                             }
                         }

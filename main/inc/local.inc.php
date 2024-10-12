@@ -971,13 +971,19 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             $osso->logout(); //redirects and exits
         }
     } elseif (api_get_setting('openid_authentication') == 'true') {
-        if (!empty($_POST['openid_url'])) {
-            include api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
-            openid_begin(trim($_POST['openid_url']), api_get_path(WEB_PATH).'index.php');
-            //this last function should trigger a redirect, so we can die here safely
-            exit('Openid login redirection should be in progress');
+        include api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
+        $openidForm = openid_form();
+        if ($openidForm->validate() && $openidForm->isSubmitted()) {
+            $openidUrl = $openidForm->exportValue('openid_url');
+
+            if (openid_is_allowed_provider($openidUrl)) {
+                openid_begin($openidUrl, api_get_path(WEB_PATH).'index.php');
+                //this last function should trigger a redirect, so we can die here safely
+                exit('Openid login redirection should be in progress');
+            } else {
+                $loginFailed = true;
+            }
         } elseif (!empty($_GET['openid_identity'])) { //it's usual for PHP to replace '.' (dot) by '_' (underscore) in URL parameters
-            include api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
             $res = openid_complete($_GET);
             if ($res['status'] == 'success') {
                 $id1 = Database::escape_string($res['openid.identity']);

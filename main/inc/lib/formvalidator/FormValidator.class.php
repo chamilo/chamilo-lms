@@ -1106,6 +1106,7 @@ EOT;
 
         $this->addElement('html_editor', $name, $label, $attributes, $config);
         $this->applyFilter($name, 'trim');
+        $this->applyFilter($name, 'attr_on_filter');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
@@ -2096,4 +2097,16 @@ function plain_url_filter($html, $mode = NO_HTML)
     $allowed_html_fixed = kses_array_lc($allowed_tags);
 
     return kses_split($html, $allowed_html_fixed, ['http', 'https']);
+}
+
+/**
+ * Prevent execution of event handlers in HTML elements.
+ *
+ * @param string $html
+ * @return string
+ */
+function attr_on_filter($html) {
+    $prefix = uniqid('data-cke-').'-';
+
+    return preg_replace('/(\s)(on)/i', '$1'.$prefix.'$2', $html);
 }

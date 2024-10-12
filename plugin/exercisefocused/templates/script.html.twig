@@ -1,0 +1,163 @@
+{% if exercisefocused.show_region %}
+    {% set enable_time_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_time_limit') %}
+    {% set time_limit = exercisefocused.plugin_info.obj.get('time_limit') %}
+    {% set enable_outfocused_limit = 'true' == exercisefocused.plugin_info.obj.get('enable_outfocused_limit') %}
+    {% set outfocused_limit = exercisefocused.plugin_info.obj.get('outfocused_limit') %}
+
+    {% set ALL_ON_ONE_PAGE = exercisefocused.exercise_type == 1 %}
+    {% set ONE_PER_PAGE = exercisefocused.exercise_type == 2 %}
+
+<script>
+    $(function () {
+        var $exerciseFocused = $("#exercisefocused-block").appendTo('body');
+        var $timeLimitBlock = $exerciseFocused.find('#time-limit-block');
+        var $timeLimitTarget = $exerciseFocused.find('#time-limit-target');
+        var $outfocusedLimitBlock = $exerciseFocused.find('#outfocused-limit-block');
+        var $outfocusedLimitTarget = $exerciseFocused.find('#outfocused-limit-target');
+
+        var $backdrop = $('<div>')
+            .addClass('exercisefocused-backdrop text-danger')
+            .attr('data-alert', '{{ 'AlertBeforeLeaving'|get_plugin_lang('ExerciseFocusedPlugin') }}')
+            .hover(
+                function () {$backdrop.removeClass('out').addClass('inmediate'); },
+                function () { $backdrop.addClass('out').removeClass('inmediate'); }
+            );
+
+        var $btnSaveNow = $('button[name="save_now"]');
+
+        $backdrop.appendTo('body');
+
+        var secToken = "{{ exercisefocused.sec_token }}";
+        var initDocumentTitle = document.title;
+        var countdownInterval;
+        var remainingTime;
+        var enableTimeLimit = {{ enable_time_limit ? 'true' : 'false' }};
+        var enableOutfocusedLimit = {{ enable_outfocused_limit ? 'true' : 'false' }};
+
+        {% if enable_outfocused_limit %}
+            var remainingOutfocused = {{ exercisefocused.remaining_outfocused }};
+        {% endif %}
+
+        function finishExam() {
+            $(window).off("blur", onBlur)
+            $(window).off("focus", onFocus)
+
+            {% if ALL_ON_ONE_PAGE %}
+                save_now_all('validate');
+            {% elseif ONE_PER_PAGE %}
+                window.quizTimeEnding = true;
+                $('[name="save_now"]').trigger('click');
+            {% endif %}
+        }
+
+        {% if enable_time_limit %}
+            function updateCountdown() {
+                var seconds = remainingTime;
+                var strSeconds = `${seconds.toString().padStart(2, '0')}`;
+
+                $timeLimitTarget.text(strSeconds);
+                document.title = $timeLimitTarget.parent().text();
+
+                remainingTime--;
+
+                if (remainingTime < 0) {
+                    clearInterval(countdownInterval);
+
+                    sendAction('time_limit', function () {
+                        finishExam()
+                    });
+                }
+            }
+        {% endif %}
+
+        function sendAction(action, callback) {
+            {% if ALL_ON_ONE_PAGE %}
+                var levelId = 0;
+            {% elseif ONE_PER_PAGE %}
+                var levelId = $btnSaveNow.data('question') || -1;
+            {% endif %}
+
+            $.ajax({
+                url: "{{ _p.web_plugin }}exercisefocused/pages/log.php",
+                data: {
+                    action: action,
+                    exercisefocused_sec_token: secToken,
+                    level_id: levelId
+                },
+                success: function (response) {
+                    if (!response) {
+                        return;
+                    }
+
+                    secToken = response.sec_token;
+
+                    if (callback) {
+                        callback(response)
+                    }
+                },
+            });
+        }
+
+        function onBlur() {
+            $exerciseFocused.show();
+
+            if (enableOutfocusedLimit) {
+                if (remainingOutfocused <= 0) {
+                    $outfocusedLimitBlock.find('p').text("{{ 'OutfocusedLimitExceeded'|get_plugin_lang('ExerciseFocusedPlugin')|escape('js') }}");
+                    $timeLimitBlock.hide();
+
+                    sendAction('outfocused_limit', function () {
+                        finishExam()
+                    });
+
+                    return;
+                } else {
+                    $outfocusedLimitTarget.text(remainingOutfocused);
+                }
+
+                remainingOutfocused--;
+            }
+
+            sendAction('outfocused');
+
+            {% if enable_time_limit %}
+                remainingTime = {{ time_limit }};
+
+                updateCountdown();
+
+                countdownInterval = window.setInterval(updateCountdown, 1000);
+            {% else %}
+                document.title = "{{ 'WindowTitleOutfocused'|get_plugin_lang('ExerciseFocusedPlugin')|escape('js') }}";
+            {% endif %}
+        }
+
+        function onFocus() {
+            sendAction('return');
+
+            document.title = initDocumentTitle;
+
+            window.setTimeout(
+                function () {
+                    $exerciseFocused.hide();
+                },
+                3500
+            );
+
+            {% if enable_time_limit %}
+                clearInterval(countdownInterval);
+            {% endif %}
+        }
+
+        $(window).on("blur", onBlur)
+        $(window).on("focus", onFocus)
+
+        $('body').on('click', 'a, button', function (e) {
+            var $el = $(e.target);
+
+            if (0 === $el.parents('form#exercise_form').length) {
+                e.preventDefault();
+            }
+        });
+    })
+</script>
+{% endif %}

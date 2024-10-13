@@ -8981,7 +8981,7 @@ class Tracking
                 $user->getId(),
                 $courseInfo,
                 $sessionId,
-                'lp.publicatedOn ASC',
+                null,
                 true,
                 $category->getId(),
                 false,

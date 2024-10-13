@@ -1560,7 +1560,7 @@ CREATE TABLE c_plagiarism_compilatio_docs (
     id INT AUTO_INCREMENT NOT NULL,
     c_id int(11) NOT NULL,
     document_id int(11) NOT NULL,
-    compilatio_id varchar(32) CHARACTER SET utf8 NOT NULL,
+    compilatio_id varchar(40) CHARACTER SET utf8 NOT NULL,
     PRIMARY KEY (id)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 

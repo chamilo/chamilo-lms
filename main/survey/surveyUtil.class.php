@@ -3437,6 +3437,25 @@ class SurveyUtil
         $formToString = $form->returnForm();
 
         echo '<div id="dialog-confirm">'.$formToString.'</div>';
+
+        $form = new FormValidator(
+            'copy-survey',
+            'post',
+            null,
+            null,
+            ['class' => 'form-vertical']
+        );
+        $form->addElement(
+            'text',
+            'survey_code',
+            get_lang('SurveyCode'),
+            ['size' => 20, 'maxlength' => 20]
+        );
+
+        $formToString = $form->returnForm();
+
+        echo '<div id="dialog-copy-confirm">'.$formToString.'</div>';
+
         $table->display();
     }
 
@@ -3516,6 +3535,7 @@ class SurveyUtil
      *
      * @param int  $survey_id the id of the survey
      * @param bool $drh
+     * @param bool $surveyCode
      *
      * @return string html code that are the actions that can be performed on any survey
      *
@@ -3523,7 +3543,7 @@ class SurveyUtil
      *
      * @version January 2007
      */
-    public static function modify_filter($survey_id, $drh = false)
+    public static function modify_filter($survey_id, $drh = false, $surveyCode = "")
     {
         /** @var CSurvey $survey */
         $survey = Database::getManager()->find('ChamiloCourseBundle:CSurvey', $survey_id);
@@ -3591,7 +3611,8 @@ class SurveyUtil
                 $actions[] = Display::url(
                     Display::return_icon('copy.png', get_lang('DuplicateSurvey')),
                     $codePath.'survey/survey_list.php?'
-                    .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id])
+                    .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id]),
+                    ['survey_id' => $survey_id, 'class' => 'copy_survey_popup']
                 );
 
                 $actions[] = Display::url(

@@ -120,9 +120,9 @@ class Session implements \ArrayAccess
     }
 
     /*
-     * ArrayAccess
+     * ArrayAccess : bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($_SESSION[$offset]);
     }
@@ -133,19 +133,19 @@ class Session implements \ArrayAccess
      *
      * @param string $offset
      *
-     * @return mixed
+     * @return mixed (write offsetGet($offset): mixed on PHP 8 and & > )
      */
     public function offsetGet($offset)
     {
         return self::read($offset);
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         self::write($offset, $value);
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($_SESSION[$offset]);
     }

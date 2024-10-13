@@ -1866,6 +1866,7 @@ class CourseHome
             );
         }
 
+        $visibility = false;
         if ($tool) {
             $visibility = $tool->getVisibility();
         }

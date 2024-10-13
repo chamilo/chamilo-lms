@@ -308,7 +308,19 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
         }
     }
 
-    echo '<tr class="'.$questionsGroupClass.$breakClass.'">';
+    // Highlight the question that was just updated and scrool to it
+    if ($row['question_id']==$my_question_id_survey) {
+        echo '<tr class="'.$questionsGroupClass.$breakClass.'" style="background-color:#A9DFBF;" >';
+        echo '<a name="tocupdatelink" id="tocupdatelink" ></a>';
+        echo '<script>';
+        echo '$(document).ready(function() {';
+        echo "var element_to_scroll_to = document.getElementById('tocupdatelink');";
+        echo 'element_to_scroll_to.scrollIntoView();';
+        echo '});';
+        echo '</script>';
+    } else {
+	    echo '<tr class="'.$questionsGroupClass.$breakClass.'">';
+    }
     echo '	<td>'.$question_counter.'</td>';
     echo '	<td>';
 

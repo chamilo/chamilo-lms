@@ -51,22 +51,22 @@ class SurveyManager
     /**
      * Checks if the survey code is unique.
      *
-     * @param string $courseCode
+     * @param string $surveyCode Proposed new survey code
      *
      * @return bool
      * @assert ('') === false
      */
-    public static function checkUniqueCode($courseCode)
+    public static function checkUniqueCode($surveyCode)
     {
         if (empty($courseCode)) {
             return false;
         }
         $courseId = api_get_course_int_id();
         $table = Database::get_course_table(TABLE_SURVEY);
-        $courseCode = Database::escape_string($courseCode);
+        $surveyCode = Database::escape_string($surveyCode);
 
         $sql = "SELECT * FROM $table
-                WHERE code = '$courseCode' AND c_id = $courseId";
+                WHERE code = '$surveyCode' AND c_id = $courseId";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return false;

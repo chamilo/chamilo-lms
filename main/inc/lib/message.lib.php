@@ -3050,6 +3050,57 @@ class MessageManager
     }
 
     /**
+     * Retrieves a list of users with whom the specified user has exchanged messages within an optional date range.
+     *
+     * @param   int         $userId The user ID for whom to retrieve message exchange.
+     * @param   string|null $startDate Start date to filter the messages (optional).
+     * @param   string|null $endDate End date to filter the messages (optional).
+     *
+     * @return array Array of user information for each user with whom the specified user has exchanged messages.
+     */
+    public static function getMessageExchangeWithUser($userId, $startDate = null, $endDate = null)
+    {
+        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+        $userId = (int) $userId;
+
+        if ($startDate !== null) {
+            $startDate = Database::escape_string($startDate);
+        }
+        if ($endDate !== null) {
+            $endDate = Database::escape_string($endDate);
+        }
+
+        $sql = "SELECT DISTINCT user_sender_id AS user_id
+                 FROM $messagesTable
+                 WHERE user_receiver_id = $userId" .
+                 ($startDate ? " AND send_date >= '$startDate'" : "") .
+                 ($endDate ? " AND send_date <= '$endDate'" : "") .
+               " UNION
+               SELECT DISTINCT user_receiver_id
+                 FROM $messagesTable
+                 WHERE user_sender_id = $userId" .
+                 ($startDate ? " AND send_date >= '$startDate'" : "") .
+                 ($endDate ? " AND send_date <= '$endDate'" : "");
+
+        $result = Database::query($sql);
+        $users = Database::store_result($result);
+
+        $userList = [];
+        foreach ($users as $userData) {
+            $userId = $userData['user_id'];
+            if (empty($userId)) {
+                continue;
+            }
+            $userInfo = api_get_user_info($userId);
+            if ($userInfo) {
+                $userList[$userId] = $userInfo;
+            }
+        }
+
+        return $userList;
+    }
+
+    /**
      * @param int      $userId
      * @param int      $otherUserId
      * @param datetime $startDate

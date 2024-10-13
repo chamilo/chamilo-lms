@@ -14,7 +14,14 @@ api_protect_course_script();
 
 $courseId = api_get_course_int_id();
 $courseInfo = api_get_course_info();
-$compilatio = new Compilatio();
+
+try {
+    $compilatio = new Compilatio();
+} catch (Exception $e) {
+    $message = Display::return_message($e->getMessage(), 'error');
+
+    exit($message);
+}
 
 /* if we have to upload severals documents*/
 if (isset($_REQUEST['type']) && 'multi' === $_REQUEST['type']) {
@@ -39,47 +46,22 @@ if (isset($_REQUEST['type']) && 'multi' === $_REQUEST['type']) {
             $sqlResult = Database::query($query);
             $doc = Database::fetch_object($sqlResult);
             if ($doc) {
-                /*We load the document in compilatio through the webservice */
-                $currentCourseRepositoryWeb = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/';
-                $WrkUrl = $currentCourseRepositoryWeb.$doc->url;
-                $LocalWrkUrl = $courseInfo['course_sys_path'].$doc->url;
-                $mime = DocumentManager::file_get_mime_type($doc->title);
-                if ('wget' === $compilatio->getTransportMode()) {
-                    /*Compilatio's server recover tjre file throught wget like this:
-                    username:password@http://somedomain.com/reg/remotefilename.tar.gz */
-                    if (strlen($compilatio->getWgetUri()) > 2) {
-                        $filename = preg_replace(
-                                '/$',
-                                '',
-                                $compilatio->getWgetUri()
-                            ).'/'.$courseInfo['path'].'/'.$doc->url;
-                    } else {
-                        $filename = $WrkUrl;
-                    }
-                    if (strlen($compilatio->getWgetLogin()) > 2) {
-                        $filename = $compilatio->getWgetLogin().':'.$compilatio->getWgetPassword().'@'.$filename;
-                    }
-                    $mime = 'text/plain';
-                    $compilatioId = $compilatio->sendDoc($doc->title, '', $filename, $mime, 'get_url');
-                } else {
-                    /* we use strictly the SOAP for the data trasmission */
-                    $pieces = explode('/', $doc->url);
-                    $nbPieces = count($pieces);
-                    $filename = $pieces[$nbPieces - 1];
+                try {
                     $compilatioId = $compilatio->sendDoc(
                         $doc->title,
-                        '',
-                        $filename,
-                        $mime,
-                        file_get_contents($LocalWrkUrl)
+                        $doc->description,
+                        $doc->url,
+                        $courseInfo['course_sys_path'].$doc->url
                     );
-                }
-                /*we associate in the database the document chamilo to the document compilatio*/
-                /*we verify that the docmuent's id is an hash_md5*/
-                if (Compilatio::isMd5($compilatioId)) {
+
+                    /*we associate in the database the document chamilo to the document compilatio*/
                     $compilatio->saveDocument($courseId, $doc->id, $compilatioId);
                     sleep(10);
-                    $soapRes = $compilatio->startAnalyse($compilatioId);
+                    $compilatio->startAnalyse($compilatioId);
+                } catch (Exception $e) {
+                    $message = Display::return_message($e->getMessage(), 'error');
+
+                    exit($message);
                 }
             }
         }
@@ -92,14 +74,14 @@ if (isset($_REQUEST['type']) && 'multi' === $_REQUEST['type']) {
 function sendDocument($documentId, $courseInfo)
 {
     if (empty($courseInfo)) {
-        return false;
+        return;
     }
 
     $courseId = $courseInfo['real_id'] ?? 0;
     $documentId = (int) $documentId;
 
     if (empty($courseId) || empty($documentId)) {
-        return false;
+        return;
     }
 
     compilatioUpdateWorkDocument($documentId, $courseId);
@@ -108,37 +90,25 @@ function sendDocument($documentId, $courseInfo)
               WHERE id = $documentId AND c_id= $courseId";
     $sqlResult = Database::query($query);
     $doc = Database::fetch_object($sqlResult);
-    $currentCourseRepositoryWeb = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/';
-    $documentUrl = $currentCourseRepositoryWeb.$doc->url;
 
     $filePath = $courseInfo['course_sys_path'].$doc->url;
-    $mime = DocumentManager::file_get_mime_type($doc->title);
 
-    $compilatio = new Compilatio();
-    if ('wget' === $compilatio->getTransportMode()) {
-        if (strlen($compilatio->getWgetUri()) > 2) {
-            $filename = preg_replace('/$', '', $compilatio->getWgetUri()).'/'.$courseInfo['path'].'/'.$doc->title;
-        } else {
-            $filename = $documentUrl;
-        }
-        if (strlen($compilatio->getWgetLogin()) > 2) {
-            $filename = $compilatio->getWgetLogin().':'.$compilatio->getWgetPassword().'@'.$filename;
-        }
-        $compilatioId = $compilatio->sendDoc($doc->title, '', $filename, 'text/plain', 'get_url');
-    } else {
-        $pieces = explode('/', $doc->url);
-        $nbPieces = count($pieces);
-        $filename = $pieces[$nbPieces - 1];
-        $compilatioId = $compilatio->sendDoc($doc->title, '', $filename, $mime, file_get_contents($filePath));
-    }
+    try {
+        $compilatio = new Compilatio();
 
-    if (Compilatio::isMd5($compilatioId)) {
+        $compilatioId = $compilatio->sendDoc(
+            $doc->title,
+            $doc->description,
+            $doc->url,
+            $filePath
+        );
+
         $compilatio->saveDocument($courseId, $doc->id, $compilatioId);
         sleep(10);
         $compilatio->startAnalyse($compilatioId);
-        echo Display::return_message(get_lang('Uploaded'));
-    } else {
-        echo Display::return_message(get_lang('Error'), 'error');
+        echo Display::return_message(get_lang('Uploaded'), 'success');
+    } catch (Exception $e) {
+        echo Display::return_message($e->getMessage(), 'error');
     }
 }
 
@@ -203,16 +173,6 @@ function getWorkFolder($txt)
     preg_match('|(.*/)[^/]+|', $txt, $urlList);
     if (count($urlList) > 0) {
         $res = $urlList[1];
-    }
-
-    return $res;
-}
-
-function getShortFilename($txt)
-{
-    $res = $txt;
-    if (strlen($txt) > 10) {
-        $res = substr($txt, 0, 10);
     }
 
     return $res;

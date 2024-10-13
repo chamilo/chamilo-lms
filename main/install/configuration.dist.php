@@ -751,6 +751,8 @@ $_configuration['send_all_emails_to'] = [
 // $_configuration['quiz_question_delete_automatically_when_deleting_exercise'] = false;
 // Opens the quiz question description by default
 //$_configuration['quiz_question_description_open_by_default'] = false;
+// Opens advanced parameters options by default when creating or editing quiz questions
+//$_configuration['quiz_question_edit_open_advanced_params_by_default'] = false;
 // Define how many seconds an AJAX request should be started to avoid loss of connection.
 //$_configuration['quiz_keep_alive_ping_interval'] = 0;
 // Hide search form in session list

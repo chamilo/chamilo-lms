@@ -1202,12 +1202,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $sessionId,
                 ],
             ],
-            'order' => 'q.status DESC, u.lastname ASC',
+            'order' => 'qstatus DESC, lastname ASC',
         ];
-        $select = 'u.user_id, u.firstname, u.lastname, q.created_at, q.updated_at, q.status, q.id as queue_id';
+        $select = 'u.user_id, u.firstname, u.lastname, q.created_at, q.updated_at, q.status as qstatus, q.id as queue_id';
         $students = Database::select($select, $userJoinTable, $where);
         foreach ($students as &$student) {
-            $status = intval($student['status']);
+            $status = intval($student['qstatus']);
             switch ($status) {
                 case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE:
                 case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START:

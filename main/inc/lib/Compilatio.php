@@ -20,12 +20,7 @@ class Compilatio
      */
     protected $baseUrl;
     /** Webservice connection*/
-    public $soapcli;
-    private $transportMode;
     private $maxFileSize;
-    private $wgetUri;
-    private $wgetLogin;
-    private $wgetPassword;
     private $proxyHost;
     private $proxyPort;
 
@@ -36,18 +31,16 @@ class Compilatio
 
     /**
      * Compilatio constructor.
+     *
+     * @throws Exception
      */
     public function __construct()
     {
         $settings = $this->getSettings();
 
-        $this->transportMode = $settings['transport_mode'];
         $this->maxFileSize = $settings['max_filesize'];
-        $this->wgetUri = $settings['wget_uri'];
-        $this->wgetLogin = $settings['wget_login'];
-        $this->wgetPassword = $settings['wget_password'];
         $this->key = $settings['key'];
-        $this->baseUrl = $settings['soap_url'];
+        $this->baseUrl = $settings['api_url'];
 
         if (!empty($settings['proxy_host'])) {
             $this->proxyHost = $settings['proxy_host'];
@@ -92,8 +85,8 @@ class Compilatio
             throw new Exception('API key not available');
         }
 
-        if (empty($settings['soap_url'])) {
-            throw new Exception('WS urlsoap not available');
+        if (empty($settings['api_url'])) {
+            throw new Exception('Api URL not available');
         }
 
         return $settings;

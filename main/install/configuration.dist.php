@@ -1576,14 +1576,10 @@ requires extension "php-soap"  sudo apt-get install php-soap
 /*$_configuration['compilatio_tool'] = [
     'settings' => [
         'key' => '',
-        'soap_url' => '',
+        'api_url' => 'https://app.compilatio.net/api',
         'proxy_host' => '',
         'proxy_port' => '',
         'max_filesize' => '',
-        'transport_mode' => '',
-        'wget_uri' => '',
-        'wget_login' => '',
-        'wget_password' => '',
     ]
 ];*/
 

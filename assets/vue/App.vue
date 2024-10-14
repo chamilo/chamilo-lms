@@ -41,7 +41,6 @@
 import { computed, onMounted, onUpdated, provide, ref, watch, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { DefaultApolloClient } from "@vue/apollo-composable"
-import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client/core"
 import axios from "axios"
 import { capitalize, isEmpty } from "lodash"
 import ConfirmDialog from "primevue/confirmdialog"
@@ -56,12 +55,7 @@ import CustomDashboardLayout from "../../var/vue_templates/components/layout/Das
 import EmptyLayout from "./components/layout/EmptyLayout.vue"
 import { useMediaElementLoader } from "./composables/mediaElementLoader"
 
-const apolloClient = new ApolloClient({
-  link: createHttpLink({
-    uri: "/api/graphql",
-  }),
-  cache: new InMemoryCache(),
-})
+import apolloClient from "./config/apolloClient"
 
 provide(DefaultApolloClient, apolloClient)
 
@@ -192,5 +186,5 @@ watch(
 onMounted(async () => {
   mejsLoader()
   await securityStore.checkSession()
-});
+})
 </script>

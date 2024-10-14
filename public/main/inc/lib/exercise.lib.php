@@ -3003,46 +3003,6 @@ EOT;
         $repo = Container::getQuizRepository();
 
         return $repo->findAllByCourse($course, $session, (string) $search, $active);
-
-        // Show courses by active status
-        /*if (true == $search_all_sessions) {
-            $conditions = [
-                'where' => [
-                    $active_sql.' c_id = ? '.$needle_where.$timeConditions => [
-                        $course_id,
-                        $needle,
-                    ],
-                ],
-                'order' => 'title',
-            ];
-        } else {
-            if (empty($session_id)) {
-                $conditions = [
-                    'where' => [
-                        $active_sql.' (session_id = 0 OR session_id IS NULL) AND c_id = ? '.$needle_where.$timeConditions => [
-                            $course_id,
-                            $needle,
-                        ],
-                    ],
-                    'order' => 'title',
-                ];
-            } else {
-                $conditions = [
-                    'where' => [
-                        $active_sql.' (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id = ? '.$needle_where.$timeConditions => [
-                            $session_id,
-                            $course_id,
-                            $needle,
-                        ],
-                    ],
-                    'order' => 'title',
-                ];
-            }
-        }
-
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-
-        return Database::select('*', $table, $conditions);*/
     }
 
     /**

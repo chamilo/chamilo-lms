@@ -2653,9 +2653,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/apollo-composable@npm:^4.0.0-beta.8":
-  version: 4.0.2
-  resolution: "@vue/apollo-composable@npm:4.0.2"
+"@vue/apollo-composable@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "@vue/apollo-composable@npm:4.2.1"
   dependencies:
     throttle-debounce: "npm:^5.0.0"
     ts-essentials: "npm:^9.4.0"
@@ -2668,19 +2668,7 @@ __metadata:
   peerDependenciesMeta:
     "@vue/composition-api":
       optional: true
-  checksum: 10c0/117fec6158ce44f5a254180601da249efa88d1ec4eed65c77bce3ff6cd039157ff1f4c93895cf57b37289e1869bf56d9bd419a11c28e598f33e8edd2d2b467f1
-  languageName: node
-  linkType: hard
-
-"@vue/apollo-option@npm:4.0.0-beta.5":
-  version: 4.0.0-beta.5
-  resolution: "@vue/apollo-option@npm:4.0.0-beta.5"
-  dependencies:
-    throttle-debounce: "npm:^3.0.1"
-  peerDependencies:
-    "@apollo/client": ^3.2.1
-    vue: ^3.1.0
-  checksum: 10c0/694f8c02cb95ec082861797d18660a4b660ef27d55c52a9964d1cf4da0271bd4ac6e177b502d82de4272eb6813a036c482dc174a4215978425cc227da5d81e2b
+  checksum: 10c0/b708ee519724747891d2adea123d6aa57dde27923399ed401ed24286393a3523af95b609c02c2a2c22542a8615cb9dd9cb9c231a4d3a0a5567e7940ae2569da9
   languageName: node
   linkType: hard
 
@@ -3829,8 +3817,7 @@ __metadata:
     "@uppy/vue": "npm:^0.4.9"
     "@uppy/webcam": "npm:^2.1.0"
     "@uppy/xhr-upload": "npm:^2.0.7"
-    "@vue/apollo-composable": "npm:^4.0.0-beta.8"
-    "@vue/apollo-option": "npm:4.0.0-beta.5"
+    "@vue/apollo-composable": "npm:^4.2.1"
     "@vue/compiler-sfc": "npm:^3.5.12"
     "@vuelidate/core": "npm:^2.0.3"
     "@vuelidate/validators": "npm:^2.0.4"
@@ -10196,13 +10183,6 @@ __metadata:
   peerDependencies:
     tslib: ^2
   checksum: 10c0/7570ee855aecb73185a672ecf3eb1c287a6512bf5476449388433b2d4debcf78100bc8bfd439b0edd38d2bc3bfb8341de5ce85b8557dec66d0f27b962c9a8bc1
-  languageName: node
-  linkType: hard
-
-"throttle-debounce@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "throttle-debounce@npm:3.0.1"
-  checksum: 10c0/c8e558479463b7ed8bac30d6b10cc87abd1c9fc64edfce2db4109be1a04acaef5d2d0557f49c1a3845ea07d9f79e6e0389b1b60db0a77c44e5b7a1216596f285
   languageName: node
   linkType: hard
 

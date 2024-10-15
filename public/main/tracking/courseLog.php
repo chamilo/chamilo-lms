@@ -456,7 +456,7 @@ if ($nbStudents > 0) {
     if (false === $hideReports) {
         $conditions['course_id'] = $courseId;
         $conditions['include_invited_users'] = false;
-        $usersTracking = TrackingCourseLog::get_user_data(
+        $usersTracking = TrackingCourseLog::getUserData(
             0,
             $nbStudents,
             $trackingColumn,
@@ -578,7 +578,7 @@ if ($nbStudents > 0) {
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addButtonSend(get_lang('Notify'));
 
-    $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields();
+    $extraFieldSelect = TrackingCourseLog::displayAdditionalProfileFields();
     if (!empty($extraFieldSelect)) {
         $html .= $extraFieldSelect;
     }

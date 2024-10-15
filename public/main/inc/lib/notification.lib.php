@@ -69,16 +69,16 @@ class Notification extends Model
             }
         } else {
             // Default no-reply email
-            $this->adminEmail = api_get_setting('noreply_email_address');
-            $this->adminName = api_get_setting('siteName');
-            $this->titlePrefix = '['.api_get_setting('siteName').'] ';
+            $this->adminEmail = api_get_setting('mail.noreply_email_address');
+            $this->adminName = api_get_setting('platform.site_name');
+            $this->titlePrefix = '['.api_get_setting('platform.site_name').'] ';
 
             // If no-reply email doesn't exist use the admin name/email
             if (empty($this->adminEmail)) {
-                $this->adminEmail = api_get_setting('emailAdministrator');
+                $this->adminEmail = api_get_setting('admin.administrator_email');
                 $this->adminName = api_get_person_name(
-                    api_get_setting('administratorName'),
-                    api_get_setting('administratorSurname'),
+                    api_get_setting('admin.administrator_name'),
+                    api_get_setting('admin.administrator_surname'),
                     null,
                     PERSON_NAME_EMAIL_ADDRESS
                 );
@@ -428,7 +428,7 @@ class Notification extends Model
         }
 
         // See message with link text
-        if (!empty($linkToNewMessage) && 'true' == api_get_setting('allow_message_tool')) {
+        if (!empty($linkToNewMessage) && 'true' == api_get_setting('message.allow_message_tool')) {
             $content = $content.'<br /><br />'.$linkToNewMessage;
         }
 
@@ -461,11 +461,11 @@ class Notification extends Model
      */
     public static function sendPushNotification(array $userIds, $title, $content)
     {
-        if ('true' !== api_get_setting('messaging_allow_send_push_notification')) {
+        if ('true' !== api_get_setting('webservice.messaging_allow_send_push_notification')) {
             return false;
         }
 
-        $gdcApiKey = api_get_setting('messaging_gdc_api_key');
+        $gdcApiKey = api_get_setting('webservice.messaging_gdc_api_key');
 
         if (false === $gdcApiKey) {
             return false;

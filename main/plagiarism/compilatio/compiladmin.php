@@ -3,12 +3,8 @@
 
 exit;
 
-ini_set('soap.wsdl_cache_enabled', 0);
-ini_set('default_socket_timeout', '1000');
-
 require_once '../../inc/global.inc.php';
 
-$compilatio = new Compilatio();
 $use_space = number_format($quotas->usedSpace / 1000000, 2);
 $total_space = $quotas->space / 1000000;
 
@@ -33,27 +29,31 @@ if (!isset($_GET['action'])) {
 } else {
         echo get_lang('CompilatioConnectionTestSoap')."<br>";
         echo "1) ".get_lang('CompilatioServerConnection')."<br>";
-        $compilatio = new Compilatio();
+
+        try {
+            $compilatio = new Compilatio();
+        } catch (Exception $e) {
+            $compilatio = null;
+            echo get_lang('CompilatioNoConnection')."<br>";
+            echo get_lang('CompilatioParamVerification')."<br>";
+        }
+
         if ($compilatio) {
             echo get_lang('CompilatioConnectionSuccessful')."<br>";
             echo "2) ".get_lang('CompilatioSendTextToServer')."<br>";
             $text = sprintf(get_lang('CompilatioTextSendingTestKeyX'), $compilatio->getKey());
-            $id_compi = $compilatio->SendDoc(
-            'Doc de test',
-            'test',
-            'test',
-            'text/plain',
-            $text
-        );
-            if (Compilatio::isMd5($id_compi)) {
+            try {
+                $id_compi = $compilatio->sendDoc(
+                    'Doc de test',
+                    'test',
+                    'test',
+                    $text
+                );
                 echo get_lang('CompilatioSuccessfulTransfer')."<br>";
-            } else {
+            } catch (Exception $e) {
                 echo get_lang('CompilatioFailedTransfer')."<br>";
                 echo get_lang('CompilatioParamVerification')."<br>";
             }
-        } else {
-            echo get_lang('CompilatioNoConnection')."<br>";
-            echo get_lang('CompilatioParamVerification')."<br>";
         }
     }
 ?>

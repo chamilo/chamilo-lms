@@ -8,12 +8,18 @@ api_protect_course_script();
 if (isset($_GET['workid'])) {
     $workIdList = $_GET['workid'];    // list of workid separate by the :
     $workList = explode('a', $workIdList);
-    $compilatio = new Compilatio();
-    $result = '';
-    foreach ($workList as $workId) {
-        if (!empty($workId)) {
-            $result .= $compilatio->giveWorkIdState($workId);
+    $workList = array_map('intval', $workList);
+    $workList = array_filter($workList);
+    try {
+        $compilatio = new Compilatio();
+        $result = '';
+        foreach ($workList as $workId) {
+            if (!empty($workId)) {
+                $result .= $compilatio->giveWorkIdState($workId);
+            }
         }
+        echo $result;
+    } catch (Exception $e) {
+        echo $e->getMessage();
     }
-    echo $result;
 }

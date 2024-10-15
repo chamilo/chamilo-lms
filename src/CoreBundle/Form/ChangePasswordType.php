@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,15 +24,19 @@ class ChangePasswordType extends AbstractType
         $builder
             ->add('currentPassword', PasswordType::class, [
                 'label' => 'Current Password',
-                'required' => true,
+                'required' => false,
             ])
             ->add('newPassword', PasswordType::class, [
                 'label' => 'New Password',
-                'required' => true,
+                'required' => false,
             ])
             ->add('confirmPassword', PasswordType::class, [
                 'label' => 'Confirm New Password',
-                'required' => true,
+                'required' => false,
+            ])
+            ->add('enable2FA', CheckboxType::class, [
+                'label' => 'Enable Two-Factor Authentication (2FA)',
+                'required' => false,
             ])
         ;
     }

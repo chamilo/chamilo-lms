@@ -742,7 +742,7 @@ class TestCategory
                         true
                     )
                 );
-                $tempResult[$category_id] = round($category_item['score'] / $category_item['total'] * 10);
+                $tempResult[$category_id] = $category_item['total'] != 0 ? round($category_item['score'] / $category_item['total'] * 10) : 0;
                 $row++;
             }
 
@@ -1039,7 +1039,7 @@ class TestCategory
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_array($res);
-            $out_res = $data['id'];
+            $out_res = $data['iid'];
         }
 
         return $out_res;
@@ -1063,8 +1063,8 @@ class TestCategory
             $questionId > 0 &&
             $courseId > 0
         ) {
-            $sql = "INSERT INTO $table (c_id, question_id, category_id)
-                    VALUES (".intval($courseId).", ".intval($questionId).", ".intval($categoryId).")";
+            $sql = "INSERT INTO $table (question_id, category_id)
+                    VALUES (".intval($questionId).", ".intval($categoryId).")";
             Database::query($sql);
             $id = Database::insert_id();
 

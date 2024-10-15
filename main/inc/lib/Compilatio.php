@@ -342,8 +342,9 @@ class Compilatio
 
         // if the compilatio's hash is not a valide hash md5,
         // we return à specific status (cf : IsInCompilatio() )
-        $actionCompilatio = get_lang('CompilatioDocumentTextNotImage').'<br/>'.
-            get_lang('CompilatioDocumentNotCorrupt');
+        // Not used since implementation of RestAPI but there if needed later
+        //$actionCompilatio = get_lang('CompilatioDocumentTextNotImage').'<br/>'.
+        //    get_lang('CompilatioDocumentNotCorrupt');
         $status = '';
         if (!empty($compilatioId)) {
             // if compilatio_id is a hash md5, we call the function of the compilatio's

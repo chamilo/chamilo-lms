@@ -1572,7 +1572,6 @@ ALTER TABLE c_plagiarism_compilatio_docs ADD COLUMN id INT AUTO_INCREMENT NOT NU
 ALTER TABLE c_plagiarism_compilatio_docs CHANGE COLUMN id_doc document_id INT NOT NULL;
 ALTER TABLE c_plagiarism_compilatio_docs MODIFY compilatio_id VARCHAR(40) NOT NULL;
 
-requires extension "php-soap"  sudo apt-get install php-soap
 */
 //$_configuration['allow_compilatio_tool'] = false;
 /*$_configuration['compilatio_tool'] = [

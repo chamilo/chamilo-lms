@@ -125,6 +125,12 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public const GENERAL_COACH = 3;
     public const SESSION_ADMIN = 4;
 
+    public const STATUS_PLANNED = 1;
+    public const STATUS_PROGRESS = 2;
+    public const STATUS_FINISHED = 3;
+    public const STATUS_CANCELLED = 4;
+    public const STATUS_UNKNOWN = 0;
+
     #[Groups([
         'session:basic',
         'session:read',

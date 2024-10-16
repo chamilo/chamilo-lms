@@ -41,6 +41,7 @@
 
       <div class="document-show__details-side">
         <table>
+          <tbody>
           <tr>
             <th v-text="$t('Author')" />
             <td v-text="item.resourceNode.creator.username" />
@@ -72,6 +73,7 @@
               </a>
             </td>
           </tr>
+          </tbody>
         </table>
 
         <ShowLinks :item="item" />

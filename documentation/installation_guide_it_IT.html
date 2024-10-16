@@ -290,36 +290,6 @@
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1">Sui sistemi operativi Linux, Mac OS X e BSD puoi facilmente settare queste impostazioni utilizzando il comando “chmod 0777”, ma se non ne sei sicuro, ti raccomandiamo di chiedere consiglio per il tuo sistema operativo sul nostro forum. In Windows devi controllare le proprietà di tutte le cartelle sopraindicate.</span></p>
 <p class="p3"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1"><b>3.6 Aggiornamento rapido dalla guida 1.8.x per Linux<span class="Apple-converted-space"> </span></b></span></p>
-<p class="p2"><span class="s1">La seguente guida per aggiornamento rapido presuppone che:</span></p>
-<ul>
-  <li class="li2"><span class="s1">lo username del database Chamilo (per MySQL) sia “chamilo_db_user” ed il tuo login sia “chamilo_user”</span></li>
-  <li class="li2"><span class="s1">l’installazione di Chamilo sia in /var/www/chamilo/ ed abbia i permessi settati a 0777 (che non è la configurazione corretta, come sappiamo, ma che poi correggerai)</span></li>
-  <li class="li2"><span class="s1">l’URL del tuo portale sia https://www.portalurl.com/</span></li>
-</ul>
-<p class="p3"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1">Digita al prompt dei comandi:</span></p>
-<ul>
-  <li class="li2"><span class="s1">cd /tmp</span></li>
-  <li class="li2"><span class="s1">mysqldump -u chamilo_db_user -p --all-databases --result-file=/home/chamilo_user/chamilo_old.sql</span></li>
-  <li class="li2"><span class="s1">cp -ra /var/www/chamilo /home/chamilo_user/backup_chamilo</span></li>
-  <li class="li2"><span class="s1">mkdir /var/www/chamilo/old_version</span></li>
-  <li class="li2"><span class="s1">mv /var/www/chamilo/* /var/www/chamilo/old_version/</span></li>
-  <li class="li2"><span class="s1">chmod -R 0777 /var/www/chamilo/old_version/</span></li>
-  <li class="li12"><span class="s4">wget <a href="https://chamilo.googlecode.com/files/chamilo-1.9.tar.gz"><span class="s5">https://chamilo.googlecode.com/files/chamilo-1.9.tar.gz</span></a></span></li>
-  <li class="li2"><span class="s1">tar zxvf chamilo-1.9.tar.gz</span></li>
-  <li class="li2"><span class="s1">sudo cp -ra chamilo-1.9/* /var/www/chamilo/</span></li>
-  <li class="li2"><span class="s1">rm chamilo-1.9.tar.gz</span></li>
-  <li class="li2"><span class="s1">sudo rm -r chamilo-1.9/</span></li>
-</ul>
-<p class="p3"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1">Poi:</span></p>
-<ul>
-  <li class="li12"><span class="s4">connetti il tuo browser a <a href="https://www.portalurl.com/main/install/"><span class="s5">https://www.portalurl.com/main/install/</span></a></span></li>
-  <li class="li2"><span class="s1">Procedi con l’installazione</span></li>
-  <li class="li2"><span class="s1">Correggi i permessi delle cartelle<span class="Apple-converted-space"> </span></span></li>
-</ul>
-<p class="p3"><span class="s1"></span><br></p>
 <p class="p3"><span class="s1"></span><br></p>
 <ol class="ol1">
   <li class="li13"><span class="s1">4. Risoluzione dei problemi (Troubleshooting)</span></li>

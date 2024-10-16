@@ -1562,7 +1562,7 @@ CREATE TABLE c_plagiarism_compilatio_docs (
     id INT AUTO_INCREMENT NOT NULL,
     c_id int(11) NOT NULL,
     document_id int(11) NOT NULL,
-    compilatio_id varchar(32) CHARACTER SET utf8 NOT NULL,
+    compilatio_id varchar(40) CHARACTER SET utf8 NOT NULL,
     PRIMARY KEY (id)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
@@ -1572,20 +1572,15 @@ ALTER TABLE c_plagiarism_compilatio_docs ADD COLUMN id INT AUTO_INCREMENT NOT NU
 ALTER TABLE c_plagiarism_compilatio_docs CHANGE COLUMN id_doc document_id INT NOT NULL;
 ALTER TABLE c_plagiarism_compilatio_docs MODIFY compilatio_id VARCHAR(40) NOT NULL;
 
-requires extension "php-soap"  sudo apt-get install php-soap
 */
 //$_configuration['allow_compilatio_tool'] = false;
 /*$_configuration['compilatio_tool'] = [
     'settings' => [
         'key' => '',
-        'soap_url' => '',
+        'api_url' => 'https://app.compilatio.net/api',
         'proxy_host' => '',
         'proxy_port' => '',
         'max_filesize' => '',
-        'transport_mode' => '',
-        'wget_uri' => '',
-        'wget_login' => '',
-        'wget_password' => '',
     ]
 ];*/
 

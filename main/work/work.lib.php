@@ -2101,16 +2101,17 @@ function get_work_user_list(
     $group_id = api_get_group_id();
     $course_info = api_get_course_info();
     $course_info = empty($course_info) ? api_get_course_info_by_id($courseId) : $course_info;
-    $course_id = isset($course_info['real_id']) ? $course_info['real_id'] : $courseId;
+    $course_id = (int) ($course_info['real_id'] ?? $courseId);
 
     $work_id = (int) $work_id;
     $start = (int) $start;
     $limit = (int) $limit;
 
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
-    $compilation = null;
-    if (api_get_configuration_value('allow_compilatio_tool')) {
-        $compilation = new Compilatio();
+    try {
+        $compilatio = new Compilatio();
+    } catch (Exception $e) {
+        $compilatio = false;
     }
 
     if (!in_array($direction, ['asc', 'desc'])) {
@@ -2281,7 +2282,7 @@ function get_work_user_list(
         }
 
         while ($work = Database::fetch_array($result, 'ASSOC')) {
-            $item_id = $work['id'];
+            $item_id = (int) $work['id'];
             $dbTitle = $work['title'];
             // Get the author ID for that document from the item_property table
             $is_author = false;
@@ -2557,8 +2558,8 @@ function get_work_user_list(
                 $work['actions'] = '<div class="work-action">'.$linkToDownload.$action.'</div>';
                 $work['correction'] = $correction;
 
-                if (!empty($compilation) && $is_allowed_to_edit) {
-                    $compilationId = $compilation->getCompilatioId($item_id, $course_id);
+                if ($compilatio && $is_allowed_to_edit) {
+                    $compilationId = $compilatio->getCompilatioId($item_id, $course_id);
                     if ($compilationId) {
                         $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>
                             ".$loading.'&nbsp;'.get_lang('CompilatioConnectionWithServer').'</div>';
@@ -2566,7 +2567,7 @@ function get_work_user_list(
                         $workDirectory = api_get_path(SYS_COURSE_PATH).$course_info['directory'];
                         if (!Compilatio::verifiFileType($dbTitle)) {
                             $actionCompilatio = get_lang('FileFormatNotSupported');
-                        } elseif (filesize($workDirectory.'/'.$work['url']) > $compilation->getMaxFileSize()) {
+                        } elseif (filesize($workDirectory.'/'.$work['url']) > $compilatio->getMaxFileSize()) {
                             $sizeFile = round(filesize($workDirectory.'/'.$work['url']) / 1000000);
                             $actionCompilatio = get_lang('UplFileTooBig').': '.format_file_size($sizeFile).'<br />';
                         } else {
@@ -2688,10 +2689,12 @@ function getAllWork(
     }
 
     $courseQueryToString = implode(' OR ', $courseQuery);
-    $compilation = null;
-    /*if (api_get_configuration_value('allow_compilatio_tool')) {
-        $compilation = new Compilatio();
-    }*/
+
+    //try {
+        $compilatio = new Compilatio();
+    //} catch (Exception $e) {
+    //    $compilatio = null;
+    //}
 
     if ($getCount) {
         if (empty($courseQuery)) {
@@ -3094,8 +3097,8 @@ function getAllWork(
             $work['actions'] = '<div class="work-action">'.$linkToDownload.$action.'</div>';
             $work['correction'] = $correction;
 
-            if (!empty($compilation)) {
-                $compilationId = $compilation->getCompilatioId($item_id, $courseId);
+            if (!empty($compilatio)) {
+                $compilationId = $compilatio->getCompilatioId($item_id, $courseId);
                 if ($compilationId) {
                     $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>
                         ".$loading.'&nbsp;'.get_lang('CompilatioConnectionWithServer').'</div>';
@@ -3103,7 +3106,7 @@ function getAllWork(
                     $workDirectory = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'];
                     if (!Compilatio::verifiFileType($dbTitle)) {
                         $actionCompilatio = get_lang('FileFormatNotSupported');
-                    } elseif (filesize($workDirectory.'/'.$work['url']) > $compilation->getMaxFileSize()) {
+                    } elseif (filesize($workDirectory.'/'.$work['url']) > $compilatio->getMaxFileSize()) {
                         $sizeFile = round(filesize($workDirectory.'/'.$work['url']) / 1000000);
                         $actionCompilatio = get_lang('UplFileTooBig').': '.format_file_size($sizeFile).'<br />';
                     } else {

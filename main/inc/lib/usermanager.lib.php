@@ -8112,7 +8112,7 @@ SQL;
      *
      * @return bool Whether we can send an e-mail or not
      */
-    public function isEmailingAllowed(string $mail): bool
+    public static function isEmailingAllowed(string $mail): bool
     {
         $list = self::getUsersByMail($mail);
         if (empty($list)) {

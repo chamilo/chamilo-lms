@@ -112,4 +112,20 @@ export default {
       value: item.id,
     }))
   },
+
+  /**
+   * Fetches course details by course ID.
+   *
+   * @param {number} courseId - The ID of the course.
+   * @returns {Promise<Object|null>} - The course details or null if an error occurs.
+   */
+  getCourseDetails: async (courseId) => {
+    try {
+      const response = await api.get(`/api/courses/${courseId}`)
+      return response.data
+    } catch (error) {
+      console.error("Error fetching course details:", error)
+      return null
+    }
+  }
 }

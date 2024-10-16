@@ -119,23 +119,22 @@ class GlobalMultipleAnswer extends Question
             $form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox"');
             $boxes_names[] = 'correct['.$i.']';
 
-            $form->addElement(
-                'html_editor',
-                'answer['.$i.']',
-                null,
-                [],
+            $form->addHtmlEditor(
+                "answer[$i]",
+                '',
+                false,
+                false,
                 [
                     'ToolbarSet' => 'TestProposedAnswer',
                     'Width' => '100%',
                     'Height' => '100',
                 ]
             );
-            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-            $form->addElement(
-                'html_editor',
-                'comment['.$i.']',
-                null,
-                [],
+            $form->addHtmlEditor(
+                "comment[$i]",
+                '',
+                false,
+                false,
                 [
                     'ToolbarSet' => 'TestProposedAnswer',
                     'Width' => '100%',

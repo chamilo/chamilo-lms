@@ -162,6 +162,7 @@ class MultipleAnswerTrueFalse extends Question
                         'Height' => '100',
                     ]
                 );
+                $form->applyFilter("comment[$i]", 'attr_on_filter');
 
                 if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
                     $txtComment->setValue(Security::remove_XSS($_POST['comment'][$i]));

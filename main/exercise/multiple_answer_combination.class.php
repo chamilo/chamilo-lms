@@ -121,20 +121,19 @@ class MultipleAnswerCombination extends Question
             );
             $boxes_names[] = 'correct['.$i.']';
 
-            $form->addElement(
-                'html_editor',
-                'answer['.$i.']',
-                null,
-                [],
+            $form->addHtmlEditor(
+                "answer[$i]",
+                '',
+                true,
+                false,
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
-            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
-            $form->addElement(
-                'html_editor',
-                'comment['.$i.']',
-                null,
-                [],
+            $form->addHtmlEditor(
+                "comment[$i]",
+                '',
+                false,
+                false,
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
 

@@ -91,11 +91,12 @@ if ($action === 'addnote') {
     $form->addElement('header', '', get_lang('NoteAddNew'));
     $form->addElement('text', 'note_title', get_lang('NoteTitle'), ['id' => 'note_title']);
     $form->applyFilter('text', 'html_filter');
-    $form->addElement(
-        'html_editor',
+    $form->applyFilter('text', 'attr_on_filter');
+    $form->addHtmlEditor(
         'note_comment',
         get_lang('NoteComment'),
-        null,
+        false,
+        false,
         api_is_allowed_to_edit() ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300'] : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
     );
     $form->addButtonCreate(get_lang('AddNote'), 'SubmitNote');
@@ -158,14 +159,15 @@ if ($action === 'addnote') {
     $form->addElement('hidden', 'notebook_id');
     $form->addElement('text', 'note_title', get_lang('NoteTitle'), ['size' => '100']);
     $form->applyFilter('text', 'html_filter');
-    $form->addElement(
-        'html_editor',
+    $form->applyFilter('text', 'attr_on_filter');
+    $form->addHtmlEditor(
         'note_comment',
         get_lang('NoteComment'),
-        null,
+        false,
+        false,
         api_is_allowed_to_edit()
-        ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300']
-        : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
+            ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300']
+            : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
     );
     $form->addButtonUpdate(get_lang('ModifyNote'), 'SubmitNote');
 

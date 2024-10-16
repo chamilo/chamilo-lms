@@ -384,6 +384,7 @@ EOT;
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
+        $this->applyFilter($name, 'attr_on_filter');
 
         return $element;
     }

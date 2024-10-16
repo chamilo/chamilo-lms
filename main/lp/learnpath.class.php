@@ -9054,7 +9054,7 @@ class learnpath
                 'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().$item_path_fck,
             ];
 
-            $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
+            $form->addHtmlEditor('content_lp', '', true, true, $editor_config);
             $content_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().$item_path_fck;
             $defaults['content_lp'] = file_get_contents($content_path);
         }

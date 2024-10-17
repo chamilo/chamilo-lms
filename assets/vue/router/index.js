@@ -43,8 +43,9 @@ import courseService from "../services/courseService"
 import catalogueCourses from "./cataloguecourses"
 import catalogueSessions from "./cataloguesessions"
 import {customVueTemplateEnabled} from "../config/env"
-import {useCourseSettings} from "../store/courseSettingStore";
-import {checkIsAllowedToEdit} from "../composables/userPermissions";
+import {useCourseSettings} from "../store/courseSettingStore"
+import {checkIsAllowedToEdit} from "../composables/userPermissions"
+import {usePlatformConfig} from "../store/platformConfig"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -125,8 +126,26 @@ const router = createRouter({
             window.location.href = `/resources/document/${course.resourceNode.id}/?cid=${courseId}`
               + (sessionId ? `&sid=${sessionId}` : '')
             return false
-          } else {
-            console.log("Document auto launch is disabled or resourceNode ID is missing.")
+          }
+
+          const platformConfigStore = usePlatformConfig()
+          const isExerciseAutoLaunchEnabled = "true" === platformConfigStore.getSetting("exercise.allow_exercise_auto_launch")
+
+          if (isExerciseAutoLaunchEnabled) {
+            const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
+            if (exerciseAutoLaunch === 2) {
+              window.location.href = `/main/exercise/exercise.php?cid=${courseId}`
+                + (sessionId ? `&sid=${sessionId}` : '')
+              return false
+            }
+            else if (exerciseAutoLaunch === 1) {
+              const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
+              if (exerciseId) {
+                window.location.href = `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}`
+                  + (sessionId ? `&sid=${sessionId}` : '')
+                return false
+              }
+            }
           }
 
         } catch (error) {

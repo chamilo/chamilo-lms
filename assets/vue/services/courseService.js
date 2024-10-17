@@ -127,5 +127,31 @@ export default {
       console.error("Error fetching course details:", error)
       return null
     }
-  }
+  },
+
+  /**
+   * Retrieves the ID of the auto-launchable exercise in a course, if configured.
+   *
+   * @param {number} courseId - The ID of the course.
+   * @param {number=} sessionId - The ID of the session (optional).
+   * @returns {Promise<number|null>} The ID of the auto-launchable exercise, or null if none exists.
+   */
+  getAutoLaunchExerciseId: async (courseId, sessionId = 0) => {
+    try {
+      const { data } = await api.get(`/course/${courseId}/getAutoLaunchExerciseId`, {
+        params: {
+          sid: sessionId,
+        },
+      });
+
+      if (data && data.exerciseId) {
+        return data.exerciseId;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error fetching auto-launch exercise ID:", error);
+      return null;
+    }
+  },
 }

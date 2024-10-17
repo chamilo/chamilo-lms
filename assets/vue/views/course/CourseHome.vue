@@ -85,6 +85,10 @@
           {{ t('Document auto-launch is enabled for students') }}
         </p>
 
+        <p v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)" class="text-sm text-gray-600">
+          {{ t('Exercise auto-launch is enabled for students') }}
+        </p>
+
         <div class="grow-0">
           <StudentViewButton
             v-if="course"
@@ -251,6 +255,7 @@ const courseItems = ref([])
 
 const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
 const documentAutoLaunch = ref(0)
+const exerciseAutoLaunch = ref(0)
 const courseSettingsStore = useCourseSettings()
 
 courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
@@ -397,6 +402,7 @@ onMounted(async () => {
 
   await courseSettingsStore.loadCourseSettings(course.value.id, session.value?.id)
   documentAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
+  exerciseAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
 })
 
 const onStudentViewChanged = async () => {

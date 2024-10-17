@@ -88,6 +88,7 @@ class PlatformConfigurationController extends AbstractController
                 'document.students_download_folders',
                 'social.hide_social_groups_block',
                 'course.show_course_duration',
+                'exercise.allow_exercise_auto_launch',
             ];
 
             $user = $this->userHelper->getCurrent();
@@ -143,6 +144,7 @@ class PlatformConfigurationController extends AbstractController
             'show_course_in_user_language' => $courseSettingsManager->getCourseSettingValue('show_course_in_user_language'),
             'allow_user_edit_agenda' => $courseSettingsManager->getCourseSettingValue('allow_user_edit_agenda'),
             'enable_document_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_document_auto_launch'),
+            'enable_exercise_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_exercise_auto_launch'),
         ];
 
         return new JsonResponse(['settings' => $settings]);

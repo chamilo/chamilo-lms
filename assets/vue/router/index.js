@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router"
+import {createRouter, createWebHistory} from "vue-router"
 import adminRoutes from "./admin"
 import courseRoutes from "./course"
 import accountRoutes from "./account"
@@ -20,8 +20,7 @@ import documents from "./documents"
 import assignments from "./assignments"
 import links from "./links"
 import glossary from "./glossary"
-import { useSecurityStore } from "../store/securityStore"
-import securityService from "../services/securityService"
+import {useSecurityStore} from "../store/securityStore"
 import MyCourseList from "../views/user/courses/List.vue"
 import MySessionList from "../views/user/sessions/SessionsCurrent.vue"
 import MySessionListPast from "../views/user/sessions/SessionsPast.vue"
@@ -38,12 +37,15 @@ import Login from "../pages/Login.vue"
 import Faq from "../pages/Faq.vue"
 import Demo from "../pages/Demo.vue"
 
-import { useCidReqStore } from "../store/cidReq"
+import {useCidReqStore} from "../store/cidReq"
 import courseService from "../services/courseService"
 
 import catalogueCourses from "./cataloguecourses"
 import catalogueSessions from "./cataloguesessions"
-import { customVueTemplateEnabled } from "../config/env"
+import {customVueTemplateEnabled} from "../config/env"
+import {useCourseSettings} from "../store/courseSettingStore"
+import {checkIsAllowedToEdit} from "../composables/userPermissions"
+import {usePlatformConfig} from "../store/platformConfig"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -97,13 +99,60 @@ const router = createRouter({
       name: "CourseHome",
       component: CourseHome,
       beforeEnter: async (to) => {
-        const check = await courseService.checkLegal(to.params.id, to.query?.sid)
+        const courseId = to.params.id
+        const sessionId = to.query?.sid
+        try {
+          const check = await courseService.checkLegal(courseId, sessionId)
+          if (check.redirect) {
+            window.location.href = check.url
 
-        if (check.redirect) {
-          window.location.href = check.url
+            return false
+          }
 
-          return false
+          const course = await courseService.getCourseDetails(courseId)
+          if (!course) {
+            return false
+          }
+
+          const isAllowedToEdit = await checkIsAllowedToEdit(true, true, true)
+          if (isAllowedToEdit) {
+            return true
+          }
+
+          const courseSettingsStore = useCourseSettings()
+          await courseSettingsStore.loadCourseSettings(courseId, sessionId)
+          const documentAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
+          if (documentAutoLaunch === 1 && course.resourceNode?.id) {
+            window.location.href = `/resources/document/${course.resourceNode.id}/?cid=${courseId}`
+              + (sessionId ? `&sid=${sessionId}` : '')
+            return false
+          }
+
+          const platformConfigStore = usePlatformConfig()
+          const isExerciseAutoLaunchEnabled = "true" === platformConfigStore.getSetting("exercise.allow_exercise_auto_launch")
+
+          if (isExerciseAutoLaunchEnabled) {
+            const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
+            if (exerciseAutoLaunch === 2) {
+              window.location.href = `/main/exercise/exercise.php?cid=${courseId}`
+                + (sessionId ? `&sid=${sessionId}` : '')
+              return false
+            }
+            else if (exerciseAutoLaunch === 1) {
+              const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
+              if (exerciseId) {
+                window.location.href = `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}`
+                  + (sessionId ? `&sid=${sessionId}` : '')
+                return false
+              }
+            }
+          }
+
+        } catch (error) {
+          console.error("Error during CourseHome route guard:", error)
         }
+
+        return true
       },
     },
     {

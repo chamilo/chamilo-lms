@@ -661,7 +661,7 @@ class PortfolioController
                 });
                 $(\'#add_portfolio_template\').on(\'change\', function () {
                     $(\'#portfolio-spinner\').show();
-                
+
                     $.getJSON(_p.web_ajax + \'portfolio.ajax.php?a=find_template&item=\' + this.value)
                         .done(function(response) {
                             if (CKEDITOR.instances.title) {
@@ -3994,7 +3994,7 @@ class PortfolioController
             $(function() {
                 $(\'#frm_comment_template\').on(\'change\', function () {
                     $(\'#portfolio-spinner\').show();
-                
+
                     $.getJSON(_p.web_ajax + \'portfolio.ajax.php?a=find_template_comment&comment=\' + this.value)
                         .done(function(response) {
                             CKEDITOR.instances.content.setData(response.content);
@@ -4094,7 +4094,7 @@ class PortfolioController
             $origin = $em->find(Portfolio::class, $item->getOrigin());
 
             if ($origin) {
-                $originContent = $origin->getContent();
+                $originContent = Security::remove_XSS($origin->getContent());
                 $originContentFooter = vsprintf(
                     get_lang('OriginallyPublishedAsXTitleByYUser'),
                     [
@@ -4107,7 +4107,7 @@ class PortfolioController
             $origin = $em->find(PortfolioComment::class, $item->getOrigin());
 
             if ($origin) {
-                $originContent = $origin->getContent();
+                $originContent = Security::remove_XSS($origin->getContent());
                 $originContentFooter = vsprintf(
                     get_lang('OriginallyCommentedByXUserInYItem'),
                     [

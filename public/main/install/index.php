@@ -586,7 +586,8 @@ if (isset($_POST['step2'])) {
                 $campusForm,
                 $allowSelfReg,
                 $allowSelfRegProf,
-                $installationProfile
+                $installationProfile,
+                $kernel
             );
             error_log('Finish installation');
         } else {

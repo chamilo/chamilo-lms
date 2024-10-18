@@ -1,0 +1,40 @@
+{
+    "name": "onlyoffice/docs-integration-sdk",
+    "type": "library",
+    "description": "ONLYOFFICE Docs integration SDK",
+    "keywords": ["onlyoffice"],
+    "homepage": "https://www.onlyoffice.com",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Ascensio System SIA"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ONLYOFFICE/docs-integration-sdk-php/issues",
+        "source": "https://github.com/ONLYOFFICE/docs-integration-sdk-php",
+        "email": "support@onlyoffice.com",
+        "forum": "https://forum.onlyoffice.com/"
+    },
+    "autoload": {
+        "psr-4": {
+            "Onlyoffice\\DocsIntegrationSdk\\": "src/",
+            "Onlyoffice\\DocsIntegrationSdk\\Manager\\Document\\": "src/manager/document/",
+            "Onlyoffice\\DocsIntegrationSdk\\Manager\\Formats\\": "src/manager/formats/",
+            "Onlyoffice\\DocsIntegrationSdk\\Manager\\Security\\": "src/manager/security/",
+            "Onlyoffice\\DocsIntegrationSdk\\Manager\\Settings\\": "src/manager/settings/",
+            "Onlyoffice\\DocsIntegrationSdk\\Models\\": "src/models/",
+            "Onlyoffice\\DocsIntegrationSdk\\Service\\Request\\": "src/service/request/",
+            "Onlyoffice\\DocsIntegrationSdk\\Service\\DocEditorConfig\\": "src/service/doceditorconfig/",
+            "Onlyoffice\\DocsIntegrationSdk\\Util\\": "src/util/"
+        }
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.0"
+        }
+    }
+}

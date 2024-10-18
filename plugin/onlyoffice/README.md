@@ -175,18 +175,18 @@ The table below will help you to make the right choice.
 | Font and paragraph formatting   | + | + |
 | Object insertion                | + | + |
 | Transitions                     | + | + |
+| Animations                      | + | + |
 | Presenter mode                  | + | + |
 | Notes                           | + | + |
 | **Form creator features** | **Community Edition** | **Enterprise Edition** |
 | Adding form fields           | + | + |
 | Form preview                    | + | + |
 | Saving as PDF                   | + | + |
+| **Working with PDF**      | **Community Edition** | **Enterprise Edition** |
+| Text annotations (highlight, underline, cross out) | + | + |
+| Comments                        | + | + |
+| Freehand drawings               | + | + |
+| Form filling                    | + | + |
 | | [Get it now](https://www.onlyoffice.com/download-docs.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo#docs-community)  | [Start Free Trial](https://www.onlyoffice.com/download-docs.aspx?utm_source=github&utm_medium=cpc&utm_campaign=GitHubChamilo#docs-enterprise)  |
 
 \* If supported by DMS.
-
-## Note on SSL
-
-As for all SSL to non-SSL communication, this plugin will not work fully if your
-Chamilo portal works in HTTP and your OnlyOffice Document server works in HTTPS, or vice-versa.
-You will need to ensure the same protocol on both sides. 

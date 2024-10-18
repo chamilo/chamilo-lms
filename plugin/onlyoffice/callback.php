@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * (c) Copyright Ascensio System SIA 2023
+ * (c) Copyright Ascensio System SIA 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,38 +13,29 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 use ChamiloSession as Session;
-use \Firebase\JWT\JWT;
-use \Firebase\JWT\Key;
-
-/**
- * Status of the document
- */
-const TrackerStatus_Editing = 1;
-const TrackerStatus_MustSave = 2;
-const TrackerStatus_Corrupted = 3;
-const TrackerStatus_Closed = 4;
-const TrackerStatus_ForceSave = 6;
-const TrackerStatus_CorruptedForceSave = 7;
+use Onlyoffice\DocsIntegrationSdk\Models\Callback as OnlyofficeCallback;
+use Onlyoffice\DocsIntegrationSdk\Models\CallbackDocStatus;
 
 $plugin = OnlyofficePlugin::create();
 
-if (isset($_GET["hash"]) && !empty($_GET["hash"])) {
+if (isset($_GET['hash']) && !empty($_GET['hash'])) {
     $callbackResponseArray = [];
-    @header( 'Content-Type: application/json; charset==utf-8');
-    @header( 'X-Robots-Tag: noindex' );
-    @header( 'X-Content-Type-Options: nosniff' );
+    @header('Content-Type: application/json; charset==utf-8');
+    @header('X-Robots-Tag: noindex');
+    @header('X-Content-Type-Options: nosniff');
 
-    list ($hashData, $error) = Crypt::ReadHash($_GET["hash"]);
-    if ($hashData === null) {
-        $callbackResponseArray["status"] = "error";
-        $callbackResponseArray["error"] = $error;
-        die(json_encode($callbackResponseArray));
+    $appSettings = new OnlyofficeAppsettings($plugin);
+    $jwtManager = new OnlyofficeJwtManager($appSettings);
+    list($hashData, $error) = $jwtManager->readHash($_GET['hash'], api_get_security_key());
+    if (null === $hashData) {
+        $callbackResponseArray['status'] = 'error';
+        $callbackResponseArray['error'] = $error;
+        exit(json_encode($callbackResponseArray));
     }
 
     $type = $hashData->type;
@@ -56,44 +46,47 @@ if (isset($_GET["hash"]) && !empty($_GET["hash"])) {
     $sessionId = $hashData->sessionId;
 
     $courseInfo = api_get_course_info_by_id($courseId);
-    $courseCode = $courseInfo["code"];
+    $courseCode = $courseInfo['code'];
 
     if (!empty($userId)) {
         $userInfo = api_get_user_info($userId);
     } else {
-        $result["error"] = "User not found";
-        die (json_encode($result));
+        $result['error'] = 'User not found';
+        exit(json_encode($result));
     }
 
     if (api_is_anonymous()) {
         $loggedUser = [
-            "user_id" => $userInfo["id"],
-            "status" => $userInfo["status"],
-            "uidReset" => true,
+            'user_id' => $userInfo['id'],
+            'status' => $userInfo['status'],
+            'uidReset' => true,
         ];
 
-        Session::write("_user", $loggedUser);
-        Login::init_user($loggedUser["user_id"], true);
+        Session::write('_user', $loggedUser);
+        Login::init_user($loggedUser['user_id'], true);
     } else {
         $userId = api_get_user_id();
     }
 
-    switch($type) {
-        case "track":
+    switch ($type) {
+        case 'track':
             $callbackResponseArray = track();
-            die (json_encode($callbackResponseArray));
-        case "download":
+            exit(json_encode($callbackResponseArray));
+        case 'download':
             $callbackResponseArray = download();
-            die (json_encode($callbackResponseArray));
+            exit(json_encode($callbackResponseArray));
+        case 'empty':
+            $callbackResponseArray = emptyFile();
+            exit(json_encode($callbackResponseArray));
         default:
-            $callbackResponseArray["status"] = "error";
-            $callbackResponseArray["error"] = "404 Method not found";
-            die(json_encode($callbackResponseArray));
+            $callbackResponseArray['status'] = 'error';
+            $callbackResponseArray['error'] = '404 Method not found';
+            exit(json_encode($callbackResponseArray));
     }
 }
 
 /**
- * Handle request from the document server with the document status information
+ * Handle request from the document server with the document status information.
  */
 function track(): array
 {
@@ -106,117 +99,73 @@ function track(): array
     global $groupId;
     global $sessionId;
     global $courseInfo;
+    global $appSettings;
+    global $jwtManager;
 
-    if (($body_stream = file_get_contents("php://input")) === false) {
-        $result["error"] = "Bad Request";
+    if (($body_stream = file_get_contents('php://input')) === false) {
+        $result['error'] = 'Bad Request';
+
         return $result;
     }
 
     $data = json_decode($body_stream, true);
 
-    if ($data === null) {
-        $result["error"] = "Bad Response";
+    if (null === $data) {
+        $result['error'] = 'Bad Response';
+
         return $result;
     }
 
-    if (!empty($plugin->getDocumentServerSecret())) {
-
-        if (!empty($data["token"])) {
+    if ($jwtManager->isJwtEnabled()) {
+        if (!empty($data['token'])) {
             try {
-                $payload = JWT::decode($data["token"], new Key($plugin->getDocumentServerSecret(), "HS256"));
-            } catch (\UnexpectedValueException $e) {
-                $result["status"] = "error";
-                $result["error"] = "403 Access denied";
+                $payload = $jwtManager->decode($data['token'], $appSettings->getJwtKey());
+            } catch (UnexpectedValueException $e) {
+                $result['status'] = 'error';
+                $result['error'] = '403 Access denied';
+
                 return $result;
             }
         } else {
-            $token = substr(getallheaders()[$plugin->getJwtHeader()], strlen("Bearer "));
+            $token = substr(getallheaders()[$appSettings->getJwtHeader()], strlen('Bearer '));
             try {
-                $decodeToken = JWT::decode($token, new Key($plugin->getDocumentServerSecret(), "HS256"));
+                $decodeToken = $jwtManager->decode($token, $appSettings->getJwtKey());
                 $payload = $decodeToken->payload;
-            } catch (\UnexpectedValueException $e) {
-                $result["status"] = "error";
-                $result["error"] = "403 Access denied";
+            } catch (UnexpectedValueException $e) {
+                $result['status'] = 'error';
+                $result['error'] = '403 Access denied';
+
                 return $result;
             }
         }
 
-        $data["url"] = isset($payload->url) ? $payload->url : null;
-        $data["status"] = $payload->status;
+        $data['url'] = isset($payload->url) ? $payload->url : null;
+        $data['status'] = $payload->status;
     }
 
-    $status = $data["status"];
+    $docStatus = new CallbackDocStatus($data['status']);
+    $callback = new OnlyofficeCallback();
+    $callback->setStatus($docStatus);
+    $callback->setKey($docId);
+    $callback->setUrl($data['url']);
+    $callbackService = new OnlyofficeCallbackService(
+        $appSettings,
+        $jwtManager,
+        [
+            'courseCode' => $courseCode,
+            'userId' => $userId,
+            'docId' => $docId,
+            'groupId' => $groupId,
+            'sessionId' => $sessionId,
+            'courseInfo' => $courseInfo,
+        ]);
+    $result = $callbackService->processCallback($callback, $docId);
 
-    $track_result = 1;
-    switch ($status) {
-        case TrackerStatus_MustSave:
-        case TrackerStatus_Corrupted:
-
-            $downloadUri = $data["url"];
-            $downloadUri = $plugin->replaceDocumentServerUrlToInternal($downloadUri);
-
-            if (!empty($docId) && !empty($courseCode)) {
-                $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
-
-                if ($docInfo === false) {
-                    $result["error"] = "File not found";
-                    return $result;
-                }
-
-                $filePath = $docInfo["absolute_path"];
-            } else {
-                $result["error"] = "Bad Request";
-                return $result;
-            }
-
-            list ($isAllowToEdit, $isMyDir, $isGroupAccess, $isReadonly) = getPermissions($docInfo, $userId, $courseCode, $groupId, $sessionId);
-
-            if ($isReadonly) {
-                break;
-            }
-
-            if (($new_data = file_get_contents($downloadUri)) === false) {
-                break;
-            }
-
-            if ($isAllowToEdit || $isMyDir || $isGroupAccess) {
-                $groupInfo = GroupManager::get_group_properties($groupId);
-
-                if ($fp = @fopen($filePath, "w")) {
-                    fputs($fp, $new_data);
-                    fclose($fp);
-                    api_item_property_update($courseInfo,
-                                                TOOL_DOCUMENT,
-                                                $docId,
-                                                "DocumentUpdated",
-                                                $userId,
-                                                $groupInfo,
-                                                null,
-                                                null,
-                                                null,
-                                                $sessionId);
-                    update_existing_document($courseInfo,
-                                                $docId,
-                                                filesize($filePath),
-                                                false);
-                    $track_result = 0;
-                    break;
-                }
-            }
-
-        case TrackerStatus_Editing:
-        case TrackerStatus_Closed:
-
-            $track_result = 0;
-            break;
-    }
-
-    $result["error"] = $track_result;
     return $result;
 }
 
 /**
- * Downloading file by the document service
+ * Downloading file by the document service.
  */
 function download()
 {
@@ -227,15 +176,17 @@ function download()
     global $groupId;
     global $sessionId;
     global $courseInfo;
+    global $appSettings;
+    global $jwtManager;
 
-    if (!empty($plugin->getDocumentServerSecret())) {
-        $token = substr(getallheaders()[$plugin->getJwtHeader()], strlen("Bearer "));
+    if ($jwtManager->isJwtEnabled()) {
+        $token = substr(getallheaders()[$appSettings->getJwtHeader()], strlen('Bearer '));
         try {
-            $payload = JWT::decode($token, new Key($plugin->getDocumentServerSecret(), "HS256"));
+            $payload = $jwtManager->decode($token, $appSettings->getJwtKey());
+        } catch (UnexpectedValueException $e) {
+            $result['status'] = 'error';
+            $result['error'] = '403 Access denied';
 
-        } catch (\UnexpectedValueException $e) {
-            $result["status"] = "error";
-            $result["error"] = "403 Access denied";
             return $result;
         }
     }
@@ -243,42 +194,70 @@ function download()
     if (!empty($docId) && !empty($courseCode)) {
         $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
 
-        if ($docInfo === false) {
-            $result["error"] = "File not found";
+        if (false === $docInfo) {
+            $result['error'] = 'File not found';
+
             return $result;
         }
 
-        $filePath = $docInfo["absolute_path"];
+        $filePath = $docInfo['absolute_path'];
     } else {
-        $result["error"] = "File not found";
+        $result['error'] = 'File not found';
+
         return $result;
     }
 
-    @header("Content-Type: application/octet-stream");
-    @header("Content-Disposition: attachment; filename=" . $docInfo["title"]);
+    @header('Content-Type: application/octet-stream');
+    @header('Content-Disposition: attachment; filename='.$docInfo['title']);
 
     readfile($filePath);
-    exit();
+    exit;
 }
 
 /**
- * Method checks access rights to document and returns permissions
+ * Downloading empty file by the document service.
  */
-function getPermissions(array $docInfo, int $userId, string $courseCode, int $groupId = null, int $sessionId = null): array
+function emptyFile()
 {
-    $isAllowToEdit = api_is_allowed_to_edit(true, true);
-    $isMyDir = DocumentManager::is_my_shared_folder($userId, $docInfo["absolute_parent_path"], $sessionId);
+    global $plugin;
+    global $type;
+    global $courseCode;
+    global $userId;
+    global $docId;
+    global $groupId;
+    global $sessionId;
+    global $courseInfo;
+    global $appSettings;
+    global $jwtManager;
 
-    $isGroupAccess = false;
-    if (!empty($groupId)) {
-        $courseInfo = api_get_course_info($courseCode);
-        Session::write("_real_cid", $courseInfo["real_id"]);
-        $groupProperties = GroupManager::get_group_properties($groupId);
-        $docInfoGroup = api_get_item_property_info($courseInfo["real_id"], "document", $docInfo["id"], $sessionId);
-        $isGroupAccess = GroupManager::allowUploadEditDocument($userId, $courseCode, $groupProperties, $docInfoGroup);
+
+    if ($type !== 'empty') {
+        $result['status'] = 'error';
+        $result['error'] = 'Download empty with other action';
+        return $result;
     }
 
-    $isReadonly = $docInfo["readonly"];
+    if ($jwtManager->isJwtEnabled()) {
+        $token = substr(getallheaders()[$appSettings->getJwtHeader()], strlen('Bearer '));
+        try {
+            $payload = $jwtManager->decode($token, $appSettings->getJwtKey());
+        } catch (UnexpectedValueException $e) {
+            $result['status'] = 'error';
+            $result['error'] = '403 Access denied';
+            return $result;
+        }
+    }
 
-    return [$isAllowToEdit, $isMyDir, $isGroupAccess, $isReadonly];
+    $template = TemplateManager::getEmptyTemplate('docx');
+
+    if (!$template) {
+        $result['status'] = 'error';
+        $result['error'] = 'File not found';
+        return $result;
+    }
+
+    @header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    @header('Content-Disposition: attachment; filename='.'docx.docx');
+    readfile($template);
+    exit;
 }

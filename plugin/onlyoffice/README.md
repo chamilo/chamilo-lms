@@ -1,8 +1,8 @@
 ﻿# Chamilo ONLYOFFICE integration plugin
 
-This app enables users to edit office documents from [Chamilo](https://chamilo.org) using ONLYOFFICE Docs packaged as Document Server - [Community or Enterprise Edition](#onlyoffice-docs-editions).
+This plugin allows users to edit office documents from [Chamilo](https://chamilo.org) using ONLYOFFICE Docs packaged as Document Server - [Community or Enterprise Edition](#onlyoffice-docs-editions).
 
-The app is compatible with Chamilo v1.11.16 or newer. 
+The plugin is compatible with Chamilo v1.11.16 and later, although some features might only work on the [latest stable version](https://chamilo.org/download) of Chamilo. 
 
 ## Features
 
@@ -13,13 +13,18 @@ The plugin allows teachers to:
 
 Supported formats:
 
-* For editing: DOCX, XLSX, PPTX, DOCXF, OFORM.
+* For editing: DOCX, XLSX, PPTX, DOCXF, OFORM, ODT, ODS, ODP.
 
 ## Installing ONLYOFFICE Docs
 
-You will need an instance of ONLYOFFICE Docs (Document Server) that is resolvable and connectable both from Chamilo and any end clients. ONLYOFFICE Document Server must also be able to POST to Chamilo directly.
+You will need an instance of ONLYOFFICE Docs (Document Server) that is resolvable and connectable both from Chamilo 
+and any end clients. ONLYOFFICE Document Server must also be able to POST to Chamilo directly.
 
-ONLYOFFICE Document Server and Chamilo can be installed either on different computers, or on the same machine. If you use one machine, set up a custom port for Document Server as by default both ONLYOFFICE Document Server and Chamilo work on port 80.
+ONLYOFFICE Document Server and Chamilo can be installed either on different computers, or on the same machine. 
+If you use one machine, set up a custom port for Document Server as by default both ONLYOFFICE Document Server and 
+Chamilo work on port 80.
+
+The ONLYOFFICE server needs to be able to resolve your Chamilo portal's URL.
 
 You can install the free Community version of ONLYOFFICE Docs or scalable Enterprise Edition with pro features.
 
@@ -31,7 +36,12 @@ The Community Edition vs Enterprise Edition comparison can be found [here](#only
 
 To use ONLYOFFICE behind a proxy, please refer to [this article](https://helpcenter.onlyoffice.com/installation/docs-community-proxy.aspx).
 
-## Collect Chamilo ONLYOFFICE integration plugin
+## Download a more recent version of the Chamilo-ONLYOFFICE integration plugin
+
+When approved by Chamilo and integrated as official plugin, the Chamilo team strives to provide the latest 
+stable version of the plugin within the Chamilo package. Downloading another version of the plugin might have
+negative effects on your installation. However, if you believe you need to download a more recent version from
+the third party, here is the recommended procedure:
 
 1. Get the latest version of this repository running the command:
     ```
@@ -39,12 +49,12 @@ To use ONLYOFFICE behind a proxy, please refer to [this article](https://helpcen
     cd onlyoffice-chamilo
     ```
 
-2. Get a submodule:
+2. Get submodules:
     ```
     git submodule update --init --recursive
     ```
 
-3. Collect all files
+3. Clean up
     ```
     mkdir /tmp/onlyoffice-deploy
     mkdir /tmp/onlyoffice-deploy/onlyoffice
@@ -78,21 +88,25 @@ Upload `onlyoffice.zip` (you'll find it in the Releases section). You'll see the
 
 Then launch `composer install` from the Chamilo root folder. 
 
-Return to the plugin list, select the ONLYOFFICE plugin, and click Enable the selected plugins.
+Return to the plugin list, select the ONLYOFFICE plugin, and click "Enable".
 
 ## Configuring Chamilo ONLYOFFICE integration plugin
 
 On the Plugins page, find ONLYOFFICE and click _Configure_. You'll see the _Settings_ page. Enable the plugin and specify the _Document Server address_. 
 
 Starting from version 7.2, JWT is enabled by default and the secret key is generated automatically to restrict the access to ONLYOFFICE Docs and for security reasons and data integrity. 
-Specify your own **Secret key** on the Chamilo **Settings** page. 
-In the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/editors/signature/), specify the same secret key and enable the validation.
+Specify your own **Secret key** on the Chamilo **Settings** page. The key can be found on your OnlyOffice server, depending on the type of server. See the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/editors/signature/) page for more details.
+Specify the same secret key (search for a long hash string next to "secret") and save.
+
+The plugin will tell you if anything is wrong.
 
 ## How it works
 
-* To create a new file, the teacher opens the necessary folder and clicks the ONLYOFFICE icon "Create new".
+### For teachers/trainers
+
+* To create a new file, teachers can open the documents folder and click the ONLYOFFICE icon "Create new".
 * The user is redirected to the file creation page where they need to enter the file name and format (text document, spreadsheet, or presentation). The browser calls `/plugin/onlyoffice/create.php` method. It adds the copy of the empty file to the course folder.
-* To open an existing file, the user chooses the _Open with ONLYOFFICE_ icon.
+* To open an existing file, the user chooses the _Open with ONLYOFFICE_ icon next to the normal edit icon.
 * The request is being sent to `/plugin/onlyoffice/editor.php?docId=«document identificator»`. The server processes the request, generates the editor initialization configuration with the properties:
 
   * **url** - the URL that ONLYOFFICE Document Server uses to download the document;
@@ -108,6 +122,11 @@ In the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/editors/signatur
 * When all users have finished editing, they close the editor window.
 * After 10 seconds, Document Server makes a POST request to **callbackUrl** with the information that editing has ended and sends a link to the new document version.
 * Chamilo loads a new version of the document and overwrites the file.
+
+### For learners
+
+* Learners have access to a new ONLYOFFICE icon next to all documents supported by ONLYOFFICE in the documents tool.
+* In the learning paths, the viewer seamlessly integrates with Chamilo to open the supported documents.
 
 More information on integration ONLYOFFICE Docs can be found in the [API documentation](https://api.onlyoffice.com/editors/basic). 
 

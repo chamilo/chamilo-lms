@@ -990,6 +990,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Block access to any user to "my progress" page
 //$_configuration['block_my_progress_page'] = false;
 
+// Hides the "my progress" tab from the navigation menu
+//$_configuration['hide_my_progress_tab'] = false;
+
 // Add user extra fields in report: main/mySpace/exercise_category_report.php
 //$_configuration['exercise_category_report_user_extra_fields'] = ['fields' => ['skype', 'rssfeeds']];
 

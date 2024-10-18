@@ -3710,18 +3710,55 @@ class learnpath
                                         'zip',
                                         'ppt',
                                         'pptx',
-                                        'ods',
-                                        'xlsx',
+                                        'odp',
                                         'xls',
+                                        'xlsx',
+                                        'ods',
                                         'csv',
                                         'doc',
                                         'docx',
+                                        'odt',
+                                        'pdf',
                                         'dot',
+                                    ];
+                                    $officeExtensions = [
+                                        'ppt',
+                                        'pptx',
+                                        'odp',
+                                        'xls',
+                                        'xlsx',
+                                        'ods',
+                                        'csv',
+                                        'doc',
+                                        'docx',
+                                        'odt',
+                                        'pdf',
                                     ];
 
                                     if (in_array($extension, $extensionsToDownload)) {
-                                        $file = api_get_path(WEB_CODE_PATH).
-                                            'lp/embed.php?type=download&source=file&lp_item_id='.$item_id.'&'.api_get_cidreq();
+                                        $found = false;
+                                        if (in_array($extension, $officeExtensions)) {
+                                            $onlyOffice = OnlyofficePlugin::create();
+                                            if ($onlyOffice->isEnabled()) {
+                                                $lpItem = $this->getItem($item_id);
+                                                if ($lpItem->get_type() == 'document') {
+                                                    $docId = $lpItem->get_path();
+                                                    if (method_exists('OnlyofficeTools', 'getPathToView')) {
+                                                        $pathToView = OnlyofficeTools::getPathToView($docId, false);
+                                                        // getPathView returns empty on error, so if this is the case,
+                                                        // fallback to normal viewer/downloader
+                                                        if (!empty($pathToView)) {
+                                                            $file = $pathToView;
+                                                            $found = true;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (false === $found) {
+                                            $file = api_get_path(WEB_CODE_PATH).
+                                                'lp/embed.php?type=download&source=file&lp_item_id='.$item_id.'&'.api_get_cidreq();
+                                        }
                                     }
                                 }
                             }

@@ -202,11 +202,11 @@ function show_add_forumcategory_form($lp_id)
     $form->addElement('header', get_lang('AddForumCategory'));
     $form->addElement('text', 'forum_category_title', get_lang('Title'), ['autofocus']);
     $form->applyFilter('forum_category_title', 'html_filter');
-    $form->addElement(
-        'html_editor',
+    $form->addHtmlEditor(
         'forum_category_comment',
         get_lang('Description'),
-        null,
+        false,
+        false,
         ['ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200']
     );
 
@@ -283,11 +283,11 @@ function show_add_forum_form($inputvalues = [], $lp_id = 0)
     $form->applyFilter('forum_title', 'html_filter');
 
     // The comment of the forum.
-    $form->addElement(
-        'html_editor',
+    $form->addHtmlEditor(
         'forum_comment',
         get_lang('Description'),
-        null,
+        false,
+        false,
         ['ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200']
     );
 
@@ -533,11 +533,11 @@ function show_edit_forumcategory_form($inputvalues = [])
     $form->addElement('text', 'forum_category_title', get_lang('Title'));
     $form->applyFilter('forum_category_title', 'html_filter');
 
-    $form->addElement(
-        'html_editor',
+    $form->addHtmlEditor(
         'forum_category_comment',
         get_lang('Comment'),
-        null,
+        false,
+        false,
         ['ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200']
     );
 
@@ -4047,11 +4047,11 @@ function show_edit_post_form(
 
     $form->addElement('text', 'post_title', get_lang('Title'));
     $form->applyFilter('post_title', 'html_filter');
-    $form->addElement(
-        'html_editor',
+    $form->addHtmlEditor(
         'post_text',
         get_lang('Text'),
-        null,
+        true,
+        false,
         api_is_allowed_to_edit(null, true) ? [
             'ToolbarSet' => 'Forum',
             'Width' => '100%',
@@ -4063,7 +4063,6 @@ function show_edit_post_form(
             'UserStatus' => 'student',
         ]
     );
-    $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
 
     $extraFields = new ExtraField('forum_post');
     $extraFields->addElements($form, $current_post['post_id']);

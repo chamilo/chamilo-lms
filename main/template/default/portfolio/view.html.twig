@@ -47,7 +47,7 @@
         </ul>
     </header>
 
-    {{ item_content }}
+    {{ item_content|remove_xss }}
 
     {% if attachment_list %}
         <section>

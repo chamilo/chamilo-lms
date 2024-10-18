@@ -338,14 +338,16 @@ class FillBlanks extends Question
             null,
             get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank')
         );
-        $form->addElement(
-            'html_editor',
+        $form->addHtmlEditor(
             'answer',
             Display::return_icon('fill_field.png'),
-            ['id' => 'answer'],
-            ['ToolbarSet' => 'TestQuestionDescription']
+            true,
+            false,
+            [
+                'id' => 'answer',
+                'ToolbarSet' => 'TestQuestionDescription',
+            ]
         );
-        $form->addRule('answer', get_lang('GiveText'), 'required');
 
         //added multiple answers
         $form->addElement('checkbox', 'multiple_answer', '', get_lang('FillInBlankSwitchable'));

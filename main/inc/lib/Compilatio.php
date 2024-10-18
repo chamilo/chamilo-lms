@@ -340,6 +340,7 @@ class Compilatio
         $courseId = api_get_course_int_id();
         $compilatioId = $this->getCompilatioId($workId, $courseId);
 
+        $actionCompilatio = '';
         // if the compilatio's hash is not a valide hash md5,
         // we return à specific status (cf : IsInCompilatio() )
         // Not used since implementation of RestAPI but there if needed later

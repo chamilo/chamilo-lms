@@ -3106,12 +3106,13 @@ class Agenda
             $toolbar = 'AgendaStudent';
         }
 
-        $form->addElement(
-            'html_editor',
+        $form->addHtmlEditor(
             'content',
             get_lang('Description'),
-            null,
+            false,
+            false,
             [
+                'style' => 'vertical-align:middle;',
                 'ToolbarSet' => $toolbar,
                 'Width' => '100%',
                 'Height' => '200',

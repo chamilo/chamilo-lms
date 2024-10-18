@@ -142,18 +142,18 @@ if ('edit' == $action) {
     $form->applyFilter('survey_code', 'api_strtoupper');
 }
 
-$form->addElement(
-    'html_editor',
+$form->addHtmlEditor(
     'survey_title',
     get_lang('SurveyTitle'),
-    null,
+    false,
+    false,
     ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200']
 );
-$form->addElement(
-    'html_editor',
+$form->addHtmlEditor(
     'survey_subtitle',
     get_lang('SurveySubTitle'),
-    null,
+    false,
+    false,
     [
         'ToolbarSet' => 'Survey',
         'Width' => '100%',
@@ -194,18 +194,18 @@ if (api_get_configuration_value('hide_survey_reporting_button')) {
     $form->addElement('select', 'visible_results', get_lang('ResultsVisibility'), $visibleResults);
 }
 //$defaults['visible_results'] = 0;
-$form->addElement(
-    'html_editor',
+$form->addHtmlEditor(
     'survey_introduction',
     get_lang('SurveyIntroduction'),
-    null,
+    false,
+    false,
     ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false]
 );
-$form->addElement(
-    'html_editor',
+$form->addHtmlEditor(
     'survey_thanks',
     get_lang('SurveyThanks'),
-    null,
+    false,
+    false,
     ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false]
 );
 

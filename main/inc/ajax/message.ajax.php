@@ -47,6 +47,7 @@ switch ($action) {
 
         $subject = isset($_REQUEST['subject']) ? trim($_REQUEST['subject']) : null;
         $messageContent = isset($_REQUEST['content']) ? trim($_REQUEST['content']) : null;
+        $messageContent = attr_on_filter($messageContent);
 
         if (empty($subject) || empty($messageContent)) {
             echo Display::return_message(get_lang('ErrorSendingMessage'), 'error');

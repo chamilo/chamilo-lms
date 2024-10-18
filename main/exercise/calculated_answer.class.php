@@ -133,6 +133,7 @@ class CalculatedAnswer extends Question
 
         $form->addRule('answer', get_lang('GiveText'), 'required');
         $form->addRule('answer', get_lang('DefineBlanks'), 'regex', '/\[.*\]/');
+        $form->applyFilter('answer', 'attr_on_filter');
 
         $form->addElement('label', null, get_lang('IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals'));
         $form->addElement('html', '<div id="blanks_weighting"></div>');

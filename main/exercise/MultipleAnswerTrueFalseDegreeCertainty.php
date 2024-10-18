@@ -163,6 +163,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+            $form->applyFilter("answer[$i]", 'attr_on_filter');
 
             if (isset($_POST['answer']) && isset($_POST['answer'][$i])) {
                 $txtAnswer->setValue(Security::remove_XSS($_POST['answer'][$i]));
@@ -177,6 +178,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                     ['style' => 'vertical-align:middle;'],
                     ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
                 );
+                $form->applyFilter("comment[$i]", 'attr_on_filter');
 
                 if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
                     $txtComment->setValue(Security::remove_XSS($_POST['comment'][$i]));

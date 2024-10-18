@@ -428,7 +428,6 @@ abstract class RequestService implements RequestServiceInterface
             return [$e->getMessage(), $version];
         }
 
-	/*
         try {
             $fileUrl = $this->getFileUrlForConvert();
 
@@ -450,8 +449,7 @@ abstract class RequestService implements RequestServiceInterface
             $this->request($convertedFileUri);
         } catch (\Exception $e) {
             return [$e->getMessage(), $version];
-	}
-	 */
+        }
 
         return ["", $version];
     }

@@ -52,6 +52,10 @@ class QuizExport extends ActivityExport
         $quizResources = $this->course->resources[RESOURCE_QUIZ];
 
         foreach ($quizResources as $quiz) {
+            if ($quiz->obj->iid == -1) {
+                continue;
+            }
+
             if ($quiz->obj->iid == $quizId) {
                 $contextid = $quiz->obj->c_id;
 

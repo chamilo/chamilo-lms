@@ -402,7 +402,7 @@ foreach ($userList as $userInfo) {
 
                 $list = new LearnpathList(
                     $studentId,
-                    $courseCode,
+                    $courseInfo,
                     $sessionId,
                     null,
                     false,

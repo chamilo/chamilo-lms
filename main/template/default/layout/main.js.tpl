@@ -5,6 +5,9 @@ var offline_button = '<img src="' + _p.web_img + 'statusoffline.png">';
 var connect_lang = '{{ "ChatConnected"|get_lang | escape('js')}}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang | escape('js')}}';
 var chatLang = '{{ "GlobalChat"|get_lang | escape('js')}}';
+var sessionRemainingSeconds = 0;
+var sessionCounterInterval;
+var sessionClosing = false;
 
 {% if 'hide_chat_video'|api_get_configuration_value %}
     var hide_chat_video = true;
@@ -443,6 +446,10 @@ $(function() {
             });
         });
     {% endif %}
+
+    if (window.self === window.top) {
+        checkSessionTime();
+    }
 });
 
 $(window).resize(function() {
@@ -730,4 +737,194 @@ function copyTextToClipBoard(elementId)
 
     /* Copy the text inside the text field */
     document.execCommand("copy");
+}
+
+function checkSessionTime()
+{
+    fetch('/main/inc/ajax/session_clock.ajax.php?action=time')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Server error: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.sessionTimeLeft <= 0) {
+            if (!document.getElementById('session-checker-overlay')) {
+                clearInterval(sessionCounterInterval);
+
+                var counterOverlay = document.getElementById('session-count-overlay');
+                if (counterOverlay) {
+                    counterOverlay.remove();
+                }
+
+                var now = new Date();
+                var day = String(now.getDate()).padStart(2, '0');
+                var month = String(now.getMonth() + 1).padStart(2, '0');
+                var year = now.getFullYear();
+                var hour = String(now.getHours()).padStart(2, '0');
+                var minutes = String(now.getMinutes()).padStart(2, '0');
+
+                var dateTimeSessionExpired = day + '/' + month + '/' + year + ' ' + hour + ':' + minutes;
+
+                document.body.insertAdjacentHTML('afterbegin', '<div id="session-checker-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,1);display:flex;justify-content:center;align-items:center;z-index:1000;"><div id="session-checker-modal" style="background:white;padding:20px;border-radius:5px;box-shadow:0010pxrgba(0,0,0,0.5);width:35%;text-align:center;"><p style="margin-bottom:20px;">{{ 'SessionExpiredAt' | get_lang | escape('js')}} ' + dateTimeSessionExpired + '.</p><button class="btn btn-primary" onclick="window.location.pathname = \'/\';">OK</button></div></div>');
+            }
+        } else if (data.sessionTimeLeft <= 110) {
+            sessionRemainingSeconds = data.sessionTimeLeft - 5;
+
+            if (sessionRemainingSeconds < 0) {
+                sessionRemainingSeconds = 0;
+            }
+
+            if (!document.getElementById('session-count-overlay')) {
+                document.body.insertAdjacentHTML('afterbegin', '<div id="session-count-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:1000;"><div id="session-checker-modal" style="background:white;padding:20px;border-radius:5px;box-shadow:0010pxrgba(0,0,0,0.5);width:35%;text-align:center;"><p id="session-counter" style="margin-bottom:20px;">{{ 'DueToInactivityTheSessionIsGoingToClose' | get_lang | escape('js')}} ' + sessionRemainingSeconds + ' {{ 'Seconds' | get_lang | escape('js')}}</p><button class="btn btn-primary" id="btn-session-extend" onclick="extendSession();">{{ 'KeepGoing' | get_lang | escape('js')}}</button></div></div>');
+
+                sessionCounterInterval = setInterval(updateSessionTimeCounter, 1000);
+            }
+            setTimeout(checkSessionTime, 60000);
+        } else {
+            clearInterval(sessionCounterInterval);
+
+            var counterOverlay = document.getElementById('session-count-overlay');
+            if (counterOverlay) {
+                counterOverlay.remove();
+            }
+
+            setTimeout(checkSessionTime, 60000);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function extendSession() {
+    fetch('/main/inc/ajax/online.ajax.php')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Server error: ' + response.statusText);
+        }
+        return response;
+    })
+    .then(data => {
+        console.log('Session extended');
+
+        clearInterval(sessionCounterInterval);
+
+        var counterOverlay = document.getElementById('session-count-overlay');
+        if (counterOverlay) {
+            counterOverlay.remove();
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function updateSessionTimeCounter() {
+    var sessionCounter = document.getElementById('session-counter');
+    if (sessionRemainingSeconds > 3) {
+        sessionCounter.innerHTML = '{{ 'DueToInactivityTheSessionIsGoingToClose' | get_lang | escape('js')}} ' + sessionRemainingSeconds + ' {{ 'Seconds' | get_lang | escape('js')}}';
+        sessionRemainingSeconds--;
+    } else if (sessionRemainingSeconds <= 3 && sessionRemainingSeconds > 1) {
+        var currentUrl = window.location.href;
+        if (currentUrl.includes('lp_controller.php') && currentUrl.includes('lp_id=') && currentUrl.includes('action=view')) {
+
+            if (!sessionClosing) {
+                var btnSessionExtend = document.getElementById('btn-session-extend');
+                if (btnSessionExtend) {
+                    btnSessionExtend.remove();
+                }
+
+                document.getElementById('session-counter').innerHTML = '{{ 'SessionIsClosing' | get_lang | escape('js')}}';
+
+                setTimeout(function() {
+                    fetch('/main/inc/ajax/session_clock.ajax.php?action=logout')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!document.getElementById('session-checker-overlay')) {
+                            clearInterval(sessionCounterInterval);
+
+                            var counterOverlay = document.getElementById('session-count-overlay');
+                            if (counterOverlay) {
+                                counterOverlay.remove();
+                            }
+
+                            var now = new Date();
+                            var day = String(now.getDate()).padStart(2, '0');
+                            var month = String(now.getMonth() + 1).padStart(2, '0');
+                            var year = now.getFullYear();
+                            var hour = String(now.getHours()).padStart(2, '0');
+                            var minutes = String(now.getMinutes()).padStart(2, '0');
+
+                            var dateTimeSessionExpired = day + '/' + month + '/' + year + ' ' + hour + ':' + minutes;
+
+                            document.body.insertAdjacentHTML('afterbegin', '<div id="session-checker-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,1);display:flex;justify-content:center;align-items:center;z-index:1000;"><div id="session-checker-modal" style="background:white;padding:20px;border-radius:5px;box-shadow:0010pxrgba(0,0,0,0.5);width:35%;text-align:center;"><p style="margin-bottom:20px;">{{ 'SessionExpiredAt' | get_lang | escape('js')}} ' + dateTimeSessionExpired + '.</p><button class="btn btn-primary" onclick="window.location.pathname = \'/\';">OK</button></div></div>');
+                        }
+                    })
+                    .catch((error) => {
+                    console.error('Error:', error);
+                    });
+                }, 1000);
+
+                lastCall();
+            }
+            sessionClosing = true;
+        }
+        else {
+            if (!sessionClosing) {
+                var btnSessionExtend = document.getElementById('btn-session-extend');
+                if (btnSessionExtend) {
+                    btnSessionExtend.remove();
+                }
+
+                document.getElementById('session-counter').innerHTML = '{{ 'SessionIsClosing' | get_lang | escape('js')}}';
+
+                setTimeout(function() {
+                    fetch('/main/inc/ajax/session_clock.ajax.php?action=logout')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!document.getElementById('session-checker-overlay')) {
+                            clearInterval(sessionCounterInterval);
+
+                            var counterOverlay = document.getElementById('session-count-overlay');
+                            if (counterOverlay) {
+                                counterOverlay.remove();
+                            }
+
+                            var now = new Date();
+                            var day = String(now.getDate()).padStart(2, '0');
+                            var month = String(now.getMonth() + 1).padStart(2, '0');
+                            var year = now.getFullYear();
+                            var hour = String(now.getHours()).padStart(2, '0');
+                            var minutes = String(now.getMinutes()).padStart(2, '0');
+
+                            var dateTimeSessionExpired = day + '/' + month + '/' + year + ' ' + hour + ':' + minutes;
+
+                            document.body.insertAdjacentHTML('afterbegin', '<div id="session-checker-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,1);display:flex;justify-content:center;align-items:center;z-index:1000;"><div id="session-checker-modal" style="background:white;padding:20px;border-radius:5px;box-shadow:0010pxrgba(0,0,0,0.5);width:35%;text-align:center;"><p style="margin-bottom:20px;">{{ 'SessionExpiredAt' | get_lang | escape('js')}} ' + dateTimeSessionExpired + '.</p><button class="btn btn-primary" onclick="window.location.pathname = \'/\';">OK</button></div></div>');
+                        }
+                    })
+                    .catch((error) => {
+                    console.error('Error:', error);
+                    });
+                }, 1000);
+            }
+            sessionClosing = true;
+        }
+    }
+    else {
+        clearInterval(sessionCounterInterval);
+
+        var counterOverlay = document.getElementById('session-count-overlay');
+        if (counterOverlay) {
+            counterOverlay.remove();
+        }
+
+        var now = new Date();
+        var day = String(now.getDate()).padStart(2, '0');
+        var month = String(now.getMonth() + 1).padStart(2, '0');
+        var year = now.getFullYear();
+        var hour = String(now.getHours()).padStart(2, '0');
+        var minutes = String(now.getMinutes()).padStart(2, '0');
+
+        var dateTimeSessionExpired = day + '/' + month + '/' + year + ' ' + hour + ':' + minutes;
+
+        document.body.insertAdjacentHTML('afterbegin', '<div id="session-checker-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,1);display:flex;justify-content:center;align-items:center;z-index:1000;"><div id="session-checker-modal" style="background:white;padding:20px;border-radius:5px;box-shadow:0010pxrgba(0,0,0,0.5);width:35%;text-align:center;"><p style="margin-bottom:20px;">{{ 'SessionExpiredAt' | get_lang | escape('js')}} ' + dateTimeSessionExpired + '.</p><button class="btn btn-primary" onclick="window.location.pathname = \'/\';">OK</button></div></div>');
+    }
 }

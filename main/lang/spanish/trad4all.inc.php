@@ -9098,4 +9098,8 @@ $MoodleVersion = "Versión de Moodle";
 $CreateExport = "Crear archivo de exporte";
 $MoodleExportAdminIDComment = "Moodle requiere la indentificación de algún usuario para almacenarla dentro de los archivos XML del formato .mbz. Por favor indique un número de ID interno (entero) del usuario quien está exportando este curso, o el ID interno del usuario en Moodle para el usuario quien será propietario de los recursos importados. Si tiene duda, puede simplemente marcar '1' y algunos datos falsos para seguir.";
 $DropboxVulnerabilityWarning = "Recuerde únicamente descargar archivos enviados por personas conocidas. Si tiene dudas, use un anti-virus en su computadora para reducir el riesgo de daños a sus datos.";
+$SessionExpiredAt = "Sesión expirada el";
+$DueToInactivityTheSessionIsGoingToClose = "Debido a su inactividad, esta sesión se cerrará en";
+$KeepGoing = "Seguir conectado";
+$SessionIsClosing = "Su sesión se está cerrando";
 ?>

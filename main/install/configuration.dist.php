@@ -2580,3 +2580,6 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // is '$1EdTech-CC-FILEBASE$' (the latest), but previous versions of the standard
 // recommended '$IMS-CC-FILEBASE$', so you might want to use that for greater compatibility.
 //$_configuration['commoncartridge_path_token'] = '$IMS-CC-FILEBASE$';
+
+// Set the following parameter to true to enable a session lifetime controller that notifies users that their session is about to expire
+//$_configuration['session_lifetime_controller'] = false;

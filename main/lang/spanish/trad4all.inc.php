@@ -9102,4 +9102,5 @@ $SessionExpiredAt = "Sesión expirada el";
 $DueToInactivityTheSessionIsGoingToClose = "Debido a su inactividad, esta sesión se cerrará en";
 $KeepGoing = "Seguir conectado";
 $SessionIsClosing = "Su sesión se está cerrando";
+$CannotChangeVisibilityOfBaseCourseResourceX = "La visibilidad de %s del curso base no puede ser cambiada desde una sesión.";
 ?>

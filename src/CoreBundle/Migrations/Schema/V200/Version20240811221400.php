@@ -100,15 +100,6 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE skill_rel_user_comment DROP FOREIGN KEY IF EXISTS FK_7AE9F6B63AF3B65B');
         $this->addSql('ALTER TABLE skill_rel_user_comment ADD CONSTRAINT FK_7AE9F6B63AF3B65B FOREIGN KEY (feedback_giver_id) REFERENCES user (id) ON DELETE CASCADE');
 
-        // portfolio_rel_tag
-        $this->addSql('DROP INDEX IF EXISTS IDX_DB734472BAD26311 ON portfolio_rel_tag');
-        $this->addSql('DROP INDEX IF EXISTS IDX_DB73447291D79BD3 ON portfolio_rel_tag');
-        $this->addSql('DROP INDEX IF EXISTS IDX_DB734472613FECDF ON portfolio_rel_tag');
-        $this->addSql('ALTER TABLE portfolio_rel_tag ADD COLUMN IF NOT EXISTS tag INT NOT NULL');
-        $this->addSql('ALTER TABLE portfolio_rel_tag ADD COLUMN IF NOT EXISTS course INT NOT NULL');
-        $this->addSql('ALTER TABLE portfolio_rel_tag DROP COLUMN IF EXISTS tag_id');
-        $this->addSql('ALTER TABLE portfolio_rel_tag DROP COLUMN IF EXISTS c_id');
-        $this->addSql('ALTER TABLE portfolio_rel_tag CHANGE COLUMN IF EXISTS session_id session INT DEFAULT NULL');
         $this->addSql('ALTER TABLE track_e_attempt_qualify CHANGE marks marks DOUBLE PRECISION NOT NULL');
         $this->addSql('ALTER TABLE track_e_attempt_qualify DROP FOREIGN KEY IF EXISTS FK_B88BC9BCB5A18F57');
         $this->addSql('ALTER TABLE track_e_attempt_qualify ADD CONSTRAINT FK_B88BC9BCB5A18F57 FOREIGN KEY (exe_id) REFERENCES track_e_exercises (exe_id) ON DELETE CASCADE');

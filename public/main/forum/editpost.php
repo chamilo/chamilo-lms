@@ -213,7 +213,7 @@ if (!api_is_allowed_to_create_course() &&
     (
         (false === $categoryIsVisible) ||
         false === $forumIsVisible
-    )
+    ) && (!api_is_course_admin())
 ) {
     api_not_allowed(true);
 }

@@ -684,7 +684,7 @@ foreach ($categories as $category) {
                         );
                     } else {
                         $lp_auto_launch_icon = Display::url(
-                            Display::getMdiIcon('rocket-launch', 'ch-tool-icon', '', 22),
+                            Display::getMdiIcon('rocket-launch', 'ch-tool-icon-disabled', '', 22),
                             api_get_self().'?'.$cidReq."&action=auto_launch&status=1&lp_id=$id",
                             ['title' => htmlentities(get_lang('Enable learning path auto-launch'))]
                         );

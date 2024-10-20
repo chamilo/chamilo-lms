@@ -95,6 +95,19 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
         return $router->generate('legacy_main', $params);
     }
 
+    public function findAutoLaunchableLPByCourseAndSession(Course $course, ?Session $session = null): ?int
+    {
+        $qb = $this->getResourcesByCourse($course, $session)
+            ->select('resource.iid')
+            ->andWhere('resource.autolaunch = 1');
+
+        $qb->setMaxResults(1);
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result ? $result['iid'] : null;
+    }
+
     protected function addNotDeletedQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);

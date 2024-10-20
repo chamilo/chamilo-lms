@@ -6957,31 +6957,30 @@ class learnpath
      */
     public function set_autolaunch($lp_id, $status)
     {
-        $course_id = api_get_course_int_id();
-        $lp_id = (int) $lp_id;
         $status = (int) $status;
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $em = Database::getManager();
+        $repo = Container::getLpRepository();
 
-        // Setting everything to autolaunch = 0
-        $attributes['autolaunch'] = 0;
-        $where = [
-            'session_id = ? AND c_id = ? ' => [
-                api_get_session_id(),
-                $course_id,
-            ],
-        ];
-        Database::update($lp_table, $attributes, $where);
-        if (1 == $status) {
-            //Setting my lp_id to autolaunch = 1
-            $attributes['autolaunch'] = 1;
-            $where = [
-                'iid = ? AND session_id = ? AND c_id = ?' => [
-                    $lp_id,
-                    api_get_session_id(),
-                    $course_id,
-                ],
-            ];
-            Database::update($lp_table, $attributes, $where);
+        $session = api_get_session_entity();
+        $course = api_get_course_entity();
+
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $lps = $qb->getQuery()->getResult();
+
+        foreach ($lps as $lp) {
+            $lp->setAutoLaunch(0);
+            $em->persist($lp);
+        }
+
+        $em->flush();
+
+        if ($status === 1) {
+            $lp = $repo->find($lp_id);
+            if ($lp) {
+                $lp->setAutolaunch(1);
+                $em->persist($lp);
+            }
+            $em->flush();
         }
     }
 

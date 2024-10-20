@@ -154,4 +154,29 @@ export default {
       return null;
     }
   },
+  /**
+   * Retrieves the ID of the auto-launchable learnpaths in a course, if configured.
+   *
+   * @param {number} courseId - The ID of the course.
+   * @param {number=} sessionId - The ID of the session (optional).
+   * @returns {Promise<number|null>} The ID of the auto-launchable learnpath, or null if none exists.
+   */
+  getAutoLaunchLPId: async (courseId, sessionId = 0) => {
+    try {
+      const { data } = await api.get(`/course/${courseId}/getAutoLaunchLPId`, {
+        params: {
+          sid: sessionId,
+        },
+      });
+
+      if (data && data.lpId) {
+        return data.lpId;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error fetching auto-launch LP ID:", error);
+      return null;
+    }
+  },
 }

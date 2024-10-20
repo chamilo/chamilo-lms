@@ -145,6 +145,8 @@ class PlatformConfigurationController extends AbstractController
             'allow_user_edit_agenda' => $courseSettingsManager->getCourseSettingValue('allow_user_edit_agenda'),
             'enable_document_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_document_auto_launch'),
             'enable_exercise_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_exercise_auto_launch'),
+            'enable_lp_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_lp_auto_launch'),
+            'enable_forum_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_forum_auto_launch'),
         ];
 
         return new JsonResponse(['settings' => $settings]);

@@ -33,6 +33,7 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
+use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
@@ -782,6 +783,28 @@ class CourseController extends ToolBaseController
         $autoLaunchExerciseId = $quizRepository->findAutoLaunchableQuizByCourseAndSession($course, $session);
 
         return new JsonResponse(['exerciseId' => $autoLaunchExerciseId], Response::HTTP_OK);
+    }
+
+    #[Route('/{id}/getAutoLaunchLPId', name: 'chamilo_core_course_get_auto_launch_lp_id', methods: ['GET'])]
+    public function getAutoLaunchLPId(
+        Request $request,
+        Course $course,
+        CLPRepository $lpRepository,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $data = $request->getContent();
+        $data = json_decode($data);
+        $sessionId = $data->sid ?? 0;
+
+        $sessionRepo = $em->getRepository(Session::class);
+        $session = null;
+        if (!empty($sessionId)) {
+            $session = $sessionRepo->find($sessionId);
+        }
+
+        $autoLaunchLPId = $lpRepository->findAutoLaunchableLPByCourseAndSession($course, $session);
+
+        return new JsonResponse(['lpId' => $autoLaunchLPId], Response::HTTP_OK);
     }
 
     private function autoLaunch(): void

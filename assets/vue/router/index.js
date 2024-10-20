@@ -121,6 +121,8 @@ const router = createRouter({
 
           const courseSettingsStore = useCourseSettings()
           await courseSettingsStore.loadCourseSettings(courseId, sessionId)
+
+          // Document auto-launch
           const documentAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
           if (documentAutoLaunch === 1 && course.resourceNode?.id) {
             window.location.href = `/resources/document/${course.resourceNode.id}/?cid=${courseId}`
@@ -128,17 +130,16 @@ const router = createRouter({
             return false
           }
 
+          // Exercise auto-launch
           const platformConfigStore = usePlatformConfig()
           const isExerciseAutoLaunchEnabled = "true" === platformConfigStore.getSetting("exercise.allow_exercise_auto_launch")
-
           if (isExerciseAutoLaunchEnabled) {
             const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
             if (exerciseAutoLaunch === 2) {
               window.location.href = `/main/exercise/exercise.php?cid=${courseId}`
                 + (sessionId ? `&sid=${sessionId}` : '')
               return false
-            }
-            else if (exerciseAutoLaunch === 1) {
+            } else if (exerciseAutoLaunch === 1) {
               const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
               if (exerciseId) {
                 window.location.href = `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}`
@@ -146,6 +147,29 @@ const router = createRouter({
                 return false
               }
             }
+          }
+
+          // Learning path auto-launch
+          const lpAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
+          if (lpAutoLaunch === 2) {
+            window.location.href = `/main/lp/lp_controller.php?cid=${courseId}`
+              + (sessionId ? `&sid=${sessionId}` : '')
+            return false
+          } else if (lpAutoLaunch === 1) {
+            const lpId = await courseService.getAutoLaunchLPId(courseId, sessionId)
+            if (lpId) {
+              window.location.href = `/main/lp/lp_controller.php?lp_id=${lpId}&cid=${courseId}&action=view&isStudentView=true`
+                + (sessionId ? `&sid=${sessionId}` : '')
+              return false
+            }
+          }
+
+          // Forum auto-launch
+          const forumAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
+          if (forumAutoLaunch === 1) {
+            window.location.href = `/main/forum/index.php?cid=${courseId}`
+              + (sessionId ? `&sid=${sessionId}` : '')
+            return false
           }
 
         } catch (error) {

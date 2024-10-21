@@ -17,6 +17,7 @@ Feature: Session access
     Then I should see "Update successful"
     Then I should see "Subscribe users to this session"
     Then I follow "Multiple registration"
+    Then wait for the page to be loaded
     Then I select "Warnier Yannick (ywarnier)" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"

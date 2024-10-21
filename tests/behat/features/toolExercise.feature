@@ -208,6 +208,7 @@ Feature: Exercise tool
     Then I fill in ckeditor field "comment[1]" with "Comment true"
     Then I fill in ckeditor field "comment[2]" with "Comment false"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Global multiple answer" to exercise created "Exercise 1"

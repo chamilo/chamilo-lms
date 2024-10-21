@@ -1116,6 +1116,14 @@ ALTER TABLE portfolio_rel_tag ADD CONSTRAINT FK_DB734472613FECDF FOREIGN KEY (se
 // - edit src/Chamilo/CoreBundle/Entity/Portfolio.php, PortfolioCategory.php, PortfolioAttachment.php and PortfolioComment.php PortfolioRelTag.php
 //   and follow the instructions about the @ORM\Entity() line
 // - launch composer install to rebuild the autoload.php
+// To allow to add tags to portfolio items, create a extrafield called "tags" that can be modified and visible to others
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES (19, 10, 'tags', 'tags', '', 0, 1, 1, 1, 0, NOW());
+*/
+// To enable (make visible for students) the new Portfolio tool when creating a course it's necessary to create a new setting parameter
+/*
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable, access_url_locked) VALUES ('course_create_active_tools', 'portfolio', 'checkbox', 'Tools', 'true', 'CourseCreateActiveToolsTitle', 'CourseCreateActiveToolsComment', null, 'Portfolio', 1, 0, 0);
+*/
 //$_configuration['allow_portfolio_tool'] = false;
 // Allow advanced selection of who can view the posts and comments. It requires DB changes:
 // ALTER TABLE portfolio_comment ADD visibility SMALLINT DEFAULT 1 NOT NULL;

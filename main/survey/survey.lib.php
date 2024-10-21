@@ -58,7 +58,7 @@ class SurveyManager
      */
     public static function checkUniqueCode($surveyCode)
     {
-        if (empty($courseCode)) {
+        if (empty($surveyCode)) {
             return false;
         }
         $courseId = api_get_course_int_id();

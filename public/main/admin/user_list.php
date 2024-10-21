@@ -525,6 +525,8 @@ function modify_deleted_filter(int $user_id, string $url_params, array $row): st
         [
             'title' => get_lang('Restore'),
             'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+            'data-confirm-text' => get_lang('Yes'),
+            'data-cancel-text' => get_lang('Cancel'),
             'class' => 'delete-swal',
         ]
     );
@@ -542,6 +544,8 @@ function modify_deleted_filter(int $user_id, string $url_params, array $row): st
         [
             'title' => get_lang('Delete permanently'),
             'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+            'data-confirm-text' => get_lang('Yes'),
+            'data-cancel-text' => get_lang('Cancel'),
             'class' => 'delete-swal',
         ]
     );
@@ -713,6 +717,8 @@ function modify_filter($user_id, $url_params, $row): string
                 [
                     'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
                     'class' => 'delete-swal',
+                    'data-confirm-text' => get_lang('Yes'),
+                    'data-cancel-text' => get_lang('Cancel'),
                     'title' => get_lang('Anonymize'),
                 ]
             );
@@ -746,6 +752,8 @@ function modify_filter($user_id, $url_params, $row): string
                     [
                         'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
                         'title' => get_lang('Delete'),
+                        'data-confirm-text' => get_lang('Yes'),
+                        'data-cancel-text' => get_lang('Cancel'),
                         'class' => 'delete-swal',
                     ]
                 );
@@ -789,6 +797,8 @@ function modify_filter($user_id, $url_params, $row): string
                 [
                     'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
                     'title' => get_lang('Delete'),
+                    'data-confirm-text' => get_lang('Yes'),
+                    'data-cancel-text' => get_lang('Cancel'),
                     'class' => 'delete-swal',
                 ]
             );

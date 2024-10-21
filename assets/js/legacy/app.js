@@ -133,26 +133,23 @@ $(function () {
 
   // MODAL DELETE CONFIRM
   $(".delete-swal").click(function (e) {
-    e.preventDefault() // Prevent the href from redirecting directly
+    e.preventDefault()
     var url = $(this).attr("href")
     var title = $(this).data("title") || $(this).attr("title")
+    var confirmText = $(this).data("confirm-text") || 'Yes'
+    var cancelText = $(this).data("cancel-text") || 'Cancel'
 
     Swal.fire({
       title: title,
       text: "",
       icon: "warning",
       showCancelButton: true,
-      cancelButtonText: "Cancel",
+      cancelButtonText: cancelText,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes",
+      confirmButtonText: confirmText,
     }).then((result) => {
       if (result.value) {
-        /*Swal.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-        )*/
         window.location.href = url
       }
     })

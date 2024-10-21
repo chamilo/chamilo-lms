@@ -298,24 +298,24 @@ class H5pImportLibrary extends EntityRepository
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): H5pImportLibrary
+    public function setCreatedAt(DateTime $createdAt): H5pImportLibrary
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getModifiedAt(): \DateTime
+    public function getModifiedAt(): DateTime
     {
         return $this->modifiedAt;
     }
 
-    public function setModifiedAt(\DateTime $modifiedAt): H5pImportLibrary
+    public function setModifiedAt(DateTime $modifiedAt): H5pImportLibrary
     {
         $this->modifiedAt = $modifiedAt;
 

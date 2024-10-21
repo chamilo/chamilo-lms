@@ -32,7 +32,7 @@ if (!$h5pImportId) {
     api_not_allowed(true);
 }
 
-/** @var null|H5pImport $h5pImport */
+/** @var H5pImport|null $h5pImport */
 $h5pImport = $embedRepo->find($h5pImportId);
 
 if (!$h5pImport) {

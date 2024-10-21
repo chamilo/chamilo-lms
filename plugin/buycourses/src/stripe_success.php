@@ -45,7 +45,7 @@ if (!empty($globalParameters['sale_email'])) {
         $plugin->get_lang('bc_subject'),
         $messageConfirmBuyerTemplate->fetch('buycourses/view/message_confirm_buyer.tpl'),
         '',
-        $globalParameters['sale_email'],
+        $globalParameters['sale_email']
     );
 
     $messageConfirmTemplate = new Template();

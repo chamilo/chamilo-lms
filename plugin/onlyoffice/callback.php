@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 use ChamiloSession as Session;
@@ -230,10 +229,10 @@ function emptyFile()
     global $appSettings;
     global $jwtManager;
 
-
     if ($type !== 'empty') {
         $result['status'] = 'error';
         $result['error'] = 'Download empty with other action';
+
         return $result;
     }
 
@@ -244,6 +243,7 @@ function emptyFile()
         } catch (UnexpectedValueException $e) {
             $result['status'] = 'error';
             $result['error'] = '403 Access denied';
+
             return $result;
         }
     }
@@ -253,6 +253,7 @@ function emptyFile()
     if (!$template) {
         $result['status'] = 'error';
         $result['error'] = 'File not found';
+
         return $result;
     }
 

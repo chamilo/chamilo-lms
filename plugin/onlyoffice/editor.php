@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $plugin = OnlyofficePlugin::create();
@@ -50,7 +49,7 @@ $courseCode = $courseInfo['code'];
 $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
 $langInfo = LangManager::getLangUser();
 $jwtManager = new OnlyofficeJwtManager($appSettings);
-if (isset($_GET['forceEdit']) && (bool)$_GET['forceEdit'] === true) {
+if (isset($_GET['forceEdit']) && (bool) $_GET['forceEdit'] === true) {
     $docInfo['forceEdit'] = $_GET['forceEdit'];
 }
 $documentManager = new OnlyofficeDocumentManager($appSettings, $docInfo);

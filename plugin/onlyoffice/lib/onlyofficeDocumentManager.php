@@ -23,7 +23,7 @@ class OnlyofficeDocumentManager extends DocumentManager
 
     public function __construct($settingsManager, array $docInfo, $formats = null, $systemLangCode = 'en')
     {
-        $formats = new OnlyofficeFormatsManager;
+        $formats = new OnlyofficeFormatsManager();
         parent::__construct($settingsManager, $formats, $systemLangCode);
         $this->docInfo = $docInfo;
     }

@@ -152,7 +152,8 @@ class OnlyofficeTools
 
     /**
      * Return path to OnlyOffice viewer for a given file.
-     * @param int $documentId The ID from c_document.iid
+     *
+     * @param int  $documentId  The ID from c_document.iid
      * @param bool $showHeaders Whether to show Chamilo headers on top of the OnlyOffice frame or not
      *
      * @return string A link to open the OnlyOffice viewer

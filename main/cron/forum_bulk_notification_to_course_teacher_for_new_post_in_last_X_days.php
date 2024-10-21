@@ -109,7 +109,7 @@ function sendMessage(
         $toUserId,
         $subject,
         $content,
-        1,
+        1
     );
 }
 

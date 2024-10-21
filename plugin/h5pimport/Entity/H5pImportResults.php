@@ -68,7 +68,7 @@ class H5pImportResults
     private $course;
 
     /**
-     * @var null|Session
+     * @var Session|null
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      *
@@ -205,7 +205,7 @@ class H5pImportResults
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
@@ -246,19 +246,19 @@ class H5pImportResults
         return $this;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): H5pImportResults
+    public function setCreatedAt(DateTime $createdAt): H5pImportResults
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getModifiedAt(): \DateTime
+    public function getModifiedAt(): DateTime
     {
         return $this->modifiedAt;
     }
 
-    public function setModifiedAt(\DateTime $modifiedAt): H5pImportResults
+    public function setModifiedAt(DateTime $modifiedAt): H5pImportResults
     {
         $this->modifiedAt = $modifiedAt;
 

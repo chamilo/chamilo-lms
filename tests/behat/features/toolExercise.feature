@@ -91,6 +91,7 @@ Feature: Exercise tool
       | questionName | Fill blanks |
     Then I fill in ckeditor field "answer" with "Romeo and [Juliet] [Hätten||Haetten] [möchte||moechte] [wäre||waere] [können||koennen] [Könnten||Koennten] [Ärger] [voilà] [müssen] [l'été] [cherchent à] [Übung]  [Ärger|Möglichkeit]"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Matching" to exercise created "Exercise 1"

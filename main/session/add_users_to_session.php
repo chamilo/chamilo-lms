@@ -93,6 +93,15 @@ if (ChamiloApi::isAjaxRequest() && isset($_POST['action'])) {
     $result = Database::query($sql);
     $users = [];
     while ($row = Database::fetch_assoc($result)) {
+        $row['complete_name_with_username'] = api_get_person_name(
+            $row['firstname'],
+            $row['lastname'],
+            null,
+            null,
+            null,
+            $row['username']
+        );
+        $row['complete_name_with_username'] .= ' ('.$row['username'].')';
         $users[] = $row;
     }
 
@@ -365,7 +374,7 @@ $htmlHeadXtra[] = '
             var select = document.getElementById("origin_users");
             select.innerHTML = "";
             $.each(data, function(index, user) {
-                select.append(new Option(user.username + " - " + user.firstname + " " + user.lastname, user.id));
+                select.append(new Option(user.complete_name_with_username, user.id));
             });
         }, "json").fail(function(xhr, status, error) {
             console.error("Error en la solicitud AJAX: " + error);
@@ -397,7 +406,7 @@ $htmlHeadXtra[] = '
             select.innerHTML = "";
 
             $.each(data, function(index, user) {
-                select.append(new Option(user.username + " - " + user.firstname + " " + user.lastname, user.id));
+                select.append(new Option(user.complete_name_with_username, user.id));
             });
         }, "json").fail(function(xhr, status, error) {
             console.error("Error en la solicitud AJAX: " + error);

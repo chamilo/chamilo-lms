@@ -123,4 +123,5 @@ export const chamiloIconToClass = {
   "event-reminder": "mdi mdi-alarm",
   "add-event-reminder": "mdi mdi-alarm-plus",
   "session-star": "mdi mdi-star",
+  "next": "mdi mdi-arrow-right-bold-box",
 };

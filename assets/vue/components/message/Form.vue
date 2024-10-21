@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-cols-3 gap-4">
-    <div class="col-span-2">
+  <div class="flex flex-col md:flex-row md:space-x-4">
+    <div class="flex-1">
       <BaseInputText
         id="item_title"
         v-model="messagePayload.title"
@@ -37,12 +37,12 @@
         :label="t('Send')"
         icon="plus"
         type="primary"
-        class="mb-2"
+        class="mt-4"
         @click="onSubmit"
       />
     </div>
 
-    <div class="space-y-4">
+    <div class="mt-4 md:mt-0 md:w-1/3">
       <p class="text-h6">
         <BaseIcon icon="attachment" />
         {{ t("Attachments") }}

@@ -117,6 +117,9 @@ class MoodleExport
         $siteHash = md5(uniqid(mt_rand(), true));
         $wwwRoot = api_get_path(WEB_PATH);
 
+        $courseStartDate = strtotime($courseInfo['creation_date']);
+        $courseEndDate = $courseStartDate + (365 * 24 * 60 * 60);
+
         // Build the XML content for the backup
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $xmlContent .= '<moodle_backup>' . PHP_EOL;
@@ -137,8 +140,8 @@ class MoodleExport
         $xmlContent .= '    <original_course_format>' . get_lang('Topics') . '</original_course_format>' . PHP_EOL;
         $xmlContent .= '    <original_course_fullname>' . htmlspecialchars($courseInfo['title']) . '</original_course_fullname>' . PHP_EOL;
         $xmlContent .= '    <original_course_shortname>' . htmlspecialchars($courseInfo['code']) . '</original_course_shortname>' . PHP_EOL;
-        $xmlContent .= '    <original_course_startdate>' . $courseInfo['startdate'] . '</original_course_startdate>' . PHP_EOL;
-        $xmlContent .= '    <original_course_enddate>' . $courseInfo['enddate'] . '</original_course_enddate>' . PHP_EOL;
+        $xmlContent .= '    <original_course_startdate>' . $courseStartDate . '</original_course_startdate>' . PHP_EOL;
+        $xmlContent .= '    <original_course_enddate>' . $courseEndDate . '</original_course_enddate>' . PHP_EOL;
         $xmlContent .= '    <original_course_contextid>' . $courseInfo['real_id'] . '</original_course_contextid>' . PHP_EOL;
         $xmlContent .= '    <original_system_contextid>' . api_get_current_access_url_id() . '</original_system_contextid>' . PHP_EOL;
 

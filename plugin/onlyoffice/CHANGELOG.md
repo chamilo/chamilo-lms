@@ -2,6 +2,20 @@
 
 This plugin is developed and maintained at https://github.com/ONLYOFFICE/onlyoffice-chamilo.
 
+## 1.5.0
+## Added
+- support learning path
+
+## 1.4.1
+## Changed
+- minor fixes
+
+## 1.4.0
+## Added
+- using onlyoffice/docs-integration-sdk
+- default empty file templates
+- Arabic, Serbian, Finnish, Hebrew, Norwegian, Slovenian empty file templates
+
 ## 1.3.0
 ## Added
 - Chinese (Taiwan), Basque (Spain), Malay (Malaysia), and Galician empty file templates

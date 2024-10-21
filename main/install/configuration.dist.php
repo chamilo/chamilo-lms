@@ -990,6 +990,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Block access to any user to "my progress" page
 //$_configuration['block_my_progress_page'] = false;
 
+// Hides the "my progress" tab from the navigation menu
+//$_configuration['hide_my_progress_tab'] = false;
+
 // Add user extra fields in report: main/mySpace/exercise_category_report.php
 //$_configuration['exercise_category_report_user_extra_fields'] = ['fields' => ['skype', 'rssfeeds']];
 
@@ -2389,6 +2392,14 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // they are only accessible during the active duration).
 //$_configuration['session_coach_access_after_duration_end'] = false;
 
+// Hide visibility options for session visibility after end date.
+// Admitted options: SESSION_VISIBLE_READ_ONLY, SESSION_VISIBLE, SESSION_INVISIBLE
+/*$_configuration['session_visibility_after_end_date_options_configuration'] = [
+    'visibility_options_to_hide' => [
+        'SESSION_VISIBLE_READ_ONLY '
+    ]
+];*/
+
 // Restrict the list of students to subscribe in the course session. And disable
 // registration for users in all courses from Resume Session page
 //$_configuration['session_course_users_subscription_limited_to_session_users'] = false;
@@ -2588,3 +2599,6 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // is '$1EdTech-CC-FILEBASE$' (the latest), but previous versions of the standard
 // recommended '$IMS-CC-FILEBASE$', so you might want to use that for greater compatibility.
 //$_configuration['commoncartridge_path_token'] = '$IMS-CC-FILEBASE$';
+
+// Set the following parameter to true to enable a session lifetime controller that notifies users that their session is about to expire
+//$_configuration['session_lifetime_controller'] = false;

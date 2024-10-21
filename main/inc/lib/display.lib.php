@@ -1572,6 +1572,11 @@ class Display
             $row = Database::fetch_array($result, 'ASSOC');
             $latestDate = $row['access_date'];
         }
+        // Get a timestamp format copy, for use in c_lp_item_view below
+        $originalTimeZone = date_default_timezone_get();
+        date_default_timezone_set('UTC');
+        $latestTimestamp = strtotime($latestDate);
+        date_default_timezone_set($originalTimeZone);
 
         $sessionCondition = api_get_session_condition(
             $sessionId,
@@ -1596,6 +1601,7 @@ class Display
         $group_ids[] = 0; //add group 'everyone'
         $notifications = [];
         if ($tools) {
+            $latestLocalDate = $latestDate;
             foreach ($tools as $tool) {
                 $toolName = $tool['name'];
                 $toolName = Database::escape_string($toolName);
@@ -1603,6 +1609,13 @@ class Display
                 $toolCondition = " tool = '$toolName' AND ";
                 if ($toolName == 'student_publication' || $toolName == 'work') {
                     $toolCondition = " (tool = 'work' OR tool = 'student_publication') AND ";
+                }
+                if ($toolName == 'learnpath') {
+                    // Make sure c_lp_item_view is considered in the latestDate calculation for LPs
+                    $lpLatest = self::getLatestLpView($course_id, $user_id, $sessionId, $latestTimestamp);
+                    if (!empty($lpLatest)) {
+                        $latestLocalDate = $lpLatest;
+                    }
                 }
 
                 $toolName = addslashes($toolName);
@@ -1614,7 +1627,7 @@ class Display
                             lastedit_type NOT LIKE '%Deleted%' AND
                             lastedit_type NOT LIKE '%deleted%' AND
                             lastedit_type NOT LIKE '%DocumentInvisible%' AND
-                            lastedit_date > '$latestDate' AND
+                            lastedit_date > '$latestLocalDate' AND
                             lastedit_user_id != $user_id $sessionCondition AND
                             visibility != 2 AND
                             (to_user_id IN ('$user_id', '0') OR to_user_id IS NULL) AND
@@ -3070,5 +3083,41 @@ HTML;
         );
 
         return "$header<br><small>$percentHtml</small>";
+    }
+
+    /**
+     * Get the latest view (later than given date) in any LP in this course/session
+     * as datetime format, or null
+     * @param int $courseId
+     * @param int $userId
+     * @param int $sessionId
+     * @param int $latestTimestamp The latest time for the tool in general, as obtained through track_e_access
+     * @return string|null The latest view if later than $latestTimestamp, or null otherwise
+     */
+    public static function getLatestLpView(int $courseId, int $userId, int $sessionId, int $latestTimestamp): ?string
+    {
+        // Control if the latest view in c_lp_view is more recent than in track_e_access
+        // Use case: a user skipped the course home page by following a direct link to a LP in an email
+        // $latestDate is in datetime format, while c_lp_item_view.start_time is in EPOCH
+        $t_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $t_lp_view = Database::get_course_table(TABLE_LP_VIEW);
+        $sql = "SELECT cliv.start_time FROM $t_lp_item_view cliv
+        INNER JOIN $t_lp_view clv ON cliv.lp_view_id = clv.id
+        WHERE
+        clv.c_id = $courseId AND
+        clv.user_id = $userId AND
+        clv.session_id = $sessionId AND
+        cliv.start_time > $latestTimestamp
+        ORDER BY cliv.start_time DESC
+        LIMIT 1";
+        $resultItems = Database::query($sql);
+        if (Database::num_rows($resultItems)) {
+            $rowItems = Database::fetch_assoc($resultItems);
+            $controlDate = $rowItems['start_time'];
+            // convert to date
+            return date('Y-m-d H:i:s', $controlDate);
+        }
+
+        return null;
     }
 }

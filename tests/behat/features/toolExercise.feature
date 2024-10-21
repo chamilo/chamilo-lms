@@ -106,6 +106,7 @@ Feature: Exercise tool
     And I fill in ckeditor field "option[2]" with "Option B"
     And I fill in select bootstrap static input "#matches_2" select "2"
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
     Scenario: Add question "Open" to exercise created "Exercise 1"

@@ -917,7 +917,7 @@ function api_get_path($path = '', $configuration = [])
         // Initialization of a table that contains common-purpose paths.
         $paths[$root_web][REL_PATH] = $root_rel;
         $paths[$root_web][REL_COURSE_PATH] = $root_rel.$course_folder;
-        $paths[$root_web][REL_CODE_PATH] = $root_rel.$code_folder;
+        $paths[$root_web][REL_CODE_PATH] = $root_rel.preg_replace('#^/#', '', $code_folder);
         $paths[$root_web][REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[$root_web][REL_PATH].'main/default_course_document/';
 
         $paths[$root_web][WEB_PATH] = $slashed_root_web;
@@ -941,7 +941,7 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][WEB_HOME_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][REL_HOME_PATH];
 
         $paths[$root_web][SYS_PATH] = $root_sys;
-        $paths[$root_web][SYS_CODE_PATH] = $root_sys.$code_folder;
+        $paths[$root_web][SYS_CODE_PATH] = $root_sys.preg_replace('#^/#', '', $code_folder);
         $paths[$root_web][SYS_TEST_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_TEST_PATH];
         $paths[$root_web][SYS_TEMPLATE_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][SYS_TEMPLATE_PATH];
         $paths[$root_web][SYS_PUBLIC_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_PUBLIC_PATH];

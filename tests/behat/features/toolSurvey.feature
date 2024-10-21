@@ -51,6 +51,7 @@ Feature: Survey tool
   Scenario: Duplicate survey
     Given I am on "/main/survey/survey_list.php?cidReq=TEMP"
     And I follow "Duplicate survey"
+    And I press "Copy survey"
     Then I should see "Survey copied"
     And I should see "Survey 1 Copy"
 

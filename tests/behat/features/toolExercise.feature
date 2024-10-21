@@ -129,6 +129,7 @@ Feature: Exercise tool
       | questionName | Oral expression question |
       | weighting | 10 |
     And I press "submitQuestion"
+    And wait for the page to be loaded
     Then I should see "Item added"
 
   Scenario: Add question "Exact answers combination" to exercise created "Exercise 1"

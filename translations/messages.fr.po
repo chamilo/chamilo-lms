@@ -29564,3 +29564,6 @@ msgstr "Ajouter des amis"
 
 msgid "Add friend"
 msgstr "Ajouter un ami"
+
+msgid "Delete permanently"
+msgstr "Supprimer définitivement"

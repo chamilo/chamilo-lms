@@ -27784,3 +27784,6 @@ msgstr "%s's picture"
 
 msgid "+%d"
 msgstr "+%d"
+
+msgid "Delete permanently"
+msgstr "Delete permanently"

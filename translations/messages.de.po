@@ -29216,3 +29216,6 @@ msgstr "Freund hinzufügen"
 
 msgid "Add friend"
 msgstr "Freunde hinzufügen"
+
+msgid "Delete permanently"
+msgstr "Endgültig löschen"

@@ -27770,3 +27770,6 @@ msgstr ""
 
 msgid "+%d"
 msgstr ""
+
+msgid "Delete permanently"
+msgstr ""

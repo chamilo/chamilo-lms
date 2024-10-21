@@ -28762,3 +28762,6 @@ msgstr "Agregar amigo"
 
 msgid "%s's picture"
 msgstr "Imagen de %s"
+
+msgid "Delete permanently"
+msgstr "Eliminar permanentemente"

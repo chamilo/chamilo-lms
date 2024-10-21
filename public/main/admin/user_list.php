@@ -537,10 +537,10 @@ function modify_deleted_filter(int $user_id, string $url_params, array $row): st
             'view' => Security::remove_XSS($_GET['view']),
         ]);
     $result .= Display::url(
-        Display::getMdiIcon('delete-forever', 'ch-tool-icon', null, 22, get_lang('DeletePermanently')),
+        Display::getMdiIcon('delete-forever', 'ch-tool-icon', null, 22, get_lang('Delete permanently')),
         $deleteUrl,
         [
-            'title' => get_lang('DeletePermanently'),
+            'title' => get_lang('Delete permanently'),
             'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
             'class' => 'delete-swal',
         ]

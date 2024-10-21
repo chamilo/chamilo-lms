@@ -3533,7 +3533,7 @@ class SurveyUtil
     /**
      * This function changes the modify column of the sortable table.
      *
-     * @param int  $survey_id the id of the survey
+     * @param int  $survey_id  the id of the survey
      * @param bool $drh
      * @param bool $surveyCode
      *

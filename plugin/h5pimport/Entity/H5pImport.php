@@ -74,7 +74,7 @@ class H5pImport
     private $course;
 
     /**
-     * @var null|Session
+     * @var Session|null
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      *
@@ -83,14 +83,14 @@ class H5pImport
     private $session;
 
     /**
-     * @var null|string
+     * @var string|null
      *
      * @ORM\Column(name="name", type="text", nullable=true)
      */
     private $name;
 
     /**
-     * @var null|string
+     * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */

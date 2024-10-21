@@ -67,9 +67,9 @@ class ZipPackageImporter extends H5pPackageImporter
     /**
      * Import an H5P package. No DB change.
      *
-     * @return string The path to the extracted package directory.
-     *
      * @throws Exception When the H5P package is invalid.
+     *
+     * @return string The path to the extracted package directory.
      */
     public function import(): string
     {
@@ -160,7 +160,7 @@ class ZipPackageImporter extends H5pPackageImporter
             while ($fs->exists($directoryPath)) {
                 $modifiedName = $safeName.'_'.$counter;
                 $directoryPath = $baseDirectory.$modifiedName;
-                ++$counter;
+                $counter++;
             }
         }
 

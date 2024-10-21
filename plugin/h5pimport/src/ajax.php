@@ -27,7 +27,7 @@ if ('set_finished' === $action && 0 !== $h5pId) {
     }
 
     if (is_numeric($_POST['score']) && is_numeric($_POST['maxScore'])) {
-        /** @var null|H5pImport $h5pImport */
+        /** @var H5pImport|null $h5pImport */
         $h5pImport = $h5pImportRepo->find($h5pId);
         $entityManager = Database::getManager();
 
@@ -48,7 +48,7 @@ if ('set_finished' === $action && 0 !== $h5pId) {
             $lpObject = Session::read('oLP');
             $clpItemViewRepo = $em->getRepository('ChamiloCourseBundle:CLpItemView');
 
-            /** @var null|CLpItemView $lpItemView */
+            /** @var CLpItemView|null $lpItemView */
             $lpItemView = $clpItemViewRepo->findOneBy(
                 [
                     'lpViewId' => $lpObject->lp_view_id,
@@ -56,7 +56,7 @@ if ('set_finished' === $action && 0 !== $h5pId) {
                 ]
             );
 
-            /** @var null|CLpItem $lpItem */
+            /** @var CLpItem|null $lpItem */
             $lpItem = $entityManager->find('ChamiloCourseBundle:CLpItem', $lpItemView->getLpItemId());
             if ('h5p' !== $lpItem->getItemType()) {
                 return null;
@@ -83,7 +83,7 @@ if ('set_finished' === $action && 0 !== $h5pId) {
         H5PCore::ajaxError($plugin->get_lang('h5p_error_invalid_token'));
     }
 
-    /** @var null|H5pImport $h5pImport */
+    /** @var H5pImport|null $h5pImport */
     $h5pImport = $h5pImportRepo->find($h5pId);
 } else {
     H5PCore::ajaxError(get_lang('InvalidAction'));

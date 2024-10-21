@@ -181,9 +181,9 @@ Display::display_header(get_lang('ExportExerciseAllResults'));
 echo Display::return_message(
     get_lang('PleaseWaitThisCouldTakeAWhile'),
     'normal',
-    false,
+    false
 );
 
-echo $form->display();
+$form->display();
 
 Display::display_footer();

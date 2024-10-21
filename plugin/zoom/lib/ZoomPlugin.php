@@ -1626,13 +1626,10 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * @param Meeting $meeting
      * @param array<User> $users
      *
      * @throws OptimisticLockException
      * @throws \Doctrine\ORM\ORMException
-     *
-     * @return array
      */
     public function registerPresenters(Meeting $meeting, array $users): array
     {

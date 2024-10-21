@@ -98,7 +98,7 @@ if (ChamiloApi::isAjaxRequest() && isset($_POST['action'])) {
 
     header('Content-Type: application/json');
     echo json_encode($users);
-    die();
+    exit();
 }
 
 function search_users($needle, $type)
@@ -799,10 +799,10 @@ $newLinks .= Display::url(
                         echo Display::get_alphabet_options(); ?>
                     </select>
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" id="show_last_ten_users_button" title="<?php echo get_lang('ShowLastTenUsers') ?>">
+                        <button class="btn btn-default" type="button" id="show_last_ten_users_button" title="<?php echo get_lang('ShowLastTenUsers'); ?>">
                             <i class="fa fa-clock-o"></i>
                         </button>
-                        <button class="btn btn-default" type="button" id="reset_users_button" title="<?php echo get_lang('Reset') ?>">
+                        <button class="btn btn-default" type="button" id="reset_users_button" title="<?php echo get_lang('Reset'); ?>">
                             <i class="fa fa-refresh"></i>
                         </button>
                     </span>

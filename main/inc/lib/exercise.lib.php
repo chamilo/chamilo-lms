@@ -2605,7 +2605,7 @@ HOTSPOT;
             if (empty($courseInfo)) {
                 return [];
             }
-        } elseif (false === api_is_platform_admin(true,false)) {
+        } elseif (false === api_is_platform_admin(true, false)) {
             $courses = CourseManager::get_courses_list_by_user_id(api_get_user_id(), $showAttemptsInSessions, false, false);
 
             if (empty($courses)) {

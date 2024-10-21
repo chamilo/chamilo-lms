@@ -3087,11 +3087,10 @@ HTML;
 
     /**
      * Get the latest view (later than given date) in any LP in this course/session
-     * as datetime format, or null
-     * @param int $courseId
-     * @param int $userId
-     * @param int $sessionId
+     * as datetime format, or null.
+     *
      * @param int $latestTimestamp The latest time for the tool in general, as obtained through track_e_access
+     *
      * @return string|null The latest view if later than $latestTimestamp, or null otherwise
      */
     public static function getLatestLpView(int $courseId, int $userId, int $sessionId, int $latestTimestamp): ?string

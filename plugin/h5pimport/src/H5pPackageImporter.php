@@ -65,9 +65,9 @@ abstract class H5pPackageImporter
     /**
      * Check the package and unzip it, checking if it has the 'h5p.json' file or some php script.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     abstract public function import(): string;
 

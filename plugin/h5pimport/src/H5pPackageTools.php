@@ -88,8 +88,8 @@ class H5pPackageTools
      * @param string       $packagePath the path to the H5P package file
      * @param object       $h5pJson     the parsed H5P JSON object
      * @param Course       $course      the course entity related to the package
-     * @param null|Session $session     the session entity related to the package
-     * @param null|array   $values      the advance options in upload form
+     * @param Session|null $session     the session entity related to the package
+     * @param array|null   $values      the advance options in upload form
      */
     public static function storeH5pPackage(
         string $packagePath,
@@ -196,7 +196,7 @@ class H5pPackageTools
      *
      * @return array the core settings for H5P content
      */
-    public static function getCoreSettings(H5pImport $h5pImport, \H5PCore $h5pCore): array
+    public static function getCoreSettings(H5pImport $h5pImport, H5PCore $h5pCore): array
     {
         $originIsLearnpath = 'learnpath' === api_get_origin();
 
@@ -270,7 +270,7 @@ class H5pPackageTools
      *
      * @param mixed $h5pNode
      */
-    public static function getContentSettings($h5pNode, \H5PCore $h5pCore): array
+    public static function getContentSettings($h5pNode, H5PCore $h5pCore): array
     {
         $filtered = $h5pCore->filterParameters($h5pNode);
         $contentUserData = [

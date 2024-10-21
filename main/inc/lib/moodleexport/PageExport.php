@@ -14,10 +14,10 @@ class PageExport extends ActivityExport
     /**
      * Export a page to the specified directory.
      *
-     * @param int $activityId The ID of the page.
-     * @param string $exportDir The directory where the page will be exported.
-     * @param int $moduleId The ID of the module.
-     * @param int $sectionId The ID of the section.
+     * @param int    $activityId The ID of the page.
+     * @param string $exportDir  The directory where the page will be exported.
+     * @param int    $moduleId   The ID of the module.
+     * @param int    $sectionId  The ID of the section.
      */
     public function export($activityId, $exportDir, $moduleId, $sectionId): void
     {
@@ -37,30 +37,6 @@ class PageExport extends ActivityExport
         $this->createRolesXml($pageData, $pageDir);
         $this->createCommentsXml($pageData, $pageDir);
         $this->createCalendarXml($pageData, $pageDir);
-    }
-
-    /**
-     * Create the XML file for the page.
-     */
-    private function createPageXml(array $pageData, string $pageDir): void
-    {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<activity id="' . $pageData['id'] . '" moduleid="' . $pageData['moduleid'] . '" modulename="page" contextid="' . $pageData['contextid'] . '">' . PHP_EOL;
-        $xmlContent .= '  <page id="' . $pageData['id'] . '">' . PHP_EOL;
-        $xmlContent .= '    <name>' . htmlspecialchars($pageData['name']) . '</name>' . PHP_EOL;
-        $xmlContent .= '    <intro>' . htmlspecialchars($pageData['intro']) . '</intro>' . PHP_EOL;
-        $xmlContent .= '    <introformat>1</introformat>' . PHP_EOL;
-        $xmlContent .= '    <content>' . htmlspecialchars($pageData['content']) . '</content>' . PHP_EOL;
-        $xmlContent .= '    <contentformat>1</contentformat>' . PHP_EOL;
-        $xmlContent .= '    <legacyfiles>0</legacyfiles>' . PHP_EOL;
-        $xmlContent .= '    <display>5</display>' . PHP_EOL;
-        $xmlContent .= '    <displayoptions>a:3:{s:12:"printheading";s:1:"1";s:10:"printintro";s:1:"0";s:17:"printlastmodified";s:1:"1";}</displayoptions>' . PHP_EOL;
-        $xmlContent .= '    <revision>1</revision>' . PHP_EOL;
-        $xmlContent .= '    <timemodified>' . $pageData['timemodified'] . '</timemodified>' . PHP_EOL;
-        $xmlContent .= '  </page>' . PHP_EOL;
-        $xmlContent .= '</activity>';
-
-        $this->createXmlFile('page', $xmlContent, $pageDir);
     }
 
     /**
@@ -96,12 +72,36 @@ class PageExport extends ActivityExport
     }
 
     /**
+     * Create the XML file for the page.
+     */
+    private function createPageXml(array $pageData, string $pageDir): void
+    {
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<activity id="'.$pageData['id'].'" moduleid="'.$pageData['moduleid'].'" modulename="page" contextid="'.$pageData['contextid'].'">'.PHP_EOL;
+        $xmlContent .= '  <page id="'.$pageData['id'].'">'.PHP_EOL;
+        $xmlContent .= '    <name>'.htmlspecialchars($pageData['name']).'</name>'.PHP_EOL;
+        $xmlContent .= '    <intro>'.htmlspecialchars($pageData['intro']).'</intro>'.PHP_EOL;
+        $xmlContent .= '    <introformat>1</introformat>'.PHP_EOL;
+        $xmlContent .= '    <content>'.htmlspecialchars($pageData['content']).'</content>'.PHP_EOL;
+        $xmlContent .= '    <contentformat>1</contentformat>'.PHP_EOL;
+        $xmlContent .= '    <legacyfiles>0</legacyfiles>'.PHP_EOL;
+        $xmlContent .= '    <display>5</display>'.PHP_EOL;
+        $xmlContent .= '    <displayoptions>a:3:{s:12:"printheading";s:1:"1";s:10:"printintro";s:1:"0";s:17:"printlastmodified";s:1:"1";}</displayoptions>'.PHP_EOL;
+        $xmlContent .= '    <revision>1</revision>'.PHP_EOL;
+        $xmlContent .= '    <timemodified>'.$pageData['timemodified'].'</timemodified>'.PHP_EOL;
+        $xmlContent .= '  </page>'.PHP_EOL;
+        $xmlContent .= '</activity>';
+
+        $this->createXmlFile('page', $xmlContent, $pageDir);
+    }
+
+    /**
      * Retrieves the content of the page.
      */
     private function getPageContent(object $page): string
     {
         if ($page->file_type === 'file') {
-            return file_get_contents($this->course->path . $page->path);
+            return file_get_contents($this->course->path.$page->path);
         }
 
         return '';

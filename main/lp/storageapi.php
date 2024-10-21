@@ -86,6 +86,7 @@ function storage_get($sv_user, $sv_course, $sv_sco, $sv_key)
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_assoc($res);
+
         return Security::remove_XSS($row['sv_value']);
     } else {
         return null;
@@ -236,6 +237,7 @@ function storage_stack_pop($sv_user, $sv_course, $sv_sco, $sv_key)
     $resdelete = Database::query($sqldelete);
     if ($resselect && $resdelete) {
         Database::query("commit");
+
         return Security::remove_XSS($rowselect['sv_value']);
     } else {
         Database::query("rollback");

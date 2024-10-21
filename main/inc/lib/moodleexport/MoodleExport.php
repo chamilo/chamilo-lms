@@ -5,10 +5,9 @@
 namespace moodleexport;
 
 use Exception;
-use FillBlanks;
-use ZipArchive;
-use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use ZipArchive;
 
 /**
  * Class MoodleExport.
@@ -34,7 +33,7 @@ class MoodleExport
      */
     public function export(string $courseId, string $exportDir, int $version)
     {
-        $tempDir = api_get_path(SYS_ARCHIVE_PATH) . $exportDir;
+        $tempDir = api_get_path(SYS_ARCHIVE_PATH).$exportDir;
 
         if (!is_dir($tempDir)) {
             if (!mkdir($tempDir, api_get_permissions_for_new_directories(), true)) {
@@ -75,6 +74,107 @@ class MoodleExport
         $this->cleanupTempDir($tempDir);
 
         return $exportedFile;
+    }
+
+    /**
+     * Export questions data to XML file.
+     */
+    public function exportQuestionsXml(array $questionsData, string $exportDir): void
+    {
+        $quizExport = new QuizExport($this->course);
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<question_categories>'.PHP_EOL;
+
+        foreach ($questionsData as $quiz) {
+            $categoryId = $quiz['questions'][0]['questioncategoryid'] ?? '0';
+
+            $xmlContent .= '  <question_category id="'.$categoryId.'">'.PHP_EOL;
+            $xmlContent .= '    <name>Default for '.htmlspecialchars($quiz['name'] ?? 'Unknown').'</name>'.PHP_EOL;
+            $xmlContent .= '    <contextid>'.($quiz['contextid'] ?? '0').'</contextid>'.PHP_EOL;
+            $xmlContent .= '    <contextlevel>70</contextlevel>'.PHP_EOL;
+            $xmlContent .= '    <contextinstanceid>'.($quiz['moduleid'] ?? '0').'</contextinstanceid>'.PHP_EOL;
+            $xmlContent .= '    <info>The default category for questions shared in context "'.htmlspecialchars($quiz['name'] ?? 'Unknown').'".</info>'.PHP_EOL;
+            $xmlContent .= '    <infoformat>0</infoformat>'.PHP_EOL;
+            $xmlContent .= '    <stamp>moodle+'.time().'+CATEGORYSTAMP</stamp>'.PHP_EOL;
+            $xmlContent .= '    <parent>0</parent>'.PHP_EOL;
+            $xmlContent .= '    <sortorder>999</sortorder>'.PHP_EOL;
+            $xmlContent .= '    <idnumber>$@NULL@$</idnumber>'.PHP_EOL;
+            $xmlContent .= '    <questions>'.PHP_EOL;
+
+            foreach ($quiz['questions'] as $question) {
+                $xmlContent .= $quizExport->exportQuestion($question);
+            }
+
+            $xmlContent .= '    </questions>'.PHP_EOL;
+            $xmlContent .= '  </question_category>'.PHP_EOL;
+        }
+
+        $xmlContent .= '</question_categories>';
+        file_put_contents($exportDir.'/questions.xml', $xmlContent);
+    }
+
+    /**
+     * Sets the admin user data.
+     */
+    public function setAdminUserData(int $id, string $username, string $email): void
+    {
+        self::$adminUserData = [
+            'id' => $id,
+            'contextid' => $id,
+            'username' => $username,
+            'idnumber' => '',
+            'email' => $email,
+            'phone1' => '',
+            'phone2' => '',
+            'institution' => '',
+            'department' => '',
+            'address' => '',
+            'city' => 'London',
+            'country' => 'GB',
+            'lastip' => '127.0.0.1',
+            'picture' => '0',
+            'description' => '',
+            'descriptionformat' => 1,
+            'imagealt' => '$@NULL@$',
+            'auth' => 'manual',
+            'firstname' => 'Admin',
+            'lastname' => 'User',
+            'confirmed' => 1,
+            'policyagreed' => 0,
+            'deleted' => 0,
+            'lang' => 'en',
+            'theme' => '',
+            'timezone' => 99,
+            'firstaccess' => time(),
+            'lastaccess' => time() - (60 * 60 * 24 * 7),
+            'lastlogin' => time() - (60 * 60 * 24 * 2),
+            'currentlogin' => time(),
+            'mailformat' => 1,
+            'maildigest' => 0,
+            'maildisplay' => 1,
+            'autosubscribe' => 1,
+            'trackforums' => 0,
+            'timecreated' => time(),
+            'timemodified' => time(),
+            'trustbitmask' => 0,
+            'preferences' => [
+                ['name' => 'core_message_migrate_data', 'value' => 1],
+                ['name' => 'auth_manual_passwordupdatetime', 'value' => time()],
+                ['name' => 'email_bounce_count', 'value' => 1],
+                ['name' => 'email_send_count', 'value' => 1],
+                ['name' => 'login_failed_count_since_success', 'value' => 0],
+                ['name' => 'filepicker_recentrepository', 'value' => 5],
+                ['name' => 'filepicker_recentlicense', 'value' => 'unknown'],
+            ],
+        ];
+    }
+
+    /**
+     * Returns hardcoded data for the admin user.
+     */
+    public static function getAdminUserData(): array
+    {
+        return self::$adminUserData;
     }
 
     /**
@@ -121,104 +221,104 @@ class MoodleExport
         $courseEndDate = $courseStartDate + (365 * 24 * 60 * 60);
 
         // Build the XML content for the backup
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<moodle_backup>' . PHP_EOL;
-        $xmlContent .= '  <information>' . PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<moodle_backup>'.PHP_EOL;
+        $xmlContent .= '  <information>'.PHP_EOL;
 
-        $xmlContent .= '    <name>backup-' . htmlspecialchars($courseInfo['code']) . '.mbz</name>' . PHP_EOL;
-        $xmlContent .= '    <moodle_version>' . ($version === 3 ? '2021051718' : '2022041900') . '</moodle_version>' . PHP_EOL;
-        $xmlContent .= '    <moodle_release>' . ($version === 3 ? '3.11.18 (Build: 20231211)' : '4.x version here') . '</moodle_release>' . PHP_EOL;
-        $xmlContent .= '    <backup_version>' . ($version === 3 ? '2021051700' : '2022041900') . '</backup_version>' . PHP_EOL;
-        $xmlContent .= '    <backup_release>' . ($version === 3 ? '3.11' : '4.x') . '</backup_release>' . PHP_EOL;
-        $xmlContent .= '    <backup_date>' . time() . '</backup_date>' . PHP_EOL;
-        $xmlContent .= '    <mnet_remoteusers>0</mnet_remoteusers>' . PHP_EOL;
-        $xmlContent .= '    <include_files>1</include_files>' . PHP_EOL;
-        $xmlContent .= '    <include_file_references_to_external_content>0</include_file_references_to_external_content>' . PHP_EOL;
-        $xmlContent .= '    <original_wwwroot>' . $wwwRoot . '</original_wwwroot>' . PHP_EOL;
-        $xmlContent .= '    <original_site_identifier_hash>' . $siteHash . '</original_site_identifier_hash>' . PHP_EOL;
-        $xmlContent .= '    <original_course_id>' . htmlspecialchars($courseInfo['real_id']) . '</original_course_id>' . PHP_EOL;
-        $xmlContent .= '    <original_course_format>' . get_lang('Topics') . '</original_course_format>' . PHP_EOL;
-        $xmlContent .= '    <original_course_fullname>' . htmlspecialchars($courseInfo['title']) . '</original_course_fullname>' . PHP_EOL;
-        $xmlContent .= '    <original_course_shortname>' . htmlspecialchars($courseInfo['code']) . '</original_course_shortname>' . PHP_EOL;
-        $xmlContent .= '    <original_course_startdate>' . $courseStartDate . '</original_course_startdate>' . PHP_EOL;
-        $xmlContent .= '    <original_course_enddate>' . $courseEndDate . '</original_course_enddate>' . PHP_EOL;
-        $xmlContent .= '    <original_course_contextid>' . $courseInfo['real_id'] . '</original_course_contextid>' . PHP_EOL;
-        $xmlContent .= '    <original_system_contextid>' . api_get_current_access_url_id() . '</original_system_contextid>' . PHP_EOL;
+        $xmlContent .= '    <name>backup-'.htmlspecialchars($courseInfo['code']).'.mbz</name>'.PHP_EOL;
+        $xmlContent .= '    <moodle_version>'.($version === 3 ? '2021051718' : '2022041900').'</moodle_version>'.PHP_EOL;
+        $xmlContent .= '    <moodle_release>'.($version === 3 ? '3.11.18 (Build: 20231211)' : '4.x version here').'</moodle_release>'.PHP_EOL;
+        $xmlContent .= '    <backup_version>'.($version === 3 ? '2021051700' : '2022041900').'</backup_version>'.PHP_EOL;
+        $xmlContent .= '    <backup_release>'.($version === 3 ? '3.11' : '4.x').'</backup_release>'.PHP_EOL;
+        $xmlContent .= '    <backup_date>'.time().'</backup_date>'.PHP_EOL;
+        $xmlContent .= '    <mnet_remoteusers>0</mnet_remoteusers>'.PHP_EOL;
+        $xmlContent .= '    <include_files>1</include_files>'.PHP_EOL;
+        $xmlContent .= '    <include_file_references_to_external_content>0</include_file_references_to_external_content>'.PHP_EOL;
+        $xmlContent .= '    <original_wwwroot>'.$wwwRoot.'</original_wwwroot>'.PHP_EOL;
+        $xmlContent .= '    <original_site_identifier_hash>'.$siteHash.'</original_site_identifier_hash>'.PHP_EOL;
+        $xmlContent .= '    <original_course_id>'.htmlspecialchars($courseInfo['real_id']).'</original_course_id>'.PHP_EOL;
+        $xmlContent .= '    <original_course_format>'.get_lang('Topics').'</original_course_format>'.PHP_EOL;
+        $xmlContent .= '    <original_course_fullname>'.htmlspecialchars($courseInfo['title']).'</original_course_fullname>'.PHP_EOL;
+        $xmlContent .= '    <original_course_shortname>'.htmlspecialchars($courseInfo['code']).'</original_course_shortname>'.PHP_EOL;
+        $xmlContent .= '    <original_course_startdate>'.$courseStartDate.'</original_course_startdate>'.PHP_EOL;
+        $xmlContent .= '    <original_course_enddate>'.$courseEndDate.'</original_course_enddate>'.PHP_EOL;
+        $xmlContent .= '    <original_course_contextid>'.$courseInfo['real_id'].'</original_course_contextid>'.PHP_EOL;
+        $xmlContent .= '    <original_system_contextid>'.api_get_current_access_url_id().'</original_system_contextid>'.PHP_EOL;
 
-        $xmlContent .= '    <details>' . PHP_EOL;
-        $xmlContent .= '      <detail backup_id="' . $backupId . '">' . PHP_EOL;
-        $xmlContent .= '        <type>course</type>' . PHP_EOL;
-        $xmlContent .= '        <format>moodle2</format>' . PHP_EOL;
-        $xmlContent .= '        <interactive>1</interactive>' . PHP_EOL;
-        $xmlContent .= '        <mode>10</mode>' . PHP_EOL;
-        $xmlContent .= '        <execution>1</execution>' . PHP_EOL;
-        $xmlContent .= '        <executiontime>0</executiontime>' . PHP_EOL;
-        $xmlContent .= '      </detail>' . PHP_EOL;
-        $xmlContent .= '    </details>' . PHP_EOL;
+        $xmlContent .= '    <details>'.PHP_EOL;
+        $xmlContent .= '      <detail backup_id="'.$backupId.'">'.PHP_EOL;
+        $xmlContent .= '        <type>course</type>'.PHP_EOL;
+        $xmlContent .= '        <format>moodle2</format>'.PHP_EOL;
+        $xmlContent .= '        <interactive>1</interactive>'.PHP_EOL;
+        $xmlContent .= '        <mode>10</mode>'.PHP_EOL;
+        $xmlContent .= '        <execution>1</execution>'.PHP_EOL;
+        $xmlContent .= '        <executiontime>0</executiontime>'.PHP_EOL;
+        $xmlContent .= '      </detail>'.PHP_EOL;
+        $xmlContent .= '    </details>'.PHP_EOL;
 
         // Contents with activities and sections
-        $xmlContent .= '    <contents>' . PHP_EOL;
+        $xmlContent .= '    <contents>'.PHP_EOL;
 
         // Export sections dynamically and add them to the XML
         $sections = $this->getSections();
         if (!empty($sections)) {
-            $xmlContent .= '      <sections>' . PHP_EOL;
+            $xmlContent .= '      <sections>'.PHP_EOL;
             foreach ($sections as $section) {
-                $xmlContent .= '        <section>' . PHP_EOL;
-                $xmlContent .= '          <sectionid>' . $section['id'] . '</sectionid>' . PHP_EOL;
-                $xmlContent .= '          <title>' . htmlspecialchars($section['name']) . '</title>' . PHP_EOL;
-                $xmlContent .= '          <directory>sections/section_' . $section['id'] . '</directory>' . PHP_EOL;
-                $xmlContent .= '        </section>' . PHP_EOL;
+                $xmlContent .= '        <section>'.PHP_EOL;
+                $xmlContent .= '          <sectionid>'.$section['id'].'</sectionid>'.PHP_EOL;
+                $xmlContent .= '          <title>'.htmlspecialchars($section['name']).'</title>'.PHP_EOL;
+                $xmlContent .= '          <directory>sections/section_'.$section['id'].'</directory>'.PHP_EOL;
+                $xmlContent .= '        </section>'.PHP_EOL;
             }
-            $xmlContent .= '      </sections>' . PHP_EOL;
+            $xmlContent .= '      </sections>'.PHP_EOL;
         }
 
         $activities = $this->getActivities();
         if (!empty($activities)) {
-            $xmlContent .= '      <activities>' . PHP_EOL;
+            $xmlContent .= '      <activities>'.PHP_EOL;
             foreach ($activities as $activity) {
-                $xmlContent .= '        <activity>' . PHP_EOL;
-                $xmlContent .= '          <moduleid>' . $activity['moduleid'] . '</moduleid>' . PHP_EOL;
-                $xmlContent .= '          <sectionid>' . $activity['sectionid'] . '</sectionid>' . PHP_EOL;
-                $xmlContent .= '          <modulename>' . htmlspecialchars($activity['modulename']) . '</modulename>' . PHP_EOL;
-                $xmlContent .= '          <title>' . htmlspecialchars($activity['title']) . '</title>' . PHP_EOL;
-                $xmlContent .= '          <directory>activities/' . $activity['modulename'] . '_' . $activity['moduleid'] . '</directory>' . PHP_EOL;
-                $xmlContent .= '        </activity>' . PHP_EOL;
+                $xmlContent .= '        <activity>'.PHP_EOL;
+                $xmlContent .= '          <moduleid>'.$activity['moduleid'].'</moduleid>'.PHP_EOL;
+                $xmlContent .= '          <sectionid>'.$activity['sectionid'].'</sectionid>'.PHP_EOL;
+                $xmlContent .= '          <modulename>'.htmlspecialchars($activity['modulename']).'</modulename>'.PHP_EOL;
+                $xmlContent .= '          <title>'.htmlspecialchars($activity['title']).'</title>'.PHP_EOL;
+                $xmlContent .= '          <directory>activities/'.$activity['modulename'].'_'.$activity['moduleid'].'</directory>'.PHP_EOL;
+                $xmlContent .= '        </activity>'.PHP_EOL;
             }
-            $xmlContent .= '      </activities>' . PHP_EOL;
+            $xmlContent .= '      </activities>'.PHP_EOL;
         }
 
         // Course directory
-        $xmlContent .= '      <course>' . PHP_EOL;
-        $xmlContent .= '        <courseid>' . $courseInfo['real_id'] . '</courseid>' . PHP_EOL;
-        $xmlContent .= '        <title>' . htmlspecialchars($courseInfo['title']) . '</title>' . PHP_EOL;
-        $xmlContent .= '        <directory>course</directory>' . PHP_EOL;
-        $xmlContent .= '      </course>' . PHP_EOL;
+        $xmlContent .= '      <course>'.PHP_EOL;
+        $xmlContent .= '        <courseid>'.$courseInfo['real_id'].'</courseid>'.PHP_EOL;
+        $xmlContent .= '        <title>'.htmlspecialchars($courseInfo['title']).'</title>'.PHP_EOL;
+        $xmlContent .= '        <directory>course</directory>'.PHP_EOL;
+        $xmlContent .= '      </course>'.PHP_EOL;
 
-        $xmlContent .= '    </contents>' . PHP_EOL;
+        $xmlContent .= '    </contents>'.PHP_EOL;
 
         // Backup settings
-        $xmlContent .= '    <settings>' . PHP_EOL;
+        $xmlContent .= '    <settings>'.PHP_EOL;
         $settings = $this->exportBackupSettings($sections, $activities);
         foreach ($settings as $setting) {
-            $xmlContent .= '      <setting>' . PHP_EOL;
-            $xmlContent .= '        <level>' . htmlspecialchars($setting['level']) . '</level>' . PHP_EOL;
-            $xmlContent .= '        <name>' . htmlspecialchars($setting['name']) . '</name>' . PHP_EOL;
-            $xmlContent .= '        <value>' . $setting['value'] . '</value>' . PHP_EOL;
+            $xmlContent .= '      <setting>'.PHP_EOL;
+            $xmlContent .= '        <level>'.htmlspecialchars($setting['level']).'</level>'.PHP_EOL;
+            $xmlContent .= '        <name>'.htmlspecialchars($setting['name']).'</name>'.PHP_EOL;
+            $xmlContent .= '        <value>'.$setting['value'].'</value>'.PHP_EOL;
             if (isset($setting['section'])) {
-                $xmlContent .= '        <section>' . htmlspecialchars($setting['section']) . '</section>' . PHP_EOL;
+                $xmlContent .= '        <section>'.htmlspecialchars($setting['section']).'</section>'.PHP_EOL;
             }
             if (isset($setting['activity'])) {
-                $xmlContent .= '        <activity>' . htmlspecialchars($setting['activity']) . '</activity>' . PHP_EOL;
+                $xmlContent .= '        <activity>'.htmlspecialchars($setting['activity']).'</activity>'.PHP_EOL;
             }
-            $xmlContent .= '      </setting>' . PHP_EOL;
+            $xmlContent .= '      </setting>'.PHP_EOL;
         }
-        $xmlContent .= '    </settings>' . PHP_EOL;
+        $xmlContent .= '    </settings>'.PHP_EOL;
 
-        $xmlContent .= '  </information>' . PHP_EOL;
+        $xmlContent .= '  </information>'.PHP_EOL;
         $xmlContent .= '</moodle_backup>';
 
-        $xmlFile = $destinationDir . '/moodle_backup.xml';
+        $xmlFile = $destinationDir.'/moodle_backup.xml';
         file_put_contents($xmlFile, $xmlContent);
     }
 
@@ -366,7 +466,7 @@ class MoodleExport
     private function createMbzFile(string $sourceDir): string
     {
         $zip = new ZipArchive();
-        $zipFile = $sourceDir . '.mbz';
+        $zipFile = $sourceDir.'.mbz';
 
         if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
             throw new Exception(get_lang('ErrorCreatingZip'));
@@ -383,7 +483,7 @@ class MoodleExport
                 $relativePath = substr($filePath, strlen($sourceDir) + 1);
 
                 if (!$zip->addFile($filePath, $relativePath)) {
-                    throw new Exception(get_lang('ErrorAddingFileToZip') . ": $relativePath");
+                    throw new Exception(get_lang('ErrorAddingFileToZip').": $relativePath");
                 }
             }
         }
@@ -421,10 +521,10 @@ class MoodleExport
      */
     private function exportBadgesXml(string $exportDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<badges>' . PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<badges>'.PHP_EOL;
         $xmlContent .= '</badges>';
-        file_put_contents($exportDir . '/badges.xml', $xmlContent);
+        file_put_contents($exportDir.'/badges.xml', $xmlContent);
     }
 
     /**
@@ -432,10 +532,10 @@ class MoodleExport
      */
     private function exportCompletionXml(string $exportDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<completions>' . PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<completions>'.PHP_EOL;
         $xmlContent .= '</completions>';
-        file_put_contents($exportDir . '/completion.xml', $xmlContent);
+        file_put_contents($exportDir.'/completion.xml', $xmlContent);
     }
 
     /**
@@ -443,10 +543,10 @@ class MoodleExport
      */
     private function exportGradebookXml(string $exportDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<gradebook>' . PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<gradebook>'.PHP_EOL;
         $xmlContent .= '</gradebook>';
-        file_put_contents($exportDir . '/gradebook.xml', $xmlContent);
+        file_put_contents($exportDir.'/gradebook.xml', $xmlContent);
     }
 
     /**
@@ -454,10 +554,10 @@ class MoodleExport
      */
     private function exportGradeHistoryXml(string $exportDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<grade_history>' . PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<grade_history>'.PHP_EOL;
         $xmlContent .= '</grade_history>';
-        file_put_contents($exportDir . '/grade_history.xml', $xmlContent);
+        file_put_contents($exportDir.'/grade_history.xml', $xmlContent);
     }
 
     /**
@@ -465,10 +565,10 @@ class MoodleExport
      */
     private function exportGroupsXml(string $exportDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<groups>' . PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<groups>'.PHP_EOL;
         $xmlContent .= '</groups>';
-        file_put_contents($exportDir . '/groups.xml', $xmlContent);
+        file_put_contents($exportDir.'/groups.xml', $xmlContent);
     }
 
     /**
@@ -476,47 +576,10 @@ class MoodleExport
      */
     private function exportOutcomesXml(string $exportDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<outcomes>' . PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<outcomes>'.PHP_EOL;
         $xmlContent .= '</outcomes>';
-        file_put_contents($exportDir . '/outcomes.xml', $xmlContent);
-    }
-
-    /**
-     * Export questions data to XML file.
-     */
-    public function exportQuestionsXml(array $questionsData, string $exportDir): void
-    {
-        $quizExport = new QuizExport($this->course);
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<question_categories>' . PHP_EOL;
-
-        foreach ($questionsData as $quiz) {
-            $categoryId = $quiz['questions'][0]['questioncategoryid'] ?? '0';
-
-            $xmlContent .= '  <question_category id="' . $categoryId . '">' . PHP_EOL;
-            $xmlContent .= '    <name>Default for ' . htmlspecialchars($quiz['name'] ?? 'Unknown') . '</name>' . PHP_EOL;
-            $xmlContent .= '    <contextid>' . ($quiz['contextid'] ?? '0') . '</contextid>' . PHP_EOL;
-            $xmlContent .= '    <contextlevel>70</contextlevel>' . PHP_EOL;
-            $xmlContent .= '    <contextinstanceid>' . ($quiz['moduleid'] ?? '0') . '</contextinstanceid>' . PHP_EOL;
-            $xmlContent .= '    <info>The default category for questions shared in context "' . htmlspecialchars($quiz['name'] ?? 'Unknown') . '".</info>' . PHP_EOL;
-            $xmlContent .= '    <infoformat>0</infoformat>' . PHP_EOL;
-            $xmlContent .= '    <stamp>moodle+' . time() . '+CATEGORYSTAMP</stamp>' . PHP_EOL;
-            $xmlContent .= '    <parent>0</parent>' . PHP_EOL;
-            $xmlContent .= '    <sortorder>999</sortorder>' . PHP_EOL;
-            $xmlContent .= '    <idnumber>$@NULL@$</idnumber>' . PHP_EOL;
-            $xmlContent .= '    <questions>' . PHP_EOL;
-
-            foreach ($quiz['questions'] as $question) {
-                $xmlContent .= $quizExport->exportQuestion($question);
-            }
-
-            $xmlContent .= '    </questions>' . PHP_EOL;
-            $xmlContent .= '  </question_category>' . PHP_EOL;
-        }
-
-        $xmlContent .= '</question_categories>';
-        file_put_contents($exportDir . '/questions.xml', $xmlContent);
+        file_put_contents($exportDir.'/outcomes.xml', $xmlContent);
     }
 
     /**
@@ -524,19 +587,19 @@ class MoodleExport
      */
     private function exportRolesXml(string $exportDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<roles_definition>' . PHP_EOL;
-        $xmlContent .= '  <role id="5">' . PHP_EOL;
-        $xmlContent .= '    <name></name>' . PHP_EOL;
-        $xmlContent .= '    <shortname>student</shortname>' . PHP_EOL;
-        $xmlContent .= '    <nameincourse>$@NULL@$</nameincourse>' . PHP_EOL;
-        $xmlContent .= '    <description></description>' . PHP_EOL;
-        $xmlContent .= '    <sortorder>5</sortorder>' . PHP_EOL;
-        $xmlContent .= '    <archetype>student</archetype>' . PHP_EOL;
-        $xmlContent .= '  </role>' . PHP_EOL;
-        $xmlContent .= '</roles_definition>' . PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<roles_definition>'.PHP_EOL;
+        $xmlContent .= '  <role id="5">'.PHP_EOL;
+        $xmlContent .= '    <name></name>'.PHP_EOL;
+        $xmlContent .= '    <shortname>student</shortname>'.PHP_EOL;
+        $xmlContent .= '    <nameincourse>$@NULL@$</nameincourse>'.PHP_EOL;
+        $xmlContent .= '    <description></description>'.PHP_EOL;
+        $xmlContent .= '    <sortorder>5</sortorder>'.PHP_EOL;
+        $xmlContent .= '    <archetype>student</archetype>'.PHP_EOL;
+        $xmlContent .= '  </role>'.PHP_EOL;
+        $xmlContent .= '</roles_definition>'.PHP_EOL;
 
-        file_put_contents($exportDir . '/roles.xml', $xmlContent);
+        file_put_contents($exportDir.'/roles.xml', $xmlContent);
     }
 
     /**
@@ -544,76 +607,10 @@ class MoodleExport
      */
     private function exportScalesXml(string $exportDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<scales>' . PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<scales>'.PHP_EOL;
         $xmlContent .= '</scales>';
-        file_put_contents($exportDir . '/scales.xml', $xmlContent);
-    }
-
-    /**
-     * Sets the admin user data.
-     */
-    public function setAdminUserData(int $id, string $username, string $email): void
-    {
-        self::$adminUserData = [
-            'id' => $id,
-            'contextid' => $id,
-            'username' => $username,
-            'idnumber' => '',
-            'email' => $email,
-            'phone1' => '',
-            'phone2' => '',
-            'institution' => '',
-            'department' => '',
-            'address' => '',
-            'city' => 'London',
-            'country' => 'GB',
-            'lastip' => '127.0.0.1',
-            'picture' => '0',
-            'description' => '',
-            'descriptionformat' => 1,
-            'imagealt' => '$@NULL@$',
-            'auth' => 'manual',
-            'firstname' => 'Admin',
-            'lastname' => 'User',
-            'confirmed' => 1,
-            'policyagreed' => 0,
-            'deleted' => 0,
-            'lang' => 'en',
-            'theme' => '',
-            'timezone' => 99,
-            'firstaccess' => time(),
-            'lastaccess' => time() - (60 * 60 * 24 * 7),
-            'lastlogin' => time() - (60 * 60 * 24 * 2),
-            'currentlogin' => time(),
-            'mailformat' => 1,
-            'maildigest' => 0,
-            'maildisplay' => 1,
-            'autosubscribe' => 1,
-            'trackforums' => 0,
-            'timecreated' => time(),
-            'timemodified' => time(),
-            'trustbitmask' => 0,
-            'preferences' => [
-                ['name' => 'core_message_migrate_data', 'value' => 1],
-                ['name' => 'auth_manual_passwordupdatetime', 'value' => time()],
-                ['name' => 'email_bounce_count', 'value' => 1],
-                ['name' => 'email_send_count', 'value' => 1],
-                ['name' => 'login_failed_count_since_success', 'value' => 0],
-                ['name' => 'filepicker_recentrepository', 'value' => 5],
-                ['name' => 'filepicker_recentlicense', 'value' => 'unknown'],
-            ],
-        ];
-    }
-
-    /**
-     * Returns hardcoded data for the admin user.
-     *
-     * @return array
-     */
-    public static function getAdminUserData(): array
-    {
-        return self::$adminUserData;
+        file_put_contents($exportDir.'/scales.xml', $xmlContent);
     }
 
     /**
@@ -623,71 +620,71 @@ class MoodleExport
     {
         $adminData = self::getAdminUserData();
 
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<users>' . PHP_EOL;
-        $xmlContent .= '  <user id="' . $adminData['id'] . '" contextid="' . $adminData['contextid'] . '">' . PHP_EOL;
-        $xmlContent .= '    <username>' . $adminData['username'] . '</username>' . PHP_EOL;
-        $xmlContent .= '    <idnumber>' . $adminData['idnumber'] . '</idnumber>' . PHP_EOL;
-        $xmlContent .= '    <email>' . $adminData['email'] . '</email>' . PHP_EOL;
-        $xmlContent .= '    <phone1>' . $adminData['phone1'] . '</phone1>' . PHP_EOL;
-        $xmlContent .= '    <phone2>' . $adminData['phone2'] . '</phone2>' . PHP_EOL;
-        $xmlContent .= '    <institution>' . $adminData['institution'] . '</institution>' . PHP_EOL;
-        $xmlContent .= '    <department>' . $adminData['department'] . '</department>' . PHP_EOL;
-        $xmlContent .= '    <address>' . $adminData['address'] . '</address>' . PHP_EOL;
-        $xmlContent .= '    <city>' . $adminData['city'] . '</city>' . PHP_EOL;
-        $xmlContent .= '    <country>' . $adminData['country'] . '</country>' . PHP_EOL;
-        $xmlContent .= '    <lastip>' . $adminData['lastip'] . '</lastip>' . PHP_EOL;
-        $xmlContent .= '    <picture>' . $adminData['picture'] . '</picture>' . PHP_EOL;
-        $xmlContent .= '    <description>' . $adminData['description'] . '</description>' . PHP_EOL;
-        $xmlContent .= '    <descriptionformat>' . $adminData['descriptionformat'] . '</descriptionformat>' . PHP_EOL;
-        $xmlContent .= '    <imagealt>' . $adminData['imagealt'] . '</imagealt>' . PHP_EOL;
-        $xmlContent .= '    <auth>' . $adminData['auth'] . '</auth>' . PHP_EOL;
-        $xmlContent .= '    <firstname>' . $adminData['firstname'] . '</firstname>' . PHP_EOL;
-        $xmlContent .= '    <lastname>' . $adminData['lastname'] . '</lastname>' . PHP_EOL;
-        $xmlContent .= '    <confirmed>' . $adminData['confirmed'] . '</confirmed>' . PHP_EOL;
-        $xmlContent .= '    <policyagreed>' . $adminData['policyagreed'] . '</policyagreed>' . PHP_EOL;
-        $xmlContent .= '    <deleted>' . $adminData['deleted'] . '</deleted>' . PHP_EOL;
-        $xmlContent .= '    <lang>' . $adminData['lang'] . '</lang>' . PHP_EOL;
-        $xmlContent .= '    <theme>' . $adminData['theme'] . '</theme>' . PHP_EOL;
-        $xmlContent .= '    <timezone>' . $adminData['timezone'] . '</timezone>' . PHP_EOL;
-        $xmlContent .= '    <firstaccess>' . $adminData['firstaccess'] . '</firstaccess>' . PHP_EOL;
-        $xmlContent .= '    <lastaccess>' . $adminData['lastaccess'] . '</lastaccess>' . PHP_EOL;
-        $xmlContent .= '    <lastlogin>' . $adminData['lastlogin'] . '</lastlogin>' . PHP_EOL;
-        $xmlContent .= '    <currentlogin>' . $adminData['currentlogin'] . '</currentlogin>' . PHP_EOL;
-        $xmlContent .= '    <mailformat>' . $adminData['mailformat'] . '</mailformat>' . PHP_EOL;
-        $xmlContent .= '    <maildigest>' . $adminData['maildigest'] . '</maildigest>' . PHP_EOL;
-        $xmlContent .= '    <maildisplay>' . $adminData['maildisplay'] . '</maildisplay>' . PHP_EOL;
-        $xmlContent .= '    <autosubscribe>' . $adminData['autosubscribe'] . '</autosubscribe>' . PHP_EOL;
-        $xmlContent .= '    <trackforums>' . $adminData['trackforums'] . '</trackforums>' . PHP_EOL;
-        $xmlContent .= '    <timecreated>' . $adminData['timecreated'] . '</timecreated>' . PHP_EOL;
-        $xmlContent .= '    <timemodified>' . $adminData['timemodified'] . '</timemodified>' . PHP_EOL;
-        $xmlContent .= '    <trustbitmask>' . $adminData['trustbitmask'] . '</trustbitmask>' . PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<users>'.PHP_EOL;
+        $xmlContent .= '  <user id="'.$adminData['id'].'" contextid="'.$adminData['contextid'].'">'.PHP_EOL;
+        $xmlContent .= '    <username>'.$adminData['username'].'</username>'.PHP_EOL;
+        $xmlContent .= '    <idnumber>'.$adminData['idnumber'].'</idnumber>'.PHP_EOL;
+        $xmlContent .= '    <email>'.$adminData['email'].'</email>'.PHP_EOL;
+        $xmlContent .= '    <phone1>'.$adminData['phone1'].'</phone1>'.PHP_EOL;
+        $xmlContent .= '    <phone2>'.$adminData['phone2'].'</phone2>'.PHP_EOL;
+        $xmlContent .= '    <institution>'.$adminData['institution'].'</institution>'.PHP_EOL;
+        $xmlContent .= '    <department>'.$adminData['department'].'</department>'.PHP_EOL;
+        $xmlContent .= '    <address>'.$adminData['address'].'</address>'.PHP_EOL;
+        $xmlContent .= '    <city>'.$adminData['city'].'</city>'.PHP_EOL;
+        $xmlContent .= '    <country>'.$adminData['country'].'</country>'.PHP_EOL;
+        $xmlContent .= '    <lastip>'.$adminData['lastip'].'</lastip>'.PHP_EOL;
+        $xmlContent .= '    <picture>'.$adminData['picture'].'</picture>'.PHP_EOL;
+        $xmlContent .= '    <description>'.$adminData['description'].'</description>'.PHP_EOL;
+        $xmlContent .= '    <descriptionformat>'.$adminData['descriptionformat'].'</descriptionformat>'.PHP_EOL;
+        $xmlContent .= '    <imagealt>'.$adminData['imagealt'].'</imagealt>'.PHP_EOL;
+        $xmlContent .= '    <auth>'.$adminData['auth'].'</auth>'.PHP_EOL;
+        $xmlContent .= '    <firstname>'.$adminData['firstname'].'</firstname>'.PHP_EOL;
+        $xmlContent .= '    <lastname>'.$adminData['lastname'].'</lastname>'.PHP_EOL;
+        $xmlContent .= '    <confirmed>'.$adminData['confirmed'].'</confirmed>'.PHP_EOL;
+        $xmlContent .= '    <policyagreed>'.$adminData['policyagreed'].'</policyagreed>'.PHP_EOL;
+        $xmlContent .= '    <deleted>'.$adminData['deleted'].'</deleted>'.PHP_EOL;
+        $xmlContent .= '    <lang>'.$adminData['lang'].'</lang>'.PHP_EOL;
+        $xmlContent .= '    <theme>'.$adminData['theme'].'</theme>'.PHP_EOL;
+        $xmlContent .= '    <timezone>'.$adminData['timezone'].'</timezone>'.PHP_EOL;
+        $xmlContent .= '    <firstaccess>'.$adminData['firstaccess'].'</firstaccess>'.PHP_EOL;
+        $xmlContent .= '    <lastaccess>'.$adminData['lastaccess'].'</lastaccess>'.PHP_EOL;
+        $xmlContent .= '    <lastlogin>'.$adminData['lastlogin'].'</lastlogin>'.PHP_EOL;
+        $xmlContent .= '    <currentlogin>'.$adminData['currentlogin'].'</currentlogin>'.PHP_EOL;
+        $xmlContent .= '    <mailformat>'.$adminData['mailformat'].'</mailformat>'.PHP_EOL;
+        $xmlContent .= '    <maildigest>'.$adminData['maildigest'].'</maildigest>'.PHP_EOL;
+        $xmlContent .= '    <maildisplay>'.$adminData['maildisplay'].'</maildisplay>'.PHP_EOL;
+        $xmlContent .= '    <autosubscribe>'.$adminData['autosubscribe'].'</autosubscribe>'.PHP_EOL;
+        $xmlContent .= '    <trackforums>'.$adminData['trackforums'].'</trackforums>'.PHP_EOL;
+        $xmlContent .= '    <timecreated>'.$adminData['timecreated'].'</timecreated>'.PHP_EOL;
+        $xmlContent .= '    <timemodified>'.$adminData['timemodified'].'</timemodified>'.PHP_EOL;
+        $xmlContent .= '    <trustbitmask>'.$adminData['trustbitmask'].'</trustbitmask>'.PHP_EOL;
 
         // Preferences
         if (isset($adminData['preferences']) && is_array($adminData['preferences'])) {
-            $xmlContent .= '    <preferences>' . PHP_EOL;
+            $xmlContent .= '    <preferences>'.PHP_EOL;
             foreach ($adminData['preferences'] as $preference) {
-                $xmlContent .= '      <preference>' . PHP_EOL;
-                $xmlContent .= '        <name>' . htmlspecialchars($preference['name']) . '</name>' . PHP_EOL;
-                $xmlContent .= '        <value>' . htmlspecialchars($preference['value']) . '</value>' . PHP_EOL;
-                $xmlContent .= '      </preference>' . PHP_EOL;
+                $xmlContent .= '      <preference>'.PHP_EOL;
+                $xmlContent .= '        <name>'.htmlspecialchars($preference['name']).'</name>'.PHP_EOL;
+                $xmlContent .= '        <value>'.htmlspecialchars($preference['value']).'</value>'.PHP_EOL;
+                $xmlContent .= '      </preference>'.PHP_EOL;
             }
-            $xmlContent .= '    </preferences>' . PHP_EOL;
+            $xmlContent .= '    </preferences>'.PHP_EOL;
         } else {
-            $xmlContent .= '    <preferences></preferences>' . PHP_EOL;
+            $xmlContent .= '    <preferences></preferences>'.PHP_EOL;
         }
 
         // Roles (empty for now)
-        $xmlContent .= '    <roles>' . PHP_EOL;
-        $xmlContent .= '      <role_overrides></role_overrides>' . PHP_EOL;
-        $xmlContent .= '      <role_assignments></role_assignments>' . PHP_EOL;
-        $xmlContent .= '    </roles>' . PHP_EOL;
+        $xmlContent .= '    <roles>'.PHP_EOL;
+        $xmlContent .= '      <role_overrides></role_overrides>'.PHP_EOL;
+        $xmlContent .= '      <role_assignments></role_assignments>'.PHP_EOL;
+        $xmlContent .= '    </roles>'.PHP_EOL;
 
-        $xmlContent .= '  </user>' . PHP_EOL;
+        $xmlContent .= '  </user>'.PHP_EOL;
         $xmlContent .= '</users>';
 
         // Save the content to the users.xml file
-        file_put_contents($exportDir . '/users.xml', $xmlContent);
+        file_put_contents($exportDir.'/users.xml', $xmlContent);
     }
 
     /**
@@ -697,7 +694,7 @@ class MoodleExport
     {
         // root-level settings
         $settings = [
-            ['level' => 'root', 'name' => 'filename', 'value' => 'backup-moodle-course-' . time() . '.mbz'],
+            ['level' => 'root', 'name' => 'filename', 'value' => 'backup-moodle-course-'.time().'.mbz'],
             ['level' => 'root', 'name' => 'imscc11', 'value' => '0'],
             ['level' => 'root', 'name' => 'users', 'value' => '1'],
             ['level' => 'root', 'name' => 'anonymize', 'value' => '0'],
@@ -724,14 +721,14 @@ class MoodleExport
         foreach ($sections as $section) {
             $settings[] = [
                 'level' => 'section',
-                'section' => 'section_' . $section['id'],
-                'name' => 'section_' . $section['id'] . '_included',
+                'section' => 'section_'.$section['id'],
+                'name' => 'section_'.$section['id'].'_included',
                 'value' => '1',
             ];
             $settings[] = [
                 'level' => 'section',
-                'section' => 'section_' . $section['id'],
-                'name' => 'section_' . $section['id'] . '_userinfo',
+                'section' => 'section_'.$section['id'],
+                'name' => 'section_'.$section['id'].'_userinfo',
                 'value' => '1',
             ];
         }
@@ -740,14 +737,14 @@ class MoodleExport
         foreach ($activities as $activity) {
             $settings[] = [
                 'level' => 'activity',
-                'activity' => $activity['modulename'] . '_' . $activity['moduleid'],
-                'name' => $activity['modulename'] . '_' . $activity['moduleid'] . '_included',
+                'activity' => $activity['modulename'].'_'.$activity['moduleid'],
+                'name' => $activity['modulename'].'_'.$activity['moduleid'].'_included',
                 'value' => '1',
             ];
             $settings[] = [
                 'level' => 'activity',
-                'activity' => $activity['modulename'] . '_' . $activity['moduleid'],
-                'name' => $activity['modulename'] . '_' . $activity['moduleid'] . '_userinfo',
+                'activity' => $activity['modulename'].'_'.$activity['moduleid'],
+                'name' => $activity['modulename'].'_'.$activity['moduleid'].'_userinfo',
                 'value' => '1',
             ];
         }

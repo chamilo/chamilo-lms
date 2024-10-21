@@ -31,7 +31,7 @@ class SectionExport
      */
     public function exportSection(int $sectionId, string $exportDir): void
     {
-        $sectionDir = $exportDir . "/sections/section_{$sectionId}";
+        $sectionDir = $exportDir."/sections/section_{$sectionId}";
 
         if (!is_dir($sectionDir)) {
             mkdir($sectionDir, api_get_permissions_for_new_directories(), true);
@@ -59,34 +59,6 @@ class SectionExport
         $this->createSectionXml($sectionData, $sectionDir);
         $this->createInforefXml($sectionData, $sectionDir);
         $this->exportActivities($sectionData['activities'], $exportDir, $sectionId);
-    }
-
-    /**
-     * Export the activities of a section.
-     */
-    private function exportActivities(array $activities, string $exportDir, int $sectionId): void
-    {
-        $exportClasses = [
-            'quiz' => QuizExport::class,
-            'glossary' => GlossaryExport::class,
-            'url' => UrlExport::class,
-            'assign' => AssignExport::class,
-            'forum' => ForumExport::class,
-            'page' => PageExport::class,
-            'resource' => ResourceExport::class,
-            'folder' => FolderExport::class,
-            'feedback' => FeedbackExport::class,
-        ];
-
-        foreach ($activities as $activity) {
-            $moduleName = $activity['modulename'];
-            if (isset($exportClasses[$moduleName])) {
-                $exportClass = new $exportClasses[$moduleName]($this->course);
-                $exportClass->export($activity['id'], $exportDir, $activity['moduleid'], $sectionId);
-            } else {
-                throw new \Exception("Export for module '$moduleName' is not supported.");
-            }
-        }
     }
 
     /**
@@ -135,30 +107,10 @@ class SectionExport
     {
         $generalLearnpath = (object) [
             'items' => $this->getGeneralItems(),
-            'source_id' => 0
+            'source_id' => 0,
         ];
 
         return $this->getActivitiesForSection($generalLearnpath, true);
-    }
-
-    /**
-     * Check if an item is associated with any learnpath.
-     */
-    private function isItemInLearnpath(object $item, string $type): bool
-    {
-        if (!empty($this->course->resources[RESOURCE_LEARNPATH])) {
-            foreach ($this->course->resources[RESOURCE_LEARNPATH] as $learnpath) {
-                if (!empty($learnpath->items)) {
-                    foreach ($learnpath->items as $learnpathItem) {
-                        if ($learnpathItem['item_type'] === $type && $learnpathItem['path'] == $item->source_id) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -188,7 +140,7 @@ class SectionExport
             'sequence' => $learnpath->source_id,
             'visible' => $learnpath->visibility,
             'timemodified' => strtotime($learnpath->modified_on),
-            'activities' => $this->getActivitiesForSection($learnpath)
+            'activities' => $this->getActivitiesForSection($learnpath),
         ];
     }
 
@@ -205,6 +157,54 @@ class SectionExport
         }
 
         return $activities;
+    }
+
+    /**
+     * Export the activities of a section.
+     */
+    private function exportActivities(array $activities, string $exportDir, int $sectionId): void
+    {
+        $exportClasses = [
+            'quiz' => QuizExport::class,
+            'glossary' => GlossaryExport::class,
+            'url' => UrlExport::class,
+            'assign' => AssignExport::class,
+            'forum' => ForumExport::class,
+            'page' => PageExport::class,
+            'resource' => ResourceExport::class,
+            'folder' => FolderExport::class,
+            'feedback' => FeedbackExport::class,
+        ];
+
+        foreach ($activities as $activity) {
+            $moduleName = $activity['modulename'];
+            if (isset($exportClasses[$moduleName])) {
+                $exportClass = new $exportClasses[$moduleName]($this->course);
+                $exportClass->export($activity['id'], $exportDir, $activity['moduleid'], $sectionId);
+            } else {
+                throw new \Exception("Export for module '$moduleName' is not supported.");
+            }
+        }
+    }
+
+    /**
+     * Check if an item is associated with any learnpath.
+     */
+    private function isItemInLearnpath(object $item, string $type): bool
+    {
+        if (!empty($this->course->resources[RESOURCE_LEARNPATH])) {
+            foreach ($this->course->resources[RESOURCE_LEARNPATH] as $learnpath) {
+                if (!empty($learnpath->items)) {
+                    foreach ($learnpath->items as $learnpathItem) {
+                        if ($learnpathItem['item_type'] === $type && $learnpathItem['path'] == $item->source_id) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -287,18 +287,18 @@ class SectionExport
      */
     private function createSectionXml(array $sectionData, string $destinationDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<section id="' . $sectionData['id'] . '">' . PHP_EOL;
-        $xmlContent .= '  <number>' . $sectionData['number'] . '</number>' . PHP_EOL;
-        $xmlContent .= '  <name>' . htmlspecialchars($sectionData['name']) . '</name>' . PHP_EOL;
-        $xmlContent .= '  <summary>' . htmlspecialchars($sectionData['summary']) . '</summary>' . PHP_EOL;
-        $xmlContent .= '  <summaryformat>1</summaryformat>' . PHP_EOL;
-        $xmlContent .= '  <sequence>' . implode(',', array_column($sectionData['activities'], 'moduleid')) . '</sequence>' . PHP_EOL;
-        $xmlContent .= '  <visible>' . $sectionData['visible'] . '</visible>' . PHP_EOL;
-        $xmlContent .= '  <timemodified>' . $sectionData['timemodified'] . '</timemodified>' . PHP_EOL;
-        $xmlContent .= '</section>' . PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<section id="'.$sectionData['id'].'">'.PHP_EOL;
+        $xmlContent .= '  <number>'.$sectionData['number'].'</number>'.PHP_EOL;
+        $xmlContent .= '  <name>'.htmlspecialchars($sectionData['name']).'</name>'.PHP_EOL;
+        $xmlContent .= '  <summary>'.htmlspecialchars($sectionData['summary']).'</summary>'.PHP_EOL;
+        $xmlContent .= '  <summaryformat>1</summaryformat>'.PHP_EOL;
+        $xmlContent .= '  <sequence>'.implode(',', array_column($sectionData['activities'], 'moduleid')).'</sequence>'.PHP_EOL;
+        $xmlContent .= '  <visible>'.$sectionData['visible'].'</visible>'.PHP_EOL;
+        $xmlContent .= '  <timemodified>'.$sectionData['timemodified'].'</timemodified>'.PHP_EOL;
+        $xmlContent .= '</section>'.PHP_EOL;
 
-        $xmlFile = $destinationDir . '/section.xml';
+        $xmlFile = $destinationDir.'/section.xml';
         file_put_contents($xmlFile, $xmlContent);
     }
 
@@ -307,16 +307,16 @@ class SectionExport
      */
     private function createInforefXml(array $sectionData, string $destinationDir): void
     {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<inforef>' . PHP_EOL;
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<inforef>'.PHP_EOL;
 
         foreach ($sectionData['activities'] as $activity) {
-            $xmlContent .= '  <activity id="' . $activity['id'] . '">' . htmlspecialchars($activity['name']) . '</activity>' . PHP_EOL;
+            $xmlContent .= '  <activity id="'.$activity['id'].'">'.htmlspecialchars($activity['name']).'</activity>'.PHP_EOL;
         }
 
-        $xmlContent .= '</inforef>' . PHP_EOL;
+        $xmlContent .= '</inforef>'.PHP_EOL;
 
-        $xmlFile = $destinationDir . '/inforef.xml';
+        $xmlFile = $destinationDir.'/inforef.xml';
         file_put_contents($xmlFile, $xmlContent);
     }
 }

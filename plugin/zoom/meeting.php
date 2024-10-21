@@ -3,7 +3,6 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\PluginBundle\Zoom\Meeting;
-use Chamilo\PluginBundle\Zoom\Registrant;
 use Chamilo\PluginBundle\Zoom\Webinar;
 
 require_once __DIR__.'/config.php';

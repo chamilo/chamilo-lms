@@ -3052,9 +3052,9 @@ class MessageManager
     /**
      * Retrieves a list of users with whom the specified user has exchanged messages within an optional date range.
      *
-     * @param   int         $userId The user ID for whom to retrieve message exchange.
-     * @param   string|null $startDate Start date to filter the messages (optional).
-     * @param   string|null $endDate End date to filter the messages (optional).
+     * @param int         $userId    The user ID for whom to retrieve message exchange.
+     * @param string|null $startDate Start date to filter the messages (optional).
+     * @param string|null $endDate   End date to filter the messages (optional).
      *
      * @return array Array of user information for each user with whom the specified user has exchanged messages.
      */
@@ -3072,14 +3072,14 @@ class MessageManager
 
         $sql = "SELECT DISTINCT user_sender_id AS user_id
                  FROM $messagesTable
-                 WHERE user_receiver_id = $userId" .
-                 ($startDate ? " AND send_date >= '$startDate'" : "") .
-                 ($endDate ? " AND send_date <= '$endDate'" : "") .
+                 WHERE user_receiver_id = $userId".
+                 ($startDate ? " AND send_date >= '$startDate'" : "").
+                 ($endDate ? " AND send_date <= '$endDate'" : "").
                " UNION
                SELECT DISTINCT user_receiver_id
                  FROM $messagesTable
-                 WHERE user_sender_id = $userId" .
-                 ($startDate ? " AND send_date >= '$startDate'" : "") .
+                 WHERE user_sender_id = $userId".
+                 ($startDate ? " AND send_date >= '$startDate'" : "").
                  ($endDate ? " AND send_date <= '$endDate'" : "");
 
         $result = Database::query($sql);

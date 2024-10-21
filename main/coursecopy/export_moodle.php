@@ -8,7 +8,6 @@ use moodleexport\MoodleExport;
 
 /**
  * Create a Moodle export.
- *
  */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_PATH).'main/work/work.lib.php';
@@ -72,7 +71,7 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
 
         // Perform export
         $courseId = api_get_course_id();
-        $exportDir = 'moodle_export_' . $courseId;
+        $exportDir = 'moodle_export_'.$courseId;
         try {
             $moodleVersion = isset($_POST['moodle_version']) ? (int) $_POST['moodle_version'] : 3;
             $mbzFile = $exporter->export($courseId, $exportDir, $moodleVersion);
@@ -135,7 +134,7 @@ if ($action === 'course_select_form' && Security::check_token('post')) {
             $exporter->setAdminUserData($adminId, $adminUsername, $adminEmail);
 
             $courseId = api_get_course_id();  // Get course ID
-            $exportDir = 'moodle_export_' . $courseId;
+            $exportDir = 'moodle_export_'.$courseId;
 
             try {
                 $moodleVersion = isset($values['moodle_version']) ? $values['moodle_version'] : '3';

@@ -32,7 +32,7 @@ class FileExport
      */
     public function exportFiles(array $filesData, string $exportDir): void
     {
-        $filesDir = $exportDir . '/files';
+        $filesDir = $exportDir.'/files';
 
         if (!is_dir($filesDir)) {
             mkdir($filesDir, api_get_permissions_for_new_directories(), true);
@@ -48,88 +48,6 @@ class FileExport
 
         // Create files.xml in the export directory
         $this->createFilesXml($filesData, $exportDir);
-    }
-
-    /**
-     * Create a placeholder index.html file to prevent an empty directory.
-     */
-    private function createPlaceholderFile(string $filesDir): void
-    {
-        $placeholderFile = $filesDir . '/index.html';
-        file_put_contents($placeholderFile, "<!-- Placeholder file to ensure the directory is not empty -->");
-    }
-
-    /**
-     * Copy a file to the export directory using its contenthash.
-     */
-    private function copyFileToExportDir(array $file, string $filesDir): void
-    {
-        if ($file['filepath'] === '.') {
-            return;
-        }
-
-        $contenthash = $file['contenthash'];
-        $subDir = substr($contenthash, 0, 2);
-        $filePath = $this->course->path . $file['documentpath'];
-        $exportSubDir = $filesDir . '/' . $subDir;
-
-        // Ensure the subdirectory exists
-        if (!is_dir($exportSubDir)) {
-            mkdir($exportSubDir, api_get_permissions_for_new_directories(), true);
-        }
-
-        // Copy the file to the export directory
-        $destinationFile = $exportSubDir . '/' . $contenthash;
-        if (file_exists($filePath)) {
-            copy($filePath, $destinationFile);
-        } else {
-            throw new Exception("File {$filePath} not found.");
-        }
-    }
-
-    /**
-     * Create the files.xml with the provided file data.
-     */
-    private function createFilesXml(array $filesData, string $destinationDir): void
-    {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<files>' . PHP_EOL;
-
-        foreach ($filesData['files'] as $file) {
-            $xmlContent .= $this->createFileXmlEntry($file);
-        }
-
-        $xmlContent .= '</files>' . PHP_EOL;
-        file_put_contents($destinationDir . '/files.xml', $xmlContent);
-    }
-
-    /**
-     * Create an XML entry for a file.
-     */
-    private function createFileXmlEntry(array $file): string
-    {
-        return '  <file id="' . $file['id'] . '">' . PHP_EOL .
-            '    <contenthash>' . htmlspecialchars($file['contenthash']) . '</contenthash>' . PHP_EOL .
-            '    <contextid>' . $file['contextid'] . '</contextid>' . PHP_EOL .
-            '    <component>' . htmlspecialchars($file['component']) . '</component>' . PHP_EOL .
-            '    <filearea>' . htmlspecialchars($file['filearea']) . '</filearea>' . PHP_EOL .
-            '    <itemid>0</itemid>' . PHP_EOL .
-            '    <filepath>' . htmlspecialchars($file['filepath']) . '</filepath>' . PHP_EOL .
-            '    <filename>' . htmlspecialchars($file['filename']) . '</filename>' . PHP_EOL .
-            '    <userid>' . $file['userid'] . '</userid>' . PHP_EOL .
-            '    <filesize>' . $file['filesize'] . '</filesize>' . PHP_EOL .
-            '    <mimetype>' . htmlspecialchars($file['mimetype']) . '</mimetype>' . PHP_EOL .
-            '    <status>' . $file['status'] . '</status>' . PHP_EOL .
-            '    <timecreated>' . $file['timecreated'] . '</timecreated>' . PHP_EOL .
-            '    <timemodified>' . $file['timemodified'] . '</timemodified>' . PHP_EOL .
-            '    <source>' . htmlspecialchars($file['source']) . '</source>' . PHP_EOL .
-            '    <author>' . htmlspecialchars($file['author']) . '</author>' . PHP_EOL .
-            '    <license>' . htmlspecialchars($file['license']) . '</license>' . PHP_EOL .
-            '    <sortorder>0</sortorder>' . PHP_EOL .
-            '    <repositorytype>$@NULL@$</repositorytype>' . PHP_EOL .
-            '    <repositoryid>$@NULL@$</repositoryid>' . PHP_EOL .
-            '    <reference>$@NULL@$</reference>' . PHP_EOL .
-            '  </file>' . PHP_EOL;
     }
 
     /**
@@ -161,7 +79,7 @@ class FileExport
                             'filearea' => 'introattachment',
                             'itemid' => (int) $work->params['id'],
                             'filepath' => '/',
-                            'documentpath' =>  'document/'.$docData['path'],
+                            'documentpath' => 'document/'.$docData['path'],
                             'filename' => basename($docData['path']),
                             'userid' => $adminId,
                             'filesize' => $docData['size'],
@@ -182,6 +100,88 @@ class FileExport
     }
 
     /**
+     * Create a placeholder index.html file to prevent an empty directory.
+     */
+    private function createPlaceholderFile(string $filesDir): void
+    {
+        $placeholderFile = $filesDir.'/index.html';
+        file_put_contents($placeholderFile, "<!-- Placeholder file to ensure the directory is not empty -->");
+    }
+
+    /**
+     * Copy a file to the export directory using its contenthash.
+     */
+    private function copyFileToExportDir(array $file, string $filesDir): void
+    {
+        if ($file['filepath'] === '.') {
+            return;
+        }
+
+        $contenthash = $file['contenthash'];
+        $subDir = substr($contenthash, 0, 2);
+        $filePath = $this->course->path.$file['documentpath'];
+        $exportSubDir = $filesDir.'/'.$subDir;
+
+        // Ensure the subdirectory exists
+        if (!is_dir($exportSubDir)) {
+            mkdir($exportSubDir, api_get_permissions_for_new_directories(), true);
+        }
+
+        // Copy the file to the export directory
+        $destinationFile = $exportSubDir.'/'.$contenthash;
+        if (file_exists($filePath)) {
+            copy($filePath, $destinationFile);
+        } else {
+            throw new Exception("File {$filePath} not found.");
+        }
+    }
+
+    /**
+     * Create the files.xml with the provided file data.
+     */
+    private function createFilesXml(array $filesData, string $destinationDir): void
+    {
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<files>'.PHP_EOL;
+
+        foreach ($filesData['files'] as $file) {
+            $xmlContent .= $this->createFileXmlEntry($file);
+        }
+
+        $xmlContent .= '</files>'.PHP_EOL;
+        file_put_contents($destinationDir.'/files.xml', $xmlContent);
+    }
+
+    /**
+     * Create an XML entry for a file.
+     */
+    private function createFileXmlEntry(array $file): string
+    {
+        return '  <file id="'.$file['id'].'">'.PHP_EOL.
+            '    <contenthash>'.htmlspecialchars($file['contenthash']).'</contenthash>'.PHP_EOL.
+            '    <contextid>'.$file['contextid'].'</contextid>'.PHP_EOL.
+            '    <component>'.htmlspecialchars($file['component']).'</component>'.PHP_EOL.
+            '    <filearea>'.htmlspecialchars($file['filearea']).'</filearea>'.PHP_EOL.
+            '    <itemid>0</itemid>'.PHP_EOL.
+            '    <filepath>'.htmlspecialchars($file['filepath']).'</filepath>'.PHP_EOL.
+            '    <filename>'.htmlspecialchars($file['filename']).'</filename>'.PHP_EOL.
+            '    <userid>'.$file['userid'].'</userid>'.PHP_EOL.
+            '    <filesize>'.$file['filesize'].'</filesize>'.PHP_EOL.
+            '    <mimetype>'.htmlspecialchars($file['mimetype']).'</mimetype>'.PHP_EOL.
+            '    <status>'.$file['status'].'</status>'.PHP_EOL.
+            '    <timecreated>'.$file['timecreated'].'</timecreated>'.PHP_EOL.
+            '    <timemodified>'.$file['timemodified'].'</timemodified>'.PHP_EOL.
+            '    <source>'.htmlspecialchars($file['source']).'</source>'.PHP_EOL.
+            '    <author>'.htmlspecialchars($file['author']).'</author>'.PHP_EOL.
+            '    <license>'.htmlspecialchars($file['license']).'</license>'.PHP_EOL.
+            '    <sortorder>0</sortorder>'.PHP_EOL.
+            '    <repositorytype>$@NULL@$</repositorytype>'.PHP_EOL.
+            '    <repositoryid>$@NULL@$</repositoryid>'.PHP_EOL.
+            '    <reference>$@NULL@$</reference>'.PHP_EOL.
+            '  </file>'.PHP_EOL;
+    }
+
+    /**
      * Process a document or folder and add its data to the files array.
      */
     private function processDocument(array $filesData, object $document): array
@@ -194,6 +194,7 @@ class FileExport
                 $filesData['files'][] = $this->getFolderFileData($file, (int) $document->source_id);
             }
         }
+
         return $filesData;
     }
 
@@ -268,7 +269,7 @@ class FileExport
      */
     private function ensureTrailingSlash($path): string
     {
-        return empty($path) || $path === '.' || $path === '/' ? '/' : rtrim($path, '/') . '/';
+        return empty($path) || $path === '.' || $path === '/' ? '/' : rtrim($path, '/').'/';
     }
 
     /**

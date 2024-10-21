@@ -27,7 +27,7 @@ if (isset($_GET['action'])) {
 
             $session = new ChamiloSession();
 
-            $endTime =  0;
+            $endTime = 0;
             $isExpired = false;
             $timeLeft = -1;
 
@@ -44,9 +44,8 @@ if (isset($_GET['action'])) {
             }
 
             $timeLeft = $endTime - $currentTime;
-        }
-        else {
-            $endTime =  999999;
+        } else {
+            $endTime = 999999;
             $isExpired = false;
             $timeLeft = 999999;
         }

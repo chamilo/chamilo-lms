@@ -203,10 +203,10 @@ class CourseSelectForm
         echo Display::return_message(get_lang('DontForgetToSelectTheMediaFilesIfYourResourceNeedIt'));
 
         $resource_titles = self::getResourceTitleList();
-        $element_count = self::parseResources($resource_titles, $course->resources, $forum_categories, $forums, $forum_topics,true, true);
+        $element_count = self::parseResources($resource_titles, $course->resources, $forum_categories, $forums, $forum_topics, true, true);
 
         // Fixes forum order
-       if (!empty($element_count)) {
+        if (!empty($element_count)) {
             $type = RESOURCE_FORUMCATEGORY;
             echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
             echo '<em id="img_'.$type.'" class="fa fa-minus-square-o fa-lg"></em>';

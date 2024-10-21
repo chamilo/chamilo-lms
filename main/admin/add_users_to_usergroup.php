@@ -191,13 +191,13 @@ if (ChamiloApi::isAjaxRequest() && $_SERVER['REQUEST_METHOD'] === 'POST' && isse
             'id' => $user['id'],
             'username' => $user['username'],
             'firstname' => $user['firstname'],
-            'lastname' => $user['lastname']
+            'lastname' => $user['lastname'],
         ];
     }
 
     header('Content-Type: application/json');
     echo json_encode($users);
-    die();
+    exit();
 }
 
 $first_letter_user = '';
@@ -528,7 +528,7 @@ echo '</div>';
                             </button>
                         </span>
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" id="show_last_ten_users_button" title="<?php echo get_lang('ShowLastTenUsers') ?>">
+                            <button class="btn btn-default" type="button" id="show_last_ten_users_button" title="<?php echo get_lang('ShowLastTenUsers'); ?>">
                                 <i class="fa fa-clock-o"></i>
                             </button>
                         </span>

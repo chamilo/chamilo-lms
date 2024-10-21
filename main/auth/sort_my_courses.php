@@ -19,7 +19,7 @@ $authorizedActions = [
     'deletecoursecategory',
     'createcoursecategory',
     'set_collapsable',
-    'unsubscribe'
+    'unsubscribe',
 ];
 if (in_array(trim($_REQUEST['action']), $authorizedActions)) {
     $action = trim($_REQUEST['action']);

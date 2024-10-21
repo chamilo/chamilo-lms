@@ -14,10 +14,10 @@ class FolderExport extends ActivityExport
     /**
      * Export a folder to the specified directory.
      *
-     * @param int $activityId The ID of the folder.
-     * @param string $exportDir The directory where the folder will be exported.
-     * @param int $moduleId The ID of the module.
-     * @param int $sectionId The ID of the section.
+     * @param int    $activityId The ID of the folder.
+     * @param string $exportDir  The directory where the folder will be exported.
+     * @param int    $moduleId   The ID of the module.
+     * @param int    $sectionId  The ID of the section.
      */
     public function export($activityId, $exportDir, $moduleId, $sectionId): void
     {
@@ -40,29 +40,6 @@ class FolderExport extends ActivityExport
     }
 
     /**
-     * Create the XML file for the folder.
-     */
-    private function createFolderXml(array $folderData, string $folderDir): void
-    {
-        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xmlContent .= '<activity id="' . $folderData['id'] . '" moduleid="' . $folderData['moduleid'] . '" modulename="folder" contextid="' . $folderData['contextid'] . '">' . PHP_EOL;
-        $xmlContent .= '  <folder id="' . $folderData['id'] . '">' . PHP_EOL;
-        $xmlContent .= '    <name>' . htmlspecialchars($folderData['name']) . '</name>' . PHP_EOL;
-        $xmlContent .= '    <intro></intro>' . PHP_EOL;
-        $xmlContent .= '    <introformat>1</introformat>' . PHP_EOL;
-        $xmlContent .= '    <revision>1</revision>' . PHP_EOL;
-        $xmlContent .= '    <timemodified>' . $folderData['timemodified'] . '</timemodified>' . PHP_EOL;
-        $xmlContent .= '    <display>0</display>' . PHP_EOL;
-        $xmlContent .= '    <showexpanded>1</showexpanded>' . PHP_EOL;
-        $xmlContent .= '    <showdownloadfolder>1</showdownloadfolder>' . PHP_EOL;
-        $xmlContent .= '    <forcedownload>1</forcedownload>' . PHP_EOL;
-        $xmlContent .= '  </folder>' . PHP_EOL;
-        $xmlContent .= '</activity>';
-
-        $this->createXmlFile('folder', $xmlContent, $folderDir);
-    }
-
-    /**
      * Get folder data dynamically from the course.
      */
     public function getData(int $folderId, int $sectionId): array
@@ -81,6 +58,29 @@ class FolderExport extends ActivityExport
     }
 
     /**
+     * Create the XML file for the folder.
+     */
+    private function createFolderXml(array $folderData, string $folderDir): void
+    {
+        $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlContent .= '<activity id="'.$folderData['id'].'" moduleid="'.$folderData['moduleid'].'" modulename="folder" contextid="'.$folderData['contextid'].'">'.PHP_EOL;
+        $xmlContent .= '  <folder id="'.$folderData['id'].'">'.PHP_EOL;
+        $xmlContent .= '    <name>'.htmlspecialchars($folderData['name']).'</name>'.PHP_EOL;
+        $xmlContent .= '    <intro></intro>'.PHP_EOL;
+        $xmlContent .= '    <introformat>1</introformat>'.PHP_EOL;
+        $xmlContent .= '    <revision>1</revision>'.PHP_EOL;
+        $xmlContent .= '    <timemodified>'.$folderData['timemodified'].'</timemodified>'.PHP_EOL;
+        $xmlContent .= '    <display>0</display>'.PHP_EOL;
+        $xmlContent .= '    <showexpanded>1</showexpanded>'.PHP_EOL;
+        $xmlContent .= '    <showdownloadfolder>1</showdownloadfolder>'.PHP_EOL;
+        $xmlContent .= '    <forcedownload>1</forcedownload>'.PHP_EOL;
+        $xmlContent .= '  </folder>'.PHP_EOL;
+        $xmlContent .= '</activity>';
+
+        $this->createXmlFile('folder', $xmlContent, $folderDir);
+    }
+
+    /**
      * Get the list of files for a folder.
      */
     private function getFilesForFolder(int $folderId): array
@@ -92,7 +92,7 @@ class FolderExport extends ActivityExport
             if ($doc['filetype'] === 'file') {
                 $files[] = [
                     'id' => (int) $doc['id'],
-                    'contenthash' => 'hash' . $doc['id'],
+                    'contenthash' => 'hash'.$doc['id'],
                     'filename' => $doc['basename'],
                     'filepath' => $doc['path'],
                     'filesize' => (int) $doc['size'],

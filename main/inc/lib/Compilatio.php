@@ -15,6 +15,11 @@ class Compilatio
 {
     /** Identification key for the Compilatio account*/
     public $key;
+
+    /**
+     * @var Client
+     */
+    public $client;
     /**
      * @var string
      */
@@ -23,11 +28,6 @@ class Compilatio
     private $maxFileSize;
     private $proxyHost;
     private $proxyPort;
-
-    /**
-     * @var Client
-     */
-    public $client;
 
     /**
      * Compilatio constructor.
@@ -60,36 +60,6 @@ class Compilatio
         }
 
         $this->client = new Client($clientConfig);
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function getSettings(): array
-    {
-        if (empty(api_get_configuration_value('allow_compilatio_tool')) ||
-            empty(api_get_configuration_value('compilatio_tool'))
-        ) {
-            throw new Exception('Compilatio not available');
-        }
-
-        $compilatioTool = api_get_configuration_value('compilatio_tool');
-
-        if (!isset($compilatioTool['settings'])) {
-            throw new Exception('Compilatio config available');
-        }
-
-        $settings = $compilatioTool['settings'];
-
-        if (empty($settings['key'])) {
-            throw new Exception('API key not available');
-        }
-
-        if (empty($settings['api_url'])) {
-            throw new Exception('Api URL not available');
-        }
-
-        return $settings;
     }
 
     /**
@@ -153,20 +123,20 @@ class Compilatio
             'filename' => basename($filename),
             'indexed' => 'true',
             'user_notes' => [
-                'description' => $description
+                'description' => $description,
             ],
             'authors' => [
                 [
                     'firstname' => $user->getFirstname(),
                     'lastname' => $user->getlastname(),
                     'email_address' => $user->getEmail(),
-                ]
+                ],
             ],
             'depositor' => [
                 'firstname' => $user->getFirstname(),
                 'lastname' => $user->getlastname(),
                 'email_address' => $user->getEmail(),
-            ]
+            ],
         ];
 
         try {
@@ -176,14 +146,14 @@ class Compilatio
                     [
                         'multipart' => [
                             [
-                                'name'     => 'postData',
-                                'contents' => json_encode($postData)
+                                'name' => 'postData',
+                                'contents' => json_encode($postData),
                             ],
                             [
-                                'name'     => 'file',
+                                'name' => 'file',
                                 'contents' => Utils::tryFopen($filepath, 'r'),
-                            ]
-                        ]
+                            ],
+                        ],
                     ]
                 )
                 ->getBody()
@@ -238,7 +208,6 @@ class Compilatio
      */
     public function deldoc(string $documentId)
     {
-
     }
 
     /**
@@ -255,7 +224,7 @@ class Compilatio
                     [
                         'json' => [
                             'doc_id' => $compilatioId,
-                            'recipe_name' => 'anasim'
+                            'recipe_name' => 'anasim',
                         ],
                     ]
                 )
@@ -332,7 +301,7 @@ class Compilatio
         $result = Database::query($sql);
         $result = Database::fetch_object($result);
 
-        return $result ? (string)$result->compilatio_id : null;
+        return $result ? (string) $result->compilatio_id : null;
     }
 
     public function giveWorkIdState(int $workId): string
@@ -372,7 +341,7 @@ class Compilatio
                     $actionCompilatio .= "<div style='font-size:80%;font-style:italic;margin-bottom:5px;'>"
                         .get_lang('CompilatioAnalysisPercentage')
                         ."</div>";
-                    $actionCompilatio .= $spinnerIcon.PHP_EOL .get_lang('CompilatioAnalysisEnding');
+                    $actionCompilatio .= $spinnerIcon.PHP_EOL.get_lang('CompilatioAnalysisEnding');
                     break;
                 case 'waiting':
                     $actionCompilatio .= $spinnerIcon.PHP_EOL.get_lang('CompilatioWaitingAnalysis');
@@ -387,5 +356,35 @@ class Compilatio
         }
 
         return $workId.'|'.$actionCompilatio.'|'.$status.'|';
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function getSettings(): array
+    {
+        if (empty(api_get_configuration_value('allow_compilatio_tool')) ||
+            empty(api_get_configuration_value('compilatio_tool'))
+        ) {
+            throw new Exception('Compilatio not available');
+        }
+
+        $compilatioTool = api_get_configuration_value('compilatio_tool');
+
+        if (!isset($compilatioTool['settings'])) {
+            throw new Exception('Compilatio config available');
+        }
+
+        $settings = $compilatioTool['settings'];
+
+        if (empty($settings['key'])) {
+            throw new Exception('API key not available');
+        }
+
+        if (empty($settings['api_url'])) {
+            throw new Exception('Api URL not available');
+        }
+
+        return $settings;
     }
 }

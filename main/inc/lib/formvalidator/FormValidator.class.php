@@ -2104,9 +2104,11 @@ function plain_url_filter($html, $mode = NO_HTML)
  * Prevent execution of event handlers in HTML elements.
  *
  * @param string $html
+ *
  * @return string
  */
-function attr_on_filter($html) {
+function attr_on_filter($html)
+{
     $prefix = uniqid('data-cke-').'-';
 
     return preg_replace('/(\s)(on)/i', '$1'.$prefix.'$2', $html);

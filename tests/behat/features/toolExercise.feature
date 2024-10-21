@@ -356,7 +356,8 @@ Feature: Exercise tool
     And I press "next"
     Then I should see "Update successful"
     Then I follow "Multiple registration"
-    Then I select "Costea Andrea (acostea)" from "nosessionUsersList[]"
+    Then wait for the page to be loaded
+    Then I select "Andrea Costea (acostea)" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"
     Then I should see "Update successful"

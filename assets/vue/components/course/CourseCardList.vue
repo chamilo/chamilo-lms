@@ -7,13 +7,12 @@
 </template>
 
 <script setup>
-import CourseCard from './CourseCard.vue';
+import CourseCard from "./CourseCard.vue"
 
-// eslint-disable-next-line no-undef
 defineProps({
   courses: {
     type: Array,
     default: () => [],
   },
-});
+})
 </script>

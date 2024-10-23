@@ -7,7 +7,7 @@
             :alt="shortcut.title"
             :src="`/img/tools/${shortcut.type}.png`"
             class="w-32 h-32 object-contain"
-          >
+          />
         </a>
       </div>
 
@@ -21,16 +21,14 @@
 </template>
 
 <script setup>
-
-// eslint-disable-next-line no-undef
 defineProps({
   shortcut: {
     type: Object,
-    required: true
+    required: true,
   },
   goToShortCut: {
     type: Function,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 </script>

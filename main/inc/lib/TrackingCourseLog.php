@@ -284,6 +284,8 @@ class TrackingCourseLog
                     $row[4] = $ip;
                 }
 
+                $row[5] = Security::remove_XSS($row[5]);
+
                 $resources[] = $row;
             }
         }

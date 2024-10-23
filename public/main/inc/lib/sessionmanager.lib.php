@@ -2615,7 +2615,9 @@ class SessionManager
             $user_list,
             $courseId,
             $session_id,
-            ['visibility' => $session_visibility]
+            ['visibility' => $session_visibility],
+            true,
+            true
         );
     }
 
@@ -9913,15 +9915,16 @@ class SessionManager
         int $courseId,
         int $sessionId,
         array $relationInfo = [],
-        bool $updateSession = true
+        bool $updateSession = true,
+        bool $sendNotification = false
     ) {
         $em = Database::getManager();
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
-
         $relationInfo = array_merge(['visibility' => 0, 'status' => Session::STUDENT], $relationInfo);
 
+        $usersToInsert = [];
         foreach ($studentIds as $studentId) {
             $user = api_get_user_entity($studentId);
             $session->addUserInCourse($relationInfo['status'], $user, $course)
@@ -9930,15 +9933,40 @@ class SessionManager
             Event::logUserSubscribedInCourseSession($user, $course, $session);
 
             if ($updateSession) {
-                $session->addUserInSession(Session::STUDENT, $user);
+                if (!$session->hasUserInSession($user, Session::STUDENT)) {
+                    $session->addUserInSession(Session::STUDENT, $user);
+                }
             }
+
+            $usersToInsert[] = $studentId;
         }
 
-       try {
-            $em->persist($session);
-            $em->flush();
-        } catch (\Exception $e) {
-            error_log("Error executing flush: " . $e->getMessage());
+        $em->persist($session);
+        $em->flush();
+
+        if ($sendNotification && !empty($usersToInsert)) {
+            foreach ($usersToInsert as $userId) {
+                $user = api_get_user_entity($userId);
+                $courseTitle = $course->getTitle();
+                $sessionTitle = $session->getTitle();
+
+                $subject = sprintf(get_lang('You have been enrolled in the course %s for the session %s'), $courseTitle, $sessionTitle);
+                $message = sprintf(
+                    get_lang('Hello %s, you have been enrolled in the course %s for the session %s.'),
+                    UserManager::formatUserFullName($user, true),
+                    $courseTitle,
+                    $sessionTitle
+                );
+
+                MessageManager::send_message_simple(
+                    $userId,
+                    $subject,
+                    $message,
+                    api_get_user_id(),
+                    false,
+                    true
+                );
+            }
         }
     }
 

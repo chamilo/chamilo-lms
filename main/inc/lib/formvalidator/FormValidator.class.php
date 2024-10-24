@@ -2111,5 +2111,5 @@ function attr_on_filter($html)
 {
     $prefix = uniqid('data-cke-').'-';
 
-    return preg_replace('/(\s)(on)/i', '$1'.$prefix.'$2', $html);
+    return preg_replace('/\b(on[a-z]+)\b\s*=/i', '$1'.$prefix.'$2', $html);
 }

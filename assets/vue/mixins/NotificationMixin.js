@@ -1,40 +1,30 @@
 import { mapFields } from "vuex-map-fields"
-import { useQuasar } from "quasar"
+import { useNotification } from "../composables/notification"
 
 export default {
   setup() {
-    const quasar = useQuasar()
+    const notification = useNotification()
 
     const showError = (error) => {
-      showMessage(error, "danger")
+      notification.showErrorNotification(error)
     }
 
     const showMessage = (message, type = "success") => {
-      let color = "primary"
-
       switch (type) {
         case "info":
+          notification.showInfoNotification(message)
           break
         case "success":
-          color = "green"
+          notification.showSuccessNotification(message)
           break
         case "error":
         case "danger":
-          color = "red"
+          notification.showErrorNotification(message)
           break
         case "warning":
-          color = "yellow"
+          notification.showWarningNotification(message)
           break
       }
-
-      quasar.notify({
-        position: "top",
-        timeout: 10000,
-        message: message,
-        color: color,
-        html: true,
-        multiLine: true,
-      })
     }
 
     return {

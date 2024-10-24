@@ -144,13 +144,16 @@ class Notification extends Model
     }
 
     /**
-     * @param string $title
-     * @param array  $senderInfo
-     * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
+     * Formats the title of the notification.
      *
-     * @return string
+     * @param string $title The original title of the notification.
+     * @param array  $senderInfo Information about the sender.
+     * @param bool   $forceTitleWhenSendingEmail Whether to force the use of the original title.
+     * @param string|null $recipientLanguage The language of the recipient for translation.
+     *
+     * @return string The formatted title for the notification.
      */
-    public function formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail = false)
+    public function formatTitle(string $title, array $senderInfo, bool $forceTitleWhenSendingEmail = false, $recipientLanguage = null): string
     {
         $newTitle = $this->getTitlePrefix();
 
@@ -163,7 +166,7 @@ class Notification extends Model
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $newTitle .= sprintf(get_lang('You have a new message from %s'), $senderName);
+                    $newTitle .= sprintf(get_lang('You have a new message from %s', $recipientLanguage), $senderName);
                 }
                 break;
             case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
@@ -177,13 +180,13 @@ class Notification extends Model
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $newTitle .= sprintf(get_lang('You have a new invitation from %s'), $senderName);
+                    $newTitle .= sprintf(get_lang('You have a new invitation from %s', $recipientLanguage), $senderName);
                 }
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
                 if (!empty($senderInfo)) {
                     $senderName = $senderInfo['group_info']['title'];
-                    $newTitle .= sprintf(get_lang('You have received a new message in group %s'), $senderName);
+                    $newTitle .= sprintf(get_lang('You have received a new message in group %s', $recipientLanguage), $senderName);
                     $senderName = api_get_person_name(
                         $senderInfo['user_info']['firstname'],
                         $senderInfo['user_info']['lastname'],
@@ -195,18 +198,9 @@ class Notification extends Model
                 break;
         }
 
-        // The title won't be changed, it will be used as is
         if ($forceTitleWhenSendingEmail) {
             $newTitle = $title;
         }
-
-        /*if (!empty($hook)) {
-            $hook->setEventData(['title' => $newTitle]);
-            $data = $hook->notifyNotificationTitle(HOOK_EVENT_TYPE_POST);
-            if (isset($data['title'])) {
-                $newTitle = $data['title'];
-            }
-        }*/
 
         return $newTitle;
     }
@@ -239,7 +233,6 @@ class Notification extends Model
         $this->type = (int) $type;
         $messageId = (int) $messageId;
         $content = $this->formatContent($messageId, $content, $senderInfo);
-        $titleToNotification = $this->formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail);
         $settingToCheck = '';
         $avoid_my_self = false;
 
@@ -273,6 +266,9 @@ class Notification extends Model
                     }
                 }
                 $userInfo = api_get_user_info($user_id);
+
+                $recipientLanguage = !empty($userInfo['locale']) ? $userInfo['locale'] : null;
+                $titleToNotification = $this->formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail, $recipientLanguage);
 
                 // Extra field was deleted or removed? Use the default status.
                 $userSetting = $defaultStatus;

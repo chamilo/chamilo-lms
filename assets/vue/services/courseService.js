@@ -66,13 +66,7 @@ export default {
    * @returns {Promise<Object>}
    */
   checkLegal: async (courseId, sessionId = 0) => {
-    const { data } = await api.get(`/course/${courseId}/checkLegal.json`, {
-      params: {
-        sid: sessionId,
-      },
-    })
-
-    return data
+    return await baseService.get(`/course/${courseId}/checkLegal.json`, { sid: sessionId })
   },
 
   /**

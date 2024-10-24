@@ -31,7 +31,7 @@ import { useNotification } from "../../composables/notification"
 
 const item = ref({})
 const store = useStore()
-const securityStore = useSecurityStore();
+const securityStore = useSecurityStore()
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
@@ -43,16 +43,16 @@ if (isEmpty(id)) {
   id = route.query.id
 }
 
-const isLoading = ref(true);
+const isLoading = ref(true)
 
 onMounted(async () => {
   isLoading.value = true
 
   const response = await store.dispatch("message/load", id)
-  const currentUser = securityStore.user;
+  const currentUser = securityStore.user
   item.value = await response
 
-  isLoading.value = false;
+  isLoading.value = false
 
   // Remove unused properties:
   delete item.value["status"]
@@ -74,7 +74,7 @@ onMounted(async () => {
 
   // Set new receivers, will be loaded by onSendMessageForm()
   item.value.resourceLinkListFromEntity = []
-  const receivers = [...item.value.receiversTo, ...item.value.receiversCc];
+  const receivers = [...item.value.receiversTo, ...item.value.receiversCc]
   let itemsAdded = []
   receivers.forEach((receiver) => {
     // Skip current user.
@@ -104,34 +104,32 @@ onMounted(async () => {
 
 const onClickCreateEvent = async () => {
   if (createForm.value.v$.$invalid) {
-    return;
+    return
   }
 
-  isLoading.value = true;
+  isLoading.value = true
 
   const itemModel = createForm.value.v$.item.$model
 
   try {
     await store.dispatch("ccalendarevent/create", itemModel)
   } catch (e) {
-    isLoading.value = false;
+    isLoading.value = false
 
     notification.showErrorNotification(e)
 
-    return;
+    return
   }
 
-  await router.push({ name: 'CCalendarEventList' })
+  await router.push({ name: "CCalendarEventList" })
 }
 
-const notification = useNotification();
+const notification = useNotification()
 
 watch(
   () => store.state.ccalendarevent.created,
   (created) => {
-    notification.showSuccessNotification(
-      t("{resource} created", { resource: created.resourceNode.title })
-    )
+    notification.showSuccessNotification(t("{resource} created", { resource: created.resourceNode.title }))
   },
 )
 </script>

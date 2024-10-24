@@ -1,18 +1,11 @@
-//import './styles/quasar.sass'
-import '@quasar/extras/material-icons/material-icons.css'
+import "@quasar/extras/material-icons/material-icons.css"
 
-import {Dialog, Notify} from 'quasar'
+import { Dialog, Notify } from "quasar"
 
 export default {
   config: {
-    notify: {
-    }
+    notify: {},
   },
-  plugins: [
-    Notify,
-    Dialog,
-  ],
-  extras: [
-    'material-icons',
-  ]
+  plugins: [Notify, Dialog],
+  extras: ["material-icons"],
 }

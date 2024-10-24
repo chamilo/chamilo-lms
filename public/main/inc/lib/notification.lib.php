@@ -144,13 +144,16 @@ class Notification extends Model
     }
 
     /**
-     * @param string $title
-     * @param array  $senderInfo
-     * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
+     * Formats the title of the notification.
      *
-     * @return string
+     * @param string $title The original title of the notification.
+     * @param array  $senderInfo Information about the sender.
+     * @param bool   $forceTitleWhenSendingEmail Whether to force the use of the original title.
+     * @param string|null $recipientLanguage The language of the recipient for translation.
+     *
+     * @return string The formatted title for the notification.
      */
-    public function formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail = false)
+    public function formatTitle(string $title, array $senderInfo, bool $forceTitleWhenSendingEmail = false, $recipientLanguage = null): string
     {
         $newTitle = $this->getTitlePrefix();
 
@@ -163,7 +166,7 @@ class Notification extends Model
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $newTitle .= sprintf(get_lang('You have a new message from %s'), $senderName);
+                    $newTitle .= sprintf(get_lang('You have a new message from %s', $recipientLanguage), $senderName);
                 }
                 break;
             case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
@@ -177,13 +180,13 @@ class Notification extends Model
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $newTitle .= sprintf(get_lang('You have a new invitation from %s'), $senderName);
+                    $newTitle .= sprintf(get_lang('You have a new invitation from %s', $recipientLanguage), $senderName);
                 }
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
                 if (!empty($senderInfo)) {
                     $senderName = $senderInfo['group_info']['title'];
-                    $newTitle .= sprintf(get_lang('You have received a new message in group %s'), $senderName);
+                    $newTitle .= sprintf(get_lang('You have received a new message in group %s', $recipientLanguage), $senderName);
                     $senderName = api_get_person_name(
                         $senderInfo['user_info']['firstname'],
                         $senderInfo['user_info']['lastname'],
@@ -195,18 +198,9 @@ class Notification extends Model
                 break;
         }
 
-        // The title won't be changed, it will be used as is
         if ($forceTitleWhenSendingEmail) {
             $newTitle = $title;
         }
-
-        /*if (!empty($hook)) {
-            $hook->setEventData(['title' => $newTitle]);
-            $data = $hook->notifyNotificationTitle(HOOK_EVENT_TYPE_POST);
-            if (isset($data['title'])) {
-                $newTitle = $data['title'];
-            }
-        }*/
 
         return $newTitle;
     }
@@ -238,8 +232,6 @@ class Notification extends Model
     ) {
         $this->type = (int) $type;
         $messageId = (int) $messageId;
-        $content = $this->formatContent($messageId, $content, $senderInfo);
-        $titleToNotification = $this->formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail);
         $settingToCheck = '';
         $avoid_my_self = false;
 
@@ -273,6 +265,10 @@ class Notification extends Model
                     }
                 }
                 $userInfo = api_get_user_info($user_id);
+
+                $recipientLanguage = !empty($userInfo['locale']) ? $userInfo['locale'] : null;
+                $content = $this->formatContent($messageId, $content, $senderInfo, $recipientLanguage);
+                $titleToNotification = $this->formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail, $recipientLanguage);
 
                 // Extra field was deleted or removed? Use the default status.
                 $userSetting = $defaultStatus;
@@ -357,7 +353,7 @@ class Notification extends Model
      *
      * @return string
      * */
-    public function formatContent($messageId, $content, $senderInfo)
+    public function formatContent($messageId, $content, $senderInfo, $recipientLanguage = null)
     {
         $newMessageText = $linkToNewMessage = '';
         $showEmail = ('true' === api_get_setting('mail.show_user_email_in_notification'));
@@ -373,7 +369,7 @@ class Notification extends Model
             case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
                 $newMessageText = '';
                 $linkToNewMessage = Display::url(
-                    get_lang('See message'),
+                    get_lang('See message', $recipientLanguage),
                     api_get_path(WEB_PATH).'resources/messages/show?id=/api/messages/'.$messageId
                 );
                 break;
@@ -384,24 +380,24 @@ class Notification extends Model
                 }
                 if (!empty($senderInfo)) {
                     $newMessageText = sprintf(
-                        get_lang('You have a new message from %s'),
+                        get_lang('You have a new message from %s', $recipientLanguage),
                         $senderInfoName
                     );
                 }
                 $linkToNewMessage = Display::url(
-                    get_lang('See message'),
+                    get_lang('See message', $recipientLanguage),
                     api_get_path(WEB_PATH).'resources/messages/show?id=/api/messages/'.$messageId
                 );
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
                 if (!empty($senderInfo)) {
                     $newMessageText = sprintf(
-                        get_lang('You have a new invitation from %s'),
+                        get_lang('You have a new invitation from %s', $recipientLanguage),
                         $senderInfoName
                     );
                 }
                 $linkToNewMessage = Display::url(
-                    get_lang('See invitation'),
+                    get_lang('See invitation', $recipientLanguage),
                     api_get_path(WEB_CODE_PATH).'social/invitations.php'
                 );
                 break;
@@ -409,15 +405,15 @@ class Notification extends Model
                 $topicPage = isset($_REQUEST['topics_page_nr']) ? (int) $_REQUEST['topics_page_nr'] : 0;
                 if (!empty($senderInfo)) {
                     $senderName = $senderInfo['group_info']['title'];
-                    $newMessageText = sprintf(get_lang('You have received a new message in group %s'), $senderName);
+                    $newMessageText = sprintf(get_lang('You have received a new message in group %s', $recipientLanguage), $senderName);
                     $senderName = Display::url(
                         $senderInfoName,
                         api_get_path(WEB_CODE_PATH).'social/profile.php?'.$senderInfo['user_info']['user_id']
                     );
-                    $newMessageText .= '<br />'.get_lang('User').': '.$senderName;
+                    $newMessageText .= '<br />'.get_lang('User', $recipientLanguage).': '.$senderName;
                 }
                 $groupUrl = api_get_path(WEB_PATH).'resources/usergroups/show/'.$senderInfo['group_info']['id'];
-                $linkToNewMessage = Display::url(get_lang('See message'), $groupUrl);
+                $linkToNewMessage = Display::url(get_lang('See message', $recipientLanguage), $groupUrl);
                 break;
         }
         $preferenceUrl = api_get_path(WEB_CODE_PATH).'auth/profile.php';
@@ -435,7 +431,7 @@ class Notification extends Model
         // You have received this message because you are subscribed text
         $content = $content.'<br /><hr><i>'.
             sprintf(
-                get_lang('You have received this notification because you are subscribed or involved in it to change your notification preferences please click here: %s'),
+                get_lang('You have received this notification because you are subscribed or involved in it to change your notification preferences please click here: %s', $recipientLanguage),
                 Display::url($preferenceUrl, $preferenceUrl)
             ).'</i>';
 

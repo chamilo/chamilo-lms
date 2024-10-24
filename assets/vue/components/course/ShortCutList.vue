@@ -1,34 +1,39 @@
 <template>
-  <div class="bg-gray-100 rounded-xl p-2 shadow-md">
-    <div class="flex flex-col flex-center">
-      <div class="mx-auto">
-        <a :href="goToShortCut(shortcut)">
-          <img
-            :alt="shortcut.title"
-            :src="`/img/tools/${shortcut.type}.png`"
-            class="w-32 h-32 object-contain"
-          />
-        </a>
-      </div>
-
-      <div class="flex flex-row gap-2 text-gray-500 pt-3">
-        <a>
-          {{ shortcut.title }}
-        </a>
-      </div>
-    </div>
+  <div class="course-tool">
+    <BaseAppLink
+      :url="url"
+      class="course-tool__link"
+    >
+      <img
+        :alt="shortcut.title"
+        :src="`/img/tools/${shortcut.type}.png`"
+        class="course-tool__icon"
+      />
+    </BaseAppLink>
+    <BaseAppLink
+      :url="url"
+      class="course-tool__title"
+    >
+      {{ shortcut.title }}
+    </BaseAppLink>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { computed } from "vue"
+import { storeToRefs } from "pinia"
+import BaseAppLink from "../basecomponents/BaseAppLink.vue"
+import { useCidReqStore } from "../../store/cidReq"
+
+const cidReqStore = useCidReqStore()
+const { course, session } = storeToRefs(cidReqStore)
+
+const props = defineProps({
   shortcut: {
     type: Object,
     required: true,
   },
-  goToShortCut: {
-    type: Function,
-    required: true,
-  },
 })
+
+const url = computed(() => `${props.shortcut.url}?cid=${course.value.id}&sid=${session.value?.id || 0}`)
 </script>

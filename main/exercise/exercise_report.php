@@ -500,6 +500,8 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
             'comparative_group_report.php?'.api_get_cidreq().'&id='.$exercise_id,
             ['class' => 'btn btn-default']
         );
+
+        $actions .= ExerciseFocusedPlugin::create()->getLinkReporting($exercise_id);
     }
 } else {
     $actions .= '<a href="exercise.php">'.

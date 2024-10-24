@@ -123,11 +123,6 @@ export default {
       message && this.showError(message)
     },
 
-    deleteError(message) {
-      console.log("deleteError")
-      message && this.showError(message)
-    },
-
     updated(val) {
       console.log("updated")
       //this.showMessage(`${val['@id']} updated.`);

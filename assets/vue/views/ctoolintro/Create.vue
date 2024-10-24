@@ -90,7 +90,6 @@ export default {
     getIntro()
 
     function onCreated(item) {
-      //showNotification(t("Updated"))
       cToolIntroService
         .addToolIntro(cid, {
           iid: item.iid,

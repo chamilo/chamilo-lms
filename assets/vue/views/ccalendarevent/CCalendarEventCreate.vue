@@ -72,7 +72,6 @@ onMounted(async () => {
   // New sender.
   //item.value['sender'] = currentUser['@id'];
 
-  // Set new receivers, will be loaded by onSendMessageForm()
   item.value.resourceLinkListFromEntity = []
   const receivers = [...item.value.receiversTo, ...item.value.receiversCc]
   let itemsAdded = []

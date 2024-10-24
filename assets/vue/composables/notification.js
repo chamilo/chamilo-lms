@@ -1,8 +1,5 @@
 import { useToast } from "primevue/usetoast"
 
-// This is the migration from assets/vue/mixins/NotificationMixin.js to composables
-// some components still use UploadMixin with options API, this should be use
-// when migrating from options API to composition API
 export function useNotification() {
   const toast = useToast()
 

@@ -853,6 +853,13 @@ form .field {
   }
 }
 
+@layer components {
+  .tiny-content table {
+    @apply w-auto table-auto;
+  }
+}
+
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';

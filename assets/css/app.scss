@@ -850,6 +850,12 @@ form .field {
   }
 }
 
+@layer components {
+  .tiny-content table {
+    @apply w-auto table-auto;
+  }
+}
+
 //@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 @import "~timepicker/jquery.timepicker.min.css";

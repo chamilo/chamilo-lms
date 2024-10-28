@@ -1981,6 +1981,7 @@ switch ($action) {
                 break;
             case 'custom':
             case 'simple':
+            case 'all':
                 $result = SessionManager::getSessionsForAdmin(
                     api_get_user_id(),
                     [
@@ -1999,7 +2000,6 @@ switch ($action) {
                 break;
             case 'active':
             case 'close':
-            case 'all':
                 $result = SessionManager::formatSessionsAdminForGrid(
                     [
                         'where' => $whereCondition,

@@ -128,7 +128,7 @@ class ExerciseMonitoringPlugin extends Plugin
         $monitoringDetailUrl = api_get_path(WEB_PLUGIN_PATH).'exercisemonitoring/pages/detail.php?'.api_get_cidreq()
             .'&'.http_build_query(['id' => $exeId]);
 
-        $url =  Display::url(
+        $url = Display::url(
             $webcamIcon,
             $monitoringDetailUrl,
             [

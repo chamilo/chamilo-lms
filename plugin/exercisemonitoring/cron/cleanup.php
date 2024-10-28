@@ -9,10 +9,10 @@ use Symfony\Component\Filesystem\Filesystem;
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 if ('cli' !== PHP_SAPI) {
-    die('For security reasons, this script can only be launched from cron or from the command line');
+    exit('For security reasons, this script can only be launched from cron or from the command line');
 }
 
-die;
+exit;
 
 $plugin = ExerciseMonitoringPlugin::create();
 $em = Database::getManager();

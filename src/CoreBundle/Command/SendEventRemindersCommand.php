@@ -131,8 +131,11 @@ class SendEventRemindersCommand extends Command
 
     private function getFirstAdminId(): int
     {
-        $admin = $this->entityManager->getRepository(User::class)->findOneByRole('ROLE_ADMIN');
-        return $admin ? $admin->getId() : 1;
+        $admin = $this->entityManager->getRepository(User::class)->findOneBy([]);
+        if ($admin && ($admin->hasRole('ROLE_ADMIN') || $admin->hasRole('ROLE_SUPER_ADMIN'))) {
+            return $admin->getId();
+        }
+        return 1;
     }
 
     private function generateEventDetails(CCalendarEvent $event): string

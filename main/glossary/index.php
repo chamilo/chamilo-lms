@@ -90,12 +90,12 @@ switch ($action) {
             $form->addHtmlEditor(
                 'name',
                 get_lang('TermName'),
-                false,
+                true,
                 false,
                 ['ToolbarSet' => 'TitleAsHtml']
             );
         } else {
-            $form->addElement('text', 'name', get_lang('TermName'), ['id' => 'glossary_title']);
+            $form->addText('name', get_lang('TermName'), true, ['id' => 'glossary_title']);
         }
 
         $form->addHtmlEditor(
@@ -107,7 +107,6 @@ switch ($action) {
         );
         $form->addButtonCreate(get_lang('TermAddButton'), 'SubmitGlossary');
         // setting the rules
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
         // The validation or display
         if ($form->validate()) {
             $check = Security::check_token('post');
@@ -154,12 +153,12 @@ switch ($action) {
                 $form->addHtmlEditor(
                     'name',
                     get_lang('TermName'),
-                    false,
+                    true,
                     false,
                     ['ToolbarSet' => 'TitleAsHtml']
                 );
             } else {
-                $form->addElement('text', 'name', get_lang('TermName'), ['id' => 'glossary_title']);
+                $form->addText('name', get_lang('TermName'), true, ['id' => 'glossary_title']);
             }
 
             $form->addHtmlEditor(
@@ -191,9 +190,6 @@ switch ($action) {
 
             $form->addButtonUpdate(get_lang('TermUpdateButton'), 'SubmitGlossary');
             $form->setDefaults($glossary_data);
-
-            // setting the rules
-            $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
             // The validation or display
             if ($form->validate()) {

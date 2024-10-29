@@ -1,0 +1,314 @@
+{% if exercisemonitoring.show_overview_region and exercisemonitoring.enabled %}
+    {% if exercisemonitoring.enable_snapshots %}
+        <div id="em-modal-start" class="modal fade in" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{ 'ExerciseMonitored'|get_plugin_lang('ExerciseMonitoringPlugin') }}</h4>
+                    </div>
+
+                    <div class="modal-body" id="em-terms-body">
+                        {{ exercisemonitoring.instructions }}
+                    </div>
+
+                    <div class="modal-body text-center" id="em-camera-body" style="display: none;">
+                        <p id="txt-iddoc-img-instructions" class="lead" style="display: block;">
+                            {{ 'ImageIdDocumentCameraInstructions'|get_plugin_lang('ExerciseMonitoringPlugin') }}
+                        </p>
+                        <p id="txt-learner-img-instructions" class="lead" style="display: none;">
+                            {{ 'ImageStudentCameraInstructions'|get_plugin_lang('ExerciseMonitoringPlugin') }}
+                        </p>
+                        <div style="position: relative">
+                            <div id="monitoring-camera" class="embed-responsive embed-responsive-4by3"></div>
+                            <img id="img-iddoc-placeholder" style="display: block;" src="{{ _p.web_plugin }}exercisemonitoring/assets/images/idcard.png">
+                            <img id="img-learner-placeholder" style="display: none" src="{{ _p.web_plugin }}exercisemonitoring/assets/images/user.png">
+                        </div>
+                        <br>
+                        <button class="btn btn-default" type="button" id="btn-snap" disabled>
+                            <span class="fa fa-camera" aria-hidden="true"></span>
+                            {{ 'Snapshot'|get_lang }}
+                        </button>
+                    </div>
+
+                    <div class="modal-body text-center" id="em-iddoc-body" style="display: none;">
+                        <p class="lead">{{ 'IdDocumentSnapshot'|get_plugin_lang('ExerciseMonitoringPlugin') }}</p>
+                        <div id="img-iddoc"></div>
+                    </div>
+
+                    <div class="modal-body text-center" id="em-student-body" style="display: none;">
+                        <p class="lead">{{ 'StudentSnapshot'|get_plugin_lang('ExerciseMonitoringPlugin') }}</p>
+                        <div id="img-learner"></div>
+                    </div>
+
+                    <div id="em-terms-footer" class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="btn-accept">
+                            <span class="fa fa-check" aria-hidden="true"></span> {{ 'Accept'|get_lang }}
+                        </button>
+                    </div>
+
+                    <div id="em-camera-footer" class="modal-footer" style="display: none;">
+                        <button class="btn btn-default" type="button" id="btn-retry" disabled>
+                            <span class="fa fa-refresh" aria-hidden="true"></span>
+                            {{ 'Retry'|get_plugin_lang('ExerciseMonitoringPlugin') }}
+                        </button>
+                        <button class="btn btn-primary" type="button" id="btn-next" disabled>
+                            <span class="fa fa-forward" aria-hidden="true"></span> {{ 'Next'|get_lang }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="{{ _p.web }}web/assets/webcamjs/webcam.js"></script>
+        <script>
+            $(function () {
+                var $btnStartExercise = $('.exercise_overview_options a');
+                var $bodyTerms = $('#em-terms-body');
+                var $bodyCamera = $('#em-camera-body');
+                var $bodyIdDoc = $('#em-iddoc-body');
+                var $bodyStudent = $('#em-student-body');
+
+                var $footTerms = $('#em-terms-footer');
+                var $footCamera = $('#em-camera-footer');
+
+                var $btnSnap = $('#btn-snap');
+                var $btnRetry = $('#btn-retry');
+                var $btnNext = $('#btn-next');
+
+                var $imgIdDoc = $('#img-iddoc');
+                var $imgLearner = $('#img-learner');
+
+                var $txtIdDocInstructions = $('#txt-iddoc-img-instructions');
+                var $txtLearnerInstructions = $('#txt-learner-img-instructions');
+                var $imgIdDocPlaceholder = $('#img-iddoc-placeholder');
+                var $imgLearnerPlaceholder = $('#img-learner-placeholder');
+
+                var hasIdDoc = false;
+                var hasLearner = false;
+
+                var imgIdDoc = null;
+                var imgLearner = null;
+
+                if ($btnStartExercise.length > 0) {
+                    $("#em-modal-start").modal("show");
+                }
+
+                $btnStartExercise.addClass('disabled').attr('aria-disabled', 'true');
+
+                $("#btn-accept").on('click', function (e) {
+                    e.preventDefault();
+
+                    $bodyTerms.hide();
+                    $footTerms.hide();
+
+                    $bodyCamera.show();
+                    $footCamera.show();
+
+                    Webcam.set({
+                        height: 480,
+                        width: 640,
+                    });
+                    Webcam.attach('#monitoring-camera');
+                    Webcam.on('live', function () {
+                        $txtIdDocInstructions.show();
+                        $imgIdDocPlaceholder.show();
+                        $txtLearnerInstructions.hide();
+                        $imgLearnerPlaceholder.hide();
+
+                        $btnSnap.prop({disabled: false}).focus();
+                        $('#monitoring-camera video').addClass('embed-responsive-item');
+                    });
+                });
+
+                $btnSnap.on('click', function (e) {
+                    e.preventDefault();
+
+                    $btnSnap.prop({disabled: true});
+                    $btnRetry.prop({disabled: true});
+                    $btnNext.prop({disabled: true});
+
+                    snap()
+                        .done(function () {
+                            $btnRetry.prop({disabled: false});
+                            $btnNext.prop({disabled: false});
+                        });
+                });
+
+                $btnRetry.on('click', function (e) {
+                    e.preventDefault();
+
+                    $btnSnap.prop({disabled: false}).focus();
+                    $btnRetry.prop({disabled: true});
+                    $btnNext.prop({disabled: true});
+
+                    if (hasIdDoc && !hasLearner) {
+                        $bodyCamera.show();
+                        $bodyIdDoc.hide();
+
+                        hasIdDoc = false;
+                        hasLearner = false;
+                    } else if (hasIdDoc && hasLearner) {
+                        $bodyCamera.show();
+                        $bodyStudent.hide();
+
+                        hasIdDoc = true;
+                        hasLearner = false;
+                    }
+                });
+
+                $btnNext.on('click', function (e) {
+                    e.preventDefault();
+
+                    $btnRetry.prop({disabled: true});
+
+                    if (hasIdDoc && !hasLearner) {
+                        $bodyIdDoc.hide();
+                        $bodyCamera.show();
+
+                        $txtIdDocInstructions.hide();
+                        $imgIdDocPlaceholder.hide();
+                        $txtLearnerInstructions.show();
+                        $imgLearnerPlaceholder.show();
+
+                        $btnSnap.prop({disabled: false}).focus();
+                    } else if (hasIdDoc && hasLearner) {
+                        $btnNext.prop({disabled: true});
+                        $btnSnap.prop({disabled: true});
+
+                        Webcam.reset();
+
+                        sendData().done(function () {
+                            $btnStartExercise.removeClass('disabled').removeAttr('aria-disabled');
+
+                            window.location = $btnStartExercise.prop('href');
+
+                            $("#em-modal-start").modal('hide');
+                        });
+                    }
+                });
+
+                $(window).on('keyup', function (e) {
+                    if (32 === event.which && !$btnSnap.prop('disabled')) {
+                        e.preventDefault();
+
+                        $btnSnap.trigger('click');
+                    }
+                });
+
+                function snap() {
+                    var deferred = $.Deferred();
+
+                    Webcam.snap(function (dataUri) {
+                        var $imgSnapshot = $('<img>')
+                            .prop({src: dataUri, id: 'img-snapshot'})
+                            .addClass('img-responsive');
+
+                        if (!hasIdDoc && !hasLearner) {
+                            $imgIdDoc.html($imgSnapshot);
+
+                            $bodyCamera.hide();
+                            $bodyIdDoc.show();
+
+                            hasIdDoc = true;
+                            hasLearner = false;
+
+                            imgIdDoc = dataUri;
+                        } else if (hasIdDoc && !hasLearner) {
+                            $imgLearner.html($imgSnapshot);
+
+                            $bodyCamera.hide();
+                            $bodyStudent.show();
+
+                            hasIdDoc = true;
+                            hasLearner = true;
+
+                            imgLearner = dataUri;
+                        }
+
+                        deferred.resolve();
+                    });
+
+                    return deferred.promise();
+                }
+
+                function sendData() {
+                    var rawImgIdDoc = imgIdDoc.replace(/^data:image\/\w+;base64,/, '');
+                    var blobImgIdDoc = new Blob( [ Webcam.base64DecToArr(rawImgIdDoc) ], {type: 'image/jpeg'} );
+
+                    var rawImgLearner = imgLearner.replace(/^data:image\/\w+;base64,/, '');
+                    var blobImgLearner = new Blob( [ Webcam.base64DecToArr(rawImgLearner) ], {type: 'image/jpeg'} );
+
+                    var formData = new FormData();
+                    formData.append('iddoc', blobImgIdDoc, 'iddoc.jpg');
+                    formData.append('learner', blobImgLearner, 'learner.jpg');
+                    formData.append('exercise_id', '{{ exercisemonitoring.exercise_id }}');
+
+                    return $.ajax({
+                        url: '{{ _p.web_plugin }}exercisemonitoring/pages/start.ajax.php',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                    });
+                }
+            });
+        </script>
+        <style>
+            #monitoring-camera {
+                height: auto !important;
+                max-width: 100% !important;
+                margin: 0 auto;
+            }
+
+            #em-camera-body img#img-iddoc-placeholder,
+            #em-camera-body img#img-learner-placeholder {
+                height: auto;
+                left: 0;
+                position: absolute;
+                top: 0;
+                width: 100%;
+            }
+
+            #monitoring-camera video {
+                height: auto !important;
+                max-width: 100%;
+            }
+        </style>
+    {% else %}
+        <div id="em-modal-start" class="modal fade in" tabindex="1" role="dialog" data-backdrop="static" data-keyboard="false" data-show="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{ 'ExerciseMonitored'|get_plugin_lang('ExerciseMonitoringPlugin') }}</h4>
+                    </div>
+
+                    <div class="modal-body" id="em-terms-body">
+                        {{ exercisemonitoring.instructions }}
+                    </div>
+
+                    <div id="em-terms-footer" class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">
+                            <span class="fa fa-check" aria-hidden="true"></span> {{ 'Accept'|get_lang }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(function () {
+                var $modal = $("#em-modal-start");
+                var $btnStartExercise = $('.exercise_overview_options a');
+
+                if ($btnStartExercise.length > 0) {
+                    $modal.modal("show");
+                }
+
+                $modal.on('hidden.bs.modal', function (e) {
+                    $btnStartExercise.removeClass('disabled').removeAttr('aria-disabled');
+
+                    window.location = $btnStartExercise.prop('href');
+                });
+            });
+        </script>
+    {% endif %}
+{% endif %}

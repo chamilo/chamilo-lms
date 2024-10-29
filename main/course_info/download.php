@@ -31,8 +31,12 @@ if (in_array($extension, ['xml', 'csv', 'imscc', 'mbz']) &&
     (api_is_platform_admin(true) || api_is_drh() || CourseManager::is_course_teacher(api_get_user_id(), api_get_course_id()))
 ) {
     $content_type = 'application/force-download';
-} elseif ('zip' === $extension && $_cid && (api_is_platform_admin(true) || api_is_course_admin())) {
-    $content_type = 'application/force-download';
+} elseif ('zip' === $extension) {
+    if ($_cid && (api_is_platform_admin(true) || api_is_course_admin())) {
+        $content_type = 'application/force-download';
+    } elseif (empty($_cid) && api_is_platform_admin()) {
+        $content_type = 'application/force-download';
+    }
 }
 
 if (empty($content_type)) {

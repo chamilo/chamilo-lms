@@ -25,28 +25,8 @@ if (!empty($argv[1])) {
 }
 
 if (!empty(api_get_configuration_value('ldap_admin_password_salt'))) {
-    echo "The encrypted password is : " . encrypt(api_get_configuration_value('ldap_admin_password_salt'), $password) .PHP_EOL;
+    echo "The encrypted password is : " . api_encrypt_hash($password, api_get_configuration_value('ldap_admin_password_salt')) .PHP_EOL;
 } else {
     echo "There is no salt defined in app/config/configuration.php for variable 'ldap_admin_password_salt'".PHP_EOL.PHP_EOL;
 }
 
-
-function encrypt($secret, $data)
-{
-  $secret = hex2bin($secret);
-  $iv = random_bytes(12);
-  $tag = '';
-
-  $encrypted = openssl_encrypt(
-    $data,
-    'aes-256-gcm',
-    $secret,
-    OPENSSL_RAW_DATA,
-    $iv,
-    $tag,
-    '',
-    16
-  );
-
-  return base64_encode($iv) . base64_encode($encrypted . $tag);
-}

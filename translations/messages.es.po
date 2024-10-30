@@ -15826,7 +15826,7 @@ msgstr "Dirección IP"
 msgid "Only skills that were not registered were imported"
 msgstr "Solo las competencias que no estaban registradas fueron importadas"
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "El nombre de la competencia no está definido"
 
 msgid "The parent skill was not set"

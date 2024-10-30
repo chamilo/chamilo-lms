@@ -13,7 +13,7 @@ final class Version20241001155300 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Create and modify tables for peer assessment, autogroups, learning paths, group relations, and student publications.';
+        return 'Modify tables c_lp_rel_user and c_student_publication, adding new fields for group handling and publication categorization.';
     }
 
     public function up(Schema $schema): void
@@ -46,6 +46,11 @@ final class Version20241001155300 extends AbstractMigrationChamilo
             ALTER TABLE c_lp_rel_user
             ADD CONSTRAINT FK_AD97516EFE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid) ON DELETE CASCADE
         ");
+
+        $this->addSql("
+            ALTER TABLE c_student_publication
+            ADD IF NOT EXISTS group_category_work_id INT DEFAULT 0
+        ");
     }
 
     public function down(Schema $schema): void
@@ -56,6 +61,11 @@ final class Version20241001155300 extends AbstractMigrationChamilo
             DROP IF EXISTS start_date,
             DROP IF EXISTS end_date,
             DROP IF EXISTS is_open_without_date
+        ");
+
+        $this->addSql("
+            ALTER TABLE c_student_publication
+            DROP IF EXISTS group_category_work_id
         ");
     }
 }

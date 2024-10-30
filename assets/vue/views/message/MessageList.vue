@@ -149,7 +149,7 @@
           <template #body="slotProps">
             <BaseAppLink
               class="text-primary"
-              :to="{ name: 'MessageShow', query: { id: slotProps.data['@id'] } }"
+              :to="{ name: 'MessageShow', query: { id: slotProps.data['@id'], receiverType: showingInbox ? MESSAGE_TYPE_INBOX : MESSAGE_TYPE_SENDER } }"
             >
               {{ slotProps.data.title }}
             </BaseAppLink>
@@ -474,6 +474,7 @@ function showInbox() {
     page: 1,
     "receivers.receiver": securityStore.user["@id"],
     "receivers.receiverType": MESSAGE_TYPE_INBOX,
+    "exists[receivers.deletedAt]": false,
   }
 
   loadMessages()
@@ -489,6 +490,7 @@ function showInboxByTag(tag) {
     itemsPerPage: initialRowsPerPage,
     page: 1,
     "receivers.receiverType": MESSAGE_TYPE_INBOX,
+    "exists[receivers.deletedAt]": false,
   }
 
   loadMessages()
@@ -505,6 +507,7 @@ function showUnread() {
     itemsPerPage: initialRowsPerPage,
     page: 1,
     "receivers.receiverType": MESSAGE_TYPE_INBOX,
+    "exists[receivers.deletedAt]": false,
   }
 
   loadMessages()
@@ -518,6 +521,7 @@ function showSent() {
   fetchPayload = {
     sender: securityStore.user["@id"],
     "receivers.receiverType": MESSAGE_TYPE_SENDER,
+    "exists[receivers.deletedAt]": false,
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
@@ -529,6 +533,7 @@ function showSent() {
 function refreshMessages() {
   fetchPayload.itemsPerPage = initialRowsPerPage
   fetchPayload.page = 1
+  fetchPayload["exists[receivers.deletedAt]"] = false
 
   loadMessages()
 }
@@ -553,10 +558,12 @@ function sortingChanged(event) {
   loadMessages(true)
 }
 
-function findMyReceiver(message) {
+function findMyReceiver(message, receiverType = showingInbox.value ? MESSAGE_TYPE_INBOX : MESSAGE_TYPE_SENDER) {
   const receivers = [...message.receiversTo, ...message.receiversCc, ...message.receiversSender]
-
-  return receivers.find(({ receiver }) => receiver["@id"] === securityStore.user["@id"])
+  return receivers.find(({ receiver, receiverType: type }) => {
+    const isSelf = receiver["@id"] === securityStore.user["@id"]
+    return isSelf && type === receiverType
+  })
 }
 
 async function deleteMessage(message) {

@@ -43,6 +43,10 @@ class AccessUrlHelper
             return $accessUrl;
         }
 
+        if ('cli' === PHP_SAPI) {
+            return $this->getFirstAccessUrl();
+        }
+
         $accessUrl = $this->getFirstAccessUrl();
 
         if ($this->isMultiple()) {

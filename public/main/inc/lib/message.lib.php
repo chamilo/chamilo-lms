@@ -409,7 +409,9 @@ class MessageManager
                         $subject,
                         $content,
                         $group_info,
-                        $attachmentAddedByMail
+                        $attachmentAddedByMail,
+                        $forceTitleWhenSendingEmail,
+                        $baseUrl
                     );
                 }
             }

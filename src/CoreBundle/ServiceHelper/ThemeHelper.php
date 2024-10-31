@@ -40,10 +40,6 @@ final class ThemeHelper
      */
     public function getVisualTheme(): string
     {
-        if ('cli' === PHP_SAPI) {
-            return '';
-        }
-
         static $visualTheme;
 
         global $lp_theme_css;

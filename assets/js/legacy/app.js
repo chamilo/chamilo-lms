@@ -456,13 +456,13 @@ function setCheckbox(value, table_id) {
 }
 
 function action_click(element, table_id) {
-  var d = $("#" + table_id)
-  if (!confirm("ConfirmYourChoice")) {
-    //if (!confirm('{{ "ConfirmYourChoice"|get_lang }}')) {
-    return false
+  var d = $("#" + table_id);
+  var confirmMessage = $(element).attr("data-confirm") || "ConfirmYourChoice";
+  if (!confirm(confirmMessage)) {
+    return false;
   } else {
     var action = $(element).attr("data-action")
-    $("#" + table_id + ' input[name="action"] ').attr("value", action)
+    $("#" + table_id + ' input[name="action"]').attr("value", action)
     d.submit()
 
     return false

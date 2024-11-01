@@ -724,8 +724,8 @@ function modify_filter($user_id, $url_params, $row): string
             );
         }
 
-        $deleteAllowed = api_get_env_variable('DENY_DELETE_USERS', false);
-        if ($deleteAllowed) {
+        $denyDeleteUsers = api_get_env_variable('DENY_DELETE_USERS', false);
+        if (!$denyDeleteUsers) {
             if ($user_id != $currentUserId &&
                 !$user_is_anonymous &&
                 api_global_admin_can_edit_admin($user_id)

@@ -8,10 +8,11 @@ namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Doctrine\ORM\EntityManagerInterface;
-use MessageManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -19,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use DateTime;
 use DateTimeZone;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SendEventRemindersCommand extends Command
 {
@@ -26,7 +28,10 @@ class SendEventRemindersCommand extends Command
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly SettingsManager $settingsManager
+        private readonly SettingsManager $settingsManager,
+        private readonly CourseRepository $courseRepository,
+        private readonly TranslatorInterface $translator,
+        private readonly MessageHelper $messageHelper
     ) {
         parent::__construct();
     }
@@ -44,6 +49,7 @@ class SendEventRemindersCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $debug = $input->getOption('debug');
         $now = new DateTime('now', new DateTimeZone('UTC'));
+        $sentRemindersCount = 0;
 
         if ($debug) {
             error_log('Debug mode activated');
@@ -53,78 +59,99 @@ class SendEventRemindersCommand extends Command
         $remindersRepo = $this->entityManager->getRepository(AgendaReminder::class);
         $reminders = $remindersRepo->findBy(['sent' => false]);
 
+        if ($debug) {
+            error_log('Total reminders fetched: ' . count($reminders));
+        }
+
         $senderId = $this->settingsManager->getSetting('agenda.agenda_reminders_sender_id');
         $senderId = (int) $senderId ?: $this->getFirstAdminId();
 
-        $batchCounter = 0;
-        $batchSize = 100;
-
         foreach ($reminders as $reminder) {
+            /** @var CCalendarEvent $event */
             $event = $reminder->getEvent();
 
-            if (!$event) {
+            if (null === $event) {
                 if ($debug) {
                     error_log('No event found for reminder ID: ' . $reminder->getId());
-                    $io->note('No event found for reminder ID: ' . $reminder->getId());
                 }
                 continue;
             }
 
-            $eventId = $event->getIid();
-            $eventEntity = $this->entityManager->getRepository(CCalendarEvent::class)->find($eventId);
-
-            if (!$eventEntity) {
-                if ($debug) {
-                    error_log('No event entity found for event ID: ' . $eventId);
-                    $io->note('No event entity found for event ID: ' . $eventId);
-                }
-                continue;
-            }
-
+            $eventType = $event->determineType();
             $notificationDate = clone $event->getStartDate();
             $notificationDate->sub($reminder->getDateInterval());
             if ($notificationDate > $now) {
                 continue;
             }
 
+            $eventDetails = $this->generateEventDetails($event);
             $messageSubject = sprintf('Reminder for event: %s', $event->getTitle());
-            $messageContent = $this->generateEventDetails($event);
-            $invitees = $this->getInviteesForEvent($event);
+            $messageContent = implode(PHP_EOL, $eventDetails);
 
-            foreach ($invitees as $userId) {
-                MessageManager::send_message_simple(
-                    $userId,
-                    $messageSubject,
-                    $messageContent,
-                    $senderId
-                );
+            $resourceLink = $event->getResourceNode()->getResourceLinks()->first();
 
+            if (!$resourceLink) {
                 if ($debug) {
-                    error_log("Message sent to user ID: $userId for event: " . $event->getTitle());
-                    $io->note("Message sent to user ID: $userId for event: " . $event->getTitle());
+                    error_log("No ResourceLink found for event ID: {$event->getIid()}");
                 }
+                continue;
+            }
+
+            switch ($eventType) {
+                case 'personal':
+                    if ($user = $resourceLink->getUser()) {
+                        $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
+                        if ($debug) {
+                            error_log("Message sent to user ID: {$user->getId()} for personal event: " . $event->getTitle());
+                        }
+                    }
+                    break;
+                case 'global':
+                    foreach ($event->getResourceNode()->getResourceLinks() as $link) {
+                        if ($user = $link->getUser()) {
+                            $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
+                            if ($debug) {
+                                error_log("Message sent to user ID: {$user->getId()} for global event: " . $event->getTitle());
+                            }
+                        }
+                    }
+                    break;
+                case 'course':
+                    if ($course = $resourceLink->getCourse()) {
+                        $users = $this->courseRepository->getSubscribedUsers($course)->getQuery()->getResult();
+                        foreach ($users as $user) {
+                            $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
+                            if ($debug) {
+                                error_log("Message sent to user ID: {$user->getId()} for course event: " . $event->getTitle());
+                            }
+                        }
+                    }
+                    break;
+                case 'session':
+                    if ($session = $resourceLink->getSession()) {
+                        foreach ($session->getUsers() as $sessionRelUser) {
+                            $user = $sessionRelUser->getUser();
+                            $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
+                            if ($debug) {
+                                error_log("Message sent to user ID: {$user->getId()} for session event: " . $event->getTitle());
+                            }
+                        }
+                    }
+                    break;
             }
 
             $reminder->setSent(true);
-            $batchCounter++;
-
-            if (($batchCounter % $batchSize) === 0) {
-                $this->entityManager->flush();
-
-                if ($debug) {
-                    error_log('Batch of reminders flushed');
-                    $io->note('Batch of reminders flushed');
-                }
-            }
+            $this->entityManager->persist($reminder);
+            $sentRemindersCount++;
         }
 
         $this->entityManager->flush();
-        if ($debug) {
-            error_log('Final batch of reminders flushed');
-            $io->note('Final batch of reminders flushed');
-        }
 
-        $io->success('Event reminders have been sent successfully.');
+        if ($sentRemindersCount > 0) {
+            $io->success(sprintf('%d event reminders have been sent successfully.', $sentRemindersCount));
+        } else {
+            $io->warning('No event reminders were sent.');
+        }
 
         return Command::SUCCESS;
     }
@@ -132,43 +159,37 @@ class SendEventRemindersCommand extends Command
     private function getFirstAdminId(): int
     {
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([]);
-        if ($admin && ($admin->hasRole('ROLE_ADMIN') || $admin->hasRole('ROLE_SUPER_ADMIN'))) {
-            return $admin->getId();
-        }
-        return 1;
+        return $admin && ($admin->hasRole('ROLE_ADMIN') || $admin->hasRole('ROLE_SUPER_ADMIN'))
+            ? $admin->getId()
+            : 1;
     }
 
-    private function generateEventDetails(CCalendarEvent $event): string
+    private function generateEventDetails(CCalendarEvent $event): array
     {
         $details = [];
         $details[] = sprintf('<p><strong>%s</strong></p>', $event->getTitle());
 
         if ($event->isAllDay()) {
-            $details[] = '<p class="small">All Day</p>';
+            $details[] = sprintf('<p class="small">%s</p>', $this->translator->trans("All Day"));
         } else {
-            $details[] = sprintf('<p class="small">From %s</p>', $event->getStartDate()->format('Y-m-d H:i:s'));
+            $details[] = sprintf(
+                '<p class="small">%s</p>',
+                sprintf($this->translator->trans("From %s"), $event->getStartDate()->format('Y-m-d H:i:s'))
+            );
+
             if ($event->getEndDate()) {
-                $details[] = sprintf('<p class="small">Until %s</p>', $event->getEndDate()->format('Y-m-d H:i:s'));
+                $details[] = sprintf(
+                    '<p class="small">%s</p>',
+                    sprintf($this->translator->trans("Until %s"), $event->getEndDate()->format('Y-m-d H:i:s'))
+                );
             }
         }
 
         if ($event->getContent()) {
-            $details[] = $event->getContent();
+            $cleanContent = strip_tags($event->getContent());
+            $details[] = sprintf('<p>%s</p>', $cleanContent);
         }
 
-        return implode(PHP_EOL, $details);
-    }
-
-    private function getInviteesForEvent(CCalendarEvent $event): array
-    {
-        $inviteeList = [];
-
-        foreach ($event->getResourceNode()->getResourceLinks() as $resourceLink) {
-            if ($user = $resourceLink->getUser()) {
-                $inviteeList[] = $user->getId();
-            }
-        }
-
-        return $inviteeList;
+        return $details;
     }
 }

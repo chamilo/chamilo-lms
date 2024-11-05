@@ -1431,10 +1431,10 @@ HTML;
             $hotspotColor = 0;
             if (HOT_SPOT_DELINEATION != $answerType) {
                 $answerList = '
-        <div class="bg-tertiary p-4 rounded-md border border-gray-25">
+        <div class="p-4 rounded-md border border-gray-25">
             <h5 class="font-bold text-lg mb-2 text-primary">'.get_lang('Image zones').'</h5>
             <ol class="list-decimal ml-6 space-y-2 text-primary">
-    ';
+        ';
 
                 if (!empty($answers_hotspot)) {
                     Session::write("hotspot_ordered$questionId", array_keys($answers_hotspot));
@@ -1459,7 +1459,7 @@ HTML;
                 echo "
         <div class=\"flex space-x-4\">
             <div class=\"w-3/4\">
-                <div id=\"hotspot-preview-$questionId\" class=\"bg-gray-10 h-[500px] w-full bg-center bg-no-repeat bg-contain border border-gray-25\"></div>
+                <div id=\"hotspot-preview-$questionId\" class=\"bg-gray-10 w-full bg-center bg-no-repeat bg-contain border border-gray-25\"></div>
             </div>
             <div class=\"w-1/4\">
                 $answerList
@@ -1498,24 +1498,24 @@ HOTSPOT;
 
             $relPath = api_get_path(WEB_CODE_PATH);
             $s .= "<div class=\"w-3/4\">
-                   <div class=\"hotspot-image h-[500px] bg-gray-10 border border-gray-25 bg-center bg-no-repeat bg-contain\"></div>
-                    <script>
-                        $(function() {
-                            new ".(HOT_SPOT_DELINEATION == $answerType ? 'DelineationQuestion' : 'HotspotQuestion')."({
-                                questionId: $questionId,
-                                exerciseId: $exerciseId,
-                                exeId: 0,
-                                selector: '#question_div_' + $questionId + ' .hotspot-image',
-                                for: 'user',
-                                relPath: '$relPath'
-                            });
-                        });
-                    </script>
-                </div>
-                <div class=\"w-1/4\">
-                    $answerList
-                </div>
-            ";
+           <div class=\"hotspot-image bg-gray-10 border border-gray-25 bg-center bg-no-repeat bg-contain\"></div>
+            <script>
+                $(function() {
+                    new ".(HOT_SPOT_DELINEATION == $answerType ? 'DelineationQuestion' : 'HotspotQuestion')."({
+                        questionId: $questionId,
+                        exerciseId: $exerciseId,
+                        exeId: 0,
+                        selector: '#question_div_' + $questionId + ' .hotspot-image',
+                        for: 'user',
+                        relPath: '$relPath'
+                    });
+                });
+            </script>
+        </div>
+        <div class=\"w-1/4\">
+            $answerList
+        </div>
+    ";
 
             echo <<<HOTSPOT
         $s

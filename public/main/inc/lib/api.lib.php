@@ -6857,6 +6857,7 @@ function get_hosting_limit(int $urlId, string $limitName): mixed
  */
 function api_get_env_variable(string $variable, mixed $default = null): mixed
 {
+    $variable = strtolower($variable);
     if (Container::$container->hasParameter($variable)) {
         return Container::$container->getParameter($variable);
     }

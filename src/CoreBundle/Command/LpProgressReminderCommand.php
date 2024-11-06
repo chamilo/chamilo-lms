@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRelCourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
+use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
 use DateTime;
 use DateTimeZone;
 use Symfony\Component\Mailer\MailerInterface;
@@ -30,15 +31,15 @@ class LpProgressReminderCommand extends Command
     private const NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION = 3;
 
     public function __construct(
-        private CourseRepository $courseRepository,
-        private CourseRelUserRepository $courseRelUserRepository,
-        private SessionRelCourseRelUserRepository $sessionRelCourseRelUserRepository,
-        private ExtraFieldValuesRepository $extraFieldValuesRepository,
-        private TrackEDefaultRepository $trackEDefaultRepository,
-        private UserRepository $userRepository,
-        private MailerInterface $mailer,
-        private Environment $twig,
-        private TranslatorInterface $translator
+        private readonly CourseRepository $courseRepository,
+        private readonly CourseRelUserRepository $courseRelUserRepository,
+        private readonly SessionRelCourseRelUserRepository $sessionRelCourseRelUserRepository,
+        private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
+        private readonly TrackEDefaultRepository $trackEDefaultRepository,
+        private readonly UserRepository $userRepository,
+        private readonly Environment $twig,
+        private readonly TranslatorInterface $translator,
+        private readonly MessageHelper $messageHelper
     ) {
         parent::__construct();
     }
@@ -130,10 +131,7 @@ class LpProgressReminderCommand extends Command
                 continue;
             }
 
-            $sessionId = 0;
-            if ($checkSession && isset($user['sessionId']) && $user['sessionId'] > 0) {
-                $sessionId = $user['sessionId'];
-            }
+            $sessionId = $checkSession && isset($user['sessionId']) && $user['sessionId'] > 0 ? $user['sessionId'] : 0;
 
             $registrationDate = $this->trackEDefaultRepository->getUserCourseRegistrationAt($courseId, $userId, $sessionId);
             $nbDaysForLpCompletion = (int) $lpItems[$lpId];
@@ -147,7 +145,7 @@ class LpProgressReminderCommand extends Command
                     $nbRemind = $this->getNbReminder($registrationDate, $nbDaysForLpCompletion);
                     if ($debugMode) {
                         echo "Sending reminder to user $userId for course $courseTitle (LP ID: $lpId) $sessionInfo\n";
-                        $this->logReminderSent($userId, $courseTitle, $nbRemind, $debugMode, $sessionId, $lpId);
+                        $this->logReminderSent($userId, $courseTitle, $nbRemind, $debugMode, $lpId, $sessionId);
                     }
                     $this->sendLpReminder($userId, $courseTitle, $progress, $registrationDate, $nbRemind);
                 }
@@ -158,7 +156,7 @@ class LpProgressReminderCommand extends Command
     /**
      * Logs the reminder details if debug mode is enabled.
      */
-    private function logReminderSent(int $userId, string $courseTitle, int $nbRemind, bool $debugMode, int $sessionId = 0, int $lpId): void
+    private function logReminderSent(int $userId, string $courseTitle, int $nbRemind, bool $debugMode, int $lpId, int $sessionId = 0): void
     {
         if ($debugMode) {
             $sessionInfo = $sessionId > 0 ? sprintf("in session ID %d", $sessionId) : "without a session";
@@ -220,11 +218,11 @@ class LpProgressReminderCommand extends Command
             throw new \Exception("User not found");
         }
 
-        $hello = $this->translator->trans('HelloX');
-        $youAreRegCourse = $this->translator->trans('YouAreRegCourseXFromDateX');
-        $thisMessageIsAbout = $this->translator->trans('ThisMessageIsAboutX');
-        $stepsToRemind = $this->translator->trans('StepsToRemindX');
-        $lpRemindFooter = $this->translator->trans('LpRemindFooterX');
+        $hello = $this->translator->trans("Hello %s");
+        $youAreRegCourse = $this->translator->trans("You are registered in the training %s since the %s");
+        $thisMessageIsAbout = $this->translator->trans("You are receiving this message because you have completed a learning path with a %s% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer.");
+        $stepsToRemind = $this->translator->trans("As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary.");
+        $lpRemindFooter = $this->translator->trans("The training center<p>%s</p>Trainers:<br/>%s");
 
         $hello = sprintf($hello, $user->getFullName());
         $youAreRegCourse = sprintf($youAreRegCourse, $courseName, $registrationDate->format('Y-m-d'));
@@ -232,7 +230,7 @@ class LpProgressReminderCommand extends Command
         $stepsToRemind = sprintf($stepsToRemind, '', $user->getUsername(), '');
         $lpRemindFooter = sprintf($lpRemindFooter, '', 'm');
 
-        $body = $this->twig->render('@ChamiloCore/Mailer/Legacy/lp_progress_reminder_body.html.twig', [
+        $messageContent = $this->twig->render('@ChamiloCore/Mailer/Legacy/lp_progress_reminder_body.html.twig', [
             'HelloX' => $hello,
             'YouAreRegCourseXFromDateX' => $youAreRegCourse,
             'ThisMessageIsAboutX' => $thisMessageIsAbout,
@@ -240,17 +238,18 @@ class LpProgressReminderCommand extends Command
             'LpRemindFooterX' => $lpRemindFooter,
         ]);
 
-        $email = (new Email())
-            ->from('noreply@yourdomain.com')
-            ->to($user->getEmail())
-            ->subject(sprintf("Reminder number %d for the course %s", $nbRemind, $courseName))
-            ->html($body);
-
         try {
-            $this->mailer->send($email);
+            $this->messageHelper->sendMessageSimple(
+                $toUserId,
+                sprintf("Reminder number %d for the course %s", $nbRemind, $courseName),
+                $messageContent,
+                0,
+                true
+            );
+
             return true;
         } catch (\Exception $e) {
-            throw new \Exception('Error to send email: ' . $e->getMessage());
+            throw new \Exception('Error sending reminder: ' . $e->getMessage());
         }
     }
 }

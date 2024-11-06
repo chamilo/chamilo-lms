@@ -29,8 +29,9 @@ class CourseRelUserRepository extends ServiceEntityRepository
             ->innerJoin('cu.user', 'u')
             ->innerJoin('cu.course', 'c')
             ->leftJoin(CLpView::class, 'lpv', 'WITH', 'lpv.user = u.id AND lpv.course = cu.course')
-            ->leftJoin(CLp::class, 'lp', 'WITH', 'lp.iid = lpv.lp OR lp.iid IN (:lpIds)')
+            ->leftJoin(CLp::class, 'lp', 'WITH', 'lp.iid = lpv.lp AND lp.iid IN (:lpIds)')
             ->where('cu.course = :courseId')
+            ->andWhere('lpv.course = :courseId')
             ->setParameter('courseId', $courseId)
             ->setParameter('lpIds', $lpIds)
             ->andWhere('(lpv.progress < 100 OR lpv.progress IS NULL)');

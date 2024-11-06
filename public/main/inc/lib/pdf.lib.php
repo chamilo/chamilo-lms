@@ -137,6 +137,10 @@ class PDF
             }
         }
 
+        if (!empty($this->params['session_info']['title'])) {
+            $this->params['session_info']['title'] = preg_replace('/[\x{2600}-\x{26FF}]/u', '', $this->params['session_info']['title']);
+        }
+
         $tpl->assign('pdf_course', $this->params['course_code']);
         $tpl->assign('pdf_course_info', $this->params['course_info']);
         $tpl->assign('pdf_session_info', $this->params['session_info']);
@@ -153,6 +157,7 @@ class PDF
         $tableTemplate = $tpl->get_template('export/table_pdf.tpl');
         $html = $tpl->fetch($tableTemplate);
         $html = api_utf8_encode($html);
+        $html = $this->replaceIconsWithImages($html);
 
         if ($returnHtml) {
             return $html;
@@ -413,7 +418,7 @@ class PDF
         $basicStyles = [];
 
         $doc = new DOMDocument();
-        @$doc->loadHTML($document_html);
+        @$doc->loadHTML('<?xml encoding="UTF-8">' . $document_html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
         $linksToRemove = [];
 
@@ -443,28 +448,6 @@ class PDF
                     if (in_array($old_src, $replaced)) {
                         continue;
                     }
-
-                    if (false === strpos($old_src, $protocol)) {
-                        if (false === strpos($old_src, '/main/default_course_document')) {
-                            if (false === strpos($old_src, '/main/inc/lib/') &&
-                                false === strpos($old_src, '/app/upload/')
-                            ) {
-                                /*$old_src_fixed = str_replace(
-                                    api_get_path(REL_COURSE_PATH).$courseInfo['path'].'/document/',
-                                    '',
-                                    $old_src
-                                );
-                                $old_src_fixed = str_replace(
-                                    'courses/'.$courseInfo['path'].'/document/',
-                                    '',
-                                    $old_src_fixed
-                                );
-                                $new_path = $document_path.$old_src_fixed;
-                                $document_html = str_replace($old_src, $new_path, $document_html);
-                                $replaced[] = $old_src;*/
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -476,13 +459,26 @@ class PDF
             $document_html
         );
         $document_html = str_replace(api_get_path(WEB_ARCHIVE_PATH), api_get_path(SYS_ARCHIVE_PATH), $document_html);
-
+        $document_html = str_replace('<?xml encoding="UTF-8">', '', $document_html);
         // The library mPDF expects UTF-8 encoded input data.
         api_set_encoding_html($document_html, 'UTF-8');
         // At the moment the title is retrieved from the html document itself.
         if ($returnHtml) {
             return "<style>$css</style>".$document_html;
         }
+
+        $css .= "
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                font-size: 12px;
+                text-align: left;
+                padding: 2px;
+                border: 1px solid #ccc;
+            }
+        ";
 
         if (!empty($css)) {
             $this->pdf->WriteHTML($css, HTMLParserMode::HEADER_CSS);
@@ -998,5 +994,32 @@ class PDF
         }
 
         return $doc->saveHTML();
+    }
+
+    /**
+     * Replaces icon tags in the HTML content with corresponding image paths.
+     */
+    public function replaceIconsWithImages(string $content): string
+    {
+        // Load icon images
+        $checkboxOn = Display::return_icon('checkbox_on.png', null, null, ICON_SIZE_TINY);
+        $checkboxOff = Display::return_icon('checkbox_off.png', null, null, ICON_SIZE_TINY);
+        $radioOn = Display::return_icon('radio_on.png', null, null, ICON_SIZE_TINY);
+        $radioOff = Display::return_icon('radio_off.png', null, null, ICON_SIZE_TINY);
+
+        // Define replacements
+        $replacements = [
+            '/<i[^>]*class="[^"]*checkbox-marked-outline[^"]*"[^>]*><\/i>/i' => $checkboxOn,
+            '/<i[^>]*class="[^"]*checkbox-blank-outline[^"]*"[^>]*><\/i>/i' => $checkboxOff,
+            '/<i[^>]*class="[^"]*radiobox-marked[^"]*"[^>]*><\/i>/i' => $radioOn,
+            '/<i[^>]*class="[^"]*radiobox-blank[^"]*"[^>]*><\/i>/i' => $radioOff,
+        ];
+
+        // Perform replacements
+        foreach ($replacements as $pattern => $replacement) {
+            $content = preg_replace($pattern, $replacement, $content);
+        }
+
+        return $content;
     }
 }

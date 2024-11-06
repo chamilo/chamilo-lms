@@ -12,7 +12,10 @@
       />
       <BaseAdvancedSettingsButton v-model="showAdvancedSettings"></BaseAdvancedSettingsButton>
     </div>
-    <div v-if="showAdvancedSettings" class="advanced-settings">
+    <div
+      v-if="showAdvancedSettings"
+      class="advanced-settings"
+    >
       <BaseMultiSelect
         id="category-multiselect"
         v-model="courseCategory"
@@ -43,7 +46,7 @@
         id="demo-content"
         :label="t('Fill with demo content')"
         v-model="fillDemoContent"
-       name=""
+        name=""
       />
       <!--BaseAutocomplete
         id="template"
@@ -72,7 +75,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue"
+import { onMounted, ref } from "vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseDropdown from "../basecomponents/BaseDropdown.vue"
@@ -81,40 +84,39 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import { useRouter } from "vue-router"
 import courseService from "../../services/courseService"
 import languageService from "../../services/languageService"
-import BaseAutocomplete from "../basecomponents/BaseAutocomplete.vue"
 import BaseMultiSelect from "../basecomponents/BaseMultiSelect.vue"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()
-const courseName = ref('')
+const courseName = ref("")
 const courseCategory = ref([])
-const courseCode = ref('')
+const courseCode = ref("")
 const courseLanguage = ref(null)
 const fillDemoContent = ref(false)
-const courseTemplate = ref(null);
+const courseTemplate = ref(null)
 const showAdvancedSettings = ref(false)
 const router = useRouter()
 
 const categoryOptions = ref([])
 const languageOptions = ref([])
 
-const courseNameError = ref('')
-const courseCodeError = ref('')
+const courseNameError = ref("")
+const courseCodeError = ref("")
 const isCodeInvalid = ref(false)
 const isCourseNameInvalid = ref(false)
 
 const formSubmitted = ref(false)
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(["submit"])
 
 const validateCourseCode = () => {
   const pattern = /^[a-zA-Z0-9]*$/
   if (!pattern.test(courseCode.value)) {
     isCodeInvalid.value = true
-    courseCodeError.value = 'Only letters (a-z) and numbers (0-9) are allowed.'
+    courseCodeError.value = "Only letters (a-z) and numbers (0-9) are allowed."
     return false
   }
-  courseCodeError.value = ''
+  courseCodeError.value = ""
   return true
 }
 
@@ -122,7 +124,7 @@ const submitForm = () => {
   formSubmitted.value = true
   if (!courseName.value) {
     isCourseNameInvalid.value = true
-    courseNameError.value = 'This field is required'
+    courseNameError.value = "This field is required"
     return
   }
 
@@ -130,35 +132,34 @@ const submitForm = () => {
     return
   }
 
-  emit('submit', {
+  emit("submit", {
     name: courseName.value,
     category: courseCategory.value ? courseCategory.value : null,
     code: courseCode.value,
     language: courseLanguage.value,
     template: courseTemplate.value ? courseTemplate.value.value : null,
-    fillDemoContent: fillDemoContent.value
+    fillDemoContent: fillDemoContent.value,
   })
 }
 
 onMounted(async () => {
   try {
-    const categoriesResponse = await courseService.getCategories('categories');
-    categoryOptions.value = categoriesResponse.map(category => ({
+    const categoriesResponse = await courseService.getCategories("categories")
+    categoryOptions.value = categoriesResponse.map((category) => ({
       name: category.name,
       id: category.id,
     }))
 
     const languagesResponse = await languageService.findAll()
     const data = await languagesResponse.json()
-    languageOptions.value = data['hydra:member'].map(language => ({
+    languageOptions.value = data["hydra:member"].map((language) => ({
       name: language.englishName,
       id: language.isocode,
     }))
-
   } catch (error) {
-    console.error('Failed to load dropdown data', error)
+    console.error("Failed to load dropdown data", error)
   }
-});
+})
 
 const searchTemplates = async (query) => {
   if (query && query.length >= 3) {

@@ -15808,7 +15808,7 @@ msgstr ""
 msgid "Only skills that were not registered were imported"
 msgstr ""
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr ""
 
 msgid "The parent skill was not set"
@@ -27769,4 +27769,7 @@ msgid "%s's picture"
 msgstr ""
 
 msgid "+%d"
+msgstr ""
+
+msgid "Delete permanently"
 msgstr ""

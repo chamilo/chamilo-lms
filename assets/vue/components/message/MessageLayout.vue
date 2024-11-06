@@ -1,9 +1,9 @@
 <template>
-  <div class="message-layout flex">
-    <div class="sidebar">
+  <div class="message-layout flex flex-col md:flex-row">
+    <div class="sidebar hidden md:block md:w-1/4">
       <UserProfileCard />
     </div>
-    <div class="content flex-grow">
+    <div class="content flex-grow w-full">
       <router-view></router-view>
     </div>
   </div>

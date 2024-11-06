@@ -243,7 +243,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ['bundle' => 'CoreBundle', 'entity' => 'GradebookResultLog', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'GradebookScoreLog', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'Message', 'field' => 'sender', 'type' => 'object', 'action' => 'convert'],
-            ['bundle' => 'CoreBundle', 'entity' => 'MessageFeedback', 'field' => 'user', 'type' => 'object', 'action' => 'convert'],
             ['bundle' => 'CoreBundle', 'entity' => 'MessageRelUser', 'field' => 'receiver', 'type' => 'object', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'MessageTag', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'Notification', 'field' => 'destUserId', 'type' => 'int', 'action' => 'delete'],
@@ -1032,5 +1031,27 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         }
 
         return $url.$paramsToString;
+    }
+
+    /**
+     * Retrieves the list of DRH (HR) users related to a specific user and access URL.
+     */
+    public function getDrhListFromUser(int $userId, int $accessUrlId): array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
+
+        $qb->select('u.id, u.username, u.firstname, u.lastname')
+            ->innerJoin('u.friends', 'uru', Join::WITH, 'uru.friend = u.id')
+            ->where('uru.user = :userId')
+            ->andWhere('uru.relationType = :relationType')
+            ->setParameter('userId', $userId)
+            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_RRHH);
+
+        $qb->orderBy('u.lastname', 'ASC')
+            ->addOrderBy('u.firstname', 'ASC');
+
+        return $qb->getQuery()->getResult();
     }
 }

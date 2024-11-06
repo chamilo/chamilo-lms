@@ -42,6 +42,9 @@ class CGroupRelUser
     #[ORM\Column(name: 'role', type: 'string', length: 50, nullable: false)]
     protected string $role;
 
+    #[ORM\Column(name: 'ready_autogroup', type: 'boolean', options: ['default' => 0])]
+    protected bool $readyAutogroup = false;
+
     public function setGroup(CGroup $group): self
     {
         $this->group = $group;
@@ -79,6 +82,18 @@ class CGroupRelUser
     public function setRole(string $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function getReadyAutogroup(): bool
+    {
+        return $this->readyAutogroup;
+    }
+
+    public function setReadyAutogroup(bool $readyAutogroup): self
+    {
+        $this->readyAutogroup = $readyAutogroup;
 
         return $this;
     }

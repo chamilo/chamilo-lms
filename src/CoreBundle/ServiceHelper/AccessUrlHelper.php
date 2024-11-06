@@ -43,10 +43,20 @@ class AccessUrlHelper
             return $accessUrl;
         }
 
+        if ('cli' === PHP_SAPI) {
+            return $this->getFirstAccessUrl();
+        }
+
         $accessUrl = $this->getFirstAccessUrl();
 
         if ($this->isMultiple()) {
-            $url = $this->requestStack->getMainRequest()->getSchemeAndHttpHost().'/';
+            $request = $this->requestStack->getMainRequest();
+
+            if (null === $request) {
+                return $accessUrl;
+            }
+
+            $url = $request->getSchemeAndHttpHost().'/';
 
             /** @var AccessUrl $accessUrl */
             $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $url]);

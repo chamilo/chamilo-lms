@@ -158,7 +158,8 @@ class SessionManager
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false,
         $accessUrlId = 0,
-        $status = 0
+        $status = 0,
+        $notifyBoss = false
     ) {
         global $_configuration;
 
@@ -237,6 +238,7 @@ class SessionManager
                     ->setDescription($description)
                     ->setShowDescription(1 === $showDescription)
                     ->setSendSubscriptionNotification((bool) $sendSubscriptionNotification)
+                    ->setNotifyBoss((bool) $notifyBoss)
                 ;
 
                 foreach ($coachesId as $coachId) {
@@ -1790,7 +1792,8 @@ class SessionManager
         $extraFields = [],
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false,
-        $status = 0
+        $status = 0,
+        $notifyBoss = 0
     ) {
         $id = (int) $id;
         $status = (int) $status;
@@ -1859,6 +1862,7 @@ class SessionManager
                     ->setShowDescription(1 === $showDescription)
                     ->setVisibility($visibility)
                     ->setSendSubscriptionNotification((bool) $sendSubscriptionNotification)
+                    ->setNotifyBoss((bool) $notifyBoss)
                     ->setAccessStartDate(null)
                     ->setAccessStartDate(null)
                     ->setDisplayStartDate(null)
@@ -2154,12 +2158,7 @@ class SessionManager
         }
 
         if ($session->getSendSubscriptionNotification() && is_array($userList)) {
-            // Sending emails only
             foreach ($userList as $user_id) {
-                if (in_array($user_id, $existingUsers)) {
-                    continue;
-                }
-
                 $tplSubject = new Template(
                     null,
                     false,
@@ -2194,6 +2193,7 @@ class SessionManager
                 );
                 $content = $tplContent->fetch($layoutContent);
 
+                // Send email
                 api_mail_html(
                     $user_info['complete_name'],
                     $user_info['mail'],
@@ -2205,6 +2205,30 @@ class SessionManager
                     ),
                     api_get_setting('emailAdministrator')
                 );
+
+                // Record message in system
+                MessageManager::send_message_simple(
+                    $user_id,
+                    $subject,
+                    $content,
+                    api_get_user_id(),
+                    false,
+                    true
+                );
+            }
+        }
+
+        if ($session->getNotifyBoss()) {
+            foreach ($userList as $user_id) {
+                $studentBossList = UserManager::getStudentBossList($user_id);
+
+                if (!empty($studentBossList)) {
+                    $studentBossList = array_column($studentBossList, 'boss_id');
+                    foreach ($studentBossList as $bossId) {
+                        $boss = api_get_user_entity($bossId);
+                        self::notifyBossOfInscription($boss, $session, $user_id);
+                    }
+                }
             }
         }
 
@@ -2302,6 +2326,60 @@ class SessionManager
         Database::query($sql);
 
         return true;
+    }
+
+    /**
+     * Sends a notification email to the student's boss when the student is enrolled in a session.
+     *
+     * @param User $boss The boss of the student to be notified.
+     * @param Session $session The session the student has been enrolled in.
+     * @param int $userId The ID of the student being enrolled.
+     */
+    public static function notifyBossOfInscription(User $boss, Session $session, int $userId): void
+    {
+        $tpl = Container::getTwig();
+
+        $user_info = api_get_user_info($userId);
+
+        $subject = $tpl->render(
+            '@ChamiloCore/Mailer/Legacy/subject_subscription_to_boss_notification.html.twig',
+            [
+                'locale' => $boss->getLocale(),
+                'boss_name' => $boss->getFullname(),
+                'student_name' => $user_info['complete_name'],
+                'session_name' => $session->getTitle(),
+            ]
+        );
+
+        $content = $tpl->render(
+            '@ChamiloCore/Mailer/Legacy/content_subscription_to_boss_notification.html.twig',
+            [
+                'locale' => $boss->getLocale(),
+                'boss_name' => $boss->getFullname(),
+                'student_name' => $user_info['complete_name'],
+                'session_name' => $session->getTitle(),
+            ]
+        );
+
+        // Send email
+        api_mail_html(
+            $boss->getFullname(),
+            $boss->getEmail(),
+            $subject,
+            $content,
+            api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')),
+            api_get_setting('emailAdministrator')
+        );
+
+        // Record message in system
+        MessageManager::send_message_simple(
+            $boss->getId(),
+            $subject,
+            $content,
+            api_get_user_id(),
+            false,
+            true
+        );
     }
 
     /**
@@ -8160,6 +8238,11 @@ class SessionManager
         $form->addCheckBox(
             'send_subscription_notification',
             get_lang('Send an email when a user being subscribed to session'),
+        );
+
+        $form->addCheckBox(
+            'notify_boss',
+            get_lang('Notify inscription of user to student boss')
         );
 
         // Picture

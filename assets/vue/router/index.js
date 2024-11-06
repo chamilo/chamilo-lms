@@ -97,12 +97,16 @@ const router = createRouter({
       name: "CourseHome",
       component: CourseHome,
       beforeEnter: async (to) => {
-        const check = await courseService.checkLegal(to.params.id, to.query?.sid)
+        try {
+          const check = await courseService.checkLegal(to.params.id, to.query?.sid)
 
-        if (check.redirect) {
-          window.location.href = check.url
+          if (check.redirect) {
+            window.location.href = check.url
 
-          return false
+            return false
+          }
+        } catch (e) {
+          return true
         }
       },
     },

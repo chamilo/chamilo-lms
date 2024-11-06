@@ -125,6 +125,12 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public const GENERAL_COACH = 3;
     public const SESSION_ADMIN = 4;
 
+    public const STATUS_PLANNED = 1;
+    public const STATUS_PROGRESS = 2;
+    public const STATUS_FINISHED = 3;
+    public const STATUS_CANCELLED = 4;
+    public const STATUS_UNKNOWN = 0;
+
     #[Groups([
         'session:basic',
         'session:read',
@@ -373,6 +379,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     #[Groups(['user_subscriptions:sessions', 'session:read', 'session:item:read'])]
     private int $accessVisibility = 0;
+
+    #[ORM\Column(name: 'notify_boss', type: 'boolean', options: ['default' => false])]
+    protected bool $notifyBoss = false;
 
     public function __construct()
     {
@@ -1447,5 +1456,17 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             $sessionRelCourse->getCourse()->getVisibility(),
             $closedVisibilities
         ));
+    }
+
+    public function getNotifyBoss(): bool
+    {
+        return $this->notifyBoss;
+    }
+
+    public function setNotifyBoss(bool $notifyBoss): self
+    {
+        $this->notifyBoss = $notifyBoss;
+
+        return $this;
     }
 }

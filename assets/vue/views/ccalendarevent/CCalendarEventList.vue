@@ -355,18 +355,20 @@ function reFetch() {
 
 function confirmDelete() {
   confirm.require({
-    message: t("Are you sure you want to delete this event?"),
+    message: t("Are you sure you want to delete"),
     header: t("Delete"),
     icon: "pi pi-exclamation-triangle",
     acceptClass: "p-button-danger",
     rejectClass: "p-button-plain p-button-outlined",
+    acceptLabel: t("Yes"),
+    rejectLabel: t("Cancel"),
     accept() {
       if (item.value["parentResourceNodeId"] === securityStore.user["id"]) {
-        store.dispatch("ccalendarevent/del", item.value)
-
-        dialogShow.value = false
-        dialog.value = false
-        reFetch()
+        store.dispatch("ccalendarevent/del", item.value).then(() => {
+          dialogShow.value = false
+          dialog.value = false
+          reFetch()
+        })
       } else {
         let filteredLinks = item.value["resourceLinkListFromEntity"].filter(
           (resourceLinkFromEntity) => resourceLinkFromEntity["user"]["id"] === securityStore.user["id"],
@@ -375,15 +377,16 @@ function confirmDelete() {
         if (filteredLinks.length > 0) {
           store.dispatch("resourcelink/del", {
             "@id": `/api/resource_links/${filteredLinks[0]["id"]}`,
+          }).then(() => {
+            currentEvent.remove();
+            dialogShow.value = false
+            dialog.value = false
+            reFetch()
           })
-
-          currentEvent.remove()
-          dialogShow.value = false
-          dialog.value = false
-          reFetch()
         }
       }
     },
+    reject() {},
   })
 }
 
@@ -408,34 +411,43 @@ const isLoading = computed(() => store.getters["ccalendarevent/isLoading"])
 
 const createForm = ref(null)
 
-function onCreateEventForm() {
-  if (createForm.value.v$.$invalid) {
-    return
-  }
-
-  let itemModel = createForm.value.v$.item.$model
-
-  if (isGlobal.value) {
-    itemModel.isGlobal = true
-  }
-
-  if (itemModel["@id"]) {
-    store.dispatch("ccalendarevent/update", itemModel)
-  } else {
-    if (course.value) {
-      itemModel.resourceLinkList = [
-        {
-          cid: course.value.id,
-          sid: session.value?.id ?? null,
-          visibility: RESOURCE_LINK_PUBLISHED,
-        },
-      ]
+async function onCreateEventForm() {
+  try {
+    if (createForm.value.v$.$invalid) {
+      return
     }
 
-    store.dispatch("ccalendarevent/create", itemModel)
-  }
+    let itemModel = createForm.value.v$.item.$model
 
-  dialog.value = false
+    if (!itemModel.content) {
+      itemModel = { ...itemModel, content: "" }
+    }
+
+    if (isGlobal.value) {
+      itemModel.isGlobal = true
+    }
+
+    if (itemModel["@id"]) {
+      await store.dispatch("ccalendarevent/update", itemModel)
+    } else {
+      if (course.value) {
+        itemModel.resourceLinkList = [
+          {
+            cid: course.value.id,
+            sid: session.value?.id ?? null,
+            visibility: RESOURCE_LINK_PUBLISHED,
+          },
+        ]
+      }
+      await store.dispatch("ccalendarevent/create", itemModel)
+    }
+
+    dialog.value = false
+    dialogShow.value = false
+    reFetch()
+  } catch (error) {
+    console.error("An error occurred:", error)
+  }
 }
 
 const toast = useToast()

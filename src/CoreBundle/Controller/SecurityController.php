@@ -126,6 +126,6 @@ class SecurityController extends AbstractController
             return new JsonResponse(['isAuthenticated' => true, 'user' => json_decode($data)], Response::HTTP_OK);
         }
 
-        return new JsonResponse(['isAuthenticated' => false], Response::HTTP_OK);
+        throw $this->createAccessDeniedException();
     }
 }

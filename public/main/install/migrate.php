@@ -23,6 +23,11 @@ if (file_exists($logFile)) {
 
 if (!$response['status']) {
     http_response_code(500); // Return a 500 Internal Server Error if migration failed
+} else {
+    $kernel = new \Chamilo\Kernel('dev', true);
+    $kernel->boot();
+
+    executeLexikKeyPair($kernel);
 }
 
 $response = [

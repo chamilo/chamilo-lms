@@ -6,416 +6,118 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\DBAL\Schema\Schema;
-
-use const PREG_NO_ERROR;
+use Exception;
 
 final class Version20231022124700 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Replace old cidReq url path by new version';
+        return 'Replace old cidReq URL path with the new version and handle updates for HTML files.';
     }
 
     public function up(Schema $schema): void
     {
-        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $this->entityManager->clear();
 
-        /** @var Course $course */
-        foreach ($q->toIterable() as $course) {
-            $courseId = $course->getId();
+        // Configuration for content updates in the database
+        $updateConfigurations = [
+            ['table' => 'c_tool_intro', 'field' => 'intro_text'],
+            ['table' => 'c_course_description', 'field' => 'content'],
+            ['table' => 'c_quiz', 'fields' => ['description', 'text_when_finished']],
+            ['table' => 'c_quiz_question', 'fields' => ['description', 'question']],
+            ['table' => 'c_quiz_answer', 'fields' => ['answer', 'comment']],
+            ['table' => 'c_student_publication', 'field' => 'description'],
+            ['table' => 'c_student_publication_comment', 'field' => 'comment'],
+            ['table' => 'c_forum_post', 'field' => 'post_text'],
+            ['table' => 'c_glossary', 'field' => 'description'],
+            ['table' => 'c_survey', 'fields' => ['title', 'subtitle']],
+            ['table' => 'c_survey_question', 'fields' => ['survey_question', 'survey_question_comment']],
+            ['table' => 'c_survey_question_option', 'field' => 'option_text'],
+        ];
 
-            // Tool intro
-            $sql = "SELECT * FROM c_tool_intro WHERE c_id = {$courseId} ORDER BY iid";
+        foreach ($updateConfigurations as $config) {
+            $this->updateContent($config);
+        }
+
+        $this->updateHtmlFiles();
+    }
+
+    private function updateContent(array $config): void
+    {
+        $fields = isset($config['field']) ? [$config['field']] : $config['fields'] ?? [];
+
+        foreach ($fields as $field) {
+            $sql = "SELECT iid, {$field} FROM {$config['table']}";
             $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalIntroText = $itemData['intro_text'];
-                    if (!empty($originalIntroText)) {
-                        $updatedIntroText = $this->replaceURLParametersInContent($originalIntroText);
-                        if ($originalIntroText !== $updatedIntroText) {
-                            $sql = 'UPDATE c_tool_intro SET intro_text = :newIntroText WHERE iid = :introId';
-                            $params = [
-                                'newIntroText' => $updatedIntroText,
-                                'introId' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_tool_intro  cid ='.$courseId);
-                        }
-                    }
-                }
-            }
 
-            // Course description
-            $sql = "SELECT * FROM c_course_description WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalContent = $itemData['content'];
-                    if (!empty($originalContent)) {
-                        $updatedContent = $this->replaceURLParametersInContent($originalContent);
-                        if ($originalContent !== $updatedContent) {
-                            $sql = 'UPDATE c_course_description SET content = :newContent WHERE iid = :id';
-                            $params = [
-                                'newContent' => $updatedContent,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_course_description  cid ='.$courseId);
-                        }
-                    }
-                }
-            }
-
-            // Quiz
-            $sql = "SELECT * FROM c_quiz WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalDescription = $itemData['description'];
-                    if (!empty($originalDescription)) {
-                        $updatedDescription = $this->replaceURLParametersInContent($originalDescription);
-                        if ($originalDescription !== $updatedDescription) {
-                            $sql = 'UPDATE c_quiz SET description = :newDescription WHERE iid = :id';
-                            $params = [
-                                'newDescription' => $updatedDescription,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_quiz  cid ='.$courseId);
-                        }
-                    }
-
-                    $originalText = $itemData['text_when_finished'];
-                    if (!empty($originalText)) {
-                        $updatedText = $this->replaceURLParametersInContent($originalText);
-                        if ($originalText !== $updatedText) {
-                            $sql = 'UPDATE c_quiz SET text_when_finished = :newText WHERE iid = :id';
-                            $params = [
-                                'newText' => $updatedText,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_quiz text_when_finished  cid ='.$courseId);
-                        }
-                    }
-                }
-            }
-
-            // Quiz question
-            $sql = "SELECT * FROM c_quiz_question WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalDescription = $itemData['description'];
-                    if (!empty($originalDescription)) {
-                        $updatedDescription = $this->replaceURLParametersInContent($originalDescription);
-                        if ($originalDescription !== $updatedDescription) {
-                            $sql = 'UPDATE c_quiz_question SET description = :newDescription WHERE iid = :id';
-                            $params = [
-                                'newDescription' => $updatedDescription,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_quiz_question  cid ='.$courseId);
-                        }
-                    }
-
-                    $originalQuestion = $itemData['question'];
-                    if (!empty($originalQuestion)) {
-                        $updatedQuestion = $this->replaceURLParametersInContent($originalQuestion);
-                        if ($originalQuestion !== $updatedQuestion) {
-                            $sql = 'UPDATE c_quiz_question SET question = :newQuestion WHERE iid = :id';
-                            $params = [
-                                'newQuestion' => $updatedQuestion,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_quiz_question question cid ='.$courseId);
-                        }
-                    }
-                }
-            }
-
-            // Quiz answer
-            $sql = "SELECT * FROM c_quiz_answer WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalAnswer = $itemData['answer'];
-                    if (!empty($originalAnswer)) {
-                        $updatedAnswer = $this->replaceURLParametersInContent($originalAnswer);
-                        if ($originalAnswer !== $updatedAnswer) {
-                            $sql = 'UPDATE c_quiz_answer SET answer = :newAnswer WHERE iid = :id';
-                            $params = [
-                                'newAnswer' => $updatedAnswer,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_quiz_answer cid ='.$courseId);
-                        }
-                    }
-
-                    $originalComment = $itemData['comment'];
-                    if (!empty($originalComment)) {
-                        $updatedComment = $this->replaceURLParametersInContent($originalComment);
-                        if ($originalComment !== $updatedComment) {
-                            $sql = 'UPDATE c_quiz_answer SET comment = :newComment WHERE iid = :id';
-                            $params = [
-                                'newComment' => $updatedComment,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_quiz_answer comment cid ='.$courseId);
-                        }
-                    }
-                }
-            }
-
-            // Student publication
-            $sql = "SELECT * FROM c_student_publication WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalWorkDescription = $itemData['description'];
-                    if (!empty($originalWorkDescription)) {
-                        $updatedWorkDescription = $this->replaceURLParametersInContent($originalWorkDescription);
-                        if ($originalWorkDescription !== $updatedWorkDescription) {
-                            $sql = 'UPDATE c_student_publication SET description = :newDescription WHERE iid = :id';
-                            $params = [
-                                'newDescription' => $updatedWorkDescription,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_student_publication cid ='.$courseId);
-                        }
-                    }
-                }
-            }
-
-            // Student publication comment
-            $sql = "SELECT * FROM c_student_publication_comment WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalWorkComment = $itemData['comment'];
-                    if (!empty($originalWorkComment)) {
-                        $updatedWorkComment = $this->replaceURLParametersInContent($originalWorkComment);
-                        if ($originalWorkComment !== $updatedWorkComment) {
-                            $sql = 'UPDATE c_student_publication_comment SET comment = :newComment WHERE iid = :id';
-                            $params = [
-                                'newComment' => $updatedWorkComment,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_student_publication_comment cid ='.$courseId);
-                        }
-                    }
-                }
-            }
-
-            // Forum category
-            $sql = "SELECT * FROM c_forum_category WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalCatComment = $itemData['cat_comment'];
-                    if (!empty($originalCatComment)) {
-                        $updatedCatComment = $this->replaceURLParametersInContent($originalCatComment);
-                        if ($originalCatComment !== $updatedCatComment) {
-                            $sql = 'UPDATE c_forum_category SET cat_comment = :newComment WHERE iid = :id';
-                            $params = [
-                                'newComment' => $updatedCatComment,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_forum_category cid ='.$courseId);
-                        }
-                    }
-                }
-            }
-
-            // Forum
-            $sql = "SELECT * FROM c_forum_forum WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalForumComment = $itemData['forum_comment'];
-                    if (!empty($originalForumComment)) {
-                        $updatedForumComment = $this->replaceURLParametersInContent($originalForumComment);
-                        if ($originalForumComment !== $updatedForumComment) {
-                            $sql = 'UPDATE c_forum_forum SET forum_comment = :newComment WHERE iid = :id';
-                            $params = [
-                                'newComment' => $updatedForumComment,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_forum_forum cid ='.$courseId);
-                        }
-                    }
-                }
-            }
-
-            // Forum post
-            $sql = "SELECT * FROM c_forum_post WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalPostText = $itemData['post_text'];
-                    if (!empty($originalPostText)) {
-                        $updatedPostText = $this->replaceURLParametersInContent($originalPostText);
-                        if ($originalPostText !== $updatedPostText) {
-                            $sql = 'UPDATE c_forum_post SET post_text = :newText WHERE iid = :id';
-                            $params = [
-                                'newText' => $updatedPostText,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_forum_post cid ='.$courseId);
-                        }
-                    }
-                }
-            }
-
-            // Glossary
-            $sql = "SELECT * FROM c_glossary WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalGlossaryDescription = $itemData['description'];
-                    if (!empty($originalGlossaryDescription)) {
-                        $updatedGlossaryDescription = $this->replaceURLParametersInContent($originalGlossaryDescription);
-                        if ($originalGlossaryDescription !== $updatedGlossaryDescription) {
-                            $sql = 'UPDATE c_glossary SET description = :newDescription WHERE iid = :id';
-                            $params = [
-                                'newDescription' => $updatedGlossaryDescription,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_glossary cid ='.$courseId);
-                        }
-                    }
-                }
-            }
-
-            // Survey
-            $sql = "SELECT * FROM c_survey WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalSurveyTitle = $itemData['title'];
-                    if (!empty($originalSurveyTitle)) {
-                        $updatedSurveyTitle = $this->replaceURLParametersInContent($originalSurveyTitle);
-                        if ($originalSurveyTitle !== $updatedSurveyTitle) {
-                            $sql = 'UPDATE c_survey SET title = :newTitle WHERE iid = :id';
-                            $params = [
-                                'newTitle' => $updatedSurveyTitle,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_survey cid ='.$courseId);
-                        }
-                    }
-
-                    $originalSurveySubTitle = $itemData['subtitle'];
-                    if (!empty($originalSurveySubTitle)) {
-                        $updatedSurveySubTitle = $this->replaceURLParametersInContent($originalSurveySubTitle);
-                        if ($originalSurveySubTitle !== $updatedSurveySubTitle) {
-                            $sql = 'UPDATE c_survey SET subtitle = :newSubtitle WHERE iid = :id';
-                            $params = [
-                                'newSubtitle' => $updatedSurveySubTitle,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_survey subtitle cid ='.$courseId);
-                        }
-                    }
-                }
-            }
-
-            // Survey question
-            $sql = "SELECT * FROM c_survey_question WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalSurveyQuestion = $itemData['survey_question'];
-                    if (!empty($originalSurveyQuestion)) {
-                        $updatedSurveyQuestion = $this->replaceURLParametersInContent($originalSurveyQuestion);
-                        if ($originalSurveyQuestion !== $updatedSurveyQuestion) {
-                            $sql = 'UPDATE c_survey_question SET survey_question = :newQuestion WHERE iid = :id';
-                            $params = [
-                                'newQuestion' => $updatedSurveyQuestion,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_survey_question cid ='.$courseId);
-                        }
-                    }
-
-                    $originalSurveyQuestionComment = $itemData['survey_question_comment'];
-                    if (!empty($originalSurveyQuestionComment)) {
-                        $updatedSurveyQuestionComment = $this->replaceURLParametersInContent($originalSurveyQuestionComment);
-                        if ($originalSurveyQuestionComment !== $updatedSurveyQuestionComment) {
-                            $sql = 'UPDATE c_survey_question SET survey_question_comment = :newComment WHERE iid = :id';
-                            $params = [
-                                'newComment' => $updatedSurveyQuestionComment,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_survey_question survey_question_comment cid ='.$courseId);
-                        }
-                    }
-                }
-            }
-
-            // Survey question option
-            $sql = "SELECT * FROM c_survey_question_option WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalOptionText = $itemData['option_text'];
-                    if (!empty($originalOptionText)) {
-                        $updatedOptionText = $this->replaceURLParametersInContent($originalOptionText);
-                        if ($originalOptionText !== $updatedOptionText) {
-                            $sql = 'UPDATE c_survey_question_option SET option_text = :newText WHERE iid = :id';
-                            $params = [
-                                'newText' => $updatedOptionText,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                            error_log('Updated c_survey_question_option cid ='.$courseId);
-                        }
+            foreach ($items as $item) {
+                $originalText = $item[$field];
+                if (is_string($originalText) && trim($originalText) !== '') {
+                    $updatedText = $this->replaceURLParametersInContent($originalText);
+                    if ($originalText !== $updatedText) {
+                        $updateSql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
+                        $this->connection->executeQuery($updateSql, ['newText' => $updatedText, 'id' => $item['iid']]);
                     }
                 }
             }
         }
     }
 
-    private function replaceURLParametersInContent($htmlContent)
+    private function updateHtmlFiles(): void
     {
-        $pattern = '/((https?:\/\/[^\/\s]*|)\/[^?\s]+?)\?cidReq=([a-zA-Z0-9_]+)(&(?:amp;)?id_session=([0-9]+))(&(?:amp;)?gidReq=([0-9]+))([^"\s]*)/i';
+        $sql = "SELECT iid, resource_node_id FROM c_document WHERE filetype = 'file'";
+        $result = $this->connection->executeQuery($sql);
+        $items = $result->fetchAllAssociative();
 
-        // Replace URLs with a callback function.
+        $documentRepo = $this->container->get(CDocumentRepository::class);
+        $resourceNodeRepo = $this->container->get(ResourceNodeRepository::class);
+
+        foreach ($items as $item) {
+            $document = $documentRepo->find($item['iid']);
+            if (!$document) {
+                continue;
+            }
+
+            $resourceNode = $document->getResourceNode();
+            if (!$resourceNode || !$resourceNode->hasResourceFile()) {
+                continue;
+            }
+
+            $resourceFile = $resourceNode->getResourceFiles()->first();
+            if (!$resourceFile || $resourceFile->getMimeType() !== 'text/html') {
+                continue;
+            }
+
+            try {
+                $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
+                if (is_string($content) && trim($content) !== '') {
+                    $updatedContent = $this->replaceURLParametersInContent($content);
+                    if ($content !== $updatedContent) {
+                        $documentRepo->updateResourceFileContent($document, $updatedContent);
+                        $documentRepo->update($document);
+                    }
+                }
+            } catch (Exception $e) {
+                // Error handling for specific documents
+                error_log("Error processing file for document ID {$item['iid']}: " . $e->getMessage());
+            }
+        }
+    }
+
+    private function replaceURLParametersInContent(string $content): string
+    {
+        // Pattern to find and replace cidReq, id_session, and gidReq
+        $pattern = '/((https?:\/\/[^\/\s]*|)\/[^?\s]+?)\?(.*?)(cidReq=([a-zA-Z0-9_]+))((?:&|&amp;)id_session=([0-9]+))?((?:&|&amp;)gidReq=([0-9]+))?(.*)/i';
+
         $newContent = @preg_replace_callback(
             $pattern,
             function ($matches) {
-                $code = $matches[3]; // The 'code' is extracted from the captured URL.
+                $code = $matches[5];
 
                 $courseId = null;
                 $sql = 'SELECT id FROM course WHERE code = :code ORDER BY id DESC LIMIT 1';
@@ -427,27 +129,32 @@ final class Version20231022124700 extends AbstractMigrationChamilo
                 }
 
                 if (null === $courseId) {
-                    return $matches[0]; // Complete original URL.
+                    return $matches[0]; // If the courseId is not found, return the original URL.
                 }
 
-                // Processing the remaining part of the URL.
-                $remainingParams = '';
-                if (!empty($matches[8])) {
-                    $remainingParams = $matches[8];
-                    if ('&' !== $remainingParams[0]) {
-                        $remainingParams = '&'.$remainingParams;
-                    }
+                // Ensure sid and gid are always populated
+                $sessionId = isset($matches[7]) && !empty($matches[7]) ? $matches[7] : '0';
+                $groupId = isset($matches[9]) && !empty($matches[9]) ? $matches[9] : '0';
+                $remainingParams = isset($matches[10]) ? $matches[10] : '';
+
+                // Prepare new URL with updated parameters
+                $newParams = "cid=$courseId&sid=$sessionId&gid=$groupId";
+                $beforeCidReqParams = isset($matches[3]) ? $matches[3] : '';
+
+                // Ensure other parameters are maintained
+                if (!empty($remainingParams)) {
+                    $newParams .= '&' . ltrim($remainingParams, '&amp;');
                 }
 
-                // Reconstructing the URL with the new courseId and adjusted parameters.
-                return $matches[1].'?cid='.$courseId.'&sid='.$matches[5].'&gid='.$matches[7].$remainingParams;
-                // Return the new URL.
+                $finalUrl = $matches[1] . '?' . $beforeCidReqParams . $newParams;
+
+                return str_replace('&amp;', '&', $finalUrl); // Replace any remaining &amp; with &
             },
-            $htmlContent
+            $content
         );
 
         if (PREG_NO_ERROR !== preg_last_error()) {
-            error_log('Error encountered in preg_replace_callback: '.preg_last_error());
+            error_log('Error encountered in preg_replace_callback: ' . preg_last_error());
         }
 
         return $newContent;

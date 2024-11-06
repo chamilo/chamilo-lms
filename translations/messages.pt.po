@@ -15809,7 +15809,7 @@ msgstr "Endereço IP"
 msgid "Only skills that were not registered were imported"
 msgstr "Apenas foram importadas as competências ainda não registadas"
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "Não existe um nome definido para a competência"
 
 msgid "The parent skill was not set"

@@ -49,6 +49,7 @@ class SendEventRemindersCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $debug = $input->getOption('debug');
         $now = new DateTime('now', new DateTimeZone('UTC'));
+        $initialSentRemindersCount = 0;
         $sentRemindersCount = 0;
 
         if ($debug) {
@@ -88,61 +89,82 @@ class SendEventRemindersCommand extends Command
             $messageSubject = sprintf('Reminder for event: %s', $event->getTitle());
             $messageContent = implode(PHP_EOL, $eventDetails);
 
-            $resourceLink = $event->getResourceNode()->getResourceLinks()->first();
+            $initialSentRemindersCount = $sentRemindersCount;
 
-            if (!$resourceLink) {
-                if ($debug) {
-                    error_log("No ResourceLink found for event ID: {$event->getIid()}");
-                }
-                continue;
-            }
-
-            switch ($eventType) {
-                case 'personal':
-                    if ($user = $resourceLink->getUser()) {
-                        $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
-                        if ($debug) {
-                            error_log("Message sent to user ID: {$user->getId()} for personal event: " . $event->getTitle());
-                        }
+            if ('personal' === $eventType) {
+                $creator = $event->getResourceNode()->getCreator();
+                if ($creator) {
+                    $this->messageHelper->sendMessageSimple($creator->getId(), $messageSubject, $messageContent, $senderId);
+                    if ($debug) {
+                        error_log("Message sent to creator ID: {$creator->getId()} for personal event: " . $event->getTitle());
                     }
-                    break;
-                case 'global':
-                    foreach ($event->getResourceNode()->getResourceLinks() as $link) {
+                    $sentRemindersCount++;
+                }
+
+                $resourceLinks = $event->getResourceNode()->getResourceLinks();
+                if (!$resourceLinks->isEmpty()) {
+                    foreach ($resourceLinks as $link) {
                         if ($user = $link->getUser()) {
                             $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
                             if ($debug) {
-                                error_log("Message sent to user ID: {$user->getId()} for global event: " . $event->getTitle());
+                                error_log("Message sent to user ID: {$user->getId()} for personal event: " . $event->getTitle());
                             }
+                            $sentRemindersCount++;
                         }
                     }
-                    break;
-                case 'course':
-                    if ($course = $resourceLink->getCourse()) {
-                        $users = $this->courseRepository->getSubscribedUsers($course)->getQuery()->getResult();
-                        foreach ($users as $user) {
-                            $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
-                            if ($debug) {
-                                error_log("Message sent to user ID: {$user->getId()} for course event: " . $event->getTitle());
+                }
+            } else {
+                $resourceLink = $event->getResourceNode()->getResourceLinks()->first();
+                if (!$resourceLink) {
+                    if ($debug) {
+                        error_log("No ResourceLink found for event ID: {$event->getIid()}");
+                    }
+                    continue;
+                }
+
+                switch ($eventType) {
+                    case 'global':
+                        foreach ($event->getResourceNode()->getResourceLinks() as $link) {
+                            if ($user = $link->getUser()) {
+                                $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
+                                if ($debug) {
+                                    error_log("Message sent to user ID: {$user->getId()} for global event: " . $event->getTitle());
+                                }
+                                $sentRemindersCount++;
                             }
                         }
-                    }
-                    break;
-                case 'session':
-                    if ($session = $resourceLink->getSession()) {
-                        foreach ($session->getUsers() as $sessionRelUser) {
-                            $user = $sessionRelUser->getUser();
-                            $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
-                            if ($debug) {
-                                error_log("Message sent to user ID: {$user->getId()} for session event: " . $event->getTitle());
+                        break;
+                    case 'course':
+                        if ($course = $resourceLink->getCourse()) {
+                            $users = $this->courseRepository->getSubscribedUsers($course)->getQuery()->getResult();
+                            foreach ($users as $user) {
+                                $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
+                                if ($debug) {
+                                    error_log("Message sent to user ID: {$user->getId()} for course event: " . $event->getTitle());
+                                }
+                                $sentRemindersCount++;
                             }
                         }
-                    }
-                    break;
+                        break;
+                    case 'session':
+                        if ($session = $resourceLink->getSession()) {
+                            foreach ($session->getUsers() as $sessionRelUser) {
+                                $user = $sessionRelUser->getUser();
+                                $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
+                                if ($debug) {
+                                    error_log("Message sent to user ID: {$user->getId()} for session event: " . $event->getTitle());
+                                }
+                                $sentRemindersCount++;
+                            }
+                        }
+                        break;
+                }
             }
 
-            $reminder->setSent(true);
-            $this->entityManager->persist($reminder);
-            $sentRemindersCount++;
+            if ($sentRemindersCount > $initialSentRemindersCount) {
+                $reminder->setSent(true);
+                $this->entityManager->persist($reminder);
+            }
         }
 
         $this->entityManager->flush();

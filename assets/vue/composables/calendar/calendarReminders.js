@@ -14,15 +14,16 @@ export function useCalendarReminders() {
    * @returns {string}
    */
   function decodeDateInterval(reminder) {
+    let unit;
     if (reminder.period === "i") {
-      return t("%d minutes before", [reminder.count])
+      unit = t("minutes before");
+    } else if (reminder.period === "h") {
+      unit = t("hours before");
+    } else {
+      unit = t("days before");
     }
 
-    if (reminder.period === "h") {
-      return t("%d hours before", [reminder.count])
-    }
-
-    return t("%d days before", [reminder.count])
+    return `${reminder.count} ${unit}`;
   }
 
   return {

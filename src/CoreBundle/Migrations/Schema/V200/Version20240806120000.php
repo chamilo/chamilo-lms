@@ -37,6 +37,11 @@ final class Version20240806120000 extends AbstractMigrationChamilo
             'SOFTWARE_URL' => $_configuration['software_url'] ?? '',
             'DENY_DELETE_USERS' => !empty($_configuration['deny_delete_users']) ? '1' : '0',
             'HOSTING_TOTAL_SIZE_LIMIT' => $_configuration['hosting_total_size_limit'] ?? 0,
+            'THEME_FALLBACK' => $_configuration['theme_fallback'] ?? 'chamilo',
+            'PACKAGER' => $_configuration['packager'] ?? 'chamilo',
+            'DEFAULT_TEMPLATE' => $_configuration['default_template'] ?? 'default',
+            'ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE' => !empty($_configuration['admin_chamilo_announcements_disable']) ? '1' : '0',
+            'WEBSERVICE_ENABLE' => !empty($_configuration['webservice_enable']) ? '1' : '0',
         ]);
 
         // Ensure the hosting_limits.yml file exists

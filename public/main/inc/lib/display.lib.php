@@ -1771,6 +1771,7 @@ class Display
                         'role' => 'menuitem',
                         'onclick' => $item['onclick'] ?? '',
                         'data-action' => $item['data-action'] ?? '',
+                        'data-confirm' => $item['data-confirm'] ?? '',
                     ]
                 );
         }

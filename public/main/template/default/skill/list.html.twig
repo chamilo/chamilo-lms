@@ -1,98 +1,93 @@
 {% autoescape false %}
-{% if tags %}
-    <div class="row">
-        <div class="col-md-3">
-            <select id="tag-filter" class="chzn-select form-control">
-                <option value="0">{{ 'Please make a choice' | trans }}</option>
-                {% for tag in tags %}
-                    <option value="{{ tag.id }}">{{ tag.tag }}</option>
-                {% endfor %}
-            </select>
+    {% if tags %}
+        <div class="row">
+            <div class="col-md-3">
+                <select id="tag-filter" class="chzn-select form-control">
+                    <option value="0">{{ 'Please make a choice'|trans }}</option>
+                    {% for tag in tags %}
+                        <option value="{{ tag.id }}">{{ tag.tag }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <a id="filter-button" class="btn btn--plain">{{ 'Filter by tags'|trans }}</a>
+            </div>
         </div>
-        <div class="col-md-3">
-            <a id="filter-button" class="btn btn--plain">{{ 'Filter by tags' | trans }}</a>
-        </div>
-    </div>
-    <br />
-{% endif %}
+        <br />
+    {% endif %}
 
-<table class="table table-hover">
-    <thead>
+    <table class="table table-hover">
+        <thead>
         <tr>
-            <th>{{ "Badges" | trans }}</th>
-            <th>{{ "Name" | trans }}</th>
-            <th class="text-center">{{ "Short code" | trans }}</th>
-            <th class="text-center">{{ "Description" | trans }}</th>
-            <th class="text-center">{{ "Options" | trans }}</th>
+            <th>{{ "Badges"|trans }}</th>
+            <th>{{ "Name"|trans }}</th>
+            <th class="text-center">{{ "Short code"|trans }}</th>
+            <th class="text-center">{{ "Description"|trans }}</th>
+            <th class="text-center">{{ "Options"|trans }}</th>
         </tr>
-    </thead>
-    <tfoot>
+        </thead>
+        <tfoot>
         <tr>
-            <th>{{ "Badges" | trans }}</th>
-            <th>{{ "Name" | trans }}</th>
-            <th class="text-center">{{ "Short code" | trans }}</th>
-            <th class="text-center">{{ "Description" | trans }}</th>
-            <th class="text-center">{{ "Options" | trans }}</th>
+            <th>{{ "Badges"|trans }}</th>
+            <th>{{ "Name"|trans }}</th>
+            <th class="text-center">{{ "Short code"|trans }}</th>
+            <th class="text-center">{{ "Description"|trans }}</th>
+            <th class="text-center">{{ "Options"|trans }}</th>
         </tr>
-    </tfoot>
-    <tbody>
-    {% for skill in skills %}
-        <tr>
-            <td width="50">
-                {% if skill.asset %}
-                    <img src="{{ skill.asset }}?w=50" />
-                {% endif %}
-            </td>
-            <td width="200">{{ skill.title }}</td>
-            <td class="text-center">{{ skill.short_code }}</td>
-            <td width="500">{{ skill.description }}</td>
-            <td class="text-right">
-                <div class="btn-group btn-group-sm" role="group" aria-label="">
-                    <a
-                        href="{{ url('legacy_main', { 'name' : 'skills/skill_edit.php', 'id' : skill.id }) }}"
-                       class="btn btn--primary btn-sm" title="{{ "Edit" | trans }}">
-                        {{ 'ActionIcon::EDIT' | mdi_icon }}
-                    </a>
-                    <a
-                        href="{{ url('legacy_main', { 'name' : 'skills/skill_create.php', 'parent' : skill.id }) }}"
-                       class="btn btn--plain btn-sm" title="{{ "Create child skill" | trans }}">
-                        {{ 'ActionIcon::ADD' | mdi_icon }}
-                    </a>
-                    <a
-                        href="{{ url('legacy_main', { 'name' : 'skills/skill_badge_create.php', 'id' : skill.id }) }}"
-                        class="btn btn-light btn-sm" title="{{ "Create badge" | trans }}">
-                        {{ 'ObjectIcon::BADGE' | mdi_icon }}
-                    </a>
-                    {% if skill.status == 0 %}
-                        <a
-                            href="{{ url('legacy_main', { 'name' : 'skills/skill_list.php', 'id' : skill.id, 'action': 'enable' }) }}"
-                           class="btn btn--success btn-sm" title="{{ 'Enable' }}">
-                            {{ 'StateIcon::INACTIVE' | mdi_icon }}
-                        </a>
-                    {% else %}
-                        <a
-                            href="{{ url('legacy_main', { 'name' : 'skills/skill_list.php', 'id' : skill.id, 'action': 'disable' }) }}"
-                           class="btn btn-sm" title="{{ 'Disable' }}">
-                            {{ 'StateIcon::ACTIVE' | mdi_icon }}
-                        </a>
+        </tfoot>
+        <tbody>
+        {% for skill in skills %}
+            <tr>
+                <td width="50">
+                    {% if skill.asset %}
+                        <img src="{{ skill.asset }}?w=50" />
                     {% endif %}
-                </div>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+                </td>
+                <td>{{ skill.title }}</td>
+                <td class="text-center">{{ skill.short_code }}</td>
+                <td>{{ skill.description }}</td>
+                <td class="text-right">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="">
+                        <a href="{{ url('legacy_main', { 'name' : 'skills/skill_edit.php', 'id' : skill.id }) }}"
+                           class="btn btn--primary btn-sm" title="{{ "Edit"|trans }}">
+                            {{ 'ActionIcon::EDIT'|mdi_icon }}
+                        </a>
+                        <a href="{{ url('legacy_main', { 'name' : 'skills/skill_create.php', 'parent' : skill.id }) }}"
+                           class="btn btn--plain btn-sm" title="{{ "Create child skill"|trans }}">
+                            {{ 'ActionIcon::ADD'|mdi_icon }}
+                        </a>
+                        <a href="{{ url('legacy_main', { 'name' : 'skills/skill_badge_create.php', 'id' : skill.id }) }}"
+                           class="btn btn-light btn-sm" title="{{ "Create badge"|trans }}">
+                            {{ 'ObjectIcon::BADGE'|mdi_icon }}
+                        </a>
+                        {% if skill.status == 0 %}
+                            <a href="{{ url('legacy_main', { 'name' : 'skills/skill_list.php', 'id' : skill.id, 'action': 'enable' }) }}"
+                               class="btn btn--success btn-sm" title="{{ 'Enable' }}">
+                                {{ 'StateIcon::INACTIVE'|mdi_icon }}
+                            </a>
+                        {% else %}
+                            <a href="{{ url('legacy_main', { 'name' : 'skills/skill_list.php', 'id' : skill.id, 'action': 'disable' }) }}"
+                               class="btn btn-sm" title="{{ 'Disable' }}">
+                                {{ 'StateIcon::ACTIVE'|mdi_icon }}
+                            </a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-<script>
-    $(function() {
-        $("#tag-filter").val("{{ current_tag_id }}");
+    <script>
+      $(function() {
+        $("#tag-filter").val("{{ current_tag_id }}")
         $("#filter-button").click(function() {
-            var tagId = $( "#tag-filter option:selected" ).val();
-            $(location).attr(
-                'href',
-                '{{ url('legacy_main', { 'name' : 'skills/skill_list.php'}) }}' + tagId
-            );
-        });
-    });
-</script>
+          var tagId = $("#tag-filter option:selected").val()
+          $(location).attr(
+            "href",
+            '{{ url('legacy_main', { 'name' : 'skills/skill_list.php'}) }}' + tagId
+          )
+        })
+      })
+    </script>
 {% endautoescape %}

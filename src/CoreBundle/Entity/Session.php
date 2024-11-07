@@ -768,6 +768,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
+    #[Groups(['session:basic'])]
     public function getGeneralCoaches(): ReadableCollection
     {
         return $this->getGeneralCoachesSubscriptions()
@@ -1302,6 +1303,14 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         }
 
         return !empty($end) && $now <= $end;
+    }
+
+    #[Groups(['session:basic'])]
+    public function getCourseCoaches()
+    {
+        return $this->getCourseCoachesSubscriptions()
+            ->map(fn (SessionRelCourseRelUser $subscription) => $subscription->getUser())
+        ;
     }
 
     /**

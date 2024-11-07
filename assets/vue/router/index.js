@@ -175,14 +175,13 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const securityStore = useSecurityStore()
 
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!securityStore.isLoading) {
       await securityStore.checkSession()
     }
 
     if (securityStore.isAuthenticated) {
-      next();
+      next()
     } else {
       next({
         path: "/login",
@@ -196,6 +195,7 @@ router.beforeEach(async (to, from, next) => {
 
 router.beforeResolve(async (to) => {
   const cidReqStore = useCidReqStore()
+  const securityStore = useSecurityStore()
 
   let cid = parseInt(to.query?.cid ?? 0)
   const sid = parseInt(to.query?.sid ?? 0)
@@ -206,6 +206,27 @@ router.beforeResolve(async (to) => {
 
   if (cid) {
     await cidReqStore.setCourseAndSessionById(cid, sid)
+
+    if (cidReqStore.session) {
+      const isGeneralCoach = cidReqStore.session.generalCoaches.includes(securityStore.user["@id"])
+      const isCourseCoach = cidReqStore.session.courseCoaches.includes(securityStore.user["@id"])
+
+      if (isGeneralCoach || isCourseCoach) {
+        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_TEACHER")
+      } else {
+        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_STUDENT")
+      }
+    } else {
+      const isTeacher = cidReqStore.course.teachers.some((userSubscription) => {
+        return 0 === userSubscription.relationType && userSubscription.user["@id"] === securityStore.user["@id"]
+      })
+
+      if (isTeacher) {
+        securityStore.user.roles.push("ROLE_CURRENT_COURSE_TEACHER")
+      } else {
+        securityStore.user.roles.push("ROLE_CURRENT_COURSE_STUDENT")
+      }
+    }
   } else {
     cidReqStore.resetCid()
   }

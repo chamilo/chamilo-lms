@@ -43,6 +43,12 @@ class Version20240202122300 extends AbstractMigrationChamilo
                 continue;
             }
 
+            if (null === $link->getFirstResourceLink()) {
+                error_log("Link with ID $linkId does not have a resource_node");
+
+                continue;
+            }
+
             $course = $link->getFirstResourceLink()->getCourse();
             $session = $link->getFirstResourceLink()->getSession();
 

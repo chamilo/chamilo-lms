@@ -570,5 +570,8 @@
     "Promoted Messages": "Messages promus",
     "Are you sure you want to delete %s?": "\u00cates-vous certains de vouloir supprimer {0}\u202f?",
     "%s's picture": "{0}'s picture",
-    "+%d": "+{0}"
+    "+%d": "+{0}",
+    "%d minutes before": "{0} minutes avant",
+    "%d hours before": "{0} heures avant",
+    "%d days before": "{0} jours avant"
 }

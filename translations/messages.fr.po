@@ -29567,3 +29567,12 @@ msgstr "Ajouter un ami"
 
 msgid "Delete permanently"
 msgstr "Supprimer définitivement"
+
+msgid "%d minutes before"
+msgstr "%d minutes avant"
+
+msgid "%d hours before"
+msgstr "%d heures avant"
+
+msgid "%d days before"
+msgstr "%d jours avant"

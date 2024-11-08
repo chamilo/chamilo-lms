@@ -570,5 +570,8 @@
     "Promoted Messages": "Mensajes promocionados",
     "Are you sure you want to delete %s?": "\u00bfEst\u00e1 seguro de querer borrar {0}?",
     "%s's picture": "Imagen de {0}",
-    "+%d": "+{0}"
+    "+%d": "+{0}",
+    "%d minutes before": "{0} minutos antes",
+    "%d hours before": "{0} horas antes",
+    "%d days before": "{0} dias antes"
 }

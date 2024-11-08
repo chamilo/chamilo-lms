@@ -28765,3 +28765,12 @@ msgstr "Imagen de %s"
 
 msgid "Delete permanently"
 msgstr "Eliminar permanentemente"
+
+msgid "%d minutes before"
+msgstr "%d minutos antes"
+
+msgid "%d hours before"
+msgstr "%d horas antes"
+
+msgid "%d days before"
+msgstr "%d dias antes"

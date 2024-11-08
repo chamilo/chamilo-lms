@@ -569,5 +569,8 @@
     "Promoted Messages": "Promoted Messages",
     "Are you sure you want to delete %s?": "Ste prepri\u010dani, da \u017eelite odstraniti {0}?",
     "%s's picture": "{0}'s picture",
-    "+%d": "+{0}"
+    "+%d": "+{0}",
+    "%d minutes before": "{0} minutes before",
+    "%d hours before": "{0} hours before",
+    "%d days before": "{0} days before"
 }

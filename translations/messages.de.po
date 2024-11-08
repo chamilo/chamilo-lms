@@ -29219,3 +29219,12 @@ msgstr "Freunde hinzufügen"
 
 msgid "Delete permanently"
 msgstr "Endgültig löschen"
+
+msgid "%d minutes before"
+msgstr "%d Minuten vorher"
+
+msgid "%d hours before"
+msgstr "%d Stunden vorher"
+
+msgid "%d days before"
+msgstr "%d Tage vorher"

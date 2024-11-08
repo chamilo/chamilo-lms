@@ -519,5 +519,8 @@
     "All Messages": "All Messages",
     "Promoted Messages": "Promoted Messages",
     "%s's picture": "{0}'s picture",
-    "+%d": "+{0}"
+    "+%d": "+{0}",
+    "%d minutes before": "{0} minutes before",
+    "%d hours before": "{0} hours before",
+    "%d days before": "{0} days before"
 }

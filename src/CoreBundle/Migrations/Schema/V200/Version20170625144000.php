@@ -26,6 +26,10 @@ class Version20170625144000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_student_publication CHANGE user_id user_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_student_publication CHANGE parent_id parent_id INT DEFAULT NULL');
         $this->addSql('UPDATE c_student_publication SET parent_id = NULL WHERE parent_id = 0');
+        $this->addSql("
+            ALTER TABLE c_student_publication
+            ADD IF NOT EXISTS group_category_work_id INT DEFAULT 0
+        ");
 
         if ($table->hasIndex('course')) {
             $this->addSql('DROP INDEX course ON c_student_publication');

@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -44,90 +44,60 @@ class SkillRelItemRelUser
 
     public function __construct() {}
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function getSkillRelItem()
+    public function getSkillRelItem(): SkillRelItem
     {
         return $this->skillRelItem;
     }
 
-    /**
-     * @return SkillRelItemRelUser
-     */
-    public function setSkillRelItem(SkillRelItem $skillRelItem)
+    public function setSkillRelItem(SkillRelItem $skillRelItem): static
     {
         $this->skillRelItem = $skillRelItem;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getCreatedBy()
+    public function getCreatedBy(): int
     {
         return $this->createdBy;
     }
 
-    /**
-     * @return SkillRelItemRelUser
-     */
-    public function setCreatedBy(int $createdBy)
+    public function setCreatedBy(int $createdBy): static
     {
         $this->createdBy = $createdBy;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getUpdatedBy()
+    public function getUpdatedBy(): int
     {
         return $this->updatedBy;
     }
 
-    /**
-     * @return SkillRelItemRelUser
-     */
-    public function setUpdatedBy(int $updatedBy)
+    public function setUpdatedBy(int $updatedBy): static
     {
         $this->updatedBy = $updatedBy;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getResultId()
+    public function getResultId(): int
     {
         return $this->resultId;
     }
 
-    /**
-     * @return SkillRelItemRelUser
-     */
-    public function setResultId(int $resultId)
+    public function setResultId(int $resultId): static
     {
         $this->resultId = $resultId;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getUserItemResultUrl(string $cidReq)
+    public function getUserItemResultUrl(string $cidReq): string
     {
         $resultId = $this->getResultId();
 

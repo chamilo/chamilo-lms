@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -36,9 +36,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: 'skill_rel_user')]
-#[ORM\Index(name: 'idx_select_cs', columns: ['course_id', 'session_id'])]
-#[ORM\Index(name: 'idx_select_s_c_u', columns: ['session_id', 'course_id', 'user_id'])]
-#[ORM\Index(name: 'idx_select_sk_u', columns: ['skill_id', 'user_id'])]
+#[ORM\Index(columns: ['course_id', 'session_id'], name: 'idx_select_cs')]
+#[ORM\Index(columns: ['session_id', 'course_id', 'user_id'], name: 'idx_select_s_c_u')]
+#[ORM\Index(columns: ['skill_id', 'user_id'], name: 'idx_select_sk_u')]
 #[ORM\Entity]
 #[ORM\EntityListeners([SkillRelUserListener::class])]
 class SkillRelUser
@@ -50,27 +50,32 @@ class SkillRelUser
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'achievedSkills', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'achievedSkills')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
     #[Groups(['skill_rel_user:read'])]
-    #[ORM\ManyToOne(targetEntity: Skill::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Skill::class, cascade: ['persist'], inversedBy: 'issuedSkills')]
     #[ORM\JoinColumn(name: 'skill_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected ?Skill $skill = null;
 
-    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Course::class, cascade: ['persist'], inversedBy: 'issuedSkills')]
     #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 
-    #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Session::class, cascade: ['persist'], inversedBy: 'issuedSkills')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
     /**
      * @var Collection<int, SkillRelUserComment>
      */
-    #[ORM\OneToMany(targetEntity: SkillRelUserComment::class, mappedBy: 'skillRelUser', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'skillRelUser',
+        targetEntity: SkillRelUserComment::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true,
+    )]
     protected Collection $comments;
 
     #[ORM\ManyToOne(targetEntity: Level::class)]
@@ -113,12 +118,7 @@ class SkillRelUser
         return $this;
     }
 
-    /**
-     * Get skill.
-     *
-     * @return Skill
-     */
-    public function getSkill()
+    public function getSkill(): ?Skill
     {
         return $this->skill;
     }
@@ -130,12 +130,7 @@ class SkillRelUser
         return $this;
     }
 
-    /**
-     * Get course.
-     *
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): ?Course
     {
         return $this->course;
     }
@@ -147,12 +142,7 @@ class SkillRelUser
         return $this;
     }
 
-    /**
-     * Get session.
-     *
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
@@ -164,12 +154,7 @@ class SkillRelUser
         return $this;
     }
 
-    /**
-     * Get acquiredSkillAt.
-     *
-     * @return DateTime
-     */
-    public function getAcquiredSkillAt()
+    public function getAcquiredSkillAt(): DateTime
     {
         return $this->acquiredSkillAt;
     }
@@ -181,22 +166,12 @@ class SkillRelUser
         return $this;
     }
 
-    /**
-     * Get assignedBy.
-     *
-     * @return int
-     */
-    public function getAssignedBy()
+    public function getAssignedBy(): int
     {
         return $this->assignedBy;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -208,12 +183,7 @@ class SkillRelUser
         return $this;
     }
 
-    /**
-     * Get acquiredLevel.
-     *
-     * @return Level
-     */
-    public function getAcquiredLevel()
+    public function getAcquiredLevel(): ?Level
     {
         return $this->acquiredLevel;
     }
@@ -225,12 +195,7 @@ class SkillRelUser
         return $this;
     }
 
-    /**
-     * Get argumentationAuthorId.
-     *
-     * @return int
-     */
-    public function getArgumentationAuthorId()
+    public function getArgumentationAuthorId(): int
     {
         return $this->argumentationAuthorId;
     }
@@ -242,22 +207,15 @@ class SkillRelUser
         return $this;
     }
 
-    /**
-     * Get argumentation.
-     *
-     * @return string
-     */
-    public function getArgumentation()
+    public function getArgumentation(): string
     {
         return $this->argumentation;
     }
 
     /**
      * Get the source which the skill was obtained.
-     *
-     * @return string
      */
-    public function getSourceName()
+    public function getSourceName(): string
     {
         $source = '';
         if (null !== $this->session) {
@@ -273,30 +231,24 @@ class SkillRelUser
 
     /**
      * Get the URL for the issue.
-     *
-     * @return string
      */
-    public function getIssueUrl()
+    public function getIssueUrl(): string
     {
         return api_get_path(WEB_PATH).\sprintf('badge/%s', $this->id);
     }
 
     /**
-     * Get the URL for the All issues page.
-     *
-     * @return string
+     * Get the URL for the issues page.
      */
-    public function getIssueUrlAll()
+    public function getIssueUrlAll(): string
     {
         return api_get_path(WEB_PATH).\sprintf('skill/%s/user/%s', $this->skill->getId(), $this->user->getId());
     }
 
     /**
      * Get the URL for the assertion.
-     *
-     * @return string
      */
-    public function getAssertionUrl()
+    public function getAssertionUrl(): string
     {
         $url = api_get_path(WEB_CODE_PATH).'skills/assertion.php?';
 
@@ -343,18 +295,12 @@ class SkillRelUser
         return number_format($average, 2);
     }
 
-    /**
-     * @return int
-     */
-    public function getValidationStatus()
+    public function getValidationStatus(): int
     {
         return $this->validationStatus;
     }
 
-    /**
-     * @return SkillRelUser
-     */
-    public function setValidationStatus(int $validationStatus)
+    public function setValidationStatus(int $validationStatus): static
     {
         $this->validationStatus = $validationStatus;
 

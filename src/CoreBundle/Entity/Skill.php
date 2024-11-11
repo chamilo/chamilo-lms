@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -24,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: ['issuedSkills.user' => 'exact'])]
 #[ORM\Table(name: 'skill')]
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
-class Skill implements Stringable
+class Skill implements Stringable, Translatable
 {
     public const STATUS_DISABLED = 0;
     public const STATUS_ENABLED = 1;
@@ -70,11 +71,13 @@ class Skill implements Stringable
     #[ORM\OneToMany(mappedBy: 'skill', targetEntity: SkillRelGradebook::class, cascade: ['persist'])]
     protected Collection $gradeBookCategories;
 
+    #[Gedmo\Translatable]
     #[Assert\NotBlank]
     #[Groups(['skill:read', 'skill:write', 'skill_rel_user:read'])]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
+    #[Gedmo\Translatable]
     #[Assert\NotBlank]
     #[Groups(['skill:read', 'skill:write'])]
     #[ORM\Column(name: 'short_code', type: 'string', length: 100, nullable: false)]
@@ -105,6 +108,9 @@ class Skill implements Stringable
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
     protected DateTime $updatedAt;
+
+    #[Gedmo\Locale]
+    private ?string $locale = null;
 
     public function __construct()
     {
@@ -397,5 +403,17 @@ class Skill implements Stringable
     {
         $item->setSkill($this);
         $this->courses[] = $item;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): Skill
+    {
+        $this->locale = $locale;
+
+        return $this;
     }
 }

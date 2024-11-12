@@ -15,8 +15,7 @@ use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
 use DateTime;
 use DateTimeZone;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Symfony\Component\Console\Command\Command;
@@ -39,7 +38,8 @@ class LpProgressReminderCommand extends Command
         private readonly UserRepository $userRepository,
         private readonly Environment $twig,
         private readonly TranslatorInterface $translator,
-        private readonly MessageHelper $messageHelper
+        private readonly MessageHelper $messageHelper,
+        private readonly UrlGeneratorInterface $urlGenerator
     ) {
         parent::__construct();
     }
@@ -218,17 +218,23 @@ class LpProgressReminderCommand extends Command
             throw new \Exception("User not found");
         }
 
+        $platformUrl = $this->urlGenerator->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $recoverPasswordUrl = $platformUrl.'/main/auth/lostPassword.php';
+
+        $trainingCenterName = 'Your Training Center';
+        $trainers = 'Trainer Name';
+
         $hello = $this->translator->trans("Hello %s");
         $youAreRegCourse = $this->translator->trans("You are registered in the training %s since the %s");
-        $thisMessageIsAbout = $this->translator->trans("You are receiving this message because you have completed a learning path with a %s% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer.");
+        $thisMessageIsAbout = $this->translator->trans("You are receiving this message because you have completed a learning path with a %s progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer.");
         $stepsToRemind = $this->translator->trans("As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary.");
         $lpRemindFooter = $this->translator->trans("The training center<p>%s</p>Trainers:<br/>%s");
 
         $hello = sprintf($hello, $user->getFullName());
         $youAreRegCourse = sprintf($youAreRegCourse, $courseName, $registrationDate->format('Y-m-d'));
         $thisMessageIsAbout = sprintf($thisMessageIsAbout, $lpProgress);
-        $stepsToRemind = sprintf($stepsToRemind, '', $user->getUsername(), '');
-        $lpRemindFooter = sprintf($lpRemindFooter, '', 'm');
+        $stepsToRemind = sprintf($stepsToRemind, $platformUrl, $user->getUsername(), $recoverPasswordUrl);
+        $lpRemindFooter = sprintf($lpRemindFooter, $trainingCenterName, $trainers);
 
         $messageContent = $this->twig->render('@ChamiloCore/Mailer/Legacy/lp_progress_reminder_body.html.twig', [
             'HelloX' => $hello,
@@ -242,9 +248,7 @@ class LpProgressReminderCommand extends Command
             $this->messageHelper->sendMessageSimple(
                 $toUserId,
                 sprintf("Reminder number %d for the course %s", $nbRemind, $courseName),
-                $messageContent,
-                0,
-                true
+                $messageContent
             );
 
             return true;

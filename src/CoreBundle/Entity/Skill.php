@@ -136,29 +136,13 @@ class Skill implements Stringable, Translatable
         return $this;
     }
 
-    public function getTitle($translated = true): string
+    public function getTitle(): string
     {
-        if ($translated) {
-            $variable = ChamiloApi::getLanguageVar($this->title, 'Skill');
-            $translation = get_lang($variable);
-            if ($variable != $translation) {
-                return $translation;
-            }
-        }
-
         return $this->title;
     }
 
-    public function getShortCode($translated = true): string
+    public function getShortCode(): string
     {
-        if ($translated) {
-            $variable = ChamiloApi::getLanguageVar($this->shortCode, 'SkillCode');
-            $translation = get_lang($variable);
-            if ($variable != $translation) {
-                return $translation;
-            }
-        }
-
         return $this->shortCode;
     }
 

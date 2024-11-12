@@ -1426,6 +1426,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return false;
     }
 
+    /**
+     * @return Collection<int, SkillRelUser>
+     */
     public function getAchievedSkills(): Collection
     {
         return $this->achievedSkills;

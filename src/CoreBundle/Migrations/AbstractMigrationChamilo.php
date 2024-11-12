@@ -259,6 +259,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $groupRepo = $this->container->get(CGroupRepository::class);
         $userRepo = $this->container->get(UserRepository::class);
 
+        $resourceType = $repo->getResourceType();
+
         $resource->setParent($parentResource);
         $resourceNode = null;
         $userList = [];
@@ -325,7 +327,12 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             }
 
             if (null === $resourceNode) {
-                $resourceNode = $repo->addResourceNode($resource, $user, $parentResource);
+                $resourceNode = $repo->addResourceNode(
+                    $resource,
+                    $user,
+                    $parentResource,
+                    $resourceType
+                );
                 $this->entityManager->persist($resourceNode);
             }
             $resource->addCourseLink($course, $session, $group, $newVisibility);

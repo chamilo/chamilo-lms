@@ -615,21 +615,36 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
     }
 
-    public function addResourceNode(ResourceInterface $resource, User $creator, ResourceInterface $parentResource): ResourceNode
-    {
+    public function addResourceNode(
+        ResourceInterface $resource,
+        User $creator,
+        ResourceInterface $parentResource,
+        ?ResourceType $resourceType = null,
+    ): ResourceNode {
         $parentResourceNode = $parentResource->getResourceNode();
 
-        return $this->createNodeForResource($resource, $creator, $parentResourceNode);
+        return $this->createNodeForResource(
+            $resource,
+            $creator,
+            $parentResourceNode,
+            null,
+            $resourceType,
+        );
     }
 
     /**
      * @todo remove this function and merge it with addResourceNode()
      */
-    public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parentNode, ?UploadedFile $file = null): ResourceNode
-    {
+    public function createNodeForResource(
+        ResourceInterface $resource,
+        User $creator,
+        ResourceNode $parentNode,
+        ?UploadedFile $file = null,
+        ?ResourceType $resourceType = null,
+    ): ResourceNode {
         $em = $this->getEntityManager();
 
-        $resourceType = $this->getResourceType();
+        $resourceType = $resourceType ?: $this->getResourceType();
         $resourceName = $resource->getResourceName();
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
 

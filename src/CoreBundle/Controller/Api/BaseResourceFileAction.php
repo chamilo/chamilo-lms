@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Component\Utils\CreateUploadedFile;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -396,13 +397,15 @@ class BaseResourceFileAction
         $resourceLinkList = [];
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
+            if (isset($contentData['parentResourceNodeId']) && count($contentData) === 1) {
+                $parentResourceNodeId = (int) $contentData['parentResourceNodeId'];
+            }
             $title = $contentData['title'] ?? '';
             $content = $contentData['contentFile'] ?? '';
             $resourceLinkList = $contentData['resourceLinkListFromEntity'] ?? [];
         } else {
             $title = $request->get('title');
             $content = $request->request->get('contentFile');
-            // $comment = $request->request->get('comment');
         }
 
         $repo->setResourceName($resource, $title);
@@ -445,6 +448,13 @@ class BaseResourceFileAction
         // If it's a folder then change the visibility to the children (That have the same link).
         if ($isRecursive && null !== $link) {
             $repo->copyVisibilityToChildren($resource->getResourceNode(), $link);
+        }
+
+        if (!empty($parentResourceNodeId)) {
+            $parentResourceNode = $em->getRepository(ResourceNode::class)->find($parentResourceNodeId);
+            if ($parentResourceNode) {
+                $resourceNode->setParent($parentResourceNode);
+            }
         }
 
         $resourceNode->setUpdatedAt(new DateTime());

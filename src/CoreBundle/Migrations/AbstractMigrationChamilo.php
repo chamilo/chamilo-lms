@@ -292,20 +292,14 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             }
 
             // If c_item_property.insert_user_id doesn't exist we use the first admin id.
-            $user = null;
-            if (isset($userList[$userId])) {
-                $user = $userList[$userId];
-            } else {
-                if (!empty($userId)) {
-                    $userFound = $userRepo->find($userId);
-                    if ($userFound) {
-                        $user = $userList[$userId] = $userRepo->find($userId);
-                    }
-                }
-            }
+            $user = $admin;
 
-            if (null === $user) {
-                $user = $admin;
+            if ($userId) {
+                if (isset($userList[$userId])) {
+                    $user = $userList[$userId];
+                } elseif ($userFound = $userRepo->find($userId)) {
+                    $user = $userList[$userId] = $userFound;
+                }
             }
 
             $session = null;

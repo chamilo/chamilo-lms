@@ -88,9 +88,10 @@ final class Version20201216110722 extends AbstractMigrationChamilo
         }
         // Restoring attendance title and resource_node title
         foreach ($attendancesBackup as $attendance) {
-            $sqlRestoreAttendance = "UPDATE c_attendance SET title = '{$attendance['title']}' where iid = {$attendance['iid']}";
+            $titleForDatabase = Database::escape_string($attendance['title']);
+            $sqlRestoreAttendance = "UPDATE c_attendance SET title = '{$titleForDatabase}' where iid = {$attendance['iid']}";
             $resultUpdate = $this->connection->executeQuery($sqlRestoreAttendance);
-            $sqlUpdateResourceNode = "UPDATE resource_node SET title = '{$attendance['title']}' where id in (SELECT resource_node_id FROM c_attendance where iid = {$attendance['iid']})";
+            $sqlUpdateResourceNode = "UPDATE resource_node SET title = '{$titleForDatabase}' where id in (SELECT resource_node_id FROM c_attendance where iid = {$attendance['iid']})";
             $resultUpdate = $this->connection->executeQuery($sqlUpdateResourceNode);
         }
     }

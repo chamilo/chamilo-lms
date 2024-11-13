@@ -3,12 +3,15 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Controller\ExceptionController;
+use Chamilo\CoreBundle\EventListener\ExceptionListener;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpFoundation\Response;
 
 // Use when running PHPUnit tests.
 if (isset($fileToLoad)) {
@@ -30,7 +33,7 @@ if (file_exists($envFile)) {
 }
 
 $env = $_SERVER['APP_ENV'] ?? 'dev';
-$debug = $env === 'prod' || $env === 'dev';
+$debug = 'dev' === $env;
 if ($debug) {
     Debug::enable();
 }
@@ -80,6 +83,26 @@ if ($isCli) {
     $router = $container->get('router');
     $context = $router->getContext();
     $router->setContext($context);
+
+    set_exception_handler(function ($exception) use ($kernel, $container) {
+        $request = Request::createFromGlobals();
+        $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $exception);
+        $listener = $container->get(ExceptionListener::class);
+        if (is_callable([$listener, '__invoke'])) {
+            $listener->__invoke($event);
+        } else {
+            $response = new Response('Error occurred', Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response->send();
+            return;
+        }
+        $response = $event->getResponse();
+        if ($response) {
+            $response->send();
+        } else {
+            $response = new Response('An error occurred', Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response->send();
+        }
+    });
 
     $context = Container::getRouter()->getContext();
 

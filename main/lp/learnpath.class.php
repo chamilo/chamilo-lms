@@ -3718,7 +3718,6 @@ class learnpath
                                         'doc',
                                         'docx',
                                         'odt',
-                                        'pdf',
                                         'dot',
                                     ];
                                     $officeExtensions = [
@@ -3732,7 +3731,6 @@ class learnpath
                                         'doc',
                                         'docx',
                                         'odt',
-                                        'pdf',
                                     ];
 
                                     if (in_array($extension, $extensionsToDownload)) {

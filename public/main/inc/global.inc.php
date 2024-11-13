@@ -30,7 +30,7 @@ if (file_exists($envFile)) {
 }
 
 $env = $_SERVER['APP_ENV'] ?? 'dev';
-$debug = 'dev' === $env;
+$debug = $env === 'prod' || $env === 'dev';
 if ($debug) {
     Debug::enable();
 }

@@ -326,6 +326,7 @@ if (1 === $activeUser) {
 
 $filterData = [];
 if ($searchForm->validate()) {
+    $showAllStudentByDefault = true;
     $filterData = $searchForm->getSubmitValues();
 
     foreach ($filters as $filter) {

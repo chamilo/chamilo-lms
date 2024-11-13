@@ -203,8 +203,8 @@ if (ChamiloApi::isAjaxRequest() && $_SERVER['REQUEST_METHOD'] === 'POST' && isse
 $first_letter_user = '';
 
 if ((isset($_POST['form_sent']) && $_POST['form_sent']) || isset($_REQUEST['firstLetterUser'])) {
-    $form_sent = $_POST['form_sent'];
-    $elements_posted = $_POST['elements_in_name'] ?? null;
+    $form_sent = $_POST['form_sent'] ?? 0;
+    $elements_posted = $_POST['elements_in_name'] ?? [];
     $first_letter_user = Security::remove_XSS($_REQUEST['firstLetterUser']);
 
     if (!is_array($elements_posted)) {

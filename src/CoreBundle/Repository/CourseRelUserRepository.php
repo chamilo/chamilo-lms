@@ -31,10 +31,9 @@ class CourseRelUserRepository extends ServiceEntityRepository
             ->leftJoin(CLpView::class, 'lpv', 'WITH', 'lpv.user = u.id AND lpv.course = cu.course')
             ->leftJoin(CLp::class, 'lp', 'WITH', 'lp.iid = lpv.lp AND lp.iid IN (:lpIds)')
             ->where('cu.course = :courseId')
-            ->andWhere('lpv.course = :courseId')
+            ->andWhere('(lpv.progress < 100 OR lpv.progress IS NULL OR lpv.lp IS NULL)')
             ->setParameter('courseId', $courseId)
-            ->setParameter('lpIds', $lpIds)
-            ->andWhere('(lpv.progress < 100 OR lpv.progress IS NULL)');
+            ->setParameter('lpIds', $lpIds);
 
         return $qb->getQuery()->getResult();
     }

@@ -18,7 +18,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\Listener\MessageListener;
-use Chamilo\CoreBundle\Filter\SearchOrFilter;
+use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\State\MessageByGroupStateProvider;
 use Chamilo\CoreBundle\State\MessageProcessor;
@@ -78,7 +78,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     BooleanFilter::class,
     properties: ['receivers.read']
 )]
-#[ApiFilter(SearchOrFilter::class, properties: ['title', 'content'])]
+#[ApiFilter(PartialSearchOrFilter::class, properties: ['title', 'content'])]
 #[ApiFilter(ExistsFilter::class, properties: ['receivers.deletedAt'])]
 class Message
 {

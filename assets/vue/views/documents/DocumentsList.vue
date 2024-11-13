@@ -179,12 +179,14 @@
             icon="folder-move"
             size="small"
             type="secondary"
+            :title="t('Move')"
             @click="openMoveDialog(slotProps.data)"
           />
           <BaseButton
             icon="information"
             size="small"
             type="primary"
+            :title="t('Information')"
             @click="btnShowInformationOnClick(slotProps.data)"
           />
 
@@ -199,6 +201,7 @@
             "
             size="small"
             type="secondary"
+            :title="t('Visibility')"
             @click="btnChangeVisibilityOnClick(slotProps.data)"
           />
 
@@ -207,6 +210,7 @@
             icon="edit"
             size="small"
             type="secondary"
+            :title="t('Edit')"
             @click="btnEditOnClick(slotProps.data)"
           />
 
@@ -215,6 +219,7 @@
             icon="delete"
             size="small"
             type="danger"
+            :title="t('Delete')"
             @click="confirmDeleteItem(slotProps.data)"
           />
           <BaseButton
@@ -223,6 +228,7 @@
             :icon="slotProps.data.iid === defaultCertificateId ? 'certificate-selected' : 'certificate-not-selected'"
             size="small"
             type="slotProps.data.iid === defaultCertificateId ? 'success' : 'black'"
+            :title="t('Set as default certificate')"
             @click="selectAsDefaultCertificate(slotProps.data)"
           />
           <BaseButton
@@ -230,6 +236,7 @@
             :icon="getTemplateIcon(slotProps.data.iid)"
             size="small"
             type="secondary"
+            :title="t('Template options')"
             @click="openTemplateForm(slotProps.data.iid)"
           />
         </div>

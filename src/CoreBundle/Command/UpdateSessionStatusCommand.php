@@ -50,9 +50,9 @@ class UpdateSessionStatusCommand extends Command
             $id = $session->getId();
             $start = $session->getDisplayStartDate();
             $end = $session->getDisplayEndDate();
-            $userCount = $this->sessionRepository->countUsersBySession($session->getId());
+            $studentCount = $this->sessionRepository->countUsersBySession($session->getId());
 
-            $status = $this->determineSessionStatus($start, $end, $userCount, $now);
+            $status = $this->determineSessionStatus($start, $end, $studentCount, $now);
 
             if ($debug) {
                 $startFormatted = $start ? $start->format('Y-m-d H:i:s') : 'N/A';

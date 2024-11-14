@@ -127,28 +127,62 @@ class LpProgressReminderCommand extends Command
             $lpId = $user['lpId'];
             $progress = (int) $user['progress'];
 
-            if (!isset($lpItems[$lpId])) {
-                continue;
+            if ($lpId === null) {
+                foreach ($lpItems as $lpId => $nbDaysForLpCompletion) {
+                    $this->sendReminderIfNeeded(
+                        $userId,
+                        $courseTitle,
+                        $courseId,
+                        $sessionId ?? 0,
+                        (int) $nbDaysForLpCompletion,
+                        $debugMode,
+                        $lpId,
+                        $progress
+                    );
+                }
+            } else {
+                $nbDaysForLpCompletion = (int) ($lpItems[$lpId] ?? self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION);
+                $this->sendReminderIfNeeded(
+                    $userId,
+                    $courseTitle,
+                    $courseId,
+                    $sessionId ?? 0,
+                    $nbDaysForLpCompletion,
+                    $debugMode,
+                    $lpId,
+                    $progress
+                );
             }
+        }
+    }
 
-            $sessionId = $checkSession && isset($user['sessionId']) && $user['sessionId'] > 0 ? $user['sessionId'] : 0;
-
-            $registrationDate = $this->trackEDefaultRepository->getUserCourseRegistrationAt($courseId, $userId, $sessionId);
-            $nbDaysForLpCompletion = (int) $lpItems[$lpId];
-
-            if ($registrationDate) {
+    /**
+     * Sends a progress reminder to a user if the conditions for reminder timing are met,
+     * based on their registration date and learning path completion criteria.
+     */
+    private function sendReminderIfNeeded(
+        int $userId,
+        string $courseTitle,
+        int $courseId,
+        int $sessionId,
+        int $nbDaysForLpCompletion,
+        bool $debugMode,
+        ?int $lpId,
+        int $progress
+    ): void {
+        $registrationDate = $this->trackEDefaultRepository->getUserCourseRegistrationAt($courseId, $userId, $sessionId);
+        if ($registrationDate) {
+            if ($debugMode) {
+                $sessionInfo = $sessionId > 0 ? "in session ID $sessionId" : "without a session";
+                echo "Registration date: {$registrationDate->format('Y-m-d H:i:s')}, Days for completion: $nbDaysForLpCompletion, LP ID: {$lpId}, $sessionInfo\n";
+            }
+            if ($this->isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion)) {
+                $nbRemind = $this->getNbReminder($registrationDate, $nbDaysForLpCompletion);
                 if ($debugMode) {
-                    $sessionInfo = $sessionId > 0 ? "in session ID $sessionId" : "without a session";
-                    echo "Registration date: {$registrationDate->format('Y-m-d H:i:s')}, Days for completion: $nbDaysForLpCompletion, LP ID: $lpId, $sessionInfo\n";
+                    echo "Sending reminder to user $userId for course $courseTitle (LP ID: {$lpId}) $sessionInfo\n";
+                    $this->logReminderSent($userId, $courseTitle, $nbRemind, $debugMode, $lpId, $sessionId);
                 }
-                if ($this->isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion)) {
-                    $nbRemind = $this->getNbReminder($registrationDate, $nbDaysForLpCompletion);
-                    if ($debugMode) {
-                        echo "Sending reminder to user $userId for course $courseTitle (LP ID: $lpId) $sessionInfo\n";
-                        $this->logReminderSent($userId, $courseTitle, $nbRemind, $debugMode, $lpId, $sessionId);
-                    }
-                    $this->sendLpReminder($userId, $courseTitle, $progress, $registrationDate, $nbRemind);
-                }
+                $this->sendLpReminder($userId, $courseTitle, $progress, $registrationDate, $nbRemind);
             }
         }
     }

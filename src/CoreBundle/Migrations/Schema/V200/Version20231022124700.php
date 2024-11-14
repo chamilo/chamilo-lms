@@ -155,6 +155,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
 
         if (PREG_NO_ERROR !== preg_last_error()) {
             error_log('Error encountered in preg_replace_callback: ' . preg_last_error());
+            $newContent = $content;
         }
 
         return $newContent;

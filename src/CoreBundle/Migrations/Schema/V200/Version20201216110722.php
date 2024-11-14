@@ -26,6 +26,7 @@ final class Version20201216110722 extends AbstractMigrationChamilo
         $attendanceRepo = $this->container->get(CAttendanceRepository::class);
         // $attendanceRepo = $container->get(CAttendanceCalendar::class);
         $courseRepo = $this->container->get(CourseRepository::class);
+        $attendanceResourceType = $attendanceRepo->getResourceType();
 
         $admin = $this->getAdmin();
 
@@ -75,7 +76,9 @@ final class Version20201216110722 extends AbstractMigrationChamilo
                     $course,
                     $admin,
                     $resource,
-                    $course
+                    $course,
+                    [],
+                    $attendanceResourceType
                 );
 
                 if (false === $result) {

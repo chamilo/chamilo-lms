@@ -18,7 +18,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\Listener\MessageListener;
-use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
+use Chamilo\CoreBundle\Filter\MatchSearchFilter;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\State\MessageByGroupStateProvider;
 use Chamilo\CoreBundle\State\MessageProcessor;
@@ -35,6 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['user_sender_id'], name: 'idx_message_user_sender')]
 #[ORM\Index(columns: ['group_id'], name: 'idx_message_group')]
 #[ORM\Index(columns: ['msg_type'], name: 'idx_message_type')]
+#[Orm\Index(columns: ['title', 'content'], name: 'idx_message_search', flags: ['fulltext'])]
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 #[ORM\EntityListeners([MessageListener::class])]
 #[ApiResource(
@@ -78,7 +79,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     BooleanFilter::class,
     properties: ['receivers.read']
 )]
-#[ApiFilter(PartialSearchOrFilter::class, properties: ['title', 'content'])]
+#[ApiFilter(MatchSearchFilter::class, properties: ['title', 'content'])]
 #[ApiFilter(ExistsFilter::class, properties: ['receivers.deletedAt'])]
 class Message
 {

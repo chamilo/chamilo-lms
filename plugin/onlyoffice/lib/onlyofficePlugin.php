@@ -121,4 +121,23 @@ class OnlyofficePlugin extends Plugin implements HookPluginInterface
     {
         return $this->pluginName;
     }
+
+    public static function isExtensionAllowed(string $extension): bool
+    {
+        $officeExtensions = [
+            'ppt',
+            'pptx',
+            'odp',
+            'xls',
+            'xlsx',
+            'ods',
+            'csv',
+            'doc',
+            'docx',
+            'odt',
+            'pdf',
+        ];
+
+        return in_array($extension, $officeExtensions);
+    }
 }

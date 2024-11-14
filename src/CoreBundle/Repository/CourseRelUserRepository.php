@@ -25,13 +25,15 @@ class CourseRelUserRepository extends ServiceEntityRepository
     public function getCourseUsers(int $courseId, array $lpIds): array
     {
         $qb = $this->createQueryBuilder('cu')
-            ->select('u.id AS userId, c.title AS courseTitle, lp.iid AS lpId, lpv.progress')
+            ->select('u.id AS userId, c.title AS courseTitle, lp.iid AS lpId, COALESCE(lpv.progress, 0) AS progress')
             ->innerJoin('cu.user', 'u')
             ->innerJoin('cu.course', 'c')
-            ->leftJoin(CLpView::class, 'lpv', 'WITH', 'lpv.user = u.id AND lpv.course = cu.course')
-            ->leftJoin(CLp::class, 'lp', 'WITH', 'lp.iid = lpv.lp AND lp.iid IN (:lpIds)')
+            ->leftJoin(CLpView::class, 'lpv', 'WITH', 'lpv.user = u.id AND lpv.course = cu.course AND lpv.lp IN (:lpIds)')
+            ->leftJoin(CLp::class, 'lp', 'WITH', 'lp.iid IN (:lpIds)')
+            ->innerJoin('lp.resourceNode', 'rn')
             ->where('cu.course = :courseId')
-            ->andWhere('(lpv.progress < 100 OR lpv.progress IS NULL OR lpv.lp IS NULL)')
+            ->andWhere('rn.parent = c.resourceNode')
+            ->andWhere('(lpv.progress < 100 OR lpv.progress IS NULL)')
             ->setParameter('courseId', $courseId)
             ->setParameter('lpIds', $lpIds);
 

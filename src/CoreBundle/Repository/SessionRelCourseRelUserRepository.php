@@ -25,13 +25,15 @@ class SessionRelCourseRelUserRepository extends ServiceEntityRepository
     public function getSessionCourseUsers(int $courseId, array $lpIds): array
     {
         $qb = $this->createQueryBuilder('scu')
-            ->select('u.id AS userId, c.title AS courseTitle, lp.iid AS lpId, lpv.progress, IDENTITY(scu.session) AS sessionId')
+            ->select('u.id AS userId, c.title AS courseTitle, lp.iid AS lpId, COALESCE(lpv.progress, 0) AS progress, IDENTITY(scu.session) AS sessionId')
             ->innerJoin('scu.user', 'u')
             ->innerJoin('scu.course', 'c')
-            ->leftJoin(CLpView::class, 'lpv', 'WITH', 'lpv.user = u.id AND lpv.course = scu.course')
-            ->leftJoin(CLp::class, 'lp', 'WITH', 'lp.iid = lpv.lp AND lp.iid IN (:lpIds)')
+            ->leftJoin(CLpView::class, 'lpv', 'WITH', 'lpv.user = u.id AND lpv.course = scu.course AND lpv.lp IN (:lpIds)')
+            ->leftJoin(CLp::class, 'lp', 'WITH', 'lp.iid IN (:lpIds)')
+            ->innerJoin('lp.resourceNode', 'rn')
             ->where('scu.course = :courseId')
-            ->andWhere('(lpv.progress < 100 OR lpv.progress IS NULL OR lpv.lp IS NULL)')
+            ->andWhere('rn.parent = c.resourceNode')
+            ->andWhere('(lpv.progress < 100 OR lpv.progress IS NULL)')
             ->setParameter('courseId', $courseId)
             ->setParameter('lpIds', $lpIds);
 

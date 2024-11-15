@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
@@ -238,7 +239,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $admin,
         ResourceInterface $resource,
         $parentResource,
-        array $items = []
+        array $items = [],
+        ?ResourceType $resourceType = null,
     ) {
         $courseId = $course->getId();
         $id = $resource->getResourceIdentifier();
@@ -259,7 +261,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $groupRepo = $this->container->get(CGroupRepository::class);
         $userRepo = $this->container->get(UserRepository::class);
 
-        $resourceType = $repo->getResourceType();
+        $resourceType = $resourceType ?: $repo->getResourceType();
 
         $resource->setParent($parentResource);
         $resourceNode = null;

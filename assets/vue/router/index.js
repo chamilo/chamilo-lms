@@ -21,7 +21,6 @@ import assignments from "./assignments"
 import links from "./links"
 import glossary from "./glossary"
 import { useSecurityStore } from "../store/securityStore"
-import securityService from "../services/securityService"
 import MyCourseList from "../views/user/courses/List.vue"
 import MySessionList from "../views/user/sessions/SessionsCurrent.vue"
 import MySessionListPast from "../views/user/sessions/SessionsPast.vue"
@@ -44,6 +43,7 @@ import courseService from "../services/courseService"
 import catalogueCourses from "./cataloguecourses"
 import catalogueSessions from "./cataloguesessions"
 import { customVueTemplateEnabled } from "../config/env"
+import { useUserSessionSubscription } from "../composables/userPermissions"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -208,10 +208,12 @@ router.beforeResolve(async (to) => {
     await cidReqStore.setCourseAndSessionById(cid, sid)
 
     if (cidReqStore.session) {
-      const isGeneralCoach = cidReqStore.session.generalCoaches.includes(securityStore.user["@id"])
-      const isCourseCoach = cidReqStore.session.courseCoaches.includes(securityStore.user["@id"])
+      const { isGeneralCoach, isCourseCoach } = useUserSessionSubscription()
 
-      if (isGeneralCoach || isCourseCoach) {
+      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_TEACHER")
+      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_STUDENT")
+
+      if (isGeneralCoach.value || isCourseCoach.value) {
         securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_TEACHER")
       } else {
         securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_STUDENT")

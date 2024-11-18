@@ -1,7 +1,10 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\AzureActiveDirectory\AzureSyncState;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\Tools\ToolsException;
 use TheNetworg\OAuth2\Client\Provider\Azure;
 
 /**
@@ -28,6 +31,8 @@ class AzureActiveDirectory extends Plugin
     public const SETTING_EXISTING_USER_VERIFICATION_ORDER = 'existing_user_verification_order';
     public const SETTING_TENANT_ID = 'tenant_id';
     public const SETTING_DEACTIVATE_NONEXISTING_USERS = 'deactivate_nonexisting_users';
+    public const SETTING_GET_USERS_DELTA = 'script_users_delta';
+    public const SETTING_GET_USERGROUPS_DELTA = 'script_usergroups_delta';
 
     public const URL_TYPE_AUTHORIZE = 'login';
     public const URL_TYPE_LOGOUT = 'logout';
@@ -59,9 +64,11 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_EXISTING_USER_VERIFICATION_ORDER => 'text',
             self::SETTING_TENANT_ID => 'text',
             self::SETTING_DEACTIVATE_NONEXISTING_USERS => 'boolean',
+            self::SETTING_GET_USERS_DELTA => 'boolean',
+            self::SETTING_GET_USERGROUPS_DELTA => 'boolean',
         ];
 
-        parent::__construct('2.4', 'Angel Fernando Quiroz Campos, Yannick Warnier', $settings);
+        parent::__construct('2.5', 'Angel Fernando Quiroz Campos, Yannick Warnier', $settings);
     }
 
     /**
@@ -131,6 +138,8 @@ class AzureActiveDirectory extends Plugin
 
     /**
      * Create extra fields for user when installing.
+     *
+     * @throws ToolsException
      */
     public function install()
     {
@@ -151,6 +160,35 @@ class AzureActiveDirectory extends Plugin
             ExtraField::FIELD_TYPE_TEXT,
             $this->get_lang('AzureUid'),
             ''
+        );
+
+        $em = Database::getManager();
+
+        if ($em->getConnection()->getSchemaManager()->tablesExist(['course_home_notify_notification'])) {
+            return;
+        }
+
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema(
+            [
+                $em->getClassMetadata(AzureSyncState::class),
+            ]
+        );
+    }
+
+    public function uninstall()
+    {
+        $em = Database::getManager();
+
+        if (!$em->getConnection()->getSchemaManager()->tablesExist(['course_home_notify_notification'])) {
+            return;
+        }
+
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->dropSchema(
+            [
+                $em->getClassMetadata(AzureSyncState::class),
+            ]
         );
     }
 
@@ -384,5 +422,28 @@ class AzureActiveDirectory extends Plugin
             $active,
             $extra,
         ];
+    }
+
+    public function getSyncState(string $title): ?AzureSyncState
+    {
+        $stateRepo = Database::getManager()->getRepository(AzureSyncState::class);
+
+        return $stateRepo->findOneBy(['title' => $title]);
+    }
+
+    public function saveSyncState(string $title, $value)
+    {
+        $state = $this->getSyncState($title);
+
+        if (!$state) {
+            $state = new AzureSyncState();
+            $state->setTitle($title);
+
+            Database::getManager()->persist($state);
+        }
+
+        $state->setValue($value);
+
+        Database::getManager()->flush();
     }
 }

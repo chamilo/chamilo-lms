@@ -281,7 +281,7 @@
       :options="folders"
       optionLabel="label"
       optionValue="value"
-      placeholder="Select a folder"
+      :placeholder="t('Select a folder')"
     />
   </BaseDialogConfirmCancel>
 

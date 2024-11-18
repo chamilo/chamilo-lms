@@ -1,5 +1,13 @@
 # Azure Active Directory Changelog
 
+## 2.5 - 2024-11-18
+
+* Added new options to get the user and groups with delta query (or change tracking) when syncing with scripts.
+this requires manually doing the following changes to  your database if you are upgrading from v2.4
+```sql
+CREATE TABLE azure_ad_sync_state (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, value LONGTEXT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+```
+
 ## 2.4 - 2024-08-28
 
 * Added a new user extra field to save the unique Azure ID (internal UID).

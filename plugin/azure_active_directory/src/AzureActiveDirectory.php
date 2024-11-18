@@ -68,7 +68,7 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_GET_USERGROUPS_DELTA => 'boolean',
         ];
 
-        parent::__construct('2.4', 'Angel Fernando Quiroz Campos, Yannick Warnier', $settings);
+        parent::__construct('2.5', 'Angel Fernando Quiroz Campos, Yannick Warnier', $settings);
     }
 
     /**

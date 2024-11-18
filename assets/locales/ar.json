@@ -572,5 +572,9 @@
     "+%d": "+{0}",
     "%d minutes before": "{0} minutes before",
     "%d hours before": "{0} hours before",
-    "%d days before": "{0} days before"
+    "%d days before": "{0} days before",
+    "Move": "\u0646\u0642\u0644",
+    "Select the destination folder": "Select the destination folder",
+    "Select a folder": "Select a folder",
+    "Move document": "\u0646\u0642\u0644 \u0627\u0644\u0645\u0633\u062a\u0646\u062f"
 }

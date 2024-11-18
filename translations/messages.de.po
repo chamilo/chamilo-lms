@@ -29228,3 +29228,9 @@ msgstr "%d Stunden vorher"
 
 msgid "%d days before"
 msgstr "%d Tage vorher"
+
+msgid "Select a folder"
+msgstr "Wählen Sie einen Ordner aus"
+
+msgid "Select the destination folder"
+msgstr "Wählen Sie den Zielordner"

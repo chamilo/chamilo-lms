@@ -27796,3 +27796,9 @@ msgstr "%d hours before"
 
 msgid "%d days before"
 msgstr "%d days before"
+
+msgid "Select a folder"
+msgstr "Select a folder"
+
+msgid "Select the destination folder"
+msgstr "Select the destination folder"

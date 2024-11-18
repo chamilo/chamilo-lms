@@ -573,5 +573,9 @@
     "+%d": "+{0}",
     "%d minutes before": "{0} minutos antes",
     "%d hours before": "{0} horas antes",
-    "%d days before": "{0} dias antes"
+    "%d days before": "{0} dias antes",
+    "Move": "Mover",
+    "Select the destination folder": "Seleccione la carpeta de destino",
+    "Select a folder": "Seleccione una carpeta",
+    "Move document": "Mover el documento"
 }

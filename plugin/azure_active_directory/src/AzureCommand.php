@@ -2,6 +2,7 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\AzureActiveDirectory\AzureSyncState;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 use TheNetworg\OAuth2\Client\Provider\Azure;
@@ -56,11 +57,21 @@ abstract class AzureCommand
             'id',
         ];
 
-        $query = sprintf(
-            '$top=%d&$select=%s',
-            AzureActiveDirectory::API_PAGE_SIZE,
-            implode(',', $userFields)
-        );
+        $getUsersDelta = 'true' === $this->plugin->get(AzureActiveDirectory::SETTING_GET_USERS_DELTA);
+
+        if ($getUsersDelta) {
+            $usersDeltaLink = $this->plugin->getSyncState(AzureSyncState::USERS_DATALINK);
+
+            $query = $usersDeltaLink
+                ? $usersDeltaLink->getValue()
+                : sprintf('$select=%s', implode(',', $userFields));
+        } else {
+            $query = sprintf(
+                '$top=%d&$select=%s',
+                AzureActiveDirectory::API_PAGE_SIZE,
+                implode(',', $userFields)
+            );
+        }
 
         $token = null;
 
@@ -70,7 +81,7 @@ abstract class AzureCommand
             try {
                 $azureUsersRequest = $this->provider->request(
                     'get',
-                    "users?$query",
+                    $getUsersDelta ? "users/delta?$query" : "users?$query",
                     $token
                 );
             } catch (Exception $e) {
@@ -80,6 +91,10 @@ abstract class AzureCommand
             $azureUsersInfo = $azureUsersRequest['value'] ?? [];
 
             foreach ($azureUsersInfo as $azureUserInfo) {
+                $azureUserInfo['mail'] = $azureUserInfo['mail'] ?? null;
+                $azureUserInfo['surname'] = $azureUserInfo['surname'] ?? null;
+                $azureUserInfo['givenName'] = $azureUserInfo['givenName'] ?? null;
+
                 yield $azureUserInfo;
             }
 
@@ -88,6 +103,13 @@ abstract class AzureCommand
             if (!empty($azureUsersRequest['@odata.nextLink'])) {
                 $hasNextLink = true;
                 $query = parse_url($azureUsersRequest['@odata.nextLink'], PHP_URL_QUERY);
+            }
+
+            if ($getUsersDelta && !empty($azureUsersRequest['@odata.deltaLink'])) {
+                $this->plugin->saveSyncState(
+                    AzureSyncState::USERS_DATALINK,
+                    parse_url($azureUsersRequest['@odata.deltaLink'], PHP_URL_QUERY),
+                );
             }
         } while ($hasNextLink);
     }
@@ -105,11 +127,21 @@ abstract class AzureCommand
             'description',
         ];
 
-        $query = sprintf(
-            '$top=%d&$select=%s',
-            AzureActiveDirectory::API_PAGE_SIZE,
-            implode(',', $groupFields)
-        );
+        $getUsergroupsDelta = 'true' === $this->plugin->get(AzureActiveDirectory::SETTING_GET_USERGROUPS_DELTA);
+
+        if ($getUsergroupsDelta) {
+            $usergroupsDeltaLink = $this->plugin->getSyncState(AzureSyncState::USERGROUPS_DATALINK);
+
+            $query = $usergroupsDeltaLink
+                ? $usergroupsDeltaLink->getValue()
+                : sprintf('$select=%s', implode(',', $groupFields));
+        } else {
+            $query = sprintf(
+                '$top=%d&$select=%s',
+                AzureActiveDirectory::API_PAGE_SIZE,
+                implode(',', $groupFields)
+            );
+        }
 
         $token = null;
 
@@ -117,7 +149,11 @@ abstract class AzureCommand
             $this->generateOrRefreshToken($token);
 
             try {
-                $azureGroupsRequest = $this->provider->request('get', "groups?$query", $token);
+                $azureGroupsRequest = $this->provider->request(
+                    'get',
+                    $getUsergroupsDelta ? "groups/delta?$query" : "groups?$query",
+                    $token
+                );
             } catch (Exception $e) {
                 throw new Exception('Exception when requesting groups from Azure: '.$e->getMessage());
             }
@@ -133,6 +169,13 @@ abstract class AzureCommand
             if (!empty($azureGroupsRequest['@odata.nextLink'])) {
                 $hasNextLink = true;
                 $query = parse_url($azureGroupsRequest['@odata.nextLink'], PHP_URL_QUERY);
+            }
+
+            if ($getUsergroupsDelta && !empty($azureGroupsRequest['@odata.deltaLink'])) {
+                $this->plugin->saveSyncState(
+                    AzureSyncState::USERGROUPS_DATALINK,
+                    parse_url($azureGroupsRequest['@odata.deltaLink'], PHP_URL_QUERY),
+                );
             }
         } while ($hasNextLink);
     }

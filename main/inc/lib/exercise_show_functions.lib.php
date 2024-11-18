@@ -30,7 +30,8 @@ class ExerciseShowFunctions
             $answer,
             $feedbackType,
             $resultsDisabled,
-            $showTotalScoreAndUserChoices
+            $showTotalScoreAndUserChoices,
+            $exercise
         );
 
         if (empty($id)) {

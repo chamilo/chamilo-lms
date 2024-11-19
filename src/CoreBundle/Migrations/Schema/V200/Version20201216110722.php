@@ -13,6 +13,8 @@ use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Doctrine\DBAL\Schema\Schema;
+use Database;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class Version20201216110722 extends AbstractMigrationChamilo
 {
@@ -90,8 +92,10 @@ final class Version20201216110722 extends AbstractMigrationChamilo
             }
         }
         // Restoring attendance title and resource_node title
+        $db = new Database();
+        $db->setManager($this->entityManager);
         foreach ($attendancesBackup as $attendance) {
-            $titleForDatabase = Database::escape_string($attendance['title']);
+            $titleForDatabase = $db->escape_string($attendance['title']);
             $sqlRestoreAttendance = "UPDATE c_attendance SET title = '{$titleForDatabase}' where iid = {$attendance['iid']}";
             $resultUpdate = $this->connection->executeQuery($sqlRestoreAttendance);
             $sqlUpdateResourceNode = "UPDATE resource_node SET title = '{$titleForDatabase}' where id in (SELECT resource_node_id FROM c_attendance where iid = {$attendance['iid']})";

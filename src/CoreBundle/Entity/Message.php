@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\State\MessageByGroupStateProvider;
 use Chamilo\CoreBundle\State\MessageProcessor;
+use Chamilo\CoreBundle\State\MessageStateProvider;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -45,7 +46,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(
             uriTemplate: '/messages',
             security: "is_granted('ROLE_USER')",
-            name: 'get_all_messages'
+            name: 'get_all_messages',
+            provider: MessageStateProvider::class
         ),
         new GetCollection(
             uriTemplate: '/messages/by-group/list',

@@ -27788,3 +27788,6 @@ msgstr ""
 
 msgid "Select the destination folder"
 msgstr ""
+
+msgid "All users"
+msgstr ""

@@ -29234,3 +29234,6 @@ msgstr "Wählen Sie einen Ordner aus"
 
 msgid "Select the destination folder"
 msgstr "Wählen Sie den Zielordner"
+
+msgid "All users"
+msgstr "Alle Benutzer"

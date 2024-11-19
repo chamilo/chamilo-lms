@@ -27802,3 +27802,6 @@ msgstr "Select a folder"
 
 msgid "Select the destination folder"
 msgstr "Select the destination folder"
+
+msgid "All users"
+msgstr "All users"

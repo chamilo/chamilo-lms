@@ -28774,3 +28774,12 @@ msgstr "%d horas antes"
 
 msgid "%d days before"
 msgstr "%d dias antes"
+
+msgid "Select a folder"
+msgstr "Seleccione una carpeta"
+
+msgid "Select the destination folder"
+msgstr "Seleccione la carpeta de destino"
+
+msgid "All users"
+msgstr "Todos los usuarios"

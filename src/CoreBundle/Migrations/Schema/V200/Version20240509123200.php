@@ -59,7 +59,7 @@ final class Version20240509123200 extends AbstractMigrationChamilo
         foreach ($courses as $course) {
             foreach ($requiredTools as $toolName) {
                 $baseTool = $course->getTools()->filter(
-                    fn(CTool $ct) => $ct->getTool()->getTitle() === $toolName && $ct->getSession() === null
+                    fn (CTool $ct) => $ct->getTool()->getTitle() === $toolName && null === $ct->getSession()
                 )->first();
 
                 if (!$baseTool) {
@@ -85,7 +85,7 @@ final class Version20240509123200 extends AbstractMigrationChamilo
             }
 
             $sessionTools = $course->getTools()->filter(
-                fn(CTool $ct) => $ct->getSession() !== null
+                fn (CTool $ct) => null !== $ct->getSession()
             );
 
             foreach ($sessionTools as $tool) {

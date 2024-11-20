@@ -53,7 +53,7 @@ final class Version20201212114908 extends AbstractMigrationChamilo
                 CONSTRAINT FK_7CAC73F768DFD1EF FOREIGN KEY (lp_id) REFERENCES c_lp (iid) ON DELETE SET NULL
             )
         ");
-        $this->addSql("
+        $this->addSql('
             CREATE TABLE IF NOT EXISTS c_group_rel_usergroup (
                 id INT AUTO_INCREMENT NOT NULL,
                 group_id INT NOT NULL,
@@ -71,8 +71,8 @@ final class Version20201212114908 extends AbstractMigrationChamilo
                 CONSTRAINT FK_AEE272A8613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE,
                 CONSTRAINT FK_AEE272A891D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE
             )
-        ");
-        $this->addSql("
+        ');
+        $this->addSql('
             CREATE TABLE IF NOT EXISTS c_group_category_rel_user (
                 id INT NOT NULL,
                 group_category_id INT NOT NULL,
@@ -83,7 +83,7 @@ final class Version20201212114908 extends AbstractMigrationChamilo
                 INDEX IDX_4D66D81337FE8223 (group_category_id),
                 CONSTRAINT FK_4D66D81337FE8223 FOREIGN KEY (group_category_id) REFERENCES c_group_category (iid) ON DELETE CASCADE
             )
-        ");
+        ');
         $this->addSql("
             CREATE TABLE IF NOT EXISTS c_peer_assessment (
                 id INT AUTO_INCREMENT NOT NULL,
@@ -130,7 +130,7 @@ final class Version20201212114908 extends AbstractMigrationChamilo
                 CONSTRAINT FK_71C6D04BA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL
             )
         ");
-        $this->addSql("
+        $this->addSql('
             CREATE TABLE IF NOT EXISTS c_peer_assessment_rel_student_publication (
                 id INT AUTO_INCREMENT NOT NULL,
                 peer_assessment_id INT DEFAULT NULL,
@@ -145,8 +145,8 @@ final class Version20201212114908 extends AbstractMigrationChamilo
                 CONSTRAINT FK_1B078BC72F50351C FOREIGN KEY (student_publication_id) REFERENCES c_student_publication (iid) ON DELETE CASCADE,
                 CONSTRAINT FK_1B078BC7FE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid) ON DELETE CASCADE
             )
-        ");
-        $this->addSql("
+        ');
+        $this->addSql('
             CREATE TABLE IF NOT EXISTS c_autogroup_user_invitation (
                 id INT AUTO_INCREMENT NOT NULL,
                 group_category_id INT NOT NULL,
@@ -161,8 +161,8 @@ final class Version20201212114908 extends AbstractMigrationChamilo
                 CONSTRAINT FK_84AB4980FE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid) ON DELETE CASCADE,
                 CONSTRAINT FK_84AB4980A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
             )
-        ");
-        $this->addSql("
+        ');
+        $this->addSql('
             CREATE TABLE IF NOT EXISTS c_peer_assessment_correction (
                 id INT AUTO_INCREMENT NOT NULL,
                 peer_assessment_id INT DEFAULT NULL,
@@ -181,8 +181,8 @@ final class Version20201212114908 extends AbstractMigrationChamilo
                 CONSTRAINT FK_AFB0F2B7672C3733 FOREIGN KEY (peer_assessment_id) REFERENCES c_peer_assessment (id) ON DELETE CASCADE,
                 CONSTRAINT FK_AFB0F2B74DDF95DC FOREIGN KEY (student_group_id) REFERENCES usergroup (id) ON DELETE CASCADE
             )
-        ");
-        $this->addSql("
+        ');
+        $this->addSql('
             CREATE TABLE IF NOT EXISTS c_peer_assessment_criteria (
                 id INT AUTO_INCREMENT NOT NULL,
                 peer_assessment_id INT DEFAULT NULL,
@@ -194,8 +194,8 @@ final class Version20201212114908 extends AbstractMigrationChamilo
                 INDEX IDX_5025776B672C3733 (peer_assessment_id),
                 CONSTRAINT FK_5025776B672C3733 FOREIGN KEY (peer_assessment_id) REFERENCES c_peer_assessment (id) ON DELETE CASCADE
             )
-        ");
-        $this->addSql("
+        ');
+        $this->addSql('
             CREATE TABLE IF NOT EXISTS c_peer_assessment_correction_criteria (
                 id INT AUTO_INCREMENT NOT NULL,
                 peer_assessment_correction_id INT DEFAULT NULL,
@@ -208,7 +208,7 @@ final class Version20201212114908 extends AbstractMigrationChamilo
                 CONSTRAINT FK_C1AB8C19D723148D FOREIGN KEY (peer_assessment_correction_id) REFERENCES c_peer_assessment_correction (id) ON DELETE CASCADE,
                 CONSTRAINT FK_C1AB8C1962488999 FOREIGN KEY (peer_assessment_criteria_id) REFERENCES c_peer_assessment_criteria (id) ON DELETE CASCADE
             )
-        ");
+        ');
         $this->addSql("
             ALTER TABLE c_group_category
             ADD IF NOT EXISTS min_student INT DEFAULT NULL,
@@ -220,26 +220,26 @@ final class Version20201212114908 extends AbstractMigrationChamilo
             ADD COLUMN allow_change_group_name INT(11) DEFAULT 1 NULL AFTER allow_coach_change_options_groups,
             ADD COLUMN allow_autogroup TINYINT(1) DEFAULT 0 NOT NULL AFTER allow_change_group_name
         ");
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE c_group_rel_user
             ADD COLUMN ready_autogroup TINYINT(1) NOT NULL AFTER role
-        ");
+        ');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql("DROP TABLE IF EXISTS c_peer_autogroup_rel_student_publication");
-        $this->addSql("DROP TABLE IF EXISTS c_lp_user_access");
-        $this->addSql("DROP TABLE IF EXISTS c_group_rel_usergroup");
-        $this->addSql("DROP TABLE IF EXISTS c_group_category_rel_user");
-        $this->addSql("DROP TABLE IF EXISTS c_peer_assessment");
-        $this->addSql("DROP TABLE IF EXISTS c_peer_assessment_log");
-        $this->addSql("DROP TABLE IF EXISTS c_peer_assessment_rel_student_publication");
-        $this->addSql("DROP TABLE IF EXISTS c_autogroup_user_invitation");
-        $this->addSql("DROP TABLE IF EXISTS c_peer_assessment_correction");
-        $this->addSql("DROP TABLE IF EXISTS c_peer_assessment_criteria");
-        $this->addSql("DROP TABLE IF EXISTS c_peer_assessment_correction_criteria");
-        $this->addSql("
+        $this->addSql('DROP TABLE IF EXISTS c_peer_autogroup_rel_student_publication');
+        $this->addSql('DROP TABLE IF EXISTS c_lp_user_access');
+        $this->addSql('DROP TABLE IF EXISTS c_group_rel_usergroup');
+        $this->addSql('DROP TABLE IF EXISTS c_group_category_rel_user');
+        $this->addSql('DROP TABLE IF EXISTS c_peer_assessment');
+        $this->addSql('DROP TABLE IF EXISTS c_peer_assessment_log');
+        $this->addSql('DROP TABLE IF EXISTS c_peer_assessment_rel_student_publication');
+        $this->addSql('DROP TABLE IF EXISTS c_autogroup_user_invitation');
+        $this->addSql('DROP TABLE IF EXISTS c_peer_assessment_correction');
+        $this->addSql('DROP TABLE IF EXISTS c_peer_assessment_criteria');
+        $this->addSql('DROP TABLE IF EXISTS c_peer_assessment_correction_criteria');
+        $this->addSql('
             ALTER TABLE c_group_category
             DROP COLUMN min_student,
             DROP COLUMN begin_inscription_date,
@@ -249,10 +249,10 @@ final class Version20201212114908 extends AbstractMigrationChamilo
             DROP COLUMN allow_coach_change_options_groups,
             DROP COLUMN allow_change_group_name,
             DROP COLUMN allow_autogroup
-        ");
-        $this->addSql("
+        ');
+        $this->addSql('
             ALTER TABLE c_group_rel_user
             DROP COLUMN ready_autogroup
-        ");
+        ');
     }
 }

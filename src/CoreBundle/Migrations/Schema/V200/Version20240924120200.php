@@ -58,7 +58,7 @@ final class Version20240924120200 extends AbstractMigrationChamilo
 
             foreach ($items as $item) {
                 $originalText = $item[$field];
-                if (is_string($originalText) && trim($originalText) !== '') {
+                if (\is_string($originalText) && '' !== trim($originalText)) {
                     $updatedText = $this->replaceGifWithPng($originalText);
                     if ($originalText !== $updatedText) {
                         $updateSql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
@@ -91,13 +91,13 @@ final class Version20240924120200 extends AbstractMigrationChamilo
             }
 
             $resourceFile = $resourceNode->getResourceFiles()->first();
-            if (!$resourceFile || $resourceFile->getMimeType() !== 'text/html') {
+            if (!$resourceFile || 'text/html' !== $resourceFile->getMimeType()) {
                 continue;
             }
 
             try {
                 $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
-                if (is_string($content) && trim($content) !== '') {
+                if (\is_string($content) && '' !== trim($content)) {
                     $updatedContent = $this->replaceGifWithPng($content);
                     if ($content !== $updatedContent) {
                         $documentRepo->updateResourceFileContent($document, $updatedContent);
@@ -105,7 +105,7 @@ final class Version20240924120200 extends AbstractMigrationChamilo
                     }
                 }
             } catch (Exception $e) {
-               // error_log("Error processing file for document ID {$item['iid']}: " . $e->getMessage());
+                // error_log("Error processing file for document ID {$item['iid']}: " . $e->getMessage());
             }
         }
     }

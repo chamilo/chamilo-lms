@@ -397,7 +397,7 @@ class BaseResourceFileAction
         $resourceLinkList = [];
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
-            if (isset($contentData['parentResourceNodeId']) && count($contentData) === 1) {
+            if (isset($contentData['parentResourceNodeId']) && 1 === \count($contentData)) {
                 $parentResourceNodeId = (int) $contentData['parentResourceNodeId'];
             }
             $title = $contentData['title'] ?? '';

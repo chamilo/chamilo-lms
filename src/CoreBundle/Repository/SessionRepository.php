@@ -472,7 +472,8 @@ class SessionRepository extends ServiceEntityRepository
             ->where('s.id = :sessionId')
             ->andWhere('sru.relationType = :relationType')
             ->setParameter('sessionId', $sessionId)
-            ->setParameter('relationType', $relationType);
+            ->setParameter('relationType', $relationType)
+        ;
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }

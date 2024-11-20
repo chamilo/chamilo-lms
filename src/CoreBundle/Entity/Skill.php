@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Repository\SkillRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -394,7 +393,7 @@ class Skill implements Stringable, Translatable
         return $this->locale;
     }
 
-    public function setLocale(string $locale): Skill
+    public function setLocale(string $locale): self
     {
         $this->locale = $locale;
 

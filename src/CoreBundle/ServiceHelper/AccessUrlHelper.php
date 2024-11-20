@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+use const PHP_SAPI;
+
 class AccessUrlHelper
 {
     public function __construct(

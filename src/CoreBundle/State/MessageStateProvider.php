@@ -14,6 +14,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Message;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use LogicException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -37,7 +38,7 @@ final class MessageStateProvider implements ProviderInterface
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = [])
     {
-        $isCollection = $context['operation_type'] === 'collection';
+        $isCollection = 'collection' === $context['operation_type'];
 
         if ($isCollection) {
             return $this->handleCollection($operation, $context);
@@ -54,7 +55,7 @@ final class MessageStateProvider implements ProviderInterface
     {
         $user = $this->security->getUser();
         if (!$user) {
-            throw new \LogicException('User not found.');
+            throw new LogicException('User not found.');
         }
 
         // Retrieve initial filters if they exist
@@ -69,7 +70,7 @@ final class MessageStateProvider implements ProviderInterface
         $context['filters'] = $filters;
 
         // Check if advanced filtering is applied
-        $isSearchApplied = isset($filters['search']) || count($filters) > 2;
+        $isSearchApplied = isset($filters['search']) || \count($filters) > 2;
 
         if (!$isSearchApplied) {
             // Delegate to CollectionProvider for standard query handling
@@ -96,7 +97,8 @@ final class MessageStateProvider implements ProviderInterface
         $currentPage = (int) ($context['filters']['page'] ?? 1);
 
         $queryBuilder->setFirstResult(($currentPage - 1) * $itemsPerPage)
-            ->setMaxResults($itemsPerPage);
+            ->setMaxResults($itemsPerPage)
+        ;
 
         // Count query for total items
         $countQueryBuilder = $this->createQueryWithFilters($filters, true);
@@ -106,12 +108,10 @@ final class MessageStateProvider implements ProviderInterface
         $doctrinePaginator = new \Doctrine\ORM\Tools\Pagination\Paginator($queryBuilder, true);
 
         // Adjust OutputWalkers as needed
-        $needsOutputWalkers = count($queryBuilder->getDQLPart('join')) > 0;
+        $needsOutputWalkers = \count($queryBuilder->getDQLPart('join')) > 0;
         $doctrinePaginator->setUseOutputWalkers($needsOutputWalkers);
 
-        $paginator = new Paginator($doctrinePaginator);
-
-        return $paginator;
+        return new Paginator($doctrinePaginator);
     }
 
     /**
@@ -131,29 +131,42 @@ final class MessageStateProvider implements ProviderInterface
         $queryBuilder->from(Message::class, 'm')
             ->leftJoin('m.receivers', 'r', 'WITH', 'r.deletedAt IS NULL OR r.deletedAt > CURRENT_TIMESTAMP()')
             ->where('m.sender = :user OR r.receiver = :user')
-            ->setParameter('user', $filters['sender']);
+            ->setParameter('user', $filters['sender'])
+        ;
 
         // Dynamically apply filters
         foreach ($filters as $key => $value) {
             switch ($key) {
                 case 'msgType':
                     $queryBuilder->andWhere('m.msgType = :msgType')->setParameter('msgType', $value);
+
                     break;
+
                 case 'status':
                     $queryBuilder->andWhere('m.status = :status')->setParameter('status', $value);
+
                     break;
+
                 case 'receivers.receiver':
                     $queryBuilder->andWhere('r.receiver = :receiver')->setParameter('receiver', $value);
+
                     break;
+
                 case 'receivers.receiverType':
                     $queryBuilder->andWhere('r.receiverType = :receiverType')->setParameter('receiverType', $value);
+
                     break;
+
                 case 'receivers.read':
-                    $queryBuilder->andWhere('r.read = :read')->setParameter('read', !($value === 'false'));
+                    $queryBuilder->andWhere('r.read = :read')->setParameter('read', !('false' === $value));
+
                     break;
+
                 case 'search':
                     $queryBuilder->andWhere('m.title LIKE :search OR m.content LIKE :search')
-                        ->setParameter('search', '%' . $value . '%');
+                        ->setParameter('search', '%'.$value.'%')
+                    ;
+
                     break;
             }
         }

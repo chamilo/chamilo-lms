@@ -1,30 +1,36 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use DateTime;
+
+use const PHP_EOL;
+use const PHP_SAPI;
 
 class UpdateSessionStatusCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'app:update-session-status';
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly SessionRepository      $sessionRepository
-    )
-    {
+        private readonly SessionRepository $sessionRepository
+    ) {
         parent::__construct();
     }
 
@@ -32,7 +38,8 @@ class UpdateSessionStatusCommand extends Command
     {
         $this
             ->setDescription('Updates the status of training sessions based on their dates and user count.')
-            ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode');
+            ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -41,8 +48,8 @@ class UpdateSessionStatusCommand extends Command
         $debug = $input->getOption('debug');
         $lineBreak = PHP_SAPI === 'cli' ? PHP_EOL : '<br />';
 
-        $now = new DateTime('now', new \DateTimeZone('UTC'));
-        $io->text('Today is: ' . $now->format('Y-m-d H:i:s') . $lineBreak);
+        $now = new DateTime('now', new DateTimeZone('UTC'));
+        $io->text('Today is: '.$now->format('Y-m-d H:i:s').$lineBreak);
 
         $sessions = $this->sessionRepository->findAll();
 
@@ -87,7 +94,7 @@ class UpdateSessionStatusCommand extends Command
             return Session::STATUS_PROGRESS;
         }
 
-        if ($userCount === 0 && $now > $start) {
+        if (0 === $userCount && $now > $start) {
             return Session::STATUS_CANCELLED;
         }
 

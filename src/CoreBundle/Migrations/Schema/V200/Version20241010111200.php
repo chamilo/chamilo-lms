@@ -43,7 +43,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
         $documentRepo = $this->container->get(CDocumentRepository::class);
 
         foreach ($updateConfigurations as $config) {
-           $this->updateContent($config, $documentRepo);
+            $this->updateContent($config, $documentRepo);
         }
 
         $this->updateDocumentLinks();
@@ -51,6 +51,8 @@ final class Version20241010111200 extends AbstractMigrationChamilo
 
     /**
      * Updates content fields with new URLs.
+     *
+     * @param mixed $documentRepo
      */
     private function updateContent(array $config, $documentRepo): void
     {
@@ -61,7 +63,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             foreach ($items as $item) {
                 $originalText = $item[$field];
-                if (is_string($originalText) && trim($originalText) !== '') {
+                if (\is_string($originalText) && '' !== trim($originalText)) {
                     $updatedText = $this->replaceOldURLs($originalText, $documentRepo);
                     if ($originalText !== $updatedText) {
                         $updateSql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
@@ -97,10 +99,10 @@ final class Version20241010111200 extends AbstractMigrationChamilo
             }
 
             $resourceFile = $resourceNode->getResourceFiles()->first();
-            if ($resourceFile && $resourceFile->getMimeType() === 'text/html') {
+            if ($resourceFile && 'text/html' === $resourceFile->getMimeType()) {
                 try {
                     $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
-                    if (is_string($content) && trim($content) !== '') {
+                    if (\is_string($content) && '' !== trim($content)) {
                         $updatedContent = $this->replaceOldURLs($content, $documentRepo);
                         if ($content !== $updatedContent) {
                             $documentRepo->updateResourceFileContent($document, $updatedContent);
@@ -116,17 +118,22 @@ final class Version20241010111200 extends AbstractMigrationChamilo
 
     /**
      * Replace old URLs with new Vue.js resource paths.
+     *
+     * @param mixed $documentRepo
      */
     private function replaceOldURLs(string $content, $documentRepo): string
     {
         // Replace document URLs
         $content = $this->replaceOldDocumentURLs($content, $documentRepo);
+
         // Replace link URLs
         return $this->replaceOldLinkURLs($content);
     }
 
     /**
      * Replace old document URLs with the new relative paths.
+     *
+     * @param mixed $documentRepo
      */
     private function replaceOldDocumentURLs(string $content, $documentRepo): string
     {
@@ -154,30 +161,30 @@ final class Version20241010111200 extends AbstractMigrationChamilo
             }
 
             if ($documentId && $courseId) {
-                $sql = "SELECT iid, filetype, resource_node_id FROM c_document WHERE iid = :documentId";
+                $sql = 'SELECT iid, filetype, resource_node_id FROM c_document WHERE iid = :documentId';
                 $result = $this->connection->executeQuery($sql, ['documentId' => $documentId]);
                 $documents = $result->fetchAllAssociative();
 
                 if (!empty($documents)) {
                     $documentData = $documents[0];
-                    if ($documentData['filetype'] === 'folder') {
-                        $newUrl = $this->generateFolderUrl((int)$documentData['resource_node_id'], (int)$courseId, $sessionId, $groupId);
+                    if ('folder' === $documentData['filetype']) {
+                        $newUrl = $this->generateFolderUrl((int) $documentData['resource_node_id'], (int) $courseId, $sessionId, $groupId);
                     } else {
                         $document = $documentRepo->find($documentId);
                         $newUrl = $documentRepo->getResourceFileUrl($document);
                     }
 
-                    return sprintf('%s="%s"', $attribute, $newUrl);
+                    return \sprintf('%s="%s"', $attribute, $newUrl);
                 }
             } elseif ($courseId) {
-                $sql = "SELECT resource_node_id FROM course WHERE id = :courseId";
+                $sql = 'SELECT resource_node_id FROM course WHERE id = :courseId';
                 $result = $this->connection->executeQuery($sql, ['courseId' => $courseId]);
                 $course = $result->fetch();
 
                 if ($course && isset($course['resource_node_id'])) {
-                    $newUrl = $this->generateFolderUrl((int)$course['resource_node_id'], (int)$courseId, $sessionId, $groupId);
+                    $newUrl = $this->generateFolderUrl((int) $course['resource_node_id'], (int) $courseId, $sessionId, $groupId);
 
-                    return sprintf('%s="%s"', $attribute, $newUrl);
+                    return \sprintf('%s="%s"', $attribute, $newUrl);
                 }
             }
 
@@ -197,7 +204,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
             $params = str_replace('&amp;', '&', $matches[3]);
             parse_str($params, $parsedParams);
 
-            $courseId = isset($parsedParams['cid']) ? (int)$parsedParams['cid'] : null;
+            $courseId = isset($parsedParams['cid']) ? (int) $parsedParams['cid'] : null;
             $sessionId = $parsedParams['id_session'] ?? $parsedParams['sid'] ?? '0';
             $groupId = $parsedParams['gidReq'] ?? $parsedParams['gid'] ?? '0';
 
@@ -207,14 +214,14 @@ final class Version20241010111200 extends AbstractMigrationChamilo
             }
 
             if ($courseId) {
-                $sql = "SELECT resource_node_id FROM course WHERE id = :courseId";
+                $sql = 'SELECT resource_node_id FROM course WHERE id = :courseId';
                 $result = $this->connection->executeQuery($sql, ['courseId' => $courseId]);
                 $course = $result->fetch();
 
                 if ($course && isset($course['resource_node_id'])) {
-                    $newUrl = $this->generateLinkUrl((int)$course['resource_node_id'], (int)$courseId, $sessionId, $groupId);
+                    $newUrl = $this->generateLinkUrl((int) $course['resource_node_id'], (int) $courseId, $sessionId, $groupId);
 
-                    return sprintf('%s="%s"', $attribute, $newUrl);
+                    return \sprintf('%s="%s"', $attribute, $newUrl);
                 }
             }
 
@@ -227,7 +234,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
      */
     private function generateLinkUrl(int $resourceNodeId, int $courseId, string $sessionId, string $groupId): string
     {
-        return sprintf("/resources/links/%d/?cid=%d&sid=%s&gid=%s", $resourceNodeId, $courseId, $sessionId, $groupId);
+        return \sprintf('/resources/links/%d/?cid=%d&sid=%s&gid=%s', $resourceNodeId, $courseId, $sessionId, $groupId);
     }
 
     /**
@@ -240,7 +247,7 @@ final class Version20241010111200 extends AbstractMigrationChamilo
         $stmt = $this->connection->executeQuery($sql, ['code' => $courseCode]);
         $course = $stmt->fetch();
 
-        return $course ? (int)$course['id'] : null;
+        return $course ? (int) $course['id'] : null;
     }
 
     /**
@@ -248,6 +255,6 @@ final class Version20241010111200 extends AbstractMigrationChamilo
      */
     private function generateFolderUrl(int $resourceNodeId, int $courseId, string $sessionId, string $groupId): string
     {
-        return sprintf("/resources/document/%d/?cid=%d&sid=%s&gid=%s", $resourceNodeId, $courseId, $sessionId, $groupId);
+        return \sprintf('/resources/document/%d/?cid=%d&sid=%s&gid=%s', $resourceNodeId, $courseId, $sessionId, $groupId);
     }
 }

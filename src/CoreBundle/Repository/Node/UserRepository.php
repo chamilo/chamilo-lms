@@ -1047,10 +1047,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->where('uru.user = :userId')
             ->andWhere('uru.relationType = :relationType')
             ->setParameter('userId', $userId)
-            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_RRHH);
+            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_RRHH)
+        ;
 
         $qb->orderBy('u.lastname', 'ASC')
-            ->addOrderBy('u.firstname', 'ASC');
+            ->addOrderBy('u.firstname', 'ASC')
+        ;
 
         return $qb->getQuery()->getResult();
     }

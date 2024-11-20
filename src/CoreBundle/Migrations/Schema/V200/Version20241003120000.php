@@ -8,11 +8,11 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
-use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
 
@@ -67,7 +67,7 @@ final class Version20241003120000 extends AbstractMigrationChamilo
 
             foreach ($items as $item) {
                 $content = $item[$field];
-                if (is_string($content) && trim($content) !== '') {
+                if (\is_string($content) && '' !== trim($content)) {
                     // Process URLs in the content
                     $updatedContent = $this->processContentUrls($content, $fallbackUser, $personalRepo);
                     if ($content !== $updatedContent) {
@@ -101,13 +101,13 @@ final class Version20241003120000 extends AbstractMigrationChamilo
             }
 
             $resourceFile = $resourceNode->getResourceFiles()->first();
-            if (!$resourceFile || $resourceFile->getMimeType() !== 'text/html') {
+            if (!$resourceFile || 'text/html' !== $resourceFile->getMimeType()) {
                 continue;
             }
 
             try {
                 $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
-                if (is_string($content) && trim($content) !== '') {
+                if (\is_string($content) && '' !== trim($content)) {
                     // Process URLs in the HTML content
                     $updatedContent = $this->processContentUrls($content, $fallbackUser, $personalRepo);
                     if ($content !== $updatedContent) {
@@ -116,7 +116,7 @@ final class Version20241003120000 extends AbstractMigrationChamilo
                     }
                 }
             } catch (Exception $e) {
-                error_log("Error processing file for document ID {$item['iid']}: " . $e->getMessage());
+                error_log("Error processing file for document ID {$item['iid']}: ".$e->getMessage());
             }
         }
     }
@@ -129,8 +129,8 @@ final class Version20241003120000 extends AbstractMigrationChamilo
         // Use a callback function to process each matched URL
         return preg_replace_callback($pattern, function ($matches) use ($fallbackUser, $personalRepo) {
             $attribute = $matches[1];      // Capture whether it's a `href` or `src`
-            $folderId = (int)$matches[2];  // Capture the first digit of the userId (folderId)
-            $userId = (int)$matches[3];    // Capture the full userId
+            $folderId = (int) $matches[2];  // Capture the first digit of the userId (folderId)
+            $userId = (int) $matches[3];    // Capture the full userId
             $filename = urldecode($matches[4]);  // Decode the filename
 
             error_log("Processing file: $filename for userId: $userId (Folder ID: $folderId)");
@@ -144,10 +144,11 @@ final class Version20241003120000 extends AbstractMigrationChamilo
 
             // Search for the personal file by name and creator (user)
             $personalFile = $personalRepo->getResourceByCreatorFromTitle($filename, $user, $user->getResourceNode());
-            if ($personalFile !== null) {
+            if (null !== $personalFile) {
                 $newUrl = $personalRepo->getResourceFileUrl($personalFile);
                 if (!empty($newUrl)) {
                     error_log("Replaced URL for $filename: $newUrl");
+
                     return "{$attribute}=\"{$newUrl}\"";
                 }
             }

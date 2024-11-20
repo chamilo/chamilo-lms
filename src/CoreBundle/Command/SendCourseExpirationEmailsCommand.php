@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
@@ -24,6 +24,9 @@ use UserManager;
 
 class SendCourseExpirationEmailsCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'app:send-course-expiration-emails';
 
     public function __construct(
@@ -40,7 +43,8 @@ class SendCourseExpirationEmailsCommand extends Command
         $this
             ->setDescription('Send an email to users when their course is finished.')
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
-            ->setHelp('This command sends an email to users whose course session is expiring today.');
+            ->setHelp('This command sends an email to users whose course session is expiring today.')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -62,6 +66,7 @@ class SendCourseExpirationEmailsCommand extends Command
                 error_log('Cron job for course expiration emails is not active.');
                 $io->note('Cron job for course expiration emails is not active.');
             }
+
             return Command::SUCCESS;
         }
 
@@ -70,10 +75,12 @@ class SendCourseExpirationEmailsCommand extends Command
             ->where('s.accessEndDate LIKE :date')
             ->setParameter('date', "$endDate%")
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         if (empty($sessions)) {
             $io->success("No sessions finishing today $endDate");
+
             return Command::SUCCESS;
         }
 
@@ -86,7 +93,8 @@ class SendCourseExpirationEmailsCommand extends Command
             $sessionUsers = $session->getUsers();
 
             if (empty($sessionUsers)) {
-                $io->warning('No users to send mail for session: ' . $session->getTitle());
+                $io->warning('No users to send mail for session: '.$session->getTitle());
+
                 continue;
             }
 
@@ -97,6 +105,7 @@ class SendCourseExpirationEmailsCommand extends Command
         }
 
         $io->success('Emails sent successfully for sessions expiring today.');
+
         return Command::SUCCESS;
     }
 
@@ -128,13 +137,14 @@ class SendCourseExpirationEmailsCommand extends Command
             ->from($administrator['email'])
             ->to($user->getEmail())
             ->subject($subject)
-            ->html($body);
+            ->html($body)
+        ;
 
         $this->mailer->send($email);
 
         if ($debug) {
-            error_log("Email sent to: " . UserManager::formatUserFullName($user) . " ({$user->getEmail()})");
-            $io->note("Email sent to: " . UserManager::formatUserFullName($user) . " ({$user->getEmail()})");
+            error_log('Email sent to: '.UserManager::formatUserFullName($user)." ({$user->getEmail()})");
+            $io->note('Email sent to: '.UserManager::formatUserFullName($user)." ({$user->getEmail()})");
             $io->note("Session: {$session->getTitle()}");
             $io->note("End date: {$session->getAccessEndDate()->format('Y-m-d h:i')}");
         }

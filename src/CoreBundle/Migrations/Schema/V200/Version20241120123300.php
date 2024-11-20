@@ -27,7 +27,7 @@ final class Version20241120123300 extends AbstractMigrationChamilo
 
         foreach ($sessionTools as $tool) {
             $this->entityManager->remove($tool);
-            error_log(sprintf("Removed tool: %s (ID: %d)", $tool->getTitle(), $tool->getIid()));
+            error_log(\sprintf('Removed tool: %s (ID: %d)', $tool->getTitle(), $tool->getIid()));
         }
 
         $this->entityManager->flush();

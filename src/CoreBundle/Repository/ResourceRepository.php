@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
@@ -18,7 +18,6 @@ use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\NonResourceRepository;
 use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;

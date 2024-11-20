@@ -690,8 +690,8 @@ class TrackingCourseLog
             }
         }
 
-        $urlBase = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&cidReq='.$courseCode.
-            '&course='.$courseCode.'&origin=tracking_course&id_session='.$sessionId;
+        $urlBase = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&cid='.$courseId.
+            '&course='.$courseCode.'&origin=tracking_course&sid='.$sessionId;
 
         Session::write('user_id_list', []);
         $userIdList = [];
@@ -1117,7 +1117,7 @@ class TrackingCourseLog
             );
 
             $user['link'] = '<center>
-                             <a href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&course='.$course_code.'&origin=tracking_course&id_session='.$session_id.'">
+                             <a href="../my_space/myStudents.php?student='.$user['user_id'].'&details=true&cid='.$courseId.'&sid='.$session_id.'&course='.$course_code.'&origin=tracking_course&id_session='.$session_id.'">
                              '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
                              </a>
                          </center>';
@@ -1273,5 +1273,50 @@ class TrackingCourseLog
         ];
 
         return implode('', $items).'&nbsp;';
+    }
+
+    public static function calcBestScoreAverageNotInLP(
+        array $exerciseList,
+        array $usersInGroup,
+        int $cId,
+        int $sessionId = 0,
+        bool $returnFormatted = false
+    ) {
+        if (empty($exerciseList) || empty($usersInGroup)) {
+            return 0;
+        }
+
+        $bestScoreAverageNotInLP = 0;
+
+        foreach ($exerciseList as $exerciseData) {
+            foreach ($usersInGroup as $userId) {
+                $results = Event::get_best_exercise_results_by_user(
+                    $exerciseData['iid'],
+                    $cId,
+                    $sessionId,
+                    $userId
+                );
+
+                $scores = array_map(
+                    function (array $result) {
+                        return empty($result['exe_weighting']) ? 0 : $result['exe_result'] / $result['exe_weighting'];
+                    },
+                    $results
+                );
+
+                $bestScoreAverageNotInLP += $scores ? max($scores) : 0;
+            }
+        }
+
+        $rounded = round(
+            $bestScoreAverageNotInLP / count($exerciseList) * 100 / count($usersInGroup),
+            2
+        );
+
+        if ($returnFormatted) {
+            return sprintf(get_lang('XPercent'), $rounded);
+        }
+
+        return $rounded;
     }
 }

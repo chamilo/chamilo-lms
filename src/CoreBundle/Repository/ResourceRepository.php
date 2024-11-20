@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\NonResourceRepository;
 use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
@@ -600,19 +601,28 @@ abstract class ResourceRepository extends ServiceEntityRepository
         }
     }
 
-    public function setVisibilityPublished(AbstractResource $resource): void
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED);
+    public function setVisibilityPublished(
+        AbstractResource $resource,
+        ?Course $course = null,
+        ?Session $session = null,
+    ): void {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED, true, $course, $session);
     }
 
-    public function setVisibilityDraft(AbstractResource $resource): void
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DRAFT);
+    public function setVisibilityDraft(
+        AbstractResource $resource,
+        ?Course $course = null,
+        ?Session $session = null,
+    ): void {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DRAFT, true, $course, $session);
     }
 
-    public function setVisibilityPending(AbstractResource $resource): void
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
+    public function setVisibilityPending(
+        AbstractResource $resource,
+        ?Course $course = null,
+        ?Session $session = null,
+    ): void {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING, true, $course, $session);
     }
 
     public function addResourceNode(
@@ -844,8 +854,15 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool
-    {
+    private function setLinkVisibility(
+        AbstractResource $resource,
+        int $visibility,
+        bool $recursive = true,
+        ?Course $course = null,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?User $user = null,
+    ): bool {
         $resourceNode = $resource->getResourceNode();
 
         if (null === $resourceNode) {
@@ -868,7 +885,19 @@ abstract class ResourceRepository extends ServiceEntityRepository
             }
         }
 
-        $links = $resourceNode->getResourceLinks();
+        if ($resource instanceof ResourceShowCourseResourcesInSessionInterface) {
+            $link = $resource->getFirstResourceLinkFromCourseSession($course, $session);
+
+            if (!$link) {
+                $resource->parentResource = $course;
+                $resource->addCourseLink($course, $session);
+            }
+
+            $link = $resource->getFirstResourceLinkFromCourseSession($course, $session);
+            $links = [$link];
+        } else {
+            $links = $resourceNode->getResourceLinks();
+        }
 
         /** @var ResourceLink $link */
         foreach ($links as $link) {

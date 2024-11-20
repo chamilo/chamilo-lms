@@ -673,7 +673,7 @@ class TrackingCourseLog
 
         if (empty($sessionId)) {
             $surveyUserList = [];
-            $surveyList = SurveyManager::get_surveys($courseCode, $sessionId);
+            $surveyList = SurveyManager::get_surveys($courseCode);
             if ($surveyList) {
                 $totalSurveys = count($surveyList);
                 foreach ($surveyList as $survey) {
@@ -1188,7 +1188,7 @@ class TrackingCourseLog
         $attendanceLink = '';
         if (!empty($sessionId)) {
             $attendanceLink = Display::url(
-                Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+                Display::return_icon('attendance_list.png', get_lang('Logins'), [], ICON_SIZE_MEDIUM),
                 api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=calendar_logins'
             );
         }
@@ -1243,7 +1243,7 @@ class TrackingCourseLog
             case 'attendance':
                 if (!empty($sessionId)) {
                     $attendanceLink = Display::url(
-                        Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+                        Display::return_icon('attendance_list.png', get_lang('Logins'), [], ICON_SIZE_MEDIUM),
                         '#'
                     );
                 }

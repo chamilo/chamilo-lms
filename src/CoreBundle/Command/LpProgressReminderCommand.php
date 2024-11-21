@@ -127,13 +127,15 @@ class LpProgressReminderCommand extends Command
             $lpId = $user['lpId'];
             $progress = (int) $user['progress'];
 
+            $sessionId = $checkSession ? ($user['sessionId'] ?? 0) : 0;
+
             if ($lpId === null) {
                 foreach ($lpItems as $lpId => $nbDaysForLpCompletion) {
                     $this->sendReminderIfNeeded(
                         $userId,
                         $courseTitle,
                         $courseId,
-                        $sessionId ?? 0,
+                        $sessionId,
                         (int) $nbDaysForLpCompletion,
                         $debugMode,
                         $lpId,
@@ -146,7 +148,7 @@ class LpProgressReminderCommand extends Command
                     $userId,
                     $courseTitle,
                     $courseId,
-                    $sessionId ?? 0,
+                    $sessionId,
                     $nbDaysForLpCompletion,
                     $debugMode,
                     $lpId,
@@ -234,15 +236,12 @@ class LpProgressReminderCommand extends Command
         $reminderStartDate = (clone $registrationDate)->modify("+$nbDaysForLpCompletion days");
         $currentDate = new DateTime('now', new DateTimeZone('UTC'));
 
-        if ($reminderStartDate > $currentDate) {
-            return false;
-        }
-
         $interval = $reminderStartDate->diff($currentDate);
         $diffDays = (int) $interval->format('%a');
 
-        return $diffDays % self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION === 0;
+        return $diffDays % self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION === 0 || $diffDays === 0;
     }
+
 
     /**
      * Sends a reminder email to the user regarding their LP progress.

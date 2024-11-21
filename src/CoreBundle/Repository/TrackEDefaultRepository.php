@@ -36,23 +36,29 @@ class TrackEDefaultRepository extends ServiceEntityRepository
             ->setParameter('eventType', 'user_subscribed')
             ->setParameter('serializedPattern', '%' . $serializedPattern . '%');
 
-        if ($sessionId !== null) {
+        if ($sessionId > 0) {
             $qb->andWhere('te.sessionId = :sessionId')
                 ->setParameter('sessionId', $sessionId);
+        } elseif ($sessionId === 0) {
+            $qb->andWhere('te.sessionId = 0');
         } else {
             $qb->andWhere('te.sessionId IS NULL');
         }
 
         $qb->setMaxResults(1);
         $query = $qb->getQuery();
-        $result = $query->getOneOrNullResult();
 
-        // Devuelve directamente si el resultado ya es DateTime
-        if (isset($result['defaultDate']) && $result['defaultDate'] instanceof \DateTime) {
-            return $result['defaultDate'];
+        try {
+            $result = $query->getOneOrNullResult();
+            if ($result && isset($result['defaultDate'])) {
+                return $result['defaultDate'] instanceof \DateTime
+                    ? $result['defaultDate']
+                    : new \DateTime($result['defaultDate']);
+            }
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Error fetching registration date: ' . $e->getMessage());
         }
 
-        // Convierte si es necesario
-        return isset($result['defaultDate']) ? new \DateTime($result['defaultDate']) : null;
+        return null;
     }
 }

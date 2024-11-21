@@ -796,30 +796,6 @@ class ExtraField extends Model
     }
 
     /**
-     * Translate the display text for a extra field.
-     *
-     * @param string $variable
-     * @param string $defaultDisplayText
-     *
-     * @return string
-     */
-    public static function translateDisplayName($variable, $defaultDisplayText): string
-    {
-        // 1st priority variable.
-        $translatedVariable = get_lang(api_underscore_to_camel_case($variable));
-        if (api_underscore_to_camel_case($variable) !== $translatedVariable) {
-            return $translatedVariable;
-        }
-
-        // 2nd priority display text.
-        $translatedDisplayText = get_lang($defaultDisplayText);
-        if ($defaultDisplayText !== $translatedDisplayText) {
-            return $translatedDisplayText;
-        }
-        return $defaultDisplayText;
-    }
-
-    /**
      * Return an array of all the extra fields available for this item.
      *
      * @param int $itemId (session_id, question_id, course id)

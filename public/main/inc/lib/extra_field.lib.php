@@ -2351,7 +2351,23 @@ class ExtraField extends Model
         }
 
         $form->addElement('header', $header);
-        $form->addElement('text', 'display_text', get_lang('Name'));
+
+        if ('edit' === $action) {
+            $translateUrl = Container::getRouter()->generate(
+                'legacy_main',
+                ['name' => 'extrafield/translate.php', 'extra_field' => $id]
+            );
+            $translateButton = Display::toolbarButton(
+                get_lang('Translate this term'),
+                $translateUrl,
+                'language',
+                'plain'
+            );
+
+            $form->addElement('text', 'display_text', [get_lang('Name'), $translateButton]);
+        } else {
+            $form->addElement('text', 'display_text', get_lang('Name'));
+        }
 
         $form->addHtmlEditor('description', get_lang('Description'), false);
 

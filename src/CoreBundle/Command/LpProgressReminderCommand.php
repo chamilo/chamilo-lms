@@ -171,19 +171,26 @@ class LpProgressReminderCommand extends Command
         int $progress
     ): void {
         $registrationDate = $this->trackEDefaultRepository->getUserCourseRegistrationAt($courseId, $userId, $sessionId);
-        if ($registrationDate) {
+        if (!$registrationDate) {
             if ($debugMode) {
-                $sessionInfo = $sessionId > 0 ? "in session ID $sessionId" : "without a session";
-                echo "Registration date: {$registrationDate->format('Y-m-d H:i:s')}, Days for completion: $nbDaysForLpCompletion, LP ID: {$lpId}, $sessionInfo\n";
+                echo "No registration date found for user $userId in course $courseId (session ID: $sessionId).\n";
             }
-            if ($this->isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion)) {
-                $nbRemind = $this->getNbReminder($registrationDate, $nbDaysForLpCompletion);
-                if ($debugMode) {
-                    echo "Sending reminder to user $userId for course $courseTitle (LP ID: {$lpId}) $sessionInfo\n";
-                    $this->logReminderSent($userId, $courseTitle, $nbRemind, $debugMode, $lpId, $sessionId);
-                }
-                $this->sendLpReminder($userId, $courseTitle, $progress, $registrationDate, $nbRemind);
+            return;
+        }
+
+        if ($debugMode) {
+            $sessionInfo = $sessionId > 0 ? "in session ID $sessionId" : "without a session";
+            echo "Registration date: {$registrationDate->format('Y-m-d H:i:s')}, Days for completion: $nbDaysForLpCompletion, LP ID: {$lpId}, $sessionInfo\n";
+        }
+
+        if ($this->isTimeToRemindUser($registrationDate, $nbDaysForLpCompletion)) {
+            $nbRemind = $this->getNbReminder($registrationDate, $nbDaysForLpCompletion);
+
+            if ($debugMode) {
+                echo "Sending reminder to user $userId for course $courseTitle (LP ID: {$lpId})\n";
             }
+            $this->logReminderSent($userId, $courseTitle, $nbRemind, $debugMode, $lpId, $sessionId);
+            $this->sendLpReminder($userId, $courseTitle, $progress, $registrationDate, $nbRemind);
         }
     }
 
@@ -210,15 +217,13 @@ class LpProgressReminderCommand extends Command
      */
     private function getNbReminder(DateTime $registrationDate, int $nbDaysForLpCompletion): int
     {
-        $date1 = clone $registrationDate;
-        $date1->modify("+$nbDaysForLpCompletion day");
+        $reminderStartDate = (clone $registrationDate)->modify("+$nbDaysForLpCompletion days");
+        $currentDate = new DateTime('now', new DateTimeZone('UTC'));
 
-        $date2 = new DateTime('now', new DateTimeZone('UTC'));
-
-        $interval = $date1->diff($date2);
+        $interval = $reminderStartDate->diff($currentDate);
         $diffDays = (int) $interval->format('%a');
 
-        return (int) ceil($diffDays / self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION) + 1;
+        return (int) floor($diffDays / self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION) + 1;
     }
 
     /**
@@ -226,20 +231,17 @@ class LpProgressReminderCommand extends Command
      */
     private function isTimeToRemindUser(DateTime $registrationDate, int $nbDaysForLpCompletion): bool
     {
-        $date1 = clone $registrationDate;
-        $date1->modify("+$nbDaysForLpCompletion day");
-        $startDate = $date1->format('Y-m-d');
+        $reminderStartDate = (clone $registrationDate)->modify("+$nbDaysForLpCompletion days");
+        $currentDate = new DateTime('now', new DateTimeZone('UTC'));
 
-        $date2 = new DateTime('now', new DateTimeZone('UTC'));
-        $now = $date2->format('Y-m-d');
-
-        if ($startDate < $now) {
-            $interval = $date1->diff($date2);
-            $diffDays = (int) $interval->format('%a');
-            return (0 === $diffDays % self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION);
+        if ($reminderStartDate > $currentDate) {
+            return false;
         }
 
-        return $startDate === $now;
+        $interval = $reminderStartDate->diff($currentDate);
+        $diffDays = (int) $interval->format('%a');
+
+        return $diffDays % self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION === 0;
     }
 
     /**

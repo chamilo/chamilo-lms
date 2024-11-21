@@ -23,7 +23,7 @@ class TrackEDefaultRepository extends ServiceEntityRepository
      */
     public function getUserCourseRegistrationAt(int $courseId, int $userId, ?int $sessionId = 0): ?\DateTime
     {
-        $serializedPattern = '%s:2:"id";i:' . $userId . ';%';
+        $serializedPattern = sprintf('s:2:"id";i:%d;', $userId);
 
         $qb = $this->createQueryBuilder('te')
             ->select('te.defaultDate')
@@ -34,16 +34,12 @@ class TrackEDefaultRepository extends ServiceEntityRepository
             ->setParameter('courseId', $courseId)
             ->setParameter('valueType', 'user_object')
             ->setParameter('eventType', 'user_subscribed')
-            ->setParameter('serializedPattern', $serializedPattern);
+            ->setParameter('serializedPattern', '%' . $serializedPattern . '%');
 
-        if ($sessionId > 0) {
+        if ($sessionId !== null) {
             $qb->andWhere('te.sessionId = :sessionId')
                 ->setParameter('sessionId', $sessionId);
-        }
-        else if ($sessionId === 0) {
-            $qb->andWhere('te.sessionId = 0');
-        }
-        else {
+        } else {
             $qb->andWhere('te.sessionId IS NULL');
         }
 
@@ -51,6 +47,12 @@ class TrackEDefaultRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
         $result = $query->getOneOrNullResult();
 
-        return $result ? $result['defaultDate'] : null;
+        // Devuelve directamente si el resultado ya es DateTime
+        if (isset($result['defaultDate']) && $result['defaultDate'] instanceof \DateTime) {
+            return $result['defaultDate'];
+        }
+
+        // Convierte si es necesario
+        return isset($result['defaultDate']) ? new \DateTime($result['defaultDate']) : null;
     }
 }

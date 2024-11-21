@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Framework\Container;
 use Gedmo\Translatable\Entity\Translation;
@@ -20,8 +21,11 @@ $languageRepo = Container::getLanguageRepository();
 
 $fieldId = (int) ($_REQUEST['id'] ?? 0);
 
-/** @var \Chamilo\CoreBundle\Entity\ExtraFieldOptions|null $extraFieldOption */
+/** @var ExtraFieldOptions|null $extraFieldOption */
 $extraFieldOption = $extraFieldOptionsRepo->find($fieldId);
+
+$extraFieldOption->setLocale(Container::getParameter('locale'));
+$em->refresh($extraFieldOption);
 
 if (null === $extraFieldOption) {
     api_not_allowed(true);
@@ -30,24 +34,27 @@ if (null === $extraFieldOption) {
 $extraField = $extraFieldOption->getField();
 
 $currentUrl = api_get_self().'?id='.$fieldId;
-$qb = $languageRepo->getAllAvailable();
-$languages = $qb->getQuery()->getResult();
+$languages = $languageRepo->getAllAvailable(true)->getQuery()->getResult();
 
 $form = new FormValidator('translate', 'POST', $currentUrl);
 $form->addHidden('id', $fieldId);
 $form->addHeader($extraFieldOption->getDisplayText());
 
-$repository = $em->getRepository(Translation::class);
-$translations = $repository->findTranslations($extraFieldOption);
+$translationsRepo = $em->getRepository(Translation::class);
+$translations = $translationsRepo->findTranslations($extraFieldOption);
 
 $defaults = [];
 /** @var Language $language */
 foreach ($languages as $language) {
     $iso = $language->getIsocode();
-    $variable = 'variable['.$iso.']';
-    $form->addText($variable, $language->getOriginalName().' ('.$iso.')', false);
-    if (isset($translations[$iso]) && $translations[$iso]['displayText']) {
-        $defaults['variable['.$iso.']'] = $translations[$iso]['displayText'];
+    $form->addText(
+        'language['.$language->getId().']',
+        $language->getOriginalName(),
+        false
+    );
+
+    if (!empty($translations[$iso]['displayText'])) {
+        $defaults['language['.$language->getId().']'] = $translations[$iso]['displayText'];
     }
 }
 
@@ -72,22 +79,19 @@ $interbreadcrumb[] = [
 if ($form->validate()) {
     $values = $form->getSubmitValues();
     foreach ($languages as $language) {
-        if (!isset($values['variable'][$language->getIsocode()])) {
-            continue;
-        }
-        $translation = $values['variable'][$language->getIsocode()];
-        if (empty($translation)) {
+        if (empty($values['language'][$language->getId()])) {
             continue;
         }
 
-        $extraFieldOption = $extraFieldOptionsRepo->find($fieldId);
-        $extraFieldOption
-            ->setTranslatableLocale($language->getIsocode())
-            ->setDisplayText($translation)
-        ;
-        $em->persist($extraFieldOption);
-        $em->flush();
+        $translationsRepo->translate(
+            $extraFieldOption,
+            'displayText',
+            $language->getIsocode(),
+            $values['language'][$language->getId()],
+        );
     }
+
+    $em->flush();
 
     Display::addFlash(Display::return_message(get_lang('Updated')));
     api_location($currentUrl);

@@ -576,7 +576,7 @@ class ExtraField extends Model
      * @param int    $start
      * @param int    $limit
      *
-     * @return array
+     * @return array<int, EntityExtraField>
      */
     public function getAllGrid($sidx, $sord, $start, $limit)
     {
@@ -608,14 +608,14 @@ class ExtraField extends Model
         }
         $em = Database::getManager();
         $query = $em->getRepository(EntityExtraField::class)->createQueryBuilder('e');
-        $query->select('e.id', 'e.itemType', 'e.valueType', 'e.variable', 'e.displayText', 'e.autoRemove', 'e.changeable', 'e.visibleToOthers', 'e.filter', 'e.visibleToSelf')
+        $query
             ->where('e.itemType = :type')
             ->setParameter('type', $this->getItemType())
             ->orderBy($sidx, $sord)
             ->setFirstResult($start)
             ->setMaxResults($limit);
 
-        return $query->getQuery()->getArrayResult();
+        return $query->getQuery()->getResult();
     }
 
     /**
@@ -637,9 +637,9 @@ class ExtraField extends Model
         if (Database::num_rows($result)) {
             $row = Database::fetch_assoc($result);
             $extraFieldId = $row['id'];
-            /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+            /** @var EntityExtraField $extraField */
             $extraField = $extraFieldRepo->find($extraFieldId);
-            $row['display_text'] = ExtraField::translateDisplayName($row['variable'],$row['display_text']);
+            $row['display_text'] = $extraField->getDisplayText();
 
             // All the tags of the field
             $sql = "SELECT * FROM $this->table_field_tag
@@ -946,9 +946,9 @@ class ExtraField extends Model
         if (!empty($extraFields)) {
             foreach ($extraFields as &$extraField) {
                 $extraFieldId = $extraField['id'];
-                /** @var \Chamilo\CoreBundle\Entity\ExtraField $field */
+                /** @var EntityExtraField $field */
                 $field = $extraFieldRepo->find($extraFieldId);
-                $extraField['display_text'] = self::translateDisplayName($extraField['variable'], $extraField['display_text']);
+                $extraField['display_text'] = $field->getDisplayText();
                 $extraField['options'] = $option->get_field_options_by_field(
                     $extraField['id'],
                     false,
@@ -1136,9 +1136,9 @@ class ExtraField extends Model
                 }
 
                 //$translatedDisplayText = $field_details['display_text'];
-                /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+                /** @var EntityExtraField $extraField */
                 $extraField = $extraFieldRepo->find($field_details['id']);
-                $translatedDisplayText = ExtraField::translateDisplayName($field_details['variable'],$field_details['display_text']);
+                $translatedDisplayText = $extraField->getDisplayText();
 
                 $translatedDisplayHelpText = '';
                 if ($help) {
@@ -2088,9 +2088,9 @@ class ExtraField extends Model
             $row = Database::fetch_assoc($result);
             if ($row) {
                 $extraFieldId = $row['id'];
-                /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+                /** @var EntityExtraField $extraField */
                 $field = $extraFieldRepo->find($extraFieldId);
-                $row['display_text'] = $this->translateDisplayName($row['variable'], $row['display_text']);
+                $row['display_text'] = $field->getDisplayText();
 
                 // All the options of the field
                 $sql = "SELECT * FROM $this->table_field_options
@@ -2347,7 +2347,7 @@ class ExtraField extends Model
         if ('edit' === $action) {
             $header = get_lang('Edit');
             // Setting the defaults
-            $defaults = $this->get($id, false);
+            $defaults = $this->get($id);
         }
 
         $form->addElement('header', $header);
@@ -2497,22 +2497,12 @@ class ExtraField extends Model
      * Gets an element.
      *
      * @param int  $id
-     * @param bool $translateDisplayText Optional
      *
      * @return array
      */
-    public function get($id, $translateDisplayText = true)
+    public function get($id)
     {
-        $info = parent::get($id);
-
-        if ($translateDisplayText) {
-            $extraFieldRepo = Container::getExtraFieldRepository();
-            /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
-            $field = $extraFieldRepo->find($id);
-            $info['display_text'] = ExtraField::translateDisplayName($info['variable'],$info['display_text']);
-        }
-
-        return $info;
+        return parent::get($id);
     }
 
     /**

@@ -18,17 +18,17 @@ final class Version20190210182620 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE session
             ADD notify_boss TINYINT(1) DEFAULT 0 NOT NULL
-        ");
+        ');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE session
             DROP COLUMN notify_boss
-        ");
+        ');
     }
 }

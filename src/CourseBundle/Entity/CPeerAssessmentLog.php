@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,7 +34,7 @@ class CPeerAssessmentLog
     protected ?User $user = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    protected ?\DateTime $date = null;
+    protected ?DateTime $date = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $description = null;
@@ -57,12 +58,12 @@ class CPeerAssessmentLog
         return $this;
     }
 
-    public function getDate(): ?\DateTime
+    public function getDate(): ?DateTime
     {
         return $this->date;
     }
 
-    public function setDate(?\DateTime $date): self
+    public function setDate(?DateTime $date): self
     {
         $this->date = $date;
 

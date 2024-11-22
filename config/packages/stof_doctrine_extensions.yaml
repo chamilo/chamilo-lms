@@ -10,4 +10,4 @@ stof_doctrine_extensions:
             sluggable: true
             softdeleteable: true
             sortable: true
-            translatable: false
+            translatable: true

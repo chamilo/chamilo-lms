@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
@@ -18,6 +18,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class SendNotificationsCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'app:send-notifications';
 
     public function __construct(
@@ -31,7 +34,8 @@ class SendNotificationsCommand extends Command
         $this
             ->setDescription('Send notifications')
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
-            ->setHelp('This command sends notifications using the Notification class.');
+            ->setHelp('This command sends notifications using the Notification class.')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

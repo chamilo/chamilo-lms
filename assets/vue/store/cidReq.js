@@ -1,7 +1,6 @@
 import { defineStore } from "pinia"
-import { usePlatformConfig } from "./platformConfig"
 import courseService from "../services/courseService"
-import { computed, ref } from "vue"
+import { ref } from "vue"
 import sessionService from "../services/sessionService"
 import { useCourseSettings } from "./courseSettingStore"
 
@@ -12,42 +11,6 @@ export const useCidReqStore = defineStore("cidReq", () => {
   const isCourseLoaded = ref(true)
 
   const courseSettingsStore = useCourseSettings()
-
-  const userIsCoach = computed(() => {
-    const platformConfigStore = usePlatformConfig()
-
-    return (userId, cId = 0, checkStudentView = true) => {
-      if (checkStudentView && platformConfigStore.isStudentViewActive) {
-        return false
-      }
-
-      if (!session.value || !userId) {
-        return false
-      }
-
-      const sessionIsCoach = []
-
-      if (cId) {
-        const courseCoachSubscription = session.value?.sessionRelCourseRelUsers?.find(
-          (srcru) => srcru.course.id === cId && srcru.user.id === userId && 2 === srcru.status,
-        )
-
-        if (courseCoachSubscription) {
-          sessionIsCoach.push(courseCoachSubscription)
-        }
-      }
-
-      const generalCoachSubscription = session.value?.users?.find(
-        (sru) => sru.user.id === userId && 3 === sru.relationType,
-      )
-
-      if (generalCoachSubscription) {
-        sessionIsCoach.push(generalCoachSubscription)
-      }
-
-      return sessionIsCoach.length > 0
-    }
-  })
 
   const resetCid = () => {
     course.value = null
@@ -112,8 +75,6 @@ export const useCidReqStore = defineStore("cidReq", () => {
     course,
     session,
     group,
-
-    userIsCoach,
 
     resetCid,
     setCourseAndSessionById,

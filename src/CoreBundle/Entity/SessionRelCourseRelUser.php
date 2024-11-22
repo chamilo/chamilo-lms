@@ -10,8 +10,6 @@ use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use Chamilo\CoreBundle\Entity\User as UserAlias;
-use Chamilo\CoreBundle\Repository\SessionRelCourseRelUserRepository;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -34,7 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['user_id'], name: 'idx_session_rel_course_rel_user_id_user')]
 #[ORM\Index(columns: ['c_id'], name: 'idx_session_rel_course_rel_user_course_id')]
 #[ORM\UniqueConstraint(name: 'course_session_unique', columns: ['session_id', 'c_id', 'user_id', 'status'])]
-#[ORM\Entity(repositoryClass: SessionRelCourseRelUserRepository::class)]
+#[ORM\Entity]
 #[ApiFilter(
     filterClass: SearchFilter::class,
     properties: [
@@ -76,10 +74,11 @@ class SessionRelCourseRelUser
         'session:read',
         'session_rel_course_rel_user:read',
         'user_subscriptions:sessions',
+        'session:basic',
     ])]
-    #[ORM\ManyToOne(targetEntity: UserAlias::class, cascade: ['persist'], inversedBy: 'sessionRelCourseRelUsers')]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'sessionRelCourseRelUsers')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    protected UserAlias $user;
+    protected User $user;
 
     #[Groups([
         'session_rel_course_rel_user:read',
@@ -93,6 +92,7 @@ class SessionRelCourseRelUser
         'session_rel_course_rel_user:read',
         'session_rel_user:read',
         'user_subscriptions:sessions',
+        'session:basic',
     ])]
     #[MaxDepth(1)]
     #[ORM\ManyToOne(targetEntity: Course::class, cascade: ['persist'], inversedBy: 'sessionRelCourseRelUsers')]

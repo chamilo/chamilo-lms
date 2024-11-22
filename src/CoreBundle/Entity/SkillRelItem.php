@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -77,10 +77,7 @@ class SkillRelItem
         $this->requiresValidation = false;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -97,28 +94,19 @@ class SkillRelItem
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getItemId()
+    public function getItemId(): int
     {
         return $this->itemId;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setItemId(int $itemId)
+    public function setItemId(int $itemId): static
     {
         $this->itemId = $itemId;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getObtainConditions()
+    public function getObtainConditions(): ?string
     {
         return $this->obtainConditions;
     }
@@ -154,46 +142,31 @@ class SkillRelItem
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    /**
-     * @return SkillRelItem
-     */
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getCreatedBy()
+    public function getCreatedBy(): int
     {
         return $this->createdBy;
     }
@@ -205,10 +178,7 @@ class SkillRelItem
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getUpdatedBy()
+    public function getUpdatedBy(): int
     {
         return $this->updatedBy;
     }
@@ -220,10 +190,7 @@ class SkillRelItem
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getItemType()
+    public function getItemType(): int
     {
         return $this->itemType;
     }
@@ -235,10 +202,7 @@ class SkillRelItem
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getCourseId()
+    public function getCourseId(): ?int
     {
         return $this->courseId;
     }
@@ -250,10 +214,7 @@ class SkillRelItem
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getSessionId()
+    public function getSessionId(): ?int
     {
         return $this->sessionId;
     }

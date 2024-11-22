@@ -67,6 +67,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         }
     }
 
+
     private function updateContent($config, $courseDirectory, $courseId, $documentRepo): void
     {
         if (isset($config['field'])) {
@@ -87,9 +88,11 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                 if (!empty($originalText)) {
                     $updatedText = $this->replaceOldURLsWithNew($originalText, $courseDirectory, $courseId, $documentRepo);
                     if ($originalText !== $updatedText) {
-                        $sql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
-                        $params = ['newText' => $updatedText, 'id' => $item['iid']];
-                        $this->connection->executeQuery($sql, $params);
+                        error_log("SIMULACIÓN: Actualizar campo {$field} en {$config['table']} para ID {$item['iid']}");
+                        // Simular sin guardar cambios
+                        // $sql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
+                        // $params = ['newText' => $updatedText, 'id' => $item['iid']];
+                        // $this->connection->executeQuery($sql, $params);
                     }
                 }
             }
@@ -98,7 +101,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
 
     private function updateHtmlContent($courseDirectory, $courseId, $documentRepo, $resourceNodeRepo): void
     {
-        $sql = "SELECT iid, resource_node_id FROM c_document WHERE filetype = 'file'";
+        $sql = "SELECT iid, resource_node_id FROM c_document WHERE filetype = 'file' AND resource_node_id IS NOT NULL";
         $result = $this->connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
@@ -123,18 +126,20 @@ final class Version20230913162700 extends AbstractMigrationChamilo
 
             $filePath = $resourceFile->getTitle();
             if ('text/html' === $resourceFile->getMimeType()) {
-                error_log('Verifying HTML file: '.$filePath);
+                error_log("Verificando archivo HTML: $filePath");
 
                 try {
                     $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
                     $updatedContent = $this->replaceOldURLsWithNew($content, $courseDirectory, $courseId, $documentRepo);
 
                     if ($content !== $updatedContent) {
-                        $documentRepo->updateResourceFileContent($document, $updatedContent);
-                        $documentRepo->update($document);
+                        error_log("SIMULACIÓN: Actualizar contenido HTML en {$filePath}");
+                        // Simular sin guardar cambios
+                        // $documentRepo->updateResourceFileContent($document, $updatedContent);
+                        // $documentRepo->update($document);
                     }
                 } catch (Exception $e) {
-                    error_log("Error processing file $filePath: ".$e->getMessage());
+                    error_log("Error al procesar archivo $filePath: " . $e->getMessage());
                 }
             }
         }
@@ -198,7 +203,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             $documentRepo = $this->container->get(CDocumentRepository::class);
             $kernel = $this->container->get('kernel');
             $rootPath = $kernel->getProjectDir();
-            $appCourseOldPath = $rootPath.'/app'.$videoPath;
+            $appCourseOldPath = $rootPath . '/app' . $videoPath;
             $title = basename($appCourseOldPath);
 
             $courseRepo = $this->container->get(CourseRepository::class);
@@ -207,58 +212,31 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                 throw new Exception("Course with ID $courseId not found.");
             }
 
-            $document = $documentRepo->findCourseResourceByTitle($title, $course->getResourceNode(), $course);
-            if (null !== $document) {
-                return $document;
-            }
+            error_log("SIMULACIÓN: Intentando localizar archivo {$title} en la ruta esperada: {$appCourseOldPath}");
 
+            // Verificar si el archivo existe en la ubicación esperada
             if (file_exists($appCourseOldPath) && !is_dir($appCourseOldPath)) {
-                $document = new CDocument();
-                $document->setFiletype('file')
-                    ->setTitle($title)
-                    ->setComment(null)
-                    ->setReadonly(false)
-                    ->setCreator($this->getAdmin())
-                    ->setParent($course)
-                    ->addCourseLink($course)
-                ;
-
-                $this->entityManager->persist($document);
-                $this->entityManager->flush();
-
-                $documentRepo->addFileFromPath($document, $title, $appCourseOldPath);
-
-                return $document;
+                error_log("SIMULACIÓN: Archivo encontrado en ruta esperada: {$appCourseOldPath}");
+                return null; // Retorna null en modo de solo lectura
             }
-            $generalCoursesPath = $this->getUpdateRootPath().'/app/courses/';
+
+            // Buscar en directorios alternativos usando recursiveFileSearch
+            $generalCoursesPath = $this->getUpdateRootPath() . '/app/courses/';
             $foundPath = $this->recursiveFileSearch($generalCoursesPath, $title);
             if ($foundPath) {
-                $document = new CDocument();
-                $document->setFiletype('file')
-                    ->setTitle($title)
-                    ->setComment(null)
-                    ->setReadonly(false)
-                    ->setCreator($this->getAdmin())
-                    ->setParent($course)
-                    ->addCourseLink($course)
-                ;
-
-                $this->entityManager->persist($document);
-                $this->entityManager->flush();
-
-                $documentRepo->addFileFromPath($document, $title, $foundPath);
-                error_log('File found in new location: '.$foundPath);
-
-                return $document;
+                // Registrar el valor de foundPath sin realizar ninguna operación de escritura
+                error_log("SIMULACIÓN: Archivo encontrado en nueva ubicación: {$foundPath}");
+            } else {
+                error_log("SIMULACIÓN: Archivo {$title} no encontrado en {$generalCoursesPath}");
             }
 
-            throw new Exception('File not found in any location.');
+            return null; // No realizar ninguna operación de creación
         } catch (Exception $e) {
-            error_log('Migration error: '.$e->getMessage());
-
+            error_log('Error en la migración: ' . $e->getMessage());
             return null;
         }
     }
+
 
     private function recursiveFileSearch($directory, $title)
     {

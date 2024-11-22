@@ -27787,3 +27787,21 @@ msgstr "+%d"
 
 msgid "Delete permanently"
 msgstr "Delete permanently"
+
+msgid "%d minutes before"
+msgstr "%d minutes before"
+
+msgid "%d hours before"
+msgstr "%d hours before"
+
+msgid "%d days before"
+msgstr "%d days before"
+
+msgid "Select a folder"
+msgstr "Select a folder"
+
+msgid "Select the destination folder"
+msgstr "Select the destination folder"
+
+msgid "All users"
+msgstr "All users"

@@ -1,15 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -17,11 +19,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 
 class SendCourseExpirationRemindersCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'app:send-course-expiration-reminders';
 
     public function __construct(
@@ -37,7 +40,8 @@ class SendCourseExpirationRemindersCommand extends Command
         $this
             ->setDescription('Send course expiration reminders to users.')
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
-            ->setHelp('This command sends email reminders to users before their course access expires.');
+            ->setHelp('This command sends email reminders to users before their course access expires.')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -52,6 +56,7 @@ class SendCourseExpirationRemindersCommand extends Command
         $isActive = 'true' === $this->settingsManager->getSetting('crons.cron_remind_course_expiration_activate');
         if (!$isActive) {
             $io->warning('Course expiration reminder cron is not active.');
+
             return Command::SUCCESS;
         }
 
@@ -62,7 +67,8 @@ class SendCourseExpirationRemindersCommand extends Command
         $sessions = $this->getSessionsExpiringBetween($today->format('Y-m-d'), $expirationDate);
 
         if (empty($sessions)) {
-            $io->success("No users to be reminded.");
+            $io->success('No users to be reminded.');
+
             return Command::SUCCESS;
         }
 
@@ -71,31 +77,31 @@ class SendCourseExpirationRemindersCommand extends Command
         }
 
         $io->success('Course expiration reminders sent successfully.');
+
         return Command::SUCCESS;
     }
 
     private function getSessionsExpiringBetween(string $today, string $expirationDate): array
     {
-        $sql = "
+        $sql = '
         SELECT DISTINCT category.session_id, certificate.user_id, session.access_end_date, session.title as name
         FROM gradebook_category AS category
         LEFT JOIN gradebook_certificate AS certificate ON category.id = certificate.cat_id
         INNER JOIN session AS session ON category.session_id = session.id
         WHERE session.access_end_date BETWEEN :today AND :expirationDate
         AND category.session_id IS NOT NULL AND certificate.user_id IS NOT NULL
-    ";
+    ';
 
         return $this->connection->fetchAllAssociative($sql, [
             'today' => $today,
-            'expirationDate' => $expirationDate
+            'expirationDate' => $expirationDate,
         ]);
     }
-
 
     private function sendReminder(array $session, SymfonyStyle $io, bool $debug): void
     {
         $userInfo = $this->getUserInfo((int) $session['user_id']);
-        $userInfo['complete_name'] = $userInfo['firstname'] . ' ' . $userInfo['lastname'];
+        $userInfo['complete_name'] = $userInfo['firstname'].' '.$userInfo['lastname'];
         $remainingDays = $this->calculateRemainingDays($session['access_end_date']);
 
         $administrator = [
@@ -118,7 +124,8 @@ class SendCourseExpirationRemindersCommand extends Command
                 'remaining_days' => $remainingDays,
                 'institution' => $institution,
                 'root_web' => $rootWeb,
-            ]);
+            ])
+        ;
 
         try {
             $this->mailer->send($email);
@@ -133,7 +140,8 @@ class SendCourseExpirationRemindersCommand extends Command
 
     private function getUserInfo(int $userId): array
     {
-        $sql = "SELECT * FROM user WHERE id = :userId";
+        $sql = 'SELECT * FROM user WHERE id = :userId';
+
         return $this->connection->fetchAssociative($sql, ['userId' => $userId]);
     }
 
@@ -141,6 +149,7 @@ class SendCourseExpirationRemindersCommand extends Command
     {
         $today = new DateTime('now', new DateTimeZone('UTC'));
         $endDate = new DateTime($accessEndDate);
+
         return $today->diff($endDate)->format('%d');
     }
 }

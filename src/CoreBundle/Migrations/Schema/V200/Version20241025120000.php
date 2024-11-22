@@ -36,7 +36,7 @@ final class Version20241025120000 extends AbstractMigrationChamilo
                     $document = $this->findDocumentByPictureId($pictureId, $documentRepo);
                     if ($document && $document->hasResourceNode() && $document->getResourceNode()->getResourceLinks()->first()) {
                         $course = $document->getResourceNode()->getResourceLinks()->first()->getCourse();
-                        error_log('Creating resource node for question IID ' . $question->getIid());
+                        error_log('Creating resource node for question IID '.$question->getIid());
 
                         $resourceNode = $quizQuestionRepo->addResourceNode($question, $courseAdmin, $course);
                         $this->entityManager->persist($resourceNode);
@@ -44,27 +44,28 @@ final class Version20241025120000 extends AbstractMigrationChamilo
                         // Flush here to ensure the resource node is saved
                         $this->entityManager->flush();
                     } else {
-                        error_log('No course association for question IID ' . $question->getIid() . ' with document ' . $pictureId);
+                        error_log('No course association for question IID '.$question->getIid().' with document '.$pictureId);
+
                         continue;
                     }
                 }
             }
 
             if ($question->hasResourceNode() && $pictureId && !$question->getResourceNode()->hasResourceFile()) {
-                error_log('Existing resource node found for question IID ' . $question->getIid() . ' but no ResourceFile.');
+                error_log('Existing resource node found for question IID '.$question->getIid().' but no ResourceFile.');
 
                 $document = $this->findDocumentByPictureId($pictureId, $documentRepo);
                 if ($document) {
-                    error_log('Document found for picture ID ' . $pictureId . ' and question IID ' . $question->getIid());
+                    error_log('Document found for picture ID '.$pictureId.' and question IID '.$question->getIid());
 
                     if ($document->hasResourceNode() && !$document->getResourceNode()->hasResourceFile()) {
                         $course = $document->getResourceNode()->getResourceLinks()->first()->getCourse();
-                        $filePath = $this->getUpdateRootPath() . '/app/courses/' . $course->getDirectory() . '/document/images/' . $document->getTitle();
+                        $filePath = $this->getUpdateRootPath().'/app/courses/'.$course->getDirectory().'/document/images/'.$document->getTitle();
                         if (file_exists($filePath)) {
                             $this->addLegacyFileToResource($filePath, $documentRepo, $document, $document->getIid());
                             $this->entityManager->persist($document);
                             $this->entityManager->flush();
-                            error_log('ResourceFile created and flushed for document with IID ' . $document->getIid());
+                            error_log('ResourceFile created and flushed for document with IID '.$document->getIid());
                         } else {
                             continue;
                         }
@@ -72,7 +73,7 @@ final class Version20241025120000 extends AbstractMigrationChamilo
 
                     if ($document->getResourceNode()->hasResourceFile()) {
                         $resourceFile = $document->getResourceNode()->getResourceFiles()->first();
-                        error_log('Resource file ready for question IID ' . $question->getIid() . ': ' . $resourceFile->getOriginalName());
+                        error_log('Resource file ready for question IID '.$question->getIid().': '.$resourceFile->getOriginalName());
 
                         $contents = $documentRepo->getResourceFileContent($document);
                         $quizQuestionRepo->addFileFromString(

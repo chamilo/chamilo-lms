@@ -173,6 +173,11 @@ class ResourceNodeVoter extends Voter
             ) {
                 return true;
             }
+            if ($firstLink->getCourse() instanceof Course
+                && $firstLink->getCourse()->isPublic()
+            ) {
+                return true;
+            }
         }
 
         $linkFound = 0;

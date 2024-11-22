@@ -17,7 +17,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 use const DIRECTORY_SEPARATOR;
-use const PHP_SAPI;
 
 final class ThemeHelper
 {

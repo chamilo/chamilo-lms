@@ -18,7 +18,6 @@ final class Version20241001155300 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-
         $this->addSql("
             ALTER TABLE c_lp_rel_user
             ADD IF NOT EXISTS group_id INT NOT NULL,
@@ -27,45 +26,45 @@ final class Version20241001155300 extends AbstractMigrationChamilo
             ADD IF NOT EXISTS is_open_without_date TINYINT(1) DEFAULT 0 NOT NULL
         ");
 
-        $this->addSql("
+        $this->addSql('
             CREATE INDEX IF NOT EXISTS IDX_AD97516EFE54D947 ON c_lp_rel_user (group_id)
-        ");
+        ');
 
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE c_lp_rel_user
             MODIFY group_id INT DEFAULT NULL
-        ");
+        ');
 
-        $this->addSql("
+        $this->addSql('
             UPDATE c_lp_rel_user
             SET group_id = NULL
             WHERE group_id = 0
-        ");
+        ');
 
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE c_lp_rel_user
             ADD CONSTRAINT FK_AD97516EFE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid) ON DELETE CASCADE
-        ");
+        ');
 
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE c_student_publication
             ADD IF NOT EXISTS group_category_work_id INT DEFAULT 0
-        ");
+        ');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE c_lp_rel_user
             DROP IF EXISTS group_id,
             DROP IF EXISTS start_date,
             DROP IF EXISTS end_date,
             DROP IF EXISTS is_open_without_date
-        ");
+        ');
 
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE c_student_publication
             DROP IF EXISTS group_category_work_id
-        ");
+        ');
     }
 }

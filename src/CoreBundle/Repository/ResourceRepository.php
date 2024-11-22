@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
@@ -600,36 +600,60 @@ abstract class ResourceRepository extends ServiceEntityRepository
         }
     }
 
-    public function setVisibilityPublished(AbstractResource $resource): void
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED);
+    public function setVisibilityPublished(
+        AbstractResource $resource,
+        ?Course $course = null,
+        ?Session $session = null,
+    ): void {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED, true, $course, $session);
     }
 
-    public function setVisibilityDraft(AbstractResource $resource): void
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DRAFT);
+    public function setVisibilityDraft(
+        AbstractResource $resource,
+        ?Course $course = null,
+        ?Session $session = null,
+    ): void {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DRAFT, true, $course, $session);
     }
 
-    public function setVisibilityPending(AbstractResource $resource): void
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
+    public function setVisibilityPending(
+        AbstractResource $resource,
+        ?Course $course = null,
+        ?Session $session = null,
+    ): void {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING, true, $course, $session);
     }
 
-    public function addResourceNode(ResourceInterface $resource, User $creator, ResourceInterface $parentResource): ResourceNode
-    {
+    public function addResourceNode(
+        ResourceInterface $resource,
+        User $creator,
+        ResourceInterface $parentResource,
+        ?ResourceType $resourceType = null,
+    ): ResourceNode {
         $parentResourceNode = $parentResource->getResourceNode();
 
-        return $this->createNodeForResource($resource, $creator, $parentResourceNode);
+        return $this->createNodeForResource(
+            $resource,
+            $creator,
+            $parentResourceNode,
+            null,
+            $resourceType,
+        );
     }
 
     /**
      * @todo remove this function and merge it with addResourceNode()
      */
-    public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parentNode, ?UploadedFile $file = null): ResourceNode
-    {
+    public function createNodeForResource(
+        ResourceInterface $resource,
+        User $creator,
+        ResourceNode $parentNode,
+        ?UploadedFile $file = null,
+        ?ResourceType $resourceType = null,
+    ): ResourceNode {
         $em = $this->getEntityManager();
 
-        $resourceType = $this->getResourceType();
+        $resourceType = $resourceType ?: $this->getResourceType();
         $resourceName = $resource->getResourceName();
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
 
@@ -829,8 +853,15 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool
-    {
+    private function setLinkVisibility(
+        AbstractResource $resource,
+        int $visibility,
+        bool $recursive = true,
+        ?Course $course = null,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?User $user = null,
+    ): bool {
         $resourceNode = $resource->getResourceNode();
 
         if (null === $resourceNode) {
@@ -853,7 +884,19 @@ abstract class ResourceRepository extends ServiceEntityRepository
             }
         }
 
-        $links = $resourceNode->getResourceLinks();
+        if ($resource instanceof ResourceShowCourseResourcesInSessionInterface) {
+            $link = $resource->getFirstResourceLinkFromCourseSession($course, $session);
+
+            if (!$link) {
+                $resource->parentResource = $course;
+                $resource->addCourseLink($course, $session);
+            }
+
+            $link = $resource->getFirstResourceLinkFromCourseSession($course, $session);
+            $links = [$link];
+        } else {
+            $links = $resourceNode->getResourceLinks();
+        }
 
         /** @var ResourceLink $link */
         foreach ($links as $link) {

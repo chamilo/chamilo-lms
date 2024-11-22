@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -28,11 +28,11 @@ class SkillRelCourse
     #[ORM\JoinColumn(name: 'skill_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Skill $skill;
 
-    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'skills', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Course::class, cascade: ['persist'], inversedBy: 'skills')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected Course $course;
 
-    #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'skills', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Session::class, cascade: ['persist'], inversedBy: 'skills')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
@@ -42,10 +42,7 @@ class SkillRelCourse
         $this->updatedAt = new DateTime('now');
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -86,36 +83,24 @@ class SkillRelCourse
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @return SkillRelCourse
-     */
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    /**
-     * @return SkillRelCourse
-     */
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 

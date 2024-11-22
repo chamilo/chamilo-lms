@@ -54,6 +54,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -71,6 +72,7 @@ class CourseController extends ToolBaseController
         private readonly UserHelper $userHelper,
     ) {}
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/{cid}/checkLegal.json', name: 'chamilo_core_course_check_legal_json')]
     public function checkTermsAndConditionJson(
         Request $request,
@@ -86,7 +88,7 @@ class CourseController extends ToolBaseController
             'url' => '#',
         ];
 
-        if ($user && $user->hasRole('ROLE_STUDENT')
+        if ($user->hasRole('ROLE_STUDENT')
             && 'true' === $settingsManager->getSetting('registration.allow_terms_conditions')
             && 'course' === $settingsManager->getSetting('platform.load_term_conditions_section')
         ) {
@@ -103,30 +105,23 @@ class CourseController extends ToolBaseController
 
             if (false === $termAndConditionStatus) {
                 $request->getSession()->set('term_and_condition', ['user_id' => $user->getId()]);
-            } else {
-                $request->getSession()->remove('term_and_condition');
-            }
 
-            $termsAndCondition = $request->getSession()->get('term_and_condition');
-            if (null !== $termsAndCondition) {
                 $redirect = true;
-                $allow = 'true' === Container::getSettingsManager()
-                    ->getSetting('course.allow_public_course_with_no_terms_conditions')
-                ;
 
-                if (true === $allow
-                    && null !== $course->getVisibility()
+                if ('true' === $settingsManager->getSetting('course.allow_public_course_with_no_terms_conditions')
                     && Course::OPEN_WORLD === $course->getVisibility()
                 ) {
                     $redirect = false;
                 }
+
                 if ($redirect && !$this->isGranted('ROLE_ADMIN')) {
-                    $url = '/main/auth/inscription.php';
                     $responseData = [
                         'redirect' => true,
-                        'url' => $url,
+                        'url' => '/main/auth/inscription.php',
                     ];
                 }
+            } else {
+                $request->getSession()->remove('term_and_condition');
             }
         }
 

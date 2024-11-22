@@ -1,10 +1,10 @@
 <div class="col-md-12">
     <ul class="nav nav-tabs">
         <li class="active">
-            <a href="{{ _p.web_main }}skills/skill_badge.php">{{ 'Home' | trans }}</a>
+            <a href="{{ _p.web_main }}skills/skill_badge.php">{{ 'Home'|trans }}</a>
         </li>
         <li>
-            <a href="{{ _p.web_main }}skills/skill_badge_list.php">{{ "CurrentBadges" | trans }}</a>
+            <a href="{{ _p.web_main }}skills/skill_badge_list.php">{{ "Current badges"|trans }}</a>
         </li>
     </ul>
 
@@ -12,31 +12,30 @@
         <div class="tab-pane active">
             <div class="openbadges-introduction">
                 <h1 class="title">
-                    {{ 'ObjectIcon::BADGE'|mdi_icon(64) }} {{ 'OpenBadgesTitle' | trans }}
+                    {{ 'ObjectIcon::BADGE'|mdi_icon(64) }} {{ 'Chamilo supports the OpenBadges standard'|trans }}
                 </h1>
                 <div class="row">
                     <div class="col-xs-12 col-md-6">
                         <p class="lead">
-                            {{ 'OpenBadgesBannerText' | trans }}
+                            {{ 'You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>.'|trans }}
                         </p>
                         <p class="lead">
-                            {{ 'OpenBadgesIntroduction' | trans }}
+                            {{ 'You can now design skills learning badges for learning through your courses on this virtual campus.'|trans }}
                         </p>
                     </div>
                     <div class="col-xs-12 col-md-6">
-                        <img class="img-fluid" src="{{ 'openbadges.png' | icon() }}">
+                        <img class="img-fluid" src="{{ 'openbadges.png'|icon() }}">
                     </div>
                 </div>
 
-                <h3 class="sub-title">{{ 'OpenBadgesActionCall' | trans }}</h3>
+                <h3 class="sub-title">{{ 'Convert your virtual campus to a skills-based learning experience'|trans }}</h3>
                 <div class="block-content">
-                    <div class="block-title">{{ 'IssuerDetails' | trans }}</div>
-                    <p>{{ 'Name' | trans }} : {{ _s.institution }}</p>
+                    <div class="block-title">{{ 'Badges issuer details'|trans }}</div>
+                    <p>{{ 'Name'|trans }} : {{ _s.institution }}</p>
                     <p>URL: {{ _p.web }}</p>
-                    <div class="block-title">{{ 'BackpackDetails' | trans }}</div>
+                    <div class="block-title">{{ 'Backpack details'|trans }}</div>
                     <p>URL: {{ backpack }}</p>
-                    <p>{{ 'TheBadgesWillBeSentToThatBackpack' | trans }}</p>
-
+                    <p>{{ 'The badges will be sent to this backpack'|trans }}</p>
                 </div>
             </div>
         </div>

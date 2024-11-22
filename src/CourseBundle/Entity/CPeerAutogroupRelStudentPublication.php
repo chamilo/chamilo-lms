@@ -8,10 +8,10 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CPeerAutogroupRelStudentPublication
  * Represents the link between autogroups and peer assessment related to student publications.
  */
 #[ORM\Table(name: 'c_peer_autogroup_rel_student_publication')]
@@ -36,7 +36,7 @@ class CPeerAutogroupRelStudentPublication
     protected ?bool $vote = null;
 
     #[ORM\Column(name: 'date_vote', type: 'datetime', nullable: true)]
-    protected ?\DateTimeInterface $dateVote = null;
+    protected ?DateTimeInterface $dateVote = null;
 
     #[ORM\ManyToOne(targetEntity: CStudentPublication::class)]
     #[ORM\JoinColumn(name: 'student_publication_id', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
@@ -83,12 +83,12 @@ class CPeerAutogroupRelStudentPublication
         return $this;
     }
 
-    public function getDateVote(): ?\DateTimeInterface
+    public function getDateVote(): ?DateTimeInterface
     {
         return $this->dateVote;
     }
 
-    public function setDateVote(?\DateTimeInterface $dateVote): self
+    public function setDateVote(?DateTimeInterface $dateVote): self
     {
         $this->dateVote = $dateVote;
 

@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CPeerAssessmentCorrection.
@@ -52,7 +52,6 @@ class CPeerAssessmentCorrection
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     protected ?bool $completed = false;
-
 
     public function __construct() {}
 

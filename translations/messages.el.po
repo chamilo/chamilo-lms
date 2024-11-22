@@ -15809,7 +15809,7 @@ msgstr "IP address"
 msgid "Only skills that were not registered were imported"
 msgstr "Μόνο οι δεξιότητες που δεν είχαν καταχωρηθεί εισήχθησαν"
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "Δεν δόθηκε όνομα στο επίπεδο ικανότητας"
 
 msgid "The parent skill was not set"

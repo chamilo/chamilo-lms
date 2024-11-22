@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@use "./tailwind" as *;
+@use "./scss" as *;
 
 @import '~cropper/dist/cropper.css';
 //@import "~flag-icons/sass/flag-icons.scss";
@@ -8,7 +7,7 @@
 @import "~bootstrap-daterangepicker/daterangepicker.css";
 //@import '~jquery-ui/themes/base/all.css';
 
-@import "tinymce/skins/ui/oxide/skin.css";
+@import "~tinymce/skins/ui/oxide/skin.css";
 @import './editor_content.css';
 
 @layer utilities {
@@ -325,8 +324,6 @@
     @apply bg-white;
   }
 }
-
-@import "scss/index.scss";
 
 .field > small.p-error {
   @apply text-error;
@@ -853,13 +850,11 @@ form .field {
   }
 }
 
-//@import 'primevue-md-light-indigo/theme.css';
-//@import '~primevue/resources/primevue.min.css';
-//@import '~primeflex/primeflex.css';
-//@import "~primeicons/primeicons.css";
-
-@import 'primeflex/core/_variables.scss';
-@import 'primeflex/core/_formlayout.scss';
+@layer components {
+  .tiny-content table {
+    @apply w-auto table-auto;
+  }
+}
 
 //@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";

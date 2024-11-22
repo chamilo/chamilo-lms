@@ -26,7 +26,7 @@
 
         {% if not personal_badge is empty %}
             <p class="text-center">
-                <a href="{{ personal_badge }}" class="btn btn--primary" target="_blank" >
+                <a href="{{ personal_badge }}" class="btn btn--primary" target="_blank">
                     <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
                 </a>
             </p>
@@ -41,7 +41,8 @@
             </p>
             <div class='col-md-12 text-center'>
                 <h5><b> {{ 'Share with your friends'|trans }} </b></h5>
-                <a href="http://www.facebook.com/sharer.php?u={{ url('badge_issued', { 'id': issue_info.id }) }}" target="_blank">
+                <a href="http://www.facebook.com/sharer.php?u={{ url('badge_issued', { 'id': issue_info.id }) }}"
+                   target="_blank">
                     <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                 </a>
                 <a href="https://twitter.com/home?status={{ 'I have achieved skill %s on %s'|trans|format(
@@ -133,7 +134,8 @@
                                 <div class="media-right text-right">
                                     <div style="width: 80px;">
                                         {% if comment.value %}
-                                            <em class="fa fa-certificate fa-fw" aria-label="{{ 'Average rating'|trans }}"></em>
+                                            <em class="fa fa-certificate fa-fw"
+                                                aria-label="{{ 'Average rating'|trans }}"></em>
                                             <span class="sr-only">{{ 'Average rating'|trans }}</span> {{ comment.value }}
                                         {% endif %}
                                     </div>
@@ -157,11 +159,11 @@
 </div>
 {% if allow_export %}
     <script>
-        $(function () {
-            $('#badge-export-button').on('click', function (e) {
-                e.preventDefault();
-                OpenBadges.issue({{ issue_info.badge_assertion|json_encode() }});
-            });
-        });
+      $(function() {
+        $("#badge-export-button").on("click", function(e) {
+          e.preventDefault()
+          OpenBadges.issue({{ issue_info.badge_assertion|json_encode() }})
+        })
+      })
     </script>
 {% endif %}

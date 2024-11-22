@@ -42,37 +42,37 @@
       <div class="document-show__details-side">
         <table>
           <tbody>
-          <tr>
-            <th v-text="$t('Author')" />
-            <td v-text="item.resourceNode.creator.username" />
-          </tr>
-          <tr v-if="item.comment">
-            <th v-text="$t('Comment')" />
-            <td v-text="item.comment" />
-          </tr>
-          <tr>
-            <th v-text="$t('Created at')" />
-            <td>
-              {{ item["resourceNode"] ? relativeDatetime(item["resourceNode"].createdAt) : "" }}
-            </td>
-          </tr>
-          <tr>
-            <th v-text="$t('Updated at')" />
-            <td>
-              {{ item.resourceNode ? relativeDatetime(item.resourceNode.updatedAt) : "" }}
-            </td>
-          </tr>
-          <tr v-if="item.resourceNode.firstResourceFile">
-            <th v-text="$t('File')" />
-            <td>
-              <a
-                :href="item['downloadUrl']"
-                class="btn btn--primary"
-              >
-                <BaseIcon icon="download" /> {{ $t("Download file") }}
-              </a>
-            </td>
-          </tr>
+            <tr>
+              <th v-text="$t('Author')" />
+              <td v-text="item.resourceNode.creator.username" />
+            </tr>
+            <tr v-if="item.comment">
+              <th v-text="$t('Comment')" />
+              <td v-text="item.comment" />
+            </tr>
+            <tr>
+              <th v-text="$t('Created at')" />
+              <td>
+                {{ item["resourceNode"] ? relativeDatetime(item["resourceNode"].createdAt) : "" }}
+              </td>
+            </tr>
+            <tr>
+              <th v-text="$t('Updated at')" />
+              <td>
+                {{ item.resourceNode ? relativeDatetime(item.resourceNode.updatedAt) : "" }}
+              </td>
+            </tr>
+            <tr v-if="item.resourceNode.firstResourceFile">
+              <th v-text="$t('File')" />
+              <td>
+                <a
+                  :href="item['downloadUrl']"
+                  class="btn btn--primary"
+                >
+                  <BaseIcon icon="download" /> {{ $t("Download file") }}
+                </a>
+              </td>
+            </tr>
           </tbody>
         </table>
 

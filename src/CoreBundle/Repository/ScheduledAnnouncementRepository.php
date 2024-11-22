@@ -19,8 +19,6 @@ class ScheduledAnnouncementRepository extends ServiceEntityRepository
 
     /**
      * Mark an announcement as sent.
-     *
-     * @param ScheduledAnnouncement $announcement
      */
     public function markAsSent(ScheduledAnnouncement $announcement): void
     {

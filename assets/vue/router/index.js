@@ -20,7 +20,7 @@ import documents from "./documents"
 import assignments from "./assignments"
 import links from "./links"
 import glossary from "./glossary"
-import {useSecurityStore} from "../store/securityStore"
+import { useSecurityStore } from "../store/securityStore"
 import MyCourseList from "../views/user/courses/List.vue"
 import MySessionList from "../views/user/sessions/SessionsCurrent.vue"
 import MySessionListPast from "../views/user/sessions/SessionsPast.vue"
@@ -244,14 +244,13 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const securityStore = useSecurityStore()
 
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!securityStore.isLoading) {
       await securityStore.checkSession()
     }
 
     if (securityStore.isAuthenticated) {
-      next();
+      next()
     } else {
       next({
         path: "/login",
@@ -265,6 +264,7 @@ router.beforeEach(async (to, from, next) => {
 
 router.beforeResolve(async (to) => {
   const cidReqStore = useCidReqStore()
+  const securityStore = useSecurityStore()
 
   let cid = parseInt(to.query?.cid ?? 0)
   const sid = parseInt(to.query?.sid ?? 0)
@@ -275,6 +275,29 @@ router.beforeResolve(async (to) => {
 
   if (cid) {
     await cidReqStore.setCourseAndSessionById(cid, sid)
+
+    if (cidReqStore.session) {
+      const { isGeneralCoach, isCourseCoach } = useUserSessionSubscription()
+
+      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_TEACHER")
+      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_STUDENT")
+
+      if (isGeneralCoach.value || isCourseCoach.value) {
+        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_TEACHER")
+      } else {
+        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_STUDENT")
+      }
+    } else {
+      const isTeacher = cidReqStore.course.teachers.some((userSubscription) => {
+        return 0 === userSubscription.relationType && userSubscription.user["@id"] === securityStore.user["@id"]
+      })
+
+      if (isTeacher) {
+        securityStore.user.roles.push("ROLE_CURRENT_COURSE_TEACHER")
+      } else {
+        securityStore.user.roles.push("ROLE_CURRENT_COURSE_STUDENT")
+      }
+    }
   } else {
     cidReqStore.resetCid()
   }

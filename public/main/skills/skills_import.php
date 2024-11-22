@@ -22,7 +22,7 @@ function validate_data($skills)
 {
     $errors = [];
     // 1. Check if mandatory fields are set.
-    $mandatory_fields = ['id', 'parent_id', 'name'];
+    $mandatory_fields = ['id', 'parent_id', 'title'];
     foreach ($skills as $index => $skill) {
         foreach ($mandatory_fields as $field) {
             if (empty($skill[$field])) {
@@ -41,8 +41,8 @@ function validate_data($skills)
             $errors[] = $skill;
         }
         // 4. Check skill Name
-        if (!isset($skill['name'])) {
-            $skill['error'] = get_lang('The skill had no name set');
+        if (!isset($skill['title'])) {
+            $skill['error'] = get_lang('The skill had no title set');
             $errors[] = $skill;
         }
     }
@@ -96,6 +96,10 @@ function parse_csv_data($file)
 {
     $skills = Import::csvToArray($file);
     foreach ($skills as $index => $skill) {
+        if (isset($skill['name'])) {
+            $skill['title'] = $skill['name'];
+        }
+
         $skills[$index] = $skill;
     }
 
@@ -144,7 +148,7 @@ if (!empty($_POST['formSent']) && 0 !== $_FILES['import_file']['size']) {
     }
     if (is_array($skills)) {
         foreach ($skills as $my_skill) {
-            if (isset($my_skill['name']) && !in_array($my_skill['name'], $skill_id_error)) {
+            if (isset($my_skill['title']) && !in_array($my_skill['title'], $skill_id_error)) {
                 $skills_to_insert[] = $my_skill;
             }
         }
@@ -214,7 +218,7 @@ $form->display();
 $contents = '
 <p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <pre>
-    <b>id</b>;<b>parent_id</b>;<b>name</b>;<b>description</b>
+    <b>id</b>;<b>parent_id</b>;<b>title</b>;<b>description</b>
     <b>2</b>;<b>1</b>;<b>Chamilo Expert</b>;Chamilo is an open source LMS;<br />
 </pre>
 ';

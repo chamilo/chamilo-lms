@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Traits\CourseTrait;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -18,8 +19,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 #[ORM\Entity]
 class CPeerAssessment
 {
-    use TimestampableEntity;
     use CourseTrait;
+    use TimestampableEntity;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -77,16 +78,16 @@ class CPeerAssessment
     protected ?bool $distributionAlgorithm = false;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    protected ?\DateTime $sendWorkStartDate = null;
+    protected ?DateTime $sendWorkStartDate = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    protected ?\DateTime $sendWorkEndDate = null;
+    protected ?DateTime $sendWorkEndDate = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    protected ?\DateTime $startCorrectionDate = null;
+    protected ?DateTime $startCorrectionDate = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    protected ?\DateTime $endCorrectionDate = null;
+    protected ?DateTime $endCorrectionDate = null;
 
     public function __construct() {}
 
@@ -103,6 +104,7 @@ class CPeerAssessment
     public function setGroupCategory(?CGroupCategory $groupCategory): self
     {
         $this->groupCategory = $groupCategory;
+
         return $this;
     }
 
@@ -114,6 +116,7 @@ class CPeerAssessment
     public function setMaxCorrectionPerStudent(?int $maxCorrectionPerStudent): self
     {
         $this->maxCorrectionPerStudent = $maxCorrectionPerStudent;
+
         return $this;
     }
 
@@ -125,6 +128,7 @@ class CPeerAssessment
     public function setState(?int $state): self
     {
         $this->state = $state;
+
         return $this;
     }
 
@@ -136,6 +140,7 @@ class CPeerAssessment
     public function setStartWorkRepositoryOption(?int $startWorkRepositoryOption): self
     {
         $this->startWorkRepositoryOption = $startWorkRepositoryOption;
+
         return $this;
     }
 
@@ -147,6 +152,7 @@ class CPeerAssessment
     public function setEndWorkRepositoryOption(?int $endWorkRepositoryOption): self
     {
         $this->endWorkRepositoryOption = $endWorkRepositoryOption;
+
         return $this;
     }
 
@@ -158,6 +164,7 @@ class CPeerAssessment
     public function setStartCorrectionOption(?int $startCorrectionOption): self
     {
         $this->startCorrectionOption = $startCorrectionOption;
+
         return $this;
     }
 
@@ -169,6 +176,7 @@ class CPeerAssessment
     public function setEndCorrectionOption(?int $endCorrectionOption): self
     {
         $this->endCorrectionOption = $endCorrectionOption;
+
         return $this;
     }
 
@@ -180,6 +188,7 @@ class CPeerAssessment
     public function setDistributeCorrectionOption(int $distributeCorrectionOption): self
     {
         $this->distributeCorrectionOption = $distributeCorrectionOption;
+
         return $this;
     }
 
@@ -191,6 +200,7 @@ class CPeerAssessment
     public function setEndRepositoryOption(?int $endRepositoryOption): self
     {
         $this->endRepositoryOption = $endRepositoryOption;
+
         return $this;
     }
 
@@ -202,6 +212,7 @@ class CPeerAssessment
     public function setExaminerRoleCondition(?bool $examinerRoleCondition): self
     {
         $this->examinerRoleCondition = $examinerRoleCondition;
+
         return $this;
     }
 
@@ -213,6 +224,7 @@ class CPeerAssessment
     public function setStudentAccessToCorrection(?bool $studentAccessToCorrection): self
     {
         $this->studentAccessToCorrection = $studentAccessToCorrection;
+
         return $this;
     }
 
@@ -224,6 +236,7 @@ class CPeerAssessment
     public function setCommentConstraint(?bool $commentConstraint): self
     {
         $this->commentConstraint = $commentConstraint;
+
         return $this;
     }
 
@@ -235,6 +248,7 @@ class CPeerAssessment
     public function setCorrectOwnWork(?bool $correctOwnWork): self
     {
         $this->correctOwnWork = $correctOwnWork;
+
         return $this;
     }
 
@@ -246,6 +260,7 @@ class CPeerAssessment
     public function setCorrectBenchmarkWork(?bool $correctBenchmarkWork): self
     {
         $this->correctBenchmarkWork = $correctBenchmarkWork;
+
         return $this;
     }
 
@@ -257,50 +272,55 @@ class CPeerAssessment
     public function setDistributionAlgorithm(?bool $distributionAlgorithm): self
     {
         $this->distributionAlgorithm = $distributionAlgorithm;
+
         return $this;
     }
 
-    public function getSendWorkStartDate(): ?\DateTime
+    public function getSendWorkStartDate(): ?DateTime
     {
         return $this->sendWorkStartDate;
     }
 
-    public function setSendWorkStartDate(?\DateTime $sendWorkStartDate): self
+    public function setSendWorkStartDate(?DateTime $sendWorkStartDate): self
     {
         $this->sendWorkStartDate = $sendWorkStartDate;
+
         return $this;
     }
 
-    public function getSendWorkEndDate(): ?\DateTime
+    public function getSendWorkEndDate(): ?DateTime
     {
         return $this->sendWorkEndDate;
     }
 
-    public function setSendWorkEndDate(?\DateTime $sendWorkEndDate): self
+    public function setSendWorkEndDate(?DateTime $sendWorkEndDate): self
     {
         $this->sendWorkEndDate = $sendWorkEndDate;
+
         return $this;
     }
 
-    public function getStartCorrectionDate(): ?\DateTime
+    public function getStartCorrectionDate(): ?DateTime
     {
         return $this->startCorrectionDate;
     }
 
-    public function setStartCorrectionDate(?\DateTime $startCorrectionDate): self
+    public function setStartCorrectionDate(?DateTime $startCorrectionDate): self
     {
         $this->startCorrectionDate = $startCorrectionDate;
+
         return $this;
     }
 
-    public function getEndCorrectionDate(): ?\DateTime
+    public function getEndCorrectionDate(): ?DateTime
     {
         return $this->endCorrectionDate;
     }
 
-    public function setEndCorrectionDate(?\DateTime $endCorrectionDate): self
+    public function setEndCorrectionDate(?DateTime $endCorrectionDate): self
     {
         $this->endCorrectionDate = $endCorrectionDate;
+
         return $this;
     }
 }

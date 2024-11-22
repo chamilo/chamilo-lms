@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -53,12 +53,7 @@ class SkillRelSkill
         return $this;
     }
 
-    /**
-     * Get relationType.
-     *
-     * @return int
-     */
-    public function getRelationType()
+    public function getRelationType(): int
     {
         return $this->relationType;
     }

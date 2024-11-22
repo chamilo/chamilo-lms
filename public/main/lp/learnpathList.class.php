@@ -119,7 +119,7 @@ class LearnpathList
                 $lp->getId(),
                 $session_id
             );*/
-            $visibility = $lp->isVisible($course);
+            $visibility = $lp->isVisible($course, $session);
 
             // If option is not true then don't show invisible LP to user
             if (false === $ignoreLpVisibility) {

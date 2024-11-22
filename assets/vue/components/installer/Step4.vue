@@ -143,34 +143,34 @@
     >
       <table>
         <tbody>
-        <tr>
-          <td v-t="'Database host'" />
-          <td v-text="installerData.stepData.connParams.host" />
-        </tr>
-        <tr>
-          <td v-t="'Database port'" />
-          <td v-text="installerData.stepData.connParams.port" />
-        </tr>
-        <tr>
-          <td v-t="'Database driver'" />
-          <td v-text="installerData.stepData.connParams.driver" />
-        </tr>
+          <tr>
+            <td v-t="'Database host'" />
+            <td v-text="installerData.stepData.connParams.host" />
+          </tr>
+          <tr>
+            <td v-t="'Database port'" />
+            <td v-text="installerData.stepData.connParams.port" />
+          </tr>
+          <tr>
+            <td v-t="'Database driver'" />
+            <td v-text="installerData.stepData.connParams.driver" />
+          </tr>
         </tbody>
       </table>
       <table v-if="'update' === installerData.installType">
         <tbody>
-        <tr>
-          <td v-t="'CREATE TABLE works'" />
-          <td v-t="'OK'" />
-        </tr>
-        <tr>
-          <td v-t="'ALTER TABLE works'" />
-          <td v-t="'OK'" />
-        </tr>
-        <tr>
-          <td v-t="'DROP COLUMN works'" />
-          <td v-t="'OK'" />
-        </tr>
+          <tr>
+            <td v-t="'CREATE TABLE works'" />
+            <td v-t="'OK'" />
+          </tr>
+          <tr>
+            <td v-t="'ALTER TABLE works'" />
+            <td v-t="'OK'" />
+          </tr>
+          <tr>
+            <td v-t="'DROP COLUMN works'" />
+            <td v-t="'OK'" />
+          </tr>
         </tbody>
       </table>
     </Message>

@@ -85,9 +85,27 @@ final class Version20230216122950 extends AbstractMigrationChamilo
         }
 
         if ($schema->hasTable('portfolio')) {
-            $this->addSql(
-                'ALTER TABLE portfolio ADD origin INT DEFAULT NULL, ADD origin_type INT DEFAULT NULL, ADD score DOUBLE PRECISION DEFAULT NULL, ADD is_highlighted TINYINT(1) DEFAULT 0 NOT NULL, ADD is_template TINYINT(1) DEFAULT 0 NOT NULL'
-            );
+            $tblPortfolio = $schema->getTable('portfolio');
+
+            if (!$tblPortfolio->hasColumn('origin')) {
+                $this->addSql('ALTER TABLE portfolio ADD origin INT DEFAULT NULL');
+            }
+
+            if (!$tblPortfolio->hasColumn('origin_type')) {
+                $this->addSql('ALTER TABLE portfolio ADD origin_type INT DEFAULT NULL');
+            }
+
+            if (!$tblPortfolio->hasColumn('score')) {
+                $this->addSql('ALTER TABLE portfolio ADD score DOUBLE PRECISION DEFAULT NULL');
+            }
+
+            if (!$tblPortfolio->hasColumn('is_highlighted')) {
+                $this->addSql('ALTER TABLE portfolio ADD is_highlighted TINYINT(1) DEFAULT 0 NOT NULL');
+            }
+
+            if (!$tblPortfolio->hasColumn('is_template')) {
+                $this->addSql('ALTER TABLE portfolio ADD is_template TINYINT(1) DEFAULT 0 NOT NULL');
+            }
         }
 
         if (!$schema->hasTable('c_attendance_result_comment')) {

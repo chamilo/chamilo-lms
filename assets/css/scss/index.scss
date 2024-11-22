@@ -1,3 +1,4 @@
+@use "sass:meta";
 //@import 'variables';
 //@import 'base_theme';
 //
@@ -11,77 +12,77 @@
   }
 }
 
-@import "settings/typography";
+@include meta.load-css("settings/typography");
 
-@import "atoms/form";
-@import "atoms/autocomplete";
-@import "atoms/avatar";
-@import "atoms/buttons";
-@import "atoms/calendar";
-@import "atoms/checkbox";
-@import "atoms/color_picker";
-@import "atoms/divider";
-@import "atoms/dropdown";
-@import "atoms/fieldset";
-@import "atoms/inline_message";
-@import "atoms/inputgroup";
-@import "atoms/input_switch";
-@import "atoms/input_text";
-@import "atoms/messages";
-@import "atoms/overlay";
-@import "atoms/password";
-@import "atoms/platform_logo";
-@import "atoms/progressbar";
-@import "atoms/radio";
-@import "atoms/skeleton";
-@import "atoms/tags";
-@import "atoms/toast";
-@import "atoms/wysiwyg";
+@include meta.load-css("atoms/form");
+@include meta.load-css("atoms/autocomplete");
+@include meta.load-css("atoms/avatar");
+@include meta.load-css("atoms/buttons");
+@include meta.load-css("atoms/calendar");
+@include meta.load-css("atoms/checkbox");
+@include meta.load-css("atoms/color_picker");
+@include meta.load-css("atoms/divider");
+@include meta.load-css("atoms/dropdown");
+@include meta.load-css("atoms/fieldset");
+@include meta.load-css("atoms/inline_message");
+@include meta.load-css("atoms/inputgroup");
+@include meta.load-css("atoms/input_switch");
+@include meta.load-css("atoms/input_text");
+@include meta.load-css("atoms/messages");
+@include meta.load-css("atoms/overlay");
+@include meta.load-css("atoms/password");
+@include meta.load-css("atoms/platform_logo");
+@include meta.load-css("atoms/progressbar");
+@include meta.load-css("atoms/radio");
+@include meta.load-css("atoms/skeleton");
+@include meta.load-css("atoms/tags");
+@include meta.load-css("atoms/toast");
+@include meta.load-css("atoms/wysiwyg");
 
-@import "molecules/chip";
-@import "molecules/course_tool";
-@import "molecules/datepicker";
-@import "molecules/empty_state";
-@import "molecules/teacher_bar";
-@import "molecules/toolbar";
-@import "molecules/legacy_panel";
+@include meta.load-css("molecules/chip");
+@include meta.load-css("molecules/course_tool");
+@include meta.load-css("molecules/datepicker");
+@include meta.load-css("molecules/empty_state");
+@include meta.load-css("molecules/teacher_bar");
+@include meta.load-css("molecules/toolbar");
+@include meta.load-css("molecules/legacy_panel");
 
-@import "organisms/cards";
-@import "organisms/course_card";
-@import "organisms/datatable";
-@import "organisms/dataview";
-@import "organisms/external_logins";
-@import "organisms/modals";
-@import "organisms/menu";
-@import "organisms/sidebar";
-@import "organisms/section_header";
-@import "organisms/tables";
-@import "organisms/install";
+@include meta.load-css("organisms/cards");
+@include meta.load-css("organisms/course_card");
+@include meta.load-css("organisms/datatable");
+@include meta.load-css("organisms/dataview");
+@include meta.load-css("organisms/external_logins");
+@include meta.load-css("organisms/modals");
+@include meta.load-css("organisms/menu");
+@include meta.load-css("organisms/sidebar");
+@include meta.load-css("organisms/section_header");
+@include meta.load-css("organisms/tables");
+@include meta.load-css("organisms/install");
 
-@import "components/badges";
+@include meta.load-css("components/badges");
 //@import 'announcement';
 
-@import "layout/topbar";
-@import "layout/breadcrumb";
-@import 'layout/main_container';
+@include meta.load-css("layout/topbar");
+@include meta.load-css("layout/breadcrumb");
+@include meta.load-css('layout/main_container');
 
-@import "admin_index";
-@import "calendar";
-@import "course_home";
+@include meta.load-css("admin_index");
+@include meta.load-css("calendar");
+@include meta.load-css("course_home");
 
-@import "documents";
+@include meta.load-css("documents");
 
-@import 'login';
+@include meta.load-css('login');
 
-@import 'forums';
-@import 'exercise';
-@import 'catalog_course';
-@import 'catalog_session';
+@include meta.load-css('forums');
+@include meta.load-css('exercise');
+@include meta.load-css('catalog_course');
+@include meta.load-css('catalog_session');
 //@import 'jqueryui';
-@import 'lp';
-@import "messages";
-@import "userreluser";
-@import 'social';
-@import 'skill';
+@include meta.load-css('lp');
+@include meta.load-css("messages");
+@include meta.load-css("userreluser");
+@include meta.load-css('social');
+@include meta.load-css('skill');
 
-@import "libs/mediaelementjs/styles";
+@include meta.load-css("libs/mediaelementjs/styles");

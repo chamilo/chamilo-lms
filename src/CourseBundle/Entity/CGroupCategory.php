@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Uid\Uuid;
@@ -73,10 +74,10 @@ class CGroupCategory extends AbstractResource implements ResourceInterface, Stri
     protected ?int $minStudent = null;
 
     #[ORM\Column(name: 'begin_inscription_date', type: 'datetime', nullable: true)]
-    protected ?\DateTime $beginInscriptionDate = null;
+    protected ?DateTime $beginInscriptionDate = null;
 
     #[ORM\Column(name: 'end_inscription_date', type: 'datetime', nullable: true)]
-    protected ?\DateTime $endInscriptionDate = null;
+    protected ?DateTime $endInscriptionDate = null;
 
     #[ORM\Column(name: 'only_me', type: 'boolean', options: ['default' => 0])]
     protected bool $onlyMe = false;
@@ -356,24 +357,24 @@ class CGroupCategory extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    public function getBeginInscriptionDate(): ?\DateTime
+    public function getBeginInscriptionDate(): ?DateTime
     {
         return $this->beginInscriptionDate;
     }
 
-    public function setBeginInscriptionDate(?\DateTime $beginInscriptionDate): self
+    public function setBeginInscriptionDate(?DateTime $beginInscriptionDate): self
     {
         $this->beginInscriptionDate = $beginInscriptionDate;
 
         return $this;
     }
 
-    public function getEndInscriptionDate(): ?\DateTime
+    public function getEndInscriptionDate(): ?DateTime
     {
         return $this->endInscriptionDate;
     }
 
-    public function setEndInscriptionDate(?\DateTime $endInscriptionDate): self
+    public function setEndInscriptionDate(?DateTime $endInscriptionDate): self
     {
         $this->endInscriptionDate = $endInscriptionDate;
 

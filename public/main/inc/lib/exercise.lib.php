@@ -1431,20 +1431,19 @@ HTML;
             $hotspotColor = 0;
             if (HOT_SPOT_DELINEATION != $answerType) {
                 $answerList = '
-                    <div class="well well-sm">
-                        <h5 class="page-header">'.get_lang('Image zones').'</h5>
-                        <ol>
-                ';
+        <div class="p-4 rounded-md border border-gray-25">
+            <h5 class="font-bold text-lg mb-2 text-primary">'.get_lang('Image zones').'</h5>
+            <ol class="list-decimal ml-6 space-y-2 text-primary">
+        ';
 
                 if (!empty($answers_hotspot)) {
                     Session::write("hotspot_ordered$questionId", array_keys($answers_hotspot));
                     foreach ($answers_hotspot as $value) {
-                        $answerList .= '<li>';
+                        $answerList .= '<li class="flex items-center space-x-2">';
                         if ($freeze) {
-                            $answerList .= '<span class="hotspot-color-'.$hotspotColor
-                                .' fa fa-square" aria-hidden="true"></span>'.PHP_EOL;
+                            $answerList .= '<span class="text-support-5 fa fa-square" aria-hidden="true"></span>';
                         }
-                        $answerList .= $value;
+                        $answerList .= '<span>'.$value.'</span>';
                         $answerList .= '</li>';
                         $hotspotColor++;
                     }
@@ -1458,26 +1457,25 @@ HTML;
             if ($freeze) {
                 $relPath = api_get_path(WEB_CODE_PATH);
                 echo "
-                        <div class=\"row\">
-                            <div class=\"col-sm-9\">
-                                <div id=\"hotspot-preview-$questionId\"></div>
-                            </div>
-                            <div class=\"col-sm-3\">
-                                $answerList
-                            </div>
-                        </div>
-                        <script>
-                            new ".(HOT_SPOT == $answerType ? "HotspotQuestion" : "DelineationQuestion")."({
-                                questionId: $questionId,
-                                exerciseId: $exerciseId,
-                                exeId: 0,
-                                selector: '#hotspot-preview-$questionId',
-                                for: 'preview',
-                                relPath: '$relPath'
-                            });
-                        </script>
-                    ";
-
+        <div class=\"flex space-x-4\">
+            <div class=\"w-3/4\">
+                <div id=\"hotspot-preview-$questionId\" class=\"bg-gray-10 w-full bg-center bg-no-repeat bg-contain border border-gray-25\"></div>
+            </div>
+            <div class=\"w-1/4\">
+                $answerList
+            </div>
+        </div>
+        <script>
+            new ".(HOT_SPOT == $answerType ? "HotspotQuestion" : "DelineationQuestion")."({
+                questionId: $questionId,
+                exerciseId: $exerciseId,
+                exeId: 0,
+                selector: '#hotspot-preview-$questionId',
+                for: 'preview',
+                relPath: '$relPath'
+            });
+        </script>
+    ";
                 return;
             }
 
@@ -1491,38 +1489,38 @@ HTML;
 
                 //@todo I need to the get the feedback type
                 echo <<<HOTSPOT
-                    <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
-                    <div class="exercise_questions">
-                        $questionDescription
-                        <div class="row">
+        <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
+        <div class="exercise_questions">
+            $questionDescription
+            <div class="flex space-x-4">
 HOTSPOT;
             }
 
             $relPath = api_get_path(WEB_CODE_PATH);
-            $s .= "<div class=\"col-sm-8 col-md-9\">
-                   <div class=\"hotspot-image\"></div>
-                    <script>
-                        $(function() {
-                            new ".(HOT_SPOT_DELINEATION == $answerType ? 'DelineationQuestion' : 'HotspotQuestion')."({
-                                questionId: $questionId,
-                                exerciseId: $exerciseId,
-                                exeId: 0,
-                                selector: '#question_div_' + $questionId + ' .hotspot-image',
-                                for: 'user',
-                                relPath: '$relPath'
-                            });
-                        });
-                    </script>
-                </div>
-                <div class=\"col-sm-4 col-md-3\">
-                    $answerList
-                </div>
-            ";
+            $s .= "<div class=\"w-3/4\">
+           <div class=\"hotspot-image bg-gray-10 border border-gray-25 bg-center bg-no-repeat bg-contain\"></div>
+            <script>
+                $(function() {
+                    new ".(HOT_SPOT_DELINEATION == $answerType ? 'DelineationQuestion' : 'HotspotQuestion')."({
+                        questionId: $questionId,
+                        exerciseId: $exerciseId,
+                        exeId: 0,
+                        selector: '#question_div_' + $questionId + ' .hotspot-image',
+                        for: 'user',
+                        relPath: '$relPath'
+                    });
+                });
+            </script>
+        </div>
+        <div class=\"w-1/4\">
+            $answerList
+        </div>
+    ";
 
             echo <<<HOTSPOT
-                            $s
-                        </div>
-                    </div>
+        $s
+    </div>
+</div>
 HOTSPOT;
         } elseif (ANNOTATION == $answerType) {
             global $exe_id;

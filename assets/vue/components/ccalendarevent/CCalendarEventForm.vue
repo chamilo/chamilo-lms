@@ -14,12 +14,15 @@
       show-icon
       show-time
       type="range"
+      id="calendar-id"
+      :initial-value="[item.startDate, item.endDate]"
+      class="max-w-sm w-full"
     />
 
     <BaseTinyEditor
       v-model="item.content"
       editor-id="calendar-event-content"
-      required
+      :required="false"
     />
     <CalendarInvitations v-model="item" />
 
@@ -67,9 +70,6 @@ const item = computed(() => props.initialValues || props.values)
 const rules = computed(() => ({
   item: {
     title: {
-      required,
-    },
-    content: {
       required,
     },
     startDate: {

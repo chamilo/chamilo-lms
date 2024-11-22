@@ -1,41 +1,41 @@
 {% autoescape false %}
-<h1 class="page-header">{{ 'My Badges' | trans }}</h1>
-<p>
-    {{ "My skills report introduction" | trans }}
-</p>
-{% if rows %}
-    <div class="communications">
-        {% if skill_table %}
-            {{ skill_table }}
-        {% endif %}
-    </div>
-    <h6 class="table-header">{{ 'Skills History' | trans }}</h6>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>{{ 'Badge' | trans }}</th>
-            <th>{{ 'Skill' | trans }}</th>
-            <th>{{ 'Date' | trans }}</th>
-            <th>{{ 'Course' | trans }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in rows %}
+    <h1 class="page-header">{{ 'My Badges'|trans }}</h1>
+    <p>
+        {{ "My skills report introduction"|trans }}
+    </p>
+    {% if rows %}
+        <div class="communications">
+            {% if skill_table %}
+                {{ skill_table }}
+            {% endif %}
+        </div>
+        <h6 class="table-header">{{ 'Skills History'|trans }}</h6>
+        <table class="table">
+            <thead>
             <tr>
-                <td>{{ row.skill_badge }}</td>
-                <td>{{ row.skill_name }}</td>
-                <td>{{ row.achieved_at }}</td>
-                {% if row.course_name %}
-                    <td>
-                        <img src="{{ row.course_image }}" alt="{{ row.course_name }}" width="32">
-                        {{ row.course_name }}
-                    </td>
-                {% else %}
-                    <td> - </td>
-                {% endif %}
+                <th>{{ 'Badge'|trans }}</th>
+                <th>{{ 'Skill'|trans }}</th>
+                <th>{{ 'Date'|trans }}</th>
+                <th>{{ 'Course'|trans }}</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-{% endif %}
+            </thead>
+            <tbody>
+            {% for row in rows %}
+                <tr>
+                    <td>{{ row.skill_badge }}</td>
+                    <td>{{ row.skill_name }}</td>
+                    <td>{{ row.achieved_at }}</td>
+                    {% if row.course_name %}
+                        <td>
+                            <img src="{{ row.course_image }}" alt="{{ row.course_name }}" width="32">
+                            {{ row.course_name }}
+                        </td>
+                    {% else %}
+                        <td> -</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endautoescape %}

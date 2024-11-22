@@ -132,7 +132,8 @@ class MessageManager
         $forwardId = 0,
         $checkCurrentAudioId = false,
         $forceTitleWhenSendingEmail = false,
-        $msgType = null
+        $msgType = null,
+        $baseUrl = null
     ) {
         $group_id = (int) $group_id;
         $receiverUserId = (int) $receiverUserId;
@@ -374,7 +375,8 @@ class MessageManager
                         $content,
                         $sender_info,
                         $attachmentAddedByMail,
-                        $forceTitleWhenSendingEmail
+                        $forceTitleWhenSendingEmail,
+                        $baseUrl
                     );
                 } else {
                     $usergroup = new UserGroupModel();
@@ -407,7 +409,9 @@ class MessageManager
                         $subject,
                         $content,
                         $group_info,
-                        $attachmentAddedByMail
+                        $attachmentAddedByMail,
+                        $forceTitleWhenSendingEmail,
+                        $baseUrl
                     );
                 }
             }

@@ -33,7 +33,7 @@ $allGradebooks = $objGradebook->find('all');
 
 $skillDefaultInfo = [
     'id' => $skillInfo['id'],
-    'name' => $skillInfo['name'],
+    'title' => $skillInfo['title'],
     'short_code' => $skillInfo['short_code'],
     'description' => $skillInfo['description'],
     'parent_id' => $skillInfo['extra']['parent_id'],
@@ -47,7 +47,7 @@ foreach ($skillInfo['gradebooks'] as $gradebook) {
 
 $gradebookList = [];
 foreach ($allGradebooks as $gradebook) {
-    $gradebookList[$gradebook['id']] = $gradebook['name'];
+    $gradebookList[$gradebook['id']] = $gradebook['title'];
 }
 
 /* Form */

@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@use "../tailwind";
+@use "../scss/settings/typography" as *;
+@use "../scss/libs/mediaelementjs/styles" as *;
 
 @layer base {
   :root {
@@ -36,10 +36,6 @@
     --color-form-base: 46 117 163;
   }
 }
-
-@import "../scss/settings/typography";
-
-@import "../scss/libs/mediaelementjs/styles";
 
 body {
   @apply prose max-w-none space-y-4

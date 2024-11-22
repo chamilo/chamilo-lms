@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
@@ -13,8 +14,9 @@ use Chamilo\CoreBundle\Repository\ScheduledAnnouncementRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Entity\Course;
+use DateTime;
 use Doctrine\ORM\EntityManager;
+use Exception;
 use ExtraField;
 use ExtraFieldValue;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -39,22 +41,23 @@ class ScheduledAnnouncementService
     {
         if (!$this->allowed()) {
             if ($debug) {
-                error_log("Announcements not allowed.");
+                error_log('Announcements not allowed.');
             }
+
             return 0;
         }
 
         $messagesSent = 0;
-        $now = new \DateTime();
+        $now = new DateTime();
 
         if ($debug) {
-            error_log("Current time: " . $now->format('Y-m-d H:i:s'));
+            error_log('Current time: '.$now->format('Y-m-d H:i:s'));
         }
 
         $announcements = $this->announcementRepository->findBy(['sent' => false]);
 
         if ($debug) {
-            error_log(count($announcements) . " pending announcements found.");
+            error_log(\count($announcements).' pending announcements found.');
         }
 
         $extraField = new ExtraField('user');
@@ -63,7 +66,7 @@ class ScheduledAnnouncementService
         foreach ($announcements as $announcement) {
             if (!$announcement->isSent() && $announcement->getDate() < $now) {
                 if ($debug) {
-                    error_log("Processing announcement ID: " . $announcement->getId());
+                    error_log('Processing announcement ID: '.$announcement->getId());
                 }
 
                 $sessionId = $announcement->getSessionId();
@@ -73,6 +76,7 @@ class ScheduledAnnouncementService
                     if ($debug) {
                         error_log("Session not found for session ID: $sessionId");
                     }
+
                     continue;
                 }
 
@@ -80,10 +84,11 @@ class ScheduledAnnouncementService
                 $sessionRelUsers = $this->sessionRepository->getUsersByAccessUrl($session, $accessUrl);
                 $generalCoaches = $session->getGeneralCoaches();
 
-                if (empty($sessionRelUsers) || $generalCoaches->count() === 0) {
+                if (empty($sessionRelUsers) || 0 === $generalCoaches->count()) {
                     if ($debug) {
                         error_log("No users or general coaches found for session ID: $sessionId");
                     }
+
                     continue;
                 }
 
@@ -99,10 +104,10 @@ class ScheduledAnnouncementService
                 $courseList = $session->getCourses();
 
                 if ($debug) {
-                    error_log("Number of courses in session: " . count($courseList));
+                    error_log('Number of courses in session: '.\count($courseList));
                     foreach ($courseList as $sessionRelCourse) {
                         $course = $sessionRelCourse->getCourse();
-                        error_log("Course ID: " . $course->getId() . ", Course Title: " . $course->getTitle());
+                        error_log('Course ID: '.$course->getId().', Course Title: '.$course->getTitle());
                     }
                 }
 
@@ -125,7 +130,7 @@ class ScheduledAnnouncementService
                     $user = $sessionRelUser->getUser();
 
                     if ($debug) {
-                        error_log('User ::: ' . $user->getId());
+                        error_log('User ::: '.$user->getId());
                     }
 
                     if ($user->getId() !== $coachId) {
@@ -151,7 +156,7 @@ class ScheduledAnnouncementService
                         }
 
                         if ($debug) {
-                            error_log("Sending email to user ID: " . $user->getId());
+                            error_log('Sending email to user ID: '.$user->getId());
                         }
 
                         $this->sendEmail($user->getId(), $subject, $message, $coachId);
@@ -161,7 +166,7 @@ class ScheduledAnnouncementService
                 $coachMessage = $this->buildCoachMessage($announcement, $generalCoaches, $message);
                 foreach ($coachList as $courseCoach) {
                     if ($debug) {
-                        error_log("Sending email to coach ID: " . $courseCoach->getId());
+                        error_log('Sending email to coach ID: '.$courseCoach->getId());
                     }
                     $this->sendEmail($courseCoach->getId(), $subject, $coachMessage, $coachId);
                 }
@@ -169,7 +174,7 @@ class ScheduledAnnouncementService
                 $messagesSent++;
 
                 if ($debug) {
-                    error_log("Messages sent for announcement ID: " . $announcement->getId());
+                    error_log('Messages sent for announcement ID: '.$announcement->getId());
                 }
             }
         }
@@ -188,7 +193,8 @@ class ScheduledAnnouncementService
     {
         $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
         $sendToCoaches = $extraFieldValue->get_values_by_handler_and_field_variable($announcementId, 'send_to_coaches');
-        return !empty($sendToCoaches) && !empty($sendToCoaches['value']) && (int)$sendToCoaches['value'] === 1;
+
+        return !empty($sendToCoaches) && !empty($sendToCoaches['value']) && 1 === (int) $sendToCoaches['value'];
     }
 
     /**
@@ -201,6 +207,11 @@ class ScheduledAnnouncementService
 
     /**
      * Builds the announcement message for the user.
+     *
+     * @param mixed $announcement
+     * @param mixed $courseInfo
+     * @param mixed $attachments
+     * @param mixed $progress
      */
     private function buildMessage($announcement, Session $session, User $user, $courseInfo, $attachments, $progress): string
     {
@@ -222,7 +233,7 @@ class ScheduledAnnouncementService
             '((general_coach))' => implode(' - ', $generalCoachName),
             '((general_coach_email))' => implode(' - ', $generalCoachEmail),
             '((session_end_date))' => $endTime,
-            '((user_complete_name))' => $user->getFirstname() . ' ' . $user->getLastname(),
+            '((user_complete_name))' => $user->getFirstname().' '.$user->getLastname(),
             '((user_firstname))' => $user->getFirstname(),
             '((user_lastname))' => $user->getLastname(),
             '((lp_progress))' => $progress,
@@ -230,11 +241,15 @@ class ScheduledAnnouncementService
 
         $message = str_replace(array_keys($tags), $tags, $announcement->getMessage());
 
-        return $message . $attachments;
+        return $message.$attachments;
     }
 
     /**
      * Builds the announcement message for the coach.
+     *
+     * @param mixed $announcement
+     * @param mixed $generalCoaches
+     * @param mixed $message
      */
     private function buildCoachMessage($announcement, $generalCoaches, $message): string
     {
@@ -243,13 +258,13 @@ class ScheduledAnnouncementService
             $coachNames[] = $coach->getFullname();
         }
 
-        $coachMessageIntro = count($generalCoaches) > 1
+        $coachMessageIntro = \count($generalCoaches) > 1
             ? $this->translator->trans('You are receiving a copy because you are one of the course coaches')
             : $this->translator->trans('You are receiving a copy because you are the course coach');
 
-        $coachMessage = $coachMessageIntro . ': ' . implode(', ', $coachNames);
+        $coachMessage = $coachMessageIntro.': '.implode(', ', $coachNames);
 
-        return $coachMessage . '<br /><br />' . $message;
+        return $coachMessage.'<br /><br />'.$message;
     }
 
     /**
@@ -261,7 +276,7 @@ class ScheduledAnnouncementService
         $coach = $this->em->getRepository(User::class)->find($coachId);
 
         if (!$user || !$coach) {
-            throw new \Exception("User or coach not found.");
+            throw new Exception('User or coach not found.');
         }
 
         $this->messageHelper->sendMessageSimple(
@@ -274,15 +289,18 @@ class ScheduledAnnouncementService
 
     /**
      * Retrieves course information from a list of courses.
+     *
+     * @param mixed $courseList
      */
     private function getCourseInfo($courseList)
     {
         if (!empty($courseList) && current($courseList) instanceof Course) {
             $courseId = current($courseList)->getId();
+
             return $this->getCourseInfoById($courseId);
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**
@@ -307,20 +325,24 @@ class ScheduledAnnouncementService
 
     /**
      * Gets the user's progress for a specific course and session.
+     *
+     * @param mixed $courseInfo
      */
     private function getUserProgress(int $userId, $courseInfo, Session $session): string
     {
         if (!empty($courseInfo) && $session) {
             $progress = Tracking::get_avg_student_progress($userId, $courseInfo['real_id'], [], $session->getId());
-            return is_numeric($progress) ? $progress . '%' : '0%';
+
+            return is_numeric($progress) ? $progress.'%' : '0%';
         }
+
         return '0%';
     }
 
     /**
      * Formats a DateTime object to a string.
      */
-    private function getLocalTime(?\DateTime $datetime): string
+    private function getLocalTime(?DateTime $datetime): string
     {
         return $datetime ? $datetime->format('Y-m-d H:i:s') : '';
     }

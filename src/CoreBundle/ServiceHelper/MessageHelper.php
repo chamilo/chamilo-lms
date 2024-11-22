@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\ServiceHelper;
 
@@ -15,25 +15,30 @@ use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
+use const PHP_SAPI;
+use const UPLOAD_ERR_OK;
+
 class MessageHelper
 {
-    private $session;
+    private ?SessionInterface $session = null;
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly MessageRepository      $messageRepository,
-        private readonly UserRepository         $userRepository,
-        private readonly RequestStack           $requestStack,
-        private readonly AccessUrlHelper        $accessUrlHelper,
-        private readonly SettingsManager        $settingsManager,
-        private readonly MailerInterface        $mailer
+        private readonly MessageRepository $messageRepository,
+        private readonly UserRepository $userRepository,
+        private readonly RequestStack $requestStack,
+        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly SettingsManager $settingsManager,
+        private readonly MailerInterface $mailer
     ) {
-        if (php_sapi_name() !== 'cli') {
+        if (PHP_SAPI !== 'cli') {
             $this->session = $this->requestStack->getSession();
         }
     }
@@ -50,7 +55,7 @@ class MessageHelper
         bool $uploadFiles = true,
         array $attachmentList = []
     ): ?int {
-        $files = $_FILES ? $_FILES : [];
+        $files = $_FILES ?: [];
         if (false === $uploadFiles) {
             $files = [];
         }
@@ -73,16 +78,16 @@ class MessageHelper
 
         if ($sendCopyToDrhUsers) {
             $accessUrl = $this->accessUrlHelper->getCurrent();
-            if ($accessUrl !== null) {
+            if (null !== $accessUrl) {
                 $drhList = $this->userRepository->getDrhListFromUser($receiverUserId, $accessUrl->getId());
                 if (!empty($drhList)) {
                     $receiverInfo = $this->userRepository->find($receiverUserId);
 
                     foreach ($drhList as $drhUser) {
-                        $drhMessage = sprintf(
-                                'Copy of message sent to %s',
-                                $receiverInfo->getFirstname() . ' ' . $receiverInfo->getLastname()
-                            ) . ' <br />' . $message;
+                        $drhMessage = \sprintf(
+                            'Copy of message sent to %s',
+                            $receiverInfo->getFirstname().' '.$receiverInfo->getLastname()
+                        ).' <br />'.$message;
 
                         $this->sendMessageSimple(
                             $drhUser->getId(),
@@ -116,7 +121,6 @@ class MessageHelper
         bool $forceTitleWhenSendingEmail = false,
         ?int $msgType = null
     ): ?int {
-
         $sender = $this->userRepository->find($senderId);
         $receiver = $this->userRepository->find($receiverUserId);
 
@@ -127,8 +131,8 @@ class MessageHelper
         $totalFileSize = 0;
         $attachmentList = $this->processAttachments($attachments, $fileCommentList, $totalFileSize);
 
-        if ($totalFileSize > (int)  $this->settingsManager->getSetting('message.message_max_upload_filesize')) {
-            throw new \Exception('Files size exceeds allowed limit.');
+        if ($totalFileSize > (int) $this->settingsManager->getSetting('message.message_max_upload_filesize')) {
+            throw new Exception('Files size exceeds allowed limit.');
         }
 
         $parent = $this->messageRepository->find($parentId);
@@ -146,9 +150,10 @@ class MessageHelper
                 ->setTitle($subject)
                 ->setContent($content)
                 ->setGroup($groupId ? $this->getGroupById($groupId) : null)
-                ->setParent($parent);
+                ->setParent($parent)
+            ;
 
-            if ($msgType !== null) {
+            if (null !== $msgType) {
                 $message->setMsgType($msgType);
             }
         }
@@ -177,6 +182,8 @@ class MessageHelper
 
     /**
      * Processes attachments, calculates total file size, and returns the attachment list.
+     *
+     * @param mixed $totalFileSize
      */
     private function processAttachments(array $attachments, array $fileCommentList, &$totalFileSize): array
     {
@@ -185,7 +192,7 @@ class MessageHelper
             $comment = $fileCommentList[$index] ?? '';
             $size = $attachment['size'] ?? 0;
 
-            if (is_array($size)) {
+            if (\is_array($size)) {
                 foreach ($size as $s) {
                     $totalFileSize += $s;
                 }
@@ -198,6 +205,7 @@ class MessageHelper
                 'comment' => $comment,
             ];
         }
+
         return $attachmentList;
     }
 
@@ -228,7 +236,8 @@ class MessageHelper
                 $attachment = new MessageAttachment();
                 $attachment->setFilename($audio['name'])
                     ->setComment('audio_message')
-                    ->setMessage($message);
+                    ->setMessage($message)
+                ;
 
                 $message->addAttachment($attachment);
 
@@ -247,13 +256,14 @@ class MessageHelper
             $file = $attachment['file'];
             $comment = $attachment['comment'] ?? '';
 
-            if ($file instanceof UploadedFile && $file->getError() === UPLOAD_ERR_OK) {
+            if ($file instanceof UploadedFile && UPLOAD_ERR_OK === $file->getError()) {
                 $attachmentEntity = new MessageAttachment();
                 $attachmentEntity->setFilename($file->getClientOriginalName())
                     ->setSize($file->getSize())
                     ->setPath($file->getRealPath())
                     ->setMessage($message)
-                    ->setComment($comment);
+                    ->setComment($comment)
+                ;
 
                 $message->addAttachment($attachmentEntity);
                 $this->entityManager->persist($attachmentEntity);
@@ -271,14 +281,15 @@ class MessageHelper
         $existingRelation = $messageRelUserRepository->findOneBy([
             'message' => $message,
             'receiver' => $sender,
-            'receiverType' => MessageRelUser::TYPE_SENDER
+            'receiverType' => MessageRelUser::TYPE_SENDER,
         ]);
 
         if (!$existingRelation) {
             $messageRelUserSender = new MessageRelUser();
             $messageRelUserSender->setMessage($message)
                 ->setReceiver($sender)
-                ->setReceiverType(MessageRelUser::TYPE_SENDER);
+                ->setReceiverType(MessageRelUser::TYPE_SENDER)
+            ;
             $this->entityManager->persist($messageRelUserSender);
             $this->entityManager->flush();
         }
@@ -287,7 +298,7 @@ class MessageHelper
     private function sendEmailNotification(User $receiver, User $sender, string $subject, string $content, array $attachmentList): void
     {
         if (empty($receiver->getEmail())) {
-            throw new \Exception('The receiver does not have a valid email address.');
+            throw new Exception('The receiver does not have a valid email address.');
         }
 
         $email = (new Email())
@@ -295,7 +306,8 @@ class MessageHelper
             ->to($receiver->getEmail())
             ->subject($subject)
             ->text($content)
-            ->html($content);
+            ->html($content)
+        ;
 
         foreach ($attachmentList as $attachment) {
             if ($attachment instanceof UploadedFile) {
@@ -305,10 +317,11 @@ class MessageHelper
 
         try {
             $this->mailer->send($email);
-        } catch (\Exception $e) {
-            error_log('Failed to send email: ' . $e->getMessage());
+        } catch (Exception $e) {
+            error_log('Failed to send email: '.$e->getMessage());
         }
     }
+
     /**
      * Retrieves a user group by its ID.
      */

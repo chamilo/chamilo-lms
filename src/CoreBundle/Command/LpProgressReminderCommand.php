@@ -234,12 +234,16 @@ class LpProgressReminderCommand extends Command
     private function isTimeToRemindUser(DateTime $registrationDate, int $nbDaysForLpCompletion): bool
     {
         $reminderStartDate = (clone $registrationDate)->modify("+$nbDaysForLpCompletion days");
+        $reminderStartDate->setTime(0, 0, 0);
+
         $currentDate = new DateTime('now', new DateTimeZone('UTC'));
+        $currentDate->setTime(0, 0, 0);
 
         $interval = $reminderStartDate->diff($currentDate);
         $diffDays = (int) $interval->format('%a');
 
-        return $diffDays % self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION === 0 || $diffDays === 0;
+        return $diffDays >= self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION &&
+            $diffDays % self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION === 0;
     }
 
 

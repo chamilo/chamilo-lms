@@ -221,6 +221,8 @@ class LpProgressReminderCommand extends Command
     {
         $reminderStartDate = (clone $registrationDate)->modify("+$nbDaysForLpCompletion days");
         $currentDate = new DateTime('now', new DateTimeZone('UTC'));
+        $reminderStartDate->setTime(0, 0, 0);
+        $currentDate->setTime(0, 0, 0);
 
         $interval = $reminderStartDate->diff($currentDate);
         $diffDays = (int) $interval->format('%a');
@@ -242,8 +244,8 @@ class LpProgressReminderCommand extends Command
         $interval = $reminderStartDate->diff($currentDate);
         $diffDays = (int) $interval->format('%a');
 
-        return $diffDays >= self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION &&
-            $diffDays % self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION === 0;
+        return ($diffDays >= self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION &&
+            $diffDays % self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION === 0) || $diffDays === 0;
     }
 
 

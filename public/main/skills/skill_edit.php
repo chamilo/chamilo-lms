@@ -6,6 +6,10 @@
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
+
+use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -25,6 +29,11 @@ $objSkill = new SkillModel();
 $objGradebook = new Gradebook();
 $skillInfo = $objSkill->getSkillInfo($skillId);
 
+$em = Database::getManager();
+$skill = $em->find(Skill::class, $skillId);
+$skill->setLocale(Container::getParameter('locale'));
+$em->refresh($skill);
+
 if (empty($skillInfo)) {
     api_not_allowed(true);
 }
@@ -33,8 +42,8 @@ $allGradebooks = $objGradebook->find('all');
 
 $skillDefaultInfo = [
     'id' => $skillInfo['id'],
-    'title' => $skillInfo['title'],
-    'short_code' => $skillInfo['short_code'],
+    'title' => $skill->getTitle(),
+    'short_code' => $skill->getShortCode(),
     'description' => $skillInfo['description'],
     'parent_id' => $skillInfo['extra']['parent_id'],
     'criteria' => $skillInfo['criteria'],

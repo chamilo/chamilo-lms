@@ -101,6 +101,13 @@ const router = createRouter({
       beforeEnter: async (to) => {
         const courseId = to.params.id
         const sessionId = to.query?.sid
+        const autoLaunchKey = `course_autolaunch_${courseId}`
+        const hasAutoLaunched = sessionStorage.getItem(autoLaunchKey)
+
+        if (hasAutoLaunched === "true") {
+          return true
+        }
+
         try {
           const check = await courseService.checkLegal(courseId, sessionId)
           if (check.redirect) {
@@ -125,6 +132,7 @@ const router = createRouter({
           // Document auto-launch
           const documentAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
           if (documentAutoLaunch === 1 && course.resourceNode?.id) {
+            sessionStorage.setItem(autoLaunchKey, "true")
             window.location.href = `/resources/document/${course.resourceNode.id}/?cid=${courseId}`
               + (sessionId ? `&sid=${sessionId}` : '')
             return false
@@ -136,12 +144,14 @@ const router = createRouter({
           if (isExerciseAutoLaunchEnabled) {
             const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
             if (exerciseAutoLaunch === 2) {
+              sessionStorage.setItem(autoLaunchKey, "true")
               window.location.href = `/main/exercise/exercise.php?cid=${courseId}`
                 + (sessionId ? `&sid=${sessionId}` : '')
               return false
             } else if (exerciseAutoLaunch === 1) {
               const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
               if (exerciseId) {
+                sessionStorage.setItem(autoLaunchKey, "true")
                 window.location.href = `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}`
                   + (sessionId ? `&sid=${sessionId}` : '')
                 return false
@@ -152,12 +162,14 @@ const router = createRouter({
           // Learning path auto-launch
           const lpAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
           if (lpAutoLaunch === 2) {
+            sessionStorage.setItem(autoLaunchKey, "true")
             window.location.href = `/main/lp/lp_controller.php?cid=${courseId}`
               + (sessionId ? `&sid=${sessionId}` : '')
             return false
           } else if (lpAutoLaunch === 1) {
             const lpId = await courseService.getAutoLaunchLPId(courseId, sessionId)
             if (lpId) {
+              sessionStorage.setItem(autoLaunchKey, "true")
               window.location.href = `/main/lp/lp_controller.php?lp_id=${lpId}&cid=${courseId}&action=view&isStudentView=true`
                 + (sessionId ? `&sid=${sessionId}` : '')
               return false
@@ -167,6 +179,7 @@ const router = createRouter({
           // Forum auto-launch
           const forumAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
           if (forumAutoLaunch === 1) {
+            sessionStorage.setItem(autoLaunchKey, "true")
             window.location.href = `/main/forum/index.php?cid=${courseId}`
               + (sessionId ? `&sid=${sessionId}` : '')
             return false
@@ -244,6 +257,10 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const securityStore = useSecurityStore()
 
+  if (!securityStore.isAuthenticated) {
+    sessionStorage.clear()
+  }
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!securityStore.isLoading) {
       await securityStore.checkSession()
@@ -252,6 +269,7 @@ router.beforeEach(async (to, from, next) => {
     if (securityStore.isAuthenticated) {
       next()
     } else {
+      sessionStorage.clear()
       next({
         path: "/login",
         query: { redirect: to.fullPath },

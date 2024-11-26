@@ -261,7 +261,13 @@ router.beforeEach(async (to, from, next) => {
     sessionStorage.clear()
   }
 
-  if (!to.query.cid) {
+  let cid = parseInt(to.query?.cid ?? 0)
+
+  if ("CourseHome" === to.name) {
+    cid = parseInt(to.params?.id ?? 0)
+  }
+
+  if (!cid) {
     for (const key in sessionStorage) {
       if (key.startsWith('course_autolaunch_')) {
         sessionStorage.removeItem(key)

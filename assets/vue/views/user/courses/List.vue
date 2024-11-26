@@ -97,6 +97,14 @@ const loadMoreCourses = () => {
     updateQuery: (previousResult, {fetchMoreResult}) => {
       if (!fetchMoreResult) return previousResult
 
+      const newCourses = fetchMoreResult.courseRelUsers.edges.map(({ node }) => node.course)
+      const filteredCourses = newCourses.filter(
+        (newCourse) => !courses.value.some((existingCourse) => existingCourse._id === newCourse._id)
+      )
+      courses.value.push(...filteredCourses)
+      endCursor.value = fetchMoreResult.courseRelUsers.pageInfo.endCursor
+      hasMore.value = fetchMoreResult.courseRelUsers.pageInfo.hasNextPage
+
       return {
         ...previousResult,
         courseRelUsers: {
@@ -105,10 +113,12 @@ const loadMoreCourses = () => {
         },
       }
     },
+  }).finally(() => {
+    isLoading.value = false
   })
 }
 
-const observer = new IntersectionObserver((entries) => {
+let observer = new IntersectionObserver((entries) => {
   if (entries[0].isIntersecting) {
     loadMoreCourses();
   }
@@ -117,6 +127,20 @@ const observer = new IntersectionObserver((entries) => {
 })
 
 onMounted(() => {
+  courses.value = []
+  endCursor.value = null
+  hasMore.value = true
+  isLoading.value = false
+
+  if (observer) observer.disconnect()
+  observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      loadMoreCourses()
+    }
+  }, {
+    rootMargin: '300px',
+  })
+
   loadMoreCourses()
 })
 </script>

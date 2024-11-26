@@ -2,11 +2,8 @@
 
 /* See license terms in /license.txt */
 
-//use Chamilo\CoreBundle\Component\Editor\Connector;
-//use MediaAlchemyst\Alchemyst;
-//use MediaAlchemyst\DriversContainer;
-use Neutron\TemporaryFilesystem\Manager;
-use Neutron\TemporaryFilesystem\TemporaryFilesystem;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Sonata\Exporter\Handler;
 use Sonata\Exporter\Source\ArraySourceIterator;
 use Sonata\Exporter\Writer\CsvWriter;
@@ -60,21 +57,28 @@ class Export
 
     /**
      * Export tabular data to XLS-file.
-     *
-     * @param array  $data
-     * @param string $filename
      */
-    public static function arrayToXls($data, $filename = 'export')
+    public static function arrayToXls(array $data, string $filename = 'export')
     {
         if (empty($data)) {
             return false;
         }
 
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $rowNumber = 1;
+        foreach ($data as $row) {
+            $colNumber = 'A';
+            foreach ($row as $cell) {
+                $sheet->setCellValue($colNumber . $rowNumber, $cell);
+                $colNumber++;
+            }
+            $rowNumber++;
+        }
+
         $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xlsx';
-        $writer = new XlsWriter($filePath);
-        $source = new ArraySourceIterator($data);
-        $handler = Handler::create($source, $writer);
-        $handler->export();
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($filePath);
 
         DocumentManager::file_send_for_download($filePath, true, $filename.'.xlsx');
         exit;

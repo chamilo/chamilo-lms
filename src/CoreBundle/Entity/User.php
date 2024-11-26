@@ -18,7 +18,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
-use Chamilo\CoreBundle\Filter\SearchOrFilter;
+use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
@@ -78,7 +78,7 @@ use UserManager;
         'lastname' => 'partial',
     ]
 )]
-#[ApiFilter(SearchOrFilter::class, properties: ['username', 'firstname', 'lastname'])]
+#[ApiFilter(PartialSearchOrFilter::class, properties: ['username', 'firstname', 'lastname'])]
 #[ApiFilter(filterClass: BooleanFilter::class, properties: ['isActive'])]
 class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface, Stringable
 {
@@ -1426,6 +1426,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return false;
     }
 
+    /**
+     * @return Collection<int, SkillRelUser>
+     */
     public function getAchievedSkills(): Collection
     {
         return $this->achievedSkills;

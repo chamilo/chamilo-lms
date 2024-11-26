@@ -648,6 +648,7 @@ class SocialController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/invitations/count/{userId}', name: 'chamilo_core_social_invitations_count')]
     public function getInvitationsCount(
         int $userId,

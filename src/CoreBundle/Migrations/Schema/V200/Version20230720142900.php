@@ -29,7 +29,8 @@ class Version20230720142900 extends AbstractMigrationChamilo
 
         if ($existingFallbackUser) {
             // User already exists, no need to create it again
-            error_log('Fallback user already exists: ' . $existingFallbackUser->getFullname());
+            error_log('Fallback user already exists: '.$existingFallbackUser->getFullname());
+
             return;
         }
 
@@ -57,7 +58,7 @@ class Version20230720142900 extends AbstractMigrationChamilo
         $this->entityManager->persist($fallbackUser);
         $this->entityManager->flush();
 
-        error_log('Fallback user created: ' . $fallbackUser->getFullname());
+        error_log('Fallback user created: '.$fallbackUser->getFullname());
 
         $repo->updateUser($fallbackUser);
     }

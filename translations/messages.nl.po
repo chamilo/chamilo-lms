@@ -15864,7 +15864,7 @@ msgstr "IP adres"
 msgid "Only skills that were not registered were imported"
 msgstr "Alleen vaardigheden die nog niet waren geregistreerd werden geïmporteerd."
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "De vaardigheid had nog geen naam"
 
 msgid "The parent skill was not set"

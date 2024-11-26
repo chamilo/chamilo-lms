@@ -67,7 +67,6 @@ import { usePlatformConfig } from "../../store/platformConfig"
 
 const { abbreviatedDatetime } = useFormatDate()
 
-// eslint-disable-next-line no-undef
 const props = defineProps({
   course: {
     type: Object,

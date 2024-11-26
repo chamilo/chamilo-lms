@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\ExistsFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -39,7 +40,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(
     fields: ['message', 'receiver'],
     message: 'This message-receiver relation is already used.',
-    errorPath: 'message'
+    errorPath: 'message',
+    groups: ['create']
 )]
 #[ORM\Table(name: 'message_rel_user')]
 #[ORM\UniqueConstraint(name: 'message_receiver', columns: ['message_id', 'user_id', 'receiver_type'])]
@@ -54,6 +56,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'starred' => 'exact',
         'tags.tag' => 'exact',
     ]
+)]
+#[ApiFilter(
+    ExistsFilter::class,
+    properties: ['deletedAt']
 )]
 class MessageRelUser
 {

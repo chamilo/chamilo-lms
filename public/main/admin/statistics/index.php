@@ -1000,7 +1000,7 @@ switch ($report) {
                     $count = $result['count'];
                     $usersFound += $count;
 
-                    $option = $extraFieldOption->get($item['id'], true);
+                    $option = $extraFieldOption->get($item['id']);
                     $item['display_text'] = $option['display_text'];
                     $all[$item['display_text']] = $count;
                 }
@@ -1204,7 +1204,7 @@ switch ($report) {
                     $query = Database::query($sql);
                     $result = Database::fetch_array($query);
                     $count = $result['count'];
-                    $option = $extraFieldOption->get($item['id'], true);
+                    $option = $extraFieldOption->get($item['id']);
                     $item['display_text'] = $option['display_text'];
                     $all[$item['display_text']] = $count;
                     $usersFound += $count;

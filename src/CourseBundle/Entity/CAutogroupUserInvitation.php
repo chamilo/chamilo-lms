@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CAutogroupUserInvitation
  * Represents the invitation of a user to join a group in a specific category.
  */
 #[ORM\Table(name: 'c_autogroup_user_invitation')]

@@ -33,7 +33,8 @@ export const chamiloIconToClass = {
   "cog": "mdi mdi-cog",
   "confirm": "mdi mdi-check",
   "save": "mdi mdi-content-save",
-  "cursor-move": "",
+  "cursor-move": "mdi mdi-cursor-move",
+  "folder-move": "mdi mdi-folder-move",
   "customize": "mdi mdi-format-paint",
   "delete": "mdi mdi-delete",
   "delete-multiple-user": "mdi mdi-account-multiple-minus-outline",
@@ -123,4 +124,5 @@ export const chamiloIconToClass = {
   "event-reminder": "mdi mdi-alarm",
   "add-event-reminder": "mdi mdi-alarm-plus",
   "session-star": "mdi mdi-star",
+  "next": "mdi mdi-arrow-right-bold-box",
 };

@@ -9,7 +9,6 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CGroupCategoryRelUser
  * Relates users to group categories for autogroup functionality.
  */
 #[ORM\Table(name: 'c_group_category_rel_user')]

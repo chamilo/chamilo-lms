@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
@@ -238,7 +239,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $admin,
         ResourceInterface $resource,
         $parentResource,
-        array $items = []
+        array $items = [],
+        ?ResourceType $resourceType = null,
     ) {
         $courseId = $course->getId();
         $id = $resource->getResourceIdentifier();
@@ -258,6 +260,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         $sessionRepo = $this->container->get(SessionRepository::class);
         $groupRepo = $this->container->get(CGroupRepository::class);
         $userRepo = $this->container->get(UserRepository::class);
+
+        $resourceType = $resourceType ?: $repo->getResourceType();
 
         $resource->setParent($parentResource);
         $resourceNode = null;
@@ -290,20 +294,14 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             }
 
             // If c_item_property.insert_user_id doesn't exist we use the first admin id.
-            $user = null;
-            if (isset($userList[$userId])) {
-                $user = $userList[$userId];
-            } else {
-                if (!empty($userId)) {
-                    $userFound = $userRepo->find($userId);
-                    if ($userFound) {
-                        $user = $userList[$userId] = $userRepo->find($userId);
-                    }
-                }
-            }
+            $user = $admin;
 
-            if (null === $user) {
-                $user = $admin;
+            if ($userId) {
+                if (isset($userList[$userId])) {
+                    $user = $userList[$userId];
+                } elseif ($userFound = $userRepo->find($userId)) {
+                    $user = $userList[$userId] = $userFound;
+                }
             }
 
             $session = null;
@@ -325,7 +323,12 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             }
 
             if (null === $resourceNode) {
-                $resourceNode = $repo->addResourceNode($resource, $user, $parentResource);
+                $resourceNode = $repo->addResourceNode(
+                    $resource,
+                    $user,
+                    $parentResource,
+                    $resourceType
+                );
                 $this->entityManager->persist($resourceNode);
             }
             $resource->addCourseLink($course, $session, $group, $newVisibility);

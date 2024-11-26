@@ -768,14 +768,20 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
-    public function getGeneralCoaches(): ReadableCollection
+    /**
+     * @return Collection<int, SessionRelUser>
+     */
+    public function getGeneralCoaches(): Collection
     {
         return $this->getGeneralCoachesSubscriptions()
             ->map(fn (SessionRelUser $subscription) => $subscription->getUser())
         ;
     }
 
-    #[Groups(['user_subscriptions:sessions'])]
+    /**
+     * @return Collection<int, SessionRelUser>
+     */
+    #[Groups(['session:basic', 'user_subscriptions:sessions'])]
     public function getGeneralCoachesSubscriptions(): Collection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('relationType', self::GENERAL_COACH));
@@ -1307,7 +1313,17 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     /**
      * @return Collection<int, SessionRelCourseRelUser>
      */
-    #[Groups(['user_subscriptions:sessions'])]
+    public function getCourseCoaches(): Collection
+    {
+        return $this->getCourseCoachesSubscriptions()
+            ->map(fn (SessionRelCourseRelUser $subscription) => $subscription->getUser())
+        ;
+    }
+
+    /**
+     * @return Collection<int, SessionRelCourseRelUser>
+     */
+    #[Groups(['session:basic', 'user_subscriptions:sessions'])]
     public function getCourseCoachesSubscriptions(): Collection
     {
         return $this->getAllUsersFromCourse(self::COURSE_COACH);

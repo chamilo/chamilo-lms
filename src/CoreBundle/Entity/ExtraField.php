@@ -132,6 +132,9 @@ class ExtraField
     #[ORM\Column(name: 'auto_remove', type: 'boolean', options: ['default' => false])]
     protected bool $autoRemove = false;
 
+    #[Gedmo\Locale]
+    private ?string $locale = null;
+
     public function __construct()
     {
         $this->options = new ArrayCollection();
@@ -325,6 +328,18 @@ class ExtraField
     public function setAutoRemove(bool $autoRemove): self
     {
         $this->autoRemove = $autoRemove;
+
+        return $this;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
 
         return $this;
     }

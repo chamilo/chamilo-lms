@@ -5,6 +5,8 @@
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Framework\Container;
+use Gedmo\Translatable\Entity\Translation;
 
 $cidReset = true;
 
@@ -12,50 +14,35 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 
+$request = Container::getRequest();
 $em = Database::getManager();
+$translationsRepo = $em->getRepository(Translation::class);
+$defaultLocale = Container::getParameter('locale');
 
 $skill = null;
-$extraFieldOption = null;
-$variableLanguage = null;
-$originalName = null;
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'name';
+$action = $request->query->getString('action') ?: $request->request->getString('action');
 
-if (isset($_GET['skill'])) {
-    /** @var Skill $skill */
-    $skill = $em->find(Skill::class, $_GET['skill']);
+$fieldsMap = ['name' => 'title', 'code' => 'shortCode'];
 
-    if ('name' === $action) {
-        $variableLanguage = ChamiloApi::getLanguageVar(
-            $skill->getTitle(false),
-            'Skill'
-        );
-        $originalName = $skill->getTitle(false);
-    } elseif ('code' === $action) {
-        $variableLanguage = ChamiloApi::getLanguageVar(
-            $skill->getShortCode(false),
-            'SkillCode'
-        );
-        $originalName = $skill->getShortCode(false);
-    }
-}
+$fieldToTranslate = $fieldsMap[$action] ?? null;
 
-if (!$skill || empty($variableLanguage)) {
-    api_not_allowed(true);
-}
+/** @var Skill $skill */
+$skill = $em->find(
+    Skill::class,
+    $request->query->getInt('skill')
+);
 
-if (empty($originalName)) {
+if (!$skill || empty($skill->getShortCode())) {
     Display::addFlash(
         Display::return_message(get_lang('Could not translate'), 'error')
     );
+
     header('Location: '.api_get_path(WEB_CODE_PATH).'skills/skill_edit.php?id='.$skill->getId());
     exit;
 }
 
-$languageId = isset($_GET['sub_language']) ? intval($_GET['sub_language']) : 0;
-
-$languages = $em
-    ->getRepository(Language::class)
-    ->findAllSubLanguages();
+$languages = Container::getLanguageRepository()->getAllAvailable(true)->getQuery()->getResult();
+$translations = $translationsRepo->findTranslations($skill);
 
 $languagesOptions = [0 => get_lang('none')];
 
@@ -64,40 +51,68 @@ foreach ($languages as $language) {
     $languagesOptions[$language->getId()] = $language->getOriginalName();
 }
 
-$translateUrl = api_get_path(WEB_CODE_PATH).'admin/sub_language_ajax.inc.php?skill='.$skill->getId();
+$translateUrl = api_get_self().'?'.http_build_query(['skill' => $skill->getId(), 'action' => $action]);
 
-$form = new FormValidator('new_lang_variable', 'POST', $translateUrl);
+$skill->setLocale($defaultLocale);
+$em->refresh($skill);
+
+$defaults = [
+    'original_name' => 'title' === $fieldToTranslate ? $skill->getTitle() : $skill->getShortCode(),
+];
+
+$form = new FormValidator('new_lang_variable', 'post', $translateUrl);
 $form->addHeader(get_lang('Add terms to the sub-language'));
-$form->addText('variable_language', get_lang('Language variable'), false);
-$form->addText('original_name', get_lang('Original name'), false);
-$form->addSelect(
-    'sub_language',
-    [get_lang('Sub-language'), get_lang('OnlyActiveSub-languagesAreListed')],
-    $languagesOptions
+$form->addText(
+    'original_name',
+    [
+        get_lang('Original name'),
+        get_lang('If this term has already been translated, this operation will replace its translation for this sub-language.'),
+    ],
+    false
 );
 
-if ($languageId) {
-    $languageInfo = api_get_language_info($languageId);
+foreach ($languages as $language) {
+    $iso = $language->getIsoCode();
     $form->addText(
-        'new_language',
-        [get_lang('Translation'), get_lang('If this term has already been translated, this operation will replace its translation for this sub-language.')]
+        'language['.$language->getId().']',
+        $language->getOriginalName(),
+        false
     );
-    $form->addHidden('file_id', 0);
-    $form->addHidden('id', $languageInfo['parent_id']);
-    $form->addHidden('sub', $languageInfo['id']);
-    $form->addHidden('sub_language_id', $languageInfo['id']);
-    $form->addHidden('redirect', true);
-    $form->addButtonSave(get_lang('Save'));
+
+    if (!empty($translations[$iso][$fieldToTranslate])) {
+        $defaults["language[{$language->getId()}]"] = $translations[$iso][$fieldToTranslate];
+    }
 }
 
-$form->setDefaults([
-    'variable_language' => '$'.$variableLanguage,
-    'original_name' => $originalName,
-    'sub_language' => $languageId,
-    'new_language' => 'code' === $action ? $skill->getShortCode() : $skill->getTitle(),
-]);
-$form->addRule('sub_language', get_lang('Required'), 'required');
-$form->freeze(['variable_language', 'original_name']);
+$form->addButtonSave(get_lang('Save'));
+$form->freeze(['original_name']);
+$form->setDefaults($defaults);
+
+if ($form->validate()) {
+    $values = $form->exportValues();
+
+    foreach ($languages as $language) {
+        if (empty($values['language'][$language->getId()])) {
+            continue;
+        }
+
+        $translationsRepo->translate(
+            $skill,
+            $fieldToTranslate,
+            $language->getIsocode(),
+            $values['language'][$language->getId()]
+        );
+    }
+
+    $em->flush();
+
+    Display::addFlash(
+        Display::return_message(get_lang('Translation saved'), 'success')
+    );
+
+    header("Location: $translateUrl");
+    exit;
+}
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('Manage skills')];

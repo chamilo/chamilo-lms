@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Traits\SessionTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -57,10 +58,10 @@ class CLpRelUser
     protected ?CGroup $group = null;
 
     #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
-    protected ?\DateTimeInterface $startDate = null;
+    protected ?DateTimeInterface $startDate = null;
 
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
-    protected ?\DateTimeInterface $endDate = null;
+    protected ?DateTimeInterface $endDate = null;
 
     #[ORM\Column(name: 'is_open_without_date', type: 'boolean', nullable: false, options: ['default' => 0])]
     protected bool $isOpenWithoutDate = false;
@@ -77,24 +78,24 @@ class CLpRelUser
         return $this;
     }
 
-    public function getStartDate(): ?\DateTimeInterface
+    public function getStartDate(): ?DateTimeInterface
     {
         return $this->startDate;
     }
 
-    public function setStartDate(?\DateTimeInterface $startDate): self
+    public function setStartDate(?DateTimeInterface $startDate): self
     {
         $this->startDate = $startDate;
 
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
+    public function getEndDate(): ?DateTimeInterface
     {
         return $this->endDate;
     }
 
-    public function setEndDate(?\DateTimeInterface $endDate): self
+    public function setEndDate(?DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
 

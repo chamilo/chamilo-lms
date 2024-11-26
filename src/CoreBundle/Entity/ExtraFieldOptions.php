@@ -42,6 +42,9 @@ class ExtraFieldOptions
     #[ORM\Column(name: 'option_order', type: 'integer', nullable: true)]
     protected ?int $optionOrder = null;
 
+    #[Gedmo\Locale]
+    private ?string $locale = null;
+
     /**
      * @return int
      */
@@ -127,6 +130,18 @@ class ExtraFieldOptions
     public function setPriorityMessage(string $priorityMessage): self
     {
         $this->priorityMessage = $priorityMessage;
+
+        return $this;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
 
         return $this;
     }

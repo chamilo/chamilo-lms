@@ -12,6 +12,8 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
 
+use const PREG_NO_ERROR;
+
 final class Version20231022124700 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -57,7 +59,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
 
             foreach ($items as $item) {
                 $originalText = $item[$field];
-                if (is_string($originalText) && trim($originalText) !== '') {
+                if (\is_string($originalText) && '' !== trim($originalText)) {
                     $updatedText = $this->replaceURLParametersInContent($originalText);
                     if ($originalText !== $updatedText) {
                         $updateSql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
@@ -89,13 +91,13 @@ final class Version20231022124700 extends AbstractMigrationChamilo
             }
 
             $resourceFile = $resourceNode->getResourceFiles()->first();
-            if (!$resourceFile || $resourceFile->getMimeType() !== 'text/html') {
+            if (!$resourceFile || 'text/html' !== $resourceFile->getMimeType()) {
                 continue;
             }
 
             try {
                 $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
-                if (is_string($content) && trim($content) !== '') {
+                if (\is_string($content) && '' !== trim($content)) {
                     $updatedContent = $this->replaceURLParametersInContent($content);
                     if ($content !== $updatedContent) {
                         $documentRepo->updateResourceFileContent($document, $updatedContent);
@@ -104,7 +106,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
                 }
             } catch (Exception $e) {
                 // Error handling for specific documents
-                error_log("Error processing file for document ID {$item['iid']}: " . $e->getMessage());
+                error_log("Error processing file for document ID {$item['iid']}: ".$e->getMessage());
             }
         }
     }
@@ -143,10 +145,10 @@ final class Version20231022124700 extends AbstractMigrationChamilo
 
                 // Ensure other parameters are maintained
                 if (!empty($remainingParams)) {
-                    $newParams .= '&' . ltrim($remainingParams, '&amp;');
+                    $newParams .= '&'.ltrim($remainingParams, '&amp;');
                 }
 
-                $finalUrl = $matches[1] . '?' . $beforeCidReqParams . $newParams;
+                $finalUrl = $matches[1].'?'.$beforeCidReqParams.$newParams;
 
                 return str_replace('&amp;', '&', $finalUrl); // Replace any remaining &amp; with &
             },
@@ -154,7 +156,8 @@ final class Version20231022124700 extends AbstractMigrationChamilo
         );
 
         if (PREG_NO_ERROR !== preg_last_error()) {
-            error_log('Error encountered in preg_replace_callback: ' . preg_last_error());
+            error_log('Error encountered in preg_replace_callback: '.preg_last_error());
+            $newContent = $content;
         }
 
         return $newContent;

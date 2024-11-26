@@ -192,7 +192,6 @@
           v-for="(shortcut, index) in shortcuts"
           :key="'shortcut-' + index.toString()"
           :change-visibility="changeVisibility"
-          :go-to-short-cut="goToShortCut"
           :shortcut="shortcut"
         />
       </div>
@@ -292,15 +291,6 @@ const toggleCourseTMenu = (event) => {
 
 function goToSettingCourseTool(tool) {
   return "/course/" + course.value.id + "/settings/" + tool.tool.title + "?sid=" + session.value?.id
-}
-
-function goToShortCut(shortcut) {
-  const url = new URLSearchParams("?")
-
-  url.append("cid", course.value.id)
-  url.append("sid", session.value?.id)
-
-  return shortcut.url + "?" + url
 }
 
 const setToolVisibility = (tool, visibility) => {

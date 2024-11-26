@@ -535,8 +535,7 @@ class ExtraFieldOption extends Model
                 break;
         }
 
-        $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
-        $result = $extraFieldOptionsRepo->findBy(['field' => $field_id], $orderBy);
+        $result = Container::getExtraFieldOptionsRepository()->findBy(['field' => $field_id], $orderBy);
 
         if (!$result) {
             return false;
@@ -549,7 +548,7 @@ class ExtraFieldOption extends Model
                 'id' => $row->getId(),
                 'field_id' => $row->getField()->getId(),
                 'option_value' => $row->getValue(),
-                'display_text' => \ExtraField::translateDisplayName($row->getValue(), $row->getDisplayText()),
+                'display_text' => $row->getDisplayText(),
                 'priority' => $row->getPriority(),
                 'priority_message' => $row->getPriorityMessage(),
                 'option_order' => $row->getOptionOrder(),
@@ -591,7 +590,7 @@ class ExtraFieldOption extends Model
                 'id' => $subOption->getId(),
                 'field_id' => $subOption->getField()->getId(),
                 'option_value' => $subOption->getValue(),
-                'display_text' => \ExtraField::translateDisplayName($subOption->getValue(), $subOption->getDisplayText()),
+                'display_text' => $subOption->getDisplayText(),
                 'priority' => $subOption->getPriority(),
                 'priority_message' => $subOption->getPriorityMessage(),
                 'option_order' => $subOption->getOptionOrder(),
@@ -859,10 +858,13 @@ class ExtraFieldOption extends Model
     {
         $info = parent::get($id);
 
-        if ($info && $translateDisplayText) {
-            $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
-            $option = $extraFieldOptionsRepo->find($id);
-            $info['display_text'] = \ExtraField::translateDisplayName($option->getValue(), $option->getDisplayText());
+        if ($info) {
+            $option = Container::getExtraFieldOptionsRepository()->find($id);
+            if (!$translateDisplayText) {
+                $option->setLocale(Container::getParameter('locale'));
+                Database::getManager()->refresh($option);
+            }
+            $info['display_text'] = $option->getDisplayText();
         }
 
         return $info;
@@ -873,9 +875,8 @@ class ExtraFieldOption extends Model
         $result = parent::get_all($options);
 
         foreach ($result as &$row) {
-            $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
-            $option = $extraFieldOptionsRepo->find($row['id']);
-            $row['display_text'] = \ExtraField::translateDisplayName($option->getValue(), $option->getDisplayText());
+            $option = Container::getExtraFieldOptionsRepository()->find($row['id']);
+            $row['display_text'] = $option->getDisplayText();
         }
 
         return $result;

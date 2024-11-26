@@ -3315,10 +3315,13 @@ class learnpath
 
         $visibility = (int) $visibility;
 
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
         if (1 === $visibility) {
-            $repo->setVisibilityPublished($lp);
+            $repo->setVisibilityPublished($lp, $course, $session);
         } else {
-            $repo->setVisibilityDraft($lp);
+            $repo->setVisibilityDraft($lp, $course, $session);
         }
 
         return true;

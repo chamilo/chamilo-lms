@@ -18,11 +18,11 @@ const { course, session } = storeToRefs(cidReqStore)
 
 const intro = ref(null)
 
-const props = defineProps({
+defineProps({
   isAllowedToEdit: {
     type: Boolean,
-    required: true
-  }
+    required: true,
+  },
 })
 
 courseService.loadHomeIntro(course.value.id, session.value?.id).then((data) => (intro.value = data))

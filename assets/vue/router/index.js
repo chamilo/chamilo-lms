@@ -261,6 +261,14 @@ router.beforeEach(async (to, from, next) => {
     sessionStorage.clear()
   }
 
+  if (!to.query.cid) {
+    for (const key in sessionStorage) {
+      if (key.startsWith('course_autolaunch_')) {
+        sessionStorage.removeItem(key)
+      }
+    }
+  }
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!securityStore.isLoading) {
       await securityStore.checkSession()

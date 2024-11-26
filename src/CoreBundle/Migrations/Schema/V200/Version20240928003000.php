@@ -8,13 +8,12 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Schema\Table;
 
 final class Version20240928003000 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Add new fields to session and c_lp tables for handling reinscription and session repetition logic';
+        return 'Add new fields to session and c_lp tables for handling reinscription and session repetition logic, and insert new settings if not exist.';
     }
 
     public function up(Schema $schema): void
@@ -39,7 +38,7 @@ final class Version20240928003000 extends AbstractMigrationChamilo
             }
         }
 
-        // Add the field to the 'c_lp' (Learnpath) table
+        // Add fields to the 'c_lp' (Learnpath) table
         if ($schemaManager->tablesExist('c_lp')) {
             $clpTable = $schemaManager->listTableColumns('c_lp');
 
@@ -47,6 +46,23 @@ final class Version20240928003000 extends AbstractMigrationChamilo
                 $this->addSql("ALTER TABLE c_lp ADD validity_in_days INT DEFAULT NULL");
             }
         }
+
+        // Insert new settings if not exist
+        $this->addSql("
+            INSERT INTO settings (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable, access_url_locked)
+            SELECT 'enable_auto_reinscription', NULL, NULL, 'session', '0', 'Enable Auto Reinscription', 'Allow users to be automatically reinscribed in new sessions.', '', NULL, 1, 1, 1
+            WHERE NOT EXISTS (
+                SELECT 1 FROM settings WHERE variable = 'enable_auto_reinscription'
+            )
+        ");
+
+        $this->addSql("
+            INSERT INTO settings (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable, access_url_locked)
+            SELECT 'enable_session_replication', NULL, NULL, 'session', '0', 'Enable Session Replication', 'Allow replication of session data across instances.', '', NULL, 1, 1, 1
+            WHERE NOT EXISTS (
+                SELECT 1 FROM settings WHERE variable = 'enable_session_replication'
+            )
+        ");
     }
 
     public function down(Schema $schema): void
@@ -79,5 +95,9 @@ final class Version20240928003000 extends AbstractMigrationChamilo
                 $this->addSql("ALTER TABLE c_lp DROP COLUMN validity_in_days");
             }
         }
+
+        // Remove settings
+        $this->addSql("DELETE FROM settings WHERE variable = 'enable_auto_reinscription'");
+        $this->addSql("DELETE FROM settings WHERE variable = 'enable_session_replication'");
     }
 }

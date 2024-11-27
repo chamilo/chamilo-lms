@@ -1,11 +1,12 @@
 <script setup>
-import { ref } from "vue"
+import {computed, ref} from "vue"
 import { useI18n } from "vue-i18n"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
 import Button from "primevue/button"
 import InputSwitch from "primevue/inputswitch"
 import { useLogin } from "../../../assets/vue/composables/auth/login"
+import {usePlatformConfig} from "../../../assets/vue/store/platformConfig"
 
 const { t } = useI18n()
 
@@ -14,6 +15,9 @@ const { performLogin, isLoading } = useLogin()
 const login = ref("")
 const password = ref("")
 const remember = ref(false)
+
+const platformConfigStore = usePlatformConfig()
+const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration"))
 
 function onSubmitLoginForm() {
   performLogin({
@@ -74,6 +78,7 @@ function onSubmitLoginForm() {
         />
 
         <a
+          v-if="allowRegistration"
           v-t="'Register oneself'"
           class="btn btn--primary-outline"
           href="/main/auth/inscription.php"

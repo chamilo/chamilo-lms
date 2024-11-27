@@ -55,7 +55,7 @@ class Skill implements Stringable, Translatable
     /**
      * @var Collection<int, SkillRelSkill>
      */
-    #[ORM\OneToMany(mappedBy: 'skill', targetEntity: SkillRelSkill::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: SkillRelSkill::class, cascade: ['persist'])]
     protected Collection $skills;
 
     /**

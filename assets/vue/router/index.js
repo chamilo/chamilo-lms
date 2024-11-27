@@ -44,7 +44,7 @@ import catalogueCourses from "./cataloguecourses"
 import catalogueSessions from "./cataloguesessions"
 import {customVueTemplateEnabled} from "../config/env"
 import {useCourseSettings} from "../store/courseSettingStore"
-import {checkIsAllowedToEdit} from "../composables/userPermissions"
+import {checkIsAllowedToEdit, useUserSessionSubscription} from "../composables/userPermissions"
 import {usePlatformConfig} from "../store/platformConfig"
 
 const router = createRouter({

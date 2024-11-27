@@ -379,7 +379,7 @@ if ($form->validate()) {
         ->setExpiredOn(api_get_utc_datetime($expired_on, true, true))
         ->setCategory($category)
         ->setSubscribeUsers(isset($_REQUEST['subscribe_users']) ? 1 : 0)
-        ->setValidityInDays($_REQUEST['validity_in_days'] ?? null)
+        ->setValidityInDays(isset($_REQUEST['validity_in_days']) ? (int) $_REQUEST['validity_in_days'] : null)
     ;
 
     $extraFieldValue = new ExtraFieldValue('lp');

@@ -21,7 +21,6 @@ import assignments from "./assignments"
 import links from "./links"
 import glossary from "./glossary"
 import { useSecurityStore } from "../store/securityStore"
-import securityService from "../services/securityService"
 import MyCourseList from "../views/user/courses/List.vue"
 import MySessionList from "../views/user/sessions/SessionsCurrent.vue"
 import MySessionListPast from "../views/user/sessions/SessionsPast.vue"
@@ -44,6 +43,7 @@ import courseService from "../services/courseService"
 import catalogueCourses from "./cataloguecourses"
 import catalogueSessions from "./cataloguesessions"
 import { customVueTemplateEnabled } from "../config/env"
+import { useUserSessionSubscription } from "../composables/userPermissions"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -97,12 +97,16 @@ const router = createRouter({
       name: "CourseHome",
       component: CourseHome,
       beforeEnter: async (to) => {
-        const check = await courseService.checkLegal(to.params.id, to.query?.sid)
+        try {
+          const check = await courseService.checkLegal(to.params.id, to.query?.sid)
 
-        if (check.redirect) {
-          window.location.href = check.url
+          if (check.redirect) {
+            window.location.href = check.url
 
-          return false
+            return false
+          }
+        } catch (e) {
+          return true
         }
       },
     },
@@ -171,14 +175,13 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const securityStore = useSecurityStore()
 
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!securityStore.isLoading) {
       await securityStore.checkSession()
     }
 
     if (securityStore.isAuthenticated) {
-      next();
+      next()
     } else {
       next({
         path: "/login",
@@ -192,6 +195,7 @@ router.beforeEach(async (to, from, next) => {
 
 router.beforeResolve(async (to) => {
   const cidReqStore = useCidReqStore()
+  const securityStore = useSecurityStore()
 
   let cid = parseInt(to.query?.cid ?? 0)
   const sid = parseInt(to.query?.sid ?? 0)
@@ -202,6 +206,29 @@ router.beforeResolve(async (to) => {
 
   if (cid) {
     await cidReqStore.setCourseAndSessionById(cid, sid)
+
+    if (cidReqStore.session) {
+      const { isGeneralCoach, isCourseCoach } = useUserSessionSubscription()
+
+      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_TEACHER")
+      securityStore.removeRole("ROLE_CURRENT_COURSE_SESSION_STUDENT")
+
+      if (isGeneralCoach.value || isCourseCoach.value) {
+        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_TEACHER")
+      } else {
+        securityStore.user.roles.push("ROLE_CURRENT_COURSE_SESSION_STUDENT")
+      }
+    } else {
+      const isTeacher = cidReqStore.course.teachers.some((userSubscription) => {
+        return 0 === userSubscription.relationType && userSubscription.user["@id"] === securityStore.user["@id"]
+      })
+
+      if (isTeacher) {
+        securityStore.user.roles.push("ROLE_CURRENT_COURSE_TEACHER")
+      } else {
+        securityStore.user.roles.push("ROLE_CURRENT_COURSE_STUDENT")
+      }
+    }
   } else {
     cidReqStore.resetCid()
   }

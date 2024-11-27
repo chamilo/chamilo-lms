@@ -134,6 +134,21 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'page_result_configuration', type: 'array')]
     protected array $pageResultConfiguration = [];
 
+    #[ORM\Column(name: 'display_chart_degree_certainty', type: 'integer', options: ['default' => 0])]
+    protected int $displayChartDegreeCertainty = 0;
+
+    #[ORM\Column(name: 'send_email_chart_degree_certainty', type: 'integer', options: ['default' => 0])]
+    protected int $sendEmailChartDegreeCertainty = 0;
+
+    #[ORM\Column(name: 'not_display_balance_percentage_categorie_question', type: 'integer', options: ['default' => 0])]
+    protected int $notDisplayBalancePercentageCategorieQuestion = 0;
+
+    #[ORM\Column(name: 'display_chart_degree_certainty_category', type: 'integer', options: ['default' => 0])]
+    protected int $displayChartDegreeCertaintyCategory = 0;
+
+    #[ORM\Column(name: 'gather_questions_categories', type: 'integer', options: ['default' => 0])]
+    protected int $gatherQuestionsCategories = 0;
+
     /**
      * @var Collection<int, CQuizRelQuestion>
      */
@@ -603,6 +618,66 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     public function setPageResultConfiguration(array $pageResultConfiguration): self
     {
         $this->pageResultConfiguration = $pageResultConfiguration;
+
+        return $this;
+    }
+
+    public function getDisplayChartDegreeCertainty(): int
+    {
+        return $this->displayChartDegreeCertainty;
+    }
+
+    public function setDisplayChartDegreeCertainty(int $displayChartDegreeCertainty): self
+    {
+        $this->displayChartDegreeCertainty = $displayChartDegreeCertainty;
+
+        return $this;
+    }
+
+    public function getSendEmailChartDegreeCertainty(): int
+    {
+        return $this->sendEmailChartDegreeCertainty;
+    }
+
+    public function setSendEmailChartDegreeCertainty(int $sendEmailChartDegreeCertainty): self
+    {
+        $this->sendEmailChartDegreeCertainty = $sendEmailChartDegreeCertainty;
+
+        return $this;
+    }
+
+    public function getNotDisplayBalancePercentageCategorieQuestion(): int
+    {
+        return $this->notDisplayBalancePercentageCategorieQuestion;
+    }
+
+    public function setNotDisplayBalancePercentageCategorieQuestion(int $notDisplayBalancePercentageCategorieQuestion): self
+    {
+        $this->notDisplayBalancePercentageCategorieQuestion = $notDisplayBalancePercentageCategorieQuestion;
+
+        return $this;
+    }
+
+    public function getDisplayChartDegreeCertaintyCategory(): int
+    {
+        return $this->displayChartDegreeCertaintyCategory;
+    }
+
+    public function setDisplayChartDegreeCertaintyCategory(int $displayChartDegreeCertaintyCategory): self
+    {
+        $this->displayChartDegreeCertaintyCategory = $displayChartDegreeCertaintyCategory;
+
+        return $this;
+    }
+
+    public function getGatherQuestionsCategories(): int
+    {
+        return $this->gatherQuestionsCategories;
+    }
+
+    public function setGatherQuestionsCategories(int $gatherQuestionsCategories): self
+    {
+        $this->gatherQuestionsCategories = $gatherQuestionsCategories;
 
         return $this;
     }

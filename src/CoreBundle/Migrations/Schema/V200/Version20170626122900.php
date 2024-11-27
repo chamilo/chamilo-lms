@@ -104,6 +104,10 @@ class Version20170626122900 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE user CHANGE confirmation_token confirmation_token VARCHAR(255) DEFAULT NULL');
         }
 
+        if ($table->hasColumn('enabled')) {
+            $this->addSql('ALTER TABLE user DROP enabled');
+        }
+
         $this->addSql('ALTER TABLE user CHANGE username_canonical username_canonical VARCHAR(180) NOT NULL');
         $this->addSql('ALTER TABLE user CHANGE lastname lastname VARCHAR(64) DEFAULT NULL');
         $this->addSql('ALTER TABLE user CHANGE firstname firstname VARCHAR(64) DEFAULT NULL');

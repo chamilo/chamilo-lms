@@ -1,38 +1,40 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Repository\SkillRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(security: 'is_granted(\'ROLE_ADMIN\')', normalizationContext: ['groups' => ['skill:read']])]
+#[ApiResource(normalizationContext: ['groups' => ['skill:read']], security: 'is_granted(\'ROLE_ADMIN\')')]
 #[ApiFilter(SearchFilter::class, properties: ['issuedSkills.user' => 'exact'])]
 #[ORM\Table(name: 'skill')]
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
-class Skill implements Stringable
+class Skill implements Stringable, Translatable
 {
     public const STATUS_DISABLED = 0;
     public const STATUS_ENABLED = 1;
+
     #[Groups(['skill:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
+
     #[ORM\ManyToOne(targetEntity: Profile::class, inversedBy: 'skills')]
     #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id')]
     protected ?Profile $profile = null;
@@ -41,59 +43,74 @@ class Skill implements Stringable
      * @var Collection<int, SkillRelUser>
      */
     #[Groups(['skill:read'])]
-    #[ORM\OneToMany(targetEntity: SkillRelUser::class, mappedBy: 'skill', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'skill', targetEntity: SkillRelUser::class, cascade: ['persist'])]
     protected Collection $issuedSkills;
 
     /**
      * @var Collection<int, SkillRelItem>
      */
-    #[ORM\OneToMany(targetEntity: SkillRelItem::class, mappedBy: 'skill', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'skill', targetEntity: SkillRelItem::class, cascade: ['persist'])]
     protected Collection $items;
 
     /**
      * @var Collection<int, SkillRelSkill>
      */
-    #[ORM\OneToMany(targetEntity: SkillRelSkill::class, mappedBy: 'skill', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'skill', targetEntity: SkillRelSkill::class, cascade: ['persist'])]
     protected Collection $skills;
 
     /**
      * @var Collection<int, SkillRelCourse>
      */
-    #[ORM\OneToMany(targetEntity: SkillRelCourse::class, mappedBy: 'skill', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'skill', targetEntity: SkillRelCourse::class, cascade: ['persist'])]
     protected Collection $courses;
 
     /**
      * @var Collection<int, SkillRelGradebook>
      */
-    #[ORM\OneToMany(targetEntity: SkillRelGradebook::class, mappedBy: 'skill', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'skill', targetEntity: SkillRelGradebook::class, cascade: ['persist'])]
     protected Collection $gradeBookCategories;
+
+    #[Gedmo\Translatable]
     #[Assert\NotBlank]
     #[Groups(['skill:read', 'skill:write', 'skill_rel_user:read'])]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
+
+    #[Gedmo\Translatable]
     #[Assert\NotBlank]
     #[Groups(['skill:read', 'skill:write'])]
     #[ORM\Column(name: 'short_code', type: 'string', length: 100, nullable: false)]
     protected string $shortCode;
+
     #[Groups(['skill:read', 'skill:write'])]
     #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected string $description;
+
     #[Assert\NotNull]
     #[ORM\Column(name: 'access_url_id', type: 'integer', nullable: false)]
     protected int $accessUrlId;
+
     #[Groups(['skill:read', 'skill_rel_user:read'])]
     #[ORM\Column(name: 'icon', type: 'string', length: 255, nullable: false)]
     protected string $icon;
+
     #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id')]
     protected ?Asset $asset = null;
+
     #[ORM\Column(name: 'criteria', type: 'text', nullable: true)]
     protected ?string $criteria = null;
+
     #[ORM\Column(name: 'status', type: 'integer', nullable: false, options: ['default' => 1])]
     protected int $status;
+
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
     protected DateTime $updatedAt;
+
+    #[Gedmo\Locale]
+    private ?string $locale = null;
+
     public function __construct()
     {
         $this->issuedSkills = new ArrayCollection();
@@ -105,6 +122,7 @@ class Skill implements Stringable
         $this->description = '';
         $this->status = self::STATUS_ENABLED;
     }
+
     public function __toString(): string
     {
         return $this->getTitle();
@@ -117,68 +135,47 @@ class Skill implements Stringable
         return $this;
     }
 
-    public function getTitle($translated = true): string
+    public function getTitle(): string
     {
-        if ($translated) {
-            $variable = ChamiloApi::getLanguageVar($this->title, 'Skill');
-            $translation = get_lang($variable);
-            if ($variable != $translation) {
-                return $translation;
-            }
-        }
-
         return $this->title;
     }
-    public function getShortCode($translated = true): string
-    {
-        if ($translated) {
-            $variable = ChamiloApi::getLanguageVar($this->shortCode, 'SkillCode');
-            $translation = get_lang($variable);
-            if ($variable != $translation) {
-                return $translation;
-            }
-        }
 
+    public function getShortCode(): string
+    {
         return $this->shortCode;
     }
+
     public function setShortCode(string $shortCode): self
     {
         $this->shortCode = $shortCode;
 
         return $this;
     }
+
     public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
+
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * Set accessUrlId.
-     *
-     * @return Skill
-     */
-    public function setAccessUrlId(int $accessUrlId)
+    public function setAccessUrlId(int $accessUrlId): static
     {
         $this->accessUrlId = $accessUrlId;
 
         return $this;
     }
 
-    /**
-     * Get accessUrlId.
-     *
-     * @return int
-     */
-    public function getAccessUrlId()
+    public function getAccessUrlId(): int
     {
         return $this->accessUrlId;
     }
+
     public function setIcon(string $icon): self
     {
         $this->icon = $icon;
@@ -186,15 +183,11 @@ class Skill implements Stringable
         return $this;
     }
 
-    /**
-     * Get icon.
-     *
-     * @return string
-     */
-    public function getIcon()
+    public function getIcon(): string
     {
         return $this->icon;
     }
+
     public function setCriteria(string $criteria): self
     {
         $this->criteria = $criteria;
@@ -202,15 +195,11 @@ class Skill implements Stringable
         return $this;
     }
 
-    /**
-     * Get criteria.
-     *
-     * @return string
-     */
-    public function getCriteria()
+    public function getCriteria(): ?string
     {
         return $this->criteria;
     }
+
     public function setStatus(int $status): self
     {
         $this->status = $status;
@@ -218,57 +207,33 @@ class Skill implements Stringable
         return $this;
     }
 
-    /**
-     * Get status.
-     *
-     * @return int
-     */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }
 
-    /**
-     * Set updatedAt.
-     *
-     * @param DateTime $updatedAt The update datetime
-     *
-     * @return Skill
-     */
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    /**
-     * Get updatedAt.
-     *
-     * @return DateTime
-     */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Profile
-     */
-    public function getProfile()
+    public function getProfile(): ?Profile
     {
         return $this->profile;
     }
+
     public function setProfile(Profile $profile): self
     {
         $this->profile = $profile;
@@ -291,12 +256,14 @@ class Skill implements Stringable
     {
         return $this->items;
     }
+
     public function setItems(ArrayCollection $items): self
     {
         $this->items = $items;
 
         return $this;
     }
+
     public function hasItem(int $typeId, int $itemId): bool
     {
         if (0 !== $this->getItems()->count()) {
@@ -316,19 +283,18 @@ class Skill implements Stringable
 
         return false;
     }
+
     public function addItem(SkillRelItem $skillRelItem): void
     {
         $skillRelItem->setSkill($this);
         $this->items[] = $skillRelItem;
     }
 
-    /**
-     * @return Collection
-     */
-    public function getCourses()
+    public function getCourses(): Collection
     {
         return $this->courses;
     }
+
     public function setCourses(ArrayCollection $courses): self
     {
         $this->courses = $courses;
@@ -337,17 +303,17 @@ class Skill implements Stringable
     }
 
     /**
-     * @return SkillRelSkill[]|Collection
+     * @return Collection<int, SkillRelSkill>
      */
-    public function getSkills(): array|Collection
+    public function getSkills(): Collection
     {
         return $this->skills;
     }
 
     /**
-     * @param SkillRelSkill[]|Collection $skills
+     * @param Collection<int, SkillRelSkill> $skills
      */
-    public function setSkills(array|Collection $skills): self
+    public function setSkills(Collection $skills): self
     {
         $this->skills = $skills;
 
@@ -355,36 +321,40 @@ class Skill implements Stringable
     }
 
     /**
-     * @return SkillRelGradebook[]|Collection
+     * @return Collection<int, SkillRelGradebook>
      */
-    public function getGradeBookCategories(): array|Collection
+    public function getGradeBookCategories(): Collection
     {
         return $this->gradeBookCategories;
     }
 
     /**
-     * @param SkillRelGradebook[]|Collection $gradeBookCategories
+     * @param Collection<int, SkillRelGradebook> $gradeBookCategories
      */
-    public function setGradeBookCategories(array|Collection $gradeBookCategories): self
+    public function setGradeBookCategories(Collection $gradeBookCategories): self
     {
         $this->gradeBookCategories = $gradeBookCategories;
 
         return $this;
     }
+
     public function hasAsset(): bool
     {
         return null !== $this->asset;
     }
+
     public function getAsset(): ?Asset
     {
         return $this->asset;
     }
+
     public function setAsset(?Asset $asset): self
     {
         $this->asset = $asset;
 
         return $this;
     }
+
     public function hasCourseAndSession(SkillRelCourse $searchItem): bool
     {
         if (0 !== $this->getCourses()->count()) {
@@ -411,9 +381,22 @@ class Skill implements Stringable
 
         return false;
     }
+
     public function addToCourse(SkillRelCourse $item): void
     {
         $item->setSkill($this);
         $this->courses[] = $item;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
+
+        return $this;
     }
 }

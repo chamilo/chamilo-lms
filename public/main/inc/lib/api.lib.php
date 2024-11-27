@@ -6857,21 +6857,14 @@ function get_hosting_limit(int $urlId, string $limitName): mixed
  */
 function api_get_env_variable(string $variable, mixed $default = null): mixed
 {
+    $variable = strtolower($variable);
     if (Container::$container->hasParameter($variable)) {
-        $value = Container::$container->getParameter($variable);
-
-        if ($value === '0') {
-            return false;
-        }
-        if ($value === '1') {
-            return true;
-        }
-
-        return $value;
+        return Container::$container->getParameter($variable);
     }
 
     return $default;
 }
+
 /**
  * Retreives and returns a value in a hierarchical configuration array
  * api_get_configuration_sub_value('a/b/c') returns api_get_configuration_value('a')['b']['c'].

@@ -16344,7 +16344,7 @@ msgstr "Adresse IP"
 msgid "Only skills that were not registered were imported"
 msgstr "Seuls les nouvelles compétences ont été importées"
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "La compétence n'a pas de nom"
 
 msgid "The parent skill was not set"
@@ -29564,3 +29564,24 @@ msgstr "Ajouter des amis"
 
 msgid "Add friend"
 msgstr "Ajouter un ami"
+
+msgid "Delete permanently"
+msgstr "Supprimer définitivement"
+
+msgid "%d minutes before"
+msgstr "%d minutes avant"
+
+msgid "%d hours before"
+msgstr "%d heures avant"
+
+msgid "%d days before"
+msgstr "%d jours avant"
+
+msgid "Select a folder"
+msgstr "Choisir un dossier"
+
+msgid "Select the destination folder"
+msgstr "Choisir le dossier de destination"
+
+msgid "All users"
+msgstr "Tous les utilisateurs"

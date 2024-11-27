@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Uid\Uuid;
@@ -68,6 +69,31 @@ class CGroupCategory extends AbstractResource implements ResourceInterface, Stri
 
     #[ORM\Column(name: 'document_access', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $documentAccess;
+
+    #[ORM\Column(name: 'min_student', type: 'integer', nullable: true)]
+    protected ?int $minStudent = null;
+
+    #[ORM\Column(name: 'begin_inscription_date', type: 'datetime', nullable: true)]
+    protected ?DateTime $beginInscriptionDate = null;
+
+    #[ORM\Column(name: 'end_inscription_date', type: 'datetime', nullable: true)]
+    protected ?DateTime $endInscriptionDate = null;
+
+    #[ORM\Column(name: 'only_me', type: 'boolean', options: ['default' => 0])]
+    protected bool $onlyMe = false;
+
+    #[ORM\ManyToOne(targetEntity: CPeerAssessment::class)]
+    #[ORM\JoinColumn(name: 'peer_assessment', referencedColumnName: 'id', nullable: true)]
+    protected ?CPeerAssessment $peerAssessment = null;
+
+    #[ORM\Column(name: 'allow_coach_change_options_groups', type: 'boolean', options: ['default' => 0])]
+    protected bool $allowCoachChangeOptionsGroups = false;
+
+    #[ORM\Column(name: 'allow_change_group_name', type: 'integer', nullable: true, options: ['default' => 1])]
+    protected ?int $allowChangeGroupName = 1;
+
+    #[ORM\Column(name: 'allow_autogroup', type: 'boolean', options: ['default' => 0])]
+    protected bool $allowAutogroup = false;
 
     public function __construct()
     {
@@ -315,6 +341,102 @@ class CGroupCategory extends AbstractResource implements ResourceInterface, Stri
     public function setDocumentAccess(int $documentAccess): self
     {
         $this->documentAccess = $documentAccess;
+
+        return $this;
+    }
+
+    public function getMinStudent(): ?int
+    {
+        return $this->minStudent;
+    }
+
+    public function setMinStudent(?int $minStudent): self
+    {
+        $this->minStudent = $minStudent;
+
+        return $this;
+    }
+
+    public function getBeginInscriptionDate(): ?DateTime
+    {
+        return $this->beginInscriptionDate;
+    }
+
+    public function setBeginInscriptionDate(?DateTime $beginInscriptionDate): self
+    {
+        $this->beginInscriptionDate = $beginInscriptionDate;
+
+        return $this;
+    }
+
+    public function getEndInscriptionDate(): ?DateTime
+    {
+        return $this->endInscriptionDate;
+    }
+
+    public function setEndInscriptionDate(?DateTime $endInscriptionDate): self
+    {
+        $this->endInscriptionDate = $endInscriptionDate;
+
+        return $this;
+    }
+
+    public function getOnlyMe(): bool
+    {
+        return $this->onlyMe;
+    }
+
+    public function setOnlyMe(bool $onlyMe): self
+    {
+        $this->onlyMe = $onlyMe;
+
+        return $this;
+    }
+
+    public function getPeerAssessment(): ?CPeerAssessment
+    {
+        return $this->peerAssessment;
+    }
+
+    public function setPeerAssessment(?CPeerAssessment $peerAssessment): self
+    {
+        $this->peerAssessment = $peerAssessment;
+
+        return $this;
+    }
+
+    public function getAllowCoachChangeOptionsGroups(): bool
+    {
+        return $this->allowCoachChangeOptionsGroups;
+    }
+
+    public function setAllowCoachChangeOptionsGroups(bool $allowCoachChangeOptionsGroups): self
+    {
+        $this->allowCoachChangeOptionsGroups = $allowCoachChangeOptionsGroups;
+
+        return $this;
+    }
+
+    public function getAllowChangeGroupName(): ?int
+    {
+        return $this->allowChangeGroupName;
+    }
+
+    public function setAllowChangeGroupName(?int $allowChangeGroupName): self
+    {
+        $this->allowChangeGroupName = $allowChangeGroupName;
+
+        return $this;
+    }
+
+    public function getAllowAutogroup(): bool
+    {
+        return $this->allowAutogroup;
+    }
+
+    public function setAllowAutogroup(bool $allowAutogroup): self
+    {
+        $this->allowAutogroup = $allowAutogroup;
 
         return $this;
     }

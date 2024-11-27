@@ -1,16 +1,16 @@
-<p>{{ "ToGetToLearnXYouWillNeedToTakeOneOfTheFollowingCourses" | trans | format( "<em>" ~ skill.title ~ "</em>") }}</p>
+<p>{{ "To get to learn %s you will need to take one of the following courses:" | trans | format( "<em>" ~ skill.title ~ "</em>") }}</p>
 <ul>
 {% for course in courses %}
     <li>
         <a href="#" class="course_description_popup" rel="{{ course.code }}">
-            {{ "SkillXWithCourseX" | trans | format(skill.title, course.title) }}
+            {{ "%s with %s" | trans | format(skill.title, course.title) }}
         </a>
     </li>
 {% endfor %}
 
 {% for session in sessions %}
     <li>
-        {{ "SkillXWithCourseX" | trans | format(skill.title, session.name) }}
+        {{ "%s with %s" | trans | format(skill.title, session.name) }}
     </li>
 {% endfor %}
 </ul>

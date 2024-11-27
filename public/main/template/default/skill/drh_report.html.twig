@@ -1,38 +1,38 @@
 {% if allow_skill_tool %}
     <div class="btn-group">
         <a class="btn btn--plain" href="{{ _p.web_main }}social/skills_wheel.php">
-            {{ 'SkillsWheel' | trans }}
+            {{ 'Skills wheel'|trans }}
         </a>
         {% if allow_drh_skills_management %}
             <a class="btn btn--plain" href="{{ _p.web_main }}skills/skills_wheel.php">
-                {{ 'ManageSkills' | trans }}
+                {{ 'Manage skills'|trans }}
             </a>
         {% endif %}
     </div>
 {% endif %}
 
-<h1 class="page-header">{{ 'Skills' | trans }}</h1>
+<h1 class="page-header">{{ 'Skills'|trans }}</h1>
 <div class="row">
     <div class="col-md-6">
         <form class="form--inline" method="post" action="{{ _p.web_self }}">
-            <label for="course">{{ 'Courses' | trans }}</label>
+            <label for="course">{{ 'Courses'|trans }}</label>
             <select name="course" id="course" class="form-control">
-                <option value="0">{{ 'Select' | trans }}</option>
+                <option value="0">{{ 'Select'|trans }}</option>
                 {% for course in courses %}
                     <option value="{{ course.id }}" {{ (course.id == selected_course) ? 'selected' : '' }}>{{ course.title }}</option>
                 {% endfor %}
             </select>
             <button type="submit" class="btn btn--plain">
                 <span class="fa fa-filter" aria-hidden="true"></span>
-                {{ 'Filter' | trans }}
+                {{ 'Filter'|trans }}
             </button>
         </form>
     </div>
     <div class="col-md-6">
         <form class="form--inline" method="post" action="{{ _p.web_self }}">
-            <label for="skill">{{ 'Skills' | trans }}</label>
+            <label for="skill">{{ 'Skills'|trans }}</label>
             <select name="skill" id="skill" class="form-control">
-                <option value="0">{{ 'Select' | trans }}</option>
+                <option value="0">{{ 'Select'|trans }}</option>
                 {% for skill in skills %}
                     <option value="{{ skill.id }}" {{ (skill.id == selected_skill) ? 'selected' : '' }}>
                         {{ skill.title }}
@@ -41,7 +41,7 @@
             </select>
             <button type="submit" class="btn btn--plain">
                 <span class="fa fa-filter" aria-hidden="true"></span>
-                {{ 'Filter' | trans }}
+                {{ 'Filter'|trans }}
             </button>
         </form>
     </div>
@@ -51,19 +51,19 @@
 {% if rows %}
     <table class="table">
         <thead>
-            <tr>
-                {% if action == 'filterByCourse' %}
-                    <th>{{ 'Course' | trans }}</th>
-                    <th>{{ 'Skill' | trans }}</th>
-                    <th>{{ 'Student' | trans }}</th>
-                    <th>{{ 'Date' | trans }}</th>
-                {% elseif action == 'filterBySkill' %}
-                    <th>{{ 'Skill' | trans }}</th>
-                    <th>{{ 'Student' | trans }}</th>
-                    <th>{{ 'Date' | trans }}</th>
-                    <th>{{ 'Course' | trans }}</th>
-                {% endif %}
-            </tr>
+        <tr>
+            {% if action == 'filterByCourse' %}
+                <th>{{ 'Course'|trans }}</th>
+                <th>{{ 'Skill'|trans }}</th>
+                <th>{{ 'Learner'|trans }}</th>
+                <th>{{ 'Date'|trans }}</th>
+            {% elseif action == 'filterBySkill' %}
+                <th>{{ 'Skill'|trans }}</th>
+                <th>{{ 'Learner'|trans }}</th>
+                <th>{{ 'Date'|trans }}</th>
+                <th>{{ 'Course'|trans }}</th>
+            {% endif %}
+        </tr>
         </thead>
         <tbody>
         {% for row in rows %}

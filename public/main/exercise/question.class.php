@@ -1771,7 +1771,6 @@ abstract class Question
         $type = 1,
         $level = 1
     ) {
-        $course_id = api_get_course_int_id();
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tbl_quiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
@@ -1785,22 +1784,20 @@ abstract class Question
                 FROM $tbl_quiz_question q
                 INNER JOIN $tbl_quiz_rel_question r
                 ON
-                    q.id = r.question_id AND
-                    quiz_id = $quiz_id AND
-                    q.c_id = $course_id AND
-                    r.c_id = $course_id";
+                    q.iid = r.question_id AND
+                    quiz_id = $quiz_id";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
         $max_position = $row_max->max_position + 1;
 
         $params = [
-            'c_id' => $course_id,
             'question' => $question_name,
             'description' => $question_description,
             'ponderation' => $max_score,
             'position' => $max_position,
             'type' => $type,
             'level' => $level,
+            'mandatory' => 0,
         ];
         $question_id = Database::insert($tbl_quiz_question, $params);
 
@@ -1808,13 +1805,13 @@ abstract class Question
             // Get the max question_order
             $sql = "SELECT max(question_order) as max_order
                     FROM $tbl_quiz_rel_question
-                    WHERE c_id = $course_id AND quiz_id = $quiz_id ";
+                    WHERE quiz_id = $quiz_id ";
             $rs_max_order = Database::query($sql);
             $row_max_order = Database::fetch_object($rs_max_order);
             $max_order = $row_max_order->max_order + 1;
             // Attach questions to quiz
-            $sql = "INSERT INTO $tbl_quiz_rel_question (c_id, question_id, quiz_id, question_order)
-                    VALUES($course_id, $question_id, $quiz_id, $max_order)";
+            $sql = "INSERT INTO $tbl_quiz_rel_question (question_id, quiz_id, question_order)
+                    VALUES($question_id, $quiz_id, $max_order)";
             Database::query($sql);
         }
 

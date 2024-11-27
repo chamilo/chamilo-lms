@@ -17,7 +17,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 use const DIRECTORY_SEPARATOR;
-use const PHP_SAPI;
 
 final class ThemeHelper
 {
@@ -40,10 +39,6 @@ final class ThemeHelper
      */
     public function getVisualTheme(): string
     {
-        if ('cli' === PHP_SAPI) {
-            return '';
-        }
-
         static $visualTheme;
 
         global $lp_theme_css;

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+/* For licensing terms, see /license.txt */
+
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
@@ -15,7 +17,7 @@ final class Version20240509123200 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Ensure all courses have the required tools post-migration.';
+        return 'Ensure only base tools exist (session_id = NULL) for each course, removing session-specific tools.';
     }
 
     public function up(Schema $schema): void
@@ -56,30 +58,39 @@ final class Version20240509123200 extends AbstractMigrationChamilo
         $courses = $courseRepo->findAll();
         foreach ($courses as $course) {
             foreach ($requiredTools as $toolName) {
-                $ctool = $course->getTools()->filter(
-                    fn (CTool $ct) => $ct->getTool()->getTitle() === $toolName
-                )->first() ?? null;
+                $baseTool = $course->getTools()->filter(
+                    fn (CTool $ct) => $ct->getTool()->getTitle() === $toolName && null === $ct->getSession()
+                )->first();
 
-                if (!$ctool) {
+                if (!$baseTool) {
                     $tool = $toolRepo->findOneBy(['title' => $toolName]);
                     if ($tool) {
                         $linkVisibility = ('course_setting' == $toolName || 'course_maintenance' == $toolName)
                             ? ResourceLink::VISIBILITY_DRAFT : ResourceLink::VISIBILITY_PUBLISHED;
 
-                        $ctool = new CTool();
-                        $ctool->setTool($tool);
-                        $ctool->setTitle($toolName);
-                        $ctool->setVisibility(true);
-                        $ctool->setParent($course);
-                        $ctool->setCreator($admin);
-                        $ctool->addCourseLink($course, null, null, $linkVisibility);
-                        $this->entityManager->persist($ctool);
-                        error_log("Tool '{$toolName}' needs to be added to course ID {$course->getId()}.");
+                        $baseTool = new CTool();
+                        $baseTool->setTool($tool);
+                        $baseTool->setTitle($toolName);
+                        $baseTool->setVisibility(true);
+                        $baseTool->setCourse($course);
+                        $baseTool->setParent($course);
+                        $baseTool->setSession(null);
+                        $baseTool->setCreator($admin);
+                        $baseTool->addCourseLink($course, null, null, $linkVisibility);
 
-                        $course->addTool($ctool);
-                        error_log("Tool '{$toolName}' created and linked to course.");
+                        $this->entityManager->persist($baseTool);
+                        error_log("Base tool '{$toolName}' added for course ID {$course->getId()}.");
                     }
                 }
+            }
+
+            $sessionTools = $course->getTools()->filter(
+                fn (CTool $ct) => null !== $ct->getSession()
+            );
+
+            foreach ($sessionTools as $tool) {
+                $this->entityManager->remove($tool);
+                error_log("Removed session-specific tool '{$tool->getTitle()}' (ID: {$tool->getIid()}).");
             }
         }
         $this->entityManager->flush();

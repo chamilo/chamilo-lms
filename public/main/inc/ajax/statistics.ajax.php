@@ -362,7 +362,7 @@ switch ($action) {
                     $count = $result['count'];
                     $usersFound += $count;
 
-                    $option = $extraFieldOption->get($item['id'], true);
+                    $option = $extraFieldOption->get($item['id']);
                     $item['display_text'] = $option['display_text'];
                     $all[$item['display_text']] = $count;
                 }

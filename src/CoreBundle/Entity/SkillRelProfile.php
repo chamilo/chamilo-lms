@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -25,12 +25,7 @@ class SkillRelProfile
     #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected SkillProfile $profile;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }

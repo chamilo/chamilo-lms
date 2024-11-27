@@ -14,11 +14,11 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 
 $em = Database::getManager();
-
+$request = Container::getRequest();
 $extraFieldRepo = Container::getExtraFieldRepository();
 $languageRepo = Container::getLanguageRepository();
 
-$fieldId = (int) ($_REQUEST['id'] ?? 0);
+$fieldId = $request->query->getInt('extra_field');
 
 /** @var ExtraField|null $extraField */
 $extraField = $extraFieldRepo->find($fieldId);
@@ -27,26 +27,32 @@ if (null === $extraField) {
     api_not_allowed(true);
 }
 
-$currentUrl = api_get_self().'?id='.$fieldId;
-$qb = $languageRepo->getAllAvailable();
-$languages = $qb->getQuery()->getResult();
+$currentUrl = api_get_self().'?extra_field='.$fieldId;
+$languages = $languageRepo->getAllAvailable(true)->getQuery()->getResult();
 
 $form = new FormValidator('translate', 'POST', $currentUrl);
 $form->addHidden('id', $fieldId);
+
+$extraField->setLocale(Container::getParameter('locale'));
+$em->refresh($extraField);
+
 $form->addHeader($extraField->getDisplayText());
 
-$repository = $em->getRepository(Translation::class);
-$translations = $repository->findTranslations($extraField);
+$translationsRepo = $em->getRepository(Translation::class);
+$translations = $translationsRepo->findTranslations($extraField);
 
 $defaults = [];
 
 /** @var Language $language */
 foreach ($languages as $language) {
     $iso = $language->getIsocode();
-    $variable = 'variable['.$iso.']';
-    $form->addText($variable, $language->getOriginalName().' ('.$iso.')', false);
-    if (isset($translations[$iso]) && $translations[$iso]['displayText']) {
-        $defaults['variable['.$iso.']'] = $translations[$iso]['displayText'];
+    $form->addText(
+        'language['.$language->getId().']',
+        $language->getOriginalName(),
+        false
+    );
+    if (!empty($translations[$iso]['displayText'])) {
+        $defaults['language['.$language->getId().']'] = $translations[$iso]['displayText'];
     }
 }
 
@@ -70,22 +76,19 @@ $interbreadcrumb[] = [
 if ($form->validate()) {
     $values = $form->getSubmitValues();
     foreach ($languages as $language) {
-        if (!isset($values['variable'][$language->getIsocode()])) {
-            continue;
-        }
-        $translation = $values['variable'][$language->getIsocode()];
-        if (empty($translation)) {
+        if (empty($values['language'][$language->getId()])) {
             continue;
         }
 
-        $extraField = $extraFieldRepo->find($fieldId);
-        $extraField
-            ->setTranslatableLocale($language->getIsocode())
-            ->setDisplayText($translation)
-        ;
-        $em->persist($extraField);
-        $em->flush();
+        $translationsRepo->translate(
+            $extraField,
+            'displayText',
+            $language->getIsocode(),
+            $values['language'][$language->getId()]
+        );
     }
+
+    $em->flush();
 
     Display::addFlash(Display::return_message(get_lang('Updated')));
     api_location($currentUrl);

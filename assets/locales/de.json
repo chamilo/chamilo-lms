@@ -570,5 +570,12 @@
     "Promoted Messages": "Gesponserte Nachrichten",
     "Are you sure you want to delete %s?": "Sind Sie sicher, dass Sie {0} l\u00f6schen m\u00f6chten?",
     "%s's picture": "{0}'s picture",
-    "+%d": "+{0}"
+    "+%d": "+{0}",
+    "%d minutes before": "{0} Minuten vorher",
+    "%d hours before": "{0} Stunden vorher",
+    "%d days before": "{0} Tage vorher",
+    "Move": "verschieben",
+    "Select the destination folder": "W\u00e4hlen Sie den Zielordner",
+    "Select a folder": "W\u00e4hlen Sie einen Ordner aus",
+    "Move document": "Dokument verschieben"
 }

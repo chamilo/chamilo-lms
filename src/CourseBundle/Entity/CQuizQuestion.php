@@ -254,7 +254,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, Strin
         return $this->level;
     }
 
-    public function setExtra(string $extra): self
+    public function setExtra(?string $extra): self
     {
         $this->extra = $extra;
 

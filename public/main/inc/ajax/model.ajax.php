@@ -2412,18 +2412,17 @@ switch ($action) {
                 get_lang('No')
             );
             foreach ($result as $item) {
-                $item['display_text'] = ExtraField::translateDisplayName($item['variable'], $item['displayText']);
-                $item['value_type'] = $obj->get_field_type_by_id($item['valueType']);
-                $item['changeable'] = $item['changeable'] ? $checkIcon : $timesIcon;
-                $item['visible_to_self'] = $item['visibleToSelf'] ? $checkIcon : $timesIcon;
-                $item['visible_to_others'] = $item['visibleToOthers'] ? $checkIcon : $timesIcon;
-                $item['filter'] = $item['filter'] ? $checkIcon : $timesIcon;
-
-                if (isset($item['autoRemove'])) {
-                    $item['auto_remove'] = $item['autoRemove'] ? $checkIcon : $timesIcon;
-                }
-
-                $new_result[] = $item;
+                $new_result[] = [
+                    'id' => $item->getId(),
+                    'variable' => $item->getVariable(),
+                    'display_text' => $item->getDisplayText(),
+                    'value_type' => $obj->get_field_type_by_id($item->getValueType()),
+                    'changeable' => $item->isChangeable() ? $checkIcon : $timesIcon,
+                    'visible_to_self' => $item->isVisibleToSelf() ? $checkIcon : $timesIcon,
+                    'visible_to_others' => $item->isVisibleToOthers() ? $checkIcon : $timesIcon,
+                    'filter' => $item->isFilter() ? $checkIcon : $timesIcon,
+                    'auto_remove' => $item->getAutoRemove() ? $checkIcon : $timesIcon,
+                ];
             }
             $result = $new_result;
         }

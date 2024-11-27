@@ -36,7 +36,7 @@ class AgendaReminder
     #[Groups(['calendar_event:write', 'calendar_event:read'])]
     public string $period;
 
-    #[ORM\ManyToOne(inversedBy: 'reminders')]
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'reminders')]
     #[ORM\JoinColumn(referencedColumnName: 'iid', nullable: false)]
     private ?CCalendarEvent $event = null;
 

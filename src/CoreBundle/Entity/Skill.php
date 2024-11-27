@@ -9,7 +9,15 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\ApiResource\SkillTreeNode;
 use Chamilo\CoreBundle\Repository\SkillRepository;
+use Chamilo\CoreBundle\State\SkillTreeStateProvider;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,7 +28,29 @@ use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(normalizationContext: ['groups' => ['skill:read']], security: 'is_granted(\'ROLE_ADMIN\')')]
+#[ApiResource(
+    operations: [
+        new Post(),
+        new Patch(),
+        new Put(),
+        new Delete(),
+        new GetCollection(
+            uriTemplate: '/skills/tree.{_format}',
+            paginationEnabled: false,
+            normalizationContext: [
+                'groups' => ['skill:tree:read']
+            ],
+            output: SkillTreeNode::class,
+            provider: SkillTreeStateProvider::class
+        ),
+        new GetCollection(),
+        new Get(),
+    ],
+    normalizationContext: [
+        'groups' => ['skill:read'],
+    ],
+    security: "is_granted('ROLE_ADMIN')"
+)]
 #[ApiFilter(SearchFilter::class, properties: ['issuedSkills.user' => 'exact'])]
 #[ORM\Table(name: 'skill')]
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
@@ -398,5 +428,16 @@ class Skill implements Stringable, Translatable
         $this->locale = $locale;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getChildSkills(): Collection
+    {
+        return $this
+            ->getSkills()
+            ->map(fn(SkillRelSkill $skillRelSkill): Skill => $skillRelSkill->getSkill())
+        ;
     }
 }

@@ -45,6 +45,9 @@ class PlatformConfigurationController extends AbstractController
             'visual_theme' => $this->themeHelper->getVisualTheme(),
             'external_authentication' => $this->authenticationConfigHelper->getEnabledProviders(),
         ];
+
+        $configuration['settings']['registration.allow_registration'] = $settingsManager->getSetting('registration.allow_registration', true);
+
         $variables = [];
 
         if ($this->isGranted('ROLE_USER')) {

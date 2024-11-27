@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router"
+import {createRouter, createWebHistory} from "vue-router"
 import adminRoutes from "./admin"
 import courseRoutes from "./course"
 import accountRoutes from "./account"
@@ -37,13 +37,15 @@ import Login from "../pages/Login.vue"
 import Faq from "../pages/Faq.vue"
 import Demo from "../pages/Demo.vue"
 
-import { useCidReqStore } from "../store/cidReq"
+import {useCidReqStore} from "../store/cidReq"
 import courseService from "../services/courseService"
 
 import catalogueCourses from "./cataloguecourses"
 import catalogueSessions from "./cataloguesessions"
-import { customVueTemplateEnabled } from "../config/env"
-import { useUserSessionSubscription } from "../composables/userPermissions"
+import {customVueTemplateEnabled} from "../config/env"
+import {useCourseSettings} from "../store/courseSettingStore"
+import {checkIsAllowedToEdit} from "../composables/userPermissions"
+import {usePlatformConfig} from "../store/platformConfig"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -97,17 +99,97 @@ const router = createRouter({
       name: "CourseHome",
       component: CourseHome,
       beforeEnter: async (to) => {
-        try {
-          const check = await courseService.checkLegal(to.params.id, to.query?.sid)
+        const courseId = to.params.id
+        const sessionId = to.query?.sid
+        const autoLaunchKey = `course_autolaunch_${courseId}`
+        const hasAutoLaunched = sessionStorage.getItem(autoLaunchKey)
 
+        if (hasAutoLaunched === "true") {
+          return true
+        }
+
+        try {
+          const check = await courseService.checkLegal(courseId, sessionId)
           if (check.redirect) {
             window.location.href = check.url
 
             return false
           }
-        } catch (e) {
-          return true
+
+          const course = await courseService.getCourseDetails(courseId)
+          if (!course) {
+            return false
+          }
+
+          const isAllowedToEdit = await checkIsAllowedToEdit(true, true, true)
+          if (isAllowedToEdit) {
+            return true
+          }
+
+          const courseSettingsStore = useCourseSettings()
+          await courseSettingsStore.loadCourseSettings(courseId, sessionId)
+
+          // Document auto-launch
+          const documentAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
+          if (documentAutoLaunch === 1 && course.resourceNode?.id) {
+            sessionStorage.setItem(autoLaunchKey, "true")
+            window.location.href = `/resources/document/${course.resourceNode.id}/?cid=${courseId}`
+              + (sessionId ? `&sid=${sessionId}` : '')
+            return false
+          }
+
+          // Exercise auto-launch
+          const platformConfigStore = usePlatformConfig()
+          const isExerciseAutoLaunchEnabled = "true" === platformConfigStore.getSetting("exercise.allow_exercise_auto_launch")
+          if (isExerciseAutoLaunchEnabled) {
+            const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
+            if (exerciseAutoLaunch === 2) {
+              sessionStorage.setItem(autoLaunchKey, "true")
+              window.location.href = `/main/exercise/exercise.php?cid=${courseId}`
+                + (sessionId ? `&sid=${sessionId}` : '')
+              return false
+            } else if (exerciseAutoLaunch === 1) {
+              const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
+              if (exerciseId) {
+                sessionStorage.setItem(autoLaunchKey, "true")
+                window.location.href = `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}`
+                  + (sessionId ? `&sid=${sessionId}` : '')
+                return false
+              }
+            }
+          }
+
+          // Learning path auto-launch
+          const lpAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
+          if (lpAutoLaunch === 2) {
+            sessionStorage.setItem(autoLaunchKey, "true")
+            window.location.href = `/main/lp/lp_controller.php?cid=${courseId}`
+              + (sessionId ? `&sid=${sessionId}` : '')
+            return false
+          } else if (lpAutoLaunch === 1) {
+            const lpId = await courseService.getAutoLaunchLPId(courseId, sessionId)
+            if (lpId) {
+              sessionStorage.setItem(autoLaunchKey, "true")
+              window.location.href = `/main/lp/lp_controller.php?lp_id=${lpId}&cid=${courseId}&action=view&isStudentView=true`
+                + (sessionId ? `&sid=${sessionId}` : '')
+              return false
+            }
+          }
+
+          // Forum auto-launch
+          const forumAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
+          if (forumAutoLaunch === 1) {
+            sessionStorage.setItem(autoLaunchKey, "true")
+            window.location.href = `/main/forum/index.php?cid=${courseId}`
+              + (sessionId ? `&sid=${sessionId}` : '')
+            return false
+          }
+
+        } catch (error) {
+          console.error("Error during CourseHome route guard:", error)
         }
+
+        return true
       },
     },
     {
@@ -175,6 +257,24 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const securityStore = useSecurityStore()
 
+  if (!securityStore.isAuthenticated) {
+    sessionStorage.clear()
+  }
+
+  let cid = parseInt(to.query?.cid ?? 0)
+
+  if ("CourseHome" === to.name) {
+    cid = parseInt(to.params?.id ?? 0)
+  }
+
+  if (!cid) {
+    for (const key in sessionStorage) {
+      if (key.startsWith('course_autolaunch_')) {
+        sessionStorage.removeItem(key)
+      }
+    }
+  }
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!securityStore.isLoading) {
       await securityStore.checkSession()
@@ -183,6 +283,7 @@ router.beforeEach(async (to, from, next) => {
     if (securityStore.isAuthenticated) {
       next()
     } else {
+      sessionStorage.clear()
       next({
         path: "/login",
         query: { redirect: to.fullPath },

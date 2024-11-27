@@ -8534,10 +8534,22 @@ class Exercise
      */
     public function cleanCourseLaunchSettings()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $table SET autolaunch = 0
-                WHERE c_id = ".$this->course_id.' AND session_id = '.$this->sessionId;
-        Database::query($sql);
+        $em = Database::getManager();
+
+        $repo = Container::getQuizRepository();
+
+        $session = api_get_session_entity();
+        $course = api_get_course_entity();
+
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $quizzes = $qb->getQuery()->getResult();
+
+        foreach ($quizzes as $quiz) {
+            $quiz->setAutoLaunch(false);
+            $em->persist($quiz);
+        }
+
+        $em->flush();
     }
 
     /**

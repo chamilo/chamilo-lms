@@ -156,22 +156,13 @@ class ReinscriptionCheckCommand extends Command
      */
     private function enrollUserInSession($user, $session): void
     {
-        // First, check if the user is already enrolled in the session
         $existingSubscription = $this->findUserSubscriptionInSession($user, $session);
 
-        if ($existingSubscription) {
-            // Remove existing subscription before re-enrolling the user
-            $session->removeUserSubscription($existingSubscription);
+        if (!$existingSubscription) {
+            $session->addUserInSession(Session::STUDENT, $user);
             $this->entityManager->persist($session);
             $this->entityManager->flush();
         }
-
-        // Add the user into the session as a student
-        $session->addUserInSession(Session::STUDENT, $user);
-
-        // Save the changes to the database
-        $this->entityManager->persist($session);
-        $this->entityManager->flush();
     }
 
     private function findUserSubscriptionInSession($user, $session)

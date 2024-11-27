@@ -86,7 +86,8 @@ class SessionRepetitionCommand extends Command
         $newEndDate = (clone $newStartDate)->add($duration);
 
         if ($debug) {
-            $output->writeln(sprintf('Duplicating session %d. New start date: %s, New end date: %s',
+            $output->writeln(sprintf(
+                'Duplicating session %d. New start date: %s, New end date: %s',
                 $session->getId(),
                 $newStartDate->format('Y-m-d H:i:s'),
                 $newEndDate->format('Y-m-d H:i:s')
@@ -109,24 +110,24 @@ class SessionRepetitionCommand extends Command
             ->setShowDescription($session->getShowDescription() ?? false)
             ->setCategory($session->getCategory())
             ->setPromotion($session->getPromotion())
+            ->setDaysToReinscription($session->getDaysToReinscription())
+            ->setDaysToNewRepetition($session->getDaysToNewRepetition())
+            ->setParentId($session->getId())
             ->setLastRepetition(false);
 
         // Copy the AccessUrls from the original session
-        $accessUrls = $session->getUrls();
+        foreach ($session->getUrls() as $accessUrl) {
+            $newSession->addAccessUrl($accessUrl->getUrl());
+        }
 
-        if ($accessUrls->isEmpty()) {
-            // Handle the case where the session does not have any AccessUrl
-            if ($debug) {
-                $output->writeln('No AccessUrl found for session ' . $session->getId() . '. Assigning default AccessUrl.');
-            }
+        // Copy the courses from the original session
+        foreach ($session->getCourses() as $course) {
+            $newSession->addCourse($course);
+        }
 
-            // Retrieve or create a default AccessUrl (you need to adjust this based on your system's needs)
-            $defaultAccessUrl = $this->getDefaultAccessUrl();
-            $newSession->addAccessUrl($defaultAccessUrl);
-        } else {
-            foreach ($accessUrls as $accessUrl) {
-                $newSession->addAccessUrl($accessUrl->getUrl());
-            }
+        // Copy the general coaches from the original session
+        foreach ($session->getGeneralCoaches() as $coach) {
+            $newSession->addGeneralCoach($coach);
         }
 
         // Save the new session

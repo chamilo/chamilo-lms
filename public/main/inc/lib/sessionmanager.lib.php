@@ -8305,6 +8305,12 @@ class SessionManager
                 get_lang('Days before finishing for reinscription'),
                 ['maxlength' => 5]
             );
+            $form->addRule(
+                'days_before_finishing_for_reinscription',
+                get_lang('Days must be a positive number or empty'),
+                'regex',
+                '/^\d*$/'
+            );
         }
 
         if ('true' === api_get_setting('session.enable_session_replication')) {
@@ -8313,6 +8319,12 @@ class SessionManager
                 'days_before_finishing_to_create_new_repetition',
                 get_lang('Days before finishing to create new repetition'),
                 ['maxlength' => 5]
+            );
+            $form->addRule(
+                'days_before_finishing_to_create_new_repetition',
+                get_lang('Days must be a positive number or empty'),
+                'regex',
+                '/^\d*$/'
             );
         }
 
@@ -8335,9 +8347,12 @@ class SessionManager
 
         $element->addOption(get_lang('None'), 0, []);
         $sessions = SessionManager::getListOfParentSessions();
+        $currentSessionId = $session?->getId();
         foreach ($sessions as $id => $title) {
-            $attributes = [];
-            $element->addOption($title, $id, $attributes);
+            if ($id !== $currentSessionId) {
+                $attributes = [];
+                $element->addOption($title, $id, $attributes);
+            }
         }
 
         $form->addElement($element);

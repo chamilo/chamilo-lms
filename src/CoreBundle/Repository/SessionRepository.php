@@ -473,22 +473,20 @@ class SessionRepository extends ServiceEntityRepository
     public function findValidChildSession(Session $session): ?Session
     {
         $childSessions = $this->findChildSessions($session);
+        $now = new \DateTime();
+
         foreach ($childSessions as $childSession) {
-            $now = new \DateTime();
             $startDate = $childSession->getAccessStartDate();
             $endDate = $childSession->getAccessEndDate();
             $daysToReinscription = $childSession->getDaysToReinscription();
 
-            // Skip if days to reinscription is not set
-            if ($daysToReinscription === null || $daysToReinscription === '') {
+            if (empty($daysToReinscription) || $daysToReinscription <= 0) {
                 continue;
             }
 
-            // Adjust the end date by days to reinscription
-            $endDate = $endDate->modify('-' . $daysToReinscription . ' days');
+            $adjustedEndDate = (clone $endDate)->modify('-' . $daysToReinscription . ' days');
 
-            // Check if the current date falls within the session's validity period
-            if ($startDate <= $now && $endDate >= $now) {
+            if ($startDate <= $now && $adjustedEndDate >= $now) {
                 return $childSession;
             }
         }
@@ -561,6 +559,7 @@ class SessionRepository extends ServiceEntityRepository
             ->andWhere('s.daysToNewRepetition IS NOT NULL')
             ->andWhere('s.lastRepetition = :false')
             ->andWhere(':currentDate BETWEEN DATE_SUB(s.accessEndDate, s.daysToNewRepetition, \'DAY\') AND s.accessEndDate')
+            ->andWhere('NOT EXISTS (SELECT 1 FROM Chamilo\CoreBundle\Entity\Session child WHERE child.parentId = s.id)')
             ->setParameter('false', false)
             ->setParameter('currentDate', $currentDate);
 

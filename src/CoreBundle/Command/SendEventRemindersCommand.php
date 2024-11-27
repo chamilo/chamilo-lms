@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\AgendaReminder;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
@@ -160,11 +161,34 @@ class SendEventRemindersCommand extends Command
 
                     case 'session':
                         if ($session = $resourceLink->getSession()) {
-                            foreach ($session->getUsers() as $sessionRelUser) {
-                                $user = $sessionRelUser->getUser();
+                            $course = $resourceLink->getCourse();
+                            if (!$course) {
+                                if ($debug) {
+                                    error_log("No course found for resource link in session ID: {$session->getId()}");
+                                }
+                                break;
+                            }
+
+                            $usersToNotify = [];
+                            $studentSubscriptions = $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT);
+                            foreach ($studentSubscriptions as $studentSubscription) {
+                                $usersToNotify[$studentSubscription->getUser()->getId()] = $studentSubscription->getUser();
+                            }
+
+                            $coachSubscriptions = $session->getSessionRelCourseRelUsersByStatus($course, Session::COURSE_COACH);
+                            foreach ($coachSubscriptions as $coachSubscription) {
+                                $usersToNotify[$coachSubscription->getUser()->getId()] = $coachSubscription->getUser();
+                            }
+
+                            $generalCoaches = $session->getGeneralCoaches();
+                            foreach ($generalCoaches as $generalCoach) {
+                                $usersToNotify[$generalCoach->getId()] = $generalCoach;
+                            }
+
+                            foreach ($usersToNotify as $user) {
                                 $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
                                 if ($debug) {
-                                    error_log("Message sent to user ID: {$user->getId()} for session event: ".$event->getTitle());
+                                    error_log("Message sent to user ID: {$user->getId()} ({$user->getUsername()}) for session event: {$event->getTitle()}");
                                 }
                                 $sentRemindersCount++;
                             }

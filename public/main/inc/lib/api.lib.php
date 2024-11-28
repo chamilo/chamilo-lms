@@ -205,6 +205,12 @@ define('LOG_GROUP_PORTAL_USER_UPDATE_ROLE', 'soc_gr_update_role');
 define('LOG_MESSAGE_DATA', 'message_data');
 define('LOG_MESSAGE_DELETE', 'msg_deleted');
 
+const LOG_RESOURCE_LINK_DELETE = 'resource_link_deleted';
+const LOG_RESOURCE_LINK_SOFT_DELETE = 'resource_link_soft_deleted';
+const LOG_RESOURCE_NODE = 'resource_node_id';
+const LOG_RESOURCE_LINK = 'resource_link_id';
+const LOG_RESOURCE_NODE_AND_RESOURCE_LINK = 'resource_node_id_and_resource_link_id';
+
 define('LOG_USER_DELETE', 'user_deleted');
 define('LOG_USER_PREDELETE', 'user_predeleted');
 define('LOG_USER_CREATE', 'user_created');

@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from "vue-router"
+import { createRouter, createWebHistory } from "vue-router"
 import adminRoutes from "./admin"
 import courseRoutes from "./course"
 import accountRoutes from "./account"
@@ -37,15 +37,15 @@ import Login from "../pages/Login.vue"
 import Faq from "../pages/Faq.vue"
 import Demo from "../pages/Demo.vue"
 
-import {useCidReqStore} from "../store/cidReq"
+import { useCidReqStore } from "../store/cidReq"
 import courseService from "../services/courseService"
 
 import catalogueCourses from "./cataloguecourses"
 import catalogueSessions from "./cataloguesessions"
-import {customVueTemplateEnabled} from "../config/env"
-import {useCourseSettings} from "../store/courseSettingStore"
-import {checkIsAllowedToEdit, useUserSessionSubscription} from "../composables/userPermissions"
-import {usePlatformConfig} from "../store/platformConfig"
+import { customVueTemplateEnabled } from "../config/env"
+import { useCourseSettings } from "../store/courseSettingStore"
+import { checkIsAllowedToEdit, useUserSessionSubscription } from "../composables/userPermissions"
+import { usePlatformConfig } from "../store/platformConfig"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -133,27 +133,29 @@ const router = createRouter({
           const documentAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
           if (documentAutoLaunch === 1 && course.resourceNode?.id) {
             sessionStorage.setItem(autoLaunchKey, "true")
-            window.location.href = `/resources/document/${course.resourceNode.id}/?cid=${courseId}`
-              + (sessionId ? `&sid=${sessionId}` : '')
+            window.location.href =
+              `/resources/document/${course.resourceNode.id}/?cid=${courseId}` + (sessionId ? `&sid=${sessionId}` : "")
             return false
           }
 
           // Exercise auto-launch
           const platformConfigStore = usePlatformConfig()
-          const isExerciseAutoLaunchEnabled = "true" === platformConfigStore.getSetting("exercise.allow_exercise_auto_launch")
+          const isExerciseAutoLaunchEnabled =
+            "true" === platformConfigStore.getSetting("exercise.allow_exercise_auto_launch")
           if (isExerciseAutoLaunchEnabled) {
             const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
             if (exerciseAutoLaunch === 2) {
               sessionStorage.setItem(autoLaunchKey, "true")
-              window.location.href = `/main/exercise/exercise.php?cid=${courseId}`
-                + (sessionId ? `&sid=${sessionId}` : '')
+              window.location.href =
+                `/main/exercise/exercise.php?cid=${courseId}` + (sessionId ? `&sid=${sessionId}` : "")
               return false
             } else if (exerciseAutoLaunch === 1) {
               const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
               if (exerciseId) {
                 sessionStorage.setItem(autoLaunchKey, "true")
-                window.location.href = `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}`
-                  + (sessionId ? `&sid=${sessionId}` : '')
+                window.location.href =
+                  `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}` +
+                  (sessionId ? `&sid=${sessionId}` : "")
                 return false
               }
             }
@@ -163,15 +165,15 @@ const router = createRouter({
           const lpAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
           if (lpAutoLaunch === 2) {
             sessionStorage.setItem(autoLaunchKey, "true")
-            window.location.href = `/main/lp/lp_controller.php?cid=${courseId}`
-              + (sessionId ? `&sid=${sessionId}` : '')
+            window.location.href = `/main/lp/lp_controller.php?cid=${courseId}` + (sessionId ? `&sid=${sessionId}` : "")
             return false
           } else if (lpAutoLaunch === 1) {
             const lpId = await courseService.getAutoLaunchLPId(courseId, sessionId)
             if (lpId) {
               sessionStorage.setItem(autoLaunchKey, "true")
-              window.location.href = `/main/lp/lp_controller.php?lp_id=${lpId}&cid=${courseId}&action=view&isStudentView=true`
-                + (sessionId ? `&sid=${sessionId}` : '')
+              window.location.href =
+                `/main/lp/lp_controller.php?lp_id=${lpId}&cid=${courseId}&action=view&isStudentView=true` +
+                (sessionId ? `&sid=${sessionId}` : "")
               return false
             }
           }
@@ -180,11 +182,9 @@ const router = createRouter({
           const forumAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
           if (forumAutoLaunch === 1) {
             sessionStorage.setItem(autoLaunchKey, "true")
-            window.location.href = `/main/forum/index.php?cid=${courseId}`
-              + (sessionId ? `&sid=${sessionId}` : '')
+            window.location.href = `/main/forum/index.php?cid=${courseId}` + (sessionId ? `&sid=${sessionId}` : "")
             return false
           }
-
         } catch (error) {
           console.error("Error during CourseHome route guard:", error)
         }
@@ -269,7 +269,7 @@ router.beforeEach(async (to, from, next) => {
 
   if (!cid) {
     for (const key in sessionStorage) {
-      if (key.startsWith('course_autolaunch_')) {
+      if (key.startsWith("course_autolaunch_")) {
         sessionStorage.removeItem(key)
       }
     }

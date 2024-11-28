@@ -53,76 +53,67 @@ class ReinscriptionCheckCommand extends Command
     {
         $debug = $input->getOption('debug');
 
-        // 1. Find all lessons with "validity_in_days" > 0
-        $learningPaths = $this->lpRepository->findWithValidity();
+        $expiredViews = $this->lpRepository->findExpiredViews(0);
 
-        /* @var CLp $lp */
-        foreach ($learningPaths as $lp) {
-            $validityDays = $lp->getValidityInDays();
-            $sessionId = $this->lpRepository->getLpSessionId($lp->getIid());
+        if ($debug) {
+            $output->writeln(sprintf('Found %d expired views.', count($expiredViews)));
+        }
 
-            if (!$sessionId) {
-                if ($debug) {
-                    $output->writeln('Session ID not found for Learning Path ID: ' . $lp->getIid());
-                }
-                continue;
+        foreach ($expiredViews as $view) {
+            $user = $view->getUser();
+            $session = $view->getSession();
+            $lp = $view->getLp();
+
+            if ($debug) {
+                $output->writeln(sprintf(
+                    'User %d completed course %d associated with session %d, and its validity has expired.',
+                    $user->getId(),
+                    $lp->getIid(),
+                    $session->getId()
+                ));
             }
 
-            // 2. Get the session of the lesson
-            $session = $this->sessionRepository->find($sessionId);
-            if (!$session) {
-                if ($debug) {
-                    $output->writeln('Session not found for ID: ' . $sessionId);
-                }
-                continue;
-            }
-
-            // Process only if the session is not the last repetition
+            // Check if the session is marked as the last repetition
             if ($session->getLastRepetition()) {
                 if ($debug) {
-                    $output->writeln('Session ' . $session->getId() . ' is the last repetition. Skipping...');
+                    $output->writeln('The session is marked as the last repetition. Skipping...');
                 }
                 continue;
             }
 
-            // 3. Find users who completed the lesson and whose validity has expired
-            $expiredUsers = $this->findExpiredCompletions($lp, $validityDays);
+            // Find a valid child session
+            $validChildSession = $this->sessionRepository->findValidChildSession($session);
 
-            if (count($expiredUsers) === 0) {
+            if ($validChildSession) {
+                $this->enrollUserInSession($user, $validChildSession);
                 if ($debug) {
-                    $output->writeln('No expired users found for Learning Path ID: ' . $lp->getIid());
+                    $output->writeln(sprintf(
+                        'User %d re-enrolled into the valid child session %d.',
+                        $user->getId(),
+                        $validChildSession->getId()
+                    ));
                 }
                 continue;
             }
 
-            foreach ($expiredUsers as $user) {
+            // If no valid child session exists, check the parent session
+            $validParentSession = $this->sessionRepository->findValidParentSession($session);
+
+            if ($validParentSession) {
+                $this->enrollUserInSession($user, $validParentSession);
                 if ($debug) {
-                    $output->writeln('User ' . $user->getUser()->getId() . ' has expired completion for LP ' . $lp->getIid());
+                    $output->writeln(sprintf(
+                        'User %d re-enrolled into the valid parent session %d.',
+                        $user->getId(),
+                        $validParentSession->getId()
+                    ));
                 }
-
-                // 4. Find the last valid child session
-                $validChildSession = $this->sessionRepository->findValidChildSession($session);
-
-                if ($validChildSession) {
-                    // Reinscribe user in the valid child session
-                    $this->enrollUserInSession($user->getUser(), $validChildSession);
-                    if ($debug) {
-                        $output->writeln('Reinscribed user ' . $user->getUser()->getId() . ' into child session ' . $validChildSession->getId());
-                    }
-                } else {
-                    // 5. If no valid child session, find the valid parent session
-                    $validParentSession = $this->sessionRepository->findValidParentSession($session);
-                    if ($validParentSession) {
-                        // Reinscribe user in the valid parent session
-                        $this->enrollUserInSession($user->getUser(), $validParentSession);
-                        if ($debug) {
-                            $output->writeln('Reinscribed user ' . $user->getUser()->getId() . ' into parent session ' . $validParentSession->getId());
-                        }
-                    } else {
-                        if ($debug) {
-                            $output->writeln('No valid parent or child session found for user ' . $user->getUser()->getId());
-                        }
-                    }
+            } else {
+                if ($debug) {
+                    $output->writeln(sprintf(
+                        'No valid child or parent session found for user %d.',
+                        $user->getId()
+                    ));
                 }
             }
         }

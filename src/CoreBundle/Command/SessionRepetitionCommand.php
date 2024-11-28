@@ -121,7 +121,8 @@ class SessionRepetitionCommand extends Command
         }
 
         // Copy the courses from the original session
-        foreach ($session->getCourses() as $course) {
+        foreach ($session->getCourses() as $sessionRelCourse) {
+            $course = $sessionRelCourse->getCourse();
             $newSession->addCourse($course);
         }
 

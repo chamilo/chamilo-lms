@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use Chamilo\CoreBundle\Entity\Listener\ResourceLinkListener;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -27,6 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     name: 'idx_resource_link_sortable_groups'
 )]
 #[ORM\Entity(repositoryClass: ResourceLinkRepository::class)]
+#[ORM\EntityListeners([ResourceLinkListener::class])]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class ResourceLink implements Stringable
 {

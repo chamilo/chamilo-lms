@@ -47,8 +47,7 @@ class SendEventRemindersCommand extends Command
         $this
             ->setDescription('Send notification messages to users that have reminders from events in their agenda.')
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
-            ->setHelp('This command sends notifications to users who have pending reminders for calendar events.')
-        ;
+            ->setHelp('This command sends notifications to users who have pending reminders for calendar events.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -94,30 +93,20 @@ class SendEventRemindersCommand extends Command
             }
 
             $eventDetails = $this->generateEventDetails($event);
-            $messageSubject = \sprintf('Reminder for event: %s', $event->getTitle());
-            $messageContent = implode(PHP_EOL, $eventDetails);
 
             $initialSentRemindersCount = $sentRemindersCount;
 
             if ('personal' === $eventType) {
                 $creator = $event->getResourceNode()->getCreator();
                 if ($creator) {
-                    $this->messageHelper->sendMessageSimple($creator->getId(), $messageSubject, $messageContent, $senderId);
-                    if ($debug) {
-                        error_log("Message sent to creator ID: {$creator->getId()} for personal event: ".$event->getTitle());
-                    }
-                    $sentRemindersCount++;
+                    $this->sendReminderMessage($creator, $event, $senderId, $debug, $io, $sentRemindersCount);
                 }
 
                 $resourceLinks = $event->getResourceNode()->getResourceLinks();
                 if (!$resourceLinks->isEmpty()) {
                     foreach ($resourceLinks as $link) {
                         if ($user = $link->getUser()) {
-                            $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
-                            if ($debug) {
-                                error_log("Message sent to user ID: {$user->getId()} for personal event: ".$event->getTitle());
-                            }
-                            $sentRemindersCount++;
+                            $this->sendReminderMessage($user, $event, $senderId, $debug, $io, $sentRemindersCount);
                         }
                     }
                 }
@@ -135,25 +124,16 @@ class SendEventRemindersCommand extends Command
                     case 'global':
                         foreach ($event->getResourceNode()->getResourceLinks() as $link) {
                             if ($user = $link->getUser()) {
-                                $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
-                                if ($debug) {
-                                    error_log("Message sent to user ID: {$user->getId()} for global event: ".$event->getTitle());
-                                }
-                                $sentRemindersCount++;
+                                $this->sendReminderMessage($user, $event, $senderId, $debug, $io, $sentRemindersCount);
                             }
                         }
-
                         break;
 
                     case 'course':
                         if ($course = $resourceLink->getCourse()) {
                             $users = $this->courseRepository->getSubscribedUsers($course)->getQuery()->getResult();
                             foreach ($users as $user) {
-                                $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
-                                if ($debug) {
-                                    error_log("Message sent to user ID: {$user->getId()} for course event: ".$event->getTitle());
-                                }
-                                $sentRemindersCount++;
+                                $this->sendReminderMessage($user, $event, $senderId, $debug, $io, $sentRemindersCount);
                             }
                         }
 
@@ -186,11 +166,7 @@ class SendEventRemindersCommand extends Command
                             }
 
                             foreach ($usersToNotify as $user) {
-                                $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
-                                if ($debug) {
-                                    error_log("Message sent to user ID: {$user->getId()} ({$user->getUsername()}) for session event: {$event->getTitle()}");
-                                }
-                                $sentRemindersCount++;
+                                $this->sendReminderMessage($user, $event, $senderId, $debug, $io, $sentRemindersCount);
                             }
                         }
 
@@ -215,6 +191,25 @@ class SendEventRemindersCommand extends Command
         return Command::SUCCESS;
     }
 
+    private function sendReminderMessage(User $user, CCalendarEvent $event, int $senderId, bool $debug, SymfonyStyle $io, int &$sentRemindersCount): void
+    {
+        $locale = $user->getLocale() ?: 'en';
+        $this->translator->setLocale($locale);
+
+        $messageSubject = $this->translator->trans('Reminder for event : %s', ['%s' => $event->getTitle()]);
+        $messageContent = implode(PHP_EOL, $this->generateEventDetails($event));
+
+        $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
+
+        if ($debug) {
+            error_log("Message sent to user ID: {$user->getId()} for event: {$event->getTitle()}");
+            error_log("Message Subject: {$messageSubject}");
+            error_log("Message Content: {$messageContent}");
+        }
+
+        $sentRemindersCount++;
+    }
+
     private function getFirstAdminId(): int
     {
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([]);
@@ -234,13 +229,13 @@ class SendEventRemindersCommand extends Command
         } else {
             $details[] = \sprintf(
                 '<p class="small">%s</p>',
-                \sprintf($this->translator->trans('From %s'), $event->getStartDate()->format('Y-m-d H:i:s'))
+                $this->translator->trans('From %s', ['%s' => $event->getStartDate()->format('Y-m-d H:i:s')])
             );
 
             if ($event->getEndDate()) {
                 $details[] = \sprintf(
                     '<p class="small">%s</p>',
-                    \sprintf($this->translator->trans('Until %s'), $event->getEndDate()->format('Y-m-d H:i:s'))
+                    $this->translator->trans('Until %s', ['%s' => $event->getEndDate()->format('Y-m-d H:i:s')])
                 );
             }
         }

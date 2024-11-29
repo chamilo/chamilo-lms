@@ -81,9 +81,9 @@ class SessionRepetitionCommand extends Command
     private function duplicateSession(Session $session, bool $debug, OutputInterface $output): Session
     {
         // Calculate new session dates based on the duration of the original session
-        $duration = $session->getAccessEndDate()->diff($session->getAccessStartDate());
+        $duration = $session->getAccessEndDate()->diff($session->getAccessStartDate())->days;
         $newStartDate = (clone $session->getAccessEndDate())->modify('+1 day');
-        $newEndDate = (clone $newStartDate)->add($duration);
+        $newEndDate = (clone $newStartDate)->modify("+{$duration} days");
 
         if ($debug) {
             $output->writeln(sprintf(
@@ -105,7 +105,7 @@ class SessionRepetitionCommand extends Command
             ->setCoachAccessStartDate($newStartDate)
             ->setCoachAccessEndDate($newEndDate)
             ->setVisibility($session->getVisibility())
-            ->setDuration($session->getDuration())
+            ->setDuration($duration)
             ->setDescription($session->getDescription() ?? '')
             ->setShowDescription($session->getShowDescription() ?? false)
             ->setCategory($session->getCategory())

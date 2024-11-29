@@ -73,45 +73,21 @@ class ReinscriptionCheckCommand extends Command
                 ));
             }
 
-            // Check if the session is marked as the last repetition
-            if ($session->getLastRepetition()) {
-                if ($debug) {
-                    $output->writeln('The session is marked as the last repetition. Skipping...');
-                }
-                continue;
-            }
+            $validSession = $this->findValidSessionInHierarchy($session);
 
-            // Find a valid child session
-            $validChildSession = $this->sessionRepository->findValidChildSession($session);
-
-            if ($validChildSession) {
-                $this->enrollUserInSession($user, $validChildSession);
+            if ($validSession) {
+                $this->enrollUserInSession($user, $validSession);
                 if ($debug) {
                     $output->writeln(sprintf(
-                        'User %d re-enrolled into the valid child session %d.',
+                        'User %d re-enrolled into session %d.',
                         $user->getId(),
-                        $validChildSession->getId()
-                    ));
-                }
-                continue;
-            }
-
-            // If no valid child session exists, check the parent session
-            $validParentSession = $this->sessionRepository->findValidParentSession($session);
-
-            if ($validParentSession) {
-                $this->enrollUserInSession($user, $validParentSession);
-                if ($debug) {
-                    $output->writeln(sprintf(
-                        'User %d re-enrolled into the valid parent session %d.',
-                        $user->getId(),
-                        $validParentSession->getId()
+                        $validSession->getId()
                     ));
                 }
             } else {
                 if ($debug) {
                     $output->writeln(sprintf(
-                        'No valid child or parent session found for user %d.',
+                        'No valid session found for user %d.',
                         $user->getId()
                     ));
                 }
@@ -164,4 +140,35 @@ class ReinscriptionCheckCommand extends Command
                 'session' => $session,
             ]);
     }
+
+    private function findValidSessionInHierarchy(Session $session): ?Session
+    {
+        $childSessions = $this->sessionRepository->findChildSessions($session);
+
+        /* @var Session $child */
+        foreach ($childSessions as $child) {
+            $validUntil = (clone $child->getAccessEndDate())->modify("-{$child->getDaysToReinscription()} days");
+            if (new \DateTime() <= $validUntil) {
+                return $child;
+            }
+
+            $validChild = $this->findValidSessionInHierarchy($child);
+            if ($validChild) {
+                return $validChild;
+            }
+        }
+
+        /* @var Session $parentSession */
+        $parentSession = $this->sessionRepository->findParentSession($session);
+
+        if ($parentSession) {
+            $validUntil = (clone $parentSession->getAccessEndDate())->modify("-{$parentSession->getDaysToReinscription()} days");
+            if (new \DateTime() <= $validUntil) {
+                return $parentSession;
+            }
+        }
+
+        return null;
+    }
+
 }

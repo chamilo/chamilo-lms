@@ -217,6 +217,8 @@ EOT;
 
         $this->applyFilter($name, 'trim');
         $this->applyFilter($name, 'html_filter');
+        $this->applyFilter($name, 'attr_on_filter');
+
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }

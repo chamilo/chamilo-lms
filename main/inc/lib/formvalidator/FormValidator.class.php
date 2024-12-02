@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\RemoveOnAttributes;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -2107,7 +2108,5 @@ function plain_url_filter($html, $mode = NO_HTML)
  */
 function attr_on_filter(string $html): string
 {
-    $pattern = '/\s*on\w+=(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i';
-
-    return preg_replace($pattern, '', $html);
+    return RemoveOnAttributes::filter($html);
 }

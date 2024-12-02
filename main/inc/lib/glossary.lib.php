@@ -663,8 +663,16 @@ class GlossaryManager
         $glossary_term = Security::remove_XSS(strip_tags($glossary_data['name']));
         if (api_is_allowed_to_edit(null, true)) {
             if ($glossary_data['session_id'] == api_get_session_id()) {
-                $return .= '<a href="'.api_get_self().'?action=delete_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.
-                    Display::return_icon('delete.png', get_lang('Delete'), '', 22).'</a>';
+                $return .= Display::url(
+                    Display::return_icon('delete.png', get_lang('Delete')),
+                    '#',
+                    [
+                        'data-item-title' => $glossary_term,
+                        'data-href' => api_get_self().'?action=delete_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq(),
+                        'data-toggle' => 'modal',
+                        'data-target' => '#confirm-delete',
+                    ]
+                );
             } else {
                 $return = get_lang('EditionNotAvailableFromSession');
             }

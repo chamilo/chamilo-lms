@@ -1010,6 +1010,7 @@ class PDF
         $sysCodePath = api_get_path(SYS_CODE_PATH);
         $sysCoursePath = api_get_path(SYS_COURSE_PATH);
         $sysUploadPath = api_get_path(SYS_UPLOAD_PATH);
+        $sysPath = api_get_path(SYS_PATH);
 
         $documentPath = $courseInfo ? $sysCoursePath.$courseInfo['path'].'/document/' : '';
 
@@ -1062,6 +1063,15 @@ class PDF
                     'src',
                     str_replace('/app/upload/', $sysUploadPath, $src)
                 );
+                continue;
+            }
+
+            if (strpos($src, '/web/css/themes/') === 0) {
+                $element->setAttribute(
+                    'src',
+                    str_replace('/web/css/themes/', $sysPath.'web/css/themes/', $src)
+                );
+
                 continue;
             }
 

@@ -1812,7 +1812,7 @@ msgid "Course program"
 msgstr "Cahier des charges"
 
 msgid "Statistics"
-msgstr "Suivi"
+msgstr "Statistiques"
 
 msgid "Upload page and link to Home Page"
 msgstr "Déposer page et lier à l'accueil"

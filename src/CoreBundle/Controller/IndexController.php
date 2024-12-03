@@ -71,10 +71,6 @@ class IndexController extends BaseController
     #[Security("is_granted('ROLE_TEACHER')")]
     public function toggleStudentView(Request $request, SettingsManager $settingsManager): Response
     {
-        if (!api_is_allowed_to_edit(false, false, false, false)) {
-            throw $this->createAccessDeniedException();
-        }
-
         if ('true' !== $settingsManager->getSetting('course.student_view_enabled')) {
             throw $this->createAccessDeniedException();
         }

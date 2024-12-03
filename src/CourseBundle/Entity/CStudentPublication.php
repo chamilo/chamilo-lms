@@ -189,6 +189,10 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\Column(name: 'extensions', type: 'text', nullable: true)]
     protected ?string $extensions = null;
 
+    #[ORM\Column(name: 'group_category_work_id', type: 'integer', nullable: false, options: ['default' => 0])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
+    protected int $groupCategoryWorkId = 0;
+
     public function __construct()
     {
         $this->description = '';
@@ -646,5 +650,17 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         }
 
         return 0;
+    }
+
+    public function getGroupCategoryWorkId(): int
+    {
+        return $this->groupCategoryWorkId;
+    }
+
+    public function setGroupCategoryWorkId(int $groupCategoryWorkId): self
+    {
+        $this->groupCategoryWorkId = $groupCategoryWorkId;
+
+        return $this;
     }
 }

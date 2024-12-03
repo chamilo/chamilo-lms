@@ -100,7 +100,7 @@ jobs:
               run: php bin/phpunit --testdox --coverage-clover clover.xml
 
             - name: Coverage
-              uses: codecov/codecov-action@v4
+              uses: codecov/codecov-action@v5
               with:
                   token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
                   files: ./clover.xml

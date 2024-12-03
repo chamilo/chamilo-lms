@@ -15826,7 +15826,7 @@ msgstr "Dirección IP"
 msgid "Only skills that were not registered were imported"
 msgstr "Solo las competencias que no estaban registradas fueron importadas"
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "El nombre de la competencia no está definido"
 
 msgid "The parent skill was not set"
@@ -28762,3 +28762,24 @@ msgstr "Agregar amigo"
 
 msgid "%s's picture"
 msgstr "Imagen de %s"
+
+msgid "Delete permanently"
+msgstr "Eliminar permanentemente"
+
+msgid "%d minutes before"
+msgstr "%d minutos antes"
+
+msgid "%d hours before"
+msgstr "%d horas antes"
+
+msgid "%d days before"
+msgstr "%d dias antes"
+
+msgid "Select a folder"
+msgstr "Seleccione una carpeta"
+
+msgid "Select the destination folder"
+msgstr "Seleccione la carpeta de destino"
+
+msgid "All users"
+msgstr "Todos los usuarios"

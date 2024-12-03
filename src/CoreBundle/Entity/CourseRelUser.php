@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -34,9 +35,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_USER')"
 )]
 #[ORM\Table(name: 'course_rel_user')]
-#[ORM\Index(name: 'course_rel_user_user_id', columns: ['id', 'user_id'])]
-#[ORM\Index(name: 'course_rel_user_c_id_user_id', columns: ['id', 'c_id', 'user_id'])]
-#[ORM\Entity]
+#[ORM\Index(columns: ['id', 'user_id'], name: 'course_rel_user_user_id')]
+#[ORM\Index(columns: ['id', 'c_id', 'user_id'], name: 'course_rel_user_c_id_user_id')]
+#[ORM\Entity(repositoryClass: CourseRelUserRepository::class)]
 #[ApiFilter(
     filterClass: SearchFilter::class,
     properties: [

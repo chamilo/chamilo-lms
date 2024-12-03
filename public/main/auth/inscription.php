@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
 use ChamiloSession as Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -1159,6 +1160,7 @@ if ($form->validate()) {
     $token = new UsernamePasswordToken($userEntity, $providerKey, $roles);
 
     $container->get(ContainerHelper::class)->getTokenStorage()->setToken($token);
+    $request = $container->get('request_stack')->getMainRequest();
     $sessionHandler = $container->get('request_stack')->getSession();
     $sessionHandler->set('_security_' . $providerKey, serialize($token));
     $userData = [
@@ -1174,9 +1176,11 @@ if ($form->validate()) {
     $is_allowedCreateCourse = isset($values['status']) && 1 == $values['status'];
     $sessionHandler->set('is_allowedCreateCourse', $is_allowedCreateCourse);
 
-
     // Stats
-    //Event::eventLogin($user_id);
+    Container::getTrackELoginRepository()
+        ->createLoginRecord($userEntity, new DateTime(), $request->getClientIp())
+    ;
+    // @todo implement Auto-subscribe according to STATUS_autosubscribe setting
 
     // last user login date is now
     $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970

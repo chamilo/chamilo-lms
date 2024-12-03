@@ -33,6 +33,8 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
+use Chamilo\CourseBundle\Repository\CLpRepository;
+use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
@@ -52,6 +54,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -69,6 +72,7 @@ class CourseController extends ToolBaseController
         private readonly UserHelper $userHelper,
     ) {}
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/{cid}/checkLegal.json', name: 'chamilo_core_course_check_legal_json')]
     public function checkTermsAndConditionJson(
         Request $request,
@@ -84,7 +88,7 @@ class CourseController extends ToolBaseController
             'url' => '#',
         ];
 
-        if ($user && $user->hasRole('ROLE_STUDENT')
+        if ($user->hasRole('ROLE_STUDENT')
             && 'true' === $settingsManager->getSetting('registration.allow_terms_conditions')
             && 'course' === $settingsManager->getSetting('platform.load_term_conditions_section')
         ) {
@@ -101,30 +105,23 @@ class CourseController extends ToolBaseController
 
             if (false === $termAndConditionStatus) {
                 $request->getSession()->set('term_and_condition', ['user_id' => $user->getId()]);
-            } else {
-                $request->getSession()->remove('term_and_condition');
-            }
 
-            $termsAndCondition = $request->getSession()->get('term_and_condition');
-            if (null !== $termsAndCondition) {
                 $redirect = true;
-                $allow = 'true' === Container::getSettingsManager()
-                    ->getSetting('course.allow_public_course_with_no_terms_conditions')
-                ;
 
-                if (true === $allow
-                    && null !== $course->getVisibility()
+                if ('true' === $settingsManager->getSetting('course.allow_public_course_with_no_terms_conditions')
                     && Course::OPEN_WORLD === $course->getVisibility()
                 ) {
                     $redirect = false;
                 }
+
                 if ($redirect && !$this->isGranted('ROLE_ADMIN')) {
-                    $url = '/main/auth/inscription.php';
                     $responseData = [
                         'redirect' => true,
-                        'url' => $url,
+                        'url' => '/main/auth/inscription.php',
                     ];
                 }
+            } else {
+                $request->getSession()->remove('term_and_condition');
             }
         }
 
@@ -759,6 +756,50 @@ class CourseController extends ToolBaseController
         }
 
         return new JsonResponse(['success' => false, 'message' => $translator->trans('An error occurred while creating the course.')]);
+    }
+
+    #[Route('/{id}/getAutoLaunchExerciseId', name: 'chamilo_core_course_get_auto_launch_exercise_id', methods: ['GET'])]
+    public function getAutoLaunchExerciseId(
+        Request $request,
+        Course $course,
+        CQuizRepository $quizRepository,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $data = $request->getContent();
+        $data = json_decode($data);
+        $sessionId = $data->sid ?? 0;
+
+        $sessionRepo = $em->getRepository(Session::class);
+        $session = null;
+        if (!empty($sessionId)) {
+            $session = $sessionRepo->find($sessionId);
+        }
+
+        $autoLaunchExerciseId = $quizRepository->findAutoLaunchableQuizByCourseAndSession($course, $session);
+
+        return new JsonResponse(['exerciseId' => $autoLaunchExerciseId], Response::HTTP_OK);
+    }
+
+    #[Route('/{id}/getAutoLaunchLPId', name: 'chamilo_core_course_get_auto_launch_lp_id', methods: ['GET'])]
+    public function getAutoLaunchLPId(
+        Request $request,
+        Course $course,
+        CLPRepository $lpRepository,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $data = $request->getContent();
+        $data = json_decode($data);
+        $sessionId = $data->sid ?? 0;
+
+        $sessionRepo = $em->getRepository(Session::class);
+        $session = null;
+        if (!empty($sessionId)) {
+            $session = $sessionRepo->find($sessionId);
+        }
+
+        $autoLaunchLPId = $lpRepository->findAutoLaunchableLPByCourseAndSession($course, $session);
+
+        return new JsonResponse(['lpId' => $autoLaunchLPId], Response::HTTP_OK);
     }
 
     private function autoLaunch(): void

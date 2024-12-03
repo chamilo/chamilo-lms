@@ -128,19 +128,19 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected ?DateTime $expiredOn = null;
 
     #[ORM\Column(name: 'accumulate_scorm_time', type: 'integer', nullable: false, options: ['default' => 1])]
-    protected int $accumulateScormTime;
+    protected int $accumulateScormTime = 1;
 
     #[ORM\Column(name: 'accumulate_work_time', type: 'integer', nullable: false, options: ['default' => 0])]
-    protected int $accumulateWorkTime;
+    protected int $accumulateWorkTime = 0;
 
     #[ORM\Column(name: 'next_lp_id', type: 'integer', nullable: false, options: ['default' => 0])]
-    protected int $nextLpId;
+    protected int $nextLpId = 0;
 
     #[ORM\Column(name: 'subscribe_user_by_date', type: 'boolean', nullable: false, options: ['default' => 0])]
-    protected bool $subscribeUserByDate;
+    protected bool $subscribeUserByDate = false;
 
     #[ORM\Column(name: 'display_not_allowed_lp', type: 'boolean', nullable: true, options: ['default' => 0])]
-    protected bool $displayNotAllowedLp;
+    protected bool $displayNotAllowedLp = false;
 
     #[ORM\OneToMany(mappedBy: 'lp', targetEntity: CLpItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $items;

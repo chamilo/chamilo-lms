@@ -15,6 +15,7 @@
     >
       <v-simple-table>
         <template slot="default">
+          <table>
           <thead>
             <tr>
               <th>Field</th>
@@ -91,6 +92,7 @@
               </td>
             </tr>
           </tbody>
+          </table>
         </template>
       </v-simple-table>
     </div>

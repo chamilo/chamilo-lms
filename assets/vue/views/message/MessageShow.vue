@@ -148,6 +148,7 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
+import { MESSAGE_TYPE_INBOX } from "../../constants/entity/message"
 
 const confirm = useConfirm()
 const { t } = useI18n()
@@ -174,22 +175,30 @@ const item = ref(null)
 const myReceiver = ref(null)
 const notification = useNotification()
 
+const receiverType = route.query.receiverType ? parseInt(route.query.receiverType) : MESSAGE_TYPE_INBOX
 store.dispatch("message/load", id).then((responseItem) => {
-  item.value = responseItem
+  item.value = responseItem;
 
-  myReceiver.value = findMyReceiver(responseItem)
+  myReceiver.value = findMyReceiver(responseItem, receiverType)
 
-  // Change to read.
-  if (myReceiver.value && false === myReceiver.value.read) {
+  if (myReceiver.value && !myReceiver.value.read) {
     messageRelUserService
       .update(myReceiver.value["@id"], { read: true })
       .then(() => messageRelUserStore.findUnreadCount())
   }
 })
 
-function findMyReceiver(message) {
-  const receivers = [...message.receiversTo, ...message.receiversCc, ...message.receiversSender]
-  return receivers.find(({ receiver }) => receiver["@id"] === securityStore.user["@id"])
+function findMyReceiver(message, receiverType) {
+  const receivers = [
+    ...message.receiversTo,
+    ...message.receiversCc,
+    ...message.receiversSender
+  ]
+
+  return receivers.find(({receiver, receiverType: type}) => {
+    const isSelf = receiver["@id"] === securityStore.user["@id"]
+    return isSelf && type === receiverType
+  })
 }
 
 async function deleteMessage(message) {

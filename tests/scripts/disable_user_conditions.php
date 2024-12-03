@@ -18,6 +18,8 @@
 die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
+$options = getopt('', ['url:']);
+$baseUrl = isset($options['url']) ? rtrim($options['url'], '/') : null;
 $senderId = api_get_setting('platform.disable_user_conditions_sender_id');
 
 if (empty($senderId)) {
@@ -98,7 +100,13 @@ foreach ($students as $student) {
                 0,
                 0,
                 0,
-                $senderId
+                $senderId,
+                false,
+                0,
+                false,
+                false,
+                null,
+                $baseUrl
             );
             UserManager::disable($studentId);
         }
@@ -157,7 +165,13 @@ foreach ($students as $student) {
                 0,
                 0,
                 0,
-                $senderId
+                $senderId,
+                false,
+                0,
+                false,
+                false,
+                null,
+                $baseUrl
             );
             UserManager::disable($studentId);
         }
@@ -223,7 +237,13 @@ foreach ($students as $student) {
                 0,
                 0,
                 0,
-                $senderId
+                $senderId,
+                false,
+                0,
+                false,
+                false,
+                null,
+                $baseUrl
             );
             UserManager::disable($studentId);
             if (!empty($bossInfo) && !empty($subjectBoss)) {
@@ -237,7 +257,13 @@ foreach ($students as $student) {
                     0,
                     0,
                     0,
-                    $senderId
+                    $senderId,
+                    false,
+                    0,
+                    false,
+                    false,
+                    null,
+                    $baseUrl
                 );
             }
             UserManager::removeAllBossFromStudent($studentId);

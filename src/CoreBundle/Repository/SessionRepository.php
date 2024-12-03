@@ -463,4 +463,18 @@ class SessionRepository extends ServiceEntityRepository
 
         return array_filter($sessions, $filterSessions);
     }
+
+    public function countUsersBySession(int $sessionId, int $relationType = Session::STUDENT): int
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('COUNT(sru.id)')
+            ->innerJoin('s.users', 'sru')
+            ->where('s.id = :sessionId')
+            ->andWhere('sru.relationType = :relationType')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('relationType', $relationType)
+        ;
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
 }

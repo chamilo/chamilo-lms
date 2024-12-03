@@ -38,21 +38,18 @@
                         <em class="fa fa-external-link-square fa-fw"></em> {{ 'Export badge'|trans }}
                     </a>
                 </p>
-                {% if "display.hide_social_media_links" | api_get_setting == 'false' %}
-                <div class='col-md-12 text-center'>
-                    <h5><b> {{ 'Share with your friends' | trans }} </b></h5>
-                    <a
-                        href="http://www.facebook.com/sharer.php?u={{ url('index') }}badge/{{ badge.issue_info.id }}"
-                        target="_new"
-                    >
-                        <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
-                    </a>
-                    <a
-                        href="https://twitter.com/home?status={{ 'I have achieved skill %s on %s' | trans |format(badge.issue_info.skill_name, chamilo_settings_get('platform.site_name'))}} - {{ url('index')}}badge/{{ badge.issue_info.id }}"
-                        target="_new">
-                        <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
-                    </a>
-                </div>
+                {% if "display.hide_social_media_links"|api_get_setting == 'false' %}
+                    <div class='col-md-12 text-center'>
+                        <h5><b> {{ 'Share with your friends'|trans }} </b></h5>
+                        <a href="http://www.facebook.com/sharer.php?u={{ url('index') }}badge/{{ badge.issue_info.id }}"
+                           target="_new">
+                            <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
+                        </a>
+                        <a href="https://twitter.com/home?status={{ 'I have achieved skill %s on %s'|trans |format(badge.issue_info.skill_name, chamilo_settings_get('platform.site_name')) }} - {{ url('index') }}badge/{{ badge.issue_info.id }}"
+                           target="_new">
+                            <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
+                        </a>
+                    </div>
                 {% endif %}
             {% endif %}
         </div>
@@ -71,9 +68,11 @@
                     {% endif %}
                     {% if badge.issue_info.argumentation %}
                         {% if badge.issue_info.argumentation %}
-                            <b><p style="font-style: italic;">
+                            <p style="font-style: italic;">
+                                <b>
                                     {{ 'User %s indicated:'|trans|format(badge.issue_info.argumentation_author_name) }}
-                            </p></b>
+                                </b>
+                            </p>
                         {% endif %}
                         <p>{{ badge.issue_info.argumentation }}</p>
                     {% endif %}
@@ -81,13 +80,13 @@
             </ul>
 
             {% if show_level %}
-            <h4>{{ 'Level acquired'|trans }}</h4>
-            <ul class="fa-ul">
-                <li>
-                    <em class="fa-li fa fa-check-circle-o fa-fw"></em>
-                    {{ badge.issue_info.acquired_level }}
-                </li>
-            </ul>
+                <h4>{{ 'Level acquired'|trans }}</h4>
+                <ul class="fa-ul">
+                    <li>
+                        <em class="fa-li fa fa-check-circle-o fa-fw"></em>
+                        {{ badge.issue_info.acquired_level }}
+                    </li>
+                </ul>
             {% endif %}
 
             {% if badge.allow_comment %}
@@ -119,7 +118,8 @@
                                 <div class="media-right text-right">
                                     <div style="width: 80px;">
                                         {% if comment.value %}
-                                            <em class="fa fa-certificate fa-fw" aria-label="{{ 'Average rating' }}"></em>
+                                            <em class="fa fa-certificate fa-fw"
+                                                aria-label="{{ 'Average rating' }}"></em>
                                             <span class="sr-only">{{ 'Average rating' }}</span>
                                             {{ comment.value }}
                                         {% endif %}
@@ -145,12 +145,12 @@
     </div>
     {% if badge.allow_download_export %}
         <script>
-            $(function () {
-                $('#badge-export-button-{{ badge.issue_info.id }}').on('click', function (e) {
-                    e.preventDefault();
-                    OpenBadges.issue('{{ badge.issue_info.badge_assertion|json_encode() }}');
-                });
-            });
+          $(function() {
+            $('#badge-export-button-{{ badge.issue_info.id }}').on("click", function(e) {
+              e.preventDefault()
+              OpenBadges.issue('{{ badge.issue_info.badge_assertion|json_encode() }}')
+            })
+          })
         </script>
     {% endif %}
     <br />

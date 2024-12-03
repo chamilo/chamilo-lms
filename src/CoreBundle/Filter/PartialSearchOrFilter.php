@@ -12,7 +12,7 @@ use ApiPlatform\Metadata\Operation;
 use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
 
-class SearchOrFilter extends AbstractFilter
+class PartialSearchOrFilter extends AbstractFilter
 {
     protected function filterProperty(
         string $property,
@@ -32,17 +32,17 @@ class SearchOrFilter extends AbstractFilter
         }
 
         $alias = $queryBuilder->getRootAliases()[0];
-        $valueParameter = $queryNameGenerator->generateParameterName($property);
+        $valueParameter = ':'.$queryNameGenerator->generateParameterName($property);
 
         $ors = [];
 
         foreach (array_keys($this->properties) as $field) {
             $ors[] = $queryBuilder->expr()->like(
                 "$alias.$field",
-                ":$valueParameter"
+                (string) $queryBuilder->expr()->concat("'%'", $valueParameter, "'%'")
             );
 
-            $queryBuilder->setParameter($valueParameter, "%$value%");
+            $queryBuilder->setParameter($valueParameter, $value);
         }
 
         $queryBuilder

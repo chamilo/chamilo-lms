@@ -14,6 +14,8 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+use const GLOB_ONLYDIR;
+
 final class Version20230720143000 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -31,7 +33,8 @@ final class Version20230720143000 extends AbstractMigrationChamilo
 
         $variable = 'split_users_upload_directory';
         $query = $this->entityManager->createQuery('SELECT s.selectedValue FROM Chamilo\CoreBundle\Entity\SettingsCurrent s WHERE s.variable = :variable')
-            ->setParameter('variable', $variable);
+            ->setParameter('variable', $variable)
+        ;
         $result = $query->getOneOrNullResult();
         $splitUsersUploadDirectory = $result['selectedValue'] ?? 'false';
 
@@ -60,7 +63,7 @@ final class Version20230720143000 extends AbstractMigrationChamilo
         $userEntity = $this->entityManager->getRepository(User::class)->find($userId);
         $userToAssign = $userEntity ?? $fallbackUser;
 
-        if ($userEntity === null) {
+        if (null === $userEntity) {
             error_log("User with ID {$userId} not found. Using fallback_user.");
         } else {
             error_log("Processing files for user with ID {$userId}.");
@@ -76,6 +79,7 @@ final class Version20230720143000 extends AbstractMigrationChamilo
 
         if (!is_dir($baseDir)) {
             error_log("Directory not found for user with ID {$userId}. Skipping.");
+
             return;
         }
 
@@ -98,12 +102,14 @@ final class Version20230720143000 extends AbstractMigrationChamilo
                 ->where('n.title = :title')
                 ->andWhere('n.creator = :creator')
                 ->setParameter('title', $title)
-                ->setParameter('creator', $userToAssign->getId());
+                ->setParameter('creator', $userToAssign->getId())
+            ;
 
             $result = $queryBuilder->getQuery()->getOneOrNullResult();
 
             if ($result) {
                 error_log('MIGRATIONS :: '.$file.' (Skipped: Already exists) ...');
+
                 continue;
             }
 

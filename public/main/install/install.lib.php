@@ -15,6 +15,7 @@ use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Query\Query;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -1484,7 +1485,8 @@ function finishInstallationWithContainer(
     $siteName,
     $allowSelfReg,
     $allowSelfRegProf,
-    $installationProfile = ''
+    $installationProfile = '',
+    \Chamilo\Kernel $kernel
 ) {
     Container::setContainer($container);
     Container::setLegacyServices($container);
@@ -1536,6 +1538,7 @@ function finishInstallationWithContainer(
     );
     lockSettings();
     updateDirAndFilesPermissions();
+    executeLexikKeyPair($kernel);
 }
 
 /**
@@ -1926,4 +1929,21 @@ function executeMigration(): array
     }
 
     return $resultStatus;
+}
+
+/**
+ * @throws Exception
+ */
+function executeLexikKeyPair(\Chamilo\Kernel $kernel): void
+{
+    $application = new Application($kernel);
+    $application->setAutoExit(false);
+
+    $input = new ArrayInput([
+        'command' => 'lexik:jwt:generate-keypair',
+    ]);
+
+    $output = new NullOutput();
+
+    $application->run($input, $output);
 }

@@ -14,10 +14,10 @@ import BaseToggleButton from "./basecomponents/BaseToggleButton.vue"
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../store/platformConfig"
-import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../store/cidReq"
 import { useSecurityStore } from "../store/securityStore"
 import permissionService from "../services/permissionService"
+import { useUserSessionSubscription } from "../composables/userPermissions"
 
 const emit = defineEmits(["change"])
 
@@ -25,6 +25,7 @@ const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
 const cidReqStore = useCidReqStore()
 const securityStore = useSecurityStore()
+const { isCoach } = useUserSessionSubscription()
 
 const isStudentView = computed({
   async set() {
@@ -39,13 +40,11 @@ const isStudentView = computed({
   },
 })
 
-const { course, userIsCoach } = storeToRefs(cidReqStore)
-
 const showButton = computed(() => {
   return (
     securityStore.isAuthenticated &&
-    course.value &&
-    (securityStore.isCourseAdmin || securityStore.isAdmin || userIsCoach.value(securityStore.user.id, 0, false)) &&
+    cidReqStore.course &&
+    (securityStore.isCourseAdmin || securityStore.isAdmin || isCoach.value) &&
     "true" === platformConfigStore.getSetting("course.student_view_enabled")
   )
 })

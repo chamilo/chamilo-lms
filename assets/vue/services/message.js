@@ -18,6 +18,7 @@ async function create(message) {
 }
 
 async function countUnreadMessages(params) {
+  params["exists[receivers.deletedAt]"] = false
   const queryParams = new URLSearchParams(params).toString()
   return await baseService.get(`/api/messages?${queryParams}`)
 }

@@ -525,6 +525,8 @@ function modify_deleted_filter(int $user_id, string $url_params, array $row): st
         [
             'title' => get_lang('Restore'),
             'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+            'data-confirm-text' => get_lang('Yes'),
+            'data-cancel-text' => get_lang('Cancel'),
             'class' => 'delete-swal',
         ]
     );
@@ -537,11 +539,13 @@ function modify_deleted_filter(int $user_id, string $url_params, array $row): st
             'view' => Security::remove_XSS($_GET['view']),
         ]);
     $result .= Display::url(
-        Display::getMdiIcon('delete-forever', 'ch-tool-icon', null, 22, get_lang('DeletePermanently')),
+        Display::getMdiIcon('delete-forever', 'ch-tool-icon', null, 22, get_lang('Delete permanently')),
         $deleteUrl,
         [
-            'title' => get_lang('DeletePermanently'),
+            'title' => get_lang('Delete permanently'),
             'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+            'data-confirm-text' => get_lang('Yes'),
+            'data-cancel-text' => get_lang('Cancel'),
             'class' => 'delete-swal',
         ]
     );
@@ -713,13 +717,15 @@ function modify_filter($user_id, $url_params, $row): string
                 [
                     'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
                     'class' => 'delete-swal',
+                    'data-confirm-text' => get_lang('Yes'),
+                    'data-cancel-text' => get_lang('Cancel'),
                     'title' => get_lang('Anonymize'),
                 ]
             );
         }
 
-        $deleteAllowed = api_get_env_variable('DENY_DELETE_USERS', false);
-        if ($deleteAllowed) {
+        $denyDeleteUsers = api_get_env_variable('DENY_DELETE_USERS', false);
+        if (!$denyDeleteUsers) {
             if ($user_id != $currentUserId &&
                 !$user_is_anonymous &&
                 api_global_admin_can_edit_admin($user_id)
@@ -746,6 +752,8 @@ function modify_filter($user_id, $url_params, $row): string
                     [
                         'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
                         'title' => get_lang('Delete'),
+                        'data-confirm-text' => get_lang('Yes'),
+                        'data-cancel-text' => get_lang('Cancel'),
                         'class' => 'delete-swal',
                     ]
                 );
@@ -789,6 +797,8 @@ function modify_filter($user_id, $url_params, $row): string
                 [
                     'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
                     'title' => get_lang('Delete'),
+                    'data-confirm-text' => get_lang('Yes'),
+                    'data-cancel-text' => get_lang('Cancel'),
                     'class' => 'delete-swal',
                 ]
             );

@@ -103,3 +103,5 @@ services:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
     Chamilo\CoreBundle\EventListener\MessageStatusListener: ~
+
+    Chamilo\CoreBundle\EventListener\ResourceLinkListener: ~

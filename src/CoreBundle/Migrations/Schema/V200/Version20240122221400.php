@@ -6,9 +6,10 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use RuntimeException;
 use SubLanguageManager;
-use Symfony\Component\Process\Process;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 use const FILE_APPEND;
 
@@ -155,14 +156,19 @@ final class Version20240122221400 extends AbstractMigrationChamilo
 
     private function executeVueTranslationsUpdate(): void
     {
-        $process = new Process(['php', 'bin/console', 'chamilo:update_vue_translations']);
-        $process->run();
+        $application = new Application($this->container->get('kernel'));
+        $application->setAutoExit(false);
 
-        if (!$process->isSuccessful()) {
-            // throw new RuntimeException($process->getErrorOutput());
-        }
+        $input = new ArrayInput([
+            'command' => 'chamilo:update_vue_translations',
+        ]);
+        $output = new BufferedOutput();
 
-        error_log($process->getOutput());
+        $application->run($input, $output);
+
+        $content = $output->fetch();
+
+        error_log($content);
     }
 
     private function generateSublanguageCode(string $parentCode, string $variant, int $maxLength = 10): string

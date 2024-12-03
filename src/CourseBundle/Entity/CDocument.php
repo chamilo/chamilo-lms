@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
@@ -52,6 +53,12 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: UpdateVisibilityDocument::class,
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false
+        ),
+        new Put(
+            uriTemplate: '/documents/{iid}/move',
+            controller: UpdateDocumentFileAction::class,
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: true
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
@@ -299,5 +306,19 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
         }
 
         return $this;
+    }
+
+    #[Groups(['document:read', 'document:fullPath'])]
+    public function getFullPath(): string
+    {
+        $pathParts = [$this->getTitle()];
+
+        $parent = $this->getParent();
+        while ($parent instanceof ResourceNode) {
+            array_unshift($pathParts, $parent->getTitle());
+            $parent = $parent->getParent();
+        }
+
+        return implode('/', $pathParts);
     }
 }

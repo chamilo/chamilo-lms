@@ -55,6 +55,7 @@ class CGroupRelUsergroup
     public function setGroup(CGroup $group): self
     {
         $this->group = $group;
+
         return $this;
     }
 
@@ -66,6 +67,7 @@ class CGroupRelUsergroup
     public function setUsergroup(Usergroup $usergroup): self
     {
         $this->usergroup = $usergroup;
+
         return $this;
     }
 
@@ -77,6 +79,7 @@ class CGroupRelUsergroup
     public function setSession(?Session $session): self
     {
         $this->session = $session;
+
         return $this;
     }
 
@@ -88,6 +91,7 @@ class CGroupRelUsergroup
     public function setCourse(?Course $course): self
     {
         $this->course = $course;
+
         return $this;
     }
 
@@ -99,6 +103,7 @@ class CGroupRelUsergroup
     public function setReadyAutogroup(bool $readyAutogroup): self
     {
         $this->readyAutogroup = $readyAutogroup;
+
         return $this;
     }
 }

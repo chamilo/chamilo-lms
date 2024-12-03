@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -18,11 +18,11 @@ class SkillRelSkill
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Skill::class, inversedBy: 'skills')]
+    #[ORM\ManyToOne(targetEntity: Skill::class)]
     #[ORM\JoinColumn(name: 'skill_id', referencedColumnName: 'id')]
     protected Skill $skill;
 
-    #[ORM\ManyToOne(targetEntity: Skill::class)]
+    #[ORM\ManyToOne(targetEntity: Skill::class, inversedBy: 'skills')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Skill $parent = null;
 
@@ -53,12 +53,7 @@ class SkillRelSkill
         return $this;
     }
 
-    /**
-     * Get relationType.
-     *
-     * @return int
-     */
-    public function getRelationType()
+    public function getRelationType(): int
     {
         return $this->relationType;
     }

@@ -49,6 +49,7 @@
         />
 
         <a
+          v-if="allowRegistration"
           v-t="'Register oneself'"
           class="btn btn--primary-outline"
           href="/main/auth/inscription.php"
@@ -72,7 +73,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import Button from "primevue/button"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
@@ -80,8 +81,11 @@ import InputSwitch from "primevue/inputswitch"
 import { useI18n } from "vue-i18n"
 import { useLogin } from "../composables/auth/login"
 import ExternalLoginButtons from "./login/LoginExternalButtons.vue"
+import { usePlatformConfig } from "../store/platformConfig"
 
 const { t } = useI18n()
+const platformConfigStore = usePlatformConfig()
+const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration"))
 
 const { redirectNotAuthenticated, performLogin, isLoading } = useLogin()
 

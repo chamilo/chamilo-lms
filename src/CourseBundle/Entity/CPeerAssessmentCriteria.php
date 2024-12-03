@@ -36,7 +36,6 @@ class CPeerAssessmentCriteria
     #[ORM\Column(type: 'integer', nullable: true)]
     protected ?int $position = null;
 
-
     public function __construct() {}
 
     public function getId(): ?int

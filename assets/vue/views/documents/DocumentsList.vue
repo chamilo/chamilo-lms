@@ -175,9 +175,18 @@
       <template #body="slotProps">
         <div class="flex flex-row justify-end gap-2">
           <BaseButton
+            v-if="canEdit(slotProps.data)"
+            icon="folder-move"
+            size="small"
+            type="secondary"
+            :title="t('Move')"
+            @click="openMoveDialog(slotProps.data)"
+          />
+          <BaseButton
             icon="information"
             size="small"
             type="primary"
+            :title="t('Information')"
             @click="btnShowInformationOnClick(slotProps.data)"
           />
 
@@ -192,6 +201,7 @@
             "
             size="small"
             type="secondary"
+            :title="t('Visibility')"
             @click="btnChangeVisibilityOnClick(slotProps.data)"
           />
 
@@ -200,6 +210,7 @@
             icon="edit"
             size="small"
             type="secondary"
+            :title="t('Edit')"
             @click="btnEditOnClick(slotProps.data)"
           />
 
@@ -208,6 +219,7 @@
             icon="delete"
             size="small"
             type="danger"
+            :title="t('Delete')"
             @click="confirmDeleteItem(slotProps.data)"
           />
           <BaseButton
@@ -216,6 +228,7 @@
             :icon="slotProps.data.iid === defaultCertificateId ? 'certificate-selected' : 'certificate-not-selected'"
             size="small"
             type="slotProps.data.iid === defaultCertificateId ? 'success' : 'black'"
+            :title="t('Set as default certificate')"
             @click="selectAsDefaultCertificate(slotProps.data)"
           />
           <BaseButton
@@ -223,6 +236,7 @@
             :icon="getTemplateIcon(slotProps.data.iid)"
             size="small"
             type="secondary"
+            :title="t('Template options')"
             @click="openTemplateForm(slotProps.data.iid)"
           />
         </div>
@@ -254,6 +268,22 @@
       @click="showDeleteMultipleDialog"
     />
   </BaseToolbar>
+
+  <BaseDialogConfirmCancel
+    v-model:is-visible="isMoveDialogVisible"
+    :title="t('Move document')"
+    @confirm-clicked="moveDocument"
+    @cancel-clicked="isMoveDialogVisible = false"
+  >
+    <p>{{ t("Select the destination folder") }}</p>
+    <Dropdown
+      v-model="selectedFolder"
+      :options="folders"
+      optionLabel="label"
+      optionValue="value"
+      :placeholder="t('Select a folder')"
+    />
+  </BaseDialogConfirmCancel>
 
   <BaseDialogConfirmCancel
     v-model:is-visible="isNewFolderDialogVisible"
@@ -420,6 +450,8 @@ const { isImage, isHtml } = useFileUtils()
 
 const { relativeDatetime } = useFormatDate()
 const isAllowedToEdit = ref(false)
+const folders = ref([])
+const selectedFolder = ref(null)
 
 const {
   showNewDocumentButton,
@@ -445,6 +477,7 @@ const isFileUsageDialogVisible = ref(false)
 const isRecordAudioDialogVisible = ref(false)
 
 const submitted = ref(false)
+const isMoveDialogVisible = ref(false)
 
 filters.value.loadNode = 1
 
@@ -501,6 +534,7 @@ onMounted(async () => {
 
   await loadDefaultCertificate()
   onUpdateOptions(options.value)
+  await loadAllFolders()
 })
 
 watch(
@@ -743,6 +777,77 @@ function recordedAudioSaved() {
 function recordedAudioNotSaved(error) {
   notification.showErrorNotification(t("Document not saved"))
   console.error(error)
+}
+
+function openMoveDialog(document) {
+  item.value = document
+  isMoveDialogVisible.value = true
+}
+
+async function fetchFolders(nodeId = null, parentPath = '') {
+  const foldersList = [{
+    label: 'Root',
+    value: nodeId || route.params.node || route.query.node || 'root-node-id',
+  }]
+
+  try {
+    let nodesToFetch = [{ id: nodeId || route.params.node || route.query.node, path: parentPath }]
+    let depth = 0
+    const maxDepth = 5
+
+    while (nodesToFetch.length > 0 && depth < maxDepth) {
+      const currentNode = nodesToFetch.shift()
+
+      const response = await axios.get("/api/documents", {
+        params: {
+          filetype: "folder",
+          "resourceNode.parent": currentNode.id,
+          cid: route.query.cid,
+          sid: route.query.sid,
+        },
+      })
+
+      response.data["hydra:member"].forEach(folder => {
+        const fullPath = `${currentNode.path}/${folder.title}`
+
+        foldersList.push({
+          label: fullPath,
+          value: folder.resourceNode?.id || folder.resourceNodeId || folder["@id"],
+        })
+
+        if (folder.resourceNode && folder.resourceNode.id) {
+          nodesToFetch.push({ id: folder.resourceNode.id, path: fullPath })
+        }
+      })
+
+      depth++
+    }
+
+    return foldersList
+  } catch (error) {
+    console.error("Error fetching folders:", error.message || error)
+    return []
+  }
+}
+
+async function loadAllFolders() {
+  folders.value = await fetchFolders()
+}
+
+async function moveDocument() {
+  try {
+
+    const response = await axios.put(`/api/documents/${item.value.iid}/move`, {
+      parentResourceNodeId: selectedFolder.value,
+    })
+
+    notification.showSuccessNotification(t("Document moved successfully"))
+    isMoveDialogVisible.value = false
+    onUpdateOptions(options.value)
+  } catch (error) {
+    console.error("Error moving document:", error.response || error)
+    notification.showErrorNotification(t("Error moving the document"))
+  }
 }
 
 async function selectAsDefaultCertificate(certificate) {

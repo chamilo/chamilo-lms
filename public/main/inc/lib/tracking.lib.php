@@ -2640,11 +2640,6 @@ class Tracking
         $sessionId
     ) {
         $result = 0;
-
-        if ($exercise_list instanceof \Doctrine\ORM\QueryBuilder) {
-            $exercise_list = $exercise_list->getQuery()->getResult();
-        }
-
         if (!empty($exercise_list) && (is_array($exercise_list) || $exercise_list instanceof \Countable)) {
             foreach ($exercise_list as $exercise_data) {
                 $exercise_id = $exercise_data->getIid();
@@ -2652,7 +2647,8 @@ class Tracking
                     $user_id,
                     $exercise_id,
                     $courseId,
-                    $sessionId
+                    $sessionId,
+                    false
                 );
 
                 if (!empty($best_attempt) && !empty($best_attempt['max_score'])) {
@@ -2940,6 +2936,7 @@ class Tracking
                 WHERE
                     lp_id IN (".implode(',', $lp_list).")
                     $condition_user1
+                    $sessionCondition
                 GROUP BY lp_id, user_id";
         //AND        session_id = $sessionId
 

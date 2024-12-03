@@ -664,11 +664,7 @@ class TrackingCourseLog
         $totalSurveys = 0;
         $totalExercises = ExerciseLib::get_all_exercises(
             $courseInfo,
-            $sessionId,
-            false,
-            null,
-            false,
-            3
+            $sessionId
         );
 
         if (empty($sessionId)) {

@@ -3000,7 +3000,9 @@ EOT;
 
         $repo = Container::getQuizRepository();
 
-        return $repo->findAllByCourse($course, $session, (string) $search, $active);
+        return $repo->findAllByCourse($course, $session, (string) $search, $active)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

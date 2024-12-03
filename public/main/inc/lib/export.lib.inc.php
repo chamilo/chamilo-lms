@@ -26,14 +26,9 @@ class Export
     /**
      * Export tabular data to CSV-file.
      *
-     * @param array  $data
-     * @param string $filename
-     * @param bool   $writeOnly Whether to only write on disk or also send for download
-     * @param string $enclosure
-     *
      * @return mixed csv raw data | false if no data to export | string file path if success in $writeOnly mode
      */
-    public static function arrayToCsv($data, $filename = 'export', $writeOnly = false, $enclosure = '"')
+    public static function arrayToCsv(array $data, string $filename = 'export', bool $writeOnly = false, string $enclosure = '"')
     {
         if (empty($data)) {
             return false;
@@ -53,6 +48,44 @@ class Export
         }
 
         return $filePath;
+    }
+
+    /**
+     * Converts an array of data into a CSV file and optionally sends it for download.
+     *
+     * @return string|void Returns the file path if $writeOnly is true, otherwise sends the file for download and exits.
+     */
+    public static function arrayToCsvSimple(array $data, string $filename = 'export', bool $writeOnly = false)
+    {
+        $file = api_get_path(SYS_ARCHIVE_PATH) . uniqid('') . '.csv';
+
+        $handle = fopen($file, 'w');
+
+        if ($handle === false) {
+            throw new \RuntimeException("Unable to create or open the file: $file");
+        }
+
+        if (is_array($data)) {
+            foreach ($data as $row) {
+                $line = '';
+                if (is_array($row)) {
+                    foreach ($row as $value) {
+                        $line .= '"' . str_replace('"', '""', (string)$value) . '";';
+                    }
+                }
+                fwrite($handle, rtrim($line, ';') . "\n");
+            }
+        }
+
+        fclose($handle);
+
+        if (!$writeOnly) {
+            DocumentManager::file_send_for_download($file, true, $filename . '.csv');
+            unlink($file);
+            exit;
+        }
+
+        return $file;
     }
 
     /**

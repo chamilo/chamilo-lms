@@ -2899,25 +2899,6 @@ class Tracking
         }
         $sessionCondition = api_get_session_condition($sessionId);
 
-        //$sessionId = (int) $sessionId;
-        /*if (count($lp_ids) > 0) {
-            $condition_session = " AND session_id = $sessionId ";
-        } else {
-            $condition_session = " WHERE session_id = $sessionId ";
-        }
-
-        // Check the real number of LPs corresponding to the filter in the
-        // database (and if no list was given, get them all)
-        if (empty($sessionId)) {
-            $sql = "SELECT DISTINCT(iid), use_max_score
-                    FROM $lp_table
-                    WHERE
-                        c_id = $courseId AND
-                        (session_id = 0 OR session_id IS NULL) $condition_lp ";
-        } else {
-
-        }*/
-
         $lp_list = $use_max_score = [];
         if (empty($condition_lp)) {
             $repo = Container::getLpRepository();

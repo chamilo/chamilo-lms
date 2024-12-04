@@ -116,4 +116,44 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
 
         return $qb;
     }
+
+    public function getLpSessionId(int $lpId): ?int
+    {
+        $lp = $this->find($lpId);
+
+        if (!$lp) {
+            return null;
+        }
+
+        $resourceNode = $lp->getResourceNode();
+        if ($resourceNode) {
+            $link = $resourceNode->getResourceLinks()->first();
+
+            if ($link && $link->getSession()) {
+
+                return (int) $link->getSession()->getId();
+            }
+        }
+
+        return null;
+    }
+
+    public function findExpiredViews(int $validityDays): array
+    {
+        $now = new \DateTime();
+        $expirationDate = (clone $now)->modify('-' . $validityDays . ' days');
+
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('v')
+            ->from('Chamilo\CourseBundle\Entity\CLpView', 'v')
+            ->join('v.lp', 'lp')
+            ->where('lp.validityInDays > 0')
+            ->andWhere('v.progress = 100')
+            ->andWhere('v.session IS NOT NULL')
+            ->andWhere('v.lastItem < :expirationDate')
+            ->setParameter('expirationDate', $expirationDate->getTimestamp())
+            ->getQuery()
+            ->getResult();
+    }
 }

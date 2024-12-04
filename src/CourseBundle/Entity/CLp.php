@@ -158,6 +158,9 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
     protected ?int $duration = null;
 
+    #[ORM\Column(name: 'validity_in_days', type: 'integer', nullable: true)]
+    protected ?int $validityInDays = null;
+
     public function __construct()
     {
         $now = new DateTime();
@@ -644,6 +647,17 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     {
         $this->duration = $duration;
 
+        return $this;
+    }
+
+    public function getValidityInDays(): ?int
+    {
+        return $this->validityInDays;
+    }
+
+    public function setValidityInDays(?int $validityInDays): self
+    {
+        $this->validityInDays = $validityInDays;
         return $this;
     }
 

@@ -28783,3 +28783,24 @@ msgstr "Seleccione la carpeta de destino"
 
 msgid "All users"
 msgstr "Todos los usuarios"
+
+msgid "Edit introduction"
+msgstr "Editar la introduccion"
+
+msgid "To teacher and tutor"
+msgstr "Para profesor y tutor"
+
+msgid "To HR only"
+msgstr "Solo para RRHH"
+
+msgid "Only for teachers"
+msgstr "Solo para profesores"
+
+msgid "Only for students"
+msgstr "Solo para estudiantes"
+
+msgid "Autolaunch settings"
+msgstr "Configuración de inicio automático"
+
+msgid "Auto-launch"
+msgstr "Inicio automático"

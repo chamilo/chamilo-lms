@@ -220,6 +220,10 @@ class ExtraFieldValue extends Model
 
                     $tags = [];
                     foreach ($tagValues as $tagValue) {
+                        if (is_array($tagValue)) {
+                            $tagValue = reset($tagValue);
+                        }
+
                         if (empty($tagValue)) {
                             continue;
                         }
@@ -338,16 +342,26 @@ class ExtraFieldValue extends Model
 
                     break;
                 case ExtraField::FIELD_TYPE_DATE:
-                    $d = DateTime::createFromFormat('Y-m-d', $value);
-                    $valid = $d && $d->format('Y-m-d') === $value;
-                    if ($valid) {
-                        $newParams = [
-                            'item_id' => $params['item_id'],
-                            'field_id' => $extraFieldInfo['id'],
-                            'field_value' => $value,
-                            'comment' => $comment,
-                        ];
-                        $this->save($newParams, $showQuery);
+                    if (is_array($value)) {
+                        if (empty($value)) {
+                            break;
+                        }
+                        $value = reset($value);
+                    }
+
+                    if (is_string($value) && !empty($value)) {
+                        $d = DateTime::createFromFormat('Y-m-d', $value);
+                        $valid = $d && $d->format('Y-m-d') === $value;
+
+                        if ($valid) {
+                            $newParams = [
+                                'item_id' => $params['item_id'],
+                                'field_id' => $extraFieldInfo['id'],
+                                'field_value' => $value,
+                                'comment' => $comment,
+                            ];
+                            $this->save($newParams, $showQuery);
+                        }
                     }
                     break;
                 case ExtraField::FIELD_TYPE_DATETIME:

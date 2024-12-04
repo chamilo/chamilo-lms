@@ -18,6 +18,8 @@ use Chamilo\CoreBundle\Component\Utils\ToolIcon;
  */
 class UserGroupModel extends Model
 {
+    public const SOCIAL_CLASS = 1;
+    public const NORMAL_CLASS = 0;
     public $columns = [
         'id',
         'title',

@@ -8533,7 +8533,7 @@ class SessionManager
                     [
                         'name' => 'title',
                         'index' => 's.title',
-                        'width' => '160',
+                        'width' => '300',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8549,6 +8549,7 @@ class SessionManager
                         'name' => 'display_start_date',
                         'index' => 'display_start_date',
                         'align' => 'left',
+                        'width' => '200',
                         'search' => 'true',
                         'searchoptions' => [
                             'dataInit' => 'date_pick_today',
@@ -8559,6 +8560,7 @@ class SessionManager
                         'name' => 'display_end_date',
                         'index' => 'display_end_date',
                         'align' => 'left',
+                        'width' => '200',
                         'search' => 'true',
                         'searchoptions' => [
                             'dataInit' => 'date_pick_one_month',
@@ -8579,6 +8581,7 @@ class SessionManager
                         'name' => 'users',
                         'index' => 'users',
                         'align' => 'left',
+                        'width' => '100',
                         'search' => 'false',
                     ];
 
@@ -8603,6 +8606,7 @@ class SessionManager
                     'name' => 'status',
                     'index' => 'status',
                     'align' => 'left',
+                    'width' => '120',
                     'search' => 'true',
                     'stype' => 'select',
                     // for the bottom bar
@@ -8633,7 +8637,7 @@ class SessionManager
                     [
                         'name' => 'title',
                         'index' => 's.title',
-                        'width' => '160',
+                        'width' => '300',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8649,6 +8653,7 @@ class SessionManager
                         'name' => 'display_start_date',
                         'index' => 'display_start_date',
                         'align' => 'left',
+                        'width' => '200',
                         'search' => 'true',
                         'searchoptions' => [
                             'dataInit' => 'date_pick_today',
@@ -8659,6 +8664,7 @@ class SessionManager
                         'name' => 'display_end_date',
                         'index' => 'display_end_date',
                         'align' => 'left',
+                        'width' => '200',
                         'search' => 'true',
                         'searchoptions' => [
                             'dataInit' => 'date_pick_one_month',
@@ -8679,6 +8685,7 @@ class SessionManager
                         'name' => 'users',
                         'index' => 'users',
                         'align' => 'left',
+                        'width' => '100',
                         'search' => 'false',
                     ];
 
@@ -8722,7 +8729,7 @@ class SessionManager
                     [
                         'name' => 'title',
                         'index' => 's.title',
-                        'width' => '200',
+                        'width' => '300',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8731,12 +8738,14 @@ class SessionManager
                         'name' => 'display_start_date',
                         'index' => 'display_start_date',
                         'align' => 'left',
+                        'width' => '200',
                         'search' => 'true',
                         'searchoptions' => ['dataInit' => 'date_pick_today', 'sopt' => $date_operators],
                     ],
                     [
                         'name' => 'display_end_date',
                         'index' => 'display_end_date',
+                        'width' => '200',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['dataInit' => 'date_pick_one_month', 'sopt' => $date_operators],
@@ -8801,7 +8810,7 @@ class SessionManager
                     [
                         'name' => 'title',
                         'index' => 's.title',
-                        'width' => '160',
+                        'width' => '300',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8817,6 +8826,7 @@ class SessionManager
                         'name' => 'display_start_date',
                         'index' => 'display_start_date',
                         'align' => 'left',
+                        'width' => '200',
                         'search' => 'true',
                         'searchoptions' => [
                             'dataInit' => 'date_pick_today',
@@ -8827,6 +8837,7 @@ class SessionManager
                         'name' => 'display_end_date',
                         'index' => 'display_end_date',
                         'align' => 'left',
+                        'width' => '200',
                         'search' => 'true',
                         'searchoptions' => [
                             'dataInit' => 'date_pick_one_month',
@@ -8847,6 +8858,7 @@ class SessionManager
                         'name' => 'users',
                         'index' => 'users',
                         'align' => 'left',
+                        'width' => '100',
                         'search' => 'false',
                     ];
 
@@ -8871,6 +8883,7 @@ class SessionManager
                     'name' => 'status',
                     'index' => 'status',
                     'align' => 'left',
+                    'width' => '120',
                     'search' => 'true',
                     'stype' => 'select',
                     // for the bottom bar
@@ -10213,4 +10226,192 @@ class SessionManager
 
         return $users;
     }
+
+    /**
+     * Method to export sessions data as CSV
+     */
+    public static function exportSessionsAsCSV(array $selectedSessions): void
+    {
+        $csvData = [];
+        $headersGenerated = false;
+        $csvHeaders = [];
+
+        foreach ($selectedSessions as $sessionId) {
+            $courses = SessionManager::get_course_list_by_session_id($sessionId);
+
+            if (!empty($courses)) {
+                foreach ($courses as $course) {
+                    $courseCode = $course['course_code'];
+                    $courseId = $course['id'];
+                    $studentList = CourseManager::get_student_list_from_course_code(
+                        $courseCode,
+                        true,
+                        $sessionId
+                    );
+
+                    $userIds = array_keys($studentList);
+
+                    [$generatedHeaders, $csvContent] = self::generateSessionCourseReportData($sessionId, $courseId, $userIds);
+
+                    if (!$headersGenerated) {
+                        $csvHeaders = $generatedHeaders;
+                        $headersGenerated = true;
+                    }
+
+                    foreach ($csvContent as $row) {
+                        $csvData[] = $row;
+                    }
+                }
+            }
+        }
+
+        if (!empty($csvData)) {
+            array_unshift($csvData, $csvHeaders);
+            $filename = 'export_session_courses_reports_complete_' . date('Y-m-d_H-i-s') . '.csv';
+            Export::arrayToCsvSimple($csvData, $filename);
+            exit;
+        }
+    }
+
+    /**
+     * Exports session data as a ZIP file with CSVs and sends it for download.
+     */
+    public static function exportSessionsAsZip(array $sessionList): void
+    {
+        $tempZipFile = api_get_path(SYS_ARCHIVE_PATH) . api_get_unique_id() . '.zip';
+        $tempDir = dirname($tempZipFile);
+
+        if (!is_dir($tempDir) || !is_writable($tempDir)) {
+            exit("The directory for creating the ZIP file does not exist or lacks write permissions: $tempDir");
+        }
+
+        $zip = new \ZipArchive();
+        if ($zip->open($tempZipFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+            exit("Unable to open the ZIP file for writing: $tempZipFile");
+        }
+
+        foreach ($sessionList as $sessionItemId) {
+            $courses = SessionManager::get_course_list_by_session_id($sessionItemId);
+
+            if (!empty($courses)) {
+                foreach ($courses as $course) {
+                    $courseCode = $course['course_code'];
+                    $courseId = $course['id'];
+                    $studentList = CourseManager::get_student_list_from_course_code($courseCode, true, $sessionItemId);
+                    $userIds = array_keys($studentList);
+
+                    [$csvHeaders, $csvContent] = self::generateSessionCourseReportData($sessionItemId, $courseId, $userIds);
+                    array_unshift($csvContent, $csvHeaders);
+
+                    $sessionInfo = api_get_session_info($sessionItemId);
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    $csvFileName = $sessionInfo['name'] . '_' . $courseInfo['name'] . '.csv';
+
+                    $csvFilePath = Export::arrayToCsvSimple($csvContent, $csvFileName, true);
+
+                    if ($csvFilePath && file_exists($csvFilePath)) {
+                        $zip->addFile($csvFilePath, $csvFileName);
+                    }
+                }
+            }
+        }
+
+        if (!$zip->close()) {
+            exit("Could not close the ZIP file correctly.");
+        }
+
+        if (file_exists($tempZipFile)) {
+            DocumentManager::file_send_for_download($tempZipFile, true);
+            unlink($tempZipFile);
+        } else {
+            exit("The ZIP file was not created correctly.");
+        }
+    }
+
+    private static function generateSessionCourseReportData($sessionId, $courseId, $userIds): array
+    {
+        $em = Database::getManager();
+        $sessionRepository = $em->getRepository(Session::class);
+        $session = $sessionRepository->find($sessionId);
+
+        if (!$session instanceof Session) {
+            throw new \InvalidArgumentException("Invalid session object for session ID $sessionId");
+        }
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $courseCode = $courseInfo['code'];
+
+        $csvHeaders = [
+            get_lang('Session name'),
+            get_lang('Session access dates'),
+            get_lang('Session display dates'),
+            get_lang('Course name'),
+            get_lang('Official code'),
+            get_lang('First name'),
+            get_lang('Last name'),
+            get_lang('Login'),
+            get_lang('Training time'),
+            get_lang('Course progress'),
+            get_lang('Exercise progress'),
+            get_lang('Exercise average'),
+            get_lang('Score'),
+            get_lang('Score') . ' - ' . get_lang('Best attempt'),
+            get_lang('Student_publication'),
+            get_lang('Messages'),
+            get_lang('Classes'),
+            get_lang('Registration date'),
+            get_lang('First login in course'),
+            get_lang('Latest login in course'),
+        ];
+
+        $csvData = TrackingCourseLog::getUserData(
+            null,
+            count($userIds),
+            null,
+            null,
+            [],
+            true,
+            true,
+            $courseCode,
+            $sessionId,
+            true,
+            $userIds
+        );
+
+        $rawCsvContent = ChamiloSession::read('csv_content');
+
+        if (empty($rawCsvContent)) {
+            throw new \RuntimeException("No CSV content found in session for course $courseCode and session $sessionId.");
+        }
+
+        $csvContent = [];
+        foreach ($rawCsvContent as $row) {
+            $alignedRow = [
+                $row['session_name'] ?? '',
+                $row['session_startdate'] ?? '',
+                $row['session_enddate'] ?? '',
+                $row['course_name'] ?? '',
+                $row['official_code'] ?? '',
+                $row['firstname'] ?? '',
+                $row['lastname'] ?? '',
+                $row['username'] ?? '',
+                $row['time'] ?? '',
+                $row['average_progress'] ?? '',
+                $row['exercise_progress'] ?? '',
+                $row['exercise_average'] ?? '',
+                $row['student_score'] ?? '',
+                $row['student_score_best'] ?? '',
+                $row['count_assignments'] ?? '',
+                $row['count_messages'] ?? '',
+                $row['classes'] ?? '',
+                $row['registered_at'] ?? '',
+                $row['first_connection'] ?? '',
+                $row['last_connection'] ?? '',
+            ];
+            $csvContent[] = $alignedRow;
+        }
+
+        return [$csvHeaders, $csvContent];
+    }
+
 }

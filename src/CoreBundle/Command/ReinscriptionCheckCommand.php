@@ -62,6 +62,14 @@ class ReinscriptionCheckCommand extends Command
         foreach ($expiredViews as $view) {
             $user = $view->getUser();
             $session = $view->getSession();
+
+            if ($this->isUserAlreadyEnrolledInChildSession($user, $session)) {
+                if ($debug) {
+                    $output->writeln(sprintf('User %d is already enrolled in a valid child session.', $user->getId()));
+                }
+                continue;
+            }
+
             $lp = $view->getLp();
 
             if ($debug) {
@@ -171,4 +179,16 @@ class ReinscriptionCheckCommand extends Command
         return null;
     }
 
+    private function isUserAlreadyEnrolledInChildSession($user, $parentSession): bool
+    {
+        $childSessions = $this->sessionRepository->findChildSessions($parentSession);
+
+        foreach ($childSessions as $childSession) {
+            if ($this->findUserSubscriptionInSession($user, $childSession)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

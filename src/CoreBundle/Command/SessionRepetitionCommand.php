@@ -105,7 +105,7 @@ class SessionRepetitionCommand extends Command
             ->setCoachAccessStartDate($newStartDate)
             ->setCoachAccessEndDate($newEndDate)
             ->setVisibility($session->getVisibility())
-            ->setDuration($duration)
+            ->setDuration(0)
             ->setDescription($session->getDescription() ?? '')
             ->setShowDescription($session->getShowDescription() ?? false)
             ->setCategory($session->getCategory())
@@ -123,7 +123,9 @@ class SessionRepetitionCommand extends Command
         // Copy the courses from the original session
         foreach ($session->getCourses() as $sessionRelCourse) {
             $course = $sessionRelCourse->getCourse();
-            $newSession->addCourse($course);
+            if ($course) {
+                $newSession->addCourse($course);
+            }
         }
 
         // Copy the general coaches from the original session

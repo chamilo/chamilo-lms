@@ -350,7 +350,7 @@ switch ($action) {
                         $studentId,
                         $course,
                         [],
-                        $sId,
+                        api_get_session_entity($sId),
                         false,
                         false,
                         true

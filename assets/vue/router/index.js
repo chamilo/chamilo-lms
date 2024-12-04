@@ -116,7 +116,7 @@ const router = createRouter({
             return false
           }
 
-          const course = await courseService.getCourseDetails(courseId)
+          const course = await courseService.findById(courseId, { sid: sessionId })
           if (!course) {
             return false
           }

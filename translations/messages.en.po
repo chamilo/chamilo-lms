@@ -27805,3 +27805,24 @@ msgstr "Select the destination folder"
 
 msgid "All users"
 msgstr "All users"
+
+msgid "Edit introduction"
+msgstr "Edit introduction"
+
+msgid "To teacher and tutor"
+msgstr "To teacher and tutor"
+
+msgid "To HR only"
+msgstr "To HR only"
+
+msgid "Only for teachers"
+msgstr "Only for teachers"
+
+msgid "Only for students"
+msgstr "Only for students"
+
+msgid "Autolaunch settings"
+msgstr "Autolaunch settings"
+
+msgid "Auto-launch"
+msgstr "Auto-launch"

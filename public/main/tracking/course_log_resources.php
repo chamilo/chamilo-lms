@@ -28,7 +28,7 @@ if (!$is_allowedToTrack) {
 }
 
 if ($export_csv || $exportXls) {
-    $csvData = TrackingCourseLog::get_item_resources_data(0, 0, '', '');
+    $csvData = TrackingCourseLog::getItemResourcesData(0, 0, '', '');
     array_walk(
         $csvData,
         function (&$item) {

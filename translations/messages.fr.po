@@ -1812,7 +1812,7 @@ msgid "Course program"
 msgstr "Cahier des charges"
 
 msgid "Statistics"
-msgstr "Suivi"
+msgstr "Statistiques"
 
 msgid "Upload page and link to Home Page"
 msgstr "Déposer page et lier à l'accueil"
@@ -29585,3 +29585,24 @@ msgstr "Choisir le dossier de destination"
 
 msgid "All users"
 msgstr "Tous les utilisateurs"
+
+msgid "Edit introduction"
+msgstr "Éditer l'introduction"
+
+msgid "To teacher and tutor"
+msgstr "Pour le professeur et le tuteur"
+
+msgid "To HR only"
+msgstr "Pour les RH uniquement"
+
+msgid "Only for teachers"
+msgstr "Pour les professeurs uniquement"
+
+msgid "Only for students"
+msgstr "Pour les apprenants uniquement"
+
+msgid "Autolaunch settings"
+msgstr "Paramètres d'auto démarrage"
+
+msgid "Auto-launch"
+msgstr "Auto-démarrage"

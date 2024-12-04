@@ -27791,3 +27791,24 @@ msgstr ""
 
 msgid "All users"
 msgstr ""
+
+msgid "Edit introduction"
+msgstr ""
+
+msgid "To teacher and tutor"
+msgstr ""
+
+msgid "To HR only"
+msgstr ""
+
+msgid "Only for teachers"
+msgstr ""
+
+msgid "Only for students"
+msgstr ""
+
+msgid "Autolaunch settings"
+msgstr ""
+
+msgid "Auto-launch"
+msgstr ""

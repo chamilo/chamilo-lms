@@ -311,7 +311,7 @@ $group[] = $form->createElement(
     'radio',
     'email_alert_to_teacher_on_new_user_in_course',
     null,
-    get_lang('To teachar and tutor'),
+    get_lang('To teacher and tutor'),
     2
 );
 $group[] = $form->createElement(

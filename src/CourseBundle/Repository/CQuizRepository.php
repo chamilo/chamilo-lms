@@ -40,7 +40,9 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         $this->addCategoryQueryBuilder($categoryId, $qb);
         $this->addActiveQueryBuilder($active, $qb);
         $this->addNotDeletedQueryBuilder($qb);
-        $this->addTitleQueryBuilder($title, $qb);
+        if (!empty($title)) {
+            $this->addTitleQueryBuilder($title, $qb);
+        }
 
         return $qb;
     }

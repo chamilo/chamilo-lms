@@ -18,9 +18,21 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = $_REQUEST['action'] ?? null;
 $idChecked = $_REQUEST['idChecked'] ?? null;
+$idMultiple = $_REQUEST['id'] ?? null;
 $listType = isset($_REQUEST['list_type']) ? Security::remove_XSS($_REQUEST['list_type']) : SessionManager::getDefaultSessionTab();
+$copySessionContent = isset($_REQUEST['copy_session_content']) ? true : false;
 
 switch ($action) {
+    case 'delete_multiple':
+        $sessionList = explode(',', $idMultiple);
+        foreach ($sessionList as $id) {
+            $sessionInfo = api_get_session_info($id);
+            if ($sessionInfo) {
+                $response = SessionManager::delete($id);
+            }
+        }
+        echo 1;
+        exit;
     case 'delete':
         $sessionInfo = api_get_session_info($idChecked);
         if ($sessionInfo) {
@@ -37,7 +49,6 @@ switch ($action) {
         }
         header('Location: '.$url);
         exit();
-        break;
     case 'copy':
         $result = SessionManager::copy($idChecked);
         if ($result) {
@@ -50,6 +61,32 @@ switch ($action) {
             $url = 'session_list.php?list_type='.$listType;
         }
         header('Location: '.$url);
+        exit;
+    case 'copy_multiple':
+        $sessionList = explode(',', $idMultiple);
+        foreach ($sessionList as $id) {
+            $sessionIdCopied = SessionManager::copy($id);
+            if ($sessionIdCopied) {
+                $sessionInfo = api_get_session_info($sessionIdCopied);
+                Display::addFlash(Display::return_message(get_lang('ItemCopied').' - '.$sessionInfo['name']));
+            } else {
+                Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'error'));
+            }
+        }
+        $url = 'session_list.php';
+        if ('custom' !== $listType) {
+            $url = 'session_list.php?list_type='.$listType;
+        }
+        header('Location: '.$url);
+        exit;
+    case 'export_csv':
+        $selectedSessions = explode(',', $idMultiple);
+        SessionManager::exportSessionsAsCSV($selectedSessions);
+        break;
+
+    case 'export_multiple':
+        $sessionList = explode(',', $idMultiple);
+        SessionManager::exportSessionsAsZip($sessionList);
         break;
 }
 
@@ -169,6 +206,11 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
+$deleteUrl = api_get_self().'?list_type='.$listType.'&action=delete_multiple';
+$copyUrl = api_get_self().'?list_type='.$listType.'&action=copy_multiple';
+$exportUrl = api_get_self().'?list_type='.$listType.'&action=export_multiple';
+$exportCsvUrl = api_get_self().'?list_type='.$listType.'&action=export_csv';
+$extra_params['multiselect'] = true;
 
 ?>
     <script>
@@ -308,12 +350,47 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             grid.jqGrid('sortableRows', options);
 
             grid.jqGrid('navGrid','#sessions_pager',
-                {edit:false,add:false,del:false},
+                {edit:false,add:false,del:true},
                 {height:280,reloadAfterSubmit:false}, // edit options
                 {height:280,reloadAfterSubmit:false}, // add options
-                {reloadAfterSubmit:false},// del options
+                {reloadAfterSubmit:true, url: '<?php echo $deleteUrl; ?>' }, // del options
                 prmSearch
-            );
+            ).navButtonAdd('#sessions_pager',{
+                caption:"<?php echo addslashes(Display::return_icon('copy.png', get_lang('Copy'))); ?>",
+                buttonicon:"ui-icon ui-icon-plus",
+                onClickButton: function(a) {
+                    var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');
+                    if (list.length) {
+                        window.location.replace('<?php echo $copyUrl; ?>&id='+list.join(','));
+                    } else {
+                        alert("<?php echo addslashes(get_lang('Select an option')); ?>");
+                    }
+                }
+            }).navButtonAdd('#sessions_pager',{
+                caption:"<?php echo addslashes(Display::return_icon('save_pack.png', get_lang('Export courses reports'))); ?>",
+                buttonicon:"ui-icon ui-icon-plus",
+                onClickButton: function(a) {
+                    var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');
+                    if (list.length) {
+                        window.location.replace('<?php echo $exportUrl; ?>&id='+list.join(','));
+                    } else {
+                        alert("<?php echo addslashes(get_lang('Select an option')); ?>");
+                    }
+                },
+                position:"last"
+            }).navButtonAdd('#sessions_pager',{
+                caption:"<?php echo addslashes(Display::return_icon('export_csv.png', get_lang('Export courses reports complete'))); ?>",
+                buttonicon:"ui-icon ui-icon-plus",
+                onClickButton: function(a) {
+                    var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');
+                    if (list.length) {
+                        window.location.replace('<?php echo $exportCsvUrl; ?>&id='+list.join(','));
+                    } else {
+                        alert("<?php echo addslashes(get_lang('Select an option')); ?>");
+                    }
+                },
+                position:"last"
+            });
 
             <?php
             // Create the searching dialog.

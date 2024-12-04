@@ -5,6 +5,13 @@ export default {
   find: baseService.get,
 
   /**
+   * @param {number} cid
+   * @param {object} params
+   * @returns {Promise<Object>}
+   */
+  findById: async (cid, params) => baseService.get(`/api/courses/${cid}`, params),
+
+  /**
    * @param {number} courseId
    * @param {number=} sessionId
    * @returns {Promise<Object>}
@@ -108,22 +115,6 @@ export default {
   },
 
   /**
-   * Fetches course details by course ID.
-   *
-   * @param {number} courseId - The ID of the course.
-   * @returns {Promise<Object|null>} - The course details or null if an error occurs.
-   */
-  getCourseDetails: async (courseId) => {
-    try {
-      const response = await api.get(`/api/courses/${courseId}`)
-      return response.data
-    } catch (error) {
-      console.error("Error fetching course details:", error)
-      return null
-    }
-  },
-
-  /**
    * Retrieves the ID of the auto-launchable exercise in a course, if configured.
    *
    * @param {number} courseId - The ID of the course.
@@ -136,16 +127,16 @@ export default {
         params: {
           sid: sessionId,
         },
-      });
+      })
 
       if (data && data.exerciseId) {
-        return data.exerciseId;
+        return data.exerciseId
       }
 
-      return null;
+      return null
     } catch (error) {
-      console.error("Error fetching auto-launch exercise ID:", error);
-      return null;
+      console.error("Error fetching auto-launch exercise ID:", error)
+      return null
     }
   },
   /**
@@ -161,16 +152,16 @@ export default {
         params: {
           sid: sessionId,
         },
-      });
+      })
 
       if (data && data.lpId) {
-        return data.lpId;
+        return data.lpId
       }
 
-      return null;
+      return null
     } catch (error) {
-      console.error("Error fetching auto-launch LP ID:", error);
-      return null;
+      console.error("Error fetching auto-launch LP ID:", error)
+      return null
     }
   },
 }

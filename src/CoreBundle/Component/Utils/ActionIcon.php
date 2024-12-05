@@ -160,4 +160,6 @@ enum ActionIcon: string
     case EDIT_BADGE = 'shield-edit-outline';
 
     case ADD_EVENT_REMINDER = 'alarm-plus';
+
+    case SWAP_FILE = 'file-swap';
 }

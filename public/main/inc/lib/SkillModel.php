@@ -288,7 +288,7 @@ class SkillModel extends Model
                 'criteria' => $skill->getCriteria(),
                 'status' => $skill->getStatus(),
                 'asset_id' => (string) $skill->getAsset()?->getId(),
-                'profile_id' => $skill->getProfile()?->getId(),
+                'profile_id' => $skill->getLevelProfile()?->getId(),
                 'icons_small' => sprintf('badges/%s-small.png', sha1($skill['title'])),
             ];
         }
@@ -1023,7 +1023,7 @@ class SkillModel extends Model
         if (!empty($skills)) {
             foreach ($skills as &$skill) {
                 if (0 == $skill['parent_id']) {
-                    $skill['parent_id'] = 1;
+                    $skill['parent_id'] = '-1';
                 }
 
                 // because except main keys (id, title, children) others keys
@@ -1070,7 +1070,7 @@ class SkillModel extends Model
 
                 // Check if the skill has related gradebooks
                 $skill['data']['skill_has_gradebook'] = false;
-                if (isset($skill['gradebooks']) && !empty($skill['gradebooks'])) {
+                if (!empty($skill['gradebooks'])) {
                     $skill['data']['skill_has_gradebook'] = true;
                 }
                 $refs[$skill['id']] = &$skill;

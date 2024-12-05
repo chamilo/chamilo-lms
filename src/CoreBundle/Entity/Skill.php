@@ -65,9 +65,9 @@ class Skill implements Stringable, Translatable
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Profile::class, inversedBy: 'skills')]
+    #[ORM\ManyToOne(targetEntity: SkillLevelProfile::class, inversedBy: 'skills')]
     #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id')]
-    protected ?Profile $profile = null;
+    protected ?SkillLevelProfile $levelProfile = null;
 
     /**
      * @var Collection<int, SkillRelUser>
@@ -259,14 +259,14 @@ class Skill implements Stringable, Translatable
         return $this->id;
     }
 
-    public function getProfile(): ?Profile
+    public function getLevelProfile(): ?SkillLevelProfile
     {
-        return $this->profile;
+        return $this->levelProfile;
     }
 
-    public function setProfile(Profile $profile): self
+    public function setLevelProfile(SkillLevelProfile $levelProfile): self
     {
-        $this->profile = $profile;
+        $this->levelProfile = $levelProfile;
 
         return $this;
     }

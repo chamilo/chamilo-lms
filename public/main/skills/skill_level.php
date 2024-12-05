@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Level;
-use Chamilo\CoreBundle\Entity\Profile;
+use Chamilo\CoreBundle\Entity\SkillLevelProfile;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 /**
@@ -15,7 +15,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 
 $em = Database::getManager();
-$profiles = $em->getRepository(Profile::class)->findAll();
+$profiles = $em->getRepository(SkillLevelProfile::class)->findAll();
 $list = $em->getRepository(Level::class)->findAll();
 
 $listAction = api_get_self();
@@ -64,7 +64,7 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->exportValues();
             if (isset($values['profile_id']) && !empty($values['profile_id'])) {
-                $profile = $em->getRepository(Profile::class)->find($values['profile_id']);
+                $profile = $em->getRepository(SkillLevelProfile::class)->find($values['profile_id']);
                 if ($profile) {
                     $item = new Level();
                     $item->setTitle($values['title']);
@@ -101,7 +101,7 @@ switch ($action) {
 
             $item->setTitle($values['title']);
             $item->setShortTitle($values['short_title']);
-            $profile = $em->getRepository(Profile::class)->find($values['profile_id']);
+            $profile = $em->getRepository(SkillLevelProfile::class)->find($values['profile_id']);
             if ($profile) {
                 $item->setProfile($profile);
             }

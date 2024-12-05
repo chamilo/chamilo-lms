@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Profile;
+use Chamilo\CoreBundle\Entity\SkillLevelProfile;
 use Chamilo\CoreBundle\Entity\Skill;
 
 /**
@@ -11,7 +11,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 $em = Database::getManager();
-$profiles = $em->getRepository(Profile::class)->findAll();
+$profiles = $em->getRepository(SkillLevelProfile::class)->findAll();
 $list = $em->getRepository(Skill::class)->findAll();
 
 $listAction = api_get_self();
@@ -40,11 +40,11 @@ $form->addHidden('id', $id);
 $form->addButtonSave(get_lang('Update'));
 
 if (!empty($item)) {
-    $profile = $item->getProfile();
+    $profile = $item->getLevelProfile();
     if ($profile) {
         $form->setDefaults(
             [
-                'profile_id' => $item->getProfile()->getId(),
+                'profile_id' => $item->getLevelProfile()->getId(),
             ]
         );
     }
@@ -63,9 +63,9 @@ switch ($action) {
 
         if ($form->validate()) {
             $values = $form->exportValues();
-            $profile = $em->getRepository(Profile::class)->find($values['profile_id']);
+            $profile = $em->getRepository(SkillLevelProfile::class)->find($values['profile_id']);
             if ($profile) {
-                $item->setProfile($profile);
+                $item->setLevelProfile($profile);
                 $em->persist($item);
                 $em->flush();
                 Display::addFlash(Display::return_message(get_lang('Update successful')));

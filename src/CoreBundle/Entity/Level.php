@@ -33,9 +33,9 @@ class Level implements Stringable
     protected string $shortTitle;
 
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: Profile::class, inversedBy: 'levels')]
+    #[ORM\ManyToOne(targetEntity: SkillLevelProfile::class, inversedBy: 'levels')]
     #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id')]
-    protected ?Profile $profile = null;
+    protected ?SkillLevelProfile $profile = null;
 
     public function __toString(): string
     {
@@ -89,15 +89,12 @@ class Level implements Stringable
         return $this;
     }
 
-    /**
-     * @return Profile
-     */
-    public function getProfile()
+    public function getProfile(): ?SkillLevelProfile
     {
         return $this->profile;
     }
 
-    public function setProfile(Profile $profile): self
+    public function setProfile(SkillLevelProfile $profile): self
     {
         $this->profile = $profile;
 

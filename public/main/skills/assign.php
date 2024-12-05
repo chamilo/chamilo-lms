@@ -123,13 +123,13 @@ $skillId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : key($skillsOptions);
 $skill = $skillRepo->find($skillId);
 $profile = false;
 if ($skill) {
-    $profile = $skill->getProfile();
+    $profile = $skill->getLevelProfile();
 }
 
 if (!empty($subSkillList)) {
     $skillFromLastSkill = $skillRepo->find(end($subSkillList));
     if ($skillFromLastSkill) {
-        $profile = $skillFromLastSkill->getProfile();
+        $profile = $skillFromLastSkill->getLevelProfile();
     }
 }
 
@@ -139,7 +139,7 @@ if (!$profile) {
     krsort($parents);
     foreach ($parents as $parent) {
         $skillParentId = $parent['skill_id'];
-        $profile = $skillRepo->find($skillParentId)->getProfile();
+        $profile = $skillRepo->find($skillParentId)->getLevelProfile();
 
         if ($profile) {
             break;

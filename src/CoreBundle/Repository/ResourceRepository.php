@@ -933,4 +933,19 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    public function findResourceByTitleInCourse(
+        string $title,
+        Course $course,
+        ?Session $session = null,
+        ?CGroup $group = null
+    ): ?ResourceInterface {
+        $qb = $this->getResourcesByCourse($course, $session, $group);
+
+        $this->addTitleQueryBuilder($title, $qb);
+
+        $qb->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

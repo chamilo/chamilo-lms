@@ -162,4 +162,6 @@ enum ActionIcon: string
     case ADD_EVENT_REMINDER = 'alarm-plus';
 
     case SWAP_FILE = 'file-swap';
+
+    case ADD_FILE_VARIATION = 'file-replace';
 }

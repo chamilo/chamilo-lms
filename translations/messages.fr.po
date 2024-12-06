@@ -5134,7 +5134,7 @@ msgid "Session overview"
 msgstr "Résumé de la session"
 
 msgid "Add user in the course only if not yet in"
-msgstr "Inscrire l'utilsateur s'il n'est pas déjà inscrit"
+msgstr "Inscrire l'utilisateur s'il n'est pas déjà inscrit"
 
 msgid "Remove users from any courses that are not mentioned explicitly in this file"
 msgstr "Désinscrire l'utilisateur de tous les cours auxquels il n'est pas explicitement inscrit dans le fichier"

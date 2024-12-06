@@ -174,7 +174,7 @@ if ($form->validate()) {
     if (0 == count($errors)) {
         $inserted_in_course = save_data($users_courses);
         // Build the alert message in case there were visual codes subscribed to.
-        if ($_POST['subscribe']) {
+        if (isset($_POST['subscribe']) && $_POST['subscribe']) {
             //$warn = get_lang('The users have been subscribed to the following courses because several courses share the same visual code').': ';
         } else {
             $warn = get_lang('The users have been unsubscribed from the following courses because several courses share the same visual code').': ';

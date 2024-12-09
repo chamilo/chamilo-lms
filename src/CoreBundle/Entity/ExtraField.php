@@ -126,15 +126,15 @@ class ExtraField
     #[ORM\Column(name: 'field_order', type: 'integer', unique: false, nullable: true)]
     protected ?int $fieldOrder = null;
 
-    #[ORM\Column(name: 'visible_to_self', type: 'boolean', unique: false, nullable: true)]
+    #[ORM\Column(name: 'visible_to_self', type: 'boolean', options: ['default' => false])]
     protected ?bool $visibleToSelf = false;
-    #[ORM\Column(name: 'visible_to_others', type: 'boolean', unique: false, nullable: true)]
+    #[ORM\Column(name: 'visible_to_others', type: 'boolean', options: ['default' => false])]
     protected ?bool $visibleToOthers = false;
 
-    #[ORM\Column(name: 'changeable', type: 'boolean', unique: false, nullable: true)]
+    #[ORM\Column(name: 'changeable', type: 'boolean', options: ['default' => false])]
     protected ?bool $changeable = false;
 
-    #[ORM\Column(name: 'filter', type: 'boolean', unique: false, nullable: true)]
+    #[ORM\Column(name: 'filter', type: 'boolean', options: ['default' => false])]
     protected ?bool $filter = false;
 
     /**

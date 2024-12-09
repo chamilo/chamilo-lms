@@ -142,6 +142,12 @@ class Skill implements Stringable, Translatable
     #[Gedmo\Locale]
     private ?string $locale = null;
 
+    /**
+     * @var Collection<int, SkillRelProfile>
+     */
+    #[ORM\OneToMany(mappedBy: 'skill', targetEntity: SkillRelProfile::class, cascade: ['persist'])]
+    private Collection $profiles;
+
     public function __construct()
     {
         $this->issuedSkills = new ArrayCollection();
@@ -152,6 +158,7 @@ class Skill implements Stringable, Translatable
         $this->icon = '';
         $this->description = '';
         $this->status = self::STATUS_ENABLED;
+        $this->profiles = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -440,5 +447,35 @@ class Skill implements Stringable, Translatable
             ->getSkills()
             ->map(fn(SkillRelSkill $skillRelSkill): Skill => $skillRelSkill->getSkill())
         ;
+    }
+
+    /**
+     * @return Collection<int, SkillRelProfile>
+     */
+    public function getProfiles(): Collection
+    {
+        return $this->profiles;
+    }
+
+    public function addProfile(SkillRelProfile $profile): static
+    {
+        if (!$this->profiles->contains($profile)) {
+            $this->profiles->add($profile);
+            $profile->setSkill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProfile(SkillRelProfile $profile): static
+    {
+        if ($this->profiles->removeElement($profile)) {
+            // set the owning side to null (unless already changed)
+            if ($profile->getSkill() === $this) {
+                $profile->setSkill(null);
+            }
+        }
+
+        return $this;
     }
 }

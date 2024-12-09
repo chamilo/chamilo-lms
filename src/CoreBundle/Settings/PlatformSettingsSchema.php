@@ -19,15 +19,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 class PlatformSettingsSchema extends AbstractSettingsSchema
 {
     private static array $tabs = [
-        'TabsCampusHomepage' => 'campus_homepage',
-        'TabsMyCourses' => 'my_courses',
-        'TabsReporting' => 'reporting',
-        'TabsPlatformAdministration' => 'platform_administration',
-        'mypersonalopenarea' => 'my_agenda',
-        'TabsMyAgenda' => 'my_profile',
-        'TabsMyGradebook' => 'my_gradebook',
-        'TabsSocial' => 'social',
-        'TabsDashboard' => 'dashboard',
+        'MenuCampusHomepage' => 'campus_homepage',
+        'MenuMyCourses' => 'my_courses',
+        'MenuReporting' => 'reporting',
+        'MenuPlatformAdministration' => 'platform_administration',
+        'MenuMyAgenda' => 'my_agenda',
+        'MenuSocial' => 'social',
+        'MenuVideoConference' => 'videoconference',
+        'MenuDiagnostics' => 'diagnostics',
+        'MenuCatalogue' => 'catalogue',
+        'TopbarCertificate' => 'topbar_certificate',
+        'TopbarSkills' => 'topbar_skills',
     ];
 
     public function buildSettings(AbstractSettingsBuilder $builder): void

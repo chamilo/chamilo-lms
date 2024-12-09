@@ -32,7 +32,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         $resourceNodeRepo = $this->container->get(ResourceNodeRepository::class);
 
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
-        /*$updateConfigurations = [
+        $updateConfigurations = [
             ['table' => 'c_tool_intro', 'field' => 'intro_text'],
             ['table' => 'c_course_description', 'field' => 'content'],
             ['table' => 'c_quiz', 'fields' => ['description', 'text_when_finished']],
@@ -48,7 +48,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             ['table' => 'c_survey', 'fields' => ['title', 'subtitle']],
             ['table' => 'c_survey_question', 'fields' => ['survey_question', 'survey_question_comment']],
             ['table' => 'c_survey_question_option', 'field' => 'option_text'],
-        ];*/
+        ];
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -59,9 +59,9 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                 continue;
             }
 
-           /* foreach ($updateConfigurations as $config) {
+            foreach ($updateConfigurations as $config) {
                 $this->updateContent($config, $courseDirectory, $courseId, $documentRepo);
-            }*/
+            }
 
             $this->updateHtmlContent($courseDirectory, $courseId, $documentRepo, $resourceNodeRepo);
         }
@@ -155,13 +155,6 @@ final class Version20230913162700 extends AbstractMigrationChamilo
 
             $documentPath = str_replace('/courses/'.$courseDirectory.'/document/', '/', $videoPath);
 
-            error_log('Debugging Replace URLs:');
-            error_log('Full URL: ' . $fullUrl);
-            error_log('Video Path: ' . $videoPath);
-            error_log('Actual Course Directory: ' . $actualCourseDirectory);
-            error_log('Processed Document Path: ' . $documentPath);
-
-            /*
             $sql = "SELECT iid, path, resource_node_id FROM c_document WHERE c_id = $courseId AND path LIKE '$documentPath'";
             $result = $this->connection->executeQuery($sql);
             $documents = $result->fetchAllAssociative();
@@ -177,7 +170,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                         $contentText = str_replace($matches[0][$index], $replacement, $contentText);
                     }
                 }
-            }*/
+            }
         }
 
         return $contentText;
@@ -214,9 +207,10 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                 throw new Exception("Course with ID $courseId not found.");
             }
 
-            $document = $documentRepo->findCourseResourceByTitle($title, $course->getResourceNode(), $course);
-            if (null !== $document) {
-                return $document;
+            $existingDocument = $documentRepo->findResourceByTitleInCourse($title, $course);
+            if ($existingDocument) {
+                error_log("Document '$title' already exists for course {$course->getId()}. Skipping creation.");
+                return $existingDocument;
             }
 
             if (file_exists($appCourseOldPath) && !is_dir($appCourseOldPath)) {
@@ -235,6 +229,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
 
                 $documentRepo->addFileFromPath($document, $title, $appCourseOldPath);
 
+                error_log("Document '$title' successfully created for course $courseId.");
                 return $document;
             }
             $generalCoursesPath = $this->getUpdateRootPath().'/app/courses/';
@@ -259,9 +254,10 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                 return $document;
             }
 
-            throw new Exception('File not found in any location.');
+            error_log("File '$title' not found for course $courseId. Skipping.");
+            return null;
         } catch (Exception $e) {
-            error_log('Migration error: '.$e->getMessage());
+            error_log('Error in createNewDocument: ' . $e->getMessage());
 
             return null;
         }

@@ -52,6 +52,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_ADMIN')"
 )]
 #[ApiFilter(SearchFilter::class, properties: ['issuedSkills.user' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
 #[ORM\Table(name: 'skill')]
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
 class Skill implements Stringable, Translatable

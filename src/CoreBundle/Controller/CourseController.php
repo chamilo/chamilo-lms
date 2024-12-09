@@ -784,7 +784,7 @@ class CourseController extends ToolBaseController
     public function getAutoLaunchLPId(
         Request $request,
         Course $course,
-        CLPRepository $lpRepository,
+        CLpRepository $lpRepository,
         EntityManagerInterface $em
     ): JsonResponse {
         $data = $request->getContent();

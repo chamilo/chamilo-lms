@@ -210,6 +210,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             $existingDocument = $documentRepo->findResourceByTitleInCourse($title, $course);
             if ($existingDocument) {
                 error_log("Document '$title' already exists for course {$course->getId()}. Skipping creation.");
+
                 return $existingDocument;
             }
 
@@ -230,6 +231,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                 $documentRepo->addFileFromPath($document, $title, $appCourseOldPath);
 
                 error_log("Document '$title' successfully created for course $courseId.");
+
                 return $document;
             }
             $generalCoursesPath = $this->getUpdateRootPath().'/app/courses/';
@@ -255,9 +257,10 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             }
 
             error_log("File '$title' not found for course $courseId. Skipping.");
+
             return null;
         } catch (Exception $e) {
-            error_log('Error in createNewDocument: ' . $e->getMessage());
+            error_log('Error in createNewDocument: '.$e->getMessage());
 
             return null;
         }

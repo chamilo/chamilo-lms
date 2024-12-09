@@ -34,7 +34,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['extra_field:write'],
     ],
-    security: "is_granted('ROLE_ADMIN')"),
+    security: "is_granted('ROLE_ADMIN')"
+),
 ]
 #[ORM\Table(name: 'extra_field')]
 #[ORM\Entity]

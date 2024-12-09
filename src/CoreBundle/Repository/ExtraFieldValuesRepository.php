@@ -193,7 +193,8 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->innerJoin(CLp::class, 'lp', 'WITH', 'lp.iid = efv.itemId')
             ->where('ef.variable = :variable')
             ->andWhere('efv.fieldValue > 0')
-            ->setParameter('variable', 'number_of_days_for_completion');
+            ->setParameter('variable', 'number_of_days_for_completion')
+        ;
 
         return $qb->getQuery()->getResult();
     }

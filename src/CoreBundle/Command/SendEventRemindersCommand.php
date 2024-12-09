@@ -47,7 +47,8 @@ class SendEventRemindersCommand extends Command
         $this
             ->setDescription('Send notification messages to users that have reminders from events in their agenda.')
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
-            ->setHelp('This command sends notifications to users who have pending reminders for calendar events.');
+            ->setHelp('This command sends notifications to users who have pending reminders for calendar events.')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -127,6 +128,7 @@ class SendEventRemindersCommand extends Command
                                 $this->sendReminderMessage($user, $event, $senderId, $debug, $io, $sentRemindersCount);
                             }
                         }
+
                         break;
 
                     case 'course':
@@ -146,6 +148,7 @@ class SendEventRemindersCommand extends Command
                                 if ($debug) {
                                     error_log("No course found for resource link in session ID: {$session->getId()}");
                                 }
+
                                 break;
                             }
 

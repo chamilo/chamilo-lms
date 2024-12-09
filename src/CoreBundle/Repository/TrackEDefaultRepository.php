@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\TrackEDefault;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
+use RuntimeException;
 
 class TrackEDefaultRepository extends ServiceEntityRepository
 {
@@ -21,9 +23,9 @@ class TrackEDefaultRepository extends ServiceEntityRepository
     /**
      * Retrieves the registration date of a user in a specific course or session.
      */
-    public function getUserCourseRegistrationAt(int $courseId, int $userId, ?int $sessionId = 0): ?\DateTime
+    public function getUserCourseRegistrationAt(int $courseId, int $userId, ?int $sessionId = 0): ?DateTime
     {
-        $serializedPattern = sprintf('s:2:"id";i:%d;', $userId);
+        $serializedPattern = \sprintf('s:2:"id";i:%d;', $userId);
 
         $qb = $this->createQueryBuilder('te')
             ->select('te.defaultDate')
@@ -34,12 +36,14 @@ class TrackEDefaultRepository extends ServiceEntityRepository
             ->setParameter('courseId', $courseId)
             ->setParameter('valueType', 'user_object')
             ->setParameter('eventType', 'user_subscribed')
-            ->setParameter('serializedPattern', '%' . $serializedPattern . '%');
+            ->setParameter('serializedPattern', '%'.$serializedPattern.'%')
+        ;
 
         if ($sessionId > 0) {
             $qb->andWhere('te.sessionId = :sessionId')
-                ->setParameter('sessionId', $sessionId);
-        } elseif ($sessionId === 0) {
+                ->setParameter('sessionId', $sessionId)
+            ;
+        } elseif (0 === $sessionId) {
             $qb->andWhere('te.sessionId = 0');
         } else {
             $qb->andWhere('te.sessionId IS NULL');
@@ -51,12 +55,12 @@ class TrackEDefaultRepository extends ServiceEntityRepository
         try {
             $result = $query->getOneOrNullResult();
             if ($result && isset($result['defaultDate'])) {
-                return $result['defaultDate'] instanceof \DateTime
+                return $result['defaultDate'] instanceof DateTime
                     ? $result['defaultDate']
-                    : new \DateTime($result['defaultDate']);
+                    : new DateTime($result['defaultDate']);
             }
-        } catch (\Exception $e) {
-            throw new \RuntimeException('Error fetching registration date: ' . $e->getMessage());
+        } catch (Exception $e) {
+            throw new RuntimeException('Error fetching registration date: '.$e->getMessage());
         }
 
         return null;

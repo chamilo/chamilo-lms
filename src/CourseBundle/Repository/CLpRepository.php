@@ -99,7 +99,8 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
     {
         $qb = $this->getResourcesByCourse($course, $session)
             ->select('resource.iid')
-            ->andWhere('resource.autolaunch = 1');
+            ->andWhere('resource.autolaunch = 1')
+        ;
 
         $qb->setMaxResults(1);
 

@@ -12,8 +12,6 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
 
-use const PREG_NO_ERROR;
-
 final class Version20231022124700 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -123,7 +121,8 @@ final class Version20231022124700 extends AbstractMigrationChamilo
                     $code = $matches[5] ?? null;
 
                     if (!$code) {
-                        error_log('Missing cidReq in URL: ' . $matches[0]);
+                        error_log('Missing cidReq in URL: '.$matches[0]);
+
                         return $matches[0];
                     }
 
@@ -137,7 +136,8 @@ final class Version20231022124700 extends AbstractMigrationChamilo
                     }
 
                     if (null === $courseId) {
-                        error_log('Course ID not found for cidReq: ' . $code);
+                        error_log('Course ID not found for cidReq: '.$code);
+
                         return $matches[0];
                     }
 
@@ -152,7 +152,7 @@ final class Version20231022124700 extends AbstractMigrationChamilo
 
                     // Ensure other parameters are maintained
                     if (!empty($remainingParams)) {
-                        $newParams .= '&' . ltrim($remainingParams, '&amp;');
+                        $newParams .= '&'.ltrim($remainingParams, '&amp;');
                     }
 
                     $finalUrl = $matches[1].'?'.$beforeCidReqParams.$newParams;
@@ -163,11 +163,13 @@ final class Version20231022124700 extends AbstractMigrationChamilo
             );
 
             if (false === $newContent || null === $newContent) {
-                error_log('preg_replace_callback failed for content: ' . substr($content, 0, 500));
+                error_log('preg_replace_callback failed for content: '.substr($content, 0, 500));
+
                 return $content;
             }
         } catch (Exception $e) {
-            error_log('Exception in replaceURLParametersInContent: ' . $e->getMessage());
+            error_log('Exception in replaceURLParametersInContent: '.$e->getMessage());
+
             return $content;
         }
 

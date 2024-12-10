@@ -82,8 +82,6 @@ class GlossaryManager
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
-        $sessionCondition = api_get_session_condition($session_id);
-
         $glossaryName = Security::remove_XSS($name);
         $glossaryName = api_convert_encoding($glossaryName, 'UTF-8', 'UTF-8');
         $glossaryName = trim($glossaryName);
@@ -95,16 +93,31 @@ class GlossaryManager
         }
 
         $sql = "SELECT * FROM $table
-		        WHERE
-		            c_id = $course_id AND
-		            (
-		                name LIKE '".Database::escape_string($glossaryName)."'
-		                OR
-		                name LIKE '".Database::escape_string($parsed)."'
-                    )
-                    $sessionCondition
-                LIMIT 1
-                ";
+            WHERE
+                c_id = $course_id AND
+                (
+                    name LIKE '".Database::escape_string($glossaryName)."' OR
+                    name LIKE '".Database::escape_string($parsed)."'
+                ) AND
+                session_id = $session_id
+            LIMIT 1";
+
+        $rs = Database::query($sql);
+
+        if (Database::num_rows($rs) > 0) {
+            return Database::fetch_array($rs, 'ASSOC');
+        }
+
+        $sql = "SELECT * FROM $table
+            WHERE
+                c_id = $course_id AND
+                (
+                    name LIKE '".Database::escape_string($glossaryName)."' OR
+                    name LIKE '".Database::escape_string($parsed)."'
+                ) AND
+                session_id IS NULL
+            LIMIT 1";
+
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {

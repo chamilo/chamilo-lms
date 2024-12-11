@@ -125,4 +125,7 @@ export const chamiloIconToClass = {
   "add-event-reminder": "mdi mdi-alarm-plus",
   "session-star": "mdi mdi-star",
   "next": "mdi mdi-arrow-right-bold-box",
+  "crosshairs": "mdi mdi-crosshairs",
+  "square": "mdi mdi-square",
+  "wheel": "mdi mdi-tire",
 };

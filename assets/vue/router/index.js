@@ -14,6 +14,7 @@ import publicPageRoutes from "./publicPage"
 import socialNetworkRoutes from "./social"
 import termsRoutes from "./terms"
 import fileManagerRoutes from "./filemanager"
+import skillRoutes from "./skill"
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from "./documents"
@@ -251,6 +252,7 @@ const router = createRouter({
     toolIntroRoutes,
     pageRoutes,
     publicPageRoutes,
+    skillRoutes,
   ],
 })
 

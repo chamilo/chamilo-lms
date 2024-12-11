@@ -5084,7 +5084,7 @@ class SessionManager
                     }
                 }
 
-                $session_name = $enreg['SessionName'];
+                $session_name = trim(trim(api_utf8_decode($enreg['SessionName']), '"'));
 
                 if ($debug) {
                     $logger->addInfo('---------------------------------------');
@@ -5536,6 +5536,7 @@ class SessionManager
                     }
                 }
 
+                $position = 0;
                 foreach ($courses as $course) {
                     $courseArray = bracketsToArray($course);
                     $course_code = $courseArray[0];
@@ -5546,7 +5547,7 @@ class SessionManager
 
                         // Adding the course to a session.
                         $sql = "INSERT IGNORE INTO $tbl_session_course
-                                SET c_id = '$courseId', session_id='$session_id'";
+                                SET c_id = '$courseId', session_id='$session_id', position = '$position'";
                         Database::query($sql);
 
                         self::installCourse($session_id, $courseInfo['real_id']);
@@ -5934,6 +5935,7 @@ class SessionManager
                             }
                         }
                         $inserted_in_course[$course_code] = $courseInfo['title'];
+                        $position++;
                     }
                 }
                 $access_url_id = api_get_current_access_url_id();

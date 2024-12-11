@@ -287,6 +287,28 @@ class Skill implements Stringable, Translatable
         return $this->issuedSkills;
     }
 
+    public function addIssuedSkill(SkillRelUser $issuedSkill): static
+    {
+        if (!$this->issuedSkills->contains($issuedSkill)) {
+            $this->issuedSkills->add($issuedSkill);
+            $issuedSkill->setSkill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIssuedSkill(SkillRelUser $issuedSkill): static
+    {
+        if ($this->issuedSkills->removeElement($issuedSkill)) {
+            // set the owning side to null (unless already changed)
+            if ($issuedSkill->getSkill() === $this) {
+                $issuedSkill->setSkill(null);
+            }
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, SkillRelItem>
      */

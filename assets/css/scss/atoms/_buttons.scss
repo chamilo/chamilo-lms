@@ -53,7 +53,7 @@
 
     &:hover,
     &:focus {
-      @apply bg-gray-30 border-gray-30 text-white;
+      @apply bg-gray-90 border-gray-90 text-white;
     }
   }
 
@@ -170,7 +170,7 @@ $border-color_12: #9333EA;
   $textColor: 'white';
 
   @if('warning' == $color) {
-    $textColor: 'gray-30';
+    $textColor: 'gray-90';
   }
 
   @apply bg-#{$color} text-#{$textColor};
@@ -199,7 +199,7 @@ $border-color_12: #9333EA;
       @if ('warning' == $color) {
         @apply bg-#{$color} border-#{$color} text-gray-90;
       } @else if('black' == $color) {
-        @apply bg-gray-30 border-gray-30 text-white;
+        @apply bg-gray-90 border-gray-90 text-white;
       } @else {
         @apply bg-#{$color} border-#{$color} text-white;
       }
@@ -326,7 +326,7 @@ $border-color_12: #9333EA;
 
 // plain button
 .p-button.p-button-plain {
-  @include filled-style('gray-30', 'black');
+  @include filled-style('gray-90', 'black');
 
   &.p-button-outlined {
     @include outlined-style('black');
@@ -339,7 +339,7 @@ $border-color_12: #9333EA;
 
 .p-buttonset.p-button-plain {
   > .p-button {
-    @include filled-style('gray-30', 'black');
+    @include filled-style('gray-90', 'black');
 
     &.p-button-outlined {
       @include outlined-style('black');

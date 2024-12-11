@@ -92,7 +92,7 @@
     @apply cursor-default inline-flex items-center flex-initial;
 
     &-icon {
-      @apply cursor-pointer;
+      @apply cursor-pointer inline-flex;
     }
   }
 

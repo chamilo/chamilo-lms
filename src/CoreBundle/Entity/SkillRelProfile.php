@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Table(name: 'skill_rel_profile')]
 #[ORM\Entity]
@@ -17,6 +18,7 @@ class SkillRelProfile
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
+    #[Groups(['skill_profile:write', 'skill_profile:read'])]
     #[ORM\ManyToOne(inversedBy: 'profiles')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Skill $skill = null;

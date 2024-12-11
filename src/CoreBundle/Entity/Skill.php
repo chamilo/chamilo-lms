@@ -60,7 +60,7 @@ class Skill implements Stringable, Translatable
     public const STATUS_DISABLED = 0;
     public const STATUS_ENABLED = 1;
 
-    #[Groups(['skill:read'])]
+    #[Groups(['skill:read', 'skill_profile:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]

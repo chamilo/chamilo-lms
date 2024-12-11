@@ -170,7 +170,7 @@ if ($form->validate()) {
                 $sessionArray = [];
                 foreach ($coachData['week'][$dateWeekToCheck]['sessions'] as $session) {
                     $date2 = new DateTime($session['display_start_date']);
-                    $name = $session['name'];
+                    $name = $session['title'];
 
                     $showName = true;
                     if (in_array($session['session_id'], $sessionAdded)) {

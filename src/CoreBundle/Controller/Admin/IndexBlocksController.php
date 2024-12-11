@@ -580,7 +580,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-skill-wheel',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'skills/skills_wheel.php']),
+            'route' => ['name' => 'SkillWheel'],
             'label' => $this->translator->trans('Skills wheel'),
         ];
         $items[] = [

@@ -86,7 +86,7 @@ class ValidationToken
     }
 
     /**
-     * Genera un enlace de validación.
+     * Generates a validation link.
      */
     public static function generateLink(int $type, int $resourceId): string
     {

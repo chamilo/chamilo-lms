@@ -68,7 +68,7 @@ class TrackEDefault
         return $this->defaultUserId;
     }
 
-    public function setCId(int $cId): self
+    public function setCId(?int $cId): self
     {
         $this->cId = $cId;
 
@@ -153,7 +153,7 @@ class TrackEDefault
         return $this->defaultValue;
     }
 
-    public function setSessionId(int $sessionId): self
+    public function setSessionId(?int $sessionId): self
     {
         $this->sessionId = $sessionId;
 

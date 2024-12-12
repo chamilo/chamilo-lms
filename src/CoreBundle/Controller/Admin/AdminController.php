@@ -67,7 +67,7 @@ class AdminController extends BaseController
                 $fileUrls[$file->getId()] = null;
                 $creator = null;
             }
-            $filePaths[$file->getId()] = '/upload/resources'.$this->resourceNodeRepository->getFilename($file);
+            $filePaths[$file->getId()] = '/upload/resource'.$this->resourceNodeRepository->getFilename($file);
         }
 
         return $this->render('@ChamiloCore/Admin/files_info.html.twig', [

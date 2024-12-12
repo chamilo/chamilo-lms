@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
@@ -136,47 +137,48 @@ class Statistics
         $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $tblCourseRelCategory = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
         $urlId = api_get_current_access_url_id();
-        $active_filter = $onlyActive ? ' AND active = 1' : '';
-        $status_filter = isset($status) ? ' AND status = '.intval($status) : '';
+
+        $conditions = [];
+        $conditions[] = "u.active <> " . USER_SOFT_DELETED;
+        if ($onlyActive) {
+            $conditions[] = "u.active = 1";
+        }
+        if (isset($status)) {
+            $conditions[] = "u.status = " . intval($status);
+        }
+
+        $where = implode(' AND ', $conditions);
 
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(DISTINCT(u.id)) AS number
-                    FROM $user_table as u, $access_url_rel_user_table as url
-                    WHERE
-                        u.active <> ".USER_SOFT_DELETED." AND
-                        u.id = url.user_id AND
-                        access_url_id = $urlId
-                        $status_filter $active_filter";
+                FROM $user_table as u
+                INNER JOIN $access_url_rel_user_table as url ON u.id = url.user_id
+                WHERE $where AND url.access_url_id = $urlId";
+
             if (isset($categoryCode)) {
                 $categoryCode = Database::escape_string($categoryCode);
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
-                        FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url, $tblCourseRelCategory crc, $tblCourseCategory cc
-                        WHERE
-                            c.id = cu.c_id AND
-                            cc.code = '$categoryCode' AND
-                            crc.course_category_id = cc.id AND
-                            crc.course_id = c.id AND
-                            cu.user_id = url.user_id AND
-                            access_url_id = $urlId
-                            $status_filter $active_filter";
+                    FROM $course_user_table cu
+                    INNER JOIN $course_table c ON c.id = cu.c_id
+                    INNER JOIN $access_url_rel_user_table as url ON cu.user_id = url.user_id
+                    INNER JOIN $tblCourseRelCategory crc ON crc.course_id = c.id
+                    INNER JOIN $tblCourseCategory cc ON cc.id = crc.course_category_id
+                    WHERE $where AND url.access_url_id = $urlId AND cc.code = '$categoryCode'";
             }
         } else {
             $sql = "SELECT COUNT(DISTINCT(id)) AS number
-                    FROM $user_table
-                    WHERE 1 = 1 AND active <> ".USER_SOFT_DELETED." $status_filter $active_filter";
+                FROM $user_table u
+                WHERE $where";
+
             if (isset($categoryCode)) {
                 $categoryCode = Database::escape_string($categoryCode);
-                $status_filter = isset($status) ? ' AND status = '.intval($status) : '';
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
-                        FROM $course_user_table cu, $course_table c, $tblCourseRelCategory crc, $tblCourseCategory cc
-                        WHERE
-                            c.id = cu.c_id AND
-                            cc.code = '$categoryCode' AND
-                            crc.course_category_id = cc.id AND
-                            crc.course_id = c.id AND
-                            $status_filter
-                            $active_filter
-                        ";
+                    FROM $course_user_table cu
+                    INNER JOIN $course_table c ON c.id = cu.c_id
+                    INNER JOIN $tblCourseRelCategory crc ON crc.course_id = c.id
+                    INNER JOIN $tblCourseCategory cc ON cc.id = crc.course_category_id
+                    INNER JOIN $user_table u ON u.id = cu.user_id
+                    WHERE $where AND cc.code = '$categoryCode'";
             }
         }
 
@@ -890,7 +892,7 @@ class Statistics
             'get',
             api_get_path(WEB_CODE_PATH).'admin/statistics/index.php',
             '',
-            'width=200px',
+            ['style' => 'width:200px'],
             false
         );
         $renderer = &$form->defaultRenderer();
@@ -941,7 +943,7 @@ class Statistics
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $urlId = api_get_current_access_url_id();
 
-        $columns[0] = 't.c_id';
+        $columns[0] = 'c_id';
         $columns[1] = 'access_date';
         $sql_order[SORT_ASC] = 'ASC';
         $sql_order[SORT_DESC] = 'DESC';
@@ -972,15 +974,15 @@ class Statistics
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT * FROM $table t , $access_url_rel_course_table a
                    WHERE
-                        t.c_id = a.c_id AND
+                        c_id = a.c_id AND
                         access_url_id='".$urlId."'
-                   GROUP BY t.c_id
-                   HAVING t.c_id <> ''
+                   GROUP BY c_id
+                   HAVING c_id <> ''
                    AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ".$date_diff;
         } else {
             $sql = "SELECT * FROM $table t
-                   GROUP BY t.c_id
-                   HAVING t.c_id <> ''
+                   GROUP BY c_id
+                   HAVING c_id <> ''
                    AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ".$date_diff;
         }
         $sql .= ' ORDER BY `'.$columns[$column].'` '.$sql_order[$direction];
@@ -1030,33 +1032,42 @@ class Statistics
      */
     public static function getMessages($messageType)
     {
-        $message_table = Database::get_main_table(TABLE_MESSAGE);
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $messageTable = Database::get_main_table(TABLE_MESSAGE);
+        $messageRelUserTable = Database::get_main_table(TABLE_MESSAGE_REL_USER);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $accessUrlRelUserTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         $urlId = api_get_current_access_url_id();
 
         switch ($messageType) {
             case 'sent':
-                $field = 'user_sender_id';
+                $field = 'm.user_sender_id';
+                $joinCondition = "m.id = mru.message_id AND mru.receiver_type = " . MessageRelUser::TYPE_SENDER;
                 break;
             case 'received':
-                $field = 'user_receiver_id';
+                $field = 'mru.user_id';
+                $joinCondition = "m.id = mru.message_id AND mru.receiver_type = " . MessageRelUser::TYPE_TO;
                 break;
         }
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message
-                FROM $access_url_rel_user_table as url, $message_table m
-                LEFT JOIN $user_table u ON m.$field = u.id AND u.active <> ".USER_SOFT_DELETED."
-                WHERE  url.user_id = m.$field AND  access_url_id='".$urlId."'
-                GROUP BY m.$field
-                ORDER BY count_message DESC ";
+            $sql = "SELECT u.lastname, u.firstname, u.username, COUNT(DISTINCT m.id) AS count_message
+            FROM $messageTable m
+            INNER JOIN $messageRelUserTable mru ON $joinCondition
+            INNER JOIN $userTable u ON $field = u.id
+            INNER JOIN $accessUrlRelUserTable url ON u.id = url.user_id
+            WHERE url.access_url_id = $urlId
+            AND u.active <> " . USER_SOFT_DELETED . "
+            GROUP BY $field
+            ORDER BY count_message DESC";
         } else {
-            $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message
-                FROM $message_table m
-                LEFT JOIN $user_table u ON m.$field = u.id AND u.active <> ".USER_SOFT_DELETED."
-                GROUP BY m.$field ORDER BY count_message DESC ";
+            $sql = "SELECT u.lastname, u.firstname, u.username, COUNT(DISTINCT m.id) AS count_message
+            FROM $messageTable m
+            INNER JOIN $messageRelUserTable mru ON $joinCondition
+            INNER JOIN $userTable u ON $field = u.id
+            WHERE u.active <> " . USER_SOFT_DELETED . "
+            GROUP BY $field
+            ORDER BY count_message DESC";
         }
         $res = Database::query($sql);
         $messages_sent = [];
@@ -1065,9 +1076,9 @@ class Statistics
                 $messages['username'] = get_lang('Unknown');
             }
             $users = api_get_person_name(
-                $messages['firstname'],
-                $messages['lastname']
-            ).'<br />('.$messages['username'].')';
+                    $messages['firstname'],
+                    $messages['lastname']
+                ) . '<br />(' . $messages['username'] . ')';
             $messages_sent[$users] = $messages['count_message'];
         }
 
@@ -1144,7 +1155,7 @@ class Statistics
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= '$now' $where_url";
-        $sql[sprintf(get_lang('Last %i months'), 6)] =
+        $sql[sprintf(get_lang('Last %d months'), 6)] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 6 MONTH) >= '$now' $where_url";

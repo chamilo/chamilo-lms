@@ -152,15 +152,20 @@ class SettingsController extends BaseController
                 $manager->save($form->getData());
                 $message = $this->trans('Settings have been successfully updated');
             } catch (ValidatorException $validatorException) {
-                // $message = $this->trans($exception->getMessage(), [], 'validators');
                 $message = $this->trans($validatorException->getMessage());
                 $messageType = 'error';
             }
 
             $this->addFlash($messageType, $message);
-            if (!empty($keywordFromGet)) {
-                return $this->redirect($request->headers->get('referer'));
+            if (!empty($keyword)) {
+                return $this->redirectToRoute('chamilo_platform_settings_search', [
+                    'keyword' => $keyword,
+                ]);
             }
+
+            return $this->redirectToRoute('chamilo_platform_settings', [
+                'namespace' => $namespace,
+            ]);
         }
         $schemas = $manager->getSchemas();
 

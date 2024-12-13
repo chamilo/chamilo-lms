@@ -259,13 +259,7 @@ class SettingsManager implements SettingsManagerInterface
 
         foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
             if (\array_key_exists($parameter, $parameters)) {
-                if ('course_creation_use_template' === $parameter) {
-                    if (empty($parameters[$parameter])) {
-                        $parameters[$parameter] = null;
-                    }
-                } else {
-                    $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
-                }
+                $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
             }
         }
 
@@ -290,10 +284,8 @@ class SettingsManager implements SettingsManagerInterface
         // 2. Is defined as an array in class DocumentSettingsSchema
         // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
         // 4. Here we recover the transformer and convert the array to string
-        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (\array_key_exists($parameter, $parameters)) {
-                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
-            }
+        foreach ($parameters as $parameter => $value) {
+            $parameters[$parameter] = $this->transformToString($value);
         }
 
         $settings->setParameters($parameters);
@@ -329,11 +321,6 @@ class SettingsManager implements SettingsManagerInterface
                     ->setAccessUrlLocked(1)
                 ;
 
-                // @var ConstraintViolationListInterface $errors
-                /*$errors = $this->validator->validate($parameter);
-                if (0 < $errors->count()) {
-                    throw new ValidatorException($errors->get(0)->getMessage());
-                }*/
                 $this->manager->persist($parameter);
             }
         }
@@ -359,10 +346,8 @@ class SettingsManager implements SettingsManagerInterface
         // 2. Is defined as an array in class DocumentSettingsSchema
         // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
         // 4. Here we recover the transformer and convert the array to string
-        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (\array_key_exists($parameter, $parameters)) {
-                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
-            }
+        foreach ($parameters as $parameter => $value) {
+            $parameters[$parameter] = $this->transformToString($value);
         }
         $settings->setParameters($parameters);
         $persistedParameters = $this->repository->findBy([
@@ -372,12 +357,6 @@ class SettingsManager implements SettingsManagerInterface
         foreach ($persistedParameters as $parameter) {
             $persistedParametersMap[$parameter->getVariable()] = $parameter;
         }
-
-        // @var SettingsEvent $event
-        /*$event = $this->eventDispatcher->dispatch(
-            SettingsEvent::PRE_SAVE,
-            new SettingsEvent($settings, $parameters)
-        );*/
 
         $url = $this->getUrl();
         $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
@@ -397,77 +376,11 @@ class SettingsManager implements SettingsManagerInterface
                     ->setAccessUrlLocked(1)
                 ;
 
-                // @var ConstraintViolationListInterface $errors
-                /*$errors = $this->validator->validate($parameter);
-                if (0 < $errors->count()) {
-                    throw new ValidatorException($errors->get(0)->getMessage());
-                }*/
                 $this->manager->persist($parameter);
             }
-            $this->manager->persist($parameter);
         }
 
         $this->manager->flush();
-
-        //        $schemaAlias = $settings->getSchemaAlias();
-        //        $schemaAliasChamilo = str_replace('chamilo_core.settings.', '', $schemaAlias);
-        //
-        //        $schema = $this->schemaRegistry->get($schemaAlias);
-        //
-        //        $settingsBuilder = new SettingsBuilder();
-        //        $schema->buildSettings($settingsBuilder);
-        //
-        //        $parameters = $settingsBuilder->resolve($settings->getParameters());
-        //
-        //        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-        //            if (array_key_exists($parameter, $parameters)) {
-        //                $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
-        //            }
-        //        }
-        //
-        //        /** @var \Sylius\Bundle\SettingsBundle\Event\SettingsEvent $event */
-        //        $event = $this->eventDispatcher->dispatch(
-        //            SettingsEvent::PRE_SAVE,
-        //            new SettingsEvent($settings)
-        //        );
-        //
-        //        /** @var SettingsCurrent $url */
-        //        $url = $event->getSettings()->getAccessUrl();
-        //
-        //        foreach ($parameters as $name => $value) {
-        //            if (isset($persistedParametersMap[$name])) {
-        //                if ($value instanceof Course) {
-        //                    $value = $value->getId();
-        //                }
-        //                $persistedParametersMap[$name]->setValue($value);
-        //            } else {
-        //                $setting = new Settings();
-        //                $setting->setSchemaAlias($schemaAlias);
-        //
-        //                $setting
-        //                    ->setNamespace($schemaAliasChamilo)
-        //                    ->setName($name)
-        //                    ->setValue($value)
-        //                    ->setUrl($url)
-        //                    ->setAccessUrlLocked(0)
-        //                    ->setAccessUrlChangeable(1)
-        //                ;
-        //
-        //                /** @var ConstraintViolationListInterface $errors */
-        //                /*$errors = $this->->validate($parameter);
-        //                if (0 < $errors->count()) {
-        //                    throw new ValidatorException($errors->get(0)->getMessage());
-        //                }*/
-        //                $this->manager->persist($setting);
-        //                $this->manager->flush();
-        //            }
-        //        }
-        /*$parameters = $settingsBuilder->resolve($settings->getParameters());
-         * $settings->setParameters($parameters);
-         * $this->eventDispatcher->dispatch(SettingsEvent::PRE_SAVE, new SettingsEvent($settings));
-         * $this->manager->persist($settings);
-         * $this->manager->flush();
-         * $this->eventDispatcher->dispatch(SettingsEvent::POST_SAVE, new SettingsEvent($settings));*/
     }
 
     /**
@@ -1077,5 +990,26 @@ class SettingsManager implements SettingsManagerInterface
         ];
 
         return $settings[$variable] ?? $defaultCategory;
+    }
+
+    private function transformToString($value): string
+    {
+        if (is_array($value)) {
+            return implode(',', $value);
+        }
+
+        if ($value instanceof Course) {
+            return (string) $value->getId();
+        }
+
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
+        if (is_null($value)) {
+            return '';
+        }
+
+        return (string) $value;
     }
 }

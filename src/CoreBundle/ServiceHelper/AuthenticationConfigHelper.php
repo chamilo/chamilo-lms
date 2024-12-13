@@ -50,7 +50,7 @@ readonly class AuthenticationConfigHelper
                 $enabledProviders[] = [
                     'name' => $providerName,
                     'title' => $providerParams['title'] ?? u($providerName)->title(),
-                    'url' => $this->urlGenerator->generate("chamilo.oauth2_{$providerName}_start"),
+                    'url' => $this->urlGenerator->generate(sprintf("chamilo.oauth2_%s_start", $providerName)),
                 ];
             }
         }

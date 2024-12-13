@@ -35,8 +35,8 @@ if (empty($documentServerUrl)) {
 
 $config = [];
 $docApiUrl = $appSettings->getDocumentServerApiUrl();
-$docId = $_GET['docId'];
-$groupId = isset($_GET['groupId']) && !empty($_GET['groupId']) ? $_GET['groupId'] : null;
+$docId = (int) $_GET['docId'];
+$groupId = isset($_GET['groupId']) && !empty($_GET['groupId']) ? (int) $_GET['groupId'] : (!empty($_GET['gidReq']) ? (int) $_GET['gidReq'] : null);
 $userId = api_get_user_id();
 $userInfo = api_get_user_info($userId);
 $sessionId = api_get_session_id();

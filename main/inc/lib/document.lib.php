@@ -5479,7 +5479,13 @@ class DocumentManager
                 } else {
                     // For a "PDF Download" of the file.
                     $pdfPreview = null;
-                    if ($ext != 'pdf' && !in_array($ext, $webODFList)) {
+
+                    if (OnlyofficePlugin::create()->isEnabled() &&
+                        OnlyofficePlugin::isExtensionAllowed($document_data['file_extension']) &&
+                        method_exists('OnlyofficeTools', 'getPathToView')
+                    ) {
+                        $url = OnlyofficeTools::getPathToView($document_data['id']);
+                    } elseif ($ext != 'pdf' && !in_array($ext, $webODFList)) {
                         $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
                     } else {
                         $pdfPreview = Display::url(

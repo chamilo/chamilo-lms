@@ -24,4 +24,13 @@ knpu_oauth2_client:
             auth_server_url: null
             realm: null
 
+        azure:
+            type: azure
+            client_id: ''
+            # a route name you'll create
+            redirect_route: chamilo.oauth2_azure_check
+            redirect_params: { }
+            # The shared client secret if you don't use a certificate
+            client_secret: ' '
+
         # configure your clients as described here: https://github.com/knpuniversity/oauth2-client-bundle#configuration

@@ -16,6 +16,7 @@ use League\OAuth2\Client\Provider\GenericProvider;
 use Stevenmaguire\OAuth2\Client\Provider\Keycloak;
 use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 use Symfony\Component\DependencyInjection\Attribute\AutowireDecorated;
+use TheNetworg\OAuth2\Client\Provider\Azure;
 
 #[AsDecorator(decorates: 'knpu.oauth2.provider_factory')]
 readonly class OAuth2ProviderFactoryDecorator
@@ -37,6 +38,7 @@ readonly class OAuth2ProviderFactoryDecorator
             GenericProvider::class => $this->getProviderOptions('generic'),
             Facebook::class => $this->getProviderOptions('facebook'),
             Keycloak::class => $this->getProviderOptions('keycloak'),
+            Azure::class => $this->getProviderOptions('azure'),
         };
 
         return $this->inner->createProvider($class, $options, $redirectUri, $redirectParams, $collaborators);

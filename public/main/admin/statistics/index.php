@@ -372,6 +372,8 @@ switch ($report) {
         $sessions = [];
         if ($validated) {
             $values = $form->getSubmitValues();
+            $dateStart = $values['range_start'];
+            $dateEnd = $values['range_end'];
             $first = DateTime::createFromFormat('Y-m-d', $dateStart);
             $second = DateTime::createFromFormat('Y-m-d', $dateEnd);
             $numberOfWeeks = 0;
@@ -549,7 +551,7 @@ switch ($report) {
 
         foreach ($sessions as $session) {
             $courseList = SessionManager::getCoursesInSession($session['id']);
-            $table->setCellContents($row, 0, $session['name']);
+            $table->setCellContents($row, 0, $session['title']);
             $table->setCellContents($row, 1, api_get_local_time($session['display_start_date']));
             $table->setCellContents($row, 2, api_get_local_time($session['display_end_date']));
 

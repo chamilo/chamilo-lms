@@ -53,3 +53,21 @@ parameters:
                 encryption_key_path: null
                 encryption_key: null
                 redirect_params: { }
+
+            azure:
+                enabled: false
+                title: ''
+                client_id: ''
+                client_secret: ''
+                tenant: 'common'
+                client_certificate_private_key: ''
+                client_certificate_thumbprint: ''
+                url_login: 'https://login.microsoftonline.com/'
+                path_authorize: '/oauth2/authorize'
+                path_token: '/oauth2/token'
+                scope: {}
+                url_api: 'https://graph.windows.net/'
+                resource: null
+                api_version: '1.6'
+                auth_with_resource: true
+                default_end_point_version: '1.0'

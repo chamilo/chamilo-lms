@@ -118,6 +118,7 @@ security:
                 - Chamilo\CoreBundle\Security\Authenticator\OAuth2\GenericAuthenticator
                 - Chamilo\CoreBundle\Security\Authenticator\OAuth2\FacebookAuthenticator
                 - Chamilo\CoreBundle\Security\Authenticator\OAuth2\KeycloakAuthenticator
+                - Chamilo\CoreBundle\Security\Authenticator\OAuth2\AzureAuthenticator
 
     access_control:
         - {path: ^/login, roles: PUBLIC_ACCESS}

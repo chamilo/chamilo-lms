@@ -7,9 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Decorator;
 
 use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
-use KnpU\OAuth2ClientBundle\DependencyInjection\KnpUOAuth2ClientExtension;
 use KnpU\OAuth2ClientBundle\DependencyInjection\ProviderFactory;
-use KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Facebook;
 use League\OAuth2\Client\Provider\GenericProvider;
@@ -34,23 +32,31 @@ readonly class OAuth2ProviderFactoryDecorator
         array $redirectParams = [],
         array $collaborators = []
     ): AbstractProvider {
-        $options = match ($class) {
-            GenericProvider::class => $this->getProviderOptions('generic'),
-            Facebook::class => $this->getProviderOptions('facebook'),
-            Keycloak::class => $this->getProviderOptions('keycloak'),
-            Azure::class => $this->getProviderOptions('azure'),
+        $customConfig = match ($class) {
+            GenericProvider::class => $this->authenticationConfigHelper->getProviderConfig('generic'),
+            Facebook::class => $this->authenticationConfigHelper->getProviderConfig('facebook'),
+            Keycloak::class => $this->authenticationConfigHelper->getProviderConfig('keycloak'),
+            Azure::class => $this->authenticationConfigHelper->getProviderConfig('azure'),
         };
 
+        $redirectParams = $customConfig['redirect_params'] ?? [];
+
+        $customOptions = match ($class) {
+            GenericProvider::class => $this->authenticationConfigHelper->getProviderOptions(
+                'generic',
+                [
+                    'client_id' => $customConfig['client_id'],
+                    'client_secret' => $customConfig['client_secret'],
+                    ...$customConfig['provider_options'],
+                ],
+            ),
+            Facebook::class => $this->authenticationConfigHelper->getProviderOptions('facebook', $customConfig),
+            Keycloak::class => $this->authenticationConfigHelper->getProviderOptions('keycloak', $customConfig),
+            Azure::class => $this->authenticationConfigHelper->getProviderOptions('azure', $customConfig),
+        };
+
+        $options = $customOptions + $options;
+
         return $this->inner->createProvider($class, $options, $redirectUri, $redirectParams, $collaborators);
-    }
-
-    private function getProviderOptions(string $providerName): array
-    {
-        /** @var KnpUOAuth2ClientExtension $extension */
-        $extension = (new KnpUOAuth2ClientBundle())->getContainerExtension();
-
-        $configParams = $this->authenticationConfigHelper->getParams($providerName);
-
-        return $extension->getConfigurator($providerName)->getProviderOptions($configParams);
     }
 }

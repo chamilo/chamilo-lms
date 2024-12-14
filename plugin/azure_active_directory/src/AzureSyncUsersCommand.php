@@ -15,8 +15,8 @@ class AzureSyncUsersCommand extends AzureCommand
     {
         yield 'Synchronizing users from Azure.';
 
-        /** @var array<string, int> $existingUsers */
-        $existingUsers = [];
+        /** @var array<string, int> $azureCreatedUserIdList */
+        $azureCreatedUserIdList = [];
 
         foreach ($this->getAzureUsers() as $azureUserInfo) {
             try {
@@ -27,7 +27,7 @@ class AzureSyncUsersCommand extends AzureCommand
                 continue;
             }
 
-            $existingUsers[$azureUserInfo['id']] = $userId;
+            $azureCreatedUserIdList[$azureUserInfo['id']] = $userId;
 
             yield sprintf('User (ID %d) with received info: %s ', $userId, serialize($azureUserInfo));
         }
@@ -53,7 +53,7 @@ class AzureSyncUsersCommand extends AzureCommand
             $azureGroupMembersUids = array_column($azureGroupMembersInfo, 'id');
 
             foreach ($azureGroupMembersUids as $azureGroupMembersUid) {
-                $userId = $existingUsers[$azureGroupMembersUid] ?? null;
+                $userId = $azureCreatedUserIdList[$azureGroupMembersUid] ?? null;
 
                 if (!$userId) {
                     continue;
@@ -72,20 +72,22 @@ class AzureSyncUsersCommand extends AzureCommand
             $em->flush();
         }
 
-        if ('true' === $this->plugin->get(AzureActiveDirectory::SETTING_DEACTIVATE_NONEXISTING_USERS)) {
+        if ('true' === $this->plugin->get(AzureActiveDirectory::SETTING_DEACTIVATE_NONEXISTING_USERS)
+            && 'true' !== $this->plugin->get(AzureActiveDirectory::SETTING_GET_USERS_DELTA)
+        ) {
             yield '----------------';
 
             yield 'Trying deactivate non-existing users in Azure';
 
             $users = UserManager::getRepository()->findByAuthSource('azure');
-            $userIdList = array_map(
+            $chamiloUserIdList = array_map(
                 function ($user) {
                     return $user->getId();
                 },
                 $users
             );
 
-            $nonExistingUsers = array_diff($userIdList, $existingUsers);
+            $nonExistingUsers = array_diff($chamiloUserIdList, $azureCreatedUserIdList);
 
             UserManager::deactivate_users($nonExistingUsers);
 

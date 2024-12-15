@@ -189,8 +189,11 @@ class OnlyofficeDocumentManager extends DocumentManager
 
         $fileTitle = Security::remove_XSS($basename).'.'.$fileExt;
 
-        $fileNamePrefix = ChamiloDocumentManager::getDocumentSuffix($courseInfo, $sessionId, $groupId);
-        $fileName = preg_replace('/\.\./', '', $basename).$fileNamePrefix.'.'.$fileExt;
+        $fileNameSuffix = ChamiloDocumentManager::getDocumentSuffix($courseInfo, $sessionId, $groupId);
+        // Try to avoid directories browsing (remove .., slashes and backslashes)
+        $patterns = ['#\.\./#', '#\.\.#', '#/#', '#\\\#'];
+        $replacements = ['', '', '', ''];
+        $fileName = preg_replace($patterns, $replacements, $basename).$fileNameSuffix.'.'.$fileExt;
 
         if (empty($templatePath)) {
             $templatePath = TemplateManager::getEmptyTemplate($fileExt);

@@ -60,7 +60,7 @@ $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 $sessionId = api_get_session_id();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
-if ('export_all_exercises_results' !== $action) {
+if ('export_all_exercises_results' !== $action && !(isset($_GET['delete']) && $_GET['delete'] === 'delete')) {
     if (empty($exercise_id)) {
         api_not_allowed(true);
     }
@@ -523,6 +523,10 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
     if (!empty($exe_id)) {
         ExerciseLib::deleteExerciseAttempt($exe_id);
 
+        if (empty($exercise_id)) {
+            header('Location: pending.php');
+            exit;
+        }
         header('Location: exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id);
         exit;
     }

@@ -1156,7 +1156,7 @@ function api_utf8_encode($string, $from_encoding = 'UTF-8')
  *
  * @see http://php.net/manual/en/function.utf8-decode
  */
-function api_utf8_decode($string, $to_encoding = null)
+function api_utf8_decode($string, $to_encoding = 'UTF-8')
 {
     return mb_convert_encoding($string, $to_encoding, 'UTF-8');
 }
@@ -1176,7 +1176,7 @@ function api_utf8_decode($string, $to_encoding = null)
  *
  * @return string returns the converted string
  */
-function api_to_system_encoding($string, $from_encoding = null, $check_utf8_validity = false)
+function api_to_system_encoding($string, $from_encoding = 'UTF-8', $check_utf8_validity = false)
 {
     $system_encoding = api_get_system_encoding();
 

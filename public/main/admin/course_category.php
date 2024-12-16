@@ -73,7 +73,7 @@ switch ($action) {
         if (isset($_POST['formSent']) && $_POST['formSent']) {
             $categoryEntity = CourseCategory::add(
                 $_POST['code'],
-                $_POST['name'],
+                $_POST['title'],
                 $_POST['auth_course_child'],
                 $_POST['description'],
                 $parentId,
@@ -92,7 +92,7 @@ switch ($action) {
         if (isset($_POST['formSent']) && $_POST['formSent']) {
             $categoryEntity = CourseCategory::edit(
                 $categoryId,
-                $_REQUEST['name'],
+                $_REQUEST['title'],
                 $_REQUEST['auth_course_child'],
                 $_REQUEST['code'],
                 $_REQUEST['description']
@@ -144,15 +144,15 @@ if ('add' === $action || 'edit' === $action) {
 
     if ('true' === api_get_setting('editor.save_titles_as_html')) {
         $form->addHtmlEditor(
-            'name',
+            'title',
             get_lang('Category name'),
             true,
             false,
             ['ToolbarSet' => 'TitleAsHtml']
         );
     } else {
-        $form->addElement('text', 'name', get_lang('Category name'));
-        $form->addRule('name', get_lang('Please enter a code and a name for the category'), 'required');
+        $form->addElement('text', 'title', get_lang('Category name'));
+        $form->addRule('title', get_lang('Please enter a code and a name for the category'), 'required');
     }
 
     $form->addRule('code', get_lang('Please enter a code and a name for the category'), 'required');
@@ -191,8 +191,9 @@ if ('add' === $action || 'edit' === $action) {
 
         $asset = $assetRepo->find($categoryInfo['asset_id']);
         $image = $assetRepo->getAssetUrl($asset);
+        $escapedImageUrl = htmlspecialchars($image, ENT_QUOTES, 'UTF-8');
 
-        $form->addLabel(get_lang('Image'), "<img src=$image />");
+        $form->addLabel(get_lang('Image'), "<img src='$escapedImageUrl' alt='Image' />");
     }
 
     if ('edit' === $action  && !empty($categoryInfo)) {

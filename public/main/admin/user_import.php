@@ -57,15 +57,6 @@ function validate_data($users, $checkUniqueEmail = false)
                 $user['message'] .= Display::return_message(get_lang('This login is too long'), 'warning');
                 $user['has_error'] = true;
             }
-            // 2.1.1
-            $hasDash = strpos($username, '-');
-            if (false !== $hasDash) {
-                $user['message'] .= Display::return_message(
-                    get_lang('The username cannot contain the \' - \' character'),
-                    'warning'
-                );
-                $user['has_error'] = true;
-            }
             // 2.2. Check whether the username was used twice in import file.
             if (isset($usernames[$username])) {
                 $user['message'] .= Display::return_message(get_lang('Login is used twice'), 'warning');

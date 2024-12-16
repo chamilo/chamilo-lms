@@ -288,10 +288,12 @@ courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
 
       return false
     })
-    .map((adminTool) => ({
-      label: adminTool.tool.titleToShow,
-      url: adminTool.url,
-    }))
+    .map((adminTool) => {
+      return {
+        label: t(adminTool.tool.titleToShow),
+        url: adminTool.url,
+      }
+    })
 
   noAdminToolsIndex.reverse().forEach((element) => tools.value.splice(element, 1))
 

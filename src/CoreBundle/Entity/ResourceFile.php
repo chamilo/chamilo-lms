@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
+use Chamilo\CoreBundle\Controller\AddVariantResourceFileAction;
 use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use DateTime;
@@ -40,6 +41,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Post(
             controller: CreateResourceFileAction::class,
             openapiContext: [
+                'summary' => 'Create a new resource file',
                 'requestBody' => [
                     'content' => [
                         'multipart/form-data' => [
@@ -61,6 +63,37 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                 'groups' => ['Default', 'media_object_create', 'document:write'],
             ],
             deserialize: false
+        ),
+        new Post(
+            uriTemplate: '/resource_files/add_variant',
+            controller: AddVariantResourceFileAction::class,
+            openapiContext: [
+                'summary' => 'Add a variant to an existing resource file',
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'file' => [
+                                        'type' => 'string',
+                                        'format' => 'binary',
+                                    ],
+                                    'resourceNodeId' => [
+                                        'type' => 'integer',
+                                    ],
+                                    'accessUrlId' => [
+                                        'type' => 'integer',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            security: 'is_granted(\'ROLE_USER\')',
+            deserialize: false,
+            name: 'add_variant'
         ),
         new GetCollection(),
     ],
@@ -150,6 +183,11 @@ class ResourceFile implements Stringable
     #[ORM\Column(type: 'datetime')]
     protected $updatedAt;
 
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class)]
+    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?AccessUrl $accessUrl = null;
+
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read'])]
     #[ORM\ManyToOne(inversedBy: 'resourceFiles')]
     private ?ResourceNode $resourceNode = null;
 
@@ -329,6 +367,17 @@ class ResourceFile implements Stringable
             $this->updatedAt = new DateTimeImmutable();
         }
 
+        return $this;
+    }
+
+    public function getAccessUrl(): ?AccessUrl
+    {
+        return $this->accessUrl;
+    }
+
+    public function setAccessUrl(?AccessUrl $accessUrl): self
+    {
+        $this->accessUrl = $accessUrl;
         return $this;
     }
 

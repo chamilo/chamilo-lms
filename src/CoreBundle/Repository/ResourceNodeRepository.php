@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use League\Flysystem\FilesystemOperator;
@@ -25,17 +27,18 @@ use Vich\UploaderBundle\Storage\FlysystemStorage;
  */
 class ResourceNodeRepository extends MaterializedPathRepository
 {
-    protected FlysystemStorage $storage;
     protected FilesystemOperator $filesystem;
-    protected RouterInterface $router;
 
-    public function __construct(EntityManagerInterface $manager, FlysystemStorage $storage, FilesystemOperator $resourceFilesystem, RouterInterface $router)
-    {
+    public function __construct(
+        private readonly EntityManagerInterface $manager,
+        private readonly FlysystemStorage $storage,
+        private readonly FilesystemOperator $resourceFilesystem,
+        private readonly RouterInterface $router,
+        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly SettingsManager $settingsManager
+    ) {
+        $this->filesystem = $resourceFilesystem; // Asignar el filesystem correcto
         parent::__construct($manager, $manager->getClassMetadata(ResourceNode::class));
-        $this->storage = $storage;
-        // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml
-        $this->filesystem = $resourceFilesystem;
-        $this->router = $router;
     }
 
     public function getFilename(ResourceFile $resourceFile): ?string
@@ -61,10 +64,10 @@ class ResourceNodeRepository extends MaterializedPathRepository
         return $this->filesystem;
     }
 
-    public function getResourceNodeFileContent(ResourceNode $resourceNode): string
+    public function getResourceNodeFileContent(ResourceNode $resourceNode, ?ResourceFile $resourceFile = null): string
     {
         try {
-            $resourceFile = $resourceNode->getResourceFiles()->first();
+            $resourceFile ??= $resourceNode->getResourceFiles()->first();
 
             if ($resourceFile) {
                 $fileName = $this->getFilename($resourceFile);
@@ -81,10 +84,10 @@ class ResourceNodeRepository extends MaterializedPathRepository
     /**
      * @return false|resource
      */
-    public function getResourceNodeFileStream(ResourceNode $resourceNode)
+    public function getResourceNodeFileStream(ResourceNode $resourceNode, ?ResourceFile $resourceFile = null)
     {
         try {
-            $resourceFile = $resourceNode->getResourceFiles()->first();
+            $resourceFile ??= $resourceNode->getResourceFiles()->first();
 
             if ($resourceFile) {
                 $fileName = $this->getFilename($resourceFile);
@@ -98,15 +101,21 @@ class ResourceNodeRepository extends MaterializedPathRepository
         }
     }
 
-    public function getResourceFileUrl(ResourceNode $resourceNode, array $extraParams = [], ?int $referenceType = null): string
+    public function getResourceFileUrl(?ResourceNode $resourceNode, array $extraParams = [], ?int $referenceType = null, ?ResourceFile $resourceFile = null): string
     {
         try {
-            if ($resourceNode->hasResourceFile()) {
+            $file = $resourceFile ?? $resourceNode?->getResourceFiles()->first();
+
+            if ($file) {
                 $params = [
                     'tool' => $resourceNode->getResourceType()->getTool(),
                     'type' => $resourceNode->getResourceType(),
                     'id' => $resourceNode->getUuid(),
                 ];
+
+                if ($resourceFile) {
+                    $params['resourceFileId'] = $resourceFile->getId();
+                }
 
                 if (!empty($extraParams)) {
                     $params = array_merge($params, $extraParams);

@@ -206,6 +206,15 @@
           />
 
           <BaseButton
+            v-if="canEdit(slotProps.data) && allowAccessUrlFiles && isFile(slotProps.data)"
+            icon="file-replace"
+            size="small"
+            type="secondary"
+            :title="t('Add File Variation')"
+            @click="goToAddVariation(slotProps.data)"
+          />
+
+          <BaseButton
             v-if="canEdit(slotProps.data)"
             icon="edit"
             size="small"
@@ -436,17 +445,21 @@ import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import { useDocumentActionButtons } from "../../composables/document/documentActionButtons"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
 
+const platformConfigStore = usePlatformConfig()
+const allowAccessUrlFiles = computed(() => "false" !== platformConfigStore.getSetting("course.access_url_specific_files"))
+
 const { t } = useI18n()
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents")
 const notification = useNotification()
 const { cid, sid, gid } = useCidReq()
-const { isImage, isHtml } = useFileUtils()
+const { isImage, isHtml, isFile } = useFileUtils()
 
 const { relativeDatetime } = useFormatDate()
 const isAllowedToEdit = ref(false)
@@ -558,6 +571,15 @@ const showBackButtonIfNotRootFolder = computed(() => {
   }
   return resourceNode.value.resourceType.title !== "courses"
 })
+
+function goToAddVariation(item) {
+  const resourceFileId = item.resourceNode.firstResourceFile.id
+  router.push({
+    name: 'DocumentsAddVariation',
+    params: { resourceFileId, node: route.params.node },
+    query: { cid, sid, gid },
+  })
+}
 
 function back() {
   if (!resourceNode.value) {

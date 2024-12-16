@@ -170,6 +170,7 @@ $is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable
 $badUpdatePath = false;
 $emptyUpdatePath = true;
 $proposedUpdatePath = '';
+$updateFromConfigFile = '';
 
 if (!empty($_POST['updatePath'])) {
     $proposedUpdatePath = $_POST['updatePath'];
@@ -198,11 +199,10 @@ if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_upda
 } elseif (@$_POST['step1']) {
     $_POST['updatePath'] = '';
     $installType = '';
-    $updateFromConfigFile = '';
     unset($_GET['running']);
 } else {
     $installType = isset($_GET['installType']) ? $_GET['installType'] : null;
-    $updateFromConfigFile = isset($_GET['updateFromConfigFile']) ? $_GET['updateFromConfigFile'] : false;
+    $updateFromConfigFile = isset($_GET['updateFromConfigFile']) ? $_GET['updateFromConfigFile'] : '';
 }
 
 if ($installType == 'update' && in_array($my_old_version, $update_from_version_8)) {

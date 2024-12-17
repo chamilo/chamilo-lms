@@ -42,6 +42,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 class CourseService
 {
@@ -629,22 +630,27 @@ class CourseService
         $courseTemplate = isset($courseTemplate) ? (int) $courseTemplate : 0;
 
         $useTemplate = false;
-
-        if ($teacherCanSelectCourseTemplate && $courseTemplate) {
+        if ($teacherCanSelectCourseTemplate && $courseTemplate > 0) {
             $useTemplate = true;
-            $originCourse = $this->courseRepository->findCourseAsArray($courseTemplate);
+            $originCourse = $this->courseRepository->findCourseAsArray((int) $courseTemplate);
         } elseif (!empty($templateSetting)) {
             $useTemplate = true;
-            $originCourse = $this->courseRepository->findCourseAsArray($templateSetting);
+            $originCourse = $this->courseRepository->findCourseAsArray((int) $templateSetting);
         }
 
-        if ($useTemplate && $originCourse) {
-            $originCourse['official_code'] = $originCourse['code'];
-            $cb = new CourseBuilder(null, $originCourse);
-            $course = $cb->build(null, $originCourse['code']);
-            $cr = new CourseRestorer($course);
-            $cr->set_file_option();
-            $cr->restore($courseCode);
+        if ($useTemplate && !empty($originCourse)) {
+            try {
+                $originCourse['official_code'] = $originCourse['code'];
+                $cb = new CourseBuilder(null, $originCourse);
+                $course = $cb->build(null, $originCourse['code']);
+                $cr = new CourseRestorer($course);
+                $cr->set_file_option();
+                $cr->restore($courseCode);
+            } catch (Exception $e) {
+                error_log('Error during course template application: ' . $e->getMessage());
+            } catch (Throwable $t) {
+                error_log('Unexpected error during course template application: ' . $t->getMessage());
+            }
         }
     }
 

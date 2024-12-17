@@ -122,11 +122,7 @@
         "twig/twig": "1.*",
         "webit/eval-math": "1.0.1",
         "yuloh/bccomp-polyfill": "dev-master",
-	    "packbackbooks/lti-1p3-tool": "1.1.1.x-dev",
-        "zendframework/zend-config": "~3.0",
-        "zendframework/zend-feed": "~2.6|^3.0",
-        "zendframework/zend-http": "~2.6|^3.0",
-        "zendframework/zend-soap": "~2.6|^3.0"
+	    "packbackbooks/lti-1p3-tool": "1.1.1.x-dev"
     },
     "require-dev": {
         "behat/behat": "~3.5",

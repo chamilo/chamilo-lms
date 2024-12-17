@@ -235,11 +235,7 @@ function get_number_of_users()
     $sessionId = api_get_session_id();
     $courseId = api_get_course_int_id();
 
-    $studentRoleFilter = " AND (
-        u.roles LIKE '%ROLE_STUDENT%'
-        )
-    ";
-
+    $studentRoleFilter = '';
     $teacherRoleFilter = " AND (
         u.roles LIKE '%ROLE_TEACHER%' OR
         u.roles LIKE '%ROLE_ADMIN%' OR
@@ -481,11 +477,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 u.id              AS col5";
     }
 
-    $studentRoleFilter = " AND (
-        u.roles LIKE '%ROLE_STUDENT%'
-        )
-    ";
-
+    $studentRoleFilter = '';
     $teacherRoleFilter = " AND (
         u.roles LIKE '%ROLE_TEACHER%' OR
         u.roles LIKE '%ROLE_ADMIN%' OR

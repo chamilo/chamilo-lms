@@ -166,7 +166,7 @@ class CourseService
             if (isset($rawParams['course_template'])) {
                 $this->useTemplateAsBasisIfRequired(
                     $course->getCode(),
-                    $rawParams['course_template']
+                    (int) $rawParams['course_template']
                 );
             }
 

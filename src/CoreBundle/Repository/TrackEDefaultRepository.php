@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\TrackEDefault;
+use Chamilo\CoreBundle\Entity\ValidationToken;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -64,5 +65,23 @@ class TrackEDefaultRepository extends ServiceEntityRepository
         }
 
         return null;
+    }
+
+    /**
+     * Registers an event when a validation token is used.
+     */
+    public function registerTokenUsedEvent(ValidationToken $token, ?int $userId = null): void
+    {
+        $event = new TrackEDefault();
+        $event->setDefaultUserId($userId ?? 0);
+        $event->setCId(null);
+        $event->setDefaultDate(new \DateTime());
+        $event->setDefaultEventType('VALIDATION_TOKEN_USED');
+        $event->setDefaultValueType('validation_token');
+        $event->setDefaultValue(\json_encode(['hash' => $token->getHash()]));
+        $event->setSessionId(null);
+
+        $this->_em->persist($event);
+        $this->_em->flush();
     }
 }

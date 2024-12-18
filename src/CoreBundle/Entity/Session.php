@@ -395,6 +395,10 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\Column(name: 'notify_boss', type: 'boolean', options: ['default' => false])]
     protected bool $notifyBoss = false;
 
+    #[Groups(['session:basic', 'session:read', 'session:write'])]
+    #[ORM\Column(name: 'validity_in_days', type: 'integer', nullable: true)]
+    protected ?int $validityInDays = null;
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();
@@ -1543,6 +1547,17 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     {
         $this->notifyBoss = $notifyBoss;
 
+        return $this;
+    }
+
+    public function getValidityInDays(): ?int
+    {
+        return $this->validityInDays;
+    }
+
+    public function setValidityInDays(?int $validityInDays): self
+    {
+        $this->validityInDays = $validityInDays;
         return $this;
     }
 }

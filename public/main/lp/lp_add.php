@@ -148,21 +148,6 @@ $extra = $extraField->addElements($form, 0, ['lp_icon']);
 
 SkillModel::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, 0);
 
-$showValidityField = 'true' === api_get_setting('session.enable_auto_reinscription') || 'true' === api_get_setting('session.enable_session_replication');
-if ($showValidityField) {
-    $form->addElement(
-        'number',
-        'validity_in_days',
-        get_lang('Validity in days'),
-        [
-            'min' => 0,
-            'max' => 365,
-            'step' => 1,
-            'placeholder' => get_lang('Enter the number of days'),
-        ]
-    );
-}
-
 $form->addElement('html', '</div>');
 
 $defaults['activate_start_date_check'] = 1;
@@ -223,8 +208,6 @@ if ($form->validate()) {
 
         $lp->setSubscribeUsers(isset($_REQUEST['subscribe_users']) ? 1 : 0);
         $lp->setAccumulateScormTime(1 === (int) $_REQUEST['accumulate_scorm_time'] ? 1 : 0);
-        $validityInDays = $_REQUEST['validity_in_days'] ?? null;
-        $lp->setValidityInDays($validityInDays);
         $lpRepo->update($lp);
 
         $url = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();

@@ -219,6 +219,7 @@ $(function() {
 </script>";
 
 $form->addButtonNext(get_lang('Next step'));
+$showValidityField = 'true' === api_get_setting('session.enable_auto_reinscription') || 'true' === api_get_setting('session.enable_session_replication');
 
 $formDefaults = [];
 if (!$formSent) {
@@ -250,9 +251,17 @@ if (!$formSent) {
             'last_repetition' => $session->getLastRepetition(),
             'parent_id' => $session->getParentId() ?? 0,
         ];
+
+        if ($showValidityField) {
+            $formDefaults['validity_in_days'] = $session->getValidityInDays();
+        }
+
     } else {
         $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
         $formDefaults['coach_username'] = [api_get_user_id()];
+        if ($showValidityField) {
+            $formDefaults['validity_in_days'] = null;
+        }
     }
 }
 
@@ -318,6 +327,7 @@ if ($form->validate()) {
     $daysBeforeFinishingForReinscription = $params['days_before_finishing_for_reinscription'] ?? null;
     $lastRepetition = isset($params['last_repetition']) ? true : false;
     $daysBeforeFinishingToCreateNewRepetition = $params['days_before_finishing_to_create_new_repetition'] ?? null;
+    $validityInDays = $params['validity_in_days'] ?? null;
 
     $return = SessionManager::create_session(
         $title,
@@ -343,7 +353,8 @@ if ($form->validate()) {
         $parentId,
         $daysBeforeFinishingForReinscription,
         $lastRepetition,
-        $daysBeforeFinishingToCreateNewRepetition
+        $daysBeforeFinishingToCreateNewRepetition,
+        $validityInDays
     );
 
     if ($return == strval(intval($return))) {

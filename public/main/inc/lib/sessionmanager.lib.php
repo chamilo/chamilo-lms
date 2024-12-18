@@ -163,7 +163,8 @@ class SessionManager
         $parentId = null,
         $daysBeforeFinishingForReinscription = null,
         $lastRepetition = false,
-        $daysBeforeFinishingToCreateNewRepetition = null
+        $daysBeforeFinishingToCreateNewRepetition = null,
+        $validityInDays = null
     ) {
         global $_configuration;
 
@@ -234,7 +235,8 @@ class SessionManager
                     ->setParentId($parentId)
                     ->setDaysToReinscription((int) $daysBeforeFinishingForReinscription)
                     ->setLastRepetition($lastRepetition)
-                    ->setDaysToNewRepetition((int) $daysBeforeFinishingToCreateNewRepetition);
+                    ->setDaysToNewRepetition((int) $daysBeforeFinishingToCreateNewRepetition)
+                    ->setValidityInDays((int) $validityInDays);
 
                 foreach ($coachesId as $coachId) {
                     $session->addGeneralCoach(api_get_user_entity($coachId));
@@ -1806,7 +1808,8 @@ class SessionManager
         $parentId = 0,
         $daysBeforeFinishingForReinscription = null,
         $daysBeforeFinishingToCreateNewRepetition = null,
-        $lastRepetition = false
+        $lastRepetition = false,
+        $validityInDays = null
     ) {
         $id = (int) $id;
         $status = (int) $status;
@@ -1880,6 +1883,7 @@ class SessionManager
                     ->setDaysToReinscription((int) $daysBeforeFinishingForReinscription)
                     ->setLastRepetition($lastRepetition)
                     ->setDaysToNewRepetition((int) $daysBeforeFinishingToCreateNewRepetition)
+                    ->setValidityInDays((int) $validityInDays)
                     ->setAccessStartDate(null)
                     ->setAccessStartDate(null)
                     ->setDisplayStartDate(null)
@@ -8333,6 +8337,26 @@ class SessionManager
                 'checkbox',
                 'last_repetition',
                 get_lang('Last repetition')
+            );
+
+            $form->addElement(
+                'number',
+                'validity_in_days',
+                get_lang('Validity in days'),
+                [
+                    'min' => 0,
+                    'max' => 365,
+                    'step' => 1,
+                    'placeholder' => get_lang('Enter the number of days'),
+                ]
+            );
+
+            $form->addRule(
+                'validity_in_days',
+                get_lang('The field must be a positive number'),
+                'numeric',
+                null,
+                'client'
             );
         }
 

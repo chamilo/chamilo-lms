@@ -20,6 +20,15 @@ final class Version20240928003000 extends AbstractMigrationChamilo
     {
         $schemaManager = $this->connection->createSchemaManager();
 
+        // Add 'new_subscription_session_id' to the 'session_rel_user' table
+        if ($schemaManager->tablesExist('session_rel_user')) {
+            $sessionRelUserTable = $schemaManager->listTableColumns('session_rel_user');
+
+            if (!isset($sessionRelUserTable['new_subscription_session_id'])) {
+                $this->addSql("ALTER TABLE session_rel_user ADD new_subscription_session_id INT DEFAULT NULL");
+            }
+        }
+
         // Add fields to the 'session' table
         if ($schemaManager->tablesExist('session')) {
             $sessionTable = $schemaManager->listTableColumns('session');
@@ -38,12 +47,21 @@ final class Version20240928003000 extends AbstractMigrationChamilo
             }
         }
 
-        // Add fields to the 'c_lp' (Learnpath) table
+        // Add 'validity_in_days' to the 'session' table
+        if ($schemaManager->tablesExist('session')) {
+            $sessionTable = $schemaManager->listTableColumns('session');
+
+            if (!isset($sessionTable['validity_in_days'])) {
+                $this->addSql("ALTER TABLE session ADD validity_in_days INT DEFAULT NULL");
+            }
+        }
+
+        // Remove 'validity_in_days' from the 'c_lp' table
         if ($schemaManager->tablesExist('c_lp')) {
             $clpTable = $schemaManager->listTableColumns('c_lp');
 
-            if (!isset($clpTable['validity_in_days'])) {
-                $this->addSql("ALTER TABLE c_lp ADD validity_in_days INT DEFAULT NULL");
+            if (isset($clpTable['validity_in_days'])) {
+                $this->addSql("ALTER TABLE c_lp DROP COLUMN validity_in_days");
             }
         }
 
@@ -69,6 +87,15 @@ final class Version20240928003000 extends AbstractMigrationChamilo
     {
         $schemaManager = $this->connection->createSchemaManager();
 
+        // Revert 'new_subscription_session_id' in the 'session_rel_user' table
+        if ($schemaManager->tablesExist('session_rel_user')) {
+            $sessionRelUserTable = $schemaManager->listTableColumns('session_rel_user');
+
+            if (isset($sessionRelUserTable['new_subscription_session_id'])) {
+                $this->addSql("ALTER TABLE session_rel_user DROP COLUMN new_subscription_session_id");
+            }
+        }
+
         // Revert changes in the 'session' table
         if ($schemaManager->tablesExist('session')) {
             $sessionTable = $schemaManager->listTableColumns('session');
@@ -87,12 +114,21 @@ final class Version20240928003000 extends AbstractMigrationChamilo
             }
         }
 
-        // Revert changes in the 'c_lp' table
+        // Revert 'validity_in_days' in the 'session' table
+        if ($schemaManager->tablesExist('session')) {
+            $sessionTable = $schemaManager->listTableColumns('session');
+
+            if (isset($sessionTable['validity_in_days'])) {
+                $this->addSql("ALTER TABLE session DROP COLUMN validity_in_days");
+            }
+        }
+
+        // Re-add 'validity_in_days' to the 'c_lp' table
         if ($schemaManager->tablesExist('c_lp')) {
             $clpTable = $schemaManager->listTableColumns('c_lp');
 
-            if (isset($clpTable['validity_in_days'])) {
-                $this->addSql("ALTER TABLE c_lp DROP COLUMN validity_in_days");
+            if (!isset($clpTable['validity_in_days'])) {
+                $this->addSql("ALTER TABLE c_lp ADD validity_in_days INT DEFAULT NULL");
             }
         }
 

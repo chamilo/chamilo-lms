@@ -130,10 +130,10 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 'course_hide_tools',
                 new ArrayToIdentifierTransformer()
             )
-           /* ->setTransformer(
+            ->setTransformer(
                 'course_creation_use_template',
-                new ResourceToIdentifierTransformer($this->getRepository())
-            )*/
+                new ResourceToIdentifierTransformer($this->getRepository(), 'id')
+            )
         ;
 
         $allowedTypes = [
@@ -229,7 +229,9 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'class' => Course::class,
                     'placeholder' => 'Choose ...',
                     'empty_data' => null,
-                    'data' => null,
+                    'choice_label' => 'title',
+                    'choice_value' => 'id',
+                    'required' => false,
                 ]
             )
             ->add('hide_scorm_export_link', YesNoType::class)

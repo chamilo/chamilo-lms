@@ -15,13 +15,14 @@ use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
 use DateTime;
 use DateTimeZone;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Environment;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 class LpProgressReminderCommand extends Command
 {
@@ -44,8 +45,7 @@ class LpProgressReminderCommand extends Command
         parent::__construct();
     }
 
-
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Send LP progress reminders to users based on "number_of_days_for_completion".')
@@ -54,7 +54,8 @@ class LpProgressReminderCommand extends Command
                 null,
                 InputOption::VALUE_NONE,
                 'If set, will output detailed debug information'
-            );
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -65,11 +66,12 @@ class LpProgressReminderCommand extends Command
         // Retrieve LPs with completion days
         $lpItems = $this->extraFieldValuesRepository->getLpIdWithDaysForCompletion();
         if ($debugMode && !empty($lpItems)) {
-            $output->writeln('LP Items retrieved: ' . print_r($lpItems, true));
+            $output->writeln('LP Items retrieved: '.print_r($lpItems, true));
         }
 
         if (empty($lpItems)) {
             $output->writeln('No learning paths with days for completion found.');
+
             return Command::SUCCESS;
         }
 
@@ -82,7 +84,7 @@ class LpProgressReminderCommand extends Command
         // Retrieve all courses from the CourseRepository
         $courses = $this->courseRepository->findAll();
         if ($debugMode && !empty($courses)) {
-            $output->writeln('Courses retrieved: ' . count($courses));
+            $output->writeln('Courses retrieved: '.\count($courses));
         }
 
         foreach ($courses as $course) {
@@ -94,14 +96,14 @@ class LpProgressReminderCommand extends Command
             $sessionCourseUsers = $this->sessionRelCourseRelUserRepository->getSessionCourseUsers($courseId, $lpIds);
 
             if ($debugMode && (!empty($courseUsers) || !empty($sessionCourseUsers))) {
-                $output->writeln('Processing course ID: ' . $courseId);
+                $output->writeln('Processing course ID: '.$courseId);
                 if (!empty($courseUsers)) {
-                    $output->writeln('Course users retrieved: ' . count($courseUsers));
-                    //$output->writeln('Course retrieved: ' . print_r($courseUsers, true));
+                    $output->writeln('Course users retrieved: '.\count($courseUsers));
+                    // $output->writeln('Course retrieved: ' . print_r($courseUsers, true));
                 }
                 if (!empty($sessionCourseUsers)) {
-                    $output->writeln('Session users retrieved: ' . count($sessionCourseUsers));
-                    //$output->writeln('Session retrieved: ' . print_r($sessionCourseUsers, true));
+                    $output->writeln('Session users retrieved: '.\count($sessionCourseUsers));
+                    // $output->writeln('Session retrieved: ' . print_r($sessionCourseUsers, true));
                 }
             }
 
@@ -113,6 +115,7 @@ class LpProgressReminderCommand extends Command
         }
 
         $output->writeln('LP progress reminder process finished.');
+
         return Command::SUCCESS;
     }
 
@@ -129,7 +132,7 @@ class LpProgressReminderCommand extends Command
 
             $sessionId = $checkSession ? ($user['sessionId'] ?? 0) : 0;
 
-            if ($lpId === null) {
+            if (null === $lpId) {
                 foreach ($lpItems as $lpId => $nbDaysForLpCompletion) {
                     $this->sendReminderIfNeeded(
                         $userId,
@@ -177,11 +180,12 @@ class LpProgressReminderCommand extends Command
             if ($debugMode) {
                 echo "No registration date found for user $userId in course $courseId (session ID: $sessionId).\n";
             }
+
             return;
         }
 
         if ($debugMode) {
-            $sessionInfo = $sessionId > 0 ? "in session ID $sessionId" : "without a session";
+            $sessionInfo = $sessionId > 0 ? "in session ID $sessionId" : 'without a session';
             echo "Registration date: {$registrationDate->format('Y-m-d H:i:s')}, Days for completion: $nbDaysForLpCompletion, LP ID: {$lpId}, $sessionInfo\n";
         }
 
@@ -202,8 +206,8 @@ class LpProgressReminderCommand extends Command
     private function logReminderSent(int $userId, string $courseTitle, int $nbRemind, bool $debugMode, int $lpId, int $sessionId = 0): void
     {
         if ($debugMode) {
-            $sessionInfo = $sessionId > 0 ? sprintf("in session ID %d", $sessionId) : "without a session";
-            echo sprintf(
+            $sessionInfo = $sessionId > 0 ? \sprintf('in session ID %d', $sessionId) : 'without a session';
+            echo \sprintf(
                 "Reminder number %d sent to user ID %d for the course %s (LP ID: %d) %s.\n",
                 $nbRemind,
                 $userId,
@@ -244,10 +248,9 @@ class LpProgressReminderCommand extends Command
         $interval = $reminderStartDate->diff($currentDate);
         $diffDays = (int) $interval->format('%a');
 
-        return ($diffDays >= self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION &&
-            $diffDays % self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION === 0) || $diffDays === 0;
+        return ($diffDays >= self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION
+            && 0 === $diffDays % self::NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION) || 0 === $diffDays;
     }
-
 
     /**
      * Sends a reminder email to the user regarding their LP progress.
@@ -256,7 +259,7 @@ class LpProgressReminderCommand extends Command
     {
         $user = $this->userRepository->find($toUserId);
         if (!$user) {
-            throw new \Exception("User not found");
+            throw new Exception('User not found');
         }
 
         $platformUrl = $this->urlGenerator->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -265,17 +268,17 @@ class LpProgressReminderCommand extends Command
         $trainingCenterName = 'Your Training Center';
         $trainers = 'Trainer Name';
 
-        $hello = $this->translator->trans("Hello %s");
-        $youAreRegCourse = $this->translator->trans("You are registered in the training %s since the %s");
-        $thisMessageIsAbout = $this->translator->trans("You are receiving this message because you have completed a learning path with a %s progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer.");
+        $hello = $this->translator->trans('Hello %s');
+        $youAreRegCourse = $this->translator->trans('You are registered in the training %s since the %s');
+        $thisMessageIsAbout = $this->translator->trans('You are receiving this message because you have completed a learning path with a %s progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer.');
         $stepsToRemind = $this->translator->trans("As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary.");
-        $lpRemindFooter = $this->translator->trans("The training center<p>%s</p>Trainers:<br/>%s");
+        $lpRemindFooter = $this->translator->trans('The training center<p>%s</p>Trainers:<br/>%s');
 
-        $hello = sprintf($hello, $user->getFullName());
-        $youAreRegCourse = sprintf($youAreRegCourse, $courseName, $registrationDate->format('Y-m-d'));
-        $thisMessageIsAbout = sprintf($thisMessageIsAbout, $lpProgress);
-        $stepsToRemind = sprintf($stepsToRemind, $platformUrl, $user->getUsername(), $recoverPasswordUrl);
-        $lpRemindFooter = sprintf($lpRemindFooter, $trainingCenterName, $trainers);
+        $hello = \sprintf($hello, $user->getFullName());
+        $youAreRegCourse = \sprintf($youAreRegCourse, $courseName, $registrationDate->format('Y-m-d'));
+        $thisMessageIsAbout = \sprintf($thisMessageIsAbout, $lpProgress);
+        $stepsToRemind = \sprintf($stepsToRemind, $platformUrl, $user->getUsername(), $recoverPasswordUrl);
+        $lpRemindFooter = \sprintf($lpRemindFooter, $trainingCenterName, $trainers);
 
         $messageContent = $this->twig->render('@ChamiloCore/Mailer/Legacy/lp_progress_reminder_body.html.twig', [
             'HelloX' => $hello,
@@ -288,13 +291,13 @@ class LpProgressReminderCommand extends Command
         try {
             $this->messageHelper->sendMessageSimple(
                 $toUserId,
-                sprintf("Reminder number %d for the course %s", $nbRemind, $courseName),
+                \sprintf('Reminder number %d for the course %s', $nbRemind, $courseName),
                 $messageContent
             );
 
             return true;
-        } catch (\Exception $e) {
-            throw new \Exception('Error sending reminder: ' . $e->getMessage());
+        } catch (Exception $e) {
+            throw new Exception('Error sending reminder: '.$e->getMessage());
         }
     }
 }

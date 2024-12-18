@@ -1,4 +1,4 @@
-{% if search_skill_list is not null %}
+{% if search_skill_list is defined and search_skill_list is not null %}
     <div class="skills-skills">
         <h3>{{ "Skills"|trans }}</h3>
         <ul class="holder">
@@ -15,7 +15,7 @@
     </div>
 {% endif %}
 
-{% if profiles is not null %}
+{% if profiles is defined and profiles is not null %}
     <div class="skills-profiles">
         <h3>{{ "Skill profiles"|trans }}</h3>
         <ul class="holder">
@@ -92,7 +92,7 @@
         </div>
     {% endfor %}
 {% else %}
-    {% if search_skill_list is null %}
+    {% if search_skill_list is defined and search_skill_list is null %}
         <div class="warning-message">{{ "No results found"|trans }}</div>
     {% endif %}
 {% endif %}

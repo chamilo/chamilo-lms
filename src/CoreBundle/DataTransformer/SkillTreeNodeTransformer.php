@@ -21,24 +21,25 @@ readonly class SkillTreeNodeTransformer implements DataTransformerInterface
     {
         \assert($object instanceof Skill);
 
-        $leaf = new SkillTreeNode();
-        $leaf->id = $object->getId();
-        $leaf->title = $object->getTitle();
-        $leaf->status = $object->getStatus();
+        $skillNode = new SkillTreeNode();
+        $skillNode->id = $object->getId();
+        $skillNode->title = $object->getTitle();
+        $skillNode->status = $object->getStatus();
+        $skillNode->isSearched = $object->getProfiles()->count() > 0;
+        $skillNode->hasGradebook = $object->getGradeBookCategories()->count() > 0;
 
         if (($shortCode = $object->getShortCode())
             && 'false' === $this->settingsManager->getSetting('skill.show_full_skill_name_on_skill_wheel')
         ) {
-            $leaf->shortCode = $shortCode;
+            $skillNode->shortCode = $shortCode;
         }
 
-        $leaf->children = [];
+        $skillNode->children = $object->getChildSkills()
+            ->map(fn(Skill $childSkill) => $this->transform($childSkill, $to, $context))
+            ->toArray()
+        ;
 
-        foreach ($object->getChildSkills() as $childSkill) {
-            $leaf->children[] = $this->transform($childSkill, $to, $context);
-        }
-
-        return $leaf;
+        return $skillNode;
     }
 
     public function supportsTransformation($data, string $to, array $context = []): bool

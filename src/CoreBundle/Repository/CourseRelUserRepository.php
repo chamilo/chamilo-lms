@@ -35,7 +35,8 @@ class CourseRelUserRepository extends ServiceEntityRepository
             ->andWhere('rn.parent = c.resourceNode')
             ->andWhere('(lpv.progress < 100 OR lpv.progress IS NULL)')
             ->setParameter('courseId', $courseId)
-            ->setParameter('lpIds', $lpIds);
+            ->setParameter('lpIds', $lpIds)
+        ;
 
         return $qb->getQuery()->getResult();
     }

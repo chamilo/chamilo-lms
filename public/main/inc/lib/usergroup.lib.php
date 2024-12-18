@@ -1371,7 +1371,7 @@ class UserGroupModel extends Model
         }
 
         $result = Database::store_result(
-            Database::query("SELECT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY title $sord LIMIT $start, $limit")
+            Database::query("SELECT DISTINCT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY title $sord LIMIT $start, $limit")
         );
 
         $new_result = [];
@@ -1588,8 +1588,9 @@ class UserGroupModel extends Model
         return false;
     }
 
-    public function update($params, $showQuery = false)
+    public function update($params, $showQuery = false): bool
     {
+        $em = Database::getManager();
         $repo = Container::getUsergroupRepository();
         /** @var Usergroup $userGroup */
         $userGroup = $repo->find($params['id']);
@@ -1597,7 +1598,22 @@ class UserGroupModel extends Model
             return false;
         }
 
-        //$params['updated_on'] = api_get_utc_datetime();
+        if (isset($params['title'])) {
+            $userGroup->setTitle($params['title']);
+        }
+
+        if (isset($params['description'])) {
+            $userGroup->setDescription($params['description']);
+        }
+
+        if (isset($params['visibility'])) {
+            $userGroup->setVisibility($params['visibility']);
+        }
+
+        if (isset($params['url'])) {
+            $userGroup->setUrl($params['url']);
+        }
+
         $userGroup
             ->setGroupType(isset($params['group_type']) ? Usergroup::SOCIAL_CLASS : Usergroup::NORMAL_CLASS)
             ->setAllowMembersToLeaveGroup(isset($params['allow_members_leave_group']) ? 1 : 0)
@@ -1612,7 +1628,8 @@ class UserGroupModel extends Model
             }
         }
 
-        $repo->update($userGroup);
+        $em->persist($userGroup);
+        $em->flush();
 
         if (isset($params['delete_picture'])) {
             $this->delete_group_picture($params['id']);

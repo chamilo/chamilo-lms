@@ -10,12 +10,21 @@ use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 use Chamilo\CoreBundle\Component\Utils\StateIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 // Resetting the course id.
 $cidReset = true;
 
 // Including some necessary chamilo files.
 require_once __DIR__.'/../inc/global.inc.php';
+
+$response = new RedirectResponse(
+    Container::getRouter()->generate('admin')
+);
+$response->send();
+
+exit;
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;

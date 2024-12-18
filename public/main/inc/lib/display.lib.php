@@ -1200,11 +1200,13 @@ class Display
 
         // Default row quantity
         if (!isset($extra_params['rowList'])) {
-            $extra_params['rowList'] = [20, 50, 100, 500, 1000, $all_value];
+            $defaultRowList = [20, 50, 100, 500, 1000, $all_value];
             $rowList = api_get_setting('platform.table_row_list', true);
-            if (!empty($rowList) && isset($rowList['options'])) {
+            if (is_array($rowList) && isset($rowList['options']) && is_array($rowList['options'])) {
                 $rowList = $rowList['options'];
                 $rowList[] = $all_value;
+            } else {
+                $rowList = $defaultRowList;
             }
             $extra_params['rowList'] = $rowList;
         }

@@ -126,7 +126,7 @@ switch ($action) {
 
         $toolbar .= Display::url(
             Display::getMdiIcon(ObjectIcon::WHEEL, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Skills wheel')),
-            api_get_path(WEB_CODE_PATH).'skills/skills_wheel.php',
+            Container::getRouter()->generate('skill_wheel'),
             ['title' => get_lang('Skills wheel')]
         );
 

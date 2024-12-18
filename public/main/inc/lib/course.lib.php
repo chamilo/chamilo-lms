@@ -6345,13 +6345,11 @@ class CourseManager
     /**
      * Helper function to check if there is a course template and, if so, to
      * copy the template as basis for the new course.
-     *
-     * @param string $courseCode     Course code
-     * @param int    $courseTemplate 0 if no course template is defined
      */
-    public static function useTemplateAsBasisIfRequired($courseCode, $courseTemplate)
+    public static function useTemplateAsBasisIfRequired(string $courseCode, int $courseTemplate): void
     {
         $template = api_get_setting('course_creation_use_template');
+        $template = is_numeric($template) ? intval($template) : null;
         $teacherCanSelectCourseTemplate = 'true' === api_get_setting('teacher_can_select_course_template');
         $courseTemplate = isset($courseTemplate) ? intval($courseTemplate) : 0;
 
@@ -6365,7 +6363,7 @@ class CourseManager
             $originCourse = api_get_course_info_by_id($template);
         }
 
-        if ($useTemplate) {
+        if ($useTemplate && !empty($originCourse)) {
             // Include the necessary libraries to generate a course copy
             // Call the course copy object
             $originCourse['official_code'] = $originCourse['code'];
@@ -6768,7 +6766,7 @@ class CourseManager
         if (isset($params['course_template'])) {
             self::useTemplateAsBasisIfRequired(
                 $course->getCode(),
-                $params['course_template']
+                (int) $params['course_template']
             );
         }
         $params['course_code'] = $course->getCode();

@@ -13,7 +13,7 @@ use Stringable;
 
 #[ORM\Table(name: 'skill_level_profile')]
 #[ORM\Entity]
-class Profile implements Stringable
+class SkillLevelProfile implements Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -26,7 +26,7 @@ class Profile implements Stringable
     /**
      * @var Collection<int, Skill>
      */
-    #[ORM\OneToMany(mappedBy: 'profile', targetEntity: Skill::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'levelProfile', targetEntity: Skill::class, cascade: ['persist'])]
     protected Collection $skills;
 
     /**

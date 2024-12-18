@@ -143,7 +143,8 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
     {
         $qb = $this->getResourcesByCourse($course, $session)
             ->select('resource.iid')
-            ->andWhere('resource.autoLaunch = 1');
+            ->andWhere('resource.autoLaunch = 1')
+        ;
 
         $qb->setMaxResults(1);
 

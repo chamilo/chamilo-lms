@@ -52,6 +52,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_ADMIN')"
 )]
 #[ApiFilter(SearchFilter::class, properties: ['issuedSkills.user' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
 #[ORM\Table(name: 'skill')]
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
 class Skill implements Stringable, Translatable
@@ -59,15 +60,15 @@ class Skill implements Stringable, Translatable
     public const STATUS_DISABLED = 0;
     public const STATUS_ENABLED = 1;
 
-    #[Groups(['skill:read'])]
+    #[Groups(['skill:read', 'skill_profile:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Profile::class, inversedBy: 'skills')]
+    #[ORM\ManyToOne(targetEntity: SkillLevelProfile::class, inversedBy: 'skills')]
     #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id')]
-    protected ?Profile $profile = null;
+    protected ?SkillLevelProfile $levelProfile = null;
 
     /**
      * @var Collection<int, SkillRelUser>
@@ -141,6 +142,12 @@ class Skill implements Stringable, Translatable
     #[Gedmo\Locale]
     private ?string $locale = null;
 
+    /**
+     * @var Collection<int, SkillRelProfile>
+     */
+    #[ORM\OneToMany(mappedBy: 'skill', targetEntity: SkillRelProfile::class, cascade: ['persist'])]
+    private Collection $profiles;
+
     public function __construct()
     {
         $this->issuedSkills = new ArrayCollection();
@@ -151,6 +158,7 @@ class Skill implements Stringable, Translatable
         $this->icon = '';
         $this->description = '';
         $this->status = self::STATUS_ENABLED;
+        $this->profiles = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -259,14 +267,14 @@ class Skill implements Stringable, Translatable
         return $this->id;
     }
 
-    public function getProfile(): ?Profile
+    public function getLevelProfile(): ?SkillLevelProfile
     {
-        return $this->profile;
+        return $this->levelProfile;
     }
 
-    public function setProfile(Profile $profile): self
+    public function setLevelProfile(SkillLevelProfile $levelProfile): self
     {
-        $this->profile = $profile;
+        $this->levelProfile = $levelProfile;
 
         return $this;
     }
@@ -277,6 +285,28 @@ class Skill implements Stringable, Translatable
     public function getIssuedSkills(): Collection
     {
         return $this->issuedSkills;
+    }
+
+    public function addIssuedSkill(SkillRelUser $issuedSkill): static
+    {
+        if (!$this->issuedSkills->contains($issuedSkill)) {
+            $this->issuedSkills->add($issuedSkill);
+            $issuedSkill->setSkill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIssuedSkill(SkillRelUser $issuedSkill): static
+    {
+        if ($this->issuedSkills->removeElement($issuedSkill)) {
+            // set the owning side to null (unless already changed)
+            if ($issuedSkill->getSkill() === $this) {
+                $issuedSkill->setSkill(null);
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -439,5 +469,35 @@ class Skill implements Stringable, Translatable
             ->getSkills()
             ->map(fn(SkillRelSkill $skillRelSkill): Skill => $skillRelSkill->getSkill())
         ;
+    }
+
+    /**
+     * @return Collection<int, SkillRelProfile>
+     */
+    public function getProfiles(): Collection
+    {
+        return $this->profiles;
+    }
+
+    public function addProfile(SkillRelProfile $profile): static
+    {
+        if (!$this->profiles->contains($profile)) {
+            $this->profiles->add($profile);
+            $profile->setSkill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProfile(SkillRelProfile $profile): static
+    {
+        if ($this->profiles->removeElement($profile)) {
+            // set the owning side to null (unless already changed)
+            if ($profile->getSkill() === $this) {
+                $profile->setSkill(null);
+            }
+        }
+
+        return $this;
     }
 }

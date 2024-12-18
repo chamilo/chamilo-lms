@@ -31,23 +31,34 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
             return null;
         }
 
-        /* @psalm-suppress ArgumentTypeCoercion */
-        Assert::isInstanceOf($value, $this->repository->getClassName());
+        if (is_object($value) && method_exists($value, 'getId')) {
+            return $value;
+        }
 
-        return PropertyAccess::createPropertyAccessor()->getValue($value, $this->identifier);
+        if (is_numeric($value)) {
+            return $this->repository->find($value);
+        }
+
+        return $value;
     }
 
     public function reverseTransform($value)
     {
-        if (null === $value) {
+        if (null === $value || '' === $value) {
             return null;
         }
 
-        $resource = $this->repository->findOneBy([
-            $this->identifier => $value,
-        ]);
+        if (is_object($value) && method_exists($value, 'getId')) {
+            return $value;
+        }
+
+        $resource = $this->repository->find($value);
         if (null === $resource) {
-            throw new TransformationFailedException(\sprintf('Object "%s" with identifier "%s"="%s" does not exist.', $this->repository->getClassName(), $this->identifier, $value));
+            throw new TransformationFailedException(sprintf(
+                'Object "%s" with identifier "%s" does not exist.',
+                $this->repository->getClassName(),
+                $value
+            ));
         }
 
         return $resource;

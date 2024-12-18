@@ -22,7 +22,7 @@ $parentInfo = [];
 if (!empty($categoryId)) {
     $categoryInfo = $parentInfo = CourseCategory::getCategoryById($categoryId);
 }
-$parentId = $parentInfo ? $parentInfo['id'] : null;
+$parentId = $parentInfo ? $parentInfo['parent_id'] : null;
 
 switch ($action) {
     case 'delete':
@@ -37,36 +37,43 @@ switch ($action) {
         }
         if (!empty($categoryId)) {
             $categoryRepo->delete($categoryRepo->find($categoryId));
+            CourseCategory::reorganizeTreePos($parentId);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit;
-        break;
     case 'export':
         $courses = CourseCategory::getCoursesInCategory($categoryId);
-        if (!empty($courses)) {
+        if ($courses && count($courses) > 0) {
             $name = api_get_local_time().'_'.$categoryInfo['code'];
             $courseList = [];
-            foreach ($courses as $course) {
-                $courseList[] = $course->getTitle();
-            }
-            Export::arrayToCsv($courseList, $name);
-        }
 
-        header('Location: '.api_get_self());
-        exit;
+            /* @var \Chamilo\CoreBundle\Entity\Course $course */
+            foreach ($courses as $course) {
+                $courseList[] = [$course->getTitle()];
+            }
+
+            $header = [get_lang('Course Title')];
+            Export::arrayToCsvSimple($courseList, $name, false, $header);
+        } else {
+            Display::addFlash(Display::return_message(get_lang('No courses found for this category'), 'warning'));
+            header('Location: '.api_get_self().'?category='.Security::remove_XSS($categoryId));
+            exit;
+        }
         break;
     case 'moveUp':
-        CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
-        Display::addFlash(Display::return_message(get_lang('Update successful')));
+        if (CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $parentId)) {
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
+        } else {
+            Display::addFlash(Display::return_message(get_lang('Cannot move category up'), 'error'));
+        }
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit;
-        break;
     case 'add':
         if (isset($_POST['formSent']) && $_POST['formSent']) {
             $categoryEntity = CourseCategory::add(
                 $_POST['code'],
-                $_POST['name'],
+                $_POST['title'],
                 $_POST['auth_course_child'],
                 $_POST['description'],
                 $parentId,
@@ -85,7 +92,7 @@ switch ($action) {
         if (isset($_POST['formSent']) && $_POST['formSent']) {
             $categoryEntity = CourseCategory::edit(
                 $categoryId,
-                $_REQUEST['name'],
+                $_REQUEST['title'],
                 $_REQUEST['auth_course_child'],
                 $_REQUEST['code'],
                 $_REQUEST['description']
@@ -127,7 +134,7 @@ if ('add' === $action || 'edit' === $action) {
 
     $form_title = 'add' === $action ? get_lang('Add category') : get_lang('Edit this category');
     if (!empty($categoryInfo)) {
-        $form_title .= ' '.get_lang('Into').' '.$categoryInfo['name'];
+        $form_title .= ' '.get_lang('Into').' '.$categoryInfo['title'];
     }
     $url = api_get_self().'?action='.Security::remove_XSS($action).'&id='.Security::remove_XSS($categoryId);
     $form = new FormValidator('course_category', 'post', $url);
@@ -137,15 +144,15 @@ if ('add' === $action || 'edit' === $action) {
 
     if ('true' === api_get_setting('editor.save_titles_as_html')) {
         $form->addHtmlEditor(
-            'name',
+            'title',
             get_lang('Category name'),
             true,
             false,
             ['ToolbarSet' => 'TitleAsHtml']
         );
     } else {
-        $form->addElement('text', 'name', get_lang('Category name'));
-        $form->addRule('name', get_lang('Please enter a code and a name for the category'), 'required');
+        $form->addElement('text', 'title', get_lang('Category name'));
+        $form->addRule('title', get_lang('Please enter a code and a name for the category'), 'required');
     }
 
     $form->addRule('code', get_lang('Please enter a code and a name for the category'), 'required');
@@ -184,8 +191,9 @@ if ('add' === $action || 'edit' === $action) {
 
         $asset = $assetRepo->find($categoryInfo['asset_id']);
         $image = $assetRepo->getAssetUrl($asset);
+        $escapedImageUrl = htmlspecialchars($image, ENT_QUOTES, 'UTF-8');
 
-        $form->addLabel(get_lang('Image'), "<img src=$image />");
+        $form->addLabel(get_lang('Image'), "<img src='$escapedImageUrl' alt='Image' />");
     }
 
     if ('edit' === $action  && !empty($categoryInfo)) {
@@ -223,7 +231,7 @@ if ('add' === $action || 'edit' === $action) {
     }
     echo Display::toolbarAction('categories', [$actions]);
     if (!empty($parentInfo)) {
-        echo Display::page_subheader($parentInfo['name'].' ('.$parentInfo['code'].')');
+        echo Display::page_subheader($parentInfo['title'].' ('.$parentInfo['code'].')');
     }
     echo CourseCategory::listCategories($categoryInfo);
 }

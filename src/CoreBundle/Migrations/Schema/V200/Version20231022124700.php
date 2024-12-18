@@ -12,8 +12,6 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
 
-use const PREG_NO_ERROR;
-
 final class Version20231022124700 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -116,48 +114,63 @@ final class Version20231022124700 extends AbstractMigrationChamilo
         // Pattern to find and replace cidReq, id_session, and gidReq
         $pattern = '/((https?:\/\/[^\/\s]*|)\/[^?\s]+?)\?(.*?)(cidReq=([a-zA-Z0-9_]+))((?:&|&amp;)id_session=([0-9]+))?((?:&|&amp;)gidReq=([0-9]+))?(.*)/i';
 
-        $newContent = @preg_replace_callback(
-            $pattern,
-            function ($matches) {
-                $code = $matches[5];
+        try {
+            $newContent = @preg_replace_callback(
+                $pattern,
+                function ($matches) {
+                    $code = $matches[5] ?? null;
 
-                $courseId = null;
-                $sql = 'SELECT id FROM course WHERE code = :code ORDER BY id DESC LIMIT 1';
-                $stmt = $this->connection->executeQuery($sql, ['code' => $code]);
-                $course = $stmt->fetch();
+                    if (!$code) {
+                        error_log('Missing cidReq in URL: '.$matches[0]);
 
-                if ($course) {
-                    $courseId = $course['id'];
-                }
+                        return $matches[0];
+                    }
 
-                if (null === $courseId) {
-                    return $matches[0]; // If the courseId is not found, return the original URL.
-                }
+                    $courseId = null;
+                    $sql = 'SELECT id FROM course WHERE code = :code ORDER BY id DESC LIMIT 1';
+                    $stmt = $this->connection->executeQuery($sql, ['code' => $code]);
+                    $course = $stmt->fetch();
 
-                // Ensure sid and gid are always populated
-                $sessionId = isset($matches[7]) && !empty($matches[7]) ? $matches[7] : '0';
-                $groupId = isset($matches[9]) && !empty($matches[9]) ? $matches[9] : '0';
-                $remainingParams = isset($matches[10]) ? $matches[10] : '';
+                    if ($course) {
+                        $courseId = $course['id'];
+                    }
 
-                // Prepare new URL with updated parameters
-                $newParams = "cid=$courseId&sid=$sessionId&gid=$groupId";
-                $beforeCidReqParams = isset($matches[3]) ? $matches[3] : '';
+                    if (null === $courseId) {
+                        error_log('Course ID not found for cidReq: '.$code);
 
-                // Ensure other parameters are maintained
-                if (!empty($remainingParams)) {
-                    $newParams .= '&'.ltrim($remainingParams, '&amp;');
-                }
+                        return $matches[0];
+                    }
 
-                $finalUrl = $matches[1].'?'.$beforeCidReqParams.$newParams;
+                    // Ensure sid and gid are always populated
+                    $sessionId = $matches[7] ?? '0';
+                    $groupId = $matches[9] ?? '0';
+                    $remainingParams = $matches[10] ?? '';
 
-                return str_replace('&amp;', '&', $finalUrl); // Replace any remaining &amp; with &
-            },
-            $content
-        );
+                    // Prepare new URL with updated parameters
+                    $newParams = "cid=$courseId&sid=$sessionId&gid=$groupId";
+                    $beforeCidReqParams = $matches[3] ?? '';
 
-        if (PREG_NO_ERROR !== preg_last_error()) {
-            error_log('Error encountered in preg_replace_callback: '.preg_last_error());
-            $newContent = $content;
+                    // Ensure other parameters are maintained
+                    if (!empty($remainingParams)) {
+                        $newParams .= '&'.ltrim($remainingParams, '&amp;');
+                    }
+
+                    $finalUrl = $matches[1].'?'.$beforeCidReqParams.$newParams;
+
+                    return str_replace('&amp;', '&', $finalUrl);
+                },
+                $content
+            );
+
+            if (false === $newContent || null === $newContent) {
+                error_log('preg_replace_callback failed for content: '.substr($content, 0, 500));
+
+                return $content;
+            }
+        } catch (Exception $e) {
+            error_log('Exception in replaceURLParametersInContent: '.$e->getMessage());
+
+            return $content;
         }
 
         return $newContent;

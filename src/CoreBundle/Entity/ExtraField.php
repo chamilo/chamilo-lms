@@ -21,7 +21,22 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(operations: [new Get(security: 'is_granted(\'ROLE_ADMIN\')'), new Put(security: 'is_granted(\'ROLE_ADMIN\')'), new GetCollection(security: 'is_granted(\'ROLE_ADMIN\')'), new Post(security: 'is_granted(\'ROLE_ADMIN\')')], security: 'is_granted(\'ROLE_ADMIN\')', denormalizationContext: ['groups' => ['extra_field:write']], normalizationContext: ['groups' => ['extra_field:read']])]
+#[ApiResource(
+    operations: [
+        new Get(security: "is_granted('ROLE_ADMIN')"),
+        new Put(security: "is_granted('ROLE_ADMIN')"),
+        new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new Post(security: "is_granted('ROLE_ADMIN')"),
+    ],
+    normalizationContext: [
+        'groups' => ['extra_field:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['extra_field:write'],
+    ],
+    security: "is_granted('ROLE_ADMIN')"
+),
+]
 #[ORM\Table(name: 'extra_field')]
 #[ORM\Entity]
 #[ORM\MappedSuperclass]
@@ -79,51 +94,63 @@ class ExtraField
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
+
     #[Groups(['extra_field:read', 'extra_field:write'])]
     #[ORM\Column(name: 'item_type', type: 'integer')]
     protected int $itemType;
+
     #[Groups(['extra_field:read', 'extra_field:write'])]
     #[ORM\Column(name: 'value_type', type: 'integer')]
     protected int $valueType;
+
     #[Assert\NotBlank]
     #[Groups(['extra_field:read', 'extra_field:write'])]
     #[ORM\Column(name: 'variable', type: 'string', length: 255)]
     protected string $variable;
+
     #[Groups(['extra_field:read', 'extra_field:write'])]
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
+
     #[Assert\NotBlank]
     #[Groups(['extra_field:read', 'extra_field:write'])]
     #[Gedmo\Translatable]
-    #[ORM\Column(name: 'display_text', type: 'string', length: 255, nullable: true, unique: false)]
+    #[ORM\Column(name: 'display_text', type: 'string', length: 255, unique: false, nullable: true)]
     protected ?string $displayText = null;
-    #[ORM\Column(name: 'helper_text', type: 'text', nullable: true, unique: false)]
+
+    #[ORM\Column(name: 'helper_text', type: 'text', unique: false, nullable: true)]
     protected ?string $helperText = null;
-    #[ORM\Column(name: 'default_value', type: 'text', nullable: true, unique: false)]
+
+    #[ORM\Column(name: 'default_value', type: 'text', unique: false, nullable: true)]
     protected ?string $defaultValue = null;
-    #[ORM\Column(name: 'field_order', type: 'integer', nullable: true, unique: false)]
+
+    #[ORM\Column(name: 'field_order', type: 'integer', unique: false, nullable: true)]
     protected ?int $fieldOrder = null;
-    #[ORM\Column(name: 'visible_to_self', type: 'boolean', nullable: true, unique: false)]
+
+    #[ORM\Column(name: 'visible_to_self', type: 'boolean', options: ['default' => false])]
     protected ?bool $visibleToSelf = false;
-    #[ORM\Column(name: 'visible_to_others', type: 'boolean', nullable: true, unique: false)]
+    #[ORM\Column(name: 'visible_to_others', type: 'boolean', options: ['default' => false])]
     protected ?bool $visibleToOthers = false;
-    #[ORM\Column(name: 'changeable', type: 'boolean', nullable: true, unique: false)]
+
+    #[ORM\Column(name: 'changeable', type: 'boolean', options: ['default' => false])]
     protected ?bool $changeable = false;
-    #[ORM\Column(name: 'filter', type: 'boolean', nullable: true, unique: false)]
+
+    #[ORM\Column(name: 'filter', type: 'boolean', options: ['default' => false])]
     protected ?bool $filter = false;
 
     /**
      * @var Collection<int, ExtraFieldOptions>
      */
     #[Groups(['extra_field:read'])]
-    #[ORM\OneToMany(targetEntity: ExtraFieldOptions::class, mappedBy: 'field')]
+    #[ORM\OneToMany(mappedBy: 'field', targetEntity: ExtraFieldOptions::class)]
     protected Collection $options;
 
     /**
      * @var Collection<int, Tag>
      */
-    #[ORM\OneToMany(targetEntity: Tag::class, mappedBy: 'field')]
+    #[ORM\OneToMany(mappedBy: 'field', targetEntity: Tag::class)]
     protected Collection $tags;
+
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(name: 'created_at', type: 'datetime')]
     protected DateTime $createdAt;
@@ -151,20 +178,24 @@ class ExtraField
     {
         return $this->id;
     }
+
     public function getItemType(): int
     {
         return $this->itemType;
     }
+
     public function setItemType(int $itemType): self
     {
         $this->itemType = $itemType;
 
         return $this;
     }
+
     public function getValueType(): int
     {
         return $this->valueType;
     }
+
     public function setValueType(int $valueType): self
     {
         $this->valueType = $valueType;
@@ -176,6 +207,7 @@ class ExtraField
     {
         return $this->variable;
     }
+
     public function setVariable(string $variable): self
     {
         $this->variable = $variable;
@@ -187,6 +219,7 @@ class ExtraField
     {
         return $this->displayText;
     }
+
     public function setDisplayText(string $displayText): self
     {
         $this->displayText = $displayText;
@@ -198,6 +231,7 @@ class ExtraField
     {
         return $this->defaultValue;
     }
+
     public function setDefaultValue(string $defaultValue): self
     {
         $this->defaultValue = $defaultValue;
@@ -209,6 +243,7 @@ class ExtraField
     {
         return $this->fieldOrder;
     }
+
     public function setFieldOrder(int $fieldOrder): self
     {
         $this->fieldOrder = $fieldOrder;
@@ -220,46 +255,55 @@ class ExtraField
     {
         return $this->changeable;
     }
+
     public function setChangeable(bool $changeable): self
     {
         $this->changeable = $changeable;
 
         return $this;
     }
+
     public function isFilter(): bool
     {
         return $this->filter;
     }
+
     public function setFilter(bool $filter): self
     {
         $this->filter = $filter;
 
         return $this;
     }
+
     public function isVisibleToSelf(): bool
     {
         return $this->visibleToSelf;
     }
+
     public function setVisibleToSelf(bool $visibleToSelf): self
     {
         $this->visibleToSelf = $visibleToSelf;
 
         return $this;
     }
+
     public function isVisibleToOthers(): bool
     {
         return $this->visibleToOthers;
     }
+
     public function setVisibleToOthers(bool $visibleToOthers): self
     {
         $this->visibleToOthers = $visibleToOthers;
 
         return $this;
     }
+
     public function getDescription(): ?string
     {
         return $this->description;
     }
+
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -274,6 +318,7 @@ class ExtraField
     {
         return $this->options;
     }
+
     public function setOptions(Collection $options): self
     {
         $this->options = $options;
@@ -288,6 +333,7 @@ class ExtraField
     {
         return $this->tags;
     }
+
     public function setTags(Collection $tags): self
     {
         $this->tags = $tags;
@@ -302,6 +348,7 @@ class ExtraField
 
         return $this->tags->exists(fn ($key, Tag $tag) => $tagName === $tag->getTag());
     }
+
     public function getTypeToString(): string
     {
         return match ($this->getItemType()) {
@@ -309,10 +356,12 @@ class ExtraField
             default => 'text',
         };
     }
+
     public function getHelperText(): string
     {
         return $this->helperText;
     }
+
     public function setHelperText(string $helperText): self
     {
         $this->helperText = $helperText;

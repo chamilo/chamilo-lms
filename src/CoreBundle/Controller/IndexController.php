@@ -31,6 +31,7 @@ class IndexController extends BaseController
     #[Route('/social', name: 'chamilo_core_socialnetwork', options: ['expose' => true])]
     #[Route('/admin', name: 'admin', options: ['expose' => true])]
     #[Route('/p/{slug}', name: 'public_page')]
+    #[Route('/skill/wheel', name: 'skill_wheel')]
     public function index(): Response
     {
         return $this->render('@ChamiloCore/Layout/no_layout.html.twig', ['content' => '']);

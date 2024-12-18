@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\DataFixtures;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
+use Chamilo\CoreBundle\ServiceHelper\AzureAuthenticatorHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -598,6 +599,24 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'display_text' => 'Time',
                 'item_type' => ExtraField::QUESTION_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_INTEGER,
+            ],
+            [
+                'variable' => AzureAuthenticatorHelper::EXTRA_FIELD_ORGANISATION_EMAIL,
+                'display_text' => 'Organisation e-mail',
+                'item_type' => ExtraField::USER_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
+            ],
+            [
+                'variable' => AzureAuthenticatorHelper::EXTRA_FIELD_AZURE_ID,
+                'display_text' => 'Azure ID (mailNickname)',
+                'item_type' => ExtraField::USER_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
+            ],
+            [
+                'variable' => AzureAuthenticatorHelper::EXTRA_FIELD_AZURE_UID,
+                'display_text' => 'Azure UID (internal ID)',
+                'item_type' => ExtraField::USER_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],
         ];
     }

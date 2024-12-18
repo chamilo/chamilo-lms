@@ -55,7 +55,7 @@ class Export
      *
      * @return string|void Returns the file path if $writeOnly is true, otherwise sends the file for download and exits.
      */
-    public static function arrayToCsvSimple(array $data, string $filename = 'export', bool $writeOnly = false)
+    public static function arrayToCsvSimple(array $data, string $filename = 'export', bool $writeOnly = false, array $header = [])
     {
         $file = api_get_path(SYS_ARCHIVE_PATH) . uniqid('') . '.csv';
 
@@ -65,16 +65,12 @@ class Export
             throw new \RuntimeException("Unable to create or open the file: $file");
         }
 
-        if (is_array($data)) {
-            foreach ($data as $row) {
-                $line = '';
-                if (is_array($row)) {
-                    foreach ($row as $value) {
-                        $line .= '"' . str_replace('"', '""', (string)$value) . '";';
-                    }
-                }
-                fwrite($handle, rtrim($line, ';') . "\n");
-            }
+        if (!empty($header)) {
+            fputcsv($handle, $header, ';');
+        }
+
+        foreach ($data as $row) {
+            fputcsv($handle, (array)$row, ';');
         }
 
         fclose($handle);

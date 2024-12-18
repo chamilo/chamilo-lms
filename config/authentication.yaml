@@ -13,12 +13,6 @@ parameters:
                     urlAccessToken: ''
                     urlResourceOwnerDetails: ''
                     responseResourceOwnerId: 'sub'
-                    # accessTokenMethod: 'POST'
-                    # responseError: 'error'
-                    # responseCode: ''
-                    # scopeSeparator: ' '
-                    scopes:
-                        - openid
                 allow_create_new_users: true
                 allow_update_user_info: false
                 resource_owner_username_field: null
@@ -38,8 +32,7 @@ parameters:
                 title: 'Facebook'
                 client_id: ''
                 client_secret: ''
-                graph_api_version: 'v20.0'
-                redirect_params: { }
+                #graph_api_version: 'v20.0'
 
             keycloak:
                 enabled: false
@@ -48,8 +41,10 @@ parameters:
                 client_secret: ''
                 auth_server_url: ''
                 realm: ''
-                version: ''
-                encryption_algorithm: null
-                encryption_key_path: null
-                encryption_key: null
-                redirect_params: { }
+                #version: ''
+
+            azure:
+                enabled: false
+                title: 'Azure'
+                client_id: ''
+                client_secret: ''

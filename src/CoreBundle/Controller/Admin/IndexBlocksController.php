@@ -416,7 +416,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-stats-report',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'mySpace/company_reports.php']),
+            'url' => $this->generateUrl('legacy_main', ['name' => 'my_space/company_reports.php']),
             'label' => $this->translator->trans('Reports'),
         ];
         $items[] = [
@@ -580,7 +580,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-skill-wheel',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'skills/skills_wheel.php']),
+            'route' => ['name' => 'SkillWheel'],
             'label' => $this->translator->trans('Skills wheel'),
         ];
         $items[] = [

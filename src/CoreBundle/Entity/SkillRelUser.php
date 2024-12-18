@@ -50,20 +50,20 @@ class SkillRelUser
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'achievedSkills')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'achievedSkills')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
     #[Groups(['skill_rel_user:read'])]
-    #[ORM\ManyToOne(targetEntity: Skill::class, cascade: ['persist'], inversedBy: 'issuedSkills')]
+    #[ORM\ManyToOne(targetEntity: Skill::class, inversedBy: 'issuedSkills')]
     #[ORM\JoinColumn(name: 'skill_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected ?Skill $skill = null;
 
-    #[ORM\ManyToOne(targetEntity: Course::class, cascade: ['persist'], inversedBy: 'issuedSkills')]
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'issuedSkills')]
     #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 
-    #[ORM\ManyToOne(targetEntity: Session::class, cascade: ['persist'], inversedBy: 'issuedSkills')]
+    #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'issuedSkills')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
@@ -111,7 +111,7 @@ class SkillRelUser
         $this->acquiredSkillAt = new DateTime();
     }
 
-    public function setSkill(Skill $skill): self
+    public function setSkill(?Skill $skill): self
     {
         $this->skill = $skill;
 

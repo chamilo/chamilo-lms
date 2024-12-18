@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\StateIcon;
-
+use Symfony\Component\HttpFoundation\Request;
 /**
  * Description of zombie_report.
  *
@@ -14,12 +14,14 @@ use Chamilo\CoreBundle\Component\Utils\StateIcon;
 class ZombieReport implements Countable
 {
     protected $additional_parameters = [];
+    protected $request;
 
     protected $parameters_form = null;
 
-    public function __construct($additional_parameters = [])
+    public function __construct($additional_parameters = [], Request $request = null)
     {
         $this->additional_parameters = $additional_parameters;
+        $this->request = $request ?? Request::createFromGlobals();
     }
 
     /**
@@ -121,7 +123,7 @@ class ZombieReport implements Countable
 
     public function get_ceiling($format = null)
     {
-        $result = Request::get('ceiling');
+        $result = $this->request->get('ceiling');
         $result = $result ? $result : ZombieManager::last_year();
 
         $result = is_array($result) && 1 == count($result) ? reset($result) : $result;
@@ -137,7 +139,7 @@ class ZombieReport implements Countable
 
     public function get_active_only()
     {
-        $result = Request::get('active_only', false);
+        $result = $this->request->get('active_only', $this->request->query->get('active_only'));
         $result = 'true' === $result ? true : $result;
         $result = 'false' === $result ? false : $result;
         $result = (bool) $result;
@@ -156,12 +158,12 @@ class ZombieReport implements Countable
             return 'display';
         }
 
-        return Request::post('action', 'display');
+        return $this->request->request->get('action', 'display');
     }
 
     public function perform_action()
     {
-        $ids = Request::post('id');
+        $ids = $this->request->request->get('id');
         if (empty($ids)) {
             return $ids;
         }
@@ -198,7 +200,7 @@ class ZombieReport implements Countable
         $result = [];
         foreach ($items as $item) {
             $row = [];
-            $row[] = $item['user_id'];
+            $row[] = $item['id'];
             $row[] = $item['official_code'];
             $row[] = $item['firstname'];
             $row[] = $item['lastname'];

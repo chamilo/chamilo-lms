@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Portfolio;
@@ -11,10 +12,12 @@ use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Chamilo\CoreBundle\Entity\PortfolioRelTag;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Mpdf\MpdfException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
@@ -1203,6 +1206,8 @@ class PortfolioController
             ;
         }
 
+        $this->filterCommentsByCourseAndSession($commentsQueryBuilder);
+
         $comments = $commentsQueryBuilder
             ->orderBy('comment.root, comment.lft', 'ASC')
             ->setParameter('item', $item)
@@ -1866,13 +1871,7 @@ class PortfolioController
                     ->andWhere('i.course = :course')
                     ->setParameter('course', $this->course);
 
-                if ($this->session) {
-                    $qb
-                        ->andWhere('i.session = :session')
-                        ->setParameter('session', $this->session);
-                } else {
-                    $qb->andWhere('i.session IS NULL');
-                }
+                $this->applySessionCondition($qb, 'i.session');
             }
 
             if ($isAllowedToFilterStudent && $currentUserId !== $this->owner->getId()) {
@@ -1901,13 +1900,7 @@ class PortfolioController
                     ->andWhere('item.course = :course_id')
                     ->setParameter('course_id', $this->course);
 
-                if ($this->session) {
-                    $qb
-                        ->andWhere('item.session = :session')
-                        ->setParameter('session', $this->session);
-                } else {
-                    $qb->andWhere('item.session IS NULL');
-                }
+                $this->applySessionCondition($qb, 'item.session');
             }
 
             if ($isAllowedToFilterStudent && $currentUserId !== $this->owner->getId()) {
@@ -3700,12 +3693,7 @@ class PortfolioController
             ->andWhere('pi.isHighlighted = TRUE')
             ->setParameter('course', $this->course);
 
-        if ($this->session) {
-            $queryBuilder->andWhere('pi.session = :session');
-            $queryBuilder->setParameter('session', $this->session);
-        } else {
-            $queryBuilder->andWhere('pi.session IS NULL');
-        }
+        $this->applySessionCondition($queryBuilder, 'pi.session');
 
         if ($this->advancedSharingEnabled) {
             $queryBuilder
@@ -3770,12 +3758,7 @@ class PortfolioController
 
             $queryBuilder->setParameter('course', $this->course);
 
-            if ($this->session) {
-                $queryBuilder->andWhere('pi.session = :session');
-                $queryBuilder->setParameter('session', $this->session);
-            } else {
-                $queryBuilder->andWhere('pi.session IS NULL');
-            }
+            $this->applySessionCondition($queryBuilder, 'pi.session');
 
             if ($frmFilterList && $frmFilterList->validate()) {
                 $values = $frmFilterList->exportValues();
@@ -4398,6 +4381,8 @@ class PortfolioController
             ;
         }
 
+        $this->filterCommentsByCourseAndSession($queryBuilder);
+
         $queryBuilder->orderBy('c.date', 'DESC');
 
         return $queryBuilder->getQuery()->getResult();
@@ -4429,5 +4414,42 @@ class PortfolioController
         }
 
         return $dateLabel;
+    }
+
+    // Rename this function properly
+    private function applySessionCondition(QueryBuilder $queryBuilder, string $sessionField)
+    {
+        $sessionCondition = api_get_session_condition(
+            $this->session ? $this->session->getId() : 0,
+            false,
+            api_get_configuration_value('portfolio_show_base_course_post_in_sessions'),
+            $sessionField,
+            true
+        );
+        $queryBuilder->andWhere($sessionCondition);
+    }
+
+    private function filterCommentsByCourseAndSession(QueryBuilder $queryBuilder)
+    {
+        if ($this->course) {
+            if ($this->session) {
+                $studentIdList = $this->session->getUsers()->map(fn(SessionRelUser $sru) => $sru->getUser()->getId());
+
+                if ($this->session->getSessionAdminId()) {
+                    $studentIdList->add($this->session->getSessionAdminId());
+                }
+
+                if ($generalCoach = $this->session->getGeneralCoach()) {
+                    $studentIdList->add($generalCoach->getId());
+                }
+            } else {
+                $studentIdList = $this->course->getUsers()->map(fn(CourseRelUser $cru) => $cru->getUser()->getId());
+            }
+
+            $queryBuilder
+                ->andWhere('comment.author IN (:students)')
+                ->setParameter('students', $studentIdList->getValues())
+            ;
+        }
     }
 }

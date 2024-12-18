@@ -12,6 +12,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ValidationTokenHelper
 {
+    // Define constants for the types
+    public const TYPE_TICKET = 1;
+    public const TYPE_USER = 2;
+
     public function __construct(
         private readonly ValidationTokenRepository $tokenRepository,
         private readonly UrlGeneratorInterface $urlGenerator,
@@ -22,6 +26,7 @@ class ValidationTokenHelper
         $token = new ValidationToken($type, $resourceId);
         $this->tokenRepository->save($token, true);
 
+        // Generate a validation link with the token's hash
         return $this->urlGenerator->generate('validate_token', [
             'type' => $this->getTypeString($type),
             'hash' => $token->getHash(),
@@ -31,8 +36,8 @@ class ValidationTokenHelper
     public function getTypeId(string $type): int
     {
         return match ($type) {
-            'ticket' => 1,
-            'user' => 2,
+            'ticket' => self::TYPE_TICKET,
+            'user' => self::TYPE_USER,
             default => throw new \InvalidArgumentException('Unrecognized validation type'),
         };
     }
@@ -40,8 +45,8 @@ class ValidationTokenHelper
     private function getTypeString(int $type): string
     {
         return match ($type) {
-            1 => 'ticket',
-            2 => 'user',
+            self::TYPE_TICKET => 'ticket',
+            self::TYPE_USER => 'user',
             default => throw new \InvalidArgumentException('Unrecognized validation type'),
         };
     }

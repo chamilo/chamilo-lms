@@ -84,4 +84,22 @@ class TrackEDefaultRepository extends ServiceEntityRepository
         $this->_em->persist($event);
         $this->_em->flush();
     }
+
+    /**
+     * Registers a specific event such as ticket unsubscribe.
+     */
+    public function registerTicketUnsubscribeEvent(int $ticketId, int $userId): void
+    {
+        $event = new TrackEDefault();
+        $event->setDefaultUserId($userId);
+        $event->setCId($ticketId);
+        $event->setDefaultDate(new \DateTime());
+        $event->setDefaultEventType('ticket_unsubscribe');
+        $event->setDefaultValueType('ticket_event');
+        $event->setDefaultValue(\json_encode(['user_id' => $userId, 'ticket_id' => $ticketId, 'action' => 'unsubscribe']));
+        $event->setSessionId(null);
+
+        $this->_em->persist($event);
+        $this->_em->flush();
+    }
 }

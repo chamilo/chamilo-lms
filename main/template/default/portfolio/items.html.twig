@@ -1,15 +1,15 @@
-{% macro display(items, category_id, _c, _u, _p) %}
+{% macro display(items, category_id, course, session, _u, _p) %}
     {% set edit_img = 'edit.png'|img(22, 'Edit'|get_lang) %}
     {% set visible_img = 'visible.png'|img(22, 'Invisible'|get_lang) %}
     {% set invisible_img = 'invisible.png'|img(22, 'Visible'|get_lang) %}
     {% set delete_img = 'delete.png'|img(22, 'Delete'|get_lang) %}
     {% set baseurl = _p.web_self ~ '?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
-    {% set is_advanced_sharing_enabled = 'portfolio_advanced_sharing'|api_get_configuration_value and not _c is empty %}
+    {% set is_advanced_sharing_enabled = 'portfolio_advanced_sharing'|api_get_configuration_value and course %}
 
     <section class="portfolio-items">
         {% for item in items %}
             {% set item_url = baseurl ~ {'action':'view', 'id':item.id}|url_encode %}
-            {% set comments = item.lastComments(3, is_advanced_sharing_enabled) %}
+            {% set comments = item.lastComments(3, is_advanced_sharing_enabled, course, session) %}
 
             <div class="panel panel-default">
                 <article class="panel-body portfolio-item" id="portfolio-item-{{ item.id }}">
@@ -74,7 +74,7 @@
                         </h3>
 
                         <ul class="fa-ul list-inline">
-                            {% if _c is empty %}
+                            {% if course %}
                                 {% if item.session %}
                                     <li>
                                         <span class="fa-li fa fa-book" aria-hidden="true"></span>

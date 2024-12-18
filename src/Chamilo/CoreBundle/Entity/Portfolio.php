@@ -376,8 +376,12 @@ class Portfolio
         return $this->comments;
     }
 
-    public function getLastComments(int $number = 3, bool $avoidPerUserVisibility = false): Collection
-    {
+    public function getLastComments(
+        int $number = 3,
+        bool $avoidPerUserVisibility = false,
+        ?Course $course = null,
+        ?Session $session = null
+    ): Collection {
         $criteria = Criteria::create();
         $criteria
             ->orderBy(['date' => 'DESC'])
@@ -386,6 +390,26 @@ class Portfolio
         if ($avoidPerUserVisibility) {
             $criteria->where(
                 Criteria::expr()->neq('visibility', PortfolioComment::VISIBILITY_PER_USER)
+            );
+        }
+
+        if ($course) {
+            if ($session) {
+                $studentIdList = $session->getUsers()->map(fn(SessionRelUser $sru) => $sru->getUser()->getId());
+
+                if ($session->getSessionAdminId()) {
+                    $studentIdList->add($session->getSessionAdminId());
+                }
+
+                if ($generalCoach = $session->getGeneralCoach()) {
+                    $studentIdList->add($generalCoach->getId());
+                }
+            } else {
+                $studentIdList = $course->getUsers()->map(fn(CourseRelUser $cru) => $cru->getUser()->getId());
+            }
+
+            $criteria->andWhere(
+                Criteria::expr()->in('author', $studentIdList->getValues())
             );
         }
 

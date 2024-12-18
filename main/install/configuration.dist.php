@@ -1132,6 +1132,8 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 // ALTER TABLE portfolio_comment ADD visibility SMALLINT DEFAULT 1 NOT NULL;
 // Then add the "@" symbol to the CPortfolioComment::$visibility property in the ORM\Column() line.
 //$_configuration['portfolio_advanced_sharing'] = false;
+// Show base course posts in session course
+//$_configuration['portfolio_show_base_course_post_in_sessions'] = false;
 
 // DEPRECATED: gradebook_enable_best_score is deprecated. Use gradebook_display_extra_stats instead.
 // Enable best score column in gradebook. Previously called disable_gradebook_stats

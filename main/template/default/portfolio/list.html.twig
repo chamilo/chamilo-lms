@@ -58,7 +58,7 @@
             <h4 class="page-header">{{ 'Posts'|get_lang }}</h4>
         {% endif %}
 
-        {{ items.display(uncategorized_items, 0, _c, _u, _p) }}
+        {{ items.display(uncategorized_items, 0, course, session, _u, _p) }}
 
         {% if found_comments %}
             <section>
@@ -127,7 +127,8 @@
                             items.display(
                                 category.items(course, session, _u.id != category.user.id),
                                 category.id,
-                                _c,
+                                course,
+                                session,
                                 _u,
                                 _p
                             )

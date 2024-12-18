@@ -3044,7 +3044,8 @@ function api_get_session_condition(
     $session_id,
     $and = true,
     $with_base_content = false,
-    $session_field = 'session_id'
+    $session_field = 'session_id',
+    bool $avoidConditionType = false
 ) {
     $session_id = (int) $session_id;
 
@@ -3053,6 +3054,10 @@ function api_get_session_condition(
     }
     // Condition to show resources by session
     $condition_add = $and ? ' AND ' : ' WHERE ';
+
+    if ($avoidConditionType) {
+        $condition_add = '';
+    }
 
     if ($with_base_content) {
         $condition_session = $condition_add." ( $session_field = $session_id OR $session_field = 0 OR $session_field IS NULL) ";

@@ -7,9 +7,12 @@ use Chamilo\CoreBundle\Entity\TicketMessage;
 use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Entity\TicketPriority;
 use Chamilo\CoreBundle\Entity\TicketProject;
+use Chamilo\CoreBundle\Entity\TicketRelUser;
 use Chamilo\CoreBundle\Entity\TicketStatus;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\ValidationToken;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\ServiceHelper\ValidationTokenHelper;
 use Chamilo\CourseBundle\Entity\CLp;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
@@ -711,6 +714,10 @@ class TicketManager
                     }
                 }
             }
+
+            if (!self::isUserSubscribedToTicket($ticketId, $userId)) {
+                self::subscribeUserToTicket($ticketId, $userId);
+            }
         }
 
         return true;
@@ -1275,7 +1282,7 @@ class TicketManager
                 $userInfo = api_get_user_info($row['sys_insert_user_id']);
                 $row['user_url'] = '<a href="'.api_get_path(WEB_PATH).'main/admin/user_information.php?user_id='.$userInfo['user_id'].'">
                 '.$userInfo['complete_name'].'</a>';
-                $ticket['usuario'] = $userInfo;
+                $ticket['user'] = $userInfo;
                 $ticket['ticket'] = $row;
             }
 
@@ -1354,15 +1361,8 @@ class TicketManager
 
     /**
      * Send notification to a user through the internal messaging system.
-     *
-     * @param int    $ticketId
-     * @param string $title
-     * @param string $message
-     * @param int    $onlyToUserId
-     *
-     * @return bool
      */
-    public static function sendNotification($ticketId, $title, $message, $onlyToUserId = 0)
+    public static function sendNotification($ticketId, $title, $message, $onlyToUserId = 0, $debug = false)
     {
         $ticketInfo = self::get_ticket_detail_by_id($ticketId);
 
@@ -1371,7 +1371,7 @@ class TicketManager
         }
 
         $assignedUserInfo = api_get_user_info($ticketInfo['ticket']['assigned_last_user']);
-        $requestUserInfo = $ticketInfo['usuario'];
+        $requestUserInfo = $ticketInfo['user'];
         $ticketCode = $ticketInfo['ticket']['code'];
         $status = $ticketInfo['ticket']['status'];
         $priority = $ticketInfo['ticket']['priority'];
@@ -1380,68 +1380,79 @@ class TicketManager
         $titleEmail = "[$ticketCode] $title";
 
         // Content
-        $href = api_get_path(WEB_CODE_PATH).'ticket/ticket_details.php?ticket_id='.$ticketId;
+        $href = api_get_path(WEB_CODE_PATH) . 'ticket/ticket_details.php?ticket_id=' . $ticketId;
         $ticketUrl = Display::url($ticketCode, $href);
-        $messageEmail = get_lang('Ticket number').": $ticketUrl <br />";
-        $messageEmail .= get_lang('Status').": $status <br />";
-        $messageEmail .= get_lang('Priority').": $priority <br />";
-        $messageEmail .= '<hr /><br />';
-        $messageEmail .= $message;
+        $messageEmailBase = get_lang('Ticket number') . ": $ticketUrl <br />";
+        $messageEmailBase .= get_lang('Status') . ": $status <br />";
+        $messageEmailBase .= get_lang('Priority') . ": $priority <br />";
+        $messageEmailBase .= '<hr /><br />';
+        $messageEmailBase .= $message;
+
         $currentUserId = api_get_user_id();
-        $attachmentList = [];
-        $attachments = self::getTicketMessageAttachmentsByTicketId($ticketId);
-        if (!empty($attachments)) {
-            /** @var TicketMessageAttachment $attachment */
-            foreach ($attachments as $attachment) {
-                //$attachment->get
-            }
-        }
+        $recipients = [];
 
-        if (!empty($onlyToUserId)) {
-            // Send only to specific user
-            if ($currentUserId != $onlyToUserId) {
-                MessageManager::send_message_simple(
-                    $onlyToUserId,
-                    $titleEmail,
-                    $messageEmail,
-                    0,
-                    false,
-                    false,
-                    true,
-                    $attachmentList
-                );
-            }
+        if (!empty($onlyToUserId) && $currentUserId != $onlyToUserId) {
+            $recipients[$onlyToUserId] = $onlyToUserId;
         } else {
-            // Send to assigned user and to author
             if ($requestUserInfo && $currentUserId != $requestUserInfo['id']) {
-                MessageManager::send_message_simple(
-                    $requestUserInfo['id'],
-                    $titleEmail,
-                    $messageEmail,
-                    0,
-                    false,
-                    false,
-                    false,
-                    $attachmentList
-                );
+                $recipients[$requestUserInfo['id']] = $requestUserInfo['complete_name_with_username'];
             }
 
-            if ($assignedUserInfo &&
-                $requestUserInfo['id'] != $assignedUserInfo['id'] &&
-                $currentUserId != $assignedUserInfo['id']
-            ) {
-                MessageManager::send_message_simple(
-                    $assignedUserInfo['id'],
-                    $titleEmail,
-                    $messageEmail,
-                    0,
-                    false,
-                    false,
-                    false,
-                    $attachmentList
-                );
+            if ($assignedUserInfo && $currentUserId != $assignedUserInfo['id']) {
+                $recipients[$assignedUserInfo['id']] = $assignedUserInfo['complete_name_with_username'];
+            }
+
+            $followers = self::getFollowers($ticketId);
+            /* @var User $follower */
+            foreach ($followers as $follower) {
+                if ($currentUserId != $follower->getId()) {
+                    $recipients[$follower->getId()] = $follower->getFullname();
+                }
             }
         }
+
+        if ($debug) {
+            echo "<pre>";
+            echo "Title: $titleEmail\n";
+            echo "Message Preview:\n\n";
+
+            foreach ($recipients as $recipientId => $recipientName) {
+                $unsubscribeLink = self::generateUnsubscribeLink($ticketId, $recipientId);
+                $finalMessageEmail = $messageEmailBase;
+                $finalMessageEmail .= '<br /><hr /><br />';
+                $finalMessageEmail .= '<small>' . get_lang('To unsubscribe from notifications, click here') . ': ';
+                $finalMessageEmail .= '<a href="' . $unsubscribeLink . '">' . $unsubscribeLink . '</a></small>';
+
+                echo "------------------------------------\n";
+                echo "Recipient: $recipientName (User ID: $recipientId)\n";
+                echo "Message:\n$finalMessageEmail\n";
+                echo "------------------------------------\n\n";
+            }
+
+            echo "</pre>";
+            exit;
+        }
+
+        foreach ($recipients as $recipientId => $recipientName) {
+            $unsubscribeLink = self::generateUnsubscribeLink($ticketId, $recipientId);
+
+            $finalMessageEmail = $messageEmailBase;
+            $finalMessageEmail .= '<br /><hr /><br />';
+            $finalMessageEmail .= '<small>' . get_lang('To unsubscribe from notifications, click here') . ': ';
+            $finalMessageEmail .= '<a href="' . $unsubscribeLink . '">' . $unsubscribeLink . '</a></small>';
+
+            MessageManager::send_message_simple(
+                $recipientId,
+                $titleEmail,
+                $finalMessageEmail,
+                0,
+                false,
+                false,
+                false
+            );
+        }
+
+        return true;
     }
 
     /**
@@ -2497,5 +2508,95 @@ class TicketManager
         return array_map(function ($roleId) use ($roleMap) {
             return $roleMap[$roleId] ?? "$roleId";
         }, $roleIds);
+    }
+
+    /**
+     * Subscribes a user to a ticket.
+     */
+    public static function subscribeUserToTicket(int $ticketId, int $userId): void
+    {
+        $em = Database::getManager();
+        $ticket = $em->getRepository(Ticket::class)->find($ticketId);
+        $user = $em->getRepository(User::class)->find($userId);
+
+        if ($ticket && $user) {
+            $repository = $em->getRepository(TicketRelUser::class);
+            $repository->subscribeUserToTicket($user, $ticket);
+
+            Event::addEvent(
+                'ticket_subscribe',
+                'ticket_event',
+                ['user_id' => $userId, 'ticket_id' => $ticketId, 'action' => 'subscribe']
+            );
+        }
+    }
+
+    /**
+     * Unsubscribes a user from a ticket.
+     */
+    public static function unsubscribeUserFromTicket(int $ticketId, int $userId): void
+    {
+        $em = Database::getManager();
+        $ticket = $em->getRepository(Ticket::class)->find($ticketId);
+        $user = $em->getRepository(User::class)->find($userId);
+
+        if ($ticket && $user) {
+            $repository = $em->getRepository(TicketRelUser::class);
+            $repository->unsubscribeUserFromTicket($user, $ticket);
+
+            Event::addEvent(
+                'ticket_unsubscribe',
+                'ticket_event',
+                ['user_id' => $userId, 'ticket_id' => $ticketId, 'action' => 'unsubscribe']
+            );
+        }
+    }
+
+    /**
+     * Checks if a user is subscribed to a ticket.
+     */
+    public static function isUserSubscribedToTicket(int $ticketId, int $userId): bool
+    {
+        $em = Database::getManager();
+        $ticket = $em->getRepository(Ticket::class)->find($ticketId);
+        $user = $em->getRepository(User::class)->find($userId);
+
+        if ($ticket && $user) {
+            $repository = $em->getRepository(TicketRelUser::class);
+            return $repository->isUserSubscribedToTicket($user, $ticket);
+        }
+
+        return false;
+    }
+
+    /**
+     * Retrieves the followers of a ticket.
+     */
+    public static function getFollowers($ticketId): array
+    {
+        $em = Database::getManager();
+        $repository = $em->getRepository(TicketRelUser::class);
+        $ticket = $em->getRepository(Ticket::class)->find($ticketId);
+
+        $followers = $repository->findBy(['ticket' => $ticket]);
+
+        $users = [];
+        foreach ($followers as $follower) {
+            $users[] = $follower->getUser();
+        }
+
+        return $users;
+    }
+
+    /**
+     * Generates an unsubscribe link for a ticket.
+     */
+    public static function generateUnsubscribeLink($ticketId, $userId): string
+    {
+        $token = new ValidationToken(ValidationTokenHelper::TYPE_TICKET, $ticketId);
+        Database::getManager()->persist($token);
+        Database::getManager()->flush();
+
+        return api_get_path(WEB_PATH).'validate/ticket/'.$token->getHash().'?user_id='.$userId;
     }
 }

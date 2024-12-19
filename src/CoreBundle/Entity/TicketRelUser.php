@@ -6,11 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\TicketRelUserRepository;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'ticket_rel_user')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: TicketRelUserRepository::class)]
 class TicketRelUser
 {
     use UserTrait;

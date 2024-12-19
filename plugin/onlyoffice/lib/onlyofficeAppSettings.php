@@ -108,16 +108,22 @@ class OnlyofficeAppsettings extends SettingsManager
         }
         switch ($settingName) {
             case $this->jwtHeader:
-                $value = api_get_setting($settingName)[$this->plugin->getPluginName()];
+                $settings = api_get_setting($settingName);
+                $value = is_array($settings) && array_key_exists($this->plugin->getPluginName(), $settings)
+                    ? $settings[$this->plugin->getPluginName()]
+                    : null;
+
                 if (empty($value)) {
                     $value = 'Authorization';
                 }
                 break;
             case $this->documentServerInternalUrl:
-                $value = api_get_setting($settingName)[$this->plugin->getPluginName()];
+                $settings = api_get_setting($settingName);
+                $value = is_array($settings) ? ($settings[$this->plugin->getPluginName()] ?? null) : null;
                 break;
             case $this->useDemoName:
-                $value = api_get_setting($settingName)[0];
+                $settings = api_get_setting($settingName);
+                $value = is_array($settings) ? ($settings[0] ?? null) : null;
                 break;
             case $this->jwtPrefix:
                 $value = 'Bearer ';

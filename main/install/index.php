@@ -760,12 +760,12 @@ if (@$_POST['step2']) {
             set_file_folder_permissions();
 
             $manager = connectToDatabase(
-            $dbHostForm,
-            $dbUsernameForm,
-            $dbPassForm,
-            null,
-            $dbPortForm
-        );
+                $dbHostForm,
+                $dbUsernameForm,
+                $dbPassForm,
+                null,
+                $dbPortForm
+            );
 
             $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
 
@@ -773,12 +773,12 @@ if (@$_POST['step2']) {
             $manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
 
             $manager = connectToDatabase(
-            $dbHostForm,
-            $dbUsernameForm,
-            $dbPassForm,
-            $dbNameForm,
-            $dbPortForm
-        );
+                $dbHostForm,
+                $dbUsernameForm,
+                $dbPassForm,
+                $dbNameForm,
+                $dbPortForm
+            );
 
             $sql = getVersionTable();
             $manager->getConnection()->executeQuery($sql);
@@ -898,23 +898,23 @@ if (@$_POST['step2']) {
             $sysPath = api_get_path(SYS_PATH);
 
             finishInstallation(
-            $manager,
-            $sysPath,
-            $encryptPassForm,
-            $passForm,
-            $adminLastName,
-            $adminFirstName,
-            $loginForm,
-            $emailForm,
-            $adminPhoneForm,
-            $languageForm,
-            $institutionForm,
-            $institutionUrlForm,
-            $campusForm,
-            $allowSelfReg,
-            $allowSelfRegProf,
-            $installationProfile
-        );
+                $manager,
+                $sysPath,
+                $encryptPassForm,
+                $passForm,
+                $adminLastName,
+                $adminFirstName,
+                $loginForm,
+                $emailForm,
+                $adminPhoneForm,
+                $languageForm,
+                $institutionForm,
+                $institutionUrlForm,
+                $campusForm,
+                $allowSelfReg,
+                $allowSelfRegProf,
+                $installationProfile
+            );
 
             include 'install_files.inc.php';
         }

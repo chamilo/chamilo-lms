@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -37,120 +38,90 @@ class Portfolio
     public const VISIBILITY_PER_USER = 3;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=255)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var string
      * @ORM\Column(name="content", type="text")
      */
-    protected $content;
+    protected string $content;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var Course
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $course = null;
+    protected ?Course $course = null;
 
     /**
-     * @var Session
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $session = null;
+    protected ?Session $session = null;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="creation_date", type="datetime")
      */
-    protected $creationDate;
+    protected DateTime $creationDate;
 
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="update_date", type="datetime")
      */
-    protected $updateDate;
+    protected DateTime $updateDate;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="visibility", type="smallint", options={"default": 1})
      */
-    protected $visibility = 1;
+    protected int $visibility = self::VISIBILITY_VISIBLE;
 
     /**
-     * @var \Chamilo\CoreBundle\Entity\PortfolioCategory
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\PortfolioCategory", inversedBy="items")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $category;
+    protected ?PortfolioCategory $category;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\PortfolioComment", mappedBy="item")
      */
-    private $comments;
+    private Collection $comments;
 
     /**
-     * @var int|null
-     *
      * @ORM\Column(name="origin", type="integer", nullable=true)
      */
-    private $origin;
+    private ?int $origin = null;
+
     /**
-     * @var int|null
-     *
      * @ORM\Column(name="origin_type", type="integer", nullable=true)
      */
-    private $originType;
+    private ?int $originType = null;
 
     /**
-     * @var float|null
-     *
      * @ORM\Column(name="score", type="float", nullable=true)
      */
-    private $score;
+    private ?float $score = null;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="is_highlighted", type="boolean", options={"default": false})
      */
-    private $isHighlighted = false;
+    private bool $isHighlighted = false;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="is_template", type="boolean", options={"default": false})
      */
-    private $isTemplate = false;
+    private bool $isTemplate = false;
 
     /**
      * Portfolio constructor.
@@ -161,89 +132,49 @@ class Portfolio
         $this->comments = new ArrayCollection();
     }
 
-    /**
-     * Set user.
-     *
-     * @return Portfolio
-     */
-    public function setUser(User $user)
+    public function setUser(User $user): Portfolio
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get user.
-     *
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * Set course.
-     *
-     * @return Portfolio
-     */
-    public function setCourse(Course $course = null)
+    public function setCourse(?Course $course = null): Portfolio
     {
         $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * Get course.
-     *
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): ?Course
     {
         return $this->course;
     }
 
-    /**
-     * Get session.
-     *
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    /**
-     * Set session.
-     *
-     * @return Portfolio
-     */
-    public function setSession(Session $session = null)
+    public function setSession(?Session $session = null): Portfolio
     {
         $this->session = $session;
 
         return $this;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return Portfolio
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): Portfolio
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     */
     public function getTitle(bool $stripTags = false): string
     {
         if ($stripTags) {
@@ -253,87 +184,47 @@ class Portfolio
         return $this->title;
     }
 
-    /**
-     * Set content.
-     *
-     * @param string $content
-     *
-     * @return Portfolio
-     */
-    public function setContent($content)
+    public function setContent(string $content): Portfolio
     {
         $this->content = $content;
 
         return $this;
     }
 
-    /**
-     * Get content.
-     *
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * Set creationDate.
-     *
-     * @return Portfolio
-     */
-    public function setCreationDate(\DateTime $creationDate)
+    public function setCreationDate(DateTime $creationDate): Portfolio
     {
         $this->creationDate = $creationDate;
 
         return $this;
     }
 
-    /**
-     * Get creationDate.
-     *
-     * @return \DateTime
-     */
-    public function getCreationDate()
+    public function getCreationDate(): DateTime
     {
         return $this->creationDate;
     }
 
-    /**
-     * Set updateDate.
-     *
-     * @return Portfolio
-     */
-    public function setUpdateDate(\DateTime $updateDate)
+    public function setUpdateDate(DateTime $updateDate): Portfolio
     {
         $this->updateDate = $updateDate;
 
         return $this;
     }
 
-    /**
-     * Get updateDate.
-     *
-     * @return \DateTime
-     */
-    public function getUpdateDate()
+    public function getUpdateDate(): DateTime
     {
         return $this->updateDate;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set isVisible.
-     */
     public function setVisibility(int $visibility): Portfolio
     {
         $this->visibility = $visibility;
@@ -341,30 +232,17 @@ class Portfolio
         return $this;
     }
 
-    /**
-     * Get isVisible.
-     */
     public function getVisibility(): int
     {
         return $this->visibility;
     }
 
-    /**
-     * Get category.
-     *
-     * @return PortfolioCategory
-     */
-    public function getCategory()
+    public function getCategory(): ?PortfolioCategory
     {
         return $this->category;
     }
 
-    /**
-     * Set category.
-     *
-     * @return Portfolio
-     */
-    public function setCategory(PortfolioCategory $category = null)
+    public function setCategory(?PortfolioCategory $category = null): Portfolio
     {
         $this->category = $category;
 
@@ -397,9 +275,6 @@ class Portfolio
         return $this->origin;
     }
 
-    /**
-     * @return \Chamilo\CoreBundle\Entity\Portfolio
-     */
     public function setOrigin(?int $origin): Portfolio
     {
         $this->origin = $origin;
@@ -412,9 +287,6 @@ class Portfolio
         return $this->originType;
     }
 
-    /**
-     * @return \Chamilo\CoreBundle\Entity\Portfolio
-     */
     public function setOriginType(?int $originType): Portfolio
     {
         $this->originType = $originType;

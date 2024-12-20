@@ -21,52 +21,41 @@ class PortfolioAttachment
     public const TYPE_COMMENT = 2;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="path", type="string", length=255)
      */
-    protected $path;
+    protected string $path;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
-    protected $comment;
+    protected ?string $comment;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="size", type="integer")
      */
-    protected $size;
+    protected int $size;
+
     /**
-     * @var string
-     *
      * @ORM\Column(name="filename", type="string", length=255)
      */
-    protected $filename;
+    protected string $filename;
+
     /**
-     * @var int
-     *
      * @ORM\Column(name="origin_id", type="integer")
      */
-    private $origin;
+    private int $origin;
+
     /**
-     * @var int
-     *
      * @ORM\Column(name="origin_type", type="integer")
      */
-    private $originType;
+    private int $originType;
 
     public function getId(): int
     {

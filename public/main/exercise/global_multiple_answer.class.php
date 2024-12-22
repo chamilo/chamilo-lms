@@ -128,7 +128,7 @@ class GlobalMultipleAnswer extends Question
             $form->addHtmlEditor(
                 'comment['.$i.']',
                 null,
-                true,
+                false,
                 false,
                 [
                     'ToolbarSet' => 'TestProposedAnswer',

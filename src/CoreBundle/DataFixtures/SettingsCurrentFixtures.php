@@ -2404,11 +2404,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'By default, Chamilo prevents you from editing tests that are included inside a learning path. This is to avoid changes that would affect learners (past and future) differently regarding the results and/or progress in the learning path. This option allows teachers to bypass this restriction.',
                 ],
                 [
-                    'name' => 'allow_exercise_auto_launch',
-                    'title' => 'Allow tests auto-launch',
-                    'comment' => 'The auto-launch feature allows the teacher to set an exercise to open immediately upon accessing the course homepage. Enable this option and click on the rocket icon in the list of tests to enable.',
-                ],
-                [
                     'name' => 'allow_exercise_categories',
                     'title' => 'Enable test categories',
                     'comment' => 'Test categories are not enabled by default because they add a level of complexity. Enable this feature to show all test categories related management icons appear.',

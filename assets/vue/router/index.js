@@ -140,25 +140,20 @@ const router = createRouter({
           }
 
           // Exercise auto-launch
-          const platformConfigStore = usePlatformConfig()
-          const isExerciseAutoLaunchEnabled =
-            "true" === platformConfigStore.getSetting("exercise.allow_exercise_auto_launch")
-          if (isExerciseAutoLaunchEnabled) {
-            const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
-            if (exerciseAutoLaunch === 2) {
+          const exerciseAutoLaunch = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
+          if (exerciseAutoLaunch === 2) {
+            sessionStorage.setItem(autoLaunchKey, "true")
+            window.location.href =
+              `/main/exercise/exercise.php?cid=${courseId}` + (sessionId ? `&sid=${sessionId}` : "")
+            return false
+          } else if (exerciseAutoLaunch === 1) {
+            const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
+            if (exerciseId) {
               sessionStorage.setItem(autoLaunchKey, "true")
               window.location.href =
-                `/main/exercise/exercise.php?cid=${courseId}` + (sessionId ? `&sid=${sessionId}` : "")
+                `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}` +
+                (sessionId ? `&sid=${sessionId}` : "")
               return false
-            } else if (exerciseAutoLaunch === 1) {
-              const exerciseId = await courseService.getAutoLaunchExerciseId(courseId, sessionId)
-              if (exerciseId) {
-                sessionStorage.setItem(autoLaunchKey, "true")
-                window.location.href =
-                  `/main/exercise/overview.php?exerciseId=${exerciseId}&cid=${courseId}` +
-                  (sessionId ? `&sid=${sessionId}` : "")
-                return false
-              }
             }
           }
 

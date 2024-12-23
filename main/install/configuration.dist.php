@@ -1132,6 +1132,14 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 // ALTER TABLE portfolio_comment ADD visibility SMALLINT DEFAULT 1 NOT NULL;
 // Then add the "@" symbol to the CPortfolioComment::$visibility property in the ORM\Column() line.
 //$_configuration['portfolio_advanced_sharing'] = false;
+// Show base course posts in session course. Requires DB changes and edit the Portfolio entity
+// adding the "@" symbol to the beginning of ORM\ManyToOne, ORM\JoinColumn, ORM\OneToMany lines for the Portfolio::$duplicatedFrom and Portfolio::$duplicates properties.
+/*
+ALTER TABLE portfolio ADD duplicated_from INT DEFAULT NULL;
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062FC4CB679 FOREIGN KEY (duplicated_from) REFERENCES portfolio (id) ON DELETE SET NULL;
+CREATE INDEX IDX_A9ED1062FC4CB679 ON portfolio (duplicated_from);
+*/
+//$_configuration['portfolio_show_base_course_post_in_sessions'] = false;
 
 // DEPRECATED: gradebook_enable_best_score is deprecated. Use gradebook_display_extra_stats instead.
 // Enable best score column in gradebook. Previously called disable_gradebook_stats

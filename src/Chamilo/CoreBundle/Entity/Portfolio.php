@@ -124,12 +124,25 @@ class Portfolio
     private bool $isTemplate = false;
 
     /**
+     * ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Portfolio", inversedBy="duplicates")
+     * ORM\JoinColumn(name="duplicated_from", onDelete="SET NULL")
+     */
+    private ?Portfolio $duplicatedFrom = null;
+
+    /**
+     * @var Collection<int, Portfolio>
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Portfolio", mappedBy="duplicatedFrom")
+     */
+    private Collection $duplicates;
+
+    /**
      * Portfolio constructor.
      */
     public function __construct()
     {
         $this->category = null;
         $this->comments = new ArrayCollection();
+        $this->duplicates = new ArrayCollection();
     }
 
     public function setUser(User $user): Portfolio
@@ -331,5 +344,67 @@ class Portfolio
         $this->isTemplate = $isTemplate;
 
         return $this;
+    }
+
+    public function getDuplicatedFrom(): ?Portfolio
+    {
+        return $this->duplicatedFrom;
+    }
+
+    public function setDuplicatedFrom(?Portfolio $duplicatedFrom): Portfolio
+    {
+        $this->duplicatedFrom = $duplicatedFrom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Portfolio>
+     */
+    public function getDuplicates(): Collection
+    {
+        return $this->duplicates;
+    }
+
+    public function addDuplicate(Portfolio $duplicate): Portfolio
+    {
+        if (!$this->duplicates->contains($duplicate)) {
+            $this->duplicates->add($duplicate);
+            $duplicate->setDuplicatedFrom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDuplicate(Portfolio $duplicate): Portfolio
+    {
+        if ($this->duplicates->removeElement($duplicate)) {
+            // set the owning side to null (unless already changed)
+            if ($duplicate->getDuplicatedFrom() === $this) {
+                $duplicate->setDuplicatedFrom(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function hasDuplicates(): bool
+    {
+        return $this->duplicates->count() > 0;
+    }
+
+    public function isDuplicated(): bool
+    {
+        return null !== $this->duplicatedFrom;
+    }
+
+    public function isDuplicatedInSession(Session $session): bool
+    {
+        return $this->duplicates->exists(fn($key, Portfolio $duplicated): bool => $duplicated->session === $session);
+    }
+
+    public function isDuplicatedInSessionId(int $sessionId): bool
+    {
+        return $this->duplicates->exists(fn($key, Portfolio $duplicated): bool => $duplicated->session && $duplicated->session->getId() === $sessionId);
     }
 }

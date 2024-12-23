@@ -894,58 +894,56 @@ class CourseController extends ToolBaseController
             }
         }
 
-        if ('true' === api_get_setting('exercise.allow_exercise_auto_launch')) {
-            $exerciseAutoLaunch = (int) api_get_course_setting('enable_exercise_auto_launch');
-            if (2 === $exerciseAutoLaunch) {
-                if ($allowAutoLaunchForCourseAdmins) {
-                    if (empty($autoLaunchWarning)) {
-                        $autoLaunchWarning = get_lang(
-                            'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList'
-                        );
-                    }
-                } else {
-                    // Redirecting to the document
-                    $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
-                    header(\sprintf('Location: %s', $url));
-
-                    exit;
+        $exerciseAutoLaunch = (int) api_get_course_setting('enable_exercise_auto_launch');
+        if (2 === $exerciseAutoLaunch) {
+            if ($allowAutoLaunchForCourseAdmins) {
+                if (empty($autoLaunchWarning)) {
+                    $autoLaunchWarning = get_lang(
+                        'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList'
+                    );
                 }
-            } elseif (1 === $exerciseAutoLaunch) {
-                if ($allowAutoLaunchForCourseAdmins) {
-                    if (empty($autoLaunchWarning)) {
-                        $autoLaunchWarning = get_lang(
-                            'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'
-                        );
-                    }
-                } else {
-                    // Redirecting to an exercise
-                    $table = Database::get_course_table(TABLE_QUIZ_TEST);
-                    $condition = '';
-                    if (!empty($session_id)) {
-                        $condition = api_get_session_condition($session_id);
-                        $sql = "SELECT iid FROM {$table}
-                                WHERE c_id = {$course_id} AND autolaunch = 1 {$condition}
-                                LIMIT 1";
-                        $result = Database::query($sql);
-                        // If we found nothing in the session we just called the session_id = 0 autolaunch
-                        if (0 === Database::num_rows($result)) {
-                            $condition = '';
-                        }
-                    }
+            } else {
+                // Redirecting to the document
+                $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
+                header(\sprintf('Location: %s', $url));
 
+                exit;
+            }
+        } elseif (1 === $exerciseAutoLaunch) {
+            if ($allowAutoLaunchForCourseAdmins) {
+                if (empty($autoLaunchWarning)) {
+                    $autoLaunchWarning = get_lang(
+                        'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'
+                    );
+                }
+            } else {
+                // Redirecting to an exercise
+                $table = Database::get_course_table(TABLE_QUIZ_TEST);
+                $condition = '';
+                if (!empty($session_id)) {
+                    $condition = api_get_session_condition($session_id);
                     $sql = "SELECT iid FROM {$table}
                             WHERE c_id = {$course_id} AND autolaunch = 1 {$condition}
                             LIMIT 1";
                     $result = Database::query($sql);
-                    if (Database::num_rows($result) > 0) {
-                        $row = Database::fetch_array($result);
-                        $exerciseId = $row['iid'];
-                        $url = api_get_path(WEB_CODE_PATH).
-                            'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
-                        header(\sprintf('Location: %s', $url));
-
-                        exit;
+                    // If we found nothing in the session we just called the session_id = 0 autolaunch
+                    if (0 === Database::num_rows($result)) {
+                        $condition = '';
                     }
+                }
+
+                $sql = "SELECT iid FROM {$table}
+                        WHERE c_id = {$course_id} AND autolaunch = 1 {$condition}
+                        LIMIT 1";
+                $result = Database::query($sql);
+                if (Database::num_rows($result) > 0) {
+                    $row = Database::fetch_array($result);
+                    $exerciseId = $row['iid'];
+                    $url = api_get_path(WEB_CODE_PATH).
+                        'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
+                    header(\sprintf('Location: %s', $url));
+
+                    exit;
                 }
             }
         }

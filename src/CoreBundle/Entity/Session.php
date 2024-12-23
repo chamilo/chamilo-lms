@@ -803,6 +803,16 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->users->matching($criteria)->count() > 0;
     }
 
+    public function hasUserInSession(User $user, int $relationType): bool
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('user', $user))
+            ->andWhere(Criteria::expr()->eq('relationType', $relationType));
+
+        return $this->users->matching($criteria)->count() > 0;
+    }
+
+
     public function addGeneralCoach(User $coach): self
     {
         return $this->addUserInSession(self::GENERAL_COACH, $coach);

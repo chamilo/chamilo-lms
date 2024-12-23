@@ -11,6 +11,12 @@
             {% set item_url = baseurl ~ {'action':'view', 'id':item.id}|url_encode %}
             {% set comments = item.lastComments(3, is_advanced_sharing_enabled) %}
 
+            {% if 'portfolio_show_base_course_post_in_sessions'|api_get_configuration_value %}
+                {% if _c.session_id and not item.session and not item.isDuplicatedInSessionId(_c.session_id) %}
+                    {% set comments = {} %}
+                {% endif %}
+            {% endif %}
+
             <div class="panel panel-default">
                 <article class="panel-body portfolio-item" id="portfolio-item-{{ item.id }}">
                     <div class="portfolio-actions pull-right">

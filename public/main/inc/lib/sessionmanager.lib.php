@@ -5558,13 +5558,10 @@ class SessionManager
                                 }
                             }
 
-                            $userList[] = $user_id;
-                            // Insert new users.
-                            $sql = "INSERT IGNORE INTO $tbl_session_user SET
-                                    user_id = '$user_id',
-                                    session_id = '$session_id',
-                                    registered_at = '".api_get_utc_datetime()."'";
-                            Database::query($sql);
+                            $userEntity = api_get_user_entity($user_id);
+                            $sessionEntity = api_get_session_entity($session_id);
+                            $sessionEntity->addUserInSession(Session::STUDENT, $userEntity);
+
                             if ($debug) {
                                 $logger->debug("Adding User #$user_id ($user) to session #$session_id");
                             }

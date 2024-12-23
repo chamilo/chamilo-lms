@@ -392,6 +392,7 @@ class TicketManager
         $ticketId = Database::insert($table_support_tickets, $params);
 
         if ($ticketId) {
+            self::subscribeUserToTicket($ticketId, $currentUserId);
             $ticket_code = 'A'.str_pad($ticketId, 11, '0', STR_PAD_LEFT);
             $titleCreated = sprintf(
                 get_lang('Ticket %s created'),
@@ -557,11 +558,11 @@ class TicketManager
                 // Send notification to all users
                 if (!empty($usersInCategory)) {
                     foreach ($usersInCategory as $data) {
-                        if ($data['user_id']) {
+                        if ($data['user_id'] && $data['user_id'] !== $currentUserId) {
                             self::sendNotification(
                                 $ticketId,
-                                $subject,
-                                $message,
+                                $titleCreated,
+                                $helpDeskMessage,
                                 $data['user_id']
                             );
                         }
@@ -1375,6 +1376,7 @@ class TicketManager
         $ticketCode = $ticketInfo['ticket']['code'];
         $status = $ticketInfo['ticket']['status'];
         $priority = $ticketInfo['ticket']['priority'];
+        $creatorId = $ticketInfo['ticket']['sys_insert_user_id'];
 
         // Subject
         $titleEmail = "[$ticketCode] $title";
@@ -1394,7 +1396,11 @@ class TicketManager
         if (!empty($onlyToUserId) && $currentUserId != $onlyToUserId) {
             $recipients[$onlyToUserId] = $onlyToUserId;
         } else {
-            if ($requestUserInfo && $currentUserId != $requestUserInfo['id']) {
+            if (
+                $requestUserInfo &&
+                $currentUserId != $requestUserInfo['id'] &&
+                self::isUserSubscribedToTicket($ticketId, $requestUserInfo['id'])
+            ) {
                 $recipients[$requestUserInfo['id']] = $requestUserInfo['complete_name_with_username'];
             }
 
@@ -1405,7 +1411,7 @@ class TicketManager
             $followers = self::getFollowers($ticketId);
             /* @var User $follower */
             foreach ($followers as $follower) {
-                if ($currentUserId != $follower->getId()) {
+                if ($follower->getId() !== $creatorId || self::isUserSubscribedToTicket($ticketId, $follower->getId())) {
                     $recipients[$follower->getId()] = $follower->getFullname();
                 }
             }

@@ -3974,6 +3974,20 @@ class PortfolioController
         $form->addButtonSave(get_lang('Save'));
 
         if ($form->validate()) {
+            if ($this->session
+                && true === api_get_configuration_value('portfolio_show_base_course_post_in_sessions')
+                && !$item->getSession()
+            ) {
+                $duplicate = $item->duplicateInSession($this->session);
+
+                $this->em->persist($duplicate);
+                $this->em->flush();
+
+                $item = $duplicate;
+
+                $formAction = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]);
+            }
+
             $values = $form->exportValues();
 
             $parentComment = $this->em->find(PortfolioComment::class, $values['parent']);

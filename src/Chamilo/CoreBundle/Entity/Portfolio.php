@@ -407,4 +407,22 @@ class Portfolio
     {
         return $this->duplicates->exists(fn($key, Portfolio $duplicated): bool => $duplicated->session && $duplicated->session->getId() === $sessionId);
     }
+
+    public function reset()
+    {
+        $this->id = null;
+        $this->duplicates = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+    }
+
+    public function duplicateInSession(Session $session): Portfolio
+    {
+        $duplicate = clone $this;
+        $duplicate->reset();
+
+        $duplicate->setSession($session);
+        $this->addDuplicate($duplicate);
+
+        return $duplicate;
+    }
 }

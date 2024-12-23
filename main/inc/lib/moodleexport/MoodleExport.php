@@ -404,15 +404,33 @@ class MoodleExport
                         $id = $resource->source_id;
                         $title = $document['title'];
                     } elseif ('file' === $resource->file_type) {
-                        $exportClass = ResourceExport::class;
-                        $moduleName = 'resource';
-                        $id = $resource->source_id;
-                        $title = $resource->title;
+                        $isRoot = substr_count($resource->path, '/') === 1;
+
+                        if ($isRoot) {
+                            $exportClass = ResourceExport::class;
+                            $moduleName = 'resource';
+                            $id = $resource->source_id;
+                            $title = $resource->title;
+                        }
                     } elseif ('folder' === $resource->file_type) {
-                        $exportClass = FolderExport::class;
-                        $moduleName = 'folder';
-                        $id = $resource->source_id;
-                        $title = $resource->title;
+                        $isEmpty = true;
+                        $folderPath = $resource->path . '/';
+
+                        foreach ($this->course->resources['document'] as $childResource) {
+                            if (str_starts_with($childResource->path, $folderPath) && $childResource->path !== $resource->path) {
+                                $isEmpty = false;
+                                break;
+                            }
+                        }
+
+                        $isRoot = substr_count($resource->path, '/') === 1;
+
+                        if (!$isEmpty && $isRoot) {
+                            $exportClass = FolderExport::class;
+                            $moduleName = 'folder';
+                            $id = $resource->source_id;
+                            $title = $resource->title;
+                        }
                     }
                 }
                 // Handle assignments (work)

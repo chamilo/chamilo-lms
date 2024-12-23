@@ -42,19 +42,26 @@ class FolderExport extends ActivityExport
     /**
      * Get folder data dynamically from the course.
      */
-    public function getData(int $folderId, int $sectionId): array
+    public function getData(int $folderId, int $sectionId): ?array
     {
         $folder = $this->course->resources['document'][$folderId];
 
-        return [
-            'id' => $folderId,
-            'moduleid' => $folder->source_id,
-            'modulename' => 'folder',
-            'contextid' => $folder->source_id,
-            'name' => $folder->title,
-            'sectionid' => $sectionId,
-            'timemodified' => time(),
-        ];
+        $folderPath = $folder->path . '/';
+        foreach ($this->course->resources['document'] as $resource) {
+            if ($resource->path !== $folder->path && str_starts_with($resource->path, $folderPath)) {
+                return [
+                    'id' => $folderId,
+                    'moduleid' => $folder->source_id,
+                    'modulename' => 'folder',
+                    'contextid' => $folder->source_id,
+                    'name' => $folder->title,
+                    'sectionid' => $sectionId,
+                    'timemodified' => time(),
+                ];
+            }
+        }
+
+        return null;
     }
 
     /**

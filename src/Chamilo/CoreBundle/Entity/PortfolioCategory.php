@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,56 +26,42 @@ use Doctrine\ORM\Mapping as ORM;
 class PortfolioCategory
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string", length=255)
      */
-    protected $title;
+    protected string $title;
 
     /**
-     * @var null
-     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected $description = null;
+    protected ?string $description = null;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $user;
+    protected User $user;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="is_visible", type="boolean", options={"default": true})
      */
-    protected $isVisible = true;
+    protected bool $isVisible = true;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="parent_id", type="integer", nullable=false, options={"default": 0})
      */
-    protected $parentId = 0;
+    protected int $parentId = 0;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Portfolio", mappedBy="category")
      */
-    protected $items;
+    protected Collection $items;
 
     /**
      * PortfolioCategory constructor.
@@ -84,160 +71,84 @@ class PortfolioCategory
         $this->items = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->title;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return PortfolioCategory
-     */
-    public function setId($id)
+    public function setId(?int $id): PortfolioCategory
     {
         $this->id = $id;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return PortfolioCategory
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): PortfolioCategory
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string|null
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string|null $description
-     *
-     * @return PortfolioCategory
-     */
-    public function setDescription($description)
+    public function setDescription(?string $description): PortfolioCategory
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get user.
-     *
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * Set user.
-     *
-     * @return PortfolioCategory
-     */
-    public function setUser(User $user)
+    public function setUser(User $user): PortfolioCategory
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get isVisible.
-     *
-     * @return bool
-     */
-    public function isVisible()
+    public function isVisible(): bool
     {
         return $this->isVisible;
     }
 
-    /**
-     * Set isVisible.
-     *
-     * @param bool $isVisible
-     *
-     * @return PortfolioCategory
-     */
-    public function setIsVisible($isVisible)
+    public function setIsVisible(bool $isVisible): PortfolioCategory
     {
         $this->isVisible = $isVisible;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getParentId()
+    public function getParentId(): int
     {
         return $this->parentId;
     }
 
-    /**
-     * Set parent id.
-     *
-     * @return PortfolioCategory
-     */
-    public function setParentId(int $parentId)
+    public function setParentId(int $parentId): PortfolioCategory
     {
         $this->parentId = $parentId;
 
         return $this;
     }
 
-    /**
-     * Get items.
-     *
-     * @param \Chamilo\CoreBundle\Entity\Course|null  $course
-     * @param \Chamilo\CoreBundle\Entity\Session|null $session
-     * @param bool                                    $onlyVisibles
-     *
-     * @return ArrayCollection
-     */
-    public function getItems(Course $course = null, Session $session = null, $onlyVisibles = false)
+    public function getItems(Course $course = null, Session $session = null, bool $onlyVisibles = false): Collection
     {
         $criteria = Criteria::create();
 
@@ -262,12 +173,7 @@ class PortfolioCategory
         return $this->items->matching($criteria);
     }
 
-    /**
-     * Set items.
-     *
-     * @return PortfolioCategory
-     */
-    public function setItems(ArrayCollection $items)
+    public function setItems(Collection $items): PortfolioCategory
     {
         $this->items = $items;
 

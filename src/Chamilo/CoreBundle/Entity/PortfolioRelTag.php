@@ -13,37 +13,29 @@ use Doctrine\ORM\Mapping as ORM;
 class PortfolioRelTag
 {
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id;
 
     /**
-     * @var Tag
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tag")
      * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $tag;
+    protected Tag $tag;
 
     /**
-     * @var Course
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    protected $course;
+    protected Course $course;
 
     /**
-     * @var Session|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $session;
+    protected ?Session $session;
 
     public function getId(): int
     {

@@ -1411,7 +1411,13 @@ class TicketManager
             $followers = self::getFollowers($ticketId);
             /* @var User $follower */
             foreach ($followers as $follower) {
-                if ($follower->getId() !== $creatorId || self::isUserSubscribedToTicket($ticketId, $follower->getId())) {
+                if (
+                    $follower->getId() !== $currentUserId &&
+                    (
+                        $follower->getId() !== $creatorId ||
+                        self::isUserSubscribedToTicket($ticketId, $follower->getId())
+                    )
+                ) {
                     $recipients[$follower->getId()] = $follower->getFullname();
                 }
             }

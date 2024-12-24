@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\UserBundle\Entity\User;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -26,111 +27,92 @@ class PortfolioComment
     public const VISIBILITY_PER_USER = 2;
 
     /**
-     * @var int
-     *
      * Add @ to the next line if portfolio_advanced_sharing config setting is true
      * ORM\Column(name="visibility", type="smallint", options={"default": 1})
      */
-    protected $visibility = 1;
+    protected int $visibility = 1;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    private $id;
+    private ?int $id;
+
     /**
-     * @var \Chamilo\UserBundle\Entity\User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private $author;
+    private User $author;
+
     /**
-     * @var \Chamilo\CoreBundle\Entity\Portfolio
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Portfolio", inversedBy="comments")
      * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
-    private $item;
+    private Portfolio $item;
+
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text")
      */
-    private $content;
+    private string $content;
+
     /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="date", type="datetime")
      */
-    private $date;
+    private DateTime $date;
+
     /**
-     * @var bool
-     *
      * @ORM\Column(name="is_important", type="boolean", options={"default":false})
      */
-    private $isImportant;
+    private bool $isImportant;
+
     /**
-     * @var int
-     *
      * @Gedmo\TreeLeft()
      * @ORM\Column(name="lft", type="integer")
      */
-    private $lft;
+    private int $lft;
+
     /**
-     * @var int
-     *
      * @Gedmo\TreeLevel()
      * @ORM\Column(name="lvl", type="integer")
      */
-    private $lvl;
+    private int $lvl;
+
     /**
-     * @var int
-     *
      * @Gedmo\TreeRight()
      * @ORM\Column(name="rgt", type="integer")
      */
-    private $rgt;
+    private int $rgt;
+
     /**
-     * @var \Chamilo\CoreBundle\Entity\PortfolioComment
-     *
      * @Gedmo\TreeRoot()
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\PortfolioComment")
      * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $root;
+    private ?PortfolioComment $root = null;
+
     /**
-     * @var \Chamilo\CoreBundle\Entity\PortfolioComment|null
-     *
      * @Gedmo\TreeParent()
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\PortfolioComment", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $parent;
+    private ?PortfolioComment $parent;
+
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\PortfolioComment", mappedBy="parent")
      * @ORM\OrderBy({"lft"="DESC"})
      */
-    private $children;
+    private Collection $children;
 
     /**
-     * @var float|null
-     *
      * @ORM\Column(name="score", type="float", nullable=true)
      */
-    private $score;
+    private ?float $score;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="is_template", type="boolean", options={"default": false})
      */
-    private $isTemplate = false;
+    private bool $isTemplate = false;
 
     /**
      * PortfolioComment constructor.
@@ -159,17 +141,11 @@ class PortfolioComment
         return $this;
     }
 
-    /**
-     * @return \Chamilo\CoreBundle\Entity\Portfolio
-     */
     public function getItem(): Portfolio
     {
         return $this->item;
     }
 
-    /**
-     * @param \Chamilo\CoreBundle\Entity\Portfolio $item
-     */
     public function setItem(Portfolio $item): PortfolioComment
     {
         $this->item = $item;
@@ -201,17 +177,11 @@ class PortfolioComment
         return $this;
     }
 
-    /**
-     * @return \Chamilo\CoreBundle\Entity\PortfolioComment|null
-     */
     public function getParent(): ?PortfolioComment
     {
         return $this->parent;
     }
 
-    /**
-     * @param \Chamilo\CoreBundle\Entity\PortfolioComment|null $parent
-     */
     public function setParent(?PortfolioComment $parent): PortfolioComment
     {
         $this->parent = $parent;
@@ -256,9 +226,6 @@ class PortfolioComment
         $this->score = $score;
     }
 
-    /**
-     * @return \Chamilo\CoreBundle\Entity\PortfolioComment
-     */
     public function getRoot(): PortfolioComment
     {
         return $this->root;

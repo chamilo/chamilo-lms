@@ -352,6 +352,8 @@ class MessageManager
             if ($sendEmail) {
                 $notification = new Notification();
                 $sender_info = api_get_user_info($user_sender_id);
+                $baseUrl = $baseUrl ?? api_get_path(WEB_PATH);
+                $content = self::processRelativeLinks($content, $baseUrl);
 
                 // add file attachment additional attributes
                 $attachmentAddedByMail = [];
@@ -420,6 +422,20 @@ class MessageManager
         }
 
         return false;
+    }
+
+    /**
+     * Converts relative URLs in href and src attributes to absolute URLs.
+     */
+    private static function processRelativeLinks(string $content, string $baseUrl): string
+    {
+        return preg_replace_callback(
+            '/(href|src)="(\/[^"]*)"/',
+            function ($matches) use ($baseUrl) {
+                return $matches[1] . '="' . rtrim($baseUrl, '/') . $matches[2] . '"';
+            },
+            $content
+        );
     }
 
     /**

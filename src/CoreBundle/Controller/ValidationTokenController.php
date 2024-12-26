@@ -14,12 +14,13 @@ use Chamilo\CoreBundle\Repository\TicketRepository;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
 use Chamilo\CoreBundle\ServiceHelper\ValidationTokenHelper;
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use \Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/validate')]
 class ValidationTokenController extends AbstractController
@@ -39,11 +40,11 @@ class ValidationTokenController extends AbstractController
     public function validate(string $type, string $hash): Response
     {
         $userId = $this->requestStack->getCurrentRequest()->query->get('user_id');
-        $userId = $userId !== null ? (int) $userId : null;
+        $userId = null !== $userId ? (int) $userId : null;
 
         $token = $this->tokenRepository->findOneBy([
             'type' => $this->validationTokenHelper->getTypeId($type),
-            'hash' => $hash
+            'hash' => $hash,
         ]);
 
         if (!$token) {
@@ -61,7 +62,8 @@ class ValidationTokenController extends AbstractController
 
         if ('ticket' === $type) {
             $ticketId = $token->getResourceId();
-            return $this->redirect('/main/ticket/ticket_details.php?ticket_id=' . $ticketId);
+
+            return $this->redirect('/main/ticket/ticket_details.php?ticket_id='.$ticketId);
         }
 
         return $this->render('@ChamiloCore/Validation/success.html.twig', [
@@ -92,9 +94,11 @@ class ValidationTokenController extends AbstractController
         switch ($token->getType()) {
             case ValidationTokenHelper::TYPE_TICKET:
                 $this->unsubscribeUserFromTicket($token->getResourceId(), $userId);
+
                 break;
+
             default:
-                throw new \InvalidArgumentException('Unrecognized token type');
+                throw new InvalidArgumentException('Unrecognized token type');
         }
     }
 
@@ -133,6 +137,7 @@ class ValidationTokenController extends AbstractController
     private function getUserId(): ?int
     {
         $user = $this->tokenStorage->getToken()?->getUser();
+
         return $user instanceof User ? $user->getId() : null;
     }
 }

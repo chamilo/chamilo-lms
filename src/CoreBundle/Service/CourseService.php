@@ -647,9 +647,9 @@ class CourseService
                 $cr->set_file_option();
                 $cr->restore($courseCode);
             } catch (Exception $e) {
-                error_log('Error during course template application: ' . $e->getMessage());
+                error_log('Error during course template application: '.$e->getMessage());
             } catch (Throwable $t) {
-                error_log('Unexpected error during course template application: ' . $t->getMessage());
+                error_log('Unexpected error during course template application: '.$t->getMessage());
             }
         }
     }

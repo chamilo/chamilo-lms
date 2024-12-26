@@ -50,7 +50,7 @@ readonly class AuthenticationConfigHelper
                 $enabledProviders[] = [
                     'name' => $providerName,
                     'title' => $providerParams['title'] ?? u($providerName)->title(),
-                    'url' => $this->urlGenerator->generate(sprintf("chamilo.oauth2_%s_start", $providerName)),
+                    'url' => $this->urlGenerator->generate(\sprintf('chamilo.oauth2_%s_start', $providerName)),
                 ];
             }
         }
@@ -77,7 +77,7 @@ readonly class AuthenticationConfigHelper
 
     public function getProviderOptions(string $providerType, array $config): array
     {
-        $defaults = match($providerType) {
+        $defaults = match ($providerType) {
             'generic' => [
                 'clientId' => $config['client_id'],
                 'clientSecret' => $config['client_secret'],
@@ -126,6 +126,6 @@ readonly class AuthenticationConfigHelper
             ],
         };
 
-        return array_filter($defaults, fn($value) => $value !== null);
+        return array_filter($defaults, fn ($value) => null !== $value);
     }
 }

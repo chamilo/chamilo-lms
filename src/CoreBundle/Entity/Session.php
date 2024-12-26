@@ -812,8 +812,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     {
         foreach ($this->getUsers() as $existingSubscription) {
             if (
-                $existingSubscription->getUser()->getId() === $user->getId() &&
-                $existingSubscription->getRelationType() === $relationType
+                $existingSubscription->getUser()->getId() === $user->getId()
+                && $existingSubscription->getRelationType() === $relationType
             ) {
                 return $this;
             }
@@ -821,7 +821,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
         $sessionRelUser = (new SessionRelUser())
             ->setUser($user)
-            ->setRelationType($relationType);
+            ->setRelationType($relationType)
+        ;
         $this->addUserSubscription($sessionRelUser);
 
         return $this;

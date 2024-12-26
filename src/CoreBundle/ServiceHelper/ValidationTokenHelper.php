@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Entity\ValidationToken;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
+use InvalidArgumentException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ValidationTokenHelper
@@ -38,7 +39,7 @@ class ValidationTokenHelper
         return match ($type) {
             'ticket' => self::TYPE_TICKET,
             'user' => self::TYPE_USER,
-            default => throw new \InvalidArgumentException('Unrecognized validation type'),
+            default => throw new InvalidArgumentException('Unrecognized validation type'),
         };
     }
 
@@ -47,7 +48,7 @@ class ValidationTokenHelper
         return match ($type) {
             self::TYPE_TICKET => 'ticket',
             self::TYPE_USER => 'user',
-            default => throw new \InvalidArgumentException('Unrecognized validation type'),
+            default => throw new InvalidArgumentException('Unrecognized validation type'),
         };
     }
 }

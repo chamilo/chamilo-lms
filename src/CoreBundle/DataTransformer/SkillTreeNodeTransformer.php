@@ -35,7 +35,7 @@ readonly class SkillTreeNodeTransformer implements DataTransformerInterface
         }
 
         $skillNode->children = $object->getChildSkills()
-            ->map(fn(Skill $childSkill) => $this->transform($childSkill, $to, $context))
+            ->map(fn (Skill $childSkill) => $this->transform($childSkill, $to, $context))
             ->toArray()
         ;
 

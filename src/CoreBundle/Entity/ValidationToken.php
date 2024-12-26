@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,14 +33,14 @@ class ValidationToken
     protected string $hash;
 
     #[ORM\Column(type: 'datetime')]
-    protected \DateTime $createdAt;
+    protected DateTime $createdAt;
 
     public function __construct(int $type, int $resourceId)
     {
         $this->type = $type;
         $this->resourceId = $resourceId;
         $this->hash = hash('sha256', uniqid((string) rand(), true));
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new DateTime();
     }
 
     public function getId(): ?int
@@ -55,6 +56,7 @@ class ValidationToken
     public function setType(int $type): self
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -66,6 +68,7 @@ class ValidationToken
     public function setResourceId(int $resourceId): self
     {
         $this->resourceId = $resourceId;
+
         return $this;
     }
 
@@ -74,14 +77,15 @@ class ValidationToken
         return $this->hash;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -91,6 +95,7 @@ class ValidationToken
     public static function generateLink(int $type, int $resourceId): string
     {
         $token = new self($type, $resourceId);
-        return '/validate/' . $type . '/' . $token->getHash();
+
+        return '/validate/'.$type.'/'.$token->getHash();
     }
 }

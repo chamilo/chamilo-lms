@@ -89,6 +89,14 @@ function get_course_data(
                  ON (course.id = url_rel_course.c_id)";
     }
 
+    if (!empty($_GET['session_id'])) {
+        $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $session = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        $sql .= " INNER JOIN $session_rel_course r ON course.id = r.c_id
+            INNER JOIN $session s ON r.session_id = s.id ";
+    }
+
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string('%'.trim($_GET['keyword']).'%');
         $sql .= " WHERE (
@@ -126,6 +134,11 @@ function get_course_data(
         && api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
     ) {
         $sql .= ' AND url_rel_course.access_url_id='.api_get_current_access_url_id();
+    }
+
+    if (!empty($_GET['session_id'])) {
+        $sessionId = (int) $_GET['session_id'];
+        $sql .= ' AND s.id = '.$sessionId.' ';
     }
 
     if ($getCount) {
@@ -250,76 +263,6 @@ function get_course_data(
             implode(\PHP_EOL, $actions),
         ];
         $courses[] = $courseItem;
-    }
-
-    return $courses;
-}
-
-/**
- * Get course data to display filtered by session name.
- *
- * @throws Exception
- */
-function get_course_data_by_session(int $from, int $number_of_items, int $column, string $direction): array
-{
-    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-
-    $session = Database::get_main_table(TABLE_MAIN_SESSION);
-
-    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
-        $direction = 'desc';
-    }
-
-    $sql = "SELECT
-                c.code AS col0,
-                c.title AS col1,
-                c.code AS col2,
-                c.course_language AS col3,
-                c.subscribe AS col4,
-                c.unsubscribe AS col5,
-                c.code AS col6,
-                c.visibility AS col7,
-                c.directory as col8,
-                c.visual_code
-            FROM $course_table c
-            INNER JOIN $session_rel_course r
-            ON c.id = r.c_id
-            INNER JOIN $session s
-            ON r.session_id = s.id
-            ";
-
-    if (!empty($_GET['session_id'])) {
-        $sessionId = (int) $_GET['session_id'];
-        $sql .= ' WHERE s.id = '.$sessionId;
-    }
-
-    $sql .= " ORDER BY col$column $direction ";
-    $sql .= " LIMIT $from,$number_of_items";
-    $res = Database::query($sql);
-
-    $courseUrl = api_get_path(WEB_COURSE_PATH);
-    $courses = [];
-    while ($course = Database::fetch_array($res)) {
-        // Place colour icons in front of courses.
-        $showVisualCode = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
-        $course['col1'] = get_course_visibility_icon($course['col7'])
-            .Display::url($course['col1'], $courseUrl.$course[9].'/index.php')
-            .PHP_EOL.$showVisualCode;
-        $course['col4'] = SUBSCRIBE_ALLOWED == $course['col4'] ? get_lang('Yes') : get_lang('No');
-        $course['col5'] = UNSUBSCRIBE_ALLOWED == $course['col5'] ? get_lang('Yes') : get_lang('No');
-        $row = [
-            $course[0],
-            $course['col1'],
-            $course['col2'],
-            $course['col3'],
-            $course['col4'],
-            $course['col5'],
-            $course['col6'],
-            $course['col7'],
-        ];
-        $courses[] = $row;
     }
 
     return $courses;
@@ -545,26 +488,16 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     </script>';
 
     $actions = Display::toolbarAction('toolbar', [$actions1, $actions3.$actions4.$actions2]);
-    if (!empty($_GET['session_id'])) {
-        // Create a sortable table with the course data filtered by session
-        $table = new SortableTable(
-            'courses',
-            'get_number_of_courses',
-            'get_course_data_by_session',
-            2
-        );
-    } else {
-        // Create a sortable table with the course data
-        $table = new SortableTable(
-            'courses',
-            'get_number_of_courses',
-            'get_course_data',
-            2,
-            20,
-            'ASC',
-            'course-list'
-        );
-    }
+    // Create a sortable table with the course data
+    $table = new SortableTable(
+        'courses',
+        'get_number_of_courses',
+        'get_course_data',
+        2,
+        20,
+        'ASC',
+        'course-list'
+    );
 
     $parameters = [];
     if (isset($_GET['keyword'])) {

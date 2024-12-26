@@ -175,15 +175,15 @@
             v-else-if="data.visibility === 2 && !isUserInCourse(data)"
             :label="$t('Not subscribed')"
             class="btn btn--primary text-white"
-            icon="pi pi-times"
             disabled
+            icon="pi pi-times"
           />
           <Button
             v-else
             :label="$t('Private course')"
             class="btn btn--primary text-white"
-            icon="pi pi-lock"
             disabled
+            icon="pi pi-lock"
           />
         </template>
       </Column>

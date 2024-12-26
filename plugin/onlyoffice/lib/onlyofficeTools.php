@@ -202,7 +202,6 @@ class OnlyofficeTools
         }
 
         if ($canView && !$accessRights) {
-
             return $urlToEdit;
         }
 

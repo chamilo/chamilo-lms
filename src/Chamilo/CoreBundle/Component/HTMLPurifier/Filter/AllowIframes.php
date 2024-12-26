@@ -69,6 +69,7 @@ class AllowIframes extends HTMLPurifier_Filter
         } elseif ($vimeoMatch) {
             $extra .= ' webkitAllowFullScreen mozallowfullscreen allowFullScreen';
         }
+
         return '<iframe '.$matches[1].$extra.'></iframe>';
     }
 }

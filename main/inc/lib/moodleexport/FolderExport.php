@@ -46,7 +46,7 @@ class FolderExport extends ActivityExport
     {
         $folder = $this->course->resources['document'][$folderId];
 
-        $folderPath = $folder->path . '/';
+        $folderPath = $folder->path.'/';
         foreach ($this->course->resources['document'] as $resource) {
             if ($resource->path !== $folder->path && str_starts_with($resource->path, $folderPath)) {
                 return [

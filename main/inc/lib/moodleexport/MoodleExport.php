@@ -414,7 +414,7 @@ class MoodleExport
                         }
                     } elseif ('folder' === $resource->file_type) {
                         $isEmpty = true;
-                        $folderPath = $resource->path . '/';
+                        $folderPath = $resource->path.'/';
 
                         foreach ($this->course->resources['document'] as $childResource) {
                             if (str_starts_with($childResource->path, $folderPath) && $childResource->path !== $resource->path) {

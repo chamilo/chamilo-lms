@@ -3909,7 +3909,7 @@ class PortfolioController
             if ($showBaseContentInSession) {
                 $items = array_filter(
                     $items,
-                    fn(Portfolio $item) => !($this->session && !$item->getSession() && $item->isDuplicatedInSession($this->session))
+                    fn (Portfolio $item) => !($this->session && !$item->getSession() && $item->isDuplicatedInSession($this->session))
                 );
             }
 

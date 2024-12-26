@@ -459,15 +459,17 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     {
         return $this->getUsername();
     }
+
     public function __serialize(): array
     {
         return get_object_vars($this);
     }
+
     public function __unserialize(array $data): void
     {
         $reflection = new ReflectionClass($this);
         $properties = $reflection->getProperties();
-        $propertyNames = array_map(fn($prop) => $prop->getName(), $properties);
+        $propertyNames = array_map(fn ($prop) => $prop->getName(), $properties);
 
         foreach ($data as $property => $value) {
             if (in_array($property, $propertyNames)) {

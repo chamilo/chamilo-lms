@@ -400,12 +400,12 @@ class Portfolio
 
     public function isDuplicatedInSession(Session $session): bool
     {
-        return $this->duplicates->exists(fn($key, Portfolio $duplicated): bool => $duplicated->session === $session);
+        return $this->duplicates->exists(fn ($key, Portfolio $duplicated): bool => $duplicated->session === $session);
     }
 
     public function isDuplicatedInSessionId(int $sessionId): bool
     {
-        return $this->duplicates->exists(fn($key, Portfolio $duplicated): bool => $duplicated->session && $duplicated->session->getId() === $sessionId);
+        return $this->duplicates->exists(fn ($key, Portfolio $duplicated): bool => $duplicated->session && $duplicated->session->getId() === $sessionId);
     }
 
     public function reset()

@@ -2264,7 +2264,7 @@ function processChunkedFile(array $file): array
             api_replace_dangerous_char($file['name'])
         );
 
-        $chunkedFile = api_get_path(SYS_ARCHIVE_PATH) . $tmpFile;
+        $chunkedFile = api_get_path(SYS_ARCHIVE_PATH).$tmpFile;
         $file['tmp_name'] = $chunkedFile;
         $file['size'] = filesize($chunkedFile);
         $file['copy_file'] = true;

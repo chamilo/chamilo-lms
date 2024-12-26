@@ -2,51 +2,52 @@
 
 /* For licensing terms, see /license.txt */
 
-/**
+declare(strict_types=1);
+
+/*
  * This script shows a list of courses and allows searching for courses codes
  * and names.
  */
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Component\Utils\StateIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 $cidReset = true;
+
 require_once __DIR__.'/../inc/global.inc.php';
+
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
-$sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
+$sessionId = $_GET['session_id'] ?? null;
 
 /**
  * Get the number of courses which will be displayed.
  *
- * @throws Exception
- *
  * @return int The number of matching courses
+ *
+ * @throws Exception
  */
-function get_number_of_courses()
+function get_number_of_courses(): int
 {
-    return get_course_data(0, 0, 0, 0, null, true);
+    return get_course_data(0, 0, 0, 'ASC', [], true);
 }
 
 /**
  * Get course data to display.
  *
- * @param int    $from
- * @param int    $number_of_items
- * @param int    $column
- * @param string $direction
- *
+ * @throws Doctrine\DBAL\Exception
  * @throws Exception
- *
- * @return array
  */
-function get_course_data($from, $number_of_items, $column, $direction, $dataFunctions = [], $getCount = false)
-{
+function get_course_data(
+    int $from,
+    int $number_of_items,
+    int $column,
+    string $direction,
+    array $dataFunctions = [],
+    bool $getCount = false
+): int|array {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $from = (int) $from;
-    $number_of_items = (int) $number_of_items;
-    $column = (int) $column;
 
     if (!in_array(strtolower($direction), ['asc', 'desc'])) {
         $direction = 'desc';
@@ -55,7 +56,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $tblCourseRelCategory = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
 
-    $select = "SELECT
+    $select = 'SELECT
                 course.code AS col0,
                 course.title AS col1,
                 course.code AS col2,
@@ -67,7 +68,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
                 directory as col9,
                 visual_code,
                 directory,
-                course.id";
+                course.id';
 
     if ($getCount) {
         $select = 'SELECT COUNT(DISTINCT(course.id)) as count ';
@@ -75,13 +76,13 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
     $sql = "$select FROM $course_table course ";
 
-    if (isset($_GET['keyword_category']) && !empty($_GET['keyword_category'])) {
+    if (!empty($_GET['keyword_category'])) {
         $sql .= "INNER JOIN $tblCourseRelCategory course_rel_category ON course.id = course_rel_category.course_id
             INNER JOIN $tblCourseCategory category ON course_rel_category.course_category_id = category.id ";
     }
 
-    if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
+    if ((api_is_platform_admin() || api_is_session_admin())
+        && api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
     ) {
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
@@ -116,13 +117,13 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
                 unsubscribe LIKE '".$keyword_unsubscribe."'";
 
         if (!empty($keyword_category)) {
-            $sql .= " AND category.id = ".$keyword_category." ";
+            $sql .= ' AND category.id = '.$keyword_category.' ';
         }
     }
 
     // Adding the filter to see the user's only of the current access_url.
-    if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
+    if ((api_is_platform_admin() || api_is_session_admin())
+        && api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
     ) {
         $sql .= ' AND url_rel_course.access_url_id='.api_get_current_access_url_id();
     }
@@ -137,7 +138,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         return 0;
     }
 
-    $sql .= " GROUP BY course.code";
+    $sql .= ' GROUP BY course.code';
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from, $number_of_items";
 
@@ -163,12 +164,12 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
         // Place colour icons in front of courses.
         $show_visual_code = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
-        $course[1] = get_course_visibility_icon($courseInfo['visibility']).PHP_EOL
-            .Display::url(Security::remove_XSS($course[1]), $courseInfo['course_public_url']).PHP_EOL
+        $course[1] = get_course_visibility_icon($courseInfo['visibility']).\PHP_EOL
+            .Display::url(Security::remove_XSS($course[1]), $courseInfo['course_public_url']).\PHP_EOL
             .$show_visual_code;
         $course[5] = SUBSCRIBE_ALLOWED == $course[5] ? get_lang('Yes') : get_lang('No');
         $course[6] = UNSUBSCRIBE_ALLOWED == $course[6] ? get_lang('Yes') : get_lang('No');
-        $language = isset($languages[$course[3]]) ? $languages[$course[3]] : $course[3];
+        $language = $languages[$course[3]] ?? $course[3];
 
         $courseCode = $course[0];
         $courseId = $course['id'];
@@ -235,7 +236,8 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
             $path.'admin/course_list.php?delete_course='.$courseCode,
             [
                 'onclick' => "javascript: if (!confirm('"
-                    .addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;",
+                    .addslashes(api_htmlentities(get_lang('Please confirm your choice'), \ENT_QUOTES))
+                    ."')) return false;",
             ]
         );
 
@@ -244,10 +246,10 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
             $course[1],
             $course[2],
             $language,
-            implode(", ", $categories),
+            implode(', ', $categories),
             $course[5],
             $course[6],
-            implode(PHP_EOL, $actions),
+            implode(\PHP_EOL, $actions),
         ];
         $courses[] = $courseItem;
     }
@@ -258,25 +260,15 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 /**
  * Get course data to display filtered by session name.
  *
- * @param int    $from
- * @param int    $number_of_items
- * @param int    $column
- * @param string $direction
- *
  * @throws Exception
- *
- * @return array
  */
-function get_course_data_by_session($from, $number_of_items, $column, $direction)
+function get_course_data_by_session(int $from, int $number_of_items, int $column, string $direction): array
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
     $session = Database::get_main_table(TABLE_MAIN_SESSION);
-    $from = (int) $from;
-    $number_of_items = (int) $number_of_items;
-    $column = (int) $column;
 
     if (!in_array(strtolower($direction), ['asc', 'desc'])) {
         $direction = 'desc';
@@ -300,8 +292,8 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
             ON r.session_id = s.id
             ";
 
-    if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-        $sessionId = (int) ($_GET['session_id']);
+    if (!empty($_GET['session_id'])) {
+        $sessionId = (int) $_GET['session_id'];
         $sql .= ' WHERE s.id = '.$sessionId;
     }
 
@@ -341,99 +333,82 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
  * Return an icon representing the visibility of the course.
  *
  * @param int $visibility
- *
- * @return string
  */
-function get_course_visibility_icon($visibility)
+function get_course_visibility_icon($visibility): string
 {
     $visibility = (int) $visibility;
 
     $style = 'margin-bottom:0;margin-right:5px;';
-    switch ($visibility) {
-        case 0:
-            return Display::getMdiIcon(
-                StateIcon::CLOSED_VISIBILITY,
-                'ch-tool-icon',
-                null,
-                22,
-                get_lang('Closed - the course is only accessible to the teachers')
-            );
 
-            break;
-        case 1:
-            return Display::getMdiIcon(
-                StateIcon::PRIVATE_VISIBILITY,
-                'ch-tool-icon',
-                null,
-                22,
-                get_lang('Private access (access authorized to group members only) access (access authorized to group members only)')
-            );
-
-            break;
-        case 2:
-            return Display::getMdiIcon(
-                StateIcon::OPEN_VISIBILITY,
-                'ch-tool-icon',
-                null,
-                22,
-                get_lang(' Open - access allowed for users registered on the platform')
-            );
-
-            break;
-        case 3:
-            return Display::getMdiIcon(
-                StateIcon::PUBLIC_VISIBILITY,
-                'ch-tool-icon',
-                null,
-                22,
-                get_lang('Public - access allowed for the whole world')
-            );
-
-            break;
-        case 4:
-            return Display::getMdiIcon(
-                StateIcon::HIDDEN_VISIBILITY,
-                'ch-tool-icon',
-                null,
-                22,
-                get_lang('Hidden - Completely hidden to all users except the administrators')
-            );
-
-            break;
-        default:
-            return '';
-    }
+    return match ($visibility) {
+        0 => Display::getMdiIcon(
+            StateIcon::CLOSED_VISIBILITY,
+            'ch-tool-icon',
+            null,
+            22,
+            get_lang('Closed - the course is only accessible to the teachers')
+        ),
+        1 => Display::getMdiIcon(
+            StateIcon::PRIVATE_VISIBILITY,
+            'ch-tool-icon',
+            null,
+            22,
+            get_lang(
+                'Private access (access authorized to group members only) access (access authorized to group members only)'
+            )
+        ),
+        2 => Display::getMdiIcon(
+            StateIcon::OPEN_VISIBILITY,
+            'ch-tool-icon',
+            null,
+            22,
+            get_lang(' Open - access allowed for users registered on the platform')
+        ),
+        3 => Display::getMdiIcon(
+            StateIcon::PUBLIC_VISIBILITY,
+            'ch-tool-icon',
+            null,
+            22,
+            get_lang('Public - access allowed for the whole world')
+        ),
+        4 => Display::getMdiIcon(
+            StateIcon::HIDDEN_VISIBILITY,
+            'ch-tool-icon',
+            null,
+            22,
+            get_lang('Hidden - Completely hidden to all users except the administrators')
+        ),
+        default => '',
+    };
 }
 
 if (isset($_POST['action'])) {
-    switch ($_POST['action']) {
-        // Delete selected courses
-        case 'delete_courses':
-            if (!empty($_POST['course'])) {
-                $course_codes = $_POST['course'];
-                if (count($course_codes) > 0) {
-                    foreach ($course_codes as $course_code) {
-                        CourseManager::delete_course($course_code);
-                    }
+    // Delete selected courses
+    if ('delete_courses' == $_POST['action']) {
+        if (!empty($_POST['course'])) {
+            $course_codes = $_POST['course'];
+            if (count($course_codes) > 0) {
+                foreach ($course_codes as $course_code) {
+                    CourseManager::delete_course($course_code);
                 }
-
-                Display::addFlash(Display::return_message(get_lang('Deleted')));
             }
-            api_location(api_get_self());
 
-            break;
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        }
+        api_location(api_get_self());
     }
 }
 $content = '';
 $message = '';
 $actions = '';
 
+$interbreadcrumb[] = [
+    'url' => 'index.php',
+    'name' => get_lang('Administration'),
+];
+
 if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     // Get all course categories
-    $interbreadcrumb[] = [
-        'url' => 'index.php',
-        'name' => get_lang('Administration'),
-    ];
     $interbreadcrumb[] = [
         'url' => 'course_list.php',
         'name' => get_lang('Course list'),
@@ -479,10 +454,6 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $form->setDefaults($defaults);
     $content .= $form->returnForm();
 } else {
-    $interbreadcrumb[] = [
-        'url' => 'index.php',
-        'name' => get_lang('Administration'),
-    ];
     $tool_name = get_lang('Course list');
     if (isset($_GET['delete_course'])) {
         $result = CourseManager::delete_course($_GET['delete_course']);
@@ -580,7 +551,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     </script>';
 
     $actions = Display::toolbarAction('toolbar', [$actions1, $actions3.$actions4.$actions2]);
-    if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
+    if (!empty($_GET['session_id'])) {
         // Create a sortable table with the course data filtered by session
         $table = new SortableTable(
             'courses',

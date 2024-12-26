@@ -64,7 +64,7 @@ function get_course_data(
                 subscribe AS col5,
                 unsubscribe AS col6,
                 course.code AS col7,
-                visibility AS col8,
+                course.visibility AS col8,
                 directory as col9,
                 visual_code,
                 directory,
@@ -163,15 +163,13 @@ function get_course_data(
         }
 
         // Place colour icons in front of courses.
-        $show_visual_code = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
-        $course[1] = get_course_visibility_icon($courseInfo['visibility']).\PHP_EOL
-            .Display::url(Security::remove_XSS($course[1]), $courseInfo['course_public_url']).\PHP_EOL
+        $show_visual_code = $course['visual_code'] != $course['col2'] ? Display::label($course['visual_code'], 'info') : null;
+        $course['col1'] = get_course_visibility_icon($courseInfo['visibility']).\PHP_EOL
+            .Display::url(Security::remove_XSS($course['col1']), $courseInfo['course_public_url']).\PHP_EOL
             .$show_visual_code;
-        $course[5] = SUBSCRIBE_ALLOWED == $course[5] ? get_lang('Yes') : get_lang('No');
-        $course[6] = UNSUBSCRIBE_ALLOWED == $course[6] ? get_lang('Yes') : get_lang('No');
-        $language = $languages[$course[3]] ?? $course[3];
+        $course['col5'] = SUBSCRIBE_ALLOWED == $course['col5'] ? get_lang('Yes') : get_lang('No');
+        $course['col6'] = UNSUBSCRIBE_ALLOWED == $course['col6'] ? get_lang('Yes') : get_lang('No');
 
-        $courseCode = $course[0];
         $courseId = $course['id'];
 
         $actions = [];
@@ -233,7 +231,7 @@ function get_course_data(
                 ICON_SIZE_SMALL,
                 get_lang('Delete')
             ),
-            $path.'admin/course_list.php?delete_course='.$courseCode,
+            $path.'admin/course_list.php?delete_course='.$course['col0'],
             [
                 'onclick' => "javascript: if (!confirm('"
                     .addslashes(api_htmlentities(get_lang('Please confirm your choice'), \ENT_QUOTES))
@@ -242,13 +240,13 @@ function get_course_data(
         );
 
         $courseItem = [
-            $course[0],
-            $course[1],
-            $course[2],
-            $language,
+            $course['col0'],
+            $course['col1'],
+            $course['col2'],
+            $languages[$course['col3']] ?? $course['col3'],
             implode(', ', $categories),
-            $course[5],
-            $course[6],
+            $course['col5'],
+            $course['col6'],
             implode(\PHP_EOL, $actions),
         ];
         $courses[] = $courseItem;
@@ -306,22 +304,20 @@ function get_course_data_by_session(int $from, int $number_of_items, int $column
     while ($course = Database::fetch_array($res)) {
         // Place colour icons in front of courses.
         $showVisualCode = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
-        $course[1] = get_course_visibility_icon($course['col8']).
-            '<a href="'.$courseUrl.$course[9].'/index.php">'.
-            $course[1].
-            '</a> '.
-            $showVisualCode;
-        $course[5] = SUBSCRIBE_ALLOWED == $course[5] ? get_lang('Yes') : get_lang('No');
-        $course[6] = UNSUBSCRIBE_ALLOWED == $course[6] ? get_lang('Yes') : get_lang('No');
+        $course['col1'] = get_course_visibility_icon($course['col7'])
+            .Display::url($course['col1'], $courseUrl.$course[9].'/index.php')
+            .PHP_EOL.$showVisualCode;
+        $course['col4'] = SUBSCRIBE_ALLOWED == $course['col4'] ? get_lang('Yes') : get_lang('No');
+        $course['col5'] = UNSUBSCRIBE_ALLOWED == $course['col5'] ? get_lang('Yes') : get_lang('No');
         $row = [
             $course[0],
-            $course[1],
-            $course[2],
-            $course[3],
-            $course[4],
-            $course[5],
-            $course[6],
-            $course[7],
+            $course['col1'],
+            $course['col2'],
+            $course['col3'],
+            $course['col4'],
+            $course['col5'],
+            $course['col6'],
+            $course['col7'],
         ];
         $courses[] = $row;
     }
@@ -334,10 +330,8 @@ function get_course_data_by_session(int $from, int $number_of_items, int $column
  *
  * @param int $visibility
  */
-function get_course_visibility_icon($visibility): string
+function get_course_visibility_icon(int $visibility): string
 {
-    $visibility = (int) $visibility;
-
     $style = 'margin-bottom:0;margin-right:5px;';
 
     return match ($visibility) {

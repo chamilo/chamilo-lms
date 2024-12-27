@@ -5,6 +5,12 @@ export default {
   find: baseService.get,
 
   /**
+   * @param {Object} searchParams
+   * @returns {Promise<{totalItems, items}>}
+   */
+  listAll: async (searchParams = {}) => await baseService.getCollection("/api/courses", searchParams),
+
+  /**
    * @param {number} cid
    * @param {object} params
    * @returns {Promise<Object>}

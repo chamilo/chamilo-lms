@@ -207,8 +207,10 @@ import courseService from "../../services/courseService"
 import * as trackCourseRanking from "../../services/trackCourseRankingService"
 
 import { useNotification } from "../../composables/notification"
+import { useLanguage } from "../../composables/language"
 
 const { showErrorNotification } = useNotification()
+const { findByIsoCode: findLanguageByIsoCode } = useLanguage()
 
 const securityStore = useSecurityStore()
 const status = ref(false)
@@ -227,7 +229,7 @@ async function load() {
 
     courses.value = items.map((course) => ({
       ...course,
-      courseLanguage: getOriginalLanguageName(course.courseLanguage),
+      courseLanguage: findLanguageByIsoCode(course.courseLanguage)?.originalName,
     }))
   } catch (error) {
     showErrorNotification(error)
@@ -291,16 +293,6 @@ const clearFilter = function () {
 const initFilters = function () {
   filters.value = {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  }
-}
-
-const getOriginalLanguageName = function (courseLanguage) {
-  const languages = window.languages
-  let language = languages.find((element) => element.isocode === courseLanguage)
-  if (language) {
-    return language.originalName
-  } else {
-    return ""
   }
 }
 

@@ -50,3 +50,5 @@ $strings['script_users_delta'] = 'Requête delta pour les utilisateurs';
 $strings['script_users_delta_help'] = 'Get newly created, updated, or deleted users without having to perform a full read of the entire user collection. By default, is <code>No</code>.';
 $strings['script_usergroups_delta'] = 'Requête delta pour les groupes d\'utilisateurs';
 $strings['script_usergroups_delta_help'] = 'Get newly created, updated, or deleted groups, including group membership changes, without having to perform a full read of the entire group collection. By default, is <code>No</code>.';
+$strings['group_filter_regex'] = 'Group filter RegEx';
+$strings['group_filter_regex_help'] = 'Regular expression to filter groups (only matches will be synchronized), e.g. <code>.*-FIL-.*</code> <code>.*-PAR-.*</code> <code>.*(FIL|PAR).*</code> <code>^(FIL|PAR).*</code>';

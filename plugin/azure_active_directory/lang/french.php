@@ -46,3 +46,7 @@ $strings['tenant_id'] = 'ID du client';
 $strings['tenant_id_help'] = 'Nécessaire pour exécuter des scripts.';
 $strings['deactivate_nonexisting_users'] = 'Deactivate non-existing users';
 $strings['deactivate_nonexisting_users_help'] = 'Compare registered users in Chamilo with those in Azure and deactivate accounts in Chamilo that do not exist in Azure.';
+$strings['script_users_delta'] = 'Requête delta pour les utilisateurs';
+$strings['script_users_delta_help'] = 'Get newly created, updated, or deleted users without having to perform a full read of the entire user collection. By default, is <code>No</code>.';
+$strings['script_usergroups_delta'] = 'Requête delta pour les groupes d\'utilisateurs';
+$strings['script_usergroups_delta_help'] = 'Get newly created, updated, or deleted groups, including group membership changes, without having to perform a full read of the entire group collection. By default, is <code>No</code>.';

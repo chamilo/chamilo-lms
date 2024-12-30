@@ -121,6 +121,8 @@ abstract class AzureCommand
      */
     protected function getAzureGroups(): Generator
     {
+        $groupFilter = $this->plugin->get(AzureActiveDirectory::SETTING_GROUP_FILTER);
+
         $groupFields = [
             'id',
             'displayName',
@@ -161,6 +163,12 @@ abstract class AzureCommand
             $azureGroupsInfo = $azureGroupsRequest['value'] ?? [];
 
             foreach ($azureGroupsInfo as $azureGroupInfo) {
+                if (!empty($groupFilter) &&
+                    !preg_match("/$groupFilter/", $azureGroupInfo['displayName'])
+                ) {
+                    continue;
+                }
+
                 yield $azureGroupInfo;
             }
 

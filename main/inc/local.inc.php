@@ -1250,15 +1250,24 @@ if ($cidReset) {
 
         if (!empty($_SESSION)) {
             foreach ($_SESSION as $key => $session_item) {
-                if (strpos($key, 'lp_autolaunch_') === false) {
-                    continue;
-                } else {
+                // Clear session keys related to SortableTable
+                if (strpos($key, 'table_') === 0 || strpos($key, 'sortable_table_') === 0) {
+                    if (isset($_SESSION[$key])) {
+                        Session::erase($key);
+                    }
+                }
+
+                // Clear session keys related to lp_autolaunch_
+                if (strpos($key, 'lp_autolaunch_') !== false) {
                     if (isset($_SESSION[$key])) {
                         Session::erase($key);
                     }
                 }
             }
         }
+
+        // Clear the general clean_sortable_table flag if it exists
+        Session::erase('clean_sortable_table');
 
         if (api_get_group_id()) {
             Session::erase('_gid');

@@ -6,12 +6,18 @@ import baseService from "./baseService";
  * @param {boolean} _remember_me
  * @returns {Promise<Object>}
  */
-async function login({ login, password, _remember_me }) {
-  return await baseService.post("/login_json", {
+async function login({ login, password, _remember_me, totp = null }) {
+  const payload = {
     username: login,
     password,
     _remember_me,
-  });
+  }
+
+  if (totp) {
+    payload.totp = totp
+  }
+
+  return await baseService.post("/login_json", payload)
 }
 
 /**

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use OTPHP\TOTP;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,6 +62,23 @@ class SecurityController extends AbstractController
             $request->getSession()->invalidate();
 
             return $this->json(['error' => $message], 401);
+        }
+
+        if ($user->getMfaEnabled()) {
+            $totpCode = null;
+            $data = json_decode($request->getContent(), true);
+            if (isset($data['totp'])) {
+                $totpCode = $data['totp'];
+            }
+
+            if (null === $totpCode || !$this->isTOTPValid($user, $totpCode)) {
+                $tokenStorage->setToken(null);
+                $request->getSession()->invalidate();
+
+                return $this->json([
+                    'requires2FA' => true,
+                ], 200);
+            }
         }
 
         if (null !== $user->getExpirationDate() && $user->getExpirationDate() <= new DateTime()) {
@@ -127,5 +145,34 @@ class SecurityController extends AbstractController
         }
 
         throw $this->createAccessDeniedException();
+    }
+
+    /**
+     * Validates the provided TOTP code for the given user.
+     */
+    private function isTOTPValid($user, string $totpCode): bool
+    {
+        $decryptedSecret = $this->decryptTOTPSecret($user->getMfaSecret(), $_ENV['APP_SECRET']);
+        $totp = TOTP::create($decryptedSecret);
+
+        return $totp->verify($totpCode);
+    }
+
+    /**
+     * Decrypts the stored TOTP secret.
+     */
+    private function decryptTOTPSecret(string $encryptedSecret, string $encryptionKey): string
+    {
+        $cipherMethod = 'aes-256-cbc';
+
+        try {
+            list($iv, $encryptedData) = explode('::', base64_decode($encryptedSecret), 2);
+            $decryptedSecret = openssl_decrypt($encryptedData, $cipherMethod, $encryptionKey, 0, $iv);
+
+            return $decryptedSecret;
+        } catch (\Exception $e) {
+            error_log("Exception caught during decryption: " . $e->getMessage());
+            return '';
+        }
     }
 }

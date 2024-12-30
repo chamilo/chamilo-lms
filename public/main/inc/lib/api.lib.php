@@ -2444,7 +2444,12 @@ function api_check_password($password)
  */
 function api_get_session_id()
 {
-    return (int) Session::read('sid', 0);
+    $sessionId = (int) Session::read('sid', 0);
+    if (empty($sessionId) && !empty($_REQUEST['sid'])) {
+        $sessionId = (int) $_REQUEST['sid'];
+    }
+
+    return $sessionId;
 }
 
 /**

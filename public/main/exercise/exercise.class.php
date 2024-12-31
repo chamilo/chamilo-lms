@@ -8810,12 +8810,6 @@ class Exercise
         $keyword = Database::escape_string($keyword);
         $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
-        $autoLaunchAvailable = false;
-        if (1 == api_get_course_setting('enable_exercise_auto_launch') &&
-            ('true' === api_get_setting('exercise.allow_exercise_auto_launch'))
-        ) {
-            $autoLaunchAvailable = true;
-        }
 
         $courseId = $course->getId();
         $tableRows = [];
@@ -9067,21 +9061,19 @@ class Exercise
                         }
 
                         // Auto launch
-                        if ($autoLaunchAvailable) {
-                            $autoLaunch = $exercise->getAutoLaunch();
-                            if (empty($autoLaunch)) {
-                                $actions .= Display::url(
-                                    Display::getMdiIcon('rocket-launch', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Enable')),
-                                    'exercise.php?'.api_get_cidreq(
-                                    ).'&action=enable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
-                                );
-                            } else {
-                                $actions .= Display::url(
-                                    Display::getMdiIcon('rocket-launch', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Disable')),
-                                    'exercise.php?'.api_get_cidreq(
-                                    ).'&action=disable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
-                                );
-                            }
+                        $autoLaunch = $exercise->getAutoLaunch();
+                        if (empty($autoLaunch)) {
+                            $actions .= Display::url(
+                                Display::getMdiIcon('rocket-launch', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Enable')),
+                                'exercise.php?'.api_get_cidreq(
+                                ).'&action=enable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
+                            );
+                        } else {
+                            $actions .= Display::url(
+                                Display::getMdiIcon('rocket-launch', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Disable')),
+                                'exercise.php?'.api_get_cidreq(
+                                ).'&action=disable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
+                            );
                         }
 
                         // Export

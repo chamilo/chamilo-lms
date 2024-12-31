@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
-use Sylius\Bundle\SettingsBundle\Event\SettingsEvent;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
@@ -21,7 +20,6 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
 use const ARRAY_FILTER_USE_KEY;
@@ -994,7 +992,7 @@ class SettingsManager implements SettingsManagerInterface
 
     private function transformToString($value): string
     {
-        if (is_array($value)) {
+        if (\is_array($value)) {
             return implode(',', $value);
         }
 
@@ -1002,11 +1000,11 @@ class SettingsManager implements SettingsManagerInterface
             return (string) $value->getId();
         }
 
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             return $value ? 'true' : 'false';
         }
 
-        if (is_null($value)) {
+        if (null === $value) {
             return '';
         }
 

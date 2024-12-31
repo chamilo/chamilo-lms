@@ -175,15 +175,15 @@
             v-else-if="data.visibility === 2 && !isUserInCourse(data)"
             :label="$t('Not subscribed')"
             class="btn btn--primary text-white"
-            icon="pi pi-times"
             disabled
+            icon="pi pi-times"
           />
           <Button
             v-else
             :label="$t('Private course')"
             class="btn btn--primary text-white"
-            icon="pi pi-lock"
             disabled
+            icon="pi pi-lock"
           />
         </template>
       </Column>
@@ -195,8 +195,6 @@
 </template>
 <script setup>
 import { ref } from "vue"
-import { ENTRYPOINT } from "../../config/entrypoint"
-import axios from "axios"
 import { FilterMatchMode } from "primevue/api"
 import Button from "primevue/button"
 import DataTable from "primevue/datatable"
@@ -205,8 +203,17 @@ import Rating from "primevue/rating"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
 
+import courseService from "../../services/courseService"
+import * as trackCourseRanking from "../../services/trackCourseRankingService"
+
+import { useNotification } from "../../composables/notification"
+import { useLanguage } from "../../composables/language"
+
+const { showErrorNotification } = useNotification()
+const { findByIsoCode: findLanguageByIsoCode } = useLanguage()
+
 const securityStore = useSecurityStore()
-const status = ref(null)
+const status = ref(false)
 const courses = ref([])
 const filters = ref(null)
 const currentUserId = securityStore.user.id
@@ -214,73 +221,65 @@ const currentUserId = securityStore.user.id
 const platformConfigStore = usePlatformConfig()
 const showCourseDuration = "true" === platformConfigStore.getSetting("course.show_course_duration")
 
-const load = function () {
+async function load() {
   status.value = true
-  axios
-    .get(ENTRYPOINT + "courses.json")
-    .then((response) => {
-      status.value = false
-      if (Array.isArray(response.data)) {
-        response.data.forEach((course) => {
-          course.courseLanguage = getOriginalLanguageName(course.courseLanguage)
 
-          if (course.duration) {
-            course.duration = course.duration
-          }
-        })
-        courses.value = response.data
+  try {
+    const { items } = await courseService.listAll()
+
+    courses.value = items.map((course) => ({
+      ...course,
+      courseLanguage: findLanguageByIsoCode(course.courseLanguage)?.originalName,
+    }))
+  } catch (error) {
+    showErrorNotification(error)
+  } finally {
+    status.value = false
+  }
+}
+
+async function updateRating(id, value) {
+  status.value = true
+
+  try {
+    const response = await trackCourseRanking.updateRanking({
+      iri: `/api/track_course_rankings/${id}`,
+      totalScore: value,
+    })
+
+    courses.value.forEach((course) => {
+      if (course.trackCourseRanking && course.trackCourseRanking.id === id) {
+        course.trackCourseRanking.realTotalScore = response.realTotalScore
       }
     })
-    .catch(function (error) {
-      console.log(error)
-    })
+  } catch (e) {
+    showErrorNotification(e)
+  } finally {
+    status.value = false
+  }
 }
 
-const updateRating = function (id, value) {
+const newRating = async function (courseId, value) {
   status.value = true
-  axios
-    .patch(
-      ENTRYPOINT + "track_course_rankings/" + id,
-      { totalScore: value },
-      { headers: { "Content-Type": "application/merge-patch+json" } },
-    )
-    .then((response) => {
-      courses.value.forEach((course) => {
-        if (course.trackCourseRanking && course.trackCourseRanking.id === id) {
-          course.trackCourseRanking.realTotalScore = response.data.realTotalScore
-        }
-      })
-      status.value = false
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
-}
 
-const newRating = function (courseId, value) {
-  status.value = true
-  axios
-    .post(
-      ENTRYPOINT + "track_course_rankings",
-      {
-        totalScore: value,
-        course: ENTRYPOINT + "courses/" + courseId,
-        url_id: window.access_url_id,
-        sessionId: 0,
-      },
-      { headers: { "Content-Type": "application/ld+json" } },
-    )
-    .then((response) => {
-      courses.value.forEach((course) => {
-        if (course.id === courseId) {
-          course.trackCourseRanking = response.data
-        }
-      })
-      status.value = false
+  try {
+    const response = await trackCourseRanking.saveRanking({
+      totalScore: value,
+      courseIri: `/api/courses/${courseId}`,
+      urlId: window.access_url_id,
+      sessionId: 0,
     })
-    .catch(function (error) {
-      console.log(error)
+
+    courses.value.forEach((course) => {
+      if (course.id === courseId) {
+        course.trackCourseRanking = response
+      }
     })
+  } catch (e) {
+    showErrorNotification(e)
+  } finally {
+    status.value = false
+  }
 }
 
 const isUserInCourse = (course) => {
@@ -294,16 +293,6 @@ const clearFilter = function () {
 const initFilters = function () {
   filters.value = {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  }
-}
-
-const getOriginalLanguageName = function (courseLanguage) {
-  const languages = window.languages
-  let language = languages.find((element) => element.isocode === courseLanguage)
-  if (language) {
-    return language.originalName
-  } else {
-    return ""
   }
 }
 

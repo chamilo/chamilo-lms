@@ -260,7 +260,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session:write',
     ])]
     #[ORM\Column(name: 'show_description', type: 'boolean', nullable: true)]
-    protected ?bool $showDescription;
+    protected ?bool $showDescription = false;
 
     #[Groups(['session:read', 'session:write', 'user_subscriptions:sessions'])]
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
@@ -826,7 +826,19 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     public function addUserInSession(int $relationType, User $user): self
     {
-        $sessionRelUser = (new SessionRelUser())->setUser($user)->setRelationType($relationType);
+        foreach ($this->getUsers() as $existingSubscription) {
+            if (
+                $existingSubscription->getUser()->getId() === $user->getId()
+                && $existingSubscription->getRelationType() === $relationType
+            ) {
+                return $this;
+            }
+        }
+
+        $sessionRelUser = (new SessionRelUser())
+            ->setUser($user)
+            ->setRelationType($relationType)
+        ;
         $this->addUserSubscription($sessionRelUser);
 
         return $this;
@@ -1001,8 +1013,12 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
      * If user status in session is student, then increase number of course users.
      * Status example: Session::STUDENT.
      */
-    public function addUserInCourse(int $status, User $user, Course $course): SessionRelCourseRelUser
+    public function addUserInCourse(int $status, User $user, Course $course): ?SessionRelCourseRelUser
     {
+        if ($this->hasUserInCourse($user, $course, $status)) {
+            return null;
+        }
+
         $userRelCourseRelSession = (new SessionRelCourseRelUser())
             ->setCourse($course)
             ->setUser($user)
@@ -1014,7 +1030,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
         if (self::STUDENT === $status) {
             $sessionCourse = $this->getCourseSubscription($course);
-            $sessionCourse->setNbrUsers($sessionCourse->getNbrUsers() + 1);
+            if ($sessionCourse) {
+                $sessionCourse->setNbrUsers($sessionCourse->getNbrUsers() + 1);
+            }
         }
 
         return $userRelCourseRelSession;

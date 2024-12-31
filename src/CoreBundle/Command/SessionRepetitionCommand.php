@@ -7,9 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,22 +26,13 @@ class SessionRepetitionCommand extends Command
 {
     protected static $defaultName = 'app:session-repetition';
 
-    private SessionRepository $sessionRepository;
-    private EntityManagerInterface $entityManager;
-    private MailerInterface $mailer;
-    private TranslatorInterface $translator;
-
     public function __construct(
-        SessionRepository $sessionRepository,
-        EntityManagerInterface $entityManager,
-        MailerInterface $mailer,
-        TranslatorInterface $translator
+        private readonly SessionRepository $sessionRepository,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly MailerInterface $mailer,
+        private readonly TranslatorInterface $translator
     ) {
         parent::__construct();
-        $this->sessionRepository = $sessionRepository;
-        $this->entityManager = $entityManager;
-        $this->mailer = $mailer;
-        $this->translator = $translator;
     }
 
     protected function configure(): void
@@ -77,6 +72,7 @@ class SessionRepetitionCommand extends Command
 
     /**
      * Duplicates a session and creates a new session with adjusted dates.
+     * @throws Exception
      */
     private function duplicateSession(Session $session, bool $debug, OutputInterface $output): Session
     {
@@ -120,19 +116,6 @@ class SessionRepetitionCommand extends Command
             $newSession->addAccessUrl($accessUrl->getUrl());
         }
 
-        // Copy the courses from the original session
-        foreach ($session->getCourses() as $sessionRelCourse) {
-            $course = $sessionRelCourse->getCourse();
-            if ($course) {
-                $newSession->addCourse($course);
-            }
-        }
-
-        // Copy the general coaches from the original session
-        foreach ($session->getGeneralCoaches() as $coach) {
-            $newSession->addGeneralCoach($coach);
-        }
-
         // Save the new session
         $this->entityManager->persist($newSession);
         $this->entityManager->flush();
@@ -141,17 +124,59 @@ class SessionRepetitionCommand extends Command
             $output->writeln(sprintf('New session %d created successfully.', $newSession->getId()));
         }
 
+        $courses = $session->getCourses()->toArray();
+
+        if ($debug) {
+            $output->writeln('Courses retrieved: ' . count($courses));
+            foreach ($courses as $index => $sessionRelCourse) {
+                $course = $sessionRelCourse->getCourse();
+                $output->writeln(sprintf(
+                    'Course #%d: %s (Course ID: %s)',
+                    $index + 1,
+                    $course ? $course->getTitle() : 'NULL',
+                    $course ? $course->getId() : 'NULL'
+                ));
+            }
+        }
+
+        // Extract course IDs
+        $courseList = array_map(function ($sessionRelCourse) {
+            $course = $sessionRelCourse->getCourse();
+            return $course?->getId();
+        }, $courses);
+
+        // Remove null values
+        $courseList = array_filter($courseList);
+
+        if ($debug) {
+            $output->writeln(sprintf(
+                'Extracted course IDs: %s',
+                json_encode($courseList)
+            ));
+        }
+
+        if (empty($courseList)) {
+            $output->writeln(sprintf('Warning: No courses found in the original session %d.', $session->getId()));
+        }
+
+        // Add courses to the new session
+        foreach ($courses as $sessionRelCourse) {
+            $course = $sessionRelCourse->getCourse();
+            if ($course) {
+                $newSession->addCourse($course);
+
+                if ($debug) {
+                    $output->writeln(sprintf('Added course ID %d to session ID %d.', $course->getId(), $newSession->getId()));
+                }
+
+                $this->copyEvaluationsAndCategories($course->getId(), $session->getId(), $newSession->getId(), $debug, $output);
+            }
+        }
+
+        $this->entityManager->flush();
+
         return $newSession;
     }
-
-    /**
-     * Retrieves or creates a default AccessUrl for sessions.
-     */
-    private function getDefaultAccessUrl()
-    {
-        return $this->entityManager->getRepository(AccessUrl::class)->findOneBy([]);
-    }
-
 
     /**
      * Notifies the general coach of the session about the new repetition.
@@ -205,5 +230,72 @@ class SessionRepetitionCommand extends Command
     private function generateSessionSummaryLink(Session $session): string
     {
         return '/main/session/resume_session.php?id_session=' . $session->getId();
+    }
+
+    /**
+     * Copies gradebook categories, evaluations, and links from the old session to the new session.
+     */
+    private function copyEvaluationsAndCategories(
+        int $courseId,
+        int $oldSessionId,
+        int $newSessionId,
+        bool $debug,
+        OutputInterface $output
+    ): void {
+        // Get existing categories of the original course and session
+        $categories = $this->entityManager->getRepository(GradebookCategory::class)
+            ->findBy(['course' => $courseId, 'session' => $oldSessionId]);
+
+        if ($debug) {
+            $output->writeln(sprintf('Found %d category(ies) for course ID %d in session ID %d.', count($categories), $courseId, $oldSessionId));
+        }
+
+        foreach ($categories as $category) {
+            // Create new category for the new session
+            $newCategory = new GradebookCategory();
+            $newCategory->setTitle($category->getTitle())
+                ->setDescription($category->getDescription())
+                ->setWeight($category->getWeight())
+                ->setVisible($category->getVisible())
+                ->setCertifMinScore($category->getCertifMinScore())
+                ->setGenerateCertificates($category->getGenerateCertificates())
+                ->setIsRequirement($category->getIsRequirement())
+                ->setCourse($category->getCourse())
+                ->setSession($this->entityManager->getReference(Session::class, $newSessionId))
+                ->setParent($category->getParent());
+
+            $this->entityManager->persist($newCategory);
+            $this->entityManager->flush();
+
+            if ($debug) {
+                $output->writeln(sprintf('Created new category ID %d for session ID %d.', $newCategory->getId(), $newSessionId));
+            }
+
+            // Copy links
+            $links = $this->entityManager->getRepository(GradebookLink::class)
+                ->findBy(['category' => $category->getId()]);
+
+            foreach ($links as $link) {
+                $newLink = clone $link;
+                $newLink->setCategory($newCategory);
+                $this->entityManager->persist($newLink);
+            }
+
+            // Copy evaluations
+            $evaluations = $this->entityManager->getRepository(GradebookEvaluation::class)
+                ->findBy(['category' => $category->getId()]);
+
+            foreach ($evaluations as $evaluation) {
+                $newEvaluation = clone $evaluation;
+                $newEvaluation->setCategory($newCategory);
+                $this->entityManager->persist($newEvaluation);
+            }
+
+            $this->entityManager->flush();
+
+            if ($debug) {
+                $output->writeln(sprintf('Copied links and evaluations for category ID %d to new category ID %d.', $category->getId(), $newCategory->getId()));
+            }
+        }
     }
 }

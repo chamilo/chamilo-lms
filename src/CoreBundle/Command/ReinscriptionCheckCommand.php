@@ -56,7 +56,7 @@ class ReinscriptionCheckCommand extends Command
         $sessions = $this->sessionRepository->findAll();
 
         foreach ($sessions as $session) {
-            if ($session->getValidityInDays() === null) {
+            if ($session->getValidityInDays() === null || $session->getValidityInDays() === 0) {
                 continue;
             }
 

@@ -1527,7 +1527,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     public function setDaysToReinscription(?int $daysToReinscription): self
     {
-        $this->daysToReinscription = $daysToReinscription;
+        $this->daysToReinscription = $daysToReinscription ?: null;
 
         return $this;
     }
@@ -1551,7 +1551,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     public function setDaysToNewRepetition(?int $daysToNewRepetition): self
     {
-        $this->daysToNewRepetition = $daysToNewRepetition;
+        $this->daysToNewRepetition = $daysToNewRepetition ?: null;
 
         return $this;
     }
@@ -1575,7 +1575,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     public function setValidityInDays(?int $validityInDays): self
     {
-        $this->validityInDays = $validityInDays;
+        $this->validityInDays = $validityInDays ?: null;
+
         return $this;
     }
 }

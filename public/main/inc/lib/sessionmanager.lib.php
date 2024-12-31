@@ -2880,6 +2880,8 @@ class SessionManager
                             $cat->set_weight(100);
                             $cat->set_visible(0);
                             $cat->set_certificate_min_score(75);
+                            $cat->setGenerateCertificates(1);
+                            $cat->setIsRequirement(1);
                             $cat->add();
                             $sessionGradeBookCategoryId = $cat->get_id();
                         } else {

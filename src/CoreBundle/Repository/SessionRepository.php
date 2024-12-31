@@ -555,16 +555,15 @@ class SessionRepository extends ServiceEntityRepository
         $currentDate = new \DateTime();
 
         $qb = $this->createQueryBuilder('s')
-            ->where('s.parentId IS NULL')
-            ->andWhere('s.daysToNewRepetition IS NOT NULL')
+            ->where('s.daysToNewRepetition IS NOT NULL')
             ->andWhere('s.lastRepetition = :false')
             ->andWhere(':currentDate BETWEEN DATE_SUB(s.accessEndDate, s.daysToNewRepetition, \'DAY\') AND s.accessEndDate')
             ->andWhere('NOT EXISTS (
-            SELECT 1
-            FROM Chamilo\CoreBundle\Entity\Session child
-            WHERE child.parentId = s.id
-            AND child.accessEndDate >= :currentDate
-        )')
+                SELECT 1
+                FROM Chamilo\CoreBundle\Entity\Session child
+                WHERE child.parentId = s.id
+                AND child.accessEndDate >= :currentDate
+            )')
             ->setParameter('false', false)
             ->setParameter('currentDate', $currentDate);
 

@@ -33,6 +33,7 @@ class AzureActiveDirectory extends Plugin
     public const SETTING_DEACTIVATE_NONEXISTING_USERS = 'deactivate_nonexisting_users';
     public const SETTING_GET_USERS_DELTA = 'script_users_delta';
     public const SETTING_GET_USERGROUPS_DELTA = 'script_usergroups_delta';
+    public const SETTING_GROUP_FILTER = 'group_filter_regex';
 
     public const URL_TYPE_AUTHORIZE = 'login';
     public const URL_TYPE_LOGOUT = 'logout';
@@ -66,6 +67,7 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_DEACTIVATE_NONEXISTING_USERS => 'boolean',
             self::SETTING_GET_USERS_DELTA => 'boolean',
             self::SETTING_GET_USERGROUPS_DELTA => 'boolean',
+            self::SETTING_GROUP_FILTER => 'text',
         ];
 
         parent::__construct('2.5', 'Angel Fernando Quiroz Campos, Yannick Warnier', $settings);

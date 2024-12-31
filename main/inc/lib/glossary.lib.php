@@ -115,7 +115,7 @@ class GlossaryManager
                     name LIKE '".Database::escape_string($glossaryName)."' OR
                     name LIKE '".Database::escape_string($parsed)."'
                 ) AND
-                session_id IS NULL
+                (session_id IS NULL OR session_id = 0)
             LIMIT 1";
 
         $rs = Database::query($sql);

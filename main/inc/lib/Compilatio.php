@@ -191,13 +191,26 @@ class Compilatio
         $documentInfo = [
             'report_url' => $dataDocument['report_url'],
         ];
-
-        if (isset($dataDocument['analyses']['anasim']['state'])) {
-            $documentInfo['analysis_status'] = $dataDocument['analyses']['anasim']['state'];
+        // anasim analyse type is applied for services Magister and Copyright
+        // anasim-premium analyse type is applied for services Magister+ and Copyright+
+        $anasim = 'anasim';
+        if (isset($dataDocument['analyses']['anasim-premium'])) {
+            $anasim = 'anasim-premium';
+            if (isset($dataDocument['analyses']['anasim'])) {
+                if (isset($dataDocument['analyses']['anasim']['creation_launch_date']) && isset($dataDocument['analyses']['anasim-premium']['creation_launch_date'])) {
+                    // if the 2 analyses type exist (which could happen technically but would be exceptional) then we present the most recent one.
+                    if ($dataDocument['analyses']['anasim']['creation_launch_date'] > $dataDocument['analyses']['anasim-premium']['creation_launch_date']) {
+                        $anasim = 'anasim';
+                    }
+                }
+            }
         }
-
-        if (isset($dataDocument['light_reports']['anasim']['scores']['global_score_percent'])) {
-            $documentInfo['report_percent'] = $dataDocument['light_reports']['anasim']['scores']['global_score_percent'];
+        if (isset($dataDocument['analyses'][$anasim]['state'])) {
+            $documentInfo['analysis_status'] = $dataDocument['analyses'][$anasim]['state'];
+        }
+ 
+        if (isset($dataDocument['light_reports'][$anasim]['scores']['global_score_percent'])) {
+            $documentInfo['report_percent'] = $dataDocument['light_reports'][$anasim]['scores']['global_score_percent'];
         }
 
         return $documentInfo;

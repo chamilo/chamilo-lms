@@ -50,3 +50,5 @@ $strings['script_users_delta'] = 'Consula delta para usuarios';
 $strings['script_users_delta_help'] = 'Obtiene usuarios recién creados, actualizados o eliminados sin tener que realizar una lectura completa de toda la colección de usuarios. De forma predeterminada, es <code>No</code>.';
 $strings['script_usergroups_delta'] = 'Consulta delta para grupos de usuarios';
 $strings['script_usergroups_delta_help'] = 'Obtiene grupos recién creados, actualizados o eliminados, incluidos los cambios de membresía del grupo, sin tener que realizar una lectura completa de toda la colección de grupos. De forma predeterminada, es <code>No</code>';
+$strings['group_filter_regex'] = 'Group filter RegEx';
+$strings['group_filter_regex_help'] = 'Expresión regular para filtrar grupos (solo las coincidencias serán sincronizadas), p.ej. <code>.*-FIL-.*</code> <code>.*-PAR-.*</code> <code>.*(FIL|PAR).*</code> <code>^(FIL|PAR).*</code>';

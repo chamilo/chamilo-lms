@@ -10,6 +10,11 @@
  * This files provides the facebookConnect()  and facebook_get_url functions
  * Please edit the facebook.conf.php file to adapt it to your fb application parameter
  */
+
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Facebook;
+
 require_once __DIR__.'/../../inc/global.inc.php';
 require_once __DIR__.'/facebook.init.php';
 require_once __DIR__.'/functions.inc.php';
@@ -18,10 +23,12 @@ require_once __DIR__.'/functions.inc.php';
  * This function connect to facebook and retrieves the user info
  * If user does not exist in chamilo, it creates it and logs in
  * If user already exists, it updates his info.
+ *
+ * @throws FacebookSDKException
  */
 function facebookConnect()
 {
-    $fb = new \Facebook\Facebook([
+    $fb = new Facebook([
         'app_id' => $GLOBALS['facebook_config']['appId'],
         'app_secret' => $GLOBALS['facebook_config']['secret'],
         'default_graph_version' => 'v2.2',
@@ -31,14 +38,14 @@ function facebookConnect()
 
     try {
         $accessToken = $helper->getAccessToken();
-    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+    } catch (FacebookResponseException $e) {
         Display::addFlash(
             Display::return_message('Facebook Graph returned an error: '.$e->getMessage(), 'error')
         );
 
         header('Location: '.api_get_path(WEB_PATH));
         exit;
-    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+    } catch (FacebookSDKException $e) {
         Display::addFlash(
             Display::return_message('Facebook SDK returned an error: '.$e->getMessage(), 'error')
         );
@@ -79,7 +86,7 @@ function facebookConnect()
     if (!$accessToken->isLongLived()) {
         try {
             $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
-        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+        } catch (FacebookSDKException $e) {
             Display::addFlash(
                 Display::return_message('Error getting long-lived access token: '.$e->getMessage(), 'error')
             );
@@ -91,14 +98,14 @@ function facebookConnect()
 
     try {
         $response = $fb->get('/me?fields=id,first_name,last_name,locale,email', $accessToken->getValue());
-    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+    } catch (FacebookResponseException $e) {
         Display::addFlash(
             Display::return_message('Graph returned an error: '.$e->getMessage(), 'error')
         );
 
         header('Location: '.api_get_path(WEB_PATH));
         exit;
-    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+    } catch (FacebookSDKException $e) {
         Display::addFlash(
             Display::return_message('Facebook SDK returned an error: '.$e->getMessage(), 'error')
         );
@@ -165,44 +172,40 @@ function facebookConnect()
  * Get facebook login url for the platform.
  *
  * @return string
+ * @throws FacebookSDKException
  */
-function facebookGetLoginUrl()
+function facebookGetLoginUrl(): string
 {
-    $fb = new \Facebook\Facebook([
+    $fb = new Facebook([
         'app_id' => $GLOBALS['facebook_config']['appId'],
         'app_secret' => $GLOBALS['facebook_config']['secret'],
         'default_graph_version' => 'v2.2',
     ]);
 
     $helper = $fb->getRedirectLoginHelper();
-    $loginUrl = $helper->getLoginUrl(api_get_path(WEB_PATH).'?action=fbconnect', [
+
+    return $helper->getLoginUrl(api_get_path(WEB_PATH).'?action=fbconnect', [
         'email',
     ]);
-
-    return $loginUrl;
 }
 
 /**
  * Return a valid Chamilo login
  * Chamilo login only use characters lettres, des chiffres et les signes _ . -.
- *
- * @param $in_txt
- *
- * @return mixed
  */
-function changeToValidChamiloLogin($in_txt)
+function changeToValidChamiloLogin(?string $in_txt): string
 {
+    if (empty($in_txt)) {
+        return '';
+    }
+
     return preg_replace("/[^a-zA-Z1-9_\-.]/", "_", $in_txt);
 }
 
 /**
  * Get user language.
- *
- * @param string $language
- *
- * @return bool
  */
-function facebookPluginGetLanguage($language = 'en_US')
+function facebookPluginGetLanguage(string $language = 'en_US'): bool
 {
     $language = substr($language, 0, 2);
     $sqlResult = Database::query(

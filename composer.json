@@ -61,7 +61,7 @@
         "enshrined/svg-sanitize": "^0.16.0",
         "essence/essence": "2.6.1",
         "ezyang/htmlpurifier": "~4.9",
-        "facebook/php-sdk-v4": "~5.0",
+        "facebook/graph-sdk": "^5.7",
         "firebase/php-jwt": "~5.0",
         "gedmo/doctrine-extensions": "~2.3",
         "graphp/algorithms": "~0.8.0",

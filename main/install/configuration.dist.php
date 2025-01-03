@@ -698,6 +698,9 @@ $_configuration['send_all_emails_to'] = [
         'admin2@example.com',
     ]
 ];*/
+// Add a new type of scheduled announcement, based on user course session progress
+// Requires a "use_base_progress" extra field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
+//$_configuration['scheduled_announcements_use_base_progress'] = false;
 // Allow ticket projects to be access by specific chamilo roles
 /*$_configuration['ticket_project_user_roles'] = [
     'permissions' => [

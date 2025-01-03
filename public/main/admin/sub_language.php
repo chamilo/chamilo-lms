@@ -65,7 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
     $sub_language_name = SubLanguageManager::get_name_of_language_by_id($_GET['sub_language_id']);
     $all_data_of_language = SubLanguageManager::get_all_information_of_language($_GET['id']);
     $all_data_of_sublanguage = SubLanguageManager::get_all_information_of_language($_GET['sub_language_id']);
-    if (true === SubLanguageManager::check_if_exist_language_by_id($_GET['id'])) {
+    if (true === SubLanguageManager::languageExistsById((int) $_GET['id'])) {
         $language_id_exist = true;
     } else {
         $language_id_exist = false;

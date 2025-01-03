@@ -1362,6 +1362,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
     ]
 ];*/
 
+// This option hide the old relationships in the session import view for drh users
+//$_configuration['session_import_drh_hide_old_relationships_check_box'] = false;
+
 /*
  * Fields visibility in the profile user page
 $_configuration['profile_fields_visibility'] = [

@@ -551,6 +551,20 @@ class ResourceController extends AbstractResourceController implements CourseCon
         return $this->json($data);
     }
 
+    #[Route('/resource_files/{id}/delete_variant', methods: ['DELETE'], name: 'chamilo_core_resource_files_delete_variant')]
+    public function deleteVariant(int $id, EntityManagerInterface $em): JsonResponse
+    {
+        $variant = $em->getRepository(ResourceFile::class)->find($id);
+        if (!$variant) {
+            return $this->json(['error' => 'Variant not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $em->remove($variant);
+        $em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
     private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', ?array $allUserInfo = null, ?ResourceFile $resourceFile = null): mixed
     {
         $this->denyAccessUnlessGranted(

@@ -74,6 +74,24 @@
           </template>
         </Column>
         <Column field="creator" :header="t('Creator')" />
+        <Column field="accessUrl" :header="t('Associated URL')">
+          <template #body="slotProps">
+            <span>
+              {{ slotProps.data.url ? slotProps.data.url : t('Default (No URL)') }}
+            </span>
+          </template>
+        </Column>
+        <Column>
+          <template #header>{{ t('Actions') }}</template>
+          <template #body="slotProps">
+            <BaseButton
+              :label="t('Delete')"
+              icon="delete"
+              type="danger"
+              @click="deleteVariant(slotProps.data.id)"
+            />
+          </template>
+        </Column>
       </DataTable>
     </div>
   </div>
@@ -90,10 +108,10 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import prettyBytes from 'pretty-bytes'
-import { useStore } from "vuex"
 import { useCidReq } from "../../composables/cidReq"
+import { useSecurityStore } from "../../store/securityStore"
 
-const store = useStore()
+const securityStore = useSecurityStore()
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
@@ -101,11 +119,17 @@ const { cid, sid, gid } = useCidReq()
 const file = ref(null)
 const variations = ref([])
 const originalFile = ref(null)
-const resourceFileId = route.params.resourceFileId;
+const resourceFileId = route.params.resourceFileId
 const selectedAccessUrl = ref(null)
 const accessUrls = ref([])
+const isAdmin = computed(() => securityStore.isAdmin)
 
 onMounted(async () => {
+  if (!isAdmin.value) {
+    await router.push({ name: 'DocumentsList' })
+    return
+  }
+
   await fetchOriginalFile()
   await fetchVariations()
   await fetchAccessUrls()
@@ -175,6 +199,16 @@ async function uploadVariant(file, resourceNodeId, accessUrlId) {
     selectedAccessUrl.value = null
   } catch (error) {
     console.error('Error uploading variant:', error)
+  }
+}
+
+async function deleteVariant(variantId) {
+  try {
+    await axios.delete(`/r/resource_files/${variantId}/delete_variant`)
+    console.log('Variant deleted successfully.')
+    await fetchVariations()
+  } catch (error) {
+    console.error('Error deleting variant:', error)
   }
 }
 

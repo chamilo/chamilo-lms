@@ -206,7 +206,7 @@
           />
 
           <BaseButton
-            v-if="canEdit(slotProps.data) && allowAccessUrlFiles && isFile(slotProps.data)"
+            v-if="canEdit(slotProps.data) && allowAccessUrlFiles && isFile(slotProps.data) && securityStore.isAdmin"
             icon="file-replace"
             size="small"
             type="secondary"

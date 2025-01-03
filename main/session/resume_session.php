@@ -398,14 +398,14 @@ if (!empty($userList)) {
         }
 
         $editUrl = null;
-        /*
+
         if (isset($sessionInfo['duration']) && !empty($sessionInfo['duration'])) {
             $editUrl = $codePath . 'session/session_user_edit.php?session_id=' . $sessionId . '&user_id=' . $userId;
             $editUrl = Display::url(
                 Display::return_icon('agenda.png', get_lang('SessionDurationEdit')),
                 $editUrl
             );
-        }*/
+        }
 
         $table->setCellContents($row, 0, $userLink);
         $link = $reportingLink.$courseUserLink.$removeLink.$addUserToUrlLink.$editUrl;

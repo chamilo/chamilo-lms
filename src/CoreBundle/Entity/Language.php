@@ -56,6 +56,9 @@ class Language
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
     protected ?Language $parent = null;
 
+    /**
+     * @var Collection<int, self>
+     */
     #[Groups(['language:read', 'language:write'])]
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $subLanguages;
@@ -113,18 +116,21 @@ class Language
         return $this->available;
     }
 
-    public function setParent(self $parent): self
+    public function setParent(?self $parent): static
     {
         $this->parent = $parent;
 
         return $this;
     }
 
-    public function getParent(): ?self
+    public function getParent(): ?static
     {
         return $this->parent;
     }
 
+    /**
+     * @return Collection<int, self>
+     */
     public function getSubLanguages(): Collection
     {
         return $this->subLanguages;
@@ -138,5 +144,27 @@ class Language
     public function getId()
     {
         return $this->id;
+    }
+
+    public function addSubLanguage(self $subLanguage): static
+    {
+        if (!$this->subLanguages->contains($subLanguage)) {
+            $this->subLanguages->add($subLanguage);
+            $subLanguage->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSub(self $sub): static
+    {
+        if ($this->subLanguages->removeElement($sub)) {
+            // set the owning side to null (unless already changed)
+            if ($sub->getParent() === $this) {
+                $sub->setParent(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -45,14 +45,19 @@ const submitCourse = async (formData) => {
     const response = await courseService.createCourse(formData)
     const courseId = response.courseId
     const sessionId = 0
+
+    if (!courseId) {
+      throw new Error(t('Course ID is missing. Unable to navigate to the course home page.'))
+    }
+
     showSuccessNotification(t('Course created successfully.'))
     await router.push(`/course/${courseId}/home?sid=${sessionId}`)
   } catch (error) {
     console.error(error)
 
-    const errorMessage = error.response && error.response.data && error.response.data.message
+    const errorMessage = error.message || (error.response && error.response.data && error.response.data.message
       ? error.response.data.message
-      : t('An unexpected error occurred.')
+      : t('An unexpected error occurred.'))
     showErrorNotification(errorMessage)
 
     if (error.response && error.response.data && error.response.data.violations) {

@@ -53,8 +53,13 @@ if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
 if ((isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) &&
     (isset($_GET['sub_language_id']) && $_GET['sub_language_id'] == strval(intval($_GET['sub_language_id'])))
 ) {
-    if (true === SubLanguageManager::languageExistsById($_GET['id']) && true === SubLanguageManager::languageExistsById($_GET['sub_language_id'])) {
-        $get_all_information = SubLanguageManager::getAllInformationOfSubLanguage((int) $_GET['id'], (int) $_GET['sub_language_id']);
+    if (true === SubLanguageManager::languageExistsById($_GET['id'])
+        && true === SubLanguageManager::languageExistsById($_GET['sub_language_id'])
+    ) {
+        $get_all_information = SubLanguageManager::getAllInformationOfSubLanguage(
+            (int) $_GET['id'],
+            (int) $_GET['sub_language_id']
+        );
         $original_name = $get_all_information['original_name'];
         $english_name = $get_all_information['english_name'];
         $isocode = $get_all_information['isocode'];
@@ -63,8 +68,8 @@ if ((isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) &&
 
 $language_name = get_lang('Create sub-languageForLanguage').' ( '.strtolower($language_name).' )';
 
-if (true ===  SubLanguageManager::isParentOfSubLanguage($parent_id) &&
-    isset($_GET['action']) && 'deletesublanguage' == $_GET['action']
+if (true === SubLanguageManager::isParentOfSubLanguage($parent_id)
+    && isset($_GET['action']) && 'deletesublanguage' == $_GET['action']
 ) {
     $language_name = get_lang('Delete sub-language');
 }
@@ -113,14 +118,25 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
             //$english_name = str_starts_with($english_name, $firstIso.'_') ? $english_name : $firstIso.'_'.$english_name;
 
             $isocode = SubLanguageManager::generateSublanguageCode($firstIso, $_POST['english_name']);
-            $str_info = '<br/>'.get_lang('Original name').' : '.$original_name.'<br/>'.get_lang('English name').' : '.$english_name.'<br/>'.get_lang('Character set').' : '.$isocode;
+            $str_info = '<br/>'.get_lang('Original name').' : '
+                .$original_name.'<br/>'.get_lang('English name').' : '
+                .$english_name.'<br/>'.get_lang('Character set').' : '.$isocode;
 
             $mkdir_result = SubLanguageManager::addPoFileForSubLanguage($isocode);
             if ($mkdir_result) {
-                $sl_id = SubLanguageManager::addSubLanguage($original_name, $english_name, $sublanguage_available, $parent_id, $isocode);
+                $sl_id = SubLanguageManager::addSubLanguage(
+                    $original_name,
+                    $english_name,
+                    $sublanguage_available,
+                    $parent_id,
+                    $isocode
+                );
                 if (false === $sl_id) {
                     SubLanguageManager::removePoFileForSubLanguage($isocode);
-                    $msg .= Display::return_message(get_lang('The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'), 'error');
+                    $msg .= Display::return_message(
+                        get_lang('The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'),
+                        'error'
+                    );
                 } else {
                     Display::addFlash(
                         Display::return_message(get_lang('The new sub-language has been added').$str_info, null, false)
@@ -128,15 +144,19 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
                     api_location(api_get_path(WEB_CODE_PATH).'admin/languages.php?sub_language_id='.$sl_id);
                 }
             } else {
-                $msg .= Display::return_message(get_lang('The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'), 'error');
+                $msg .= Display::return_message(
+                    get_lang('The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'),
+                    'error'
+                );
             }
-        } else {
-            if (false === $language_id_exist) {
-                $msg .= Display::return_message(get_lang('The parent language does not exist.'), 'error');
-            }
+        } elseif (false === $language_id_exist) {
+            $msg .= Display::return_message(get_lang('The parent language does not exist.'), 'error');
         }
     } else {
-        $msg .= Display::return_message(get_lang('The form contains incorrect or incomplete data. Please check your input.'), 'error');
+        $msg .= Display::return_message(
+            get_lang('The form contains incorrect or incomplete data. Please check your input.'),
+            'error'
+        );
     }
 }
 
@@ -145,9 +165,7 @@ if (isset($_POST['SubmitAddDeleteLanguage'])) {
     if ($removed) {
         Display::addFlash(
             Display::return_message(
-                get_lang(
-                    'The sub language has been removed.'
-                )
+                get_lang('The sub language has been removed.')
             )
         );
         api_location(api_get_path(WEB_CODE_PATH).'admin/languages.php');
@@ -187,7 +205,10 @@ if (isset($_GET['action']) && 'definenewsublanguage' == $_GET['action']) {
         $form = new FormValidator(
             'deletesublanguage',
             'post',
-            'sub_language_add.php?id='.Security::remove_XSS($_GET['id']).'&sub_language_id='.Security::remove_XSS($_GET['sub_language_id'])
+            'sub_language_add.php?id='.http_build_query([
+                'id' => Security::remove_XSS($_GET['id']),
+                'sub_language_id' => Security::remove_XSS($_GET['sub_language_id']),
+            ])
         );
         $class = 'minus';
         $form->addElement('header', '', $text);

@@ -240,52 +240,55 @@ class CourseCategory
      *
      * @return bool
      */
-    public static function moveNodeUp($code, $tree_pos, $parent_id)
+    public static function moveNodeUp($categoryId, $treePos, $parentId): bool
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $code = Database::escape_string($code);
-        $tree_pos = (int) $tree_pos;
-        $parent_id = Database::escape_string($parent_id);
+        $categoryId = (int) $categoryId;
+        $treePos = (int) $treePos;
 
-        $parentIdCondition = " AND (parent_id IS NULL OR parent_id = '' )";
-        if (!empty($parent_id)) {
-            $parentIdCondition = " AND parent_id = '$parent_id' ";
+        $parentIdCondition = "parent_id IS NULL";
+        if (!empty($parentId)) {
+            $parentIdCondition = "parent_id = '".Database::escape_string($parentId)."'";
         }
 
-        $sql = "SELECT code,tree_pos
-                FROM $table
-                WHERE
-                    tree_pos < $tree_pos
-                    $parentIdCondition
-                ORDER BY tree_pos DESC
-                LIMIT 0,1";
+        self::reorganizeTreePos($parentId);
+
+        $sql = "SELECT id, tree_pos
+            FROM $table
+            WHERE $parentIdCondition AND tree_pos < $treePos
+            ORDER BY tree_pos DESC
+            LIMIT 1";
 
         $result = Database::query($sql);
-        if (!$row = Database::fetch_array($result)) {
-            $sql = "SELECT code, tree_pos
-                    FROM $table
-                    WHERE
-                        tree_pos > $tree_pos
-                        $parentIdCondition
-                    ORDER BY tree_pos DESC
-                    LIMIT 0,1";
-            $result2 = Database::query($sql);
-            if (!$row = Database::fetch_array($result2)) {
-                return false;
-            }
+        $previousCategory = Database::fetch_array($result);
+
+        if (!$previousCategory) {
+            return false;
         }
 
-        $sql = "UPDATE $table
-                SET tree_pos ='".$row['tree_pos']."'
-                WHERE code='$code'";
-        Database::query($sql);
-
-        $sql = "UPDATE $table
-                SET tree_pos = '$tree_pos'
-                WHERE code= '".$row['code']."'";
-        Database::query($sql);
+        Database::query("UPDATE $table SET tree_pos = {$previousCategory['tree_pos']} WHERE id = $categoryId");
+        Database::query("UPDATE $table SET tree_pos = $treePos WHERE id = {$previousCategory['id']}");
 
         return true;
+    }
+
+    public static function reorganizeTreePos($parentId): void
+    {
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+
+        $parentIdCondition = "parent_id IS NULL";
+        if (!empty($parentId)) {
+            $parentIdCondition = "parent_id = '".Database::escape_string($parentId)."'";
+        }
+
+        $sql = "SELECT id FROM $table WHERE $parentIdCondition ORDER BY tree_pos";
+        $result = Database::query($sql);
+
+        $newTreePos = 1;
+        while ($row = Database::fetch_array($result)) {
+            Database::query("UPDATE $table SET tree_pos = $newTreePos WHERE id = {$row['id']}");
+            $newTreePos++;
+        }
     }
 
     /**

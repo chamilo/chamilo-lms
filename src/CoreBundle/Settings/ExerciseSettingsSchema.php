@@ -44,7 +44,6 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                     'hide_free_question_score' => 'false',
                     'hide_user_info_in_quiz_result' => 'false',
                     'exercise_attempts_report_show_username' => 'false',
-                    'allow_exercise_auto_launch' => 'false',
                     'disable_clean_exercise_results_for_teachers' => 'true',
                     'show_exercise_question_certainty_ribbon_result' => 'false',
                     'quiz_results_answers_report' => 'false',
@@ -121,7 +120,6 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             ->add('hide_free_question_score', YesNoType::class)
             ->add('hide_user_info_in_quiz_result', YesNoType::class)
             ->add('exercise_attempts_report_show_username', YesNoType::class)
-            ->add('allow_exercise_auto_launch', YesNoType::class)
             ->add('disable_clean_exercise_results_for_teachers', YesNoType::class)
             ->add('show_exercise_question_certainty_ribbon_result', YesNoType::class)
             ->add('quiz_results_answers_report', YesNoType::class)

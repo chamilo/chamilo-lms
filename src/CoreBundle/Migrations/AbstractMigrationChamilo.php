@@ -410,7 +410,11 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
     {
         $fullFilename = $this->generateFilePath($filename);
 
-        return file_get_contents($fullFilename);
+        if ($this->fileExists($fullFilename)) {
+            return file_get_contents($fullFilename);
+        }
+
+        return '';
     }
 
     protected function removeFile(string $filename): void

@@ -133,7 +133,7 @@ class ToolChain
     public function addToolsInCourse(Course $course): Course
     {
         $manager = $this->entityManager;
-        $toolVisibility = $this->settingsManager->getSetting('course.active_tools_on_create');
+        $activeToolsOnCreate = $this->settingsManager->getSetting('course.active_tools_on_create') ?? [];
 
         // Hardcoded tool list order
         $toolList = [
@@ -157,7 +157,6 @@ class ToolChain
             'survey',
             'wiki',
             'notebook',
-            // 'blog',
             'course_tool',
             'course_homepage',
             'tracking',
@@ -171,7 +170,6 @@ class ToolChain
         $tools = $this->handlerCollection->getCollection();
 
         foreach ($tools as $tool) {
-            $visibility = \in_array($tool->getTitle(), $toolVisibility, true);
             $criteria = [
                 'title' => $tool->getTitle(),
             ];
@@ -179,7 +177,9 @@ class ToolChain
                 continue;
             }
 
-            $linkVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+            $visibility = \in_array($tool->getTitle(), $activeToolsOnCreate, true);
+            $linkVisibility = $visibility ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT;
+
             if (\in_array($tool->getTitle(), ['course_setting', 'course_maintenance'])) {
                 $linkVisibility = ResourceLink::VISIBILITY_DRAFT;
             }

@@ -1,25 +1,25 @@
 export default {
-  path: '/resources/ccalendarevent',
+  path: "/resources/ccalendarevent",
   meta: { requiresAuth: true },
-  name: 'ccalendarevent',
-  redirect: { name: 'CCalendarEventList' },
-  component: () => import('../components/ccalendarevent/CCalendarEventLayout.vue'),
+  name: "ccalendarevent",
+  redirect: { name: "CCalendarEventList" },
+  component: () => import("../components/ccalendarevent/CCalendarEventLayout.vue"),
   children: [
     {
-      name: 'CCalendarEventShow',
-      path: 'show',
-      component: () => import('../views/ccalendarevent/CCalendarEventShow.vue')
+      name: "CCalendarEventShow",
+      path: "show",
+      component: () => import("../views/ccalendarevent/CCalendarEventShow.vue"),
     },
     {
-      name: 'CCalendarEventCreate',
-      path: 'new',
-      component: () => import('../views/ccalendarevent/CCalendarEventCreate.vue')
+      name: "CCalendarEventCreate",
+      path: "new",
+      component: () => import("../views/ccalendarevent/CCalendarEventCreate.vue"),
     },
     {
-      name: 'CCalendarEventList',
-      path: '',
-      component: () => import('../views/ccalendarevent/CCalendarEventList.vue'),
-      props: (route) => ({ type: route.query.type })
-    }
-  ]
-};
+      name: "CCalendarEventList",
+      path: "",
+      component: () => import("../views/ccalendarevent/CCalendarEventList.vue"),
+      props: (route) => ({ type: route.query.type }),
+    },
+  ],
+}

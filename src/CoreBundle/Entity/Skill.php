@@ -38,7 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/skills/tree.{_format}',
             paginationEnabled: false,
             normalizationContext: [
-                'groups' => ['skill:tree:read']
+                'groups' => ['skill:tree:read'],
             ],
             output: SkillTreeNode::class,
             provider: SkillTreeStateProvider::class
@@ -467,7 +467,7 @@ class Skill implements Stringable, Translatable
     {
         return $this
             ->getSkills()
-            ->map(fn(SkillRelSkill $skillRelSkill): Skill => $skillRelSkill->getSkill())
+            ->map(fn (SkillRelSkill $skillRelSkill): Skill => $skillRelSkill->getSkill())
         ;
     }
 

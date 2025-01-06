@@ -226,6 +226,13 @@ class ReinscriptionCheckCommand extends Command
         if (!$existingSubscription) {
             $newSession->addUserInSession(Session::STUDENT, $user);
 
+            foreach ($newSession->getCourses() as $sessionRelCourse) {
+                $course = $sessionRelCourse->getCourse();
+                if ($course) {
+                    $newSession->addUserInCourse(Session::STUDENT, $user, $course);
+                }
+            }
+
             $subscription = $this->findUserSubscriptionInSession($user, $oldSession);
             if ($subscription) {
                 $subscription->setNewSubscriptionSessionId($newSession->getId());

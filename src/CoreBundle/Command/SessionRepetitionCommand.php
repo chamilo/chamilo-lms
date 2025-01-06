@@ -160,18 +160,29 @@ class SessionRepetitionCommand extends Command
         }
 
         // Add courses to the new session
+        $courseCount = 0;
         foreach ($courses as $sessionRelCourse) {
             $course = $sessionRelCourse->getCourse();
             if ($course) {
                 $newSession->addCourse($course);
+                $this->entityManager->persist($newSession);
 
                 if ($debug) {
                     $output->writeln(sprintf('Added course ID %d to session ID %d.', $course->getId(), $newSession->getId()));
                 }
 
                 $this->copyEvaluationsAndCategories($course->getId(), $session->getId(), $newSession->getId(), $debug, $output);
+
+                $courseCount++;
             }
         }
+
+        foreach ($session->getGeneralCoaches() as $coach) {
+            $newSession->addGeneralCoach($coach);
+        }
+
+        $newSession->setNbrCourses($courseCount);
+        $this->entityManager->persist($newSession);
 
         $this->entityManager->flush();
 

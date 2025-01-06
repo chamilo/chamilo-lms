@@ -34,6 +34,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const MB_CASE_LOWER;
 
@@ -48,7 +49,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
     public function __construct(
         ManagerRegistry $registry,
-        private readonly IllustrationRepository $illustrationRepository
+        private readonly IllustrationRepository $illustrationRepository,
+        private readonly TranslatorInterface $translator
     ) {
         parent::__construct($registry, User::class);
     }
@@ -149,6 +151,9 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
         try {
             if ($destroy) {
+                // Call method to delete messages and attachments
+                $this->deleteUserMessagesAndAttachments($user);
+
                 $fallbackUser = $this->getFallbackUser();
 
                 if ($fallbackUser) {
@@ -233,8 +238,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     }
 
     /**
-     * Retrieves a list of database table relations and their corresponding actions
-     * to handle user resource reassignment or deletion.
+     * Provides a list of database table relations and their respective actions
+     * (update or delete) for handling user resource reassignment or deletion.
+     *
+     * Any new database table that stores references to users and requires updates
+     * or deletions when a user is removed should be added to this list. This ensures
+     * proper handling of dependencies and avoids orphaned data.
      */
     protected function getRelations(): array
     {
@@ -333,6 +342,44 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ['table' => 'user_rel_tag', 'field' => 'user_id', 'action' => 'delete'],
             ['table' => 'user_rel_user', 'field' => 'user_id', 'action' => 'delete'],
         ];
+    }
+
+    /**
+     * Deletes a user's messages and their attachments, updates the message content,
+     * and detaches the user as the sender.
+     */
+    public function deleteUserMessagesAndAttachments(User $user): void
+    {
+        $em = $this->getEntityManager();
+        $connection = $em->getConnection();
+
+        $currentDate = (new \DateTime())->format('Y-m-d H:i:s');
+        $updatedContent = sprintf(
+            $this->translator->trans('This message was deleted when the user was removed from the platform on %s'),
+            $currentDate
+        );
+
+        $connection->executeStatement(
+            'UPDATE message m
+         SET m.content = :content, m.user_sender_id = NULL
+         WHERE m.user_sender_id = :userId',
+            [
+                'content' => $updatedContent,
+                'userId' => $user->getId(),
+            ]
+        );
+
+        $connection->executeStatement(
+            'DELETE ma
+         FROM message_attachment ma
+         INNER JOIN message m ON ma.message_id = m.id
+         WHERE m.user_sender_id IS NULL',
+            [
+                'userId' => $user->getId(),
+            ]
+        );
+
+        $em->clear();
     }
 
     public function getFallbackUser(): ?User

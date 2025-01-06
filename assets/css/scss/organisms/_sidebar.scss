@@ -106,7 +106,7 @@
 
       > .p-panelmenu-header-content a {
         .p-menuitem-text {
-          @apply order-2 grow text-body-2 font-semibold whitespace-nowrap;
+          @apply order-2 grow text-body-2 font-semibold;
         }
       }
     }

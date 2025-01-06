@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Language;
+use Doctrine\ORM\Exception\NotSupported;
 
 /**
  * This is used in some scripts inside tests.
@@ -198,31 +199,6 @@ class SubLanguageManager
         }
 
         return true;
-    }
-
-    /**
-     * check if language exist by id.
-     *
-     * @param int $language_id
-     *
-     * @return bool
-     */
-    public static function check_if_exist_language_by_id($language_id)
-    {
-        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = 'SELECT count(*) as count
-                FROM '.$table.'
-                WHERE id="'.intval($language_id).'"';
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if (1 == Database::result($rs, 0, 'count')) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
     }
 
     /**
@@ -768,6 +744,8 @@ class SubLanguageManager
 
     /**
      * Check if a language exists by its ID.
+     *
+     * @throws NotSupported
      */
     public static function languageExistsById(int $languageId): bool
     {
@@ -792,18 +770,18 @@ class SubLanguageManager
 
     /**
      * Get all information of a sub-language.
+     *
+     * @throws NotSupported
      */
-    public static function getAllInformationOfSubLanguage(int $parentId, int $subLanguageId): array
+    public static function getAllInformationOfSubLanguage(int $parentId, int $subLanguageId): ?Language
     {
         $entityManager = Database::getManager();
         $languageRepository = $entityManager->getRepository(Language::class);
 
-        $subLanguage = $languageRepository->findOneBy([
+        return $languageRepository->findOneBy([
             'parent' => $parentId,
             'id' => $subLanguageId
         ]);
-
-        return $subLanguage ? self::convertLanguageToArray($subLanguage) : [];
     }
 
     /**

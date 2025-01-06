@@ -770,18 +770,18 @@ class SubLanguageManager
 
     /**
      * Get all information of a sub-language.
+     *
+     * @throws NotSupported
      */
-    public static function getAllInformationOfSubLanguage(int $parentId, int $subLanguageId): array
+    public static function getAllInformationOfSubLanguage(int $parentId, int $subLanguageId): ?Language
     {
         $entityManager = Database::getManager();
         $languageRepository = $entityManager->getRepository(Language::class);
 
-        $subLanguage = $languageRepository->findOneBy([
+        return $languageRepository->findOneBy([
             'parent' => $parentId,
             'id' => $subLanguageId
         ]);
-
-        return $subLanguage ? self::convertLanguageToArray($subLanguage) : [];
     }
 
     /**

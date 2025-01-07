@@ -353,12 +353,32 @@ $userListToShow = Display::page_subheader(get_lang('UserList').$url);
 $userList = SessionManager::get_users_by_session($sessionId);
 
 if (!empty($userList)) {
+    $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : null;
+    $sortColumn = isset($_GET['sort']) ? Security::remove_XSS($_GET['sort']) : 'registration_date';
+    $sortOrder = isset($_GET['order']) && Security::remove_XSS($_GET['order']) === 'ASC' ? SORT_ASC : SORT_DESC;
+
+    $allowedColumns = ['user', 'registration_date'];
+    if (!in_array($sortColumn, $allowedColumns, true)) {
+        $sortColumn = 'registration_date';
+    }
+
+    usort($userList, function ($a, $b) use ($sortColumn, $sortOrder) {
+        if ($sortColumn === 'user') {
+            $valueA = strtolower(api_get_user_info($a['user_id'])['complete_name_with_username']);
+            $valueB = strtolower(api_get_user_info($b['user_id'])['complete_name_with_username']);
+        } else {
+            $valueA = strtotime($a['registered_at']);
+            $valueB = strtotime($b['registered_at']);
+        }
+        return $sortOrder === SORT_ASC ? $valueA <=> $valueB : $valueB <=> $valueA;
+    });
+
     $table = new HTML_Table(
         ['class' => 'table table-hover table-striped data_table', 'id' => 'session-user-list']
     );
-    $table->setHeaderContents(0, 0, get_lang('User'));
+    $table->setHeaderContents(0, 0, '<a href="?id_session='.$sessionId.'&sort=user&order='.($sortColumn === 'user' && $sortOrder === SORT_ASC ? 'DESC' : 'ASC').'">'.get_lang('User').'</a>');
     $table->setHeaderContents(0, 1, get_lang('Status'));
-    $table->setHeaderContents(0, 2, get_lang('RegistrationDate'));
+    $table->setHeaderContents(0, 2, '<a href="?id_session='.$sessionId.'&sort=registration_date&order='.($sortColumn === 'registration_date' && $sortOrder === SORT_ASC ? 'DESC' : 'ASC').'">'.get_lang('RegistrationDate').'</a>');
     $table->setHeaderContents(0, 3, get_lang('Actions'));
 
     $row = 1;

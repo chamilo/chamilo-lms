@@ -59,15 +59,21 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     'career_diagram_legend' => 'false',
                     'career_diagram_disclaimer' => 'false',
                     'linkedin_organization_id' => 'false',
+                    'visible_options' => [],
                 ]
             )
             ->setTransformer(
                 'changeable_options',
                 new ArrayToIdentifierTransformer()
             )
+            ->setTransformer(
+                'visible_options',
+                new ArrayToIdentifierTransformer()
+            )
         ;
         $allowedTypes = [
             'changeable_options' => ['array'],
+            'visible_options' => ['array'],
             'account_valid_duration' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -90,9 +96,25 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                         'Password' => 'password',
                         'Language' => 'language',
                         'Phone' => 'phone',
-                        // 'openid' => 'openid',
                         'Theme' => 'theme',
-                        // 'apikeys' => 'apikeys',
+                    ],
+                ]
+            )
+            ->add(
+                'visible_options',
+                ChoiceType::class,
+                [
+                    'multiple' => true,
+                    'choices' => [
+                        'Name' => 'name',
+                        'Official code' => 'officialcode',
+                        'E-mail' => 'email',
+                        'Picture' => 'picture',
+                        'Login' => 'login',
+                        'Password' => 'password',
+                        'Language' => 'language',
+                        'Phone' => 'phone',
+                        'Theme' => 'theme',
                     ],
                 ]
             )

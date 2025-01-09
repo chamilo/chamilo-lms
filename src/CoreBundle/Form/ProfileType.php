@@ -11,13 +11,10 @@ use Chamilo\CoreBundle\Form\Type\IllustrationType;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -37,56 +34,61 @@ class ProfileType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $changeableOptions = $this->settingsManager->getSetting('profile.changeable_options') ?? [];
+        $visibleOptions = $this->settingsManager->getSetting('profile.visible_options') ?? [];
         $languages = array_flip($this->languageRepository->getAllAvailableToArray());
 
-        $builder
-            ->add('firstname', TextType::class, ['label' => 'Firstname', 'required' => true])
-            ->add('lastname', TextType::class, ['label' => 'Lastname', 'required' => true])
-            ->add('email', EmailType::class, ['label' => 'Email', 'required' => true])
-            // ->add('official_code', TextType::class)
-            // ->add('groups')
-            ->add('locale', LocaleType::class, [
-                // 'preferred_choices' => ['en', 'fr_FR', 'es_ES', 'pt', 'nl'],
+        $fieldsMap = [
+            'name' => ['field' => 'firstname', 'type' => TextType::class, 'label' => 'Firstname'],
+            'officialcode' => ['field' => 'official_code', 'type' => TextType::class, 'label' => 'Official Code'],
+            'email' => ['field' => 'email', 'type' => EmailType::class, 'label' => 'Email'],
+            'picture' => [
+                'field' => 'illustration',
+                'type' => IllustrationType::class,
+                'label' => 'Picture',
+                'mapped' => false
+            ],
+            'login' => ['field' => 'login', 'type' => TextType::class, 'label' => 'Login'],
+            'password' => ['field' => 'password', 'type' => TextType::class, 'label' => 'Password'],
+            'language' => [
+                'field' => 'locale',
+                'type' => LocaleType::class,
+                'label' => 'Language',
                 'choices' => $languages,
-                'choice_loader' => null,
-            ])
-            /*->add(                'dateOfBirth',
-                BirthdayType::class,
-                [
-                    'label' => 'form.label_date_of_birth',
-                    'required' => false,
-                    'widget' => 'single_text',
-                ]
-            )
-            ->add(
-                'biography',
-                TextareaType::class,
-                [
-                    'label' => 'form.label_biography',
-                    'required' => false,
-                ]
-            )*/
-            /*->add('locale', 'locale', array(
-                'label'    => 'form.label_locale',
-                'required' => false,
-            ))*/
-        ;
+            ],
+            'phone' => ['field' => 'phone', 'type' => TextType::class, 'label' => 'Phone Number'],
+            'theme' => ['field' => 'theme', 'type' => TextType::class, 'label' => 'Theme'],
+        ];
 
-        if ('true' === $this->settingsManager->getSetting('use_users_timezone')) {
-            $builder
-                ->add('timezone', TimezoneType::class, ['label' => 'Timezone', 'required' => true])
-            ;
+        foreach ($fieldsMap as $key => $fieldConfig) {
+            if (in_array($key, $visibleOptions)) {
+                $isEditable = in_array($key, $changeableOptions);
+                $builder->add(
+                    $fieldConfig['field'],
+                    $fieldConfig['type'],
+                    array_merge(
+                        [
+                            'label' => $fieldConfig['label'],
+                            'required' => false,
+                            'attr' => !$isEditable ? ['readonly' => true] : [],
+                        ],
+                        isset($fieldConfig['choices']) ? ['choices' => $fieldConfig['choices']] : []
+                    )
+                );
+            }
         }
 
-        $builder
-            ->add('phone', TextType::class, ['label' => 'Phone number', 'required' => false])
-            ->add(
-                'illustration',
-                IllustrationType::class,
-                ['label' => 'Picture', 'required' => false, 'mapped' => false]
-            )
-            // ->add('website', UrlType::class, ['label' => 'Website', 'required' => false])
-        ;
+        if ('true' === $this->settingsManager->getSetting('use_users_timezone') && in_array('timezone', $visibleOptions)) {
+            $builder->add(
+                'timezone',
+                TimezoneType::class,
+                [
+                    'label' => 'Timezone',
+                    'required' => true,
+                    'attr' => !in_array('timezone', $changeableOptions) ? ['readonly' => true] : [],
+                ]
+            );
+        }
 
         $builder->add('extra_fields', ExtraFieldType::class, ['mapped' => false]);
     }

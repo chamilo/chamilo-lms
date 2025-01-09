@@ -46,7 +46,7 @@ class ProfileType extends AbstractType
                 'field' => 'illustration',
                 'type' => IllustrationType::class,
                 'label' => 'Picture',
-                'mapped' => false
+                'mapped' => false,
             ],
             'login' => ['field' => 'login', 'type' => TextType::class, 'label' => 'Login'],
             'password' => ['field' => 'password', 'type' => TextType::class, 'label' => 'Password'],
@@ -61,8 +61,8 @@ class ProfileType extends AbstractType
         ];
 
         foreach ($fieldsMap as $key => $fieldConfig) {
-            if (in_array($key, $visibleOptions)) {
-                $isEditable = in_array($key, $changeableOptions);
+            if (\in_array($key, $visibleOptions)) {
+                $isEditable = \in_array($key, $changeableOptions);
                 $builder->add(
                     $fieldConfig['field'],
                     $fieldConfig['type'],
@@ -78,14 +78,14 @@ class ProfileType extends AbstractType
             }
         }
 
-        if ('true' === $this->settingsManager->getSetting('use_users_timezone') && in_array('timezone', $visibleOptions)) {
+        if ('true' === $this->settingsManager->getSetting('use_users_timezone') && \in_array('timezone', $visibleOptions)) {
             $builder->add(
                 'timezone',
                 TimezoneType::class,
                 [
                     'label' => 'Timezone',
                     'required' => true,
-                    'attr' => !in_array('timezone', $changeableOptions) ? ['readonly' => true] : [],
+                    'attr' => !\in_array('timezone', $changeableOptions) ? ['readonly' => true] : [],
                 ]
             );
         }

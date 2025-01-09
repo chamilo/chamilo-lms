@@ -49,9 +49,12 @@
       class="flex flex-col gap-4"
     >
       <!-- Render the list of links without a category -->
-      <LinkCategoryCard v-if="linksWithoutCategory.length > 0" :showHeader="false">
+      <LinkCategoryCard
+        v-if="linksWithoutCategory.length > 0"
+        :showHeader="false"
+      >
         <template #header>
-          <h5>{{ t('General') }}</h5>
+          <h5>{{ t("General") }}</h5>
         </template>
 
         <ul>
@@ -61,8 +64,8 @@
             class="mb-4"
           >
             <LinkItem
-              :link="link"
               :isLinkValid="linkValidationResults[link.iid]"
+              :link="link"
               @check="checkLink(link.iid, link.url)"
               @delete="confirmDeleteLink(link)"
               @edit="editLink"
@@ -90,7 +93,10 @@
               />
               <h5>{{ category.info.title }}</h5>
             </div>
-            <div class="flex gap-2" v-if="securityStore.isAuthenticated && isCurrentTeacher">
+            <div
+              v-if="securityStore.isAuthenticated && isCurrentTeacher"
+              class="flex gap-2"
+            >
               <BaseButton
                 :label="t('Edit')"
                 icon="edit"
@@ -123,8 +129,8 @@
             :key="link.id"
           >
             <LinkItem
-              :link="link"
               :isLinkValid="linkValidationResults[link.iid]"
+              :link="link"
               @check="checkLink(link.iid, link.url)"
               @delete="confirmDeleteLink(link)"
               @edit="editLink"
@@ -135,7 +141,7 @@
           </li>
         </ul>
         <p v-if="!category.links || category.links.length === 0">
-          {{ t('There are no links in this category') }}
+          {{ t("There are no links in this category") }}
         </p>
       </LinkCategoryCard>
     </div>
@@ -153,9 +159,7 @@
     >
       <div v-if="categoryToDelete">
         <p class="mb-2 font-semibold">{{ categoryToDelete.info.title }}</p>
-        <p>
-          {{ t('With links') }}: {{ (categoryToDelete.links || []).map((l) => l.title).join(', ') }}
-        </p>
+        <p>{{ t("With links") }}: {{ (categoryToDelete.links || []).map((l) => l.title).join(", ") }}</p>
       </div>
     </BaseDialogDelete>
   </div>
@@ -178,14 +182,13 @@ import Skeleton from "primevue/skeleton"
 import { isVisible, toggleVisibilityProperty, visibilityFromBoolean } from "../../components/links/linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCidReq } from "../../composables/cidReq"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions";
-
+import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
 const { cid, sid, gid } = useCidReq()
-const isAllowedToEdit = ref(false);
+const isAllowedToEdit = ref(false)
 
 const { t } = useI18n()
 
@@ -216,7 +219,7 @@ const isLoading = ref(true)
 const linkValidationResults = ref({})
 
 onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true);
+  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
   linksWithoutCategory.value = []
   categories.value = []
   await fetchLinks()
@@ -257,7 +260,7 @@ async function checkLink(id, url) {
     console.error("Error checking link:", error)
     linkValidationResults.value = {
       ...linkValidationResults.value,
-      [id]: { isValid: false, message: error.message || "Link validation failed" }
+      [id]: { isValid: false, message: error.message || "Link validation failed" },
     }
   }
 }
@@ -265,7 +268,7 @@ async function checkLink(id, url) {
 async function toggleVisibility(link) {
   try {
     const visibility = toggleVisibilityProperty(!link.linkVisible)
-    let newLink = await linkService.toggleLinkVisibility(link.iid, isVisible(visibility))
+    let newLink = await linkService.toggleLinkVisibility(link.iid, isVisible(visibility), cid, sid)
     notifications.showSuccessNotification(t("Link visibility updated"))
     Object.values(categories.value)
       .map((c) => c.links)
@@ -377,14 +380,14 @@ async function fetchLinks() {
   }
 
   try {
-    const data = await linkService.getLinks(params);
-    linksWithoutCategory.value = data.linksWithoutCategory || [];
-    categories.value = data.categories || [];
+    const data = await linkService.getLinks(params)
+    linksWithoutCategory.value = data.linksWithoutCategory || []
+    categories.value = data.categories || []
   } catch (error) {
-    console.error("Error fetching links:", error);
-    notifications.showErrorNotification(t("Could not retrieve links"));
+    console.error("Error fetching links:", error)
+    notifications.showErrorNotification(t("Could not retrieve links"))
   } finally {
-    isLoading.value = false;
+    isLoading.value = false
   }
 }
 </script>

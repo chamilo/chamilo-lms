@@ -133,15 +133,15 @@
       field="resourceNode.title"
     >
       <template #body="slotProps">
-        <div style="display: flex; align-items: center;">
+        <div style="display: flex; align-items: center">
           <DocumentEntry
             v-if="slotProps.data"
             :data="slotProps.data"
           />
           <BaseIcon
             v-if="isAllowedToEdit && isSessionDocument(slotProps.data)"
-            icon="session-star"
             class="mr-8"
+            icon="session-star"
           />
         </div>
       </template>
@@ -176,17 +176,17 @@
         <div class="flex flex-row justify-end gap-2">
           <BaseButton
             v-if="canEdit(slotProps.data)"
+            :title="t('Move')"
             icon="folder-move"
             size="small"
             type="secondary"
-            :title="t('Move')"
             @click="openMoveDialog(slotProps.data)"
           />
           <BaseButton
+            :title="t('Information')"
             icon="information"
             size="small"
             type="primary"
-            :title="t('Information')"
             @click="btnShowInformationOnClick(slotProps.data)"
           />
 
@@ -199,44 +199,46 @@
                   ? 'eye-off'
                   : ''
             "
+            :title="t('Visibility')"
             size="small"
             type="secondary"
-            :title="t('Visibility')"
             @click="btnChangeVisibilityOnClick(slotProps.data)"
           />
 
           <BaseButton
             v-if="canEdit(slotProps.data)"
+            :title="t('Edit')"
             icon="edit"
             size="small"
             type="secondary"
-            :title="t('Edit')"
             @click="btnEditOnClick(slotProps.data)"
           />
 
           <BaseButton
             v-if="canEdit(slotProps.data)"
+            :title="t('Delete')"
             icon="delete"
             size="small"
             type="danger"
-            :title="t('Delete')"
             @click="confirmDeleteItem(slotProps.data)"
           />
           <BaseButton
             v-if="isCertificateMode && canEdit(slotProps.data)"
             :class="{ selected: slotProps.data.iid === defaultCertificateId }"
             :icon="slotProps.data.iid === defaultCertificateId ? 'certificate-selected' : 'certificate-not-selected'"
+            :title="t('Set as default certificate')"
             size="small"
             type="slotProps.data.iid === defaultCertificateId ? 'success' : 'black'"
-            :title="t('Set as default certificate')"
             @click="selectAsDefaultCertificate(slotProps.data)"
           />
           <BaseButton
-            v-if="securityStore.isAuthenticated && isCurrentTeacher && isHtmlFile(slotProps.data) && canEdit(slotProps.data)"
+            v-if="
+              securityStore.isAuthenticated && isCurrentTeacher && isHtmlFile(slotProps.data) && canEdit(slotProps.data)
+            "
             :icon="getTemplateIcon(slotProps.data.iid)"
+            :title="t('Template options')"
             size="small"
             type="secondary"
-            :title="t('Template options')"
             @click="openTemplateForm(slotProps.data.iid)"
           />
         </div>
@@ -279,9 +281,9 @@
     <Dropdown
       v-model="selectedFolder"
       :options="folders"
+      :placeholder="t('Select a folder')"
       optionLabel="label"
       optionValue="value"
-      :placeholder="t('Select a folder')"
     />
   </BaseDialogConfirmCancel>
 
@@ -505,17 +507,14 @@ const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 
 const canEdit = (item) => {
   const resourceLink = item.resourceLinkListFromEntity[0]
-  const isSessionDocument = resourceLink.session && resourceLink.session['@id'] === `/api/sessions/${sid}`
+  const isSessionDocument = resourceLink.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
   const isBaseCourse = !resourceLink.session
-  return (
-    (isSessionDocument && isAllowedToEdit.value) ||
-    (isBaseCourse && !sid && isCurrentTeacher.value)
-  )
+  return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
 }
 
 const isSessionDocument = (item) => {
   const resourceLink = item.resourceLinkListFromEntity[0]
-  return resourceLink.session && resourceLink.session['@id'] === `/api/sessions/${sid}`
+  return resourceLink.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
 }
 
 const isHtmlFile = (fileData) => isHtml(fileData)
@@ -785,11 +784,13 @@ function openMoveDialog(document) {
   isMoveDialogVisible.value = true
 }
 
-async function fetchFolders(nodeId = null, parentPath = '') {
-  const foldersList = [{
-    label: 'Root',
-    value: nodeId || route.params.node || route.query.node || 'root-node-id',
-  }]
+async function fetchFolders(nodeId = null, parentPath = "") {
+  const foldersList = [
+    {
+      label: "Root",
+      value: nodeId || route.params.node || route.query.node || "root-node-id",
+    },
+  ]
 
   try {
     let nodesToFetch = [{ id: nodeId || route.params.node || route.query.node, path: parentPath }]
@@ -808,7 +809,7 @@ async function fetchFolders(nodeId = null, parentPath = '') {
         },
       })
 
-      response.data["hydra:member"].forEach(folder => {
+      response.data["hydra:member"].forEach((folder) => {
         const fullPath = `${currentNode.path}/${folder.title}`
 
         foldersList.push({
@@ -837,7 +838,6 @@ async function loadAllFolders() {
 
 async function moveDocument() {
   try {
-
     const response = await axios.put(`/api/documents/${item.value.iid}/move`, {
       parentResourceNodeId: selectedFolder.value,
     })

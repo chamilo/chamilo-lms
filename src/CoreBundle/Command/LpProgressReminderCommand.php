@@ -26,6 +26,9 @@ use Twig\Environment;
 
 class LpProgressReminderCommand extends Command
 {
+    /**
+     * @var string|null
+     */
     protected static $defaultName = 'app:lp-progress-reminder';
 
     private const NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION = 3;

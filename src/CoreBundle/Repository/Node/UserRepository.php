@@ -188,12 +188,15 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $connection->commit();
         } catch (Exception $e) {
             $connection->rollBack();
+
             throw $e;
         }
     }
 
     /**
      * Reassigns resources and related data from a deleted user to a fallback user in the database.
+     *
+     * @param mixed $connection
      */
     protected function reassignUserResourcesToFallbackSQL(User $userToDelete, User $fallbackUser, $connection): void
     {
@@ -220,12 +223,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $field = $relation['field'];
             $action = $relation['action'];
 
-            if ($action === 'delete') {
+            if ('delete' === $action) {
                 $connection->executeStatement(
                     "DELETE FROM $table WHERE $field = :userId",
                     ['userId' => $userToDelete->getId()]
                 );
-            } elseif ($action === 'update') {
+            } elseif ('update' === $action) {
                 $connection->executeStatement(
                     "UPDATE $table SET $field = :fallbackUserId WHERE $field = :userId",
                     [
@@ -353,8 +356,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
 
-        $currentDate = (new \DateTime())->format('Y-m-d H:i:s');
-        $updatedContent = sprintf(
+        $currentDate = (new Datetime())->format('Y-m-d H:i:s');
+        $updatedContent = \sprintf(
             $this->translator->trans('This message was deleted when the user was removed from the platform on %s'),
             $currentDate
         );

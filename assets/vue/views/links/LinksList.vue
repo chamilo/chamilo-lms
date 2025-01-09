@@ -346,7 +346,12 @@ async function deleteCategory() {
 async function toggleCategoryVisibility(category) {
   const visibility = toggleVisibilityProperty(category.info.visible)
   try {
-    const updatedLinkCategory = await linkService.toggleCategoryVisibility(category.info.id, isVisible(visibility))
+    const updatedLinkCategory = await linkService.toggleCategoryVisibility(
+      category.info.id,
+      isVisible(visibility),
+      cid,
+      sid,
+    )
     category.info.visible = visibilityFromBoolean(updatedLinkCategory.linkCategoryVisible)
     notifications.showSuccessNotification(t("Visibility of category changed"))
   } catch (error) {

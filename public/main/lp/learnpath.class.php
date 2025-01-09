@@ -3347,10 +3347,13 @@ class learnpath
 
         $visibility = (int) $visibility;
 
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
         if (1 === $visibility) {
-            $repo->setVisibilityPublished($resource);
+            $repo->setVisibilityPublished($resource, $course, $session);
         } else {
-            $repo->setVisibilityDraft($resource);
+            $repo->setVisibilityDraft($resource, $course, $session);
             self::toggleCategoryPublish($id, 0);
         }
 

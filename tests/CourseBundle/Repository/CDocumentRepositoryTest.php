@@ -1089,7 +1089,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertSame(ResourceLink::VISIBILITY_PUBLISHED, $link->getVisibility());
 
         $documentId = $document->getIid();
-        $url = '/api/documents/'.$documentId.'/toggle_visibility';
+        $url = '/api/documents/'.$documentId.'/toggle_visibility?cid='.$course->getId();
 
         // Not logged in.
         $client->request('PUT', $url);

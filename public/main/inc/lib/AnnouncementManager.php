@@ -3,8 +3,10 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -215,24 +217,18 @@ class AnnouncementManager
     /**
      * This functions switches the visibility a course resource
      * using the visibility field in 'item_property'.
-     *
-     * @param array  $courseInfo
-     * @param int    $id
-     * @param string $status
-     *
-     * @return bool False on failure, True on success
      */
-    public static function change_visibility_announcement($courseInfo, $id, $status)
+    public static function change_visibility_announcement($id, $status, ?Course $course, ?Session $session): bool
     {
         $repo = Container::getAnnouncementRepository();
         $announcement = $repo->find($id);
         if ($announcement) {
             switch ($status) {
                 case 'invisible':
-                    $repo->setVisibilityDraft($announcement);
+                    $repo->setVisibilityDraft($announcement, $course, $session);
                     break;
                 case 'visible':
-                    $repo->setVisibilityPublished($announcement);
+                    $repo->setVisibilityPublished($announcement, $course, $session);
                     break;
             }
         }

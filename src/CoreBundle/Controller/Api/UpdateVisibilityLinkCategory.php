@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,9 +15,17 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 #[AsController]
 class UpdateVisibilityLinkCategory extends AbstractController
 {
+    public function __construct(
+        private readonly CidReqHelper $cidReqHelper,
+    ) {}
+
     public function __invoke(CLinkCategory $linkCategory, CLinkCategoryRepository $repo): CLinkCategory
     {
-        $repo->toggleVisibilityPublishedDraft($linkCategory);
+        $repo->toggleVisibilityPublishedDraft(
+            $linkCategory,
+            $this->cidReqHelper->getCourseEntity(),
+            $this->cidReqHelper->getSessionEntity()
+        );
         $linkCategory->toggleVisibility();
 
         return $linkCategory;

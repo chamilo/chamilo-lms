@@ -129,7 +129,7 @@ function handleForum($url)
             case 'invisible':
                 if (null !== $resource) {
                     if ('visible' === $action) {
-                        $repo->setVisibilityPublished($resource);
+                        $repo->setVisibilityPublished($resource, $course, $session);
                     } else {
                         $repo->setVisibilityPending($resource);
                     }

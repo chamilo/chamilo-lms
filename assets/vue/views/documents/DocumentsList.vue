@@ -420,6 +420,7 @@ import { useCidReq } from "../../composables/cidReq"
 import { useDatatableList } from "../../composables/datatableList"
 import { useFormatDate } from "../../composables/formatDate"
 import axios from "axios"
+import baseService from "../../services/baseService"
 import DocumentEntry from "../../components/documents/DocumentEntry.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
@@ -691,9 +692,9 @@ function btnChangeVisibilityOnClick(item) {
 
   folderParams.id = item["@id"]
 
-  axios.put(item["@id"] + "/toggle_visibility").then((response) => {
-    item.resourceLinkListFromEntity = response.data.resourceLinkListFromEntity
-  })
+  baseService
+    .put(item["@id"] + `/toggle_visibility?cid=${cid}&sid=${sid}`, {})
+    .then((data) => (item.resourceLinkListFromEntity = data.resourceLinkListFromEntity))
 }
 
 function btnEditOnClick(item) {

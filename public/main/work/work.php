@@ -17,6 +17,8 @@ $courseInfo = api_get_course_info();
 $user_id = api_get_user_id();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
+$course = api_get_course_entity();
+$session = api_get_session_entity();
 
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
@@ -252,7 +254,7 @@ switch ($action) {
             api_not_allowed();
         }
 
-        $repo->setVisibilityPublished($studentPublication);
+        $repo->setVisibilityPublished($studentPublication, $course, $session);
 
         /*api_item_property_update(
             $courseInfo,
@@ -283,7 +285,7 @@ switch ($action) {
             api_not_allowed();
         }
 
-        $repo->setVisibilityDraft($studentPublication);
+        $repo->setVisibilityDraft($studentPublication, $course, $session);
         /*
         api_item_property_update(
             $courseInfo,

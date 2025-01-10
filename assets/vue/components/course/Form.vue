@@ -3,11 +3,11 @@
     <div class="form-header">
       <BaseInputText
         id="course-name"
-        :label="t('Course name')"
-        :help-text="t('Write a short and striking course name, For example: Innovation Management')"
         v-model="courseName"
         :error-text="courseNameError"
+        :help-text="t('Write a short and striking course name, For example: Innovation Management')"
         :is-invalid="isCourseNameInvalid"
+        :label="t('Course name')"
         required
       />
       <BaseAdvancedSettingsButton v-model="showAdvancedSettings"></BaseAdvancedSettingsButton>
@@ -19,33 +19,33 @@
       <BaseMultiSelect
         id="category-multiselect"
         v-model="courseCategory"
-        :options="categoryOptions"
         :label="t('Category')"
+        :options="categoryOptions"
         input-id="multiselect-category"
       />
       <BaseInputText
         id="course-code"
-        :label="t('Course code')"
-        :help-text="t('Only letters (a-z) and numbers (0-9)')"
         v-model="courseCode"
-        :maxlength="40"
         :error-text="courseCodeError"
+        :help-text="t('Only letters (a-z) and numbers (0-9)')"
         :is-invalid="isCodeInvalid"
+        :label="t('Course code')"
+        :maxlength="40"
         validation-message="Only letters (a-z) and numbers (0-9) are allowed."
       />
       <BaseDropdown
-        name="language"
         v-model="courseLanguage"
+        :label="t('Language')"
         :options="languageOptions"
         :placeholder="t('Select Language')"
         input-id="language-dropdown"
-        :label="t('Language')"
+        name="language"
         option-label="name"
       />
       <BaseCheckbox
         id="demo-content"
-        :label="t('Fill with demo content')"
         v-model="fillDemoContent"
+        :label="t('Fill with demo content')"
         name=""
       />
       <!--BaseAutocomplete
@@ -58,11 +58,11 @@
     <!-- Form Footer -->
     <div class="form-footer">
       <BaseButton
-        label="Back"
+        class="mr-4"
         icon="back"
+        label="Back"
         type="secondary"
         @click="goBack"
-        class="mr-4"
       />
       <BaseButton
         :label="t('Create this course')"

@@ -10,19 +10,19 @@
         class="item-button"
       >
         <BaseIcon
-          icon="ticket"
           class="item-button__icon"
+          icon="ticket"
         />
       </BaseAppLink>
 
       <BaseAppLink
+        :class="{ 'item-button--unread': !!btnInboxBadge }"
         :to="{ name: 'MessageList' }"
         class="item-button"
-        :class="{ 'item-button--unread': !!btnInboxBadge }"
       >
         <BaseIcon
-          icon="inbox"
           class="item-button__icon"
+          icon="inbox"
         />
         <span
           v-if="btnInboxBadge"
@@ -57,9 +57,7 @@ import { useRouter } from "vue-router"
 
 import Avatar from "primevue/avatar"
 import Menu from "primevue/menu"
-import PrimeButton from "primevue/button"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { useCidReq } from "../../composables/cidReq"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 
 import { useNotification } from "../../composables/notification"
@@ -130,7 +128,7 @@ const userSubmenuItems = computed(() => {
       label: t("Sign out"),
       url: "/logout",
       icon: "mdi mdi-logout-variant",
-    }
+    },
   )
 
   return items

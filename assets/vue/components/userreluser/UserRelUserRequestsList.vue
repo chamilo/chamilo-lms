@@ -29,24 +29,27 @@
       :key="i"
       class="flex flex-row gap-2 items-center"
     >
-      <BaseUserAvatar :image-url="request.user.illustrationUrl" :alt="t('Picture')" />
+      <BaseUserAvatar
+        :alt="t('Picture')"
+        :image-url="request.user.illustrationUrl"
+      />
 
       {{ request.user.username }}
 
       <BaseButton
+        :tooltip="t('Accept invitation')"
         class="ml-auto"
         icon="user-add"
         only-icon
         type="black"
-        :tooltip="t('Accept invitation')"
         @click="acceptFriendRequest(request)"
       />
       <BaseButton
+        :tooltip="t('Reject invitation')"
         class="ml-2"
         icon="user-delete"
         only-icon
         type="danger"
-        :tooltip="t('Reject invitation')"
         @click="rejectFriendRequest(request)"
       />
     </div>
@@ -113,7 +116,7 @@ const loadRequests = () => {
     userRelUserService.findAll({ params: waitingFilter }),
   ])
     .then(([sentRequestsResponse, waitingRequestsRespose]) =>
-      Promise.all([sentRequestsResponse.json(), waitingRequestsRespose.json()])
+      Promise.all([sentRequestsResponse.json(), waitingRequestsRespose.json()]),
     )
     .then(([sentRequestsJson, waitingRequestsJson]) => {
       friendRequests.value = sentRequestsJson["hydra:member"]

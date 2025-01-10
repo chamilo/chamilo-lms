@@ -8,16 +8,16 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-import PageCardList from "../components/page/PageCardList";
-import SystemAnnouncementCardList from "../components/systemannouncement/SystemAnnouncementCardList";
-import { usePlatformConfig } from "../store/platformConfig";
+import { useRouter } from "vue-router"
+import PageCardList from "../components/page/PageCardList"
+import SystemAnnouncementCardList from "../components/systemannouncement/SystemAnnouncementCardList"
+import { usePlatformConfig } from "../store/platformConfig"
 
-const router = useRouter();
-const platformConfigStore = usePlatformConfig();
+const router = useRouter()
+const platformConfigStore = usePlatformConfig()
 
-const redirectValue = platformConfigStore.getSetting("platform.redirect_index_to_url_for_logged_users");
-if (typeof redirectValue === 'string' && redirectValue.trim() !== '') {
-  router.replace(`/${redirectValue}`);
+const redirectValue = platformConfigStore.getSetting("platform.redirect_index_to_url_for_logged_users")
+if (typeof redirectValue === "string" && redirectValue.trim() !== "") {
+  router.replace(`/${redirectValue}`)
 }
 </script>

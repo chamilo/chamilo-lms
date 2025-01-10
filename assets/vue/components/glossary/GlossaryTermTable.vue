@@ -1,12 +1,12 @@
 <template>
   <DataTable :value="glossaries">
     <Column
-      field="name"
       :header="t('Term')"
+      field="name"
     />
     <Column
-      field="description"
       :header="t('Definition')"
+      field="description"
     />
     <Column :header="t('Actions')">
       <template #body="{ data }">
@@ -14,16 +14,16 @@
           :label="t('Edit')"
           class="mr-2"
           icon="edit"
-          type="black"
           size="small"
+          type="black"
           @click="emit('edit', data)"
         />
         <BaseButton
           :label="t('Delete')"
           class="mr-2"
           icon="delete"
-          type="danger"
           size="small"
+          type="danger"
           @click="emit('delete', data)"
         />
       </template>

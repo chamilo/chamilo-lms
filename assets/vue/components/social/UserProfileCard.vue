@@ -2,8 +2,8 @@
   <BaseCard plain>
     <div class="flex flex-col items-center p-4 user-profile-card">
       <BaseUserAvatar
-        :image-url="user.illustrationUrl"
         :alt="t('Picture')"
+        :image-url="user.illustrationUrl"
         size="xlarge"
       />
       <div

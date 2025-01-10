@@ -4,8 +4,8 @@
       :handle-delete="del"
       :handle-edit="editHandler"
     >
-      <template slot="left">
-        <v-toolbar-title v-if="item">{{ `${$options.servicePrefix} ${item["@id"]}` }} </v-toolbar-title>
+      <template v-slot:left>
+        <v-toolbar-title v-if="item">{{ `${$options.servicePrefix} ${item["@id"]}` }}</v-toolbar-title>
       </template>
     </Toolbar>
 
@@ -16,7 +16,7 @@
       class="table-coursecategory-show"
     >
       <v-simple-table>
-        <template slot="default">
+        <template v-slot:default>
           <thead>
             <tr>
               <th>Field</th>

@@ -83,23 +83,11 @@ export function useSidebarMenu() {
 
     if (showTabsSetting.indexOf("catalogue") > -1) {
       if (showCatalogue == 0 || showCatalogue == 2) {
-        items.push(
-          createMenuItem(
-            "catalogue",
-            "mdi-bookmark-multiple",
-            "Explore more courses",
-            "CatalogueCourses"
-          )
-        )
+        items.push(createMenuItem("catalogue", "mdi-bookmark-multiple", "Explore more courses", "CatalogueCourses"))
       }
       if (showCatalogue > 0) {
         items.push(
-          createMenuItem(
-            "catalogue",
-            "mdi-bookmark-multiple-outline",
-            "Sessions catalogue",
-            "CatalogueSessions"
-          )
+          createMenuItem("catalogue", "mdi-bookmark-multiple-outline", "Sessions catalogue", "CatalogueSessions"),
         )
       }
     }
@@ -168,13 +156,13 @@ export function useSidebarMenu() {
         null,
         platformConfigStore.plugins?.bbb?.show_global_conference_link
           ? [
-            {
-              label: t("Conference Room"),
-              url: platformConfigStore.plugins.bbb.listingURL,
-            },
-          ]
-          : null
-      )
+              {
+                label: t("Conference Room"),
+                url: platformConfigStore.plugins.bbb.listingURL,
+              },
+            ]
+          : null,
+      ),
     )
 
     items.push(
@@ -188,7 +176,7 @@ export function useSidebarMenu() {
           label: t("Diagnostic Form"),
           url: "/main/search/search.php",
         },
-      ])
+      ]),
     )
 
     if (showTabsSetting.indexOf("platform_administration") > -1) {

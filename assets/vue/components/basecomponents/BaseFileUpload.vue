@@ -3,8 +3,8 @@
     <BaseButton
       :label="label"
       :size="size"
-      type="primary"
       icon="attachment"
+      type="primary"
       @click="showFileDialog"
     />
     <p class="text-gray-90">
@@ -12,9 +12,9 @@
     </p>
     <input
       ref="inputFile"
-      type="file"
-      class="hidden"
       :accept="acceptFileType"
+      class="hidden"
+      type="file"
     />
   </div>
 </template>

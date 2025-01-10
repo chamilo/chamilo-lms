@@ -2,9 +2,7 @@
   <!-- Public homepage (no login required) -->
   <div class="container mx-auto flex flex-columm md:flex-row gap-8">
     <Login class="md:w-4/12 lg:order-1" />
-    <div
-      class="flex-1 md:w-8/12 lg:order-0"
-    >
+    <div class="flex-1 md:w-8/12 lg:order-0">
       <SystemAnnouncementCardList />
 
       <PageCardList

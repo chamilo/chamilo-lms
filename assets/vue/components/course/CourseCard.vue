@@ -3,8 +3,8 @@
     <template #header>
       <img
         v-if="disabled"
-        :src="course.illustrationUrl"
         :alt="course.title"
+        :src="course.illustrationUrl"
       />
       <BaseAppLink
         v-else
@@ -12,8 +12,8 @@
         class="course-card__home-link"
       >
         <img
-          :src="course.illustrationUrl"
           :alt="course.title"
+          :src="course.illustrationUrl"
         />
       </BaseAppLink>
     </template>

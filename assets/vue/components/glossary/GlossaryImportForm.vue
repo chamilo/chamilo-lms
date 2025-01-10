@@ -13,8 +13,8 @@
       v-model="fileType"
       :options="formats"
       class="mb-6"
-      name="file-type"
       initial-value="csv"
+      name="file-type"
     />
 
     <BaseCheckbox
@@ -34,14 +34,14 @@
     <LayoutFormButtons class="mt-8">
       <BaseButton
         :label="t('Back')"
-        type="black"
         icon="back"
+        type="black"
         @click="emit('backPressed')"
       />
       <BaseButton
         :label="t('Import')"
-        type="secondary"
         icon="import"
+        type="secondary"
         @click="submitForm"
       />
     </LayoutFormButtons>
@@ -60,7 +60,7 @@ import BaseRadioButtons from "../basecomponents/BaseRadioButtons.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import glossaryService from "../../services/glossaryService"
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
-import {useCidReq} from "../../composables/cidReq";
+import { useCidReq } from "../../composables/cidReq"
 
 const route = useRoute()
 const router = useRouter()
@@ -88,7 +88,7 @@ const resourceLinkList = ref(
       cid,
       visibility: RESOURCE_LINK_PUBLISHED, // visible by default
     },
-  ])
+  ]),
 )
 
 const submitForm = async () => {

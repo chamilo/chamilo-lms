@@ -14,7 +14,6 @@ import UserProfileCard from "../social/UserProfileCard.vue"
 import { onMounted, provide } from "vue"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 
-
 const { user, isCurrentUser, groupInfo, isGroup, loadUser } = useSocialInfo()
 
 provide("social-user", user)

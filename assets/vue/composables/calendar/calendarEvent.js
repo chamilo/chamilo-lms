@@ -1,4 +1,4 @@
-import { type, subscriptionVisibility } from "../../constants/entity/ccalendarevent"
+import { subscriptionVisibility, type } from "../../constants/entity/ccalendarevent"
 
 export function useCalendarEvent() {
   return {

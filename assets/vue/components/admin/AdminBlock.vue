@@ -1,7 +1,7 @@
 <template>
   <div
-    class="admin-index__block-container"
     :class="id"
+    class="admin-index__block-container"
   >
     <div class="admin-index__block">
       <div class="flex gap-2 justify-between">

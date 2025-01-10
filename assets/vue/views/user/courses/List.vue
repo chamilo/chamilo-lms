@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, nextTick } from "vue"
+import { nextTick, onMounted, ref, watch } from "vue"
 import { useQuery } from "@vue/apollo-composable"
 import { useI18n } from "vue-i18n"
 import { GET_COURSE_REL_USER } from "../../../graphql/queries/CourseRelUser.js"
@@ -68,7 +68,7 @@ watch(result, (newResult) => {
     const newCourses = newResult.courseRelUsers.edges.map(({ node }) => node.course)
 
     const filteredCourses = newCourses.filter(
-      (newCourse) => !courses.value.some((existingCourse) => existingCourse._id === newCourse._id)
+      (newCourse) => !courses.value.some((existingCourse) => existingCourse._id === newCourse._id),
     )
 
     courses.value.push(...filteredCourses)
@@ -94,12 +94,12 @@ const loadMoreCourses = () => {
       first: 10,
       after: endCursor.value,
     },
-    updateQuery: (previousResult, {fetchMoreResult}) => {
+    updateQuery: (previousResult, { fetchMoreResult }) => {
       if (!fetchMoreResult) return previousResult
 
       const newCourses = fetchMoreResult.courseRelUsers.edges.map(({ node }) => node.course)
       const filteredCourses = newCourses.filter(
-        (newCourse) => !courses.value.some((existingCourse) => existingCourse._id === newCourse._id)
+        (newCourse) => !courses.value.some((existingCourse) => existingCourse._id === newCourse._id),
       )
       courses.value.push(...filteredCourses)
       endCursor.value = fetchMoreResult.courseRelUsers.pageInfo.endCursor
@@ -118,13 +118,16 @@ const loadMoreCourses = () => {
   })
 }
 
-let observer = new IntersectionObserver((entries) => {
-  if (entries[0].isIntersecting) {
-    loadMoreCourses();
-  }
-}, {
-  rootMargin: '300px',
-})
+let observer = new IntersectionObserver(
+  (entries) => {
+    if (entries[0].isIntersecting) {
+      loadMoreCourses()
+    }
+  },
+  {
+    rootMargin: "300px",
+  },
+)
 
 onMounted(() => {
   courses.value = []
@@ -133,13 +136,16 @@ onMounted(() => {
   isLoading.value = false
 
   if (observer) observer.disconnect()
-  observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      loadMoreCourses()
-    }
-  }, {
-    rootMargin: '300px',
-  })
+  observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        loadMoreCourses()
+      }
+    },
+    {
+      rootMargin: "300px",
+    },
+  )
 
   loadMoreCourses()
 })

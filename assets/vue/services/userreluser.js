@@ -1,3 +1,3 @@
-import makeService from './api';
+import makeService from "./api"
 
-export default makeService('user_rel_users');
+export default makeService("user_rel_users")

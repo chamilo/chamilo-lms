@@ -9,22 +9,22 @@
       @click="redirectToCreateCourse"
     />
   </div>
-  <hr>
+  <hr />
   <router-view />
 </template>
 
 <script setup>
-import Button from 'primevue/button';
-import { useI18n } from 'vue-i18n';
+import Button from "primevue/button"
+import { useI18n } from "vue-i18n"
 import { storeToRefs } from "pinia"
 import { useSecurityStore } from "../store/securityStore"
 import { useRouter } from "vue-router"
 
-const { t } = useI18n();
+const { t } = useI18n()
 const { isTeacher } = storeToRefs(useSecurityStore())
 const router = useRouter()
 
 const redirectToCreateCourse = () => {
-  router.push({ name: 'CourseCreate' })
+  router.push({ name: "CourseCreate" })
 }
 </script>

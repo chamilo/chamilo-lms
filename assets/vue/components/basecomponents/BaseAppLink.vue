@@ -21,16 +21,16 @@ const isAnchor = computed(() => !!props.url)
 <template>
   <a
     v-if="isAnchor"
-    v-bind="$attrs"
     :href="url !== '#' ? url : undefined"
+    v-bind="$attrs"
   >
     <slot />
   </a>
   <router-link
     v-else
     v-slot="{ href, navigate }"
-    v-bind="$props"
     custom
+    v-bind="$props"
   >
     <a
       :href="href"

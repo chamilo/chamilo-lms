@@ -1,13 +1,16 @@
 <template>
   <div class="create-course-page m-10">
-
     <div class="message-container mb-4">
       <Message severity="info">
-        {{ t('Once you click on "Create a course", a course is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as teacher provides you with editing privileges for this course.') }}
+        {{
+          t(
+            'Once you click on "Create a course", a course is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as teacher provides you with editing privileges for this course.',
+          )
+        }}
       </Message>
     </div>
 
-    <h1 class="page-title text-xl text-gray-90">{{ t('Add a new course') }}</h1>
+    <h1 class="page-title text-xl text-gray-90">{{ t("Add a new course") }}</h1>
     <hr />
 
     <CourseForm
@@ -21,11 +24,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import CourseForm from '../../components/course/Form.vue'
-import Loading from '../../components/Loading.vue'
+import { ref } from "vue"
+import CourseForm from "../../components/course/Form.vue"
+import Loading from "../../components/Loading.vue"
 import { useRouter } from "vue-router"
-import Message from 'primevue/message'
+import Message from "primevue/message"
 import courseService from "../../services/courseService"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
@@ -47,17 +50,19 @@ const submitCourse = async (formData) => {
     const sessionId = 0
 
     if (!courseId) {
-      throw new Error(t('Course ID is missing. Unable to navigate to the course home page.'))
+      throw new Error(t("Course ID is missing. Unable to navigate to the course home page."))
     }
 
-    showSuccessNotification(t('Course created successfully.'))
+    showSuccessNotification(t("Course created successfully."))
     await router.push(`/course/${courseId}/home?sid=${sessionId}`)
   } catch (error) {
     console.error(error)
 
-    const errorMessage = error.message || (error.response && error.response.data && error.response.data.message
-      ? error.response.data.message
-      : t('An unexpected error occurred.'))
+    const errorMessage =
+      error.message ||
+      (error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : t("An unexpected error occurred."))
     showErrorNotification(errorMessage)
 
     if (error.response && error.response.data && error.response.data.violations) {

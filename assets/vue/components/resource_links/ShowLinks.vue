@@ -4,13 +4,16 @@
     :key="index"
     class="field space-y-2"
   >
-    <div v-if="link.course" :class="{ 'text-right text-body-2': editStatus }">
+    <div
+      v-if="link.course"
+      :class="{ 'text-right text-body-2': editStatus }"
+    >
       <span class="mdi mdi-book"></span>
       <BaseAppLink
         v-if="clickableCourse"
         :to="{
           name: 'CourseHome',
-          params: { id: courseId(link.course) }
+          params: { id: courseId(link.course) },
         }"
       >
         {{ $t("Course") }}: {{ link.course.resourceNode.title }}
@@ -34,18 +37,14 @@
       {{ $t("Group") }}: {{ link.group.resourceNode.title }}
     </div>
 
-    <div v-if="link.userGroup">
-      {{ $t("Class") }}: {{ link.userGroup.resourceNode.title }}
-    </div>
+    <div v-if="link.userGroup">{{ $t("Class") }}: {{ link.userGroup.resourceNode.title }}</div>
 
     <div v-if="link.user">
       <span class="mdi mdi-account"></span>
       {{ link.user.username }}
     </div>
 
-    <div v-if="showStatus">
-      {{ $t("Status") }}: {{ link.visibilityName }}
-    </div>
+    <div v-if="showStatus">{{ $t("Status") }}: {{ link.visibilityName }}</div>
 
     <div v-if="editStatus">
       <div class="p-float-label">
@@ -95,7 +94,7 @@ defineProps({
 })
 
 const courseId = (course) => {
-  return course['@id'] ? course['@id'].split('/').pop() : null;
+  return course["@id"] ? course["@id"].split("/").pop() : null
 }
 
 const visibilityOptions = [

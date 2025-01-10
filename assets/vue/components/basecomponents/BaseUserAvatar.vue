@@ -1,9 +1,9 @@
 <template>
   <Avatar
+    :aria-label="alt"
     :image="`${imageUrl}?w=${imageSize}&h=${imageSize}&fit=crop`"
     :shape="shape"
     :size="'normal' !== size ? size : undefined"
-    :aria-label="alt"
   />
 </template>
 

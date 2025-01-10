@@ -14,9 +14,9 @@ defineModel({
     <template #item="{ item, root, active, props }">
       <BaseAppLink
         v-if="item.route || item.url"
+        :class="{ 'p-panelmenu-header-action': root, 'p-menuitem-link': !root }"
         :to="item.route"
         :url="item.url"
-        :class="{ 'p-panelmenu-header-action': root, 'p-menuitem-link': !root }"
       >
         <span v-bind="props.icon" />
         <span

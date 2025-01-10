@@ -48,7 +48,7 @@ export default {
   setup() {
     const parentResourceNodeId = ref(null)
     const route = useRoute()
-    const router = useRouter();
+    const router = useRouter()
     const securityStore = useSecurityStore()
 
     const { user, isAuthenticated, isAdmin } = storeToRefs(securityStore)
@@ -93,8 +93,8 @@ export default {
     })
 
     uppy.value.on("complete", (result) => {
-      router.push({ name: "PersonalFileList" });
-    });
+      router.push({ name: "PersonalFileList" })
+    })
 
     return {
       uppy,

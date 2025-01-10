@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag"
 
 export const GET_COURSE_REL_USER = gql`
   query getCourses($user: String!, $first: Int!, $after: String) {
@@ -7,18 +7,18 @@ export const GET_COURSE_REL_USER = gql`
         cursor
         node {
           course {
-            _id,
-            title,
-            illustrationUrl,
-            duration,
+            _id
+            title
+            illustrationUrl
+            duration
             users(status: 1, first: 4) {
               edges {
                 node {
                   id
                   status
                   user {
-                    illustrationUrl,
-                    username,
+                    illustrationUrl
+                    username
                     fullName
                   }
                 }
@@ -33,5 +33,4 @@ export const GET_COURSE_REL_USER = gql`
       }
     }
   }
-`;
-
+`

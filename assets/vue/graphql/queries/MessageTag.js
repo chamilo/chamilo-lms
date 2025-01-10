@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from "graphql-tag"
 
 export const GET_USER_MESSAGE_TAGS = gql`
   query getUserMessageTags($user: String!) {
@@ -12,4 +12,4 @@ export const GET_USER_MESSAGE_TAGS = gql`
       }
     }
   }
-`;
+`

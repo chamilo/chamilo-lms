@@ -12,10 +12,10 @@
             <div class="flex items-center gap-2">
               <span>{{ term.title }}</span>
               <BaseIcon
-                v-if="isAllowedToEdit && (term.sessionId && term.sessionId === sid)"
+                v-if="isAllowedToEdit && term.sessionId && term.sessionId === sid"
+                class="mr-8"
                 icon="session-star"
                 size="small"
-                class="mr-8"
                 title="Session Item"
               />
             </div>
@@ -24,16 +24,16 @@
                 :label="t('Edit')"
                 class="mr-2"
                 icon="edit"
-                type="black"
                 size="small"
+                type="black"
                 @click="emit('edit', term)"
               />
               <BaseButton
                 :label="t('Delete')"
                 class="mr-2"
                 icon="delete"
-                type="danger"
                 size="small"
+                type="danger"
                 @click="emit('delete', term)"
               />
             </div>
@@ -90,14 +90,11 @@ defineProps({
 const emit = defineEmits(["edit", "delete"])
 
 const canEdit = (item) => {
-  const sessionId = item.sessionId;
-  const isSessionDocument = sessionId && sessionId === sid;
-  const isBaseCourse = !sessionId;
+  const sessionId = item.sessionId
+  const isSessionDocument = sessionId && sessionId === sid
+  const isBaseCourse = !sessionId
 
-  return (
-    (isSessionDocument && isAllowedToEdit.value) ||
-    (isBaseCourse && !sid && isCurrentTeacher.value)
-  );
+  return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
 }
 
 onMounted(async () => {

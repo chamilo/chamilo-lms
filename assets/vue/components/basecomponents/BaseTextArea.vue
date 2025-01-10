@@ -3,9 +3,9 @@
     <div class="p-float-label">
       <Textarea
         :id="id"
-        :model-value="modelValue"
-        :class="{ 'p-invalid': isInvalid }"
         :aria-label="label"
+        :class="{ 'p-invalid': isInvalid }"
+        :model-value="modelValue"
         type="text"
         @update:model-value="$emit('update:modelValue', $event)"
       />

@@ -38,8 +38,8 @@
 
     <input
       v-model="installerData.stepData.installationProfile"
-      type="hidden"
       name="installationProfile"
+      type="hidden"
     />
 
     <hr />
@@ -64,17 +64,17 @@
         <hr />
       </Message>
       <Button
-        :label="t('Next')"
         :class="[installerData.isUpdateAvailable ? 'p-button-secondary' : 'p-button-success']"
-        icon="mdi mdi-page-next"
+        :label="t('Next')"
         :name="'step1'"
+        icon="mdi mdi-page-next"
         type="submit"
       />
       <input
         id="is_executable"
+        :value="!installerData.isUpdateAvailable ? 'step1' : '-'"
         name="is_executable"
         type="hidden"
-        :value="!installerData.isUpdateAvailable ? 'step1' : '-'"
       />
     </div>
   </div>

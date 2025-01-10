@@ -52,8 +52,8 @@
         v-model="foundTag"
         :label="t('Tags')"
         :search="onSearchTags"
-        option-label="tag"
         class="message-show__tag-searcher"
+        option-label="tag"
         @item-select="onItemSelect"
       />
     </div>
@@ -73,16 +73,16 @@
     <div class="field space-x-4">
       <span>{{ t("To") }}</span>
       <BaseAvatarList
-        :users="mapReceiverListToUsers(item.receiversTo)"
         :short-several="false"
+        :users="mapReceiverListToUsers(item.receiversTo)"
       />
     </div>
 
     <div class="field space-x-4">
       <span>{{ t("Cc") }}</span>
       <BaseAvatarList
-        :users="mapReceiverListToUsers(item.receiversCc)"
         :short-several="false"
+        :users="mapReceiverListToUsers(item.receiversCc)"
       />
     </div>
 
@@ -177,7 +177,7 @@ const notification = useNotification()
 
 const receiverType = route.query.receiverType ? parseInt(route.query.receiverType) : MESSAGE_TYPE_INBOX
 store.dispatch("message/load", id).then((responseItem) => {
-  item.value = responseItem;
+  item.value = responseItem
 
   myReceiver.value = findMyReceiver(responseItem, receiverType)
 
@@ -189,13 +189,9 @@ store.dispatch("message/load", id).then((responseItem) => {
 })
 
 function findMyReceiver(message, receiverType) {
-  const receivers = [
-    ...message.receiversTo,
-    ...message.receiversCc,
-    ...message.receiversSender
-  ]
+  const receivers = [...message.receiversTo, ...message.receiversCc, ...message.receiversSender]
 
-  return receivers.find(({receiver, receiverType: type}) => {
+  return receivers.find(({ receiver, receiverType: type }) => {
     const isSelf = receiver["@id"] === securityStore.user["@id"]
     return isSelf && type === receiverType
   })

@@ -1,11 +1,11 @@
 <template>
   <Button
-    class="cursor-pointer"
     :aria-label="onlyIcon ? label : undefined"
     :class="buttonClass"
     :disabled="disabled"
     :icon="chamiloIconToClass[icon]"
     :label="onlyIcon ? undefined : label"
+    :loading="isLoading"
     :outlined="primeOutlinedProperty"
     :plain="primePlainProperty"
     :severity="primeSeverityProperty"
@@ -13,7 +13,7 @@
     :text="onlyIcon"
     :title="tooltip || (onlyIcon ? label : undefined)"
     :type="isSubmit ? 'submit' : 'button'"
-    :loading="isLoading"
+    class="cursor-pointer"
     @click="$emit('click', $event)"
   />
 </template>
@@ -68,7 +68,7 @@ const props = defineProps({
   },
   popupIdentifier: {
     type: String,
-    default: "",  // This ensures that popupIdentifier is still present
+    default: "", // This ensures that popupIdentifier is still present
   },
 })
 

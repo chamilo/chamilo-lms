@@ -256,8 +256,8 @@
           type="hidden"
         />
         <input
-          type="hidden"
           name="step6"
+          type="hidden"
           value="1"
         />
       </div>
@@ -274,26 +274,55 @@
     </div>
   </div>
 
-  <div v-show="loading" class="install-step">
-    <h2 v-if="'update' !== installerData.installType" v-t="'Step 7 - Installation process execution'" class="RequirementHeading mb-8" />
-    <h2 v-else v-t="'Step 7 - Update process execution'" class="RequirementHeading mb-8" />
+  <div
+    v-show="loading"
+    class="install-step"
+  >
+    <h2
+      v-if="'update' !== installerData.installType"
+      v-t="'Step 7 - Installation process execution'"
+      class="RequirementHeading mb-8"
+    />
+    <h2
+      v-else
+      v-t="'Step 7 - Update process execution'"
+      class="RequirementHeading mb-8"
+    />
 
-    <Message id="pleasewait" :closable="false" severity="success">
-      <p v-t="'Please wait. This could take a while...'" class="mb-3" />
+    <Message
+      id="pleasewait"
+      :closable="false"
+      severity="success"
+    >
+      <p
+        v-t="'Please wait. This could take a while...'"
+        class="mb-3"
+      />
     </Message>
 
     <div v-if="'update' === installerData.installType">
-      <ProgressBar :value="progressPercentage" style="height: 22px">{{ progressPercentage }}%</ProgressBar>
+      <ProgressBar
+        :value="progressPercentage"
+        style="height: 22px"
+        >{{ progressPercentage }}%</ProgressBar
+      >
       <p class="current-migration">
-        <strong>{{ t('Verifying migration:') }}</strong> {{ currentMigration }}
+        <strong>{{ t("Verifying migration:") }}</strong> {{ currentMigration }}
       </p>
     </div>
-
   </div>
 
-  <Dialog v-model:visible="successDialogVisible" :closable="false" :modal="true" :show-header="false">
+  <Dialog
+    v-model:visible="successDialogVisible"
+    :closable="false"
+    :modal="true"
+    :show-header="false"
+  >
     <div class="p-d-flex p-ai-center p-jc-center">
-      <h3 v-t="'Migration completed successfully!'" class="mb-4" />
+      <h3
+        v-t="'Migration completed successfully!'"
+        class="mb-4"
+      />
     </div>
     <div class="formgroup-inline">
       <div class="field">
@@ -307,15 +336,28 @@
     </div>
   </Dialog>
 
-  <Dialog v-model:visible="errorDialogVisible" :closable="false" :modal="true" :show-header="false">
+  <Dialog
+    v-model:visible="errorDialogVisible"
+    :closable="false"
+    :modal="true"
+    :show-header="false"
+  >
     <div class="p-d-flex p-ai-center p-jc-center">
-      <h3 v-t="'Migration failed!'" class="mb-4 text-error" />
+      <h3
+        v-t="'Migration failed!'"
+        class="mb-4 text-error"
+      />
     </div>
     <div class="p-d-flex p-ai-center p-jc-center">
       <p class="text-error">{{ errorMessage }}</p>
     </div>
-    <div v-if="currentMigration" class="p-d-flex p-ai-center p-jc-center mt-4">
-      <p class="text-body-2">{{ t('The last migration executed successfully was:') }} <br /><strong>{{ currentMigration }}</strong></p>
+    <div
+      v-if="currentMigration"
+      class="p-d-flex p-ai-center p-jc-center mt-4"
+    >
+      <p class="text-body-2">
+        {{ t("The last migration executed successfully was:") }} <br /><strong>{{ currentMigration }}</strong>
+      </p>
     </div>
     <div class="formgroup-inline">
       <div class="field">
@@ -351,15 +393,15 @@ const progressPercentage = ref(0)
 const currentMigration = ref("")
 const successDialogVisible = ref(false)
 const errorDialogVisible = ref(false)
-const errorMessage = ref('')
+const errorMessage = ref("")
 
 function btnStep6OnClick() {
   loading.value = true
   isButtonDisabled.value = true
 
-  const updatePath = installerData.value.updatePath || '';
+  const updatePath = installerData.value.updatePath || ""
 
-  if (installerData.value.installType === 'update') {
+  if (installerData.value.installType === "update") {
     startMigration(updatePath)
     setTimeout(pollMigrationStatus, 5000)
   } else {
@@ -376,10 +418,10 @@ function startMigration(updatePath) {
       isButtonDisabled.value = false
       errorDialogVisible.value = true
       errorMessage.value = `
-        ${t('Please check the following error:')} ${xhr.status} - ${xhr.statusText}.
+        ${t("Please check the following error:")} ${xhr.status} - ${xhr.statusText}.
       `
     }
-  };
+  }
 
   const url = `/main/install/migrate.php?updatePath=${encodeURIComponent(updatePath)}`
   xhr.open("POST", url, true)
@@ -388,7 +430,7 @@ function startMigration(updatePath) {
 
 function pollMigrationStatus() {
   setTimeout(() => {
-    var xhr = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
         const response = JSON.parse(xhr.responseText)
@@ -406,9 +448,9 @@ function pollMigrationStatus() {
         loading.value = false
         isButtonDisabled.value = false
         errorDialogVisible.value = true
-        errorMessage.value = `${t('Please check the following error:')} ${xhr.status} - ${xhr.statusText}`
+        errorMessage.value = `${t("Please check the following error:")} ${xhr.status} - ${xhr.statusText}`
       }
-    };
+    }
 
     xhr.open("GET", "/main/install/get_migration_status.php", true)
     xhr.send()
@@ -420,6 +462,6 @@ function btnFinishOnClick() {
 }
 
 function btnSupportOnClick() {
-  alert(t('Please contact support with the error details.'))
+  alert(t("Please contact support with the error details."))
 }
 </script>

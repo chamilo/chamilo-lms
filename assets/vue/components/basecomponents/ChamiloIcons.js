@@ -127,5 +127,5 @@ export const chamiloIconToClass = {
   "next": "mdi mdi-arrow-right-bold-box",
   "crosshairs": "mdi mdi-crosshairs",
   "square": "mdi mdi-square",
-  "wheel": "mdi mdi-tire",
-};
+  "wheel": "mdi mdi-tire"
+}

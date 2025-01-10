@@ -43,36 +43,36 @@
     <div class="message-list__actions">
       <BaseButton
         :label="t('Inbox')"
+        class="w-full md:w-auto"
         icon="inbox"
         type="black"
         @click="showInbox"
-        class="w-full md:w-auto"
       />
 
       <BaseButton
         :label="t('Unread')"
+        class="w-full md:w-auto"
         icon="email-unread"
         type="black"
         @click="showUnread"
-        class="w-full md:w-auto"
       />
 
       <BaseButton
         :label="t('Sent')"
+        class="w-full md:w-auto"
         icon="sent"
         type="black"
         @click="showSent"
-        class="w-full md:w-auto"
       />
 
       <BaseButton
         v-for="tag in tags"
         :key="tag.id"
         :label="tag.tag"
+        class="w-full md:w-auto"
         icon="tag-outline"
         type="black"
         @click="showInboxByTag(tag)"
-        class="w-full md:w-auto"
       />
     </div>
 
@@ -84,8 +84,10 @@
         :row-class="rowClass"
         :rows="initialRowsPerPage"
         :rows-per-page-options="[10, 20, 50]"
+        :sort-order="-1"
         :total-records="totalItems"
         :value="items"
+        class="w-full table-auto"
         current-page-report-template="{first} to {last} of {totalRecords}"
         data-key="@id"
         lazy
@@ -93,11 +95,9 @@
         paginator-template="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
         responsive-layout="scroll"
         sort-field="sendDate"
-        :sort-order="-1"
         striped-rows
         @page="onPage"
         @sort="sortingChanged"
-        class="w-full table-auto"
       >
         <template #header>
           <form
@@ -112,8 +112,8 @@
               />
               <BaseButton
                 icon="search"
-                type="primary"
                 is-submit
+                type="primary"
               />
               <BaseButton
                 icon="close"
@@ -148,8 +148,14 @@
         >
           <template #body="slotProps">
             <BaseAppLink
+              :to="{
+                name: 'MessageShow',
+                query: {
+                  id: slotProps.data['@id'],
+                  receiverType: showingInbox ? MESSAGE_TYPE_INBOX : MESSAGE_TYPE_SENDER,
+                },
+              }"
               class="text-primary"
-              :to="{ name: 'MessageShow', query: { id: slotProps.data['@id'], receiverType: showingInbox ? MESSAGE_TYPE_INBOX : MESSAGE_TYPE_SENDER } }"
             >
               {{ slotProps.data.title }}
             </BaseAppLink>
@@ -165,8 +171,8 @@
         <Column
           :header="t('Send date')"
           :sortable="true"
-          field="sendDate"
           class="truncate w-24 md:w-auto"
+          field="sendDate"
         >
           <template #body="slotProps">
             {{ abbreviatedDatetime(slotProps.data.sendDate) }}
@@ -207,25 +213,34 @@
               :users="mapReceiverMixToUsers(item)"
             />
             <div class="flex-1">
-              <div v-if="showingInbox && item.sender" class="font-bold text-lg">
+              <div
+                v-if="showingInbox && item.sender"
+                class="font-bold text-lg"
+              >
                 {{ item.sender.name }}
               </div>
-              <div v-if="showingInbox && item.sender" class="text-sm text-gray-600">
+              <div
+                v-if="showingInbox && item.sender"
+                class="text-sm text-gray-600"
+              >
                 {{ item.sender.email }}
               </div>
             </div>
           </div>
           <div class="mt-4">
-            <div class="text-sm font-bold">{{ t('Title') }}:</div>
+            <div class="text-sm font-bold">{{ t("Title") }}:</div>
             <BaseAppLink
-              class="text-base text-blue-600"
               :to="{ name: 'MessageShow', query: { id: item['@id'] } }"
+              class="text-base text-blue-600"
             >
               {{ item.title }}
             </BaseAppLink>
           </div>
-          <div v-if="findMyReceiver(item)?.tags.length" class="mt-2">
-            <div class="text-sm font-bold">{{ t('Tags') }}:</div>
+          <div
+            v-if="findMyReceiver(item)?.tags.length"
+            class="mt-2"
+          >
+            <div class="text-sm font-bold">{{ t("Tags") }}:</div>
             <div>
               <BaseTag
                 v-for="tag in findMyReceiver(item)?.tags"
@@ -236,7 +251,7 @@
             </div>
           </div>
           <div class="mt-2">
-            <div class="text-sm font-bold">{{ t('Send date') }}:</div>
+            <div class="text-sm font-bold">{{ t("Send date") }}:</div>
             <div class="text-base text-gray-500">{{ abbreviatedDatetime(item.sendDate) }}</div>
           </div>
           <div class="mt-4 flex space-x-2">
@@ -252,16 +267,18 @@
       <div class="flex justify-between items-center mt-4">
         <BaseButton
           :disabled="isPrevDisabled"
-          @click="prevPage"
           icon="back"
           type="black"
+          @click="prevPage"
         />
-        <span>{{ t('Page') }} {{ currentPage }} {{ t('of') }} {{ totalPages }} ({{ totalItems }} {{ t('messages') }})</span>
+        <span
+          >{{ t("Page") }} {{ currentPage }} {{ t("of") }} {{ totalPages }} ({{ totalItems }} {{ t("messages") }})</span
+        >
         <BaseButton
           :disabled="isNextDisabled"
-          @click="nextPage"
           icon="next"
           type="black"
+          @click="nextPage"
         />
       </div>
     </div>
@@ -282,7 +299,7 @@ import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import { useConfirm } from "primevue/useconfirm"
 import { useQuery } from "@vue/apollo-composable"
-import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX, MESSAGE_TYPE_SENDER } from "../../constants/entity/message"
+import { MESSAGE_TYPE_INBOX, MESSAGE_TYPE_SENDER } from "../../constants/entity/message"
 import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag"
 import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"

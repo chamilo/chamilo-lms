@@ -3,8 +3,8 @@
     <BaseInputTextWithVuelidate
       id="category_category_title"
       v-model="formData.title"
-      :vuelidate-property="v$.title"
       :label="t('Category name')"
+      :vuelidate-property="v$.title"
     />
     <BaseTextArea
       id="description"
@@ -15,14 +15,14 @@
     <div class="flex gap-4">
       <BaseButton
         :label="t('Back')"
-        type="black"
         icon="back"
+        type="black"
         @click="emit('backPressed')"
       />
       <BaseButton
         :label="t('Save category')"
-        type="success"
         icon="send"
+        type="success"
         @click="submitCategoryForm"
       />
     </div>
@@ -30,32 +30,31 @@
 </template>
 
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
-import { useI18n } from "vue-i18n";
-import {ref, onMounted, reactive} from "vue";
-import linkService from "../../services/linkService";
-import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue";
-import BaseTextArea from "../basecomponents/BaseTextArea.vue";
-import BaseButton from "../basecomponents/BaseButton.vue";
-import useVuelidate from "@vuelidate/core";
-import {required} from "@vuelidate/validators";
-import {useNotification} from "../../composables/notification";
+import { useRoute, useRouter } from "vue-router"
+import { useI18n } from "vue-i18n"
+import { onMounted, reactive, ref } from "vue"
+import linkService from "../../services/linkService"
+import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
+import BaseTextArea from "../basecomponents/BaseTextArea.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import useVuelidate from "@vuelidate/core"
+import { required } from "@vuelidate/validators"
+import { useNotification } from "../../composables/notification"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 
-const notification = useNotification();
-const route = useRoute();
-const router = useRouter();
-const { t } = useI18n();
-
+const notification = useNotification()
+const route = useRoute()
+const router = useRouter()
+const { t } = useI18n()
 
 const props = defineProps({
   categoryId: {
     type: [String, Number],
-    default: null
-  }
+    default: null,
+  },
 })
 
-const emit = defineEmits(['backPressed'])
+const emit = defineEmits(["backPressed"])
 
 const parentResourceNodeId = ref(Number(route.params.node))
 const resourceLinkList = ref(
@@ -65,21 +64,21 @@ const resourceLinkList = ref(
       cid: route.query.cid,
       visibility: RESOURCE_LINK_PUBLISHED, // visible by default
     },
-  ])
+  ]),
 )
 
 const formData = reactive({
-  title: '',
-  description: '',
+  title: "",
+  description: "",
 })
 const rules = {
-  title: {required},
-  description: {}
+  title: { required },
+  description: {},
 }
 const v$ = useVuelidate(rules, formData)
 
 onMounted(() => {
-  fetchCategory();
+  fetchCategory()
 })
 
 const fetchCategory = async () => {
@@ -89,7 +88,7 @@ const fetchCategory = async () => {
       formData.title = category.title
       formData.description = category.description
     } catch (error) {
-      console.error('Error fetching category:', error)
+      console.error("Error fetching category:", error)
     }
   }
 }
@@ -115,14 +114,14 @@ const submitCategoryForm = async () => {
       await linkService.createCategory(postData)
     }
 
-    notification.showSuccessNotification(t('Category saved'))
+    notification.showSuccessNotification(t("Category saved"))
 
     await router.push({
       name: "LinksList",
       query: route.query,
     })
   } catch (error) {
-    console.error('Error updating link:', error)
+    console.error("Error updating link:", error)
   }
 }
 </script>

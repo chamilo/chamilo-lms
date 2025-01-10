@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, unref } from "vue"
+import { reactive, unref } from "vue"
 import { useI18n } from "vue-i18n"
 
 import BaseTextArea from "../basecomponents/BaseTextArea.vue"
@@ -51,8 +51,8 @@ async function saveProfile() {
 
 <template>
   <BaseDialog
-    :title="t('Skill profile')"
     v-model:is-visible="isVisible"
+    :title="t('Skill profile')"
   >
     <BaseInputText
       id="name_profile"

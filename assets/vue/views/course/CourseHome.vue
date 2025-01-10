@@ -81,20 +81,32 @@
           <small v-if="session"> ({{ session.title }}) </small>
         </h2>
 
-        <p v-if="isAllowedToEdit && documentAutoLaunch === 1" class="text-sm text-gray-600">
-          {{ t('Document auto-launch is enabled for students') }}
+        <p
+          v-if="isAllowedToEdit && documentAutoLaunch === 1"
+          class="text-sm text-gray-600"
+        >
+          {{ t("Document auto-launch is enabled for students") }}
         </p>
 
-        <p v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)" class="text-sm text-gray-600">
-          {{ t('Exercise auto-launch is enabled for students') }}
+        <p
+          v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)"
+          class="text-sm text-gray-600"
+        >
+          {{ t("Exercise auto-launch is enabled for students") }}
         </p>
 
-        <p v-if="isAllowedToEdit && (lpAutoLaunch === 1 || lpAutoLaunch === 2)" class="text-sm text-gray-600">
-          {{ t('LP auto-launch is enabled for students') }}
+        <p
+          v-if="isAllowedToEdit && (lpAutoLaunch === 1 || lpAutoLaunch === 2)"
+          class="text-sm text-gray-600"
+        >
+          {{ t("LP auto-launch is enabled for students") }}
         </p>
 
-        <p v-if="isAllowedToEdit && (forumAutoLaunch === 1 || forumAutoLaunch === 2)" class="text-sm text-gray-600">
-          {{ t('Forum auto-launch is enabled for students') }}
+        <p
+          v-if="isAllowedToEdit && (forumAutoLaunch === 1 || forumAutoLaunch === 2)"
+          class="text-sm text-gray-600"
+        >
+          {{ t("Forum auto-launch is enabled for students") }}
         </p>
 
         <div class="grow-0">
@@ -236,7 +248,7 @@ import courseService from "../../services/courseService"
 import CourseIntroduction from "../../components/course/CourseIntroduction.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
-import {useCourseSettings} from "../../store/courseSettingStore"
+import { useCourseSettings } from "../../store/courseSettingStore"
 
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()

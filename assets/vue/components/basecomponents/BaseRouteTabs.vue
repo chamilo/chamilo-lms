@@ -3,15 +3,15 @@
     <BaseAppLink
       v-for="(tab, index) in tabs"
       :key="tab.title"
-      class="px-4 py-2 font-semibold"
+      :aria-selected="selectedTab === index ? 'true' : 'false'"
       :class="{
         'text-primary border-b-2 border-primary': selectedTab === index,
         'text-gray-50 border-b-2 border-gray-50 hover:text-primary hover:border-b-2 hover:border-primary':
           selectedTab !== index,
       }"
       :to="tab.to"
+      class="px-4 py-2 font-semibold"
       role="tab"
-      :aria-selected="selectedTab === index ? 'true' : 'false'"
     >
       {{ tab.title }}
     </BaseAppLink>

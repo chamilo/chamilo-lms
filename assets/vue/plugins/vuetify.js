@@ -1,7 +1,7 @@
 const options = {
-    theme: {
-        defaultTheme: 'light'
-    },
+  theme: {
+    defaultTheme: "light",
+  },
   /*  icons: {
         defaultSet: 'mdi',
         aliases,
@@ -9,4 +9,4 @@ const options = {
             mdi,
         }
     },*/
-};
+}

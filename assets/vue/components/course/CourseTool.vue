@@ -40,8 +40,8 @@
         />
         <BaseIcon
           v-else
-          icon="eye-off"
           class="text-gray-50"
+          icon="eye-off"
         />
       </button>
 

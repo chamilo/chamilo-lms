@@ -12,10 +12,21 @@
         :placeholder="placeholder"
         @update:model-value="$emit('update:modelValue', $event)"
       />
-      <label :for="inputId" v-text="label" />
+      <label
+        :for="inputId"
+        v-text="label"
+      />
     </div>
-    <small v-if="isInvalid" :class="{ 'p-error': isInvalid }" v-text="errorText" />
-    <small v-if="helpText" class="form-text text-muted">{{ helpText }}</small>
+    <small
+      v-if="isInvalid"
+      :class="{ 'p-error': isInvalid }"
+      v-text="errorText"
+    />
+    <small
+      v-if="helpText"
+      class="form-text text-muted"
+      >{{ helpText }}</small
+    >
   </div>
 </template>
 

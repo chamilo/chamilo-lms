@@ -2,8 +2,8 @@
   <Topbar />
   <Sidebar v-if="securityStore.isAuthenticated" />
   <div
-    class="app-main"
     :class="{ 'app-main--no-sidebar': !securityStore.isAuthenticated }"
+    class="app-main"
   >
     <Breadcrumb v-if="showBreadcrumb" />
     <slot />

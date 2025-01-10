@@ -35,11 +35,11 @@ const supportedLanguages = {
 function getUppyLanguageConfig(appLocale) {
   const defaultLang = en_US
 
-  if (typeof appLocale !== 'string') {
+  if (typeof appLocale !== "string") {
     return defaultLang
   }
 
-  const localePrefix = appLocale.split('_')[0]
+  const localePrefix = appLocale.split("_")[0]
 
   return supportedLanguages[localePrefix] || defaultLang
 }

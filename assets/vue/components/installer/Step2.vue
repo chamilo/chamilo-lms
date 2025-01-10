@@ -10,9 +10,9 @@
     </p>
 
     <i18n-t
+      class="mb-4"
       keypath="For more details {0}"
       tag="p"
-      class="mb-4"
     >
       <a
         v-t="'read the installation guide'"
@@ -63,8 +63,8 @@
         class="text-success text-body-1 font-semibold"
       >
         <span
-          class="mdi mdi-check"
           aria-hidden="true"
+          class="mdi mdi-check"
         />
         {{ t("Your PHP version matches the minimum requirement:") }}
         {{ installerData.stepData.phpVersion }}
@@ -145,8 +145,8 @@
             />
             <td class="requirements-recommended">
               <Tag
-                severity="success"
                 :value="recommended"
+                severity="success"
               />
             </td>
             <td class="requirements-value">
@@ -217,9 +217,9 @@
         <div class="p-float-label">
           <InputText
             id="updatePath"
+            :value="installerData.badUpdatePath && installerData.updatePath ? updatePath : ''"
             name="updatePath"
             size="50"
-            :value="installerData.badUpdatePath && installerData.updatePath ? updatePath : ''"
           />
           <label v-text="t('Old version\'s root path')" />
         </div>
@@ -323,12 +323,12 @@
         </div>
         <div class="field">
           <Button
+            :disabled="installerData.stepData.installError || installerData.isUpdateAvailable"
             :label="t('New installation')"
             class="p-button-success"
             icon="mdi mdi-page-next"
             name="step2_install"
             type="submit"
-            :disabled="installerData.stepData.installError || installerData.isUpdateAvailable"
           />
         </div>
         <Button

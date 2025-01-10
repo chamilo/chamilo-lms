@@ -25,14 +25,12 @@ import "@uppy/image-editor/dist/style.css"
 import Uppy from "@uppy/core"
 import Webcam from "@uppy/webcam"
 import { Dashboard } from "@uppy/vue"
+import XHRUpload from "@uppy/xhr-upload"
+import ImageEditor from "@uppy/image-editor"
 import { useRoute, useRouter } from "vue-router"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import { useSecurityStore } from "../../store/securityStore"
 import { storeToRefs } from "pinia"
-
-const XHRUpload = require("@uppy/xhr-upload")
-
-const ImageEditor = require("@uppy/image-editor")
 
 const servicePrefix = "PersonalFile"
 

@@ -3,6 +3,9 @@ import Uppy from "@uppy/core"
 import { Dashboard } from "@uppy/vue"
 import Webcam from "@uppy/webcam"
 import Audio from "@uppy/audio"
+import XHRUpload from "@uppy/xhr-upload"
+import ImageEditor from "@uppy/image-editor"
+
 import es_ES from "@uppy/locales/lib/es_ES"
 import en_US from "@uppy/locales/lib/en_US"
 import fr_FR from "@uppy/locales/lib/fr_FR"
@@ -10,9 +13,6 @@ import de_DE from "@uppy/locales/lib/de_DE"
 import it_IT from "@uppy/locales/lib/it_IT"
 import pl_PL from "@uppy/locales/lib/pl_PL"
 import pt_PT from "@uppy/locales/lib/pt_PT"
-
-const XHRUpload = require("@uppy/xhr-upload")
-const ImageEditor = require("@uppy/image-editor")
 
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"

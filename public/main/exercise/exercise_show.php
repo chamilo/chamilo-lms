@@ -21,6 +21,7 @@ $origin = api_get_origin();
 $currentUserId = api_get_user_id();
 $printHeaders = 'learnpath' === $origin;
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0; //exe id
+$exportTypeAllResults = ('export' === $_GET['action'] && (in_array($_GET['export_type'], ['all_results', 'result_pdf'])));
 
 if (empty($id)) {
     api_not_allowed(true);
@@ -39,15 +40,17 @@ $learnpath_id = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
 $lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
 $isBossOfStudent = false;
-if (api_is_student_boss()) {
-    // Check if boss has access to user info.
-    if (UserManager::userIsBossOfStudent($currentUserId, $student_id)) {
-        $isBossOfStudent = true;
+if (!$exportTypeAllResults) {
+    if (api_is_student_boss()) {
+        // Check if boss has access to user info.
+        if (UserManager::userIsBossOfStudent($currentUserId, $student_id)) {
+            $isBossOfStudent = true;
+        } else {
+            api_not_allowed($printHeaders);
+        }
     } else {
-        api_not_allowed($printHeaders);
+        api_protect_course_script($printHeaders, false, true);
     }
-} else {
-    api_protect_course_script($printHeaders, false, true);
 }
 
 // Database table definitions
@@ -80,6 +83,7 @@ if (empty($nbrQuestions)) {
 if (empty($questionList)) {
     $questionList = Session::read('questionList');
 }
+/* @var Exercise $objExercise */
 if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }
@@ -93,7 +97,8 @@ $is_allowedToEdit =
     api_is_course_tutor() ||
     api_is_session_admin() ||
     api_is_drh() ||
-    api_is_student_boss();
+    api_is_student_boss() ||
+    $exportTypeAllResults;
 
 if (!empty($sessionId) && !$is_allowedToEdit) {
     if (api_is_course_session_coach(
@@ -973,7 +978,24 @@ if ('export' === $action) {
         'orientation' => 'P',
     ];
     $pdf = new PDF('A4', $params['orientation'], $params);
-    $pdf->html_to_pdf_with_template($content, false, false, true);
+    if ('all_results' === $_GET['export_type']) {
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        $exportName = 'S'.$sessionId.'-C'.$courseId.'-T'.$exercise_id;
+        $baseDir = api_get_path(SYS_ARCHIVE_PATH);
+        $folderName = 'pdfexport-'.$exportName;
+        $exportFolderPath = $baseDir.$folderName;
+        if (!is_dir($exportFolderPath)) {
+            @mkdir($exportFolderPath);
+        }
+        $pdfFileName = $user_info['firstname'].' '.$user_info['lastname'].'-attemptId'.$id.'.pdf';
+        $pdfFileName = api_replace_dangerous_char($pdfFileName);
+        $fileNameToSave = $exportFolderPath.'/'.$pdfFileName;
+        $pdf->html_to_pdf_with_template($content, true, false, true, [], 'F', $fileNameToSave);
+    } else {
+        $pdf->html_to_pdf_with_template($content, false, false, true);
+    }
+
     exit;
 }
 

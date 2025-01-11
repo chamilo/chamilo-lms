@@ -102,7 +102,9 @@ class PDF
         $saveToFile = false,
         $returnHtml = false,
         $addDefaultCss = false,
-        $extraRows = []
+        $extraRows = [],
+        $outputMode = 'D',
+        $fileToSave = null
     ) {
         if (empty($this->template)) {
             $tpl = new Template('', false, false, false, false, true, false);
@@ -170,9 +172,9 @@ class PDF
             $css,
             $this->params['filename'],
             $this->params['course_code'],
-            'D',
+            $outputMode,
             $saveToFile,
-            null,
+            $fileToSave,
             $returnHtml,
             $addDefaultCss
         );

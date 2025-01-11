@@ -2351,6 +2351,13 @@ HOTSPOT;
                                 ]
                             );
 
+                            $exportPdfUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.
+                                api_get_cidreq().'&exerciseId='.$exercise_id.'&action=export_pdf&attemptId='.$id.'&userId='.(int) $results[$i]['exe_user_id'];
+                            $actions .= '<a href="'.$exportPdfUrl.'" target="_blank">'
+                                .Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export to PDF'))
+                                .'</a>';
+
+
                             $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
                             $delete_link = '<a
                                 href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
@@ -6023,5 +6030,124 @@ EOT;
         }
 
         return $scorePassed;
+    }
+
+    /**
+     * Export all results of *one* exercise to a ZIP file containing individual PDFs.
+     *
+     * @return false|void
+     * @throws Exception
+     */
+    public static function exportExerciseAllResultsZip(
+        int $sessionId,
+        int $courseId,
+        int $exerciseId,
+        array $filterDates = [],
+        string $mainPath = ''
+    ) {
+        $objExerciseTmp = new Exercise($courseId);
+        $exeResults = $objExerciseTmp->getExerciseAndResult(
+            $courseId,
+            $sessionId,
+            $exerciseId
+        );
+
+        $exportOk = false;
+        if (!empty($exeResults)) {
+            $exportName = 'S'.$sessionId.'-C'.$courseId.'-T'.$exerciseId;
+            $baseDir = api_get_path(SYS_ARCHIVE_PATH);
+            $folderName = 'pdfexport-'.$exportName;
+            $exportFolderPath = $baseDir.$folderName;
+
+            // 1. Cleans the export folder if it exists.
+            if (is_dir($exportFolderPath)) {
+                rmdirr($exportFolderPath);
+            }
+
+            // 2. Create the pdfs inside a new export folder path.
+            foreach ($exeResults as $exeResult) {
+                $exeId = (int) $exeResult['exe_id'];
+                self::saveFileExerciseResultPdf($exeId, $courseId, $sessionId);
+            }
+
+            // 3. If export folder is not empty will be zipped.
+            $isFolderPathEmpty = (file_exists($exportFolderPath) && 2 == count(scandir($exportFolderPath)));
+            if (is_dir($exportFolderPath) && !$isFolderPathEmpty) {
+                $exportOk = true;
+                $exportFilePath = $baseDir.$exportName.'.zip';
+                $zip = new \ZipArchive();
+                if ($zip->open($exportFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+                    $files = new RecursiveIteratorIterator(
+                        new RecursiveDirectoryIterator($exportFolderPath),
+                        RecursiveIteratorIterator::LEAVES_ONLY
+                    );
+
+                    foreach ($files as $name => $file) {
+                        if (!$file->isDir()) {
+                            $filePath = $file->getRealPath();
+                            $relativePath = substr($filePath, strlen($exportFolderPath) + 1);
+                            $zip->addFile($filePath, $relativePath);
+                        }
+                    }
+
+                    $zip->close();
+                } else {
+                    throw new Exception('Failed to create ZIP file');
+                }
+
+                rmdirr($exportFolderPath);
+
+                if (!empty($mainPath) && file_exists($exportFilePath)) {
+                    @rename($exportFilePath, $mainPath.'/'.$exportName.'.zip');
+                } else {
+                    DocumentManager::file_send_for_download($exportFilePath, true, $exportName.'.zip');
+                    exit;
+                }
+            }
+        }
+
+        if (empty($mainPath) && !$exportOk) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('ExportExerciseNoResult'),
+                    'warning',
+                    false
+                )
+            );
+        }
+
+        return false;
+    }
+
+    /**
+     * Generates and saves a PDF file for a specific exercise attempt result.
+     */
+    public static function saveFileExerciseResultPdf(
+        int $exeId,
+        int $courseId,
+        int $sessionId
+    ): void
+    {
+        $cidReq = 'cid='.$courseId.'&sid='.$sessionId.'&gid=0&gradebook=0';
+        $url = api_get_path(WEB_PATH).'main/exercise/exercise_show.php?'.$cidReq.'&id='.$exeId.'&action=export&export_type=all_results';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_COOKIE, session_id());
+        curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($ch, CURLOPT_COOKIESESSION, true);
+        curl_setopt($ch, CURLOPT_FAILONERROR, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($ch);
+
+        if (false === $result) {
+            error_log('saveFileExerciseResultPdf error: '.curl_error($ch));
+        }
+
+        curl_close($ch);
     }
 }

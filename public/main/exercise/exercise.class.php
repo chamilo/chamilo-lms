@@ -8072,7 +8072,7 @@ class Exercise
               INNER JOIN c_quiz cq
               ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
               WHERE
-              te.id = %s AND
+              te.c_id = %d AND
               te.session_id = %s AND
               cq.id IN (%s)
               ORDER BY cq.id";
@@ -8082,7 +8082,7 @@ class Exercise
             $sql = "SELECT * FROM $track_exercises te
               INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
               WHERE
-              te.id = %s AND
+              te.c_id = %d AND
               cq.id IN (%s)
               ORDER BY cq.id";
             $sql = sprintf($sql, $courseId, $ids);

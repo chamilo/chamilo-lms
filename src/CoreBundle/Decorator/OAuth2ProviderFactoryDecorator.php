@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Decorator;
 
 use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
+use InvalidArgumentException;
 use KnpU\OAuth2ClientBundle\DependencyInjection\ProviderFactory;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Facebook;
@@ -37,6 +38,7 @@ readonly class OAuth2ProviderFactoryDecorator
             Facebook::class => $this->authenticationConfigHelper->getProviderConfig('facebook'),
             Keycloak::class => $this->authenticationConfigHelper->getProviderConfig('keycloak'),
             Azure::class => $this->authenticationConfigHelper->getProviderConfig('azure'),
+            default => throw new InvalidArgumentException("Unsupported provider class: $class"),
         };
 
         $redirectParams = $customConfig['redirect_params'] ?? [];
@@ -53,6 +55,7 @@ readonly class OAuth2ProviderFactoryDecorator
             Facebook::class => $this->authenticationConfigHelper->getProviderOptions('facebook', $customConfig),
             Keycloak::class => $this->authenticationConfigHelper->getProviderOptions('keycloak', $customConfig),
             Azure::class => $this->authenticationConfigHelper->getProviderOptions('azure', $customConfig),
+            default => throw new \InvalidArgumentException("Unsupported provider class: $class"),
         };
 
         $options = $customOptions + $options;

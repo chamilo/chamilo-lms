@@ -23,7 +23,7 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
         $this->identifier = $identifier ?? 'id';
     }
 
-    public function transform($value)
+    public function transform($value): mixed
     {
         if (null === $value) {
             return null;
@@ -40,7 +40,7 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
         return $value;
     }
 
-    public function reverseTransform($value)
+    public function reverseTransform($value): mixed
     {
         if (null === $value || '' === $value) {
             return null;

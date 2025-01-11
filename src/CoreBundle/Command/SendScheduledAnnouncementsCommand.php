@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -36,7 +37,7 @@ class SendScheduledAnnouncementsCommand extends Command
     {
         $this
             ->setDescription('Send scheduled announcements to all users.')
-            ->addOption('debug', null, null, 'If set, debug messages will be shown.')
+            ->addOption('debug', null, InputOption::VALUE_NONE, 'If set, debug messages will be shown.')
         ;
     }
 

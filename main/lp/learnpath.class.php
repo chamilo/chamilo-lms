@@ -4860,17 +4860,19 @@ class learnpath
     /**
      * Check if the learnpath category is visible for a user.
      *
-     * @param int
-     * @param int
+     * @param CLpCategory|null $category
+     * @param User $user
+     * @param int $courseId
+     * @param int $sessionId
      *
      * @return bool
      */
     public static function categoryIsVisibleForStudent(
-        CLpCategory $category,
+        ?CLpCategory $category,
         User $user,
         $courseId = 0,
         $sessionId = 0
-    ) {
+    ): bool {
         if (empty($category)) {
             return false;
         }
@@ -4899,7 +4901,7 @@ class learnpath
 
         $subscriptionSettings = self::getSubscriptionSettings();
 
-        if ($subscriptionSettings['allow_add_users_to_lp_category'] == false) {
+        if (!$subscriptionSettings['allow_add_users_to_lp_category']) {
             return true;
         }
 
@@ -4951,9 +4953,8 @@ class learnpath
                 }
             }
         }
-        $response = $noGroupSubscribed && $noUserSubscribed;
 
-        return $response;
+        return $noGroupSubscribed && $noUserSubscribed;
     }
 
     /**
@@ -12959,10 +12960,8 @@ EOD;
 
     /**
      * @param int $id
-     *
-     * @return CLpCategory
      */
-    public static function getCategory($id)
+    public static function getCategory($id): ?CLpCategory
     {
         $id = (int) $id;
         $em = Database::getManager();

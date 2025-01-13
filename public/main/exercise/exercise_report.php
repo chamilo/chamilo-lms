@@ -62,6 +62,7 @@ $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : (isset($_GET['id']) ? (int) $_GET['id'] : 0);
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 $sessionId = api_get_session_id();
+$action = $_REQUEST['action'] ?? null;
 
 if (empty($exercise_id)) {
     api_not_allowed(true);
@@ -92,6 +93,27 @@ if (!empty($exercise_id)) {
 
 if (!empty($_GET['path'])) {
     $parameters['path'] = Security::remove_XSS($_GET['path']);
+}
+
+switch ($action) {
+    case 'export_all_results':
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        ExerciseLib::exportExerciseAllResultsZip($sessionId, $courseId, $exercise_id);
+
+        break;
+    case 'export_pdf':
+        $exerciseId = (int) $_GET['exerciseId'];
+        $attemptId = (int) $_GET['attemptId'];
+        $userId = (int) $_GET['userId'];
+        $urlExportPdf = api_get_path(WEB_PATH).'main/exercise/exercise_show.php?'.api_get_cidreq().'&id='.$attemptId.'&action=export&export_type=result_pdf';
+
+        if (!$exerciseId || !$attemptId) {
+            api_not_allowed(true);
+        }
+
+        header('Location: '.$urlExportPdf);
+        exit;
 }
 
 if (!empty($_REQUEST['export_report']) && '1' == $_REQUEST['export_report']) {
@@ -431,8 +453,12 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::getMdiIcon('content-save', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).'</a>';
         $actions .= Display::url(
-            Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('RecalculateResults')),
+            Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Recalculate Results')),
             api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
+        );
+        $actions .= Display::url(
+            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export all attempts')),
+            api_get_self().'?'.api_get_cidreq().'&action=export_all_results&exerciseId='.$exercise_id
         );
 
         // clean result before a selected date icon

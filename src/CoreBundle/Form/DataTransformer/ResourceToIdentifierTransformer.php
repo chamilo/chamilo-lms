@@ -30,7 +30,7 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
             return null;
         }
 
-        \assert(get_class($value) === $this->repository->getClassName());
+        \assert($value::class === $this->repository->getClassName());
 
         return PropertyAccess::createPropertyAccessor()->getValue($value, $this->identifier);
     }

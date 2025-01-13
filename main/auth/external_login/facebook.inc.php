@@ -31,7 +31,7 @@ function facebookConnect()
     $fb = new Facebook([
         'app_id' => $GLOBALS['facebook_config']['appId'],
         'app_secret' => $GLOBALS['facebook_config']['secret'],
-        'default_graph_version' => 'v2.2',
+        'default_graph_version' => 'v21.0',
     ]);
 
     $helper = $fb->getRedirectLoginHelper();
@@ -115,10 +115,10 @@ function facebookConnect()
     }
 
     $user = $response->getGraphUser();
-    $language = facebookPluginGetLanguage($user['locale']);
+    $language = facebookPluginGetLanguage($user->getField('locale', ''));
 
     if (!$language) {
-        $language = 'en_US';
+        $language = 'english';
     }
 
     $u = [

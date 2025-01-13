@@ -55,7 +55,7 @@ readonly class OAuth2ProviderFactoryDecorator
             Facebook::class => $this->authenticationConfigHelper->getProviderOptions('facebook', $customConfig),
             Keycloak::class => $this->authenticationConfigHelper->getProviderOptions('keycloak', $customConfig),
             Azure::class => $this->authenticationConfigHelper->getProviderOptions('azure', $customConfig),
-            default => throw new \InvalidArgumentException("Unsupported provider class: $class"),
+            default => throw new InvalidArgumentException("Unsupported provider class: $class"),
         };
 
         $options = $customOptions + $options;

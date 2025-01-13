@@ -585,8 +585,11 @@ abstract class ResourceRepository extends ServiceEntityRepository
         }
     }
 
-    public function toggleVisibilityPublishedDraft(AbstractResource $resource, ?Course $course, ?Session $session): void
-    {
+    public function toggleVisibilityPublishedDraft(
+        AbstractResource $resource,
+        ?Course $course = null,
+        ?Session $session = null
+    ): void {
         $firstLink = $resource->getFirstResourceLink();
 
         if (ResourceLink::VISIBILITY_PUBLISHED === $firstLink->getVisibility()) {

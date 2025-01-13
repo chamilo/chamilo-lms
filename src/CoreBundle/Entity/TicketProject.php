@@ -31,7 +31,7 @@ class TicketProject
     protected ?string $email = null;
 
     #[ORM\Column(name: 'other_area', type: 'integer', nullable: true)]
-    protected ?string $otherArea = null;
+    protected ?int $otherArea = null;
 
     #[ORM\Column(name: 'sys_insert_user_id', type: 'integer')]
     protected int $insertUserId;
@@ -39,10 +39,10 @@ class TicketProject
     #[ORM\Column(name: 'sys_insert_datetime', type: 'datetime')]
     protected DateTime $insertDateTime;
 
-    #[ORM\Column(name: 'sys_lastedit_user_id', type: 'integer', nullable: true, unique: false)]
+    #[ORM\Column(name: 'sys_lastedit_user_id', type: 'integer', unique: false, nullable: true)]
     protected ?int $lastEditUserId = null;
 
-    #[ORM\Column(name: 'sys_lastedit_datetime', type: 'datetime', nullable: true, unique: false)]
+    #[ORM\Column(name: 'sys_lastedit_datetime', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $lastEditDateTime = null;
 
     public function __construct()
@@ -50,18 +50,12 @@ class TicketProject
         $this->insertDateTime = new DateTime();
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -73,10 +67,7 @@ class TicketProject
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -88,10 +79,7 @@ class TicketProject
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -103,25 +91,19 @@ class TicketProject
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getOtherArea()
+    public function getOtherArea(): int
     {
-        return $this->otherArea;
+        return (int) $this->otherArea;
     }
 
-    public function setOtherArea(string $otherArea): self
+    public function setOtherArea(?int $otherArea): static
     {
         $this->otherArea = $otherArea;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getInsertUserId()
+    public function getInsertUserId(): int
     {
         return $this->insertUserId;
     }
@@ -133,10 +115,7 @@ class TicketProject
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getInsertDateTime()
+    public function getInsertDateTime(): DateTime
     {
         return $this->insertDateTime;
     }
@@ -148,10 +127,7 @@ class TicketProject
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getLastEditUserId()
+    public function getLastEditUserId(): ?int
     {
         return $this->lastEditUserId;
     }
@@ -163,10 +139,7 @@ class TicketProject
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getLastEditDateTime()
+    public function getLastEditDateTime(): ?DateTime
     {
         return $this->lastEditDateTime;
     }

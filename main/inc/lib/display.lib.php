@@ -917,9 +917,10 @@ class Display
         $attribute_list = '';
         // Managing the additional attributes
         if (!empty($additional_attributes) && is_array($additional_attributes)) {
-            $attribute_list = '';
             foreach ($additional_attributes as $key => &$value) {
-                $attribute_list .= $key.'="'.$value.'" ';
+                $sanitized_key = htmlspecialchars($key, ENT_QUOTES, api_get_system_encoding());
+                $sanitized_value = htmlspecialchars($value, ENT_QUOTES, api_get_system_encoding());
+                $attribute_list .= $sanitized_key.'="'.$sanitized_value.'" ';
             }
         }
         //some tags don't have this </XXX>

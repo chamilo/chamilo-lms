@@ -520,33 +520,13 @@
 }
 
 form .field {
-  .help-text {
-    color: #666;
-    font-family: 'Arial', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    background-color: #f8f8f8;
-    border-left: 4px solid #007bff;
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    max-width: 80%;
-    display: inline-block;
-  }
-
-  textarea {
-    width: 100%;
-  }
-
   .freeze {
     display: block;
     padding-top: 10px;
   }
 
   .freeze + label,
-  .advmultiselect + label,
-  textarea + label.settings-label
+  .advmultiselect + label
   {
     font-size: 13px;
     @apply absolute top-0 left-0 text-support-3 text-caption px-1 bg-white text-primary;

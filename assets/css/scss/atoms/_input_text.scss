@@ -64,3 +64,13 @@
 .p-inputnumber-input {
   @apply flex-1;
 }
+
+.p-inputtextarea {
+  &-resizable {
+    @apply overflow-hidden resize-none;
+  }
+
+  .p-fluid & {
+    @apply w-full;
+  }
+}

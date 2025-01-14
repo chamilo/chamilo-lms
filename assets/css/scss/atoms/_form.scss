@@ -57,7 +57,8 @@
 .field {
   @apply mb-4;
 
-  > small {
+  > small,
+  .help-text {
     @apply text-caption text-primary mt-1;
   }
 

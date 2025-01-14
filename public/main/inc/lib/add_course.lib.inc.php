@@ -244,15 +244,14 @@ class AddCourse
      */
     public static function fillCourse(Course $course, bool $fillWithExemplaryContent = null, int $authorId = 0): bool
     {
-        $entityManager = Database::getManager();
         $authorId = $authorId ?: api_get_user_id();
 
         self::insertCourseSettings($course);
         self::createGroupCategory($course);
-        $gradebook = self::createRootGradebook($course);
-
+        
         if ($fillWithExemplaryContent ?? api_get_setting('example_material_course_creation') !== 'false') {
-            self::insertExampleContent($course, $authorId, $entityManager);
+            $gradebook = self::createRootGradebook($course);
+            self::insertExampleContent($course, $authorId, $gradebook);
         }
 
         self::installCoursePlugins($course->getId());
@@ -362,12 +361,12 @@ class AddCourse
      *
      * @param Course $course The course object into which the example content will be inserted.
      * @param int $authorId The ID of the user who will be listed as the author of the inserted content.
-     * @param GradebookCategory $gradebook
+     * @param GradebookCategory|null $gradebook
      *
      * @return void
      * @throws Exception
      */
-    private static function insertExampleContent(Course $course, int $authorId, GradebookCategory $gradebook): void
+    private static function insertExampleContent(Course $course, int $authorId, ?GradebookCategory $gradebook): void
     {
         $now = api_get_utc_datetime();
         $files = [

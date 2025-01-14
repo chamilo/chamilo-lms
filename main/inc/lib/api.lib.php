@@ -4034,6 +4034,9 @@ function api_not_allowed(
     if ((!isset($user_id) || api_is_anonymous()) && CustomPages::enabled()) {
         $customLoginTemplate = Template::findTemplateFilePath('custompage/login.tpl');
         if (file_exists(api_get_path(SYS_TEMPLATE_PATH) . $customLoginTemplate)) {
+            if (empty($_SESSION['request_uri'])) {
+                $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
+            }
             $tpl = new Template(null, false, false);
             $content = $tpl->fetch($customLoginTemplate);
             $tpl->assign('content', $content);

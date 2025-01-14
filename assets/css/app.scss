@@ -103,39 +103,6 @@
     overflow: auto;
   }
 
-  .toolbar-action {
-    .p-toolbar-group-start.p-toolbar-group-left {
-      display: flex;
-      padding: 10px;
-      background: #f0f0f0;
-      border-radius: 5px;
-    }
-
-    .p-toolbar-group-start.p-toolbar-group-left .btn {
-      padding: 10px 20px;
-      text-decoration: none;
-      color: #333;
-      background-color: #e7e7e7;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-    }
-
-    .p-toolbar-group-start.p-toolbar-group-left .btn:hover {
-      background-color: #ddd;
-    }
-
-    .p-toolbar-group-start.p-toolbar-group-left .btn.active {
-      background-color: #007bff;
-      color: white;
-      border-color: #007bff;
-    }
-
-    .p-toolbar-group-start.p-toolbar-group-left .btn + .btn {
-      margin-left: 10px;
-    }
-  }
-
   .sortable-buttons-actions {
     @apply bg-gray-5 border border-gray-20 rounded shadow;
 

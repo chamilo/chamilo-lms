@@ -1093,7 +1093,9 @@ class Display
         foreach ($headers as $item) {
             $class = null;
             if ($i == $selected) {
-                $class = 'active';
+                $class = 'btn--primary';
+            } else {
+                $class = 'btn--plain';
             }
             $item = self::tag(
                 'a',

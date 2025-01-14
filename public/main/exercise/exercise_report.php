@@ -63,6 +63,8 @@ $exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 $sessionId = api_get_session_id();
 $action = $_REQUEST['action'] ?? null;
+$idChecked = $_REQUEST['idChecked'] ?? null;
+$idMultiple = $_REQUEST['id'] ?? null;
 
 if (empty($exercise_id)) {
     api_not_allowed(true);
@@ -96,6 +98,13 @@ if (!empty($_GET['path'])) {
 }
 
 switch ($action) {
+    case 'delete_multiple':
+        $exeIds = explode(',', $idMultiple);
+        foreach ($exeIds as $exeId) {
+            ExerciseLib::deleteExerciseAttempt((int) $exeId);
+        }
+        echo 1;
+        exit;
     case 'export_all_results':
         $sessionId = api_get_session_id();
         $courseId = api_get_course_int_id();
@@ -767,7 +776,9 @@ if ($is_allowedToEdit || $is_tutor) {
     }';
 }
 
+$deleteUrl = api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exercise_id.'&action=delete_multiple';
 $extra_params['autowidth'] = 'true';
+$extra_params['multiselect'] = true;
 $extra_params['height'] = 'auto';
 $extra_params['gridComplete'] = "
     defaultGroupId = Cookies.get('default_group_".$exercise_id."');
@@ -848,16 +859,11 @@ $gridJs = Display::grid_js(
 
         if ($is_allowedToEdit || $is_tutor) {
             ?>
-            $("#results").jqGrid(
-                'navGrid',
-                '#results_pager', {
-                    view:true, edit:false, add:false, del:false, excel:false
-                },
-                {height:280, reloadAfterSubmit:false}, // view options
-                {height:280, reloadAfterSubmit:false}, // edit options
-                {height:280, reloadAfterSubmit:false}, // add options
-                {reloadAfterSubmit: false}, // del options
-                {width:500}, // search options
+            $("#results").jqGrid('navGrid', '#results_pager',
+                {edit:false,add:false,del:true},
+                {height:280,reloadAfterSubmit:false}, // edit options
+                {height:280,reloadAfterSubmit:false}, // add options
+                {reloadAfterSubmit:true, url: '<?php echo $deleteUrl; ?>' }, // del options
             );
 
             var sgrid = $("#results")[0];

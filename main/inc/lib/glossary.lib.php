@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CGlossary;
 use ChamiloSession as Session;
 
 /**
@@ -131,17 +132,18 @@ class GlossaryManager
      * This functions stores the glossary in the database.
      *
      * @param array $values Array of title + description (name => $title, description => $comment)
+     * @param bool $showMessage
      *
-     * @return mixed Term id on success, false on failure
+     * @return bool|int Term id on success, false on failure
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public static function save_glossary($values, $showMessage = true)
+    public static function save_glossary(array $values, bool $showMessage = true)
     {
-        if (!is_array($values) || !isset($values['name'])) {
+        if (!isset($values['name'])) {
             return false;
         }
-
-        // Database table definition
-        $table = Database::get_course_table(TABLE_GLOSSARY);
 
         // get the maximum display order of all the glossary items
         $max_glossary_item = self::get_max_glossary_item();
@@ -159,39 +161,38 @@ class GlossaryManager
             }
 
             return false;
-        } else {
-            $params = [
-                'glossary_id' => 0,
-                'c_id' => api_get_course_int_id(),
-                'name' => $values['name'],
-                'description' => isset($values['description']) ? $values['description'] : "",
-                'display_order' => $max_glossary_item + 1,
-                'session_id' => $session_id,
-            ];
-            $id = Database::insert($table, $params);
-
-            if ($id) {
-                $sql = "UPDATE $table SET glossary_id = $id WHERE iid = $id";
-                Database::query($sql);
-
-                //insert into item_property
-                api_item_property_update(
-                    api_get_course_info(),
-                    TOOL_GLOSSARY,
-                    $id,
-                    'GlossaryAdded',
-                    api_get_user_id()
-                );
-            }
-            // display the feedback message
-            if ($showMessage) {
-                Display::addFlash(
-                    Display::return_message(get_lang('TermAdded'))
-                );
-            }
-
-            return $id;
         }
+
+        $glossary = (new CGlossary())
+            ->setGlossaryId(0)
+            ->setCId(api_get_course_int_id())
+            ->setName($values['name'])
+            ->setDescription($values['description'] ?? "")
+            ->setDisplayOrder($max_glossary_item + 1)
+            ->setSessionId($session_id);
+        ;
+        Database::getManager()->persist($glossary);
+        Database::getManager()->flush();
+
+        $glossary->setGlossaryId($glossary->getIid());
+        Database::getManager()->flush();
+
+        //insert into item_property
+        api_item_property_update(
+            api_get_course_info(),
+            TOOL_GLOSSARY,
+            $glossary->getIid(),
+            'GlossaryAdded',
+            api_get_user_id()
+        );
+        // display the feedback message
+        if ($showMessage) {
+            Display::addFlash(
+                Display::return_message(get_lang('TermAdded'))
+            );
+        }
+
+        return $glossary->getIid();
     }
 
     /**

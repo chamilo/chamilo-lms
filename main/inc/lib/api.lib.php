@@ -4037,7 +4037,7 @@ function api_not_allowed(
             $tpl = new Template(null, false, false);
             $content = $tpl->fetch($customLoginTemplate);
             $tpl->assign('content', $content);
-            $tpl->display_one_col_template();
+            $tpl->display_no_layout_template();
             exit;
         }
     }

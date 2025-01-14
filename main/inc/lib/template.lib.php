@@ -787,14 +787,14 @@ class Template
             'jquery/dist/jquery.min.js',
             'bootstrap/dist/js/bootstrap.min.js',
             'jquery-ui/jquery-ui.min.js',
-            "jquery-ui/ui/minified/i18n/datepicker-$isoCode.js",
+            'en' !== $isoCode ? "jquery-ui/ui/minified/i18n/datepicker-$isoCode.js" : null,
             'jqueryui-touch-punch/jquery.ui.touch-punch.min.js',
             'moment/min/moment-with-locales.js',
             'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',
             'mediaelement/build/mediaelement-and-player.min.js',
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
-            "jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-$isoCode.js",
+            'en' !== $isoCode ? "jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-$isoCode.js" : null,
             'image-map-resizer/js/imageMapResizer.min.js',
             'jquery.scrollbar/jquery.scrollbar.min.js',
             'readmore-js/readmore.min.js',
@@ -855,6 +855,8 @@ class Template
                 $bowerJsFiles[] = 'jquery-ui/ui/minified/i18n/datepicker-'.$isoCode.'.min.js';
             }
         }
+
+        $bowerJsFiles = array_filter($bowerJsFiles);
 
         foreach ($bowerJsFiles as $file) {
             $js_file_to_string .= '<script src="'.api_get_cdn_path(api_get_path(WEB_PUBLIC_PATH).'assets/'.$file).'"></script>'."\n";

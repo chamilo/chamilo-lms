@@ -459,6 +459,11 @@ ALTER TABLE personal_agenda ADD agenda_event_invitation_id BIGINT DEFAULT NULL, 
 ALTER TABLE personal_agenda ADD CONSTRAINT FK_D8612460AF68C6B FOREIGN KEY (agenda_event_invitation_id) REFERENCES agenda_event_invitation (id) ON DELETE CASCADE;
 CREATE UNIQUE INDEX UNIQ_D8612460AF68C6B ON personal_agenda (agenda_event_invitation_id);
 */
+// After Chamilo v1.11.30 it's necessary to change the foreign key in agenda_event_invitee.user_id so that the record is deleted when deleting a user
+/*
+ALTER TABLE agenda_event_invitee DROP FOREIGN KEY FK_4F5757FEA76ED395;
+ALTER TABLE agenda_event_invitee ADD CONSTRAINT FK_4F5757FEA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+*/
 // Then add the "@" symbol to AgendaEventInvitation and AgendaEventInvitee classes in the ORM\Entity() line.
 // Then uncomment the "use EventCollectiveTrait;" line in the PersonalAgenda class.
 //$_configuration['agenda_collective_invitations'] = false;

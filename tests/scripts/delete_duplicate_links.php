@@ -25,6 +25,7 @@
  * first place (they were probably duplicated through a short/broken process) and
  * this is where most of the time is spent during deletion.
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ * @author Christian Fasanando <christian.fasanando@beeznest.com>
  */
 exit; //remove this line to execute from the command line
 
@@ -62,6 +63,9 @@ while ($course = Database::fetch_assoc($resCourse)) {
     if (empty($course['id'])) {
         continue; // Skip invalid course IDs
     }
+    if ($debug) {
+        echo "\n-= Course ".$course['id']." (".$course['code'].") =-\n----\n";
+    }
 
     $sql2 = "SELECT iid, url, title, description, category_id, on_homepage, target, session_id
              FROM c_link
@@ -84,7 +88,14 @@ while ($course = Database::fetch_assoc($resCourse)) {
 
     foreach ($links as $key => $original) {
         $originalsCount++;
+        // Make sure we don't use a just-deleted link as original
+        if (in_array($original['iid'], $processedDuplicates)) {
+            continue;
+        }
         foreach ($links as $key2 => $duplicate) {
+            if ($debug) {
+                echo "Checking potential duplicate link ".$duplicate['iid']." against original ".$original['iid']."\n";
+            }
             if (
                 $key !== $key2 &&
                 !in_array($duplicate['iid'], $processedDuplicates) &&
@@ -99,8 +110,8 @@ while ($course = Database::fetch_assoc($resCourse)) {
             ) {
                 $duplicatesCount++;
                 if ($debug) {
-                    echo "\nDuplicate found in Course ID: " . $course['id'] . "\n";
-                    echo "Original IID=" . $original['iid'] . ", Duplicate IID=" . $duplicate['iid'] . "\n";
+                    echo "\n[".date('Y-m-d h:i:s')."]\nDuplicate found in Course ID: " . $course['id'] . "\n";
+                    echo "Original IID=" . $original['iid'] . ", Duplicate IID=" . $duplicate['iid'] . " ($duplicatesCount)\n";
                 }
 
                 // Check if duplicate exists in c_lp_item
@@ -129,12 +140,16 @@ while ($course = Database::fetch_assoc($resCourse)) {
             }
         }
     }
+    if ($debug) {
+	    echo "Ending course ".$course['id']."\n\n";
+    }
 }
 
 // Summary
-echo "\nSummary:\n";
-echo "- Total duplicates detected: $duplicatesCount\n";
-echo "- Duplicates ignored (in learning paths): $itemsInLP\n";
-echo "- Duplicates deleted: $deletedCount\n";
-
-echo "[" . time() . "] Process complete.\n";
+if ($debug) {
+    echo "\nSummary:\n";
+    echo "- Total duplicates detected: $duplicatesCount\n";
+    echo "- Duplicates ignored (in learning paths): $itemsInLP\n";
+    echo "- Duplicates deleted: $deletedCount\n";
+    echo "[".time()."] Process complete.\n";
+}

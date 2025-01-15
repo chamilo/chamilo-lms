@@ -383,22 +383,14 @@ class Link extends Model
 
     /**
      * Used to delete a link or a category.
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @param int    $id
-     * @param string $type The type of item to delete
-     *
-     * @return bool
      */
-    public static function deletelinkcategory($id, $type)
+    public static function deletelinkcategory(int $id, string $type, $courseId = null, bool $removeContentFromDb = false): bool
     {
-        $courseInfo = api_get_course_info();
-        $tbl_link = Database::get_course_table(TABLE_LINK);
-        $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
-
-        $course_id = $courseInfo['real_id'];
-        $id = intval($id);
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $tblLink = Database::get_course_table(TABLE_LINK);
+        $tblCategories = Database::get_course_table(TABLE_LINK_CATEGORY);
+        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $courseIdReal = $courseInfo['real_id'];
 
         if (empty($id)) {
             return false;
@@ -407,45 +399,74 @@ class Link extends Model
         $result = false;
         switch ($type) {
             case 'link':
-                // -> Items are no longer physically deleted,
-                // but the visibility is set to 2 (in item_property).
-                // This will make a restore function possible for the platform administrator.
-                $sql = "UPDATE $tbl_link SET on_homepage='0'
-                        WHERE c_id = $course_id AND id='".$id."'";
-                Database::query($sql);
+                if ($removeContentFromDb) {
+                    // Hard delete: Remove from both c_link and item_property
+                    $sql = "DELETE FROM $tblItemProperty
+                        WHERE c_id = $courseIdReal AND ref = $id AND tool = '".TOOL_LINK."'";
+                    Database::query($sql);
 
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_LINK,
-                    $id,
-                    'delete',
-                    api_get_user_id()
-                );
-                self::delete_link_from_search_engine(api_get_course_id(), $id);
-                Skill::deleteSkillsFromItem($id, ITEM_TYPE_LINK);
-                Display::addFlash(Display::return_message(get_lang('LinkDeleted')));
-                $result = true;
+                    $sql = "DELETE FROM $tblLink
+                        WHERE c_id = $courseIdReal AND id = $id";
+                    Database::query($sql);
+
+                    self::delete_link_from_search_engine(api_get_course_id(), $id);
+                    Skill::deleteSkillsFromItem($id, ITEM_TYPE_LINK);
+                    $result = true;
+                } else {
+                    // Soft delete: Update visibility in item_property
+                    $sql = "UPDATE $tblLink SET on_homepage='0'
+                        WHERE c_id = $courseIdReal AND id='$id'";
+                    Database::query($sql);
+
+                    api_item_property_update(
+                        $courseInfo,
+                        TOOL_LINK,
+                        $id,
+                        'delete',
+                        api_get_user_id()
+                    );
+                    self::delete_link_from_search_engine(api_get_course_id(), $id);
+                    Skill::deleteSkillsFromItem($id, ITEM_TYPE_LINK);
+                    Display::addFlash(Display::return_message(get_lang('LinkDeleted')));
+                    $result = true;
+                }
                 break;
             case 'category':
-                // First we delete the category itself and afterwards all the links of this category.
-                $sql = "DELETE FROM ".$tbl_categories."
-                        WHERE c_id = $course_id AND id='".$id."'";
-                Database::query($sql);
+                if ($removeContentFromDb) {
+                    // Hard delete: Remove category and its links
+                    $sql = "DELETE FROM $tblCategories
+                        WHERE c_id = $courseIdReal AND id = $id";
+                    Database::query($sql);
 
-                $sql = "DELETE FROM ".$tbl_link."
-                        WHERE c_id = $course_id AND category_id='".$id."'";
-                Database::query($sql);
+                    $sql = "DELETE FROM $tblLink
+                        WHERE c_id = $courseIdReal AND category_id = $id";
+                    Database::query($sql);
 
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_LINK_CATEGORY,
-                    $id,
-                    'delete',
-                    api_get_user_id()
-                );
+                    $sql = "DELETE FROM $tblItemProperty
+                        WHERE c_id = $courseIdReal AND ref = $id AND tool = '".TOOL_LINK_CATEGORY."'";
+                    Database::query($sql);
+                    $result = true;
+                } else {
+                    // Soft delete: Update visibility in item_property
+                    $sql = "DELETE FROM $tblCategories
+                        WHERE c_id = $courseIdReal AND id = $id";
+                    Database::query($sql);
 
-                Display::addFlash(Display::return_message(get_lang('CategoryDeleted')));
-                $result = true;
+                    $sql = "DELETE FROM $tblLink
+                        WHERE c_id = $courseIdReal AND category_id = $id";
+                    Database::query($sql);
+
+                    api_item_property_update(
+                        $courseInfo,
+                        TOOL_LINK_CATEGORY,
+                        $id,
+                        'delete',
+                        api_get_user_id()
+                    );
+
+                    Display::addFlash(Display::return_message(get_lang('CategoryDeleted')));
+                    $result = true;
+                }
                 break;
         }
 

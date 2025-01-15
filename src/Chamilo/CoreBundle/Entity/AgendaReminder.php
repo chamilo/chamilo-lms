@@ -17,41 +17,31 @@ class AgendaReminder
     use TimestampableTypedEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Id()
      * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected ?int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string")
      */
-    protected $type;
+    protected string $type;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="event_id", type="integer")
      */
-    protected $eventId;
+    protected int $eventId;
 
     /**
-     * @var \DateInterval
-     *
      * @ORM\Column(name="date_interval", type="dateinterval")
      */
-    protected $dateInterval;
+    protected \DateInterval $dateInterval;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="sent", type="boolean")
      */
-    protected $sent;
+    protected bool $sent;
 
     public function __construct()
     {

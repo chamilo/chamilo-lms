@@ -26,13 +26,11 @@ class AgendaEventInvitation
     use TimestampableTypedEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Id()
      * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected ?int $id;
 
     /**
      * @var Collection<int, AgendaEventInvitee>
@@ -40,15 +38,13 @@ class AgendaEventInvitation
      * @ORM\OneToMany(targetEntity="AgendaEventInvitee", mappedBy="invitation", cascade={"persist", "remove"},
      *                                                   orphanRemoval=true)
      */
-    protected $invitees;
+    protected Collection $invitees;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
-    protected $creator;
+    protected User $creator;
 
     public function __construct()
     {

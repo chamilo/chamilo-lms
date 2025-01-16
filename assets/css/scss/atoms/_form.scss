@@ -29,7 +29,7 @@
   .form {
     &--search,
     &--inline {
-      @apply flex-row gap-3 mb-1;
+      @apply flex-row gap-3;
     }
 
     &--search {
@@ -55,7 +55,7 @@
 }
 
 .field {
-  @apply mb-4;
+  @apply mb-5;
 
   > small,
   .help-text {

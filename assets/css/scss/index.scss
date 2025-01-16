@@ -7,8 +7,21 @@
 //@import 'install';
 
 @layer base {
+  body {
+    line-height: normal;
+  }
+
   hr {
     @apply text-gray-30 my-6;
+  }
+
+  .p-component {
+    font-size: 1rem;
+    font-weight: normal;
+
+    & * {
+      @apply box-border;
+    }
   }
 }
 

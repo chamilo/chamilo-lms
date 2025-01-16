@@ -5,6 +5,8 @@
   .p-inputtext {
     @apply border-none py-4 pl-4 text-support-3;
 
+    font-size: 16px;
+
     &.p-invalid.p-component {
       @apply border-error;
     }
@@ -51,11 +53,11 @@
   }
 
   &__buttons {
-    @apply flex flex-row gap-4;
+    @apply grid grid-cols-2 gap-4;
 
     a.btn,
     .p-button {
-      @apply w-6/12 p-3.5;
+      @apply p-3.5 text-body-1;
     }
   }
 }

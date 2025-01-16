@@ -95,13 +95,6 @@ const buttonClass = computed(() => {
     return "p-3 text-tertiary hover:bg-tertiary-gradient/30"
   }
   let result = ""
-  switch (props.size) {
-    case "normal":
-      result += "py-2.5 px-4 "
-      break
-    case "small":
-      result += "py-2 px-3.5 "
-  }
 
   let commonDisabled =
     "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled disabled:pointer-events-auto disabled:cursor-not-allowed"

@@ -15,7 +15,7 @@
 
   .p-inputtext,
   .p-inputwrapper {
-    @apply flex-1 w-[1%];
+    @apply flex-auto w-[1%];
   }
 
   > .p-component,

@@ -1,7 +1,6 @@
 .btn {
-  @apply cursor-default font-semibold gap-2 inline-flex justify-center px-6 py-3 rounded-md transition flex-none;
-  font-size: 1rem;
-  line-height: 1rem;
+  @apply cursor-default font-semibold gap-2 inline-flex justify-center px-6 py-2 rounded-md transition flex-none;
+  font-size: 16px;
 
   &--primary {
     @apply bg-primary text-white;
@@ -230,9 +229,9 @@ $border-color_12: #9333EA;
 
 .p-button {
   @include filled-style('primary', 'support-4');
-  @apply cursor-default font-semibold gap-2 inline-flex justify-center px-6 py-3 rounded-md transition;
-  font-size: 1rem;
-  line-height: 1rem;
+  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center px-4 py-2 rounded-md transition;
+
+  font-size: 16px;
 
   &:focus {
     @apply outline-none;
@@ -259,7 +258,7 @@ $border-color_12: #9333EA;
   }
 
   &.p-button-sm {
-    @apply px-4 py-2;
+    @apply px-2 py-1;
     font-size: 13px;
   }
 

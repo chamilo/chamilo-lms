@@ -92,7 +92,7 @@ const primePlainProperty = computed(() => {
 
 const buttonClass = computed(() => {
   if (props.onlyIcon) {
-    return "p-3 text-tertiary hover:bg-tertiary-gradient/30"
+    return "text-tertiary hover:bg-tertiary-gradient/30"
   }
   let result = ""
 

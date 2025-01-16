@@ -1085,32 +1085,40 @@ class Display
      *
      * @return string
      */
-    public static function tabsOnlyLink($headers, $selected = null)
+    public static function tabsOnlyLink($headers, $selected = null, string $tabList = '')
     {
         $id = uniqid('tabs_');
-        $i = 1;
         $list = '';
-        foreach ($headers as $item) {
+
+        if ('integer' === gettype($selected)) {
+            $selected -= 1;
+        }
+
+        foreach ($headers as $key => $item) {
             $class = null;
-            if ($i == $selected) {
-                $class = 'btn--primary';
-            } else {
-                $class = 'btn--plain';
+            if ($key == $selected) {
+                $class = 'active';
             }
             $item = self::tag(
                 'a',
                 $item['content'],
                 [
-                    'id' => $id.'-'.$i,
+                    'id' => $id.'-'.$key,
                     'href' => $item['url'],
-                    'class' => 'btn '.$class,
+                    'class' => 'nav-link '.$class,
                 ]
             );
-            $list .= $item;
-            $i++;
+            $list .= '<li class="nav-item">'.$item.'</li>';
         }
 
-        return self::toolbarAction($id, [$list]);
+        return self::div(
+            self::tag(
+                'ul',
+                $list,
+                ['class' => 'nav nav-tabs']
+            ),
+            ['class' => "ul-tablist $tabList"]
+        );
     }
 
     /**

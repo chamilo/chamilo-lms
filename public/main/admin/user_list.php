@@ -1397,19 +1397,20 @@ if (0 == $table->get_total_number_of_items()) {
     }
 }
 
-$tabsHtml = '
-<div class="users-list">
-    <ul class="nav nav-tabs">
-      <li class="nav-item '.($view == 'all' ? 'active' : '').'">
-        <a class="nav-link '.($view == 'all' ? 'active' : '').'" href="user_list.php?view=all">'.get_lang('All users').'</a>
-      </li>
-      <li class="nav-item '.($view == 'deleted' ? 'active' : '').'">
-        <a class="nav-link '.($view == 'deleted' ? 'active' : '').'" href="user_list.php?view=deleted">'.get_lang('Deleted users').'</a>
-      </li>
-    </ul>
-</div>';
-
-$toolbarActions = $tabsHtml;
+$toolbarActions = Display::tabsOnlyLink(
+    [
+        'all' => [
+            'url' => 'user_list.php?view=all',
+            'content' => get_lang('All users'),
+        ],
+        'deleted' => [
+            'url' => 'user_list.php?view=deleted',
+            'content' => get_lang('Deleted users'),
+        ],
+    ],
+    $view,
+    'users-list'
+);
 $toolbarActions .= Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter.$actionsRight]);
 
 $tpl = new Template($tool_name);

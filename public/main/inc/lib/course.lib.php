@@ -6585,27 +6585,17 @@ class CourseManager
     public static function getCourseListTabs($listType)
     {
         $tabs = [
-            [
+            'simple' => [
                 'content' => get_lang('Standard list'),
                 'url' => api_get_path(WEB_CODE_PATH).'admin/course_list.php',
             ],
-            [
+            'admin' => [
                 'content' => get_lang('Management List'),
                 'url' => api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php',
             ],
         ];
 
-        $default = 1;
-        switch ($listType) {
-            case 'simple':
-                $default = 1;
-                break;
-            case 'admin':
-                $default = 2;
-                break;
-        }
-
-        return Display::tabsOnlyLink($tabs, $default);
+        return Display::tabsOnlyLink($tabs, $listType, 'course-list');
     }
 
     public static function getUrlMarker($courseId)

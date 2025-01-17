@@ -22,7 +22,6 @@
 <script setup>
 import { computed } from "vue"
 import { storeToRefs } from "pinia"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import { useCidReqStore } from "../../store/cidReq"
 
 const cidReqStore = useCidReqStore()

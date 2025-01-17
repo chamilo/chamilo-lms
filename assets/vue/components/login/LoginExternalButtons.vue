@@ -1,5 +1,4 @@
 <script setup>
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import BaseDivider from "../basecomponents/BaseDivider.vue"
 import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../../store/platformConfig"

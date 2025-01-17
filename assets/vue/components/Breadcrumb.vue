@@ -31,7 +31,6 @@ import { useI18n } from "vue-i18n"
 import Breadcrumb from "primevue/breadcrumb"
 import { useCidReqStore } from "../store/cidReq"
 import { storeToRefs } from "pinia"
-import BaseAppLink from "./basecomponents/BaseAppLink.vue"
 
 const legacyItems = ref(window.breadcrumb)
 

@@ -307,7 +307,6 @@ import { useSecurityStore } from "../../store/securityStore"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import InputGroup from "primevue/inputgroup"
 import InputText from "primevue/inputtext"
-import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import messageRelUserService from "../../services/messagereluser"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 

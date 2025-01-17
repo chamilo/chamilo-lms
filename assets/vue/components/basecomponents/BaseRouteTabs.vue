@@ -23,9 +23,6 @@
  * Component that will render a tab interface WITHOUT content. Every tab should be a router link. So, when user
  * change tab the route of the url will change
  */
-
-import BaseAppLink from "./BaseAppLink.vue"
-
 defineProps({
   tabs: {
     type: Array,

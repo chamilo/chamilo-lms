@@ -63,13 +63,11 @@ import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 import { useNotification } from "../../composables/notification"
 import { useI18n } from "vue-i18n"
 import PlatformLogo from "./PlatformLogo.vue"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { useCidReqStore } from "../../store/cidReq"
 
 const { t } = useI18n()
 
-// eslint-disable-next-line no-undef
 const props = defineProps({
   currentUser: {
     required: true,

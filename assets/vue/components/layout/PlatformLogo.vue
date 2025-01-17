@@ -2,7 +2,6 @@
 import { ref } from "vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useVisualTheme } from "../../composables/theme"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const platformConfigStore = usePlatformConfig()
 const { getThemeAssetUrl } = useVisualTheme()

@@ -946,7 +946,6 @@ class Display
     {
         if (!empty($url)) {
             $url = preg_replace('#&amp;#', '&', $url);
-            $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
             $attributes['href'] = $url;
         }
 

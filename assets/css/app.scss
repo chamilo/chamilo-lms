@@ -292,6 +292,10 @@
   }
 }
 
+.mdi {
+  @apply font-normal text-base leading-none;
+}
+
 .field > small.p-error {
   @apply text-error;
 }

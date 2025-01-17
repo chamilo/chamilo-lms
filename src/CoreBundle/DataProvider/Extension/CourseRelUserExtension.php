@@ -60,20 +60,24 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
             }
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return;
-        }
-
         if (CourseRelUser::class === $resourceClass) {
             if ('collection_query' === $operation?->getName()) {
-                /** @var User|null $user */
-                if (null === $user = $this->security->getUser()) {
-                    throw new AccessDeniedException('Access Denied.');
-                }
-
                 $rootAlias = $queryBuilder->getRootAliases()[0];
-                $queryBuilder->andWhere(\sprintf('%s.user = :current_user', $rootAlias));
-                $queryBuilder->setParameter('current_user', $user->getId());
+                $queryBuilder->leftJoin("$rootAlias.course", 'c');
+                $queryBuilder
+                    ->orderBy('c.title', 'ASC')
+                    ->addOrderBy("$rootAlias.sort", 'ASC')
+                    ->addOrderBy("$rootAlias.userCourseCat", 'ASC');
+
+                if (!$this->security->isGranted('ROLE_ADMIN')) {
+                    /** @var User|null $user */
+                    if (null === $user = $this->security->getUser()) {
+                        throw new AccessDeniedException('Access Denied.');
+                    }
+
+                    $queryBuilder->andWhere(\sprintf('%s.user = :current_user', $rootAlias));
+                    $queryBuilder->setParameter('current_user', $user->getId());
+                }
             }
         }
 

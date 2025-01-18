@@ -1943,31 +1943,31 @@ class SessionManager
      *
      * @author Carlos Vargas  from existing code
      *
-     * @param array $id_checked an array to delete sessions
-     * @param bool  $from_ws    optional, true if the function is called
+     * @param array $idChecked an array to delete sessions
+     * @param bool  $fromWs    optional, true if the function is called
      *                          by a webservice, false otherwise
      *
      * @return bool
      * */
-    public static function delete($id_checked, $from_ws = false)
+    public static function delete($idChecked, $fromWs = false)
     {
         $sessionId = null;
-        if (is_array($id_checked)) {
-            foreach ($id_checked as $sessionId) {
+        if (is_array($idChecked)) {
+            foreach ($idChecked as $sessionId) {
                 self::delete($sessionId);
             }
         } else {
-            $sessionId = (int) $id_checked;
+            $sessionId = (int) $idChecked;
         }
 
         if (empty($sessionId)) {
             return false;
         }
 
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_url_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $tblSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tblSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tblUrlSession = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $userGroupSessionTable = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
         $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $trackAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
@@ -1999,7 +1999,7 @@ class SessionManager
             return false;
         }
 
-        if (self::allowed($sessionEntity) && !$from_ws) {
+        if (self::allowed($sessionEntity) && !$fromWs) {
             if (!$sessionEntity->hasUserAsSessionAdmin($user) && !api_is_platform_admin()) {
                 api_not_allowed(true);
             }
@@ -2008,47 +2008,45 @@ class SessionManager
         // Delete Picture Session
         SessionManager::deleteAsset($sessionId);
 
-        // Delete documents inside a session
-        $courses = self::getCoursesInSession($sessionId);
-        foreach ($courses as $courseId) {
-            $courseInfo = api_get_course_info_by_id($courseId);
-            /*DocumentManager::deleteDocumentsFromSession($courseInfo, $sessionId);
-            $works = Database::select(
-                '*',
-                $tbl_student_publication,
-                [
-                    'where' => ['session_id = ? AND c_id = ?' => [$sessionId, $courseId]],
-                ]
-            );
-
-            $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
-            foreach ($works as $index => $work) {
-                if ($work['filetype'] = 'folder') {
-                    Database::query("DELETE FROM $tbl_student_publication_assignment WHERE publication_id = $index");
-                }
-                my_delete($currentCourseRepositorySys.'/'.$work['url']);
-            }*/
-        }
-
         $sessionName = $sessionEntity->getTitle();
         $em->remove($sessionEntity);
         $em->flush();
 
-        // Class
-        $sql = "DELETE FROM $userGroupSessionTable
-                WHERE session_id = $sessionId";
-        Database::query($sql);
+        // Delete explicitly from tables not directly related to 'session'
+        $tables = [
+            'track_e_lastaccess',
+            'track_e_default',
+            'track_e_exercise_confirmation',
+            'track_e_links',
+            'track_e_online',
+            'track_e_attempt_qualify',
+            'track_e_access_complete',
+            'track_e_uploads',
+            'track_course_ranking',
+            'c_dropbox_file',
+            'c_forum_thread_qualify_log',
+            'c_dropbox_post',
+            'c_survey_answer',
+            'c_wiki_mailcue',
+            'c_dropbox_category',
+            'skill_rel_item',
+            'scheduled_announcements',
+            'sequence_row_entity',
+        ];
 
-        //Database::query("DELETE FROM $tbl_student_publication WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id = $sessionId");
-        //Database::query("DELETE FROM $tbl_item_properties WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $tbl_url_session WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $trackCourseAccess WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $trackAccess WHERE session_id = $sessionId");
-        $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id = $sessionId";
-        Database::query($sql);
+        foreach ($tables as $table) {
+            Database::delete($table, ['session_id = ?' => $sessionId]);
+        }
+
+        // Delete other related tables
+        Database::delete($userGroupSessionTable, ['session_id = ?' => $sessionId]);
+        Database::delete($tblSessionRelCourse, ['session_id = ?' => $sessionId]);
+        Database::delete($tblSessionRelCourseRelUser, ['session_id = ?' => $sessionId]);
+        Database::delete($tblSessionRelUser, ['session_id = ?' => $sessionId]);
+        Database::delete($tblUrlSession, ['session_id = ?' => $sessionId]);
+        Database::delete($trackCourseAccess, ['session_id = ?' => $sessionId]);
+        Database::delete($trackAccess, ['session_id = ?' => $sessionId]);
+        Database::update($ticket, ['session_id' => null], ['session_id = ?' => $sessionId]);
 
         $extraFieldValue = new ExtraFieldValue('session');
         $extraFieldValue->deleteValuesByItem($sessionId);

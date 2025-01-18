@@ -334,6 +334,7 @@ $tools = [
     get_lang('Courses') => [
         'report=courses' => get_lang('Courses'),
         'report=tools' => get_lang('Tools access'),
+        'report=tool_usage' => get_lang('Tool Usage Report'),
         'report=courselastvisit' => get_lang('Latest access'),
         'report=coursebylanguage' => get_lang('Number of courses by language'),
     ],
@@ -707,6 +708,66 @@ switch ($report) {
     case 'tools':
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         $content .= Statistics::printToolStats();
+        break;
+    case 'tool_usage':
+        $courseTools = Statistics::getAvailableTools();
+
+        if (empty($courseTools)) {
+            $content .= '<div class="alert alert-info">'.get_lang('No tools available for this report').'</div>';
+            break;
+        }
+
+        $form = new FormValidator('tool_usage', 'get');
+        $form->addHeader(get_lang('Tool Usage Report'));
+        $form->addSelect(
+            'tool_ids',
+            get_lang('Select Tools'),
+            $courseTools,
+            ['multiple' => true, 'required' => true]
+        );
+        $form->addButtonSearch(get_lang('Generate Report'));
+        $form->addHidden('report', 'tool_usage');
+
+        $content .= $form->returnForm();
+
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
+            $toolIds = $values['tool_ids'];
+            $reportData = Statistics::getToolUsageReportByTools($toolIds);
+
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table stats_table']);
+            $headers = [
+                get_lang('Tool'),
+                get_lang('Session'),
+                get_lang('Course'),
+                get_lang('Items Count'),
+                get_lang('Last Updated'),
+            ];
+            $row = 0;
+
+            foreach ($headers as $index => $header) {
+                $table->setHeaderContents($row, $index, $header);
+            }
+            $row++;
+
+            foreach ($reportData as $data) {
+                $linkHtml = $data['link'] !== '-'
+                    ? sprintf(
+                        '<a href="%s" class="text-blue-500 underline hover:text-blue-700" target="_self">%s</a>',
+                        $data['link'],
+                        htmlspecialchars($data['tool_name'])
+                    )
+                    : htmlspecialchars($data['tool_name']);
+
+                $table->setCellContents($row, 0, $linkHtml);
+                $table->setCellContents($row, 1, htmlspecialchars($data['session_name']));
+                $table->setCellContents($row, 2, htmlspecialchars($data['course_name']));
+                $table->setCellContents($row, 3, (int) $data['resource_count']);
+                $table->setCellContents($row, 4, htmlspecialchars($data['last_updated']));
+                $row++;
+            }
+            $content .= $table->toHtml();
+        }
         break;
     case 'coursebylanguage':
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';

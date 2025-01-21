@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
@@ -30,6 +31,8 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Chamilo\CourseBundle\Entity\CLink;
+use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
@@ -133,6 +136,7 @@ class CourseController extends ToolBaseController
         Request $request,
         CShortcutRepository $shortcutRepository,
         EntityManagerInterface $em,
+        AssetRepository $assetRepository
     ): Response {
         $requestData = json_decode($request->getContent(), true);
         // Sort behaviour
@@ -214,6 +218,22 @@ class CourseController extends ToolBaseController
         if (null !== $user) {
             $shortcutQuery = $shortcutRepository->getResources($course->getResourceNode());
             $shortcuts = $shortcutQuery->getQuery()->getResult();
+
+            /* @var CShortcut $shortcut */
+            foreach ($shortcuts as $shortcut) {
+                $resourceNode = $shortcut->getShortCutNode();
+                $cLink = $em->getRepository(CLink::class)->findOneBy(['resourceNode' => $resourceNode]);
+
+                if ($cLink) {
+                    $shortcut->setCustomImageUrl(
+                        $cLink->getCustomImage()
+                            ? $assetRepository->getAssetUrl($cLink->getCustomImage())
+                            : null
+                    );
+                } else {
+                    $shortcut->setCustomImageUrl(null);
+                }
+            }
         }
         $responseData = [
             'shortcuts' => $shortcuts,

@@ -179,7 +179,7 @@ class AiHelperPlugin extends Plugin
         $response = curl_exec($ch);
 
         if ($response === false) {
-            error_log('Error en cURL: ' . curl_error($ch));
+            error_log('cURL error: ' . curl_error($ch));
             curl_close($ch);
             return ['error' => true, 'message' => 'Request to AI provider failed.'];
         }

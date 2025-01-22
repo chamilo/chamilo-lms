@@ -70,7 +70,7 @@ function generateAikenForm()
     if ($hasSingleApi) {
         $apiName = $availableApis[$configuredApi] ?? $configuredApi;
         $form->addHtml('<div style="margin-bottom: 10px; font-size: 14px; color: #555;">'
-            . get_lang('UsingAIProvider') . ': <strong>' . htmlspecialchars($apiName) . '</strong></div>');
+            . sprintf(get_lang('UsingAIProviderX'), ': <strong>'.htmlspecialchars($apiName).'</strong>').'</div>');
     }
 
     $form->addElement('text', 'quiz_name', get_lang('QuestionsTopic'));

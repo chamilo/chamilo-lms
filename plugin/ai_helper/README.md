@@ -1,46 +1,67 @@
-AI Helper plugin
+AI Helper Plugin
 ======
 
-Version 1.1
+Version 1.2
 
-> This plugin is meant to be later integrated into Chamilo (in a major version
-release).
+> This plugin is designed to integrate AI functionality into Chamilo, providing tools for generating educational content, such as quizzes or learning paths, using AI providers like OpenAI or DeepSeek.
 
-The AI helper plugin integrates into parts of the platform that seem the most useful to teachers/trainers or learners. 
-Because available Artificial Intelligence (to use the broad term) now allows us to ask for meaningful texts to be generated, we can use those systems to pre-generate content, then let the teacher/trainer review the content before publication.
+---
 
-Currently, this plugin is only integrated into:
+### Overview
 
- - exercises: in the Aiken import form, scrolling down
- - learnpaths: option to create one with openai
+The AI Helper plugin integrates into parts of the Chamilo platform that are most useful to teachers/trainers or learners. It allows pre-generating content, letting teachers/trainers review it before publishing.
 
-### OpenAI/ChatGPT
+Currently, this plugin is integrated into:
 
-The plugin, created in early 2023, currently only supports OpenAI's ChatGPT API.
-Create an account at https://platform.openai.com/signup (if you already have an API account, go 
-to https://platform.openai.com/login), then generate a secret key at https://platform.openai.com/account/api-keys 
-or click on "Personal" -> "View API keys".
-Click the "Create new secret key" button, copy the key and use it to fill the "API key" field on the 
-plugin configuration page.
+- **Exercises:** In the Aiken import form, with options to generate questions using OpenAI or DeepSeek.
+- **Learnpaths:** Option to create structured learning paths with OpenAI or DeepSeek.
 
-# Changelog
+---
 
-## v1.1
+### Supported AI Providers
 
-Added tracking for requests and differential settings to enable only in exercises, only in learning paths, or both.
+#### OpenAI/ChatGPT
+The plugin, created in early 2023, supports OpenAI's ChatGPT API.
+- **Setup:**
+1. Create an account at [OpenAI](https://platform.openai.com/signup) (or login if you already have one).
+2. Generate a secret key at [API Keys](https://platform.openai.com/account/api-keys).
+3. Click "Create new secret key," copy the key, and paste it into the "API key" field in the plugin configuration.
 
-To update from v1.0, execute the following queries manually.
+#### DeepSeek
+DeepSeek is an alternative AI provider focused on generating educational content.
+- **Setup:**
+1. Obtain an API key from your DeepSeek account.
+2. Paste the key into the "API key" field in the plugin configuration.
+
+---
+
+### Features
+
+- Generate quizzes in the Aiken format using AI.
+- Create structured learning paths with AI assistance.
+- Support for multiple AI providers, enabling easy switching between OpenAI and DeepSeek.
+- Tracks API requests for monitoring usage and limits.
+
+---
+
+### Database Requirements
+
+No additional database changes are required for v1.2.  
+The existing table `plugin_ai_helper_requests` is sufficient for tracking requests from both OpenAI and DeepSeek.
+
+If you're updating from **v1.0**, ensure the following table exists:
+
 ```sql
 CREATE TABLE plugin_ai_helper_requests (
-id int(11) NOT NULL AUTO_INCREMENT,
-user_id int(11) NOT NULL,
-tool_name varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-requested_at datetime DEFAULT NULL,
-request_text varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-prompt_tokens int(11) NOT NULL,
-completion_tokens int(11) NOT NULL,
-total_tokens int(11) NOT NULL,
-PRIMARY KEY (id)
+  id int(11) NOT NULL AUTO_INCREMENT,
+  user_id int(11) NOT NULL,
+  tool_name varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  requested_at datetime DEFAULT NULL,
+  request_text varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  prompt_tokens int(11) NOT NULL,
+  completion_tokens int(11) NOT NULL,
+  total_tokens int(11) NOT NULL,
+  PRIMARY KEY (id)
 ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 ```
 If you got this update through Git, you will also need to run `composer install` to update the autoload mechanism.

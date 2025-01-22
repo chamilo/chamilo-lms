@@ -3,20 +3,21 @@
 
 use Chamilo\PluginBundle\Entity\AiHelper\Requests;
 use Doctrine\ORM\Tools\SchemaTool;
-
+require_once __DIR__ . '/src/deepseek/DeepSeek.php';
 /**
  * Description of AiHelperPlugin.
  *
- * @author Christian Beeznest <christian.fasanando@beeznest.com>
+ * @author Christian Beeznest
  */
 class AiHelperPlugin extends Plugin
 {
     public const TABLE_REQUESTS = 'plugin_ai_helper_requests';
     public const OPENAI_API = 'openai';
+    public const DEEPSEEK_API = 'deepseek';
 
     protected function __construct()
     {
-        $version = '1.1';
+        $version = '1.2';
         $author = 'Christian Fasanando';
 
         $message = 'Description';
@@ -39,7 +40,7 @@ class AiHelperPlugin extends Plugin
     }
 
     /**
-     * Get the list of apis availables.
+     * Get the list of APIs available.
      *
      * @return array
      */
@@ -47,20 +48,19 @@ class AiHelperPlugin extends Plugin
     {
         $list = [
             self::OPENAI_API => 'OpenAI',
+            self::DEEPSEEK_API => 'DeepSeek',
         ];
 
         return $list;
     }
 
     /**
-     * Get the completion text from openai.
+     * Get the completion text from the selected API.
      *
-     * @return string
+     * @return string|array
      */
-    public function openAiGetCompletionText(
-        string $prompt,
-        string $toolName
-    ) {
+    public function getCompletionText(string $prompt, string $toolName)
+    {
         if (!$this->validateUserTokensLimit(api_get_user_id())) {
             return [
                 'error' => true,
@@ -68,47 +68,216 @@ class AiHelperPlugin extends Plugin
             ];
         }
 
-        require_once __DIR__.'/src/openai/OpenAi.php';
+        $apiName = $this->get('api_name');
 
+        switch ($apiName) {
+            case self::OPENAI_API:
+                return $this->openAiGetCompletionText($prompt, $toolName);
+            case self::DEEPSEEK_API:
+                return $this->deepSeekGetCompletionText($prompt, $toolName);
+            default:
+                return [
+                    'error' => true,
+                    'message' => 'API not supported.',
+                ];
+        }
+    }
+
+    /**
+     * Get completion text from OpenAI.
+     */
+    public function openAiGetCompletionText(string $prompt, string $toolName)
+    {
+        try {
+            require_once __DIR__.'/src/openai/OpenAi.php';
+
+            $apiKey = $this->get('api_key');
+            $organizationId = $this->get('organization_id');
+
+            $ai = new OpenAi($apiKey, $organizationId);
+
+            $params = [
+                'model' => 'gpt-3.5-turbo-instruct',
+                'prompt' => $prompt,
+                'temperature' => 0.2,
+                'max_tokens' => 2000,
+                'frequency_penalty' => 0,
+                'presence_penalty' => 0.6,
+                'top_p' => 1.0,
+            ];
+
+            $complete = $ai->completion($params);
+            $result = json_decode($complete, true);
+
+            if (isset($result['error'])) {
+                $errorMessage = $result['error']['message'] ?? 'Unknown error';
+                error_log("OpenAI Error: $errorMessage");
+                return [
+                    'error' => true,
+                    'message' => $errorMessage,
+                ];
+            }
+
+            $resultText = $result['choices'][0]['text'] ?? '';
+
+            if (!empty($resultText)) {
+                $this->saveRequest([
+                    'user_id' => api_get_user_id(),
+                    'tool_name' => $toolName,
+                    'prompt' => $prompt,
+                    'prompt_tokens' => (int) ($result['usage']['prompt_tokens'] ?? 0),
+                    'completion_tokens' => (int) ($result['usage']['completion_tokens'] ?? 0),
+                    'total_tokens' => (int) ($result['usage']['total_tokens'] ?? 0),
+                ]);
+            }
+
+            return $resultText ?: 'No response generated.';
+
+        } catch (Exception $e) {
+            return [
+                'error' => true,
+                'message' => 'An error occurred while connecting to OpenAI: ' . $e->getMessage(),
+            ];
+        }
+    }
+
+    /**
+     * Get completion text from DeepSeek.
+     */
+    public function deepSeekGetCompletionText(string $prompt, string $toolName)
+    {
         $apiKey = $this->get('api_key');
-        $organizationId = $this->get('organization_id');
 
-        $ai = new OpenAi($apiKey, $organizationId);
+        $url = 'https://api.deepseek.com/chat/completions';
 
-        $temperature = 0.2;
-        $model = 'gpt-3.5-turbo-instruct';
-        $maxTokens = 2000;
-        $frequencyPenalty = 0;
-        $presencePenalty = 0.6;
-        $topP = 1.0;
+        $payload = [
+            'model' => 'deepseek-chat',
+            'messages' => [
+                [
+                    'role' => 'system',
+                    'content' => ($toolName === 'quiz')
+                        ? 'You are a helpful assistant that generates Aiken format questions.'
+                        : 'You are a helpful assistant that generates learning path contents.',
+                ],
+                [
+                    'role' => 'user',
+                    'content' => $prompt,
+                ],
+            ],
+            'stream' => false,
+        ];
 
-        $complete = $ai->completion([
-            'model' => $model,
-            'prompt' => $prompt,
-            'temperature' => $temperature,
-            'max_tokens' => $maxTokens,
-            'frequency_penalty' => $frequencyPenalty,
-            'presence_penalty' => $presencePenalty,
-            'top_p' => $topP,
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            "Authorization: Bearer $apiKey",
         ]);
 
-        $result = json_decode($complete, true);
-        $resultText = '';
-        if (!empty($result['choices'])) {
-            $resultText = $result['choices'][0]['text'];
-            // saves information of user results.
-            $values = [
-                'user_id' => api_get_user_id(),
-                'tool_name' => $toolName,
-                'prompt' => $prompt,
-                'prompt_tokens' => (int) $result['usage']['prompt_tokens'],
-                'completion_tokens' => (int) $result['usage']['completion_tokens'],
-                'total_tokens' => (int) $result['usage']['total_tokens'],
-            ];
-            $this->saveRequest($values);
+        $response = curl_exec($ch);
+
+        if ($response === false) {
+            error_log('Error en cURL: ' . curl_error($ch));
+            curl_close($ch);
+            return ['error' => true, 'message' => 'Request to AI provider failed.'];
         }
 
+        curl_close($ch);
+
+        $result = json_decode($response, true);
+
+        if (isset($result['error'])) {
+            return [
+                'error' => true,
+                'message' => $result['error']['message'] ?? 'Unknown error',
+            ];
+        }
+
+        $resultText = $result['choices'][0]['message']['content'] ?? '';
+        $this->saveRequest([
+            'user_id' => api_get_user_id(),
+            'tool_name' => $toolName,
+            'prompt' => $prompt,
+            'prompt_tokens' => 0,
+            'completion_tokens' => 0,
+            'total_tokens' => 0,
+        ]);
+
         return $resultText;
+    }
+
+    /**
+     * Generate questions based on the selected AI provider.
+     *
+     * @param int $nQ Number of questions
+     * @param string $lang Language for the questions
+     * @param string $topic Topic of the questions
+     * @param string $questionType Type of questions (e.g., 'multiple_choice')
+     * @return string Questions generated in Aiken format
+     * @throws Exception If an error occurs
+     */
+    public function generateQuestions(int $nQ, string $lang, string $topic, string $questionType = 'multiple_choice'): string
+    {
+        $apiName = $this->get('api_name');
+
+        switch ($apiName) {
+            case self::OPENAI_API:
+                return $this->generateOpenAiQuestions($nQ, $lang, $topic, $questionType);
+            case self::DEEPSEEK_API:
+                return $this->generateDeepSeekQuestions($nQ, $lang, $topic);
+            default:
+                throw new Exception("Unsupported API provider: $apiName");
+        }
+    }
+
+    /**
+     * Generate questions using OpenAI.
+     */
+    private function generateOpenAiQuestions(int $nQ, string $lang, string $topic, string $questionType): string
+    {
+        $prompt = sprintf(
+            'Generate %d "%s" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The line starting with \'ANSWER\' must not be separated from the last possible answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text without quotes. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question.',
+            $nQ,
+            $questionType,
+            $lang,
+            $topic
+        );
+
+        $result = $this->openAiGetCompletionText($prompt, 'quiz');
+        if (isset($result['error']) && true === $result['error']) {
+            throw new Exception($result['message']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Generate questions using DeepSeek.
+     */
+    private function generateDeepSeekQuestions(int $nQ, string $lang, string $topic): string
+    {
+        $apiKey = $this->get('api_key');
+        $payload = [
+            'model' => 'deepseek-chat',
+            'messages' => [
+                [
+                    'role' => 'system',
+                    'content' => 'You are a helpful assistant that generates Aiken format questions.',
+                ],
+                [
+                    'role' => 'user',
+                    'content' => "Generate $nQ multiple choice questions about \"$topic\" in $lang.",
+                ],
+            ],
+            'stream' => false,
+        ];
+
+        $deepSeek = new DeepSeek($apiKey);
+        $response = $deepSeek->generateQuestions($payload);
+
+        return $response;
     }
 
     /**

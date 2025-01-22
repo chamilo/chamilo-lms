@@ -259,6 +259,13 @@ class AiHelperPlugin extends Plugin
     private function generateDeepSeekQuestions(int $nQ, string $lang, string $topic): string
     {
         $apiKey = $this->get('api_key');
+        $prompt = sprintf(
+            'Generate %d "%s" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The line starting with \'ANSWER\' must not be separated from the last possible answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text without quotes. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question.',
+            $nQ,
+            $questionType,
+            $lang,
+            $topic
+        );
         $payload = [
             'model' => 'deepseek-chat',
             'messages' => [
@@ -268,7 +275,7 @@ class AiHelperPlugin extends Plugin
                 ],
                 [
                     'role' => 'user',
-                    'content' => "Generate $nQ multiple choice questions about \"$topic\" in $lang.",
+                    'content' => $prompt,
                 ],
             ],
             'stream' => false,

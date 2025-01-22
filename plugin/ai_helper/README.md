@@ -25,13 +25,14 @@ The plugin, created in early 2023, supports OpenAI's ChatGPT API.
 - **Setup:**
 1. Create an account at [OpenAI](https://platform.openai.com/signup) (or login if you already have one).
 2. Generate a secret key at [API Keys](https://platform.openai.com/account/api-keys).
-3. Click "Create new secret key," copy the key, and paste it into the "API key" field in the plugin configuration.
+3. Click "Create new secret key", copy the key, and paste it into the "API key" field in the plugin configuration.
 
 #### DeepSeek
-DeepSeek is an alternative AI provider focused on generating educational content.
+DeepSeek is an alternative Open Source AI provider.
 - **Setup:**
-1. Obtain an API key from your DeepSeek account.
-2. Paste the key into the "API key" field in the plugin configuration.
+1. Create an account at [DeepSeek](https://www.deepseek.com/) (or login if you already have one).
+2. Generate an API key at [API Keys](https://platform.deepseek.com/api_keys).
+3. Click "Create new API key", copy the key, and paste it into the "API key" field in the plugin configuration.
 
 ---
 

@@ -226,7 +226,7 @@ class AiHelperPlugin extends Plugin
             case self::OPENAI_API:
                 return $this->generateOpenAiQuestions($nQ, $lang, $topic, $questionType);
             case self::DEEPSEEK_API:
-                return $this->generateDeepSeekQuestions($nQ, $lang, $topic);
+                return $this->generateDeepSeekQuestions($nQ, $lang, $topic, $questionType);
             default:
                 throw new Exception("Unsupported API provider: $apiName");
         }
@@ -256,7 +256,7 @@ class AiHelperPlugin extends Plugin
     /**
      * Generate questions using DeepSeek.
      */
-    private function generateDeepSeekQuestions(int $nQ, string $lang, string $topic): string
+    private function generateDeepSeekQuestions(int $nQ, string $lang, string $topic, string $questionType): string
     {
         $apiKey = $this->get('api_key');
         $prompt = sprintf(

@@ -5,6 +5,7 @@ doctrine:
         user: '%env(DATABASE_USER)%'
         password: '%env(DATABASE_PASSWORD)%'
         host: '%env(DATABASE_HOST)%'
+        port: '%env(DATABASE_PORT)%'
         driver: 'pdo_mysql'
         charset: utf8mb4
         options:

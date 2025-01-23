@@ -20,14 +20,86 @@ Session::erase('objExercise');
 Session::erase('objQuestion');
 Session::erase('objAnswer');
 
-$interbreadcrumb[] = ['url' => '/admin', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => Container::getRouter()->generate('admin'), 'name' => get_lang('Administration')];
+$action = $_REQUEST['action'] ?? '';
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : '';
+$description = $_REQUEST['description'] ?? '';
+$title = $_REQUEST['title'] ?? '';
+$page = !empty($_GET['page']) ? (int) $_GET['page'] : 1;
+
+// Prepare lists for form
+// Courses list
+$selectedCourse = isset($_GET['selected_course']) ? (int) $_GET['selected_course'] : null;
+$courseList = CourseManager::get_courses_list(0, 0, 'title');
+$courseSelectionList = ['-1' => get_lang('Select')];
+
+foreach ($courseList as $item) {
+    $course = api_get_course_entity($item['real_id']);
+    $courseSelectionList[$course->getId()] = '';
+
+    if ($course->getId() == api_get_course_int_id()) {
+        $courseSelectionList[$course->getId()] = '>&nbsp;&nbsp;&nbsp;&nbsp;';
+    }
+
+    $courseSelectionList[$course->getId()] .= $course->getTitle();
+}
+
+// Difficulty list (only from 0 to 5)
+$questionLevel = isset($_REQUEST['question_level']) ? (int) $_REQUEST['question_level'] : -1;
+$levels = [
+    -1 => get_lang('All'),
+    0 => 0,
+    1 => 1,
+    2 => 2,
+    3 => 3,
+    4 => 4,
+    5 => 5,
+];
+
+// Answer type
+$answerType = isset($_REQUEST['answer_type']) ? (int) $_REQUEST['answer_type'] : null;
+$questionList = Question::getQuestionTypeList();
+$questionTypesList = [];
+$questionTypesList['-1'] = get_lang('All');
+
+foreach ($questionList as $key => $item) {
+    $questionTypesList[$key] = get_lang($item[1]);
+}
 
 $form = new FormValidator('admin_questions', 'get');
 $form->addHeader(get_lang('Questions'));
 $form->addText('id', get_lang('Id'), false);
 $form->addText('title', get_lang('Title'), false);
 $form->addText('description', get_lang('Description'), false);
+$form
+    ->addSelect(
+        'selected_course',
+        [get_lang('Course'), get_lang('Course in which the question was initially created.')],
+        $courseSelectionList,
+        ['id' => 'selected_course']
+    )
+    ->setSelected($selectedCourse)
+;
+$form
+    ->addSelect(
+        'question_level',
+        get_lang('Difficulty'),
+        $levels,
+        ['id' => 'question_level']
+    )
+    ->setSelected($questionLevel)
+;
+$form
+    ->addSelect(
+        'answer_type',
+        get_lang('Answer type'),
+        $questionTypesList,
+        ['id' => 'answer_type']
+    )
+    ->setSelected($answerType)
+;
 $form->addHidden('form_sent', 1);
+$form->addHidden('course_id_changed', '0');
 $form->addButtonSearch(get_lang('Search'));
 
 $questions = [];
@@ -37,12 +109,19 @@ $length = 20;
 $questionCount = 0;
 $start = 0;
 $end = 0;
+$pdfContent = '';
+
+$params = [
+    'id' => $id,
+    'title' => Security::remove_XSS($title),
+    'description' => Security::remove_XSS($description),
+    'selected_course' => $selectedCourse,
+    'question_level' => $questionLevel,
+    'answer_type' => $answerType,
+];
 
 if ($formSent) {
-    $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : '';
-    $description = isset($_REQUEST['description']) ? $_REQUEST['description'] : '';
-    $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
-    $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
+    $params['form_sent'] = 1;
 
     $em = Database::getManager();
     $repo = $em->getRepository(CQuizQuestion::class);
@@ -61,22 +140,26 @@ if ($formSent) {
         $criteria->orWhere($criteria->expr()->contains('question', "%$title%"));
     }
 
+//    if (-1 !== $selectedCourse) {
+//        $criteria->andWhere($criteria->expr()->eq('cId', $selectedCourse));
+//    }
+
+    if (-1 !== $questionLevel) {
+        $criteria->andWhere($criteria->expr()->eq('level', $questionLevel));
+    }
+    if (-1 !== $answerType) {
+        $criteria->andWhere($criteria->expr()->eq('type', $answerType));
+    }
+
     $questions = $repo->matching($criteria);
 
-    if (empty($id)) {
-        $id = '';
-    }
-    $params = [
-        'id' => $id,
-        'title' => Security::remove_XSS($title),
-        'description' => Security::remove_XSS($description),
-        'form_sent' => 1,
-    ];
     $url = api_get_self().'?'.http_build_query($params);
-
     $form->setDefaults($params);
-
     $questionCount = count($questions);
+
+    if ('export_pdf' === $action) {
+        $length = $questionCount;
+    }
 
     $paginator = new Paginator(Container::$container->get('event_dispatcher'));
     $pagination = $paginator->paginate($questions, $page, $length);
@@ -141,6 +224,14 @@ if ($formSent) {
                 true
             );
             $question->questionData = ob_get_contents();
+
+            if ('export_pdf' === $action) {
+                $pdfContent .= '<span style="color:#000; font-weight:bold; font-size:x-large;">#'.$question->getIid().'. '.$question->getQuestion().'</span><br />';
+                $pdfContent .= '<span style="color:#444;">('.$questionTypesList[$question->getType()].') ['.get_lang('Source').': '.$courseCode.']</span><br />';
+                $pdfContent .= $question->getDescription().'<br />';
+                $pdfContent .= $question->questionData;
+                continue;
+            }
 
             $deleteUrl = $url.'&'.http_build_query([
                 'courseId' => $question->getCId(),
@@ -222,11 +313,20 @@ if ($formSent) {
 
 $formContent = $form->returnForm();
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 switch ($action) {
+    case 'export_pdf':
+        $pdfContent = Security::remove_XSS($pdfContent);
+        $pdfParams = [
+            'filename' => 'questions-export-'.api_get_local_time(),
+            'pdf_date' => api_get_local_time(),
+            'orientation' => 'P',
+        ];
+        $pdf = new PDF('A4', $pdfParams['orientation'], $pdfParams);
+        $pdf->html_to_pdf_with_template($pdfContent, false, false, true);
+        exit;
     case 'delete':
-        $questionId = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : '';
-        $courseId = isset($_REQUEST['courseId']) ? $_REQUEST['courseId'] : '';
+        $questionId = $_REQUEST['questionId'] ?? '';
+        $courseId = $_REQUEST['courseId'] ?? '';
         $courseInfo = api_get_course_info_by_id($courseId);
 
         if (!empty($courseInfo)) {
@@ -245,16 +345,36 @@ switch ($action) {
 
         header("Location: $url");
         exit;
-        break;
 }
+
+$actionsLeft = Display::url(
+    Display::return_icon('back.png', get_lang('Administration'), [], ICON_SIZE_MEDIUM),
+    Container::getRouter()->generate('admin'),
+);
+
+$exportUrl = Container::getRouter()->generate(
+    'legacy_main',
+    ['name' => 'admin/questions.php', 'action' => 'export_pdf', ...$params]
+);
+
+$actionsRight = Display::url(
+    Display::return_icon('pdf.png', get_lang('Export to PDF'), [], ICON_SIZE_MEDIUM),
+    $exportUrl
+);
+
+$toolbar = Display::toolbarAction(
+    'toolbar-admin-questions',
+    [$actionsLeft, $actionsRight]
+);
 
 $tpl = new Template(get_lang('Questions'));
 $tpl->assign('form', $formContent);
+$tpl->assign('toolbar', $toolbar);
 $tpl->assign('pagination', $pagination);
 $tpl->assign('pagination_length', $length);
 $tpl->assign('start', $start);
 $tpl->assign('end', $end);
 $tpl->assign('question_count', $questionCount);
 
-$layout = $tpl->get_template('admin/questions.tpl');
+$layout = $tpl->get_template('admin/questions.html.twig');
 $tpl->display($layout);

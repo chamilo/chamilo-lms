@@ -4082,14 +4082,16 @@ function copy_folder_course_session(
     $session_id,
     $course_info,
     $document,
-    $source_course_id
+    $source_course_id,
+    array $originalFolderNameList = [],
+    string $originalBaseName = ''
 ) {
     $table = Database::get_course_table(TABLE_DOCUMENT);
     $session_id = intval($session_id);
     $source_course_id = intval($source_course_id);
 
     // Check whether directory already exists.
-    if (is_dir($pathname) || empty($pathname)) {
+    if (empty($pathname) || is_dir($pathname)) {
         return true;
     }
 
@@ -4100,12 +4102,20 @@ function copy_folder_course_session(
         return false;
     }
 
+    $baseNoDocument = str_replace('document', '', $originalBaseName);
+    $folderTitles = explode('/', $baseNoDocument);
+    $folderTitles = array_filter($folderTitles);
+
+    $table = Database::get_course_table(TABLE_DOCUMENT);
+    $session_id = (int) $session_id;
+    $source_course_id = (int) $source_course_id;
+
     $course_id = $course_info['real_id'];
     $folders = explode(DIRECTORY_SEPARATOR, str_replace($base_path_document.DIRECTORY_SEPARATOR, '', $pathname));
     $new_pathname = $base_path_document;
     $path = '';
 
-    foreach ($folders as $folder) {
+    foreach ($folders as $index => $folder) {
         $new_pathname .= DIRECTORY_SEPARATOR.$folder;
         $path .= DIRECTORY_SEPARATOR.$folder;
 
@@ -4123,13 +4133,22 @@ function copy_folder_course_session(
 
             if (0 == $num_rows) {
                 mkdir($new_pathname, api_get_permissions_for_new_directories());
+                $title = basename($new_pathname);
+
+                if (isset($folderTitles[$index + 1])) {
+                    $checkPath = $folderTitles[$index +1];
+
+                    if (isset($originalFolderNameList[$checkPath])) {
+                        $title = $originalFolderNameList[$checkPath];
+                    }
+                }
 
                 // Insert new folder with destination session_id.
                 $params = [
                     'c_id' => $course_id,
                     'path' => $path,
                     'comment' => $document->comment,
-                    'title' => basename($new_pathname),
+                    'title' => $title,
                     'filetype' => 'folder',
                     'size' => '0',
                     'session_id' => $session_id,

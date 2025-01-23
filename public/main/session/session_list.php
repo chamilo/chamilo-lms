@@ -20,7 +20,12 @@ $action = $_REQUEST['action'] ?? null;
 $idChecked = $_REQUEST['idChecked'] ?? null;
 $idMultiple = $_REQUEST['id'] ?? null;
 $listType = isset($_REQUEST['list_type']) ? Security::remove_XSS($_REQUEST['list_type']) : SessionManager::getDefaultSessionTab();
-$copySessionContent = isset($_REQUEST['copy_session_content']) ? true : false;
+$copySessionContent = isset($_REQUEST['copy_session_content']);
+$addSessionContent = 'true' === api_get_setting('session.duplicate_specific_session_content_on_session_copy');
+
+if (!$addSessionContent) {
+    $copySessionContent = false;
+}
 
 switch ($action) {
     case 'delete_multiple':
@@ -50,7 +55,14 @@ switch ($action) {
         header('Location: '.$url);
         exit();
     case 'copy':
-        $result = SessionManager::copy($idChecked);
+        $result = SessionManager::copy(
+          (int) $idChecked,
+          true,
+          true,
+          false,
+          false,
+          $copySessionContent
+        );
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('ItemCopied')));
         } else {
@@ -65,7 +77,7 @@ switch ($action) {
     case 'copy_multiple':
         $sessionList = explode(',', $idMultiple);
         foreach ($sessionList as $id) {
-            $sessionIdCopied = SessionManager::copy($id);
+            $sessionIdCopied = SessionManager::copy((int) $id);
             if ($sessionIdCopied) {
                 $sessionInfo = api_get_session_info($sessionIdCopied);
                 Display::addFlash(Display::return_message(get_lang('ItemCopied').' - '.$sessionInfo['name']));
@@ -152,14 +164,38 @@ if (isset($_REQUEST['keyword'])) {
     $filter->groupOp = 'OR';
 
     $filter = json_encode($filter);
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters='.$filter.'&searchField=s.title&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=in';
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?'
+        .http_build_query([
+            'a' => 'get_sessions',
+            '_force_search' => 'true',
+            'rows' => 20,
+            'page' => 1,
+            'sidx' => '',
+            'sord' => 'asc',
+            'filters' => $filter,
+            'searchField' => 's.title',
+            'searchString' => Security::remove_XSS($_REQUEST['keyword']),
+            'searchOper' => 'in',
+        ]);
 }
 
 if (isset($_REQUEST['id_category'])) {
     $sessionCategory = SessionManager::get_session_category($_REQUEST['id_category']);
     if (!empty($sessionCategory)) {
         //Begin with see the searchOper param
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=sc.title&searchString='.Security::remove_XSS($sessionCategory['title']).'&searchOper=in';
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?'
+            .http_build_query([
+                'a' => 'get_sessions',
+                '_force_search' => 'true',
+                'rows' => 20,
+                'page' => 1,
+                'sidx' => '',
+                'sord' => 'asc',
+                'filters' => '',
+                'searchField' => 'sc.title',
+                'searchString' => Security::remove_XSS($sessionCategory['title']),
+                'searchOper' => 'in',
+            ]);
     }
 }
 
@@ -187,6 +223,11 @@ if (!isset($_GET['keyword'])) {
 }
 
 $hideSearch = ('true' === api_get_setting('session.hide_search_form_in_session_list'));
+$copySessionContentLink = '';
+if ($addSessionContent) {
+    $copySessionContentLink = ' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?copy_session_content=1&list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
+        Display::return_icon('copy.png', get_lang('CopyWithSessionContent'), '', ICON_SIZE_SMALL).'</a>';
+}
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
@@ -194,6 +235,7 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
     '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::getMdiIcon('account-multiple-plus', 'ch-tool-icon', null, 22, get_lang('Subscribe users to this session')).'</a>'.
     '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, 22, get_lang('Add courses to this session')).'</a>'.
     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::getMdiIcon('text-box-plus', 'ch-tool-icon', null, 22, get_lang('Copy')).'</a>'.
+    $copySessionContentLink.
     '<button type="button" title="'.get_lang('Delete').'" onclick="if(confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) window.location = '."\'session_list.php?action=delete&idChecked=\' + ".'\' + options.rowId +\';">'.Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('Delete')).'</button>'.
     '\';
 }';

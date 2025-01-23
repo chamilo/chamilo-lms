@@ -181,7 +181,8 @@
             "symfony/flex": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "symfony/runtime": true
-        }
+        },
+        "process-timeout": 900
     },
     "require-dev": {
         "behat/behat": "^3.10",

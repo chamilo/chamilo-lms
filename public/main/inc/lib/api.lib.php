@@ -7553,3 +7553,20 @@ function api_get_permission(string $permissionSlug, array $roles): bool
 
     return $permissionService->hasPermission($permissionSlug, $roles);
 }
+
+/**
+ * Calculate the percentage of change between two numbers.
+ *
+ * @param int $newValue
+ * @param int $oldValue
+ * @return string
+ */
+function api_calculate_increment_percent(int $newValue, int $oldValue): string
+{
+    if ($oldValue <= 0) {
+        $result = " - ";
+    } else {
+        $result = ' '.round(100 * (($newValue / $oldValue) - 1), 2).' %';
+    }
+    return $result;
+}

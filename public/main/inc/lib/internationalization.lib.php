@@ -2013,3 +2013,58 @@ function api_get_human_date_time($date, $showTime = true, $humanForm = false)
         }
     }
 }
+
+/**
+ * Return an array with the start and end dates of a quarter (as in 3 months period).
+ * If no DateTime is not sent, use the current date.
+ *
+ * @param string|null $date (optional) The date or null.
+ *
+ * @return array E.G.: ['quarter_start' => '2022-10-11',
+ *               'quarter_end' => '2022-12-31',
+ *               'quarter_title' => 'Q4 2022']
+ */
+function getQuarterDates(string $date = null): array
+{
+    if (empty($date)) {
+        $date = api_get_utc_datetime();
+    }
+    if (strlen($date > 10)) {
+        $date = substr($date, 0, 10);
+    }
+    $month = substr($date, 5, 2);
+    $year = substr($date, 0, 4);
+    switch ($month) {
+        case $month >= 1 && $month <= 3:
+            $start = "$year-01-01";
+            $end = "$year-03-31";
+            $quarter = 1;
+            break;
+        case $month >= 4 && $month <= 6:
+            $start = "$year-04-01";
+            $end = "$year-06-30";
+            $quarter = 2;
+            break;
+        case $month >= 7 && $month <= 9:
+            $start = "$year-07-01";
+            $end = "$year-09-30";
+            $quarter = 3;
+            break;
+        case $month >= 10 && $month <= 12:
+            $start = "$year-10-01";
+            $end = "$year-12-31";
+            $quarter = 4;
+            break;
+        default:
+            // Should never happen
+            $start = "$year-01-01";
+            $end = "$year-03-31";
+            $quarter = 1;
+            break;
+    }
+    return [
+        'quarter_start' => $start,
+        'quarter_end' => $end,
+        'quarter_title' => sprintf(get_lang('Q%s %s'), $quarter, $year),
+    ];
+}

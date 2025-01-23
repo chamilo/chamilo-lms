@@ -5,6 +5,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 
 /**
  * This class provides some functions for statistics.
@@ -37,40 +38,42 @@ class Statistics
     /**
      * Count courses.
      *
-     * @param string $categoryCode Code of a course category.
-     *                             Default: count all courses.
+     * @param string|null $categoryCode Code of a course category.
+     *                                  Default: count all courses.
+     * @param string|null $dateFrom dateFrom
+     * @param string|null $dateUntil dateUntil
      *
      * @return int Number of courses counted
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function countCourses($categoryCode = null)
+    public static function countCourses(string $categoryCode = null, string $dateFrom = null, string $dateUntil = null): int
     {
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $urlId = api_get_current_access_url_id();
-
-        $categoryJoin = '';
-        $categoryCondition = '';
-
-        if (!empty($categoryCode)) {
-            //$categoryJoin = " LEFT JOIN $tblCourseCategory course_category ON course.category_id = course_category.id ";
-            //$categoryCondition = " course_category.code = '".Database::escape_string($categoryCode)."' ";
-        }
-
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $sql = "SELECT COUNT(*) AS number
-                    FROM ".$course_table." as c, $access_url_rel_course_table as u
-                    $categoryJoin
-                    WHERE u.c_id = c.id AND access_url_id='".$urlId."'";
+                    FROM ".$courseTable." AS c, $accessUrlRelCourseTable AS u
+                    WHERE u.c_id = c.id AND $accessUrlRelCourseTable='".$urlId."'";
             if (isset($categoryCode)) {
-                $sql .= " AND $categoryCondition";
+                $sql .= " AND category_code = '".Database::escape_string($categoryCode)."'";
             }
         } else {
             $sql = "SELECT COUNT(*) AS number
-                    FROM $course_table $categoryJoin";
+                    FROM $courseTable AS c
+                    WHERE 1 = 1";
             if (isset($categoryCode)) {
-                $sql .= " WHERE $categoryCondition";
+                $sql .= " WHERE c.category_code = '".Database::escape_string($categoryCode)."'";
             }
+        }
+
+        if (!empty($dateFrom)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $sql .= " AND c.creation_date >= '$dateFrom' ";
+        }
+        if (!empty($dateUntil)) {
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $sql .= " AND c.creation_date <= '$dateUntil' ";
         }
 
         $res = Database::query($sql);
@@ -82,30 +85,52 @@ class Statistics
     /**
      * Count courses by visibility.
      *
-     * @param int $visibility visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses
+     * @param array|null  $visibility visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses
+     * @param string|null $dateFrom dateFrom
+     * @param string|null $dateUntil dateUntil
      *
      * @return int Number of courses counted
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function countCoursesByVisibility($visibility = null)
+    public static function countCoursesByVisibility(
+        array $visibility = null,
+        string $dateFrom = null,
+        string $dateUntil = null
+    ): int
     {
-        if (!isset($visibility)) {
+        if (empty($visibility)) {
             return 0;
-        }
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $urlId = api_get_current_access_url_id();
-        if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT COUNT(*) AS number
-                    FROM $course_table as c, $access_url_rel_course_table as u
-                    WHERE u.c_id = c.id AND access_url_id='".$urlId."'";
-            if (isset($visibility)) {
-                $sql .= " AND visibility = ".intval($visibility);
-            }
         } else {
-            $sql = "SELECT COUNT(*) AS number FROM $course_table ";
-            if (isset($visibility)) {
-                $sql .= " WHERE visibility = ".intval($visibility);
+            $visibilityString = '';
+            $auxArrayVisibility = [];
+            if (!is_array($visibility)) {
+                $visibility = [$visibility];
             }
+            foreach ($visibility as $item) {
+                $auxArrayVisibility[] = (int) $item;
+            }
+            $visibilityString = implode(',', $auxArrayVisibility);
+        }
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $urlId = api_get_current_access_url_id();
+        if (AccessUrlHelper::isMultiple()) {
+            $sql = "SELECT COUNT(*) AS number
+                    FROM $courseTable AS c, $accessUrlRelCourseTable AS u
+                    WHERE u.c_id = c.id AND u.access_url_id='".$urlId."'";
+        } else {
+            $sql = "SELECT COUNT(*) AS number
+                    FROM $courseTable AS c
+                    WHERE 1 = 1";
+        }
+        $sql .= " AND visibility IN ($visibilityString) ";
+        if (!empty($dateFrom)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $sql .= " AND c.creation_date >= '$dateFrom' ";
+        }
+        if (!empty($dateUntil)) {
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $sql .= " AND c.creation_date <= '$dateUntil' ";
         }
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
@@ -149,7 +174,7 @@ class Statistics
 
         $where = implode(' AND ', $conditions);
 
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $sql = "SELECT COUNT(DISTINCT(u.id)) AS number
                 FROM $user_table as u
                 INNER JOIN $access_url_rel_user_table as url ON u.id = url.user_id
@@ -203,7 +228,7 @@ class Statistics
 
         $urlId = api_get_current_access_url_id();
 
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $sql = "SELECT DISTINCT(t.c_id) FROM $table t , $access_url_rel_course_table a
                     WHERE
                         t.c_id = a.c_id AND
@@ -232,7 +257,7 @@ class Statistics
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $urlId = api_get_current_access_url_id();
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $sql = "SELECT count(default_id) AS total_number_of_items
                     FROM $track_e_default, $table_user user, $access_url_rel_user_table url
                     WHERE user.active <> ".USER_SOFT_DELETED." AND
@@ -298,7 +323,7 @@ class Statistics
             $direction = 'DESC';
         }
 
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $sql = "SELECT
                         default_event_type  as col0,
                         default_value_type    as col1,
@@ -522,7 +547,7 @@ class Statistics
         $where_url = null;
         $now = api_get_utc_datetime();
         $where_url_last = ' WHERE login_date > DATE_SUB("'.$now.'",INTERVAL 1 %s)';
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $table_url = ", $access_url_rel_user_table";
             $where_url = " WHERE login_user_id=user_id AND access_url_id='".$urlId."'";
             $where_url_last = ' AND login_date > DATE_SUB("'.$now.'",INTERVAL 1 %s)';
@@ -622,7 +647,7 @@ class Statistics
         $urlId = api_get_current_access_url_id();
         $table_url = '';
         $where_url = '';
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $table_url = ", $access_url_rel_user_table";
             $where_url = " AND login_user_id=user_id AND access_url_id='".$urlId."'";
         }
@@ -712,7 +737,7 @@ class Statistics
         $urlId = api_get_current_access_url_id();
         $table_url = '';
         $where_url = '';
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $table_url = ", $access_url_rel_user_table";
             $where_url = " AND login_user_id=user_id AND access_url_id='".$urlId."'";
         }
@@ -778,7 +803,7 @@ class Statistics
         foreach ($tools as $tool) {
             $tool_names[$tool] = get_lang(ucfirst($tool), '');
         }
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $sql = "SELECT access_tool, count( access_id ) AS number_of_logins
                     FROM $table t , $access_url_rel_course_table a
                     WHERE
@@ -827,7 +852,7 @@ class Statistics
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $urlId = api_get_current_access_url_id();
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $sql = "SELECT course_language, count( c.code ) AS number_of_courses
                     FROM $table as c, $access_url_rel_course_table as u
                     WHERE u.c_id = c.id AND access_url_id='".$urlId."'
@@ -858,7 +883,7 @@ class Statistics
         $url_condition = null;
         $url_condition2 = null;
         $table = null;
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $url_condition = ", $access_url_rel_user_table as url WHERE url.user_id=u.id AND access_url_id='".$urlId."'";
             $url_condition2 = " AND url.user_id=u.id AND access_url_id='".$urlId."'";
             $table = ", $access_url_rel_user_table as url ";
@@ -971,7 +996,7 @@ class Statistics
         $values = $form->exportValues();
         $date_diff = $values['date_diff'];
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $sql = "SELECT * FROM $table t , $access_url_rel_course_table a
                    WHERE
                         c_id = a.c_id AND
@@ -1050,7 +1075,7 @@ class Statistics
                 break;
         }
 
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $sql = "SELECT u.lastname, u.firstname, u.username, COUNT(DISTINCT m.id) AS count_message
             FROM $messageTable m
             INNER JOIN $messageRelUserTable mru ON $joinCondition
@@ -1095,7 +1120,7 @@ class Statistics
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $urlId = api_get_current_access_url_id();
 
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
                     FROM $access_url_rel_user_table as url, $user_friend_table uf
                     LEFT JOIN $user_table u
@@ -1135,7 +1160,7 @@ class Statistics
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $urlId = api_get_current_access_url_id();
         $total = self::countUsers();
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $table_url = ", $access_url_rel_user_table";
             $where_url = " AND login_user_id=user_id AND access_url_id='".$urlId."'";
         } else {
@@ -1516,7 +1541,7 @@ class Statistics
      *
      * @return array
      */
-    private static function getLoginsByDate($startDate, $endDate)
+    public static function getLoginsByDate(string $startDate, string $endDate): array
     {
         $startDate = api_get_utc_datetime("$startDate 00:00:00");
         $endDate = api_get_utc_datetime("$endDate 23:59:59");
@@ -1530,7 +1555,7 @@ class Statistics
         $urlJoin = '';
         $urlWhere = '';
 
-        if (api_is_multiple_url_enabled()) {
+        if (AccessUrlHelper::isMultiple()) {
             $tblUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
             $urlJoin = "INNER JOIN $tblUrlUser au ON u.id = au.user_id";
@@ -1664,5 +1689,89 @@ class Statistics
         }
 
         return $groupedData;
+    }
+
+    /**
+     * Return de number of certificates generated.
+     * This function is resource intensive.
+     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
+     */
+    public static function countCertificatesByQuarter(string $dateFrom = null, string $dateUntil = null): int
+    {
+        $tableGradebookCertificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $condition = "";
+        if (!empty($dateFrom) && !empty($dateUntil)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $condition = "WHERE (created_at BETWEEN '$dateFrom' AND '$dateUntil')";
+        } elseif (!empty($dateFrom)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $condition = "WHERE created_at >= '$dateFrom'";
+        } elseif (!empty($dateUntil)) {
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $condition = "WHERE created_at <= '$dateUntil'";
+        }
+        $sql = "
+            SELECT count(*) AS count
+            FROM $tableGradebookCertificate
+            $condition
+        ";
+        $response = Database::query($sql);
+        $obj = Database::fetch_object($response);
+        return $obj->count;
+    }
+
+    /**
+     * Get the number of logins by dates.
+     * This function is resource intensive.
+     * @throws Exception
+     */
+    public static function getSessionsByDuration(string $dateFrom, string $dateUntil): array
+    {
+        $results = [
+            '0' => 0,
+            '5' => 0,
+            '10' => 0,
+            '15' => 0,
+            '30' => 0,
+            '60' => 0,
+        ];
+        if (!empty($dateFrom) && !empty($dateUntil)) {
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+            $accessUrlRelUserTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $urlId = api_get_current_access_url_id();
+            $tableUrl = '';
+            $whereUrl = '';
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            if (AccessUrlHelper::isMultiple()) {
+                $tableUrl = ", $accessUrlRelUserTable";
+                $whereUrl = " AND login_user_id = user_id AND access_url_id = $urlId";
+            }
+            $sql = "SELECT login_id, TIMESTAMPDIFF(SECOND, login_date, logout_date) AS duration
+            FROM $table $tableUrl
+            WHERE login_date >= '$dateFrom'
+            AND logout_date <= '$dateUntil'
+            $whereUrl
+            ";
+            $res = Database::query($sql);
+            while ($session = Database::fetch_array($res)) {
+                if ($session['duration'] > 3600) {
+                    $results['60']++;
+                } elseif ($session['duration'] > 1800) {
+                    $results['30']++;
+                } elseif ($session['duration'] > 900) {
+                    $results['15']++;
+                } elseif ($session['duration'] > 600) {
+                    $results['10']++;
+                } elseif ($session['duration'] > 300) {
+                    $results['5']++;
+                } else {
+                    $results['0']++;
+                }
+            }
+        }
+        return $results;
     }
 }

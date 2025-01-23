@@ -8134,4 +8134,40 @@ class Tracking
         return $exeDate;
     }
 
+    /**
+     * Return the total time spent in courses (no the total in platform).
+     *
+     * @return int
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public static function getTotalTimeSpentInCourses(
+        string $dateFrom = '',
+        string $dateUntil = ''
+    ): int {
+        $tableTrackLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $tableUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $tableUrl = null;
+        $urlCondition = null;
+        $conditionTime = null;
+        if (api_is_multiple_url_enabled()) {
+            $accessUrlId = api_get_current_access_url_id();
+            $tableUrl = ", ".$tableUrlRelUser." as url_users";
+            $urlCondition = " AND u.user_id = url_users.user_id AND access_url_id = $accessUrlId";
+        }
+        if (!empty($dateFrom) && !empty($dateUntil)) {
+            $dateFrom = Database::escape_string($dateFrom);
+            $dateUntil = Database::escape_string($dateUntil);
+            $conditionTime = " (login_course_date >= '$dateFrom' AND logout_course_date <= '$dateUntil' ) ";
+        }
+        $sql = "SELECT SUM(TIMESTAMPDIFF(HOUR, login_course_date, logout_course_date)) diff
+    	        FROM $tableTrackLogin u $tableUrl
+                WHERE $conditionTime $urlCondition";
+        $rs = Database::query($sql);
+        $row = Database::fetch_array($rs, 'ASSOC');
+        $diff = $row['diff'];
+        if ($diff >= 0 and !empty($diff)) {
+            return $diff;
+        }
+        return 0;
+    }
 }

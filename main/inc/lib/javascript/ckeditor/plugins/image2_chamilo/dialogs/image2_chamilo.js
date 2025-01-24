@@ -430,10 +430,16 @@ CKEDITOR.dialog.add( 'image2_chamilo', function( editor ) {
 						type: 'text',
 						label: lang.alt,
 						setup: function( widget ) {
-							this.setValue( widget.data.alt );
+                            const tempDiv = document.createElement("div");
+                            tempDiv.innerHTML = widget.data.alt;
+
+                            this.setValue( tempDiv.textContent || tempDiv.innerText );
 						},
 						commit: function( widget ) {
-							widget.setData( 'alt', this.getValue() );
+                            const tempDiv = document.createElement("div");
+                            tempDiv.textContent = this.getValue();
+
+                            widget.setData( 'alt', tempDiv.innerHTML );
 						},
 						validate: editor.config.image2_chamilo_altRequired === true ? CKEDITOR.dialog.validate.notEmpty( lang.altMissing ) : null
 					},

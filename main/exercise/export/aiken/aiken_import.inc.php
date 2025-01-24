@@ -44,14 +44,20 @@ function aiken_display_form()
 }
 
 /**
- * Generates aiken format using AI api.
- * Requires plugin ai_helper to connect to the api.
+ * Generates Aiken format using AI APIs (supports multiple providers).
+ * Requires plugin ai_helper to connect to the API.
  */
 function generateAikenForm()
 {
     if (!('true' === api_get_plugin_setting('ai_helper', 'tool_enable') && 'true' === api_get_plugin_setting('ai_helper', 'tool_quiz_enable'))) {
         return false;
     }
+
+    $plugin = AiHelperPlugin::create();
+    $availableApis = $plugin->getApiList();
+
+    $configuredApi = $plugin->get('api_name');
+    $hasSingleApi = count($availableApis) === 1 || isset($availableApis[$configuredApi]);
 
     $form = new FormValidator(
         'aiken_generate',
@@ -60,20 +66,31 @@ function generateAikenForm()
         null
     );
     $form->addElement('header', get_lang('AIQuestionsGenerator'));
-    $form->addElement('text', 'quiz_name', [get_lang('QuestionsTopic'), get_lang('QuestionsTopicHelp')]);
+
+    if ($hasSingleApi) {
+        $apiName = $availableApis[$configuredApi] ?? $configuredApi;
+        $form->addHtml('<div style="margin-bottom: 10px; font-size: 14px; color: #555;">'
+            . sprintf(get_lang('UsingAIProviderX'), '<strong>'.htmlspecialchars($apiName).'</strong>').'</div>');
+    }
+
+    $form->addElement('text', 'quiz_name', get_lang('QuestionsTopic'));
     $form->addRule('quiz_name', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('number', 'nro_questions', [get_lang('NumberOfQuestions'), get_lang('AIQuestionsGeneratorNumberHelper')]);
+    $form->addElement('number', 'nro_questions', get_lang('NumberOfQuestions'));
     $form->addRule('nro_questions', get_lang('ThisFieldIsRequired'), 'required');
 
     $options = [
         'multiple_choice' => get_lang('MultipleAnswer'),
     ];
-    $form->addElement(
-        'select',
-        'question_type',
-        get_lang('QuestionType'),
-        $options
-    );
+    $form->addElement('select', 'question_type', get_lang('QuestionType'), $options);
+
+    if (!$hasSingleApi) {
+        $form->addElement(
+            'select',
+            'ai_provider',
+            get_lang('AIProvider'),
+            array_combine(array_keys($availableApis), array_keys($availableApis))
+        );
+    }
 
     $generateUrl = api_get_path(WEB_PLUGIN_PATH).'ai_helper/tool/answers.php';
     $language = api_get_interface_language();
@@ -87,10 +104,9 @@ function generateAikenForm()
                       var btnGenerate = $(this);
                       var quizName = $("[name=\'quiz_name\']").val();
                       var nroQ = parseInt($("[name=\'nro_questions\']").val());
-                      var qType = $("[name=\'question_type\']").val();
-                      var valid = (quizName != \'\' && nroQ > 0);
-                      var qWeight = 1;
-
+                      var qType = $("[name=\'question_type\']").val();'
+        . (!$hasSingleApi ? 'var provider = $("[name=\'ai_provider\']").val();' : 'var provider = "' . $configuredApi . '";') .
+        'var valid = (quizName != \'\' && nroQ > 0);
                       if (valid) {
                         btnGenerate.attr("disabled", true);
                         btnGenerate.text("'.get_lang('PleaseWaitThisCouldTakeAWhile').'");
@@ -100,7 +116,8 @@ function generateAikenForm()
                             "quiz_name": quizName,
                             "nro_questions": nroQ,
                             "question_type": qType,
-                            "language": "'.$language.'"
+                            "language": "'.$language.'",
+                            "ai_provider": provider
                         }).done(function (data) {
                           btnGenerate.attr("disabled", false);
                           btnGenerate.text("'.get_lang('Generate').'");

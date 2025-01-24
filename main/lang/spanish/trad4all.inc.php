@@ -9103,4 +9103,6 @@ $DueToInactivityTheSessionIsGoingToClose = "Debido a su inactividad, esta sesió
 $KeepGoing = "Seguir conectado";
 $SessionIsClosing = "Su sesión se está cerrando";
 $CannotChangeVisibilityOfBaseCourseResourceX = "La visibilidad de %s del curso base no puede ser cambiada desde una sesión.";
+$UsingAIProviderX = "Usando el proveedor de IA %s";
+$AIProvider = "Proveedor de IA";
 ?>

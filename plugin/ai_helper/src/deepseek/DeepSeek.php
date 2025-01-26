@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-require_once 'Url.php';
+require_once 'DeepSeekUrl.php';
 
 class DeepSeek
 {
@@ -26,7 +26,7 @@ class DeepSeek
      */
     public function generateQuestions(array $payload): string
     {
-        $url = Url::completionsUrl();
+        $url = DeepSeekUrl::completionsUrl();
         $response = $this->sendRequest($url, 'POST', $payload);
 
         if (empty($response)) {

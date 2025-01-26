@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-class Url
+class DeepSeekUrl
 {
     private const BASE_URL = 'https://api.deepseek.com/chat';
 

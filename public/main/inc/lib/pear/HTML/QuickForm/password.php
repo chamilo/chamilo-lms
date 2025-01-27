@@ -21,6 +21,8 @@
  * @link        http://pear.php.net/package/HTML_QuickForm
  */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * HTML class for a password type field
  *
@@ -47,7 +49,7 @@ class HTML_QuickForm_password extends HTML_QuickForm_text
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
-        $attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'form-control';
+        $attributes['class'] = $attributes['class'] ?? '';
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->setType('password');
     }
@@ -94,5 +96,34 @@ class HTML_QuickForm_password extends HTML_QuickForm_text
 
         return ('' != $value ? '**********' : '&nbsp;').
             $this->_getPersistantData();
+    }
+
+    public function toHtml(): string
+    {
+        if (parent::isFrozen()) {
+            return parent::getFrozenHtml();
+        }
+
+        $attributes = $this->getAttributes();
+
+        $this->removeAttribute('show_hide');
+        $this->_attributes['class'] = ($attributes['class'] ?? '').' p-password-input ';
+
+        $input = parent::toHtml();
+
+        if (empty($attributes['show_hide'])) {
+            return $input;
+        }
+
+        $id = $attributes['id'] ?? '';
+
+        return '<div class="p-password p-component p-inputwrapper p-inputwrapper-filled p-icon-field p-icon-field-right">
+                '.$input.'
+                <span class="p-icon p-input-icon mdi mdi-'.ActionIcon::VISIBLE->value.'"></span>
+            </div>'
+            ."<script>$('input#$id + .p-icon.mdi').click(() => {
+              var txtPasswd = $('input#$id')
+              txtPasswd.attr('type', txtPasswd.attr('type') === 'password' ? 'text' : 'password');
+            })</script>";
     }
 }

@@ -1,9 +1,6 @@
 <template>
   <div class="install-step">
-    <h2
-      v-t="'Step 2 - Requirements'"
-      class="install-title mb-8"
-    />
+    <SectionHeader :title="t('Step 2 - Requirements')" />
 
     <p class="RequirementText mb-4">
       <strong v-text="t('Please read the following requirements thoroughly.')" />
@@ -358,6 +355,7 @@ import Message from "primevue/message"
 import Tag from "primevue/tag"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
+import SectionHeader from "../layout/SectionHeader.vue"
 
 const { t } = useI18n()
 

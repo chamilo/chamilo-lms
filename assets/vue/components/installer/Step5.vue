@@ -1,8 +1,8 @@
 <template>
   <div class="install-step">
-    <h2
-      v-t="'Step 5 - Configuration settings'"
-      class="RequirementHeading mb-8"
+    <SectionHeader
+      :title="t('Step 5 - Configuration settings')"
+      class="RequirementHeading"
     />
 
     <div v-if="'update' === installerData.installType">
@@ -511,6 +511,7 @@ import Password from "primevue/password"
 import Dropdown from "primevue/dropdown"
 import Button from "primevue/button"
 import RadioButton from "primevue/radiobutton"
+import SectionHeader from "../layout/SectionHeader.vue"
 
 import languages from "../../utils/languages"
 

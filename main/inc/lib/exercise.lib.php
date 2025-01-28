@@ -5399,7 +5399,7 @@ EOT;
             $exerciseResult = Session::read('exerciseResult');
             $exerciseResultCoordinates = Session::read('exerciseResultCoordinates');
             $delineationResults = Session::read('hotspot_delineation_result');
-            $delineationResults = isset($delineationResults[$objExercise->iid]) ? $delineationResults[$objExercise->iid] : null;
+            $delineationResults = $delineationResults[$objExercise->iid] ?? null;
         }
 
         $countPendingQuestions = 0;
@@ -5414,8 +5414,8 @@ EOT;
                 $choice = null;
                 $delineationChoice = null;
                 if ($loadChoiceFromSession) {
-                    $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : null;
-                    $delineationChoice = isset($delineationResults[$questionId]) ? $delineationResults[$questionId] : null;
+                    $choice = $exerciseResult[$questionId] ?? null;
+                    $delineationChoice = $delineationResults[$questionId] ?? null;
                 }
 
                 // We're inside *one* question. Go through each possible answer for this question

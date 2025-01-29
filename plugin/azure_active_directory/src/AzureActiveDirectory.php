@@ -384,6 +384,29 @@ class AzureActiveDirectory extends Plugin
         ];
     }
 
+    public function getSyncState(string $title): ?AzureSyncState
+    {
+        $stateRepo = Database::getManager()->getRepository(AzureSyncState::class);
+
+        return $stateRepo->findOneBy(['title' => $title]);
+    }
+
+    public function saveSyncState(string $title, $value)
+    {
+        $state = $this->getSyncState($title);
+
+        if (!$state) {
+            $state = new AzureSyncState();
+            $state->setTitle($title);
+
+            Database::getManager()->persist($state);
+        }
+
+        $state->setValue($value);
+
+        Database::getManager()->flush();
+    }
+
     /**
      * @throws Exception
      */
@@ -424,28 +447,5 @@ class AzureActiveDirectory extends Plugin
             $active,
             $extra,
         ];
-    }
-
-    public function getSyncState(string $title): ?AzureSyncState
-    {
-        $stateRepo = Database::getManager()->getRepository(AzureSyncState::class);
-
-        return $stateRepo->findOneBy(['title' => $title]);
-    }
-
-    public function saveSyncState(string $title, $value)
-    {
-        $state = $this->getSyncState($title);
-
-        if (!$state) {
-            $state = new AzureSyncState();
-            $state->setTitle($title);
-
-            Database::getManager()->persist($state);
-        }
-
-        $state->setValue($value);
-
-        Database::getManager()->flush();
     }
 }

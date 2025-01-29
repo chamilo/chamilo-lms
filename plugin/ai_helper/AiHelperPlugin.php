@@ -3,7 +3,8 @@
 
 use Chamilo\PluginBundle\Entity\AiHelper\Requests;
 use Doctrine\ORM\Tools\SchemaTool;
-require_once __DIR__ . '/src/deepseek/DeepSeek.php';
+
+require_once __DIR__.'/src/deepseek/DeepSeek.php';
 /**
  * Description of AiHelperPlugin.
  *
@@ -112,6 +113,7 @@ class AiHelperPlugin extends Plugin
             if (isset($result['error'])) {
                 $errorMessage = $result['error']['message'] ?? 'Unknown error';
                 error_log("OpenAI Error: $errorMessage");
+
                 return [
                     'error' => true,
                     'message' => $errorMessage,
@@ -132,11 +134,10 @@ class AiHelperPlugin extends Plugin
             }
 
             return $resultText ?: 'No response generated.';
-
         } catch (Exception $e) {
             return [
                 'error' => true,
-                'message' => 'An error occurred while connecting to OpenAI: ' . $e->getMessage(),
+                'message' => 'An error occurred while connecting to OpenAI: '.$e->getMessage(),
             ];
         }
     }
@@ -179,8 +180,9 @@ class AiHelperPlugin extends Plugin
         $response = curl_exec($ch);
 
         if ($response === false) {
-            error_log('cURL error: ' . curl_error($ch));
+            error_log('cURL error: '.curl_error($ch));
             curl_close($ch);
+
             return ['error' => true, 'message' => 'Request to AI provider failed.'];
         }
 
@@ -211,12 +213,14 @@ class AiHelperPlugin extends Plugin
     /**
      * Generate questions based on the selected AI provider.
      *
-     * @param int $nQ Number of questions
-     * @param string $lang Language for the questions
-     * @param string $topic Topic of the questions
+     * @param int    $nQ           Number of questions
+     * @param string $lang         Language for the questions
+     * @param string $topic        Topic of the questions
      * @param string $questionType Type of questions (e.g., 'multiple_choice')
-     * @return string Questions generated in Aiken format
+     *
      * @throws Exception If an error occurs
+     *
+     * @return string Questions generated in Aiken format
      */
     public function generateQuestions(int $nQ, string $lang, string $topic, string $questionType = 'multiple_choice'): string
     {
@@ -230,61 +234,6 @@ class AiHelperPlugin extends Plugin
             default:
                 throw new Exception("Unsupported API provider: $apiName");
         }
-    }
-
-    /**
-     * Generate questions using OpenAI.
-     */
-    private function generateOpenAiQuestions(int $nQ, string $lang, string $topic, string $questionType): string
-    {
-        $prompt = sprintf(
-            'Generate %d "%s" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The line starting with \'ANSWER\' must not be separated from the last possible answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text without quotes. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question.',
-            $nQ,
-            $questionType,
-            $lang,
-            $topic
-        );
-
-        $result = $this->openAiGetCompletionText($prompt, 'quiz');
-        if (isset($result['error']) && true === $result['error']) {
-            throw new Exception($result['message']);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Generate questions using DeepSeek.
-     */
-    private function generateDeepSeekQuestions(int $nQ, string $lang, string $topic, string $questionType): string
-    {
-        $apiKey = $this->get('api_key');
-        $prompt = sprintf(
-            'Generate %d "%s" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The line starting with \'ANSWER\' must not be separated from the last possible answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text without quotes. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question.',
-            $nQ,
-            $questionType,
-            $lang,
-            $topic
-        );
-        $payload = [
-            'model' => 'deepseek-chat',
-            'messages' => [
-                [
-                    'role' => 'system',
-                    'content' => 'You are a helpful assistant that generates Aiken format questions.',
-                ],
-                [
-                    'role' => 'user',
-                    'content' => $prompt,
-                ],
-            ],
-            'stream' => false,
-        ];
-
-        $deepSeek = new DeepSeek($apiKey);
-        $response = $deepSeek->generateQuestions($payload);
-
-        return $response;
     }
 
     /**
@@ -413,5 +362,60 @@ class AiHelperPlugin extends Plugin
                 $em->getClassMetadata(Requests::class),
             ]
         );
+    }
+
+    /**
+     * Generate questions using OpenAI.
+     */
+    private function generateOpenAiQuestions(int $nQ, string $lang, string $topic, string $questionType): string
+    {
+        $prompt = sprintf(
+            'Generate %d "%s" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The line starting with \'ANSWER\' must not be separated from the last possible answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text without quotes. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question.',
+            $nQ,
+            $questionType,
+            $lang,
+            $topic
+        );
+
+        $result = $this->openAiGetCompletionText($prompt, 'quiz');
+        if (isset($result['error']) && true === $result['error']) {
+            throw new Exception($result['message']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Generate questions using DeepSeek.
+     */
+    private function generateDeepSeekQuestions(int $nQ, string $lang, string $topic, string $questionType): string
+    {
+        $apiKey = $this->get('api_key');
+        $prompt = sprintf(
+            'Generate %d "%s" questions in Aiken format in the %s language about "%s", making sure there is a \'ANSWER\' line for each question. \'ANSWER\' lines must only mention the letter of the correct answer, not the full answer text and not a parenthesis. The line starting with \'ANSWER\' must not be separated from the last possible answer by a blank line. Each answer starts with an uppercase letter, a dot, one space and the answer text without quotes. Include an \'ANSWER_EXPLANATION\' line after the \'ANSWER\' line for each question. The terms between single quotes above must not be translated. There must be a blank line between each question.',
+            $nQ,
+            $questionType,
+            $lang,
+            $topic
+        );
+        $payload = [
+            'model' => 'deepseek-chat',
+            'messages' => [
+                [
+                    'role' => 'system',
+                    'content' => 'You are a helpful assistant that generates Aiken format questions.',
+                ],
+                [
+                    'role' => 'user',
+                    'content' => $prompt,
+                ],
+            ],
+            'stream' => false,
+        ];
+
+        $deepSeek = new DeepSeek($apiKey);
+        $response = $deepSeek->generateQuestions($payload);
+
+        return $response;
     }
 }

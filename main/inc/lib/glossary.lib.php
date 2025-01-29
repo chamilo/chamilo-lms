@@ -132,12 +132,11 @@ class GlossaryManager
      * This functions stores the glossary in the database.
      *
      * @param array $values Array of title + description (name => $title, description => $comment)
-     * @param bool $showMessage
-     *
-     * @return bool|int Term id on success, false on failure
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return bool|int Term id on success, false on failure
      */
     public static function save_glossary(array $values, bool $showMessage = true)
     {
@@ -170,7 +169,7 @@ class GlossaryManager
             ->setDescription($values['description'] ?? "")
             ->setDisplayOrder($max_glossary_item + 1)
             ->setSessionId($session_id);
-        ;
+
         Database::getManager()->persist($glossary);
         Database::getManager()->flush();
 

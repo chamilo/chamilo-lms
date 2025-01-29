@@ -22,10 +22,9 @@ try {
         'text' => trim($resultText),
     ]);
 } catch (Exception $e) {
-    error_log("Error: " . $e->getMessage());
+    error_log("Error: ".$e->getMessage());
     echo json_encode([
         'success' => false,
         'text' => $e->getMessage(),
     ]);
 }
-

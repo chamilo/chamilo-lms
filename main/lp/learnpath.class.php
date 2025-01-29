@@ -4860,12 +4860,8 @@ class learnpath
     /**
      * Check if the learnpath category is visible for a user.
      *
-     * @param CLpCategory|null $category
-     * @param User $user
      * @param int $courseId
      * @param int $sessionId
-     *
-     * @return bool
      */
     public static function categoryIsVisibleForStudent(
         ?CLpCategory $category,

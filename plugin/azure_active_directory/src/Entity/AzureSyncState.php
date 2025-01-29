@@ -21,8 +21,6 @@ class AzureSyncState
     public const USERGROUPS_DATALINK = 'usergroups_datalink';
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -30,15 +28,11 @@ class AzureSyncState
     private int $id = 0;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="title", type="string")
      */
     private string $title;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="value", type="text")
      */
     private string $value;

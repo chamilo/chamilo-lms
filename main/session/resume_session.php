@@ -370,6 +370,7 @@ if (!empty($userList)) {
             $valueA = strtotime($a['registered_at']);
             $valueB = strtotime($b['registered_at']);
         }
+
         return $sortOrder === SORT_ASC ? $valueA <=> $valueB : $valueB <=> $valueA;
     });
 

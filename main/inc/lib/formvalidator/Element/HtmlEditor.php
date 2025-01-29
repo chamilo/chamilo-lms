@@ -112,9 +112,6 @@ class HtmlEditor extends HTML_QuickForm_textarea
         return $result;
     }
 
-    /**
-     * @return string|null
-     */
     public function getValue(): ?string
     {
         return RemoveOnAttributes::filter($this->_value);

@@ -208,7 +208,7 @@ class Compilatio
         if (isset($dataDocument['analyses'][$anasim]['state'])) {
             $documentInfo['analysis_status'] = $dataDocument['analyses'][$anasim]['state'];
         }
- 
+
         if (isset($dataDocument['light_reports'][$anasim]['scores']['global_score_percent'])) {
             $documentInfo['report_percent'] = $dataDocument['light_reports'][$anasim]['scores']['global_score_percent'];
         }

@@ -74,7 +74,7 @@ class LpAiHelper
                 var wordsCount = parseInt($("[name=\'words_count\']").val());
                 var addTests = $("#add-lp-quiz").is(":checked");
                 var nroQuestions = parseInt($("[name=\'nro_questions\']").val());
-                var provider = "' . $configuredApi . '";
+                var provider = "'.$configuredApi.'";
 
                 if (lpName && nroItems > 0 && wordsCount > 0) {
                     if (addTests && (nroQuestions <= 0 || nroQuestions > 5)) {

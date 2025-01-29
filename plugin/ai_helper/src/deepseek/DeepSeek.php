@@ -21,8 +21,10 @@ class DeepSeek
      * Generate questions using the DeepSeek API.
      *
      * @param array $payload Data to send to the API
-     * @return string Decoded response from the API
+     *
      * @throws Exception If an error occurs during the request
+     *
+     * @return string Decoded response from the API
      */
     public function generateQuestions(array $payload): string
     {
@@ -51,11 +53,13 @@ class DeepSeek
     /**
      * Send a request to the DeepSeek API.
      *
-     * @param string $url Endpoint to send the request to
+     * @param string $url    Endpoint to send the request to
      * @param string $method HTTP method (e.g., GET, POST)
-     * @param array $data Data to send as JSON
-     * @return string Raw response from the API
+     * @param array  $data   Data to send as JSON
+     *
      * @throws Exception If a cURL error occurs
+     *
+     * @return string Raw response from the API
      */
     private function sendRequest(string $url, string $method, array $data = []): string
     {

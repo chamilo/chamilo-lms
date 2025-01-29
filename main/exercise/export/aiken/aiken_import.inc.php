@@ -70,7 +70,7 @@ function generateAikenForm()
     if ($hasSingleApi) {
         $apiName = $availableApis[$configuredApi] ?? $configuredApi;
         $form->addHtml('<div style="margin-bottom: 10px; font-size: 14px; color: #555;">'
-            . sprintf(get_lang('UsingAIProviderX'), '<strong>'.htmlspecialchars($apiName).'</strong>').'</div>');
+            .sprintf(get_lang('UsingAIProviderX'), '<strong>'.htmlspecialchars($apiName).'</strong>').'</div>');
     }
 
     $form->addElement('text', 'quiz_name', get_lang('QuestionsTopic'));
@@ -105,7 +105,7 @@ function generateAikenForm()
                       var quizName = $("[name=\'quiz_name\']").val();
                       var nroQ = parseInt($("[name=\'nro_questions\']").val());
                       var qType = $("[name=\'question_type\']").val();'
-        . (!$hasSingleApi ? 'var provider = $("[name=\'ai_provider\']").val();' : 'var provider = "' . $configuredApi . '";') .
+        .(!$hasSingleApi ? 'var provider = $("[name=\'ai_provider\']").val();' : 'var provider = "'.$configuredApi.'";').
         'var valid = (quizName != \'\' && nroQ > 0);
                       if (valid) {
                         btnGenerate.attr("disabled", true);

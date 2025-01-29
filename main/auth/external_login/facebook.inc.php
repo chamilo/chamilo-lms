@@ -171,7 +171,6 @@ function facebookConnect()
 /**
  * Get facebook login url for the platform.
  *
- * @return string
  * @throws FacebookSDKException
  */
 function facebookGetLoginUrl(): string

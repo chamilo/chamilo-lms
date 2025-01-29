@@ -22,7 +22,6 @@ if (!in_array($apiName, array_keys($apiList))) {
     exit;
 }
 
-
 $courseLanguage = (string) $_REQUEST['language'];
 $chaptersCount = (int) $_REQUEST['nro_items'];
 $topic = (string) $_REQUEST['lp_name'];

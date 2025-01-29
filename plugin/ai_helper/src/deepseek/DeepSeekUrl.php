@@ -12,6 +12,6 @@ class DeepSeekUrl
      */
     public static function completionsUrl(): string
     {
-        return self::BASE_URL . '/completions';
+        return self::BASE_URL.'/completions';
     }
 }

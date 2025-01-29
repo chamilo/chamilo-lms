@@ -61,6 +61,13 @@ class AccountController extends BaseController
                 }
             }
 
+            if ($form->has('password')) {
+                $password = $form['password']->getData();
+                if ($password) {
+                    $user->setPlainPassword($password);
+                }
+            }
+
             $showTermsIfProfileCompleted = ('true' === $settingsManager->getSetting('show_terms_if_profile_completed'));
             $user->setProfileCompleted($showTermsIfProfileCompleted);
 

@@ -3872,8 +3872,8 @@ class Exercise
 
         if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
             $choiceTmp = $choice;
-            $choice = isset($choiceTmp['choice']) ? $choiceTmp['choice'] : '';
-            $choiceDegreeCertainty = isset($choiceTmp['choiceDegreeCertainty']) ? $choiceTmp['choiceDegreeCertainty'] : '';
+            $choice = $choiceTmp['choice'] ?? '';
+            $choiceDegreeCertainty = $choiceTmp['choiceDegreeCertainty'] ?? '';
         }
 
         if ($answerType == FREE_ANSWER ||
@@ -3888,12 +3888,12 @@ class Exercise
         $generatedFile = '';
         if ($answerType == ORAL_EXPRESSION) {
             $exe_info = Event::get_exercise_results_by_attempt($exeId);
-            $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
+            $exe_info = $exe_info[$exeId] ?? null;
             $objQuestionTmp->initFile(
                 api_get_session_id(),
-                isset($exe_info['exe_user_id']) ? $exe_info['exe_user_id'] : api_get_user_id(),
-                isset($exe_info['exe_exo_id']) ? $exe_info['exe_exo_id'] : $this->iid,
-                isset($exe_info['exe_id']) ? $exe_info['exe_id'] : $exeId
+                $exe_info['exe_user_id'] ?? api_get_user_id(),
+                $exe_info['exe_exo_id'] ?? $this->iid,
+                $exe_info['exe_id'] ?? $exeId
             );
 
             // Probably this attempt came in an exercise all question by page
@@ -4068,7 +4068,7 @@ class Exercise
                         $userAnsweredQuestion = !empty($choice);
                     }
 
-                    $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+                    $studentChoice = $choice[$answerAutoId] ?? null;
                     if (isset($studentChoice)) {
                         $correctAnswerId[] = $answerAutoId;
                         if ($studentChoice == $answerCorrect) {
@@ -4110,8 +4110,8 @@ class Exercise
                         }
                     }
 
-                    $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-                    $studentChoiceDegree = isset($choiceDegreeCertainty[$answerAutoId]) ? $choiceDegreeCertainty[$answerAutoId] : null;
+                    $studentChoice = $choice[$answerAutoId] ?? null;
+                    $studentChoiceDegree = $choiceDegreeCertainty[$answerAutoId] ?? null;
 
                     // student score update
                     if (!empty($studentChoice)) {
@@ -4150,14 +4150,14 @@ class Exercise
                             $choice[$row['answer']] = 1;
                         }
 
-                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+                        $studentChoice = $choice[$answerAutoId] ?? null;
                         $real_answers[$answerId] = (bool) $studentChoice;
 
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                         }
                     } else {
-                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+                        $studentChoice = $choice[$answerAutoId] ?? null;
                         $real_answers[$answerId] = (bool) $studentChoice;
 
                         if (isset($studentChoice)
@@ -4178,13 +4178,13 @@ class Exercise
                         while ($row = Database::fetch_array($resultans)) {
                             $choice[$row['answer']] = 1;
                         }
-                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+                        $studentChoice = $choice[$answerAutoId] ?? null;
                         $real_answers[$answerId] = (bool) $studentChoice;
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                         }
                     } else {
-                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+                        $studentChoice = $choice[$answerAutoId] ?? null;
                         if (isset($studentChoice)) {
                             $questionScore += $answerWeighting;
                         }
@@ -4209,13 +4209,13 @@ class Exercise
                                 $choice[$my_answer_id] = $option;
                             }
                         }
-                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : '';
+                        $studentChoice = $choice[$answerAutoId] ?? '';
                         $real_answers[$answerId] = false;
                         if ($answerCorrect == $studentChoice) {
                             $real_answers[$answerId] = true;
                         }
                     } else {
-                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : '';
+                        $studentChoice = $choice[$answerAutoId] ?? '';
                         $real_answers[$answerId] = false;
                         if ($answerCorrect == $studentChoice) {
                             $real_answers[$answerId] = true;
@@ -4232,7 +4232,7 @@ class Exercise
                             $choice[$row['answer']] = 1;
                         }
 
-                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+                        $studentChoice = $choice[$answerAutoId] ?? null;
                         if (1 == $answerCorrect) {
                             $real_answers[$answerId] = false;
                             if ($studentChoice) {
@@ -4245,7 +4245,7 @@ class Exercise
                             }
                         }
                     } else {
-                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+                        $studentChoice = $choice[$answerAutoId] ?? null;
                         if (1 == $answerCorrect) {
                             $real_answers[$answerId] = false;
                             if ($studentChoice) {
@@ -5745,7 +5745,7 @@ class Exercise
                             break;
                         case ORAL_EXPRESSION:
                             echo '<tr>
-                                <td valign="top">'.
+                                <td>'.
                                 ExerciseShowFunctions::display_oral_expression_answer(
                                     $feedback_type,
                                     $choice,

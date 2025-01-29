@@ -416,7 +416,7 @@ if ($allowRecordAudio && $allowTeacherCommentAudio) {
 }
 
 foreach ($questionList as $questionId) {
-    $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : '';
+    $choice = $exerciseResult[$questionId] ?? '';
     // destruction of the Question object
     unset($objQuestionTmp);
     $questionWeighting = 0;

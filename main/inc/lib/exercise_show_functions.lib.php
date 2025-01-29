@@ -221,13 +221,19 @@ class ExerciseShowFunctions
                 echo '<tr><td>&nbsp;</td></tr>';
             }
         } else {
-            echo '<tr>';
-            echo '<td>';
-            if (!empty($answer)) {
-                echo Security::remove_XSS($answer);
+            $text = '';
+
+            if (is_array($answer) && !empty($answer['answer'])) {
+                $text = $answer['answer'];
+            } elseif (!is_array($answer)) {
+                $text = $answer;
             }
-            echo '</td>';
-            echo '</tr>';
+
+            if (!empty($text)) {
+                echo '<tr><td>';
+                echo Security::remove_XSS($text);
+                echo '</td></tr>';
+            }
         }
     }
 

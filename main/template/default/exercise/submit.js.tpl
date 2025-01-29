@@ -61,12 +61,14 @@ var DraggableAnswer = {
 
         DraggableAnswer.trash.droppable({
             accept: ".exercise-draggable-answer > li.touch-items",
+            tolerance: "pointer",
             drop: function (e, ui) {
                 DraggableAnswer.deleteItem(ui.draggable, $(this));
             }
         });
 
         DraggableAnswer.gallery.droppable({
+            tolerance: "pointer",
             drop: function (e, ui) {
                 DraggableAnswer.recycleItem(ui.draggable, $(this));
             }

@@ -1220,7 +1220,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->plainPassword;
     }
 
-    public function setPlainPassword(string $password): self
+    public function setPlainPassword(?string $password): self
     {
         $this->plainPassword = $password;
         // forces the object to look "dirty" to Doctrine. Avoids
@@ -2207,6 +2207,17 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     {
         $this->surveyInvitations = $surveyInvitations;
 
+        return $this;
+    }
+
+    public function getLogin(): string
+    {
+        return $this->username;
+    }
+
+    public function setLogin(string $login): self
+    {
+        $this->username = $login;
         return $this;
     }
 

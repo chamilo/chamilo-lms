@@ -1321,7 +1321,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         'language',
         'locale',
         'creator_id',
-        'registration_date',
+        'created_at',
         'hr_dept_id',
         'expiration_date',
         'last_login',
@@ -1650,7 +1650,7 @@ function api_get_user_info_from_entity(
     $result['auth_source'] = $user->getAuthSource();
     $result['language'] = $user->getLocale();
     $result['creator_id'] = $user->getCreatorId();
-    $result['registration_date'] = $user->getRegistrationDate()->format('Y-m-d H:i:s');
+    $result['created_at'] = $user->getCreatedAt()->format('Y-m-d H:i:s');
     $result['hr_dept_id'] = $user->getHrDeptId();
     $result['expiration_date'] = '';
     if ($user->getExpirationDate()) {
@@ -1989,7 +1989,7 @@ function api_get_anonymous_id()
         $result = Database::query($sql);
         if (empty(Database::num_rows($result))) {
             $login = uniqid('anon_');
-            $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['registration_date ASC']);
+            $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['created_at ASC']);
             if (count($anonList) >= $max) {
                 foreach ($anonList as $userToDelete) {
                     UserManager::delete_user($userToDelete['user_id']);

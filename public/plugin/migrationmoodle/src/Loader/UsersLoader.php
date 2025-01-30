@@ -76,11 +76,11 @@ class UsersLoader implements LoaderInterface
             throw new \Exception('User was not created');
         }
 
-        if ($incomingData['registration_date']) {
-            $incomingData['registration_date'] = $incomingData['registration_date']->format('Y-m-d H:i:s');
+        if ($incomingData['created_at']) {
+            $incomingData['created_at'] = $incomingData['created_at']->format('Y-m-d H:i:s');
 
             \Database::query(
-                "UPDATE $tblUser SET registration_date = '{$incomingData['registration_date']}' WHERE id = $userId"
+                "UPDATE $tblUser SET created_at = '{$incomingData['created_at']}' WHERE id = $userId"
             );
         }
 

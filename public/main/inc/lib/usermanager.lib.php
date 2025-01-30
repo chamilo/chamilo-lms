@@ -279,7 +279,6 @@ class UserManager
             ->setPhone($phone)
             ->setAddress($address)
             ->setLocale($language)
-            ->setRegistrationDate($now)
             ->setHrDeptId($hrDeptId)
             ->setActive($active)
             ->setTimezone(api_get_timezone())
@@ -3410,11 +3409,11 @@ class UserManager
 
         if (!empty($dateFrom)) {
             $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
-            $sql .= " AND u.registration_date >= '$dateFrom' ";
+            $sql .= " AND u.created_at >= '$dateFrom' ";
         }
         if (!empty($dateUntil)) {
             $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
-            $sql .= " AND u.registration_date <= '$dateUntil' ";
+            $sql .= " AND u.created_at <= '$dateUntil' ";
         }
 
         $res = Database::query($sql);

@@ -208,7 +208,7 @@ class ZombieReport implements Countable
             $row[] = $item['email'];
             $row[] = $item['status'];
             $row[] = $item['auth_source'];
-            $row[] = api_format_date($item['registration_date'], DATE_FORMAT_SHORT);
+            $row[] = api_format_date($item['created_at'], DATE_FORMAT_SHORT);
             $row[] = api_format_date($item['login_date'], DATE_FORMAT_SHORT);
             $row[] = $item['active'];
             $result[] = $row;

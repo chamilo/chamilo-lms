@@ -166,12 +166,12 @@ $params = [];
 $creatorId = $user->getCreatorId();
 $creatorInfo = api_get_user_info($creatorId);
 if (!empty($creatorId) && !empty($creatorInfo)) {
-    $registrationDate = $user->getRegistrationDate()->format('Y-m-d H:i:s');
+    $createdAt = $user->getCreatedAt()->format('Y-m-d H:i:s');
     $userInfo['created'] = sprintf(
         get_lang('Create by <a href="%s">%s</a> on %s'),
         'user_information.php?user_id='.$creatorId,
         $creatorInfo['username'],
-        api_get_utc_datetime($registrationDate)
+        api_get_utc_datetime($createdAt)
     );
 }
 

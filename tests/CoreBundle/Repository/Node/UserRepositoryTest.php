@@ -216,7 +216,6 @@ class UserRepositoryTest extends AbstractApiTest
             ->setFirstname('Joe')
             ->setUsername('admin2')
             ->setSalt('')
-            ->setRegistrationDate(new DateTime())
             ->setExpirationDate(new DateTime())
             ->setOpenid('')
             ->setSlug('admin2')

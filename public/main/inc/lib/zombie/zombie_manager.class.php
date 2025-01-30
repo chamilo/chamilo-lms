@@ -41,7 +41,7 @@ class ZombieManager
             $column = 'firstname';
         }
 
-        $validColumns = ['id', 'official_code', 'firstname', 'lastname', 'username', 'auth_source', 'email', 'status', 'registration_date', 'active', 'login_date'];
+        $validColumns = ['id', 'official_code', 'firstname', 'lastname', 'username', 'auth_source', 'email', 'status', 'created_at', 'active', 'login_date'];
         if (!in_array($column, $validColumns)) {
             $column = 'firstname';
         }
@@ -60,7 +60,7 @@ class ZombieManager
                     user.auth_source,
                     user.email,
                     user.status,
-                    user.registration_date,
+                    user.created_at,
                     user.active,
                     access.login_date';
 

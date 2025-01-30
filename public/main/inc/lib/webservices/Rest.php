@@ -1876,8 +1876,8 @@ class Rest extends WebService
                     }
                     $user->setLocale($value);
                     break;
-                case 'registration_date':
-                    $user->setRegistrationDate($value);
+                case 'created_at':
+                    $user->setCreatedAt($value);
                     break;
                 case 'expiration_date':
                     $user->setExpirationDate(

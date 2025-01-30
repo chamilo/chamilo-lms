@@ -166,7 +166,7 @@ class AzureActiveDirectory extends Plugin
 
         $em = Database::getManager();
 
-        if ($em->getConnection()->getSchemaManager()->tablesExist(['course_home_notify_notification'])) {
+        if ($em->getConnection()->getSchemaManager()->tablesExist(['azure_ad_sync_state'])) {
             return;
         }
 
@@ -182,7 +182,7 @@ class AzureActiveDirectory extends Plugin
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->getSchemaManager()->tablesExist(['course_home_notify_notification'])) {
+        if (!$em->getConnection()->getSchemaManager()->tablesExist(['azure_ad_sync_state'])) {
             return;
         }
 

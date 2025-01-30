@@ -294,7 +294,7 @@ switch ($action) {
 
         $extraConditions = '';
         if (!empty($startDate) && !empty($endDate)) {
-            $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
+            $extraConditions .= " AND created_at BETWEEN '$startDate' AND '$endDate' ";
         }
 
         switch ($filter) {

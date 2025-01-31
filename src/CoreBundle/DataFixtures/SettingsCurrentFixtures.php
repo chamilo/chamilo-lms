@@ -364,11 +364,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Use course images as the course icon in courses lists (instead of the default green blackboard icon).',
                 ],
                 [
-                    'name' => 'enable_record_audio',
-                    'title' => 'Enable audio recorder',
-                    'comment' => 'Enables the WebRTC (flashless) audio recorder at several locations inside Chamilo',
-                ],
-                [
                     'name' => 'hide_scorm_copy_link',
                     'title' => 'Hide SCORM Copy',
                     'comment' => 'Hide the Learning Path Copy icon from the Learning Paths list',
@@ -815,11 +810,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'enable_webcam_clip',
                     'title' => 'Enable Webcam Clip',
                     'comment' => 'Webcam Clip allow to users capture images from his webcam and send them to server in JPEG (.jpg or .jpeg) format',
-                ],
-                [
-                    'name' => 'enabled_text2audio',
-                    'title' => 'Enable online services for text to speech conversion',
-                    'comment' => 'Online tool to convert text to speech. Uses speech synthesis technology to generate audio files saved into your course.',
                 ],
                 [
                     'name' => 'pdf_export_watermark_by_course',

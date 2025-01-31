@@ -77,10 +77,8 @@ if ('true' === api_get_setting('exercise.quiz_prevent_copy_paste')) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
 }
 
-if ('true' === api_get_setting('enable_record_audio')) {
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
-    $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
-}
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
+$htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 
 $zoomOptions = api_get_setting('exercise.quiz_image_zoom', true);
 if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'mobileapp'])) {

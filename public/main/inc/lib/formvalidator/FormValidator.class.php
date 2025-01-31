@@ -1748,7 +1748,7 @@ EOT;
             $(function() {
                 var defaultValue = '$defaultId';
                 $('#$typeNoDots').val(defaultValue);
-                $('#$typeNoDots').selectpicker('render');
+                //$('#$typeNoDots').selectpicker('render');
                 if (defaultValue != '') {
                     var selected = $('#$typeNoDots option:selected').val();
                     $.ajax({

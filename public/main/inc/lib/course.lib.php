@@ -896,6 +896,18 @@ class CourseManager
                     )
                 );
 
+                $subject = get_lang('You have been enrolled in the course').' '.$course->getTitle();
+                $message = sprintf(get_lang('Hello %s, you have been enrolled in the course %s.'), UserManager::formatUserFullName($user, true), $course->getTitle());
+
+                MessageManager::send_message_simple(
+                    $userId,
+                    $subject,
+                    $message,
+                    api_get_user_id(),
+                    false,
+                    true
+                );
+
                 $send = (int) api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course);
 
                 if (1 === $send) {

@@ -691,13 +691,15 @@ class SubLanguageManager
 
     /**
      * Add a sub-language.
+     *
+     * @throws Exception
      */
-    public static function addSubLanguage(string $originalName, string $englishName, bool $isAvailable, int $parentId, string $isoCode): bool|int
+    public static function addSubLanguage(string $originalName, string $englishName, bool $isAvailable, int $parentId, string $isoCode): Language
     {
         $entityManager = Database::getManager();
         $parentLanguage = $entityManager->getRepository(Language::class)->find($parentId);
         if (!$parentLanguage) {
-            return false;
+            throw new Exception();
         }
 
         $subLanguage = new Language();
@@ -707,15 +709,10 @@ class SubLanguageManager
             ->setAvailable($isAvailable)
             ->setParent($parentLanguage);
 
-        try {
-            $entityManager->persist($subLanguage);
-            $entityManager->flush();
-        } catch (\Exception $e) {
-            // Handle exception if needed
-            return false;
-        }
+        $entityManager->persist($subLanguage);
+        $entityManager->flush();
 
-        return $subLanguage->getId();
+        return $subLanguage;
     }
 
     /**
@@ -744,15 +741,17 @@ class SubLanguageManager
 
     /**
      * Check if a language exists by its ID.
-     *
-     * @throws NotSupported
      */
     public static function languageExistsById(int $languageId): bool
     {
         $entityManager = Database::getManager();
-        $language = $entityManager->getRepository(Language::class)->find($languageId);
+        try {
+            $language = $entityManager->getRepository(Language::class)->find($languageId);
 
-        return $language !== null;
+            return $language !== null;
+        } catch (NotSupported) {
+            return false;
+        }
     }
 
     /**
@@ -770,18 +769,20 @@ class SubLanguageManager
 
     /**
      * Get all information of a sub-language.
-     *
-     * @throws NotSupported
      */
     public static function getAllInformationOfSubLanguage(int $parentId, int $subLanguageId): ?Language
     {
         $entityManager = Database::getManager();
-        $languageRepository = $entityManager->getRepository(Language::class);
+        try {
+            $languageRepository = $entityManager->getRepository(Language::class);
 
-        return $languageRepository->findOneBy([
-            'parent' => $parentId,
-            'id' => $subLanguageId
-        ]);
+            return $languageRepository->findOneBy([
+                'parent' => $parentId,
+                'id' => $subLanguageId
+            ]);
+        } catch (NotSupported) {
+            return null;
+        }
     }
 
     /**
@@ -857,7 +858,7 @@ class SubLanguageManager
         return null; // No parent language
     }
 
-    public static function generateSublanguageCode(string $parentCode, string $variant, int $maxLength = 10): string
+    public static function generateSublanguageCode(string $parentCode, string $variant, int $maxLength = Language::ISO_MAX_LENGTH): string
     {
         $parentCode = strtolower(trim($parentCode));
         $variant = strtolower(trim($variant));

@@ -9909,15 +9909,29 @@ class Exercise
                                 );
                             } else {
                                 if ($row['active'] == 0 || $visibility == 0) {
-                                    $visibility = Display::url(
-                                        Display::return_icon(
-                                            'invisible.png',
-                                            get_lang('Activate'),
-                                            '',
-                                            ICON_SIZE_SMALL
-                                        ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$row['iid']
+                                    $visibleOnBaseCourse = api_get_item_visibility(
+                                        $courseInfo,
+                                        TOOL_QUIZ,
+                                        $row['iid'],
+                                        0
                                     );
+
+                                    if ($visibleOnBaseCourse) {
+                                        $visibility = Display::url(
+                                            Display::return_icon(
+                                                'invisible.png',
+                                                get_lang('Activate'),
+                                                '',
+                                                ICON_SIZE_SMALL
+                                            ),
+                                            'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$row['iid']
+                                        );
+                                    } else {
+                                        $visibility = Display::return_icon(
+                                            'invisible.png',
+                                            get_lang('Activate')
+                                        );
+                                    }
                                 } else {
                                     // else if not active
                                     $visibility = Display::url(

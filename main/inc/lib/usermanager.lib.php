@@ -8261,4 +8261,52 @@ SQL;
 
         return $url;
     }
+
+    /**
+     * Search for users based on given filters.
+     */
+    public static function searchUsers(array $filters = [], array $editableFields = []): array
+    {
+        $where = [];
+
+        if (!empty($filters['keywordFirstname'])) {
+            $where[] = "u.firstname LIKE '%".Database::escape_string($filters['keywordFirstname'])."%'";
+        }
+        if (!empty($filters['keywordLastname'])) {
+            $where[] = "u.lastname LIKE '%".Database::escape_string($filters['keywordLastname'])."%'";
+        }
+        if (!empty($filters['keywordUsername'])) {
+            $where[] = "u.username LIKE '%".Database::escape_string($filters['keywordUsername'])."%'";
+        }
+        if (!empty($filters['keywordEmail'])) {
+            $where[] = "u.email LIKE '%".Database::escape_string($filters['keywordEmail'])."%'";
+        }
+        if (!empty($filters['keywordOfficialCode'])) {
+            $where[] = "u.official_code LIKE '%".Database::escape_string($filters['keywordOfficialCode'])."%'";
+        }
+        if (!empty($filters['keywordStatus']) && $filters['keywordStatus'] !== '%') {
+            $where[] = "u.status = '".Database::escape_string($filters['keywordStatus'])."'";
+        }
+        if (!empty($filters['keywordActive']) && empty($filters['keywordInactive'])) {
+            $where[] = "u.active = 1";
+        } elseif (empty($filters['keywordActive']) && !empty($filters['keywordInactive'])) {
+            $where[] = "u.active = 0";
+        }
+
+        $fields = ['u.id', 'u.username'];
+
+        if (!empty($editableFields)) {
+            foreach ($editableFields as $field) {
+                $fields[] = "u." . Database::escapeField($field);
+            }
+        }
+
+        $sql = "SELECT " . implode(", ", $fields) . " FROM " . Database::get_main_table(TABLE_MAIN_USER) . " u";
+        if (!empty($where)) {
+            $sql .= " WHERE " . implode(" AND ", $where);
+        }
+        $sql .= " ORDER BY u.id ASC";
+
+        return Database::store_result(Database::query($sql), 'ASSOC');
+    }
 }

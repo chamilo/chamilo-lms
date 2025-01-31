@@ -147,6 +147,11 @@ if (api_is_platform_admin()) {
         'url' => 'usergroups.php',
         'label' => get_lang('Classes'),
     ];
+    $items[] = [
+        'class' => 'item-user-advanced_edit',
+        'url' => 'user_advanced_edit.php',
+        'label' => get_lang('UserAdvancedEdit'),
+    ];
     if (api_get_configuration_value('show_link_request_hrm_user')) {
         $items[] = [
             'class' => 'item-user-linking-requests',
@@ -176,6 +181,11 @@ if (api_is_platform_admin()) {
             'url' => 'usergroups.php',
             'label' => get_lang('Classes'),
         ],
+    ];
+    $items[] = [
+        'class' => 'item-user-advanced_edit',
+        'url' => 'user_advanced_edit.php',
+        'label' => get_lang('UserAdvancedEdit'),
     ];
 
     if (api_is_session_admin()) {

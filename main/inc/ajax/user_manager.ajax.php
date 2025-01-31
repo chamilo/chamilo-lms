@@ -463,6 +463,86 @@ switch ($action) {
         header('Content-Type: application/json');
         echo json_encode(['items' => $items]);
         break;
+    case 'update_users':
+        $usersData = json_decode($_POST['users'], true);
+        $updatedCount = 0;
+
+        foreach ($usersData as $userData) {
+            if (empty($userData['user_id'])) {
+                continue;
+            }
+
+            $userId = (int) $userData['user_id'];
+            $currentUserData = api_get_user_info($userId);
+
+            if (!$currentUserData) {
+                continue;
+            }
+
+            $updatedData = [
+                'firstname'      => $userData['firstname'] ?? $currentUserData['firstname'],
+                'lastname'       => $userData['lastname'] ?? $currentUserData['lastname'],
+                'email'          => $userData['email'] ?? $currentUserData['email'],
+                'phone'          => $userData['phone'] ?? $currentUserData['phone'],
+                'official_code'  => $userData['official_code'] ?? $currentUserData['official_code'],
+                'status'         => isset($userData['status']) ? (int) $userData['status'] : $currentUserData['status'],
+                'active'         => isset($userData['active']) ? (int) $userData['active'] : $currentUserData['active'],
+            ];
+
+            if (!empty($userData['password'])) {
+                $updatedData['password'] = $userData['password'];
+            }
+
+            $extraFieldHandler = new ExtraField('user');
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extraFields = [];
+            foreach ($userData as $key => &$value) {
+                if (strpos($key, 'extra_') === 0) {
+                    $fieldName = str_replace('extra_', '', $key);
+                    $fieldInfo = $extraFieldHandler->get_handler_field_info_by_field_variable($fieldName);
+                    if ($fieldInfo) {
+                        if ($fieldInfo['field_type'] == 10 && is_string($value) && strpos($value, ',') !== false) {
+                            $value = explode(',', $value);
+                        }
+                    }
+                }
+            }
+
+            UserManager::update_user(
+                $userId,
+                $updatedData['firstname'],
+                $updatedData['lastname'],
+                $currentUserData['username'],
+                $updatedData['password'] ?? null,
+                $currentUserData['auth_source'],
+                $updatedData['email'],
+                $updatedData['status'],
+                $updatedData['official_code'],
+                $updatedData['phone'],
+                $currentUserData['picture_uri'],
+                null,
+                $updatedData['active'],
+                null,
+                null,
+                null,
+                $currentUserData['language']
+            );
+
+            $userData['item_id'] = $userId;
+            $extraFieldValue->saveFieldValues(
+                $userData,
+                false,
+                false,
+                [],
+                [],
+                true
+            );
+
+            $updatedCount++;
+        }
+
+        echo json_encode(['message' => $updatedCount.' '.get_lang('UsersAdded')]);
+        break;
     default:
         echo '';
 }

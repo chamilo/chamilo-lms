@@ -201,15 +201,13 @@ class ExerciseLib
                     break;
                 case ORAL_EXPRESSION:
                     // Add nanog
-                    if ('true' === api_get_setting('enable_record_audio')) {
-                        //@todo pass this as a parameter
-                        global $exercise_stat_info;
-                        if (!empty($exercise_stat_info)) {
-                            echo $objQuestionTmp->returnRecorder((int) $exercise_stat_info['exe_id']);
-                            $generatedFile = self::getOralFileAudio($exercise_stat_info['exe_id'], $questionId);
-                            if (!empty($generatedFile)) {
-                                echo $generatedFile;
-                            }
+                    //@todo pass this as a parameter
+                    global $exercise_stat_info;
+                    if (!empty($exercise_stat_info)) {
+                        echo $objQuestionTmp->returnRecorder((int) $exercise_stat_info['exe_id']);
+                        $generatedFile = self::getOralFileAudio($exercise_stat_info['exe_id'], $questionId);
+                        if (!empty($generatedFile)) {
+                            echo $generatedFile;
                         }
                     }
 

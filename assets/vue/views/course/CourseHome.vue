@@ -423,6 +423,13 @@ onMounted(async () => {
 
 const onStudentViewChanged = async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()
+
+  courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
+    tools.value = cTools.map((element) => ({
+      ...element,
+      isEnabled: element.resourceNode?.resourceLinks[0]?.visibility === 2,
+    }))
+  })
 }
 
 const allowEditToolVisibilityInSession = computed(() => {

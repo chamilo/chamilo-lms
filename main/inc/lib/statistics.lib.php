@@ -1935,10 +1935,18 @@ class Statistics
             get_lang('Progress'),
         ];
 
+        $extraField = new ExtraField('user');
+        $extraFields = $extraField->get_all(['filter = ?' => 1], 'option_order');
+
+        foreach ($extraFields as $field) {
+            $headers[] = $field['variable'];
+        }
+
         $exportData = [$headers];
         foreach ($sessions as $session) {
             $sessionId = (int) $session['id'];
             $students = SessionManager::get_users_by_session($sessionId);
+            $extraValueObj = new ExtraFieldValue('user');
 
             foreach ($students as $student) {
                 $studentId = $student['user_id'];
@@ -1951,7 +1959,7 @@ class Statistics
                 $averageScore = round(Tracking::getAverageStudentScore($studentId, $courseCode, [], $sessionId));
                 $averageProgress = round(Tracking::get_avg_student_progress($studentId, $courseCode, [], $sessionId));
 
-                $exportData[] = [
+                $userData = [
                     $courseInfo['name'],
                     $session['name'],
                     $studentInfo['lastname'],
@@ -1962,6 +1970,13 @@ class Statistics
                     $averageScore,
                     $averageProgress,
                 ];
+
+                foreach ($extraFields as $field) {
+                    $extraValue = $extraValueObj->get_values_by_handler_and_field_id($studentId, $field['id'], true);
+                    $userData[] = $extraValue['value'] ?? '';
+                }
+
+                $exportData[] = $userData;
             }
         }
 

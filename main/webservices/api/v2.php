@@ -751,6 +751,18 @@ try {
             );
             $restResponse->setData([$idSession]);
             break;
+        case Rest::GET_SESSION_INFO_FROM_EXTRA_FIELD:
+            if (empty($_POST['field_name']) || empty($_POST['field_value'])) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $idSession = $restApi->getSessionInfoFromExtraField($_POST['field_name'], $_POST['field_value']);
+            Event::addEvent(
+                LOG_WS.$action,
+                'extra_field_name-extra_field_value',
+                Database::escape_string($_POST['field_name']).':'.Database::escape_string($_POST['field_value'])
+            );
+            $restResponse->setData([$idSession]);
+            break;
         case Rest::SAVE_SESSION:
             $data = $restApi->addSession($_POST);
             Event::addEvent(LOG_WS.$action, 'session_id', $data['id_session']);

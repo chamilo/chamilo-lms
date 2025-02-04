@@ -109,8 +109,8 @@ class Rest extends WebService
     public const GET_COURSES_FROM_EXTRA_FIELD = 'get_courses_from_extra_field';
     public const SAVE_COURSE = 'save_course';
     public const DELETE_COURSE = 'delete_course';
-
     public const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
+    public const GET_SESSION_INFO_FROM_EXTRA_FIELD = 'get_session_info_from_extra_field';
     public const SAVE_SESSION = 'save_session';
     public const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
     public const UPDATE_SESSION = 'update_session';
@@ -2514,18 +2514,18 @@ class Rest extends WebService
     }
 
     /**
-     * finds the session which has a specific value in a specific extra field.
+     * Finds the session which has a specific value in a specific extra field and return its ID (only that)
      *
-     * @param $fieldName
-     * @param $fieldValue
+     * @param string $fieldName
+     * @param string $fieldValue
      *
+     * @return int The matching session id, or an array with details about the session
      * @throws Exception when no session matched or more than one session matched
      *
-     * @return int, the matching session id
      */
-    public function getSessionFromExtraField($fieldName, $fieldValue)
+    public function getSessionFromExtraField(string $fieldName, string $fieldValue)
     {
-        // find sessions that that have value in field
+        // find sessions that have that value in the given field
         $valueModel = new ExtraFieldValue('session');
         $sessionIdList = $valueModel->get_item_id_from_field_variable_and_field_value(
             $fieldName,
@@ -2547,6 +2547,54 @@ class Rest extends WebService
 
         // return sessionId
         return intval($sessionIdList[0]['item_id']);
+    }
+
+    /**
+     * Finds the session which has a specific value in a specific extra field and return its details
+     *
+     * @param string $fieldName
+     * @param string $fieldValue
+     *
+     * @return array The matching session id, or an array with details about the session
+     * @throws Exception when no session matched or more than one session matched
+     *
+     */
+    public function getSessionInfoFromExtraField(string $fieldName, string $fieldValue): array
+    {
+        $session = [];
+        // find sessions that have that value in the given field
+        $valueModel = new ExtraFieldValue('session');
+        $sessionIdList = $valueModel->get_item_id_from_field_variable_and_field_value(
+            $fieldName,
+            $fieldValue,
+            false,
+            false,
+            true
+        );
+
+        // throw if none found
+        if (empty($sessionIdList)) {
+            throw new Exception(get_lang('NoSessionMatched'));
+        }
+
+        // throw if more than one found
+        if (count($sessionIdList) > 1) {
+            throw new Exception(get_lang('MoreThanOneSessionMatched'));
+        }
+
+        $session = api_get_session_info($sessionIdList[0]['item_id']);
+        $bundle = [
+            'id' => $session['id'],
+            'name' => $session['name'],
+            'access_start_date' => $session['access_start_date'],
+            'access_end_date' => $session['access_end_date'],
+        ];
+        $extraFieldValues = new ExtraFieldValue('session');
+        $extraFields = $extraFieldValues->getAllValuesByItem($session['id']);
+        $bundle['extra_fields'] = $extraFields;
+
+        // return session details, including extra fields that have filter=1
+        return $bundle;
     }
 
     /**

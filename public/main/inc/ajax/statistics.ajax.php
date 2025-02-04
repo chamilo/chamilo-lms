@@ -205,7 +205,7 @@ switch ($action) {
         } elseif ('courses' == $action) {
             $courseCategoryRepo = Container::getCourseCategoryRepository();
             $categories = $courseCategoryRepo->findAll();
-            $statsName = 'CountCours';
+            $statsName = 'Total number of courses';
             // total amount of courses
             $all = [];
             foreach ($categories as $category) {
@@ -213,7 +213,7 @@ switch ($action) {
                 $all[$category->getTitle()] = $category->getCourses()->count();
             }
         } elseif ('courses_by_language' == $action) {
-            $statsName = 'CountCourseByLanguage';
+            $statsName = 'Count course by language';
             $all = Statistics::printCourseByLanguageStats();
             // use slightly different colors than previous chart
             for ($k = 0; $k < 3; $k++) {
@@ -221,7 +221,7 @@ switch ($action) {
                 array_push($palette, $item);
             }
         } elseif ('users' == $action) {
-            $statsName = 'NumberOfUsers';
+            $statsName = 'Number of users';
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
             $all = [
                 get_lang('Trainers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
@@ -286,7 +286,7 @@ switch ($action) {
         $list = [];
         $palette = ChamiloApi::getColorPalette(true, true);
 
-        $statsName = 'NumberOfUsers';
+        $statsName = 'Number of users';
         $filter = $_REQUEST['filter'];
 
         $startDate = $_REQUEST['date_start'];
@@ -617,7 +617,7 @@ switch ($action) {
         $list = [];
         $palette = ChamiloApi::getColorPalette(true, true);
 
-        $statsName = 'NumberOfUsers';
+        $statsName = 'Number of users';
         $filter = $_REQUEST['filter'];
 
         $startDate = Database::escape_string($_REQUEST['date_start']);

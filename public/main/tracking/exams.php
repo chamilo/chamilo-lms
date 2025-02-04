@@ -376,7 +376,7 @@ if (!empty($courseList)) {
             } else {
                 $html .= "<tr>
                             <td colspan='6'>
-                                ".get_lang('NoTest')."
+                                ".get_lang('There is no test for the moment')."
                             </td>
                         </tr>
                      ";
@@ -384,7 +384,7 @@ if (!empty($courseList)) {
         } else {
             $html .= "<tr>
                         <td colspan='6'>
-                            ".get_lang('NoTest')."
+                            ".get_lang('There is no test for the moment')."
                         </td>
                     </tr>
                  ";

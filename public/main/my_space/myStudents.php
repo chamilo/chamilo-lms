@@ -2032,7 +2032,7 @@ if (empty($details)) {
                 $i++;
             }
         } else {
-            echo '<tr><td colspan="6">'.get_lang('NoTest').'</td></tr>';
+            echo '<tr><td colspan="6">'.get_lang('There is no test for the moment').'</td></tr>';
         }
         echo '</tbody></table></div>';
     }

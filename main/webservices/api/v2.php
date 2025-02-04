@@ -794,8 +794,12 @@ try {
             if (!empty($_POST['id_campus'])) {
                 $campusId = (int) $_POST['id_campus'];
             }
+            $getExtraFields = false;
+            if (!empty($_POST['get_extra_fields']) && ('false' != $_POST['get_extra_fields'])) {
+                $getExtraFields = true;
+            }
             Event::addEvent(LOG_WS.$action, 'id_campus', $campusId);
-            $data = $restApi->getSessionsCampus($campusId);
+            $data = $restApi->getSessionsCampus($campusId, $getExtraFields);
             $restResponse->setData($data);
             break;
         case Rest::ADD_COURSES_SESSION:

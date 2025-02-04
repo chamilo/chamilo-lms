@@ -1682,7 +1682,7 @@ class Rest extends WebService
      *
      * @throws Exception
      */
-    public function getSessionsCampus(int $campusId = 0): array
+    public function getSessionsCampus(int $campusId = 0, bool $getExtraFields = false): array
     {
         self::protectAdminEndpoint();
 
@@ -1695,12 +1695,18 @@ class Rest extends WebService
         );
         $shortList = [];
         foreach ($list as $session) {
-            $shortList[] = [
+            $bundle = [
                 'id' => $session['id'],
                 'name' => $session['name'],
                 'access_start_date' => $session['access_start_date'],
                 'access_end_date' => $session['access_end_date'],
             ];
+            if ($getExtraFields) {
+                $extraFieldValues = new ExtraFieldValue('session');
+                $extraFields = $extraFieldValues->getAllValuesByItem($session['id']);
+                $bundle['extra_fields'] = $extraFields;
+            }
+            $shortList[] = $bundle;
         }
 
         return $shortList;

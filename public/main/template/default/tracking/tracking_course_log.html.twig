@@ -58,7 +58,7 @@ $(() => {
         data: {
             labels: ["0-9%", "10-19%", "20-29%", "30-39%", "40-49%", "50-59%", "60-69%", "70-79%", "80-89%", "90-100%"],
             datasets: [{
-                label: '{{ "NumberOfUsers"|get_lang|e('js') }}',
+                label: '{{ "Number of users"|get_lang|e('js') }}',
                 data: {{ score_distribution|raw }},
                 backgroundColor: {{ chart_colors|raw }},
                 borderColor: {{ chart_colors|raw }},
@@ -74,7 +74,7 @@ $(() => {
                 y: {
                     position: "left",
                     title: {
-                      text: '{{ "NumberOfUsers"|get_lang|e('js') }}',
+                      text: '{{ "Number of users"|get_lang|e('js') }}',
                       display: true
                     },
                     ticks: {

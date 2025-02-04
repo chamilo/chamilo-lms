@@ -41,7 +41,8 @@ export const chamiloIconToClass = {
   "dots-vertical": "mdi mdi-dots-vertical",
   "down": "mdi mdi-arrow-down-right",
   "download": "mdi mdi-download-box",
-  "drawing": "mdi mdi-drawing",
+  "comment": "mdi mdi-comment-text-outline",
+  "drawing": "mdi mdi-pencil-outline",
   "edit": "mdi mdi-pencil",
   "email-plus": "mdi mdi-email-plus-outline",
   "email-unread": "mdi mdi-email-mark-as-unread",
@@ -127,5 +128,11 @@ export const chamiloIconToClass = {
   "next": "mdi mdi-arrow-right-bold-box",
   "crosshairs": "mdi mdi-crosshairs",
   "square": "mdi mdi-square",
-  "wheel": "mdi mdi-tire"
+  "wheel": "mdi mdi-tire",
+  "view-table": "mdi mdi-table-eye",
+  "eye-lock": "mdi mdi-lock",
+  "unlock": "mdi mdi-lock-open",
+  "lock": "mdi mdi-lock",
+  "account-check": "mdi mdi-account-check",
+  "account-cancel": "mdi mdi-account-cancel",
 }

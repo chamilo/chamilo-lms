@@ -6,23 +6,47 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\User;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\User;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Course groups.
- */
-#[ApiResource(normalizationContext: ['groups' => ['group:read']], security: "is_granted('ROLE_ADMIN')")]
+#[ApiResource(
+    shortName: 'Groups',
+    operations: [
+        new GetCollection(
+            uriTemplate: '/groups',
+            openapiContext: [
+                'parameters' => [
+                    [
+                        'name' => 'resourceNode.parent',
+                        'in' => 'query',
+                        'required' => true,
+                        'description' => 'Filter groups by the parent resource node (course)',
+                        'schema' => ['type' => 'integer'],
+                    ],
+                ],
+            ]
+        ),
+        new Get(security: "is_granted('VIEW', object.resourceNode)")
+    ],
+    normalizationContext: ['groups' => ['group:read']],
+    denormalizationContext: ['groups' => ['group:write']],
+    paginationEnabled: true
+)]
+#[ApiFilter(SearchFilter::class, properties: ['resourceNode.parent' => 'exact'])]
 #[ORM\Table(name: 'c_group_info')]
 #[ORM\Entity(repositoryClass: CGroupRepository::class)]
 class CGroup extends AbstractResource implements ResourceInterface, Stringable
@@ -42,11 +66,13 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
     protected string $title;
     #[Assert\NotNull]
     #[ORM\Column(name: 'status', type: 'boolean', nullable: false)]
+    #[Groups(['group:read', 'group:write'])]
     protected bool $status;
     #[ORM\ManyToOne(targetEntity: CGroupCategory::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CGroupCategory $category = null;
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
+    #[Groups(['group:read', 'group:write'])]
     protected ?string $description = null;
     #[Assert\NotBlank]
     #[ORM\Column(name: 'max_student', type: 'integer')]

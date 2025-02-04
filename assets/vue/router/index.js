@@ -21,6 +21,7 @@ import documents from "./documents"
 import assignments from "./assignments"
 import links from "./links"
 import glossary from "./glossary"
+import attendance from "./attendance"
 import catalogue from "./catalogue"
 import { useSecurityStore } from "../store/securityStore"
 import MyCourseList from "../views/user/courses/List.vue"
@@ -234,6 +235,7 @@ const router = createRouter({
     assignments,
     links,
     glossary,
+    attendance,
     accountRoutes,
     personalFileRoutes,
     messageRoutes,

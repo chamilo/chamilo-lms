@@ -21,6 +21,7 @@ class CAttendanceResult
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[Groups(['attendance:read'])]
     protected User $user;
 
     #[ORM\ManyToOne(targetEntity: CAttendance::class, inversedBy: 'results')]

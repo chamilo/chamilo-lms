@@ -3078,6 +3078,47 @@ class UserManager
         return $myCourseList;
     }
 
+        /**
+     * Gives a list of session for the given user in the given course id.
+     *
+     * @param int $user_id
+     * @param int $course_id
+     *
+     * @return array list of session
+     */
+    public static function get_sessions_list_by_course($user_id, $course_id) : array
+    {
+        $course_id = (int) $course_id;
+        $user_id = (int) $user_id;
+
+        if (empty($course_id)) {
+            return [];
+        }
+
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        $sql = "SELECT DISTINCT
+                    s.id,
+                    s.name
+                FROM $tbl_session s
+                INNER JOIN $tbl_session_course_user scu
+                ON s.id = scu.session_id
+                WHERE scu.c_id = $course_id";
+        // prepare array
+        $sessions = [];
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_assoc($result)) {
+                $sessions[$row['id']] = $row;
+            }
+        }
+
+        return $sessions;
+
+    }
+
     /**
      * Get user id from a username.
      *

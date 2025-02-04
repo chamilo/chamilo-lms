@@ -104,7 +104,7 @@ class Promotion extends Model
 
                         foreach ($session_list as $item) {
                             $sid = SessionManager::copy(
-                                $item['id'],
+                                (int) $item['id'],
                                 true,
                                 false,
                                 false,

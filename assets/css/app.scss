@@ -292,6 +292,10 @@
   }
 }
 
+.mdi {
+  @apply font-normal text-base leading-none;
+}
+
 .field > small.p-error {
   @apply text-error;
 }
@@ -797,6 +801,15 @@ form .field {
   .tiny-content table {
     @apply w-auto table-auto;
   }
+}
+
+/* Loader */
+.loader {
+  @apply w-10 h-10 border-4 border-gray-20 border-l-primary rounded-full animate-spin;
+}
+
+.loader-overlay {
+  @apply absolute inset-0 flex items-center justify-center bg-white bg-opacity-40 backdrop-blur-sm;
 }
 
 //@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";

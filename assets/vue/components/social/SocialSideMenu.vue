@@ -152,7 +152,6 @@ import { computed, inject, onMounted, ref, watchEffect } from "vue"
 import { useSecurityStore } from "../../store/securityStore"
 import axios from "axios"
 import { usePlatformConfig } from "../../store/platformConfig"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const { t } = useI18n()
 const route = useRoute()

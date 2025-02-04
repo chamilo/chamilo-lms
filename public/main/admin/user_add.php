@@ -218,6 +218,7 @@ $group[] = $form->createElement(
         'id' => 'password',
         'autocomplete' => 'off',
         'onkeydown' => 'javascript: password_switch_radio_button();',
+        'show_hide' => true,
         //'required' => 'required'
     ]
 );

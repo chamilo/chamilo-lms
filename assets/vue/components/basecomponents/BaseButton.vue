@@ -13,6 +13,7 @@
     :text="onlyIcon"
     :title="tooltip || (onlyIcon ? label : undefined)"
     :type="isSubmit ? 'submit' : 'button'"
+    :name="name"
     class="cursor-pointer"
     @click="$emit('click', $event)"
   />
@@ -69,6 +70,11 @@ const props = defineProps({
   popupIdentifier: {
     type: String,
     default: "", // This ensures that popupIdentifier is still present
+  },
+  name: {
+    type: String || undefined,
+    required: false,
+    default: undefined,
   },
 })
 

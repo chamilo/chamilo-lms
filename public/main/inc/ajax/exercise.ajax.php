@@ -8,7 +8,7 @@ use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
 $current_course_tool = TOOL_QUIZ;
-$debug = true;
+$debug = false;
 api_protect_course_script(true);
 $action = $_REQUEST['a'];
 $course_id = api_get_course_int_id();

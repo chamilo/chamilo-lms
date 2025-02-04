@@ -72,7 +72,6 @@ import { useSecurityStore } from "../../store/securityStore"
 import axios from "axios"
 import { useNotification } from "../../composables/notification"
 import { useSocialInfo } from "../../composables/useSocialInfo"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const { t } = useI18n()
 const route = useRoute()

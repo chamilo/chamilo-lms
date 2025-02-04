@@ -3,9 +3,9 @@
     v-show="!loading"
     class="install-step"
   >
-    <h2
-      v-t="'Step 6 - Last check before install'"
-      class="RequirementHeading mb-8"
+    <SectionHeader
+      :title="t('Step 6 - Last check before install')"
+      class="RequirementHeading"
     />
 
     <p
@@ -380,6 +380,7 @@ import Message from "primevue/message"
 import Button from "primevue/button"
 import ProgressBar from "primevue/progressbar"
 import Dialog from "primevue/dialog"
+import SectionHeader from "../layout/SectionHeader.vue"
 
 const { t } = useI18n()
 

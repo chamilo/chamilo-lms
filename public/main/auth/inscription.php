@@ -1089,6 +1089,7 @@ if ($form->validate()) {
             $cond_array = explode(':', $values['legal_accept_type']);
             if (!empty($cond_array[0]) && !empty($cond_array[1])) {
                 $time = time();
+                // legal_accept is stored as version_id:language_id:timestamp
                 $conditionToSave = (int) $cond_array[0].':'.(int) $cond_array[1].':'.$time;
                 UserManager::update_extra_field_value(
                     $userId,

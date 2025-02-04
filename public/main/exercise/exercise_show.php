@@ -141,7 +141,7 @@ if (!$is_allowedToEdit) {
     }
 }
 
-$allowRecordAudio = 'true' === api_get_setting('enable_record_audio');
+$allowRecordAudio = true;
 $allowTeacherCommentAudio = ('true' === api_get_setting('exercise.allow_teacher_comment_audio'));
 
 //$js = '<script>'.api_get_language_translate_html().'</script>';

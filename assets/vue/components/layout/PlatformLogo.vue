@@ -1,10 +1,12 @@
 <script setup>
 import { ref } from "vue"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useSecurityStore } from "../../store/securityStore"
 import { useVisualTheme } from "../../composables/theme"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const platformConfigStore = usePlatformConfig()
+const securityStore = useSecurityStore()
+
 const { getThemeAssetUrl } = useVisualTheme()
 
 const siteName = platformConfigStore.getSetting("platform.site_name")
@@ -26,7 +28,7 @@ const onError = () => {
 
 <template>
   <div class="platform-logo">
-    <BaseAppLink :to="{ name: 'Index' }">
+    <BaseAppLink :to="securityStore.user ? { name: 'Home' } : { name: 'Index' }">
       <img
         :alt="siteName"
         :src="currentSrc"

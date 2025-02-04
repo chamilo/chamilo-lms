@@ -1097,10 +1097,6 @@ abstract class Question
      */
     public static function get_question_type($type)
     {
-        if (ORAL_EXPRESSION == $type && 'true' !== api_get_setting('enable_record_audio')) {
-            return null;
-        }
-
         return self::$questionTypes[$type];
     }
 
@@ -1109,10 +1105,6 @@ abstract class Question
      */
     public static function getQuestionTypeList()
     {
-        if ('true' !== api_get_setting('enable_record_audio')) {
-            self::$questionTypes[ORAL_EXPRESSION] = null;
-            unset(self::$questionTypes[ORAL_EXPRESSION]);
-        }
         if ('true' !== api_get_setting('enable_quiz_scenario')) {
             self::$questionTypes[HOT_SPOT_DELINEATION] = null;
             unset(self::$questionTypes[HOT_SPOT_DELINEATION]);

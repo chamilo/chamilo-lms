@@ -13,7 +13,14 @@ if (!ctype_alnum($token)) {
 $form = new FormValidator('reset', 'POST', api_get_self().'?token='.$token);
 $form->addElement('header', get_lang('Reset password'));
 $form->addHidden('token', $token);
-$form->addElement('password', 'pass1', get_lang('Password'));
+$form->addElement(
+    'password',
+    'pass1',
+    get_lang('Password'),
+    [
+        'show_hide' => true,
+    ]
+);
 $form->addElement(
     'password',
     'pass2',

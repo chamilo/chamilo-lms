@@ -21,6 +21,7 @@ import documents from "./documents"
 import assignments from "./assignments"
 import links from "./links"
 import glossary from "./glossary"
+import catalogue from "./catalogue"
 import { useSecurityStore } from "../store/securityStore"
 import MyCourseList from "../views/user/courses/List.vue"
 import MySessionList from "../views/user/sessions/SessionsCurrent.vue"
@@ -41,8 +42,6 @@ import Demo from "../pages/Demo.vue"
 import { useCidReqStore } from "../store/cidReq"
 import courseService from "../services/courseService"
 
-import catalogueCourses from "./cataloguecourses"
-import catalogueSessions from "./cataloguesessions"
 import { customVueTemplateEnabled } from "../config/env"
 import { useCourseSettings } from "../store/courseSettingStore"
 import { checkIsAllowedToEdit, useUserSessionSubscription } from "../composables/userPermissions"
@@ -227,8 +226,7 @@ const router = createRouter({
     fileManagerRoutes,
     termsRoutes,
     socialNetworkRoutes,
-    catalogueCourses,
-    catalogueSessions,
+    catalogue,
     adminRoutes,
     courseRoutes,
     //courseCategoryRoutes,

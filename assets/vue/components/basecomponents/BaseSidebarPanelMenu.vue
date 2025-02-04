@@ -1,5 +1,4 @@
 <script setup>
-import BaseAppLink from "./BaseAppLink.vue"
 import PanelMenu from "primevue/panelmenu"
 import BaseIcon from "./BaseIcon.vue"
 

@@ -229,7 +229,11 @@ $group[] = $form->createElement(
     'password',
     'password',
     null,
-    ['onkeydown' => 'javascript: password_switch_radio_button();']
+    [
+        'id' => 'password',
+        'onkeydown' => 'javascript: password_switch_radio_button();',
+        'show_hide' => true,
+    ]
 );
 
 $form->addGroup($group, 'password', null, null, false);

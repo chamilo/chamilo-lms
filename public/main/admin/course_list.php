@@ -12,6 +12,7 @@ declare(strict_types=1);
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\StateIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 
@@ -416,9 +417,12 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         ['id' => 'course-search-keyword', 'aria-label' => get_lang('Search courses')]
     );
     $form->addButtonSearch(get_lang('Search courses'));
-    $advanced = '<a class="btn btn--plain" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list.php?search=advanced">
-        <em class="pi pi-search"></em> '.
-        get_lang('Advanced search').'</a>';
+    $advanced = Display::toolbarButton(
+        get_lang('Advanced search'),
+        Container::getRouter()->generate('legacy_main', ['name' => 'admin/course_list.php', 'search' => 'advanced']),
+        ActionIcon::SEARCH,
+        'plain'
+    );
 
     // Create a filter by session
     $sessionFilter = new FormValidator(

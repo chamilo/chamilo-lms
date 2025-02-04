@@ -2,10 +2,6 @@
 import { RouterLink } from "vue-router"
 import { computed } from "vue"
 
-defineOptions({
-  inheritAttrs: false,
-})
-
 const props = defineProps({
   ...RouterLink.props,
   url: {
@@ -28,16 +24,8 @@ const isAnchor = computed(() => !!props.url)
   </a>
   <router-link
     v-else
-    v-slot="{ href, navigate }"
-    custom
-    v-bind="$props"
+    v-bind="props"
   >
-    <a
-      :href="href"
-      v-bind="$attrs"
-      @click="navigate"
-    >
-      <slot />
-    </a>
+    <slot />
   </router-link>
 </template>

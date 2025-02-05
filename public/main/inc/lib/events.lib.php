@@ -1856,14 +1856,7 @@ class Event
 
         if ($courseAccessId) {
             // Course catalog stats modifications see #4191
-            CourseManager::update_course_ranking(
-                null,
-                0,
-                null,
-                null,
-                true,
-                false
-            );
+            CourseManager::update_course_ranking();
 
             return true;
         }

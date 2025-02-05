@@ -2793,10 +2793,7 @@ class SessionManager
                         $sessionId
                     );
 
-                    CourseManager::remove_course_ranking(
-                        $existingCourse['c_id'],
-                        $sessionId
-                    );
+                    CourseManager::remove_course_ranking($existingCourse['c_id']);
                     $nbr_courses--;
                 }
             }

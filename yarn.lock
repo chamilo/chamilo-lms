@@ -1530,6 +1530,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@maxgraph/core@npm:^0.15.0":
+  version: 0.15.0
+  resolution: "@maxgraph/core@npm:0.15.0"
+  checksum: 10c0/682e7e34d9059e436b9360c0043142b6908b505e1bbde555295604c00ae2d160a213308a25193e75d975a1a9fddce4903b20d5486605a7d736e25c77a2454eff
+  languageName: node
+  linkType: hard
+
 "@mdi/font@npm:^7.4.47":
   version: 7.4.47
   resolution: "@mdi/font@npm:7.4.47"
@@ -4036,6 +4043,7 @@ __metadata:
     "@fullcalendar/interaction": "npm:^5.11.5"
     "@fullcalendar/timegrid": "npm:^5.11.5"
     "@fullcalendar/vue3": "npm:^5.11.5"
+    "@maxgraph/core": "npm:^0.15.0"
     "@mdi/font": "npm:^7.4.47"
     "@symfony/webpack-encore": "npm:^5.0.1"
     "@tailwindcss/forms": "npm:^0.5.10"
@@ -4111,7 +4119,6 @@ __metadata:
     mini-css-extract-plugin: "npm:^1.6.2"
     moment: "npm:^2.30.1"
     multiselect-two-sides: "npm:^2.5.7"
-    mxgraph: "npm:^4.2.2"
     path: "npm:^0.12.7"
     pinia: "npm:^2.3.0"
     postcss: "npm:^8.4.49"
@@ -7766,13 +7773,6 @@ __metadata:
   bin:
     muxjs-transmux: bin/transmux.js
   checksum: 10c0/c77f8bc501302d68b3bc5846b80bfdfa387a07118757598b4e6a38b42c7ff2d2dd8b9f24142326b5ed9fe65dfb7d8a6616dc477f4503b070919b365a26a6c5d5
-  languageName: node
-  linkType: hard
-
-"mxgraph@npm:^4.2.2":
-  version: 4.2.2
-  resolution: "mxgraph@npm:4.2.2"
-  checksum: 10c0/8757842e40b2bbf183470a9eb3ccb74be2cc74544cc766fc2942929963062afb35e9de2e2b11f7cc93c866328462acff6b32c401752016eeeb0074ff33cb71a1
   languageName: node
   linkType: hard
 

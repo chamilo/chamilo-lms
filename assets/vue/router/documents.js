@@ -43,6 +43,11 @@ export default {
       component: () => import("../views/documents/DocumentShow.vue"),
     },
     {
+      name: "DocumentsAddVariation",
+      path: "add_variation/:resourceFileId",
+      component: () => import("../views/documents/AddVariation.vue"),
+    },
+    {
       name: "DocumentForHtmlEditor",
       path: "manager",
       component: () => import("../views/documents/DocumentForHtmlEditor.vue"),

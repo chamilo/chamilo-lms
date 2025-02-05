@@ -124,6 +124,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'course_creation_user_course_extra_field_relation_to_prefill' => '',
                     'allow_edit_tool_visibility_in_session' => 'true',
                     'show_course_duration' => 'false',
+                    'access_url_specific_files' => 'false',
                 ]
             )
             ->setTransformer(
@@ -372,6 +373,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             )
             ->add('allow_edit_tool_visibility_in_session', YesNoType::class)
             ->add('show_course_duration', YesNoType::class)
+            ->add('access_url_specific_files', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

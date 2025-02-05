@@ -90,6 +90,8 @@ class PlatformConfigurationController extends AbstractController
                 'document.students_download_folders',
                 'social.hide_social_groups_block',
                 'course.show_course_duration',
+                'exercise.allow_exercise_auto_launch',
+                'course.access_url_specific_files',
             ];
 
             $user = $this->userHelper->getCurrent();

@@ -94,7 +94,7 @@
     "textcomplete": "^0.18.2",
     "timeago": "^1.6.7",
     "timepicker": "^1.14.1",
-    "tinymce": "^5.10.9",
+    "tinymce": "^7.2.0",
     "video.js": "^7.21.6",
     "vue-flatpickr-component": "^9.0.8",
     "vue-i18n": "10.0.5",

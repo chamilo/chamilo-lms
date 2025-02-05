@@ -80,7 +80,8 @@ class SessionRepository extends ServiceEntityRepository
             ])
             ->orderBy('s.displayStartDate', 'ASC')
             ->addOrderBy('s.title', 'ASC')
-            ->addOrderBy('s.position', 'ASC');
+            ->addOrderBy('s.position', 'ASC')
+        ;
 
         return $qb;
     }

@@ -2218,6 +2218,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setLogin(string $login): self
     {
         $this->username = $login;
+
         return $this;
     }
 

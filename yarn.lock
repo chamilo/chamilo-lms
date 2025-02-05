@@ -4145,7 +4145,7 @@ __metadata:
     textcomplete: "npm:^0.18.2"
     timeago: "npm:^1.6.7"
     timepicker: "npm:^1.14.1"
-    tinymce: "npm:^5.10.9"
+    tinymce: "npm:^7.2.0"
     ts-loader: "npm:^9.5.1"
     typescript: "npm:^5.7.3"
     video.js: "npm:^7.21.6"
@@ -10278,17 +10278,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinymce@npm:^5.10.9":
-  version: 5.10.9
-  resolution: "tinymce@npm:5.10.9"
-  checksum: 10c0/8b0d8602259d54ab89ffbf7bc4ea08f1bb35fa1f523748358d22550fed1abbffda3a2168af7c7a562a6bb8828c1c9dedb41e8ed1cd63b21a00f31ef39e708443
-  languageName: node
-  linkType: hard
-
 "tinymce@npm:^6.0.0 || ^5.5.1":
   version: 6.8.5
   resolution: "tinymce@npm:6.8.5"
   checksum: 10c0/8c273b1ee321080dc8684d433ad6e8b10870032347d56768a2feb533a4d6a43c51ce44feb7707a4d195ddaafe329c4ec7690f0aebcc8b37faf19a99f739b227d
+  languageName: node
+  linkType: hard
+
+"tinymce@npm:^7.2.0":
+  version: 7.6.1
+  resolution: "tinymce@npm:7.6.1"
+  checksum: 10c0/b4cbb2bb78b60b96101e15998a3d19e34897799f07679d12a7b884dc0bc1d3dc4a5e22990de984def5059ef5599cb0fb643afa7b68094857c8c118bfd1c6c5e6
   languageName: node
   linkType: hard
 

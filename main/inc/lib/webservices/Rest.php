@@ -2591,7 +2591,11 @@ class Rest extends WebService
         ];
         $extraFieldValues = new ExtraFieldValue('session');
         $extraFields = $extraFieldValues->getAllValuesByItem($session['id']);
-        $bundle['extra_fields'] = $extraFields;
+        // Only return these properties for each extra_field (the rest is not relevant to a webservice)
+        $filter = ['variable', 'value', 'display_text'];
+        $bundle['extra_fields'] = array_map(function($item) use ($filter) {
+            return array_intersect_key($item, array_flip($filter));
+        }, $extraFields);
 
         // return session details, including extra fields that have filter=1
         return $bundle;

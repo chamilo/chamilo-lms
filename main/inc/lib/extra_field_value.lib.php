@@ -968,7 +968,7 @@ class ExtraFieldValue extends Model
      *
      * @return array
      */
-    public function getAllValuesByItem($itemId)
+    public function getAllValuesByItem(int $itemId): array
     {
         $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
@@ -984,9 +984,9 @@ class ExtraFieldValue extends Model
 
         $result = Database::query($sql);
         $idList = [];
+        $finalResult = [];
         if (Database::num_rows($result)) {
             $result = Database::store_result($result, 'ASSOC');
-            $finalResult = [];
             foreach ($result as $item) {
                 $finalResult[$item['id']] = $item;
             }

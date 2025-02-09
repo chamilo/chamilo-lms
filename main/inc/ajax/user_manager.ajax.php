@@ -541,7 +541,7 @@ switch ($action) {
             $updatedCount++;
         }
 
-        echo json_encode(['message' => $updatedCount.' '.get_lang('UsersAdded')]);
+        echo json_encode(['message' => $updatedCount.' '.get_lang('Saved')]);
         break;
     default:
         echo '';

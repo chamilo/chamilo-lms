@@ -368,6 +368,7 @@ $filtered_extension = false;
 if ($form->validate()) {
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
+    $user_data['item_id'] = api_get_user_id();
     $user = api_get_user_entity(api_get_user_id());
 
     // set password if a new one was provided
@@ -661,7 +662,7 @@ if ($allowSocialTool) {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
                 Display::getMdiIcon(ToolIcon::MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Messages')).'</a>';
         }
-        $show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
+        $show = isset($_GET['show']) ? '&show='.(int) $_GET['show'] : '';
 
         if (isset($_GET['type']) && 'extended' === $_GET['type']) {
             $actions .= '<a href="profile.php?type=reduced'.$show.'">'.

@@ -1017,7 +1017,9 @@ class MessageManager
         $main_content .= '<div class="message-content"> ';
         $main_content .= '<div class="username">'.$user_link.'</div>';
         $main_content .= $date;
-        $main_content .= '<div class="message">'.$main_message['content'].$attachment.'</div></div>';
+        $main_content .= '<div class="message">'
+            .Security::remove_XSS($main_message['content'], STUDENT, true)
+            .$attachment.'</div></div>';
         $main_content .= '</div>';
         $main_content .= '</div>';
 
@@ -1778,5 +1780,21 @@ class MessageManager
         }
 
         return $btnLike.PHP_EOL.$btnDislike;
+    }
+
+    /**
+     * Reports whether the given user is sender or receiver of the given message
+     */
+    public static function isUserOwner(int $userId, int $messageId): bool
+    {
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $sql = "SELECT id FROM $table
+          WHERE id = $messageId
+            AND (user_receiver_id = $userId OR user_sender_id = $userId)";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) === 1) {
+            return true;
+        }
+        return false;
     }
 }

@@ -275,7 +275,11 @@ if (!empty($onHoverInfo)) {
     ];
 }
 $tpl->assign('on_hover_info', $options);
-
+if (api_is_https()) {
+    $tpl->assign('is_https', 1);
+} else {
+    $tpl->assign('is_https', 0);
+}
 $templateName = $tpl->get_template('agenda/month.tpl');
 $content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);

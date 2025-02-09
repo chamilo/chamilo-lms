@@ -215,6 +215,8 @@ EOT;
         }
 
         $this->applyFilter($name, 'trim');
+        $this->applyFilter($name, 'html_filter');
+
         if ($required) {
             $this->addRule($name, get_lang('Required field'), 'required');
         }
@@ -1127,6 +1129,7 @@ EOT;
 
         $this->addElement('html_editor', $name, $label, $attributes, $config);
         $this->applyFilter($name, 'trim');
+        $this->applyFilter($name, 'attr_on_filter');
         if ($required) {
             $this->addRule($name, get_lang('Required field'), 'required');
         }
@@ -1143,6 +1146,17 @@ EOT;
         if ($element->editor) {
             $element->editor->processConfig($config);
         }
+    }
+
+    /**
+     * Prevent execution of event handlers in HTML elements.
+     *
+     * @param string $html
+     * @return string
+     */
+    function attr_on_filter($html) {
+        $prefix = uniqid('data-cke-').'-';
+        return preg_replace('/(\s)(on)/i', '$1'.$prefix.'$2', $html);
     }
 
     /**

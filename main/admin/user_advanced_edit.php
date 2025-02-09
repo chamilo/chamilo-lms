@@ -230,7 +230,7 @@ if (!empty($users)) {
             }
         }
 
-        $row[] = '<button class="btn btn-primary saveUser" data-user-id="'.$user['id'].'">'.get_lang('Save').'</button>';
+        $row[] = '<button class="btn btn-primary saveUser" data-user-id="'.$user['id'].'">'.get_lang('SaveOne').'</button>';
 
         $userTable->addRow($row);
     }
@@ -326,5 +326,5 @@ $formContent = $form->returnForm();
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);
 $tpl->assign('message', $message);
-$tpl->assign('content', $formContent . $fieldSelector . $tableResult . (!empty($users) ? '<button class="btn btn-success" id="saveAll">'.get_lang('SaveChanges').'</button>' : ''));
+$tpl->assign('content', $formContent . $fieldSelector . $tableResult . (!empty($users) ? '<button class="btn btn-success" id="saveAll">'.get_lang('SaveAll').'</button>' : ''));
 $tpl->display_one_col_template();

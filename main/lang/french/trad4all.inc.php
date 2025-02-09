@@ -9015,4 +9015,8 @@ $SessionIsClosing = "Votre session est en cours de fermeture";
 $CannotChangeVisibilityOfBaseCourseResourceX = "La visibilité de %s du cours de base ne peut être changée depuis une session.";
 $UsingAIProviderX = "Utilisation du fournisseur d'IA %s";
 $AIProvider = "Fournisseur d'IA";
+$AdvancedUserEdition = "Édition d'utilisateurs avancée";
+$FieldsToEdit = "Champs à modifier";
+$SaveAll = "Tout enregistrer";
+$SaveOne = "Enregistrer cet élément";
 ?>

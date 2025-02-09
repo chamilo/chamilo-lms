@@ -548,6 +548,26 @@ try {
             $data = $restApi->getUsersCampus($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::GET_USER_INFO_FROM_USERNAME:
+            if (empty($_POST['loginname'])) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $item = api_get_user_info_from_username($_POST['loginname']);
+            $userInfo = [
+                'id' => $item['user_id'],
+                'firstname' => $item['firstname'],
+                'lastname' => $item['lastname'],
+                'email' => $item['email'],
+                'username' => $item['username'],
+                'active' => $item['active'],
+            ];
+            Event::addEvent(
+                LOG_WS.$action,
+                'username',
+                Database::escape_string($_POST['loginname'])
+            );
+            $restResponse->setData($userInfo);
+            break;
         case Rest::USERNAME_EXIST:
             Event::addEvent(LOG_WS.$action, 'username', $_POST['loginname']);
             $data = $restApi->usernameExist($_POST['loginname']);

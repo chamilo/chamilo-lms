@@ -92,6 +92,7 @@ class Rest extends WebService
     public const DELETE_CAMPUS = 'delete_campus';
 
     public const GET_USERS = 'get_users';
+    public const GET_USER_INFO_FROM_USERNAME = 'get_user_info_from_username';
     public const USERNAME_EXIST = 'username_exist';
     public const SAVE_USER = 'save_user';
     public const SAVE_USER_GET_APIKEY = 'save_user_get_apikey';

@@ -237,7 +237,6 @@ class Compilatio
                     [
                         'json' => [
                             'doc_id' => $compilatioId,
-                            'recipe_name' => 'anasim',
                         ],
                     ]
                 )

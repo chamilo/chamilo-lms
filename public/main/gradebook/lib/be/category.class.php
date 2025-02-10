@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
@@ -2002,26 +2003,21 @@ class Category implements GradebookItem
 
     /**
      * Generates a certificate for this user if everything matches.
-     *
-     * @param int  $user_id
-     * @param bool $sendNotification
-     * @param bool $skipGenerationIfExists
-     *
-     * @return array
      */
     public static function generateUserCertificate(
         GradebookCategory $category,
-        $user_id,
-        $sendNotification = false,
-        $skipGenerationIfExists = false
+        int               $user_id,
+        bool              $sendNotification = false,
+        bool $skipGenerationIfExists = false
     ) {
         $user_id = (int) $user_id;
         $categoryId = $category->getId();
         $sessionId = $category->getSession() ? $category->getSession()->getId() : 0;
         $courseId = $category->getCourse()->getId();
-        $userFinishedCourse = self::userFinishedCourse($user_id, $category, true);
-        if (!$userFinishedCourse) {
-            return false;
+
+        // check if all min_score requirements are met
+        if (!self::userMeetsMinimumScores($user_id, $category)) {
+            return false; // Do not generate certificate if the user does not meet all min_score criteria
         }
 
         $skillToolEnabled = SkillModel::hasAccessToUserSkill(api_get_user_id(), $user_id);
@@ -2034,7 +2030,7 @@ class Category implements GradebookItem
             $userHasSkills = !empty($userSkills);
         }
 
-        // Block certification links depending on gradebook configuration (generate certifications)
+        // If certificate generation is disabled, return only badge link (if available)
         if (empty($category->getGenerateCertificates())) {
             if ($userHasSkills) {
                 return [
@@ -2050,6 +2046,7 @@ class Category implements GradebookItem
         }
         $my_certificate = GradebookUtils::get_certificate_by_user_id($categoryId, $user_id);
 
+        // If certificate already exists and we should skip regeneration, return false
         if ($skipGenerationIfExists && !empty($my_certificate)) {
             return false;
         }
@@ -2089,7 +2086,7 @@ class Category implements GradebookItem
 
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();
 
-            // Fix when using custom certificate BT#15937
+            // Fix when using a custom certificate plugin
             if ('true' === api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate')) {
                 $infoCertificate = CustomCertificatePlugin::getCertificateData($my_certificate['id'], $user_id);
                 if (!empty($infoCertificate)) {
@@ -2135,6 +2132,43 @@ class Category implements GradebookItem
 
             return $html;
         }
+
+        return false;
+    }
+
+    /**
+     * Checks whether the user has met the minimum score (`min_score`) in all required evaluations.
+     */
+    public static function userMeetsMinimumScores(int $userId, GradebookCategory $category): bool
+    {
+        $evaluations = $category->getEvaluations();
+
+        foreach ($evaluations as $evaluation) {
+            $minScore = $evaluation->getMinScore();
+            if ($minScore !== null) {
+                $userScore = self::getUserScoreForEvaluation($userId, $evaluation->getId());
+                if ($userScore === null || $userScore < $minScore) {
+                    return false; // If at least one evaluation is below `min_score`, return false
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Retrieves the score of a user for a specific evaluation using the GradebookResult repository.
+     */
+    public static function getUserScoreForEvaluation(int $userId, int $evaluationId): ?float
+    {
+        $gradebookResultRepo = Container::getGradebookResultRepository();
+
+        $gradebookResult = $gradebookResultRepo->findOneBy([
+            'user' => $userId,
+            'evaluation' => $evaluationId,
+        ]);
+
+        return $gradebookResult ? $gradebookResult->getScore() : null;
     }
 
     /**

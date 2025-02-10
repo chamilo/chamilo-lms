@@ -714,6 +714,13 @@ class GradebookDataGenerator
         $scoreDisplay = ScoreDisplay::instance();
         $score = $item->calc_score($userId);
         $model = ExerciseLib::getCourseScoreModel();
+
+        // Get min_score from entity (only if available)
+        $minScore = null;
+        if (isset($item->entity) && method_exists($item->entity, 'getMinScore')) {
+            $minScore = $item->entity->getMinScore();
+        }
+
         if (!empty($score)) {
             switch ($item->get_item_type()) {
                 // category
@@ -797,6 +804,11 @@ class GradebookDataGenerator
                             $score[1],
                             false
                         );
+                    }
+
+                    // If minScore exists and user score is lower, mark in red
+                    if (!is_null($minScore) && $score[0] < $minScore) {
+                        $display = "<span class='text-danger font-bold'>$display</span>";
                     }
 
                     return [

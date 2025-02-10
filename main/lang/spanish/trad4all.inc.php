@@ -9105,4 +9105,8 @@ $SessionIsClosing = "Su sesión se está cerrando";
 $CannotChangeVisibilityOfBaseCourseResourceX = "La visibilidad de %s del curso base no puede ser cambiada desde una sesión.";
 $UsingAIProviderX = "Usando el proveedor de IA %s";
 $AIProvider = "Proveedor de IA";
+$AdvancedUserEdition = "Edición avanzada de usuarios";
+$FieldsToEdit = "Campos a editar";
+$SaveAll = "Guardar todo";
+$SaveOne = "Guardar este elemento";
 ?>

@@ -963,11 +963,12 @@ class ExtraFieldValue extends Model
     }
 
     /**
+     * Return extra fields details for an item if the extra field is marked as filter.
      * @param int $itemId
      *
      * @return array
      */
-    public function getAllValuesByItem($itemId)
+    public function getAllValuesByItem(int $itemId): array
     {
         $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
@@ -983,9 +984,9 @@ class ExtraFieldValue extends Model
 
         $result = Database::query($sql);
         $idList = [];
+        $finalResult = [];
         if (Database::num_rows($result)) {
             $result = Database::store_result($result, 'ASSOC');
-            $finalResult = [];
             foreach ($result as $item) {
                 $finalResult[$item['id']] = $item;
             }

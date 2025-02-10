@@ -9080,4 +9080,8 @@ $SessionIsClosing = "Your session is closing";
 $CannotChangeVisibilityOfBaseCourseResourceX = "The visibility of %s from the base course cannot be changed from the session.";
 $UsingAIProviderX = "Using AI provider %s";
 $AIProvider = "AI provider";
+$AdvancedUserEdition = "Advanced user edition";
+$FieldsToEdit = "Fields to edit";
+$SaveAll = "Save all";
+$SaveOne = "Save one";
 ?>

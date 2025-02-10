@@ -44,7 +44,7 @@ switch ($action) {
                     continue;
                 }
 
-                $exerciseId = $data['id'];
+                $exerciseId = $data['iid'];
                 $result = $exercise->read($exerciseId);
                 if ($result) {
                     $exercise->generateStats($exerciseId, api_get_course_info(), api_get_session_id());

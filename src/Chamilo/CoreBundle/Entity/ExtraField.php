@@ -43,6 +43,7 @@ class ExtraField extends BaseAttribute
     public const MESSAGE_TYPE = 22;
     public const DOCUMENT_TYPE = 23;
     public const ATTENDANCE_CALENDAR_TYPE = 24;
+    public const ATTENDANCE_TYPE = 25;
 
     /**
      * @var int

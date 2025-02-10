@@ -951,6 +951,10 @@ class TrackingCourseLog
             $userRow['lp_finalization_date'] = $user['lp_finalization_date'];
             $userRow['quiz_finalization_date'] = $user['quiz_finalization_date'];
 
+            if (api_get_setting('show_email_addresses') === 'true') {
+                $userRow['email'] = $user['col4'];
+            }
+
             // we need to display an additional profile field
             if (isset($_GET['additional_profile_field'])) {
                 $data = Session::read('additional_user_profile_info');
@@ -989,10 +993,6 @@ class TrackingCourseLog
                         $userRow[$defaultExtraFieldInfo[$key]['variable']] = '';
                     }
                 }
-            }
-
-            if (api_get_setting('show_email_addresses') === 'true') {
-                $userRow['email'] = $user['col4'];
             }
 
             $userRow['link'] = $user['link'];

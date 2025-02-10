@@ -85,7 +85,7 @@ function prepare_user_sql_query($getCount)
     foreach ($keywordList as $keyword) {
         $keywordListValues[$keyword] = null;
         if (isset($_GET[$keyword]) && !empty($_GET[$keyword])) {
-            $keywordListValues[$keyword] = $_GET[$keyword];
+            $keywordListValues[$keyword] = Security::remove_XSS($_GET[$keyword]);
             $atLeastOne = true;
         }
     }

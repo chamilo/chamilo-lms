@@ -659,6 +659,7 @@ foreach ($questionList as $questionId) {
                 );
             } else {
                 $feedback_form->addElement('textarea', $textareaId, ['id' => $textareaId]);
+                $feedback_form->applyFilter($textareaId, 'attr_on_filter');
             }
             $feedback_form->setDefaults($default);
             $feedback_form->display();

@@ -915,7 +915,7 @@ class GradebookTable extends SortableTable
                                 $averageWeight += $averageScore[1];
                             }
                             $categoryAverage = $categoryAverage / count($totalAverageList);
-                            //$averageWeight = $averageWeight ($totalAverageList);
+                            $averageWeight = $averageWeight / count($totalAverageList);
 
                             // Overwrite main weight
                             //$totalAverage[0] = $average / count($this->studentList);

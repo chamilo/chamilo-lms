@@ -5,10 +5,16 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
+
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(false, true);
 SkillModel::isAllowed();
+
+$httpRequest = HttpRequest::createFromGlobals();
+
 
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_js('d3/d3.v3.5.4.min.js');
@@ -23,9 +29,10 @@ if (isset($_GET['load_user'])) {
 }
 
 $skill_condition = '';
-$skillId = isset($_REQUEST['skill_id']) ? (int) $_REQUEST['skill_id'] : 0;
-if (!empty($skillId)) {
-    $skill_condition = '&skill_id='.$skillId;
+$skillId = $httpRequest->query->getInt('skill_id', 0);
+
+if ($skillId > 0) {
+    $skill_condition = "&skill_id=$skillId";
 }
 $tpl->assign('skill_id_to_load', $skillId);
 

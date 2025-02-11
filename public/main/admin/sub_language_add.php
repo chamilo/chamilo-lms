@@ -57,7 +57,7 @@ if ($language_id_exist && $sub_language_id_exist) {
     $isocode = $get_all_information->getIsocode();
 }
 
-$language_name = get_lang('Create sub-languageForLanguage').' ( '.strtolower($language_name).' )';
+$language_name = get_lang('Create sub-language').' ( '.strtolower($language_name).' )';
 
 if ($request->request->has('SubmitAddNewLanguage')) {
     $original_name = $request->request->get('original_name');

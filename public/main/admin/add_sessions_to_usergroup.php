@@ -75,8 +75,8 @@ function validate_filter() {
 </script>';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
-    $form_sent = $_POST['form_sent'];
-    $elements_posted = $_POST['elements_in_name'];
+    $form_sent = (int) $_POST['form_sent'];
+    $elements_posted = Security::remove_XSS($_POST['elements_in_name']);
     if (!is_array($elements_posted)) {
         $elements_posted = [];
     }

@@ -480,6 +480,10 @@ class SessionManager
 
         $userId = (int) $userId;
 
+        if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_teacher()) {
+            api_not_allowed(true);
+        }
+
         $extraFieldModel = new ExtraFieldModel('session');
         $conditions = $extraFieldModel->parseConditions($options);
 
@@ -3204,7 +3208,7 @@ class SessionManager
         $sday_end
     ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $name = trim($sname);
+        $name = html_filter(trim($sname));
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
         $day_start = intval($sday_start);
@@ -3289,7 +3293,7 @@ class SessionManager
         $sday_end
     ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $name = trim($sname);
+        $name = html_filter(trim($sname));
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
         $day_start = intval($sday_start);

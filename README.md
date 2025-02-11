@@ -34,7 +34,7 @@ On Ubuntu 24.04+, the following should take care of most dependencies.
 ~~~~
 sudo apt update
 sudo apt -y upgrade
-sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip
+sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl
 sudo mysql
 mysql> GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost IDENTIFIED BY '{password}';
 mysql> exit
@@ -49,7 +49,7 @@ sudo apt -y upgrade
 sudo apt -y install ca-certificates curl gnupg software-properties-common
 sudo add-apt-repository ppa:ondrej/php
 sudo apt update
-sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis php-pear php8.3-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip
+sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis php-pear php8.3-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl
 ~~~~
 (replace 'chamilo' by the database name and user you want, and '{password}' by a more secure password)
 

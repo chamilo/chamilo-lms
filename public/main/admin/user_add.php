@@ -153,7 +153,7 @@ if ('true' === api_get_setting('login_is_email')) {
 }
 
 // Phone
-$form->addElement('text', 'phone', get_lang('Phone number'), ['autocomplete' => 'off', 'id' => 'phone']);
+$form->addText('phone', get_lang('Phone number'), false, ['autocomplete' => 'off', 'id' => 'phone']);
 // Picture
 $form->addFile(
     'picture',

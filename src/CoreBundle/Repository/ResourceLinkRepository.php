@@ -16,6 +16,9 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
+/**
+ * @template-extends SortableRepository<ResourceLink>
+ */
 class ResourceLinkRepository extends SortableRepository
 {
     public function __construct(EntityManagerInterface $em)

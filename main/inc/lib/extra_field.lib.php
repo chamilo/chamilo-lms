@@ -783,7 +783,6 @@ class ExtraField extends Model
 
         $itemId = (int) $itemId;
         $form->addHidden('item_id', $itemId);
-        $extraData = false;
         if (!empty($itemId)) {
             $extraData = $this->get_handler_extra_data($itemId);
             if (!empty($showOnlyTheseFields)) {
@@ -1372,6 +1371,23 @@ class ExtraField extends Model
                                             ]
                                         );
                                         $selectedOptions[] = $tag['tag'];
+                                    }
+                                } else {
+                                    if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
+                                        $data = $extraData['extra_'.$field_details['variable']];
+                                        if (!empty($data)) {
+                                            foreach ($data as $option) {
+                                                $tagsSelect->addOption(
+                                                    $option,
+                                                    $option,
+                                                    [
+                                                        'selected' => 'selected',
+                                                        'class' => 'selected',
+                                                    ]
+                                                );
+                                                $selectedOptions[] = $option;
+                                            }
+                                        }
                                     }
                                 }
                                 $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';

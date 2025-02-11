@@ -54,7 +54,7 @@ function prepare_user_sql_query($getCount)
                     u.status AS col7,
                     u.active AS col8,
                     u.id AS col9,
-                    u.registration_date AS col10,
+                    u.created_at AS col10,
                     u.expiration_date AS exp,
                     u.password,
                     v.field_id,

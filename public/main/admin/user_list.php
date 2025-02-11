@@ -186,7 +186,7 @@ function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false):
                     u.email AS col6,
                     u.status AS col7,
                     u.active AS col8,
-                    u.registration_date AS col9,
+                    u.created_at AS col9,
                     u.last_login as col10,
                     u.id AS col11,
                     u.expiration_date AS exp,

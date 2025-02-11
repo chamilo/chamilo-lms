@@ -73,7 +73,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
                     'auth_source' => $user->getAuthSource(),
                     'theme' => $user->getTheme(),
                     'language' => $user->getLocale(),
-                    'registration_date' => $user->getRegistrationDate()->format('Y-m-d H:i:s'),
+                    'created_at' => $user->getCreatedAt()->format('Y-m-d H:i:s'),
                     'expiration_date' => $user->getExpirationDate() ? $user->getExpirationDate()->format('Y-m-d H:i:s') : null,
                     'last_login' => $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d H:i:s') : null,
                     'is_anonymous' => true,
@@ -98,7 +98,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         $anonymousAutoProvisioning = 'true' === $this->settingsManager->getSetting('security.anonymous_autoprovisioning');
 
         if (!$anonymousAutoProvisioning) {
-            $anonymousUser = $userRepository->findOneBy(['status' => User::ANONYMOUS], ['registrationDate' => 'ASC']);
+            $anonymousUser = $userRepository->findOneBy(['status' => User::ANONYMOUS], ['createdAt' => 'ASC']);
             if ($anonymousUser) {
                 return $anonymousUser->getId();
             }
@@ -110,7 +110,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         if (0 === $maxAnonymousUsers) {
             $maxAnonymousUsers = self::MAX_ANONYMOUS_USERS;
         }
-        $anonymousUsers = $userRepository->findBy(['status' => User::ANONYMOUS], ['registrationDate' => 'ASC']);
+        $anonymousUsers = $userRepository->findBy(['status' => User::ANONYMOUS], ['createdAt' => 'ASC']);
 
         // Check in TrackELogin if there is an anonymous user with the same IP
         foreach ($anonymousUsers as $user) {

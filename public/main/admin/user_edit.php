@@ -93,7 +93,7 @@ $user_data['send_mail'] = 0;
 $user_data['old_password'] = $user_data['password'];
 //Convert the registration date of the user
 
-$user_data['registration_date'] = api_get_local_time($user_data['registration_date']);
+$user_data['created_at'] = api_get_local_time($user_data['created_at']);
 unset($user_data['password']);
 
 // Create the form
@@ -289,7 +289,7 @@ if (!empty($creatorInfo)) {
         get_lang('Create by <a href="%s">%s</a> on %s'),
         'user_information.php?user_id='.$user_data['creator_id'],
         $creatorInfo['username'],
-        $user_data['registration_date']
+        $user_data['created_at']
     );
     $form->addElement('label', get_lang('Registration date'), $date);
 }

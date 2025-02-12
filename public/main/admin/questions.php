@@ -1,13 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
+use Knp\Component\Pager\Event\Subscriber\Paginate\PaginationSubscriber;
+use Knp\Component\Pager\Event\Subscriber\Sortable\SortableSubscriber;
 use Knp\Component\Pager\Paginator;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -140,9 +144,15 @@ if ($formSent) {
         $criteria->orWhere($criteria->expr()->contains('question', "%$title%"));
     }
 
-//    if (-1 !== $selectedCourse) {
-//        $criteria->andWhere($criteria->expr()->eq('cId', $selectedCourse));
-//    }
+    if (-1 !== $selectedCourse) {
+        /** @var \Chamilo\CoreBundle\Repository\ResourceNodeRepository $resourceNodeRepo */
+        $resourceNodeRepo = $em->getRepository(ResourceNode::class);
+        $resourceNodes = $resourceNodeRepo->findByResourceTypeAndCourse('questions', api_get_course_entity($selectedCourse));
+
+        $criteria->andWhere(
+            Criteria::expr()->in('resourceNode', $resourceNodes)
+        );
+    }
 
     if (-1 !== $questionLevel) {
         $criteria->andWhere($criteria->expr()->eq('level', $questionLevel));
@@ -161,7 +171,11 @@ if ($formSent) {
         $length = $questionCount;
     }
 
-    $paginator = new Paginator(Container::$container->get('event_dispatcher'));
+    $dispatcher = new EventDispatcher();
+    $dispatcher->addSubscriber(new PaginationSubscriber());
+    $dispatcher->addSubscriber(new SortableSubscriber());
+
+    $paginator = new Paginator($dispatcher);
     $pagination = $paginator->paginate($questions, $page, $length);
     $pagination->setItemNumberPerPage($length);
     $pagination->setCurrentPageNumber($page);
@@ -180,134 +194,132 @@ if ($formSent) {
         return $render;
     };
 
-    if ($pagination) {
-        $urlExercise = api_get_path(WEB_CODE_PATH).'exercise/admin.php?';
-        $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?';
-        $warningText = addslashes(api_htmlentities(get_lang('Please confirm your choice')));
+    $urlExercise = api_get_path(WEB_CODE_PATH).'exercise/admin.php?';
+    $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?';
+    $warningText = addslashes(api_htmlentities(get_lang('Please confirm your choice')));
 
-        /** @var CQuizQuestion $question */
-        for ($i = 0; $i < $length; $i++) {
-            $index = $i;
-            if (!empty($page)) {
-                $index = ($page - 1) * $length + $i;
-            }
-            if (0 === $i) {
-                $start = $index;
-            }
-            if (!isset($pagination[$index])) {
-                continue;
-            }
+    /** @var CQuizQuestion $question */
+    for ($i = 0; $i < $length; $i++) {
+        $index = $i;
+        if (!empty($page)) {
+            $index = ($page - 1) * $length + $i;
+        }
+        if (0 === $i) {
+            $start = $index;
+        }
+        if (!isset($pagination[$index])) {
+            continue;
+        }
 
-            if ($i < $length) {
-                $end = $index;
-            }
-            $question = &$pagination[$index];
-            $courseId = $question->getCId();
-            $courseInfo = api_get_course_info_by_id($courseId);
-            $courseCode = $courseInfo['code'];
-            $question->courseCode = $courseCode;
-            // Creating empty exercise
-            $exercise = new Exercise($courseId);
-            $questionObject = Question::read($question->getIid(), $courseInfo);
+        if ($i < $length) {
+            $end = $index;
+        }
+        $question = &$pagination[$index];
+        $courseId = $question->getFirstResourceLink()->getCourse()->getId();
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $courseCode = $courseInfo['code'];
+        $question->courseCode = $courseCode;
+        // Creating empty exercise
+        $exercise = new Exercise($courseId);
+        $questionObject = Question::read($question->getIid(), $courseInfo);
 
-            ob_start();
-            ExerciseLib::showQuestion(
-                $exercise,
-                $question->getIid(),
-                false,
-                null,
-                null,
-                false,
-                true,
-                false,
-                true,
-                true
-            );
-            $question->questionData = ob_get_contents();
+        ob_start();
+        ExerciseLib::showQuestion(
+            $exercise,
+            $question->getIid(),
+            false,
+            null,
+            null,
+            false,
+            true,
+            false,
+            true,
+            true
+        );
+        $question->questionData = ob_get_contents();
 
-            if ('export_pdf' === $action) {
-                $pdfContent .= '<span style="color:#000; font-weight:bold; font-size:x-large;">#'.$question->getIid().'. '.$question->getQuestion().'</span><br />';
-                $pdfContent .= '<span style="color:#444;">('.$questionTypesList[$question->getType()].') ['.get_lang('Source').': '.$courseCode.']</span><br />';
-                $pdfContent .= $question->getDescription().'<br />';
-                $pdfContent .= $question->questionData;
-                continue;
-            }
+        if ('export_pdf' === $action) {
+            $pdfContent .= '<span style="color:#000; font-weight:bold; font-size:x-large;">#'.$question->getIid().'. '.$question->getQuestion().'</span><br />';
+            $pdfContent .= '<span style="color:#444;">('.$questionTypesList[$question->getType()].') ['.get_lang('Source').': '.$courseCode.']</span><br />';
+            $pdfContent .= $question->getDescription().'<br />';
+            $pdfContent .= $question->questionData;
+            continue;
+        }
 
-            $deleteUrl = $url.'&'.http_build_query([
-                'courseId' => $question->getCId(),
-                'questionId' => $question->getId(),
-                'action' => 'delete',
-            ]);
-            $exerciseData = '';
-            $exerciseId = 0;
-            if (!empty($questionObject->exerciseList)) {
-                // Question exists in a valid exercise
-                $exerciseData .= get_lang('Tests').'<br />';
-                foreach ($questionObject->exerciseList as $exerciseId) {
-                    $exercise = new Exercise($question->getCId());
-                    $exercise->course_id = $question->getCId();
-                    $exercise->read($exerciseId);
-                    $exerciseData .= $exercise->title.'&nbsp;';
-                    $exerciseData .= Display::url(
-                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
-                        $urlExercise.http_build_query(
-                            [
-                            'cidReq' => $courseCode,
-                            'id_session' => $exercise->sessionId,
-                            'exerciseId' => $exerciseId,
-                            'type' => $question->getType(),
-                                'editQuestion' => $question->getId(),
-                            ]
-                        ),
-                        ['target' => '_blank']
-                    ).'<br />';
-                }
-                $question->questionData .= '<br />'.$exerciseData;
-            } else {
-                // Question exists but it's orphan or it belongs to a deleted exercise
-
-                // This means the question is added in a deleted exercise
-                if ($questionObject->getCountExercise() > 0) {
-                    $exerciseList = $questionObject->getExerciseListWhereQuestionExists();
-                    if (!empty($exerciseList)) {
-                        $question->questionData .= '<br />'.get_lang('Tests').'<br />';
-                        /** @var CQuiz $exercise */
-                        foreach ($exerciseList as $exercise) {
-                            $question->questionData .= $exercise->getTitle();
-                            if (-1 == $exercise->getActive()) {
-                                $question->questionData .= '- ('.get_lang('The test has been deleted').' #'.$exercise->getIid().') ';
-                            }
-                            $question->questionData .= '<br />';
-                        }
-                    }
-                } else {
-                    // This question is orphan :(
-                    $question->questionData .= '&nbsp;'.get_lang('Orphan question');
-                }
-                $question->questionData .= Display::url(
+        $deleteUrl = $url.'&'.http_build_query([
+            'courseId' => $courseId,
+            'questionId' => $question->getIid(),
+            'action' => 'delete',
+        ]);
+        $exerciseData = '';
+        $exerciseId = 0;
+        if (!empty($questionObject->exerciseList)) {
+            // Question exists in a valid exercise
+            $exerciseData .= '<p><strong>'.get_lang('Tests').'</strong></p>';
+            foreach ($questionObject->exerciseList as $exerciseId) {
+                $exercise = new Exercise($courseId);
+                $exercise->course_id = $courseId;
+                $exercise->read($exerciseId);
+                $exerciseData .= $exercise->title.'&nbsp;';
+                $exerciseData .= Display::url(
                     Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                     $urlExercise.http_build_query(
                         [
-                            'cidReq' => $courseCode,
-                            'id_session' => 0, //$exercise->sessionId,
-                            'exerciseId' => $exerciseId,
-                            'type' => $question->getType(),
-                            'editQuestion' => $question->getId(),
+                        'cidReq' => $courseCode,
+                        'id_session' => $exercise->sessionId,
+                        'exerciseId' => $exerciseId,
+                        'type' => $question->getType(),
+                            'editQuestion' => $question->getIid(),
                         ]
                     ),
                     ['target' => '_blank']
-                );
+                ).'<br />';
             }
-            $question->questionData .= '<div class="pull-right">'.Display::url(
-                get_lang('Delete'),
-                $deleteUrl,
-                [
-                    'class' => 'btn btn--danger',
-                    'onclick' => 'javascript: if(!confirm(\''.$warningText.'\')) return false',
-                ]
-            ).'</div>';
-            ob_end_clean();
+            $question->questionData .= '<br />'.$exerciseData;
+        } else {
+            // Question exists but it's orphan or it belongs to a deleted exercise
+
+            // This means the question is added in a deleted exercise
+            if ($questionObject->getCountExercise() > 0) {
+                $exerciseList = $questionObject->getExerciseListWhereQuestionExists();
+                if (!empty($exerciseList)) {
+                    $question->questionData .= '<p><strong>'.get_lang('Tests').'</strong></p>';
+                    /** @var CQuiz $exercise */
+                    foreach ($exerciseList as $exercise) {
+                        $question->questionData .= $exercise->getTitle();
+                        if (-1 == $exercise->getActive()) {
+                            $question->questionData .= '- ('.get_lang('The test has been deleted').' #'.$exercise->getIid().') ';
+                        }
+                        $question->questionData .= '<br />';
+                    }
+                }
+            } else {
+                // This question is orphan :(
+                $question->questionData .= '&nbsp;'.get_lang('Orphan question');
+            }
+            $question->questionData .= Display::url(
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
+                $urlExercise.http_build_query(
+                    [
+                        'cidReq' => $courseCode,
+                        'id_session' => 0, //$exercise->sessionId,
+                        'exerciseId' => $exerciseId,
+                        'type' => $question->getType(),
+                        'editQuestion' => $question->getIid(),
+                    ]
+                ),
+                ['target' => '_blank']
+            );
         }
+        $question->questionData .= '<div class="float-right">'.Display::url(
+            get_lang('Delete'),
+            $deleteUrl,
+            [
+                'class' => 'btn btn--danger',
+                'onclick' => 'javascript: if(!confirm(\''.$warningText.'\')) return false',
+            ]
+        ).'</div>';
+        ob_end_clean();
     }
 }
 

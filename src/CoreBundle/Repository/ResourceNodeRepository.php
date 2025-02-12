@@ -159,4 +159,22 @@ class ResourceNodeRepository extends MaterializedPathRepository
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
+
+    public function findByResourceTypeAndCourse(string $type, Course $course): array
+    {
+        $qb = $this->createQueryBuilder('node');
+
+        return $qb
+            ->innerJoin('node.resourceType', 'resourceType')
+            ->innerJoin('node.resourceLinks', 'resourceLinks')
+            ->where($qb->expr()->eq('resourceType.title', ':resourceType'))
+            ->andWhere($qb->expr()->eq('resourceLinks.course', ':course'))
+            ->setParameters([
+                'resourceType' => $type,
+                'course' => $course,
+            ])
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

@@ -26,7 +26,7 @@ function updateCourseList(sessionId) {
     }, function (courseList) {
         $("<option>", {
             value: 0,
-            text: "'.get_lang('Select').'"
+            text: '.json_encode(get_lang('Select')).'
         }).appendTo($selectCourse);
 
         if (courseList.length > 0) {
@@ -54,7 +54,7 @@ function updateExerciseList(courseId, sessionId) {
     }, function (exerciseList) {
         $("<option>", {
             value: 0,
-            text: "'.get_lang('Select').'"
+            text: '.json_encode(get_lang('Select')).'
         }).appendTo($selectExercise);
 
         if (exerciseList.length > 0) {
@@ -83,7 +83,7 @@ function updateLpList(courseId, sessionId) {
     }, function (lpList) {
         $("<option>", {
             value: 0,
-            text: "'.get_lang('Select').'"
+            text: '.json_encode(get_lang('Select')).'
         }).appendTo($selectLp);
 
         if (lpList.length > 0) {
@@ -221,9 +221,9 @@ function save_ticket()
     $lp_id = isset($_POST['lp_id']) ? (int) $_POST['lp_id'] : null;
 
     $project_id = (int) $_POST['project_id'];
-    $subject = $_POST['subject'];
+    $subject = Security::remove_XSS($_POST['subject']);
     $other_area = (int) $_POST['other_area'];
-    $personal_email = $_POST['personal_email'];
+    $personal_email = Security::remove_XSS($_POST['personal_email']);
     $source = (int) $_POST['source_id'];
     $user_id = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
     $priority = isset($_POST['priority_id']) ? (int) $_POST['priority_id'] : '';

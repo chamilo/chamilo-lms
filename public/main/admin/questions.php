@@ -255,7 +255,7 @@ if ($formSent) {
         $exerciseId = 0;
         if (!empty($questionObject->exerciseList)) {
             // Question exists in a valid exercise
-            $exerciseData .= get_lang('Tests').'<br />';
+            $exerciseData .= '<p><strong>'.get_lang('Tests').'</strong></p>';
             foreach ($questionObject->exerciseList as $exerciseId) {
                 $exercise = new Exercise($courseId);
                 $exercise->course_id = $courseId;
@@ -283,7 +283,7 @@ if ($formSent) {
             if ($questionObject->getCountExercise() > 0) {
                 $exerciseList = $questionObject->getExerciseListWhereQuestionExists();
                 if (!empty($exerciseList)) {
-                    $question->questionData .= '<br />'.get_lang('Tests').'<br />';
+                    $question->questionData .= '<p><strong>'.get_lang('Tests').'</strong></p>';
                     /** @var CQuiz $exercise */
                     foreach ($exerciseList as $exercise) {
                         $question->questionData .= $exercise->getTitle();
@@ -311,7 +311,7 @@ if ($formSent) {
                 ['target' => '_blank']
             );
         }
-        $question->questionData .= '<div class="pull-right">'.Display::url(
+        $question->questionData .= '<div class="float-right">'.Display::url(
             get_lang('Delete'),
             $deleteUrl,
             [

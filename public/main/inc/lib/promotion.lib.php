@@ -213,14 +213,9 @@ class Promotion extends Model
 
         $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
 
-        $form->addElement('header', '', $header);
-        $form->addElement('hidden', 'id', $id);
-        $form->addElement(
-            'text',
-            'name',
-            get_lang('Name'),
-            ['size' => '70', 'id' => 'name']
-        );
+        $form->addHeader($header);
+        $form->addHidden('id', $id);
+        $form->addText('name', get_lang('Name'), true, ['size' => '70', 'id' => 'name']);
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),

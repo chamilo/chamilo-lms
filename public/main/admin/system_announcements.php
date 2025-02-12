@@ -179,6 +179,7 @@ if ($action_todo) {
     $form = new FormValidator('system_announcement', 'post', $url);
     $form->addHeader($form_title);
     $form->addText('title', get_lang('Title'), true);
+    $form->applyFilter('title', 'html_filter');
 
     $extraOption = [];
     $extraOption['all'] = get_lang('All');

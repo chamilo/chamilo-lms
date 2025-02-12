@@ -279,7 +279,6 @@ class UserManager
             ->setPhone($phone)
             ->setAddress($address)
             ->setLocale($language)
-            ->setRegistrationDate($now)
             ->setHrDeptId($hrDeptId)
             ->setActive($active)
             ->setTimezone(api_get_timezone())
@@ -3410,11 +3409,11 @@ class UserManager
 
         if (!empty($dateFrom)) {
             $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
-            $sql .= " AND u.registration_date >= '$dateFrom' ";
+            $sql .= " AND u.created_at >= '$dateFrom' ";
         }
         if (!empty($dateUntil)) {
             $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
-            $sql .= " AND u.registration_date <= '$dateUntil' ";
+            $sql .= " AND u.created_at <= '$dateUntil' ";
         }
 
         $res = Database::query($sql);
@@ -6181,6 +6180,29 @@ SQL;
             }
         }
         return $coursesInSessions;
+    }
+
+    public static function redirectToResetPassword($userId): void
+    {
+        if ('true' !== api_get_setting('platform.force_renew_password_at_first_login')) {
+            return;
+        }
+        $askPassword = self::get_extra_user_data_by_field(
+            $userId,
+            'ask_new_password'
+        );
+        if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
+            1 === (int) $askPassword['ask_new_password']
+        ) {
+            $uniqueId = api_get_unique_id();
+            $userObj = api_get_user_entity($userId);
+            $userObj->setConfirmationToken($uniqueId);
+            $userObj->setPasswordRequestedAt(new \DateTime());
+            Database::getManager()->persist($userObj);
+            Database::getManager()->flush();
+            $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
+            api_location($url);
+        }
     }
 
 }

@@ -19,7 +19,7 @@
           <img
             v-if="item.resourceNode.firstResourceFile.image"
             :alt="item.title"
-            :src="item.contentUrl + '&w=500'"
+            :src="item.contentUrl + '?w=500'"
           />
 
           <video

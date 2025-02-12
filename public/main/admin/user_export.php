@@ -96,7 +96,7 @@ if ($form->validate()) {
                 u.status		AS Status,
                 u.official_code	AS OfficialCode,
                 u.phone		AS Phone,
-                u.registration_date AS RegistrationDate";
+                u.created_at AS CreatedAt";
     if (strlen($course_code) > 0) {
         $sql .= " FROM $user_table u, $course_user_table cu
                     WHERE

@@ -575,22 +575,6 @@ if (api_is_platform_admin()) {
 $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 
 $tpl = new Template();
-
-// Display the Site Use Cookie Warning Validation
-$useCookieValidation = api_get_setting('cookie_warning');
-if ('true' === $useCookieValidation) {
-    if (isset($_POST['acceptCookies'])) {
-        api_set_site_use_cookie_warning_cookie();
-    } elseif (!api_site_use_cookie_warning_cookie_exist()) {
-        if (Template::isToolBarDisplayedForUser()) {
-            $tpl->assign('toolBarDisplayed', true);
-        } else {
-            $tpl->assign('toolBarDisplayed', false);
-        }
-        $tpl->assign('displayCookieUsageWarning', true);
-    }
-}
-
 $tpl->assign('web_admin_ajax_url', $admin_ajax_url);
 $tpl->assign('blocks_admin', $blocks);
 

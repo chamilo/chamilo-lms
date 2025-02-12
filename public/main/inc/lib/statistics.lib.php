@@ -1585,9 +1585,9 @@ class Statistics
      */
     public static function getNewUserRegistrations(string $startDate, string $endDate): array
     {
-        $sql = "SELECT DATE_FORMAT(registration_date, '%Y-%m-%d') as reg_date, COUNT(*) as user_count
+        $sql = "SELECT DATE_FORMAT(created_at, '%Y-%m-%d') as reg_date, COUNT(*) as user_count
             FROM user
-            WHERE registration_date BETWEEN '$startDate' AND '$endDate'
+            WHERE created_at BETWEEN '$startDate' AND '$endDate'
             GROUP BY reg_date";
 
         $result = Database::query($sql);
@@ -1608,7 +1608,7 @@ class Statistics
         $sql = "SELECT u.creator_id, COUNT(u.id) as user_count, c.firstname, c.lastname
                 FROM user u
                 LEFT JOIN user c ON u.creator_id = c.id
-                WHERE u.registration_date BETWEEN '$startDate' AND '$endDate'
+                WHERE u.created_at BETWEEN '$startDate' AND '$endDate'
                 AND u.creator_id IS NOT NULL
                 GROUP BY u.creator_id";
 

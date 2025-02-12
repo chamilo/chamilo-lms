@@ -21,7 +21,7 @@ function php2phps($file_name)
 }
 
 /**
- * Renames .htaccess & .HTACCESS to htaccess.txt.
+ * Renames .htaccess & .HTACCESS & .htAccess to htaccess.txt.
  *
  * @param string $filename
  *
@@ -29,7 +29,9 @@ function php2phps($file_name)
  */
 function htaccess2txt($filename)
 {
-    return str_replace(['.htaccess', '.HTACCESS'], ['htaccess.txt', 'htaccess.txt'], $filename);
+    $filename = strtolower($filename);
+
+    return str_replace('.htaccess', 'htaccess.txt', $filename);
 }
 
 /**
@@ -490,7 +492,7 @@ function filter_extension(&$filename)
             if ('true' == $skip) {
                 return 0;
             } else {
-                $new_ext = api_get_setting('upload_extensions_replace_by');
+                $new_ext = getReplacedByExtension();
                 $filename = str_replace('.'.$ext, '.'.$new_ext, $filename);
 
                 return 1;
@@ -510,7 +512,7 @@ function filter_extension(&$filename)
             if ('true' == $skip) {
                 return 0;
             } else {
-                $new_ext = api_get_setting('upload_extensions_replace_by');
+                $new_ext = getReplacedByExtension();
                 $filename = str_replace('.'.$ext, '.'.$new_ext, $filename);
 
                 return 1;
@@ -519,6 +521,12 @@ function filter_extension(&$filename)
             return 1;
         }
     }
+}
+
+function getReplacedByExtension(): string
+{
+    $extension = api_get_setting('document.upload_extensions_replace_by');
+    return 'REPLACED_'.api_replace_dangerous_char(str_replace('.', '', $extension));
 }
 
 /**

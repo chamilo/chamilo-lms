@@ -769,7 +769,7 @@ class SurveyManager
     /**
      * Updates c_survey.answered: number of people who have taken the survey (=filled at least one question).
      */
-    public static function updateSurveyAnswered(CSurvey $survey, $user)
+    public static function updateSurveyAnswered(CSurvey $survey, $user, $lpItemId = 0): void
     {
         $em = Database::getManager();
         $surveyId = $survey->getIid();
@@ -780,6 +780,15 @@ class SurveyManager
         $em->persist($survey);
         $em->flush();
 
+        $lpItemCondition = '';
+        if (!empty($lpItemId)) {
+            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+        }
+        $sessionCondition = '';
+        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            $sessionCondition = api_get_session_condition($sessionId);
+        }
+
         $table = Database::get_course_table(TABLE_SURVEY_INVITATION);
         // Storing that the user has finished the survey.
         $sql = "UPDATE $table
@@ -787,10 +796,11 @@ class SurveyManager
                     answered_at = '".api_get_utc_datetime()."',
                     answered = 1
                 WHERE
-                    c_id = $courseId AND
                     session_id = $sessionId AND
                     user_id ='".Database::escape_string($user)."' AND
-                    survey_id ='".$surveyId."'";
+                    survey_id ='".$surveyId."'
+                    $sessionCondition
+                    $lpItemCondition";
         Database::query($sql);
     }
 
@@ -2154,38 +2164,38 @@ class SurveyManager
         }
     }
 
-    /**
-     * @param int    $userId
-     * @param string $surveyCode
-     * @param int    $courseId
-     * @param int    $sessionId
-     * @param int    $groupId
-     *
-     * @return array|CSurveyInvitation[]
-     */
     public static function getUserInvitationsForSurveyInCourse(
-        $userId,
-        $surveyCode,
-        $courseId,
-        $sessionId = 0,
-        $groupId = 0
-    ) {
+        int    $userId,
+        string $surveyCode,
+        int    $courseId,
+        int    $sessionId = 0,
+        int    $groupId = 0,
+        int    $lpItemId = 0
+    ): array {
+
         $em = Database::getManager();
         $invitationRepo = $em->getRepository(CSurveyInvitation::class);
         $surveyRepo = $em->getRepository(CSurvey::class);
         $survey = $surveyRepo->findBy(['code' => $surveyCode]);
 
+        $criteria = [
+            'user' => api_get_user_entity($userId),
+            'course' => api_get_course_entity($courseId),
+            'session' => api_get_session_entity($sessionId),
+            'group' => api_get_group_entity($groupId),
+            'survey' => $survey,
+        ];
+
+        if (is_int($lpItemId) && $lpItemId > 0) {
+            $criteria['lpItemId'] = $lpItemId;
+        }
+
         return $invitationRepo->findBy(
-            [
-                'user' => api_get_user_entity($userId),
-                'course' => api_get_course_entity($courseId),
-                'session' => api_get_session_entity($sessionId),
-                'group' => api_get_group_entity($groupId),
-                'survey' => $survey,
-            ],
+            $criteria,
             ['invitationDate' => 'DESC']
         );
     }
+
 
     /**
      * @param array $userInfo
@@ -2351,5 +2361,24 @@ class SurveyManager
         }
 
         return false;
+    }
+
+    public static function getInvitationsAnswered(
+        $surveyCode,
+        $courseId,
+        $sessionId = 0
+    ): array
+    {
+        $invitationRepo = Database::getManager()->getRepository(CSurveyInvitation::class);
+
+        return $invitationRepo->findBy(
+            [
+                'cId' => $courseId,
+                'sessionId' => $sessionId,
+                'answered' => true,
+                'surveyCode' => $surveyCode,
+            ],
+            ['invitationDate' => 'DESC']
+        );
     }
 }

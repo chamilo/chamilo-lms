@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\RemoveOnAttributes;
+
 /**
  * Class FormValidator
  * create/manipulate/validate user input.

@@ -90,6 +90,8 @@ class PlatformConfigurationController extends AbstractController
                 'document.students_download_folders',
                 'social.hide_social_groups_block',
                 'course.show_course_duration',
+                'attendance.attendance_allow_comments',
+                'attendance.enable_sign_attendance_sheet',
             ];
 
             $user = $this->userHelper->getCurrent();

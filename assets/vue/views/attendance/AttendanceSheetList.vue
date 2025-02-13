@@ -1,7 +1,13 @@
 <template>
-  <div class="p-4">
+  <div class="attendance-page p-4">
     <!-- Toolbar -->
     <BaseToolbar class="flex justify-between items-center mb-4">
+      <BaseButton
+        :label="t('Go Back')"
+        icon="arrow-left"
+        type="black"
+        @click="redirectToAttendanceList"
+      />
       <BaseButton
         v-if="canEdit"
         :label="t('Go to Calendar')"
@@ -28,6 +34,12 @@
             {{ date.label }}
           </option>
         </select>
+        <div
+          v-if="!isLoading"
+          class="ml-4 text-lg font-semibold text-gray-800"
+        >
+          {{ attendanceTitle }}
+        </div>
       </div>
     </BaseToolbar>
 
@@ -183,14 +195,14 @@
                     title="Column is locked or read-only"
                   >
                     <div
-                      :class="getStateIconClass(attendanceData[`${user.id}-${date.id}`])"
+                      :class="getStateClass(attendanceData[`${user.id}-${date.id}`])"
                       class="w-10 h-10 rounded-full mx-auto"
                     ></div>
                   </div>
 
                   <div
                     v-else
-                    :class="getStateIconClass(attendanceData[`${user.id}-${date.id}`])"
+                    :class="getStateClass(attendanceData[`${user.id}-${date.id}`])"
                     @click="openMenu(user.id, date.id)"
                     class="w-10 h-10 rounded-full cursor-pointer mx-auto"
                     :title="getStateLabel(attendanceData[`${user.id}-${date.id}`])"
@@ -208,10 +220,17 @@
                       @click="selectState(user.id, date.id, state.id)"
                     >
                       <div
-                        :class="getStateIconClass(state.id)"
+                        :class="getStateClass(state.id)"
                         class="w-5 h-5 rounded-full"
                       ></div>
                       <span>{{ state.label }}</span>
+                    </div>
+                    <div
+                      class="flex items-center gap-2 p-2 cursor-pointer hover:bg-gray-100 rounded"
+                      @click="selectState(user.id, date.id, null)"
+                    >
+                      <div class="w-5 h-5 rounded-full bg-gray-30"></div>
+                      <span>{{ t("Remove State") }}</span>
                     </div>
                   </div>
 
@@ -220,12 +239,14 @@
                     class="absolute top-2 right-2 flex gap-3"
                   >
                     <BaseIcon
+                      v-if="allowComments"
                       icon="comment"
                       size="normal"
                       @click="openCommentDialog(user.id, date.id)"
                       class="cursor-pointer text-info"
                     />
                     <BaseIcon
+                      v-if="enableSignature"
                       icon="drawing"
                       size="normal"
                       @click="openSignatureDialog(user.id, date.id)"
@@ -243,11 +264,16 @@
       <div class="mt-4 flex justify-end">
         <BaseButton
           v-if="canEdit"
-          :label="t('Save Attendance')"
+          :label="isSaving ? t('Saving...') : t('Save Attendance')"
           icon="check"
           type="success"
           @click="saveAttendanceSheet"
+          :disabled="isSaving"
         />
+        <div
+          v-if="isSaving"
+          class="ml-2 loader"
+        ></div>
       </div>
 
       <!-- Comment Dialog -->
@@ -323,14 +349,21 @@ import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceService"
 import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const { sid, cid, gid } = useCidReq()
 const isLoading = ref(true)
+const attendanceTitle = ref("")
 const securityStore = useSecurityStore()
+const platformConfigStore = usePlatformConfig()
 
+const enableSignature = computed(
+  () => platformConfigStore.getSetting("attendance.enable_sign_attendance_sheet") === "true",
+)
+const allowComments = computed(() => platformConfigStore.getSetting("attendance.attendance_allow_comments") === "true")
 const canEdit = computed(() => securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM)
 const isStudent = computed(() => securityStore.isStudent)
 const isAdmin = computed(() => securityStore.isAdmin)
@@ -358,6 +391,13 @@ const redirectToCalendarList = () => {
   })
 }
 
+const redirectToAttendanceList = () => {
+  router.push({
+    name: "AttendanceList",
+    query: { sid, cid, gid },
+  })
+}
+
 const filteredAttendanceSheets = computed(() => {
   if (isStudent.value) {
     const currentUser = securityStore.user
@@ -366,6 +406,7 @@ const filteredAttendanceSheets = computed(() => {
   return attendanceSheetUsers.value
 })
 
+const isSaving = ref(false)
 const saveAttendanceSheet = async () => {
   if (!canEdit.value) return
 
@@ -382,13 +423,14 @@ const saveAttendanceSheet = async () => {
       preparedData.push({
         userId: user.id,
         calendarId: date.id,
-        presence: attendanceData.value[key] ?? 0,
+        presence: attendanceData.value[key] !== undefined ? attendanceData.value[key] : null,
         comment: comments.value[key] ?? null,
         signature: signatures.value[key] ?? null,
       })
     })
   })
 
+  isSaving.value = true
   try {
     const response = await attendanceService.saveAttendanceSheet({
       courseId: parseInt(cid),
@@ -402,6 +444,8 @@ const saveAttendanceSheet = async () => {
   } catch (error) {
     console.error("Error saving attendance data:", error)
     alert(t("Failed to save attendance. Please try again."))
+  } finally {
+    isSaving.value = false
   }
 }
 
@@ -450,40 +494,83 @@ const fetchFullAttendanceData = async (attendanceId) => {
   }
 }
 
-const filteredDates = ref([])
-
-const filterAttendanceSheets = () => {
-  switch (selectedFilter.value) {
-    case "all":
-      filteredDates.value = attendanceDates.value
-      break
-
-    case "done":
-      filteredDates.value = attendanceDates.value.filter((date) =>
-        Object.keys(attendanceData.value).some(
-          (key) => key.endsWith(`-${date.id}`) && attendanceData.value[key] !== null,
-        ),
-      )
-      break
-
-    case "not_done":
-      filteredDates.value = attendanceDates.value.filter(
-        (date) =>
-          !Object.keys(attendanceData.value).some(
-            (key) => key.endsWith(`-${date.id}`) && attendanceData.value[key] !== null,
-          ),
-      )
-      break
-
-    default:
-      filteredDates.value = attendanceDates.value.filter((date) => date.id === parseInt(selectedFilter.value, 10))
-      break
+const fetchAttendanceTitle = async () => {
+  try {
+    isLoading.value = true
+    const attendanceId = route.params.id
+    const response = await attendanceService.getAttendance(attendanceId)
+    attendanceTitle.value = response.title || t("Unknown Attendance")
+  } catch (error) {
+    console.error("Error fetching attendance title:", error)
+    attendanceTitle.value = t("Unknown Attendance")
+  } finally {
+    isLoading.value = false
   }
 }
 
-watch([attendanceDates, attendanceData, selectedFilter], filterAttendanceSheets, {
-  immediate: true,
-})
+const today = new Date().toISOString().split("T")[0]
+
+const filteredDates = ref([])
+const availableFilters = ref([])
+
+const updateAvailableFilters = () => {
+  availableFilters.value = [
+    { label: t("All"), value: "all" },
+    { label: t("All done"), value: "done" },
+    { label: t("All not done"), value: "not_done" },
+  ]
+
+  const todayEntry = attendanceDates.value.find((date) => {
+    if (!date.label || isNaN(Date.parse(date.label))) return false
+    const dateFormatted = new Date(Date.parse(date.label)).toISOString().split("T")[0]
+    return dateFormatted === today
+  })
+
+  if (todayEntry) {
+    availableFilters.value.splice(1, 0, { label: t("Today"), value: "today" })
+  }
+
+  attendanceDates.value.forEach((date) => {
+    availableFilters.value.push({ label: date.label, value: date.id })
+  })
+}
+
+const filterAttendanceSheets = () => {
+  if (selectedFilter.value === "all") {
+    filteredDates.value = attendanceDates.value
+  } else if (selectedFilter.value === "today") {
+    const todayEntry = attendanceDates.value.find((date) => {
+      if (!date.label) return false
+      const dateParts = date.label.split(" - ")[0]
+      return dateParts === todayDate
+    })
+    filteredDates.value = todayEntry ? [todayEntry] : []
+  } else if (selectedFilter.value === "done") {
+    filteredDates.value = attendanceDates.value.filter((date) =>
+      Object.keys(attendanceData.value).some(
+        (key) => key.endsWith(`-${date.id}`) && attendanceData.value[key] !== null,
+      ),
+    )
+  } else if (selectedFilter.value === "not_done") {
+    filteredDates.value = attendanceDates.value.filter(
+      (date) =>
+        !Object.keys(attendanceData.value).some(
+          (key) => key.endsWith(`-${date.id}`) && attendanceData.value[key] !== null,
+        ),
+    )
+  } else {
+    filteredDates.value = attendanceDates.value.filter((date) => date.id === parseInt(selectedFilter.value, 10))
+  }
+}
+
+watch(
+  [attendanceDates, attendanceData, selectedFilter],
+  () => {
+    updateAvailableFilters()
+    filterAttendanceSheets()
+  },
+  { immediate: true },
+)
 
 const contextMenu = ref({
   show: false,
@@ -518,21 +605,25 @@ const toggleLock = (dateId) => {
 onMounted(() => {
   fetchFullAttendanceData(route.params.id)
   fetchAttendanceSheetUsers()
+  fetchAttendanceTitle()
   initializeColumnLocks(attendanceDates.value)
 })
 
 initializeColumnLocks(attendanceDates.value)
 
 const getStateLabel = (stateId) => Object.values(ATTENDANCE_STATES).find((state) => state.id === stateId)?.label
-const getStateIconClass = (stateId) => {
-  const stateColors = {
-    0: "bg-red-500", // Absent
-    1: "bg-green-500", // Present
-    2: "bg-orange-300", // Late < 15 min
-    3: "bg-orange-500", // Late > 15 min
-    4: "bg-pink-400", // Absent, justified
+
+const getStateClass = (stateId) => {
+  const attendanceColors = {
+    0: "bg-[rgb(var(--color-danger-base))]",
+    1: "bg-[rgb(var(--color-success-base))]",
+    2: "bg-[rgb(var(--color-warning-base))]",
+    3: "bg-[rgb(var(--color-secondary-base))]",
+    4: "bg-[rgb(var(--color-info-base))]",
+    null: "bg-gray-30",
   }
-  return stateColors[stateId] || "bg-gray-200"
+
+  return attendanceColors[stateId] || "bg-gray-30"
 }
 
 const setAllAttendance = (dateId, stateId) => {
@@ -550,7 +641,11 @@ const closeMenu = () => {
 }
 
 const selectState = (userId, dateId, stateId) => {
-  attendanceData.value[`${userId}-${dateId}`] = stateId
+  if (stateId === null) {
+    delete attendanceData.value[`${userId}-${dateId}`]
+  } else {
+    attendanceData.value[`${userId}-${dateId}`] = stateId
+  }
   closeMenu()
 }
 
@@ -621,84 +716,3 @@ const viewForTablet = (dateId) => {
   console.log(`View for tablet clicked for date ID: ${dateId}`)
 }
 </script>
-<style scoped>
-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-tr {
-  height: 100px;
-}
-th,
-td {
-  height: 100px;
-  vertical-align: middle;
-}
-
-.flex {
-  display: flex;
-}
-
-.flex-col {
-  flex-direction: column;
-}
-
-.align-middle {
-  vertical-align: middle;
-}
-
-.mt-1 {
-  margin-top: 4px;
-}
-
-.gap-2 {
-  gap: 8px;
-}
-
-.bg-red-500 {
-  background-color: #f87171;
-}
-.bg-green-500 {
-  background-color: #4ade80;
-}
-.bg-orange-300 {
-  background-color: #fdba74;
-}
-.bg-orange-500 {
-  background-color: #f97316;
-}
-.bg-pink-400 {
-  background-color: #f472b6;
-}
-.bg-gray-200 {
-  background-color: #e5e7eb;
-}
-
-.opacity-50 {
-  opacity: 0.5;
-}
-
-.cursor-not-allowed {
-  cursor: not-allowed;
-}
-
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-</style>

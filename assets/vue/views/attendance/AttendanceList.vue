@@ -28,7 +28,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue"
+import { ref, onMounted, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import attendanceService from "../../services/attendanceService"
 import AttendanceTable from "../../components/attendance/AttendanceTable.vue"
@@ -37,10 +37,13 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
 import { useI18n } from "vue-i18n"
 import { useCidReq } from "../../composables/cidReq"
+import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
+const securityStore = useSecurityStore()
+const isStudent = computed(() => securityStore.isStudent)
 const attendances = ref([])
 const isDeleteDialogVisible = ref(false)
 const attendanceToDelete = ref({ id: null, title: "" })
@@ -103,7 +106,7 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
     }
     const data = await attendanceService.getAttendances(params)
 
-    attendances.value = data["hydra:member"].map((item) => ({
+    let attendanceList = data["hydra:member"].map((item) => ({
       id: item.iid,
       title: item.title,
       description: item.description,
@@ -112,6 +115,14 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
       attendanceWeight: item.attendanceWeight,
     }))
 
+    if (isStudent.value) {
+      attendanceList = attendanceList.filter((item) => {
+        const visibility = item.resourceLinkListFromEntity?.[0]?.visibility || 0
+        return visibility === 2
+      })
+    }
+
+    attendances.value = attendanceList
     totalAttendances.value = data.total || 0
   } catch (error) {
     console.error("Error fetching attendances:", error)

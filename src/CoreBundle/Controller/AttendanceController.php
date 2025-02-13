@@ -19,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/attendance')]
 class AttendanceController extends AbstractController
@@ -26,7 +27,8 @@ class AttendanceController extends AbstractController
 
     public function __construct(
         private readonly CAttendanceCalendarRepository $attendanceCalendarRepository,
-        private readonly EntityManagerInterface $em
+        private readonly EntityManagerInterface $em,
+        private readonly TranslatorInterface $translator
     ) {}
 
     #[Route('/full-data', name: 'chamilo_core_attendance_get_full_data', methods: ['GET'])]
@@ -112,7 +114,7 @@ class AttendanceController extends AbstractController
             foreach ($attendanceData as $entry) {
                 $userId = (int) $entry['userId'];
                 $calendarId = (int) $entry['calendarId'];
-                $presence = isset($entry['presence']) ? (int)$entry['presence'] : null;
+                $presence = array_key_exists('presence', $entry) ? $entry['presence'] : null;
                 $signature = $entry['signature'] ?? null;
                 $comment = $entry['comment'] ?? null;
 
@@ -129,7 +131,20 @@ class AttendanceController extends AbstractController
                 $sheet = $sheetRepository->findOneBy([
                     'user' => $user,
                     'attendanceCalendar' => $calendar,
-                ]) ?? new CAttendanceSheet();
+                ]);
+
+                if ($sheet && $presence === null) {
+                    $this->em->remove($sheet);
+                    continue;
+                }
+
+                if (!$sheet && $presence === null) {
+                    continue;
+                }
+
+                if (!$sheet) {
+                    $sheet = new CAttendanceSheet();
+                }
 
                 $sheet->setUser($user)
                     ->setAttendanceCalendar($calendar)
@@ -184,7 +199,7 @@ class AttendanceController extends AbstractController
             $this->em->flush();
 
             return $this->json([
-                'message' => 'Attendance data and comments saved successfully',
+                'message' => $this->translator->trans('Attendance data and comments saved successfully'),
                 'affectedRows' => $affectedRows,
             ]);
 

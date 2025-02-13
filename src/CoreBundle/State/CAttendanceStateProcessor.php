@@ -48,8 +48,13 @@ final class CAttendanceStateProcessor implements ProcessorInterface
 
     private function handleToggleVisibility(CAttendance $attendance): void
     {
-        $attendance->setActive($attendance->getActive() === 1 ? 0 : 1);
+        $attendanceRepo = $this->entityManager->getRepository(CAttendance::class);
+
+        $course = $attendance->getFirstResourceLink()->getCourse();
+        $attendanceRepo->toggleVisibilityPublishedDraft($attendance, $course);
+
         $this->entityManager->persist($attendance);
+        $this->entityManager->flush();
     }
 
     private function handleSoftDelete(CAttendance $attendance): void

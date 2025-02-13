@@ -91,8 +91,11 @@
 </template>
 <script setup>
 import { useRoute } from "vue-router"
+import { computed } from "vue"
+import { useSecurityStore } from "../../store/securityStore"
 
 const route = useRoute()
+const securityStore = useSecurityStore()
 
 const props = defineProps({
   attendances: {
@@ -111,6 +114,9 @@ const props = defineProps({
 
 const emit = defineEmits(["edit", "view", "delete", "pageChange"])
 
+// Roles
+const isAdminOrTeacher = computed(() => securityStore.isAdmin || securityStore.isTeacher)
+computed(() => securityStore.isStudent)
 const onEdit = (attendance) => emit("edit", attendance)
 const onView = (attendance) => emit("view", attendance)
 const onDelete = (attendance) => emit("delete", attendance)
@@ -123,6 +129,11 @@ const getVisibilityIcon = (attendance) => {
 
 const getVisibilityClass = (attendance) => {
   const visibility = attendance.resourceLinkListFromEntity?.[0]?.visibility || 0
+
+  if (isAdminOrTeacher.value) {
+    return visibility === 2 ? "p-button-success" : "p-button-secondary opacity-50"
+  }
+
   return visibility === 2 ? "p-button-success" : "p-button-warning"
 }
 

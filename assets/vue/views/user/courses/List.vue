@@ -1,8 +1,6 @@
 <template>
   <StickyCourses />
 
-  <hr />
-
   <div class="relative min-h-[300px]">
     <Loading :visible="!isFullyLoaded" />
     <div

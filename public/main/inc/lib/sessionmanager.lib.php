@@ -179,13 +179,10 @@ class SessionManager
             }
         }
 
-        $name = Database::escape_string(trim($name));
+        $name = trim($name);
         $sessionCategoryId = (int) $sessionCategoryId;
         $visibility = (int) $visibility;
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-
-        $startDate = Database::escape_string($startDate);
-        $endDate = Database::escape_string($endDate);
 
         if (empty($name)) {
             $msg = get_lang('A title is required for the session');

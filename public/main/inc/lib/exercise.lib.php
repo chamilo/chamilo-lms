@@ -2134,7 +2134,7 @@ HOTSPOT;
         $clean_group_list = [];
         if (!empty($group_list)) {
             foreach ($group_list as $group) {
-                $clean_group_list[$group['iid']] = $group['name'];
+                $clean_group_list[$group['iid']] = $group['title'];
             }
         }
 
@@ -2411,7 +2411,7 @@ HOTSPOT;
                         if (!empty($results[$i]['session_id'])) {
                             $sessionInfo = api_get_session_info($results[$i]['session_id']);
                             if (!empty($sessionInfo)) {
-                                $sessionName = $sessionInfo['name'];
+                                $sessionName = $sessionInfo['title'];
                                 $sessionStartAccessDate = api_get_local_time($sessionInfo['access_start_date']);
                             }
                         }

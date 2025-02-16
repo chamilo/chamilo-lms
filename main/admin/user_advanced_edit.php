@@ -27,11 +27,11 @@ $toolbarActions = '';
 // Advanced search form
 $form = new FormValidator('advancedSearch', 'get', '', '', [], FormValidator::LAYOUT_HORIZONTAL);
 $form->addElement('header', '', get_lang('AdvancedSearch'));
-$form->addText('keywordUsername', get_lang('LoginName'), false);
-$form->addText('keywordEmail', get_lang('Email'), false);
-$form->addText('keywordFirstname', get_lang('FirstName'), false);
-$form->addText('keywordLastname', get_lang('LastName'), false);
-$form->addText('keywordOfficialCode', get_lang('OfficialCode'), false);
+$form->addText('keywordUsername', get_lang('LoginName'), false, ['value' => $_GET['keywordUsername'] ?? '']);
+$form->addText('keywordEmail', get_lang('Email'), false, ['value' => $_GET['keywordEmail'] ?? '']);
+$form->addText('keywordFirstname', get_lang('FirstName'), false, ['value' => $_GET['keywordFirstname'] ?? '']);
+$form->addText('keywordLastname', get_lang('LastName'), false, ['value' => $_GET['keywordLastname'] ?? '']);
+$form->addText('keywordOfficialCode', get_lang('OfficialCode'), false, ['value' => $_GET['keywordOfficialCode'] ?? '']);
 
 $statusOptions = [
     '%' => get_lang('All'),
@@ -41,34 +41,43 @@ $statusOptions = [
     SESSIONADMIN => get_lang('SessionsAdmin'),
     PLATFORM_ADMIN => get_lang('Administrator')
 ];
-$form->addElement('select', 'keywordStatus', get_lang('Profile'), $statusOptions);
+$form->addElement('select', 'keywordStatus', get_lang('Profile'), $statusOptions, ['selected' => $_GET['keywordStatus'] ?? '%']);
 
 $activeGroup = [];
-$activeGroup[] = $form->createElement('checkbox', 'keywordActive', '', get_lang('Active'));
-$activeGroup[] = $form->createElement('checkbox', 'keywordInactive', '', get_lang('Inactive'));
+$activeGroup[] = $form->createElement('checkbox', 'keywordActive', '', get_lang('Active'), ['checked' => isset($_GET['keywordActive'])]);
+$activeGroup[] = $form->createElement('checkbox', 'keywordInactive', '', get_lang('Inactive'), ['checked' => isset($_GET['keywordInactive'])]);
 $form->addGroup($activeGroup, '', get_lang('ActiveAccount'), null, false);
-$form->addButtonSearch(get_lang('SearchUsers'), 'filter');
 
-// Search filters
-$searchFilters = [
-    'keywordFirstname' => $_GET['keywordFirstname'] ?? '',
-    'keywordLastname' => $_GET['keywordLastname'] ?? '',
-    'keywordUsername' => $_GET['keywordUsername'] ?? '',
-    'keywordEmail' => $_GET['keywordEmail'] ?? '',
-    'keywordOfficialCode' => $_GET['keywordOfficialCode'] ?? '',
-    'keywordStatus' => $_GET['keywordStatus'] ?? '',
-    'keywordActive' => $_GET['keywordActive'] ?? '',
-    'keywordInactive' => $_GET['keywordInactive'] ?? '',
-];
+$parameters = array_map(function ($value) {
+    return Security::remove_XSS($value);
+}, $_GET);
+
+$extraUserField = new ExtraField('user');
+$returnParams = $extraUserField->addElements(
+    $form,
+    0,
+    [],
+    true,
+    false,
+    [],
+    [],
+    $_REQUEST
+);
+
+$htmlHeadXtra[] = '<script>
+    $(function () {
+        '.$returnParams['jquery_ready_content'].'
+    })
+</script>';
+$form->addButtonSearch(get_lang('SearchUsers'), 'filter');
 
 $users = [];
 if (isset($_GET['filter'])) {
-    $users = UserManager::searchUsers($searchFilters);
+    $users = UserManager::searchUsers($parameters);
 }
 
 $fieldSelector = '';
 $jqueryReadyContent = '';
-$extraUserField = new ExtraField('user');
 if (!empty($users)) {
     $extraFields = $extraUserField->get_all(['filter = ?' => 1], 'option_order');
 
@@ -116,7 +125,12 @@ if (!empty($users)) {
     }
     unset($user);
 
+    if (count($users) === 1) {
+        array_unshift($users, ['id' => '', 'username' => '']);
+    }
+    $parameters = array_diff_key($parameters, array_flip(['users_direction', 'users_column']));
     $userTable = new SortableTable('users', null, null, 0, 50);
+    $userTable->set_additional_parameters($parameters);
     $userTable->set_header(0, get_lang('ID'));
     $userTable->set_header(1, get_lang('Username'));
 

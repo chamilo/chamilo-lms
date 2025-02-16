@@ -8269,6 +8269,12 @@ SQL;
     {
         $where = [];
 
+        $accessUrlRelUserTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $userGroupTable = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+
+        $isMultipleUrl = (api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url();
+        $urlId = api_get_current_access_url_id();
+
         if (!empty($filters['keywordFirstname'])) {
             $where[] = "u.firstname LIKE '%".Database::escape_string($filters['keywordFirstname'])."%'";
         }
@@ -8293,6 +8299,50 @@ SQL;
             $where[] = "u.active = 0";
         }
 
+        if ($isMultipleUrl) {
+            $where[] = "u.id IN (SELECT user_id FROM $accessUrlRelUserTable WHERE access_url_id = $urlId)";
+        }
+
+        if (!empty($filters['class_id'])) {
+            $where[] = "u.id IN (SELECT user_id FROM $userGroupTable WHERE usergroup_id = " . (int)$filters['class_id'] . ")";
+        }
+
+        $extraField = new ExtraField('user');
+        $extraFieldResults = [];
+        $extraFieldHasData = false;
+
+        foreach ($filters as $key => $value) {
+            if (strpos($key, 'extra_') === 0 && !empty($value)) {
+                $variable = substr($key, 6);
+                $fieldInfo = $extraField->get_handler_field_info_by_field_variable($variable);
+                if ($fieldInfo) {
+                    $extraFieldHasData = true;
+                    $values = is_array($value) ? $value : [$value];
+
+                    foreach ($values as $singleValue) {
+                        if (empty($singleValue)) {
+                            continue;
+                        }
+
+                        if ($fieldInfo['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                            $result = $extraField->getAllUserPerTag($fieldInfo['id'], $singleValue);
+                            $result = empty($result) ? [] : array_column($result, 'user_id');
+                        } else {
+                            $result = UserManager::get_extra_user_data_by_value($variable, $singleValue, true);
+                        }
+
+                        if (!empty($result)) {
+                            $extraFieldResults = array_merge($extraFieldResults, $result);
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($extraFieldHasData && !empty($extraFieldResults)) {
+            $where[] = "u.id IN ('" . implode("','", array_unique($extraFieldResults)) . "')";
+        }
+
         $fields = ['u.id', 'u.username'];
 
         if (!empty($editableFields)) {
@@ -8301,11 +8351,25 @@ SQL;
             }
         }
 
+        $sortableFields = [
+            0 => 'u.id',
+            1 => 'u.username'
+        ];
+
+        $columnIndex = $_GET['users_column'] ?? 0;
+        $direction = strtoupper($_GET['users_direction'] ?? 'ASC');
+
+        if (!in_array($direction, ['ASC', 'DESC'])) {
+            $direction = 'ASC';
+        }
+
+        $orderBy = $sortableFields[$columnIndex] ?? 'u.id';
+
         $sql = "SELECT " . implode(", ", $fields) . " FROM " . Database::get_main_table(TABLE_MAIN_USER) . " u";
         if (!empty($where)) {
             $sql .= " WHERE " . implode(" AND ", $where);
         }
-        $sql .= " ORDER BY u.id ASC";
+        $sql .= " ORDER BY $orderBy $direction";
 
         return Database::store_result(Database::query($sql), 'ASSOC');
     }

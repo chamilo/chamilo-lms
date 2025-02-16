@@ -24,6 +24,14 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')]
 // Toolbar actions
 $toolbarActions = '';
 
+// Filter GET params
+$keywordUsername = !empty($_GET['keywordUsername']) ? Security::remove_XSS($_GET['keywordUsername']) : '';
+$keywordEmail = !empty($_GET['keywordEmail']) ? Security::remove_XSS($_GET['keywordEmail']) : '';
+$keywordFirstname = !empty($_GET['keywordFirstname']) ? Security::remove_XSS($_GET['keywordFirstname']) : '';
+$keywordLastname = !empty($_GET['keywordLastname']) ? Security::remove_XSS($_GET['keywordLastname']) : '';
+$keywordOfficialCode = !empty($_GET['keywordOfficialCode']) ? Security::remove_XSS($_GET['keywordOfficialCode']) : '';
+$keywordStatus = !empty($_GET['keywordStatus']) ? Security::remove_XSS($_GET['keywordStatus']) : '';
+
 // Advanced search form
 $form = new FormValidator('advancedSearch', 'get', '', '', [], FormValidator::LAYOUT_HORIZONTAL);
 $form->addElement('header', '', get_lang('AdvancedSearch'));
@@ -43,32 +51,54 @@ $statusOptions = [
 ];
 $form->addElement('select', 'keywordStatus', get_lang('Profile'), $statusOptions);
 
-$activeGroup = [];
-$activeGroup[] = $form->createElement('checkbox', 'keywordActive', '', get_lang('Active'));
-$activeGroup[] = $form->createElement('checkbox', 'keywordInactive', '', get_lang('Inactive'));
-$form->addGroup($activeGroup, '', get_lang('ActiveAccount'), null, false);
-$form->addButtonSearch(get_lang('SearchUsers'), 'filter');
+$form->setDefaults(
+    [
+        'keywordUsername' => $keywordUsername,
+        'keywordEmail' => $keywordEmail,
+        'keywordFirstname' => $keywordFirstname,
+        'keywordLastname' => $keywordLastname,
+        'keywordOfficialCode' => $keywordOfficialCode,
+        'keywordStatus' => $keywordStatus,
+    ]
+);
 
-// Search filters
-$searchFilters = [
-    'keywordFirstname' => $_GET['keywordFirstname'] ?? '',
-    'keywordLastname' => $_GET['keywordLastname'] ?? '',
-    'keywordUsername' => $_GET['keywordUsername'] ?? '',
-    'keywordEmail' => $_GET['keywordEmail'] ?? '',
-    'keywordOfficialCode' => $_GET['keywordOfficialCode'] ?? '',
-    'keywordStatus' => $_GET['keywordStatus'] ?? '',
-    'keywordActive' => $_GET['keywordActive'] ?? '',
-    'keywordInactive' => $_GET['keywordInactive'] ?? '',
-];
+$activeGroup = [];
+$activeGroup[] = $form->createElement('checkbox', 'keywordActive', '', get_lang('Active'), ['checked' => isset($_GET['keywordActive'])]);
+$activeGroup[] = $form->createElement('checkbox', 'keywordInactive', '', get_lang('Inactive'), ['checked' => isset($_GET['keywordInactive'])]);
+$form->addGroup($activeGroup, '', get_lang('ActiveAccount'), null, false);
+
+$parameters = array_map(function ($value) {
+    return Security::remove_XSS($value);
+}, $_GET);
+
+$extraUserField = new ExtraField('user');
+$returnParams = $extraUserField->addElements(
+    $form,
+    0,
+    [],
+    true,
+    false,
+    [],
+    [],
+    $_REQUEST,
+    null,
+    true
+);
+
+$htmlHeadXtra[] = '<script>
+    $(function () {
+        '.$returnParams['jquery_ready_content'].'
+    })
+</script>';
+$form->addButtonSearch(get_lang('SearchUsers'), 'filter');
 
 $users = [];
 if (isset($_GET['filter'])) {
-    $users = UserManager::searchUsers($searchFilters);
+    $users = UserManager::searchUsers($parameters);
 }
 
 $fieldSelector = '';
 $jqueryReadyContent = '';
-$extraUserField = new ExtraField('user');
 if (!empty($users)) {
     $extraFields = $extraUserField->get_all(['filter = ?' => 1], 'option_order');
 
@@ -116,7 +146,12 @@ if (!empty($users)) {
     }
     unset($user);
 
+    if (count($users) === 1) {
+        array_unshift($users, ['id' => '', 'username' => '']);
+    }
+    $parameters = array_diff_key($parameters, array_flip(['users_direction', 'users_column']));
     $userTable = new SortableTable('users', null, null, 0, 50);
+    $userTable->set_additional_parameters($parameters);
     $userTable->set_header(0, get_lang('ID'));
     $userTable->set_header(1, get_lang('Username'));
 

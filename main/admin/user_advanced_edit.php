@@ -24,14 +24,22 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')]
 // Toolbar actions
 $toolbarActions = '';
 
+// Filter GET params
+$keywordUsername = !empty($_GET['keywordUsername']) ? Security::remove_XSS($_GET['keywordUsername']) : '';
+$keywordEmail = !empty($_GET['keywordEmail']) ? Security::remove_XSS($_GET['keywordEmail']) : '';
+$keywordFirstname = !empty($_GET['keywordFirstname']) ? Security::remove_XSS($_GET['keywordFirstname']) : '';
+$keywordLastname = !empty($_GET['keywordLastname']) ? Security::remove_XSS($_GET['keywordLastname']) : '';
+$keywordOfficialCode = !empty($_GET['keywordOfficialCode']) ? Security::remove_XSS($_GET['keywordOfficialCode']) : '';
+$keywordStatus = !empty($_GET['keywordStatus']) ? Security::remove_XSS($_GET['keywordStatus']) : '';
+
 // Advanced search form
 $form = new FormValidator('advancedSearch', 'get', '', '', [], FormValidator::LAYOUT_HORIZONTAL);
 $form->addElement('header', '', get_lang('AdvancedSearch'));
-$form->addText('keywordUsername', get_lang('LoginName'), false, ['value' => $_GET['keywordUsername'] ?? '']);
-$form->addText('keywordEmail', get_lang('Email'), false, ['value' => $_GET['keywordEmail'] ?? '']);
-$form->addText('keywordFirstname', get_lang('FirstName'), false, ['value' => $_GET['keywordFirstname'] ?? '']);
-$form->addText('keywordLastname', get_lang('LastName'), false, ['value' => $_GET['keywordLastname'] ?? '']);
-$form->addText('keywordOfficialCode', get_lang('OfficialCode'), false, ['value' => $_GET['keywordOfficialCode'] ?? '']);
+$form->addText('keywordUsername', get_lang('LoginName'), false);
+$form->addText('keywordEmail', get_lang('Email'), false);
+$form->addText('keywordFirstname', get_lang('FirstName'), false);
+$form->addText('keywordLastname', get_lang('LastName'), false);
+$form->addText('keywordOfficialCode', get_lang('OfficialCode'), false);
 
 $statusOptions = [
     '%' => get_lang('All'),
@@ -41,7 +49,18 @@ $statusOptions = [
     SESSIONADMIN => get_lang('SessionsAdmin'),
     PLATFORM_ADMIN => get_lang('Administrator')
 ];
-$form->addElement('select', 'keywordStatus', get_lang('Profile'), $statusOptions, ['selected' => $_GET['keywordStatus'] ?? '%']);
+$form->addElement('select', 'keywordStatus', get_lang('Profile'), $statusOptions);
+
+$form->setDefaults(
+    [
+        'keywordUsername' => $keywordUsername,
+        'keywordEmail' => $keywordEmail,
+        'keywordFirstname' => $keywordFirstname,
+        'keywordLastname' => $keywordLastname,
+        'keywordOfficialCode' => $keywordOfficialCode,
+        'keywordStatus' => $keywordStatus,
+    ]
+);
 
 $activeGroup = [];
 $activeGroup[] = $form->createElement('checkbox', 'keywordActive', '', get_lang('Active'), ['checked' => isset($_GET['keywordActive'])]);
@@ -61,7 +80,9 @@ $returnParams = $extraUserField->addElements(
     false,
     [],
     [],
-    $_REQUEST
+    $_REQUEST,
+    null,
+    true
 );
 
 $htmlHeadXtra[] = '<script>

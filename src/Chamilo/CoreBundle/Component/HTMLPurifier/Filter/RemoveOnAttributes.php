@@ -17,7 +17,7 @@ class RemoveOnAttributes extends HTMLPurifier_Filter
 
     public static function filter($html)
     {
-        $pattern = '/\s*on\w+=(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i';
+        $pattern = '/\s+on\w+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i';
 
         return preg_replace($pattern, '', $html);
     }

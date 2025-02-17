@@ -1539,6 +1539,8 @@ function finishInstallationWithContainer(
     lockSettings();
     updateDirAndFilesPermissions();
     executeLexikKeyPair($kernel);
+
+    createExtraConfigFile();
 }
 
 /**
@@ -1912,6 +1914,8 @@ function executeMigration(): array
 
         $result = $output->fetch();
 
+        createExtraConfigFile();
+
         if (strpos($result, '[OK] Successfully migrated to version') !== false) {
             $resultStatus['status'] = true;
             $resultStatus['message'] = 'Migration completed successfully.';
@@ -1922,7 +1926,6 @@ function executeMigration(): array
         }
 
         $resultStatus['current_migration'] = getLastExecutedMigration($connection);
-
     } catch (Exception $e) {
         $resultStatus['current_migration'] = getLastExecutedMigration($connection);
         $resultStatus['message'] = 'Migration failed: ' . $e->getMessage();
@@ -1946,4 +1949,26 @@ function executeLexikKeyPair(\Chamilo\Kernel $kernel): void
     $output = new NullOutput();
 
     $application->run($input, $output);
+}
+
+function createExtraConfigFile(): void {
+    $files = [
+        'authentication',
+        'hosting_limits',
+        'plugin',
+    ];
+
+    $sysPath = api_get_path(SYMFONY_SYS_PATH);
+
+    foreach ($files as $file) {
+        $finalFilename = $sysPath."config/$file.yaml";
+
+        if (!file_exists($finalFilename)) {
+            $distFilename = $sysPath."config/$file.dist.yaml";
+
+            $contents = file_get_contents($distFilename);
+
+            file_put_contents($finalFilename, $contents);
+        }
+    }
 }

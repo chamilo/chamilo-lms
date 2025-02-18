@@ -2616,6 +2616,7 @@ class Exercise
                     'notifications',
                     'remedialcourselist',
                     'advancedcourselist',
+                    'subscribe_session_when_finished_failure',
                 ], //exclude
                 false, // filter
                 false, // tag as select
@@ -2674,6 +2675,25 @@ class Exercise
                         ]
                     );
                 }
+            }
+
+            if (true === api_get_configuration_value('exercise_subscribe_session_when_finished_failure')) {
+                $optionSessionWhenFailure = [];
+
+                if ($failureSession = ExerciseLib::getSessionWhenFinishedFailure($this->iid)) {
+                    $defaults['subscribe_session_when_finished_failure'] = $failureSession->getId();
+                    $optionSessionWhenFailure[$failureSession->getId()] = $failureSession->getName();
+                }
+
+                $form->addSelectAjax(
+                    'extra_subscribe_session_when_finished_failure',
+                    get_lang('SubscribeSessionWhenFinishedFailure'),
+                    $optionSessionWhenFailure,
+                    [
+                        'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?'
+                            .http_build_query(['a' => 'search_session']),
+                    ]
+                );
             }
 
             $settings = api_get_configuration_value('exercise_finished_notification_settings');

@@ -8308,17 +8308,28 @@ SQL;
         }
 
         $extraField = new ExtraField('user');
-        $extraFieldResults = [];
+        $extraFieldResults = null;
         $extraFieldHasData = false;
 
         foreach ($filters as $key => $value) {
-            if (strpos($key, 'extra_') === 0 && !empty($value)) {
+            if (str_starts_with($key, 'extra_')) {
+                if (is_array($value)) {
+                    $value = array_filter($value, function ($v) {
+                        return $v !== null && $v !== '';
+                    });
+                }
+
+                if (empty($value)) {
+                    continue;
+                }
+
                 $variable = substr($key, 6);
                 $fieldInfo = $extraField->get_handler_field_info_by_field_variable($variable);
                 if ($fieldInfo) {
                     $extraFieldHasData = true;
                     $values = is_array($value) ? $value : [$value];
 
+                    $fieldResults = [];
                     foreach ($values as $singleValue) {
                         if (empty($singleValue)) {
                             continue;
@@ -8332,15 +8343,40 @@ SQL;
                         }
 
                         if (!empty($result)) {
-                            $extraFieldResults = array_merge($extraFieldResults, $result);
+                            $fieldResults[] = $result;
                         }
+                    }
+
+                    if (!empty($values) && empty($fieldResults)) {
+                        $extraFieldResults = [];
+                        break;
+                    }
+
+                    $mergedFieldResults = call_user_func_array('array_merge', $fieldResults);
+
+                    if ($extraFieldResults === null) {
+                        $extraFieldResults = $mergedFieldResults;
+                    } else {
+                        $extraFieldResults = array_intersect($extraFieldResults, $mergedFieldResults);
+                    }
+
+                    if (empty($extraFieldResults)) {
+                        break;
                     }
                 }
             }
         }
 
-        if ($extraFieldHasData && !empty($extraFieldResults)) {
-            $where[] = "u.id IN ('" . implode("','", array_unique($extraFieldResults)) . "')";
+        if ($extraFieldHasData && $extraFieldResults === null) {
+            $extraFieldResults = [];
+        }
+
+        if ($extraFieldHasData) {
+            if (empty($extraFieldResults)) {
+                $where[] = "u.id IN ('-1')";
+            } else {
+                $where[] = "u.id IN ('" . implode("','", array_unique($extraFieldResults)) . "')";
+            }
         }
 
         $fields = ['u.id', 'u.username'];

@@ -5368,21 +5368,6 @@ EOT;
             );
         }
 
-        // Display text when test is finished #4074 and for LP #4227
-        // Allows to do a remove_XSS for end text result of exercise with
-        // user status COURSEMANAGERLOWSECURITY BT#20194
-        if (true === api_get_configuration_value('exercise_result_end_text_html_strict_filtering')) {
-            $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished(), COURSEMANAGERLOWSECURITY);
-        } else {
-            $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished());
-        }
-        if (!empty($endOfMessage)) {
-            echo Display::div(
-                $endOfMessage,
-                ['id' => 'quiz_end_message']
-            );
-        }
-
         $question_list_answers = [];
         $category_list = [];
         $loadChoiceFromSession = false;
@@ -5616,6 +5601,22 @@ EOT;
                     }
                 }
             }
+        }
+
+        // Display text when test is finished #4074 and for LP #4227
+        // Allows to do a remove_XSS for end text result of exercise with
+        // user status COURSEMANAGERLOWSECURITY BT#20194
+        $finishMessage = $objExercise->getFinishText($total_score, $total_weight);
+        if (true === api_get_configuration_value('exercise_result_end_text_html_strict_filtering')) {
+            $endOfMessage = Security::remove_XSS($finishMessage, COURSEMANAGERLOWSECURITY);
+        } else {
+            $endOfMessage = Security::remove_XSS($finishMessage);
+        }
+        if (!empty($endOfMessage)) {
+            echo Display::div(
+                $endOfMessage,
+                ['id' => 'quiz_end_message']
+            );
         }
 
         $totalScoreText = null;

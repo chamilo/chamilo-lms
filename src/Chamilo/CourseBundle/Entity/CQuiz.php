@@ -184,6 +184,13 @@ class CQuiz
     protected $textWhenFinished;
 
     /**
+     * @var string|null
+     *
+     * ORM\Column(name="text_when_finished_failure", type="text", nullable=true)
+     */
+    protected ?string $textWhenFinishedFailure = null;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="display_category_name", type="integer", nullable=false)
@@ -835,6 +842,17 @@ class CQuiz
     {
         $this->hideQuestionTitle = $hideQuestionTitle;
 
+        return $this;
+    }
+
+    public function getTextWhenFinishedFailure(): ?string
+    {
+        return $this->textWhenFinishedFailure;
+    }
+
+    public function setTextWhenFinishedFailure(?string $textWhenFinishedFailure): CQuiz
+    {
+        $this->textWhenFinishedFailure = $textWhenFinishedFailure;
         return $this;
     }
 }

@@ -2555,6 +2555,13 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // Add more speed options to reading comprehension question type (type id = 21) in words per minute
 //$_configuration['exercise_question_reading_comprehension_extra_speeds'] = ['speeds' => [70, 110, 170]];
 
+// Text appearing at the end of the test when the user has failed. Requires DB changes.
+/*
+ALTER TABLE c_quiz ADD text_when_finished_failure LONGTEXT DEFAULT NULL;
+*/
+// Then add the "@" symbol to the CQuiz class in the ORM\Column() line for its $textWhenFinishedFailure property.
+//$_configuration['exercise_text_when_finished_failure'] = false;
+
 //hide copy icon in LP's authoring options
 //$_configuration['lp_hide_copy_option'] = false;
 

@@ -379,7 +379,6 @@ if (!empty($track_exercise_info['data_tracking'])) {
     $questionList = $question_list_from_database;
 }
 
-
 // for each question
 $total_weighting = 0;
 foreach ($questionList as $questionId) {

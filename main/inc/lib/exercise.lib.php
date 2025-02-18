@@ -5840,20 +5840,6 @@ EOT;
         return null;
     }
 
-    private static function subscribeSessionWhenFinishedFailure(int $exerciseId): void
-    {
-        $failureSession = self::getSessionWhenFinishedFailure($exerciseId);
-
-        if ($failureSession) {
-            SessionManager::subscribeUsersToSession(
-                $failureSession->getId(),
-                [api_get_user_id()],
-                SESSION_VISIBLE_READ_ONLY,
-                false
-            );
-        }
-    }
-
     /**
      * It validates unique score when all user answers are correct by question.
      * It is used for global questions.
@@ -7415,5 +7401,19 @@ EOT;
         }
 
         return false;
+    }
+
+    private static function subscribeSessionWhenFinishedFailure(int $exerciseId): void
+    {
+        $failureSession = self::getSessionWhenFinishedFailure($exerciseId);
+
+        if ($failureSession) {
+            SessionManager::subscribeUsersToSession(
+                $failureSession->getId(),
+                [api_get_user_id()],
+                SESSION_VISIBLE_READ_ONLY,
+                false
+            );
+        }
     }
 }

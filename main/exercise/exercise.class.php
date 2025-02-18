@@ -460,7 +460,8 @@ class Exercise
     }
 
     /**
-     * Get the text to display when the user has failed the test
+     * Get the text to display when the user has failed the test.
+     *
      * @return string html text : the text to display ay the end of the test
      */
     public function getTextWhenFinishedFailure(): string
@@ -473,8 +474,7 @@ class Exercise
     }
 
     /**
-     * Set the text to display when the user has succeeded in the test
-     * @param string $text
+     * Set the text to display when the user has succeeded in the test.
      */
     public function setTextWhenFinishedFailure(string $text): void
     {
@@ -11838,6 +11838,34 @@ class Exercise
     }
 
     /**
+     * Return the text to display, based on the score and the max score.
+     *
+     * @param int|float $score
+     * @param int|float $maxScore
+     */
+    public function getFinishText($score, $maxScore): string
+    {
+        if (true !== api_get_configuration_value('exercise_text_when_finished_failure')) {
+            return $this->getTextWhenFinished();
+        }
+
+        $passPercentage = $this->selectPassPercentage();
+
+        if (!empty($passPercentage)) {
+            $percentage = float_format(
+                ($score / (0 != $maxScore ? $maxScore : 1)) * 100,
+                1
+            );
+
+            if ($percentage < $passPercentage) {
+                return $this->getTextWhenFinishedFailure();
+            }
+        }
+
+        return $this->getTextWhenFinished();
+    }
+
+    /**
      * Get number of questions in exercise by user attempt.
      *
      * @return int
@@ -12321,33 +12349,5 @@ class Exercise
             null,
             get_lang('ShowResultsToStudents')
         );
-    }
-
-    /**
-     * Return the text to display, based on the score and the max score.
-     * @param int|float $score
-     * @param int|float $maxScore
-     * @return string
-     */
-    public function getFinishText($score, $maxScore): string
-    {
-        if (true !== api_get_configuration_value('exercise_text_when_finished_failure')) {
-            return $this->getTextWhenFinished();
-        }
-
-        $passPercentage = $this->selectPassPercentage();
-
-        if (!empty($passPercentage)) {
-            $percentage = float_format(
-                ($score / (0 != $maxScore ? $maxScore : 1)) * 100,
-                1
-            );
-
-            if ($percentage < $passPercentage) {
-                return $this->getTextWhenFinishedFailure();
-            }
-        }
-
-        return $this->getTextWhenFinished();
     }
 }

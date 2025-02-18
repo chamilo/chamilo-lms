@@ -853,6 +853,7 @@ class CQuiz
     public function setTextWhenFinishedFailure(?string $textWhenFinishedFailure): CQuiz
     {
         $this->textWhenFinishedFailure = $textWhenFinishedFailure;
+
         return $this;
     }
 }

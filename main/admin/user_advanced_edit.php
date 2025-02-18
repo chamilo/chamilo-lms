@@ -81,7 +81,7 @@ $returnParams = $extraUserField->addElements(
     [],
     [],
     $_REQUEST,
-    null,
+    false,
     true
 );
 
@@ -126,8 +126,6 @@ if (!empty($users)) {
 
 $tableResult = '';
 if (!empty($users)) {
-    $selectedFields = $_GET['editableFields'] ?? [];
-
     foreach ($users as &$user) {
         $userData = api_get_user_info($user['id']);
         if ($userData) {
@@ -146,21 +144,50 @@ if (!empty($users)) {
     }
     unset($user);
 
-    if (count($users) === 1) {
-        array_unshift($users, ['id' => '', 'username' => '']);
+    $selectedFields = $_GET['editableFields'] ?? [];
+    $filtersUsed = [
+        'keywordUsername' => 'username',
+        'keywordEmail' => 'email',
+        'keywordFirstname' => 'firstname',
+        'keywordLastname' => 'lastname',
+        'keywordOfficialCode' => 'official_code',
+        'keywordStatus' => 'status'
+    ];
+
+    foreach ($filtersUsed as $filterKey => $fieldName) {
+        $getFilterKey = Security::remove_XSS($_GET[$filterKey]);
+        if (!empty($getFilterKey) && !in_array($fieldName, $selectedFields)) {
+            $selectedFields[] = $fieldName;
+        }
     }
+
+    foreach ($extraFields as $field) {
+        $extraVariable = Security::remove_XSS($_GET['extra_'.$field['variable']]);
+        if (is_array($extraVariable)) {
+            $extraVariable = array_filter($extraVariable, function ($v) {
+                return $v !== null && $v !== '';
+            });
+        }
+        if (!empty($extraVariable) && !in_array($field['variable'], $selectedFields)) {
+            $selectedFields[] = $field['variable'];
+        }
+    }
+
     $parameters = array_diff_key($parameters, array_flip(['users_direction', 'users_column']));
-    $userTable = new SortableTable('users', null, null, 0, 50);
+    $userTable = new SortableTable('users', null, null, 0, count($users));
     $userTable->set_additional_parameters($parameters);
+    $userTable->setTotalNumberOfItems(count($users));
     $userTable->set_header(0, get_lang('ID'));
     $userTable->set_header(1, get_lang('Username'));
 
+    $columnIndex = 2;
     foreach ($selectedFields as $field) {
-        $userTable->set_header(count($userTable->headers), ucfirst($field));
+        $userTable->set_header($columnIndex, ucfirst($field));
+        $columnIndex++;
     }
 
-    $userTable->set_header(count($userTable->headers), get_lang('Actions'));
-
+    $userTable->set_header($columnIndex, get_lang('Actions'));
+    $userTable->addRow([]);
     foreach ($users as $user) {
         $row = [$user['id'], $user['username']];
 

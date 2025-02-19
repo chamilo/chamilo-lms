@@ -45,7 +45,8 @@ class LearnpathList
         $categoryId = null,
         $ignoreCategoryFilter = false,
         $ignoreLpVisibility = false,
-        bool $includeSubscribedLp = true
+        bool $includeSubscribedLp = true,
+        bool $showOnlyVisibleToStudent = false
     ) {
         if (empty($courseInfo)) {
             $courseInfo = api_get_course_info();
@@ -164,7 +165,7 @@ class LearnpathList
 
             // If option is not true then don't show invisible LP to user
             if ($ignoreLpVisibility === false) {
-                if ($showBlockedPrerequisite !== true && !$isAllowToEdit) {
+                if ($showBlockedPrerequisite !== true && (!$isAllowToEdit || $showOnlyVisibleToStudent)) {
                     $lpVisibility = learnpath::is_lp_visible_for_student(
                         $row->getId(),
                         $user_id,

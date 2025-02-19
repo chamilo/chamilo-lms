@@ -696,7 +696,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $courseProgressHeadTitle = ($lpShowMaxProgress ? get_lang('ScormAndLPMaxProgress') : get_lang('ScormAndLPProgressTotalAverage'));
     $table->set_header(
         $headerCounter++,
-        get_lang('CourseProgress').'&nbsp;'.
+        get_lang('CourseProgress').'&nbsp; (*) &nbsp;'.
         Display::return_icon('info3.gif', $courseProgressHeadTitle, [], ICON_SIZE_TINY),
         false
     );
@@ -831,6 +831,24 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
 
     $html .= '<div id="reporting_table">';
     $html .= $table->return_table();
+    $userIdList = Session::read('user_id_list');
+    if (isset($userIdList[0])) {
+        $lpList = new LearnpathList(
+            $studentId,
+            $courseInfo,
+            $sessionId,
+            null,
+            false,
+            null,
+            true,
+            false,
+            true,
+            true
+        );
+        $lpList = $lpList->get_flat_list();
+        $NbVisibleLps = count($lpList);
+        $html .= '<p>(*) ' . sprintf(get_lang('progressBasedOnXVisiblesLPs'), $NbVisibleLps);
+    }
     $html .= '</div>';
 } else {
     $html .= Display::return_message(get_lang('NoUsersInCourse'), 'warning');

@@ -3761,6 +3761,9 @@ class Tracking
                     null,
                     false,
                     null,
+                    true,
+                    false,
+                    true,
                     true
                 );
                 $lpList = $lpList->get_flat_list();

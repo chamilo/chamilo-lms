@@ -1274,7 +1274,7 @@ if (empty($details)) {
         echo '<tr>
             <th>'.get_lang('Course').'</th>
             <th>'.get_lang('Time').'</th>
-            <th>'.get_lang('Progress').'</th>
+            <th>'.get_lang('Progress').' (*)</th>
             <th>'.get_lang('Score').'</th>
             <th>'.get_lang('AttendancesFaults').'</th>
             <th>'.get_lang('Evaluations').'</th>
@@ -1589,6 +1589,7 @@ if (empty($details)) {
         Session::write('export_course_list', $exportCourseList);
         echo '</tbody>';
         echo '</table>';
+        echo '<p>(*) ' . get_lang('progressBasedOnVisiblesLPsInEachCourse') . '</p>';
         echo '</div>';
     }
 } else {

@@ -9109,4 +9109,8 @@ $AdvancedUserEdition = "Edición avanzada de usuarios";
 $FieldsToEdit = "Campos a editar";
 $SaveAll = "Guardar todo";
 $SaveOne = "Guardar este elemento";
+$TextAppearingAtTheEndOfTheTestWhenTheUserHasFailed = "Texto que aparece al final del examen cuando el usuario no ha aprobado";
+$SubscribeSessionWhenFinishedFailure = "Suscribir a la sesión al final del examen cuando el usuario no ha aprobado";
+$progressBasedOnVisiblesLPsInEachCourse = "El progreso es calculado en base a lecciones visibles en cada curso";
+$progressBasedOnXVisiblesLPs = "El progreso es calculado en base a %s lecciones visibles en el contexto presente.";
 ?>

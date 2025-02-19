@@ -9019,4 +9019,8 @@ $AdvancedUserEdition = "Édition d'utilisateurs avancée";
 $FieldsToEdit = "Champs à modifier";
 $SaveAll = "Tout enregistrer";
 $SaveOne = "Enregistrer cet élément";
+$TextAppearingAtTheEndOfTheTestWhenTheUserHasFailed = "Texte apparaissant à la fin de l'exercice lorsque l'utilisateur a échoué.";
+$SubscribeSessionWhenFinishedFailure = "S'abonner à la session à la fin de l'exercice lorsque l'utilisateur a échoué";
+$progressBasedOnVisiblesLPsInEachCourse = "Les progrès sont calculés en fonction des leçons visibles dans chaque cours";
+$progressBasedOnXVisiblesLPs = "Les progrès sont calculés en fonction de %s leçons visibles dans le contexte actuel.";
 ?>

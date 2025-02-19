@@ -9084,4 +9084,8 @@ $AdvancedUserEdition = "Advanced user edition";
 $FieldsToEdit = "Fields to edit";
 $SaveAll = "Save all";
 $SaveOne = "Save one";
+$TextAppearingAtTheEndOfTheTestWhenTheUserHasFailed = "Text appearing at the end of the test when the user has failed.";
+$SubscribeSessionWhenFinishedFailure = "Subscribe to session at the end of the test when the user has failed";
+$progressBasedOnVisiblesLPsInEachCourse = "Progress is calculated based on lessons visible in each course";
+$progressBasedOnXVisiblesLPs = "Progress is calculated based on %s lessons visible in the present context.";
 ?>

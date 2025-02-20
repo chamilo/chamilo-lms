@@ -3206,7 +3206,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             return Display::img($icon, $basename, [], false);
         }
 
-        return Display::return_icon($icon, $basename, [], ICON_SIZE_SMALL);
+        return Display::return_icon($icon, $basename);
     }
 
     public static function isBasicCourseFolder($path, $sessionId)

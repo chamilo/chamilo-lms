@@ -827,15 +827,13 @@ $hideCertificateExport = api_get_setting('hide_certificate_export_link');
 $category = null;
 if (!empty($selectCat)) {
     $repo = Container::getGradeBookCategoryRepository();
-    if (!empty($categoryId)) {
-        $category = $repo->find($selectCat);
-    }
+    $category = $repo->find($selectCat);
     $course_id = CourseManager::get_course_by_category($selectCat);
     $show_message = Category::show_message_resource_delete($course_id);
     if (empty($show_message)) {
         // Student
         if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-            if ($category) {
+            if (null !== $category) {
                 $certificate = Category::generateUserCertificate($category, $stud_id);
                 if ('true' !== $hideCertificateExport && isset($certificate['pdf_url'])) {
                     $actionsLeft .= Display::url(

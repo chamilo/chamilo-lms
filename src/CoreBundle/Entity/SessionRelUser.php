@@ -108,6 +108,9 @@ class SessionRelUser
     #[ORM\Column(name: 'collapsed', type: 'boolean', nullable: true, options: ['default' => null])]
     protected ?bool $collapsed = null;
 
+    #[ORM\Column(name: 'new_subscription_session_id', type: 'integer', nullable: true)]
+    protected ?int $newSubscriptionSessionId = null;
+
     /**
      * @throws Exception
      */
@@ -223,6 +226,18 @@ class SessionRelUser
     public function setDuration(int $duration): self
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getNewSubscriptionSessionId(): ?int
+    {
+        return $this->newSubscriptionSessionId;
+    }
+
+    public function setNewSubscriptionSessionId(?int $newSubscriptionSessionId): self
+    {
+        $this->newSubscriptionSessionId = $newSubscriptionSessionId;
 
         return $this;
     }

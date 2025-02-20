@@ -2368,6 +2368,15 @@ class learnpath
             $lp_id,
             $sessionId
         );
+        // If there is no registry for the session verify the registry in the base course
+        if (empty($itemInfo)) {
+            $itemInfo = api_get_item_property_info(
+                $courseId,
+                TOOL_LEARNPATH,
+                $lp_id,
+                0
+            );
+        }
 
         // If the item was deleted or is invisible.
         if (isset($itemInfo['visibility']) && ($itemInfo['visibility'] == 2 || $itemInfo['visibility'] == 0)) {

@@ -1653,7 +1653,9 @@ class DocumentManager
             $session_id &&
             SessionManager::isSessionFollowedByDrh($session_id, $userId);
 
-        $hasAccess = api_is_allowed_in_course() || api_is_platform_admin() || $drhAccessContent;
+        $sessionAdminAccessContent = api_get_configuration_value('session_admins_access_all_content');
+
+        $hasAccess = api_is_allowed_in_course() || api_is_platform_admin() || $drhAccessContent || $sessionAdminAccessContent;
 
         if (false === $hasAccess) {
             return false;

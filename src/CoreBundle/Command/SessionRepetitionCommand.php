@@ -11,7 +11,9 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Command\Command;
@@ -19,7 +21,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SessionRepetitionCommand extends Command
@@ -29,8 +30,8 @@ class SessionRepetitionCommand extends Command
     public function __construct(
         private readonly SessionRepository $sessionRepository,
         private readonly EntityManagerInterface $entityManager,
-        private readonly MailerInterface $mailer,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly MessageHelper $messageHelper
     ) {
         parent::__construct();
     }
@@ -196,7 +197,8 @@ class SessionRepetitionCommand extends Command
     {
         $generalCoach = $newSession->getGeneralCoaches()->first();
         if ($generalCoach) {
-            $message = sprintf(
+            $messageSubject = $this->translator->trans('New Session Repetition Created');
+            $messageContent = sprintf(
                 'A new repetition of the session "%s" has been created. Please review the details: %s',
                 $newSession->getTitle(),
                 $this->generateSessionSummaryLink($newSession)
@@ -206,33 +208,29 @@ class SessionRepetitionCommand extends Command
                 $output->writeln(sprintf('Notifying coach (ID: %d) for session %d', $generalCoach->getId(), $newSession->getId()));
             }
 
-            // Send message to the general coach
-            $this->sendMessage($generalCoach->getEmail(), $message);
+            $senderId = $this->getFirstAdminId();
+            $this->messageHelper->sendMessageSimple(
+                $generalCoach->getId(),
+                $messageSubject,
+                $messageContent,
+                $senderId
+            );
 
             if ($debug) {
-                $output->writeln('Notification sent.');
+                $output->writeln('Notification sent using MessageHelper.');
             }
-        } else {
-            if ($debug) {
-                $output->writeln('No general coach found for session ' . $newSession->getId());
-            }
+        } elseif ($debug) {
+            $output->writeln('No general coach found for session ' . $newSession->getId());
         }
     }
 
-    /**
-     * Sends an email message to a user.
-     */
-    private function sendMessage(string $recipientEmail, string $message): void
+    private function getFirstAdminId(): int
     {
-        $subject = $this->translator->trans('New Session Repetition Created');
+        $admin = $this->entityManager->getRepository(User::class)->findOneBy([]);
 
-        $email = (new Email())
-            ->from('no-reply@yourdomain.com')
-            ->to($recipientEmail)
-            ->subject($subject)
-            ->html('<p>' . $message . '</p>');
-
-        $this->mailer->send($email);
+        return $admin && ($admin->hasRole('ROLE_ADMIN') || $admin->hasRole('ROLE_SUPER_ADMIN'))
+            ? $admin->getId()
+            : 1;
     }
 
     /**

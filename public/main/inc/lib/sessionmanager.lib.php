@@ -8392,7 +8392,7 @@ class SessionManager
                 $element->addOption($title, $id, $attributes);
             }
         }
-
+        $element->setSelected($session?->getParentId() ?? 0);
         $form->addElement($element);
 
         $form->addElement('html', '</div>');

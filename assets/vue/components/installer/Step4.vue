@@ -1,9 +1,6 @@
 <template>
   <div class="install-step">
-    <h2
-      v-t="'Step 4 - Database settings'"
-      class="RequirementHeading mb-8"
-    />
+    <SectionHeader :title="t('Step 4 - Database settings')" />
 
     <p
       v-if="'update' === installerData.installType"
@@ -226,6 +223,7 @@ import InputText from "primevue/inputtext"
 import Password from "primevue/password"
 import Button from "primevue/button"
 import Message from "primevue/message"
+import SectionHeader from "../layout/SectionHeader.vue"
 
 const { t } = useI18n()
 

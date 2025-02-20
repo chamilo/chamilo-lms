@@ -53,10 +53,19 @@ class AccountController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $illustration = $form['illustration']->getData();
-            if ($illustration) {
-                $illustrationRepo->deleteIllustration($user);
-                $illustrationRepo->addIllustration($user, $user, $illustration);
+            if ($form->has('illustration')) {
+                $illustration = $form['illustration']->getData();
+                if ($illustration) {
+                    $illustrationRepo->deleteIllustration($user);
+                    $illustrationRepo->addIllustration($user, $user, $illustration);
+                }
+            }
+
+            if ($form->has('password')) {
+                $password = $form['password']->getData();
+                if ($password) {
+                    $user->setPlainPassword($password);
+                }
             }
 
             $showTermsIfProfileCompleted = ('true' === $settingsManager->getSetting('show_terms_if_profile_completed'));
@@ -72,7 +81,7 @@ class AccountController extends BaseController
         }
 
         return $this->render('@ChamiloCore/Account/edit.html.twig', [
-            'form' => $form,
+            'form' => $form->createView(),
             'user' => $user,
         ]);
     }

@@ -1,20 +1,20 @@
 <template>
   <Card :class="customClass">
     <template
-      #header
       v-if="slots.header"
+      #header
     >
       <slot name="header"></slot>
     </template>
     <template
-      #title
       v-if="slots.title"
+      #title
     >
       <slot name="title"></slot>
     </template>
     <template
-      #footer
       v-if="slots.footer"
+      #footer
     >
       <slot name="footer"></slot>
     </template>

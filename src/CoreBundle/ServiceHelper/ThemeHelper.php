@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
-use League\Flysystem\UnableToReadFile;
 use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -78,7 +77,6 @@ final class ThemeHelper
 
     /**
      * @throws FilesystemException
-     * @throws UnableToCheckExistence
      */
     public function getFileLocation(string $path): ?string
     {
@@ -140,7 +138,7 @@ final class ThemeHelper
 
                 return $contents;
             }
-        } catch (FilesystemException|UnableToReadFile) {
+        } catch (FilesystemException) {
             return '';
         }
 

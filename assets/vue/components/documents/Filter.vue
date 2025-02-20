@@ -1,33 +1,30 @@
 <template>
-    <q-input
-      id="search_filter"
-      v-model="item.title"
-      :placeholder="$t('title')"
-      type="text"
-    />
+  <q-input
+    id="search_filter"
+    v-model="item.title"
+    :placeholder="$t('title')"
+    type="text"
+  />
 </template>
 
 <script>
-
 export default {
-  name: 'DocumentsFilter',
+  name: "DocumentsFilter",
   props: {
     values: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
-    return {};
+    return {}
   },
   computed: {
     item() {
-      return this.initialValues || this.values;
-    }
+      return this.initialValues || this.values
+    },
   },
-  mounted() {
-  },
-  methods: {
-  }
-};
+  mounted() {},
+  methods: {},
+}
 </script>

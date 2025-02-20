@@ -279,7 +279,6 @@ class UserManager
             ->setPhone($phone)
             ->setAddress($address)
             ->setLocale($language)
-            ->setRegistrationDate($now)
             ->setHrDeptId($hrDeptId)
             ->setActive($active)
             ->setTimezone(api_get_timezone())
@@ -3368,27 +3367,33 @@ class UserManager
     /**
      * Get the total count of users.
      *
-     * @param int $status        Status of users to be counted
-     * @param int $access_url_id Access URL ID (optional)
-     * @param int $active
+     * @param ?int $status Status of users to be counted
+     * @param ?int $access_url_id Access URL ID (optional)
+     * @param ?int $active
      *
      * @return mixed Number of users or false on error
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function get_number_of_users($status = 0, $access_url_id = 1, $active = null)
-    {
-        $t_u = Database::get_main_table(TABLE_MAIN_USER);
-        $t_a = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    public static function get_number_of_users(
+        ?int $status = 0,
+        ?int $access_url_id = 1,
+        ?int $active = null,
+        ?string $dateFrom = null,
+        ?string $dateUntil = null
+    ): mixed {
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tableAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT count(u.id)
-                    FROM $t_u u
-                    INNER JOIN $t_a url_user
+                    FROM $tableUser u
+                    INNER JOIN $tableAccessUrlRelUser url_user
                     ON (u.id = url_user.user_id)
                     WHERE url_user.access_url_id = $access_url_id
             ";
         } else {
             $sql = "SELECT count(u.id)
-                    FROM $t_u u
+                    FROM $tableUser u
                     WHERE 1 = 1 ";
         }
 
@@ -3397,9 +3402,18 @@ class UserManager
             $sql .= " AND u.status = $status ";
         }
 
-        if (null !== $active) {
+        if (isset($active)) {
             $active = (int) $active;
             $sql .= " AND u.active = $active ";
+        }
+
+        if (!empty($dateFrom)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $sql .= " AND u.created_at >= '$dateFrom' ";
+        }
+        if (!empty($dateUntil)) {
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $sql .= " AND u.created_at <= '$dateUntil' ";
         }
 
         $res = Database::query($sql);
@@ -6066,4 +6080,129 @@ SQL;
 
         return $url;
     }
+
+    /**
+     * Count users in courses and if they have certificate.
+     * This function is resource intensive.
+     *
+     * @return array
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public static function countUsersWhoFinishedCourses()
+    {
+        $courses = [];
+        $currentAccessUrlId = api_get_current_access_url_id();
+        $sql = "SELECT course.code, cru.user_id
+                FROM course_rel_user cru
+                    JOIN course ON cru.c_id = course.id
+                    JOIN access_url_rel_user auru on cru.user_id = auru.user_id
+                    JOIN access_url_rel_course ON course.id = access_url_rel_course.c_id
+                WHERE access_url_rel_course.access_url_id = $currentAccessUrlId
+                ORDER BY course.code
+        ";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            while ($row = Database::fetch_array($res)) {
+                if (!isset($courses[$row['code']])) {
+                    $courses[$row['code']] = [
+                        'subscribed' => 0,
+                        'finished' => 0,
+                    ];
+                }
+                $courses[$row['code']]['subscribed']++;
+                $entityManager = Database::getManager();
+                $repository = $entityManager->getRepository('ChamiloCoreBundle:GradebookCategory');
+                //todo check when have more than 1 gradebook
+                /** @var \Chamilo\CoreBundle\Entity\GradebookCategory $gradebook */
+                $gradebook = $repository->findOneBy(['courseCode' => $row['code']]);
+                if (!empty($gradebook)) {
+                    $finished = 0;
+                    $gb = Category::createCategoryObjectFromEntity($gradebook);
+                    $finished = $gb->is_certificate_available($row['user_id']);
+                    if (!empty($finished)) {
+                        $courses[$row['code']]['finished']++;
+                    }
+                }
+            }
+        }
+        return $courses;
+    }
+
+    /**
+     * Count users in sessions and if they have certificate.
+     * This function is resource intensive.
+     *
+     * @return array
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public static function countUsersWhoFinishedCoursesInSessions()
+    {
+        $coursesInSessions = [];
+        $currentAccessUrlId = api_get_current_access_url_id();
+        $sql = "SELECT course.code, srcru.session_id, srcru.user_id, session.title
+                FROM session_rel_course_rel_user srcru
+                    JOIN course ON srcru.c_id = course.id
+                    JOIN access_url_rel_session aurs on srcru.session_id = aurs.session_id
+                    JOIN session ON srcru.session_id = session.id
+                WHERE aurs.access_url_id = $currentAccessUrlId
+                ORDER BY course.code, session.title
+        ";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            while ($row = Database::fetch_array($res)) {
+                $index = $row['code'].' ('.$row['title'].')';
+                if (!isset($coursesInSessions[$index])) {
+                    $coursesInSessions[$index] = [
+                        'subscribed' => 0,
+                        'finished' => 0,
+                    ];
+                }
+                $coursesInSessions[$index]['subscribed']++;
+                $entityManager = Database::getManager();
+                $repository = $entityManager->getRepository('ChamiloCoreBundle:GradebookCategory');
+                /** @var \Chamilo\CoreBundle\Entity\GradebookCategory $gradebook */
+                $gradebook = $repository->findOneBy(
+                    [
+                        'courseCode' => $row['code'],
+                        'sessionId' => $row['session_id'],
+                    ]
+                );
+                if (!empty($gradebook)) {
+                    $finished = 0;
+                    $gb = Category::createCategoryObjectFromEntity($gradebook);
+                    $finished = $gb->is_certificate_available($row['user_id']);
+                    if (!empty($finished)) {
+                        $coursesInSessions[$index]['finished']++;
+                    }
+                }
+            }
+        }
+        return $coursesInSessions;
+    }
+
+    public static function redirectToResetPassword($userId): void
+    {
+        if ('true' !== api_get_setting('platform.force_renew_password_at_first_login')) {
+            return;
+        }
+        $askPassword = self::get_extra_user_data_by_field(
+            $userId,
+            'ask_new_password'
+        );
+        if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
+            1 === (int) $askPassword['ask_new_password']
+        ) {
+            $uniqueId = api_get_unique_id();
+            $userObj = api_get_user_entity($userId);
+            $userObj->setConfirmationToken($uniqueId);
+            $userObj->setPasswordRequestedAt(new \DateTime());
+            Database::getManager()->persist($userObj);
+            Database::getManager()->flush();
+            $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
+            api_location($url);
+        }
+    }
+
 }

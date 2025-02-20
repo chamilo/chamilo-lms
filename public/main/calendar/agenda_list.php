@@ -92,12 +92,14 @@ $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
 if (api_is_allowed_to_edit()) {
     if ('change_visibility' === $action) {
         $courseInfo = api_get_course_info();
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
         $courseCondition = '';
         // This happens when list agenda is not inside a course
-        if (('course' === $type || 'session' === $type) && !empty($courseInfo)) {
+        if (('course' === $type || 'session' === $type) && $course) {
             // For course and session event types
             // Just needs course ID
-            $agenda->changeVisibility($_GET['id'], $_GET['visibility'], $courseInfo);
+            $agenda->changeVisibility($_GET['id'], $_GET['visibility'], $course, $session);
         } else {
             $courseCondition = '&'.api_get_cidreq();
         }

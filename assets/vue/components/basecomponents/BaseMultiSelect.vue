@@ -5,31 +5,39 @@
         id="multiSelect"
         v-model="selectedValues"
         :options="options"
+        display="chip"
         optionLabel="name"
         optionValue="id"
-        display="chip"
-        @update:model-value="updateModelValue"
-        @focus="isFocused = true"
-        @blur="isFocused = false"
         panelClass="multi-select-panel"
+        @blur="isFocused = false"
+        @focus="isFocused = true"
+        @update:model-value="updateModelValue"
       />
-      <label :for="inputId" v-text="label" />
+      <label
+        :for="inputId"
+        v-text="label"
+      />
     </div>
-      <small v-if="isInvalid" :class="{ 'p-error': isInvalid }" v-text="errorText" />
+    <small
+      v-if="isInvalid"
+      :class="{ 'p-error': isInvalid }"
+      v-text="errorText"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import MultiSelect from 'primevue/multiselect'
+import { ref, watch } from "vue"
+import MultiSelect from "primevue/multiselect"
+
 const props = defineProps({
   modelValue: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   options: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   placeholder: String,
   inputId: {
@@ -53,15 +61,18 @@ const props = defineProps({
     default: false,
   },
 })
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"])
 const selectedValues = ref([...props.modelValue])
 const isFocused = ref(false)
 
-watch(() => props.modelValue, (newValue) => {
-  selectedValues.value = [...newValue]
-})
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    selectedValues.value = [...newValue]
+  },
+)
 
 const updateModelValue = (newValue) => {
-  emit('update:modelValue', newValue)
+  emit("update:modelValue", newValue)
 }
 </script>

@@ -8,21 +8,21 @@
     />
 
     <BaseCalendar
+      id="calendar-id"
       v-model="dateRange"
+      :initial-value="[item.startDate, item.endDate]"
       :is-invalid="v$.item.startDate.$invalid || v$.item.endDate.$invalid"
       :label="t('Date')"
+      class="max-w-sm w-full"
       show-icon
       show-time
       type="range"
-      id="calendar-id"
-      :initial-value="[item.startDate, item.endDate]"
-      class="max-w-sm w-full"
     />
 
     <BaseTinyEditor
       v-model="item.content"
-      editor-id="calendar-event-content"
       :required="false"
+      editor-id="calendar-event-content"
     />
     <CalendarInvitations v-model="item" />
 

@@ -1,11 +1,11 @@
 <template>
-    <div
-      class="alert alert-danger"
-      role="alert"
-    >
-        {{ error.response.data.error }}
-        {{ error.response.data.message }}
-    </div>
+  <div
+    class="alert alert-danger"
+    role="alert"
+  >
+    {{ error.response.data.error }}
+    {{ error.response.data.message }}
+  </div>
 </template>
 
 <script>
@@ -14,8 +14,8 @@ export default {
   props: {
     error: {
       type: Error,
-      required: true
-    }
+      required: true,
+    },
   },
 }
 </script>

@@ -2,10 +2,13 @@
   <div class="flex flex-col md:flex-row gap-4">
     <div class="md:basis-1/4 lg:basis-1/6 2xl:basis-1/8 flex flex-col">
       <UserProfileCard />
-      <BaseCard plain class="mt-4">
+      <BaseCard
+        class="mt-4"
+        plain
+      >
         <template #header>
           <div class="px-4 py-3 bg-gray-200 border-b border-gray-300">
-            <h3 class="text-xl font-semibold">{{ t('Requests') }}</h3>
+            <h3 class="text-xl font-semibold">{{ t("Requests") }}</h3>
           </div>
         </template>
         <div class="px-4 py-3">
@@ -83,7 +86,7 @@ const reloadHandler = async () => {
 
 const reloadRequestsList = () => {
   if (requestList.value) {
-    requestList.value.loadRequests();
+    requestList.value.loadRequests()
   }
 }
 

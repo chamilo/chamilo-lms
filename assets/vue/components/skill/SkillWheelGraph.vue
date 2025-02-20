@@ -22,8 +22,8 @@ onMounted(() => {
     <div ref="wheelContainer" />
 
     <Skeleton
-      shape="circle"
       v-if="isLoading"
+      shape="circle"
       size="100%"
     />
   </div>

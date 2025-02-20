@@ -1,3 +1,3 @@
-import makeService from './api';
+import makeService from "./api"
 
-export default makeService('course_categories');
+export default makeService("course_categories")

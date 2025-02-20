@@ -1,4 +1,4 @@
-import baseService from "./baseService";
+import baseService from "./baseService"
 
 /**
  * @param {string} login
@@ -11,7 +11,7 @@ async function login({ login, password, _remember_me }) {
     username: login,
     password,
     _remember_me,
-  });
+  })
 }
 
 /**
@@ -19,7 +19,7 @@ async function login({ login, password, _remember_me }) {
  * @returns {Promise<Object>}
  */
 async function checkSession() {
-  return await baseService.get('/check-session')
+  return await baseService.get("/check-session")
 }
 
 export default {

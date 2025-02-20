@@ -36,12 +36,12 @@
         <BaseRadioButtons
           id="fileExistsOption"
           v-model="fileExistsOption"
+          :initial-value="'rename'"
           :options="[
             { label: t('Do nothing'), value: 'nothing' },
             { label: t('Overwrite the existing file'), value: 'overwrite' },
             { label: t('Rename the uploaded file if it exists'), value: 'rename' },
           ]"
-          :initial-value="'rename'"
           name="fileExistsOption"
         />
       </div>
@@ -58,6 +58,8 @@ import "@uppy/image-editor/dist/style.css"
 import Uppy from "@uppy/core"
 import Webcam from "@uppy/webcam"
 import { Dashboard } from "@uppy/vue"
+import XHRUpload from "@uppy/xhr-upload"
+import ImageEditor from "@uppy/image-editor"
 import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { ENTRYPOINT } from "../../config/entrypoint"
@@ -71,16 +73,13 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useStore } from "vuex"
 
-const XHRUpload = require("@uppy/xhr-upload")
-const ImageEditor = require("@uppy/image-editor")
-
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const { gid, sid, cid } = useCidReq()
 const { onCreated, onError } = useUpload()
 const { t } = useI18n()
-const filetype = route.query.filetype === 'certificate' ? 'certificate' : 'file';
+const filetype = route.query.filetype === "certificate" ? "certificate" : "file"
 
 const showAdvancedSettings = ref(false)
 const isUncompressZipEnabled = ref(false)
@@ -96,10 +95,10 @@ const resourceLinkList = ref(
       cid,
       visibility: RESOURCE_LINK_PUBLISHED,
     },
-  ])
+  ]),
 )
 
-let uppy = ref();
+let uppy = ref()
 uppy.value = new Uppy()
   .use(ImageEditor, {
     cropperOptions: {
@@ -128,22 +127,22 @@ uppy.value = new Uppy()
   .on("upload-success", (item, response) => {
     onCreated(response.body)
   })
-  .on('complete', () => {
-    console.log('Upload complete, sending message...');
-    const parentNodeId = parentResourceNodeId.value;
-    localStorage.setItem('isUploaded', 'true');
-    localStorage.setItem('uploadParentNodeId', parentNodeId);
+  .on("complete", () => {
+    console.log("Upload complete, sending message...")
+    const parentNodeId = parentResourceNodeId.value
+    localStorage.setItem("isUploaded", "true")
+    localStorage.setItem("uploadParentNodeId", parentNodeId)
     setTimeout(() => {
       if (route.query.returnTo) {
         router.push({
           name: route.query.returnTo,
           params: { node: parentNodeId },
           query: { ...route.query, parentResourceNodeId: parentNodeId },
-        });
+        })
       } else {
-        router.back();
+        router.back()
       }
-    }, 2000);
+    }, 2000)
   })
 
 uppy.value.setMeta({
@@ -154,8 +153,8 @@ uppy.value.setMeta({
   fileExistsOption: fileExistsOption.value,
 })
 
-if (filetype === 'certificate') {
-  uppy.value.opts.restrictions.allowedFileTypes = ['.html']
+if (filetype === "certificate") {
+  uppy.value.opts.restrictions.allowedFileTypes = [".html"]
 } else {
   uppy.value.use(Webcam)
 }
@@ -180,9 +179,9 @@ function back() {
   let queryParams = { cid, sid, gid, filetype, tab: route.query.tab }
   if (route.query.tab) {
     router.push({
-      name: 'FileManagerList',
+      name: "FileManagerList",
       params: { node: parentResourceNodeId.value },
-      query: queryParams
+      query: queryParams,
     })
   } else {
     router.back()

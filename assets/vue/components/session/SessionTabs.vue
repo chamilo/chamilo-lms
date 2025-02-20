@@ -38,7 +38,7 @@ const sessionTabs = [
 
 <template>
   <BaseRouteTabs
-    :tabs="sessionTabs"
     :selected-tab="selected"
+    :tabs="sessionTabs"
   />
 </template>

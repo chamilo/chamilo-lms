@@ -93,7 +93,7 @@ $user_data['send_mail'] = 0;
 $user_data['old_password'] = $user_data['password'];
 //Convert the registration date of the user
 
-$user_data['registration_date'] = api_get_local_time($user_data['registration_date']);
+$user_data['created_at'] = api_get_local_time($user_data['created_at']);
 unset($user_data['password']);
 
 // Create the form
@@ -229,7 +229,11 @@ $group[] = $form->createElement(
     'password',
     'password',
     null,
-    ['onkeydown' => 'javascript: password_switch_radio_button();']
+    [
+        'id' => 'password',
+        'onkeydown' => 'javascript: password_switch_radio_button();',
+        'show_hide' => true,
+    ]
 );
 
 $form->addGroup($group, 'password', null, null, false);
@@ -285,7 +289,7 @@ if (!empty($creatorInfo)) {
         get_lang('Create by <a href="%s">%s</a> on %s'),
         'user_information.php?user_id='.$user_data['creator_id'],
         $creatorInfo['username'],
-        $user_data['registration_date']
+        $user_data['created_at']
     );
     $form->addElement('label', get_lang('Registration date'), $date);
 }
@@ -430,7 +434,11 @@ if ($form->validate()) {
         $phone = $user['phone'];
         $username = $user['username'] ?? $userInfo['username'];
         $status = (int) $user['status'];
-        $platform_admin = (int) $user['platform_admin'];
+        $platform_admin = 0;
+        // Only platform admin can change user status to admin.
+        if (api_is_platform_admin()) {
+            $platform_admin = (int) $user['platform_admin'];
+        }
         $send_mail = (int) $user['send_mail'];
         $reset_password = (int) $user['reset_password'];
         $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;

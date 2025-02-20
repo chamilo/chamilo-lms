@@ -132,8 +132,8 @@ function emptyDuration() {
 }
 </script>";
 
-if (isset($_POST['formSent']) && $_POST['formSent']) {
-    $formSent = 1;
+if (isset($_POST['formSent'])) {
+    $formSent = (int) $_POST['formSent'];
 }
 
 $tool_name = get_lang('Add a training session');

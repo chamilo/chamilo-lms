@@ -10,7 +10,7 @@ import EditLinks from "../resource_links/EditLinks.vue"
 import { useCalendarInvitations } from "../../composables/calendar/calendarInvitations"
 import BaseAutocomplete from "../basecomponents/BaseAutocomplete.vue"
 import usergrupService from "../../services/usergroupService"
-import { type, subscriptionVisibility } from "../../constants/entity/ccalendarevent"
+import { subscriptionVisibility, type } from "../../constants/entity/ccalendarevent"
 
 const model = defineModel({
   type: Object,
@@ -96,10 +96,10 @@ const maxSubscriptionsDisabled = computed(() => 0 === subscriptionVisibilitySele
     <EditLinks
       v-model="model"
       :edit-status="false"
-      links-type="user_rel_users"
       :show-status="false"
-      show-share-with-user
       link-list-name="resourceLinkList"
+      links-type="user_rel_users"
+      show-share-with-user
     />
     <BaseCheckbox
       id="is_collective"
@@ -123,10 +123,10 @@ const maxSubscriptionsDisabled = computed(() => 0 === subscriptionVisibilitySele
     <BaseAutocomplete
       id="subscription_item"
       v-model="subscriptionItemSelected"
-      :search="findUsergroup"
-      :label="t('Social group')"
-      option-label="title"
       :disabled="subscriptionItemDisabled"
+      :label="t('Social group')"
+      :search="findUsergroup"
+      option-label="title"
       @item-select="onSubscriptionItemSelected"
     />
     <BaseInputNumber

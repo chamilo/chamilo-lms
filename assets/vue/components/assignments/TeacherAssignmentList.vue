@@ -67,8 +67,8 @@
               RESOURCE_LINK_PUBLISHED === slotProps.data.firstResourceLink.visibility
                 ? 'eye-on'
                 : RESOURCE_LINK_DRAFT === slotProps.data.firstResourceLink.visibility
-                ? 'eye-off'
-                : ''
+                  ? 'eye-off'
+                  : ''
             "
             :label="t('Visibility')"
             only-icon
@@ -118,14 +118,13 @@
 <script setup>
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
-import { onMounted, reactive, ref, watch, computed } from "vue"
+import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import { useCidReq } from "../../composables/cidReq"
 import { useFormatDate } from "../../composables/formatDate"
 import BaseTag from "../basecomponents/BaseTag.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
-import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useNotification } from "../../composables/notification"
 import { useConfirm } from "primevue/useconfirm"
@@ -135,7 +134,7 @@ import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
-const route = useRoute();
+const route = useRoute()
 const router = useRouter()
 
 const assignments = ref([])
@@ -245,37 +244,34 @@ async function onClickVisibility(assignment) {
 }
 
 function onClickEdit(assignment) {
-  const assignmentId = parseInt(assignment["@id"].split('/').pop(), 10);
+  const assignmentId = parseInt(assignment["@id"].split("/").pop(), 10)
 
-  console.log('onClickEdit id :::', assignmentId);
+  console.log("onClickEdit id :::", assignmentId)
 
   router.push({
     name: "AssignmentsUpdate",
     params: { id: assignment["@id"] },
     query: route.query,
-  });
+  })
 }
 
 const getSessionId = (item) => {
   if (!item.firstResourceLink || !item.firstResourceLink.session) {
-    return null;
+    return null
   }
 
-  const sessionParts = item.firstResourceLink.session.split('/');
-  return parseInt(sessionParts[sessionParts.length - 1]);
+  const sessionParts = item.firstResourceLink.session.split("/")
+  return parseInt(sessionParts[sessionParts.length - 1])
 }
 
 const canEdit = (item) => {
-  const sessionId = getSessionId(item);
+  const sessionId = getSessionId(item)
 
-  console.log('sessionId ::: ', sessionId)
+  console.log("sessionId ::: ", sessionId)
 
-  const isSessionDocument = sessionId && sessionId === sid;
-  const isBaseCourse = !sessionId;
+  const isSessionDocument = sessionId && sessionId === sid
+  const isBaseCourse = !sessionId
 
-  return (
-    (isSessionDocument && isAllowedToEdit.value) ||
-    (isBaseCourse && !sid && isCurrentTeacher.value)
-  );
+  return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
 }
 </script>

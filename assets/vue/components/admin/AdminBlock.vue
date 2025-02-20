@@ -1,7 +1,7 @@
 <template>
   <div
-    class="admin-index__block-container"
     :class="id"
+    class="admin-index__block-container"
   >
     <div class="admin-index__block">
       <div class="flex gap-2 justify-between">
@@ -76,7 +76,6 @@ import { useI18n } from "vue-i18n"
 import BaseInputGroup from "../basecomponents/BaseInputGroup.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import AdminBlockExtraContent from "./AdminBlockExtraContent.vue"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const { t } = useI18n()
 

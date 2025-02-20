@@ -198,7 +198,7 @@ if (!empty($skillIdFromGet)) {
     foreach ($subSkillList as $subSkillId) {
         $children = $skillManager->getChildren($subSkillId);
 
-        if (isset($subSkillList[$counter - 1])) {
+        if (isset($subSkillList[$counter - 1]) && isset($subSkillList[$counter])) {
             $oldSkill = $skillRepo->find($subSkillList[$counter]);
         }
         $skillsOptions = [];

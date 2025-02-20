@@ -15,7 +15,7 @@ import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import { useLocale } from "../../composables/locale"
 import PlatformLogo from "./PlatformLogo.vue"
-import {usePlatformConfig} from "../../store/platformConfig"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 const router = useRouter()

@@ -14,8 +14,8 @@ require_once __DIR__.'/../global.inc.php';
 
 // 1. Setting variables needed by jqgrid
 $action = $_GET['a'];
-$page = (int) $_REQUEST['page']; //page
-$limit = (int) $_REQUEST['rows']; //quantity of rows
+$page = isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : 1;
+$limit = isset($_REQUEST['rows']) ? (int) $_REQUEST['rows'] : 20;
 $cid = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : null;
 $sid = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : null;
 
@@ -29,8 +29,8 @@ if (empty($savedRows)) {
     }
 }
 
-$sidx = $_REQUEST['sidx']; //index (field) to filter
-$sord = $_REQUEST['sord']; //asc or desc
+$sidx = isset($_REQUEST['sidx']) ? $_REQUEST['sidx'] : ''; // Default to empty string
+$sord = isset($_REQUEST['sord']) ? $_REQUEST['sord'] : 'asc';
 $exportFilename = isset($_REQUEST['export_filename']) ? $_REQUEST['export_filename'] : '';
 
 if (false !== strpos(strtolower($sidx), 'asc')) {

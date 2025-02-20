@@ -184,13 +184,10 @@ class SessionManager
             }
         }
 
-        $name = Database::escape_string(trim($name));
+        $name = trim($name);
         $sessionCategoryId = (int) $sessionCategoryId;
         $visibility = (int) $visibility;
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-
-        $startDate = Database::escape_string($startDate);
-        $endDate = Database::escape_string($endDate);
 
         if (empty($name)) {
             return get_lang('A title is required for the session');
@@ -464,6 +461,10 @@ class SessionManager
         $where = 'WHERE 1 = 1 ';
 
         $userId = (int) $userId;
+
+        if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_teacher()) {
+            api_not_allowed(true);
+        }
 
         $extraFieldModel = new ExtraFieldModel('session');
         $conditions = $extraFieldModel->parseConditions($options);
@@ -3237,7 +3238,7 @@ class SessionManager
         $sday_end
     ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $name = trim($sname);
+        $name = html_filter(trim($sname));
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
         $day_start = intval($sday_start);
@@ -3322,7 +3323,7 @@ class SessionManager
         $sday_end
     ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $name = trim($sname);
+        $name = html_filter(trim($sname));
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
         $day_start = intval($sday_start);
@@ -4625,6 +4626,7 @@ class SessionManager
      * @param bool $copyTeachersAndDrh
      * @param bool $create_new_courses         New courses will be created
      * @param bool $set_exercises_lp_invisible Set exercises and LPs in the new session to invisible by default
+     * @param bool $copyWithSessionContent     Copy course session content into the courses
      *
      * @return int The new session ID on success, 0 otherwise
      *
@@ -4633,11 +4635,12 @@ class SessionManager
      * @todo make sure the extra session fields are copied too
      */
     public static function copy(
-        $id,
-        $copy_courses = true,
-        $copyTeachersAndDrh = true,
-        $create_new_courses = false,
-        $set_exercises_lp_invisible = false
+        int $id,
+        bool $copy_courses = true,
+        bool $copyTeachersAndDrh = true,
+        bool $create_new_courses = false,
+        bool $set_exercises_lp_invisible = false,
+        bool $copyWithSessionContent = false,
     ) {
         $id = (int) $id;
         $s = self::fetch($id);
@@ -4747,9 +4750,7 @@ class SessionManager
 
                     foreach ($short_courses as $course_data) {
                         $course = CourseManager::copy_course_simple(
-                            $course_data['title'].' '.get_lang(
-                                'Copy'
-                            ),
+                            $course_data['title'].' '.get_lang('Copy'),
                             $course_data['course_code'],
                             $id,
                             $sid,
@@ -4797,6 +4798,20 @@ class SessionManager
 
                 $short_courses = $new_short_courses;
                 self::add_courses_to_session($sid, $short_courses, true);
+
+                if ($copyWithSessionContent) {
+                    foreach ($courses as $course) {
+                        CourseManager::copy_course(
+                            $course['code'],
+                            $id,
+                            $course['code'],
+                            $sid,
+                            [],
+                            false,
+                            true
+                        );
+                    }
+                }
 
                 if (false === $create_new_courses && $copyTeachersAndDrh) {
                     foreach ($short_courses as $courseItemId) {

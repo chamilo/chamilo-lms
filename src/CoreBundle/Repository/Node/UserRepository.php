@@ -8,11 +8,13 @@ namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
@@ -22,6 +24,7 @@ use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelTag;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Datetime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -188,12 +191,15 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $connection->commit();
         } catch (Exception $e) {
             $connection->rollBack();
+
             throw $e;
         }
     }
 
     /**
      * Reassigns resources and related data from a deleted user to a fallback user in the database.
+     *
+     * @param mixed $connection
      */
     protected function reassignUserResourcesToFallbackSQL(User $userToDelete, User $fallbackUser, $connection): void
     {
@@ -220,12 +226,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $field = $relation['field'];
             $action = $relation['action'];
 
-            if ($action === 'delete') {
+            if ('delete' === $action) {
                 $connection->executeStatement(
                     "DELETE FROM $table WHERE $field = :userId",
                     ['userId' => $userToDelete->getId()]
                 );
-            } elseif ($action === 'update') {
+            } elseif ('update' === $action) {
                 $connection->executeStatement(
                     "UPDATE $table SET $field = :fallbackUserId WHERE $field = :userId",
                     [
@@ -353,8 +359,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
 
-        $currentDate = (new \DateTime())->format('Y-m-d H:i:s');
-        $updatedContent = sprintf(
+        $currentDate = (new Datetime())->format('Y-m-d H:i:s');
+        $updatedContent = \sprintf(
             $this->translator->trans('This message was deleted when the user was removed from the platform on %s'),
             $currentDate
         );
@@ -1119,5 +1125,51 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function findUsersByContext(int $courseId, ?int $sessionId = null, ?int $groupId = null): array
+    {
+        $course = $this->_em->getRepository(Course::class)->find($courseId);
+        if (!$course) {
+            throw new \InvalidArgumentException('Course not found.');
+        }
+
+        if ($sessionId !== null) {
+            $session = $this->_em->getRepository(Session::class)->find($sessionId);
+            if (!$session) {
+                throw new \InvalidArgumentException('Session not found.');
+            }
+
+            $list = $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT);
+            $users = [];
+
+            if ($list) {
+                foreach ($list as $sessionCourseUser) {
+                    $users[$sessionCourseUser->getUser()->getId()] = $sessionCourseUser->getUser();
+                }
+            }
+
+            return array_values($users);
+        }
+
+        if ($groupId !== null) {
+            $qb = $this->_em->createQueryBuilder();
+            $qb->select('u')
+                ->from(CGroupRelUser::class, 'cgru')
+                ->innerJoin('cgru.user', 'u')
+                ->where('cgru.cId = :courseId')
+                ->andWhere('cgru.group = :groupId')
+                ->setParameters([
+                    'courseId' => $courseId,
+                    'groupId' => $groupId,
+                ])
+                ->orderBy('u.lastname', 'ASC')
+                ->addOrderBy('u.firstname', 'ASC');
+
+            return $qb->getQuery()->getResult();
+        }
+
+        $queryBuilder = $this->_em->getRepository(Course::class)->getSubscribedStudents($course);
+        return $queryBuilder->getQuery()->getResult();
     }
 }

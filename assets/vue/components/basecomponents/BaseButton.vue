@@ -1,11 +1,11 @@
 <template>
   <Button
-    class="cursor-pointer"
     :aria-label="onlyIcon ? label : undefined"
     :class="buttonClass"
     :disabled="disabled"
     :icon="chamiloIconToClass[icon]"
     :label="onlyIcon ? undefined : label"
+    :loading="isLoading"
     :outlined="primeOutlinedProperty"
     :plain="primePlainProperty"
     :severity="primeSeverityProperty"
@@ -13,7 +13,8 @@
     :text="onlyIcon"
     :title="tooltip || (onlyIcon ? label : undefined)"
     :type="isSubmit ? 'submit' : 'button'"
-    :loading="isLoading"
+    :name="name"
+    class="cursor-pointer"
     @click="$emit('click', $event)"
   />
 </template>
@@ -68,7 +69,12 @@ const props = defineProps({
   },
   popupIdentifier: {
     type: String,
-    default: "",  // This ensures that popupIdentifier is still present
+    default: "", // This ensures that popupIdentifier is still present
+  },
+  name: {
+    type: String || undefined,
+    required: false,
+    default: undefined,
   },
 })
 
@@ -92,16 +98,9 @@ const primePlainProperty = computed(() => {
 
 const buttonClass = computed(() => {
   if (props.onlyIcon) {
-    return "p-3 text-tertiary hover:bg-tertiary-gradient/30"
+    return "text-tertiary hover:bg-tertiary-gradient/30"
   }
   let result = ""
-  switch (props.size) {
-    case "normal":
-      result += "py-2.5 px-4 "
-      break
-    case "small":
-      result += "py-2 px-3.5 "
-  }
 
   let commonDisabled =
     "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled disabled:pointer-events-auto disabled:cursor-not-allowed"

@@ -3,22 +3,26 @@
     <BaseButton
       :label="label"
       :size="size"
-      type="primary"
       icon="attachment"
+      type="primary"
       @click="showFileDialog"
     />
     <div v-if="files.length > 0">
-      <p class="text-gray-500" v-for="file in files" :key="file.name">
+      <p
+        v-for="file in files"
+        :key="file.name"
+        class="text-gray-500"
+      >
         {{ file.name }}
       </p>
     </div>
     <input
       ref="inputFile"
-      type="file"
-      class="hidden"
       :accept="acceptFileType"
-      @change="filesSelected"
+      class="hidden"
       multiple
+      type="file"
+      @change="filesSelected"
     />
   </div>
 </template>

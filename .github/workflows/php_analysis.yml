@@ -54,4 +54,4 @@ jobs:
               run: vendor/bin/psalm --show-info=false --output-format=github --shepherd
 
             - name: Doctrine Schema Validator
-              run: php bin/console doctrine:schema:validate --skip-sync --skip-property-types
+              run: php bin/console doctrine:schema:validate --skip-sync

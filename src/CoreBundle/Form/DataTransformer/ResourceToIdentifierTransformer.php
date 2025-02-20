@@ -7,9 +7,10 @@ namespace Chamilo\CoreBundle\Form\DataTransformer;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
- * @template-implements DataTransformerInterface<object, int|string>
+ * @implements DataTransformerInterface<object, int|string|null>
  */
 final class ResourceToIdentifierTransformer implements DataTransformerInterface
 {
@@ -23,36 +24,29 @@ final class ResourceToIdentifierTransformer implements DataTransformerInterface
         $this->identifier = $identifier ?? 'id';
     }
 
-    public function transform($value)
+    public function transform($value): mixed
     {
-        if (null === $value) {
+        if (empty($value)) {
             return null;
         }
 
-        if (\is_object($value) && method_exists($value, 'getId')) {
-            return $value;
-        }
+        \assert($value::class === $this->repository->getClassName());
 
-        if (is_numeric($value)) {
-            return $this->repository->find($value);
-        }
-
-        return $value;
+        return PropertyAccess::createPropertyAccessor()->getValue($value, $this->identifier);
     }
 
-    public function reverseTransform($value)
+    public function reverseTransform($value): mixed
     {
-        if (null === $value || '' === $value) {
+        if (empty($value)) {
             return null;
         }
 
-        if (\is_object($value) && method_exists($value, 'getId')) {
-            return $value;
-        }
+        $resource = $this->repository->findOneBy([
+            $this->identifier => $value,
+        ]);
 
-        $resource = $this->repository->find($value);
         if (null === $resource) {
-            throw new TransformationFailedException(\sprintf('Object "%s" with identifier "%s" does not exist.', $this->repository->getClassName(), $value));
+            throw new TransformationFailedException(\sprintf('Object "%s" with identifier "%s"="%s" does not exist.', $this->repository->getClassName(), $this->identifier, $value));
         }
 
         return $resource;

@@ -18,7 +18,7 @@ class SequenceRuleMethod
     protected ?int $id = null;
 
     #[ORM\Column(name: 'method_order', type: 'integer')]
-    protected string $methodOrder;
+    protected int $methodOrder;
 
     #[ORM\ManyToOne(targetEntity: SequenceRule::class)]
     #[ORM\JoinColumn(name: 'sequence_rule_id', referencedColumnName: 'id')]
@@ -28,25 +28,17 @@ class SequenceRuleMethod
     #[ORM\JoinColumn(name: 'sequence_method_id', referencedColumnName: 'id')]
     protected ?SequenceMethod $method = null;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getMethodOrder()
+    public function getMethodOrder(): int
     {
         return $this->methodOrder;
     }
 
-    public function setMethodOrder(string $methodOrder): self
+    public function setMethodOrder(int $methodOrder): static
     {
         $this->methodOrder = $methodOrder;
 
@@ -58,7 +50,7 @@ class SequenceRuleMethod
         return $this->rule;
     }
 
-    public function setRule(SequenceRule $rule): self
+    public function setRule(SequenceRule $rule): static
     {
         $this->rule = $rule;
 
@@ -70,7 +62,7 @@ class SequenceRuleMethod
         return $this->method;
     }
 
-    public function setMethod(SequenceMethod $method): self
+    public function setMethod(SequenceMethod $method): static
     {
         $this->method = $method;
 

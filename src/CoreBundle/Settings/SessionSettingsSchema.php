@@ -79,6 +79,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'session_creation_user_course_extra_field_relation_to_prefill' => '',
                     'session_creation_form_set_extra_fields_mandatory' => '',
                     'session_model_list_field_ordered_by_id' => 'false',
+                    'duplicate_specific_session_content_on_session_copy' => 'false',
                     'enable_auto_reinscription' => 'false',
                     'enable_session_replication' => 'false',
                 ]
@@ -219,8 +220,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('session_model_list_field_ordered_by_id', YesNoType::class)
-            ->add('enable_auto_reinscription', YesNoType::class)
-            ->add('enable_session_replication', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

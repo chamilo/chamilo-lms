@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { watch } from "vue"
 
 const props = defineProps({
   visible: {
@@ -9,28 +9,35 @@ const props = defineProps({
   position: {
     type: Object,
     default: () => ({ x: 0, y: 0 }),
-  }
+  },
 })
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(["close"])
 
 const handleClickOutside = (event) => {
-  emit('close')
+  emit("close")
 }
 
-watch(() => props.visible, (newVal) => {
-  if (newVal) {
-    setTimeout(() => {
-      document.addEventListener('click', handleClickOutside)
-    }, 0)
-  } else {
-    document.removeEventListener('click', handleClickOutside)
-  }
-})
+watch(
+  () => props.visible,
+  (newVal) => {
+    if (newVal) {
+      setTimeout(() => {
+        document.addEventListener("click", handleClickOutside)
+      }, 0)
+    } else {
+      document.removeEventListener("click", handleClickOutside)
+    }
+  },
+)
 </script>
 
 <template>
-  <div class="context-menu" v-if="visible" :style="{ top: `${position.y}px`, left: `${position.x}px` }">
+  <div
+    v-if="visible"
+    :style="{ top: `${position.y}px`, left: `${position.x}px` }"
+    class="context-menu"
+  >
     <slot />
   </div>
 </template>

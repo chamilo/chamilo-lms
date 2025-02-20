@@ -4,6 +4,8 @@
     hover:border-primary hover:text-gray-90 hover:outline-0 hover:outline-none
     focus:border-primary focus:text-gray-90 focus:outline-0 focus:outline-none;
 
+  font-size: 14px;
+
   .p-dropdown-panel, .p-multiselect-panel {
     @apply min-w-full;
   }
@@ -11,6 +13,10 @@
   &.p-invalid.p-component {
     @apply border-error text-error;
   }
+}
+
+select.p-dropdown {
+  @apply px-4 py-2;
 }
 
 .p-dropdown {
@@ -29,7 +35,7 @@
 }
 
 .p-dropdown-label, .p-multiselect-label {
-  @apply block whitespace-nowrap overflow-hidden flex-1 w-[1%] overflow-ellipsis cursor-pointer
+  @apply block whitespace-nowrap overflow-hidden flex-auto w-[1%] overflow-ellipsis cursor-pointer
       bg-transparent border-none
     focus:outline-0 focus:outline-none;
 }

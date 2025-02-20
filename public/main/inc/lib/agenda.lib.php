@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
@@ -2249,8 +2250,8 @@ class Agenda
     public static function changeVisibility(
         $id,
         $visibility,
-        $courseInfo,
-        $userId = null
+        ?Course $course,
+        ?SessionEntity $session,
     ) {
         $id = (int) $id;
 
@@ -2261,9 +2262,9 @@ class Agenda
 
         if ($event) {
             if (0 === $visibility) {
-                $repo->setVisibilityDraft($event);
+                $repo->setVisibilityDraft($event, $course, $session);
             } else {
-                $repo->setVisibilityPublished($event);
+                $repo->setVisibilityPublished($event, $course, $session);
             }
         }
 

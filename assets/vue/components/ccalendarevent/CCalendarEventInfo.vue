@@ -23,9 +23,9 @@
     />
     <ShowLinks
       v-else
+      :clickable-course="true"
       :item="event"
       :show-status="false"
-      :clickable-course="true"
     />
 
     <CalendarRemindersInfo :event="event" />

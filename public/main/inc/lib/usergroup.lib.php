@@ -1812,10 +1812,7 @@ class UserGroupModel extends Model
         $form->addHeader($header);
 
         // Name
-        $form->addElement('text', 'title', get_lang('Title'), ['maxlength' => 255]);
-        $form->applyFilter('title', 'trim');
-
-        $form->addRule('title', get_lang('Required field'), 'required');
+        $form->addText('title', get_lang('Title'), true, ['maxlength' => 255]);
         $form->addRule('title', '', 'maxlength', 255);
 
         // Description
@@ -1840,8 +1837,7 @@ class UserGroupModel extends Model
         }
 
         // url
-        $form->addElement('text', 'url', get_lang('URL'));
-        $form->applyFilter('url', 'trim');
+        $form->addText('url', get_lang('Url'), false);
 
         // Picture
         //$allowed_picture_types = $this->getAllowedPictureExtensions();
@@ -1857,7 +1853,7 @@ class UserGroupModel extends Model
         if ($userGroup && $repo->hasIllustration($userGroup)) {
             $picture = $repo->getIllustrationUrl($userGroup);
             $img = '<img src="'.$picture.'" />';
-            $form->addElement('label', null, $img);
+            $form->addLabel(null, $img);
             $form->addElement('checkbox', 'delete_picture', '', get_lang('Remove picture'));
         }
 

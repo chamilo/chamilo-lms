@@ -76,7 +76,6 @@ class PlatformConfigurationController extends AbstractController
                 'course.course_validation',
                 'course.student_view_enabled',
                 'course.allow_edit_tool_visibility_in_session',
-                'course.enable_record_audio',
                 'session.limit_session_admin_role',
                 'session.allow_session_admin_read_careers',
                 'session.limit_session_admin_list_users',
@@ -91,6 +90,8 @@ class PlatformConfigurationController extends AbstractController
                 'document.students_download_folders',
                 'social.hide_social_groups_block',
                 'course.show_course_duration',
+                'attendance.attendance_allow_comments',
+                'attendance.enable_sign_attendance_sheet',
             ];
 
             $user = $this->userHelper->getCurrent();

@@ -1,8 +1,10 @@
 .p-inputtext {
-  @apply border border-support-3 px-4 py-3 text-body-1 bg-white rounded-lg text-gray-90 transition w-full duration-200
+  @apply border border-support-3 px-4 py-2 bg-white rounded-lg text-gray-90 transition w-full duration-200 appearance-none font-sans
       placeholder:text-support-3
     hover:border-primary hover:text-gray-90 hover:outline-0 hover:ring-0
     focus:border-primary focus:text-gray-90 focus:outline-0 focus:ring-0;
+
+  font-size: 14px;
 
   &.p-invalid.p-component {
     @apply border-error
@@ -10,11 +12,11 @@
   }
 
   &.p-inputtext-sm {
-    @apply px-2 py-1.5 text-body-2;
+    @apply px-3 py-1.5 text-body-2;
   }
 
   &.p-inputtext-lg {
-    @apply py-4;
+    @apply py-3;
   }
 }
 
@@ -62,5 +64,15 @@
 }
 
 .p-inputnumber-input {
-  @apply flex-1;
+  @apply flex-auto;
+}
+
+.p-inputtextarea {
+  &-resizable {
+    @apply overflow-hidden resize-none;
+  }
+
+  .p-fluid & {
+    @apply w-full;
+  }
 }

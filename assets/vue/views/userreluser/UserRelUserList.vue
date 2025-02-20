@@ -1,5 +1,8 @@
 <template>
-  <h2 v-t="'Friends'" class="mr-auto" />
+  <h2
+    v-t="'Friends'"
+    class="mr-auto"
+  />
   <hr />
   <BaseToolbar v-if="isCurrentUser">
     <BaseButton
@@ -44,25 +47,48 @@
               :key="index"
               class="friend-list__block"
             >
-              <div v-if="item.user['@id'] === user['@id']" class="friend-info">
+              <div
+                v-if="item.user['@id'] === user['@id']"
+                class="friend-info"
+              >
                 <img
                   :alt="item.friend.username"
                   :src="item.friend.illustrationUrl"
                   class="friend-info__avatar"
                 />
-                <div class="friend-info__username" v-text="item.friend.username" />
+                <div
+                  class="friend-info__username"
+                  v-text="item.friend.username"
+                />
               </div>
-              <div v-else class="friend-info">
+              <div
+                v-else
+                class="friend-info"
+              >
                 <img
                   :alt="item.user.username"
                   :src="item.user.illustrationUrl"
                   class="friend-info__avatar"
                 />
-                <div class="friend-info__username" v-text="item.user.username" />
+                <div
+                  class="friend-info__username"
+                  v-text="item.user.username"
+                />
               </div>
-              <div class="friend-options" v-if="isCurrentUser">
-                <span class="friend-options__time" v-text="relativeDatetime(item.createdAt)" />
-                <BaseButton icon="user-delete" only-icon type="danger" @click="onClickDeleteFriend(item)" />
+              <div
+                v-if="isCurrentUser"
+                class="friend-options"
+              >
+                <span
+                  class="friend-options__time"
+                  v-text="relativeDatetime(item.createdAt)"
+                />
+                <BaseButton
+                  icon="user-delete"
+                  only-icon
+                  type="danger"
+                  @click="onClickDeleteFriend(item)"
+                />
               </div>
             </div>
           </div>
@@ -73,7 +99,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue"
+import { onMounted, ref, watch } from "vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import Skeleton from "primevue/skeleton"
@@ -99,8 +125,8 @@ const requestList = ref()
 
 function reloadHandler() {
   if (!user.value) {
-    console.log('User not defined yet');
-    return;
+    console.log("User not defined yet")
+    return
   }
 
   loadingFriends.value = true
@@ -115,20 +141,19 @@ function reloadHandler() {
     })
     .then(([friendshipJson, friendshipBackJson]) => {
       const friendsSet = new Set()
-      items.value = [...friendshipJson["hydra:member"], ...friendshipBackJson["hydra:member"]]
-        .filter(friend => {
-          const friendId = friend.user['@id'] === user.value['@id'] ? friend.friend['@id'] : friend.user['@id']
-          if (friendsSet.has(friendId)) {
-            return false
-          } else {
-            friendsSet.add(friendId)
-            return true
-          }
-        })
+      items.value = [...friendshipJson["hydra:member"], ...friendshipBackJson["hydra:member"]].filter((friend) => {
+        const friendId = friend.user["@id"] === user.value["@id"] ? friend.friend["@id"] : friend.user["@id"]
+        if (friendsSet.has(friendId)) {
+          return false
+        } else {
+          friendsSet.add(friendId)
+          return true
+        }
+      })
     })
     .catch((e) => {
-      console.error('Error occurred', e);
-      notification.showErrorNotification(e);
+      console.error("Error occurred", e)
+      notification.showErrorNotification(e)
     })
     .finally(() => {
       loadingFriends.value = false

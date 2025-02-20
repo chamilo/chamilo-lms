@@ -144,11 +144,11 @@ if (isset($exerciseId) && $exerciseId > 0) {
         // In building mode show all questions not render by teacher order.
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $allowQuestionOrdering = true;
-        $showPagination = api_get_setting('exercise.show_question_pagination');
-        $length = api_get_setting('exercise.question_pagination_length');
+        $showPagination = 'true' === api_get_setting('exercise.show_question_pagination');
+        $length = (int) api_get_setting('exercise.question_pagination_length') ?: 30;
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
-        if (!empty($showPagination) && $nbrQuestions > $showPagination) {
+        if ($showPagination && $nbrQuestions > $length) {
             $allowQuestionOrdering = false;
             $start = ($page - 1) * $length;
             $questionList = $objExercise->selectQuestionList(true, true);
@@ -310,13 +310,15 @@ if (isset($exerciseId) && $exerciseId > 0) {
 
         echo '</div>'; //question list div
         // Pagination navigation
-        $totalPages = ceil($nbrQuestions / $length);
-        echo '<div class="pagination flex justify-center mt-4">';
-        for ($i = 1; $i <= $totalPages; $i++) {
-            $isActive = ($i == $page) ? 'bg-primary text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-200';
-            echo '<a href="?'.http_build_query(array_merge($_GET, ['page' => $i])).'" class="mx-1 px-4 py-2 border '.$isActive.' rounded">'.$i.'</a>';
+        if ($showPagination && $nbrQuestions > $length) {
+            $totalPages = ceil($nbrQuestions / $length);
+            echo '<div class="pagination flex justify-center mt-4">';
+            for ($i = 1; $i <= $totalPages; $i++) {
+                $isActive = ($i == $page) ? 'bg-primary text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-200';
+                echo '<a href="?' . http_build_query(array_merge($_GET, ['page' => $i])) . '" class="mx-1 px-4 py-2 border ' . $isActive . ' rounded">' . $i . '</a>';
+            }
+            echo '</div>';
         }
-        echo '</div>';
     } else {
         echo Display::return_message(get_lang('Questions list (there is no question so far).'), 'warning');
     }

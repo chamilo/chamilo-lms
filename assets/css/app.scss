@@ -103,39 +103,6 @@
     overflow: auto;
   }
 
-  .toolbar-action {
-    .p-toolbar-group-start.p-toolbar-group-left {
-      display: flex;
-      padding: 10px;
-      background: #f0f0f0;
-      border-radius: 5px;
-    }
-
-    .p-toolbar-group-start.p-toolbar-group-left .btn {
-      padding: 10px 20px;
-      text-decoration: none;
-      color: #333;
-      background-color: #e7e7e7;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-    }
-
-    .p-toolbar-group-start.p-toolbar-group-left .btn:hover {
-      background-color: #ddd;
-    }
-
-    .p-toolbar-group-start.p-toolbar-group-left .btn.active {
-      background-color: #007bff;
-      color: white;
-      border-color: #007bff;
-    }
-
-    .p-toolbar-group-start.p-toolbar-group-left .btn + .btn {
-      margin-left: 10px;
-    }
-  }
-
   .sortable-buttons-actions {
     @apply bg-gray-5 border border-gray-20 rounded shadow;
 
@@ -325,6 +292,10 @@
   }
 }
 
+.mdi {
+  @apply font-normal text-base leading-none;
+}
+
 .field > small.p-error {
   @apply text-error;
 }
@@ -482,7 +453,7 @@
   cursor: pointer;
 }
 
-.users-list {
+.ul-tablist {
   .nav-tabs {
     display: flex;
     list-style-type: none;
@@ -520,33 +491,13 @@
 }
 
 form .field {
-  .help-text {
-    color: #666;
-    font-family: 'Arial', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    background-color: #f8f8f8;
-    border-left: 4px solid #007bff;
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    max-width: 80%;
-    display: inline-block;
-  }
-
-  textarea {
-    width: 100%;
-  }
-
   .freeze {
     display: block;
     padding-top: 10px;
   }
 
   .freeze + label,
-  .advmultiselect + label,
-  textarea + label.settings-label
+  .advmultiselect + label
   {
     font-size: 13px;
     @apply absolute top-0 left-0 text-support-3 text-caption px-1 bg-white text-primary;
@@ -830,6 +781,70 @@ form .field {
   }
 }
 
+.attendance-page {
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  tr {
+    height: 100px;
+  }
+
+  th,
+  td {
+    height: 100px;
+    vertical-align: middle;
+  }
+
+  .flex {
+    display: flex;
+  }
+
+  .flex-col {
+    flex-direction: column;
+  }
+
+  .align-middle {
+    vertical-align: middle;
+  }
+
+  .mt-1 {
+    margin-top: 4px;
+  }
+
+  .gap-2 {
+    gap: 8px;
+  }
+
+  .opacity-50 {
+    opacity: 0.5;
+  }
+
+  .cursor-not-allowed {
+    cursor: not-allowed;
+  }
+
+  .loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
 .row {
   @apply flex flex-wrap -mx-4;
 }
@@ -838,10 +853,6 @@ form .field {
 }
 .col-md-6 {
   @apply w-full md:w-1/2 px-4;
-}
-
-.section-header__title {
-  @apply mt-4;
 }
 
 .stats_table {
@@ -854,6 +865,15 @@ form .field {
   .tiny-content table {
     @apply w-auto table-auto;
   }
+}
+
+/* Loader */
+.loader {
+  @apply w-10 h-10 border-4 border-gray-20 border-l-primary rounded-full animate-spin;
+}
+
+.loader-overlay {
+  @apply absolute inset-0 flex items-center justify-center bg-white bg-opacity-40 backdrop-blur-sm;
 }
 
 //@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";

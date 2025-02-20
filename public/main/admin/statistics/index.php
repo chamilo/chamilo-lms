@@ -352,16 +352,17 @@ $tools = [
         'report=new_user_registrations' => get_lang('New users registrations'),
     ],
     get_lang('System') => [
-        'report=activities' => get_lang('ImportantActivities'),
-        'report=user_session' => get_lang('PortalUserSessionStats'),
+        'report=activities' => get_lang('Important activities'),
+        'report=user_session' => get_lang('Portal user session stats'),
+        'report=quarterly_report' => get_lang('Quarterly report'),
     ],
     get_lang('Social') => [
-        'report=messagereceived' => get_lang('MessagesReceived'),
-        'report=messagesent' => get_lang('MessagesSent'),
-        'report=friends' => get_lang('CountFriends'),
+        'report=messagereceived' => get_lang('Number of messages received'),
+        'report=messagesent' => get_lang('Number of messages sent'),
+        'report=friends' => get_lang('Contacts count'),
     ],
     get_lang('Session') => [
-        'report=session_by_date' => get_lang('SessionsByDate'),
+        'report=session_by_date' => get_lang('Sessions by date'),
     ],
 ];
 
@@ -746,7 +747,7 @@ switch ($report) {
             $extraConditions = '';
             if (!empty($startDate) && !empty($endDate)) {
                 // $extraConditions is already cleaned inside the function getUserListExtraConditions
-                $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
+                $extraConditions .= " AND created_at BETWEEN '$startDate' AND '$endDate' ";
             }
 
             $totalCount = UserManager::getUserListExtraConditions(
@@ -855,7 +856,7 @@ switch ($report) {
                 $item = [];
                 $item[] = $user['firstname'];
                 $item[] = $user['lastname'];
-                $item[] = api_get_local_time($user['registration_date']);
+                $item[] = api_get_local_time($user['created_at']);
                 $item[] = $userLanguage;
                 $item[] = $languageTarget;
                 $item[] = $contract ? get_lang('Yes') : get_lang('No');
@@ -1664,6 +1665,146 @@ switch ($report) {
         break;
     case 'logins_by_date':
         $content .= Statistics::printLoginsByDate();
+        break;
+    case 'quarterly_report':
+        global $htmlHeadXtra;
+        $ajaxPath = api_get_path(WEB_AJAX_PATH);
+        $waitIcon = Display::getMdiIcon('clock-time-four', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, false);
+        $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlyUsers () {
+                    $("#tracking-report-quarterly-users")
+                        .html(\'<p>'.$waitIcon.'</p>\')
+                        .load("'.$ajaxPath.'statistics.ajax.php?a=report_quarterly_users'.'");
+            }</script>';
+        $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlyCourses () {
+                    $("#tracking-report-quarterly-courses")
+                        .html(\'<p>'.$waitIcon.'</p>\')
+                        .load("'.$ajaxPath.'statistics.ajax.php?a=report_quarterly_courses'.'");
+            }</script>';
+        $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlyHoursOfTraining () {
+                    $("#tracking-report-quarterly-hours-of-training")
+                        .html(\'<p>'.$waitIcon.'</p>\')
+                        .load("'.$ajaxPath.'statistics.ajax.php?a=report_quarterly_hours_of_training'.'");
+            }</script>';
+        $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlyCertificatesGenerated () {
+                    $("#tracking-report-quarterly-number-of-certificates-generated")
+                        .html(\'<p>'.$waitIcon.'</p>\')
+                        .load("'.$ajaxPath.'statistics.ajax.php?a=report_quarterly_number_of_certificates_generated'.'");
+            }</script>';
+        $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlySessionsByDuration () {
+                    $("#tracking-report-quarterly-sessions-by-duration")
+                        .html(\'<p>'.$waitIcon.'</p>\')
+                        .load("'.$ajaxPath.'statistics.ajax.php?a=report_quarterly_sessions_by_duration'.'");
+            }</script>';
+        $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlyCoursesAndSessions () {
+                    $("#tracking-report-quarterly-courses-and-sessions")
+                        .html(\'<p>'.$waitIcon.'</p>\')
+                        .load("'.$ajaxPath.'statistics.ajax.php?a=report_quarterly_courses_and_sessions'.'");
+            }</script>';
+        if (api_get_current_access_url_id() === 1) {
+            $htmlHeadXtra[] .= '<script>
+                function loadReportQuarterlyTotalDiskUsage () {
+                    $("#tracking-report-quarterly-total-disk-usage")
+                        .html(\'<p>'.$waitIcon.'</p>\')
+                        .load("'.$ajaxPath.'statistics.ajax.php?a=report_quarterly_total_disk_usage'.'");
+            }</script>';
+        }
+        $content .= Display::tag('H4', get_lang('Number of users registered and connected'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyUsers();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div('', ['id' => 'tracking-report-quarterly-users', 'style' => 'margin: 30px;']);
+        $content .= Display::tag('H4', get_lang('Number of existing and available courses'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyCourses();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div('', ['id' => 'tracking-report-quarterly-courses', 'style' => 'margin: 30px;']);
+        $content .= Display::tag('H4', get_lang('Hours of training'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyHoursOfTraining();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div(
+            '',
+            [
+                'id' => 'tracking-report-quarterly-hours-of-training',
+                'style' => 'margin: 30px;',
+            ]
+        );
+        $content .= Display::tag(
+            'H4',
+            get_lang('Number of certificates generated'),
+            ['style' => 'margin-bottom: 25px;']
+        );
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyCertificatesGenerated();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div(
+            '',
+            ['id' => 'tracking-report-quarterly-number-of-certificates-generated', 'style' => 'margin: 30px;']
+        );
+        $content .= Display::tag(
+            'H4',
+            get_lang('Number of sessions per duration'),
+            ['style' => 'margin-bottom: 25px;']
+        );
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlySessionsByDuration();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div(
+            '',
+            ['id' => 'tracking-report-quarterly-sessions-by-duration', 'style' => 'margin: 30px;']
+        );
+        $content .= Display::tag(
+            'H4',
+            get_lang('Number of courses, sessions and subscribed users'),
+            ['style' => 'margin-bottom: 25px;']
+        );
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyCoursesAndSessions();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div(
+            '',
+            [
+                'id' => 'tracking-report-quarterly-courses-and-sessions',
+                'style' => 'margin: 30px;',
+            ]
+        );
+        if (api_get_current_access_url_id() === 1) {
+            $content .= Display::tag(
+                'H4',
+                get_lang('Total disk usage'),
+                ['style' => 'margin-bottom: 25px;']
+            );
+            $content .= Display::url(
+                get_lang('Show'),
+                'javascript://',
+                ['onclick' => 'loadReportQuarterlyTotalDiskUsage();', 'class' => 'btn btn-default']
+            );
+            $content .= Display::div(
+                '',
+                [
+                    'id' => 'tracking-report-quarterly-total-disk-usage',
+                    'style' => 'margin: 30px;',
+                ]
+            );
+        }
         break;
 }
 

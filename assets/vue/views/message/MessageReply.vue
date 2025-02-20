@@ -1,10 +1,10 @@
 <template>
   <MessageForm
     v-if="replyMessage"
-    :title="replyMessage.title"
     :content="replyMessage.content"
-    :receivers-to="replyMessage.receiversTo"
     :receivers-cc="replyMessage.receiversCc"
+    :receivers-to="replyMessage.receiversTo"
+    :title="replyMessage.title"
     @submit="onReplyMessageForm"
   />
   <Loading :visible="isLoading" />

@@ -22,8 +22,8 @@ const { course } = storeToRefs(cidReqStore)
 
 <template>
   <div
-    class="section-header"
     :class="`section-header--h${size}`"
+    class="section-header"
   >
     <component
       :is="`h${size}`"

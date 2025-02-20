@@ -1,7 +1,10 @@
 <template>
   <div class="terms">
     <div v-if="!isLoading">
-      <div v-for="(item, index) in term" :key="index">
+      <div
+        v-for="(item, index) in term"
+        :key="index"
+      >
         <h3>{{ item.title }}</h3>
         <div v-html="item.content"></div>
       </div>
@@ -9,31 +12,35 @@
       <div v-if="!accepted && !blockButton">
         <BaseButton
           :label="$t('Accept Terms and Conditions')"
-          type="primary"
           icon="pi pi-check"
+          type="primary"
           @click="acceptTerms"
         />
       </div>
       <div v-else-if="accepted">
-        <p>{{ t('You accepted these terms on') }} {{ acceptanceDate }}</p>
+        <p>{{ t("You accepted these terms on") }} {{ acceptanceDate }}</p>
         <BaseButton
           :label="$t('Revoke Acceptance')"
-          type="danger"
           icon="pi pi-times"
+          type="danger"
           @click="revokeAcceptance"
         />
       </div>
-      <div v-if="blockButton" class="alert alert-warning" v-html="infoMessage"></div>
+      <div
+        v-if="blockButton"
+        class="alert alert-warning"
+        v-html="infoMessage"
+      ></div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from "vue"
 import { useSecurityStore } from "../../store/securityStore"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import socialService from '../../services/socialService'
+import socialService from "../../services/socialService"
 
 const { t } = useI18n()
 
@@ -41,7 +48,7 @@ const term = ref({})
 const accepted = ref(false)
 const acceptanceDate = ref(null)
 const blockButton = ref(false)
-const infoMessage = ref('')
+const infoMessage = ref("")
 const isLoading = ref(true)
 const securityStore = useSecurityStore()
 
@@ -50,7 +57,7 @@ const fetchTerms = async () => {
     const userId = securityStore.user.id
     term.value = await socialService.fetchTermsAndConditions(userId)
   } catch (error) {
-    console.error('Error fetching terms:', error)
+    console.error("Error fetching terms:", error)
   }
 }
 
@@ -61,7 +68,7 @@ const checkAcceptance = async () => {
     accepted.value = response.isAccepted
     acceptanceDate.value = response.acceptDate
   } catch (error) {
-    console.error('Error checking acceptance:', error)
+    console.error("Error checking acceptance:", error)
   }
 }
 
@@ -72,7 +79,7 @@ const checkRestrictions = async () => {
     blockButton.value = response.blockButton
     infoMessage.value = response.infoMessage
   } catch (error) {
-    console.error('Error checking restrictions:', error)
+    console.error("Error checking restrictions:", error)
   }
 }
 
@@ -83,7 +90,7 @@ const acceptTerms = async () => {
     accepted.value = true
     acceptanceDate.value = new Date().toLocaleDateString()
   } catch (error) {
-    console.error('Error accepting terms:', error)
+    console.error("Error accepting terms:", error)
   }
 }
 
@@ -94,7 +101,7 @@ const revokeAcceptance = async () => {
     accepted.value = false
     acceptanceDate.value = null
   } catch (error) {
-    console.error('Error revoking acceptance:', error)
+    console.error("Error revoking acceptance:", error)
   }
 }
 

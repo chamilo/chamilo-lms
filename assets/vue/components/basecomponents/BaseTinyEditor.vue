@@ -86,24 +86,24 @@ if (route.params.node) {
 }
 
 const supportedLanguages = {
-  ar: 'ar.js',
-  de: 'de.js',
-  en: 'en.js',
-  es: 'es.js',
-  fr_FR: 'fr_FR.js',
-  it: 'it.js',
-  nl: 'nl.js',
-  pt_PT: 'pt_PT.js',
-  ru: 'ru.js',
-  zh_CN: 'zh_CN.js',
-};
+  ar: "ar.js",
+  de: "de.js",
+  en: "en.js",
+  es: "es.js",
+  fr_FR: "fr_FR.js",
+  it: "it.js",
+  nl: "nl.js",
+  pt_PT: "pt_PT.js",
+  ru: "ru.js",
+  zh_CN: "zh_CN.js",
+}
 
 const { appLocale } = useLocale()
 
 function getLanguageConfig(locale) {
-  const defaultLang = 'en'
-  const url = '/libs/editor/langs/'
-  const isoCode = locale.split('_')[0]
+  const defaultLang = "en"
+  const url = "/libs/editor/langs/"
+  const isoCode = locale.split("_")[0]
   let languageFile = supportedLanguages[isoCode]
   let finalLanguage = isoCode
 
@@ -121,7 +121,7 @@ function getLanguageConfig(locale) {
   return {
     language: finalLanguage,
     language_url: `${url}${languageFile}`,
-  };
+  }
 }
 
 const languageConfig = getLanguageConfig(appLocale.value)
@@ -141,7 +141,7 @@ const toolbarTextDirection = "ltr rtl"
 
 const defaultEditorConfig = {
   skin: false,
-  content_css: ['/build/css/editor_content.css'],
+  content_css: ["/build/css/editor_content.css"],
   branding: false,
   relative_urls: false,
   height: 500,
@@ -202,8 +202,8 @@ const defaultEditorConfig = {
     " | " +
     toolbarTextDirection,
   content_style: ".tiny-content { font-family: Arial, sans-serif; }",
-  body_class: 'tiny-content'
-};
+  body_class: "tiny-content",
+}
 
 if (props.fullPage) {
   defaultEditorConfig.plugins.push("fullpage")
@@ -217,7 +217,7 @@ const editorConfig = computed(() => ({
 }))
 
 watch(modelValue, (newValue) => {
-  if (newValue && !newValue.includes('tiny-content')) {
+  if (newValue && !newValue.includes("tiny-content")) {
     modelValue.value = `<div class="tiny-content">${newValue}</div>`
   }
 })
@@ -259,11 +259,11 @@ function getUrlForTinyEditor() {
     }).href
   }
 
-  let queryParams = { cid: course.value.id, sid: 0, gid: 0, filetype: 'file' }
+  let queryParams = { cid: course.value.id, sid: 0, gid: 0, filetype: "file" }
   return router.resolve({
-      name: 'FileManagerList',
-      params: { node: parentResourceNodeId.value },
-      query: queryParams,
+    name: "FileManagerList",
+    params: { node: parentResourceNodeId.value },
+    query: queryParams,
   }).href
 }
 </script>

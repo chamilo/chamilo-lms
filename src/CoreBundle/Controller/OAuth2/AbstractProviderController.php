@@ -22,6 +22,6 @@ abstract class AbstractProviderController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        return $clientRegistry->getClient($providerName)->redirect();
+        return $clientRegistry->getClient($providerName)->redirect([], []);
     }
 }

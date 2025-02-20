@@ -25,6 +25,10 @@ readonly class AuthenticationConfigHelper
     {
         $providers = $this->getProvidersForUrl($url);
 
+        if ([] === $providers) {
+            return [];
+        }
+
         if (!isset($providers[$providerName])) {
             throw new InvalidArgumentException('Invalid authentication provider for access URL');
         }
@@ -62,7 +66,9 @@ readonly class AuthenticationConfigHelper
     {
         $urlId = $url ? $url->getId() : $this->urlHelper->getCurrent()->getId();
 
-        $authentication = $this->parameterBag->get('authentication');
+        $authentication = $this->parameterBag->has('authentication')
+            ? $this->parameterBag->get('authentication')
+            : [];
 
         if (isset($authentication[$urlId])) {
             return $authentication[$urlId];
@@ -72,7 +78,7 @@ readonly class AuthenticationConfigHelper
             return $authentication['default'];
         }
 
-        throw new InvalidArgumentException('Invalid access URL configuration');
+        return [];
     }
 
     public function getProviderOptions(string $providerType, array $config): array

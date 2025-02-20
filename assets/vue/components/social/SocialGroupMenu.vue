@@ -13,8 +13,8 @@
       <li class="menu-item">
         <BaseAppLink to="/social">
           <i
-            class="mdi mdi-home"
             aria-hidden="true"
+            class="mdi mdi-home"
           ></i>
           {{ t("Home") }}
         </BaseAppLink>
@@ -22,8 +22,8 @@
       <li class="menu-item">
         <BaseAppLink :to="{ name: '', params: { group_id: groupInfo.id } }">
           <i
-            class="mdi mdi-account-multiple-outline"
             aria-hidden="true"
+            class="mdi mdi-account-multiple-outline"
           ></i>
           {{ t("Waiting list") }}
         </BaseAppLink>
@@ -31,8 +31,8 @@
       <li class="menu-item">
         <BaseAppLink :to="{ name: 'UserGroupInvite', params: { group_id: groupInfo.id } }">
           <i
-            class="mdi mdi-account-plus"
             aria-hidden="true"
+            class="mdi mdi-account-plus"
           ></i>
           {{ t("Invite friends") }}
         </BaseAppLink>
@@ -43,8 +43,8 @@
       >
         <button @click="leaveGroup">
           <i
-            class="mdi mdi-exit-to-app"
             aria-hidden="true"
+            class="mdi mdi-exit-to-app"
           ></i>
           {{ t("Leave group") }}
         </button>
@@ -54,8 +54,8 @@
       <li class="menu-item">
         <BaseAppLink to="/social">
           <i
-            class="mdi mdi-home"
             aria-hidden="true"
+            class="mdi mdi-home"
           ></i>
           {{ t("Home") }}
         </BaseAppLink>
@@ -72,7 +72,6 @@ import { useSecurityStore } from "../../store/securityStore"
 import axios from "axios"
 import { useNotification } from "../../composables/notification"
 import { useSocialInfo } from "../../composables/useSocialInfo"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const { t } = useI18n()
 const route = useRoute()

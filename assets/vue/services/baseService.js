@@ -39,10 +39,10 @@ export default {
   async post(endpoint, params = {}, addContentType = false) {
     const config = addContentType
       ? {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       : {}
 
     const { data } = await api.post(endpoint, params, config)

@@ -27,7 +27,9 @@ export function useFileUtils() {
 
   const isPreviewable = (fileData) => {
     const mimeType = fileData.resourceNode.firstResourceFile.mimeType.toLowerCase()
-    return isImage(fileData) || isVideo(fileData) || isAudio(fileData) || isHtml(fileData) || mimeType === "application/pdf"
+    return (
+      isImage(fileData) || isVideo(fileData) || isAudio(fileData) || isHtml(fileData) || mimeType === "application/pdf"
+    )
   }
 
   return {

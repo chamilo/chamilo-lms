@@ -15,7 +15,7 @@
 
   .p-inputtext,
   .p-inputwrapper {
-    @apply flex-1 w-[1%];
+    @apply flex-auto w-[1%];
   }
 
   > .p-component,
@@ -59,7 +59,7 @@
 }
 
 .p-inputgroup-addon {
-  @apply flex items-center justify-center bg-white border-t border-l border-b border-support-3 px-4 py-3
+  @apply flex items-center justify-center bg-white border-t border-l border-b border-support-3 px-4 py-2
     last:border-r last:rounded-r-lg
     first:rounded-l-lg;
 }

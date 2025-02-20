@@ -4,14 +4,14 @@
       <Dropdown
         :id="id"
         :disabled="disabled"
+        :loading="isLoading"
         :model-value="modelValue"
-        :options="realOptions"
         :option-label="optionLabel"
         :option-value="optionValue"
-        :loading="isLoading"
+        :options="realOptions"
         :show-clear="allowClear"
-        @update:model-value="emit('update:modelValue', $event)"
         @change="emit('change', $event)"
+        @update:model-value="emit('update:modelValue', $event)"
       >
         <template #emptyfilter>--</template>
         <template #empty>

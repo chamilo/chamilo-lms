@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
@@ -677,7 +679,7 @@ class Link extends Model
     /**
      * Changes the visibility of a link.
      */
-    public static function setVisible($id, $scope)
+    public static function setVisible($id, $scope, ?Course $course, ?Session $session)
     {
         if (TOOL_LINK == $scope) {
             /*api_item_property_update(
@@ -691,14 +693,14 @@ class Link extends Model
             /** @var CLink $link */
             $link = $repo->find($id);
             if ($link) {
-                $repo->setVisibilityPublished($link);
+                $repo->setVisibilityPublished($link, $course, $session);
             }
         } elseif (TOOL_LINK_CATEGORY == $scope) {
             $repo = Container::getLinkCategoryRepository();
             /** @var CLink $link */
             $link = $repo->find($id);
             if ($link) {
-                $repo->setVisibilityPublished($link);
+                $repo->setVisibilityPublished($link, $course, $session);
             }
             /*api_item_property_update(
                 $_course,
@@ -711,21 +713,21 @@ class Link extends Model
         Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
     }
 
-    public static function setInvisible($id, $scope)
+    public static function setInvisible($id, $scope, ?Course $course, ?Session $session)
     {
         if (TOOL_LINK == $scope) {
             $repo = Container::getLinkRepository();
             /** @var CLink $link */
             $link = $repo->find($id);
             if ($link) {
-                $repo->setVisibilityDraft($link);
+                $repo->setVisibilityDraft($link, $course, $session);
             }
         } elseif (TOOL_LINK_CATEGORY == $scope) {
             $repo = Container::getLinkCategoryRepository();
             /** @var CLinkCategory $link */
             $link = $repo->find($id);
             if ($link) {
-                $repo->setVisibilityDraft($link);
+                $repo->setVisibilityDraft($link, $course, $session);
             }
         }
         Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));

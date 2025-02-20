@@ -4220,7 +4220,8 @@ class CourseManager
         $destination_course_code,
         $destination_session_id,
         $params = [],
-        $withBaseContent = true
+        bool $withBaseContent = true,
+        bool $copySessionContent = false
     ) {
         $course_info = api_get_course_info($source_course_code);
 
@@ -4228,6 +4229,7 @@ class CourseManager
             $cb = new CourseBuilder('', $course_info);
             $course = $cb->build($source_session_id, $source_course_code, $withBaseContent);
             $restorer = new CourseRestorer($course);
+            $restorer->copySessionContent = $copySessionContent;
             $restorer->skip_content = $params;
             $restorer->restore(
                 $destination_course_code,
@@ -4260,7 +4262,7 @@ class CourseManager
         $source_session_id = 0,
         $destination_session_id = 0,
         $params = [],
-        $copySessionContent = false
+        bool $copySessionContent = false
     ) {
         $source_course_info = api_get_course_info($source_course_code);
         if (!empty($source_course_info)) {
@@ -4278,7 +4280,8 @@ class CourseManager
                         $newCourse->getCode(),
                         $destination_session_id,
                         $params,
-                        true
+                        true,
+                        $copySessionContent
                     );
                     if ($result) {
                         return $newCourse;
@@ -6585,27 +6588,17 @@ class CourseManager
     public static function getCourseListTabs($listType)
     {
         $tabs = [
-            [
+            'simple' => [
                 'content' => get_lang('Standard list'),
                 'url' => api_get_path(WEB_CODE_PATH).'admin/course_list.php',
             ],
-            [
+            'admin' => [
                 'content' => get_lang('Management List'),
                 'url' => api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php',
             ],
         ];
 
-        $default = 1;
-        switch ($listType) {
-            case 'simple':
-                $default = 1;
-                break;
-            case 'admin':
-                $default = 2;
-                break;
-        }
-
-        return Display::tabsOnlyLink($tabs, $default);
+        return Display::tabsOnlyLink($tabs, $listType, 'course-list');
     }
 
     public static function getUrlMarker($courseId)

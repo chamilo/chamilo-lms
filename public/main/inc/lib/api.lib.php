@@ -1321,7 +1321,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         'language',
         'locale',
         'creator_id',
-        'registration_date',
+        'created_at',
         'hr_dept_id',
         'expiration_date',
         'last_login',
@@ -1650,7 +1650,7 @@ function api_get_user_info_from_entity(
     $result['auth_source'] = $user->getAuthSource();
     $result['language'] = $user->getLocale();
     $result['creator_id'] = $user->getCreatorId();
-    $result['registration_date'] = $user->getRegistrationDate()->format('Y-m-d H:i:s');
+    $result['created_at'] = $user->getCreatedAt()->format('Y-m-d H:i:s');
     $result['hr_dept_id'] = $user->getHrDeptId();
     $result['expiration_date'] = '';
     if ($user->getExpirationDate()) {
@@ -1989,7 +1989,7 @@ function api_get_anonymous_id()
         $result = Database::query($sql);
         if (empty(Database::num_rows($result))) {
             $login = uniqid('anon_');
-            $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['registration_date ASC']);
+            $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['created_at ASC']);
             if (count($anonList) >= $max) {
                 foreach ($anonList as $userToDelete) {
                     UserManager::delete_user($userToDelete['user_id']);
@@ -4082,14 +4082,16 @@ function copy_folder_course_session(
     $session_id,
     $course_info,
     $document,
-    $source_course_id
+    $source_course_id,
+    array $originalFolderNameList = [],
+    string $originalBaseName = ''
 ) {
     $table = Database::get_course_table(TABLE_DOCUMENT);
     $session_id = intval($session_id);
     $source_course_id = intval($source_course_id);
 
     // Check whether directory already exists.
-    if (is_dir($pathname) || empty($pathname)) {
+    if (empty($pathname) || is_dir($pathname)) {
         return true;
     }
 
@@ -4100,12 +4102,20 @@ function copy_folder_course_session(
         return false;
     }
 
+    $baseNoDocument = str_replace('document', '', $originalBaseName);
+    $folderTitles = explode('/', $baseNoDocument);
+    $folderTitles = array_filter($folderTitles);
+
+    $table = Database::get_course_table(TABLE_DOCUMENT);
+    $session_id = (int) $session_id;
+    $source_course_id = (int) $source_course_id;
+
     $course_id = $course_info['real_id'];
     $folders = explode(DIRECTORY_SEPARATOR, str_replace($base_path_document.DIRECTORY_SEPARATOR, '', $pathname));
     $new_pathname = $base_path_document;
     $path = '';
 
-    foreach ($folders as $folder) {
+    foreach ($folders as $index => $folder) {
         $new_pathname .= DIRECTORY_SEPARATOR.$folder;
         $path .= DIRECTORY_SEPARATOR.$folder;
 
@@ -4123,13 +4133,22 @@ function copy_folder_course_session(
 
             if (0 == $num_rows) {
                 mkdir($new_pathname, api_get_permissions_for_new_directories());
+                $title = basename($new_pathname);
+
+                if (isset($folderTitles[$index + 1])) {
+                    $checkPath = $folderTitles[$index +1];
+
+                    if (isset($originalFolderNameList[$checkPath])) {
+                        $title = $originalFolderNameList[$checkPath];
+                    }
+                }
 
                 // Insert new folder with destination session_id.
                 $params = [
                     'c_id' => $course_id,
                     'path' => $path,
                     'comment' => $document->comment,
-                    'title' => basename($new_pathname),
+                    'title' => $title,
                     'filetype' => 'folder',
                     'size' => '0',
                     'session_id' => $session_id,
@@ -7521,6 +7540,22 @@ function api_protect_webservices()
     }
 }
 
+function api_filename_has_blacklisted_stream_wrapper(string $filename) {
+    if (strpos($filename, '://') > 0) {
+        $wrappers = stream_get_wrappers();
+        $allowedWrappers = ['http', 'https', 'file'];
+        foreach ($wrappers as $wrapper) {
+            if (in_array($wrapper, $allowedWrappers)) {
+                continue;
+            }
+            if (stripos($filename, $wrapper . '://') === 0) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 /**
  * Checks if a set of roles have a specific permission.
  *
@@ -7533,4 +7568,21 @@ function api_get_permission(string $permissionSlug, array $roles): bool
     $permissionService = Container::$container->get(PermissionServiceHelper::class);
 
     return $permissionService->hasPermission($permissionSlug, $roles);
+}
+
+/**
+ * Calculate the percentage of change between two numbers.
+ *
+ * @param int $newValue
+ * @param int $oldValue
+ * @return string
+ */
+function api_calculate_increment_percent(int $newValue, int $oldValue): string
+{
+    if ($oldValue <= 0) {
+        $result = " - ";
+    } else {
+        $result = ' '.round(100 * (($newValue / $oldValue) - 1), 2).' %';
+    }
+    return $result;
 }

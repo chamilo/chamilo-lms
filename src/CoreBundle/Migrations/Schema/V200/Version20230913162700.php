@@ -103,7 +103,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         $items = $result->fetchAllAssociative();
 
         foreach ($items as $item) {
-            if ((int)$item['c_id'] !== (int)$courseId) {
+            if ((int) $item['c_id'] !== (int) $courseId) {
                 continue;
             }
 
@@ -138,7 +138,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                         $documentRepo->update($document);
                     }
                 } catch (Exception $e) {
-                    error_log("[ERROR] Processing file $filePath failed for IID={$item['iid']} in Course ID={$item['c_id']}: " . $e->getMessage());
+                    error_log("[ERROR] Processing file $filePath failed for IID={$item['iid']} in Course ID={$item['c_id']}: ".$e->getMessage());
                 }
             }
         }
@@ -159,7 +159,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                 $videoPath = preg_replace("/^\\/courses\\/$actualCourseDirectory\\//i", "/courses/$courseDirectory/", $videoPath);
             }
 
-            $sql = "SELECT iid, title, resource_node_id FROM c_document WHERE title = :title AND c_id = :courseId";
+            $sql = 'SELECT iid, title, resource_node_id FROM c_document WHERE title = :title AND c_id = :courseId';
             $result = $this->connection->executeQuery($sql, ['title' => $fileName, 'courseId' => $courseId]);
             $documents = $result->fetchAllAssociative();
 
@@ -213,7 +213,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             $appCourseOldPath = $rootPath.'/app'.$videoPath;
             $title = basename($appCourseOldPath);
 
-            $sql = "SELECT * FROM c_document WHERE title = :title AND c_id = :courseId";
+            $sql = 'SELECT * FROM c_document WHERE title = :title AND c_id = :courseId';
             $stmt = $this->connection->prepare($sql);
             $result = $stmt->executeQuery(['title' => $title, 'courseId' => $courseId]);
             $existingDocument = $result->fetchAssociative();
@@ -222,9 +222,9 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                 $document = $documentRepo->find($existingDocument['iid']);
                 if ($document) {
                     return $document;
-                } else {
-                    throw new Exception("ResourceNode not found for resource_node_id " . $existingDocument['resource_node_id']);
                 }
+
+                throw new Exception('ResourceNode not found for resource_node_id '.$existingDocument['resource_node_id']);
             }
 
             if (file_exists($appCourseOldPath) && !is_dir($appCourseOldPath)) {

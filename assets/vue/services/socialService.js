@@ -108,8 +108,7 @@ export default {
 
   async checkTermsRestrictions(userId) {
     try {
-
-      return await baseService.get(`${API_URL}/terms-restrictions/${userId}`);
+      return await baseService.get(`${API_URL}/terms-restrictions/${userId}`)
     } catch (error) {
       console.error("Error checking terms restrictions:", error)
       throw error

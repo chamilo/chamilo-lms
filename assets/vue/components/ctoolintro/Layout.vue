@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  export default {
-      name: 'ToolIntroLayout'
-  }
+export default {
+  name: "ToolIntroLayout",
+}
 </script>

@@ -2,8 +2,8 @@
   <form>
     <BaseTinyEditor
       v-model="item.introText"
-      editor-id="introText"
       :full-page="false"
+      editor-id="introText"
       required
     />
     <!-- For extra content-->

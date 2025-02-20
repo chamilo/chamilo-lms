@@ -16,8 +16,8 @@
     <div class="search-area mb-4">
       <input
         v-model="searchQuery"
-        class="search-input mr-3"
         :placeholder="t('Search')"
+        class="search-input mr-3"
         type="text"
       />
       <BaseButton

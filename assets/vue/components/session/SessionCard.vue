@@ -21,7 +21,7 @@ export default {
         // User is Session::SESSION_ADMIN
         if (4 === node.relationType) {
           showAllCourses = true
-          return
+
         }
       })
     }

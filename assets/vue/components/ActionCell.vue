@@ -1,67 +1,67 @@
 <template>
-<!--  auto-width-->
-  <q-td slot="body-cell-action" >
+  <!--  auto-width-->
+  <q-td slot="body-cell-action">
     <div class="p-4 flex flex-row gap-1">
       <q-btn
-          v-if="handleShow"
-          no-caps
-          dense
-          color="secondary"
-          @click="handleShow"
-          label="Show"
+        v-if="handleShow"
+        color="secondary"
+        dense
+        label="Show"
+        no-caps
+        @click="handleShow"
       />
       <q-btn
-          v-if="handleEdit"
-          no-caps
-             dense
-             color="secondary"
-             @click="handleEdit"
-          label="Edit"
+        v-if="handleEdit"
+        color="secondary"
+        dense
+        label="Edit"
+        no-caps
+        @click="handleEdit"
       />
       <q-btn
-          v-if="handleDelete"
-          no-caps
-          label="Delete"
-          dense
-          color="red"
-          @click="confirmDeleteClick = true"
+        v-if="handleDelete"
+        color="red"
+        dense
+        label="Delete"
+        no-caps
+        @click="confirmDeleteClick = true"
       />
       <ConfirmDelete
-          v-if="handleDelete"
-          :show="confirmDeleteClick"
-          :handle-delete="handleDelete"
-          :handle-cancel="() => (confirmDeleteClick = false)"
+        v-if="handleDelete"
+        :handle-cancel="() => (confirmDeleteClick = false)"
+        :handle-delete="handleDelete"
+        :show="confirmDeleteClick"
       />
     </div>
   </q-td>
 </template>
 
 <script>
-import ConfirmDelete from './ConfirmDelete.vue';
+import ConfirmDelete from "./ConfirmDelete.vue"
 
 export default {
-  name: 'ActionCell',
+  name: "ActionCell",
   components: {
-    ConfirmDelete
+    ConfirmDelete,
   },
   data() {
     return {
-      confirmDeleteClick: false
-    };
+      confirmDeleteClick: false,
+    }
   },
   props: {
     handleShow: {
       type: Function,
-      required: false
+      required: false,
     },
     handleEdit: {
       type: Function,
-      required: false
+      required: false,
     },
     handleDelete: {
       type: Function,
-      required: false
-    }
-  }
-};
+      required: false,
+    },
+  },
+}
 </script>

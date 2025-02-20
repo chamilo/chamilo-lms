@@ -86,7 +86,7 @@ const addFriend = (friend) => {
     .sendFriendRequest(securityStore.user["@id"], friend["@id"])
     .then(() => {
       showSuccessNotification(t("Friend request sent successfully"))
-      emit('friend-request-sent')
+      emit("friend-request-sent")
       sendNotificationMessage(friend)
     })
     .catch((error) => {
@@ -105,28 +105,30 @@ const sendNotificationMessage = async (friend) => {
   const messageData = {
     userId: userId,
     targetUserId: targetUserId,
-    action: 'send_message',
-    subject: t('You have a new friend request'),
-    content: t('You have received a new friend request. Visit the invitations page to accept or reject the request.') + ` <a href="/resources/friends">${t('here')}</a>`
+    action: "send_message",
+    subject: t("You have a new friend request"),
+    content:
+      t("You have received a new friend request. Visit the invitations page to accept or reject the request.") +
+      ` <a href="/resources/friends">${t("here")}</a>`,
   }
 
   try {
-    const response = await fetch('/social-network/user-action', {
-      method: 'POST',
+    const response = await fetch("/social-network/user-action", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(messageData)
+      body: JSON.stringify(messageData),
     })
     const result = await response.json()
     if (result.success) {
-      showSuccessNotification(t('Notification message sent successfully'))
+      showSuccessNotification(t("Notification message sent successfully"))
     } else {
-      showErrorNotification(t('Failed to send notification message'))
+      showErrorNotification(t("Failed to send notification message"))
     }
   } catch (error) {
-    showErrorNotification(t('An error occurred while sending the notification message'))
-    console.error('Error sending notification message:', error)
+    showErrorNotification(t("An error occurred while sending the notification message"))
+    console.error("Error sending notification message:", error)
   }
 }
 

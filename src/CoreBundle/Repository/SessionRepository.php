@@ -78,6 +78,9 @@ class SessionRepository extends ServiceEntityRepository
                 'user' => $user,
                 'url' => $url,
             ])
+            ->orderBy('s.displayStartDate', 'ASC')
+            ->addOrderBy('s.title', 'ASC')
+            ->addOrderBy('s.position', 'ASC')
         ;
 
         return $qb;

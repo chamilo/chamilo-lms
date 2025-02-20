@@ -18,8 +18,8 @@
         <div v-if="item.resourceNode.firstResourceFile">
           <img
             v-if="item.resourceNode.firstResourceFile.image"
-            :src="item.contentUrl + '&w=500'"
             :alt="item.title"
+            :src="item.contentUrl + '?w=500'"
           />
 
           <video
@@ -69,7 +69,8 @@
                   :href="item['downloadUrl']"
                   class="btn btn--primary"
                 >
-                  <BaseIcon icon="download" /> {{ $t("Download file") }}
+                  <BaseIcon icon="download" />
+                  {{ $t("Download file") }}
                 </a>
               </td>
             </tr>

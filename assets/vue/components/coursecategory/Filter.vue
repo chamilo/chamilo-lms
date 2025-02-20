@@ -1,11 +1,15 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="12" sm="6" md="6">
+      <v-col
+        cols="12"
+        md="6"
+        sm="6"
+      >
         <v-text-field
-                v-model="item.title"
-                :label="$t('name')"
-                type="text"
+          v-model="item.title"
+          :label="$t('name')"
+          type="text"
         />
       </v-col>
     </v-row>
@@ -13,28 +17,25 @@
 </template>
 
 <script>
-
 export default {
-  name: 'CourseCategoryFilter',
+  name: "CourseCategoryFilter",
   props: {
     values: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
-    return {};
+    return {}
   },
-  mounted() {
-  },
+  mounted() {},
 
   computed: {
     // eslint-disable-next-line
     item() {
-      return this.initialValues || this.values;
-    }
+      return this.initialValues || this.values
+    },
   },
-  methods: {
-  }
-};
+  methods: {},
+}
 </script>

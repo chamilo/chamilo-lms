@@ -615,9 +615,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\Column(name: 'productions', type: 'string', length: 250, unique: false, nullable: true)]
     protected ?string $productions = null;
 
-    #[ORM\Column(name: 'registration_date', type: 'datetime')]
-    protected DateTime $registrationDate;
-
     #[ORM\Column(name: 'expiration_date', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $expirationDate = null;
 
@@ -759,7 +756,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->logins = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->updatedAt = new DateTime();
-        $this->registrationDate = new DateTime();
         $this->roles = [];
         $this->credentialsExpired = false;
         $this->credentialsExpireAt = new DateTime();
@@ -1045,18 +1041,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function getRegistrationDate(): DateTime
-    {
-        return $this->registrationDate;
-    }
-
-    public function setRegistrationDate(DateTime $registrationDate): self
-    {
-        $this->registrationDate = $registrationDate;
-
-        return $this;
-    }
-
     public function getExpirationDate(): ?DateTime
     {
         return $this->expirationDate;
@@ -1120,11 +1104,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->hrDeptId = $hrDeptId;
 
         return $this;
-    }
-
-    public function getMemberSince(): DateTime
-    {
-        return $this->registrationDate;
     }
 
     public function isOnline(): bool
@@ -1220,7 +1199,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->plainPassword;
     }
 
-    public function setPlainPassword(string $password): self
+    public function setPlainPassword(?string $password): self
     {
         $this->plainPassword = $password;
         // forces the object to look "dirty" to Doctrine. Avoids
@@ -2210,6 +2189,18 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
+    public function getLogin(): string
+    {
+        return $this->username;
+    }
+
+    public function setLogin(string $login): self
+    {
+        $this->username = $login;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, TrackELogin>
      */
@@ -2412,6 +2403,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function isCourseTutor(?Course $course = null, ?Session $session = null): bool
     {
-        return $session?->hasCoachInCourseList($user) || $course?->getSubscriptionByUser($user)?->isTutor();
+        return $session?->hasCoachInCourseList($this) || $course?->getSubscriptionByUser($this)?->isTutor();
     }
 }

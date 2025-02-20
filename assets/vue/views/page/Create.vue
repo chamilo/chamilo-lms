@@ -11,7 +11,7 @@
 <script setup>
 import { computed, ref, watch } from "vue"
 import { useStore } from "vuex"
-import {useSecurityStore} from "../../store/securityStore";
+import { useSecurityStore } from "../../store/securityStore"
 
 import PageForm from "../../components/page/Form.vue"
 import Loading from "../../components/Loading.vue"
@@ -32,8 +32,8 @@ const created = computed(() => store.state["page"].created)
 
 const item = ref({
   enabled: true,
-  creator: securityStore.user['@id'],
-  url: '/api/access_urls/' + window.access_url_id,
+  creator: securityStore.user["@id"],
+  url: "/api/access_urls/" + window.access_url_id,
 })
 
 watch(created, (newCreated) => {
@@ -46,7 +46,7 @@ watch(created, (newCreated) => {
 
 watch(error, (newError) => {
   if (!newError) {
-    return;
+    return
   }
 
   toast.add({

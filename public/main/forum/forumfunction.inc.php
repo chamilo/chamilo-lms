@@ -129,7 +129,7 @@ function handleForum($url)
             case 'invisible':
                 if (null !== $resource) {
                     if ('visible' === $action) {
-                        $repo->setVisibilityPublished($resource);
+                        $repo->setVisibilityPublished($resource, $course, $session);
                     } else {
                         $repo->setVisibilityPending($resource);
                     }
@@ -216,6 +216,7 @@ function getForumCategoryAddForm(int $lp_id = null): string
     // Setting the form elements.
     $form->addHeader(get_lang('Add forum category'));
     $form->addText('forum_category_title', get_lang('Title'), true, ['autofocus']);
+    $form->applyFilter('forum_category_title', 'html_filter');
     $form->addHtmlEditor(
         'forum_category_comment',
         get_lang('Description'),
@@ -293,6 +294,7 @@ function forumForm(CForum $forum = null, int $lp_id = null): string
 
     // The title of the forum
     $form->addText('forum_title', get_lang('Title'), true, ['autofocus']);
+    $form->applyFilter('forum_title', 'html_filter');
 
     // The comment of the forum.
     $form->addHtmlEditor(
@@ -521,6 +523,7 @@ function editForumCategoryForm(CForumCategory $category): string
     $form->addElement('hidden', 'action', 'edit_category');
     $form->addElement('hidden', 'forum_category_id');
     $form->addElement('text', 'forum_category_title', get_lang('Title'));
+    $form->applyFilter('forum_category_title', 'html_filter');
 
     $form->addElement(
         'html_editor',
@@ -1934,6 +1937,7 @@ function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $pos
     }
 
     $form->addElement('text', 'post_title', get_lang('Title'));
+    $form->applyFilter('post_title', 'html_filter');
     $form->addHtmlEditor(
         'post_text',
         get_lang('Text'),
@@ -2197,6 +2201,7 @@ function newThread(CForum $forum, $form_values = '', $showPreview = true)
     }
 
     $form->addElement('text', 'post_title', get_lang('Title'));
+    $form->applyFilter('post_title', 'html_filter');
     $form->addHtmlEditor(
         'post_text',
         get_lang('Text'),

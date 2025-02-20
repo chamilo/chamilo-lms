@@ -17,14 +17,14 @@ const pageList = ref([])
 
 pageService
   .findAll({
-    params : {
+    params: {
       "category.title": props.categoryTitle,
       enabled: "1",
       locale: locale.value,
     },
   })
-  .then(response => response.json())
-  .then(json => pageList.value = json["hydra:member"])
+  .then((response) => response.json())
+  .then((json) => (pageList.value = json["hydra:member"]))
 </script>
 
 <template>

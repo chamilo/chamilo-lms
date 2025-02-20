@@ -1,10 +1,15 @@
 <template>
-  <i :class="iconClass" aria-hidden="true" />
+  <i
+    :class="iconClass"
+    aria-hidden="true"
+    @click="$emit('click', $event)"
+    class="cursor-pointer"
+  />
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { chamiloIconToClass } from "./ChamiloIcons";
+import { computed } from "vue"
+import { chamiloIconToClass } from "./ChamiloIcons"
 
 const props = defineProps({
   icon: {
@@ -12,9 +17,9 @@ const props = defineProps({
     required: true,
     validator: (value) => {
       if (typeof value !== "string") {
-        return false;
+        return false
       }
-      return Object.keys(chamiloIconToClass).includes(value);
+      return Object.keys(chamiloIconToClass).includes(value)
     },
   },
   size: {
@@ -22,26 +27,26 @@ const props = defineProps({
     default: "normal",
     validator: (value) => {
       if (typeof value !== "string") {
-        return false;
+        return false
       }
-      return ["big", "normal", "small"].includes(value);
+      return ["big", "normal", "small"].includes(value)
     },
   },
-});
+})
 
 const iconClass = computed(() => {
-  let iconClass = chamiloIconToClass[props.icon] + " ";
+  let iconClass = chamiloIconToClass[props.icon] + " "
   switch (props.size) {
     case "big":
-      iconClass += "text-3xl/4 ";
-      break;
+      iconClass += "text-3xl/4 "
+      break
     case "normal":
-      iconClass += "text-xl/4 ";
-      break;
+      iconClass += "text-xl/4 "
+      break
     case "small":
-      iconClass += "text-base/4 ";
-      break;
+      iconClass += "text-base/4 "
+      break
   }
-  return iconClass;
-});
+  return iconClass
+})
 </script>

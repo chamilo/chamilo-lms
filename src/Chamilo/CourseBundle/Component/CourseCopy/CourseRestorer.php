@@ -1974,6 +1974,10 @@ class CourseRestorer
                         'hide_question_title' => isset($quiz->hide_question_title) ? $quiz->hide_question_title : 0,
                     ];
 
+                    if (true === api_get_configuration_value('exercise_text_when_finished_failure')) {
+                        $params['text_when_finished_failure'] = (string) $quiz->text_when_finished_failure;
+                    }
+
                     $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
                     if ($allow) {
                         $params['notifications'] = isset($quiz->notifications) ? $quiz->notifications : '';

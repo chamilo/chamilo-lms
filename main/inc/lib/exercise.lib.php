@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
@@ -5368,21 +5369,6 @@ EOT;
             );
         }
 
-        // Display text when test is finished #4074 and for LP #4227
-        // Allows to do a remove_XSS for end text result of exercise with
-        // user status COURSEMANAGERLOWSECURITY BT#20194
-        if (true === api_get_configuration_value('exercise_result_end_text_html_strict_filtering')) {
-            $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished(), COURSEMANAGERLOWSECURITY);
-        } else {
-            $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished());
-        }
-        if (!empty($endOfMessage)) {
-            echo Display::div(
-                $endOfMessage,
-                ['id' => 'quiz_end_message']
-            );
-        }
-
         $question_list_answers = [];
         $category_list = [];
         $loadChoiceFromSession = false;
@@ -5618,6 +5604,22 @@ EOT;
             }
         }
 
+        // Display text when test is finished #4074 and for LP #4227
+        // Allows to do a remove_XSS for end text result of exercise with
+        // user status COURSEMANAGERLOWSECURITY BT#20194
+        $finishMessage = $objExercise->getFinishText($total_score, $total_weight);
+        if (true === api_get_configuration_value('exercise_result_end_text_html_strict_filtering')) {
+            $endOfMessage = Security::remove_XSS($finishMessage, COURSEMANAGERLOWSECURITY);
+        } else {
+            $endOfMessage = Security::remove_XSS($finishMessage);
+        }
+        if (!empty($endOfMessage)) {
+            echo Display::div(
+                $endOfMessage,
+                ['id' => 'quiz_end_message']
+            );
+        }
+
         $totalScoreText = null;
         $certificateBlock = '';
         if (($show_results || $show_only_score) && $showTotalScore) {
@@ -5791,6 +5793,13 @@ EOT;
             $total_weight
         );
 
+        if ($save_user_result
+            && !$passed
+            && true === api_get_configuration_value('exercise_subscribe_session_when_finished_failure')
+        ) {
+            self::subscribeSessionWhenFinishedFailure($objExercise->iid);
+        }
+
         $percentage = 0;
         if (!empty($total_weight)) {
             $percentage = ($total_score / $total_weight) * 100;
@@ -5809,6 +5818,26 @@ EOT;
             'total_percentage' => $percentage,
             'count_pending_questions' => $countPendingQuestions,
         ];
+    }
+
+    public static function getSessionWhenFinishedFailure(int $exerciseId): ?SessionEntity
+    {
+        $objExtraField = new ExtraField('exercise');
+        $objExtraFieldValue = new ExtraFieldValue('exercise');
+
+        $subsSessionWhenFailureField = $objExtraField->get_handler_field_info_by_field_variable(
+            'subscribe_session_when_finished_failure'
+        );
+        $subsSessionWhenFailureValue = $objExtraFieldValue->get_values_by_handler_and_field_id(
+            $exerciseId,
+            $subsSessionWhenFailureField['id']
+        );
+
+        if (!empty($subsSessionWhenFailureValue['value'])) {
+            return api_get_session_entity((int) $subsSessionWhenFailureValue['value']);
+        }
+
+        return null;
     }
 
     /**
@@ -7372,5 +7401,19 @@ EOT;
         }
 
         return false;
+    }
+
+    private static function subscribeSessionWhenFinishedFailure(int $exerciseId): void
+    {
+        $failureSession = self::getSessionWhenFinishedFailure($exerciseId);
+
+        if ($failureSession) {
+            SessionManager::subscribeUsersToSession(
+                $failureSession->getId(),
+                [api_get_user_id()],
+                SESSION_VISIBLE_READ_ONLY,
+                false
+            );
+        }
     }
 }

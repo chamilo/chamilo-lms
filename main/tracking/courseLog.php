@@ -710,11 +710,11 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         );
         $lpList = $lpList->get_flat_list();
         $NbVisibleLps = count($lpList);
-        $courseProgressHeadTitle .= '. (*) ' . sprintf(get_lang('progressBasedOnXVisiblesLPs'), $NbVisibleLps);
+        $courseProgressHeadTitle .= '. ' . sprintf(get_lang('progressBasedOnXVisiblesLPs'), $NbVisibleLps);
     }
     $table->set_header(
         $headerCounter++,
-        get_lang('CourseProgress').'&nbsp; (*) &nbsp;'.
+        get_lang('CourseProgress').'&nbsp;'.
         Display::return_icon('info3.gif', $courseProgressHeadTitle, [], ICON_SIZE_TINY),
         false
     );

@@ -23,7 +23,7 @@ readonly class AuthenticationConfigHelper
 
     public function getProviderConfig(string $providerName, ?AccessUrl $url = null): array
     {
-        $providers = $this->getProvidersForUrl($url);
+        $providers = $this->getOAuthProvidersForUrl($url);
 
         if ([] === $providers) {
             return [];
@@ -36,16 +36,16 @@ readonly class AuthenticationConfigHelper
         return $providers[$providerName];
     }
 
-    public function isEnabled(string $methodName, ?AccessUrl $url = null): bool
+    public function isOAuth2ProviderEnabled(string $methodName, ?AccessUrl $url = null): bool
     {
         $configParams = $this->getProviderConfig($methodName, $url);
 
         return $configParams['enabled'] ?? false;
     }
 
-    public function getEnabledProviders(?AccessUrl $url = null): array
+    public function getEnabledOAuthProviders(?AccessUrl $url = null): array
     {
-        $urlProviders = $this->getProvidersForUrl($url);
+        $urlProviders = $this->getOAuthProvidersForUrl($url);
 
         $enabledProviders = [];
 
@@ -62,7 +62,7 @@ readonly class AuthenticationConfigHelper
         return $enabledProviders;
     }
 
-    private function getProvidersForUrl(?AccessUrl $url): array
+    private function getOAuthProvidersForUrl(?AccessUrl $url): array
     {
         $urlId = $url ? $url->getId() : $this->urlHelper->getCurrent()->getId();
 
@@ -70,12 +70,12 @@ readonly class AuthenticationConfigHelper
             ? $this->parameterBag->get('authentication')
             : [];
 
-        if (isset($authentication[$urlId])) {
-            return $authentication[$urlId];
+        if (isset($authentication[$urlId]['oauth2'])) {
+            return $authentication[$urlId]['oauth2'];
         }
 
-        if (isset($authentication['default'])) {
-            return $authentication['default'];
+        if (isset($authentication['default']['oauth2'])) {
+            return $authentication['default']['oauth2'];
         }
 
         return [];

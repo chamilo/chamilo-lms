@@ -121,7 +121,7 @@ if (!empty($users)) {
         'multiple' => 'multiple',
         'size' => 7
     ]);
-    $form->addElement('submit', 'filter', get_lang('Filter'));
+    $form->addElement('submit', 'filter', get_lang('View'));
 }
 
 $tableResult = '';

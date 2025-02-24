@@ -175,11 +175,16 @@ if (ChamiloApi::isAjaxRequest() && $_SERVER['REQUEST_METHOD'] === 'POST' && isse
     $excludedUsers = isset($_POST['excludedUsers']) ? $_POST['excludedUsers'] : [];
     $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
 
+    $accessUrlId = api_get_current_access_url_id();
     $excludedIds = !empty($excludedUsers) ? implode(",", array_map('intval', $excludedUsers)) : '0';
     $sql = 'SELECT id, username, firstname, lastname
             FROM user
             WHERE status != '.ANONYMOUS.'
             AND id NOT IN ('.$excludedIds.')
+            AND u.id IN (
+                SELECT user_id
+                FROM access_url_rel_user
+                WHERE access_url_id ='.$accessUrlId.')
             ORDER BY id DESC
             LIMIT 10';
 

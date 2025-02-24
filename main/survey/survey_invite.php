@@ -242,6 +242,10 @@ if ($form->validate()) {
 } else {
     // Getting the invited users
     $defaults = SurveyUtil::get_invited_users($survey_data['code']);
+    if (isset($defaults['additional_users']) && is_array($defaults['additional_users'])) {
+        $defaults['additional_users'] = implode('; ', $defaults['additional_users']);
+    }
+
     // Getting the survey mail text
     if (!empty($survey_data['reminder_mail'])) {
         $defaults['mail_text'] = $survey_data['reminder_mail'];

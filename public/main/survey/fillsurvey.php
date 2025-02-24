@@ -60,6 +60,8 @@ if (empty($courseInfo)) {
 $courseId = $courseInfo['real_id'];
 $userInfo = api_get_user_info();
 $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : api_get_session_id();
+$lpItemId = isset($_GET['lp_item_id']) ? (int) $_GET['lp_item_id'] : 0;
+$allowSurveyInLp = true;
 
 if (!empty($userInfo)) {
     $interbreadcrumb[] = [
@@ -88,6 +90,16 @@ if (null === $survey) {
 
 $surveyId = $survey->getIid();
 $invitationCode = $_GET['invitationcode'] ?? null;
+
+$lpItemCondition = '';
+if ($allowSurveyInLp && !empty($lpItemId)) {
+    $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+}
+
+$sessionCondition = '';
+if (true === api_get_setting('survey.show_surveys_base_in_sessions')) {
+    $sessionCondition = api_get_session_condition($sessionId);
+}
 
 /*$surveyCode = isset($_GET['scode']) ? Database::escape_string($_GET['scode']) : '';
 if ('' != $surveyCode) {
@@ -122,7 +134,9 @@ if ('auto' === $invitationCode) {
             $userid,
             $surveyCode,
             $courseId,
-            $sessionId
+            $sessionId,
+            0,
+            $lpItemId
         );
         $lastInvitation = current($invitations);
 
@@ -142,7 +156,9 @@ if ('auto' === $invitationCode) {
             FROM $table_survey_invitation
             WHERE
                 c_id = $courseId AND
-                invitation_code = '".Database::escape_string($autoInvitationCode)."'";
+                invitation_code = '".Database::escape_string($autoInvitationCode)."'
+                $sessionCondition
+                $lpItemCondition";
     $result = Database::query($sql);
     $now = api_get_utc_datetime();
     if (0 == Database::num_rows($result)) {
@@ -153,7 +169,7 @@ if ('auto' === $invitationCode) {
             'invitation_code' => $autoInvitationCode,
             'invitation_date' => $now,
             'answered' => 0,
-            'c_lp_item_id' => 0,
+            'c_lp_item_id' => $lpItemId,
         ];
         Database::insert($table_survey_invitation, $params);
     }
@@ -167,7 +183,9 @@ if ('auto' === $invitationCode) {
 $sql = "SELECT * FROM $table_survey_invitation
         WHERE
             c_id = $courseId AND
-            invitation_code = '".Database::escape_string($invitationCode)."'";
+            invitation_code = '".Database::escape_string($invitationCode)."'
+            $sessionCondition
+            $lpItemCondition";
 $result = Database::query($sql);
 if (Database::num_rows($result) < 1) {
     api_not_allowed(true, get_lang('Wrong invitation code'));
@@ -256,7 +274,8 @@ if (count($_POST) > 0) {
                     SurveyUtil::remove_answer(
                         $survey_invitation['user_id'],
                         $surveyId,
-                        $survey_question_id
+                        $survey_question_id,
+                        $lpItemId
                     );
 
                     foreach ($value as $answer_key => &$answer_value) {
@@ -273,7 +292,9 @@ if (count($_POST) > 0) {
                             $survey,
                             $question,
                             $option_id,
-                            $option_value
+                            $option_value,
+                            '',
+                            $lpItemId
                         );
                     }
                 } else {
@@ -298,7 +319,8 @@ if (count($_POST) > 0) {
                     SurveyUtil::remove_answer(
                         $survey_invitation['user_id'],
                         $surveyId,
-                        $survey_question_id
+                        $survey_question_id,
+                        $lpItemId
                     );
 
                     SurveyUtil::saveAnswer(
@@ -307,7 +329,8 @@ if (count($_POST) > 0) {
                         $question,
                         $value,
                         $option_value,
-                        $other
+                        $other,
+                        $lpItemId
                     );
                 }
             }
@@ -358,15 +381,24 @@ if (count($_POST) > 0) {
                 SurveyUtil::remove_answer(
                     $survey_invitation['user_id'],
                     $survey_invitation['survey_id'],
-                    $survey_question_id
+                    $survey_question_id,
+                    api_get_course_int_id(),
+                    $lpItemId
                 );
 
+
+                $surveyId = (int) $survey_invitation['survey_id'];
+                $repo = Container::getSurveyRepository();
+                $survey = $repo->find($surveyId);
+
                 SurveyUtil::saveAnswer(
-                    $survey_invitation['user_id'],
-                    $survey_invitation['survey_id'],
+                    api_get_user_entity($survey_invitation['user_id']),
+                    $survey,
                     $questionList[$survey_question_id],
                     $value,
-                    $option_value
+                    $option_value,
+                    '',
+                    $lpItemId
                 );
             }
         }
@@ -398,10 +430,14 @@ if ('' != $survey->getFormFields() &&
         }
     }
 
-    $url = api_get_self().'?cid='.$courseId.'&sid='.$sessionId;
+    $url = api_get_self().'?'.api_get_cidreq();
     $listQueryParams = explode('&', $_SERVER['QUERY_STRING']);
     foreach ($listQueryParams as $param) {
         $url .= '&'.Security::remove_XSS($param);
+    }
+
+    if (!empty($lpItemId)) {
+        $url .= '&lp_item_id='.$lpItemId;
     }
 
     // We use the same form as in auth/profile.php
@@ -611,10 +647,10 @@ if ($survey->getFormFields() &&
 if (isset($_POST['finish_survey'])) {
     echo Display::return_message(get_lang('You have finished this survey.'), 'confirm');
     echo Security::remove_XSS($survey->getSurveythanks());
-    SurveyManager::updateSurveyAnswered($survey, $survey_invitation['user_id']);
+    SurveyManager::updateSurveyAnswered($survey, $survey_invitation['user_id'], $lpItemId);
     SurveyUtil::flagSurveyAsAnswered($survey->getCode(), $survey_invitation['c_id']);
 
-    if ($courseInfo && !api_is_anonymous()) {
+    if ($courseInfo && !api_is_anonymous() && 'learnpath' !== api_get_origin()) {
         echo '<br /><br />';
         echo Display::toolbarButton(
             get_lang('Return to Course Homepage'),
@@ -1179,7 +1215,7 @@ $g_ic = isset($_GET['invitationcode']) ? Security::remove_XSS($_GET['invitationc
 $g_cr = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
 $p_l = isset($_POST['language']) ? Security::remove_XSS($_POST['language']) : '';
 $add_parameters = isset($_GET['user_id']) ? '&user_id='.intval($_GET['user_id']) : '';
-$url = api_get_self().'?cid='.$courseId.'&sid='.$sessionId.$add_parameters.
+$url = api_get_self().'?'.api_get_cidreq().$add_parameters.
     '&course='.$g_c.
     '&invitationcode='.$g_ic.
     '&show='.$show.
@@ -1189,6 +1225,11 @@ if (!empty($_GET['language'])) {
     $lang = Security::remove_XSS($_GET['language']);
     $url .= '&language='.$lang;
 }
+
+if (!empty($lpItemId)) {
+    $url .= '&lp_item_id='.$lpItemId;
+}
+
 $form = new FormValidator(
     'question',
     'post',
@@ -1256,7 +1297,7 @@ if (isset($questions) && is_array($questions)) {
         }
         $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
 
-        $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id']);
+        $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id'], $lpItemId);
         $finalAnswer = null;
 
         if (!empty($userAnswerData[$user_id])) {

@@ -269,6 +269,13 @@
       type="danger"
       @click="showDeleteMultipleDialog"
     />
+    <BaseButton
+      :disabled="isDownloading || !selectedItems || !selectedItems.length"
+      :label="isDownloading ? t('Preparing...') : t('Download selected ZIP')"
+      icon="download"
+      type="primary"
+      @click="downloadSelectedItems"
+    />
   </BaseToolbar>
 
   <BaseDialogConfirmCancel
@@ -455,6 +462,7 @@ const { relativeDatetime } = useFormatDate()
 const isAllowedToEdit = ref(false)
 const folders = ref([])
 const selectedFolder = ref(null)
+const isDownloading = ref(false)
 
 const {
   showNewDocumentButton,
@@ -618,6 +626,38 @@ function showDeleteMultipleDialog() {
 function confirmDeleteItem(itemToDelete) {
   item.value = itemToDelete
   isDeleteItemDialogVisible.value = true
+}
+
+async function downloadSelectedItems() {
+  if (!selectedItems.value.length) {
+    notification.showErrorNotification(t("No items selected."))
+    return
+  }
+
+  isDownloading.value = true
+
+  try {
+    const response = await axios.post(
+      "/api/documents/download-selected",
+      { ids: selectedItems.value.map(item => item.iid) },
+      { responseType: "blob" }
+    )
+
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute("download", "selected_documents.zip")
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    notification.showSuccessNotification(t("Download started."))
+  } catch (error) {
+    console.error("Error downloading selected items:", error)
+    notification.showErrorNotification(t("Error downloading selected items."))
+  } finally {
+    isDownloading.value = false;
+  }
 }
 
 async function deleteMultipleItems() {

@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
+use Chamilo\CoreBundle\Controller\Api\ReplaceDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
 use Chamilo\CoreBundle\Entity\AbstractResource;
@@ -59,6 +60,31 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: UpdateDocumentFileAction::class,
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: true
+        ),
+        new Post(
+            uriTemplate: '/documents/{iid}/replace',
+            controller: ReplaceDocumentFileAction::class,
+            openapiContext: [
+                'summary' => 'Replace a document file, maintaining the same IDs.',
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'file' => [
+                                        'type' => 'string',
+                                        'format' => 'binary',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
+            validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']],
+            deserialize: false
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),

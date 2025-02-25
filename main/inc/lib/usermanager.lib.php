@@ -1571,7 +1571,7 @@ class UserManager
         $creator_id = null,
         $hr_dept_id = 0,
         $extra = null,
-        $language = 'english',
+        $language = null,
         $encrypt_method = '',
         $send_email = false,
         $reset_password = 0,
@@ -1614,7 +1614,7 @@ class UserManager
 
         // Checking the user language
         $languages = api_get_languages();
-        if (!in_array($language, $languages['folder'])) {
+        if (empty($languages) || !in_array($language, $languages['folder'])) {
             $language = api_get_setting('platformLanguage');
         }
 

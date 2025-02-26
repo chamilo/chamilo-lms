@@ -9,15 +9,15 @@ namespace Chamilo\CourseBundle\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\User;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
@@ -40,7 +40,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ],
             ]
         ),
-        new Get(security: "is_granted('VIEW', object.resourceNode)")
+        new Get(security: "is_granted('VIEW', object.resourceNode)"),
     ],
     normalizationContext: ['groups' => ['group:read']],
     denormalizationContext: ['groups' => ['group:write']],

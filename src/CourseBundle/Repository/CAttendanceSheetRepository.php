@@ -25,12 +25,14 @@ final class CAttendanceSheetRepository extends ResourceRepository
             ->where('calendar.attendance = :attendanceId')
             ->andWhere('sheet.user = :userId')
             ->setParameter('attendanceId', $attendanceId)
-            ->setParameter('userId', $userId);
+            ->setParameter('userId', $userId)
+        ;
 
         if ($groupId) {
             $qb->join('calendar.groups', 'groups')
                 ->andWhere('groups.group = :groupId')
-                ->setParameter('groupId', $groupId);
+                ->setParameter('groupId', $groupId)
+            ;
         }
 
         return (int) $qb->getQuery()->getSingleScalarResult();

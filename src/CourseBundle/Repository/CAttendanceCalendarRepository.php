@@ -9,6 +9,7 @@ namespace Chamilo\CourseBundle\Repository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class CAttendanceCalendarRepository extends ResourceRepository
@@ -21,7 +22,6 @@ final class CAttendanceCalendarRepository extends ResourceRepository
     /**
      * Retrieves all calendar events for a specific attendance.
      *
-     * @param int $attendanceId
      * @return CAttendanceCalendar[]
      */
     public function findByAttendanceId(int $attendanceId): array
@@ -31,13 +31,13 @@ final class CAttendanceCalendarRepository extends ResourceRepository
             ->setParameter('attendanceId', $attendanceId)
             ->orderBy('c.dateTime', 'ASC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
      * Deletes all calendar events associated with a specific attendance.
      *
-     * @param int $attendanceId
      * @return int The number of deleted records
      */
     public function deleteAllByAttendance(int $attendanceId): int
@@ -47,15 +47,12 @@ final class CAttendanceCalendarRepository extends ResourceRepository
             ->where('c.attendance = :attendanceId')
             ->setParameter('attendanceId', $attendanceId)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
      * Finds a specific calendar event by its ID and the associated attendance ID.
-     *
-     * @param int $calendarId
-     * @param int $attendanceId
-     * @return CAttendanceCalendar|null
      */
     public function findByIdAndAttendance(int $calendarId, int $attendanceId): ?CAttendanceCalendar
     {
@@ -67,46 +64,45 @@ final class CAttendanceCalendarRepository extends ResourceRepository
                 'attendanceId' => $attendanceId,
             ])
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     /**
      * Retrieves calendar events filtered by a date range.
      *
-     * @param int $attendanceId
-     * @param \DateTime|null $startDate
-     * @param \DateTime|null $endDate
      * @return CAttendanceCalendar[]
      */
     public function findByDateRange(
         int $attendanceId,
-        ?\DateTime $startDate,
-        ?\DateTime $endDate
+        ?DateTime $startDate,
+        ?DateTime $endDate
     ): array {
         $qb = $this->createQueryBuilder('c')
             ->where('c.attendance = :attendanceId')
-            ->setParameter('attendanceId', $attendanceId);
+            ->setParameter('attendanceId', $attendanceId)
+        ;
 
         if ($startDate) {
             $qb->andWhere('c.dateTime >= :startDate')
-                ->setParameter('startDate', $startDate);
+                ->setParameter('startDate', $startDate)
+            ;
         }
 
         if ($endDate) {
             $qb->andWhere('c.dateTime <= :endDate')
-                ->setParameter('endDate', $endDate);
+                ->setParameter('endDate', $endDate)
+            ;
         }
 
         return $qb->orderBy('c.dateTime', 'ASC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
      * Checks if a calendar event is blocked.
-     *
-     * @param int $calendarId
-     * @return bool
      */
     public function isBlocked(int $calendarId): bool
     {
@@ -115,7 +111,8 @@ final class CAttendanceCalendarRepository extends ResourceRepository
             ->where('c.id = :calendarId')
             ->setParameter('calendarId', $calendarId)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
     }
 
     public function findAttendanceWithData(int $attendanceId): array
@@ -125,7 +122,8 @@ final class CAttendanceCalendarRepository extends ResourceRepository
             ->setParameter('attendanceId', $attendanceId)
             ->orderBy('calendar.dateTime', 'ASC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         $attendanceDates = array_map(function (CAttendanceCalendar $calendar) {
             return [
@@ -136,9 +134,9 @@ final class CAttendanceCalendarRepository extends ResourceRepository
 
         $attendanceData = [];
         foreach ($calendars as $calendar) {
-            /* @var CAttendanceSheet $sheet */
+            /** @var CAttendanceSheet $sheet */
             foreach ($calendar->getSheets() as $sheet) {
-                $key = $sheet->getUser()->getId() . '-' . $calendar->getIid();
+                $key = $sheet->getUser()->getId().'-'.$calendar->getIid();
                 $attendanceData[$key] = (int) $sheet->getPresence(); // Status: 1 (Present), 0 (Absent), null (No Status)
             }
         }
@@ -154,12 +152,14 @@ final class CAttendanceCalendarRepository extends ResourceRepository
         $qb = $this->createQueryBuilder('calendar')
             ->select('COUNT(calendar.iid)')
             ->where('calendar.attendance = :attendanceId')
-            ->setParameter('attendanceId', $attendanceId);
+            ->setParameter('attendanceId', $attendanceId)
+        ;
 
         if ($groupId) {
             $qb->join('calendar.groups', 'groups')
                 ->andWhere('groups.group = :groupId')
-                ->setParameter('groupId', $groupId);
+                ->setParameter('groupId', $groupId)
+            ;
         }
 
         return (int) $qb->getQuery()->getSingleScalarResult();
@@ -171,12 +171,14 @@ final class CAttendanceCalendarRepository extends ResourceRepository
             ->select('COUNT(calendar.iid)')
             ->where('calendar.attendance = :attendanceId')
             ->andWhere('calendar.doneAttendance = true')
-            ->setParameter('attendanceId', $attendanceId);
+            ->setParameter('attendanceId', $attendanceId)
+        ;
 
         if ($groupId) {
             $qb->join('calendar.groups', 'groups')
                 ->andWhere('groups.group = :groupId')
-                ->setParameter('groupId', $groupId);
+                ->setParameter('groupId', $groupId)
+            ;
         }
 
         return (int) $qb->getQuery()->getSingleScalarResult();

@@ -594,7 +594,7 @@ class CourseController extends ToolBaseController
         $ctoolSession = $ctoolRepo->findOneBy([
             'title' => 'course_homepage',
             'course' => $course,
-            'session' => $session
+            'session' => $session,
         ]);
 
         if (!$ctoolSession) {
@@ -609,7 +609,8 @@ class CourseController extends ToolBaseController
                     ->setParent($course)
                     ->setCreator($course->getCreator())
                     ->setSession($session)
-                    ->addCourseLink($course);
+                    ->addCourseLink($course)
+                ;
 
                 $em->persist($ctoolSession);
                 $em->flush();
@@ -621,7 +622,8 @@ class CourseController extends ToolBaseController
             $ctoolIntro = (new CToolIntro())
                 ->setCourseTool($ctoolSession)
                 ->setIntroText($introText ?? '')
-                ->setParent($course);
+                ->setParent($course)
+            ;
 
             $em->persist($ctoolIntro);
             $em->flush();
@@ -634,7 +636,7 @@ class CourseController extends ToolBaseController
             ]);
         }
 
-        if ($introText !== null) {
+        if (null !== $introText) {
             $ctoolIntro->setIntroText($introText);
             $em->persist($ctoolIntro);
             $em->flush();

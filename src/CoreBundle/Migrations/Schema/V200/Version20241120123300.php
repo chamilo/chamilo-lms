@@ -25,13 +25,14 @@ final class Version20241120123300 extends AbstractMigrationChamilo
         $queryBuilder
             ->where('ct.session IS NOT NULL')
             ->andWhere('ct.title != :excludedTitle')
-            ->setParameter('excludedTitle', 'course_homepage');
+            ->setParameter('excludedTitle', 'course_homepage')
+        ;
 
         $sessionTools = $queryBuilder->getQuery()->getResult();
 
         foreach ($sessionTools as $tool) {
             $this->entityManager->remove($tool);
-            error_log(sprintf('Removed tool: %s (ID: %d)', $tool->getTitle(), $tool->getIid()));
+            error_log(\sprintf('Removed tool: %s (ID: %d)', $tool->getTitle(), $tool->getIid()));
         }
 
         $this->entityManager->flush();

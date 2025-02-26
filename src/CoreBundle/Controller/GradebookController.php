@@ -39,7 +39,7 @@ class GradebookController extends AbstractController
         $categories = $this->gradeBookCategoryRepository->getCategoriesForCourse($courseId, $sessionId);
 
         // Format the response
-        $formatted = array_map(fn($category) => [
+        $formatted = array_map(fn ($category) => [
             'id' => $category->getId(),
             'title' => $category->getTitle(),
             'parentId' => $category->getParent()?->getId(),

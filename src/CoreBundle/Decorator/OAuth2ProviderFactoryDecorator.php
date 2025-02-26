@@ -84,9 +84,7 @@ readonly class OAuth2ProviderFactoryDecorator
                 break;
 
             default:
-                $customOptions = throw new InvalidArgumentException("Unsupported provider class: $class");
-
-                break;
+                throw new InvalidArgumentException("Unsupported provider class: $class");
         }
 
         $options = $customOptions + $options;

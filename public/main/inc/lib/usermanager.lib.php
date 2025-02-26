@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\NameConvention;
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
@@ -9,10 +10,12 @@ use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues as EntityExtraFieldValues;
@@ -83,9 +86,6 @@ class UserManager
     /**
      * Creates a new user for the platform.
      *
-     * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
-     * @author Roan Embrechts <roan_embrechts@yahoo.com>
-     *
      * @param string        $firstName
      * @param string        $lastName
      * @param int           $status                  (1 for course tutor, 5 for student, 6 for anonymous)
@@ -96,8 +96,8 @@ class UserManager
      * @param string        $language                User language    (optional)
      * @param string        $phone                   Phone number    (optional)
      * @param string        $pictureUri             Picture URI        (optional)
-     * @param string        $authSource              Authentication source (defaults to 'platform', dependind on constant)
-     * @param string        $expirationDate          Account expiration date (optional, defaults to null)
+     * @param string        $authSources              Authentication source (defaults to 'platform', dependind on constant)
+     * @param string $expirationDate          Account expiration date (optional, defaults to null)
      * @param int           $active                  Whether the account is enabled or disabled by default
      * @param int           $hrDeptId              The department of HR in which the user is registered (defaults to 0)
      * @param array         $extra                   Extra fields (labels must be prefixed by "extra_")
@@ -116,6 +116,9 @@ class UserManager
      * If it exists, the current user id is the creator id. If a problem arises,
      * @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1
      * @assert ('Pippin','Took',null,null,'jo','jo') === false
+     *@author Hugues Peeters <peeters@ipm.ucl.ac.be>,
+     * @author Roan Embrechts <roan_embrechts@yahoo.com>
+     *
      */
     public static function create_user(
         $firstName,
@@ -128,7 +131,7 @@ class UserManager
         $language = '',
         $phone = '',
         $pictureUri = '',
-        $authSource = null,
+        ?array $authSources = [],
         $expirationDate = null,
         $active = 1,
         $hrDeptId = 0,
@@ -143,7 +146,7 @@ class UserManager
         $emailTemplate = [],
         $redirectToURLAfterLogin = ''
     ) {
-        $authSource = !empty($authSource) ? $authSource : PLATFORM_AUTH_SOURCE;
+        $authSources = !empty($authSources) ? $authSources : [UserAuthSource::PLATFORM];
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
 
         if (0 === $creatorId) {
@@ -166,22 +169,12 @@ class UserManager
             return false;
         }
 
-        global $_configuration;
         $original_password = $password;
 
-        $access_url_id = 1;
-        if (api_get_multiple_access_url()) {
-            $access_url_id = api_get_current_access_url_id();
-        } else {
-            // In some cases, the first access_url ID might be different from 1
-            // for example when using a DB cluster or hacking the DB manually.
-            // In this case, we want the first row, not necessarily "1".
-            $accessUrlRepository = Container::getAccessUrlRepository();
-            $accessUrl = $accessUrlRepository->getFirstId();
-            if (!empty($accessUrl[0]) && !empty($accessUrl[0][1])) {
-                $access_url_id = $accessUrl[0][1];
-            }
-        }
+        /** @var AccessUrlHelper $accessUrlHelper */
+        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrl = $accessUrlHelper->getCurrent();
+        $access_url_id = $accessUrl->getId();
 
         $hostingLimitUsers = get_hosting_limit($access_url_id, 'hosting_limit_users');
 
@@ -220,7 +213,7 @@ class UserManager
         }
 
         if (empty($password)) {
-            if (PLATFORM_AUTH_SOURCE === $authSource) {
+            if (in_array(UserAuthSource::PLATFORM, $authSources)) {
                 Display::addFlash(
                     Display::return_message(
                         get_lang('Required field').': '.get_lang(
@@ -236,7 +229,7 @@ class UserManager
             // We use the authSource as password.
             // The real validation will be by processed by the auth
             // source not Chamilo
-            $password = $authSource;
+            $password = $authSources;
         }
 
         // Checking the user language
@@ -275,7 +268,6 @@ class UserManager
             ->setEmail($email)
             ->setOfficialCode($officialCode)
             ->setCreatorId($creatorId)
-            ->setAuthSource($authSource)
             ->setPhone($phone)
             ->setAddress($address)
             ->setLocale($language)
@@ -283,6 +275,10 @@ class UserManager
             ->setActive($active)
             ->setTimezone(api_get_timezone())
         ;
+
+        foreach ($authSources as $authSource) {
+            $user->addAuthSourceByAuthentication($authSource, $accessUrl);
+        }
 
         if (null !== $expirationDate) {
             $user->setExpirationDate($expirationDate);
@@ -805,7 +801,7 @@ class UserManager
      * @param string $lastname        The user's lastname
      * @param string $username        The user's username (login)
      * @param string $password        The user's password
-     * @param string $auth_source     The authentication source (default: "platform")
+     * @param string $auth_sources     The authentication source (default: "platform")
      * @param string $email           The user's e-mail address
      * @param int    $status          The user's status
      * @param string $official_code   The user's official code (usually just an internal institutional code)
@@ -832,7 +828,7 @@ class UserManager
         $lastname,
         $username,
         $password,
-        $auth_source,
+        array $auth_sources,
         $email,
         $status,
         $official_code,
@@ -865,18 +861,17 @@ class UserManager
             return false;
         }
 
+        /** @var AccessUrl $accessUrl */
+        $accessUrl = Container::$container->get(AccessUrlHelper::class)->getCurrent();
+
         if (0 == $reset_password) {
             $password = null;
-            $auth_source = $user->getAuthSource();
+            $auth_sources = $user->getAuthSourcesAuthentications($accessUrl);
         } elseif (1 == $reset_password) {
             $original_password = $password = api_generate_password();
-            $auth_source = PLATFORM_AUTH_SOURCE;
+            $auth_sources = [UserAuthSource::PLATFORM];
         } elseif (2 == $reset_password) {
-            $password = $password;
-            $auth_source = PLATFORM_AUTH_SOURCE;
-        } elseif (3 == $reset_password) {
-            $password = $password;
-            $auth_source = $auth_source;
+            $auth_sources = [UserAuthSource::PLATFORM];
         }
 
         // Checking the user language
@@ -917,7 +912,6 @@ class UserManager
             ->setFirstname($firstname)
             ->setUsername($username)
             ->setStatus($status)
-            ->setAuthSource($auth_source)
             ->setLocale($language)
             ->setEmail($email)
             ->setOfficialCode($official_code)
@@ -926,7 +920,12 @@ class UserManager
             ->setExpirationDate($expiration_date)
             ->setActive($active)
             ->setHrDeptId((int) $hr_dept_id)
+            ->removeAuthSources()
         ;
+
+        foreach ($auth_sources as $authSource) {
+            $user->addAuthSourceByAuthentication($authSource, $accessUrl);
+        }
 
         if (!is_null($password)) {
             $user->setPlainPassword($password);

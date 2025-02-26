@@ -57,7 +57,7 @@ class UsersLoader implements LoaderInterface
             $incomingData['language'],
             $incomingData['phone'],
             null,
-            $incomingData['auth_source'],
+            [$incomingData['auth_source']],
             null,
             $incomingData['active'],
             0,

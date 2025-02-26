@@ -6,6 +6,7 @@
  * This tool allows platform admins to add users by uploading a CSV or XML file.
  */
 
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Symfony\Component\DomCrawler\Crawler;
 
 $cidReset = true;
@@ -112,7 +113,7 @@ function updateUsers(
             $userName = isset($user['NewUserName']) ? $user['NewUserName'] : $userInfo['username'];
             $changePassMethod = 0;
             $password = null;
-            $authSource = $userInfo['auth_source'];
+            $authSource = $userInfo['auth_sources'];
 
             if ($resetPassword) {
                 $changePassMethod = 1;
@@ -122,8 +123,8 @@ function updateUsers(
                     $password = $user['Password'];
                 }
 
-                if (isset($user['AuthSource']) && $user['AuthSource'] != $authSource) {
-                    $authSource = $user['AuthSource'];
+                if (isset($user['AuthSource']) && !in_array($user['AuthSource'], $authSource)) {
+                    $authSource = [$user['AuthSource']];
                     $changePassMethod = 3;
                 }
             }
@@ -267,7 +268,7 @@ function parse_xml_data($file)
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true, null);
 
-$defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
+$defined_auth_sources[] = UserAuthSource::PLATFORM;
 if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }

@@ -43,7 +43,7 @@ function fill_many_users($num)
                 null,
                 null,
                 null,
-                $user['auth_source'],
+                [$user['auth_source']],
                 null,
                 $user['active']
             );

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
 use ChamiloSession as Session;
@@ -928,7 +929,7 @@ if ($form->validate()) {
             $values['language'],
             $phone,
             null,
-            PLATFORM_AUTH_SOURCE,
+            [UserAuthSource::PLATFORM],
             null,
             1,
             0,

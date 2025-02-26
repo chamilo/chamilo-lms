@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use ChamiloSession as Session;
 
@@ -177,12 +178,14 @@ function online_logout($user_id = null, $logout_redirect = false)
     // (using *authent_name*_logout as the function name) and the following code
     // will find and execute it
     $uinfo = api_get_user_info($user_id);
-    if ((PLATFORM_AUTH_SOURCE != $uinfo['auth_source']) && is_array($extAuthSource)) {
-        if (is_array($extAuthSource[$uinfo['auth_source']])) {
-            $subarray = $extAuthSource[$uinfo['auth_source']];
+    if (!in_array(UserAuthSource::PLATFORM, $uinfo['auth_sources']) && is_array($extAuthSource)) {
+        $firstAuthSource = $uinfo['auth_sources'][0];
+
+        if (is_array($extAuthSource[$firstAuthSource])) {
+            $subarray = $extAuthSource[$firstAuthSource];
             if (!empty($subarray['logout']) && file_exists($subarray['logout'])) {
                 require_once $subarray['logout'];
-                $logout_function = $uinfo['auth_source'].'_logout';
+                $logout_function = $firstAuthSource.'_logout';
                 if (function_exists($logout_function)) {
                     $logout_function($uinfo);
                 }
@@ -209,7 +212,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     Session::destroy();
 
     $pluginKeycloak = 'true' === api_get_plugin_setting('keycloak', 'tool_enable');
-    if ($pluginKeycloak && 'keycloak' === $uinfo['auth_source']) {
+    if ($pluginKeycloak && in_array('keycloak', $uinfo['auth_sources'])) {
         $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?slo';
         header('Location: '.$pluginUrl);
         exit;

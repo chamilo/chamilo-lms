@@ -5,9 +5,11 @@
 use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
@@ -1497,6 +1499,9 @@ function finishInstallationWithContainer(
     /** @var User $admin */
     $admin = $repo->findOneBy(['username' => 'admin']);
 
+    /** @var AccessUrl $accessUrl */
+    $accessUrl = Container::$container->get(AccessUrlHelper::class)->getCurrent();
+
     $admin
         ->setLastname($adminLastName)
         ->setFirstname($adminFirstName)
@@ -1505,7 +1510,7 @@ function finishInstallationWithContainer(
         ->setPlainPassword($passForm)
         ->setEmail($emailForm)
         ->setOfficialCode('ADMIN')
-        ->setAuthSource(PLATFORM_AUTH_SOURCE)
+        ->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl)
         ->setPhone($adminPhoneForm)
         ->setLocale($languageForm)
         ->setTimezone($timezone)

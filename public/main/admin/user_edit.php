@@ -2,8 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
@@ -20,6 +24,12 @@ $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $userInfo = api_get_user_info($user_id);
 $userObj = api_get_user_entity($user_id);
 $illustrationRepo = Container::getIllustrationRepository();
+
+/** @var AuthenticationConfigHelper $authenticationConfigHelper */
+$authenticationConfigHelper = Container::$container->get(AuthenticationConfigHelper::class);
+
+/** @var AccessUrl $accessUrl */
+$accessUrl = Container::$container->get(AccessUrlHelper::class)->getCurrent();
 
 $htmlHeadXtra[] = '
 <script>
@@ -192,24 +202,28 @@ if ('true' !== api_get_setting('login_is_email')) {
     $form->addRule('username', get_lang('This login is already in use'), 'username_available', $user_data['username']);
 }
 
-if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
-    $form->addLabel(
-        get_lang('External authentification'),
-        $userInfo['auth_source']
-    );
+$extAuthSource = $authenticationConfigHelper->getAuthSourceAuthentications($accessUrl);
+
+if (!empty($extAuthSource) && count($extAuthSource) > 0) {
+    foreach ($userInfo['auth_sources'] as $userAuthSource) {
+        $form->addLabel(
+            get_lang('External authentification'),
+            $userAuthSource
+        );
+    }
 }
 
 // Password
 $form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('Don\'t reset password'), 0);
 $nb_ext_auth_source_added = 0;
-if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
+if (!empty($extAuthSource) && count($extAuthSource) > 0) {
     $auth_sources = [];
-    foreach ($extAuthSource as $key => $info) {
+    foreach ($extAuthSource as $key) {
         // @todo : make uniform external authentication configuration (ex : cas and external_login ldap)
         // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
         // extAuthSource always on for CAS even if not activated
         // same action for file user_add.php
-        if ((CAS_AUTH_SOURCE == $key && 'true' === api_get_setting('cas_activate')) || (CAS_AUTH_SOURCE != $key)) {
+        if ((UserAuthSource::CAS == $key && 'true' === api_get_setting('cas_activate')) || (UserAuthSource::CAS != $key)) {
             $auth_sources[$key] = $key;
             $nb_ext_auth_source_added++;
         }
@@ -217,8 +231,8 @@ if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0
     if ($nb_ext_auth_source_added > 0) {
         // @todo check the radio button for external authentification and select the external authentication in the menu
         $group[] = $form->createElement('radio', 'reset_password', null, get_lang('External authentification').' ', 3);
-        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
-        $group[] = $form->createElement('static', '', '', '<br />');
+        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources, ['multiple' => 'multiple']);
+        $group[] = $form->createElement('static', '', '', '<br />', []);
         $form->addGroup($group, 'password', null, null, false);
     }
 }
@@ -380,6 +394,8 @@ $form->addButtonSave(get_lang('Save'));
 
 // Set default values
 $user_data['reset_password'] = 0;
+$user_data['auth_source'] = $userInfo['auth_sources'];
+
 if (!$hideFields) {
     $expiration_date = $user_data['expiration_date'];
     if (empty($expiration_date)) {

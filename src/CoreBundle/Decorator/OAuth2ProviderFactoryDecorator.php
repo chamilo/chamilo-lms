@@ -54,7 +54,7 @@ readonly class OAuth2ProviderFactoryDecorator
                     'responseResourceOwnerId' => 'sub',
                 ];
 
-                $customOptions = $this->authenticationConfigHelper->getProviderOptions(
+                $customOptions = $this->authenticationConfigHelper->getOAuthProviderOptions(
                     'generic',
                     [
                         'client_id' => $customConfig['client_id'],
@@ -66,7 +66,7 @@ readonly class OAuth2ProviderFactoryDecorator
                 break;
 
             case Facebook::class:
-                $customOptions = $this->authenticationConfigHelper->getProviderOptions('facebook', $customConfig);
+                $customOptions = $this->authenticationConfigHelper->getOAuthProviderOptions('facebook', $customConfig);
 
                 break;
 
@@ -74,12 +74,12 @@ readonly class OAuth2ProviderFactoryDecorator
                 $customConfig['auth_server_url'] ??= '';
                 $customConfig['realm'] ??= '';
 
-                $customOptions = $this->authenticationConfigHelper->getProviderOptions('keycloak', $customConfig);
+                $customOptions = $this->authenticationConfigHelper->getOAuthProviderOptions('keycloak', $customConfig);
 
                 break;
 
             case Azure::class:
-                $customOptions = $this->authenticationConfigHelper->getProviderOptions('azure', $customConfig);
+                $customOptions = $this->authenticationConfigHelper->getOAuthProviderOptions('azure', $customConfig);
 
                 break;
 

@@ -6863,6 +6863,10 @@ function get_hosting_limit(int $urlId, string $limitName): mixed
 {
     $limits = load_hosting_limits();
 
+    if (!isset($limits[$urlId])) {
+        return null;
+    }
+
     foreach ($limits[$urlId] as $limitArray) {
         if (isset($limitArray[$limitName])) {
             return $limitArray[$limitName];

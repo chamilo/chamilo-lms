@@ -154,7 +154,12 @@ try {
             $receivers = $_POST['receivers'] ?? [];
             $subject = !empty($_POST['subject']) ? $_POST['subject'] : null;
             $text = !empty($_POST['text']) ? $_POST['text'] : null;
-            $data = $restApi->saveUserMessage($subject, $text, $receivers);
+            if (!empty($_POST['only_local']) && ('false' != $_POST['only_local'])) {
+                $only_local = true;
+            } else {
+                $only_local = false;
+            }
+            $data = $restApi->saveUserMessage($subject, $text, $receivers, $only_local);
             Event::addEvent(LOG_WS.$action, 'username', $username);
             $restResponse->setData($data);
             break;

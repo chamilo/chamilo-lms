@@ -1522,10 +1522,30 @@ class Rest extends WebService
      *
      * @return array
      */
-    public function saveUserMessage($subject, $text, array $receivers)
+    public function saveUserMessage($subject, $text, array $receivers, $only_local)
     {
         foreach ($receivers as $userId) {
-            MessageManager::send_message($userId, $subject, $text);
+            MessageManager::send_message(
+                $userId,
+                $subject,
+                $text,
+                [],
+                [],
+                0,
+                0,
+                0,
+                0,
+                0,
+                false,
+                0,
+                [],
+                false,
+                false,
+                0,
+                [],
+                false,
+                null,
+                $only_local);
         }
 
         return [

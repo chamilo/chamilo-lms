@@ -18,7 +18,7 @@
             </div>
             <div
                 id="{{ name }}Collapse"
-                class="p-card-content {{  expanded == 'true' ? '' : 'collapse' }}">
+                class="p-card-content {{  expanded == 'true' ? '' : 'hidden' }}">
                 {% if list %}
                     <ul class="nav nav-pills nav-stacked">
                         {{ content }}
@@ -33,7 +33,7 @@
         $(function () {
           $("#toggle-{{ name }}Collapse").on("click", (e) => {
             e.preventDefault();
-            $("#{{ name }}Collapse").toggleClass("collapse");
+            $("#{{ name }}Collapse").toggleClass("hidden");
           })
         })
     </script>

@@ -10362,7 +10362,7 @@ class SessionManager
     {
         $sessions = [];
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sql = "SELECT id, title FROM $tbl_session WHERE parent_id IS NULL ORDER BY title";
+        $sql = "SELECT id, title FROM $tbl_session ORDER BY title";
         $result = Database::query($sql);
 
         while ($row = Database::fetch_array($result)) {

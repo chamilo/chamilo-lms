@@ -20,6 +20,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -31,7 +32,8 @@ class SessionRepetitionCommand extends Command
         private readonly SessionRepository $sessionRepository,
         private readonly EntityManagerInterface $entityManager,
         private readonly TranslatorInterface $translator,
-        private readonly MessageHelper $messageHelper
+        private readonly MessageHelper $messageHelper,
+        private readonly RequestStack $requestStack
     ) {
         parent::__construct();
     }
@@ -238,7 +240,13 @@ class SessionRepetitionCommand extends Command
      */
     private function generateSessionSummaryLink(Session $session): string
     {
-        return '/main/session/resume_session.php?id_session=' . $session->getId();
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request) {
+            return '/main/session/resume_session.php?id_session=' . $session->getId();
+        }
+
+        $baseUrl = $request->getSchemeAndHttpHost();
+        return sprintf('%s/main/session/resume_session.php?id_session=%d', $baseUrl, $session->getId());
     }
 
     /**

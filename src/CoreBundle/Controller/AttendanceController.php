@@ -14,7 +14,9 @@ use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 use Chamilo\CourseBundle\Entity\CAttendanceSheetLog;
 use Chamilo\CourseBundle\Repository\CAttendanceCalendarRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceSheetRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +26,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/attendance')]
 class AttendanceController extends AbstractController
 {
-
     public function __construct(
         private readonly CAttendanceCalendarRepository $attendanceCalendarRepository,
         private readonly EntityManagerInterface $em,
@@ -65,7 +66,7 @@ class AttendanceController extends AbstractController
 
             $totalCalendars = $calendarRepository->countByAttendanceAndGroup($courseId, $groupId);
 
-            $formattedUsers = array_map(function ($user) use ($sheetRepository, $calendarRepository, $userRepository, $courseId, $groupId, $totalCalendars) {
+            $formattedUsers = array_map(function ($user) use ($sheetRepository, $userRepository, $courseId, $groupId, $totalCalendars) {
                 $userScore = $sheetRepository->getUserScore($user->getId(), $courseId, $groupId);
 
                 $faults = max(0, $totalCalendars - $userScore);
@@ -83,8 +84,8 @@ class AttendanceController extends AbstractController
             }, $users);
 
             return $this->json($formattedUsers, 200);
-        } catch (\Exception $e) {
-            return $this->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
+        } catch (Exception $e) {
+            return $this->json(['error' => 'An error occurred: '.$e->getMessage()], 500);
         }
     }
 
@@ -106,7 +107,7 @@ class AttendanceController extends AbstractController
         $groupId = isset($data['groupId']) ? (int) $data['groupId'] : null;
 
         $usersInCourse = $userRepository->findUsersByContext($courseId, $sessionId, $groupId);
-        $userIdsInCourse = array_map(fn(User $user) => $user->getId(), $usersInCourse);
+        $userIdsInCourse = array_map(fn (User $user) => $user->getId(), $usersInCourse);
 
         $affectedRows = 0;
 
@@ -114,7 +115,7 @@ class AttendanceController extends AbstractController
             foreach ($attendanceData as $entry) {
                 $userId = (int) $entry['userId'];
                 $calendarId = (int) $entry['calendarId'];
-                $presence = array_key_exists('presence', $entry) ? $entry['presence'] : null;
+                $presence = \array_key_exists('presence', $entry) ? $entry['presence'] : null;
                 $signature = $entry['signature'] ?? null;
                 $comment = $entry['comment'] ?? null;
 
@@ -133,12 +134,13 @@ class AttendanceController extends AbstractController
                     'attendanceCalendar' => $calendar,
                 ]);
 
-                if ($sheet && $presence === null) {
+                if ($sheet && null === $presence) {
                     $this->em->remove($sheet);
+
                     continue;
                 }
 
-                if (!$sheet && $presence === null) {
+                if (!$sheet && null === $presence) {
                     continue;
                 }
 
@@ -149,13 +151,14 @@ class AttendanceController extends AbstractController
                 $sheet->setUser($user)
                     ->setAttendanceCalendar($calendar)
                     ->setPresence($presence)
-                    ->setSignature($signature);
+                    ->setSignature($signature)
+                ;
 
                 $this->em->persist($sheet);
 
                 $this->em->flush();
 
-                if ($comment !== null) {
+                if (null !== $comment) {
                     $existingComment = $this->em->getRepository(CAttendanceResultComment::class)->findOneBy([
                         'attendanceSheetId' => $sheet->getIid(),
                         'userId' => $user->getId(),
@@ -169,7 +172,7 @@ class AttendanceController extends AbstractController
                     }
 
                     $existingComment->setComment($comment);
-                    $existingComment->setUpdatedAt(new \DateTime());
+                    $existingComment->setUpdatedAt(new DateTime());
 
                     $this->em->persist($existingComment);
                 }
@@ -202,9 +205,8 @@ class AttendanceController extends AbstractController
                 'message' => $this->translator->trans('Attendance data and comments saved successfully'),
                 'affectedRows' => $affectedRows,
             ]);
-
-        } catch (\Exception $e) {
-            return $this->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
+        } catch (Exception $e) {
+            return $this->json(['error' => 'An error occurred: '.$e->getMessage()], 500);
         }
     }
 
@@ -246,10 +248,11 @@ class AttendanceController extends AbstractController
     {
         $log = new CAttendanceSheetLog();
         $log->setAttendance($attendance)
-            ->setLasteditDate(new \DateTime())
+            ->setLasteditDate(new DateTime())
             ->setLasteditType($lasteditType)
             ->setCalendarDateValue($calendar->getDateTime())
-            ->setUser($this->getUser());
+            ->setUser($this->getUser())
+        ;
 
         $this->em->persist($log);
     }

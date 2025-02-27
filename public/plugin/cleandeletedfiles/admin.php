@@ -142,7 +142,7 @@ if ($plugin->isEnabled() && $isPlatformAdmin) {
             ];
 
             $data = [];
-            $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+            $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'));
 
             foreach ($filesDeletedList as $value) {
                 $tools = Display::url(

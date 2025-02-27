@@ -2,11 +2,14 @@
 
 // personalize the logout button behaviour
 global $_user;
+
+use Chamilo\CoreBundle\Entity\UserAuthSource;
+
 $_template['show_message'] = false;
 
 if (!api_is_anonymous() &&
     'true' == api_get_setting('cas_activate') &&
-    CAS_AUTH_SOURCE == $_user['auth_source']
+    in_array(UserAuthSource::CAS, $_user['auth_sources'])
 ) {
     $_template['show_message'] = true;
     // the link URL

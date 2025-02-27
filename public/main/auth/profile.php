@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
@@ -299,7 +300,7 @@ if ('true' === api_get_setting('extended_profile')) {
 }
 
 //    PASSWORD, if auth_source is platform
-if (PLATFORM_AUTH_SOURCE == $user_data['auth_source'] &&
+if (in_array(UserAuthSource::PLATFORM, $user_data['auth_sources']) &&
     in_array('password', $profileList)
 ) {
     $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('Enter2passToChange')], ['size' => 40]);
@@ -402,7 +403,7 @@ if ($form->validate()) {
     }
 
     $allow_users_to_change_email_with_no_password = true;
-    if (isset($user_data['auth_source']) && PLATFORM_AUTH_SOURCE == $user_data['auth_source'] &&
+    if (isset($user_data['auth_sources']) && in_array(UserAuthSource::PLATFORM, $user_data['auth_sources']) &&
         'false' === api_get_setting('allow_users_to_change_email_with_no_password')
     ) {
         $allow_users_to_change_email_with_no_password = false;

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 
 $cidReset = true;
 
@@ -97,7 +98,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 null,
                                 api_utf8_decode($nodeUser->Phone),
                                 null,
-                                PLATFORM_AUTH_SOURCE,
+                                [UserAuthSource::PLATFORM],
                                 null,
                                 1,
                                 0,
@@ -134,7 +135,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     $lastname,
                                     $username,
                                     $password,
-                                    null,
+                                    [],
                                     $email,
                                     $status,
                                     $officialCode,

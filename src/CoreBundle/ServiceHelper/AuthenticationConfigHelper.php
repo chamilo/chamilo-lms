@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -62,26 +63,50 @@ readonly class AuthenticationConfigHelper
         return $enabledProviders;
     }
 
-    private function getOAuthProvidersForUrl(?AccessUrl $url): array
+    public function getAuthSources(?AccessUrl $url)
     {
-        $urlId = $url ? $url->getId() : $this->urlHelper->getCurrent()->getId();
+        $urlId = $url ?: $this->urlHelper->getCurrent();
 
         $authentication = $this->parameterBag->has('authentication')
             ? $this->parameterBag->get('authentication')
             : [];
 
-        if (isset($authentication[$urlId]['oauth2'])) {
-            return $authentication[$urlId]['oauth2'];
+        if (isset($authentication[$urlId->getId()])) {
+            return $authentication[$urlId->getId()];
         }
 
-        if (isset($authentication['default']['oauth2'])) {
-            return $authentication['default']['oauth2'];
+        if (isset($authentication['default'])) {
+            return $authentication['default'];
         }
 
         return [];
     }
 
-    public function getProviderOptions(string $providerType, array $config): array
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    private function getOAuthProvidersForUrl(?AccessUrl $url): array
+    {
+        $authentication = $this->getAuthSources($url);
+
+        if (isset($authentication['oauth2'])) {
+            return $authentication['oauth2'];
+        }
+
+        return [];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getAuthSourceAuthentications(?AccessUrl $url): array
+    {
+        $authSources = $this->getAuthSources($url);
+
+        return [UserAuthSource::PLATFORM, ...array_keys($authSources)];
+    }
+
+    public function getOAuthProviderOptions(string $providerType, array $config): array
     {
         $defaults = match ($providerType) {
             'generic' => [

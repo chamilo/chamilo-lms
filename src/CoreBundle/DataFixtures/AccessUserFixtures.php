@@ -81,7 +81,7 @@ class AccessUserFixtures extends Fixture
             ->setFirstname('User')
             ->setCreatorId(1)
             ->setOfficialCode('FALLBACK')
-            ->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl)
+            //->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl)
             ->setPhone('0000000000')
             ->setTimezone($timezone)
             ->setActive(USER_SOFT_DELETED)

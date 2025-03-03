@@ -1518,8 +1518,17 @@ function finishInstallationWithContainer(
 
     $repo->updateUser($admin);
 
-    $repo = Container::getUserRepository();
-    $repo->updateUser($admin);
+    /** @var User $anonUser */
+    $anonUser = $repo->findOneBy(['username' => 'anon']);
+    $anonUser->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl);
+
+    $repo->updateUser($anonUser);
+
+    /** @var User $fallbackUser */
+    $fallbackUser = $repo->findOneBy(['username' => 'fallback_user']);
+    $fallbackUser->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl);
+
+    $repo->updateUser($fallbackUser);
 
     // Set default language
     Database::update(

@@ -45,7 +45,7 @@ class Ticket
     protected Course $course;
 
     #[ORM\ManyToOne(targetEntity: Session::class)]
-    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected Session $session;
 
     #[Assert\NotBlank]

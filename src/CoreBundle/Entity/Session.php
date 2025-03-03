@@ -370,7 +370,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
      * Image illustrating the session (was extra field 'image' in 1.11).
      */
     #[Groups(['user_subscriptions:sessions'])]
-    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $image = null;
 

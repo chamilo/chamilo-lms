@@ -24,7 +24,6 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Yaml\Yaml;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
@@ -6841,9 +6840,11 @@ function api_get_configuration_value($variable)
  */
 function load_hosting_limits(): array
 {
-    $container = Container::$container;
+    if (!Container::$container->hasParameter('hosting_limits')) {
+        return [];
+    }
 
-    $hostingLimits = $container->getParameter('hosting_limits');
+    $hostingLimits =Container::$container->getParameter('hosting_limits');
 
     return $hostingLimits['urls'] ?? [];
 }

@@ -11,7 +11,7 @@ use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class AzureProviderController extends AbstractProviderController
+class AzureProviderController extends AbstractOAuth2ProviderController
 {
     #[Route('/connect/azure', name: 'chamilo.oauth2_azure_start')]
     public function connect(

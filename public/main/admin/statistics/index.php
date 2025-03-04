@@ -747,7 +747,7 @@ switch ($report) {
             $extraConditions = '';
             if (!empty($startDate) && !empty($endDate)) {
                 // $extraConditions is already cleaned inside the function getUserListExtraConditions
-                $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
+                $extraConditions .= " AND created_at BETWEEN '$startDate' AND '$endDate' ";
             }
 
             $totalCount = UserManager::getUserListExtraConditions(
@@ -856,7 +856,7 @@ switch ($report) {
                 $item = [];
                 $item[] = $user['firstname'];
                 $item[] = $user['lastname'];
-                $item[] = api_get_local_time($user['registration_date']);
+                $item[] = api_get_local_time($user['created_at']);
                 $item[] = $userLanguage;
                 $item[] = $languageTarget;
                 $item[] = $contract ? get_lang('Yes') : get_lang('No');

@@ -13,8 +13,15 @@ $action = $_REQUEST['a'];
 
 switch ($action) {
     case 'md_to_html':
-        $plugin = isset($_GET['plugin']) ? $_GET['plugin'] : '';
+        $plugin = $_GET['plugin'] ?? '';
         $appPlugin = new AppPlugin();
+
+        $pluginPaths = $appPlugin->read_plugins_from_path();
+        if (!in_array($plugin, $pluginPaths)) {
+            echo Display::return_message(get_lang('NotAllowed'), 'error', false);
+            exit;
+        }
+
         $pluginInfo = $appPlugin->getPluginInfo($plugin);
 
         $html = '';

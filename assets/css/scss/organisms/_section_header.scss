@@ -18,7 +18,7 @@
   }
 
   &__actions {
-    @apply flex gap-2 flex-wrap;
+    @apply flex gap-2 flex-wrap justify-center;
   }
 
   h1, h2, h3, h4, h5, h6 {

@@ -89,7 +89,7 @@
                     'view': view.type,
                     'start': date
                 };
-                Cookies.set('agenda_cookies', data, 1); // Expires 1 day*/
+              Cookies.set('agenda_cookies', data, { expires: 1{% if is_https %}, secure: true{% endif %} }); // Expires 1 day
             },
             viewDidMount: function(dateInfo) {
                 var view = dateInfo.view;
@@ -98,7 +98,7 @@
                     //'start': view.intervalStart.format("YYYY-MM-DD")
                     'start': dateInfo.currentStart
                 };
-                Cookies.set('agenda_cookies', data, 1); // Expires 1 day*/
+              Cookies.set('agenda_cookies', data, { expires: 1{% if is_https %}, secure: true{% endif %} }); // Expires 1 day
             },
             // Add event
             select: function(info) {

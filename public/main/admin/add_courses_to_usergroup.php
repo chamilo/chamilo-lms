@@ -48,8 +48,8 @@ function remove_item(origin) {
 </script>';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
-    $form_sent = $_POST['form_sent'];
-    $elements_posted = $_POST['elements_in_name'];
+    $form_sent = (int) $_POST['form_sent'];
+    $elements_posted = Security::remove_XSS($_POST['elements_in_name']);
     if (!is_array($elements_posted)) {
         $elements_posted = [];
     }
@@ -192,7 +192,7 @@ echo '<div id="advanced_search_options" style="display:none">';
 $searchForm->display();
 echo '</div>';
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) {
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($add)) {
     echo '&add=true';
 } ?>" style="margin:0px;" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';

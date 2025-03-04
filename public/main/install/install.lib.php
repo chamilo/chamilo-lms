@@ -5,9 +5,11 @@
 use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
@@ -1497,6 +1499,9 @@ function finishInstallationWithContainer(
     /** @var User $admin */
     $admin = $repo->findOneBy(['username' => 'admin']);
 
+    /** @var AccessUrl $accessUrl */
+    $accessUrl = Container::$container->get(AccessUrlHelper::class)->getCurrent();
+
     $admin
         ->setLastname($adminLastName)
         ->setFirstname($adminFirstName)
@@ -1505,7 +1510,7 @@ function finishInstallationWithContainer(
         ->setPlainPassword($passForm)
         ->setEmail($emailForm)
         ->setOfficialCode('ADMIN')
-        ->setAuthSource(PLATFORM_AUTH_SOURCE)
+        ->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl)
         ->setPhone($adminPhoneForm)
         ->setLocale($languageForm)
         ->setTimezone($timezone)
@@ -1513,8 +1518,17 @@ function finishInstallationWithContainer(
 
     $repo->updateUser($admin);
 
-    $repo = Container::getUserRepository();
-    $repo->updateUser($admin);
+    /** @var User $anonUser */
+    $anonUser = $repo->findOneBy(['username' => 'anon']);
+    $anonUser->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl);
+
+    $repo->updateUser($anonUser);
+
+    /** @var User $fallbackUser */
+    $fallbackUser = $repo->findOneBy(['username' => 'fallback_user']);
+    $fallbackUser->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl);
+
+    $repo->updateUser($fallbackUser);
 
     // Set default language
     Database::update(
@@ -1539,6 +1553,8 @@ function finishInstallationWithContainer(
     lockSettings();
     updateDirAndFilesPermissions();
     executeLexikKeyPair($kernel);
+
+    createExtraConfigFile();
 }
 
 /**
@@ -1912,6 +1928,8 @@ function executeMigration(): array
 
         $result = $output->fetch();
 
+        createExtraConfigFile();
+
         if (strpos($result, '[OK] Successfully migrated to version') !== false) {
             $resultStatus['status'] = true;
             $resultStatus['message'] = 'Migration completed successfully.';
@@ -1922,7 +1940,6 @@ function executeMigration(): array
         }
 
         $resultStatus['current_migration'] = getLastExecutedMigration($connection);
-
     } catch (Exception $e) {
         $resultStatus['current_migration'] = getLastExecutedMigration($connection);
         $resultStatus['message'] = 'Migration failed: ' . $e->getMessage();
@@ -1946,4 +1963,26 @@ function executeLexikKeyPair(\Chamilo\Kernel $kernel): void
     $output = new NullOutput();
 
     $application->run($input, $output);
+}
+
+function createExtraConfigFile(): void {
+    $files = [
+        'authentication',
+        'hosting_limits',
+        'plugin',
+    ];
+
+    $sysPath = api_get_path(SYMFONY_SYS_PATH);
+
+    foreach ($files as $file) {
+        $finalFilename = $sysPath."config/$file.yaml";
+
+        if (!file_exists($finalFilename)) {
+            $distFilename = $sysPath."config/$file.dist.yaml";
+
+            $contents = file_get_contents($distFilename);
+
+            file_put_contents($finalFilename, $contents);
+        }
+    }
 }

@@ -29188,7 +29188,7 @@ msgid "Step 4 - Database settings"
 msgstr "Schritt 4 - Datenbankeinstellungen"
 
 msgid "As read"
-msgstr "Lesen"
+msgstr "Gelesen"
 
 msgid "As unread"
 msgstr "Ungelesen"

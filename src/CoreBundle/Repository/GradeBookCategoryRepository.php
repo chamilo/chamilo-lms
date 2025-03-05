@@ -26,19 +26,22 @@ class GradeBookCategoryRepository extends ServiceEntityRepository
     /**
      * Retrieves gradebook categories for a specific course and optional session.
      *
-     * @param int $courseId The ID of the course.
-     * @param int|null $sessionId The ID of the session (optional).
-     * @return GradebookCategory[] A list of gradebook categories.
+     * @param int      $courseId  the ID of the course
+     * @param int|null $sessionId the ID of the session (optional)
+     *
+     * @return GradebookCategory[] a list of gradebook categories
      */
     public function getCategoriesForCourse(int $courseId, ?int $sessionId = null): array
     {
         $qb = $this->createQueryBuilder('gc')
             ->where('gc.course = :courseId')
-            ->setParameter('courseId', $courseId);
+            ->setParameter('courseId', $courseId)
+        ;
 
-        if ($sessionId !== null) {
+        if (null !== $sessionId) {
             $qb->andWhere('gc.session = :sessionId')
-                ->setParameter('sessionId', $sessionId);
+                ->setParameter('sessionId', $sessionId)
+            ;
         } else {
             $qb->andWhere('gc.session IS NULL');
         }
@@ -51,9 +54,10 @@ class GradeBookCategoryRepository extends ServiceEntityRepository
     /**
      * Creates a default gradebook category for a course if it doesn't already exist.
      *
-     * @param int $courseId The ID of the course.
-     * @param int|null $sessionId The ID of the session (optional).
-     * @return GradebookCategory The default category.
+     * @param int      $courseId  the ID of the course
+     * @param int|null $sessionId the ID of the session (optional)
+     *
+     * @return GradebookCategory the default category
      */
     public function createDefaultCategory(int $courseId, ?int $sessionId = null): GradebookCategory
     {

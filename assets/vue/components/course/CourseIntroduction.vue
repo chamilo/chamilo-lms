@@ -1,12 +1,13 @@
 <script setup>
 import { useI18n } from "vue-i18n"
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import { useRouter } from "vue-router"
 import { storeToRefs } from "pinia"
 import EmptyState from "../EmptyState.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import Skeleton from "primevue/skeleton"
 import { useCidReqStore } from "../../store/cidReq"
+import cToolIntroService from "../../services/cToolIntroService"
 import courseService from "../../services/courseService"
 
 const { t } = useI18n()
@@ -17,6 +18,14 @@ const cidReqStore = useCidReqStore()
 const { course, session } = storeToRefs(cidReqStore)
 
 const intro = ref(null)
+const currentSessionId = session.value?.id
+const hasMismatchedSidLinks = computed(() => {
+  if (!intro.value?.introText || !currentSessionId) return false
+
+  const regex = /sid=(\d+)/g
+  const matches = intro.value.introText.match(regex)
+  return matches?.some((match) => match !== `sid=${currentSessionId}`) || false
+})
 
 defineProps({
   isAllowedToEdit: {
@@ -26,6 +35,42 @@ defineProps({
 })
 
 courseService.loadHomeIntro(course.value.id, session.value?.id).then((data) => (intro.value = data))
+
+async function updateIntroLinks() {
+  if (!intro.value?.introText || !currentSessionId) return
+
+  const updatedIntroText = intro.value.introText.replace(/sid=\d+/g, `sid=${currentSessionId}`)
+
+  const payload = {
+    introText: updatedIntroText,
+    iid: intro.value.c_tool.iid,
+    resourceLinkList: [
+      {
+        sid: currentSessionId,
+        cid: course.value.id,
+        introText: updatedIntroText,
+        visibility: "published",
+      },
+    ],
+    ...(intro.value.iid && { iid: intro.value.iid }),
+  }
+
+  try {
+    const response = await cToolIntroService.addToolIntro(course.value.id, payload)
+
+    if (intro.value.iid) {
+      alert(t("Introduction updated successfully!"))
+    } else {
+      intro.value.iid = response.data.iid
+      alert(t("Introduction created successfully!"))
+    }
+
+    intro.value.introText = updatedIntroText
+  } catch (error) {
+    console.error("Error updating or creating the introduction:", error)
+    alert(t("An error occurred."))
+  }
+}
 
 const goToIntroCreate = () => {
   router.push({
@@ -80,10 +125,17 @@ defineExpose({
     v-if="intro"
     class="mb-4"
   >
-    <div
-      v-if="intro.introText"
-      v-html="intro.introText"
-    />
+    <div v-if="intro.introText">
+      <div v-html="intro.introText" />
+      <BaseButton
+        v-if="isAllowedToEdit && hasMismatchedSidLinks"
+        :label="t('Update introduction links')"
+        class="mt-2"
+        icon="refresh"
+        type="primary"
+        @click="updateIntroLinks"
+      />
+    </div>
     <div v-else-if="isAllowedToEdit">
       <EmptyState
         :detail="t('Add a course introduction to display to your students.')"

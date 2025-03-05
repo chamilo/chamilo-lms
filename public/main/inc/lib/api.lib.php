@@ -24,7 +24,6 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Yaml\Yaml;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
@@ -178,11 +177,6 @@ define('SECTION_REPORTS', 'reports');
 define('SECTION_GLOBAL', 'global');
 define('SECTION_INCLUDE', 'include');
 define('SECTION_CUSTOMPAGE', 'custompage');
-
-// CONSTANT name for local authentication source
-define('PLATFORM_AUTH_SOURCE', 'platform');
-define('CAS_AUTH_SOURCE', 'cas');
-define('LDAP_AUTH_SOURCE', 'extldap');
 
 // event logs types
 define('LOG_COURSE_DELETE', 'course_deleted');
@@ -1315,7 +1309,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         'official_code',
         'status',
         'active',
-        'auth_source',
+        'auth_sources',
         'username',
         'theme',
         'language',
@@ -1524,6 +1518,7 @@ function api_get_user_info(
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
+        $result_array['auth_sources'] = api_get_user_entity($result_array['id'])->getAuthSourcesAuthentications();
         $result_array['user_is_online_in_chat'] = 0;
         if ($checkIfUserOnline) {
             $use_status_in_platform = user_is_online($user_id);
@@ -1647,7 +1642,7 @@ function api_get_user_info_from_entity(
     $result['address'] = $user->getAddress();
     $result['official_code'] = $user->getOfficialCode();
     $result['active'] = $user->isActive();
-    $result['auth_source'] = $user->getAuthSource();
+    $result['auth_sources'] = $user->getAuthSourcesAuthentications();
     $result['language'] = $user->getLocale();
     $result['creator_id'] = $user->getCreatorId();
     $result['created_at'] = $user->getCreatedAt()->format('Y-m-d H:i:s');
@@ -6845,9 +6840,11 @@ function api_get_configuration_value($variable)
  */
 function load_hosting_limits(): array
 {
-    $container = Container::$container;
+    if (!Container::$container->hasParameter('hosting_limits')) {
+        return [];
+    }
 
-    $hostingLimits = $container->getParameter('hosting_limits');
+    $hostingLimits =Container::$container->getParameter('hosting_limits');
 
     return $hostingLimits['urls'] ?? [];
 }
@@ -6862,6 +6859,10 @@ function load_hosting_limits(): array
 function get_hosting_limit(int $urlId, string $limitName): mixed
 {
     $limits = load_hosting_limits();
+
+    if (!isset($limits[$urlId])) {
+        return null;
+    }
 
     foreach ($limits[$urlId] as $limitArray) {
         if (isset($limitArray[$limitName])) {

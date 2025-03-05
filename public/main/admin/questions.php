@@ -263,12 +263,10 @@ if ($formSent) {
                 $exerciseData .= $exercise->title.'&nbsp;';
                 $exerciseData .= Display::url(
                     Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
-                    $urlExercise.http_build_query(
+                    $urlExercise.api_get_cidreq_params($courseInfo['id'], $exercise->sessionId).'&'.http_build_query(
                         [
-                        'cidReq' => $courseCode,
-                        'id_session' => $exercise->sessionId,
-                        'exerciseId' => $exerciseId,
-                        'type' => $question->getType(),
+                            'exerciseId' => $exerciseId,
+                            'type' => $question->getType(),
                             'editQuestion' => $question->getIid(),
                         ]
                     ),
@@ -299,10 +297,8 @@ if ($formSent) {
             }
             $question->questionData .= Display::url(
                 Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
-                $urlExercise.http_build_query(
+                $urlExercise.api_get_cidreq_params($courseInfo['id']).'&'.http_build_query(
                     [
-                        'cidReq' => $courseCode,
-                        'id_session' => 0, //$exercise->sessionId,
                         'exerciseId' => $exerciseId,
                         'type' => $question->getType(),
                         'editQuestion' => $question->getIid(),

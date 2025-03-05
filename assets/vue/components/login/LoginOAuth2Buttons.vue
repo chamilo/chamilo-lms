@@ -10,7 +10,7 @@ const platformConfig = usePlatformConfig()
 
 <template>
   <div
-    v-if="platformConfig.externalAuthentication.length > 0"
+    v-if="platformConfig.oauth2Providers.length > 0"
     class="external-logins"
   >
     <BaseDivider
@@ -21,7 +21,7 @@ const platformConfig = usePlatformConfig()
 
     <ul class="external-logins__button-list">
       <li
-        v-for="(extAuth, idx) in platformConfig.externalAuthentication"
+        v-for="(extAuth, idx) in platformConfig.oauth2Providers"
         :key="idx"
       >
         <BaseAppLink

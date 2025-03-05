@@ -12,6 +12,8 @@ use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendarRelGroup;
 use Chamilo\CourseBundle\Repository\CAttendanceCalendarRepository;
+use DateInterval;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -27,6 +29,8 @@ final class CAttendanceStateProcessor implements ProcessorInterface
 
     /**
      * Main process function for handling attendance and calendar operations.
+     *
+     * @param mixed $data
      */
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): void
     {
@@ -72,11 +76,11 @@ final class CAttendanceStateProcessor implements ProcessorInterface
             throw new BadRequestHttpException('Request data is required to create a calendar.');
         }
 
-        $startDate = new \DateTime($data['startDate']);
+        $startDate = new DateTime($data['startDate']);
         $repeatDate = $data['repeatDate'] ?? false;
         $repeatType = $data['repeatType'] ?? null;
         $repeatDays = $data['repeatDays'] ?? null;
-        $endDate = $repeatDate ? new \DateTime($data['repeatEndDate']) : null;
+        $endDate = $repeatDate ? new DateTime($data['repeatEndDate']) : null;
         $groupId = $data['group'] ?? 0;
 
         $this->saveCalendar($attendance, $startDate, $groupId);
@@ -92,7 +96,7 @@ final class CAttendanceStateProcessor implements ProcessorInterface
         }
     }
 
-    private function saveCalendar(CAttendance $attendance, \DateTime $date, ?int $groupId): void
+    private function saveCalendar(CAttendance $attendance, DateTime $date, ?int $groupId): void
     {
         $existingCalendar = $this->calendarRepo->findOneBy([
             'attendance' => $attendance->getIid(),
@@ -100,7 +104,6 @@ final class CAttendanceStateProcessor implements ProcessorInterface
         ]);
 
         if ($existingCalendar) {
-
             return;
         }
 
@@ -124,14 +127,14 @@ final class CAttendanceStateProcessor implements ProcessorInterface
         $repository->addGroupToCalendar($calendar->getIid(), $groupId);
     }
 
-    private function getRepeatInterval(string $repeatType, ?int $repeatDays = null): \DateInterval
+    private function getRepeatInterval(string $repeatType, ?int $repeatDays = null): DateInterval
     {
         return match ($repeatType) {
-            'daily' => new \DateInterval('P1D'),
-            'weekly' => new \DateInterval('P7D'),
-            'bi-weekly' => new \DateInterval('P14D'),
-            'every-x-days' => new \DateInterval("P{$repeatDays}D"),
-            'monthly-by-date' => new \DateInterval('P1M'),
+            'daily' => new DateInterval('P1D'),
+            'weekly' => new DateInterval('P7D'),
+            'bi-weekly' => new DateInterval('P14D'),
+            'every-x-days' => new DateInterval("P{$repeatDays}D"),
+            'monthly-by-date' => new DateInterval('P1M'),
             default => throw new BadRequestHttpException('Invalid repeat type.'),
         };
     }

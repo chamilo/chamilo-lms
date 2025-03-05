@@ -217,8 +217,6 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
 
     /**
      * Get attendanceQualifyMax.
-     *
-     * @return int
      */
     public function getAttendanceQualifyMax(): int
     {
@@ -234,8 +232,6 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
 
     /**
      * Get attendanceWeight.
-     *
-     * @return float
      */
     public function getAttendanceWeight(): float
     {
@@ -251,8 +247,6 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
 
     /**
      * Get locked.
-     *
-     * @return int
      */
     public function getLocked(): int
     {

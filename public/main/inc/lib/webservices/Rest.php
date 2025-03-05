@@ -9,6 +9,9 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\HookEvent\HookEvent;
+use Chamilo\CoreBundle\HookEvent\HookEvents;
+use Chamilo\CoreBundle\HookEvent\UserUpdatedHookEvent;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
@@ -1813,10 +1816,12 @@ class Rest extends WebService
         }
 
         // tell the world we are about to update a user
-        $hook = HookUpdateUser::create();
-        if (!empty($hook)) {
-            $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);
-        }
+        $eventDispatcher = Container::getEventDispatcher();
+
+        $eventDispatcher->dispatch(
+            new UserUpdatedHookEvent([], HookEvent::TYPE_PRE),
+            HookEvents::USER_UPDATED
+        );
 
         // apply submitted modifications
         foreach ($parameters as $name => $value) {
@@ -1966,10 +1971,10 @@ class Rest extends WebService
         UserManager::getRepository()->updateUser($user, true);
 
         // tell the world we just updated this user
-        if (!empty($hook)) {
-            $hook->setEventData(['user' => $user]);
-            $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
-        }
+        $eventDispatcher->dispatch(
+            new UserUpdatedHookEvent(['user' => $user], HookEvent::TYPE_POST),
+            HookEvents::USER_UPDATED
+        );
 
         // invalidate cache for this user
         $cacheAvailable = api_get_configuration_value('apc');

@@ -89,6 +89,7 @@ use Chamilo\LtiBundle\Repository\ExternalToolRepository;
 use Database;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -662,5 +663,13 @@ class Container
     {
         /** @var AccessUrlHelper $helper */
         return self::$container->get(AccessUrlHelper::class);
+    }
+
+    public static function getEventDispatcher(): EventDispatcherInterface
+    {
+        /** @var EventDispatcherInterface $dispatcher */
+        $dispatcher = self::$container->get('event_dispatcher');
+
+        return $dispatcher;
     }
 }

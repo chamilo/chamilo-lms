@@ -12,6 +12,10 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\HookEvent\UserCreatedHookEvent;
+use Chamilo\CoreBundle\HookEvent\HookEvent;
+use Chamilo\CoreBundle\HookEvent\HookEvents;
+use Chamilo\CoreBundle\HookEvent\UserUpdatedHookEvent;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use ChamiloSession as Session;
@@ -167,6 +171,13 @@ class UserManager
 
             return false;
         }
+
+        Container::getEventDispatcher()
+            ->dispatch(
+                new UserCreatedHookEvent([], HookEvent::TYPE_PRE),
+                HookEvents::USER_CREATED
+            )
+        ;
 
         $original_password = $password;
 
@@ -572,6 +583,17 @@ class UserManager
                     }
                 }
             }
+
+            Container::getEventDispatcher()
+                ->dispatch(
+                    new UserCreatedHookEvent(
+                        ['return' => $user, 'originalPassword' => $original_password],
+                        HookEvent::TYPE_POST
+                    ),
+                    HookEvents::USER_CREATED
+                )
+            ;
+
             Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId, null, $creatorId);
         } else {
             Display::addFlash(
@@ -843,6 +865,13 @@ class UserManager
         $address = null,
         $emailTemplate = []
     ) {
+        $eventDispatcher = Container::getEventDispatcher();
+
+        $eventDispatcher->dispatch(
+            new UserUpdatedHookEvent([], HookEvent::TYPE_PRE),
+            HookEvents::USER_UPDATED
+        );
+
         $original_password = $password;
         $user_id = (int) $user_id;
         $creator_id = (int) $creator_id;
@@ -1017,6 +1046,11 @@ class UserManager
                 $creatorEmail
             );
         }
+
+        $eventDispatcher->dispatch(
+            new UserUpdatedHookEvent(['user' => $user], HookEvent::TYPE_POST),
+            HookEvents::USER_UPDATED
+        );
 
         return $user->getId();
     }

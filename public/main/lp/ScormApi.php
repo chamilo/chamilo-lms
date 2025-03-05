@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\HookEvent\HookEvents;
+use Chamilo\CoreBundle\HookEvent\LearningPathItemViewedHookEvent;
 use ChamiloSession as Session;
 
 class ScormApi
@@ -518,6 +521,11 @@ class ScormApi
 
         // To be sure progress is updated.
         $myLP->save_last($score);
+
+        Container::getEventDispatcher()->dispatch(
+            new LearningPathItemViewedHookEvent(['item_view_id' => $myLPI->db_item_view_id]),
+            HookEvents::LP_ITEM_VIEWED
+        );
 
         Session::write('lpobject', serialize($myLP));
         Session::write('oLP', $myLP);

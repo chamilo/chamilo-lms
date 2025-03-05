@@ -52,36 +52,22 @@ class ExternalNotificationConnectPlugin extends Plugin implements HookPluginInte
 
     public function performActionsAfterConfigure(): ExternalNotificationConnectPlugin
     {
-        $portfolioItemAddedEvent = HookPortfolioItemAdded::create();
-        $portfolioItemEditedEvent = HookPortfolioItemEdited::create();
-        $portfolioItemDeletedEvent = HookPortfolioItemDeleted::create();
-        $portfolioItemVisibilityEvent = HookPortfolioItemVisibility::create();
-
-        $portfolioItemAddedObserver = ExternalNotificationConnectPortfolioItemAddedHookObserver::create();
-        $portfolioItemEditedObserver = ExternalNotificationConnectPortfolioItemEditedHookObserver::create();
-        $portfolioItemDeletedObserver = ExternalNotificationConnectPortfolioItemDeletedHookObserver::create();
-        $portfolioItemVisibilityObserver = ExternalNotificationConnectPortfolioItemVisibilityHookObserver::create();
-
         if ('true' === $this->get(self::SETTING_NOTIFY_PORTFOLIO)) {
-            $portfolioItemAddedEvent->attach($portfolioItemAddedObserver);
-            $portfolioItemEditedEvent->attach($portfolioItemEditedObserver);
-            $portfolioItemDeletedEvent->attach($portfolioItemDeletedObserver);
-            $portfolioItemVisibilityEvent->attach($portfolioItemVisibilityObserver);
+            //@todo attach ExternalNotificationConnectEventSubscriber::onPortfolioItemAdded
+            //@todo attach ExternalNotificationConnectEventSubscriber::onPortfolioItemEdited
+            //@todo attach ExternalNotificationConnectEventSubscriber::onPortfolioItemDeleted
+            //@todo attach ExternalNotificationConnectEventSubscriber::onPortfolioItemVisibility
         } else {
-            $portfolioItemAddedEvent->detach($portfolioItemAddedObserver);
-            $portfolioItemEditedEvent->detach($portfolioItemEditedObserver);
-            $portfolioItemDeletedEvent->detach($portfolioItemDeletedObserver);
-            $portfolioItemVisibilityEvent->detach($portfolioItemVisibilityObserver);
+            //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemAdded
+            //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemEdited
+            //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemDeleted
+            //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemVisibility
         }
 
-        $lpCreatedEvent = HookLearningPathCreated::create();
-
-        $lpCreatedObserver = ExternalNotificationConnectLearningPathCreatedHookObserver::create();
-
         if ('true' === $this->get(self::SETTING_NOTIFY_LEARNPATH)) {
-            $lpCreatedEvent->attach($lpCreatedObserver);
+            //@todo attach ExternalNotificationConnectEventSubscriber::onLpCreated
         } else {
-            $lpCreatedEvent->detach($lpCreatedObserver);
+            //@todo detach ExternalNotificationConnectEventSubscriber::onLpCreated
         }
 
         return $this;
@@ -93,23 +79,11 @@ class ExternalNotificationConnectPlugin extends Plugin implements HookPluginInte
 
     public function uninstallHook()
     {
-        $portfolioItemAddedEvent = HookPortfolioItemAdded::create();
-        $portfolioItemEditedEvent = HookPortfolioItemEdited::create();
-        $portfolioItemDeletedEvent = HookPortfolioItemDeleted::create();
-        $portfolioItemVisibilityEvent = HookPortfolioItemVisibility::create();
-        $lpCreatedEvent = HookLearningPathCreated::create();
-
-        $portfolioItemAddedObserver = ExternalNotificationConnectPortfolioItemAddedHookObserver::create();
-        $portfolioItemEditedObserver = ExternalNotificationConnectPortfolioItemEditedHookObserver::create();
-        $portfolioItemDeletedObserver = ExternalNotificationConnectPortfolioItemDeletedHookObserver::create();
-        $portfolioItemVisibilityObserver = ExternalNotificationConnectPortfolioItemVisibilityHookObserver::create();
-        $lpCreatedObserver = ExternalNotificationConnectLearningPathCreatedHookObserver::create();
-
-        $portfolioItemAddedEvent->detach($portfolioItemAddedObserver);
-        $portfolioItemEditedEvent->detach($portfolioItemEditedObserver);
-        $portfolioItemDeletedEvent->detach($portfolioItemDeletedObserver);
-        $portfolioItemVisibilityEvent->detach($portfolioItemVisibilityObserver);
-        $lpCreatedEvent->detach($lpCreatedObserver);
+        //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemAdded
+        //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemEdited
+        //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemDeleted
+        //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemVisibility
+        //@todo detach ExternalNotificationConnectEventSubscriber::onLpCreated
     }
 
     public function install()

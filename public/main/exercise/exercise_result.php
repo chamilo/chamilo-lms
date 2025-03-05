@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\HookEvent\ExerciseEndedHookEvent;
+use Chamilo\CoreBundle\HookEvent\HookEvents;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
@@ -253,9 +256,11 @@ ExerciseLib::sendNotification(
     $statsTeacher
 );
 
-/*$hookQuizEnd = HookQuizEnd::create();
-$hookQuizEnd->setEventData(['exe_id' => $exeId]);
-$hookQuizEnd->notifyQuizEnd();*/
+Container::getEventDispatcher()->dispatch(
+    new ExerciseEndedHookEvent(['exe_id' => $exeId]),
+    HookEvents::EXERCISE_ENDED
+);
+
 //Unset session for clock time
 ExerciseLib::exercise_time_control_delete(
     $objExercise->id,

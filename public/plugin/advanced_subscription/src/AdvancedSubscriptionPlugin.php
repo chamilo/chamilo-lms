@@ -3,11 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookAdminBlock;
-use Chamilo\CoreBundle\Hook\HookNotificationContent;
-use Chamilo\CoreBundle\Hook\HookNotificationTitle;
-use Chamilo\CoreBundle\Hook\HookWSRegistration;
 use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
 
 /**
@@ -899,13 +894,10 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function installHook()
     {
-        $hookObserver = HookAdvancedSubscription::create();
-
-        $hookFactory = Container::$container->get('chamilo_core.hook_factory');
-        $hookFactory->build(HookAdminBlock::class)->attach($hookObserver);
-        $hookFactory->build(HookWSRegistration::class)->attach($hookObserver);
-        $hookFactory->build(HookNotificationContent::class)->attach($hookObserver);
-        $hookFactory->build(HookNotificationTitle::class)->attach($hookObserver);
+        //@todo attach AdvancedSubscriptionEventSubscriber::onAdminBlock
+        //@todo attach AdvancedSubscriptionEventSubscriber::onNotificationContent
+        //@todo attach AdvancedSubscriptionEventSubscriber::onNotificationTitle
+        //@todo attach AdvancedSubscriptionEventSubscriber::onWSRegistration
     }
 
     /**
@@ -913,13 +905,10 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function uninstallHook()
     {
-        $hookObserver = HookAdvancedSubscription::create();
-
-        $hookFactory = Container::$container->get('chamilo_core.hook_factory');
-        $hookFactory->build(HookAdminBlock::class)->detach($hookObserver);
-        $hookFactory->build(HookWSRegistration::class)->detach($hookObserver);
-        $hookFactory->build(HookNotificationContent::class)->detach($hookObserver);
-        $hookFactory->build(HookNotificationTitle::class)->detach($hookObserver);
+        //@todo detach AdvancedSubscriptionEventSubscriber::onAdminBlock
+        //@todo detach AdvancedSubscriptionEventSubscriber::onNotificationContent
+        //@todo detach AdvancedSubscriptionEventSubscriber::onNotificationTitle
+        //@todo detach AdvancedSubscriptionEventSubscriber::onWSRegistration
     }
 
     /**

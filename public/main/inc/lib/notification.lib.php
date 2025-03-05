@@ -2,6 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\HookEvent\HookEvent;
+use Chamilo\CoreBundle\HookEvent\HookEvents;
+use Chamilo\CoreBundle\HookEvent\NotificationContentHookEvent;
+use Chamilo\CoreBundle\HookEvent\NotificationTitleHookEvent;
 
 /**
  * Notification class
@@ -155,6 +159,12 @@ class Notification extends Model
      */
     public function formatTitle(string $title, array $senderInfo, bool $forceTitleWhenSendingEmail = false, $recipientLanguage = null): string
     {
+        $notificationTitleEvent = new NotificationTitleHookEvent(['title' => $title], HookEvent::TYPE_PRE);
+
+        Container::getEventDispatcher()->dispatch($notificationTitleEvent, HookEvents::NOTIFICATION_TITLE);
+
+        $title = $notificationTitleEvent->getTitle();
+
         $newTitle = $this->getTitlePrefix();
 
         switch ($this->type) {
@@ -202,7 +212,11 @@ class Notification extends Model
             $newTitle = $title;
         }
 
-        return $newTitle;
+        $notificationTitleEvent = new NotificationTitleHookEvent(['title' => $newTitle], HookEvent::TYPE_POST);
+
+        Container::getEventDispatcher()->dispatch($notificationTitleEvent, HookEvents::NOTIFICATION_TITLE);
+
+        return $notificationTitleEvent->getTitle();
     }
 
     /**
@@ -356,6 +370,12 @@ class Notification extends Model
      * */
     public function formatContent($messageId, $content, $senderInfo, $recipientLanguage = null, $baseUrl = null)
     {
+        $notificationContentEvent = new NotificationContentHookEvent(['content' => $content], HookEvent::TYPE_PRE);
+
+        Container::getEventDispatcher()->dispatch($notificationContentEvent, HookEvents::NOTIFICATION_CONTENT);
+
+        $content = $notificationContentEvent->getContent();
+
         $newMessageText = $linkToNewMessage = '';
         $showEmail = ('true' === api_get_setting('mail.show_user_email_in_notification'));
         $senderInfoName = '';
@@ -438,7 +458,11 @@ class Notification extends Model
                 Display::url($preferenceUrl, $preferenceUrl)
             ).'</i>';
 
-        return $content;
+        $notificationContentEvent = new NotificationContentHookEvent(['content' => $content], HookEvent::TYPE_POST);
+
+        Container::getEventDispatcher()->dispatch($notificationContentEvent, HookEvents::NOTIFICATION_CONTENT);
+
+        return $notificationContentEvent->getContent();
     }
 
     /**

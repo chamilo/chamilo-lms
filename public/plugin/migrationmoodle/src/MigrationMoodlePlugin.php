@@ -96,9 +96,7 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
      */
     public function installHook()
     {
-        $hookObserver = MigrationMoodleCheckLoginCredentialsHook::create();
-
-        CheckLoginCredentialsHook::create()->attach($hookObserver);
+        //@todo attach MigrationMoodleCheckLoginCredentialEventSubscriber
     }
 
     /**
@@ -110,9 +108,7 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
      */
     public function uninstallHook()
     {
-        $hookObserver = MigrationMoodleCheckLoginCredentialsHook::create();
-
-        CheckLoginCredentialsHook::create()->detach($hookObserver);
+        //@todo detach MigrationMoodleCheckLoginCredentialEventSubscriber
     }
 
     /**

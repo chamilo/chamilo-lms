@@ -2,8 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookResubscribe;
 use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
 
 /**
@@ -66,9 +64,7 @@ class Resubscription extends Plugin implements HookPluginInterface
      */
     public function installHook()
     {
-        $hookObserver = HookResubscription::create();
-
-        Container::instantiateHook(HookResubscribe::class)->attach($hookObserver);
+        //@todo: Attach ResubscriptionEventSusbcription
     }
 
     /**
@@ -76,8 +72,6 @@ class Resubscription extends Plugin implements HookPluginInterface
      */
     public function uninstallHook()
     {
-        $hookObserver = HookResubscription::create();
-
-        Container::instantiateHook(HookResubscribe::class)->detach($hookObserver);
+        //@todo: Detach ResubscriptionEventSusbcription
     }
 }

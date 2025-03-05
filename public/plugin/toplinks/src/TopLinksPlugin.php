@@ -88,6 +88,7 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
             return;
         }
 
+
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema(array_values($tableReferences));
 
@@ -96,8 +97,7 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
 
     public function installHook(): int
     {
-        $createCourseObserver = TopLinksCreateCourseHookObserver::create();
-        HookCreateCourse::create()->attach($createCourseObserver);
+        //@todo attach to ToplinksCreateCourseEventSubscriber
 
         return 1;
     }
@@ -121,8 +121,7 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
 
     public function uninstallHook(): int
     {
-        $createCourseObserver = TopLinksCreateCourseHookObserver::create();
-        HookCreateCourse::create()->detach($createCourseObserver);
+        //@todo detach to ToplinksCreateCourseEventSubscriber
 
         return 1;
     }

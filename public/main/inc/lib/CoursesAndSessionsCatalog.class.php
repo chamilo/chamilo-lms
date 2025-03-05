@@ -3,6 +3,10 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\HookEvent\HookEvent;
+use Chamilo\CoreBundle\HookEvent\HookEvents;
+use Chamilo\CoreBundle\HookEvent\SessionResubscriptionHookEvent;
 use Doctrine\ORM\Query\Expr\Join;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
@@ -1264,17 +1268,10 @@ class CoursesAndSessionsCatalog
             );
         }
 
-        $hook = HookResubscribe::create();
-        if (!empty($hook)) {
-            $hook->setEventData([
-                'session_id' => $sessionId,
-            ]);
-            try {
-                $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);
-            } catch (Exception $exception) {
-                $result = $exception->getMessage();
-            }
-        }
+        Container::getEventDispatcher()->dispatch(
+            new SessionResubscriptionHookEvent(['session_id' => $sessionId], HookEvent::TYPE_PRE),
+            HookEvents::SESSION_RESUBSCRIPTION
+        );
 
         return $result;
     }
@@ -1568,7 +1565,7 @@ class CoursesAndSessionsCatalog
         $entityManager = Database::getManager();
         $sessionRelCourseRepo = $entityManager->getRepository('ChamiloCoreBundle:SessionRelCourse');
         $extraFieldRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
-        $tagRepo = \Chamilo\CoreBundle\Framework\Container::getTagRepository();
+        $tagRepo = Container::getTagRepository();
 
         $tagsField = $extraFieldRepo->findOneBy([
             'itemType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,

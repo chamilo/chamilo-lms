@@ -7,6 +7,8 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\HookEvent\HookEvents;
+use Chamilo\CoreBundle\HookEvent\LearningPathEndedHookEvent;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CoreBundle\Framework\Container;
@@ -3729,6 +3731,13 @@ class learnpath
                 // Ignore errors as some tables might not have the progress field just yet.
                 Database::query($sql);
                 $this->progress_db = $progress;
+
+                if (100 == $progress) {
+                    Container::getEventDispatcher()->dispatch(
+                        new LearningPathEndedHookEvent(['lp_view_id' => $this->lp_view_id]),
+                        HookEvents::LP_ENDED
+                    );
+                }
             }
         }
     }

@@ -148,36 +148,40 @@ export function useSidebarMenu() {
       })
     }
 
-    items.push(
-      createMenuItem(
-        "videoconference",
-        "mdi-video",
-        "Videoconference",
-        null,
-        platformConfigStore.plugins?.bbb?.show_global_conference_link
-          ? [
-              {
-                label: t("Conference Room"),
-                url: platformConfigStore.plugins.bbb.listingURL,
-              },
-            ]
-          : null,
-      ),
-    )
+    if (showTabsSetting.indexOf("videoconference") > -1) {
+      items.push(
+        createMenuItem(
+          "videoconference",
+          "mdi-video",
+          "Videoconference",
+          null,
+          platformConfigStore.plugins?.bbb?.show_global_conference_link
+            ? [
+                {
+                  label: t("Conference Room"),
+                  url: platformConfigStore.plugins.bbb.listingURL,
+                },
+              ]
+            : null,
+        ),
+      )
+    }
 
-    items.push(
-      createMenuItem("diagnostics", "mdi-text-box-search", "Diagnosis Management", null, [
-        {
-          label: t("Diagnosis Management"),
-          url: "/main/search/load_search.php",
-          visible: securityStore.isStudentBoss,
-        },
-        {
-          label: t("Diagnostic Form"),
-          url: "/main/search/search.php",
-        },
-      ]),
-    )
+    if (showTabsSetting.indexOf("diagnostics") > -1) {
+      items.push(
+        createMenuItem("diagnostics", "mdi-text-box-search", "Diagnosis Management", null, [
+          {
+            label: t("Diagnosis Management"),
+            url: "/main/search/load_search.php",
+            visible: securityStore.isStudentBoss,
+          },
+          {
+            label: t("Diagnostic Form"),
+            url: "/main/search/search.php",
+          },
+        ]),
+      )
+    }
 
     if (showTabsSetting.indexOf("platform_administration") > -1) {
       if (securityStore.isAdmin || securityStore.isSessionAdmin) {

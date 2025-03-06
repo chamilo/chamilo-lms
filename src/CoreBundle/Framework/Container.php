@@ -27,6 +27,7 @@ use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\PluginRepository;
 use Chamilo\CoreBundle\Repository\PromotionRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
@@ -483,6 +484,11 @@ class Container
     public static function getUsergroupRepository(): UsergroupRepository
     {
         return self::$container->get(UsergroupRepository::class);
+    }
+
+    public static function getPluginRepository(): PluginRepository
+    {
+        return self::$container->get(PluginRepository::class);
     }
 
     public static function getUserToJsonNormalizer(): UserToJsonNormalizer

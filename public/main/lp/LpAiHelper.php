@@ -158,8 +158,6 @@ class LpAiHelper
                                     "course_code": "'.$courseCode.'"
                                 }),
                                 success: function (result) {
-                                    console.log("🔥 Response from add_lp_ai:", result);
-
                                     try {
                                         let parsedResult = (typeof result === "string") ? JSON.parse(result) : result;
                                         let isSuccess = Boolean(parsedResult.success);
@@ -170,7 +168,6 @@ class LpAiHelper
                                             alert("Error: " + (parsedResult.text || "'.get_lang('Error creating Learning Path').'"));
                                         }
                                     } catch (e) {
-                                        console.error("❌ JSON Parse Error: ", e);
                                         alert("'.get_lang('Invalid server response').'");
                                     }
                                 }

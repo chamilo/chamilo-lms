@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
@@ -20,20 +19,18 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SessionRepetitionCommand extends Command
 {
     protected static $defaultName = 'app:session-repetition';
+    private string $baseUrl;
 
     public function __construct(
         private readonly SessionRepository $sessionRepository,
         private readonly EntityManagerInterface $entityManager,
         private readonly TranslatorInterface $translator,
-        private readonly MessageHelper $messageHelper,
-        private readonly RequestStack $requestStack
+        private readonly MessageHelper $messageHelper
     ) {
         parent::__construct();
     }
@@ -42,12 +39,23 @@ class SessionRepetitionCommand extends Command
     {
         $this
             ->setDescription('Automatically duplicates sessions that meet the repetition criteria.')
-            ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode');
+            ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
+            ->addOption('base-url', null, InputOption::VALUE_REQUIRED, 'Base URL for generating session links');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $debug = $input->getOption('debug');
+        $this->baseUrl = $input->getOption('base-url');
+
+        if (!$this->baseUrl) {
+            $output->writeln('<error>Error: You must provide --base-url</error>');
+            return Command::FAILURE;
+        }
+
+        if ($debug) {
+            $output->writeln('<info>Debug mode enabled</info>');
+        }
 
         // Find sessions that meet the repetition criteria
         $sessions = $this->sessionRepository->findSessionsWithoutChildAndReadyForRepetition();
@@ -240,13 +248,7 @@ class SessionRepetitionCommand extends Command
      */
     private function generateSessionSummaryLink(Session $session): string
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request) {
-            return '/main/session/resume_session.php?id_session=' . $session->getId();
-        }
-
-        $baseUrl = $request->getSchemeAndHttpHost();
-        return sprintf('%s/main/session/resume_session.php?id_session=%d', $baseUrl, $session->getId());
+        return sprintf('%s/main/session/resume_session.php?id_session=%d', $this->baseUrl, $session->getId());
     }
 
     /**

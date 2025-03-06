@@ -680,6 +680,25 @@ try {
                 )
             );
             break;
+        case Rest::GET_USER_PROGRESS_AND_TIME_IN_SESSION:
+            $userId = (string) $_REQUEST['user_id'];
+            $sessionId = (string) $_REQUEST['session_id'];
+
+            if (empty($userId)) {
+                throw new Exception('user_id not provided');
+            }
+            if (empty($sessionId)) {
+                throw new Exception('session_id not provided');
+            }
+
+            Event::addEvent(LOG_WS.$action, 'user_id', $userId);
+            $restResponse->setData(
+                $restApi->getUserProgressAndTimeInSession(
+                    $userId,
+                    $sessionId
+                )
+            );
+            break;
         case Rest::GET_USER_SUB_GROUP:
             $userId = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
             if (empty($userId)) {

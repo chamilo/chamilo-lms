@@ -303,48 +303,35 @@ if (!empty($_GET['category'])) {
             handleRegions();
             break;
         case 'Plugins':
-            // Displaying the extensions: Plugins.
-            // This will be available to all the sites (access_urls).
-            $securityToken = isset($_GET['sec_token']) ? Security::remove_XSS($_GET['sec_token']) : null;
-            if (isset($_POST['submit_dashboard_plugins']) && Security::check_token($securityToken)) {
-                Security::clear_token();
-                $affected_rows = DashboardManager::store_dashboard_plugins($_POST);
-                if ($affected_rows) {
-                    // add event to system log
-                    $user_id = api_get_user_id();
-                    $category = $_GET['category'];
-                    Event::addEvent(
-                        LOG_CONFIGURATION_SETTINGS_CHANGE,
-                        LOG_CONFIGURATION_SETTINGS_CATEGORY,
-                        $category,
-                        api_get_utc_datetime(),
-                        $user_id
-                    );
-                    echo Display::return_message(get_lang('Dashboard pluginsUpdate successfulSuccessfully'), 'confirmation');
-                }
-            }
-
             echo '<div class="tab_wrapper">';
             echo '<ul class="nav nav-tabs" id="tabs" role="tablist">';
             echo '<li class="nav-item"><a id="plugin-tab-1" class="nav-link active" href="#tab1" aria-controls="tab1" aria-selected="true">'.get_lang('Plugins').'</a></li>';
-            echo '<li class="nav-item"><a id="plugin-tab-2" class="nav-link" href="#tab2" aria-controls="tab2" aria-selected="false">'.get_lang('Dashboard plugins').'</a></li>';
-            echo '<li class="nav-item"><a id="plugin-tab-3" class="nav-link" href="#tab3" aria-controls="tab3" aria-selected="false">'.get_lang('Configure extensions').'</a></li>';
             echo '</ul>';
 
             echo '<div class="tab-content" id="tabs-content">';
             echo '<div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="plugin-tab-1">';
             handlePlugins();
             echo '</div>';
+            echo '</div>';
+            echo '</div>';
 
-            //echo '<div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="plugin-tab-2">';
-            //DashboardManager::handle_dashboard_plugins();
-            //echo '</div>';
+            echo '<script>
+                    $(document).ready(function () {
+                        $(".plugin-action").click(function () {
+                            var pluginName = $(this).data("plugin");
+                            var action = $(this).data("action");
 
-            echo '<div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="plugin-tab-3">';
-            handleExtensions();
-            echo '</div>';
-            echo '</div>';
-            echo '</div>';
+                            $.post("'.api_get_path(WEB_AJAX_PATH).'plugin.ajax.php", { a: action, plugin: pluginName }, function(response) {
+                                var data = JSON.parse(response);
+                                if (data.success) {
+                                    location.reload();
+                                } else {
+                                    alert("Error: " + data.error);
+                                }
+                            });
+                        });
+                    });
+                    </script>';
             break;
         case 'Search':
             handleSearch();

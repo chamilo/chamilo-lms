@@ -1920,6 +1920,9 @@ class Rest extends WebService
         if (isset($userParam['phone'])) {
             $phone = $userParam['phone'];
         }
+        if (isset($userParam['official_code'])) {
+            $official_code = $userParam['official_code'];
+        }
         if (isset($userParam['expiration_date'])) {
             $expiration_date = $userParam['expiration_date'];
         }

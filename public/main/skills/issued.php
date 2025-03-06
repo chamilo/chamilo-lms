@@ -274,6 +274,16 @@ if (api_is_student_boss() || api_is_platform_admin()) {
     );
 }
 
+if (isset($_SESSION['flash_message'])) {
+    $flashMessage = $_SESSION['flash_message'];
+    unset($_SESSION['flash_message']);
+    $returnMessage .= Display::return_message(
+        $flashMessage,
+        'success',
+        false
+    );
+}
+
 $template = new Template(get_lang('Issued badge information'));
 $template->assign('issue_info', $skillRelUserInfo);
 $template->assign('allow_comment', $allowComment);

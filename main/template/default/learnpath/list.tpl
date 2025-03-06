@@ -6,6 +6,24 @@
             return false;
         }
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has("reduced")) {
+        document.body.addEventListener("click", function (event) {
+          let target = event.target;
+          while (target && target.tagName !== "A" && target.tagName !== "BUTTON") {
+            target = target.parentElement;
+          }
+          if (target && target.tagName === "A" && target.href) {
+            event.preventDefault();
+            let newUrl = new URL(target.href, window.location.origin);
+            newUrl.searchParams.delete("reduced");
+            window.top.location.href = newUrl.href;
+          }
+        });
+      }
+    });
 </script>
 {% set configuration = 'lp_category_accordion'|api_get_configuration_value %}
 <div class="lp-accordion panel-group" id="lp-accordion" role="tablist" aria-multiselectable="true">

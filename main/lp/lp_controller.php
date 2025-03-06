@@ -1732,6 +1732,7 @@ switch ($action) {
         ]);
         break;
     default:
+        $reduced = isset($_GET['reduced']) && $_GET['reduced'] == 'true';
         require 'lp_list.php';
         break;
 }

@@ -112,13 +112,13 @@ services:
       arguments:
         $httpClient: '@Symfony\Contracts\HttpClient\HttpClientInterface'
         $settingsManager: '@Chamilo\CoreBundle\Settings\SettingsManager'
-
-    Chamilo\CoreBundle\Service\AI\DeepSeekAiProvider:
-      arguments:
-        $httpClient: '@Symfony\Contracts\HttpClient\HttpClientInterface'
-        $settingsManager: '@Chamilo\CoreBundle\Settings\SettingsManager'
+        $aiRequestsRepository: '@Chamilo\CoreBundle\Repository\AiRequestsRepository'
+        $security: '@security.helper'
 
     Chamilo\CoreBundle\Service\AI\OpenAiProvider:
-      arguments:
-        $httpClient: '@Symfony\Contracts\HttpClient\HttpClientInterface'
-        $settingsManager: '@Chamilo\CoreBundle\Settings\SettingsManager'
+      factory: [ '@Chamilo\CoreBundle\Service\AI\AiProviderFactory', 'getProvider' ]
+      arguments: [ 'openai' ]
+
+    Chamilo\CoreBundle\Service\AI\DeepSeekAiProvider:
+      factory: [ '@Chamilo\CoreBundle\Service\AI\AiProviderFactory', 'getProvider' ]
+      arguments: [ 'deepseek' ]

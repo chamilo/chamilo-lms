@@ -57,9 +57,9 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
             'ai_providers' => "<pre>
             {
                 \"openai\": {
-                    \"url\": \"https://api.openai.com/v1\",
+                    \"url\": \"https://api.openai.com/v1/chat/completions\",
                     \"api_key\": \"your-key\",
-                    \"model\": \"gpt-3.5-turbo\",
+                    \"model\": \"gpt-4o\",
                     \"temperature\": 0.7,
                     \"organization_id\": \"org123\",
                     \"monthly_token_limit\": 10000

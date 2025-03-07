@@ -268,7 +268,10 @@ $form->addRule(
     10
 );
 $form->applyFilter('argumentation', 'trim');
-$form->addButtonSave(get_lang('Save'));
+$form->addHtml('<div class="flex space-x-4">');
+$form->addButton('save', get_lang('Save'), 'check', 'primary');
+$form->addButton('save_and_add_more', get_lang('Save and add more'), 'check', 'secondary');
+$form->addHtml('</div>');
 $form->setDefaults($formDefaultValues);
 
 if ($form->validate()) {
@@ -369,18 +372,17 @@ if ($form->validate()) {
         }
     }
 
-    Display::addFlash(
-        Display::return_message(
-            sprintf(
-                get_lang('The skill %s has been assigned to user %s'),
-                $skill->getTitle(),
-                UserManager::formatUserFullName($user)
-            ),
-            'success'
-        )
+    $_SESSION['flash_message'] = sprintf(
+        get_lang('The skill %s has been successfully assigned to user %s'),
+        $skill->getTitle(),
+        UserManager::formatUserFullName($user)
     );
 
-    header('Location: '.api_get_path(WEB_PATH)."badge/{$skillUser->getId()}");
+    if (isset($_POST['save_and_add_more'])) {
+        header('Location: '.api_get_path(WEB_PATH)."badge/{$skillUser->getId()}");
+    } else {
+        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId);
+    }
     exit;
 }
 

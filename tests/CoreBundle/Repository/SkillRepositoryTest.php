@@ -227,7 +227,6 @@ class SkillRepositoryTest extends AbstractApiTest
             ->setSession($session)
             ->setUser($user)
             ->setArgumentation('argumentation')
-            ->setAssignedBy(1)
             ->setArgumentationAuthorId(1)
         ;
         $this->assertHasNoEntityViolations($skillRelUser);

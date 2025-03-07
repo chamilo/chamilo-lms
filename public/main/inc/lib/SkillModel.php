@@ -2355,7 +2355,6 @@ class SkillModel extends Model
             ->setSkill($skill)
             ->setArgumentation($argumentation)
             ->setArgumentationAuthorId($authorId)
-            ->setAssignedBy(api_get_user_id())
         ;
 
         if ($showLevels && !empty($levelId)) {

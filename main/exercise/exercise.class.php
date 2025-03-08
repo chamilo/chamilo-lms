@@ -3958,7 +3958,8 @@ class Exercise
             $answerType == ORAL_EXPRESSION ||
             $answerType == CALCULATED_ANSWER ||
             $answerType == ANNOTATION ||
-            $answerType == UPLOAD_ANSWER
+            $answerType == UPLOAD_ANSWER ||
+            $answerType == ANSWER_IN_OFFICE_DOC
         ) {
             $nbrAnswers = 1;
         }
@@ -4796,6 +4797,43 @@ class Exercise
                         }
                     }
                     break;
+                case ANSWER_IN_OFFICE_DOC:
+                    if ($from_database) {
+                        $sql = "SELECT answer, marks
+                                FROM $TBL_TRACK_ATTEMPT
+                                WHERE
+                                    exe_id = $exeId AND
+                                    question_id = $questionId";
+                        $result = Database::query($sql);
+                        $data = Database::fetch_array($result);
+
+                        $choice = '';
+                        $questionScore = 0;
+
+                        if ($data) {
+                            $choice = $data['answer'];
+                            $questionScore = $data['marks'];
+                        }
+
+                        $choice = str_replace('\r\n', '', $choice);
+                        $choice = stripslashes($choice);
+
+                        if ($questionScore == -1) {
+                            $totalScore += 0;
+                        } else {
+                            $totalScore += $questionScore;
+                        }
+
+                        $arrques = $questionName;
+                        $arrans = $choice;
+                    } else {
+                        $studentChoice = $choice;
+                        if ($studentChoice) {
+                            $questionScore = 0;
+                            $totalScore += 0;
+                        }
+                    }
+                    break;
                 case ORAL_EXPRESSION:
                     if ($from_database) {
                         $query = "SELECT answer, marks
@@ -5423,6 +5461,12 @@ class Exercise
                                 $questionScore,
                                 $results_disabled
                             );
+                        } elseif ($answerType == ANSWER_IN_OFFICE_DOC) {
+                            ExerciseShowFunctions::displayOnlyOfficeAnswer(
+                                $feedback_type,
+                                $objQuestionTmp->getFileUrl(true),
+                                $questionScore
+                            );
                         } elseif ($answerType == ORAL_EXPRESSION) {
                             // to store the details of open questions in an array to be used in mail
                             /** @var OralExpression $objQuestionTmp */
@@ -5819,6 +5863,13 @@ class Exercise
                                 $questionId,
                                 $questionScore,
                                 $results_disabled
+                            );
+                            break;
+                        case ANSWER_IN_OFFICE_DOC:
+                            ExerciseShowFunctions::displayOnlyOfficeAnswer(
+                                $feedback_type,
+                                $objQuestionTmp->getFileUrl(),
+                                $questionScore
                             );
                             break;
                         case ORAL_EXPRESSION:
@@ -6538,6 +6589,47 @@ class Exercise
                     $this->iid,
                     false,
                     $questionDuration
+                );
+            } elseif ($answerType == ANSWER_IN_OFFICE_DOC) {
+                $answer = $choice;
+
+                $sessionId = api_get_session_id() ?: 0;
+                $userId = api_get_user_id();
+                $courseId = api_get_course_int_id();
+                $exercisePath = api_get_path(SYS_COURSE_PATH) . api_get_course_path() . "/exercises/{$courseId}/{$sessionId}/{$this->iid}/{$quesId}/{$userId}/";
+
+                $originalFilePath = $objQuestionTmp->getFileUrl(true);
+                if (!empty($originalFilePath) && file_exists($originalFilePath)) {
+                    $originalExtension = pathinfo($originalFilePath, PATHINFO_EXTENSION);
+                } else {
+                    $originalExtension = 'docx';
+                }
+
+                $fileName = "response_" . uniqid() . "." . $originalExtension;
+                $fullFilePath = $exercisePath . $fileName;
+
+                if (!is_dir($exercisePath)) {
+                    mkdir($exercisePath, 0775, true);
+                }
+
+                if (!empty($_FILES['office_file']['tmp_name'])) {
+                    move_uploaded_file($_FILES['office_file']['tmp_name'], $fullFilePath);
+                } else {
+                    if (!empty($originalFilePath) && file_exists($originalFilePath)) {
+                        copy($originalFilePath, $fullFilePath);
+                    }
+                }
+
+                Event::saveQuestionAttempt(
+                    $questionScore,
+                    $answer,
+                    $quesId,
+                    $exeId,
+                    0,
+                    $this->iid,
+                    false,
+                    $questionDuration,
+                    $fullFilePath
                 );
             } else {
                 if ($answerType === CALCULATED_ANSWER && !empty($calculatedAnswerId)) {

@@ -284,6 +284,22 @@ class ExerciseLib
                     }
                     $s .= $multipleForm->returnForm();
                     break;
+                case ANSWER_IN_OFFICE_DOC:
+                    if ('true' === OnlyofficePlugin::create()->get('enable_onlyoffice_plugin')) {
+                        if (!empty($objQuestionTmp->extra)) {
+                            $fileUrl = api_get_path(WEB_COURSE_PATH) . api_get_course_path() . "/exercises/" . $objQuestionTmp->extra;
+                            $documentUrl = OnlyofficeTools::getPathToView($fileUrl);
+
+                            echo '<div class="office-doc-container">';
+                            echo "<iframe src='{$documentUrl}' width='100%' height='600' style='border:none;'></iframe>";
+                            echo '</div>';
+                        } else {
+                            echo '<p>' . get_lang('NoOfficeDocProvided') . '</p>';
+                        }
+                    } else {
+                        echo '<p>' . get_lang('OnlyOfficePluginRequired') . '</p>';
+                    }
+                    break;
                 case ORAL_EXPRESSION:
                     // Add nanog
                     if (api_get_setting('enable_record_audio') === 'true') {

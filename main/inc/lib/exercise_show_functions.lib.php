@@ -1002,4 +1002,33 @@ class ExerciseShowFunctions
             }
         }
     }
+
+    /**
+     * Displays the answer to an OnlyOffice document question.
+     *
+     * @param string $feedbackType
+     * @param string|null $fileUrl URL of the submitted document
+     * @param int $questionScore Score assigned to the response
+     */
+    public static function displayOnlyOfficeAnswer(
+        string $feedbackType,
+        ?string $fileUrl,
+        int $questionScore = 0
+    ): void {
+        if ($fileUrl) {
+            echo '
+        <tr>
+            <td>
+                <p><b>' . get_lang('Submitted Document') . ':</b></p>
+                <iframe src="' . OnlyofficeTools::getPathToView($fileUrl) . '" width="100%" height="600px"></iframe>
+            </td>
+        </tr>';
+        } else {
+            echo '<tr><td>' . get_lang('NoOfficeDocProvided') . '</td></tr>';
+        }
+
+        if ($questionScore <= 0 && EXERCISE_FEEDBACK_TYPE_EXAM !== $feedbackType) {
+            echo '<tr><td>' . ExerciseLib::getNotCorrectedYetText() . '</td></tr>';
+        }
+    }
 }

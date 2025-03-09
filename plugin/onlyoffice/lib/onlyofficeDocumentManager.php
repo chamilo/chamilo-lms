@@ -59,7 +59,7 @@ class OnlyofficeDocumentManager extends DocumentManager
         ];
 
         if (!empty($this->getGroupId())) {
-            $data['groupId'] = $groupId;
+            $data['groupId'] = $this->getGroupId();
         }
         $jwtManager = new OnlyofficeJwtManager($this->settingsManager);
         $hashUrl = $jwtManager->getHash($data);
@@ -76,8 +76,6 @@ class OnlyofficeDocumentManager extends DocumentManager
 
     public function getCallbackUrl(string $fileId)
     {
-        $url = '';
-
         $data = [
             'type' => 'track',
             'courseId' => api_get_course_int_id(),
@@ -87,13 +85,17 @@ class OnlyofficeDocumentManager extends DocumentManager
         ];
 
         if (!empty($this->getGroupId())) {
-            $data['groupId'] = $groupId;
+            $data['groupId'] = $this->getGroupId();
+        }
+
+        if (isset($this->docInfo['path']) && str_contains($this->docInfo['path'], 'exercises/')) {
+            $data['typeExercise'] = 'exercise';
         }
 
         $jwtManager = new OnlyofficeJwtManager($this->settingsManager);
         $hashUrl = $jwtManager->getHash($data);
 
-        return $url.api_get_path(WEB_PLUGIN_PATH).'onlyoffice/callback.php?hash='.$hashUrl;
+        return api_get_path(WEB_PLUGIN_PATH) . 'onlyoffice/callback.php?hash=' . $hashUrl;
     }
 
     public function getGobackUrl(string $fileId)

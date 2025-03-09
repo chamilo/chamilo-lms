@@ -287,7 +287,7 @@ class ExerciseLib
                 case ANSWER_IN_OFFICE_DOC:
                     if ('true' === OnlyofficePlugin::create()->get('enable_onlyoffice_plugin')) {
                         if (!empty($objQuestionTmp->extra)) {
-                            $fileUrl = api_get_path(WEB_COURSE_PATH) . api_get_course_path() . "/exercises/" . $objQuestionTmp->extra;
+                            $fileUrl = api_get_course_path() . "/exercises/" . $objQuestionTmp->extra;
                             $documentUrl = OnlyofficeTools::getPathToView($fileUrl);
 
                             echo '<div class="office-doc-container">';

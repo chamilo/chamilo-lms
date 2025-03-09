@@ -128,7 +128,7 @@ class AnswerInOfficeDoc extends Question
         $header .= '<div class="question-container">';
 
         if (!empty($this->extra) && 'true' === OnlyofficePlugin::create()->get('enable_onlyoffice_plugin')) {
-            $fileUrl = api_get_path(WEB_COURSE_PATH).api_get_course_path() . "/exercises/" . $this->extra;
+            $fileUrl = api_get_course_path() . "/exercises/" . $this->extra;
             $documentUrl = OnlyofficeTools::getPathToView($fileUrl);
             $header .= "<iframe src='{$documentUrl}' width='800' height='600'></iframe>";
         } else {
@@ -183,9 +183,9 @@ class AnswerInOfficeDoc extends Question
             $this->fileName = basename($this->extra);
         }
 
-        $filePath = api_get_path(SYS_COURSE_PATH) . $this->course['path'] . '/exercises/' . $this->extra;
-        if (is_file($filePath)) {
-            return str_replace(api_get_path(SYS_COURSE_PATH), api_get_path(WEB_COURSE_PATH), $filePath);
+        $filePath =  $this->course['path'].'/exercises/'.$this->extra;
+        if (is_file(api_get_path(SYS_COURSE_PATH).$filePath)) {
+            return $filePath;
         }
 
         return null;

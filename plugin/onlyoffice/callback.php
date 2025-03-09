@@ -24,7 +24,7 @@ $plugin = OnlyofficePlugin::create();
 
 if (isset($_GET['hash']) && !empty($_GET['hash'])) {
     $callbackResponseArray = [];
-    @header('Content-Type: application/json; charset==utf-8');
+    @header('Content-Type: application/json; charset=utf-8');
     @header('X-Robots-Tag: noindex');
     @header('X-Content-Type-Options: nosniff');
 
@@ -69,7 +69,7 @@ if (isset($_GET['hash']) && !empty($_GET['hash'])) {
 
     switch ($type) {
         case 'track':
-            $callbackResponseArray = track();
+            $callbackResponseArray = track($type, $docId);
             exit(json_encode($callbackResponseArray));
         case 'download':
             $callbackResponseArray = download();
@@ -87,7 +87,7 @@ if (isset($_GET['hash']) && !empty($_GET['hash'])) {
 /**
  * Handle request from the document server with the document status information.
  */
-function track(): array
+function track($type, $docId): array
 {
     $result = [];
 
@@ -138,8 +138,12 @@ function track(): array
             }
         }
 
-        $data['url'] = isset($payload->url) ? $payload->url : null;
+        $data['url'] = $payload->url ?? null;
         $data['status'] = $payload->status;
+    }
+
+    if (!isset($data['url']) || empty($data['url']) || !in_array($data['status'], [2, 3])) {
+        return ['status' => 'no_changes'];
     }
 
     $docStatus = new CallbackDocStatus($data['status']);
@@ -157,10 +161,35 @@ function track(): array
             'groupId' => $groupId,
             'sessionId' => $sessionId,
             'courseInfo' => $courseInfo,
-        ]);
-    $result = $callbackService->processCallback($callback, $docId);
+        ]
+    );
 
-    return $result;
+    if ($type === 'exercise') {
+        return saveExerciseFile($docId, $data['url']);
+    }
+
+    return $callbackService->processCallback($callback, $docId);
+}
+
+/**
+ * Save exercise file
+ */
+function saveExerciseFile($docId, $fileUrl): array
+{
+    global $courseInfo, $sessionId, $userId;
+
+    $exercisePath = api_get_path(SYS_COURSE_PATH) . api_get_course_path() . "/exercises/{$courseInfo['real_id']}/{$sessionId}/{$docId}/{$userId}/";
+
+    if (!is_dir($exercisePath)) {
+        mkdir($exercisePath, 0775, true);
+    }
+
+    $fileName = "response_" . uniqid() . ".docx";
+    $fullFilePath = $exercisePath . $fileName;
+
+    file_put_contents($fullFilePath, file_get_contents($fileUrl));
+
+    return ['status' => 'saved', 'file' => $fullFilePath];
 }
 
 /**

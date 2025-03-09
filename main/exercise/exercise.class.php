@@ -6599,11 +6599,9 @@ class Exercise
                 $exercisePath = api_get_path(SYS_COURSE_PATH) . api_get_course_path() . "/exercises/{$courseId}/{$sessionId}/{$this->iid}/{$quesId}/{$userId}/";
 
                 $originalFilePath = $objQuestionTmp->getFileUrl(true);
-                if (!empty($originalFilePath) && file_exists($originalFilePath)) {
-                    $originalExtension = pathinfo($originalFilePath, PATHINFO_EXTENSION);
-                } else {
-                    $originalExtension = 'docx';
-                }
+                $originalExtension = !empty($originalFilePath) && file_exists($originalFilePath)
+                    ? pathinfo($originalFilePath, PATHINFO_EXTENSION)
+                    : 'docx';
 
                 $fileName = "response_" . uniqid() . "." . $originalExtension;
                 $fullFilePath = $exercisePath . $fileName;
@@ -6612,7 +6610,11 @@ class Exercise
                     mkdir($exercisePath, 0775, true);
                 }
 
-                if (!empty($_FILES['office_file']['tmp_name'])) {
+                if (!empty($_POST['onlyoffice_file_url'])) {
+                    $onlyofficeFileUrl = $_POST['onlyoffice_file_url'];
+                    file_put_contents($fullFilePath, file_get_contents($onlyofficeFileUrl));
+                }
+                elseif (!empty($_FILES['office_file']['tmp_name'])) {
                     move_uploaded_file($_FILES['office_file']['tmp_name'], $fullFilePath);
                 } else {
                     if (!empty($originalFilePath) && file_exists($originalFilePath)) {

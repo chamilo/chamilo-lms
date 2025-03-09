@@ -1911,7 +1911,7 @@ class learnpath
         $previousText = get_lang('ScormPrevious');
         $nextText = get_lang('ScormNext');
         $fullScreenText = get_lang('ScormExitFullScreen');
-        $lessonsText = get_lang('Lessons');
+        $lessonsText = get_lang('LearningPathsList');
 
         $settings = api_get_configuration_value('lp_view_settings');
         $display = isset($settings['display']) ? $settings['display'] : false;

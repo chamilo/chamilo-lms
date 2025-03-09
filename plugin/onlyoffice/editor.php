@@ -44,6 +44,7 @@ if (empty($courseInfo)) {
     api_not_allowed(true);
 }
 $courseCode = $courseInfo['code'];
+$exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : null;
 $docInfo = null;
 $fileId = null;
 $fileUrl = null;
@@ -61,7 +62,8 @@ if ($docPath) {
         'path' => $docPath,
         'title' => basename($docPath),
         'size' => filesize($filePath),
-        'forceEdit' => isset($_GET['forceEdit']) ? $_GET['forceEdit'] : false,
+        'forceEdit' => $_GET['forceEdit'] ?? false,
+        'exercise_id' => $exerciseId,
     ];
 
     $fileUrl = api_get_path(WEB_COURSE_PATH) . $docPath;

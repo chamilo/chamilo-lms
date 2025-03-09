@@ -170,6 +170,8 @@ class OnlyofficeTools
         }
 
         $urlToEdit = api_get_path(WEB_PLUGIN_PATH).'onlyoffice/editor.php';
+        $queryString = $_SERVER['QUERY_STRING'];
+        $isExercise = str_contains($queryString, 'exerciseId=');
 
         if (is_numeric($fileReference)) {
             $documentId = (int) $fileReference;
@@ -209,7 +211,10 @@ class OnlyofficeTools
                 return $urlToEdit;
             }
         } else {
-            $urlToEdit .= '?doc=' . urlencode($fileReference);
+            $urlToEdit .= '?'.$queryString.'&doc='.urlencode($fileReference);
+            if ($isExercise) {
+                $urlToEdit .= '&type=exercise';
+            }
             if (false === $showHeaders) {
                 $urlToEdit .= '&nh=1';
             }

@@ -57,18 +57,35 @@ if ($docPath) {
     }
 
     $fileId = basename($docPath);
+    $absolutePath = $filePath;
+    $absoluteParentPath = dirname($filePath) . '/';
 
     $docInfo = [
+        'iid' => null,
+        'id' => null,
+        'c_id' => $courseId,
         'path' => $docPath,
+        'comment' => null,
         'title' => basename($docPath),
+        'filetype' => 'file',
         'size' => filesize($filePath),
+        'readonly' => 0,
+        'session_id' => $sessionId,
+        'url' => api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/editor.php?doc=" . urlencode($docPath),
+        'document_url' => api_get_path(WEB_COURSE_PATH) . $docPath,
+        'absolute_path' => $absolutePath,
+        'absolute_path_from_document' => '/document/' . basename($docPath),
+        'absolute_parent_path' => $absoluteParentPath,
+        'direct_url' => api_get_path(WEB_COURSE_PATH) . $docPath,
+        'basename' => basename($docPath),
+        'parent_id' => false,
+        'parents' => [],
         'forceEdit' => $_GET['forceEdit'] ?? false,
         'exercise_id' => $exerciseId,
     ];
 
     $fileUrl = api_get_path(WEB_COURSE_PATH) . $docPath;
-}
-elseif ($docId) {
+} elseif ($docId) {
     $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
     if ($docInfo) {
         $fileId = $docId;

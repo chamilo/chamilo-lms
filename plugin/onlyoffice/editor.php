@@ -45,6 +45,8 @@ if (empty($courseInfo)) {
 }
 $courseCode = $courseInfo['code'];
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : null;
+$exeId = isset($_GET['exeId']) ? (int) $_GET['exeId'] : null;
+$questionId = isset($_GET['questionId']) ? (int) $_GET['questionId'] : null;
 $docInfo = null;
 $fileId = null;
 $fileUrl = null;
@@ -52,13 +54,28 @@ $fileUrl = null;
 if ($docPath) {
     $filePath = api_get_path(SYS_COURSE_PATH) . $docPath;
     if (!file_exists($filePath)) {
-        error_log("ERROR: Document not found -> " . $filePath);
         die("Error: Document not found.");
     }
 
     $fileId = basename($docPath);
     $absolutePath = $filePath;
     $absoluteParentPath = dirname($filePath) . '/';
+    $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+    if ($exeId) {
+        $userFilePath = api_get_path(SYS_COURSE_PATH).api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.{$extension}";
+        if (!file_exists($userFilePath)) {
+            if (!is_dir(dirname($userFilePath))) {
+                mkdir(dirname($userFilePath), 0775, true);
+            }
+            if (!copy($filePath, $userFilePath)) {
+                die("Error: Failed to create a copy of the file.");
+            }
+        }
+
+        $fileUrl = api_get_path(WEB_COURSE_PATH).api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.{$extension}";
+    } else {
+        $fileUrl = api_get_path(WEB_COURSE_PATH) . $docPath;
+    }
 
     $docInfo = [
         'iid' => null,
@@ -66,25 +83,23 @@ if ($docPath) {
         'c_id' => $courseId,
         'path' => $docPath,
         'comment' => null,
-        'title' => basename($docPath),
+        'title' => basename($filePath),
         'filetype' => 'file',
         'size' => filesize($filePath),
         'readonly' => 0,
         'session_id' => $sessionId,
-        'url' => api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/editor.php?doc=" . urlencode($docPath),
-        'document_url' => api_get_path(WEB_COURSE_PATH) . $docPath,
+        'url' => api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/editor.php?doc=" . urlencode($docPath) . ($exeId ? "&exeId={$exeId}" : ""),
+        'document_url' => $fileUrl,
         'absolute_path' => $absolutePath,
-        'absolute_path_from_document' => '/document/' . basename($docPath),
+        'absolute_path_from_document' => '/document/' . basename($filePath),
         'absolute_parent_path' => $absoluteParentPath,
-        'direct_url' => api_get_path(WEB_COURSE_PATH) . $docPath,
-        'basename' => basename($docPath),
+        'direct_url' => $fileUrl,
+        'basename' => basename($filePath),
         'parent_id' => false,
         'parents' => [],
         'forceEdit' => $_GET['forceEdit'] ?? false,
         'exercise_id' => $exerciseId,
     ];
-
-    $fileUrl = api_get_path(WEB_COURSE_PATH) . $docPath;
 } elseif ($docId) {
     $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
     if ($docInfo) {

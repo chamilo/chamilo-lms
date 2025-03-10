@@ -37,12 +37,8 @@ class AnswerInOfficeDoc extends Question
     /**
      * Initialize the file path structure.
      */
-    public function initFile(int $sessionId, int $userId, int $exerciseId, int $exeId, int $courseId = 0): void
+    public function initFile(int $sessionId, int $userId, int $exerciseId, int $exeId): void
     {
-        if (!empty($courseId)) {
-            $this->course = api_get_course_info_by_id($courseId);
-        }
-
         $this->sessionId = $sessionId ?: 0;
         $this->userId = $userId;
         $this->exerciseId = $exerciseId ?: 0;
@@ -58,6 +54,10 @@ class AnswerInOfficeDoc extends Question
      */
     public function createAnswersForm($form): void
     {
+        if (!empty($this->exerciseList)) {
+            $this->exerciseId = reset($this->exerciseList);
+        }
+
         $allowedFormats = [
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',      // .xlsx
@@ -73,7 +73,7 @@ class AnswerInOfficeDoc extends Question
         $form->addElement('static', 'file_hint', get_lang('AllowedFormats'), "<p>{$allowedExtensions}</p>");
 
         if (!empty($this->extra)) {
-            $fileUrl = api_get_path(WEB_COURSE_PATH) . $this->course['path'] . "/exercises/" . $this->extra;
+            $fileUrl = api_get_path(WEB_COURSE_PATH) . $this->getStoredFilePath();
             $form->addElement('static', 'current_office_file', get_lang('CurrentOfficeDoc'), "<a href='{$fileUrl}' target='_blank'>{$this->extra}</a>");
         }
 
@@ -97,46 +97,35 @@ class AnswerInOfficeDoc extends Question
     public function processAnswersCreation($form, $exercise): void
     {
         if (!empty($_FILES['office_file']['name'])) {
+            $extension = pathinfo($_FILES['office_file']['name'], PATHINFO_EXTENSION);
+            $tempFilename = "office_" . uniqid() . "." . $extension;
+            $tempPath = sys_get_temp_dir() . '/' . $tempFilename;
+
+            if (!move_uploaded_file($_FILES['office_file']['tmp_name'], $tempPath)) {
+                return;
+            }
+
+            $this->weighting = $form->getSubmitValue('weighting');
+            $this->extra = "";
+            $this->save($exercise);
+
+            $this->exerciseId = $exercise->iid;
             $uploadDir = $this->generateDirectory();
 
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0775, true);
             }
 
-            $extension = pathinfo($_FILES['office_file']['name'], PATHINFO_EXTENSION);
-            $filename = $this->generateFileName() . '.' . $extension;
+            $filename = "office_".$this->iid.".".$extension;
             $filePath = $uploadDir . $filename;
 
-            if (move_uploaded_file($_FILES['office_file']['tmp_name'], $filePath)) {
-                $this->weighting = $form->getSubmitValue('weighting');
-                $sessionId = !empty($this->sessionId) ? $this->sessionId : 0;
-                $this->extra = "{$this->course['real_id']}/{$sessionId}/{$this->exerciseId}/{$this->iid}/" . $filename;
-                $this->extra = preg_replace('/\/+/', '/', $this->extra);
-
-                $this->save($exercise);
+            if (!rename($tempPath, $filePath)) {
+                return;
             }
+
+            $this->extra = $filename;
+            $this->save($exercise);
         }
-    }
-
-    /**
-     * Show the question in an exercise.
-     */
-    public function return_header(Exercise $exercise, $counter = null, $score = []): string
-    {
-        $score['revised'] = $this->isQuestionWaitingReview($score);
-        $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<div class="question-container">';
-
-        if (!empty($this->extra) && 'true' === OnlyofficePlugin::create()->get('enable_onlyoffice_plugin')) {
-            $fileUrl = api_get_course_path() . "/exercises/" . $this->extra;
-            $documentUrl = OnlyofficeTools::getPathToView($fileUrl);
-            $header .= "<iframe src='{$documentUrl}' width='800' height='600'></iframe>";
-        } else {
-            $header .= '<p>' . get_lang('NoOfficeDocProvided') . '</p>';
-        }
-
-        $header .= '</div>';
-        return $header;
     }
 
     /**
@@ -144,15 +133,25 @@ class AnswerInOfficeDoc extends Question
      */
     private function generateDirectory(): string
     {
-        $storePath = api_get_path(SYS_COURSE_PATH) . $this->course['path'] . '/exercises/';
-        $sessionId = !empty($this->sessionId) ? $this->sessionId : 0;
-        $finalPath = "{$storePath}{$this->course['real_id']}/{$sessionId}/{$this->exerciseId}/{$this->iid}/";
+        $exercisePath = api_get_path(SYS_COURSE_PATH).$this->course['path']."/exercises/onlyoffice/{$this->exerciseId}/{$this->iid}/";
 
-        if (!is_dir($finalPath)) {
-            mkdir($finalPath, 0775, true);
+        if (!is_dir($exercisePath)) {
+            mkdir($exercisePath, 0775, true);
         }
 
-        return rtrim($finalPath, '/') . '/';
+        return rtrim($exercisePath, '/') . '/';
+    }
+
+    /**
+     * Get the stored file path dynamically.
+     */
+    public function getStoredFilePath(): ?string
+    {
+        if (empty($this->extra)) {
+            return null;
+        }
+
+        return "{$this->course['path']}/exercises/onlyoffice/{$this->exerciseId}/{$this->iid}/{$this->extra}";
     }
 
     /**
@@ -180,11 +179,12 @@ class AnswerInOfficeDoc extends Question
                 return null;
             }
 
-            $this->fileName = basename($this->extra);
+            $this->fileName = $this->extra;
         }
 
-        $filePath =  $this->course['path'].'/exercises/'.$this->extra;
-        if (is_file(api_get_path(SYS_COURSE_PATH).$filePath)) {
+        $filePath = $this->getStoredFilePath();
+
+        if (is_file(api_get_path(SYS_COURSE_PATH) . $filePath)) {
             return $filePath;
         }
 
@@ -192,12 +192,25 @@ class AnswerInOfficeDoc extends Question
     }
 
     /**
+     * Show the question in an exercise.
+     */
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
+    {
+        $score['revised'] = $this->isQuestionWaitingReview($score);
+        $header = parent::return_header($exercise, $counter, $score);
+        $header .= '<table class="'.$this->question_table_class.'">
+            <tr>
+                <th>'.get_lang("Answer").'</th>
+            </tr>';
+
+        return $header;
+    }
+
+    /**
      * Generate the file name for the OnlyOffice document.
-     *
-     * @return string
      */
     private function generateFileName(): string
     {
-        return 'office_'.uniqid();
+        return 'office_' . uniqid();
     }
 }

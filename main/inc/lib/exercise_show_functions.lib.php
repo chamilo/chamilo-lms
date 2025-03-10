@@ -1012,15 +1012,22 @@ class ExerciseShowFunctions
      */
     public static function displayOnlyOfficeAnswer(
         string $feedbackType,
-        ?string $fileUrl,
+        int $exeId,
+        int $userId,
+        int $exerciseId,
+        int $questionId,
         int $questionScore = 0
     ): void {
-        if ($fileUrl) {
+        $filePathPattern = api_get_path(SYS_COURSE_PATH).api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.*";
+        $files = glob($filePathPattern);
+
+        if (!empty($files)) {
+            $fileUrl = api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/" . basename($files[0]);
             echo '
         <tr>
             <td>
-                <p><b>' . get_lang('Submitted Document') . ':</b></p>
-                <iframe src="' . OnlyofficeTools::getPathToView($fileUrl) . '" width="100%" height="600px"></iframe>
+                <p><b>' . get_lang('SubmittedDocument') . ':</b></p>
+                <iframe src="' . OnlyofficeTools::getPathToView($fileUrl, $exeId, $questionId) . '" width="100%" height="600px"></iframe>
             </td>
         </tr>';
         } else {

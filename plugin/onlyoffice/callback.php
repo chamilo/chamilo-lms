@@ -164,32 +164,7 @@ function track($type, $docId): array
         ]
     );
 
-    if ($type === 'exercise') {
-        return saveExerciseFile($docId, $data['url']);
-    }
-
     return $callbackService->processCallback($callback, $docId);
-}
-
-/**
- * Save exercise file
- */
-function saveExerciseFile($docId, $fileUrl): array
-{
-    global $courseInfo, $sessionId, $userId;
-
-    $exercisePath = api_get_path(SYS_COURSE_PATH) . api_get_course_path() . "/exercises/{$courseInfo['real_id']}/{$sessionId}/{$docId}/{$userId}/";
-
-    if (!is_dir($exercisePath)) {
-        mkdir($exercisePath, 0775, true);
-    }
-
-    $fileName = "response_" . uniqid() . ".docx";
-    $fullFilePath = $exercisePath . $fileName;
-
-    file_put_contents($fullFilePath, file_get_contents($fileUrl));
-
-    return ['status' => 'saved', 'file' => $fullFilePath];
 }
 
 /**

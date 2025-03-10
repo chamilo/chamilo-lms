@@ -5464,7 +5464,10 @@ class Exercise
                         } elseif ($answerType == ANSWER_IN_OFFICE_DOC) {
                             ExerciseShowFunctions::displayOnlyOfficeAnswer(
                                 $feedback_type,
-                                $objQuestionTmp->getFileUrl(true),
+                                $exeId,
+                                api_get_user_id(),
+                                $this->iid,
+                                $questionId,
                                 $questionScore
                             );
                         } elseif ($answerType == ORAL_EXPRESSION) {
@@ -5868,7 +5871,10 @@ class Exercise
                         case ANSWER_IN_OFFICE_DOC:
                             ExerciseShowFunctions::displayOnlyOfficeAnswer(
                                 $feedback_type,
-                                $objQuestionTmp->getFileUrl(),
+                                $exeId,
+                                api_get_user_id(),
+                                $this->iid,
+                                $questionId,
                                 $questionScore
                             );
                             break;
@@ -6592,46 +6598,21 @@ class Exercise
                 );
             } elseif ($answerType == ANSWER_IN_OFFICE_DOC) {
                 $answer = $choice;
-
-                $sessionId = api_get_session_id() ?: 0;
-                $userId = api_get_user_id();
-                $courseId = api_get_course_int_id();
-                $exercisePath = api_get_path(SYS_COURSE_PATH) . api_get_course_path() . "/exercises/{$courseId}/{$sessionId}/{$this->iid}/{$quesId}/{$userId}/";
-
-                $originalFilePath = $objQuestionTmp->getFileUrl(true);
-                $originalExtension = !empty($originalFilePath) && file_exists($originalFilePath)
-                    ? pathinfo($originalFilePath, PATHINFO_EXTENSION)
-                    : 'docx';
-
-                $fileName = "response_" . uniqid() . "." . $originalExtension;
-                $fullFilePath = $exercisePath . $fileName;
-
-                if (!is_dir($exercisePath)) {
-                    mkdir($exercisePath, 0775, true);
-                }
-
-                if (!empty($_POST['onlyoffice_file_url'])) {
-                    $onlyofficeFileUrl = $_POST['onlyoffice_file_url'];
-                    file_put_contents($fullFilePath, file_get_contents($onlyofficeFileUrl));
-                }
-                elseif (!empty($_FILES['office_file']['tmp_name'])) {
-                    move_uploaded_file($_FILES['office_file']['tmp_name'], $fullFilePath);
-                } else {
-                    if (!empty($originalFilePath) && file_exists($originalFilePath)) {
-                        copy($originalFilePath, $fullFilePath);
-                    }
-                }
-
+                $exerciseId = $this->iid;
+                $questionId = $quesId;
+                $originalFilePath = $objQuestionTmp->getFileUrl();
+                $originalExtension = !empty($originalFilePath) ? pathinfo($originalFilePath, PATHINFO_EXTENSION) : 'docx';
+                $fileName = "response_{$exeId}.{$originalExtension}";
                 Event::saveQuestionAttempt(
                     $questionScore,
                     $answer,
-                    $quesId,
+                    $questionId,
                     $exeId,
                     0,
-                    $this->iid,
+                    $exerciseId,
                     false,
                     $questionDuration,
-                    $fullFilePath
+                    $fileName
                 );
             } else {
                 if ($answerType === CALCULATED_ANSWER && !empty($calculatedAnswerId)) {

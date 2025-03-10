@@ -89,7 +89,7 @@ class OnlyofficeDocumentManager extends DocumentManager
         }
 
         if (isset($this->docInfo['path']) && str_contains($this->docInfo['path'], 'exercises/')) {
-            $data['typeExercise'] = 'exercise';
+            $data['type'] = 'exercise';
         }
 
         $jwtManager = new OnlyofficeJwtManager($this->settingsManager);

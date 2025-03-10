@@ -152,13 +152,8 @@ class OnlyofficeTools
 
     /**
      * Return path to OnlyOffice viewer for a given file.
-     *
-     * @param mixed $fileReference The ID from c_document.iid or a path from exercises/
-     * @param bool  $showHeaders   Whether to show Chamilo headers on top of the OnlyOffice frame or not
-     *
-     * @return string A link to open the OnlyOffice viewer
      */
-    public static function getPathToView($fileReference, bool $showHeaders = true): string
+    public static function getPathToView($fileReference, ?int $exeId = null, ?int $questionId = null, bool $showHeaders = true): string
     {
         $plugin = OnlyofficePlugin::create();
         $appSettings = new OnlyofficeAppsettings($plugin);
@@ -214,6 +209,13 @@ class OnlyofficeTools
             $urlToEdit .= '?'.$queryString.'&doc='.urlencode($fileReference);
             if ($isExercise) {
                 $urlToEdit .= '&type=exercise';
+                if ($exeId) {
+                    $urlToEdit .= '&exeId=' . $exeId;
+                }
+
+                if ($questionId) {
+                    $urlToEdit .= '&questionId=' . $questionId;
+                }
             }
             if (false === $showHeaders) {
                 $urlToEdit .= '&nh=1';

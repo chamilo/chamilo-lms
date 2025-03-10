@@ -286,10 +286,10 @@ class ExerciseLib
                     break;
                 case ANSWER_IN_OFFICE_DOC:
                     if ('true' === OnlyofficePlugin::create()->get('enable_onlyoffice_plugin')) {
+                        global $exe_id;
                         if (!empty($objQuestionTmp->extra)) {
-                            $fileUrl = api_get_course_path() . "/exercises/" . $objQuestionTmp->extra;
-                            $documentUrl = OnlyofficeTools::getPathToView($fileUrl);
-
+                            $fileUrl = api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/" . $objQuestionTmp->extra;
+                            $documentUrl = OnlyofficeTools::getPathToView($fileUrl, $exe_id, $questionId);
                             echo '<div class="office-doc-container">';
                             echo "<iframe src='{$documentUrl}' width='100%' height='600' style='border:none;'></iframe>";
                             echo '</div>';

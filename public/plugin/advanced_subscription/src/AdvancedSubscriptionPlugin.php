@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\HookEvent\Interfaces\PluginEventSubscriberInterface;
+use Chamilo\CoreBundle\Event\Interfaces\PluginEventSubscriberInterface;
 
 /**
  * Class AdvancedSubscriptionPlugin

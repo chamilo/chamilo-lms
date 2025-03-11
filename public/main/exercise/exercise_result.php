@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\HookEvent\ExerciseEndedHookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
+use Chamilo\CoreBundle\Event\ExerciseEndedEvent;
+use Chamilo\CoreBundle\Event\Events;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
@@ -257,8 +257,8 @@ ExerciseLib::sendNotification(
 );
 
 Container::getEventDispatcher()->dispatch(
-    new ExerciseEndedHookEvent(['exe_id' => $exeId]),
-    HookEvents::EXERCISE_ENDED
+    new ExerciseEndedEvent(['exe_id' => $exeId]),
+    Events::EXERCISE_ENDED
 );
 
 //Unset session for clock time

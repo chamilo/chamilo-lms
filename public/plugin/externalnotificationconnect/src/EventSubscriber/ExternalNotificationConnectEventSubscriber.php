@@ -5,13 +5,13 @@
 declare(strict_types=1);
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\HookEvent\HookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
-use Chamilo\CoreBundle\HookEvent\LearningPathCreatedHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemAddedHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemDeletedHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemEditedHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemVisibilityChangedHookEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\LearningPathCreatedEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemAddedEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemDeletedEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemEditedEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemVisibilityChangedEvent;
 use Chamilo\PluginBundle\ExternalNotificationConnect\Traits\RequestTrait\RequestTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -25,16 +25,16 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
     public static function getSubscribedEvents(): array
     {
         return [
-            HookEvents::PORTFOLIO_ITEM_ADDED => 'onPortfolioItemAdded',
-            HookEvents::PORTFOLIO_ITEM_EDITED => 'onPortfolioItemEdited',
-            HookEvents::PORTOFLIO_ITEM_DELETED => 'onPortfolioItemDeleted',
-            HookEvents::PORTFOLIO_ITEM_VISIBILITY_CHANGED => 'onPortfolioItemVisibility',
+            Events::PORTFOLIO_ITEM_ADDED => 'onPortfolioItemAdded',
+            Events::PORTFOLIO_ITEM_EDITED => 'onPortfolioItemEdited',
+            Events::PORTOFLIO_ITEM_DELETED => 'onPortfolioItemDeleted',
+            Events::PORTFOLIO_ITEM_VISIBILITY_CHANGED => 'onPortfolioItemVisibility',
 
-            HookEvents::LP_CREATED => 'onLpCreated',
+            Events::LP_CREATED => 'onLpCreated',
         ];
     }
 
-    public function onPortfolioItemAdded(PortfolioItemAddedHookEvent $event): void
+    public function onPortfolioItemAdded(PortfolioItemAddedEvent $event): void
     {
         $item = $event->getPortfolio();
 
@@ -78,7 +78,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
         error_log('ExtNotifConn: Portfolio item created: ID '.$json['data']['notification_id']);
     }
 
-    public function onPortfolioItemEdited(PortfolioItemEditedHookEvent $event): void
+    public function onPortfolioItemEdited(PortfolioItemEditedEvent $event): void
     {
         $item = $event->getPortfolio();
 
@@ -122,7 +122,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
         error_log('ExtNotifConn: Portfolio item edited. Status'.((int)$json['status']));
     }
 
-    public function onPortfolioItemDeleted(PortfolioItemDeletedHookEvent $event): void
+    public function onPortfolioItemDeleted(PortfolioItemDeletedEvent $event): void
     {
         $item = $event->getPortfolio();
 
@@ -130,7 +130,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
             return;
         }
 
-        if (HookEvent::TYPE_PRE === $event->getType()) {
+        if (AbstractEvent::TYPE_PRE === $event->getType()) {
             try {
                 $json = $this->doDeleteRequest($item->getId(), 'eportfolio');
             } catch (Exception $e) {
@@ -149,7 +149,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
         }
     }
 
-    public function onPortfolioItemVisibility(PortfolioItemVisibilityChangedHookEvent $event): void
+    public function onPortfolioItemVisibility(PortfolioItemVisibilityChangedEvent $event): void
     {
         $item = $event->getPortfolio();
 
@@ -183,7 +183,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
         error_log('ExtNotifConn: Portfolio item visibility: ID '.$json['data']['notification_id']);
     }
 
-    public function onLpCreated(LearningPathCreatedHookEvent $event): void
+    public function onLpCreated(LearningPathCreatedEvent $event): void
     {
         $lp = $event->getLp();
 

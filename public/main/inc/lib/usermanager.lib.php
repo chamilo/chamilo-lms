@@ -12,10 +12,10 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\HookEvent\UserCreatedHookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
-use Chamilo\CoreBundle\HookEvent\UserUpdatedHookEvent;
+use Chamilo\CoreBundle\Event\UserCreatedEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\UserUpdatedEvent;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use ChamiloSession as Session;
@@ -174,8 +174,8 @@ class UserManager
 
         Container::getEventDispatcher()
             ->dispatch(
-                new UserCreatedHookEvent([], HookEvent::TYPE_PRE),
-                HookEvents::USER_CREATED
+                new UserCreatedEvent([], AbstractEvent::TYPE_PRE),
+                Events::USER_CREATED
             )
         ;
 
@@ -586,11 +586,11 @@ class UserManager
 
             Container::getEventDispatcher()
                 ->dispatch(
-                    new UserCreatedHookEvent(
+                    new UserCreatedEvent(
                         ['return' => $user, 'originalPassword' => $original_password],
-                        HookEvent::TYPE_POST
+                        AbstractEvent::TYPE_POST
                     ),
-                    HookEvents::USER_CREATED
+                    Events::USER_CREATED
                 )
             ;
 
@@ -868,8 +868,8 @@ class UserManager
         $eventDispatcher = Container::getEventDispatcher();
 
         $eventDispatcher->dispatch(
-            new UserUpdatedHookEvent([], HookEvent::TYPE_PRE),
-            HookEvents::USER_UPDATED
+            new UserUpdatedEvent([], AbstractEvent::TYPE_PRE),
+            Events::USER_UPDATED
         );
 
         $original_password = $password;
@@ -1048,8 +1048,8 @@ class UserManager
         }
 
         $eventDispatcher->dispatch(
-            new UserUpdatedHookEvent(['user' => $user], HookEvent::TYPE_POST),
-            HookEvents::USER_UPDATED
+            new UserUpdatedEvent(['user' => $user], AbstractEvent::TYPE_POST),
+            Events::USER_UPDATED
         );
 
         return $user->getId();

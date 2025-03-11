@@ -10,9 +10,9 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\HookEvent\CourseCreatedHookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
+use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
@@ -80,8 +80,8 @@ class CourseManager
 
             Container::getEventDispatcher()
                 ->dispatch(
-                    new CourseCreatedHookEvent(['course_info' => $courseInfo], HookEvent::TYPE_POST),
-                    HookEvents::COURSE_CREATED
+                    new CourseCreatedEvent(['course_info' => $courseInfo], AbstractEvent::TYPE_POST),
+                    Events::COURSE_CREATED
                 )
             ;
 

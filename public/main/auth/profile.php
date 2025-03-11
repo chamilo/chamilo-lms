@@ -4,9 +4,9 @@
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\HookEvent\HookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
-use Chamilo\CoreBundle\HookEvent\UserUpdatedHookEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\UserUpdatedEvent;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
@@ -372,8 +372,8 @@ $filtered_extension = false;
 
 if ($form->validate()) {
     Container::getEventDispatcher()->dispatch(
-        new UserUpdatedHookEvent([], HookEvent::TYPE_PRE),
-        HookEvents::USER_UPDATED
+        new UserUpdatedEvent([], AbstractEvent::TYPE_PRE),
+        Events::USER_UPDATED
     );
 
     $wrong_current_password = false;
@@ -650,11 +650,11 @@ if ($form->validate()) {
     Session::write('_user', $userInfo);
 
     Container::getEventDispatcher()->dispatch(
-        new UserUpdatedHookEvent(
+        new UserUpdatedEvent(
             ['user' => api_get_user_entity()],
-            HookEvent::TYPE_POST
+            AbstractEvent::TYPE_POST
         ),
-        HookEvents::USER_UPDATED
+        Events::USER_UPDATED
     );
 
     /*if ($hook) {

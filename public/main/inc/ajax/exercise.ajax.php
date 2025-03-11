@@ -5,7 +5,7 @@
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\HookEvent\ExerciseQuestionAnsweredHookEvent;
+use Chamilo\CoreBundle\Event\ExerciseQuestionAnsweredEvent;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
@@ -828,7 +828,7 @@ switch ($action) {
             }
 
             Container::getEventDispatcher()->dispatch(
-                new ExerciseQuestionAnsweredHookEvent(
+                new ExerciseQuestionAnsweredEvent(
                     [
                         'exe_id' => (int) $exeId,
                         'exercise' => [

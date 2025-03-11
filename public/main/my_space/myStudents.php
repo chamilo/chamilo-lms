@@ -5,10 +5,10 @@
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\HookEvent\HookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
-use Chamilo\CoreBundle\HookEvent\MyStudentsLpTrackingHookEvent;
-use Chamilo\CoreBundle\HookEvent\MyStudentsQuizTrackingHookEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\MyStudentsLpTrackingEvent;
+use Chamilo\CoreBundle\Event\MyStudentsQuizTrackingEvent;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -1619,9 +1619,9 @@ if (empty($details)) {
             );
         }
 
-        $lpTrackingEvent = new MyStudentsLpTrackingHookEvent([], HookEvent::TYPE_PRE);
+        $lpTrackingEvent = new MyStudentsLpTrackingEvent([], AbstractEvent::TYPE_PRE);
 
-        Container::getEventDispatcher()->dispatch($lpTrackingEvent, HookEvents::MY_STUDENTS_LP_TRACKING);
+        Container::getEventDispatcher()->dispatch($lpTrackingEvent, Events::MY_STUDENTS_LP_TRACKING);
 
         foreach ($lpTrackingEvent->getHeaders() as $eventHeader) {
             $columnHeadersToExport[] = $eventHeader['title'];
@@ -1817,12 +1817,12 @@ if (empty($details)) {
                     echo Display::tag('td', $start_time);
                 }
 
-                $lpTrackingEvent = new MyStudentsLpTrackingHookEvent(
+                $lpTrackingEvent = new MyStudentsLpTrackingEvent(
                     ['lp_id' => $lp_id, 'student_id' => $studentId],
-                    HookEvent::TYPE_POST
+                    AbstractEvent::TYPE_POST
                 );
 
-                Container::getEventDispatcher()->dispatch($lpTrackingEvent, HookEvents::MY_STUDENTS_LP_TRACKING);
+                Container::getEventDispatcher()->dispatch($lpTrackingEvent, Events::MY_STUDENTS_LP_TRACKING);
 
                 foreach ($lpTrackingEvent->getContents() as $eventContent) {
                     if (isset($eventContent['value'])) {
@@ -1892,9 +1892,9 @@ if (empty($details)) {
         echo '<th>'.get_lang('Latest attempt').'</th>';
         echo '<th>'.get_lang('All attempts').'</th>';
 
-        $myStudentsQuizTrackingEvent = new MyStudentsQuizTrackingHookEvent([], HookEvent::TYPE_PRE);
+        $myStudentsQuizTrackingEvent = new MyStudentsQuizTrackingEvent([], AbstractEvent::TYPE_PRE);
 
-        Container::getEventDispatcher()->dispatch($myStudentsQuizTrackingEvent, HookEvents::MY_STUDENTS_EXERCISE_TRACKING);
+        Container::getEventDispatcher()->dispatch($myStudentsQuizTrackingEvent, Events::MY_STUDENTS_EXERCISE_TRACKING);
 
         $eventHeaders = array_map(
             fn(array $eventHeader) => Display::tag('th', $eventHeader['title'], $eventHeader['attrs']),
@@ -1951,12 +1951,12 @@ if (empty($details)) {
 
                 $lp_name = '-';
 
-                $myStudentsQuizTrackingEvent = new MyStudentsQuizTrackingHookEvent(
+                $myStudentsQuizTrackingEvent = new MyStudentsQuizTrackingEvent(
                     ['exercise_id' => $exercise_id, 'student_id' => $studentId],
-                    HookEvent::TYPE_POST
+                    AbstractEvent::TYPE_POST
                 );
 
-                Container::getEventDispatcher()->dispatch($myStudentsQuizTrackingEvent, HookEvents::MY_STUDENTS_EXERCISE_TRACKING);
+                Container::getEventDispatcher()->dispatch($myStudentsQuizTrackingEvent, Events::MY_STUDENTS_EXERCISE_TRACKING);
 
                 $eventContents = $myStudentsQuizTrackingEvent->getContents();
 

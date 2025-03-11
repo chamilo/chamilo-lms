@@ -7,8 +7,8 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
-use Chamilo\CoreBundle\HookEvent\LearningPathEndedHookEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CoreBundle\Framework\Container;
@@ -3734,8 +3734,8 @@ class learnpath
 
                 if (100 == $progress) {
                     Container::getEventDispatcher()->dispatch(
-                        new LearningPathEndedHookEvent(['lp_view_id' => $this->lp_view_id]),
-                        HookEvents::LP_ENDED
+                        new LearningPathEndedEvent(['lp_view_id' => $this->lp_view_id]),
+                        Events::LP_ENDED
                     );
                 }
             }

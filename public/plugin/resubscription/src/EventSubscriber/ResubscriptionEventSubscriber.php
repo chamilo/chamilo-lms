@@ -4,9 +4,9 @@
 
 declare(strict_types=1);
 
-use Chamilo\CoreBundle\HookEvent\HookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
-use Chamilo\CoreBundle\HookEvent\SessionResubscriptionHookEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\SessionResubscriptionEvent;
 use Database;
 use Display;
 use Exception;
@@ -18,16 +18,16 @@ class ResubscriptionEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            HookEvents::SESSION_RESUBSCRIPTION => 'onResubscribe',
+            Events::SESSION_RESUBSCRIPTION => 'onResubscribe',
         ];
     }
 
     /**
      * @throws \Exception
      */
-    public function onResubscribe(SessionResubscriptionHookEvent $event): void
+    public function onResubscribe(SessionResubscriptionEvent $event): void
     {
-        if (HookEvent::TYPE_PRE === $event->getType()) {
+        if (AbstractEvent::TYPE_PRE === $event->getType()) {
             $resubscriptionLimit = Resubscription::create()->get('resubscription_limit');
 
             // Initialize variables as a calendar year by default

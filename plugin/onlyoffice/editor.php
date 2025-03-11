@@ -54,6 +54,7 @@ $fileUrl = null;
 if ($docPath) {
     $filePath = api_get_path(SYS_COURSE_PATH) . $docPath;
     if (!file_exists($filePath)) {
+        error_log("ERROR: Original file not found -> " . $filePath);
         die("Error: Document not found.");
     }
 
@@ -62,19 +63,36 @@ if ($docPath) {
     $absoluteParentPath = dirname($filePath) . '/';
     $extension = pathinfo($filePath, PATHINFO_EXTENSION);
     if ($exeId) {
-        $userFilePath = api_get_path(SYS_COURSE_PATH).api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.{$extension}";
+        $userFilePath = api_get_path(SYS_COURSE_PATH) . api_get_course_path() . "/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.{$extension}";
+        $previousAttemptFile = null;
+        if ($exeId > 1) {
+            $prevExeId = $exeId - 1;
+            $previousAttemptFile = api_get_path(SYS_COURSE_PATH) . api_get_course_path() . "/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$prevExeId}.{$extension}";
+            if (!file_exists($previousAttemptFile)) {
+                $previousAttemptFile = null;
+            }
+        }
+
         if (!file_exists($userFilePath)) {
             if (!is_dir(dirname($userFilePath))) {
                 mkdir(dirname($userFilePath), 0775, true);
             }
-            if (!copy($filePath, $userFilePath)) {
+            $sourceFile = $previousAttemptFile ?? $filePath;
+            if (!copy($sourceFile, $userFilePath)) {
+                error_log("ERROR: Failed to create a copy from {$sourceFile} to {$userFilePath}");
                 die("Error: Failed to create a copy of the file.");
+            } else {
+                error_log("File successfully copied from {$sourceFile} to {$userFilePath}");
             }
+        } else {
+            error_log("File already exists, using: {$userFilePath}");
         }
 
-        $fileUrl = api_get_path(WEB_COURSE_PATH).api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.{$extension}";
+        $fileUrl = api_get_path(WEB_COURSE_PATH) . api_get_course_path() . "/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.{$extension}";
+        error_log("File loaded in OnlyOffice: {$fileUrl}");
     } else {
         $fileUrl = api_get_path(WEB_COURSE_PATH) . $docPath;
+        error_log("Original file loaded in OnlyOffice: {$fileUrl}");
     }
 
     $docInfo = [

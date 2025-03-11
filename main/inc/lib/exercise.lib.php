@@ -114,7 +114,7 @@ class ExerciseLib
                 }
             }
 
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, UPLOAD_ANSWER]) && $freeze) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, UPLOAD_ANSWER, ANSWER_IN_OFFICE_DOC]) && $freeze) {
                 return '';
             }
 
@@ -2592,7 +2592,7 @@ HOTSPOT;
                             FROM $TBL_EXERCISES_REL_QUESTION terq
                             LEFT JOIN $TBL_EXERCISES_QUESTION teq
                             ON terq.question_id = teq.iid
-                            WHERE teq.type in (".FREE_ANSWER.", ".ORAL_EXPRESSION.", ".ANNOTATION.", ".UPLOAD_ANSWER.")
+                            WHERE teq.type in (".FREE_ANSWER.", ".ORAL_EXPRESSION.", ".ANNOTATION.", ".UPLOAD_ANSWER.", ".ANSWER_IN_OFFICE_DOC.")
             ";
 
             $resultExerciseIds = Database::query($sqlExercise);
@@ -5557,7 +5557,7 @@ EOT;
                 if ($show_results) {
                     $score = $calculatedScore;
                 }
-                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
+                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER, ANSWER_IN_OFFICE_DOC])) {
                     $reviewScore = [
                         'score' => $my_total_score,
                         'comments' => Event::get_comments($exeId, $questionId),
@@ -6435,6 +6435,7 @@ EOT;
             READING_COMPREHENSION,
             MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY,
             UPLOAD_ANSWER,
+            ANSWER_IN_OFFICE_DOC,
             MATCHING_COMBINATION,
             FILL_IN_BLANKS_COMBINATION,
             MULTIPLE_ANSWER_DROPDOWN,

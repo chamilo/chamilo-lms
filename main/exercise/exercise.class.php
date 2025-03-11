@@ -4763,6 +4763,7 @@ class Exercise
                     break;
                 case UPLOAD_ANSWER:
                 case FREE_ANSWER:
+                case ANSWER_IN_OFFICE_DOC:
                     if ($from_database) {
                         $sql = "SELECT answer, marks FROM $TBL_TRACK_ATTEMPT
                                  WHERE
@@ -4792,43 +4793,6 @@ class Exercise
                         $studentChoice = $choice;
                         if ($studentChoice) {
                             //Fixing negative puntation see #2193
-                            $questionScore = 0;
-                            $totalScore += 0;
-                        }
-                    }
-                    break;
-                case ANSWER_IN_OFFICE_DOC:
-                    if ($from_database) {
-                        $sql = "SELECT answer, marks
-                                FROM $TBL_TRACK_ATTEMPT
-                                WHERE
-                                    exe_id = $exeId AND
-                                    question_id = $questionId";
-                        $result = Database::query($sql);
-                        $data = Database::fetch_array($result);
-
-                        $choice = '';
-                        $questionScore = 0;
-
-                        if ($data) {
-                            $choice = $data['answer'];
-                            $questionScore = $data['marks'];
-                        }
-
-                        $choice = str_replace('\r\n', '', $choice);
-                        $choice = stripslashes($choice);
-
-                        if ($questionScore == -1) {
-                            $totalScore += 0;
-                        } else {
-                            $totalScore += $questionScore;
-                        }
-
-                        $arrques = $questionName;
-                        $arrans = $choice;
-                    } else {
-                        $studentChoice = $choice;
-                        if ($studentChoice) {
                             $questionScore = 0;
                             $totalScore += 0;
                         }
@@ -6520,6 +6484,24 @@ class Exercise
                     false,
                     $questionDuration
                 );
+            } elseif ($answerType == ANSWER_IN_OFFICE_DOC) {
+                $answer = $choice;
+                $exerciseId = $this->iid;
+                $questionId = $quesId;
+                $originalFilePath = $objQuestionTmp->getFileUrl();
+                $originalExtension = !empty($originalFilePath) ? pathinfo($originalFilePath, PATHINFO_EXTENSION) : 'docx';
+                $fileName = "response_{$exeId}.{$originalExtension}";
+                Event::saveQuestionAttempt(
+                    $questionScore,
+                    $answer,
+                    $questionId,
+                    $exeId,
+                    0,
+                    $exerciseId,
+                    false,
+                    $questionDuration,
+                    $fileName
+                );
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
                 $absFilePath = $objQuestionTmp->getAbsoluteFilePath();
@@ -6595,24 +6577,6 @@ class Exercise
                     $this->iid,
                     false,
                     $questionDuration
-                );
-            } elseif ($answerType == ANSWER_IN_OFFICE_DOC) {
-                $answer = $choice;
-                $exerciseId = $this->iid;
-                $questionId = $quesId;
-                $originalFilePath = $objQuestionTmp->getFileUrl();
-                $originalExtension = !empty($originalFilePath) ? pathinfo($originalFilePath, PATHINFO_EXTENSION) : 'docx';
-                $fileName = "response_{$exeId}.{$originalExtension}";
-                Event::saveQuestionAttempt(
-                    $questionScore,
-                    $answer,
-                    $questionId,
-                    $exeId,
-                    0,
-                    $exerciseId,
-                    false,
-                    $questionDuration,
-                    $fileName
                 );
             } else {
                 if ($answerType === CALCULATED_ANSWER && !empty($calculatedAnswerId)) {

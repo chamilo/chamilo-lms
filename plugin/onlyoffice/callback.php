@@ -69,7 +69,7 @@ if (isset($_GET['hash']) && !empty($_GET['hash'])) {
 
     switch ($type) {
         case 'track':
-            $callbackResponseArray = track($type, $docId);
+            $callbackResponseArray = track();
             exit(json_encode($callbackResponseArray));
         case 'download':
             $callbackResponseArray = download();
@@ -87,7 +87,7 @@ if (isset($_GET['hash']) && !empty($_GET['hash'])) {
 /**
  * Handle request from the document server with the document status information.
  */
-function track($type, $docId): array
+function track(): array
 {
     $result = [];
 
@@ -142,10 +142,6 @@ function track($type, $docId): array
         $data['status'] = $payload->status;
     }
 
-    if (!isset($data['url']) || empty($data['url']) || !in_array($data['status'], [2, 3])) {
-        return ['status' => 'no_changes'];
-    }
-
     $docStatus = new CallbackDocStatus($data['status']);
     $callback = new OnlyofficeCallback();
     $callback->setStatus($docStatus);
@@ -161,10 +157,10 @@ function track($type, $docId): array
             'groupId' => $groupId,
             'sessionId' => $sessionId,
             'courseInfo' => $courseInfo,
-        ]
-    );
+        ]);
+    $result = $callbackService->processCallback($callback, $docId);
 
-    return $callbackService->processCallback($callback, $docId);
+    return $result;
 }
 
 /**

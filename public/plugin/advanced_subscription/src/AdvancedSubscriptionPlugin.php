@@ -3,14 +3,14 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
+use Chamilo\CoreBundle\HookEvent\Interfaces\PluginEventSubscriberInterface;
 
 /**
  * Class AdvancedSubscriptionPlugin
  * This class is used to add an advanced subscription allowing the admin to
- * create user queues requesting a subscribe to a session.
+ * create user queues requesting to subscribe to a session.
  */
-class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
+class AdvancedSubscriptionPlugin extends Plugin implements PluginEventSubscriberInterface
 {
     protected $strings;
     private $errorMessages;
@@ -58,7 +58,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         $this->installDatabase();
         $this->addAreaField();
-        $this->installHook();
+        $this->installEventSubscribers();
     }
 
     /**
@@ -69,7 +69,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         //$setting = api_get_setting('advanced_subscription');
         $setting = false;
         if (!empty($setting)) {
-            $this->uninstallHook();
+            $this->uninstallEventSubscribers();
             // Note: Keeping area field data is intended so it will not be removed
             $this->uninstallDatabase();
         }
@@ -892,7 +892,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     /**
      * This method will call the Hook management insertHook to add Hook observer from this plugin.
      */
-    public function installHook()
+    public function installEventSubscribers(): void
     {
         //@todo attach AdvancedSubscriptionEventSubscriber::onAdminBlock
         //@todo attach AdvancedSubscriptionEventSubscriber::onNotificationContent
@@ -903,7 +903,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     /**
      * This method will call the Hook management deleteHook to disable Hook observer from this plugin.
      */
-    public function uninstallHook()
+    public function uninstallEventSubscribers(): void
     {
         //@todo detach AdvancedSubscriptionEventSubscriber::onAdminBlock
         //@todo detach AdvancedSubscriptionEventSubscriber::onNotificationContent

@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
+use Chamilo\CoreBundle\HookEvent\Interfaces\PluginEventSubscriberInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\ORM\ORMException;
@@ -19,7 +20,7 @@ use Xabbuh\XApi\Serializer\Symfony\Serializer;
 /**
  * Class XApiPlugin.
  */
-class XApiPlugin extends Plugin implements HookPluginInterface
+class XApiPlugin extends Plugin implements PluginEventSubscriberInterface
 {
     public const SETTING_LRS_URL = 'lrs_url';
     public const SETTING_LRS_AUTH_USERNAME = 'lrs_auth_username';
@@ -88,7 +89,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     {
         $this->installInitialConfig();
         $this->addCourseTools();
-        $this->installHook();
+        $this->installEventSubscribers();
     }
 
     /**
@@ -96,14 +97,14 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     public function uninstall()
     {
-        $this->uninstallHook();
+        $this->uninstallEventSubscribers();
         $this->deleteCourseTools();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function uninstallHook()
+    public function uninstallEventSubscribers(): void
     {
         //@todo detach XApiCreateCourseEventSubscriber
         //@todo detach XApiEventSubscriber::onLpItemViewed
@@ -119,8 +120,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         //@todo detach XApiEventSubscriber::onPortfolioItemScored
         //@todo detach XApiEventSubscriber::onPortfolioCommentScored
         //@todo detach XApiEventSubscriber::onPortfolioCommentEdited
-
-        return 1;
     }
 
     /**
@@ -216,7 +215,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     /**
      * {@inheritdoc}
      */
-    public function installHook()
+    public function installEventSubscribers(): void
     {
         //@todo attach XApiCreateCourseEventSubscriber
     }

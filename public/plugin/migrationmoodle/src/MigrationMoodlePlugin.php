@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\HookEvent\Interfaces\PluginEventSubscriberInterface;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -8,7 +9,7 @@ use Doctrine\DBAL\DriverManager;
 /**
  * Class MigrationMoodlePlugin.
  */
-class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
+class MigrationMoodlePlugin extends Plugin implements PluginEventSubscriberInterface
 {
     public const SETTING_USER_FILTER = 'user_filter';
     public const SETTING_URL_ID = 'url_id';
@@ -79,34 +80,20 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
     public function performActionsAfterConfigure()
     {
         if ('true' === $this->get('active')) {
-            $this->installHook();
+            $this->installEventSubscribers();
         } else {
-            $this->uninstallHook();
+            $this->uninstallEventSubscribers();
         }
 
         return $this;
     }
 
-    /**
-     * This method will call the Hook management insertHook to add Hook observer from this plugin.
-     *
-     * @throws Exception
-     *
-     * @return void
-     */
-    public function installHook()
+    public function installEventSubscribers(): void
     {
         //@todo attach MigrationMoodleCheckLoginCredentialEventSubscriber
     }
 
-    /**
-     * This method will call the Hook management deleteHook to disable Hook observer from this plugin.
-     *
-     * @throws Exception
-     *
-     * @return void
-     */
-    public function uninstallHook()
+    public function uninstallEventSubscribers(): void
     {
         //@todo detach MigrationMoodleCheckLoginCredentialEventSubscriber
     }

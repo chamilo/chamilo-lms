@@ -2,6 +2,7 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\HookEvent\Interfaces\PluginEventSubscriberInterface;
 use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
 use Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -9,7 +10,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 /**
  * Class TopLinksPlugin.
  */
-class TopLinksPlugin extends Plugin implements HookPluginInterface
+class TopLinksPlugin extends Plugin implements PluginEventSubscriberInterface
 {
     /**
      * TopLinksPlugin constructor.
@@ -92,14 +93,12 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema(array_values($tableReferences));
 
-        $this->installHook();
+        $this->installEventSubscribers();
     }
 
-    public function installHook(): int
+    public function installEventSubscribers(): void
     {
         //@todo attach to ToplinksCreateCourseEventSubscriber
-
-        return 1;
     }
 
     public function uninstall()
@@ -114,16 +113,14 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
         $schemaTool = new SchemaTool($em);
         $schemaTool->dropSchema(array_values($tableReferences));
 
-        $this->uninstallHook();
+        $this->uninstallEventSubscribers();
 
         $this->deleteCourseTools();
     }
 
-    public function uninstallHook(): int
+    public function uninstallEventSubscribers(): void
     {
         //@todo detach to ToplinksCreateCourseEventSubscriber
-
-        return 1;
     }
 
     private function deleteCourseTools()

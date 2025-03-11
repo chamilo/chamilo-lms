@@ -1072,9 +1072,7 @@ class Statistics
             $parameters = [];
 
             $parameters['report'] = 'activities';
-            if (isset($_GET['keyword'])) {
-                $parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
-            }
+            $parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
 
             $table->set_additional_parameters($parameters);
             $table->set_header(0, get_lang('EventType'));

@@ -1031,7 +1031,8 @@ if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_af
     }
 }
 
-$template = new Template($nameTools);
+$reduced = (isset($reduced) && $reduced);
+$template = new Template($nameTools, !$reduced);
 $template->assign('first_session_category', $firstSessionCategoryId);
 $template->assign('session_star_icon', Display::return_icon('star.png', get_lang('Session')));
 $template->assign('subscription_settings', $subscriptionSettings);

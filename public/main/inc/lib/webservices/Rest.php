@@ -9,9 +9,9 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\HookEvent\HookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
-use Chamilo\CoreBundle\HookEvent\UserUpdatedHookEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\UserUpdatedEvent;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
@@ -1819,8 +1819,8 @@ class Rest extends WebService
         $eventDispatcher = Container::getEventDispatcher();
 
         $eventDispatcher->dispatch(
-            new UserUpdatedHookEvent([], HookEvent::TYPE_PRE),
-            HookEvents::USER_UPDATED
+            new UserUpdatedEvent([], AbstractEvent::TYPE_PRE),
+            Events::USER_UPDATED
         );
 
         // apply submitted modifications
@@ -1972,8 +1972,8 @@ class Rest extends WebService
 
         // tell the world we just updated this user
         $eventDispatcher->dispatch(
-            new UserUpdatedHookEvent(['user' => $user], HookEvent::TYPE_POST),
-            HookEvents::USER_UPDATED
+            new UserUpdatedEvent(['user' => $user], AbstractEvent::TYPE_POST),
+            Events::USER_UPDATED
         );
 
         // invalidate cache for this user

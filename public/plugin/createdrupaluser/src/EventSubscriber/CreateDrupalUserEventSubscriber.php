@@ -4,8 +4,8 @@
 
 declare(strict_types=1);
 
-use Chamilo\CoreBundle\HookEvent\UserCreatedHookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
+use Chamilo\CoreBundle\Event\UserCreatedEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CreateDrupalUserEventSubscriber implements EventSubscriberInterface
@@ -16,11 +16,11 @@ class CreateDrupalUserEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            HookEvents::USER_CREATED => 'onCreateUser',
+            Events::USER_CREATED => 'onCreateUser',
         ];
     }
 
-    public function onCreateUser(UserCreatedHookEvent $event): void
+    public function onCreateUser(UserCreatedEvent $event): void
     {
         $drupalDomain = CreateDrupalUser::create()->get('drupal_domain');
         $drupalDomain = rtrim($drupalDomain, '/').'/';

@@ -7,10 +7,10 @@ use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\HookEvent\HookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemDeletedHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemVisibilityChangedHookEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\PortfolioItemDeletedEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemVisibilityChangedEvent;
 
 // Make sure we void the course context if we are in the social network section
 if (empty($_GET['cidReq'])) {
@@ -179,8 +179,8 @@ switch ($action) {
         $em->flush();
 
         Container::getEventDispatcher()->dispatch(
-            new PortfolioItemVisibilityChangedHookEvent(['portfolio' => $item, 'visibility']),
-            HookEvents::PORTFOLIO_ITEM_VISIBILITY_CHANGED
+            new PortfolioItemVisibilityChangedEvent(['portfolio' => $item, 'visibility']),
+            Events::PORTFOLIO_ITEM_VISIBILITY_CHANGED
         );
 
         Display::addFlash(
@@ -204,8 +204,8 @@ switch ($action) {
         }
 
         Container::getEventDispatcher()->dispatch(
-            new PortfolioItemDeletedHookEvent(['item' => $item], HookEvent::TYPE_PRE),
-            HookEvents::PORTOFLIO_ITEM_DELETED
+            new PortfolioItemDeletedEvent(['item' => $item], AbstractEvent::TYPE_PRE),
+            Events::PORTOFLIO_ITEM_DELETED
         );
 
         $em->remove($item);

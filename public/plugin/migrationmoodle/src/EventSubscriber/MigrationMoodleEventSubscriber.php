@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CoreBundle\HookEvent\CheckLoginCredentialsHookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
+use Chamilo\CoreBundle\Event\CheckLoginCredentialsEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Doctrine\ORM\Exception\NotSupported;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -20,14 +20,14 @@ class MigrationMoodleEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            HookEvents::CHECK_LOGIN_CREDENTIALS => 'onCheckLoginCredentials',
+            Events::CHECK_LOGIN_CREDENTIALS => 'onCheckLoginCredentials',
         ];
     }
 
     /**
      * @throws NotSupported
      */
-    public function onCheckLoginCredentials(CheckLoginCredentialsHookEvent $event): void
+    public function onCheckLoginCredentials(CheckLoginCredentialsEvent $event): void
     {
         $userData = $event->getUser();
         $credentials = $event->getCredentials();

@@ -4,9 +4,9 @@
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\HookEvent\HookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
-use Chamilo\CoreBundle\HookEvent\SessionResubscriptionHookEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\SessionResubscriptionEvent;
 use Doctrine\ORM\Query\Expr\Join;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
@@ -1269,8 +1269,8 @@ class CoursesAndSessionsCatalog
         }
 
         Container::getEventDispatcher()->dispatch(
-            new SessionResubscriptionHookEvent(['session_id' => $sessionId], HookEvent::TYPE_PRE),
-            HookEvents::SESSION_RESUBSCRIPTION
+            new SessionResubscriptionEvent(['session_id' => $sessionId], AbstractEvent::TYPE_PRE),
+            Events::SESSION_RESUBSCRIPTION
         );
 
         return $result;

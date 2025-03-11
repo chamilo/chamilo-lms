@@ -4,9 +4,9 @@
 
 declare(strict_types=1);
 
-use Chamilo\CoreBundle\HookEvent\CourseCreatedHookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
+use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -20,11 +20,11 @@ class TopLinksEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            HookEvents::COURSE_CREATED => 'onCreateCourse',
+            Events::COURSE_CREATED => 'onCreateCourse',
         ];
     }
 
-    public function onCreateCourse(CourseCreatedHookEvent $event): void
+    public function onCreateCourse(CourseCreatedEvent $event): void
     {
         $plugin = TopLinksPlugin::create();
 
@@ -32,7 +32,7 @@ class TopLinksEventSubscriber implements EventSubscriberInterface
 
         $courseId = $event->getCourseInfo()['id'];
 
-        if (HookEvent::TYPE_POST === $event->getType()) {
+        if (AbstractEvent::TYPE_POST === $event->getType()) {
             foreach ($linkRepo->findAll() as $link) {
                 $plugin->addToolInCourse($courseId, $link);
             }

@@ -6,22 +6,22 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
-use Chamilo\CoreBundle\HookEvent\CourseCreatedHookEvent;
-use Chamilo\CoreBundle\HookEvent\ExerciseEndedHookEvent;
-use Chamilo\CoreBundle\HookEvent\ExerciseQuestionAnsweredHookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
-use Chamilo\CoreBundle\HookEvent\LearningPathEndedHookEvent;
-use Chamilo\CoreBundle\HookEvent\LearningPathItemViewedHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioCommentEditedHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioCommentScoredHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemAddedHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemCommentedHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemDownloadedHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemEditedHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemHighlightedHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemScoredHookEvent;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemViewedHookEvent;
+use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\ExerciseEndedEvent;
+use Chamilo\CoreBundle\Event\ExerciseQuestionAnsweredEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
+use Chamilo\CoreBundle\Event\LearningPathItemViewedEvent;
+use Chamilo\CoreBundle\Event\PortfolioCommentEditedEvent;
+use Chamilo\CoreBundle\Event\PortfolioCommentScoredEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemAddedEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemCommentedEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemDownloadedEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemEditedEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemHighlightedEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemScoredEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemViewedEvent;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -59,31 +59,31 @@ class XApiEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            HookEvents::COURSE_CREATED => 'onCreateCourse',
+            Events::COURSE_CREATED => 'onCreateCourse',
 
-            HookEvents::EXERCISE_QUESTION_ANSWERED => 'onExerciseQuestionAnswered',
-            HookEvents::EXERCISE_ENDED => 'onExerciseEnded',
+            Events::EXERCISE_QUESTION_ANSWERED => 'onExerciseQuestionAnswered',
+            Events::EXERCISE_ENDED => 'onExerciseEnded',
 
-            HookEvents::LP_ITEM_VIEWED => 'onLpItemViewed',
-            HookEvents::LP_ENDED => 'onLpEnded',
+            Events::LP_ITEM_VIEWED => 'onLpItemViewed',
+            Events::LP_ENDED => 'onLpEnded',
 
-            HookEvents::PORTFOLIO_ITEM_ADDED => 'onPortfolioItemAdded',
-            HookEvents::PORTFOLIO_ITEM_EDITED => 'onPortfolioItemEdited',
-            HookEvents::PORTFOLIO_ITEM_VIEWED => 'onPortfolioItemViewed',
-            HookEvents::PORTFOLIO_ITEM_COMMENTED => 'onPortfolioItemCommented',
-            HookEvents::PORTFOLIO_ITEM_HIGHLIGHTED => 'onPortfolioItemHighlighted',
-            HookEVents::PORTFOLIO_DOWNLOADED => 'onPortfolioItemDownloaded',
-            HookEvents::PORTFOLIO_ITEM_SCORED => 'onPortfolioItemScored',
-            HookEvents::PORTFOLIO_COMMENT_SCORED => 'onPortfolioCommentScored',
-            HookEvents::PORTFOLIO_COMMENT_EDITED => 'onPortfolioCommentEdited',
+            Events::PORTFOLIO_ITEM_ADDED => 'onPortfolioItemAdded',
+            Events::PORTFOLIO_ITEM_EDITED => 'onPortfolioItemEdited',
+            Events::PORTFOLIO_ITEM_VIEWED => 'onPortfolioItemViewed',
+            Events::PORTFOLIO_ITEM_COMMENTED => 'onPortfolioItemCommented',
+            Events::PORTFOLIO_ITEM_HIGHLIGHTED => 'onPortfolioItemHighlighted',
+            Events::PORTFOLIO_DOWNLOADED => 'onPortfolioItemDownloaded',
+            Events::PORTFOLIO_ITEM_SCORED => 'onPortfolioItemScored',
+            Events::PORTFOLIO_COMMENT_SCORED => 'onPortfolioCommentScored',
+            Events::PORTFOLIO_COMMENT_EDITED => 'onPortfolioCommentEdited',
         ];
     }
 
-    public function onCreateCourse(CourseCreatedHookEvent $event): void
+    public function onCreateCourse(CourseCreatedEvent $event): void
     {
         $plugin = XApiPlugin::create();
 
-        if (HookEvent::TYPE_POST === $event->getType()) {
+        if (AbstractEvent::TYPE_POST === $event->getType()) {
             $plugin->addCourseToolForTinCan($event->getCourseInfo()['id']);
         }
     }
@@ -94,7 +94,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
      * @throws NotSupported
      * @throws TransactionRequiredException
      */
-    public function onExerciseQuestionAnswered(ExerciseQuestionAnsweredHookEvent $event): void
+    public function onExerciseQuestionAnswered(ExerciseQuestionAnsweredEvent $event): void
     {
         $em = Database::getManager();
         $attemptRepo = $em->getRepository(TrackEAttempt::class);
@@ -121,7 +121,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
      * @throws ORMException
      * @throws TransactionRequiredException
      */
-    public function onExerciseEnded(ExerciseEndedHookEvent $event): void
+    public function onExerciseEnded(ExerciseEndedEvent $event): void
     {
         $em = Database::getManager();
 
@@ -140,7 +140,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
      */
-    public function onLpItemViewed(LearningPathItemViewedHookEvent $event): void
+    public function onLpItemViewed(LearningPathItemViewedEvent $event): void
     {
         $em = Database::getManager();
 
@@ -165,7 +165,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
      * @throws ORMException
      * @throws TransactionRequiredException
      */
-    public function onLpEnded(LearningPathEndedHookEvent $event): void
+    public function onLpEnded(LearningPathEndedEvent $event): void
     {
         $em = Database::getManager();
 
@@ -183,7 +183,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function onPortfolioItemAdded(PortfolioItemAddedHookEvent $event): void
+    public function onPortfolioItemAdded(PortfolioItemAddedEvent $event): void
     {
         $item = $event->getPortfolio();
 
@@ -200,7 +200,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function onPortfolioItemEdited(PortfolioItemEditedHookEvent $event): void
+    public function onPortfolioItemEdited(PortfolioItemEditedEvent $event): void
     {
         $item = $event->getPortfolio();
 
@@ -217,7 +217,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function onPortfolioItemViewed(PortfolioItemViewedHookEvent $event): void
+    public function onPortfolioItemViewed(PortfolioItemViewedEvent $event): void
     {
         $item = $event->getPortfolio();
 
@@ -234,7 +234,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function onPortfolioItemCommented(PortfolioItemCommentedHookEvent $event): void
+    public function onPortfolioItemCommented(PortfolioItemCommentedEvent $event): void
     {
         $comment = $event->getComment();
 
@@ -249,7 +249,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
         $this->saveSharedStatement($statement);
     }
 
-    public function onPortfolioItemHighlighted(PortfolioItemHighlightedHookEvent $event): void
+    public function onPortfolioItemHighlighted(PortfolioItemHighlightedEvent $event): void
     {
         $item = $event->getPortfolio();
 
@@ -266,7 +266,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function onPortfolioItemDownloaded(PortfolioItemDownloadedHookEvent $event): void
+    public function onPortfolioItemDownloaded(PortfolioItemDownloadedEvent $event): void
     {
         $owner = $event->getOwner();
 
@@ -279,7 +279,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
         $this->saveSharedStatement($statement);
     }
 
-    public function onPortfolioItemScored(PortfolioItemScoredHookEvent $event): void
+    public function onPortfolioItemScored(PortfolioItemScoredEvent $event): void
     {
         $item = $event->getPortfolio();
 
@@ -296,7 +296,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function onPortfolioCommentScored(PortfolioCommentScoredHookEvent $event): void
+    public function onPortfolioCommentScored(PortfolioCommentScoredEvent $event): void
     {
         $comment = $event->getComment();
 
@@ -313,7 +313,7 @@ class XApiEventSubscriber implements EventSubscriberInterface
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function onPortfolioCommentEdited(PortfolioCommentEditedHookEvent $event): void
+    public function onPortfolioCommentEdited(PortfolioCommentEditedEvent $event): void
     {
         $comment = $event->getComment();
 

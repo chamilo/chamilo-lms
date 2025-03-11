@@ -2,7 +2,7 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\CoreBundle\HookEvent\Interfaces\PluginEventSubscriberInterface;
+use Chamilo\CoreBundle\Event\Interfaces\PluginEventSubscriberInterface;
 use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
 use Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool;
 use Doctrine\ORM\Tools\SchemaTool;

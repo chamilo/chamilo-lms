@@ -3,8 +3,8 @@
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
-use Chamilo\CoreBundle\HookEvent\PortfolioItemEditedHookEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\PortfolioItemEditedEvent;
 
 $categories = $em
     ->getRepository('ChamiloCoreBundle:PortfolioCategory')
@@ -44,8 +44,8 @@ if ($form->validate()) {
     $em->flush();
 
     Container::getEventDispatcher()->dispatch(
-        new PortfolioItemEditedHookEvent(['portfolio' => $item]),
-        HookEvents::PORTFOLIO_ITEM_EDITED
+        new PortfolioItemEditedEvent(['portfolio' => $item]),
+        Events::PORTFOLIO_ITEM_EDITED
     );
 
     Display::addFlash(

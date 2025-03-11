@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\HookEvent\Interfaces\PluginEventSubscriberInterface;
+use Chamilo\CoreBundle\Event\Interfaces\PluginEventSubscriberInterface;
 use Chamilo\PluginBundle\ExternalNotificationConnect\Entity\AccessToken;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;

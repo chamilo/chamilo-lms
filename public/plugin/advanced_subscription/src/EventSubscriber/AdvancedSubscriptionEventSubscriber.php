@@ -4,12 +4,12 @@
 
 declare(strict_types=1);
 
-use Chamilo\CoreBundle\HookEvent\AdminBlockHookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvent;
-use Chamilo\CoreBundle\HookEvent\HookEvents;
-use Chamilo\CoreBundle\HookEvent\NotificationContentHookEvent;
-use Chamilo\CoreBundle\HookEvent\NotificationTitleHookEvent;
-use Chamilo\CoreBundle\HookEvent\WSRegistrationHookEvent;
+use Chamilo\CoreBundle\Event\AdminBlockEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\NotificationContentEvent;
+use Chamilo\CoreBundle\Event\NotificationTitleEvent;
+use Chamilo\CoreBundle\Event\WSRegistrationEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AdvancedSubscriptionEventSubscriber implements EventSubscriberInterface
@@ -20,24 +20,24 @@ class AdvancedSubscriptionEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            HookEvents::NOTIFICATION_CONTENT => 'onNotificationContent',
-            HookEvents::NOTIFICATION_TITLE => 'onNotificationTitle',
+            Events::NOTIFICATION_CONTENT => 'onNotificationContent',
+            Events::NOTIFICATION_TITLE => 'onNotificationTitle',
 
-            HookEvents::WS_REGISTRATION => 'onWSRegistration',
+            Events::WS_REGISTRATION => 'onWSRegistration',
 
-            HookEvents::ADMIN_BLOCK => 'onAdminBlock',
+            Events::ADMIN_BLOCK => 'onAdminBlock',
         ];
     }
 
-    public function onNotificationContent(NotificationContentHookEvent $event): void
+    public function onNotificationContent(NotificationContentEvent $event): void
     {
         $data = $event->getData();
 
-        if (HookEvent::TYPE_PRE === $event->getType()) {
+        if (AbstractEvent::TYPE_PRE === $event->getType()) {
             $data['advanced_subscription_pre_content'] = $event->getContent();
 
             $event->setData($data);
-        } elseif (HookEvent::TYPE_POST === $event->getType()) {
+        } elseif (AbstractEvent::TYPE_POST === $event->getType()) {
             if (!empty($event->getContent()) && !empty($data['advanced_subscription_pre_content'])) {
                 $content = str_replace(
                     [
@@ -54,24 +54,24 @@ class AdvancedSubscriptionEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onNotificationTitle(NotificationTitleHookEvent $event): void
+    public function onNotificationTitle(NotificationTitleEvent $event): void
     {
         $data = $event->getData();
 
-        if (HookEvent::TYPE_PRE === $event->getType()) {
+        if (AbstractEvent::TYPE_PRE === $event->getType()) {
             $data['advanced_subscription_pre_title'] = $event->getTitle();
 
             $event->setData($data);
-        } elseif (HookEvent::TYPE_POST === $event->getType()
+        } elseif (AbstractEvent::TYPE_POST === $event->getType()
             && !empty($data['advanced_subscription_pre_title'])
         ) {
             $event->setTitle($data['advanced_subscription_pre_title']);
         }
     }
 
-    public function onWSRegistration(WSRegistrationHookEvent $event): void
+    public function onWSRegistration(WSRegistrationEvent $event): void
     {
-        if (HookEvent::TYPE_POST === $event->getType()) {
+        if (AbstractEvent::TYPE_POST === $event->getType()) {
             $server = $event->getServer();
 
             /** WSSessionListInCategory */
@@ -409,9 +409,9 @@ class AdvancedSubscriptionEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onAdminBlock(AdminBlockHookEvent $event): void
+    public function onAdminBlock(AdminBlockEvent $event): void
     {
-        if (HookEvent::TYPE_POST === $event->getType()) {
+        if (AbstractEvent::TYPE_POST === $event->getType()) {
             $item = [
                 'url' => '../../plugin/advanced_subscription/src/admin_view.php',
                 'label' => get_plugin_lang('plugin_title', 'AdvancedSubscriptionPlugin'),

@@ -32,8 +32,6 @@ class HookObserver
 
     /**
      * Set className.
-     *
-     * @return HookObserver
      */
     public function setClassName(string $className)
     {
@@ -54,8 +52,6 @@ class HookObserver
 
     /**
      * Set path.
-     *
-     * @return HookObserver
      */
     public function setPath(string $path)
     {
@@ -76,8 +72,6 @@ class HookObserver
 
     /**
      * Set pluginName.
-     *
-     * @return HookObserver
      */
     public function setPluginName(string $pluginName)
     {

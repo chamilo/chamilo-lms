@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\HookEvent\Interfaces\PluginEventSubscriberInterface;
 use Chamilo\PluginBundle\ExternalNotificationConnect\Entity\AccessToken;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
@@ -11,7 +12,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException;
 
-class ExternalNotificationConnectPlugin extends Plugin implements HookPluginInterface
+class ExternalNotificationConnectPlugin extends Plugin implements PluginEventSubscriberInterface
 {
     public const SETTING_AUTH_URL = 'auth_url';
     public const SETTING_AUTH_USERNAME = 'auth_username';
@@ -73,11 +74,11 @@ class ExternalNotificationConnectPlugin extends Plugin implements HookPluginInte
         return $this;
     }
 
-    public function installHook()
+    public function installEventSubscribers(): void
     {
     }
 
-    public function uninstallHook()
+    public function uninstallEventSubscribers(): void
     {
         //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemAdded
         //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemEdited
@@ -99,12 +100,12 @@ class ExternalNotificationConnectPlugin extends Plugin implements HookPluginInte
         }
 
         $this->installDBTables();
-        $this->installHook();
+        $this->installEventSubscribers();
     }
 
     public function uninstall()
     {
-        $this->uninstallHook();
+        $this->uninstallEventSubscribers();
         $this->uninstallDBTables();
     }
 

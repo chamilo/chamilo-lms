@@ -59,6 +59,7 @@ use Chamilo\CourseBundle\Repository\CForumRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
+use Chamilo\CourseBundle\Repository\CGroupRelUsergroupRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
@@ -655,5 +656,10 @@ class Container
     public static function getThemeHelper(): ThemeHelper
     {
         return self::$container->get(ThemeHelper::class);
+    }
+
+    public static function getGroupRelUsergroupRepository(): CGroupRelUsergroupRepository
+    {
+        return self::$container->get(CGroupRelUsergroupRepository::class);
     }
 }

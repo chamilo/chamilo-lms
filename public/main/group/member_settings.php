@@ -3,6 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+use Chamilo\CoreBundle\Framework\Container;
+
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
 
@@ -14,7 +17,7 @@ $current_group = GroupManager::get_group_properties($group_id);
 $groupEntity = api_get_group_entity($group_id);
 
 $nameTools = get_lang('Edit this group');
-$interbreadcrumb[] = ['url' => 'group.php', 'name' => get_lang('Groups')];
+$interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $groupEntity->getTitle()];
 
 $is_group_member = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
@@ -227,6 +230,25 @@ Display::display_header($nameTools, 'Group');
 
 $form->setDefaults($defaults);
 echo GroupManager::getSettingBar('member');
-$form->display();
+
+// check if group has a CGroupRelUsergroup
+$courseInfo = api_get_course_info_by_id(api_get_course_int_id());
+
+if (GroupManager::is_group_linked_to_usergroup($groupEntity)) {
+
+    echo '<div class="alert alert-info">Ce groupe est lié à la classe ' .$courseInfo['title'].'. La liste de ses membres dépend des membres de la classe et ne peut-être modifiée.
+    Allez dans les paramètres du groupe pour rompre ce lien si vous souhaitez ajouter ou ôter des membres de la classe.
+    </div>';
+
+    echo '<h3>Membres du groupe</h3>';
+    $memberInfos = GroupManager::get_subscribed_users($groupEntity);
+    echo '<ul>';
+    foreach ($memberInfos as $memberInfo) {
+        echo '<li>'.$memberInfo['firstname'].' '.$memberInfo['lastname'].' ('.$memberInfo['username'].')'.'</li>';
+    }
+    echo '</ul>';
+} else {
+    $form->display();
+}
 
 Display::display_footer();

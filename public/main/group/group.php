@@ -234,12 +234,26 @@ echo UserManager::getUserSubscriptionTab(3);
 
 /*  List all categories */
 if ('true' === api_get_setting('allow_group_categories')) {
-    $defaultCategory = [
-        'iid' => null,
-        'description' => '',
-        'title' => get_lang('Default groups'),
-    ];
-    $categories = array_merge([$defaultCategory], $categories);
+    if (empty($categories)) {
+        $defaultCategoryId = GroupManager::create_category(
+            get_lang('Default groups'),
+            '',
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+        );
+        $defaultCategory = GroupManager::get_category($defaultCategoryId);
+        $categories = [$defaultCategory];
+    }
     $course = api_get_course_entity();
     foreach ($categories as $index => $category) {
         $categoryId = $category['iid'];
@@ -264,13 +278,20 @@ if ('true' === api_get_setting('allow_group_categories')) {
             // Edit
             $actions .= '<a
                 href="group_category.php?'.api_get_cidreq().'&id='.$categoryId.'" title="'.get_lang('Edit').'">'.
-                Display::getMdiIcon('edit', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit this category')).'</a>';
+                Display::getMdiIcon('pencil', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit this category')).'</a>';
+
+            // Add group
+            $actions .= ' <a
+                href="group_creation.php?'.api_get_cidreq().'&category_id='.$categoryId.'">'.
+                Display::getMdiIcon(ActionIcon::SUBSCRIBE_GROUP_USERS_TO_RESOURCE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create new group(s)')).'</a>';
 
             // Delete
             $actions .= Display::url(
-                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
+                Display::getMdiIcon(ActionIcon::DELETE, count($categories) == 1 ? 'ch-tool-icon-disabled' : 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                 'group.php?'.api_get_cidreq().'&action=delete_category&category_id='.$categoryId,
-                [
+                count($categories) == 1 ? [
+                    'onclick' => 'javascript:alert('."'".addslashes(api_htmlentities(get_lang('You cannot delete the last category'), ENT_QUOTES))."'".'); return false;',
+                ] : [
                     'onclick' => 'javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;',
                 ]
             );

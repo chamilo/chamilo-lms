@@ -76,6 +76,8 @@ if (isset($_GET['id'])) {
         'forum_state' => GroupManager::TOOL_PRIVATE,
         'max_student' => 0,
         'document_access' => 0,
+        'allow_change_group_name' => GroupManager::GROUP_ONLY_TEACHER_CAN_RENAME,
+        'only_me' => GroupManager::GROUP_VISIBILITY_DEFAULT,
     ];
 }
 
@@ -103,7 +105,11 @@ if (isset($_GET['id'])) {
 } else {
     // Create a new category
     $action = 'add_category';
-    $form = new FormValidator('group_category');
+    $form = new FormValidator(
+        'group_category',
+        'post',
+        api_get_self().'?'.api_get_cidreq()
+    );
 }
 
 $form->addElement('header', $nameTools);
@@ -158,6 +164,42 @@ $group = [
 ];
 $form->addGroup($group, 'max_member_group', get_lang('Limit'), null, false);
 $form->addRule('max_member_group', get_lang('Please enter a valid number for the maximum number of members.'), 'callback', 'check_max_number_of_members');
+$form->addElement('html', '</div>');
+
+// group naming settings
+$form->addElement('html', '<div class="col-md-6">');
+
+$group = [
+    $form->createElement('radio', 'allow_change_group_name', null, 'Seul les enseignants peuvent renommer les groupes', GroupManager::GROUP_ONLY_TEACHER_CAN_RENAME),
+    $form->createElement('radio', 'allow_change_group_name', null, 'Les membres peuvent renommer les groupes', GroupManager::GROUP_STUDENT_CAN_RENAME),
+    $form->createElement('radio', 'allow_change_group_name', null, 'Le groupe sera nommé avec les noms prénoms de ses membres', GroupManager::GROUP_AUTO_RENAME_WITH_SELF_MEMBERS),
+];
+$form->addGroup(
+    $group,
+    '',
+    Display::getMdiIcon('rename', 'ch-tool-icon', null, ICON_SIZE_SMALL, 'Renommer').' Renommer',
+    null,
+    false
+);
+
+$form->addElement('html', '</div>');
+
+// visibility settings
+$form->addElement('html', '<div class="col-md-6">');
+
+$group = [
+    $form->createElement('radio', 'only_me', null, 'Par défaut', GroupManager::GROUP_VISIBILITY_DEFAULT),
+    $form->createElement('radio', 'only_me', null, 'Afficher uniquement les groupes dont l\'étudiant est membre', GroupManager::GROUP_ONLY_FOR_THOSE_JOINED),
+    $form->createElement('radio', 'only_me', null, 'Afficher, sans leur nom ni la liste des membres, uniquement les groupes dont l\'étudiant est membre', GroupManager::GROUP_ONLY_FOR_THOSE_JOINED_WITHOUT_MEMBERS_INFOS),
+];
+$form->addGroup(
+    $group,
+    '',
+    Display::getMdiIcon('eye', 'ch-tool-icon', null, ICON_SIZE_SMALL, 'Visibilité').' Visibilité',
+    null,
+    false
+);
+
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="col-md-6">');
@@ -403,7 +445,9 @@ if ($form->validate()) {
                 $self_unreg_allowed,
                 $max_member,
                 $values['groups_per_user'],
-                $values['document_access'] ?? 0
+                $values['document_access'] ?? 0,
+                $values['allow_change_group_name'],
+                $values['only_me']
             );
             Display::addFlash(Display::return_message(get_lang('Group settings have been modified')));
             header('Location: '.$currentUrl.'&category='.$values['id']);
@@ -423,7 +467,9 @@ if ($form->validate()) {
                 $self_unreg_allowed,
                 $max_member,
                 $values['groups_per_user'],
-                $values['document_access'] ?? 0
+                $values['document_access'] ?? 0,
+                $values['allow_change_group_name'],
+                $values['only_me']
             );
             Display::addFlash(Display::return_message(get_lang('Category created')));
             header('Location: '.$currentUrl);
@@ -436,7 +482,7 @@ if ($form->validate()) {
 // Else display the form
 Display::display_header($nameTools, 'Group');
 
-$actions = '<a href="group.php">'.
+$actions = '<a href="group.php?'.api_get_cidreq().'">'.
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Groups list')).'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);
 
@@ -448,6 +494,10 @@ if (GroupManager::MEMBER_PER_GROUP_NO_LIMIT == $defaults['max_student']) {
     $defaults['max_member_no_limit'] = 1;
     $defaults['max_member'] = $defaults['max_student'];
 }
+if (api_get_setting('allow_group_categories')) {
+    $defaults['id'] = $_GET['id'];
+}
+
 $form->setDefaults($defaults);
 $form->display();
 

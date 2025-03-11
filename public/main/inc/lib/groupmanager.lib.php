@@ -11,6 +11,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CourseBundle\Entity\CGroupRelUsergroup;
+use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  * This library contains some functions for group-management.
@@ -64,6 +67,21 @@ class GroupManager
     public const DOCUMENT_MODE_SHARE = 0; // By default
     public const DOCUMENT_MODE_READ_ONLY = 1;
     public const DOCUMENT_MODE_COLLABORATION = 2;
+
+    /**
+     * Constant for the group category's naming rules
+     */
+    public const GROUP_ONLY_TEACHER_CAN_RENAME = 0;
+    public const GROUP_STUDENT_CAN_RENAME = 1;
+    public const GROUP_AUTO_RENAME_WITH_SELF_MEMBERS = 2;
+
+    /**
+     * Constant for the group category's visibility rules
+     */
+    public const GROUP_VISIBILITY_DEFAULT = 0;
+    public const GROUP_ONLY_FOR_THOSE_JOINED = 1;
+    public const GROUP_ONLY_FOR_THOSE_JOINED_WITHOUT_MEMBERS_INFOS = 2;
+
 
     public function __construct()
     {
@@ -390,7 +408,7 @@ class GroupManager
      *
      * @return array
      */
-    public static function create_class_groups($categoryId)
+    public static function create_class_groups($categoryId, $classIds = [])
     {
         $options['where'] = [' usergroup.course_id = ? ' => api_get_course_int_id()];
         $obj = new UserGroupModel();
@@ -398,21 +416,173 @@ class GroupManager
         $group_ids = [];
 
         foreach ($classes as $class) {
-            $userList = $obj->get_users_by_usergroup($class['id']);
-            $groupId = self::create_group(
-                $class['name'],
-                $categoryId,
-                0,
-                null
-            );
+            if (in_array((int)$class['id'], $classIds)) {
+                $userList = $obj->get_users_by_usergroup($class['id']);
+                $groupId = self::create_group(
+                    $class['title'],
+                    $categoryId,
+                    0,
+                    null
+                );
 
-            if ($groupId) {
-                self::subscribeUsers($userList, api_get_group_entity($groupId));
-                $group_ids[] = $groupId;
+                if ($groupId) {
+                    self::subscribeUsers($userList, api_get_group_entity($groupId));
+                    $group_ids[] = $groupId;
+                }
             }
         }
 
         return $group_ids;
+    }
+
+    /**
+     * Create a group for every class subscribed to the current course
+     *
+     * @author Esteban Ristich <esteban.ristich@protonmail.com>
+     *
+     * @param int $category_id The category in which the groups should be created
+     * @param $category_id
+     *
+     * @return array
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public static function create_usergroup_consistent_groups($category_id = 0, $classIds = [])
+    {
+        // check if group is not duplicated in same category
+        /** @var \Chamilo\CourseBundle\Repository\CGroupRelUsergroupRepository $relRepository */
+        $relRepository = Database::getManager()->getRepository(CGroupRelUsergroup::class);
+        $filteredClassIds = $classIds;
+
+        foreach ($classIds as $k => $classId) {
+            // get count of duclicated groups in same category
+            $qb = $relRepository->createQueryBuilder('gru');
+            $qb = $qb->select('count(gru.id)');
+            $qb = $qb->innerJoin('gru.group', 'g', \Doctrine\ORM\Query\Expr\Join::WITH, 'g.category = :categoryId');
+            $qb->setParameter('categoryId', $category_id);
+            $qb->where($qb->expr()->eq('gru.usergroup', ':usergroupId'));
+            $qb->setParameter('usergroupId', $classId);
+            // $rawSQL = $qb->getQuery()->getSql();
+            $groupNb = $qb->getQuery()->getSingleScalarResult();
+            $isDuplicate = $groupNb !== 0;
+            if ($isDuplicate) {
+                unset($filteredClassIds[$k]);
+            }
+        }
+
+        // check if a category has been done, create one otherwise
+        $categorieGroupe =  self::get_category($category_id);
+        if (count($categorieGroupe) == 0) {
+            $category_id = self::create_category(
+                get_lang('DefaultGroupCategory'),
+                '',
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+            );
+        }
+
+        if ($category_id == 0) {
+            return [];
+        }
+
+        // BEGIN TEST
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+        $group_ids = [];
+        $session = Database::getManager()->getRepository(Session::class)->find($sessionId);
+        $course = Database::getManager()->getRepository(Course::class)->find($courseId);
+
+        foreach ($filteredClassIds as $classId) {
+            $usergroup = Database::getManager()->getRepository(Usergroup::class)->find($classId);
+
+            $groupId = self::create_group(
+                $usergroup->getTitle(), // name of class (usergroup)
+                $category_id, // category_id
+                0,
+                null
+            );
+
+            $group = Database::getManager()->getRepository(CGroup::class)->find($groupId);
+
+            // fill the group from usergroup
+            $obj = new UserGroupModel();
+            $userList = $obj->get_users_by_usergroup($classId);
+            if ($groupId) {
+                self::subscribeUsers($userList, api_get_group_entity($groupId));
+            }
+
+            $groupRelUsergroup = (new CGroupRelUsergroup())
+                ->setGroup($group)
+                ->setUsergroup($usergroup)
+                ->setSession($session)
+                ->setCourse($course)
+                ->setReadyAutogroup(0)
+            ;
+
+            $em = Database::getManager();
+            $em->persist($groupRelUsergroup);
+            $em->flush();
+
+            $group_ids[] = $groupRelUsergroup->getId();
+        }
+        return $group_ids;
+    }
+
+    /**
+     * Get the usergroup linked to the group if it exists.
+     *
+     * @author Esteban Ristich <esteban.ristich@protonmail.com>
+     *
+     * @param CGroup $groupId
+     * @return Usergroup|null
+     */
+    public static function get_usergroup_link(CGroup $groupId): ?Usergroup
+    {
+        $em = Database::getManager();
+        $repo = $em->getRepository(CGroupRelUsergroup::class);
+        $criteria = [
+            'group' => $groupId,
+        ];
+
+        $rel = $repo->findOneBy($criteria);
+        if ($rel instanceof CGroupRelUsergroup) {
+            return $rel->getUsergroup();
+        } else {
+            return null;
+        }
+    }
+
+    public static function is_group_linked_to_usergroup(CGroup $group): bool
+    {
+        $em = Database::getManager();
+        $repo = $em->getRepository(CGroupRelUsergroup::class);
+        $criteria = [
+            'group' => $group,
+        ];
+
+        $rel = $repo->findOneBy($criteria);
+        return $rel instanceof CGroupRelUsergroup;
+    }
+
+    public static function remove_group_consistent_link(CGroup $group): bool
+    {
+        $em = Database::getManager();
+        $repo = Database::getManager()->getRepository(CGroupRelUsergroup::class);
+        $criteria = [
+            'group' => $group,
+        ];
+
+        $rel = $repo->findOneBy($criteria);
+        if ($rel instanceof CGroupRelUsergroup) {
+            $em->remove($rel);
+            $em->flush();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -901,7 +1071,9 @@ class GroupManager
         $selfUnRegistrationAllowed = 0,
         $maxStudent = 8,
         $groupsPerUser = 0,
-        $documentAccess = 0
+        $documentAccess = 0,
+        $namingRule = GroupManager::GROUP_ONLY_TEACHER_CAN_RENAME,
+        $visibilityRule = GroupManager::GROUP_VISIBILITY_DEFAULT
     ) {
         if (empty($title)) {
             return false;
@@ -928,6 +1100,8 @@ class GroupManager
             ->setGroupsPerUser($groupsPerUser)
             ->setParent($course)
             ->addCourseLink($course, $session)
+            ->setAllowChangeGroupName($namingRule)
+            ->setOnlyMe($visibilityRule)
         ;
 
         $repo = Container::getGroupCategoryRepository();
@@ -970,7 +1144,9 @@ class GroupManager
         $selfUnRegistrationAllowed,
         $maximum_number_of_students,
         $groups_per_user,
-        $documentAccess
+        $documentAccess,
+        $namingRule = GroupManager::GROUP_ONLY_TEACHER_CAN_RENAME,
+        $visibilityRule = GroupManager::GROUP_VISIBILITY_DEFAULT
     ) {
         $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $id = (int) $id;
@@ -995,6 +1171,8 @@ class GroupManager
                     groups_per_user   = '".Database::escape_string($groups_per_user)."',
                     self_reg_allowed = '".Database::escape_string($selfRegistrationAllowed)."',
                     self_unreg_allowed = '".Database::escape_string($selfUnRegistrationAllowed)."',
+                    allow_change_group_name = '".Database::escape_string($namingRule)."',
+                    only_me = '".Database::escape_string($visibilityRule)."',
                     $documentCondition
                     max_student = ".intval($maximum_number_of_students)."
                 WHERE iid = $id";
@@ -2236,6 +2414,12 @@ class GroupManager
                 }
             }
 
+            // linked class
+            if (api_get_setting('allow_group_categories') === 'true') {
+                $usergroup = GroupManager::get_usergroup_link($group);
+                isset($usergroup) ? $row[] = $usergroup->getTitle() : $row[] = '-';
+            }
+
             // @todo fix group session access.
             $groupSessionId = null;
 
@@ -2317,6 +2501,9 @@ class GroupManager
         $table->set_header($column++, get_lang('Groups'));
         $table->set_header($column++, get_lang('Group tutor'));
         $table->set_header($column++, get_lang('Registered'), false);
+        if (api_get_setting('allow_group_categories') === 'true') {
+            $table->set_header($column++, get_lang('Classe liée'), false);
+        }
 
         if (!api_is_allowed_to_edit(false, true)) {
             // If self-registration allowed
@@ -2385,7 +2572,9 @@ class GroupManager
                         $data['self_unreg_allowed'],
                         $data['max_student'],
                         $data['groups_per_user'],
-                        $data['document_access']
+                        $data['document_access'],
+                        $data['allow_change_group_name'],
+                        $data['only_me']
                     );
                     $data['category_id'] = $categoryId;
                     $result['updated']['category'][] = $data;
@@ -2404,7 +2593,10 @@ class GroupManager
                         $data['self_reg_allowed'],
                         $data['self_unreg_allowed'],
                         $data['max_student'],
-                        $data['groups_per_user']
+                        $data['groups_per_user'],
+                        $data['document_access'] ?? 0,
+                        $data['allow_change_group_name'],
+                        $data['only_me']
                     );
 
                     if ($categoryId) {

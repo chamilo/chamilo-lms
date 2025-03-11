@@ -10,12 +10,13 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Doctrine\ORM\Mapping as ORM;
+use Chamilo\CourseBundle\Repository\CGroupRelUsergroupRepository;
 
 /**
  * CGroupRelUsergroup.
  */
 #[ORM\Table(name: 'c_group_rel_usergroup')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CGroupRelUsergroupRepository::class)]
 class CGroupRelUsergroup
 {
     #[ORM\Id]
@@ -55,7 +56,6 @@ class CGroupRelUsergroup
     public function setGroup(CGroup $group): self
     {
         $this->group = $group;
-
         return $this;
     }
 
@@ -67,7 +67,6 @@ class CGroupRelUsergroup
     public function setUsergroup(Usergroup $usergroup): self
     {
         $this->usergroup = $usergroup;
-
         return $this;
     }
 
@@ -79,7 +78,6 @@ class CGroupRelUsergroup
     public function setSession(?Session $session): self
     {
         $this->session = $session;
-
         return $this;
     }
 
@@ -91,7 +89,6 @@ class CGroupRelUsergroup
     public function setCourse(?Course $course): self
     {
         $this->course = $course;
-
         return $this;
     }
 
@@ -103,7 +100,6 @@ class CGroupRelUsergroup
     public function setReadyAutogroup(bool $readyAutogroup): self
     {
         $this->readyAutogroup = $readyAutogroup;
-
         return $this;
     }
 }

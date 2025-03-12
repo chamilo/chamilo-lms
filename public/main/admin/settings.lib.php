@@ -408,36 +408,6 @@ function storeRegions()
 }
 
 /**
- * This function allows easy activating and inactivating of plugins.
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- */
-function storePlugins()
-{
-    $appPlugin = new AppPlugin();
-    // Get a list of all current 'Plugins' settings
-    $plugin_list = $appPlugin->read_plugins_from_path();
-    $installed_plugins = [];
-
-    foreach ($plugin_list as $plugin) {
-        if (isset($_POST['plugin_'.$plugin])) {
-            $appPlugin->install($plugin);
-            $installed_plugins[] = $plugin;
-        }
-    }
-
-    if (!empty($installed_plugins)) {
-        $remove_plugins = array_diff($plugin_list, $installed_plugins);
-    } else {
-        $remove_plugins = $plugin_list;
-    }
-
-    foreach ($remove_plugins as $plugin) {
-        $appPlugin->uninstall($plugin);
-    }
-}
-
-/**
  * This function checks if the given style is a recognize style that exists in the css directory as
  * a standalone directory.
  *

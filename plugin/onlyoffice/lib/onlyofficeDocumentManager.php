@@ -61,6 +61,12 @@ class OnlyofficeDocumentManager extends DocumentManager
         if (!empty($this->getGroupId())) {
             $data['groupId'] = $this->getGroupId();
         }
+
+        if (isset($this->docInfo['path']) && str_contains($this->docInfo['path'], 'exercises/')) {
+            $data['doctype'] = 'exercise';
+            $data['docPath'] = urlencode($this->docInfo['path']);
+        }
+
         $jwtManager = new OnlyofficeJwtManager($this->settingsManager);
         $hashUrl = $jwtManager->getHash($data);
 
@@ -89,7 +95,8 @@ class OnlyofficeDocumentManager extends DocumentManager
         }
 
         if (isset($this->docInfo['path']) && str_contains($this->docInfo['path'], 'exercises/')) {
-            $data['type'] = 'exercise';
+            $data['doctype'] = 'exercise';
+            $data['docPath'] = urlencode($this->docInfo['path']);
         }
 
         $jwtManager = new OnlyofficeJwtManager($this->settingsManager);

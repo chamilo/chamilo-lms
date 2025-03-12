@@ -289,7 +289,7 @@ class ExerciseLib
                         global $exe_id;
                         if (!empty($objQuestionTmp->extra)) {
                             $fileUrl = api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/" . $objQuestionTmp->extra;
-                            $documentUrl = OnlyofficeTools::getPathToView($fileUrl, $exe_id, $questionId);
+                            $documentUrl = OnlyofficeTools::getPathToView($fileUrl, false, $exe_id, $questionId);
                             echo '<div class="office-doc-container">';
                             echo "<iframe src='{$documentUrl}' width='100%' height='600' style='border:none;'></iframe>";
                             echo '</div>';

@@ -153,7 +153,7 @@ class OnlyofficeTools
     /**
      * Return path to OnlyOffice viewer for a given file.
      */
-    public static function getPathToView($fileReference, ?int $exeId = null, ?int $questionId = null, bool $showHeaders = true): string
+    public static function getPathToView($fileReference, bool $showHeaders = true, ?int $exeId = null, ?int $questionId = null, bool $isReadOnly = false): string
     {
         $plugin = OnlyofficePlugin::create();
         $appSettings = new OnlyofficeAppsettings($plugin);
@@ -216,6 +216,7 @@ class OnlyofficeTools
                 if ($questionId) {
                     $urlToEdit .= '&questionId=' . $questionId;
                 }
+                $urlToEdit .= '&readOnly='.(int) $isReadOnly;
             }
             if (false === $showHeaders) {
                 $urlToEdit .= '&nh=1';

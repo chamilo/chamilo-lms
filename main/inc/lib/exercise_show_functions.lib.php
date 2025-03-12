@@ -1027,7 +1027,7 @@ class ExerciseShowFunctions
         <tr>
             <td>
                 <p><b>' . get_lang('SubmittedDocument') . ':</b></p>
-                <iframe src="' . OnlyofficeTools::getPathToView($fileUrl, $exeId, $questionId) . '" width="100%" height="600px"></iframe>
+                <iframe src="' . OnlyofficeTools::getPathToView($fileUrl, false, $exeId, $questionId, true) . '" width="100%" height="600px"></iframe>
             </td>
         </tr>';
         } else {

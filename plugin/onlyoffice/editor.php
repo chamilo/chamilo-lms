@@ -58,61 +58,66 @@ if ($docPath) {
         die("Error: Document not found.");
     }
 
-    $fileId = basename($docPath);
-    $absolutePath = $filePath;
-    $absoluteParentPath = dirname($filePath) . '/';
     $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+    $fileUrl = api_get_path(WEB_COURSE_PATH).$docPath;
+    $newDocPath = $docPath;
+    $userFilePath = $filePath;
+
     if ($exeId) {
-        $userFilePath = api_get_path(SYS_COURSE_PATH) . api_get_course_path() . "/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.{$extension}";
-        $previousAttemptFile = null;
-        if ($exeId > 1) {
-            $prevExeId = $exeId - 1;
-            $previousAttemptFile = api_get_path(SYS_COURSE_PATH) . api_get_course_path() . "/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$prevExeId}.{$extension}";
-            if (!file_exists($previousAttemptFile)) {
-                $previousAttemptFile = null;
-            }
-        }
+        $newDocPath = api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.{$extension}";
+        $userFilePath = api_get_path(SYS_COURSE_PATH).$newDocPath;
 
         if (!file_exists($userFilePath)) {
             if (!is_dir(dirname($userFilePath))) {
                 mkdir(dirname($userFilePath), 0775, true);
             }
-            $sourceFile = $previousAttemptFile ?? $filePath;
-            if (!copy($sourceFile, $userFilePath)) {
-                error_log("ERROR: Failed to create a copy from {$sourceFile} to {$userFilePath}");
+            if (!copy($filePath, $userFilePath)) {
                 die("Error: Failed to create a copy of the file.");
-            } else {
-                error_log("File successfully copied from {$sourceFile} to {$userFilePath}");
             }
-        } else {
-            error_log("File already exists, using: {$userFilePath}");
         }
+        $fileUrl = api_get_path(WEB_COURSE_PATH).$newDocPath;
+    }
 
-        $fileUrl = api_get_path(WEB_COURSE_PATH) . api_get_course_path() . "/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.{$extension}";
-        error_log("File loaded in OnlyOffice: {$fileUrl}");
+    $fileId = basename($newDocPath);
+    $absolutePath = $userFilePath;
+    $absoluteParentPath = dirname($userFilePath) . '/';
+    $data = [
+        'type' => 'download',
+        'doctype' => 'exercise',
+        'docPath' => urlencode($newDocPath),
+        'courseId' => api_get_course_int_id(),
+        'userId' => api_get_user_id(),
+        'docId' => $fileId,
+        'sessionId' => api_get_session_id(),
+    ];
+
+    $jwtManager = new OnlyofficeJwtManager($appSettings);
+    $hashUrl = $jwtManager->getHash($data);
+    $callbackUrl = api_get_path(WEB_PLUGIN_PATH) . 'onlyoffice/callback.php?hash=' . $hashUrl;
+    if ($exeId) {
+        $callbackUrl .= '&docPath=' . urlencode($newDocPath);
     } else {
-        $fileUrl = api_get_path(WEB_COURSE_PATH) . $docPath;
-        error_log("Original file loaded in OnlyOffice: {$fileUrl}");
+        $callbackUrl .= '&docPath=' . urlencode($newDocPath);
     }
 
     $docInfo = [
         'iid' => null,
         'id' => null,
         'c_id' => $courseId,
-        'path' => $docPath,
+        'path' => $newDocPath,
         'comment' => null,
-        'title' => basename($filePath),
+        'title' => basename($userFilePath),
         'filetype' => 'file',
-        'size' => filesize($filePath),
+        'size' => filesize($userFilePath),
         'readonly' => 0,
         'session_id' => $sessionId,
-        'url' => api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/editor.php?doc=" . urlencode($docPath) . ($exeId ? "&exeId={$exeId}" : ""),
-        'document_url' => $fileUrl,
+        'url' => api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/editor.php?doc=" . urlencode($newDocPath) . ($exeId ? "&exeId={$exeId}" : ""),
+        'document_url' => $callbackUrl,
         'absolute_path' => $absolutePath,
-        'absolute_path_from_document' => '/document/' . basename($filePath),
+        'absolute_path_from_document' => '/document/' . basename($userFilePath),
         'absolute_parent_path' => $absoluteParentPath,
-        'direct_url' => $fileUrl,
-        'basename' => basename($filePath),
+        'direct_url' => $callbackUrl,
+        'basename' => basename($userFilePath),
         'parent_id' => false,
         'parents' => [],
         'forceEdit' => $_GET['forceEdit'] ?? false,
@@ -161,7 +166,7 @@ $isMobileAgent = $configService->isMobileAgent($_SERVER['HTTP_USER_AGENT']);
 
 $showHeaders = true;
 $headerHeight = 'calc(100% - 140px)';
-if (!empty($_GET['nh']) || !empty($docPath)) {
+if (!empty($_GET['nh'])) {
     $showHeaders = false;
     $headerHeight = '100%';
 }

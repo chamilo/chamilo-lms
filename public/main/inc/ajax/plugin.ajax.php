@@ -70,6 +70,8 @@ switch ($action) {
 
             $plugin->setInstalled(false);
             $plugin->setActive(false);
+
+            $appPlugin->uninstall($pluginTitle);
         } elseif ($action === 'enable') {
             if ($plugin->isInstalled()) {
                 $plugin->setActive(true);

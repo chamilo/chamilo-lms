@@ -1,5 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
 use Michelf\MarkdownExtra;
 use Chamilo\CoreBundle\Entity\Plugin;
 
@@ -13,6 +15,8 @@ api_block_anonymous_users();
 $action = $_REQUEST['a'];
 $em = Database::getManager();
 $pluginRepository = $em->getRepository(Plugin::class);
+
+$accessUrlHelper = Container::getAccessUrlHelper();
 
 switch ($action) {
     case 'md_to_html':
@@ -44,14 +48,26 @@ switch ($action) {
     case 'disable':
         $pluginTitle = $_POST['plugin'] ?? '';
 
-        $plugin = $pluginRepository->findOneBy(['title' => $pluginTitle]);
+        $criteria = ['title' => $pluginTitle];
+
+        if ($accessUrlHelper->isMultiple()) {
+            $criteria['accessUrlId'] = $accessUrlHelper->getCurrent()->getId();
+        }
+
+        $plugin = $pluginRepository->findOneBy($criteria);
         if (!$plugin) {
             die(json_encode(['error' => 'Plugin not found']));
         }
 
+        $appPlugin = new AppPlugin();
+
         if ($action === 'install') {
+            $appPlugin->install($pluginTitle);
+
             $plugin->setInstalled(true);
         } elseif ($action === 'uninstall') {
+            $appPlugin->uninstall($pluginTitle);
+
             $plugin->setInstalled(false);
             $plugin->setActive(false);
         } elseif ($action === 'enable') {
@@ -64,7 +80,6 @@ switch ($action) {
             $plugin->setActive(false);
         }
 
-        $em->persist($plugin);
         $em->flush();
 
         echo json_encode(['success' => true, 'message' => "Plugin action '$action' applied to '$pluginTitle'."]);

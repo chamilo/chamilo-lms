@@ -216,10 +216,13 @@ class OnlyofficeTools
                 if ($questionId) {
                     $urlToEdit .= '&questionId=' . $questionId;
                 }
-                $urlToEdit .= '&readOnly='.(int) $isReadOnly;
             }
             if (false === $showHeaders) {
                 $urlToEdit .= '&nh=1';
+            }
+
+            if (true === $isReadOnly) {
+                $urlToEdit .= '&readOnly=1';
             }
 
             return $urlToEdit;

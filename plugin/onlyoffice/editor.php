@@ -47,6 +47,7 @@ $courseCode = $courseInfo['code'];
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : null;
 $exeId = isset($_GET['exeId']) ? (int) $_GET['exeId'] : null;
 $questionId = isset($_GET['questionId']) ? (int) $_GET['questionId'] : null;
+$isReadOnly = isset($_GET['readOnly']) ? (int) $_GET['readOnly'] : null;
 $docInfo = null;
 $fileId = null;
 $fileUrl = null;
@@ -109,9 +110,9 @@ if ($docPath) {
         'title' => basename($userFilePath),
         'filetype' => 'file',
         'size' => filesize($userFilePath),
-        'readonly' => 0,
+        'readonly' => (int) $isReadOnly,
         'session_id' => $sessionId,
-        'url' => api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/editor.php?doc=" . urlencode($newDocPath) . ($exeId ? "&exeId={$exeId}" : ""),
+        'url' => api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/editor.php?doc=" . urlencode($newDocPath) . ($exeId ? "&exeId={$exeId}" : "") . ($isReadOnly ? "&readOnly={$isReadOnly}" : ""),
         'document_url' => $callbackUrl,
         'absolute_path' => $absolutePath,
         'absolute_path_from_document' => '/document/' . basename($userFilePath),

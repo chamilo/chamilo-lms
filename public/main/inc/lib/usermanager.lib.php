@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues as EntityExtraFieldValues;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 
 /**
  * This library provides functions for user management.
@@ -6092,7 +6093,7 @@ SQL;
     {
         $courses = [];
         $currentAccessUrlId = api_get_current_access_url_id();
-        $sql = "SELECT course.code, cru.user_id
+        $sql = "SELECT course.code, course.id as cid, cru.user_id
                 FROM course_rel_user cru
                     JOIN course ON cru.c_id = course.id
                     JOIN access_url_rel_user auru on cru.user_id = auru.user_id
@@ -6111,14 +6112,15 @@ SQL;
                 }
                 $courses[$row['code']]['subscribed']++;
                 $entityManager = Database::getManager();
-                $repository = $entityManager->getRepository('ChamiloCoreBundle:GradebookCategory');
+                $repository = $entityManager->getRepository(GradebookCategory::class);
                 //todo check when have more than 1 gradebook
-                /** @var \Chamilo\CoreBundle\Entity\GradebookCategory $gradebook */
-                $gradebook = $repository->findOneBy(['courseCode' => $row['code']]);
+                /** @var GradebookCategory $gradebook */
+                $gradebook = $repository->findOneBy(['course' => $row['cid']]);
                 if (!empty($gradebook)) {
                     $finished = 0;
-                    $gb = Category::createCategoryObjectFromEntity($gradebook);
-                    $finished = $gb->is_certificate_available($row['user_id']);
+                    Database::getManager()->persist($gradebook);
+                    $certificateRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\GradebookCertificate::class);
+                    $finished = $certificateRepo->getCertificateByUserId($gradebook->getId(), $row['user_id']);
                     if (!empty($finished)) {
                         $courses[$row['code']]['finished']++;
                     }
@@ -6160,18 +6162,19 @@ SQL;
                 }
                 $coursesInSessions[$index]['subscribed']++;
                 $entityManager = Database::getManager();
-                $repository = $entityManager->getRepository('ChamiloCoreBundle:GradebookCategory');
-                /** @var \Chamilo\CoreBundle\Entity\GradebookCategory $gradebook */
+                $repository = $entityManager->getRepository(GradebookCategory::class);
+                /** @var GradebookCategory $gradebook */
                 $gradebook = $repository->findOneBy(
                     [
-                        'courseCode' => $row['code'],
+                        'course' => $row['cid'],
                         'sessionId' => $row['session_id'],
                     ]
                 );
                 if (!empty($gradebook)) {
                     $finished = 0;
-                    $gb = Category::createCategoryObjectFromEntity($gradebook);
-                    $finished = $gb->is_certificate_available($row['user_id']);
+                    Database::getManager()->persist($gradebook);
+                    $certificateRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\GradebookCertificate::class);
+                    $finished = $certificateRepo->getCertificateByUserId($gradebook->getId(), $row['user_id']);
                     if (!empty($finished)) {
                         $coursesInSessions[$index]['finished']++;
                     }

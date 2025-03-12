@@ -109,6 +109,9 @@ class ZombieManager
 
         $result = Database::query($sql);
 
+        if (Database::num_rows($result) === 0) {
+            return [];
+        }
         $userInfo = Database::store_result($result, 'ASSOC');
         $userInfo['auth_sources'] = api_get_user_entity($userInfo['id'])->getAuthSourcesAuthentications($accessUrl);
 

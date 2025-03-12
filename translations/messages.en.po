@@ -27826,3 +27826,27 @@ msgstr "Autolaunch settings"
 
 msgid "Auto-launch"
 msgstr "Auto-launch"
+
+msgid "User registrations by month"
+msgstr "User registrations by month"
+
+msgid "User registrations by day"
+msgstr "User registrations by day"
+
+msgid "No data available for the selected date range"
+msgstr "No data available for the selected date range"
+
+msgid "Back to months"
+msgstr "Back to months"
+
+msgid "User registrations by creator"
+msgstr "User registrations by creator"
+
+msgid "Tools access"
+msgstr "Tools access"
+
+msgid "Courses count"
+msgstr "Courses count"
+
+msgid "Courses count by language"
+msgstr "Courses count by language"

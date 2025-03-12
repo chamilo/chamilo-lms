@@ -133,7 +133,6 @@ function handlePlugins()
     Session::erase('plugin_data');
     $pluginRepo = Container::getPluginRepository();
 
-    $installedPlugins = $pluginRepo->getInstalledPlugins();
     $allPlugins = (new AppPlugin())->read_plugins_from_path();
 
     echo '<div class="p-6 bg-white shadow-lg rounded-lg">';
@@ -156,6 +155,16 @@ function handlePlugins()
     echo '<tbody>';
 
     foreach ($allPlugins as $pluginName) {
+        $pluginInfoFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
+
+        if (!file_exists($pluginInfoFile)) {
+            continue;
+        }
+
+        $plugin_info = [];
+
+        require $pluginInfoFile;
+
         $plugin = $pluginRepo->findOneBy(['title' => $pluginName]);
         $isInstalled = $plugin && $plugin->isInstalled();
         $isEnabled = $plugin ? $plugin->isActive() : false;
@@ -168,8 +177,8 @@ function handlePlugins()
             : '<span class="px-2 py-1 text-sm font-semibold text-gray-50 bg-gray-20 rounded-full">'.get_lang('Not Installed').'</span>';
 
         echo '<tr class="border-t border-gray-25 hover:bg-gray-15 transition duration-200">';
-        echo '<td class="p-3 font-medium">'.$pluginName.'</td>';
-        echo '<td class="p-3">'.($plugin ? $plugin->getVersion() : 'N/A').'</td>';
+        echo '<td class="p-3 font-medium">'.$plugin_info['title'].'</td>';
+        echo '<td class="p-3">'.$plugin_info['version'].'</td>';
         echo '<td class="p-3">'.$statusBadge.'</td>';
         echo '<td class="p-3 text-center">';
 

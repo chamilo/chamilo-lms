@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Message;
@@ -10,7 +9,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
@@ -1790,8 +1788,7 @@ class Rest extends WebService
      */
     public function updateUserFromUserName($parameters)
     {
-        /** @var AccessUrl $accessUrl */
-        $accessUrl = Container::$container->get(AccessUrlHelper::class)->getCurrent();
+        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
 
         // find user
         $userId = null;

@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\NameConvention;
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
@@ -15,7 +14,6 @@ use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues as EntityExtraFieldValues;
@@ -172,9 +170,7 @@ class UserManager
 
         $original_password = $password;
 
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
-        $accessUrl = $accessUrlHelper->getCurrent();
+        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
         $access_url_id = $accessUrl->getId();
 
         $hostingLimitUsers = get_hosting_limit($access_url_id, 'hosting_limit_users');
@@ -862,8 +858,7 @@ class UserManager
             return false;
         }
 
-        /** @var AccessUrl $accessUrl */
-        $accessUrl = Container::$container->get(AccessUrlHelper::class)->getCurrent();
+        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
 
         if (0 == $reset_password) {
             $password = null;

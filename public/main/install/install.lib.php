@@ -9,7 +9,6 @@ use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
@@ -1499,8 +1498,7 @@ function finishInstallationWithContainer(
     /** @var User $admin */
     $admin = $repo->findOneBy(['username' => 'admin']);
 
-    /** @var AccessUrl $accessUrl */
-    $accessUrl = Container::$container->get(AccessUrlHelper::class)->getCurrent();
+    $accessUrl = Container::getAccessUrlHelper()->getCurrent();
 
     $admin
         ->setLastname($adminLastName)

@@ -2,11 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
@@ -28,8 +26,7 @@ $illustrationRepo = Container::getIllustrationRepository();
 /** @var AuthenticationConfigHelper $authenticationConfigHelper */
 $authenticationConfigHelper = Container::$container->get(AuthenticationConfigHelper::class);
 
-/** @var AccessUrl $accessUrl */
-$accessUrl = Container::$container->get(AccessUrlHelper::class)->getCurrent();
+$accessUrl = Container::getAccessUrlHelper()->getCurrent();
 
 $htmlHeadXtra[] = '
 <script>

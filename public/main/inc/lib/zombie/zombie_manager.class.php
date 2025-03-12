@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 
 /**
  * ZombieQuery.
@@ -54,8 +53,7 @@ class ZombieManager
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
         $accessUrl = $accessUrlHelper->getCurrent();
 
         $sql = 'SELECT

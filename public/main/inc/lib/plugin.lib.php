@@ -3,6 +3,7 @@
 
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class AppPlugin.
@@ -55,22 +56,18 @@ class AppPlugin
 
     /**
      * Read plugin from path.
-     *
-     * @return array
      */
-    public function read_plugins_from_path()
+    public function read_plugins_from_path(): array
     {
         /* We scan the plugin directory. Each folder is a potential plugin. */
         $pluginPath = api_get_path(SYS_PLUGIN_PATH);
+        $finder = (new Finder())->directories()->depth('== 0')->sortByName()->in($pluginPath);
+
         $plugins = [];
-        $handle = @opendir($pluginPath);
-        while (false !== ($file = readdir($handle))) {
-            if ('.' != $file && '..' != $file && is_dir(api_get_path(SYS_PLUGIN_PATH).$file)) {
-                $plugins[] = $file;
-            }
+
+        foreach ($finder as $file) {
+            $plugins[] = $file->getFilename();
         }
-        @closedir($handle);
-        sort($plugins);
 
         return $plugins;
     }

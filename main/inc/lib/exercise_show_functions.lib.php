@@ -1002,4 +1002,40 @@ class ExerciseShowFunctions
             }
         }
     }
+
+    /**
+     * Displays the answer to an OnlyOffice document question.
+     *
+     * @param string $feedbackType
+     * @param string|null $fileUrl URL of the submitted document
+     * @param int $questionScore Score assigned to the response
+     */
+    public static function displayOnlyOfficeAnswer(
+        string $feedbackType,
+        int $exeId,
+        int $userId,
+        int $exerciseId,
+        int $questionId,
+        int $questionScore = 0
+    ): void {
+        $filePathPattern = api_get_path(SYS_COURSE_PATH).api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.*";
+        $files = glob($filePathPattern);
+
+        if (!empty($files)) {
+            $fileUrl = api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/" . basename($files[0]);
+            echo '
+        <tr>
+            <td>
+                <p><b>' . get_lang('SubmittedDocument') . ':</b></p>
+                <iframe src="' . OnlyofficeTools::getPathToView($fileUrl, false, $exeId, $questionId, true) . '" width="100%" height="600px"></iframe>
+            </td>
+        </tr>';
+        } else {
+            echo '<tr><td>' . get_lang('NoOfficeDocProvided') . '</td></tr>';
+        }
+
+        if ($questionScore <= 0 && EXERCISE_FEEDBACK_TYPE_EXAM !== $feedbackType) {
+            echo '<tr><td>' . ExerciseLib::getNotCorrectedYetText() . '</td></tr>';
+        }
+    }
 }

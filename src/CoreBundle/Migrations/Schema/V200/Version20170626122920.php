@@ -16,9 +16,6 @@ class Version20170626122920 extends AbstractMigrationChamilo
         return 'Extend the user.auth_source field';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE TABLE user_auth_source (id INT AUTO_INCREMENT NOT NULL, url_id INT NOT NULL, user_id INT NOT NULL, authentication VARCHAR(255) NOT NULL, INDEX IDX_D632110481CFDAE7 (url_id), INDEX IDX_D6321104A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC');
@@ -30,7 +27,8 @@ class Version20170626122920 extends AbstractMigrationChamilo
                 'SELECT u.id user_id, u.auth_source authentication, uru.access_url_id url_id
                     FROM user u LEFT JOIN  access_url_rel_user uru ON u.id = uru.user_id'
             )
-            ->fetchAllAssociative();
+            ->fetchAllAssociative()
+        ;
 
         foreach ($rows as $row) {
             $row['url_id'] ??= 1;

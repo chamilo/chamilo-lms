@@ -26,9 +26,9 @@ class LpAiHelper
 
         // Get AI providers from settings
         $aiProvidersJson = api_get_setting('ai_helpers.ai_providers');
-        $configuredApi = api_get_setting('ai_helpers.default_ai_provider');
         $availableApis = json_decode($aiProvidersJson, true) ?? [];
-        $hasSingleApi = count($availableApis) === 1 || isset($availableApis[$configuredApi]);
+        $hasSingleApi = count($availableApis) === 1;
+        $configuredApi = $hasSingleApi ? array_key_first($availableApis) : null;
 
         $form = new FormValidator(
             'lp_ai_generate',

@@ -38,7 +38,7 @@ function search_coachs($needle)
     if (!empty($needle)) {
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
-        // search users where username or firstname or lastname begins likes $needle
+        // search users where username or firstname or lastname begins like $needle
         $sql = 'SELECT username, lastname, firstname
                 FROM '.$tbl_user.' user
                 WHERE (username LIKE "'.$needle.'%"
@@ -57,7 +57,7 @@ function search_coachs($needle)
                         INNER JOIN '.$tbl_user_rel_access_url.' url_user
                         ON (url_user.user_id=user.user_id)
                         WHERE
-                            access_url_id = '.$access_url_id.'  AND
+                            access_url_id = '.$access_url_id.' AND
                             (
                                 username LIKE "'.$needle.'%" OR
                                 firstname LIKE "'.$needle.'%" OR
@@ -219,6 +219,7 @@ $(function() {
 </script>";
 
 $form->addButtonNext(get_lang('Next step'));
+$showValidityField = 'true' === api_get_setting('session.enable_auto_reinscription') || 'true' === api_get_setting('session.enable_session_replication');
 
 $formDefaults = [];
 if (!$formSent) {
@@ -245,10 +246,22 @@ if (!$formSent) {
                 $session->getGeneralCoaches()->getValues()
             ),
             'session_template' => $session->getTitle(),
+            'days_before_finishing_for_reinscription' => $session->getDaysToReinscription() ?? '',
+            'days_before_finishing_to_create_new_repetition' => $session->getDaysToNewRepetition() ?? '',
+            'last_repetition' => $session->getLastRepetition(),
+            'parent_id' => $session->getParentId() ?? 0,
         ];
+
+        if ($showValidityField) {
+            $formDefaults['validity_in_days'] = $session->getValidityInDays();
+        }
+
     } else {
         $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
         $formDefaults['coach_username'] = [api_get_user_id()];
+        if ($showValidityField) {
+            $formDefaults['validity_in_days'] = null;
+        }
     }
 }
 
@@ -261,15 +274,12 @@ if ($form->validate()) {
     $endDate = $params['access_end_date'];
     $displayStartDate = $params['display_start_date'];
     $displayEndDate = $params['display_end_date'];
-    $coachStartDate = $params['coach_access_start_date'];
-    if (empty($coachStartDate)) {
-        $coachStartDate = $displayStartDate;
-    }
+    $coachStartDate = $params['coach_access_start_date'] ?? $displayStartDate;
     $coachEndDate = $params['coach_access_end_date'];
     $coachUsername = $params['coach_username'];
     $id_session_category = (int) $params['session_category'];
     $id_visibility = $params['session_visibility'];
-    $duration = isset($params['duration']) ? $params['duration'] : null;
+    $duration = $params['duration'] ?? null;
     $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1 : 0;
     $sendSubscriptionNotification = isset($params['send_subscription_notification']);
@@ -311,6 +321,13 @@ if ($form->validate()) {
             }
         }
     }
+    $status = $params['status'] ?? 0;
+
+    $parentId = $params['parent_id'] ?? null;
+    $daysBeforeFinishingForReinscription = $params['days_before_finishing_for_reinscription'] ?? null;
+    $lastRepetition = isset($params['last_repetition']) ? true : false;
+    $daysBeforeFinishingToCreateNewRepetition = $params['days_before_finishing_to_create_new_repetition'] ?? null;
+    $validityInDays = $params['validity_in_days'] ?? null;
 
     $return = SessionManager::create_session(
         $title,
@@ -328,11 +345,16 @@ if ($form->validate()) {
         $description,
         $showDescription,
         $extraFields,
-        null,
+        0,
         $sendSubscriptionNotification,
         api_get_current_access_url_id(),
         $status,
-        $notifyBoss
+        $notifyBoss,
+        $parentId,
+        $daysBeforeFinishingForReinscription,
+        $lastRepetition,
+        $daysBeforeFinishingToCreateNewRepetition,
+        $validityInDays
     );
 
     if ($return == strval(intval($return))) {

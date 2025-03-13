@@ -4,15 +4,13 @@
 
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 api_protect_admin_script(true, true);
 
-/** @var AccessUrlHelper $accessUrlHelper */
-$accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+$accessUrlHelper = Container::getAccessUrlHelper();
 
 $encryption = api_get_configuration_value('password_encryption');
 

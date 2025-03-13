@@ -190,6 +190,14 @@ sudo chown -R www-data:www-data var/ .env</pre>
   You should now be able to direct your browser to your URL (e.g. <em>[http://my.chamilo.local]</em>).<br>
   Chamilo will pick it up from there and offer the installation wizard to help guide you through the rest of the process.
 
+  <h2>Web panel upgrade from 1.11.*</h2>
+
+  <h2>Command line upgrade from 1.11.*</h2>
+  <h3>Database</h3>
+  Before you start, it is *critical* to delete the <em>version</em> table from your Chamilo 1.11.* database.
+  Failure to do this will make the command line upgrade fail immediately after starting.
+  The <em>version</em> table is not necessary for Chamilo 1.11.* to work, so don't
+
   <h2>Help available</h2>
   If you are struggling with this guide, don't hesitate to ask for help on <a href="https://github.com/chamilo/chamilo-lms/discussions">our community forum.</a><br>
   If you have reasons to seek professional assistance and warranties, please contact <a href="https://chamilo.org/providers">one of our official providers</a>. They contribute heavily to the project and will be able to help you out quickly and efficiently, for configurations from 10 to 1M users.<br>
@@ -199,5 +207,10 @@ sudo chown -R www-data:www-data var/ .env</pre>
   <a href="http://jigsaw.w3.org/css-validator/">
       <img src="//jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
   </a>
+<p>
+    To be added to the installation/upgrade guides:<br>
+    - yarn dev required on sub-language update if terms in assets/locales<br>
+    - app/home from 1.11.x not migrated -&gt; use pages<br>
+</p>
 </body>
 </html>

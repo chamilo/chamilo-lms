@@ -42,7 +42,7 @@ in_array(
             break;
         case 'tools':
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=tools_usage';
-            $reportName = 'PlatformToolAccess';
+            $reportName = 'Tools access';
             $reportType = 'pie';
             $reportOptions = '
                 legend: {
@@ -58,7 +58,7 @@ in_array(
             break;
         case 'courses':
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=courses';
-            $reportName = 'CountCours';
+            $reportName = 'Courses count';
             $reportType = 'pie';
             $reportOptions = '
                 legend: {
@@ -74,7 +74,7 @@ in_array(
             break;
         case 'coursebylanguage':
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=courses_by_language';
-            $reportName = 'CountCourseByLanguage';
+            $reportName = 'Courses count by language';
             $reportType = 'pie';
             $reportOptions = '
                 legend: {
@@ -409,7 +409,7 @@ switch ($report) {
                 $sessionCount++;
             }
 
-            $content .= Display::page_subheader2(get_lang('GeneralStats'));
+            $content .= Display::page_subheader2(get_lang('Global statistics'));
             // Coach.
             $sql = "SELECT COUNT(DISTINCT(sru.user_id)) count
                     FROM $tableSession s
@@ -472,19 +472,19 @@ switch ($report) {
             $table->setCellContents($row, 1, $numberOfWeeks);
             $row++;
 
-            $table->setCellContents($row, 0, get_lang('SessionCount'));
+            $table->setCellContents($row, 0, get_lang('Sessions count'));
             $table->setCellContents($row, 1, $sessionCount);
             $row++;
 
-            $table->setCellContents($row, 0, get_lang('SessionsPerWeek'));
+            $table->setCellContents($row, 0, get_lang('Sessions per week'));
             $table->setCellContents($row, 1, $sessionAverage);
             $row++;
 
-            $table->setCellContents($row, 0, get_lang('AverageUserPerSession'));
+            $table->setCellContents($row, 0, get_lang('Average number of users per session'));
             $table->setCellContents($row, 1, $averageUser);
             $row++;
 
-            $table->setCellContents($row, 0, get_lang('AverageSessionPerGeneralCoach'));
+            $table->setCellContents($row, 0, get_lang('Average number of sessions per general session coach'));
             $table->setCellContents($row, 1, $averageCoach);
             $row++;
 
@@ -499,7 +499,7 @@ switch ($report) {
             $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
             $headers = [
                 get_lang('Course'),
-                get_lang('CountOfSessions'),
+                get_lang('Sessions count'),
             ];
 
             $row = 0;
@@ -536,12 +536,12 @@ switch ($report) {
         $table = new HTML_Table(['class' => 'table table-responsive']);
         $headers = [
             get_lang('Name'),
-            get_lang('StartDate'),
-            get_lang('EndDate'),
+            get_lang('Start date'),
+            get_lang('End date'),
             get_lang('Language'),
             get_lang('Status'),
         ];
-        $headers[] = get_lang('NumberOfStudents');
+        $headers[] = get_lang('Total number of students');
         $row = 0;
         $column = 0;
         foreach ($headers as $header) {
@@ -589,7 +589,7 @@ switch ($report) {
                 }
             }
             $link = Display::url(
-                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon').'&nbsp;'.get_lang('ExportAsXLS'),
+                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon').'&nbsp;'.get_lang('Export to XLS'),
                 $url,
                 ['class' => 'btn btn--plain']
             );
@@ -600,7 +600,7 @@ switch ($report) {
         break;
     case 'user_session':
         $form = new FormValidator('user_session', 'get');
-        $form->addDateRangePicker('range', get_lang('DateRange'), true);
+        $form->addDateRangePicker('range', get_lang('Date range'), true);
         $form->addHidden('report', 'user_session');
         $form->addButtonSearch(get_lang('Search'));
 
@@ -712,7 +712,7 @@ switch ($report) {
     case 'coursebylanguage':
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         $result = Statistics::printCourseByLanguageStats();
-        $content .= Statistics::printStats(get_lang('CountCourseByLanguage'), $result, true);
+        $content .= Statistics::printStats(get_lang('Number of courses by language'), $result, true);
         break;
     case 'courselastvisit':
         $content .= Statistics::printCourseLastVisit();
@@ -784,16 +784,16 @@ switch ($report) {
             $headers = [
                 get_lang('FirstName'),
                 get_lang('LastName'),
-                get_lang('RegistrationDate'),
-                get_lang('UserNativeLanguage'),
-                get_lang('LangueCible'),
-                get_lang('ApprenticeshipContract'),
-                get_lang('UserResidenceCountry'),
+                get_lang('Registration date'),
+                get_lang('Native language'),
+                get_lang('Users by target language'),
+                get_lang('Apprenticeship contract'),
+                get_lang('Country of residence'),
                 get_lang('Career'),
                 get_lang('Status'),
                 get_lang('Active'),
                 get_lang('Certificate'),
-                get_lang('UserBirthday'),
+                get_lang('Birthday'),
             ];
 
             if (isset($_REQUEST['action_table']) && 'export' === $_REQUEST['action_table']) {
@@ -1007,7 +1007,7 @@ switch ($report) {
                     $item['display_text'] = $option['display_text'];
                     $all[$item['display_text']] = $count;
                 }
-                $all[get_lang('N/A')] = $total - $usersFound;
+                $all[get_lang('Not available')] = $total - $usersFound;
 
                 $data = Statistics::buildJsChartData($all, $reportName2);
                 $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
@@ -1092,7 +1092,7 @@ switch ($report) {
                     $item['display_text'] = get_lang(ucfirst(str_replace('2', '', strtolower($item['display_text']))));
                     $all[$item['display_text']] = $count;
                 }
-                $all[get_lang('N/A')] = $total - $usersFound;
+                $all[get_lang('Not available')] = $total - $usersFound;
 
                 $data = Statistics::buildJsChartData($all, $reportName4);
                 $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
@@ -1134,7 +1134,7 @@ switch ($report) {
                 $usersFound = 0;
                 $now = new DateTime();
                 $all = [
-                    //get_lang('N/A') => 0,
+                    //get_lang('Not available') => 0,
                     '16-17' => 0,
                     '18-25' => 0,
                     '26-30' => 0,
@@ -1213,7 +1213,7 @@ switch ($report) {
                     $usersFound += $count;
                 }
 
-                $all[get_lang('N/A')] = $total - $usersFound;
+                $all[get_lang('Not available')] = $total - $usersFound;
 
                 $data = Statistics::buildJsChartData($all, $reportName5);
                 $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
@@ -1371,7 +1371,7 @@ switch ($report) {
                                 <i class="fa fa-thermometer-2" aria-hidden="true"></i>
                             </span>
                             <div class="tracking-info">
-                                <div class="tracking-text">'.get_lang('UsersOnline').' (30\')</div>
+                                <div class="tracking-text">'.get_lang('Users online').' (30\')</div>
                                 <div class="tracking-number">'.getOnlineUsersCount(30).'</div>
                             </div>
                         </div>
@@ -1477,7 +1477,7 @@ switch ($report) {
                 if (Statistics::isMoreThanAMonth($dateStart, $dateEnd)) {
                     $textChart = get_lang('User registrations by month');
                     $all = Statistics::groupByMonth($registrations);
-                    $chartData = Statistics::buildJsChartData($all, get_lang('User Registrations by Month'));
+                    $chartData = Statistics::buildJsChartData($all, get_lang('User registrations by month'));
 
                     // Allow clicks only when showing by month
                     $onClickHandler = '
@@ -1504,7 +1504,7 @@ switch ($report) {
                         });
                     }';
                 } else {
-                    $textChart = get_lang('User registrations by days');
+                    $textChart = get_lang('User registrations by day');
                     foreach ($registrations as $registration) {
                         $date = $registration['date'];
                         if (isset($all[$date])) {
@@ -1539,7 +1539,7 @@ switch ($report) {
                                         var monthlyData = JSON.parse(response);
                                         chart.data.labels = monthlyData.labels;
                                         chart.data.datasets[0].data = monthlyData.data;
-                                        chart.data.datasets[0].label = "'.get_lang('User Registrations by month').'";
+                                        chart.data.datasets[0].label = "'.get_lang('User registrations by month').'";
                                         chart.update();
                                         $("#backButton").hide();
                                     }
@@ -1549,7 +1549,7 @@ switch ($report) {
                 );
 
                 $chartContent .= '<canvas id="user_registration_chart"></canvas>';
-                $chartContent .= '<button id="backButton" style="display:none;" class="btn btn--info">'.get_lang('Back to Months').'</button>';
+                $chartContent .= '<button id="backButton" style="display:none;" class="btn btn--info">'.get_lang('Back to months').'</button>';
 
                 $creators = Statistics::getUserRegistrationsByCreator($dateStart, $dateEnd);
                 if (!empty($creators)) {
@@ -1562,9 +1562,9 @@ switch ($report) {
                     }
 
                     $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
-                        ['labels' => $creatorLabels, 'datasets' => [['label' => get_lang('Registrations by Creator'), 'data' => $creatorData]]],
+                        ['labels' => $creatorLabels, 'datasets' => [['label' => get_lang('User registrations by creator'), 'data' => $creatorData]]],
                         'pie',
-                        'title: { text: "'.get_lang('User Registrations by Creator').'", display: true },
+                        'title: { text: "'.get_lang('User registrations by creator').'", display: true },
                         legend: { position: "top" },
                         layout: {
                             padding: { left: 10, right: 10, top: 10, bottom: 10 }
@@ -1632,8 +1632,8 @@ switch ($report) {
         $content .= $form->returnForm();
 
         $content .= '<canvas class="col-md-12" id="canvas" height="200px" style="margin-bottom: 20px"></canvas>';
-        $content .= Statistics::printRecentLoginStats(false, $sessionDuration);
-        $content .= Statistics::printRecentLoginStats(true, $sessionDuration);
+        $content .= Statistics::printRecentLoginStats(false, $sessionDuration?:0);
+        $content .= Statistics::printRecentLoginStats(true, $sessionDuration?:0);
         break;
     case 'logins':
         $content .= Statistics::printLoginStats($_GET['type']);

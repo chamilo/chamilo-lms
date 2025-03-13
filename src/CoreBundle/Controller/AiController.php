@@ -7,9 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Service\AI\AiProviderFactory;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+
+use const FILTER_VALIDATE_BOOLEAN;
 
 /**
  * Controller to handle AI-related functionalities.
@@ -53,12 +56,12 @@ class AiController
                 'success' => true,
                 'text' => trim($questions),
             ]);
+        } catch (Exception $e) {
+            error_log('AI Request failed: '.$e->getMessage());
 
-        } catch (\Exception $e) {
-            error_log("AI Request failed: " . $e->getMessage());
             return new JsonResponse([
                 'success' => false,
-                'text' => "An error occurred while generating questions. Please contact the administrator.",
+                'text' => 'An error occurred while generating questions. Please contact the administrator.',
             ], 500);
         }
     }
@@ -89,12 +92,12 @@ class AiController
 
             return new JsonResponse([
                 'success' => true,
-                'data' => $lpData
+                'data' => $lpData,
             ]);
+        } catch (Exception $e) {
+            error_log('ERROR: '.$e->getMessage());
 
-        } catch (\Exception $e) {
-            error_log("ERROR: " . $e->getMessage());
-            return new JsonResponse(['success' => false, 'text' => "An error occurred."], 500);
+            return new JsonResponse(['success' => false, 'text' => 'An error occurred.'], 500);
         }
     }
 }

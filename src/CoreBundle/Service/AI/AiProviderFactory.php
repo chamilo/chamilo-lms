@@ -8,9 +8,9 @@ namespace Chamilo\CoreBundle\Service\AI;
 
 use Chamilo\CoreBundle\Repository\AiRequestsRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use InvalidArgumentException;
 
 class AiProviderFactory
 {
@@ -38,9 +38,9 @@ class AiProviderFactory
         // Initialize AI providers dynamically
         $this->providers = [];
         foreach ($config as $providerName => $providerConfig) {
-            if ($providerName === 'openai') {
+            if ('openai' === $providerName) {
                 $this->providers[$providerName] = new OpenAiProvider($httpClient, $settingsManager, $this->aiRequestsRepository, $this->security);
-            } elseif ($providerName === 'deepseek') {
+            } elseif ('deepseek' === $providerName) {
                 $this->providers[$providerName] = new DeepSeekAiProvider($httpClient, $settingsManager, $this->aiRequestsRepository, $this->security);
             }
         }
@@ -51,7 +51,7 @@ class AiProviderFactory
         }
     }
 
-    public function getProvider(string $provider = null): AiProviderInterface
+    public function getProvider(?string $provider = null): AiProviderInterface
     {
         $provider = $provider ?? $this->defaultProvider;
 

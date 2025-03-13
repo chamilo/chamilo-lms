@@ -24423,7 +24423,6 @@ msgstr "Link zur Testbearbeitung"
 msgid "Move users results from base course to a session"
 msgstr "Verschieben Sie Benutzerergebnisse vom Basiskurs zum eine Session"
 
-#, fuzzy
 msgid "If your quiz have hotspot questions included, you should select the images related from the documents."
 msgstr ""
 "Wenn Ihr Quiz Hotspot-Fragen enthält, sollten Sie die zugehörigen Bilder aus "
@@ -29237,3 +29236,15 @@ msgstr "Wählen Sie den Zielordner"
 
 msgid "All users"
 msgstr "Alle Benutzer"
+
+msgid "Reminders"
+msgstr "Erinnerungen"
+
+msgid "Add reminder"
+msgstr "Erinnerung hinzufügen"
+
+msgid "Update introduction links"
+msgstr "Link im Text aktualisieren"
+
+msgid "Conference Room"
+msgstr "Konferenzraum"

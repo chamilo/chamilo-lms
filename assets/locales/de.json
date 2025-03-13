@@ -511,7 +511,7 @@
     "Could not retrieve links": "Could not retrieve links",
     "Update link": "Update link",
     "Unread": "Ungelesen",
-    "As read": "Lesen",
+    "As read": "Gelesen",
     "As unread": "Ungelesen",
     "Message deleted": "Nachricht gel\u00f6scht",
     "Messages deleted": "Nachrichten gel\u00f6scht",
@@ -577,5 +577,9 @@
     "Move": "verschieben",
     "Select the destination folder": "W\u00e4hlen Sie den Zielordner",
     "Select a folder": "W\u00e4hlen Sie einen Ordner aus",
-    "Move document": "Dokument verschieben"
+    "Move document": "Dokument verschieben",
+    "Reminders": "Erinnerungen",
+    "Add reminder": "Erinnerung hinzuf\u00fcgen",
+    "Update introduction links": "Link im Text aktualisieren",
+    "Conference Room": "Konferenzraum"
 }

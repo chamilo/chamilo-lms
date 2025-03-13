@@ -27850,3 +27850,15 @@ msgstr "Courses count"
 
 msgid "Courses count by language"
 msgstr "Courses count by language"
+
+msgid "Reminders"
+msgstr "Reminders"
+
+msgid "Add reminder"
+msgstr "Add reminder"
+
+msgid "Update introduction links"
+msgstr "Update introduction links"
+
+msgid "Conference Room"
+msgstr "Conference Room"

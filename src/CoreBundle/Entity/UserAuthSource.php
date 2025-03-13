@@ -9,14 +9,13 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Repository\UserAuthSourceRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-//agregar url_id priority
+// agregar url_id priority
 #[ORM\Entity(repositoryClass: UserAuthSourceRepository::class)]
 class UserAuthSource
 {
     public const PLATFORM = 'platform';
     public const CAS = 'cas';
     public const LDAP = 'extldap';
-
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

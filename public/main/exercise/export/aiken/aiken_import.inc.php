@@ -268,7 +268,6 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir): int|
 
             // Insert answer into database
             $params = [
-                'c_id' => $courseId,
                 'question_id' => $lastQuestionId,
                 'answer' => $answer->new_answer[$answerIndex],
                 'correct' => $answer->new_correct[$answerIndex],
@@ -491,11 +490,9 @@ function generateAikenForm()
 
     // Get AI providers configuration from settings
     $aiProvidersJson = api_get_setting('ai_helpers.ai_providers');
-
-    $configuredApi = api_get_setting('ai_helpers.default_ai_provider');
-
     $availableApis = json_decode($aiProvidersJson, true) ?? [];
-    $hasSingleApi = count($availableApis) === 1 || isset($availableApis[$configuredApi]);
+    $hasSingleApi = count($availableApis) === 1;
+    $configuredApi = $hasSingleApi ? array_key_first($availableApis) : null;
 
     $form = new FormValidator(
         'aiken_generate',

@@ -469,14 +469,11 @@ class SessionRepository extends ServiceEntityRepository
 
     /**
      * Finds a valid child session based on access dates and reinscription days.
-     *
-     * @param Session $session
-     * @return Session|null
      */
     public function findValidChildSession(Session $session): ?Session
     {
         $childSessions = $this->findChildSessions($session);
-        $now = new \DateTime();
+        $now = new DateTime();
 
         foreach ($childSessions as $childSession) {
             $startDate = $childSession->getAccessStartDate();
@@ -487,12 +484,13 @@ class SessionRepository extends ServiceEntityRepository
                 continue;
             }
 
-            $adjustedEndDate = (clone $endDate)->modify('-' . $daysToReinscription . ' days');
+            $adjustedEndDate = (clone $endDate)->modify('-'.$daysToReinscription.' days');
 
             if ($startDate <= $now && $adjustedEndDate >= $now) {
                 return $childSession;
             }
         }
+
         return null;
     }
 
@@ -503,24 +501,25 @@ class SessionRepository extends ServiceEntityRepository
     {
         $parentSession = $this->findParentSession($session);
         if ($parentSession) {
-            $now = new \DateTime();
+            $now = new DateTime();
             $startDate = $parentSession->getAccessStartDate();
             $endDate = $parentSession->getAccessEndDate();
             $daysToReinscription = $parentSession->getDaysToReinscription();
 
             // Return null if days to reinscription is not set
-            if ($daysToReinscription === null || $daysToReinscription === '') {
+            if (null === $daysToReinscription || '' === $daysToReinscription) {
                 return null;
             }
 
             // Adjust the end date by days to reinscription
-            $endDate = $endDate->modify('-' . $daysToReinscription . ' days');
+            $endDate = $endDate->modify('-'.$daysToReinscription.' days');
 
             // Check if the current date falls within the session's validity period
             if ($startDate <= $now && $endDate >= $now) {
                 return $parentSession;
             }
         }
+
         return null;
     }
 
@@ -533,7 +532,8 @@ class SessionRepository extends ServiceEntityRepository
             ->where('s.parentId = :parentId')
             ->setParameter('parentId', $parentSession->getId())
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
@@ -555,7 +555,7 @@ class SessionRepository extends ServiceEntityRepository
      */
     public function findSessionsWithoutChildAndReadyForRepetition()
     {
-        $currentDate = new \DateTime();
+        $currentDate = new DateTime();
 
         $qb = $this->createQueryBuilder('s')
             ->where('s.daysToNewRepetition IS NOT NULL')
@@ -568,7 +568,8 @@ class SessionRepository extends ServiceEntityRepository
                 AND child.accessEndDate >= :currentDate
             )')
             ->setParameter('false', false)
-            ->setParameter('currentDate', $currentDate);
+            ->setParameter('currentDate', $currentDate)
+        ;
 
         return $qb->getQuery()->getResult();
     }

@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\AiRequestsRepository;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Chamilo\CoreBundle\Repository\AiRequestsRepository;
 
 #[ORM\Table(name: 'ai_requests')]
 #[ORM\Entity(repositoryClass: AiRequestsRepository::class)]
@@ -29,7 +31,7 @@ class AiRequests
 
     #[Assert\NotBlank]
     #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface $requestedAt;
+    private DateTimeInterface $requestedAt;
 
     #[Assert\NotBlank]
     #[ORM\Column(type: 'text')]
@@ -50,7 +52,7 @@ class AiRequests
 
     public function __construct()
     {
-        $this->requestedAt = new \DateTime();
+        $this->requestedAt = new DateTime();
     }
 
     public function getId(): ?int
@@ -66,6 +68,7 @@ class AiRequests
     public function setUserId(int $userId): self
     {
         $this->userId = $userId;
+
         return $this;
     }
 
@@ -77,10 +80,11 @@ class AiRequests
     public function setToolName(string $toolName): self
     {
         $this->toolName = $toolName;
+
         return $this;
     }
 
-    public function getRequestedAt(): \DateTimeInterface
+    public function getRequestedAt(): DateTimeInterface
     {
         return $this->requestedAt;
     }
@@ -93,6 +97,7 @@ class AiRequests
     public function setRequestText(string $requestText): self
     {
         $this->requestText = $requestText;
+
         return $this;
     }
 
@@ -104,6 +109,7 @@ class AiRequests
     public function setPromptTokens(?int $promptTokens): self
     {
         $this->promptTokens = $promptTokens;
+
         return $this;
     }
 
@@ -115,6 +121,7 @@ class AiRequests
     public function setCompletionTokens(?int $completionTokens): self
     {
         $this->completionTokens = $completionTokens;
+
         return $this;
     }
 
@@ -126,6 +133,7 @@ class AiRequests
     public function setTotalTokens(?int $totalTokens): self
     {
         $this->totalTokens = $totalTokens;
+
         return $this;
     }
 
@@ -137,6 +145,7 @@ class AiRequests
     public function setAiProvider(string $aiProvider): self
     {
         $this->aiProvider = $aiProvider;
+
         return $this;
     }
 }

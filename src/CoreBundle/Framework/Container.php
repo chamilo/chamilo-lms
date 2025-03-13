@@ -103,8 +103,6 @@ use Symfony\Component\Translation\Translator;
 use Twig\Environment;
 use UnitEnum;
 
-use function Symfony\Component\String\s;
-
 /**
  * Symfony services for the legacy Chamilo code.
  */
@@ -663,8 +661,6 @@ class Container
     public static function getAccessUrlHelper(): AccessUrlHelper
     {
         /** @var AccessUrlHelper $helper */
-        $helper = self::$container->get(AccessUrlHelper::class);
-
-        return $helper;
+        return self::$container->get(AccessUrlHelper::class);
     }
 }

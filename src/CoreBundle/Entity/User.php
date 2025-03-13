@@ -2462,18 +2462,19 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function hasAuthSourceByAuthentication(string $authentication): bool
     {
         return $this->authSources
-            ->exists(fn(UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication)
+            ->exists(fn (UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication)
         ;
     }
 
     public function getAuthSourceByAuthentication(string $authentication): UserAuthSource
     {
         return $this->authSources->findFirst(
-            fn(UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication
+            fn (UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication
         );
     }
 
-    public function removeAuthSources(): static {
+    public function removeAuthSources(): static
+    {
         foreach ($this->authSources as $authSource) {
             $authSource->setUser(null);
         }

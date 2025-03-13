@@ -577,5 +577,9 @@
     "Move": "D\u00e9placer",
     "Select the destination folder": "Choisir le dossier de destination",
     "Select a folder": "Choisir un dossier",
-    "Move document": "D\u00e9placer le document"
+    "Move document": "D\u00e9placer le document",
+    "Reminders": "Notifications",
+    "Add reminder": "Ajouter une notification",
+    "Update introduction links": "Mettre \u00e0 jour les liens de l'introduction",
+    "Conference Room": "Salle de conf\u00e9rence"
 }

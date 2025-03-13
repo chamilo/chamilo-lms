@@ -28804,3 +28804,15 @@ msgstr "Configuración de inicio automático"
 
 msgid "Auto-launch"
 msgstr "Inicio automático"
+
+msgid "Reminders"
+msgstr "Recordatorios"
+
+msgid "Add reminder"
+msgstr "Añadir recordatorios"
+
+msgid "Update introduction links"
+msgstr "Actualizar enlaces de introducción"
+
+msgid "Conference Room"
+msgstr "Sala de conferencias"

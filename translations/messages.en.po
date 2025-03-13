@@ -27850,3 +27850,43 @@ msgstr "Courses count"
 
 msgid "Courses count by language"
 msgstr "Courses count by language"
+
+msgid "AI provider"
+msgstr "AI provider"
+
+msgid "Request failed"
+msgstr "Request failed"
+
+msgid "Using AI provider %s"
+msgstr "Using AI provider %s"
+
+msgid "Aiken Format Example"
+msgstr "Aiken Format Example"
+
+msgid "Number of questions"
+msgstr "Number of questions"
+
+msgid "Please enter a valid number of questions"
+msgstr "Please enter a valid number of questions"
+
+msgid "An unexpected error occurred. Please try again later."
+msgstr "An unexpected error occurred. Please try again later."
+
+msgid "An unexpected error occurred. Please contact support."
+msgstr "An unexpected error occurred. Please contact support."
+
+msgid "Generate Aiken"
+msgstr "Generate Aiken"
+
+msgid "Reminders"
+msgstr "Reminders"
+
+msgid "Add reminder"
+msgstr "Add reminder"
+
+msgid "Update introduction links"
+msgstr "Update introduction links"
+
+msgid "Conference Room"
+msgstr "Conference Room"
+

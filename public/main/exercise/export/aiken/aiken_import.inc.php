@@ -36,7 +36,23 @@ function aiken_display_form()
     $form_validator->addElement('file', 'userFile', get_lang('File'));
     $form_validator->addButtonUpload(get_lang('Upload'), 'submit');
     $form .= $form_validator->returnForm();
-    $form .= '<blockquote>'.get_lang('Import Aiken quizExplanation').'<br /><pre>'.get_lang('Import Aiken quizExplanationExample').'</pre></blockquote>';
+    $form .= '<blockquote>'.get_lang('The Aiken format comes in a simple text (.txt) file, with several question blocks, each separated by a blank line. The first line is the question, the answer lines are prefixed by a letter and a dot, and the correct answer comes next with the ANSWER: prefix. See example below.').'<br />
+<pre>
+This is the text for question 1
+A. Answer 1
+B. Answer 2
+C. Answer 3
+ANSWER: B
+
+This is the text for question 2
+A. Answer 1
+B. Answer 2
+C. Answer 3
+D. Answer 4
+ANSWER: D
+ANSWER_EXPLANATION: this is an optional feedback comment that will appear next to the correct answer.
+SCORE: 20
+</pre></blockquote>';
     echo $form;
 }
 
@@ -139,7 +155,7 @@ function aiken_import_exercise(string $file = null, ?array $request = [])
         $exerciseInfo['question'] = [];
 
         if (!preg_match('/\.(zip|txt)$/i', $file)) {
-            return get_lang('You must upload a .zip or .txt file');
+            return get_lang('You must upload a .txt or .zip file');
         }
 
         $result = aiken_parse_file($exerciseInfo, $file);
@@ -506,9 +522,9 @@ function generateAikenForm()
     </div>');
 
     $form->addElement('text', 'quiz_name', get_lang('Questions topic'));
-    $form->addRule('quiz_name', get_lang('This field is required'), 'required');
+    $form->addRule('quiz_name', get_lang('Required field'), 'required');
     $form->addElement('number', 'nro_questions', get_lang('Number of questions'));
-    $form->addRule('nro_questions', get_lang('This field is required'), 'required');
+    $form->addRule('nro_questions', get_lang('Required field'), 'required');
 
     $options = [
         'multiple_choice' => get_lang('Multiple answer'),
@@ -516,14 +532,14 @@ function generateAikenForm()
 
     $form->addSelect(
         'question_type',
-        get_lang('Question yype'),
+        get_lang('Question type'),
         $options
     );
 
     if (!$hasSingleApi) {
         $form->addSelect(
             'ai_provider',
-            get_lang('Ai provider'),
+            get_lang('AI provider'),
             array_combine(array_keys($availableApis), array_keys($availableApis))
         );
     }
@@ -552,7 +568,7 @@ function generateAikenForm()
 
             // Validate quiz name
             if (quizName === "") {
-                $("[name=\'quiz_name\']").after("<div class=\'error-message\' style=\'color: red;\'>'.get_lang('This field is required').'</div>");
+                $("[name=\'quiz_name\']").after("<div class=\'error-message\' style=\'color: red;\'>'.get_lang('Required field').'</div>");
                 isValid = false;
             }
 
@@ -567,7 +583,7 @@ function generateAikenForm()
             }
 
             btnGenerate.attr("disabled", true);
-            btnGenerate.text("'.get_lang('Please wait this could take a while').'");
+            btnGenerate.text("'.get_lang('Please wait. This could take a while...').'");
 
             $("#textarea-aiken").text("");
             $("#aiken-area").hide();
@@ -595,7 +611,7 @@ function generateAikenForm()
                         $("#textarea-aiken").text(data.text);
                         $("#textarea-aiken").focus();
                     } else {
-                        alert("'.get_lang('Error occurred').': " + data.text);
+                        alert("'.get_lang('An error occurred.').': " + data.text);
                     }
                 },
                  error: function (jqXHR) {

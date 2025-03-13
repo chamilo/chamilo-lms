@@ -27836,3 +27836,30 @@ msgstr ""
 
 msgid "Courses count by language"
 msgstr ""
+
+msgid "AI provider"
+msgstr ""
+
+msgid "Request failed"
+msgstr ""
+
+msgid "Using AI provider %s"
+msgstr ""
+
+msgid "Aiken Format Example"
+msgstr ""
+
+msgid "Number of questions"
+msgstr ""
+
+msgid "Please enter a valid number of questions"
+msgstr ""
+
+msgid "An unexpected error occurred. Please try again later."
+msgstr ""
+
+msgid "An unexpected error occurred. Please contact support."
+msgstr ""
+
+msgid "Generate Aiken"
+msgstr ""

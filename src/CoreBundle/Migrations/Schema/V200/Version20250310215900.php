@@ -39,6 +39,11 @@ final class Version20250310215900 extends AbstractMigrationChamilo
                 $this->migrateBbbActivities();
             }
 
+            // Migrate BBB Recordings
+            if ($this->tableExists('plugin_bbb_meeting_format')) {
+                $this->migrateBbbRecordings();
+            }
+
             // Migrate Zoom Meetings
             if ($this->tableExists('plugin_zoom_meeting')) {
                 $this->migrateZoomMeetings();
@@ -132,6 +137,26 @@ final class Version20250310215900 extends AbstractMigrationChamilo
             $conferenceActivity->setEvent('joined');
 
             $this->entityManager->persist($conferenceActivity);
+        }
+    }
+
+    private function migrateBbbRecordings(): void
+    {
+        $bbbRecordings = $this->connection->fetchAllAssociative("SELECT * FROM plugin_bbb_meeting_format");
+
+        foreach ($bbbRecordings as $recording) {
+            $meeting = $this->getEntityById(ConferenceMeeting::class, $recording['meeting_id']);
+
+            if (!$meeting) {
+                continue;
+            }
+
+            $conferenceRecording = new ConferenceRecording();
+            $conferenceRecording->setMeeting($meeting);
+            $conferenceRecording->setFormatType($recording['format_type']);
+            $conferenceRecording->setResourceUrl($recording['resource_url']);
+
+            $this->entityManager->persist($conferenceRecording);
         }
     }
 

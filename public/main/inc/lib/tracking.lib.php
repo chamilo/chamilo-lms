@@ -20,7 +20,6 @@ use CpChart\Image as pImage;
 use ExtraField as ExtraFieldModel;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\StateIcon;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 
 /**
  *  Class Tracking.
@@ -1746,8 +1745,7 @@ class Tracking
         $url_condition = null;
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $url_table = null;
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
         if ($accessUrlHelper->isMultiple()) {
             $access_url_id = $accessUrlHelper->getCurrent()->getId();
             $url_table = ", $tbl_url_rel_user as url_users";
@@ -1830,8 +1828,7 @@ class Tracking
 
         $url_table = null;
         $url_condition = null;
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
         if ($accessUrlHelper->isMultiple()) {
             $access_url_id = $accessUrlHelper->getCurrent()->getId();
             $url_table = ", ".$tbl_url_rel_user." as url_users";
@@ -3604,8 +3601,7 @@ class Tracking
         $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
         $access_url_id = -1;
         if ($accessUrlHelper->isMultiple()) {
             $access_url_id = $accessUrlHelper->getCurrent()->getId();
@@ -3762,8 +3758,7 @@ class Tracking
                 ON (c.id = sc.c_id)
                 WHERE sc.user_id = '.$coach_id.' AND sc.status = '.SessionEntity::COURSE_COACH;
 
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
         if ($accessUrlHelper->isMultiple()) {
             $access_url_id = $accessUrlHelper->getCurrent()->getId();
             if (-1 != $access_url_id) {
@@ -4608,8 +4603,7 @@ class Tracking
         $session_id = (int) $session_id;
         $urlId = -1;
 
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
         if ($accessUrlHelper->isMultiple()) {
             $urlId = $accessUrlHelper->getCurrent()->getId();
             $sql = "SELECT c.id, c.code, title
@@ -8165,8 +8159,7 @@ class Tracking
         $tableUrl = null;
         $urlCondition = null;
         $conditionTime = null;
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
         if ($accessUrlHelper->isMultiple()) {
             $accessUrlId = $accessUrlHelper->getCurrent()->getId();
             $tableUrl = ", ".$tableUrlRelUser." as url_users";

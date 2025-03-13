@@ -6,7 +6,6 @@ use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 
 /**
  * This class provides some functions for statistics.
@@ -54,8 +53,7 @@ class Statistics
     {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -122,8 +120,7 @@ class Statistics
         }
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -188,8 +185,7 @@ class Statistics
 
         $where = implode(' AND ', $conditions);
 
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -247,8 +243,7 @@ class Statistics
         $startDate = Database::escape_string($startDate);
         $endDate = Database::escape_string($endDate);
 
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -281,8 +276,7 @@ class Statistics
         $track_e_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
         if (is_array($courseId)) {
             // Usually when no param is given, we get an empty array from SortableTable
             $courseId = 0;
@@ -358,8 +352,7 @@ class Statistics
             $direction = 'DESC';
         }
 
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -564,8 +557,7 @@ class Statistics
         $where_url = null;
         $now = api_get_utc_datetime();
         $where_url_last = ' WHERE login_date > DATE_SUB("'.$now.'",INTERVAL 1 %s)';
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -668,8 +660,7 @@ class Statistics
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $table_url = '';
         $where_url = '';
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -762,8 +753,7 @@ class Statistics
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $table_url = '';
         $where_url = '';
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -833,8 +823,7 @@ class Statistics
         foreach ($tools as $tool) {
             $tool_names[$tool] = get_lang(ucfirst($tool), '');
         }
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -888,8 +877,7 @@ class Statistics
     {
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -924,8 +912,7 @@ class Statistics
         $url_condition = null;
         $url_condition2 = null;
         $table = null;
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -1065,8 +1052,7 @@ class Statistics
         $values = $form->exportValues();
         $date_diff = $values['date_diff'];
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -1147,8 +1133,7 @@ class Statistics
                 break;
         }
 
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -1197,8 +1182,7 @@ class Statistics
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -1242,8 +1226,7 @@ class Statistics
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $total = self::countUsers();
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -1656,8 +1639,7 @@ class Statistics
         $urlJoin = '';
         $urlWhere = '';
 
-        /** @var AccessUrlHelper $accessUrlHelper */
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+        $accessUrlHelper = Container::getAccessUrlHelper();
 
         if ($accessUrlHelper->isMultiple()) {
             $accessUrl = $accessUrlHelper->getCurrent();
@@ -1856,8 +1838,7 @@ class Statistics
             $whereUrl = '';
             $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
             $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
-            /** @var AccessUrlHelper $accessUrlHelper */
-            $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+            $accessUrlHelper = Container::getAccessUrlHelper();
 
             if ($accessUrlHelper->isMultiple()) {
                 $accessUrl = $accessUrlHelper->getCurrent();

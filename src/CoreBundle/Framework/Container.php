@@ -41,6 +41,7 @@ use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -101,6 +102,8 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Translation\Translator;
 use Twig\Environment;
 use UnitEnum;
+
+use function Symfony\Component\String\s;
 
 /**
  * Symfony services for the legacy Chamilo code.
@@ -655,5 +658,13 @@ class Container
     public static function getThemeHelper(): ThemeHelper
     {
         return self::$container->get(ThemeHelper::class);
+    }
+
+    public static function getAccessUrlHelper(): AccessUrlHelper
+    {
+        /** @var AccessUrlHelper $helper */
+        $helper = self::$container->get(AccessUrlHelper::class);
+
+        return $helper;
     }
 }

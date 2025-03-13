@@ -2,9 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 
 $cidReset = true;
 
@@ -22,8 +20,7 @@ $session_course_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_
 $tool_name = get_lang('Export users list');
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
 
-/** @var AccessUrl $accessUrl */
-$accessUrl = Container::$container->get(AccessUrlHelper::class)->getCurrent();
+$accessUrl = Container::getAccessUrlHelper()->getCurrent();
 
 set_time_limit(0);
 $coursesSessions = [];

@@ -157,7 +157,7 @@ switch ($action) {
         // for global recent logins
         header('Content-type: application/json');
         $list = [];
-        $all = Statistics::getRecentLoginStats(false, $sessionDuration, [31]);
+        $all = Statistics::getRecentLoginStats(false, $sessionDuration);
         foreach ($all as $tick => $tock) {
             $list['labels'][] = $tick;
         }
@@ -366,7 +366,7 @@ switch ($action) {
                     $item['display_text'] = $option['display_text'];
                     $all[$item['display_text']] = $count;
                 }
-                $all[get_lang('N/A')] = $total - $usersFound;
+                $all[get_lang('Not available')] = $total - $usersFound;
 
                 break;
             case 'language':
@@ -430,7 +430,7 @@ switch ($action) {
                     $item['display_text'] = get_lang(str_replace('2', '', $item['display_text']));
                     $all[$item['display_text']] = $count;
                 }
-                $all[get_lang('N/A')] = $total - $usersFound;
+                $all[get_lang('Not available')] = $total - $usersFound;
                 break;
 
             case 'age':
@@ -462,7 +462,7 @@ switch ($action) {
                 $usersFound = 0;
                 $now = new DateTime();
                 $all = [
-                    //get_lang('N/A') => 0,
+                    //get_lang('Not available') => 0,
                     '16-17' => 0,
                     '18-25' => 0,
                     '26-30' => 0,
@@ -526,7 +526,7 @@ switch ($action) {
                     $usersFound += $count;
                 }
 
-                $all[get_lang('N/A')] = $total - $usersFound;
+                $all[get_lang('Not available')] = $total - $usersFound;
                 break;
 
             case 'contract':

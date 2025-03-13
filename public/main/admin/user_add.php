@@ -2,11 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 
 $cidReset = true;
@@ -22,8 +20,7 @@ api_protect_limit_for_session_admin();
 /** @var AuthenticationConfigHelper $authenticationConfigHelper */
 $authenticationConfigHelper = Container::$container->get(AuthenticationConfigHelper::class);
 
-/** @var AccessUrl $accessUrl */
-$accessUrl = Container::$container->get(AccessUrlHelper::class)->getCurrent();
+$accessUrl = Container::getAccessUrlHelper()->getCurrent();
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 

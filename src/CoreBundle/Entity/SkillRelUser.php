@@ -93,10 +93,6 @@ class SkillRelUser
     protected int $validationStatus;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'assigned_by', type: 'integer', nullable: false)]
-    protected int $assignedBy;
-
-    #[Assert\NotBlank]
     #[ORM\Column(name: 'argumentation', type: 'text')]
     protected string $argumentation;
 
@@ -157,18 +153,6 @@ class SkillRelUser
     public function getAcquiredSkillAt(): DateTime
     {
         return $this->acquiredSkillAt;
-    }
-
-    public function setAssignedBy(int $assignedBy): self
-    {
-        $this->assignedBy = $assignedBy;
-
-        return $this;
-    }
-
-    public function getAssignedBy(): int
-    {
-        return $this->assignedBy;
     }
 
     public function getId(): ?int

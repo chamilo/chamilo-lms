@@ -593,9 +593,14 @@ if (isset($_GET['action'])) {
     }
 }
 
+$flashMessage = '';
+if (!empty($_SESSION['flash_message'])) {
+    $flashMessage = Display::return_message($_SESSION['flash_message'], 'success');
+    unset($_SESSION['flash_message']);
+}
 Display::display_header($tool_name);
 echo Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
-
+echo $flashMessage;
 $fullUrlBig = UserManager::getUserPicture(
     $userId,
     USER_IMAGE_SIZE_BIG

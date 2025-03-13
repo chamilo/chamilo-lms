@@ -25,7 +25,7 @@ final class Version20240928003000 extends AbstractMigrationChamilo
             $sessionRelUserTable = $schemaManager->listTableColumns('session_rel_user');
 
             if (!isset($sessionRelUserTable['new_subscription_session_id'])) {
-                $this->addSql("ALTER TABLE session_rel_user ADD new_subscription_session_id INT DEFAULT NULL");
+                $this->addSql('ALTER TABLE session_rel_user ADD new_subscription_session_id INT DEFAULT NULL');
             }
         }
 
@@ -34,16 +34,16 @@ final class Version20240928003000 extends AbstractMigrationChamilo
             $sessionTable = $schemaManager->listTableColumns('session');
 
             if (!isset($sessionTable['parent_id'])) {
-                $this->addSql("ALTER TABLE session ADD parent_id INT DEFAULT NULL");
+                $this->addSql('ALTER TABLE session ADD parent_id INT DEFAULT NULL');
             }
             if (!isset($sessionTable['days_to_reinscription'])) {
-                $this->addSql("ALTER TABLE session ADD days_to_reinscription INT DEFAULT NULL");
+                $this->addSql('ALTER TABLE session ADD days_to_reinscription INT DEFAULT NULL');
             }
             if (!isset($sessionTable['last_repetition'])) {
-                $this->addSql("ALTER TABLE session ADD last_repetition TINYINT(1) DEFAULT 0 NOT NULL");
+                $this->addSql('ALTER TABLE session ADD last_repetition TINYINT(1) DEFAULT 0 NOT NULL');
             }
             if (!isset($sessionTable['days_to_new_repetition'])) {
-                $this->addSql("ALTER TABLE session ADD days_to_new_repetition INT DEFAULT NULL");
+                $this->addSql('ALTER TABLE session ADD days_to_new_repetition INT DEFAULT NULL');
             }
         }
 
@@ -52,7 +52,7 @@ final class Version20240928003000 extends AbstractMigrationChamilo
             $sessionTable = $schemaManager->listTableColumns('session');
 
             if (!isset($sessionTable['validity_in_days'])) {
-                $this->addSql("ALTER TABLE session ADD validity_in_days INT DEFAULT NULL");
+                $this->addSql('ALTER TABLE session ADD validity_in_days INT DEFAULT NULL');
             }
         }
 
@@ -61,7 +61,7 @@ final class Version20240928003000 extends AbstractMigrationChamilo
             $clpTable = $schemaManager->listTableColumns('c_lp');
 
             if (isset($clpTable['validity_in_days'])) {
-                $this->addSql("ALTER TABLE c_lp DROP COLUMN validity_in_days");
+                $this->addSql('ALTER TABLE c_lp DROP COLUMN validity_in_days');
             }
         }
 
@@ -92,7 +92,7 @@ final class Version20240928003000 extends AbstractMigrationChamilo
             $sessionRelUserTable = $schemaManager->listTableColumns('session_rel_user');
 
             if (isset($sessionRelUserTable['new_subscription_session_id'])) {
-                $this->addSql("ALTER TABLE session_rel_user DROP COLUMN new_subscription_session_id");
+                $this->addSql('ALTER TABLE session_rel_user DROP COLUMN new_subscription_session_id');
             }
         }
 
@@ -101,16 +101,16 @@ final class Version20240928003000 extends AbstractMigrationChamilo
             $sessionTable = $schemaManager->listTableColumns('session');
 
             if (isset($sessionTable['parent_id'])) {
-                $this->addSql("ALTER TABLE session DROP COLUMN parent_id");
+                $this->addSql('ALTER TABLE session DROP COLUMN parent_id');
             }
             if (isset($sessionTable['days_to_reinscription'])) {
-                $this->addSql("ALTER TABLE session DROP COLUMN days_to_reinscription");
+                $this->addSql('ALTER TABLE session DROP COLUMN days_to_reinscription');
             }
             if (isset($sessionTable['last_repetition'])) {
-                $this->addSql("ALTER TABLE session DROP COLUMN last_repetition");
+                $this->addSql('ALTER TABLE session DROP COLUMN last_repetition');
             }
             if (isset($sessionTable['days_to_new_repetition'])) {
-                $this->addSql("ALTER TABLE session DROP COLUMN days_to_new_repetition");
+                $this->addSql('ALTER TABLE session DROP COLUMN days_to_new_repetition');
             }
         }
 
@@ -119,7 +119,7 @@ final class Version20240928003000 extends AbstractMigrationChamilo
             $sessionTable = $schemaManager->listTableColumns('session');
 
             if (isset($sessionTable['validity_in_days'])) {
-                $this->addSql("ALTER TABLE session DROP COLUMN validity_in_days");
+                $this->addSql('ALTER TABLE session DROP COLUMN validity_in_days');
             }
         }
 
@@ -128,7 +128,7 @@ final class Version20240928003000 extends AbstractMigrationChamilo
             $clpTable = $schemaManager->listTableColumns('c_lp');
 
             if (!isset($clpTable['validity_in_days'])) {
-                $this->addSql("ALTER TABLE c_lp ADD validity_in_days INT DEFAULT NULL");
+                $this->addSql('ALTER TABLE c_lp ADD validity_in_days INT DEFAULT NULL');
             }
         }
 

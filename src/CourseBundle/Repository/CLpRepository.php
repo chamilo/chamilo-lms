@@ -131,7 +131,6 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
             $link = $resourceNode->getResourceLinks()->first();
 
             if ($link && $link->getSession()) {
-
                 return (int) $link->getSession()->getId();
             }
         }

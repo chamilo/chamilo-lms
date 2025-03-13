@@ -7,6 +7,8 @@ namespace Chamilo\CoreBundle\Service\AI;
 use Chamilo\CoreBundle\Entity\AiRequests;
 use Chamilo\CoreBundle\Repository\AiRequestsRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Exception;
+use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -36,7 +38,7 @@ class OpenAiProvider implements AiProviderInterface
         $config = json_decode($configJson, true) ?? [];
 
         if (!isset($config['openai'])) {
-            throw new \RuntimeException('OpenAI configuration is missing.');
+            throw new RuntimeException('OpenAI configuration is missing.');
         }
 
         $this->apiUrl = $config['openai']['url'] ?? 'https://api.openai.com/v1/chat/completions';
@@ -45,13 +47,13 @@ class OpenAiProvider implements AiProviderInterface
         $this->temperature = $config['openai']['temperature'] ?? 0.7;
 
         if (empty($this->apiKey)) {
-            throw new \RuntimeException('OpenAI API key is missing.');
+            throw new RuntimeException('OpenAI API key is missing.');
         }
     }
 
     public function generateQuestions(string $topic, int $numQuestions, string $questionType, string $language): ?string
     {
-        $prompt = sprintf(
+        $prompt = \sprintf(
             'Generate %d "%s" questions in Aiken format in the %s language about "%s".
             Ensure each question follows this format:
 
@@ -63,7 +65,10 @@ class OpenAiProvider implements AiProviderInterface
             ANSWER: (Correct answer letter)
 
             The output should be plain text without additional symbols or markdown.',
-            $numQuestions, $questionType, $language, $topic
+            $numQuestions,
+            $questionType,
+            $language,
+            $topic
         );
 
         return $this->requestOpenAI($prompt, 'quiz');
@@ -72,10 +77,12 @@ class OpenAiProvider implements AiProviderInterface
     public function generateLearnPath(string $topic, int $chaptersCount, string $language, int $wordsCount, bool $addTests, int $numQuestions): ?array
     {
         // Step 1: Generate the Table of Contents
-        $tableOfContentsPrompt = sprintf(
+        $tableOfContentsPrompt = \sprintf(
             'Generate a structured table of contents for a course in "%s" with %d chapters on "%s".
             Return a numbered list, each chapter on a new line. No conclusion.',
-            $language, $chaptersCount, $topic
+            $language,
+            $chaptersCount,
+            $topic
         );
 
         $lpStructure = $this->requestOpenAI($tableOfContentsPrompt, 'learnpath');
@@ -88,20 +95,27 @@ class OpenAiProvider implements AiProviderInterface
         $chapters = explode("\n", trim($lpStructure));
         foreach ($chapters as $index => $chapterTitle) {
             $chapterTitle = trim($chapterTitle);
-            if (empty($chapterTitle)) continue;
+            if (empty($chapterTitle)) {
+                continue;
+            }
 
-            $chapterPrompt = sprintf(
+            $chapterPrompt = \sprintf(
                 'Create a learning chapter in HTML for "%s" in "%s" with %d words.
                 Title: "%s". Assume the reader already knows the context.',
-                $topic, $language, $wordsCount, $chapterTitle
+                $topic,
+                $language,
+                $wordsCount,
+                $chapterTitle
             );
 
             $chapterContent = $this->requestOpenAI($chapterPrompt, 'learnpath');
-            if (!$chapterContent) continue;
+            if (!$chapterContent) {
+                continue;
+            }
 
             $lpItems[] = [
                 'title' => $chapterTitle,
-                'content' => "<html><head><title>{$chapterTitle}</title></head><body>{$chapterContent}</body></html>"
+                'content' => "<html><head><title>{$chapterTitle}</title></head><body>{$chapterContent}</body></html>",
             ];
         }
 
@@ -109,7 +123,7 @@ class OpenAiProvider implements AiProviderInterface
         $quizItems = [];
         if ($addTests) {
             foreach ($lpItems as &$chapter) {
-                $quizPrompt = sprintf(
+                $quizPrompt = \sprintf(
                     'Generate %d multiple-choice questions in Aiken format in %s about "%s".
             Ensure each question follows this format:
 
@@ -122,7 +136,9 @@ class OpenAiProvider implements AiProviderInterface
 
             Each question must have exactly 4 options and one answer line.
             Return only valid questions without extra text.',
-                    $numQuestions, $language, $chapter['title']
+                    $numQuestions,
+                    $language,
+                    $chapter['title']
                 );
 
                 $quizContent = $this->requestOpenAI($quizPrompt, 'learnpath');
@@ -132,8 +148,8 @@ class OpenAiProvider implements AiProviderInterface
 
                     if (!empty($validQuestions)) {
                         $quizItems[] = [
-                            'title' => "Quiz: " . $chapter['title'],
-                            'content' => implode("\n\n", $validQuestions)
+                            'title' => 'Quiz: '.$chapter['title'],
+                            'content' => implode("\n\n", $validQuestions),
                         ];
                     }
                 }
@@ -144,7 +160,7 @@ class OpenAiProvider implements AiProviderInterface
             'success' => true,
             'topic' => $topic,
             'lp_items' => $lpItems,
-            'quiz_items' => $quizItems
+            'quiz_items' => $quizItems,
         ];
     }
 
@@ -156,15 +172,15 @@ class OpenAiProvider implements AiProviderInterface
         foreach ($questions as $questionBlock) {
             $lines = explode("\n", trim($questionBlock));
 
-            if (count($lines) < 6) {
+            if (\count($lines) < 6) {
                 continue;
             }
 
-            $options = array_slice($lines, 1, 4);
-            $validOptions = array_filter($options, fn($line) => preg_match('/^[A-D]\. .+/', $line));
+            $options = \array_slice($lines, 1, 4);
+            $validOptions = array_filter($options, fn ($line) => preg_match('/^[A-D]\. .+/', $line));
 
             $answerLine = end($lines);
-            if (count($validOptions) === 4 && preg_match('/^ANSWER: [A-D]$/', $answerLine)) {
+            if (4 === \count($validOptions) && preg_match('/^ANSWER: [A-D]$/', $answerLine)) {
                 $validQuestions[] = implode("\n", $lines);
             }
         }
@@ -176,14 +192,14 @@ class OpenAiProvider implements AiProviderInterface
     {
         $userId = $this->getUserId();
         if (!$userId) {
-            throw new \RuntimeException('User not authenticated.');
+            throw new RuntimeException('User not authenticated.');
         }
 
         $payload = [
             'model' => $this->model,
             'messages' => [
                 ['role' => 'system', 'content' => 'You are a helpful AI assistant that generates structured educational content.'],
-                ['role' => 'user', 'content' => $prompt]
+                ['role' => 'user', 'content' => $prompt],
             ],
             'temperature' => $this->temperature,
             'max_tokens' => 1000,
@@ -192,7 +208,7 @@ class OpenAiProvider implements AiProviderInterface
         try {
             $response = $this->httpClient->request('POST', $this->apiUrl, [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $this->apiKey,
+                    'Authorization' => 'Bearer '.$this->apiKey,
                     'Content-Type' => 'application/json',
                 ],
                 'json' => $payload,
@@ -201,7 +217,7 @@ class OpenAiProvider implements AiProviderInterface
             $statusCode = $response->getStatusCode();
             $data = $response->toArray();
 
-            if ($statusCode === 200 && isset($data['choices'][0]['message']['content'])) {
+            if (200 === $statusCode && isset($data['choices'][0]['message']['content'])) {
                 $generatedContent = $data['choices'][0]['message']['content'];
 
                 $aiRequest = new AiRequests();
@@ -211,7 +227,8 @@ class OpenAiProvider implements AiProviderInterface
                     ->setPromptTokens($data['usage']['prompt_tokens'] ?? 0)
                     ->setCompletionTokens($data['usage']['completion_tokens'] ?? 0)
                     ->setTotalTokens($data['usage']['total_tokens'] ?? 0)
-                    ->setAiProvider('openai');
+                    ->setAiProvider('openai')
+                ;
 
                 $this->aiRequestsRepository->save($aiRequest);
 
@@ -219,9 +236,9 @@ class OpenAiProvider implements AiProviderInterface
             }
 
             return null;
+        } catch (Exception $e) {
+            error_log('ERROR - OpenAI Request failed: '.$e->getMessage());
 
-        } catch (\Exception $e) {
-            error_log("ERROR - OpenAI Request failed: " . $e->getMessage());
             return null;
         }
     }
@@ -229,6 +246,7 @@ class OpenAiProvider implements AiProviderInterface
     private function getUserId(): ?int
     {
         $user = $this->security->getUser();
+
         return $user instanceof UserInterface ? $user->getId() : null;
     }
 }

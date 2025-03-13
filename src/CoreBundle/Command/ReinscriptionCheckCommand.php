@@ -1,25 +1,28 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
-use Chamilo\CoreBundle\Entity\GradebookCertificate;
-use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ReinscriptionCheckCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'app:reinscription-check';
 
     private SessionRepository $sessionRepository;
@@ -46,7 +49,8 @@ class ReinscriptionCheckCommand extends Command
                 null,
                 InputOption::VALUE_NONE,
                 'If set, debug messages will be shown.'
-            );
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -56,7 +60,7 @@ class ReinscriptionCheckCommand extends Command
         $sessions = $this->sessionRepository->findAll();
 
         foreach ($sessions as $session) {
-            if ($session->getValidityInDays() === null || $session->getValidityInDays() === 0) {
+            if (null === $session->getValidityInDays() || 0 === $session->getValidityInDays()) {
                 continue;
             }
 
@@ -64,7 +68,7 @@ class ReinscriptionCheckCommand extends Command
 
             foreach ($users as $user) {
                 if ($debug) {
-                    $output->writeln(sprintf('Processing user %d in session %d.', $user->getId(), $session->getId()));
+                    $output->writeln(\sprintf('Processing user %d in session %d.', $user->getId(), $session->getId()));
                 }
 
                 if ($this->isUserReinscribed($user, $session)) {
@@ -73,8 +77,9 @@ class ReinscriptionCheckCommand extends Command
 
                 if ($this->isUserAlreadyEnrolledInChildSession($user, $session)) {
                     if ($debug) {
-                        $output->writeln(sprintf('User %d is already enrolled in a valid child session.', $user->getId()));
+                        $output->writeln(\sprintf('User %d is already enrolled in a valid child session.', $user->getId()));
                     }
+
                     continue;
                 }
 
@@ -83,11 +88,11 @@ class ReinscriptionCheckCommand extends Command
                 if ($this->hasUserValidatedAllGradebooks($session, $certificates)) {
                     $latestValidationDate = $this->getLatestCertificateDate($certificates);
 
-                    if ($latestValidationDate !== null) {
+                    if (null !== $latestValidationDate) {
                         $reinscriptionDate = (clone $latestValidationDate)->modify("+{$session->getValidityInDays()} days");
 
                         if ($debug) {
-                            $output->writeln(sprintf(
+                            $output->writeln(\sprintf(
                                 'User %d - Latest certificate date: %s, Reinscription date: %s',
                                 $user->getId(),
                                 $latestValidationDate->format('Y-m-d'),
@@ -95,13 +100,13 @@ class ReinscriptionCheckCommand extends Command
                             ));
                         }
 
-                        if (new \DateTime() >= $reinscriptionDate) {
+                        if (new DateTime() >= $reinscriptionDate) {
                             $validSession = $this->findValidSessionInHierarchy($session);
 
                             if ($validSession) {
                                 $this->enrollUserInSession($user, $validSession, $session);
                                 if ($debug) {
-                                    $output->writeln(sprintf(
+                                    $output->writeln(\sprintf(
                                         'User %d re-enrolled into session %d.',
                                         $user->getId(),
                                         $validSession->getId()
@@ -111,7 +116,7 @@ class ReinscriptionCheckCommand extends Command
                         }
                     } else {
                         if ($debug) {
-                            $output->writeln(sprintf(
+                            $output->writeln(\sprintf(
                                 'User %d has no valid certificates for session %d.',
                                 $user->getId(),
                                 $session->getId()
@@ -157,6 +162,9 @@ class ReinscriptionCheckCommand extends Command
 
     /**
      * Checks if the user is already enrolled in a valid child session.
+     *
+     * @param mixed $user
+     * @param mixed $parentSession
      */
     private function isUserAlreadyEnrolledInChildSession($user, $parentSession): bool
     {
@@ -173,13 +181,16 @@ class ReinscriptionCheckCommand extends Command
 
     /**
      * Gets the user's certificates for the courses in the session.
+     *
+     * @param mixed $user
      */
     private function getUserCertificatesForSession($user, Session $session): array
     {
         $courses = $this->entityManager->getRepository(SessionRelCourse::class)
-            ->findBy(['session' => $session]);
+            ->findBy(['session' => $session])
+        ;
 
-        $courseIds = array_map(fn($rel) => $rel->getCourse()->getId(), $courses);
+        $courseIds = array_map(fn ($rel) => $rel->getCourse()->getId(), $courses);
 
         return $this->certificateRepository->createQueryBuilder('gc')
             ->join('gc.category', 'cat')
@@ -188,7 +199,8 @@ class ReinscriptionCheckCommand extends Command
             ->setParameter('user', $user)
             ->setParameter('courses', $courseIds)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
@@ -197,17 +209,18 @@ class ReinscriptionCheckCommand extends Command
     private function hasUserValidatedAllGradebooks(Session $session, array $certificates): bool
     {
         $courses = $this->entityManager->getRepository(SessionRelCourse::class)
-            ->findBy(['session' => $session]);
+            ->findBy(['session' => $session])
+        ;
 
-        return count($certificates) === count($courses);
+        return \count($certificates) === \count($courses);
     }
 
     /**
      * Returns the latest certificate creation date.
      */
-    private function getLatestCertificateDate(array $certificates): ?\DateTime
+    private function getLatestCertificateDate(array $certificates): ?DateTime
     {
-        $dates = array_map(fn($cert) => $cert->getCreatedAt(), $certificates);
+        $dates = array_map(fn ($cert) => $cert->getCreatedAt(), $certificates);
 
         if (empty($dates)) {
             return null;
@@ -218,6 +231,10 @@ class ReinscriptionCheckCommand extends Command
 
     /**
      * Enrolls the user in a new session and updates the previous session subscription.
+     *
+     * @param mixed $user
+     * @param mixed $newSession
+     * @param mixed $oldSession
      */
     private function enrollUserInSession($user, $newSession, $oldSession): void
     {
@@ -245,15 +262,21 @@ class ReinscriptionCheckCommand extends Command
 
     /**
      * Determines if the user has already been reinscribed.
+     *
+     * @param mixed $user
      */
     private function isUserReinscribed($user, Session $session): bool
     {
         $subscription = $this->findUserSubscriptionInSession($user, $session);
-        return $subscription && $subscription->getNewSubscriptionSessionId() !== null;
+
+        return $subscription && null !== $subscription->getNewSubscriptionSessionId();
     }
 
     /**
      * Finds the user's subscription in the specified session.
+     *
+     * @param mixed $user
+     * @param mixed $session
      */
     private function findUserSubscriptionInSession($user, $session)
     {
@@ -261,7 +284,8 @@ class ReinscriptionCheckCommand extends Command
             ->findOneBy([
                 'user' => $user,
                 'session' => $session,
-            ]);
+            ])
+        ;
     }
 
     /**
@@ -271,17 +295,17 @@ class ReinscriptionCheckCommand extends Command
     {
         $childSessions = $this->sessionRepository->findChildSessions($session);
 
-        /* @var Session $child */
+        /** @var Session $child */
         foreach ($childSessions as $child) {
             $validUntil = (clone $child->getAccessEndDate())->modify("-{$child->getDaysToReinscription()} days");
-            if (new \DateTime() <= $validUntil) {
+            if (new DateTime() <= $validUntil) {
                 return $child;
             }
         }
 
         $parentSession = $this->sessionRepository->findParentSession($session);
 
-        if ($parentSession && new \DateTime() <= $parentSession->getAccessEndDate()) {
+        if ($parentSession && new DateTime() <= $parentSession->getAccessEndDate()) {
             return $parentSession;
         }
 

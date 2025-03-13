@@ -823,11 +823,11 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     {
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq('user', $user))
-            ->andWhere(Criteria::expr()->eq('relationType', $relationType));
+            ->andWhere(Criteria::expr()->eq('relationType', $relationType))
+        ;
 
         return $this->users->matching($criteria)->count() > 0;
     }
-
 
     public function addGeneralCoach(User $coach): self
     {

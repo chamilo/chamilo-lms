@@ -27837,6 +27837,7 @@ msgstr ""
 msgid "Courses count by language"
 msgstr ""
 
+<<<<<<< HEAD
 msgid "AI provider"
 msgstr ""
 
@@ -27863,3 +27864,16 @@ msgstr ""
 
 msgid "Generate Aiken"
 msgstr ""
+
+msgid "Reminders"
+msgstr ""
+
+msgid "Add reminder"
+msgstr ""
+
+msgid "Update introduction links"
+msgstr ""
+
+msgid "Conference Room"
+msgstr ""
+

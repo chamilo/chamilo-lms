@@ -27851,6 +27851,7 @@ msgstr "Courses count"
 msgid "Courses count by language"
 msgstr "Courses count by language"
 
+<<<<<<< HEAD
 msgid "AI provider"
 msgstr "AI provider"
 
@@ -27877,3 +27878,16 @@ msgstr "An unexpected error occurred. Please contact support."
 
 msgid "Generate Aiken"
 msgstr "Generate Aiken"
+
+msgid "Reminders"
+msgstr "Reminders"
+
+msgid "Add reminder"
+msgstr "Add reminder"
+
+msgid "Update introduction links"
+msgstr "Update introduction links"
+
+msgid "Conference Room"
+msgstr "Conference Room"
+

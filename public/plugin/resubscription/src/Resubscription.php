@@ -2,16 +2,14 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookResubscribe;
-use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
+use Chamilo\CoreBundle\Event\Interfaces\PluginEventSubscriberInterface;
 
 /**
  * Limit session resubscriptions.
  *
  * @author Imanol Losada Oriol <imanol.losada@beeznest.com>
  */
-class Resubscription extends Plugin implements HookPluginInterface
+class Resubscription extends Plugin implements PluginEventSubscriberInterface
 {
     /**
      * Class constructor.
@@ -50,7 +48,7 @@ class Resubscription extends Plugin implements HookPluginInterface
      */
     public function install()
     {
-        $this->installHook();
+        $this->installEventSubscribers();
     }
 
     /**
@@ -58,26 +56,16 @@ class Resubscription extends Plugin implements HookPluginInterface
      */
     public function uninstall()
     {
-        $this->uninstallHook();
+        $this->uninstallEventSubscribers();
     }
 
-    /**
-     * Install the Resubscription hook.
-     */
-    public function installHook()
+    public function installEventSubscribers(): void
     {
-        $hookObserver = HookResubscription::create();
-
-        Container::instantiateHook(HookResubscribe::class)->attach($hookObserver);
+        //@todo: Attach ResubscriptionEventSusbcription
     }
 
-    /**
-     * Uninstall the Resubscription hook.
-     */
-    public function uninstallHook()
+    public function uninstallEventSubscribers(): void
     {
-        $hookObserver = HookResubscription::create();
-
-        Container::instantiateHook(HookResubscribe::class)->detach($hookObserver);
+        //@todo: Detach ResubscriptionEventSusbcription
     }
 }

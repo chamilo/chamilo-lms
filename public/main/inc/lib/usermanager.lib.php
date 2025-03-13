@@ -12,6 +12,10 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\UserCreatedEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\UserUpdatedEvent;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use ChamiloSession as Session;
@@ -167,6 +171,13 @@ class UserManager
 
             return false;
         }
+
+        Container::getEventDispatcher()
+            ->dispatch(
+                new UserCreatedEvent([], AbstractEvent::TYPE_PRE),
+                Events::USER_CREATED
+            )
+        ;
 
         $original_password = $password;
 
@@ -572,6 +583,17 @@ class UserManager
                     }
                 }
             }
+
+            Container::getEventDispatcher()
+                ->dispatch(
+                    new UserCreatedEvent(
+                        ['return' => $user, 'originalPassword' => $original_password],
+                        AbstractEvent::TYPE_POST
+                    ),
+                    Events::USER_CREATED
+                )
+            ;
+
             Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId, null, $creatorId);
         } else {
             Display::addFlash(
@@ -843,6 +865,13 @@ class UserManager
         $address = null,
         $emailTemplate = []
     ) {
+        $eventDispatcher = Container::getEventDispatcher();
+
+        $eventDispatcher->dispatch(
+            new UserUpdatedEvent([], AbstractEvent::TYPE_PRE),
+            Events::USER_UPDATED
+        );
+
         $original_password = $password;
         $user_id = (int) $user_id;
         $creator_id = (int) $creator_id;
@@ -1017,6 +1046,11 @@ class UserManager
                 $creatorEmail
             );
         }
+
+        $eventDispatcher->dispatch(
+            new UserUpdatedEvent(['user' => $user], AbstractEvent::TYPE_POST),
+            Events::USER_UPDATED
+        );
 
         return $user->getId();
     }

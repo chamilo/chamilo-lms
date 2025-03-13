@@ -8,9 +8,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * HookEvent.
- */
 #[ORM\Table(name: 'hook_event', options: ['row_format' => 'DYNAMIC'])]
 #[ORM\UniqueConstraint(name: 'class_name', columns: ['class_name'])]
 #[ORM\Entity]

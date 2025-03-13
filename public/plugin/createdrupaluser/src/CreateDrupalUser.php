@@ -2,16 +2,14 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookCreateUser;
-use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
+use Chamilo\CoreBundle\Event\Interfaces\PluginEventSubscriberInterface;
 
 /**
  * Create a user in Drupal website when a user is registered in Chamilo LMS.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-class CreateDrupalUser extends Plugin implements HookPluginInterface
+class CreateDrupalUser extends Plugin implements PluginEventSubscriberInterface
 {
     const EXTRAFIELD_VARIABLE_NAME = 'drupal_user_id';
 
@@ -47,7 +45,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     public function install()
     {
         $this->createExtraField();
-        $this->installHook();
+        $this->installEventSubscribers();
     }
 
     /**
@@ -55,34 +53,18 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
      */
     public function uninstall()
     {
-        $this->uninstallHook();
+        $this->uninstallEventSubscribers();
         $this->deleteExtraField();
     }
 
-    /**
-     * Install the Create User hook.
-     */
-    public function installHook()
+    public function installEventSubscribers(): void
     {
-        /** @var HookCreateDrupalUser $observer */
-        $observer = HookCreateDrupalUser::create();
-
-        Container::instantiateHook(HookCreateUser::class)->attach($observer);
+        //@todo attach CreateDrupalUserEventSubscriber
     }
 
-    /**
-     * Uninstall the Create User hook.
-     */
-    public function uninstallHook()
+    public function uninstallEventSubscribers(): void
     {
-        /** @var HookCreateDrupalUser $observer */
-        $observer = HookCreateDrupalUser::create();
-
-        $event = Container::instantiateHook(HookCreateUser::class);
-
-        if ($event) {
-            $event->detach($observer);
-        }
+        //@todo detach CreateDrupalUserEventSubscriber
     }
 
     /**

@@ -9,7 +9,7 @@ try {
     removeExtraField();
     removePluginTables();
 
-    $plugin->uninstallHook();
+    $plugin->uninstallEventSubscribers();
 } catch (Exception $exception) {
     $message = sprintf(
         $plugin->get_lang('UninstallError'),

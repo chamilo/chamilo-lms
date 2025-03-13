@@ -3,6 +3,7 @@
 
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class AppPlugin.
@@ -55,22 +56,18 @@ class AppPlugin
 
     /**
      * Read plugin from path.
-     *
-     * @return array
      */
-    public function read_plugins_from_path()
+    public function read_plugins_from_path(): array
     {
         /* We scan the plugin directory. Each folder is a potential plugin. */
         $pluginPath = api_get_path(SYS_PLUGIN_PATH);
+        $finder = (new Finder())->directories()->depth('== 0')->sortByName()->in($pluginPath);
+
         $plugins = [];
-        $handle = @opendir($pluginPath);
-        while (false !== ($file = readdir($handle))) {
-            if ('.' != $file && '..' != $file && is_dir(api_get_path(SYS_PLUGIN_PATH).$file)) {
-                $plugins[] = $file;
-            }
+
+        foreach ($finder as $file) {
+            $plugins[] = $file->getFilename();
         }
-        @closedir($handle);
-        sort($plugins);
 
         return $plugins;
     }
@@ -265,25 +262,6 @@ class AppPlugin
      */
     public function install($pluginName, $urlId = null)
     {
-        $urlId = (int) $urlId;
-        if (empty($urlId)) {
-            $urlId = api_get_current_access_url_id();
-        }
-
-        api_add_setting(
-            'installed',
-            'status',
-            $pluginName,
-            'setting',
-            'Plugins',
-            $pluginName,
-            '',
-            '',
-            '',
-            $urlId,
-            1
-        );
-
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/install.php';
 
         if (is_file($pluginPath) && is_readable($pluginPath)) {
@@ -299,23 +277,13 @@ class AppPlugin
      */
     public function uninstall($pluginName, $urlId = null)
     {
-        $urlId = (int) $urlId;
-        if (empty($urlId)) {
-            $urlId = api_get_current_access_url_id();
-        }
-
-        // First call the custom uninstall to allow full access to global settings
+        // First call the custom uninstallation to allow full access to global settings
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/uninstall.php';
         if (is_file($pluginPath) && is_readable($pluginPath)) {
             // Execute the uninstall procedure.
 
             require $pluginPath;
         }
-
-        // Second remove all remaining global settings
-        api_delete_settings_params(
-            ['category = ? AND access_url = ? AND subkey = ? ' => ['Plugins', $urlId, $pluginName]]
-        );
     }
 
     /**

@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Event\Interfaces\PluginEventSubscriberInterface;
 use Chamilo\PluginBundle\ExternalNotificationConnect\Entity\AccessToken;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
@@ -11,7 +12,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException;
 
-class ExternalNotificationConnectPlugin extends Plugin implements HookPluginInterface
+class ExternalNotificationConnectPlugin extends Plugin implements PluginEventSubscriberInterface
 {
     public const SETTING_AUTH_URL = 'auth_url';
     public const SETTING_AUTH_USERNAME = 'auth_username';
@@ -52,64 +53,38 @@ class ExternalNotificationConnectPlugin extends Plugin implements HookPluginInte
 
     public function performActionsAfterConfigure(): ExternalNotificationConnectPlugin
     {
-        $portfolioItemAddedEvent = HookPortfolioItemAdded::create();
-        $portfolioItemEditedEvent = HookPortfolioItemEdited::create();
-        $portfolioItemDeletedEvent = HookPortfolioItemDeleted::create();
-        $portfolioItemVisibilityEvent = HookPortfolioItemVisibility::create();
-
-        $portfolioItemAddedObserver = ExternalNotificationConnectPortfolioItemAddedHookObserver::create();
-        $portfolioItemEditedObserver = ExternalNotificationConnectPortfolioItemEditedHookObserver::create();
-        $portfolioItemDeletedObserver = ExternalNotificationConnectPortfolioItemDeletedHookObserver::create();
-        $portfolioItemVisibilityObserver = ExternalNotificationConnectPortfolioItemVisibilityHookObserver::create();
-
         if ('true' === $this->get(self::SETTING_NOTIFY_PORTFOLIO)) {
-            $portfolioItemAddedEvent->attach($portfolioItemAddedObserver);
-            $portfolioItemEditedEvent->attach($portfolioItemEditedObserver);
-            $portfolioItemDeletedEvent->attach($portfolioItemDeletedObserver);
-            $portfolioItemVisibilityEvent->attach($portfolioItemVisibilityObserver);
+            //@todo attach ExternalNotificationConnectEventSubscriber::onPortfolioItemAdded
+            //@todo attach ExternalNotificationConnectEventSubscriber::onPortfolioItemEdited
+            //@todo attach ExternalNotificationConnectEventSubscriber::onPortfolioItemDeleted
+            //@todo attach ExternalNotificationConnectEventSubscriber::onPortfolioItemVisibility
         } else {
-            $portfolioItemAddedEvent->detach($portfolioItemAddedObserver);
-            $portfolioItemEditedEvent->detach($portfolioItemEditedObserver);
-            $portfolioItemDeletedEvent->detach($portfolioItemDeletedObserver);
-            $portfolioItemVisibilityEvent->detach($portfolioItemVisibilityObserver);
+            //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemAdded
+            //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemEdited
+            //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemDeleted
+            //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemVisibility
         }
 
-        $lpCreatedEvent = HookLearningPathCreated::create();
-
-        $lpCreatedObserver = ExternalNotificationConnectLearningPathCreatedHookObserver::create();
-
         if ('true' === $this->get(self::SETTING_NOTIFY_LEARNPATH)) {
-            $lpCreatedEvent->attach($lpCreatedObserver);
+            //@todo attach ExternalNotificationConnectEventSubscriber::onLpCreated
         } else {
-            $lpCreatedEvent->detach($lpCreatedObserver);
+            //@todo detach ExternalNotificationConnectEventSubscriber::onLpCreated
         }
 
         return $this;
     }
 
-    public function installHook()
+    public function installEventSubscribers(): void
     {
     }
 
-    public function uninstallHook()
+    public function uninstallEventSubscribers(): void
     {
-        $portfolioItemAddedEvent = HookPortfolioItemAdded::create();
-        $portfolioItemEditedEvent = HookPortfolioItemEdited::create();
-        $portfolioItemDeletedEvent = HookPortfolioItemDeleted::create();
-        $portfolioItemVisibilityEvent = HookPortfolioItemVisibility::create();
-        $lpCreatedEvent = HookLearningPathCreated::create();
-
-        $portfolioItemAddedObserver = ExternalNotificationConnectPortfolioItemAddedHookObserver::create();
-        $portfolioItemEditedObserver = ExternalNotificationConnectPortfolioItemEditedHookObserver::create();
-        $portfolioItemDeletedObserver = ExternalNotificationConnectPortfolioItemDeletedHookObserver::create();
-        $portfolioItemVisibilityObserver = ExternalNotificationConnectPortfolioItemVisibilityHookObserver::create();
-        $lpCreatedObserver = ExternalNotificationConnectLearningPathCreatedHookObserver::create();
-
-        $portfolioItemAddedEvent->detach($portfolioItemAddedObserver);
-        $portfolioItemEditedEvent->detach($portfolioItemEditedObserver);
-        $portfolioItemDeletedEvent->detach($portfolioItemDeletedObserver);
-        $portfolioItemVisibilityEvent->detach($portfolioItemVisibilityObserver);
-        $lpCreatedEvent->detach($lpCreatedObserver);
+        //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemAdded
+        //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemEdited
+        //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemDeleted
+        //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemVisibility
+        //@todo detach ExternalNotificationConnectEventSubscriber::onLpCreated
     }
 
     public function install()
@@ -125,12 +100,12 @@ class ExternalNotificationConnectPlugin extends Plugin implements HookPluginInte
         }
 
         $this->installDBTables();
-        $this->installHook();
+        $this->installEventSubscribers();
     }
 
     public function uninstall()
     {
-        $this->uninstallHook();
+        $this->uninstallEventSubscribers();
         $this->uninstallDBTables();
     }
 

@@ -3,6 +3,10 @@
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\UserUpdatedEvent;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
@@ -367,6 +371,11 @@ $form->setDefaults($user_data);
 $filtered_extension = false;
 
 if ($form->validate()) {
+    Container::getEventDispatcher()->dispatch(
+        new UserUpdatedEvent([], AbstractEvent::TYPE_PRE),
+        Events::USER_UPDATED
+    );
+
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
     $user_data['item_id'] = api_get_user_id();
@@ -639,6 +648,14 @@ if ($form->validate()) {
         true
     );
     Session::write('_user', $userInfo);
+
+    Container::getEventDispatcher()->dispatch(
+        new UserUpdatedEvent(
+            ['user' => api_get_user_entity()],
+            AbstractEvent::TYPE_POST
+        ),
+        Events::USER_UPDATED
+    );
 
     /*if ($hook) {
         Database::getManager()->clear(User::class); // Avoid cache issue (user entity is used before)

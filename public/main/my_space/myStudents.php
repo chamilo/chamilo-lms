@@ -5,6 +5,10 @@
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\MyStudentsLpTrackingEvent;
+use Chamilo\CoreBundle\Event\MyStudentsQuizTrackingEvent;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -1615,18 +1619,15 @@ if (empty($details)) {
             );
         }
 
-        /*$hookLpTracking = HookMyStudentsLpTracking::create();
-        if ($hookLpTracking) {
-            $hookHeaders = $hookLpTracking->notifyTrackingHeader();
+        $lpTrackingEvent = new MyStudentsLpTrackingEvent([], AbstractEvent::TYPE_PRE);
 
-            foreach ($hookHeaders as $hookHeader) {
-                if (isset($hookHeader['value'])) {
-                $columnHeadersToExport[] = $hookHeader['value'];
+        Container::getEventDispatcher()->dispatch($lpTrackingEvent, Events::MY_STUDENTS_LP_TRACKING);
 
-                $headers .= Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
-            }
-}
-        }*/
+        foreach ($lpTrackingEvent->getHeaders() as $eventHeader) {
+            $columnHeadersToExport[] = $eventHeader['title'];
+
+            $headers .= Display::tag('th', $eventHeader['title'], $eventHeader['attrs']);
+        }
 
         $csv_content[] = $columnHeadersToExport;
         $columnHeadersKeys = array_keys($columnHeaders);
@@ -1816,6 +1817,21 @@ if (empty($details)) {
                     echo Display::tag('td', $start_time);
                 }
 
+                $lpTrackingEvent = new MyStudentsLpTrackingEvent(
+                    ['lp_id' => $lp_id, 'student_id' => $studentId],
+                    AbstractEvent::TYPE_POST
+                );
+
+                Container::getEventDispatcher()->dispatch($lpTrackingEvent, Events::MY_STUDENTS_LP_TRACKING);
+
+                foreach ($lpTrackingEvent->getContents() as $eventContent) {
+                    if (isset($eventContent['value'])) {
+                        $contentToExport[] = strip_tags($eventContent['value']);
+
+                        echo Display::tag('td', $eventContent['value'], $eventContent['attrs']);
+                    }
+                }
+
                 $csv_content[] = $contentToExport;
 
                 if (true === $any_result) {
@@ -1875,6 +1891,17 @@ if (empty($details)) {
         echo '<th>'.get_lang('Attempts').'</th>';
         echo '<th>'.get_lang('Latest attempt').'</th>';
         echo '<th>'.get_lang('All attempts').'</th>';
+
+        $myStudentsQuizTrackingEvent = new MyStudentsQuizTrackingEvent([], AbstractEvent::TYPE_PRE);
+
+        Container::getEventDispatcher()->dispatch($myStudentsQuizTrackingEvent, Events::MY_STUDENTS_EXERCISE_TRACKING);
+
+        $eventHeaders = array_map(
+            fn(array $eventHeader) => Display::tag('th', $eventHeader['title'], $eventHeader['attrs']),
+            $myStudentsQuizTrackingEvent->getHeaders()
+        );
+
+        echo implode(PHP_EOL, $eventHeaders);
         echo '</tr></thead><tbody>';
 
         $csv_content[] = [];
@@ -1884,6 +1911,15 @@ if (empty($details)) {
             get_lang('Average score in learning paths'),
             get_lang('Attempts'),
         ];
+
+        $eventHeaders = array_map(
+            fn(array $eventHeader) => strip_tags($eventHeader['title']),
+            $myStudentsQuizTrackingEvent->getHeaders()
+        );
+
+        $csvContentIndex = count($csv_content) - 1;
+        $csv_content[$csvContentIndex] = array_merge($csv_content[$csvContentIndex], $eventHeaders);
+
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
         $repo = Container::getQuizRepository();
@@ -1914,9 +1950,16 @@ if (empty($details)) {
                 );
 
                 $lp_name = '-';
-                /*$hookContents = $hookQuizTracking
-                    ? $hookQuizTracking->notifyTrackingContent($exercise_id, $studentId)
-                    : [];*/
+
+                $myStudentsQuizTrackingEvent = new MyStudentsQuizTrackingEvent(
+                    ['exercise_id' => $exercise_id, 'student_id' => $studentId],
+                    AbstractEvent::TYPE_POST
+                );
+
+                Container::getEventDispatcher()->dispatch($myStudentsQuizTrackingEvent, Events::MY_STUDENTS_EXERCISE_TRACKING);
+
+                $eventContents = $myStudentsQuizTrackingEvent->getContents();
+
                 $hookContents = [];
                 if (!isset($score_percentage) && $count_attempts > 0) {
                     $scores_lp = Tracking::get_avg_student_exercise_score(
@@ -2000,13 +2043,9 @@ if (empty($details)) {
                 }
                 echo '</td>';
 
-                /*if (!empty($hookContents)) {
-                    foreach ($hookContents as $hookContent) {
-                        if (isset($hookContent['value'])) {
-                            echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
-                        }
-                    }
-                }*/
+                foreach ($eventContents as $eventContent) {
+                    echo Display::tag('td', $eventContent['value'], $eventContent['attrs']);
+                }
 
                 echo '</tr>';
                 $data_exercices[$i][] = $exercise->getTitle();
@@ -2023,11 +2062,9 @@ if (empty($details)) {
                 if (!empty($hookContents)) {
                     $csvContentIndex = count($csv_content) - 1;
 
-                    /*foreach ($hookContents as $hookContent) {
-                        if (isset($hookContent['value'])) {
-                            $csv_content[$csvContentIndex][] = strip_tags($hookContent['value']);
-                        }
-                    }*/
+                    foreach ($eventContents as $eventContent) {
+                        $csv_content[$csvContentIndex][] = strip_tags($eventContent['value']);
+                    }
                 }
                 $i++;
             }

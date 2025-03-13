@@ -282,6 +282,12 @@ if (isset($_SESSION['flash_message'])) {
         'success',
         false
     );
+} else {
+    $returnMessage .= Display::return_message(
+        get_lang('The skill has been successfully assigned.'),
+        'success',
+        false
+    );
 }
 
 $template = new Template(get_lang('Issued badge information'));

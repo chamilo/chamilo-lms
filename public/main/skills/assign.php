@@ -298,15 +298,10 @@ if ($form->validate()) {
     }
 
     if ($user->hasSkill($skill)) {
-        Display::addFlash(
-            Display::return_message(
-                sprintf(
-                    get_lang('The user %s has already achieved the skill %s'),
-                    UserManager::formatUserFullName($user),
-                    $skill->getTitle()
-                ),
-                'warning'
-            )
+        $_SESSION['flash_message'] = sprintf(
+            get_lang('The user %s has already achieved the skill %s'),
+            UserManager::formatUserFullName($user),
+            $skill->getTitle()
         );
 
         header('Location: '.$currentUrl);
@@ -381,7 +376,8 @@ if ($form->validate()) {
     if (isset($_POST['save_and_add_more'])) {
         header('Location: '.api_get_path(WEB_PATH)."badge/{$skillUser->getId()}");
     } else {
-        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId);
+        $secToken = Security::get_token();
+        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId.'&sec_token='.$secToken);
     }
     exit;
 }
@@ -446,6 +442,11 @@ $(function() {
 });
 </script>';
 
+$flashMessage = '';
+if (isset($_SESSION['flash_message'])) {
+    $flashMessage = Display::return_message($_SESSION['flash_message'], 'warning');
+    unset($_SESSION['flash_message']);
+}
 $template = new Template(get_lang('Add skill'));
-$template->assign('content', $form->returnForm());
+$template->assign('content', $flashMessage.$form->returnForm());
 $template->display_one_col_template();

@@ -27837,7 +27837,6 @@ msgstr ""
 msgid "Courses count by language"
 msgstr ""
 
-<<<<<<< HEAD
 msgid "AI provider"
 msgstr ""
 

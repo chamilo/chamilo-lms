@@ -6574,15 +6574,15 @@ class Tracking
      * Get the HTML code for show a block with the achieved user skill on course/session.
      *
      * @param int  $userId
-     * @param int  $courseId
-     * @param int  $sessionId
-     * @param bool $forceView forces the view of the skills, not checking for deeper access
+     * @param ?int  $courseId
+     * @param ?int  $sessionId
+     * @param ?bool $forceView forces the view of the skills, not checking for deeper access
      *
      * @return string
      */
-    public static function displayUserSkills($userId, $courseId = 0, $sessionId = 0, $forceView = false)
+    public static function displayUserSkills(int $userId, ?int $courseId = 0, ?int $sessionId = 0, ?bool $forceView = false): string
     {
-        if (false === SkillModel::isAllowed($userId, false) && false == $forceView) {
+        if (false === SkillModel::isAllowed($userId, false) && !$forceView) {
             return '';
         }
         $skillManager = new SkillModel();
@@ -6591,18 +6591,17 @@ class Tracking
     }
 
     /**
+     * Return time spent by the given user in the given course/session, from the track_e_access_complete table, and
+     * breakdown time items in different array elements
      * @param int $userId
      * @param int $courseId
      * @param int $sessionId
      *
      * @return array
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function getCalculateTime($userId, $courseId, $sessionId)
+    public static function getCalculateTime(int $userId, int $courseId, int $sessionId): array
     {
-        $userId = (int) $userId;
-        $courseId = (int) $courseId;
-        $sessionId = (int) $sessionId;
-
         if (empty($userId) || empty($courseId)) {
             return [];
         }
@@ -6763,18 +6762,19 @@ class Tracking
      *
      * @param int User ID
      * @param string Datetime
-     * @param bool Whether to return the IP as a link or just as an IP
-     * @param string If defined and return_as_link if true, will be used as the text to be shown as the link
+     * @param ?bool Whether to return the IP as a link or just as an IP
+     * @param ?string If defined and return_as_link if true, will be used as the text to be shown as the link
      *
      * @return string IP address (or false on error)
      * @assert (0,0) === false
+     * @throws \Doctrine\DBAL\Exception
      */
     public static function get_ip_from_user_event(
-        $user_id,
-        $event_date,
-        $return_as_link = false,
-        $body_replace = null
-    ) {
+        int $user_id,
+        string $event_date,
+        ?bool $return_as_link = false,
+        ?string $body_replace = null
+    ): mixed {
         if (empty($user_id) || empty($event_date)) {
             return false;
         }
@@ -6806,15 +6806,15 @@ class Tracking
     /**
      * @param int   $userId
      * @param array $courseInfo
-     * @param int   $sessionId
+     * @param ?int   $sessionId
      *
      * @return array
      */
     public static function getToolInformation(
-        $userId,
-        $courseInfo,
-        $sessionId = 0
-    ) {
+        int $userId,
+        array $courseInfo,
+        ?int $sessionId = 0
+    ): array {
         $csvContent = [];
         $courseToolInformation = '';
         $headerTool = [

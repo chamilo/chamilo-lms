@@ -148,23 +148,21 @@ export function useSidebarMenu() {
       })
     }
 
-    if (showTabsSetting.indexOf("videoconference") > -1) {
-      items.push(
-        createMenuItem(
-          "videoconference",
-          "mdi-video",
-          "Videoconference",
-          null,
-          platformConfigStore.plugins?.bbb?.show_global_conference_link
-            ? [
-                {
-                  label: t("Conference Room"),
-                  url: platformConfigStore.plugins.bbb.listingURL,
-                },
-              ]
-            : null,
-        ),
-      )
+    if (
+      showTabsSetting.includes("videoconference") > -1 &&
+      platformConfigStore.plugins?.bbb?.show_global_conference_link &&
+      platformConfigStore.plugins?.bbb?.listingURL
+    ) {
+      const conferenceItems = [
+        {
+          label: t("Conference Room"),
+          url: platformConfigStore.plugins.bbb.listingURL,
+        },
+      ]
+
+      if (conferenceItems.length > 0) {
+        items.push(createMenuItem("videoconference", "mdi-video", "Videoconference", null, conferenceItems))
+      }
     }
 
     if (showTabsSetting.indexOf("diagnostics") > -1) {

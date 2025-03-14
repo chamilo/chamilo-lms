@@ -1157,8 +1157,8 @@ EOT;
      * @return string
      */
     function attr_on_filter($html) {
-        $prefix = uniqid('data-cke-').'-';
-        return preg_replace('/(\s)(on)/i', '$1'.$prefix.'$2', $html);
+        $pattern = '/\s+on\w+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i';
+        return preg_replace($pattern, '', $html);
     }
 
     /**

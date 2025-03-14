@@ -7,6 +7,8 @@
 
 use Chamilo\UserBundle\Entity\User;
 
+$GLOBALS['noredirection'] = empty($_GET) || isset($_GET['code']) || isset($_GET['state']) || isset($_GET['session_state']) || isset($_GET['error']);
+
 require __DIR__.'/../../../main/inc/global.inc.php';
 
 if (!empty($_GET['error']) && !empty($_GET['state'])) {
@@ -142,4 +144,7 @@ ChamiloSession::write('redirect_after_not_allow_page', $redirectAfterNotAllowPag
 ChamiloSession::write('_user', $userInfo);
 ChamiloSession::write('_user_auth_source', 'azure_active_directory');
 Event::eventLogin($userInfo['user_id']);
+
+$GLOBALS['noredirection'] = false;
+
 Redirect::session_request_uri(true, $userInfo['user_id']);

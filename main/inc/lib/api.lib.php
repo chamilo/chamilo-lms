@@ -1449,7 +1449,7 @@ function api_protect_teacher_script()
 function api_block_anonymous_users($printHeaders = true)
 {
     $user = api_get_user_info();
-    if (!(isset($user['user_id']) && $user['user_id']) || api_is_anonymous($user['user_id'], true)) {
+    if (empty($user['user_id']) || api_is_anonymous($user['user_id'], true)) {
         api_not_allowed($printHeaders);
 
         return false;
@@ -4030,26 +4030,9 @@ function api_not_allowed(
 
     global $this_section;
 
-    // Check if a custom file (login.tpl) exists for custompages included overrides
-    if ((!isset($user_id) || api_is_anonymous()) && CustomPages::enabled()) {
-        $customLoginTemplate = Template::findTemplateFilePath('custompage/login.tpl');
-        if (file_exists(api_get_path(SYS_TEMPLATE_PATH).$customLoginTemplate)) {
-            if (empty($_SESSION['request_uri'])) {
-                $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-            }
-            $tpl = new Template(null, false, false);
-            $content = $tpl->fetch($customLoginTemplate);
-            $tpl->assign('content', $content);
-            $tpl->display_no_layout_template();
-            exit;
-        }
-    }
-
-    if (CustomPages::enabled() && !isset($user_id)) {
-        if (empty($user_id)) {
-            // Why the CustomPages::enabled() need to be to set the request_uri
-            $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-        }
+    if (CustomPages::enabled() && (empty($user_id) || api_is_anonymous())) {
+        // Why the CustomPages::enabled() need to be to set the request_uri
+        $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
     }
 

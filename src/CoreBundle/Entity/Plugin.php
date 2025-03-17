@@ -1,52 +1,49 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource]
 #[ORM\Entity]
 #[ORM\Table(name: 'plugin')]
 class Plugin
 {
+    public const SOURCE_THIRD_PARTY = 'third_party';
+    public const SOURCE_OFFICIAL = 'official';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
-    #[Groups(['plugin:read', 'plugin:write'])]
     private string $title;
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(['plugin:read', 'plugin:write'])]
     private bool $installed = false;
 
-    #[ORM\Column(type: 'boolean')]
-    #[Groups(['plugin:read', 'plugin:write'])]
-    private bool $active = false;
-
     #[ORM\Column(type: 'string', length: 20)]
-    #[Groups(['plugin:read', 'plugin:write'])]
-    private string $version;
+    private string $installedVersion;
 
-    #[ORM\Column(type: 'integer')]
-    #[Groups(['plugin:read', 'plugin:write'])]
-    private int $accessUrlId;
-
-    #[ORM\Column(type: 'json', nullable: true)]
-    #[Groups(['plugin:read', 'plugin:write'])]
-    private ?array $configuration = [];
-
-    #[ORM\Column(type: 'string', length: 20, options: ["default" => "third_party"])]
-    #[Groups(['plugin:read', 'plugin:write'])]
+    #[ORM\Column(type: 'string', length: 20, options: ['default' => self::SOURCE_THIRD_PARTY])]
     private string $source = 'third_party';
+
+    /**
+     * @var Collection<int, AccessUrlRelPlugin>
+     */
+    #[ORM\OneToMany(mappedBy: 'plugin', targetEntity: AccessUrlRelPlugin::class, orphanRemoval: true)]
+    private Collection $urls;
+
+    public function __construct()
+    {
+        $this->urls = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -61,6 +58,7 @@ class Plugin
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -72,50 +70,19 @@ class Plugin
     public function setInstalled(bool $installed): self
     {
         $this->installed = $installed;
+
         return $this;
     }
 
-    public function isActive(): bool
+    public function getInstalledVersion(): string
     {
-        return $this->active;
+        return $this->installedVersion;
     }
 
-    public function setActive(bool $active): self
+    public function setInstalledVersion(string $installedVersion): self
     {
-        $this->active = $active;
-        return $this;
-    }
+        $this->installedVersion = $installedVersion;
 
-    public function getVersion(): string
-    {
-        return $this->version;
-    }
-
-    public function setVersion(string $version): self
-    {
-        $this->version = $version;
-        return $this;
-    }
-
-    public function getAccessUrlId(): int
-    {
-        return $this->accessUrlId;
-    }
-
-    public function setAccessUrlId(int $accessUrlId): self
-    {
-        $this->accessUrlId = $accessUrlId;
-        return $this;
-    }
-
-    public function getConfiguration(): ?array
-    {
-        return $this->configuration;
-    }
-
-    public function setConfiguration(?array $configuration): self
-    {
-        $this->configuration = $configuration;
         return $this;
     }
 
@@ -127,6 +94,37 @@ class Plugin
     public function setSource(string $source): self
     {
         $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AccessUrlRelPlugin>
+     */
+    public function getUrls(): Collection
+    {
+        return $this->urls;
+    }
+
+    public function addUrl(AccessUrlRelPlugin $url): static
+    {
+        if (!$this->urls->contains($url)) {
+            $this->urls->add($url);
+            $url->setPlugin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUrl(AccessUrlRelPlugin $url): static
+    {
+        if ($this->urls->removeElement($url)) {
+            // set the owning side to null (unless already changed)
+            if ($url->getPlugin() === $this) {
+                $url->setPlugin(null);
+            }
+        }
+
         return $this;
     }
 }

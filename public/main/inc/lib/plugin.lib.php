@@ -192,11 +192,10 @@ class AppPlugin
      *
      * @return array
      */
-    public function getOfficialPlugins()
+    public static function getOfficialPlugins(): array
     {
-        static $officialPlugins = null;
         // Please keep this list alphabetically sorted
-        $officialPlugins = [
+        return [
             'advanced_subscription',
             'ai_helper',
             'azure_active_directory',
@@ -252,8 +251,6 @@ class AppPlugin
             'userremoteservice',
             'zoom',
         ];
-
-        return $officialPlugins;
     }
 
     /**

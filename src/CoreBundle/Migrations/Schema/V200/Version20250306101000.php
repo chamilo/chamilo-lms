@@ -1,10 +1,15 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
 declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use AppPlugin;
+use Chamilo\CoreBundle\Entity\Plugin;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20250306101000 extends AbstractMigrationChamilo
@@ -16,37 +21,109 @@ final class Version20250306101000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        // Insert unique plugin data from settings to plugin
-        $this->addSql("
-            INSERT INTO plugin (title, installed, active, version, access_url_id, configuration, source)
-            SELECT
-                subkey AS title,
-                MAX(IF(variable = 'status', 1, 0)) AS installed,
-                MAX(IF(selected_value = 'true', 1, 0)) AS active,
-                '1.0.0' AS version,
-                access_url AS access_url_id,
-                '{}' AS configuration,
-                'third_party' AS source
-            FROM settings
-            WHERE category = 'plugins'
-            GROUP BY subkey;
-        ");
+        foreach ($this->getPluginTitles() as $pluginTitle) {
+            $pluginId = $this->insertPlugin($pluginTitle);
+
+            $settingsByUrl = $this->getPluginSettingsByUrl($pluginTitle);
+
+            $this->insertPluginSettingsByUrl($pluginId, $settingsByUrl);
+        }
     }
 
     public function down(Schema $schema): void
     {
-        // Restore data back to settings if rolling back
-        $this->addSql("
-            INSERT INTO settings (variable, subkey, type, category, selected_value, title, access_url)
-            SELECT
-                'status' AS variable,
-                title AS subkey,
-                'setting' AS type,
-                'plugins' AS category,
-                IF(active = 1, 'true', 'false') AS selected_value,
-                title AS title,
-                access_url_id AS access_url
-            FROM plugin;
-        ");
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getPluginTitles(): array
+    {
+        return $this->connection
+            ->executeQuery(
+                "SELECT title FROM settings
+                    WHERE category = 'plugins' AND type = 'setting' AND subkey IS NOT NULL AND variable <> 'status'
+                    GROUP BY subkey"
+            )
+            ->fetchAllAssociative()
+        ;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function insertPlugin(string $pluginTitle): int
+    {
+        $pluginSource = in_array($pluginTitle, AppPlugin::getOfficialPlugins())
+            ? Plugin::SOURCE_OFFICIAL
+            : Plugin::SOURCE_THIRD_PARTY;
+
+        $this->connection->insert(
+            'plugin',
+            [
+                'title' => $pluginTitle,
+                'installed' => 1,
+                'installed_version' => '1.0.0',
+                'source' => $pluginSource,
+            ]
+        );
+
+        return $this->connection->lastInsertId();
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getPluginSettingsByUrl(string $pluginTitle): array
+    {
+        $settingsByUrl = [];
+
+        $pluginSettings = $this->connection
+            ->executeQuery(
+                "SELECT variable, selected_value, access_url
+                        FROM settings
+                        WHERE category = 'plugins'
+                            AND type = 'setting'
+                            AND subkey IS NOT NULL
+                            AND variable <> 'status'
+                            AND subkey = '$pluginTitle'"
+            )
+            ->fetchAllAssociative()
+        ;
+
+        foreach ($pluginSettings as $pluginSetting) {
+            if (!isset($settingsByUrl[$pluginSetting['access_url']])) {
+                $settingsByUrl[$pluginSetting['access_url']] = [];
+            }
+
+            $variable = str_replace($pluginSetting['title'].'_', '', $pluginSetting['variable']);
+
+            $settingsByUrl[$pluginSetting['access_url']][$variable] = $pluginSetting['selected_value'];
+        }
+
+        return $settingsByUrl;
+    }
+
+    /**
+     * @param int $pluginId
+     * @param array<int, array<string, mixed>> $settingsByUrl
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    private function insertPluginSettingsByUrl(int $pluginId, array $settingsByUrl): void
+    {
+        foreach ($settingsByUrl as $accessUrlId => $pluginSettings) {
+            $this->connection->insert(
+                'access_url_rel_plugin',
+                [
+                    'plugin_id' => $pluginId,
+                    'url_id' => $accessUrlId,
+                    'active' => 1,
+                    'configuration' => json_encode($pluginSettings),
+                ]
+            );
+        }
     }
 }

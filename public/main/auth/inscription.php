@@ -190,8 +190,9 @@ if (!empty($course_code_redirect)) {
     Session::write('exercise_redirect', $exercise_redirect);
 }
 
+// allow_registration can be 'true', 'false', 'approval' or 'confirmation'. Only 'false' hides the form.
 if (false === $userAlreadyRegisteredShowTerms &&
-    'true' === api_get_setting('allow_registration')
+    'false' !== api_get_setting('allow_registration')
 ) {
     // EMAIL
     $form->addElement('text', 'email', get_lang('e-mail'), ['size' => 40]);

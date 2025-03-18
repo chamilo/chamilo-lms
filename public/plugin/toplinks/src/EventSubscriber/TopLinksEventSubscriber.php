@@ -11,10 +11,10 @@ use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class TopLinksEventSubscriber implements EventSubscriberInterface
+readonly class TopLinksEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -30,11 +30,11 @@ class TopLinksEventSubscriber implements EventSubscriberInterface
 
         $linkRepo = $this->entityManager->getRepository(TopLink::class);
 
-        $courseId = $event->getCourseInfo()['id'];
+        $course = $event->getCourse();
 
-        if (AbstractEvent::TYPE_POST === $event->getType()) {
+        if (AbstractEvent::TYPE_POST === $event->getType() && $course) {
             foreach ($linkRepo->findAll() as $link) {
-                $plugin->addToolInCourse($courseId, $link);
+                $plugin->addToolInCourse($course->getId(), $link);
             }
         }
     }

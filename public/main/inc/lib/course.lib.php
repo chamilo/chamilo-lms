@@ -78,15 +78,21 @@ class CourseManager
             $params['directory'] = $keys['currentCourseRepository'];
             $courseInfo = api_get_course_info($params['code']);
 
-            Container::getEventDispatcher()
-                ->dispatch(
-                    new CourseCreatedEvent(['course_info' => $courseInfo], AbstractEvent::TYPE_POST),
-                    Events::COURSE_CREATED
-                )
-            ;
-
             if (empty($courseInfo)) {
+                $eventDispatcher = Container::getEventDispatcher();
+
+                $eventDispatcher->dispatch(
+                    new CourseCreatedEvent([], AbstractEvent::TYPE_PRE),
+                    Events::COURSE_CREATED
+                );
+
                 $course = AddCourse::register_course($params);
+
+                $eventDispatcher->dispatch(
+                    new CourseCreatedEvent(['course' => $course], AbstractEvent::TYPE_POST),
+                    Events::COURSE_CREATED
+                );
+
                 if (null !== $course) {
                     self::fillCourse($course, $params, $authorId);
 

@@ -20,10 +20,10 @@ class H5pImportEventSubscriber implements EventSubscriberInterface
 
     public function onCreateCourse(CourseCreatedEvent $event): void
     {
-        if (AbstractEvent::TYPE_POST === $event->getType()) {
-            H5pImportPlugin::create()
-                ->addCourseTool($event->getCourseInfo()['id'])
-            ;
+        $course = $event->getCourse();
+
+        if (AbstractEvent::TYPE_POST === $event->getType() && $course) {
+            H5pImportPlugin::create()->addCourseTool($course->getId());
         }
     }
 }

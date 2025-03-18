@@ -6,10 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Event;
 
+use Chamilo\CoreBundle\Entity\Course;
+
 class CourseCreatedEvent extends AbstractEvent
 {
-    public function getCourseInfo(): array
+    public function getCourse(): ?Course
     {
-        return $this->data['course_info'] ?? [];
+        return $this->data['course'] ?? null;
     }
 }

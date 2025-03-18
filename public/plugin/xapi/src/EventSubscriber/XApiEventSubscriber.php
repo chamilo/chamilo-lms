@@ -83,8 +83,10 @@ class XApiEventSubscriber implements EventSubscriberInterface
     {
         $plugin = XApiPlugin::create();
 
-        if (AbstractEvent::TYPE_POST === $event->getType()) {
-            $plugin->addCourseToolForTinCan($event->getCourseInfo()['id']);
+        $course = $event->getCourse();
+
+        if (AbstractEvent::TYPE_POST === $event->getType() && $course) {
+            $plugin->addCourseToolForTinCan($course->getId());
         }
     }
 

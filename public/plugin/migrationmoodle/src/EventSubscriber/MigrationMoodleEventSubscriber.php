@@ -14,6 +14,13 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MigrationMoodleEventSubscriber implements EventSubscriberInterface
 {
+    private MigrationMoodlePlugin $plugin;
+
+    public function __construct()
+    {
+        $this->plugin = MigrationMoodlePlugin::create();
+    }
+
     /**
      * @inheritDoc
      */
@@ -29,6 +36,10 @@ class MigrationMoodleEventSubscriber implements EventSubscriberInterface
      */
     public function onCheckLoginCredentials(CheckLoginCredentialsEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)) {
+            return;
+        }
+
         $userData = $event->getUser();
         $credentials = $event->getCredentials();
 

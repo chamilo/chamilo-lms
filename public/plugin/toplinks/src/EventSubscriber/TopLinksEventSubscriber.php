@@ -13,9 +13,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 readonly class TopLinksEventSubscriber implements EventSubscriberInterface
 {
+    private TopLinksPlugin $plugin;
+
     public function __construct(
         private EntityManagerInterface $entityManager
-    ) {}
+    ) {
+        $this->plugin = TopLinksPlugin::create();
+    }
 
     public static function getSubscribedEvents(): array
     {
@@ -26,7 +30,9 @@ readonly class TopLinksEventSubscriber implements EventSubscriberInterface
 
     public function onCreateCourse(CourseCreatedEvent $event): void
     {
-        $plugin = TopLinksPlugin::create();
+        if (!$this->plugin->isEnabled(true)) {
+            return;
+        }
 
         $linkRepo = $this->entityManager->getRepository(TopLink::class);
 
@@ -34,7 +40,7 @@ readonly class TopLinksEventSubscriber implements EventSubscriberInterface
 
         if (AbstractEvent::TYPE_POST === $event->getType() && $course) {
             foreach ($linkRepo->findAll() as $link) {
-                $plugin->addToolInCourse($course->getId(), $link);
+                $this->plugin->addToolInCourse($course->getId(), $link);
             }
         }
     }

@@ -10,6 +10,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CreateDrupalUserEventSubscriber implements EventSubscriberInterface
 {
+    private CreateDrupalUser $plugin;
+
+    public function __construct()
+    {
+        $this->plugin = CreateDrupalUser::create();
+    }
+
     /**
      * @inheritDoc
      */
@@ -22,7 +29,11 @@ class CreateDrupalUserEventSubscriber implements EventSubscriberInterface
 
     public function onCreateUser(UserCreatedEvent $event): void
     {
-        $drupalDomain = CreateDrupalUser::create()->get('drupal_domain');
+        if (!$this->plugin->isEnabled(true)) {
+            return;
+        }
+
+        $drupalDomain = $this->plugin->get('drupal_domain');
         $drupalDomain = rtrim($drupalDomain, '/').'/';
 
         if (HOOK_EVENT_TYPE_POST === $event->getType()) {

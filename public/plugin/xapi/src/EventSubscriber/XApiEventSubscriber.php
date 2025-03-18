@@ -81,12 +81,14 @@ class XApiEventSubscriber implements EventSubscriberInterface
 
     public function onCreateCourse(CourseCreatedEvent $event): void
     {
-        $plugin = XApiPlugin::create();
+        if (!$this->plugin->isEnabled(true)) {
+            return;
+        }
 
         $course = $event->getCourse();
 
         if (AbstractEvent::TYPE_POST === $event->getType() && $course) {
-            $plugin->addCourseToolForTinCan($course->getId());
+            $this->plugin->addCourseToolForTinCan($course->getId());
         }
     }
 
@@ -98,6 +100,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onExerciseQuestionAnswered(ExerciseQuestionAnsweredEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_QUIZ_QUESTION_ACTIVE)
+        ) {
+            return;
+        }
+
         $em = Database::getManager();
         $attemptRepo = $em->getRepository(TrackEAttempt::class);
 
@@ -125,6 +133,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onExerciseEnded(ExerciseEndedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_QUIZ_ACTIVE)
+        ) {
+            return;
+        }
+
         $em = Database::getManager();
 
         $exe = $em->find(TrackEExercise::class, $event->getTrackingExeId());
@@ -144,6 +158,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onLpItemViewed(LearningPathItemViewedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_LP_ITEM_ACTIVE)
+        ) {
+            return;
+        }
+
         $em = Database::getManager();
 
         $lpItemView = $em->find(CLpItemView::class, $event->getItemViewId());
@@ -169,6 +189,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onLpEnded(LearningPathEndedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_LP_ACTIVE)
+        ) {
+            return;
+        }
+
         $em = Database::getManager();
 
         $lpView = $em->find(CLpView::class, $event->getLpViewId());
@@ -187,6 +213,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioItemAdded(PortfolioItemAddedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
+        ) {
+            return;
+        }
+
         $item = $event->getPortfolio();
 
         if (!$item) {
@@ -204,6 +236,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioItemEdited(PortfolioItemEditedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
+        ) {
+            return;
+        }
+
         $item = $event->getPortfolio();
 
         if (!$item) {
@@ -221,6 +259,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioItemViewed(PortfolioItemViewedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
+        ) {
+            return;
+        }
+
         $item = $event->getPortfolio();
 
         if (!$item) {
@@ -238,6 +282,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioItemCommented(PortfolioItemCommentedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
+        ) {
+            return;
+        }
+
         $comment = $event->getComment();
 
         if (!$comment) {
@@ -253,6 +303,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
 
     public function onPortfolioItemHighlighted(PortfolioItemHighlightedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
+        ) {
+            return;
+        }
+
         $item = $event->getPortfolio();
 
         if (!$item) {
@@ -270,6 +326,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioItemDownloaded(PortfolioItemDownloadedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
+        ) {
+            return;
+        }
+
         $owner = $event->getOwner();
 
         if (!$owner) {
@@ -283,6 +345,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
 
     public function onPortfolioItemScored(PortfolioItemScoredEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
+        ) {
+            return;
+        }
+
         $item = $event->getPortfolio();
 
         if (!$item) {
@@ -300,6 +368,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioCommentScored(PortfolioCommentScoredEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
+        ) {
+            return;
+        }
+
         $comment = $event->getComment();
 
         if (!$comment) {
@@ -317,6 +391,12 @@ class XApiEventSubscriber implements EventSubscriberInterface
      */
     public function onPortfolioCommentEdited(PortfolioCommentEditedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(XApiPlugin::SETTING_LRS_PORTFOLIO_ACTIVE)
+        ) {
+            return;
+        }
+
         $comment = $event->getComment();
 
         if (!$comment) {

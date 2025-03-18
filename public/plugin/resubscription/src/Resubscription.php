@@ -2,14 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Event\Interfaces\PluginEventSubscriberInterface;
-
 /**
  * Limit session resubscriptions.
  *
  * @author Imanol Losada Oriol <imanol.losada@beeznest.com>
  */
-class Resubscription extends Plugin implements PluginEventSubscriberInterface
+class Resubscription extends Plugin
 {
     /**
      * Class constructor.
@@ -48,7 +46,6 @@ class Resubscription extends Plugin implements PluginEventSubscriberInterface
      */
     public function install()
     {
-        $this->installEventSubscribers();
     }
 
     /**
@@ -56,16 +53,5 @@ class Resubscription extends Plugin implements PluginEventSubscriberInterface
      */
     public function uninstall()
     {
-        $this->uninstallEventSubscribers();
-    }
-
-    public function installEventSubscribers(): void
-    {
-        //@todo: Attach ResubscriptionEventSusbcription
-    }
-
-    public function uninstallEventSubscribers(): void
-    {
-        //@todo: Detach ResubscriptionEventSusbcription
     }
 }

@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Event\Interfaces\PluginEventSubscriberInterface;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -9,7 +8,7 @@ use Doctrine\DBAL\DriverManager;
 /**
  * Class MigrationMoodlePlugin.
  */
-class MigrationMoodlePlugin extends Plugin implements PluginEventSubscriberInterface
+class MigrationMoodlePlugin extends Plugin
 {
     public const SETTING_USER_FILTER = 'user_filter';
     public const SETTING_URL_ID = 'url_id';
@@ -66,36 +65,6 @@ class MigrationMoodlePlugin extends Plugin implements PluginEventSubscriberInter
         $connection = DriverManager::getConnection($params, new Configuration());
 
         return $connection;
-    }
-
-    /**
-     * Perform actions after configure the plugin.
-     *
-     * Add user extra field.
-     *
-     * @throws Exception
-     *
-     * @return MigrationMoodlePlugin
-     */
-    public function performActionsAfterConfigure()
-    {
-        if ('true' === $this->get('active')) {
-            $this->installEventSubscribers();
-        } else {
-            $this->uninstallEventSubscribers();
-        }
-
-        return $this;
-    }
-
-    public function installEventSubscribers(): void
-    {
-        //@todo attach MigrationMoodleCheckLoginCredentialEventSubscriber
-    }
-
-    public function uninstallEventSubscribers(): void
-    {
-        //@todo detach MigrationMoodleCheckLoginCredentialEventSubscriber
     }
 
     /**

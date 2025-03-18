@@ -11,6 +11,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class H5pImportEventSubscriber implements EventSubscriberInterface
 {
+    private H5pImportPlugin $plugin;
+
+    public function __construct()
+    {
+        $this->plugin = H5pImportPlugin::create();
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -20,10 +27,14 @@ class H5pImportEventSubscriber implements EventSubscriberInterface
 
     public function onCreateCourse(CourseCreatedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)) {
+            return;
+        }
+
         $course = $event->getCourse();
 
         if (AbstractEvent::TYPE_POST === $event->getType() && $course) {
-            H5pImportPlugin::create()->addCourseTool($course->getId());
+            $this->plugin->addCourseTool($course->getId());
         }
     }
 }

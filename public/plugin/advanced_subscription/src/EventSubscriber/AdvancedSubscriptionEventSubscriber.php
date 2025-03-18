@@ -31,6 +31,10 @@ class AdvancedSubscriptionEventSubscriber implements EventSubscriberInterface
 
     public function onNotificationContent(NotificationContentEvent $event): void
     {
+        if (!AdvancedSubscriptionPlugin::create()->isEnabled(true)) {
+            return;
+        }
+
         $data = $event->getData();
 
         if (AbstractEvent::TYPE_PRE === $event->getType()) {
@@ -56,6 +60,10 @@ class AdvancedSubscriptionEventSubscriber implements EventSubscriberInterface
 
     public function onNotificationTitle(NotificationTitleEvent $event): void
     {
+        if (!AdvancedSubscriptionPlugin::create()->isEnabled(true)) {
+            return;
+        }
+
         $data = $event->getData();
 
         if (AbstractEvent::TYPE_PRE === $event->getType()) {
@@ -71,6 +79,10 @@ class AdvancedSubscriptionEventSubscriber implements EventSubscriberInterface
 
     public function onWSRegistration(WSRegistrationEvent $event): void
     {
+        if (!AdvancedSubscriptionPlugin::create()->isEnabled(true)) {
+            return;
+        }
+
         if (AbstractEvent::TYPE_POST === $event->getType()) {
             $server = $event->getServer();
 
@@ -411,10 +423,16 @@ class AdvancedSubscriptionEventSubscriber implements EventSubscriberInterface
 
     public function onAdminBlock(AdminBlockEvent $event): void
     {
+        $plugin = AdvancedSubscriptionPlugin::create();
+
+        if (!$plugin->isEnabled(true)) {
+            return;
+        }
+
         if (AbstractEvent::TYPE_POST === $event->getType()) {
             $item = [
                 'url' => '../../plugin/advanced_subscription/src/admin_view.php',
-                'label' => get_plugin_lang('plugin_title', 'AdvancedSubscriptionPlugin'),
+                'label' => $plugin->get_lang('plugin_title'),
             ];
 
             $event->setItems('sessions', [$item]);

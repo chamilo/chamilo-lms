@@ -19,6 +19,13 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
 {
     use RequestTrait;
 
+    private ExternalNotificationConnectPlugin $plugin;
+
+    public function __construct()
+    {
+        $this->plugin = ExternalNotificationConnectPlugin::create();
+    }
+
     /**
      * @inheritDoc
      */
@@ -36,6 +43,12 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
 
     public function onPortfolioItemAdded(PortfolioItemAddedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFY_PORTFOLIO)
+        ) {
+            return;
+        }
+
         $item = $event->getPortfolio();
 
         if (!$item) {
@@ -80,6 +93,12 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
 
     public function onPortfolioItemEdited(PortfolioItemEditedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFY_PORTFOLIO)
+        ) {
+            return;
+        }
+
         $item = $event->getPortfolio();
 
         if (!$item) {
@@ -124,6 +143,12 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
 
     public function onPortfolioItemDeleted(PortfolioItemDeletedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFY_PORTFOLIO)
+        ) {
+            return;
+        }
+
         $item = $event->getPortfolio();
 
         if (!$item) {
@@ -151,6 +176,12 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
 
     public function onPortfolioItemVisibility(PortfolioItemVisibilityChangedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFY_PORTFOLIO)
+        ) {
+            return;
+        }
+
         $item = $event->getPortfolio();
 
         if (!$item) {
@@ -185,6 +216,12 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
 
     public function onLpCreated(LearningPathCreatedEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)
+            || 'true' !== $this->plugin->get(ExternalNotificationConnectPlugin::SETTING_NOTIFY_LEARNPATH)
+        ) {
+            return;
+        }
+
         $lp = $event->getLp();
 
         if (!$lp) {

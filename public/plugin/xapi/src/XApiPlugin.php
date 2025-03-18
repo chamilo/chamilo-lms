@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
-use Chamilo\CoreBundle\Event\Interfaces\PluginEventSubscriberInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\ORM\ORMException;
@@ -20,7 +19,7 @@ use Xabbuh\XApi\Serializer\Symfony\Serializer;
 /**
  * Class XApiPlugin.
  */
-class XApiPlugin extends Plugin implements PluginEventSubscriberInterface
+class XApiPlugin extends Plugin
 {
     public const SETTING_LRS_URL = 'lrs_url';
     public const SETTING_LRS_AUTH_USERNAME = 'lrs_auth_username';
@@ -89,7 +88,6 @@ class XApiPlugin extends Plugin implements PluginEventSubscriberInterface
     {
         $this->installInitialConfig();
         $this->addCourseTools();
-        $this->installEventSubscribers();
     }
 
     /**
@@ -97,29 +95,7 @@ class XApiPlugin extends Plugin implements PluginEventSubscriberInterface
      */
     public function uninstall()
     {
-        $this->uninstallEventSubscribers();
         $this->deleteCourseTools();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function uninstallEventSubscribers(): void
-    {
-        //@todo detach XApiCreateCourseEventSubscriber
-        //@todo detach XApiEventSubscriber::onLpItemViewed
-        //@todo detach XApiEventSubscriber::onLpEnded
-        //@todo detach XApiEventSubscriber::onExerciseQuestionAnswered
-        //@todo detach XApiEventSubscriber::onExerciseEnded
-        //@todo detach XApiEventSubscriber::onPortfolioItemAdded
-        //@todo detach XApiEventSubscriber::onPortfolioItemEdited
-        //@todo detach XApiEventSubscriber::onPortfolioItemViewed
-        //@todo detach XApiEventSubscriber::onPortfolioItemCommented
-        //@todo detach XApiEventSubscriber::onPortfolioItemHighlighted
-        //@todo detach XApiEventSubscriber::onPortfolioItemDownloaded
-        //@todo detach XApiEventSubscriber::onPortfolioItemScored
-        //@todo detach XApiEventSubscriber::onPortfolioCommentScored
-        //@todo detach XApiEventSubscriber::onPortfolioCommentEdited
     }
 
     /**
@@ -154,70 +130,6 @@ class XApiPlugin extends Plugin implements PluginEventSubscriberInterface
                 empty($lrsPassword) ? null : $lrsPassword
             )
             ->getStatementsApiClient();
-    }
-
-    /**
-     * Perform actions after save the plugin configuration.
-     *
-     * @return \XApiPlugin
-     */
-    public function performActionsAfterConfigure()
-    {
-        if ('true' === $this->get(self::SETTING_LRS_LP_ITEM_ACTIVE)) {
-            //@todo attach XApiEventSubscriber::onLpItemViewed
-        } else {
-            //@todo detach XApiEventSubscriber::onLpItemViewed
-        }
-
-        if ('true' === $this->get(self::SETTING_LRS_LP_ACTIVE)) {
-            //@todo attach XApiEventSubscriber::onLpEnded
-        } else {
-            //@todo detach XApiEventSubscriber::onLpEnded
-        }
-
-        if ('true' === $this->get(self::SETTING_LRS_QUIZ_ACTIVE)) {
-            //@todo attach XApiEventSubscriber::onExerciseQuestionAnswered
-        } else {
-            //@todo detach XApiEventSubscriber::onExerciseQuestionAnswered
-        }
-
-        if ('true' === $this->get(self::SETTING_LRS_QUIZ_QUESTION_ACTIVE)) {
-            //@todo attach XApiEventSubscriber::onExerciseEnded
-        } else {
-            //@todo detach XApiEventSubscriber::onExerciseEnded
-        }
-
-        if ('true' === $this->get(self::SETTING_LRS_PORTFOLIO_ACTIVE)) {
-            //@todo attach XApiEventSubscriber::onPortfolioItemAdded
-            //@todo attach XApiEventSubscriber::onPortfolioItemEdited
-            //@todo attach XApiEventSubscriber::onPortfolioItemViewed
-            //@todo attach XApiEventSubscriber::onPortfolioItemCommented
-            //@todo attach XApiEventSubscriber::onPortfolioItemHighlighted
-            //@todo attach XApiEventSubscriber::onPortfolioItemDownloaded
-            //@todo attach XApiEventSubscriber::onPortfolioItemScored
-            //@todo attach XApiEventSubscriber::onPortfolioCommentScored
-            //@todo attach XApiEventSubscriber::onPortfolioCommentEdited
-        } else {
-            //@todo detach XApiEventSubscriber::onPortfolioItemAdded
-            //@todo detach XApiEventSubscriber::onPortfolioItemEdited
-            //@todo detach XApiEventSubscriber::onPortfolioItemViewed
-            //@todo detach XApiEventSubscriber::onPortfolioItemCommented
-            //@todo detach XApiEventSubscriber::onPortfolioItemHighlighted
-            //@todo detach XApiEventSubscriber::onPortfolioItemDownloaded
-            //@todo detach XApiEventSubscriber::onPortfolioItemScored
-            //@todo detach XApiEventSubscriber::onPortfolioCommentScored
-            //@todo detach XApiEventSubscriber::onPortfolioCommentEdited
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function installEventSubscribers(): void
-    {
-        //@todo attach XApiCreateCourseEventSubscriber
     }
 
     /**

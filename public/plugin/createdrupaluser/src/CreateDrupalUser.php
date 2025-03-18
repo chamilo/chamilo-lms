@@ -2,14 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Event\Interfaces\PluginEventSubscriberInterface;
-
 /**
  * Create a user in Drupal website when a user is registered in Chamilo LMS.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-class CreateDrupalUser extends Plugin implements PluginEventSubscriberInterface
+class CreateDrupalUser extends Plugin
 {
     const EXTRAFIELD_VARIABLE_NAME = 'drupal_user_id';
 
@@ -45,7 +43,6 @@ class CreateDrupalUser extends Plugin implements PluginEventSubscriberInterface
     public function install()
     {
         $this->createExtraField();
-        $this->installEventSubscribers();
     }
 
     /**
@@ -53,18 +50,7 @@ class CreateDrupalUser extends Plugin implements PluginEventSubscriberInterface
      */
     public function uninstall()
     {
-        $this->uninstallEventSubscribers();
         $this->deleteExtraField();
-    }
-
-    public function installEventSubscribers(): void
-    {
-        //@todo attach CreateDrupalUserEventSubscriber
-    }
-
-    public function uninstallEventSubscribers(): void
-    {
-        //@todo detach CreateDrupalUserEventSubscriber
     }
 
     /**

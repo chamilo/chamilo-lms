@@ -3,14 +3,13 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Event\Interfaces\PluginEventSubscriberInterface;
 
 /**
  * Class AdvancedSubscriptionPlugin
  * This class is used to add an advanced subscription allowing the admin to
  * create user queues requesting to subscribe to a session.
  */
-class AdvancedSubscriptionPlugin extends Plugin implements PluginEventSubscriberInterface
+class AdvancedSubscriptionPlugin extends Plugin
 {
     protected $strings;
     private $errorMessages;
@@ -58,7 +57,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements PluginEventSubscriber
     {
         $this->installDatabase();
         $this->addAreaField();
-        $this->installEventSubscribers();
     }
 
     /**
@@ -69,7 +67,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements PluginEventSubscriber
         //$setting = api_get_setting('advanced_subscription');
         $setting = false;
         if (!empty($setting)) {
-            $this->uninstallEventSubscribers();
             // Note: Keeping area field data is intended so it will not be removed
             $this->uninstallDatabase();
         }
@@ -887,28 +884,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements PluginEventSubscriber
         }
 
         return $count;
-    }
-
-    /**
-     * This method will call the Hook management insertHook to add Hook observer from this plugin.
-     */
-    public function installEventSubscribers(): void
-    {
-        //@todo attach AdvancedSubscriptionEventSubscriber::onAdminBlock
-        //@todo attach AdvancedSubscriptionEventSubscriber::onNotificationContent
-        //@todo attach AdvancedSubscriptionEventSubscriber::onNotificationTitle
-        //@todo attach AdvancedSubscriptionEventSubscriber::onWSRegistration
-    }
-
-    /**
-     * This method will call the Hook management deleteHook to disable Hook observer from this plugin.
-     */
-    public function uninstallEventSubscribers(): void
-    {
-        //@todo detach AdvancedSubscriptionEventSubscriber::onAdminBlock
-        //@todo detach AdvancedSubscriptionEventSubscriber::onNotificationContent
-        //@todo detach AdvancedSubscriptionEventSubscriber::onNotificationTitle
-        //@todo detach AdvancedSubscriptionEventSubscriber::onWSRegistration
     }
 
     /**

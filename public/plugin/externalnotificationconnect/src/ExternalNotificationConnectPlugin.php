@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Event\Interfaces\PluginEventSubscriberInterface;
 use Chamilo\PluginBundle\ExternalNotificationConnect\Entity\AccessToken;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
@@ -12,7 +11,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException;
 
-class ExternalNotificationConnectPlugin extends Plugin implements PluginEventSubscriberInterface
+class ExternalNotificationConnectPlugin extends Plugin
 {
     public const SETTING_AUTH_URL = 'auth_url';
     public const SETTING_AUTH_USERNAME = 'auth_username';
@@ -51,42 +50,6 @@ class ExternalNotificationConnectPlugin extends Plugin implements PluginEventSub
         return $result ?: $result = new self();
     }
 
-    public function performActionsAfterConfigure(): ExternalNotificationConnectPlugin
-    {
-        if ('true' === $this->get(self::SETTING_NOTIFY_PORTFOLIO)) {
-            //@todo attach ExternalNotificationConnectEventSubscriber::onPortfolioItemAdded
-            //@todo attach ExternalNotificationConnectEventSubscriber::onPortfolioItemEdited
-            //@todo attach ExternalNotificationConnectEventSubscriber::onPortfolioItemDeleted
-            //@todo attach ExternalNotificationConnectEventSubscriber::onPortfolioItemVisibility
-        } else {
-            //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemAdded
-            //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemEdited
-            //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemDeleted
-            //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemVisibility
-        }
-
-        if ('true' === $this->get(self::SETTING_NOTIFY_LEARNPATH)) {
-            //@todo attach ExternalNotificationConnectEventSubscriber::onLpCreated
-        } else {
-            //@todo detach ExternalNotificationConnectEventSubscriber::onLpCreated
-        }
-
-        return $this;
-    }
-
-    public function installEventSubscribers(): void
-    {
-    }
-
-    public function uninstallEventSubscribers(): void
-    {
-        //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemAdded
-        //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemEdited
-        //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemDeleted
-        //@todo detach ExternalNotificationConnectEventSubscriber::onPortfolioItemVisibility
-        //@todo detach ExternalNotificationConnectEventSubscriber::onLpCreated
-    }
-
     public function install()
     {
         $em = Database::getManager();
@@ -100,12 +63,10 @@ class ExternalNotificationConnectPlugin extends Plugin implements PluginEventSub
         }
 
         $this->installDBTables();
-        $this->installEventSubscribers();
     }
 
     public function uninstall()
     {
-        $this->uninstallEventSubscribers();
         $this->uninstallDBTables();
     }
 

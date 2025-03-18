@@ -11,6 +11,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ResubscriptionEventSubscriber implements EventSubscriberInterface
 {
+    private Resubscription $plugin;
+
+    public function __construct()
+    {
+        $this->plugin = Resubscription::create();
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -23,6 +30,10 @@ class ResubscriptionEventSubscriber implements EventSubscriberInterface
      */
     public function onResubscribe(SessionResubscriptionEvent $event): void
     {
+        if (!$this->plugin->isEnabled(true)) {
+            return;
+        }
+
         if (AbstractEvent::TYPE_PRE === $event->getType()) {
             $resubscriptionLimit = Resubscription::create()->get('resubscription_limit');
 

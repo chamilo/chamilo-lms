@@ -4856,10 +4856,10 @@ msgstr "تایید"
 msgid "Unsubscribe users from course"
 msgstr "ابطال ثبت نام کاربران از درس"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "فاقد نام کلاس"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "نام کلاس وجود دارد"
 
 msgid "CSV file import location"

@@ -4856,10 +4856,10 @@ msgstr "Konfirmi"
 msgid "Unsubscribe users from course"
 msgstr "Forigi uzantojn el la kurso"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Mankas klasnomo"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Klasnomo jam ekzistas"
 
 msgid "CSV file import location"

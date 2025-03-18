@@ -4856,10 +4856,10 @@ msgstr "Apstiprināt"
 msgid "Unsubscribe users from course"
 msgstr "Dzēst lietotājus no kursa"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Pazudis grupas nosaukums"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Grupas nosaukums jau eksistē"
 
 msgid "CSV file import location"

@@ -4856,10 +4856,10 @@ msgstr "Konfirmasi"
 msgid "Unsubscribe users from course"
 msgstr "Keluarkan user dari Mata Kuliah"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Nama klas hilang"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Nama klas sudah ada"
 
 msgid "CSV file import location"

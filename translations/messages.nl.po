@@ -4884,10 +4884,10 @@ msgstr "Bevestig"
 msgid "Unsubscribe users from course"
 msgstr "Gebruikers uitschrijven uit de cursus"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Klasnaam ontbreekt"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "De klasnaam bestaat reeds"
 
 msgid "CSV file import location"

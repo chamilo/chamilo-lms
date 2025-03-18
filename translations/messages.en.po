@@ -4862,11 +4862,11 @@ msgstr "Confirm"
 msgid "Unsubscribe users from course"
 msgstr "Unsubscribe users from course"
 
-msgid "Missing class name"
-msgstr "Missing class name"
+msgid "Missing class title"
+msgstr "Missing class title"
 
-msgid "Class name exists"
-msgstr "Class name exists"
+msgid "Class title exists"
+msgstr "Class title exists"
 
 msgid "CSV file import location"
 msgstr "CSV file import location"

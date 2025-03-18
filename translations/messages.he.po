@@ -4856,10 +4856,10 @@ msgstr "אישור"
 msgid "Unsubscribe users from course"
 msgstr "בטל רישום משתמשים לקורס"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "חסר שם מחלקה"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "שם הכיתה קיים"
 
 msgid "CSV file import location"

@@ -7,10 +7,6 @@ declare(strict_types=1);
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\SessionResubscriptionEvent;
-use Database;
-use Display;
-use Exception;
-use Resubscription;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ResubscriptionEventSubscriber implements EventSubscriberInterface

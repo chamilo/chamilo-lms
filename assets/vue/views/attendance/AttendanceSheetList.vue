@@ -200,16 +200,33 @@
                     ></div>
                   </div>
 
-                  <div
-                    v-else
-                    :class="getStateClass(attendanceData[`${user.id}-${date.id}`])"
-                    @click="openMenu(user.id, date.id)"
-                    class="w-10 h-10 rounded-full cursor-pointer mx-auto"
-                    :title="getStateLabel(attendanceData[`${user.id}-${date.id}`])"
-                  ></div>
+                  <div v-else>
+                    <template v-if="!allowMultilevelGrading">
+                      <input
+                        type="checkbox"
+                        :checked="attendanceData[`${user.id}-${date.id}`] === 1"
+                        @change="toggleAttendanceState(user.id, date.id)"
+                        class="w-5 h-5 cursor-pointer"
+                      />
+                    </template>
+
+                    <template v-else>
+                      <div
+                        :class="getStateClass(attendanceData[`${user.id}-${date.id}`])"
+                        @click="openMenu(user.id, date.id)"
+                        class="w-10 h-10 rounded-full cursor-pointer mx-auto"
+                        :title="getStateLabel(attendanceData[`${user.id}-${date.id}`])"
+                      ></div>
+                    </template>
+                  </div>
 
                   <div
-                    v-if="contextMenu.show && contextMenu.userId === user.id && contextMenu.dateId === date.id"
+                    v-if="
+                      allowMultilevelGrading &&
+                      contextMenu.show &&
+                      contextMenu.userId === user.id &&
+                      contextMenu.dateId === date.id
+                    "
                     class="absolute bg-white border border-gray-300 rounded shadow-lg z-10 p-2"
                     style="top: 40px; left: 50%; transform: translateX(-50%)"
                   >
@@ -338,8 +355,8 @@
   </div>
 </template>
 <script setup>
-import { ref, nextTick, computed, onMounted, watch } from "vue"
-import { useRouter, useRoute } from "vue-router"
+import { computed, nextTick, onMounted, ref, watch } from "vue"
+import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import SignaturePad from "signature_pad"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
@@ -364,6 +381,9 @@ const enableSignature = computed(
   () => platformConfigStore.getSetting("attendance.enable_sign_attendance_sheet") === "true",
 )
 const allowComments = computed(() => platformConfigStore.getSetting("attendance.attendance_allow_comments") === "true")
+const allowMultilevelGrading = computed(
+  () => platformConfigStore.getSetting("attendance.multilevel_grading") === "true",
+)
 const canEdit = computed(() => securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM)
 const isStudent = computed(() => securityStore.isStudent)
 const isAdmin = computed(() => securityStore.isAdmin)
@@ -611,19 +631,36 @@ onMounted(() => {
 
 initializeColumnLocks(attendanceDates.value)
 
-const getStateLabel = (stateId) => Object.values(ATTENDANCE_STATES).find((state) => state.id === stateId)?.label
+const getStateLabel = (stateId) => {
+  if (!allowMultilevelGrading.value) {
+    return stateId === 1 ? "Present" : "Absent"
+  }
+  return ATTENDANCE_STATES[stateId]?.label || "Unknown"
+}
 
 const getStateClass = (stateId) => {
-  const attendanceColors = {
-    0: "bg-[rgb(var(--color-danger-base))]",
-    1: "bg-[rgb(var(--color-success-base))]",
-    2: "bg-[rgb(var(--color-warning-base))]",
-    3: "bg-[rgb(var(--color-secondary-base))]",
-    4: "bg-[rgb(var(--color-info-base))]",
-    null: "bg-gray-30",
+  if (!allowMultilevelGrading.value) {
+    return stateId === 1 ? "bg-[rgb(var(--color-success-base))]" : "bg-[rgb(var(--color-danger-base))]"
   }
+  return (
+    {
+      0: "bg-[rgb(var(--color-danger-base))]",
+      1: "bg-[rgb(var(--color-success-base))]",
+      2: "bg-[rgb(var(--color-warning-base))]",
+      3: "bg-[rgb(var(--color-secondary-base))]",
+      4: "bg-[rgb(var(--color-info-base))]",
+      null: "bg-gray-30",
+    }[stateId] || "bg-gray-30"
+  )
+}
 
-  return attendanceColors[stateId] || "bg-gray-30"
+const toggleAttendanceState = (userId, dateId) => {
+  if (!allowMultilevelGrading.value) {
+    attendanceData.value[`${userId}-${dateId}`] = attendanceData.value[`${userId}-${dateId}`] === 1 ? 0 : 1
+  } else {
+    const currentState = attendanceData.value[`${userId}-${dateId}`] || 0
+    attendanceData.value[`${userId}-${dateId}`] = (currentState + 1) % Object.keys(ATTENDANCE_STATES).length
+  }
 }
 
 const setAllAttendance = (dateId, stateId) => {
@@ -633,7 +670,11 @@ const setAllAttendance = (dateId, stateId) => {
 }
 
 const openMenu = (userId, dateId) => {
-  contextMenu.value = { show: true, userId, dateId }
+  if (allowMultilevelGrading.value) {
+    contextMenu.value = { show: true, userId, dateId }
+  } else {
+    toggleAttendanceState(userId, dateId)
+  }
 }
 
 const closeMenu = () => {

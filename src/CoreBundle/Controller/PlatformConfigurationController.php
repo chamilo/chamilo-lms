@@ -91,6 +91,7 @@ class PlatformConfigurationController extends AbstractController
                 'social.hide_social_groups_block',
                 'course.show_course_duration',
                 'attendance.attendance_allow_comments',
+                'attendance.multilevel_grading',
                 'attendance.enable_sign_attendance_sheet',
             ];
 

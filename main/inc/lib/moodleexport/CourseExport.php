@@ -17,7 +17,7 @@ class CourseExport
     private $courseInfo;
     private $activities;
 
-    public function __construct($course, $activities)
+    public function __construct($course, $activities = [])
     {
         $this->course = $course;
         $this->courseInfo = api_get_course_info($course->code);

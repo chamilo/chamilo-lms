@@ -44,25 +44,31 @@ class FolderExport extends ActivityExport
      */
     public function getData(int $folderId, int $sectionId): ?array
     {
-        $folder = $this->course->resources['document'][$folderId];
-
-        $folderPath = $folder->path.'/';
-        foreach ($this->course->resources['document'] as $resource) {
-            if ($resource->path !== $folder->path && str_starts_with($resource->path, $folderPath)) {
-                return [
-                    'id' => $folderId,
-                    'moduleid' => $folder->source_id,
-                    'modulename' => 'folder',
-                    'contextid' => $folder->source_id,
-                    'name' => $folder->title,
-                    'sectionid' => $sectionId,
-                    'timemodified' => time(),
-                ];
-            }
+        if ($folderId === 0) {
+            return [
+                'id' => 0,
+                'moduleid' => 0,
+                'modulename' => 'folder',
+                'contextid' => 0,
+                'name' => 'Documents',
+                'sectionid' => $sectionId,
+                'timemodified' => time(),
+            ];
         }
 
-        return null;
+        $folder = $this->course->resources['document'][$folderId];
+
+        return [
+            'id' => $folderId,
+            'moduleid' => $folder->source_id,
+            'modulename' => 'folder',
+            'contextid' => $folder->source_id,
+            'name' => $folder->title,
+            'sectionid' => $sectionId,
+            'timemodified' => time(),
+        ];
     }
+
 
     /**
      * Create the XML file for the folder.
@@ -92,19 +98,19 @@ class FolderExport extends ActivityExport
      */
     private function getFilesForFolder(int $folderId): array
     {
-        $documentData = \DocumentManager::getAllDocumentsByParentId($this->course->info, $folderId);
-
         $files = [];
-        foreach ($documentData as $doc) {
-            if ($doc['filetype'] === 'file') {
-                $files[] = [
-                    'id' => (int) $doc['id'],
-                    'contenthash' => 'hash'.$doc['id'],
-                    'filename' => $doc['basename'],
-                    'filepath' => $doc['path'],
-                    'filesize' => (int) $doc['size'],
-                    'mimetype' => $this->getMimeType($doc['basename']),
-                ];
+        if ($folderId === 0) {
+            foreach ($this->course->resources[RESOURCE_DOCUMENT] as $doc) {
+                if ($doc->file_type === 'file') {
+                    $files[] = [
+                        'id' => (int) $doc->source_id,
+                        'contenthash' => hash('sha1', basename($doc->path)),
+                        'filename' => basename($doc->path),
+                        'filepath' => '/Documents/',
+                        'filesize' => (int) $doc->size,
+                        'mimetype' => $this->getMimeType($doc->path),
+                    ];
+                }
             }
         }
 

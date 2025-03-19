@@ -53,16 +53,17 @@ class Redirect
      */
     public static function session_request_uri($logging_in = false, $user_id = null)
     {
-        $no_redirection = isset($_SESSION['noredirection']) ? $_SESSION['noredirection'] : false;
+        $no_redirection = $_SESSION['noredirection'] ?? false;
+        $no_redirection = $GLOBALS['noredirection'] ?? $no_redirection;
 
         if ($no_redirection) {
             unset($_SESSION['noredirection']);
+            unset($GLOBALS['noredirection']);
 
             return;
         }
 
         $url = isset($_SESSION['request_uri']) ? Security::remove_XSS($_SESSION['request_uri']) : '';
-        unset($_SESSION['request_uri']);
 
         $afterLogin = Session::read('redirect_after_not_allow_page');
 
@@ -71,11 +72,11 @@ class Redirect
             self::navigate($afterLogin);
         }
         if (!empty($url)) {
+            $_SESSION['custom_request_uri'] = $_SERVER['REQUEST_URI'];
+            unset($_SESSION['request_uri']);
             self::navigate($url);
-        } elseif ($logging_in ||
-            (isset($_REQUEST['sso_referer']) && !empty($_REQUEST['sso_referer']))
-        ) {
-            if (isset($user_id)) {
+        } elseif ($logging_in || !empty($_REQUEST['sso_referer'])) {
+            if (!empty($user_id)) {
                 $allow = api_get_configuration_value('plugin_redirection_enabled');
                 if ($allow) {
                     $allow = api_get_configuration_value('plugin_redirection_enabled');
@@ -121,8 +122,8 @@ class Redirect
                 if (api_is_multiple_url_enabled()) {
                     // if multiple URLs are enabled, make sure he's admin of the
                     // current URL before redirecting
-                    $url = api_get_current_access_url_id();
-                    if (api_is_platform_admin_by_id($user_id, $url)) {
+                    $urlId = api_get_current_access_url_id();
+                    if (api_is_platform_admin_by_id($user_id, $urlId)) {
                         self::navigate(api_get_path(WEB_CODE_PATH).'admin/index.php');
                     }
                 } else {

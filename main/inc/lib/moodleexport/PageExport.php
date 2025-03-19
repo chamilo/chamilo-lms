@@ -44,12 +44,35 @@ class PageExport extends ActivityExport
      */
     public function getData(int $pageId, int $sectionId): ?array
     {
-        $pageResources = $this->course->resources[RESOURCE_DOCUMENT];
+        $contextid = $this->course->info['real_id'];
+        if ($pageId === 0) {
+            if (
+                isset($this->course->resources[RESOURCE_TOOL_INTRO]['course_homepage']) &&
+                is_object($this->course->resources[RESOURCE_TOOL_INTRO]['course_homepage']) &&
+                !empty($this->course->resources[RESOURCE_TOOL_INTRO]['course_homepage']->intro_text)
+            ) {
 
+                return [
+                    'id' => 0,
+                    'moduleid' => 0,
+                    'modulename' => 'page',
+                    'contextid' => $contextid,
+                    'name' => get_lang('Introduction'),
+                    'intro' => '',
+                    'content' => trim($this->course->resources[RESOURCE_TOOL_INTRO]['course_homepage']->intro_text),
+                    'sectionid' => $sectionId,
+                    'sectionnumber' => 1,
+                    'display' => 0,
+                    'timemodified' => time(),
+                    'users' => [],
+                    'files' => [],
+                ];
+            }
+        }
+
+        $pageResources = $this->course->resources[RESOURCE_DOCUMENT] ?? [];
         foreach ($pageResources as $page) {
             if ($page->source_id == $pageId) {
-                $contextid = $this->course->info['real_id'];
-
                 return [
                     'id' => $page->source_id,
                     'moduleid' => $page->source_id,

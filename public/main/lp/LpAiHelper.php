@@ -216,33 +216,31 @@ class LpAiHelper
             'manual'
         );
 
-        if (null === $lp) {
+        if (null === $lp || empty($lp->getIid())) {
             return ['success' => false, 'text' => 'Failed to create Learning Path.'];
         }
 
         $lpId = $lp->getIid();
-        if (empty($lpId)) {
-            return ['success' => false, 'text' => 'Failed to retrieve Learning Path ID.'];
-        }
-
         $courseInfo = api_get_course_info($courseCode);
         $learningPath = new learnpath($lp, $courseInfo, api_get_user_id());
 
         $lpItemRepo = Container::getLpItemRepository();
 
         $parent = $lpItemRepo->getRootItem($lpId);
-        $order = 1;
         $lpItemsIds = [];
+        $order = 1;
 
-        foreach ($lpData['lp_items'] as $item) {
+        require_once api_get_path(SYS_CODE_PATH).'exercise/export/aiken/aiken_import.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'exercise/export/aiken/aiken_classes.php';
+
+        foreach ($lpData['lp_items'] as $index => $item) {
             $documentId = $learningPath->create_document(
                 $courseInfo,
                 $item['content'],
                 $item['title']
             );
-
             if (!empty($documentId)) {
-                $previousId = isset($lpItemsIds[$order - 1]) ? (int) $lpItemsIds[$order - 1]['item_id'] : 0;
+                $previousId = $order > 1 ? (int) $lpItemsIds[$order - 1]['item_id'] : 0;
                 $lpItemId = $learningPath->add_item(
                     $parent,
                     $previousId,
@@ -251,18 +249,12 @@ class LpAiHelper
                     $item['title']
                 );
                 $lpItemsIds[$order] = ['item_id' => $lpItemId, 'item_type' => TOOL_DOCUMENT];
+                $previousId = $lpItemId;
+                $order++;
             }
-            $order++;
-        }
 
-        if (!empty($lpData['quiz_items'])) {
-            require_once api_get_path(SYS_CODE_PATH).'exercise/export/aiken/aiken_import.inc.php';
-            require_once api_get_path(SYS_CODE_PATH).'exercise/export/aiken/aiken_classes.php';
-
-            foreach ($lpData['quiz_items'] as $quiz) {
-                if (empty(trim($quiz['content']))) {
-                    continue;
-                }
+            if (!empty($lpData['quiz_items'][$index]) && !empty(trim($lpData['quiz_items'][$index]['content']))) {
+                $quiz = $lpData['quiz_items'][$index];
 
                 $request = [
                     'quiz_name' => get_lang('Exercise') . ': ' . $quiz['title'],
@@ -274,7 +266,6 @@ class LpAiHelper
                 $exerciseId = aiken_import_exercise(null, $request);
 
                 if (!empty($exerciseId)) {
-                    $previousId = isset($lpItemsIds[$order - 1]) ? (int) $lpItemsIds[$order - 1]['item_id'] : 0;
                     $lpQuizItemId = $learningPath->add_item(
                         $parent,
                         $previousId,
@@ -290,8 +281,9 @@ class LpAiHelper
                             'min_score' => round($request['nro_questions'] / 2, 2),
                             'max_score' => (float) $request['nro_questions'],
                         ];
+                        $previousId = $lpQuizItemId;
+                        $order++;
                     }
-                    $order++;
                 }
             }
         }

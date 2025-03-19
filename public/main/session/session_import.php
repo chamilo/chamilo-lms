@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 
 $cidReset = true;
 
@@ -97,7 +98,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 null,
                                 api_utf8_decode($nodeUser->Phone),
                                 null,
-                                PLATFORM_AUTH_SOURCE,
+                                [UserAuthSource::PLATFORM],
                                 null,
                                 1,
                                 0,
@@ -134,7 +135,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     $lastname,
                                     $username,
                                     $password,
-                                    null,
+                                    [],
                                     $email,
                                     $status,
                                     $officialCode,
@@ -172,10 +173,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
                         // Looking up for the teacher.
                         $username = trim(api_utf8_decode($courseNode->CourseTeacher));
-                        $sql = "SELECT id, lastname, firstname FROM $tblUser WHERE username='$username'";
-                        $rs = Database::query($sql);
-                        if (Database::num_rows($rs) > 0) {
-                            [$userId, $lastname, $firstname] = Database::fetch_array($rs);
+                        $rs = Database::select(
+                            ['id', 'lastname', 'firstname'],
+                            $tblUser,
+                            ['where' => ['username = ?' => $username]],
+                            'first',
+                            'NUM'
+                        );
+                        [$userId, $lastname, $firstname] = $rs;
+                        if ($userId > 0) {
                             $params['teachers'] = $userId;
                         } else {
                             $params['teachers'] = api_get_user_id();

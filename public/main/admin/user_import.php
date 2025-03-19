@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use ChamiloSession as Session;
 
 /**
@@ -163,7 +164,7 @@ function complete_missing_data($user)
     }
     // 4. Set authsource if not allready set.
     if (empty($user['AuthSource'])) {
-        $user['AuthSource'] = PLATFORM_AUTH_SOURCE;
+        $user['AuthSource'] = UserAuthSource::PLATFORM;
     }
 
     if (empty($user['ExpiryDate'])) {
@@ -233,7 +234,7 @@ function save_data($users, $sendMail = false)
                 $user['language'],
                 $user['PhoneNumber'],
                 '',
-                $user['AuthSource'],
+                [$user['AuthSource']],
                 $user['ExpiryDate'],
                 1,
                 0,
@@ -494,7 +495,7 @@ function processUsers(&$users, $sendMail)
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-$defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
+$defined_auth_sources[] = UserAuthSource::PLATFORM;
 if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }

@@ -4856,10 +4856,10 @@ msgstr "Cheqaqchay"
 msgid "Unsubscribe users from course"
 msgstr "Anular la inscripción de los usuarios en el curso"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Manaraq kashanchu claseq sutin"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Claseq sutinqa kashanña"
 
 msgid "CSV file import location"

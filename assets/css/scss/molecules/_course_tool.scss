@@ -13,12 +13,8 @@
   &__icon {
     @apply text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary-gradient leading-none;
 
-    &,
     &.mdi {
       font-size: 52px;
-    }
-
-    &::before {
     }
   }
 

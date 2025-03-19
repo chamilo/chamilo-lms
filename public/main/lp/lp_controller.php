@@ -452,6 +452,12 @@ switch ($action) {
         }
         require 'lp_add_category.php';
         break;
+    case 'ai_helper':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        require 'lp_add_ai_helper.php';
+        break;
     case 'move_up_category':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

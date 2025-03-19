@@ -4856,10 +4856,10 @@ msgstr "确定"
 msgid "Unsubscribe users from course"
 msgstr "没有订阅的用户"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "缺少类名"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "类名不存在"
 
 msgid "CSV file import location"

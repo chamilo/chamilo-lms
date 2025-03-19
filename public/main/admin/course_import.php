@@ -7,6 +7,8 @@
  * Copyright (c) 2005 Bart Mollet <bart.mollet@hogent.be>.
  */
 
+use Chamilo\CoreBundle\Entity\UserAuthSource;
+
 /**
  * Validates imported data.
  *
@@ -167,7 +169,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
-$defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
+$defined_auth_sources[] = UserAuthSource::PLATFORM;
 
 if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));

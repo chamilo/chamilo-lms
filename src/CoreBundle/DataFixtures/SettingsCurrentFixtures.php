@@ -364,11 +364,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Use course images as the course icon in courses lists (instead of the default green blackboard icon).',
                 ],
                 [
-                    'name' => 'enable_record_audio',
-                    'title' => 'Enable audio recorder',
-                    'comment' => 'Enables the WebRTC (flashless) audio recorder at several locations inside Chamilo',
-                ],
-                [
                     'name' => 'hide_scorm_copy_link',
                     'title' => 'Hide SCORM Copy',
                     'comment' => 'Hide the Learning Path Copy icon from the Learning Paths list',
@@ -815,11 +810,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'enable_webcam_clip',
                     'title' => 'Enable Webcam Clip',
                     'comment' => 'Webcam Clip allow to users capture images from his webcam and send them to server in JPEG (.jpg or .jpeg) format',
-                ],
-                [
-                    'name' => 'enabled_text2audio',
-                    'title' => 'Enable online services for text to speech conversion',
-                    'comment' => 'Online tool to convert text to speech. Uses speech synthesis technology to generate audio files saved into your course.',
                 ],
                 [
                     'name' => 'pdf_export_watermark_by_course',
@@ -3285,6 +3275,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'session_model_list_field_ordered_by_id',
                     'title' => 'Sort session templates by id in session creation form',
                     'comment' => '',
+                ],
+                [
+                    'name' => 'enable_auto_reinscription',
+                    'title' => 'Enable Automatic Reinscription',
+                    'comment' => 'Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated.',
+                ],
+                [
+                    'name' => 'enable_session_replication',
+                    'title' => 'Enable Session Replication',
+                    'comment' => 'Enable or disable automatic session replication. The related cron job must also be activated.',
                 ],
                 [
                     'name' => 'session_multiple_subscription_students_list_avoid_emptying',

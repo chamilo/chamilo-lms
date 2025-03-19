@@ -1,45 +1,42 @@
 {% macro collapse(name, title, content, list = false, expanded = 'true', title_right = '', title_icons = '') %}
     {% autoescape false %}
-    <div class="panel-group" id="{{ name }}" role="tablist" aria-multiselectable="true">
-        <div class="panel panel-default" id="{{ name }}_block">
-            <div class="panel-heading" role="tab">
+    <div class="p-card p-component mb-4" id="{{ name }}" role="tablist" aria-multiselectable="true">
+        <div class="p-card-body" id="{{ name }}_block">
+            <div class="p-card-caption" role="tab">
                 {% if title_icons %}
                     {{ title_icons }}
                 {% endif %}
-                <h4 class="panel-title">
-                    <a role="button"
-                       data-toggle="collapse"
-                       data-parent="#{{ name }}"
-                       href="#{{ name }}Collapse"
-                       aria-expanded="{{ expanded }}"
-                       aria-controls="{{ name }}Collapse">
-                        {{ title }}
-                    </a>
+                <h4 class="p-card-title">
+                    <a role="button" id="toggle-{{ name }}Collapse" href="#{{ name }}Collapse">{{ title }}</a>
                 </h4>
 
                 {% if title_right %}
-                    <div class="pull-right">
+                    <div class="float-right">
                         {{ title_right }}
                     </div>
                 {% endif %}
             </div>
             <div
-                aria-expanded="{{ expanded }}"
                 id="{{ name }}Collapse"
-                class="panel-collapse collapse {{  expanded == 'true' ? 'in' : '' }}"
-                role="tabpanel">
-                <div class="panel-body">
-                    {% if list %}
-                        <ul class="nav nav-pills nav-stacked">
-                            {{ content }}
-                        </ul>
-                    {% else %}
+                class="p-card-content {{  expanded == 'true' ? '' : 'hidden' }}">
+                {% if list %}
+                    <ul class="nav nav-pills nav-stacked">
                         {{ content }}
-                    {% endif %}
-                </div>
+                    </ul>
+                {% else %}
+                    {{ content }}
+                {% endif %}
             </div>
         </div>
     </div>
+    <script>
+        $(function () {
+          $("#toggle-{{ name }}Collapse").on("click", (e) => {
+            e.preventDefault();
+            $("#{{ name }}Collapse").toggleClass("hidden");
+          })
+        })
+    </script>
     {% endautoescape %}
 {% endmacro %}
 

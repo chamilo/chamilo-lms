@@ -585,9 +585,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: CGroupRelTutor::class, orphanRemoval: true)]
     protected Collection $courseGroupsAsTutor;
 
-    #[ORM\Column(name: 'auth_source', type: 'string', length: 50, nullable: true)]
-    protected ?string $authSource;
-
     #[ORM\Column(name: 'status', type: 'integer')]
     protected int $status;
 
@@ -614,9 +611,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     #[ORM\Column(name: 'productions', type: 'string', length: 250, unique: false, nullable: true)]
     protected ?string $productions = null;
-
-    #[ORM\Column(name: 'registration_date', type: 'datetime')]
-    protected DateTime $registrationDate;
 
     #[ORM\Column(name: 'expiration_date', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $expirationDate = null;
@@ -705,6 +699,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: SocialPostFeedback::class, orphanRemoval: true)]
     private Collection $socialPostsFeedbacks;
 
+    /**
+     * @var Collection<int, UserAuthSource>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserAuthSource::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $authSources;
+
     public function __construct()
     {
         $this->skipResourceNode = false;
@@ -714,7 +714,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->website = '';
         $this->locale = 'en';
         $this->timezone = 'Europe\Paris';
-        $this->authSource = 'platform';
         $this->status = CourseRelUser::STUDENT;
         $this->salt = sha1(uniqid('', true));
         $this->active = 1;
@@ -759,7 +758,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->logins = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->updatedAt = new DateTime();
-        $this->registrationDate = new DateTime();
         $this->roles = [];
         $this->credentialsExpired = false;
         $this->credentialsExpireAt = new DateTime();
@@ -769,6 +767,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->sentSocialPosts = new ArrayCollection();
         $this->receivedSocialPosts = new ArrayCollection();
         $this->socialPostsFeedbacks = new ArrayCollection();
+        $this->authSources = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -1045,18 +1044,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function getRegistrationDate(): DateTime
-    {
-        return $this->registrationDate;
-    }
-
-    public function setRegistrationDate(DateTime $registrationDate): self
-    {
-        $this->registrationDate = $registrationDate;
-
-        return $this;
-    }
-
     public function getExpirationDate(): ?DateTime
     {
         return $this->expirationDate;
@@ -1120,11 +1107,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->hrDeptId = $hrDeptId;
 
         return $this;
-    }
-
-    public function getMemberSince(): DateTime
-    {
-        return $this->registrationDate;
     }
 
     public function isOnline(): bool
@@ -2218,6 +2200,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setLogin(string $login): self
     {
         $this->username = $login;
+
         return $this;
     }
 
@@ -2424,5 +2407,92 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function isCourseTutor(?Course $course = null, ?Session $session = null): bool
     {
         return $session?->hasCoachInCourseList($this) || $course?->getSubscriptionByUser($this)?->isTutor();
+    }
+
+    /**
+     * @return Collection<int, UserAuthSource>
+     */
+    public function getAuthSources(): Collection
+    {
+        return $this->authSources;
+    }
+
+    public function getAuthSourcesByUrl(AccessUrl $url): Collection
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('url', $url)
+        );
+
+        return $this->authSources->matching($criteria);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getAuthSourcesAuthentications(?AccessUrl $url = null): array
+    {
+        $authSources = $url ? $this->getAuthSourcesByUrl($url) : $this->getAuthSources();
+
+        return $authSources->map(fn (UserAuthSource $authSource) => $authSource->getAuthentication())->toArray();
+    }
+
+    public function addAuthSource(UserAuthSource $authSource): static
+    {
+        if (!$this->authSources->contains($authSource)) {
+            $this->authSources->add($authSource);
+            $authSource->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function addAuthSourceByAuthentication(string $authentication, AccessUrl $url): static
+    {
+        $authSource = (new UserAuthSource())
+            ->setAuthentication($authentication)
+            ->setUrl($url)
+        ;
+
+        $this->addAuthSource($authSource);
+
+        return $this;
+    }
+
+    public function hasAuthSourceByAuthentication(string $authentication): bool
+    {
+        return $this->authSources
+            ->exists(fn (UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication)
+        ;
+    }
+
+    public function getAuthSourceByAuthentication(string $authentication): UserAuthSource
+    {
+        return $this->authSources->findFirst(
+            fn (UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication
+        );
+    }
+
+    public function removeAuthSources(): static
+    {
+        foreach ($this->authSources as $authSource) {
+            $authSource->setUser(null);
+        }
+
+        $this->authSources = new ArrayCollection();
+
+        return $this;
+    }
+
+    public function removeAuthSource(UserAuthSource $authSource): static
+    {
+        if ($this->authSources->removeElement($authSource)) {
+            // set the owning side to null (unless already changed)
+            if ($authSource->getUser() === $this) {
+                $authSource->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -164,4 +164,6 @@ enum ActionIcon: string
     case SWAP_FILE = 'file-swap';
 
     case ADD_FILE_VARIATION = 'file-replace';
+
+    case CLOSE = 'close';
 }

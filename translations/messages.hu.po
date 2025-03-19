@@ -4856,10 +4856,10 @@ msgstr "Megerősít"
 msgid "Unsubscribe users from course"
 msgstr "Felhasználók eltávolítása a kurzusról"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Hiányzó osztálynév"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Létező osztálynév"
 
 msgid "CSV file import location"

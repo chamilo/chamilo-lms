@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
@@ -1289,7 +1290,7 @@ class Rest extends WebService
         $language = '';
         $phone = '';
         $picture_uri = '';
-        $auth_source = $userParam['auth_source'] ?? PLATFORM_AUTH_SOURCE;
+        $auth_source = $userParam['auth_source'] ?? UserAuthSource::PLATFORM;
         $expiration_date = '';
         $active = 1;
         $hr_dept_id = 0;
@@ -1329,7 +1330,7 @@ class Rest extends WebService
             $language,
             $phone,
             $picture_uri,
-            $auth_source,
+            [$auth_source],
             $expiration_date,
             $active,
             $hr_dept_id
@@ -1787,6 +1788,8 @@ class Rest extends WebService
      */
     public function updateUserFromUserName($parameters)
     {
+        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+
         // find user
         $userId = null;
         if (!is_array($parameters) || empty($parameters)) {
@@ -1840,7 +1843,7 @@ class Rest extends WebService
                     $user->setProfileCompleted($value);
                     break;
                 case 'auth_source':
-                    $user->setAuthSource($value);
+                    $user->addAuthSourceByAuthentication($value, $accessUrl);
                     break;
                 case 'status':
                     $user->setStatus($value);
@@ -1876,8 +1879,8 @@ class Rest extends WebService
                     }
                     $user->setLocale($value);
                     break;
-                case 'registration_date':
-                    $user->setRegistrationDate($value);
+                case 'created_at':
+                    $user->setCreatedAt($value);
                     break;
                 case 'expiration_date':
                     $user->setExpirationDate(

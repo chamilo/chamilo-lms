@@ -4856,10 +4856,10 @@ msgstr "Onayla"
 msgid "Unsubscribe users from course"
 msgstr "Kullanıcıların ders kaydını sil"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Sınıf ismi mevcut değil"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Sınıf ismi zaten mevcut"
 
 msgid "CSV file import location"

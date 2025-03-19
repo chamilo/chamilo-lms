@@ -23,9 +23,12 @@ const isAnchor = computed(() => !!props.url)
     <slot />
   </a>
   <router-link
-    v-else
+    v-else-if="props.to"
     v-bind="props"
   >
     <slot />
   </router-link>
+  <span v-else>
+    <slot />
+  </span>
 </template>

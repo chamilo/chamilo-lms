@@ -583,54 +583,73 @@ class CourseController extends ToolBaseController
     #[Route('/{id}/addToolIntro', name: 'chamilo_core_course_addtoolintro')]
     public function addToolIntro(Request $request, Course $course, EntityManagerInterface $em): Response
     {
-        $data = $request->getContent();
-        $data = json_decode($data);
-        $ctoolintroId = $data->iid;
-        $sessionId = $data->sid ?? 0;
+        $data = json_decode($request->getContent());
+        $sessionId = $data->sid ?? ($data->resourceLinkList[0]->sid ?? 0);
+        $introText = $data->introText ?? null;
 
-        $sessionRepo = $em->getRepository(Session::class);
-        $session = null;
-        if (!empty($sessionId)) {
-            $session = $sessionRepo->find($sessionId);
-        }
+        $session = $sessionId ? $em->getRepository(Session::class)->find($sessionId) : null;
+        $ctoolRepo = $em->getRepository(CTool::class);
+        $ctoolintroRepo = $em->getRepository(CToolIntro::class);
 
-        $ctool = $em->getRepository(CTool::class);
-        $check = $ctool->findOneBy(['title' => 'course_homepage', 'course' => $course, 'session' => $session]);
-        if (!$check) {
-            $toolRepo = $em->getRepository(Tool::class);
-            $toolEntity = $toolRepo->findOneBy(['title' => 'course_homepage']);
-            $courseTool = (new CTool())
-                ->setTool($toolEntity)
-                ->setTitle('course_homepage')
-                ->setCourse($course)
-                ->setPosition(1)
-                ->setVisibility(true)
-                ->setParent($course)
-                ->setCreator($course->getCreator())
-                ->setSession($session)
-                ->addCourseLink($course)
-            ;
-            $em->persist($courseTool);
-            $em->flush();
-            if ($courseTool && !empty($ctoolintroId)) {
-                $ctoolintroRepo = Container::getToolIntroRepository();
+        $ctoolSession = $ctoolRepo->findOneBy([
+            'title' => 'course_homepage',
+            'course' => $course,
+            'session' => $session,
+        ]);
 
-                /** @var CToolIntro $ctoolintro */
-                $ctoolintro = $ctoolintroRepo->find($ctoolintroId);
-                $ctoolintro->setCourseTool($courseTool);
-                $ctoolintroRepo->update($ctoolintro);
+        if (!$ctoolSession) {
+            $toolEntity = $em->getRepository(Tool::class)->findOneBy(['title' => 'course_homepage']);
+            if ($toolEntity) {
+                $ctoolSession = (new CTool())
+                    ->setTool($toolEntity)
+                    ->setTitle('course_homepage')
+                    ->setCourse($course)
+                    ->setPosition(1)
+                    ->setVisibility(true)
+                    ->setParent($course)
+                    ->setCreator($course->getCreator())
+                    ->setSession($session)
+                    ->addCourseLink($course)
+                ;
+
+                $em->persist($ctoolSession);
+                $em->flush();
             }
         }
-        $responseData = [];
-        $json = $this->serializer->serialize(
-            $responseData,
-            'json',
-            [
-                'groups' => ['course:read', 'ctool:read', 'tool:read', 'cshortcut:read'],
-            ]
-        );
 
-        return new JsonResponse($responseData);
+        $ctoolIntro = $ctoolintroRepo->findOneBy(['courseTool' => $ctoolSession]);
+        if (!$ctoolIntro) {
+            $ctoolIntro = (new CToolIntro())
+                ->setCourseTool($ctoolSession)
+                ->setIntroText($introText ?? '')
+                ->setParent($course)
+            ;
+
+            $em->persist($ctoolIntro);
+            $em->flush();
+
+            return new JsonResponse([
+                'status' => 'created',
+                'cToolId' => $ctoolSession->getIid(),
+                'introIid' => $ctoolIntro->getIid(),
+                'introText' => $ctoolIntro->getIntroText(),
+            ]);
+        }
+
+        if (null !== $introText) {
+            $ctoolIntro->setIntroText($introText);
+            $em->persist($ctoolIntro);
+            $em->flush();
+
+            return new JsonResponse([
+                'status' => 'updated',
+                'cToolId' => $ctoolSession->getIid(),
+                'introIid' => $ctoolIntro->getIid(),
+                'introText' => $ctoolIntro->getIntroText(),
+            ]);
+        }
+
+        return new JsonResponse(['status' => 'no_action']);
     }
 
     #[Route('/check-enrollments', name: 'chamilo_core_check_enrollments', methods: ['GET'])]

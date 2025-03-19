@@ -157,7 +157,7 @@ switch ($action) {
         // for global recent logins
         header('Content-type: application/json');
         $list = [];
-        $all = Statistics::getRecentLoginStats(false, $sessionDuration, [31]);
+        $all = Statistics::getRecentLoginStats(false, $sessionDuration);
         foreach ($all as $tick => $tock) {
             $list['labels'][] = $tick;
         }
@@ -205,7 +205,7 @@ switch ($action) {
         } elseif ('courses' == $action) {
             $courseCategoryRepo = Container::getCourseCategoryRepository();
             $categories = $courseCategoryRepo->findAll();
-            $statsName = 'CountCours';
+            $statsName = 'Total number of courses';
             // total amount of courses
             $all = [];
             foreach ($categories as $category) {
@@ -213,7 +213,7 @@ switch ($action) {
                 $all[$category->getTitle()] = $category->getCourses()->count();
             }
         } elseif ('courses_by_language' == $action) {
-            $statsName = 'CountCourseByLanguage';
+            $statsName = 'Count course by language';
             $all = Statistics::printCourseByLanguageStats();
             // use slightly different colors than previous chart
             for ($k = 0; $k < 3; $k++) {
@@ -221,7 +221,7 @@ switch ($action) {
                 array_push($palette, $item);
             }
         } elseif ('users' == $action) {
-            $statsName = 'NumberOfUsers';
+            $statsName = 'Number of users';
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
             $all = [
                 get_lang('Trainers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
@@ -286,7 +286,7 @@ switch ($action) {
         $list = [];
         $palette = ChamiloApi::getColorPalette(true, true);
 
-        $statsName = 'NumberOfUsers';
+        $statsName = 'Number of users';
         $filter = $_REQUEST['filter'];
 
         $startDate = $_REQUEST['date_start'];
@@ -294,7 +294,7 @@ switch ($action) {
 
         $extraConditions = '';
         if (!empty($startDate) && !empty($endDate)) {
-            $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
+            $extraConditions .= " AND created_at BETWEEN '$startDate' AND '$endDate' ";
         }
 
         switch ($filter) {
@@ -366,7 +366,7 @@ switch ($action) {
                     $item['display_text'] = $option['display_text'];
                     $all[$item['display_text']] = $count;
                 }
-                $all[get_lang('N/A')] = $total - $usersFound;
+                $all[get_lang('Not available')] = $total - $usersFound;
 
                 break;
             case 'language':
@@ -430,7 +430,7 @@ switch ($action) {
                     $item['display_text'] = get_lang(str_replace('2', '', $item['display_text']));
                     $all[$item['display_text']] = $count;
                 }
-                $all[get_lang('N/A')] = $total - $usersFound;
+                $all[get_lang('Not available')] = $total - $usersFound;
                 break;
 
             case 'age':
@@ -462,7 +462,7 @@ switch ($action) {
                 $usersFound = 0;
                 $now = new DateTime();
                 $all = [
-                    //get_lang('N/A') => 0,
+                    //get_lang('Not available') => 0,
                     '16-17' => 0,
                     '18-25' => 0,
                     '26-30' => 0,
@@ -526,7 +526,7 @@ switch ($action) {
                     $usersFound += $count;
                 }
 
-                $all[get_lang('N/A')] = $total - $usersFound;
+                $all[get_lang('Not available')] = $total - $usersFound;
                 break;
 
             case 'contract':
@@ -617,7 +617,7 @@ switch ($action) {
         $list = [];
         $palette = ChamiloApi::getColorPalette(true, true);
 
-        $statsName = 'NumberOfUsers';
+        $statsName = 'Number of users';
         $filter = $_REQUEST['filter'];
 
         $startDate = Database::escape_string($_REQUEST['date_start']);

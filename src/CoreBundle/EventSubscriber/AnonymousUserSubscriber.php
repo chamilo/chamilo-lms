@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\EventSubscriber;
 
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +24,8 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
     public function __construct(
         private readonly Security $security,
         private readonly EntityManagerInterface $entityManager,
-        private readonly SettingsManager $settingsManager
+        private readonly SettingsManager $settingsManager,
+        private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
     public function onKernelRequest(RequestEvent $event): void
@@ -34,6 +36,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
 
         $request = $event->getRequest();
         $userIp = $request->getClientIp() ?: '127.0.0.1';
+        $accessUrl = $this->accessUrlHelper->getCurrent();
 
         $anonymousUserId = $this->getOrCreateAnonymousUserId($userIp);
         if (null !== $anonymousUserId) {
@@ -70,10 +73,10 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
                     'picture_uri' => $user->getPictureUri(),
                     'status' => $user->getStatus(),
                     'active' => $user->isActive(),
-                    'auth_source' => $user->getAuthSource(),
+                    'auth_sources' => $user->getAuthSourcesAuthentications($accessUrl),
                     'theme' => $user->getTheme(),
                     'language' => $user->getLocale(),
-                    'registration_date' => $user->getRegistrationDate()->format('Y-m-d H:i:s'),
+                    'created_at' => $user->getCreatedAt()->format('Y-m-d H:i:s'),
                     'expiration_date' => $user->getExpirationDate() ? $user->getExpirationDate()->format('Y-m-d H:i:s') : null,
                     'last_login' => $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d H:i:s') : null,
                     'is_anonymous' => true,
@@ -98,7 +101,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         $anonymousAutoProvisioning = 'true' === $this->settingsManager->getSetting('security.anonymous_autoprovisioning');
 
         if (!$anonymousAutoProvisioning) {
-            $anonymousUser = $userRepository->findOneBy(['status' => User::ANONYMOUS], ['registrationDate' => 'ASC']);
+            $anonymousUser = $userRepository->findOneBy(['status' => User::ANONYMOUS], ['createdAt' => 'ASC']);
             if ($anonymousUser) {
                 return $anonymousUser->getId();
             }
@@ -110,7 +113,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         if (0 === $maxAnonymousUsers) {
             $maxAnonymousUsers = self::MAX_ANONYMOUS_USERS;
         }
-        $anonymousUsers = $userRepository->findBy(['status' => User::ANONYMOUS], ['registrationDate' => 'ASC']);
+        $anonymousUsers = $userRepository->findBy(['status' => User::ANONYMOUS], ['createdAt' => 'ASC']);
 
         // Check in TrackELogin if there is an anonymous user with the same IP
         foreach ($anonymousUsers as $user) {

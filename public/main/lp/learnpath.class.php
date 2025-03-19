@@ -830,7 +830,7 @@ class learnpath
             api_get_session_id()
         );
 
-        if (false !== $link_info) {
+        if (!empty($link_info)) {
             GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
         }
 

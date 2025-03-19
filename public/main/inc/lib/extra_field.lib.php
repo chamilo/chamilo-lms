@@ -1150,6 +1150,8 @@ class ExtraField extends Model
                             'extra_'.$variable,
                             'trim'
                         );
+                        $form->applyFilter('extra_'.$variable, 'html_filter');
+
                         if ($freezeElement) {
                             $form->freeze('extra_'.$variable);
                         }
@@ -1169,6 +1171,7 @@ class ExtraField extends Model
                         );
                         $form->applyFilter('extra_'.$variable, 'stripslashes');
                         $form->applyFilter('extra_'.$variable, 'trim');
+                        $form->applyFilter('extra_'.$variable, 'html_filter');
                         if ($freezeElement) {
                             $form->freeze('extra_'.$variable);
                         }
@@ -1631,6 +1634,7 @@ class ExtraField extends Model
                         $form->applyFilter('extra_'.$variable, 'stripslashes');
                         $form->applyFilter('extra_'.$variable, 'trim');
                         $form->applyFilter('extra_'.$variable, 'mobile_phone_number_filter');
+                        $form->applyFilter('extra_'.$variable, 'html_filter');
                         $form->addRule(
                             'extra_'.$variable,
                             get_lang('Mobile phone number is incomplete or contains invalid characters'),
@@ -2312,9 +2316,9 @@ class ExtraField extends Model
     {
         $form = new FormValidator($this->type.'_field', 'post', $url);
 
-        $form->addElement('hidden', 'type', $this->type);
+        $form->addHidden('type', $this->type);
         $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-        $form->addElement('hidden', 'id', $id);
+        $form->addHidden('id', $id);
 
         // Setting the form elements
         $header = get_lang('Add');
@@ -2326,7 +2330,7 @@ class ExtraField extends Model
             $defaults = $this->get($id);
         }
 
-        $form->addElement('header', $header);
+        $form->addHeader($header);
 
         if ('edit' === $action) {
             $translateUrl = Container::getRouter()->generate(
@@ -2342,7 +2346,7 @@ class ExtraField extends Model
 
             $form->addElement('text', 'display_text', [get_lang('Name'), $translateButton]);
         } else {
-            $form->addElement('text', 'display_text', get_lang('Name'));
+            $form->addText('display_text', get_lang('Name'));
         }
 
         $form->addHtmlEditor('description', get_lang('Description'), false);
@@ -2356,8 +2360,8 @@ class ExtraField extends Model
             $types,
             ['id' => 'field_type']
         );
-        $form->addElement('label', get_lang('Example'), '<div id="example">-</div>');
-        $form->addElement('text', 'variable', get_lang('Field label'), ['class' => 'span5']);
+        $form->addLabel(get_lang('Example'), '<div id="example">-</div>');
+        $form->addText('variable', get_lang('Field label'), false);
         $form->addElement(
             'text',
             'field_options',
@@ -2382,7 +2386,7 @@ class ExtraField extends Model
                     'extra_field_options.php?type='.$this->type.'&field_id='.$id,
                     ['class' => 'btn']
                 );
-                $form->addElement('label', null, $url);
+                $form->addLabel(null, $url);
 
                 if (self::FIELD_TYPE_SELECT == $defaults['value_type']) {
                     $urlWorkFlow = Display::url(
@@ -2390,16 +2394,16 @@ class ExtraField extends Model
                         'extra_field_workflow.php?type='.$this->type.'&field_id='.$id,
                         ['class' => 'btn']
                     );
-                    $form->addElement('label', null, $urlWorkFlow);
+                    $form->addLabel(null, $urlWorkFlow);
                 }
 
                 $form->freeze('field_options');
             }
         }
-        $form->addElement(
-            'text',
+        $form->addText(
             'default_value',
             get_lang('Default value'),
+            false,
             ['id' => 'default_value']
         );
 
@@ -2430,7 +2434,7 @@ class ExtraField extends Model
         $form->addGroup($group, '', get_lang('Field changes should be logged'), '', false);
         */
 
-        $form->addElement('text', 'field_order', get_lang('Order'));
+        $form->addNumeric('field_order', get_lang('Order'), ['step' => 1, 'min' => 0]);
 
         if ($this->type == 'user') {
             $form->addElement(

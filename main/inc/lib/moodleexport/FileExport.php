@@ -78,7 +78,7 @@ class FileExport
                             'component' => 'mod_assign',
                             'filearea' => 'introattachment',
                             'itemid' => (int) $work->params['id'],
-                            'filepath' => '/',
+                            'filepath' => '/Documents/',
                             'documentpath' => 'document/'.$docData['path'],
                             'filename' => basename($docData['path']),
                             'userid' => $adminId,
@@ -187,11 +187,15 @@ class FileExport
     private function processDocument(array $filesData, object $document): array
     {
         if ($document->file_type === 'file') {
-            $filesData['files'][] = $this->getFileData($document);
+            $fileData = $this->getFileData($document);
+            $fileData['filepath'] = '/Documents/';
+            $fileData['contextid'] = 0;
+            $fileData['component'] = 'mod_folder';
+            $filesData['files'][] = $fileData;
         } elseif ($document->file_type === 'folder') {
             $folderFiles = \DocumentManager::getAllDocumentsByParentId($this->course->info, $document->source_id);
             foreach ($folderFiles as $file) {
-                $filesData['files'][] = $this->getFolderFileData($file, (int) $document->source_id);
+                $filesData['files'][] = $this->getFolderFileData($file, (int) $document->source_id, '/Documents/'.dirname($file['path']).'/');
             }
         }
 
@@ -233,14 +237,14 @@ class FileExport
     /**
      * Get file data for files inside a folder.
      */
-    private function getFolderFileData(array $file, int $sourceId): array
+    private function getFolderFileData(array $file, int $sourceId, string $parentPath = '/Documents/'): array
     {
         $adminData = MoodleExport::getAdminUserData();
         $adminId = $adminData['id'];
         $contenthash = hash('sha1', basename($file['path']));
         $mimetype = $this->getMimeType($file['path']);
         $filename = basename($file['path']);
-        $filepath = $this->ensureTrailingSlash(dirname($file['path']));
+        $filepath = $this->ensureTrailingSlash($parentPath);
 
         return [
             'id' => $file['id'],
@@ -267,9 +271,15 @@ class FileExport
     /**
      * Ensure the directory path has a trailing slash.
      */
-    private function ensureTrailingSlash($path): string
+    private function ensureTrailingSlash(string $path): string
     {
-        return empty($path) || $path === '.' || $path === '/' ? '/' : rtrim($path, '/').'/';
+        if (empty($path) || $path === '.' || $path === '/') {
+            return '/';
+        }
+
+        $path = preg_replace('/\/+/', '/', $path);
+
+        return rtrim($path, '/') . '/';
     }
 
     /**

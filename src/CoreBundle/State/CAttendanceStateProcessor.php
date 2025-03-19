@@ -82,8 +82,9 @@ final class CAttendanceStateProcessor implements ProcessorInterface
         $repeatDays = $data['repeatDays'] ?? null;
         $endDate = $repeatDate ? new DateTime($data['repeatEndDate']) : null;
         $groupId = $data['group'] ?? 0;
+        $duration = $data['duration'] ?? null;
 
-        $this->saveCalendar($attendance, $startDate, $groupId);
+        $this->saveCalendar($attendance, $startDate, $groupId, $duration);
 
         if ($repeatDate && $repeatType && $endDate) {
             $interval = $this->getRepeatInterval($repeatType, $repeatDays);
@@ -91,12 +92,12 @@ final class CAttendanceStateProcessor implements ProcessorInterface
 
             while ($currentDate < $endDate) {
                 $currentDate->add($interval);
-                $this->saveCalendar($attendance, $currentDate, $groupId);
+                $this->saveCalendar($attendance, $currentDate, $groupId, $duration);
             }
         }
     }
 
-    private function saveCalendar(CAttendance $attendance, DateTime $date, ?int $groupId): void
+    private function saveCalendar(CAttendance $attendance, DateTime $date, ?int $groupId, ?int $duration = null): void
     {
         $existingCalendar = $this->calendarRepo->findOneBy([
             'attendance' => $attendance->getIid(),
@@ -112,6 +113,7 @@ final class CAttendanceStateProcessor implements ProcessorInterface
         $calendar->setDateTime($date);
         $calendar->setDoneAttendance(false);
         $calendar->setBlocked(false);
+        $calendar->setDuration($duration);
 
         $this->entityManager->persist($calendar);
         $this->entityManager->flush();

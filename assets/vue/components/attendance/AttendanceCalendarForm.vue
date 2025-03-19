@@ -46,6 +46,14 @@
       />
     </div>
 
+    <BaseInputNumber
+      v-model="formData.duration"
+      :label="t('Duration (minutes)')"
+      type="number"
+      min="1"
+      required
+    />
+
     <!-- Group -->
     <BaseSelect
       v-model="formData.group"
@@ -97,6 +105,7 @@ const formData = reactive({
   repeatEndDate: "",
   repeatDays: 0,
   group: "",
+  duration: null,
 })
 
 const repeatTypeOptions = [
@@ -133,6 +142,7 @@ const submitForm = async () => {
     repeatEndDate: formData.repeatEndDate,
     repeatDays: formData.repeatType === "every-x-days" ? formData.repeatDays : null,
     group: formData.group ? parseInt(formData.group) : null,
+    duration: formData.duration,
   }
 
   try {

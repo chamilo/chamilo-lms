@@ -47,6 +47,7 @@ class CAttendanceCalendar
     protected bool $blocked;
 
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
+    #[Groups(['attendance:read', 'attendance:write', 'attendance_calendar:read', 'attendance_calendar:write'])]
     protected ?int $duration = null;
 
     /**

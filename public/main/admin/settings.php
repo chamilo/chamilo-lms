@@ -314,24 +314,6 @@ if (!empty($_GET['category'])) {
             echo '</div>';
             echo '</div>';
             echo '</div>';
-
-            echo '<script>
-                    $(document).ready(function () {
-                        $(".plugin-action").click(function () {
-                            var pluginName = $(this).data("plugin");
-                            var action = $(this).data("action");
-
-                            $.post("'.api_get_path(WEB_AJAX_PATH).'plugin.ajax.php", { a: action, plugin: pluginName }, function(response) {
-                                var data = JSON.parse(response);
-                                if (data.success) {
-                                    location.reload();
-                                } else {
-                                    alert("Error: " + data.error);
-                                }
-                            });
-                        });
-                    });
-                    </script>';
             break;
         case 'Search':
             handleSearch();

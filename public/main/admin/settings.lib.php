@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
 use ChamiloSession as Session;
 use Symfony\Component\Filesystem\Filesystem;
@@ -165,9 +166,11 @@ function handlePlugins()
 
         require $pluginInfoFile;
 
+        /** @var PluginEntity|null $plugin */
         $plugin = $pluginRepo->findOneBy(['title' => $pluginName]);
+        $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlHelper()->getCurrent());
         $isInstalled = $plugin && $plugin->isInstalled();
-        $isEnabled = $plugin ? $plugin->isActive() : false;
+        $isEnabled = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
 
         // Status badge
         $statusBadge = $isInstalled

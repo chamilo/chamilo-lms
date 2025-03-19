@@ -253,6 +253,11 @@ class AppPlugin
         ];
     }
 
+    public static function isOfficial(string $title): bool
+    {
+        return in_array($title, self::getOfficialPlugins());
+    }
+
     /**
      * @param string $pluginName
      * @param int    $urlId

@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -37,12 +38,12 @@ class Plugin
     /**
      * @var Collection<int, AccessUrlRelPlugin>
      */
-    #[ORM\OneToMany(mappedBy: 'plugin', targetEntity: AccessUrlRelPlugin::class, orphanRemoval: true)]
-    private Collection $urls;
+    #[ORM\OneToMany(mappedBy: 'plugin', targetEntity: AccessUrlRelPlugin::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $configurationsInUrl;
 
     public function __construct()
     {
-        $this->urls = new ArrayCollection();
+        $this->configurationsInUrl = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,24 +102,24 @@ class Plugin
     /**
      * @return Collection<int, AccessUrlRelPlugin>
      */
-    public function getUrls(): Collection
+    public function getConfigurationsInUrl(): Collection
     {
-        return $this->urls;
+        return $this->configurationsInUrl;
     }
 
-    public function addUrl(AccessUrlRelPlugin $url): static
+    public function addConfigurationsInUrl(AccessUrlRelPlugin $url): static
     {
-        if (!$this->urls->contains($url)) {
-            $this->urls->add($url);
+        if (!$this->configurationsInUrl->contains($url)) {
+            $this->configurationsInUrl->add($url);
             $url->setPlugin($this);
         }
 
         return $this;
     }
 
-    public function removeUrl(AccessUrlRelPlugin $url): static
+    public function removeConfigurationsInUrl(AccessUrlRelPlugin $url): static
     {
-        if ($this->urls->removeElement($url)) {
+        if ($this->configurationsInUrl->removeElement($url)) {
             // set the owning side to null (unless already changed)
             if ($url->getPlugin() === $this) {
                 $url->setPlugin(null);
@@ -126,5 +127,15 @@ class Plugin
         }
 
         return $this;
+    }
+
+    public function getConfigurationsByAccessUrl(AccessUrl $url): ?AccessUrlRelPlugin
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('url', $url))
+            ->setMaxResults(1)
+        ;
+
+        return $this->configurationsInUrl->matching($criteria)->first() ?: null;
     }
 }

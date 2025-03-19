@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelPlugin;
 use Chamilo\CoreBundle\Framework\Container;
 use Michelf\MarkdownExtra;
 use Chamilo\CoreBundle\Entity\Plugin;
@@ -17,6 +18,7 @@ $em = Database::getManager();
 $pluginRepository = $em->getRepository(Plugin::class);
 
 $accessUrlHelper = Container::getAccessUrlHelper();
+$currentAccessUrl = $accessUrlHelper->getCurrent();
 
 switch ($action) {
     case 'md_to_html':
@@ -46,17 +48,28 @@ switch ($action) {
     case 'uninstall':
     case 'enable':
     case 'disable':
-        $pluginTitle = $_POST['plugin'] ?? '';
+        $pluginTitle = api_replace_dangerous_char($_POST['plugin'] ?? '');
+        $plugin_info = [
+            'version' => '0.0.1',
+            'title' => $pluginTitle,
+        ];
 
         $criteria = ['title' => $pluginTitle];
 
         if ($accessUrlHelper->isMultiple()) {
-            $criteria['accessUrlId'] = $accessUrlHelper->getCurrent()->getId();
+            $criteria['accessUrlId'] = $currentAccessUrl->getId();
         }
 
-        $plugin = $pluginRepository->findOneBy($criteria);
-        if (!$plugin) {
-            die(json_encode(['error' => 'Plugin not found']));
+        $plugin = match ($action) {
+            'uninstall', 'enable', 'disable' => $pluginRepository->findOneBy($criteria),
+            'install' => new Plugin(),
+            default => die(json_encode(['error' => 'Plugin not found'])),
+        };
+
+        $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginTitle.'/plugin.php';
+
+        if (is_file($pluginPath) && is_readable($pluginPath)) {
+            require $pluginPath;
         }
 
         $appPlugin = new AppPlugin();
@@ -64,22 +77,38 @@ switch ($action) {
         if ($action === 'install') {
             $appPlugin->install($pluginTitle);
 
-            $plugin->setInstalled(true);
-        } elseif ($action === 'uninstall') {
+            $plugin
+                ->setTitle($plugin_info['title'])
+                ->setInstalledVersion($plugin_info['version'])
+                ->setInstalled(true)
+            ;
+
+            if (AppPlugin::isOfficial($plugin_info['title'])) {
+                $plugin->setSource(Plugin::SOURCE_OFFICIAL);
+            }
+
+            $em->persist($plugin);
+        } elseif ($plugin && $action === 'uninstall') {
             $appPlugin->uninstall($pluginTitle);
 
             $plugin->setInstalled(false);
-            $plugin->setActive(false);
+        } elseif (('enable' === $action || 'disable' === $action)
+            && $plugin && $plugin->isInstalled()
+        ) {
+            $pluginConfiguration = $plugin->getConfigurationsByAccessUrl($currentAccessUrl);
 
-            $appPlugin->uninstall($pluginTitle);
-        } elseif ($action === 'enable') {
-            if ($plugin->isInstalled()) {
-                $plugin->setActive(true);
-            } else {
-                die(json_encode(['error' => 'Cannot enable an uninstalled plugin']));
+            if (!$pluginConfiguration) {
+                $pluginConfiguration = (new AccessUrlRelPlugin())->setUrl($currentAccessUrl);
+
+                $plugin->addConfigurationsInUrl($pluginConfiguration);
             }
-        } elseif ($action === 'disable') {
-            $plugin->setActive(false);
+
+            match($action) {
+                'enable' => $pluginConfiguration->setActive(true),
+                'disable' => $pluginConfiguration->setActive(false),
+            };
+        } else {
+            die(json_encode(['error' => 'Cannot enable an uninstalled plugin']));
         }
 
         $em->flush();

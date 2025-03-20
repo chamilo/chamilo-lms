@@ -595,7 +595,9 @@ if (isset($_GET['action'])) {
 
 $flashMessage = '';
 if (!empty($_SESSION['flash_message'])) {
-    $flashMessage = Display::return_message($_SESSION['flash_message'], 'success');
+    $messageType = isset($_SESSION['flash_message']['type']) ? $_SESSION['flash_message']['type'] : 'warning';
+    $messageText = isset($_SESSION['flash_message']['message']) ? $_SESSION['flash_message']['message'] : '';
+    $flashMessage = Display::return_message($messageText, $messageType);
     unset($_SESSION['flash_message']);
 }
 Display::display_header($tool_name);

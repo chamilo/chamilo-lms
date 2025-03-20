@@ -120,6 +120,28 @@ class LinkAddEditForm extends FormValidator
             ]
         );
 
+        // ELEMENT: min_score
+        $this->addFloat(
+            'min_score',
+            get_lang('Minimum Score'),
+            true,
+            [
+                'size' => '4',
+                'maxlength' => '5',
+            ]
+        );
+        $this->addRule('min_score', get_lang('Only numbers'), 'numeric');
+        $this->addRule(
+            'min_score',
+            get_lang('Negative value'),
+            'compare',
+            '>=',
+            'server',
+            false,
+            false,
+            0
+        );
+
         $this->addElement('hidden', 'weight');
 
         if (self::TYPE_EDIT == $form_type) {
@@ -137,6 +159,9 @@ class LinkAddEditForm extends FormValidator
             }
             $defaults['weight_mask'] = $values['weight'];
             $defaults['select_gradebook'] = $link->get_category_id();
+            if (!is_null($link->entity)) {
+                $defaults['min_score'] = $link->entity->getMinScore();
+            }
         }
         // ELEMENT: max
         if ($link->needs_max()) {

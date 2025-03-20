@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
+use Chamilo\CoreBundle\Repository\GradebookResultRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\MessageRepository;
@@ -364,6 +365,11 @@ class Container
     public static function getGradeBookCertificateRepository(): GradebookCertificateRepository
     {
         return self::$container->get(GradebookCertificateRepository::class);
+    }
+
+    public static function getGradebookResultRepository(): GradebookResultRepository
+    {
+        return self::$container->get(GradebookResultRepository::class);
     }
 
     public static function getGroupRepository(): CGroupRepository

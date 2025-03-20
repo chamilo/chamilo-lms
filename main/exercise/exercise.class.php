@@ -5426,10 +5426,12 @@ class Exercise
                                 $results_disabled
                             );
                         } elseif ($answerType == ANSWER_IN_OFFICE_DOC) {
+                            $exe_info = Event::get_exercise_results_by_attempt($exeId);
+                            $exe_info = $exe_info[$exeId] ?? null;
                             ExerciseShowFunctions::displayOnlyOfficeAnswer(
                                 $feedback_type,
                                 $exeId,
-                                api_get_user_id(),
+                                $exe_info['exe_user_id'] ?? api_get_user_id(),
                                 $this->iid,
                                 $questionId,
                                 $questionScore
@@ -5833,10 +5835,12 @@ class Exercise
                             );
                             break;
                         case ANSWER_IN_OFFICE_DOC:
+                            $exe_info = Event::get_exercise_results_by_attempt($exeId);
+                            $exe_info = $exe_info[$exeId] ?? null;
                             ExerciseShowFunctions::displayOnlyOfficeAnswer(
                                 $feedback_type,
                                 $exeId,
-                                api_get_user_id(),
+                                $exe_info['exe_user_id'] ?? api_get_user_id(),
                                 $this->iid,
                                 $questionId,
                                 $questionScore

@@ -1368,30 +1368,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@intlify/core-base@npm:10.0.5":
-  version: 10.0.5
-  resolution: "@intlify/core-base@npm:10.0.5"
+"@intlify/core-base@npm:10.0.6":
+  version: 10.0.6
+  resolution: "@intlify/core-base@npm:10.0.6"
   dependencies:
-    "@intlify/message-compiler": "npm:10.0.5"
-    "@intlify/shared": "npm:10.0.5"
-  checksum: 10c0/595c9623dce01f8d4ac5ad4b9086b1927956c63ad18098434a0a991e69147c6284619338bc4a9fe6f3c2a4c666d957a2c19ecfe61f3cc30abe130e0d80e17f94
+    "@intlify/message-compiler": "npm:10.0.6"
+    "@intlify/shared": "npm:10.0.6"
+  checksum: 10c0/84af28b63bf658876802812f8df2325112fb165803fe43e45f88d91a842d7237085af21d0929fe4bfafc5fdb7b36a2676a82a273c6c03075779f7140de3ebf29
   languageName: node
   linkType: hard
 
-"@intlify/message-compiler@npm:10.0.5":
-  version: 10.0.5
-  resolution: "@intlify/message-compiler@npm:10.0.5"
+"@intlify/message-compiler@npm:10.0.6":
+  version: 10.0.6
+  resolution: "@intlify/message-compiler@npm:10.0.6"
   dependencies:
-    "@intlify/shared": "npm:10.0.5"
+    "@intlify/shared": "npm:10.0.6"
     source-map-js: "npm:^1.0.2"
-  checksum: 10c0/66312b863fccd822be4f0fda485685a0eb9f500e84023689d0f2540be32159e2c4e828d3ada4923c78c219d0f31a9bb41595da8f40e0fdbd45037db393198ec2
+  checksum: 10c0/58e73233b6b9362559119e1cd72bf9e7efc522cc1dd02a8944c876527d98ab21ff8589f987230bb3d5d9f34cdbd44bfa1edd9dd7612ddec7aae1e0f6f24a3145
   languageName: node
   linkType: hard
 
-"@intlify/shared@npm:10.0.5":
-  version: 10.0.5
-  resolution: "@intlify/shared@npm:10.0.5"
-  checksum: 10c0/4435a714e4a324fd2f40c01be3f55abc7bd87e6280b25e6fce720178f8cf5e01fece538c2fbd72fca64471589f46531dd89bc772455ffad831c7e43f01655097
+"@intlify/shared@npm:10.0.6":
+  version: 10.0.6
+  resolution: "@intlify/shared@npm:10.0.6"
+  checksum: 10c0/cd90aeee74a2906516f11ad4d0a50de2b462c2a29a7b469c83e6078bd5fbe3bd99a9e1b11af7961570d29b8608beb8b9c67d7f4846b7c50707e00368888cd11f
   languageName: node
   linkType: hard
 
@@ -4152,7 +4152,7 @@ __metadata:
     vue: "npm:^3.5.13"
     vue-eslint-parser: "npm:^9.4.3"
     vue-flatpickr-component: "npm:^9.0.8"
-    vue-i18n: "npm:10.0.5"
+    vue-i18n: "npm:10.0.6"
     vue-loader: "npm:^17.4.2"
     vue-multiselect: "npm:^3.0.0-beta.2"
     vue-perfect-scrollbar: "npm:^0.2.1"
@@ -10673,16 +10673,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-i18n@npm:10.0.5":
-  version: 10.0.5
-  resolution: "vue-i18n@npm:10.0.5"
+"vue-i18n@npm:10.0.6":
+  version: 10.0.6
+  resolution: "vue-i18n@npm:10.0.6"
   dependencies:
-    "@intlify/core-base": "npm:10.0.5"
-    "@intlify/shared": "npm:10.0.5"
+    "@intlify/core-base": "npm:10.0.6"
+    "@intlify/shared": "npm:10.0.6"
     "@vue/devtools-api": "npm:^6.5.0"
   peerDependencies:
     vue: ^3.0.0
-  checksum: 10c0/070ab39eb0e046d3ba298ba952efe1ea18d22ddecb4a73411e5f1863954e582d7f98a25c4fcac8330b40745fcffd404cc936c8abd102fd3628ac2abb9d0fe58b
+  checksum: 10c0/4ed20fcbd400d095991edf02028b5dac5fd75601b3dac1b804d4cec444149cc12fb0c7cfd8aee0c4024b3cc19cfc65c649f1039c95bd9506cc4e59afe22cf274
   languageName: node
   linkType: hard
 

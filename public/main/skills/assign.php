@@ -298,11 +298,14 @@ if ($form->validate()) {
     }
 
     if ($user->hasSkill($skill)) {
-        $_SESSION['flash_message'] = sprintf(
-            get_lang('The user %s has already achieved the skill %s'),
-            UserManager::formatUserFullName($user),
-            $skill->getTitle()
-        );
+        $_SESSION['flash_message'] = [
+            'type' => 'warning',
+            'message' => sprintf(
+                get_lang('The user %s has already achieved the skill %s'),
+                UserManager::formatUserFullName($user),
+                $skill->getTitle()
+            )
+        ];
 
         header('Location: '.$currentUrl);
         exit;
@@ -367,14 +370,17 @@ if ($form->validate()) {
         }
     }
 
-    $_SESSION['flash_message'] = sprintf(
-        get_lang('The skill %s has been successfully assigned to user %s'),
-        $skill->getTitle(),
-        UserManager::formatUserFullName($user)
-    );
+    $_SESSION['flash_message'] = [
+        'type' => 'success',
+        'message' => sprintf(
+            get_lang('The skill %s has been successfully assigned to user %s'),
+            $skill->getTitle(),
+            UserManager::formatUserFullName($user)
+        )
+    ];
 
     if (isset($_POST['save_and_add_more'])) {
-        header('Location: '.api_get_path(WEB_PATH)."badge/{$skillUser->getId()}");
+        header('Location: '.api_get_path(WEB_CODE_PATH)."skills/assign.php?user={$userId}");
     } else {
         $secToken = Security::get_token();
         header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId.'&sec_token='.$secToken);
@@ -444,9 +450,13 @@ $(function() {
 
 $flashMessage = '';
 if (isset($_SESSION['flash_message'])) {
-    $flashMessage = Display::return_message($_SESSION['flash_message'], 'warning');
+    $messageType = isset($_SESSION['flash_message']['type']) ? $_SESSION['flash_message']['type'] : 'warning';
+    $messageText = isset($_SESSION['flash_message']['message']) ? $_SESSION['flash_message']['message'] : '';
+
+    $flashMessage = Display::return_message($messageText, $messageType);
     unset($_SESSION['flash_message']);
 }
+
 $template = new Template(get_lang('Add skill'));
 $template->assign('content', $flashMessage.$form->returnForm());
 $template->display_one_col_template();

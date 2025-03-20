@@ -26,7 +26,6 @@ export default {
         },
         {
           name: "PersonalFileUpdate",
-          //path: ':id/edit',
           path: "edit_file",
           component: () => import("../views/personalfile/Update.vue"),
         },

@@ -18,7 +18,7 @@ final class Version20250310214200 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $this->addSql("
+        $this->addSql('
             CREATE TABLE conference_meeting (
                 id INT AUTO_INCREMENT NOT NULL,
                 c_id INT DEFAULT NULL,
@@ -55,9 +55,9 @@ final class Version20250310214200 extends AbstractMigrationChamilo
                 CONSTRAINT FK_EE87E81FE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid) ON DELETE CASCADE,
                 CONSTRAINT FK_EE87E81A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-        ");
+        ');
 
-        $this->addSql("
+        $this->addSql('
             CREATE TABLE conference_recording (
                 id INT AUTO_INCREMENT NOT NULL,
                 meeting_id INT NOT NULL,
@@ -66,9 +66,9 @@ final class Version20250310214200 extends AbstractMigrationChamilo
                 PRIMARY KEY(id),
                 CONSTRAINT FK_F7FF7ACB67433D9C FOREIGN KEY (meeting_id) REFERENCES conference_meeting (id) ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-        ");
+        ');
 
-        $this->addSql("
+        $this->addSql('
             CREATE TABLE conference_activity (
                 id INT AUTO_INCREMENT NOT NULL,
                 meeting_id INT NOT NULL,
@@ -85,13 +85,13 @@ final class Version20250310214200 extends AbstractMigrationChamilo
                 CONSTRAINT FK_6935CF7B67433D9C FOREIGN KEY (meeting_id) REFERENCES conference_meeting (id) ON DELETE CASCADE,
                 CONSTRAINT FK_6935CF7B9D1C3019 FOREIGN KEY (participant_id) REFERENCES user (id) ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-        ");
+        ');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql("DROP TABLE IF EXISTS conference_activity;");
-        $this->addSql("DROP TABLE IF EXISTS conference_recording;");
-        $this->addSql("DROP TABLE IF EXISTS conference_meeting;");
+        $this->addSql('DROP TABLE IF EXISTS conference_activity;');
+        $this->addSql('DROP TABLE IF EXISTS conference_recording;');
+        $this->addSql('DROP TABLE IF EXISTS conference_meeting;');
     }
 }

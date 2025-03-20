@@ -99,7 +99,7 @@ Encore.setOutputPath("public/build/")
       from: "./node_modules/chart.js/dist/",
       to: "libs/chartjs/[name].[ext]",
       pattern: /\.(js|css)$/,
-    }
+    },
   ])
   .addPlugin(
     new webpack.DefinePlugin({
@@ -109,6 +109,7 @@ Encore.setOutputPath("public/build/")
   .configureDevServerOptions((options) => {
     options.host = "0.0.0.0"
   })
+  .enableVersioning()
 
 Encore.copyFiles({
   from: "./node_modules/mediaelement/build",

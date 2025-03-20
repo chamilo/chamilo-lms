@@ -104,6 +104,10 @@ function track(): array
         return ['error' => 'Bad Response'];
     }
 
+    if ($data['status'] == 4) {
+        return ['status' => 'success', 'message' => 'No changes detected'];
+    }
+
     if ($jwtManager->isJwtEnabled()) {
         if (!empty($data['token'])) {
             try {

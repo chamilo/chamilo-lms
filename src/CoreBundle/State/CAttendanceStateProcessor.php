@@ -38,8 +38,6 @@ final class CAttendanceStateProcessor implements ProcessorInterface
 
         $operationName = $operation->getName();
 
-        error_log("Processing $operationName");
-
         match ($operationName) {
             'toggle_visibility' => $this->handleToggleVisibility($data),
             'soft_delete' => $this->handleSoftDelete($data),

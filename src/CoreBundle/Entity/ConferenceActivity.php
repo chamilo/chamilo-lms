@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use DateTime;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Conference Activity entity.

@@ -61,7 +61,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__.'/src/CourseBundle/Component/CourseCopy/*',
             __DIR__.'/src/CoreBundle/Component/HTMLPurifier/*',
             __DIR__.'/src/LtiBundle/*',
-            __DIR__.'/src/CoreBundle/Hook/*',
             __DIR__.'/src/CoreBundle/Migrations/*',
             __DIR__.'/src/CoreBundle/Twig/SettingsHelper.php',
             __DIR__.'/src/CoreBundle/Settings/*',

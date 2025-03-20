@@ -75,6 +75,9 @@ class GradebookEvaluation
     #[ORM\Column(name: 'user_score_list', type: 'array', nullable: true)]
     protected ?array $userScoreList = null;
 
+    #[ORM\Column(name: 'min_score', type: 'float', precision: 6, scale: 2, nullable: true)]
+    protected ?float $minScore = null;
+
     public function __construct()
     {
         $this->locked = 0;
@@ -305,6 +308,18 @@ class GradebookEvaluation
     public function setCategory(GradebookCategory $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getMinScore(): ?float
+    {
+        return $this->minScore;
+    }
+
+    public function setMinScore(?float $minScore): self
+    {
+        $this->minScore = $minScore;
 
         return $this;
     }

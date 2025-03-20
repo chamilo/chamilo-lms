@@ -54,7 +54,6 @@ parameters:
 		- public/main/cron/*
 		- public/main/webservices/*
 
-		- src/CoreBundle/Hook/*
 		- src/CoreBundle/Migrations/*
 		- src/CoreBundle/Twig/SettingsHelper.php
 		- src/CoreBundle/Settings/SettingsResolver.php

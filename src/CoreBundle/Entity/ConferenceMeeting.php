@@ -20,9 +20,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class ConferenceMeeting
 {
-    use UserTrait;
     use CourseTrait;
     use SessionTrait;
+    use UserTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

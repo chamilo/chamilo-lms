@@ -6,15 +6,16 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\ConferenceActivity;
+use Chamilo\CoreBundle\Entity\ConferenceMeeting;
+use Chamilo\CoreBundle\Entity\ConferenceRecording;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\CoreBundle\Entity\ConferenceMeeting;
-use Chamilo\CoreBundle\Entity\ConferenceActivity;
-use Chamilo\CoreBundle\Entity\ConferenceRecording;
-use Doctrine\DBAL\Schema\Schema;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CourseBundle\Entity\CGroup;
-use Chamilo\CoreBundle\Entity\Session;
+use DateTime;
+use Doctrine\DBAL\Schema\Schema;
 use Exception;
 
 final class Version20250310215900 extends AbstractMigrationChamilo
@@ -63,13 +64,13 @@ final class Version20250310215900 extends AbstractMigrationChamilo
             $this->entityManager->commit();
         } catch (Exception $e) {
             $this->entityManager->rollBack();
-            error_log('Migration failed: ' . $e->getMessage());
+            error_log('Migration failed: '.$e->getMessage());
         }
     }
 
     private function migrateBbbMeetings(): void
     {
-        $bbbMeetings = $this->connection->fetchAllAssociative("SELECT * FROM plugin_bbb_meeting");
+        $bbbMeetings = $this->connection->fetchAllAssociative('SELECT * FROM plugin_bbb_meeting');
 
         foreach ($bbbMeetings as $bbb) {
             $course = $this->getEntityById(Course::class, $bbb['c_id']);
@@ -95,7 +96,7 @@ final class Version20250310215900 extends AbstractMigrationChamilo
             $meeting->setVoiceBridge($bbb['voice_bridge']);
             $meeting->setVideoUrl($bbb['video_url']);
             $meeting->setHasVideoM4v((bool) $bbb['has_video_m4v']);
-            $meeting->setClosedAt($bbb['closed_at'] ? new \DateTime($bbb['closed_at']) : null);
+            $meeting->setClosedAt($bbb['closed_at'] ? new DateTime($bbb['closed_at']) : null);
 
             $meeting->setCourse($course);
             $meeting->setUser($user);
@@ -114,7 +115,7 @@ final class Version20250310215900 extends AbstractMigrationChamilo
 
     private function migrateBbbActivities(): void
     {
-        $bbbActivities = $this->connection->fetchAllAssociative("SELECT * FROM plugin_bbb_room");
+        $bbbActivities = $this->connection->fetchAllAssociative('SELECT * FROM plugin_bbb_room');
 
         foreach ($bbbActivities as $activity) {
             if (!isset($this->meetingIdMap[$activity['meeting_id']])) {
@@ -131,8 +132,8 @@ final class Version20250310215900 extends AbstractMigrationChamilo
             $conferenceActivity = new ConferenceActivity();
             $conferenceActivity->setMeeting($meeting);
             $conferenceActivity->setParticipant($participant);
-            $conferenceActivity->setInAt(new \DateTime($activity['in_at']));
-            $conferenceActivity->setOutAt($activity['out_at'] ? new \DateTime($activity['out_at']) : null);
+            $conferenceActivity->setInAt(new DateTime($activity['in_at']));
+            $conferenceActivity->setOutAt($activity['out_at'] ? new DateTime($activity['out_at']) : null);
             $conferenceActivity->setType('participant');
             $conferenceActivity->setEvent('joined');
 
@@ -142,7 +143,7 @@ final class Version20250310215900 extends AbstractMigrationChamilo
 
     private function migrateBbbRecordings(): void
     {
-        $bbbRecordings = $this->connection->fetchAllAssociative("SELECT * FROM plugin_bbb_meeting_format");
+        $bbbRecordings = $this->connection->fetchAllAssociative('SELECT * FROM plugin_bbb_meeting_format');
 
         foreach ($bbbRecordings as $recording) {
             $meeting = $this->getEntityById(ConferenceMeeting::class, $recording['meeting_id']);
@@ -162,7 +163,7 @@ final class Version20250310215900 extends AbstractMigrationChamilo
 
     private function migrateZoomMeetings(): void
     {
-        $zoomMeetings = $this->connection->fetchAllAssociative("SELECT * FROM plugin_zoom_meeting");
+        $zoomMeetings = $this->connection->fetchAllAssociative('SELECT * FROM plugin_zoom_meeting');
 
         foreach ($zoomMeetings as $zoom) {
             $course = $this->getEntityById(Course::class, $zoom['course_id']);
@@ -199,7 +200,7 @@ final class Version20250310215900 extends AbstractMigrationChamilo
 
     private function migrateZoomActivities(): void
     {
-        $zoomActivities = $this->connection->fetchAllAssociative("SELECT * FROM plugin_zoom_meeting_activity");
+        $zoomActivities = $this->connection->fetchAllAssociative('SELECT * FROM plugin_zoom_meeting_activity');
 
         foreach ($zoomActivities as $activity) {
             if (!isset($this->meetingIdMap[$activity['meeting_id']])) {
@@ -216,7 +217,7 @@ final class Version20250310215900 extends AbstractMigrationChamilo
             $conferenceActivity = new ConferenceActivity();
             $conferenceActivity->setMeeting($meeting);
             $conferenceActivity->setParticipant($participant);
-            $conferenceActivity->setInAt(new \DateTime($activity['created_at']));
+            $conferenceActivity->setInAt(new DateTime($activity['created_at']));
             $conferenceActivity->setEvent($activity['event']);
 
             $this->entityManager->persist($conferenceActivity);
@@ -225,7 +226,7 @@ final class Version20250310215900 extends AbstractMigrationChamilo
 
     private function migrateZoomRecordings(): void
     {
-        $zoomRecordings = $this->connection->fetchAllAssociative("SELECT * FROM plugin_zoom_recording");
+        $zoomRecordings = $this->connection->fetchAllAssociative('SELECT * FROM plugin_zoom_recording');
 
         foreach ($zoomRecordings as $recording) {
             $meeting = $this->getEntityById(ConferenceMeeting::class, $recording['meeting_id']);
@@ -252,6 +253,7 @@ final class Version20250310215900 extends AbstractMigrationChamilo
     {
         try {
             $this->connection->executeQuery("SELECT 1 FROM $tableName LIMIT 1");
+
             return true;
         } catch (Exception $e) {
             return false;

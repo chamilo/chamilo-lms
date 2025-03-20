@@ -5,7 +5,6 @@ export default {
   component: () => import("../views/personalfile/Home.vue"),
   children: [
     {
-      name: "personal_files",
       path: ":node/",
       component: () => import("../components/personalfile/Layout.vue"),
       redirect: { name: "PersonalFileList" },

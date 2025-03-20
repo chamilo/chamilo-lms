@@ -1849,6 +1849,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Attendance signing',
                     'comment' => "Enable taking signatures to confirm one's attendance.",
                 ],
+                [
+                    'name' => 'multilevel_grading',
+                    'title' => 'Enable Multi-Level Attendance Grading',
+                    'comment' => 'Allows grading attendance with multiple levels instead of a simple present/absent system.',
+                ],
             ],
             'display' => [
                 [

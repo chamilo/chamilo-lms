@@ -462,10 +462,6 @@ class SessionManager
 
         $userId = (int) $userId;
 
-        if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_teacher()) {
-            api_not_allowed(true);
-        }
-
         $extraFieldModel = new ExtraFieldModel('session');
         $conditions = $extraFieldModel->parseConditions($options);
 

@@ -83,8 +83,9 @@ class FlatViewDataGenerator
      * @param bool $show_detail whether to show the details or not
      *
      * @return array List of headers
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function get_header_names($items_start = 0, $items_count = null, $show_detail = false)
+    public function get_header_names($items_start = 0, $items_count = null, $show_detail = false): array
     {
         $headers = [];
         if (isset($this->params['show_official_code']) && $this->params['show_official_code']) {
@@ -223,12 +224,12 @@ class FlatViewDataGenerator
             }
         }
 
-        $headers[] = '<span class="text-center">'.api_strtoupper(get_lang('GradebookQualificationTotal')).'</span>';
+        $headers[] = '<span class="text-center">'.api_strtoupper(get_lang('Total')).'</span>';
 
         if ('true' === api_get_setting('gradebook.gradebook_score_display_custom_standalone')
             && ScoreDisplay::instance()->is_custom()
         ) {
-            $headers[] = get_lang('GradebookScoreDisplayCustomValues');
+            $headers[] = get_lang('Competence levels custom values');
         }
 
         return $headers;

@@ -132,7 +132,7 @@ if ($form->validate()) {
     $userResetPasswordSetting = api_get_setting('user_reset_password');
 
     if ('true' === $userResetPasswordSetting) {
-        $userObj = api_get_user_entity($user['uid']);
+        $userObj = api_get_user_entity($user['id']);
         Login::sendResetEmail($userObj);
 
         header('Location: '.api_get_path(WEB_PATH));

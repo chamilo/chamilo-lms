@@ -18,7 +18,7 @@ class Login
     /**
      * Get user account list.
      *
-     * @param array $user        array with keys: email, password, uid, loginName
+     * @param array $user        array with keys: email, password, id, loginName
      * @param bool  $reset
      * @param bool  $by_username
      *
@@ -40,13 +40,13 @@ class Login
             if ($by_username) {
                 $secret_word = self::get_secret_word($user['email']);
                 if ($reset) {
-                    $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$user['uid'];
+                    $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$user['id'];
                     $reset_link = Display::url($reset_link, $reset_link);
                 } else {
                     $reset_link = get_lang('Pass')." : $user[password]";
                 }
                 $user_account_list = get_lang('Your registration data')." : \n".
-                    get_lang('Username').' : '.$user['loginName']."\n".
+                    get_lang('Username').' : '.$user['username']."\n".
                     get_lang('Click here to recover your password').' : '.$reset_link;
 
                 if ($user_account_list) {
@@ -56,7 +56,7 @@ class Login
                 foreach ($user as $this_user) {
                     $secret_word = self::get_secret_word($this_user['email']);
                     if ($reset) {
-                        $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$this_user['uid'];
+                        $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$this_user['id'];
                         $reset_link = Display::url($reset_link, $reset_link);
                     } else {
                         $reset_link = get_lang('Pass')." : $this_user[password]";
@@ -145,14 +145,14 @@ class Login
     /**
      * Handle encrypted password, send an email to a user with his password.
      *
-     * @param int user id
+     * @param int $user
      * @param bool $by_username
      *
      * @return string
      *
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
-    public static function handle_encrypted_password($user, $by_username = false)
+    public static function handle_encrypted_password(int $user, $by_username = false)
     {
         $email_subject = "[".api_get_setting('siteName')."] ".get_lang('Login request'); // SUBJECT
 
@@ -257,7 +257,7 @@ class Login
 
         if ($userEntity) {
             $user = [
-                'uid' => $userEntity->getId(),
+                'id' => $userEntity->getId(),
                 'lastName' => $userEntity->getLastname(),
                 'firstName' => $userEntity->getFirstname(),
                 'loginName' => $userEntity->getUsername(),
@@ -370,6 +370,7 @@ class Login
      * @param string $username (email or username)
      *
      * @return array|bool
+     * @throws \Doctrine\DBAL\Exception
      */
     public static function get_user_accounts_by_username($username)
     {
@@ -389,7 +390,7 @@ class Login
 
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
-        $query = "SELECT id AS uid FROM $tbl_user WHERE ( $condition AND active = 1) ";
+        $query = "SELECT id FROM $tbl_user WHERE ( $condition AND active = 1) ";
         $result = Database::query($query);
         $num_rows = Database::num_rows($result);
         if ($result && $num_rows > 0) {

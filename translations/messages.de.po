@@ -4915,10 +4915,10 @@ msgstr "Bestätigen"
 msgid "Unsubscribe users from course"
 msgstr "Teilnehmer aus Kurs abmelden"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Name für Klasse fehlt"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Name für Klasse existiert schon"
 
 msgid "CSV file import location"

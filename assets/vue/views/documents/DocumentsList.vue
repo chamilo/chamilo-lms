@@ -787,7 +787,7 @@ function openMoveDialog(document) {
 async function fetchFolders(nodeId = null, parentPath = "") {
   const foldersList = [
     {
-      label: "Root",
+      label: t('Documents'),
       value: nodeId || route.params.node || route.query.node || "root-node-id",
     },
   ]

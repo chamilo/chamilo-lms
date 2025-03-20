@@ -51,7 +51,7 @@ class LinkAddEditForm extends FormValidator
             if ($link->needs_name_and_description()) {
                 $this->addText('name', get_lang('Name'), true, ['size' => '40', 'maxlength' => '40']);
             } else {
-                $select = $this->addSelect('select_link', get_lang('ChooseItem'));
+                $select = $this->addSelect('select_link', get_lang('Choose item'));
                 foreach ($link->get_all_links() as $newlink) {
                     $name = strip_tags(Exercise::get_formated_title_variable($newlink[1]));
                     $select->addOption($name, $newlink[0]);

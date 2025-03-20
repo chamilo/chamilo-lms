@@ -27916,3 +27916,21 @@ msgstr "Results and feedback per user"
 
 msgid "Score display custom values"
 msgstr "Score display custom values"
+
+msgid "AI generator"
+msgstr "AI generator"
+
+msgid "Words count per page"
+msgstr "Words count per page"
+
+msgid "Add test after each page"
+msgstr "Add test after each page"
+
+msgid "Error creating learning path"
+msgstr "Error creating learning path"
+
+msgid "Invalid server response"
+msgstr "Invalid server response"
+
+msgid "Please wait, this could take a while..."
+msgstr "Please wait, this could take a while..."

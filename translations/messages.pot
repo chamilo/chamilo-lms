@@ -27902,3 +27902,21 @@ msgstr ""
 
 msgid "Score display custom values"
 msgstr ""
+
+msgid "AI generator"
+msgstr ""
+
+msgid "Words count per page"
+msgstr ""
+
+msgid "Add test after each page"
+msgstr ""
+
+msgid "Error creating learning path"
+msgstr ""
+
+msgid "Invalid server response"
+msgstr ""
+
+msgid "Please wait, this could take a while..."
+msgstr ""

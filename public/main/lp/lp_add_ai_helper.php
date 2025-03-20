@@ -11,10 +11,10 @@ require_once $mainPath.'exercise/export/aiken/aiken_classes.php';
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 
-Display::display_header(get_lang('LpAiGenerator'), 'Learnpath');
+Display::display_header(get_lang('AI generator'), 'Learnpath');
 
 echo '<div class="actions">';
 echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.

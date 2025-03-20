@@ -36,13 +36,13 @@ $lp = Session::read('oLP');
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$lpId&".api_get_cidreq(),

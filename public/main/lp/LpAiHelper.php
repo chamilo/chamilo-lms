@@ -36,7 +36,7 @@ class LpAiHelper
             api_get_self()."?".api_get_cidreq(),
             null
         );
-        $form->addElement('header', get_lang('Lp Ai generator'));
+        $form->addElement('header', get_lang('AI generator'));
 
         // Show the AI provider being used
         if ($hasSingleApi) {
@@ -46,11 +46,11 @@ class LpAiHelper
         }
 
         // Input fields for LP generation
-        $form->addElement('text', 'lp_name', get_lang('Lp Ai Topic'));
+        $form->addElement('text', 'lp_name', get_lang('Topic'));
         $form->addRule('lp_name', get_lang('This field is required'), 'required');
-        $form->addElement('number', 'nro_items', get_lang('Lp Ai number of items'));
+        $form->addElement('number', 'nro_items', get_lang('Number of items'));
         $form->addRule('nro_items', get_lang('This field is required'), 'required');
-        $form->addElement('number', 'words_count', get_lang('Lp Ai words count'));
+        $form->addElement('number', 'words_count', get_lang('Words count per page'));
         $form->addRule('words_count', get_lang('This field is required'), 'required');
 
         // Checkbox for adding quizzes
@@ -65,7 +65,7 @@ class LpAiHelper
         if (!$hasSingleApi) {
             $form->addSelect(
                 'ai_provider',
-                get_lang('AI Provider'),
+                get_lang('AI provider'),
                 array_combine(array_keys($availableApis), array_keys($availableApis))
             );
         }
@@ -126,7 +126,7 @@ class LpAiHelper
                     return;
                 }
 
-                btnGenerate.attr("disabled", true).text("'.get_lang('Please wait this could take a while').'");
+                btnGenerate.attr("disabled", true).text("'.get_lang('Please wait, this could take a while...').'");
 
                 var requestData = JSON.stringify({
                     "lp_name": lpName,
@@ -165,7 +165,7 @@ class LpAiHelper
                                         if (isSuccess) {
                                             location.href = "'.$redirectSuccess.'" + parsedResult.lp_id;
                                         } else {
-                                            alert("Error: " + (parsedResult.text || "'.get_lang('Error creating Learning Path').'"));
+                                            alert("Error: " + (parsedResult.text || "'.get_lang('Error creating learning path').'"));
                                         }
                                     } catch (e) {
                                         alert("'.get_lang('Invalid server response').'");
@@ -173,7 +173,7 @@ class LpAiHelper
                                 }
                             });
                         } else {
-                            alert(data.text || "'.get_lang('No results found').'. '.get_lang('Please try again').'");
+                            alert(data.text || "'.get_lang('No results found').'. '.get_lang('Please Try Again!').'");
                         }
                     },
                     error: function (jqXHR) {
@@ -198,7 +198,7 @@ class LpAiHelper
         });
         </script>');
 
-        $form->addButton('create_lp_button', get_lang('Add Learnpath'), 'check', 'primary', '', null, ['id' => 'create-lp-ai']);
+        $form->addButton('create_lp_button', get_lang('Generate'), 'check', 'primary', '', null, ['id' => 'create-lp-ai']);
         echo $form->returnForm();
     }
 

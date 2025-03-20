@@ -153,6 +153,12 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     #[ORM\OneToMany(mappedBy: 'url', targetEntity: AccessUrlRelColorTheme::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $colorThemes;
 
+    /**
+     * @var Collection<int, AccessUrlRelPlugin>
+     */
+    #[ORM\OneToMany(mappedBy: 'url', targetEntity: AccessUrlRelPlugin::class, orphanRemoval: true)]
+    private Collection $plugins;
+
     public function __construct()
     {
         $this->description = '';
@@ -166,6 +172,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         $this->courseCategory = new ArrayCollection();
         $this->children = new ArrayCollection();
         $this->colorThemes = new ArrayCollection();
+        $this->plugins = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -546,5 +553,35 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         );
 
         return $this->colorThemes->matching($criteria)->first() ?: null;
+    }
+
+    /**
+     * @return Collection<int, AccessUrlRelPlugin>
+     */
+    public function getPlugins(): Collection
+    {
+        return $this->plugins;
+    }
+
+    public function addPlugin(AccessUrlRelPlugin $plugin): static
+    {
+        if (!$this->plugins->contains($plugin)) {
+            $this->plugins->add($plugin);
+            $plugin->setUrl($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlugin(AccessUrlRelPlugin $plugin): static
+    {
+        if ($this->plugins->removeElement($plugin)) {
+            // set the owning side to null (unless already changed)
+            if ($plugin->getUrl() === $this) {
+                $plugin->setUrl(null);
+            }
+        }
+
+        return $this;
     }
 }

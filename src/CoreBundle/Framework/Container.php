@@ -27,6 +27,7 @@ use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\PluginRepository;
 use Chamilo\CoreBundle\Repository\PromotionRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
@@ -89,6 +90,7 @@ use Chamilo\LtiBundle\Repository\ExternalToolRepository;
 use Database;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -484,6 +486,11 @@ class Container
         return self::$container->get(UsergroupRepository::class);
     }
 
+    public static function getPluginRepository(): PluginRepository
+    {
+        return self::$container->get(PluginRepository::class);
+    }
+
     public static function getUserToJsonNormalizer(): UserToJsonNormalizer
     {
         return self::$container->get(UserToJsonNormalizer::class);
@@ -662,5 +669,13 @@ class Container
     {
         /** @var AccessUrlHelper $helper */
         return self::$container->get(AccessUrlHelper::class);
+    }
+
+    public static function getEventDispatcher(): EventDispatcherInterface
+    {
+        /** @var EventDispatcherInterface $dispatcher */
+        $dispatcher = self::$container->get('event_dispatcher');
+
+        return $dispatcher;
     }
 }

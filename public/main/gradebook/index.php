@@ -359,13 +359,8 @@ if (isset($_GET['visiblecat'])) {
     $cats[0]->save();
     $cats[0]->apply_visibility_to_children();
     unset($cats);
-    if ($visibility_command) {
-        $confirmation_message = get_lang('Visibility modified');
-        $filter_confirm_msg = false;
-    } else {
-        $confirmation_message = get_lang('InVisibility modified');
-        $filter_confirm_msg = false;
-    }
+    $confirmation_message = get_lang('Visibility modified');
+    $filter_confirm_msg = false;
 }
 
 if (isset($_GET['deletecat'])) {
@@ -395,13 +390,8 @@ if (isset($_GET['visibleeval'])) {
     $eval[0]->set_visible($visibility_command);
     $eval[0]->save();
     unset($eval);
-    if ($visibility_command) {
-        $confirmation_message = get_lang('Visibility modified');
-        $filter_confirm_msg = false;
-    } else {
-        $confirmation_message = get_lang('InVisibility modified');
-        $filter_confirm_msg = false;
-    }
+    $confirmation_message = get_lang('Visibility modified');
+    $filter_confirm_msg = false;
 }
 
 // Parameters for evaluations.
@@ -445,13 +435,8 @@ if (isset($_GET['visiblelink'])) {
         $link[0]->save();
     }
     unset($link);
-    if ($visibility_command) {
-        $confirmation_message = get_lang('Visibility modified');
-        $filter_confirm_msg = false;
-    } else {
-        $confirmation_message = get_lang('InVisibility modified');
-        $filter_confirm_msg = false;
-    }
+    $confirmation_message = get_lang('Visibility modified');
+    $filter_confirm_msg = false;
 }
 
 if (isset($_GET['deletelink'])) {

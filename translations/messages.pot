@@ -27876,3 +27876,29 @@ msgstr ""
 msgid "Conference Room"
 msgstr ""
 
+msgid "Choose item"
+msgstr ""
+
+msgid "No result or feedback available."
+msgstr ""
+
+msgid "Add gradebook comment"
+msgstr ""
+
+msgid "Assessments visible"
+msgstr ""
+
+msgid "Assessments invisible"
+msgstr ""
+
+msgid "Add result"
+msgstr ""
+
+msgid "Student reports"
+msgstr ""
+
+msgid "Results and feedback per user"
+msgstr ""
+
+msgid "Score display custom values"
+msgstr ""

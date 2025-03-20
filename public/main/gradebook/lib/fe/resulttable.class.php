@@ -238,7 +238,7 @@ class ResultTable extends SortableTable
                 if (!empty($item['percentage_score'])) {
                     $editColumn .=
                         Display::url(
-                            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddAttempt')),
+                            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add attempt')),
                             $baseUrl.'&action=add_attempt&editres='.$item['result_id']
                         );
                 } else {

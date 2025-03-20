@@ -194,7 +194,7 @@ $interbreadcrumb[] = [
     'url' => Category::getUrl(),
     'name' => get_lang('Assessments'),
 ];
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AssessmentsListOfLearnersCertificates')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('List of learner certificates')];
 
 $this_section = SECTION_COURSES;
 Display::display_header('');
@@ -214,7 +214,7 @@ if ('delete' === $action) {
 }
 
 $token = Security::get_token();
-echo Display::page_header(get_lang('AssessmentsListOfLearnersCertificates'));
+echo Display::page_header(get_lang('List of learner certificates'));
 
 if (!empty($content)) {
     echo $content;
@@ -299,13 +299,13 @@ if (count($certificate_list) > 0 && 'true' !== $hideCertificateExport) {
 
     if ($allowCustomCertificate) {
         $actions .= Display::url(
-            Display::getMdiIcon(ActionIcon::EXPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAllCertificatesToZIP')),
+            Display::getMdiIcon(ActionIcon::EXPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export all certificates to ZIP')),
             $url.'&action=export_all_certificates_zip'
         );
     }
 
     $actions .= Display::url(
-        Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send messageCertificateNotifications')),
+        Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send certificate notification to all users')),
         $url.'&action=show_notification_form'
     );
 }

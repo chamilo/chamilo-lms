@@ -60,6 +60,7 @@ export const chamiloIconToClass = {
   "file-upload": "mdi mdi-file-upload",
   "file-video": "mdi mdi-file-video",
   "filter": "mdi mdi-filter",
+  "file-replace": "mdi mdi-file-replace",
   "fit-to-screen": "",
   "folder-generic": "mdi mdi-folder",
   "folder-multiple-plus": "mdi mdi-folder-multiple-plus",

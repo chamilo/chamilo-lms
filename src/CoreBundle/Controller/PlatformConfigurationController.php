@@ -93,6 +93,8 @@ class PlatformConfigurationController extends AbstractController
                 'attendance.attendance_allow_comments',
                 'attendance.multilevel_grading',
                 'attendance.enable_sign_attendance_sheet',
+                'exercise.allow_exercise_auto_launch',
+                'course.access_url_specific_files',
             ];
 
             $user = $this->userHelper->getCurrent();

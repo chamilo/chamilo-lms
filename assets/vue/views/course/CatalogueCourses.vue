@@ -190,7 +190,7 @@ const platformConfigStore = usePlatformConfig()
 const showCourseDuration = "true" === platformConfigStore.getSetting("course.show_course_duration")
 
 const isUserInCourse = (course) => {
-  return course.users.some((user) => user.user.id === securityStore.user.id)
+  return Array.isArray(course.users) && course.users.some((user) => user.user.id === securityStore.user.id)
 }
 
 load()

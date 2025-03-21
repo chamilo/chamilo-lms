@@ -115,7 +115,7 @@
             class="p-button-sm"
           >
             <BaseIcon icon="link-external" />
-            {{ t("Go to the session") }}
+            {{ $t("Go to the session") }}
           </BaseAppLink>
         </template>
       </Column>
@@ -183,7 +183,7 @@
                     class="p-button-sm"
                     icon="link-external"
                   />
-                  {{ t("Go to the course") }}
+                  {{ $t("Go to the course") }}
                 </BaseAppLink>
               </template>
             </Column>
@@ -232,14 +232,14 @@ export default {
     load: function () {
       this.status = true
       axios
-        .get(ENTRYPOINT + "sessions.json")
+        .get("/catalogue/sessions-list")
         .then((response) => {
           this.status = false
           if (Array.isArray(response.data)) {
             this.sessions = response.data
           }
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error)
         })
     },

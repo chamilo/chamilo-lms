@@ -170,4 +170,12 @@ export default {
       return null
     }
   },
+  /**
+   * Loads public catalogue courses filtered by access_url and usergroup rules.
+   * @returns {Promise<{items: Array}>}
+   */
+  listCatalogueCourses: async () => {
+    const response = await api.get("/catalogue/courses-list")
+    return response.data
+  },
 }

@@ -33,6 +33,7 @@ $skillLevelRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\Level
 $skillUserRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillRelUser::class);
 
 $skillLevels = api_get_setting('skill.skill_levels_names', true);
+$autoloadSubskills = api_get_setting('skill.manual_assignment_subskill_autoload');
 
 $skillsOptions = ['' => get_lang('Select')];
 $acquiredLevel = ['' => get_lang('none')];
@@ -63,26 +64,28 @@ $subSkillList = isset($_REQUEST['sub_skill_list']) ? explode(',', $_REQUEST['sub
 $subSkillList = array_unique($subSkillList);
 
 if (empty($subSkillList) && $skillId) {
-    $skillRelSkill = new SkillRelSkillModel();
-    $parents = $skillRelSkill->getSkillParents($skillId);
-    ksort($parents);
+    if ('true' === $autoloadSubskills) {
+        $skillRelSkill = new SkillRelSkillModel();
+        $parents = $skillRelSkill->getSkillParents($skillId);
+        ksort($parents);
 
-    $subSkillList = [];
-    foreach ($parents as $parent) {
-        if ($parent['skill_id'] != 1) {
-            $subSkillList[] = $parent['skill_id'];
+        $subSkillList = [];
+        foreach ($parents as $parent) {
+            if ($parent['skill_id'] != 1) {
+                $subSkillList[] = $parent['skill_id'];
+            }
         }
+        $subSkillList[] = $skillId;
+        $subSkillList = array_unique($subSkillList);
+
+        $firstParentId = $subSkillList[0];
+        $subSkillListToString = implode(',', array_slice($subSkillList, 0, -1)) . ',' . $skillId;
+        $currentLevel = 'sub_skill_id_' . count($subSkillList) - 1;
+
+        $currentUrl = api_get_path(WEB_CODE_PATH).'skills/assign.php?user='.$userId.'&id='.$firstParentId.'&current_value='.$skillId.'&current='.$currentLevel.'&sub_skill_list='.$subSkillListToString;
+        header('Location: '.$currentUrl);
+        exit;
     }
-    $subSkillList[] = $skillId;
-    $subSkillList = array_unique($subSkillList);
-
-    $firstParentId = $subSkillList[0];
-    $subSkillListToString = implode(',', array_slice($subSkillList, 0, -1)) . ',' . $skillId;
-    $currentLevel = 'sub_skill_id_' . count($subSkillList) - 1;
-
-    $currentUrl = api_get_path(WEB_CODE_PATH).'skills/assign.php?user='.$userId.'&id='.$firstParentId.'&current_value='.$skillId.'&current='.$currentLevel.'&sub_skill_list='.$subSkillListToString;
-    header('Location: '.$currentUrl);
-    exit;
 }
 
 if (!empty($subSkillList)) {
@@ -221,15 +224,17 @@ if (!empty($skillIdFromGet)) {
             }
         }
 
-        $form->addSelect(
-            'sub_skill_id_'.($counter + 1),
-            $levelName,
-            $skillsOptions,
-            [
-                'id' => 'sub_skill_id_'.($counter + 1),
-                'class' => 'sub_skill ',
-            ]
-        );
+        if ('true' === $autoloadSubskills) {
+            $form->addSelect(
+                'sub_skill_id_'.($counter + 1),
+                $levelName,
+                $skillsOptions,
+                [
+                    'id' => 'sub_skill_id_'.($counter + 1),
+                    'class' => 'sub_skill ',
+                ]
+            );
+        }
 
         if (isset($subSkillList[$counter + 1])) {
             $nextSkill = $skillRepo->find($subSkillList[$counter + 1]);

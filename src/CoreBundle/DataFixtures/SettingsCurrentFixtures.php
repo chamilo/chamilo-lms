@@ -3427,6 +3427,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Allow teachers to set which skills are acquired through their courses',
                     'comment' => 'By default, only admins can decide which skills can be acquired through which course.',
                 ],
+                [
+                    'name' => 'manual_assignment_subskill_autoload',
+                    'title' => 'Assigning skills to user: sub-skills auto-loading',
+                    'comment' => 'When manually assigning skills to a user, the form can be set to automatically offer you to assign a sub-skill instead of the skill you selected.',
+                ],
             ],
             'survey' => [
                 [

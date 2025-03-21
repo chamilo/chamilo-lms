@@ -29,6 +29,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
                     'skills_hierarchical_view_in_user_tracking' => 'false',
                     'skill_levels_names' => '',
                     'allow_skill_rel_items' => 'false',
+                    'manual_assignment_subskill_autoload' => 'false',
                 ]
             )
         ;
@@ -59,6 +60,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('allow_skill_rel_items', YesNoType::class)
+            ->add('manual_assignment_subskill_autoload', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

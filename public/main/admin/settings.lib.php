@@ -136,8 +136,6 @@ function handlePlugins()
 
     $allPlugins = (new AppPlugin())->read_plugins_from_path();
 
-    echo '<div class="p-6 bg-white shadow-lg rounded-lg">';
-
     // Header
     echo '<div class="mb-4 flex items-center justify-between">';
     echo '<h2 class="text-2xl font-semibold text-gray-90">'.get_lang('Manage Plugins').'</h2>';
@@ -174,9 +172,9 @@ function handlePlugins()
         // Status badge
         $statusBadge = $isInstalled
             ? ($isEnabled
-                ? '<span class="px-2 py-1 text-sm font-semibold text-success-button-text bg-success/10 rounded-full">'.get_lang('Enabled').'</span>'
-                : '<span class="px-2 py-1 text-sm font-semibold text-warning-button-text bg-warning/10 rounded-full">'.get_lang('Disabled').'</span>')
-            : '<span class="px-2 py-1 text-sm font-semibold text-gray-50 bg-gray-20 rounded-full">'.get_lang('Not Installed').'</span>';
+                ? '<span class="badge badge--success">'.get_lang('Enabled').'</span>'
+                : '<span class="badge badge--warning">'.get_lang('Disabled').'</span>')
+            : '<span class="badge badge--default">'.get_lang('Not Installed').'</span>';
 
         echo '<tr class="border-t border-gray-25 hover:bg-gray-15 transition duration-200">';
         echo '<td class="p-3 font-medium">'.$plugin_info['title'].'</td>';
@@ -187,16 +185,9 @@ function handlePlugins()
         echo '<div class="flex justify-center gap-2">';
 
         if ($isInstalled) {
-            echo '<button class="plugin-action bg-warning text-white px-4 py-2 rounded-md transition hover:bg-warning/80 flex items-center gap-2"
-                    data-plugin="'.$pluginName.'" data-action="uninstall">
-                    <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
-                  </button>';
-
             $toggleAction = $isEnabled ? 'disable' : 'enable';
             $toggleText = $isEnabled ? get_lang('Disable') : get_lang('Enable');
-            $toggleColor = $isEnabled
-                ? 'bg-gray-50 text-gray-90 hover:bg-gray-90 hover:text-white'
-                : 'bg-success text-success-button-text hover:bg-success/80';
+            $toggleColor = $isEnabled ? 'btn btn--plain' : 'btn btn--warning';
 
             $toggleIcon = $isEnabled ? 'mdi mdi-toggle-switch-off-outline' : 'mdi mdi-toggle-switch-outline';
 
@@ -204,8 +195,13 @@ function handlePlugins()
                     data-plugin="'.$pluginName.'" data-action="'.$toggleAction.'">
                     <i class="'.$toggleIcon.'"></i> '.$toggleText.'
                   </button>';
+
+            echo '<button class="plugin-action btn btn--danger"
+                    data-plugin="'.$plugin_info['title'].'" data-action="uninstall">
+                    <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
+                  </button>';
         } else {
-            echo '<button class="plugin-action bg-success text-white px-4 py-2 rounded-md transition hover:bg-success/80 flex items-center gap-2"
+            echo '<button class="plugin-action btn btn--success"
                     data-plugin="'.$pluginName.'" data-action="install">
                     <i class="mdi mdi-download"></i> '.get_lang('Install').'
                   </button>';
@@ -217,7 +213,6 @@ function handlePlugins()
     }
 
     echo '</tbody></table>';
-    echo '</div>';
 
     echo '<script>
     $(document).ready(function () {

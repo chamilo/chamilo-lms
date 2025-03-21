@@ -10,6 +10,10 @@ use Chamilo\CoreBundle\Entity\Plugin;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Plugin>
+ * @method Plugin|null findOneByTitle(string $title)
+ */
 class PluginRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -20,7 +24,7 @@ class PluginRepository extends ServiceEntityRepository
     /**
      * Get all installed plugins.
      *
-     * @return Plugin[]
+     * @return array<int, Plugin>
      */
     public function getInstalledPlugins(): array
     {
@@ -30,7 +34,7 @@ class PluginRepository extends ServiceEntityRepository
     /**
      * Get all active plugins.
      *
-     * @return Plugin[]
+     * @return array<int, Plugin>
      */
     public function getActivePlugins(): array
     {
@@ -39,97 +43,19 @@ class PluginRepository extends ServiceEntityRepository
 
     /**
      * Check if a plugin is installed.
-     *
-     * @param string $pluginName
-     * @return bool
      */
-    public function isInstalled(string $pluginName): bool
+    public function isInstalledByName(string $pluginName): bool
     {
-        return $this->findOneBy(['title' => $pluginName, 'installed' => true]) !== null;
+        return null !== $this->findOneBy(['title' => $pluginName, 'installed' => true]);
     }
 
     /**
      * Check if a plugin is active.
-     *
-     * @param string $pluginName
-     * @return bool
      */
-    public function isActive(string $pluginName): bool
+    public function isActiveByName(string $pluginName): bool
     {
         $plugin = $this->findOneBy(['title' => $pluginName, 'installed' => true]);
+
         return $plugin ? $plugin->isActive() : false;
-    }
-
-    /**
-     * Install a plugin.
-     *
-     * @param string $pluginName
-     */
-    public function installPlugin(string $pluginName): void
-    {
-        $plugin = $this->findOneBy(['title' => $pluginName]);
-
-        if (!$plugin) {
-            $plugin = new Plugin();
-            $plugin->setTitle($pluginName)
-                ->setInstalled(true)
-                ->setActive(false)
-                ->setVersion('1.0')
-                ->setAccessUrlId(api_get_current_access_url_id())
-                ->setConfiguration([]);
-        } else {
-            $plugin->setInstalled(true);
-        }
-
-        $this->getEntityManager()->persist($plugin);
-        $this->getEntityManager()->flush();
-    }
-
-    /**
-     * Uninstall a plugin.
-     *
-     * @param string $pluginName
-     */
-    public function uninstallPlugin(string $pluginName): void
-    {
-        $plugin = $this->findOneBy(['title' => $pluginName]);
-
-        if ($plugin) {
-            $plugin->setInstalled(false);
-            $this->getEntityManager()->persist($plugin);
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    /**
-     * Enable a plugin.
-     *
-     * @param string $pluginName
-     */
-    public function enablePlugin(string $pluginName): void
-    {
-        $plugin = $this->findOneBy(['title' => $pluginName]);
-
-        if ($plugin && $plugin->isInstalled()) {
-            $plugin->setActive(true);
-            $this->getEntityManager()->persist($plugin);
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    /**
-     * Disable a plugin.
-     *
-     * @param string $pluginName
-     */
-    public function disablePlugin(string $pluginName): void
-    {
-        $plugin = $this->findOneBy(['title' => $pluginName]);
-
-        if ($plugin && $plugin->isInstalled()) {
-            $plugin->setActive(false);
-            $this->getEntityManager()->persist($plugin);
-            $this->getEntityManager()->flush();
-        }
     }
 }

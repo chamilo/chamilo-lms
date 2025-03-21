@@ -494,7 +494,10 @@ class Container
 
     public static function getPluginRepository(): PluginRepository
     {
-        return self::$container->get(PluginRepository::class);
+        /** @var PluginRepository $pluginRepo */
+        $pluginRepo = self::$container->get(PluginRepository::class);
+
+        return $pluginRepo;
     }
 
     public static function getUserToJsonNormalizer(): UserToJsonNormalizer

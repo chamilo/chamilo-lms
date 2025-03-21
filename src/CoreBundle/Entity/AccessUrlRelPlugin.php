@@ -17,7 +17,7 @@ class AccessUrlRelPlugin
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'accessUrlRelPlugins')]
+    #[ORM\ManyToOne(inversedBy: 'configurationsInUrl')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Plugin $plugin = null;
 

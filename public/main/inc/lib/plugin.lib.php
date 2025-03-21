@@ -258,11 +258,7 @@ class AppPlugin
         return in_array($title, self::getOfficialPlugins());
     }
 
-    /**
-     * @param string $pluginName
-     * @param int    $urlId
-     */
-    public function install($pluginName, $urlId = null)
+    public function install(string $pluginName): void
     {
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/install.php';
 
@@ -273,11 +269,7 @@ class AppPlugin
         }
     }
 
-    /**
-     * @param string $pluginName
-     * @param int    $urlId
-     */
-    public function uninstall($pluginName, $urlId = null)
+    public function uninstall(string $pluginName): void
     {
         // First call the custom uninstallation to allow full access to global settings
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/uninstall.php';

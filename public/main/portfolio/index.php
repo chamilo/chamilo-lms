@@ -205,7 +205,7 @@ switch ($action) {
 
         Container::getEventDispatcher()->dispatch(
             new PortfolioItemDeletedEvent(['item' => $item], AbstractEvent::TYPE_PRE),
-            Events::PORTOFLIO_ITEM_DELETED
+            Events::PORTFOLIO_ITEM_DELETED
         );
 
         $em->remove($item);

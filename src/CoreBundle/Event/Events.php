@@ -35,7 +35,7 @@ final class Events
     public const PORTFOLIO_ITEM_ADDED = 'chamilo.event.portfolio_item_added';
     public const PORTFOLIO_ITEM_EDITED = 'chamilo.event.portfolio_item_edited';
     public const PORTFOLIO_ITEM_VIEWED = 'chamilo.event.portfolio_item_viewed';
-    public const PORTOFLIO_ITEM_DELETED = 'chamilo.event.portfolio_item_deleted';
+    public const PORTFOLIO_ITEM_DELETED = 'chamilo.event.portfolio_item_deleted';
     public const PORTFOLIO_ITEM_VISIBILITY_CHANGED = 'chamilo.event.portfolio_item_visibility_changed';
     public const PORTFOLIO_ITEM_COMMENTED = 'chamilo.event.portfolio_item_commented';
     public const PORTFOLIO_ITEM_HIGHLIGHTED = 'chamilo.event.portfolio_item_highlighted';

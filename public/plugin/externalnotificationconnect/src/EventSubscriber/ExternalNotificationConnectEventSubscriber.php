@@ -34,7 +34,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
         return [
             Events::PORTFOLIO_ITEM_ADDED => 'onPortfolioItemAdded',
             Events::PORTFOLIO_ITEM_EDITED => 'onPortfolioItemEdited',
-            Events::PORTOFLIO_ITEM_DELETED => 'onPortfolioItemDeleted',
+            Events::PORTFOLIO_ITEM_DELETED => 'onPortfolioItemDeleted',
             Events::PORTFOLIO_ITEM_VISIBILITY_CHANGED => 'onPortfolioItemVisibility',
 
             Events::LP_CREATED => 'onLpCreated',

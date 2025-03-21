@@ -156,7 +156,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     /**
      * @var Collection<int, AccessUrlRelPlugin>
      */
-    #[ORM\OneToMany(mappedBy: 'url', targetEntity: AccessUrlRelPlugin::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'url', targetEntity: AccessUrlRelPlugin::class, fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private Collection $plugins;
 
     public function __construct()

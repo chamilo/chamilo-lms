@@ -138,4 +138,39 @@ class Plugin
 
         return $this->configurationsInUrl->matching($criteria)->first() ?: null;
     }
+
+    public function uninstall(AccessUrl $currentAccessUrl): static
+    {
+        $this->disable($currentAccessUrl);
+
+        $this->setInstalled(false);
+
+        return $this;
+    }
+
+    public function disable(AccessUrl $currentAccessUrl): static
+    {
+        $this->getOrCreatePluginConfiguration($currentAccessUrl)->setActive(false);
+
+        return $this;
+    }
+
+    public function enable(AccessUrl $currentAccessUrl): static
+    {
+        $this->getOrCreatePluginConfiguration($currentAccessUrl)->setActive(true);
+
+        return $this;
+    }
+
+    private function getOrCreatePluginConfiguration(AccessUrl $currentAccessUrl): AccessUrlRelPlugin
+    {
+        $pluginConfiguration = $this->getConfigurationsByAccessUrl($currentAccessUrl);
+
+        if (!$pluginConfiguration) {
+            $pluginConfiguration = (new AccessUrlRelPlugin())->setUrl($currentAccessUrl);
+            $this->addConfigurationsInUrl($pluginConfiguration);
+        }
+
+        return $pluginConfiguration;
+    }
 }

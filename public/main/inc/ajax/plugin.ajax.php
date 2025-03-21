@@ -60,11 +60,15 @@ switch ($action) {
             $criteria['accessUrlId'] = $currentAccessUrl->getId();
         }
 
-        $plugin = match ($action) {
-            'uninstall', 'enable', 'disable' => $pluginRepository->findOneBy($criteria),
-            'install' => new Plugin(),
-            default => die(json_encode(['error' => 'Plugin not found'])),
-        };
+        $plugin = $pluginRepository->findOneBy($criteria);
+
+        if (empty($plugin)) {
+            if ('install' === $action) {
+                $plugin = new Plugin();
+            } else {
+                die(json_encode(['error' => 'Plugin not found']));
+            }
+        }
 
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginTitle.'/plugin.php';
 
@@ -78,12 +82,12 @@ switch ($action) {
             $appPlugin->install($pluginTitle);
 
             $plugin
-                ->setTitle($plugin_info['title'])
+                ->setTitle($pluginTitle)
                 ->setInstalledVersion($plugin_info['version'])
                 ->setInstalled(true)
             ;
 
-            if (AppPlugin::isOfficial($plugin_info['title'])) {
+            if (AppPlugin::isOfficial($pluginTitle)) {
                 $plugin->setSource(Plugin::SOURCE_OFFICIAL);
             }
 
@@ -91,21 +95,13 @@ switch ($action) {
         } elseif ($plugin && $action === 'uninstall') {
             $appPlugin->uninstall($pluginTitle);
 
-            $plugin->setInstalled(false);
+            $plugin->uninstall($currentAccessUrl);
         } elseif (('enable' === $action || 'disable' === $action)
             && $plugin && $plugin->isInstalled()
         ) {
-            $pluginConfiguration = $plugin->getConfigurationsByAccessUrl($currentAccessUrl);
-
-            if (!$pluginConfiguration) {
-                $pluginConfiguration = (new AccessUrlRelPlugin())->setUrl($currentAccessUrl);
-
-                $plugin->addConfigurationsInUrl($pluginConfiguration);
-            }
-
             match($action) {
-                'enable' => $pluginConfiguration->setActive(true),
-                'disable' => $pluginConfiguration->setActive(false),
+                'enable' => $plugin->enable($currentAccessUrl),
+                'disable' => $plugin->disable($currentAccessUrl),
             };
         } else {
             die(json_encode(['error' => 'Cannot enable an uninstalled plugin']));

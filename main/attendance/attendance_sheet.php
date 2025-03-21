@@ -286,7 +286,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 if ($allowSignature) {
                     $iconFullScreen = Display::url(
                         Display::return_icon('view_fullscreen.png', get_lang('SeeForTablet'), [], ICON_SIZE_SMALL),
-                        api_get_self().'?'.api_get_cidreq().'&action=attendance_sheet_list&func=fullscreen&attendance_id='.$attendance_id.'&calendar_id='.$calendar['id']
+                        api_get_self().'?'.api_get_cidreq().'&action=attendance_sheet_list&func=fullscreen&attendance_id='.$attendance_id.'&calendar_id='.$calendar['id'] . (!empty($groupId) ? '&group_id=' . $groupId : '')
                     );
                     $isBlocked = 0;
                     $iconBlockName = 'eyes.png';

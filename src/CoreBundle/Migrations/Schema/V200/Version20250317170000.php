@@ -15,7 +15,7 @@ class Version20250317170000 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Drop tables relatesd to hooks management.';
+        return 'Drop tables related to hooks management.';
     }
 
     /**

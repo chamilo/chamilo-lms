@@ -27,7 +27,16 @@ $form = new FormValidator(
 );
 
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
-$form->addCheckbox('remove_old_relationships', [get_lang('RemoveOldRelationships'), get_lang('RemoveOldRelationshipsHelp')]);
+
+$displayRemoveOldRelationshipsCheckbox = true;
+if (true === api_get_configuration_value('session_import_drh_hide_old_relationships_check_box')) {
+    $displayRemoveOldRelationshipsCheckbox = false;
+}
+
+if ($displayRemoveOldRelationshipsCheckbox) {
+    $form->addCheckbox('remove_old_relationships', [get_lang('RemoveOldRelationships'), get_lang('RemoveOldRelationshipsHelp')]);
+}
+
 $form->addButtonImport(get_lang('ImportSession'));
 
 if ($form->validate()) {

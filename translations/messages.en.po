@@ -4862,11 +4862,11 @@ msgstr "Confirm"
 msgid "Unsubscribe users from course"
 msgstr "Unsubscribe users from course"
 
-msgid "Missing class name"
-msgstr "Missing class name"
+msgid "Missing class title"
+msgstr "Missing class title"
 
-msgid "Class name exists"
-msgstr "Class name exists"
+msgid "Class title exists"
+msgstr "Class title exists"
 
 msgid "CSV file import location"
 msgstr "CSV file import location"
@@ -27826,3 +27826,138 @@ msgstr "Autolaunch settings"
 
 msgid "Auto-launch"
 msgstr "Auto-launch"
+
+msgid "User registrations by month"
+msgstr "User registrations by month"
+
+msgid "User registrations by day"
+msgstr "User registrations by day"
+
+msgid "No data available for the selected date range"
+msgstr "No data available for the selected date range"
+
+msgid "Back to months"
+msgstr "Back to months"
+
+msgid "User registrations by creator"
+msgstr "User registrations by creator"
+
+msgid "Tools access"
+msgstr "Tools access"
+
+msgid "Courses count"
+msgstr "Courses count"
+
+msgid "Courses count by language"
+msgstr "Courses count by language"
+
+msgid "AI provider"
+msgstr "AI provider"
+
+msgid "Request failed"
+msgstr "Request failed"
+
+msgid "Using AI provider %s"
+msgstr "Using AI provider %s"
+
+msgid "Aiken Format Example"
+msgstr "Aiken Format Example"
+
+msgid "Number of questions"
+msgstr "Number of questions"
+
+msgid "Please enter a valid number of questions"
+msgstr "Please enter a valid number of questions"
+
+msgid "An unexpected error occurred. Please try again later."
+msgstr "An unexpected error occurred. Please try again later."
+
+msgid "An unexpected error occurred. Please contact support."
+msgstr "An unexpected error occurred. Please contact support."
+
+msgid "Generate Aiken"
+msgstr "Generate Aiken"
+
+msgid "Reminders"
+msgstr "Reminders"
+
+msgid "Add reminder"
+msgstr "Add reminder"
+
+msgid "Update introduction links"
+msgstr "Update introduction links"
+
+msgid "Conference Room"
+msgstr "Conference Room"
+
+msgid "Choose item"
+msgstr "Choose item"
+
+msgid "No result or feedback available."
+msgstr "No result or feedback available."
+
+msgid "Add gradebook comment"
+msgstr "Add gradebook comment"
+
+msgid "Assessments visible"
+msgstr "Assessments visible"
+
+msgid "Assessments invisible"
+msgstr "Assessments invisible"
+
+msgid "Add result"
+msgstr "Add result"
+
+msgid "Student reports"
+msgstr "Student reports"
+
+msgid "Results and feedback per user"
+msgstr "Results and feedback per user"
+
+msgid "Score display custom values"
+msgstr "Score display custom values"
+
+msgid "AI generator"
+msgstr "AI generator"
+
+msgid "Words count per page"
+msgstr "Words count per page"
+
+msgid "Add test after each page"
+msgstr "Add test after each page"
+
+msgid "Error creating learning path"
+msgstr "Error creating learning path"
+
+msgid "Invalid server response"
+msgstr "Invalid server response"
+
+msgid "Please wait, this could take a while..."
+msgstr "Please wait, this could take a while..."
+
+msgid "Replace (files only)"
+msgstr "Replace (files only)"
+
+msgid "Select replacement file"
+msgstr "Select replacement file"
+
+msgid "No file selected."
+msgstr "No file selected."
+
+msgid "Only files can be replaced."
+msgstr "Only files can be replaced."
+
+msgid "Error replacing file."
+msgstr "Error replacing file."
+
+msgid "Download selected items as ZIP"
+msgstr "Download selected items as ZIP"
+
+msgid "No items selected."
+msgstr "No items selected."
+
+msgid "Download started"
+msgstr "Download started"
+
+msgid "Error downloading selected items."
+msgstr "Error downloading selected items."

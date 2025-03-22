@@ -134,6 +134,8 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
             return $this->getFrozenHtml();
         }
 
+        $attributes = $this->getAttributes();
+
         $this->_attributes['class'] = ($attributes['class'] ?? '').' p-inputtext p-component ';
 
         if (FormValidator::LAYOUT_HORIZONTAL === $this->getLayout()) {

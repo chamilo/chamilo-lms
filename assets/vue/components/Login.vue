@@ -68,7 +68,7 @@
       </div>
     </form>
 
-    <ExternalLoginButtons />
+    <LoginOAuth2Buttons />
   </div>
 </template>
 
@@ -80,7 +80,7 @@ import Password from "primevue/password"
 import InputSwitch from "primevue/inputswitch"
 import { useI18n } from "vue-i18n"
 import { useLogin } from "../composables/auth/login"
-import ExternalLoginButtons from "./login/LoginExternalButtons.vue"
+import LoginOAuth2Buttons from "./login/LoginOAuth2Buttons.vue"
 import { usePlatformConfig } from "../store/platformConfig"
 
 const { t } = useI18n()

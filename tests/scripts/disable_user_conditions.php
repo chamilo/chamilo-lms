@@ -68,6 +68,17 @@ $students = Database::store_result($result);
 foreach ($students as $student) {
     $studentId = $student['id'];
     $lastDate = Tracking::get_last_connection_date($studentId, false, true);
+    // OFAJ : In Chamilo 2 until 2024/12/01 there was no login registered after inscription
+    // This is a special fix for those cases
+    if ($lastDate === false) {
+        $sqlStudentCreationDate = "SELECT created_at
+        FROM user
+        WHERE id = $studentId
+        ";
+        $resultStudentCreationDate = Database::query($sqlStudentCreationDate);
+        $obj = Database::fetch_object($resultStudentCreationDate);
+        $lastDate = $obj->created_at;
+    }
     $lastDate = api_get_utc_datetime($lastDate);
 
     if ($date3Months > $lastDate) {

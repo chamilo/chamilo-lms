@@ -4856,10 +4856,10 @@ msgstr "Berretsi"
 msgid "Unsubscribe users from course"
 msgstr "Kendu erabiltzaileen inskripzioa ikastarotik"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Klasearen izena falta da"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Klasearen izena badago lehendik"
 
 msgid "CSV file import location"

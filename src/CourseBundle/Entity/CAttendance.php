@@ -6,37 +6,110 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\State\CAttendanceStateProcessor;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[ApiResource(
+    shortName: 'Attendances',
+    operations: [
+        new Put(
+            uriTemplate: '/attendances/{iid}/toggle_visibility',
+            openapiContext: [
+                'summary' => 'Toggle visibility of the attendance\'s associated ResourceLink',
+            ],
+            security: "is_granted('EDIT', object.resourceNode)",
+            name: 'toggle_visibility',
+            processor: CAttendanceStateProcessor::class
+        ),
+        new Put(
+            uriTemplate: '/attendances/{iid}/soft_delete',
+            openapiContext: [
+                'summary' => 'Soft delete the attendance',
+            ],
+            security: "is_granted('EDIT', object.resourceNode)",
+            name: 'soft_delete',
+            processor: CAttendanceStateProcessor::class
+        ),
+        new Delete(security: "is_granted('ROLE_TEACHER')"),
+        new Post(
+            uriTemplate: '/attendances/{iid}/calendars',
+            openapiContext: ['summary' => 'Add a calendar to an attendance.'],
+            denormalizationContext: ['groups' => ['attendance:write']],
+            name: 'calendar_add',
+            processor: CAttendanceStateProcessor::class
+        ),
+        new GetCollection(
+            openapiContext: [
+                'parameters' => [
+                    [
+                        'name' => 'resourceNode.parent',
+                        'in' => 'query',
+                        'required' => true,
+                        'description' => 'Resource node Parent',
+                        'schema' => ['type' => 'integer'],
+                    ],
+                ],
+            ],
+        ),
+        new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new Post(
+            denormalizationContext: ['groups' => ['attendance:write']],
+            security: "is_granted('ROLE_TEACHER')",
+            validationContext: ['groups' => ['Default']]
+        ),
+        new Put(
+            denormalizationContext: ['groups' => ['attendance:write']],
+            security: "is_granted('ROLE_TEACHER')"
+        ),
+    ],
+    normalizationContext: ['groups' => ['attendance:read']],
+    denormalizationContext: ['groups' => ['attendance:write']],
+    paginationEnabled: true,
+)]
+#[ApiFilter(SearchFilter::class, properties: ['active' => 'exact', 'title' => 'partial', 'resourceNode.parent' => 'exact'])]
 #[ORM\Table(name: 'c_attendance')]
-#[ORM\Index(name: 'active', columns: ['active'])]
+#[ORM\Index(columns: ['active'], name: 'active')]
 #[ORM\Entity(repositoryClass: CAttendanceRepository::class)]
 class CAttendance extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups(['attendance:read'])]
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'text', nullable: false)]
+    #[Groups(['attendance:read', 'attendance:write'])]
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
-    protected ?string $description;
+    #[Groups(['attendance:read', 'attendance:write'])]
+    protected ?string $description = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'active', type: 'integer', nullable: false)]
-    protected int $active;
+    #[Groups(['attendance:read', 'attendance:write'])]
+    protected int $active = 1;
 
     #[ORM\Column(name: 'attendance_qualify_title', type: 'string', length: 255, nullable: true)]
+    #[Groups(['attendance:read', 'attendance:write'])]
     protected ?string $attendanceQualifyTitle = null;
 
     #[Assert\NotNull]
@@ -45,7 +118,8 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
 
     #[Assert\NotNull]
     #[ORM\Column(name: 'attendance_weight', type: 'float', precision: 6, scale: 2, nullable: false)]
-    protected float $attendanceWeight;
+    #[Groups(['attendance:read', 'attendance:write'])]
+    protected float $attendanceWeight = 0.0;
 
     #[Assert\NotNull]
     #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
@@ -54,19 +128,20 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
     /**
      * @var Collection|CAttendanceCalendar[]
      */
-    #[ORM\OneToMany(targetEntity: CAttendanceCalendar::class, mappedBy: 'attendance', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'attendance', targetEntity: CAttendanceCalendar::class, cascade: ['persist', 'remove'])]
+    #[Groups(['attendance:read'])]
     protected Collection $calendars;
 
     /**
      * @var Collection|CAttendanceResult[]
      */
-    #[ORM\OneToMany(targetEntity: CAttendanceResult::class, mappedBy: 'attendance', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'attendance', targetEntity: CAttendanceResult::class, cascade: ['persist', 'remove'])]
     protected Collection $results;
 
     /**
      * @var Collection|CAttendanceSheetLog[]
      */
-    #[ORM\OneToMany(targetEntity: CAttendanceSheetLog::class, mappedBy: 'attendance', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'attendance', targetEntity: CAttendanceSheetLog::class, cascade: ['persist', 'remove'])]
     protected Collection $logs;
 
     public function __construct()
@@ -142,10 +217,8 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
 
     /**
      * Get attendanceQualifyMax.
-     *
-     * @return int
      */
-    public function getAttendanceQualifyMax()
+    public function getAttendanceQualifyMax(): int
     {
         return $this->attendanceQualifyMax;
     }
@@ -159,10 +232,8 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
 
     /**
      * Get attendanceWeight.
-     *
-     * @return float
      */
-    public function getAttendanceWeight()
+    public function getAttendanceWeight(): float
     {
         return $this->attendanceWeight;
     }
@@ -176,10 +247,8 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
 
     /**
      * Get locked.
-     *
-     * @return int
      */
-    public function getLocked()
+    public function getLocked(): int
     {
         return $this->locked;
     }
@@ -197,6 +266,16 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
     public function setCalendars(Collection $calendars): self
     {
         $this->calendars = $calendars;
+
+        return $this;
+    }
+
+    public function addCalendar(CAttendanceCalendar $calendar): self
+    {
+        if (!$this->calendars->contains($calendar)) {
+            $this->calendars->add($calendar);
+            $calendar->setAttendance($this);
+        }
 
         return $this;
     }

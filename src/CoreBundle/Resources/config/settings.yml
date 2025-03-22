@@ -193,3 +193,8 @@ services:
         class: Chamilo\CoreBundle\Settings\WebServiceSettingsSchema
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.webservice, namespace: webservice}
+
+    chamilo_core.settings.ai_helpers:
+      class: Chamilo\CoreBundle\Settings\AiHelpersSettingsSchema
+      tags:
+        - { name: sylius.settings_schema, alias: chamilo_core.settings.ai_helpers, namespace: ai_helpers }

@@ -4855,10 +4855,10 @@ msgstr ""
 msgid "Unsubscribe users from course"
 msgstr ""
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr ""
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr ""
 
 msgid "CSV file import location"
@@ -27811,4 +27811,139 @@ msgid "Autolaunch settings"
 msgstr ""
 
 msgid "Auto-launch"
+msgstr ""
+
+msgid "User registrations by month"
+msgstr ""
+
+msgid "User registrations by day"
+msgstr ""
+
+msgid "No data available for the selected date range"
+msgstr ""
+
+msgid "Back to months"
+msgstr ""
+
+msgid "User registrations by creator"
+msgstr ""
+
+msgid "Tools access"
+msgstr ""
+
+msgid "Courses count"
+msgstr ""
+
+msgid "Courses count by language"
+msgstr ""
+
+msgid "AI provider"
+msgstr ""
+
+msgid "Request failed"
+msgstr ""
+
+msgid "Using AI provider %s"
+msgstr ""
+
+msgid "Aiken Format Example"
+msgstr ""
+
+msgid "Number of questions"
+msgstr ""
+
+msgid "Please enter a valid number of questions"
+msgstr ""
+
+msgid "An unexpected error occurred. Please try again later."
+msgstr ""
+
+msgid "An unexpected error occurred. Please contact support."
+msgstr ""
+
+msgid "Generate Aiken"
+msgstr ""
+
+msgid "Reminders"
+msgstr ""
+
+msgid "Add reminder"
+msgstr ""
+
+msgid "Update introduction links"
+msgstr ""
+
+msgid "Conference Room"
+msgstr ""
+
+msgid "Choose item"
+msgstr ""
+
+msgid "No result or feedback available."
+msgstr ""
+
+msgid "Add gradebook comment"
+msgstr ""
+
+msgid "Assessments visible"
+msgstr ""
+
+msgid "Assessments invisible"
+msgstr ""
+
+msgid "Add result"
+msgstr ""
+
+msgid "Student reports"
+msgstr ""
+
+msgid "Results and feedback per user"
+msgstr ""
+
+msgid "Score display custom values"
+msgstr ""
+
+msgid "AI generator"
+msgstr ""
+
+msgid "Words count per page"
+msgstr ""
+
+msgid "Add test after each page"
+msgstr ""
+
+msgid "Error creating learning path"
+msgstr ""
+
+msgid "Invalid server response"
+msgstr ""
+
+msgid "Please wait, this could take a while..."
+msgstr ""
+
+msgid "Replace (files only)"
+msgstr ""
+
+msgid "Select replacement file"
+msgstr ""
+
+msgid "No file selected."
+msgstr ""
+
+msgid "Only files can be replaced."
+msgstr ""
+
+msgid "Error replacing file."
+msgstr ""
+
+msgid "Download selected items as ZIP"
+msgstr ""
+
+msgid "No items selected."
+msgstr ""
+
+msgid "Download started"
+msgstr ""
+
+msgid "Error downloading selected items."
 msgstr ""

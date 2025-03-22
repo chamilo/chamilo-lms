@@ -141,7 +141,7 @@ if (!$is_allowedToEdit) {
     }
 }
 
-$allowRecordAudio = 'true' === api_get_setting('enable_record_audio');
+$allowRecordAudio = true;
 $allowTeacherCommentAudio = ('true' === api_get_setting('exercise.allow_teacher_comment_audio'));
 
 //$js = '<script>'.api_get_language_translate_html().'</script>';
@@ -659,6 +659,7 @@ foreach ($questionList as $questionId) {
                 );
             } else {
                 $feedback_form->addElement('textarea', $textareaId, ['id' => $textareaId]);
+                $feedback_form->applyFilter($textareaId, 'attr_on_filter');
             }
             $feedback_form->setDefaults($default);
             $feedback_form->display();

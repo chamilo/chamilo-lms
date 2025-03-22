@@ -89,7 +89,7 @@ try {
                 null,
                 $me['telephoneNumber'],
                 null,
-                'azure',
+                ['azure'],
                 null,
                 ($me['accountEnabled'] ? 1 : 0),
                 null,

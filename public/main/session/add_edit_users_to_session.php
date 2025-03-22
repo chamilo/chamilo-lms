@@ -19,7 +19,7 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 if (empty($sessionId)) {
     api_not_allowed(true);
 }
-$addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
+$addProcess = isset($_GET['add']) && 'true' === $_GET['add'] ? 'true' : null;
 
 $session = api_get_session_entity($sessionId);
 SessionManager::protectSession($session);

@@ -166,12 +166,12 @@ $params = [];
 $creatorId = $user->getCreatorId();
 $creatorInfo = api_get_user_info($creatorId);
 if (!empty($creatorId) && !empty($creatorInfo)) {
-    $registrationDate = $user->getRegistrationDate()->format('Y-m-d H:i:s');
+    $createdAt = $user->getCreatedAt()->format('Y-m-d H:i:s');
     $userInfo['created'] = sprintf(
         get_lang('Create by <a href="%s">%s</a> on %s'),
         'user_information.php?user_id='.$creatorId,
         $creatorInfo['username'],
-        api_get_utc_datetime($registrationDate)
+        api_get_utc_datetime($createdAt)
     );
 }
 
@@ -593,9 +593,16 @@ if (isset($_GET['action'])) {
     }
 }
 
+$flashMessage = '';
+if (!empty($_SESSION['flash_message'])) {
+    $messageType = isset($_SESSION['flash_message']['type']) ? $_SESSION['flash_message']['type'] : 'warning';
+    $messageText = isset($_SESSION['flash_message']['message']) ? $_SESSION['flash_message']['message'] : '';
+    $flashMessage = Display::return_message($messageText, $messageType);
+    unset($_SESSION['flash_message']);
+}
 Display::display_header($tool_name);
 echo Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
-
+echo $flashMessage;
 $fullUrlBig = UserManager::getUserPicture(
     $userId,
     USER_IMAGE_SIZE_BIG

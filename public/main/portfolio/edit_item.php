@@ -2,6 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\PortfolioItemEditedEvent;
 
 $categories = $em
     ->getRepository('ChamiloCoreBundle:PortfolioCategory')
@@ -39,6 +42,11 @@ if ($form->validate()) {
 
     $em->persist($item);
     $em->flush();
+
+    Container::getEventDispatcher()->dispatch(
+        new PortfolioItemEditedEvent(['portfolio' => $item]),
+        Events::PORTFOLIO_ITEM_EDITED
+    );
 
     Display::addFlash(
         Display::return_message(get_lang('Item updated'), 'success')

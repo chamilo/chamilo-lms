@@ -8,7 +8,7 @@ use Doctrine\DBAL\DriverManager;
 /**
  * Class MigrationMoodlePlugin.
  */
-class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
+class MigrationMoodlePlugin extends Plugin
 {
     public const SETTING_USER_FILTER = 'user_filter';
     public const SETTING_URL_ID = 'url_id';
@@ -65,54 +65,6 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
         $connection = DriverManager::getConnection($params, new Configuration());
 
         return $connection;
-    }
-
-    /**
-     * Perform actions after configure the plugin.
-     *
-     * Add user extra field.
-     *
-     * @throws Exception
-     *
-     * @return MigrationMoodlePlugin
-     */
-    public function performActionsAfterConfigure()
-    {
-        if ('true' === $this->get('active')) {
-            $this->installHook();
-        } else {
-            $this->uninstallHook();
-        }
-
-        return $this;
-    }
-
-    /**
-     * This method will call the Hook management insertHook to add Hook observer from this plugin.
-     *
-     * @throws Exception
-     *
-     * @return void
-     */
-    public function installHook()
-    {
-        $hookObserver = MigrationMoodleCheckLoginCredentialsHook::create();
-
-        CheckLoginCredentialsHook::create()->attach($hookObserver);
-    }
-
-    /**
-     * This method will call the Hook management deleteHook to disable Hook observer from this plugin.
-     *
-     * @throws Exception
-     *
-     * @return void
-     */
-    public function uninstallHook()
-    {
-        $hookObserver = MigrationMoodleCheckLoginCredentialsHook::create();
-
-        CheckLoginCredentialsHook::create()->detach($hookObserver);
     }
 
     /**

@@ -11,7 +11,7 @@ use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class KeycloakProviderController extends AbstractProviderController
+class KeycloakProviderController extends AbstractOAuth2ProviderController
 {
     #[Route('/connect/keycloak', name: 'chamilo.oauth2_keycloak_start')]
     public function connect(

@@ -4856,10 +4856,10 @@ msgstr "Patvirtinti"
 msgid "Unsubscribe users from course"
 msgstr "Išregistruoti vartotojus iš kurso"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Klasės vardo nėra"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Toks klasės vardas egzistuoja"
 
 msgid "CSV file import location"

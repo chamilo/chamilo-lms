@@ -16,16 +16,16 @@ function validate_data($classes)
     $usergroup = new UserGroupModel();
     foreach ($classes as $index => $class) {
         // 1. Check of class name is available.
-        if (!isset($class['name']) || 0 == strlen(trim($class['name']))) {
-            $class['line'] = $index + 2;
-            $class['error'] = get_lang('Missing class name');
+        if (!isset($class['title']) || 0 == strlen(trim($class['title']))) {
+            $class['line'] = $index + 1;
+            $class['error'] = get_lang('Missing class title');
             $errors[] = $class;
         } else {
             // 2. Check whether class doesn't exist yet.
-            if ($usergroup->usergroup_exists($class['name'])) {
+            if ($usergroup->usergroup_exists($class['title'])) {
                 $class['line'] = $index + 2;
-                $class['error'] = get_lang('Class name exists').
-                    ': <strong>'.$class['name'].'</strong>';
+                $class['error'] = get_lang('Class title exists').
+                    ': <strong>'.$class['title'].'</strong>';
                 $errors[] = $class;
             }
         }
@@ -131,7 +131,7 @@ $form->display();
 <p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
 
 <pre>
-<b>name;description;</b>users
+<b>title;description;</b>users
 "User group 1";"Description";admin,username1,username2
 </pre>
 <?php

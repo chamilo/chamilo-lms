@@ -63,7 +63,7 @@ if (isset($_GET['exportpdf'])) {
             get_lang('Score'),
             get_lang('Course'),
             get_lang('Category'),
-            get_lang('ScoreAverage'),
+            get_lang('Score average'),
             get_lang('Result'),
             get_lang('Ranking'),
         ];
@@ -72,7 +72,7 @@ if (isset($_GET['exportpdf'])) {
             get_lang('Score'),
             get_lang('Course'),
             get_lang('Category'),
-            get_lang('ScoreAverage'),
+            get_lang('Score average'),
             get_lang('Result'),
         ];
     }
@@ -123,7 +123,7 @@ if (!empty($evaluationId)) {
         'name' => get_lang('Assessment details'),
     ];
     $actions .= '<a href="gradebook_view_result.php?selecteval='.$evaluationId.'&'.api_get_cidreq().'">
-	'.Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back toScore')).'</a>';
+	'.Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to result list')).'</a>';
 }
 
 $actions .= '<a href="'.api_get_self().'?exportpdf=&userid='.$userId.'&selectcat='.$category[0]->get_id().'&'.api_get_cidreq().'" target="_blank">
@@ -131,7 +131,7 @@ $actions .= '<a href="'.api_get_self().'?exportpdf=&userid='.$userId.'&selectcat
 
 $actions .= '</div>';
 
-Display::display_header(get_lang('Results and feedbackPerUser'));
+Display::display_header(get_lang('Results and feedback per user'));
 echo $actions;
 DisplayGradebook::display_header_user($_GET['userid'], $category[0]->get_id());
 $user_table->display();

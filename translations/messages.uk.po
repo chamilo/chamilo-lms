@@ -4856,10 +4856,10 @@ msgstr "Підтвердити"
 msgid "Unsubscribe users from course"
 msgstr "Відрахувати користувачів з курсу"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Пропущено назву класу"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Назва класу існує"
 
 msgid "CSV file import location"

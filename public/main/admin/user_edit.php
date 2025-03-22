@@ -3,7 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
@@ -20,6 +22,11 @@ $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $userInfo = api_get_user_info($user_id);
 $userObj = api_get_user_entity($user_id);
 $illustrationRepo = Container::getIllustrationRepository();
+
+/** @var AuthenticationConfigHelper $authenticationConfigHelper */
+$authenticationConfigHelper = Container::$container->get(AuthenticationConfigHelper::class);
+
+$accessUrl = Container::getAccessUrlHelper()->getCurrent();
 
 $htmlHeadXtra[] = '
 <script>
@@ -93,7 +100,7 @@ $user_data['send_mail'] = 0;
 $user_data['old_password'] = $user_data['password'];
 //Convert the registration date of the user
 
-$user_data['registration_date'] = api_get_local_time($user_data['registration_date']);
+$user_data['created_at'] = api_get_local_time($user_data['created_at']);
 unset($user_data['password']);
 
 // Create the form
@@ -192,24 +199,28 @@ if ('true' !== api_get_setting('login_is_email')) {
     $form->addRule('username', get_lang('This login is already in use'), 'username_available', $user_data['username']);
 }
 
-if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
-    $form->addLabel(
-        get_lang('External authentification'),
-        $userInfo['auth_source']
-    );
+$extAuthSource = $authenticationConfigHelper->getAuthSourceAuthentications($accessUrl);
+
+if (!empty($extAuthSource) && count($extAuthSource) > 0) {
+    foreach ($userInfo['auth_sources'] as $userAuthSource) {
+        $form->addLabel(
+            get_lang('External authentification'),
+            $userAuthSource
+        );
+    }
 }
 
 // Password
 $form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('Don\'t reset password'), 0);
 $nb_ext_auth_source_added = 0;
-if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
+if (!empty($extAuthSource) && count($extAuthSource) > 0) {
     $auth_sources = [];
-    foreach ($extAuthSource as $key => $info) {
+    foreach ($extAuthSource as $key) {
         // @todo : make uniform external authentication configuration (ex : cas and external_login ldap)
         // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
         // extAuthSource always on for CAS even if not activated
         // same action for file user_add.php
-        if ((CAS_AUTH_SOURCE == $key && 'true' === api_get_setting('cas_activate')) || (CAS_AUTH_SOURCE != $key)) {
+        if ((UserAuthSource::CAS == $key && 'true' === api_get_setting('cas_activate')) || (UserAuthSource::CAS != $key)) {
             $auth_sources[$key] = $key;
             $nb_ext_auth_source_added++;
         }
@@ -217,8 +228,8 @@ if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0
     if ($nb_ext_auth_source_added > 0) {
         // @todo check the radio button for external authentification and select the external authentication in the menu
         $group[] = $form->createElement('radio', 'reset_password', null, get_lang('External authentification').' ', 3);
-        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
-        $group[] = $form->createElement('static', '', '', '<br />');
+        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources, ['multiple' => 'multiple']);
+        $group[] = $form->createElement('static', '', '', '<br />', []);
         $form->addGroup($group, 'password', null, null, false);
     }
 }
@@ -229,7 +240,11 @@ $group[] = $form->createElement(
     'password',
     'password',
     null,
-    ['onkeydown' => 'javascript: password_switch_radio_button();']
+    [
+        'id' => 'password',
+        'onkeydown' => 'javascript: password_switch_radio_button();',
+        'show_hide' => true,
+    ]
 );
 
 $form->addGroup($group, 'password', null, null, false);
@@ -285,7 +300,7 @@ if (!empty($creatorInfo)) {
         get_lang('Create by <a href="%s">%s</a> on %s'),
         'user_information.php?user_id='.$user_data['creator_id'],
         $creatorInfo['username'],
-        $user_data['registration_date']
+        $user_data['created_at']
     );
     $form->addElement('label', get_lang('Registration date'), $date);
 }
@@ -376,6 +391,8 @@ $form->addButtonSave(get_lang('Save'));
 
 // Set default values
 $user_data['reset_password'] = 0;
+$user_data['auth_source'] = $userInfo['auth_sources'];
+
 if (!$hideFields) {
     $expiration_date = $user_data['expiration_date'];
     if (empty($expiration_date)) {
@@ -430,7 +447,11 @@ if ($form->validate()) {
         $phone = $user['phone'];
         $username = $user['username'] ?? $userInfo['username'];
         $status = (int) $user['status'];
-        $platform_admin = (int) $user['platform_admin'];
+        $platform_admin = 0;
+        // Only platform admin can change user status to admin.
+        if (api_is_platform_admin()) {
+            $platform_admin = (int) $user['platform_admin'];
+        }
         $send_mail = (int) $user['send_mail'];
         $reset_password = (int) $user['reset_password'];
         $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;

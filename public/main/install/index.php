@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\Translation\Loader\PoFileLoader;
 use Symfony\Component\Translation\Translator;
@@ -71,12 +72,16 @@ Container::$session = new HttpSession();
 require_once 'install.lib.php';
 $installationLanguage = 'en_US';
 
-if (!empty($_POST['language_list']) && !ChamiloSession::has('install_language')) {
+$httpRequest = Request::createFromGlobals();
+
+if ($httpRequest->request->get('language_list')) {
     $search = ['../', '\\0'];
-    $installationLanguage = str_replace($search, '', urldecode($_POST['language_list']));
+    $installationLanguage = str_replace($search, '', urldecode($httpRequest->request->get('language_list')));
     ChamiloSession::write('install_language', $installationLanguage);
 } elseif (ChamiloSession::has('install_language')) {
   $installationLanguage = ChamiloSession::read('install_language');
+} else {
+  $installationLanguage = $httpRequest->getPreferredLanguage();
 }
 
 // Set translation
@@ -254,7 +259,7 @@ $total_steps = 7;
 $current_step = 1;
 if (!$_POST) {
     $current_step = 1;
-} elseif (!empty($_POST['language_list']) || !empty($_POST['step1']) || ((!empty($_POST['step2_update_8']) || (!empty($_POST['step2_update_6']))) && ($emptyUpdatePath || $badUpdatePath))) {
+} elseif ($httpRequest->request->get('language_list') || !empty($_POST['step1']) || ((!empty($_POST['step2_update_8']) || (!empty($_POST['step2_update_6']))) && ($emptyUpdatePath || $badUpdatePath))) {
     $current_step = 2;
 } elseif (!empty($_POST['step2']) || (!empty($_POST['step2_update_8']) || (!empty($_POST['step2_update_6'])))) {
     $current_step = 3;

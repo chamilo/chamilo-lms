@@ -183,6 +183,14 @@
             @click="openMoveDialog(slotProps.data)"
           />
           <BaseButton
+            :disabled="slotProps.data.filetype !== 'file'"
+            :title="slotProps.data.filetype !== 'file' ? t('Replace (files only)') : t('Replace file')"
+            icon="file-swap"
+            size="small"
+            type="secondary"
+            @click="slotProps.data.filetype === 'file' && openReplaceDialog(slotProps.data)"
+          />
+          <BaseButton
             :title="t('Information')"
             icon="information"
             size="small"
@@ -361,6 +369,21 @@
     </div>
   </BaseDialogConfirmCancel>
 
+  <BaseDialogConfirmCancel
+    v-model:is-visible="isReplaceDialogVisible"
+    :title="t('Replace file')"
+    @confirm-clicked="replaceDocument"
+    @cancel-clicked="isReplaceDialogVisible = false"
+  >
+    <BaseFileUpload
+      id="replace-file"
+      :label="t('Select replacement file')"
+      accept="*/*"
+      model-value="selectedReplaceFile"
+      @file-selected="selectedReplaceFile = $event"
+    />
+  </BaseDialogConfirmCancel>
+
   <BaseDialog
     v-model:is-visible="isFileUsageDialogVisible"
     :style="{ width: '28rem' }"
@@ -531,6 +554,10 @@ const isSessionDocument = (item) => {
 }
 
 const isHtmlFile = (fileData) => isHtml(fileData)
+
+const isReplaceDialogVisible = ref(false)
+const selectedReplaceFile = ref(null)
+const documentToReplace = ref(null)
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
@@ -804,6 +831,41 @@ function recordedAudioNotSaved(error) {
 function openMoveDialog(document) {
   item.value = document
   isMoveDialogVisible.value = true
+}
+
+function openReplaceDialog(document) {
+  documentToReplace.value = document
+  isReplaceDialogVisible.value = true
+}
+
+async function replaceDocument() {
+  if (!selectedReplaceFile.value) {
+    notification.showErrorNotification(t("No file selected."))
+    return
+  }
+
+  if (documentToReplace.value.filetype !== 'file') {
+    notification.showErrorNotification(t("Only files can be replaced."))
+    return
+  }
+
+  const formData = new FormData()
+  console.log(selectedReplaceFile.value)
+  formData.append('file', selectedReplaceFile.value)
+
+  try {
+    await axios.post(`/api/documents/${documentToReplace.value.iid}/replace`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    notification.showSuccessNotification(t("File replaced"))
+    isReplaceDialogVisible.value = false
+    onUpdateOptions(options.value)
+  } catch (error) {
+    notification.showErrorNotification(t("Error replacing file."))
+    console.error(error)
+  }
 }
 
 async function fetchFolders(nodeId = null, parentPath = "") {

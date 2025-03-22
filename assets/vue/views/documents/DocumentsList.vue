@@ -362,13 +362,13 @@
 
   <BaseDialogConfirmCancel
     v-model:is-visible="isReplaceDialogVisible"
-    :title="t('Replace document')"
+    :title="t('Replace file')"
     @confirm-clicked="replaceDocument"
     @cancel-clicked="isReplaceDialogVisible = false"
   >
     <BaseFileUpload
       id="replace-file"
-      :label="t('Select file to replace')"
+      :label="t('Select replacement file')"
       accept="*/*"
       model-value="selectedReplaceFile"
       @file-selected="selectedReplaceFile = $event"
@@ -837,11 +837,11 @@ async function replaceDocument() {
         'Content-Type': 'multipart/form-data',
       },
     })
-    notification.showSuccessNotification(t("Document replaced successfully."))
+    notification.showSuccessNotification(t("File replaced"))
     isReplaceDialogVisible.value = false
     onUpdateOptions(options.value)
   } catch (error) {
-    notification.showErrorNotification(t("Error replacing document."))
+    notification.showErrorNotification(t("Error replacing file."))
     console.error(error)
   }
 }

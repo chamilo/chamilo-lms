@@ -135,7 +135,7 @@ class ResourceLinkRepository extends SortableRepository
         return array_map(function ($row) {
             $toolName = $row['tool_name'];
             $baseLink = $this->toolList[$toolName] ?? null;
-
+            $link = '-';
             if ($baseLink) {
                 $link = str_replace(
                     ['%resource_node_id%'],
@@ -152,8 +152,6 @@ class ResourceLinkRepository extends SortableRepository
                 }
 
                 $link .= '?' . http_build_query($queryParams);
-            } else {
-                $link = '-';
             }
 
             return [
@@ -162,7 +160,7 @@ class ResourceLinkRepository extends SortableRepository
                 'session_name' => $row['session_name'] ?: '-',
                 'course_id' => $row['course_id'],
                 'course_name' => $row['course_name'],
-                'resource_count' => (int)$row['resource_count'],
+                'resource_count' => (int) $row['resource_count'],
                 'last_updated' => $row['last_updated'] ?: '-',
                 'link' => $link,
             ];

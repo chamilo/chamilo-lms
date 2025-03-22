@@ -206,7 +206,7 @@ if (api_is_allowed_to_edit(false, true)) {
 
     if (empty($sessionId) && 'true' === api_get_setting('allow_group_categories')) {
         $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
-            Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AddCategory')).'</a>';
+            Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add category')).'</a>';
     }
 
     $actionsLeft .= '<a href="import.php?'.api_get_cidreq().'&action=import">'.

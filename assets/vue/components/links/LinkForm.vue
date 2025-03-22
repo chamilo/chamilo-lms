@@ -43,6 +43,38 @@
       option-value="value"
     />
 
+    <div v-if="formData.showOnHomepage">
+      <div
+        v-if="formData.customImageUrl"
+        class="mb-4"
+      >
+        <p class="text-gray-600">{{ t("Current icon") }}</p>
+        <img
+          :src="formData.customImageUrl"
+          alt="Custom Image"
+          class="w-24 h-24 object-cover"
+        />
+        <BaseButton
+          :label="t('Remove current icon')"
+          icon="trash"
+          type="danger"
+          @click="removeCurrentImage"
+        />
+      </div>
+
+      <BaseFileUpload
+        id="custom-image"
+        :label="t('Custom icon')"
+        accept="image"
+        size="small"
+        @file-selected="selectedFile = $event"
+      />
+      <p class="text-gray-600">
+        {{ t("This icon will show for the link displayed as a tool on the course homepage.") }}
+      </p>
+      <p class="text-gray-600">{{ t("The icon must be 120x120 pixels.") }}</p>
+    </div>
+
     <LayoutFormButtons>
       <BaseButton
         :label="t('Back')"
@@ -76,12 +108,14 @@ import BaseTextArea from "../basecomponents/BaseTextArea.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import { useNotification } from "../../composables/notification"
 import LayoutFormButtons from "../layout/LayoutFormButtons.vue"
+import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
 
 const notification = useNotification()
 const { t } = useI18n()
 const { cid, sid } = useCidReq()
 const router = useRouter()
 const route = useRoute()
+const selectedFile = ref(null)
 
 const props = defineProps({
   linkId: {
@@ -111,6 +145,9 @@ const formData = reactive({
   category: null,
   showOnHomepage: false,
   target: "_blank",
+  customImage: null,
+  customImageUrl: null,
+  removeImage: false,
 })
 const rules = {
   url: { required, url },
@@ -146,6 +183,11 @@ const fetchLink = async () => {
       formData.target = response.target
       formData.parentResourceNodeId = response.parentResourceNodeId
       formData.resourceLinkList = response.resourceLinkList
+
+      if (response.customImageUrl) {
+        formData.customImageUrl = response.customImageUrl
+      }
+
       if (response.category) {
         formData.category = parseInt(response.category["@id"].split("/").pop())
       }
@@ -153,6 +195,11 @@ const fetchLink = async () => {
       console.error("Error fetching link:", error)
     }
   }
+}
+
+const removeCurrentImage = () => {
+  formData.customImageUrl = null
+  formData.removeImage = true
 }
 
 const submitForm = async () => {
@@ -180,8 +227,23 @@ const submitForm = async () => {
   try {
     if (props.linkId) {
       await linkService.updateLink(props.linkId, postData)
+
+      const formDataImage = new FormData()
+      formDataImage.append("removeImage", formData.removeImage ? "true" : "false")
+
+      if (selectedFile.value instanceof File) {
+        formDataImage.append("customImage", selectedFile.value)
+      }
+
+      await linkService.uploadImage(props.linkId, formDataImage)
     } else {
-      await linkService.createLink(postData)
+      const newLink = await linkService.createLink(postData)
+
+      if (selectedFile.value instanceof File) {
+        const formDataImage = new FormData()
+        formDataImage.append("customImage", selectedFile.value)
+        await linkService.uploadImage(newLink.iid, formDataImage)
+      }
     }
 
     notification.showSuccessNotification(t("Link saved"))
@@ -192,6 +254,7 @@ const submitForm = async () => {
     })
   } catch (error) {
     console.error("Error updating link:", error)
+    notification.showErrorNotification(t("Error saving the link"))
   }
 }
 </script>

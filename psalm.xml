@@ -151,7 +151,6 @@
             <directory name="vendor"/>
 
             <directory name="src/CoreBundle/Component/Editor"/>
-            <directory name="src/CoreBundle/Hook"/>
             <directory name="src/CourseBundle/Component/CourseCopy"/>
             <directory name="src/LtiBundle"/>
 

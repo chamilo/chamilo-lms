@@ -95,8 +95,8 @@ if (isset($_GET['action'])) {
 
                 $url = api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq().'&editres='.$result->get_id();
                 $form = new FormValidator('attempt', 'post', $url.'&action=add_attempt');
-                $form->addHeader(get_lang('AddResult'));
-                $form->addLabel(get_lang('CurrentScore'), $result->get_score());
+                $form->addHeader(get_lang('Add result'));
+                $form->addLabel(get_lang('Current score'), $result->get_score());
 
                 $form->addFloat(
                     'score',
@@ -207,7 +207,7 @@ if (isset($_GET['editres'])) {
             Database::insert($table, $params);
         }
 
-        Display::addFlash(Display::return_message(get_lang('ResultEdited'), 'normal', false));
+        Display::addFlash(Display::return_message(get_lang('Result edited'), 'normal', false));
         header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&editresmessage=&'.api_get_cidreq());
         exit;
     }
@@ -301,7 +301,7 @@ if (isset($_GET['import'])) {
         } else {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('ImportNoFile'),
+                    get_lang('There is no file to import'),
                     'warning',
                     false
                 )
@@ -390,7 +390,7 @@ if (isset($_GET['export'])) {
             $h4 = [get_lang('Weight'), $eval[0]->get_weight()];
             $h5 = [get_lang('Session'), api_get_session_name(api_get_session_id())];
             $date = date('d-m-Y H:i:s', time());
-            $h6 = [get_lang('DateTime'), api_convert_and_format_date($date, "%d/%m/%Y %H:%M")];
+            $h6 = [get_lang('Date and time'), api_convert_and_format_date($date, "%d/%m/%Y %H:%M")];
             $header_pdf = [$h1, $h2, $h3, $h4, $h5, $h6];
 
             // set footer pdf
@@ -624,7 +624,7 @@ function confirmationall () {
 </script>';
 if (isset($_GET['deleteall'])) {
     $eval[0]->delete_results();
-    Display::addFlash(Display::return_message(get_lang('AllResult deleted.')));
+    Display::addFlash(Display::return_message(get_lang('All results have been removed')));
     header('Location: '.api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?allresdeleted=&selecteval='.$select_eval.'&'.api_get_cidreq());
     exit;
 }

@@ -201,15 +201,13 @@ class ExerciseLib
                     break;
                 case ORAL_EXPRESSION:
                     // Add nanog
-                    if ('true' === api_get_setting('enable_record_audio')) {
-                        //@todo pass this as a parameter
-                        global $exercise_stat_info;
-                        if (!empty($exercise_stat_info)) {
-                            echo $objQuestionTmp->returnRecorder((int) $exercise_stat_info['exe_id']);
-                            $generatedFile = self::getOralFileAudio($exercise_stat_info['exe_id'], $questionId);
-                            if (!empty($generatedFile)) {
-                                echo $generatedFile;
-                            }
+                    //@todo pass this as a parameter
+                    global $exercise_stat_info;
+                    if (!empty($exercise_stat_info)) {
+                        echo $objQuestionTmp->returnRecorder((int) $exercise_stat_info['exe_id']);
+                        $generatedFile = self::getOralFileAudio($exercise_stat_info['exe_id'], $questionId);
+                        if (!empty($generatedFile)) {
+                            echo $generatedFile;
                         }
                     }
 
@@ -2136,7 +2134,7 @@ HOTSPOT;
         $clean_group_list = [];
         if (!empty($group_list)) {
             foreach ($group_list as $group) {
-                $clean_group_list[$group['iid']] = $group['name'];
+                $clean_group_list[$group['iid']] = $group['title'];
             }
         }
 
@@ -2413,7 +2411,7 @@ HOTSPOT;
                         if (!empty($results[$i]['session_id'])) {
                             $sessionInfo = api_get_session_info($results[$i]['session_id']);
                             if (!empty($sessionInfo)) {
-                                $sessionName = $sessionInfo['name'];
+                                $sessionName = $sessionInfo['title'];
                                 $sessionStartAccessDate = api_get_local_time($sessionInfo['access_start_date']);
                             }
                         }

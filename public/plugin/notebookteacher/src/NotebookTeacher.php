@@ -502,11 +502,13 @@ class NotebookTeacher
         );
 
         $form->addElement('text', 'note_title', get_lang('Note title'), ['id' => 'note_title']);
-        $form->addElement(
-            'html_editor',
+        $form->applyFilter('note_title', 'html_filter');
+        $form->applyFilter('note_title', 'attr_on_filter');
+        $form->addHtmlEditor(
             'note_comment',
             get_lang('Note details'),
-            null,
+            false,
+            false,
             api_is_allowed_to_edit()
                 ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300']
                 : ['ToolbarSet' => 'NotebookLearner', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']

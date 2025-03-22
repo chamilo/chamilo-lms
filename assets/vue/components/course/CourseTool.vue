@@ -65,7 +65,6 @@ import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()

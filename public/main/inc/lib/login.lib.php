@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use ChamiloSession as Session;
 
 /**
@@ -17,7 +18,7 @@ class Login
     /**
      * Get user account list.
      *
-     * @param array $user        array with keys: email, password, uid, loginName
+     * @param array $user        array with keys: email, password, id, loginName
      * @param bool  $reset
      * @param bool  $by_username
      *
@@ -39,13 +40,13 @@ class Login
             if ($by_username) {
                 $secret_word = self::get_secret_word($user['email']);
                 if ($reset) {
-                    $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$user['uid'];
+                    $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$user['id'];
                     $reset_link = Display::url($reset_link, $reset_link);
                 } else {
                     $reset_link = get_lang('Pass')." : $user[password]";
                 }
                 $user_account_list = get_lang('Your registration data')." : \n".
-                    get_lang('Username').' : '.$user['loginName']."\n".
+                    get_lang('Username').' : '.$user['username']."\n".
                     get_lang('Click here to recover your password').' : '.$reset_link;
 
                 if ($user_account_list) {
@@ -55,7 +56,7 @@ class Login
                 foreach ($user as $this_user) {
                     $secret_word = self::get_secret_word($this_user['email']);
                     if ($reset) {
-                        $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$this_user['uid'];
+                        $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$this_user['id'];
                         $reset_link = Display::url($reset_link, $reset_link);
                     } else {
                         $reset_link = get_lang('Pass')." : $this_user[password]";
@@ -144,14 +145,14 @@ class Login
     /**
      * Handle encrypted password, send an email to a user with his password.
      *
-     * @param int user id
+     * @param int $user
      * @param bool $by_username
      *
      * @return string
      *
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
-    public static function handle_encrypted_password($user, $by_username = false)
+    public static function handle_encrypted_password(int $user, $by_username = false)
     {
         $email_subject = "[".api_get_setting('siteName')."] ".get_lang('Login request'); // SUBJECT
 
@@ -252,25 +253,20 @@ class Login
      */
     public static function reset_password($secret, $id, $by_username = false)
     {
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $id = intval($id);
-        $sql = "SELECT
-                    id AS uid,
-                    lastname AS lastName,
-                    firstname AS firstName,
-                    username AS loginName,
-                    password,
-                    email,
-                    auth_source
-                FROM ".$tbl_user."
-                WHERE id = $id";
-        $result = Database::query($sql);
-        $num_rows = Database::num_rows($result);
+        $userEntity = api_get_user_entity((int) $id);
 
-        if ($result && $num_rows > 0) {
-            $user = Database::fetch_array($result);
+        if ($userEntity) {
+            $user = [
+                'id' => $userEntity->getId(),
+                'lastName' => $userEntity->getLastname(),
+                'firstName' => $userEntity->getFirstname(),
+                'loginName' => $userEntity->getUsername(),
+                'password' => $userEntity->getPassword(),
+                'email' => $userEntity->getEmail(),
+                'auth_sources' => $userEntity->getAuthSourcesAuthentications(),
+            ];
 
-            if ('extldap' == $user['auth_source']) {
+            if ($userEntity->hasAuthSourceByAuthentication(UserAuthSource::CAS)) {
                 return get_lang('Could not reset password');
             }
         } else {
@@ -281,7 +277,7 @@ class Login
             // OK, secret word is good. Now change password and mail it.
             $user['password'] = api_generate_password();
 
-            UserManager::updatePassword($id, $user['password']);
+            UserManager::updatePassword($userEntity->getId(), $user['password']);
 
             return self::send_password_to_user($user, $by_username);
         } else {
@@ -329,20 +325,21 @@ class Login
                     // Extracting the user data
 
                     $uData = Database::fetch_array($result);
+                    $userEntity = api_get_user_entity($uData['id']);
 
-                    $_user['firstName'] = $uData['firstname'];
-                    $_user['lastName'] = $uData['lastname'];
-                    $_user['mail'] = $uData['email'];
-                    $_user['official_code'] = $uData['official_code'];
-                    $_user['picture_uri'] = $uData['picture_uri'];
-                    $_user['user_id'] = $uData['user_id'];
-                    $_user['language'] = $uData['language'];
-                    $_user['auth_source'] = $uData['auth_source'];
-                    $_user['theme'] = $uData['theme'];
-                    $_user['status'] = $uData['status'];
+                    $_user['firstName'] = $userEntity->getFirstname();
+                    $_user['lastName'] = $userEntity->getLastname();
+                    $_user['mail'] = $userEntity->getEmail();
+                    $_user['official_code'] = $userEntity->getOfficialCode();
+                    $_user['picture_uri'] = $userEntity->getPictureUri();
+                    $_user['user_id'] = $userEntity->getId();
+                    $_user['language'] = $userEntity->getLocale();
+                    $_user['auth_sources'] = $userEntity->getAuthSourcesAuthentications();
+                    $_user['theme'] = $userEntity->getTheme();
+                    $_user['status'] = $userEntity->getStatus();
 
                     $is_platformAdmin = (bool) (!is_null($uData['is_admin']));
-                    $is_allowedCreateCourse = (bool) ((1 == $uData['status']) or (api_get_setting('drhCourseManagerRights') and 4 == $uData['status']));
+                    $is_allowedCreateCourse = (bool) ((1 == $userEntity->getStatus()) or (api_get_setting('drhCourseManagerRights') and 4 == $userEntity->getStatus()));
                     ConditionalLogin::check_conditions($uData);
 
                     Session::write('_user', $_user);
@@ -373,6 +370,7 @@ class Login
      * @param string $username (email or username)
      *
      * @return array|bool
+     * @throws \Doctrine\DBAL\Exception
      */
     public static function get_user_accounts_by_username($username)
     {
@@ -391,25 +389,28 @@ class Login
         }
 
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $query = "SELECT
-                    id AS uid,
-		            lastname AS lastName,
-		            firstname AS firstName,
-		            username AS loginName,
-		            password,
-		            email,
-                    status AS status,
-                    official_code,
-                    phone,
-                    picture_uri,
-                    creator_id,
-                    auth_source
-				 FROM $tbl_user
-				 WHERE ( $condition AND active = 1) ";
+
+        $query = "SELECT id FROM $tbl_user WHERE ( $condition AND active = 1) ";
         $result = Database::query($query);
         $num_rows = Database::num_rows($result);
         if ($result && $num_rows > 0) {
-            return Database::fetch_assoc($result);
+            $userInfo = Database::fetch_assoc($result);
+            $user = api_get_user_entity($userInfo['id']);
+
+            return [
+                'id' => $user->getId(),
+                'lastname' => $user->getLastname(),
+                'firstname' => $user->getFirstname(),
+                'username' => $user->getUsername(),
+                'password' => $user->getPassword(),
+                'email' => $user->getEmail(),
+                'status' => $user->getStatus(),
+                'official_code' => $user->getOfficialCode(),
+                'phone' => $user->getPhone(),
+                'picture_uri' => $user->getPictureUri(),
+                'creator_id' => $user->getCreator()?->getId(),
+                'auth_sources' => $user->getAuthSourcesAuthentications(),
+            ];
         }
 
         return false;

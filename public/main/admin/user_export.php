@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -17,6 +19,8 @@ $session_course_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_
 
 $tool_name = get_lang('Export users list');
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
+
+$accessUrl = Container::getAccessUrlHelper()->getCurrent();
 
 set_time_limit(0);
 $coursesSessions = [];
@@ -87,16 +91,12 @@ if ($form->validate()) {
 
     $sql = "SELECT
                 u.id 	AS UserId,
-                u.lastname 	AS LastName,
-                u.firstname 	AS FirstName,
                 u.email 		AS Email,
-                u.username	AS UserName,
                 ".(('none' != api_get_configuration_value('password_encryption')) ? " " : "u.password AS Password, ")."
-                u.auth_source	AS AuthSource,
                 u.status		AS Status,
                 u.official_code	AS OfficialCode,
                 u.phone		AS Phone,
-                u.registration_date AS RegistrationDate";
+                u.created_at AS CreatedAt";
     if (strlen($course_code) > 0) {
         $sql .= " FROM $user_table u, $course_user_table cu
                     WHERE
@@ -171,6 +171,12 @@ if ($form->validate()) {
 
     $res = Database::query($sql);
     while ($user = Database::fetch_assoc($res)) {
+        $userEntity = api_get_user_entity($user['UserId']);
+        $user['LastName'] = $userEntity->getLastname();
+        $user['FirstName'] = $userEntity->getFirstname();
+        $user['UserName'] = $userEntity->getUsername();
+        $user['AuthSource'] = implode(', ', $userEntity->getAuthSourcesAuthentications($accessUrl));
+
         $student_data = UserManager:: get_extra_user_data(
             $user['UserId'],
             true,

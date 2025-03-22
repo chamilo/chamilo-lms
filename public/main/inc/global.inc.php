@@ -68,6 +68,13 @@ if ($isCli) {
     $kernel = new Chamilo\Kernel($env, $debug);
     // Loading Request from Sonata. In order to use Sonata Pages Bundle.
     $request = Request::createFromGlobals();
+    if (!empty($_SERVER['TRUSTED_PROXIES'])) {
+        $request->setTrustedProxies(
+            preg_split('#,#', $_SERVER['TRUSTED_PROXIES']),
+            Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_PROTO | Request::HEADER_X_FORWARDED_HOST | Request::HEADER_X_FORWARDED_PORT
+        );
+        // TRUSTED_PROXIES must be defined in .env. For non-legacy code, check config/packages/framework.yaml
+    }
     // This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
     // and not called from a symfony controller from public/
     $request->request->set('load_legacy', true);

@@ -2,6 +2,8 @@
   <i
     :class="iconClass"
     aria-hidden="true"
+    @click="$emit('click', $event)"
+    class="cursor-pointer"
   />
 </template>
 

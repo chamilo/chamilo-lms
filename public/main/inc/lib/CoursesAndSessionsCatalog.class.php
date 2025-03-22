@@ -3,6 +3,10 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\SessionResubscriptionEvent;
 use Doctrine\ORM\Query\Expr\Join;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
@@ -241,11 +245,11 @@ class CoursesAndSessionsCatalog
      * @param string $categoryCode
      * @param int    $randomValue
      * @param array  $limit        will be used if $randomValue is not set.
-     *                             This array should contains 'start' and 'length' keys
+     *                             This array should contain 'start' and 'length' keys
      *
      * @return array
      */
-    public static function getCoursesInCategory($categoryCode, $randomValue = null, $limit = [])
+    public static function getCoursesInCategory(string $categoryCode, $randomValue = null, $limit = [])
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $avoidCoursesCondition = self::getAvoidCourseCondition();
@@ -1264,17 +1268,10 @@ class CoursesAndSessionsCatalog
             );
         }
 
-        $hook = HookResubscribe::create();
-        if (!empty($hook)) {
-            $hook->setEventData([
-                'session_id' => $sessionId,
-            ]);
-            try {
-                $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);
-            } catch (Exception $exception) {
-                $result = $exception->getMessage();
-            }
-        }
+        Container::getEventDispatcher()->dispatch(
+            new SessionResubscriptionEvent(['session_id' => $sessionId], AbstractEvent::TYPE_PRE),
+            Events::SESSION_RESUBSCRIPTION
+        );
 
         return $result;
     }
@@ -1506,7 +1503,7 @@ class CoursesAndSessionsCatalog
      */
     public static function sessionsListByCoursesTag(array $limit)
     {
-        $searchTag = isset($_REQUEST['search_tag']) ? $_REQUEST['search_tag'] : '';
+        $searchTag = $_REQUEST['search_tag'] ? Security::remove_XSS($_REQUEST['search_tag']) : '';
         $searchDate = isset($_REQUEST['date']) ? $_REQUEST['date'] : date('Y-m-d');
         $courseUrl = self::getCatalogUrl(
             1,
@@ -1568,7 +1565,7 @@ class CoursesAndSessionsCatalog
         $entityManager = Database::getManager();
         $sessionRelCourseRepo = $entityManager->getRepository('ChamiloCoreBundle:SessionRelCourse');
         $extraFieldRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
-        $tagRepo = \Chamilo\CoreBundle\Framework\Container::getTagRepository();
+        $tagRepo = Container::getTagRepository();
 
         $tagsField = $extraFieldRepo->findOneBy([
             'itemType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
@@ -1854,7 +1851,7 @@ class CoursesAndSessionsCatalog
         $action = isset($action) ? Security::remove_XSS($action) : $requestAction;
         $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
         $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
-        $searchTag = isset($_REQUEST['search_tag']) ? $_REQUEST['search_tag'] : '';
+        $searchTag = $_REQUEST['search_tag'] ? Security::remove_XSS($_REQUEST['search_tag']) : '';
 
         if ('subscribe_user_with_password' === $action) {
             $action = 'subscribe';

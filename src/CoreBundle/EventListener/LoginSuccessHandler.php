@@ -144,6 +144,10 @@ class LoginSuccessHandler
             $trackELoginRepository->createLoginRecord($user, new DateTime(), $userIp);
             $trackEOnlineRepository->createOnlineSession($user, $userIp);
 
+            $user->setLastLogin(new DateTime());
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+
             // Log of connection attempts
             $trackELoginRecordRepository->addTrackLogin($user->getUsername(), $userIp, true);
             $this->loginAttemptLogger->logAttempt(true, $user->getUsername(), $userIp);

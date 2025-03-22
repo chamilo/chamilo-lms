@@ -13,6 +13,7 @@
     :text="onlyIcon"
     :title="tooltip || (onlyIcon ? label : undefined)"
     :type="isSubmit ? 'submit' : 'button'"
+    :name="name"
     class="cursor-pointer"
     @click="$emit('click', $event)"
   />
@@ -70,6 +71,11 @@ const props = defineProps({
     type: String,
     default: "", // This ensures that popupIdentifier is still present
   },
+  name: {
+    type: String || undefined,
+    required: false,
+    default: undefined,
+  },
 })
 
 defineEmits(["click"])
@@ -92,7 +98,7 @@ const primePlainProperty = computed(() => {
 
 const buttonClass = computed(() => {
   if (props.onlyIcon) {
-    return "p-3 text-tertiary hover:bg-tertiary-gradient/30"
+    return "text-tertiary hover:bg-tertiary-gradient/30"
   }
   let result = ""
 

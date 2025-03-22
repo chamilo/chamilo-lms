@@ -89,7 +89,7 @@ $htmlHeadXtra[] = '
       const diapoButton = document.querySelector("#card_"+targetBlockWithoutHash+" a");
 
       setTimeout(function() {
-        diapoButton.click();
+        diapoButton?.click();
       }, 500);
     });
 </script>

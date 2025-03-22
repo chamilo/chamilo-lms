@@ -1,14 +1,12 @@
 <template>
   <div class="install-step">
-    <h2
-      v-if="'update' !== installerData.installType"
-      v-t="'Step 7 - Installation process execution'"
-      class="RequirementHeading mb-8"
-    />
-    <h2
-      v-else
-      v-t="'Step 7 - Update process execution'"
-      class="RequirementHeading mb-8"
+    <SectionHeader
+      :title="
+        'update' !== installerData.installType
+          ? t('Step 7 - Installation process execution')
+          : t('Step 7 - Update process execution')
+      "
+      class="RequirementHeading"
     />
 
     <p
@@ -42,12 +40,13 @@
 
       <div class="formgroup-inline">
         <div class="field">
-          <Button
-            :label="t('Go to your newly created portal.')"
-            class="p-button-success"
-            type="button"
-            @click="btnFinishOnClick"
-          />
+          <BaseAppLink url="../../">
+            <Button
+              :label="t('Go to your newly created portal.')"
+              class="p-button-success"
+              type="button"
+            />
+          </BaseAppLink>
         </div>
       </div>
     </div>
@@ -60,12 +59,10 @@ import { useI18n } from "vue-i18n"
 
 import Message from "primevue/message"
 import Button from "primevue/button"
+import SectionHeader from "../layout/SectionHeader.vue"
+import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const { t } = useI18n()
 
 const installerData = inject("installerData")
-
-function btnFinishOnClick() {
-  window.location = "../../"
-}
 </script>

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\RemoveOnAttributes;
+
 /**
  * Class FormValidator
  * create/manipulate/validate user input.
@@ -50,10 +52,8 @@ class FormValidator extends HTML_QuickForm
 
         switch ($layout) {
             case self::LAYOUT_BOX_SEARCH:
-                $attributes['class'] = 'form--search';
-                break;
             case self::LAYOUT_INLINE:
-                $attributes['class'] = 'flex flex-row gap-3 ';
+                $attributes['class'] = 'flex flex-row gap-3 items-center ';
                 break;
             case self::LAYOUT_BOX:
                 $attributes['class'] = 'ch flex gap-1 ';
@@ -217,6 +217,8 @@ EOT;
         }
 
         $this->applyFilter($name, 'trim');
+        $this->applyFilter($name, 'html_filter');
+
         if ($required) {
             $this->addRule($name, get_lang('Required field'), 'required');
         }
@@ -1129,6 +1131,7 @@ EOT;
 
         $this->addElement('html_editor', $name, $label, $attributes, $config);
         $this->applyFilter($name, 'trim');
+        $this->applyFilter($name, 'attr_on_filter');
         if ($required) {
             $this->addRule($name, get_lang('Required field'), 'required');
         }
@@ -1145,6 +1148,17 @@ EOT;
         if ($element->editor) {
             $element->editor->processConfig($config);
         }
+    }
+
+    /**
+     * Prevent execution of event handlers in HTML elements.
+     *
+     * @param string $html
+     * @return string
+     */
+    function attr_on_filter($html) {
+        $pattern = '/\s+on\w+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i';
+        return preg_replace($pattern, '', $html);
     }
 
     /**
@@ -1750,7 +1764,7 @@ EOT;
             $(function() {
                 var defaultValue = '$defaultId';
                 $('#$typeNoDots').val(defaultValue);
-                $('#$typeNoDots').selectpicker('render');
+                //$('#$typeNoDots').selectpicker('render');
                 if (defaultValue != '') {
                     var selected = $('#$typeNoDots option:selected').val();
                     $.ajax({
@@ -1976,3 +1990,30 @@ function mobile_phone_number_filter($mobilePhoneNumber)
 
     return ltrim($mobilePhoneNumber, '0');
 }
+
+/**
+ * Cleans JS from a URL.
+ *
+ * @param string $html URL to clean
+ * @param int    $mode (optional)
+ *
+ * @return string The cleaned URL
+ */
+function plain_url_filter($html, $mode = NO_HTML)
+{
+    $allowed_tags = HTML_QuickForm_Rule_HTML::get_allowed_tags($mode);
+    $html = kses_no_null($html);
+    $html = kses_js_entities($html);
+    $allowed_html_fixed = kses_array_lc($allowed_tags);
+
+    return kses_split($html, $allowed_html_fixed, ['http', 'https']);
+}
+
+/**
+ * Prevent execution of event handlers in HTML elements.
+ */
+function attr_on_filter(string $html): string
+{
+    return RemoveOnAttributes::filter($html);
+}
+

@@ -62,7 +62,6 @@ import BaseAvatarList from "../basecomponents/BaseAvatarList.vue"
 import { computed } from "vue"
 import { isEmpty } from "lodash"
 import { useFormatDate } from "../../composables/formatDate"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 
 const { abbreviatedDatetime } = useFormatDate()

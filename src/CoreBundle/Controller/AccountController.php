@@ -160,13 +160,13 @@ class AccountController extends BaseController
 
                 if ($newPassword || $confirmPassword || $currentPassword) {
                     if (!$userRepository->isPasswordValid($user, $currentPassword)) {
-                        $form->get('currentPassword')->addError(new FormError($this->translator->trans('Current password is incorrect.')));
+                        $form->get('currentPassword')->addError(new FormError($this->translator->trans('The current password is incorrect')));
                     } elseif ($newPassword !== $confirmPassword) {
-                        $form->get('confirmPassword')->addError(new FormError($this->translator->trans('Passwords do not match.')));
+                        $form->get('confirmPassword')->addError(new FormError($this->translator->trans('Passwords do not match')));
                     } else {
                         $user->setPlainPassword($newPassword);
                         $userRepository->updateUser($user);
-                        $this->addFlash('success', 'Password updated successfully.');
+                        $this->addFlash('success', 'Password updated successfully');
                     }
                 }
 

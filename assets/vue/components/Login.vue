@@ -31,7 +31,7 @@
       <div v-if="requires2FA" class="field">
         <InputText
           v-model="totp"
-          :placeholder="t('Enter TOTP code')"
+          :placeholder="t('Enter 2FA code')"
           type="text"
         />
       </div>
@@ -51,7 +51,7 @@
 
       <div class="field login-section__buttons">
         <Button
-          :label="requires2FA ? t('Submit TOTP') : t('Sign in')"
+          :label="requires2FA ? t('Submit code') : t('Sign in')"
           :loading="isLoading"
           type="submit"
         />

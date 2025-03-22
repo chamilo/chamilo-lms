@@ -334,7 +334,7 @@ $tools = [
     get_lang('Courses') => [
         'report=courses' => get_lang('Courses'),
         'report=tools' => get_lang('Tools access'),
-        'report=tool_usage' => get_lang('Tool Usage Report'),
+        'report=tool_usage' => get_lang('Tool-based resource count'),
         'report=courselastvisit' => get_lang('Latest access'),
         'report=coursebylanguage' => get_lang('Number of courses by language'),
     ],
@@ -719,14 +719,14 @@ switch ($report) {
         }
 
         $form = new FormValidator('tool_usage', 'get');
-        $form->addHeader(get_lang('Tool Usage Report'));
+        $form->addHeader(get_lang('Tool-based resource count'));
         $form->addSelect(
             'tool_ids',
             get_lang('Select Tools'),
             $courseTools,
             ['multiple' => true, 'required' => true]
         );
-        $form->addButtonSearch(get_lang('Generate Report'));
+        $form->addButtonSearch(get_lang('Generate report'));
         $form->addHidden('report', 'tool_usage');
 
         $content .= $form->returnForm();
@@ -741,8 +741,8 @@ switch ($report) {
                 get_lang('Tool'),
                 get_lang('Session'),
                 get_lang('Course'),
-                get_lang('Items Count'),
-                get_lang('Last Updated'),
+                get_lang('Resource count'),
+                get_lang('Last updated'),
             ];
             $row = 0;
 

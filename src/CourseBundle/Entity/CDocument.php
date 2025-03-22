@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
+use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\ReplaceDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
@@ -135,6 +136,29 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']],
             deserialize: false
+        ),
+        new Post(
+            uriTemplate: '/documents/download-selected',
+            controller: DownloadSelectedDocumentsAction::class,
+            openapiContext: [
+                'summary' => 'Download selected documents as a ZIP file.',
+                'requestBody' => [
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'ids' => [
+                                        'type' => 'array',
+                                        'items' => ['type' => 'integer']
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            security: "is_granted('ROLE_USER')",
         ),
         new GetCollection(
             openapiContext: [

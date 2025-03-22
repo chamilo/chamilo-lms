@@ -27947,3 +27947,21 @@ msgstr ""
 
 msgid "Error downloading selected items."
 msgstr ""
+
+msgid "Remove current icon"
+msgstr ""
+
+msgid "This icon will show for the link displayed as a tool on the course homepage."
+msgstr ""
+
+msgid "The icon must be 120x120 pixels."
+msgstr ""
+
+msgid "Error saving the link"
+msgstr ""
+
+msgid "Tool-based resource count"
+msgstr ""
+
+msgid "Resource count"
+msgstr ""

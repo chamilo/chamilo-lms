@@ -27920,3 +27920,30 @@ msgstr ""
 
 msgid "Please wait, this could take a while..."
 msgstr ""
+
+msgid "Replace (files only)"
+msgstr ""
+
+msgid "Select replacement file"
+msgstr ""
+
+msgid "No file selected."
+msgstr ""
+
+msgid "Only files can be replaced."
+msgstr ""
+
+msgid "Error replacing file."
+msgstr ""
+
+msgid "Download selected items as ZIP"
+msgstr ""
+
+msgid "No items selected."
+msgstr ""
+
+msgid "Download started"
+msgstr ""
+
+msgid "Error downloading selected items."
+msgstr ""

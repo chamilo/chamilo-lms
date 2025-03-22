@@ -27934,3 +27934,30 @@ msgstr "Invalid server response"
 
 msgid "Please wait, this could take a while..."
 msgstr "Please wait, this could take a while..."
+
+msgid "Replace (files only)"
+msgstr "Replace (files only)"
+
+msgid "Select replacement file"
+msgstr "Select replacement file"
+
+msgid "No file selected."
+msgstr "No file selected."
+
+msgid "Only files can be replaced."
+msgstr "Only files can be replaced."
+
+msgid "Error replacing file."
+msgstr "Error replacing file."
+
+msgid "Download selected items as ZIP"
+msgstr "Download selected items as ZIP"
+
+msgid "No items selected."
+msgstr "No items selected."
+
+msgid "Download started"
+msgstr "Download started"
+
+msgid "Error downloading selected items."
+msgstr "Error downloading selected items."

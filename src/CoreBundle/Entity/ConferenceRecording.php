@@ -6,13 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\ConferenceRecordingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Conference Recording entity.
  */
 #[ORM\Table(name: 'conference_recording')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ConferenceRecordingRepository::class)]
 class ConferenceRecording
 {
     #[ORM\Id]

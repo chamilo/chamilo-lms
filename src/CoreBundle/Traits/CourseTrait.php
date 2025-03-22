@@ -24,7 +24,7 @@ trait CourseTrait
     /**
      * @return $this
      */
-    public function setCourse(Course $course): self
+    public function setCourse(?Course $course): self
     {
         $this->course = $course;
 

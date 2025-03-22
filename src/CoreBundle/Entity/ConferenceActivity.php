@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\ConferenceActivityRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Conference Activity entity.
  */
 #[ORM\Table(name: 'conference_activity')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ConferenceActivityRepository::class)]
 class ConferenceActivity
 {
     #[ORM\Id]

@@ -22,6 +22,11 @@ final class Version20250306101000 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         foreach ($this->getPluginTitles() as $pluginTitle) {
+
+            if (is_array($pluginTitle) && isset($pluginTitle['title'])) {
+                $pluginTitle = (string) $pluginTitle['title'];
+            }
+
             $pluginId = $this->insertPlugin($pluginTitle);
 
             $settingsByUrl = $this->getPluginSettingsByUrl($pluginTitle);
@@ -68,7 +73,7 @@ final class Version20250306101000 extends AbstractMigrationChamilo
             ]
         );
 
-        return $this->connection->lastInsertId();
+        return (int) $this->connection->lastInsertId();
     }
 
     /**
@@ -80,7 +85,7 @@ final class Version20250306101000 extends AbstractMigrationChamilo
 
         $pluginSettings = $this->connection
             ->executeQuery(
-                "SELECT variable, selected_value, access_url
+                "SELECT variable, selected_value, access_url, title
                         FROM settings
                         WHERE category = 'plugins'
                             AND type = 'setting'

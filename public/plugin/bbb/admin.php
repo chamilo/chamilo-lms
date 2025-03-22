@@ -53,6 +53,10 @@ foreach ($meetings as &$meeting) {
     }
 }
 
+if (!isset($meeting['participants'])) {
+    $meeting['participants'] = [];
+}
+
 if ($action) {
     switch ($action) {
         case 'export':

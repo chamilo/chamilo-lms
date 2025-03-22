@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\ConferenceMeetingRepository;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\SessionTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
@@ -17,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Conference Meeting entity.
  */
 #[ORM\Table(name: 'conference_meeting')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ConferenceMeetingRepository::class)]
 class ConferenceMeeting
 {
     use CourseTrait;
@@ -404,5 +405,35 @@ class ConferenceMeeting
         $this->webinarSchema = $webinarSchema;
 
         return $this;
+    }
+
+    public function isVisible(): bool
+    {
+        return $this->visibility === 1;
+    }
+
+    public function isClosed(): bool
+    {
+        return $this->status === 0;
+    }
+
+    public function isOpen(): bool
+    {
+        return $this->status === 1;
+    }
+
+    public function hasRecording(): bool
+    {
+        return $this->record === true;
+    }
+
+    public function hasVideoUrl(): bool
+    {
+        return !empty($this->videoUrl);
+    }
+
+    public function isRecordingAvailable(): bool
+    {
+        return $this->hasRecording() && $this->hasVideoUrl();
     }
 }

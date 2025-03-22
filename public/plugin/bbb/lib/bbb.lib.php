@@ -5,6 +5,13 @@
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 use Chamilo\CoreBundle\Component\Utils\StateIcon;
+use Chamilo\CoreBundle\Entity\ConferenceActivity;
+use Chamilo\CoreBundle\Entity\ConferenceMeeting;
+use Chamilo\CoreBundle\Entity\ConferenceRecording;
+use Chamilo\CoreBundle\Repository\ConferenceActivityRepository;
+use Chamilo\CoreBundle\Repository\ConferenceMeetingRepository;
+use Chamilo\CoreBundle\Repository\ConferenceRecordingRepository;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Class bbb
@@ -62,7 +69,7 @@ class bbb
         $bbb_host = !empty($host) ? $host : $this->plugin->get('host');
         $bbb_salt = !empty($salt) ? $salt : $this->plugin->get('salt');
 
-        $this->table = Database::get_main_table('plugin_bbb_meeting');
+        $this->table = Database::get_main_table('conference_meeting');
         $this->enableGlobalConference = $this->plugin->get('enable_global_conference') === 'true';
         $this->isGlobalConference = (bool) $isGlobalConference;
 
@@ -385,63 +392,79 @@ class bbb
         $params['voice_bridge'] = rand(10000, 99999);
         $params['created_at'] = api_get_utc_datetime();
         $params['access_url'] = $this->accessUrl;
-        $params['closed_at'] = '';
 
-        $id = Database::insert($this->table, $params);
+        $em = Database::getManager();
+        $meeting = new ConferenceMeeting();
 
-        if ($id) {
-            Event::addEvent(
-                'bbb_create_meeting',
-                'meeting_id',
-                (int) $id,
-                null,
-                api_get_user_id(),
-                api_get_course_int_id(),
-                api_get_session_id()
-            );
+        $meeting
+            ->setCourse(api_get_course_entity($params['c_id']))
+            ->setSession(api_get_session_entity($params['session_id']))
+            ->setAccessUrl(api_get_url_entity($params['access_url']))
+            ->setGroup($this->hasGroupSupport() ? api_get_group_entity($params['group_id']) : null)
+            ->setUser($this->isGlobalConferencePerUserEnabled() ? api_get_user_entity($params['user_id']) : null)
+            ->setRemoteId($params['remote_id'])
+            ->setTitle($params['meeting_name'] ?? $this->getCurrentVideoConferenceName())
+            ->setAttendeePw($attendeePassword)
+            ->setModeratorPw($moderatorPassword)
+            ->setRecord((bool)$params['record'])
+            ->setStatus($params['status'])
+            ->setVoiceBridge($params['voice_bridge'])
+            ->setWelcomeMsg($params['welcome_msg'] ?? null)
+            ->setVisibility(1)
+            ->setHasVideoM4v(false)
+            ->setServiceProvider('bbb');
 
-            $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : $this->getCurrentVideoConferenceName();
-            $welcomeMessage = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;
-            $record = isset($params['record']) && $params['record'] ? 'true' : 'false';
-            //$duration = isset($params['duration']) ? intval($params['duration']) : 0;
-            // This setting currently limits the maximum conference duration,
-            // to avoid lingering sessions on the video-conference server #6261
-            $duration = 300;
-            $meetingDuration = (int) $this->plugin->get('meeting_duration');
-            if (!empty($meetingDuration)) {
-                $duration = $meetingDuration;
-            }
-            $bbbParams = array(
-                'meetingId' => $params['remote_id'], // REQUIRED
-                'meetingName' => $meetingName, // REQUIRED
-                'attendeePw' => $attendeePassword, // Match this value in getJoinMeetingURL() to join as attendee.
-                'moderatorPw' => $moderatorPassword, // Match this value in getJoinMeetingURL() to join as moderator.
-                'welcomeMsg' => $welcomeMessage, // ''= use default. Change to customize.
-                'dialNumber' => '', // The main number to call into. Optional.
-                'voiceBridge' => $params['voice_bridge'], // PIN to join voice. Required.
-                'webVoice' => '', // Alphanumeric to join voice. Optional.
-                'logoutUrl' => $this->logoutUrl.'&action=logout&remote_id='.$params['remote_id'],
-                'maxParticipants' => $max, // Optional. -1 = unlimitted. Not supported in BBB. [number]
-                'record' => $record, // New. 'true' will tell BBB to record the meeting.
-                'duration' => $duration, // Default = 0 which means no set duration in minutes. [number]
-                //'meta_category' => '',  // Use to pass additional info to BBB server. See API docs.
-            );
+        $em->persist($meeting);
+        $em->flush();
 
-            $status = false;
-            $meeting = null;
-            while ($status === false) {
-                $result = $this->api->createMeetingWithXmlResponseArray($bbbParams);
-                if (isset($result) && strval($result['returncode']) == 'SUCCESS') {
-                    if ($this->plugin->get('allow_regenerate_recording') === 'true') {
-                        $internalId = Database::escape_string($result['internalMeetingID']);
-                        $sql = "UPDATE $this->table SET internal_meeting_id = '".$internalId."'
-                                WHERE id = $id";
-                        Database::query($sql);
-                    }
-                    $meeting = $this->joinMeeting($meetingName, true);
+        $id = $meeting->getId();
 
-                    return $meeting;
+        Event::addEvent(
+            'bbb_create_meeting',
+            'meeting_id',
+            (int)$id,
+            null,
+            api_get_user_id(),
+            api_get_course_int_id(),
+            api_get_session_id()
+        );
+
+        $meetingName = $meeting->getTitle();
+        $record = $meeting->isRecord() ? 'true' : 'false';
+        $duration = 300;
+        $meetingDuration = (int) $this->plugin->get('meeting_duration');
+        if (!empty($meetingDuration)) {
+            $duration = $meetingDuration;
+        }
+
+        $bbbParams = [
+            'meetingId' => $meeting->getRemoteId(),
+            'meetingName' => $meetingName,
+            'attendeePw' => $attendeePassword,
+            'moderatorPw' => $moderatorPassword,
+            'welcomeMsg' => $meeting->getWelcomeMsg(),
+            'dialNumber' => '',
+            'voiceBridge' => $meeting->getVoiceBridge(),
+            'webVoice' => '',
+            'logoutUrl' => $this->logoutUrl . '&action=logout&remote_id=' . $meeting->getRemoteId(),
+            'maxParticipants' => $max,
+            'record' => $record,
+            'duration' => $duration,
+        ];
+
+        $status = false;
+        $finalMeetingUrl = null;
+
+        while ($status === false) {
+            $result = $this->api->createMeetingWithXmlResponseArray($bbbParams);
+            if (isset($result) && strval($result['returncode']) === 'SUCCESS') {
+                if ($this->plugin->get('allow_regenerate_recording') === 'true') {
+                    $meeting->setInternalMeetingId($result['internalMeetingID']);
+                    $em->flush();
                 }
+
+                $finalMeetingUrl = $this->joinMeeting($meetingName, true);
+                return $finalMeetingUrl;
             }
         }
 
@@ -540,27 +563,17 @@ class bbb
         }
 
         $manager = $this->isConferenceManager();
-        if ($manager) {
-            $pass = $this->getModMeetingPassword();
-        } else {
-            $pass = $this->getUserMeetingPassword();
-        }
+        $pass = $manager ? $this->getModMeetingPassword() : $this->getUserMeetingPassword();
 
-        $meetingData = Database::select(
-            '*',
-            $this->table,
-            array(
-                'where' => array(
-                    'meeting_name = ? AND status = 1 AND access_url = ?' => array(
-                        $meetingName,
-                        $this->accessUrl,
-                    ),
-                ),
-            ),
-            'first'
-        );
+        $meetingData = Database::getManager()
+            ->getRepository(ConferenceMeeting::class)
+            ->findOneBy([
+                'title' => $meetingName,
+                'status' => 1,
+                'accessUrl' => api_get_url_entity($this->accessUrl),
+            ]);
 
-        if (empty($meetingData) || !is_array($meetingData)) {
+        if (empty($meetingData)) {
             if ($this->debug) {
                 error_log("meeting does not exist: $meetingName");
             }
@@ -568,12 +581,10 @@ class bbb
             return false;
         }
 
-        $params = array(
-            'meetingId' => $meetingData['remote_id'],
-            //  -- REQUIRED - The unique id for the meeting
-            'password' => $this->getModMeetingPassword()
-            //  -- REQUIRED - The moderator password for the meeting
-        );
+        $params = [
+            'meetingId' => $meetingData->getRemoteId(),
+            'password' => $this->getModMeetingPassword(),
+        ];
 
         $meetingInfoExists = false;
         $meetingIsRunningInfo = $this->getMeetingInfo($params);
@@ -585,14 +596,7 @@ class bbb
         }
 
         if ($meetingIsRunningInfo === false) {
-            // checking with the remote_id didn't work, so just in case and
-            // to provide backwards support, check with the id
-            $params = array(
-                'meetingId' => $meetingData['id'],
-                //  -- REQUIRED - The unique id for the meeting
-                'password' => $this->getModMeetingPassword()
-                //  -- REQUIRED - The moderator password for the meeting
-            );
+            $params['meetingId'] = $meetingData->getId();
             $meetingIsRunningInfo = $this->getMeetingInfo($params);
             if ($this->debug) {
                 error_log('Searching meetingId with params:');
@@ -602,7 +606,8 @@ class bbb
             }
         }
 
-        if (strval($meetingIsRunningInfo['returncode']) === 'SUCCESS' &&
+        if (
+            strval($meetingIsRunningInfo['returncode']) === 'SUCCESS' &&
             isset($meetingIsRunningInfo['meetingName']) &&
             !empty($meetingIsRunningInfo['meetingName'])
         ) {
@@ -610,35 +615,24 @@ class bbb
         }
 
         if ($this->debug) {
-            error_log(
-                "meeting is running: ".intval($meetingInfoExists)
-            );
+            error_log("meeting is running: " . intval($meetingInfoExists));
         }
 
-        $url = false;
         if ($meetingInfoExists) {
             $joinParams = [
-                'meetingId' => $meetingData['remote_id'],
-                //	-- REQUIRED - A unique id for the meeting
+                'meetingId' => $meetingData->getRemoteId(),
                 'username' => $this->userCompleteName,
-                //-- REQUIRED - The name that will display for the user in the meeting
                 'password' => $pass,
-                //-- REQUIRED - The attendee or moderator password, depending on what's passed here
-                //'createTime' => api_get_utc_datetime(),			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
                 'userID' => api_get_user_id(),
-                //-- OPTIONAL - string
                 'webVoiceConf' => '',
             ];
             $url = $this->api->getJoinMeetingURL($joinParams);
-            $url = $this->protocol.$url;
+            return $this->protocol . $url;
         }
 
-        if ($this->debug) {
-            error_log("return url :".$url);
-        }
-
-        return $url;
+        return false;
     }
+
 
     /**
      * Checks whether a user is teacher in the current course
@@ -723,20 +717,40 @@ class bbb
      *
      * @return array
      */
-    public function getMeetingParticipantInfo($meetingId, $userId)
+    public function getMeetingParticipantInfo($meetingId, $userId): array
     {
-        $meetingData = Database::select(
-            '*',
-            'plugin_bbb_room',
-            array('where' => array('meeting_id = ? AND participant_id = ?' => [$meetingId, $userId])),
-            'first'
-        );
+        $em = Database::getManager();
+        /** @var ConferenceActivityRepository $repo */
+        $repo = $em->getRepository(ConferenceActivity::class);
 
-        if ($meetingData) {
-            return $meetingData;
+        $activity = $repo->createQueryBuilder('a')
+            ->join('a.meeting', 'm')
+            ->join('a.participant', 'u')
+            ->where('m.id = :meetingId')
+            ->andWhere('u.id = :userId')
+            ->setParameter('meetingId', $meetingId)
+            ->setParameter('userId', $userId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$activity) {
+            return [];
         }
 
-        return [];
+        return [
+            'id' => $activity->getId(),
+            'meeting_id' => $activity->getMeeting()?->getId(),
+            'participant_id' => $activity->getParticipant()?->getId(),
+            'in_at' => $activity->getInAt()?->format('Y-m-d H:i:s'),
+            'out_at' => $activity->getOutAt()?->format('Y-m-d H:i:s'),
+            'close' => $activity->isClose(),
+            'type' => $activity->getType(),
+            'event' => $activity->getEvent(),
+            'activity_data' => $activity->getActivityData(),
+            'signature_file' => $activity->getSignatureFile(),
+            'signed_at' => $activity->getSignedAt()?->format('Y-m-d H:i:s'),
+        ];
     }
 
     /**
@@ -747,55 +761,51 @@ class bbb
      *
      * @return false|int The last inserted ID. Otherwise return false
      */
-    public function saveParticipant($meetingId, $participantId)
+    public function saveParticipant(int $meetingId, int $participantId): false|int
     {
-        $meetingData = Database::select(
-            '*',
-            'plugin_bbb_room',
-            [
-                'where' => [
-                    'meeting_id = ? AND participant_id = ? AND close = ?' => [
-                        $meetingId,
-                        $participantId,
-                        BBBPlugin::ROOM_OPEN,
-                    ],
-                ],
-            ]
-        );
+        $em = Database::getManager();
 
-        foreach ($meetingData as $roomItem) {
-            $inAt = $roomItem['in_at'];
-            $outAt = $roomItem['out_at'];
-            $roomId = $roomItem['id'];
-            if (!empty($roomId)) {
-                if ($inAt != $outAt) {
-                    Database::update(
-                        'plugin_bbb_room',
-                        ['close' => BBBPlugin::ROOM_CLOSE],
-                        ['id = ? ' => $roomId]
-                    );
-                } else {
-                    Database::update(
-                        'plugin_bbb_room',
-                        ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
-                        ['id = ? ' => $roomId]
-                    );
-                }
-            }
+        /** @var ConferenceActivityRepository $repo */
+        $repo = $em->getRepository(ConferenceActivity::class);
+
+        $meeting = $em->getRepository(ConferenceMeeting::class)->find($meetingId);
+        $user = $em->getRepository(User::class)->find($participantId);
+
+        if (!$meeting || !$user) {
+            return false;
         }
 
-        $params = [
-            'meeting_id' => $meetingId,
-            'participant_id' => $participantId,
-            'in_at' => api_get_utc_datetime(),
-            'out_at' => api_get_utc_datetime(),
-            'close' => BBBPlugin::ROOM_OPEN,
-        ];
+        $existing = $repo->createQueryBuilder('a')
+            ->where('a.meeting = :meeting')
+            ->andWhere('a.participant = :participant')
+            ->andWhere('a.close = :open')
+            ->setParameter('meeting', $meeting)
+            ->setParameter('participant', $user)
+            ->setParameter('open', \BBBPlugin::ROOM_OPEN)
+            ->getQuery()
+            ->getResult();
 
-        return Database::insert(
-            'plugin_bbb_room',
-            $params
-        );
+        foreach ($existing as $activity) {
+            if ($activity->getInAt() != $activity->getOutAt()) {
+                $activity->setClose(\BBBPlugin::ROOM_CLOSE);
+            } else {
+                $activity->setOutAt(new \DateTime());
+                $activity->setClose(\BBBPlugin::ROOM_CLOSE);
+            }
+            $em->persist($activity);
+        }
+
+        $newActivity = new ConferenceActivity();
+        $newActivity->setMeeting($meeting);
+        $newActivity->setParticipant($user);
+        $newActivity->setInAt(new \DateTime());
+        $newActivity->setOutAt(new \DateTime());
+        $newActivity->setClose(\BBBPlugin::ROOM_OPEN);
+
+        $em->persist($newActivity);
+        $em->flush();
+
+        return $newActivity->getId();
     }
 
     /**
@@ -826,43 +836,54 @@ class bbb
             return [];
         }
 
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-        $conditions = array(
-            'where' => array(
-                'c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 AND access_url = ?' =>
-                    array($courseId, $sessionId, $meetingName, $this->accessUrl),
-            ),
-        );
+        $courseEntity = api_get_course_entity();
+        $sessionEntity = api_get_session_entity();
+        $accessUrlEntity = api_get_url_entity($this->accessUrl);
+
+        $criteria = [
+            'course' => $courseEntity,
+            'session' => $sessionEntity,
+            'title' => $meetingName,
+            'status' => 1,
+            'accessUrl' => $accessUrlEntity,
+        ];
 
         if ($this->hasGroupSupport()) {
-            $groupId = api_get_group_id();
-            $conditions = array(
-                'where' => array(
-                    'c_id = ? AND session_id = ? AND meeting_name = ? AND group_id = ? AND status = 1 AND access_url = ?' =>
-                        array(
-                            $courseId,
-                            $sessionId,
-                            $meetingName,
-                            $groupId,
-                            $this->accessUrl,
-                        ),
-                ),
-            );
+            $groupEntity = api_get_group_entity(api_get_group_id());
+            $criteria['group'] = $groupEntity;
         }
 
-        $meetingData = Database::select(
-            '*',
-            $this->table,
-            $conditions,
-            'first'
-        );
+        $meeting = Database::getManager()
+            ->getRepository(ConferenceMeeting::class)
+            ->findOneBy($criteria);
 
         if ($this->debug) {
-            error_log('meeting_exists '.print_r($meetingData, 1));
+            error_log('meeting_exists '.print_r($meeting ? ['id' => $meeting->getId()] : [], 1));
         }
 
-        return $meetingData;
+        if (!$meeting) {
+            return [];
+        }
+
+        return [
+            'id' => $meeting->getId(),
+            'c_id' => $meeting->getCourse()?->getId(),
+            'session_id' => $meeting->getSession()?->getId(),
+            'meeting_name' => $meeting->getTitle(),
+            'status' => $meeting->getStatus(),
+            'access_url' => $meeting->getAccessUrl()?->getId(),
+            'group_id' => $meeting->getGroup()?->getIid(),
+            'remote_id' => $meeting->getRemoteId(),
+            'moderator_pw' => $meeting->getModeratorPw(),
+            'attendee_pw' => $meeting->getAttendeePw(),
+            'created_at' => $meeting->getCreatedAt()->format('Y-m-d H:i:s'),
+            'closed_at' => $meeting->getClosedAt()?->format('Y-m-d H:i:s'),
+            'visibility' => $meeting->getVisibility(),
+            'video_url' => $meeting->getVideoUrl(),
+            'has_video_m4v' => $meeting->isHasVideoM4v(),
+            'record' => $meeting->isRecord(),
+            'internal_meeting_id' => $meeting->getInternalMeetingId(),
+        ];
     }
 
     /**
@@ -875,21 +896,40 @@ class bbb
      */
     public function getAllMeetingsInCourse($courseId, $sessionId, $status)
     {
-        $conditions = array(
-            'where' => array(
-                'status = ? AND c_id = ? AND session_id = ? ' => array(
-                    $status,
-                    $courseId,
-                    $sessionId,
-                ),
-            ),
-        );
+        $em = Database::getManager();
+        $courseEntity = api_get_course_entity($courseId);
+        $sessionEntity = api_get_session_entity($sessionId);
 
-        return Database::select(
-            '*',
-            $this->table,
-            $conditions
-        );
+        $meetings = $em->getRepository(ConferenceMeeting::class)->findBy([
+            'course' => $courseEntity,
+            'session' => $sessionEntity,
+            'status' => $status,
+        ]);
+
+        $results = [];
+        foreach ($meetings as $meeting) {
+            $results[] = [
+                'id' => $meeting->getId(),
+                'c_id' => $meeting->getCourse()?->getId(),
+                'session_id' => $meeting->getSession()?->getId(),
+                'meeting_name' => $meeting->getTitle(),
+                'status' => $meeting->getStatus(),
+                'access_url' => $meeting->getAccessUrl()?->getId(),
+                'group_id' => $meeting->getGroup()?->getIid(),
+                'remote_id' => $meeting->getRemoteId(),
+                'moderator_pw' => $meeting->getModeratorPw(),
+                'attendee_pw' => $meeting->getAttendeePw(),
+                'created_at' => $meeting->getCreatedAt()->format('Y-m-d H:i:s'),
+                'closed_at' => $meeting->getClosedAt()?->format('Y-m-d H:i:s'),
+                'visibility' => $meeting->getVisibility(),
+                'video_url' => $meeting->getVideoUrl(),
+                'has_video_m4v' => $meeting->isHasVideoM4v(),
+                'record' => $meeting->isRecord(),
+                'internal_meeting_id' => $meeting->getInternalMeetingId(),
+            ];
+        }
+
+        return $results;
     }
 
     /**
@@ -913,225 +953,178 @@ class bbb
         $dateRange = []
     ) {
         $em = Database::getManager();
+        $repo = $em->getRepository(ConferenceMeeting::class);
         $manager = $this->isConferenceManager();
-
-        $conditions = [];
-        if ($courseId || $sessionId || $groupId) {
-            $conditions = array(
-                'where' => array(
-                    'c_id = ? AND session_id = ? ' => array($courseId, $sessionId),
-                ),
-            );
-
-            if ($this->hasGroupSupport()) {
-                $conditions = array(
-                    'where' => array(
-                        'c_id = ? AND session_id = ? AND group_id = ? ' => array(
-                            $courseId,
-                            $sessionId,
-                            $groupId,
-                        ),
-                    ),
-                );
-            }
-
-            if ($this->isGlobalConferencePerUserEnabled()) {
-                $conditions = array(
-                    'where' => array(
-                        'c_id = ? AND session_id = ? AND user_id = ?' => array(
-                            $courseId,
-                            $sessionId,
-                            $this->userId,
-                        ),
-                    ),
-                );
-            }
-        }
-        if ($this->isGlobalConference()) {
-            $conditions = array(
-                'where' => array(
-                    'c_id = ? AND user_id = ?' => array(
-                        0,
-                        $this->userId,
-                     ),
-                 ),
-            );
-        }
+        $isGlobal = $this->isGlobalConference();
+        $meetings = [];
 
         if (!empty($dateRange)) {
-            $dateStart = date_create($dateRange['search_meeting_start']);
-            $dateStart = date_format($dateStart, 'Y-m-d H:i:s');
-            $dateEnd = date_create($dateRange['search_meeting_end']);
-            $dateEnd = $dateEnd->add(new DateInterval('P1D'));
-            $dateEnd = date_format($dateEnd, 'Y-m-d H:i:s');
-
-            $conditions = array(
-                'where' => array(
-                    'created_at BETWEEN ? AND ? ' => array($dateStart, $dateEnd),
-                ),
-            );
+            $dateStart = (new \DateTime($dateRange['search_meeting_start']))->setTime(0, 0, 0);
+            $dateEnd = (new \DateTime($dateRange['search_meeting_end']))->setTime(23, 59, 59);
+            $meetings = $repo->findByDateRange($dateStart, $dateEnd);
+        } elseif ($this->isGlobalConference()) {
+            $meetings = $repo->findBy([
+                'course' => null,
+                'user' => api_get_user_entity($this->userId),
+                'status' => 1,
+                'accessUrl' => api_get_url_entity($this->accessUrl),
+            ]);
+        } elseif ($this->isGlobalConferencePerUserEnabled()) {
+            $meetings = $repo->findBy([
+                'course' => api_get_course_entity($courseId),
+                'session' => api_get_session_entity($sessionId),
+                'user' => api_get_user_entity($this->userId),
+                'status' => 1,
+                'accessUrl' => api_get_url_entity($this->accessUrl),
+            ]);
+        } else {
+            $criteria = [
+                'course' => api_get_course_entity($courseId),
+                'session' => api_get_session_entity($sessionId),
+                'status' => 1,
+                'accessUrl' => api_get_url_entity($this->accessUrl),
+            ];
+            if ($this->hasGroupSupport() && $groupId) {
+                $criteria['group'] = api_get_group_entity($groupId);
+            }
+            $meetings = $repo->findBy($criteria, ['createdAt' => 'ASC']);
         }
 
-        $conditions['order'] = 'created_at ASC';
+        $result = [];
+        foreach ($meetings as $meeting) {
+            $meetingArray = $this->convertMeetingToArray($meeting);
+            $recordLink = $this->plugin->get_lang('NoRecording');
+            $meetingBBB = $this->getMeetingInfo([
+                'meetingId' => $meeting->getRemoteId(),
+                'password' => $manager ? $meeting->getModeratorPw() : $meeting->getAttendeePw(),
+            ]);
 
-        $meetingList = Database::select(
-            '*',
-            $this->table,
-            $conditions
-        );
-        $isGlobal = $this->isGlobalConference();
-        $newMeetingList = array();
-        foreach ($meetingList as $meetingDB) {
-            $item = array();
-            $courseId = $meetingDB['c_id'];
-            $courseInfo = api_get_course_info_by_id($courseId);
-            $courseCode = '';
-            if (!empty($courseInfo)) {
-                $courseCode = $courseInfo['code'];
+            if (!$meetingBBB && $meeting->getId()) {
+                $meetingBBB = $this->getMeetingInfo([
+                    'meetingId' => $meeting->getId(),
+                    'password' => $manager ? $meeting->getModeratorPw() : $meeting->getAttendeePw(),
+                ]);
             }
 
-            if ($manager) {
-                $pass = $meetingDB['moderator_pw'];
-            } else {
-                $pass = $meetingDB['attendee_pw'];
-            }
-
-            $meetingBBB = $this->getMeetingInfo(
-                [
-                    'meetingId' => $meetingDB['remote_id'],
-                    'password' => $pass,
-                ]
-            );
-
-            if ($meetingBBB === false) {
-                // Checking with the remote_id didn't work, so just in case and
-                // to provide backwards support, check with the id
-                $params = array(
-                    'meetingId' => $meetingDB['id'],
-                    //  -- REQUIRED - The unique id for the meeting
-                    'password' => $pass
-                    //  -- REQUIRED - The moderator password for the meeting
-                );
-                $meetingBBB = $this->getMeetingInfo($params);
-            }
-
-            if ($meetingDB['visibility'] == 0 && $this->isConferenceManager() === false) {
+            if (!$meeting->isVisible() && !$manager) {
                 continue;
             }
 
-            $meetingBBB['end_url'] = $this->endUrl($meetingDB);
-
+            $meetingBBB['end_url'] = $this->endUrl(['id' => $meeting->getId()]);
             if (isset($meetingBBB['returncode']) && (string) $meetingBBB['returncode'] === 'FAILED') {
-                if ($meetingDB['status'] == 1 && $this->isConferenceManager()) {
-                    $this->endMeeting($meetingDB['id'], $courseCode);
+                if ($meeting->getStatus() === 1 && $manager) {
+                    $this->endMeeting($meeting->getId(), $meeting->getCourse()?->getCode());
                 }
             } else {
-                $meetingBBB['add_to_calendar_url'] = $this->addToCalendarUrl($meetingDB);
+                $meetingBBB['add_to_calendar_url'] = $this->addToCalendarUrl($meetingArray);
             }
 
-            if ($meetingDB['record'] == 1) {
-                // backwards compatibility (when there was no remote ID)
-                $mId = $meetingDB['remote_id'];
-                if (empty($mId)) {
-                    $mId = $meetingDB['id'];
-                }
-                if (empty($mId)) {
-                    // if the id is still empty (should *never* occur as 'id' is
-                    // the table's primary key), skip this conference
-                    continue;
-                }
-
-                $record = [];
-                $recordingParams = ['meetingId' => $mId];
-                $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
-
-                if (!empty($records)) {
-                    if (!isset($records['messageKey']) || $records['messageKey'] !== 'noRecordings') {
-                        $record = end($records);
-                        if (!is_array($record) || !isset($record['recordId'])) {
-                            continue;
-                        }
-
-                        if (!empty($record['playbackFormatUrl'])) {
-                            $this->updateMeetingVideoUrl($meetingDB['id'], $record['playbackFormatUrl']);
-                        }
+            if ($meeting->isRecord()) {
+                $recordings = $this->api->getRecordingsWithXmlResponseArray(['meetingId' => $meeting->getRemoteId()]);
+                if (!empty($recordings) && (!isset($recordings['messageKey']) || $recordings['messageKey'] !== 'noRecordings')) {
+                    $record = end($recordings);
+                    if (isset($record['playbackFormatUrl'])) {
+                        $recordLink = Display::url(
+                            $this->plugin->get_lang('ViewRecord'),
+                            $record['playbackFormatUrl'],
+                            ['target' => '_blank', 'class' => 'btn btn--plain']
+                        );
+                        $this->updateMeetingVideoUrl($meeting->getId(), $record['playbackFormatUrl']);
                     }
                 }
-
-                if (isset($record['playbackFormatUrl']) && !empty($record['playbackFormatUrl'])) {
-                    $recordLink = Display::url(
-                        $this->plugin->get_lang('ViewRecord'),
-                        $record['playbackFormatUrl'],
-                        ['target' => '_blank', 'class' => 'btn btn--plain']
-                    );
-                } else {
-                    $recordLink = $this->plugin->get_lang('NoRecording');
-                }
-
-                if ($isAdminReport) {
-                    $this->forceCIdReq(
-                        $courseInfo['code'],
-                        $meetingDB['session_id'],
-                        $meetingDB['group_id']
-                    );
-                }
-
-                $actionLinks = $this->getActionLinks(
-                    $meetingDB,
-                    $record,
-                    $isGlobal,
-                    $isAdminReport
-                );
-                $item['show_links'] = $recordLink;
-            } else {
-                $actionLinks = $this->getActionLinks(
-                    $meetingDB,
-                    [],
-                    $isGlobal,
-                    $isAdminReport
-                );
-
-                $item['show_links'] = $this->plugin->get_lang('NoRecording');
             }
 
-            $item['action_links'] = implode(PHP_EOL, $actionLinks);
-            $item['created_at'] = api_convert_and_format_date($meetingDB['created_at']);
-            // created_at
-            $meetingDB['created_at'] = $item['created_at']; //avoid overwrite in array_merge() below
+            $actionLinks = $this->getActionLinks($meetingArray, $record ?? [], $isGlobal, $isAdminReport);
 
-            $item['closed_at'] = '';
-            if (!empty($meetingDB['closed_at'])) {
-                $item['closed_at'] = api_convert_and_format_date($meetingDB['closed_at']);
-                $meetingDB['closed_at'] = $item['closed_at'];
-            }
+            $item = array_merge($meetingArray, [
+                'go_url' => '',
+                'show_links' => $recordLink,
+                'action_links' => implode(PHP_EOL, $actionLinks),
+                'publish_url' => $this->publishUrl(['id' => $meeting->getId()]),
+                'unpublish_url' => $this->unPublishUrl(['id' => $meeting->getId()]),
+            ]);
 
-            $item['publish_url'] = $this->publishUrl($meetingDB);
-            $item['unpublish_url'] = $this->unPublishUrl($meetingBBB);
-
-            if ($meetingDB['status'] == 1) {
+            if ($meeting->getStatus() === 1) {
                 $joinParams = [
-                    'meetingId' => $meetingDB['remote_id'],
-                    //-- REQUIRED - A unique id for the meeting
+                    'meetingId' => $meeting->getRemoteId(),
                     'username' => $this->userCompleteName,
-                    //-- REQUIRED - The name that will display for the user in the meeting
-                    'password' => $pass,
-                    //-- REQUIRED - The attendee or moderator password, depending on what's passed here
+                    'password' => $manager ? $meeting->getModeratorPw() : $meeting->getAttendeePw(),
                     'createTime' => '',
-                    //-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
                     'userID' => '',
-                    //	-- OPTIONAL - string
                     'webVoiceConf' => '',
                 ];
                 $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
             }
-            $item = array_merge($item, $meetingDB, $meetingBBB);
 
-            $item['course'] = api_get_course_entity($item['c_id']);
-            $item['session'] = api_get_session_entity($item['session_id']);
-            $newMeetingList[] = $item;
+            $result[] = array_merge($item, $meetingBBB);
         }
 
-        return $newMeetingList;
+        return $result;
+    }
+
+    private function convertMeetingToArray(ConferenceMeeting $meeting): array
+    {
+        return [
+            'id' => $meeting->getId(),
+            'remote_id' => $meeting->getRemoteId(),
+            'internal_meeting_id' => $meeting->getInternalMeetingId(),
+            'meeting_name' => $meeting->getTitle(),
+            'status' => $meeting->getStatus(),
+            'visibility' => $meeting->getVisibility(),
+            'created_at' => $meeting->getCreatedAt() instanceof \DateTime ? $meeting->getCreatedAt()->format('Y-m-d H:i:s') : '',
+            'closed_at' => $meeting->getClosedAt() instanceof \DateTime ? $meeting->getClosedAt()->format('Y-m-d H:i:s') : '',
+            'record' => $meeting->isRecord() ? 1 : 0,
+            'c_id' => $meeting->getCourse()?->getId() ?? 0,
+            'session_id' => $meeting->getSession()?->getId() ?? 0,
+            'group_id' => $meeting->getGroup()?->getIid() ?? 0,
+            'course' => $meeting->getCourse(),
+            'session' => $meeting->getSession(),
+            'title' => $meeting->getTitle(),
+        ];
+    }
+
+    public function getMeetingsLight(
+        $courseId = 0,
+        $sessionId = 0,
+        $groupId = 0,
+        $dateRange = []
+    ): array {
+        $em = Database::getManager();
+        $repo = $em->getRepository(ConferenceMeeting::class);
+        $meetings = [];
+
+        if (!empty($dateRange)) {
+            $dateStart = (new \DateTime($dateRange['search_meeting_start']))->setTime(0, 0, 0);
+            $dateEnd = (new \DateTime($dateRange['search_meeting_end']))->setTime(23, 59, 59);
+            $meetings = $repo->findByDateRange($dateStart, $dateEnd);
+        } else {
+            $criteria = [
+                'course' => api_get_course_entity($courseId),
+                'session' => api_get_session_entity($sessionId),
+                'accessUrl' => api_get_url_entity($this->accessUrl),
+            ];
+            if ($this->hasGroupSupport() && $groupId) {
+                $criteria['group'] = api_get_group_entity($groupId);
+            }
+            $meetings = $repo->findBy($criteria, ['createdAt' => 'DESC']);
+        }
+
+        $result = [];
+        foreach ($meetings as $meeting) {
+            $meetingArray = $this->convertMeetingToArray($meeting);
+
+            $item = array_merge($meetingArray, [
+                'go_url' => '',
+                'show_links' => $this->plugin->get_lang('NoRecording'),
+                'action_links' => '',
+                'publish_url' => $this->publishUrl(['id' => $meeting->getId()]),
+                'unpublish_url' => $this->unPublishUrl(['id' => $meeting->getId()]),
+            ]);
+
+            $result[] = $item;
+        }
+
+        return $result;
     }
 
     /**
@@ -1164,18 +1157,18 @@ class bbb
             return false;
         }
 
-        $meetingData = Database::select(
-            '*',
-            $this->table,
-            array('where' => array('id = ?' => array($id))),
-            'first'
-        );
-        $manager = $this->isConferenceManager();
-        if ($manager) {
-            $pass = $meetingData['moderator_pw'];
-        } else {
-            $pass = $meetingData['attendee_pw'];
+        $em = Database::getManager();
+
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
+
+        $meetingData = $repo->findOneAsArrayById((int) $id);
+        if (!$meetingData) {
+            return false;
         }
+
+        $manager = $this->isConferenceManager();
+        $pass = $manager ? $meetingData['moderatorPw'] : $meetingData['attendeePw'];
 
         Event::addEvent(
             'bbb_end_meeting',
@@ -1187,43 +1180,30 @@ class bbb
             api_get_session_id()
         );
 
-        $endParams = array(
-            'meetingId' => $meetingData['remote_id'], // REQUIRED - We have to know which meeting to end.
-            'password' => $pass, // REQUIRED - Must match moderator pass for meeting.
-        );
+        $endParams = [
+            'meetingId' => $meetingData['remoteId'],
+            'password' => $pass,
+        ];
         $this->api->endMeetingWithXmlResponseArray($endParams);
-        Database::update(
-            $this->table,
-            array('status' => 0, 'closed_at' => api_get_utc_datetime()),
-            array('id = ? ' => $id)
-        );
 
-        // Update users with in_at y ou_at field equal
-        $roomTable = Database::get_main_table('plugin_bbb_room');
-        $conditions['where'] = ['meeting_id=? AND in_at=out_at AND close=?' => [$id, BBBPlugin::ROOM_OPEN]];
-        $roomList = Database::select(
-            '*',
-            $roomTable,
-            $conditions
-        );
+        $repo->closeMeeting((int) $id, new \DateTime());
 
-        foreach ($roomList as $roomDB) {
-            $roomId = $roomDB['id'];
-            if (!empty($roomId)) {
-                Database::update(
-                    $roomTable,
-                    ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
-                    ['id = ? ' => $roomId]
-                );
-            }
+        /** @var ConferenceActivityRepository $activityRepo */
+        $activityRepo = $em->getRepository(ConferenceActivity::class);
+
+        $activities = $activityRepo->findOpenWithSameInAndOutTime((int) $id);
+
+        foreach ($activities as $activity) {
+            $activity->setOutAt(new \DateTime());
+            $activity->setClose(BBBPlugin::ROOM_CLOSE);
+            $em->persist($activity);
         }
 
-        // Close all meeting rooms with meeting ID
-        Database::update(
-            $roomTable,
-            ['close' => BBBPlugin::ROOM_CLOSE],
-            ['meeting_id = ? ' => $id]
-        );
+        $activityRepo->closeAllByMeetingId((int) $id);
+
+        $em->flush();
+
+        return true;
     }
 
     /**
@@ -1232,7 +1212,7 @@ class bbb
      *
      * @return string
      */
-    public function addToCalendarUrl($meeting, $record = [])
+    public function addToCalendarUrl($meeting, $record = []): string
     {
         $url = isset($record['playbackFormatUrl']) ? $record['playbackFormatUrl'] : '';
 
@@ -1246,13 +1226,12 @@ class bbb
      *
      * @return bool|int
      */
-    public function updateMeetingVideoUrl($meetingId, $videoUrl)
+    public function updateMeetingVideoUrl(int $meetingId, string $videoUrl): void
     {
-        return Database::update(
-            'plugin_bbb_meeting',
-            ['video_url' => $videoUrl],
-            ['id = ?' => intval($meetingId)]
-        );
+        $em = Database::getManager();
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
+        $repo->updateVideoUrl($meetingId, $videoUrl);
     }
 
     /**
@@ -1489,12 +1468,21 @@ class bbb
      */
     public function publishMeeting($id)
     {
-        //return BigBlueButtonBN::setPublishRecordings($id, 'true', $this->url, $this->salt);
         if (empty($id)) {
             return false;
         }
-        $id = intval($id);
-        Database::update($this->table, array('visibility' => 1), array('id = ? ' => $id));
+
+        $em = Database::getManager();
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
+
+        $meeting = $repo->find($id);
+        if (!$meeting) {
+            return false;
+        }
+
+        $meeting->setVisibility(1);
+        $em->flush();
 
         return true;
     }
@@ -1504,12 +1492,21 @@ class bbb
      */
     public function unpublishMeeting($id)
     {
-        //return BigBlueButtonBN::setPublishRecordings($id, 'false', $this->url, $this->salt);
         if (empty($id)) {
             return false;
         }
-        $id = intval($id);
-        Database::update($this->table, array('visibility' => 0), array('id = ?' => $id));
+
+        $em = Database::getManager();
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
+
+        $meeting = $repo->find($id);
+        if (!$meeting) {
+            return false;
+        }
+
+        $meeting->setVisibility(0);
+        $em->flush();
 
         return true;
     }
@@ -1525,67 +1522,52 @@ class bbb
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
-        $conditions = array(
-            'where' => array(
-                'c_id = ? AND session_id = ? AND status = 1 AND access_url = ?' => array(
-                    $courseId,
-                    $sessionId,
-                    $this->accessUrl,
-                ),
-            ),
-        );
+        $em = Database::getManager();
+        $repo = $em->getRepository(ConferenceMeeting::class);
+
+        $qb = $repo->createQueryBuilder('m')
+            ->where('m.status = 1')
+            ->andWhere('m.accessUrl = :accessUrl')
+            ->setParameter('accessUrl', $this->accessUrl)
+            ->setMaxResults(1);
 
         if ($this->hasGroupSupport()) {
             $groupId = api_get_group_id();
-            $conditions = array(
-                'where' => array(
-                    'c_id = ? AND session_id = ? AND group_id = ? AND status = 1 AND access_url = ?' => array(
-                        $courseId,
-                        $sessionId,
-                        $groupId,
-                        $this->accessUrl,
-                    ),
-                ),
-            );
+            $qb->andWhere('m.course = :courseId')
+                ->andWhere('m.session = :sessionId')
+                ->andWhere('m.group = :groupId')
+                ->setParameter('courseId', $courseId)
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('groupId', $groupId);
+        } elseif ($this->isGlobalConferencePerUserEnabled()) {
+            $qb->andWhere('m.user = :userId')
+                ->setParameter('userId', $this->userId);
+        } else {
+            $qb->andWhere('m.course = :courseId')
+                ->andWhere('m.session = :sessionId')
+                ->setParameter('courseId', $courseId)
+                ->setParameter('sessionId', $sessionId);
         }
 
-        if ($this->isGlobalConferencePerUserEnabled()) {
-            $conditions = array(
-                'where' => array(
-                    'user_id = ? AND status = 1 AND access_url = ?' => array(
-                        $this->userId,
-                        $this->accessUrl,
-                    ),
-                ),
-            );
-        }
+        $meetingData = $qb->getQuery()->getOneOrNullResult();
 
-        $meetingData = Database::select(
-            '*',
-            $this->table,
-            $conditions,
-            'first'
-        );
-
-        if (empty($meetingData)) {
+        if (!$meetingData) {
             return 0;
         }
-        $pass = $meetingData['moderator_pw'];
-        $info = $this->getMeetingInfo(array('meetingId' => $meetingData['remote_id'], 'password' => $pass));
+        $pass = $meetingData->getModeratorPw();
+        $info = $this->getMeetingInfo([
+            'meetingId' => $meetingData->getRemoteId(),
+            'password' => $pass,
+        ]);
         if ($info === false) {
-            //checking with the remote_id didn't work, so just in case and
-            // to provide backwards support, check with the id
-            $params = array(
-                'meetingId' => $meetingData['id'],
-                //  -- REQUIRED - The unique id for the meeting
-                'password' => $pass
-                //  -- REQUIRED - The moderator password for the meeting
-            );
-            $info = $this->getMeetingInfo($params);
+            $info = $this->getMeetingInfo([
+                'meetingId' => $meetingData->getId(),
+                'password' => $pass,
+            ]);
         }
 
         if (!empty($info) && isset($info['participantCount'])) {
-            return $info['participantCount'];
+            return (int) $info['participantCount'];
         }
 
         return 0;
@@ -1607,12 +1589,14 @@ class bbb
             return false;
         }
 
-        $meetingData = Database::select(
-            '*',
-            $this->table,
-            array('where' => array('id = ?' => array($id))),
-            'first'
-        );
+        $em = Database::getManager();
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
+
+        $meetingData = $repo->findOneAsArrayById((int) $id);
+        if (!$meetingData) {
+            return false;
+        }
 
         Event::addEvent(
             'bbb_regenerate_record',
@@ -1624,32 +1608,21 @@ class bbb
             api_get_session_id()
         );
 
-        // Check if there are recordings for this meeting
-        $recordings = $this->api->getRecordings(['meetingId' => $meetingData['remote_id']]);
+        /** @var ConferenceRecordingRepository $recordingRepo */
+        $recordingRepo = $em->getRepository(ConferenceRecordingRepository::class);
+        $recordings = $recordingRepo->findByMeetingRemoteId($meetingData['remoteId']);
+
         if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] === 'noRecordings') {
-            // Regenerate the meeting id
-            if (!empty($meetingData['internal_meeting_id'])) {
-                return $this->api->generateRecording(['recordId' => $meetingData['internal_meeting_id']]);
+            if (!empty($meetingData['internalMeetingId'])) {
+                return $this->api->generateRecording(['recordId' => $meetingData['internalMeetingId']]);
             }
 
-            /*$pass = $this->getModMeetingPassword();
-            $info = $this->getMeetingInfo(['meetingId' => $meetingData['remote_id'], 'password' => $pass]);
-            if (!empty($info) && isset($info['internalMeetingID'])) {
-                return $this->api->generateRecording(['recordId' => $meetingData['internal_meeting_id']]);
-            }*/
-
             return false;
-        } else {
-            if (!empty($recordings['records'])) {
-                $recordExists = false;
-                foreach ($recordings['records'] as $record) {
-                    if ($recordId == $record['recordId']) {
-                        $recordExists = true;
-                        break;
-                    }
-                }
+        }
 
-                if ($recordExists) {
+        if (!empty($recordings['records'])) {
+            foreach ($recordings['records'] as $record) {
+                if ($recordId == $record['recordId']) {
                     return $this->api->generateRecording(['recordId' => $recordId]);
                 }
             }
@@ -1674,12 +1647,14 @@ class bbb
             return false;
         }
 
-        $meetingData = Database::select(
-            '*',
-            $this->table,
-            array('where' => array('id = ?' => array($id))),
-            'first'
-        );
+        $em = Database::getManager();
+
+        /** @var ConferenceMeetingRepository $meetingRepo */
+        $meetingRepo = $em->getRepository(ConferenceMeeting::class);
+        $meetingData = $meetingRepo->findOneAsArrayById((int) $id);
+        if (!$meetingData) {
+            return false;
+        }
 
         Event::addEvent(
             'bbb_delete_record',
@@ -1693,57 +1668,62 @@ class bbb
 
         $delete = false;
         $recordings = [];
-        // Check if there are recordings for this meeting
-        if (!empty($meetingData['remote_id'])) {
+
+        if (!empty($meetingData['remoteId'])) {
             Event::addEvent(
                 'bbb_delete_record',
                 'remote_id',
-                $meetingData['remote_id'],
+                $meetingData['remoteId'],
                 null,
                 api_get_user_id(),
                 api_get_course_int_id(),
                 api_get_session_id()
             );
-            $recordings = $this->api->getRecordings(['meetingId' => $meetingData['remote_id']]);
+
+            /** @var ConferenceRecordingRepository $recordingRepo */
+            $recordingRepo = $em->getRepository(ConferenceRecording::class);
+            $recordings = $recordingRepo->findByMeetingRemoteId($meetingData['remoteId']);
         }
-        if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] == 'noRecordings') {
+
+        if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] === 'noRecordings') {
             $delete = true;
-        } else {
-            if (!empty($recordings['records'])) {
-                $recordsToDelete = [];
-                foreach ($recordings['records'] as $record) {
-                    $recordsToDelete[] = $record['recordId'];
-                }
-                $delete = true;
-                if (!empty($recordsToDelete)) {
-                    $recordingParams = ['recordId' => implode(',', $recordsToDelete)];
-                    Event::addEvent(
-                        'bbb_delete_record',
-                        'record_id_list',
-                        implode(',', $recordsToDelete),
-                        null,
-                        api_get_user_id(),
-                        api_get_course_int_id(),
-                        api_get_session_id()
-                    );
-                    $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
-                    if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
-                        $delete = true;
-                    }
+        } elseif (!empty($recordings['records'])) {
+            $recordsToDelete = [];
+            foreach ($recordings['records'] as $record) {
+                $recordsToDelete[] = $record['recordId'];
+            }
+
+            if (!empty($recordsToDelete)) {
+                $recordingParams = ['recordId' => implode(',', $recordsToDelete)];
+                Event::addEvent(
+                    'bbb_delete_record',
+                    'record_id_list',
+                    implode(',', $recordsToDelete),
+                    null,
+                    api_get_user_id(),
+                    api_get_course_int_id(),
+                    api_get_session_id()
+                );
+
+                $result = $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
+
+                if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
+                    $delete = true;
                 }
             }
         }
 
         if ($delete) {
-            Database::delete(
-                'plugin_bbb_room',
-                array('meeting_id = ?' => array($id))
-            );
+            /** @var ConferenceActivityRepository $activityRepo */
+            $activityRepo = $em->getRepository(ConferenceActivity::class);
+            $activityRepo->closeAllByMeetingId((int) $id);
 
-            Database::delete(
-                $this->table,
-                array('id = ?' => array($id))
-            );
+            $meeting = $meetingRepo->find((int) $id);
+            if ($meeting) {
+                $em->remove($meeting);
+            }
+
+            $em->flush();
         }
 
         return $delete;
@@ -1765,34 +1745,34 @@ class bbb
         if (empty($id)) {
             return false;
         }
-        //$records =  BigBlueButtonBN::getRecordingsUrl($id);
-        $meetingData = Database::select(
-            '*',
-            $this->table,
-            array('where' => array('id = ?' => array($id))),
-            'first'
-        );
 
-        $records = $this->api->getRecordingsWithXmlResponseArray(
-            array('meetingId' => $meetingData['remote_id'])
-        );
+        $em = Database::getManager();
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
+
+        $meetingData = $repo->findOneAsArrayById((int) $id);
+        if (!$meetingData || empty($meetingData['remoteId'])) {
+            return false;
+        }
+
+        $records = $this->api->getRecordingsWithXmlResponseArray([
+            'meetingId' => $meetingData['remoteId']
+        ]);
 
         if (!empty($records)) {
             if (isset($records['message']) && !empty($records['message'])) {
                 if ($records['messageKey'] == 'noRecordings') {
-                    $recordArray[] = $this->plugin->get_lang('NoRecording');
-                } else {
-                    //$recordArray[] = $records['message'];
+                    return false;
                 }
-
-                return false;
             } else {
                 $record = $records[0];
                 if (is_array($record) && isset($record['recordId'])) {
                     $url = $record['playbackFormatUrl'];
-                    $link = new Link();
-                    $params['url'] = $url;
-                    $params['title'] = $meetingData['meeting_name'];
+                    $link = new \Link();
+                    $params = [
+                        'url' => $url,
+                        'title' => $meetingData['title'],
+                    ];
                     $id = $link->save($params);
 
                     return $id;
@@ -1841,30 +1821,36 @@ class bbb
     /**
      * Get active session in the all platform
      */
-    public function getActiveSessionsCount()
+    public function getActiveSessionsCount(): int
     {
-        $meetingList = Database::select(
-            'count(id) as count',
-            $this->table,
-            array('where' => array('status = ? AND access_url = ?' => array(1, $this->accessUrl))),
-            'first'
-        );
+        $em = Database::getManager();
+        $qb = $em->createQueryBuilder();
 
-        return $meetingList['count'];
+        $qb->select('COUNT(m.id)')
+            ->from(ConferenceMeeting::class, 'm')
+            ->where('m.status = :status')
+            ->andWhere('m.accessUrl = :accessUrl')
+            ->setParameter('status', 1)
+            ->setParameter('accessUrl', $this->accessUrl);
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
      * Get active session in the all platform
      */
-    public function getActiveSessions()
+    public function getActiveSessions(): array
     {
-        $meetingList = Database::select(
-            '*',
-            $this->table,
-            array('where' => array('status = ? AND access_url = ?' => array(1, $this->accessUrl)))
-        );
+        $em = Database::getManager();
+        $repo = $em->getRepository(ConferenceMeeting::class);
 
-        return $meetingList;
+        $qb = $repo->createQueryBuilder('m')
+            ->where('m.status = :status')
+            ->andWhere('m.accessUrl = :accessUrl')
+            ->setParameter('status', 1)
+            ->setParameter('accessUrl', $this->accessUrl);
+
+        return $qb->getQuery()->getArrayResult();
     }
 
     /**
@@ -1898,16 +1884,21 @@ class bbb
      *
      * @return array
      */
-    public function findMeetingByName($name)
+    public function findMeetingByName(string $name): ?array
     {
-        $meetingData = Database::select(
-            '*',
-            'plugin_bbb_meeting',
-            array('where' => array('meeting_name = ? AND status = 1 ' => $name)),
-            'first'
-        );
+        $em = Database::getManager();
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
 
-        return $meetingData;
+        $qb = $repo->createQueryBuilder('m')
+            ->where('m.meetingName = :name')
+            ->andWhere('m.status = 1')
+            ->setParameter('name', $name)
+            ->setMaxResults(1);
+
+        $result = $qb->getQuery()->getArrayResult();
+
+        return $result[0] ?? null;
     }
 
     /**
@@ -1917,16 +1908,13 @@ class bbb
      *
      * @return array
      */
-    public function getMeeting($id)
+    public function getMeeting(int $id): ?array
     {
-        $meetingData = Database::select(
-            '*',
-            'plugin_bbb_meeting',
-            array('where' => array('id = ?' => $id)),
-            'first'
-        );
+        $em = Database::getManager();
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
 
-        return $meetingData;
+        return $repo->findOneAsArrayById($id);
     }
 
     /**
@@ -1936,16 +1924,13 @@ class bbb
      *
      * @return array
      */
-    public function getMeetingByRemoteId($id)
+    public function getMeetingByRemoteId(string $id): ?array
     {
-        $meetingData = Database::select(
-            '*',
-            'plugin_bbb_meeting',
-            array('where' => array('remote_id = ?' => $id)),
-            'first'
-        );
+        $em = Database::getManager();
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
 
-        return $meetingData;
+        return $repo->findOneByRemoteIdAndAccessUrl($id, $this->accessUrl);
     }
 
     /**
@@ -1953,29 +1938,38 @@ class bbb
      *
      * @return array
      */
-    public function findConnectedMeetingParticipants($meetingId)
+    public function findConnectedMeetingParticipants(int $meetingId): array
     {
-        $meetingData = Database::select(
-            '*',
-            'plugin_bbb_room',
-            array('where' => array('meeting_id = ? AND in_at IS NOT NULL' => $meetingId))
-        );
+        $em = Database::getManager();
+        /** @var ConferenceActivityRepository $repo */
+        $repo = $em->getRepository(ConferenceActivity::class);
+
+        $activities = $repo->createQueryBuilder('a')
+            ->where('a.meeting = :meetingId')
+            ->andWhere('a.inAt IS NOT NULL')
+            ->setParameter('meetingId', $meetingId)
+            ->getQuery()
+            ->getResult();
+
         $participantIds = [];
         $return = [];
 
-        foreach ($meetingData as $participantInfo) {
-            if (in_array($participantInfo['participant_id'], $participantIds)) {
+        foreach ($activities as $activity) {
+            $participant = $activity->getParticipant();
+            $participantId = $participant?->getId();
+
+            if (!$participantId || in_array($participantId, $participantIds)) {
                 continue;
             }
 
-            $participantIds[] = $participantInfo['participant_id'];
+            $participantIds[] = $participantId;
 
             $return[] = [
-                'id' => $participantInfo['id'],
-                'meeting_id' => $participantInfo['meeting_id'],
-                'participant' => api_get_user_entity($participantInfo['participant_id']),
-                'in_at' => $participantInfo['in_at'],
-                'out_at' => $participantInfo['out_at'],
+                'id' => $activity->getId(),
+                'meeting_id' => $meetingId,
+                'participant' => api_get_user_entity($participantId),
+                'in_at' => $activity->getInAt()?->format('Y-m-d H:i:s'),
+                'out_at' => $activity->getOutAt()?->format('Y-m-d H:i:s'),
             ];
         }
 
@@ -1989,31 +1983,33 @@ class bbb
      *
      * @return bool
      */
-    public function checkDirectMeetingVideoUrl($meetingId)
+    public function checkDirectMeetingVideoUrl(int $meetingId): bool
     {
-        $meetingInfo = Database::select(
-            '*',
-            'plugin_bbb_meeting',
-            [
-                'where' => ['id = ?' => intval($meetingId)],
-            ],
-            'first'
-        );
+        $em = Database::getManager();
+        /** @var ConferenceMeetingRepository $repo */
+        $repo = $em->getRepository(ConferenceMeeting::class);
 
-        if (!isset($meetingInfo['video_url'])) {
+        $meetingInfo = $repo->findOneAsArrayById($meetingId);
+
+        if (empty($meetingInfo) || !isset($meetingInfo['videoUrl'])) {
             return false;
         }
 
-        $hasCapture = SocialManager::verifyUrl($meetingInfo['video_url'].'/capture.m4v');
+        $hasCapture = SocialManager::verifyUrl($meetingInfo['videoUrl'].'/capture.m4v');
 
         if ($hasCapture) {
-            return Database::update(
-                'plugin_bbb_meeting',
-                ['has_video_m4v' => true],
-                ['id = ?' => intval($meetingId)]
-            );
+            $qb = $em->createQueryBuilder();
+            $qb->update(ConferenceMeeting::class, 'm')
+                ->set('m.hasVideoM4v', ':value')
+                ->where('m.id = :id')
+                ->setParameter('value', true)
+                ->setParameter('id', $meetingId)
+                ->getQuery()
+                ->execute();
+
+            return true;
         }
 
-        return $hasCapture;
+        return false;
     }
 }

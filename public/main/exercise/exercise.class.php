@@ -9041,7 +9041,7 @@ class Exercise
                             'ch-tool-icon',
                             null,
                             ICON_SIZE_SMALL,
-                            get_lang('Pending Attempts') . ": $pendingCount"
+                            get_lang('Pending attempts') . ": $pendingCount"
                         );
                         $url .= " $pendingIcon";
                     }

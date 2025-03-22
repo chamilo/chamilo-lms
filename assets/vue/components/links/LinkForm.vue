@@ -48,14 +48,14 @@
         v-if="formData.customImageUrl"
         class="mb-4"
       >
-        <p class="text-gray-600">{{ t("Current Image") }}</p>
+        <p class="text-gray-600">{{ t("Current icon") }}</p>
         <img
           :src="formData.customImageUrl"
           alt="Custom Image"
           class="w-24 h-24 object-cover"
         />
         <BaseButton
-          :label="t('Remove Current Image')"
+          :label="t('Remove current icon')"
           icon="trash"
           type="danger"
           @click="removeCurrentImage"
@@ -64,15 +64,15 @@
 
       <BaseFileUpload
         id="custom-image"
-        :label="t('Custom Image')"
+        :label="t('Custom icon')"
         accept="image"
         size="small"
         @file-selected="selectedFile = $event"
       />
       <p class="text-gray-600">
-        {{ t("This image will serve as the icon for the link displayed as a tool on the course homepage.") }}
+        {{ t("This icon will show for the link displayed as a tool on the course homepage.") }}
       </p>
-      <p class="text-gray-600">{{ t("Image must be 120x120 pixels.") }}</p>
+      <p class="text-gray-600">{{ t("The icon must be 120x120 pixels.") }}</p>
     </div>
 
     <LayoutFormButtons>

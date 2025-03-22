@@ -241,15 +241,11 @@ class SurveyUtil
                 self::display_comparative_report();
                 break;
             case 'completereport':
-                if (true === api_get_configuration_value('allow_survey_tool_in_lp')) {
-                    $surveysAnswered = SurveyManager::getInvitationsAnswered($survey->getCode(), api_get_course_int_id(), api_get_session_id());
-                    if (count($surveysAnswered) > 0) {
-                        foreach ($surveysAnswered as $survey) {
-                            echo self::displayCompleteReport($survey, 0, true, true, !$survey->getAnonymous(), $survey->getLpItemId());
-                        }
+                $surveysAnswered = SurveyManager::getInvitationsAnswered($survey->getCode(), api_get_course_int_id(), api_get_session_id());
+                if (count($surveysAnswered) > 0) {
+                    foreach ($surveysAnswered as $survey) {
+                        echo self::displayCompleteReport($survey, 0, true, true, !$survey->getAnonymous(), $survey->getLpItemId());
                     }
-                } else {
-                    echo self::displayCompleteReport($survey, 0, true, true, !$survey->getAnonymous());
                 }
                 break;
             case 'deleteuserreport':

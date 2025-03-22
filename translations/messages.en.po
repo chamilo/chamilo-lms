@@ -27979,3 +27979,30 @@ msgstr "Tool-based resource count"
 
 msgid "Resource count"
 msgstr "Resource count"
+
+msgid "Enter 2FA code"
+msgstr "Enter 2FA code"
+
+msgid "Submit code"
+msgstr "Submit code"
+
+msgid "Sign up"
+msgstr "Sign up"
+
+msgid "2FA disabled successfully."
+msgstr "2FA disabled successfully."
+
+msgid "Passwords do not match"
+msgstr "Passwords do not match"
+
+msgid "Password updated successfully"
+msgstr "Password updated successfully"
+
+msgid "Update settings"
+msgstr "Update settings"
+
+msgid "Scan the QR code to enable 2FA"
+msgstr "Scan the QR code to enable 2FA"
+
+msgid "QR code for 2FA"
+msgstr "QR code for 2FA"

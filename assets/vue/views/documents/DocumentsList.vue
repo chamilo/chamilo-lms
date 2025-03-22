@@ -271,7 +271,7 @@
     />
     <BaseButton
       :disabled="isDownloading || !selectedItems || !selectedItems.length"
-      :label="isDownloading ? t('Preparing...') : t('Download selected ZIP')"
+      :label="isDownloading ? t('In progress') : t('Download selected items as ZIP')"
       icon="download"
       type="primary"
       @click="downloadSelectedItems"
@@ -651,7 +651,7 @@ async function downloadSelectedItems() {
     link.click()
     document.body.removeChild(link)
 
-    notification.showSuccessNotification(t("Download started."))
+    notification.showSuccessNotification(t("Download started"))
   } catch (error) {
     console.error("Error downloading selected items:", error)
     notification.showErrorNotification(t("Error downloading selected items."))

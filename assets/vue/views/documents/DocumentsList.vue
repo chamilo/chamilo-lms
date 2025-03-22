@@ -184,7 +184,7 @@
           />
           <BaseButton
             :disabled="slotProps.data.filetype !== 'file'"
-            :title="slotProps.data.filetype !== 'file' ? t('Replace (files only)') : t('Replace')"
+            :title="slotProps.data.filetype !== 'file' ? t('Replace (files only)') : t('Replace file')"
             icon="file-swap"
             size="small"
             type="secondary"

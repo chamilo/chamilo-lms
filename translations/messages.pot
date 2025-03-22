@@ -27965,3 +27965,30 @@ msgstr ""
 
 msgid "Resource count"
 msgstr ""
+
+msgid "Enter 2FA code"
+msgstr ""
+
+msgid "Submit code"
+msgstr ""
+
+msgid "Sign up"
+msgstr ""
+
+msgid "2FA disabled successfully."
+msgstr ""
+
+msgid "Passwords do not match"
+msgstr ""
+
+msgid "Password updated successfully"
+msgstr ""
+
+msgid "Update settings"
+msgstr ""
+
+msgid "Scan the QR code to enable 2FA"
+msgstr ""
+
+msgid "QR code for 2FA"
+msgstr ""

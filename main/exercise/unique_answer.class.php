@@ -371,12 +371,12 @@ class UniqueAnswer extends Question
         }
 
         if (!$hasCorrectAnswer) {
-            $errors[] = get_lang('MustSelectCorrectAnswer');
+            $errors[] = get_lang('AtLeastOneCorrectAnswerRequired');
             $error_fields[] = "correct";
         }
 
         if (!$hasPositiveScore) {
-            $errors[] = get_lang('CorrectAnswerMustHavePositiveScore');
+            $errors[] = get_lang('AtLeastOneCorrectAnswerMustHavePositiveWeighting');
         }
 
         return empty($errors) ? true : ['errors' => $errors, 'error_fields' => $error_fields];

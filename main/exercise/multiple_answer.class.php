@@ -218,7 +218,7 @@ class MultipleAnswer extends Question
 
         if ($hasCorrectAnswer && !$hasValidWeighting) {
             // Only show if at least one correct answer exists but its weighting is not valid
-            $errors[] = get_lang('AtLeastOneCorrectAnswerMustHavePositiveWeighting');
+            $errors[] = get_lang('AtLeastOneCorrectAnswerMustHaveAPositiveScore');
         }
 
         return empty($errors) ? true : ['errors' => $errors, 'error_fields' => $error_fields];

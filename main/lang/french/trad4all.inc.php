@@ -9029,4 +9029,6 @@ $NoAnswerCanBeEmpty = "Aucune réponse ne peut être vide";
 $ScoreMustBeNumeric = "Le score doit être numérique";
 $TheCorrectAnswerMustHaveAPositiveScore = "La réponse correcte doit avoir un score positif";
 $ACorrectAnswerIsRequired = "Une réponse doit être marquée comme correcte";
+$NoAdditionalComments = "Aucun commentaire additionnel";
+$TeacherFeedback = "Rétroalimentation du professeur";
 ?>

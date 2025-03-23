@@ -9094,4 +9094,6 @@ $NoAnswerCanBeEmpty = "No answer can be empty";
 $ScoreMustBeNumeric = "The score must be numeric";
 $TheCorrectAnswerMustHaveAPositiveScore = "The correct answer must have a positive score";
 $ACorrectAnswerIsRequired = "An answer marked as correct is required";
+$NoAdditionalComments = "No additional comments";
+$TeacherFeedback = "Teacher feedback";
 ?>

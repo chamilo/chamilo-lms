@@ -312,7 +312,13 @@ if (isset($_REQUEST['comments']) &&
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else
         $subject = get_lang('ExamSheetVCC');
-        $message = isset($_POST['notification_content']) ? $_POST['notification_content'] : '';
+        $message = $_POST['notification_content'] ?? '';
+
+        $feedbackComments = ExerciseLib::getFeedbackComments($id);
+        $message .= "<div style='padding:10px; border:1px solid #ddd; border-radius:5px;'>";
+        $message .= $feedbackComments;
+        $message .= "</div>";
+
         MessageManager::send_message_simple(
             $student_id,
             $subject,

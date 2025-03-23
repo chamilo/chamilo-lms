@@ -185,10 +185,57 @@ class MultipleAnswer extends Question
     }
 
     /**
+     * Validate question answers before saving.
+     *
+     * @param object $form The form object.
+     * @return array|bool True if valid, or an array with errors if invalid.
+     */
+    public function validateAnswers($form)
+    {
+        $nb_answers = $form->getSubmitValue('nb_answers');
+        $hasCorrectAnswer = false;
+        $hasValidWeighting = false;
+        $errors = [];
+        $error_fields = [];
+
+        for ($i = 1; $i <= $nb_answers; $i++) {
+            $isCorrect = $form->getSubmitValue("correct[$i]");
+            $weighting = trim($form->getSubmitValue("weighting[$i]") ?? '');
+
+            if ($isCorrect) {
+                $hasCorrectAnswer = true;
+
+                if (is_numeric($weighting) && floatval($weighting) > 0) {
+                    $hasValidWeighting = true;
+                }
+            }
+        }
+
+        if (!$hasCorrectAnswer) {
+            $errors[] = get_lang('AtLeastOneCorrectAnswerRequired');
+            $error_fields[] = "correct";
+        }
+
+        if ($hasCorrectAnswer && !$hasValidWeighting) {
+            // Only show if at least one correct answer exists but its weighting is not valid
+            $errors[] = get_lang('AtLeastOneCorrectAnswerMustHaveAPositiveScore');
+        }
+
+        return empty($errors) ? true : ['errors' => $errors, 'error_fields' => $error_fields];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
+        $validationResult = $this->validateAnswers($form);
+        if ($validationResult !== true) {
+            Display::addFlash(Display::return_message(implode("<br>", $validationResult['errors']), 'error'));
+
+            return;
+        }
+
         $questionWeighting = 0;
         $objAnswer = new Answer($this->iid);
         $nb_answers = $form->getSubmitValue('nb_answers');

@@ -358,7 +358,7 @@ class UniqueAnswer extends Question
             }
 
             if ($weighting === '' || !is_numeric($weighting)) {
-                $errors[] = sprintf(get_lang('WeightingMustBeNumeric'), $i);
+                $errors[] = sprintf(get_lang('ScoreMustBeNumeric'), $i);
                 $error_fields[] = "weighting[$i]";
             }
 

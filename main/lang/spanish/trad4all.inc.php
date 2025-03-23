@@ -432,13 +432,13 @@ $LatestVersionIs = "La última versión es";
 $YourVersionNotUpToDate = "Su versión no está actualizada";
 $Hotpotatoes = "Hotpotatoes";
 $ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected = "-1 = Todas las preguntas serán seleccionadas. 0 = Ninguna pregunta será seleccionada.";
-$EmailNotificationTemplateDescription = "Puede modificar el correo enviado a los usuarios al terminar el ejercicio. Puede usar los siguientes términos:
+$EmailNotificationTemplateDescription = "Puede modificar el correo enviado a los usuarios al terminar el ejercicio. Puede usar los siguientes términos: 
 
 {{ student.username }}
-{{ student.firstname }}
+{{ student.firstname }} 
 {{ student.lastname }}
-{{ student.official_code }}
-{{ exercise.title }}
+{{ student.official_code }} 
+{{ exercise.title }} 
 {{ exercise.start_time }}
 {{ exercise.end_time }}
 {{ course.title }}
@@ -6158,7 +6158,7 @@ $LastConnexionDate = "Fecha de la última conexión";
 $ToolVideoconference = "Videoconferencia";
 $BigBlueButtonEnableTitle = "Herramienta de videoconferencia BigBlueButton";
 $BigBlueButtonEnableComment = "Seleccione si desea habilitar la herramienta de videoconferencia BigBlueButton. Una vez activada, se mostrará como una herramienta en la página principal todos los curso. Los profesores podrán lanzar una videoconferencia en cualquier momento, pero los estudiantes sólo podrán unirse a una ya lanzada.
-Si no dispone de un servidor BigBlueButton, pruebe a
+Si no dispone de un servidor BigBlueButton, pruebe a 
 <a href=\"http://bigbluebutton.org/\" target=\"_blank\">configurar uno</a> o pida ayuda a los <a href=\"http://www.chamilo.org/en/providers\" target=\"_blank\">proveedores oficiales de Chamilo</a>.
 BigBlueButton es libre, pero su instalación requiere ciertas habilidades técnicas que no todo el mundo posee. Puede instalarlo por su cuenta o buscar ayuda profesional con el consiguiente costo. En la lógica del software libre, nosotros le ofrecemos las herramientas para hacer más fácil su trabajo y le recomendamos profesionales (los proveedores oficiales de Chamilo) que serán capaces de ayudarle.";
 $BigBlueButtonHostTitle = "Servidor BigBlueButton";
@@ -6176,7 +6176,7 @@ La carpeta de los usuarios y las carpetas que contiene de cada uno de ellos, se 
 
 Si se hace visible la carpeta de los usuarios y la carpeta de uno o más alumnos, el resto de los alumnos podrán ver todo su contenido. En este caso, el alumno propietario de la carpeta también podrá desde la herramienta documentos (sólo dentro de su carpeta): crear y editar documentos web, convertir un documento web en una plantilla para uso personal, crear y editar dibujos SVG y PNG, grabar archivos de audio en formato WAV, convertir texto en audio en formato MP3, realizar capturas a través de su webcam, enviar documentos, crear carpetas, mover carpetas y archivos, borrar carpetas y archivos, y descargar copias de seguridad de su carpeta.
 
-Por otra parte, la herramienta documentos se sincroniza con el gestor de archivos del editor web, así que los cambios en la gestión de los documentos realizados en una u otra afectarán a ambas.
+Por otra parte, la herramienta documentos se sincroniza con el gestor de archivos del editor web, así que los cambios en la gestión de los documentos realizados en una u otra afectarán a ambas. 
 
 Así pues, la carpeta de usuario no sólo es un lugar para depositar los archivos, sino que se convierte en un completo gestor de los documentos que los estudiantes utilizan durante el curso. Además, recuerde que cualquier usuario podrá copiar un archivo, que sea visible, de cualquier carpeta de la herramienta documentos (sea o no la suya) a su portafolios o área personal de documentos de la red social, donde estará disponible para que lo pueda usar en otros cursos.";
 $HelpFolderChat = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:\nEsta carpeta contiene todas las sesiones que se han realizado en el chat. Aunque muchas veces las sesiones en el chat pueden ser triviales, en otras pueden ser dignas de ser tratadas como un documento más de trabajo. Para ello, sin cambiar la visibilidad de esta carpeta, haga visible el archivo y enlácelo donde considere oportuno. No se recomienda hacer visible esta carpeta.";
@@ -9113,4 +9113,10 @@ $TextAppearingAtTheEndOfTheTestWhenTheUserHasFailed = "Texto que aparece al fina
 $SubscribeSessionWhenFinishedFailure = "Suscribir a la sesión al final del examen cuando el usuario no ha aprobado";
 $progressBasedOnVisiblesLPsInEachCourse = "El progreso es calculado en base a lecciones visibles en cada curso";
 $progressBasedOnXVisiblesLPs = "El progreso es calculado en base a %s lecciones visibles en el contexto presente.";
+$AtLeastOneCorrectAnswerRequired = "Por lo menos una respuesta debe ser marcada como correcta";
+$AtLeastOneCorrectAnswerMustHaveAPositiveScore = "Por lo menos una respuesta correcta debe tener un score positivo";
+$NoAnswerCanBeEmpty = "Ninguna respuesta puede ser vacía";
+$ScoreMustBeNumeric = "La nota debe ser numérica";
+$TheCorrectAnswerMustHaveAPositiveScore = "La respuesta correcta debe tener un score positivo";
+$ACorrectAnswerIsRequired = "Una respuesta debe ser marcada como correcta";
 ?>

@@ -353,7 +353,7 @@ class UniqueAnswer extends Question
             $weighting = trim($form->getSubmitValue("weighting[$i]") ?? '');
             $isCorrect = ($correct == $i);
             if (empty($answer)) {
-                $errors[] = sprintf(get_lang('QuestionCannotBeEmpty'), $i);
+                $errors[] = sprintf(get_lang('NoAnswerCanBeEmpty'), $i);
                 $error_fields[] = "answer[$i]";
             }
 

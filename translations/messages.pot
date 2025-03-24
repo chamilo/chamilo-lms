@@ -27920,3 +27920,87 @@ msgstr ""
 
 msgid "Please wait, this could take a while..."
 msgstr ""
+
+msgid "Replace (files only)"
+msgstr ""
+
+msgid "Select replacement file"
+msgstr ""
+
+msgid "No file selected."
+msgstr ""
+
+msgid "Only files can be replaced."
+msgstr ""
+
+msgid "Error replacing file."
+msgstr ""
+
+msgid "Download selected items as ZIP"
+msgstr ""
+
+msgid "No items selected."
+msgstr ""
+
+msgid "Download started"
+msgstr ""
+
+msgid "Error downloading selected items."
+msgstr ""
+
+msgid "Remove current icon"
+msgstr ""
+
+msgid "This icon will show for the link displayed as a tool on the course homepage."
+msgstr ""
+
+msgid "The icon must be 120x120 pixels."
+msgstr ""
+
+msgid "Error saving the link"
+msgstr ""
+
+msgid "Tool-based resource count"
+msgstr ""
+
+msgid "Resource count"
+msgstr ""
+
+msgid "Enter 2FA code"
+msgstr ""
+
+msgid "Submit code"
+msgstr ""
+
+msgid "Sign up"
+msgstr ""
+
+msgid "2FA disabled successfully."
+msgstr ""
+
+msgid "Passwords do not match"
+msgstr ""
+
+msgid "Password updated successfully"
+msgstr ""
+
+msgid "Update settings"
+msgstr ""
+
+msgid "Scan the QR code to enable 2FA"
+msgstr ""
+
+msgid "QR code for 2FA"
+msgstr ""
+
+msgid "Add to catalogue"
+msgstr ""
+
+msgid "Added to catalogue"
+msgstr ""
+
+msgid "Remove from catalogue"
+msgstr ""
+
+msgid "Removed from catalogue"
+msgstr ""

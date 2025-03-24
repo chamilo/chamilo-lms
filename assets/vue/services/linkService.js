@@ -4,6 +4,20 @@ import baseService from "./baseService"
 
 export default {
   /**
+   * @param {Number|String} linkId
+   * @param {FormData} imageData
+   */
+  uploadImage: async (linkId, imageData) => {
+    const endpoint = `${ENTRYPOINT}links/${linkId}/upload-image`
+    const response = await axios.post(endpoint, imageData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    return response.data
+  },
+
+  /**
    * @param {Object} params
    */
   getLinks: async (params) => {

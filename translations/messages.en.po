@@ -27934,3 +27934,87 @@ msgstr "Invalid server response"
 
 msgid "Please wait, this could take a while..."
 msgstr "Please wait, this could take a while..."
+
+msgid "Replace (files only)"
+msgstr "Replace (files only)"
+
+msgid "Select replacement file"
+msgstr "Select replacement file"
+
+msgid "No file selected."
+msgstr "No file selected."
+
+msgid "Only files can be replaced."
+msgstr "Only files can be replaced."
+
+msgid "Error replacing file."
+msgstr "Error replacing file."
+
+msgid "Download selected items as ZIP"
+msgstr "Download selected items as ZIP"
+
+msgid "No items selected."
+msgstr "No items selected."
+
+msgid "Download started"
+msgstr "Download started"
+
+msgid "Error downloading selected items."
+msgstr "Error downloading selected items."
+
+msgid "Remove current icon"
+msgstr "Remove current icon"
+
+msgid "This icon will show for the link displayed as a tool on the course homepage."
+msgstr "This icon will show for the link displayed as a tool on the course homepage."
+
+msgid "The icon must be 120x120 pixels."
+msgstr "The icon must be 120x120 pixels."
+
+msgid "Error saving the link"
+msgstr "Error saving the link"
+
+msgid "Tool-based resource count"
+msgstr "Tool-based resource count"
+
+msgid "Resource count"
+msgstr "Resource count"
+
+msgid "Enter 2FA code"
+msgstr "Enter 2FA code"
+
+msgid "Submit code"
+msgstr "Submit code"
+
+msgid "Sign up"
+msgstr "Sign up"
+
+msgid "2FA disabled successfully."
+msgstr "2FA disabled successfully."
+
+msgid "Passwords do not match"
+msgstr "Passwords do not match"
+
+msgid "Password updated successfully"
+msgstr "Password updated successfully"
+
+msgid "Update settings"
+msgstr "Update settings"
+
+msgid "Scan the QR code to enable 2FA"
+msgstr "Scan the QR code to enable 2FA"
+
+msgid "QR code for 2FA"
+msgstr "QR code for 2FA"
+
+msgid "Add to catalogue"
+msgstr "Add to catalogue"
+
+msgid "Added to catalogue"
+msgstr "Added to catalogue"
+
+msgid "Remove from catalogue"
+msgstr "Remove from catalogue"
+
+msgid "Removed from catalogue"
+msgstr "Removed from catalogue"

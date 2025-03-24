@@ -103,7 +103,11 @@ if (isset($_GET['id'])) {
 } else {
     // Create a new category
     $action = 'add_category';
-    $form = new FormValidator('group_category');
+    $form = new FormValidator(
+        'group_category',
+        'post',
+        api_get_self().'?'.api_get_cidreq()
+    );
 }
 
 $form->addElement('header', $nameTools);
@@ -436,7 +440,7 @@ if ($form->validate()) {
 // Else display the form
 Display::display_header($nameTools, 'Group');
 
-$actions = '<a href="group.php">'.
+$actions = '<a href="group.php?'.api_get_cidreq().'">'.
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Groups list')).'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);
 

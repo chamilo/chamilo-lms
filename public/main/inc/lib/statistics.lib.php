@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
@@ -1782,6 +1783,28 @@ class Statistics
         }
 
         return $groupedData;
+    }
+
+    /**
+     * Retrieves the available tools using the repository.
+     */
+    public static function getAvailableTools(): array
+    {
+        $em = Database::getManager();
+        $repo = $em->getRepository(ResourceLink::class);
+
+        return $repo->getAvailableTools();
+    }
+
+    /**
+     * Generates a report of tool usage based on the provided tool IDs.
+     */
+    public static function getToolUsageReportByTools(array $toolIds): array
+    {
+        $em = Database::getManager();
+        $repo = $em->getRepository(ResourceLink::class);
+
+        return $repo->getToolUsageReportByTools($toolIds);
     }
 
     /**

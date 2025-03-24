@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
@@ -162,7 +163,7 @@ class Version20 extends AbstractMigrationChamilo
 
         // Update language to ISO.
         $this->addSql('UPDATE language SET isocode = "en" WHERE isocode IS NULL');
-        $this->addSql('ALTER TABLE language CHANGE isocode isocode VARCHAR(10) NOT NULL');
+        $this->addSql('ALTER TABLE language CHANGE isocode isocode VARCHAR('.Language::ISO_MAX_LENGTH.') NOT NULL');
         $this->addSql('UPDATE language SET english_name = "english" WHERE english_name IS NULL');
         $this->addSql('ALTER TABLE language CHANGE english_name english_name VARCHAR(255) NOT NULL');
 
@@ -182,7 +183,7 @@ class Version20 extends AbstractMigrationChamilo
             $englishName = $item['english_name'];
             if (isset($languages[$englishName])) {
                 $newIso = $languages[$englishName];
-                $this->addSql("UPDATE language SET isocode = '$newIso' WHERE id = $id");
+                $this->addSql("UPDATE language SET isocode = '$newIso', parent_id = NULL WHERE id = $id");
             }
         }
 

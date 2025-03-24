@@ -32,7 +32,7 @@ class PENSPlugin extends Plugin
      *
      * @staticvar null $result
      *
-     * @return AdvancedSubscriptionPlugin
+     * @return PENSPlugin
      */
     public static function create()
     {

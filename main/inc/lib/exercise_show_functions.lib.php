@@ -1022,14 +1022,24 @@ class ExerciseShowFunctions
         $files = glob($filePathPattern);
 
         if (!empty($files)) {
-            $fileUrl = api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/" . basename($files[0]);
+            $fileUrl = api_get_course_path() . "/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/" . basename($files[0]);
+            $iframeId = "onlyoffice_result_frame_{$exerciseId}_{$questionId}_{$exeId}_{$userId}";
+            $iframeSrc = OnlyofficeTools::getPathToView($fileUrl, false, $exeId, $questionId, true);
             echo '
-        <tr>
-            <td>
-                <p><b>' . get_lang('SubmittedDocument') . ':</b></p>
-                <iframe src="' . OnlyofficeTools::getPathToView($fileUrl, false, $exeId, $questionId, true) . '" width="100%" height="600px"></iframe>
-            </td>
-        </tr>';
+                <tr>
+                    <td>
+                        <p><b>' . get_lang('SubmittedDocument') . ':</b></p>
+                        <iframe id="' . $iframeId . '" src="' . $iframeSrc . '" width="100%" height="600px" style="border:none;"></iframe>
+                    </td>
+                </tr>
+                <script>
+                    setTimeout(function() {
+                        var iframe = document.getElementById("' . $iframeId . '");
+                        if (iframe) {
+                            iframe.src = iframe.src;
+                        }
+                    }, 3000);
+                </script>';
         } else {
             echo '<tr><td>' . get_lang('NoOfficeDocProvided') . '</td></tr>';
         }

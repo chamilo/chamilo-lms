@@ -288,11 +288,20 @@ class ExerciseLib
                     if ('true' === OnlyofficePlugin::create()->get('enable_onlyoffice_plugin')) {
                         global $exe_id;
                         if (!empty($objQuestionTmp->extra)) {
-                            $fileUrl = api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/" . $objQuestionTmp->extra;
+                            $fileUrl = api_get_course_path() . "/exercises/onlyoffice/{$exerciseId}/{$questionId}/" . $objQuestionTmp->extra;
                             $documentUrl = OnlyofficeTools::getPathToView($fileUrl, false, $exe_id, $questionId);
+                            $iframeId = "onlyoffice_frame_{$exerciseId}_{$questionId}_{$exe_id}";
                             echo '<div class="office-doc-container">';
-                            echo "<iframe src='{$documentUrl}' width='100%' height='600' style='border:none;'></iframe>";
+                            echo "<iframe id='{$iframeId}' src='{$documentUrl}' width='100%' height='600' style='border:none;'></iframe>";
                             echo '</div>';
+                            echo "<script>
+                                setTimeout(function() {
+                                    var iframe = document.getElementById('{$iframeId}');
+                                    if (iframe) {
+                                        iframe.src = iframe.src;
+                                    }
+                                }, 3000);
+                            </script>";
                         } else {
                             echo '<p>' . get_lang('NoOfficeDocProvided') . '</p>';
                         }

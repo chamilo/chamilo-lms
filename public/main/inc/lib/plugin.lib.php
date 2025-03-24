@@ -207,7 +207,6 @@ class AppPlugin
             'courseblock',
             'coursehomenotify',
             'courselegal',
-            'createdrupaluser',
             'customcertificate',
             'customfooter',
             'dashboard',

@@ -38,7 +38,7 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('m');
 
         $qb
-            ->select('m')
+            ->select('m', 'IDENTITY(m.user) AS user_id')
             ->where('m.remoteId = :remoteId')
             ->andWhere('m.accessUrl = :accessUrlId')
             ->setParameter('remoteId', $remoteId)

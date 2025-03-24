@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CCourseSetting;
+use Chamilo\CoreBundle\Entity\Course;
+
 /**
  * BigBlueButton plugin configuration class.
  * Handles plugin options and course settings.
@@ -109,15 +112,15 @@ class BBBPlugin extends Plugin
     public function performActionsAfterConfigure(): self
     {
         if ($this->get('disable_course_settings') === 'true') {
-            self::update_course_field_in_all_courses(
+            self::updateCourseFieldInAllCourses(
                 'bbb_enable_conference_in_groups',
                 $this->get('enable_conference_in_course_groups') === 'true' ? 1 : 0
             );
-            self::update_course_field_in_all_courses(
+            self::updateCourseFieldInAllCourses(
                 'bbb_force_record_generation',
                 $this->get('allow_regenerate_recording') === 'true' ? 1 : 0
             );
-            self::update_course_field_in_all_courses(
+            self::updateCourseFieldInAllCourses(
                 'big_blue_button_record_and_store',
                 $this->get('big_blue_button_record_and_store') === 'true' ? 1 : 0
             );
@@ -129,19 +132,30 @@ class BBBPlugin extends Plugin
     /**
      * Updates a course setting value across all existing courses.
      */
-    public function update_course_field_in_all_courses($variable, $value): void
+    public static function updateCourseFieldInAllCourses(string $variable, string $value): void
     {
-        // Update existing courses to add the new course setting value
-        $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $table ORDER BY id";
-        $res = Database::query($sql);
-        $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
-        while ($row = Database::fetch_assoc($res)) {
-            Database::update(
-                $courseSettingTable,
-                ['value' => $value],
-                ['variable = ? AND c_id = ?' => [$variable, $row['id']]]
-            );
+        $entityManager = Database::getManager();
+        $courseRepo = $entityManager->getRepository(Course::class);
+        $settingRepo = $entityManager->getRepository(CCourseSetting::class);
+
+        $courses = $courseRepo->createQueryBuilder('c')
+            ->select('c.id')
+            ->orderBy('c.id', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+
+        foreach ($courses as $course) {
+            $setting = $settingRepo->findOneBy([
+                'variable' => $variable,
+                'cId' => $course['id'],
+            ]);
+
+            if ($setting) {
+                $setting->setValue($value);
+                $entityManager->persist($setting);
+            }
         }
+
+        $entityManager->flush();
     }
 }

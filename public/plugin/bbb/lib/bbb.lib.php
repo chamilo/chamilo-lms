@@ -406,7 +406,7 @@ class bbb
             ->setTitle($params['meeting_name'] ?? $this->getCurrentVideoConferenceName())
             ->setAttendeePw($attendeePassword)
             ->setModeratorPw($moderatorPassword)
-            ->setRecord((bool)$params['record'])
+            ->setRecord((bool) $params['record'])
             ->setStatus($params['status'])
             ->setVoiceBridge($params['voice_bridge'])
             ->setWelcomeMsg($params['welcome_msg'] ?? null)
@@ -422,7 +422,7 @@ class bbb
         Event::addEvent(
             'bbb_create_meeting',
             'meeting_id',
-            (int)$id,
+            $id,
             null,
             api_get_user_id(),
             api_get_course_int_id(),
@@ -463,8 +463,7 @@ class bbb
                     $em->flush();
                 }
 
-                $finalMeetingUrl = $this->joinMeeting($meetingName, true);
-                return $finalMeetingUrl;
+                return $this->joinMeeting($meetingName, true);
             }
         }
 
@@ -769,7 +768,7 @@ class bbb
         $repo = $em->getRepository(ConferenceActivity::class);
 
         $meeting = $em->getRepository(ConferenceMeeting::class)->find($meetingId);
-        $user = $em->getRepository(User::class)->find($participantId);
+        $user = api_get_user_entity($participantId);
 
         if (!$meeting || !$user) {
             return false;
@@ -966,7 +965,6 @@ class bbb
             $meetings = $repo->findBy([
                 'course' => null,
                 'user' => api_get_user_entity($this->userId),
-                'status' => 1,
                 'accessUrl' => api_get_url_entity($this->accessUrl),
             ]);
         } elseif ($this->isGlobalConferencePerUserEnabled()) {
@@ -974,14 +972,12 @@ class bbb
                 'course' => api_get_course_entity($courseId),
                 'session' => api_get_session_entity($sessionId),
                 'user' => api_get_user_entity($this->userId),
-                'status' => 1,
                 'accessUrl' => api_get_url_entity($this->accessUrl),
             ]);
         } else {
             $criteria = [
                 'course' => api_get_course_entity($courseId),
                 'session' => api_get_session_entity($sessionId),
-                'status' => 1,
                 'accessUrl' => api_get_url_entity($this->accessUrl),
             ];
             if ($this->hasGroupSupport() && $groupId) {
@@ -1891,8 +1887,7 @@ class bbb
         $repo = $em->getRepository(ConferenceMeeting::class);
 
         $qb = $repo->createQueryBuilder('m')
-            ->where('m.meetingName = :name')
-            ->andWhere('m.status = 1')
+            ->where('m.title = :name')
             ->setParameter('name', $name)
             ->setMaxResults(1);
 

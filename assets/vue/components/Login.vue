@@ -50,7 +50,7 @@
 
         <a
           v-if="allowRegistration"
-          v-t="'Register oneself'"
+          v-t="'Sign up'"
           class="btn btn--primary-outline"
           href="/main/auth/inscription.php"
           tabindex="3"

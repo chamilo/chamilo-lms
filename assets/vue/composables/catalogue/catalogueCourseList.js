@@ -29,7 +29,7 @@ export function useCatalogueCourseList() {
     isLoading.value = true
 
     try {
-      const { items } = await courseService.listAll()
+      const items = await courseService.listCatalogueCourses()
 
       courses.value = items.map((course) => ({
         ...course,

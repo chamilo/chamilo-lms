@@ -28006,3 +28006,15 @@ msgstr "Scan the QR code to enable 2FA"
 
 msgid "QR code for 2FA"
 msgstr "QR code for 2FA"
+
+msgid "Add to catalogue"
+msgstr "Add to catalogue"
+
+msgid "Added to catalogue"
+msgstr "Added to catalogue"
+
+msgid "Remove from catalogue"
+msgstr "Remove from catalogue"
+
+msgid "Removed from catalogue"
+msgstr "Removed from catalogue"

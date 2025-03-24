@@ -27992,3 +27992,15 @@ msgstr ""
 
 msgid "QR code for 2FA"
 msgstr ""
+
+msgid "Add to catalogue"
+msgstr ""
+
+msgid "Added to catalogue"
+msgstr ""
+
+msgid "Remove from catalogue"
+msgstr ""
+
+msgid "Removed from catalogue"
+msgstr ""

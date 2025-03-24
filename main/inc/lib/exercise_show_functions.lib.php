@@ -1029,24 +1029,34 @@ class ExerciseShowFunctions
         if (!empty($files)) {
             $fileUrl = api_get_course_path() . "/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/" . basename($files[0]);
             $iframeId = "onlyoffice_result_frame_{$exerciseId}_{$questionId}_{$exeId}_{$userId}";
+            $loaderId = "onlyoffice_loader_{$exerciseId}_{$questionId}_{$exeId}_{$userId}";
             $iframeSrc = OnlyofficeTools::getPathToView($fileUrl, false, $exeId, $questionId, true);
             echo '
-            <tr>
-                <td>
-                    <p><b>' . get_lang('SubmittedDocument') . ':</b></p>
-                    <iframe id="' . $iframeId . '" src="' . $iframeSrc . '" width="100%" height="600px" style="border:none;"></iframe>
-                </td>
-            </tr>';
-            if ($autorefresh) {
-                echo "<script>
-                setTimeout(function() {
-                    var iframe = document.getElementById('{$iframeId}');
-                    if (iframe) {
-                        iframe.src = iframe.src;
-                    }
-                }, 5000);
-            </script>";
+                <tr>
+                    <td>
+                        <p><b>' . get_lang('SubmittedDocument') . ':</b></p>';
+                        if ($autorefresh) {
+                            echo '
+                        <div id="' . $loaderId . '">
+                            <p><em>' . get_lang('LoadingLatestVersion') . '...</em></p>
+                        </div>
+                        <iframe id="' . $iframeId . '" src="' . $iframeSrc . '" width="100%" height="600px" style="border:none; display:none;"></iframe>';
+                            echo "<script>
+                            setTimeout(function() {
+                                var iframe = document.getElementById('{$iframeId}');
+                                var loader = document.getElementById('{$loaderId}');
+                                if (iframe && loader) {
+                                    iframe.src = iframe.src;
+                                    iframe.style.display = 'block';
+                                    loader.style.display = 'none';
+                                }
+                            }, 5000);
+                    </script>";
+            } else {
+                echo '
+                <iframe id="' . $iframeId . '" src="' . $iframeSrc . '" width="100%" height="600px" style="border:none;"></iframe>';
             }
+            echo '</td></tr>';
         } else {
             echo '<tr><td>' . get_lang('NoOfficeDocProvided') . '</td></tr>';
         }

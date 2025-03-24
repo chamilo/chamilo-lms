@@ -129,6 +129,12 @@ services:
             - setValidator: [ '@validator' ]
             - setSessionFactory: [ '@session.factory' ]
 
+    Google\Cloud\Storage\StorageClient:
+        arguments:
+            $config:
+                projectId: '%env(GOOGLE_CLOUD_PROJECT_ID)%'
+                keyFilePath: '%env(resolve:GOOGLE_CLOUD_KEY_FILE_PATH)%'
+
 cocur_slugify:
     lowercase: true
 

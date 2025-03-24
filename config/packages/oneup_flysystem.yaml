@@ -14,6 +14,18 @@ oneup_flysystem:
             local:
                 location: '%kernel.project_dir%/var/cache/resource'
 
+        resource_gcs_adapter:
+            googlecloudstorage:
+                client: 'Google\Cloud\Storage\StorageClient'
+                bucket: '%env(GOOGLE_CLOUD_STORAGE_RESOURCE_BUCKET)%'
+                prefix: '%env(GOOGLE_CLOUD_STORAGE_PREFIX)%'
+
+        resource_cache_gcs_adapter:
+            googlecloudstorage:
+                client: 'Google\Cloud\Storage\StorageClient'
+                bucket: '%env(GOOGLE_CLOUD_STORAGE_RESOURCE_CACHE_BUCKET)%'
+                prefix: '%env(GOOGLE_CLOUD_STORAGE_PREFIX)%'
+
         themes_adapter:
             local:
                 location: '%kernel.project_dir%/var/themes'

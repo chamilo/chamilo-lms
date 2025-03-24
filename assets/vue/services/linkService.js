@@ -1,7 +1,22 @@
 import { ENTRYPOINT } from "../config/entrypoint"
 import axios from "axios"
+import baseService from "./baseService"
 
 export default {
+  /**
+   * @param {Number|String} linkId
+   * @param {FormData} imageData
+   */
+  uploadImage: async (linkId, imageData) => {
+    const endpoint = `${ENTRYPOINT}links/${linkId}/upload-image`
+    const response = await axios.post(endpoint, imageData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    return response.data
+  },
+
   /**
    * @param {Object} params
    */
@@ -45,14 +60,16 @@ export default {
   },
 
   /**
-   * @param {Number|String} linkId
-   * @param {Boolean} visible
+   * @param {number} linkId
+   * @param {boolean} visible
+   * @param {number} cid
+   * @param {number} sid
+   * @returns {Promise<Object>}
    */
-  toggleLinkVisibility: async (linkId, visible) => {
-    const endpoint = `${ENTRYPOINT}links/${linkId}/toggle_visibility`
-    const response = await axios.put(endpoint, { visible })
+  toggleLinkVisibility: async (linkId, visible, cid, sid) => {
+    const endpoint = `${ENTRYPOINT}links/${linkId}/toggle_visibility?cid=${cid}&sid=${sid}`
 
-    return response.data
+    return baseService.put(endpoint, { visible })
   },
 
   /**
@@ -123,11 +140,13 @@ export default {
   },
 
   /**
-   * @param {Number|String} categoryId
-   * @param {Boolean} visible
+   * @param {number} categoryId
+   * @param {boolean} visible
+   * @param {number} cid
+   * @param {number} sid
    */
-  toggleCategoryVisibility: async (categoryId, visible) => {
-    const endpoint = `${ENTRYPOINT}link_categories/${categoryId}/toggle_visibility`
+  toggleCategoryVisibility: async (categoryId, visible, cid, sid) => {
+    const endpoint = `${ENTRYPOINT}link_categories/${categoryId}/toggle_visibility?cid=${cid}&sid=${sid}`
     const response = await axios.put(endpoint, { visible })
 
     return response.data

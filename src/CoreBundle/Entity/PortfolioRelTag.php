@@ -17,17 +17,14 @@ class PortfolioRelTag
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: 'integer')]
     #[ORM\ManyToOne(targetEntity: Tag::class)]
     #[ORM\JoinColumn(name: 'tag_id', referencedColumnName: 'id', nullable: false)]
     private Tag $tag;
 
-    #[ORM\Column(type: 'integer')]
     #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
     private Course $course;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
     #[ORM\ManyToOne(targetEntity: Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true)]
     private ?Session $session;

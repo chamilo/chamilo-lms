@@ -41,9 +41,9 @@
 
     <BaseTinyEditor
       v-model="v$.item.content.$model"
+      :title="t('Content')"
       editor-id="item_content"
       required
-      :title="t('Content')"
     />
 
     <div class="text-right">

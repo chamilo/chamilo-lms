@@ -5,7 +5,10 @@
       top
     >
       <q-avatar>
-        <img :src="comment.sender.illustrationUrl" class="h-12 w-12 border border-gray-25" />
+        <img
+          :src="comment.sender.illustrationUrl"
+          class="h-12 w-12 border border-gray-25"
+        />
       </q-avatar>
     </q-item-section>
 

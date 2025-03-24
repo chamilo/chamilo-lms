@@ -18,11 +18,11 @@ export default {
    */
   async find(iri, useBasic = false) {
     const endpoint = iri
-    const groups = useBasic ? ['session:basic'] : ['session:read']
+    const groups = useBasic ? ["session:basic"] : ["session:read"]
     const { data } = await api.get(endpoint, {
       params: {
-        'groups[]': groups
-      }
+        "groups[]": groups,
+      },
     })
 
     return data

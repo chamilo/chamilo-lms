@@ -19,9 +19,9 @@
           class="flex mx-7 my-1.5 py-2 ml-8 gap-4"
         >
           <BaseIcon
-            size="small"
             class="text-sm"
             icon="courses"
+            size="small"
           />
           <div
             v-if="sidebarIsOpen"
@@ -30,9 +30,9 @@
             {{ t("Course") }}
           </div>
           <BaseIcon
-            size="small"
             class="text-sm animate-spin"
             icon="sync"
+            size="small"
           />
         </div>
 

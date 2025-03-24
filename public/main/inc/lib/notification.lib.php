@@ -2,6 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\NotificationContentEvent;
+use Chamilo\CoreBundle\Event\NotificationTitleEvent;
 
 /**
  * Notification class
@@ -155,6 +159,12 @@ class Notification extends Model
      */
     public function formatTitle(string $title, array $senderInfo, bool $forceTitleWhenSendingEmail = false, $recipientLanguage = null): string
     {
+        $notificationTitleEvent = new NotificationTitleEvent(['title' => $title], AbstractEvent::TYPE_PRE);
+
+        Container::getEventDispatcher()->dispatch($notificationTitleEvent, Events::NOTIFICATION_TITLE);
+
+        $title = $notificationTitleEvent->getTitle();
+
         $newTitle = $this->getTitlePrefix();
 
         switch ($this->type) {
@@ -202,7 +212,11 @@ class Notification extends Model
             $newTitle = $title;
         }
 
-        return $newTitle;
+        $notificationTitleEvent = new NotificationTitleEvent(['title' => $newTitle], AbstractEvent::TYPE_POST);
+
+        Container::getEventDispatcher()->dispatch($notificationTitleEvent, Events::NOTIFICATION_TITLE);
+
+        return $notificationTitleEvent->getTitle();
     }
 
     /**
@@ -356,6 +370,12 @@ class Notification extends Model
      * */
     public function formatContent($messageId, $content, $senderInfo, $recipientLanguage = null, $baseUrl = null)
     {
+        $notificationContentEvent = new NotificationContentEvent(['content' => $content], AbstractEvent::TYPE_PRE);
+
+        Container::getEventDispatcher()->dispatch($notificationContentEvent, Events::NOTIFICATION_CONTENT);
+
+        $content = $notificationContentEvent->getContent();
+
         $newMessageText = $linkToNewMessage = '';
         $showEmail = ('true' === api_get_setting('mail.show_user_email_in_notification'));
         $senderInfoName = '';
@@ -438,7 +458,11 @@ class Notification extends Model
                 Display::url($preferenceUrl, $preferenceUrl)
             ).'</i>';
 
-        return $content;
+        $notificationContentEvent = new NotificationContentEvent(['content' => $content], AbstractEvent::TYPE_POST);
+
+        Container::getEventDispatcher()->dispatch($notificationContentEvent, Events::NOTIFICATION_CONTENT);
+
+        return $notificationContentEvent->getContent();
     }
 
     /**

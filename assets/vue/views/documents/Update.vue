@@ -16,14 +16,14 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from 'vue'
+import { computed, onMounted, ref } from "vue"
 import DocumentsForm from "../../components/documents/Form.vue"
 import Loading from "../../components/Loading.vue"
 import EditLinks from "../../components/resource_links/EditLinks.vue"
 import { useDatatableUpdate } from "../../composables/datatableUpdate"
 import { useSecurityStore } from "../../store/securityStore"
-import { useRoute } from 'vue-router'
-import { checkIsAllowedToEdit } from '../../composables/userPermissions'
+import { useRoute } from "vue-router"
+import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 
 const securityStore = useSecurityStore()
 const route = useRoute()
@@ -32,11 +32,10 @@ const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher || isAllo
 const { item, retrieve, updateItemWithFormData, isLoading } = useDatatableUpdate("Documents")
 
 const canEditItem = computed(() => {
-
-  console.log('item.value ::: ', item.value)
+  console.log("item.value ::: ", item.value)
 
   const resourceLink = item.value?.resourceLinkListFromEntity?.[0]
-  const sidFromResourceLink = resourceLink?.session?.['@id']
+  const sidFromResourceLink = resourceLink?.session?.["@id"]
   return (
     (sidFromResourceLink && sidFromResourceLink === `/api/sessions/${route.query.sid}` && isAllowedToEdit.value) ||
     isCurrentTeacher.value

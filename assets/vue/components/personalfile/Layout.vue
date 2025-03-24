@@ -4,7 +4,10 @@
       <UserProfileCard />
     </div>
     <div class="md:basis-2/3 lg:basis-3/4 2xl:basis-5/6">
-      <h2 v-t="'My files'" class="mr-auto" />
+      <h2
+        v-t="'My files'"
+        class="mr-auto"
+      />
       <hr />
       <router-view></router-view>
     </div>
@@ -14,7 +17,6 @@
 import UserProfileCard from "../social/UserProfileCard.vue"
 import { onMounted, provide } from "vue"
 import { useSocialInfo } from "../../composables/useSocialInfo"
-
 
 const { user, isCurrentUser, groupInfo, isGroup, loadUser } = useSocialInfo()
 

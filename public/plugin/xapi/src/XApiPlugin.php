@@ -19,7 +19,7 @@ use Xabbuh\XApi\Serializer\Symfony\Serializer;
 /**
  * Class XApiPlugin.
  */
-class XApiPlugin extends Plugin implements HookPluginInterface
+class XApiPlugin extends Plugin
 {
     public const SETTING_LRS_URL = 'lrs_url';
     public const SETTING_LRS_AUTH_USERNAME = 'lrs_auth_username';
@@ -88,7 +88,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     {
         $this->installInitialConfig();
         $this->addCourseTools();
-        $this->installHook();
     }
 
     /**
@@ -96,44 +95,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     public function uninstall()
     {
-        $this->uninstallHook();
         $this->deleteCourseTools();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function uninstallHook()
-    {
-        $learningPathItemViewedHook = XApiLearningPathItemViewedHookObserver::create();
-        $learningPathEndHook = XApiLearningPathEndHookObserver::create();
-        $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHookObserver::create();
-        $quizEndHook = XApiQuizEndHookObserver::create();
-        $createCourseHook = XApiCreateCourseHookObserver::create();
-        $portfolioItemAddedHook = XApiPortfolioItemAddedHookObserver::create();
-        $portfolioItemCommentedHook = XApiPortfolioItemCommentedHookObserver::create();
-        $portfolioItemHighlightedHook = XApiPortfolioItemHighlightedHookObserver::create();
-        $portfolioDownloaded = XApiPortfolioDownloadedHookObserver::create();
-        $portfolioItemScoredHook = XApiPortfolioItemScoredHookObserver::create();
-        $portfolioCommentedScoredHook = XApiPortfolioCommentScoredHookObserver::create();
-        $portfolioItemEditedHook = XApiPortfolioItemEditedHookObserver::create();
-        $portfolioCommentEditedHook = XApiPortfolioCommentEditedHookObserver::create();
-
-        HookLearningPathItemViewed::create()->detach($learningPathItemViewedHook);
-        HookLearningPathEnd::create()->detach($learningPathEndHook);
-        HookQuizQuestionAnswered::create()->detach($quizQuestionAnsweredHook);
-        HookQuizEnd::create()->detach($quizEndHook);
-        HookCreateCourse::create()->detach($createCourseHook);
-        HookPortfolioItemAdded::create()->detach($portfolioItemAddedHook);
-        HookPortfolioItemCommented::create()->detach($portfolioItemCommentedHook);
-        HookPortfolioItemHighlighted::create()->detach($portfolioItemHighlightedHook);
-        HookPortfolioDownloaded::create()->detach($portfolioDownloaded);
-        HookPortfolioItemScored::create()->detach($portfolioItemScoredHook);
-        HookPortfolioCommentScored::create()->detach($portfolioCommentedScoredHook);
-        HookPortfolioItemEdited::create()->detach($portfolioItemEditedHook);
-        HookPortfolioCommentEdited::create()->detach($portfolioCommentEditedHook);
-
-        return 1;
     }
 
     /**
@@ -168,100 +130,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
                 empty($lrsPassword) ? null : $lrsPassword
             )
             ->getStatementsApiClient();
-    }
-
-    /**
-     * Perform actions after save the plugin configuration.
-     *
-     * @return \XApiPlugin
-     */
-    public function performActionsAfterConfigure()
-    {
-        $learningPathItemViewedHook = XApiLearningPathItemViewedHookObserver::create();
-        $learningPathEndHook = XApiLearningPathEndHookObserver::create();
-        $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHookObserver::create();
-        $quizEndHook = XApiQuizEndHookObserver::create();
-        $portfolioItemAddedHook = XApiPortfolioItemAddedHookObserver::create();
-        $portfolioItemCommentedHook = XApiPortfolioItemCommentedHookObserver::create();
-        $portfolioItemViewedHook = XApiPortfolioItemViewedHookObserver::create();
-        $portfolioItemHighlightedHook = XApiPortfolioItemHighlightedHookObserver::create();
-        $portfolioDownloadedHook = XApiPortfolioDownloadedHookObserver::create();
-        $portfolioItemScoredHook = XApiPortfolioItemScoredHookObserver::create();
-        $portfolioCommentScoredHook = XApiPortfolioCommentScoredHookObserver::create();
-        $portfolioItemEditedHook = XApiPortfolioItemEditedHookObserver::create();
-        $portfolioCommentEditedHook = XApiPortfolioCommentEditedHookObserver::create();
-
-        $learningPathItemViewedEvent = HookLearningPathItemViewed::create();
-        $learningPathEndEvent = HookLearningPathEnd::create();
-        $quizQuestionAnsweredEvent = HookQuizQuestionAnswered::create();
-        $quizEndEvent = HookQuizEnd::create();
-        $portfolioItemAddedEvent = HookPortfolioItemAdded::create();
-        $portfolioItemCommentedEvent = HookPortfolioItemCommented::create();
-        $portfolioItemViewedEvent = HookPortfolioItemViewed::create();
-        $portfolioItemHighlightedEvent = HookPortfolioItemHighlighted::create();
-        $portfolioDownloadedEvent = HookPortfolioDownloaded::create();
-        $portfolioItemScoredEvent = HookPortfolioItemScored::create();
-        $portfolioCommentScoredEvent = HookPortfolioCommentScored::create();
-        $portfolioItemEditedEvent = HookPortfolioItemEdited::create();
-        $portfolioCommentEditedEvent = HookPortfolioCommentEdited::create();
-
-        if ('true' === $this->get(self::SETTING_LRS_LP_ITEM_ACTIVE)) {
-            $learningPathItemViewedEvent->attach($learningPathItemViewedHook);
-        } else {
-            $learningPathItemViewedEvent->detach($learningPathItemViewedHook);
-        }
-
-        if ('true' === $this->get(self::SETTING_LRS_LP_ACTIVE)) {
-            $learningPathEndEvent->attach($learningPathEndHook);
-        } else {
-            $learningPathEndEvent->detach($learningPathEndHook);
-        }
-
-        if ('true' === $this->get(self::SETTING_LRS_QUIZ_ACTIVE)) {
-            $quizQuestionAnsweredEvent->attach($quizQuestionAnsweredHook);
-        } else {
-            $quizQuestionAnsweredEvent->detach($quizQuestionAnsweredHook);
-        }
-
-        if ('true' === $this->get(self::SETTING_LRS_QUIZ_QUESTION_ACTIVE)) {
-            $quizEndEvent->attach($quizEndHook);
-        } else {
-            $quizEndEvent->detach($quizEndHook);
-        }
-
-        if ('true' === $this->get(self::SETTING_LRS_PORTFOLIO_ACTIVE)) {
-            $portfolioItemAddedEvent->attach($portfolioItemAddedHook);
-            $portfolioItemCommentedEvent->attach($portfolioItemCommentedHook);
-            $portfolioItemViewedEvent->attach($portfolioItemViewedHook);
-            $portfolioItemHighlightedEvent->attach($portfolioItemHighlightedHook);
-            $portfolioDownloadedEvent->attach($portfolioDownloadedHook);
-            $portfolioItemScoredEvent->attach($portfolioItemScoredHook);
-            $portfolioCommentScoredEvent->attach($portfolioCommentScoredHook);
-            $portfolioItemEditedEvent->attach($portfolioItemEditedHook);
-            $portfolioCommentEditedEvent->attach($portfolioCommentEditedHook);
-        } else {
-            $portfolioItemAddedEvent->detach($portfolioItemAddedHook);
-            $portfolioItemCommentedEvent->detach($portfolioItemCommentedHook);
-            $portfolioItemViewedEvent->detach($portfolioItemViewedHook);
-            $portfolioItemHighlightedEvent->detach($portfolioItemHighlightedHook);
-            $portfolioDownloadedEvent->detach($portfolioDownloadedHook);
-            $portfolioItemScoredEvent->detach($portfolioItemScoredHook);
-            $portfolioCommentScoredEvent->detach($portfolioCommentScoredHook);
-            $portfolioItemEditedEvent->detach($portfolioItemEditedHook);
-            $portfolioCommentEditedEvent->detach($portfolioCommentEditedHook);
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function installHook()
-    {
-        $createCourseHook = XApiCreateCourseHookObserver::create();
-
-        HookCreateCourse::create()->attach($createCourseHook);
     }
 
     /**

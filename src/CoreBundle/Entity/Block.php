@@ -38,9 +38,9 @@ class Block
     #[ORM\Column(name: 'active', type: 'boolean', nullable: false)]
     protected bool $active;
 
-    #[ORM\OneToOne(inversedBy: 'block', targetEntity: User::class)]
+    #[ORM\OneToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected User $user;
+    private ?User $user = null;
 
     /**
      * Get id.
@@ -106,18 +106,6 @@ class Block
     public function setActive(bool $active): self
     {
         $this->active = $active;
-
-        return $this;
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }

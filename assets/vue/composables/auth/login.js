@@ -32,6 +32,10 @@ export function useLogin() {
     try {
       const responseData = await securityService.login(payload)
 
+      if (responseData.requires2FA) {
+        return { success: true, requires2FA: true };
+      }
+
       if (route.query.redirect) {
         // Check if 'redirect' is an absolute URL
         if (isValidHttpUrl(route.query.redirect.toString())) {

@@ -4,8 +4,8 @@
       <BaseButton
         v-if="handleBack"
         :label="$t('Back')"
-        type="primary"
         icon="back"
+        type="primary"
         @click="backAction"
       />
 
@@ -30,8 +30,8 @@
         v-if="handleSubmit"
         :is-loading="isLoading"
         :label="$t('Submit')"
-        type="success"
         icon="save"
+        type="success"
         @click="submitItem"
       />
 

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  export default {
-      name: 'CourseCategoryLayout'
-  }
+export default {
+  name: "CourseCategoryLayout",
+}
 </script>

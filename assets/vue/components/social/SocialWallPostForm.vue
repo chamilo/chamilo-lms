@@ -3,10 +3,10 @@
     <form>
       <BaseTinyEditor
         v-model="content"
+        :editor-config="editorConfig"
         :editor-id="'content-editor'"
         :required="true"
         :title="textPlaceholder"
-        :editor-config="editorConfig"
         class="mb-2"
       />
 

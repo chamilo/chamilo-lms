@@ -14,6 +14,7 @@ export const sizeValidator = (value) => {
   if (typeof value !== "string") {
     return false
   }
+
   return ["normal", "small"].includes(value)
 }
 
@@ -21,5 +22,8 @@ export const buttonTypeValidator = (value) => {
   if (typeof value !== "string") {
     return false
   }
-  return ["primary", "primary-alternative", "secondary", "black", "success", "info", "warning", "danger"].includes(value)
+
+  return ["primary", "primary-alternative", "secondary", "black", "success", "info", "warning", "danger"].includes(
+    value,
+  )
 }

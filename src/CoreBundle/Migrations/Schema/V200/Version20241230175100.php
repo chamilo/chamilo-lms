@@ -51,13 +51,13 @@ final class Version20241230175100 extends AbstractMigrationChamilo
 
     private function getForeignKeyName(string $tableName, string $columnName): ?string
     {
-        $query = "
+        $query = '
             SELECT CONSTRAINT_NAME
             FROM information_schema.KEY_COLUMN_USAGE
             WHERE TABLE_NAME = :tableName
             AND COLUMN_NAME = :columnName
             AND TABLE_SCHEMA = DATABASE()
-        ";
+        ';
 
         $result = $this->connection->fetchOne($query, [
             'tableName' => $tableName,

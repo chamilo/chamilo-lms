@@ -76,7 +76,7 @@ if (!empty($exercise_stat_info['data_tracking'])) {
     $question_list = explode(',', $exercise_stat_info['data_tracking']);
 }
 
-if (empty($exercise_stat_info) || empty($question_list)) {
+if (empty($exercise_stat_info) || empty($question_list) || $exercise_stat_info['exe_user_id'] != api_get_user_id()) {
     api_not_allowed();
 }
 

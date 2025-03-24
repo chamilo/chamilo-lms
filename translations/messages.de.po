@@ -4915,10 +4915,10 @@ msgstr "Bestätigen"
 msgid "Unsubscribe users from course"
 msgstr "Teilnehmer aus Kurs abmelden"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Name für Klasse fehlt"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Name für Klasse existiert schon"
 
 msgid "CSV file import location"
@@ -24423,7 +24423,6 @@ msgstr "Link zur Testbearbeitung"
 msgid "Move users results from base course to a session"
 msgstr "Verschieben Sie Benutzerergebnisse vom Basiskurs zum eine Session"
 
-#, fuzzy
 msgid "If your quiz have hotspot questions included, you should select the images related from the documents."
 msgstr ""
 "Wenn Ihr Quiz Hotspot-Fragen enthält, sollten Sie die zugehörigen Bilder aus "
@@ -29188,7 +29187,7 @@ msgid "Step 4 - Database settings"
 msgstr "Schritt 4 - Datenbankeinstellungen"
 
 msgid "As read"
-msgstr "Lesen"
+msgstr "Gelesen"
 
 msgid "As unread"
 msgstr "Ungelesen"
@@ -29237,3 +29236,15 @@ msgstr "Wählen Sie den Zielordner"
 
 msgid "All users"
 msgstr "Alle Benutzer"
+
+msgid "Reminders"
+msgstr "Erinnerungen"
+
+msgid "Add reminder"
+msgstr "Erinnerung hinzufügen"
+
+msgid "Update introduction links"
+msgstr "Link im Text aktualisieren"
+
+msgid "Conference Room"
+msgstr "Konferenzraum"

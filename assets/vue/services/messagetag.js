@@ -1,3 +1,3 @@
-import makeService from './api';
+import makeService from "./api"
 
-export default makeService('message_tags');
+export default makeService("message_tags")

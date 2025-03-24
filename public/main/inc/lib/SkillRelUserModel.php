@@ -12,7 +12,6 @@ class SkillRelUserModel extends Model
         'user_id',
         'skill_id',
         'acquired_skill_at',
-        'assigned_by',
         'course_id',
         'session_id',
     ];

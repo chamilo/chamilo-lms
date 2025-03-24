@@ -6,7 +6,7 @@
     >
       <img
         :alt="shortcut.title"
-        :src="`/img/tools/${shortcut.type}.png`"
+        :src="shortcut.customImageUrl || `/img/tools/${shortcut.type}.png`"
         class="course-tool__icon"
       />
     </BaseAppLink>
@@ -22,7 +22,6 @@
 <script setup>
 import { computed } from "vue"
 import { storeToRefs } from "pinia"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import { useCidReqStore } from "../../store/cidReq"
 
 const cidReqStore = useCidReqStore()

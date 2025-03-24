@@ -2,14 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
 
 /**
  * Class PENSPlugin
  * This class is used to add an advanced subscription allowing the admin to
  * create user queues requesting a subscribe to a session.
  */
-class PENSPlugin extends Plugin implements HookPluginInterface
+class PENSPlugin extends Plugin
 {
     protected $strings;
     private $errorMessages;
@@ -33,7 +32,7 @@ class PENSPlugin extends Plugin implements HookPluginInterface
      *
      * @staticvar null $result
      *
-     * @return AdvancedSubscriptionPlugin
+     * @return PENSPlugin
      */
     public static function create()
     {
@@ -48,7 +47,6 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     public function install()
     {
         $this->installDatabase();
-        $this->installHook();
     }
 
     /**
@@ -58,7 +56,6 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     {
         $setting = api_get_setting('plugin_pens');
         if (!empty($setting)) {
-            $this->uninstallHook();
             // Note: Keeping area field data is intended so it will not be removed
             $this->uninstallDatabase();
         }
@@ -113,24 +110,6 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     public function getErrorMessages()
     {
         return $this->errorMessages;
-    }
-
-    /**
-     * This method will call the Hook management insertHook to add Hook observer from this plugin.
-     *
-     * @return int
-     */
-    public function installHook()
-    {
-    }
-
-    /**
-     * This method will call the Hook management deleteHook to disable Hook observer from this plugin.
-     *
-     * @return int
-     */
-    public function uninstallHook()
-    {
     }
 
     /**

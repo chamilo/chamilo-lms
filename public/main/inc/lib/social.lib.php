@@ -976,28 +976,28 @@ class SocialManager extends UserManager
 
     /**
      * verify if Url Exist - Using Curl.
-     *
-     * @param $uri url
-     *
-     * @return bool
      */
-    public static function verifyUrl($uri)
+    public static function verifyUrl(string $uri): bool
     {
-        $curl = curl_init($uri);
-        curl_setopt($curl, CURLOPT_FAILONERROR, true);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 15);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-        $response = curl_exec($curl);
-        curl_close($curl);
-        if (!empty($response)) {
-            return true;
-        }
+        $client = new Client();
 
-        return false;
+        try {
+            $response = $client->request('GET', $uri, [
+                'timeout' => 15,
+                'verify' => false,
+                'headers' => [
+                    'User-Agent' => $_SERVER['HTTP_USER_AGENT'],
+                ],
+            ]);
+
+            if (200 !== $response->getStatusCode()) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -1258,6 +1258,7 @@ class SocialManager extends UserManager
         $form->addHtml('</div></div>');
         $form->addHtml('</div>');
         $form->addHidden('url_content', '');
+        $form->protect();
         $html = Display::panel($form->returnForm(), get_lang('Social wall'));
 
         return $html;

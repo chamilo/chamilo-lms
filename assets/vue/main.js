@@ -49,6 +49,7 @@ import Column from "primevue/column"
 import ColumnGroup from "primevue/columngroup"
 import ToastService from "primevue/toastservice"
 import ConfirmationService from "primevue/confirmationservice"
+import BaseAppLink from "./components/basecomponents/BaseAppLink.vue"
 
 import "primevue/resources/primevue.min.css"
 // import 'primeflex/primeflex.css';
@@ -192,6 +193,7 @@ app.component("ColumnGroup", ColumnGroup)
 app.component("Toolbar", Toolbar)
 app.component("DashboardLayout", DashboardLayout)
 app.component("EmptyLayout", EmptyLayout)
+app.component("BaseAppLink", BaseAppLink)
 
 app.config.globalProperties.axios = axios
 app.config.globalProperties.window = window

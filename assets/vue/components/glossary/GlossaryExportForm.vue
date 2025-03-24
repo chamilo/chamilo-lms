@@ -3,8 +3,8 @@
     <BaseSelect
       id="format"
       v-model="selectedFormat"
-      :options="formats"
       :label="t('Export format')"
+      :options="formats"
       option-label="label"
       option-value="value"
     />
@@ -12,14 +12,14 @@
     <LayoutFormButtons>
       <BaseButton
         :label="t('Back')"
-        type="black"
         icon="back"
+        type="black"
         @click="emit('backPressed')"
       />
       <BaseButton
         :label="t('Export')"
-        type="secondary"
         icon="file-export"
+        type="secondary"
         @click="submitForm"
       />
     </LayoutFormButtons>

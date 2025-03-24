@@ -1,3 +1,3 @@
-import makeService from './api';
+import makeService from "./api"
 
-export default makeService('c_calendar_events');
+export default makeService("c_calendar_events")

@@ -9,18 +9,22 @@ namespace Chamilo\CoreBundle\State;
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use Chamilo\CoreBundle\Entity\SocialPost;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class SocialPostStateProvider implements ProviderInterface
+/**
+ * @template-implements ProviderInterface<SocialPost>
+ */
+readonly class SocialPostStateProvider implements ProviderInterface
 {
     public function __construct(
         #[Autowire(service: 'api_platform.doctrine.orm.state.item_provider')]
-        private readonly ProviderInterface $itemProvider,
+        private ProviderInterface $itemProvider,
         #[Autowire(service: 'api_platform.doctrine.orm.state.collection_provider')]
-        private readonly ProviderInterface $collectionProvider,
-        private readonly SettingsManager $settingsManager,
+        private ProviderInterface $collectionProvider,
+        private SettingsManager $settingsManager,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null

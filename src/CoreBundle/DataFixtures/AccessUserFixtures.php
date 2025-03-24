@@ -7,7 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\DataFixtures;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -20,13 +22,16 @@ class AccessUserFixtures extends Fixture
 
     public function __construct(
         private readonly ToolChain $toolChain,
-        private readonly UserRepository $userRepository
+        private readonly UserRepository $userRepository,
+        private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
     public function load(ObjectManager $manager): void
     {
         $timezone = 'Europe\Paris';
         $this->toolChain->createTools();
+
+        $accessUrl = $this->accessUrlHelper->getCurrent();
 
         // Defined in AccessGroupFixtures.php.
         // $group = $this->getReference('GROUP_ADMIN');
@@ -76,7 +81,7 @@ class AccessUserFixtures extends Fixture
             ->setFirstname('User')
             ->setCreatorId(1)
             ->setOfficialCode('FALLBACK')
-            ->setAuthSource(PLATFORM_AUTH_SOURCE)
+            // ->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl)
             ->setPhone('0000000000')
             ->setTimezone($timezone)
             ->setActive(USER_SOFT_DELETED)

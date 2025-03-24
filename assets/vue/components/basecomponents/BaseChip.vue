@@ -7,8 +7,8 @@
   >
     <template #removeicon="{ removeCallback, keydownCallback }">
       <BaseIcon
-        icon="close"
         class="p-icon p-chip-remove-icon"
+        icon="close"
         @click="removeCallback"
         @keydownk="keydownCallback"
       />
@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import Chip from "primevue/chip";
+import Chip from "primevue/chip"
 import BaseIcon from "./BaseIcon.vue"
 
 defineProps({
@@ -39,7 +39,7 @@ defineProps({
     required: false,
     default: false,
   },
-});
+})
 
-defineEmits(["remove"]);
+defineEmits(["remove"])
 </script>

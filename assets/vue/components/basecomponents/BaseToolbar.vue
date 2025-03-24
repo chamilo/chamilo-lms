@@ -1,12 +1,21 @@
 <template>
   <Toolbar :class="toolbarClass">
-    <template v-if="!hasStartSlot && !hasEndSlot" #start>
+    <template
+      v-if="!hasStartSlot && !hasEndSlot"
+      #start
+    >
       <slot></slot>
     </template>
-    <template v-if="hasStartSlot" v-slot:start>
+    <template
+      v-if="hasStartSlot"
+      v-slot:start
+    >
       <slot name="start"></slot>
     </template>
-    <template v-if="hasEndSlot" v-slot:end>
+    <template
+      v-if="hasEndSlot"
+      v-slot:end
+    >
       <slot name="end"></slot>
     </template>
   </Toolbar>
@@ -14,8 +23,7 @@
 
 <script setup>
 import Toolbar from "primevue/toolbar"
-import { computed, onMounted, ref } from "vue"
-import { useSlots } from 'vue'
+import { computed, onMounted, ref, useSlots } from "vue"
 
 const props = defineProps({
   showTopBorder: {

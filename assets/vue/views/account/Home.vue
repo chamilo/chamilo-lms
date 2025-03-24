@@ -15,13 +15,12 @@ import UserProfileCard from "../../components/social/UserProfileCard.vue"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 import SocialWall from "../social/SocialWall.vue"
 
+const { user, isCurrentUser, groupInfo, isGroup, loadUser } = useSocialInfo()
 
-const { user, isCurrentUser, groupInfo, isGroup, loadUser } = useSocialInfo();
+provide("social-user", user)
+provide("is-current-user", isCurrentUser)
+provide("group-info", groupInfo)
+provide("is-group", isGroup)
 
-provide("social-user", user);
-provide("is-current-user", isCurrentUser);
-provide("group-info", groupInfo);
-provide("is-group", isGroup);
-
-onMounted(loadUser);
+onMounted(loadUser)
 </script>

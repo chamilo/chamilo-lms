@@ -350,15 +350,28 @@ if ($allowEdition
 }
 
 $isSubscribed = TicketManager::isUserSubscribedToTicket($ticket_id, $user_id);
+$subscribeAction = '';
 if ($isSubscribed) {
     $subscribeAction = Display::url(
-        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Unsubscribe')),
+        Display::getMdiIcon(
+            'email-alert',
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Unsubscribe')
+        ),
         api_get_self().'?ticket_id='.$ticket_id.'&action=unsubscribe',
         ['title' => get_lang('Unsubscribe')]
     );
 } else {
     $subscribeAction = Display::url(
-        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Subscribe')),
+        Display::getMdiIcon(
+            'email-outline',
+            'ch-tool-icon-disabled',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Subscribe')
+        ),
         api_get_self().'?ticket_id='.$ticket_id.'&action=subscribe',
         ['title' => get_lang('Subscribe')]
     );

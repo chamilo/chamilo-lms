@@ -10,8 +10,8 @@
 </template>
 
 <script setup>
-import Menu from "primevue/menu";
-import {ref} from "vue";
+import Menu from "primevue/menu"
+import { ref } from "vue"
 
 defineProps({
   id: {
@@ -23,15 +23,15 @@ defineProps({
     type: Array,
     required: true,
   },
-});
+})
 
-const menu = ref(null);
+const menu = ref(null)
 
 const toggle = (event) => {
-  menu.value.toggle(event);
-};
+  menu.value.toggle(event)
+}
 
 defineExpose({
   toggle,
-});
+})
 </script>

@@ -3,13 +3,13 @@
     <FloatLabel>
       <AutoComplete
         v-model="modelValue"
+        :disabled="disabled"
         :input-id="id"
+        :min-length="3"
         :multiple="isMultiple"
+        :option-label="optionLabel"
         :suggestions="suggestions"
         force-selection
-        :option-label="optionLabel"
-        :disabled="disabled"
-        :min-length="3"
         @complete="onComplete"
         @item-select="$emit('item-select', $event)"
       >

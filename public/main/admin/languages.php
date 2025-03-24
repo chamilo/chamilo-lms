@@ -180,13 +180,15 @@ switch ($action) {
 
 if (isset($_POST['Submit']) && $_POST['Submit']) {
     // changing the name
-    $name = Database::escape_string($_POST['txt_name']);
+    $name = html_filter($_POST['txt_name']);
     $postId = (int) $_POST['edit_id'];
-    $sql = "UPDATE $tbl_admin_languages SET original_name='$name'
-            WHERE id='$postId'";
-    $result = Database::query($sql);
+    Database::update(
+        $tbl_admin_languages,
+        ['original_name' => $name],
+        ['id = ?' => $postId]
+    );
     // changing the Platform language
-    if ($_POST['platformlanguage'] && '' != $_POST['platformlanguage']) {
+    if (isset($_POST['platformlanguage']) && '' != $_POST['platformlanguage']) {
         api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, api_get_current_access_url_id());
         header("Location: $url");
         exit;

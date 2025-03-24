@@ -14,8 +14,8 @@
         @click="$emit('cancelClicked')"
       />
       <BaseButton
-        :label="innerConfirmLabel"
         :icon="confirmIcon"
+        :label="innerConfirmLabel"
         :type="confirmType"
         @click="$emit('confirmClicked')"
       />

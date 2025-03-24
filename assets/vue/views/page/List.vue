@@ -215,8 +215,7 @@ const securityStore = useSecurityStore()
 
 const { t } = useI18n()
 
-const { filters, options, onUpdateOptions, onShowItem, goToEditItem, deleteItem } =
-  useDatatableList("Page")
+const { filters, options, onUpdateOptions, onShowItem, goToEditItem, deleteItem } = useDatatableList("Page")
 
 const toast = useToast()
 

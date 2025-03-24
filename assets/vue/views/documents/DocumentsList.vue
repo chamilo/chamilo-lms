@@ -133,15 +133,15 @@
       field="resourceNode.title"
     >
       <template #body="slotProps">
-        <div style="display: flex; align-items: center;">
+        <div style="display: flex; align-items: center">
           <DocumentEntry
             v-if="slotProps.data"
             :data="slotProps.data"
           />
           <BaseIcon
             v-if="isAllowedToEdit && isSessionDocument(slotProps.data)"
-            icon="session-star"
             class="mr-8"
+            icon="session-star"
           />
         </div>
       </template>
@@ -176,17 +176,25 @@
         <div class="flex flex-row justify-end gap-2">
           <BaseButton
             v-if="canEdit(slotProps.data)"
+            :title="t('Move')"
             icon="folder-move"
             size="small"
             type="secondary"
-            :title="t('Move')"
             @click="openMoveDialog(slotProps.data)"
           />
           <BaseButton
+            :disabled="slotProps.data.filetype !== 'file'"
+            :title="slotProps.data.filetype !== 'file' ? t('Replace (files only)') : t('Replace file')"
+            icon="file-swap"
+            size="small"
+            type="secondary"
+            @click="slotProps.data.filetype === 'file' && openReplaceDialog(slotProps.data)"
+          />
+          <BaseButton
+            :title="t('Information')"
             icon="information"
             size="small"
             type="primary"
-            :title="t('Information')"
             @click="btnShowInformationOnClick(slotProps.data)"
           />
 
@@ -199,44 +207,55 @@
                   ? 'eye-off'
                   : ''
             "
+            :title="t('Visibility')"
             size="small"
             type="secondary"
-            :title="t('Visibility')"
             @click="btnChangeVisibilityOnClick(slotProps.data)"
           />
 
           <BaseButton
+            v-if="canEdit(slotProps.data) && allowAccessUrlFiles && isFile(slotProps.data) && securityStore.isAdmin"
+            icon="file-replace"
+            size="small"
+            type="secondary"
+            :title="t('Add File Variation')"
+            @click="goToAddVariation(slotProps.data)"
+          />
+
+          <BaseButton
             v-if="canEdit(slotProps.data)"
+            :title="t('Edit')"
             icon="edit"
             size="small"
             type="secondary"
-            :title="t('Edit')"
             @click="btnEditOnClick(slotProps.data)"
           />
 
           <BaseButton
             v-if="canEdit(slotProps.data)"
+            :title="t('Delete')"
             icon="delete"
             size="small"
             type="danger"
-            :title="t('Delete')"
             @click="confirmDeleteItem(slotProps.data)"
           />
           <BaseButton
             v-if="isCertificateMode && canEdit(slotProps.data)"
             :class="{ selected: slotProps.data.iid === defaultCertificateId }"
             :icon="slotProps.data.iid === defaultCertificateId ? 'certificate-selected' : 'certificate-not-selected'"
+            :title="t('Set as default certificate')"
             size="small"
             type="slotProps.data.iid === defaultCertificateId ? 'success' : 'black'"
-            :title="t('Set as default certificate')"
             @click="selectAsDefaultCertificate(slotProps.data)"
           />
           <BaseButton
-            v-if="securityStore.isAuthenticated && isCurrentTeacher && isHtmlFile(slotProps.data) && canEdit(slotProps.data)"
+            v-if="
+              securityStore.isAuthenticated && isCurrentTeacher && isHtmlFile(slotProps.data) && canEdit(slotProps.data)
+            "
             :icon="getTemplateIcon(slotProps.data.iid)"
+            :title="t('Template options')"
             size="small"
             type="secondary"
-            :title="t('Template options')"
             @click="openTemplateForm(slotProps.data.iid)"
           />
         </div>
@@ -267,6 +286,13 @@
       type="danger"
       @click="showDeleteMultipleDialog"
     />
+    <BaseButton
+      :disabled="isDownloading || !selectedItems || !selectedItems.length"
+      :label="isDownloading ? t('In progress') : t('Download selected items as ZIP')"
+      icon="download"
+      type="primary"
+      @click="downloadSelectedItems"
+    />
   </BaseToolbar>
 
   <BaseDialogConfirmCancel
@@ -279,9 +305,9 @@
     <Dropdown
       v-model="selectedFolder"
       :options="folders"
+      :placeholder="t('Select a folder')"
       optionLabel="label"
       optionValue="value"
-      :placeholder="t('Select a folder')"
     />
   </BaseDialogConfirmCancel>
 
@@ -348,6 +374,21 @@
       />
       <span v-if="item">{{ t("Are you sure you want to delete the selected items?") }}</span>
     </div>
+  </BaseDialogConfirmCancel>
+
+  <BaseDialogConfirmCancel
+    v-model:is-visible="isReplaceDialogVisible"
+    :title="t('Replace file')"
+    @confirm-clicked="replaceDocument"
+    @cancel-clicked="isReplaceDialogVisible = false"
+  >
+    <BaseFileUpload
+      id="replace-file"
+      :label="t('Select replacement file')"
+      accept="*/*"
+      model-value="selectedReplaceFile"
+      @file-selected="selectedReplaceFile = $event"
+    />
   </BaseDialogConfirmCancel>
 
   <BaseDialog
@@ -420,6 +461,7 @@ import { useCidReq } from "../../composables/cidReq"
 import { useDatatableList } from "../../composables/datatableList"
 import { useFormatDate } from "../../composables/formatDate"
 import axios from "axios"
+import baseService from "../../services/baseService"
 import DocumentEntry from "../../components/documents/DocumentEntry.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
@@ -436,22 +478,27 @@ import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import { useDocumentActionButtons } from "../../composables/document/documentActionButtons"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
 
+const platformConfigStore = usePlatformConfig()
+const allowAccessUrlFiles = computed(() => "false" !== platformConfigStore.getSetting("course.access_url_specific_files"))
+
 const { t } = useI18n()
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents")
 const notification = useNotification()
 const { cid, sid, gid } = useCidReq()
-const { isImage, isHtml } = useFileUtils()
+const { isImage, isHtml, isFile } = useFileUtils()
 
 const { relativeDatetime } = useFormatDate()
 const isAllowedToEdit = ref(false)
 const folders = ref([])
 const selectedFolder = ref(null)
+const isDownloading = ref(false)
 
 const {
   showNewDocumentButton,
@@ -504,20 +551,21 @@ const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 
 const canEdit = (item) => {
   const resourceLink = item.resourceLinkListFromEntity[0]
-  const isSessionDocument = resourceLink.session && resourceLink.session['@id'] === `/api/sessions/${sid}`
+  const isSessionDocument = resourceLink.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
   const isBaseCourse = !resourceLink.session
-  return (
-    (isSessionDocument && isAllowedToEdit.value) ||
-    (isBaseCourse && !sid && isCurrentTeacher.value)
-  )
+  return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
 }
 
 const isSessionDocument = (item) => {
   const resourceLink = item.resourceLinkListFromEntity[0]
-  return resourceLink.session && resourceLink.session['@id'] === `/api/sessions/${sid}`
+  return resourceLink.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
 }
 
 const isHtmlFile = (fileData) => isHtml(fileData)
+
+const isReplaceDialogVisible = ref(false)
+const selectedReplaceFile = ref(null)
+const documentToReplace = ref(null)
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
@@ -558,6 +606,15 @@ const showBackButtonIfNotRootFolder = computed(() => {
   }
   return resourceNode.value.resourceType.title !== "courses"
 })
+
+function goToAddVariation(item) {
+  const resourceFileId = item.resourceNode.firstResourceFile.id
+  router.push({
+    name: 'DocumentsAddVariation',
+    params: { resourceFileId, node: route.params.node },
+    query: { cid, sid, gid },
+  })
+}
 
 function back() {
   if (!resourceNode.value) {
@@ -618,6 +675,38 @@ function showDeleteMultipleDialog() {
 function confirmDeleteItem(itemToDelete) {
   item.value = itemToDelete
   isDeleteItemDialogVisible.value = true
+}
+
+async function downloadSelectedItems() {
+  if (!selectedItems.value.length) {
+    notification.showErrorNotification(t("No items selected."))
+    return
+  }
+
+  isDownloading.value = true
+
+  try {
+    const response = await axios.post(
+      "/api/documents/download-selected",
+      { ids: selectedItems.value.map(item => item.iid) },
+      { responseType: "blob" }
+    )
+
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute("download", "selected_documents.zip")
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    notification.showSuccessNotification(t("Download started"))
+  } catch (error) {
+    console.error("Error downloading selected items:", error)
+    notification.showErrorNotification(t("Error downloading selected items."))
+  } finally {
+    isDownloading.value = false;
+  }
 }
 
 async function deleteMultipleItems() {
@@ -691,9 +780,9 @@ function btnChangeVisibilityOnClick(item) {
 
   folderParams.id = item["@id"]
 
-  axios.put(item["@id"] + "/toggle_visibility").then((response) => {
-    item.resourceLinkListFromEntity = response.data.resourceLinkListFromEntity
-  })
+  baseService
+    .put(item["@id"] + `/toggle_visibility?cid=${cid}&sid=${sid}`, {})
+    .then((data) => (item.resourceLinkListFromEntity = data.resourceLinkListFromEntity))
 }
 
 function btnEditOnClick(item) {
@@ -784,11 +873,48 @@ function openMoveDialog(document) {
   isMoveDialogVisible.value = true
 }
 
-async function fetchFolders(nodeId = null, parentPath = '') {
-  const foldersList = [{
-    label: 'Root',
-    value: nodeId || route.params.node || route.query.node || 'root-node-id',
-  }]
+function openReplaceDialog(document) {
+  documentToReplace.value = document
+  isReplaceDialogVisible.value = true
+}
+
+async function replaceDocument() {
+  if (!selectedReplaceFile.value) {
+    notification.showErrorNotification(t("No file selected."))
+    return
+  }
+
+  if (documentToReplace.value.filetype !== 'file') {
+    notification.showErrorNotification(t("Only files can be replaced."))
+    return
+  }
+
+  const formData = new FormData()
+  console.log(selectedReplaceFile.value)
+  formData.append('file', selectedReplaceFile.value)
+
+  try {
+    await axios.post(`/api/documents/${documentToReplace.value.iid}/replace`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    notification.showSuccessNotification(t("File replaced"))
+    isReplaceDialogVisible.value = false
+    onUpdateOptions(options.value)
+  } catch (error) {
+    notification.showErrorNotification(t("Error replacing file."))
+    console.error(error)
+  }
+}
+
+async function fetchFolders(nodeId = null, parentPath = "") {
+  const foldersList = [
+    {
+      label: t('Documents'),
+      value: nodeId || route.params.node || route.query.node || "root-node-id",
+    },
+  ]
 
   try {
     let nodesToFetch = [{ id: nodeId || route.params.node || route.query.node, path: parentPath }]
@@ -807,7 +933,7 @@ async function fetchFolders(nodeId = null, parentPath = '') {
         },
       })
 
-      response.data["hydra:member"].forEach(folder => {
+      response.data["hydra:member"].forEach((folder) => {
         const fullPath = `${currentNode.path}/${folder.title}`
 
         foldersList.push({
@@ -836,7 +962,6 @@ async function loadAllFolders() {
 
 async function moveDocument() {
   try {
-
     const response = await axios.put(`/api/documents/${item.value.iid}/move`, {
       parentResourceNodeId: selectedFolder.value,
     })

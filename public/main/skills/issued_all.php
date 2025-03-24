@@ -108,7 +108,7 @@ foreach ($userSkills as $index => $skillRelUser) {
     }
 
     $acquiredLevel = [];
-    $profile = $skillRepo->find($skillId)->getProfile();
+    $profile = $skillRepo->find($skillId)->getLevelProfile();
 
     if (!$profile) {
         $skillRelSkill = new SkillRelSkillModel();
@@ -118,7 +118,7 @@ foreach ($userSkills as $index => $skillRelUser) {
 
         foreach ($parents as $parent) {
             $skillParentId = $parent['skill_id'];
-            $profile = $skillRepo->find($skillParentId)->getProfile();
+            $profile = $skillRepo->find($skillParentId)->getLevelProfile();
 
             if ($profile) {
                 break;

@@ -28,6 +28,14 @@
         />
       </div>
 
+      <div v-if="requires2FA" class="field">
+        <InputText
+          v-model="totp"
+          :placeholder="t('Enter 2FA code')"
+          type="text"
+        />
+      </div>
+
       <div class="field login-section__remember-me">
         <InputSwitch
           v-model="remember"
@@ -43,14 +51,14 @@
 
       <div class="field login-section__buttons">
         <Button
-          :label="t('Sign in')"
+          :label="requires2FA ? t('Submit code') : t('Sign in')"
           :loading="isLoading"
           type="submit"
         />
 
         <a
           v-if="allowRegistration"
-          v-t="'Register oneself'"
+          v-t="'Sign up'"
           class="btn btn--primary-outline"
           href="/main/auth/inscription.php"
           tabindex="3"
@@ -68,19 +76,19 @@
       </div>
     </form>
 
-    <ExternalLoginButtons />
+    <LoginOAuth2Buttons />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
+import { computed, ref } from "vue"
 import Button from "primevue/button"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
 import InputSwitch from "primevue/inputswitch"
 import { useI18n } from "vue-i18n"
 import { useLogin } from "../composables/auth/login"
-import ExternalLoginButtons from "./login/LoginExternalButtons.vue"
+import LoginOAuth2Buttons from "./login/LoginOAuth2Buttons.vue"
 import { usePlatformConfig } from "../store/platformConfig"
 
 const { t } = useI18n()
@@ -91,15 +99,24 @@ const { redirectNotAuthenticated, performLogin, isLoading } = useLogin()
 
 const login = ref("")
 const password = ref("")
+const totp = ref("")
 const remember = ref(false)
+const requires2FA = ref(false)
 
 redirectNotAuthenticated()
 
-function onSubmitLoginForm() {
-  performLogin({
+async function onSubmitLoginForm() {
+  const response = await performLogin({
     login: login.value,
     password: password.value,
+    totp: requires2FA.value ? totp.value : null,
     _remember_me: remember.value,
   })
+
+  if (response.requires2FA) {
+    requires2FA.value = true
+  } else {
+    router.replace({ name: "Home" })
+  }
 }
 </script>

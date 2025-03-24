@@ -62,6 +62,9 @@ $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : (isset($_GET['id']) ? (int) $_GET['id'] : 0);
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 $sessionId = api_get_session_id();
+$action = $_REQUEST['action'] ?? null;
+$idChecked = $_REQUEST['idChecked'] ?? null;
+$idMultiple = $_REQUEST['id'] ?? null;
 
 if (empty($exercise_id)) {
     api_not_allowed(true);
@@ -92,6 +95,34 @@ if (!empty($exercise_id)) {
 
 if (!empty($_GET['path'])) {
     $parameters['path'] = Security::remove_XSS($_GET['path']);
+}
+
+switch ($action) {
+    case 'delete_multiple':
+        $exeIds = explode(',', $idMultiple);
+        foreach ($exeIds as $exeId) {
+            ExerciseLib::deleteExerciseAttempt((int) $exeId);
+        }
+        echo 1;
+        exit;
+    case 'export_all_results':
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        ExerciseLib::exportExerciseAllResultsZip($sessionId, $courseId, $exercise_id);
+
+        break;
+    case 'export_pdf':
+        $exerciseId = (int) $_GET['exerciseId'];
+        $attemptId = (int) $_GET['attemptId'];
+        $userId = (int) $_GET['userId'];
+        $urlExportPdf = api_get_path(WEB_PATH).'main/exercise/exercise_show.php?'.api_get_cidreq().'&id='.$attemptId.'&action=export&export_type=result_pdf';
+
+        if (!$exerciseId || !$attemptId) {
+            api_not_allowed(true);
+        }
+
+        header('Location: '.$urlExportPdf);
+        exit;
 }
 
 if (!empty($_REQUEST['export_report']) && '1' == $_REQUEST['export_report']) {
@@ -431,8 +462,12 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::getMdiIcon('content-save', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).'</a>';
         $actions .= Display::url(
-            Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('RecalculateResults')),
+            Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Recalculate Results')),
             api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
+        );
+        $actions .= Display::url(
+            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export all attempts')),
+            api_get_self().'?'.api_get_cidreq().'&action=export_all_results&exerciseId='.$exercise_id
         );
 
         // clean result before a selected date icon
@@ -633,7 +668,7 @@ $group_parameters = [
 ];
 
 foreach ($group_list as $group) {
-    $group_parameters[] = $group['iid'].':'.$group['name'];
+    $group_parameters[] = $group['iid'].':'.$group['title'];
 }
 if (!empty($group_parameters)) {
     $group_parameters = implode(';', $group_parameters);
@@ -741,7 +776,9 @@ if ($is_allowedToEdit || $is_tutor) {
     }';
 }
 
+$deleteUrl = api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exercise_id.'&action=delete_multiple';
 $extra_params['autowidth'] = 'true';
+$extra_params['multiselect'] = true;
 $extra_params['height'] = 'auto';
 $extra_params['gridComplete'] = "
     defaultGroupId = Cookies.get('default_group_".$exercise_id."');
@@ -822,16 +859,11 @@ $gridJs = Display::grid_js(
 
         if ($is_allowedToEdit || $is_tutor) {
             ?>
-            $("#results").jqGrid(
-                'navGrid',
-                '#results_pager', {
-                    view:true, edit:false, add:false, del:false, excel:false
-                },
-                {height:280, reloadAfterSubmit:false}, // view options
-                {height:280, reloadAfterSubmit:false}, // edit options
-                {height:280, reloadAfterSubmit:false}, // add options
-                {reloadAfterSubmit: false}, // del options
-                {width:500}, // search options
+            $("#results").jqGrid('navGrid', '#results_pager',
+                {edit:false,add:false,del:true},
+                {height:280,reloadAfterSubmit:false}, // edit options
+                {height:280,reloadAfterSubmit:false}, // add options
+                {reloadAfterSubmit:true, url: '<?php echo $deleteUrl; ?>' }, // del options
             );
 
             var sgrid = $("#results")[0];

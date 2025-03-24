@@ -983,7 +983,11 @@ class CDocumentRepositoryTest extends AbstractApiTest
     public function testSetVisibility(): void
     {
         $course = $this->createCourse('Test');
+
+        /** @var CDocumentRepository $documentRepo */
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+
+        /** @var ResourceLinkRepository $linksRepo */
         $linksRepo = self::getContainer()->get(ResourceLinkRepository::class);
         $admin = $this->getUser('admin');
 
@@ -1020,12 +1024,12 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $link->getVisibility());
         $this->assertSame('Draft', $link->getVisibilityName());
 
-        $documentRepo->toggleVisibilityPublishedDraft($document);
+        $documentRepo->toggleVisibilityPublishedDraft($document, $course);
         $link = $document->getFirstResourceLink();
         $this->assertSame(ResourceLink::VISIBILITY_PUBLISHED, $link->getVisibility());
         $this->assertSame('Published', $link->getVisibilityName());
 
-        $documentRepo->toggleVisibilityPublishedDraft($document);
+        $documentRepo->toggleVisibilityPublishedDraft($document, $course);
         $link = $document->getFirstResourceLink();
         $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $link->getVisibility());
 
@@ -1089,7 +1093,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertSame(ResourceLink::VISIBILITY_PUBLISHED, $link->getVisibility());
 
         $documentId = $document->getIid();
-        $url = '/api/documents/'.$documentId.'/toggle_visibility';
+        $url = '/api/documents/'.$documentId.'/toggle_visibility?cid='.$course->getId();
 
         // Not logged in.
         $client->request('PUT', $url);

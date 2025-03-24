@@ -31,7 +31,6 @@ import { useI18n } from "vue-i18n"
 import Breadcrumb from "primevue/breadcrumb"
 import { useCidReqStore } from "../store/cidReq"
 import { storeToRefs } from "pinia"
-import BaseAppLink from "./basecomponents/BaseAppLink.vue"
 
 const legacyItems = ref(window.breadcrumb)
 
@@ -67,7 +66,7 @@ watchEffect(() => {
     const parts = route.path.split("/").filter(Boolean)
     parts.forEach((part, index) => {
       const path = `/${parts.slice(0, index + 1).join("/")}`
-      const matchedRoute = router.getRoutes().find(r => r.path === path)
+      const matchedRoute = router.getRoutes().find((r) => r.path === path)
       if (matchedRoute) {
         const label = matchedRoute.meta?.breadcrumb || t(part.charAt(0).toUpperCase() + part.slice(1))
         itemList.value.push({

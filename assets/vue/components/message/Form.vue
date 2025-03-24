@@ -35,9 +35,9 @@
       <BaseButton
         :disabled="!canSubmitMessage"
         :label="t('Send')"
+        class="mt-4"
         icon="plus"
         type="primary"
-        class="mt-4"
         @click="onSubmit"
       />
     </div>
@@ -61,11 +61,11 @@
       </ul>
 
       <BaseUploader
-        field-name="file"
         :endpoint="resourceFileService.endpoint"
-        @upload-success="onUploadSuccess"
-        @upload="onUpload"
+        field-name="file"
         @complete="onUploadComplete"
+        @upload="onUpload"
+        @upload-success="onUploadSuccess"
       />
     </div>
   </div>

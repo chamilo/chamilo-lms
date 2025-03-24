@@ -1,9 +1,9 @@
 <template>
   <BaseInputText
     :id="id"
-    :model-value="modelValue"
-    :label="labelWithRequiredIfNeeded"
     :is-invalid="vuelidateProperty.$error"
+    :label="labelWithRequiredIfNeeded"
+    :model-value="modelValue"
     @update:model-value="emit('update:modelValue', $event)"
   >
     <template #errors>
@@ -20,7 +20,7 @@
 
 <script setup>
 import BaseInputText from "./BaseInputText.vue"
-import {computed} from "vue"
+import { computed } from "vue"
 
 const props = defineProps({
   id: {
@@ -46,7 +46,7 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"])
 
 const labelWithRequiredIfNeeded = computed(() => {
-  if (Object.hasOwn(props.vuelidateProperty, 'required')) {
+  if (Object.hasOwn(props.vuelidateProperty, "required")) {
     return `* ${props.label}`
   }
   return props.label

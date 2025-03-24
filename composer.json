@@ -117,6 +117,7 @@
         "sensio/framework-extra-bundle": "~6.1",
         "simpod/doctrine-utcdatetime": "^0.1.2",
         "sonata-project/exporter": "^2.2",
+        "spomky-labs/otphp": "^10.0",
         "stevenmaguire/oauth2-keycloak": "^5.1",
         "stof/doctrine-extensions-bundle": "^1.12",
         "sunra/php-simple-html-dom-parser": "~1.5",
@@ -181,7 +182,8 @@
             "symfony/flex": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "symfony/runtime": true
-        }
+        },
+        "process-timeout": 900
     },
     "require-dev": {
         "behat/behat": "^3.10",

@@ -56,7 +56,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'registered' => 'false',
                     'load_term_conditions_section' => 'login',
                     'server_type' => 'prod',
-                    'show_tabs' => array_values(self::$tabs),
+                    'show_tabs' => array_values(array_diff(self::$tabs, ['videoconference', 'diagnostics'])),
                     'chamilo_database_version' => '2.0.0',
                     'unoconv_binaries' => '/usr/bin/unoconv',
                     'hide_main_navigation_menu' => 'false',

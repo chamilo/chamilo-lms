@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue'
+import { onMounted, ref } from "vue"
 import { mapActions, mapGetters } from "vuex"
 import { mapFields } from "vuex-map-fields"
 import DocumentsForm from "../../components/documents/FormNewDocument.vue"
@@ -54,9 +54,9 @@ import EditLinks from "../../components/resource_links/EditLinks.vue"
 import TemplateList from "../../components/documents/TemplateList.vue"
 import axios from "axios"
 import Panel from "primevue/panel"
-import { useRoute } from 'vue-router'
+import { useRoute } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
-import { checkIsAllowedToEdit } from '../../composables/userPermissions'
+import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 
 const servicePrefix = "Documents"
 
@@ -89,7 +89,7 @@ export default {
       securityStore,
       isAllowedToEdit,
       route,
-      checkEditPermissions
+      checkEditPermissions,
     }
   },
   data() {
@@ -97,7 +97,7 @@ export default {
     return {
       templates: [],
       finalTags,
-      isAllowedToEdit: ref(false)
+      isAllowedToEdit: ref(false),
     }
   },
   computed: {
@@ -114,12 +114,14 @@ export default {
     },
     canEditItem() {
       const resourceLink = this.item?.resourceLinkListFromEntity?.[0]
-      const sidFromResourceLink = resourceLink?.session?.['@id']
+      const sidFromResourceLink = resourceLink?.session?.["@id"]
       return (
-        (sidFromResourceLink && sidFromResourceLink === `/api/sessions/${this.$route.query.sid}` && this.isAllowedToEdit) ||
+        (sidFromResourceLink &&
+          sidFromResourceLink === `/api/sessions/${this.$route.query.sid}` &&
+          this.isAllowedToEdit) ||
         this.isCurrentTeacher
       )
-    }
+    },
   },
   mounted() {
     this.fetchTemplates()
@@ -186,6 +188,6 @@ export default {
       updateWithFormData: "updateWithFormData",
       updateReset: "resetUpdate",
     }),
-  }
+  },
 }
 </script>

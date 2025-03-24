@@ -28,8 +28,8 @@ defineProps({
 
 <template>
   <Dialog
-    :modal="true"
     v-model:visible="isVisible"
+    :modal="true"
     class="p-fluid"
   >
     <template #header>

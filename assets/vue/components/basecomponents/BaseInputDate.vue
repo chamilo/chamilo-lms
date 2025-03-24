@@ -8,14 +8,21 @@
         :show-time="showTime"
         @update:model-value="$emit('update:modelValue', $event)"
       />
-      <label :for="id" v-text="label" />
+      <label
+        :for="id"
+        v-text="label"
+      />
     </div>
-    <small v-if="isInvalid" :class="{ 'p-error': isInvalid }" v-text="errorText" />
+    <small
+      v-if="isInvalid"
+      :class="{ 'p-error': isInvalid }"
+      v-text="errorText"
+    />
   </div>
 </template>
 
 <script setup>
-import Calendar from "primevue/calendar";
+import Calendar from "primevue/calendar"
 
 defineProps({
   modelValue: {
@@ -47,7 +54,7 @@ defineProps({
     required: false,
     default: () => false,
   },
-});
+})
 
-defineEmits(["update:modelValue"]);
+defineEmits(["update:modelValue"])
 </script>

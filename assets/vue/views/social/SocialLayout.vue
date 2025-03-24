@@ -1,5 +1,8 @@
 <template>
-  <div v-if="!isLoadingPage && hasPermission" class="flex flex-wrap md:flex-nowrap gap-4">
+  <div
+    v-if="!isLoadingPage && hasPermission"
+    class="flex flex-wrap md:flex-nowrap gap-4"
+  >
     <div class="flex flex-col w-full md:w-1/5">
       <UserProfileCard />
       <MyGroupsCard v-if="!hideSocialGroupBlock" />
@@ -12,13 +15,13 @@
   </div>
   <div v-if="!isLoadingPage && !hasPermission">
     <div class="flex flex-wrap md:flex-nowrap gap-4">
-      <p> {{ t("You do not have permission to view this page") }}</p>
+      <p>{{ t("You do not have permission to view this page") }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, provide, computed, ref } from "vue"
+import { computed, onMounted, provide, ref } from "vue"
 import { useRoute } from "vue-router"
 import SocialWall from "./SocialWall.vue"
 import SocialSearch from "./SocialSearch.vue"
@@ -52,6 +55,6 @@ onMounted(async () => {
   }
 })
 
-const isSearchPage = computed(() => route.path.includes('/social/search'))
-const currentComponent = computed(() => isSearchPage.value ? SocialSearch : SocialWall)
+const isSearchPage = computed(() => route.path.includes("/social/search"))
+const currentComponent = computed(() => (isSearchPage.value ? SocialSearch : SocialWall))
 </script>

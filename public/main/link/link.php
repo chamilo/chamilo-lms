@@ -49,6 +49,8 @@ $nameTools = get_lang('Links');
 $course_id = api_get_course_int_id();
 $session_id = api_get_session_id();
 $courseInfo = api_get_course_info();
+$course = api_get_course_entity();
+$session = api_get_session_entity();
 
 if ('addlink' === $action) {
     $nameTools = '';
@@ -168,14 +170,14 @@ switch ($action) {
         break;
     case 'visible':
         // Here we edit a category
-        Link::setVisible($id, $scope);
+        Link::setVisible($id, $scope, $course, $session);
         header('Location: '.$linkListUrl);
         exit;
 
         break;
     case 'invisible':
         // Here we edit a category
-        Link::setInvisible($id, $scope);
+        Link::setInvisible($id, $scope, $course, $session);
         header('Location: '.$linkListUrl);
         exit;
 

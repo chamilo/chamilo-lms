@@ -8072,7 +8072,7 @@ class Exercise
               INNER JOIN c_quiz cq
               ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
               WHERE
-              te.id = %s AND
+              te.c_id = %d AND
               te.session_id = %s AND
               cq.id IN (%s)
               ORDER BY cq.id";
@@ -8082,7 +8082,7 @@ class Exercise
             $sql = "SELECT * FROM $track_exercises te
               INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
               WHERE
-              te.id = %s AND
+              te.c_id = %d AND
               cq.id IN (%s)
               ORDER BY cq.id";
             $sql = sprintf($sql, $courseId, $ids);
@@ -8792,6 +8792,13 @@ class Exercise
 
         $repo = Container::getQuizRepository();
 
+        $trackEExerciseRepo = Container::getTrackEExerciseRepository();
+        $pendingCorrections = $trackEExerciseRepo->getPendingCorrectionsByExercise($courseId);
+        $pendingAttempts = [];
+        foreach ($pendingCorrections as $correction) {
+            $pendingAttempts[$correction['exerciseId']] = $correction['pendingCount'];
+        }
+
         // 2. Get query builder from repo.
         $qb = $repo->getResourcesByCourse($course, $session);
 
@@ -9025,6 +9032,18 @@ class Exercise
                     if (ExerciseLib::isQuizEmbeddable($exerciseEntity)) {
                         $embeddableIcon = Display::getMdiIcon('book-music-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ThisQuizCanBeEmbeddable'));
                         $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
+                    }
+
+                    $pendingCount = $pendingAttempts[$exerciseId] ?? 0;
+                    if ($pendingCount > 0) {
+                        $pendingIcon = Display::getMdiIcon(
+                            ActionIcon::ALERT->value,
+                            'ch-tool-icon',
+                            null,
+                            ICON_SIZE_SMALL,
+                            get_lang('Pending attempts') . ": $pendingCount"
+                        );
+                        $url .= " $pendingIcon";
                     }
 
                     $currentRow['title'] = $url.$lp_blocked;

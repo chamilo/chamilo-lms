@@ -1,6 +1,6 @@
 <script setup>
 import BaseSelect from "../basecomponents/BaseSelect.vue"
-import { computed, ref } from "vue"
+import { ref } from "vue"
 import themeService from "../../services/colorThemeService"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"

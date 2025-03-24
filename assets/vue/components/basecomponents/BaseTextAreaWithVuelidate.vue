@@ -1,9 +1,9 @@
 <template>
   <BaseTextArea
     :id="id"
+    :is-invalid="vuelidateProperty.$error"
     :label="labelWithRequiredIfNeeded"
     :model-value="modelValue"
-    :is-invalid="vuelidateProperty.$error"
     @update:model-value="emit('update:modelValue', $event)"
   >
     <template #errors>

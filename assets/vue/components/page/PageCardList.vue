@@ -1,7 +1,5 @@
 <template>
-  <div
-    v-if="pageList.length"
-  >
+  <div v-if="pageList.length">
     <PageCard
       v-for="page in pageList"
       :key="page.id"
@@ -23,23 +21,23 @@ const props = defineProps({
     type: Array,
     required: false,
     default: () => [],
-  }
-});
+  },
+})
 
 const pageList = ref([])
 
 if (props.pages.length) {
-  pageList.value = props.pages;
+  pageList.value = props.pages
 } else {
   pageService
     .findAll({
-      params : {
+      params: {
         "category.title": "home",
         enabled: "1",
         locale: locale.value,
       },
     })
-    .then(response => response.json())
-    .then(json => pageList.value = json["hydra:member"])
+    .then((response) => response.json())
+    .then((json) => (pageList.value = json["hydra:member"]))
 }
 </script>

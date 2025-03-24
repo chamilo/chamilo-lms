@@ -1,9 +1,9 @@
 <script setup>
-import {computed, onMounted, ref, watch} from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import Calendar from "primevue/calendar"
-import {calendarLocales} from "../../utils/calendarLocales"
-import {useLocale} from "../../composables/locale"
-import {usePrimeVue} from "primevue/config"
+import { calendarLocales } from "../../utils/calendarLocales"
+import { useLocale } from "../../composables/locale"
+import { usePrimeVue } from "primevue/config"
 
 const { appLocale } = useLocale()
 const localePrefix = ref(getLocalePrefix(appLocale.value))
@@ -42,7 +42,7 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false,
-  }
+  },
 })
 
 const model = ref(
@@ -50,8 +50,8 @@ const model = ref(
     ? Array.isArray(props.modelValue)
       ? props.modelValue.map((date) => new Date(date))
       : new Date(props.modelValue)
-    : null
-);
+    : null,
+)
 
 const emit = defineEmits(["update:modelValue"])
 
@@ -61,7 +61,7 @@ watch(model, (newValue) => {
 
 function getLocalePrefix(locale) {
   const defaultLang = "en"
-  return typeof locale === "string" ? locale.split('_')[0] : defaultLang
+  return typeof locale === "string" ? locale.split("_")[0] : defaultLang
 }
 
 function getDateFormat(locale) {
@@ -85,7 +85,7 @@ const dateFormat = computed(() => {
 
 const selectedLocale = computed(() => calendarLocales[localePrefix.value] || calendarLocales.en)
 
-const primevue = usePrimeVue();
+const primevue = usePrimeVue()
 onMounted(() => {
   if (selectedLocale.value) {
     primevue.config.locale = selectedLocale.value
@@ -99,14 +99,14 @@ onMounted(() => {
         :id="id"
         v-model="model"
         :class="{ 'p-invalid': isInvalid }"
+        :date-format="dateFormat"
+        :locale="selectedLocale"
         :manual-input="type !== 'range'"
         :selection-mode="type"
         :show-icon="showIcon"
         :show-time="showTime"
-        :locale="selectedLocale"
-        :date-format="dateFormat"
       />
-      <label v-text="label"/>
+      <label v-text="label" />
     </div>
     <small></small>
   </div>

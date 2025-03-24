@@ -9,7 +9,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 /**
  * Class TopLinksPlugin.
  */
-class TopLinksPlugin extends Plugin implements HookPluginInterface
+class TopLinksPlugin extends Plugin
 {
     /**
      * TopLinksPlugin constructor.
@@ -88,18 +88,9 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
             return;
         }
 
+
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema(array_values($tableReferences));
-
-        $this->installHook();
-    }
-
-    public function installHook(): int
-    {
-        $createCourseObserver = TopLinksCreateCourseHookObserver::create();
-        HookCreateCourse::create()->attach($createCourseObserver);
-
-        return 1;
     }
 
     public function uninstall()
@@ -114,17 +105,7 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
         $schemaTool = new SchemaTool($em);
         $schemaTool->dropSchema(array_values($tableReferences));
 
-        $this->uninstallHook();
-
         $this->deleteCourseTools();
-    }
-
-    public function uninstallHook(): int
-    {
-        $createCourseObserver = TopLinksCreateCourseHookObserver::create();
-        HookCreateCourse::create()->detach($createCourseObserver);
-
-        return 1;
     }
 
     private function deleteCourseTools()

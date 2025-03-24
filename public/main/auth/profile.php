@@ -2,6 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\UserUpdatedEvent;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
@@ -299,7 +304,7 @@ if ('true' === api_get_setting('extended_profile')) {
 }
 
 //    PASSWORD, if auth_source is platform
-if (PLATFORM_AUTH_SOURCE == $user_data['auth_source'] &&
+if (in_array(UserAuthSource::PLATFORM, $user_data['auth_sources']) &&
     in_array('password', $profileList)
 ) {
     $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('Enter2passToChange')], ['size' => 40]);
@@ -366,8 +371,14 @@ $form->setDefaults($user_data);
 $filtered_extension = false;
 
 if ($form->validate()) {
+    Container::getEventDispatcher()->dispatch(
+        new UserUpdatedEvent([], AbstractEvent::TYPE_PRE),
+        Events::USER_UPDATED
+    );
+
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
+    $user_data['item_id'] = api_get_user_id();
     $user = api_get_user_entity(api_get_user_id());
 
     // set password if a new one was provided
@@ -401,7 +412,7 @@ if ($form->validate()) {
     }
 
     $allow_users_to_change_email_with_no_password = true;
-    if (isset($user_data['auth_source']) && PLATFORM_AUTH_SOURCE == $user_data['auth_source'] &&
+    if (isset($user_data['auth_sources']) && in_array(UserAuthSource::PLATFORM, $user_data['auth_sources']) &&
         'false' === api_get_setting('allow_users_to_change_email_with_no_password')
     ) {
         $allow_users_to_change_email_with_no_password = false;
@@ -638,6 +649,14 @@ if ($form->validate()) {
     );
     Session::write('_user', $userInfo);
 
+    Container::getEventDispatcher()->dispatch(
+        new UserUpdatedEvent(
+            ['user' => api_get_user_entity()],
+            AbstractEvent::TYPE_POST
+        ),
+        Events::USER_UPDATED
+    );
+
     /*if ($hook) {
         Database::getManager()->clear(User::class); // Avoid cache issue (user entity is used before)
         $user = api_get_user_entity(api_get_user_id()); // Get updated user info for hook event
@@ -661,7 +680,7 @@ if ($allowSocialTool) {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
                 Display::getMdiIcon(ToolIcon::MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Messages')).'</a>';
         }
-        $show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
+        $show = isset($_GET['show']) ? '&show='.(int) $_GET['show'] : '';
 
         if (isset($_GET['type']) && 'extended' === $_GET['type']) {
             $actions .= '<a href="profile.php?type=reduced'.$show.'">'.

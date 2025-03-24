@@ -18,8 +18,8 @@
       <CCalendarEventForm
         v-if="dialog"
         ref="createForm"
-        :values="item"
         :is-global="isGlobal"
+        :values="item"
       />
       <template #footer>
         <BaseButton
@@ -56,15 +56,15 @@
         <BaseButton
           v-if="allowToUnsubscribe"
           :label="t('Unsubscribe')"
-          type="black"
           icon="join-group"
+          type="black"
           @click="unsubscribeToEvent"
         />
         <BaseButton
           v-else-if="allowToSubscribe"
           :label="t('Subscribe')"
-          type="black"
           icon="join-group"
+          type="black"
           @click="subscribeToEvent"
         />
 
@@ -78,8 +78,8 @@
         <BaseButton
           v-if="allowToEdit && showEditButton"
           :label="t('Edit')"
-          type="secondary"
           icon="edit"
+          type="secondary"
           @click="dialog = true"
         />
       </template>
@@ -177,21 +177,25 @@ const route = useRoute()
 const isGlobal = ref(route.query.type === "global")
 
 const courseSettingsStore = useCourseSettings()
-const allowUserEditAgenda = ref(false);
+const allowUserEditAgenda = ref(false)
 
-watch([course, session], async ([newCourse, newSession]) => {
-  if (newCourse && newCourse.id) {
-    const sessionId = newSession ? newSession.id : null;
-    await courseSettingsStore.loadCourseSettings(newCourse.id, sessionId);
-    const setting = courseSettingsStore.getSetting("allow_user_edit_agenda");
-    allowUserEditAgenda.value = setting === "1";
-    if (allowUserEditAgenda.value) {
-      showAddButton.value = true;
+watch(
+  [course, session],
+  async ([newCourse, newSession]) => {
+    if (newCourse && newCourse.id) {
+      const sessionId = newSession ? newSession.id : null
+      await courseSettingsStore.loadCourseSettings(newCourse.id, sessionId)
+      const setting = courseSettingsStore.getSetting("allow_user_edit_agenda")
+      allowUserEditAgenda.value = setting === "1"
+      if (allowUserEditAgenda.value) {
+        showAddButton.value = true
+      }
+    } else {
+      allowUserEditAgenda.value = false
     }
-  } else {
-    allowUserEditAgenda.value = false;
-  }
-}, { immediate: true });
+  },
+  { immediate: true },
+)
 
 let currentEvent = null
 
@@ -283,7 +287,8 @@ const calendarOptions = ref({
     let event = eventClickInfo.event.toPlainObject()
 
     if (event.extendedProps["@type"] && event.extendedProps["@type"] === "Session") {
-      allowToEdit.value = allowUserEditAgenda.value && (event.extendedProps.resourceNode.creator.id === securityStore.user.id)
+      allowToEdit.value =
+        allowUserEditAgenda.value && event.extendedProps.resourceNode.creator.id === securityStore.user.id
       sessionState.sessionAsEvent = event
       sessionState.showSessionDialog = true
 
@@ -295,9 +300,24 @@ const calendarOptions = ref({
     item.value["title"] = event.title
     item.value["startDate"] = event.start
     item.value["endDate"] = event.end
-    item.value["parentResourceNodeId"] = event.extendedProps.resourceNode.creator.id
+    item.value["parentResourceNodeId"] = event.extendedProps?.resourceNode?.creator?.id
 
-    allowToEdit.value = (isEditableByUser(item.value, securityStore.user.id) || allowUserEditAgenda.value) && (event.extendedProps.resourceNode.creator.id === securityStore.user.id)
+    if (
+      !(route.query.sid === "0" && item.value.type === "session") &&
+      !(route.query.sid !== "0" && item.value.type === "course") &&
+      !(route.query.type === "global" && item.value.type !== "global") &&
+      !(!route.query.cid && !route.query.sid && !route.query.type && item.value.type !== "personal")
+    ) {
+      currentContext.value = item.value.type
+    }
+
+    allowToEdit.value =
+      (isEditableByUser(item.value, securityStore.user.id) ||
+        allowUserEditAgenda.value ||
+        securityStore.isCourseAdmin ||
+        securityStore.isSessionAdmin) &&
+      (event.extendedProps?.resourceNode?.creator?.id === securityStore.user.id || securityStore.isCourseAdmin)
+
     allowToSubscribe.value = !allowToEdit.value && allowSubscribeToEvent(item.value)
     allowToUnsubscribe.value = !allowToEdit.value && allowUnsubscribeToEvent(item.value, securityStore.user.id)
 
@@ -321,17 +341,22 @@ const calendarOptions = ref({
   },
 })
 
-const currentContext = computed(() => {
-  if (route.query.type === "global") {
-    return "global"
-  } else if (course.value) {
-    return "course"
-  } else if (session.value) {
-    return "session"
-  } else {
-    return "personal"
-  }
-})
+const currentContext = ref("course")
+watch(
+  () => route.query,
+  (query) => {
+    if (query.type === "global") {
+      currentContext.value = "global"
+    } else if (query.sid && query.sid !== "0") {
+      currentContext.value = "session"
+    } else if (query.cid && (!query.sid || query.sid === "0")) {
+      currentContext.value = "course"
+    } else {
+      currentContext.value = "personal"
+    }
+  },
+  { immediate: true },
+)
 
 const allowAction = (eventType) => {
   const contextRules = {
@@ -344,8 +369,15 @@ const allowAction = (eventType) => {
   return contextRules[currentContext.value].includes(eventType)
 }
 
-const showEditButton = computed(() => allowToEdit.value && allowAction(item.value.type));
-const showDeleteButton = computed(() => (isEditableByUser(item.value, securityStore.user.id) || allowUserEditAgenda.value) && allowAction(item.value.type));
+const showEditButton = computed(() => {
+  return allowToEdit.value && allowAction(item.value.type)
+})
+
+const showDeleteButton = computed(() => {
+  return (
+    (isEditableByUser(item.value, securityStore.user.id) || allowUserEditAgenda.value) && allowAction(item.value.type)
+  )
+})
 
 const cal = ref(null)
 
@@ -375,14 +407,16 @@ function confirmDelete() {
         )
 
         if (filteredLinks.length > 0) {
-          store.dispatch("resourcelink/del", {
-            "@id": `/api/resource_links/${filteredLinks[0]["id"]}`,
-          }).then(() => {
-            currentEvent.remove();
-            dialogShow.value = false
-            dialog.value = false
-            reFetch()
-          })
+          store
+            .dispatch("resourcelink/del", {
+              "@id": `/api/resource_links/${filteredLinks[0]["id"]}`,
+            })
+            .then(() => {
+              currentEvent.remove()
+              dialogShow.value = false
+              dialog.value = false
+              reFetch()
+            })
         }
       }
     },

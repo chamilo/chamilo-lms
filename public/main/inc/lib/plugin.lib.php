@@ -196,7 +196,6 @@ class AppPlugin
     {
         // Please keep this list alphabetically sorted
         return [
-            'advanced_subscription',
             'ai_helper',
             'azure_active_directory',
             'bbb',
@@ -208,7 +207,6 @@ class AppPlugin
             'courseblock',
             'coursehomenotify',
             'courselegal',
-            'createdrupaluser',
             'customcertificate',
             'customfooter',
             'dashboard',

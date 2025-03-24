@@ -183,6 +183,14 @@
             @click="openMoveDialog(slotProps.data)"
           />
           <BaseButton
+            :disabled="slotProps.data.filetype !== 'file'"
+            :title="slotProps.data.filetype !== 'file' ? t('Replace (files only)') : t('Replace file')"
+            icon="file-swap"
+            size="small"
+            type="secondary"
+            @click="slotProps.data.filetype === 'file' && openReplaceDialog(slotProps.data)"
+          />
+          <BaseButton
             :title="t('Information')"
             icon="information"
             size="small"
@@ -278,6 +286,13 @@
       type="danger"
       @click="showDeleteMultipleDialog"
     />
+    <BaseButton
+      :disabled="isDownloading || !selectedItems || !selectedItems.length"
+      :label="isDownloading ? t('In progress') : t('Download selected items as ZIP')"
+      icon="download"
+      type="primary"
+      @click="downloadSelectedItems"
+    />
   </BaseToolbar>
 
   <BaseDialogConfirmCancel
@@ -359,6 +374,21 @@
       />
       <span v-if="item">{{ t("Are you sure you want to delete the selected items?") }}</span>
     </div>
+  </BaseDialogConfirmCancel>
+
+  <BaseDialogConfirmCancel
+    v-model:is-visible="isReplaceDialogVisible"
+    :title="t('Replace file')"
+    @confirm-clicked="replaceDocument"
+    @cancel-clicked="isReplaceDialogVisible = false"
+  >
+    <BaseFileUpload
+      id="replace-file"
+      :label="t('Select replacement file')"
+      accept="*/*"
+      model-value="selectedReplaceFile"
+      @file-selected="selectedReplaceFile = $event"
+    />
   </BaseDialogConfirmCancel>
 
   <BaseDialog
@@ -468,6 +498,7 @@ const { relativeDatetime } = useFormatDate()
 const isAllowedToEdit = ref(false)
 const folders = ref([])
 const selectedFolder = ref(null)
+const isDownloading = ref(false)
 
 const {
   showNewDocumentButton,
@@ -531,6 +562,10 @@ const isSessionDocument = (item) => {
 }
 
 const isHtmlFile = (fileData) => isHtml(fileData)
+
+const isReplaceDialogVisible = ref(false)
+const selectedReplaceFile = ref(null)
+const documentToReplace = ref(null)
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
@@ -640,6 +675,38 @@ function showDeleteMultipleDialog() {
 function confirmDeleteItem(itemToDelete) {
   item.value = itemToDelete
   isDeleteItemDialogVisible.value = true
+}
+
+async function downloadSelectedItems() {
+  if (!selectedItems.value.length) {
+    notification.showErrorNotification(t("No items selected."))
+    return
+  }
+
+  isDownloading.value = true
+
+  try {
+    const response = await axios.post(
+      "/api/documents/download-selected",
+      { ids: selectedItems.value.map(item => item.iid) },
+      { responseType: "blob" }
+    )
+
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute("download", "selected_documents.zip")
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    notification.showSuccessNotification(t("Download started"))
+  } catch (error) {
+    console.error("Error downloading selected items:", error)
+    notification.showErrorNotification(t("Error downloading selected items."))
+  } finally {
+    isDownloading.value = false;
+  }
 }
 
 async function deleteMultipleItems() {
@@ -804,6 +871,41 @@ function recordedAudioNotSaved(error) {
 function openMoveDialog(document) {
   item.value = document
   isMoveDialogVisible.value = true
+}
+
+function openReplaceDialog(document) {
+  documentToReplace.value = document
+  isReplaceDialogVisible.value = true
+}
+
+async function replaceDocument() {
+  if (!selectedReplaceFile.value) {
+    notification.showErrorNotification(t("No file selected."))
+    return
+  }
+
+  if (documentToReplace.value.filetype !== 'file') {
+    notification.showErrorNotification(t("Only files can be replaced."))
+    return
+  }
+
+  const formData = new FormData()
+  console.log(selectedReplaceFile.value)
+  formData.append('file', selectedReplaceFile.value)
+
+  try {
+    await axios.post(`/api/documents/${documentToReplace.value.iid}/replace`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    notification.showSuccessNotification(t("File replaced"))
+    isReplaceDialogVisible.value = false
+    onUpdateOptions(options.value)
+  } catch (error) {
+    notification.showErrorNotification(t("Error replacing file."))
+    console.error(error)
+  }
 }
 
 async function fetchFolders(nodeId = null, parentPath = "") {

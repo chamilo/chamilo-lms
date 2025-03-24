@@ -6833,22 +6833,6 @@ function api_get_configuration_value($variable)
 }
 
 /**
- * Loads hosting limits from the YAML file.
- *
- * @return array The hosting limits.
- */
-function load_hosting_limits(): array
-{
-    if (!Container::$container->hasParameter('hosting_limits')) {
-        return [];
-    }
-
-    $hostingLimits =Container::$container->getParameter('hosting_limits');
-
-    return $hostingLimits['urls'] ?? [];
-}
-
-/**
  * Gets a specific hosting limit.
  *
  * @param int $urlId The URL ID.
@@ -6857,13 +6841,15 @@ function load_hosting_limits(): array
  */
 function get_hosting_limit(int $urlId, string $limitName): mixed
 {
-    $limits = load_hosting_limits();
-
-    if (!isset($limits[$urlId])) {
-        return null;
+    if (!Container::$container->hasParameter('settings_overrides')) {
+        return [];
     }
 
-    foreach ($limits[$urlId] as $limitArray) {
+    $settingsOverrides = Container::$container->getParameter('settings_overrides');
+
+    $limits = $settingsOverrides[$urlId]['hosting_limit'] ?? $settingsOverrides['default']['hosting_limit'];
+
+    foreach ($limits as $limitArray) {
         if (isset($limitArray[$limitName])) {
             return $limitArray[$limitName];
         }

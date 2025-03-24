@@ -136,5 +136,5 @@ imports:
     - { resource: ../src/CoreBundle/Resources/config/services.yml }
     - { resource: ../src/LtiBundle/Resources/config/services.yml }
     - { resource: ./authentication.yaml, ignore_errors: not_found }
-    - { resource: ./hosting_limits.yaml, ignore_errors: not_found }
+    - { resource: ./settings_overrides.yaml, ignore_errors: not_found }
     - { resource: ./plugin.yaml, ignore_errors: not_found }

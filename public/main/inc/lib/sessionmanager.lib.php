@@ -173,7 +173,7 @@ class SessionManager
             ? (empty($accessUrlId) ? api_get_current_access_url_id() : (int) $accessUrlId)
             : 1;
 
-        $hostingLimitSessions = get_hosting_limit($accessUrlId, 'hosting_limit_sessions');
+        $hostingLimitSessions = get_hosting_limit($accessUrlId, 'sessions');
 
         if ($hostingLimitSessions !== null && $hostingLimitSessions > 0) {
             $num = self::count_sessions();

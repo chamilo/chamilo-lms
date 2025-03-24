@@ -1004,11 +1004,15 @@ class ExerciseShowFunctions
     }
 
     /**
-     * Displays the answer to an OnlyOffice document question.
+     * Displays the submitted OnlyOffice document in an iframe.
      *
-     * @param string $feedbackType
-     * @param string|null $fileUrl URL of the submitted document
-     * @param int $questionScore Score assigned to the response
+     * @param string $feedbackType   The feedback type of the exercise.
+     * @param int    $exeId          The execution ID.
+     * @param int    $userId         The user ID.
+     * @param int    $exerciseId     The exercise ID.
+     * @param int    $questionId     The question ID.
+     * @param int    $questionScore  Score assigned to the response.
+     * @param bool   $autorefresh    If true, auto-refresh the iframe after a short delay (used in result view).
      */
     public static function displayOnlyOfficeAnswer(
         string $feedbackType,
@@ -1016,7 +1020,8 @@ class ExerciseShowFunctions
         int $userId,
         int $exerciseId,
         int $questionId,
-        int $questionScore = 0
+        int $questionScore = 0,
+        bool $autorefresh = false
     ): void {
         $filePathPattern = api_get_path(SYS_COURSE_PATH).api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.*";
         $files = glob($filePathPattern);
@@ -1026,20 +1031,22 @@ class ExerciseShowFunctions
             $iframeId = "onlyoffice_result_frame_{$exerciseId}_{$questionId}_{$exeId}_{$userId}";
             $iframeSrc = OnlyofficeTools::getPathToView($fileUrl, false, $exeId, $questionId, true);
             echo '
-                <tr>
-                    <td>
-                        <p><b>' . get_lang('SubmittedDocument') . ':</b></p>
-                        <iframe id="' . $iframeId . '" src="' . $iframeSrc . '" width="100%" height="600px" style="border:none;"></iframe>
-                    </td>
-                </tr>
-                <script>
-                    setTimeout(function() {
-                        var iframe = document.getElementById("' . $iframeId . '");
-                        if (iframe) {
-                            iframe.src = iframe.src;
-                        }
-                    }, 3000);
-                </script>';
+            <tr>
+                <td>
+                    <p><b>' . get_lang('SubmittedDocument') . ':</b></p>
+                    <iframe id="' . $iframeId . '" src="' . $iframeSrc . '" width="100%" height="600px" style="border:none;"></iframe>
+                </td>
+            </tr>';
+            if ($autorefresh) {
+                echo "<script>
+                setTimeout(function() {
+                    var iframe = document.getElementById('{$iframeId}');
+                    if (iframe) {
+                        iframe.src = iframe.src;
+                    }
+                }, 5000);
+            </script>";
+            }
         } else {
             echo '<tr><td>' . get_lang('NoOfficeDocProvided') . '</td></tr>';
         }

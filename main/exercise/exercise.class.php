@@ -5434,7 +5434,8 @@ class Exercise
                                 $exe_info['exe_user_id'] ?? api_get_user_id(),
                                 $this->iid,
                                 $questionId,
-                                $questionScore
+                                $questionScore,
+                                true
                             );
                         } elseif ($answerType == ORAL_EXPRESSION) {
                             // to store the details of open questions in an array to be used in mail

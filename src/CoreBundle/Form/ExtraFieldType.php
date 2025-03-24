@@ -79,12 +79,14 @@ class ExtraFieldType extends AbstractType
             $variable = $extraField->getVariable();
             $value = $data[$extraField->getVariable()] ?? null;
 
+            $isEditable = $extraField->isChangeable();
             $defaultOptions = [
                 'label' => $text,
                 'required' => false,
                 'by_reference' => false,
                 'mapped' => false,
                 'data' => $value,
+                'attr' => $isEditable ? [] : ['readonly' => true, 'class' => 'readonly-field'],
             ];
 
             // @todo validate data.

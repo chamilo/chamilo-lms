@@ -7,7 +7,10 @@
       :label="t('Assignment name')"
     />
 
-    <BaseInputText v-model="assignment.description" :label="t('Description')" />
+    <BaseInputText
+      v-model="assignment.description"
+      :label="t('Description')"
+    />
 
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
       <BaseInputNumber
@@ -102,27 +105,38 @@
     </BaseAdvancedSettingsButton>
 
     <div class="flex justify-end space-x-2 mt-4">
-      <BaseButton :label="t('Back')" type="white" icon="arrow-left" @click="goBack" />
-      <BaseButton :label="t('Save')" :disabled="isFormLoading" icon="save" is-submit type="secondary" />
+      <BaseButton
+        :label="t('Back')"
+        icon="arrow-left"
+        type="white"
+        @click="goBack"
+      />
+      <BaseButton
+        :disabled="isFormLoading"
+        :label="t('Save')"
+        icon="save"
+        is-submit
+        type="secondary"
+      />
     </div>
   </form>
 </template>
 
 <script setup>
-import BaseInputDate from "../basecomponents/BaseInputDate.vue";
-import BaseInputText from "../basecomponents/BaseInputText.vue";
-import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue";
-import BaseButton from "../basecomponents/BaseButton.vue";
-import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
-import BaseDropdrown from "../basecomponents/BaseDropdown.vue";
-import BaseInputNumber from "../basecomponents/BaseInputNumber.vue";
-import useVuelidate from "@vuelidate/core";
-import { computed, reactive, ref, watch, watchEffect } from "vue"
-import { maxValue, minValue, required } from "@vuelidate/validators";
-import { useI18n } from "vue-i18n";
-import { useCidReq } from "../../composables/cidReq";
-import { useRoute, useRouter } from "vue-router";
-import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink";
+import BaseInputDate from "../basecomponents/BaseInputDate.vue"
+import BaseInputText from "../basecomponents/BaseInputText.vue"
+import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
+import BaseDropdrown from "../basecomponents/BaseDropdown.vue"
+import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
+import useVuelidate from "@vuelidate/core"
+import { computed, reactive, ref, watchEffect } from "vue"
+import { maxValue, minValue, required } from "@vuelidate/validators"
+import { useI18n } from "vue-i18n"
+import { useCidReq } from "../../composables/cidReq"
+import { useRoute, useRouter } from "vue-router"
+import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 
 const props = defineProps({
   defaultAssignment: {
@@ -134,28 +148,28 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: () => false,
-  }
-});
+  },
+})
 
-const emit = defineEmits(["submit"]);
+const emit = defineEmits(["submit"])
 
-const route = useRoute();
-const router = useRouter();
-const { t } = useI18n();
-const { cid, sid, gid } = useCidReq();
+const route = useRoute()
+const router = useRouter()
+const { t } = useI18n()
+const { cid, sid, gid } = useCidReq()
 
-const showAdvancedSettings = ref(false);
+const showAdvancedSettings = ref(false)
 
-const chkAddToGradebook = ref(false);
-const chkExpiresOn = ref(false);
-const chkEndsOn = ref(false);
+const chkAddToGradebook = ref(false)
+const chkExpiresOn = ref(false)
+const chkEndsOn = ref(false)
 
-const gradebookCategories = ref([{ name: "Default", id: 1 }]);
+const gradebookCategories = ref([{ name: "Default", id: 1 }])
 const documentTypes = ref([
   { name: t("Allow files or online text"), value: 0 },
   { name: t("Allow only text"), value: 1 },
   { name: t("Allow only files"), value: 2 },
-]);
+])
 
 const assignment = reactive({
   title: "",
@@ -167,7 +181,7 @@ const assignment = reactive({
   endsOn: new Date(),
   addToCalendar: false,
   allowTextAssignment: documentTypes.value[2],
-});
+})
 
 watchEffect(() => {
   const defaultAssignment = props.defaultAssignment
@@ -217,44 +231,44 @@ watchEffect(() => {
 const rules = computed(() => {
   const localRules = {
     title: { required, $autoDirty: true },
-  };
+  }
 
   if (showAdvancedSettings.value) {
     if (chkAddToGradebook.value) {
-      localRules.gradebookId = { required };
+      localRules.gradebookId = { required }
 
-      localRules.weight = { required };
+      localRules.weight = { required }
     }
 
     if (chkExpiresOn.value) {
-      localRules.expiresOn = { required, $autoDirty: true };
+      localRules.expiresOn = { required, $autoDirty: true }
 
       if (chkEndsOn.value) {
-        localRules.expiresOn.maxValue = maxValue(assignment.endsOn);
+        localRules.expiresOn.maxValue = maxValue(assignment.endsOn)
       }
     }
 
     if (chkEndsOn.value) {
-      localRules.endsOn = { required, $autoDirty: true };
+      localRules.endsOn = { required, $autoDirty: true }
 
       if (chkExpiresOn.value) {
-        localRules.endsOn.minValue = minValue(assignment.expiresOn);
+        localRules.endsOn.minValue = minValue(assignment.expiresOn)
       }
     }
 
-    localRules.allowTextAssignment = { required };
+    localRules.allowTextAssignment = { required }
   }
 
-  return localRules;
-});
+  return localRules
+})
 
-const v$ = useVuelidate(rules, assignment);
+const v$ = useVuelidate(rules, assignment)
 
 const onSubmit = async () => {
-  const result = await v$.value.$validate();
+  const result = await v$.value.$validate()
 
   if (!result) {
-    return;
+    return
   }
 
   const publicationStudent = {
@@ -273,27 +287,27 @@ const onSubmit = async () => {
         visibility: RESOURCE_LINK_PUBLISHED,
       },
     ],
-  };
+  }
 
   if (showAdvancedSettings.value) {
-    publicationStudent.qualification = assignment.qualification;
+    publicationStudent.qualification = assignment.qualification
 
-    publicationStudent.addToCalendar = assignment.addToCalendar;
+    publicationStudent.addToCalendar = assignment.addToCalendar
 
     if (chkAddToGradebook.value) {
-      publicationStudent.gradebookCategoryId = assignment.gradebookId.id;
-      publicationStudent.weight = assignment.weight;
+      publicationStudent.gradebookCategoryId = assignment.gradebookId.id
+      publicationStudent.weight = assignment.weight
     }
 
     if (chkExpiresOn.value) {
-      publicationStudent.assignment.expiresOn = assignment.expiresOn;
+      publicationStudent.assignment.expiresOn = assignment.expiresOn
     }
 
     if (chkEndsOn.value) {
-      publicationStudent.assignment.endsOn = assignment.endsOn;
+      publicationStudent.assignment.endsOn = assignment.endsOn
     }
 
-    publicationStudent.allowTextAssignment = assignment.allowTextAssignment.value;
+    publicationStudent.allowTextAssignment = assignment.allowTextAssignment.value
   }
 
   if (props.defaultAssignment) {
@@ -301,8 +315,8 @@ const onSubmit = async () => {
     publicationStudent.assignment["@id"] = props.defaultAssignment.assignment["@id"]
   }
 
-  emit("submit", publicationStudent);
-};
+  emit("submit", publicationStudent)
+}
 
 function goBack() {
   router.push({ name: "AssignmentsList", query: { cid, sid, gid } })

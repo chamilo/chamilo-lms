@@ -1,12 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Table(name: 'skill_rel_profile')]
 #[ORM\Entity]
@@ -17,42 +18,38 @@ class SkillRelProfile
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Skill::class, cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'skill_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected Skill $skill;
+    #[Groups(['skill_profile:write', 'skill_profile:read'])]
+    #[ORM\ManyToOne(inversedBy: 'profiles')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    private ?Skill $skill = null;
 
-    #[ORM\ManyToOne(targetEntity: SkillProfile::class, cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected SkillProfile $profile;
+    #[ORM\ManyToOne(inversedBy: 'skills')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    private ?SkillProfile $profile = null;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getSkill(): Skill
+    public function getSkill(): ?Skill
     {
         return $this->skill;
     }
 
-    public function setSkill(Skill $skill): self
+    public function setSkill(?Skill $skill): static
     {
         $this->skill = $skill;
 
         return $this;
     }
 
-    public function getProfile(): SkillProfile
+    public function getProfile(): ?SkillProfile
     {
         return $this->profile;
     }
 
-    public function setProfile(SkillProfile $profile): self
+    public function setProfile(?SkillProfile $profile): static
     {
         $this->profile = $profile;
 

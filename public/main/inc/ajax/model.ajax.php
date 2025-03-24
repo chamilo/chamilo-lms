@@ -14,8 +14,8 @@ require_once __DIR__.'/../global.inc.php';
 
 // 1. Setting variables needed by jqgrid
 $action = $_GET['a'];
-$page = (int) $_REQUEST['page']; //page
-$limit = (int) $_REQUEST['rows']; //quantity of rows
+$page = isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : 1;
+$limit = isset($_REQUEST['rows']) ? (int) $_REQUEST['rows'] : 20;
 $cid = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : null;
 $sid = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : null;
 
@@ -29,8 +29,8 @@ if (empty($savedRows)) {
     }
 }
 
-$sidx = $_REQUEST['sidx']; //index (field) to filter
-$sord = $_REQUEST['sord']; //asc or desc
+$sidx = isset($_REQUEST['sidx']) ? $_REQUEST['sidx'] : ''; // Default to empty string
+$sord = isset($_REQUEST['sord']) ? $_REQUEST['sord'] : 'asc';
 $exportFilename = isset($_REQUEST['export_filename']) ? $_REQUEST['export_filename'] : '';
 
 if (false !== strpos(strtolower($sidx), 'asc')) {
@@ -677,7 +677,7 @@ switch ($action) {
         $count = ExerciseLib::get_count_exam_results(
             $exerciseId,
             $whereCondition,
-            '',
+            $courseId,
             false,
             true,
             $status
@@ -839,6 +839,7 @@ switch ($action) {
                     ['where' => $whereCondition, 'extra' => $extra_fields]
                 );
                 break;
+            case 'replication':
             case 'custom':
             case 'simple':
                 $count = SessionManager::getSessionsForAdmin(
@@ -1981,6 +1982,7 @@ switch ($action) {
                 break;
             case 'custom':
             case 'simple':
+            case 'replication':
                 $result = SessionManager::getSessionsForAdmin(
                     api_get_user_id(),
                     [
@@ -2410,18 +2412,17 @@ switch ($action) {
                 get_lang('No')
             );
             foreach ($result as $item) {
-                $item['display_text'] = ExtraField::translateDisplayName($item['variable'], $item['displayText']);
-                $item['value_type'] = $obj->get_field_type_by_id($item['valueType']);
-                $item['changeable'] = $item['changeable'] ? $checkIcon : $timesIcon;
-                $item['visible_to_self'] = $item['visibleToSelf'] ? $checkIcon : $timesIcon;
-                $item['visible_to_others'] = $item['visibleToOthers'] ? $checkIcon : $timesIcon;
-                $item['filter'] = $item['filter'] ? $checkIcon : $timesIcon;
-
-                if (isset($item['autoRemove'])) {
-                    $item['auto_remove'] = $item['autoRemove'] ? $checkIcon : $timesIcon;
-                }
-
-                $new_result[] = $item;
+                $new_result[] = [
+                    'id' => $item->getId(),
+                    'variable' => $item->getVariable(),
+                    'display_text' => $item->getDisplayText(),
+                    'value_type' => $obj->get_field_type_by_id($item->getValueType()),
+                    'changeable' => $item->isChangeable() ? $checkIcon : $timesIcon,
+                    'visible_to_self' => $item->isVisibleToSelf() ? $checkIcon : $timesIcon,
+                    'visible_to_others' => $item->isVisibleToOthers() ? $checkIcon : $timesIcon,
+                    'filter' => $item->isFilter() ? $checkIcon : $timesIcon,
+                    'auto_remove' => $item->getAutoRemove() ? $checkIcon : $timesIcon,
+                ];
             }
             $result = $new_result;
         }

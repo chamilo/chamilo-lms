@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,10 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
  * TrackEDefault.
  */
 #[ORM\Table(name: 'track_e_default')]
-#[ORM\Index(name: 'course', columns: ['c_id'])]
-#[ORM\Index(name: 'session', columns: ['session_id'])]
-#[ORM\Index(name: 'idx_default_user_id', columns: ['default_user_id'])]
-#[ORM\Entity]
+#[ORM\Index(columns: ['c_id'], name: 'course')]
+#[ORM\Index(columns: ['session_id'], name: 'session')]
+#[ORM\Index(columns: ['default_user_id'], name: 'idx_default_user_id')]
+#[ORM\Entity(repositoryClass: TrackEDefaultRepository::class)]
 class TrackEDefault
 {
     #[ORM\Column(name: 'default_id', type: 'integer')]
@@ -67,7 +68,7 @@ class TrackEDefault
         return $this->defaultUserId;
     }
 
-    public function setCId(int $cId): self
+    public function setCId(?int $cId): self
     {
         $this->cId = $cId;
 
@@ -152,7 +153,7 @@ class TrackEDefault
         return $this->defaultValue;
     }
 
-    public function setSessionId(int $sessionId): self
+    public function setSessionId(?int $sessionId): self
     {
         $this->sessionId = $sessionId;
 

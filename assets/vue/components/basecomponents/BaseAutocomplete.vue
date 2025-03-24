@@ -3,16 +3,34 @@
     <FloatLabel>
       <AutoComplete
         v-model="modelValue"
+        :disabled="disabled"
         :input-id="id"
+        :min-length="3"
         :multiple="isMultiple"
+        :option-label="optionLabel"
         :suggestions="suggestions"
         force-selection
-        :option-label="optionLabel"
-        :disabled="disabled"
-        :min-length="3"
         @complete="onComplete"
         @item-select="$emit('item-select', $event)"
-      />
+      >
+        <template
+          v-if="hasChipSlot"
+          #chip="{ value }"
+        >
+          <slot
+            :value="value"
+            name="chip"
+          ></slot>
+        </template>
+        <template #removetokenicon="slopProps">
+          <span class="p-autocomplete-token-icon">
+            <BaseIcon
+              icon="close"
+              @click="slopProps.removeCallback"
+            />
+          </span>
+        </template>
+      </AutoComplete>
       <label
         v-t="label"
         :for="id"
@@ -27,9 +45,10 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { onMounted, ref, useSlots } from "vue"
 import FloatLabel from "primevue/floatlabel"
 import AutoComplete from "primevue/autocomplete"
+import BaseIcon from "./BaseIcon.vue"
 
 const modelValue = defineModel({
   type: [Array, String],
@@ -92,4 +111,11 @@ const onComplete = async (event) => {
     suggestions.value = []
   }
 }
+
+const slots = useSlots()
+const hasChipSlot = ref(false)
+
+onMounted(() => {
+  hasChipSlot.value = !!slots.chip
+})
 </script>

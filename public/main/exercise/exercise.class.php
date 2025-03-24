@@ -237,7 +237,7 @@ class Exercise
                 $this->lpList = $list;
             }
 
-            $this->force_edit_exercise_in_lp = api_get_configuration_value('force_edit_exercise_in_lp');
+            $this->force_edit_exercise_in_lp = api_get_setting('lp.force_edit_exercise_in_lp');
             $this->edit_exercise_in_lp = true;
             if ($this->exercise_was_added_in_lp) {
                 $this->edit_exercise_in_lp = true == $this->force_edit_exercise_in_lp;
@@ -8072,7 +8072,7 @@ class Exercise
               INNER JOIN c_quiz cq
               ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
               WHERE
-              te.id = %s AND
+              te.c_id = %d AND
               te.session_id = %s AND
               cq.id IN (%s)
               ORDER BY cq.id";
@@ -8082,7 +8082,7 @@ class Exercise
             $sql = "SELECT * FROM $track_exercises te
               INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
               WHERE
-              te.id = %s AND
+              te.c_id = %d AND
               cq.id IN (%s)
               ORDER BY cq.id";
             $sql = sprintf($sql, $courseId, $ids);
@@ -8534,10 +8534,22 @@ class Exercise
      */
     public function cleanCourseLaunchSettings()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $table SET autolaunch = 0
-                WHERE c_id = ".$this->course_id.' AND session_id = '.$this->sessionId;
-        Database::query($sql);
+        $em = Database::getManager();
+
+        $repo = Container::getQuizRepository();
+
+        $session = api_get_session_entity();
+        $course = api_get_course_entity();
+
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $quizzes = $qb->getQuery()->getResult();
+
+        foreach ($quizzes as $quiz) {
+            $quiz->setAutoLaunch(false);
+            $em->persist($quiz);
+        }
+
+        $em->flush();
     }
 
     /**
@@ -8780,6 +8792,13 @@ class Exercise
 
         $repo = Container::getQuizRepository();
 
+        $trackEExerciseRepo = Container::getTrackEExerciseRepository();
+        $pendingCorrections = $trackEExerciseRepo->getPendingCorrectionsByExercise($courseId);
+        $pendingAttempts = [];
+        foreach ($pendingCorrections as $correction) {
+            $pendingAttempts[$correction['exerciseId']] = $correction['pendingCount'];
+        }
+
         // 2. Get query builder from repo.
         $qb = $repo->getResourcesByCourse($course, $session);
 
@@ -8798,12 +8817,6 @@ class Exercise
         $keyword = Database::escape_string($keyword);
         $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
-        $autoLaunchAvailable = false;
-        if (1 == api_get_course_setting('enable_exercise_auto_launch') &&
-            ('true' === api_get_setting('exercise.allow_exercise_auto_launch'))
-        ) {
-            $autoLaunchAvailable = true;
-        }
 
         $courseId = $course->getId();
         $tableRows = [];
@@ -9021,6 +9034,18 @@ class Exercise
                         $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
                     }
 
+                    $pendingCount = $pendingAttempts[$exerciseId] ?? 0;
+                    if ($pendingCount > 0) {
+                        $pendingIcon = Display::getMdiIcon(
+                            ActionIcon::ALERT->value,
+                            'ch-tool-icon',
+                            null,
+                            ICON_SIZE_SMALL,
+                            get_lang('Pending attempts') . ": $pendingCount"
+                        );
+                        $url .= " $pendingIcon";
+                    }
+
                     $currentRow['title'] = $url.$lp_blocked;
                     $rowi = $exerciseEntity->getQuestions()->count();
                     if ($allowToEditBaseCourse || $allowToEditSession) {
@@ -9055,21 +9080,19 @@ class Exercise
                         }
 
                         // Auto launch
-                        if ($autoLaunchAvailable) {
-                            $autoLaunch = $exercise->getAutoLaunch();
-                            if (empty($autoLaunch)) {
-                                $actions .= Display::url(
-                                    Display::getMdiIcon('rocket-launch', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Enable')),
-                                    'exercise.php?'.api_get_cidreq(
-                                    ).'&action=enable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
-                                );
-                            } else {
-                                $actions .= Display::url(
-                                    Display::getMdiIcon('rocket-launch', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Disable')),
-                                    'exercise.php?'.api_get_cidreq(
-                                    ).'&action=disable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
-                                );
-                            }
+                        $autoLaunch = $exercise->getAutoLaunch();
+                        if (empty($autoLaunch)) {
+                            $actions .= Display::url(
+                                Display::getMdiIcon('rocket-launch', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Enable')),
+                                'exercise.php?'.api_get_cidreq(
+                                ).'&action=enable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
+                            );
+                        } else {
+                            $actions .= Display::url(
+                                Display::getMdiIcon('rocket-launch', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Disable')),
+                                'exercise.php?'.api_get_cidreq(
+                                ).'&action=disable_launch&sec_token='.$token.'&exerciseId='.$exerciseId
+                            );
                         }
 
                         // Export

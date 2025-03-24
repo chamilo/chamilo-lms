@@ -337,8 +337,32 @@ switch ($action) {
         }
         $lp->error = '';
         exit;
+    case 'add_lp_ai':
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'text' => 'Invalid request method.']);
+            exit;
+        }
 
-        break;
+        $jsonInput = file_get_contents('php://input');
+        $requestData = json_decode($jsonInput, true);
+
+        if (!isset($requestData['lp_data']) || !isset($requestData['course_code'])) {
+            echo json_encode(['success' => false, 'text' => 'Invalid AI response data.']);
+            exit;
+        }
+
+        require_once api_get_path(SYS_CODE_PATH).'lp/LpAiHelper.php';
+
+        $aiHelper = new LpAiHelper();
+        $result = $aiHelper->createLearningPathFromAI($requestData['lp_data'], $requestData['course_code']);
+
+        if (!isset($result['lp_id'])) {
+            $result['success'] = false;
+            $result['text'] = 'Learning Path created but no ID returned.';
+        }
+
+        echo json_encode($result);
+        exit;
     default:
         echo '';
 }

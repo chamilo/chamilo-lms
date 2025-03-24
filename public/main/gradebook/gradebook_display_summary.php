@@ -261,7 +261,7 @@ if (0 == count($userList)) {
         if ($allowComments) {
             $url = api_get_self().'?'.api_get_cidreq().'&action=add_comment&user_id='.$value['user_id'].'&gradebook_id='.$cat_id;
             $link .= '&nbsp;'.Display::url(
-                get_lang('AddGradebookComment'),
+                get_lang('Add gradebook comment'),
                 $url,
                 ['target' => '_blank', 'class' => 'ajax btn btn--plain']
             );

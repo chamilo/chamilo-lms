@@ -135,11 +135,7 @@ $token = Security::get_token();
 //deletes a session when using don't know question type (ugly fix)
 Session::erase('less_answer');
 
-// If we are in a test
-$inATest = isset($exerciseId) && $exerciseId > 0;
-if (!$inATest) {
-    echo Display::return_message(get_lang('Choose question type'), 'warning');
-} else {
+if (isset($exerciseId) && $exerciseId > 0) {
     if ($nbrQuestions) {
         // In the building exercise mode show question list ordered as is.
         $objExercise->setCategoriesGrouping(false);
@@ -148,33 +144,15 @@ if (!$inATest) {
         // In building mode show all questions not render by teacher order.
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $allowQuestionOrdering = true;
-        $showPagination = api_get_setting('exercise.show_question_pagination');
-        if (!empty($showPagination) && $nbrQuestions > $showPagination) {
-            $length = api_get_setting('exercise.question_pagination_length');
-            $url = api_get_self().'?'.api_get_cidreq();
-            // Use pagination for exercise with more than 200 questions.
+        $showPagination = 'true' === api_get_setting('exercise.show_question_pagination');
+        $length = (int) api_get_setting('exercise.question_pagination_length') ?: 30;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+        if ($showPagination && $nbrQuestions > $length) {
             $allowQuestionOrdering = false;
             $start = ($page - 1) * $length;
-            $questionList = $objExercise->getQuestionForTeacher($start, $length);
-            $paginator = new Knp\Component\Pager\Paginator();
-            $pagination = $paginator->paginate([]);
-            $pagination->setTotalItemCount($nbrQuestions);
-            $pagination->setItemNumberPerPage($length);
-            $pagination->setCurrentPageNumber($page);
-            $pagination->renderer = function ($data) use ($url) {
-                $render = '<ul class="pagination">';
-                for ($i = 1; $i <= $data['pageCount']; $i++) {
-                    $pageContent = '<li><a href="'.$url.'&page='.$i.'">'.$i.'</a></li>';
-                    if ($data['current'] == $i) {
-                        $pageContent = '<li class="active"><a href="#" >'.$i.'</a></li>';
-                    }
-                    $render .= $pageContent;
-                }
-                $render .= '</ul>';
-
-                return $render;
-            };
-            echo $pagination;
+            $questionList = $objExercise->selectQuestionList(true, true);
+            $questionList = array_slice($questionList, $start, $length);
         } else {
             // Classic order
             $questionList = $objExercise->selectQuestionList(true, true);
@@ -331,7 +309,19 @@ if (!$inATest) {
         }
 
         echo '</div>'; //question list div
+        // Pagination navigation
+        if ($showPagination && $nbrQuestions > $length) {
+            $totalPages = ceil($nbrQuestions / $length);
+            echo '<div class="pagination flex justify-center mt-4">';
+            for ($i = 1; $i <= $totalPages; $i++) {
+                $isActive = ($i == $page) ? 'bg-primary text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-200';
+                echo '<a href="?' . http_build_query(array_merge($_GET, ['page' => $i])) . '" class="mx-1 px-4 py-2 border ' . $isActive . ' rounded">' . $i . '</a>';
+            }
+            echo '</div>';
+        }
     } else {
         echo Display::return_message(get_lang('Questions list (there is no question so far).'), 'warning');
     }
+} else {
+    echo Display::return_message(get_lang('Choose question type'), 'warning');
 }

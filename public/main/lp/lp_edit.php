@@ -112,10 +112,10 @@ if ('true' === api_get_setting('allow_course_theme')) {
 
 // Author
 $form->addHtmlEditor(
-    'html_editor',
     'lp_author',
     get_lang('Author'),
-    ['size' => 80],
+    false,
+    false,
     ['ToolbarSet' => 'LearningPathAuthor', 'Width' => '100%', 'Height' => '200px']
 );
 $form->applyFilter('lp_author', 'html_filter');

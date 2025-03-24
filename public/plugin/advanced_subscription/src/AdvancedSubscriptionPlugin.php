@@ -3,19 +3,13 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookAdminBlock;
-use Chamilo\CoreBundle\Hook\HookNotificationContent;
-use Chamilo\CoreBundle\Hook\HookNotificationTitle;
-use Chamilo\CoreBundle\Hook\HookWSRegistration;
-use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
 
 /**
  * Class AdvancedSubscriptionPlugin
  * This class is used to add an advanced subscription allowing the admin to
- * create user queues requesting a subscribe to a session.
+ * create user queues requesting to subscribe to a session.
  */
-class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
+class AdvancedSubscriptionPlugin extends Plugin
 {
     protected $strings;
     private $errorMessages;
@@ -63,7 +57,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         $this->installDatabase();
         $this->addAreaField();
-        $this->installHook();
     }
 
     /**
@@ -74,7 +67,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         //$setting = api_get_setting('advanced_subscription');
         $setting = false;
         if (!empty($setting)) {
-            $this->uninstallHook();
             // Note: Keeping area field data is intended so it will not be removed
             $this->uninstallDatabase();
         }
@@ -892,34 +884,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         }
 
         return $count;
-    }
-
-    /**
-     * This method will call the Hook management insertHook to add Hook observer from this plugin.
-     */
-    public function installHook()
-    {
-        $hookObserver = HookAdvancedSubscription::create();
-
-        $hookFactory = Container::$container->get('chamilo_core.hook_factory');
-        $hookFactory->build(HookAdminBlock::class)->attach($hookObserver);
-        $hookFactory->build(HookWSRegistration::class)->attach($hookObserver);
-        $hookFactory->build(HookNotificationContent::class)->attach($hookObserver);
-        $hookFactory->build(HookNotificationTitle::class)->attach($hookObserver);
-    }
-
-    /**
-     * This method will call the Hook management deleteHook to disable Hook observer from this plugin.
-     */
-    public function uninstallHook()
-    {
-        $hookObserver = HookAdvancedSubscription::create();
-
-        $hookFactory = Container::$container->get('chamilo_core.hook_factory');
-        $hookFactory->build(HookAdminBlock::class)->detach($hookObserver);
-        $hookFactory->build(HookWSRegistration::class)->detach($hookObserver);
-        $hookFactory->build(HookNotificationContent::class)->detach($hookObserver);
-        $hookFactory->build(HookNotificationTitle::class)->detach($hookObserver);
     }
 
     /**

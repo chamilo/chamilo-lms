@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\ExistsFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
@@ -17,10 +18,11 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\Listener\MessageListener;
-use Chamilo\CoreBundle\Filter\SearchOrFilter;
+use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\State\MessageByGroupStateProvider;
 use Chamilo\CoreBundle\State\MessageProcessor;
+use Chamilo\CoreBundle\State\MessageStateProvider;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -44,7 +46,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(
             uriTemplate: '/messages',
             security: "is_granted('ROLE_USER')",
-            name: 'get_all_messages'
+            name: 'get_all_messages',
+            provider: MessageStateProvider::class
         ),
         new GetCollection(
             uriTemplate: '/messages/by-group/list',
@@ -77,7 +80,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     BooleanFilter::class,
     properties: ['receivers.read']
 )]
-#[ApiFilter(SearchOrFilter::class, properties: ['title', 'content'])]
+#[ApiFilter(PartialSearchOrFilter::class, properties: ['title', 'content'])]
+#[ApiFilter(ExistsFilter::class, properties: ['receivers.deletedAt'])]
 class Message
 {
     public const MESSAGE_TYPE_INBOX = 1;
@@ -169,9 +173,6 @@ class Message
     )]
     protected Collection $attachments;
 
-    #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageFeedback::class, orphanRemoval: true)]
-    protected Collection $likes;
-
     public function __construct()
     {
         $this->sendDate = new DateTime('now');
@@ -181,7 +182,6 @@ class Message
         $this->attachments = new ArrayCollection();
         $this->children = new ArrayCollection();
         $this->receivers = new ArrayCollection();
-        $this->likes = new ArrayCollection();
         $this->votes = 0;
         $this->status = 0;
     }
@@ -476,10 +476,5 @@ class Message
         $this->status = $status;
 
         return $this;
-    }
-
-    public function getLikes(): Collection
-    {
-        return $this->likes;
     }
 }

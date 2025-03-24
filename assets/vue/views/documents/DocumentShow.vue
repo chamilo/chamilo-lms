@@ -18,8 +18,8 @@
         <div v-if="item.resourceNode.firstResourceFile">
           <img
             v-if="item.resourceNode.firstResourceFile.image"
-            :src="item.contentUrl + '&w=500'"
             :alt="item.title"
+            :src="item.contentUrl + '?w=500'"
           />
 
           <video
@@ -41,37 +41,40 @@
 
       <div class="document-show__details-side">
         <table>
-          <tr>
-            <th v-text="$t('Author')" />
-            <td v-text="item.resourceNode.creator.username" />
-          </tr>
-          <tr v-if="item.comment">
-            <th v-text="$t('Comment')" />
-            <td v-text="item.comment" />
-          </tr>
-          <tr>
-            <th v-text="$t('Created at')" />
-            <td>
-              {{ item["resourceNode"] ? relativeDatetime(item["resourceNode"].createdAt) : "" }}
-            </td>
-          </tr>
-          <tr>
-            <th v-text="$t('Updated at')" />
-            <td>
-              {{ item.resourceNode ? relativeDatetime(item.resourceNode.updatedAt) : "" }}
-            </td>
-          </tr>
-          <tr v-if="item.resourceNode.firstResourceFile">
-            <th v-text="$t('File')" />
-            <td>
-              <a
-                :href="item['downloadUrl']"
-                class="btn btn--primary"
-              >
-                <BaseIcon icon="download" /> {{ $t("Download file") }}
-              </a>
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <th v-text="$t('Author')" />
+              <td v-text="item.resourceNode.creator.username" />
+            </tr>
+            <tr v-if="item.comment">
+              <th v-text="$t('Comment')" />
+              <td v-text="item.comment" />
+            </tr>
+            <tr>
+              <th v-text="$t('Created at')" />
+              <td>
+                {{ item["resourceNode"] ? relativeDatetime(item["resourceNode"].createdAt) : "" }}
+              </td>
+            </tr>
+            <tr>
+              <th v-text="$t('Updated at')" />
+              <td>
+                {{ item.resourceNode ? relativeDatetime(item.resourceNode.updatedAt) : "" }}
+              </td>
+            </tr>
+            <tr v-if="item.resourceNode.firstResourceFile">
+              <th v-text="$t('File')" />
+              <td>
+                <a
+                  :href="item['downloadUrl']"
+                  class="btn btn--primary"
+                >
+                  <BaseIcon icon="download" />
+                  {{ $t("Download file") }}
+                </a>
+              </td>
+            </tr>
+          </tbody>
         </table>
 
         <ShowLinks :item="item" />

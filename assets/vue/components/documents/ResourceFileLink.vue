@@ -1,8 +1,8 @@
 <template>
   <a
-    data-fancybox="gallery"
-    :href="resource.contentUrl"
     :data-type="getDataType"
+    :href="resource.contentUrl"
+    data-fancybox="gallery"
   >
     <ResourceIcon :resource-data="resource" />
     {{ resource.title }}
@@ -11,6 +11,7 @@
 
 <script>
 import ResourceIcon from "./ResourceIcon.vue"
+
 export default {
   name: "ResourceFileLink",
   components: {

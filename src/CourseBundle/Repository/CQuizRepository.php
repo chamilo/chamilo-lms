@@ -40,7 +40,9 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         $this->addCategoryQueryBuilder($categoryId, $qb);
         $this->addActiveQueryBuilder($active, $qb);
         $this->addNotDeletedQueryBuilder($qb);
-        $this->addTitleQueryBuilder($title, $qb);
+        if (!empty($title)) {
+            $this->addTitleQueryBuilder($title, $qb);
+        }
 
         return $qb;
     }
@@ -132,5 +134,22 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         }
 
         return $qb;
+    }
+
+    /**
+     * Finds the auto-launchable quiz for the given course and session.
+     */
+    public function findAutoLaunchableQuizByCourseAndSession(Course $course, ?Session $session = null): ?int
+    {
+        $qb = $this->getResourcesByCourse($course, $session)
+            ->select('resource.iid')
+            ->andWhere('resource.autoLaunch = 1')
+        ;
+
+        $qb->setMaxResults(1);
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result ? $result['iid'] : null;
     }
 }

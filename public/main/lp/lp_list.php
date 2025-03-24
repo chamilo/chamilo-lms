@@ -88,6 +88,22 @@ if ($is_allowed_to_edit) {
             ['title' => htmlentities(get_lang('Add category'))]
         );
     }
+
+    if (('true' === api_get_setting('ai_helpers.enable_ai_helpers'))  &&
+        ('true' === api_get_course_setting('learning_path_generator'))
+    ) {
+        $actionLeft .= Display::url(
+            Display::getMdiIcon(
+                'robot',
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Lp Ai Generator')
+            ),
+            api_get_self().'?'.api_get_cidreq().'&action=ai_helper'
+        );
+    }
+
     $actions = Display::toolbarAction('actions-lp', [$actionLeft]);
 }
 
@@ -684,7 +700,7 @@ foreach ($categories as $category) {
                         );
                     } else {
                         $lp_auto_launch_icon = Display::url(
-                            Display::getMdiIcon('rocket-launch', 'ch-tool-icon', '', 22),
+                            Display::getMdiIcon('rocket-launch', 'ch-tool-icon-disabled', '', 22),
                             api_get_self().'?'.$cidReq."&action=auto_launch&status=1&lp_id=$id",
                             ['title' => htmlentities(get_lang('Enable learning path auto-launch'))]
                         );

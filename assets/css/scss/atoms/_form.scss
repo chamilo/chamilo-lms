@@ -29,7 +29,7 @@
   .form {
     &--search,
     &--inline {
-      @apply flex-row gap-3 mb-1;
+      @apply flex-row gap-3;
     }
 
     &--search {
@@ -55,12 +55,48 @@
 }
 
 .field {
-  > small {
-    @apply text-caption text-primary;
+  @apply mb-5;
+
+  > small,
+  .help-text {
+    @apply text-caption text-primary mt-1;
   }
 
   &-group {
     @apply flex gap-4 flex-wrap mb-4 items-start;
+  }
+
+  &.grid {
+    @apply mt-0;
+  }
+}
+
+.formgrid {
+  &.grid {
+    @apply mt-0;
+  }
+}
+
+.formgroup-inline {
+  @apply flex flex-wrap items-start;
+
+  .field,
+  .field-checkbox,
+  .field-radiobutton {
+    @apply mr-4;
+
+    > label {
+      @apply mr-2 mb-0;
+    }
+  }
+}
+
+.field-checkbox,
+.field-radiobutton {
+  @apply mb-4 flex items-center;
+
+  > label {
+    @apply ml-2 leading-none;
   }
 }
 

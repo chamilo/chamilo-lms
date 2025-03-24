@@ -180,8 +180,8 @@
               <template #body="{ data }">
                 <BaseAppLink :to="{ name: 'CourseHome', params: { id: data.course.id } }">
                   <BaseIcon
-                    icon="link-external"
                     class="p-button-sm"
+                    icon="link-external"
                   />
                   {{ t("Go to the course") }}
                 </BaseAppLink>

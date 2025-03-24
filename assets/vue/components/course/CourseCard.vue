@@ -3,8 +3,8 @@
     <template #header>
       <img
         v-if="disabled"
-        :src="course.illustrationUrl"
         :alt="course.title"
+        :src="course.illustrationUrl"
       />
       <BaseAppLink
         v-else
@@ -12,8 +12,8 @@
         class="course-card__home-link"
       >
         <img
-          :src="course.illustrationUrl"
           :alt="course.title"
+          :src="course.illustrationUrl"
         />
       </BaseAppLink>
     </template>
@@ -62,12 +62,10 @@ import BaseAvatarList from "../basecomponents/BaseAvatarList.vue"
 import { computed } from "vue"
 import { isEmpty } from "lodash"
 import { useFormatDate } from "../../composables/formatDate"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 
 const { abbreviatedDatetime } = useFormatDate()
 
-// eslint-disable-next-line no-undef
 const props = defineProps({
   course: {
     type: Object,

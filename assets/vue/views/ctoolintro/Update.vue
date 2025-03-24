@@ -37,7 +37,6 @@ export default {
   setup() {
     const route = useRoute()
     const router = useRouter()
-    //const { showNotification } = useNotification()
     const item = ref({})
     const { cid, sid } = useCidReq()
 
@@ -65,7 +64,6 @@ export default {
     ]
 
     function onUpdated() {
-      //showNotification(t("Updated"))
       router.go(-1)
     }
 

@@ -10,14 +10,12 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
-use League\Flysystem\UnableToReadFile;
 use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 use const DIRECTORY_SEPARATOR;
-use const PHP_SAPI;
 
 final class ThemeHelper
 {
@@ -40,10 +38,6 @@ final class ThemeHelper
      */
     public function getVisualTheme(): string
     {
-        if ('cli' === PHP_SAPI) {
-            return '';
-        }
-
         static $visualTheme;
 
         global $lp_theme_css;
@@ -83,7 +77,6 @@ final class ThemeHelper
 
     /**
      * @throws FilesystemException
-     * @throws UnableToCheckExistence
      */
     public function getFileLocation(string $path): ?string
     {
@@ -145,7 +138,7 @@ final class ThemeHelper
 
                 return $contents;
             }
-        } catch (FilesystemException|UnableToReadFile) {
+        } catch (FilesystemException) {
             return '';
         }
 

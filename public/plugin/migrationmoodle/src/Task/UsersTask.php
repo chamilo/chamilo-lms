@@ -59,7 +59,7 @@ class UsersTask extends BaseTask
                     'class' => AuthLookup::class,
                     'properties' => ['auth'],
                 ],
-                'registration_date' => [
+                'created_at' => [
                     'class' => DateTimeObject::class,
                     'properties' => ['timecreated'],
                 ],

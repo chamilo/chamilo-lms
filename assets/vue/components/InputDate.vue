@@ -3,9 +3,9 @@
     v-model="showMenu"
     :close-on-content-click="false"
     :nudge-right="40"
-    transition="scale-transition"
-    offset-y
     min-width="290px"
+    offset-y
+    transition="scale-transition"
   >
     <template v-slot:activator="{ on }">
       <v-text-field
@@ -16,37 +16,40 @@
         v-on="on"
       ></v-text-field>
     </template>
-    <v-date-picker v-model="date" @input="handleInput"></v-date-picker>
+    <v-date-picker
+      v-model="date"
+      @input="handleInput"
+    ></v-date-picker>
   </v-menu>
 </template>
 
 <script>
-import { formatDateTime } from '../utils/dates';
+import { formatDateTime } from "../utils/dates"
 
 export default {
   props: {
     label: {
       type: String,
       required: false,
-      default: () => ''
+      default: () => "",
     },
-    value: String
+    value: String,
   },
   created() {
-    this.date = this.value ? this.value : this.date;
+    this.date = this.value ? this.value : this.date
   },
   data() {
     return {
       date: this.value ? this.value : new Date().toISOString().substr(0, 10),
-      showMenu: false
-    };
+      showMenu: false,
+    }
   },
   methods: {
     formatDateTime,
     handleInput() {
-      this.showMenu = false;
-      this.$emit('input', this.date);
-    }
-  }
-};
+      this.showMenu = false
+      this.$emit("input", this.date)
+    },
+  },
+}
 </script>

@@ -18,6 +18,8 @@
 die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
+$options = getopt('', ['url:']);
+$baseUrl = isset($options['url']) ? rtrim($options['url'], '/') : null;
 $senderId = api_get_setting('platform.disable_user_conditions_sender_id');
 
 if (empty($senderId)) {
@@ -66,6 +68,17 @@ $students = Database::store_result($result);
 foreach ($students as $student) {
     $studentId = $student['id'];
     $lastDate = Tracking::get_last_connection_date($studentId, false, true);
+    // OFAJ : In Chamilo 2 until 2024/12/01 there was no login registered after inscription
+    // This is a special fix for those cases
+    if ($lastDate === false) {
+        $sqlStudentCreationDate = "SELECT created_at
+        FROM user
+        WHERE id = $studentId
+        ";
+        $resultStudentCreationDate = Database::query($sqlStudentCreationDate);
+        $obj = Database::fetch_object($resultStudentCreationDate);
+        $lastDate = $obj->created_at;
+    }
     $lastDate = api_get_utc_datetime($lastDate);
 
     if ($date3Months > $lastDate) {
@@ -98,7 +111,13 @@ foreach ($students as $student) {
                 0,
                 0,
                 0,
-                $senderId
+                $senderId,
+                false,
+                0,
+                false,
+                false,
+                null,
+                $baseUrl
             );
             UserManager::disable($studentId);
         }
@@ -157,7 +176,13 @@ foreach ($students as $student) {
                 0,
                 0,
                 0,
-                $senderId
+                $senderId,
+                false,
+                0,
+                false,
+                false,
+                null,
+                $baseUrl
             );
             UserManager::disable($studentId);
         }
@@ -223,7 +248,13 @@ foreach ($students as $student) {
                 0,
                 0,
                 0,
-                $senderId
+                $senderId,
+                false,
+                0,
+                false,
+                false,
+                null,
+                $baseUrl
             );
             UserManager::disable($studentId);
             if (!empty($bossInfo) && !empty($subjectBoss)) {
@@ -237,7 +268,13 @@ foreach ($students as $student) {
                     0,
                     0,
                     0,
-                    $senderId
+                    $senderId,
+                    false,
+                    0,
+                    false,
+                    false,
+                    null,
+                    $baseUrl
                 );
             }
             UserManager::removeAllBossFromStudent($studentId);

@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\MailHelper;
 use Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
@@ -24,7 +23,6 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Yaml\Yaml;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
@@ -179,11 +177,6 @@ define('SECTION_GLOBAL', 'global');
 define('SECTION_INCLUDE', 'include');
 define('SECTION_CUSTOMPAGE', 'custompage');
 
-// CONSTANT name for local authentication source
-define('PLATFORM_AUTH_SOURCE', 'platform');
-define('CAS_AUTH_SOURCE', 'cas');
-define('LDAP_AUTH_SOURCE', 'extldap');
-
 // event logs types
 define('LOG_COURSE_DELETE', 'course_deleted');
 define('LOG_COURSE_CREATE', 'course_created');
@@ -204,6 +197,12 @@ define('LOG_GROUP_PORTAL_USER_UPDATE_ROLE', 'soc_gr_update_role');
 
 define('LOG_MESSAGE_DATA', 'message_data');
 define('LOG_MESSAGE_DELETE', 'msg_deleted');
+
+const LOG_RESOURCE_LINK_DELETE = 'resource_link_deleted';
+const LOG_RESOURCE_LINK_SOFT_DELETE = 'resource_link_soft_deleted';
+const LOG_RESOURCE_NODE = 'resource_node_id';
+const LOG_RESOURCE_LINK = 'resource_link_id';
+const LOG_RESOURCE_NODE_AND_RESOURCE_LINK = 'resource_node_id_and_resource_link_id';
 
 define('LOG_USER_DELETE', 'user_deleted');
 define('LOG_USER_PREDELETE', 'user_predeleted');
@@ -634,7 +633,7 @@ define('RESOURCE_SCORM', 'Scorm');
 define('RESOURCE_SURVEY', 'survey');
 define('RESOURCE_SURVEYQUESTION', 'survey_question');
 define('RESOURCE_SURVEYINVITATION', 'survey_invitation');
-//define('RESOURCE_WIKI', 'wiki');
+define('RESOURCE_WIKI', 'wiki');
 define('RESOURCE_THEMATIC', 'thematic');
 define('RESOURCE_ATTENDANCE', 'attendance');
 define('RESOURCE_WORK', 'work');
@@ -1309,13 +1308,13 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         'official_code',
         'status',
         'active',
-        'auth_source',
+        'auth_sources',
         'username',
         'theme',
         'language',
         'locale',
         'creator_id',
-        'registration_date',
+        'created_at',
         'hr_dept_id',
         'expiration_date',
         'last_login',
@@ -1518,6 +1517,7 @@ function api_get_user_info(
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
+        $result_array['auth_sources'] = api_get_user_entity($result_array['id'])->getAuthSourcesAuthentications();
         $result_array['user_is_online_in_chat'] = 0;
         if ($checkIfUserOnline) {
             $use_status_in_platform = user_is_online($user_id);
@@ -1641,10 +1641,10 @@ function api_get_user_info_from_entity(
     $result['address'] = $user->getAddress();
     $result['official_code'] = $user->getOfficialCode();
     $result['active'] = $user->isActive();
-    $result['auth_source'] = $user->getAuthSource();
+    $result['auth_sources'] = $user->getAuthSourcesAuthentications();
     $result['language'] = $user->getLocale();
     $result['creator_id'] = $user->getCreatorId();
-    $result['registration_date'] = $user->getRegistrationDate()->format('Y-m-d H:i:s');
+    $result['created_at'] = $user->getCreatedAt()->format('Y-m-d H:i:s');
     $result['hr_dept_id'] = $user->getHrDeptId();
     $result['expiration_date'] = '';
     if ($user->getExpirationDate()) {
@@ -1983,7 +1983,7 @@ function api_get_anonymous_id()
         $result = Database::query($sql);
         if (empty(Database::num_rows($result))) {
             $login = uniqid('anon_');
-            $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['registration_date ASC']);
+            $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['created_at ASC']);
             if (count($anonList) >= $max) {
                 foreach ($anonList as $userToDelete) {
                     UserManager::delete_user($userToDelete['user_id']);
@@ -4076,14 +4076,16 @@ function copy_folder_course_session(
     $session_id,
     $course_info,
     $document,
-    $source_course_id
+    $source_course_id,
+    array $originalFolderNameList = [],
+    string $originalBaseName = ''
 ) {
     $table = Database::get_course_table(TABLE_DOCUMENT);
     $session_id = intval($session_id);
     $source_course_id = intval($source_course_id);
 
     // Check whether directory already exists.
-    if (is_dir($pathname) || empty($pathname)) {
+    if (empty($pathname) || is_dir($pathname)) {
         return true;
     }
 
@@ -4094,12 +4096,20 @@ function copy_folder_course_session(
         return false;
     }
 
+    $baseNoDocument = str_replace('document', '', $originalBaseName);
+    $folderTitles = explode('/', $baseNoDocument);
+    $folderTitles = array_filter($folderTitles);
+
+    $table = Database::get_course_table(TABLE_DOCUMENT);
+    $session_id = (int) $session_id;
+    $source_course_id = (int) $source_course_id;
+
     $course_id = $course_info['real_id'];
     $folders = explode(DIRECTORY_SEPARATOR, str_replace($base_path_document.DIRECTORY_SEPARATOR, '', $pathname));
     $new_pathname = $base_path_document;
     $path = '';
 
-    foreach ($folders as $folder) {
+    foreach ($folders as $index => $folder) {
         $new_pathname .= DIRECTORY_SEPARATOR.$folder;
         $path .= DIRECTORY_SEPARATOR.$folder;
 
@@ -4117,13 +4127,22 @@ function copy_folder_course_session(
 
             if (0 == $num_rows) {
                 mkdir($new_pathname, api_get_permissions_for_new_directories());
+                $title = basename($new_pathname);
+
+                if (isset($folderTitles[$index + 1])) {
+                    $checkPath = $folderTitles[$index +1];
+
+                    if (isset($originalFolderNameList[$checkPath])) {
+                        $title = $originalFolderNameList[$checkPath];
+                    }
+                }
 
                 // Insert new folder with destination session_id.
                 $params = [
                     'c_id' => $course_id,
                     'path' => $path,
                     'comment' => $document->comment,
-                    'title' => basename($new_pathname),
+                    'title' => $title,
                     'filetype' => 'folder',
                     'size' => '0',
                     'session_id' => $session_id,
@@ -5970,7 +5989,7 @@ function api_get_course_url($courseId = null, $sessionId = null, $groupId = null
  */
 function api_get_multiple_access_url(): bool
 {
-    return Container::$container->get(AccessUrlHelper::class)->isMultiple();
+    return Container::getAccessUrlHelper()->isMultiple();
 }
 
 /**
@@ -6820,9 +6839,11 @@ function api_get_configuration_value($variable)
  */
 function load_hosting_limits(): array
 {
-    $container = Container::$container;
+    if (!Container::$container->hasParameter('hosting_limits')) {
+        return [];
+    }
 
-    $hostingLimits = $container->getParameter('hosting_limits');
+    $hostingLimits =Container::$container->getParameter('hosting_limits');
 
     return $hostingLimits['urls'] ?? [];
 }
@@ -6837,6 +6858,10 @@ function load_hosting_limits(): array
 function get_hosting_limit(int $urlId, string $limitName): mixed
 {
     $limits = load_hosting_limits();
+
+    if (!isset($limits[$urlId])) {
+        return null;
+    }
 
     foreach ($limits[$urlId] as $limitArray) {
         if (isset($limitArray[$limitName])) {
@@ -6857,21 +6882,14 @@ function get_hosting_limit(int $urlId, string $limitName): mixed
  */
 function api_get_env_variable(string $variable, mixed $default = null): mixed
 {
+    $variable = strtolower($variable);
     if (Container::$container->hasParameter($variable)) {
-        $value = Container::$container->getParameter($variable);
-
-        if ($value === '0') {
-            return false;
-        }
-        if ($value === '1') {
-            return true;
-        }
-
-        return $value;
+        return Container::$container->getParameter($variable);
     }
 
     return $default;
 }
+
 /**
  * Retreives and returns a value in a hierarchical configuration array
  * api_get_configuration_sub_value('a/b/c') returns api_get_configuration_value('a')['b']['c'].
@@ -7522,6 +7540,22 @@ function api_protect_webservices()
     }
 }
 
+function api_filename_has_blacklisted_stream_wrapper(string $filename) {
+    if (strpos($filename, '://') > 0) {
+        $wrappers = stream_get_wrappers();
+        $allowedWrappers = ['http', 'https', 'file'];
+        foreach ($wrappers as $wrapper) {
+            if (in_array($wrapper, $allowedWrappers)) {
+                continue;
+            }
+            if (stripos($filename, $wrapper . '://') === 0) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 /**
  * Checks if a set of roles have a specific permission.
  *
@@ -7534,4 +7568,21 @@ function api_get_permission(string $permissionSlug, array $roles): bool
     $permissionService = Container::$container->get(PermissionServiceHelper::class);
 
     return $permissionService->hasPermission($permissionSlug, $roles);
+}
+
+/**
+ * Calculate the percentage of change between two numbers.
+ *
+ * @param int $newValue
+ * @param int $oldValue
+ * @return string
+ */
+function api_calculate_increment_percent(int $newValue, int $oldValue): string
+{
+    if ($oldValue <= 0) {
+        $result = " - ";
+    } else {
+        $result = ' '.round(100 * (($newValue / $oldValue) - 1), 2).' %';
+    }
+    return $result;
 }

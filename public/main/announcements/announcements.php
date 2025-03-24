@@ -348,9 +348,10 @@ switch ($action) {
                 api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $announcement_id)
             ) {
                 AnnouncementManager::change_visibility_announcement(
-                    $_course,
                     $announcement_id,
-                    $status
+                    $status,
+                    $course,
+                    $session
                 );
                 Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
                 header('Location: '.$homeUrl);

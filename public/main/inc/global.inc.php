@@ -3,12 +3,15 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Controller\ExceptionController;
+use Chamilo\CoreBundle\EventListener\ExceptionListener;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpFoundation\Response;
 
 // Use when running PHPUnit tests.
 if (isset($fileToLoad)) {
@@ -65,6 +68,13 @@ if ($isCli) {
     $kernel = new Chamilo\Kernel($env, $debug);
     // Loading Request from Sonata. In order to use Sonata Pages Bundle.
     $request = Request::createFromGlobals();
+    if (!empty($_SERVER['TRUSTED_PROXIES'])) {
+        $request->setTrustedProxies(
+            preg_split('#,#', $_SERVER['TRUSTED_PROXIES']),
+            Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_PROTO | Request::HEADER_X_FORWARDED_HOST | Request::HEADER_X_FORWARDED_PORT
+        );
+        // TRUSTED_PROXIES must be defined in .env. For non-legacy code, check config/packages/framework.yaml
+    }
     // This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
     // and not called from a symfony controller from public/
     $request->request->set('load_legacy', true);
@@ -80,6 +90,26 @@ if ($isCli) {
     $router = $container->get('router');
     $context = $router->getContext();
     $router->setContext($context);
+
+    set_exception_handler(function ($exception) use ($kernel, $container) {
+        $request = Request::createFromGlobals();
+        $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $exception);
+        $listener = $container->get(ExceptionListener::class);
+        if (is_callable([$listener, '__invoke'])) {
+            $listener->__invoke($event);
+        } else {
+            $response = new Response('Error occurred', Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response->send();
+            return;
+        }
+        $response = $event->getResponse();
+        if ($response) {
+            $response->send();
+        } else {
+            $response = new Response('An error occurred', Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response->send();
+        }
+    });
 
     $context = Container::getRouter()->getContext();
 

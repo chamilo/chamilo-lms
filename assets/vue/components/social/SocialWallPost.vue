@@ -102,7 +102,6 @@ import BaseCard from "../basecomponents/BaseCard.vue"
 import { SOCIAL_TYPE_PROMOTED_MESSAGE } from "./constants"
 import { useFormatDate } from "../../composables/formatDate"
 import { useSecurityStore } from "../../store/securityStore"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const props = defineProps({
   post: {

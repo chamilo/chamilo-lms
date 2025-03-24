@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-cols-3 gap-4">
-    <div class="col-span-2">
+  <div class="flex flex-col md:flex-row md:space-x-4">
+    <div class="flex-1">
       <BaseInputText
         id="item_title"
         v-model="messagePayload.title"
@@ -35,14 +35,14 @@
       <BaseButton
         :disabled="!canSubmitMessage"
         :label="t('Send')"
+        class="mt-4"
         icon="plus"
         type="primary"
-        class="mb-2"
         @click="onSubmit"
       />
     </div>
 
-    <div class="space-y-4">
+    <div class="mt-4 md:mt-0 md:w-1/3">
       <p class="text-h6">
         <BaseIcon icon="attachment" />
         {{ t("Attachments") }}
@@ -61,11 +61,11 @@
       </ul>
 
       <BaseUploader
-        field-name="file"
         :endpoint="resourceFileService.endpoint"
-        @upload-success="onUploadSuccess"
-        @upload="onUpload"
+        field-name="file"
         @complete="onUploadComplete"
+        @upload="onUpload"
+        @upload-success="onUploadSuccess"
       />
     </div>
   </div>

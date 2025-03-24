@@ -7,6 +7,7 @@ import Dropdown from "primevue/dropdown"
 import SidebarLogin from "../SidebarLogin.vue"
 import PageList from "../../../../assets/vue/components/page/PageList.vue"
 import { useLocale } from "../../../../assets/vue/composables/locale"
+import { usePlatformConfig } from "../../../../assets/vue/store/platformConfig"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -22,37 +23,48 @@ const languageItems = languageList.map((language) => ({
   isoCode: language.isocode,
 }))
 
-const menuItems = computed(() => [
-  {
-    label: t("Home"),
-    url: router.resolve({ name: "Index" }).href,
-  },
-  {
-    id: "login-header-item",
-    label: t("Login"),
-    items: [
-      {
-        id: "login-form-item",
-      },
-    ],
-  },
-  {
-    label: t("Registration"),
-    url: "/main/auth/inscription.php",
-  },
-  {
-    label: t("Demo"),
-    url: router.resolve({ name: "Demo" }).href,
-  },
-  {
-    label: t("FAQ"),
-    url: router.resolve({ name: "Faq" }).href,
-  },
-  {
-    label: t("Contact"),
-    url: "/contact",
-  },
-])
+const platformConfigStore = usePlatformConfig()
+const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration"))
+
+
+const menuItems = computed(() => {
+  const items = [
+    {
+      label: t("Home"),
+      url: router.resolve({ name: "Index" }).href,
+    },
+    {
+      id: "login-header-item",
+      label: t("Login"),
+      items: [
+        {
+          id: "login-form-item",
+        },
+      ],
+    },
+    {
+      label: t("Demo"),
+      url: router.resolve({ name: "Demo" }).href,
+    },
+    {
+      label: t("FAQ"),
+      url: router.resolve({ name: "Faq" }).href,
+    },
+    {
+      label: t("Contact"),
+      url: "/contact",
+    },
+  ]
+
+  if (allowRegistration.value) {
+    items.splice(2, 0, {
+      label: t("Registration"),
+      url: "/main/auth/inscription.php",
+    })
+  }
+
+  return items
+})
 
 const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
 

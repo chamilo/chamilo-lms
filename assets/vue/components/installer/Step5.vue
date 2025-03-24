@@ -1,8 +1,8 @@
 <template>
   <div class="install-step">
-    <h2
-      v-t="'Step 5 - Configuration settings'"
-      class="RequirementHeading mb-8"
+    <SectionHeader
+      :title="t('Step 5 - Configuration settings')"
+      class="RequirementHeading"
     />
 
     <div v-if="'update' === installerData.installType">
@@ -91,8 +91,8 @@
       >
         <input
           v-model="installerData.stepData.loginForm"
-          type="hidden"
           name="loginForm"
+          type="hidden"
         />
         {{ installerData.stepData.loginForm }}
       </div>
@@ -304,9 +304,9 @@
         <div class="field-checkbox">
           <RadioButton
             v-model="installerData.stepData.encryptPassForm"
-            value="bcrypt"
             input-id="encrypt_bcrypt"
             name="encryptPassForm"
+            value="bcrypt"
           />
           <label
             for="encrypt_bcrypt"
@@ -316,9 +316,9 @@
         <div class="field-checkbox">
           <RadioButton
             v-model="installerData.stepData.encryptPassForm"
-            value="sha1"
             input-id="encrypt_sha1"
             name="encryptPassForm"
+            value="sha1"
           />
           <label
             for="encrypt_sha1"
@@ -328,9 +328,9 @@
         <div class="field-checkbox">
           <RadioButton
             v-model="installerData.stepData.encryptPassForm"
-            value="md5"
             input-id="encrypt_md5"
             name="encryptPassForm"
+            value="md5"
           />
           <label
             for="encrypt_md5"
@@ -340,9 +340,9 @@
         <div class="field-checkbox">
           <RadioButton
             v-model="installerData.stepData.encryptPassForm"
-            value="none"
             input-id="encrypt_none"
             name="encryptPassForm"
+            value="none"
           />
           <label
             v-t="'None'"
@@ -356,8 +356,8 @@
       >
         <input
           v-model="installerData.stepData.encryptPassForm"
-          type="hidden"
           name="encryptPassForm"
+          type="hidden"
         />
         {{ installerData.stepData.encryptPassForm }}
       </div>
@@ -370,9 +370,9 @@
         <div class="field-checkbox">
           <RadioButton
             v-model="installerData.stepData.allowSelfReg"
-            value="true"
             input-id="self_reg_yes"
             name="allowSelfReg"
+            value="true"
           />
           <label
             v-t="'Yes'"
@@ -382,9 +382,9 @@
         <div class="field-checkbox">
           <RadioButton
             v-model="installerData.stepData.allowSelfReg"
-            value="false"
             input-id="self_reg_no"
             name="allowSelfReg"
+            value="false"
           />
           <label
             v-t="'No'"
@@ -394,9 +394,9 @@
         <div class="field-checkbox">
           <RadioButton
             v-model="installerData.stepData.allowSelfReg"
-            value="approval"
             input-id="self_reg_approval"
             name="allowSelfReg"
+            value="approval"
           />
           <label
             v-t="'After approval'"
@@ -407,8 +407,8 @@
       <div v-else>
         <input
           v-model="installerData.stepData.allowSelfReg"
-          type="hidden"
           name="allowSelfReg"
+          type="hidden"
         />
         <span
           v-if="'true' === installerData.stepData.allowSelfReg"
@@ -432,9 +432,9 @@
         <div class="field-checkbox">
           <RadioButton
             v-model="installerData.stepData.allowSelfRegProf"
-            value="1"
             input-id="self_reg_prof_yes"
             name="allowSelfRegProf"
+            value="1"
           />
           <label
             v-t="'Yes'"
@@ -444,9 +444,9 @@
         <div class="field-checkbox">
           <RadioButton
             v-model="installerData.stepData.allowSelfRegProf"
-            value="0"
             input-id="self_reg_prof_no"
             name="allowSelfRegProf"
+            value="0"
           />
           <label
             v-t="'No'"
@@ -457,8 +457,8 @@
       <div v-else>
         <input
           v-model="installerData.stepData.allowSelfRegProf"
-          type="hidden"
           name="allowSelfRegProf"
+          type="hidden"
         />
         <span
           v-if="1 === installerData.stepData.allowSelfRegProf"
@@ -511,6 +511,7 @@ import Password from "primevue/password"
 import Dropdown from "primevue/dropdown"
 import Button from "primevue/button"
 import RadioButton from "primevue/radiobutton"
+import SectionHeader from "../layout/SectionHeader.vue"
 
 import languages from "../../utils/languages"
 

@@ -1,120 +1,101 @@
 <script>
-(function () {
-    var designer = null;
-    $(function () {
-        $('.help-badges').tooltip();
-        $('.help-badges-img').tooltip();
-        $('#btn-open-designer').on('click', function (e) {
-            e.preventDefault();
+    $(function() {
+      $("#image").on("change", function() {
+        var self = this
 
-            var designerUrl = 'https://www.openbadges.me/designer.html?origin={{ url('index') }}';
-            designerUrl = designerUrl + '&email={{ platformAdminEmail }}';
-            designerUrl = designerUrl + '&close=true';
-            designerUrl = designerUrl + '&hidePublish=true';
+        if (self.files.length > 0) {
+          var image = self.files[0]
 
-            var windowOptions = 'width=1200,height=680,location=0,menubar=0,status=0,toolbar=0';
-            designer = window.open(designerUrl, '', windowOptions);
-        });
+          if (!image.type.match(/image.*/)) {
+            return
+          }
 
-        $('#image').on('change', function () {
-            var self = this;
-
-            if (self.files.length > 0) {
-                var image = self.files[0];
-
-                if (!image.type.match(/image.*/)) {
-                    return;
-                }
-
-                var fileReader = new FileReader();
-                fileReader.onload = function (e) {
-                    $('#badge-preview').attr('src', e.target.result);
-                    $('#badge-container').removeClass('hide');
-                };
-                fileReader.readAsDataURL(image);
-            }
-        });
-    });
-})();
+          var fileReader = new FileReader()
+          fileReader.onload = function(e) {
+            $("#badge-preview").attr("src", e.target.result)
+            $("#badge-container").removeClass("hide")
+          }
+          fileReader.readAsDataURL(image)
+        }
+      })
+    })
 </script>
 
-<div class="grid grid-cols-2 gap-4">
-    <div class="col-md-9">
+<div class="section-header section-header--h2">
+    <h2 class="section-header__title">{{ skill.title }}</h2>
+</div>
+
+<div class="grid md:grid-cols-3 gap-4">
+    <div class="order-last md:order-first col-span-2">
         <form action="{{ current_url }}" class="form-horizontal" method="post" enctype="multipart/form-data">
-            <legend>
-                {{ skill.title }}
-            </legend>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="image">{{ 'Image' | trans }}</label>
-                <div class="col-sm-10">
-                    <input data-placement="left"
-                           data-toggle="tooltip"
-                           title="{{ "Badge measures 200x200 pixels in PNG" | trans }}"
-                           type="file" name="image" id="image" class="help-badges-img" accept="image/*">
+            <div class="field">
+                <div class="float-label">
+                    <label for="image">{{ 'Image'|trans }}</label>
+                    <input data-placement="left" data-toggle="tooltip" type="file" name="image" id="image"
+                           accept="image/*">
                 </div>
+                <small>{{ "Badge measures 200x200 pixels in PNG"|trans }}</small>
             </div>
-            <div class="form-group collapse" id="badge-studio-frame" style="display: none">
-                <label class="col-sm-2 control-label" for="criteria"></label>
+            <div class="form-group invisible" id="badge-studio-frame">
+                <label for="criteria"></label>
                 <div class="col-sm-10">
                     <h1 class="title">Badge Studio</h1>
                     <div class="" id="studio">
-                        <div id="input">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h3 class="label"><label for="studio-mask">{{ "Templates" | trans }}</label></h3>
+                        <div id="input" class="space-y-4">
+                            <div class="grid md:grid-cols-4 gap-4">
+                                <div>
+                                    <h3 class="label"><label for="studio-mask">{{ "Templates"|trans }}</label></h3>
                                     <select name="template" class="form-control" id="studio-template"
                                             data-path="{{ badge_studio.templates }}">
-                                        <option value="template-1">{{ "Template" | trans }} 1</option>
-                                        <option value="template-2">{{ "Template" | trans }} 2</option>
-                                        <option value="template-3">{{ "Template" | trans }} 3</option>
+                                        <option value="template-1">{{ "Template"|trans }} 1</option>
+                                        <option value="template-2">{{ "Template"|trans }} 2</option>
+                                        <option value="template-3">{{ "Template"|trans }} 3</option>
                                     </select>
-                                    <h3 class="label"><label for="studio-mask">{{ "Palettes" | trans }}</label></h3>
+                                    <h3 class="label"><label for="studio-mask">{{ "Palettes"|trans }}</label></h3>
                                     <select name="palette" class="form-control" id="studio-palette">
-                                        <option value="palette-1"
-                                                data-color-background="#CE001F"
-                                                data-color-stitching="#FFF"
-                                                data-color-border="#4C4F53"
-                                                data-color-detail="#999"
-                                                data-color-glyph="#FFF">{{ "Palette" | trans }} 1</option>
-                                        <option value="palette-2"
-                                                data-color-background="#04A"
-                                                data-color-stitching="#0AE"
-                                                data-color-border="#0AE"
-                                                data-color-detail="#FFF"
-                                                data-color-glyph="#FFF">{{ "Palette" | trans }} 2</option>
-                                        <option value="palette-3"
-                                                data-color-background="#11458B"
-                                                data-color-stitching="#3EB48D"
-                                                data-color-border="#3EB48D"
-                                                data-color-detail="#FFF"
-                                                data-color-glyph="#FFF">{{ "Palette" | trans }} 3</option>
+                                        <option value="palette-1" data-color-background="#CE001F"
+                                                data-color-stitching="#FFF" data-color-border="#4C4F53"
+                                                data-color-detail="#999" data-color-glyph="#FFF">
+                                            {{ "Palette"|trans }} 1
+                                        </option>
+                                        <option value="palette-2" data-color-background="#04A"
+                                                data-color-stitching="#0AE" data-color-border="#0AE"
+                                                data-color-detail="#FFF" data-color-glyph="#FFF">
+                                            {{ "Palette"|trans }} 2
+                                        </option>
+                                        <option value="palette-3" data-color-background="#11458B"
+                                                data-color-stitching="#3EB48D" data-color-border="#3EB48D"
+                                                data-color-detail="#FFF" data-color-glyph="#FFF">
+                                            {{ "Palette"|trans }} 3
+                                        </option>
                                     </select>
                                     <br />
-                                    <h3 class="label"><label for="studio-mask">{{ "Colors" | trans }}</label></h3>
+                                    <h3 class="label"><label for="studio-mask">{{ "Colors"|trans }}</label></h3>
                                     <div id="custom-palette"></div>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="md:col-span-3">
                                     <div id="output"></div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <h3 class="label"><label for="studio-mask">{{ "Mask" | trans }}</label></h3>
+                            <div class="grid md:grid-cols-4 gap-4">
+                                <div>
+                                    <h3 class="label"><label for="studio-mask">{{ "Mask"|trans }}</label></h3>
                                     <p class="item">
-                                        <select name="mask" class="form-control" id="studio-mask" data-path="{{ badge_studio.masks }}">
-                                            <option value="">{{ "None" | trans }}</option>
-                                            <option value="lines">{{ "Lines" | trans }}</option>
+                                        <select name="mask" class="form-control" id="studio-mask"
+                                                data-path="{{ badge_studio.masks }}">
+                                            <option value="">{{ "None"|trans }}</option>
+                                            <option value="lines">{{ "Lines"|trans }}</option>
                                         </select>
                                     </p>
                                 </div>
-                                <div class="col-md-3">
-                                    <h3 class="label"><label for="studio-options">{{ "Options" | trans }}</label></h3>
+                                <div>
+                                    <h3 class="label"><label for="studio-options">{{ "Options"|trans }}</label></h3>
                                     <p class="item" id="options">
                                         <i>None</i>
                                     </p>
                                 </div>
-                                <div class="col-md-6">
-                                    <h3 class="label"><label for="studio-glyph">{{ "Icon" | trans }}</label></h3>
+                                <div class="col-span-2">
+                                    <h3 class="label"><label for="studio-glyph">{{ "Icon"|trans }}</label></h3>
                                     <p class="item">
                                         <select name="glyph" class="form-control" id="studio-glyph">
                                             <option value="">None</option>
@@ -617,27 +598,28 @@
                                             <option value="youtube-square">Youtube (Square)</option>
                                         </select>
                                     </p>
-                                    <h3 class="label"><label for="size-glyph">{{ "Size" | trans }}</label></h3>
+                                    <h3 class="label"><label for="size-glyph">{{ "Size"|trans }}</label></h3>
                                     <p class="item">
                                         <select name="size-glyph" class="form-control" id="size-glyph">
-                                            <option value="big">{{ "Big" | trans }}</option>
-                                            <option value="medium" selected>{{ "Medium" | trans }}</option>
-                                            <option value="small">{{ "Small" | trans }}</option>
+                                            <option value="big">{{ "Big"|trans }}</option>
+                                            <option value="medium" selected>{{ "Medium"|trans }}</option>
+                                            <option value="small">{{ "Small"|trans }}</option>
                                         </select>
                                     </p>
                                 </div>
-                                <div class="col-md-12 text-center">
-                                    <a id="set-custom-badge" class="btn btn--primary"><em class="fa fa-check"></em>
-                                        {{ 'Use this badge' | trans }}</a>
-                                    <input type="hidden" id="badge_studio_image" name="badge_studio_image" >
-                                </div>
+                            </div>
+                            <div class="text-center">
+                                <a id="set-custom-badge" class="btn btn--primary"><em class="fa fa-check"></em>
+                                    {{ 'Use this badge'|trans }}</a>
+                                <input type="hidden" id="badge_studio_image" name="badge_studio_image">
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <template id="glyph-selector-template">
-                    <div id="glyph-selector" role="dialog" class="overlay hidden" aria-label="Select a glyph" tabIndex="0">
+                    <div id="glyph-selector" role="dialog" class="overlay hidden" aria-label="Select a glyph"
+                         tabIndex="0">
                         <div class="header">
                             <label class="title"></label>
                         </div>
@@ -683,54 +665,55 @@
             </div>
         </form>
     </div>
-    <div class="col-md-3">
+    <div>
         <div class="openbadges-img" id="badge-container">
             <img id="badge-preview"
-                 class="img-fluid" alt="{{ 'Badge preview' | trans }}" src="{{ skill.asset }}">
+                 class="img-fluid" alt="{{ 'Badge preview'|trans }}" src="{{ skill.asset }}">
         </div>
 
         <div class="create-openbadges">
-            <button id="btn-open-designer"
-                class="help-badges btn btn--primary btn-large btn-block"
-                data-toggle="tooltip" data-placement="bottom"
-                title="{{ 'Design a new badge, download it from the design tool and upload it on the platform.' | trans }}"
-                type="button"
-            >
-                <em class="fas fa-pencil-alt"></em> {{ 'Design a new badge' | trans }}
-            </button>
+            <div class="field">
+                <div>
+                    <a id="btn-open-designer" href="https://badge.design" class="btn btn--primary" target="_blank">
+                        <span aria-hidden="true" class="fas fa-pencil-alt"></span> {{ 'Design a new badge'|trans }}
+                    </a>
+                </div>
+                <small>{{ 'Design a new badge, download it from the design tool and upload it on the platform.'|trans }}</small>
+            </div>
         </div>
         <div class="create-openbadges">
-            <button id="btn-open-badge-studio"
-                    class="help-badges btn btn-outline-primary btn-large btn-block"
-                    data-toggle="collapse" data-target="#badge-studio-frame" aria-expanded="false"
-                    aria-controls="badge-studio-frame"
-                    title="{{ 'Use the Badge Studio to create your own badge from within your platform' | trans }}"
-                    type="button"
-            >
-                <em class="fa fa-cogs"></em> {{ 'Design with Badge Studio' | trans }}
-            </button>
+            <div class="field">
+                <div>
+                    <button id="btn-open-badge-studio" class="btn btn--primary-outline"
+                            data-toggle="collapse" data-target="#badge-studio-frame" aria-expanded="false"
+                            aria-controls="badge-studio-frame" type="button">
+                        <samll aria-hidden="true" class="fa fa-cogs"></samll> {{ 'Design with Badge Studio'|trans }}
+                    </button>
+                </div>
+                <small>{{ 'Use the Badge Studio to create your own badge from within your platform'|trans }}</small>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    $(function() {
-        $('#btn-open-badge-studio').click(function () {
-            $('#badge-studio-frame').toggle();
-        });
-
-        $('#set-custom-badge').click(function () {
-            var data = $('#raster').attr('src');
-            $('#badge_studio_image').val(data);
-            $('#badge-preview').attr('src', data);
-            $('#badge-container').removeClass('hide');
-        });
-
-        $('#size-glyph').change(function () {
-            window.size = $(this).val();
-            updateGlyph();
-        });
+  $(function() {
+    $("#btn-open-badge-studio").click(function() {
+      $("#badge-studio-frame").toggleClass("invisible")
     })
+
+    $("#set-custom-badge").click(function() {
+      var data = $("#raster").attr("src")
+      $("#badge_studio_image").val(data)
+      $("#badge-preview").attr("src", data)
+      $("#badge-container").removeClass("hide")
+    })
+
+    $("#size-glyph").change(function() {
+      window.size = $(this).val()
+      updateGlyph()
+    })
+  })
 </script>
 
 {% autoescape false %}

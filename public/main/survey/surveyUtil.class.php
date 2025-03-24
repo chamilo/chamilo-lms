@@ -78,14 +78,29 @@ class SurveyUtil
      *
      * @version January 2007
      */
-    public static function remove_answer($user, $survey_id, $question_id)
+    public static function remove_answer($user, $survey_id, $question_id, $course_id, $lpItemId = 0): void
     {
+        $sessionId = api_get_session_id();
+        $course_id = intval($course_id);
+        // table definition
         $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
+
+        $lpItemCondition = '';
+        if (!empty($lpItemId)) {
+            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+        }
+        $sessionCondition = '';
+        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            $sessionCondition = api_get_session_condition($sessionId);
+        }
+
         $sql = "DELETE FROM $table
 				WHERE
                     user = '".Database::escape_string($user)."' AND
                     survey_id = '".intval($survey_id)."' AND
-                    question_id = '".intval($question_id)."'";
+                    question_id = '".intval($question_id)."'
+                    $sessionCondition
+                    $lpItemCondition";
         Database::query($sql);
     }
 
@@ -95,8 +110,10 @@ class SurveyUtil
         CSurveyQuestion $question,
         $optionId,
         $optionValue,
-        $otherOption = ''
-    ) {
+        $otherOption = '',
+        $lpItemId = 0
+    ): bool {
+
         // Make the survey anonymous
         if (1 == $survey->getAnonymous()) {
             $surveyUser = Session::read('surveyuser');
@@ -120,6 +137,7 @@ class SurveyUtil
             ->setQuestion($question)
             ->setOptionId($optionId)
             ->setValue((int) $optionValue)
+            ->setLpItemId((int) $lpItemId)
             ->setSessionId($sessionId ?: null)
         ;
 
@@ -223,10 +241,15 @@ class SurveyUtil
                 self::display_comparative_report();
                 break;
             case 'completereport':
-                echo self::displayCompleteReport($survey);
+                $surveysAnswered = SurveyManager::getInvitationsAnswered($survey->getCode(), api_get_course_int_id(), api_get_session_id());
+                if (count($surveysAnswered) > 0) {
+                    foreach ($surveysAnswered as $survey) {
+                        echo self::displayCompleteReport($survey, 0, true, true, !$survey->getAnonymous(), $survey->getLpItemId());
+                    }
+                }
                 break;
             case 'deleteuserreport':
-                self::delete_user_report($survey, $_GET['user']);
+                self::delete_user_report($survey->getIid(), $_GET['user']);
                 break;
         }
     }
@@ -252,9 +275,16 @@ class SurveyUtil
         $user_id = Database::escape_string($user_id);
 
         if (!empty($survey_id) && !empty($user_id)) {
+
+            $sessionCondition = '';
+            if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+                $sessionId = api_get_session_id();
+                $sessionCondition = api_get_session_condition($sessionId);
+            }
+
             // delete data from survey_answer by user_id and survey_id
             $sql = "DELETE FROM $table_survey_answer
-			        WHERE c_id = $course_id AND survey_id = '".$survey_id."' AND user = '".$user_id."'";
+			        WHERE c_id = $course_id AND survey_id = '".$survey_id."' AND user = '".$user_id."' $sessionCondition";
             Database::query($sql);
             // update field answered from survey_invitation by user_id and survey_id
             $sql = "UPDATE $table_survey_invitation SET answered = '0'
@@ -265,7 +295,7 @@ class SurveyUtil
                             WHERE
                                 iid = '".$survey_id."'
                         ) AND
-			            user_id = '".$user_id."'";
+			            user_id = '".$user_id."'  $sessionCondition";
             $result = Database::query($sql);
         }
 
@@ -379,11 +409,17 @@ class SurveyUtil
                 }
             }
 
+            $sessionCondition = '';
+            if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+                $sessionId = api_get_session_id();
+                $sessionCondition = api_get_session_condition($sessionId);
+            }
+
             // Getting all the answers of the user
             $sql = "SELECT * FROM $table_survey_answer
 			        WHERE
                         survey_id = '".$surveyId."' AND
-                        user = '".$userId."'";
+                        user = '".$userId."' $sessionCondition";
             $result = Database::query($sql);
             while ($row = Database::fetch_assoc($result)) {
                 $answers[$row['question_id']][] = $row['option_id'];
@@ -514,6 +550,15 @@ class SurveyUtil
         $surveyId = $survey->getIid();
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
         $course_id = api_get_course_int_id();
+
+        $sessionCondition = '';
+        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            $sessionId = api_get_session_id();
+            $sessionCondition = api_get_session_condition($sessionId);
+        }
+
+        // Database table definitions
+        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
@@ -781,7 +826,7 @@ class SurveyUtil
                     WHERE
                         c_id = $course_id AND
                         option_id = '".Database::escape_string($_GET['viewoption'])."'
-                        $sql_restriction";
+                        $sql_restriction $sessionCondition";
             $result = Database::query($sql);
             echo '<ul>';
             while ($row = Database::fetch_assoc($result)) {
@@ -809,14 +854,13 @@ class SurveyUtil
         $surveyId = $survey->getIid();
         $questionId = $question->getIid();
         $options = $survey->getOptions();
-        // Getting the options
-        /*$sql = "SELECT * FROM $table_survey_question_option
-                WHERE
-                    survey_id= $surveyId AND
-                    question_id = '".intval($question['iid'])."'
-                ORDER BY sort ASC";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {*/
+
+        $sessionCondition = '';
+        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            $sessionId = api_get_session_id();
+            $sessionCondition = api_get_session_condition($sessionId);
+        }
+
         foreach ($options as $option) {
             $options[$option->getIid()] = $option;
         }
@@ -827,6 +871,7 @@ class SurveyUtil
                 WHERE
                    survey_id= $surveyId AND
                    question_id = '".$questionId."'
+                   $sessionCondition
                 GROUP BY option_id, value";
         $result = Database::query($sql);
         $number_of_answers = 0;
@@ -936,7 +981,8 @@ class SurveyUtil
         $userId = 0,
         $addActionBar = true,
         $addFilters = true,
-        $addExtraFields = true
+        $addExtraFields = true,
+        $lpItemId = 0
     ) {
         // Database table definitions
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
@@ -950,8 +996,38 @@ class SurveyUtil
             return '';
         }
 
+        $sessionCondition = '';
+        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            $sessionId = api_get_session_id();
+            $sessionCondition = api_get_session_condition($sessionId);
+        }
+        $lpItemCondition = '';
+        if (!empty($lpItemId)) {
+            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+        }
+
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
         $content = '';
+        if (!empty($lpItemId)) {
+            $tableLp = Database::get_course_table(TABLE_LP_MAIN);
+            $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
+            $sql = "SELECT l.name,
+                    li.title
+                    FROM $tableLpItem li
+                    INNER JOIN $tableLp l
+                    ON l.iid = li.lp_id AND
+                       l.c_id = li.c_id
+                    WHERE li.c_id = $course_id AND
+                          li.iid = $lpItemId";
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                $row = Database::fetch_assoc($rs);
+                $lpName = $row['name'];
+                $lpItemTitle = $row['title'];
+                $content .= '<h3>'.$lpName.' : '.$lpItemTitle.'</h3>';
+            }
+        }
+
         if ($addActionBar) {
             $actions = '<a
                 href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
@@ -1173,6 +1249,8 @@ class SurveyUtil
                 WHERE
                     survey_id = $surveyId
                     $userCondition
+                    $sessionCondition
+                    $lpItemCondition
                 ORDER BY iid, user ASC";
         $result = Database::query($sql);
         $i = 1;
@@ -1359,6 +1437,12 @@ class SurveyUtil
         $course = api_get_course_info();
         $course_id = $course['real_id'];
 
+        $sessionCondition = '';
+        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            $sessionId = api_get_session_id();
+            $sessionCondition = api_get_session_condition($sessionId);
+        }
+
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
@@ -1505,6 +1589,7 @@ class SurveyUtil
         $sql = "SELECT * FROM $table_survey_answer
 		        WHERE
 		          survey_id = $surveyId
+		          $sessionCondition
 		          ";
         if (0 != $user_id) {
             $user_id = (int) $user_id;
@@ -2219,15 +2304,27 @@ class SurveyUtil
      *
      * @version February 2007 - Updated March 2008
      */
-    public static function get_answers_of_question_by_user($survey_id, $question_id)
+    public static function get_answers_of_question_by_user($survey_id, $question_id, $lpItemId = 0)
     {
         $course_id = api_get_course_int_id();
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+
+        $sessionCondition = '';
+        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            $sessionId = api_get_session_id();
+            $sessionCondition = api_get_session_condition($sessionId);
+        }
+        $lpItemCondition = '';
+        if (!empty($lpItemId)) {
+            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+        }
 
         $sql = "SELECT * FROM $table_survey_answer
                 WHERE
                   survey_id='".intval($survey_id)."' AND
                   question_id='".intval($question_id)."'
+                  $sessionCondition
+                  $lpItemCondition
                 ORDER BY USER ASC";
         $result = Database::query($sql);
         $return = [];
@@ -3861,11 +3958,8 @@ class SurveyUtil
 
     /**
      * Set a flag to the current survey as answered by the current user.
-     *
-     * @param string $surveyCode The survey code
-     * @param int    $courseId   The course ID
      */
-    public static function flagSurveyAsAnswered($surveyCode, $courseId)
+    public static function flagSurveyAsAnswered(string $surveyCode, int $courseId): void
     {
         $currentUserId = api_get_user_id();
         $flag = sprintf('%s-%s-%d', $courseId, $surveyCode, $currentUserId);
@@ -3879,13 +3973,8 @@ class SurveyUtil
 
     /**
      * Check whether a survey was answered by the current user.
-     *
-     * @param string $surveyCode The survey code
-     * @param int    $courseId   The course ID
-     *
-     * @return bool
      */
-    public static function isSurveyAnsweredFlagged($surveyCode, $courseId)
+    public static function isSurveyAnsweredFlagged(string $surveyCode, int $courseId): bool
     {
         $currentUserId = api_get_user_id();
         $flagToCheck = sprintf('%s-%s-%d', $courseId, $surveyCode, $currentUserId);

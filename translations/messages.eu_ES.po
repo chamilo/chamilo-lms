@@ -4856,10 +4856,10 @@ msgstr "Berretsi"
 msgid "Unsubscribe users from course"
 msgstr "Kendu erabiltzaileen inskripzioa ikastarotik"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Klasearen izena falta da"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Klasearen izena badago lehendik"
 
 msgid "CSV file import location"
@@ -15809,7 +15809,7 @@ msgstr "IP helbidea"
 msgid "Only skills that were not registered were imported"
 msgstr "Erregistraturik ez zeuden gaitasunak bakarrik inportatu ziren"
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "Ez da gaitasunaren izena zehaztu"
 
 msgid "The parent skill was not set"

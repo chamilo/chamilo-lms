@@ -19,10 +19,10 @@ const { courses, isEnabled } = useSessionCard(props.session)
     style="max-width: 540px"
   >
     <CourseCard
-      :session="session"
       :course="course"
-      :session-id="session.id"
       :disabled="!isEnabled"
+      :session="session"
+      :session-id="session.id"
     />
   </div>
 </template>

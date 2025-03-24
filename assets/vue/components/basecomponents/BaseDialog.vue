@@ -3,13 +3,14 @@ import Dialog from "primevue/dialog"
 import { iconValidator } from "./validators"
 import BaseIcon from "./BaseIcon.vue"
 
+const isVisible = defineModel("isVisible", {
+  required: true,
+  type: Boolean,
+})
+
 defineProps({
   title: {
     type: String,
-    required: true,
-  },
-  isVisible: {
-    type: Boolean,
     required: true,
   },
   headerIcon: {
@@ -23,16 +24,13 @@ defineProps({
     },
   },
 })
-
-defineEmits(["update:isVisible"])
 </script>
 
 <template>
   <Dialog
+    v-model:visible="isVisible"
     :modal="true"
-    :visible="isVisible"
     class="p-fluid"
-    @update:visible="$emit('update:isVisible', $event)"
   >
     <template #header>
       <div class="text-left">

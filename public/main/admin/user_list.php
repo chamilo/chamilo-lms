@@ -186,7 +186,7 @@ function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false):
                     u.email AS col6,
                     u.status AS col7,
                     u.active AS col8,
-                    u.registration_date AS col9,
+                    u.created_at AS col9,
                     u.last_login as col10,
                     u.id AS col11,
                     u.expiration_date AS exp,
@@ -225,7 +225,7 @@ function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false):
     foreach ($keywordList as $keyword) {
         $keywordListValues[$keyword] = null;
         if (isset($_GET[$keyword]) && !empty($_GET[$keyword])) {
-            $keywordListValues[$keyword] = $_GET[$keyword];
+            $keywordListValues[$keyword] = Security::remove_XSS($_GET[$keyword]);
             $atLeastOne = true;
         }
     }
@@ -525,6 +525,8 @@ function modify_deleted_filter(int $user_id, string $url_params, array $row): st
         [
             'title' => get_lang('Restore'),
             'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+            'data-confirm-text' => get_lang('Yes'),
+            'data-cancel-text' => get_lang('Cancel'),
             'class' => 'delete-swal',
         ]
     );
@@ -537,11 +539,13 @@ function modify_deleted_filter(int $user_id, string $url_params, array $row): st
             'view' => Security::remove_XSS($_GET['view']),
         ]);
     $result .= Display::url(
-        Display::getMdiIcon('delete-forever', 'ch-tool-icon', null, 22, get_lang('DeletePermanently')),
+        Display::getMdiIcon('delete-forever', 'ch-tool-icon', null, 22, get_lang('Delete permanently')),
         $deleteUrl,
         [
-            'title' => get_lang('DeletePermanently'),
+            'title' => get_lang('Delete permanently'),
             'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+            'data-confirm-text' => get_lang('Yes'),
+            'data-cancel-text' => get_lang('Cancel'),
             'class' => 'delete-swal',
         ]
     );
@@ -713,13 +717,15 @@ function modify_filter($user_id, $url_params, $row): string
                 [
                     'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
                     'class' => 'delete-swal',
+                    'data-confirm-text' => get_lang('Yes'),
+                    'data-cancel-text' => get_lang('Cancel'),
                     'title' => get_lang('Anonymize'),
                 ]
             );
         }
 
-        $deleteAllowed = api_get_env_variable('DENY_DELETE_USERS', false);
-        if ($deleteAllowed) {
+        $denyDeleteUsers = api_get_env_variable('DENY_DELETE_USERS', false);
+        if (!$denyDeleteUsers) {
             if ($user_id != $currentUserId &&
                 !$user_is_anonymous &&
                 api_global_admin_can_edit_admin($user_id)
@@ -746,6 +752,8 @@ function modify_filter($user_id, $url_params, $row): string
                     [
                         'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
                         'title' => get_lang('Delete'),
+                        'data-confirm-text' => get_lang('Yes'),
+                        'data-cancel-text' => get_lang('Cancel'),
                         'class' => 'delete-swal',
                     ]
                 );
@@ -789,6 +797,8 @@ function modify_filter($user_id, $url_params, $row): string
                 [
                     'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
                     'title' => get_lang('Delete'),
+                    'data-confirm-text' => get_lang('Yes'),
+                    'data-cancel-text' => get_lang('Cancel'),
                     'class' => 'delete-swal',
                 ]
             );
@@ -1387,19 +1397,20 @@ if (0 == $table->get_total_number_of_items()) {
     }
 }
 
-$tabsHtml = '
-<div class="users-list">
-    <ul class="nav nav-tabs">
-      <li class="nav-item '.($view == 'all' ? 'active' : '').'">
-        <a class="nav-link '.($view == 'all' ? 'active' : '').'" href="user_list.php?view=all">'.get_lang('All users').'</a>
-      </li>
-      <li class="nav-item '.($view == 'deleted' ? 'active' : '').'">
-        <a class="nav-link '.($view == 'deleted' ? 'active' : '').'" href="user_list.php?view=deleted">'.get_lang('Deleted users').'</a>
-      </li>
-    </ul>
-</div>';
-
-$toolbarActions = $tabsHtml;
+$toolbarActions = Display::tabsOnlyLink(
+    [
+        'all' => [
+            'url' => 'user_list.php?view=all',
+            'content' => get_lang('All users'),
+        ],
+        'deleted' => [
+            'url' => 'user_list.php?view=deleted',
+            'content' => get_lang('Deleted users'),
+        ],
+    ],
+    $view,
+    'users-list'
+);
 $toolbarActions .= Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter.$actionsRight]);
 
 $tpl = new Template($tool_name);

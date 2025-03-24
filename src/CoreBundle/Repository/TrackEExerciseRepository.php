@@ -22,4 +22,21 @@ class TrackEExerciseRepository extends ServiceEntityRepository
         $this->getEntityManager()->remove($track);
         $this->getEntityManager()->flush();
     }
+
+    /**
+     * Get exercises with pending corrections grouped by exercise ID.
+     */
+    public function getPendingCorrectionsByExercise(int $courseId): array
+    {
+        $qb = $this->createQueryBuilder('te');
+
+        $qb->select('IDENTITY(te.quiz) AS exerciseId, COUNT(te.exeId) AS pendingCount')
+            ->where('te.status = :status')
+            ->andWhere('te.course = :courseId')
+            ->setParameter('status', 'incomplete')
+            ->setParameter('courseId', $courseId)
+            ->groupBy('te.quiz');
+
+        return $qb->getQuery()->getResult();
+    }
 }

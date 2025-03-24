@@ -4856,10 +4856,10 @@ msgstr "Potvrdit"
 msgid "Unsubscribe users from course"
 msgstr "Odregistrovat uživatele ze školení"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Chybí název třídy"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Název třídy existuje"
 
 msgid "CSV file import location"
@@ -15809,7 +15809,7 @@ msgstr ""
 msgid "Only skills that were not registered were imported"
 msgstr ""
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr ""
 
 msgid "The parent skill was not set"

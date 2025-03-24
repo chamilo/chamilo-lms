@@ -49,7 +49,6 @@ import ResourceIcon from "./ResourceIcon.vue"
 import { computed } from "vue"
 import { useCidReq } from "../../composables/cidReq"
 import { useFileUtils } from "../../composables/fileUtils"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const props = defineProps({
   data: {

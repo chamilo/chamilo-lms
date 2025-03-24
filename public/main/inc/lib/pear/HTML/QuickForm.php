@@ -257,11 +257,9 @@ class HTML_QuickForm extends HTML_Common
 
     public function protect()
     {
-        $token = $this->getSubmitValue('protect_token');
+        $token = Security::get_existing_token();
         if (null === $token) {
             $token = Security::get_token();
-        } else {
-            $token = Security::get_existing_token();
         }
         $this->addHidden('protect_token', $token);
         $this->setToken($token);
@@ -1409,22 +1407,12 @@ class HTML_QuickForm extends HTML_Common
      */
     public function validate()
     {
-        if (count($this->_rules) == 0 && count($this->_formRules) == 0 && $this->isSubmitted()) {
-            return 0 === count($this->_errors);
-        } elseif (!$this->isSubmitted()) {
-
+        if (!$this->isSubmitted()) {
             return false;
         }
 
-        if (null !== $this->getToken()) {
-            $check = Security::check_token('form', $this);
-            Security::clear_token();
-            if (false === $check) {
-                return false;
-            }
-        }
-
-        $registry =& HTML_QuickForm_RuleRegistry::singleton();
+        if (count($this->_rules) > 0 || count($this->_formRules) > 0) {
+            $registry =& HTML_QuickForm_RuleRegistry::singleton();
 
         foreach ($this->_rules as $target => $rules) {
             $submitValue = $this->getSubmitValue($target);
@@ -1516,7 +1504,25 @@ class HTML_QuickForm extends HTML_Common
             }
         }
 
-        return (0 == count($this->_errors));
+            if (count($this->_errors) > 0) {
+                return false;
+            }
+        }
+
+        if (null !== $this->getToken()) {
+            $check = Security::check_token('form', $this);
+            Security::clear_token();
+            if (false === $check) {
+                // Redirect to the same URL + show token not validated message.
+                $url = $this->getAttribute('action');
+                Display::addFlash(Display::return_message(get_lang('NotValidated'), 'warning'));
+                api_location($url);
+
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

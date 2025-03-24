@@ -1,25 +1,39 @@
 <template>
   <div class="flex flex-col">
-    <label v-if="title" :for="name" class="mb-2">{{ title }}</label>
-    <div v-for="(option, index) in options" :key="option.value" class="flex items-center mr-2">
+    <label
+      v-if="title"
+      :for="name"
+      class="mb-2"
+      >{{ title }}</label
+    >
+    <div
+      v-for="(option, index) in options"
+      :key="option.value"
+      class="flex items-center mr-2"
+    >
       <RadioButton
-        :input-id="`${name}-${index}`"
         v-model="value"
+        :input-id="`${name}-${index}`"
         :name="name"
         :value="option.value"
       />
-      <label :for="`${name}-${index}`" class="ml-2 cursor-pointer">{{ option.label }}</label>
+      <label
+        :for="`${name}-${index}`"
+        class="ml-2 cursor-pointer"
+        >{{ option.label }}</label
+      >
     </div>
   </div>
 </template>
 
 <script setup>
-import RadioButton from 'primevue/radiobutton'
-import { ref, watch } from 'vue'
+import RadioButton from "primevue/radiobutton"
+import { ref, watch } from "vue"
+
 const props = defineProps({
   modelValue: {
     type: [String, Number],
-    required: true
+    required: true,
   },
   name: {
     type: String,
@@ -32,15 +46,18 @@ const props = defineProps({
   },
   initialValue: {
     type: String,
-    default: ''
+    default: "",
   },
 })
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"])
 const value = ref(props.modelValue)
-watch(() => props.modelValue, (newValue) => {
-  value.value = newValue
-})
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    value.value = newValue
+  },
+)
 watch(value, (newValue) => {
-  emit('update:modelValue', newValue)
+  emit("update:modelValue", newValue)
 })
 </script>

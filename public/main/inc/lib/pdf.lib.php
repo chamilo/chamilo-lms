@@ -7,7 +7,10 @@ use Chamilo\CoreBundle\Framework\Container;
 use Masterminds\HTML5;
 use Mpdf\HTMLParserMode;
 use Mpdf\Mpdf;
+use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
+use Mpdf\Utils\UtfString;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class PDF.
@@ -29,6 +32,8 @@ class PDF
      * @param string   $orientation orientation "P" = Portrait "L" = Landscape
      * @param array    $params
      * @param Template $template
+     *
+     * @throws MpdfException
      */
     public function __construct(
         $pageFormat = 'A4',
@@ -37,31 +42,31 @@ class PDF
         $template = null
     ) {
         $this->template = $template;
-        /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF */
+        /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=Mpdf */
         if (!in_array($orientation, ['P', 'L'])) {
             $orientation = 'P';
         }
         //left, right, top, bottom, margin_header, margin footer
 
-        $params['left'] = isset($params['left']) ? $params['left'] : 15;
-        $params['right'] = isset($params['right']) ? $params['right'] : 15;
-        $params['top'] = isset($params['top']) ? $params['top'] : 30;
-        $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 30;
-        $params['margin_footer'] = isset($params['margin_footer']) ? $params['margin_footer'] : 8;
+        $params['left'] = $params['left'] ?? 15;
+        $params['right'] = $params['right'] ?? 15;
+        $params['top'] = $params['top'] ?? 30;
+        $params['bottom'] = $params['bottom'] ?? 30;
+        $params['margin_footer'] = $params['margin_footer'] ?? 8;
 
-        $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
-        $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : '';
-        $this->params['course_info'] = isset($params['course_info']) ? $params['course_info'] : api_get_course_info();
-        $this->params['session_info'] = isset($params['session_info']) ? $params['session_info'] : api_get_session_info(api_get_session_id());
-        $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
-        $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : [];
-        $this->params['show_real_course_teachers'] = isset($params['show_real_course_teachers']) ? $params['show_real_course_teachers'] : false;
-        $this->params['student_info'] = isset($params['student_info']) ? $params['student_info'] : false;
-        $this->params['show_grade_generated_date'] = isset($params['show_grade_generated_date']) ? $params['show_grade_generated_date'] : false;
-        $this->params['show_teacher_as_myself'] = isset($params['show_teacher_as_myself']) ? $params['show_teacher_as_myself'] : true;
+        $this->params['filename'] = $params['filename'] ?? api_get_local_time();
+        $this->params['pdf_title'] = $params['pdf_title'] ?? '';
+        $this->params['course_info'] = $params['course_info'] ?? api_get_course_info();
+        $this->params['session_info'] = $params['session_info'] ?? api_get_session_info(api_get_session_id());
+        $this->params['course_code'] = $params['course_code'] ?? api_get_course_id();
+        $this->params['add_signatures'] = $params['add_signatures'] ?? [];
+        $this->params['show_real_course_teachers'] = $params['show_real_course_teachers'] ?? false;
+        $this->params['student_info'] = $params['student_info'] ?? false;
+        $this->params['show_grade_generated_date'] = $params['show_grade_generated_date'] ?? false;
+        $this->params['show_teacher_as_myself'] = $params['show_teacher_as_myself'] ?? true;
         $localTime = api_get_local_time();
-        $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_TIME_FORMAT_LONG);
-        $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
+        $this->params['pdf_date'] = $params['pdf_date'] ?? api_format_date($localTime, DATE_TIME_FORMAT_LONG);
+        $this->params['pdf_date_only'] = $params['pdf_date'] ?? api_format_date($localTime, DATE_FORMAT_LONG);
 
         $params = [
             'tempDir' => Container::getParameter('kernel.cache_dir').'/mpdf',
@@ -102,7 +107,9 @@ class PDF
         $saveToFile = false,
         $returnHtml = false,
         $addDefaultCss = false,
-        $extraRows = []
+        $extraRows = [],
+        $outputMode = 'D',
+        $fileToSave = null
     ) {
         if (empty($this->template)) {
             $tpl = new Template('', false, false, false, false, true, false);
@@ -137,6 +144,10 @@ class PDF
             }
         }
 
+        if (!empty($this->params['session_info']['title'])) {
+            $this->params['session_info']['title'] = preg_replace('/[\x{2600}-\x{26FF}]/u', '', $this->params['session_info']['title']);
+        }
+
         $tpl->assign('pdf_course', $this->params['course_code']);
         $tpl->assign('pdf_course_info', $this->params['course_info']);
         $tpl->assign('pdf_session_info', $this->params['session_info']);
@@ -153,6 +164,7 @@ class PDF
         $tableTemplate = $tpl->get_template('export/table_pdf.tpl');
         $html = $tpl->fetch($tableTemplate);
         $html = api_utf8_encode($html);
+        $html = $this->replaceIconsWithImages($html);
 
         if ($returnHtml) {
             return $html;
@@ -165,9 +177,9 @@ class PDF
             $css,
             $this->params['filename'],
             $this->params['course_code'],
-            'D',
+            $outputMode,
             $saveToFile,
-            null,
+            $fileToSave,
             $returnHtml,
             $addDefaultCss
         );
@@ -299,8 +311,22 @@ class PDF
                     $filename = basename($filename, '.htm');
                 }
 
+                $webPath = api_get_path(WEB_PATH);
+
                 $documentHtml = @file_get_contents($file);
                 $documentHtml = preg_replace($clean_search, '', $documentHtml);
+
+                $crawler = new Crawler($documentHtml);
+                $crawler
+                    ->filter('link[rel="stylesheet"]')
+                    ->each(function (Crawler $node) use ($webPath) {
+                        $linkUrl = $node->link()->getUri();
+                        if (!str_starts_with($linkUrl, $webPath)) {
+                            $node->getNode(0)->parentNode->removeChild($node->getNode(0));
+                        }
+                    })
+                ;
+                $documentHtml = $crawler->outerHtml();
 
                 //absolute path for frames.css //TODO: necessary?
                 $absolute_css_path = api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets.stylesheets').'/frames.css';
@@ -413,7 +439,7 @@ class PDF
         $basicStyles = [];
 
         $doc = new DOMDocument();
-        @$doc->loadHTML($document_html);
+        @$doc->loadHTML('<?xml encoding="UTF-8">' . $document_html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
         $linksToRemove = [];
 
@@ -443,28 +469,6 @@ class PDF
                     if (in_array($old_src, $replaced)) {
                         continue;
                     }
-
-                    if (false === strpos($old_src, $protocol)) {
-                        if (false === strpos($old_src, '/main/default_course_document')) {
-                            if (false === strpos($old_src, '/main/inc/lib/') &&
-                                false === strpos($old_src, '/app/upload/')
-                            ) {
-                                /*$old_src_fixed = str_replace(
-                                    api_get_path(REL_COURSE_PATH).$courseInfo['path'].'/document/',
-                                    '',
-                                    $old_src
-                                );
-                                $old_src_fixed = str_replace(
-                                    'courses/'.$courseInfo['path'].'/document/',
-                                    '',
-                                    $old_src_fixed
-                                );
-                                $new_path = $document_path.$old_src_fixed;
-                                $document_html = str_replace($old_src, $new_path, $document_html);
-                                $replaced[] = $old_src;*/
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -476,13 +480,26 @@ class PDF
             $document_html
         );
         $document_html = str_replace(api_get_path(WEB_ARCHIVE_PATH), api_get_path(SYS_ARCHIVE_PATH), $document_html);
-
+        $document_html = str_replace('<?xml encoding="UTF-8">', '', $document_html);
         // The library mPDF expects UTF-8 encoded input data.
         api_set_encoding_html($document_html, 'UTF-8');
         // At the moment the title is retrieved from the html document itself.
         if ($returnHtml) {
             return "<style>$css</style>".$document_html;
         }
+
+        $css .= "
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                font-size: 12px;
+                text-align: left;
+                padding: 2px;
+                border: 1px solid #ccc;
+            }
+        ";
 
         if (!empty($css)) {
             $this->pdf->WriteHTML($css, HTMLParserMode::HEADER_CSS);
@@ -775,7 +792,7 @@ class PDF
                 }
                 if (!empty($watermark_text)) {
                     $this->pdf->SetWatermarkText(
-                        strcode2utf($watermark_text),
+                        UtfString::strcode2utf($watermark_text),
                         0.1
                     );
                     $this->pdf->showWatermarkText = true;
@@ -923,10 +940,24 @@ class PDF
 
         $documentPath = $courseInfo ? $sysCoursePath.$courseInfo['path'].'/document/' : '';
 
+        $notFoundImagePath = Display::return_icon(
+            'closed-circle.png',
+            get_lang('FileNotFound'),
+            [],
+            ICON_SIZE_TINY,
+            false,
+            true
+        );
+
         /** @var \DOMElement $element */
         foreach ($elements as $element) {
             $src = $element->getAttribute('src');
             $src = trim($src);
+
+            if (api_filename_has_blacklisted_stream_wrapper($src)) {
+                $element->setAttribute('src', $notFoundImagePath);
+                continue;
+            }
 
             if (false !== strpos($src, $protocol)) {
                 continue;
@@ -998,5 +1029,32 @@ class PDF
         }
 
         return $doc->saveHTML();
+    }
+
+    /**
+     * Replaces icon tags in the HTML content with corresponding image paths.
+     */
+    public function replaceIconsWithImages(string $content): string
+    {
+        // Load icon images
+        $checkboxOn = Display::return_icon('checkbox_on.png', null, null, ICON_SIZE_TINY);
+        $checkboxOff = Display::return_icon('checkbox_off.png', null, null, ICON_SIZE_TINY);
+        $radioOn = Display::return_icon('radio_on.png', null, null, ICON_SIZE_TINY);
+        $radioOff = Display::return_icon('radio_off.png', null, null, ICON_SIZE_TINY);
+
+        // Define replacements
+        $replacements = [
+            '/<i[^>]*class="[^"]*checkbox-marked-outline[^"]*"[^>]*><\/i>/i' => $checkboxOn,
+            '/<i[^>]*class="[^"]*checkbox-blank-outline[^"]*"[^>]*><\/i>/i' => $checkboxOff,
+            '/<i[^>]*class="[^"]*radiobox-marked[^"]*"[^>]*><\/i>/i' => $radioOn,
+            '/<i[^>]*class="[^"]*radiobox-blank[^"]*"[^>]*><\/i>/i' => $radioOff,
+        ];
+
+        // Perform replacements
+        foreach ($replacements as $pattern => $replacement) {
+            $content = preg_replace($pattern, $replacement, $content);
+        }
+
+        return $content;
     }
 }

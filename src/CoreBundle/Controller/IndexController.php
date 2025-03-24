@@ -31,6 +31,7 @@ class IndexController extends BaseController
     #[Route('/social', name: 'chamilo_core_socialnetwork', options: ['expose' => true])]
     #[Route('/admin', name: 'admin', options: ['expose' => true])]
     #[Route('/p/{slug}', name: 'public_page')]
+    #[Route('/skill/wheel', name: 'skill_wheel')]
     public function index(): Response
     {
         return $this->render('@ChamiloCore/Layout/no_layout.html.twig', ['content' => '']);
@@ -71,10 +72,6 @@ class IndexController extends BaseController
     #[Security("is_granted('ROLE_TEACHER')")]
     public function toggleStudentView(Request $request, SettingsManager $settingsManager): Response
     {
-        if (!api_is_allowed_to_edit(false, false, false, false)) {
-            throw $this->createAccessDeniedException();
-        }
-
         if ('true' !== $settingsManager->getSetting('course.student_view_enabled')) {
             throw $this->createAccessDeniedException();
         }

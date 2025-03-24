@@ -4856,10 +4856,10 @@ msgstr "אישור"
 msgid "Unsubscribe users from course"
 msgstr "בטל רישום משתמשים לקורס"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "חסר שם מחלקה"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "שם הכיתה קיים"
 
 msgid "CSV file import location"
@@ -15809,7 +15809,7 @@ msgstr "כתובת IP"
 msgid "Only skills that were not registered were imported"
 msgstr "יובאו רק מיומנויות שלא נרשמו"
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "למיומנות לא הוגדר שם"
 
 msgid "The parent skill was not set"

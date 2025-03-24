@@ -1,158 +1,153 @@
 {% import '@ChamiloCore/Macros/box.html.twig' as display %}
 
 {% for badge in user_badges %}
-    <div class="row issued">
-        <div class="col-md-5">
-            <div class="thumbnail">
-                <figure class="text-center">
-                    <img class="img-fluid center-block"
-                         src="{{ badge.issue_info.skill_badge_image }}?w=120"
-                         alt="{{ badge.issue_info.skill_name }}"
-                    />
-                    <figcaption>
-                        <p class="lead">{{ badge.issue_info.skill_name }}</p>
+    <div class="flex flex-col md:flex-row gap-6 issued">
+        <div class="w-full md:w-1/5 flex flex-col items-center">
+            <div class="border rounded-lg shadow-md p-4 w-full">
+                <figure class="flex flex-col items-center text-center">
+                    <img class="w-32 md:w-40" src="{{ badge.issue_info.skill_badge_image }}?w=120"
+                         alt="{{ badge.issue_info.skill_name }}" />
+                    <figcaption class="mt-2">
+                        <p class="text-lg font-semibold">{{ badge.issue_info.skill_name }}</p>
                         {% if badge.issue_info.skill_short_code %}
-                            <p>{{ badge.issue_info.skill_short_code }}</p>
+                            <p class="text-gray-500">{{ badge.issue_info.skill_short_code }}</p>
                         {% endif %}
                     </figcaption>
                 </figure>
-                <div class="caption">
+                <div class="mt-4 text-center">
                     {% if badge.issue_info.skill_description %}
-                        <p>{{ badge.issue_info.skill_description }}</p>
+                        <p class="text-gray-600">{{ badge.issue_info.skill_description }}</p>
                     {% endif %}
                     {% if badge.issue_info.skill_criteria %}
-                        <h3>{{ 'Criteria to earn the badge'|trans }}</h3>
-                        <p>{{ badge.issue_info.skill_criteria }}</p>
+                        <h3 class="font-bold mt-3">{{ 'Criteria to earn the badge'|trans }}</h3>
+                        <p class="text-gray-600">{{ badge.issue_info.skill_criteria }}</p>
                     {% endif %}
                 </div>
-            </div>
-            {% if badge.allow_download_export %}
-                <p class="text-center">
-                    <a href="{{ badge.personal_badge }}" class="btn btn--primary">
-                        <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
-                    </a>
-                </p>
-                <hr>
-                <p class="text-center">
-                    <a href="#" class="btn btn--success" id="badge-export-button-{{ badge.issue_info.id }}">
-                        <em class="fa fa-external-link-square fa-fw"></em> {{ 'Export badge'|trans }}
-                    </a>
-                </p>
-                {% if "display.hide_social_media_links" | api_get_setting == 'false' %}
-                <div class='col-md-12 text-center'>
-                    <h5><b> {{ 'Share with your friends' | trans }} </b></h5>
-                    <a
-                        href="http://www.facebook.com/sharer.php?u={{ url('index') }}badge/{{ badge.issue_info.id }}"
-                        target="_new"
-                    >
-                        <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
-                    </a>
-                    <a
-                        href="https://twitter.com/home?status={{ 'I have achieved skill %s on %s' | trans |format(badge.issue_info.skill_name, chamilo_settings_get('platform.site_name'))}} - {{ url('index')}}badge/{{ badge.issue_info.id }}"
-                        target="_new">
-                        <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
-                    </a>
-                </div>
+
+                {% if badge.allow_download_export %}
+                    <div class="mt-4 flex justify-center space-x-4">
+                        <p class="text-center">
+                            <a href="{{ badge.personal_badge }}" class="btn btn--primary">
+                                <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
+                            </a>
+                        </p>
+                        <hr>
+                        <p class="text-center">
+                            <a href="#" class="btn btn--success" id="badge-export-button-{{ badge.issue_info.id }}">
+                                <em class="fa fa-external-link-square fa-fw"></em> {{ 'Export badge'|trans }}
+                            </a>
+                        </p>
+                    </div>
+                    {% if "display.hide_social_media_links"|api_get_setting == 'false' %}
+                        <div class="mt-4 text-center">
+                            <h5 class="font-semibold">{{ 'Share with your friends'|trans }}</h5>
+                            <div class="flex justify-center space-x-4">
+                                <a href="http://www.facebook.com/sharer.php?u={{ url('index') }}badge/{{ badge.issue_info.id }}" target="_new">
+                                    <em class='fa fa-facebook-square fa-2x text-blue-500'></em>
+                                </a>
+                                <a href="https://twitter.com/home?status={{ 'I have achieved skill %s on %s'|trans |format(badge.issue_info.skill_name, chamilo_settings_get('platform.site_name')) }} - {{ url('index') }}badge/{{ badge.issue_info.id }}" target="_new">
+                                    <em class='fa fa-twitter-square fa-2x text-blue-400'></em>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
+            </div>
         </div>
-        <div class="col-md-7">
-            <h3>{{ 'Recipient details'|trans }}</h3>
-            <p class="lead">{{ badge.issue_info.user_complete_name }}</p>
-            <h4>{{ 'Skill acquired at'|trans }}</h4>
-            <ul class="fa-ul">
-                <li>
+        <div class="w-full md:w-4/5 px-4">
+            <h3 class="text-xl font-bold">{{ 'Recipient details'|trans }}</h3>
+            <p class="text-lg font-semibold">{{ badge.issue_info.user_complete_name }}</p>
+
+            <h4 class="mt-4 font-bold">{{ 'Skill acquired at'|trans }}</h4>
+            <ul class="list-none">
+                <li class="mt-2 flex items-center">
+                    <em class="fa fa-clock-o mr-2"></em>
                     {% if badge.issue_info.source_name %}
-                        <em class="fa-li fa fa-clock-o fa-fw"></em>
-                        {{ '<strong>%s</strong> through <em>%s</em>'|trans|format(badge.issue_info.datetime, badge.issue_info.source_name) }}
+                        <strong>{{ badge.issue_info.datetime }}</strong> {{ 'through'|trans }} <em>{{ badge.issue_info.source_name }}</em>
                     {% else %}
-                        <em class="fa-li fa fa-clock-o fa-fw"></em>
                         {{ badge.issue_info.datetime }}
                     {% endif %}
-                    {% if badge.issue_info.argumentation %}
-                        {% if badge.issue_info.argumentation %}
-                            <b><p style="font-style: italic;">
-                                    {{ 'User %s indicated:'|trans|format(badge.issue_info.argumentation_author_name) }}
-                            </p></b>
-                        {% endif %}
-                        <p>{{ badge.issue_info.argumentation }}</p>
-                    {% endif %}
                 </li>
+                {% if badge.issue_info.argumentation %}
+                    <li class="mt-2">
+                        <p class="italic font-semibold">
+                            {{ 'User %s indicated:'|trans|format(badge.issue_info.argumentation_author_name) }}
+                        </p>
+                        <p class="text-gray-600">{{ badge.issue_info.argumentation }}</p>
+                    </li>
+                {% endif %}
             </ul>
 
             {% if show_level %}
-            <h4>{{ 'Level acquired'|trans }}</h4>
-            <ul class="fa-ul">
-                <li>
-                    <em class="fa-li fa fa-check-circle-o fa-fw"></em>
-                    {{ badge.issue_info.acquired_level }}
-                </li>
-            </ul>
+                <h4 class="mt-4 font-bold">{{ 'Level acquired'|trans }}</h4>
+                <p class="flex items-center text-green-600">
+                    <em class="fa fa-check-circle-o mr-2"></em> {{ badge.issue_info.acquired_level }}
+                </p>
             {% endif %}
 
             {% if badge.allow_comment %}
-                <hr />
-                {{ display.panel('Change acquired level'|trans, badge.acquired_level_form) }}
-                <hr>
-
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em>
-                        {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
-                        /
-                        <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em>
-                        {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
+                <hr class="my-4">
+                <div class="border border-blue-300 rounded-lg bg-blue-100 p-4">
+                    <div class="font-bold text-blue-700">
+                        <em class="fa fa-check-circle-o fa-fw"></em> {{ 'Change acquired level'|trans }}
                     </div>
+                    <div class="mt-2">
+                        {% autoescape false %}{{ badge.acquired_level_form }}{% endautoescape %}
+                    </div>
+                </div>
 
-                    <div class="panel-body">
-                        {% autoescape false %}
-                            {{ badge.comment_form }}
-                        {% endautoescape %}
-                        <hr />
-                        {% for comment in badge.issue_info.comments %}
-                            <article>
-                                <div class="media-body">
-                                    <h4 class="media-heading">{{ comment.giver_complete_name }}</h4>
-                                    <p><small>{{ comment.datetime }}</small></p>
-                                    <p>{{ comment.text }}</p>
-                                </div>
-                                <div class="media-right text-right">
-                                    <div style="width: 80px;">
+                <hr class="my-4">
+                <div class="border border-blue-300 rounded-lg bg-blue-100 p-4">
+                    <div class="font-bold text-blue-700 flex justify-between items-center">
+                        <span>
+                            <em class="fa fa-comment-o fa-fw"></em> {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
+                        </span>
+                        <span>
+                            <em class="fa fa-thumbs-o-up fa-fw"></em> {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
+                        </span>
+                    </div>
+                    <div class="mt-2">
+                        {% autoescape false %}{{ badge.comment_form }}{% endautoescape %}
+                        {% if badge.issue_info.comments %}
+                            <hr class="my-4">
+                            {% for comment in badge.issue_info.comments %}
+                                <article class="flex items-start space-x-4">
+                                    <div>
+                                        <h4 class="font-bold">{{ comment.giver_complete_name }}</h4>
+                                        <p class="text-sm text-gray-600">{{ comment.datetime }}</p>
+                                        <p>{{ comment.text }}</p>
+                                    </div>
+                                    <div class="flex justify-end items-center w-16">
                                         {% if comment.value %}
-                                            <em class="fa fa-certificate fa-fw" aria-label="{{ 'Average rating' }}"></em>
-                                            <span class="sr-only">{{ 'Average rating' }}</span>
-                                            {{ comment.value }}
+                                            <em class="fa fa-certificate fa-fw"></em> {{ comment.value }}
                                         {% endif %}
                                     </div>
-                                </div>
-                            </article>
-                        {% else %}
-                            <p>{{ 'Without comment'|trans }}</p>
-                        {% endfor %}
+                                </article>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
             {% else %}
-                <hr>
-                <p class="lead">
-                    <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em>
-                    {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
-                    /
-                    <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em>
-                    {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
+                <hr class="my-4" />
+                <p class="text-lg font-semibold flex justify-between">
+                    <span>
+                        <em class="fa fa-comment-o fa-fw"></em> {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
+                    </span>
+                    <span>
+                        <em class="fa fa-thumbs-o-up fa-fw"></em> {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
+                    </span>
                 </p>
             {% endif %}
         </div>
     </div>
     {% if badge.allow_download_export %}
         <script>
-            $(function () {
-                $('#badge-export-button-{{ badge.issue_info.id }}').on('click', function (e) {
-                    e.preventDefault();
-                    OpenBadges.issue('{{ badge.issue_info.badge_assertion|json_encode() }}');
-                });
-            });
+          $(function() {
+            $('#badge-export-button-{{ badge.issue_info.id }}').on("click", function(e) {
+              e.preventDefault()
+              OpenBadges.issue('{{ badge.issue_info.badge_assertion|json_encode() }}')
+            })
+          })
         </script>
     {% endif %}
-    <br />
-    <br />
 {% endfor %}

@@ -10,19 +10,19 @@
         class="item-button"
       >
         <BaseIcon
-          icon="ticket"
           class="item-button__icon"
+          icon="ticket"
         />
       </BaseAppLink>
 
       <BaseAppLink
+        :class="{ 'item-button--unread': !!btnInboxBadge }"
         :to="{ name: 'MessageList' }"
         class="item-button"
-        :class="{ 'item-button--unread': !!btnInboxBadge }"
       >
         <BaseIcon
-          icon="inbox"
           class="item-button__icon"
+          icon="inbox"
         />
         <span
           v-if="btnInboxBadge"
@@ -57,21 +57,17 @@ import { useRouter } from "vue-router"
 
 import Avatar from "primevue/avatar"
 import Menu from "primevue/menu"
-import PrimeButton from "primevue/button"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { useCidReq } from "../../composables/cidReq"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 
 import { useNotification } from "../../composables/notification"
 import { useI18n } from "vue-i18n"
 import PlatformLogo from "./PlatformLogo.vue"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { useCidReqStore } from "../../store/cidReq"
 
 const { t } = useI18n()
 
-// eslint-disable-next-line no-undef
 const props = defineProps({
   currentUser: {
     required: true,
@@ -97,33 +93,44 @@ const ticketUrl = computed(() => {
 })
 
 const elUserSubmenu = ref(null)
-const userSubmenuItems = computed(() => [
-  {
-    label: props.currentUser.fullName,
-    items: [
-      {
-        label: t("My profile"),
-        url: router.resolve({ name: "AccountHome" }).href,
-      },
-      {
-        label: t("My General Certificate"),
-        url: "/main/social/my_skills_report.php?a=generate_custom_skill",
-      },
-      {
-        label: t("My skills"),
-        url: "/main/social/my_skills_report.php",
-      },
-      {
-        separator: true,
-      },
-      {
-        label: t("Sign out"),
-        url: "/logout",
-        icon: "mdi mdi-logout-variant",
-      },
-    ],
-  },
-])
+const userSubmenuItems = computed(() => {
+  const items = [
+    {
+      label: props.currentUser.fullName,
+      items: [
+        {
+          label: t("My profile"),
+          url: router.resolve({ name: "AccountHome" }).href,
+        },
+      ],
+    },
+  ]
+
+  if (platformConfigStore.getSetting("platform.show_tabs").indexOf("topbar_certificate") > -1) {
+    items[0].items.push({
+      label: t("My General Certificate"),
+      url: "/main/social/my_skills_report.php?a=generate_custom_skill",
+    })
+  }
+
+  if (platformConfigStore.getSetting("platform.show_tabs").indexOf("topbar_skills") > -1) {
+    items[0].items.push({
+      label: t("My skills"),
+      url: "/main/social/my_skills_report.php",
+    })
+  }
+
+  items[0].items.push(
+    { separator: true },
+    {
+      label: t("Sign out"),
+      url: "/logout",
+      icon: "mdi mdi-logout-variant",
+    },
+  )
+
+  return items
+})
 
 function toggleUserMenu(event) {
   elUserSubmenu.value.toggle(event)

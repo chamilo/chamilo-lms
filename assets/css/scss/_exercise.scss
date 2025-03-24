@@ -509,3 +509,72 @@
     }
   }
 }
+
+.ui-jqgrid {
+  .btn.btn-sm.ui-pg-button.active:hover {
+    @apply bg-primary text-white border-primary;
+  }
+
+  .fm-button-icon.active,
+  .fm-button-text.active {
+    @apply text-primary;
+  }
+}
+
+.modal.ui-jqgrid-bootstrap.ui-jqdialog {
+  @apply absolute bg-white rounded-lg border border-gray-30 shadow-lg overflow-hidden font-sans p-0 w-[300px];
+}
+
+.ui-jqdialog {
+  .modal-dialog {
+    @apply h-full;
+  }
+
+  .modal-content {
+    @apply bg-white border-none rounded-lg shadow-none w-full;
+  }
+
+  .modal-header.ui-jqdialog-titlebar {
+    @apply bg-primary text-white px-4 py-3 text-lg font-bold flex justify-between items-center w-full box-border;
+  }
+
+  .modal-header .close.ui-jqdialog-titlebar-close {
+    @apply text-white text-2xl no-underline m-0 cursor-pointer;
+  }
+
+  .modal-header .close.ui-jqdialog-titlebar-close:hover {
+    @apply text-support-5;
+  }
+
+  .modal-body {
+    @apply px-5 py-5 text-sm text-gray-90 text-center;
+  }
+
+  .fm-button {
+    @apply bg-gray-10 text-gray-90 inline-flex items-center gap-2 px-4 py-2 rounded-md transition-all duration-200 ease-in-out;
+  }
+
+  .fm-button:hover {
+    @apply bg-gray-20 text-gray-50;
+  }
+
+  .fm-button-icon {
+    @apply text-gray-30 transition-colors duration-200 ease-in-out;
+  }
+
+  .fm-button-icon:hover {
+    @apply text-gray-50;
+  }
+
+  .fm-button-text {
+    color: inherit;
+  }
+
+  .ui-resizable-handle {
+    @apply bg-gray-25 w-1 h-1 cursor-pointer;
+  }
+
+  .ui-resizable-handle:hover {
+    @apply bg-primary;
+  }
+}

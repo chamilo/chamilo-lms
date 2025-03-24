@@ -18,6 +18,8 @@ use Chamilo\CoreBundle\Component\Utils\ToolIcon;
  */
 class UserGroupModel extends Model
 {
+    public const SOCIAL_CLASS = 1;
+    public const NORMAL_CLASS = 0;
     public $columns = [
         'id',
         'title',
@@ -1369,7 +1371,7 @@ class UserGroupModel extends Model
         }
 
         $result = Database::store_result(
-            Database::query("SELECT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY title $sord LIMIT $start, $limit")
+            Database::query("SELECT DISTINCT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY title $sord LIMIT $start, $limit")
         );
 
         $new_result = [];
@@ -1541,6 +1543,8 @@ class UserGroupModel extends Model
         $params['updated_at'] = $params['created_at'] = api_get_utc_datetime();
         $params['group_type'] = isset($params['group_type']) ? Usergroup::SOCIAL_CLASS : Usergroup::NORMAL_CLASS;
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
+        $params['url'] = isset($params['url']) ? $params['url'] : "";
+        $params['visibility'] = isset($params['visibility']) ? $params['visibility'] : Usergroup::GROUP_PERMISSION_OPEN;
 
         $userGroupExists = $this->usergroup_exists(trim($params['title']));
         if (false === $userGroupExists) {
@@ -1586,8 +1590,9 @@ class UserGroupModel extends Model
         return false;
     }
 
-    public function update($params, $showQuery = false)
+    public function update($params, $showQuery = false): bool
     {
+        $em = Database::getManager();
         $repo = Container::getUsergroupRepository();
         /** @var Usergroup $userGroup */
         $userGroup = $repo->find($params['id']);
@@ -1595,7 +1600,22 @@ class UserGroupModel extends Model
             return false;
         }
 
-        //$params['updated_on'] = api_get_utc_datetime();
+        if (isset($params['title'])) {
+            $userGroup->setTitle($params['title']);
+        }
+
+        if (isset($params['description'])) {
+            $userGroup->setDescription($params['description']);
+        }
+
+        if (isset($params['visibility'])) {
+            $userGroup->setVisibility($params['visibility']);
+        }
+
+        if (isset($params['url'])) {
+            $userGroup->setUrl($params['url']);
+        }
+
         $userGroup
             ->setGroupType(isset($params['group_type']) ? Usergroup::SOCIAL_CLASS : Usergroup::NORMAL_CLASS)
             ->setAllowMembersToLeaveGroup(isset($params['allow_members_leave_group']) ? 1 : 0)
@@ -1610,7 +1630,8 @@ class UserGroupModel extends Model
             }
         }
 
-        $repo->update($userGroup);
+        $em->persist($userGroup);
+        $em->flush();
 
         if (isset($params['delete_picture'])) {
             $this->delete_group_picture($params['id']);
@@ -1793,10 +1814,7 @@ class UserGroupModel extends Model
         $form->addHeader($header);
 
         // Name
-        $form->addElement('text', 'title', get_lang('Title'), ['maxlength' => 255]);
-        $form->applyFilter('title', 'trim');
-
-        $form->addRule('title', get_lang('Required field'), 'required');
+        $form->addText('title', get_lang('Title'), true, ['maxlength' => 255]);
         $form->addRule('title', '', 'maxlength', 255);
 
         // Description
@@ -1821,8 +1839,7 @@ class UserGroupModel extends Model
         }
 
         // url
-        $form->addElement('text', 'url', get_lang('URL'));
-        $form->applyFilter('url', 'trim');
+        $form->addText('url', get_lang('Url'), false);
 
         // Picture
         //$allowed_picture_types = $this->getAllowedPictureExtensions();
@@ -1838,7 +1855,7 @@ class UserGroupModel extends Model
         if ($userGroup && $repo->hasIllustration($userGroup)) {
             $picture = $repo->getIllustrationUrl($userGroup);
             $img = '<img src="'.$picture.'" />';
-            $form->addElement('label', null, $img);
+            $form->addLabel(null, $img);
             $form->addElement('checkbox', 'delete_picture', '', get_lang('Remove picture'));
         }
 

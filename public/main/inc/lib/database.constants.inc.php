@@ -232,6 +232,7 @@ define('TABLE_NOTEBOOK', 'notebook');
 // Message
 define('TABLE_MESSAGE', 'message');
 define('TABLE_MESSAGE_ATTACHMENT', 'message_attachment');
+define('TABLE_MESSAGE_REL_USER', 'message_rel_user');
 
 // Attendance Sheet
 define('TABLE_ATTENDANCE', 'attendance');

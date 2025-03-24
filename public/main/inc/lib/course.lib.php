@@ -10,6 +10,9 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
@@ -74,8 +77,22 @@ class CourseManager
             $params['visual_code'] = $keys['currentCourseId'];
             $params['directory'] = $keys['currentCourseRepository'];
             $courseInfo = api_get_course_info($params['code']);
+
             if (empty($courseInfo)) {
+                $eventDispatcher = Container::getEventDispatcher();
+
+                $eventDispatcher->dispatch(
+                    new CourseCreatedEvent([], AbstractEvent::TYPE_PRE),
+                    Events::COURSE_CREATED
+                );
+
                 $course = AddCourse::register_course($params);
+
+                $eventDispatcher->dispatch(
+                    new CourseCreatedEvent(['course' => $course], AbstractEvent::TYPE_POST),
+                    Events::COURSE_CREATED
+                );
+
                 if (null !== $course) {
                     self::fillCourse($course, $params, $authorId);
 
@@ -894,6 +911,18 @@ class CourseManager
                             $course->getTitle()
                         )
                     )
+                );
+
+                $subject = get_lang('You have been enrolled in the course').' '.$course->getTitle();
+                $message = sprintf(get_lang('Hello %s, you have been enrolled in the course %s.'), UserManager::formatUserFullName($user, true), $course->getTitle());
+
+                MessageManager::send_message_simple(
+                    $userId,
+                    $subject,
+                    $message,
+                    api_get_user_id(),
+                    false,
+                    true
                 );
 
                 $send = (int) api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course);
@@ -4220,7 +4249,8 @@ class CourseManager
         $destination_course_code,
         $destination_session_id,
         $params = [],
-        $withBaseContent = true
+        bool $withBaseContent = true,
+        bool $copySessionContent = false
     ) {
         $course_info = api_get_course_info($source_course_code);
 
@@ -4228,6 +4258,7 @@ class CourseManager
             $cb = new CourseBuilder('', $course_info);
             $course = $cb->build($source_session_id, $source_course_code, $withBaseContent);
             $restorer = new CourseRestorer($course);
+            $restorer->copySessionContent = $copySessionContent;
             $restorer->skip_content = $params;
             $restorer->restore(
                 $destination_course_code,
@@ -4260,7 +4291,7 @@ class CourseManager
         $source_session_id = 0,
         $destination_session_id = 0,
         $params = [],
-        $copySessionContent = false
+        bool $copySessionContent = false
     ) {
         $source_course_info = api_get_course_info($source_course_code);
         if (!empty($source_course_info)) {
@@ -4278,7 +4309,8 @@ class CourseManager
                         $newCourse->getCode(),
                         $destination_session_id,
                         $params,
-                        true
+                        true,
+                        $copySessionContent
                     );
                     if ($result) {
                         return $newCourse;
@@ -5381,6 +5413,8 @@ class CourseManager
             'hide_forum_notifications',
             'quiz_question_limit_per_day',
             'subscribe_users_to_forum_notifications',
+            'learning_path_generator',
+            'exercise_generator',
         ];
 
         $courseModels = ExerciseLib::getScoreModels();
@@ -6345,13 +6379,11 @@ class CourseManager
     /**
      * Helper function to check if there is a course template and, if so, to
      * copy the template as basis for the new course.
-     *
-     * @param string $courseCode     Course code
-     * @param int    $courseTemplate 0 if no course template is defined
      */
-    public static function useTemplateAsBasisIfRequired($courseCode, $courseTemplate)
+    public static function useTemplateAsBasisIfRequired(string $courseCode, int $courseTemplate): void
     {
         $template = api_get_setting('course_creation_use_template');
+        $template = is_numeric($template) ? intval($template) : null;
         $teacherCanSelectCourseTemplate = 'true' === api_get_setting('teacher_can_select_course_template');
         $courseTemplate = isset($courseTemplate) ? intval($courseTemplate) : 0;
 
@@ -6365,7 +6397,7 @@ class CourseManager
             $originCourse = api_get_course_info_by_id($template);
         }
 
-        if ($useTemplate) {
+        if ($useTemplate && !empty($originCourse)) {
             // Include the necessary libraries to generate a course copy
             // Call the course copy object
             $originCourse['official_code'] = $originCourse['code'];
@@ -6587,27 +6619,17 @@ class CourseManager
     public static function getCourseListTabs($listType)
     {
         $tabs = [
-            [
+            'simple' => [
                 'content' => get_lang('Standard list'),
                 'url' => api_get_path(WEB_CODE_PATH).'admin/course_list.php',
             ],
-            [
+            'admin' => [
                 'content' => get_lang('Management List'),
                 'url' => api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php',
             ],
         ];
 
-        $default = 1;
-        switch ($listType) {
-            case 'simple':
-                $default = 1;
-                break;
-            case 'admin':
-                $default = 2;
-                break;
-        }
-
-        return Display::tabsOnlyLink($tabs, $default);
+        return Display::tabsOnlyLink($tabs, $listType, 'course-list');
     }
 
     public static function getUrlMarker($courseId)
@@ -6768,7 +6790,7 @@ class CourseManager
         if (isset($params['course_template'])) {
             self::useTemplateAsBasisIfRequired(
                 $course->getCode(),
-                $params['course_template']
+                (int) $params['course_template']
             );
         }
         $params['course_code'] = $course->getCode();

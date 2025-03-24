@@ -4915,10 +4915,10 @@ msgstr "Bestätigen"
 msgid "Unsubscribe users from course"
 msgstr "Teilnehmer aus Kurs abmelden"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Name für Klasse fehlt"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Name für Klasse existiert schon"
 
 msgid "CSV file import location"
@@ -15869,7 +15869,7 @@ msgstr "IP-Adresse"
 msgid "Only skills that were not registered were imported"
 msgstr "Nur Fähigkeiten, die noch nicht registriert waren, wurden importiert"
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "Die Fähigkeit hat keinen Namen"
 
 msgid "The parent skill was not set"
@@ -24423,7 +24423,6 @@ msgstr "Link zur Testbearbeitung"
 msgid "Move users results from base course to a session"
 msgstr "Verschieben Sie Benutzerergebnisse vom Basiskurs zum eine Session"
 
-#, fuzzy
 msgid "If your quiz have hotspot questions included, you should select the images related from the documents."
 msgstr ""
 "Wenn Ihr Quiz Hotspot-Fragen enthält, sollten Sie die zugehörigen Bilder aus "
@@ -29188,7 +29187,7 @@ msgid "Step 4 - Database settings"
 msgstr "Schritt 4 - Datenbankeinstellungen"
 
 msgid "As read"
-msgstr "Lesen"
+msgstr "Gelesen"
 
 msgid "As unread"
 msgstr "Ungelesen"
@@ -29216,3 +29215,36 @@ msgstr "Freund hinzufügen"
 
 msgid "Add friend"
 msgstr "Freunde hinzufügen"
+
+msgid "Delete permanently"
+msgstr "Endgültig löschen"
+
+msgid "%d minutes before"
+msgstr "%d Minuten vorher"
+
+msgid "%d hours before"
+msgstr "%d Stunden vorher"
+
+msgid "%d days before"
+msgstr "%d Tage vorher"
+
+msgid "Select a folder"
+msgstr "Wählen Sie einen Ordner aus"
+
+msgid "Select the destination folder"
+msgstr "Wählen Sie den Zielordner"
+
+msgid "All users"
+msgstr "Alle Benutzer"
+
+msgid "Reminders"
+msgstr "Erinnerungen"
+
+msgid "Add reminder"
+msgstr "Erinnerung hinzufügen"
+
+msgid "Update introduction links"
+msgstr "Link im Text aktualisieren"
+
+msgid "Conference Room"
+msgstr "Konferenzraum"

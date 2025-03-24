@@ -7,8 +7,8 @@
           v-if="isAdmin"
           icon="edit"
           label="Edit"
-          type="black"
           size="small"
+          type="black"
           @click="handleClick(page)"
         />
       </div>

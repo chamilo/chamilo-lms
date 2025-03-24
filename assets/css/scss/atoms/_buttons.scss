@@ -1,7 +1,9 @@
 .btn {
-  @apply cursor-default font-semibold gap-2 inline-flex justify-center px-6 py-3 rounded-md transition flex-none;
-  font-size: 1rem;
-  line-height: 1rem;
+  @apply cursor-default font-semibold gap-2 inline-flex justify-center px-6 py-2 rounded-md transition flex-none text-base;
+
+  .mdi {
+    @apply text-base;
+  }
 
   &--primary {
     @apply bg-primary text-white;
@@ -53,7 +55,7 @@
 
     &:hover,
     &:focus {
-      @apply bg-gray-30 border-gray-30 text-white;
+      @apply bg-gray-90 border-gray-90 text-white;
     }
   }
 
@@ -170,7 +172,7 @@ $border-color_12: #9333EA;
   $textColor: 'white';
 
   @if('warning' == $color) {
-    $textColor: 'gray-30';
+    $textColor: 'gray-90';
   }
 
   @apply bg-#{$color} text-#{$textColor};
@@ -199,7 +201,7 @@ $border-color_12: #9333EA;
       @if ('warning' == $color) {
         @apply bg-#{$color} border-#{$color} text-gray-90;
       } @else if('black' == $color) {
-        @apply bg-gray-30 border-gray-30 text-white;
+        @apply bg-gray-90 border-gray-90 text-white;
       } @else {
         @apply bg-#{$color} border-#{$color} text-white;
       }
@@ -230,9 +232,7 @@ $border-color_12: #9333EA;
 
 .p-button {
   @include filled-style('primary', 'support-4');
-  @apply cursor-default font-semibold gap-2 inline-flex justify-center px-6 py-3 rounded-md transition;
-  font-size: 1rem;
-  line-height: 1rem;
+  @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center px-4 py-2 rounded-md transition;
 
   &:focus {
     @apply outline-none;
@@ -259,17 +259,29 @@ $border-color_12: #9333EA;
   }
 
   &.p-button-sm {
-    @apply px-4 py-2;
-    font-size: 13px;
+    @apply px-2 py-1;
+
+    .p-button-icon,
+    .p-button-label {
+      font-size: 13px;
+    }
   }
 
   &.p-button-lg {
     @apply px-8 py-4;
-    font-size: 18px;
+
+    .p-button-icon,
+    .p-button-label {
+      font-size: 18px;
+    }
+  }
+
+  .p-button-icon {
+    @apply text-base;
   }
 
   .p-button-label {
-    @apply align-middle font-semibold;
+    @apply align-middle font-semibold text-base;
   }
 
   &.p-button-icon-only {
@@ -290,7 +302,7 @@ $border-color_12: #9333EA;
         @apply bg-gray-10;
 
         .p-button-label {
-          text-decoration: underline;
+          @apply underline;
         }
       }
     }
@@ -326,7 +338,7 @@ $border-color_12: #9333EA;
 
 // plain button
 .p-button.p-button-plain {
-  @include filled-style('gray-30', 'black');
+  @include filled-style('gray-90', 'black');
 
   &.p-button-outlined {
     @include outlined-style('black');
@@ -339,7 +351,7 @@ $border-color_12: #9333EA;
 
 .p-buttonset.p-button-plain {
   > .p-button {
-    @include filled-style('gray-30', 'black');
+    @include filled-style('gray-90', 'black');
 
     &.p-button-outlined {
       @include outlined-style('black');

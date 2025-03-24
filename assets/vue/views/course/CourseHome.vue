@@ -81,6 +81,34 @@
           <small v-if="session"> ({{ session.title }}) </small>
         </h2>
 
+        <p
+          v-if="isAllowedToEdit && documentAutoLaunch === 1"
+          class="text-sm text-gray-600"
+        >
+          {{ t("Document auto-launch is enabled for students") }}
+        </p>
+
+        <p
+          v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)"
+          class="text-sm text-gray-600"
+        >
+          {{ t("Exercise auto-launch is enabled for students") }}
+        </p>
+
+        <p
+          v-if="isAllowedToEdit && (lpAutoLaunch === 1 || lpAutoLaunch === 2)"
+          class="text-sm text-gray-600"
+        >
+          {{ t("LP auto-launch is enabled for students") }}
+        </p>
+
+        <p
+          v-if="isAllowedToEdit && (forumAutoLaunch === 1 || forumAutoLaunch === 2)"
+          class="text-sm text-gray-600"
+        >
+          {{ t("Forum auto-launch is enabled for students") }}
+        </p>
+
         <div class="grow-0">
           <StudentViewButton
             v-if="course"
@@ -192,7 +220,6 @@
           v-for="(shortcut, index) in shortcuts"
           :key="'shortcut-' + index.toString()"
           :change-visibility="changeVisibility"
-          :go-to-short-cut="goToShortCut"
           :shortcut="shortcut"
         />
       </div>
@@ -221,6 +248,7 @@ import courseService from "../../services/courseService"
 import CourseIntroduction from "../../components/course/CourseIntroduction.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
+import { useCourseSettings } from "../../store/courseSettingStore"
 
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
@@ -245,6 +273,11 @@ provide("isCustomizing", isCustomizing)
 const courseItems = ref([])
 
 const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
+const documentAutoLaunch = ref(0)
+const exerciseAutoLaunch = ref(0)
+const lpAutoLaunch = ref(0)
+const forumAutoLaunch = ref(0)
+const courseSettingsStore = useCourseSettings()
 
 courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
   tools.value = cTools.map((element) => {
@@ -267,10 +300,12 @@ courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
 
       return false
     })
-    .map((adminTool) => ({
-      label: adminTool.tool.titleToShow,
-      url: adminTool.url,
-    }))
+    .map((adminTool) => {
+      return {
+        label: t(adminTool.tool.titleToShow),
+        url: adminTool.url,
+      }
+    })
 
   noAdminToolsIndex.reverse().forEach((element) => tools.value.splice(element, 1))
 
@@ -280,9 +315,15 @@ courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
 courseService
   .loadTools(course.value.id, session.value?.id)
   .then((data) => {
-    shortcuts.value = data.shortcuts
+    shortcuts.value = data.shortcuts.map((shortcut) => {
+      return {
+        ...shortcut,
+        customImageUrl: shortcut.customImageUrl || null,
+      }
+    })
   })
-  .catch((error) => console.log(error))
+  .catch((error) => console.error(error))
+
 
 const courseTMenu = ref(null)
 
@@ -292,15 +333,6 @@ const toggleCourseTMenu = (event) => {
 
 function goToSettingCourseTool(tool) {
   return "/course/" + course.value.id + "/settings/" + tool.tool.title + "?sid=" + session.value?.id
-}
-
-function goToShortCut(shortcut) {
-  const url = new URLSearchParams("?")
-
-  url.append("cid", course.value.id)
-  url.append("sid", session.value?.id)
-
-  return shortcut.url + "?" + url
 }
 
 const setToolVisibility = (tool, visibility) => {
@@ -387,10 +419,23 @@ onMounted(async () => {
       translateHtml()
     }, 1000)
   }
+
+  await courseSettingsStore.loadCourseSettings(course.value.id, session.value?.id)
+  documentAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_document_auto_launch"), 10) || 0
+  exerciseAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_exercise_auto_launch"), 10) || 0
+  lpAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_lp_auto_launch"), 10) || 0
+  forumAutoLaunch.value = parseInt(courseSettingsStore.getSetting("enable_forum_auto_launch"), 10) || 0
 })
 
 const onStudentViewChanged = async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()
+
+  courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
+    tools.value = cTools.map((element) => ({
+      ...element,
+      isEnabled: element.resourceNode?.resourceLinks[0]?.visibility === 2,
+    }))
+  })
 }
 
 const allowEditToolVisibilityInSession = computed(() => {

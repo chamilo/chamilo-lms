@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\StateIcon;
-
+use Symfony\Component\HttpFoundation\Request;
 /**
  * Description of zombie_report.
  *
@@ -14,12 +14,14 @@ use Chamilo\CoreBundle\Component\Utils\StateIcon;
 class ZombieReport implements Countable
 {
     protected $additional_parameters = [];
+    protected $request;
 
     protected $parameters_form = null;
 
-    public function __construct($additional_parameters = [])
+    public function __construct($additional_parameters = [], Request $request = null)
     {
         $this->additional_parameters = $additional_parameters;
+        $this->request = $request ?? Request::createFromGlobals();
     }
 
     /**
@@ -121,7 +123,7 @@ class ZombieReport implements Countable
 
     public function get_ceiling($format = null)
     {
-        $result = Request::get('ceiling');
+        $result = $this->request->get('ceiling');
         $result = $result ? $result : ZombieManager::last_year();
 
         $result = is_array($result) && 1 == count($result) ? reset($result) : $result;
@@ -137,7 +139,7 @@ class ZombieReport implements Countable
 
     public function get_active_only()
     {
-        $result = Request::get('active_only', false);
+        $result = $this->request->get('active_only', $this->request->query->get('active_only'));
         $result = 'true' === $result ? true : $result;
         $result = 'false' === $result ? false : $result;
         $result = (bool) $result;
@@ -156,12 +158,12 @@ class ZombieReport implements Countable
             return 'display';
         }
 
-        return Request::post('action', 'display');
+        return $this->request->request->get('action', 'display');
     }
 
     public function perform_action()
     {
-        $ids = Request::post('id');
+        $ids = $this->request->request->get('id');
         if (empty($ids)) {
             return $ids;
         }
@@ -198,15 +200,15 @@ class ZombieReport implements Countable
         $result = [];
         foreach ($items as $item) {
             $row = [];
-            $row[] = $item['user_id'];
+            $row[] = $item['id'];
             $row[] = $item['official_code'];
             $row[] = $item['firstname'];
             $row[] = $item['lastname'];
             $row[] = $item['username'];
             $row[] = $item['email'];
             $row[] = $item['status'];
-            $row[] = $item['auth_source'];
-            $row[] = api_format_date($item['registration_date'], DATE_FORMAT_SHORT);
+            $row[] = $item['auth_sources'];
+            $row[] = api_format_date($item['created_at'], DATE_FORMAT_SHORT);
             $row[] = api_format_date($item['login_date'], DATE_FORMAT_SHORT);
             $row[] = $item['active'];
             $result[] = $row;
@@ -238,7 +240,7 @@ class ZombieReport implements Countable
         $table->set_header($col++, get_lang('Login'));
         $table->set_header($col++, get_lang('e-mail'));
         $table->set_header($col++, get_lang('Profile'));
-        $table->set_header($col++, get_lang('Authentication source'));
+        $table->set_header($col++, get_lang('Authentication source'), false);
         $table->set_header($col++, get_lang('Registered date'));
         $table->set_header($col++, get_lang('Latest access'), false);
         $table->set_header($col, get_lang('active'), false);

@@ -36,13 +36,13 @@ $lp = Session::read('oLP');
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$lpId&".api_get_cidreq(),
@@ -132,7 +132,7 @@ $tpl = new Template(get_lang('Add'));
 $tpl->assign('unique_file_id', api_get_unique_id());
 $tpl->assign('course_code', api_get_course_id());
 $tpl->assign('filename', $lp_item->get_title().'_nano.wav');
-$tpl->assign('enable_record_audio', 'true' === api_get_setting('enable_record_audio'));
+$tpl->assign('enable_record_audio', true);
 $tpl->assign('cur_dir_path', '/audio');
 $tpl->assign('lp_item_id', $lp_item_id);
 //$tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));

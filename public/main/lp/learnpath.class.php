@@ -7,10 +7,13 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -830,7 +833,7 @@ class learnpath
             api_get_session_id()
         );
 
-        if (false !== $link_info) {
+        if (!empty($link_info)) {
             GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
         }
 
@@ -2768,7 +2771,7 @@ class learnpath
             // then change the lp type to thread it as a normal Chamilo LP not a SCO.
             if (in_array(
                 $lp_item_type,
-                ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication']
+                ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication', 'survey']
             )
             ) {
                 $lp_type = CLp::LP_TYPE;
@@ -3315,10 +3318,13 @@ class learnpath
 
         $visibility = (int) $visibility;
 
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
         if (1 === $visibility) {
-            $repo->setVisibilityPublished($lp);
+            $repo->setVisibilityPublished($lp, $course, $session);
         } else {
-            $repo->setVisibilityDraft($lp);
+            $repo->setVisibilityDraft($lp, $course, $session);
         }
 
         return true;
@@ -3344,10 +3350,13 @@ class learnpath
 
         $visibility = (int) $visibility;
 
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
         if (1 === $visibility) {
-            $repo->setVisibilityPublished($resource);
+            $repo->setVisibilityPublished($resource, $course, $session);
         } else {
-            $repo->setVisibilityDraft($resource);
+            $repo->setVisibilityDraft($resource, $course, $session);
             self::toggleCategoryPublish($id, 0);
         }
 
@@ -3723,6 +3732,13 @@ class learnpath
                 // Ignore errors as some tables might not have the progress field just yet.
                 Database::query($sql);
                 $this->progress_db = $progress;
+
+                if (100 == $progress) {
+                    Container::getEventDispatcher()->dispatch(
+                        new LearningPathEndedEvent(['lp_view_id' => $this->lp_view_id]),
+                        Events::LP_ENDED
+                    );
+                }
             }
         }
     }
@@ -6957,31 +6973,30 @@ class learnpath
      */
     public function set_autolaunch($lp_id, $status)
     {
-        $course_id = api_get_course_int_id();
-        $lp_id = (int) $lp_id;
         $status = (int) $status;
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $em = Database::getManager();
+        $repo = Container::getLpRepository();
 
-        // Setting everything to autolaunch = 0
-        $attributes['autolaunch'] = 0;
-        $where = [
-            'session_id = ? AND c_id = ? ' => [
-                api_get_session_id(),
-                $course_id,
-            ],
-        ];
-        Database::update($lp_table, $attributes, $where);
-        if (1 == $status) {
-            //Setting my lp_id to autolaunch = 1
-            $attributes['autolaunch'] = 1;
-            $where = [
-                'iid = ? AND session_id = ? AND c_id = ?' => [
-                    $lp_id,
-                    api_get_session_id(),
-                    $course_id,
-                ],
-            ];
-            Database::update($lp_table, $attributes, $where);
+        $session = api_get_session_entity();
+        $course = api_get_course_entity();
+
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $lps = $qb->getQuery()->getResult();
+
+        foreach ($lps as $lp) {
+            $lp->setAutoLaunch(0);
+            $em->persist($lp);
+        }
+
+        $em->flush();
+
+        if ($status === 1) {
+            $lp = $repo->find($lp_id);
+            if ($lp) {
+                $lp->setAutolaunch(1);
+                $em->persist($lp);
+            }
+            $em->flush();
         }
     }
 
@@ -8016,6 +8031,27 @@ class learnpath
                 }
 
                 return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;
+            case TOOL_SURVEY:
+
+                $surveyId = (int) $id;
+                $repo = Container::getSurveyRepository();
+                if (!empty($surveyId)) {
+                    /** @var CSurvey $survey */
+                    $survey = $repo->find($surveyId);
+                    $autoSurveyLink = SurveyUtil::generateFillSurveyLink(
+                        $survey,
+                        'auto',
+                        api_get_course_entity($course_id),
+                        $session_id
+                    );
+                    $lpParams = [
+                        'lp_id' => $learningPathId,
+                        'lp_item_id' => $id_in_path,
+                        'origin' => 'learnpath',
+                    ];
+
+                    return $autoSurveyLink.'&'.http_build_query($lpParams).'&'.$extraParams;
+                }
         }
 
         return $link;

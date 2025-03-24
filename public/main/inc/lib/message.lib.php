@@ -132,7 +132,8 @@ class MessageManager
         $forwardId = 0,
         $checkCurrentAudioId = false,
         $forceTitleWhenSendingEmail = false,
-        $msgType = null
+        $msgType = null,
+        $baseUrl = null
     ) {
         $group_id = (int) $group_id;
         $receiverUserId = (int) $receiverUserId;
@@ -351,6 +352,8 @@ class MessageManager
             if ($sendEmail) {
                 $notification = new Notification();
                 $sender_info = api_get_user_info($user_sender_id);
+                $baseUrl = $baseUrl ?? api_get_path(WEB_PATH);
+                $content = self::processRelativeLinks($content, $baseUrl);
 
                 // add file attachment additional attributes
                 $attachmentAddedByMail = [];
@@ -374,7 +377,8 @@ class MessageManager
                         $content,
                         $sender_info,
                         $attachmentAddedByMail,
-                        $forceTitleWhenSendingEmail
+                        $forceTitleWhenSendingEmail,
+                        $baseUrl
                     );
                 } else {
                     $usergroup = new UserGroupModel();
@@ -407,7 +411,9 @@ class MessageManager
                         $subject,
                         $content,
                         $group_info,
-                        $attachmentAddedByMail
+                        $attachmentAddedByMail,
+                        $forceTitleWhenSendingEmail,
+                        $baseUrl
                     );
                 }
             }
@@ -416,6 +422,20 @@ class MessageManager
         }
 
         return false;
+    }
+
+    /**
+     * Converts relative URLs in href and src attributes to absolute URLs.
+     */
+    private static function processRelativeLinks(string $content, string $baseUrl): string
+    {
+        return preg_replace_callback(
+            '/(href|src)="(\/[^"]*)"/',
+            function ($matches) use ($baseUrl) {
+                return $matches[1] . '="' . rtrim($baseUrl, '/') . $matches[2] . '"';
+            },
+            $content
+        );
     }
 
     /**
@@ -997,7 +1017,9 @@ class MessageManager
         $main_content .= '<div class="message-content"> ';
         $main_content .= '<div class="username">'.$user_link.'</div>';
         $main_content .= $date;
-        $main_content .= '<div class="message">'.$main_message['content'].$attachment.'</div></div>';
+        $main_content .= '<div class="message">'
+            .Security::remove_XSS($main_message['content'], STUDENT, true)
+            .$attachment.'</div></div>';
         $main_content .= '</div>';
         $main_content .= '</div>';
 
@@ -1758,5 +1780,21 @@ class MessageManager
         }
 
         return $btnLike.PHP_EOL.$btnDislike;
+    }
+
+    /**
+     * Reports whether the given user is sender or receiver of the given message
+     */
+    public static function isUserOwner(int $userId, int $messageId): bool
+    {
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $sql = "SELECT id FROM $table
+          WHERE id = $messageId
+            AND (user_receiver_id = $userId OR user_sender_id = $userId)";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) === 1) {
+            return true;
+        }
+        return false;
     }
 }

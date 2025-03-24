@@ -15,23 +15,24 @@
             :handle-filter="onSendFilter"
             :handle-reset="resetFilter"
           >
-            <CourseCategoryFilterForm
-              ref="filterForm"
-              slot="filter"
-              :values="filters"
-            />
+            <template v-slot:filter>
+              <CourseCategoryFilterForm
+                ref="filterForm"
+                :values="filters"
+              />
+            </template>
           </DataFilter>
 
           <br />
 
           <v-data-table
             v-model="selected"
+            v-model:items-per-page="options.itemsPerPage"
+            v-model:options="options"
             :headers="headers"
             :items="items"
-            :items-per-page.sync="options.itemsPerPage"
             :loading="isLoading"
             :loading-text="$t('Loading')"
-            :options.sync="options"
             :server-items-length="totalItems"
             class="elevation-1"
             item-key="@id"

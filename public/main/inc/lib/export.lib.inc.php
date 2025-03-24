@@ -2,11 +2,8 @@
 
 /* See license terms in /license.txt */
 
-//use Chamilo\CoreBundle\Component\Editor\Connector;
-//use MediaAlchemyst\Alchemyst;
-//use MediaAlchemyst\DriversContainer;
-use Neutron\TemporaryFilesystem\Manager;
-use Neutron\TemporaryFilesystem\TemporaryFilesystem;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Sonata\Exporter\Handler;
 use Sonata\Exporter\Source\ArraySourceIterator;
 use Sonata\Exporter\Writer\CsvWriter;
@@ -29,14 +26,9 @@ class Export
     /**
      * Export tabular data to CSV-file.
      *
-     * @param array  $data
-     * @param string $filename
-     * @param bool   $writeOnly Whether to only write on disk or also send for download
-     * @param string $enclosure
-     *
      * @return mixed csv raw data | false if no data to export | string file path if success in $writeOnly mode
      */
-    public static function arrayToCsv($data, $filename = 'export', $writeOnly = false, $enclosure = '"')
+    public static function arrayToCsv(array $data, string $filename = 'export', bool $writeOnly = false, string $enclosure = '"')
     {
         if (empty($data)) {
             return false;
@@ -59,22 +51,63 @@ class Export
     }
 
     /**
-     * Export tabular data to XLS-file.
+     * Converts an array of data into a CSV file and optionally sends it for download.
      *
-     * @param array  $data
-     * @param string $filename
+     * @return string|void Returns the file path if $writeOnly is true, otherwise sends the file for download and exits.
      */
-    public static function arrayToXls($data, $filename = 'export')
+    public static function arrayToCsvSimple(array $data, string $filename = 'export', bool $writeOnly = false, array $header = [])
+    {
+        $file = api_get_path(SYS_ARCHIVE_PATH) . uniqid('') . '.csv';
+
+        $handle = fopen($file, 'w');
+
+        if ($handle === false) {
+            throw new \RuntimeException("Unable to create or open the file: $file");
+        }
+
+        if (!empty($header)) {
+            fputcsv($handle, $header, ';');
+        }
+
+        foreach ($data as $row) {
+            fputcsv($handle, (array)$row, ';');
+        }
+
+        fclose($handle);
+
+        if (!$writeOnly) {
+            DocumentManager::file_send_for_download($file, true, $filename . '.csv');
+            unlink($file);
+            exit;
+        }
+
+        return $file;
+    }
+
+    /**
+     * Export tabular data to XLS-file.
+     */
+    public static function arrayToXls(array $data, string $filename = 'export')
     {
         if (empty($data)) {
             return false;
         }
 
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $rowNumber = 1;
+        foreach ($data as $row) {
+            $colNumber = 'A';
+            foreach ($row as $cell) {
+                $sheet->setCellValue($colNumber . $rowNumber, $cell);
+                $colNumber++;
+            }
+            $rowNumber++;
+        }
+
         $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xlsx';
-        $writer = new XlsWriter($filePath);
-        $source = new ArraySourceIterator($data);
-        $handler = Handler::create($source, $writer);
-        $handler->export();
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($filePath);
 
         DocumentManager::file_send_for_download($filePath, true, $filename.'.xlsx');
         exit;

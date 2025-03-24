@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Level;
-use Chamilo\CoreBundle\Entity\Profile;
+use Chamilo\CoreBundle\Entity\SkillLevelProfile;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
@@ -17,7 +17,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 $em = Database::getManager();
-$list = $em->getRepository(Profile::class)->findAll();
+$list = $em->getRepository(SkillLevelProfile::class)->findAll();
 
 $listAction = api_get_self();
 
@@ -30,7 +30,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : '';
 
 $item = null;
 if (!empty($id)) {
-    $item = $em->getRepository(Profile::class)->find($id);
+    $item = $em->getRepository(SkillLevelProfile::class)->find($id);
     if (!$item) {
         api_not_allowed();
     }
@@ -89,7 +89,7 @@ switch ($action) {
         $tpl->assign('form', $formToDisplay);
         if ($form->validate()) {
             $values = $form->exportValues();
-            $item = new Profile();
+            $item = new SkillLevelProfile();
             $item->setTitle($values['name']);
             $em->persist($item);
             $em->flush();

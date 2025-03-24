@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class IndexManager.
@@ -216,7 +217,7 @@ class IndexManager
             if (($allowSkillsManagement && api_is_drh()) || api_is_platform_admin()) {
                 $items[] = [
                     'icon' => Display::getMdiIcon(ActionIcon::EDIT_BADGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('My skills')),
-                    'link' => api_get_path(WEB_CODE_PATH).'skills/skills_wheel.php',
+                    'link' => Container::getRouter()->generate('skill_wheel'),
                     'title' => get_lang('Manage skills'),
                 ];
             }

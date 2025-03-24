@@ -4856,10 +4856,10 @@ msgstr "Потврдува"
 msgid "Unsubscribe users from course"
 msgstr "Отпиши ги корисниците од курсот"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Недостасува името на паралелката"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Постои името на паралелката"
 
 msgid "CSV file import location"
@@ -15809,7 +15809,7 @@ msgstr ""
 msgid "Only skills that were not registered were imported"
 msgstr ""
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr ""
 
 msgid "The parent skill was not set"

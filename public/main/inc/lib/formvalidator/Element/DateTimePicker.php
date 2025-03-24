@@ -19,7 +19,7 @@ class DateTimePicker extends HTML_QuickForm_text
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;
         }
-        $attributes['class'] = 'p-component p-inputtext';
+        $attributes['class'] = 'p-component p-inputtext p-filled';
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_appendName = true;
     }
@@ -98,7 +98,7 @@ class DateTimePicker extends HTML_QuickForm_text
                     }
                 });
 
-                document.querySelector('label[for=\"' + '{$id}' + '\"]').classList.add('datepicker-label');
+                document.querySelector('label[for=\"' + '{$id}' + '\"]')?.classList.add('datepicker-label');
             }
 
             function loadLocaleAndInitialize() {

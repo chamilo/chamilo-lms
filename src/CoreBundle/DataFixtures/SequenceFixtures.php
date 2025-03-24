@@ -161,7 +161,7 @@ class SequenceFixtures extends Fixture
             $sequenceRuleMethod = (new SequenceRuleMethod())
                 ->setRule($sequenceRule)
                 ->setMethod($sequenceMethod)
-                ->setMethodOrder((string) ($key + 1))
+                ->setMethodOrder($key + 1)
             ;
             $manager->persist($sequenceRuleMethod);
         }

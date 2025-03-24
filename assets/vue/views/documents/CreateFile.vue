@@ -139,10 +139,10 @@ export default {
       this.isLoading = true
       this.errors = {}
       try {
-        let response = await documentsService.createWithFormData(payload);
-        let data = await response.json();
-        console.log(data);
-        this.onCreated(data);
+        let response = await documentsService.createWithFormData(payload)
+        let data = await response.json()
+        console.log(data)
+        this.onCreated(data)
       } catch (error) {
         console.error(error)
         this.errors = error.errors
@@ -151,25 +151,25 @@ export default {
       }
     },
     onCreated(item) {
-      let message;
+      let message
       if (item["resourceNode"]) {
         message =
           this.$i18n && this.$i18n.t
             ? this.$t("{resource} created", { resource: item["resourceNode"].title })
-            : `${item["resourceNode"].title} created`;
+            : `${item["resourceNode"].title} created`
       } else {
         message =
-          this.$i18n && this.$i18n.t ? this.$t("{resource} created", { resource: item.title }) : `${item.title} created`;
+          this.$i18n && this.$i18n.t ? this.$t("{resource} created", { resource: item.title }) : `${item.title} created`
       }
 
-      this.showMessage(message);
-      let folderParams = this.$route.query;
+      this.showMessage(message)
+      let folderParams = this.$route.query
 
       this.$router.push({
         name: `${this.$options.servicePrefix}List`,
         params: { id: item["@id"] },
         query: folderParams,
-      });
+      })
     },
   },
   mounted() {

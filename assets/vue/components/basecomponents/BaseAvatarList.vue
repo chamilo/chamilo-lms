@@ -28,18 +28,18 @@ const { t } = useI18n()
 
 <template>
   <ul
-    class="avatar-list"
     :class="{ 'avatar-list--several': several }"
+    class="avatar-list"
   >
     <li
       v-for="(user, idx) in userList"
       :key="idx"
-      class="avatar-container"
       :title="user.fullName"
+      class="avatar-container"
     >
       <BaseUserAvatar
-        :image-url="user.illustrationUrl"
         :alt="t('%s\'s picture', [user.username])"
+        :image-url="user.illustrationUrl"
       />
       <div class="avatar-info">
         <p v-text="user.fullName" />

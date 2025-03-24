@@ -4856,10 +4856,10 @@ msgstr "Confirma"
 msgid "Unsubscribe users from course"
 msgstr "Scoate userii de la curs"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Lipseste numele clasei"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Numele clasei existent!"
 
 msgid "CSV file import location"
@@ -15809,7 +15809,7 @@ msgstr ""
 msgid "Only skills that were not registered were imported"
 msgstr "Numai competențele care nu au fost înregistrate au fost importate"
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "Numele de concurență nu este definită"
 
 msgid "The parent skill was not set"

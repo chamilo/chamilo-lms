@@ -1,27 +1,27 @@
-{% if search_skill_list is not null %}
+{% if search_skill_list is defined and search_skill_list is not null %}
     <div class="skills-skills">
-        <h3>{{"Skills"|trans}}</h3>
+        <h3>{{ "Skills"|trans }}</h3>
         <ul class="holder">
             {% for search_skill_id in search_skill_list %}
                 <li class="bit-box">
-                    {{ skill_list[search_skill_id].title}}
-                    <a class="closebutton" href="?a=remove_skill&id={{search_skill_id}}"></a>
+                    {{ skill_list[search_skill_id].title }}
+                    <a class="closebutton" href="?a=remove_skill&id={{ search_skill_id }}"></a>
                 </li>
             {% endfor %}
         </ul>
         <a id="add_profile" class="btn btn--plain" href="#">
-            <em class="fa fa-floppy-o"></em> {{"SaveThisSearch"|trans}}
+            <em class="fa fa-floppy-o"></em> {{ "Save this search"|trans }}
         </a>
     </div>
 {% endif %}
 
-{% if profiles is not null %}
+{% if profiles is defined and profiles is not null %}
     <div class="skills-profiles">
-        <h3>{{"SkillProfiles"|trans}}</h3>
+        <h3>{{ "Skill profiles"|trans }}</h3>
         <ul class="holder">
-            {%for profile in profiles %}
+            {% for profile in profiles %}
                 <li class="bit-box">
-                    <a href="?a=load_profile&id={{profile.id}}">{{profile.title}}</a>
+                    <a href="?a=load_profile&id={{ profile.id }}">{{ profile.title }}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -34,12 +34,12 @@
             <div class="col-md-12">
                 <h4 class="page-header">
                     {% if count == total_search_skills %}
-                        {{ "CompleteMatch"|trans }}
+                        {{ "Complete match"|trans }}
                     {% else %}
                         {% if (total_search_skills - count) == 1 %}
-                            {{ "MissingOneStepToMatch"|trans }}
+                            {{ "Missing <b>one</b> step to match"|trans }}
                         {% else %}
-                            {{ "MissingXStepsToMatch"|trans | format(total_search_skills - count)}}
+                            {{ "Missing <b>%s</b> steps"|trans|format(total_search_skills - count) }}
                         {% endif %}
                     {% endif %}
                 </h4>
@@ -50,62 +50,66 @@
             {% for user in user_list %}
                 <div class="col-md-3">
                     <div class="items-user">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="avatar-user">
-                                <img class="img-circle" width="100" src="{{ user.user.avatar }}" class="center-block">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="avatar-user">
+                                    <img class="img-circle center-block" width="100" src="{{ user.user.avatar }}">
+                                </div>
+                                <p class="text-center"><em class="fa fa-user"></em>
+                                    <a href="{{ _p.web_main }}social/profile.php?u={{ user['user'].user_id }}"
+                                       target="_blank">
+                                        {{ user['user'].complete_name_with_username }}
+                                    </a>
+                                </p>
+                                <p class="text-center">
+                                    <em class="fa fa-graduation-cap"></em> {{ "Achieved skills"|trans }} {{ user.total_found_skills }}
+                                    / {{ total_search_skills }}
+                                </p>
                             </div>
-                            <p class="text-center"><em class="fa fa-user"></em>
-                                <a href="{{ _p.web_main }}social/profile.php?u={{ user['user'].user_id }}" target="_blank">
-                                    {{ user['user'].complete_name_with_username }}
-                                </a>
-                            </p>
-                            <p class="text-center">
-                                <em class="fa fa-graduation-cap"></em> {{ "AchievedSkills"|trans }} {{ user.total_found_skills }} / {{ total_search_skills }}
-                            </p>
-                        </div>
-                        <ul class="list-group">
-                            {% for skill_data in user.skills %}
-                                <li class="list-group-item {{ skill_data.found ? '' : 'text-muted' }}">
-                                    {% if skill_list[skill_data.skill_id].icon %}
-                                        <img src="{{ _p.web_upload ~ skill_list[skill_data.skill_id].icon_small }}" width="22" height="22" alt="{{ skill_list[skill_data.skill_id].title }}">
-                                    {% else %}
-                                        {{ 'ObjectIcon::BADGE'|mdi_icon(22, 'ch-tool-icon', skill_list[skill_data.skill_id].title) }}">
-                                    {% endif %}
+                            <ul class="list-group">
+                                {% for skill_data in user.skills %}
+                                    <li class="list-group-item {{ skill_data.found ? '' : 'text-muted' }}">
+                                        {% if skill_list[skill_data.skill_id].icon %}
+                                            <img src="{{ _p.web_upload ~ skill_list[skill_data.skill_id].icon_small }}"
+                                                 width="22" height="22"
+                                                 alt="{{ skill_list[skill_data.skill_id].title }}">
+                                        {% else %}
+                                            {{ 'ObjectIcon::BADGE'|mdi_icon(22, 'ch-tool-icon', skill_list[skill_data.skill_id].title) }}">
+                                        {% endif %}
 
-                                    {% if skill_data.found %}
-                                        <b>{{ skill_list[skill_data.skill_id].title }}</b>
-                                    {% else %}
-                                        {{ skill_list[skill_data.skill_id].title }}
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                                        {% if skill_data.found %}
+                                            <b>{{ skill_list[skill_data.skill_id].title }}</b>
+                                        {% else %}
+                                            {{ skill_list[skill_data.skill_id].title }}
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% endfor %}
 {% else %}
-    {% if search_skill_list is null %}
-        <div class="warning-message">{{"NoResults"|trans}}</div>
+    {% if search_skill_list is defined and search_skill_list is null %}
+        <div class="warning-message">{{ "No results found"|trans }}</div>
     {% endif %}
 {% endif %}
-</div>
+
 <div id="dialog-form" style="display:none;">
     <form id="save_profile_form" class="form-horizontal" name="form">
         <fieldset>
             <div class="control-group">
-                <label class="control-label" for="name">{{"Name"|trans}}</label>
+                <label class="control-label" for="name">{{ "Name"|trans }}</label>
                 <div class="controls">
                     <input type="text" name="name" id="name" size="40" />
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="name">{{"Description"|trans}}</label>
+                <label class="control-label" for="name">{{ "Description"|trans }}</label>
                 <div class="controls">
-                    <textarea name="description" id="description" class="span2"  rows="7"></textarea>
+                    <textarea name="description" id="description" class="span2" rows="7"></textarea>
                 </div>
             </div>
         </fieldset>

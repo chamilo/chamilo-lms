@@ -40,8 +40,8 @@
         />
         <BaseIcon
           v-else
-          icon="eye-off"
           class="text-gray-50"
+          icon="eye-off"
         />
       </button>
 
@@ -60,15 +60,11 @@
 
 <script setup>
 import { computed, inject } from "vue"
-import { useI18n } from "vue-i18n"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
-
-const { t } = useI18n()
 
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
@@ -80,7 +76,6 @@ const { getSetting } = storeToRefs(platformConfigStore)
 const isSorting = inject("isSorting")
 const isCustomizing = inject("isCustomizing")
 
-// eslint-disable-next-line no-undef
 const props = defineProps({
   isAllowedToEdit: {
     type: Boolean,

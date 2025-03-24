@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use ChamiloSession as Session;
 
 /**
@@ -55,15 +56,6 @@ function validate_data($users, $checkUniqueEmail = false)
             // 2.1. Check whether username is too long.
             if (UserManager::is_username_too_long($username)) {
                 $user['message'] .= Display::return_message(get_lang('This login is too long'), 'warning');
-                $user['has_error'] = true;
-            }
-            // 2.1.1
-            $hasDash = strpos($username, '-');
-            if (false !== $hasDash) {
-                $user['message'] .= Display::return_message(
-                    get_lang('The username cannot contain the \' - \' character'),
-                    'warning'
-                );
                 $user['has_error'] = true;
             }
             // 2.2. Check whether the username was used twice in import file.
@@ -172,7 +164,7 @@ function complete_missing_data($user)
     }
     // 4. Set authsource if not allready set.
     if (empty($user['AuthSource'])) {
-        $user['AuthSource'] = PLATFORM_AUTH_SOURCE;
+        $user['AuthSource'] = UserAuthSource::PLATFORM;
     }
 
     if (empty($user['ExpiryDate'])) {
@@ -242,7 +234,7 @@ function save_data($users, $sendMail = false)
                 $user['language'],
                 $user['PhoneNumber'],
                 '',
-                $user['AuthSource'],
+                [$user['AuthSource']],
                 $user['ExpiryDate'],
                 1,
                 0,
@@ -503,7 +495,7 @@ function processUsers(&$users, $sendMail)
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-$defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
+$defined_auth_sources[] = UserAuthSource::PLATFORM;
 if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }

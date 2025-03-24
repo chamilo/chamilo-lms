@@ -2,36 +2,44 @@
   <div class="field">
     <div class="p-float-label">
       <Dropdown
+        v-model="modelValue"
         :class="{ 'p-invalid': isInvalid }"
         :input-id="inputId"
-        :model-value="modelValue"
         :name="name"
         :option-label="optionLabel"
         :option-value="optionValue"
         :options="options"
         :placeholder="placeholder"
-        @update:model-value="$emit('update:modelValue', $event)"
       />
-      <label :for="inputId" v-text="label" />
+      <label
+        :for="inputId"
+        v-text="label"
+      />
     </div>
-    <small v-if="isInvalid" :class="{ 'p-error': isInvalid }" v-text="errorText" />
-    <small v-if="helpText" class="form-text text-muted">{{ helpText }}</small>
+    <small
+      v-if="isInvalid"
+      :class="{ 'p-error': isInvalid }"
+      v-text="errorText"
+    />
+    <small
+      v-if="helpText"
+      class="form-text text-muted"
+      >{{ helpText }}</small
+    >
   </div>
 </template>
 
 <script setup>
 import Dropdown from "primevue/dropdown"
 
+const modelValue = defineModel({
+  type: String || Number || Object,
+})
+
 defineProps({
   name: {
     type: String,
     required: true,
-  },
-  // type null allow all kind of values, like prime vue does
-  modelValue: {
-    type: null,
-    required: true,
-    default: () => {},
   },
   options: {
     type: Array,
@@ -73,8 +81,10 @@ defineProps({
     required: false,
     default: false,
   },
-  helpText: String,
+  helpText: {
+    type: String || undefined,
+    required: false,
+    default: undefined,
+  },
 })
-
-defineEmits(["update:modelValue"])
 </script>

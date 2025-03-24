@@ -2,7 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
@@ -20,7 +21,7 @@ class DatePicker extends HTML_QuickForm_text
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;
         }
-        $attributes['class'] = 'form-control';
+        $attributes['class'] = 'p-component p-inputtext p-filled';
 
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_appendName = true;
@@ -57,17 +58,18 @@ class DatePicker extends HTML_QuickForm_text
             $requiredSymbol = '<span class="form_required">*</span>';
         }
 
+        $this->setAttribute('placeholder', get_lang('Select date'));
+
         return '
-        <div>'.$requiredSymbol.$label.'</div>
-        <div id="'.$id.'" class="flex items-center mt-1 flatpickr-wrapper" data-wrap="true">
-            <input '.$this->_getAttrString($this->_attributes).'
-                class="form-control border flex-grow" type="text" value="'.$value.'" placeholder="'.get_lang('Select date').'" data-input>
+        <label>'.$requiredSymbol.$label.'</label>
+        <div id="'.$id.'_container" class="flex items-center mt-1 flatpickr-wrapper" data-wrap="true">
+            <input '.$this->_getAttrString($this->_attributes).' value="'.$value.'" data-input>
             <div class="flex space-x-1 ml-2" id="button-addon3">
                 <button class="btn btn--secondary-outline mr-2" type="button" data-toggle>
-                    <i class="pi pi-calendar pi-lg"></i>
+                  '.Display::getMdiIcon(ObjectIcon::AGENDA).'
                 </button>
                 <button class="btn btn--secondary-outline" type="button" data-clear>
-                    <i class="pi pi-times pi-lg"></i>
+                  '.Display::getMdiIcon(ActionIcon::CLOSE).'
                 </button>
             </div>
         </div>
@@ -106,7 +108,7 @@ class DatePicker extends HTML_QuickForm_text
         return "<script>
         document.addEventListener('DOMContentLoaded', function () {
             function initializeFlatpickr() {
-                const fp = flatpickr('#{$id}', {
+                const fp = flatpickr('#{$id}_container', {
                     locale: '{$localeCode}',
                     altInput: true,
                     altFormat: '{$altFormat}',
@@ -116,11 +118,7 @@ class DatePicker extends HTML_QuickForm_text
                     wrap: true
                 });
 
-                if ($('label[for=\"".$id."\"]').length > 0) {
-                    $('label[for=\"".$id."\"]').hide();
-                }
-
-                document.querySelector('label[for=\"' + '{$id}' + '\"]').classList.add('datepicker-label');
+                $('label[for=\"".$id."\"]').hide().addClass('datepicker-label');
             }
 
             function loadLocale() {

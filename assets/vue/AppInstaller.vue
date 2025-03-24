@@ -20,18 +20,17 @@
           {{ stepTitle }}
         </li>
       </ol>
-      <div id="note">
-        <a
-          class="p-button p-component p-button-info p-button-outlined"
-          href="../../documentation/installation_guide.html"
-          target="_blank"
-        >
-          <span
-            aria-hidden="true"
-            class="p-button-icon p-button-icon-left mdi mdi-text-box-search-outline"
+      <div
+        id="note"
+        class="text-center"
+      >
+        <BaseAppLink url="../../documentation/installation_guide.html">
+          <BaseButton
+            type="primary"
+            icon="courses"
+            :label="t('Read the installation guide')"
           />
-          <span class="p-button-text">{{ t("Read the installation guide") }}</span>
-        </a>
+        </BaseAppLink>
       </div>
     </aside>
 
@@ -39,19 +38,19 @@
       <h1
         v-if="'new' === installerData.installType"
         v-t="'New installation'"
-        class="mb-4"
+        class="mb-4 text-center"
       />
       <h1
         v-else-if="'update' === installerData.installType"
         v-t="{
-        path: 'Update from Chamilo ' + installerData.upgradeFromVersion.join(' | ')
+          path: 'Update from Chamilo ' + installerData.upgradeFromVersion.join(' | '),
         }"
-        class="mb-4"
+        class="mb-4 text-center"
       />
       <h1
         v-else
         v-t="'Chamilo\'s installation wizard'"
-        class="mb-8"
+        class="mb-8 text-center"
       />
 
       <form
@@ -235,6 +234,8 @@
 import { useI18n } from "vue-i18n"
 import { onMounted, provide, ref } from "vue"
 
+import BaseAppLink from "./components/basecomponents/BaseAppLink.vue"
+import BaseButton from "./components/basecomponents/BaseButton.vue"
 import Step1 from "./components/installer/Step1"
 import Step2 from "./components/installer/Step2"
 import Step3 from "./components/installer/Step3"

@@ -3,8 +3,8 @@
     <BaseInputTextWithVuelidate
       id="term-name"
       v-model="formData.title"
-      :vuelidate-property="v$.title"
       :label="t('Term')"
+      :vuelidate-property="v$.title"
     />
     <BaseTextAreaWithVuelidate
       id="term-description"
@@ -16,14 +16,14 @@
     <LayoutFormButtons>
       <BaseButton
         :label="t('Back')"
-        type="black"
         icon="back"
+        type="black"
         @click="emit('backPressed')"
       />
       <BaseButton
         :label="t('Save term')"
-        type="success"
         icon="send"
+        type="success"
         @click="submitGlossaryForm"
       />
     </LayoutFormButtons>

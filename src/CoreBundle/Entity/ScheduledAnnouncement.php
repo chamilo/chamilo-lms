@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\ScheduledAnnouncementRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ScheduledAnnouncement.
  */
 #[ORM\Table(name: 'scheduled_announcements')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ScheduledAnnouncementRepository::class)]
 class ScheduledAnnouncement
 {
     #[ORM\Column(name: 'id', type: 'integer')]

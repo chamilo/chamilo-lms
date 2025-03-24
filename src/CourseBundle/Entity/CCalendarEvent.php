@@ -95,7 +95,6 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     protected string $title;
 
     #[Groups(['calendar_event:write', 'calendar_event:read'])]
-    #[Assert\NotBlank]
     #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content = null;
 
@@ -514,20 +513,20 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         $resourceLinks = $this->resourceNode->getResourceLinks();
 
         foreach ($resourceLinks as $link) {
+            if (null !== $link->getCourse() && null === $link->getSession()) {
+                return 'course';
+            }
+
+            if (null !== $link->getSession()) {
+                return 'session';
+            }
+
             if (null === $link->getCourse()
                 && null === $link->getSession()
                 && null === $link->getGroup()
                 && null === $link->getUser()
             ) {
                 return 'global';
-            }
-
-            if (null !== $link->getCourse()) {
-                return 'course';
-            }
-
-            if (null !== $link->getSession()) {
-                return 'session';
             }
         }
 

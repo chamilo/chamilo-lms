@@ -3,10 +3,10 @@
     <div class="p-float-label">
       <InputText
         :id="id"
-        :model-value="modelValue"
-        :class="{ 'p-invalid': isInvalid, [inputClass]: true }"
         :aria-label="label"
+        :class="{ 'p-invalid': isInvalid, [inputClass]: true }"
         :disabled="disabled"
+        :model-value="modelValue"
         type="text"
         @update:model-value="updateValue"
       />

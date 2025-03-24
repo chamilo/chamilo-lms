@@ -40,3 +40,8 @@ vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig #}
 {%- block checkbox_widget -%}
         <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
 {%- endblock checkbox_widget -%}
+
+{%- block textarea_widget -%}
+    {%- set attr = attr|merge({ class: attr.class|default('p-inputtextarea p-inputtext p-component p-filled') }) -%}
+    {{- parent() -}}
+{%- endblock textarea_widget -%}

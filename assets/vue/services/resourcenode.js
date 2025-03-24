@@ -1,3 +1,3 @@
-import makeService from './api';
+import makeService from "./api"
 
-export default makeService('resource_nodes');
+export default makeService("resource_nodes")

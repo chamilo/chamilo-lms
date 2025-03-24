@@ -156,6 +156,7 @@
         "symfony/yaml": "6.4.*",
         "symfonycasts/reset-password-bundle": "^1.8",
         "szymach/c-pchart": "^3.0",
+        "thenetworg/oauth2-azure": "^2.2",
         "twig/cssinliner-extra": "^3.3",
         "twig/extra-bundle": "^3.0",
         "twig/inky-extra": "^3.3",
@@ -181,7 +182,8 @@
             "symfony/flex": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "symfony/runtime": true
-        }
+        },
+        "process-timeout": 900
     },
     "require-dev": {
         "behat/behat": "^3.10",

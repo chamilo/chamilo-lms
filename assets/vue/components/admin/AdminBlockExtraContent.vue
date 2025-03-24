@@ -77,8 +77,8 @@ async function saveExtraContent() {
   >
     <template #display>
       <BaseDivider
-        align="right"
         :title="t('Editable content')"
+        align="right"
       />
       <div
         v-if="modelExtraContent.content"

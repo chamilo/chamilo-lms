@@ -26,6 +26,10 @@ var/upload/*
 /config/configuration.php
 /main/inc/conf/configuration.php
 
+/config/authentication.yaml
+/config/hosting_limits.yaml
+/config/plugin.yaml
+
 # Home
 components/*
 

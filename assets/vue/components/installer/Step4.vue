@@ -1,9 +1,6 @@
 <template>
   <div class="install-step">
-    <h2
-      v-t="'Step 4 - Database settings'"
-      class="RequirementHeading mb-8"
-    />
+    <SectionHeader :title="t('Step 4 - Database settings')" />
 
     <p
       v-if="'update' === installerData.installType"
@@ -142,32 +139,36 @@
       severity="success"
     >
       <table>
-        <tr>
-          <td v-t="'Database host'" />
-          <td v-text="installerData.stepData.connParams.host" />
-        </tr>
-        <tr>
-          <td v-t="'Database port'" />
-          <td v-text="installerData.stepData.connParams.port" />
-        </tr>
-        <tr>
-          <td v-t="'Database driver'" />
-          <td v-text="installerData.stepData.connParams.driver" />
-        </tr>
+        <tbody>
+          <tr>
+            <td v-t="'Database host'" />
+            <td v-text="installerData.stepData.connParams.host" />
+          </tr>
+          <tr>
+            <td v-t="'Database port'" />
+            <td v-text="installerData.stepData.connParams.port" />
+          </tr>
+          <tr>
+            <td v-t="'Database driver'" />
+            <td v-text="installerData.stepData.connParams.driver" />
+          </tr>
+        </tbody>
       </table>
       <table v-if="'update' === installerData.installType">
-        <tr>
-          <td v-t="'CREATE TABLE works'" />
-          <td v-t="'OK'" />
-        </tr>
-        <tr>
-          <td v-t="'ALTER TABLE works'" />
-          <td v-t="'OK'" />
-        </tr>
-        <tr>
-          <td v-t="'DROP COLUMN works'" />
-          <td v-t="'OK'" />
-        </tr>
+        <tbody>
+          <tr>
+            <td v-t="'CREATE TABLE works'" />
+            <td v-t="'OK'" />
+          </tr>
+          <tr>
+            <td v-t="'ALTER TABLE works'" />
+            <td v-t="'OK'" />
+          </tr>
+          <tr>
+            <td v-t="'DROP COLUMN works'" />
+            <td v-t="'OK'" />
+          </tr>
+        </tbody>
       </table>
     </Message>
     <Message
@@ -222,6 +223,7 @@ import InputText from "primevue/inputtext"
 import Password from "primevue/password"
 import Button from "primevue/button"
 import Message from "primevue/message"
+import SectionHeader from "../layout/SectionHeader.vue"
 
 const { t } = useI18n()
 

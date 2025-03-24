@@ -58,6 +58,8 @@ $categories = $courseCategoryRepo->getCategoriesByCourseIdAndAccessUrlId($course
 
 $formOptionsArray = [];
 
+$enableAiHelpers = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
+
 // Build the form
 $form = new FormValidator(
     'update_course',
@@ -180,15 +182,15 @@ if ('true' === api_get_setting('allow_course_theme')) {
 
 $form->addElement('label', get_lang('Space Available'), format_file_size(DocumentManager::get_course_quota()));
 
-/*$scoreModels = ExerciseLib::getScoreModels();
-if (!empty($scoreModels)) {
-    $options = ['' => get_lang('none')];
-    foreach ($scoreModels['models'] as $item) {
-        $options[$item['id']] = get_lang($item['name']);
-    }
-    $form->addSelect('score_model_id', get_lang('Score model'), $options);
-}
-*/
+$aiOptions = [
+    'learning_path_generator' => 'Enable Learning Path Generator',
+    'exercise_generator' => 'Enable Exercise Generator',
+    'open_answers_grader' => 'Enable Open Answers Grader',
+    'tutor_chatbot' => 'Enable Tutor Chatbot',
+    'task_grader' => 'Enable Task Grader',
+    'content_analyser' => 'Enable Content Analyser',
+    'image_generator' => 'Enable Image Generator'
+];
 
 $form->addButtonSave(get_lang('Save settings'), 'submit_save');
 
@@ -290,19 +292,6 @@ if ('true' == api_get_setting('show_default_folders')) {
     $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 }
 
-$group = [];
-$group[] = $form->createElement(
-    'radio',
-    'enable_document_auto_launch',
-    get_lang('Auto-launch for documents'),
-    get_lang('Redirect to the document list'),
-    1
-);
-$group[] = $form->createElement('radio', 'enable_document_auto_launch', null, get_lang('Deactivate'), 0);
-$globalGroup[get_lang('Auto-launch for documents')] = $group;
-
-$globalGroup[] = $myButton;
-
 $form->addPanelOption(
     'documents',
     get_lang('Documents'),
@@ -324,7 +313,7 @@ $group[] = $form->createElement(
     'radio',
     'email_alert_to_teacher_on_new_user_in_course',
     null,
-    get_lang('To teachar and tutor'),
+    get_lang('To teacher and tutor'),
     2
 );
 $group[] = $form->createElement(
@@ -567,24 +556,6 @@ $form->addPanelOption(
 );
 
 $globalGroup = [];
-$group = [];
-$group[] = $form->createElement(
-    'radio',
-    'enable_lp_auto_launch',
-    get_lang('Enable learning path auto-launch'),
-    get_lang('Redirect to a selected learning path'),
-    1
-);
-$group[] = $form->createElement(
-    'radio',
-    'enable_lp_auto_launch',
-    get_lang('Enable learning path auto-launch'),
-    get_lang('Redirect to the learning paths list'),
-    2
-);
-$group[] = $form->createElement('radio', 'enable_lp_auto_launch', null, get_lang('Disable'), 0);
-
-$globalGroup[get_lang('Enable learning path auto-launch')] = $group;
 
 if ('true' === api_get_setting('allow_course_theme')) {
     // Allow theme into Learning path
@@ -687,49 +658,6 @@ $form->addPanelOption(
     false
 );
 
-if ('true' === api_get_setting('exercise.allow_exercise_auto_launch')) {
-    $globalGroup = [];
-
-    // Auto launch exercise
-    $group = [];
-    $group[] = $form->createElement(
-        'radio',
-        'enable_exercise_auto_launch',
-        get_lang('Auto-launch for exercises'),
-        get_lang('Redirect to the selected exercise'),
-        1
-    );
-    $group[] = $form->createElement(
-        'radio',
-        'enable_exercise_auto_launch',
-        get_lang('Auto-launch for exercises'),
-        get_lang('Redirect to the exercises list'),
-        2
-    );
-    $group[] = $form->createElement('radio', 'enable_exercise_auto_launch', null, get_lang('Disable'), 0);
-
-    $globalGroup[get_lang("Auto-launch for exercises")] = $group;
-
-    if ($isEditable) {
-        $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
-        $globalGroup[] = $myButton;
-    } else {
-        // Is it allowed to edit the course settings?
-        if (!$isEditable) {
-            $disabled_output = "disabled";
-        }
-        $form->freeze();
-    }
-
-    $form->addPanelOption(
-        'config_exercise',
-        get_lang('Test'),
-        $globalGroup,
-        ToolIcon::QUIZ,
-        false
-    );
-}
-
 // START THEMATIC
 $group = [];
 $group[] = $form->createElement(
@@ -802,10 +730,6 @@ if ('true' === api_get_setting('allow_public_certificates')) {
 }
 
 // Forum settings
-$group = [
-    $form->createElement('radio', 'enable_forum_auto_launch', null, get_lang('Redirect to forums list'), 1),
-    $form->createElement('radio', 'enable_forum_auto_launch', null, get_lang('Disabled'), 2),
-];
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
 // Forum settings
@@ -820,7 +744,6 @@ $addUsers = [
 ];
 
 $globalGroup = [
-    get_lang('Enable forum auto-launch') => $group,
     get_lang('Hide forum notifications') => $groupNotification,
     get_lang('Subscribe automatically all users to all forum notifications') => $addUsers,
     '' => $myButton,
@@ -859,6 +782,110 @@ $form->addPanelOption(
     false
 );
 
+// Auto-launch settings for documents, exercises, learning paths, and forums
+$globalGroup = [];
+$group = [];
+
+// Auto-launch for documents
+$group[] = $form->createElement(
+    'radio',
+    'auto_launch_option',
+    get_lang('Auto-launch for documents'),
+    get_lang('Redirect to the document list'),
+    'enable_document_auto_launch'
+);
+
+// Auto-launch for learning paths
+$group[] = $form->createElement(
+    'radio',
+    'auto_launch_option',
+    get_lang('Enable learning path auto-launch'),
+    get_lang('Redirect to a selected learning path'),
+    'enable_lp_auto_launch'
+);
+$group[] = $form->createElement(
+    'radio',
+    'auto_launch_option',
+    get_lang('Enable learning path auto-launch'),
+    get_lang('Redirect to the learning paths list'),
+    'enable_lp_auto_launch_list'
+);
+
+// Auto-launch for exercises
+$group[] = $form->createElement(
+    'radio',
+    'auto_launch_option',
+    get_lang('Auto-launch for exercises'),
+    get_lang('Redirect to the selected exercise'),
+    'enable_exercise_auto_launch'
+);
+$group[] = $form->createElement(
+    'radio',
+    'auto_launch_option',
+    get_lang('Auto-launch for exercises'),
+    get_lang('Redirect to the exercises list'),
+    'enable_exercise_auto_launch_list'
+);
+
+// Auto-launch for forums
+$group[] = $form->createElement(
+    'radio',
+    'auto_launch_option',
+    get_lang('Auto-launch for forums'),
+    get_lang('Redirect to forums list'),
+    'enable_forum_auto_launch'
+);
+
+// Option to deactivate all auto-launch options
+$group[] = $form->createElement(
+    'radio',
+    'auto_launch_option',
+    get_lang('Disable all auto-launch options'),
+    get_lang('Disable'),
+    'disable_auto_launch'
+);
+
+$myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
+$globalGroup = [
+    get_lang('Auto-launch') => $group,
+    '' => $myButton,
+];
+
+$form->addPanelOption(
+    'autolaunch',
+    get_lang('Autolaunch settings'),
+    $globalGroup,
+    ToolIcon::COURSE,
+    false
+);
+
+// Ai helpers
+if ($enableAiHelpers) {
+    $globalAiGroup = [];
+
+    foreach ($aiOptions as $key => $label) {
+        if (api_get_setting("ai_helpers.$key") === 'true') {
+            $aiGroup = [];
+            $aiGroup[] = $form->createElement('radio', $key, null, get_lang('Yes'), 'true');
+            $aiGroup[] = $form->createElement('radio', $key, null, get_lang('No'), 'false');
+
+            $globalAiGroup[get_lang($label)] = $aiGroup;
+        }
+    }
+
+    if (!empty($globalAiGroup)) {
+        $globalAiGroup[] = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
+
+        $form->addPanelOption(
+            'ai_helpers',
+            get_lang('AI Helpers'),
+            $globalAiGroup,
+            ToolIcon::ROBOT,
+            false
+        );
+    }
+}
+
 $button = Display::toolbarButton(
     get_lang('Configure external tools'),
     $router->generate('chamilo_lti_configure', ['cid' => $courseId]).'?'.api_get_cidreq(),
@@ -868,20 +895,6 @@ $button = Display::toolbarButton(
 $html = [
     $form->createElement('html', '<p>'.get_lang('LTI intro tool').'</p>'.$button),
 ];
-
-/*$form->addPanelOption(
-    'lti_tool',
-    $translator->trans('External tools'),
-    $html,
-    ToolIcon::PLUGIN,
-    false
-);*/
-
-// Plugin course settings
-//$appPlugin = new AppPlugin();
-//$appPlugin->add_course_settings_form($form);
-
-//$form->addHtml('</div>');
 
 // Set the default values of the form
 $values = [];
@@ -909,6 +922,35 @@ foreach ($courseSettings as $setting) {
 if (!isset($values['student_delete_own_publication'])) {
     $values['student_delete_own_publication'] = 0;
 }
+
+$documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
+$lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
+$exerciseAutoLaunch = api_get_course_setting('enable_exercise_auto_launch');
+$forumAutoLaunch = api_get_course_setting('enable_forum_auto_launch');
+
+$defaultAutoLaunchOption = 'disable_auto_launch';
+if ($documentAutoLaunch == 1) {
+    $defaultAutoLaunchOption = 'enable_document_auto_launch';
+} elseif ($lpAutoLaunch == 1) {
+    $defaultAutoLaunchOption = 'enable_lp_auto_launch';
+} elseif ($lpAutoLaunch == 2) {
+    $defaultAutoLaunchOption = 'enable_lp_auto_launch_list';
+} elseif ($exerciseAutoLaunch == 1) {
+    $defaultAutoLaunchOption = 'enable_exercise_auto_launch';
+} elseif ($exerciseAutoLaunch == 2) {
+    $defaultAutoLaunchOption = 'enable_exercise_auto_launch_list';
+} elseif ($forumAutoLaunch == 1) {
+    $defaultAutoLaunchOption = 'enable_forum_auto_launch';
+}
+
+$values['auto_launch_option'] = $defaultAutoLaunchOption;
+
+if ($enableAiHelpers) {
+    foreach ($aiOptions as $key => $label) {
+        $values[$key] = api_get_course_setting($key);
+    }
+}
+
 $form->setDefaults($values);
 
 // Validate form
@@ -990,10 +1032,37 @@ if ($form->validate()) {
 
     $activeLegal = $updateValues['activate_legal'] ?? 0;
 
-    /*$category = null;
-    if (!empty($updateValues['category_id'])) {
-        $category = $courseCategoryRepo->find($updateValues['category_id']);
-    }*/
+    $autoLaunchOption = $updateValues['auto_launch_option'] ?? 'disable_auto_launch';
+    $updateValues['enable_document_auto_launch'] = 0;
+    $updateValues['enable_lp_auto_launch'] = 0;
+    $updateValues['enable_lp_auto_launch_list'] = 0;
+    $updateValues['enable_exercise_auto_launch'] = 0;
+    $updateValues['enable_exercise_auto_launch_list'] = 0;
+    $updateValues['enable_forum_auto_launch'] = 0;
+
+    switch ($autoLaunchOption) {
+        case 'enable_document_auto_launch':
+            $updateValues['enable_document_auto_launch'] = 1;
+            break;
+        case 'enable_lp_auto_launch':
+            $updateValues['enable_lp_auto_launch'] = 1;
+            break;
+        case 'enable_lp_auto_launch_list':
+            $updateValues['enable_lp_auto_launch'] = 2;
+            break;
+        case 'enable_exercise_auto_launch':
+            $updateValues['enable_exercise_auto_launch'] = 1;
+            break;
+        case 'enable_exercise_auto_launch_list':
+            $updateValues['enable_exercise_auto_launch'] = 2;
+            break;
+        case 'enable_forum_auto_launch':
+            $updateValues['enable_forum_auto_launch'] = 1;
+            break;
+        case 'disable_auto_launch':
+        default:
+            break;
+    }
 
     $courseEntity
         ->setTitle($updateValues['title'])
@@ -1013,9 +1082,17 @@ if ($form->validate()) {
     $em->persist($courseEntity);
     $em->flush();
 
+    if ($enableAiHelpers) {
+        foreach ($aiOptions as $key => $label) {
+            if (isset($updateValues[$key])) {
+                CourseManager::saveCourseConfigurationSetting($key, $updateValues[$key], api_get_course_int_id());
+            }
+        }
+    }
+
     // Insert/Updates course_settings table
     foreach ($courseSettings as $setting) {
-        $value = isset($updateValues[$setting]) ? $updateValues[$setting] : null;
+        $value = $updateValues[$setting] ?? null;
         CourseManager::saveCourseConfigurationSetting(
             $setting,
             $value,

@@ -66,7 +66,7 @@ switch ($action) {
             foreach ($sessions as $session) {
                 $list['items'][] = [
                     'id' => $session['id'],
-                    'text' => $session['name'],
+                    'text' => $session['title'],
                 ];
             }
 

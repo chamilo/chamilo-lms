@@ -25,24 +25,29 @@ export function useSidebarMenu() {
     return false
   }
 
+  const createMenuItem = (key, icon, label, routeName, subItems = null) => {
+    if (showTabsSetting.indexOf(key) > -1) {
+      const item = {
+        icon: `mdi ${icon}`,
+        label: t(label),
+      }
+      if (routeName) item.route = { name: routeName }
+      if (subItems) item.items = subItems
+      return item
+    }
+    return null
+  }
+
   const menuItemsBeforeMyCourse = computed(() => {
     const items = []
-
-    if (showTabsSetting.indexOf("campus_homepage") > -1) {
-      items.push({
-        icon: "mdi mdi-home",
-        label: t("Home"),
-        route: { name: "Home" },
-      })
-    }
-
-    return items
+    items.push(createMenuItem("campus_homepage", "mdi-home", "Home", "Home"))
+    return items.filter(Boolean)
   })
 
   const menuItemMyCourse = computed(() => {
     const items = []
 
-    if (securityStore.isAuthenticated) {
+    if (securityStore.isAuthenticated && showTabsSetting.indexOf("my_courses") > -1) {
       const courseItems = []
 
       if (enrolledStore.isEnrolledInCourses) {
@@ -76,33 +81,21 @@ export function useSidebarMenu() {
   const menuItemsAfterMyCourse = computed(() => {
     const items = []
 
-    if (showCatalogue > -1) {
+    if (showTabsSetting.indexOf("catalogue") > -1) {
       if (showCatalogue == 0 || showCatalogue == 2) {
-        items.push({
-          icon: "mdi mdi-bookmark-multiple",
-          label: t("Explore more courses"),
-          route: { name: "CatalogueCourses" },
-        })
+        items.push(createMenuItem("catalogue", "mdi-bookmark-multiple", "Explore more courses", "CatalogueCourses"))
       }
       if (showCatalogue > 0) {
-        items.push({
-          icon: "mdi mdi-bookmark-multiple-outline",
-          label: t("Sessions catalogue"),
-          route: { name: "CatalogueSessions" },
-        })
+        items.push(
+          createMenuItem("catalogue", "mdi-bookmark-multiple-outline", "Sessions catalogue", "CatalogueSessions"),
+        )
       }
     }
 
-    if (showTabsSetting.indexOf("my_agenda") > -1) {
-      items.push({
-        icon: "mdi mdi-calendar-text",
-        label: t("Events"),
-        route: { name: "CCalendarEventList" },
-      })
-    }
+    items.push(createMenuItem("my_agenda", "mdi-calendar-text", "Events", "CCalendarEventList"))
 
     if (showTabsSetting.indexOf("reporting") > -1) {
-      let subItems = []
+      const subItems = []
 
       if (securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin) {
         subItems.push({
@@ -155,18 +148,26 @@ export function useSidebarMenu() {
       })
     }
 
-    if (platformConfigStore.plugins?.bbb?.show_global_conference_link) {
-      items.push({
-        icon: "mdi mdi-video",
-        label: t("Videoconference"),
-        url: platformConfigStore.plugins.bbb.listingURL,
-      })
+    if (
+      showTabsSetting.includes("videoconference") > -1 &&
+      platformConfigStore.plugins?.bbb?.show_global_conference_link &&
+      platformConfigStore.plugins?.bbb?.listingURL
+    ) {
+      const conferenceItems = [
+        {
+          label: t("Conference Room"),
+          url: platformConfigStore.plugins.bbb.listingURL,
+        },
+      ]
+
+      if (conferenceItems.length > 0) {
+        items.push(createMenuItem("videoconference", "mdi-video", "Videoconference", null, conferenceItems))
+      }
     }
 
-    if (securityStore.isStudentBoss || securityStore.isStudent) {
-      items.push({
-        icon: "mdi mdi-text-box-search",
-        items: [
+    if (showTabsSetting.indexOf("diagnostics") > -1) {
+      items.push(
+        createMenuItem("diagnostics", "mdi-text-box-search", "Diagnosis Management", null, [
           {
             label: t("Diagnosis Management"),
             url: "/main/search/load_search.php",
@@ -176,54 +177,31 @@ export function useSidebarMenu() {
             label: t("Diagnostic Form"),
             url: "/main/search/search.php",
           },
-        ],
-        label: t("Diagnosis"),
-      })
+        ]),
+      )
     }
 
-    if (securityStore.isAdmin || securityStore.isSessionAdmin) {
-      const adminItems = [
-        {
+    if (showTabsSetting.indexOf("platform_administration") > -1) {
+      if (securityStore.isAdmin || securityStore.isSessionAdmin) {
+        const adminItems = [
+          { label: t("Administration"), route: { name: "AdminIndex" } },
+          ...(securityStore.isSessionAdmin &&
+          "true" === platformConfigStore.getSetting("session.limit_session_admin_list_users")
+            ? [{ label: t("Add user"), url: "/main/admin/user_add.php" }]
+            : [{ label: t("Users"), url: "/main/admin/user_list.php" }]),
+          { label: t("Courses"), url: "/main/admin/course_list.php" },
+          { label: t("Sessions"), url: "/main/session/session_list.php" },
+        ]
+
+        items.push({
+          icon: "mdi mdi-cog",
+          items: adminItems,
           label: t("Administration"),
-          route: { name: "AdminIndex" },
-        },
-      ]
-
-      if (
-        securityStore.isSessionAdmin &&
-        "true" === platformConfigStore.getSetting("session.limit_session_admin_list_users")
-      ) {
-        adminItems.push({
-          label: t("Add user"),
-          url: "/main/admin/user_add.php",
-        })
-      } else {
-        adminItems.push({
-          label: t("Users"),
-          url: "/main/admin/user_list.php",
         })
       }
-
-      if (securityStore.isAdmin) {
-        adminItems.push({
-          label: t("Courses"),
-          url: "/main/admin/course_list.php",
-        })
-      }
-
-      adminItems.push({
-        label: t("Sessions"),
-        url: "/main/session/session_list.php",
-      })
-
-      items.push({
-        icon: "mdi mdi-cog",
-        items: adminItems,
-        label: t("Administration"),
-      })
     }
 
-    return items
+    return items.filter(Boolean)
   })
 
   async function initialize() {

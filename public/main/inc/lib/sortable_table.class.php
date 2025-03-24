@@ -418,7 +418,7 @@ class SortableTable extends HTML_Table
         }
         $html .= '<input type="hidden" name="action">';
         $html .= '<div class="flex q-card p-2 mb-4 sortable-buttons-actions">';
-        $html .= '<div class="flex w-1/2 flex-wrap items-center justify-between">';
+        $html .= '<div class="flex w-full items-center justify-between">';
 
         if (count($this->actionButtons) > 0) {
             $html .= '<div class="btn-toolbar flex space-x-2">';
@@ -447,9 +447,10 @@ class SortableTable extends HTML_Table
                     'onclick' => "javascript:action_click(this, '$table_id');",
                     'title' => $label,
                     'data-action' => $action,
+                    'data-confirm' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
                 ];
             }
-            $html .= Display::groupButtonWithDropDown(get_lang('Detail'), $items);
+            $html .= Display::groupButtonWithDropDown(get_lang('Action'), $items);
         } else {
             $html .= $form;
         }
@@ -458,7 +459,7 @@ class SortableTable extends HTML_Table
 
         // Pagination
         if ($this->get_total_number_of_items() > $this->default_items_per_page) {
-            $html .= '<div class="flex justify-end mt-4 w-1/2">';
+            $html .= '<div class="flex justify-end mt-4 w-full">';
             $html .= '<div class="page-nav pb-2 pt-2">'.$nav.'</div>';
             $html .= '</div>';
         }

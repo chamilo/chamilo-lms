@@ -201,15 +201,13 @@ class ExerciseLib
                     break;
                 case ORAL_EXPRESSION:
                     // Add nanog
-                    if ('true' === api_get_setting('enable_record_audio')) {
-                        //@todo pass this as a parameter
-                        global $exercise_stat_info;
-                        if (!empty($exercise_stat_info)) {
-                            echo $objQuestionTmp->returnRecorder((int) $exercise_stat_info['exe_id']);
-                            $generatedFile = self::getOralFileAudio($exercise_stat_info['exe_id'], $questionId);
-                            if (!empty($generatedFile)) {
-                                echo $generatedFile;
-                            }
+                    //@todo pass this as a parameter
+                    global $exercise_stat_info;
+                    if (!empty($exercise_stat_info)) {
+                        echo $objQuestionTmp->returnRecorder((int) $exercise_stat_info['exe_id']);
+                        $generatedFile = self::getOralFileAudio($exercise_stat_info['exe_id'], $questionId);
+                        if (!empty($generatedFile)) {
+                            echo $generatedFile;
                         }
                     }
 
@@ -1431,20 +1429,19 @@ HTML;
             $hotspotColor = 0;
             if (HOT_SPOT_DELINEATION != $answerType) {
                 $answerList = '
-                    <div class="well well-sm">
-                        <h5 class="page-header">'.get_lang('Image zones').'</h5>
-                        <ol>
-                ';
+        <div class="p-4 rounded-md border border-gray-25">
+            <h5 class="font-bold text-lg mb-2 text-primary">'.get_lang('Image zones').'</h5>
+            <ol class="list-decimal ml-6 space-y-2 text-primary">
+        ';
 
                 if (!empty($answers_hotspot)) {
                     Session::write("hotspot_ordered$questionId", array_keys($answers_hotspot));
                     foreach ($answers_hotspot as $value) {
-                        $answerList .= '<li>';
+                        $answerList .= '<li class="flex items-center space-x-2">';
                         if ($freeze) {
-                            $answerList .= '<span class="hotspot-color-'.$hotspotColor
-                                .' fa fa-square" aria-hidden="true"></span>'.PHP_EOL;
+                            $answerList .= '<span class="text-support-5 fa fa-square" aria-hidden="true"></span>';
                         }
-                        $answerList .= $value;
+                        $answerList .= '<span>'.$value.'</span>';
                         $answerList .= '</li>';
                         $hotspotColor++;
                     }
@@ -1458,26 +1455,25 @@ HTML;
             if ($freeze) {
                 $relPath = api_get_path(WEB_CODE_PATH);
                 echo "
-                        <div class=\"row\">
-                            <div class=\"col-sm-9\">
-                                <div id=\"hotspot-preview-$questionId\"></div>
-                            </div>
-                            <div class=\"col-sm-3\">
-                                $answerList
-                            </div>
-                        </div>
-                        <script>
-                            new ".(HOT_SPOT == $answerType ? "HotspotQuestion" : "DelineationQuestion")."({
-                                questionId: $questionId,
-                                exerciseId: $exerciseId,
-                                exeId: 0,
-                                selector: '#hotspot-preview-$questionId',
-                                for: 'preview',
-                                relPath: '$relPath'
-                            });
-                        </script>
-                    ";
-
+        <div class=\"flex space-x-4\">
+            <div class=\"w-3/4\">
+                <div id=\"hotspot-preview-$questionId\" class=\"bg-gray-10 w-full bg-center bg-no-repeat bg-contain border border-gray-25\"></div>
+            </div>
+            <div class=\"w-1/4\">
+                $answerList
+            </div>
+        </div>
+        <script>
+            new ".(HOT_SPOT == $answerType ? "HotspotQuestion" : "DelineationQuestion")."({
+                questionId: $questionId,
+                exerciseId: $exerciseId,
+                exeId: 0,
+                selector: '#hotspot-preview-$questionId',
+                for: 'preview',
+                relPath: '$relPath'
+            });
+        </script>
+    ";
                 return;
             }
 
@@ -1491,38 +1487,38 @@ HTML;
 
                 //@todo I need to the get the feedback type
                 echo <<<HOTSPOT
-                    <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
-                    <div class="exercise_questions">
-                        $questionDescription
-                        <div class="row">
+        <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
+        <div class="exercise_questions">
+            $questionDescription
+            <div class="flex space-x-4">
 HOTSPOT;
             }
 
             $relPath = api_get_path(WEB_CODE_PATH);
-            $s .= "<div class=\"col-sm-8 col-md-9\">
-                   <div class=\"hotspot-image\"></div>
-                    <script>
-                        $(function() {
-                            new ".(HOT_SPOT_DELINEATION == $answerType ? 'DelineationQuestion' : 'HotspotQuestion')."({
-                                questionId: $questionId,
-                                exerciseId: $exerciseId,
-                                exeId: 0,
-                                selector: '#question_div_' + $questionId + ' .hotspot-image',
-                                for: 'user',
-                                relPath: '$relPath'
-                            });
-                        });
-                    </script>
-                </div>
-                <div class=\"col-sm-4 col-md-3\">
-                    $answerList
-                </div>
-            ";
+            $s .= "<div class=\"w-3/4\">
+           <div class=\"hotspot-image bg-gray-10 border border-gray-25 bg-center bg-no-repeat bg-contain\"></div>
+            <script>
+                $(function() {
+                    new ".(HOT_SPOT_DELINEATION == $answerType ? 'DelineationQuestion' : 'HotspotQuestion')."({
+                        questionId: $questionId,
+                        exerciseId: $exerciseId,
+                        exeId: 0,
+                        selector: '#question_div_' + $questionId + ' .hotspot-image',
+                        for: 'user',
+                        relPath: '$relPath'
+                    });
+                });
+            </script>
+        </div>
+        <div class=\"w-1/4\">
+            $answerList
+        </div>
+    ";
 
             echo <<<HOTSPOT
-                            $s
-                        </div>
-                    </div>
+        $s
+    </div>
+</div>
 HOTSPOT;
         } elseif (ANNOTATION == $answerType) {
             global $exe_id;
@@ -2138,7 +2134,7 @@ HOTSPOT;
         $clean_group_list = [];
         if (!empty($group_list)) {
             foreach ($group_list as $group) {
-                $clean_group_list[$group['iid']] = $group['name'];
+                $clean_group_list[$group['iid']] = $group['title'];
             }
         }
 
@@ -2353,6 +2349,13 @@ HOTSPOT;
                                 ]
                             );
 
+                            $exportPdfUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.
+                                api_get_cidreq().'&exerciseId='.$exercise_id.'&action=export_pdf&attemptId='.$id.'&userId='.(int) $results[$i]['exe_user_id'];
+                            $actions .= '<a href="'.$exportPdfUrl.'" target="_blank">'
+                                .Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export to PDF'))
+                                .'</a>';
+
+
                             $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
                             $delete_link = '<a
                                 href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
@@ -2408,7 +2411,7 @@ HOTSPOT;
                         if (!empty($results[$i]['session_id'])) {
                             $sessionInfo = api_get_session_info($results[$i]['session_id']);
                             if (!empty($sessionInfo)) {
-                                $sessionName = $sessionInfo['name'];
+                                $sessionName = $sessionInfo['title'];
                                 $sessionStartAccessDate = api_get_local_time($sessionInfo['access_start_date']);
                             }
                         }
@@ -3002,47 +3005,9 @@ EOT;
 
         $repo = Container::getQuizRepository();
 
-        return $repo->findAllByCourse($course, $session, (string) $search, $active);
-
-        // Show courses by active status
-        /*if (true == $search_all_sessions) {
-            $conditions = [
-                'where' => [
-                    $active_sql.' c_id = ? '.$needle_where.$timeConditions => [
-                        $course_id,
-                        $needle,
-                    ],
-                ],
-                'order' => 'title',
-            ];
-        } else {
-            if (empty($session_id)) {
-                $conditions = [
-                    'where' => [
-                        $active_sql.' (session_id = 0 OR session_id IS NULL) AND c_id = ? '.$needle_where.$timeConditions => [
-                            $course_id,
-                            $needle,
-                        ],
-                    ],
-                    'order' => 'title',
-                ];
-            } else {
-                $conditions = [
-                    'where' => [
-                        $active_sql.' (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id = ? '.$needle_where.$timeConditions => [
-                            $session_id,
-                            $course_id,
-                            $needle,
-                        ],
-                    ],
-                    'order' => 'title',
-                ];
-            }
-        }
-
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-
-        return Database::select('*', $table, $conditions);*/
+        return $repo->findAllByCourse($course, $session, (string) $search, $active)
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -6063,5 +6028,124 @@ EOT;
         }
 
         return $scorePassed;
+    }
+
+    /**
+     * Export all results of *one* exercise to a ZIP file containing individual PDFs.
+     *
+     * @return false|void
+     * @throws Exception
+     */
+    public static function exportExerciseAllResultsZip(
+        int $sessionId,
+        int $courseId,
+        int $exerciseId,
+        array $filterDates = [],
+        string $mainPath = ''
+    ) {
+        $objExerciseTmp = new Exercise($courseId);
+        $exeResults = $objExerciseTmp->getExerciseAndResult(
+            $courseId,
+            $sessionId,
+            $exerciseId
+        );
+
+        $exportOk = false;
+        if (!empty($exeResults)) {
+            $exportName = 'S'.$sessionId.'-C'.$courseId.'-T'.$exerciseId;
+            $baseDir = api_get_path(SYS_ARCHIVE_PATH);
+            $folderName = 'pdfexport-'.$exportName;
+            $exportFolderPath = $baseDir.$folderName;
+
+            // 1. Cleans the export folder if it exists.
+            if (is_dir($exportFolderPath)) {
+                rmdirr($exportFolderPath);
+            }
+
+            // 2. Create the pdfs inside a new export folder path.
+            foreach ($exeResults as $exeResult) {
+                $exeId = (int) $exeResult['exe_id'];
+                self::saveFileExerciseResultPdf($exeId, $courseId, $sessionId);
+            }
+
+            // 3. If export folder is not empty will be zipped.
+            $isFolderPathEmpty = (file_exists($exportFolderPath) && 2 == count(scandir($exportFolderPath)));
+            if (is_dir($exportFolderPath) && !$isFolderPathEmpty) {
+                $exportOk = true;
+                $exportFilePath = $baseDir.$exportName.'.zip';
+                $zip = new \ZipArchive();
+                if ($zip->open($exportFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+                    $files = new RecursiveIteratorIterator(
+                        new RecursiveDirectoryIterator($exportFolderPath),
+                        RecursiveIteratorIterator::LEAVES_ONLY
+                    );
+
+                    foreach ($files as $name => $file) {
+                        if (!$file->isDir()) {
+                            $filePath = $file->getRealPath();
+                            $relativePath = substr($filePath, strlen($exportFolderPath) + 1);
+                            $zip->addFile($filePath, $relativePath);
+                        }
+                    }
+
+                    $zip->close();
+                } else {
+                    throw new Exception('Failed to create ZIP file');
+                }
+
+                rmdirr($exportFolderPath);
+
+                if (!empty($mainPath) && file_exists($exportFilePath)) {
+                    @rename($exportFilePath, $mainPath.'/'.$exportName.'.zip');
+                } else {
+                    DocumentManager::file_send_for_download($exportFilePath, true, $exportName.'.zip');
+                    exit;
+                }
+            }
+        }
+
+        if (empty($mainPath) && !$exportOk) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('ExportExerciseNoResult'),
+                    'warning',
+                    false
+                )
+            );
+        }
+
+        return false;
+    }
+
+    /**
+     * Generates and saves a PDF file for a specific exercise attempt result.
+     */
+    public static function saveFileExerciseResultPdf(
+        int $exeId,
+        int $courseId,
+        int $sessionId
+    ): void
+    {
+        $cidReq = 'cid='.$courseId.'&sid='.$sessionId.'&gid=0&gradebook=0';
+        $url = api_get_path(WEB_PATH).'main/exercise/exercise_show.php?'.$cidReq.'&id='.$exeId.'&action=export&export_type=all_results';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_COOKIE, session_id());
+        curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($ch, CURLOPT_COOKIESESSION, true);
+        curl_setopt($ch, CURLOPT_FAILONERROR, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($ch);
+
+        if (false === $result) {
+            error_log('saveFileExerciseResultPdf error: '.curl_error($ch));
+        }
+
+        curl_close($ch);
     }
 }

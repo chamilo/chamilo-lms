@@ -125,6 +125,12 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public const GENERAL_COACH = 3;
     public const SESSION_ADMIN = 4;
 
+    public const STATUS_PLANNED = 1;
+    public const STATUS_PROGRESS = 2;
+    public const STATUS_FINISHED = 3;
+    public const STATUS_CANCELLED = 4;
+    public const STATUS_UNKNOWN = 0;
+
     #[Groups([
         'session:basic',
         'session:read',
@@ -254,7 +260,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session:write',
     ])]
     #[ORM\Column(name: 'show_description', type: 'boolean', nullable: true)]
-    protected ?bool $showDescription;
+    protected ?bool $showDescription = false;
 
     #[Groups(['session:read', 'session:write', 'user_subscriptions:sessions'])]
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
@@ -364,7 +370,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
      * Image illustrating the session (was extra field 'image' in 1.11).
      */
     #[Groups(['user_subscriptions:sessions'])]
-    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $image = null;
 
@@ -373,6 +379,25 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     #[Groups(['user_subscriptions:sessions', 'session:read', 'session:item:read'])]
     private int $accessVisibility = 0;
+
+    #[ORM\Column(name: 'parent_id', type: 'integer', nullable: true)]
+    protected ?int $parentId = null;
+
+    #[ORM\Column(name: 'days_to_reinscription', type: 'integer', nullable: true)]
+    protected ?int $daysToReinscription = null;
+
+    #[ORM\Column(name: 'last_repetition', type: 'boolean', nullable: false, options: ['default' => false])]
+    protected bool $lastRepetition = false;
+
+    #[ORM\Column(name: 'days_to_new_repetition', type: 'integer', nullable: true)]
+    protected ?int $daysToNewRepetition = null;
+
+    #[ORM\Column(name: 'notify_boss', type: 'boolean', options: ['default' => false])]
+    protected bool $notifyBoss = false;
+
+    #[Groups(['session:basic', 'session:read', 'session:write'])]
+    #[ORM\Column(name: 'validity_in_days', type: 'integer', nullable: true)]
+    protected ?int $validityInDays = null;
 
     public function __construct()
     {
@@ -437,7 +462,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     public function getShowDescription(): bool
     {
-        return $this->showDescription;
+        return $this->showDescription ?? false;
     }
 
     public function setShowDescription(bool $showDescription): self
@@ -759,14 +784,20 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
-    public function getGeneralCoaches(): ReadableCollection
+    /**
+     * @return Collection<int, SessionRelUser>
+     */
+    public function getGeneralCoaches(): Collection
     {
         return $this->getGeneralCoachesSubscriptions()
             ->map(fn (SessionRelUser $subscription) => $subscription->getUser())
         ;
     }
 
-    #[Groups(['user_subscriptions:sessions'])]
+    /**
+     * @return Collection<int, SessionRelUser>
+     */
+    #[Groups(['session:basic', 'user_subscriptions:sessions'])]
     public function getGeneralCoachesSubscriptions(): Collection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('relationType', self::GENERAL_COACH));
@@ -788,6 +819,16 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->users->matching($criteria)->count() > 0;
     }
 
+    public function hasUserInSession(User $user, int $relationType): bool
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('user', $user))
+            ->andWhere(Criteria::expr()->eq('relationType', $relationType))
+        ;
+
+        return $this->users->matching($criteria)->count() > 0;
+    }
+
     public function addGeneralCoach(User $coach): self
     {
         return $this->addUserInSession(self::GENERAL_COACH, $coach);
@@ -795,7 +836,19 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     public function addUserInSession(int $relationType, User $user): self
     {
-        $sessionRelUser = (new SessionRelUser())->setUser($user)->setRelationType($relationType);
+        foreach ($this->getUsers() as $existingSubscription) {
+            if (
+                $existingSubscription->getUser()->getId() === $user->getId()
+                && $existingSubscription->getRelationType() === $relationType
+            ) {
+                return $this;
+            }
+        }
+
+        $sessionRelUser = (new SessionRelUser())
+            ->setUser($user)
+            ->setRelationType($relationType)
+        ;
         $this->addUserSubscription($sessionRelUser);
 
         return $this;
@@ -970,8 +1023,12 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
      * If user status in session is student, then increase number of course users.
      * Status example: Session::STUDENT.
      */
-    public function addUserInCourse(int $status, User $user, Course $course): SessionRelCourseRelUser
+    public function addUserInCourse(int $status, User $user, Course $course): ?SessionRelCourseRelUser
     {
+        if ($this->hasUserInCourse($user, $course, $status)) {
+            return null;
+        }
+
         $userRelCourseRelSession = (new SessionRelCourseRelUser())
             ->setCourse($course)
             ->setUser($user)
@@ -983,7 +1040,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
         if (self::STUDENT === $status) {
             $sessionCourse = $this->getCourseSubscription($course);
-            $sessionCourse->setNbrUsers($sessionCourse->getNbrUsers() + 1);
+            if ($sessionCourse) {
+                $sessionCourse->setNbrUsers($sessionCourse->getNbrUsers() + 1);
+            }
         }
 
         return $userRelCourseRelSession;
@@ -1298,7 +1357,17 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     /**
      * @return Collection<int, SessionRelCourseRelUser>
      */
-    #[Groups(['user_subscriptions:sessions'])]
+    public function getCourseCoaches(): Collection
+    {
+        return $this->getCourseCoachesSubscriptions()
+            ->map(fn (SessionRelCourseRelUser $subscription) => $subscription->getUser())
+        ;
+    }
+
+    /**
+     * @return Collection<int, SessionRelCourseRelUser>
+     */
+    #[Groups(['session:basic', 'user_subscriptions:sessions'])]
     public function getCourseCoachesSubscriptions(): Collection
     {
         return $this->getAllUsersFromCourse(self::COURSE_COACH);
@@ -1447,5 +1516,77 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             $sessionRelCourse->getCourse()->getVisibility(),
             $closedVisibilities
         ));
+    }
+
+    public function getParentId(): ?int
+    {
+        return $this->parentId;
+    }
+
+    public function setParentId(?int $parentId): self
+    {
+        $this->parentId = $parentId;
+
+        return $this;
+    }
+
+    public function getDaysToReinscription(): ?int
+    {
+        return $this->daysToReinscription;
+    }
+
+    public function setDaysToReinscription(?int $daysToReinscription): self
+    {
+        $this->daysToReinscription = $daysToReinscription ?: null;
+
+        return $this;
+    }
+
+    public function getLastRepetition(): bool
+    {
+        return $this->lastRepetition;
+    }
+
+    public function setLastRepetition(bool $lastRepetition): self
+    {
+        $this->lastRepetition = $lastRepetition;
+
+        return $this;
+    }
+
+    public function getDaysToNewRepetition(): ?int
+    {
+        return $this->daysToNewRepetition;
+    }
+
+    public function setDaysToNewRepetition(?int $daysToNewRepetition): self
+    {
+        $this->daysToNewRepetition = $daysToNewRepetition ?: null;
+
+        return $this;
+    }
+
+    public function getNotifyBoss(): bool
+    {
+        return $this->notifyBoss;
+    }
+
+    public function setNotifyBoss(bool $notifyBoss): self
+    {
+        $this->notifyBoss = $notifyBoss;
+
+        return $this;
+    }
+
+    public function getValidityInDays(): ?int
+    {
+        return $this->validityInDays;
+    }
+
+    public function setValidityInDays(?int $validityInDays): self
+    {
+        $this->validityInDays = $validityInDays ?: null;
+
+        return $this;
     }
 }

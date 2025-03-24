@@ -10,69 +10,72 @@
           {{ link.title }}
         </a>
         <BaseIcon
-          v-if="isAllowedToEdit && (link.sessionId && link.sessionId === sid)"
+          v-if="isAllowedToEdit && link.sessionId && link.sessionId === sid"
+          class="mr-8"
           icon="session-star"
           size="small"
-          class="mr-8"
           title="Session Item"
         />
         <BaseIcon
           v-if="isLinkValid.isValid"
+          :title="t('Link is valid')"
+          class="text-green-500"
           icon="check"
           size="small"
-          class="text-green-500"
-          :title="t('Link is valid')"
         />
         <BaseIcon
           v-else-if="isLinkValid.isValid === false"
+          :title="t('Link is not valid')"
+          class="text-red-500"
           icon="alert"
           size="small"
-          class="text-red-500"
-          :title="t('Link is not valid')"
         />
       </h6>
     </div>
-    <div class="flex gap-2" v-if="securityStore.isAuthenticated && canEdit(link)">
+    <div
+      v-if="securityStore.isAuthenticated && canEdit(link)"
+      class="flex gap-2"
+    >
       <BaseButton
-        type="black"
+        :label="t('Check link')"
         icon="check"
         size="small"
-        :label="t('Check link')"
+        type="black"
         @click="emit('check', link)"
       />
       <BaseButton
-        type="black"
+        :label="t('Edit')"
         icon="edit"
         size="small"
-        :label="t('Edit')"
+        type="black"
         @click="emit('edit', link)"
       />
       <BaseButton
-        type="black"
         :icon="isVisible(link.linkVisible) ? 'eye-on' : 'eye-off'"
-        size="small"
         :label="t('Toggle visibility')"
+        size="small"
+        type="black"
         @click="emit('toggle', link)"
       />
       <BaseButton
-        type="black"
+        :label="t('Move up')"
         icon="up"
         size="small"
-        :label="t('Move up')"
+        type="black"
         @click="emit('moveUp', link)"
       />
       <BaseButton
-        type="black"
+        :label="t('Move down')"
         icon="down"
         size="small"
-        :label="t('Move down')"
+        type="black"
         @click="emit('moveDown', link)"
       />
       <BaseButton
-        type="danger"
+        :label="t('Delete')"
         icon="delete"
         size="small"
-        :label="t('Delete')"
+        type="danger"
         @click="emit('delete', link)"
       />
     </div>
@@ -86,7 +89,7 @@ import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { isVisible } from "./linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
 import { computed, onMounted, ref } from "vue"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions";
+import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useRoute } from "vue-router"
 import { useCidReq } from "../../composables/cidReq"
 
@@ -103,23 +106,20 @@ defineProps({
   },
   isLinkValid: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
-});
+})
 
 const emit = defineEmits(["check", "edit", "toggle", "moveUp", "moveDown", "delete"])
 
 const isAllowedToEdit = ref(false)
 
 const canEdit = (item) => {
-  const sessionId = item.sessionId;
-  const isSessionDocument = sessionId && sessionId === sid;
-  const isBaseCourse = !sessionId;
+  const sessionId = item.sessionId
+  const isSessionDocument = sessionId && sessionId === sid
+  const isBaseCourse = !sessionId
 
-  return (
-    (isSessionDocument && isAllowedToEdit.value) ||
-    (isBaseCourse && !sid && isCurrentTeacher.value)
-  );
+  return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
 }
 
 onMounted(async () => {

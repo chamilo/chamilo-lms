@@ -16,6 +16,17 @@ export const useSecurityStore = defineStore("security", () => {
     return false
   })
 
+  /**
+   * @param {string} role
+   */
+  const removeRole = (role) => {
+    const index = user.value.roles.indexOf(role)
+
+    if (index > -1) {
+      user.value.roles.splice(index, 1)
+    }
+  }
+
   const isStudent = computed(() => hasRole.value("ROLE_STUDENT"))
 
   const isStudentBoss = computed(() => hasRole.value("ROLE_STUDENT_BOSS"))
@@ -35,7 +46,6 @@ export const useSecurityStore = defineStore("security", () => {
   const isSessionAdmin = computed(() => hasRole.value("ROLE_SESSION_MANAGER"))
 
   const isAdmin = computed(() => hasRole.value("ROLE_SUPER_ADMIN") || hasRole.value("ROLE_ADMIN"))
-
 
   async function checkSession() {
     isLoading.value = true
@@ -59,6 +69,7 @@ export const useSecurityStore = defineStore("security", () => {
     isLoading,
     isAuthenticated,
     hasRole,
+    removeRole,
     isStudent,
     isStudentBoss,
     isHRM,

@@ -4856,10 +4856,10 @@ msgstr "Confirmar"
 msgid "Unsubscribe users from course"
 msgstr "Anular/cancelar inscrição dos utilizadores no curso"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Nome da turma em falta"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Nome de turma já existente"
 
 msgid "CSV file import location"
@@ -15809,7 +15809,7 @@ msgstr "Endereço IP"
 msgid "Only skills that were not registered were imported"
 msgstr "Apenas foram importadas as competências ainda não registadas"
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "Não existe um nome definido para a competência"
 
 msgid "The parent skill was not set"

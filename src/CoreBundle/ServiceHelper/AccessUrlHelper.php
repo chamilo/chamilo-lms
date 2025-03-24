@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+use const PHP_SAPI;
+
 class AccessUrlHelper
 {
     public function __construct(
@@ -45,8 +47,18 @@ class AccessUrlHelper
 
         $accessUrl = $this->getFirstAccessUrl();
 
+        if ('cli' === PHP_SAPI) {
+            return $accessUrl;
+        }
+
         if ($this->isMultiple()) {
-            $url = $this->requestStack->getMainRequest()->getSchemeAndHttpHost().'/';
+            $request = $this->requestStack->getMainRequest();
+
+            if (null === $request) {
+                return $accessUrl;
+            }
+
+            $url = $request->getSchemeAndHttpHost().'/';
 
             /** @var AccessUrl $accessUrl */
             $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $url]);

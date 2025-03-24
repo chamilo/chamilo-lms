@@ -36,8 +36,10 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $is_tutor = api_is_allowed_to_edit(true);
 $is_tutor_course = api_is_course_tutor();
 $courseInfo = api_get_course_info();
-$courseId = $courseInfo['real_id'];
-$sessionId = api_get_session_id();
+$courseEntity = api_get_course_entity();
+$courseId = $courseEntity->getId();
+$sessionEntity = api_get_session_entity();
+$sessionId = $sessionEntity?->getId() ?: 0;
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
     $courseInfo
@@ -89,7 +91,6 @@ if ($is_allowedToEdit && !empty($action)) {
     switch ($action) {
         case 'add_shortcut':
             $repo = Container::getShortcutRepository();
-            $courseEntity = api_get_course_entity(api_get_course_int_id());
             $user = api_get_user_entity();
             $repo->addShortCut($exerciseEntity, $user, $courseEntity, api_get_session_entity());
 
@@ -127,7 +128,7 @@ if ($is_allowedToEdit && !empty($action)) {
                 // Teacher change exercise
                 break;
             }
-            $exerciseRepo->setVisibilityPublished($exerciseEntity);
+            $exerciseRepo->setVisibilityPublished($exerciseEntity, $courseEntity, $sessionEntity);
             Display::addFlash(Display::return_message(get_lang('The visibility has been changed.'), 'confirmation'));
 
             break;
@@ -137,7 +138,7 @@ if ($is_allowedToEdit && !empty($action)) {
                 break;
             }
 
-            $exerciseRepo->setVisibilityDraft($exerciseEntity);
+            $exerciseRepo->setVisibilityDraft($exerciseEntity, $courseEntity, $sessionEntity);
             Display::addFlash(Display::return_message(get_lang('The visibility has been changed.'), 'confirmation'));
 
             break;
@@ -335,6 +336,10 @@ if ($is_allowedToEdit && 'learnpath' !== $origin) {
     $actionsLeft .= Display::getMdiIcon('database', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Recycle existing questions'));
     $actionsLeft .= '</a>';
 
+    if (api_is_allowed_to_edit(null, true) && 'true' === api_get_course_setting('exercise_generator')) {
+        $actionsLeft .= '<a href="exercise_aiken_generator.php?'.api_get_cidreq().'">'.
+            Display::getMdiIcon('robot', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AI Aiken Generator')).'</a>';
+    }
     //echo Display::url(Display::getMdiIcon('eye', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Media')), 'media.php?' . api_get_cidreq());
     // end question category
     /*$actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/hotpotatoes.php?'.api_get_cidreq().'">'.

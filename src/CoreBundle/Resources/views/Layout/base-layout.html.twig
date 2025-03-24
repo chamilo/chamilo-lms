@@ -10,7 +10,11 @@
 {% block chamilo_head %}
     {%- include "@ChamiloCore/Layout/head.html.twig" %}
 {% endblock %}
-<body class="font-sans antialiased {{ section_name }}">
+<body class="font-sans antialiased {{ section_name }}"
+      data-in-course="{{ course ? 'true' : 'false' }}"
+      data-course-id="{{ course ? course.id : '' }}"
+      data-session-id="{{ session ? session.id : '' }}"
+>
 <noscript>{{ "Your browser does not support Javascript"|trans }}</noscript>
 {%- block chamilo_wrap -%}
     {%- block page_content %}

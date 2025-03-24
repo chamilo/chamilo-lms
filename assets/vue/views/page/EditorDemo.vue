@@ -3,10 +3,10 @@
     <h1>Editor Demo</h1>
     <BaseTinyEditor
       v-model="editorContent"
-      editor-id="demoEditor"
       :use-file-manager="useFileManager"
-      title="Demo Editor"
+      editor-id="demoEditor"
       help-text="Edit your content here in demo mode."
+      title="Demo Editor"
     />
   </div>
 </template>

@@ -133,7 +133,7 @@ if (empty($ticket)) {
     api_not_allowed(true);
 }
 $projectId = (int) $ticket['ticket']['project_id'];
-$userIsAllowInProject = TicketManager::userIsAllowInProject($projectId);
+$userIsAllowInProject = true; //TicketManager::userIsAllowInProject($projectId);
 $allowEdition = $ticket['ticket']['assigned_last_user'] == $user_id
     || $ticket['ticket']['sys_insert_user_id']
     == $user_id
@@ -143,6 +143,24 @@ if (false === $userIsAllowInProject) {
     // make sure it's either a user assigned to this ticket, or the reporter, or and admin
     if (false === $allowEdition) {
         api_not_allowed(true);
+    }
+}
+
+if (isset($_GET['action'])) {
+    $action = $_GET['action'];
+
+    switch ($action) {
+        case 'subscribe':
+            TicketManager::subscribeUserToTicket($ticket_id, $user_id);
+            Display::addFlash(Display::return_message(get_lang('Subscribed successfully')));
+            header('Location: '.api_get_self().'?ticket_id='.$ticket_id);
+            exit;
+
+        case 'unsubscribe':
+            TicketManager::unsubscribeUserFromTicket($ticket_id, $user_id);
+            Display::addFlash(Display::return_message(get_lang('Unsubscribed successfully')));
+            header('Location: '.api_get_self().'?ticket_id='.$ticket_id);
+            exit;
     }
 }
 
@@ -331,18 +349,50 @@ if ($allowEdition
     }
 }
 
+$isSubscribed = TicketManager::isUserSubscribedToTicket($ticket_id, $user_id);
+$subscribeAction = '';
+if ($isSubscribed) {
+    $subscribeAction = Display::url(
+        Display::getMdiIcon(
+            'email-alert',
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Unsubscribe')
+        ),
+        api_get_self().'?ticket_id='.$ticket_id.'&action=unsubscribe',
+        ['title' => get_lang('Unsubscribe')]
+    );
+} else {
+    $subscribeAction = Display::url(
+        Display::getMdiIcon(
+            'email-outline',
+            'ch-tool-icon-disabled',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Subscribe')
+        ),
+        api_get_self().'?ticket_id='.$ticket_id.'&action=subscribe',
+        ['title' => get_lang('Subscribe')]
+    );
+}
+
+$actions = [
+    Display::url(
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Tickets')),
+        api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId
+    ),
+    $subscribeAction,
+];
+
 Display::display_header();
-$actions = Display::url(
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Tickets')),
-    api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId
-);
-echo Display::toolbarAction('ticket', [$actions]);
+echo Display::toolbarAction('ticket', $actions);
 
 $bold = '';
 if (TicketManager::STATUS_CLOSE == $ticket['ticket']['status_id']) {
     $bold = 'style = "font-weight: bold;"';
 }
-$senderData = get_lang('added by').' '.$ticket['usuario']['complete_name_with_message_link'];
+$senderData = get_lang('added by').' '.$ticket['user']['complete_name_with_message_link'];
 echo '<div class="prose">';
 echo '<table width="100%">
         <tr>

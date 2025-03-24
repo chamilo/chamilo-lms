@@ -4,8 +4,8 @@
       :handle-delete="del"
       :handle-list="list"
     >
-      <template slot="left">
-        <v-toolbar-title v-if="item">{{ `${$options.servicePrefix} ${item["@id"]}` }} </v-toolbar-title>
+      <template v-slot:left>
+        <v-toolbar-title v-if="item">{{ `${$options.servicePrefix} ${item["@id"]}` }}</v-toolbar-title>
       </template>
     </Toolbar>
     <br />
@@ -14,83 +14,85 @@
       class="table-course-show"
     >
       <v-simple-table>
-        <template slot="default">
-          <thead>
-            <tr>
-              <th>Field</th>
-              <th>Value</th>
-              <th>Field</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <strong>{{ $t("title") }}</strong>
-              </td>
-              <td>
-                {{ item["title"] }}
-              </td>
+        <template v-slot:default>
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Value</th>
+                <th>Field</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>{{ $t("title") }}</strong>
+                </td>
+                <td>
+                  {{ item["title"] }}
+                </td>
 
-              <td>
-                <strong>{{ $t("code") }}</strong>
-              </td>
-              <td>
-                {{ item["code"] }}
-              </td>
-            </tr>
+                <td>
+                  <strong>{{ $t("code") }}</strong>
+                </td>
+                <td>
+                  {{ item["code"] }}
+                </td>
+              </tr>
 
-            <tr>
-              <td>
-                <strong>{{ $t("Course language") }}</strong>
-              </td>
-              <td>
-                {{ item["courseLanguage"] }}
-              </td>
+              <tr>
+                <td>
+                  <strong>{{ $t("Course language") }}</strong>
+                </td>
+                <td>
+                  {{ item["courseLanguage"] }}
+                </td>
 
-              <td>
-                <strong>{{ $t("category") }}</strong>
-              </td>
-              <td>
-                <div v-if="item['category']">
-                  {{ item["category"].title }}
-                </div>
-                <div v-else>-</div>
-              </td>
-            </tr>
+                <td>
+                  <strong>{{ $t("category") }}</strong>
+                </td>
+                <td>
+                  <div v-if="item['category']">
+                    {{ item["category"].title }}
+                  </div>
+                  <div v-else>-</div>
+                </td>
+              </tr>
 
-            <tr>
-              <td>
-                <strong>{{ $t("visibility") }}</strong>
-              </td>
-              <td>
-                {{ $n(item["visibility"]) }}
-              </td>
+              <tr>
+                <td>
+                  <strong>{{ $t("visibility") }}</strong>
+                </td>
+                <td>
+                  {{ $n(item["visibility"]) }}
+                </td>
 
-              <td>
-                <strong>{{ $t("Department") }}</strong>
-              </td>
-              <td>
-                {{ item["departmentName"] }}
-              </td>
-            </tr>
+                <td>
+                  <strong>{{ $t("Department") }}</strong>
+                </td>
+                <td>
+                  {{ item["departmentName"] }}
+                </td>
+              </tr>
 
-            <tr>
-              <td>
-                <strong>{{ $t("Department URL") }}</strong>
-              </td>
-              <td>
-                {{ item["departmentUrl"] }}
-              </td>
+              <tr>
+                <td>
+                  <strong>{{ $t("Department URL") }}</strong>
+                </td>
+                <td>
+                  {{ item["departmentUrl"] }}
+                </td>
 
-              <td>
-                <strong>{{ $t("Expiration date") }}</strong>
-              </td>
-              <td>
-                {{ formatDateTime(item["expirationDate"], "long") }}
-              </td>
-            </tr>
-          </tbody>
+                <td>
+                  <strong>{{ $t("Expiration date") }}</strong>
+                </td>
+                <td>
+                  {{ formatDateTime(item["expirationDate"], "long") }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </template>
       </v-simple-table>
     </div>

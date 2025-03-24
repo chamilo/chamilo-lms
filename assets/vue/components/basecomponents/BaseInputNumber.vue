@@ -4,11 +4,11 @@
       <InputNumber
         :id="id"
         :class="{ 'p-invalid': isInvalid }"
+        :disabled="disabled"
         :max="max"
         :min="min"
         :model-value="modelValue"
         :step="step"
-        :disabled="disabled"
         @update:model-value="$emit('update:modelValue', $event)"
       />
       <label

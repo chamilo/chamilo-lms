@@ -37,7 +37,7 @@ defineProps({
   },
   itemToDelete: {
     type: String,
-    default: '',
+    default: "",
   },
 })
 

@@ -13,6 +13,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @extends Voter<'DELETE'|'VIEW'|'EDIT', MessageRelUser>
+ */
 class MessageRelUserVoter extends Voter
 {
     public const DELETE = 'DELETE';

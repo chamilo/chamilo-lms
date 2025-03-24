@@ -9,8 +9,8 @@ namespace Chamilo\Tests\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Level;
-use Chamilo\CoreBundle\Entity\Profile;
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\SkillLevelProfile;
 use Chamilo\CoreBundle\Entity\SkillProfile;
 use Chamilo\CoreBundle\Entity\SkillRelCourse;
 use Chamilo\CoreBundle\Entity\SkillRelGradebook;
@@ -64,7 +64,7 @@ class SkillRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $skillRepo = self::getContainer()->get(SkillRepository::class);
-        $profileRepo = $em->getRepository(Profile::class);
+        $profileRepo = $em->getRepository(SkillLevelProfile::class);
 
         $course = $this->createCourse('new');
         $session = $this->createSession('session');
@@ -79,7 +79,7 @@ class SkillRepositoryTest extends AbstractApiTest
         ;
         $em->persist($skillProfile);
 
-        $profile = (new Profile())
+        $profile = (new SkillLevelProfile())
             ->setTitle('profile')
         ;
         $em->persist($profile);
@@ -97,7 +97,7 @@ class SkillRepositoryTest extends AbstractApiTest
             ->setShortCode('Dev')
             ->setStatus(Skill::STATUS_ENABLED)
             ->setAccessUrlId($accessUrl->getId())
-            ->setProfile($profile)
+            ->setLevelProfile($profile)
         ;
         $skillRepo->update($skill);
 
@@ -166,7 +166,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $em->flush();
         $em->clear();
 
-        /** @var Profile $profile */
+        /** @var SkillLevelProfile $profile */
         $profile = $profileRepo->find($profile->getId());
 
         /** @var Skill $skill */
@@ -227,7 +227,6 @@ class SkillRepositoryTest extends AbstractApiTest
             ->setSession($session)
             ->setUser($user)
             ->setArgumentation('argumentation')
-            ->setAssignedBy(1)
             ->setArgumentationAuthorId(1)
         ;
         $this->assertHasNoEntityViolations($skillRelUser);

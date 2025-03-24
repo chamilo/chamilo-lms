@@ -42,8 +42,8 @@
       v-if="blockSessions"
       :id="blockSessions.id"
       v-model:extra-content="blockSessions.extraContent"
-      :editable="blockSessions.editable"
       :description="t('Create course packages for a certain time with training sessions')"
+      :editable="blockSessions.editable"
       :items="blockSessions.items"
       :search-url="blockSessions.searchUrl"
       :title="t('Sessions management')"
@@ -64,8 +64,8 @@
       v-if="blockSkills"
       :id="blockSkills.id"
       v-model:extra-content="blockSkills.extraContent"
-      :editable="blockSkills.editable"
       :description="t('Manage the skills of your users, through courses and badges')"
+      :editable="blockSkills.editable"
       :items="blockSkills.items"
       :title="t('Skills')"
       icon="gradebook"
@@ -161,8 +161,8 @@
       v-if="blockPlatform"
       :id="blockPlatform.id"
       v-model:extra-content="blockPlatform.extraContent"
-      :editable="blockPlatform.editable"
       :description="t('Configure your platform, view reports, publish and send announcements globally')"
+      :editable="blockPlatform.editable"
       :items="blockPlatform.items"
       :search-url="blockPlatform.searchUrl"
       :title="t('Platform management')"
@@ -173,8 +173,8 @@
       v-if="blockChamilo"
       :id="blockChamilo.id"
       v-model:extra-content="blockChamilo.extraContent"
-      :editable="blockChamilo.editable"
       :description="t('Learn more about Chamilo and its use, official references links')"
+      :editable="blockChamilo.editable"
       :items="blockChamilo.items"
       icon="admin-settings"
       title="Chamilo.org"
@@ -203,7 +203,6 @@
           >
           </i18n-t>
         </div>
-
       </div>
     </div>
 
@@ -221,12 +220,11 @@
         />
         <div
           v-else
-          class="block-admin-news__status"
           v-t="'Disabled'"
+          class="block-admin-news__status"
         />
       </div>
     </div>
-
   </div>
 </template>
 

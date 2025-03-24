@@ -1812,7 +1812,7 @@ msgid "Course program"
 msgstr "Cahier des charges"
 
 msgid "Statistics"
-msgstr "Suivi"
+msgstr "Statistiques"
 
 msgid "Upload page and link to Home Page"
 msgstr "Déposer page et lier à l'accueil"
@@ -4985,10 +4985,10 @@ msgstr "Confirmer"
 msgid "Unsubscribe users from course"
 msgstr "Désinscrire des utilisateurs du cours"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Nom de classe manquant"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Ce nom de classe existe déjà"
 
 msgid "CSV file import location"
@@ -5134,7 +5134,7 @@ msgid "Session overview"
 msgstr "Résumé de la session"
 
 msgid "Add user in the course only if not yet in"
-msgstr "Inscrire l'utilsateur s'il n'est pas déjà inscrit"
+msgstr "Inscrire l'utilisateur s'il n'est pas déjà inscrit"
 
 msgid "Remove users from any courses that are not mentioned explicitly in this file"
 msgstr "Désinscrire l'utilisateur de tous les cours auxquels il n'est pas explicitement inscrit dans le fichier"
@@ -16344,7 +16344,7 @@ msgstr "Adresse IP"
 msgid "Only skills that were not registered were imported"
 msgstr "Seuls les nouvelles compétences ont été importées"
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "La compétence n'a pas de nom"
 
 msgid "The parent skill was not set"
@@ -29564,3 +29564,57 @@ msgstr "Ajouter des amis"
 
 msgid "Add friend"
 msgstr "Ajouter un ami"
+
+msgid "Delete permanently"
+msgstr "Supprimer définitivement"
+
+msgid "%d minutes before"
+msgstr "%d minutes avant"
+
+msgid "%d hours before"
+msgstr "%d heures avant"
+
+msgid "%d days before"
+msgstr "%d jours avant"
+
+msgid "Select a folder"
+msgstr "Choisir un dossier"
+
+msgid "Select the destination folder"
+msgstr "Choisir le dossier de destination"
+
+msgid "All users"
+msgstr "Tous les utilisateurs"
+
+msgid "Edit introduction"
+msgstr "Éditer l'introduction"
+
+msgid "To teacher and tutor"
+msgstr "Pour le professeur et le tuteur"
+
+msgid "To HR only"
+msgstr "Pour les RH uniquement"
+
+msgid "Only for teachers"
+msgstr "Pour les professeurs uniquement"
+
+msgid "Only for students"
+msgstr "Pour les apprenants uniquement"
+
+msgid "Autolaunch settings"
+msgstr "Paramètres d'auto démarrage"
+
+msgid "Auto-launch"
+msgstr "Auto-démarrage"
+
+msgid "Reminders"
+msgstr "Notifications"
+
+msgid "Add reminder"
+msgstr "Ajouter une notification"
+
+msgid "Update introduction links"
+msgstr "Mettre à jour les liens de l'introduction"
+
+msgid "Conference Room"
+msgstr "Salle de conférence"

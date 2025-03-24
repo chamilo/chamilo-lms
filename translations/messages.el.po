@@ -4856,10 +4856,10 @@ msgstr "Επιβεβαίωση"
 msgid "Unsubscribe users from course"
 msgstr "Ακύρωση εγγραφής χρηστών από το μάθημα"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Δεν υπάρχει το όνομα της τάξης"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Το όνομα της τάξης υπάρχει"
 
 msgid "CSV file import location"
@@ -15809,7 +15809,7 @@ msgstr "IP address"
 msgid "Only skills that were not registered were imported"
 msgstr "Μόνο οι δεξιότητες που δεν είχαν καταχωρηθεί εισήχθησαν"
 
-msgid "The skill had no name set"
+msgid "The skill had no title set"
 msgstr "Δεν δόθηκε όνομα στο επίπεδο ικανότητας"
 
 msgid "The parent skill was not set"

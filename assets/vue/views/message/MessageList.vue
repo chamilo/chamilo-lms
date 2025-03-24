@@ -1,5 +1,5 @@
 <template>
-  <div class="message-list">
+  <div class="message-list flex flex-col">
     <SectionHeader :title="title">
       <BaseButton
         icon="email-plus"
@@ -43,6 +43,7 @@
     <div class="message-list__actions">
       <BaseButton
         :label="t('Inbox')"
+        class="w-full md:w-auto"
         icon="inbox"
         type="black"
         @click="showInbox"
@@ -50,6 +51,7 @@
 
       <BaseButton
         :label="t('Unread')"
+        class="w-full md:w-auto"
         icon="email-unread"
         type="black"
         @click="showUnread"
@@ -57,6 +59,7 @@
 
       <BaseButton
         :label="t('Sent')"
+        class="w-full md:w-auto"
         icon="sent"
         type="black"
         @click="showSent"
@@ -66,116 +69,219 @@
         v-for="tag in tags"
         :key="tag.id"
         :label="tag.tag"
+        class="w-full md:w-auto"
         icon="tag-outline"
         type="black"
         @click="showInboxByTag(tag)"
       />
     </div>
 
-    <DataTable
-      ref="dtMessages"
-      v-model:selection="selectedItems"
-      :loading="isLoading"
-      :row-class="rowClass"
-      :rows="initialRowsPerPage"
-      :rows-per-page-options="[10, 20, 50]"
-      :total-records="totalItems"
-      :value="items"
-      current-page-report-template="{first} to {last} of {totalRecords}"
-      data-key="@id"
-      lazy
-      paginator
-      paginator-template="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-      responsive-layout="scroll"
-      sort-field="sendDate"
-      :sort-order="-1"
-      striped-rows
-      @page="onPage"
-      @sort="sortingChanged"
-    >
-      <template #header>
-        <form
-          class="message-list__searcher-container"
-          @submit.prevent="onSearch"
-        >
-          <InputGroup>
-            <InputText
-              v-model="searchText"
-              :placeholder="t('Search')"
-              type="text"
-            />
-            <BaseButton
-              icon="search"
-              type="primary"
-              is-submit
-            />
-            <BaseButton
-              icon="close"
-              type="primary"
-              @click="onResetSearch"
-            />
-          </InputGroup>
-        </form>
-      </template>
-
-      <Column selection-mode="multiple" />
-      <Column :header="showingInbox ? t('From') : t('To')">
-        <template #body="slotProps">
-          <BaseAvatarList
-            v-if="showingInbox && slotProps.data.sender"
-            :users="[slotProps.data.sender]"
-          />
-          <div
-            v-else-if="showingInbox && !slotProps.data.sender"
-            v-text="t('No sender')"
-          />
-          <BaseAvatarList
-            v-else-if="!showingInbox"
-            :users="mapReceiverMixToUsers(slotProps.data)"
-          />
-        </template>
-      </Column>
-      <Column
-        :header="t('Title')"
-        :sortable="true"
-        field="title"
+    <div class="hidden md:block overflow-x-auto">
+      <DataTable
+        ref="dtMessages"
+        v-model:selection="selectedItems"
+        :loading="isLoading"
+        :row-class="rowClass"
+        :rows="initialRowsPerPage"
+        :rows-per-page-options="[10, 20, 50]"
+        :sort-order="-1"
+        :total-records="totalItems"
+        :value="items"
+        class="w-full table-auto"
+        current-page-report-template="{first} to {last} of {totalRecords}"
+        data-key="@id"
+        lazy
+        paginator
+        paginator-template="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+        responsive-layout="scroll"
+        sort-field="sendDate"
+        striped-rows
+        @page="onPage"
+        @sort="sortingChanged"
       >
-        <template #body="slotProps">
-          <BaseAppLink
-            class="text-primary"
-            :to="{ name: 'MessageShow', query: { id: slotProps.data['@id'] } }"
+        <template #header>
+          <form
+            class="message-list__searcher-container"
+            @submit.prevent="onSearch"
           >
-            {{ slotProps.data.title }}
-          </BaseAppLink>
+            <InputGroup>
+              <InputText
+                v-model="searchText"
+                :placeholder="t('Search')"
+                type="text"
+              />
+              <BaseButton
+                icon="search"
+                is-submit
+                type="primary"
+              />
+              <BaseButton
+                icon="close"
+                type="primary"
+                @click="onResetSearch"
+              />
+            </InputGroup>
+          </form>
+        </template>
 
-          <BaseTag
-            v-for="tag in findMyReceiver(slotProps.data)?.tags"
-            :key="tag.id"
-            :label="tag.tag"
-            type="info"
-          />
-        </template>
-      </Column>
-      <Column
-        :header="t('Send date')"
-        :sortable="true"
-        field="sendDate"
-      >
-        <template #body="slotProps">
-          {{ abbreviatedDatetime(slotProps.data.sendDate) }}
-        </template>
-      </Column>
-      <Column :header="t('Actions')">
-        <template #body="slotProps">
-          <BaseButton
-            icon="delete"
-            size="small"
-            type="danger"
-            @click="showDlgConfirmDeleteSingle(slotProps)"
-          />
-        </template>
-      </Column>
-    </DataTable>
+        <Column selection-mode="multiple" />
+        <Column :header="showingInbox ? t('From') : t('To')">
+          <template #body="slotProps">
+            <BaseAvatarList
+              v-if="showingInbox && slotProps.data.sender"
+              :users="[slotProps.data.sender]"
+            />
+            <div
+              v-else-if="showingInbox && !slotProps.data.sender"
+              v-text="t('No sender')"
+            />
+            <BaseAvatarList
+              v-else-if="!showingInbox"
+              :users="mapReceiverMixToUsers(slotProps.data)"
+            />
+          </template>
+        </Column>
+        <Column
+          :header="t('Title')"
+          :sortable="true"
+          field="title"
+        >
+          <template #body="slotProps">
+            <BaseAppLink
+              :to="{
+                name: 'MessageShow',
+                query: {
+                  id: slotProps.data['@id'],
+                  receiverType: showingInbox ? MESSAGE_TYPE_INBOX : MESSAGE_TYPE_SENDER,
+                },
+              }"
+              class="text-primary"
+            >
+              {{ slotProps.data.title }}
+            </BaseAppLink>
+
+            <BaseTag
+              v-for="tag in findMyReceiver(slotProps.data)?.tags"
+              :key="tag.id"
+              :label="tag.tag"
+              type="info"
+            />
+          </template>
+        </Column>
+        <Column
+          :header="t('Send date')"
+          :sortable="true"
+          class="truncate w-24 md:w-auto"
+          field="sendDate"
+        >
+          <template #body="slotProps">
+            {{ abbreviatedDatetime(slotProps.data.sendDate) }}
+          </template>
+        </Column>
+        <Column :header="t('Actions')">
+          <template #body="slotProps">
+            <BaseButton
+              icon="delete"
+              size="small"
+              type="danger"
+              @click="showDlgConfirmDeleteSingle(slotProps)"
+            />
+          </template>
+        </Column>
+      </DataTable>
+    </div>
+    <!-- List for small screens with pagination -->
+    <div class="block md:hidden">
+      <ul class="space-y-4">
+        <li
+          v-for="item in paginatedItems"
+          :key="item.id"
+          class="bg-white shadow-md rounded-lg p-4"
+        >
+          <div class="flex items-center space-x-4">
+            <BaseAvatarList
+              v-if="showingInbox && item.sender"
+              :users="[item.sender]"
+            />
+            <div
+              v-else-if="showingInbox && !item.sender"
+              class="text-sm text-gray-600"
+              v-text="t('No sender')"
+            />
+            <BaseAvatarList
+              v-else
+              :users="mapReceiverMixToUsers(item)"
+            />
+            <div class="flex-1">
+              <div
+                v-if="showingInbox && item.sender"
+                class="font-bold text-lg"
+              >
+                {{ item.sender.name }}
+              </div>
+              <div
+                v-if="showingInbox && item.sender"
+                class="text-sm text-gray-600"
+              >
+                {{ item.sender.email }}
+              </div>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="text-sm font-bold">{{ t("Title") }}:</div>
+            <BaseAppLink
+              :to="{ name: 'MessageShow', query: { id: item['@id'] } }"
+              class="text-base text-blue-600"
+            >
+              {{ item.title }}
+            </BaseAppLink>
+          </div>
+          <div
+            v-if="findMyReceiver(item)?.tags.length"
+            class="mt-2"
+          >
+            <div class="text-sm font-bold">{{ t("Tags") }}:</div>
+            <div>
+              <BaseTag
+                v-for="tag in findMyReceiver(item)?.tags"
+                :key="tag.id"
+                :label="tag.tag"
+                type="info"
+              />
+            </div>
+          </div>
+          <div class="mt-2">
+            <div class="text-sm font-bold">{{ t("Send date") }}:</div>
+            <div class="text-base text-gray-500">{{ abbreviatedDatetime(item.sendDate) }}</div>
+          </div>
+          <div class="mt-4 flex space-x-2">
+            <BaseButton
+              icon="delete"
+              size="small"
+              type="danger"
+              @click="showDlgConfirmDeleteSingle(item)"
+            />
+          </div>
+        </li>
+      </ul>
+      <div class="flex justify-between items-center mt-4">
+        <BaseButton
+          :disabled="isPrevDisabled"
+          icon="back"
+          type="black"
+          @click="prevPage"
+        />
+        <span
+          >{{ t("Page") }} {{ currentPage }} {{ t("of") }} {{ totalPages }} ({{ totalItems }} {{ t("messages") }})</span
+        >
+        <BaseButton
+          :disabled="isNextDisabled"
+          icon="next"
+          type="black"
+          @click="nextPage"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -193,7 +299,7 @@ import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import { useConfirm } from "primevue/useconfirm"
 import { useQuery } from "@vue/apollo-composable"
-import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX, MESSAGE_TYPE_SENDER } from "../../constants/entity/message"
+import { MESSAGE_TYPE_INBOX, MESSAGE_TYPE_SENDER } from "../../constants/entity/message"
 import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag"
 import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
@@ -201,7 +307,6 @@ import { useSecurityStore } from "../../store/securityStore"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import InputGroup from "primevue/inputgroup"
 import InputText from "primevue/inputtext"
-import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import messageRelUserService from "../../services/messagereluser"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 
@@ -310,6 +415,42 @@ const rowClass = (data) => {
 
 let fetchPayload = {}
 
+const rows = ref(10)
+const currentPage = ref(1)
+
+const totalPages = computed(() => {
+  return Math.ceil(totalItems.value / rows.value)
+})
+
+const paginatedItems = computed(() => {
+  if (!items.value.length) {
+    return []
+  }
+
+  return items.value
+})
+
+function nextPage() {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+    fetchPayload.page = currentPage.value
+    fetchPayload.itemsPerPage = rows.value
+    loadMessages(false)
+  }
+}
+
+function prevPage() {
+  if (currentPage.value > 1) {
+    currentPage.value--
+    fetchPayload.page = currentPage.value
+    fetchPayload.itemsPerPage = rows.value
+    loadMessages(false)
+  }
+}
+
+const isPrevDisabled = computed(() => currentPage.value === 1)
+const isNextDisabled = computed(() => currentPage.value === totalPages.value)
+
 function loadMessages(reset = true) {
   if (reset) {
     store.dispatch("message/resetList")
@@ -349,6 +490,7 @@ function showInbox() {
     page: 1,
     "receivers.receiver": securityStore.user["@id"],
     "receivers.receiverType": MESSAGE_TYPE_INBOX,
+    "exists[receivers.deletedAt]": false,
   }
 
   loadMessages()
@@ -364,6 +506,7 @@ function showInboxByTag(tag) {
     itemsPerPage: initialRowsPerPage,
     page: 1,
     "receivers.receiverType": MESSAGE_TYPE_INBOX,
+    "exists[receivers.deletedAt]": false,
   }
 
   loadMessages()
@@ -380,6 +523,7 @@ function showUnread() {
     itemsPerPage: initialRowsPerPage,
     page: 1,
     "receivers.receiverType": MESSAGE_TYPE_INBOX,
+    "exists[receivers.deletedAt]": false,
   }
 
   loadMessages()
@@ -393,6 +537,7 @@ function showSent() {
   fetchPayload = {
     sender: securityStore.user["@id"],
     "receivers.receiverType": MESSAGE_TYPE_SENDER,
+    "exists[receivers.deletedAt]": false,
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
@@ -404,6 +549,7 @@ function showSent() {
 function refreshMessages() {
   fetchPayload.itemsPerPage = initialRowsPerPage
   fetchPayload.page = 1
+  fetchPayload["exists[receivers.deletedAt]"] = false
 
   loadMessages()
 }
@@ -428,10 +574,12 @@ function sortingChanged(event) {
   loadMessages(true)
 }
 
-function findMyReceiver(message) {
+function findMyReceiver(message, receiverType = showingInbox.value ? MESSAGE_TYPE_INBOX : MESSAGE_TYPE_SENDER) {
   const receivers = [...message.receiversTo, ...message.receiversCc, ...message.receiversSender]
-
-  return receivers.find(({ receiver }) => receiver["@id"] === securityStore.user["@id"])
+  return receivers.find(({ receiver, receiverType: type }) => {
+    const isSelf = receiver["@id"] === securityStore.user["@id"]
+    return isSelf && type === receiverType
+  })
 }
 
 async function deleteMessage(message) {
@@ -450,12 +598,14 @@ async function deleteMessage(message) {
   }
 }
 
-function showDlgConfirmDeleteSingle({ data }) {
+function showDlgConfirmDeleteSingle(dataOrItem) {
+  const item = dataOrItem.data || dataOrItem
+
   confirm.require({
     header: t("Confirmation"),
-    message: t("Are you sure you want to delete %s?", [data.title]),
+    message: t("Are you sure you want to delete %s?", [item.title]),
     accept: async () => {
-      await deleteMessage(data)
+      await deleteMessage(item)
     },
   })
 }

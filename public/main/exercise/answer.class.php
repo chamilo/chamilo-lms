@@ -697,7 +697,7 @@ class Answer
                     ->setAnswer($answer)
                     ->setCorrect($correct)
                     ->setComment($comment)
-                    ->setPonderation($weighting)
+                    ->setPonderation(!is_null($weighting) ? $weighting : 0.0)
                     ->setPosition($position)
                     ->setHotspotCoordinates($hotspot_coordinates)
                     ->setHotspotType($hotspot_type)

@@ -18,12 +18,12 @@
 
           <v-data-table
             v-model="selected"
+            v-model:items-per-page="options.itemsPerPage"
+            v-model:options="options"
             :headers="headers"
             :items="items"
-            :items-per-page.sync="options.itemsPerPage"
             :loading="isLoading"
             :loading-text="$t('Loading')"
-            :options.sync="options"
             :server-items-length="totalItems"
             class="elevation-1"
             item-key="@id"

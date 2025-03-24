@@ -1085,30 +1085,40 @@ class Display
      *
      * @return string
      */
-    public static function tabsOnlyLink($headers, $selected = null)
+    public static function tabsOnlyLink($headers, $selected = null, string $tabList = '')
     {
         $id = uniqid('tabs_');
-        $i = 1;
         $list = '';
-        foreach ($headers as $item) {
+
+        if ('integer' === gettype($selected)) {
+            $selected -= 1;
+        }
+
+        foreach ($headers as $key => $item) {
             $class = null;
-            if ($i == $selected) {
+            if ($key == $selected) {
                 $class = 'active';
             }
             $item = self::tag(
                 'a',
                 $item['content'],
                 [
-                    'id' => $id.'-'.$i,
+                    'id' => $id.'-'.$key,
                     'href' => $item['url'],
-                    'class' => 'btn '.$class,
+                    'class' => 'nav-link '.$class,
                 ]
             );
-            $list .= $item;
-            $i++;
+            $list .= '<li class="nav-item">'.$item.'</li>';
         }
 
-        return self::toolbarAction($id, [$list]);
+        return self::div(
+            self::tag(
+                'ul',
+                $list,
+                ['class' => 'nav nav-tabs']
+            ),
+            ['class' => "ul-tablist $tabList"]
+        );
     }
 
     /**
@@ -1200,11 +1210,13 @@ class Display
 
         // Default row quantity
         if (!isset($extra_params['rowList'])) {
-            $extra_params['rowList'] = [20, 50, 100, 500, 1000, $all_value];
+            $defaultRowList = [20, 50, 100, 500, 1000, $all_value];
             $rowList = api_get_setting('platform.table_row_list', true);
-            if (!empty($rowList) && isset($rowList['options'])) {
+            if (is_array($rowList) && isset($rowList['options']) && is_array($rowList['options'])) {
                 $rowList = $rowList['options'];
                 $rowList[] = $all_value;
+            } else {
+                $rowList = $defaultRowList;
             }
             $extra_params['rowList'] = $rowList;
         }
@@ -1771,6 +1783,7 @@ class Display
                         'role' => 'menuitem',
                         'onclick' => $item['onclick'] ?? '',
                         'data-action' => $item['data-action'] ?? '',
+                        'data-confirm' => $item['data-confirm'] ?? '',
                     ]
                 );
         }

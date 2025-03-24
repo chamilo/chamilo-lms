@@ -866,7 +866,7 @@ class xajax
 		}
 
 		if (!empty($aURL['query'])) {
-			$aURL['query'] = '?'.$aURL['query'];
+            $aURL['query'] = '?'.Security::remove_XSS($aURL['query']);
 		}
 
 		// Build the URL: Start with scheme, user and pass

@@ -8,9 +8,12 @@
     />
 
     <BaseCalendar
+      id="calendar-id"
       v-model="dateRange"
+      :initial-value="[item.startDate, item.endDate]"
       :is-invalid="v$.item.startDate.$invalid || v$.item.endDate.$invalid"
       :label="t('Date')"
+      class="max-w-sm w-full"
       show-icon
       show-time
       type="range"
@@ -18,8 +21,8 @@
 
     <BaseTinyEditor
       v-model="item.content"
+      :required="false"
       editor-id="calendar-event-content"
-      required
     />
     <CalendarInvitations v-model="item" />
 
@@ -67,9 +70,6 @@ const item = computed(() => props.initialValues || props.values)
 const rules = computed(() => ({
   item: {
     title: {
-      required,
-    },
-    content: {
       required,
     },
     startDate: {

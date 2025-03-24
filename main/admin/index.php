@@ -639,14 +639,11 @@ $items[] = [
 $allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
 
 if (api_is_platform_admin() || ($allowCareer && api_is_session_admin())) {
-    // option only visible in development mode. Enable through code if required
-    if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
-        $items[] = [
-            'class' => 'item-session-user-move-stats',
-            'url' => 'user_move_stats.php',
-            'label' => get_lang('MoveUserStats'),
-        ];
-    }
+    $items[] = [
+        'class' => 'item-session-user-move-stats',
+        'url' => 'user_move_stats.php',
+        'label' => get_lang('MoveUserStats'),
+    ];
 
     $items[] = [
         'class' => 'item-session-user-move',

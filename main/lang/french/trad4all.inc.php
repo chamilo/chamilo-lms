@@ -9023,4 +9023,12 @@ $TextAppearingAtTheEndOfTheTestWhenTheUserHasFailed = "Texte apparaissant à la 
 $SubscribeSessionWhenFinishedFailure = "S'abonner à la session à la fin de l'exercice lorsque l'utilisateur a échoué";
 $progressBasedOnVisiblesLPsInEachCourse = "Les progrès sont calculés en fonction des leçons visibles dans chaque cours";
 $progressBasedOnXVisiblesLPs = "Les progrès sont calculés en fonction de %s leçons visibles dans le contexte actuel.";
+$AtLeastOneCorrectAnswerRequired = "Au moins une réponse doit être marquée comme correcte";
+$AtLeastOneCorrectAnswerMustHaveAPositiveScore = "Au moins une réponse correcte doit avoir un score positif";
+$NoAnswerCanBeEmpty = "Aucune réponse ne peut être vide";
+$ScoreMustBeNumeric = "Le score doit être numérique";
+$TheCorrectAnswerMustHaveAPositiveScore = "La réponse correcte doit avoir un score positif";
+$ACorrectAnswerIsRequired = "Une réponse doit être marquée comme correcte";
+$NoAdditionalComments = "Aucun commentaire additionnel";
+$TeacherFeedback = "Rétroalimentation du professeur";
 ?>

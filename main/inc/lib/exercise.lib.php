@@ -7433,4 +7433,63 @@ EOT;
             );
         }
     }
+
+    /**
+     * Get formatted feedback comments for an exam attempt.
+     */
+    public static function getFeedbackComments(int $examId): string
+    {
+        $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $TBL_QUIZ_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);
+
+        $sql = "SELECT ta.question_id, ta.teacher_comment, q.question AS title
+            FROM $TBL_TRACK_ATTEMPT ta
+            INNER JOIN $TBL_QUIZ_QUESTION q ON ta.question_id = q.iid
+            WHERE ta.exe_id = $examId
+            AND ta.teacher_comment IS NOT NULL
+            AND ta.teacher_comment != ''
+            GROUP BY ta.question_id
+            ORDER BY q.position ASC, ta.id ASC";
+
+        $result = Database::query($sql);
+        $commentsByQuestion = [];
+
+        while ($row = Database::fetch_array($result)) {
+            $questionId = $row['question_id'];
+            $questionTitle = Security::remove_XSS($row['title']);
+            $comment = Security::remove_XSS(trim(strip_tags($row['teacher_comment'])));
+
+            if (!empty($comment)) {
+                if (!isset($commentsByQuestion[$questionId])) {
+                    $commentsByQuestion[$questionId] = [
+                        'title' => $questionTitle,
+                        'comments' => [],
+                    ];
+                }
+                $commentsByQuestion[$questionId]['comments'][] = $comment;
+            }
+        }
+
+        if (empty($commentsByQuestion)) {
+            return "<p>" . get_lang('NoAdditionalComments') . "</p>";
+        }
+
+        $output = "<h3>" . get_lang('TeacherFeedback') . "</h3>";
+        $output .= "<table border='1' cellpadding='5' cellspacing='0' width='100%' style='border-collapse: collapse;'>";
+
+        foreach ($commentsByQuestion as $questionId => $data) {
+            $output .= "<tr>
+                        <td><b>" . get_lang('Question') . " #$questionId:</b> " . $data['title'] . "</td>
+                    </tr>";
+            foreach ($data['comments'] as $comment) {
+                $output .= "<tr>
+                            <td style='padding-left: 20px;'><i>" . get_lang('Feedback') . ":</i> $comment</td>
+                        </tr>";
+            }
+        }
+
+        $output .= "</table>";
+
+        return $output;
+    }
 }

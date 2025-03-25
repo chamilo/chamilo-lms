@@ -1064,18 +1064,14 @@ class UrlManager
         // Adding courses
         foreach ($course_list as $courseId) {
             self::add_course_to_url($courseId, $urlId);
-            CourseManager::update_course_ranking($courseId, 0, $urlId);
+            CourseManager::update_course_ranking($courseId);
         }
 
         // Deleting old courses
         foreach ($existing_courses as $courseId) {
             if (!in_array($courseId, $course_list)) {
                 self::delete_url_rel_course($courseId, $urlId);
-                CourseManager::update_course_ranking(
-                    $courseId,
-                    0,
-                    $urlId
-                );
+                CourseManager::update_course_ranking($courseId);
             }
         }
     }

@@ -11,7 +11,7 @@ api_protect_admin_script();
 SkillModel::isAllowed();
 
 $interbreadcrumb[] = [
-    'url' => 'index.php',
+    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
     "name" => get_lang('Administration'),
 ];
 

@@ -110,7 +110,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 $tool_name = get_lang('Import skills from a CSV file');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
+$interbreadcrumb[] = ["url" => api_get_path(WEB_CODE_PATH).'admin/index.php', "name" => get_lang('Administration')];
 
 set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);

@@ -1709,6 +1709,10 @@ class bbb
             }
         }
 
+        if (!$delete) {
+            $delete = true;
+        }
+
         if ($delete) {
             /** @var ConferenceActivityRepository $activityRepo */
             $activityRepo = $em->getRepository(ConferenceActivity::class);

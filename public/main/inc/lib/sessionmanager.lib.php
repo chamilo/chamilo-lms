@@ -8022,7 +8022,7 @@ class SessionManager
         if (!api_is_platform_admin() && api_is_teacher()) {
             $form->addSelectFromCollection(
                 'coach_username',
-                get_lang('Coach name'),
+                [get_lang('Coach name'), get_lang('Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach.')],
                 [api_get_user_entity()],
                 [
                     'id' => 'coach_username',
@@ -8072,7 +8072,7 @@ class SessionManager
 
                 $form->addSelect(
                     'coach_username',
-                    get_lang('Coach name'),
+                    [get_lang('Coach name'), get_lang('Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach.')],
                     $coachesOptions,
                     [
                         'id' => 'coach_username',
@@ -8091,7 +8091,7 @@ class SessionManager
 
                 $form->addSelectAjax(
                     'coach_username',
-                    get_lang('Coach name'),
+                    [get_lang('Coach name'), get_lang('Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach.')],
                     $coaches,
                     [
                         'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_general_coach',

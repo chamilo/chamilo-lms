@@ -28027,3 +28027,6 @@ msgstr "Private course"
 
 msgid "Not subscribed"
 msgstr "Not subscribed"
+
+msgid "Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach."
+msgstr "Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach."

@@ -17,10 +17,10 @@ export async function saveRanking({ courseIri, urlId, sessionId, totalScore }) {
 }
 
 /**
- * @param {number} trackCourseRankingId
+ * @param {string} iri
  * @param {number} totalScore
  * @returns {Promise<Object>}
  */
-export async function updateRanking({ trackCourseRankingId, totalScore }) {
-  return await baseService.put(`/api/track_course_rankings/${trackCourseRankingId}`, { totalScore })
+export async function updateRanking({ iri, totalScore }) {
+  return await baseService.put(iri, { totalScore })
 }

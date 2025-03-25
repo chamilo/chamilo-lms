@@ -51,8 +51,8 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
                 $metaData = $this->entityManager->getClassMetadata($resourceClass);
                 if ($metaData->hasAssociation('course')) {
                     $queryBuilder
-                        ->innerJoin("$rootAlias.course", 'c')
-                        ->innerJoin('c.urls', 'url_rel')
+                        ->innerJoin("$rootAlias.course", 'co')
+                        ->innerJoin('co.urls', 'url_rel')
                         ->andWhere('url_rel.url = :access_url_id')
                         ->setParameter('access_url_id', $accessUrl->getId())
                     ;

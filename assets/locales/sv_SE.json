@@ -471,5 +471,7 @@
     "Password updated successfully": "Password updated successfully",
     "Update settings": "Update settings",
     "Scan the QR code to enable 2FA": "Scan the QR code to enable 2FA",
-    "QR code for 2FA": "QR code for 2FA"
+    "QR code for 2FA": "QR code for 2FA",
+    "Private course": "Private course",
+    "Not subscribed": "Not subscribed"
 }

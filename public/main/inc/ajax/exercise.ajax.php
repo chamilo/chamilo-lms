@@ -4,6 +4,9 @@
 
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\ExerciseQuestionAnsweredEvent;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
@@ -825,12 +828,12 @@ switch ($action) {
                 }
             }
 
-            /*HookQuizQuestionAnswered::create()
-                ->setEventData(
+            Container::getEventDispatcher()->dispatch(
+                new ExerciseQuestionAnsweredEvent(
                     [
                         'exe_id' => (int) $exeId,
-                        'quiz' => [
-                            'id' => (int) $objExercise->id,
+                        'exercise' => [
+                            'id' => $objExercise->id,
                             'title' => $objExercise->selectTitle(true),
                         ],
                         'question' => [
@@ -838,8 +841,10 @@ switch ($action) {
                             'weight' => (float) $result['weight'],
                         ],
                     ]
-                )
-                ->notifyQuizQuestionAnswered();*/
+                ),
+                Events::EXERCISE_QUESTION_ANSWERED
+            );
+
             // Destruction of the Question object
             unset($objQuestionTmp);
             if ($debug) {

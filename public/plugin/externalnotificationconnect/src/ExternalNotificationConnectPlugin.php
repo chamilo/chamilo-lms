@@ -11,7 +11,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException;
 
-class ExternalNotificationConnectPlugin extends Plugin implements HookPluginInterface
+class ExternalNotificationConnectPlugin extends Plugin
 {
     public const SETTING_AUTH_URL = 'auth_url';
     public const SETTING_AUTH_USERNAME = 'auth_username';
@@ -50,68 +50,6 @@ class ExternalNotificationConnectPlugin extends Plugin implements HookPluginInte
         return $result ?: $result = new self();
     }
 
-    public function performActionsAfterConfigure(): ExternalNotificationConnectPlugin
-    {
-        $portfolioItemAddedEvent = HookPortfolioItemAdded::create();
-        $portfolioItemEditedEvent = HookPortfolioItemEdited::create();
-        $portfolioItemDeletedEvent = HookPortfolioItemDeleted::create();
-        $portfolioItemVisibilityEvent = HookPortfolioItemVisibility::create();
-
-        $portfolioItemAddedObserver = ExternalNotificationConnectPortfolioItemAddedHookObserver::create();
-        $portfolioItemEditedObserver = ExternalNotificationConnectPortfolioItemEditedHookObserver::create();
-        $portfolioItemDeletedObserver = ExternalNotificationConnectPortfolioItemDeletedHookObserver::create();
-        $portfolioItemVisibilityObserver = ExternalNotificationConnectPortfolioItemVisibilityHookObserver::create();
-
-        if ('true' === $this->get(self::SETTING_NOTIFY_PORTFOLIO)) {
-            $portfolioItemAddedEvent->attach($portfolioItemAddedObserver);
-            $portfolioItemEditedEvent->attach($portfolioItemEditedObserver);
-            $portfolioItemDeletedEvent->attach($portfolioItemDeletedObserver);
-            $portfolioItemVisibilityEvent->attach($portfolioItemVisibilityObserver);
-        } else {
-            $portfolioItemAddedEvent->detach($portfolioItemAddedObserver);
-            $portfolioItemEditedEvent->detach($portfolioItemEditedObserver);
-            $portfolioItemDeletedEvent->detach($portfolioItemDeletedObserver);
-            $portfolioItemVisibilityEvent->detach($portfolioItemVisibilityObserver);
-        }
-
-        $lpCreatedEvent = HookLearningPathCreated::create();
-
-        $lpCreatedObserver = ExternalNotificationConnectLearningPathCreatedHookObserver::create();
-
-        if ('true' === $this->get(self::SETTING_NOTIFY_LEARNPATH)) {
-            $lpCreatedEvent->attach($lpCreatedObserver);
-        } else {
-            $lpCreatedEvent->detach($lpCreatedObserver);
-        }
-
-        return $this;
-    }
-
-    public function installHook()
-    {
-    }
-
-    public function uninstallHook()
-    {
-        $portfolioItemAddedEvent = HookPortfolioItemAdded::create();
-        $portfolioItemEditedEvent = HookPortfolioItemEdited::create();
-        $portfolioItemDeletedEvent = HookPortfolioItemDeleted::create();
-        $portfolioItemVisibilityEvent = HookPortfolioItemVisibility::create();
-        $lpCreatedEvent = HookLearningPathCreated::create();
-
-        $portfolioItemAddedObserver = ExternalNotificationConnectPortfolioItemAddedHookObserver::create();
-        $portfolioItemEditedObserver = ExternalNotificationConnectPortfolioItemEditedHookObserver::create();
-        $portfolioItemDeletedObserver = ExternalNotificationConnectPortfolioItemDeletedHookObserver::create();
-        $portfolioItemVisibilityObserver = ExternalNotificationConnectPortfolioItemVisibilityHookObserver::create();
-        $lpCreatedObserver = ExternalNotificationConnectLearningPathCreatedHookObserver::create();
-
-        $portfolioItemAddedEvent->detach($portfolioItemAddedObserver);
-        $portfolioItemEditedEvent->detach($portfolioItemEditedObserver);
-        $portfolioItemDeletedEvent->detach($portfolioItemDeletedObserver);
-        $portfolioItemVisibilityEvent->detach($portfolioItemVisibilityObserver);
-        $lpCreatedEvent->detach($lpCreatedObserver);
-    }
-
     public function install()
     {
         $em = Database::getManager();
@@ -125,12 +63,10 @@ class ExternalNotificationConnectPlugin extends Plugin implements HookPluginInte
         }
 
         $this->installDBTables();
-        $this->installHook();
     }
 
     public function uninstall()
     {
-        $this->uninstallHook();
         $this->uninstallDBTables();
     }
 

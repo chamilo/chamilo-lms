@@ -1849,6 +1849,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Attendance signing',
                     'comment' => "Enable taking signatures to confirm one's attendance.",
                 ],
+                [
+                    'name' => 'multilevel_grading',
+                    'title' => 'Enable Multi-Level Attendance Grading',
+                    'comment' => 'Allows grading attendance with multiple levels instead of a simple present/absent system.',
+                ],
             ],
             'display' => [
                 [
@@ -3277,6 +3282,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => '',
                 ],
                 [
+                    'name' => 'enable_auto_reinscription',
+                    'title' => 'Enable Automatic Reinscription',
+                    'comment' => 'Enable or disable automatic reinscription when course validity expires. The related cron job must also be activated.',
+                ],
+                [
+                    'name' => 'enable_session_replication',
+                    'title' => 'Enable Session Replication',
+                    'comment' => 'Enable or disable automatic session replication. The related cron job must also be activated.',
+                ],
+                [
                     'name' => 'session_multiple_subscription_students_list_avoid_emptying',
                     'title' => 'Prevent emptying the subscribed users in session subscription',
                     'comment' => 'When using the multiple learners subscription to a session, prevent the normal behaviour which is to unsubscribe users who are not in the right panel when clicking submit. Keep all users there.',
@@ -3411,6 +3426,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'skills_teachers_can_assign_skills',
                     'title' => 'Allow teachers to set which skills are acquired through their courses',
                     'comment' => 'By default, only admins can decide which skills can be acquired through which course.',
+                ],
+                [
+                    'name' => 'manual_assignment_subskill_autoload',
+                    'title' => 'Assigning skills to user: sub-skills auto-loading',
+                    'comment' => 'When manually assigning skills to a user, the form can be set to automatically offer you to assign a sub-skill instead of the skill you selected.',
                 ],
             ],
             'survey' => [

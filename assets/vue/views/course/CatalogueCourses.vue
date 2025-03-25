@@ -132,16 +132,16 @@
       <Column
         :header="$t('Ranking')"
         :sortable="true"
-        field="userVote.vote"
+        field="trackCourseRanking.realTotalScore"
         style="min-width: 10rem; text-align: center"
       >
         <template #body="{ data }">
           <Rating
             :cancel="false"
-            :model-value="data.userVote ? data.userVote.vote : 0"
+            :model-value="data.trackCourseRanking ? data.trackCourseRanking.realTotalScore : 0"
             :stars="5"
             class="pointer-events: none"
-            @change="onRatingChange($event, data.userVote, data.id)"
+            @change="onRatingChange($event, data.trackCourseRanking, data.id)"
           />
         </template>
       </Column>
@@ -204,9 +204,10 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
 
 import courseService from "../../services/courseService"
+import * as trackCourseRanking from "../../services/trackCourseRankingService"
+
 import { useNotification } from "../../composables/notification"
 import { useLanguage } from "../../composables/language"
-import * as userRelCourseVoteService from "../../services/userRelCourseVoteService"
 
 const { showErrorNotification } = useNotification()
 const { findByIsoCode: findLanguageByIsoCode } = useLanguage()
@@ -226,20 +227,10 @@ async function load() {
   try {
     const { items } = await courseService.listAll()
 
-    const votes = await userRelCourseVoteService.getUserVotes({
-      userId: currentUserId,
-      urlId: window.access_url_id,
-    })
-
-    courses.value = items.map((course) => {
-      const userVote = votes.find((vote) => vote.course === `/api/courses/${course.id}`)
-
-      return {
-        ...course,
-        courseLanguage: findLanguageByIsoCode(course.courseLanguage)?.originalName,
-        userVote: userVote ? { ...userVote } : { vote: 0 },
-      }
-    })
+    courses.value = items.map((course) => ({
+      ...course,
+      courseLanguage: findLanguageByIsoCode(course.courseLanguage)?.originalName,
+    }))
   } catch (error) {
     showErrorNotification(error)
   } finally {
@@ -247,22 +238,20 @@ async function load() {
   }
 }
 
-async function updateRating(voteIri, value) {
+async function updateRating(id, value) {
   status.value = true
 
   try {
-    await userRelCourseVoteService.updateVote({
-      iri: voteIri,
-      vote: value,
-      sessionId: window.session_id,
-      urlId: window.access_url_id,
+    const response = await trackCourseRanking.updateRanking({
+      iri: `/api/track_course_rankings/${id}`,
+      totalScore: value,
     })
 
-    courses.value = courses.value.map((course) =>
-      course.userVote && course.userVote["@id"] === voteIri
-        ? { ...course, userVote: { ...course.userVote, vote: value } }
-        : course,
-    )
+    courses.value.forEach((course) => {
+      if (course.trackCourseRanking && course.trackCourseRanking.id === id) {
+        course.trackCourseRanking.realTotalScore = response.realTotalScore
+      }
+    })
   } catch (e) {
     showErrorNotification(e)
   } finally {
@@ -274,44 +263,22 @@ const newRating = async function (courseId, value) {
   status.value = true
 
   try {
-    const existingVote = await userRelCourseVoteService.getUserVote({
-      userId: currentUserId,
-      courseId,
-      sessionId: window.session_id || null,
+    const response = await trackCourseRanking.saveRanking({
+      totalScore: value,
+      courseIri: `/api/courses/${courseId}`,
       urlId: window.access_url_id,
+      sessionId: 0,
     })
 
-    if (existingVote) {
-      await updateRating(existingVote["@id"], value)
-    } else {
-      await userRelCourseVoteService.saveVote({
-        vote: value,
-        courseIri: `/api/courses/${courseId}`,
-        userId: currentUserId,
-        sessionId: window.session_id || null,
-        urlId: window.access_url_id,
-      })
-    }
-
-    await load()
+    courses.value.forEach((course) => {
+      if (course.id === courseId) {
+        course.trackCourseRanking = response
+      }
+    })
   } catch (e) {
     showErrorNotification(e)
   } finally {
     status.value = false
-  }
-}
-
-const onRatingChange = function (event, userVote, courseId) {
-  let { value } = event
-
-  if (value > 0) {
-    if (userVote && userVote["@id"]) {
-      updateRating(userVote["@id"], value)
-    } else {
-      newRating(courseId, value)
-    }
-  } else {
-    event.preventDefault()
   }
 }
 
@@ -326,6 +293,16 @@ const clearFilter = function () {
 const initFilters = function () {
   filters.value = {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  }
+}
+
+const onRatingChange = function (event, trackCourseRanking, courseId) {
+  let { value } = event
+  if (value > 0) {
+    if (trackCourseRanking) updateRating(trackCourseRanking.id, value)
+    else newRating(courseId, value)
+  } else {
+    event.preventDefault()
   }
 }
 

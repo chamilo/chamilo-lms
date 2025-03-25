@@ -10,6 +10,9 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\CourseCreatedEvent;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
@@ -74,8 +77,22 @@ class CourseManager
             $params['visual_code'] = $keys['currentCourseId'];
             $params['directory'] = $keys['currentCourseRepository'];
             $courseInfo = api_get_course_info($params['code']);
+
             if (empty($courseInfo)) {
+                $eventDispatcher = Container::getEventDispatcher();
+
+                $eventDispatcher->dispatch(
+                    new CourseCreatedEvent([], AbstractEvent::TYPE_PRE),
+                    Events::COURSE_CREATED
+                );
+
                 $course = AddCourse::register_course($params);
+
+                $eventDispatcher->dispatch(
+                    new CourseCreatedEvent(['course' => $course], AbstractEvent::TYPE_POST),
+                    Events::COURSE_CREATED
+                );
+
                 if (null !== $course) {
                     self::fillCourse($course, $params, $authorId);
 
@@ -894,6 +911,18 @@ class CourseManager
                             $course->getTitle()
                         )
                     )
+                );
+
+                $subject = get_lang('You have been enrolled in the course').' '.$course->getTitle();
+                $message = sprintf(get_lang('Hello %s, you have been enrolled in the course %s.'), UserManager::formatUserFullName($user, true), $course->getTitle());
+
+                MessageManager::send_message_simple(
+                    $userId,
+                    $subject,
+                    $message,
+                    api_get_user_id(),
+                    false,
+                    true
                 );
 
                 $send = (int) api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course);
@@ -5285,6 +5314,8 @@ class CourseManager
             'hide_forum_notifications',
             'quiz_question_limit_per_day',
             'subscribe_users_to_forum_notifications',
+            'learning_path_generator',
+            'exercise_generator',
         ];
 
         $courseModels = ExerciseLib::getScoreModels();

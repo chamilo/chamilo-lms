@@ -4856,10 +4856,10 @@ msgstr "Confirmar"
 msgid "Unsubscribe users from course"
 msgstr "Anular/cancelar inscrição dos utilizadores no curso"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Nome da turma em falta"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Nome de turma já existente"
 
 msgid "CSV file import location"

@@ -1,7 +1,6 @@
 ignore: |
     assets/*
     .travis.yml
-    .codeclimate.yml
     public/libs/*
     public/plugin/test2pdf/*
 

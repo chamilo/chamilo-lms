@@ -118,7 +118,7 @@ class LtiProvider
                 '',
                 '',
                 '',
-                $authSource
+                [$authSource]
             );
         } else {
             $userId = $userInfo['user_id'];

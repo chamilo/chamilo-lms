@@ -107,3 +107,18 @@ services:
     Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper:
       arguments:
         $permissionRelRoleRepository: '@Chamilo\CoreBundle\Repository\PermissionRelRoleRepository'
+
+    Chamilo\CoreBundle\Service\AI\AiProviderFactory:
+      arguments:
+        $httpClient: '@Symfony\Contracts\HttpClient\HttpClientInterface'
+        $settingsManager: '@Chamilo\CoreBundle\Settings\SettingsManager'
+        $aiRequestsRepository: '@Chamilo\CoreBundle\Repository\AiRequestsRepository'
+        $security: '@security.helper'
+
+    Chamilo\CoreBundle\Service\AI\OpenAiProvider:
+      factory: [ '@Chamilo\CoreBundle\Service\AI\AiProviderFactory', 'getProvider' ]
+      arguments: [ 'openai' ]
+
+    Chamilo\CoreBundle\Service\AI\DeepSeekAiProvider:
+      factory: [ '@Chamilo\CoreBundle\Service\AI\AiProviderFactory', 'getProvider' ]
+      arguments: [ 'deepseek' ]

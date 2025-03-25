@@ -159,7 +159,12 @@ class SessionManager
         $sendSubscriptionNotification = false,
         $accessUrlId = 0,
         $status = 0,
-        $notifyBoss = false
+        $notifyBoss = false,
+        $parentId = null,
+        $daysBeforeFinishingForReinscription = null,
+        $lastRepetition = false,
+        $daysBeforeFinishingToCreateNewRepetition = null,
+        $validityInDays = null
     ) {
         global $_configuration;
 
@@ -179,34 +184,23 @@ class SessionManager
             }
         }
 
-        $name = Database::escape_string(trim($name));
+        $name = trim($name);
         $sessionCategoryId = (int) $sessionCategoryId;
         $visibility = (int) $visibility;
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $startDate = Database::escape_string($startDate);
-        $endDate = Database::escape_string($endDate);
-
         if (empty($name)) {
-            $msg = get_lang('A title is required for the session');
-
-            return $msg;
+            return get_lang('A title is required for the session');
         } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') &&
             !api_is_valid_date($startDate, 'Y-m-d H:i:s')
         ) {
-            $msg = get_lang('Invalid start date was given.');
-
-            return $msg;
+            return get_lang('Invalid start date was given.');
         } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i') &&
             !api_is_valid_date($endDate, 'Y-m-d H:i:s')
         ) {
-            $msg = get_lang('Invalid end date was given.');
-
-            return $msg;
+            return get_lang('Invalid end date was given.');
         } elseif (!empty($startDate) && !empty($endDate) && $startDate >= $endDate) {
-            $msg = get_lang('The first date should be before the end date');
-
-            return $msg;
+            return get_lang('The first date should be before the end date');
         } else {
             $ready_to_create = false;
             if ($fixSessionNameIfExists) {
@@ -214,16 +208,12 @@ class SessionManager
                 if ($name) {
                     $ready_to_create = true;
                 } else {
-                    $msg = get_lang('Session title already exists');
-
-                    return $msg;
+                    return get_lang('Session title already exists');
                 }
             } else {
                 $rs = Database::query("SELECT 1 FROM $tbl_session WHERE title='".$name."'");
                 if (Database::num_rows($rs)) {
-                    $msg = get_lang('Session title already exists');
-
-                    return $msg;
+                    return get_lang('Session title already exists');
                 }
                 $ready_to_create = true;
             }
@@ -239,7 +229,11 @@ class SessionManager
                     ->setShowDescription(1 === $showDescription)
                     ->setSendSubscriptionNotification((bool) $sendSubscriptionNotification)
                     ->setNotifyBoss((bool) $notifyBoss)
-                ;
+                    ->setParentId($parentId)
+                    ->setDaysToReinscription((int) $daysBeforeFinishingForReinscription)
+                    ->setLastRepetition($lastRepetition)
+                    ->setDaysToNewRepetition((int) $daysBeforeFinishingToCreateNewRepetition)
+                    ->setValidityInDays((int) $validityInDays);
 
                 foreach ($coachesId as $coachId) {
                     $session->addGeneralCoach(api_get_user_entity($coachId));
@@ -288,18 +282,6 @@ class SessionManager
                     $extraFields['item_id'] = $session_id;
                     $sessionFieldValue = new ExtraFieldValue('session');
                     $sessionFieldValue->saveFieldValues($extraFields);
-                    /*
-                      Sends a message to the user_id = 1
-
-                      $user_info = api_get_user_info(1);
-                      $complete_name = $user_info['firstname'].' '.$user_info['lastname'];
-                      $subject = api_get_setting('siteName').' - '.get_lang('A new session has been created');
-                      $message = get_lang('A new session has been created')." <br /> ".get_lang('Session name').' : '.$name;
-                      api_mail_html($complete_name, $user_info['email'], $subject, $message);
-                     *
-                     */
-                    // Adding to the correct URL
-                    //UrlManager::add_session_to_url($session_id, $accessUrlId);
 
                     // add event to system log
                     $user_id = api_get_user_id();
@@ -523,6 +505,10 @@ class SessionManager
             }
             $select .= ', status';
 
+            if ('replication' === $listType) {
+                $select .= ', parent_id';
+            }
+
             if (isset($options['order'])) {
                 $isMakingOrder = 0 === strpos($options['order'], 'category_name');
             }
@@ -654,6 +640,11 @@ class SessionManager
                     )
                 )";
                 break;
+            case 'replication':
+                $formatted = false;
+                $query .= "AND s.days_to_new_repetition IS NOT NULL
+               AND (SELECT COUNT(id) FROM session AS child WHERE child.parent_id = s.id) <= 1";
+                break;
         }
 
         $query .= $order;
@@ -668,6 +659,23 @@ class SessionManager
                     $session['users'] = Database::fetch_assoc($result)['nbr'];
                 }
             }
+
+            if ('replication' === $listType) {
+                $formattedSessions = [];
+                foreach ($sessions as $session) {
+                    $formattedSessions[] = $session;
+                    if (isset($session['id'])) {
+                        $childSessions = array_filter($sessions, fn($s) => isset($s['parent_id']) && $s['parent_id'] === $session['id']);
+                        foreach ($childSessions as $childSession) {
+                            $childSession['title'] = '-- ' . $childSession['title'];
+                            $formattedSessions[] = $childSession;
+                        }
+                    }
+                }
+
+                return $formattedSessions;
+            }
+
             if ('all' === $listType) {
                 if ($getCount) {
                     return $sessions[0]['total_rows'];
@@ -1793,7 +1801,12 @@ class SessionManager
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false,
         $status = 0,
-        $notifyBoss = 0
+        $notifyBoss = 0,
+        $parentId = 0,
+        $daysBeforeFinishingForReinscription = null,
+        $daysBeforeFinishingToCreateNewRepetition = null,
+        $lastRepetition = false,
+        $validityInDays = null
     ) {
         $id = (int) $id;
         $status = (int) $status;
@@ -1863,6 +1876,11 @@ class SessionManager
                     ->setVisibility($visibility)
                     ->setSendSubscriptionNotification((bool) $sendSubscriptionNotification)
                     ->setNotifyBoss((bool) $notifyBoss)
+                    ->setParentId($parentId)
+                    ->setDaysToReinscription((int) $daysBeforeFinishingForReinscription)
+                    ->setLastRepetition($lastRepetition)
+                    ->setDaysToNewRepetition((int) $daysBeforeFinishingToCreateNewRepetition)
+                    ->setValidityInDays((int) $validityInDays)
                     ->setAccessStartDate(null)
                     ->setAccessStartDate(null)
                     ->setDisplayStartDate(null)
@@ -1870,6 +1888,16 @@ class SessionManager
                     ->setCoachAccessStartDate(null)
                     ->setCoachAccessEndDate(null)
                 ;
+
+                if ($parentId) {
+                    $sessionEntity->setParentId($parentId);
+                } else {
+                    $sessionEntity->setParentId(null);
+                }
+
+                $sessionEntity->setDaysToReinscription($daysBeforeFinishingForReinscription);
+                $sessionEntity->setLastRepetition($lastRepetition);
+                $sessionEntity->setDaysToNewRepetition($daysBeforeFinishingToCreateNewRepetition);
 
                 $newGeneralCoaches = array_map(
                     fn($coachId) => api_get_user_entity($coachId),
@@ -1943,31 +1971,31 @@ class SessionManager
      *
      * @author Carlos Vargas  from existing code
      *
-     * @param array $id_checked an array to delete sessions
-     * @param bool  $from_ws    optional, true if the function is called
+     * @param array $idChecked an array to delete sessions
+     * @param bool  $fromWs    optional, true if the function is called
      *                          by a webservice, false otherwise
      *
      * @return bool
      * */
-    public static function delete($id_checked, $from_ws = false)
+    public static function delete($idChecked, $fromWs = false)
     {
         $sessionId = null;
-        if (is_array($id_checked)) {
-            foreach ($id_checked as $sessionId) {
+        if (is_array($idChecked)) {
+            foreach ($idChecked as $sessionId) {
                 self::delete($sessionId);
             }
         } else {
-            $sessionId = (int) $id_checked;
+            $sessionId = (int) $idChecked;
         }
 
         if (empty($sessionId)) {
             return false;
         }
 
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_url_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $tblSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tblSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tblUrlSession = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $userGroupSessionTable = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
         $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $trackAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
@@ -1999,7 +2027,7 @@ class SessionManager
             return false;
         }
 
-        if (self::allowed($sessionEntity) && !$from_ws) {
+        if (self::allowed($sessionEntity) && !$fromWs) {
             if (!$sessionEntity->hasUserAsSessionAdmin($user) && !api_is_platform_admin()) {
                 api_not_allowed(true);
             }
@@ -2008,47 +2036,45 @@ class SessionManager
         // Delete Picture Session
         SessionManager::deleteAsset($sessionId);
 
-        // Delete documents inside a session
-        $courses = self::getCoursesInSession($sessionId);
-        foreach ($courses as $courseId) {
-            $courseInfo = api_get_course_info_by_id($courseId);
-            /*DocumentManager::deleteDocumentsFromSession($courseInfo, $sessionId);
-            $works = Database::select(
-                '*',
-                $tbl_student_publication,
-                [
-                    'where' => ['session_id = ? AND c_id = ?' => [$sessionId, $courseId]],
-                ]
-            );
-
-            $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
-            foreach ($works as $index => $work) {
-                if ($work['filetype'] = 'folder') {
-                    Database::query("DELETE FROM $tbl_student_publication_assignment WHERE publication_id = $index");
-                }
-                my_delete($currentCourseRepositorySys.'/'.$work['url']);
-            }*/
-        }
-
         $sessionName = $sessionEntity->getTitle();
         $em->remove($sessionEntity);
         $em->flush();
 
-        // Class
-        $sql = "DELETE FROM $userGroupSessionTable
-                WHERE session_id = $sessionId";
-        Database::query($sql);
+        // Delete explicitly from tables not directly related to 'session'
+        $tables = [
+            'track_e_lastaccess',
+            'track_e_default',
+            'track_e_exercise_confirmation',
+            'track_e_links',
+            'track_e_online',
+            'track_e_attempt_qualify',
+            'track_e_access_complete',
+            'track_e_uploads',
+            'track_course_ranking',
+            'c_dropbox_file',
+            'c_forum_thread_qualify_log',
+            'c_dropbox_post',
+            'c_survey_answer',
+            'c_wiki_mailcue',
+            'c_dropbox_category',
+            'skill_rel_item',
+            'scheduled_announcements',
+            'sequence_row_entity',
+        ];
 
-        //Database::query("DELETE FROM $tbl_student_publication WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id = $sessionId");
-        //Database::query("DELETE FROM $tbl_item_properties WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $tbl_url_session WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $trackCourseAccess WHERE session_id = $sessionId");
-        Database::query("DELETE FROM $trackAccess WHERE session_id = $sessionId");
-        $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id = $sessionId";
-        Database::query($sql);
+        foreach ($tables as $table) {
+            Database::delete($table, ['session_id = ?' => $sessionId]);
+        }
+
+        // Delete other related tables
+        Database::delete($userGroupSessionTable, ['session_id = ?' => $sessionId]);
+        Database::delete($tblSessionRelCourse, ['session_id = ?' => $sessionId]);
+        Database::delete($tblSessionRelCourseRelUser, ['session_id = ?' => $sessionId]);
+        Database::delete($tblSessionRelUser, ['session_id = ?' => $sessionId]);
+        Database::delete($tblUrlSession, ['session_id = ?' => $sessionId]);
+        Database::delete($trackCourseAccess, ['session_id = ?' => $sessionId]);
+        Database::delete($trackAccess, ['session_id = ?' => $sessionId]);
+        Database::update($ticket, ['session_id' => null], ['session_id = ?' => $sessionId]);
 
         $extraFieldValue = new ExtraFieldValue('session');
         $extraFieldValue->deleteValuesByItem($sessionId);
@@ -2615,7 +2641,9 @@ class SessionManager
             $user_list,
             $courseId,
             $session_id,
-            ['visibility' => $session_visibility]
+            ['visibility' => $session_visibility],
+            true,
+            true
         );
     }
 
@@ -2846,6 +2874,8 @@ class SessionManager
                             $cat->set_weight(100);
                             $cat->set_visible(0);
                             $cat->set_certificate_min_score(75);
+                            $cat->setGenerateCertificates(1);
+                            $cat->setIsRequirement(1);
                             $cat->add();
                             $sessionGradeBookCategoryId = $cat->get_id();
                         } else {
@@ -3201,7 +3231,7 @@ class SessionManager
         $sday_end
     ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $name = trim($sname);
+        $name = html_filter(trim($sname));
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
         $day_start = intval($sday_start);
@@ -3286,7 +3316,7 @@ class SessionManager
         $sday_end
     ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $name = trim($sname);
+        $name = html_filter(trim($sname));
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
         $day_start = intval($sday_start);
@@ -8279,6 +8309,85 @@ class SessionManager
         $extra_field = new ExtraFieldModel('session');
         $extra = $extra_field->addElements($form, $session ? $session->getId() : 0, ['image']);
 
+        if ('true' === api_get_setting('session.enable_auto_reinscription')) {
+            $form->addElement(
+                'text',
+                'days_before_finishing_for_reinscription',
+                get_lang('Days before finishing for reinscription'),
+                ['maxlength' => 5]
+            );
+            $form->addRule(
+                'days_before_finishing_for_reinscription',
+                get_lang('Days must be a positive number or empty'),
+                'regex',
+                '/^\d*$/'
+            );
+        }
+
+        if ('true' === api_get_setting('session.enable_session_replication')) {
+            $form->addElement(
+                'text',
+                'days_before_finishing_to_create_new_repetition',
+                get_lang('Days before finishing to create new repetition'),
+                ['maxlength' => 5]
+            );
+            $form->addRule(
+                'days_before_finishing_to_create_new_repetition',
+                get_lang('Days must be a positive number or empty'),
+                'regex',
+                '/^\d*$/'
+            );
+        }
+
+        if ('true' === api_get_setting('session.enable_auto_reinscription') || 'true' === api_get_setting('session.enable_session_replication')) {
+            $form->addElement(
+                'checkbox',
+                'last_repetition',
+                get_lang('Last repetition')
+            );
+
+            $form->addElement(
+                'number',
+                'validity_in_days',
+                get_lang('Validity in days'),
+                [
+                    'min' => 0,
+                    'max' => 365,
+                    'step' => 1,
+                    'placeholder' => get_lang('Enter the number of days'),
+                ]
+            );
+
+            $form->addRule(
+                'validity_in_days',
+                get_lang('The field must be a positive number'),
+                'numeric',
+                null,
+                'client'
+            );
+        }
+
+        /** @var HTML_QuickForm_select $element */
+        $element = $form->createElement(
+            'select',
+            'parent_id',
+            get_lang('Parent session'),
+            [],
+            ['class' => 'form-control']
+        );
+
+        $element->addOption(get_lang('None'), 0, []);
+        $sessions = SessionManager::getListOfParentSessions();
+        $currentSessionId = $session?->getId();
+        foreach ($sessions as $id => $title) {
+            if ($id !== $currentSessionId) {
+                $attributes = [];
+                $element->addOption($title, $id, $attributes);
+            }
+        }
+        $element->setSelected($session?->getParentId() ?? 0);
+        $form->addElement($element);
+
         $form->addElement('html', '</div>');
 
         $js = $extra['jquery_ready_content'];
@@ -8799,7 +8908,7 @@ class SessionManager
                 ];
 
                 break;
-
+            case 'replication':
             case 'custom':
                 $columns = [
                     '#',
@@ -8818,6 +8927,7 @@ class SessionManager
                     [
                         'name' => 'title',
                         'index' => 's.title',
+                        'width' => '260px',
                         'width' => '300',
                         'align' => 'left',
                         'search' => 'true',
@@ -9813,9 +9923,9 @@ class SessionManager
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public static function getSessionListTabs($listType)
+    public static function getSessionListTabs($listType): string
     {
         $tabs = [
             [
@@ -9834,10 +9944,10 @@ class SessionManager
                 'content' => get_lang('Custom list'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=custom',
             ],
-            /*[
-                'content' => get_lang('Complete'),
-                'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php?list_type=complete',
-            ],*/
+            [
+                'content' => get_lang('Replication'),
+                'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=replication',
+            ],
         ];
         $default = null;
         switch ($listType) {
@@ -9852,6 +9962,9 @@ class SessionManager
                 break;
             case 'custom':
                 $default = 4;
+                break;
+            case 'replication':
+                $default = 5;
                 break;
         }
 
@@ -9934,15 +10047,16 @@ class SessionManager
         int $courseId,
         int $sessionId,
         array $relationInfo = [],
-        bool $updateSession = true
+        bool $updateSession = true,
+        bool $sendNotification = false
     ) {
         $em = Database::getManager();
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
-
         $relationInfo = array_merge(['visibility' => 0, 'status' => Session::STUDENT], $relationInfo);
 
+        $usersToInsert = [];
         foreach ($studentIds as $studentId) {
             $user = api_get_user_entity($studentId);
             $session->addUserInCourse($relationInfo['status'], $user, $course)
@@ -9951,15 +10065,40 @@ class SessionManager
             Event::logUserSubscribedInCourseSession($user, $course, $session);
 
             if ($updateSession) {
-                $session->addUserInSession(Session::STUDENT, $user);
+                if (!$session->hasUserInSession($user, Session::STUDENT)) {
+                    $session->addUserInSession(Session::STUDENT, $user);
+                }
             }
+
+            $usersToInsert[] = $studentId;
         }
 
-       try {
-            $em->persist($session);
-            $em->flush();
-        } catch (\Exception $e) {
-            error_log("Error executing flush: " . $e->getMessage());
+        $em->persist($session);
+        $em->flush();
+
+        if ($sendNotification && !empty($usersToInsert)) {
+            foreach ($usersToInsert as $userId) {
+                $user = api_get_user_entity($userId);
+                $courseTitle = $course->getTitle();
+                $sessionTitle = $session->getTitle();
+
+                $subject = sprintf(get_lang('You have been enrolled in the course %s for the session %s'), $courseTitle, $sessionTitle);
+                $message = sprintf(
+                    get_lang('Hello %s, you have been enrolled in the course %s for the session %s.'),
+                    UserManager::formatUserFullName($user, true),
+                    $courseTitle,
+                    $sessionTitle
+                );
+
+                MessageManager::send_message_simple(
+                    $userId,
+                    $subject,
+                    $message,
+                    api_get_user_id(),
+                    false,
+                    true
+                );
+            }
         }
     }
 
@@ -10236,6 +10375,24 @@ class SessionManager
     }
 
     /**
+     * Retrieves a list of parent sessions.
+     */
+    public static function getListOfParentSessions(): array
+    {
+        $sessions = [];
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $sql = "SELECT id, title FROM $tbl_session ORDER BY title";
+        $result = Database::query($sql);
+
+        while ($row = Database::fetch_array($result)) {
+            $sessions[$row['id']] = $row['title'];
+        }
+
+        return $sessions;
+    }
+
+
+    /**
      * Method to export sessions data as CSV
      */
     public static function exportSessionsAsCSV(array $selectedSessions): void
@@ -10421,5 +10578,4 @@ class SessionManager
 
         return [$csvHeaders, $csvContent];
     }
-
 }

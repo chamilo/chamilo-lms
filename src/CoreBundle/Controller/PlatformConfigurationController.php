@@ -43,7 +43,7 @@ class PlatformConfigurationController extends AbstractController
             'studentview' => $requestSession->get('studentview'),
             'plugins' => [],
             'visual_theme' => $this->themeHelper->getVisualTheme(),
-            'external_authentication' => $this->authenticationConfigHelper->getEnabledProviders(),
+            'oauth2_providers' => $this->authenticationConfigHelper->getEnabledOAuthProviders(),
         ];
 
         $configuration['settings']['registration.allow_registration'] = $settingsManager->getSetting('registration.allow_registration', true);
@@ -90,6 +90,11 @@ class PlatformConfigurationController extends AbstractController
                 'document.students_download_folders',
                 'social.hide_social_groups_block',
                 'course.show_course_duration',
+                'attendance.attendance_allow_comments',
+                'attendance.multilevel_grading',
+                'attendance.enable_sign_attendance_sheet',
+                'exercise.allow_exercise_auto_launch',
+                'course.access_url_specific_files',
             ];
 
             $user = $this->userHelper->getCurrent();

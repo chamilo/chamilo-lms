@@ -58,6 +58,9 @@ if ($form->validate()) {
         $link->set_category_id($values['select_gradebook']);
     }
     $link->set_visible(empty($values['visible']) ? 0 : 1);
+    if (isset($values['min_score']) && !is_null($link->entity)) {
+        $link->entity->setMinScore($values['min_score']);
+    }
     $link->save();
 
     //Update weight for attendance

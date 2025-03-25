@@ -6,13 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CourseBundle\Repository\CAttendanceCalendarRelGroupRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CAttendanceCalendarRelGroup.
  */
 #[ORM\Table(name: 'c_attendance_calendar_rel_group')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CAttendanceCalendarRelGroupRepository::class)]
 class CAttendanceCalendarRelGroup
 {
     #[ORM\Column(name: 'iid', type: 'integer')]

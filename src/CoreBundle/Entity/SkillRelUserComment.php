@@ -20,7 +20,7 @@ class SkillRelUserComment
     protected ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: SkillRelUser::class, inversedBy: 'comments')]
-    #[ORM\JoinColumn(name: 'skill_rel_user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'skill_rel_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?SkillRelUser $skillRelUser = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'commentedUserSkills')]

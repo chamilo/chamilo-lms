@@ -145,11 +145,17 @@ $(function() {
 });
 </script>';
 
-// jqgrid will use this URL to do the selects
-if (!empty($courseId)) {
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&course_id='.$courseId;
-} else {
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
+switch ($listType) {
+    case 'replication':
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&list_type=replication';
+        break;
+    default:
+        if (!empty($courseId)) {
+            $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&course_id='.$courseId;
+        } else {
+            $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
+        }
+        break;
 }
 
 if (isset($_REQUEST['keyword'])) {
@@ -226,7 +232,7 @@ $hideSearch = ('true' === api_get_setting('session.hide_search_form_in_session_l
 $copySessionContentLink = '';
 if ($addSessionContent) {
     $copySessionContentLink = ' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?copy_session_content=1&list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
-        Display::return_icon('copy.png', get_lang('CopyWithSessionContent'), '', ICON_SIZE_SMALL).'</a>';
+        Display::return_icon('copy.png', get_lang('CopyWithSessionContent')).'</a>';
 }
 
 //With this function we can add actions to the jgrid (edit, delete, etc)

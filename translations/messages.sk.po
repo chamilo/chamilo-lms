@@ -4856,10 +4856,10 @@ msgstr "Potvrdiť"
 msgid "Unsubscribe users from course"
 msgstr "Odhlásiť používateľov z kurzu"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Meno triedy chýba"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Meno triedy existuje"
 
 msgid "CSV file import location"

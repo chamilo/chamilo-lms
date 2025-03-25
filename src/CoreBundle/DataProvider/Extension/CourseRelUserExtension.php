@@ -67,7 +67,8 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
                 $queryBuilder
                     ->orderBy('c.title', 'ASC')
                     ->addOrderBy("$rootAlias.sort", 'ASC')
-                    ->addOrderBy("$rootAlias.userCourseCat", 'ASC');
+                    ->addOrderBy("$rootAlias.userCourseCat", 'ASC')
+                ;
 
                 if (!$this->security->isGranted('ROLE_ADMIN')) {
                     /** @var User|null $user */

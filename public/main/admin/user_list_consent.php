@@ -54,7 +54,7 @@ function prepare_user_sql_query($getCount)
                     u.status AS col7,
                     u.active AS col8,
                     u.id AS col9,
-                    u.registration_date AS col10,
+                    u.created_at AS col10,
                     u.expiration_date AS exp,
                     u.password,
                     v.field_id,
@@ -98,7 +98,7 @@ function prepare_user_sql_query($getCount)
     foreach ($keywordList as $keyword) {
         $keywordListValues[$keyword] = null;
         if (isset($_GET[$keyword]) && !empty($_GET[$keyword])) {
-            $keywordListValues[$keyword] = $_GET[$keyword];
+            $keywordListValues[$keyword] = Security::remove_XSS($_GET[$keyword]);
             $atLeastOne = true;
         }
     }

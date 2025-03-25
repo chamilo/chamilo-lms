@@ -3,6 +3,7 @@
 
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class AppPlugin.
@@ -55,22 +56,18 @@ class AppPlugin
 
     /**
      * Read plugin from path.
-     *
-     * @return array
      */
-    public function read_plugins_from_path()
+    public function read_plugins_from_path(): array
     {
         /* We scan the plugin directory. Each folder is a potential plugin. */
         $pluginPath = api_get_path(SYS_PLUGIN_PATH);
+        $finder = (new Finder())->directories()->depth('== 0')->sortByName()->in($pluginPath);
+
         $plugins = [];
-        $handle = @opendir($pluginPath);
-        while (false !== ($file = readdir($handle))) {
-            if ('.' != $file && '..' != $file && is_dir(api_get_path(SYS_PLUGIN_PATH).$file)) {
-                $plugins[] = $file;
-            }
+
+        foreach ($finder as $file) {
+            $plugins[] = $file->getFilename();
         }
-        @closedir($handle);
-        sort($plugins);
 
         return $plugins;
     }
@@ -195,12 +192,10 @@ class AppPlugin
      *
      * @return array
      */
-    public function getOfficialPlugins()
+    public static function getOfficialPlugins(): array
     {
-        static $officialPlugins = null;
         // Please keep this list alphabetically sorted
-        $officialPlugins = [
-            'advanced_subscription',
+        return [
             'ai_helper',
             'azure_active_directory',
             'bbb',
@@ -212,7 +207,6 @@ class AppPlugin
             'courseblock',
             'coursehomenotify',
             'courselegal',
-            'createdrupaluser',
             'customcertificate',
             'customfooter',
             'dashboard',
@@ -255,35 +249,15 @@ class AppPlugin
             'userremoteservice',
             'zoom',
         ];
-
-        return $officialPlugins;
     }
 
-    /**
-     * @param string $pluginName
-     * @param int    $urlId
-     */
-    public function install($pluginName, $urlId = null)
+    public static function isOfficial(string $title): bool
     {
-        $urlId = (int) $urlId;
-        if (empty($urlId)) {
-            $urlId = api_get_current_access_url_id();
-        }
+        return in_array($title, self::getOfficialPlugins());
+    }
 
-        api_add_setting(
-            'installed',
-            'status',
-            $pluginName,
-            'setting',
-            'Plugins',
-            $pluginName,
-            '',
-            '',
-            '',
-            $urlId,
-            1
-        );
-
+    public function install(string $pluginName): void
+    {
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/install.php';
 
         if (is_file($pluginPath) && is_readable($pluginPath)) {
@@ -293,29 +267,15 @@ class AppPlugin
         }
     }
 
-    /**
-     * @param string $pluginName
-     * @param int    $urlId
-     */
-    public function uninstall($pluginName, $urlId = null)
+    public function uninstall(string $pluginName): void
     {
-        $urlId = (int) $urlId;
-        if (empty($urlId)) {
-            $urlId = api_get_current_access_url_id();
-        }
-
-        // First call the custom uninstall to allow full access to global settings
+        // First call the custom uninstallation to allow full access to global settings
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/uninstall.php';
         if (is_file($pluginPath) && is_readable($pluginPath)) {
             // Execute the uninstall procedure.
 
             require $pluginPath;
         }
-
-        // Second remove all remaining global settings
-        api_delete_settings_params(
-            ['category = ? AND access_url = ? AND subkey = ? ' => ['Plugins', $urlId, $pluginName]]
-        );
     }
 
     /**

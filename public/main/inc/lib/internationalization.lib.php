@@ -1838,24 +1838,24 @@ function &_api_get_day_month_names($language = null)
         ];
         for ($i = 0; $i < 7; $i++) {
             $date_parts[$language]['days_short'][] = get_lang(
-                $week_day[$i].'Short',
+                $week_day[$i], //.'Short',
                 '',
                 $language
             );
             $date_parts[$language]['days_long'][] = get_lang(
-                $week_day[$i].'Long',
+                $week_day[$i], //.'Long',
                 '',
                 $language
             );
         }
         for ($i = 0; $i < 12; $i++) {
             $date_parts[$language]['months_short'][] = get_lang(
-                $month[$i].'Short',
+                $month[$i], //.'Short',
                 '',
                 $language
             );
             $date_parts[$language]['months_long'][] = get_lang(
-                $month[$i].'Long',
+                $month[$i], //.'Long',
                 '',
                 $language
             );

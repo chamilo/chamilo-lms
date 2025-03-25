@@ -40,7 +40,7 @@ $userStatus = $user_info['status'];
 
 $user = api_get_user_entity($user_id);
 $isSessionAdmin = api_is_session_admin($user);
-$firstLetterUser = $_POST['firstLetterUser'] ?? null;
+$firstLetterUser = isset($_POST['firstLetterUser']) ? Security::remove_XSS($_POST['firstLetterUser']) : null;
 
 // setting the name of the tool
 $isAdmin = UserManager::is_admin($user_id);
@@ -291,7 +291,7 @@ if (!empty($filters) && !empty($filterData)) {
 }
 
 if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent'])) {
-    $user_list = isset($_POST['UsersList']) ? $_POST['UsersList'] : null;
+    $user_list = isset($_POST['UsersList']) ? Security::remove_XSS($_POST['UsersList']) : null;
     switch ($userStatus) {
         case DRH:
         case PLATFORM_ADMIN:

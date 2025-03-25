@@ -3,12 +3,17 @@
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
  */
+
+use Chamilo\CoreBundle\Entity\ConferenceActivity;
+use Chamilo\CoreBundle\Repository\ConferenceActivityRepository;
+
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
 
 $plugin = BBBPlugin::create();
-$meetingTable = Database::get_main_table('plugin_bbb_meeting');
-$roomTable = Database::get_main_table('plugin_bbb_room');
+/** @var ConferenceActivityRepository $activityRepo */
+$em = Database::getManager();
+$activityRepo = $em->getRepository(ConferenceActivity::class);
 
 $bbb = new bbb();
 if ($bbb->pluginEnabled) {
@@ -48,50 +53,57 @@ if ($bbb->pluginEnabled) {
                             $bbb->endMeeting($value['id'], $courseCode);
                             break;
                         case 'SUCCESS':
-                            Database::update(
-                                $roomTable,
-                                ['close' => BBBPlugin::ROOM_CHECK],
-                                ['meeting_id = ? AND close= ?' => [$meetingId, BBBPlugin::ROOM_OPEN]]
-                            );
+                            $activitiesToMark = $activityRepo->createQueryBuilder('a')
+                                ->where('a.meeting = :meetingId')
+                                ->andWhere('a.close = :open')
+                                ->setParameter('meetingId', $meetingId)
+                                ->setParameter('open', BBBPlugin::ROOM_OPEN)
+                                ->getQuery()
+                                ->getResult();
+
+                            foreach ($activitiesToMark as $activity) {
+                                $activity->setClose(BBBPlugin::ROOM_CHECK);
+                            }
+                            $em->flush();
 
                             $i = 0;
                             while ($i < $meetingBBB['participantCount']) {
                                 $participantId = $meetingBBB[$i]['userId'];
-                                $roomData = Database::select(
-                                    '*',
-                                    $roomTable,
-                                    [
-                                        'where' => [
-                                            'meeting_id = ? AND participant_id = ? AND close = ?' => [
-                                                $meetingId,
-                                                $participantId,
-                                                BBBPlugin::ROOM_CHECK,
-                                            ],
-                                        ],
-                                        'order' => 'id DESC',
-                                    ],
-                                    'first'
-                                );
 
-                                if (!empty($roomData)) {
-                                    $roomId = $roomData['id'];
-                                    if (!empty($roomId)) {
-                                        Database::update(
-                                            $roomTable,
-                                            ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_OPEN],
-                                            ['id = ? ' => $roomId]
-                                        );
-                                    }
+                                $roomData = $activityRepo->createQueryBuilder('a')
+                                    ->where('a.meeting = :meetingId')
+                                    ->andWhere('a.participant = :participantId')
+                                    ->andWhere('a.close = :check')
+                                    ->setParameter('meetingId', $meetingId)
+                                    ->setParameter('participantId', $participantId)
+                                    ->setParameter('check', BBBPlugin::ROOM_CHECK)
+                                    ->orderBy('a.id', 'DESC')
+                                    ->setMaxResults(1)
+                                    ->getQuery()
+                                    ->getOneOrNullResult();
+
+                                if ($roomData instanceof ConferenceActivity) {
+                                    $roomData->setOutAt(new \DateTime());
+                                    $roomData->setClose(BBBPlugin::ROOM_OPEN);
                                 }
                                 $i++;
                             }
+                            $em->flush();
 
-                            Database::update(
-                                $roomTable,
-                                ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
-                                ['meeting_id = ? AND close= ?' => [$meetingId, BBBPlugin::ROOM_CHECK]]
-                            );
+                            $activitiesToClose = $activityRepo->createQueryBuilder('a')
+                                ->where('a.meeting = :meetingId')
+                                ->andWhere('a.close = :check')
+                                ->setParameter('meetingId', $meetingId)
+                                ->setParameter('check', BBBPlugin::ROOM_CHECK)
+                                ->getQuery()
+                                ->getResult();
 
+                            foreach ($activitiesToClose as $activity) {
+                                $activity->setOutAt(new \DateTime());
+                                $activity->setClose(BBBPlugin::ROOM_CLOSE);
+                            }
+
+                            $em->flush();
                             break;
                     }
                 }

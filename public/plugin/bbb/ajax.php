@@ -4,6 +4,8 @@
  */
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Entity\ConferenceMeeting;
+use Chamilo\CoreBundle\Repository\ConferenceMeetingRepository;
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $cidReset = true;
@@ -27,22 +29,23 @@ switch ($action) {
         }
 
         if ($bbb->checkDirectMeetingVideoUrl($meetingId)) {
-            $meetingInfo = Database::select(
-                '*',
-                'plugin_bbb_meeting',
-                ['where' => ['id = ?' => (int) $meetingId]],
-                'first'
-            );
+            $em = Database::getManager();
+            /** @var ConferenceMeetingRepository $repo */
+            $repo = $em->getRepository(ConferenceMeeting::class);
 
-            $url = $meetingInfo['video_url'].'/capture.m4v';
-            $link = Display::url(
-                Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download file')),
-                $meetingInfo['video_url'].'/capture.m4v',
-                ['target' => '_blank']
-            );
+            $meetingInfo = $repo->findOneAsArrayById($meetingId);
 
-            header('Content-Type: application/json');
-            echo json_encode(['url' => $url, 'link' => $link]);
+            if ($meetingInfo && isset($meetingInfo['videoUrl'])) {
+                $url = $meetingInfo['videoUrl'].'/capture.m4v';
+                $link = Display::url(
+                    Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download file')),
+                    $url,
+                    ['target' => '_blank']
+                );
+
+                header('Content-Type: application/json');
+                echo json_encode(['url' => $url, 'link' => $link]);
+            }
         }
         break;
 }

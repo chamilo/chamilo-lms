@@ -45,10 +45,10 @@
                 <td>{{ meeting.course ?: '-' }}</td>
                 <td>{{ meeting.session ?: '-' }}</td>
                 <td>
-                    {{ meeting.participants ? meeting.participants|join('<br>') : '-' }}
+                    {{ meeting.participants is defined and meeting.participants ? meeting.participants|join('<br>') : '-' }}
                 </td>
                 <td>
-                    {{ meeting.participants ? meeting.participants | length : 0 }}
+                    {{ meeting.participants is defined ? meeting.participants | length : 0 }}
                 </td>
                 <td>
                     {{ meeting.action_links }}

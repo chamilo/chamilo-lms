@@ -117,6 +117,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * This method creates the tables required to this plugin.
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function install()
     {
@@ -137,7 +139,7 @@ class BuyCoursesPlugin extends Plugin
         ];
         $em = Database::getManager();
         $cn = $em->getConnection();
-        $sm = $cn->getSchemaManager();
+        $sm = $cn->createSchemaManager();
         $tables = $sm->tablesExist($tablesToBeCompared);
 
         if ($tables) {

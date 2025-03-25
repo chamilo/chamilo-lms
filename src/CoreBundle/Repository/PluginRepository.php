@@ -42,11 +42,19 @@ class PluginRepository extends ServiceEntityRepository
     }
 
     /**
+     * Get an installed plugin.
+     */
+    public function getInstalledByName(string $pluginName): ?Plugin
+    {
+        return $this->findOneBy(['title' => $pluginName, 'installed' => true]);
+    }
+
+    /**
      * Check if a plugin is installed.
      */
     public function isInstalledByName(string $pluginName): bool
     {
-        return null !== $this->findOneBy(['title' => $pluginName, 'installed' => true]);
+        return null !== $this->getInstalledByName($pluginName);
     }
 
     /**

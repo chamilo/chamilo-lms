@@ -72,10 +72,14 @@ class TopLinksPlugin extends Plugin
         $em->flush();
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \Doctrine\ORM\Tools\ToolsException
+     */
     public function install()
     {
         $em = Database::getManager();
-        $schemaManager = $em->getConnection()->getSchemaManager();
+        $schemaManager = $em->getConnection()->createSchemaManager();
 
         $tableReferences = [
             'toplinks_link' => $em->getClassMetadata(TopLink::class),

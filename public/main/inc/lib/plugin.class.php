@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\Exception\ORMException;
@@ -85,6 +86,8 @@ class Plugin
      */
     public function get_info()
     {
+        $pluginRepo = Container::getPluginRepository();
+
         $result = [];
         $result['obj'] = $this;
         $result['title'] = $this->get_title();
@@ -95,6 +98,7 @@ class Plugin
         $result['is_course_plugin'] = $this->isCoursePlugin;
         $result['is_admin_plugin'] = $this->isAdminPlugin;
         $result['is_mail_plugin'] = $this->isMailPlugin;
+        $result['entity'] = $pluginRepo->findOneByTitle($this->get_title());
 
         if ($form = $this->getSettingsForm()) {
             $result['settings_form'] = $form;
@@ -337,21 +341,15 @@ class Plugin
      * @param string $name of the plugin setting
      *
      * @return string Value of the plugin setting
+     *
+     * @throws Exception
      */
     public function get($name)
     {
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
-            if ($setting['variable'] === $this->get_name().'_'.$name) {
-                /*$unserialized = UnserializeApi::unserialize('not_allowed_classes', $setting['selected_value'], true);
-
-                if (!empty($setting['selected_value']) &&
-                    false !== $unserialized
-                ) {
-                    $setting['selected_value'] = $unserialized;
-                }*/
-
-                return $setting['selected_value'];
+            if (isset($setting[$name])) {
+                return $setting[$name];
             }
         }
 
@@ -364,21 +362,19 @@ class Plugin
      * @param bool $forceFromDB Optional. Force get settings from the database
      *
      * @return array Plugin settings as an array
+     *
+     * @throws Exception
      */
-    public function get_settings($forceFromDB = false)
+    public function get_settings(bool $forceFromDB = false): array
     {
-        if (empty($this->settings) || $forceFromDB) {
-            $settings = api_get_settings_params(
-                [
-                    "subkey = ? AND category = ? AND type = ? AND access_url = ?" => [
-                        $this->get_name(),
-                        'Plugins',
-                        'setting',
-                        api_get_current_access_url_id(),
-                    ],
-                ]
+        $plugin = Container::getPluginRepository()->findOneByTitle($this->get_name());
+
+        if ($plugin && empty($this->settings) || $forceFromDB) {
+            $configByUrl = $plugin->getConfigurationsByAccessUrl(
+                Container::getAccessUrlHelper()->getCurrent()
             );
-            $this->settings = $settings;
+
+            $this->settings = $configByUrl?->getConfiguration() ?? [];
         }
 
         return $this->settings;
@@ -1112,5 +1108,10 @@ class Plugin
         }
 
         return $cTool;
+    }
+
+    public function getFieldNames(): array
+    {
+        return array_keys($this->fields);
     }
 }

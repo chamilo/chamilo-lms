@@ -50,11 +50,14 @@ class ExternalNotificationConnectPlugin extends Plugin
         return $result ?: $result = new self();
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function install()
     {
         $em = Database::getManager();
 
-        $schemaManager = $em->getConnection()->getSchemaManager();
+        $schemaManager = $em->getConnection()->createSchemaManager();
 
         $tableExists = $schemaManager->tablesExist(['plugin_ext_notif_conn_access_token']);
 

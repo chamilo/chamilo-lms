@@ -55,6 +55,8 @@ class CustomCertificatePlugin extends Plugin
 
     /**
      * This method creates the tables required to this plugin.
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function install()
     {
@@ -64,7 +66,7 @@ class CustomCertificatePlugin extends Plugin
         $tablesToBeCompared = [self::TABLE_CUSTOMCERTIFICATE];
         $em = Database::getManager();
         $cn = $em->getConnection();
-        $sm = $cn->getSchemaManager();
+        $sm = $cn->createSchemaManager();
         $tables = $sm->tablesExist($tablesToBeCompared);
 
         if ($tables) {

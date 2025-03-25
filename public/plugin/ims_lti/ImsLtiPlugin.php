@@ -630,12 +630,13 @@ class ImsLtiPlugin extends Plugin
      * Creates the plugin tables on database.
      *
      * @throws \Doctrine\ORM\Tools\ToolsException
+     * @throws \Doctrine\DBAL\Exception
      */
     private function createPluginTables()
     {
         $em = Database::getManager();
 
-        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+        if ($em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_TOOL])) {
             return;
         };
 
@@ -652,12 +653,14 @@ class ImsLtiPlugin extends Plugin
 
     /**
      * Drops the plugin tables on database.
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     private function dropPluginTables()
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+        if (!$em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_TOOL])) {
             return;
         };
 

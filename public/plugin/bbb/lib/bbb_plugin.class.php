@@ -236,6 +236,8 @@ class BBBPlugin extends Plugin
 
     /**
      * Uninstall
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function uninstall()
     {
@@ -267,7 +269,7 @@ class BBBPlugin extends Plugin
         }
 
         $em = Database::getManager();
-        $sm = $em->getConnection()->getSchemaManager();
+        $sm = $em->getConnection()->createSchemaManager();
         if ($sm->tablesExist('plugin_bbb_meeting')) {
             Database::query("DELETE FROM plugin_bbb_meeting WHERE access_url = $urlId");
         }

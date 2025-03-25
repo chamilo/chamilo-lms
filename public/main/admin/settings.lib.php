@@ -187,21 +187,32 @@ function handlePlugins()
         if ($isInstalled) {
             $toggleAction = $isEnabled ? 'disable' : 'enable';
             $toggleText = $isEnabled ? get_lang('Disable') : get_lang('Enable');
-            $toggleColor = $isEnabled ? 'btn btn--plain' : 'btn btn--warning';
+            $toggleColor = $isEnabled ? 'btn--plain' : 'btn--warning';
 
             $toggleIcon = $isEnabled ? 'mdi mdi-toggle-switch-off-outline' : 'mdi mdi-toggle-switch-outline';
 
-            echo '<button class="plugin-action '.$toggleColor.' px-4 py-2 rounded-md transition flex items-center gap-2"
+            echo '<button class="plugin-action btn btn--sm '.$toggleColor.'"
                     data-plugin="'.$pluginName.'" data-action="'.$toggleAction.'">
                     <i class="'.$toggleIcon.'"></i> '.$toggleText.'
                   </button>';
 
-            echo '<button class="plugin-action btn btn--danger"
+            echo '<button class="plugin-action btn btn--sm btn--danger"
                     data-plugin="'.$pluginName.'" data-action="uninstall">
                     <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
                   </button>';
+
+            $configureUrl = Container::getRouter()->generate(
+                'legacy_main',
+                ['name' => 'admin/configure_plugin.php', 'plugin' => $pluginName]
+            );
+
+            echo Display::url(
+                get_lang('Configure'),
+                $configureUrl,
+                ['class' => 'btn btn--info btn--sm']
+            );
         } else {
-            echo '<button class="plugin-action btn btn--success"
+            echo '<button class="plugin-action btn btn--sm btn--success"
                     data-plugin="'.$pluginName.'" data-action="install">
                     <i class="mdi mdi-download"></i> '.get_lang('Install').'
                   </button>';

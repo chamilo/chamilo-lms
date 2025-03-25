@@ -203,12 +203,14 @@ class AiHelperPlugin extends Plugin
 
     /**
      * Install the plugin. Set the database up.
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function install()
     {
         $em = Database::getManager();
 
-        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_REQUESTS])) {
+        if ($em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_REQUESTS])) {
             return;
         }
 
@@ -222,12 +224,14 @@ class AiHelperPlugin extends Plugin
 
     /**
      * Unistall plugin. Clear the database.
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function uninstall()
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_REQUESTS])) {
+        if (!$em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_REQUESTS])) {
             return;
         }
 

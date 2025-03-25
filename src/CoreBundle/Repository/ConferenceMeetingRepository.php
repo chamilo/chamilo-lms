@@ -35,19 +35,15 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
      */
     public function findOneByRemoteIdAndAccessUrl(string $remoteId, int $accessUrlId): ?array
     {
-        $qb = $this->createQueryBuilder('m');
-
-        $qb
-            ->select('m', 'IDENTITY(m.user) AS user_id')
+        return $this->createQueryBuilder('m')
+            ->select('m.id', 'IDENTITY(m.user) AS user_id', 'm.remoteId', 'm.status', 'm.videoUrl')
             ->where('m.remoteId = :remoteId')
             ->andWhere('m.accessUrl = :accessUrlId')
             ->setParameter('remoteId', $remoteId)
             ->setParameter('accessUrlId', $accessUrlId)
-            ->setMaxResults(1);
-
-        $result = $qb->getQuery()->getArrayResult();
-
-        return $result[0] ?? null;
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
     }
 
     /**

@@ -18,7 +18,7 @@ $entityManager = Database::getManager();
 $pluginSchema = new Schema();
 $connection = $entityManager->getConnection();
 $platform = $connection->getDatabasePlatform();
-$sm = $connection->getSchemaManager();
+$sm = $connection->createSchemaManager();
 
 // Create tables
 if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_PAYPAL)) {

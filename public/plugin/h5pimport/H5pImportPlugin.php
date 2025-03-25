@@ -108,12 +108,14 @@ class H5pImportPlugin extends Plugin
 
     /**
      * @throws ToolsException
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function install()
     {
         $em = Database::getManager();
         if ($em->getConnection()
-            ->getSchemaManager()
+            ->createSchemaManager()
             ->tablesExist(
                 [
                     self::TBL_H5P_IMPORT,
@@ -150,12 +152,15 @@ class H5pImportPlugin extends Plugin
         );
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function uninstall()
     {
         $em = Database::getManager();
 
         if (!$em->getConnection()
-            ->getSchemaManager()
+            ->createSchemaManager()
             ->tablesExist(
                 [
                     self::TBL_H5P_IMPORT,

@@ -62,12 +62,14 @@ class EmbedRegistryPlugin extends Plugin
 
     /**
      * @throws \Doctrine\ORM\Tools\ToolsException
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function install()
     {
         $em = Database::getManager();
 
-        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TBL_EMBED])) {
+        if ($em->getConnection()->createSchemaManager()->tablesExist([self::TBL_EMBED])) {
             return;
         }
 
@@ -79,11 +81,14 @@ class EmbedRegistryPlugin extends Plugin
         );
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function uninstall()
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TBL_EMBED])) {
+        if (!$em->getConnection()->createSchemaManager()->tablesExist([self::TBL_EMBED])) {
             return;
         }
 

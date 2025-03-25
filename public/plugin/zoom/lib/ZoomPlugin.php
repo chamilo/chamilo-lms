@@ -179,10 +179,12 @@ class ZoomPlugin extends Plugin
      * Installs course fields in all courses.
      *
      * @throws ToolsException
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function install()
     {
-        $schemaManager = Database::getManager()->getConnection()->getSchemaManager();
+        $schemaManager = Database::getManager()->getConnection()->createSchemaManager();
 
         $tablesExists = $schemaManager->tablesExist(
             [

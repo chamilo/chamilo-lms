@@ -10,6 +10,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use Chamilo\CoreBundle\Entity\Listener\LanguageListener;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,8 +26,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(OrderFilter::class, properties: ['english_name' => 'DESC'])]
 #[ORM\Table(name: 'language', options: ['row_format' => 'DYNAMIC'])]
 #[ORM\Entity(repositoryClass: LanguageRepository::class)]
+#[ORM\EntityListeners([LanguageListener::class])]
 class Language
 {
+    public const ISO_MAX_LENGTH = 8;
+
     #[Groups(['language:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -45,7 +49,7 @@ class Language
 
     #[Groups(['language:read', 'language:write'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'isocode', type: 'string', length: 10)]
+    #[ORM\Column(name: 'isocode', type: 'string', length: self::ISO_MAX_LENGTH)]
     protected string $isocode;
 
     #[Groups(['language:read', 'language:write'])]
@@ -166,5 +170,12 @@ class Language
         }
 
         return $this;
+    }
+
+    public function generateIsoCodeForChild(): string
+    {
+        $isoCode = explode('_', $this->getParent()->getIsocode());
+
+        return $isoCode[0].'_'.$this->getId();
     }
 }

@@ -51,8 +51,8 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         $parentIsoCode = $this->connection->executeQuery($parentIsoQuery, [$parentId])->fetchOne();
 
         // Get the prefix of the parent language's isocode
-        $firstIso = substr($parentIsoCode, 0, 2);
-        $newIsoCode = $this->generateSublanguageCode($firstIso, $sublanguage['english_name']);
+        $firstIso = explode('_', $parentIsoCode)[0];
+        $newIsoCode = $firstIso.'_'.$sublanguage['id'];
 
         // Update the isocode in the language table
         $updateLanguageQuery = 'UPDATE language SET isocode = ? WHERE id = ?';
@@ -169,27 +169,6 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         $content = $output->fetch();
 
         error_log($content);
-    }
-
-    private function generateSublanguageCode(string $parentCode, string $variant, int $maxLength = 10): string
-    {
-        $parentCode = strtolower(trim($parentCode));
-        $variant = strtolower(trim($variant));
-
-        // Generate a variant code by truncating the variant name
-        $variantCode = substr($variant, 0, $maxLength - \strlen($parentCode) - 1);
-
-        // Build the complete code
-        return substr($parentCode.'_'.$variantCode, 0, $maxLength);
-    }
-
-    private function deleteImportFolder(): void
-    {
-        $kernel = $this->container->get('kernel');
-        $rootPath = $kernel->getProjectDir();
-        $importPath = $rootPath.'/var/translations/import/';
-
-        $this->recursiveRemoveDirectory($importPath);
     }
 
     private function recursiveRemoveDirectory($directory): void

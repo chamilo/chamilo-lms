@@ -36,6 +36,9 @@ class StudentFollowUpPlugin extends Plugin
         return $result ?: $result = new self();
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function install()
     {
         $pluginEntityPath = $this->getEntityPath();
@@ -51,7 +54,7 @@ class StudentFollowUpPlugin extends Plugin
 
         $fs = new Filesystem();
         $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
-        $schema = Database::getManager()->getConnection()->getSchemaManager();
+        $schema = Database::getManager()->getConnection()->createSchemaManager();
 
         if (false === $schema->tablesExist('sfu_post')) {
             $sql = "CREATE TABLE IF NOT EXISTS sfu_post (id INT AUTO_INCREMENT NOT NULL, insert_user_id INT NOT NULL, user_id INT NOT NULL, parent_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content LONGTEXT DEFAULT NULL, external_care_id VARCHAR(255) DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, private TINYINT(1) NOT NULL, external_source TINYINT(1) NOT NULL, tags LONGTEXT NOT NULL COMMENT '(DC2Type:array)', attachment VARCHAR(255) NOT NULL, lft INT DEFAULT NULL, rgt INT DEFAULT NULL, lvl INT DEFAULT NULL, root INT DEFAULT NULL, INDEX IDX_35F9473C9C859CC3 (insert_user_id), INDEX IDX_35F9473CA76ED395 (user_id), INDEX IDX_35F9473C727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;";

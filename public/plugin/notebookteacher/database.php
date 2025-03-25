@@ -24,17 +24,17 @@ if ($pluginSchema->hasTable(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER)) {
 
 //Create tables
 $notebookTable = $pluginSchema->createTable(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER);
-$notebookTable->addColumn('id', \Doctrine\DBAL\Types\Type::INTEGER, ['autoincrement' => true, 'unsigned' => true]);
-$notebookTable->addColumn('c_id', \Doctrine\DBAL\Types\Type::INTEGER, ['unsigned' => true]);
-$notebookTable->addColumn('session_id', \Doctrine\DBAL\Types\Type::INTEGER, ['unsigned' => true]);
-$notebookTable->addColumn('user_id', \Doctrine\DBAL\Types\Type::INTEGER, ['unsigned' => true]);
-$notebookTable->addColumn('student_id', \Doctrine\DBAL\Types\Type::INTEGER, ['unsigned' => true]);
-$notebookTable->addColumn('course', \Doctrine\DBAL\Types\Type::STRING);
-$notebookTable->addColumn('title', \Doctrine\DBAL\Types\Type::STRING);
-$notebookTable->addColumn('description', \Doctrine\DBAL\Types\Type::TEXT);
-$notebookTable->addColumn('creation_date', \Doctrine\DBAL\Types\Type::DATETIME);
-$notebookTable->addColumn('update_date', \Doctrine\DBAL\Types\Type::DATETIME);
-$notebookTable->addColumn('status', \Doctrine\DBAL\Types\Type::INTEGER, ['unsigned' => true]);
+$notebookTable->addColumn('id', 'integer', ['autoincrement' => true, 'unsigned' => true]);
+$notebookTable->addColumn('c_id', 'integer', ['unsigned' => true]);
+$notebookTable->addColumn('session_id', 'integer', ['unsigned' => true]);
+$notebookTable->addColumn('user_id', 'integer', ['unsigned' => true]);
+$notebookTable->addColumn('student_id', 'integer', ['unsigned' => true]);
+$notebookTable->addColumn('course', 'string');
+$notebookTable->addColumn('title', 'string');
+$notebookTable->addColumn('description', 'text');
+$notebookTable->addColumn('creation_date', 'datetime');
+$notebookTable->addColumn('update_date', 'datetime');
+$notebookTable->addColumn('status', 'integer', ['unsigned' => true]);
 $notebookTable->addIndex(['c_id']);
 $notebookTable->setPrimaryKey(['id']);
 

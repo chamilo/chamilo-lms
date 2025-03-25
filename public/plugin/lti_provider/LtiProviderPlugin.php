@@ -353,12 +353,13 @@ class LtiProviderPlugin extends Plugin
      * Install the plugin. Set the database up.
      *
      * @throws \Doctrine\ORM\Tools\ToolsException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function install()
     {
         $em = Database::getManager();
 
-        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_PLATFORM])) {
+        if ($em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_PLATFORM])) {
             return;
         }
 
@@ -416,12 +417,14 @@ class LtiProviderPlugin extends Plugin
 
     /**
      * Unistall plugin. Clear the database.
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function uninstall()
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_PLATFORM])) {
+        if (!$em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_PLATFORM])) {
             return;
         }
 
@@ -489,12 +492,15 @@ class LtiProviderPlugin extends Plugin
         return false;
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     private function areTablesCreated(): bool
     {
         $entityManager = Database::getManager();
         $connection = $entityManager->getConnection();
 
-        return $connection->getSchemaManager()->tablesExist(self::TABLE_PLATFORM);
+        return $connection->createSchemaManager()->tablesExist(self::TABLE_PLATFORM);
     }
 
     /**

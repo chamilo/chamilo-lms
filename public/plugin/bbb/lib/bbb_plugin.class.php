@@ -128,6 +128,7 @@ class BBBPlugin extends Plugin
 
         return $this;
     }
+    
 
     /**
      * Updates a course setting value across all existing courses.

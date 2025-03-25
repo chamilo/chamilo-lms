@@ -15,7 +15,7 @@
 
 <p class="alert alert-info">
     {{ 'PluginInstruction'|get_plugin_lang('BuyCoursesPlugin') }}
-    <a href="{{ _p.web_main }}admin/configure_plugin.php?name=buycourses">{{ 'ClickHere'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+    <a href="{{ _p.web_main }}admin/configure_plugin.php?plugin=buycourses">{{ 'ClickHere'|get_plugin_lang('BuyCoursesPlugin') }}</a>
 </p>
 
 {% if paypal_enable == "true" %}

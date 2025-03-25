@@ -43,12 +43,13 @@ class CourseHomeNotifyPlugin extends Plugin
      * Create table in database. And setup Doctirne entity.
      *
      * @throws \Doctrine\ORM\Tools\ToolsException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function install()
     {
         $em = Database::getManager();
 
-        if ($em->getConnection()->getSchemaManager()->tablesExist(['course_home_notify_notification'])) {
+        if ($em->getConnection()->createSchemaManager()->tablesExist(['course_home_notify_notification'])) {
             return;
         }
 
@@ -64,12 +65,14 @@ class CourseHomeNotifyPlugin extends Plugin
     /**
      * Uninstall process.
      * Remove Doctrine entity. And drop table in database.
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function uninstall()
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->getSchemaManager()->tablesExist(['course_home_notify_notification'])) {
+        if (!$em->getConnection()->createSchemaManager()->tablesExist(['course_home_notify_notification'])) {
             return;
         }
 

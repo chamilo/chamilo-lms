@@ -41,6 +41,8 @@ class NotebookTeacherPlugin extends Plugin
 
     /**
      * This method creates the tables required to this plugin.
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function install()
     {
@@ -50,7 +52,7 @@ class NotebookTeacherPlugin extends Plugin
         $tablesToBeCompared = [self::TABLE_NOTEBOOKTEACHER];
         $em = Database::getManager();
         $cn = $em->getConnection();
-        $sm = $cn->getSchemaManager();
+        $sm = $cn->createSchemaManager();
         $tables = $sm->tablesExist($tablesToBeCompared);
 
         if ($tables) {

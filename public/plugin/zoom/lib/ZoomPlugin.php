@@ -1131,7 +1131,7 @@ class ZoomPlugin extends Plugin
             $actionsLeft .=
                 Display::url(
                     Display::getMdiIcon(ToolIcon::SETTINGS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Settings')),
-                    api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=zoom'
+                    api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?plugin=zoom'
                 ).$back;
         }
 

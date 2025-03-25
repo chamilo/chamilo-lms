@@ -200,6 +200,17 @@ function handlePlugins()
                     data-plugin="'.$plugin_info['title'].'" data-action="uninstall">
                     <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
                   </button>';
+
+            $configureUrl = Container::getRouter()->generate(
+                'legacy_main',
+                ['name' => 'admin/configure_plugin.php', 'plugin' => $pluginName]
+            );
+
+            echo Display::url(
+                get_lang('Configure'),
+                $configureUrl,
+                ['class' => 'btn btn--info btn--sm']
+            );
         } else {
             echo '<button class="plugin-action btn btn--sm btn--success"
                     data-plugin="'.$pluginName.'" data-action="install">

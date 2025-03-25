@@ -1,6 +1,7 @@
 <?php
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Symfony\Component\Finder\Finder;
@@ -123,42 +124,21 @@ class AppPlugin
         return in_array($plugin, $list);
     }
 
-    /**
-     * @deprecated
-     */
-    public function get_installed_plugins($fromDatabase = true)
-    {
-        return $this->getInstalledPlugins($fromDatabase);
-    }
-
-    /**
-     * @param bool $fromDatabase
-     *
-     * @return array
-     */
-    public function getInstalledPlugins($fromDatabase = true)
+    public function getInstalledPlugins(bool $fromDatabase = true): array
     {
         static $installedPlugins = null;
 
-        if (false === $fromDatabase) {
-            if (is_array($installedPlugins)) {
-                return $installedPlugins;
-            }
+        if (false === $fromDatabase && is_array($installedPlugins)) {
+            return $installedPlugins;
         }
 
         if ($fromDatabase || null === $installedPlugins) {
             $installedPlugins = [];
-            $plugins = api_get_settings_params(
-                [
-                    'variable = ? AND selected_value = ? AND category = ? ' => ['status', 'installed', 'Plugins'],
-                ]
-            );
 
-            if (!empty($plugins)) {
-                foreach ($plugins as $row) {
-                    $installedPlugins[$row['subkey']] = true;
-                }
-                $installedPlugins = array_keys($installedPlugins);
+            $plugins = Container::getPluginRepository()->getInstalledPlugins();
+
+            foreach ($plugins as $plugin) {
+                $installedPlugins[] = $plugin->getTitle();
             }
         }
 
@@ -483,32 +463,21 @@ class AppPlugin
                 require $plugin_file;
             }
 
-            // @todo check if settings are already added
-            // Extra options
-            $plugin_settings = api_get_settings_params(
-                [
-                    'subkey = ? AND category = ? AND type = ? AND access_url = ?' => [
-                        $pluginName,
-                        'Plugins',
-                        'setting',
-                        api_get_current_access_url_id(),
-                    ],
-                ]
-            );
+            $plugin = Container::getPluginRepository()->findOneByTitle($pluginName);
 
-            $settings_filtered = [];
-            foreach ($plugin_settings as $item) {
-                if (!empty($item['selected_value'])) {
-                    //if (unserialize($item['selected_value']) !== false) {
-                        //$item['selected_value'] = unserialize($item['selected_value']);
-                    //}
-                }
-                $settings_filtered[$item['variable']] = $item['selected_value'];
+            if (!$plugin) {
+                return [];
             }
 
-            $plugin_info['settings'] = $settings_filtered;
-            $pluginData[$pluginName] = $plugin_info;
-            //Session::write('plugin_data', $pluginData);
+            $configByUrl = $plugin->getConfigurationsByAccessUrl(
+                Container::getAccessUrlHelper()->getCurrent()
+            );
+
+            if (!$configByUrl) {
+                return [];
+            }
+
+            $plugin_info['settings'] = $configByUrl->getConfiguration();
 
             return $plugin_info;
         }

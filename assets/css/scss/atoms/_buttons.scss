@@ -1,5 +1,5 @@
 .btn {
-  @apply cursor-default font-semibold gap-2 inline-flex justify-center px-6 py-2 rounded-md transition flex-none text-base;
+  @apply cursor-default font-semibold gap-2 inline-flex justify-center items-center px-6 py-2 rounded-md transition flex-none text-base;
 
   .mdi {
     @apply text-base;
@@ -156,8 +156,9 @@
     }
   }
 
-  &-sm {
-    @apply px-4 py-2;
+  &-sm,
+  &--sm{
+    @apply px-3 py-1;
     font-size: 13px;
   }
 }

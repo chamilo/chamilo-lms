@@ -52,7 +52,7 @@ if (!empty($item)) {
 }
 $formToDisplay = $form->returnForm();
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Manage skills levels')];
 
 $tpl = new Template($action);

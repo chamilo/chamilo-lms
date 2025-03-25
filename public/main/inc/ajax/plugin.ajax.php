@@ -48,7 +48,7 @@ switch ($action) {
     case 'uninstall':
     case 'enable':
     case 'disable':
-        $pluginTitle = api_replace_dangerous_char($_POST['plugin'] ?? '');
+        $pluginTitle = $_POST['plugin'] ?? '';
         $plugin_info = [
             'version' => '0.0.1',
             'title' => $pluginTitle,

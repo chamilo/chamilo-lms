@@ -197,7 +197,7 @@ function handlePlugins()
                   </button>';
 
             echo '<button class="plugin-action btn btn--danger"
-                    data-plugin="'.$plugin_info['title'].'" data-action="uninstall">
+                    data-plugin="'.$pluginName.'" data-action="uninstall">
                     <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
                   </button>';
         } else {

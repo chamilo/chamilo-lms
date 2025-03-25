@@ -180,7 +180,7 @@ class ExerciseSignaturePlugin extends Plugin
         }
 
         $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $sql = "ALTER TABLE $table MODIFY COLUMN value LONGTEXT null;";
+        $sql = "ALTER TABLE $table MODIFY COLUMN field_value LONGTEXT null;";
         Database::query($sql);
     }
 

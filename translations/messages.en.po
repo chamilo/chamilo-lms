@@ -28018,3 +28018,12 @@ msgstr "Remove from catalogue"
 
 msgid "Removed from catalogue"
 msgstr "Removed from catalogue"
+
+msgid "Loading courses. Please wait."
+msgstr "Loading courses. Please wait."
+
+msgid "Private course"
+msgstr "Private course"
+
+msgid "Not subscribed"
+msgstr "Not subscribed"

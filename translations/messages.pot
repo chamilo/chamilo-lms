@@ -28004,3 +28004,12 @@ msgstr ""
 
 msgid "Removed from catalogue"
 msgstr ""
+
+msgid "Loading courses. Please wait."
+msgstr ""
+
+msgid "Private course"
+msgstr ""
+
+msgid "Not subscribed"
+msgstr ""

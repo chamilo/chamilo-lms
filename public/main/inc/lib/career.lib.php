@@ -11,7 +11,7 @@ class Career extends Model
     public $table;
     public $columns = [
         'id',
-        'name',
+        'title',
         'description',
         'status',
         'created_at',
@@ -45,7 +45,7 @@ class Career extends Model
         return Database::select(
             '*',
             $this->table,
-            ['where' => $options, 'order' => 'name ASC']
+            ['where' => $options, 'order' => 'title ASC']
         );
     }
 
@@ -182,7 +182,7 @@ class Career extends Model
                 case 'id':
                 case 'updated_at':
                     break;
-                case 'name':
+                case 'title':
                     $val .= ' '.get_lang('Copy');
                     $new[$key] = $val;
                     break;

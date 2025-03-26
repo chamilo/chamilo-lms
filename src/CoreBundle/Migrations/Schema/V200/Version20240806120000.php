@@ -16,7 +16,7 @@ final class Version20240806120000 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migrate settings from configuration.php to .env and hosting_limits.yaml files';
+        return 'Migrate settings from configuration.php to .env and settings_overrides.yaml files';
     }
 
     public function up(Schema $schema): void
@@ -44,40 +44,40 @@ final class Version20240806120000 extends AbstractMigrationChamilo
             'WEBSERVICE_ENABLE' => !empty($_configuration['webservice_enable']) ? '1' : '0',
         ]);
 
-        // Ensure the hosting_limits.yaml file exists
-        $hostingLimitsFile = $rootPath.'/config/hosting_limits.yaml';
-        $hostingLimits = ['hosting_limits' => ['urls' => []]];
+        // Ensure the settings_overrides.yaml file exists
+        $hostingLimitsFile = $rootPath.'/config/settings_overrides.yaml';
+        $hostingLimits = ['settings_overrides' => []];
 
         // Prepare hosting limits
         if (\is_array($_configuration)) {
             foreach ($_configuration as $key => $config) {
                 if (is_numeric($key) && \is_array($config)) {
                     // Handle configurations specific to URL IDs
-                    $hostingLimits['hosting_limits']['urls'][$key] = [
-                        ['hosting_limit_users' => $config['hosting_limit_users'] ?? 0],
-                        ['hosting_limit_teachers' => $config['hosting_limit_teachers'] ?? 0],
-                        ['hosting_limit_courses' => $config['hosting_limit_courses'] ?? 0],
-                        ['hosting_limit_sessions' => $config['hosting_limit_sessions'] ?? 0],
-                        ['hosting_limit_disk_space' => $config['hosting_limit_disk_space'] ?? 0],
-                        ['hosting_limit_active_courses' => $config['hosting_limit_active_courses'] ?? 0],
-                        ['hosting_total_size_limit' => $_configuration['hosting_total_size_limit'] ?? 0],
+                    $hostingLimits['settings_overrides'][$key]['hosting_limit'] = [
+                        ['users' => $config['hosting_limit_users'] ?? 0],
+                        ['teachers' => $config['hosting_limit_teachers'] ?? 0],
+                        ['courses' => $config['hosting_limit_courses'] ?? 0],
+                        ['sessions' => $config['hosting_limit_sessions'] ?? 0],
+                        ['disk_space' => $config['hosting_limit_disk_space'] ?? 0],
+                        ['active_courses' => $config['hosting_limit_active_courses'] ?? 0],
+                        ['total_size' => $_configuration['hosting_total_size_limit'] ?? 0],
                     ];
                 }
             }
         }
 
         // Format hosting limits as YAML
-        $yamlContent = "parameters:\n  hosting_limits:\n    urls:\n";
-        foreach ($hostingLimits['hosting_limits']['urls'] as $urlId => $limits) {
-            $yamlContent .= "      {$urlId}:\n";
+        $yamlContent = "parameters:\n\tsettings_overrides:\n";
+        foreach ($hostingLimits['settings_overrides'] as $urlId => $limits) {
+            $yamlContent .= "\t\t{$urlId}:\n\t\t\thosting_limit:\n";
             foreach ($limits as $limit) {
                 foreach ($limit as $key => $value) {
-                    $yamlContent .= "        - {$key}: {$value}\n";
+                    $yamlContent .= "\t\t\t\t$key: $value\n";
                 }
             }
         }
 
-        // Write hosting limits to hosting_limits.yaml
+        // Write hosting limits to settings_overrides.yaml
         file_put_contents($hostingLimitsFile, $yamlContent);
     }
 

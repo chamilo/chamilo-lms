@@ -1966,7 +1966,7 @@ function executeLexikKeyPair(\Chamilo\Kernel $kernel): void
 function createExtraConfigFile(): void {
     $files = [
         'authentication',
-        'hosting_limits',
+        'settings_overrides',
         'plugin',
     ];
 

@@ -80,7 +80,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             $this->companyField = $companyField;
         } else {
             $this->companyField = [
-                'field_type' => ExtraField::FIELD_TYPE_RADIO,
+                'value_type' => ExtraField::FIELD_TYPE_RADIO,
                 'variable' => 'company',
                 'display_text' => 'Company',
                 'default_value' => '',
@@ -133,7 +133,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     {
         $data = $this->companyField;
         if (!empty($data)) {
-            $data['field_type'] = (int) $data['field_type'];
+            $data['value_type'] = (int) $data['value_type'];
             $data['field_order'] = (int) $data['field_order'];
             $data['visible_to_self'] = (int) $data['visible_to_self'];
             $data['visible_to_others'] = (int) $data['visible_to_others'];
@@ -191,7 +191,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     public function saveAuthorsField()
     {
         $data = [
-            'field_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
+            'value_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
             'variable' => 'authors',
             'display_text' => 'Authors',
             'default_value' => '',
@@ -218,7 +218,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['filter'] = 0;
         $data['variable'] = 'price';
         $data['display_text'] = 'SalePrice';
-        $data['field_type'] = ExtraField::FIELD_TYPE_INTEGER;
+        $data['value_type'] = ExtraField::FIELD_TYPE_INTEGER;
 
         $schedule->save($data);
     }
@@ -236,7 +236,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['filter'] = 0;
         $data['variable'] = 'authorlpitem';
         $data['display_text'] = 'LearningPathItemByAuthor';
-        $data['field_type'] = ExtraField::FIELD_TYPE_SELECT_MULTIPLE;
+        $data['value_type'] = ExtraField::FIELD_TYPE_SELECT_MULTIPLE;
         $schedule->save($data);
     }
 
@@ -253,7 +253,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['visible_to_self'] = 1;
         $data['visible_to_others'] = 0;
         $data['filter'] = 0;
-        $data['field_type'] = ExtraField::FIELD_TYPE_CHECKBOX;
+        $data['value_type'] = ExtraField::FIELD_TYPE_CHECKBOX;
         $schedule->save($data);
     }
 
@@ -488,7 +488,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $validVariable = false;
         $variable = $data['variable'];
         $extraFieldTypeInt = (int) $data['extra_field_type'];
-        $FieldType = (int) $data['field_type'];
+        $FieldType = (int) $data['value_type'];
         $id = (int) $data['id'];
         $extraFieldType = null;
         switch ($variable) {

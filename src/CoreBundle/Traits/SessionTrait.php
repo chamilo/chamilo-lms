@@ -20,7 +20,7 @@ trait SessionTrait
         return $this->session;
     }
 
-    public function setSession(Session $session): self
+    public function setSession(?Session $session): self
     {
         $this->session = $session;
 

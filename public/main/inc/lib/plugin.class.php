@@ -337,18 +337,17 @@ class Plugin
 
     /**
      * Returns the value of a given plugin global setting.
-     *
-     * @param string $name of the plugin setting
-     *
-     * @return string Value of the plugin setting
-     *
-     * @throws Exception
      */
-    public function get($name)
+    public function get(string $name): false|string
     {
         $settings = $this->get_settings();
+
+        if (isset($settings[$name])) {
+            return $settings[$name];
+        }
+
         foreach ($settings as $setting) {
-            if (isset($setting[$name])) {
+            if (is_array($setting) && isset($setting[$name])) {
                 return $setting[$name];
             }
         }

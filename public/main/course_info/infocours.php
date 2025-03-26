@@ -993,7 +993,7 @@ if ($form->validate()) {
 
     $access_url_id = api_get_current_access_url_id();
 
-    $limitCourses = get_hosting_limit($access_url_id, 'hosting_limit_active_courses');
+    $limitCourses = get_hosting_limit($access_url_id, 'active_courses');
     if ($limitCourses !== null && $limitCourses > 0) {
         $courseInfo = api_get_course_info_by_id($courseId);
 

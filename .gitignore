@@ -27,7 +27,7 @@ var/upload/*
 /main/inc/conf/configuration.php
 
 /config/authentication.yaml
-/config/hosting_limits.yaml
+/config/settings_overrides.yaml
 /config/plugin.yaml
 
 # Home

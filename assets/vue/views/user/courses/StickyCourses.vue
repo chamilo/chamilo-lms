@@ -17,7 +17,7 @@
 
 <script setup>
 import { computed, ref, watchEffect } from "vue"
-
+import { useI18n } from "vue-i18n"
 import CourseCardList from "../../../components/course/CourseCardList.vue"
 import SectionHeader from "../../../components/layout/SectionHeader.vue"
 import BaseDivider from "../../../components/basecomponents/BaseDivider.vue"
@@ -31,6 +31,8 @@ import { GET_STICKY_COURSES } from "../../../graphql/queries/Course"
 const securityStore = useSecurityStore()
 
 const queryResponse = ref({})
+
+const { t } = useI18n()
 
 if (securityStore.isAuthenticated) {
   const { result } = useQuery(GET_STICKY_COURSES)

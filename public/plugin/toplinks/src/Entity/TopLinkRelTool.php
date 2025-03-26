@@ -5,42 +5,26 @@
 namespace Chamilo\PluginBundle\Entity\TopLinks;
 
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\PluginBundle\Entity\TopLinks\Repository\TopLinkRelToolRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class TopLinkRelTool.
- *
- * @package Chamilo\PluginBundle\Entity\TopLinks
- *
- * @ORM\Table(name="toplinks_link_rel_tool")
- * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Entity\TopLinks\Repository\TopLinkRelToolRepository")
- */
+#[ORM\Table(name: 'toplinks_link_rel_tool')]
+#[ORM\Entity(repositoryClass: TopLinkRelToolRepository::class)]
 class TopLinkRelTool
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
-    private $id;
-    /**
-     * @var \Chamilo\PluginBundle\Entity\TopLinks\TopLink
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\TopLinks\TopLink", inversedBy="tools")
-     * @ORM\JoinColumn(name="link_id", referencedColumnName="id")
-     */
-    private $link;
-    /**
-     * @var \Chamilo\CourseBundle\Entity\CTool
-     *
-     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CTool", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="tool_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
-     */
-    private $tool;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    private ?int $id;
+    #[ORM\ManyToOne(targetEntity: TopLink::class, inversedBy: 'tools')]
+    #[ORM\JoinColumn(name: 'link_id', referencedColumnName: 'id')]
+    private ?TopLink $link;
 
-    public function getId(): int
+    #[ORM\OneToOne(targetEntity: CTool::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
+    private ?CTool $tool;
+
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -52,18 +36,12 @@ class TopLinkRelTool
         return $this;
     }
 
-    /**
-     * @return \Chamilo\PluginBundle\Entity\TopLinks\TopLink
-     */
-    public function getLink(): TopLink
+    public function getLink(): ?TopLink
     {
         return $this->link;
     }
 
-    /**
-     * @param \Chamilo\PluginBundle\Entity\TopLinks\TopLink $link
-     */
-    public function setLink(TopLink $link): TopLinkRelTool
+    public function setLink(TopLink $link): static
     {
         $this->link = $link;
 
@@ -75,7 +53,7 @@ class TopLinkRelTool
         return $this->tool;
     }
 
-    public function setTool(CTool $tool): TopLinkRelTool
+    public function setTool(CTool $tool): static
     {
         $this->tool = $tool;
 

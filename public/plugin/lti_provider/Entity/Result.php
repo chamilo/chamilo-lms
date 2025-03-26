@@ -5,113 +5,57 @@ namespace Chamilo\PluginBundle\Entity\LtiProvider;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class Result.
- *
- * @ORM\Table(name="plugin_lti_provider_result")
- * @ORM\Entity()
- */
+#[ORM\Table(name: 'plugin_lti_provider_result')]
+#[ORM\Entity]
 class Result
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="issuer", type="text")
-     */
-    protected $issuer;
+    #[ORM\Column(name: 'issuer', type: 'text')]
+    protected string $issuer;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
-    protected $userId;
+    #[ORM\Column(name: 'user_id', type: 'integer')]
+    protected int $userId;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="client_uid", type="string", nullable=false)
-     */
-    protected $clientUId;
+    #[ORM\Column(name: 'client_uid', type: 'text')]
+    protected string $clientUId;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="course_code", type="string", length=40, nullable=true)
-     */
-    protected $courseCode;
+    #[ORM\Column(name: 'course_code', type: 'text', length: 40, nullable: true)]
+    protected string $courseCode;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="tool_id", type="integer", nullable=false)
-     */
-    protected $toolId;
+    #[ORM\Column(name: 'tool_id', type: 'integer')]
+    protected int $toolId;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tool_name", type="string")
-     */
-    protected $toolName;
+    #[ORM\Column(name: 'tool_name', type: 'string')]
+    protected string $toolName;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="score", type="float", precision=6, scale=2, nullable=false)
-     */
-    protected $score;
+    #[ORM\Column(name: 'score', type: 'float', precision: 6, scale: 2)]
+    protected float $score;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="progress", type="integer", nullable=false)
-     */
-    protected $progress;
+    #[ORM\Column(name: 'progress', type: 'integer')]
+    protected int $progress;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="duration", type="integer", nullable=false)
-     */
-    protected $duration;
+    #[ORM\Column(name: 'duration', type: 'integer')]
+    protected int $duration;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="start_date", type="datetime", nullable=false)
-     */
-    protected $startDate;
+    #[ORM\Column(name: 'start_date', type: 'datetime')]
+    protected \DateTime $startDate;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="user_ip", type="string")
-     */
-    protected $userIp;
+    #[ORM\Column(name: 'user_ip', type: 'string')]
+    protected string $userIp;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="lti_launch_id", type="string")
-     */
-    protected $ltiLaunchId;
+    #[ORM\Column(name: 'lti_launch_id', type: 'string')]
+    protected string $ltiLaunchId;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(int $id): Result
+    public function setId(int $id): static
     {
         $this->id = $id;
 
@@ -123,7 +67,7 @@ class Result
         return $this->issuer;
     }
 
-    public function setIssuer(string $issuer): Result
+    public function setIssuer(string $issuer): static
     {
         $this->issuer = $issuer;
 
@@ -135,7 +79,7 @@ class Result
         return $this->userId;
     }
 
-    public function setUserId(int $userId): Result
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
 
@@ -147,7 +91,7 @@ class Result
         return $this->clientUId;
     }
 
-    public function setClientUId(string $clientUId): Result
+    public function setClientUId(string $clientUId): static
     {
         $this->clientUId = $clientUId;
 
@@ -159,10 +103,7 @@ class Result
         return $this->courseCode;
     }
 
-    /**
-     * @param string $tool
-     */
-    public function setCourseCode(string $courseCode): Result
+    public function setCourseCode(string $courseCode): static
     {
         $this->courseCode = $courseCode;
 
@@ -174,7 +115,7 @@ class Result
         return $this->toolId;
     }
 
-    public function setToolId(int $toolId): Result
+    public function setToolId(int $toolId): static
     {
         $this->toolId = $toolId;
 
@@ -186,7 +127,7 @@ class Result
         return $this->toolName;
     }
 
-    public function setToolName(string $toolName): Result
+    public function setToolName(string $toolName): static
     {
         $this->toolName = $toolName;
 
@@ -198,7 +139,7 @@ class Result
         return $this->score;
     }
 
-    public function setScore(float $score): Result
+    public function setScore(float $score): static
     {
         $this->score = $score;
 
@@ -210,7 +151,7 @@ class Result
         return $this->progress;
     }
 
-    public function setProgress(int $progress): Result
+    public function setProgress(int $progress): static
     {
         $this->progress = $progress;
 
@@ -222,7 +163,7 @@ class Result
         return $this->duration;
     }
 
-    public function setDuration(int $duration): Result
+    public function setDuration(int $duration): static
     {
         $this->duration = $duration;
 
@@ -234,7 +175,7 @@ class Result
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTime $startDate): Result
+    public function setStartDate(\DateTime $startDate): static
     {
         $this->startDate = $startDate;
 
@@ -246,7 +187,7 @@ class Result
         return $this->userIp;
     }
 
-    public function setUserIp(string $userIp): Result
+    public function setUserIp(string $userIp): static
     {
         $this->userIp = $userIp;
 
@@ -258,7 +199,7 @@ class Result
         return $this->ltiLaunchId;
     }
 
-    public function setLtiLaunchId(string $ltiLaunchId): Result
+    public function setLtiLaunchId(string $ltiLaunchId): static
     {
         $this->ltiLaunchId = $ltiLaunchId;
 

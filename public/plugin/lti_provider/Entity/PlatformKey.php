@@ -5,109 +5,66 @@ namespace Chamilo\PluginBundle\Entity\LtiProvider;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class PlatformKey.
- *
- * @package Chamilo\PluginBundle\Entity\LtiProvider
- *
- * @ORM\Table(name="plugin_lti_provider_platform_key")
- * @ORM\Entity()
- */
+#[ORM\Table(name: 'plugin_lti_provider_platform_key')]
+#[ORM\Entity]
 class PlatformKey
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="public_key", type="text")
-     */
-    public $publicKey;
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
-    protected $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="kid", type="string")
-     */
-    private $kid;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="private_key", type="text")
-     */
-    private $privateKey;
+    #[ORM\Column(name: 'public_key', type: 'text')]
+    public string $publicKey;
 
-    /**
-     * Get id.
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $id;
+
+    #[ORM\Column(name: 'kid', type: 'string')]
+    private string $kid;
+
+    #[ORM\Column(name: 'private_key', type: 'text')]
+    private string $privateKey;
+
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * Set id.
-     */
-    public function setId(int $id): PlatformKey
+    public function setId(int $id): static
     {
         $this->id = $id;
 
         return $this;
     }
 
-    /**
-     * Get key id.
-     */
     public function getKid(): string
     {
         return $this->kid;
     }
 
-    /**
-     * Set key id.
-     */
-    public function setKid(string $kid): PlatformKey
+    public function setKid(string $kid): static
     {
         $this->kid = $kid;
 
         return $this;
     }
 
-    /**
-     * Get privateKey.
-     */
     public function getPrivateKey(): string
     {
         return $this->privateKey;
     }
 
-    /**
-     * Set privateKey.
-     */
-    public function setPrivateKey(string $privateKey): PlatformKey
+    public function setPrivateKey(string $privateKey): static
     {
         $this->privateKey = $privateKey;
 
         return $this;
     }
 
-    /**
-     * Get publicKey.
-     */
     public function getPublicKey(): string
     {
         return $this->publicKey;
     }
 
-    /**
-     * Set publicKey.
-     */
-    public function setPublicKey(string $publicKey): PlatformKey
+    public function setPublicKey(string $publicKey): static
     {
         $this->publicKey = $publicKey;
 

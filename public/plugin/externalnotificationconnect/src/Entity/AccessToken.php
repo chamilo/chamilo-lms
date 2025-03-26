@@ -6,32 +6,20 @@ namespace Chamilo\PluginBundle\ExternalNotificationConnect\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="plugin_ext_notif_conn_access_token")
- * @ORM\Entity()
- */
+#[ORM\Table(name: 'plugin_ext_notif_conn_access_token')]
+#[ORM\Entity]
 class AccessToken
 {
-    /**
-     * @var int
-     *
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer")
-     */
-    private $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="access_token", type="text")
-     */
-    private $token;
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_valid", type="boolean")
-     */
-    private $isValid;
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Column(name: "id", type: "integer")]
+    private ?int $id;
+
+    #[ORM\Column(name: "access_token", type: "text")]
+    private string $token;
+
+    #[ORM\Column(name: 'is_valid', type: 'boolean')]
+    private bool $isValid;
 
     public function getId(): int
     {

@@ -5,57 +5,34 @@
 namespace Chamilo\PluginBundle\Entity\TopLinks;
 
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\PluginBundle\Entity\TopLinks\Repository\TopLinkRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class TopLink.
- *
- * @package Chamilo\PluginBundle\Entity\TopLinks
- *
- * @ORM\Table(name="toplinks_link")
- * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Entity\TopLinks\Repository\TopLinkRepository")
- */
+#[ORM\Table(name: 'toplinks_link')]
+#[ORM\Entity(repositoryClass: TopLinkRepository::class)]
 class TopLink
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
-    private $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string")
-     */
-    private $title;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="url", type="text")
-     */
-    private $url;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="target", type="string", length=10, options={"default":"_blank"})
-     */
-    private $target;
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="icon", type="string", nullable=true)
-     */
-    private $icon;
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool", mappedBy="link", orphanRemoval=true, cascade={"persist", "remove"})
-     */
-    private $tools;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    private ?int $id;
+
+    #[ORM\Column(name: 'title', type: 'string')]
+    private string $title;
+
+    #[ORM\Column(name: 'url', type: 'text')]
+    private string $url;
+
+    #[ORM\Column(name: 'target', type: 'string', length: 10, options: ['default' => '_blank'])]
+    private string $target;
+
+    #[ORM\Column(name: 'icon', type: 'string', nullable: true)]
+    private ?string $icon;
+
+    #[ORM\OneToMany(mappedBy: 'link', targetEntity: TopLinkRelTool::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $tools;
 
     public function __construct()
     {
@@ -64,7 +41,7 @@ class TopLink
         $this->tools = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -74,7 +51,7 @@ class TopLink
         return $this->title;
     }
 
-    public function setTitle(string $title): TopLink
+    public function setTitle(string $title): static
     {
         $this->title = $title;
 
@@ -86,7 +63,7 @@ class TopLink
         return $this->url;
     }
 
-    public function setUrl(string $url): TopLink
+    public function setUrl(string $url): static
     {
         $this->url = $url;
 
@@ -98,7 +75,7 @@ class TopLink
         return $this->target;
     }
 
-    public function setTarget(string $target): TopLink
+    public function setTarget(string $target): static
     {
         $this->target = $target;
 
@@ -110,22 +87,19 @@ class TopLink
         return $this->icon;
     }
 
-    public function setIcon(string $icon = null): TopLink
+    public function setIcon(string $icon = null): static
     {
         $this->icon = $icon;
 
         return $this;
     }
 
-    /**
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTools()
+    public function getTools(): Collection
     {
         return $this->tools;
     }
 
-    public function addTool(CTool $tool)
+    public function addTool(CTool $tool): void
     {
         $linkTool = new TopLinkRelTool();
         $linkTool

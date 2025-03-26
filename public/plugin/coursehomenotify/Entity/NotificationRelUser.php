@@ -3,94 +3,49 @@
 
 namespace Chamilo\PluginBundle\Entity\CourseHomeNotify;
 
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class NotificationRelUser.
- *
- * @package Chamilo\PluginBundle\Entity\CourseHomeNotify
- *
- * @ORM\Table(name="course_home_notify_notification_rel_user")
- * @ORM\Entity()
- */
+#[ORM\Table(name: 'course_home_notify_notification_rel_user')]
+#[ORM\Entity]
 class NotificationRelUser
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
-    private $id = 0;
-    /**
-     * @var Notification
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\CourseHomeNotify\Notification")
-     * @ORM\JoinColumn(name="notification_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $notification;
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $user;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    private ?int $id = 0;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    #[ORM\ManyToOne(targetEntity: Notification::class)]
+    #[ORM\JoinColumn(name: 'notification_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private Notification $notification;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private User $user;
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return NotificationRelUser
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return Notification
-     */
-    public function getNotification()
+    public function getNotification(): Notification
     {
         return $this->notification;
     }
 
-    /**
-     * @return NotificationRelUser
-     */
-    public function setNotification(Notification $notification)
+    public function setNotification(Notification $notification): static
     {
         $this->notification = $notification;
 
         return $this;
     }
 
-    /**
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return NotificationRelUser
-     */
-    public function setUser($user)
+    public function setUser(User $user): static
     {
         $this->user = $user;
 

@@ -5,155 +5,91 @@ namespace Chamilo\PluginBundle\Entity\LtiProvider;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class Platform.
- *
- * @package Chamilo\PluginBundle\Entity\LtiProvider
- *
- * @ORM\Table(name="plugin_lti_provider_platform")
- * @ORM\Entity()
- */
+#[ORM\Table(name: 'plugin_lti_provider_platform')]
+#[ORM\Entity]
 class Platform
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="issuer", type="text")
-     */
-    public $issuer;
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     */
-    protected $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="kid", type="string")
-     */
-    private $kid;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="client_id", type="text")
-     */
-    private $clientId;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="auth_login_url", type="text")
-     */
-    private $authLoginUrl;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="auth_token_url", type="text")
-     */
-    private $authTokenUrl;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="key_set_url", type="text")
-     */
-    private $keySetUrl;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="deployment_id", type="text")
-     */
-    private $deploymentId;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tool_provider", type="text")
-     */
-    private $toolProvider;
+    #[ORM\Column(name: 'issuer', type: 'text')]
+    public string $issuer;
 
-    /**
-     * Get id.
-     */
-    public function getId(): int
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $id;
+
+    #[ORM\Column(name: 'kid', type: 'string')]
+    private string $kid;
+
+    #[ORM\Column(name: 'client_id', type: 'text')]
+    private string $clientId;
+
+    #[ORM\Column(name: 'auth_login_url', type: 'text')]
+    private string $authLoginUrl;
+
+    #[ORM\Column(name: 'auth_token_url', type: 'text')]
+    private string $authTokenUrl;
+
+    #[ORM\Column(name: 'key_set_url', type: 'text')]
+    private string $keySetUrl;
+
+    #[ORM\Column(name: 'deployment_id', type: 'text')]
+    private string $deploymentId;
+
+    #[ORM\Column(name: 'tool_provider', type: 'text')]
+    private string $toolProvider;
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set id.
-     */
-    public function setId(int $id): Platform
+    public function setId(int $id): static
     {
         $this->id = $id;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getToolProvider()
+    public function getToolProvider(): string
     {
         return $this->toolProvider;
     }
 
-    /**
-     * @param string $toolProvider
-     */
     public function setToolProvider(?string $toolProvider): void
     {
         $this->toolProvider = $toolProvider;
     }
 
-    /**
-     * Get key id.
-     */
-    public function getKid()
+    public function getKid(): string
     {
         return $this->kid;
     }
 
-    /**
-     * Set key id.
-     */
-    public function setKid(string $kid): Platform
+    public function setKid(string $kid): static
     {
         $this->kid = $kid;
 
         return $this;
     }
 
-    /**
-     * Get Issuer.
-     */
-    public function getIssuer()
+    public function getIssuer(): string
     {
         return $this->issuer;
     }
 
-    /**
-     * Set issuer.
-     */
-    public function setIssuer(string $issuer): Platform
+    public function setIssuer(string $issuer): static
     {
         $this->issuer = $issuer;
 
         return $this;
     }
 
-    /**
-     * Get client ID.
-     */
-    public function getClientId()
+    public function getClientId(): string
     {
         return $this->clientId;
     }
 
-    /**
-     * Set client ID.
-     */
-    public function setClientId(string $clientId): Platform
+    public function setClientId(string $clientId): static
     {
         $this->clientId = $clientId;
 
@@ -171,61 +107,43 @@ class Platform
     /**
      * Set auth login URL.
      */
-    public function setAuthLoginUrl(string $authLoginUrl): Platform
+    public function setAuthLoginUrl(string $authLoginUrl): static
     {
         $this->authLoginUrl = $authLoginUrl;
 
         return $this;
     }
 
-    /**
-     * Get auth token URL.
-     */
-    public function getAuthTokenUrl()
+    public function getAuthTokenUrl(): string
     {
         return $this->authTokenUrl;
     }
 
-    /**
-     * Set auth token URL.
-     */
-    public function setAuthTokenUrl(string $authTokenUrl): Platform
+    public function setAuthTokenUrl(string $authTokenUrl): static
     {
         $this->authTokenUrl = $authTokenUrl;
 
         return $this;
     }
 
-    /**
-     * Get key set URL.
-     */
-    public function getKeySetUrl()
+    public function getKeySetUrl(): string
     {
         return $this->keySetUrl;
     }
 
-    /**
-     * Set key set URL.
-     */
-    public function setKeySetUrl(string $keySetUrl): Platform
+    public function setKeySetUrl(string $keySetUrl): static
     {
         $this->keySetUrl = $keySetUrl;
 
         return $this;
     }
 
-    /**
-     * Get Deployment ID.
-     */
-    public function getDeploymentId()
+    public function getDeploymentId(): string
     {
         return $this->deploymentId;
     }
 
-    /**
-     * Set Deployment ID.
-     */
-    public function setDeploymentId(string $deploymentId): Platform
+    public function setDeploymentId(string $deploymentId): static
     {
         $this->deploymentId = $deploymentId;
 

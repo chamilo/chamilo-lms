@@ -18,23 +18,23 @@ final class Version20241002002830 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE user ADD mfa_enabled BOOLEAN NOT NULL DEFAULT false,
                              ADD mfa_service VARCHAR(255) DEFAULT NULL,
                              ADD mfa_secret VARCHAR(255) DEFAULT NULL,
                              ADD mfa_backup_codes TEXT DEFAULT NULL,
                              ADD mfa_last_used DATETIME DEFAULT NULL
-        ");
+        ');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE user DROP mfa_enabled,
                              DROP mfa_service,
                              DROP mfa_secret,
                              DROP mfa_backup_codes,
                              DROP mfa_last_used
-        ");
+        ');
     }
 }

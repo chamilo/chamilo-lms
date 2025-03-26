@@ -17,9 +17,6 @@ final class Version20250106152600 extends AbstractMigrationChamilo
         return 'Set parent as null for initial lenguages.';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $languageNameList = array_column(

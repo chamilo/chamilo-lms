@@ -30,7 +30,8 @@ class CatalogueCourseRelAccessUrlRelUsergroupRepository extends ServiceEntityRep
         $qb = $this->createQueryBuilder('a')
             ->select('DISTINCT IDENTITY(a.course) AS course_id')
             ->where('a.accessUrl = :accessUrlId')
-            ->setParameter('accessUrlId', $accessUrlId);
+            ->setParameter('accessUrlId', $accessUrlId)
+        ;
 
         if (!empty($usergroupIds)) {
             $qb->andWhere(
@@ -39,7 +40,8 @@ class CatalogueCourseRelAccessUrlRelUsergroupRepository extends ServiceEntityRep
                     'a.usergroup IN (:usergroupIds)'
                 )
             )
-                ->setParameter('usergroupIds', $usergroupIds);
+                ->setParameter('usergroupIds', $usergroupIds)
+            ;
         }
 
         return array_column($qb->getQuery()->getResult(), 'course_id');
@@ -52,12 +54,13 @@ class CatalogueCourseRelAccessUrlRelUsergroupRepository extends ServiceEntityRep
      */
     public function hasRecordsForAccessUrl(int $accessUrlId): bool
     {
-        return $this->createQueryBuilder('a')
-                ->select('1')
-                ->where('a.accessUrl = :accessUrlId')
-                ->setParameter('accessUrlId', $accessUrlId)
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getOneOrNullResult() !== null;
+        return null !== $this->createQueryBuilder('a')
+            ->select('1')
+            ->where('a.accessUrl = :accessUrlId')
+            ->setParameter('accessUrlId', $accessUrlId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 }

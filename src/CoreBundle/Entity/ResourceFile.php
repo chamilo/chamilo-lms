@@ -378,6 +378,7 @@ class ResourceFile implements Stringable
     public function setAccessUrl(?AccessUrl $accessUrl): self
     {
         $this->accessUrl = $accessUrl;
+
         return $this;
     }
 

@@ -25,6 +25,7 @@ use Chamilo\CourseBundle\Entity\CGroupRelTutor;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -712,7 +713,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $mfaBackupCodes = null;
 
     #[ORM\Column(name: 'mfa_last_used', type: 'datetime', nullable: true)]
-    protected ?\DateTimeInterface $mfaLastUsed = null;
+    protected ?DateTimeInterface $mfaLastUsed = null;
 
     /**
      * @var Collection<int, UserAuthSource>
@@ -2519,6 +2520,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setMfaEnabled(bool $mfaEnabled): self
     {
         $this->mfaEnabled = $mfaEnabled;
+
         return $this;
     }
 
@@ -2530,6 +2532,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setMfaService(?string $mfaService): self
     {
         $this->mfaService = $mfaService;
+
         return $this;
     }
 
@@ -2541,6 +2544,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setMfaSecret(?string $mfaSecret): self
     {
         $this->mfaSecret = $mfaSecret;
+
         return $this;
     }
 
@@ -2552,17 +2556,19 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setMfaBackupCodes(?string $mfaBackupCodes): self
     {
         $this->mfaBackupCodes = $mfaBackupCodes;
+
         return $this;
     }
 
-    public function getMfaLastUsed(): ?\DateTimeInterface
+    public function getMfaLastUsed(): ?DateTimeInterface
     {
         return $this->mfaLastUsed;
     }
 
-    public function setMfaLastUsed(?\DateTimeInterface $mfaLastUsed): self
+    public function setMfaLastUsed(?DateTimeInterface $mfaLastUsed): self
     {
         $this->mfaLastUsed = $mfaLastUsed;
+
         return $this;
     }
 }

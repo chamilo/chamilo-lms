@@ -8,12 +8,14 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class ReplaceDocumentFileAction extends BaseResourceFileAction
 {
@@ -21,7 +23,7 @@ class ReplaceDocumentFileAction extends BaseResourceFileAction
 
     public function __construct(KernelInterface $kernel)
     {
-        $this->uploadBasePath = $kernel->getProjectDir() . '/var/upload/resource';
+        $this->uploadBasePath = $kernel->getProjectDir().'/var/upload/resource';
     }
 
     public function __invoke(
@@ -45,7 +47,7 @@ class ReplaceDocumentFileAction extends BaseResourceFileAction
             throw new BadRequestHttpException('No file found in the resource node.');
         }
 
-        $filePath = $this->uploadBasePath . $resourceNodeRepository->getFilename($resourceFile);
+        $filePath = $this->uploadBasePath.$resourceNodeRepository->getFilename($resourceFile);
         if (!$filePath) {
             throw new BadRequestHttpException('File path could not be resolved.');
         }
@@ -53,14 +55,14 @@ class ReplaceDocumentFileAction extends BaseResourceFileAction
         $this->prepareDirectory($filePath);
 
         try {
-            $uploadedFile->move(dirname($filePath), basename($filePath));
+            $uploadedFile->move(\dirname($filePath), basename($filePath));
         } catch (FileException $e) {
-            throw new BadRequestHttpException(sprintf('Failed to move the file: %s', $e->getMessage()));
+            throw new BadRequestHttpException(\sprintf('Failed to move the file: %s', $e->getMessage()));
         }
 
         $movedFilePath = $filePath;
         if (!file_exists($movedFilePath)) {
-            throw new \RuntimeException('The moved file does not exist at the expected location.');
+            throw new RuntimeException('The moved file does not exist at the expected location.');
         }
         $fileSize = filesize($movedFilePath);
         $resourceFile->setSize($fileSize);
@@ -69,7 +71,7 @@ class ReplaceDocumentFileAction extends BaseResourceFileAction
         $document->setTitle($newFileName);
         $resourceFile->setOriginalName($newFileName);
 
-        $resourceNode->setUpdatedAt(new \DateTime());
+        $resourceNode->setUpdatedAt(new DateTime());
 
         $em->persist($document);
         $em->persist($resourceFile);
@@ -83,17 +85,16 @@ class ReplaceDocumentFileAction extends BaseResourceFileAction
      */
     protected function prepareDirectory(string $filePath): void
     {
-        $directory = dirname($filePath);
+        $directory = \dirname($filePath);
 
         if (!is_dir($directory)) {
             if (!mkdir($directory, 0775, true) && !is_dir($directory)) {
-                throw new \RuntimeException(sprintf('Unable to create directory "%s".', $directory));
+                throw new RuntimeException(\sprintf('Unable to create directory "%s".', $directory));
             }
         }
 
         if (!is_writable($directory)) {
-            throw new \RuntimeException(sprintf('Directory "%s" is not writable.', $directory));
+            throw new RuntimeException(\sprintf('Directory "%s" is not writable.', $directory));
         }
     }
-
 }

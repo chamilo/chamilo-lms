@@ -12,6 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Plugin>
+ *
  * @method Plugin|null findOneByTitle(string $title)
  */
 class PluginRepository extends ServiceEntityRepository

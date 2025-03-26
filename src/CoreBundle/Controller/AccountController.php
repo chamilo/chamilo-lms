@@ -14,6 +14,10 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\Writer\PngWriter;
 use OTPHP\TOTP;
 use Security;
 use Symfony\Component\Form\FormError;
@@ -25,10 +29,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
-use Endroid\QrCode\Writer\PngWriter;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>
@@ -94,7 +94,7 @@ class AccountController extends BaseController
     #[Route('/change-password', name: 'chamilo_core_account_change_password', methods: ['GET', 'POST'])]
     public function changePassword(Request $request, UserRepository $userRepository, CsrfTokenManagerInterface $csrfTokenManager): Response
     {
-        /* @var User $user */
+        /** @var User $user */
         $user = $this->getUser();
 
         if (!\is_object($user) || !$user instanceof UserInterface) {
@@ -107,7 +107,7 @@ class AccountController extends BaseController
         $form->handleRequest($request);
 
         $qrCodeBase64 = null;
-        if ($user->getMfaEnabled() && $user->getMfaService() === 'TOTP' && $user->getMfaSecret()) {
+        if ($user->getMfaEnabled() && 'TOTP' === $user->getMfaService() && $user->getMfaSecret()) {
             $decryptedSecret = $this->decryptTOTPSecret($user->getMfaSecret(), $_ENV['APP_SECRET']);
             $totp = TOTP::create($decryptedSecret);
             $totp->setLabel($user->getEmail());
@@ -119,7 +119,8 @@ class AccountController extends BaseController
                 ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
                 ->size(300)
                 ->margin(10)
-                ->build();
+                ->build()
+            ;
 
             $qrCodeBase64 = base64_encode($qrCodeResult->getString());
         }
@@ -151,16 +152,18 @@ class AccountController extends BaseController
                         ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
                         ->size(300)
                         ->margin(10)
-                        ->build();
+                        ->build()
+                    ;
 
                     $qrCodeBase64 = base64_encode($qrCodeResult->getString());
 
                     return $this->render('@ChamiloCore/Account/change_password.html.twig', [
                         'form' => $form->createView(),
                         'qrCode' => $qrCodeBase64,
-                        'user' => $user
+                        'user' => $user,
                     ]);
-                } elseif (!$enable2FA) {
+                }
+                if (!$enable2FA) {
                     $user->setMfaEnabled(false);
                     $user->setMfaSecret(null);
                     $userRepository->updateUser($user);
@@ -186,7 +189,7 @@ class AccountController extends BaseController
         return $this->render('@ChamiloCore/Account/change_password.html.twig', [
             'form' => $form->createView(),
             'qrCode' => $qrCodeBase64,
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -199,7 +202,7 @@ class AccountController extends BaseController
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipherMethod));
         $encryptedSecret = openssl_encrypt($secret, $cipherMethod, $encryptionKey, 0, $iv);
 
-        return base64_encode($iv . '::' . $encryptedSecret);
+        return base64_encode($iv.'::'.$encryptedSecret);
     }
 
     /**

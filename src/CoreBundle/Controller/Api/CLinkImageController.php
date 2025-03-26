@@ -9,9 +9,15 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CourseBundle\Entity\CLink;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
+use const IMAGETYPE_GIF;
+use const IMAGETYPE_JPEG;
+use const IMAGETYPE_PNG;
 
 class CLinkImageController
 {
@@ -48,7 +54,8 @@ class CLinkImageController
             $asset = new Asset();
             $asset->setFile($file)
                 ->setCategory(Asset::LINK)
-                ->setTitle($file->getClientOriginalName());
+                ->setTitle($file->getClientOriginalName())
+            ;
 
             $this->entityManager->persist($asset);
             $this->entityManager->flush();
@@ -59,6 +66,7 @@ class CLinkImageController
 
             if (!file_exists($croppedFilePath)) {
                 @unlink($uploadedFilePath);
+
                 return new Response('Error creating cropped image', Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
@@ -71,9 +79,8 @@ class CLinkImageController
             $this->entityManager->flush();
 
             return new Response('Image uploaded and linked successfully', Response::HTTP_OK);
-
-        } catch (\Exception $e) {
-            return new Response('Error processing image: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (Exception $e) {
+            return new Response('Error processing image: '.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -82,21 +89,27 @@ class CLinkImageController
         [$originalWidth, $originalHeight, $imageType] = getimagesize($filePath);
 
         if (!$originalWidth || !$originalHeight) {
-            throw new \RuntimeException('Invalid image file');
+            throw new RuntimeException('Invalid image file');
         }
 
         switch ($imageType) {
             case IMAGETYPE_JPEG:
                 $sourceImage = imagecreatefromjpeg($filePath);
+
                 break;
+
             case IMAGETYPE_PNG:
                 $sourceImage = imagecreatefrompng($filePath);
+
                 break;
+
             case IMAGETYPE_GIF:
                 $sourceImage = imagecreatefromgif($filePath);
+
                 break;
+
             default:
-                throw new \RuntimeException('Unsupported image type');
+                throw new RuntimeException('Unsupported image type');
         }
 
         $croppedImage = imagecreatetruecolor(120, 120);
@@ -109,13 +122,17 @@ class CLinkImageController
         imagecopyresampled(
             $croppedImage,
             $sourceImage,
-            0, 0,
-            $srcX, $srcY,
-            $cropWidth, $cropHeight,
-            120, 120
+            0,
+            0,
+            $srcX,
+            $srcY,
+            $cropWidth,
+            $cropHeight,
+            120,
+            120
         );
 
-        $croppedFilePath = sys_get_temp_dir() . '/' . uniqid('cropped_', true) . '.png';
+        $croppedFilePath = sys_get_temp_dir().'/'.uniqid('cropped_', true).'.png';
         imagepng($croppedImage, $croppedFilePath);
 
         imagedestroy($sourceImage);

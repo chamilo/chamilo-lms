@@ -74,7 +74,7 @@ class ResourceLinkRepository extends SortableRepository
     /**
      * Retrieves the list of available tools filtered by a predefined tool list.
      *
-     * @return array The list of tools with their IDs and titles.
+     * @return array the list of tools with their IDs and titles
      */
     public function getAvailableTools(): array
     {
@@ -86,7 +86,8 @@ class ResourceLinkRepository extends SortableRepository
             ->innerJoin('ChamiloCoreBundle:Tool', 't', 'WITH', 't.id = rt.tool')
             ->where('rl.course IS NOT NULL')
             ->andWhere('t.title IN (:toolList)')
-            ->setParameter('toolList', array_keys($this->toolList));
+            ->setParameter('toolList', array_keys($this->toolList))
+        ;
 
         $result = $queryBuilder->getQuery()->getArrayResult();
 
@@ -101,7 +102,7 @@ class ResourceLinkRepository extends SortableRepository
     /**
      * Retrieves a usage report of tools with dynamic links.
      *
-     * @return array The tool usage data including counts, last update timestamps, and dynamic links.
+     * @return array the tool usage data including counts, last update timestamps, and dynamic links
      */
     public function getToolUsageReportByTools(array $toolIds): array
     {
@@ -128,7 +129,8 @@ class ResourceLinkRepository extends SortableRepository
             ->orderBy('t.title', 'ASC')
             ->addOrderBy('c.title', 'ASC')
             ->addOrderBy('s.title', 'ASC')
-            ->setParameter('toolIds', $toolIds);
+            ->setParameter('toolIds', $toolIds)
+        ;
 
         $result = $queryBuilder->getQuery()->getArrayResult();
 
@@ -151,7 +153,7 @@ class ResourceLinkRepository extends SortableRepository
                     $queryParams['sid'] = $row['session_id'];
                 }
 
-                $link .= '?' . http_build_query($queryParams);
+                $link .= '?'.http_build_query($queryParams);
             }
 
             return [

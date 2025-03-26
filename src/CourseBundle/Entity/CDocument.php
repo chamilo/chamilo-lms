@@ -150,7 +150,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 'properties' => [
                                     'ids' => [
                                         'type' => 'array',
-                                        'items' => ['type' => 'integer']
+                                        'items' => ['type' => 'integer'],
                                     ],
                                 ],
                             ],

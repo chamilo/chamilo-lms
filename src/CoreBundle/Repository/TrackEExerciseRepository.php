@@ -35,7 +35,8 @@ class TrackEExerciseRepository extends ServiceEntityRepository
             ->andWhere('te.course = :courseId')
             ->setParameter('status', 'incomplete')
             ->setParameter('courseId', $courseId)
-            ->groupBy('te.quiz');
+            ->groupBy('te.quiz')
+        ;
 
         return $qb->getQuery()->getResult();
     }

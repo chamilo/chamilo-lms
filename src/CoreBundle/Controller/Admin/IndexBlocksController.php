@@ -766,13 +766,13 @@ class IndexBlocksController extends BaseController
         $allowCareer = $this->settingsManager->getSetting('session.allow_session_admin_read_careers');
 
         if ($this->isAdmin || ('true' === $allowCareer && $this->isSessionAdmin)) {
-// Disabled until it is reemplemented to work with Chamilo 2
-/*                $items[] = [
-                    'class' => 'item-session-user-move-stats',
-                    'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_move_stats.php']),
-                    'label' => $this->translator->trans('Move users results from/to a session'),
-                ];
- */
+            // Disabled until it is reemplemented to work with Chamilo 2
+            /*                $items[] = [
+                                'class' => 'item-session-user-move-stats',
+                                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_move_stats.php']),
+                                'label' => $this->translator->trans('Move users results from/to a session'),
+                            ];
+             */
             $items[] = [
                 'class' => 'item-session-user-move',
                 'url' => $this->generateUrl(

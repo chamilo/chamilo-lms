@@ -495,9 +495,7 @@ class Container
     public static function getPluginRepository(): PluginRepository
     {
         /** @var PluginRepository $pluginRepo */
-        $pluginRepo = self::$container->get(PluginRepository::class);
-
-        return $pluginRepo;
+        return self::$container->get(PluginRepository::class);
     }
 
     public static function getUserToJsonNormalizer(): UserToJsonNormalizer
@@ -683,8 +681,6 @@ class Container
     public static function getEventDispatcher(): EventDispatcherInterface
     {
         /** @var EventDispatcherInterface $dispatcher */
-        $dispatcher = self::$container->get('event_dispatcher');
-
-        return $dispatcher;
+        return self::$container->get('event_dispatcher');
     }
 }

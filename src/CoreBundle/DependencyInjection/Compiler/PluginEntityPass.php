@@ -13,9 +13,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class PluginEntityPass implements CompilerPassInterface
 {
-    /**
-     * @inheritDoc
-     */
     public function process(ContainerBuilder $container): void
     {
         /** @var PluginEntityLoader $pluginEntityLoader */
@@ -25,7 +22,7 @@ class PluginEntityPass implements CompilerPassInterface
         $metadataDriverDefinition = $container->getDefinition('doctrine.orm.default_metadata_driver');
 
         foreach ($entityDirs as $dir) {
-            $pluginTitle = ucwords(basename(dirname($dir)));
+            $pluginTitle = ucwords(basename(\dirname($dir)));
             $namespace = "Chamilo\\PluginBundle\\$pluginTitle";
 
             $driverReference = new Reference('doctrine.orm.default_attribute_metadata_driver');

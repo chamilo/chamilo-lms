@@ -147,7 +147,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         SettingsManager $settingsManager,
         AccessUrlHelper $accessUrlHelper
     ): Response {
-
         $id = $request->get('id');
         $resourceFileId = $request->get('resourceFileId');
         $filter = (string) $request->get('filter');
@@ -172,13 +171,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 foreach ($resourceFiles as $file) {
                     if ($file->getAccessUrl() && $file->getAccessUrl()->getUrl() === $currentUrl) {
                         $resourceFile = $file;
+
                         break;
                     }
                 }
             }
 
             if (!$resourceFile) {
-                $resourceFile = $resourceFiles->filter(fn($file) => $file->getAccessUrl() === null)->first();
+                $resourceFile = $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
             }
         }
 
@@ -282,12 +282,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
             foreach ($resourceFiles as $file) {
                 if ($file->getAccessUrl() && $file->getAccessUrl()->getUrl() === $currentUrl) {
                     $resourceFile = $file;
+
                     break;
                 }
             }
         }
 
-        $resourceFile ??= $resourceFiles->filter(fn($file) => $file->getAccessUrl() === null)->first();
+        $resourceFile ??= $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
 
         // If resource node has a file just download it. Don't download the children.
         if ($resourceFile) {
@@ -343,7 +344,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 /** @var ResourceNode $node */
                 foreach ($children as $node) {
                     $resourceFiles = $node->getResourceFiles();
-                    $resourceFile = $resourceFiles->filter(fn($file) => $file->getAccessUrl() === null)->first();
+                    $resourceFile = $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
 
                     if ($resourceFile) {
                         $stream = $repo->getResourceNodeFileStream($resourceFile);
@@ -530,11 +531,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
             ->andWhere('rf.accessUrl IS NOT NULL')
             ->setParameter('resourceNodeId', $resourceNodeId)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         $data = [];
 
-        /* @var ResourceFile $variant */
+        /** @var ResourceFile $variant */
         foreach ($variants as $variant) {
             $data[] = [
                 'id' => $variant->getId(),

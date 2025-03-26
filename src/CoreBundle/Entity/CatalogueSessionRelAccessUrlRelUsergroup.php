@@ -43,6 +43,7 @@ class CatalogueSessionRelAccessUrlRelUsergroup
     public function setSession(Session $session): self
     {
         $this->session = $session;
+
         return $this;
     }
 
@@ -66,6 +67,7 @@ class CatalogueSessionRelAccessUrlRelUsergroup
     public function setUsergroup(?Usergroup $usergroup): self
     {
         $this->usergroup = $usergroup;
+
         return $this;
     }
 }

@@ -17,9 +17,6 @@ final class Version20250106152602 extends AbstractMigrationChamilo
         return 'Change iso code length to 8 characters.';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE language CHANGE isocode isocode VARCHAR('.Language::ISO_MAX_LENGTH.') NOT NULL');

@@ -17,9 +17,6 @@ final class Version20250106152601 extends AbstractMigrationChamilo
         return 'Set new ISO code for sub-languages.';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $kernel = $this->container->get('kernel');
@@ -28,19 +25,18 @@ final class Version20250106152601 extends AbstractMigrationChamilo
         $fs = new Filesystem();
 
         $subLanguages = $this->connection
-            ->executeQuery("SELECT id, isocode, parent_id FROM language WHERE parent_id IS NOT NULL")
+            ->executeQuery('SELECT id, isocode, parent_id FROM language WHERE parent_id IS NOT NULL')
             ->fetchAllAssociative()
         ;
 
         /** @var array $subLanguage */
         foreach ($subLanguages as $subLanguage) {
-
             $parentIsoCode = $this->connection
                 ->executeQuery('SELECT isocode FROM language WHERE id = ?', [$subLanguage['parent_id']])
                 ->fetchOne()
             ;
 
-            $newIsoCode = sprintf(
+            $newIsoCode = \sprintf(
                 '%s_%d',
                 explode('_', $parentIsoCode)[0],
                 $subLanguage['id']

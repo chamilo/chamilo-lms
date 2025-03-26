@@ -6,19 +6,19 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\EventListener\UserRelCourseVoteListener;
-use Chamilo\CoreBundle\Traits\UserTrait;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Delete;
+use Chamilo\CoreBundle\EventListener\UserRelCourseVoteListener;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Metadata\ApiFilter;
 
 /**
  * UserRelCourseVote Entity - Stores user votes for courses.
@@ -29,7 +29,7 @@ use ApiPlatform\Metadata\ApiFilter;
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(security: "is_granted('ROLE_USER')"),
         new Put(security: "is_granted('ROLE_USER')"),
-        new Delete(security: "is_granted('ROLE_ADMIN')")
+        new Delete(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: ['groups' => ['userRelCourseVote:read']],
     denormalizationContext: ['groups' => ['userRelCourseVote:write']]
@@ -37,7 +37,7 @@ use ApiPlatform\Metadata\ApiFilter;
 #[ApiFilter(SearchFilter::class, properties: [
     'user.id' => 'exact',
     'course.id' => 'exact',
-    'url.id' => 'exact'
+    'url.id' => 'exact',
 ])]
 #[ApiFilter(OrderFilter::class, properties: ['vote' => 'DESC'], arguments: ['orderParameterName' => 'order'])]
 #[ORM\Table(name: 'user_rel_course_vote')]

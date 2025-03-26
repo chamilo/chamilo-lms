@@ -30,9 +30,7 @@ final class Version20250306101000 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 
     /**
      * @throws Exception
@@ -54,7 +52,7 @@ final class Version20250306101000 extends AbstractMigrationChamilo
      */
     private function insertPlugin(string $pluginTitle): int
     {
-        $pluginSource = in_array($pluginTitle, AppPlugin::getOfficialPlugins())
+        $pluginSource = \in_array($pluginTitle, AppPlugin::getOfficialPlugins())
             ? Plugin::SOURCE_OFFICIAL
             : Plugin::SOURCE_THIRD_PARTY;
 
@@ -105,10 +103,7 @@ final class Version20250306101000 extends AbstractMigrationChamilo
     }
 
     /**
-     * @param int $pluginId
      * @param array<int, array<string, mixed>> $settingsByUrl
-     *
-     * @return void
      *
      * @throws Exception
      */

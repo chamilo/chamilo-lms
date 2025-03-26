@@ -1,5 +1,9 @@
 <?php
 
+/* See license terms in /license.txt */
+
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\Language;

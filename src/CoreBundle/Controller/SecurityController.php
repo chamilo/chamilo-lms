@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use OTPHP\TOTP;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -149,6 +150,8 @@ class SecurityController extends AbstractController
 
     /**
      * Validates the provided TOTP code for the given user.
+     *
+     * @param mixed $user
      */
     private function isTOTPValid($user, string $totpCode): bool
     {
@@ -167,11 +170,11 @@ class SecurityController extends AbstractController
 
         try {
             list($iv, $encryptedData) = explode('::', base64_decode($encryptedSecret), 2);
-            $decryptedSecret = openssl_decrypt($encryptedData, $cipherMethod, $encryptionKey, 0, $iv);
 
-            return $decryptedSecret;
-        } catch (\Exception $e) {
-            error_log("Exception caught during decryption: " . $e->getMessage());
+            return openssl_decrypt($encryptedData, $cipherMethod, $encryptionKey, 0, $iv);
+        } catch (Exception $e) {
+            error_log('Exception caught during decryption: '.$e->getMessage());
+
             return '';
         }
     }

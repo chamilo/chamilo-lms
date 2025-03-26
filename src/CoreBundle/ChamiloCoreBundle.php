@@ -11,8 +11,8 @@ use Chamilo\CoreBundle\DependencyInjection\Compiler\PluginEventSubscriberPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class ChamiloCoreBundle extends Bundle {
-
+class ChamiloCoreBundle extends Bundle
+{
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);

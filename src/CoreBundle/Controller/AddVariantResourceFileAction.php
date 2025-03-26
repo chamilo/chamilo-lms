@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Entity\AccessUrl;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -50,7 +52,7 @@ class AddVariantResourceFileAction
         if ($existingResourceFile) {
             $existingResourceFile->setTitle($uploadedFile->getClientOriginalName());
             $existingResourceFile->setFile($uploadedFile);
-            $existingResourceFile->setUpdatedAt(\DateTime::createFromImmutable(new \DateTimeImmutable()));
+            $existingResourceFile->setUpdatedAt(DateTime::createFromImmutable(new DateTimeImmutable()));
             $resourceFile = $existingResourceFile;
         } else {
             $resourceFile = new ResourceFile();

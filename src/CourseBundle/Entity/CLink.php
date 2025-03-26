@@ -312,6 +312,7 @@ class CLink extends AbstractResource implements ResourceInterface, ResourceShowC
     public function setCustomImage(?Asset $customImage): self
     {
         $this->customImage = $customImage;
+
         return $this;
     }
 

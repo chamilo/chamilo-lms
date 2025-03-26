@@ -7,8 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class UserRelCourseVoteListener
 {
@@ -32,7 +32,8 @@ class UserRelCourseVoteListener
             ->where('v.course = :course')
             ->setParameter('course', $course)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
 
         $course->setPopularity((int) $uniqueUsers);
         $entityManager->persist($course);

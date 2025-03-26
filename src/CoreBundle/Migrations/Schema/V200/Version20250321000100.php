@@ -34,14 +34,14 @@ final class Version20250321000100 extends AbstractMigrationChamilo
             $accessUrlRepo = $this->container->get(AccessUrlRepository::class);
             $accessUrlId = $accessUrlRepo->getFirstId();
 
-            if ($accessUrlId === 0) {
+            if (0 === $accessUrlId) {
                 throw new Exception('No AccessUrl found for migration');
             }
 
             /** @var AccessUrl|null $accessUrl */
             $accessUrl = $this->entityManager->find(AccessUrl::class, $accessUrlId);
             if (!$accessUrl) {
-                throw new Exception('AccessUrl entity not found for ID: ' . $accessUrlId);
+                throw new Exception('AccessUrl entity not found for ID: '.$accessUrlId);
             }
 
             $courseRepo = $this->entityManager->getRepository(Course::class);
@@ -74,7 +74,7 @@ final class Version20250321000100 extends AbstractMigrationChamilo
             $this->entityManager->commit();
         } catch (Exception $e) {
             $this->entityManager->rollBack();
-            error_log('Migration failed: ' . $e->getMessage());
+            error_log('Migration failed: '.$e->getMessage());
         }
     }
 
@@ -87,6 +87,7 @@ final class Version20250321000100 extends AbstractMigrationChamilo
     {
         try {
             $this->connection->executeQuery("SELECT 1 FROM $tableName LIMIT 1");
+
             return true;
         } catch (Exception $e) {
             return false;

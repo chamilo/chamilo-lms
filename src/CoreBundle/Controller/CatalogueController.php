@@ -46,7 +46,7 @@ class CatalogueController extends AbstractController
             $courses = $this->courseRepository->findAll();
         } else {
             $userGroups = $userGroupRepo->findBy(['user' => $user]);
-            $userGroupIds = array_map(fn($ug) => $ug->getUsergroup()->getId(), $userGroups);
+            $userGroupIds = array_map(fn ($ug) => $ug->getUsergroup()->getId(), $userGroups);
 
             $visibleCourses = [];
 
@@ -54,7 +54,7 @@ class CatalogueController extends AbstractController
                 $course = $rel->getCourse();
                 $usergroup = $rel->getUsergroup();
 
-                if ($usergroup === null || in_array($usergroup->getId(), $userGroupIds)) {
+                if (null === $usergroup || \in_array($usergroup->getId(), $userGroupIds)) {
                     $visibleCourses[$course->getId()] = $course;
                 }
             }
@@ -90,7 +90,7 @@ class CatalogueController extends AbstractController
             $sessions = $this->sessionRepository->findAll();
         } else {
             $userGroups = $userGroupRepo->findBy(['user' => $user]);
-            $userGroupIds = array_map(fn($ug) => $ug->getUsergroup()->getId(), $userGroups);
+            $userGroupIds = array_map(fn ($ug) => $ug->getUsergroup()->getId(), $userGroups);
 
             $visibleSessions = [];
 
@@ -98,7 +98,7 @@ class CatalogueController extends AbstractController
                 $session = $rel->getSession();
                 $usergroup = $rel->getUsergroup();
 
-                if ($usergroup === null || in_array($usergroup->getId(), $userGroupIds)) {
+                if (null === $usergroup || \in_array($usergroup->getId(), $userGroupIds)) {
                     $visibleSessions[$session->getId()] = $session;
                 }
             }

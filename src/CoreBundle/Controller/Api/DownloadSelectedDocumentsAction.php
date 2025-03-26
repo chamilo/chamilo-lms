@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -14,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use ZipArchive;
 
 class DownloadSelectedDocumentsAction
@@ -53,12 +53,13 @@ class DownloadSelectedDocumentsAction
         }
 
         $fileSize = filesize($zipFilePath);
-        if ($fileSize === false || $fileSize === 0) {
+        if (false === $fileSize || 0 === $fileSize) {
             error_log('ZIP file is empty or unreadable.');
+
             throw new Exception('ZIP file is empty or unreadable.');
         }
 
-        $response = new StreamedResponse(function () use ($zipFilePath) {
+        $response = new StreamedResponse(function () use ($zipFilePath): void {
             $handle = fopen($zipFilePath, 'rb');
             if ($handle) {
                 while (!feof($handle)) {
@@ -80,28 +81,30 @@ class DownloadSelectedDocumentsAction
     /**
      * Creates a ZIP file containing the specified documents.
      *
-     * @return string The path to the created ZIP file.
-     * @throws Exception If the ZIP file cannot be created or closed.
+     * @return string the path to the created ZIP file
+     *
+     * @throws Exception if the ZIP file cannot be created or closed
      */
     private function createZipFile(array $documents): string
     {
         $cacheDir = $this->kernel->getCacheDir();
-        $zipFilePath = $cacheDir . '/selected_documents_' . uniqid() . '.zip';
+        $zipFilePath = $cacheDir.'/selected_documents_'.uniqid().'.zip';
 
         $zip = new ZipArchive();
         $result = $zip->open($zipFilePath, ZipArchive::CREATE);
 
-        if ($result !== true) {
+        if (true !== $result) {
             throw new Exception('Unable to create ZIP file');
         }
 
         $projectDir = $this->kernel->getProjectDir();
-        $baseUploadDir = $projectDir . '/var/upload/resource';
+        $baseUploadDir = $projectDir.'/var/upload/resource';
 
         foreach ($documents as $document) {
             $resourceNode = $document->getResourceNode();
             if (!$resourceNode) {
-                error_log('ResourceNode not found for document ID: ' . $document->getId());
+                error_log('ResourceNode not found for document ID: '.$document->getId());
+
                 continue;
             }
 
@@ -110,9 +113,9 @@ class DownloadSelectedDocumentsAction
 
         if (!$zip->close()) {
             error_log('Failed to close ZIP file.');
+
             throw new Exception('Failed to close ZIP archive');
         }
-
 
         return $zipFilePath;
     }
@@ -122,9 +125,8 @@ class DownloadSelectedDocumentsAction
      */
     private function addNodeToZip(ZipArchive $zip, ResourceNode $node, string $baseUploadDir, string $currentPath = ''): void
     {
-
         if ($node->getChildren()->count() > 0) {
-            $relativePath = $currentPath . $node->getTitle() . '/';
+            $relativePath = $currentPath.$node->getTitle().'/';
             $zip->addEmptyDir($relativePath);
 
             foreach ($node->getChildren() as $childNode) {
@@ -132,17 +134,17 @@ class DownloadSelectedDocumentsAction
             }
         } elseif ($node->hasResourceFile()) {
             foreach ($node->getResourceFiles() as $resourceFile) {
-                $filePath = $baseUploadDir . $this->resourceNodeRepository->getFilename($resourceFile);
-                $fileName = $currentPath . $resourceFile->getOriginalName();
+                $filePath = $baseUploadDir.$this->resourceNodeRepository->getFilename($resourceFile);
+                $fileName = $currentPath.$resourceFile->getOriginalName();
 
                 if (file_exists($filePath)) {
                     $zip->addFile($filePath, $fileName);
                 } else {
-                    error_log('File not found: ' . $filePath);
+                    error_log('File not found: '.$filePath);
                 }
             }
         } else {
-            error_log('Node has no children or files: ' . $node->getTitle());
+            error_log('Node has no children or files: '.$node->getTitle());
         }
     }
 }

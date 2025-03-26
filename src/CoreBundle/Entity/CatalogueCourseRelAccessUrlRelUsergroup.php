@@ -30,7 +30,6 @@ class CatalogueCourseRelAccessUrlRelUsergroup
     #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Usergroup $usergroup = null;
 
-
     public function getId(): ?int
     {
         return $this->id;

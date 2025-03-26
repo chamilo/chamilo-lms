@@ -41,5 +41,4 @@ final class Version20240204120000 extends AbstractMigrationChamilo
         )
     ');
     }
-
 }

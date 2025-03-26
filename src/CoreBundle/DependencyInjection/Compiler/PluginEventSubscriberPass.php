@@ -13,11 +13,10 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Finder\Finder;
 
+use const PATHINFO_FILENAME;
+
 class PluginEventSubscriberPass implements CompilerPassInterface
 {
-    /**
-     * @inheritDoc
-     */
     public function process(ContainerBuilder $container): void
     {
         $pluginSubscriberDir = __DIR__.'/../../../../public/plugin';

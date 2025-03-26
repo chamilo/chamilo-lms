@@ -11,75 +11,40 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use Stringable;
 
-/**
- * Class RecordingEntity.
- *
- * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\RecordingRepository")
- * @ORM\Table(
- *     name="plugin_zoom_recording",
- *     indexes={
- *         @ORM\Index(name="meeting_id_index", columns={"meeting_id"}),
- *     }
- * )
- * @ORM\HasLifecycleCallbacks
- */
-class Recording
+#[ORM\Entity(repositoryClass: RecordingRepository::class)]
+#[ORM\Table(name: 'plugin_zoom_recording')]
+#[ORM\Index(columns: ['meeting_id'], name: 'meeting_id_index')]
+#[ORM\HasLifecycleCallbacks]
+class Recording implements Stringable
 {
-    /** @var DateTime */
-    public $startDateTime;
+    public DateTime $startDateTime;
 
-    /** @var string */
-    public $formattedStartTime;
+    public string $formattedStartTime;
 
-    /** @var DateInterval */
-    public $durationInterval;
+    public DateInterval $durationInterval;
 
-    /** @var string */
-    public $formattedDuration;
+    public string $formattedDuration;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
-    protected $id;
+    #[ORM\Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     */
-    protected $uuid;
+    #[ORM\Column(type: 'string')]
+    protected ?string $uuid;
 
-    /**
-     * @var Meeting
-     *
-     * @ORM\ManyToOne(targetEntity="Meeting", inversedBy="recordings")
-     * @ORM\JoinColumn(name="meeting_id")
-     */
-    protected $meeting;
+    #[ORM\ManyToOne(targetEntity: Meeting::class, inversedBy: 'recordings')]
+    #[ORM\JoinColumn(name: 'meeting_id')]
+    protected ?Meeting $meeting;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text", name="recording_meeting_json", nullable=true)
-     */
-    protected $recordingMeetingJson;
+    #[ORM\Column(name: 'recording_meeting_json', type: 'text', nullable: true)]
+    protected ?string $recordingMeetingJson;
 
-    /** @var RecordingMeeting */
-    protected $recordingMeeting;
+    protected ?RecordingMeeting $recordingMeeting;
 
-    /**
-     * @param $name
-     *
-     * @throws Exception
-     *
-     * @return mixed
-     */
-    public function __get($name)
+    public function __get(string $name)
     {
         $object = $this->getRecordingMeeting();
         if (property_exists($object, $name)) {
@@ -88,38 +53,22 @@ class Recording
         throw new Exception(sprintf('%s does not know property %s', $this, $name));
     }
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return sprintf('Recording %d', $this->uuid);
     }
 
-    /**
-     * @return Meeting
-     */
-    public function getMeeting()
+    public function getMeeting(): ?Meeting
     {
         return $this->meeting;
     }
 
-    /**
-     * @throws Exception
-     *
-     * @return RecordingMeeting
-     */
-    public function getRecordingMeeting()
+    public function getRecordingMeeting(): RecordingMeeting
     {
         return $this->recordingMeeting;
     }
 
-    /**
-     * @param Meeting $meeting
-     *
-     * @return $this
-     */
-    public function setMeeting($meeting)
+    public function setMeeting(Meeting $meeting): static
     {
         $this->meeting = $meeting;
         $this->meeting->getRecordings()->add($this);
@@ -128,13 +77,9 @@ class Recording
     }
 
     /**
-     * @param RecordingMeeting $recordingMeeting
-     *
      * @throws Exception
-     *
-     * @return Recording
      */
-    public function setRecordingMeeting($recordingMeeting)
+    public function setRecordingMeeting(RecordingMeeting $recordingMeeting): static
     {
         if (null === $this->uuid) {
             $this->uuid = $recordingMeeting->uuid;
@@ -153,11 +98,10 @@ class Recording
     }
 
     /**
-     * @ORM\PostLoad
-     *
      * @throws Exception
      */
-    public function postLoad()
+    #[ORM\PostLoad]
+    public function postLoad(): void
     {
         if (null !== $this->recordingMeetingJson) {
             $this->recordingMeeting = RecordingMeeting::fromJson($this->recordingMeetingJson);
@@ -165,10 +109,8 @@ class Recording
         $this->initializeExtraProperties();
     }
 
-    /**
-     * @ORM\PreFlush
-     */
-    public function preFlush()
+    #[ORM\PreFlush]
+    public function preFlush(): void
     {
         if (null !== $this->recordingMeeting) {
             $this->recordingMeetingJson = json_encode($this->recordingMeeting);
@@ -178,7 +120,7 @@ class Recording
     /**
      * @throws Exception
      */
-    public function initializeExtraProperties()
+    public function initializeExtraProperties(): void
     {
         $this->startDateTime = new DateTime($this->recordingMeeting->start_time);
         $this->startDateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));

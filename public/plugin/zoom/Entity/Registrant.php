@@ -4,12 +4,14 @@
 
 namespace Chamilo\PluginBundle\Zoom;
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\PluginBundle\Zoom\API\CreatedRegistration;
 use Chamilo\PluginBundle\Zoom\API\MeetingRegistrant;
 use Chamilo\PluginBundle\Zoom\API\MeetingRegistrantListItem;
-use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use phpDocumentor\Reflection\Types\Array_;
+use Stringable;
 
 /**
  * Class RegistrantEntity.
@@ -24,59 +26,41 @@ use Exception;
  * )
  * @ORM\HasLifecycleCallbacks
  */
-class Registrant
+#[ORM\Entity(repositoryClass: RegistrantRepository::class)]
+#[ORM\Table(name: 'plugin_zoom_registrant')]
+#[ORM\Index(columns: ['user_id'], name: 'user_id_index')]
+#[ORM\Index(columns: ['meeting_id'], name: 'meeting_id_index')]
+class Registrant implements Stringable
 {
-    /** @var string */
-    public $fullName;
+    public string $fullName;
 
-    /**
-     * @var string
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id;
 
-    /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
-    protected $user;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    protected User $user;
 
-    /**
-     * @var Meeting
-     * @ORM\ManyToOne(targetEntity="Meeting", inversedBy="registrants")
-     * @ORM\JoinColumn(name="meeting_id", referencedColumnName="id")
-     */
-    protected $meeting;
+    #[ORM\ManyToOne(targetEntity: Meeting::class, inversedBy: 'registrants')]
+    #[ORM\JoinColumn(name: 'meeting_id', referencedColumnName: 'id')]
+    protected ?Meeting $meeting;
 
-    /**
-     * @var string
-     * @ORM\Column(type="text", name="created_registration_json", nullable=true)
-     */
-    protected $createdRegistrationJson;
+    #[ORM\Column(name: 'created_registration_json', type: 'text', nullable: true)]
+    protected ?string $createdRegistrationJson;
 
-    /**
-     * @var string
-     * @ORM\Column(type="text", name="meeting_registrant_list_item_json", nullable=true)
-     */
-    protected $meetingRegistrantListItemJson;
+    #[ORM\Column(name: 'meeting_registrant_list_item_json', type: 'text', nullable: true)]
+    protected ?string $meetingRegistrantListItemJson;
 
-    /**
-     * @var string
-     * @ORM\Column(type="text", name="meeting_registrant_json", nullable=true)
-     */
-    protected $meetingRegistrantJson;
+    #[ORM\Column(name: 'meeting_registrant_json', type: 'text', nullable: true)]
+    protected ?string $meetingRegistrantJson;
 
-    /** @var CreatedRegistration */
-    protected $createdRegistration;
+    protected ?CreatedRegistration $createdRegistration;
 
-    /** @var MeetingRegistrant */
-    protected $meetingRegistrant;
+    protected ?MeetingRegistrant $meetingRegistrant;
 
-    /** @var MeetingRegistrantListItem */
-    protected $meetingRegistrantListItem;
+    protected ?MeetingRegistrantListItem $meetingRegistrantListItem;
 
     /**
      * @return string
@@ -86,20 +70,12 @@ class Registrant
         return sprintf('Registrant %d', $this->id);
     }
 
-    /**
-     * @return Meeting
-     */
-    public function getMeeting()
+    public function getMeeting(): ?Meeting
     {
         return $this->meeting;
     }
 
-    /**
-     * @param Meeting $meeting
-     *
-     * @return $this
-     */
-    public function setMeeting($meeting)
+    public function setMeeting(Meeting $meeting): static
     {
         $this->meeting = $meeting;
         $this->meeting->getRegistrants()->add($this);
@@ -107,44 +83,27 @@ class Registrant
         return $this;
     }
 
-    /**
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
-    public function setUser($user)
+    public function setUser(User $user): static
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * @throws Exception
-     *
-     * @return MeetingRegistrantListItem
-     */
-    public function getMeetingRegistrantListItem()
+    public function getMeetingRegistrantListItem(): ?MeetingRegistrantListItem
     {
         return $this->meetingRegistrantListItem;
     }
 
     /**
-     * @param MeetingRegistrantListItem $meetingRegistrantListItem
-     *
      * @throws Exception
-     *
-     * @return $this
      */
-    public function setMeetingRegistrantListItem($meetingRegistrantListItem)
+    public function setMeetingRegistrantListItem(MeetingRegistrantListItem $meetingRegistrantListItem): static
     {
         if (!is_null($this->meeting) && $this->meeting->getId() != $meetingRegistrantListItem->id) {
             throw new Exception('RegistrantEntity meeting id differs from MeetingRegistrantListItem id');
@@ -155,7 +114,7 @@ class Registrant
         return $this;
     }
 
-    public function computeFullName()
+    public function computeFullName(): void
     {
         $this->fullName = api_get_person_name(
             $this->meetingRegistrant->first_name,
@@ -163,7 +122,7 @@ class Registrant
         );
     }
 
-    public function getJoinUrl()
+    public function getJoinUrl(): string
     {
         if (!$this->createdRegistration) {
             return '';
@@ -174,22 +133,16 @@ class Registrant
 
     /**
      * @throws Exception
-     *
-     * @return CreatedRegistration
      */
-    public function getCreatedRegistration()
+    public function getCreatedRegistration(): ?CreatedRegistration
     {
         return $this->createdRegistration;
     }
 
     /**
-     * @param CreatedRegistration $createdRegistration
-     *
      * @throws Exception
-     *
-     * @return $this
      */
-    public function setCreatedRegistration($createdRegistration)
+    public function setCreatedRegistration(CreatedRegistration $createdRegistration): static
     {
         if (null === $this->id) {
             $this->id = $createdRegistration->registrant_id;
@@ -201,24 +154,12 @@ class Registrant
         return $this;
     }
 
-    /**
-     * @throws Exception
-     *
-     * @return MeetingRegistrant
-     */
-    public function getMeetingRegistrant()
+    public function getMeetingRegistrant(): ?MeetingRegistrant
     {
         return $this->meetingRegistrant;
     }
 
-    /**
-     * @param MeetingRegistrant $meetingRegistrant
-     *
-     * @throws Exception
-     *
-     * @return $this
-     */
-    public function setMeetingRegistrant($meetingRegistrant)
+    public function setMeetingRegistrant(MeetingRegistrant $meetingRegistrant): static
     {
         $this->meetingRegistrant = $meetingRegistrant;
         $this->computeFullName();
@@ -227,11 +168,10 @@ class Registrant
     }
 
     /**
-     * @ORM\PostLoad
-     *
      * @throws Exception
      */
-    public function postLoad()
+    #[ORM\PostLoad]
+    public function postLoad(): void
     {
         if (null !== $this->meetingRegistrantJson) {
             $this->meetingRegistrant = MeetingRegistrant::fromJson($this->meetingRegistrantJson);
@@ -247,10 +187,8 @@ class Registrant
         $this->computeFullName();
     }
 
-    /**
-     * @ORM\PreFlush
-     */
-    public function preFlush()
+    #[ORM\PreFlush]
+    public function preFlush(): void
     {
         if (null !== $this->meetingRegistrant) {
             $this->meetingRegistrantJson = json_encode($this->meetingRegistrant);

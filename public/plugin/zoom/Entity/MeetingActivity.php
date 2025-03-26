@@ -4,181 +4,108 @@
 
 namespace Chamilo\PluginBundle\Zoom;
 
+use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
-/**
- * Class Meeting.
- *
- * @ORM\Entity()
- * @ORM\Table(name="plugin_zoom_meeting_activity")
- * @ORM\HasLifecycleCallbacks
- */
-class MeetingActivity
+#[ORM\Entity]
+#[ORM\Table(name: 'plugin_zoom_meeting_activity')]
+#[ORM\HasLifecycleCallbacks]
+class MeetingActivity implements Stringable
 {
-    /**
-     * @var int
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
-    protected $id;
+    #[ORM\Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $id;
 
-    /**
-     * @var Meeting
-     *
-     * @ORM\ManyToOne(targetEntity="Meeting", inversedBy="activities")
-     * @ORM\JoinColumn(name="meeting_id")
-     */
-    protected $meeting;
+    #[ORM\ManyToOne(targetEntity: Meeting::class, inversedBy: 'activities')]
+    #[ORM\JoinColumn(name: "meeting_id")]
+    protected ?Meeting $meeting;
 
-    /**
-     * @var Meeting
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    protected $user;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    protected ?User $user;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=255, nullable=false)
-     */
-    protected $name;
+    #[ORM\Column(name: 'name', type: 'string', length: 255)]
+    protected string $name;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", name="type", length=255, nullable=false)
-     */
-    protected $type;
+    #[ORM\Column(name: 'type', type: 'string', length: 255)]
+    protected string $type;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text", name="event", nullable=true)
-     */
-    protected $event;
+    #[ORM\Column(name: 'event', type: 'text', nullable: true)]
+    protected ?string $event;
 
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    protected $createdAt;
+    #[ORM\Column(name: 'created_at', type: 'datetime')]
+    protected DateTime $createdAt;
 
     public function __construct()
     {
         $this->createdAt = new DateTime();
     }
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return sprintf('Activity %d', $this->id);
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Meeting
-     */
-    public function getMeeting()
+    public function getMeeting(): ?Meeting
     {
         return $this->meeting;
     }
 
-    /**
-     * @param Meeting $meeting
-     *
-     * @return MeetingActivity
-     */
-    public function setMeeting($meeting)
+    public function setMeeting(Meeting $meeting): static
     {
         $this->meeting = $meeting;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return MeetingActivity
-     */
-    public function setName($name)
+    public function setName(string $name): static
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return MeetingActivity
-     */
-    public function setType($type)
+    public function setType(string $type): static
     {
         $this->type = $type;
 
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @return string
-     */
-    public function getEvent()
+    public function getEvent(): ?string
     {
         return $this->event;
     }
 
-    /**
-     * @return Meeting
-     */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    /**
-     * @param Meeting $user
-     *
-     * @return MeetingActivity
-     */
-    public function setUser($user)
+    public function setUser(User $user): static
     {
         $this->user = $user;
 
@@ -194,12 +121,7 @@ class MeetingActivity
         return '';
     }
 
-    /**
-     * @param string $event
-     *
-     * @return MeetingActivity
-     */
-    public function setEvent($event)
+    public function setEvent(string $event): static
     {
         $this->event = $event;
 

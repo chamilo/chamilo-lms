@@ -8,134 +8,104 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\API\MeetingListItem;
 use Chamilo\PluginBundle\Zoom\API\MeetingSettings;
-use Chamilo\UserBundle\Entity\User;
 use Database;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use ZoomPlugin;
 
-/**
- * Class Meeting.
- *
- * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\MeetingRepository")
- * @ORM\Table(
- *     name="plugin_zoom_meeting",
- *     indexes={
- *         @ORM\Index(name="user_id_index", columns={"user_id"}),
- *         @ORM\Index(name="course_id_index", columns={"course_id"}),
- *         @ORM\Index(name="session_id_index", columns={"session_id"})
- *     }
- * )
- * @ORM\HasLifecycleCallbacks
- */
+#[ORM\Entity(repositoryClass: MeetingRepository::class)]
+#[ORM\Table(name: 'plugin_zoom_meeting')]
+#[ORM\Index(columns: ['user_id'], name: 'user_id_index')]
+#[ORM\Index(columns: ['course_id'], name: 'course_id_index')]
+#[ORM\Index(columns: ['session_id'], name: 'session_id_index')]
+#[ORM\HasLifecycleCallbacks]
 class Meeting
 {
     /** @var string meeting type name */
-    public $typeName;
+    public string $typeName;
 
-    /** @var DateTime meeting start time as a DateTime instance */
-    public $startDateTime;
+    /**
+     * meeting start time as a DateTime instance
+     */
+    public ?DateTime $startDateTime;
 
     /** @var string meeting formatted start time */
-    public $formattedStartTime;
+    public string $formattedStartTime;
 
-    /** @var DateInterval meeting duration as a DateInterval instance */
-    public $durationInterval;
+    /**
+     * Meeting duration as a DateInterval instance
+     */
+    public ?DateInterval $durationInterval;
 
     /** @var string meeting formatted duration */
-    public $formattedDuration;
+    public string $formattedDuration;
 
     /** @var string */
-    public $statusName;
+    public string $statusName;
+
+    #[ORM\Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $id;
+
+    #[ORM\Column(name: 'meeting_id', type: 'string')]
+    protected ?int $meetingId;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    protected ?User $user;
+
+    #[ORM\ManyToOne(targetEntity: Course::class)]
+    #[ORM\JoinColumn(name: 'course_id', referencedColumnName: 'id')]
+    protected ?Course $course;
+
+    #[ORM\ManyToOne(targetEntity: CGroup::class)]
+    #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid')]
+    protected ?CGroup $group;
+
+    #[ORM\ManyToOne(targetEntity: Session::class)]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
+    protected ?Session $session;
+
+    #[ORM\Column(name: 'meeting_list_item_json', type: 'text', nullable: true)]
+    protected ?string $meetingListItemJson;
+
+    #[ORM\Column(name: 'meeting_info_get_json', type: 'text', nullable: true)]
+    protected ?string $meetingInfoGetJson;
+
+    protected ?MeetingListItem $meetingListItem;
+
+    protected ?MeetingInfoGet $meetingInfoGet;
 
     /**
-     * @var int
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
+     * @var Collection<int, MeetingActivity>
      */
-    protected $id;
+    #[ORM\OrderBy(['createdAt' => 'DESC'])]
+    #[ORM\OneToMany(mappedBy: 'meeting', targetEntity: MeetingActivity::class, cascade: ['persist', 'remove'])]
+    protected Collection $activities;
 
     /**
-     * @var int the remote zoom meeting identifier
-     * @ORM\Column(name="meeting_id", type="string")
+     * @var Collection<int, Registrant>
      */
-    protected $meetingId;
+    #[ORM\OneToMany(mappedBy: 'meeting', targetEntity: Registrant::class, cascade: ['persist', 'remove'])]
+    protected Collection $registrants;
 
     /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
+     * @var Collection<int, Recording>
      */
-    protected $user;
-
-    /**
-     * @var Course
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=true)
-     */
-    protected $course;
-
-    /**
-     * @var CGroup
-     * @ORM\ManyToOne(targetEntity="CGroup")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true)
-     */
-    protected $group;
-
-    /**
-     * @var Session
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
-     */
-    protected $session;
-
-    /**
-     * @var string
-     * @ORM\Column(type="text", name="meeting_list_item_json", nullable=true)
-     */
-    protected $meetingListItemJson;
-
-    /**
-     * @var string
-     * @ORM\Column(type="text", name="meeting_info_get_json", nullable=true)
-     */
-    protected $meetingInfoGetJson;
-
-    /** @var MeetingListItem */
-    protected $meetingListItem;
-
-    /** @var MeetingInfoGet */
-    protected $meetingInfoGet;
-
-    /**
-     * @var MeetingActivity[]|ArrayCollection
-     * @ORM\OrderBy({"createdAt" = "DESC"})
-     * @ORM\OneToMany(targetEntity="MeetingActivity", mappedBy="meeting", cascade={"persist", "remove"})
-     */
-    protected $activities;
-
-    /**
-     * @var Registrant[]|ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Registrant", mappedBy="meeting", cascade={"persist", "remove"})
-     */
-    protected $registrants;
-
-    /**
-     * @var Recording[]|ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Recording", mappedBy="meeting", cascade={"persist"}, orphanRemoval=true)
-     */
-    protected $recordings;
+    #[ORM\OneToMany(mappedBy: 'meeting', targetEntity: Recording::class, cascade: ['persist'], orphanRemoval: true)]
+    protected Collection $recordings;
 
     public function __construct()
     {
@@ -152,94 +122,72 @@ class Meeting
         return sprintf('Meeting %d', $this->id);
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getMeetingId()
+    public function getMeetingId(): ?int
     {
         return $this->meetingId;
     }
 
-    /**
-     * @param int $meetingId
-     *
-     * @return Meeting
-     */
-    public function setMeetingId($meetingId)
+    public function setMeetingId(int $meetingId): static
     {
         $this->meetingId = $meetingId;
 
         return $this;
     }
 
-    /**
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    /**
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): ?Course
     {
         return $this->course;
     }
 
-    /**
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
     /**
-     * @return Registrant[]|ArrayCollection
+     * @return Collection<int, Registrant>
      */
-    public function getRegistrants()
+    public function getRegistrants(): Collection
     {
         return $this->registrants;
     }
 
     /**
-     * @return Recording[]|ArrayCollection
+     * @return Collection<int, Recording>
      */
-    public function getRecordings()
+    public function getRecordings(): Collection
     {
         return $this->recordings;
     }
 
     /**
-     * @return MeetingActivity[]|ArrayCollection
+     * @return Collection<int, MeetingActivity>
      */
-    public function getActivities()
+    public function getActivities(): Collection
     {
         return $this->activities;
     }
 
-    public function addActivity(MeetingActivity $activity)
+    public function addActivity(MeetingActivity $activity): void
     {
         $activity->setMeeting($this);
         $this->activities[] = $activity;
     }
 
     /**
-     * @param MeetingActivity[]|ArrayCollection $activities
-     *
-     * @return Meeting
+     * @param Collection<int, MeetingActivity> $activities
      */
-    public function setActivities($activities)
+    public function setActivities(Collection $activities): static
     {
         $this->activities = $activities;
 
@@ -247,11 +195,10 @@ class Meeting
     }
 
     /**
-     * @ORM\PostLoad
-     *
      * @throws Exception
      */
-    public function postLoad()
+    #[ORM\PostLoad]
+    public function postLoad(): void
     {
         if (null !== $this->meetingListItemJson) {
             $this->meetingListItem = MeetingListItem::fromJson($this->meetingListItemJson);
@@ -263,19 +210,16 @@ class Meeting
     }
 
     /**
-     * @ORM\PostUpdate
-     *
      * @throws Exception
      */
-    public function postUpdate()
+    #[ORM\PostUpdate]
+    public function postUpdate(): void
     {
         $this->initializeDisplayableProperties();
     }
 
-    /**
-     * @ORM\PreFlush
-     */
-    public function preFlush()
+    #[ORM\PreFlush]
+    public function preFlush(): void
     {
         if (null !== $this->meetingListItem) {
             $this->meetingListItemJson = json_encode($this->meetingListItem);
@@ -285,72 +229,43 @@ class Meeting
         }
     }
 
-    /**
-     * @return MeetingListItem
-     */
-    public function getMeetingListItem()
+    public function getMeetingListItem(): ?MeetingListItem
     {
         return $this->meetingListItem;
     }
 
-    /**
-     * @return MeetingInfoGet
-     */
-    public function getMeetingInfoGet()
+    public function getMeetingInfoGet(): ?MeetingInfoGet
     {
         return $this->meetingInfoGet;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
-    public function setUser($user)
+    public function setUser(User $user): static
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * @param Course $course
-     *
-     * @return $this
-     */
-    public function setCourse($course)
+    public function setCourse(Course $course): static
     {
         $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * @param Session $session
-     *
-     * @return $this
-     */
-    public function setSession($session)
+    public function setSession(Session $session): static
     {
         $this->session = $session;
 
         return $this;
     }
 
-    /**
-     * @return CGroup
-     */
-    public function getGroup()
+    public function getGroup(): ?CGroup
     {
         return $this->group;
     }
 
-    /**
-     * @param CGroup $group
-     *
-     * @return Meeting
-     */
-    public function setGroup($group)
+    public function setGroup(CGroup $group): static
     {
         $this->group = $group;
 
@@ -358,13 +273,9 @@ class Meeting
     }
 
     /**
-     * @param MeetingListItem $meetingListItem
-     *
      * @throws Exception
-     *
-     * @return Meeting
      */
-    public function setMeetingListItem($meetingListItem)
+    public function setMeetingListItem(MeetingListItem $meetingListItem): static
     {
         if (null === $this->meetingId) {
             $this->meetingId = $meetingListItem->id;
@@ -377,13 +288,9 @@ class Meeting
     }
 
     /**
-     * @param MeetingInfoGet $meetingInfoGet
-     *
      * @throws Exception
-     *
-     * @return Meeting
      */
-    public function setMeetingInfoGet($meetingInfoGet)
+    public function setMeetingInfoGet(MeetingInfoGet $meetingInfoGet): static
     {
         if (null === $this->meetingId) {
             $this->meetingId = $meetingInfoGet->id;
@@ -396,39 +303,27 @@ class Meeting
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isCourseMeeting()
+    public function isCourseMeeting(): bool
     {
         return null !== $this->course;
     }
 
-    /**
-     * @return bool
-     */
-    public function isCourseGroupMeeting()
+    public function isCourseGroupMeeting(): bool
     {
         return null !== $this->course && null !== $this->group;
     }
 
-    /**
-     * @return bool
-     */
-    public function isUserMeeting()
+    public function isUserMeeting(): bool
     {
         return null !== $this->user && null === $this->course;
     }
 
-    /**
-     * @return bool
-     */
-    public function isGlobalMeeting()
+    public function isGlobalMeeting(): bool
     {
         return null === $this->user && null === $this->course;
     }
 
-    public function setStatus($status)
+    public function setStatus($status): void
     {
         $this->meetingInfoGet->status = $status;
     }
@@ -437,9 +332,11 @@ class Meeting
      * Builds the list of users that can register into this meeting.
      * Zoom requires an email address, therefore users without an email address are excluded from the list.
      *
-     * @return User[] the list of users
+     * @return array<int, User> the list of users
+     *
+     * @throws NotSupported
      */
-    public function getRegistrableUsers()
+    public function getRegistrableUsers(): array
     {
         $users = [];
         if (!$this->isCourseMeeting()) {
@@ -452,14 +349,12 @@ class Meeting
                     $users[] = $courseRelUser->getUser();
                 }
             }
-        } else {
-            if (null !== $this->course) {
-                $subscriptions = $this->session->getSessionRelCourseRelUsersByStatus($this->course, Session::STUDENT);
-                if ($subscriptions) {
-                    /** @var SessionRelCourseRelUser $sessionCourseUser */
-                    foreach ($subscriptions as $sessionCourseUser) {
-                        $users[] = $sessionCourseUser->getUser();
-                    }
+        } elseif (null !== $this->course) {
+            $subscriptions = $this->session->getSessionRelCourseRelUsersByStatus($this->course, Session::STUDENT);
+            if ($subscriptions->count()) {
+                /** @var SessionRelCourseRelUser $sessionCourseUser */
+                foreach ($subscriptions as $sessionCourseUser) {
+                    $users[] = $sessionCourseUser->getUser();
                 }
             }
         }
@@ -474,39 +369,25 @@ class Meeting
         return $activeUsersWithEmail;
     }
 
-    /**
-     * @return bool
-     */
-    public function requiresDateAndDuration()
+    public function requiresDateAndDuration(): bool
     {
-        return MeetingInfoGet::TYPE_SCHEDULED === $this->meetingInfoGet->type
-            || MeetingInfoGet::TYPE_RECURRING_WITH_FIXED_TIME === $this->meetingInfoGet->type;
+        return API\Meeting::TYPE_SCHEDULED === $this->meetingInfoGet->type
+            || API\Meeting::TYPE_RECURRING_WITH_FIXED_TIME === $this->meetingInfoGet->type;
     }
 
-    /**
-     * @return bool
-     */
-    public function requiresRegistration()
+    public function requiresRegistration(): bool
     {
         return MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE === $this->meetingInfoGet->settings->approval_type;
         /*return
             MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED != $this->meetingInfoGet->settings->approval_type;*/
     }
 
-    /**
-     * @return bool
-     */
-    public function hasCloudAutoRecordingEnabled()
+    public function hasCloudAutoRecordingEnabled(): bool
     {
         return ZoomPlugin::RECORDING_TYPE_NONE !== $this->meetingInfoGet->settings->auto_recording;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return bool
-     */
-    public function hasRegisteredUser($user)
+    public function hasRegisteredUser(User $user): bool
     {
         return $this->getRegistrants()->exists(
             function (Registrant $registrantEntity) use (&$user) {
@@ -515,12 +396,7 @@ class Meeting
         );
     }
 
-    /**
-     * @param User $user
-     *
-     * @return Registrant|null
-     */
-    public function getRegistrant($user)
+    public function getRegistrant(User $user): ?Registrant
     {
         foreach ($this->getRegistrants() as $registrant) {
             if ($registrant->getUser() === $user) {
@@ -534,10 +410,8 @@ class Meeting
     /**
      * Generates a short presentation of the meeting for the future participant.
      * To be displayed above the "Enter meeting" link.
-     *
-     * @return string
      */
-    public function getIntroduction()
+    public function getIntroduction(): string
     {
         $introduction = sprintf('<h1>%s</h1>', $this->meetingInfoGet->topic);
         if (!$this->isGlobalMeeting()) {
@@ -567,7 +441,7 @@ class Meeting
     /**
      * @throws Exception on unexpected start_time or duration
      */
-    private function initializeDisplayableProperties()
+    private function initializeDisplayableProperties(): void
     {
         $zoomPlugin = new ZoomPlugin();
 

@@ -473,11 +473,7 @@ class AppPlugin
                 Container::getAccessUrlHelper()->getCurrent()
             );
 
-            if (!$configByUrl) {
-                return [];
-            }
-
-            $plugin_info['settings'] = $configByUrl->getConfiguration();
+            $plugin_info['settings'] = $configByUrl?->getConfiguration() ?? [];
 
             return $plugin_info;
         }

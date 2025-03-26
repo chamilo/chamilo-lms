@@ -129,6 +129,10 @@ services:
             - setValidator: [ '@validator' ]
             - setSessionFactory: [ '@session.factory' ]
 
+    Chamilo\CoreBundle\Service\PluginEntityLoader:
+        arguments:
+            $pluginDir: '%kernel.project_dir%/public/plugin'
+
 cocur_slugify:
     lowercase: true
 

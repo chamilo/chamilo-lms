@@ -548,6 +548,8 @@ class UserManager
                     /** @var FormValidator $form */
                     $form->freeze(null, $elementTemplate);
                     $form->removeElement('submit');
+                    $form->removeElement('pass1');
+                    $form->removeElement('pass2');
                     $formData = $form->returnForm();
                     $url = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId();
                     $params = [

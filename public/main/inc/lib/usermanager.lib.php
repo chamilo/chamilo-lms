@@ -184,12 +184,12 @@ class UserManager
         $accessUrl = Container::getAccessUrlHelper()->getCurrent();
         $access_url_id = $accessUrl->getId();
 
-        $hostingLimitUsers = get_hosting_limit($access_url_id, 'hosting_limit_users');
+        $hostingLimitUsers = get_hosting_limit($access_url_id, 'users');
 
         if ($hostingLimitUsers !== null && $hostingLimitUsers > 0) {
             $num = self::get_number_of_users();
             if ($num >= $hostingLimitUsers) {
-                api_warn_hosting_contact('hosting_limit_users');
+                api_warn_hosting_contact('users');
                 Display::addFlash(
                     Display::return_message(
                         get_lang('Sorry, this installation has a users limit, which has now been reached. To increase the number of users allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan.'),
@@ -202,7 +202,7 @@ class UserManager
         }
 
         if (1 === $status) {
-            $hostingLimitTeachers = get_hosting_limit($access_url_id, 'hosting_limit_teachers');
+            $hostingLimitTeachers = get_hosting_limit($access_url_id, 'teachers');
 
             if ($hostingLimitTeachers !== null && $hostingLimitTeachers > 0) {
                 $num = self::get_number_of_users(1);

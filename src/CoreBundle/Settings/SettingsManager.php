@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Settings;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\ServiceHelper\SettingsManagerHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
@@ -58,7 +59,8 @@ class SettingsManager implements SettingsManagerInterface
         EntityManager $manager,
         EntityRepository $repository,
         EventDispatcherInterface $eventDispatcher,
-        RequestStack $request
+        RequestStack $request,
+        protected readonly SettingsManagerHelper $settingsManagerHelper,
     ) {
         $this->schemaRegistry = $schemaRegistry;
         $this->manager = $manager;
@@ -143,6 +145,12 @@ class SettingsManager implements SettingsManagerInterface
     public function getSetting(string $name, bool $loadFromDb = false): mixed
     {
         $name = $this->validateSetting($name);
+
+        $overridden = $this->settingsManagerHelper->getOverride($name);
+
+        if (null !== $overridden) {
+            return $overridden;
+        }
 
         [$category, $name] = explode('.', $name);
 

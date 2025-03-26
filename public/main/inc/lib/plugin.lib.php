@@ -176,7 +176,6 @@ class AppPlugin
     {
         // Please keep this list alphabetically sorted
         return [
-            'ai_helper',
             'azure_active_directory',
             'bbb',
             'before_login',

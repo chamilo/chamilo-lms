@@ -338,7 +338,7 @@ class Plugin
     /**
      * Returns the value of a given plugin global setting.
      */
-    public function get(string $name): false|string
+    public function get(string $name): mixed
     {
         $settings = $this->get_settings();
 
@@ -352,7 +352,7 @@ class Plugin
             }
         }
 
-        return false;
+        return null;
     }
 
     /**

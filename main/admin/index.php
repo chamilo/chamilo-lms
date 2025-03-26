@@ -541,14 +541,20 @@ if (api_is_platform_admin()) {
     }
 
     $blockPlatform['items'] = $items;
-} elseif (api_is_session_admin() && api_get_configuration_value('session_admin_access_system_announcement')) {
+} elseif (api_is_session_admin()) {
     $items = [];
     $items[] = [
-        'class' => 'item-global-announcement',
-        'url' => 'system_announcements.php',
-        'label' => get_lang('SystemAnnouncements'),
+        'class' => 'item-stats',
+        'url' => 'statistics/index.php',
+        'label' => get_lang('Statistics'),
     ];
-
+    if (api_get_configuration_value('session_admin_access_system_announcement')) {
+        $items[] = [
+            'class' => 'item-global-announcement',
+            'url' => 'system_announcements.php',
+            'label' => get_lang('SystemAnnouncements'),
+        ];
+    }
     $blockPlatform['items'] = $items;
 }
 

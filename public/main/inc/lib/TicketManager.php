@@ -1379,7 +1379,7 @@ class TicketManager
         $creatorId = $ticketInfo['ticket']['sys_insert_user_id'];
 
         // Subject
-        $titleEmail = "[$ticketCode] $title";
+        $titleEmail = "[$ticketCode] ".Security::remove_XSS($title);
 
         // Content
         $href = api_get_path(WEB_CODE_PATH) . 'ticket/ticket_details.php?ticket_id=' . $ticketId;

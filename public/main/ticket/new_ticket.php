@@ -141,9 +141,9 @@ function save_ticket()
     $category_id = isset($_POST['category_id']) ? (int) $_POST['category_id'] : '';
 
     $project_id = (int) $_POST['project_id'];
-    $subject = Security::remove_XSS($_POST['subject']);
+    $subject = $_POST['subject'];
     $other_area = (int) $_POST['other_area'];
-    $personal_email = Security::remove_XSS($_POST['personal_email']);
+    $personal_email = $_POST['personal_email'];
     $source = (int) $_POST['source_id'];
     $user_id = isset($_POST['user_id']) ? (int) $_POST['user_id'] : null;
     $priority = isset($_POST['priority_id']) ? (int) $_POST['priority_id'] : '';

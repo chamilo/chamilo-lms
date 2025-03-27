@@ -176,7 +176,7 @@ class AppPlugin
     {
         // Please keep this list alphabetically sorted
         return [
-            'azure_active_directory',
+            'AzureActiveDirectory',
             'bbb',
             'before_login',
             'buycourses',

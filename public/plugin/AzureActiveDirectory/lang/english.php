@@ -17,7 +17,7 @@ $strings['force_logout_help'] = 'Show a button to force logout session from Azur
 $strings['block_name'] = 'Block name';
 $strings['management_login_enable'] = 'Management login';
 $strings['management_login_enable_help'] = 'Disable the chamilo login and enable an alternative login page for admin users.<br>'
-    .'You will need to copy the <code>/plugin/azure_active_directory/layout/login_form.tpl</code> file to <code>/main/template/overrides/layout/</code> directory.';
+    .'You will need to copy the <code>/plugin/AzureActiveDirectory/layout/login_form.tpl</code> file to <code>/main/template/overrides/layout/</code> directory.';
 $strings['management_login_name'] = 'Name for the management login';
 $strings['management_login_name_help'] = 'The default is "Management Login".';
 $strings['OrganisationEmail'] = 'Organisation e-mail';

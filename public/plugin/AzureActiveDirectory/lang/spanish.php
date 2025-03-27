@@ -17,7 +17,7 @@ $strings['force_logout_help'] = 'Muestra un botón para hacer logout de Azure.';
 $strings['block_name'] = 'Nombre del bloque';
 $strings['management_login_enable'] = 'Login de gestión';
 $strings['management_login_enable_help'] = 'Desactivar el login de Chamilo y activar una página de login alternativa para los usuarios de administración.<br>'
-    .'Para ello, tendrá que copiar el archivo <code>/plugin/azure_active_directory/layout/login_form.tpl</code> en la carpeta <code>/main/template/overrides/layout/</code>.';
+    .'Para ello, tendrá que copiar el archivo <code>/plugin/AzureActiveDirectory/layout/login_form.tpl</code> en la carpeta <code>/main/template/overrides/layout/</code>.';
 $strings['management_login_name'] = 'Nombre del bloque de login de gestión';
 $strings['management_login_name_help'] = 'El nombre por defecto es "Login de gestión".';
 $strings['OrganisationEmail'] = 'E-mail profesional';

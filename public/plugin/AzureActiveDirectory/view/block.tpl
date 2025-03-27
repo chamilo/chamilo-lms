@@ -14,7 +14,7 @@
 
         {% if azure_active_directory.management_login_enabled %}
             <hr>
-            <a href="{{ _p.web_plugin  ~ 'azure_active_directory/login.php' }}">
+            <a href="{{ _p.web_plugin  ~ 'AzureActiveDirectory/login.php' }}">
                 {{ azure_active_directory.management_login_name }}
             </a>
         {% endif %}

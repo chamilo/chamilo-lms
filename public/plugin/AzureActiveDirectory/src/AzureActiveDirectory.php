@@ -63,7 +63,7 @@ class AzureActiveDirectory extends Plugin
      */
     public function get_name()
     {
-        return 'azure_active_directory';
+        return 'AzureActiveDirectory';
     }
 
     /**
@@ -74,7 +74,7 @@ class AzureActiveDirectory extends Plugin
         $provider = new Azure([
             'clientId' => $this->get(self::SETTING_APP_ID),
             'clientSecret' => $this->get(self::SETTING_APP_SECRET),
-            'redirectUri' => api_get_path(WEB_PLUGIN_PATH).'azure_active_directory/src/callback.php',
+            'redirectUri' => api_get_path(WEB_PLUGIN_PATH).'AzureActiveDirectory/src/callback.php',
         ]);
 
         return $provider;

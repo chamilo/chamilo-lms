@@ -16,7 +16,7 @@ Make sure your portal is in HTTPS before you configure this plugin.
 
 ### To configure Azure Active Directory
 * Create and configure an application in your Azure panel (Azure Active Directory -> Applications registration -> New registration))
-* In the _Authentication_ section, set an _Reply URL_ with `https://{CHAMILO_URL}/plugin/azure_active_directory/src/callback.php`.
+* In the _Authentication_ section, set an _Reply URL_ with `https://{CHAMILO_URL}/plugin/AzureActiveDirectory/src/callback.php`.
 * In the _Front-channel logout URL_, use `https://{CHAMILO_URL}/index.php?logout=logout`
 * In _Certificates & secrets_, create a secret string (or application password). Keep the _Value_ field at hand. If you don't copy it somewhere at this point, it will later be hidden, so take a copy, seriously!
 * Make sure you actually have users
@@ -28,7 +28,7 @@ Make sure your portal is in HTTPS before you configure this plugin.
 * _Block name_: (Optional) The name to show above the login button.
 * _Force logout button_: (Optional) Add a button to force logout from Azure.
 * _Management login_: (Optional) Disable the chamilo login and enable an alternative login page for users.   
-   You will need copy the `/plugin/azure_active_directory/layout/login_form.tpl` file to `/main/template/overrides/layout/` directory.
+   You will need copy the `/plugin/AzureActiveDirectory/layout/login_form.tpl` file to `/main/template/overrides/layout/` directory.
 * _Name for the management login_: A name for the manager login. By default, it is set to "Management Login".
 * _Automated provisioning_: Enable if you want users to be created automatically in Chamilo (as students) when they don't exist yet.
 * Assign a region in which the login option will appear. Preferably `login_bottom`.

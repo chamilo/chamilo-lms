@@ -17,7 +17,7 @@ $strings['force_logout_help'] = 'Toon een knop om afmeldingssessie van Azure af 
 $strings['block_name'] = 'Blok naam';
 $strings['management_login_enable'] = 'Beheer login';
 $strings['management_login_enable_help'] = 'Schakel de chamilo-login uit en schakel een alternatieve inlogpagina in voor gebruikers.<br>'
-    .'U zult moeten kopiëren de <code>/plugin/azure_active_directory/layout/login_form.tpl</code> bestand in het <code>/main/template/overrides/layout/</code> dossier.';
+    .'U zult moeten kopiëren de <code>/plugin/AzureActiveDirectory/layout/login_form.tpl</code> bestand in het <code>/main/template/overrides/layout/</code> dossier.';
 $strings['management_login_name'] = 'Naam voor de beheeraanmelding';
 $strings['management_login_name_help'] = 'De standaardinstelling is "Beheer login".';
 $strings['OrganisationEmail'] = 'Organisatie e-mail';

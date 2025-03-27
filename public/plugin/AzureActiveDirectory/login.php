@@ -28,7 +28,7 @@ if (!($userId) || api_is_anonymous($userId)) {
     //$template->assign('login_language_form', api_display_language_form(true, true));
     $template->assign('login_form', $template->displayLoginForm());
 
-    $content = $template->fetch('azure_active_directory/view/login.tpl');
+    $content = $template->fetch('AzureActiveDirectory/view/login.tpl');
 
     $template->assign('content', $content);
     $template->display_one_col_template();

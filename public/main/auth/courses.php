@@ -464,7 +464,7 @@ switch ($action) {
                     );
 
                     // Start buy course validation
-                    // display the course price and buy button if the buycourses plugin is enabled and this course is configured
+                    // display the course price and buy button if the BuyCourses plugin is enabled and this course is configured
                     $plugin = BuyCoursesPlugin::create();
                     $isThisCourseInSale = $plugin->buyCoursesForGridCatalogValidator(
                         $courseId,

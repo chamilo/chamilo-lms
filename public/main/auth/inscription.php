@@ -1277,7 +1277,7 @@ if ($form->validate()) {
     if ($sessionPremiumChecker && $sessionId) {
         Session::erase('SessionIsPremium');
         Session::erase('sessionId');
-        header('Location:'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$sessionId.'&t=2');
+        header('Location:'.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/process.php?i='.$sessionId.'&t=2');
         exit;
     }
 

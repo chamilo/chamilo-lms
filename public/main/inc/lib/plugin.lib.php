@@ -179,7 +179,7 @@ class AppPlugin
             'AzureActiveDirectory',
             'Bbb',
             'BeforeLogin',
-            'buycourses',
+            'BuyCourses',
             'card_game',
             'check_extra_field_author_company',
             'cleandeletedfiles',

@@ -178,7 +178,7 @@ class AppPlugin
         return [
             'AzureActiveDirectory',
             'Bbb',
-            'before_login',
+            'BeforeLogin',
             'buycourses',
             'card_game',
             'check_extra_field_author_company',

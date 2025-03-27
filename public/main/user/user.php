@@ -642,7 +642,9 @@ if ($canRead) {
     );
     $form->addHidden('type', $type);
     $form->addText('keyword', '', false);
-    $form->addElement('hidden', 'cidReq', api_get_course_id());
+    $form->addElement('hidden', 'cid', api_get_course_int_id());
+    $form->addElement('hidden', 'sid', api_get_session_id());
+    $form->addElement('hidden', 'gid', api_get_group_id());
     $form->addButtonSearch(get_lang('Search'));
     $actionsRight = $form->returnForm();
 

@@ -7,4 +7,4 @@
  * includes things to execute in the main database (settings_current table).
  */
 require_once __DIR__.'/config.php';
-BBBPlugin::create()->install();
+BbbPlugin::create()->install();

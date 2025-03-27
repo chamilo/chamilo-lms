@@ -139,14 +139,14 @@
        height="33.866665"
        x="3.8077737e-09"
        y="263.13333"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <g
        id="g2489"
        transform="matrix(1.033576,0,0,1.0310555,-0.27797462,-8.5225467)"
        style="opacity:0.5;fill:#333333;filter:url(#filter2519)"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
       <path
@@ -163,7 +163,7 @@
     <g
        id="g2477"
        transform="matrix(1.033576,0,0,1.033576,-0.51968757,-9.9364024)"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
       <path
@@ -183,7 +183,7 @@
        style="opacity:0.7;fill:#e44d26;fill-opacity:1;stroke-width:1.00862777"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="csscc"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -191,7 +191,7 @@
        d="m 21.389761,279.89888 c 0,-0.55777 -0.450856,-1.00863 -1.008628,-1.00863 h -4.034511 c -0.557771,0 -1.008627,0.45086 -1.008627,1.00863 0,0.55777 0.450856,1.00862 1.008627,1.00862 h 4.034511 c 0.557772,0 1.008628,-0.45085 1.008628,-1.00862 z"
        style="fill:#cf411b;fill-opacity:1;stroke-width:1.00862777"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -199,14 +199,14 @@
        style="fill:#ffffff;stroke-width:1.00862777"
        d="m 21.217881,279.54217 c 0,-0.55777 -0.450856,-1.00863 -1.008627,-1.00863 h -4.034511 c -0.557772,0 -1.008628,0.45086 -1.008628,1.00863 0,0.55777 0.450856,1.00862 1.008628,1.00862 h 4.034511 c 0.557771,0 1.008627,-0.45085 1.008627,-1.00862 z"
        id="path2207"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <g
        id="g2402"
        style="fill:#cf411b;fill-opacity:1"
        transform="matrix(0.98483395,0,0,0.98483395,13.502964,4.0896839)"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
       <polygon
@@ -238,7 +238,7 @@
     <g
        id="g2354"
        transform="matrix(0.45852162,0,0,0.45852162,22.902026,168.84098)"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
       <polygon
@@ -278,7 +278,7 @@
        id="path2430"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -287,7 +287,7 @@
        id="path2432"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsc"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -295,7 +295,7 @@
        d="m 5.2273919,269.72519 c 0.2058204,0.52195 0.5953864,0.73877 0.8213089,0.73877 H 17.426583 v -0.73877 z"
        id="rect2451"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -303,7 +303,7 @@
        d="m 32.611328,273.98828 -6.599609,4.39844 v 0.14648 8.21485 l 6.599609,4.40039 z m -0.546875,1.02149 v 15.11718 l -5.503906,-3.66992 v -7.77734 z"
        id="path2479"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -312,7 +312,7 @@
        style="opacity:0.5;fill:url(#linearGradient1682);fill-opacity:1;stroke-width:1.00862777"
        d="m 1.0453253,286.60256 v -8.06902 c 0,-2.22806 1.806453,-4.03451 4.034512,-4.03451 H 21.217881 c -11.3910147,1.7019 -17.4022657,2.12976 -20.1725557,12.10353 z"
        id="path1674"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <path
@@ -320,7 +320,7 @@
        d="m 6.0878906,268.17383 c -0.7051347,0 -1.28125,0.5761 -1.28125,1.28125 0,0.70513 0.5761121,1.2832 1.28125,1.2832 H 16.910156 v 1.58399 c -1.010704,0.1395 -1.761677,0.89199 -1.902344,1.90234 H 5.0800781 c -2.3758718,0 -4.30859372,1.93272 -4.30859372,4.30859 v 8.07032 c 0,2.37587 1.93272192,4.30664 4.30859372,4.30664 H 21.21875 c 2.375872,0 4.306641,-1.93077 4.306641,-4.30664 v -8.07032 c 0,-2.3142 -1.842033,-4.17671 -4.132813,-4.27343 -0.124647,-1.02913 -0.894024,-1.79603 -1.917969,-1.9375 v -2.86719 c 0,-0.70515 -0.578069,-1.28125 -1.283203,-1.28125 z m 0,0.54687 H 18.191406 c 0.410407,0 0.736328,0.32396 0.736328,0.73438 v 3.30078 h 0.273438 c 0.96687,0 1.74414,0.77726 1.74414,1.74414 v 0.27344 h 0.273438 c 2.080246,0 3.759766,1.67952 3.759766,3.75976 v 8.07032 c 0,2.08024 -1.67952,3.75976 -3.759766,3.75976 H 5.0800781 c -2.0802456,0 -3.7617187,-1.67952 -3.7617187,-3.75976 v -8.07032 c 0,-2.08024 1.6814731,-3.75976 3.7617187,-3.75976 H 15.439453 V 274.5 c 0,-0.96688 0.777271,-1.74414 1.744141,-1.74414 h 0.273437 v -2.56445 H 6.0878906 c -0.4104046,0 -0.734375,-0.32593 -0.734375,-0.73633 0,-0.41042 0.3239671,-0.73438 0.734375,-0.73438 z"
        id="path2481"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="/var/www/chamilo11/plugin/bbb/resources/img/128/videoconference_html5.png"
+       inkscape:export-filename="/var/www/chamilo11/plugin/Bbb/resources/img/128/videoconference_html5.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
   </g>

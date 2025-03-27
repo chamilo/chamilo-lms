@@ -14,11 +14,11 @@ use Chamilo\CoreBundle\Repository\ConferenceRecordingRepository;
 use Chamilo\UserBundle\Entity\User;
 
 /**
- * Class bbb
+ * Class Bbb
  * This script initiates a video conference session, calling the BigBlueButton
  * API BigBlueButton-Chamilo connector class
  */
-class bbb
+class Bbb
 {
     public $url;
     public $salt;
@@ -63,7 +63,7 @@ class bbb
         $this->groupId = api_get_group_id();
 
         // Initialize video server settings from global settings
-        $this->plugin = BBBPlugin::create();
+        $this->plugin = BbbPlugin::create();
         $bbbPluginEnabled = $this->plugin->get('tool_enable');
 
         $bbb_host = !empty($host) ? $host : $this->plugin->get('host');
@@ -165,7 +165,7 @@ class bbb
      */
     public function getListingUrl($courseId = 0, $sessionId = 0, $groupId = 0)
     {
-        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'
+        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'
             .$this->getUrlParams($courseId, $sessionId, $groupId);
     }
 
@@ -780,16 +780,16 @@ class bbb
             ->andWhere('a.close = :open')
             ->setParameter('meeting', $meeting)
             ->setParameter('participant', $user)
-            ->setParameter('open', \BBBPlugin::ROOM_OPEN)
+            ->setParameter('open', \BbbPlugin::ROOM_OPEN)
             ->getQuery()
             ->getResult();
 
         foreach ($existing as $activity) {
             if ($activity->getInAt() != $activity->getOutAt()) {
-                $activity->setClose(\BBBPlugin::ROOM_CLOSE);
+                $activity->setClose(\BbbPlugin::ROOM_CLOSE);
             } else {
                 $activity->setOutAt(new \DateTime());
-                $activity->setClose(\BBBPlugin::ROOM_CLOSE);
+                $activity->setClose(\BbbPlugin::ROOM_CLOSE);
             }
             $em->persist($activity);
         }
@@ -799,7 +799,7 @@ class bbb
         $newActivity->setParticipant($user);
         $newActivity->setInAt(new \DateTime());
         $newActivity->setOutAt(new \DateTime());
-        $newActivity->setClose(\BBBPlugin::ROOM_OPEN);
+        $newActivity->setClose(\BbbPlugin::ROOM_OPEN);
 
         $em->persist($newActivity);
         $em->flush();
@@ -1134,7 +1134,7 @@ class bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=end&id='.$meeting['id'];
+        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams().'&action=end&id='.$meeting['id'];
     }
 
     /**
@@ -1191,7 +1191,7 @@ class bbb
 
         foreach ($activities as $activity) {
             $activity->setOutAt(new \DateTime());
-            $activity->setClose(BBBPlugin::ROOM_CLOSE);
+            $activity->setClose(BbbPlugin::ROOM_CLOSE);
             $em->persist($activity);
         }
 
@@ -1212,7 +1212,7 @@ class bbb
     {
         $url = isset($record['playbackFormatUrl']) ? $record['playbackFormatUrl'] : '';
 
-        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams(
+        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams(
             ).'&action=add_to_calendar&id='.$meeting['id'].'&start='.api_strtotime($meeting['created_at']).'&url='.$url;
     }
 
@@ -1367,7 +1367,7 @@ class bbb
             return null;
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams(
+        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams(
             ).'&action=unpublish&id='.$meeting['id'];
     }
 
@@ -1382,7 +1382,7 @@ class bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams(
+        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams(
             ).'&action=publish&id='.$meeting['id'];
     }
 
@@ -1406,7 +1406,7 @@ class bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().
+        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams().
             '&action=regenerate_record&id='.$meeting['id'].'&record_id='.$recordInfo['recordId'];
     }
 
@@ -1425,7 +1425,7 @@ class bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().
+        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams().
             '&action=regenerate_record&id='.$meeting['id'];
     }
 
@@ -1440,7 +1440,7 @@ class bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams(
+        return api_get_path(WEB_PLUGIN_PATH).'Bbb/listing.php?'.$this->getUrlParams(
             ).'&action=delete_record&id='.$meeting['id'];
     }
 
@@ -1456,7 +1456,7 @@ class bbb
         }
 
         return api_get_path(WEB_PLUGIN_PATH).
-            'bbb/listing.php?'.$this->getUrlParams().'&action=copy_record_to_link_tool&id='.$meeting['id'];
+            'Bbb/listing.php?'.$this->getUrlParams().'&action=copy_record_to_link_tool&id='.$meeting['id'];
     }
 
     /**
@@ -1874,7 +1874,7 @@ class bbb
      */
     public function getConferenceUrl()
     {
-        return api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?launch=1&'.$this->getUrlParams();
+        return api_get_path(WEB_PLUGIN_PATH).'Bbb/start.php?launch=1&'.$this->getUrlParams();
     }
 
     /**

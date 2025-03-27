@@ -19,13 +19,13 @@ if ($isGlobalPerUser || $isGlobal) {
 }
 require_once __DIR__.'/config.php';
 
-$plugin = BBBPlugin::create();
+$plugin = BbbPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $em = Database::getManager();
 $meetingRepository = $em->getRepository(ConferenceMeeting::class);
 $activityRepo = $em->getRepository(ConferenceActivity::class);
 
-$htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js');
+$htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'Bbb/resources/utils.js');
 
 $action = $_GET['action'] ?? '';
 $userId = api_get_user_id();
@@ -34,7 +34,7 @@ $sessionId = api_get_session_id();
 $courseInfo = api_get_course_info();
 $course = api_get_course_entity();
 
-$bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
+$bbb = new Bbb('', '', $isGlobal, $isGlobalPerUser);
 
 $conferenceManager = $bbb->isConferenceManager();
 if ($bbb->isGlobalConference()) {
@@ -238,7 +238,7 @@ if ($conferenceManager && $allowToEdit) {
                                             ->setParameters([
                                                 'meetingId' => $meetingId,
                                                 'participantId' => $participantId,
-                                                'close' => \BBBPlugin::ROOM_OPEN,
+                                                'close' => \BbbPlugin::ROOM_OPEN,
                                             ]);
 
                                         $result = $qb->getQuery()->getArrayResult();
@@ -270,7 +270,7 @@ if ($conferenceManager && $allowToEdit) {
                         $activity = $activityRepo->find($roomId);
                         if ($activity instanceof ConferenceActivity) {
                             $activity->setOutAt(new \DateTime());
-                            $activity->setClose(BBBPlugin::ROOM_CLOSE);
+                            $activity->setClose(BbbPlugin::ROOM_CLOSE);
                             $em->flush();
                         }
                     }
@@ -306,7 +306,7 @@ if ($conferenceManager && $allowToEdit) {
                 ->andWhere('a.close = :open')
                 ->setParameter('meetingId', $meetingId)
                 ->setParameter('userId', $userId)
-                ->setParameter('open', BBBPlugin::ROOM_OPEN)
+                ->setParameter('open', BbbPlugin::ROOM_OPEN)
                 ->orderBy('a.id', 'DESC')
                 ->getQuery()
                 ->getResult();
@@ -317,7 +317,7 @@ if ($conferenceManager && $allowToEdit) {
                     if (0 === $i) {
                         $activity->setOutAt(new \DateTime());
                     }
-                    $activity->setClose(BBBPlugin::ROOM_CLOSE);
+                    $activity->setClose(BbbPlugin::ROOM_CLOSE);
                     $i++;
                 }
             }
@@ -447,13 +447,13 @@ $tpl->assign('message', $message);
 $tpl->assign('form', $formToString);
 $tpl->assign('enter_conference_links', $urlList);
 
-$content = $tpl->fetch('bbb/view/listing.tpl');
+$content = $tpl->fetch('Bbb/view/listing.tpl');
 
 $actionLinks = '';
 if (api_is_platform_admin()) {
     $actionLinks .= Display::toolbarButton(
         $plugin->get_lang('AdminView'),
-        api_get_path(WEB_PLUGIN_PATH).'bbb/admin.php',
+        api_get_path(WEB_PLUGIN_PATH).'Bbb/admin.php',
         'list',
         'primary'
     );

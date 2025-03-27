@@ -17,7 +17,7 @@ if (file_exists(__DIR__.'/config.vm.php')) {
     $vm = new VM($config);
 
     if ($vm->isEnabled()) {
-        $bbb = new bbb();
+        $bbb = new Bbb();
         if ($bbb->pluginEnabled) {
             $activeSessions = $bbb->getActiveSessionsCount();
             if (empty($activeSessions)) {

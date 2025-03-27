@@ -10,12 +10,12 @@ use Chamilo\CoreBundle\Repository\ConferenceActivityRepository;
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
 
-$plugin = BBBPlugin::create();
+$plugin = BbbPlugin::create();
 /** @var ConferenceActivityRepository $activityRepo */
 $em = Database::getManager();
 $activityRepo = $em->getRepository(ConferenceActivity::class);
 
-$bbb = new bbb();
+$bbb = new Bbb();
 if ($bbb->pluginEnabled) {
     $activeSessions = $bbb->getActiveSessions();
 
@@ -57,12 +57,12 @@ if ($bbb->pluginEnabled) {
                                 ->where('a.meeting = :meetingId')
                                 ->andWhere('a.close = :open')
                                 ->setParameter('meetingId', $meetingId)
-                                ->setParameter('open', BBBPlugin::ROOM_OPEN)
+                                ->setParameter('open', BbbPlugin::ROOM_OPEN)
                                 ->getQuery()
                                 ->getResult();
 
                             foreach ($activitiesToMark as $activity) {
-                                $activity->setClose(BBBPlugin::ROOM_CHECK);
+                                $activity->setClose(BbbPlugin::ROOM_CHECK);
                             }
                             $em->flush();
 
@@ -76,7 +76,7 @@ if ($bbb->pluginEnabled) {
                                     ->andWhere('a.close = :check')
                                     ->setParameter('meetingId', $meetingId)
                                     ->setParameter('participantId', $participantId)
-                                    ->setParameter('check', BBBPlugin::ROOM_CHECK)
+                                    ->setParameter('check', BbbPlugin::ROOM_CHECK)
                                     ->orderBy('a.id', 'DESC')
                                     ->setMaxResults(1)
                                     ->getQuery()
@@ -84,7 +84,7 @@ if ($bbb->pluginEnabled) {
 
                                 if ($roomData instanceof ConferenceActivity) {
                                     $roomData->setOutAt(new \DateTime());
-                                    $roomData->setClose(BBBPlugin::ROOM_OPEN);
+                                    $roomData->setClose(BbbPlugin::ROOM_OPEN);
                                 }
                                 $i++;
                             }
@@ -94,13 +94,13 @@ if ($bbb->pluginEnabled) {
                                 ->where('a.meeting = :meetingId')
                                 ->andWhere('a.close = :check')
                                 ->setParameter('meetingId', $meetingId)
-                                ->setParameter('check', BBBPlugin::ROOM_CHECK)
+                                ->setParameter('check', BbbPlugin::ROOM_CHECK)
                                 ->getQuery()
                                 ->getResult();
 
                             foreach ($activitiesToClose as $activity) {
                                 $activity->setOutAt(new \DateTime());
-                                $activity->setClose(BBBPlugin::ROOM_CLOSE);
+                                $activity->setClose(BbbPlugin::ROOM_CLOSE);
                             }
 
                             $em->flush();

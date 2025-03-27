@@ -15,7 +15,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $meetingId = isset($_REQUEST['meeting']) ? (int) ($_REQUEST['meeting']) : 0;
 
-$bbb = new bbb('', '');
+$bbb = new Bbb('', '');
 
 switch ($action) {
     case 'check_m4v':

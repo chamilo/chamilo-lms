@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Entity\Course;
  * BigBlueButton plugin configuration class.
  * Handles plugin options and course settings.
  */
-class BBBPlugin extends Plugin
+class BbbPlugin extends Plugin
 {
     const ROOM_OPEN = 0;
     const ROOM_CLOSE = 1;
@@ -128,7 +128,6 @@ class BBBPlugin extends Plugin
 
         return $this;
     }
-    
 
     /**
      * Updates a course setting value across all existing courses.
@@ -158,5 +157,10 @@ class BBBPlugin extends Plugin
         }
 
         $entityManager->flush();
+    }
+
+    public function get_name(): string
+    {
+        return 'Bbb';
     }
 }

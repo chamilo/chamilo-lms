@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use bbb;
+use Bbb;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
@@ -112,11 +112,11 @@ class PlatformConfigurationController extends AbstractController
             }
 
             $configuration['plugins']['bbb'] = [
-                'show_global_conference_link' => bbb::showGlobalConferenceLink([
+                'show_global_conference_link' => Bbb::showGlobalConferenceLink([
                     'username' => $user->getUserIdentifier(),
                     'status' => $user->getStatus(),
                 ]),
-                'listingURL' => (new bbb('', '', true, $user->getId()))->getListingUrl(),
+                'listingURL' => (new Bbb('', '', true, $user->getId()))->getListingUrl(),
             ];
         }
 

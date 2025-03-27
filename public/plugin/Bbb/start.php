@@ -7,7 +7,7 @@
  */
 require_once __DIR__.'/../../../vendor/autoload.php';
 
-$course_plugin = 'bbb'; //needed in order to load the plugin lang variables
+$course_plugin = 'Bbb'; //needed in order to load the plugin lang variables
 
 $isGlobal = isset($_GET['global']);
 $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
@@ -30,7 +30,7 @@ $tpl = new Template($tool_name);
 $vmIsEnabled = false;
 $host = '';
 $salt = '';
-$bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
+$bbb = new Bbb('', '', $isGlobal, $isGlobalPerUser);
 
 $conferenceManager = $bbb->isConferenceManager();
 if ($bbb->isGlobalConference()) {

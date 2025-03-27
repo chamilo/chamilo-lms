@@ -8,4 +8,4 @@
  * the global database and the courses tables.
  */
 require_once __DIR__.'/config.php';
-BBBPlugin::create()->uninstall();
+BbbPlugin::create()->uninstall();

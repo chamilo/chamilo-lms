@@ -46,7 +46,7 @@ components/*
 nbproject/*
 
 # Plugins config files
-public/plugin/bbb/config.vm.php
+public/plugin/Bbb/config.vm.php
 
 # Cron temp files
 public/main/cron/incoming/*

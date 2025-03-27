@@ -14,11 +14,11 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 
-$plugin = BBBPlugin::create();
+$plugin = BbbPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $isGlobal = isset($_GET['global']);
 
-$bbb = new bbb('', '', $isGlobal);
+$bbb = new Bbb('', '', $isGlobal);
 $action = $_GET['action'] ?? null;
 
 $currentMonth = date('n');
@@ -100,7 +100,7 @@ if (!$bbb->isServerRunning()) {
 }
 
 $htmlHeadXtra[] = api_get_js_simple(
-    api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js'
+    api_get_path(WEB_PLUGIN_PATH).'Bbb/resources/utils.js'
 );
 $htmlHeadXtra[] = "<script>var _p = {web_plugin: '".api_get_path(WEB_PLUGIN_PATH)."'}</script>";
 
@@ -147,7 +147,7 @@ if ($settingsForm->validate()) {
 
 $settingsForm->setDefaults($defaults);
 $tpl->assign('settings_form', $settingsForm->returnForm());
-$content = $tpl->fetch('bbb/view/admin.tpl');
+$content = $tpl->fetch('Bbb/view/admin.tpl');
 if ($meetings) {
     $actions = Display::toolbarButton(
         get_lang('Export in Excel format'),

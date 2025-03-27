@@ -27,7 +27,7 @@ class ConferenceActivityRepository extends ServiceEntityRepository
             ->andWhere('a.inAt = a.outAt')
             ->andWhere('a.close = :open')
             ->setParameter('meetingId', $meetingId)
-            ->setParameter('open', \BBBPlugin::ROOM_OPEN)
+            ->setParameter('open', \BbbPlugin::ROOM_OPEN)
             ->getQuery()
             ->getResult();
     }
@@ -38,7 +38,7 @@ class ConferenceActivityRepository extends ServiceEntityRepository
             ->update()
             ->set('a.close', ':closed')
             ->where('a.meeting = :meetingId')
-            ->setParameter('closed', \BBBPlugin::ROOM_CLOSE)
+            ->setParameter('closed', \BbbPlugin::ROOM_CLOSE)
             ->setParameter('meetingId', $meetingId)
             ->getQuery()
             ->execute();

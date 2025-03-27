@@ -42,7 +42,7 @@ filter:
         - 'public/plugin/buycourses/src/Requests.php'
         - 'public/plugin/vchamilo/cli/*'
         - 'public/plugin/pens/lib/'
-        - 'public/plugin/bbb/lib/bbb_api.php'
+        - 'public/plugin/Bbb/lib/bbb_api.php'
         - 'public/plugin/ims_lti/OAuthSimple.php'
         - 'public/plugin/sepe/src/wsse/*'
         - 'public/plugin/test2pdf/class/*'

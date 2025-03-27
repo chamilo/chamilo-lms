@@ -8848,30 +8848,19 @@ class learnpath
             return;
         }
 
-        $lpItemIds = array_map(fn($item) => $item->getIid(), $lpItems);
-        $lpItemViewRepo = $em->getRepository(CLpItemView::class);
-        $lpItemViews = $lpItemViewRepo->createQueryBuilder('v')
-            ->where('v.item IN (:lpItemIds)')
-            ->setParameter('lpItemIds', $lpItemIds)
-            ->getQuery()
-            ->getResult();
-
-        if (empty($lpItemViews)) {
-            Display::addFlash(Display::return_message(get_lang('No item views found'), 'error'));
-            return;
+        $lpItemsById = [];
+        foreach ($lpItems as $item) {
+            $lpItemsById[$item->getIid()] = $item;
         }
 
-        $lpViewIds = array_map(fn($view) => $view->getIid(), $lpItemViews);
         $trackEExerciseRepo = $em->getRepository(TrackEExercise::class);
         $trackExercises = $trackEExerciseRepo->createQueryBuilder('te')
             ->where('te.origLpId = :lpId')
-            ->andWhere('te.origLpItemId IN (:lpItemIds)')
-            ->andWhere('te.origLpItemViewId IN (:lpViewIds)')
             ->andWhere('te.user = :userId')
+            ->andWhere('te.origLpItemId IN (:lpItemIds)')
             ->setParameter('lpId', $this->lp_id)
-            ->setParameter('lpItemIds', $lpItemIds)
-            ->setParameter('lpViewIds', $lpViewIds)
             ->setParameter('userId', $userId)
+            ->setParameter('lpItemIds', array_keys($lpItemsById))
             ->getQuery()
             ->getResult();
 
@@ -8882,12 +8871,21 @@ class learnpath
 
         foreach ($trackExercises as $trackExercise) {
             $exeId = $trackExercise->getExeId();
-            $exerciseId = $trackExercise->getQuiz()->getIid();
-            $courseId = $trackExercise->getCourse()->getId();
+            $lpItemId = $trackExercise->getOrigLpItemId();
 
-            $result = ExerciseLib::recalculateResult($exeId, $userId, $exerciseId, $courseId);
+            if (!isset($lpItemsById[$lpItemId])) {
+                continue;
+            }
 
-            if ($result) {
+            $lpItem = $lpItemsById[$lpItemId];
+            if ('quiz' !== $lpItem->getItemType()) {
+                continue;
+            }
+
+            $quizId = (int) $lpItem->getPath();
+            $courseId = (int) $trackExercise->getCourse()->getId();
+            $updatedExercise = ExerciseLib::recalculateResult($exeId, $userId, $quizId, $courseId);
+            if ($updatedExercise instanceof TrackEExercise) {
                 Display::addFlash(Display::return_message(get_lang('Results recalculated'), 'success'));
             } else {
                 Display::addFlash(Display::return_message(get_lang('Error recalculating results'), 'error'));

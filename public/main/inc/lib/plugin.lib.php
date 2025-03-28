@@ -200,7 +200,7 @@ class AppPlugin
             'H5pImport',
             'HelloWorld',
             'ImsLti',
-            'justification',
+            'Justification',
             'learning_calendar',
             'lti_provider',
             'maintenancemode',

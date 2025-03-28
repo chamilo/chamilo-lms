@@ -16,7 +16,7 @@ $list = $plugin->getList();
 
 $tpl->assign('list', $list);
 
-$content = $tpl->fetch('justification/view/list.tpl');
+$content = $tpl->fetch('Justification/view/list.tpl');
 $actionLinks = '';
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
@@ -35,7 +35,7 @@ switch ($action) {
 if (api_is_platform_admin()) {
     $actionLinks .= Display::toolbarButton(
         $plugin->get_lang('Add'),
-        api_get_path(WEB_PLUGIN_PATH).'justification/add.php',
+        api_get_path(WEB_PLUGIN_PATH).'Justification/add.php',
         'plus',
         'primary'
     );
@@ -43,7 +43,7 @@ if (api_is_platform_admin()) {
 
 $actionLinks .= Display::toolbarButton(
     $plugin->get_lang('Users'),
-    api_get_path(WEB_PLUGIN_PATH).'justification/justification_by_user.php',
+    api_get_path(WEB_PLUGIN_PATH).'Justification/justification_by_user.php',
     'user',
     'primary'
 );
@@ -51,7 +51,7 @@ $actionLinks .= Display::toolbarButton(
 if (api_is_platform_admin()) {
     $actionLinks .= Display::toolbarButton(
         $plugin->get_lang('SetNewCourse'),
-        api_get_path(WEB_PLUGIN_PATH).'justification/set_course.php',
+        api_get_path(WEB_PLUGIN_PATH).'Justification/set_course.php',
         'book',
         'primary'
     );

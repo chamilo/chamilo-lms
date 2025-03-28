@@ -34,14 +34,14 @@ if ($form->validate()) {
     $values = $form->getSubmitValues();
     api_set_setting('justification_default_course_id', $values['course_id']);
     Display::addFlash(Display::return_message(get_lang('Saved')));
-    $url = api_get_path(WEB_PLUGIN_PATH).'justification/list.php?';
+    $url = api_get_path(WEB_PLUGIN_PATH).'Justification/list.php?';
     header('Location: '.$url);
     exit;
 }
 
 $actionLinks = Display::toolbarButton(
     $plugin->get_lang('Back'),
-    api_get_path(WEB_PLUGIN_PATH).'justification/list.php',
+    api_get_path(WEB_PLUGIN_PATH).'Justification/list.php',
     'arrow-left',
     'primary'
 );

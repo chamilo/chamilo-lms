@@ -54,7 +54,7 @@ if ($userId) {
 }
 
 $tpl->assign('user_id', $userId);
-$content = $tpl->fetch('justification/view/justification_user_list.tpl');
+$content = $tpl->fetch('Justification/view/justification_user_list.tpl');
 
 $actionLinks = '';
 
@@ -100,7 +100,7 @@ switch ($action) {
 
 $actionLinks .= Display::toolbarButton(
     $plugin->get_lang('Back'),
-    api_get_path(WEB_PLUGIN_PATH).'justification/list.php',
+    api_get_path(WEB_PLUGIN_PATH).'Justification/list.php',
     'arrow-left',
     'primary'
 );

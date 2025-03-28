@@ -23,7 +23,7 @@ $fieldList = $plugin->getList();
 $totalFields = count($fieldList);
 
 if (empty($fieldList)) {
-    echo 'No fields to check. Please add them in the justification plugin';
+    echo 'No fields to check. Please add them in the Justification plugin';
     exit;
 }
 

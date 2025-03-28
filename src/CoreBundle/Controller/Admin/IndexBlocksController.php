@@ -484,7 +484,7 @@ class IndexBlocksController extends BaseController
         if ($allowJustification) {
             $items[] = [
                 'class' => 'item-justification-list',
-                'url' => api_get_path(WEB_PLUGIN_PATH).'justification/list.php',
+                'url' => api_get_path(WEB_PLUGIN_PATH).'Justification/list.php',
                 'label' => $this->translator->trans('Justification'),
             ];
         }

@@ -2,7 +2,7 @@ Justification
 ==============
 
 1. Enable the plugin.
-2. Create the justification files in plugin/justification/list.php
+2. Create the justification files in plugin/Justification/list.php
 
 
 When activating the justification plugin it adds a link at the bottom of the plateform block of the administration page to open plugin/justification/list.php to create and manage the justification needed.

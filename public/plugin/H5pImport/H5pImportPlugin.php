@@ -146,7 +146,7 @@ class H5pImportPlugin extends Plugin
             $this->get_lang('plugin_title'),
             $courseId,
             'plugin_h5p_import.png',
-            '../plugin/h5pimport/start.php',
+            '../plugin/H5pImport/start.php',
             0,
             'authoring'
         );
@@ -209,7 +209,7 @@ class H5pImportPlugin extends Plugin
      */
     public function getViewUrl(H5pImport $h5pImport): string
     {
-        return api_get_path(WEB_PLUGIN_PATH).'h5pimport/view.php?id='.$h5pImport->getIid().'&'.api_get_cidreq();
+        return api_get_path(WEB_PLUGIN_PATH).'H5pImport/view.php?id='.$h5pImport->getIid().'&'.api_get_cidreq();
     }
 
     /**
@@ -222,7 +222,7 @@ class H5pImportPlugin extends Plugin
     public function getLpResourceBlock(int $lpId): string
     {
         $cidReq = api_get_cidreq(true, true, 'lp');
-        $webPath = api_get_path(WEB_PLUGIN_PATH).'h5pimport/';
+        $webPath = api_get_path(WEB_PLUGIN_PATH).'H5pImport/';
         $course = api_get_course_entity();
         $session = api_get_session_entity();
 
@@ -292,7 +292,7 @@ class H5pImportPlugin extends Plugin
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'authoring', 'link' => '../plugin/h5pimport/start.php%']);
+            ->execute(['category' => 'authoring', 'link' => '../plugin/H5pImport/start.php%']);
     }
 
     /**
@@ -308,5 +308,10 @@ class H5pImportPlugin extends Plugin
             $courseInfo = api_get_course_info_by_id($row['id']);
             $fs->remove($courseInfo['course_sys_path'].'/h5p');
         }
+    }
+
+    public function get_name()
+    {
+        return 'H5pImport';
     }
 }

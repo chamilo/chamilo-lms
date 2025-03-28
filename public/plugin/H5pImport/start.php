@@ -226,7 +226,7 @@ switch ($action) {
 
 }
 
-$content = $view->fetch('h5pimport/view/index.tpl');
+$content = $view->fetch('H5pImport/view/index.tpl');
 if ($actions) {
     $actions = implode(PHP_EOL, $actions);
 

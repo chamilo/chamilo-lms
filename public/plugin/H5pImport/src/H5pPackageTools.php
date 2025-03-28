@@ -205,8 +205,8 @@ class H5pPackageTools
             'url' => $h5pImport->getRelativePath(),
             'postUserStatistics' => true,
             'ajax' => [
-                'setFinished' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=set_finished&h5pId='.$h5pImport->getIid().'&learnpath='.$originIsLearnpath.'&token='.\H5PCore::createToken('result'),
-                'contentUserData' => api_get_path(WEB_PLUGIN_PATH).'h5pimport/src/ajax.php?action=content_user_data&h5pId='.$h5pImport->getIid().'&token='.\H5PCore::createToken('content'),
+                'setFinished' => api_get_path(WEB_PLUGIN_PATH).'H5pImport/src/ajax.php?action=set_finished&h5pId='.$h5pImport->getIid().'&learnpath='.$originIsLearnpath.'&token='.\H5PCore::createToken('result'),
+                'contentUserData' => api_get_path(WEB_PLUGIN_PATH).'H5pImport/src/ajax.php?action=content_user_data&h5pId='.$h5pImport->getIid().'&token='.\H5PCore::createToken('content'),
             ],
             'saveFreq' => false,
             'l10n' => [

@@ -197,7 +197,7 @@ class AppPlugin
             'ExtraMenuFromWebservice',
             'GoogleMaps',
             'GradingElectronic',
-            'h5pimport',
+            'H5pImport',
             'hello_world',
             'ims_lti',
             'justification',

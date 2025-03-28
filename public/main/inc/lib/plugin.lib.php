@@ -193,7 +193,7 @@ class AppPlugin
             'EmbedRegistry',
             'ExerciseSignature',
             'ExtAuthChamiloLogoutButtonBehaviour',
-            'externalnotificationconnect',
+            'ExternalNotificationConnect',
             'extramenufromwebservice',
             'google_maps',
             'grading_electronic',

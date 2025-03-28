@@ -177,4 +177,9 @@ class ExternalNotificationConnectPlugin extends Plugin
 
         return $json['data']['data']['token'];
     }
+
+    public function get_name()
+    {
+        return 'ExternalNotificationConnect';
+    }
 }

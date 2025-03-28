@@ -181,7 +181,7 @@ class AppPlugin
             'BeforeLogin',
             'BuyCourses',
             'CardGame',
-            'check_extra_field_author_company',
+            'CheckExtraFieldAuthorCompany',
             'cleandeletedfiles',
             'courseblock',
             'coursehomenotify',

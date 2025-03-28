@@ -194,7 +194,7 @@ class AppPlugin
             'ExerciseSignature',
             'ExtAuthChamiloLogoutButtonBehaviour',
             'ExternalNotificationConnect',
-            'extramenufromwebservice',
+            'ExtraMenuFromWebservice',
             'google_maps',
             'grading_electronic',
             'h5pimport',

@@ -7,8 +7,6 @@ use ChamiloSession as Session;
  * This is the main script of the extra menu from webservice plugin.
  *
  * @author Borja Sanchez
- *
- * @package chamilo.plugin.extramenufromwebservice
  */
 
 // This plugin doesn't work for anonymous users
@@ -28,7 +26,7 @@ if (!api_is_anonymous()) {
             false,
             true
         );
-        $pluginPath = api_get_path(WEB_PLUGIN_PATH).'extramenufromwebservice/resources/';
+        $pluginPath = api_get_path(WEB_PLUGIN_PATH).'ExtraMenuFromWebservice/resources/';
         //Check if the token is in session, if not get a new token and write in session
         if (
             Session::has('extramenufromwebservice_plugin_token') &&

@@ -15,14 +15,14 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 // This plugin doesn't work for anonymous users
 if (!api_is_anonymous()) {
-    require_once 'card_game.php';
+    require_once 'CardGame.php';
     $cardGame = CardGame::create();
 
     $version = '?v=041';
     $interface = 'localhost';
     $parsedUrl = parse_url($_SERVER['REQUEST_URI']);
     $parsedUrlpath = $parsedUrl['path'];
-    $pluginPath = api_get_path(WEB_PLUGIN_PATH).'card_game/resources/';
+    $pluginPath = api_get_path(WEB_PLUGIN_PATH).'CardGame/resources/';
 
     $fh = '<script type="text/javascript" src="'.$pluginPath.'js/cardgame.js'.$version.'" ></script>';
     $fh .= '<link href="'.$pluginPath.'css/cardgame.css'.$version.'" rel="stylesheet" type="text/css">';

@@ -180,7 +180,7 @@ class AppPlugin
             'Bbb',
             'BeforeLogin',
             'BuyCourses',
-            'card_game',
+            'CardGame',
             'check_extra_field_author_company',
             'cleandeletedfiles',
             'courseblock',

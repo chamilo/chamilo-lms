@@ -189,7 +189,7 @@ class AppPlugin
             'CustomCertificate',
             'CustomFooter',
             'Dashboard',
-            'dictionary',
+            'Dictionary',
             'embedregistry',
             'exercise_signature',
             'ext_auth_chamilo_logout_button_behaviour',

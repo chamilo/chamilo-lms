@@ -452,7 +452,7 @@ class IndexBlocksController extends BaseController
         if ('true' === api_get_plugin_setting('dictionary', 'enable_plugin_dictionary')) {
             $items[] = [
                 'class' => 'item-dictionary',
-                'url' => api_get_path(WEB_PLUGIN_PATH).'dictionary/terms.php',
+                'url' => api_get_path(WEB_PLUGIN_PATH).'Dictionary/terms.php',
                 'label' => $this->translator->trans('Dictionary'),
             ];
         }

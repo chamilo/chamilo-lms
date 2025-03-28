@@ -191,7 +191,7 @@ class AppPlugin
             'Dashboard',
             'Dictionary',
             'EmbedRegistry',
-            'exercise_signature',
+            'ExerciseSignature',
             'ext_auth_chamilo_logout_button_behaviour',
             'externalnotificationconnect',
             'extramenufromwebservice',

@@ -114,7 +114,7 @@ class ExerciseSignaturePlugin extends Plugin
      */
     public function get_name()
     {
-        return 'exercise_signature';
+        return 'ExerciseSignature';
     }
 
     /**

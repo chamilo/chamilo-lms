@@ -7,189 +7,113 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class EmbedRegistry.
- *
- * @package Chamilo\PluginBundle\Entity\EmbedRegistry
- *
- * @ORM\Entity()
- * @ORM\Table(name="plugin_embed_registry_embed")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'plugin_embed_registry_embed')]
 class Embed
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    private $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="text")
-     */
-    private $title;
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="display_start_date", type="datetime")
-     */
-    private $displayStartDate;
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="display_end_date", type="datetime")
-     */
-    private $displayEndDate;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="html_code", type="text")
-     */
-    private $htmlCode;
-    /**
-     * @var Course
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
-     */
-    private $course;
-    /**
-     * @var Session|null
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
-     */
-    private $session;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    private ?int $id;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    #[ORM\Column(name: 'title', type: 'text')]
+    private string $title;
+
+    #[ORM\Column(name: 'display_start_date', type: 'datetime')]
+    private \DateTime $displayStartDate;
+
+    #[ORM\Column(name: 'display_end_date', type: 'datetime')]
+    private \DateTime $displayEndDate;
+
+    #[ORM\Column(name: 'html_code', type: 'text')]
+    private string $htmlCode;
+
+    #[ORM\ManyToOne(targetEntity: Course::class)]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
+    private Course $course;
+
+    #[ORM\ManyToOne(targetEntity: Session::class)]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
+    private ?Session $session;
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Embed
-     */
-    public function setId($id)
+    public function setId(int $id): static
     {
         $this->id = $id;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param $title
-     *
-     * @return Embed
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): static
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getDisplayStartDate()
+    public function getDisplayStartDate(): \DateTime
     {
         return $this->displayStartDate;
     }
 
-    /**
-     * @return Embed
-     */
-    public function setDisplayStartDate(\DateTime $displayStartDate)
+    public function setDisplayStartDate(\DateTime $displayStartDate): static
     {
         $this->displayStartDate = $displayStartDate;
 
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getDisplayEndDate()
+    public function getDisplayEndDate(): \DateTime
     {
         return $this->displayEndDate;
     }
 
-    /**
-     * @return Embed
-     */
-    public function setDisplayEndDate(\DateTime $displayEndDate)
+    public function setDisplayEndDate(\DateTime $displayEndDate): static
     {
         $this->displayEndDate = $displayEndDate;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getHtmlCode()
+    public function getHtmlCode(): string
     {
         return $this->htmlCode;
     }
 
-    /**
-     * @param string $htmlCode
-     *
-     * @return Embed
-     */
-    public function setHtmlCode($htmlCode)
+    public function setHtmlCode(string $htmlCode): static
     {
         $this->htmlCode = $htmlCode;
 
         return $this;
     }
 
-    /**
-     * @return Course
-     */
-    public function getCourse()
+    public function getCourse(): Course
     {
         return $this->course;
     }
 
-    /**
-     * @return Embed
-     */
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): static
     {
         $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * @return Session|null
-     */
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    /**
-     * @return Embed
-     */
-    public function setSession(Session $session = null)
+    public function setSession(?Session $session = null): static
     {
         $this->session = $session;
 

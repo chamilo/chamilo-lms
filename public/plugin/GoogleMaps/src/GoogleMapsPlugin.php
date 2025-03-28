@@ -34,7 +34,7 @@ class GoogleMapsPlugin extends Plugin
      */
     public function get_name()
     {
-        return 'google_maps';
+        return 'GoogleMaps';
     }
 
     /**

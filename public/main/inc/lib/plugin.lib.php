@@ -195,7 +195,7 @@ class AppPlugin
             'ExtAuthChamiloLogoutButtonBehaviour',
             'ExternalNotificationConnect',
             'ExtraMenuFromWebservice',
-            'google_maps',
+            'GoogleMaps',
             'grading_electronic',
             'h5pimport',
             'hello_world',

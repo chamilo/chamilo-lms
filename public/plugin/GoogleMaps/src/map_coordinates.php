@@ -60,7 +60,7 @@ foreach ($extraFieldValues as $index => $extra) {
 $tpl->assign('extra_field_values_formatted', $formattedExtraFieldValues);
 $tpl->assign('extra_field_values', $extraFieldValues);
 
-$content = $tpl->fetch('google_maps/view/map_coordinates.tpl');
+$content = $tpl->fetch('GoogleMaps/view/map_coordinates.tpl');
 
 $tpl->assign('header', $templateName);
 $tpl->assign('content', $content);

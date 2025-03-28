@@ -9,6 +9,8 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
 use ChamiloSession as Session;
 
 /**
@@ -5494,6 +5496,20 @@ EOT;
 
         $em->persist($trackedExercise);
         $em->flush();
+        $lpItemId = $trackedExercise->getOrigLpItemId();
+        $lpId = $trackedExercise->getOrigLpId();
+        $lpItemViewId = $trackedExercise->getOrigLpItemViewId();
+        if ($lpId && $lpItemId && $lpItemViewId) {
+            $lpItem = $em->getRepository(CLpItem::class)->find($lpItemId);
+            if ($lpItem && 'quiz' === $lpItem->getItemType()) {
+                $lpItemView = $em->getRepository(CLpItemView::class)->find($lpItemViewId);
+                if ($lpItemView) {
+                    $lpItemView->setScore($totalScore);
+                    $em->persist($lpItemView);
+                    $em->flush();
+                }
+            }
+        }
 
         return $trackedExercise;
     }

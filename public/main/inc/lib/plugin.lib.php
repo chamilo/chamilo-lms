@@ -198,7 +198,7 @@ class AppPlugin
             'GoogleMaps',
             'GradingElectronic',
             'H5pImport',
-            'hello_world',
+            'HelloWorld',
             'ims_lti',
             'justification',
             'learning_calendar',

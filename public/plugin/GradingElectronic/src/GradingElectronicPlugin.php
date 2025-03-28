@@ -35,7 +35,7 @@ class GradingElectronicPlugin extends Plugin
 
     public function get_name()
     {
-        return 'grading_electronic';
+        return 'GradingElectronic';
     }
 
     /**

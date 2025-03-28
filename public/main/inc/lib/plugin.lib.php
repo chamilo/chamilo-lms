@@ -196,7 +196,7 @@ class AppPlugin
             'ExternalNotificationConnect',
             'ExtraMenuFromWebservice',
             'GoogleMaps',
-            'grading_electronic',
+            'GradingElectronic',
             'h5pimport',
             'hello_world',
             'ims_lti',

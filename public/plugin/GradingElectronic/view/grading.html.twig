@@ -28,7 +28,7 @@
                 e.preventDefault();
 
                 var $self = $(this);
-                $.post('{{ _p.web_plugin }}grading_electronic/generate.php', $self.serialize())
+                $.post('{{ _p.web_plugin }}GradingElectronic/generate.php', $self.serialize())
                 .done(function (response) {
                     $('#modal-grading-electronic-result').html(
                         response

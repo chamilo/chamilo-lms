@@ -878,7 +878,7 @@ servidor web y agregar esta línea. Debería ver una diferencia notable en el ti
   RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/skills/issued_all.php?skill=$1&user=$2 [L]
   RewriteRule ^main/exercice/(.*)$ main/exercise/$1 [QSA,L]
   RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
-  RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
+  RewriteRule ^service/(\d{1,})$ plugin/BuyCourses/src/service_information.php?service_id=$1 [L]
   RewriteRule ^lti/os$ plugin/ims_lti/outcome_service.php [L]
   RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
   RewriteRule ^(tests|.git) - [F,L,NC]
@@ -918,7 +918,7 @@ location @rewrite{
   rewrite ^/badge/(\d+)/user/(\d+)$ /main/skills/issued_all.php?skill=$1&user=$2 last;
   rewrite ^/main/exercice/(.*)$ /main/exercise/$1 last;
   rewrite ^/main/newscorm/(.*)$ /main/lp/$1 last;
-  rewrite ^/service/(\d+)$ /plugin/buycourses/src/service_information.php?service_id=$1 last;
+  rewrite ^/service/(\d+)$ /plugin/BuyCourses/src/service_information.php?service_id=$1 last;
   rewrite "^/main/upload/users/(.*)/(.*)/my_files/(.*)$" /app/upload/users/$1/$2/my_files/$3 last;
 
   try_files $uri /index.php$is_args$args;
@@ -1055,7 +1055,7 @@ location ^~ /tests/ {
                 &lt;/rule&gt;
                 &lt;rule name="rule 18v" stopProcessing="true"&gt;
                     &lt;match url="^service/(\d{1,})$"  /&gt;
-                    &lt;action type="Rewrite" url="/plugin/buycourses/src/service_information.php?service_id={R:1}"  /&gt;
+                    &lt;action type="Rewrite" url="/plugin/BuyCourses/src/service_information.php?service_id={R:1}"  /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule 19v" stopProcessing="true"&gt;
                     &lt;match url="^([^/.]+)/?$"  /&gt;

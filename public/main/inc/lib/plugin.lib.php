@@ -185,7 +185,7 @@ class AppPlugin
             'CleanDeletedFiles',
             'CourseBlock',
             'CourseHomeNotify',
-            'courselegal',
+            'CourseLegal',
             'customcertificate',
             'customfooter',
             'dashboard',

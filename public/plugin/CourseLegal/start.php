@@ -59,7 +59,7 @@ if ($form->validate()) {
     exit;
 }
 Display::display_header($legal->get_lang('CourseLegal'));
-$url = api_get_path(WEB_PLUGIN_PATH).'courselegal/user_list.php?'.api_get_cidreq();
+$url = api_get_path(WEB_PLUGIN_PATH).'CourseLegal/user_list.php?'.api_get_cidreq();
 $link = Display::url(Display::getMdiIcon(ActionIcon::USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('User list')), $url);
 echo '<div class="actions">'.$link.'</div>';
 $form->display();

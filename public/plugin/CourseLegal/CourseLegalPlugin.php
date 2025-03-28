@@ -45,7 +45,7 @@ class CourseLegalPlugin extends Plugin
     {
         $link = null;
         if (api_is_allowed_to_edit()) {
-            $url = api_get_path(WEB_PLUGIN_PATH).'courselegal/start.php?'.api_get_cidreq();
+            $url = api_get_path(WEB_PLUGIN_PATH).'CourseLegal/start.php?'.api_get_cidreq();
             $link = Display::url(
                 $this->get_lang('CourseLegal'),
                 $url,
@@ -352,7 +352,7 @@ class CourseLegalPlugin extends Plugin
         $course = api_get_course_info_by_id($courseId);
 
         $legalData = $this->getData($courseId, $sessionId);
-        $coursePath = api_get_path(SYS_COURSE_PATH).$course['directory'].'/courselegal';
+        $coursePath = api_get_path(SYS_COURSE_PATH).$course['directory'].'/CourseLegal';
         $uploadResult = $coursePath.'/'.$legalData['filename'];
 
         if (!is_dir($coursePath)) {
@@ -493,13 +493,13 @@ class CourseLegalPlugin extends Plugin
         if (isset($data['filename']) && !empty($data['filename'])) {
             $course = api_get_course_info_by_id($courseId);
 
-            $coursePath = api_get_path(SYS_COURSE_PATH).$course['directory'].'/courselegal';
+            $coursePath = api_get_path(SYS_COURSE_PATH).$course['directory'].'/CourseLegal';
             $file = $coursePath.'/'.$data['filename'];
 
             if (file_exists($file)) {
                 return Display::url(
                     $data['filename'],
-                    api_get_path(WEB_COURSE_PATH).$course['directory'].'/courselegal/'.$data['filename'],
+                    api_get_path(WEB_COURSE_PATH).$course['directory'].'/CourseLegal/'.$data['filename'],
                     ['target' => '_blank']
                 );
             }
@@ -549,5 +549,10 @@ class CourseLegalPlugin extends Plugin
 
         // Deleting course settings
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
+    }
+
+    public function get_name()
+    {
+        return 'CourseLegal';
     }
 }

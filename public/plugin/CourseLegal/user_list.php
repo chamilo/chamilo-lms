@@ -52,7 +52,7 @@ $table->setHeaderContents(0, 2, $legal->get_lang('MailAgreement'));
 $table->setHeaderContents(0, 3, $legal->get_lang('Detail'));
 $row = 1;
 
-$pluginPath = api_get_path(WEB_PLUGIN_PATH).'courselegal/';
+$pluginPath = api_get_path(WEB_PLUGIN_PATH).'CourseLegal/';
 if (!empty($userList)) {
     foreach ($userList as $user) {
         $userName = api_get_person_name($user['firstname'], $user['lastname']);

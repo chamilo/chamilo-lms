@@ -15,7 +15,7 @@ to be shown to the students. There are other options in the form, like:
  - Delete all previous agreements
  - Delete the file.
 
- The file are saved in courses/XX/courselegal/
+ The file are saved in courses/XX/CourseLegal/
 
 8. Once the form was saved, a new form will appear for the registered users.
    The student has to accept the form.

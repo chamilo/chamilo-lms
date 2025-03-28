@@ -182,7 +182,7 @@ class AppPlugin
             'BuyCourses',
             'CardGame',
             'CheckExtraFieldAuthorCompany',
-            'cleandeletedfiles',
+            'CleanDeletedFiles',
             'courseblock',
             'coursehomenotify',
             'courselegal',

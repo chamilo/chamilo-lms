@@ -187,7 +187,7 @@ class AppPlugin
             'CourseHomeNotify',
             'CourseLegal',
             'CustomCertificate',
-            'customfooter',
+            'CustomFooter',
             'dashboard',
             'dictionary',
             'embedregistry',

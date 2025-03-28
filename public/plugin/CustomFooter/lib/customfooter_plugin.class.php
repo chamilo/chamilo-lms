@@ -26,7 +26,7 @@ class CustomFooterPlugin extends Plugin
 
     public function get_name()
     {
-        return 'customfooter';
+        return 'CustomFooter';
     }
 
     public function pix_url($pixname, $size = 16)

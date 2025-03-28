@@ -73,7 +73,7 @@ class CustomCertificatePlugin extends Plugin
             return false;
         }
 
-        require_once api_get_path(SYS_PLUGIN_PATH).'customcertificate/database.php';
+        require_once api_get_path(SYS_PLUGIN_PATH).'CustomCertificate/database.php';
     }
 
     /**
@@ -276,7 +276,7 @@ class CustomCertificatePlugin extends Plugin
                     }
                 }
 
-                $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php'.
+                $url = api_get_path(WEB_PLUGIN_PATH).'CustomCertificate/src/print_certificate.php'.
                     '?student_id='.$infoCertificate['user_id'].
                     '&course_code='.$infoCertificate['course_code'].
                     '&session_id='.$infoCertificate['session_id'];
@@ -337,5 +337,10 @@ class CustomCertificatePlugin extends Plugin
         }
 
         return $resultArray;
+    }
+
+    public function get_name()
+    {
+        return 'CustomCertificate';
     }
 }

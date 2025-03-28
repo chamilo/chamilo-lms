@@ -11,7 +11,7 @@ if (1 === $isDefault) {
     $cidReset = true;
 }
 
-$course_plugin = 'customcertificate';
+$course_plugin = 'CustomCertificate';
 require_once __DIR__.'/../config.php';
 
 $_setting['student_view_enabled'] = 'false';
@@ -61,12 +61,12 @@ if (!$allow) {
 
 $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
 $htmlHeadXtra[] = api_get_js_simple(
-    api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/js/certificate.js'
+    api_get_path(WEB_PLUGIN_PATH).'CustomCertificate/resources/js/certificate.js'
 );
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $htmlHeadXtra[] = api_get_css(
-    api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/css/form.css'
+    api_get_path(WEB_PLUGIN_PATH).'CustomCertificate/resources/css/form.css'
 );
 $htmlHeadXtra[] = '<script>
     $(function () {
@@ -79,7 +79,7 @@ $htmlHeadXtra[] = '<script>
                 var sessionId = '.$sessionId.';
                 var accessUrlId = '.$accessUrlId.';
                 var plugin_path = "'.api_get_path(WEB_PLUGIN_PATH).'";
-                var ajax_path = plugin_path + "customcertificate/src/customcertificate.ajax.php?a=delete_certificate";
+                var ajax_path = plugin_path + "CustomCertificate/src/customcertificate.ajax.php?a=delete_certificate";
                 $.ajax({
                     data: {courseId: courseId, sessionId: sessionId, accessUrlId: accessUrlId},
                     url: ajax_path,

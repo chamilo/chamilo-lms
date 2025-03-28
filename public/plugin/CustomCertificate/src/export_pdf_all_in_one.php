@@ -4,7 +4,7 @@
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
 
-$course_plugin = 'customcertificate';
+$course_plugin = 'CustomCertificate';
 require_once __DIR__.'/../config.php';
 
 api_block_anonymous_users();
@@ -230,7 +230,7 @@ foreach ($userList as $userInfo) {
         $htmlText .= '
         <link rel="stylesheet"
             type="text/css"
-            href="'.api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/css/certificate.css">';
+            href="'.api_get_path(WEB_PLUGIN_PATH).'CustomCertificate/resources/css/certificate.css">';
         $htmlText .= '
         <link rel="stylesheet"
             type="text/css"
@@ -618,7 +618,7 @@ if ($exportAllInOne) {
         $certificateContent .= '
         <link rel="stylesheet"
             type="text/css"
-            href="'.api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/css/certificate.css">';
+            href="'.api_get_path(WEB_PLUGIN_PATH).'CustomCertificate/resources/css/certificate.css">';
         $certificateContent .= '
         <link rel="stylesheet"
             type="text/css"

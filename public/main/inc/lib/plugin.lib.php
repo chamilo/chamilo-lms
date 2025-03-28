@@ -186,7 +186,7 @@ class AppPlugin
             'CourseBlock',
             'CourseHomeNotify',
             'CourseLegal',
-            'customcertificate',
+            'CustomCertificate',
             'customfooter',
             'dashboard',
             'dictionary',

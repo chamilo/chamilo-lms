@@ -1,8 +1,8 @@
 <?php
 /**
- * This script initiates a customcertificate plugin.
+ * This script initiates a CustomCertificate plugin.
  */
-$course_plugin = 'customcertificate';
+$course_plugin = 'CustomCertificate';
 require_once __DIR__.'/config.php';
 
 $plugin = CustomCertificatePlugin::create();

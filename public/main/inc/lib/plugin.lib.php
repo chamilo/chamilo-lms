@@ -184,7 +184,7 @@ class AppPlugin
             'CheckExtraFieldAuthorCompany',
             'CleanDeletedFiles',
             'CourseBlock',
-            'coursehomenotify',
+            'CourseHomeNotify',
             'courselegal',
             'customcertificate',
             'customfooter',

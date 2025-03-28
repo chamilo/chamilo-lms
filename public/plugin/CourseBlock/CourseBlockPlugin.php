@@ -96,4 +96,9 @@ class CourseBlockPlugin extends Plugin
 
         return $content;
     }
+
+    public function get_name()
+    {
+        return 'CourseBlock';
+    }
 }

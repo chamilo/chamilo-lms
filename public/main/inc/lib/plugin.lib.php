@@ -183,7 +183,7 @@ class AppPlugin
             'CardGame',
             'CheckExtraFieldAuthorCompany',
             'CleanDeletedFiles',
-            'courseblock',
+            'CourseBlock',
             'coursehomenotify',
             'courselegal',
             'customcertificate',

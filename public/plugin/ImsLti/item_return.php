@@ -32,7 +32,7 @@ $consumer = new OAuthConsumer(
 );
 $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
 
-$request = OAuthRequest::from_request('POST', api_get_path(WEB_PLUGIN_PATH).'ims_lti/item_return.php');
+$request = OAuthRequest::from_request('POST', api_get_path(WEB_PLUGIN_PATH).'ImsLti/item_return.php');
 $request->sign_request($hmacMethod, $consumer, '');
 $signature = $request->get_parameter('oauth_signature');
 
@@ -55,7 +55,7 @@ foreach ($contentItems as $contentItem) {
     }
 }
 
-$currentUrl = api_get_path(WEB_PLUGIN_PATH).'ims_lti/start.php?id='.$ltiTool->getId();
+$currentUrl = api_get_path(WEB_PLUGIN_PATH).'ImsLti/start.php?id='.$ltiTool->getId();
 ?>
 <!DOCTYPE html>
 <html>

@@ -255,7 +255,7 @@ $template->assign('added_tools', $addedTools);
 $template->assign('global_tools', $globalTools);
 $template->assign('form', $form->returnForm());
 
-$content = $template->fetch('ims_lti/view/add.tpl');
+$content = $template->fetch('ImsLti/view/add.tpl');
 
 $actions = Display::url(
     Display::return_icon('add.png', $plugin->get_lang('AddExternalTool'), [], ICON_SIZE_MEDIUM),

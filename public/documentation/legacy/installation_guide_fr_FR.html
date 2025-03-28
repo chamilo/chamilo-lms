@@ -792,7 +792,7 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
     RewriteRule ^main/exercice/(.*)$ main/exercise/$1 [QSA,L]
     RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
     RewriteRule ^service/(\d{1,})$ plugin/BuyCourses/src/service_information.php?service_id=$1 [L]
-    RewriteRule ^lti/os$ plugin/ims_lti/outcome_service.php [L]
+    RewriteRule ^lti/os$ plugin/ImsLti/outcome_service.php [L]
     RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
     RewriteRule ^(tests|.git) - [F,L,NC]
   &lt;/Directory&gt;

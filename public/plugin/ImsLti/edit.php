@@ -27,7 +27,7 @@ if (!$tool) {
         Display::return_message($plugin->get_lang('NoTool'), 'error')
     );
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
     exit;
 }
 
@@ -126,19 +126,19 @@ if ($form->validate()) {
         Display::return_message($plugin->get_lang('ToolEdited'), 'success')
     );
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
     exit;
 } else {
     $form->setDefaultValues();
 }
 
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php', 'name' => $plugin->get_title()];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
 $template = new Template($plugin->get_lang('EditExternalTool'));
 $template->assign('form', $form->returnForm());
 
-$content = $template->fetch('ims_lti/view/add.tpl');
+$content = $template->fetch('ImsLti/view/add.tpl');
 
 $template->assign('header', $plugin->get_title());
 $template->assign('content', $content);

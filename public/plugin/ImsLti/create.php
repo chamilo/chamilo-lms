@@ -70,7 +70,7 @@ if ($form->validate()) {
                     Display::return_message($e->getMessage(), 'error')
                 );
 
-                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
                 exit;
             }
 
@@ -94,21 +94,21 @@ if ($form->validate()) {
         Display::return_message($plugin->get_lang('ToolAdded'), 'success')
     );
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
     exit;
 }
 
 $form->setDefaultValues();
 
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php', 'name' => $plugin->get_title()];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
 $pageTitle = $plugin->get_lang('AddExternalTool');
 
 $template = new Template($pageTitle);
 $template->assign('form', $form->returnForm());
 
-$content = $template->fetch('ims_lti/view/add.tpl');
+$content = $template->fetch('ImsLti/view/add.tpl');
 
 $template->assign('header', $pageTitle);
 $template->assign('content', $content);

@@ -42,14 +42,14 @@ foreach ($tools as $tool) {
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
 
 $htmlHeadXtra[] = api_get_css(
-    api_get_path(WEB_PLUGIN_PATH).'ims_lti/assets/style.css'
+    api_get_path(WEB_PLUGIN_PATH).'ImsLti/assets/style.css'
 );
 
 $template = new Template($plugin->get_title());
 $template->assign('tools', $tools);
 $template->assign('categories', $categoriesGradeBook);
 
-$content = $template->fetch('ims_lti/view/admin.tpl');
+$content = $template->fetch('ImsLti/view/admin.tpl');
 
 $template->assign('header', $plugin->get_title());
 $template->assign('content', $content);

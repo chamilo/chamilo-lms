@@ -1,10 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package plugin.ims_lti
- */
-
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 

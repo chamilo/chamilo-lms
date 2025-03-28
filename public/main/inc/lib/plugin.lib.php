@@ -199,7 +199,7 @@ class AppPlugin
             'GradingElectronic',
             'H5pImport',
             'HelloWorld',
-            'ims_lti',
+            'ImsLti',
             'justification',
             'learning_calendar',
             'lti_provider',

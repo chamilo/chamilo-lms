@@ -69,7 +69,7 @@ class LtiNamesRoleProvisioningService extends LtiAdvantageService
      */
     public static function getUrl($toolId, $courseId, $sessionId = 0, $extraParams = [])
     {
-        $base = api_get_path(WEB_PLUGIN_PATH).'ims_lti/nrps2.php';
+        $base = api_get_path(WEB_PLUGIN_PATH).'ImsLti/nrps2.php';
         $resource = str_replace(
             'context_id',
             $courseId,

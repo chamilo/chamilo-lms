@@ -12,7 +12,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_block_anonymous_users(false);
 
 $plugin = ImsLtiPlugin::create();
-$webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ims_lti/';
+$webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ImsLti/';
 
 $request = Request::createFromGlobals();
 $response = new Response();

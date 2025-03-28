@@ -11,7 +11,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_protect_admin_script();
 
 $plugin = ImsLtiPlugin::create();
-$webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ims_lti/';
+$webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ImsLti/';
 
 $em = Database::getManager();
 
@@ -76,7 +76,7 @@ try {
 
             /** @var ImsLtiTool $childInCourse */
             foreach ($tool->getChildrenInCourses($courseIdsToDelete) as $childInCourse) {
-                $toolLinks[] = "ims_lti/start.php?id={$childInCourse->getId()}";
+                $toolLinks[] = "ImsLti/start.php?id={$childInCourse->getId()}";
 
                 $em->remove($childInCourse);
             }
@@ -119,7 +119,7 @@ try {
             Display::return_message(get_lang('ItemUpdated'))
         );
 
-        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
         exit;
     }
 
@@ -134,7 +134,7 @@ try {
     $content = $form->returnForm();
 
     $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php', 'name' => $plugin->get_title()];
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
     $template = new Template($plugin->get_lang('AddInCourses'));
     $template->assign('header', $plugin->get_lang('AddInCourses'));
@@ -145,5 +145,5 @@ try {
         Display::return_message($exception->getMessage(), 'error')
     );
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
 }

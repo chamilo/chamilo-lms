@@ -18,6 +18,27 @@ use Psr\Log\LoggerInterface;
  */
 class Version20 extends AbstractMigrationChamilo
 {
+    // List of sublanguages to be excluded from updates, except those explicitly allowed.
+    public const ALLOWED_SUBLANGUAGES = [
+        'ast',
+        'ast_ES',
+        'ca',
+        'ca_ES',
+        'eo',
+        'gl',
+        'qu',
+        'quz_PE',
+        'qu_PE',
+        'zh-TW',
+        'zh_TW',
+        'pt-BR',
+        'pt_PT',
+        'fur',
+        'fur_IT',
+        'oc',
+        'oc_FR',
+    ];
+
     private PriorityMigrationHelper $priorityMigrationHelper;
 
     public function __construct(Connection $connection, LoggerInterface $logger)
@@ -170,11 +191,8 @@ class Version20 extends AbstractMigrationChamilo
         $languages = LanguageFixtures::getLanguages();
         $languages = array_column($languages, 'isocode', 'english_name');
 
-        // List of sublanguages to be excluded from updates, except those explicitly allowed.
-        $allowedSubLanguages = ['ast', 'ast_ES', 'ca', 'ca_ES', 'eo', 'gl', 'qu', 'quz_PE', 'qu_PE', 'zh-TW', 'zh_TW', 'pt-BR', 'pt_PT', 'fur', 'fur_IT', 'oc', 'oc_FR'];
-
         // Selecting languages that are not sublanguages or are explicitly allowed.
-        $sql = "SELECT * FROM language WHERE parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."')";
+        $sql = "SELECT * FROM language WHERE parent_id IS NULL OR isocode IN ('".implode("', '", self::ALLOWED_SUBLANGUAGES)."')";
         $result = $this->connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
@@ -201,7 +219,7 @@ class Version20 extends AbstractMigrationChamilo
                 SELECT isocode
                 FROM language
                 WHERE english_name = course_language
-                AND (parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."'))
+                AND (parent_id IS NULL OR isocode IN ('".implode("', '", self::ALLOWED_SUBLANGUAGES)."'))
             ), course_language)
         ");
 
@@ -211,7 +229,7 @@ class Version20 extends AbstractMigrationChamilo
                 SELECT isocode
                 FROM language
                 WHERE english_name = lang
-                AND (parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."'))
+                AND (parent_id IS NULL OR isocode IN ('".implode("', '", self::ALLOWED_SUBLANGUAGES)."'))
             ), lang)
         ");
 
@@ -221,7 +239,7 @@ class Version20 extends AbstractMigrationChamilo
                 SELECT isocode
                 FROM language
                 WHERE english_name = selected_value
-                AND (parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."'))
+                AND (parent_id IS NULL OR isocode IN ('".implode("', '", self::ALLOWED_SUBLANGUAGES)."'))
             ), selected_value)
             WHERE variable = 'platformLanguage'
         ");

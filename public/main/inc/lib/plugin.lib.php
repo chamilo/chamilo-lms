@@ -190,7 +190,7 @@ class AppPlugin
             'CustomFooter',
             'Dashboard',
             'Dictionary',
-            'embedregistry',
+            'EmbedRegistry',
             'exercise_signature',
             'ext_auth_chamilo_logout_button_behaviour',
             'externalnotificationconnect',

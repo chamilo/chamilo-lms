@@ -195,7 +195,7 @@ class EmbedRegistryPlugin extends Plugin
      */
     public function getViewUrl(Embed $embed)
     {
-        return api_get_path(WEB_PLUGIN_PATH).'embedregistry/view.php?id='.$embed->getId().'&'.api_get_cidreq();
+        return api_get_path(WEB_PLUGIN_PATH).'EmbedRegistry/view.php?id='.$embed->getId().'&'.api_get_cidreq();
     }
 
     /**
@@ -250,6 +250,11 @@ class EmbedRegistryPlugin extends Plugin
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'embedregistry/start.php%']);
+            ->execute(['category' => 'plugin', 'link' => 'EmbedRegistry/start.php%']);
+    }
+
+    public function get_name()
+    {
+        return 'EmbedRegistry';
     }
 }

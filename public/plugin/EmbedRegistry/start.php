@@ -294,7 +294,7 @@ switch ($action) {
         $view->assign('table', $table->return_table());
 }
 
-$content = $view->fetch('embedregistry/view/start.tpl');
+$content = $view->fetch('EmbedRegistry/view/start.tpl');
 
 if ($actions) {
     $actions = implode(PHP_EOL, $actions);

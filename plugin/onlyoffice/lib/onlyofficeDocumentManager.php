@@ -59,8 +59,14 @@ class OnlyofficeDocumentManager extends DocumentManager
         ];
 
         if (!empty($this->getGroupId())) {
-            $data['groupId'] = $groupId;
+            $data['groupId'] = $this->getGroupId();
         }
+
+        if (isset($this->docInfo['path']) && str_contains($this->docInfo['path'], 'exercises/')) {
+            $data['doctype'] = 'exercise';
+            $data['docPath'] = urlencode($this->docInfo['path']);
+        }
+
         $jwtManager = new OnlyofficeJwtManager($this->settingsManager);
         $hashUrl = $jwtManager->getHash($data);
 
@@ -76,8 +82,6 @@ class OnlyofficeDocumentManager extends DocumentManager
 
     public function getCallbackUrl(string $fileId)
     {
-        $url = '';
-
         $data = [
             'type' => 'track',
             'courseId' => api_get_course_int_id(),
@@ -87,38 +91,55 @@ class OnlyofficeDocumentManager extends DocumentManager
         ];
 
         if (!empty($this->getGroupId())) {
-            $data['groupId'] = $groupId;
+            $data['groupId'] = $this->getGroupId();
+        }
+
+        if (isset($this->docInfo['path']) && str_contains($this->docInfo['path'], 'exercises/')) {
+            $data['doctype'] = 'exercise';
+            $data['docPath'] = urlencode($this->docInfo['path']);
         }
 
         $jwtManager = new OnlyofficeJwtManager($this->settingsManager);
         $hashUrl = $jwtManager->getHash($data);
 
-        return $url.api_get_path(WEB_PLUGIN_PATH).'onlyoffice/callback.php?hash='.$hashUrl;
+        return api_get_path(WEB_PLUGIN_PATH) . 'onlyoffice/callback.php?hash=' . $hashUrl;
     }
 
-    public function getGobackUrl(string $fileId)
+    public function getGobackUrl(string $fileId): string
     {
         if (!empty($this->docInfo)) {
-            return api_get_path(WEB_CODE_PATH).'document/document.php'
-                                                        .'?cidReq='.Security::remove_XSS(api_get_course_id())
-                                                        .'&id_session='.Security::remove_XSS(api_get_session_id())
-                                                        .'&gidReq='.Security::remove_XSS($this->getGroupId())
-                                                        .'&id='.Security::remove_XSS($this->docInfo['parent_id']);
+            if (isset($this->docInfo['path']) && str_contains($this->docInfo['path'], 'exercises/')) {
+                return api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php'
+                    .'?cidReq='.Security::remove_XSS(api_get_course_id())
+                    .'&id_session='.Security::remove_XSS(api_get_session_id())
+                    .'&gidReq='.Security::remove_XSS($this->getGroupId())
+                    .'&exerciseId='.Security::remove_XSS($this->docInfo['exercise_id']);
+            }
+
+            return self::getUrlToLocation(api_get_course_id(), api_get_session_id(), $this->getGroupId(), $this->docInfo['parent_id'], $this->docInfo['path'] ?? '');
         }
 
         return '';
     }
 
     /**
-     * Return location file in chamilo documents.
+     * Return location file in Chamilo documents or exercises.
      */
-    public static function getUrlToLocation($courseCode, $sessionId, $groupId, $folderId)
+    public static function getUrlToLocation($courseCode, $sessionId, $groupId, $folderId, $filePath = ''): string
     {
+        if (!empty($filePath) && str_contains($filePath, 'exercises/')) {
+            return api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php'
+                .'?cidReq='.Security::remove_XSS($courseCode)
+                .'&id_session='.Security::remove_XSS($sessionId)
+                .'&gidReq='.Security::remove_XSS($groupId)
+                .'&exerciseId='.Security::remove_XSS($folderId);
+        }
+
         return api_get_path(WEB_CODE_PATH).'document/document.php'
-                                            .'?cidReq='.Security::remove_XSS($courseCode)
-                                            .'&id_session='.Security::remove_XSS($sessionId)
-                                            .'&gidReq='.Security::remove_XSS($groupId)
-                                            .'&id='.Security::remove_XSS($folderId);
+            .'?cidReq='.Security::remove_XSS($courseCode)
+            .'&id_session='.Security::remove_XSS($sessionId)
+            .'&gidReq='.Security::remove_XSS($groupId)
+            .'&id='.Security::remove_XSS($folderId);
     }
 
     public function getCreateUrl(string $fileId)

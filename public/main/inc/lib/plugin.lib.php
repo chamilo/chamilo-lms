@@ -192,7 +192,7 @@ class AppPlugin
             'Dictionary',
             'EmbedRegistry',
             'ExerciseSignature',
-            'ext_auth_chamilo_logout_button_behaviour',
+            'ExtAuthChamiloLogoutButtonBehaviour',
             'externalnotificationconnect',
             'extramenufromwebservice',
             'google_maps',

@@ -15284,22 +15284,22 @@ msgstr "Die Elemente wurde aktualisiert"
 msgid "Dashboard plugins"
 msgstr "Plugins für Kontroll-Anzeige"
 
-msgid "This plugin has been deleted from the dashboard plugin directory"
+msgid "This plugin has been deleted from the Dashboard plugin directory"
 msgstr "Dieses Plugin wurde aus dem Verzeichnis für die Kontrollanzeigen gelöscht."
 
-msgid "Enable dashboard plugins"
+msgid "Enable Dashboard plugins"
 msgstr "Kontrollanzeige-Plugins aktivieren"
 
-msgid "Select blocks to display in the dashboard blocks view"
+msgid "Select blocks to display in the Dashboard blocks view"
 msgstr "Elemente wählen, um Sie in der Kontroll-Anzeige anzuzeigen"
 
 msgid "Position (column)"
 msgstr "Position (Spalte)"
 
-msgid "Enable dashboard block"
+msgid "Enable Dashboard block"
 msgstr "Kontroll-Anzeige Element aktivieren"
 
-msgid "There is no enabled dashboard plugin"
+msgid "There is no enabled Dashboard plugin"
 msgstr "Es sind keine Plugins für Kontroll-Anzeige aktiviert"
 
 msgid "Enabled"
@@ -15425,7 +15425,7 @@ msgstr "Auswertung der Anwesenheitslisten"
 msgid "You do not have attendances"
 msgstr "Sie haben keine Anwesenheiten"
 
-msgid "The dashboard plugins have been updated successfully"
+msgid "The Dashboard plugins have been updated successfully"
 msgstr "Die Kontroll-Anzeige wurde erfolgreich aktualisiert"
 
 msgid "There is no available information about your courses"

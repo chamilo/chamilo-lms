@@ -857,7 +857,7 @@ class IndexManager
                 ];
             } else {
                 $items[] = [
-                    'link' => api_get_path(WEB_CODE_PATH).'dashboard/index.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'Dashboard/index.php',
                     'title' => get_lang('Dashboard'),
                 ];
             }

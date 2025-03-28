@@ -15265,23 +15265,23 @@ msgstr "De blokken zijn geüpdatet"
 msgid "Dashboard plugins"
 msgstr "Dashboard plugins"
 
-msgid "This plugin has been deleted from the dashboard plugin directory"
-msgstr "Deze plugin werd verwijderd uit de dashboard plugin map"
+msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgstr "Deze plugin werd verwijderd uit de Dashboard plugin map"
 
-msgid "Enable dashboard plugins"
-msgstr "Gebruik dashboard plugins"
+msgid "Enable Dashboard plugins"
+msgstr "Gebruik Dashboard plugins"
 
-msgid "Select blocks to display in the dashboard blocks view"
-msgstr "Selecteer blokken om in het dashboard de blokkenweergave te tonen"
+msgid "Select blocks to display in the Dashboard blocks view"
+msgstr "Selecteer blokken om in het Dashboard de blokkenweergave te tonen"
 
 msgid "Position (column)"
 msgstr "Positie (kolom)"
 
-msgid "Enable dashboard block"
+msgid "Enable Dashboard block"
 msgstr "Schakel dashboardblok in"
 
-msgid "There is no enabled dashboard plugin"
-msgstr "Er zijn geen ingeschakelde dashboard plugins"
+msgid "There is no enabled Dashboard plugin"
+msgstr "Er zijn geen ingeschakelde Dashboard plugins"
 
 msgid "Enabled"
 msgstr "Ingeschakeld"
@@ -15406,8 +15406,8 @@ msgstr "Rapport van presentielijsten"
 msgid "You do not have attendances"
 msgstr "Je hebt geen deelname"
 
-msgid "The dashboard plugins have been updated successfully"
-msgstr "De dashboard plugins zijn succesvol geüpdatet"
+msgid "The Dashboard plugins have been updated successfully"
+msgstr "De Dashboard plugins zijn succesvol geüpdatet"
 
 msgid "There is no available information about your courses"
 msgstr "Er is geen informatie beschikbaar over je cursussen"
@@ -16075,7 +16075,7 @@ msgid "Item"
 msgstr "Item"
 
 msgid "Configure Dashboard Plugin"
-msgstr "Configureer dashboard plugin"
+msgstr "Configureer Dashboard plugin"
 
 msgid "Edit blocks"
 msgstr "Bewerk blokken"

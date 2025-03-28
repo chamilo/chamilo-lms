@@ -28,7 +28,7 @@ class DashboardController
     }
 
     /**
-     * Display blocks from dashboard plugin paths
+     * Display blocks from Dashboard plugin paths
      * render to dashboard.php view.
      */
     public function display()
@@ -49,7 +49,7 @@ class DashboardController
                 $path = $block['path'];
                 $controller_class = $block['controller'];
                 $filename_controller = $path.'.class.php';
-                $dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';
+                $dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'Dashboard/'.$path.'/';
                 require_once $dashboard_plugin_path.$filename_controller;
                 if (class_exists($controller_class)) {
                     $obj = new $controller_class($user_id);
@@ -112,7 +112,7 @@ class DashboardController
         }
 
         $tpl->assign('columns', $columns);
-        $template = $tpl->get_template('dashboard/index.tpl');
+        $template = $tpl->get_template('Dashboard/index.tpl');
         $content = $tpl->fetch($template);
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
@@ -130,7 +130,7 @@ class DashboardController
             DashboardManager::store_user_blocks($this->user_id, $enabled_blocks, $columns);
             Display::addFlash(Display::return_message(get_lang('Saved')));
         }
-        header('Location: '.api_get_path(WEB_CODE_PATH).'dashboard/index.php');
+        header('Location: '.api_get_path(WEB_CODE_PATH).'Dashboard/index.php');
         exit;
     }
 
@@ -142,7 +142,7 @@ class DashboardController
     {
         DashboardManager::close_user_block($this->user_id, $path);
         Display::addFlash(Display::return_message(get_lang('Saved')));
-        header('Location: '.api_get_path(WEB_CODE_PATH).'dashboard/index.php');
+        header('Location: '.api_get_path(WEB_CODE_PATH).'Dashboard/index.php');
         exit;
     }
 }

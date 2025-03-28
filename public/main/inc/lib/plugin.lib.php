@@ -188,7 +188,7 @@ class AppPlugin
             'CourseLegal',
             'CustomCertificate',
             'CustomFooter',
-            'dashboard',
+            'Dashboard',
             'dictionary',
             'embedregistry',
             'exercise_signature',

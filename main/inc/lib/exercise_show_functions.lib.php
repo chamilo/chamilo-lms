@@ -1031,6 +1031,7 @@ class ExerciseShowFunctions
             $iframeId = "onlyoffice_result_frame_{$exerciseId}_{$questionId}_{$exeId}_{$userId}";
             $loaderId = "onlyoffice_loader_{$exerciseId}_{$questionId}_{$exeId}_{$userId}";
             $iframeSrc = OnlyofficeTools::getPathToView($fileUrl, false, $exeId, $questionId, true);
+            $iframeSrc .= '&t=' . time();
             echo '
                 <tr>
                     <td>

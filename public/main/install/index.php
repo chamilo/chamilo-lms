@@ -79,9 +79,12 @@ if ($httpRequest->request->get('language_list')) {
     $installationLanguage = str_replace($search, '', urldecode($httpRequest->request->get('language_list')));
     ChamiloSession::write('install_language', $installationLanguage);
 } elseif (ChamiloSession::has('install_language')) {
-  $installationLanguage = ChamiloSession::read('install_language');
+    $installationLanguage = ChamiloSession::read('install_language');
 } else {
-  $installationLanguage = $httpRequest->getPreferredLanguage();
+    $tempLanguage = $httpRequest->getPreferredLanguage();
+    if ($tempLanguage) {
+        $installationLanguage = $tempLanguage;
+    }
 }
 
 // Set translation

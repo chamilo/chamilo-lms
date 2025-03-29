@@ -452,7 +452,7 @@ class IndexBlocksController extends BaseController
         if ('true' === api_get_plugin_setting('dictionary', 'enable_plugin_dictionary')) {
             $items[] = [
                 'class' => 'item-dictionary',
-                'url' => api_get_path(WEB_PLUGIN_PATH).'dictionary/terms.php',
+                'url' => api_get_path(WEB_PLUGIN_PATH).'Dictionary/terms.php',
                 'label' => $this->translator->trans('Dictionary'),
             ];
         }
@@ -484,7 +484,7 @@ class IndexBlocksController extends BaseController
         if ($allowJustification) {
             $items[] = [
                 'class' => 'item-justification-list',
-                'url' => api_get_path(WEB_PLUGIN_PATH).'justification/list.php',
+                'url' => api_get_path(WEB_PLUGIN_PATH).'Justification/list.php',
                 'label' => $this->translator->trans('Justification'),
             ];
         }

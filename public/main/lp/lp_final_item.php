@@ -47,7 +47,7 @@ if ($checker) {
     if (empty($userServiceSale)) {
         // Instance a new template : No page tittle, No header, No footer
         $tpl = new Template(null, false, false);
-        $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php';
+        $url = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php';
         $content = sprintf(
             Display::return_message(
                 get_lang('If you want to get the certificate and/or skills associated with this course, you need to buy the certificate service. You can go to the services catalog by clicking this link: %s'),

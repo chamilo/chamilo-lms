@@ -15224,22 +15224,22 @@ msgstr "Els blocs han estat actualitzats"
 msgid "Dashboard plugins"
 msgstr "Connectors del tauler de control"
 
-msgid "This plugin has been deleted from the dashboard plugin directory"
+msgid "This plugin has been deleted from the Dashboard plugin directory"
 msgstr "Aquest connector ha estat eliminat de la llista de connectors del tauler de control"
 
-msgid "Enable dashboard plugins"
+msgid "Enable Dashboard plugins"
 msgstr "Habilita els connectors del tauler de control"
 
-msgid "Select blocks to display in the dashboard blocks view"
+msgid "Select blocks to display in the Dashboard blocks view"
 msgstr "Seleccioneu els blocs que es mostraran en el tauler de control"
 
 msgid "Position (column)"
 msgstr "Posició (columna)"
 
-msgid "Enable dashboard block"
+msgid "Enable Dashboard block"
 msgstr "Habiliteu bloc del tauler de control"
 
-msgid "There is no enabled dashboard plugin"
+msgid "There is no enabled Dashboard plugin"
 msgstr "No hi ha habilitat cap connector en el tauler de control"
 
 msgid "Enabled"
@@ -15365,7 +15365,7 @@ msgstr "Informe de fulls d'assistència"
 msgid "You do not have attendances"
 msgstr "No teniu assistències"
 
-msgid "The dashboard plugins have been updated successfully"
+msgid "The Dashboard plugins have been updated successfully"
 msgstr "Els connectors del tauler de control han estat actualitzats correctament"
 
 msgid "There is no available information about your courses"

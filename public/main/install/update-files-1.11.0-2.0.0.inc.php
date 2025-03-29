@@ -16,8 +16,8 @@ if (defined('SYSTEM_INSTALLATION')) {
     // Changes for 2.0.0
     $pluginPath = api_get_path(SYS_PLUGIN_PATH);
 
-    // The ims_lti plugin has been integrated to core in 2.0
-    $ltiPluginPath = $pluginPath.'ims_lti';
+    // The ImsLti plugin has been integrated to core in 2.0
+    $ltiPluginPath = $pluginPath.'ImsLti';
 
     if (is_dir($ltiPluginPath)) {
         @rrmdir($ltiPluginPath);

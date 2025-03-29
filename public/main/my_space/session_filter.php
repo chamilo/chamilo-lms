@@ -301,7 +301,7 @@ $htmlHeadXtra[] = "<script>
 
             if (confirm('".$plugin->get_lang('OnlyCustomCertificates')."')) {
                 var url = '".api_get_path(WEB_PLUGIN_PATH)."' +
-                    'customcertificate/src/export_pdf_all_in_one.php?' +
+                    'CustomCertificate/src/export_pdf_all_in_one.php?' +
                     '".$urlParam."&' +
                     'export_pdf=1';
 
@@ -318,7 +318,7 @@ $htmlHeadXtra[] = "<script>
             var date_end = $('#date-end').val();
             if (confirm('".$plugin->get_lang('OnlyCustomCertificates')."')) {
                 var url = '".api_get_path(WEB_PLUGIN_PATH)."' +
-                    'customcertificate/src/export_pdf_all_in_one.php?' +
+                    'CustomCertificate/src/export_pdf_all_in_one.php?' +
                     '".$urlParam."&' +
                     'export_zip=1';
 
@@ -338,7 +338,7 @@ $actions .= Display::url(
 );
 
 if ($allowCustomCertificate) {
-    $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/export_pdf_all_in_one.php';
+    $url = api_get_path(WEB_PLUGIN_PATH).'CustomCertificate/src/export_pdf_all_in_one.php';
     $actions .= Display::url(
         Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAllCertificatesToPDF')),
         $url,

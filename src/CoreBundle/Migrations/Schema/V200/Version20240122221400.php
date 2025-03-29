@@ -22,11 +22,8 @@ final class Version20240122221400 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        // Default sublanguages to be excluded from the update.
-        $defaultSubLanguages = ['ast', 'ast_ES', 'ca', 'ca_ES', 'eo', 'gl', 'qu', 'quz_PE', 'qu_PE', 'zh-TW', 'zh_TW', 'pt-BR', 'pt_PT', 'fur', 'fur_IT', 'oc', 'oc_FR'];
-
         // Fetching sublanguages from the database.
-        $sql = "SELECT * FROM language WHERE parent_id IS NOT NULL AND isocode NOT IN('".implode("', '", $defaultSubLanguages)."')";
+        $sql = "SELECT * FROM language WHERE parent_id IS NOT NULL AND isocode NOT IN('".implode("', '", Version20::ALLOWED_SUBLANGUAGES)."')";
         $sublanguages = $this->connection->executeQuery($sql)->fetchAllAssociative();
 
         foreach ($sublanguages as $sublanguage) {

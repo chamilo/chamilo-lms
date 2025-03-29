@@ -100,7 +100,7 @@ if ($is_platform_admin) {
         /*
         $menu_items[] = Display::url(
             Display::return_icon('dashboard.png', get_lang('Dashboard'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'dashboard/index.php'
+            api_get_path(WEB_CODE_PATH).'Dashboard/index.php'
         );
         */
         if ($pluginCalendar) {

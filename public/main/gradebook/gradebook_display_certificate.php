@@ -140,7 +140,7 @@ switch ($action) {
                 '&'.api_get_cidreq().
                 '&cat_id='.$categoryId;
             $url = api_get_path(WEB_PLUGIN_PATH).
-                'customcertificate/src/print_certificate.php?export_all_in_one=1&'.$params;
+                'CustomCertificate/src/print_certificate.php?export_all_in_one=1&'.$params;
         } else {
             if (api_is_student_boss()) {
                 $userGroup = new UserGroupModel();
@@ -164,7 +164,7 @@ switch ($action) {
                 '&session_id='.api_get_session_id().
                 '&'.api_get_cidreq().
                 '&cat_id='.$categoryId;
-            $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php?export_all=1&'.$params;
+            $url = api_get_path(WEB_PLUGIN_PATH).'CustomCertificate/src/print_certificate.php?export_all=1&'.$params;
 
             header('Location: '.$url);
         }

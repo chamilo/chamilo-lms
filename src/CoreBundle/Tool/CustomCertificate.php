@@ -10,12 +10,12 @@ class CustomCertificate extends AbstractPlugin
 {
     public function getTitle(): string
     {
-        return 'customcertificate';
+        return 'CustomCertificate';
     }
 
     public function getLink(): string
     {
-        return '/plugin/customcertificate/start.php';
+        return '/plugin/CustomCertificate/start.php';
     }
 
     public function getIcon(): string

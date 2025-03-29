@@ -15752,22 +15752,22 @@ msgstr "Les blocs ont été mis à jour"
 msgid "Dashboard plugins"
 msgstr "Plugins du panneau de contrôle"
 
-msgid "This plugin has been deleted from the dashboard plugin directory"
+msgid "This plugin has been deleted from the Dashboard plugin directory"
 msgstr "Ce plugin a été supprimé du répertoire de plugins du panneau de contrôle"
 
-msgid "Enable dashboard plugins"
+msgid "Enable Dashboard plugins"
 msgstr "Activer les plugins du panneau de contrôle"
 
-msgid "Select blocks to display in the dashboard blocks view"
+msgid "Select blocks to display in the Dashboard blocks view"
 msgstr "Sélectionnez des blocs à montrer dans le panneau de contrôle"
 
 msgid "Position (column)"
 msgstr "Position (colonne)"
 
-msgid "Enable dashboard block"
+msgid "Enable Dashboard block"
 msgstr "Activer le bloc"
 
-msgid "There is no enabled dashboard plugin"
+msgid "There is no enabled Dashboard plugin"
 msgstr "Aucun plugin du panneau de contrôle n'a été activé."
 
 msgid "Enabled"
@@ -15896,7 +15896,7 @@ msgstr "Rapport de présences"
 msgid "You do not have attendances"
 msgstr "Vous n'avez aucune feuille de présences"
 
-msgid "The dashboard plugins have been updated successfully"
+msgid "The Dashboard plugins have been updated successfully"
 msgstr "Les plugins du panneau de contrôle ont été mis à jour avec succès"
 
 msgid "There is no available information about your courses"

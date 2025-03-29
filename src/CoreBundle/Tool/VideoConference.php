@@ -10,7 +10,7 @@ class VideoConference extends AbstractTool implements ToolInterface
 {
     public function getTitle(): string
     {
-        return 'bbb';
+        return 'Bbb';
     }
 
     public function getTitleToShow(): string
@@ -25,7 +25,7 @@ class VideoConference extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/plugin/bbb/start.php';
+        return '/plugin/Bbb/start.php';
     }
 
     public function getCategory(): string

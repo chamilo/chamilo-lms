@@ -55,8 +55,8 @@ $strings['SocialAllowsYouToGetInTouchWithOtherUsersOfThePlatform'] = 'La zone so
 $strings['SocialMenuGivesAccessToDifferentToolsToGetInTouchOrPublishStuff'] = 'Le menu vous donne accès à une série d\'écrans vous permettant de participer à de la messagerie privée, du chat, des groupes d\'intérêt, etc';
 
 // if body class = section-dashboard
-$strings['DashboardAllowsYouToGetVerySpecificInformationInAnIllustratedCondensedFormat'] = 'The dashboard allows you to get very specific information in an illustrated and condensed format. Only administrators have access to this feature at this time';
-$strings['DashboardMustBeConfiguredFirstFromTheAdminSectionPluginsThenHereToEnableDesiredBlocks'] = 'To enable dashboard panels, you must first activate the possible panels in the admin section for plugins, then come back here and choose which panels *you* want to see on your dashboard';
+$strings['DashboardAllowsYouToGetVerySpecificInformationInAnIllustratedCondensedFormat'] = 'The Dashboard allows you to get very specific information in an illustrated and condensed format. Only administrators have access to this feature at this time';
+$strings['DashboardMustBeConfiguredFirstFromTheAdminSectionPluginsThenHereToEnableDesiredBlocks'] = 'To enable Dashboard panels, you must first activate the possible panels in the admin section for plugins, then come back here and choose which panels *you* want to see on your dashboard';
 
 // if body class = section-platform_admin
 $strings['AdministrationAllowsYouToManageYourPortal'] = 'The administration panel allows you to manage all resources in your Chamilo portal';

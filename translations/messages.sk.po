@@ -15224,22 +15224,22 @@ msgstr "Bloky boli aktualizované"
 msgid "Dashboard plugins"
 msgstr "Dashboard doplnky"
 
-msgid "This plugin has been deleted from the dashboard plugin directory"
-msgstr "Tento doplnok bol odstránený z dashboard adresára doplnkov"
+msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgstr "Tento doplnok bol odstránený z Dashboard adresára doplnkov"
 
-msgid "Enable dashboard plugins"
+msgid "Enable Dashboard plugins"
 msgstr "Povoliť Dashboard zásuvné moduly"
 
-msgid "Select blocks to display in the dashboard blocks view"
+msgid "Select blocks to display in the Dashboard blocks view"
 msgstr "Vyberte bloky, ktorá sa zobrazia v zobrazení blok Dashboard"
 
 msgid "Position (column)"
 msgstr "Pozícia (stĺpec)"
 
-msgid "Enable dashboard block"
+msgid "Enable Dashboard block"
 msgstr "Povoliť Dashboarad blok"
 
-msgid "There is no enabled dashboard plugin"
+msgid "There is no enabled Dashboard plugin"
 msgstr "Nie je povolený Dashboard zásuvný modul"
 
 msgid "Enabled"
@@ -15365,7 +15365,7 @@ msgstr "Správa dochádzkových hárkov"
 msgid "You do not have attendances"
 msgstr "Nemusíte mať návštevnosť"
 
-msgid "The dashboard plugins have been updated successfully"
+msgid "The Dashboard plugins have been updated successfully"
 msgstr "Dashboard zásuvné moduly boli úspešne aktualizované"
 
 msgid "There is no available information about your courses"

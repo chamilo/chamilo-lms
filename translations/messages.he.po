@@ -15224,22 +15224,22 @@ msgstr "החסימות עודכנו"
 msgid "Dashboard plugins"
 msgstr "תוספים"
 
-msgid "This plugin has been deleted from the dashboard plugin directory"
+msgid "This plugin has been deleted from the Dashboard plugin directory"
 msgstr "תוסף זה נמחק מספריית הפלאגין של לוח המחוונים"
 
-msgid "Enable dashboard plugins"
+msgid "Enable Dashboard plugins"
 msgstr "הפעל תוספים של לוח המחוונים"
 
-msgid "Select blocks to display in the dashboard blocks view"
+msgid "Select blocks to display in the Dashboard blocks view"
 msgstr "בחר בלוקים להצגה בתצוגת בלוקים של לוח המחוונים"
 
 msgid "Position (column)"
 msgstr "מיקום (עמודה)"
 
-msgid "Enable dashboard block"
+msgid "Enable Dashboard block"
 msgstr "הפעל בלוק לוח מחוונים"
 
-msgid "There is no enabled dashboard plugin"
+msgid "There is no enabled Dashboard plugin"
 msgstr "אין תוסף מופעל ללוח המחוונים"
 
 msgid "Enabled"
@@ -15365,7 +15365,7 @@ msgstr "דוח על דפי נוכחות"
 msgid "You do not have attendances"
 msgstr "אין לך נוכחות"
 
-msgid "The dashboard plugins have been updated successfully"
+msgid "The Dashboard plugins have been updated successfully"
 msgstr "תוספי לוח המחוונים עודכנו בהצלחה"
 
 msgid "There is no available information about your courses"

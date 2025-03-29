@@ -1047,7 +1047,7 @@ class ExerciseShowFunctions
                                 var iframe = document.getElementById('{$iframeId}');
                                 var loader = document.getElementById('{$loaderId}');
                                 if (iframe && loader) {
-                                    iframe.src = iframe.src;
+                                    iframe.src = iframe.src + '&reload=' + new Date().getTime();
                                     iframe.style.display = 'block';
                                     loader.style.display = 'none';
                                 }

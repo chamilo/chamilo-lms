@@ -122,3 +122,8 @@ services:
     Chamilo\CoreBundle\Service\AI\DeepSeekAiProvider:
       factory: [ '@Chamilo\CoreBundle\Service\AI\AiProviderFactory', 'getProvider' ]
       arguments: [ 'deepseek' ]
+
+    api_platform.graphql.executor:
+      class: Chamilo\CoreBundle\GraphQL\LoggingExecutor
+      arguments:
+        $logger: '@logger'

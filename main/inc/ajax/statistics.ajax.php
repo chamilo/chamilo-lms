@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  */
 require_once __DIR__.'/../global.inc.php';
 
-api_protect_admin_script();
+api_protect_admin_script(true);
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : 0;

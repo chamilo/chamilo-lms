@@ -15224,23 +15224,23 @@ msgstr "The blocks have been updated"
 msgid "Dashboard plugins"
 msgstr "Dashboard plugins"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
-msgstr "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
+msgstr "This plugin has been deleted from the dashboard plugin directory"
 
-msgid "Enable Dashboard plugins"
-msgstr "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
+msgstr "Enable dashboard plugins"
 
-msgid "Select blocks to display in the Dashboard blocks view"
-msgstr "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
+msgstr "Select blocks to display in the dashboard blocks view"
 
 msgid "Position (column)"
 msgstr "Position (column)"
 
-msgid "Enable Dashboard block"
-msgstr "Enable Dashboard block"
+msgid "Enable dashboard block"
+msgstr "Enable dashboard block"
 
-msgid "There is no enabled Dashboard plugin"
-msgstr "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
+msgstr "There is no enabled dashboard plugin"
 
 msgid "Enabled"
 msgstr "Enabled"
@@ -15365,8 +15365,8 @@ msgstr "Report of attendance sheets"
 msgid "You do not have attendances"
 msgstr "You do not have attendances"
 
-msgid "The Dashboard plugins have been updated successfully"
-msgstr "The Dashboard plugins have been updated successfully"
+msgid "The dashboard plugins have been updated successfully"
+msgstr "The dashboard plugins have been updated successfully"
 
 msgid "There is no available information about your courses"
 msgstr "Δεν υπάρχουν πληροφορίες για τα μαθήματά σας"

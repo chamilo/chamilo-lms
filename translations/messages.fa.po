@@ -15224,22 +15224,22 @@ msgstr ""
 msgid "Dashboard plugins"
 msgstr "پلاگین های داشبورد"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr ""
 
-msgid "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
 msgstr ""
 
-msgid "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
 msgstr ""
 
 msgid "Position (column)"
 msgstr "موقعیت (ستون)"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr ""
 
-msgid "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
 msgstr ""
 
 msgid "Enabled"
@@ -15365,7 +15365,7 @@ msgstr ""
 msgid "You do not have attendances"
 msgstr ""
 
-msgid "The Dashboard plugins have been updated successfully"
+msgid "The dashboard plugins have been updated successfully"
 msgstr ""
 
 msgid "There is no available information about your courses"

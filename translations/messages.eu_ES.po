@@ -15224,22 +15224,22 @@ msgstr "Blokeak eguneratu dira"
 msgid "Dashboard plugins"
 msgstr "Kontrol paneleko pluginak"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Plugin hau kendu da kontrol paneleko plugin direktoriotik"
 
-msgid "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
 msgstr "Gaitu kontrol paneleko pluginak"
 
-msgid "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
 msgstr "Hautatu erakutsi beharreko blokeak kontrol panela bistaratzean"
 
 msgid "Position (column)"
 msgstr "Posizioa (zutabea)"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr "Gaitu kontrol paneleko blokea"
 
-msgid "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
 msgstr "Ez dago kontrol paneleko plugin bat ere gaiturik"
 
 msgid "Enabled"
@@ -15365,7 +15365,7 @@ msgstr "Parte hartze orrien txostena"
 msgid "You do not have attendances"
 msgstr "Zuk ez duzu ikastaroan parte hartu"
 
-msgid "The Dashboard plugins have been updated successfully"
+msgid "The dashboard plugins have been updated successfully"
 msgstr "Kontrol paneleko pluginak ongi eguneratu dira"
 
 msgid "There is no available information about your courses"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-08-08 08:44+0000\n"
+"PO-Revision-Date: 2025-03-31 12:26+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
 "messages/fr/>\n"
@@ -1312,7 +1312,6 @@ msgstr "Hotpotatoes"
 msgid "-1 = All questions will be selected."
 msgstr "-1 = Toutes les questions seront sélectionnées. 0 = Aucune question ne sera sélectionnée."
 
-#, fuzzy
 msgid "You can customize the email sent to users when they finished the exercise. You can use tags like these:"
 msgstr ""
 "Vous pouvez adapter le courriel envoyé aux utilisateurs quand ils terminent "
@@ -1806,7 +1805,7 @@ msgid "Chamilo LIVE"
 msgstr "Vidéo"
 
 msgid "Contributions"
-msgstr "Travaux"
+msgstr "contributions"
 
 msgid "Course program"
 msgstr "Cahier des charges"
@@ -2127,7 +2126,7 @@ msgid "Import finished"
 msgstr "L'importation du fichier de sauvegarde est terminée"
 
 msgid "Tests"
-msgstr "Tests"
+msgstr "Exercices"
 
 msgid "Courses"
 msgstr "Cours"
@@ -3380,7 +3379,7 @@ msgid "Main language"
 msgstr "Langue principale"
 
 msgid "License"
-msgstr "License"
+msgstr "Licence"
 
 msgid "Last check before install"
 msgstr "Dernière vérification avant installation"
@@ -4935,7 +4934,7 @@ msgid "Chamilo RAPID is a Rapid Learning tool available in Chamilo Pro and Chami
 msgstr "Chamilo RAPID est un outil de Rapid Learning disponible dans Chamilo Pro et Chamilo Medical. Il vous permet de transformer en quelques clics de souris une présentation PowerPoint ou LibreOffice en un parcours d'apprentissage SCORM. Après la conversion, vous arriverez dans l'outil auteur et pourrez ajouter des commentaires audio. Chaque étape deviendra un objet d'apprentissage indépendent et extractible. Le cours complet générera aussi un reporting SCORM fiable pour évaluation ultérieure."
 
 msgid "Bandwidth statistics"
-msgstr "Bandwidth statistics"
+msgstr "Statistiques de bande passante"
 
 msgid "MRTG allow you to consult advanced statistics about the state of the server on the last 24 hours."
 msgstr "MRTG vous permet de consulter les statistiques détaillées de l'état de votre serveur sur les dernières 24 heures."
@@ -5380,10 +5379,10 @@ msgid "Whether you want to use the blacklist or whitelist filtering. See blackli
 msgstr "Utilisation de blacklist ou whitelist. Voir description de blacklist et whitelist ci-dessous pour plus de détails"
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Liste noire"
 
 msgid "Whitelist"
-msgstr "Whitelist"
+msgstr "Liste blanche"
 
 msgid "Blacklist - setting"
 msgstr "Blacklist - paramétrage"
@@ -6802,7 +6801,7 @@ msgid "is already in use. Choose another one."
 msgstr "est déjà pris. Choisissez-en un autre."
 
 msgid "Coach"
-msgstr "Coach"
+msgstr "Tuteur"
 
 msgid "Groups management"
 msgstr "Gestion des groupes"
@@ -8485,7 +8484,7 @@ msgid "Adaptative test with immediate feedback"
 msgstr "Test adaptatif avec feedback immédiat"
 
 msgid "Feedback"
-msgstr "Feedback"
+msgstr "Rétroalimentation"
 
 msgid "Scenario"
 msgstr "Scénario"
@@ -8792,7 +8791,7 @@ msgid "Dear"
 msgstr "Cher(ère)"
 
 msgid "archive"
-msgstr "archive"
+msgstr "fichier"
 
 msgid "Code"
 msgstr "Code de cours"
@@ -15752,22 +15751,22 @@ msgstr "Les blocs ont été mis à jour"
 msgid "Dashboard plugins"
 msgstr "Plugins du panneau de contrôle"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Ce plugin a été supprimé du répertoire de plugins du panneau de contrôle"
 
-msgid "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
 msgstr "Activer les plugins du panneau de contrôle"
 
-msgid "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
 msgstr "Sélectionnez des blocs à montrer dans le panneau de contrôle"
 
 msgid "Position (column)"
 msgstr "Position (colonne)"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr "Activer le bloc"
 
-msgid "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
 msgstr "Aucun plugin du panneau de contrôle n'a été activé."
 
 msgid "Enabled"
@@ -15896,7 +15895,7 @@ msgstr "Rapport de présences"
 msgid "You do not have attendances"
 msgstr "Vous n'avez aucune feuille de présences"
 
-msgid "The Dashboard plugins have been updated successfully"
+msgid "The dashboard plugins have been updated successfully"
 msgstr "Les plugins du panneau de contrôle ont été mis à jour avec succès"
 
 msgid "There is no available information about your courses"
@@ -21919,7 +21918,7 @@ msgid "You must first fill your profile to enable the terms and conditions valid
 msgstr "Vous devez d'abord compléter votre profil pour activer la validation de l'accord légal."
 
 msgid "Diagnostic"
-msgstr "Diagnostic"
+msgstr "Diagnostique"
 
 msgid "Allow show the user Skype account"
 msgstr "Permettre l'affichage du compte Skype de l'utilisateur"
@@ -22964,7 +22963,6 @@ msgstr ""
 msgid "List of valid domains"
 msgstr "Liste des domaines valides"
 
-#, fuzzy
 msgid "URL field format invalid. Example of expected format: http://dropbox.com/sh/loremipsum/loremipsum?dl=0"
 msgstr ""
 "Format invalide du champ URL. Exemple de format attendu : https://dropbox."
@@ -25914,7 +25912,6 @@ msgstr ""
 "contact. La fourniture de ces données est obligatoire. En leur absence, il "
 "ne sera pas possible de traiter votre demande."
 
-#, fuzzy
 msgid "All attempts blocked because you did not reach the minimum score of %s % at one of your attempts."
 msgstr ""
 "Toutes les tentatives ont été bloquées car vous n'avez pas atteint le score "
@@ -26531,7 +26528,6 @@ msgstr ""
 "cours. Et désactiver l'inscription pour les utilisateurs dans tous les cours "
 "depuis la page Reprendre la Session."
 
-#, fuzzy
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 msgstr ""
 "Activer le paramètre samesite:None pour le cookie de session. Plus d'infos : "
@@ -26808,13 +26804,12 @@ msgstr ""
 "qui ne sont pas dans le bon panneau lors du clic sur soumettre. Conservez "
 "tous les utilisateurs."
 
-#, fuzzy
 msgid "In the announcements form, an option normally appears to allow teachers to send a copy of the announcement to the user's HRM. Set this to 'Yes' to remote the option (and *not* send the copy)."
 msgstr ""
 "Dans le formulaire des annonces, une option apparaît normalement pour "
 "permettre aux formateurs d'envoyer une copie de l'annonce au gestionnaire RH "
-"de l'utilisateur. Définissez cette option sur 'Oui' pour supprimer l'option ("
-"et *ne pas* envoyer la copie)."
+"de l'utilisateur. Choisissez 'Oui' pour supprimer l'option (et *ne pas* "
+"envoyer la copie)."
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr ""
@@ -27819,9 +27814,8 @@ msgstr ""
 "Ajouter des infos sur les parcours d'apprentissage et les tests, au rapport "
 "de ticket"
 
-#, fuzzy
 msgid "Enable display of best score attempt"
-msgstr "Activer l'affichage du score de la meilleure tentative"
+msgstr "Activer l'affichage de la tentative au meilleur score"
 
 msgid "Enable subscription to learning paths and learning path categories to groups/classes."
 msgstr ""
@@ -27889,11 +27883,10 @@ msgstr ""
 "le nombre de questions dépasse ce paramètre. Réglez sur 0 pour désactiver la "
 "pagination."
 
-#, fuzzy
 msgid "Provide a list of courses and tests' IDs that will show the best score attempt for any learner in the reports. "
 msgstr ""
-"Fournissez une liste des identifiants de cours et de tests pour lesquels on "
-"affichera le score de la meilleure tentative pour tout apprenant dans les "
+"Fournissez une liste des identifiants de cours et de tests pour lesquels le "
+"score de la meilleure tentative sera affiché pour tout apprenant, dans les "
 "rapports. "
 
 msgid "Enable the selection of mandatory questions in a test when using random categories."
@@ -28271,7 +28264,6 @@ msgstr ""
 "retourner le champ de profil utilisé pour faire correspondre l'utilisateur "
 "avec le système d'authentification externe plutôt que user.id."
 
-#, fuzzy
 msgid "Enable recording of all answers (even temporary) in the track_e_attempt_recording table. This feautre is experimentaland can create issues in the reporting pages when attempting to grade a test."
 msgstr ""
 "Activez l'enregistrement de toutes les réponses (même temporaires) dans la "
@@ -28400,7 +28392,7 @@ msgstr ""
 "Désactiver l'ajout de classe dans le cours de la session pour les non-admins"
 
 msgid "X-Frame-Options"
-msgstr "X-Frame-Options"
+msgstr "En-tête X-Frame-Options"
 
 msgid "With this option enabled, if a course has public visibility and terms and conditions, those terms are disabled while the course is public."
 msgstr ""
@@ -28420,7 +28412,7 @@ msgid "Use virtual keyboard"
 msgstr "Utilisez le clavier virtuel"
 
 msgid "X-XSS-Protection"
-msgstr "X-XSS-Protection"
+msgstr "En-tête X-XSS-Protection"
 
 msgid "Array containing the names of the drivers for files access from the WYSIWYG editor."
 msgstr ""
@@ -28787,9 +28779,8 @@ msgstr ""
 msgid "Options for session import"
 msgstr "Options pour l'importation de session"
 
-#, fuzzy
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "Police de sécurité concernant les informations des sites référents"
 
 msgid "Enable X-sendfile headers"
 msgstr "Activer les en-têtes X-sendfile"
@@ -28975,7 +28966,7 @@ msgstr ""
 "suivant."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Politique de sécurité du contenu (CSP)"
 
 msgid "Enable time per question in tests"
 msgstr "Limite de temps par question dans les tests"
@@ -29618,3 +29609,210 @@ msgstr "Mettre à jour les liens de l'introduction"
 
 msgid "Conference Room"
 msgstr "Salle de conférence"
+
+msgid "Removed from catalogue"
+msgstr "Retiré du catalogue"
+
+msgid "Sign up"
+msgstr "Inscrivez-vous"
+
+msgid "Enter 2FA code"
+msgstr "Entrez le code 2FA"
+
+msgid "Resource count"
+msgstr "Nombre de ressources"
+
+msgid "Please wait, this could take a while..."
+msgstr "Veuillez patienter, cela pourrait prendre un certain temps..."
+
+msgid "Error saving the link"
+msgstr "Erreur lors de l'enregistrement du lien"
+
+msgid "Invalid server response"
+msgstr "Réponse invalide du serveur"
+
+msgid "Add to catalogue"
+msgstr "Ajouter au catalogue"
+
+msgid "Update settings"
+msgstr "Mettre à jour les paramètres"
+
+msgid "No items selected."
+msgstr "Aucun élément sélectionné."
+
+msgid "Back to months"
+msgstr "Retour aux mois"
+
+msgid "No file selected."
+msgstr "Aucun fichier sélectionné."
+
+msgid "Courses count"
+msgstr "Nombre de cours"
+
+msgid "Tool-based resource count"
+msgstr "Nombre de ressources par outil"
+
+msgid "Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach."
+msgstr ""
+"Les tuteurs de session sont les coordinateurs de la session et peuvent agir "
+"en tant que tuteurs pour chacun des cours de la session. Seuls les "
+"utilisateurs ayant le rôle d'enseignant peuvent être sélectionnés comme "
+"tuteurs de session."
+
+msgid "%s's picture"
+msgstr "Photo de %s"
+
+msgid "Step 7 - Update process execution"
+msgstr "Étape 7 - Exécution du processus de mise à jour"
+
+msgid "User registrations by month"
+msgstr "Inscriptions d'utilisateurs par mois"
+
+msgid "An unexpected error occurred. Please try again later."
+msgstr "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
+
+msgid "Add test after each page"
+msgstr "Ajoutez un exercice après chaque page"
+
+msgid "Assessments visible"
+msgstr "Évaluations visibles"
+
+msgid "Add result"
+msgstr "Ajouter un résultat"
+
+msgid "Only files can be replaced."
+msgstr "Seuls les fichiers peuvent être remplacés."
+
+msgid "AI generator"
+msgstr "Générateur d'IA"
+
+msgid "Courses count by language"
+msgstr "Nombre de cours par langue"
+
+msgid "Add gradebook comment"
+msgstr "Ajouter un commentaire au cahier de notes"
+
+msgid "Passwords do not match"
+msgstr "Les mots de passe ne correspondent pas"
+
+msgid "No result or feedback available."
+msgstr "Aucun résultat ni retour disponible."
+
+msgid "Remove current icon"
+msgstr "Supprimer l'icône actuelle"
+
+msgid "Error creating learning path"
+msgstr "Erreur lors de la création du parcours d'apprentissage"
+
+msgid "Aiken Format Example"
+msgstr "Exemple de format Aiken"
+
+msgid "2FA disabled successfully."
+msgstr "L'authentification à deux facteurs a été désactivée."
+
+msgid "Student reports"
+msgstr "Rapports des apprenants"
+
+msgid "Request failed"
+msgstr "La requête a échoué"
+
+msgid "An unexpected error occurred. Please contact support."
+msgstr "Une erreur inattendue s'est produite. Veuillez contacter le support."
+
+msgid "AI provider"
+msgstr "Fournisseur d'IA"
+
+msgid "Choose item"
+msgstr "Choisissez un élément"
+
+msgid "Replace (files only)"
+msgstr "Remplacer (fichiers uniquement)"
+
+msgid "Assessments invisible"
+msgstr "Évaluations invisibles"
+
+msgid "Using AI provider %s"
+msgstr "Utilisation du fournisseur d'IA %s"
+
+msgid "QR code for 2FA"
+msgstr "Code QR pour l'authentification à deux facteurs"
+
+msgid "Please enter a valid number of questions"
+msgstr "Veuillez saisir un nombre valide de questions"
+
+msgid "Password updated successfully"
+msgstr "Mot de passe mis à jour avec succès"
+
+msgid "Loading courses. Please wait."
+msgstr "Chargement des cours. Veuillez patienter."
+
+msgid "Error downloading selected items."
+msgstr "Erreur lors du téléchargement des éléments sélectionnés."
+
+msgid "Private course"
+msgstr "Cours privé"
+
+msgid "Added to catalogue"
+msgstr "Ajouté au catalogue"
+
+msgid "Scan the QR code to enable 2FA"
+msgstr "Scannez le code QR pour activer l'authentification à deux facteurs"
+
+msgid "Error replacing file."
+msgstr "Erreur lors du remplacement du fichier."
+
+msgid "Submit code"
+msgstr "Soumettre le code"
+
+msgid "Number of questions"
+msgstr "Nombre de questions"
+
+msgid "Remove from catalogue"
+msgstr "Retirer du catalogue"
+
+msgid "No data available for the selected date range"
+msgstr "Aucune donnée disponible pour la période sélectionnée"
+
+msgid "This icon will show for the link displayed as a tool on the course homepage."
+msgstr ""
+"Cette icône s'affichera pour le lien présenté comme un outil sur la page "
+"d'accueil du cours."
+
+msgid "Results and feedback per user"
+msgstr "Résultats et retours par utilisateur"
+
+msgid "Download started"
+msgstr "Téléchargement commencé"
+
+msgid "The icon must be 120x120 pixels."
+msgstr "L'icône doit être de 120x120 pixels."
+
+msgid "Step 7 - Installation process execution"
+msgstr "Étape 7 - Exécution du processus d'installation"
+
+msgid "User registrations by day"
+msgstr "Inscriptions d'utilisateurs par jour"
+
+msgid "Generate Aiken"
+msgstr "Générer Aiken"
+
+msgid "Download selected items as ZIP"
+msgstr "Télécharger les éléments sélectionnés en ZIP"
+
+msgid "+%d"
+msgstr "+%d"
+
+msgid "Words count per page"
+msgstr "Nombre de mots par page"
+
+msgid "Not subscribed"
+msgstr "Non inscrit"
+
+msgid "Score display custom values"
+msgstr "Affichage personnalisé des scores"
+
+msgid "User registrations by creator"
+msgstr "Inscriptions d'utilisateurs par créateur"
+
+msgid "Select replacement file"
+msgstr "Sélectionnez le fichier de remplacement"

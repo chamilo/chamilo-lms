@@ -15224,22 +15224,22 @@ msgstr "Bloki zostały zaktualizowane"
 msgid "Dashboard plugins"
 msgstr "Wtyczki do panelu"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Wtyczka ta została usunięta z katalogu wtyczek w panelu"
 
-msgid "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
 msgstr "Włącz wtyczki z panela"
 
-msgid "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
 msgstr "Zaznacz bloki do wyświetlania w widoku bloków panelu"
 
 msgid "Position (column)"
 msgstr "Pozycja (kolumna)"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr "Włącz blokadę panelu"
 
-msgid "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
 msgstr "Brak aktywnych wtyczek panelu"
 
 msgid "Enabled"
@@ -15365,7 +15365,7 @@ msgstr "Raport arkuszy obecności"
 msgid "You do not have attendances"
 msgstr "Nie masz obecności"
 
-msgid "The Dashboard plugins have been updated successfully"
+msgid "The dashboard plugins have been updated successfully"
 msgstr "Wtyczki panelu zostały zaktualizowane"
 
 msgid "There is no available information about your courses"

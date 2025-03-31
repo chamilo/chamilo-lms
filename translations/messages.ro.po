@@ -15224,22 +15224,22 @@ msgstr "Blocurile au fost actualizate"
 msgid "Dashboard plugins"
 msgstr "Plugins din panelul de control"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Acest plugin a fost eliminat de pe lista de plugin-uri din panelul de control"
 
-msgid "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
 msgstr "Activați plugin-uri din panoul de control"
 
-msgid "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
 msgstr "Selectați blocuri care vor fi afișate în panoul de control"
 
 msgid "Position (column)"
 msgstr "Pozitie (coloana)"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr "Habilitati blocul din panelul de control"
 
-msgid "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
 msgstr "Nu exista plugin in panoul de control"
 
 msgid "Enabled"
@@ -15365,7 +15365,7 @@ msgstr "Raport pontaj"
 msgid "You do not have attendances"
 msgstr "Nu asistă"
 
-msgid "The Dashboard plugins have been updated successfully"
+msgid "The dashboard plugins have been updated successfully"
 msgstr "Pluginurile de bord au fost actualizate cu succes"
 
 msgid "There is no available information about your courses"

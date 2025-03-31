@@ -15224,22 +15224,22 @@ msgstr "Os bloques foron actualizados"
 msgid "Dashboard plugins"
 msgstr "Plugins do panel de control"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Este plugin eliminouse desde o panel de administración da plataforma"
 
-msgid "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
 msgstr "Habilitar os plugins do panel de control"
 
-msgid "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
 msgstr "Seleccione os bloques a amosar na vista de bloques do panel de control"
 
 msgid "Position (column)"
 msgstr "Posición (columna)"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr "Activar bloque do panel de control"
 
-msgid "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
 msgstr "Non hai plugin do panel de control activado"
 
 msgid "Enabled"
@@ -15365,7 +15365,7 @@ msgstr "Informe de follas de asistencia"
 msgid "You do not have attendances"
 msgstr "Vostede non ten asistencias"
 
-msgid "The Dashboard plugins have been updated successfully"
+msgid "The dashboard plugins have been updated successfully"
 msgstr "Os plugins do panel de control foron actualizados correctamente"
 
 msgid "There is no available information about your courses"

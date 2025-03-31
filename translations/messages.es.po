@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-08-08 08:44+0000\n"
+"PO-Revision-Date: 2025-03-31 12:26+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -15241,22 +15241,22 @@ msgstr "Los bloques han sido actualizados"
 msgid "Dashboard plugins"
 msgstr "Plugins del panel de control"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Este plugin ha sido eliminado de la lista de plugins del panel de control"
 
-msgid "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
 msgstr "Habilitar los plugins del panel del control"
 
-msgid "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
 msgstr "Seleccione los bloques que se mostrarán en el panel de control"
 
 msgid "Position (column)"
 msgstr "Posición (columna)"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr "Habilitar bloque del panel de control"
 
-msgid "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
 msgstr "No hay habilitado ningún plugin en el panel de control"
 
 msgid "Enabled"
@@ -15382,8 +15382,8 @@ msgstr "Informe de hojas de asistencia"
 msgid "You do not have attendances"
 msgstr "No tiene asistencias"
 
-msgid "The Dashboard plugins have been updated successfully"
-msgstr "Los plugins del Dashboard han sido actualizados con éxito"
+msgid "The dashboard plugins have been updated successfully"
+msgstr "Los plugins del dashboard han sido actualizados con éxito"
 
 msgid "There is no available information about your courses"
 msgstr "No hay información disponible sobre sus cursos"
@@ -28816,3 +28816,207 @@ msgstr "Actualizar enlaces de introducción"
 
 msgid "Conference Room"
 msgstr "Sala de conferencias"
+
+msgid "Removed from catalogue"
+msgstr "Eliminado del catálogo"
+
+msgid "Sign up"
+msgstr "Regístrese"
+
+msgid "Enter 2FA code"
+msgstr "Ingrese el código de 2FA"
+
+msgid "Resource count"
+msgstr "Número de recursos"
+
+msgid "Please wait, this could take a while..."
+msgstr "Por favor espere, esto podría tardar un rato..."
+
+msgid "Error saving the link"
+msgstr "Error al guardar el enlace"
+
+msgid "Invalid server response"
+msgstr "Respuesta inválida del servidor"
+
+msgid "Add to catalogue"
+msgstr "Añadir al catálogo"
+
+msgid "Update settings"
+msgstr "Actualizar configuración"
+
+msgid "No items selected."
+msgstr "No se han seleccionado elementos."
+
+msgid "Back to months"
+msgstr "De vuelta a meses"
+
+msgid "No file selected."
+msgstr "Ningún archivo seleccionado."
+
+msgid "Courses count"
+msgstr "Número de cursos"
+
+msgid "Tool-based resource count"
+msgstr "Número de recursos por herramienta"
+
+msgid "Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach."
+msgstr ""
+"Los tutores de la sesión son coordinadores de la misma y pueden actuar como "
+"tutor para cada uno de los cursos en la sesión. Solo los usuarios con el rol "
+"de profesor pueden ser seleccionados como tutor de la sesión."
+
+msgid "Step 7 - Update process execution"
+msgstr "Paso 7 - Ejecución del proceso de actualización"
+
+msgid "User registrations by month"
+msgstr "Inscripciones de usuarios por mes"
+
+msgid "An unexpected error occurred. Please try again later."
+msgstr ""
+"Se ha producido un error inesperado. Por favor, intente de nuevo más tarde."
+
+msgid "Add test after each page"
+msgstr "Añada una prueba después de cada página"
+
+msgid "Assessments visible"
+msgstr "Evaluaciones visibles"
+
+msgid "Add result"
+msgstr "Añadir resultado"
+
+msgid "Only files can be replaced."
+msgstr "Solo se pueden reemplazar archivos."
+
+msgid "AI generator"
+msgstr "Generador de IA"
+
+msgid "Courses count by language"
+msgstr "Número de cursos por idioma"
+
+msgid "Add gradebook comment"
+msgstr "Añadir comentario en evaluaciones"
+
+msgid "Passwords do not match"
+msgstr "Las contraseñas no coinciden"
+
+msgid "No result or feedback available."
+msgstr "Ningún resultado o comentario disponible."
+
+msgid "Remove current icon"
+msgstr "Eliminar icono actual"
+
+msgid "Error creating learning path"
+msgstr "Error al crear la lección"
+
+msgid "Aiken Format Example"
+msgstr "Ejemplo de formato Aiken"
+
+msgid "2FA disabled successfully."
+msgstr "Su autenticación de dos factores ha sido desactivada."
+
+msgid "Student reports"
+msgstr "Informes de alumnos"
+
+msgid "Request failed"
+msgstr "La solicitud ha fallado"
+
+msgid "An unexpected error occurred. Please contact support."
+msgstr "Ocurrió un error inesperado. Por favor, contacte al soporte."
+
+msgid "AI provider"
+msgstr "Proveedor de IA"
+
+msgid "Choose item"
+msgstr "Seleccione un ítem"
+
+msgid "Replace (files only)"
+msgstr "Reemplazar (solo archivos)"
+
+msgid "Assessments invisible"
+msgstr "Evaluaciones invisibles"
+
+msgid "Using AI provider %s"
+msgstr "Usando el proveedor de IA %s"
+
+msgid "QR code for 2FA"
+msgstr "Código QR para 2FA"
+
+msgid "Please enter a valid number of questions"
+msgstr "Por favor, introduzca un número válido de preguntas"
+
+msgid "Password updated successfully"
+msgstr "Contraseña actualizada"
+
+msgid "Loading courses. Please wait."
+msgstr "Cargando lecciones. Por favor, espere."
+
+msgid "Error downloading selected items."
+msgstr "Error al descargar los elementos seleccionados."
+
+msgid "Private course"
+msgstr "Curso privado"
+
+msgid "Added to catalogue"
+msgstr "Añadido al catálogo"
+
+msgid "Scan the QR code to enable 2FA"
+msgstr "Escanee el código QR para activar la autenticación de dos factores"
+
+msgid "Error replacing file."
+msgstr "Error al reemplazar el archivo."
+
+msgid "Submit code"
+msgstr "Enviar código"
+
+msgid "Number of questions"
+msgstr "Número de preguntas"
+
+msgid "Remove from catalogue"
+msgstr "Eliminar del catálogo"
+
+msgid "No data available for the selected date range"
+msgstr "No hay datos disponibles para el rango de fechas seleccionado"
+
+msgid "This icon will show for the link displayed as a tool on the course homepage."
+msgstr ""
+"Este icono se mostrará para el enlace que aparece como una herramienta en la "
+"página principal del curso."
+
+msgid "Results and feedback per user"
+msgstr "Resultados y retroalimentación por usuario"
+
+msgid "Download started"
+msgstr "Descarga iniciada"
+
+msgid "The icon must be 120x120 pixels."
+msgstr "El icono debe ser de 120x120 píxeles."
+
+msgid "Step 7 - Installation process execution"
+msgstr "Paso 7 - Ejecución del proceso de instalación"
+
+msgid "User registrations by day"
+msgstr "Inscripciones de usuarios por día"
+
+msgid "Generate Aiken"
+msgstr "Generar Aiken"
+
+msgid "Download selected items as ZIP"
+msgstr "Descargar elementos seleccionados como ZIP"
+
+msgid "+%d"
+msgstr "+%d"
+
+msgid "Words count per page"
+msgstr "Número de palabras por página"
+
+msgid "Not subscribed"
+msgstr "No inscrito"
+
+msgid "Score display custom values"
+msgstr "Visualización personalizada de puntuación"
+
+msgid "User registrations by creator"
+msgstr "Inscripciones de usuarios por creador"
+
+msgid "Select replacement file"
+msgstr "Seleccione el archivo de reemplazo"

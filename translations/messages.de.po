@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-08-08 08:44+0000\n"
+"PO-Revision-Date: 2025-03-31 12:26+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -14416,9 +14416,8 @@ msgstr "Als Kursleiter wurden Sie selbst eingetragen. Sie können diese Einstell
 msgid "Installation language"
 msgstr "Sprache für die Installation"
 
-#, fuzzy
 msgid "Please read the following requirements thoroughly."
-msgstr "Bitte sorgfältig lesen"
+msgstr "Bitte lesen Sie die folgenden Anforderungen gründlich durch."
 
 msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
 msgstr "Warnung!<br/>Bei der Installation wurde eine andere Chamilo Version auf Ihrem System entdeckt."
@@ -15284,22 +15283,22 @@ msgstr "Die Elemente wurde aktualisiert"
 msgid "Dashboard plugins"
 msgstr "Plugins für Kontroll-Anzeige"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Dieses Plugin wurde aus dem Verzeichnis für die Kontrollanzeigen gelöscht."
 
-msgid "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
 msgstr "Kontrollanzeige-Plugins aktivieren"
 
-msgid "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
 msgstr "Elemente wählen, um Sie in der Kontroll-Anzeige anzuzeigen"
 
 msgid "Position (column)"
 msgstr "Position (Spalte)"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr "Kontroll-Anzeige Element aktivieren"
 
-msgid "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
 msgstr "Es sind keine Plugins für Kontroll-Anzeige aktiviert"
 
 msgid "Enabled"
@@ -15425,7 +15424,7 @@ msgstr "Auswertung der Anwesenheitslisten"
 msgid "You do not have attendances"
 msgstr "Sie haben keine Anwesenheiten"
 
-msgid "The Dashboard plugins have been updated successfully"
+msgid "The dashboard plugins have been updated successfully"
 msgstr "Die Kontroll-Anzeige wurde erfolgreich aktualisiert"
 
 msgid "There is no available information about your courses"
@@ -19418,9 +19417,8 @@ msgstr "Authentifizierung über Shibboleth"
 msgid "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=Shibboleth'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus."
 msgstr "Zuerst muß Shibboleth für die Nutzung mit Ihrem Webserver konfiguriert sein."
 
-#, fuzzy
 msgid "LDAP authentication"
-msgstr "LDAP Authentifizierung"
+msgstr "LDAP-Authentifizierung"
 
 msgid "Facebook authentication"
 msgstr "Authentifizierung über Facebook"
@@ -23446,10 +23444,9 @@ msgstr "Version aus der Versionsdatei"
 msgid "Version from the config file"
 msgstr "Version aus der Konfigurationsdatei"
 
-#, fuzzy
 msgid "The version from the version.php file is updated with each version but only available if the main/install/ directory is present."
 msgstr ""
-"Die Version aus der Datei version.php wird mit jeder Version aktualisiert, "
+"Die Version aus der version.php-Datei wird mit jeder Version aktualisiert, "
 "ist aber nur verfügbar, wenn das Verzeichnis main/install/ vorhanden ist."
 
 msgid "The version from the main configuration file shows on the main administration page, but has to be changed manually on upgrade."
@@ -24575,9 +24572,8 @@ msgstr "Bewerten Sie diesen Element"
 msgid "Portfolio item was graded"
 msgstr "Portfolio-Element wurde bewertet"
 
-#, fuzzy
 msgid "Context for the comment to be grade"
-msgstr "Kontext für den zu bewertenden Kommentar"
+msgstr "Kontext für die Kommentierung der Bewertung"
 
 msgid "Grade this comment"
 msgstr "Bewerten Sie diesen Kommentar"
@@ -29248,3 +29244,237 @@ msgstr "Link im Text aktualisieren"
 
 msgid "Conference Room"
 msgstr "Konferenzraum"
+
+msgid "Removed from catalogue"
+msgstr "Aus dem Katalog entfernt"
+
+msgid "Sign up"
+msgstr "Anmelden"
+
+msgid "Enter 2FA code"
+msgstr "Geben Sie den 2FA-Code ein"
+
+msgid "Resource count"
+msgstr "Ressourcenanzahl"
+
+msgid "Please wait, this could take a while..."
+msgstr "Bitte warten Sie, dies könnte eine Weile dauern..."
+
+msgid "Error saving the link"
+msgstr "Fehler beim Speichern des Links"
+
+msgid "Invalid server response"
+msgstr "Ungültige Serverantwort"
+
+msgid "Add to catalogue"
+msgstr "Zum Katalog hinzufügen"
+
+msgid "Auto-launch"
+msgstr "Automatischer Start"
+
+msgid "Update settings"
+msgstr "Einstellungen aktualisieren"
+
+msgid "No items selected."
+msgstr "Keine Elemente ausgewählt."
+
+msgid "To teacher and tutor"
+msgstr "An Lehrer und Tutor"
+
+msgid "Back to months"
+msgstr "Zurück zu den Monaten"
+
+msgid "No file selected."
+msgstr "Keine Datei ausgewählt."
+
+msgid "Courses count"
+msgstr "Anzahl Kurse"
+
+msgid "Only for teachers"
+msgstr "Nur für Trainer"
+
+msgid "To HR only"
+msgstr "Nur an PW"
+
+msgid "Tool-based resource count"
+msgstr "Werkzeugbasierte Ressourcenzählung"
+
+msgid "Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach."
+msgstr ""
+"Session-Coaches sind Koordinatoren für die Session und können als Tutor für "
+"jeden Kurs in der Session fungieren. Nur Nutzer mit der Lehrerrolle können "
+"als Session-Coach ausgewählt werden."
+
+msgid "%s's picture"
+msgstr "%s's Bild"
+
+msgid "Step 7 - Update process execution"
+msgstr "Schritt 7 - Ausführung des Aktualisierungsprozesses"
+
+msgid "User registrations by month"
+msgstr "Benutzerregistrierungen pro Monat"
+
+msgid "An unexpected error occurred. Please try again later."
+msgstr ""
+"Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später noch "
+"einmal."
+
+msgid "Continue with %s"
+msgstr "Fahren Sie mit %s fort"
+
+msgid "Add test after each page"
+msgstr "Fügen Sie nach jeder Seite einen Test hinzu"
+
+msgid "Assessments visible"
+msgstr "Bewertungen sichtbar"
+
+msgid "Add result"
+msgstr "Ergebnis hinzufügen"
+
+msgid "Only files can be replaced."
+msgstr "Nur Dateien können ersetzt werden."
+
+msgid "AI generator"
+msgstr "KI-Generator"
+
+msgid "Courses count by language"
+msgstr "Anzahl Kurse nach Sprache"
+
+msgid "Only for students"
+msgstr "Nur für Lernende"
+
+msgid "Add gradebook comment"
+msgstr "Gradebook-Kommentar hinzufügen"
+
+msgid "Passwords do not match"
+msgstr "Passwörter stimmen nicht überein"
+
+msgid "No result or feedback available."
+msgstr "Kein Ergebnis oder Feedback verfügbar."
+
+msgid "Remove current icon"
+msgstr "Aktuelles Symbol entfernen"
+
+msgid "Error creating learning path"
+msgstr "Fehler beim Erstellen der Lektion"
+
+msgid "Aiken Format Example"
+msgstr "Aiken-Format Beispiel"
+
+msgid "2FA disabled successfully."
+msgstr "2FA erfolgreich deaktiviert."
+
+msgid "Student reports"
+msgstr "Lernerberichte"
+
+msgid "Request failed"
+msgstr "Anfrage fehlgeschlagen"
+
+msgid "An unexpected error occurred. Please contact support."
+msgstr ""
+"Ein unerwarteter Fehler ist aufgetreten. Bitte kontaktieren Sie den Support."
+
+msgid "AI provider"
+msgstr "KI-Diensten Anbieter"
+
+msgid "Choose item"
+msgstr "Wählen Sie einen Elemente aus"
+
+msgid "Replace (files only)"
+msgstr "Ersetzen (nur Dateien)"
+
+msgid "Assessments invisible"
+msgstr "Bewertungen unsichtbar"
+
+msgid "Using AI provider %s"
+msgstr "Mit AI-Anbieter %s"
+
+msgid "QR code for 2FA"
+msgstr "QR-Code für 2FA"
+
+msgid "Please enter a valid number of questions"
+msgstr "Bitte geben Sie eine gültige Anzahl von Fragen ein"
+
+msgid "Password updated successfully"
+msgstr "Passwort erfolgreich aktualisiert"
+
+msgid "Loading courses. Please wait."
+msgstr "Lade Kurse. Bitte warten."
+
+msgid "Error downloading selected items."
+msgstr "Fehler beim Herunterladen der ausgewählten Elemente."
+
+msgid "Private course"
+msgstr "Privatkurs"
+
+msgid "Added to catalogue"
+msgstr "Hinzugefügt zum Katalog"
+
+msgid "Autolaunch settings"
+msgstr "Autostart-Einstellungen"
+
+msgid "Scan the QR code to enable 2FA"
+msgstr ""
+"Scannen Sie den QR-Code, um die Zwei-Faktor-Authentifizierung zu aktivieren"
+
+msgid "Edit introduction"
+msgstr "Einführung bearbeiten"
+
+msgid "Error replacing file."
+msgstr "Fehler beim Ersetzen der Datei."
+
+msgid "Submit code"
+msgstr "Code einreichen"
+
+msgid "Number of questions"
+msgstr "Anzahl Fragen"
+
+msgid "Remove from catalogue"
+msgstr "Aus dem Katalog entfernen"
+
+msgid "No data available for the selected date range"
+msgstr "Keine Daten für den ausgewählten Zeitraum verfügbar"
+
+msgid "This icon will show for the link displayed as a tool on the course homepage."
+msgstr ""
+"Dieses Symbol wird für den Link angezeigt, der als Werkzeug auf der "
+"Startseite des Kurses dargestellt wird."
+
+msgid "Results and feedback per user"
+msgstr "Ergebnisse und Feedback pro Benutzer"
+
+msgid "Download started"
+msgstr "Download gestartet"
+
+msgid "The icon must be 120x120 pixels."
+msgstr "Das Symbol muss 120x120 Pixel groß sein."
+
+msgid "Step 7 - Installation process execution"
+msgstr "Schritt 7 - Ausführung des Installationsprozesses"
+
+msgid "User registrations by day"
+msgstr "Benutzerregistrierungen pro Tag"
+
+msgid "Generate Aiken"
+msgstr "Generieren Sie Aiken"
+
+msgid "Download selected items as ZIP"
+msgstr "Herunterladen ausgewählter Elemente als ZIP"
+
+msgid "+%d"
+msgstr "+%d"
+
+msgid "Words count per page"
+msgstr "Wörteranzahl pro Seite"
+
+msgid "Not subscribed"
+msgstr "Nicht abonniert"
+
+msgid "Score display custom values"
+msgstr "Punkteanzeige benutzerdefinierte Werte"
+
+msgid "User registrations by creator"
+msgstr "Benutzerregistrierungen nach Ersteller"
+
+msgid "Select replacement file"
+msgstr "Wählen Sie die Ersatzdatei"

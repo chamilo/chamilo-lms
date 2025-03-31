@@ -15224,22 +15224,22 @@ msgstr "Bloki so bili ažurirani"
 msgid "Dashboard plugins"
 msgstr "Vtiči nadzorne plošče"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Ta vtičnik je bil odstranjen s spiska vtičnikov kontrolne plošče"
 
-msgid "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
 msgstr "Omogoči vtičnik nadzorne plošče (Dashboard)"
 
-msgid "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
 msgstr "Izberite bloke za prikaz v bločnem pogledu kontrolne plošče"
 
 msgid "Position (column)"
 msgstr "Pozicija (vrstice)"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr "Omogoči blok nadzorne plošče"
 
-msgid "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
 msgstr "Tu ni omogočenih vtičev nadzorne plošče"
 
 msgid "Enabled"
@@ -15365,7 +15365,7 @@ msgstr "Poročilo seznamov prisotnosti"
 msgid "You do not have attendances"
 msgstr "Nimate prisotnih"
 
-msgid "The Dashboard plugins have been updated successfully"
+msgid "The dashboard plugins have been updated successfully"
 msgstr "Vtič kontrolne plošče je bil uspešno ažuriran"
 
 msgid "There is no available information about your courses"

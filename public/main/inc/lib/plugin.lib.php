@@ -225,7 +225,7 @@ class AppPlugin
             'Test2Pdf',
             'TopLinks',
             'Tour',
-            'userremoteservice',
+            'UserRemoteService',
             'zoom',
         ];
     }

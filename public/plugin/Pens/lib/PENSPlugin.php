@@ -152,7 +152,7 @@ class PENSPlugin extends Plugin
     {
         $result = [];
         $result['title'] = $this->get_name();
-        $result['comment'] = 'Provides support for the PENS course exchange standard. Read the readme.txt file in the plugin/pens/ folder for a complete installation.';
+        $result['comment'] = 'Provides support for the PENS course exchange standard. Read the readme.txt file in the plugin/Pens/ folder for a complete installation.';
         $result['version'] = $this->get_version();
         $result['author'] = $this->get_author();
         $result['plugin_class'] = get_class($this);

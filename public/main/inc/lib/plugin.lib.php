@@ -209,7 +209,7 @@ class AppPlugin
             'NoSearchIndex',
             'NotebookTeacher',
             'PauseTraining',
-            'pens',
+            'Pens',
             'positioning',
             'questionoptionsevaluation',
             'redirection',

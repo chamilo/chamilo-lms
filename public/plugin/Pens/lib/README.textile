@@ -16,9 +16,9 @@ Assuming the URL of your server is http://www.myserver.com, create a file called
 
 In this file, write the following code:
 
-pre.. // Assuming the library is accessible through pens/pens.php
+pre.. // Assuming the library is accessible through Pens/pens.php
 
-require_once("pens/pens.php");
+require_once("Pens/pens.php");
 
 // Create a concrete class that extends PENSPackageHandler and 
 // write your implementation of the processPackage method in it
@@ -46,7 +46,7 @@ h1. How do I create a client ?
 
 The role of the PENSClient is simply to receive receipts and alerts from the server and process them. Here is how to create a client.
 
-pre.. require_once("pens/pens.php");
+pre.. require_once("Pens/pens.php");
 
 // Create a request handler if you need one. This allows you to do some processing on the requests (store them in a DB, send them to an email address etc...)
 // You do not need to create a request handler if you do not want to process the requests

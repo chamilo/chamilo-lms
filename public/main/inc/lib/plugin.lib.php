@@ -205,7 +205,7 @@ class AppPlugin
             'LtiProvider',
             'MaintenanceMode',
             'MigrationMoodle',
-            'mobidico',
+            'Mobidico',
             'nosearchindex',
             'notebookteacher',
             'pausetraining',

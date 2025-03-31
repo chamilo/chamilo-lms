@@ -68,7 +68,7 @@ class SurveyExportTxtPlugin extends Plugin
 
         return Display::url(
             Display::getMdiIcon(ActionIcon::EXPORT_ARCHIVE, 'ch-tool-icon', null, $iconSize, get_lang('Export')),
-            api_get_path(WEB_PLUGIN_PATH).'surveyexporttxt/export.php?survey='.$surveyId.'&'.api_get_cidreq()
+            api_get_path(WEB_PLUGIN_PATH).'SurveyExportTxt/export.php?survey='.$surveyId.'&'.api_get_cidreq()
         );
     }
 
@@ -93,6 +93,6 @@ class SurveyExportTxtPlugin extends Plugin
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.link LIKE :link AND t.category = :category')
-            ->execute(['link' => 'surveyexporttxt/start.php%', 'category' => 'plugin']);
+            ->execute(['link' => 'SurveyExportTxt/start.php%', 'category' => 'plugin']);
     }
 }

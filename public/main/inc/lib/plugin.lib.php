@@ -221,7 +221,7 @@ class AppPlugin
             'Static',
             'StudentFollowUp',
             'SurveyExportCsv',
-            'surveyexporttxt',
+            'SurveyExportTxt',
             'test2pdf',
             'toplinks',
             'tour',

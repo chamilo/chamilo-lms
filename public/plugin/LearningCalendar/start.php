@@ -181,7 +181,7 @@ if (in_array($action, ['add', 'edit'])) {
 
 $template->assign('form', $formToString);
 $actions = Display::toolbarAction('toolbar-calendar', [$actionLeft]);
-$content = $template->fetch('learning_calendar/view/start.tpl');
+$content = $template->fetch('LearningCalendar/view/start.tpl');
 $template->assign('content', $content);
 $template->assign('actions', $actions);
 

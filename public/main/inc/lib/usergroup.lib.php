@@ -154,7 +154,7 @@ class UserGroupModel extends Model
             if ($showCalendar) {
                 $calendarPlugin = LearningCalendarPlugin::create();
             }
-            $url = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/calendar.php?';
+            $url = api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/calendar.php?';
             while ($data = Database::fetch_array($result)) {
                 $userId = $data['user_id'];
                 $userInfo = api_get_user_info($userId);

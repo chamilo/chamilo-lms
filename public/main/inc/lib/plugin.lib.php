@@ -201,7 +201,7 @@ class AppPlugin
             'HelloWorld',
             'ImsLti',
             'Justification',
-            'learning_calendar',
+            'LearningCalendar',
             'lti_provider',
             'maintenancemode',
             'migrationmoodle',

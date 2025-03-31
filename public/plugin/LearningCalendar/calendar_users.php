@@ -19,7 +19,7 @@ $formToString = '';
 $template = new Template();
 $actionLeft = Display::url(
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
-    api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php'
+    api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/start.php'
 );
 
 $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);

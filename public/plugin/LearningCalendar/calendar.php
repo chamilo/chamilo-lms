@@ -31,7 +31,7 @@ $formToString = '';
 $template = new Template();
 $actionLeft = Display::url(
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
-    api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php'
+    api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/start.php'
 );
 
 $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
@@ -39,9 +39,9 @@ $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 $eventList = $plugin->getEventTypeList();
 $template->assign('events', $eventList);
 $template->assign('calendar_language', $calendarLanguage);
-$template->assign('ajax_url', api_get_path(WEB_PLUGIN_PATH).'learning_calendar/ajax.php?id='.$calendarId);
+$template->assign('ajax_url', api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/ajax.php?id='.$calendarId);
 $template->assign('header', $item['title']);
-$content = $template->fetch('learning_calendar/view/calendar.tpl');
+$content = $template->fetch('LearningCalendar/view/calendar.tpl');
 $template->assign('actions', $actions);
 $template->assign('content', $content);
 

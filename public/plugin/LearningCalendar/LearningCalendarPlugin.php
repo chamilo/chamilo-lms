@@ -69,7 +69,7 @@ class LearningCalendarPlugin extends Plugin
      */
     public function get_name()
     {
-        return 'learning_calendar';
+        return 'LearningCalendar';
     }
 
     /**
@@ -216,12 +216,12 @@ class LearningCalendarPlugin extends Plugin
 
         $result = Database::query($sql);
         $list = [];
-        $link = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php';
+        $link = api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/start.php';
         while ($row = Database::fetch_array($result)) {
             $id = $row['id'];
             $row['title'] = Display::url(
                 $row['title'],
-                api_get_path(WEB_PLUGIN_PATH).'learning_calendar/calendar.php?id='.$id
+                api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/calendar.php?id='.$id
             );
             $actions = Display::url(
                 Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),

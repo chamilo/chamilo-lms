@@ -9,7 +9,7 @@ $strings['LearningCalendar'] = 'Calendrier d\'apprentissage';
 $strings['NumberDaysAccumulatedInCalendar'] = 'Nombre de jours cumulés dans le calendrier: ';
 $strings['NumberDaysAccumulatedInLp'] = 'Nombre de jours cumulés dans les parcours réalisés: ';
 $strings['NumberDaysInRetard'] = "Nombre de jour de retard ou d'avance à la date d'aujourd'hui: ";
-$strings['DifferenceOfDaysAndCalendar'] = 'Différence de nombre de jours avec le plan issu du learning_calendar';
+$strings['DifferenceOfDaysAndCalendar'] = 'Différence de nombre de jours avec le plan issu du LearningCalendar';
 
 $strings['EventTypeTaken'] = 'Occupé';
 $strings['EventTypeExam'] = 'Examen';

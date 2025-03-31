@@ -15224,22 +15224,22 @@ msgstr "Разделите в информационното табло са о�
 msgid "Dashboard plugins"
 msgstr "Добавки към информационното табло"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Добавката за информационното табло е изтрита."
 
-msgid "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
 msgstr "Активиране на добавките към информационното табло"
 
-msgid "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
 msgstr ""
 
 msgid "Position (column)"
 msgstr "Позиция (колона)"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr ""
 
-msgid "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
 msgstr "Няма активирани блокове в информационното табло"
 
 msgid "Enabled"
@@ -15365,7 +15365,7 @@ msgstr "Справка за присъствията"
 msgid "You do not have attendances"
 msgstr "Нямате присъствия."
 
-msgid "The Dashboard plugins have been updated successfully"
+msgid "The dashboard plugins have been updated successfully"
 msgstr "Добавките за информационното табло са обновени."
 
 msgid "There is no available information about your courses"

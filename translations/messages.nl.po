@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-08-08 08:44+0000\n"
+"PO-Revision-Date: 2025-03-31 12:26+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Dutch <https://translation.chamilo.org/projects/chamilo/"
 "messages/nl/>\n"
@@ -15265,23 +15265,23 @@ msgstr "De blokken zijn geüpdatet"
 msgid "Dashboard plugins"
 msgstr "Dashboard plugins"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
-msgstr "Deze plugin werd verwijderd uit de Dashboard plugin map"
+msgid "This plugin has been deleted from the dashboard plugin directory"
+msgstr "Deze plugin werd verwijderd uit de dashboard plugin map"
 
-msgid "Enable Dashboard plugins"
-msgstr "Gebruik Dashboard plugins"
+msgid "Enable dashboard plugins"
+msgstr "Gebruik dashboard plugins"
 
-msgid "Select blocks to display in the Dashboard blocks view"
-msgstr "Selecteer blokken om in het Dashboard de blokkenweergave te tonen"
+msgid "Select blocks to display in the dashboard blocks view"
+msgstr "Selecteer blokken om in het dashboard de blokkenweergave te tonen"
 
 msgid "Position (column)"
 msgstr "Positie (kolom)"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr "Schakel dashboardblok in"
 
-msgid "There is no enabled Dashboard plugin"
-msgstr "Er zijn geen ingeschakelde Dashboard plugins"
+msgid "There is no enabled dashboard plugin"
+msgstr "Er zijn geen ingeschakelde dashboard plugins"
 
 msgid "Enabled"
 msgstr "Ingeschakeld"
@@ -15406,8 +15406,8 @@ msgstr "Rapport van presentielijsten"
 msgid "You do not have attendances"
 msgstr "Je hebt geen deelname"
 
-msgid "The Dashboard plugins have been updated successfully"
-msgstr "De Dashboard plugins zijn succesvol geüpdatet"
+msgid "The dashboard plugins have been updated successfully"
+msgstr "De dashboard plugins zijn succesvol geüpdatet"
 
 msgid "There is no available information about your courses"
 msgstr "Er is geen informatie beschikbaar over je cursussen"
@@ -16075,7 +16075,7 @@ msgid "Item"
 msgstr "Item"
 
 msgid "Configure Dashboard Plugin"
-msgstr "Configureer Dashboard plugin"
+msgstr "Configureer dashboard plugin"
 
 msgid "Edit blocks"
 msgstr "Bewerk blokken"
@@ -19650,24 +19650,34 @@ msgstr ""
 
 msgid "Are you sure you want to lock this item? After locking this item you can't edit the user results. To unlock it, you need to contact the platform administrator."
 msgstr ""
+"Weet u zeker dat u dit item wilt vergrendelen? Na het vergrendelen van dit "
+"item kunt u de gebruikersresultaten niet bewerken. Om het te ontgrendelen, "
+"moet u contact opnemen met de platformbeheerder."
 
 msgid "Are you sure you want to unlock this element?"
-msgstr ""
+msgstr "Weet u zeker dat u dit element wilt ontgrendelen?"
 
 msgid "Allow session administrators to see all sessions"
-msgstr ""
+msgstr "Sta sessiebeheerders toe om alle sessies te zien"
 
 msgid "When this option is not enabled (default), session administrators can only see the sessions they have created. This is confusing in an open environment where session administrators might need to share support time between two sessions."
 msgstr ""
+"Wanneer deze optie niet is ingeschakeld (standaard), kunnen sessiebeheerders "
+"alleen de sessies zien die ze hebben gemaakt. Dit is verwarrend in een open "
+"omgeving waar sessiebeheerders mogelijk ondersteuningstijd moeten delen "
+"tussen twee sessies."
 
 msgid "Pass percentage"
 msgstr "Slagingspercentage"
 
+#, fuzzy
 msgid "Allow Skills tool"
-msgstr ""
+msgstr "Sta vaardighedentool toe"
 
 msgid "Users can see their skills in the social network and in a block in the homepage."
 msgstr ""
+"Gebruikers kunnen hun vaardigheden zien in het sociaal netwerk en in een "
+"blok op de startpagina."
 
 msgid "If you want to unsubscribe completely from this campus and have all your information removed from our database, please click the button below and confirm."
 msgstr "Indien u zich volledig wenst uit te schrijven van dit leerplatform en al uw gegevens wenst te verwijderen uit onze database, klik dan op onderstaande knop om dit te bevestigen."
@@ -19676,10 +19686,12 @@ msgid "Yes, I want to remove this account completely. No data will remain on the
 msgstr "Ja, ik wil mijn account volledig verwijderen. Er zal geen data op de server achterblijven en ik zal niet opnieuw kunnen aanmelden, tenzij ik opnieuw registreer."
 
 msgid "Allow public certificates"
-msgstr ""
+msgstr "Sta openbare certificaten toe"
 
 msgid "User certificates can be view by unregistered users."
 msgstr ""
+"Gebruikerscertificaten kunnen worden bekeken door niet-geregistreerde "
+"gebruikers."
 
 msgid "Don't forget to select the media files if your resource need it"
 msgstr "Niet vergeten om je mediabestanden te selecteren als je als je bron die nodig heeft"
@@ -19691,103 +19703,110 @@ msgid "The requested certificate exists on this portal, but it has not been made
 msgstr "Het gevraagde certificaat is beschikbaar via dit platform, maar werd niet publiek gemaakt. Meld je aan om het te kunnen zien."
 
 msgid "Default"
-msgstr ""
+msgstr "Standaard"
 
 msgid "A test course has been created successfully"
-msgstr ""
+msgstr "Een oefencursus is succesvol aangemaakt"
 
 msgid "No category selected"
 msgstr "Geen categorie geselecteerd"
 
 msgid "Return to Course Homepage"
-msgstr ""
+msgstr "Terug naar cursushoofdpagina"
 
 msgid "Exercise average"
 msgstr "Gemiddelde van de oefening"
 
 msgid "Webcam Clip"
-msgstr ""
+msgstr "Webcamclip"
 
 msgid "Snapshot"
-msgstr ""
+msgstr "Snapshot"
 
 msgid "Take your photos"
-msgstr ""
+msgstr "Maak uw foto's"
 
 msgid "Local input image"
-msgstr ""
+msgstr "Lokale invoerafbeelding"
 
 msgid "Clip sent"
-msgstr ""
+msgstr "Clip verzonden"
 
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 msgid "Stop"
-msgstr ""
+msgstr "Stop"
 
 msgid "Enable Webcam Clip"
-msgstr ""
+msgstr "Activeer Webcam Clip"
 
 msgid "Webcam Clip allow to users capture images from his webcam and send them to server in JPEG (.jpg or .jpeg) format"
 msgstr ""
+"Webcam Clip stelt gebruikers in staat om afbeeldingen van hun webcam vast te "
+"leggen en deze in JPEG-formaat (.jpg of .jpeg) naar de server te sturen"
 
 msgid "AUTO RESIZE (default)"
-msgstr ""
+msgstr "AUTOMATISCH AANPASSEN (standaard)"
 
 msgid "This slideshow will resize automatically to your screen size. This is the default option."
 msgstr ""
+"Deze diavoorstelling past zich automatisch aan uw schermgrootte aan. Dit is "
+"de standaardoptie."
 
 msgid "You should create the \"Term and Conditions\" for all the available languages."
 msgstr ""
+"U dient de \"Algemene voorwaarden\" voor alle beschikbare talen te creëren."
 
 msgid "Select an audio file from documents"
-msgstr ""
+msgstr "Selecteer een audiobestand uit documenten"
 
 msgid "Enable e-mail alerts templates"
 msgstr "Activeer e-mail alerts templates"
 
 msgid "Define home-made e-mail alerts to be fired on specific events (and to specific users)"
 msgstr ""
+"Stel zelfgemaakte e-mailwaarschuwingen in om te verzenden bij specifieke "
+"gebeurtenissen (en naar specifieke gebruikers)"
 
 msgid "System Management"
-msgstr ""
+msgstr "Systeembeheer"
 
 msgid "Remove old database"
-msgstr ""
+msgstr "Verwijder oude database"
 
 msgid "Remove old tables"
-msgstr ""
+msgstr "Verwijder oude tabellen"
 
 msgid "Total space used by portal %s limit is %s MB"
-msgstr ""
+msgstr "Totale ruimte gebruikt door portaal %s limiet is %s MB"
 
 msgid "Event message management"
-msgstr ""
+msgstr "Beheer van evenementberichten"
 
 msgid "To be warned user list"
-msgstr ""
+msgstr "Te waarschuwen gebruikerslijst"
 
 msgid "You have some unsaved changes. Do you want to abandon them ?"
-msgstr ""
+msgstr "U heeft enkele niet-opgeslagen wijzigingen. Wilt u deze verlaten?"
 
 msgid "Activate event"
 msgstr "Activeer event"
 
 msgid "Available event keys. Use them between (( ))."
-msgstr ""
+msgstr "Beschikbare evenementsleutels. Gebruik ze tussen (( ))."
 
 msgid "Events"
-msgstr ""
+msgstr "Evenementen"
 
 msgid "Event type name"
-msgstr ""
+msgstr "Naam evenementtype"
 
 msgid "Hide campus from public platforms list"
-msgstr ""
+msgstr "Verberg campus van openbare platformlijst"
 
 msgid "Chamilo official services providers"
-msgstr ""
+msgstr "Chamilo officiële dienstverleners"
 
 msgid "No negative score"
 msgstr "Geen negatieve score"
@@ -19796,19 +19815,19 @@ msgid "Global multiple answer"
 msgstr "Globale meerdere antwoorden"
 
 msgid "Zombies"
-msgstr ""
+msgstr "Zombies"
 
 msgid "Active only"
-msgstr ""
+msgstr "Alleen actief"
 
 msgid "Authentication source"
-msgstr ""
+msgstr "Authenticatiebron"
 
 msgid "Registered date"
-msgstr ""
+msgstr "Registreerd datum"
 
 msgid "Number of inactive sessions"
-msgstr ""
+msgstr "Aantal inactieve sessies"
 
 msgid "Followed sessions"
 msgstr "Gevolgde sessies"
@@ -19823,7 +19842,7 @@ msgid "Timeline"
 msgstr "Tijdslijn"
 
 msgid "Export to PDF web pages and images"
-msgstr ""
+msgstr "Exporteer webpagina's en afbeeldingen naar PDF"
 
 msgid "Course catalog"
 msgstr "Cursuscatalogus"
@@ -19832,391 +19851,424 @@ msgid "Problem recording? Upload your own audio file."
 msgstr "Problemen bij het opnemen? Upload uw eigen geluidsbestand."
 
 msgid "Import course progress"
-msgstr ""
+msgstr "Cursusvoortgang importeren"
 
 msgid "Export course progress"
-msgstr ""
+msgstr "Exporteer cursusvoortgang"
 
 msgid "Delete all course progress"
-msgstr ""
+msgstr "Verwijder alle cursusvoortgang"
 
 msgid "Filter terms"
-msgstr ""
+msgstr "Filtervoorwaarden"
 
 msgid "Give a list of terms, one by line, to be filtered out of web pages and e-mails. These terms will be replaced by ***."
 msgstr ""
+"Geef een lijst met termen, één per regel, die uit webpagina's en e-mails "
+"gefilterd moeten worden. Deze termen worden vervangen door ***."
 
 msgid "Use custom pages"
-msgstr ""
+msgstr "Gebruik aangepaste pagina's"
 
 msgid "Enable this feature to configure specific login pages by role"
 msgstr ""
+"Schakel deze functie in om specifieke inlogpagina's per rol te configureren"
 
 msgid "Learner page after login"
-msgstr ""
+msgstr "Leerlingenpagina na inloggen"
 
 msgid "This page will appear to all learners after they login"
 msgstr ""
+"Deze pagina wordt weergegeven aan alle leerlingen nadat ze zijn ingelogd"
 
 msgid "Teacher page after login"
-msgstr ""
+msgstr "Docentenpagina na inloggen"
 
 msgid "This page will be loaded after login for all teachers"
-msgstr ""
+msgstr "Deze pagina wordt geladen na het inloggen voor alle trainers"
 
 msgid "Human resources manager page after login"
-msgstr ""
+msgstr "Pagina van de HR-manager na inloggen"
 
 msgid "This page will load after login for all human resources managers"
-msgstr ""
+msgstr "Deze pagina wordt geladen na inloggen voor alle HR-managers"
 
 msgid "Learner autosubscribe"
-msgstr ""
+msgstr "Leerling automatisch inschrijven"
 
 msgid "Learner autosubscribe - not yet available"
-msgstr ""
+msgstr "Leerling automatisch inschrijven - nog niet beschikbaar"
 
 msgid "Teacher autosubscribe"
-msgstr ""
+msgstr "Docent automatisch inschrijven"
 
 msgid "Teacher autosubscribe - not yet available"
-msgstr ""
+msgstr "Docent automatisch inschrijven - nog niet beschikbaar"
 
 msgid "Human resources director autosubscribe"
-msgstr ""
+msgstr "Directeur personeelszaken automatisch abonneren"
 
 msgid "Human resources director autosubscribe - not yet available"
-msgstr ""
+msgstr "Directeur personeelszaken automatisch abonneren - nog niet beschikbaar"
 
 msgid "Cumulative session time for SCORM"
-msgstr ""
+msgstr "Cumulatieve sessietijd voor SCORM"
 
 msgid "When enabled, the session time for SCORM Learning Paths will be cumulative, otherwise, it will only be counted from the last update time. This is a global setting. It is used when creating a new Learning Path but can then be redefined for each one."
 msgstr ""
+"Wanneer ingeschakeld, zal de sessietijd voor SCORM-leerpaden cumulatief "
+"zijn, anders wordt deze alleen geteld vanaf de laatste update tijd. Dit is "
+"een globale instelling. Het wordt gebruikt bij het aanmaken van een nieuw "
+"leerpad, maar kan daarna voor elk leerpad opnieuw worden gedefinieerd."
 
 msgid "Session admin page after login"
-msgstr ""
+msgstr "Pagina van de sessiebeheerder na inloggen"
 
 msgid "Page to load after login for the session administrators"
-msgstr ""
+msgstr "Pagina om te laden na inloggen voor de sessiebeheerders"
 
 msgid "Session admin autosubscribe"
-msgstr ""
+msgstr "Sessionbeheerder automatisch inschrijven"
 
 msgid "Session administrator autosubscribe - not available yet"
-msgstr ""
+msgstr "Sessiebeheerder automatisch inschrijven - nog niet beschikbaar"
 
 msgid "Tool visible at course creation"
-msgstr ""
+msgstr "Hulpmiddel zichtbaar bij cursuscreatie"
 
 msgid "Select the tools that will be visible when creating the courses - not yet available"
 msgstr ""
+"Selecteer de hulpmiddelen die zichtbaar zullen zijn bij het aanmaken van de "
+"cursussen - nog niet beschikbaar"
 
 msgid "Create a user account for any new CAS-authenticated user, from scratch"
 msgstr ""
+"Maak een gebruikersaccount aan voor elke nieuwe CAS-geauthenticeerde "
+"gebruiker, vanaf het begin"
 
 msgid "Create a user account for any new CAS-authenticated user, from LDAP"
 msgstr ""
+"Maak een gebruikersaccount aan voor elke nieuwe CAS-geauthenticeerde "
+"gebruiker, vanuit LDAP"
 
 msgid "Update CAS-authenticated user account information from LDAP"
-msgstr ""
+msgstr "Werk CAS-geauthenticeerde gebruikersaccountinformatie bij vanuit LDAP"
 
 msgid "Makes sure the user firstname, lastname and email address are the same as current values in the LDAP directory"
 msgstr ""
+"Zorgt ervoor dat de voornaam, achternaam en e-mailadres van de gebruiker "
+"hetzelfde zijn als de huidige waarden in de LDAP-directory"
 
 msgid "Installation process execution"
-msgstr ""
+msgstr "Installatieproces uitvoering"
 
 msgid "Update process execution"
-msgstr ""
+msgstr "Uitvoeringsproces bijwerken"
 
 msgid "Please wait. This could take a while..."
-msgstr ""
+msgstr "Een ogenblik geduld alstublieft. Dit kan even duren..."
 
 msgid "This platform was unable to send the email. Please contact %s for more information."
 msgstr ""
+"Dit platform kon de e-mail niet verzenden. Neem contact op met %s voor meer "
+"informatie."
 
 msgid "This is your first login. Please update your password to something you will remember."
 msgstr ""
+"Dit is uw eerste aanmelding. Gelieve uw wachtwoord te wijzigen naar iets wat "
+"u zich zult herinneren."
 
 msgid "Click here to contact the administrator"
-msgstr ""
+msgstr "Klik hier om contact op te nemen met de beheerder"
 
 msgid "Show all users"
-msgstr ""
+msgstr "Toon alle gebruikers"
 
 msgid "Show users not added to the URL"
-msgstr ""
+msgstr "Toon gebruikers die niet aan de URL zijn toegevoegd"
 
 msgid "Users not added to the URL"
-msgstr ""
+msgstr "Gebruikers niet toegevoegd aan de URL"
 
 msgid "Users not registered in any session"
-msgstr ""
+msgstr "Gebruikers niet geregistreerd in een sessie"
 
 msgid "Command line interpreter (CLI)"
-msgstr ""
+msgstr "Opdrachtregelinterpreter (CLI)"
 
 msgid "Please visit our website: https://chamilo.org/download"
-msgstr ""
+msgstr "Bezoek onze website: https://chamilo.org/download"
 
 msgid "The space used on disk cannot be measured properly on Windows-based systems."
 msgstr ""
+"De gebruikte schijfruimte kan niet correct worden gemeten op Windows-"
+"gebaseerde systemen."
 
 msgid "%d old tables deleted"
-msgstr ""
+msgstr "%d oude tabellen verwijderd"
 
 msgid "%d old databases deleted"
-msgstr ""
+msgstr "%d oude databases verwijderd"
 
 msgid "List"
 msgstr "Lijst"
 
 msgid "Not authorized"
-msgstr ""
+msgstr "Niet geautoriseerd"
 
 msgid "Unknown action"
-msgstr ""
+msgstr "Onbekende actie"
 
 msgid "First"
-msgstr ""
+msgstr "Eerste"
 
 msgid "Last"
-msgstr ""
+msgstr "Laatste"
 
 msgid "You are not authorized to do this"
-msgstr ""
+msgstr "U bent niet gemachtigd dit te doen"
 
 msgid "No implementation available yet for this action"
-msgstr ""
+msgstr "Er is nog geen implementatie beschikbaar voor deze actie"
 
 msgid "Course descriptions"
 msgstr "Cursus beschrijvingen"
 
 msgid "Replace existing entries"
-msgstr ""
+msgstr "Vervang bestaande vermeldingen"
 
 msgid "Add items"
-msgstr ""
+msgstr "Items toevoegen"
 
 msgid "Not found"
-msgstr ""
+msgstr "Niet gevonden"
 
 msgid "Successfully sent"
-msgstr ""
+msgstr "Succesvol verzonden"
 
 msgid "Sending failed"
-msgstr ""
+msgstr "Verzenden mislukt"
 
 msgid "The number of sessions limit for this portal has been reached"
-msgstr ""
+msgstr "Het limiet voor het aantal sessies voor dit portaal is bereikt"
 
 msgid "A new session has been created"
-msgstr ""
+msgstr "Er is een nieuwe sessie aangemaakt"
 
 msgid "Offline"
-msgstr ""
+msgstr "Offline"
 
 msgid "Caption"
-msgstr ""
+msgstr "Onderschrift"
 
 msgid "Credits"
-msgstr ""
+msgstr "Studiepunten"
 
 msgid "Slider title"
-msgstr ""
+msgstr "Titel van de schuifregelaar"
 
 msgid "Single Sign On error"
-msgstr ""
+msgstr "Fout bij Single Sign On"
 
 msgid "Sent"
-msgstr ""
+msgstr "Verzonden"
 
 msgid "Listing"
-msgstr ""
+msgstr "Lijst"
 
 msgid "Course RSS"
-msgstr ""
+msgstr "Cursus RSS"
 
 msgid "RSS feed for all course notifications"
-msgstr ""
+msgstr "RSS-feed voor alle cursusmeldingen"
 
 msgid "Learner certificates are public"
-msgstr ""
+msgstr "Leerlingcertificaten zijn openbaar"
 
 msgid "Delete all terms before import."
 msgstr "Verwijder alle termen"
 
 msgid "Portal homepage updated"
-msgstr ""
+msgstr "Portaalhomepage bijgewerkt"
 
 msgid "User registration"
-msgstr ""
+msgstr "Gebruikersregistratie"
 
 msgid "Actions to be fired when a user registers to the platform"
 msgstr ""
+"Acties die worden uitgevoerd wanneer een gebruiker zich registreert op het "
+"platform"
 
 msgid "This extension should be loaded."
-msgstr ""
+msgstr "Deze extensie moet worden geladen."
 
 msgid "Disabled"
-msgstr ""
+msgstr "Uitgeschakeld"
 
 msgid "Required"
-msgstr ""
+msgstr "Vereist"
 
 msgid "Category saved"
-msgstr ""
+msgstr "Categorie opgeslagen"
 
 msgid "Category removed"
-msgstr ""
+msgstr "Categorie verwijderd"
 
 msgid "Your browser doesn't support the Nanogong player"
-msgstr ""
+msgstr "Uw browser ondersteunt de Nanogong-speler niet"
 
 msgid "Import CSV"
-msgstr ""
+msgstr "CSV importeren"
 
 msgid "Table length"
-msgstr ""
+msgstr "Tabellengte"
 
 msgid "No record found"
-msgstr ""
+msgstr "Geen record gevonden"
 
 msgid "Badly formed URL"
-msgstr ""
+msgstr "Ongeldig gevormde URL"
 
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 msgid "Filtered"
-msgstr ""
+msgstr "Gefilterd"
 
 msgid "Hide column"
-msgstr ""
+msgstr "Kolom verbergen"
 
 msgid "Show column"
-msgstr ""
+msgstr "Toon kolom"
 
 msgid "Legal agreement accepted"
-msgstr ""
+msgstr "Juridische overeenkomst geaccepteerd"
 
 msgid "E-mail teachers only on new assignments submission by students"
 msgstr ""
+"E-mail docenten alleen bij nieuwe inzendingen van opdrachten door leerlingen"
 
 msgid "E-mail students only on new assignment submission (confirmation e-mail)"
 msgstr ""
+"E-mail leerlingen alleen bij nieuwe opdrachtinzending (bevestigingsmail)"
 
 msgid "Uncategorized"
-msgstr ""
+msgstr "Niet-gecategoriseerd"
 
 msgid "Natural year"
-msgstr ""
+msgstr "kalenderjaar"
 
 msgid "Automatic weight"
-msgstr ""
+msgstr "Automatisch gewicht"
 
 msgid "Use the automatic weight distribution to speed things up. The system will then distribute the total weight evenly between the evaluation items below."
 msgstr ""
+"Gebruik de automatische gewichtsverdeling om het proces te versnellen. Het "
+"systeem zal dan het totale gewicht gelijkmatig verdelen over de onderstaande "
+"evaluatie-items."
 
 msgid "Edit weight"
-msgstr ""
+msgstr "Gewicht bewerken"
 
 msgid "The skill has been created"
-msgstr ""
+msgstr "De competentie is aangemaakt"
 
 msgid "Create skill"
-msgstr ""
+msgstr "Competentie aanmaken"
 
 msgid "Cannot create skill"
-msgstr ""
+msgstr "Kan competentie niet aanmaken"
 
 msgid "Edit skill"
-msgstr ""
+msgstr "Competentie bewerken"
 
 msgid "The skill has been updated"
-msgstr ""
+msgstr "De competentie is bijgewerkt"
 
 msgid "Cannot update skill"
-msgstr ""
+msgstr "Kan competencie niet bijwerken"
 
 msgid "Badges management"
-msgstr ""
+msgstr "Beheer van badges"
 
 msgid "Current badges"
-msgstr ""
+msgstr "Huidige badges"
 
 msgid "Save badge"
-msgstr ""
+msgstr "Badge opslaan"
 
 msgid "Badge measures 200x200 pixels in PNG"
-msgstr ""
+msgstr "Badge heeft een afmeting van 200x200 pixels in PNG"
 
 msgid "Convert to assistant"
-msgstr ""
+msgstr "Converteren naar assistent"
 
 msgid "Unique answer image"
-msgstr ""
+msgstr "Uniek antwoordafbeelding"
 
 msgid "Time spent by students in courses, grouped by code"
-msgstr ""
+msgstr "Tijd besteed door leerlingen aan cursussen, gegroepeerd op code"
 
 msgid "Tests results by student groups, by code"
-msgstr ""
+msgstr "Resultaten van toetsen per leerlinggroep, per code"
 
 msgid "Tests results by student"
-msgstr ""
+msgstr "Testresultaten per leerling"
 
 msgid "The system was unable to log you in. Please contact your administrator."
-msgstr ""
+msgstr "Het systeem kon u niet aanmelden. Neem contact op met uw beheerder."
 
 msgid "Shibboleth Login"
-msgstr ""
+msgstr "Shibboleth-aanmelding"
 
 msgid "New status"
-msgstr ""
+msgstr "Nieuwe status"
 
 msgid "Reason"
-msgstr ""
+msgstr "Reden"
 
 msgid "Request new status"
-msgstr ""
+msgstr "Verzoek nieuwe status"
 
 msgid "You have been logged-in with default permissions. You can request more permissions by submitting the following request."
 msgstr ""
+"U bent ingelogd met standaardrechten. U kunt meer rechten aanvragen door het "
+"volgende verzoek in te dienen."
 
 msgid "The 'reason' field is mandatory. Please fill it in before submitting."
-msgstr ""
+msgstr "Het veld 'reden' is verplicht. Vul het in voordat u indient."
 
 msgid "Your request has been submitted."
-msgstr ""
+msgstr "Uw verzoek is ingediend."
 
 msgid "We are not able to fulfill your request at this time. Please contact your administrator."
 msgstr ""
+"We kunnen uw verzoek op dit moment niet verwerken. Neem contact op met uw "
+"beheerder."
 
 msgid "Internal login"
-msgstr ""
+msgstr "Interne login"
 
 msgid "You are already logged in"
-msgstr ""
+msgstr "U bent al ingelogd"
 
 msgid "Sequence ordering"
-msgstr ""
+msgstr "Volgorde bepalen"
 
 msgid "You have not achieved any certificate just yet. Continue on your learning path to get one!"
 msgstr "Je hebt nog geen certificaten behaald. Vervolledig je leerpad om er een te halen!"
 
 msgid "Search certificates"
-msgstr ""
+msgstr "Zoek certificaten"
 
 msgid "User %s hast not acquired any certificate yet"
-msgstr ""
+msgstr "Gebruiker %s heeft nog geen certificaat verworven"
 
 msgid "Certificates are not publicly available"
-msgstr ""
+msgstr "Certificaten zijn niet openbaar beschikbaar"
 
 msgid "Match by dragging"
-msgstr ""
+msgstr "Sleep om te matchen"
 
 msgid "Thread scored by peers"
 msgstr "Thread scored by peers"
@@ -20228,529 +20280,694 @@ msgid "To get the expected score in this forum, your contribution will have to b
 msgstr "Om een score te ontvangen in dit forum, moet een andere cursist punten geven voor je bijdragen, en moet jij zelf minstens punten geven op de bijdragen van twee andere cursisten in het forum. Zolang dit niet gebeurd is, blijft je score for deze deelname op 0 staan in je globale punten."
 
 msgid "Readable"
-msgstr ""
+msgstr "Leesbaar"
 
 msgid "Not readable"
-msgstr ""
+msgstr "Niet leesbaar"
 
 msgid "John"
-msgstr ""
+msgstr "Jan"
 
 msgid "Doe"
-msgstr ""
+msgstr "Jansen"
 
 msgid "Attendances updated"
-msgstr ""
+msgstr "Aanwezigheden bijgewerkt"
 
 msgid "Hide top content on homepage when logged in"
-msgstr ""
+msgstr "Verberg bovenste inhoud op startpagina bij ingelogd zijn"
 
 msgid "On the platform homepage, this option allows you to hide the introduction block (to leave only the announcements, for example), for all users that are already logged in. The general introduction block will still appear to users not already logged in."
 msgstr ""
+"Op de startpagina van het platform kunt u met deze optie het introductieblok "
+"verbergen (zodat bijvoorbeeld alleen de aankondigingen overblijven) voor "
+"alle gebruikers die al zijn ingelogd. Het algemene introductieblok blijft "
+"zichtbaar voor gebruikers die nog niet zijn ingelogd."
 
 msgid "Hide global announcements for anonymous"
-msgstr ""
+msgstr "Verberg globale aankondigingen voor anonieme gebruikers"
 
 msgid "Hide platform announcements from anonymous users, and only show them to authenticated users."
 msgstr ""
+"Verberg platformaankondigingen voor anonieme gebruikers en toon ze alleen "
+"aan geauthenticeerde gebruikers."
 
 msgid "Use template course for new courses"
-msgstr ""
+msgstr "Gebruik sjablooncursus voor nieuwe cursussen"
 
 msgid "Set this to use the same template course (identified by its course numeric ID in the database) for all new courses that will be created on the platform. Please note that, if not properly planned, this setting might have a massive impact on space usage. The template course will be used as if the teacher did a copy of the course with the course backup tools, so no user content is copied, only teacher material. All other course-backup rules apply. Leave empty (or set to 0) to disable."
 msgstr ""
+"Stel dit in om dezelfde sjablooncursus (geïdentificeerd door het numerieke "
+"cursus-ID in de database) te gebruiken voor alle nieuwe cursussen die op het "
+"platform worden aangemaakt. Let op dat, indien niet goed gepland, deze "
+"instelling een enorme impact kan hebben op het ruimtegebruik. De "
+"sjablooncursus zal worden gebruikt alsof de docent een kopie van de cursus "
+"heeft gemaakt met de cursusback-uphulpmiddelen, dus er wordt geen "
+"gebruikersinhoud gekopieerd, alleen lesmateriaal. Alle andere regels voor "
+"cursusback-up zijn van toepassing. Laat leeg (of stel in op 0) om uit te "
+"schakelen."
 
 msgid "Password strength checker"
-msgstr ""
+msgstr "Wachtwoordsterktemeter"
 
 msgid "Enable this option to add a visual indicator of password strength, when the user changes his/her password. This will NOT prevent bad passwords to be added, it only acts as a visual helper."
 msgstr ""
+"Schakel deze optie in om een visuele indicator van wachtwoordsterkte toe te "
+"voegen, wanneer de gebruiker zijn/haar wachtwoord wijzigt. Dit zal NIET "
+"voorkomen dat slechte wachtwoorden worden toegevoegd, het dient alleen als "
+"visuele hulp."
 
 msgid "CAPTCHA"
-msgstr ""
+msgstr "CAPTCHA"
 
 msgid "Enable a CAPTCHA on the login form to avoid password hammering"
 msgstr ""
+"Activeer een CAPTCHA op het inlogformulier om wachtwoordhammering te "
+"voorkomen"
 
 msgid "CAPTCHA mistakes allowance"
-msgstr ""
+msgstr "CAPTCHA-foutenmarge"
 
 msgid "The number of times a user can make a mistake on the CAPTCHA box before his account is locked out."
 msgstr ""
+"Het aantal keren dat een gebruiker een fout kan maken in het CAPTCHA-veld "
+"voordat zijn account wordt geblokkeerd."
 
 msgid "CAPTCHA account locking time"
-msgstr ""
+msgstr "CAPTCHA-accountvergrendelingstijd"
 
 msgid "If the user reaches the maximum allowance for login mistakes (when using the CAPTCHA), his/her account will be locked for this number of minutes."
 msgstr ""
+"Als de gebruiker het maximale aantal toegestane inlogfouten bereikt (bij "
+"gebruik van de CAPTCHA), wordt zijn/haar account voor dit aantal minuten "
+"geblokkeerd."
 
 msgid "HR directors access all session content"
-msgstr ""
+msgstr "HR-directeuren hebben toegang tot alle inhoud van de sessie"
 
 msgid "If enabled, human resources directors will get access to all content and users from the sessions (s)he follows."
 msgstr ""
+"Indien ingeschakeld, krijgen HR-directeuren toegang tot alle inhoud en "
+"gebruikers van de sessies die zij volgen."
 
 msgid "Display group forums in general forum"
-msgstr ""
+msgstr "Toon groepsforums in algemeen forum"
 
 msgid "Display group forums in the forum tool at the course level. This option is enabled by default (in this case, group forum individual visibilities still act as an additional criteria). If disabled, group forums will only be visible through the group tool, be them public or not."
 msgstr ""
+"Toon groepsforums in het forumgereedschap op cursusniveau. Deze optie is "
+"standaard ingeschakeld (in dit geval fungeren individuele zichtbaarheden van "
+"groepsforums nog steeds als een aanvullend criterium). Indien uitgeschakeld, "
+"zijn groepsforums alleen zichtbaar via het groepsgereedschap, of ze nu "
+"openbaar zijn of niet."
 
 msgid "Tutors can assign students to sessions"
-msgstr ""
+msgstr "Trainers kunnen cursisten aan sessies toewijzen"
 
 msgid "When enabled, course coaches/tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators."
 msgstr ""
+"Wanneer ingeschakeld, kunnen cursusbegeleiders/tutoren in sessies nieuwe "
+"gebruikers aan hun sessie toevoegen. Anders is deze optie alleen beschikbaar "
+"voor beheerders en sessiebeheerders."
 
 msgid "Images will be resized (up or down) to 200x150 pixels. For a better rendering of the question, we recommend you upload only images of this size."
 msgstr ""
+"Afbeeldingen worden vergroot of verkleind naar 200x150 pixels. Voor een "
+"betere weergave van de vraag raden we aan alleen afbeeldingen van deze "
+"grootte te uploaden."
 
 msgid "Show learning paths return link"
-msgstr ""
+msgstr "Toon lespaden retourlink"
 
 msgid "Disable this option to hide the 'Return to homepage' button in the learning paths"
 msgstr ""
+"Schakel deze optie uit om de knop 'Terug naar startpagina' te verbergen in "
+"de leerpaden"
 
 msgid "Hide SCORM Export"
-msgstr ""
+msgstr "SCORM-export verbergen"
 
 msgid "Hide the SCORM Export icon from the Learning Paths list"
-msgstr ""
+msgstr "Verberg het SCORM-exporticoon in de lijst met lespaden"
 
 msgid "Hide SCORM Copy"
-msgstr ""
+msgstr "Verberg SCORM-kopie"
 
 msgid "Hide the Learning Path Copy icon from the Learning Paths list"
-msgstr ""
+msgstr "Verberg het kopieericoon van de leerpad in de lijst met leerpaden"
 
 msgid "Hide Learning Path PDF export"
-msgstr ""
+msgstr "Verberg PDF-export van leerpad"
 
 msgid "Hide the Learning Path PDF Export icon from the Learning Paths list"
 msgstr ""
+"Verberg het pictogram voor PDF-export van leerpaden in de lijst met leerpaden"
 
 msgid "Default coach access days before session"
-msgstr ""
+msgstr "Standaard toegangsdagen voor de coach voorafgaand aan de sessie"
 
 msgid "Default number of days a coach can access his session before the official session start date"
 msgstr ""
+"Standaard aantal dagen dat een trainer toegang heeft tot zijn sessie voor de "
+"officiële startdatum van de sessie"
 
 msgid "Default coach access days after session"
-msgstr ""
+msgstr "Standaard toegangsdagen voor de trainer na de sessie"
 
 msgid "Default number of days a coach can access his session after the official session end date"
 msgstr ""
+"Standaard aantal dagen dat een trainer toegang heeft tot zijn sessie na de "
+"officiële einddatum van de sessie"
 
 msgid "PDF header logo"
-msgstr ""
+msgstr "PDF-koplogo"
 
 msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
 msgstr ""
+"Of u de afbeelding op css/themes/[your-css]/images/pdf_logo_header.png wilt "
+"gebruiken als het PDF-koplogo voor alle PDF-exporten (in plaats van het "
+"normale portaallogo)"
 
 msgid "Order users by official code"
-msgstr ""
+msgstr "Sorteer gebruikers op officiële code"
 
 msgid "Use the 'official code' to sort most students list on the platform, instead of their lastname or firstname."
 msgstr ""
+"Gebruik de 'officiële code' om de meeste leerlingenlijst op het platform te "
+"sorteren, in plaats van hun achternaam of voornaam."
 
 msgid "Default e-mail alert setting on new quiz"
-msgstr ""
+msgstr "Standaard e-mailwaarschuwingsinstelling bij nieuwe toets"
 
 msgid "Whether you want course managers (teachers) to be notified by e-mail when a quiz is answered by a student. This is the default value to be given to all new courses, but each teacher can still change this setting in his/her own course."
 msgstr ""
+"Wilt u dat cursusbeheerders (trainers) per e-mail worden geïnformeerd "
+"wanneer een quiz wordt beantwoord door een leerling. Dit is de "
+"standaardwaarde voor alle nieuwe cursussen, maar elke trainer kan deze "
+"instelling nog steeds wijzigen in zijn/haar eigen cursus."
 
 msgid "Display official code in exercises results"
-msgstr ""
+msgstr "Toon officiële code in oefenresultaten"
 
 msgid "Whether to show the students' official code in the exercises results reports"
 msgstr ""
+"Of tonen om de officiële code van de leerlingen in de resultatenrapporten "
+"van de oefeningen weer te geven"
 
 msgid "Hide private courses from catalogue"
-msgstr ""
+msgstr "Verberg privécursussen uit catalogus"
 
 msgid "Whether to hide the private courses from the courses catalogue. This makes sense when you use the course catalogue mainly to allow students to auto-subscribe to the courses."
 msgstr ""
+"Of u de privécursussen wilt verbergen in de cursuscatalogus. Dit is logisch "
+"wanneer u de cursuscatalogus voornamelijk gebruikt om leerlingen zichzelf te "
+"laten inschrijven voor de cursussen."
 
 msgid "Sessions and courses catalogue"
-msgstr ""
+msgstr "Sessies en cursuscatalogus"
 
 msgid "Whether you want to show only courses, only sessions or both courses *and* sessions in the courses catalogue."
 msgstr ""
+"Of u alleen cursussen, alleen sessies of zowel cursussen *als* sessies in de "
+"cursuscatalogus wilt tonen."
 
 msgid "Enable language auto-detect in custom pages"
-msgstr ""
+msgstr "Schakel automatische taalherkenning in op aangepaste pagina's"
 
 msgid "If you use custom pages, enable this if you want to have a language detector there present the page in the user's browser language, or disable to force the language to be the default platform language."
 msgstr ""
+"Als u aangepaste pagina's gebruikt, schakel dit in als u wilt dat een "
+"taaldetector de pagina presenteert in de taal van de browser van de "
+"gebruiker, of schakel uit om de taal te forceren naar de standaard "
+"platformtaal."
 
 msgid "Learning paths: show reduced report"
-msgstr ""
+msgstr "Leerpaden: toon verkort rapport"
 
 msgid "Inside the learning paths tool, when a user reviews his own progress (through the stats icon), show a shorten (less detailed) version of the progress report."
 msgstr ""
+"In het leerpad, toon een verkorte (minder gedetailleerde) versie van het "
+"voortgangsrapport wanneer een gebruiker zijn eigen vooruitgang bekijkt (via "
+"het statistieken-icoon)."
 
 msgid "Allow session-to-session copy for teachers"
-msgstr ""
+msgstr "Sta kopie van sessie naar sessie toe voor trainers"
 
 msgid "Enable this option to let teachers copy their content from one course in a session to a course in another session. By default, this option is only available to platform administrators."
 msgstr ""
+"Schakel deze optie in om trainers toe te staan hun inhoud van een cursus in "
+"een sessie te kopiëren naar een cursus in een andere sessie. Standaard is "
+"deze optie alleen beschikbaar voor platformbeheerders."
 
 msgid "Hide logout button"
-msgstr ""
+msgstr "Verberg uitlogknop"
 
 msgid "Hide the logout button. This is usually only interesting when using an external login/logout method, for example when using Single Sign On of some sort."
 msgstr ""
+"Verberg de uitlogknop. Dit is meestal alleen interessant bij gebruik van een "
+"externe inlog-/uitlogmethode, bijvoorbeeld bij gebruik van Single Sign On of "
+"iets dergelijks."
 
 msgid "Redirect admin to courses list"
-msgstr ""
+msgstr "Beheerder doorsturen naar cursuslijst"
 
 msgid "The default behaviour is to send administrators directly to the administration panel (while teachers and students are sent to the courses list or the platform homepage). Enable to redirect the administrator also to his/her courses list."
 msgstr ""
+"Het standaardgedrag is om beheerders rechtstreeks naar het beheerderspaneel "
+"te sturen (terwijl trainers en leerlingen naar de cursuslijst of de "
+"startpagina van het platform worden gestuurd). Schakel in om de beheerder "
+"ook naar zijn/haar cursuslijst door te sturen."
 
 msgid "Courses custom icons"
-msgstr ""
+msgstr "Cursussen aangepaste pictogrammen"
 
 msgid "Use course images as the course icon in courses lists (instead of the default green blackboard icon)."
 msgstr ""
+"Gebruik cursusafbeeldingen als cursuspictogram in cursuslijsten (in plaats "
+"van het standaard groene schoolbordpictogram)."
 
 msgid "Assignment considered for gradebook"
-msgstr ""
+msgstr "Opdracht meegenomen voor puntenboekje"
 
 msgid "In the assignments tool, students can upload more than one file. In case there is more than one for a single assignment, which one should be considered when ranking them in the gradebook? This depends on your methodology. Use 'first' to put the accent on attention to detail (like handling in time and handling the right work first). Use 'last' to highlight collaborative and adaptative work."
 msgstr ""
+"In het opdrachtentool kunnen leerlingen meer dan één bestand uploaden. Als "
+"er meer dan één is voor een enkele opdracht, welke moet dan worden overwogen "
+"bij het rangschikken in het puntenboekje? Dit hangt af van uw methodologie. "
+"Gebruik 'eerste' om de nadruk te leggen op aandacht voor detail (zoals op "
+"tijd afhandelen en als eerste het juiste werk behandelen). Gebruik 'laatste' "
+"om samenwerkend en adaptief werk te benadrukken."
 
 msgid "Certificates filter by official code"
-msgstr ""
+msgstr "Certificaten filteren op officiële code"
 
 msgid "Add a filter on the students official code to the certificates list."
 msgstr ""
+"Voeg een filter toe op de officiële code van de leerlingen aan de lijst met "
+"certificaten."
 
 msgid "Max editors in exercise result screen"
-msgstr ""
+msgstr "Maximaal aantal redacteuren in resultaatscherm oefening"
 
 msgid "Because of the sheer number of questions that might appear in an exercise, the correction screen, allowing the teacher to add comments to each answer, might be very slow to load. Set this number to 5 to ask the platform to only show WYSIWYG editors up to a certain number of answers on the screen. This will speed up the correction page loading time considerably, but will remove WYSIWYG editors and leave only a plain text editor."
 msgstr ""
+"Vanwege het grote aantal vragen dat in een oefening kan verschijnen, kan het "
+"correctiescherm, waar de leraar opmerkingen kan toevoegen aan elk antwoord, "
+"erg traag laden. Stel dit aantal in op 5 om het platform te vragen om "
+"slechts WYSIWYG-editors te tonen voor een bepaald aantal antwoorden op het "
+"scherm. Dit zal de laadtijd van de correctiepagina aanzienlijk versnellen, "
+"maar zal de WYSIWYG-editors verwijderen en alleen een platte teksteditor "
+"achterlaten."
 
 msgid "Default document upload mode"
-msgstr ""
+msgstr "Standaard document-uploadmodus"
 
 msgid "Default upload method in the courses documents. This setting can be changed at upload time for all users. It only represents a default setting."
 msgstr ""
+"Standaard uploadmethode in de cursusdocumenten. Deze instelling kan tijdens "
+"het uploaden voor alle gebruikers worden gewijzigd. Het vertegenwoordigt "
+"slechts een standaardinstelling."
 
 msgid "Certificates auto-generation on WS call"
-msgstr ""
+msgstr "Certificaten automatisch genereren bij WS-aanroep"
 
 msgid "When enabled, and when using the WSCertificatesList webservice, this option will make sure that all certificates have been generated by users if they reached the sufficient score in all items defined in gradebooks for all courses and sessions (this might consume considerable processing resources on your server)."
 msgstr ""
+"Wanneer ingeschakeld, en bij gebruik van de WSCertificatesList-webservice, "
+"zorgt deze optie ervoor dat alle certificaten gegenereerd zijn door "
+"gebruikers als zij de voldoende score hebben behaald voor alle onderdelen "
+"die in puntenboekjes voor alle cursussen en sessies zijn gedefinieerd (dit "
+"kan aanzienlijke verwerkingsbronnen op uw server verbruiken)."
 
 msgid "OpenBadges backpack URL"
-msgstr ""
+msgstr "OpenBadges-rugzak-URL"
 
 msgid "The URL of the OpenBadges backpack server that will be used by default for all users wanting to export their badges. This defaults to the open and free Mozilla Foundation backpack repository: https://backpack.openbadges.org/"
 msgstr ""
+"De URL van de OpenBadges-rugzakserver die standaard gebruikt zal worden door "
+"alle gebruikers die hun badges willen exporteren. Standaard is dit de open "
+"en gratis rugzakrepository van de Mozilla Foundation: https://backpack."
+"openbadges.org/"
 
 msgid "Cookie privacy notification"
-msgstr ""
+msgstr "Cookie privacy melding"
 
 msgid "If enabled, this option shows a banner on top of your platform that asks users to acknowledge that the platform is using cookies necessary to provide the user experience. The banner can easily be acknowledged and hidden by the user. This allows Chamilo to comply with EU web cookies regulations."
 msgstr ""
+"Indien ingeschakeld, toont deze optie een banner bovenaan uw platform die "
+"gebruikers vraagt te erkennen dat het platform cookies gebruikt die nodig "
+"zijn om de gebruikerservaring te bieden. De banner kan gemakkelijk worden "
+"erkend en verborgen door de gebruiker. Hierdoor kan Chamilo voldoen aan de "
+"EU-regelgeving voor webcookies."
 
 msgid "If enabled *and* the sessions catalogue is enabled, users will be able to subscribe to active sessions by themselves using the 'Subscribe' button, without any type of restriction."
 msgstr ""
+"Indien ingeschakeld *en* de sessiecatalogus is ingeschakeld, kunnen "
+"gebruikers zichzelf abonneren op actieve sessies met behulp van de "
+"'Abonneren'-knop, zonder enige vorm van beperking."
 
 msgid "Hide course group if no tool"
-msgstr ""
+msgstr "Verberg cursusgroep als er geen tool is"
 
 msgid "If no tool is available in a group and the user is not registered to the group itself, hide the group completely in the groups list."
 msgstr ""
+"Als er geen tool beschikbaar is in een groep en de gebruiker niet is "
+"geregistreerd voor de groep zelf, verberg dan de groep volledig in de lijst "
+"met groepen."
 
 msgid "Auto-subscription in sessions catalogue"
-msgstr ""
+msgstr "Automatische inschrijving in sessiecatalogus"
 
 msgid "Web services: decode UTF-8"
-msgstr ""
+msgstr "Webdiensten: decodeer UTF-8"
 
 msgid "Decode UTF-8 from web services calls. Enable this option (passed to the SOAP parser) if you have issues with the encoding of titles and names when inserted through web services."
 msgstr ""
+"Decodeer UTF-8 van webservice-aanroepen. Schakel deze optie in (doorgegeven "
+"aan de SOAP-parser) als u problemen ondervindt met de codering van titels en "
+"namen bij invoeging via webservices."
 
 msgid "Attendances: enable deletion"
-msgstr ""
+msgstr "Aanwezigheden: verwijderen inschakelen"
 
 msgid "The default behaviour in Chamilo is to hide attendance sheets instead of deleting them, just in case the teacher would do it by mistake. Enable this option to allow teachers to *really* delete attendance sheets."
 msgstr ""
+"Het standaardgedrag in Chamilo is om aanwezigheidslijsten te verbergen in "
+"plaats van ze te verwijderen, voor het geval dat de docent dit per ongeluk "
+"zou doen. Schakel deze optie in om docenten toe te staan "
+"aanwezigheidslijsten *echt* te verwijderen."
 
 msgid "Gravatar user pictures"
-msgstr ""
+msgstr "Gravatar-gebruikersafbeeldingen"
 
 msgid "Enable this option to search into the Gravatar repository for pictures of the current user, if the user hasn't defined a picture locally. This is great to auto-fill pictures on your site, in particular if your users are active internet users. Gravatar pictures can be configured easily, based on the e-mail address of a user, at http://en.gravatar.com/"
 msgstr ""
+"Schakel deze optie in om in de Gravatar-repository te zoeken naar "
+"afbeeldingen van de huidige gebruiker, als de gebruiker lokaal geen "
+"afbeelding heeft ingesteld. Dit is ideaal om automatisch afbeeldingen op uw "
+"site in te vullen, vooral als uw gebruikers actieve internetgebruikers zijn. "
+"Gravatar-afbeeldingen kunnen eenvoudig worden geconfigureerd op basis van "
+"het e-mailadres van een gebruiker, op http://en.gravatar.com/"
 
 msgid "Gravatar avatar type"
-msgstr ""
+msgstr "Gravatar-avatartype"
 
 msgid "If the Gravatar option is enabled and the user doesn't have a picture configured on Gravatar, this option allows you to choose the type of avatar that Gravatar will generate for each user. Check <a href='http://en.gravatar.com/site/implement/images#default-image'>http://en.gravatar.com/site/implement/images#default-image</a> for avatar types examples."
 msgstr ""
+"Als de Gravatar-optie is ingeschakeld en de gebruiker heeft geen afbeelding "
+"geconfigureerd op Gravatar, stelt deze optie u in staat om het type avatar "
+"te kiezen dat Gravatar voor elke gebruiker zal genereren. Controleer <a "
+"href='http://en.gravatar.com/site/implement/images#default-image'>http://en."
+"gravatar.com/site/implement/images#default-image</a> voor voorbeelden van "
+"avatartypen."
 
 msgid "Limit session admins permissions"
-msgstr ""
+msgstr "Beperk de rechten van sessiebeheerders"
 
 msgid "If enabled, the session administrators will only see the User block with the 'Add user' option and the Sessions block with the 'Sessions list' option."
 msgstr ""
+"Indien ingeschakeld, zullen de sessiebeheerders alleen het gebruikersblok "
+"met de optie 'Gebruiker toevoegen' en het sessieblok met de optie 'Lijst van "
+"sessies' zien."
 
 msgid "Show session description"
-msgstr ""
+msgstr "Toon sessiebeschrijving"
 
 msgid "Show the session description wherever this option is implemented (sessions tracking pages, etc)"
 msgstr ""
+"Toon de sessiebeschrijving waar deze optie ook geïmplementeerd is (pagina's "
+"voor het volgen van sessies, enz.)"
 
 msgid "Certificates: hide export link from students"
-msgstr ""
+msgstr "Certificaten: exportlink voor leerlingen verbergen"
 
 msgid "If enabled, students won't be able to export their certificates to PDF. This option is available because, depending on the precise HTML structure of the certificate template, the PDF export might be of low quality. In this case, it is best to only show the HTML certificate to students."
 msgstr ""
+"Indien ingeschakeld, kunnen leerlingen hun certificaten niet exporteren naar "
+"PDF. Deze optie is beschikbaar omdat, afhankelijk van de precieze HTML-"
+"structuur van de certificaatsjabloon, de PDF-export van lage kwaliteit kan "
+"zijn. In dit geval is het beter om alleen het HTML-certificaat aan "
+"leerlingen te tonen."
 
 msgid "Certificates: hide PDF export link for all"
-msgstr ""
+msgstr "Certificaten: verberg de PDF-exportlink voor iedereen"
 
 msgid "Enable to completely remove the possibility to export certificates to PDF (for all users). If enabled, this includes hiding it from students."
 msgstr ""
+"Schakel in om de mogelijkheid om certificaten naar PDF te exporteren "
+"volledig te verwijderen (voor alle gebruikers). Indien ingeschakeld, wordt "
+"dit ook verborgen voor leerlingen."
 
 msgid "Dropbox: hide course coach"
-msgstr ""
+msgstr "Dropbox: verberg cursuscoach"
 
 msgid "Hide session course coach in dropbox when a document is sent by the coach to students"
 msgstr ""
+"Verberg de sessiecursus tutor in de dropbox wanneer een document door de "
+"tutor naar de leerlingen wordt gestuurd"
 
 msgid "Single Sign On: force redirect"
-msgstr ""
+msgstr "Single Sign On: geforceerde omleiding"
 
 msgid "Enable this option to force users to authenticate on the master authentication portal when a Single Sign On method is enabled. Only enable once you are sure that your Single Sign On procedure is correctly set up, otherwise you might prevent yourself from logging in again (in this case, change the SSO settings in the settings_current table through direct access to the database, to unlock)."
 msgstr ""
+"Schakel deze optie in om gebruikers te dwingen zich te authenticeren op het "
+"hoofd authenticatieportaal wanneer een Single Sign On-methode is "
+"ingeschakeld. Schakel dit alleen in als u zeker weet dat uw Single Sign On-"
+"procedure correct is ingesteld, anders kunt u zichzelf mogelijk verhinderen "
+"om opnieuw in te loggen (in dit geval, wijzig de SSO-instellingen in de "
+"tabel settings_current via directe toegang tot de database, om te "
+"ontgrendelen)."
 
 msgid "Session courses manual ordering"
-msgstr ""
+msgstr "Sessiecursussen handmatig ordenen"
 
 msgid "Enable this option to allow the session administrators to order the courses inside a session manually. If disabled, courses are ordered alphabetically on course title."
 msgstr ""
+"Schakel deze optie in om de sessiebeheerders toe te staan de cursussen "
+"binnen een sessie handmatig te ordenen. Indien uitgeschakeld, worden "
+"cursussen alfabetisch geordend op cursustitel."
 
 msgid "Add learning path category"
-msgstr ""
+msgstr "Voeg leercategorie toe"
 
 msgid "Items the reference depends on"
-msgstr ""
+msgstr "Items waar de referentie van afhankelijk is"
 
 msgid "Use as reference"
-msgstr ""
+msgstr "Gebruik als referentie"
 
 msgid "Items that depend on the reference"
-msgstr ""
+msgstr "Items die afhankelijk zijn van de referentie"
 
 msgid "Set as a requirement"
-msgstr ""
+msgstr "Instellen als vereiste"
 
 msgid "Add new sequence"
-msgstr ""
+msgstr "Nieuwe reeks toevoegen"
 
 msgid "Resources sequencing"
-msgstr ""
+msgstr "Bronnenvolgorde"
 
 msgid "Gamification mode"
-msgstr ""
+msgstr "Gamificatiemodus"
 
 msgid "Activate the stars achievement in learning paths"
-msgstr ""
+msgstr "Activeer de sterrenprestatie in leerpaden"
 
 msgid "Level %s"
-msgstr ""
+msgstr "Niveau %s"
 
 msgid "%s points"
-msgstr ""
+msgstr "%s punten"
 
 msgid "From %s until %s"
-msgstr ""
+msgstr "Van %s tot %s"
 
 msgid "Subscribe users to learning path"
-msgstr ""
+msgstr "Gebruikers inschrijven aan leerpad"
 
 msgid "Subscribe groups to learning path"
-msgstr ""
+msgstr "Groepen inschrijven aan leerpad"
 
 msgid "Create forum for this learning path"
-msgstr ""
+msgstr "Creëer forum voor deze leerpad"
 
 msgid "By date"
-msgstr ""
+msgstr "Op datum"
 
 msgid "By tag"
-msgstr ""
+msgstr "Op tag"
 
 msgid "Go to course within session"
-msgstr ""
+msgstr "Ga naar cursus binnen sessie"
 
 msgid "Enable gamification mode"
-msgstr ""
+msgstr "Activeer gamificatiemodus"
 
 msgid "My courses session view"
 msgstr "Per module"
 
 msgid "Disable gamification mode"
-msgstr ""
+msgstr "Schakel gamificatiemodus uit"
 
 msgid "Show only courses in the catalogue"
-msgstr ""
+msgstr "Toon alleen cursussen in de catalogus"
 
 msgid "Show only sessions in the catalogue"
-msgstr ""
+msgstr "Toon alleen sessies in de catalogus"
 
 msgid "Show both courses and sessions in the catalogue"
-msgstr ""
+msgstr "Toon zowel cursussen als sessies in de catalogus"
 
 msgid "Sequence selection"
-msgstr ""
+msgstr "Sequentie selectie"
 
 msgid "Sequence configuration"
-msgstr ""
+msgstr "Configuratie van de sequentie"
 
 msgid "Sequence preview"
-msgstr ""
+msgstr "Sequentievoorvertoning"
 
 msgid "Dates shown"
-msgstr ""
+msgstr "Weergegeven data"
 
 msgid "Access dates for students"
 msgstr "Toegangsdata voor studenten"
 
 msgid "Access dates for coaches"
-msgstr ""
+msgstr "Toegangsdata voor trainers"
 
 msgid "Chat with %s"
-msgstr ""
+msgstr "Chat met %s"
 
 msgid "Start video call"
-msgstr ""
+msgstr "Start videogesprek"
 
 msgid "Video URL"
-msgstr ""
+msgstr "Video-URL"
 
 msgid "Insert a valid URL"
-msgstr ""
+msgstr "Voer een geldige URL in"
 
 msgid "See information"
-msgstr ""
+msgstr "Toon informatie"
 
 msgid "Share with your friends"
-msgstr ""
+msgstr "Deel met je vrienden"
 
 msgid "Chatroom name"
-msgstr ""
+msgstr "Chatroomnaam"
 
 msgid "The video chatroom %s already exists"
-msgstr ""
+msgstr "De videochatruimte %s bestaat al"
 
 msgid "Chatroom could not be created"
-msgstr ""
+msgstr "Chatruimte kon niet worden aangemaakt"
 
 msgid "The browser of %s does not support native video transmission. Sorry."
-msgstr ""
+msgstr "De browser van %s ondersteunt geen native video-overdracht. Sorry."
 
 msgid "From %s"
-msgstr ""
+msgstr "Vanaf %s"
 
 msgid "Until %s"
-msgstr ""
+msgstr "Tot %s"
 
 msgid "Dependency tree"
-msgstr ""
+msgstr "Afhankelijkheidsboom"
 
 msgid "Customize icons"
-msgstr ""
+msgstr "Aanpassen van pictogrammen"
 
 msgid "Export all to PDF"
-msgstr ""
+msgstr "Exporteer alles naar PDF"
 
 msgid "Grade generated on %s"
-msgstr ""
+msgstr "Cijfer gegenereerd op %s"
 
 msgid "Exercise available since %s"
-msgstr ""
+msgstr "Oefening beschikbaar sinds %s"
 
 msgid "The test is enabled from %s to %s"
-msgstr ""
+msgstr "De oefening is beschikbaar van %s tot %s"
 
 msgid "Select some options"
-msgstr ""
+msgstr "Selecteer enkele opties"
 
 msgid "You may add an introduction to this course here by clicking the edition icon"
 msgstr "Plaats een voorwoord bij deze cursus door te klikken op het bewerken-icoontje..."
 
 msgid "Social group"
-msgstr ""
+msgstr "Sociale groep"
 
 msgid "Required sessions"
-msgstr ""
+msgstr "Vereiste sessies"
 
 msgid "Dependent sessions"
-msgstr ""
+msgstr "Afhankelijke sessies"
 
 msgid "By duration"
-msgstr ""
+msgstr "Op duur"
 
 msgid "By dates"
-msgstr ""
+msgstr "Op datum"
 
 msgid "Send a copy to HR managers of selected students"
-msgstr ""
+msgstr "Stuur een kopie naar HR-managers van geselecteerde leerlingen"
 
 msgid "Powered by %s"
 msgstr "%s onder de motorkap"
 
 msgid "Please select at least one user. The announcement has not been saved."
-msgstr ""
+msgstr "Selecteer ten minste één gebruiker. De aankondiging is niet opgeslagen."
 
 msgid "No dependencies"
-msgstr ""
+msgstr "Geen afhankelijkheden"
 
 msgid "Send mail to student"
-msgstr ""
+msgstr "Stuur mail naar leerling"
 
 msgid "Send mail to HR manager"
-msgstr ""
+msgstr "Stuur mail naar de HR-manager"
 
 msgid "Course fields"
-msgstr ""
+msgstr "Cursusvelden"
 
 msgid "Checkbox options"
-msgstr ""
+msgstr "Selectievakje-opties"
 
 msgid "Integer value"
-msgstr ""
+msgstr "Geheel getal"
 
 msgid "Image file"
-msgstr ""
+msgstr "Afbeeldingsbestand"
 
 msgid "Float value"
-msgstr ""
+msgstr "Floatwaarde"
 
 msgid "Document visibility defined in course"
-msgstr ""
+msgstr "Documentzichtbaarheid gedefinieerd in cursus"
 
 msgid "The default document visibility for all courses"
-msgstr ""
+msgstr "De standaard documentzichtbaarheid voor alle cursussen"
 
 msgid "HTMLPurifier in Wiki"
-msgstr ""
+msgstr "HTMLPurifier in Wiki"
 
 msgid "Enable HTML purifier in the wiki tool (will increase security but reduce style features)"
 msgstr ""
+"HTML-purifier inschakelen in de wikihulp (verhoogt de veiligheid maar "
+"vermindert stijlfunctionaliteiten)"
 
 msgid "Click or drop files"
 msgstr ""
 
 msgid "Remove assistant role"
-msgstr ""
+msgstr "Assistentrol verwijderen"
 
 msgid "Import gradebook from base course"
-msgstr ""
+msgstr "Importeer puntenboekje uit basiscursus"
 
 msgid "Institution address"
 msgstr ""
@@ -25275,3 +25492,115 @@ msgstr ""
 
 msgid "The attempted oral questions are %s"
 msgstr "De mondelinge vragen die werden geprobeerd zijn %s"
+
+msgid "Removed from catalogue"
+msgstr "Uit catalogus verwijderd"
+
+msgid "Enter 2FA code"
+msgstr "Voer 2FA-code in"
+
+msgid "Auto-launch"
+msgstr "Auto-start"
+
+msgid "Back to months"
+msgstr "Terug naar maanden"
+
+msgid "Courses count"
+msgstr "Aantal cursussen"
+
+msgid "Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach."
+msgstr ""
+"Sessioncoaches zijn coördinatoren voor de sessie en kunnen optreden als "
+"tutor voor elke cursus in de sessie. Alleen gebruikers met de rol van docent "
+"kunnen geselecteerd worden als sessioncoach."
+
+msgid "User registrations by month"
+msgstr "Gebruikersregistraties per maand"
+
+msgid "An unexpected error occurred. Please try again later."
+msgstr "Er is een onverwachte fout opgetreden. Probeer het later opnieuw."
+
+msgid "Assessments visible"
+msgstr "Beoordelingen zichtbaar"
+
+msgid "Add result"
+msgstr "Resultaat toevoegen"
+
+msgid "AI generator"
+msgstr "AI-generator"
+
+msgid "Courses count by language"
+msgstr "Aantal cursussen per taal"
+
+msgid "Add gradebook comment"
+msgstr "Voeg puntenboekje opmerking toe"
+
+msgid "Update introduction links"
+msgstr "Introductielinks bijwerken"
+
+msgid "No result or feedback available."
+msgstr "Geen resultaat of feedback beschikbaar."
+
+msgid "Aiken Format Example"
+msgstr "Aiken-formaat voorbeeld"
+
+msgid "Add reminder"
+msgstr "Herinnering toevoegen"
+
+msgid "Student reports"
+msgstr "Leerlingrapporten"
+
+msgid "Request failed"
+msgstr "Verzoek mislukt"
+
+msgid "An unexpected error occurred. Please contact support."
+msgstr ""
+"Er is een onverwachte fout opgetreden. Neem contact op met de ondersteuning."
+
+msgid "AI provider"
+msgstr "Aanbieder van AI"
+
+msgid "Choose item"
+msgstr "Kies item"
+
+msgid "Assessments invisible"
+msgstr "Beoordelingen onzichtbaar"
+
+msgid "Using AI provider %s"
+msgstr "Met AI-provider %s"
+
+msgid "Please enter a valid number of questions"
+msgstr "Voer een geldig aantal vragen in"
+
+msgid "Loading courses. Please wait."
+msgstr "Cursussen laden. Even geduld a.u.b."
+
+msgid "Private course"
+msgstr "Privécursus"
+
+msgid "Number of questions"
+msgstr "Aantal vragen"
+
+msgid "No data available for the selected date range"
+msgstr "Geen gegevens beschikbaar voor de geselecteerde datumbereik"
+
+msgid "Results and feedback per user"
+msgstr "Resultaten en feedback per gebruiker"
+
+msgid "User registrations by day"
+msgstr "Gebruikersregistraties per dag"
+
+msgid "Conference Room"
+msgstr "Vergaderzaal"
+
+msgid "Generate Aiken"
+msgstr "Aiken genereren"
+
+msgid "Reminders"
+msgstr "Herinneringen"
+
+msgid "Words count per page"
+msgstr "Aantal woorden per pagina"
+
+msgid "User registrations by creator"
+msgstr "Gebruikersregistraties per maker"

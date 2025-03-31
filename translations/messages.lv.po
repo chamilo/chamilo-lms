@@ -15224,22 +15224,22 @@ msgstr "Bloki ir atjaunināti"
 msgid "Dashboard plugins"
 msgstr "Paneļa spraudņi"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Šis spraudnis ir dzēsts no paneļa spraudņu kataloga."
 
-msgid "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
 msgstr "Ieslēgt paneļa spraudņus"
 
-msgid "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
 msgstr "Izvēlēties blokus, lai tos izvietotu uz Paneļa"
 
 msgid "Position (column)"
 msgstr "Novietojums - kolonnās [1][2]"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr "Ieslēgt paneļa blokus"
 
-msgid "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
 msgstr "Paneļa spraudnis nav pieejams"
 
 msgid "Enabled"
@@ -15365,7 +15365,7 @@ msgstr "Atskaite par klātienes aktivitātēm"
 msgid "You do not have attendances"
 msgstr "Jums nav nevienas klātienes aktivitātes"
 
-msgid "The Dashboard plugins have been updated successfully"
+msgid "The dashboard plugins have been updated successfully"
 msgstr "Info Paneļa spraudņi ir veiksmīgi atjaunināti"
 
 msgid "There is no available information about your courses"

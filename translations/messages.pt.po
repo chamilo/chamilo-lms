@@ -15224,22 +15224,22 @@ msgstr "Os módulos foram atualizados"
 msgid "Dashboard plugins"
 msgstr "Plugins do Painel"
 
-msgid "This plugin has been deleted from the Dashboard plugin directory"
+msgid "This plugin has been deleted from the dashboard plugin directory"
 msgstr "Este plugin foi excluído da pasta de plugins do painel"
 
-msgid "Enable Dashboard plugins"
+msgid "Enable dashboard plugins"
 msgstr "Ativar plugins do painel"
 
-msgid "Select blocks to display in the Dashboard blocks view"
+msgid "Select blocks to display in the dashboard blocks view"
 msgstr "Selecionar módulos para visualização no painel"
 
 msgid "Position (column)"
 msgstr "Posição (coluna)"
 
-msgid "Enable Dashboard block"
+msgid "Enable dashboard block"
 msgstr "Ativar módulo do painel"
 
-msgid "There is no enabled Dashboard plugin"
+msgid "There is no enabled dashboard plugin"
 msgstr "Não está ativado nenhum plugin do painel"
 
 msgid "Enabled"
@@ -15365,7 +15365,7 @@ msgstr "Relatório com lista de presenças"
 msgid "You do not have attendances"
 msgstr "Não tem presenças registadas"
 
-msgid "The Dashboard plugins have been updated successfully"
+msgid "The dashboard plugins have been updated successfully"
 msgstr "Os plugins do Painel foram atualizados com sucesso"
 
 msgid "There is no available information about your courses"

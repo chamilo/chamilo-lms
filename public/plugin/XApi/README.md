@@ -13,7 +13,7 @@ The fields "Learning path item viewed", "Learning path ended", "Quiz question an
 hooks when the user views an item in learning path, completes a learning path, answers a quiz question and ends the exam.
 
 The statements generated with these hooks are logged in Chamilo database, waiting to be sent to the LRS by a cron job.
-The cron job to configure on your server is located in `CHAMILO_PATH/plugin/xapi/cron/send_statements.php`.
+The cron job to configure on your server is located in `CHAMILO_PATH/plugin/XApi/cron/send_statements.php`.
 
 **Use the Statement API from Chamilo LMS**
 
@@ -21,7 +21,7 @@ You can use xAPI's "Statement API" to save some statements from another service.
 You need to create credentials (username/password) to do this. First you need to enable the "menu_administrator" region
 in the plugin configuration. You will then be able to create the credentials with the new page "Experience API (xAPI)"
 inside de Plugins block in the Administration panel.
-The endpoint for the statements API is "https://CHAMILO_DOMAIN/plugin/xapi/lrs.php/";
+The endpoint for the statements API is "https://CHAMILO_DOMAIN/plugin/XApi/lrs.php/";
 
 ```mysql
 CREATE TABLE xapi_attachment (identifier INT AUTO_INCREMENT NOT NULL, statement_id VARCHAR(255) DEFAULT NULL, usageType VARCHAR(255) NOT NULL, contentType VARCHAR(255) NOT NULL, length INT NOT NULL, sha2 VARCHAR(255) NOT NULL, display LONGTEXT NOT NULL COMMENT '(DC2Type:json)', hasDescription TINYINT(1) NOT NULL, description LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)', fileUrl VARCHAR(255) DEFAULT NULL, content LONGTEXT DEFAULT NULL, INDEX IDX_7148C9A1849CB65B (statement_id), PRIMARY KEY(identifier)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;

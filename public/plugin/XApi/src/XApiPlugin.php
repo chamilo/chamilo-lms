@@ -184,7 +184,7 @@ class XApiPlugin extends Plugin
             $this->get_lang('ToolTinCan'),
             $courseId,
             'sessions_category.png',
-            '../plugin/xapi/start.php',
+            '../plugin/XApi/start.php',
             0,
             'authoring'
         );
@@ -255,7 +255,7 @@ class XApiPlugin extends Plugin
             $queryData['auth'] = 'Basic '.base64_encode(trim($lrsAuthUsername).':'.trim($lrsAuthPassword));
             $queryData['activity_id'] = $activityId;
         } elseif ('cmi5' === $type) {
-            $queryData['fetch'] = api_get_path(WEB_PLUGIN_PATH).'xapi/cmi5/token.php?session='.$viewSessionId;
+            $queryData['fetch'] = api_get_path(WEB_PLUGIN_PATH).'XApi/cmi5/token.php?session='.$viewSessionId;
             $queryData['activityId'] = $activityId;
         }
 
@@ -301,7 +301,7 @@ class XApiPlugin extends Plugin
     public function getLpResourceBlock(int $lpId)
     {
         $cidReq = api_get_cidreq(true, true, 'lp');
-        $webPath = api_get_path(WEB_PLUGIN_PATH).'xapi/';
+        $webPath = api_get_path(WEB_PLUGIN_PATH).'XApi/';
         $course = api_get_course_entity();
         $session = api_get_session_entity();
 
@@ -376,7 +376,7 @@ class XApiPlugin extends Plugin
         );
 
         api_add_setting(
-            api_get_path(WEB_PATH).'plugin/xapi/lrs.php',
+            api_get_path(WEB_PATH).'plugin/XApi/lrs.php',
             $pluginName.'_'.self::SETTING_LRS_URL,
             $pluginName,
             'setting',
@@ -428,6 +428,6 @@ class XApiPlugin extends Plugin
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'authoring', 'link' => '../plugin/xapi/start.php%']);
+            ->execute(['category' => 'authoring', 'link' => '../plugin/XApi/start.php%']);
     }
 }

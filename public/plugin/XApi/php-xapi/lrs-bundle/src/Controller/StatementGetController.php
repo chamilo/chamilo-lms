@@ -205,7 +205,7 @@ class StatementGetController
         $params['cursor'] = empty($params['cursor']) ? 1 : $params['cursor'] + 1;
 
         return IRL::fromString(
-            '/plugin/xapi/lrs.php/statements?'.http_build_query($params)
+            '/plugin/XApi/lrs.php/statements?'.http_build_query($params)
         );
     }
 }

@@ -76,11 +76,11 @@ $tocHtml = $itemsRepo->buildTree(
 
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH);
 
-$htmlHeadXtra[] = api_get_css($webPluginPath.'xapi/assets/css/cmi5_launch.css');
-$htmlHeadXtra[] = api_get_js_simple($webPluginPath.'xapi/assets/js/cmi5_launch.js');
+$htmlHeadXtra[] = api_get_css($webPluginPath.'XApi/assets/css/cmi5_launch.css');
+$htmlHeadXtra[] = api_get_js_simple($webPluginPath.'XApi/assets/js/cmi5_launch.js');
 
 $view = new Template('', false, false, true, true, false);
 $view->assign('tool', $toolLaunch);
 $view->assign('toc_html', $tocHtml);
-$view->assign('content', $view->fetch('xapi/views/cmi5_launch.twig'));
+$view->assign('content', $view->fetch('XApi/views/cmi5_launch.twig'));
 $view->display_no_layout_template();

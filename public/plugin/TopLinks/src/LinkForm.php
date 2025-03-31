@@ -133,7 +133,7 @@ class LinkForm extends FormValidator
 
         $extension = pathinfo($_FILES['picture']['name'], PATHINFO_EXTENSION);
         $newFilename = md5($this->link->getId()).".$extension";
-        $directoryName = api_get_path(SYS_UPLOAD_PATH).'plugins/toplinks';
+        $directoryName = api_get_path(SYS_UPLOAD_PATH).'plugins/TopLinks';
 
         $fs = new Filesystem();
         $fs->mkdir($directoryName, api_get_permissions_for_new_directories());

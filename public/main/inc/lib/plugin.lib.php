@@ -223,7 +223,7 @@ class AppPlugin
             'SurveyExportCsv',
             'SurveyExportTxt',
             'Test2Pdf',
-            'toplinks',
+            'TopLinks',
             'tour',
             'userremoteservice',
             'zoom',

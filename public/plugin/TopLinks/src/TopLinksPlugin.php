@@ -54,7 +54,7 @@ class TopLinksPlugin extends Plugin
             $link->getTitle(),
             $courseId,
             'external_link.png',
-            '../plugin/toplinks/start.php?'.http_build_query(['link' => $link->getId()]),
+            '../plugin/TopLinks/start.php?'.http_build_query(['link' => $link->getId()]),
             0,
             'authoring'
         );
@@ -116,6 +116,6 @@ class TopLinksPlugin extends Plugin
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'authoring', 'link' => '../plugin/toplinks/start.php%']);
+            ->execute(['category' => 'authoring', 'link' => '../plugin/TopLinks/start.php%']);
     }
 }

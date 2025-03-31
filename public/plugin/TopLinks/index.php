@@ -21,7 +21,7 @@ if ('/main/course_home/course_home.php' === $httpRequest->getScriptName()) {
         $toolIds[] = [
             'id' => $linkTool->getTool()->getIid(),
             'img' => $linkTool->getLink()->getIcon()
-                ? api_get_path(WEB_UPLOAD_PATH).'plugins/toplinks/'.$linkTool->getLink()->getIcon()
+                ? api_get_path(WEB_UPLOAD_PATH).'plugins/TopLinks/'.$linkTool->getLink()->getIcon()
                 : null,
         ];
     } ?>

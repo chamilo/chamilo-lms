@@ -210,7 +210,7 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
         }
 
         if ($link->getIcon()) {
-            $fullIconPath = api_get_path(SYS_UPLOAD_PATH).'plugins/toplinks/'.$link->getIcon();
+            $fullIconPath = api_get_path(SYS_UPLOAD_PATH).'plugins/TopLinks/'.$link->getIcon();
 
             $fs = new Filesystem();
             $fs->remove($fullIconPath);

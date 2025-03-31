@@ -29,7 +29,8 @@ class ConferenceRecordingRepository extends ServiceEntityRepository
             ->where('r.meetingId = :meetingId')
             ->setParameter('meetingId', $meetingId)
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
     }
 
     /**
@@ -44,7 +45,8 @@ class ConferenceRecordingRepository extends ServiceEntityRepository
             ->where('r.meetingId = :meetingId')
             ->setParameter('meetingId', $meetingId)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
@@ -56,7 +58,8 @@ class ConferenceRecordingRepository extends ServiceEntityRepository
             ->where('r.recordId = :recordId')
             ->setParameter('recordId', $recordId)
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
 
         return $result[0] ?? null;
     }

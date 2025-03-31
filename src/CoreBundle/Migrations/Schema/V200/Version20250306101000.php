@@ -22,8 +22,7 @@ final class Version20250306101000 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         foreach ($this->getPluginTitles() as $pluginTitle) {
-
-            if (is_array($pluginTitle) && isset($pluginTitle['title'])) {
+            if (\is_array($pluginTitle) && isset($pluginTitle['title'])) {
                 $pluginTitle = (string) $pluginTitle['title'];
             }
 

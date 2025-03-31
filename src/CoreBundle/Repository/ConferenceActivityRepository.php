@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
+use BbbPlugin;
 use Chamilo\CoreBundle\Entity\ConferenceActivity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,9 +28,10 @@ class ConferenceActivityRepository extends ServiceEntityRepository
             ->andWhere('a.inAt = a.outAt')
             ->andWhere('a.close = :open')
             ->setParameter('meetingId', $meetingId)
-            ->setParameter('open', \BbbPlugin::ROOM_OPEN)
+            ->setParameter('open', BbbPlugin::ROOM_OPEN)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function closeAllByMeetingId(int $meetingId): void
@@ -38,10 +40,11 @@ class ConferenceActivityRepository extends ServiceEntityRepository
             ->update()
             ->set('a.close', ':closed')
             ->where('a.meeting = :meetingId')
-            ->setParameter('closed', \BbbPlugin::ROOM_CLOSE)
+            ->setParameter('closed', BbbPlugin::ROOM_CLOSE)
             ->setParameter('meetingId', $meetingId)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     public function findOneArrayByMeetingAndParticipant(int $meetingId, int $participantId): ?array
@@ -54,7 +57,8 @@ class ConferenceActivityRepository extends ServiceEntityRepository
             ->setParameters([
                 'meetingId' => $meetingId,
                 'participantId' => $participantId,
-            ]);
+            ])
+        ;
 
         $result = $qb->getQuery()->getResult();
 

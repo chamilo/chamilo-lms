@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ConferenceMeeting;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -25,7 +26,8 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('r')
             ->innerJoin('r.meeting', 'm')
             ->where('m.remoteId = :remoteId')
-            ->setParameter('remoteId', $remoteId);
+            ->setParameter('remoteId', $remoteId)
+        ;
 
         return $qb->getQuery()->getArrayResult();
     }
@@ -43,7 +45,8 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
             ->setParameter('accessUrlId', $accessUrlId)
             ->setMaxResults(1)
             ->getQuery()
-            ->getArrayResult()[0] ?? null;
+            ->getArrayResult()[0] ?? null
+        ;
     }
 
     /**
@@ -54,7 +57,8 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('m')
             ->where('m.id = :id')
             ->setParameter('id', $id)
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         $result = $qb->getQuery()->getArrayResult();
 
@@ -82,7 +86,8 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
             ->setParameter('url', $url)
             ->setParameter('id', $id)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
@@ -97,13 +102,14 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
             ->setParameter('visible', $visible ? 1 : 0)
             ->setParameter('id', $id)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
      * Close the meeting (status = 0, update closed_at).
      */
-    public function closeMeeting(int $id, \DateTimeInterface $closedAt): void
+    public function closeMeeting(int $id, DateTimeInterface $closedAt): void
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->update(ConferenceMeeting::class, 'm')
@@ -113,7 +119,8 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
             ->setParameter('closedAt', $closedAt)
             ->setParameter('id', $id)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
@@ -126,17 +133,16 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
             ->where('m.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
      * Find meetings created between two dates.
      *
-     * @param \DateTimeInterface $start
-     * @param \DateTimeInterface $end
      * @return ConferenceMeeting[]
      */
-    public function findByDateRange(\DateTimeInterface $start, \DateTimeInterface $end): array
+    public function findByDateRange(DateTimeInterface $start, DateTimeInterface $end): array
     {
         return $this->createQueryBuilder('m')
             ->where('m.createdAt BETWEEN :start AND :end')

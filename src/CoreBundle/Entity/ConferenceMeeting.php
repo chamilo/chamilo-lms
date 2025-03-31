@@ -409,22 +409,22 @@ class ConferenceMeeting
 
     public function isVisible(): bool
     {
-        return $this->visibility === 1;
+        return 1 === $this->visibility;
     }
 
     public function isClosed(): bool
     {
-        return $this->status === 0;
+        return 0 === $this->status;
     }
 
     public function isOpen(): bool
     {
-        return $this->status === 1;
+        return 1 === $this->status;
     }
 
     public function hasRecording(): bool
     {
-        return $this->record === true;
+        return true === $this->record;
     }
 
     public function hasVideoUrl(): bool

@@ -118,4 +118,9 @@ class MigrationMoodlePlugin extends Plugin
 
         return $result['c'] > 0;
     }
+
+    public function get_name()
+    {
+        return 'MigrationMoodle';
+    }
 }

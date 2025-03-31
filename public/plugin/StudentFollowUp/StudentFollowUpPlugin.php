@@ -253,4 +253,9 @@ class StudentFollowUpPlugin extends Plugin
         Database::query("DELETE FROM sfu_post WHERE user_id = $userId");
         Database::query("DELETE FROM sfu_post WHERE insert_user_id = $userId");
     }
+
+    public function get_name()
+    {
+        return 'StudentFollowUp';
+    }
 }

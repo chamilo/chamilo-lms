@@ -71,4 +71,9 @@ class Test2pdfPlugin extends Plugin
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
         $this->manageTab(false);
     }
+
+    public function get_name()
+    {
+        return 'Test2Pdf';
+    }
 }

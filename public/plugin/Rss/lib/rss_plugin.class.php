@@ -36,4 +36,9 @@ class RssPlugin extends Plugin
     {
         return $this->get('rss');
     }
+
+    public function get_name()
+    {
+        return 'Rss';
+    }
 }

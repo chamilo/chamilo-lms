@@ -1158,6 +1158,11 @@ class ZoomPlugin extends Plugin
         return self::RECORDING_TYPE_NONE !== $recording;
     }
 
+    public function get_name()
+    {
+        return 'Zoom';
+    }
+
     /**
      * Updates meeting registrants list. Adds the missing registrants and removes the extra.
      *

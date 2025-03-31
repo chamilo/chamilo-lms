@@ -195,6 +195,11 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         return $score >= 0 ? $score : 0;
     }
 
+    public function get_name()
+    {
+        return 'QuestionOptionsEvaluation';
+    }
+
     /**
      * @param int $formula
      */

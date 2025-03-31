@@ -165,6 +165,11 @@ class Positioning extends Plugin
         return $this->getCourseExercise($courseId, $sessionId, false, true);
     }
 
+    public function get_name()
+    {
+        return 'Positioning';
+    }
+
     private function setOption($field, $exerciseId, $courseId, $sessionId)
     {
         if (!in_array($field, ['is_initial', 'is_final'], true)) {

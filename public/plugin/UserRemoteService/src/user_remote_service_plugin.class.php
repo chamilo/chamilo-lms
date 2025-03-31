@@ -306,4 +306,9 @@ class UserRemoteServicePlugin extends Plugin
                 $this->getActiveServiceId()
             )->getCustomUserRedirectURL($userInfo['id'], $this->salt());
     }
+
+    public function get_name()
+    {
+        return 'UserRemoteService';
+    }
 }

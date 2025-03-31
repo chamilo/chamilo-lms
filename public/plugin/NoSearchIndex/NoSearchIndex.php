@@ -32,4 +32,9 @@ class NoSearchIndex extends Plugin
 
         return $result ?: $result = new self();
     }
+
+    public function get_name()
+    {
+        return 'NoSearchIndex';
+    }
 }

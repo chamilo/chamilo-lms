@@ -33,4 +33,9 @@ class StaticPlugin extends Plugin
     {
         return $this->get('content');
     }
+
+    public function get_name()
+    {
+        return 'Static';
+    }
 }

@@ -128,4 +128,9 @@ class NotebookTeacherPlugin extends Plugin
         echo 'Plugin actualizado';
         Display::display_footer();
     }
+
+    public function get_name()
+    {
+        return 'NotebookTeacher';
+    }
 }

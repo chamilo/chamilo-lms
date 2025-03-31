@@ -347,4 +347,9 @@ class PauseTraining extends Plugin
     public function uninstall()
     {
     }
+
+    public function get_name()
+    {
+        return 'PauseTraining';
+    }
 }

@@ -351,6 +351,11 @@ class XApiPlugin extends Plugin
         return $return;
     }
 
+    public function get_name()
+    {
+        return 'XApi';
+    }
+
     /**
      * @throws \Exception
      */

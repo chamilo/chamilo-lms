@@ -280,7 +280,7 @@ class PauseTraining extends Plugin
                     $userInfo = api_get_user_info($userId);
                     $template->assign('days', $day);
                     $template->assign('user', $userInfo);
-                    $content = $template->fetch('pausetraining/view/notification_content.tpl');
+                    $content = $template->fetch('PauseTraining/view/notification_content.tpl');
                     echo 'Ready to send a message "'.$title.'" to user #'.$userId.' '.$userInfo['complete_name'].PHP_EOL;
                     if (false === $isTest) {
                         MessageManager::send_message_simple($userId, $title, $content, $senderId);

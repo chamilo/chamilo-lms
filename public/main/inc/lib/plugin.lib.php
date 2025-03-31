@@ -208,7 +208,7 @@ class AppPlugin
             'Mobidico',
             'NoSearchIndex',
             'NotebookTeacher',
-            'pausetraining',
+            'PauseTraining',
             'pens',
             'positioning',
             'questionoptionsevaluation',

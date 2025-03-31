@@ -1944,7 +1944,7 @@ class SocialManager extends UserManager
         if ($allowPauseTraining && $allowEdit) {
             $plugin = PauseTraining::create();
             $headers[] = [
-                'url' => api_get_path(WEB_CODE_PATH).'auth/pausetraining.php',
+                'url' => api_get_path(WEB_CODE_PATH).'auth/PauseTraining.php',
                 'content' => $plugin->get_lang('PauseTraining'),
             ];
         }

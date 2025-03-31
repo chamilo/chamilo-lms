@@ -217,7 +217,7 @@ class AppPlugin
             'Rss',
             'SearchCourse',
             'ShowRegions',
-            'show_user_info',
+            'ShowUserInfo',
             'Static',
             'studentfollowup',
             'surveyexportcsv',

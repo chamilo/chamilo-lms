@@ -13,7 +13,7 @@ Allow migrate course contents and user progress from a Moodle platform.
 You can run the migration tasks from browser using the admin panel.
 You must ejecute the tasks in the order indicated in the task list.
 
-Also you can run all the migrations running `php plugin/migrationmoodle/run_cli.php`.
+Also you can run all the migrations running `php plugin/MigrationMoodle/run_cli.php`.
 But if you want to run the migration with multiple url, then you will need edi `MigrationMoodlePlugin::getAccessUrlId`,
 `MigrationMoodlePlugin::getMoodledataPath` methods to set your plugin settings.
 

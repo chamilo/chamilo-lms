@@ -204,7 +204,7 @@ class AppPlugin
             'LearningCalendar',
             'LtiProvider',
             'MaintenanceMode',
-            'migrationmoodle',
+            'MigrationMoodle',
             'mobidico',
             'nosearchindex',
             'notebookteacher',

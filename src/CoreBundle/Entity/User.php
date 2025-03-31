@@ -16,7 +16,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Controller\Api\CreateUserOnAccessUrlAction;
 use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
+use Chamilo\CoreBundle\Dto\CreateUserOnAccessUrlInput;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
 use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -60,6 +62,16 @@ use UserManager;
             controller: UserSkillsController::class,
             normalizationContext: ['groups' => ['user_skills:read']],
             name: 'get_user_skills'
+        ),
+        new Post(
+            uriTemplate: '/custom/create-user-on-access-url',
+            controller: CreateUserOnAccessUrlAction::class,
+            denormalizationContext: ['groups' => ['write']],
+            security: "is_granted('ROLE_ADMIN')",
+            input: CreateUserOnAccessUrlInput::class,
+            output: User::class,
+            deserialize: true,
+            name: 'create_user_on_access_url'
         ),
     ],
     normalizationContext: ['groups' => ['user:read']],

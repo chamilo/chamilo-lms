@@ -767,7 +767,7 @@ $notebookTeacherEnable = 'true' === api_get_plugin_setting('notebookteacher', 'e
 if ($notebookTeacherEnable && !empty($studentId) && !empty($courseCode)) {
     // link notebookteacher
     $optionsLink = 'student_id='.$studentId.'&origin='.$origin.'&cid='.$courseId.'&id_session='.$sessionId;
-    $actions .= '<a href="'.api_get_path(WEB_PLUGIN_PATH).'notebookteacher/src/index.php?'.$optionsLink.'">'
+    $actions .= '<a href="'.api_get_path(WEB_PLUGIN_PATH).'NotebookTeacher/src/index.php?'.$optionsLink.'">'
         .Display::getMdiIcon(ToolIcon::NOTEBOOK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Notebook'))
         .'</a>';
 }

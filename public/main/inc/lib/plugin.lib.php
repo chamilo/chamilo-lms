@@ -207,7 +207,7 @@ class AppPlugin
             'MigrationMoodle',
             'Mobidico',
             'NoSearchIndex',
-            'notebookteacher',
+            'NotebookTeacher',
             'pausetraining',
             'pens',
             'positioning',

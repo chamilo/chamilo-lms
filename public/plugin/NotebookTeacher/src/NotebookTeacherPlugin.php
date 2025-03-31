@@ -77,7 +77,7 @@ class NotebookTeacherPlugin extends Plugin
             }
         }
 
-        require_once api_get_path(SYS_PLUGIN_PATH).'notebookteacher/database.php';
+        require_once api_get_path(SYS_PLUGIN_PATH).'NotebookTeacher/database.php';
     }
 
     /**

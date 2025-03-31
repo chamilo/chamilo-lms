@@ -4,7 +4,7 @@ Los estudiantes no tienen acceso a las notas compartidas de los profesores.
 
 **Instrucciones de puesta en funcionamiento**
 
-- Subir la carpeta **notebookteacher** a la carpeta plugin de chamilo.
+- Subir la carpeta **NotebookTeacher** a la carpeta plugin de chamilo.
 
 - Habilitar el plugin en la administraci&oacute;n de Chamilo.
 - El icono de la herramienta aparecer&aacute; en pantalla de los cursos con el resto de herramientas
@@ -17,4 +17,4 @@ Los estudiantes no tienen acceso a las notas compartidas de los profesores.
 Para actualizar la base de datos del plugin con los &uacute;ltimos cambios de la estructura deber&aacute; poner en su
 navegador la siguiente direcci&oacute;n cambiando el nombre del dominio con el que proceda en su caso.
 
-http://*sudominio.com*/**plugin/notebookteacher/update.php**
+http://*sudominio.com*/**plugin/NotebookTeacher/update.php**

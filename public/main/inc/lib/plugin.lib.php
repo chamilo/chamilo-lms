@@ -216,7 +216,7 @@ class AppPlugin
             'Resubscription',
             'Rss',
             'SearchCourse',
-            'show_regions',
+            'ShowRegions',
             'show_user_info',
             'static',
             'studentfollowup',

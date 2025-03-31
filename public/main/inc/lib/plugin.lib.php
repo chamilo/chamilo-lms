@@ -218,7 +218,7 @@ class AppPlugin
             'SearchCourse',
             'ShowRegions',
             'show_user_info',
-            'static',
+            'Static',
             'studentfollowup',
             'surveyexportcsv',
             'surveyexporttxt',

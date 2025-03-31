@@ -12,7 +12,7 @@ require_once __DIR__.'/LtiProviderPlugin.php';
 api_block_anonymous_users(false);
 
 $plugin = LtiProviderPlugin::create();
-$webPluginPath = api_get_path(WEB_PLUGIN_PATH).'lti_provider/';
+$webPluginPath = api_get_path(WEB_PLUGIN_PATH).'LtiProvider/';
 
 $request = Request::createFromGlobals();
 $response = new Response();

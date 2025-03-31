@@ -15,10 +15,10 @@ use Doctrine\ORM\Tools\SchemaTool;
 class LtiProviderPlugin extends Plugin
 {
     public const TABLE_PLATFORM = 'plugin_lti_provider_platform';
-    public const LAUNCH_PATH = 'lti_provider/tool/start.php';
-    public const LOGIN_PATH = 'lti_provider/tool/login.php';
-    public const REDIRECT_PATH = 'lti_provider/tool/start.php';
-    public const JWKS_URL = 'lti_provider/tool/jwks.php';
+    public const LAUNCH_PATH = 'LtiProvider/tool/start.php';
+    public const LOGIN_PATH = 'LtiProvider/tool/login.php';
+    public const REDIRECT_PATH = 'LtiProvider/tool/start.php';
+    public const JWKS_URL = 'LtiProvider/tool/jwks.php';
 
     public $isAdminPlugin = true;
 
@@ -346,7 +346,7 @@ class LtiProviderPlugin extends Plugin
      */
     public function get_name(): string
     {
-        return 'lti_provider';
+        return 'LtiProvider';
     }
 
     /**

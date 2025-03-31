@@ -28,5 +28,5 @@ Display::addFlash(
     Display::return_message($plugin->get_lang('PlatformDeleted'), 'success')
 );
 
-header('Location: '.api_get_path(WEB_PLUGIN_PATH).'lti_provider/admin.php');
+header('Location: '.api_get_path(WEB_PLUGIN_PATH).'LtiProvider/admin.php');
 exit;

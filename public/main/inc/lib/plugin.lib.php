@@ -202,7 +202,7 @@ class AppPlugin
             'ImsLti',
             'Justification',
             'LearningCalendar',
-            'lti_provider',
+            'LtiProvider',
             'maintenancemode',
             'migrationmoodle',
             'mobidico',

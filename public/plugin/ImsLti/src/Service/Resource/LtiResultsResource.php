@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookResult;
-use Chamilo\PluginBundle\Entity\ImsLti\LineItem;
+use Chamilo\PluginBundle\ImsLti\Entity\LineItem;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;

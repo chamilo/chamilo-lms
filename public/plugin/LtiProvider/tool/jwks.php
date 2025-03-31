@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\LtiProvider\PlatformKey;
+use Chamilo\PluginBundle\LtiProvider\Entity\PlatformKey;
 use Firebase\JWT\JWT;
 use phpseclib\Crypt\RSA;
 

@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
+use Chamilo\PluginBundle\StudentFollowUp\Entity\CarePost;
 use Doctrine\Common\Collections\Criteria;
 use Gaufrette\Adapter\Ftp as FtpAdapter;
 use Gaufrette\Filesystem;

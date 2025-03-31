@@ -4,8 +4,8 @@
 
 namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
-use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
-use Chamilo\PluginBundle\Entity\H5pImport\H5pImportLibrary;
+use Chamilo\PluginBundle\H5pImport\Entity\H5pImport;
+use Chamilo\PluginBundle\H5pImport\Entity\H5pImportLibrary;
 
 class H5pImplementation implements \H5PFrameworkInterface
 {

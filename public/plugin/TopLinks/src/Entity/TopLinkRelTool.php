@@ -2,10 +2,10 @@
 
 /* For license terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Entity\TopLinks;
+namespace Chamilo\PluginBundle\TopLinks\Entity;
 
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\PluginBundle\Entity\TopLinks\Repository\TopLinkRelToolRepository;
+use Chamilo\PluginBundle\TopLinks\Entity\Repository\TopLinkRelToolRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'toplinks_link_rel_tool')]

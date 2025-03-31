@@ -4,8 +4,8 @@
 
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
-use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
-use Chamilo\PluginBundle\Entity\H5pImport\H5pImportResults;
+use Chamilo\PluginBundle\H5pImport\Entity\H5pImport;
+use Chamilo\PluginBundle\H5pImport\Entity\H5pImportResults;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';

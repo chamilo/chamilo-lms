@@ -1,15 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Entity\ImsLti;
+namespace Chamilo\PluginBundle\ImsLti\Entity;
 
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class LineItem.
- *
- * @package Chamilo\PluginBundle\Entity\ImsLti
  *
  * @ORM\Table(name="plugin_ims_lti_lineitem")
  * @ORM\Entity()
@@ -27,7 +25,7 @@ class LineItem
     /**
      * @var ImsLtiTool
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool", inversedBy="lineItems")
+     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool", inversedBy="lineItems")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $tool;

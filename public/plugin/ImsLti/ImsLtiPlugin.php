@@ -5,11 +5,11 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
-use Chamilo\PluginBundle\Entity\ImsLti\LineItem;
-use Chamilo\PluginBundle\Entity\ImsLti\Platform;
-use Chamilo\PluginBundle\Entity\ImsLti\Token;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\PluginBundle\ImsLti\Entity\LineItem;
+use Chamilo\PluginBundle\ImsLti\Entity\Platform;
+use Chamilo\PluginBundle\ImsLti\Entity\Token;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Tools\SchemaTool;
 use Firebase\JWT\JWK;
 

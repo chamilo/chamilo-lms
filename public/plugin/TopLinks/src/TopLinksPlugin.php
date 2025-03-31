@@ -2,8 +2,8 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
-use Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool;
+use Chamilo\PluginBundle\TopLinks\Entity\TopLink;
+use Chamilo\PluginBundle\TopLinks\Entity\TopLinkRelTool;
 use Doctrine\ORM\Tools\SchemaTool;
 
 /**

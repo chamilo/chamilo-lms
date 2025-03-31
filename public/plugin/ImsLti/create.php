@@ -1,6 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
 use Chamilo\PluginBundle\ImsLti\Form\FrmAdd;
 
 $cidReset = true;

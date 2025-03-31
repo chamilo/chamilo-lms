@@ -4,7 +4,7 @@
 
 namespace Chamilo\PluginBundle\TopLinks\Form;
 
-use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
+use Chamilo\PluginBundle\TopLinks\Entity\TopLink;
 use FormValidator;
 use Image;
 use Security;

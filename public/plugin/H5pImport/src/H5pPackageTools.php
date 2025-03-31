@@ -6,8 +6,8 @@ namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
-use Chamilo\PluginBundle\Entity\H5pImport\H5pImportLibrary;
+use Chamilo\PluginBundle\H5pImport\Entity\H5pImport;
+use Chamilo\PluginBundle\H5pImport\Entity\H5pImportLibrary;
 use Database;
 use H5PCore;
 use Symfony\Component\Filesystem\Filesystem;

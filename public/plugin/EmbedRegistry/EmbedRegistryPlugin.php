@@ -3,7 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\PluginBundle\Entity\EmbedRegistry\Embed;
+use Chamilo\PluginBundle\EmbedRegistry\Entity\Embed;
 use Doctrine\ORM\Tools\SchemaTool;
 
 /**

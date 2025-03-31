@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 

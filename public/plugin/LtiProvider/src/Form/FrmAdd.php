@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\LtiProvider\Form;
 
-use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
+use Chamilo\PluginBundle\LtiProvider\Entity\Platform;
 use FormValidator;
 use LtiProviderPlugin;
 

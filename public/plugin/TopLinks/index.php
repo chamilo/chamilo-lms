@@ -2,7 +2,7 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool;
+use Chamilo\PluginBundle\TopLinks\Entity\TopLinkRelTool;
 
 $httpRequest = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 

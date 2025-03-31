@@ -2,10 +2,10 @@
 
 /* For license terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Entity\TopLinks;
+namespace Chamilo\PluginBundle\TopLinks\Entity;
 
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\PluginBundle\Entity\TopLinks\Repository\TopLinkRepository;
+use Chamilo\PluginBundle\TopLinks\Repository\TopLinkRepository\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

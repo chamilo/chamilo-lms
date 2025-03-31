@@ -1,9 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
-use Chamilo\PluginBundle\Entity\LtiProvider\PlatformKey;
-use Chamilo\PluginBundle\Entity\LtiProvider\Result;
+use Chamilo\PluginBundle\LtiProvider\Entity\Platform;
+use Chamilo\PluginBundle\LtiProvider\Entity\PlatformKey;
+use Chamilo\PluginBundle\LtiProvider\Entity\Result;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\SchemaTool;
 

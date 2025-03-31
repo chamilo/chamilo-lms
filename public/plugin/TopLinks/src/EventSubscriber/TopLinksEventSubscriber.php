@@ -7,7 +7,7 @@ declare(strict_types=1);
 use Chamilo\CoreBundle\Event\CourseCreatedEvent;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
-use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
+use Chamilo\PluginBundle\TopLinks\Entity\TopLink;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

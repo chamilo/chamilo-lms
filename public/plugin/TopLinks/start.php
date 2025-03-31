@@ -2,7 +2,7 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
+use Chamilo\PluginBundle\TopLinks\Entity\TopLink;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';

@@ -3,7 +3,7 @@
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-use Chamilo\PluginBundle\Entity\CourseHomeNotify\Notification;
+use Chamilo\PluginBundle\CourseHomeNotify\Entity\Notification;
 
 $plugin = CourseHomeNotifyPlugin::create();
 $courseId = api_get_course_int_id();

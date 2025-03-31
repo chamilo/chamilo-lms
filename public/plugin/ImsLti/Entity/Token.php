@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Entity\ImsLti;
+namespace Chamilo\PluginBundle\ImsLti\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

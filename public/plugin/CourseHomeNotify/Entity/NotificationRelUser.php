@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Entity\CourseHomeNotify;
+namespace Chamilo\PluginBundle\CourseHomeNotify\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;

@@ -4,7 +4,7 @@
 namespace Chamilo\PluginBundle\Form;
 
 use Category;
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
 use Display;
 use Exception;
 use FormValidator;

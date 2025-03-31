@@ -3,8 +3,8 @@
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-use Chamilo\PluginBundle\Entity\CourseHomeNotify\Notification;
-use Chamilo\PluginBundle\Entity\CourseHomeNotify\NotificationRelUser;
+use Chamilo\PluginBundle\CourseHomeNotify\Entity\Notification;
+use Chamilo\PluginBundle\CourseHomeNotify\Entity\NotificationRelUser;
 
 api_block_anonymous_users(true);
 api_protect_course_script(true);

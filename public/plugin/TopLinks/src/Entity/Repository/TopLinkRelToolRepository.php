@@ -2,19 +2,17 @@
 
 /* For license terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Entity\TopLinks\Repository;
+namespace Chamilo\PluginBundle\TopLinks\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
-use Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool;
+use Chamilo\PluginBundle\TopLinks\Entity\TopLink;
+use Chamilo\PluginBundle\TopLinks\Entity\TopLinkRelTool;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Class TopLinkRelToolRepository.
- *
- * @package Chamilo\PluginBundle\Entity\TopLinks\Repository
  */
 class TopLinkRelToolRepository extends EntityRepository
 {

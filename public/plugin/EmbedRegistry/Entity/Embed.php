@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Entity\EmbedRegistry;
+namespace Chamilo\PluginBundle\EmbedRegistry\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
 use Symfony\Component\HttpFoundation\Request;
 
 $cidReset = true;

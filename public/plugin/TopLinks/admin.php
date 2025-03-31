@@ -3,8 +3,8 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
-use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
-use Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool;
+use Chamilo\PluginBundle\TopLinks\Entity\TopLink;
+use Chamilo\PluginBundle\TopLinks\Entity\TopLinkRelTool;
 use Chamilo\PluginBundle\TopLinks\Form\LinkForm as TopLinkForm;
 use Symfony\Component\Filesystem\Filesystem;
 

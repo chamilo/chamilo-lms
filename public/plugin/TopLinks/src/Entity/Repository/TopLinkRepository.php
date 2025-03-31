@@ -2,14 +2,12 @@
 
 /* For license terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Entity\TopLinks\Repository;
+namespace Chamilo\PluginBundle\TopLinks\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
 /**
  * Class TopLinkRepository.
- *
- * @package Chamilo\PluginBundle\Entity\TopLinks
  */
 class TopLinkRepository extends EntityRepository
 {

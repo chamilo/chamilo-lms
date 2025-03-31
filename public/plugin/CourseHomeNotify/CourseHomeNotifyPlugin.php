@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\CourseHomeNotify\Notification;
-use Chamilo\PluginBundle\Entity\CourseHomeNotify\NotificationRelUser;
+use Chamilo\PluginBundle\CourseHomeNotify\Entity\Notification;
+use Chamilo\PluginBundle\CourseHomeNotify\Entity\NotificationRelUser;
 use Doctrine\ORM\Tools\SchemaTool;
 
 /**

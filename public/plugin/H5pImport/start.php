@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\H5pImport\H5pImport;
+use Chamilo\PluginBundle\H5pImport\Entity\H5pImport;
 use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pPackageImporter;
 use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pPackageTools;
 

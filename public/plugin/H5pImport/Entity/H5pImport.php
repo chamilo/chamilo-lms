@@ -2,7 +2,7 @@
 
 // For licensing terms, see /license.txt
 
-namespace Chamilo\PluginBundle\Entity\H5pImport;
+namespace Chamilo\PluginBundle\H5pImport\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;

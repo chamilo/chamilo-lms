@@ -4,7 +4,7 @@
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
-use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
+use Chamilo\PluginBundle\StudentFollowUp\Entity\CarePost;
 use Fhaculty\Graph\Graph;
 use Monolog\Handler\BufferHandler;
 use Monolog\Handler\ErrorLogHandler;

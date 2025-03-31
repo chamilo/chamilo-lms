@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\ImsLti\Platform;
+use Chamilo\PluginBundle\ImsLti\Entity\Platform;
 
 $cidReset = true;
 

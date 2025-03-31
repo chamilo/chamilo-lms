@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Entity\StudentFollowUp;
+namespace Chamilo\PluginBundle\StudentFollowUp\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;

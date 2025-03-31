@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Entity\ImsLti;
+namespace Chamilo\PluginBundle\ImsLti\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
@@ -104,14 +104,14 @@ class ImsLtiTool
     /**
      * @var ImsLtiTool|null
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $parent;
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool", mappedBy="parent")
      */
     private $children;
     /**
@@ -151,7 +151,7 @@ class ImsLtiTool
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\ImsLti\LineItem", mappedBy="tool")
+     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\ImsLti\Entity\LineItem", mappedBy="tool")
      */
     private $lineItems;
 

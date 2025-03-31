@@ -213,7 +213,7 @@ class AppPlugin
             'Positioning',
             'QuestionOptionsEvaluation',
             'Redirection',
-            'resubscription',
+            'Resubscription',
             'rss',
             'search_course',
             'show_regions',

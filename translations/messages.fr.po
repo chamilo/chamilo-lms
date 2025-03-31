@@ -28171,7 +28171,7 @@ msgstr ""
 "les événements."
 
 msgid "Enable only if you are using the Redirection plugin"
-msgstr "Activez uniquement si vous utilisez le plugin de redirection"
+msgstr "Activez uniquement si vous utilisez le plugin de Redirection"
 
 msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
 msgstr ""

@@ -13,7 +13,7 @@ api_protect_admin_script();
 
 $list = RedirectionPlugin::getAll();
 
-$url = api_get_path(WEB_PLUGIN_PATH).'redirection/admin.php';
+$url = api_get_path(WEB_PLUGIN_PATH).'Redirection/admin.php';
 
 $form = new FormValidator('add', 'post', api_get_self());
 $form->addHeader('Redirection');

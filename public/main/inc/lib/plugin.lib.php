@@ -212,7 +212,7 @@ class AppPlugin
             'Pens',
             'Positioning',
             'QuestionOptionsEvaluation',
-            'redirection',
+            'Redirection',
             'resubscription',
             'rss',
             'search_course',

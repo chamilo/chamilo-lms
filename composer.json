@@ -95,6 +95,7 @@
         "laminas/laminas-permissions-acl": "~2.8",
         "league/csv": "^9.7",
         "league/flysystem-aws-s3-v3": "^3.29",
+        "league/flysystem-azure-blob-storage": "^3.28",
         "league/flysystem-google-cloud-storage": "^3.28",
         "league/glide-symfony": "^2.0",
         "league/html-to-markdown": "^5.1",

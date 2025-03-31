@@ -43,7 +43,7 @@ filter:
         - 'public/plugin/vchamilo/cli/*'
         - 'public/plugin/Pens/lib/'
         - 'public/plugin/Bbb/lib/bbb_api.php'
-        - 'public/plugin/ims_lti/OAuthSimple.php'
+        - 'public/plugin/ImsLti/OAuthSimple.php'
         - 'public/plugin/sepe/src/wsse/*'
         - 'public/plugin/Test2Pdf/class/*'
         - 'public/plugin/jcapture/lib/*'

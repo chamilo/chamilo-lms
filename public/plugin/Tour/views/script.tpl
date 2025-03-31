@@ -45,7 +45,7 @@
 
                         $btnStart = $('<button>', {
                             class: 'tour-warning',
-                            html: '<img src="{{ _p.web }}/plugin/tour/resources/tour-chamilo.png">{{ 'StartButtonText' | get_lang }}',
+                            html: '<img src="{{ _p.web }}/plugin/Tour/resources/tour-chamilo.png">{{ 'StartButtonText' | get_lang }}',
                             click: function(e) {
                                 e.preventDefault();
 

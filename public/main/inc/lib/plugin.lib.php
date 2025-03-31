@@ -224,7 +224,7 @@ class AppPlugin
             'SurveyExportTxt',
             'Test2Pdf',
             'TopLinks',
-            'tour',
+            'Tour',
             'userremoteservice',
             'zoom',
         ];

@@ -8,8 +8,8 @@
  */
 require_once __DIR__.'/config.php';
 
-$pluginPath = api_get_path(SYS_PLUGIN_PATH).'tour/';
-$pluginWebPath = api_get_path(WEB_PLUGIN_PATH).'tour/';
+$pluginPath = api_get_path(SYS_PLUGIN_PATH).'Tour/';
+$pluginWebPath = api_get_path(WEB_PLUGIN_PATH).'Tour/';
 
 $userId = api_get_user_id();
 

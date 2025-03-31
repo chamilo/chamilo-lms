@@ -5,7 +5,7 @@ Shows people how to use your Chamilo LMS
 
 # Set the blocks for the tour
 
-Edit the `plugin/tour/config/tour.json` file adding the page classes and steps
+Edit the `plugin/Tour/config/tour.json` file adding the page classes and steps
 
 To set the steps in a page, add an object like this:
 ```
@@ -23,7 +23,7 @@ To set the steps in a page, add an object like this:
     ]
 }
 ```
-Then set the language variables inside the `plugin/tour/lang/$language.php` file
+Then set the language variables inside the `plugin/Tour/lang/$language.php` file
 
 # Set a region to plugin
 

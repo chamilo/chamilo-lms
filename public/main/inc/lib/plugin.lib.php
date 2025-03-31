@@ -206,7 +206,7 @@ class AppPlugin
             'MaintenanceMode',
             'MigrationMoodle',
             'Mobidico',
-            'nosearchindex',
+            'NoSearchIndex',
             'notebookteacher',
             'pausetraining',
             'pens',

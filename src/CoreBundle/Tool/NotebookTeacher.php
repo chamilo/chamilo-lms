@@ -10,12 +10,12 @@ class NotebookTeacher extends AbstractPlugin
 {
     public function getTitle(): string
     {
-        return 'notebookteacher';
+        return 'NotebookTeacher';
     }
 
     public function getLink(): string
     {
-        return '/plugin/notebookteacher/start.php';
+        return '/plugin/NotebookTeacher/start.php';
     }
 
     public function getIcon(): string

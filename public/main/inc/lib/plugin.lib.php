@@ -214,7 +214,7 @@ class AppPlugin
             'QuestionOptionsEvaluation',
             'Redirection',
             'Resubscription',
-            'rss',
+            'Rss',
             'search_course',
             'show_regions',
             'show_user_info',

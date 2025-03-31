@@ -220,7 +220,7 @@ class AppPlugin
             'ShowUserInfo',
             'Static',
             'StudentFollowUp',
-            'surveyexportcsv',
+            'SurveyExportCsv',
             'surveyexporttxt',
             'test2pdf',
             'toplinks',

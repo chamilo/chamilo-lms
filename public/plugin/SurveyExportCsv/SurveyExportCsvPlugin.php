@@ -68,7 +68,7 @@ class SurveyExportCsvPlugin extends Plugin
 
         return Display::url(
             Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, $iconSize, get_lang('CSV export')),
-            api_get_path(WEB_PLUGIN_PATH).'surveyexportcsv/export.php?survey='.$surveyId.'&'.api_get_cidreq()
+            api_get_path(WEB_PLUGIN_PATH).'SurveyExportCsv/export.php?survey='.$surveyId.'&'.api_get_cidreq()
         );
     }
 
@@ -93,6 +93,6 @@ class SurveyExportCsvPlugin extends Plugin
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.link LIKE :link AND t.category = :category')
-            ->execute(['link' => 'surveyexportcsv/start.php%', 'category' => 'plugin']);
+            ->execute(['link' => 'SurveyExportCsv/start.php%', 'category' => 'plugin']);
     }
 }

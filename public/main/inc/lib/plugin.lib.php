@@ -211,7 +211,7 @@ class AppPlugin
             'PauseTraining',
             'Pens',
             'Positioning',
-            'questionoptionsevaluation',
+            'QuestionOptionsEvaluation',
             'redirection',
             'resubscription',
             'rss',

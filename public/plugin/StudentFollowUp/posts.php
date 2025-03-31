@@ -71,7 +71,7 @@ $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('posts', $posts);
 $tpl->assign('current_url', $url);
 
-$url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/post.php?student_id='.$studentId;
+$url = api_get_path(WEB_PLUGIN_PATH).'StudentFollowUp/post.php?student_id='.$studentId;
 $tpl->assign('post_url', $url);
 $tpl->assign('information_icon', Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL));
 $tpl->assign('student_info', api_get_user_info($studentId));

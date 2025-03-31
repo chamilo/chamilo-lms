@@ -121,13 +121,13 @@ if ($post) {
 $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('post', $post);
 $tpl->assign('related_posts', $relatedPosts);
-$url = api_get_path(WEB_PLUGIN_PATH).'/studentfollowup/post.php?student_id='.$studentId;
+$url = api_get_path(WEB_PLUGIN_PATH).'/StudentFollowUp/post.php?student_id='.$studentId;
 $tpl->assign('post_url', $url);
 $tpl->assign(
     'back_link',
     Display::url(
         Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL),
-        api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php?student_id='.$studentId
+        api_get_path(WEB_PLUGIN_PATH).'StudentFollowUp/posts.php?student_id='.$studentId
     )
 );
 $tpl->assign('information_icon', Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL));

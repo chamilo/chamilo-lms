@@ -801,7 +801,7 @@ $isAllow = $permissions['is_allow'];
 if ($isAllow) {
     $actions .= Display::url(
         Display::getMdiIcon(ToolIcon::BLOG, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Blog')),
-        api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php?student_id='.$studentId
+        api_get_path(WEB_PLUGIN_PATH).'StudentFollowUp/posts.php?student_id='.$studentId
     );
 }
 

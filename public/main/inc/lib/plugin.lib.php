@@ -219,7 +219,7 @@ class AppPlugin
             'ShowRegions',
             'ShowUserInfo',
             'Static',
-            'studentfollowup',
+            'StudentFollowUp',
             'surveyexportcsv',
             'surveyexporttxt',
             'test2pdf',

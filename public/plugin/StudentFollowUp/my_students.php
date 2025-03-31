@@ -193,7 +193,7 @@ $form->setDefaults($defaults);
 $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('users', $items);
 $tpl->assign('form', $form->returnForm());
-$url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php?';
+$url = api_get_path(WEB_PLUGIN_PATH).'StudentFollowUp/posts.php?';
 $tpl->assign('post_url', $url);
 $url = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?';
 $tpl->assign('my_students_url', $url);

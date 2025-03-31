@@ -222,7 +222,7 @@ class AppPlugin
             'StudentFollowUp',
             'SurveyExportCsv',
             'SurveyExportTxt',
-            'test2pdf',
+            'Test2Pdf',
             'toplinks',
             'tour',
             'userremoteservice',

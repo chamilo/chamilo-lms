@@ -20,7 +20,7 @@ if ($enable) {
     $tpl->assign('infoExercise', $infoExercise);
     $tpl->assign('course_id', $courseId);
 
-    $listing_tpl = 'test2pdf/view/view-pdf.tpl';
+    $listing_tpl = 'Test2Pdf/view/view-pdf.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();

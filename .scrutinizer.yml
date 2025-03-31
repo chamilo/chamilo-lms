@@ -45,7 +45,7 @@ filter:
         - 'public/plugin/Bbb/lib/bbb_api.php'
         - 'public/plugin/ims_lti/OAuthSimple.php'
         - 'public/plugin/sepe/src/wsse/*'
-        - 'public/plugin/test2pdf/class/*'
+        - 'public/plugin/Test2Pdf/class/*'
         - 'public/plugin/jcapture/lib/*'
         - 'public/plugin/jcapture/src/*'
         - 'tests/*'

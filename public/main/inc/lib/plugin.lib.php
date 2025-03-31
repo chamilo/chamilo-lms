@@ -226,7 +226,7 @@ class AppPlugin
             'TopLinks',
             'Tour',
             'UserRemoteService',
-            'zoom',
+            'Zoom',
         ];
     }
 

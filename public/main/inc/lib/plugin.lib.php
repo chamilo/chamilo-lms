@@ -215,7 +215,7 @@ class AppPlugin
             'Redirection',
             'Resubscription',
             'Rss',
-            'search_course',
+            'SearchCourse',
             'show_regions',
             'show_user_info',
             'static',

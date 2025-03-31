@@ -26,6 +26,6 @@ class SearchCoursePlugin extends Plugin
 
     public function get_name()
     {
-        return 'search_course';
+        return 'SearchCourse';
     }
 }

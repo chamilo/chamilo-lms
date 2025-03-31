@@ -203,7 +203,7 @@ class AppPlugin
             'Justification',
             'LearningCalendar',
             'LtiProvider',
-            'maintenancemode',
+            'MaintenanceMode',
             'migrationmoodle',
             'mobidico',
             'nosearchindex',

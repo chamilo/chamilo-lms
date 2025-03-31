@@ -210,7 +210,7 @@ class AppPlugin
             'NotebookTeacher',
             'PauseTraining',
             'Pens',
-            'positioning',
+            'Positioning',
             'questionoptionsevaluation',
             'redirection',
             'resubscription',

@@ -1001,8 +1001,8 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
             $currentPath = $_SERVER['PHP_SELF'];
             // Allowed only this course paths.
             $paths = [
-                '/plugin/positioning/start.php',
-                '/plugin/positioning/start_student.php',
+                '/plugin/Positioning/start.php',
+                '/plugin/Positioning/start_student.php',
                 '/main/course_home/course_home.php',
                 '/main/exercise/overview.php',
             ];

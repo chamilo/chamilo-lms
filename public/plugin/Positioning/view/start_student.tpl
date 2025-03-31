@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-5">
-            <img style="float:left;" src="/plugin/positioning/img/positioning-line.png" />
+            <img style="float:left;" src="/plugin/Positioning/img/positioning-line.png" />
             <table style="height:380px;margin-left: auto;margin-right: auto;" >
                 <tr>
                     <td>{{ "InviteToTakePositioningTest"| get_plugin_lang('Positioning') }}<br>{{ "InitialTest"| get_plugin_lang('Positioning') }}: {{ initial_exercise }}</td>

@@ -104,5 +104,5 @@ $template->assign('final_exercise', $finalExerciseTitle);
 $template->assign('average_percentage_to_unlock_final_exercise', $averageToUnlock);
 $template->assign('lp_url_and_progress', $lpUrlAndProgress);
 $template->assign('radars', $radars);
-$template->assign('content', $template->fetch('positioning/view/start_student.tpl'));
+$template->assign('content', $template->fetch('Positioning/view/start_student.tpl'));
 $template->display_one_col_template();

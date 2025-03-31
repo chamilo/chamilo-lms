@@ -13,7 +13,7 @@ if (!$plugin->isEnabled()) {
 
 if (!api_is_allowed_to_edit()) {
     // Students are redirected to the start_student.php
-    api_location(api_get_path(WEB_PLUGIN_PATH).'positioning/start_student.php?'.api_get_cidreq());
+    api_location(api_get_path(WEB_PLUGIN_PATH).'Positioning/start_student.php?'.api_get_cidreq());
 }
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
@@ -147,5 +147,5 @@ $template->assign(
 $template->assign('table', $exercisesToString);
 $template->assign('radars', $radars);
 $template->assign('initial_exercise', $initialExerciseTitle);
-$template->assign('content', $template->fetch('positioning/view/start.tpl'));
+$template->assign('content', $template->fetch('Positioning/view/start.tpl'));
 $template->display_one_col_template();

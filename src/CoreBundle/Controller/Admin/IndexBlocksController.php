@@ -9,10 +9,14 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Page;
 use Chamilo\CoreBundle\Entity\PageCategory;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\AdminBlockEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -31,7 +35,8 @@ class IndexBlocksController extends BaseController
         private readonly SettingsManager $settingsManager,
         private readonly PageRepository $pageRepository,
         private readonly PageCategoryRepository $pageCategoryRepository,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface $serializer,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
         $this->extAuthSource = [
             'extldap' => [],
@@ -45,6 +50,13 @@ class IndexBlocksController extends BaseController
         $this->isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER');
 
         $json = [];
+
+        $adminBlockEvent = new AdminBlockEvent($json, AbstractEvent::TYPE_PRE);
+
+        $this->eventDispatcher->dispatch($adminBlockEvent, Events::ADMIN_BLOCK);
+
+        $json = $adminBlockEvent->getData();
+
         $json['users'] = [
             'id' => 'block-admin-users',
             'searchUrl' => $this->generateUrl('legacy_main', ['name' => 'admin/user_list.php']),
@@ -124,6 +136,12 @@ class IndexBlocksController extends BaseController
             'items' => $this->getItemsSessions(),
             'extraContent' => $this->getExtraContent('block-admin-sessions'),
         ];
+
+        $adminBlockEvent = new AdminBlockEvent($json, AbstractEvent::TYPE_POST);
+
+        $this->eventDispatcher->dispatch($adminBlockEvent, Events::ADMIN_BLOCK);
+
+        $json = $adminBlockEvent->getData();
 
         return $this->json($json);
     }

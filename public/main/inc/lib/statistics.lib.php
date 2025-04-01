@@ -204,6 +204,7 @@ class Statistics
                     INNER JOIN $access_url_rel_user_table as url ON cu.user_id = url.user_id
                     INNER JOIN $tblCourseRelCategory crc ON crc.course_id = c.id
                     INNER JOIN $tblCourseCategory cc ON cc.id = crc.course_category_id
+                    INNER JOIN $user_table u ON cu.user_id = u.id
                     WHERE $where AND url.access_url_id = $urlId AND cc.code = '$categoryCode'";
             }
         } else {

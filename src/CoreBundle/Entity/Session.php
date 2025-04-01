@@ -18,6 +18,8 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
+use Chamilo\CoreBundle\Controller\Api\CreateSessionWithUsersAndCoursesAction;
+use Chamilo\CoreBundle\Dto\CreateSessionWithUsersAndCoursesInput;
 use Chamilo\CoreBundle\Entity\Listener\SessionListener;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\State\UserSessionSubscriptionsStateProvider;
@@ -96,6 +98,16 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: UserSessionSubscriptionsStateProvider::class,
         ),
         new Post(security: "is_granted('ROLE_ADMIN')"),
+        new Post(
+            uriTemplate: '/advanced/create-session-with-courses-and-users',
+            controller: CreateSessionWithUsersAndCoursesAction::class,
+            denormalizationContext: ['groups' => ['write']],
+            security: "is_granted('ROLE_ADMIN')",
+            input: CreateSessionWithUsersAndCoursesInput::class,
+            output: Session::class,
+            deserialize: true,
+            name: 'create_session_with_courses_and_assign_users'
+        ),
         new Delete(security: "is_granted('DELETE', object)"),
     ],
     normalizationContext: ['groups' => ['session:basic']],

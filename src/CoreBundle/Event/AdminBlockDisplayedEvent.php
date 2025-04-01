@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Event;
 
-class AdminBlockEvent extends AbstractEvent
+class AdminBlockDisplayedEvent extends AbstractEvent
 {
     /**
      * @return array<int, array<string, string>>

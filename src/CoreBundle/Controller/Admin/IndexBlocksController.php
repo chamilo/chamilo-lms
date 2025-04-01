@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Page;
 use Chamilo\CoreBundle\Entity\PageCategory;
 use Chamilo\CoreBundle\Event\AbstractEvent;
-use Chamilo\CoreBundle\Event\AdminBlockEvent;
+use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
@@ -51,7 +51,7 @@ class IndexBlocksController extends BaseController
 
         $json = [];
 
-        $adminBlockEvent = new AdminBlockEvent($json, AbstractEvent::TYPE_PRE);
+        $adminBlockEvent = new AdminBlockDisplayedEvent($json, AbstractEvent::TYPE_PRE);
 
         $this->eventDispatcher->dispatch($adminBlockEvent, Events::ADMIN_BLOCK);
 
@@ -137,7 +137,7 @@ class IndexBlocksController extends BaseController
             'extraContent' => $this->getExtraContent('block-admin-sessions'),
         ];
 
-        $adminBlockEvent = new AdminBlockEvent($json, AbstractEvent::TYPE_POST);
+        $adminBlockEvent = new AdminBlockDisplayedEvent($json, AbstractEvent::TYPE_POST);
 
         $this->eventDispatcher->dispatch($adminBlockEvent, Events::ADMIN_BLOCK);
 

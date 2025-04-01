@@ -99,7 +99,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(security: "is_granted('ROLE_ADMIN')"),
         new Post(
-            uriTemplate: '/custom/create-session-with-courses-and-users',
+            uriTemplate: '/advanced/create-session-with-courses-and-users',
             controller: CreateSessionWithUsersAndCoursesAction::class,
             denormalizationContext: ['groups' => ['write']],
             security: "is_granted('ROLE_ADMIN')",

@@ -64,7 +64,7 @@ use UserManager;
             name: 'get_user_skills'
         ),
         new Post(
-            uriTemplate: '/custom/create-user-on-access-url',
+            uriTemplate: '/advanced/create-user-on-access-url',
             controller: CreateUserOnAccessUrlAction::class,
             denormalizationContext: ['groups' => ['write']],
             security: "is_granted('ROLE_ADMIN')",

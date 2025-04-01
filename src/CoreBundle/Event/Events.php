@@ -47,7 +47,5 @@ final class Events
     public const NOTIFICATION_CONTENT_FORMATTED = 'chamilo_hook_event.notification_content';
     public const NOTIFICATION_TITLE_FORMATTED = 'chamilo_hook_event.notification_title_formatted';
 
-    public const WS_REGISTRATION = 'chamilo.event.ws_registration';
-
     public const ADMIN_BLOCK_DISPLAYED = 'chamilo.event.admin_block_displayed';
 }

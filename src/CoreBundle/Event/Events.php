@@ -45,7 +45,7 @@ final class Events
     public const PORTFOLIO_COMMENT_EDITED = 'chamilo.event.portfolio_comment_edited';
 
     public const NOTIFICATION_CONTENT = 'chamilo_hook_event.notification_content';
-    public const NOTIFICATION_TITLE = 'chamilo_hook_event.notification_title';
+    public const NOTIFICATION_TITLE_FORMATTED = 'chamilo_hook_event.notification_title_formatted';
 
     public const WS_REGISTRATION = 'chamilo.event.ws_registration';
 

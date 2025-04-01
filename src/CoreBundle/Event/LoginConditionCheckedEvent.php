@@ -6,4 +6,4 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Event;
 
-class ConditionalLoginEvent extends AbstractEvent {}
+class LoginConditionCheckedEvent extends AbstractEvent {}

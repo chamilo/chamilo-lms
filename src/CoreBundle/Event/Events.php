@@ -16,7 +16,7 @@ final class Events
     public const LOGIN_CREDENTIALS_CHECKED = 'chamilo.event.login_credentials_checked';
 
     public const SESSION_RESUBSCRIPTION = 'chamilo.event.session_resubscription';
-    public const CONDITIONAL_LOGIN = 'chamilo.event.conditional_login';
+    public const LOGIN_CONDITION_CHECKED = 'chamilo.event.login_condition_checked';
 
     public const MY_STUDENTS_EXERCISE_TRACKING = 'chamilo.event.my_students_exercise_tracking';
     public const MY_STUDENTS_LP_TRACKING = 'chamilo.event.my_students_lp_tracking';

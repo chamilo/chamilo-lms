@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Page;
+use Chamilo\CoreBundle\Entity\PageCategory;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
@@ -1356,6 +1358,64 @@ if ($form->validate()) {
         $inscriptionHeader = '';
         if (false !== $termActivated) {
             $inscriptionHeader = Display::page_header($toolName);
+        }
+        $em = Container::getEntityManager();
+        $categoryRepo = $em->getRepository(PageCategory::class);
+        $pageRepo = $em->getRepository(Page::class);
+        $accessUrl = api_get_url_entity();
+        $locale = api_get_language_isocode();
+
+        $category = $categoryRepo->findOneBy(['title' => 'introduction']);
+        $introPage = null;
+        if ($category) {
+            $introPage = $pageRepo->findOneBy([
+                'category' => $category,
+                'url' => $accessUrl,
+                'enabled' => true,
+            ]);
+        }
+
+        if ($introPage) {
+            $content = '<div class="alert alert-info shadow-sm rounded border-start border-4 border-primary p-3 mb-4">'
+                . $introPage->getContent()
+                . '</div>' . $content;
+        }
+
+        if (isset($_GET['create_intro_page']) && api_is_platform_admin()) {
+            $user = api_get_user_entity();
+
+            if ($introPage) {
+                header('Location: '.api_get_path(WEB_PATH).'resources/pages/edit?id=/api/pages/'.$introPage->getId());
+                exit;
+            }
+
+            if (!$category) {
+                $category = new PageCategory();
+                $category
+                    ->setTitle('introduction')
+                    ->setType('cms')
+                    ->setCreator($user);
+                $em->persist($category);
+                $em->flush();
+            }
+
+            $page = new Page();
+            $page
+                ->setTitle(get_lang("Introduction to registration"))
+                ->setContent('<p>'.get_lang("Welcome to the registration process.").'</p>')
+                ->setSlug('intro-inscription')
+                ->setLocale($locale)
+                ->setCategory($category)
+                ->setEnabled(true)
+                ->setCreator($user)
+                ->setUrl($accessUrl)
+                ->setPosition(1);
+
+            $em->persist($page);
+            $em->flush();
+
+            header('Location: '.api_get_path(WEB_PATH).'resources/pages/edit?id=/api/pages/'.$page->getId());
+            exit;
         }
         $tpl->assign('inscription_header', $inscriptionHeader);
         $tpl->assign('inscription_content', $content);

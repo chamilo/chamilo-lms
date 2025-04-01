@@ -13,7 +13,7 @@ final class Events
 
     public const COURSE_CREATED = 'chamilo.event.course_created';
 
-    public const CHECK_LOGIN_CREDENTIALS = 'chamilo.event.check_login_credentials';
+    public const LOGIN_CREDENTIALS_CHECKED = 'chamilo.event.login_credentials_checked';
 
     public const SESSION_RESUBSCRIPTION = 'chamilo.event.session_resubscription';
     public const CONDITIONAL_LOGIN = 'chamilo.event.conditional_login';

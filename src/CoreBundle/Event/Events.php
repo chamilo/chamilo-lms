@@ -49,5 +49,5 @@ final class Events
 
     public const WS_REGISTRATION = 'chamilo.event.ws_registration';
 
-    public const ADMIN_BLOCK = 'chamilo.event.admin_block';
+    public const ADMIN_BLOCK_DISPLAYED = 'chamilo.event.admin_block_displayed';
 }

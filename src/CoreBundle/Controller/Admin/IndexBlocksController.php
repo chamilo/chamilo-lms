@@ -53,7 +53,7 @@ class IndexBlocksController extends BaseController
 
         $adminBlockEvent = new AdminBlockDisplayedEvent($json, AbstractEvent::TYPE_PRE);
 
-        $this->eventDispatcher->dispatch($adminBlockEvent, Events::ADMIN_BLOCK);
+        $this->eventDispatcher->dispatch($adminBlockEvent, Events::ADMIN_BLOCK_DISPLAYED);
 
         $json = $adminBlockEvent->getData();
 
@@ -139,7 +139,7 @@ class IndexBlocksController extends BaseController
 
         $adminBlockEvent = new AdminBlockDisplayedEvent($json, AbstractEvent::TYPE_POST);
 
-        $this->eventDispatcher->dispatch($adminBlockEvent, Events::ADMIN_BLOCK);
+        $this->eventDispatcher->dispatch($adminBlockEvent, Events::ADMIN_BLOCK_DISPLAYED);
 
         $json = $adminBlockEvent->getData();
 

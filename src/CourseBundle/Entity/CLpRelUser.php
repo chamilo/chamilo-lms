@@ -54,7 +54,7 @@ class CLpRelUser
     protected ?User $creatorUser;
 
     #[ORM\ManyToOne(targetEntity: CGroup::class)]
-    #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CGroup $group = null;
 
     #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]

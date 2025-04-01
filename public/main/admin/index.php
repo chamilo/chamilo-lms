@@ -366,7 +366,10 @@ if (api_is_platform_admin()) {
     ];
     // Replaced by page blocks
     //$items[] = ['url' => 'configure_homepage.php', 'label' => get_lang('Edit portal homepage')];
-    $items[] = ['url' => 'configure_inscription.php', 'label' => get_lang('Setting the registration page')];
+    $items[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'auth/inscription.php?create_intro_page=1',
+        'label' => get_lang('Setting the registration page')
+    ];
     $items[] = ['url' => 'statistics/index.php', 'label' => get_lang('Statistics')];
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'my_space/company_reports.php',

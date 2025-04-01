@@ -4,7 +4,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
-use Chamilo\CoreBundle\Event\NotificationContentEvent;
+use Chamilo\CoreBundle\Event\NotificationContentFormattedEvent;
 use Chamilo\CoreBundle\Event\NotificationTitleFormattedEvent;
 
 /**
@@ -370,9 +370,9 @@ class Notification extends Model
      * */
     public function formatContent($messageId, $content, $senderInfo, $recipientLanguage = null, $baseUrl = null)
     {
-        $notificationContentEvent = new NotificationContentEvent(['content' => $content], AbstractEvent::TYPE_PRE);
+        $notificationContentEvent = new NotificationContentFormattedEvent(['content' => $content], AbstractEvent::TYPE_PRE);
 
-        Container::getEventDispatcher()->dispatch($notificationContentEvent, Events::NOTIFICATION_CONTENT);
+        Container::getEventDispatcher()->dispatch($notificationContentEvent, Events::NOTIFICATION_CONTENT_FORMATTED);
 
         $content = $notificationContentEvent->getContent();
 
@@ -458,9 +458,9 @@ class Notification extends Model
                 Display::url($preferenceUrl, $preferenceUrl)
             ).'</i>';
 
-        $notificationContentEvent = new NotificationContentEvent(['content' => $content], AbstractEvent::TYPE_POST);
+        $notificationContentEvent = new NotificationContentFormattedEvent(['content' => $content], AbstractEvent::TYPE_POST);
 
-        Container::getEventDispatcher()->dispatch($notificationContentEvent, Events::NOTIFICATION_CONTENT);
+        Container::getEventDispatcher()->dispatch($notificationContentEvent, Events::NOTIFICATION_CONTENT_FORMATTED);
 
         return $notificationContentEvent->getContent();
     }

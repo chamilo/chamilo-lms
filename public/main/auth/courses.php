@@ -212,7 +212,7 @@ switch ($action) {
             'category_code',
             get_lang('CourseCategories'),
             [],
-            ['placeholder' => get_lang('SelectAnOption')]
+            ['placeholder' => get_lang('Please select an option')]
         );
 
         $defaults = [];

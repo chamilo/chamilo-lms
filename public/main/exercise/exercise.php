@@ -384,7 +384,7 @@ if ($is_allowedToEdit && 'learnpath' !== $origin) {
                 'category_id',
                 get_lang('Category'),
                 $options,
-                ['placeholder' => get_lang('SelectAnOption'), 'disable_js' => true]
+                ['placeholder' => get_lang('Please select an option'), 'disable_js' => true]
             );
         }
     }

@@ -219,7 +219,7 @@ if ($action_todo) {
             $list,
             [
                 'onchange' => 'javascript: showCareer();',
-                'placeholder' => get_lang('SelectAnOption'),
+                'placeholder' => get_lang('Please select an option'),
                 'id' => 'career_id',
             ]
         );

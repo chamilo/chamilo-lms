@@ -2392,7 +2392,7 @@ class Exercise
                     'extra_notifications',
                     get_lang('Notifications'),
                     $options,
-                    ['placeholder' => get_lang('SelectAnOption')]
+                    ['placeholder' => get_lang('Please select an option')]
                 );
             }
             $form->addElement('html', '</div>'); //End advanced setting

@@ -1401,7 +1401,7 @@ if ($form->validate()) {
 
             $page = new Page();
             $page
-                ->setTitle(get_lang("Intro inscription"))
+                ->setTitle(get_lang("Introduction to registration"))
                 ->setContent('<p>'.get_lang("Welcome to the registration process.").'</p>')
                 ->setSlug('intro-inscription')
                 ->setLocale($locale)

@@ -71,6 +71,7 @@ class ConferenceRecordingRepository extends ServiceEntityRepository
             ->where('m.remoteId = :remoteId')
             ->setParameter('remoteId', $remoteId)
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
     }
 }

@@ -150,6 +150,7 @@ class ConferenceMeetingRepository extends ServiceEntityRepository
             ->setParameter('end', $end->format('Y-m-d 23:59:59'))
             ->orderBy('m.createdAt', 'ASC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 }

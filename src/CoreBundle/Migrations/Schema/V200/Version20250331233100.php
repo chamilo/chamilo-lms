@@ -20,13 +20,13 @@ final class Version20250331233100 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $this->addSql("ALTER TABLE c_quiz_rel_question ADD COLUMN destination TEXT DEFAULT NULL;");
-        $this->addSql("ALTER TABLE c_quiz_answer DROP COLUMN destination;");
+        $this->addSql('ALTER TABLE c_quiz_rel_question ADD COLUMN destination TEXT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE c_quiz_answer DROP COLUMN destination;');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql("ALTER TABLE c_quiz_rel_question DROP COLUMN destination;");
-        $this->addSql("ALTER TABLE c_quiz_answer ADD COLUMN destination TEXT DEFAULT NULL;");
+        $this->addSql('ALTER TABLE c_quiz_rel_question DROP COLUMN destination;');
+        $this->addSql('ALTER TABLE c_quiz_answer ADD COLUMN destination TEXT DEFAULT NULL;');
     }
 }

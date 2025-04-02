@@ -35,21 +35,57 @@ class CreateSessionWithUsersAndCoursesInput
     #[Groups(['write'])]
     private array $tutorIds = [];
 
-    public function getTitle(): string { return $this->title; }
-    public function setTitle(string $title): void { $this->title = $title; }
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
 
-    public function getDescription(): ?string { return $this->description; }
-    public function setDescription(?string $description): void { $this->description = $description; }
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
 
-    public function getVisibility(): ?int { return $this->visibility; }
-    public function setVisibility(?int $visibility): void { $this->visibility = $visibility; }
+    public function getVisibility(): ?int
+    {
+        return $this->visibility;
+    }
+    public function setVisibility(?int $visibility): void
+    {
+        $this->visibility = $visibility;
+    }
 
-    public function getCourseIds(): array { return $this->courseIds; }
-    public function setCourseIds(array $courseIds): void { $this->courseIds = $courseIds; }
+    public function getCourseIds(): array
+    {
+        return $this->courseIds;
+    }
+    public function setCourseIds(array $courseIds): void
+    {
+        $this->courseIds = $courseIds;
+    }
 
-    public function getStudentIds(): array { return $this->studentIds; }
-    public function setStudentIds(array $studentIds): void { $this->studentIds = $studentIds; }
+    public function getStudentIds(): array
+    {
+        return $this->studentIds;
+    }
+    public function setStudentIds(array $studentIds): void
+    {
+        $this->studentIds = $studentIds;
+    }
 
-    public function getTutorIds(): array { return $this->tutorIds; }
-    public function setTutorIds(array $tutorIds): void { $this->tutorIds = $tutorIds; }
+    public function getTutorIds(): array
+    {
+        return $this->tutorIds;
+    }
+    public function setTutorIds(array $tutorIds): void
+    {
+        $this->tutorIds = $tutorIds;
+    }
 }

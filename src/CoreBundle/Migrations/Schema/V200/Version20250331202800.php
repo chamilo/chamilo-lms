@@ -37,7 +37,8 @@ final class Version20250331202800 extends AbstractMigrationChamilo
             $category
                 ->setTitle('introduction')
                 ->setType('cms')
-                ->setCreator($adminUser);
+                ->setCreator($adminUser)
+            ;
             $this->entityManager->persist($category);
             $this->entityManager->flush();
             error_log('[MIGRATION] Created "introduction" category.');
@@ -46,7 +47,7 @@ final class Version20250331202800 extends AbstractMigrationChamilo
         // Loop through directories like /app/home/localhost/
         $accessUrls = scandir($sourcePath);
         foreach ($accessUrls as $dirName) {
-            if (in_array($dirName, ['.', '..'])) {
+            if (\in_array($dirName, ['.', '..'])) {
                 continue;
             }
 
@@ -62,6 +63,7 @@ final class Version20250331202800 extends AbstractMigrationChamilo
                 $matches = [];
                 if (!preg_match('/register_top_(.+)\.html$/', basename($filePath), $matches)) {
                     error_log("[MIGRATION] File name does not match expected pattern: $filePath");
+
                     continue;
                 }
 
@@ -69,10 +71,10 @@ final class Version20250331202800 extends AbstractMigrationChamilo
 
                 // Try to find AccessUrl with both http/https and with/without trailing slash
                 $normalizedUrls = [
-                    'http://' . $dirName . '/',
-                    'https://' . $dirName . '/',
-                    'http://' . $dirName,
-                    'https://' . $dirName,
+                    'http://'.$dirName.'/',
+                    'https://'.$dirName.'/',
+                    'http://'.$dirName,
+                    'https://'.$dirName,
                 ];
 
                 $accessUrl = null;
@@ -85,6 +87,7 @@ final class Version20250331202800 extends AbstractMigrationChamilo
 
                 if (!$accessUrl) {
                     error_log("[MIGRATION] AccessUrl not found for http(s)://$dirName with or without trailing slash");
+
                     continue;
                 }
 
@@ -97,6 +100,7 @@ final class Version20250331202800 extends AbstractMigrationChamilo
 
                 if ($existingPage) {
                     error_log("[MIGRATION] Page already exists for URL=$accessUrl->getUrl(), locale=$locale. Skipped.");
+
                     continue;
                 }
 
@@ -104,6 +108,7 @@ final class Version20250331202800 extends AbstractMigrationChamilo
                 $content = file_get_contents($filePath);
                 if (empty($content)) {
                     error_log("[MIGRATION] File is empty: $filePath");
+
                     continue;
                 }
 
@@ -118,7 +123,8 @@ final class Version20250331202800 extends AbstractMigrationChamilo
                     ->setEnabled(true)
                     ->setCreator($adminUser)
                     ->setUrl($accessUrl)
-                    ->setPosition(1);
+                    ->setPosition(1)
+                ;
 
                 $this->entityManager->persist($page);
 

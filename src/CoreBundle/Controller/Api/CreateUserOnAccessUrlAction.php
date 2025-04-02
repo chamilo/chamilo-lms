@@ -32,7 +32,7 @@ class CreateUserOnAccessUrlAction
 
         $url = $this->accessUrlRepo->find($data->getAccessUrlId());
         if (!$url) {
-            throw new NotFoundHttpException("Access URL not found.");
+            throw new NotFoundHttpException('Access URL not found.');
         }
 
         $user = new User();
@@ -46,7 +46,8 @@ class CreateUserOnAccessUrlAction
             ->setStatus($data->getStatus() ?? 5)
             ->setPassword(
                 $this->passwordHasher->hashPassword($user, $data->getPassword())
-            );
+            )
+        ;
 
         $this->em->persist($user);
         $this->em->flush();

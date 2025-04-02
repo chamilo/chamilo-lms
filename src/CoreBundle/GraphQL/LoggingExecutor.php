@@ -7,9 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\GraphQL;
 
 use ApiPlatform\GraphQl\ExecutorInterface;
+use GraphQL\Executor\ExecutionResult;
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
-use GraphQL\Executor\ExecutionResult;
 use Psr\Log\LoggerInterface;
 
 class LoggingExecutor implements ExecutorInterface
@@ -23,13 +23,13 @@ class LoggingExecutor implements ExecutorInterface
 
     public function executeQuery(
         Schema $schema,
-               $source,
-               $rootValue = null,
-               $context = null,
-        array $variableValues = null,
-        string $operationName = null,
-        callable $fieldResolver = null,
-        array $validationRules = null
+        $source,
+        $rootValue = null,
+        $context = null,
+        ?array $variableValues = null,
+        ?string $operationName = null,
+        ?callable $fieldResolver = null,
+        ?array $validationRules = null
     ): ExecutionResult {
         $result = GraphQL::executeQuery(
             $schema,

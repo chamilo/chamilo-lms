@@ -10,8 +10,8 @@ use ApiPlatform\Validator\ValidatorInterface;
 use Chamilo\CoreBundle\Dto\CreateSessionWithUsersAndCoursesInput;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
-use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,15 +36,18 @@ class CreateSessionWithUsersAndCoursesAction
             ->setTitle($data->getTitle())
             ->setDescription($data->getDescription() ?? '')
             ->setVisibility($data->getVisibility() ?? 1)
-            ->setNbrCourses(count($data->getCourseIds()))
-            ->setNbrUsers(count($data->getStudentIds()) + count($data->getTutorIds()));
+            ->setNbrCourses(\count($data->getCourseIds()))
+            ->setNbrUsers(\count($data->getStudentIds()) + \count($data->getTutorIds()))
+        ;
 
         $this->em->persist($session);
 
         $relCourses = [];
         foreach ($data->getCourseIds() as $courseId) {
             $course = $this->courseRepo->find($courseId);
-            if (!$course) continue;
+            if (!$course) {
+                continue;
+            }
 
             $relCourse = new SessionRelCourse();
             $relCourse->setSession($session);
@@ -57,19 +60,24 @@ class CreateSessionWithUsersAndCoursesAction
 
         foreach ($data->getStudentIds() as $userId) {
             $user = $this->userRepo->find($userId);
-            if (!$user) continue;
+            if (!$user) {
+                continue;
+            }
 
             $rel = new SessionRelUser();
             $rel
                 ->setSession($session)
                 ->setUser($user)
-                ->setRelationType(Session::STUDENT);
+                ->setRelationType(Session::STUDENT)
+            ;
 
             $this->em->persist($rel);
 
             foreach ($data->getCourseIds() as $courseId) {
                 $course = $this->courseRepo->find($courseId);
-                if (!$course) continue;
+                if (!$course) {
+                    continue;
+                }
 
                 $relCourseUser = new SessionRelCourseRelUser();
                 $relCourseUser
@@ -79,7 +87,8 @@ class CreateSessionWithUsersAndCoursesAction
                     ->setStatus(Session::STUDENT)
                     ->setVisibility(1)
                     ->setProgress(0)
-                    ->setLegalAgreement(0);
+                    ->setLegalAgreement(0)
+                ;
 
                 $this->em->persist($relCourseUser);
 
@@ -93,13 +102,16 @@ class CreateSessionWithUsersAndCoursesAction
 
         foreach ($data->getTutorIds() as $userId) {
             $user = $this->userRepo->find($userId);
-            if (!$user) continue;
+            if (!$user) {
+                continue;
+            }
 
             $rel = new SessionRelUser();
             $rel
                 ->setSession($session)
                 ->setUser($user)
-                ->setRelationType(Session::SESSION_ADMIN);
+                ->setRelationType(Session::SESSION_ADMIN)
+            ;
 
             $this->em->persist($rel);
         }

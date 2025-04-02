@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-03-31 12:26+0000\n"
+"PO-Revision-Date: 2025-04-02 17:25+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
 "messages/fr/>\n"
@@ -29816,3 +29816,30 @@ msgstr "Inscriptions d'utilisateurs par créateur"
 
 msgid "Select replacement file"
 msgstr "Sélectionnez le fichier de remplacement"
+
+msgid "End of test"
+msgstr "Fin du test"
+
+msgid "Introduction to registration"
+msgstr "Introduction à l'inscription"
+
+msgid "Welcome to the registration process."
+msgstr "Bienvenue dans le processus d'inscription."
+
+msgid "Other (custom URL)"
+msgstr "Autre (URL personnalisée)"
+
+msgid "Custom URL"
+msgstr "URL personnalisée"
+
+msgid "On success"
+msgstr "En cas de succès"
+
+msgid "On failure"
+msgstr "En cas d'échec"
+
+msgid "Select destination"
+msgstr "Sélectionnez la destination"
+
+msgid "Repeat question"
+msgstr "Repasser la question"

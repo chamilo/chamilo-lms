@@ -28036,3 +28036,24 @@ msgstr "Introduction to registration"
 
 msgid "Welcome to the registration process."
 msgstr "Welcome to the registration process."
+
+msgid "Select destination"
+msgstr "Select destination"
+
+msgid "Repeat question"
+msgstr "Repeat question"
+
+msgid "End of test"
+msgstr "End of test"
+
+msgid "Other (custom URL)"
+msgstr "Other (custom URL)"
+
+msgid "On success"
+msgstr "On success"
+
+msgid "Custom URL"
+msgstr "Custom URL"
+
+msgid "On failure"
+msgstr "On failure"

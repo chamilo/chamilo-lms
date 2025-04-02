@@ -28022,3 +28022,24 @@ msgstr ""
 
 msgid "Welcome to the registration process."
 msgstr ""
+
+msgid "Select destination"
+msgstr ""
+
+msgid "Repeat question"
+msgstr ""
+
+msgid "End of test"
+msgstr ""
+
+msgid "Other (custom URL)"
+msgstr ""
+
+msgid "On success"
+msgstr ""
+
+msgid "Custom URL"
+msgstr ""
+
+msgid "On failure"
+msgstr ""

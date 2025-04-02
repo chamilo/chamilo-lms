@@ -9,33 +9,41 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostPersistEventArgs;
+use Doctrine\ORM\Event\PostUpdateEventArgs;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 class UserRelCourseVoteListener
 {
-    public function postPersist(UserRelCourseVote $vote, LifecycleEventArgs $args): void
+    public function postPersist(UserRelCourseVote $vote, PostPersistEventArgs $args): void
     {
-        $this->updateCoursePopularity($vote, $args->getEntityManager());
+        $this->updateCoursePopularity($vote, $args->getObjectManager());
     }
 
-    public function postUpdate(UserRelCourseVote $vote, LifecycleEventArgs $args): void
+    public function postUpdate(UserRelCourseVote $vote, PostUpdateEventArgs $args): void
     {
-        $this->updateCoursePopularity($vote, $args->getEntityManager());
+        $this->updateCoursePopularity($vote, $args->getObjectManager());
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     private function updateCoursePopularity(UserRelCourseVote $vote, EntityManagerInterface $entityManager): void
     {
         $course = $vote->getCourse();
 
-        $uniqueUsers = $entityManager->createQueryBuilder()
+        $uniqueUsers = (int) $entityManager->createQueryBuilder()
             ->select('COUNT(DISTINCT v.user)')
             ->from(UserRelCourseVote::class, 'v')
             ->where('v.course = :course')
-            ->setParameter('course', $course)
+            ->setParameter('course', $course->getId())
             ->getQuery()
             ->getSingleScalarResult()
         ;
 
-        $course->setPopularity((int) $uniqueUsers);
+        $course->setPopularity($uniqueUsers);
         $entityManager->persist($course);
         $entityManager->flush();
     }

@@ -188,7 +188,7 @@
     "Error": "\u932f\u8aa4",
     "installation guide": "installation guide",
     "Previous": "\u4e0a\u4e00\u500b",
-    "For more details {0}": "For more details {0}",
+    "For more details %s": "For more details {0}",
     "Step 2 - Requirements": "Step 2 - Requirements",
     "read the installation guide": "read the installation guide",
     "Warning!": "Warning!",

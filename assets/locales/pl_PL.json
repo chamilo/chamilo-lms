@@ -245,7 +245,7 @@
     "has not been found in that directory": "nie znaleziono w katalogu",
     "installation guide": "installation guide",
     "Previous": "Poprzedni",
-    "For more details {0}": "For more details {0}",
+    "For more details %s": "For more details {0}",
     "Step 2 - Requirements": "Step 2 - Requirements",
     "read the installation guide": "read the installation guide",
     "Warning!": "Warning!",

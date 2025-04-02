@@ -194,7 +194,7 @@
     "has not been found in that directory": "\u0432 \u044d\u0442\u043e\u043c \u0440\u0430\u0437\u0434\u0435\u043b\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e \u043d\u0435 \u0431\u044b\u043b\u043e",
     "installation guide": "installation guide",
     "Previous": "\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0438\u0439",
-    "For more details {0}": "For more details {0}",
+    "For more details %s": "For more details {0}",
     "Step 2 - Requirements": "Step 2 - Requirements",
     "read the installation guide": "read the installation guide",
     "Warning!": "Warning!",

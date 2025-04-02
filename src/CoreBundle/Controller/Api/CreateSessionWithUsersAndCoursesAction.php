@@ -9,9 +9,10 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use ApiPlatform\Validator\ValidatorInterface;
 use Chamilo\CoreBundle\Dto\CreateSessionWithUsersAndCoursesInput;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,18 +37,37 @@ class CreateSessionWithUsersAndCoursesAction
             ->setTitle($data->getTitle())
             ->setDescription($data->getDescription() ?? '')
             ->setVisibility($data->getVisibility() ?? 1)
-            ->setNbrCourses(\count($data->getCourseIds()))
-            ->setNbrUsers(\count($data->getStudentIds()) + \count($data->getTutorIds()))
-        ;
+            ->setNbrCourses(count($data->getCourseIds()))
+            ->setNbrUsers(count($data->getStudentIds()) + count($data->getTutorIds()))
+            ->setShowDescription($data->getShowDescription() ?? false)
+            ->setDuration($data->getDuration() ?? 0)
+            ->setDisplayStartDate($data->getDisplayStartDate() ?? new \DateTime())
+            ->setDisplayEndDate($data->getDisplayEndDate() ?? new \DateTime())
+            ->setAccessStartDate($data->getAccessStartDate() ?? new \DateTime())
+            ->setAccessEndDate($data->getAccessEndDate() ?? new \DateTime())
+            ->setCoachAccessStartDate($data->getCoachAccessStartDate() ?? new \DateTime())
+            ->setCoachAccessEndDate($data->getCoachAccessEndDate() ?? new \DateTime())
+            ->setValidityInDays($data->getValidityInDays() ?? 0);
+
+        if ($data->getCategory()) {
+            $category = $this->em->getRepository(SessionCategory::class)->find($data->getCategory());
+            if (!$category) {
+                throw new \RuntimeException("Invalid category ID: " . $data->getCategory());
+            }
+            $session->setCategory($category);
+        }
 
         $this->em->persist($session);
 
         $relCourses = [];
+        $courses = [];
         foreach ($data->getCourseIds() as $courseId) {
             $course = $this->courseRepo->find($courseId);
             if (!$course) {
                 continue;
             }
+
+            $courses[$courseId] = $course;
 
             $relCourse = new SessionRelCourse();
             $relCourse->setSession($session);
@@ -68,17 +88,11 @@ class CreateSessionWithUsersAndCoursesAction
             $rel
                 ->setSession($session)
                 ->setUser($user)
-                ->setRelationType(Session::STUDENT)
-            ;
+                ->setRelationType(Session::STUDENT);
 
             $this->em->persist($rel);
 
-            foreach ($data->getCourseIds() as $courseId) {
-                $course = $this->courseRepo->find($courseId);
-                if (!$course) {
-                    continue;
-                }
-
+            foreach ($courses as $courseId => $course) {
                 $relCourseUser = new SessionRelCourseRelUser();
                 $relCourseUser
                     ->setSession($session)
@@ -87,8 +101,7 @@ class CreateSessionWithUsersAndCoursesAction
                     ->setStatus(Session::STUDENT)
                     ->setVisibility(1)
                     ->setProgress(0)
-                    ->setLegalAgreement(0)
-                ;
+                    ->setLegalAgreement(0);
 
                 $this->em->persist($relCourseUser);
 
@@ -110,8 +123,7 @@ class CreateSessionWithUsersAndCoursesAction
             $rel
                 ->setSession($session)
                 ->setUser($user)
-                ->setRelationType(Session::SESSION_ADMIN)
-            ;
+                ->setRelationType(Session::SESSION_ADMIN);
 
             $this->em->persist($rel);
         }

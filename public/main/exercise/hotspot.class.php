@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+
 /**
  * Class HotSpot.
  *
@@ -115,6 +117,43 @@ class HotSpot extends Question
             'Oar' => get_lang('Area to avoid'),
             'ClosePolygon' => get_lang('Close polygon'),
             'DelineationStatus1' => get_lang('Use right-click to close the delineation'),
+        ];
+    }
+
+    public function getScenarioDestination(int $exerciseId): array
+    {
+        $em = Database::getManager();
+
+        $rel = $em->getRepository(CQuizRelQuestion::class)->findOneBy([
+            'question' => $this->iid,
+            'quiz' => $exerciseId,
+        ]);
+
+        if (!$rel || empty($rel->getDestination())) {
+            return [
+                'success' => ['type' => '', 'url' => ''],
+                'failure' => ['type' => '', 'url' => ''],
+            ];
+        }
+
+        $decoded = json_decode($rel->getDestination(), true);
+
+        if (!is_array($decoded)) {
+            return [
+                'success' => ['type' => '', 'url' => ''],
+                'failure' => ['type' => '', 'url' => ''],
+            ];
+        }
+
+        return [
+            'success' => [
+                'type' => $decoded['success']['type'] ?? '',
+                'url'  => $decoded['success']['url'] ?? '',
+            ],
+            'failure' => [
+                'type' => $decoded['failure']['type'] ?? '',
+                'url'  => $decoded['failure']['url'] ?? '',
+            ],
         ];
     }
 }

@@ -13,10 +13,10 @@ final class Events
 
     public const COURSE_CREATED = 'chamilo.event.course_created';
 
-    public const CHECK_LOGIN_CREDENTIALS = 'chamilo.event.check_login_credentials';
+    public const LOGIN_CREDENTIALS_CHECKED = 'chamilo.event.login_credentials_checked';
 
     public const SESSION_RESUBSCRIPTION = 'chamilo.event.session_resubscription';
-    public const CONDITIONAL_LOGIN = 'chamilo.event.conditional_login';
+    public const LOGIN_CONDITION_CHECKED = 'chamilo.event.login_condition_checked';
 
     public const MY_STUDENTS_EXERCISE_TRACKING = 'chamilo.event.my_students_exercise_tracking';
     public const MY_STUDENTS_LP_TRACKING = 'chamilo.event.my_students_lp_tracking';
@@ -44,10 +44,8 @@ final class Events
     public const PORTFOLIO_COMMENT_SCORED = 'chamilo.event.portfolio_comment_scored';
     public const PORTFOLIO_COMMENT_EDITED = 'chamilo.event.portfolio_comment_edited';
 
-    public const NOTIFICATION_CONTENT = 'chamilo_hook_event.notification_content';
-    public const NOTIFICATION_TITLE = 'chamilo_hook_event.notification_title';
+    public const NOTIFICATION_CONTENT_FORMATTED = 'chamilo_hook_event.notification_content';
+    public const NOTIFICATION_TITLE_FORMATTED = 'chamilo_hook_event.notification_title_formatted';
 
-    public const WS_REGISTRATION = 'chamilo.event.ws_registration';
-
-    public const ADMIN_BLOCK = 'chamilo.event.admin_block';
+    public const ADMIN_BLOCK_DISPLAYED = 'chamilo.event.admin_block_displayed';
 }

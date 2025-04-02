@@ -145,14 +145,14 @@ class Login
     /**
      * Handle encrypted password, send an email to a user with his password.
      *
-     * @param int $user
+     * @param array $user
      * @param bool $by_username
      *
      * @return string
      *
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
-    public static function handle_encrypted_password(int $user, $by_username = false)
+    public static function handle_encrypted_password(array $user, $by_username = false)
     {
         $email_subject = "[".api_get_setting('siteName')."] ".get_lang('Login request'); // SUBJECT
 

@@ -4,8 +4,8 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
-use Chamilo\CoreBundle\Event\NotificationContentEvent;
-use Chamilo\CoreBundle\Event\NotificationTitleEvent;
+use Chamilo\CoreBundle\Event\NotificationContentFormattedEvent;
+use Chamilo\CoreBundle\Event\NotificationTitleFormattedEvent;
 
 /**
  * Notification class
@@ -159,9 +159,9 @@ class Notification extends Model
      */
     public function formatTitle(string $title, array $senderInfo, bool $forceTitleWhenSendingEmail = false, $recipientLanguage = null): string
     {
-        $notificationTitleEvent = new NotificationTitleEvent(['title' => $title], AbstractEvent::TYPE_PRE);
+        $notificationTitleEvent = new NotificationTitleFormattedEvent(['title' => $title], AbstractEvent::TYPE_PRE);
 
-        Container::getEventDispatcher()->dispatch($notificationTitleEvent, Events::NOTIFICATION_TITLE);
+        Container::getEventDispatcher()->dispatch($notificationTitleEvent, Events::NOTIFICATION_TITLE_FORMATTED);
 
         $title = $notificationTitleEvent->getTitle();
 
@@ -212,9 +212,9 @@ class Notification extends Model
             $newTitle = $title;
         }
 
-        $notificationTitleEvent = new NotificationTitleEvent(['title' => $newTitle], AbstractEvent::TYPE_POST);
+        $notificationTitleEvent = new NotificationTitleFormattedEvent(['title' => $newTitle], AbstractEvent::TYPE_POST);
 
-        Container::getEventDispatcher()->dispatch($notificationTitleEvent, Events::NOTIFICATION_TITLE);
+        Container::getEventDispatcher()->dispatch($notificationTitleEvent, Events::NOTIFICATION_TITLE_FORMATTED);
 
         return $notificationTitleEvent->getTitle();
     }
@@ -370,9 +370,9 @@ class Notification extends Model
      * */
     public function formatContent($messageId, $content, $senderInfo, $recipientLanguage = null, $baseUrl = null)
     {
-        $notificationContentEvent = new NotificationContentEvent(['content' => $content], AbstractEvent::TYPE_PRE);
+        $notificationContentEvent = new NotificationContentFormattedEvent(['content' => $content], AbstractEvent::TYPE_PRE);
 
-        Container::getEventDispatcher()->dispatch($notificationContentEvent, Events::NOTIFICATION_CONTENT);
+        Container::getEventDispatcher()->dispatch($notificationContentEvent, Events::NOTIFICATION_CONTENT_FORMATTED);
 
         $content = $notificationContentEvent->getContent();
 
@@ -458,9 +458,9 @@ class Notification extends Model
                 Display::url($preferenceUrl, $preferenceUrl)
             ).'</i>';
 
-        $notificationContentEvent = new NotificationContentEvent(['content' => $content], AbstractEvent::TYPE_POST);
+        $notificationContentEvent = new NotificationContentFormattedEvent(['content' => $content], AbstractEvent::TYPE_POST);
 
-        Container::getEventDispatcher()->dispatch($notificationContentEvent, Events::NOTIFICATION_CONTENT);
+        Container::getEventDispatcher()->dispatch($notificationContentEvent, Events::NOTIFICATION_CONTENT_FORMATTED);
 
         return $notificationContentEvent->getContent();
     }

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Event;
 
-class CheckLoginCredentialsEvent extends AbstractEvent
+class LoginCredentialsCheckedEvent extends AbstractEvent
 {
     /**
      * @return array<string, mixed>

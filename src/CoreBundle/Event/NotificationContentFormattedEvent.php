@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Event;
 
-class NotificationContentEvent extends AbstractEvent
+class NotificationContentFormattedEvent extends AbstractEvent
 {
     public function getContent(): string
     {

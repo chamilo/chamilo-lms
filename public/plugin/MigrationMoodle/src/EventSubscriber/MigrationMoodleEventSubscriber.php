@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CoreBundle\Event\CheckLoginCredentialsEvent;
+use Chamilo\CoreBundle\Event\LoginCredentialsCheckedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Doctrine\ORM\Exception\NotSupported;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -27,14 +27,14 @@ class MigrationMoodleEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            Events::CHECK_LOGIN_CREDENTIALS => 'onCheckLoginCredentials',
+            Events::LOGIN_CREDENTIALS_CHECKED => 'onLoginCredentialsChecked',
         ];
     }
 
     /**
      * @throws NotSupported
      */
-    public function onCheckLoginCredentials(CheckLoginCredentialsEvent $event): void
+    public function onLoginCredentialsChecked(LoginCredentialsCheckedEvent $event): void
     {
         if (!$this->plugin->isEnabled(true)) {
             return;

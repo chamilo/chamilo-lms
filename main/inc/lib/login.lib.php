@@ -820,7 +820,8 @@ class Login
     }
 
     /**
-     * Returns true if user exists in the platform when asking the password.
+     * Returns the users that correspond to this username or email if exist else false.
+     * If many users correspond to this email or username the users as ordered by registration_date desc
      *
      * @param string $username (email or username)
      *
@@ -857,7 +858,8 @@ class Login
                     creator_id,
                     auth_source
 				 FROM $tbl_user
-				 WHERE ( $condition AND active = 1) ";
+				 WHERE ( $condition AND active = 1)
+				 ORDER BY registration_date DESC";
         $result = Database::query($query);
         $num_rows = Database::num_rows($result);
         if ($result && $num_rows > 0) {

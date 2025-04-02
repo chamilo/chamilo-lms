@@ -260,24 +260,10 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('hide_course_sidebar', YesNoType::class)
             ->add('allow_course_extra_field_in_catalog', YesNoType::class)
             ->add('multiple_access_url_show_shared_course_marker', YesNoType::class)
-            ->add(
-                'course_category_code_to_use_as_model',
-                TextType::class,
-                [
-                    'label' => 'CourseCategoryCodeToUseAsModelTitle',
-                    'help' => 'CourseCategoryCodeToUseAsModelComment',
-                ]
-            )
+            ->add('course_category_code_to_use_as_model', TextType::class)
             ->add('enable_unsubscribe_button_on_my_course_page', YesNoType::class)
             ->add('course_creation_donate_message_show', YesNoType::class)
-            ->add(
-                'course_creation_donate_link',
-                TextType::class,
-                [
-                    'label' => 'CourseCreationDonateLinkTitle',
-                    'help' => 'CourseCreationDonateLinkComment',
-                ]
-            )
+            ->add('course_creation_donate_link', TextType::class)
             ->add(
                 'courses_list_session_title_link',
                 ChoiceType::class,

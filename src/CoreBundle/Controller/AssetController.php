@@ -22,7 +22,7 @@ class AssetController
 {
     use ControllerTrait;
 
-    #[Route(path: '/{category}/{path}', methods: ['GET'], requirements: ['path' => '.+'], name: 'chamilo_core_asset_showfile')]
+    #[Route(path: '/{category}/{path}', name: 'chamilo_core_asset_showfile', requirements: ['path' => '.+'], methods: ['GET'])]
     public function showFile(
         string $category,
         string $path,
@@ -37,23 +37,11 @@ class AssetController
             $fileName = basename($filePath);
             $detector = new ExtensionMimeTypeDetector();
             $mimeType = (string) $detector->detectMimeTypeFromFile($filePath);
-            // If image use glide, because why not.
+            // If image use glide
             if (str_contains($mimeType, 'image')) {
                 $server = $glide->getServer();
                 $request = $requestStack->getCurrentRequest();
                 $params = $request->query->all();
-
-                // The filter overwrites the params from GET.
-                /*if (!empty($filter)) {
-                    $params = $glide->getFilters()[$filter] ?? [];
-                }*/
-
-                // The image was cropped manually by the user, so we force to render this version,
-                // no matter other crop parameters.
-                // $crop = $resourceFile->getCrop();
-                /*if (!empty($crop)) {
-                    $params['crop'] = $crop;
-                }*/
 
                 return $server->getImageResponse($filePath, $params);
             }
@@ -65,8 +53,8 @@ class AssetController
 
                     stream_copy_to_stream($stream, $outputStream);
 
+                    fclose($stream);
                     fclose($outputStream);
-                    fclose($fileStream);
                 }
             );
             $disposition = $response->headers->makeDisposition(

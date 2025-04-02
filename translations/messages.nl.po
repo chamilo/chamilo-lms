@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-03-31 12:26+0000\n"
+"PO-Revision-Date: 2025-04-02 17:25+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Dutch <https://translation.chamilo.org/projects/chamilo/"
 "messages/nl/>\n"
@@ -16097,7 +16097,6 @@ msgstr ""
 "Datum waarop de sessie voor coaches wordt gesloten. De extra vertraging "
 "maakt het mogelijk om alle relevante volginformatie te exporteren"
 
-#, fuzzy
 msgid "Date on which the session is made available to coaches, so they can prepare it before the students get connected"
 msgstr ""
 "Datum waarop de sessie beschikbaar wordt gesteld voor coaches, zodat zij "
@@ -18460,7 +18459,6 @@ msgstr "Forum categorieën"
 msgid "Cleanup of cache and temporary files"
 msgstr "Archive directory cleanup"
 
-#, fuzzy
 msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
 msgstr ""
 "Chamilo bewaart een kopie van de meeste tijdelijke bestanden die het "
@@ -20961,7 +20959,7 @@ msgstr ""
 "vermindert stijlfunctionaliteiten)"
 
 msgid "Click or drop files"
-msgstr ""
+msgstr "Klik of sleep bestanden"
 
 msgid "Remove assistant role"
 msgstr "Assistentrol verwijderen"
@@ -20970,10 +20968,10 @@ msgid "Import gradebook from base course"
 msgstr "Importeer puntenboekje uit basiscursus"
 
 msgid "Institution address"
-msgstr ""
+msgstr "Instellingsadres"
 
 msgid "Address"
-msgstr ""
+msgstr "Adres"
 
 msgid "Latest access in course"
 msgstr "Meest recente bezoek"
@@ -20988,151 +20986,167 @@ msgid "First access to course"
 msgstr "Eerste bezoek aan cursus"
 
 msgid "Quoting to %s"
-msgstr ""
+msgstr "Citeren naar %s"
 
 msgid "Load more comments"
-msgstr ""
+msgstr "Laad meer reacties"
 
 msgid "Show progress"
-msgstr ""
+msgstr "Toon voortgang"
 
 msgid "%s %%"
-msgstr ""
+msgstr "%s %%"
 
 msgid "Check requirements"
-msgstr ""
+msgstr "Controleer vereisten"
 
 msgid "Parent language: %s"
-msgstr ""
+msgstr "Moedertaal: %s"
 
 msgid "Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear."
 msgstr ""
+"Definieer nieuwe termen voor subtaal %s door een term te zoeken, sla "
+"vervolgens elke vertaling op door op de knop Opslaan te klikken. U moet dan "
+"uw eigen gebruikerstaal wijzigen om de nieuwe termen te zien verschijnen."
 
 msgid "See sequences"
-msgstr ""
+msgstr "Zie sequenties"
 
 msgid "Session requirements"
-msgstr ""
+msgstr "Sessievereisten"
 
 msgid "Is requirement"
-msgstr ""
+msgstr "Is vereiste"
 
 msgid "Consider this gradebook as a requirement to complete the course (influences the sessions sequences)"
 msgstr ""
+"Beschouw dit puntenboekje als een vereiste om de cursus te voltooien ("
+"beïnvloedt de volgorde van de sessies)"
 
 msgid "Distinct users logins"
-msgstr ""
+msgstr "Unieke gebruikerslogins"
 
 msgid "Are you sure to subscribe?"
-msgstr ""
+msgstr "Weet u zeker dat u zich wilt inschrijven?"
 
 msgid "Check your e-mail and follow the instructions."
-msgstr ""
+msgstr "Controleer uw e-mail en volg de instructies."
 
 msgid "Link expired, please try again."
-msgstr ""
+msgstr "Link verlopen, probeer het opnieuw."
 
 msgid "Instructions for the password change procedure"
-msgstr ""
+msgstr "Instructies voor de procedure voor het wijzigen van wachtwoorden"
 
 msgid "You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>"
 msgstr ""
+"U ontvangt dit bericht omdat u (of iemand die zich als u voordoet) heeft "
+"verzocht om een nieuw wachtwoord voor u aan te maken.<br/>"
 
 msgid "Remind Course Expiration cron"
-msgstr ""
+msgstr "Herinnering cursusverloop cron"
 
 msgid "Enable the Remind Course Expiration cron"
-msgstr ""
+msgstr "Activeer de cron voor het herinneren aan de verloopdatum van de cursus"
 
 msgid "Frequency for the Remind Course Expiration cron"
-msgstr ""
+msgstr "Frequentie voor de cron van herinnering aan cursusverloop"
 
 msgid "Number of days before the expiration of the course to consider to send reminder mail"
 msgstr ""
+"Aantal dagen voor het verlopen van de cursus om een herinneringsmail te "
+"sturen"
 
 msgid "Course Finished cron"
-msgstr ""
+msgstr "Cursus voltooid cron"
 
 msgid "Activate the Course Finished cron"
-msgstr ""
+msgstr "Activeer de cron voor afgeronde cursus"
 
 msgid "End of course %s"
-msgstr ""
+msgstr "Einde van de cursus %s"
 
 msgid "Dear %s,<br/>Thank you for your participation to course %s. We hope you've acquired new relevant knowledge and enjoyed the course.<br/>"
 msgstr ""
+"Geachte %s,<br/>Hartelijk dank voor uw deelname aan cursus %s. We hopen dat "
+"u nieuwe relevante kennis heeft opgedaan en van de cursus heeft genoten.<br/>"
 
 msgid "Generate default content"
-msgstr ""
+msgstr "Genereer standaardinhoud"
 
 msgid "Thanks for your subscription"
-msgstr ""
+msgstr "Bedankt voor uw inschrijving"
 
 msgid "%s team."
-msgstr ""
+msgstr "%s team."
 
 msgid "You can start subscribing to courses entering to %s"
-msgstr ""
+msgstr "U kunt zich inschrijven voor cursussen door te gaan naar %s"
 
 msgid "Text only letters"
-msgstr ""
+msgstr "Alleen letters"
 
 msgid "Text only alphanumeric characters"
-msgstr ""
+msgstr "Alleen alfanumerieke tekens"
 
 msgid "Only letters"
-msgstr ""
+msgstr "Alleen letters"
 
 msgid "Select a blanks marker"
 msgstr ""
 
 msgid "Refresh terms"
-msgstr ""
+msgstr "Vernieuw termen"
 
 msgid "Word to find"
-msgstr ""
+msgstr "Te vinden woord"
 
 msgid "Input size of box to fill"
-msgstr ""
+msgstr "Voer de grootte van de doos in om te vullen"
 
 msgid "MM dd, yy"
-msgstr ""
+msgstr "dd-MM-jj"
 
 msgid "HH:mm"
-msgstr ""
+msgstr "HH:mm"
 
 msgid " at"
-msgstr ""
+msgstr " op"
 
 msgid "Send mail notification to students to inform of subscription"
 msgstr ""
+"Stuur een e-mailnotificatie naar leerlingen om hen te informeren over de "
+"inschrijving"
 
 msgid "Send an email when a user being subscribed to session"
-msgstr ""
+msgstr "Stuur een e-mail wanneer een gebruiker zich inschrijft voor een sessie"
 
 msgid "Select date"
-msgstr ""
+msgstr "Selecteer datum"
 
 msgid "Only letters and spaces"
-msgstr ""
+msgstr "Alleen letters en spaties"
 
 msgid "Only letters, numbers and spaces"
-msgstr ""
+msgstr "Alleen letters, cijfers en spaties"
 
 msgid "Text letters and spaces"
-msgstr ""
+msgstr "Tekstletters en spaties"
 
 msgid "Send course finished notification"
-msgstr ""
+msgstr "Stuur cursus voltooid melding"
 
 msgid "Text alphanumeric characters and spaces"
-msgstr ""
+msgstr "Tekst alfanumerieke tekens en spaties"
 
 msgid "Whether to send an e-mail to students when their course (session) is finished. This requires cron tasks to be configured (see main/cron/ directory)."
 msgstr ""
+"Of het nodig is om een e-mail naar cursisten te sturen wanneer hun cursus "
+"(sessie) is afgelopen. Dit vereist dat cron-taken geconfigureerd zijn (zie "
+"de map main/cron/)."
 
 msgid "Thanks for registering to %s."
-msgstr ""
+msgstr "Bedankt voor uw registratie bij %s."
 
 msgid "Allow coaches to comment in review of exercises"
 msgstr ""

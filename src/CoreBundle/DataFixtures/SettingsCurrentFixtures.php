@@ -441,11 +441,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Enable the MathJax library to visualize mathematical formulas. This is only useful if either ASCIIMathML or ASCIISVG settings are enabled.',
                 ],
                 [
-                    'name' => 'enabled_support_pixlr',
-                    'title' => 'Enable external Pixlr services',
-                    'comment' => 'Pixlr allow you to edit, adjust and filter your photos with features similar to Photoshop. It is the ideal complement to process images based on bitmaps',
-                ],
-                [
                     'name' => 'enabled_support_svg',
                     'title' => 'Create and edit SVG files',
                     'comment' => 'This option allows you to create and edit SVG (Scalable Vector Graphics) multilayer online, as well as export them to png format images.',
@@ -1876,16 +1871,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Use virtual keyboard',
                     'comment' => 'Make a virtual keyboard appear. This is useful when setting up restrictive exams in a physical room where students have no keyboard to limit their ability to cheat.',
                 ],
-                [
-                    'name' => 'user_name_order',
-                    'title' => 'Order of user lastname and firstname',
-                    'comment' => '',
-                ],
-                [
-                    'name' => 'user_name_sort_by',
-                    'title' => 'Sort users by specific info by default',
-                    'comment' => '',
-                ],
             ],
             'editor' => [
                 [
@@ -2124,11 +2109,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'language' => [
-                [
-                    'name' => 'user_name_order',
-                    'title' => 'Order of user lastname and firstname',
-                    'comment' => '',
-                ],
                 [
                     'name' => 'allow_course_multiple_languages',
                     'title' => 'Multiple-language courses',

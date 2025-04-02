@@ -233,7 +233,6 @@ class Version20170627122900 extends AbstractMigrationChamilo
             'dropbox_max_filesize' => 'dropbox',
             'email_alert_manager_on_new_quiz' => 'exercise',
             'enable_webcam_clip' => 'document',
-            'enabled_support_pixlr' => 'editor',
             'enabled_support_svg' => 'editor',
             'extend_rights_for_coach' => 'session',
             'extend_rights_for_coach_on_survey' => 'survey',

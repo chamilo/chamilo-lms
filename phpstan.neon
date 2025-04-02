@@ -39,7 +39,6 @@ parameters:
 
 		- public/main/admin/ldap*
 		- public/main/lp/openoffice_presentation.class.php
-		- public/main/lp/openoffice_document.class.php
 		- public/main/lp/openoffice_text.class.php
 		- public/main/lp/openoffice_text_document.class.php
 		- public/main/lp/scorm*

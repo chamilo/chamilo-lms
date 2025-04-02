@@ -33,14 +33,7 @@ class AttendanceSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add(
-                'allow_delete_attendance',
-                YesNoType::class,
-                [
-                    'label' => 'AttendanceDeletionEnableTitle',
-                    'help' => 'AttendanceDeletionEnableComment',
-                ]
-            )
+            ->add('allow_delete_attendance', YesNoType::class)
             ->add('enable_sign_attendance_sheet', YesNoType::class)
             ->add('attendance_calendar_set_duration', YesNoType::class)
             ->add('attendance_allow_comments', YesNoType::class)

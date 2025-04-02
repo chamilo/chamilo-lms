@@ -243,7 +243,7 @@
     "has not been found in that directory": "nav atrasts \u0161aj\u0101 direktorij\u0101",
     "installation guide": "installation guide",
     "Previous": "Iepriek\u0161\u0113jais",
-    "For more details {0}": "For more details {0}",
+    "For more details %s": "For more details {0}",
     "Step 2 - Requirements": "Step 2 - Requirements",
     "read the installation guide": "read the installation guide",
     "Warning!": "Warning!",

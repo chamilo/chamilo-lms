@@ -21,7 +21,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults(
                 [
-                    'changeable_options' => [],
+                    'changeable_options' => ['name', 'officialcode', 'email', 'picture', 'login', 'password', 'language', 'phone', 'theme'],
                     'extended_profile' => 'false',
                     'account_valid_duration' => '3660',
                     'split_users_upload_directory' => 'true',
@@ -59,7 +59,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     'career_diagram_legend' => 'false',
                     'career_diagram_disclaimer' => 'false',
                     'linkedin_organization_id' => 'false',
-                    'visible_options' => [],
+                    'visible_options' => ['name', 'officialcode', 'email', 'picture', 'login', 'password', 'language', 'phone', 'theme'],
                 ]
             )
             ->setTransformer(

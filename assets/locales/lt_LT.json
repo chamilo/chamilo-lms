@@ -189,7 +189,7 @@
     "has not been found in that directory": "has not been found in that directory",
     "installation guide": "installation guide",
     "Previous": "Ankstesnis",
-    "For more details {0}": "For more details {0}",
+    "For more details %s": "For more details {0}",
     "Step 2 - Requirements": "Step 2 - Requirements",
     "read the installation guide": "read the installation guide",
     "Warning!": "Warning!",

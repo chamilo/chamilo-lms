@@ -206,7 +206,7 @@
     "has not been found in that directory": "nem tal\u00e1lhat\u00f3 abban a k\u00f6nyvt\u00e1rban",
     "installation guide": "installation guide",
     "Previous": "El\u0151z\u0151",
-    "For more details {0}": "For more details {0}",
+    "For more details %s": "For more details {0}",
     "Step 2 - Requirements": "Step 2 - Requirements",
     "read the installation guide": "read the installation guide",
     "Warning!": "Warning!",

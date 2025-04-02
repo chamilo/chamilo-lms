@@ -226,7 +226,7 @@
     "Error": "\u062e\u0637\u0627",
     "installation guide": "installation guide",
     "Previous": "\u0642\u0628\u0644\u06cc",
-    "For more details {0}": "For more details {0}",
+    "For more details %s": "For more details {0}",
     "Step 2 - Requirements": "Step 2 - Requirements",
     "read the installation guide": "read the installation guide",
     "Warning!": "Warning!",

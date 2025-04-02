@@ -296,7 +296,7 @@ class UniqueAnswer extends Question
             '' => get_lang('Select destination'),
             'repeat' => get_lang('Repeat question'),
             '-1' => get_lang('End of test'),
-            'url' => get_lang('Other (manual URL)'),
+            'url' => get_lang('Other (custom URL)'),
         ];
 
         // Append available questions to the dropdown
@@ -311,7 +311,7 @@ class UniqueAnswer extends Question
         // Success selector and optional URL field
         $form->addSelect(
             'scenario_success_selector',
-            get_lang('On Success'),
+            get_lang('On success'),
             $questionListOptions,
             ['id' => 'scenario_success_selector']
         );
@@ -329,7 +329,7 @@ class UniqueAnswer extends Question
         // Failure selector and optional URL field
         $form->addSelect(
             'scenario_failure_selector',
-            get_lang('On Failure'),
+            get_lang('On failure'),
             $questionListOptions,
             ['id' => 'scenario_failure_selector']
         );

@@ -206,6 +206,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('session_model_list_field_ordered_by_id', YesNoType::class)
+            ->add('duplicate_specific_session_content_on_session_copy', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

@@ -18,7 +18,7 @@
 <body>
 <div class="version" aria-label="2.0">
     <a id="2.0-alpha.2"></a>
-    <h1>Chamilo 2.0 alpha 2 - Petibonum, 2025-04-03</h1>
+    <h1>Chamilo 2.0 alpha 2 - Petibonum, 2025-04-04</h1>
     <h3>Release notes - summary</h3>
     <p>
         Chamilo 2.0 (stable) will be a major release, a new branch for the Chamilo software.
@@ -55,6 +55,7 @@
     <h3>Added</h3>
 
     <ul aria-live="off">
+        <li>[2025-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/cd5fa223251d2d0dd8a9fb4fbde5f93df5f1c7b8">cd5fa223</a>) Ticket: Access URL integration and ticket module refactoring</li>
         <li>[2025-04-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/40ad087c04925b5cfc40718ba2be078b7eebef04">40ad087c</a> - <a href="https://task.beeznest.com/issues/22527">BT#22527</a>) Webservice: Add new webservices to simplify the creation of users, courses and sessions with users (custom API endpoints to create users and sessions with related data)</li>
         <li>[2025-03-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/dd583e58abada38405175ad84ae916f7e73ad9a7">dd583e58</a>) Vendor: Add support for Azure file storage (league/flysystem-azure-blob-storage)</li>
         <li>[2025-03-31] (<a href="https://github.com/chamilo/chamilo-lms/commit/0a64dd691e762c1e393bad7633557f7643e7b9cc">0a64dd69</a>) Vendor: Add support for Google Cloud file storage (league/flysystem-google-cloud-storage)</li>
@@ -143,6 +144,12 @@
     <h3>Fixed</h3>
 
     <ul aria-live="off">
+        <li>[2025-04-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/bbbb0f3e048e66ea428569b2ffe42fb421c20faa">bbbb0f3e</a>) Documentation: Update security.html</li>
+        <li>[2025-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/485d687f945c19054a7a55ef0253603a13b4954c">485d687f</a>) Internal: Settings cleanup and title fixes</li>
+        <li>[2025-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/ad24f74db630253bd20a33c9bf0d9cfc60d5e3d8">ad24f74d</a>) Refactor: Simplify login redirect URL generation in ExceptionListener</li>
+        <li>[2025-04-04] (<a href="https://github.com/chamilo/chamilo-lms/commit/7ccafe187b4734e90d32fec1031e2946fa957a58">7ccafe18</a>) Exercise: Fix questions list display</li>
+        <li>[2025-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/64230eba558ba5884771df8a9ce9853f48839b63">64230eba</a> - <a href="https://task.beeznest.com/issues/22546">BT#22546</a>) Session: Fix SQL error when session title contains apostrophe</li>
+        <li>[2025-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/526b76beb0b8f3da274ab78f0d98892438a692a6">526b76be</a>) Documentation: Update README: add hardware requirements</li>
         <li>[2025-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/aa8a15ca03bfc7e7d12b95c653576a5db755b9a7">aa8a15ca</a>) Internal: Add setting titles and comments for multiple config categories</li>
         <li>[2025-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed29c9d755fc4026c1787d1306df97d5552fd5a4">ed29c9d7</a>) Internal: Refactor setting labels to use dynamic values</li>
         <li>[2025-04-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/f92de81a620530abc931ef726c870d6ff99bb5a2">f92de81a</a>) Test: Add locale field to profile update form in AccountControllerTest</li>
@@ -729,6 +736,7 @@
     <h3>Removed</h3>
 
     <ul aria-live="off">
+        <li>[2025-04-03] (<a href="https://github.com/chamilo/chamilo-lms/commit/7c277d202f4c57b4ea54b0b83f10d4b609514f99">7c277d20</a>) Plugin: Remove AzureActiveDirectory plugin directory (now managed through core components)</li>
         <li>Oogie/PPT2LP converter of office documents to learning paths has been removed for lack of usage, complexity to setup and excessive maintenance effort</li>
         <li>[2025-04-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/3e8aad932587b10bf594ff0a79fc9c72b6fcfe90">3e8aad93</a>) Internal: Remove WSRegistrationEvent event class</li>
         <li>[2025-03-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/7a861ce34e68f16930c040ac293b6721ee90617e">7a861ce3</a>) Internal: Remove deprecated ai_helper plugin after AI integration into core (configuration directly available from platform settings now)</li>

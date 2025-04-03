@@ -27714,9 +27714,6 @@ msgstr ""
 msgid "For more details %s"
 msgstr ""
 
-msgid "read the installation guide"
-msgstr ""
-
 msgid "Step 3 - License"
 msgstr ""
 

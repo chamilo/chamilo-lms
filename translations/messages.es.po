@@ -28044,9 +28044,6 @@ msgstr "Paso 2 - Requisitos"
 msgid "Show glossary in documents is manual"
 msgstr "Mostrar glosario en documentos: manual"
 
-msgid "read the installation guide"
-msgstr "consulte la guía de instalación"
-
 msgid "External tools (LTI)"
 msgstr "Herramientas externas (LTI)"
 

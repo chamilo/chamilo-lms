@@ -29176,9 +29176,6 @@ msgstr "Datenbankhost"
 msgid "Step 2 - Requirements"
 msgstr "Schritt 2 - Anforderungen"
 
-msgid "read the installation guide"
-msgstr "lesen Sie die Installationsanleitung"
-
 msgid "Step 4 - Database settings"
 msgstr "Schritt 4 - Datenbankeinstellungen"
 

@@ -29519,9 +29519,6 @@ msgstr "Hôte du serveur de bases de données"
 msgid "Step 2 - Requirements"
 msgstr "Étape 2 - Pré-requis"
 
-msgid "read the installation guide"
-msgstr "consultez le guide d'installation"
-
 msgid "Step 4 - Database settings"
 msgstr "Étape 4 - Paramètres de base de données"
 

@@ -27728,9 +27728,6 @@ msgstr "Please read the following requirements thoroughly."
 msgid "For more details %s"
 msgstr "For more details %s"
 
-msgid "read the installation guide"
-msgstr "read the installation guide"
-
 msgid "Step 3 - License"
 msgstr "Step 3 - License"
 

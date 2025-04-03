@@ -27707,8 +27707,8 @@ msgstr "Display information about the next incomplete and the last completed top
 msgid "Database settings"
 msgstr "Database settings"
 
-msgid "Chamilo's installation wizard"
-msgstr "Chamilo's installation wizard"
+msgid "Chamilo installation wizard"
+msgstr "Chamilo installation wizard"
 
 msgid "Step 1 - Installation Language"
 msgstr "Step 1 - Installation Language"

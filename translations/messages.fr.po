@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-02 17:25+0000\n"
+"PO-Revision-Date: 2025-04-03 08:56+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
 "messages/fr/>\n"
@@ -15629,7 +15629,7 @@ msgid "Installation"
 msgstr "Installation"
 
 msgid "Read the installation guide"
-msgstr "consultez le guide d'installation"
+msgstr "Consultez le guide d'installation"
 
 msgid "See blog"
 msgstr "Voir le blog"
@@ -21772,7 +21772,9 @@ msgid "Access data"
 msgstr "Données d'accès"
 
 msgid "Image dimensions do not match the requirements. Please check the suggestions next to the image field."
-msgstr "Dimensiones incorrectas de la imagen. Por favor, respete las sugerencias indicadas al lado del campo de imagen."
+msgstr ""
+"Les dimensions de l'image sont incorrectes. Merci de respecter les exigences "
+"indiquées près du champ de l'image."
 
 msgid "Could not reset password, contact your helpdesk."
 msgstr "Impossible de réinitialiser le mot de passe. Contactez votre équipe de support."
@@ -29493,7 +29495,7 @@ msgstr ""
 msgid "Step 3 - License"
 msgstr "Étape 3 - Licence"
 
-msgid "Chamilo's installation wizard"
+msgid "Chamilo installation wizard"
 msgstr "Assistant d'installation de Chamilo"
 
 msgid "No course sessions for this user"

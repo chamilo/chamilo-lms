@@ -29152,7 +29152,7 @@ msgstr "Alle Sessions"
 msgid "Step 3 - License"
 msgstr "Schritt 3 - Lizenz"
 
-msgid "Chamilo's installation wizard"
+msgid "Chamilo installation wizard"
 msgstr "Installationsassistent von Chamilo"
 
 msgid "No course sessions for this user"

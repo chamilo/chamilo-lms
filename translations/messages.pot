@@ -27693,7 +27693,7 @@ msgstr ""
 msgid "Database settings"
 msgstr ""
 
-msgid "Chamilo's installation wizard"
+msgid "Chamilo installation wizard"
 msgstr ""
 
 msgid "Step 1 - Installation Language"

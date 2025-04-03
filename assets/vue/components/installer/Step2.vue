@@ -12,7 +12,7 @@
       tag="p"
     >
       <a
-        v-t="'read the installation guide'"
+        v-t="'Read the installation guide'"
         href="/main/documentation/installation_guide.html"
         target="_blank"
       />

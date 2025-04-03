@@ -71,7 +71,7 @@ switch ($action) {
             $values = $form->getSubmitValues();
 
             $params = [
-                'name' => $values['name'],
+                'title' => $values['name'],
                 'description' => $values['description'],
             ];
             TicketManager::addStatus($params);
@@ -101,10 +101,10 @@ switch ($action) {
             $values = $form->getSubmitValues();
 
             $params = [
-                'name' => $values['name'],
+                'title' => $values['name'],
                 'description' => $values['description'],
             ];
-            $cat = TicketManager::updateStatus($id, $params);
+            TicketManager::updateStatus($id, $params);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
             header('Location: '.api_get_self());
             exit;

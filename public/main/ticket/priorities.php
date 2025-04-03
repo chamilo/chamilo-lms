@@ -71,7 +71,7 @@ switch ($action) {
             $values = $form->getSubmitValues();
 
             $params = [
-                'name' => $values['name'],
+                'title' => $values['name'],
                 'description' => $values['description'],
             ];
             TicketManager::addPriority($params);
@@ -101,10 +101,10 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->getSubmitValues();
             $params = [
-                'name' => $values['name'],
+                'title' => $values['name'],
                 'description' => $values['description'],
             ];
-            $cat = TicketManager::updatePriority($_GET['id'], $params);
+            TicketManager::updatePriority($_GET['id'], $params);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
             header('Location: '.api_get_self());
             exit;

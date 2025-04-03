@@ -211,8 +211,9 @@ class SessionManager
                     return get_lang('Session title already exists');
                 }
             } else {
-                $rs = Database::query("SELECT 1 FROM $tbl_session WHERE title='".$name."'");
-                if (Database::num_rows($rs)) {
+                $sessionRepo = Database::getManager()->getRepository(Session::class);
+                $existingSession = $sessionRepo->findOneBy(['title' => $name]);
+                if ($existingSession !== null) {
                     return get_lang('Session title already exists');
                 }
                 $ready_to_create = true;

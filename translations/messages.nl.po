@@ -3241,7 +3241,7 @@ msgstr "bv."
 msgid "Database Host"
 msgstr "Databankserver"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Gebruikersnaam voor de databank"
 
 msgid "Database Password"
@@ -3270,9 +3270,6 @@ msgstr "Familienaam administrator"
 
 msgid "Administrator login"
 msgstr "Inlognaam administrator"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Wachtwoord administrator (<font color=\"red\">aangewezen te wijzigen</font>)"
 
 msgid "Project manager"
 msgstr "Projectleider"

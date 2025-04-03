@@ -3218,7 +3218,7 @@ msgstr "piem."
 msgid "Database Host"
 msgstr "Datubāžu serveris"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Datubāzes lietotājvārds"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Administratora uzvārds"
 
 msgid "Administrator login"
 msgstr "Administratora autorizēšanās vārds"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Administratora parole (<font color=\"red\">jūs to varat mainīt)"
 
 msgid "Project manager"
 msgstr "Projekta vadītājs"

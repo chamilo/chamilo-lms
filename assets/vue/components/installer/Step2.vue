@@ -48,13 +48,8 @@
       }}
     </Message>
 
-    <h3
-      class="install-requirement mb-8"
-      v-text="t('Server requirements information')"
-    />
-
     <div class="text-center mb-4">
-      <p class="text-body-2 font-semibold mb-2">{{ t("PHP version ") }} >= {{ installerData.phpRequiredVersion }}</p>
+      <p class="text-body-2 font-semibold mb-2">{{ t("PHP version") }} >= {{ installerData.phpRequiredVersion }}</p>
       <p
         v-if="installerData.stepData.isVersionPassed"
         class="text-success text-body-1 font-semibold"

@@ -3218,7 +3218,7 @@ msgstr "misal"
 msgid "Database Host"
 msgstr "Host Database"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Nama user Database"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Nama keluarga Administrator"
 
 msgid "Administrator login"
 msgstr "Login Administrator"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Password Administrator  (<font color=\"red\">anda dapat merubahnya</font>)"
 
 msgid "Project manager"
 msgstr "Pengelola"

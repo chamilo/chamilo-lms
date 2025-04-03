@@ -3224,8 +3224,8 @@ msgstr "ex."
 msgid "Database Host"
 msgstr "Database Host"
 
-msgid "Database Login"
-msgstr "Database Login"
+msgid "Database user"
+msgstr "Database user"
 
 msgid "Database Password"
 msgstr "Database Password"
@@ -3253,12 +3253,6 @@ msgstr "Surname of the Administrator"
 
 msgid "Administrator login"
 msgstr "Administrator login"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Administrator password (<font color=\"red\">you may want to change this</font>)"
-
-msgid "Project manager"
-msgstr "Project manager"
 
 msgid "Your portal name"
 msgstr "Your portal name"
@@ -28054,3 +28048,24 @@ msgstr "Custom URL"
 
 msgid "On failure"
 msgstr "On failure"
+
+msgid "Database port"
+msgstr "Database port"
+
+msgid "Database driver"
+msgstr "Database driver"
+
+msgid "Step 5 - Configuration settings"
+msgstr "Step 5 - Configuration settings"
+
+msgid "Administrator password"
+msgstr "Administrator password"
+
+msgid "You may want to change this"
+msgstr "You may want to change this"
+
+msgid "Step 6 - Last check before install"
+msgstr "Step 6 - Last check before install"
+
+msgid "Database name"
+msgstr "Database name"

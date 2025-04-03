@@ -3218,7 +3218,7 @@ msgstr "مثال"
 msgid "Database Host"
 msgstr "میزبان پایگاه داده"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "نام کاربری پایگاه داده"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "نام خانوادگی مدیر"
 
 msgid "Administrator login"
 msgstr "نام کاربری مدیر"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "کلمه عبور مدیر : <font color=\"red\">برای سهولت در به خاطر سپاری میتوانید این رمز را تغییر دهید"
 
 msgid "Project manager"
 msgstr "مدیر پروژه"

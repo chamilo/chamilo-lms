@@ -3218,7 +3218,7 @@ msgstr "f.eks."
 msgid "Database Host"
 msgstr "Database Host"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Database Brugernavn"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Administrator efternavn"
 
 msgid "Administrator login"
 msgstr "Administrator login"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Administrator adgangskode"
 
 msgid "Project manager"
 msgstr "Undervisningsansvarlig"

@@ -3218,7 +3218,7 @@ msgstr "ex:"
 msgid "Database Host"
 msgstr "Servidor de base de dades"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Nom d'usuari de la base de dades"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Cognoms de l'administrador"
 
 msgid "Administrator login"
 msgstr "Nom d'usuari de l'administrador"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Contrasenya de l'administrador (<font color=\"red\">és recomanable canviar-la</font>)"
 
 msgid "Project manager"
 msgstr "Responsable de continguts"

@@ -3218,7 +3218,7 @@ msgstr "คือ/หรือใช้"
 msgid "Database Host"
 msgstr "ชื่อที่อยู่เครื่องแม่ข่ายบริการเว็ปไซท์และให้ใช้ฐานข้อมูล"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "ชื่อผู้มีสิทธิฐานะเข้าใช้ฐานข้อมูลในเครื่องบริการแม่ข่ายของคุณ"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "ชื่อของผู้จัดการระบบ"
 
 msgid "Administrator login"
 msgstr "ชื่อที่จะใช้เข้าบริหารระบบ"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "รหัสผ่านของผู้จัดการระบบ(<font color=\"red\">ตั้งเองหรือใช้ตามนี้</font>)"
 
 msgid "Project manager"
 msgstr "ผู้จัดการโครงการ Project manager"

@@ -3218,7 +3218,7 @@ msgstr "esim."
 msgid "Database Host"
 msgstr ""
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Tietokantaan kirjautuminen"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Ylläpitäjän sukunimi"
 
 msgid "Administrator login"
 msgstr "Ylläpitäjän login"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Ylläpitäjän salasana (haluat ehkä vaihtaa tämän)"
 
 msgid "Project manager"
 msgstr "Projektipäällikkö"

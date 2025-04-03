@@ -3218,7 +3218,7 @@ msgstr "ex."
 msgid "Database Host"
 msgstr "Hostul bazei de date"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Baza de date Nume Utilizator"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Numele de famile al administratorului"
 
 msgid "Administrator login"
 msgstr "logare administrator"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Parola administratorului (<font color=\"red\">este recomandata schimbarea ei</font>)"
 
 msgid "Project manager"
 msgstr "Administrator proiect"

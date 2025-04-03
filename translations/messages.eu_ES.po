@@ -3218,7 +3218,7 @@ msgstr "esaterako,"
 msgid "Database Host"
 msgstr "Datu basearen zerbitzaria"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Datu basearen erabiltzaile izena"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Kudeatzailearen deiturak"
 
 msgid "Administrator login"
 msgstr "Kudeatzailearen erabiltzaile izena"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Kudeatzailearen pasahitza (agian aldatu nahi duzu)"
 
 msgid "Project manager"
 msgstr "Hezkuntza arduraduna"

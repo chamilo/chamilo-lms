@@ -3218,7 +3218,7 @@ msgstr "napr."
 msgid "Database Host"
 msgstr "Hostiteľ databázy"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Používateľské meno databázy"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Priezvisko administrátora"
 
 msgid "Administrator login"
 msgstr "Prihlásenie administrátora"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Heslo administrátora (<font color=\"red\">môžete ho zmeniť</font>)"
 
 msgid "Project manager"
 msgstr "Projektový manažér"

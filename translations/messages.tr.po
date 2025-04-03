@@ -3218,7 +3218,7 @@ msgstr "örn."
 msgid "Database Host"
 msgstr "Database Host"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Veritabanı Kullanıcı Adı"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Yönetici soyadı"
 
 msgid "Administrator login"
 msgstr "Yönetici kullanıcı adı"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Yönetici parolası (<font color=\"red\">bunu değiştirmek isteyebilirsiniz</font>)"
 
 msgid "Project manager"
 msgstr "Eğitim yöneticisi"

@@ -17,24 +17,32 @@ Chamilo is an e-learning platform, also called "LMS", published under the GNU/GP
 
 **Chamilo 2.0 is still in development. This installation procedure below is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch's README.md for details.**
 
+### Minimum server hardware requirements
+
+Chamilo 2.0 has been tested on a 2 vCPUs, 2GB RAM virtual machine under Ubuntu 24.04 and has been shown to work.
+At this stage, we haven't made any load testing to evaluate the number of users that could use the system simultaneously.
+Remember this is an alpha version. As such, it will run in "dev" mode (see the `.env` file), considerably more slowly the "prod" mode.
+
+### Software stack requirements
+
 We assume you already have:
 
 - composer 2.x - https://getcomposer.org/download/
-- yarn +4.x - https://yarnpkg.com/getting-started/install
+- yarn 4.x+ - https://yarnpkg.com/getting-started/install
 - Node >= v18+ (lts) - https://github.com/nodesource/distributions/blob/master/README.md
 - Configuring a virtualhost in a domain, not in a sub folder inside a domain.
-- A working LAMP/WAMP server with PHP 8.2+
+- A working LAMP/WAMP server with PHP 8.3+
 
 ### Software stack install (Ubuntu)
 
-You will need PHP8.2+ and NodeJS v18+ to run Chamilo 2.
+You will need PHP8.3+ and NodeJS v18+ to run Chamilo 2.
 
-On Ubuntu 24.04+, the following should take care of most dependencies.
+On Ubuntu 24.04+, the following should take care of all dependencies (certbot is optional).
 
 ~~~~
 sudo apt update
 sudo apt -y upgrade
-sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl
+sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
 sudo mysql
 mysql> GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost IDENTIFIED BY '{password}';
 mysql> exit
@@ -56,16 +64,16 @@ sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server red
 #### NodeJS, Yarn, Composer
 
 If you already have nodejs installed, check the version with `node -v`
-Otherwise, install node 18 or above.
+Otherwise, install Node.js 18 or above.
 
-The following lines use a static version from https://deb.nodesource.com/ (not very sustainable over time).
+The following lines use a static version of Node.js 20 from https://deb.nodesource.com/
 ~~~~
 cd ~
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
 sudo apt-get install -y nodejs
 ~~~~
 
-Another option to install nodejs is by using NVM (Node Version Manager). You can install it following the instructions [here](https://github.com/nvm-sh/nvm#installing-and-updating).
+Another option to install Node.js is by using NVM (Node Version Manager). You can install it following the instructions [here](https://github.com/nvm-sh/nvm#installing-and-updating).
 You can install the desired node version (preferably, the LTS version):
 ~~~~
 sudo nvm install --lts
@@ -78,16 +86,16 @@ sudo corepack enable
 cd ~
 ~~~~
 
-Follow the instructions at https://getcomposer.org/download/ to get Composer, then:
+Follow the instructions at https://getcomposer.org/download/ to get Composer, then add to the local binaries for easier use:
 ~~~~
 sudo mv composer.phar /usr/local/bin/composer
 ~~~~
 
 #### Apache tweaks
 
-Optionally, you might want this to enable a series of Apache modules, but only ``rewrite` is 100% necessary:
+Apache's rewrite module is mandatory. The rest is optional and depends on your needs.
 ~~~~
-sudo apt install libapache2-mod-xsendfile
+sudo apt install libapache2-mod-xsendfile #only for optimization if used in the vhost config
 sudo a2enmod rewrite ssl headers expires
 sudo systemctl restart apache2
 ~~~~
@@ -106,9 +114,7 @@ When asked whether you want to execute the recipes or install plugins for some o
 ~~~~
 yarn set version stable
 # delete yarn.lock if present, as it might contain restrictive packages from a different context
-yarn up
-yarn install
-yarn dev
+yarn up && yarn install && yarn dev
 # you can safely ignore any "warning" mentioned by yarn dev
 sudo touch .env
 sudo chown -R www-data: var/ .env config/
@@ -139,6 +145,8 @@ This should look similar to this very short excerpt (in your Apache vhost block)
   php_value session.cookie_httponly 1
   php_admin_value session.save_handler "redis"
   php_admin_value session.save_path "tcp://127.0.0.1:6379"
+  php_admin_value upload_max_filesize 256M
+  php_admin_value post_max_size 256M
 </VirtualHost>
 ~~~~
 Don't forget to reload your Apache configuration after each change:
@@ -163,8 +171,7 @@ git pull
 composer install
 php bin/console doctrine:schema:update --force --complete
 php bin/console cache:clear
-yarn install
-yarn dev
+yarn install && yarn dev
 ~~~~
 
 Note for developers in alpha stage: the doctrine command will try to update

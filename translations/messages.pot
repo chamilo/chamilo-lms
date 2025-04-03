@@ -3217,7 +3217,7 @@ msgstr ""
 msgid "Database Host"
 msgstr ""
 
-msgid "Database Login"
+msgid "Database user"
 msgstr ""
 
 msgid "Database Password"
@@ -3245,9 +3245,6 @@ msgid "Surname of the Administrator"
 msgstr ""
 
 msgid "Administrator login"
-msgstr ""
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
 msgstr ""
 
 msgid "Project manager"
@@ -27693,7 +27690,7 @@ msgstr ""
 msgid "Database settings"
 msgstr ""
 
-msgid "Chamilo's installation wizard"
+msgid "Chamilo installation wizard"
 msgstr ""
 
 msgid "Step 1 - Installation Language"
@@ -27712,9 +27709,6 @@ msgid "Please read the following requirements thoroughly."
 msgstr ""
 
 msgid "For more details %s"
-msgstr ""
-
-msgid "read the installation guide"
 msgstr ""
 
 msgid "Step 3 - License"
@@ -28042,4 +28036,25 @@ msgid "Custom URL"
 msgstr ""
 
 msgid "On failure"
+msgstr ""
+
+msgid "Database port"
+msgstr ""
+
+msgid "Database driver"
+msgstr ""
+
+msgid "Step 5 - Configuration settings"
+msgstr ""
+
+msgid "Administrator password"
+msgstr ""
+
+msgid "You may want to change this"
+msgstr ""
+
+msgid "Step 6 - Last check before install"
+msgstr ""
+
+msgid "Database name"
 msgstr ""

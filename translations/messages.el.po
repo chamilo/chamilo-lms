@@ -3218,7 +3218,7 @@ msgstr "π. χ."
 msgid "Database Host"
 msgstr "Όνομα υπολογιστή της Βάσης Δεδομένων"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Όνομα Χρήστη για τη Βάση Δεδομένων"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Επώνυμο Διαχειριστή"
 
 msgid "Administrator login"
 msgstr "Όνομα Χρήστη του Διαχειριστή"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Συνθηματικό του Διαχειριστή(<font color=\"red\">you may want to change this</font>)"
 
 msgid "Project manager"
 msgstr "Διαχειριστής έργου (Project manager)"

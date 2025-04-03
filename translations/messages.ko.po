@@ -3218,7 +3218,7 @@ msgstr "예."
 msgid "Database Host"
 msgstr "데이터베이스 호스트"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "데이터베이스 유저명"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "관리자dml 성(Surname)"
 
 msgid "Administrator login"
 msgstr "관리자 로그인"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "관리자 패스워드(<font color=\"red\">you may want to change this</font>)"
 
 msgid "Project manager"
 msgstr "프로젝트 매니저"

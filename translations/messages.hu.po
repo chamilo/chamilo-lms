@@ -3218,7 +3218,7 @@ msgstr "pl."
 msgid "Database Host"
 msgstr "Adatbázis szerver"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Adatbázis felhasználói név"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Adminisztrátor vezetékneve"
 
 msgid "Administrator login"
 msgstr "Adminisztrátor login"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Adminisztrátor jelszó (<font color=\"red\">célszerű megváltoztatni</font>)"
 
 msgid "Project manager"
 msgstr "Projekt menedszer"

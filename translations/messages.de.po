@@ -3277,7 +3277,7 @@ msgstr "z. B."
 msgid "Database Host"
 msgstr "Datenbankhost"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "DB Username"
 
 msgid "Database Password"
@@ -3306,9 +3306,6 @@ msgstr "Administrator Vorname"
 
 msgid "Administrator login"
 msgstr "Administrator Login"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Administrator Kennwort (<font color=\"red\">bitte anpassen</font>)"
 
 msgid "Project manager"
 msgstr "Verwalter der Lernplattform"
@@ -29152,7 +29149,7 @@ msgstr "Alle Sessions"
 msgid "Step 3 - License"
 msgstr "Schritt 3 - Lizenz"
 
-msgid "Chamilo's installation wizard"
+msgid "Chamilo installation wizard"
 msgstr "Installationsassistent von Chamilo"
 
 msgid "No course sessions for this user"
@@ -29175,9 +29172,6 @@ msgstr "Datenbankhost"
 
 msgid "Step 2 - Requirements"
 msgstr "Schritt 2 - Anforderungen"
-
-msgid "read the installation guide"
-msgstr "lesen Sie die Installationsanleitung"
 
 msgid "Step 4 - Database settings"
 msgstr "Schritt 4 - Datenbankeinstellungen"

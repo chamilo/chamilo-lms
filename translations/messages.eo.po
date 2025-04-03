@@ -3218,7 +3218,7 @@ msgstr "ekz."
 msgid "Database Host"
 msgstr "Datumbenka servilo"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Uzulnoma datumbazo"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Administratora familinomo"
 
 msgid "Administrator login"
 msgstr "Administratora ensalutaj datumoj"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Administratora pasvorto (<font color=\"red\">prefere ŝanĝenda</font>)"
 
 msgid "Project manager"
 msgstr "Projektgvidanto"

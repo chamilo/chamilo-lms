@@ -108,14 +108,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
             ->add('hide_gradebook_percentage_user_result', YesNoType::class)
             ->add('gradebook_use_exercise_score_settings_in_categories', YesNoType::class)
             ->add('gradebook_use_apcu_cache', YesNoType::class)
-            ->add(
-                'gradebook_report_score_style',
-                TextType::class,
-                [
-                    'label' => 'GradebookReportScoreStyleTitle',
-                    'help' => 'GradebookReportScoreStyleComment',
-                ]
-            )
+            ->add('gradebook_report_score_style', TextType::class)
             ->add('gradebook_score_display_custom_standalone', YesNoType::class)
             ->add('gradebook_use_exercise_score_settings_in_total', YesNoType::class)
             ->add('gradebook_dependency', YesNoType::class)

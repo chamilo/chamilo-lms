@@ -93,7 +93,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'redirect_index_to_url_for_logged_users' => '',
                     'default_menu_entry_for_course_or_session' => 'my_courses',
                     'notification_event' => 'false',
-                    'access_to_personal_file_for_all' => 'false',
                 ]
             )
             ->setTransformer(
@@ -173,31 +172,18 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'multiple' => true,
-                    'choices' => self::$tabs,
-                    'label' => 'ShowTabsTitle',
-                    'help' => 'ShowTabsComment',
+                    'choices' => self::$tabs
                 ],
             )
             ->add(
                 'unoconv_binaries',
-                TextType::class,
-                [
-                    'label' => 'UnoconvBinariesTitle',
-                    'help' => 'UnoconvBinariesComment',
-                ]
+                TextType::class
             )
             ->add('hide_main_navigation_menu', YesNoType::class)
             ->add('pdf_img_dpi', TextType::class)
             ->add('tracking_skip_generic_data', YesNoType::class)
             ->add('hide_complete_name_in_whoisonline', YesNoType::class)
-            ->add(
-                'table_default_row',
-                TextType::class,
-                [
-                    'label' => 'TableDefaultRowTitle',
-                    'help' => 'TableDefaultRowComment',
-                ]
-            )
+            ->add('table_default_row', TextType::class)
             ->add('allow_double_validation_in_registration', YesNoType::class)
             ->add('block_my_progress_page', YesNoType::class)
             ->add('generate_random_login', YesNoType::class)
@@ -285,7 +271,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('notification_event', YesNoType::class)
-            ->add('access_to_personal_file_for_all', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

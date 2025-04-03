@@ -3231,7 +3231,7 @@ msgstr "ej."
 msgid "Database Host"
 msgstr "Host de la base de datos"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Nombre de usuario de la base de datos"
 
 msgid "Database Password"
@@ -3260,9 +3260,6 @@ msgstr "Apellidos del administrador"
 
 msgid "Administrator login"
 msgstr "Nombre de usuario del administrador"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Contraseña del administrador (<font color=\"red\">puede que desee cambiarla</font>)"
 
 msgid "Project manager"
 msgstr "Responsable educativo"
@@ -27648,7 +27645,7 @@ msgstr "Foto de perfil del remitente"
 msgid "Warning"
 msgstr "Advertencia"
 
-msgid "Chamilo's installation wizard"
+msgid "Chamilo installation wizard"
 msgstr "Asistente de instalación de Chamilo"
 
 msgid "Prevent editing surveys for all surveys listed here (by code). Use * to prevent edition of all surveys."
@@ -28043,9 +28040,6 @@ msgstr "Paso 2 - Requisitos"
 
 msgid "Show glossary in documents is manual"
 msgstr "Mostrar glosario en documentos: manual"
-
-msgid "read the installation guide"
-msgstr "consulte la guía de instalación"
 
 msgid "External tools (LTI)"
 msgstr "Herramientas externas (LTI)"

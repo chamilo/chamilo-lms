@@ -64,7 +64,7 @@
           type="text"
         />
         <label
-          v-t="'Database login'"
+          v-t="'Database user'"
           for="dbUsernameForm"
         />
       </div>
@@ -82,7 +82,7 @@
           toggle-mask
         />
         <label
-          v-t="'Database password'"
+          v-t="'Database Password'"
           for="dbPassForm"
         />
       </div>

@@ -120,8 +120,6 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 [
                     'multiple' => true,
                     'choices' => $extendedProfileOptions,
-                    'label' => 'ExtendedProfileRegistrationTitle',
-                    'help' => 'ExtendedProfileRegistrationComment',
                 ]
             )
             ->add(
@@ -130,8 +128,6 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 [
                     'multiple' => true,
                     'choices' => $extendedProfileOptions,
-                    'label' => 'ExtendedProfileRegistrationRequiredTitle',
-                    'help' => 'ExtendedProfileRegistrationRequiredComment',
                 ]
             )
             ->add('allow_terms_conditions', YesNoType::class)

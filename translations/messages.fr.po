@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-02 17:25+0000\n"
+"PO-Revision-Date: 2025-04-03 08:56+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
 "messages/fr/>\n"
@@ -3306,7 +3306,7 @@ msgstr "par ex."
 msgid "Database Host"
 msgstr "Hôte du serveur de bases de données"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Utilisateur base de données"
 
 msgid "Database Password"
@@ -3335,9 +3335,6 @@ msgstr "Prénom de l'administrateur"
 
 msgid "Administrator login"
 msgstr "Identifiant de l'administrateur"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Mot de passe de l'administrateur (<font color=\"red\">en choisir un autre pourrait être une bonne idée</font>)"
 
 msgid "Project manager"
 msgstr "Responsable du contenu"
@@ -15629,7 +15626,7 @@ msgid "Installation"
 msgstr "Installation"
 
 msgid "Read the installation guide"
-msgstr "consultez le guide d'installation"
+msgstr "Consultez le guide d'installation"
 
 msgid "See blog"
 msgstr "Voir le blog"
@@ -21772,7 +21769,9 @@ msgid "Access data"
 msgstr "Données d'accès"
 
 msgid "Image dimensions do not match the requirements. Please check the suggestions next to the image field."
-msgstr "Dimensiones incorrectas de la imagen. Por favor, respete las sugerencias indicadas al lado del campo de imagen."
+msgstr ""
+"Les dimensions de l'image sont incorrectes. Merci de respecter les exigences "
+"indiquées près du champ de l'image."
 
 msgid "Could not reset password, contact your helpdesk."
 msgstr "Impossible de réinitialiser le mot de passe. Contactez votre équipe de support."
@@ -29493,7 +29492,7 @@ msgstr ""
 msgid "Step 3 - License"
 msgstr "Étape 3 - Licence"
 
-msgid "Chamilo's installation wizard"
+msgid "Chamilo installation wizard"
 msgstr "Assistant d'installation de Chamilo"
 
 msgid "No course sessions for this user"
@@ -29516,9 +29515,6 @@ msgstr "Hôte du serveur de bases de données"
 
 msgid "Step 2 - Requirements"
 msgstr "Étape 2 - Pré-requis"
-
-msgid "read the installation guide"
-msgstr "consultez le guide d'installation"
 
 msgid "Step 4 - Database settings"
 msgstr "Étape 4 - Paramètres de base de données"

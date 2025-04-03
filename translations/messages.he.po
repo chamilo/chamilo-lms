@@ -3218,7 +3218,7 @@ msgstr "ex."
 msgid "Database Host"
 msgstr "מארח מסד נתונים"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "כניסה למסד נתונים"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "שם משפחה של המנהל"
 
 msgid "Administrator login"
 msgstr "כניסת מנהל"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "סיסמת מנהל (<font color=\"red\">ייתכן שתרצה לשנות זאת</font>)"
 
 msgid "Project manager"
 msgstr "מנהל פרויקט"

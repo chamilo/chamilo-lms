@@ -3218,7 +3218,7 @@ msgstr "например"
 msgid "Database Host"
 msgstr "База данных главного компьютера"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "База данных имен пользователей"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Фамилия администратора"
 
 msgid "Administrator login"
 msgstr "Логин администратора"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Пароль администратора (<font color=\"red\">возможно Вы захотите его изменить</font>)"
 
 msgid "Project manager"
 msgstr "Руководитель проекта"

@@ -3218,7 +3218,7 @@ msgstr "例如"
 msgid "Database Host"
 msgstr "数据库主机"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "数据库用户名"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "管理员姓氏"
 
 msgid "Administrator login"
 msgstr "管理员登录名"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "管理员密码(<FONT color=red>可以修改</FONT>)"
 
 msgid "Project manager"
 msgstr "项目管理人"

@@ -49,7 +49,7 @@
       />
       <h1
         v-else
-        v-t="'Chamilo\'s installation wizard'"
+        v-t="'Chamilo installation wizard'"
         class="mb-8 text-center"
       />
 

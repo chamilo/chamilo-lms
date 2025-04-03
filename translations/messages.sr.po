@@ -3218,7 +3218,7 @@ msgstr "pr."
 msgid "Database Host"
 msgstr "Host baze podataka"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Korisničko ime baze podataka"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Prezime administratora"
 
 msgid "Administrator login"
 msgstr "Korisničko ime administratora"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Lozinka administratora (<font color=\"red\">možda ćete ovo želeti da promenite</font>)"
 
 msgid "Project manager"
 msgstr "Administrator projekta"

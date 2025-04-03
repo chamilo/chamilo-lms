@@ -3218,7 +3218,7 @@ msgstr "es."
 msgid "Database Host"
 msgstr "Database Host"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Database Username"
 
 msgid "Database Password"
@@ -3247,9 +3247,6 @@ msgstr "Cognome dell'amministratore"
 
 msgid "Administrator login"
 msgstr "login dell'Amministratore"
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "password dell'Amministratore (<font color=\"red\">puoi cambiarla</font>)"
 
 msgid "Project manager"
 msgstr "Responsabile didattico"

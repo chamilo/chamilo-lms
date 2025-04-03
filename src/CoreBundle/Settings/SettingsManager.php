@@ -401,9 +401,25 @@ class SettingsManager implements SettingsManagerInterface
         $parametersFromDb = $query->getQuery()->getResult();
         $parameters = [];
 
-        /** @var SettingsCurrent $parameter */
         foreach ($parametersFromDb as $parameter) {
-            $parameters[$parameter->getCategory()][] = $parameter;
+            /** @var SettingsCurrent $parameter */
+            $category = $parameter->getCategory();
+            $variable = $parameter->getVariable();
+
+            $hidden = [];
+            $serviceKey = 'chamilo_core.settings.'.$category;
+            if ($this->schemaRegistry->has($serviceKey)) {
+                $schema = $this->schemaRegistry->get($serviceKey);
+                if (method_exists($schema, 'getHiddenSettings')) {
+                    $hidden = $schema->getHiddenSettings();
+                }
+            }
+
+            if (in_array($variable, $hidden, true)) {
+                continue;
+            }
+
+            $parameters[$category][] = $parameter;
         }
 
         return $parameters;

@@ -195,7 +195,7 @@
     "Next": "Sljede\u0107e",
     "Please select installation language": "Please select installation language",
     "Server requirements": "Karakteristike poslu\u017eitelja",
-    "PHP version": "PHP version",
+    "PHP version": "PHP verzija",
     "Your PHP version matches the minimum requirement:": "PHP verzija je u redu",
     "Recommended settings": "Preporu\u010dene postavke",
     "Recommended": "Recommended",
@@ -216,9 +216,7 @@
     "I accept": "Prihva\u0107am",
     "CC website": "CC website",
     "Dear user": "Po\u0161tovani korisni\u010de",
-    "Your company's activity": "Your company's activity",
     "Your job\\'s description": "Your job\\'s description",
-    "Your company's home country": "Your company's home country",
     "Check database connection": "Provjeri povezanost prema bazi podataka",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -476,5 +474,6 @@
     "Scan the QR code to enable 2FA": "Scan the QR code to enable 2FA",
     "QR code for 2FA": "QR code for 2FA",
     "Private course": "Private course",
-    "Not subscribed": "Not subscribed"
+    "Not subscribed": "Not subscribed",
+    "Go to your newly created portal.": "Kreni na va\u0161 novo izra\u0111eni portal."
 }

@@ -197,9 +197,7 @@
     "I accept": "I accept",
     "CC website": "CC website",
     "Dear user": "Dear user",
-    "Your company's activity": "Your company's activity",
     "Your job\\'s description": "Your job\\'s description",
-    "Your company's home country": "Your company's home country",
     "Check database connection": "Check database connection",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -451,5 +449,6 @@
     "Scan the QR code to enable 2FA": "Scan the QR code to enable 2FA",
     "QR code for 2FA": "QR code for 2FA",
     "Private course": "Private course",
-    "Not subscribed": "Not subscribed"
+    "Not subscribed": "Not subscribed",
+    "Go to your newly created portal.": "Go to your newly created portal."
 }

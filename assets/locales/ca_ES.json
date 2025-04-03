@@ -243,7 +243,7 @@
     "Next": "Seg\u00fcent",
     "Please select installation language": "Please select installation language",
     "Server requirements": "Requeriments del servidor",
-    "PHP version": "PHP version",
+    "PHP version": "Versi\u00f3 PHP",
     "Your PHP version matches the minimum requirement:": "La seva versi\u00f3 de PHP \u00e9s suficient:",
     "Recommended settings": "Par\u00e0metres recomanats",
     "Setting": "Par\u00e0metre",
@@ -272,9 +272,9 @@
     "Dear user": "Estimat (ada) usuari (a)",
     "E-mail": "Correu electr\u00f2nic",
     "Your company's name": "Nom de l'empresa",
-    "Your company's activity": "Your company's activity",
+    "Your company's activity": "Sector",
     "Your job\\'s description": "Your job\\'s description",
-    "Your company's home country": "Your company's home country",
+    "Your company's home country": "Pa\u00eds",
     "Company city": "Ciutat",
     "Preferred contact language": "Quin idioma de contacte prefereix?",
     "Do you have the power to take financial decisions on behalf of your company?": "T\u00e9 la capacitat de prendre decisions financeres?",
@@ -582,5 +582,7 @@
     "Scan the QR code to enable 2FA": "Scan the QR code to enable 2FA",
     "QR code for 2FA": "QR code for 2FA",
     "Private course": "Private course",
-    "Not subscribed": "Not subscribed"
+    "Not subscribed": "Not subscribed",
+    "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "La connexi\u00f3 amb la base de dades ha fallat. Pot que el nom d'usuari, la contrasenya o el prefix de la base de dades siguin incorrectes. Reviseu totes aquestes dades i torneu a provar-ho.",
+    "Go to your newly created portal.": "Aneu a la nova plataforma que heu creat."
 }

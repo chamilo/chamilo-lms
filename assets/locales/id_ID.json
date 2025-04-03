@@ -158,7 +158,7 @@
     "Next": "Berikutnya",
     "Please select installation language": "Please select installation language",
     "Server requirements": "Syarat-syarat server",
-    "PHP version": "PHP version",
+    "PHP version": "Versi PHP",
     "Your PHP version matches the minimum requirement:": "Versi PHP OK",
     "Recommended settings": "Seting anjuran",
     "Recommended": "Recommended",
@@ -176,9 +176,7 @@
     "Printable version": "Versi cetak",
     "I accept": "Saya Setuju",
     "CC website": "CC website",
-    "Your company's activity": "Your company's activity",
     "Your job\\'s description": "Your job\\'s description",
-    "Your company's home country": "Your company's home country",
     "Check database connection": "Periksa koneksi database",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -419,5 +417,6 @@
     "Scan the QR code to enable 2FA": "Scan the QR code to enable 2FA",
     "QR code for 2FA": "QR code for 2FA",
     "Private course": "Private course",
-    "Not subscribed": "Not subscribed"
+    "Not subscribed": "Not subscribed",
+    "Go to your newly created portal.": "Lihat ke portal anda yang baru dibuat."
 }

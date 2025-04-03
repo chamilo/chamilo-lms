@@ -193,7 +193,7 @@
     "Next": "K\u00f6vetkez\u0151",
     "Please select installation language": "Please select installation language",
     "Server requirements": "Szerver k\u00edv\u00e1nalmak",
-    "PHP version": "PHP version",
+    "PHP version": "PHP verzi\u00f3",
     "Your PHP version matches the minimum requirement:": "A PHP verzi\u00f3 megfelel.",
     "Recommended settings": "Aj\u00e1nlott be\u00e1ll\u00edt\u00e1sok",
     "Recommended": "Recommended",
@@ -214,9 +214,7 @@
     "I accept": "Elfogadom",
     "CC website": "CC website",
     "Dear user": "Kedves felhaszn\u00e1l\u00f3",
-    "Your company's activity": "Your company's activity",
     "Your job\\'s description": "Your job\\'s description",
-    "Your company's home country": "Your company's home country",
     "Check database connection": "Adatb\u00e1zis kapcsolat ellen\u0151rz\u00e9se",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -484,5 +482,6 @@
     "Scan the QR code to enable 2FA": "Scan the QR code to enable 2FA",
     "QR code for 2FA": "QR code for 2FA",
     "Private course": "Private course",
-    "Not subscribed": "Not subscribed"
+    "Not subscribed": "Not subscribed",
+    "Go to your newly created portal.": "Az \u00fajonnan l\u00e9trehozott port\u00e1l megtekint\u00e9se"
 }

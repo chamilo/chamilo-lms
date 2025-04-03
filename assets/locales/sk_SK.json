@@ -242,7 +242,7 @@
     "Next": "Nasleduj\u00faci",
     "Please select installation language": "Please select installation language",
     "Server requirements": "Po\u017eiadavky serveru",
-    "PHP version": "PHP version",
+    "PHP version": "PHP verzia",
     "Your PHP version matches the minimum requirement:": "PHP verzia je OK",
     "Recommended settings": "Odpor\u00fa\u010dan\u00e9 nastavenia",
     "Setting": "Nastavenie",
@@ -270,9 +270,9 @@
     "CC website": "CC website",
     "Dear user": "V\u00e1\u017een\u00fd pou\u017e\u00edvate\u013e",
     "Your company's name": "N\u00e1zov spolo\u010dnosti",
-    "Your company's activity": "Your company's activity",
+    "Your company's activity": "Aktivita va\u0161ej spolo\u010dnosti",
     "Your job\\'s description": "Your job\\'s description",
-    "Your company's home country": "Your company's home country",
+    "Your company's home country": "Domovsk\u00e1 krajina va\u0161ej spolo\u010dnosti",
     "Company city": "Mesto kde s\u00eddli va\u0161a spolo\u010dnos\u0165",
     "Preferred contact language": "Preferovan\u00fd kontaktn\u00fd jazyk",
     "Do you have the power to take financial decisions on behalf of your company?": "M\u00e1te pr\u00e1vomoc prij\u00edma\u0165 finan\u010dn\u00e9 rozhodnutia v mene va\u0161ej spolo\u010dnosti?",
@@ -580,5 +580,7 @@
     "Scan the QR code to enable 2FA": "Scan the QR code to enable 2FA",
     "QR code for 2FA": "QR code for 2FA",
     "Private course": "Private course",
-    "Not subscribed": "Not subscribed"
+    "Not subscribed": "Not subscribed",
+    "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "Pripojenie k datab\u00e1ze bolo ne\u00faspe\u0161n\u00e9. Obvykle je to kv\u00f4li nespr\u00e1vnemu pou\u017e\u00edvate\u013eovi, heslu alebo predpone datab\u00e1zy zadanej hore. Skontrolujte pros\u00edm tieto nastavenia a sk\u00faste znova.",
+    "Go to your newly created portal.": "Cho\u010fte na V\u00e1\u0161 novo zriaden\u00fd port\u00e1l."
 }

@@ -245,7 +245,7 @@
     "Next": "\u05d4\u05d1\u05d0",
     "Please select installation language": "Please select installation language",
     "Server requirements": "\u05d3\u05e8\u05d9\u05e9\u05d5\u05ea \u05d4\u05e9\u05e8\u05ea",
-    "PHP version": "PHP version",
+    "PHP version": "\u05d2\u05e8\u05e1\u05ea PHP",
     "Your PHP version matches the minimum requirement:": "\u05d2\u05e8\u05e1\u05ea \u05d4-PHP \u05e9\u05dc\u05da \u05ea\u05d5\u05d0\u05de\u05ea \u05d0\u05ea \u05d4\u05d3\u05e8\u05d9\u05e9\u05d4 \u05d4\u05de\u05d9\u05e0\u05d9\u05de\u05dc\u05d9\u05ea:",
     "Recommended settings": "\u05d4\u05d2\u05d3\u05e8\u05d5\u05ea \u05de\u05d5\u05de\u05dc\u05e6\u05d5\u05ea",
     "Setting": "\u05d0\u05ea",
@@ -275,9 +275,9 @@
     "Dear user": "\u05de\u05e9\u05ea\u05de\u05e9 \u05d9\u05e7\u05e8",
     "E-mail": "\u05d3\u05d5\u05d0\u05e8 \u05d0\u05dc\u05e7\u05d8\u05e8\u05d5\u05e0\u05d9",
     "Your company's name": "\u05e9\u05dd \u05d4\u05d7\u05d1\u05e8\u05d4 \u05e9\u05dc\u05da",
-    "Your company's activity": "Your company's activity",
+    "Your company's activity": "\u05d4\u05e4\u05e2\u05d9\u05dc\u05d5\u05ea \u05e9\u05dc \u05d4\u05d7\u05d1\u05e8\u05d4 \u05e9\u05dc\u05da",
     "Your job\\'s description": "Your job\\'s description",
-    "Your company's home country": "Your company's home country",
+    "Your company's home country": "\u05de\u05d3\u05d9\u05e0\u05ea \u05d4\u05d1\u05d9\u05ea \u05e9\u05dc \u05d4\u05d7\u05d1\u05e8\u05d4 \u05e9\u05dc\u05da",
     "Company city": "\u05e2\u05d9\u05e8 \u05d7\u05d1\u05e8\u05d4",
     "Preferred contact language": "\u05e9\u05e4\u05ea \u05d0\u05d9\u05e9 \u05e7\u05e9\u05e8 \u05de\u05d5\u05e2\u05d3\u05e4\u05ea",
     "Do you have the power to take financial decisions on behalf of your company?": "\u05d4\u05d0\u05dd \u05d9\u05e9 \u05dc\u05da \u05d0\u05ea \u05d4\u05db\u05d5\u05d7 \u05dc\u05e7\u05d1\u05dc \u05d4\u05d7\u05dc\u05d8\u05d5\u05ea \u05e4\u05d9\u05e0\u05e0\u05e1\u05d9\u05d5\u05ea \u05d1\u05e9\u05dd \u05d4\u05d7\u05d1\u05e8\u05d4 \u05e9\u05dc\u05da?",
@@ -597,5 +597,7 @@
     "Scan the QR code to enable 2FA": "Scan the QR code to enable 2FA",
     "QR code for 2FA": "QR code for 2FA",
     "Private course": "Private course",
-    "Not subscribed": "Not subscribed"
+    "Not subscribed": "Not subscribed",
+    "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "\u05d7\u05d9\u05d1\u05d5\u05e8 \u05de\u05e1\u05d3 \u05d4\u05e0\u05ea\u05d5\u05e0\u05d9\u05dd \u05e0\u05db\u05e9\u05dc. \u05d6\u05d4 \u05e0\u05d5\u05d1\u05e2 \u05d1\u05d3\u05e8\u05da \u05db\u05dc\u05dc \u05de\u05de\u05e9\u05ea\u05de\u05e9 \u05e9\u05d2\u05d5\u05d9, \u05e1\u05d9\u05e1\u05de\u05d4 \u05e9\u05d2\u05d5\u05d9\u05d4 \u05d0\u05d5 \u05e7\u05d9\u05d3\u05d5\u05de\u05ea \u05de\u05e1\u05d3 \u05e0\u05ea\u05d5\u05e0\u05d9\u05dd \u05e9\u05d2\u05d5\u05d9\u05d4 \u05e9\u05d4\u05d5\u05d2\u05d3\u05e8\u05d4 \u05dc\u05de\u05e2\u05dc\u05d4. \u05d0\u05e0\u05d0 \u05e2\u05d9\u05d9\u05df \u05d1\u05d4\u05d2\u05d3\u05e8\u05d5\u05ea \u05d0\u05dc\u05d4 \u05d5\u05e0\u05e1\u05d4 \u05e9\u05d5\u05d1.",
+    "Go to your newly created portal.": "\u05e2\u05d1\u05d5\u05e8 \u05dc\u05e4\u05d5\u05e8\u05d8\u05dc \u05d4\u05d7\u05d3\u05e9 \u05e9\u05dc\u05da \u05e9\u05e0\u05d5\u05e6\u05e8."
 }

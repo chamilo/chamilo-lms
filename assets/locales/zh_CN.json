@@ -196,7 +196,7 @@
     "Next": "\u4e0b\u4e00\u4e2a",
     "Please select installation language": "Please select installation language",
     "Server requirements": "\u4f3a\u670d\u5668\u8981\u6c42",
-    "PHP version": "PHP version",
+    "PHP version": "PHP \u7248\u672c",
     "Your PHP version matches the minimum requirement:": "PHP \u7248\u672c\u80fd\u63a5\u53d7",
     "Recommended settings": "\u63a8\u8350\u8bbe\u5b9a",
     "Recommended": "Recommended",
@@ -216,9 +216,7 @@
     "I accept": "\u6211\u63a5\u53d7",
     "CC website": "CC website",
     "Dear user": "\u4eb2\u7231\u7684\u7528\u6237",
-    "Your company's activity": "Your company's activity",
     "Your job\\'s description": "Your job\\'s description",
-    "Your company's home country": "Your company's home country",
     "Check database connection": "\u68c0\u67e5\u6570\u636e\u5e93\u8fde\u63a5",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -481,5 +479,6 @@
     "Scan the QR code to enable 2FA": "Scan the QR code to enable 2FA",
     "QR code for 2FA": "QR code for 2FA",
     "Private course": "Private course",
-    "Not subscribed": "Not subscribed"
+    "Not subscribed": "Not subscribed",
+    "Go to your newly created portal.": "\u8bbf\u95ee\u4f60\u65b0\u521b\u5efa\u7684\u5165\u95e8\u7f51\u7ad9\u3002"
 }

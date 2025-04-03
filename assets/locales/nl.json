@@ -242,7 +242,7 @@
     "Next": "Volgende",
     "Please select installation language": "Please select installation language",
     "Server requirements": "Server vereisten",
-    "PHP version": "PHP version",
+    "PHP version": "PHP versie",
     "Your PHP version matches the minimum requirement:": "PHP versie is ok\u00e9",
     "Recommended settings": "Aanbevolen instellingen",
     "Setting": "Instelling",
@@ -271,9 +271,9 @@
     "CC website": "CC website",
     "Dear user": "Beste gebruiker",
     "Your company's name": "Naam van de onderneming",
-    "Your company's activity": "Your company's activity",
+    "Your company's activity": "Bedrijfsactiviteit",
     "Your job\\'s description": "Your job\\'s description",
-    "Your company's home country": "Your company's home country",
+    "Your company's home country": "Thuisland van het bedrijf",
     "Company city": "Thuisstad onderneming",
     "Preferred contact language": "Voorkeurtaal",
     "Do you have the power to take financial decisions on behalf of your company?": "Ben je bevoegd financi\u00eble beslissingen te maken in naam van je bedrijf?",
@@ -579,5 +579,7 @@
     "Scan the QR code to enable 2FA": "Scan the QR code to enable 2FA",
     "QR code for 2FA": "QR code for 2FA",
     "Private course": "Priv\u00e9cursus",
-    "Not subscribed": "Not subscribed"
+    "Not subscribed": "Not subscribed",
+    "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "De verbinding met de databank is mislukt. Meestal is dit te wijten aan een foute gebruik, een fout wahctwoord of een foutief databasevoorvoegsel. Verifieer deze instelling en probeer het dan opnieuw.",
+    "Go to your newly created portal.": "Ga naar uw ge\u00efnstalleerde portaal."
 }

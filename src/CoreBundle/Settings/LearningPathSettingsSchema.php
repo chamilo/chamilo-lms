@@ -105,14 +105,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
             ->add('lp_prevents_beforeunload', YesNoType::class)
             ->add('disable_my_lps_page', YesNoType::class)
             ->add('scorm_api_username_as_student_id', YesNoType::class)
-            ->add(
-                'scorm_api_extrafield_to_use_as_student_id',
-                TextType::class,
-                [
-                    'label' => 'Extra field to use as student ID for SCORM API',
-                    'help' => 'The name provided will be used as the identifier of the user extra field containing an ID that the remote SCORM API will recognize as a user ID. This is only useful if your remote SCORM provider asked you for something similar.',
-                ]
-            )
+            ->add('scorm_api_extrafield_to_use_as_student_id', TextType::class)
             ->add('allow_import_scorm_package_in_course_builder', YesNoType::class)
             ->add('allow_htaccess_import_from_scorm', YesNoType::class)
             ->add('allow_session_lp_category', YesNoType::class)

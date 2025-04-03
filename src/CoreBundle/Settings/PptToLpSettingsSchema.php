@@ -22,8 +22,6 @@ class PptToLpSettingsSchema extends AbstractSettingsSchema
                     'host' => '',
                     'port' => '',
                     'user' => '',
-                    'ftp_password' => '',
-                    'path_to_lzx' => '',
                 ]
             )
 //            ->setAllowedTypes(
@@ -42,8 +40,6 @@ class PptToLpSettingsSchema extends AbstractSettingsSchema
             ->add('host')
             ->add('port')
             ->add('user')
-            ->add('ftp_password')
-            ->add('path_to_lzx')
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

@@ -95,25 +95,20 @@ class AzureActiveDirectory extends Plugin
         return 'azure_active_directory';
     }
 
-    /**
-     * @return Azure
-     */
-    public function getProvider()
+    public function getProvider(): Azure
     {
-        $provider = new Azure([
+        return new Azure([
             'clientId' => $this->get(self::SETTING_APP_ID),
             'clientSecret' => $this->get(self::SETTING_APP_SECRET),
             'redirectUri' => api_get_path(WEB_PLUGIN_PATH).'azure_active_directory/src/callback.php',
+            'urlAPI' => 'https://graph.microsoft.com/v1.0/',
+            'resource' => 'https://graph.microsoft.com',
         ]);
-
-        return $provider;
     }
 
     public function getProviderForApiGraph(): Azure
     {
         $provider = $this->getProvider();
-        $provider->urlAPI = "https://graph.microsoft.com/v1.0/";
-        $provider->resource = "https://graph.microsoft.com/";
         $provider->tenant = $this->get(AzureActiveDirectory::SETTING_TENANT_ID);
         $provider->authWithResource = false;
 

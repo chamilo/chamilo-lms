@@ -71,7 +71,7 @@ switch ($action) {
             $values = $form->getSubmitValues();
 
             $params = [
-                'name' => $values['name'],
+                'title' => $values['name'],
                 'description' => $values['description'],
             ];
             TicketManager::addProject($params);
@@ -102,7 +102,7 @@ switch ($action) {
             $values = $form->getSubmitValues();
 
             $params = [
-                'name' => $values['name'],
+                'title' => $values['name'],
                 'description' => $values['description'],
                 'sys_lastedit_datetime' => api_get_utc_datetime(),
                 'sys_lastedit_user_id' => api_get_user_id(),

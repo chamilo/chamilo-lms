@@ -45,6 +45,10 @@ class TicketProject
     #[ORM\Column(name: 'sys_lastedit_datetime', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $lastEditDateTime = null;
 
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class)]
+    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id', nullable: true)]
+    protected ?AccessUrl $accessUrl = null;
+
     public function __construct()
     {
         $this->insertDateTime = new DateTime();
@@ -147,6 +151,18 @@ class TicketProject
     public function setLastEditDateTime(DateTime $lastEditDateTime): self
     {
         $this->lastEditDateTime = $lastEditDateTime;
+
+        return $this;
+    }
+
+    public function getAccessUrl(): ?AccessUrl
+    {
+        return $this->accessUrl;
+    }
+
+    public function setAccessUrl(?AccessUrl $accessUrl): self
+    {
+        $this->accessUrl = $accessUrl;
 
         return $this;
     }

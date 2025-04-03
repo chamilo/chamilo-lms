@@ -156,7 +156,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('allow_my_files', YesNoType::class)
             // old settings with no category
             ->add('chamilo_database_version')
-            ->add('registered', YesNoType::class)
             ->add(
                 'load_term_conditions_section',
                 ChoiceType::class,
@@ -274,6 +273,16 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
+    }
+
+    /**
+     * Returns the list of internal settings that should be hidden from forms and search.
+     */
+    public function getHiddenSettings(): array
+    {
+        return [
+            'registered',
+        ];
     }
 
     private function settingArrayHelpValue(string $variable): string

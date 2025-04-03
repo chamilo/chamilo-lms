@@ -36,14 +36,11 @@ class ExceptionListener
 
         if ($exception instanceof NotAllowedException) {
             if (null === $this->tokenStorage->getToken()) {
-                $currentUrl = $request->getUri();
-                $parsedUrl = parse_url($currentUrl);
-                $baseUrl = $parsedUrl['scheme'].'://'.$parsedUrl['host'];
-                $path = rtrim($parsedUrl['path'], '/') ?: '';
-                $query = $parsedUrl['query'] ?? '';
-                $redirectUrl = $baseUrl.$path.($query ? '?'.$query : '');
-
-                $loginUrl = $this->router->generate('login', ['redirect' => $redirectUrl], UrlGeneratorInterface::ABSOLUTE_URL);
+                $loginUrl = $this->router->generate(
+                    'login',
+                    ['redirect' => $request->getRequestUri()],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                );
                 $event->setResponse(new RedirectResponse($loginUrl));
 
                 return;

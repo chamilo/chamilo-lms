@@ -215,7 +215,7 @@ class AzureActiveDirectory extends Plugin
         return $defaultOrder;
     }
 
-    public function getUserIdByVerificationOrder(array $azureUserData, string $azureUidKey = 'objectId'): ?int
+    public function getUserIdByVerificationOrder(array $azureUserData): ?int
     {
         $selectedOrder = $this->getExistingUserVerificationOrder();
 
@@ -231,7 +231,7 @@ class AzureActiveDirectory extends Plugin
             ),
             3 => $extraFieldValue->get_item_id_from_field_variable_and_field_value(
                 AzureActiveDirectory::EXTRA_FIELD_AZURE_UID,
-                $azureUserData[$azureUidKey]
+                $azureUserData['id']
             ),
         ];
 
@@ -247,20 +247,17 @@ class AzureActiveDirectory extends Plugin
     /**
      * @throws Exception
      */
-    public function registerUser(
-        array $azureUserInfo,
-        string $azureUidKey = 'objectId'
-    ) {
+    public function registerUser(array $azureUserInfo) {
         if (empty($azureUserInfo)) {
             throw new Exception('Groups info not found.');
         }
 
-        $userId = $this->getUserIdByVerificationOrder($azureUserInfo, $azureUidKey);
+        $userId = $this->getUserIdByVerificationOrder($azureUserInfo);
 
         if (empty($userId)) {
             // If we didn't find the user
             if ($this->get(self::SETTING_PROVISION_USERS) !== 'true') {
-                throw new Exception('User not found when checking the extra fields from '.$azureUserInfo['mail'].' or '.$azureUserInfo['mailNickname'].' or '.$azureUserInfo[$azureUidKey].'.');
+                throw new Exception('User not found when checking the extra fields from '.$azureUserInfo['mail'].' or '.$azureUserInfo['mailNickname'].' or '.$azureUserInfo['id'].'.');
             }
 
             [
@@ -272,7 +269,7 @@ class AzureActiveDirectory extends Plugin
                 $authSource,
                 $active,
                 $extra,
-            ] = $this->formatUserData($azureUserInfo, $azureUidKey);
+            ] = $this->formatUserData($azureUserInfo);
 
             // If the option is set to create users, create it
             $userId = UserManager::create_user(
@@ -312,7 +309,7 @@ class AzureActiveDirectory extends Plugin
                 $authSource,
                 $active,
                 $extra,
-            ] = $this->formatUserData($azureUserInfo, $azureUidKey);
+            ] = $this->formatUserData($azureUserInfo);
 
             $userId = UserManager::update_user(
                 $userId,
@@ -405,10 +402,7 @@ class AzureActiveDirectory extends Plugin
     /**
      * @throws Exception
      */
-    private function formatUserData(
-        array $azureUserInfo,
-        string $azureUidKey
-    ): array {
+    private function formatUserData(array $azureUserInfo): array {
         $phone = null;
 
         if (isset($azureUserInfo['telephoneNumber'])) {
@@ -429,7 +423,7 @@ class AzureActiveDirectory extends Plugin
         $extra = [
             'extra_'.self::EXTRA_FIELD_ORGANISATION_EMAIL => $azureUserInfo['mail'],
             'extra_'.self::EXTRA_FIELD_AZURE_ID => $azureUserInfo['mailNickname'],
-            'extra_'.self::EXTRA_FIELD_AZURE_UID => $azureUserInfo[$azureUidKey],
+            'extra_'.self::EXTRA_FIELD_AZURE_UID => $azureUserInfo['id'],
         ];
 
         return [

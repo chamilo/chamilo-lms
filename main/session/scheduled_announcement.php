@@ -62,6 +62,7 @@ switch ($action) {
             $values = $form->getSubmitValues();
             switch ($values['type']) {
                 case 'base_date':
+                case 'base_progress':
                     $numberDays = (int) $values['days'];
                     switch ($values['base_date']) {
                         case 'start_date':
@@ -81,6 +82,11 @@ switch ($action) {
                             break;
                     }
                     $values['date'] = $newDate->format('Y-m-d h:i:s');
+
+                    if ($values['type'] == 'base_progress') {
+                        $values['extra_use_base_progress'] = $values['progress'];
+                    }
+
                     break;
                 case 'specific_date':
                     $values['date'] = api_get_utc_datetime($values['date']);
@@ -131,7 +137,14 @@ switch ($action) {
             $values['date'] = api_get_utc_datetime($values['date']);
             $res = $object->update($values);
 
+            $values['extra_use_base_progress'] = $values['progress'];
             $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
+            $baseProgress = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $id,
+                'use_base_progress'
+            );
+            $values['extra_use_base_progress_comment'] = $baseProgress["comment"];
+
             $values['item_id'] = $id;
             $extraFieldValue->saveFieldValues($values);
 

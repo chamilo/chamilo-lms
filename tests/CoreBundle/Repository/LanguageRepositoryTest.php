@@ -45,7 +45,7 @@ class LanguageRepositoryTest extends AbstractApiTest
         $this->assertNotNull($languages);
         $this->assertCount(11, $languages);
 
-        $languages = $repo->getAllAvailableToArray();
+        $languages = $repo->getAllAvailableToArray(true);
         $this->assertCount(11, $languages);
     }
 

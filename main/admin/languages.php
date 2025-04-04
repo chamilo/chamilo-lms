@@ -204,7 +204,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
     );
     // changing the Platform language
     if (isset($_POST['platformlanguage']) && $_POST['platformlanguage'] != '') {
-        api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, $_configuration['access_url']);
+        api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, api_get_current_access_url_id());
     }
 } elseif (isset($_POST['action'])) {
     switch ($_POST['action']) {
@@ -263,7 +263,11 @@ echo '<a
 $sql_select = "SELECT * FROM $tbl_admin_languages";
 $result_select = Database::query($sql_select);
 
-$sql_select_lang = "SELECT * FROM $tbl_settings_current WHERE category='Languages'";
+$current_access_url = api_get_current_access_url_id();
+$sql_select_lang = "SELECT * FROM $tbl_settings_current
+                    WHERE category='Languages'
+                      AND access_url = $current_access_url";
+
 $result_select_lang = Database::query($sql_select_lang);
 $row_lang = Database::fetch_array($result_select_lang);
 

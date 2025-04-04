@@ -38,7 +38,7 @@ class ExceptionListener
             if (null === $this->tokenStorage->getToken()) {
                 $loginUrl = $this->router->generate(
                     'login',
-                    ['redirect' => $request->getRequestUri()],
+                    ['redirect' => $request->getSchemeAndHttpHost().$request->getRequestUri()],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );
                 $event->setResponse(new RedirectResponse($loginUrl));

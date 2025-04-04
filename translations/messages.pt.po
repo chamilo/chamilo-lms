@@ -1,9 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"Language: pt_PT\n"
+"PO-Revision-Date: 2025-04-04 14:15+0000\n"
+"Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
+"Language-Team: Portuguese <https://translation.chamilo.org/projects/chamilo/"
+"messages/pt/>\n"
+"Language: pt\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.4.2\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Você pode gerar emblemas para as habilidades aprendidas por seus usuários, para dar-lhes o reconhecimento pelo seu esforço, através do qual eles serão capazes de mostrar as suas habilidades adquiridas e competências com ícones que serão mostrados em seu perfil de usuário. Para mais informações sobre OpenBadges, verifique http://openbadges.org/."
@@ -3248,6 +3254,7 @@ msgstr "Apelido do Administrador"
 msgid "Administrator login"
 msgstr "Login/acesso do Administrador"
 
+#, fuzzy
 msgid "Project manager"
 msgstr "Reponsável do projecto"
 

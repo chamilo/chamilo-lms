@@ -1,9 +1,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"Language: sl_SI\n"
+"PO-Revision-Date: 2025-04-04 14:15+0000\n"
+"Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
+"Language-Team: Slovenian <https://translation.chamilo.org/projects/chamilo/"
+"messages/sl/>\n"
+"Language: sl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 5.4.2\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Generirate lahko značke za veščine oz. kompetence, ki so jih osvojili vaši uporabniki in jim s tem izdate priznanje za njihov trud. Preko osvojenih značk bodo lahko pokazali pridobljene veščine in kompetence preko sličic v svojih profilih. Za več informacij obiščite OpenBadges preko povezave <a href=\"http://openbadges.org\">http://openbadges.org</a>."
@@ -3248,6 +3255,7 @@ msgstr "Priimek upravitelja"
 msgid "Administrator login"
 msgstr "Uporabniško ime admin."
 
+#, fuzzy
 msgid "Project manager"
 msgstr "Upravnik izobraževanja"
 

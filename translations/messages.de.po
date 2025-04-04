@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-02 17:25+0000\n"
+"PO-Revision-Date: 2025-04-04 14:14+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -3307,6 +3307,7 @@ msgstr "Administrator Vorname"
 msgid "Administrator login"
 msgstr "Administrator Login"
 
+#, fuzzy
 msgid "Project manager"
 msgstr "Verwalter der Lernplattform"
 
@@ -29499,3 +29500,57 @@ msgstr "Wählen Sie das Ziel aus"
 
 msgid "Repeat question"
 msgstr "Wiederholen Sie die Frage"
+
+msgid "Database name"
+msgstr "Datenbankname"
+
+msgid "Step 5 - Configuration settings"
+msgstr "Schritt 5 - Konfigurationseinstellungen"
+
+msgid "Select the default timezone for this portal. This will help set the timezone (if the feature is enabled) for each new user or for any user that has not set a specific timezone yet. Timezones help show all time-related information on screen in the specific timezone of each user."
+msgstr ""
+"Wählen Sie die Standardzeitzone für dieses Portal. Dies hilft dabei, die "
+"Zeitzone (falls die Funktion aktiviert ist) für jeden neuen Benutzer oder "
+"für Benutzer, die noch keine spezifische Zeitzone festgelegt haben, "
+"einzustellen. Zeitangaben auf dem Bildschirm werden so in der jeweiligen "
+"Zeitzone jedes Benutzers angezeigt."
+
+msgid "Step 6 - Last check before install"
+msgstr "Schritt 6 - Letzte Überprüfung vor der Installation"
+
+msgid "Administrator password"
+msgstr "Administratorpasswort"
+
+msgid "Default timezone"
+msgstr "Standardzeitzone"
+
+msgid "Do not list this campus on chamilo.org"
+msgstr "Listen Sie diesen Campus nicht auf chamilo.org"
+
+msgid "Enable URL-specific files"
+msgstr "URL-spezifische Dateien aktivieren"
+
+msgid "By default, Chamilo portals are automatically registered in a public list at chamilo.org, just using the title you gave to this portal (not the URL nor any private data). Check this box to avoid having the title of your portal appear."
+msgstr ""
+"Standardmäßig werden Chamilo-Portale automatisch in einer öffentlichen Liste "
+"auf chamilo.org registriert, wobei nur der Titel dieses Portals verwendet "
+"wird (nicht die URL oder irgendwelche privaten Daten). Markieren Sie dieses "
+"Kästchen, um zu verhindern, dass der Titel Ihres Portals erscheint."
+
+msgid "When this feature is enabled on a multi-URL configuration, you can go to the main URL and provide URL-specific versions of any file (in the documents tool). The original file will be replaced by the alternative whenever seeing it from a different URL. This allows you to customize each URL even further, while enjoying the advantage of re-using the same courses many times."
+msgstr ""
+"Wenn diese Funktion in einer Multi-URL-Konfiguration aktiviert ist, können "
+"Sie zur Haupt-URL gehen und URL-spezifische Versionen einer Datei (im "
+"Dokumenten-Tool) bereitstellen. Die Originaldatei wird durch die Alternative "
+"ersetzt, wenn sie von einer anderen URL aus aufgerufen wird. Dies ermöglicht "
+"es Ihnen, jede URL weiter zu individualisieren, während Sie den Vorteil "
+"nutzen, dieselben Kurse mehrmals zu verwenden."
+
+msgid "You may want to change this"
+msgstr "Sie möchten dies möglicherweise ändern"
+
+msgid "Database port"
+msgstr "Datenbankport"
+
+msgid "Database driver"
+msgstr "Datenbanktreiber"

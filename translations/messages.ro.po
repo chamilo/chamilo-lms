@@ -1,9 +1,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"Language: ro_RO\n"
+"PO-Revision-Date: 2025-04-04 14:15+0000\n"
+"Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
+"Language-Team: Romanian <https://translation.chamilo.org/projects/chamilo/"
+"messages/ro/>\n"
+"Language: ro\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Weblate 5.4.2\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Puteți genera insigne să recunoască abilitățile învățate de la utilizatorii sai, oferind recunoaștere pentru realizarea lor, pe care le pot prezenta aptitudinile și competențele dobândite prin embleme lor, care va fi afișate în profilul dvs. de utilizator. Pentru mai multe informații despre insigne deschise http://openbadges.org/."
@@ -3248,6 +3255,7 @@ msgstr "Numele de famile al administratorului"
 msgid "Administrator login"
 msgstr "logare administrator"
 
+#, fuzzy
 msgid "Project manager"
 msgstr "Administrator proiect"
 

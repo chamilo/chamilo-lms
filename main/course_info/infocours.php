@@ -295,7 +295,7 @@ $group2 = [];
 $group2[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
 $group2[] = $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
 
-$myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save', true);
+$myButton = $form->addButtonSave(get_lang('SaveSettings'), 'submit_save_access', true);
 
 $group3[] = $form->createElement(
     'radio',

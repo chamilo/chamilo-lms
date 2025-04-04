@@ -48,7 +48,7 @@ class ExceptionListener
         }
 
         if (isset($_SERVER['APP_ENV']) && \in_array($_SERVER['APP_ENV'], ['dev', 'test'], true)) {
-            throw $exception;
+            return;
         }
 
         $message = $this->twig->render(

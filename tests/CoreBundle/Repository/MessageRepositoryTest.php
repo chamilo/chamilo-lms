@@ -239,7 +239,6 @@ class MessageRepositoryTest extends AbstractApiTest
     public function testDeleteMessageWithTag(): void
     {
         $em = $this->getEntityManager();
-        $userRepo = self::getContainer()->get(UserRepository::class);
         $messageTagRepo = self::getContainer()->get(MessageTagRepository::class);
         $messageRepo = self::getContainer()->get(MessageRepository::class);
         $messageRelUserRepo = $em->getRepository(MessageRelUser::class);
@@ -251,9 +250,9 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $messageRepo->delete($message);
 
-        $this->assertSame(0, $messageRepo->count([]));
-        $this->assertSame(0, $messageRelUserRepo->count([]));
-        $this->assertSame(0, $messageTagRepo->count([]));
+        $this->assertSame(1, $messageRepo->count([]));
+        $this->assertSame(1, $messageRelUserRepo->count([]));
+        $this->assertSame(2, $messageTagRepo->count([]));
 
         $this->assertNotNull($this->getUser('admin'));
         $this->assertNotNull($this->getUser('test'));
@@ -381,6 +380,15 @@ class MessageRepositoryTest extends AbstractApiTest
             ->addReceiverTo($testUser)
         ;
 
+        $messageRelUserSender = new MessageRelUser();
+        $messageRelUserSender->setMessage($message)
+            ->setReceiver($admin)
+            ->setReceiverType(MessageRelUser::TYPE_SENDER)
+        ;
+
+        $em->persist($messageRelUserSender);
+        $em->flush();
+
         $this->assertHasNoEntityViolations($message);
         $messageRepo->update($message);
 
@@ -418,18 +426,26 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $em->clear();
 
-        // Delete message.
+        /** @var Message $message */
         $message = $messageRepo->find($message->getId());
         $messageRepo->delete($message);
 
-        // No messages.
-        $this->assertSame(0, $messageRepo->count([]));
-        // No message_rel_user.
-        $this->assertSame(0, $messageRelUserRepo->count([]));
+        // Message is not deleted.
+        $this->assertSame(1, $messageRepo->count([]));
+        // Message has 2 message_rel_user (sender and receiver).
+        $this->assertSame(2, $messageRelUserRepo->count([]));
         // No attachments.
-        $this->assertSame(0, $messageAttachmentRepo->count([]));
+        $this->assertSame(1, $messageAttachmentRepo->count([]));
         // 2 tags still exists.
-        $this->assertSame(0, $messageTagRepo->count([]));
+        $this->assertSame(1, $messageTagRepo->count([]));
+
+        /** @var Message $message */
+        $message = $messageRepo->find($message->getId());
+
+        $em->remove($message->getReceiversSender()[0]);
+        $em->flush();
+
+        $this->assertSame(1, $message->getReceivers()->count());
     }
 
     public function testCreateMessageWithApiAsOtherUser(): void
@@ -490,6 +506,7 @@ class MessageRepositoryTest extends AbstractApiTest
 
     public function testDeleteMessageWithApi(): void
     {
+        /** @var MessageRepository $messageRepo */
         $messageRepo = self::getContainer()->get(MessageRepository::class);
 
         $fromUser = $this->createUser('from');
@@ -531,12 +548,24 @@ class MessageRepositoryTest extends AbstractApiTest
             'DELETE',
             $id,
         );
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
         /** @var Message $message */
         $message = $messageRepo->find($messageId);
 
-        $this->assertSame(1, $message->getReceivers()->count());
+        $senderRelation = $message->getReceiversSender()[0];
+        $senderRelationIri = $this->findIriBy(
+            MessageRelUser::class,
+            ['id' => $senderRelation->getId()]
+        );
+
+        $this
+            ->createClientWithCredentials($tokenFrom)
+            ->request('DELETE', $senderRelationIri)
+        ;
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
         // Receiver deletes the message.
         $tokenTo = $this->getUserToken(
@@ -547,11 +576,18 @@ class MessageRepositoryTest extends AbstractApiTest
             true
         );
 
+        $receiverRelation = $message->getFirstReceiver();
+        $senderRelationIri = $this->findIriBy(
+            MessageRelUser::class,
+            ['id' => $receiverRelation?->getId()]
+        );
+
         $this->createClientWithCredentials($tokenTo)->request(
             'DELETE',
-            $id,
+            $senderRelationIri,
         );
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     public function testGetMessageByUser(): void

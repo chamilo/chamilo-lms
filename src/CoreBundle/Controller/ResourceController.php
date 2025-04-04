@@ -347,7 +347,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     $resourceFile = $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
 
                     if ($resourceFile) {
-                        $stream = $repo->getResourceNodeFileStream($resourceFile);
+                        $stream = $repo->getResourceNodeFileStream($node);
                         $fileName = $resourceFile->getOriginalName();
                         $zip->addFileFromStream($fileName, $stream);
                     }

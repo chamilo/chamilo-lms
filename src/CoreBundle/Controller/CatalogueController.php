@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\CatalogueSessionRelAccessUrlRelUsergroup;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
+use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
@@ -83,6 +84,7 @@ class CatalogueController extends AbstractController
 
         $relRepo = $this->em->getRepository(CatalogueSessionRelAccessUrlRelUsergroup::class);
         $userGroupRepo = $this->em->getRepository(UsergroupRelUser::class);
+        $voteRepo = $this->em->getRepository(UserRelCourseVote::class);
 
         $relations = $relRepo->findBy(['accessUrl' => $accessUrl]);
 
@@ -98,7 +100,7 @@ class CatalogueController extends AbstractController
                 $session = $rel->getSession();
                 $usergroup = $rel->getUsergroup();
 
-                if (null === $usergroup || \in_array($usergroup->getId(), $userGroupIds)) {
+                if (null === $usergroup || in_array($usergroup->getId(), $userGroupIds)) {
                     $visibleSessions[$session->getId()] = $session;
                 }
             }
@@ -106,7 +108,43 @@ class CatalogueController extends AbstractController
             $sessions = array_values($visibleSessions);
         }
 
-        $data = array_map(function (Session $session) {
+        $data = array_map(function (Session $session) use ($voteRepo, $user) {
+            $courses = [];
+
+            foreach ($session->getCourses() as $rel) {
+                $course = $rel->getCourse();
+                if (!$course) {
+                    continue;
+                }
+
+                $teachers = [];
+                foreach ($session->getGeneralCoachesSubscriptions() as $coachRel) {
+                    $userObj = $coachRel->getUser();
+                    if ($userObj) {
+                        $teachers[] = [
+                            'id' => $userObj->getId(),
+                            'fullName' => $userObj->getFullname(),
+                        ];
+                    }
+                }
+
+                $courses[] = [
+                    'id' => $course->getId(),
+                    'title' => $course->getTitle(),
+                    'duration' => $course->getDuration(),
+                    'courseLanguage' => $course->getCourseLanguage(),
+                    'teachers' => $teachers,
+                ];
+            }
+
+            $voteCount = (int) $voteRepo->createQueryBuilder('v')
+                ->select('COUNT(DISTINCT v.user)')
+                ->where('v.session = :session')
+                ->andWhere('v.course IS NULL')
+                ->setParameter('session', $session->getId())
+                ->getQuery()
+                ->getSingleScalarResult();
+
             return [
                 'id' => $session->getId(),
                 'title' => $session->getTitle(),
@@ -117,6 +155,9 @@ class CatalogueController extends AbstractController
                 'nbrCourses' => $session->getNbrCourses(),
                 'startDate' => $session->getAccessStartDate()?->format('Y-m-d'),
                 'endDate' => $session->getAccessEndDate()?->format('Y-m-d'),
+                'courses' => $courses,
+                'popularity' => $voteCount,
+                'isSubscribed' => $session->hasUserInSession($user, Session::STUDENT),
             ];
         }, $sessions);
 

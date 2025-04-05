@@ -8,6 +8,23 @@ async function findAll(searchParams) {
   return await baseService.getCollection("/api/course_rel_users", searchParams)
 }
 
+/**
+ * Subscribes a user to a course.
+ * @param {Object} params
+ * @param {number} params.userId
+ * @param {number} params.courseId
+ * @returns {Promise<Object>}
+ */
+async function subscribe({ userId, courseId }) {
+  return await baseService.post("/api/course_rel_users", {
+    user: `/api/users/${userId}`,
+    course: `/api/courses/${courseId}`,
+    relationType: 0,
+    status: 5,
+  })
+}
+
 export default {
   findAll,
+  subscribe,
 }

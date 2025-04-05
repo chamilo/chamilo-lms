@@ -11,13 +11,16 @@ import baseService from "./baseService"
  * @returns {Promise<Object>}
  */
 export async function saveVote({ courseIri, userId, vote, sessionId = null, urlId }) {
-  return await baseService.post("/api/user_rel_course_votes", {
-    course: courseIri,
+  const payload = {
     user: `/api/users/${userId}`,
     vote,
-    session: sessionId ? `/api/sessions/${sessionId}` : null,
     url: `/api/access_urls/${urlId}`,
-  })
+  }
+
+  if (courseIri) payload.course = courseIri
+  if (sessionId) payload.session = `/api/sessions/${sessionId}`
+
+  return await baseService.post("/api/user_rel_course_votes", payload)
 }
 
 /**
@@ -57,17 +60,19 @@ export async function updateVote({ iri, vote, sessionId = null, urlId }) {
  */
 export async function getUserVote({ userId, courseId, sessionId = null, urlId }) {
   try {
-    let query = `/api/user_rel_course_votes?user.id=${userId}&course.id=${courseId}`
+    let query = `/api/user_rel_course_votes?user.id=${userId}`
+
     if (urlId) query += `&url.id=${urlId}`
 
-    // Remove session.id if null
-    if (sessionId) {
-      query += `&session.id=${sessionId}`
+    if (courseId && courseId !== 0) {
+      query += `&course.id=${courseId}`
+    } else if (sessionId) {
+      query += `&session.id=${sessionId}&course=null`
     }
 
     const response = await baseService.get(query)
 
-    if (response && response["hydra:member"] && response["hydra:member"].length > 0) {
+    if (response?.["hydra:member"]?.length > 0) {
       return response["hydra:member"][0]
     }
 

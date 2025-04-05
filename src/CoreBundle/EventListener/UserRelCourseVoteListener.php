@@ -34,14 +34,17 @@ class UserRelCourseVoteListener
     {
         $course = $vote->getCourse();
 
+        if (!$course) {
+            return;
+        }
+
         $uniqueUsers = (int) $entityManager->createQueryBuilder()
             ->select('COUNT(DISTINCT v.user)')
             ->from(UserRelCourseVote::class, 'v')
             ->where('v.course = :course')
             ->setParameter('course', $course->getId())
             ->getQuery()
-            ->getSingleScalarResult()
-        ;
+            ->getSingleScalarResult();
 
         $course->setPopularity($uniqueUsers);
         $entityManager->persist($course);

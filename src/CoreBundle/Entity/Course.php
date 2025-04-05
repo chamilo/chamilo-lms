@@ -300,10 +300,12 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected ?DateTime $expirationDate = null;
 
     #[Assert\NotNull]
+    #[Groups(['course:read'])]
     #[ORM\Column(name: 'subscribe', type: 'boolean', unique: false, nullable: false)]
     protected bool $subscribe;
 
     #[Assert\NotNull]
+    #[Groups(['course:read'])]
     #[ORM\Column(name: 'unsubscribe', type: 'boolean', unique: false, nullable: false)]
     protected bool $unsubscribe;
 

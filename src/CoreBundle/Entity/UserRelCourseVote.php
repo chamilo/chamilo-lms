@@ -62,9 +62,9 @@ class UserRelCourseVote
     protected User $user;
 
     #[ORM\ManyToOne(targetEntity: Course::class)]
-    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     #[Groups(['userRelCourseVote:read', 'userRelCourseVote:write'])]
-    protected Course $course;
+    protected ?Course $course = null;
 
     #[ORM\ManyToOne(targetEntity: Session::class)]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
@@ -109,12 +109,12 @@ class UserRelCourseVote
         return $this;
     }
 
-    public function getCourse(): Course
+    public function getCourse(): ?Course
     {
         return $this->course;
     }
 
-    public function setCourse(Course $course): self
+    public function setCourse(?Course $course): self
     {
         $this->course = $course;
 

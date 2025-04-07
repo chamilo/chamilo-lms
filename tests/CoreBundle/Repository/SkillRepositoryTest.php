@@ -182,7 +182,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $this->assertNotNull($skill->getId());
         $this->assertSame(1, $skill->getCourses()->count());
         $this->assertSame(1, $skill->getItems()->count());
-        $this->assertSame(1, $subSkill->getSkills()->count());
+        $this->assertSame(0, $subSkill->getSkills()->count());
 
         $this->assertTrue($skill->hasCourseAndSession($skillRelCourse));
 

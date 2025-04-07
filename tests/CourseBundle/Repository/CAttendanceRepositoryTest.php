@@ -103,7 +103,7 @@ class CAttendanceRepositoryTest extends AbstractApiTest
         $sheet = (new CAttendanceSheet())
             ->setUser($student)
             ->setAttendanceCalendar($calendar)
-            ->setPresence(true)
+            ->setPresence(CAttendanceSheet::PRESENT)
             ->setSignature('image-blob-here')
         ;
         $em->persist($sheet);

@@ -44,10 +44,8 @@ class UserListener
                 $defaultCreator = $this->security->getUser();
                 if (null !== $defaultCreator) {
                     $creator = $defaultCreator;
-                } else {
-                    if (!empty($user->getCreatorId())) {
-                        $creator = $this->userRepository->find($user->getCreatorId());
-                    }
+                } elseif (!empty($user->getCreatorId())) {
+                    $creator = $this->userRepository->find($user->getCreatorId());
                 }
             }
 

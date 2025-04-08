@@ -328,6 +328,23 @@ $globalGroup[get_lang('E-mail teacher when a new user auto-subscribes')] = $grou
 $group = [];
 $group[] = $form->createElement(
     'radio',
+    'email_alert_student_on_manual_subscription',
+    get_lang('E-mail student when he is subscribed to the course'),
+    get_lang('Enable'),
+    1
+);
+$group[] = $form->createElement(
+    'radio',
+    'email_alert_student_on_manual_subscription',
+    null,
+    get_lang('Disable'),
+    0
+);
+$globalGroup[get_lang('E-mail student when he is subscribed to the course')] = $group;
+
+$group = [];
+$group[] = $form->createElement(
+    'radio',
     'email_alert_students_on_new_homework',
     get_lang('E-mail students on assignment creation'),
     get_lang('Enable'),
@@ -921,6 +938,10 @@ foreach ($courseSettings as $setting) {
 // make sure new settings have a clear default value
 if (!isset($values['student_delete_own_publication'])) {
     $values['student_delete_own_publication'] = 0;
+}
+
+if (!isset($values['email_alert_student_on_manual_subscription'])) {
+    $values['email_alert_student_on_manual_subscription'] = 0;
 }
 
 $documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');

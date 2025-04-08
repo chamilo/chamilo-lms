@@ -913,17 +913,24 @@ class CourseManager
                     )
                 );
 
-                $subject = get_lang('You have been enrolled in the course').' '.$course->getTitle();
-                $message = sprintf(get_lang('Hello %s, you have been enrolled in the course %s.'), UserManager::formatUserFullName($user, true), $course->getTitle());
+                $sendToStudent = (int) api_get_course_setting('email_alert_student_on_manual_subscription', $course);
+                if (1 === $sendToStudent) {
+                    $subject = get_lang('You have been enrolled in the course').' '.$course->getTitle();
+                    $message = sprintf(
+                        get_lang('Hello %s, you have been enrolled in the course %s.'),
+                        UserManager::formatUserFullName($user, true),
+                        $course->getTitle()
+                    );
 
-                MessageManager::send_message_simple(
-                    $userId,
-                    $subject,
-                    $message,
-                    api_get_user_id(),
-                    false,
-                    true
-                );
+                    MessageManager::send_message_simple(
+                        $userId,
+                        $subject,
+                        $message,
+                        api_get_user_id(),
+                        false,
+                        true
+                    );
+                }
 
                 $send = (int) api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course);
 
@@ -5301,6 +5308,7 @@ class CourseManager
             'email_alert_students_on_new_homework',
             // Get send_mail_setting (auth)from table
             'email_alert_to_teacher_on_new_user_in_course',
+            'email_alert_student_on_manual_subscription',
             'enable_lp_auto_launch',
             'enable_exercise_auto_launch',
             'enable_document_auto_launch',

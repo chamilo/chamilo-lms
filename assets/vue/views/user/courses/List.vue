@@ -66,6 +66,10 @@ const { result, fetchMore } = useQuery(GET_COURSE_REL_USER, {
   after: null,
 })
 
+const sortCourses = () => {
+  courses.value.sort((a, b) => a.title.localeCompare(b.title, undefined, { numeric: true, sensitivity: "base" }))
+}
+
 watch(result, (newResult) => {
   if (newResult?.courseRelUsers) {
     const newCourses = newResult.courseRelUsers.edges.map(({ node }) => node.course)
@@ -74,12 +78,17 @@ watch(result, (newResult) => {
       (newCourse) => !courses.value.some((existingCourse) => existingCourse._id === newCourse._id),
     )
 
-    courses.value.push(...filteredCourses)
+    if (filteredCourses.length > 0) {
+      courses.value.push(...filteredCourses)
+      sortCourses()
+    }
+
     endCursor.value = newResult.courseRelUsers.pageInfo.endCursor
     hasMore.value = newResult.courseRelUsers.pageInfo.hasNextPage
 
     nextTick(() => {
       if (lastCourseRef.value) {
+        observer.unobserve(lastCourseRef.value)
         observer.observe(lastCourseRef.value)
       }
     })
@@ -92,34 +101,37 @@ const loadMoreCourses = () => {
   if (!hasMore.value || isLoading.value) return
   isLoading.value = true
 
-  fetchMore({
-    variables: {
-      user: securityStore.user["@id"],
-      first: 10,
-      after: endCursor.value,
-    },
-    updateQuery: (previousResult, { fetchMoreResult }) => {
-      if (!fetchMoreResult) return previousResult
+  setTimeout(() => {
+    fetchMore({
+      variables: {
+        user: securityStore.user["@id"],
+        first: 10,
+        after: endCursor.value,
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return previousResult
 
-      const newCourses = fetchMoreResult.courseRelUsers.edges.map(({ node }) => node.course)
-      const filteredCourses = newCourses.filter(
-        (newCourse) => !courses.value.some((existingCourse) => existingCourse._id === newCourse._id),
-      )
-      courses.value.push(...filteredCourses)
-      endCursor.value = fetchMoreResult.courseRelUsers.pageInfo.endCursor
-      hasMore.value = fetchMoreResult.courseRelUsers.pageInfo.hasNextPage
+        const newCourses = fetchMoreResult.courseRelUsers.edges.map(({ node }) => node.course)
+        const filteredCourses = newCourses.filter(
+          (newCourse) => !courses.value.some((existingCourse) => existingCourse._id === newCourse._id),
+        )
+        courses.value.push(...filteredCourses)
+        sortCourses(courses.value)
+        endCursor.value = fetchMoreResult.courseRelUsers.pageInfo.endCursor
+        hasMore.value = fetchMoreResult.courseRelUsers.pageInfo.hasNextPage
 
-      return {
-        ...previousResult,
-        courseRelUsers: {
-          ...fetchMoreResult.courseRelUsers,
-          edges: [...previousResult.courseRelUsers.edges, ...fetchMoreResult.courseRelUsers.edges],
-        },
-      }
-    },
-  }).finally(() => {
-    isLoading.value = false
-  })
+        return {
+          ...previousResult,
+          courseRelUsers: {
+            ...fetchMoreResult.courseRelUsers,
+            edges: [...previousResult.courseRelUsers.edges, ...fetchMoreResult.courseRelUsers.edges],
+          },
+        }
+      },
+    }).finally(() => {
+      isLoading.value = false
+    })
+  }, 300)
 }
 
 let observer = new IntersectionObserver(

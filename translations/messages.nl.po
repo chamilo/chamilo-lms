@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:15+0000\n"
+"PO-Revision-Date: 2025-04-08 01:39+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Dutch <https://translation.chamilo.org/projects/chamilo/"
 "messages/nl/>\n"
@@ -21091,7 +21091,7 @@ msgid "Only letters"
 msgstr "Alleen letters"
 
 msgid "Select a blanks marker"
-msgstr ""
+msgstr "Selecteer een markeerstift voor lege plekken"
 
 msgid "Refresh terms"
 msgstr "Vernieuw termen"
@@ -21147,196 +21147,219 @@ msgid "Thanks for registering to %s."
 msgstr "Bedankt voor uw registratie bij %s."
 
 msgid "Allow coaches to comment in review of exercises"
-msgstr ""
+msgstr "Sta trainers toe om te reageren bij de beoordeling van oefeningen"
 
 msgid "Allow coaches to edit feedback during review of exercises"
 msgstr ""
+"Sta trainers toe feedback te bewerken tijdens de beoordeling van oefeningen"
 
 msgid "Prevent simultaneous login"
-msgstr ""
+msgstr "Voorkom gelijktijdige aanmelding"
 
 msgid "Prevent users connecting with the same account more than once. This is a good option on pay-per-access portals, but might be restrictive during testing as only one browser can connect with any given account."
 msgstr ""
+"Voorkom dat gebruikers meer dan eens met hetzelfde account verbinden. Dit is "
+"een goede optie voor portals met betaalde toegang, maar kan beperkend zijn "
+"tijdens het testen omdat slechts één browser kan verbinden met een gegeven "
+"account."
 
 msgid "Show additional columns in gradebook"
-msgstr ""
+msgstr "Toon extra kolommen in het puntenboekje"
 
 msgid "Show additional columns in the student view of the gradebook with the best score of all students, the relative position of the student looking at the report and the average score of the whole group of students."
 msgstr ""
+"Toon extra kolommen in de studentenweergave van het puntenboekje met de "
+"beste score van alle studenten, de relatieve positie van de student die het "
+"rapport bekijkt en de gemiddelde score van de hele studentengroep."
 
 msgid "Publish course catalogue"
-msgstr ""
+msgstr "Publiceer cursuscatalogus"
 
 msgid "Make the courses catalogue available to anonymous users (the general public) without the need to login."
 msgstr ""
+"Maak de cursuscatalogus beschikbaar voor anonieme gebruikers (het algemene "
+"publiek) zonder dat inloggen nodig is."
 
 msgid "Enable password reset token"
-msgstr ""
+msgstr "Activeer wachtwoord reset token"
 
 msgid "This option allows to generate a expiring single-use token sent by e-mail to the user to reset his/her password."
 msgstr ""
+"Deze optie maakt het mogelijk om een eenmalig te gebruiken token met "
+"vervaldatum te genereren dat per e-mail naar de gebruiker wordt verzonden om "
+"zijn/haar wachtwoord te resetten."
 
 msgid "Time limit for password reset token"
-msgstr ""
+msgstr "Tijdslimiet voor het token om het wachtwoord opnieuw in te stellen"
 
 msgid "The number of seconds before the generated token automatically expires and cannot be used anymore (a new token needs to be generated)."
 msgstr ""
+"Het aantal seconden voordat de gegenereerde token automatisch verloopt en "
+"niet meer gebruikt kan worden (er moet een nieuwe token gegenereerd worden)."
 
 msgid "View my courses by session"
-msgstr ""
+msgstr "Bekijk mijn cursussen per sessie"
 
 msgid "Enable an additional 'My courses' page where sessions appear as part of courses, rather than the opposite."
 msgstr ""
+"Activeer een extra pagina 'Mijn cursussen' waar sessies verschijnen als "
+"onderdeel van cursussen, in plaats van andersom."
 
 msgid "Download certificate in PDF"
-msgstr ""
+msgstr "Download certificaat in PDF"
 
 msgid "Enter password"
-msgstr ""
+msgstr "Voer wachtwoord in"
 
 msgid "Download report in PDF"
-msgstr ""
+msgstr "Download rapport in PDF"
 
 msgid "Skill \"%s\" enabled"
-msgstr ""
+msgstr "Vaardigheid \"%s\" ingeschakeld"
 
 msgid "Skill \"%s\" disabled"
-msgstr ""
+msgstr "Vaardigheid \"%s\" uitgeschakeld"
 
 msgid "Show full skill name on skill wheel"
-msgstr ""
+msgstr "Toon volledige vaardigheidsnaam op vaardigheidswiel"
 
 msgid "On the wheel of skills, it shows the name of the skill when it has short code."
 msgstr ""
+"Op het vaardigheidswiel wordt de naam van de vaardigheid getoond wanneer "
+"deze een korte code heeft."
 
 msgid "Created by"
-msgstr ""
+msgstr "Gemaakt door"
 
 msgid "Hide general coach in dropbox"
-msgstr ""
+msgstr "Verberg algemene coach in dropbox"
 
 msgid "Hide general coach name in the dropbox tool when the general coach uploaded the file"
 msgstr ""
+"Verberg de algemene tutor naam in de dropbox-tool wanneer de algemene tutor "
+"het bestand heeft geüpload"
 
 msgid "Upload my assignment"
-msgstr ""
+msgstr "Upload mijn opdracht"
 
 msgid "Inserted"
-msgstr ""
+msgstr "Ingevoegd"
 
 msgid "Your browser does not support native video transmission."
-msgstr ""
+msgstr "Uw browser ondersteunt geen native video-overdracht."
 
 msgid "Other teachers"
-msgstr ""
+msgstr "Andere trainers"
 
 msgid "Course category"
-msgstr ""
+msgstr "Cursuscategorie"
 
 msgid "Video chat between %s and %s"
-msgstr ""
+msgstr "Videochat tussen %s en %s"
 
 msgid "Enable"
-msgstr ""
+msgstr "Inschakelen"
 
 msgid "Disable"
-msgstr ""
+msgstr "Uitschakelen"
 
 msgid "Avoid changing page as this will cut your current video chat session"
 msgstr ""
+"Vermijd het veranderen van de pagina, dit zal uw huidige videochat sessie "
+"onderbreken"
 
 msgid "Connecting to peer"
-msgstr ""
+msgstr "Verbinding maken met peer"
 
 msgid "Connection established"
-msgstr ""
+msgstr "Verbinding tot stand gebracht"
 
 msgid "Connection failed"
-msgstr ""
+msgstr "Verbinding mislukt"
 
 msgid "Connection closed"
-msgstr ""
+msgstr "Verbinding gesloten"
 
 msgid "Local connection failed"
-msgstr ""
+msgstr "Lokale verbinding mislukt"
 
 msgid "Remote connection failed"
-msgstr ""
+msgstr "De externe verbinding is mislukt"
 
 msgid "View students"
-msgstr ""
+msgstr "Bekijk leerlingen"
 
 msgid "Into"
-msgstr ""
+msgstr "In"
 
 msgid "Sequence"
-msgstr ""
+msgstr "Reeks"
 
 msgid "Invitee"
-msgstr ""
+msgstr "Genodigde"
 
 msgid "Date range"
-msgstr ""
+msgstr "Datumbereik"
 
 msgid "Edit icon"
-msgstr ""
+msgstr "Bewerk icoon"
 
 msgid "Custom icon"
-msgstr ""
+msgstr "Aangepast icoon"
 
 msgid "Current icon"
-msgstr ""
+msgstr "Huidig icoon"
 
 msgid "Group reporting"
 msgstr "Opvolging groep"
 
 msgid "Convert format"
-msgstr ""
+msgstr "Converteer formaat"
 
 msgid "Are you sure you want to delete %s?"
-msgstr ""
+msgstr "Weet u zeker dat u %s wilt verwijderen?"
 
 msgid "Attachments list"
-msgstr ""
+msgstr "Bijlagenlijst"
 
 msgid "See course information and requirements"
-msgstr ""
+msgstr "Zie cursusinformatie en vereisten"
 
 msgid "Download all"
-msgstr ""
+msgstr "Download alles"
 
 msgid "Deleted documents"
-msgstr ""
+msgstr "Verwijderde documenten"
 
 msgid "Course list not available"
-msgstr ""
+msgstr "Cursuslijst niet beschikbaar"
 
 msgid "Copy of message sent to %s"
-msgstr ""
+msgstr "Kopie van bericht verzonden naar %s"
 
 msgid "Convert"
-msgstr ""
+msgstr "Converteren"
 
 msgid "Portal's limit type"
-msgstr ""
+msgstr "Type limiet van het portaal"
 
 msgid "Portal name"
-msgstr ""
+msgstr "Portaalnaam"
 
 msgid "Best score"
-msgstr ""
+msgstr "Beste score"
 
 msgid "Are you sure to delete"
 msgstr "Bent u zeker dat u wenst te verwijderen?"
 
 msgid "Conversion to same file format. Please choose another."
-msgstr ""
+msgstr "Conversie naar hetzelfde bestandsformaat. Kies alstublieft een ander."
 
 msgid "File format not supported"
-msgstr ""
+msgstr "Bestandsformaat wordt niet ondersteund"
 
 msgid "File converted from %s to %s"
-msgstr ""
+msgstr "Bestand geconverteerd van %s naar %s"
 
 msgid "%s days"
 msgstr "%s dagen"
@@ -21375,115 +21398,126 @@ msgid "Export badge"
 msgstr "Badge exporteren"
 
 msgid "Select to search"
-msgstr ""
+msgstr "Selecteer om te zoeken"
 
 msgid "Place on the wheel"
-msgstr ""
+msgstr "Plaats op het wiel"
 
 msgid "Skill"
-msgstr ""
+msgstr "Vaardigheid"
 
 msgid "Argumentation"
-msgstr ""
+msgstr "Argumentatie"
 
 msgid "The user %s has already achieved the skill %s"
-msgstr ""
+msgstr "De gebruiker %s heeft de vaardigheid %s al bereikt"
 
 msgid "The skill %s has been assigned to user %s"
-msgstr ""
+msgstr "De vaardigheid %s is toegewezen aan gebruiker %s"
 
 msgid "Assign skill"
-msgstr ""
+msgstr "Toewijzen van vaardigheid"
 
 msgid "Geolocalization"
-msgstr ""
+msgstr "Geolokalisatie"
 
 msgid "On a grade of 1 to 10, how well did you observe that this person could put this skill in practice?"
 msgstr ""
+"Op een schaal van 1 tot 10, hoe goed heeft u waargenomen dat deze persoon "
+"deze vaardigheid in praktijk kon brengen?"
 
 msgid "Average rating %s"
-msgstr ""
+msgstr "Gemiddelde beoordeling %s"
 
 msgid "Average rating"
-msgstr ""
+msgstr "Gemiddelde beoordeling"
 
 msgid "Teachers results are not shown nor taken into account in the gradebook."
 msgstr ""
+"Resultaten van trainers worden niet getoond en niet meegenomen in het "
+"puntenboekje."
 
 msgid "Write something on your friend's wall"
-msgstr ""
+msgstr "Schrijf iets op de tijdlijn van je vriend"
 
 msgid "Blank template"
-msgstr ""
+msgstr "Lege sjabloon"
 
 msgid "Base course"
-msgstr ""
+msgstr "Basiscursus"
 
 msgid "Base courses"
-msgstr ""
+msgstr "Basiscursussen"
 
 msgid "Square"
-msgstr ""
+msgstr "Vierkant"
 
 msgid "Polygon"
-msgstr ""
+msgstr "Veelhoek"
 
 msgid "Draw a hotspot"
-msgstr ""
+msgstr "Teken een hotspot"
 
 msgid "Use right-click to close the polygon"
-msgstr ""
+msgstr "Gebruik de rechtermuisknop om de veelhoek te sluiten"
 
 msgid "Release the mousebutton to save the hotspot"
-msgstr ""
+msgstr "Laat de muisknop los om de hotspot op te slaan"
 
 msgid "Hotspot saved"
-msgstr ""
+msgstr "Hotspot opgeslagen"
 
 msgid "Show/Hide userclicks"
-msgstr ""
+msgstr "Toon/Verberg gebruikersklikken"
 
 msgid "Show / Hide hotspots"
-msgstr ""
+msgstr "Toon / Verberg hotspots"
 
 msgid "Attempts left"
-msgstr ""
+msgstr "Pogingen over"
 
 msgid "Now click on:"
-msgstr ""
+msgstr "Nu klik op:"
 
 msgid "Close delineation"
-msgstr ""
+msgstr "Nauwkeurige afbakening"
 
 msgid "Area at risk"
-msgstr ""
+msgstr "Risicogebied"
 
 msgid "Now click on the button below to validate your answers"
 msgstr "Klik op de knop onderaan om je antwoorden te valideren."
 
 msgid "Close polygon"
-msgstr ""
+msgstr "Sluit veelhoek"
 
 msgid "Use right-click to close the delineation"
-msgstr ""
+msgstr "Gebruik rechtsklik om de afbakening te sluiten"
 
 msgid "Beta"
-msgstr ""
+msgstr "Bèta"
 
 msgid "Crop your picture"
-msgstr ""
+msgstr "Snijd uw foto bij"
 
 msgid "Download badge"
-msgstr ""
+msgstr "Download badge"
 
 msgid "No XML file found in the zip archive. This is a requirement for this type of import."
 msgstr ""
+"Er is geen XML-bestand gevonden in het ziparchief. Dit is een vereiste voor "
+"dit type import."
 
 msgid "There was a problem embedding the badge assertion info into the badge image, but you can still use this page as a valid proof."
 msgstr ""
+"Er was een probleem met het integreren van de badge-toekenningsinformatie in "
+"de badge-afbeelding, maar u kunt deze pagina nog steeds gebruiken als geldig "
+"bewijs."
 
 msgid "This action will associate a forum thread to this learning path item. Do you want to proceed?"
 msgstr ""
+"Deze actie zal een forumdraad koppelen aan dit onderdeel van het leerpad. "
+"Wilt u doorgaan?"
 
 msgid "This action will dissociate the forum thread of this learning path item. Do you want to proceed?"
 msgstr ""

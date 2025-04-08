@@ -110,13 +110,6 @@ final class Version20240811221400 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE ticket_assigned_log ADD CONSTRAINT FK_54B65868700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE ticket_assigned_log ADD CONSTRAINT FK_54B65868A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
 
-        // track_course_ranking
-        $this->addSql('DELETE t1 FROM track_course_ranking t1 INNER JOIN track_course_ranking t2 WHERE t1.id > t2.id AND t1.c_id = t2.c_id');
-        $this->addSql('ALTER TABLE track_course_ranking DROP FOREIGN KEY IF EXISTS FK_4A2D3A7E91D79BD3');
-        $this->addSql('DROP INDEX IF EXISTS UNIQ_4A2D3A7E91D79BD3 ON track_course_ranking');
-        $this->addSql('ALTER TABLE track_course_ranking ADD CONSTRAINT FK_4A2D3A7E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_4A2D3A7E91D79BD3 ON track_course_ranking (c_id)');
-
         // course_rel_user
         $this->addSql('ALTER TABLE course_rel_user DROP FOREIGN KEY IF EXISTS FK_92CFD9FEA76ED395');
         $this->addSql('ALTER TABLE course_rel_user ADD CONSTRAINT FK_92CFD9FEA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');

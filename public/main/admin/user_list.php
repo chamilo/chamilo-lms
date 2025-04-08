@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
@@ -214,7 +215,7 @@ function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false):
         'keyword_username',
         'keyword_email',
         'keyword_officialcode',
-        'keyword_status',
+        'keyword_roles',
         'keyword_active',
         'keyword_inactive',
         'check_easy_passwords',
@@ -230,65 +231,64 @@ function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false):
         }
     }
 
-    if (false == $atLeastOne) {
+    if (!$atLeastOne) {
         $keywordListValues = [];
     }
 
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $keywordFiltered = Database::escape_string("%".$_GET['keyword']."%");
         $sql .= " WHERE (
-                    u.firstname LIKE '$keywordFiltered' OR
-                    u.lastname LIKE '$keywordFiltered' OR
-                    concat(u.firstname, ' ', u.lastname) LIKE '$keywordFiltered' OR
-                    concat(u.lastname,' ',u.firstname) LIKE '$keywordFiltered' OR
-                    u.username LIKE '$keywordFiltered' OR
-                    u.official_code LIKE '$keywordFiltered' OR
-                    u.email LIKE '$keywordFiltered'
-                )
-        ";
-    } elseif (isset($keywordListValues) && !empty($keywordListValues)) {
+            u.firstname LIKE '$keywordFiltered' OR
+            u.lastname LIKE '$keywordFiltered' OR
+            concat(u.firstname, ' ', u.lastname) LIKE '$keywordFiltered' OR
+            concat(u.lastname,' ',u.firstname) LIKE '$keywordFiltered' OR
+            u.username LIKE '$keywordFiltered' OR
+            u.official_code LIKE '$keywordFiltered' OR
+            u.email LIKE '$keywordFiltered'
+        )";
+    } elseif (!empty($keywordListValues)) {
         $query_admin_table = '';
         $keyword_admin = '';
 
-        if (isset($keywordListValues['keyword_status']) &&
-            PLATFORM_ADMIN == $keywordListValues['keyword_status']
-        ) {
+        $roles = [];
+        if (!empty($keywordListValues['keyword_roles'])) {
+            foreach ((array) $keywordListValues['keyword_roles'] as $sub) {
+                $roles = array_merge($roles, (array) $sub);
+            }
+        }
+
+        if (in_array('ROLE_PLATFORM_ADMIN', $roles, true)) {
             $query_admin_table = " , $admin_table a ";
             $keyword_admin = ' AND a.user_id = u.id ';
-            $keywordListValues['keyword_status'] = '';
         }
 
-        if ('%' === $keywordListValues['keyword_status']) {
-            $keywordListValues['keyword_status'] = '';
-        }
-
-        $keyword_extra_value = '';
-        $sql .= " $query_admin_table
-            WHERE ( 1 = 1 ";
+        $sql .= " $query_admin_table WHERE (1 = 1 ";
 
         if (!empty($keywordListValues['keyword_firstname'])) {
-            $sql .= "AND u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."'";
+            $sql .= " AND u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."'";
         }
-        // This block is never executed because $keyword_extra_data never exists
         if (!empty($keywordListValues['keyword_lastname'])) {
-            $sql .= "AND u.lastname LIKE '".Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."'";
+            $sql .= " AND u.lastname LIKE '".Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."'";
         }
         if (!empty($keywordListValues['keyword_username'])) {
-            $sql .= "AND u.username LIKE '".Database::escape_string("%".$keywordListValues['keyword_username']."%")."'";
+            $sql .= " AND u.username LIKE '".Database::escape_string("%".$keywordListValues['keyword_username']."%")."'";
         }
         if (!empty($keywordListValues['keyword_email'])) {
-            $sql .= "AND u.email LIKE '".Database::escape_string("%".$keywordListValues['keyword_email']."%")."'";
-        }
-
-        if (!empty($keywordListValues['keyword_status'])) {
-            $sql .= "AND u.status = '".Database::escape_string($keywordListValues['keyword_status'])."'";
+            $sql .= " AND u.email LIKE '".Database::escape_string("%".$keywordListValues['keyword_email']."%")."'";
         }
 
         if (!empty($keywordListValues['keyword_officialcode'])) {
-            $sql .= " AND u.official_code LIKE '".Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."' ";
+            $sql .= " AND u.official_code LIKE '".Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."'";
         }
 
-        $sql .= " $keyword_admin $keyword_extra_value ";
+        if (!empty($roles)) {
+            $roleConditions = [];
+            foreach ($roles as $role) {
+                $escaped = Database::escape_string($role);
+                $roleConditions[] = "u.roles LIKE '%\"$escaped\"%'";
+            }
+            $sql .= ' AND (' . implode(' OR ', $roleConditions) . ')';
+        }
 
         if (isset($keywordListValues['keyword_active']) &&
             !isset($keywordListValues['keyword_inactive'])
@@ -299,27 +299,23 @@ function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false):
         ) {
             $sql .= ' AND u.active = 0';
         }
-        $sql .= ' ) ';
+
+        $sql .= " $keyword_admin )";
     }
 
     if ($classId) {
         $sql .= " AND ug.usergroup_id = $classId";
     }
 
-    $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
-
-    $extraConditions = '';
-    if (api_is_session_admin() && 'true' === $preventSessionAdminsToManageAllUsers) {
-        $extraConditions .= ' AND u.creator_id = '.api_get_user_id();
+    if (api_is_session_admin() && api_get_setting('prevent_session_admins_to_manage_all_users') === 'true') {
+        $sql .= ' AND u.creator_id = '.api_get_user_id();
     }
 
-    // adding the filter to see the user's only of the current access_url
     if ($isMultipleUrl) {
-        $extraConditions .= ' AND url_rel_user.access_url_id = '.$urlId;
+        $sql .= ' AND url_rel_user.access_url_id = '.$urlId;
     }
 
-    $sql .= $extraConditions;
-
+    // Extra fields (sin cambios)
     $variables = Session::read('variables_to_show', []);
     $extraFields = api_get_setting('profile.user_search_on_extra_fields', true);
 
@@ -338,11 +334,9 @@ function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false):
         $extraFieldHasData = [];
         foreach ($variables as $variable) {
             if (isset($_GET['extra_'.$variable])) {
-                if (is_array($_GET['extra_'.$variable])) {
-                    $values = $_GET['extra_'.$variable];
-                } else {
-                    $values = [$_GET['extra_'.$variable]];
-                }
+                $values = is_array($_GET['extra_'.$variable])
+                    ? $_GET['extra_'.$variable]
+                    : [$_GET['extra_'.$variable]];
 
                 if (empty($values)) {
                     continue;
@@ -358,7 +352,7 @@ function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false):
                     if (empty($value)) {
                         continue;
                     }
-                    if (ExtraField::FIELD_TYPE_TAG == $info['value_type']) {
+                    if (ExtraField::FIELD_TYPE_TAG === $info['value_type']) {
                         $result = $extraField->getAllUserPerTag($info['id'], $value);
                         $result = empty($result) ? [] : array_column($result, 'user_id');
                     } else {
@@ -373,14 +367,10 @@ function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false):
             }
         }
 
-        $condition = '  AND ';
-        // If simple search then use "OR"
-        if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
-            $condition = ' OR ';
-        }
+        $condition = isset($_GET['keyword']) ? ' OR ' : ' AND ';
 
         if (!empty($extraFieldHasData) && !empty($extraFieldResult)) {
-            $sql .= " $condition (u.id IN ('".implode("','", $extraFieldResult)."') $extraConditions ) ";
+            $sql .= " $condition u.id IN ('".implode("','", $extraFieldResult)."')";
         }
     }
 
@@ -419,9 +409,6 @@ function get_user_data(int $from, int $number_of_items, int $column, string $dir
     if (!in_array($direction, ['ASC', 'DESC'])) {
         $direction = 'ASC';
     }
-    $column = (int) $column;
-    $from = (int) $from;
-    $number_of_items = (int) $number_of_items;
 
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from, $number_of_items";
@@ -458,7 +445,7 @@ function get_user_data(int $from, int $number_of_items, int $column, string $dir
             $user[3],
             $user[4], // username
             $user[5], // email
-            $user[6],
+            $user[0],
             $user[7], // active
             api_get_local_time($user[8]),
             api_get_local_time($user[9], null, null, true),
@@ -568,15 +555,15 @@ function modify_filter($user_id, $url_params, $row): string
 {
     $_admins_list = Session::read('admin_list', []);
     $is_admin = in_array($user_id, $_admins_list);
-    $statusname = api_get_status_langvars();
+
+    $repo = Container::getUserRepository();
+    $userEntity = $repo->find($user_id);
+    $userRoles = $userEntity ? $userEntity->getRoles() : [];
+
     $currentUserId = api_get_user_id();
 
-    $user_is_anonymous = false;
+    $user_is_anonymous = in_array('ROLE_ANONYMOUS', $userRoles, true);
     $current_user_status_label = $row['7'];
-
-    if ($current_user_status_label == $statusname[ANONYMOUS]) {
-        $user_is_anonymous = true;
-    }
     $result = '';
 
     if (api_is_platform_admin()) {
@@ -589,16 +576,21 @@ function modify_filter($user_id, $url_params, $row): string
         }
     }
 
-    // Only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
-    $loginAsStatusForSessionAdmins = [$statusname[STUDENT]];
+    $loginAsRolesForSessionAdmins = ['ROLE_STUDENT'];
 
-    // Except when session.allow_session_admin_login_as_teacher is enabled, then can login_as teachers also
     if ('true' === api_get_setting('session.allow_session_admin_login_as_teacher')) {
-        $loginAsStatusForSessionAdmins[] = $statusname[COURSEMANAGER];
+        $loginAsRolesForSessionAdmins[] = 'ROLE_TEACHER';
     }
 
-    $sessionAdminCanLoginAs = api_is_session_admin() &&
-        in_array($current_user_status_label, $loginAsStatusForSessionAdmins);
+    $sessionAdminCanLoginAs = false;
+    if (api_is_session_admin()) {
+        foreach ($loginAsRolesForSessionAdmins as $role) {
+            if (in_array($role, $userRoles, true)) {
+                $sessionAdminCanLoginAs = true;
+                break;
+            }
+        }
+    }
 
     if (api_is_platform_admin() || $sessionAdminCanLoginAs) {
         if (!$user_is_anonymous) {
@@ -615,7 +607,7 @@ function modify_filter($user_id, $url_params, $row): string
         $result .= Display::getMdiIcon('account-key', 'ch-tool-icon-disabled', null, 22, get_lang('Login as'));
     }
 
-    if ($current_user_status_label != $statusname[STUDENT]) {
+    if (!in_array('ROLE_STUDENT', $userRoles, true)) {
         $result .= Display::getMdiIcon(
             'chart-box',
             'ch-tool-icon-disabled',
@@ -807,7 +799,12 @@ function modify_filter($user_id, $url_params, $row): string
 
     // actions for assigning sessions, courses or users
     if (!api_is_session_admin()) {
-        if ($current_user_status_label == $statusname[SESSIONADMIN]) {
+        $isSessionManager = in_array('ROLE_SESSION_MANAGER', $userRoles, true);
+        $isHR = in_array('ROLE_HR', $userRoles, true);
+        $isStudentBoss = in_array('ROLE_STUDENT_BOSS', $userRoles, true);
+        $isAdmin = UserManager::is_admin($user_id);
+
+        if ($isSessionManager) {
             $result .= Display::url(
                 Display::getMdiIcon(
                     'google-classroom',
@@ -819,10 +816,7 @@ function modify_filter($user_id, $url_params, $row): string
                 "dashboard_add_sessions_to_user.php?user={$user_id}"
             );
         } else {
-            if ($current_user_status_label == $statusname[DRH] ||
-                UserManager::is_admin($user_id) ||
-                $current_user_status_label == $statusname[STUDENT_BOSS]
-            ) {
+            if ($isHR || $isAdmin || $isStudentBoss) {
                 $result .= Display::url(
                     Display::getMdiIcon(
                         'account-child',
@@ -836,7 +830,7 @@ function modify_filter($user_id, $url_params, $row): string
                 );
             }
 
-            if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
+            if ($isHR || $isAdmin) {
                 $result .= Display::url(
                     Display::getMdiIcon(
                         'book-open-page-variant',
@@ -916,13 +910,25 @@ function active_filter(int $active, string $params, array $row): string
 }
 
 /**
- * Instead of displaying the integer of the status, we give a translation for the status.
+ * Returns a list of user roles excluding the default ROLE_USER.
+ *
+ * @param int $userId The user ID.
+ * @return string HTML string with roles separated by <br>.
  */
-function status_filter(int $status): string
+function roles_filter($userId): string
 {
-    $name = api_get_status_langvars();
+    $repo = Container::getUserRepository();
+    $user = $repo->find($userId);
+    if (!$user) {
+        return '';
+    }
 
-    return $name[$status];
+    $roles = array_filter(
+        $user->getRoles(),
+        fn ($role) => $role !== 'ROLE_USER'
+    );
+
+    return implode('<br>', array_map('htmlentities', $roles));
 }
 
 if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
@@ -1183,7 +1189,10 @@ if (isset($_GET['keyword'])) {
     $parameters['keyword_username'] = Security::remove_XSS($_GET['keyword_username']);
     $parameters['keyword_email'] = Security::remove_XSS($_GET['keyword_email']);
     $parameters['keyword_officialcode'] = Security::remove_XSS($_GET['keyword_officialcode']);
-    $parameters['keyword_status'] = Security::remove_XSS($_GET['keyword_status']);
+    if (isset($_GET['keyword_roles'])) {
+        $keywordRoles = is_array($_GET['keyword_roles']) ? $_GET['keyword_roles'] : [$_GET['keyword_roles']];
+        $parameters['keyword_roles'] = implode(',', array_map('Security::remove_XSS', $keywordRoles));
+    }
     if (isset($_GET['keyword_active'])) {
         $parameters['keyword_active'] = Security::remove_XSS($_GET['keyword_active']);
     }
@@ -1230,19 +1239,11 @@ $form->addSelectAjax(
     ['url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword']
 );
 
-$status_options = [];
-$status_options['%'] = get_lang('All');
-$status_options[STUDENT] = get_lang('Learner');
-$status_options[COURSEMANAGER] = get_lang('Trainer');
-$status_options[DRH] = get_lang('Human Resources Manager');
-$status_options[SESSIONADMIN] = get_lang('Course sessionsAdmin');
-$status_options[PLATFORM_ADMIN] = get_lang('Administrator');
-$status_options[STUDENT_BOSS] = get_lang('RoleStudentBoss');
-
 $form->addSelect(
-    'keyword_status',
-    get_lang('Profile'),
-    $status_options
+    'keyword_roles',
+    get_lang('Roles'),
+    array_combine(api_get_roles(), api_get_roles()),
+    ['multiple' => true, 'size' => 6]
 );
 
 $active_group = [];
@@ -1291,7 +1292,7 @@ if (api_is_western_name_order()) {
 }
 $table->set_header(5, get_lang('Username'));
 $table->set_header(6, get_lang('e-mail'));
-$table->set_header(7, get_lang('Profile'));
+$table->set_header(7, get_lang('Roles'));
 $table->set_header(8, get_lang('active'), true, 'width="15px"');
 $table->set_header(9, get_lang('Registration date'), true, 'width="90px"');
 $table->set_header(10, get_lang('Latest login'), true, 'width="90px"');
@@ -1300,7 +1301,7 @@ $table->set_header(11, get_lang('Action'), false, 'width="220px"');
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
-$table->set_column_filter(7, 'status_filter');
+$table->set_column_filter(7, 'roles_filter');
 $table->set_column_filter(8, 'active_filter');
 $actionsList = [];
 if ($showDeletedUsers) {

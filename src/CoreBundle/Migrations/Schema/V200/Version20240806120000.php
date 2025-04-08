@@ -67,12 +67,12 @@ final class Version20240806120000 extends AbstractMigrationChamilo
         }
 
         // Format hosting limits as YAML
-        $yamlContent = "parameters:\n\tsettings_overrides:\n";
+        $yamlContent = "parameters:\n    settings_overrides:\n";
         foreach ($hostingLimits['settings_overrides'] as $urlId => $limits) {
-            $yamlContent .= "\t\t{$urlId}:\n\t\t\thosting_limit:\n";
+            $yamlContent .= "        {$urlId}:\n            hosting_limit:\n";
             foreach ($limits as $limit) {
                 foreach ($limit as $key => $value) {
-                    $yamlContent .= "\t\t\t\t$key: $value\n";
+                    $yamlContent .= "                $key: $value\n";
                 }
             }
         }

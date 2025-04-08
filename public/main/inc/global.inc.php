@@ -91,24 +91,21 @@ if ($isCli) {
     $context = $router->getContext();
     $router->setContext($context);
 
-    set_exception_handler(function ($exception) use ($kernel, $container) {
-        $request = Request::createFromGlobals();
+    set_exception_handler(function ($exception) use ($kernel, $container, $request) {
+        if (\in_array($kernel->getEnvironment(), ['dev', 'test'], true)) {
+            throw $exception;
+        }
+
         $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $exception);
         $listener = $container->get(ExceptionListener::class);
-        if (is_callable([$listener, '__invoke'])) {
-            $listener->__invoke($event);
-        } else {
-            $response = new Response('Error occurred', Response::HTTP_INTERNAL_SERVER_ERROR);
-            $response->send();
-            return;
+        if (is_callable($listener)) {
+            $listener($event);
         }
         $response = $event->getResponse();
-        if ($response) {
-            $response->send();
-        } else {
+        if (!$response) {
             $response = new Response('An error occurred', Response::HTTP_INTERNAL_SERVER_ERROR);
-            $response->send();
         }
+        $response->send();
     });
 
     $context = Container::getRouter()->getContext();

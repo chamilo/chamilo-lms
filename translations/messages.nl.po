@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-09 00:33+0000\n"
-"Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
+"PO-Revision-Date: 2025-04-09 20:13+0000\n"
+"Last-Translator: Rudy <rudy.willems@beeznest.com>\n"
 "Language-Team: Dutch <https://translation.chamilo.org/projects/chamilo/"
 "messages/nl/>\n"
 "Language: nl\n"
@@ -3239,7 +3239,7 @@ msgid "ex."
 msgstr "bv."
 
 msgid "Database Host"
-msgstr "Databankserver"
+msgstr "Databankhost"
 
 msgid "Database user"
 msgstr "Gebruikersnaam voor de databank"
@@ -21648,66 +21648,72 @@ msgstr "toegangsdata"
 
 msgid "Image dimensions do not match the requirements. Please check the suggestions next to the image field."
 msgstr ""
+"De afmetingen van de afbeelding voldoen niet aan de vereisten. Controleer de "
+"suggesties naast het afbeeldveld."
 
 msgid "Could not reset password, contact your helpdesk."
-msgstr ""
+msgstr "Kan wachtwoord niet resetten, neem contact op met uw helpdesk."
 
 msgid "Quote"
-msgstr ""
+msgstr "Citaat"
 
 msgid "Value is too small."
-msgstr ""
+msgstr "Waarde is te klein."
 
 msgid "Value is too big."
-msgstr ""
+msgstr "Waarde is te groot."
 
 msgid "You are a teacher of this course"
-msgstr ""
+msgstr "U bent een trainer van deze cursus"
 
 msgid "Student bosses list"
-msgstr ""
+msgstr "Lijst met studentenleiders"
 
 msgid "Show score on every attempt, show correct answers only on last attempt (only works with an attempts limit)"
 msgstr ""
+"Toon score bij elke poging, toon juiste antwoorden alleen bij laatste poging "
+"(werkt alleen met een pogingenlimiet)"
 
 msgid "Missing chart library. Please check the error log for details."
 msgstr ""
+"Ontbrekende grafiekbibliotheek. Controleer het foutenlogboek voor details."
 
 msgid "User %s indicated:"
-msgstr ""
+msgstr "Gebruiker %s gaf aan:"
 
 msgid "Level acquired"
 msgstr "Behaald niveau"
 
+#, fuzzy
 msgid "Manage skills levels"
-msgstr ""
+msgstr "Beheer vaardigheidsniveaus"
 
 msgid "Add profile"
-msgstr ""
+msgstr "Profiel toevoegen"
 
 msgid "Add level"
-msgstr ""
+msgstr "Niveau toevoegen"
 
 msgid "Change acquired level"
-msgstr ""
+msgstr "Verworven niveau wijzigen"
 
 msgid "No level acquired yet"
-msgstr ""
+msgstr "Nog geen niveau behaald"
 
 msgid "Record audio"
-msgstr ""
+msgstr "Audio opnemen"
 
 msgid "Start recording"
-msgstr ""
+msgstr "Begin met opnemen"
 
 msgid "Stop recording"
-msgstr ""
+msgstr "Stop met opnemen"
 
 msgid "Save recorded audio"
-msgstr ""
+msgstr "Opgenomen audio opslaan"
 
 msgid "Grades from course: %s"
-msgstr ""
+msgstr "Cijfers van cursus: %s"
 
 msgid "A title is required"
 msgstr "Titel verplicht"
@@ -21725,40 +21731,47 @@ msgid "Once this date has passed, the forum will be closed"
 msgstr "Na deze datum is het forum gesloten"
 
 msgid "Moderated forum"
-msgstr ""
+msgstr "Gematigd forum"
 
 msgid "Diagnosis filled successfully"
-msgstr ""
+msgstr "Diagnose succesvol ingevuld"
 
 msgid "The diagnosis has been filled successfully"
-msgstr ""
+msgstr "De diagnose is succesvol ingevuld"
 
 msgid "User %s has filled the diagnosis"
-msgstr ""
+msgstr "Gebruiker %s heeft de diagnose ingevuld"
 
 msgid "User %s has filled the diagnosis on the platform and it is ready for you to review."
 msgstr ""
+"Gebruiker %s heeft de diagnose op het platform ingevuld en het is klaar voor "
+"uw beoordeling."
 
 msgid "Send legal agreement"
-msgstr ""
+msgstr "Verstuur juridische overeenkomst"
 
 msgid "Delete legal agreement"
-msgstr ""
+msgstr "Verwijder juridische overeenkomst"
 
 msgid "Legal accepted"
-msgstr ""
+msgstr "Juridisch geaccepteerd"
 
 msgid "Load term conditions section"
-msgstr ""
+msgstr "Laad sectie voorwaarden van de term"
 
 msgid "The legal agreement will appear during the login or when enter to a course."
 msgstr ""
+"De juridische overeenkomst zal verschijnen tijdens het inloggen of bij het "
+"betreden van een cursus."
 
 msgid "Your terms and conditions are ready to be signed"
-msgstr ""
+msgstr "Uw algemene voorwaarden zijn klaar om ondertekend te worden"
 
+#, fuzzy
 msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s"
 msgstr ""
+"Hallo,<br />Uw tutor heeft u de algemene voorwaarden gestuurd. U kunt deze "
+"ondertekenen via de volgende URL: %s"
 
 msgid "User %s signed the agreement."
 msgstr "Gebruiker %s heeft de overeenkomst ondertekend."
@@ -21787,133 +21800,145 @@ msgid "You must first fill your profile to continue"
 msgstr "U moet eerst uw profiel invullen om verder te gaan"
 
 msgid "The terms and conditions have not yet been validated by your tutor."
-msgstr ""
+msgstr "De algemene voorwaarden zijn nog niet gevalideerd door uw tutor."
 
 msgid "Diagnosis management"
-msgstr ""
+msgstr "Diagnosebeheer"
 
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
+"U moet eerst uw profiel invullen om de validatie van de algemene voorwaarden "
+"mogelijk te maken."
 
 msgid "Diagnostic"
-msgstr ""
+msgstr "Diagnostisch"
 
 msgid "Allow show the user Skype account"
-msgstr ""
+msgstr "Toon het Skype-account van de gebruiker"
 
 msgid "Add a link on the user social block allowing start a chat by Skype"
 msgstr ""
+"Voeg een link toe in het sociale blok van de gebruiker om een chat via Skype "
+"te starten"
 
 msgid "Allow show the user LinkedIn URL"
-msgstr ""
+msgstr "Sta het tonen van de LinkedIn-URL van de gebruiker toe"
 
 msgid "Add a link on the user social block, allowing visit the user's LinkedIn profile"
 msgstr ""
+"Voeg een link toe in het sociale blok van de gebruiker, zodat het LinkedIn-"
+"profiel van de gebruiker bezocht kan worden."
 
 msgid "Launch videoconference room"
-msgstr ""
+msgstr "Start videoconferentieruimte"
 
 msgid "Terms duplicated in file"
-msgstr ""
+msgstr "Termen gedupliceerd in bestand"
 
 msgid "Term already exists"
-msgstr ""
+msgstr "Term bestaat al"
 
 msgid "LinkedIn profile URL"
-msgstr ""
+msgstr "LinkedIn-profiel-URL"
 
 msgid "Save the correct answer for the next attempt"
-msgstr ""
+msgstr "Bewaar het juiste antwoord voor de volgende poging"
 
 msgid "Translate this term"
-msgstr ""
+msgstr "Vertaal deze term"
 
 msgid "Only active sub-languages appear in this list"
-msgstr ""
+msgstr "Alleen actieve sub-talen worden in deze lijst weergegeven"
 
+#, fuzzy
 msgid "Translation"
-msgstr ""
+msgstr "Please provide the text you would like to have translated."
 
 msgid "If this term has already been translated, this operation will replace its translation for this sub-language."
 msgstr ""
+"Als deze term al vertaald is, zal deze bewerking zijn vertaling voor deze "
+"subtaal vervangen."
 
 msgid "Last connection"
-msgstr ""
+msgstr "Laatste verbinding"
 
 msgid "His profile is"
-msgstr ""
+msgstr "Zijn profiel is"
 
+#, fuzzy
 msgid "User %s with language %s is registered in the site"
-msgstr ""
+msgstr "Gebruiker %s met taal %s is geregistreerd op de site"
 
+#, fuzzy
 msgid "You can assign a tutor in this link %s"
-msgstr ""
+msgstr "U kunt een tutor toewijzen via deze link %s"
 
+#, fuzzy
 msgid "Update existing terms."
-msgstr ""
+msgstr "Bestaande termen bijwerken."
 
 msgid "Terms updated"
-msgstr ""
+msgstr "Voorwaarden bijgewerkt"
 
 msgid "Terms added"
-msgstr ""
+msgstr "Termen toegevoegd"
 
 msgid "Teachers time report by session"
-msgstr ""
+msgstr "Docenten tijdverslag per sessie"
 
 msgid "Number of works"
-msgstr ""
+msgstr "Aantal werken"
 
 msgid "Last work"
-msgstr ""
+msgstr "Laatste werk"
 
 msgid "Waiting for moderation"
-msgstr ""
+msgstr "In afwachting van moderatie"
 
 msgid "Works in session report"
-msgstr ""
+msgstr "Werkt in sessierapport"
 
 msgid "Files"
-msgstr ""
+msgstr "Bestanden"
 
 msgid "Assigned to"
-msgstr ""
+msgstr "Toegewezen aan"
 
 msgid "Updated by %s"
-msgstr ""
+msgstr "Bijgewerkt door %s"
 
 msgid "Assignee changed from %s to %s"
-msgstr ""
+msgstr "Toegewezen aan veranderd van %s naar %s"
 
 msgid "Request confirmation"
-msgstr ""
+msgstr "Bevestiging aanvragen"
 
 msgid "Change assign"
-msgstr ""
+msgstr "Wijzig toewijzing"
 
 msgid "To be assigned"
-msgstr ""
+msgstr "Toegewezen te worden"
 
 msgid "Pending"
-msgstr ""
+msgstr "In behandeling"
 
 msgid "Unconfirmed"
-msgstr ""
+msgstr "Onbevestigd"
 
 msgid "Forwarded"
-msgstr ""
+msgstr "Doorgestuurd"
 
 msgid "My tickets"
-msgstr ""
+msgstr "Mijn tickets"
 
 msgid "High"
-msgstr ""
+msgstr "Hoog"
 
 msgid "Low"
-msgstr ""
+msgstr "Laag"
 
 msgid "Ticket details"
-msgstr ""
+msgstr "Ticketgegevens"
 
 msgid "Unread"
 msgstr ""
@@ -22120,10 +22145,10 @@ msgid "You have already sent this file or another file with the same name. Pleas
 msgstr ""
 
 msgid "Default visibility of new documents"
-msgstr ""
+msgstr "Standaard zichtbaarheid van nieuwe documenten"
 
 msgid "Allow users to add tickets"
-msgstr ""
+msgstr "Sta gebruikers toe tickets toe te voegen"
 
 msgid "Allows all users to add tickets not only the administrators."
 msgstr "Sta alle gebruikers toe tickets toe te voegen, niet alleen beheerders"
@@ -22136,18 +22161,22 @@ msgstr "Send a message if a ticket was created without a category or if a catego
 
 msgid "Send alert to administrators if tickets category has no one in charge"
 msgstr ""
+"Stuur een waarschuwing naar de beheerders als de categorie tickets niemand "
+"heeft die verantwoordelijk is"
 
 msgid "Send a warning message (e-mail and Chamilo message) to all administrators if there's not a user assigned to a category."
 msgstr ""
+"Stuur een waarschuwingsbericht (e-mail en Chamilo-bericht) naar alle "
+"beheerders als er geen gebruiker is toegewezen aan een categorie."
 
 msgid "Allow tickets categories edition"
-msgstr ""
+msgstr "Sta bewerking van ticketcategorieën toe"
 
 msgid "Allow category edition by administrators."
-msgstr ""
+msgstr "Sta categoriebewerking toe door beheerders."
 
 msgid "Tickets"
-msgstr ""
+msgstr "Tickets"
 
 msgid "The Moodle course file has been imported successfully."
 msgstr "Het Moodle cursusbestand is succesvol geïmporteerd"
@@ -22168,22 +22197,22 @@ msgid "No history"
 msgstr "Geen geschiedenis"
 
 msgid "Recalculate results"
-msgstr ""
+msgstr "Resultaten herberekenen"
 
 msgid "%s (deleted)"
-msgstr ""
+msgstr "%s (verwijderd)"
 
 msgid "Available also on main portal"
-msgstr ""
+msgstr "Ook beschikbaar op het hoofdportaal"
 
 msgid "Edit course categories for one URL"
-msgstr ""
+msgstr "Cursuscategorieën bewerken voor één URL"
 
 msgid "Visible to self"
-msgstr ""
+msgstr "Zichtbaar voor jezelf"
 
 msgid "Visible to others"
-msgstr ""
+msgstr "Zichtbaar voor anderen"
 
 msgid "Upgrade Chamilo LMS version"
 msgstr "Upgrade Chamilo LMS version"
@@ -22225,148 +22254,152 @@ msgid "You have been assigned as tutor for the learner %s.<br/>"
 msgstr "U bent als tutor toegewezen aan student %s. U kunt zijn profiel bekijken van hier: %s"
 
 msgid "Short name"
-msgstr ""
+msgstr "Korte naam"
 
 msgid "Course user document"
-msgstr ""
+msgstr "Cursusgebruikersdocument"
 
 msgid "Destination"
-msgstr ""
+msgstr "Bestemming"
 
 msgid "User testing of e-mail configuration"
-msgstr ""
+msgstr "Gebruikerstesten van e-mailconfiguratie"
 
 msgid "CMS"
-msgstr ""
+msgstr "CMS"
 
 msgid "Legal conditions"
-msgstr ""
+msgstr "Juridische voorwaarden"
 
 msgid "Please accept our legal conditions here: %s"
-msgstr ""
+msgstr "Gelieve hier onze juridische voorwaarden te accepteren: %s"
 
 msgid "Exercise invisible in sessions"
-msgstr ""
+msgstr "Oefening onzichtbaar in sessies"
 
 msgid "You need to confirm your agreement to our terms first. Please check your e-mail."
 msgstr ""
+"U moet eerst akkoord gaan met onze voorwaarden. Controleer alstublieft uw "
+"e-mail."
 
 msgid "Error importing file"
-msgstr ""
+msgstr "Fout bij het importeren van bestand"
 
 msgid "Hidden"
-msgstr ""
+msgstr "Verborgen"
 
 msgid "Imported"
-msgstr ""
+msgstr "Geïmporteerd"
 
 msgid "Import from a CSV"
-msgstr ""
+msgstr "Importeren uit een CSV"
 
 msgid "Add files"
-msgstr ""
+msgstr "Bestanden toevoegen"
 
 msgid "Group forums"
-msgstr ""
+msgstr "Groepsforums"
 
 msgid "Generate"
-msgstr ""
+msgstr "Genereren"
 
 msgid "Ticket"
-msgstr ""
+msgstr "Ticket"
 
 msgid "Invalid API key"
-msgstr ""
+msgstr "Ongeldige API-sleutel"
 
 msgid "No announcement"
-msgstr ""
+msgstr "Geen aankondiging"
 
 msgid "No forum"
-msgstr ""
+msgstr "Geen forum"
 
 msgid "Go to exercise"
-msgstr ""
+msgstr "Ga naar oefening"
 
 msgid "Dissociate forum"
-msgstr ""
+msgstr "Forum ontkoppelen"
 
 msgid "No learning path found"
-msgstr ""
+msgstr "Geen leerroute gevonden"
 
 msgid "Active report link"
-msgstr ""
+msgstr "Actieve rapportlink"
 
 msgid "Invitees cannot be tutors"
-msgstr ""
+msgstr "Genodigden kunnen geen trainers zijn"
 
 msgid "Invalid action"
-msgstr ""
+msgstr "Ongeldige actie"
 
 msgid "Was this answer satisfactory?"
-msgstr ""
+msgstr "Was dit antwoord bevredigend?"
 
 msgid "If you are certain, the ticket will be closed."
-msgstr ""
+msgstr "Als u zeker bent, wordt het ticket gesloten."
 
 msgid "Priorities"
-msgstr ""
+msgstr "Prioriteiten"
 
 msgid "This text should be at least %s characters long"
-msgstr ""
+msgstr "Deze tekst moet ten minste %s tekens lang zijn"
 
 msgid "Ticket <b>#%s</b> assigned to user <b>%s</b>"
-msgstr ""
+msgstr "Ticket <b>#%s</b> toegewezen aan gebruiker <b>%s</b>"
 
 msgid "This item is related to other tickets."
-msgstr ""
+msgstr "Dit item is gerelateerd aan andere tickets."
 
 msgid "Warning: No one has been assigned to category %s"
-msgstr ""
+msgstr "Waarschuwing: Er is niemand toegewezen aan categorie %s"
 
 msgid "Ticket %s was created without a category"
-msgstr ""
+msgstr "Ticket %s is aangemaakt zonder categorie"
 
 msgid "Ticket info"
-msgstr ""
+msgstr "Ticketinformatie"
 
 msgid "A notification was sent to the administrators to report this category has no user assigned"
 msgstr ""
+"Er is een melding naar de beheerders gestuurd om te melden dat aan deze "
+"categorie geen gebruiker is toegewezen."
 
 msgid "Virtual support"
-msgstr ""
+msgstr "Virtuele ondersteuning"
 
 msgid "The incident has been sent to the virtual support team again"
-msgstr ""
+msgstr "Het incident is opnieuw naar het virtuele ondersteuningsteam gestuurd"
 
 msgid "Your question has been sent to %s, the area in charge"
-msgstr ""
+msgstr "Uw vraag is verzonden naar %s, de verantwoordelijke afdeling"
 
 msgid "Your answer to this question will be sent to %s"
-msgstr ""
+msgstr "Uw antwoord op deze vraag wordt verzonden naar %s"
 
 msgid "Message resent"
-msgstr ""
+msgstr "Bericht opnieuw verzonden"
 
 msgid "Ticket assigned to %s. Follow-up at <a href='%s'>#%s</a>."
-msgstr ""
+msgstr "Ticket toegewezen aan %s. Opvolgen bij <a href='%s'>#%s</a>."
 
 msgid "Ticket %s assigned"
-msgstr ""
+msgstr "Ticket %s toegewezen"
 
 msgid "Ticket number"
-msgstr ""
+msgstr "Ticketnummer"
 
 msgid "Ticket closed"
-msgstr ""
+msgstr "Ticket gesloten"
 
 msgid "Unassign"
-msgstr ""
+msgstr "Toewijzing ongedaan maken"
 
 msgid "Please select tasks"
-msgstr ""
+msgstr "Selecteer taken"
 
 msgid "Please select"
-msgstr ""
+msgstr "Selecteer alstublieft"
 
 msgid "Please select thread"
 msgstr ""
@@ -22553,18 +22586,23 @@ msgstr ""
 
 msgid "Sorry, it seems like a speed of %s words/minute was too fast for this text of %s words."
 msgstr ""
+"Het spijt ons, maar een snelheid van %s woorden per minuut was te snel voor "
+"deze tekst van %s woorden."
 
 msgid "Congratulations, you have reached and correctly understood, at a speed of %s words per minute, a text of a total %s words."
 msgstr ""
+"Gefeliciteerd, u heeft met een snelheid van %s woorden per minuut een tekst "
+"van in totaal %s woorden correct begrepen en gelezen."
 
 msgid "%s words per minute"
-msgstr ""
+msgstr "%s woorden per minuut"
 
+#, fuzzy
 msgid "Tutor %s is no subscribed to this course"
-msgstr ""
+msgstr "Tutor [X0X] is niet ingeschreven voor deze cursus"
 
 msgid "Update this title in learning paths"
-msgstr ""
+msgstr "Werk deze titel bij in leerpaden"
 
 msgid "To enable video chat in your browser (if it supports it), make sure you click on the information icon on the left of the URL and then authorize the use of the webcam and microphone."
 msgstr ""
@@ -23962,7 +24000,7 @@ msgid "Export as compact CSV"
 msgstr ""
 
 msgid "Promoted messages"
-msgstr ""
+msgstr "Gepromote Berichten"
 
 msgid "Publish for group tutors"
 msgstr ""
@@ -25665,3 +25703,351 @@ msgstr "Aantal woorden per pagina"
 
 msgid "User registrations by creator"
 msgstr "Gebruikersregistraties per maker"
+
+msgid "All Messages"
+msgstr "Alle berichten"
+
+msgid "Danger color hover/background"
+msgstr "Gevaarkleur zweven/achtergrond"
+
+msgid "Sign up"
+msgstr "Aanmelden"
+
+msgid "Database name"
+msgstr "Databasenaam"
+
+msgid "Step 3 - License"
+msgstr "Stap 3 - Licentie"
+
+msgid "Step 5 - Configuration settings"
+msgstr "Stap 5 - Configuratie-instellingen"
+
+msgid "Select the default timezone for this portal. This will help set the timezone (if the feature is enabled) for each new user or for any user that has not set a specific timezone yet. Timezones help show all time-related information on screen in the specific timezone of each user."
+msgstr ""
+"Selecteer de standaard tijdzone voor dit portaal. Dit helpt bij het "
+"instellen van de tijdzone (als de functie is ingeschakeld) voor elke nieuwe "
+"gebruiker of voor gebruikers die nog geen specifieke tijdzone hebben "
+"ingesteld. Tijdzones zorgen ervoor dat alle tijdgerelateerde informatie op "
+"het scherm wordt weergegeven in de specifieke tijdzone van elke gebruiker."
+
+msgid "Dropdowns"
+msgstr "Uitklapmenu's"
+
+msgid "Step 6 - Last check before install"
+msgstr "Stap 6 - Laatste controle voor installatie"
+
+msgid "Resource count"
+msgstr "Aantal bronnen"
+
+msgid "As read"
+msgstr "Zoals gelezen"
+
+msgid "Success color hover/background"
+msgstr "Succeskleur hover/achtergrond"
+
+msgid "Error saving the link"
+msgstr "Fout bij het opslaan van de link"
+
+msgid "Requests"
+msgstr "Verzoeken"
+
+msgid "Checkbox and radio buttons"
+msgstr "Selectievakje en keuzerondjes"
+
+msgid "Add to catalogue"
+msgstr "Toevoegen aan catalogus"
+
+msgid "Add course"
+msgstr "Cursus toevoegen"
+
+msgid "Update settings"
+msgstr "Instellingen bijwerken"
+
+msgid "Warning"
+msgstr "Waarschuwing"
+
+msgid "Tertiary"
+msgstr "Tertiair"
+
+msgid "Dialog example"
+msgstr "Voorbeeld van een dialoog"
+
+msgid "Contact form categories"
+msgstr "Contactformulier categorieën"
+
+msgid "This is a form with an error"
+msgstr "Dit is een formulier met een fout"
+
+msgid "Tool-based resource count"
+msgstr "Hulpmiddel-gebaseerde bronnenaantal"
+
+msgid "Info color"
+msgstr "Informatiekleur"
+
+msgid "Test invisible in session"
+msgstr "Oefening onzichtbaar in sessie"
+
+msgid "End of test"
+msgstr "Einde van de test"
+
+msgid "Introduction to registration"
+msgstr "Introductie tot registratie"
+
+msgid "Step 7 - Update process execution"
+msgstr "Stap 7 - Uitvoeringsproces bijwerken"
+
+msgid "Danger"
+msgstr "Gevaar"
+
+msgid "Continue with %s"
+msgstr "Ga verder met %s"
+
+msgid "Administrator password"
+msgstr "Beheerderswachtwoord"
+
+msgid "Form outline color"
+msgstr "Randkleur van formulier"
+
+msgid "News from Chamilo"
+msgstr "Nieuws van Chamilo"
+
+msgid "As unread"
+msgstr "Als ongelezen"
+
+msgid "Welcome to the registration process."
+msgstr "Welkom bij het registratieproces."
+
+msgid "This is the default form"
+msgstr "Dit is het standaardformulier"
+
+msgid "Sort"
+msgstr "Sorteren"
+
+msgid "Messages deleted"
+msgstr "Berichten verwijderd"
+
+msgid "Step 1 - Installation Language"
+msgstr "Stap 1 - Installatietaal"
+
+msgid "Other (custom URL)"
+msgstr "Andere (aangepaste URL)"
+
+msgid "Default timezone"
+msgstr "Standaard tijdzone"
+
+msgid "Success color button text"
+msgstr "Tekst van succeskleurknop"
+
+msgid "Some more elements"
+msgstr "Enkele meer elementen"
+
+msgid "Buttons"
+msgstr "Knoppen"
+
+msgid "Add friends"
+msgstr "Vrienden toevoegen"
+
+msgid "Do not list this campus on chamilo.org"
+msgstr "Vermeld deze campus niet op chamilo.org"
+
+msgid "Show advanced mode"
+msgstr "Toon geavanceerde modus"
+
+msgid "Passwords do not match"
+msgstr "Wachtwoorden komen niet overeen"
+
+msgid "Redirect to portal home"
+msgstr "Doorverwijzen naar portaal startpagina"
+
+msgid "Custom URL"
+msgstr "Aangepaste URL"
+
+msgid "Hide advanced mode"
+msgstr "Geavanceerde modus verbergen"
+
+msgid "Remove current icon"
+msgstr "Verwijder huidig icoon"
+
+msgid "Message deleted"
+msgstr "Bericht verwijderd"
+
+msgid "You can see examples of how chamilo will look here"
+msgstr "U kunt hier voorbeelden zien van hoe Chamilo eruit zal zien"
+
+msgid "Enable URL-specific files"
+msgstr "Activeer URL-specifieke bestanden"
+
+msgid "2FA disabled successfully."
+msgstr "2FA succesvol uitgeschakeld."
+
+msgid "By default, Chamilo portals are automatically registered in a public list at chamilo.org, just using the title you gave to this portal (not the URL nor any private data). Check this box to avoid having the title of your portal appear."
+msgstr ""
+"Standaard worden Chamilo-portalen automatisch geregistreerd in een openbare "
+"lijst op chamilo.org, met alleen de titel die u aan dit portaal hebt gegeven "
+"(niet de URL of enige privégegevens). Vink dit vakje aan om te voorkomen dat "
+"de titel van uw portaal verschijnt."
+
+msgid "Database settings"
+msgstr "Database-instellingen"
+
+msgid "Warning color hover/background"
+msgstr "Waarschuwingskleur zweven/achtergrond"
+
+msgid "For more details %s"
+msgstr "Voor meer details %s"
+
+msgid "Show dialog"
+msgstr "Toon dialoogvenster"
+
+msgid "Student boss"
+msgstr "Leerlingbegeleider"
+
+msgid "Info color hover/background"
+msgstr "Informatiekleur zweven/achtergrond"
+
+msgid "Platform use conditions"
+msgstr "Gebruiksvoorwaarden van het platform"
+
+msgid "Info color button text"
+msgstr "Informatiekleur knop tekst"
+
+msgid "On success"
+msgstr "Bij succes"
+
+msgid "QR code for 2FA"
+msgstr "QR-code voor 2FA"
+
+msgid "On failure"
+msgstr "Bij mislukking"
+
+msgid "Password updated successfully"
+msgstr "Wachtwoord succesvol bijgewerkt"
+
+msgid "Closed sessions"
+msgstr "Gesloten sessies"
+
+msgid "Promoted Messages"
+msgstr "Gepromote Berichten"
+
+msgid "Customize"
+msgstr "Aanpassen"
+
+msgid "Added to catalogue"
+msgstr "Toegevoegd aan catalogus"
+
+msgid "Scan the QR code to enable 2FA"
+msgstr "Scan de QR-code om 2FA in te schakelen"
+
+msgid "System templates"
+msgstr "Systeemsjablonen"
+
+msgid "When this feature is enabled on a multi-URL configuration, you can go to the main URL and provide URL-specific versions of any file (in the documents tool). The original file will be replaced by the alternative whenever seeing it from a different URL. This allows you to customize each URL even further, while enjoying the advantage of re-using the same courses many times."
+msgstr ""
+"Wanneer deze functie is ingeschakeld in een multi-URL-configuratie, kunt u "
+"naar de hoofd-URL gaan en URL-specifieke versies van elk bestand (in de "
+"documententool) verstrekken. Het originele bestand wordt vervangen door het "
+"alternatief wanneer het vanaf een andere URL wordt bekeken. Dit stelt u in "
+"staat om elke URL verder aan te passen, terwijl u profiteert van het "
+"voordeel dat u dezelfde cursussen meerdere keren kunt gebruiken."
+
+msgid "Course maintenance"
+msgstr "Cursusonderhoud"
+
+msgid "Submit code"
+msgstr "Code indienen"
+
+msgid "Danger color"
+msgstr "Gevaarkleur"
+
+msgid "Remove from catalogue"
+msgstr "Uit catalogus verwijderen"
+
+msgid "You may want to change this"
+msgstr "U wilt dit misschien veranderen"
+
+msgid "Database port"
+msgstr "Databankpoort"
+
+msgid "This icon will show for the link displayed as a tool on the course homepage."
+msgstr ""
+"Dit icoon wordt weergegeven bij de link die als een tool op de startpagina "
+"van de cursus wordt getoond."
+
+msgid "Please select installation language"
+msgstr "Selecteer de installatietaal"
+
+msgid "You need confirm your account via e-mail to access the platform"
+msgstr ""
+"U moet uw account via e-mail bevestigen om toegang te krijgen tot het "
+"platform"
+
+msgid "Toggle"
+msgstr "Schakelen"
+
+msgid "The icon must be 120x120 pixels."
+msgstr "Het icoon moet 120x120 pixels zijn."
+
+msgid "Display information about the next incomplete and the last completed topic"
+msgstr ""
+"Toon informatie over het volgende onvolledige en het laatst voltooide "
+"onderwerp"
+
+msgid "Select destination"
+msgstr "Selecteer bestemming"
+
+msgid "Add a user to a course"
+msgstr "Voeg een gebruiker toe aan een cursus"
+
+msgid "Step 7 - Installation process execution"
+msgstr "Stap 7 - Uitvoering van het installatieproces"
+
+msgid "Database driver"
+msgstr "Databasedriver"
+
+msgid "Primary alternative"
+msgstr "Primaire alternatief"
+
+msgid "Password too easy to guess"
+msgstr "Wachtwoord te makkelijk te raden"
+
+msgid "Repeat question"
+msgstr "Herhaal vraag"
+
+msgid "Database host"
+msgstr "Databankhost"
+
+msgid "Warning color button text"
+msgstr "Waarschuwingskleur knoptekst"
+
+msgid "Warning color"
+msgstr "Waarschuwingskleur"
+
+msgid "Change Password"
+msgstr "Wachtwoord wijzigen"
+
+msgid "Hide all"
+msgstr "Verberg alles"
+
+msgid "Not subscribed"
+msgstr "Niet registered"
+
+msgid "Step 2 - Requirements"
+msgstr "Stap 2 - Vereisten"
+
+msgid "External tools (LTI)"
+msgstr "Externe tools (LTI)"
+
+msgid "Add training sessions to categories"
+msgstr "Voeg trainingssessies toe aan categorieën"
+
+msgid "Add friend"
+msgstr "Vriend toevoegen"
+
+msgid "All sessions"
+msgstr "Alle sessies"
+
+msgid "Step 4 - Database settings"
+msgstr "Stap 4 - Database-instellingen"
+
+msgid "Chamilo installation wizard"
+msgstr "Chamilo installatiewizard"

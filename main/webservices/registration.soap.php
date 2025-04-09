@@ -6769,31 +6769,32 @@ function WSCertificatesList($startingDate = '', $endingDate = '')
     $userTable = Database::get_main_table(TABLE_MAIN_USER);
     $categoryTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
-    $query = "SELECT
-                    certificate.id,
-                    user.username,
-                    category.course_code,
-                    category.session_id,
-                    certificate.user_id,
-                    certificate.cat_id,
-                    certificate.created_at,
-                    certificate.path_certificate
-                FROM $certificateTable AS certificate
-                JOIN $userTable AS user
-                ON certificate.user_id = user.user_id
-                JOIN $categoryTable AS category
-                ON certificate.cat_id = category.id";
+    $conditions = [];
 
     if (!empty($startingDate) && !empty($endingDate)) {
-        $query .= " WHERE certificate.created_at BETWEEN '$startingDate' AND '$endingDate'";
+        $conditions['certificate.created_at BETWEEN ? AND ?'] = [$startingDate, $endingDate];
     } elseif (!empty($startingDate)) {
-        $query .= " WHERE certificate.created_at >= '$startingDate'";
+        $conditions['certificate.created_at >= ?'] = [$startingDate];
     } elseif (!empty($endingDate)) {
-        $query .= " WHERE certificate.created_at <= '$endingDate'";
+        $conditions['certificate.created_at <= ?'] = [$endingDate];
     }
 
-    $queryResult = Database::query($query);
-    while ($row = Database::fetch_array($queryResult)) {
+    $queryResult = Database::select(
+        [
+            'certificate.id',
+            'user.username',
+            'category.course_code',
+            'category.session_id',
+            'certificate.user_id',
+            'certificate.cat_id',
+            'certificate.created_at',
+            'certificate.path_certificate',
+        ],
+        $certificateTable,
+        ['where' => $conditions]
+    );
+
+    foreach ($queryResult as $row) {
         $userPath = USermanager::getUserPathById($row['user_id'], 'web');
         $row['path_certificate'] = $userPath.'/certificate'.$row['path_certificate'];
         $result[] = $row;

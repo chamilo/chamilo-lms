@@ -298,10 +298,17 @@ function openid_verify_assertion($op_endpoint, $response) {
 
     //TODO
     $openid_association = Database::get_main_table(TABLE_MAIN_OPENID_ASSOCIATION);
-    $sql = sprintf("SELECT * FROM $openid_association WHERE assoc_handle = '%s'", $response['openid.assoc_handle']);
-    $res = Database::query($sql);
-    $association = Database::fetch_object($res);
-    if ($association && isset($association->session_type)) {
+    $association = Database::select(
+        '*',
+        $openid_association,
+        [
+            'where' => [
+                'assoc_handle = ?' => [$response['openid.assoc_handle']],
+            ]
+        ],
+        'first'
+    );
+    if ($association && isset($association['session_type'])) {
         $keys_to_sign = explode(',', $response['openid.signed']);
         $self_sig = _openid_signature($association, $response, $keys_to_sign);
         if ($self_sig == $response['openid.sig']) {

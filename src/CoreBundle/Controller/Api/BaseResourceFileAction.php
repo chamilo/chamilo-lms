@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Component\Utils\CreateUploadedFile;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
@@ -27,6 +28,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use ZipArchive;
 
 class BaseResourceFileAction
@@ -189,7 +191,8 @@ class BaseResourceFileAction
         ResourceRepository $resourceRepository,
         Request $request,
         EntityManager $em,
-        string $fileExistsOption = ''
+        string $fileExistsOption = '',
+        TranslatorInterface $translator = null
     ): array {
         $contentData = $request->getContent();
 
@@ -253,11 +256,23 @@ class BaseResourceFileAction
                         // Check if a document with the same title and parent resource node already exists
                         $existingDocument = $resourceRepository->findByTitleAndParentResourceNode($title, $parentResourceNodeId);
                         if ($existingDocument) {
-                            if ('overwrite' == $fileExistsOption) {
-                                // Perform actions when file exists and 'overwrite' option is selected
-                                $resource->setResourceName($title);
+                            if ('overwrite' === $fileExistsOption) {
                                 $existingDocument->setTitle($title);
                                 $existingDocument->setComment($comment);
+
+                                $resourceNode = $existingDocument->getResourceNode();
+
+                                $resourceFile = $resourceNode->getFirstResourceFile();
+                                if ($resourceFile instanceof ResourceFile) {
+                                    $resourceFile->setFile($uploadedFile);
+                                    $em->persist($resourceFile);
+                                } else {
+                                    $existingDocument->setUploadFile($uploadedFile);
+                                }
+
+                                $resourceNode->setUpdatedAt(new \DateTime());
+                                $existingDocument->setResourceNode($resourceNode);
+
                                 $em->persist($existingDocument);
                                 $em->flush();
 
@@ -282,7 +297,7 @@ class BaseResourceFileAction
 
                                 // Return any data you need for further processing
                                 return [
-                                    'title' => $title,
+                                    'title' => $newTitle,
                                     'filetype' => 'file',
                                     'comment' => $comment,
                                 ];
@@ -294,13 +309,10 @@ class BaseResourceFileAction
                                 // or perform any other desired actions based on your application's requirements
                                 $resource->setResourceName($title);
                                 $flashBag = $request->getSession()->getFlashBag();
-                                $flashBag->add('warning', 'Upload Already Exists');
+                                $message = $translator ? $translator->trans('upload.already_exists') : 'Upload Already Exists';
+                                $flashBag->add('warning', $message);
 
-                                return [
-                                    'title' => $title,
-                                    'filetype' => 'file',
-                                    'comment' => $comment,
-                                ];
+                                throw new BadRequestHttpException($translator ? $translator->trans('file.already_exists') : 'The file already exists and was not uploaded.');
                             }
 
                             throw new InvalidArgumentException('Invalid fileExistsOption');
@@ -614,8 +626,15 @@ class BaseResourceFileAction
         return $result;
     }
 
+    /**
+     * Generates a unique filename by appending a random suffix.
+     */
     private function generateUniqueTitle(string $title): string
     {
-        return $title.'_'.uniqid();
+        $info = pathinfo($title);
+        $filename = $info['filename'];
+        $extension = isset($info['extension']) ? '.'.$info['extension'] : '';
+
+        return $filename.'_'.uniqid().$extension;
     }
 }

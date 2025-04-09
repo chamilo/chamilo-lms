@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-08 01:39+0000\n"
+"PO-Revision-Date: 2025-04-09 00:33+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Dutch <https://translation.chamilo.org/projects/chamilo/"
 "messages/nl/>\n"
@@ -21521,117 +21521,127 @@ msgstr ""
 
 msgid "This action will dissociate the forum thread of this learning path item. Do you want to proceed?"
 msgstr ""
+"Deze actie zal de forumthread van dit leerpad-item ontkoppelen. Wilt u "
+"doorgaan?"
 
 msgid "Dissociate the forum of this learning path item"
-msgstr ""
+msgstr "Ontkoppel het forum van dit leerpad"
 
 msgid "Associate a forum to this learning path item"
-msgstr ""
+msgstr "Koppel een forum aan dit leerpad"
 
 msgid "Forum dissociated"
-msgstr ""
+msgstr "Forum losgekoppeld"
 
 msgid "Click or drop one file here"
-msgstr ""
+msgstr "Klik of sleep hier één bestand"
 
 msgid "Modulo:\t\t\t%"
-msgstr ""
+msgstr "Modulo:\t\t\t%"
 
 msgid "Last %s days"
-msgstr ""
+msgstr "Afgelopen %s dagen"
 
 msgid "Export badges"
-msgstr ""
+msgstr "Exporteer badges"
 
 msgid "Disable all languages except the platform default"
-msgstr ""
+msgstr "Schakel alle talen uit behalve de standaardtaal van het platform"
 
 msgid "There are users currently using the following language. Please disable manually."
 msgstr ""
+"Er zijn momenteel gebruikers die de volgende taal gebruiken. Schakel "
+"handmatig uit."
 
 msgid "Allow Push Notifications to the Chamilo Messaging mobile app"
-msgstr ""
+msgstr "Sta pushmeldingen toe voor de Chamilo Messaging mobiele app"
 
 msgid "Send Push Notifications by Google's Firebase Console"
-msgstr ""
+msgstr "Stuur pushmeldingen via Google's Firebase Console"
 
 msgid "Sender ID of Firebase Console for Cloud Messaging"
-msgstr ""
+msgstr "Afzender-ID van Firebase Console voor Cloud Messaging"
 
 msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
 msgstr ""
+"U moet een project registreren op <a href=\"https://console.firebase.google."
+"com/\">Google Firebase Console</a>"
 
 msgid "Server key of Firebase Console for Cloud Messaging"
-msgstr ""
+msgstr "Server sleutel van Firebase Console voor Cloud Messaging"
 
 msgid "Server key (legacy token) from project credentials"
-msgstr ""
+msgstr "Server sleutel (legacy token) uit projectgegevens"
 
 msgid "The logo must be of %s px in size and in %s format"
-msgstr ""
+msgstr "Het logo moet %s px groot zijn en in %s formaat"
 
 msgid "Original logo recovered"
-msgstr ""
+msgstr "Origineel logo hersteld"
 
 msgid "New logo uploaded"
-msgstr ""
+msgstr "Nieuw logo geüploaded"
 
 msgid "Current logo"
-msgstr ""
+msgstr "Huidig logo"
 
 msgid "Update logo"
-msgstr ""
+msgstr "Logo bijwerken"
 
 msgid "Followed student bosses"
 msgstr "Cursist voortrekkers die ik opvolg"
 
 msgid "Database manager"
-msgstr ""
+msgstr "Databasebeheerder"
 
 msgid "Course template"
-msgstr ""
+msgstr "Cursussjabloon"
 
 msgid "Pick a course as template for this new course"
-msgstr ""
+msgstr "Kies een cursus als sjabloon voor deze nieuwe cursus"
 
 msgid "Teacher can select a course as template"
-msgstr ""
+msgstr "Docent kan een cursus als sjabloon selecteren"
 
 msgid "Allow pick a course as template for the new course that teacher is creating"
 msgstr ""
+"Sta toe een cursus als sjabloon te kiezen voor de nieuwe cursus die de "
+"trainer aanmaakt"
 
 msgid "The forum's auto-launch setting is on. Students will be redirected to the forum tool when entering this course."
 msgstr ""
+"De instelling voor automatisch starten van het forum staat aan. Leerlingen "
+"worden doorgestuurd naar de forumtool bij het betreden van deze cursus."
 
 msgid "Redirect to forums list"
-msgstr ""
+msgstr "Doorverwijzen naar lijst van forums"
 
 msgid "Enable forum auto-launch"
-msgstr ""
+msgstr "Activeer automatisch starten van forum"
 
 msgid "You can now download your certificate by clicking here"
-msgstr ""
+msgstr "U kunt nu uw certificaat downloaden door hier te klikken"
 
 msgid "Additionally, you have achieved the following skills"
-msgstr ""
+msgstr "Daarnaast heeft u de volgende vaardigheden verworven"
 
 msgid "I have achieved skill %s on %s"
-msgstr ""
+msgstr "Ik heb vaardigheid %s bereikt op %s"
 
 msgid "Another attempt"
-msgstr ""
+msgstr "Nog een poging"
 
 msgid "Remaining %d attempts"
-msgstr ""
+msgstr "Resterende %d pogingen"
 
 msgid "Map"
-msgstr ""
+msgstr "Kaart"
 
 msgid "My location"
-msgstr ""
+msgstr "Mijn locatie"
 
 msgid "Show course in user's language"
-msgstr ""
+msgstr "Toon cursus in gebruikerstaal"
 
 msgid "Access data"
 msgstr "toegangsdata"
@@ -21751,25 +21761,30 @@ msgid "Hello,<br />Your tutor sent you your terms and conditions. You can sign i
 msgstr ""
 
 msgid "User %s signed the agreement."
-msgstr ""
+msgstr "Gebruiker %s heeft de overeenkomst ondertekend."
 
 msgid "User %s signed the agreement the %s."
-msgstr ""
+msgstr "Gebruiker %s heeft de overeenkomst ondertekend op %s."
 
 msgid "Terms and conditions only if profile complete"
-msgstr ""
+msgstr "Algemene voorwaarden alleen als profiel compleet is"
 
 msgid "By enabling this option, terms and conditions will be available to the user only when the extra profile fields that start with 'terms_' and set to visible are completed."
 msgstr ""
+"Door deze optie in te schakelen, zijn de algemene voorwaarden alleen "
+"beschikbaar voor de gebruiker wanneer de extra profielvelden die beginnen "
+"met 'terms_' en ingesteld zijn op zichtbaar, zijn ingevuld."
 
 msgid "Enable user's geolocalization"
-msgstr ""
+msgstr "Schakel gebruikersgeolokalisatie in"
 
 msgid "Enable user's address field and show it on a map using geolocalization features"
 msgstr ""
+"Activeer het adresveld van de gebruiker en toon het op een kaart met behulp "
+"van geolokalisatiefuncties"
 
 msgid "You must first fill your profile to continue"
-msgstr ""
+msgstr "U moet eerst uw profiel invullen om verder te gaan"
 
 msgid "The terms and conditions have not yet been validated by your tutor."
 msgstr ""

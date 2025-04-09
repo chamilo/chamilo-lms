@@ -57,14 +57,14 @@ class CourseSelectForm
     /**
      * Display the form.
      *
-     * @param array $course
+     * @param Course $course
      * @param array $hidden_fields     hidden fields to add to the form
      * @param bool  $avoidSerialize    the document array will be serialize.
      *                                 This is used in the course_copy.php file
      * @param bool  $avoidCourseInForm
      */
     public static function display_form(
-        $course,
+        Course $course,
         $hidden_fields = null,
         $avoidSerialize = false,
         $avoidCourseInForm = false
@@ -519,7 +519,7 @@ class CourseSelectForm
     /**
      * Get the posted course with all its selected resources.
      *
-     * @param string $from         who calls the function?
+     * @param string|null $from    who calls the function?
      *                             It can be copy_course, create_backup, import_backup or recycle_course
      * @param int    $session_id
      * @param string $course_code
@@ -528,7 +528,7 @@ class CourseSelectForm
      * @return Course The course-object with all resources selected by the user
      *                in the form given by display_form(...)
      */
-    public static function get_posted_course($from = '', $session_id = 0, $course_code = '', $postedCourse = null)
+    public static function get_posted_course(?string $from = '', $session_id = 0, $course_code = '', $postedCourse = null)
     {
         $course = $postedCourse;
         if (empty($postedCourse)) {

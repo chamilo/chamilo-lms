@@ -556,46 +556,50 @@ class CourseSelectForm
             if (is_array($resource)) {
                 $resource = array_keys($resource);
                 foreach ($resource as $resource_item) {
-                    $conditionSession = '';
+                    $whereConditions = [
+                        'd.c_id = ?' => [$course_id],
+                        'tool = ?' => [TOOL_DOCUMENT],
+                        'p.visibility <> ?' => [2],
+                        'd.id = ?' => [$resource_item],
+                    ];
+
                     if (!empty($session_id)) {
                         $session_id = (int) $session_id;
-                        $conditionSession = ' AND d.session_id ='.$session_id;
+                        $whereConditions['d.session_id = ?'] = [$session_id];
                     }
 
-                    $sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-                            FROM '.$table_doc.' d
-                            INNER JOIN '.$table_prop.' p
-                            ON (d.c_id = p.c_id)
-                            WHERE
-                                d.c_id = '.$course_id.' AND
-                                p.c_id = '.$course_id.' AND
-                                tool = \''.TOOL_DOCUMENT.'\' AND
-                                p.ref = d.id AND p.visibility != 2 AND
-                                d.id = '.$resource_item.$conditionSession.'
-                            ORDER BY path';
-                    $db_result = Database::query($sql);
-                    while ($obj = Database::fetch_object($db_result)) {
+                    $db_result = Database::select(
+                        ['d.id', 'd.path', 'd.comment', 'd.title', 'd.filetype', 'd.size'],
+                        'FROM '.$table_doc.' d INNER JOIN '.$table_prop.' p ON (d.c_id = p.c_id AND p.ref = d.id)',
+                        [
+                            'where' => $whereConditions,
+                            'order' => 'path',
+                        ]
+                    );
+
+                    foreach ($db_result as $obj) {
                         $doc = new Document(
-                            $obj->id,
-                            $obj->path,
-                            $obj->comment,
-                            $obj->title,
-                            $obj->filetype,
-                            $obj->size
+                            $obj['id'],
+                            $obj['path'],
+                            $obj['comment'],
+                            $obj['title'],
+                            $obj['filetype'],
+                            $obj['size']
                         );
                         if ($doc) {
                             $course->add_resource($doc);
                             // adding item property
-                            $sql = "SELECT * FROM $table_prop
-                                    WHERE
-                                        c_id = $course_id AND
-                                        tool = '".RESOURCE_DOCUMENT."' AND
-                                        ref = $resource_item ";
-                            $res = Database::query($sql);
-                            $all_properties = [];
-                            while ($item_property = Database::fetch_array($res, 'ASSOC')) {
-                                $all_properties[] = $item_property;
-                            }
+                            $all_properties = Database::select(
+                                '*',
+                                $table_prop,
+                                [
+                                    'where' => [
+                                        'c_id = ?' => $course_id,
+                                        'tool = ?' => RESOURCE_DOCUMENT,
+                                        'ref = ?' => $resource_item,
+                                    ],
+                                ]
+                            );
                             $course->resources[RESOURCE_DOCUMENT][$resource_item]->item_properties = $all_properties;
                         }
                     }

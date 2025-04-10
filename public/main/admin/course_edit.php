@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Entity\CatalogueCourseRelAccessUrlRelUsergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
@@ -20,6 +23,7 @@ $courseCategoriesRepo = Container::getCourseCategoryRepository();
 $urlId = api_get_current_access_url_id();
 
 $courseId = $_GET['id'] ?? null;
+$currentView = $_GET['view'] ?? 'general';
 
 if (empty($courseId)) {
     api_not_allowed(true);
@@ -461,6 +465,17 @@ if ($form->validate()) {
     exit;
 }
 
+$tabs = [
+    'general' => [
+        'url' => 'course_edit.php?id='.$courseId,
+        'content' => get_lang('Edit course'),
+    ],
+    'catalogue_access' => [
+        'url' => 'course_edit.php?id='.$courseId.'&view=catalogue_access',
+        'content' => get_lang('Catalogue access'),
+    ],
+];
+
 Display::display_header($tool_name);
 
 $actions = Display::url(
@@ -477,6 +492,7 @@ $actions .= Display::url(
     api_get_path(WEB_CODE_PATH)."admin/course_information.php?id=$courseId"
 );
 
+echo Display::toolbarAction('toolbarCourseEdit', [Display::tabsOnlyLink($tabs, $currentView, 'course-edit-tabs')]);
 echo Display::toolbarAction('toolbar', [$actions]);
 
 echo "<script>
@@ -527,6 +543,100 @@ function valide() {
 }
 </script>";
 
-$form->display();
+if ('catalogue_access' === $currentView) {
+    echo Display::div(
+        get_lang('Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue.'),
+        ['class' => 'alert alert-info']
+    );
+
+    $em = Database::getManager();
+    $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+    $accessUrlId = $accessUrl->getId();
+
+    /** @var Course|null $course */
+    $course = $em->getRepository(Course::class)->find($courseId);
+
+    if (!$accessUrl || !$course) {
+        echo Display::return_message(get_lang('Invalid access URL or course'), 'error');
+        return;
+    }
+
+    $formCatalogue = new FormValidator(
+        'form_catalogue_access',
+        'post',
+        api_get_self().'?id='.$courseId.'&view=catalogue_access'
+    );
+
+    $groupEntities = $em->createQueryBuilder()
+        ->select('ug')
+        ->from(Usergroup::class, 'ug')
+        ->innerJoin('ug.urls', 'urlRel')
+        ->where('urlRel.url = :accessUrl')
+        ->setParameter('accessUrl', $accessUrl)
+        ->orderBy('ug.title', 'ASC')
+        ->getQuery()
+        ->getResult();
+
+    $groups = [];
+    foreach ($groupEntities as $group) {
+        $groups[$group->getId()] = $group->getTitle();
+    }
+
+    $existing = $em->getRepository(CatalogueCourseRelAccessUrlRelUsergroup::class)->findBy([
+        'course' => $course,
+        'accessUrl' => $accessUrl,
+    ]);
+
+    $selected = [];
+    foreach ($existing as $record) {
+        if ($record->getUsergroup()) {
+            $selected[] = $record->getUsergroup()->getId();
+        }
+    }
+
+    $formCatalogue->addMultiSelect(
+        'selected_usergroups',
+        get_lang('User groups'),
+        $groups,
+        ['style' => 'width:100%;height:300px;']
+    );
+
+    $formCatalogue->setDefaults([
+        'selected_usergroups' => $selected,
+    ]);
+
+    $formCatalogue->addButtonSave(get_lang('Save'));
+
+    if ($formCatalogue->validate()) {
+        $data = $formCatalogue->getSubmitValues();
+        $newGroups = $data['selected_usergroups'] ?? [];
+
+        foreach ($existing as $old) {
+            $em->remove($old);
+        }
+        $em->flush();
+
+        foreach ($newGroups as $groupId) {
+            $group = $em->getRepository(Usergroup::class)->find((int) $groupId);
+            if ($group) {
+                $rel = new CatalogueCourseRelAccessUrlRelUsergroup();
+                $rel->setCourse($course);
+                $rel->setAccessUrl($accessUrl);
+                $rel->setUsergroup($group);
+                $em->persist($rel);
+            }
+        }
+
+        $em->flush();
+
+        Display::addFlash(Display::return_message(get_lang('Changes saved successfully'), 'confirmation'));
+        header('Location: '.api_get_self().'?id='.$courseId.'&view=catalogue_access');
+        exit;
+    }
+
+    $formCatalogue->display();
+} else {
+    $form->display();
+}
 
 Display::display_footer();

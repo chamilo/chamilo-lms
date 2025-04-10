@@ -69,7 +69,7 @@ if ($form->validate() && Security::check_token('post')) {
     $sessionId = $courseParts[1];
 
     // Copy the survey to the target course
-    $surveyCopyId = SurveyManager::copySurveySession($surveyId, $courseId, $sessionId);
+    $surveyCopyId = SurveyManager::copySurvey($surveyId, null, $courseId, $sessionId);
     if ($surveyCopyId) {
         // Empty the copied survey
         SurveyManager::emptySurveyFromId($surveyCopyId);

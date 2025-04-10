@@ -382,7 +382,7 @@ async function fetchLinks() {
   try {
     const data = await linkService.getLinks(params)
     linksWithoutCategory.value = data.linksWithoutCategory || []
-    categories.value = data.categories || []
+    categories.value = Object.values(data.categories || {})
   } catch (error) {
     console.error("Error fetching links:", error)
     notifications.showErrorNotification(t("Could not retrieve links"))

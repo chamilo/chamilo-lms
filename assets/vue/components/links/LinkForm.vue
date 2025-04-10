@@ -139,7 +139,7 @@ const resourceLinkList = ref(
 const categories = ref([])
 
 const formData = reactive({
-  url: "http://",
+  url: "https://",
   title: "",
   description: "",
   category: null,
@@ -189,7 +189,7 @@ const fetchLink = async () => {
       }
 
       if (response.category) {
-        formData.category = parseInt(response.category["@id"].split("/").pop())
+        formData.category = response.category
       }
     } catch (error) {
       console.error("Error fetching link:", error)
@@ -228,20 +228,27 @@ const submitForm = async () => {
     if (props.linkId) {
       await linkService.updateLink(props.linkId, postData)
 
-      const formDataImage = new FormData()
-      formDataImage.append("removeImage", formData.removeImage ? "true" : "false")
+      if (formData.showOnHomepage && (formData.removeImage || selectedFile.value instanceof File)) {
+        const formDataImage = new FormData()
+        formDataImage.append("removeImage", formData.removeImage ? "true" : "false")
 
-      if (selectedFile.value instanceof File) {
-        formDataImage.append("customImage", selectedFile.value)
+        if (selectedFile.value instanceof File) {
+          formDataImage.append("customImage", selectedFile.value)
+        }
+
+        await linkService.uploadImage(props.linkId, formDataImage)
       }
-
-      await linkService.uploadImage(props.linkId, formDataImage)
     } else {
       const newLink = await linkService.createLink(postData)
 
-      if (selectedFile.value instanceof File) {
+      if (formData.showOnHomepage && (formData.removeImage || selectedFile.value instanceof File)) {
         const formDataImage = new FormData()
-        formDataImage.append("customImage", selectedFile.value)
+        formDataImage.append("removeImage", formData.removeImage ? "true" : "false")
+
+        if (selectedFile.value instanceof File) {
+          formDataImage.append("customImage", selectedFile.value)
+        }
+
         await linkService.uploadImage(newLink.iid, formDataImage)
       }
     }

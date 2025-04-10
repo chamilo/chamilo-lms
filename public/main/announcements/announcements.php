@@ -404,13 +404,20 @@ switch ($action) {
 
         $to = [];
         if (empty($group_id)) {
-            $userGroups = Container::getUsergroupRepository()->findByCourse(api_get_course_entity());
+            if (!empty($sessionId)) {
+                $userGroups = Container::getUsergroupRepository()->findBySession($session);
+                $groupSelectTitle = get_lang('Classes of session').' '.$session->getTitle();
+            } else {
+                $userGroups = Container::getUsergroupRepository()->findByCourse($course);
+                $groupSelectTitle = get_lang('Classes of course');
+            }
+
             if (!empty($userGroups)) {
                 $groupSelect = ['' => get_lang('Select a class')];
                 foreach ($userGroups as $group) {
                     $groupSelect[$group->getId()] = $group->getTitle();
                 }
-                $form->addSelect('usergroup_id', get_lang('Class'), $groupSelect, ['id' => 'usergroup_id']);
+                $form->addSelect('usergroup_id', $groupSelectTitle, $groupSelect, ['id' => 'usergroup_id']);
             }
             if (isset($_GET['remind_inactive'])) {
                 $email_ann = '1';
@@ -531,7 +538,8 @@ switch ($action) {
                         data: {
                             a: 'get_users_by_group_course',
                             group_id: groupId,
-                            course_code: '".api_get_course_id()."'
+                            course_code: '".api_get_course_id()."',
+                            session_id: '".api_get_session_id()."'
                         },
                         success: function (response) {
                             const result = JSON.parse(response);

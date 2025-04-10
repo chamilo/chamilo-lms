@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
@@ -23,6 +24,23 @@ class UsergroupRepository extends ResourceRepository
         private readonly AccessUrlHelper $accessUrlHelper,
     ) {
         parent::__construct($registry, Usergroup::class);
+    }
+
+    public function findBySession(Session $session, bool $checkAccessUrl = false): array
+    {
+        $qb = $this->createQueryBuilder('ug')
+            ->innerJoin('ug.sessions', 'ugs')
+            ->where('ugs.session = :session')
+            ->setParameter('session', $session);
+
+        if ($checkAccessUrl && $this->accessUrlHelper->isMultiple()) {
+            $accessUrl = $this->accessUrlHelper->getCurrent();
+            $qb->innerJoin('ug.urls', 'url')
+                ->andWhere('url.url = :urlId')
+                ->setParameter('urlId', $accessUrl->getId());
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     public function findByCourse(Course $course, bool $checkAccessUrl = false): array

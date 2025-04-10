@@ -16,21 +16,30 @@ $isAllowedToEdit = api_is_allowed_to_edit();
 switch ($action) {
     case 'get_users_by_group_course':
         $groupId = (int) $_POST['group_id'];
-        $courseCode = $_POST['course_code'];
-
-        if ($groupId && $courseCode) {
+        $sessionId = (int) $_POST['session_id'];
+        if ($groupId) {
             $users = Container::getUsergroupRepository()->getUsersByGroup($groupId, true);
-
-            $courseUsers = CourseManager::get_user_list_from_course_code($courseCode, api_get_session_id());
-            $courseUserIds = array_column($courseUsers, 'user_id');
-
-            $filtered = [];
-            foreach ($users as $user) {
-                if (in_array($user['id'], $courseUserIds)) {
+            if (!empty($sessionId)) {
+                $filtered = [];
+                foreach ($users as $user) {
                     $filtered[] = [
                         'id' => $user['id'],
                         'name' => api_get_person_name($user['firstname'], $user['lastname']),
                     ];
+                }
+            } else {
+                $courseCode = $_POST['course_code'];
+                $courseUsers = CourseManager::get_user_list_from_course_code($courseCode, 0);
+                $courseUserIds = array_column($courseUsers, 'user_id');
+
+                $filtered = [];
+                foreach ($users as $user) {
+                    if (in_array($user['id'], $courseUserIds)) {
+                        $filtered[] = [
+                            'id' => $user['id'],
+                            'name' => api_get_person_name($user['firstname'], $user['lastname']),
+                        ];
+                    }
                 }
             }
 

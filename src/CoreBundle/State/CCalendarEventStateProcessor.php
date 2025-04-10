@@ -10,7 +10,6 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -20,7 +19,6 @@ final class CCalendarEventStateProcessor implements ProcessorInterface
     public function __construct(
         private readonly ProcessorInterface $persistProcessor,
         private readonly Security $security,
-        private readonly SettingsManager $settingsManager,
     ) {}
 
     /**

@@ -8,17 +8,18 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @template-implements ProviderInterface<AccessUrlRelColorTheme>
  */
-class AccessUrlRelColorThemeStateProvider implements ProviderInterface
+readonly class AccessUrlRelColorThemeStateProvider implements ProviderInterface
 {
     public function __construct(
-        private readonly AccessUrlHelper $accessUrlHelper,
+        private AccessUrlHelper $accessUrlHelper,
     ) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = [])
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): Collection
     {
         $colorThemes = $this->accessUrlHelper->getCurrent()->getColorThemes();
 

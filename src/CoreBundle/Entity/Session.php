@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Serializer\Filter\GroupFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
@@ -17,6 +16,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\Serializer\Filter\GroupFilter;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\Api\CreateSessionWithUsersAndCoursesAction;
 use Chamilo\CoreBundle\Dto\CreateSessionWithUsersAndCoursesInput;

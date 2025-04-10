@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -36,6 +37,10 @@ class ChangePasswordType extends AbstractType
             ])
             ->add('enable2FA', CheckboxType::class, [
                 'label' => 'Enable Two-Factor Authentication (2FA)',
+                'required' => false,
+            ])
+            ->add('confirm2FACode', TextType::class, [
+                'label' => 'Enter your 2FA code',
                 'required' => false,
             ])
         ;

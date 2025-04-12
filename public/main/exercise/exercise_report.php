@@ -123,6 +123,22 @@ switch ($action) {
 
         header('Location: '.$urlExportPdf);
         exit;
+    case 'send_email':
+        $attemptId = (int) $_GET['attemptId'];
+        ExerciseLib::sendExerciseResultByEmail($attemptId);
+        Display::addFlash(Display::return_message(get_lang('Email content logged to error_log')));
+        header('Location: '.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exercise_id);
+        exit;
+    case 'send_all_emails':
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        $attempts = ExerciseLib::getReviewedAttemptsInfo($exercise_id, $sessionId);
+        foreach ($attempts as $attempt) {
+            ExerciseLib::sendExerciseResultByEmail($attempt['exe_id']);
+        }
+        Display::addFlash(Display::return_message(get_lang('All emails sent successfully')));
+        header('Location: '.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exercise_id);
+        exit;
 }
 
 if (!empty($_REQUEST['export_report']) && '1' == $_REQUEST['export_report']) {
@@ -470,6 +486,11 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
             api_get_self().'?'.api_get_cidreq().'&action=export_all_results&exerciseId='.$exercise_id
         );
 
+        $actions .= Display::url(
+            Display::getMdiIcon(ActionIcon::SEND_ALL_EMAILS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send all by email')),
+            api_get_self().'?'.api_get_cidreq().'&action=send_all_emails&exerciseId='.$exercise_id
+        );
+
         // clean result before a selected date icon
         if ($allowClean) {
             $actions .= Display::url(
@@ -731,7 +752,7 @@ if ($is_allowedToEdit || $is_tutor) {
             //for the top bar
             'editoptions' => ['value' => $group_parameters],
         ],
-        ['name' => 'duration', 'index' => 'exe_duration', 'width' => '150', 'align' => 'left', 'search' => 'true'],
+        ['name' => 'duration', 'index' => 'exe_duration', 'width' => '80', 'align' => 'left', 'search' => 'true'],
         ['name' => 'start_date', 'index' => 'start_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
         ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
         ['name' => 'score', 'index' => 'score', 'width' => '120', 'align' => 'center', 'search' => 'true'],
@@ -755,8 +776,8 @@ if ($is_allowedToEdit || $is_tutor) {
                     ),
             ],
         ],
-        ['name' => 'lp', 'index' => 'orig_lp_id', 'width' => '150', 'align' => 'left', 'search' => 'false'],
-        ['name' => 'actions', 'index' => 'actions', 'width' => '180', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
+        ['name' => 'lp', 'index' => 'orig_lp_id', 'width' => '130', 'align' => 'left', 'search' => 'false'],
+        ['name' => 'actions', 'index' => 'actions', 'width' => '240', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
     ];
 
     if ('true' === $officialCodeInList) {

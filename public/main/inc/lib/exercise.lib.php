@@ -2357,6 +2357,10 @@ HOTSPOT;
                                 .Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export to PDF'))
                                 .'</a>';
 
+                            $sendMailUrl =  api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&action=send_email&exerciseId='.$exercise_id.'&attemptId='.$results[$i]['exe_id'];
+                            $emailLink = '<a href="'.$sendMailUrl.'">'
+                                .Display::getMdiIcon(ActionIcon::SEND_SINGLE_EMAIL, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Send by email'))
+                                .'</a>';
 
                             $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
                             $delete_link = '<a
@@ -2375,7 +2379,11 @@ HOTSPOT;
                             if (3 == $revised) {
                                 $delete_link = null;
                             }
+                            if (1 !== $revised) {
+                                $emailLink = '';
+                            }
                             $actions .= $delete_link;
+                            $actions .= $emailLink;
                         }
                     } else {
                         $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?'.api_get_cidreq().'&id='.$results[$i]['exe_id'].'&sid='.$sessionId;
@@ -2579,6 +2587,94 @@ HOTSPOT;
         }
 
         return $listInfo;
+    }
+
+    /**
+     * Returns email content for a specific attempt.
+     */
+    public static function getEmailContentForAttempt(int $attemptId): array
+    {
+        $trackExerciseInfo = self::get_exercise_track_exercise_info($attemptId);
+
+        if (empty($trackExerciseInfo)) {
+            return [
+                'to' => '',
+                'subject' => 'No exercise info found',
+                'message' => 'Attempt ID not found or invalid.',
+            ];
+        }
+
+        $studentId = $trackExerciseInfo['exe_user_id'];
+        $courseInfo = api_get_course_info();
+        $teacherId = api_get_user_id();
+
+        if (
+            empty($trackExerciseInfo['orig_lp_id']) ||
+            empty($trackExerciseInfo['orig_lp_item_id'])
+        ) {
+            $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$trackExerciseInfo['exe_id'].'&'.api_get_cidreq()
+                .'&show_headers=1&id_session='.api_get_session_id();
+        } else {
+            $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&item_id='
+                .$trackExerciseInfo['orig_lp_item_id'].'&lp_id='.$trackExerciseInfo['orig_lp_id'].'&'.api_get_cidreq()
+                .'&id_session='.api_get_session_id();
+        }
+
+        $message = self::getEmailNotification(
+            $teacherId,
+            $courseInfo,
+            $trackExerciseInfo['title'],
+            $url
+        );
+
+        return [
+            'to' => $studentId,
+            'subject' => get_lang('Corrected test result'),
+            'message' => $message,
+        ];
+    }
+
+    /**
+     * Sends the exercise result email to the student.
+     */
+    public static function sendExerciseResultByEmail(int $attemptId): void
+    {
+        $content = self::getEmailContentForAttempt($attemptId);
+
+        if (empty($content['to'])) {
+            return;
+        }
+
+        MessageManager::send_message_simple(
+            $content['to'],
+            $content['subject'],
+            $content['message'],
+            api_get_user_id()
+        );
+    }
+
+    /**
+     * Returns all reviewed attempts for a given exercise and session.
+     */
+    public static function getReviewedAttemptsInfo(int $exerciseId, int $sessionId): array
+    {
+        $courseId = api_get_course_int_id();
+        $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $qualifyTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
+
+        $sessionCondition = api_get_session_condition($sessionId, true, false, 't.session_id');
+
+        $sql = "
+            SELECT DISTINCT t.exe_id
+            FROM $trackTable t
+            INNER JOIN $qualifyTable q ON (t.exe_id = q.exe_id AND q.author > 0)
+            WHERE
+                t.c_id = $courseId AND
+                t.exe_exo_id = $exerciseId
+                $sessionCondition
+        ";
+
+        return Database::store_result(Database::query($sql));
     }
 
     /**

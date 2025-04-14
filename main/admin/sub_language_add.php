@@ -298,14 +298,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
     );
     $class = 'add';
     $form->addElement('header', '', $text);
-    $form->addElement('text', 'original_name', get_lang('OriginalName'), 'class="input_titles"');
-    $form->addRule('original_name', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('text', 'english_name', get_lang('EnglishName'), 'class="input_titles"');
-    $form->addRule('english_name', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('text', 'isocode', get_lang('ISOCode'), 'class="input_titles"');
-    $form->addRule('isocode', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addText('original_name', get_lang('OriginalName'));
+    $form->addText('english_name', get_lang('EnglishName'));
+    $form->addText('isocode', get_lang('ISOCode'));
     $form->addElement('static', null, '&nbsp;', '<i>en, es, fr</i>');
-    $form->addElement('checkbox', 'sub_language_is_visible', '', get_lang('Visibility'));
+    $form->addCheckBox('sub_language_is_visible', '', get_lang('Visibility'));
     $form->addButtonCreate(get_lang('CreateSubLanguage'), 'SubmitAddNewLanguage');
     //$values['original_name'] = $language_details['original_name'].'...'; -> cannot be used because of quickform filtering (freeze)
     $values['english_name'] = $language_details['english_name'].'2';

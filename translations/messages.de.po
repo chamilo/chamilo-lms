@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:14+0000\n"
+"PO-Revision-Date: 2025-04-12 04:25+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -3307,9 +3307,8 @@ msgstr "Administrator Vorname"
 msgid "Administrator login"
 msgstr "Administrator Login"
 
-#, fuzzy
 msgid "Project manager"
-msgstr "Verwalter der Lernplattform"
+msgstr "Projektmanager"
 
 msgid "Your portal name"
 msgstr "Der Name Ihres Portals"

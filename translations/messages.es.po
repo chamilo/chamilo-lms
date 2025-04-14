@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:14+0000\n"
+"PO-Revision-Date: 2025-04-12 04:25+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -1754,12 +1754,11 @@ msgstr "Añadir un enlace web en la página principal"
 msgid "has been deleted"
 msgstr "ha sido suprimido"
 
-#, fuzzy
 msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
 msgstr ""
 "Si suprime el sitio web de este curso, suprimirá todos los documentos que "
 "contiene y todos sus miembros dejarán de estar inscritos en el mismo. <p>¿ "
-"Está seguro de querer suprimir este curso ?"
+"Está seguro de querer suprimir este curso ?</p>"
 
 msgid "YES"
 msgstr "SI"
@@ -3261,9 +3260,8 @@ msgstr "Apellidos del administrador"
 msgid "Administrator login"
 msgstr "Nombre de usuario del administrador"
 
-#, fuzzy
 msgid "Project manager"
-msgstr "Responsable educativo"
+msgstr "Jefe de proyecto"
 
 msgid "Your portal name"
 msgstr "Nombre de su plataforma"
@@ -14371,9 +14369,8 @@ msgstr "Por ahora, Ud está definido como profesor. Podrá cambiar el profesor e
 msgid "Installation language"
 msgstr "Idioma de instalación"
 
-#, fuzzy
 msgid "Please read the following requirements thoroughly."
-msgstr "Lea con atención"
+msgstr "Lea con atención los requerimientos siguientes."
 
 msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
 msgstr "¡ Atención !<br>El instalador ha detectado una instalación anterior de Chamilo en su sistema."
@@ -17033,21 +17030,20 @@ msgstr "Herramienta on-line para convertir texto en voz. Utiliza tecnología y s
 msgid "Show users folders in the documents tool"
 msgstr "Mostrar las carpetas de los usuarios en la herramienta documentos"
 
-#, fuzzy
 msgid "This option allows you to show or hide to teachers the folders that the system generates for each user who visits the tool documents or send a file through the web editor. If you display these folders to the teachers, they may make visible or not the learners and allow each learner to have a specific place on the course where not only store documents, but where they can also create and edit web pages and to export to pdf, make drawings, make personal web templates, send files, as well as create, move and delete directories and files and make security copies from their folders. Each user of course have a complete document manager. Also, remember that any user can copy a file that is visible from any folder in the documents tool (whether or not the owner) to his/her portfolios or personal documents area of social network, which will be available for his/her can use it in other courses."
 msgstr ""
 "Esta opción le permite mostrar u ocultar a los profesores las carpetas que "
 "el sistema genera para cada usuario que visita la herramienta de documentos "
-"o de enviar un archivo a través del editor web. Si muestra estas carpetas a "
-"los profesores, podrán hacer visibles o no a los alumnos y permitir que cada "
-"alumno tenga un espacio específico en el curso donde no solo almacenar "
-"documentos, sino también crear y editar páginas web, exportar al formato "
-"PDF, realizar dibujos, crear plantillas personales de documentos, enviar "
-"archivos, así como crear, mover y eliminar directorios y archivos y hacer "
-"copias de seguridad de sus carpetas. Cada usuario del curso tiene un gestor "
-"de documentos completo. Además, recuerde que cualquier usuario puede copiar "
-"un archivo que sea visible desde cualquier carpeta en la herramienta de "
-"documentos (sea o no el propietario) a su portafolio o área de documentos "
+"o envía un archivo a través del editor web. Si estas carpetas son visibles "
+"para los profesores, podrán hacerlas visibles o no para los alumnos y "
+"permitir que cada alumno tenga un espacio específico en el curso, donde no "
+"solo almacenar documentos, sino también crear y editar documentos, exportar "
+"a PDF, realizar dibujos, crear plantillas de documentos personalizadas, "
+"enviar archivos, así como crear, mover y eliminar directorios y archivos y "
+"hacer copias de seguridad en sus carpetas. Cada usuario del curso tendrá un "
+"gestor de documentos completo. Además, recuerde que cualquier usuario puede "
+"copiar un archivo que sea visible desde cualquier carpeta en la herramienta "
+"de documentos (sea o no el propietario) a su portafolio o área de documentos "
 "personales de la red social, la cual estará disponible para su uso en otros "
 "cursos."
 
@@ -25150,7 +25146,6 @@ msgstr ""
 "Este mensaje fue eliminado cuando el usuario fue retirado de la plataforma "
 "el %s"
 
-#, fuzzy
 msgid "All attempts blocked because you did not reach the minimum score of %s % at one of your attempts."
 msgstr ""
 "Todos los intentos fueron bloqueados porque no ha alcanzado el score mínimo "
@@ -25159,7 +25154,6 @@ msgstr ""
 msgid "Sign out"
 msgstr "Cerrar sesión"
 
-#, fuzzy
 msgid "Deleted users"
 msgstr "Usuarios eliminados"
 
@@ -25191,7 +25185,6 @@ msgstr "Gestión de sesions"
 msgid "Add a course introduction to display to your students."
 msgstr "Agregue una introducción al curso para mostrar a sus alumnos."
 
-#, fuzzy
 msgid "DiagnosticfinalizationmessageContent"
 msgstr ""
 "Hola %s, soy %s y estoy revisando tu diagnóstico para definir el curso que "
@@ -25237,7 +25230,6 @@ msgstr ""
 "Texto que aparece al final del examen cuando el usuario ha tenido éxito o si "
 "no se estableció un porcentaje de aprobación."
 
-#, fuzzy
 msgid "Multiple choice with *other* option"
 msgstr "Elección múltiple con opción *Otro*"
 
@@ -25247,7 +25239,6 @@ msgstr "Modo de ventana emergente directa"
 msgid "DiagnosticfinalizationmessageTitle"
 msgstr "Finalización del diagnóstico"
 
-#, fuzzy
 msgid "Show score by category on a radar/spiderweb chart"
 msgstr "Muestra la puntuación por categoría en un gráfico de radar/telaraña"
 
@@ -26497,7 +26488,6 @@ msgstr ""
 "pregunta añade una capa extra de posibilidades, y puede combinar ambos (con "
 "cuidado)."
 
-#, fuzzy
 msgid "Define an array with the list of user extra fields to add to the report."
 msgstr ""
 "Defina un arreglo con la lista de campos de perfil adicionales para agregar "
@@ -26900,11 +26890,10 @@ msgstr ""
 "Permitir a los usuarios completar los requisitos previos en una lección si "
 "el elemento correspondiente ya se completó en otra sesión."
 
-#, fuzzy
 msgid "The page 'My learning path' was added in 1.11. Use this option to hide it."
 msgstr ""
-"La página 'Mis lecciones' se añadió en la 1.11. Active esta opción para "
-"ocultarla."
+"La página 'Mis lecciones' se añadió de manera predeterminada en la versión "
+"1.11. Marque esta opción para ocultarla."
 
 msgid "On the learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule."
 msgstr ""
@@ -27254,7 +27243,6 @@ msgstr "Permitir a los alumnos ver mensajes sobre ellos entre tutores"
 msgid "Update SCO status autonomously"
 msgstr "Actualizar el estado del SCO de forma autónoma"
 
-#, fuzzy
 msgid "Give the system path to the UNO converter library to enable some extra exporting features."
 msgstr ""
 "Indique la ruta del sistema a la biblioteca del convertidor UNO para "
@@ -27991,11 +27979,10 @@ msgstr ""
 msgid "Skill levels names"
 msgstr "Nombres de los niveles de competencia"
 
-#, fuzzy
 msgid "User has participate at a training session on the platforme %s from %s until %s"
 msgstr ""
-"El usuario ha participado en una sesión de formación en la plataforma %s "
-"desde %s hasta %s"
+"El usuario ha participado en una sesión de formación en la plataforma %s del "
+"%s al %s"
 
 msgid "Prevent duplicate uploads in assignments"
 msgstr "Evitar cargas duplicadas en tareas"
@@ -28110,11 +28097,10 @@ msgstr ""
 "Rellene previamente el correo en el contacto del pie de página con la "
 "información del usuario y del curso"
 
-#, fuzzy
 msgid "If you already manage your personal data protection declaration to users elsewhere, you can safely disable this feature."
 msgstr ""
-"Si ya gestiona su declaración de protección de datos personales para los "
-"usuarios en otro lugar, puede desactivar esta función con seguridad."
+"Si ya gestiona su declaración de protección de datos personales en otro "
+"lugar, puede desactivar esta función con seguridad."
 
 msgid "Default number of items per page in mySpace"
 msgstr "Número predeterminado de elementos por página en mySpace"

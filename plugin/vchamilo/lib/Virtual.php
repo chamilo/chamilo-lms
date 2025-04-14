@@ -921,10 +921,7 @@ class Virtual
         return false;
     }
 
-    /**
-     * @param $data
-     */
-    public static function addInstance($data)
+    public static function addInstance(stdClass $data)
     {
         if (isset($data->what)) {
             unset($data->what);
@@ -967,7 +964,7 @@ class Virtual
             return;
         }
 
-        $databaseName = $data->main_database;
+        $databaseName = Database::clearDatabaseName($data->main_database);
         $data->main_database = '';
         $connection = self::getConnectionFromInstance($data);
         $data->main_database = $databaseName;
@@ -1061,10 +1058,11 @@ class Virtual
     }
 
     /**
-     * @param stdClass $data
-     * @param string   $fromVersion
+     * @throws \Doctrine\DBAL\Exception
+     *
+     * @return false|void
      */
-    public static function importInstance($data, $fromVersion)
+    public static function importInstance(stdClass $data, string $fromVersion)
     {
         if (isset($data->what)) {
             unset($data->what);
@@ -1094,7 +1092,7 @@ class Virtual
         unset($data->upload_path);
 
         $newDatabase = clone $data;
-        $newDatabase->main_database = $newDatabase->import_to_main_database;
+        $newDatabase->main_database = Database::clearDatabaseName($newDatabase->import_to_main_database);
         $newDatabase->db_user = $newDatabase->import_to_db_user;
         $newDatabase->db_password = $newDatabase->import_to_db_password;
         $newDatabase->db_host = $newDatabase->import_to_db_host;

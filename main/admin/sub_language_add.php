@@ -209,9 +209,8 @@ $msg = '';
 
 if (isset($_POST['SubmitAddNewLanguage'])) {
     $original_name = $_POST['original_name'];
-    $english_name = $_POST['english_name'];
     $isocode = $_POST['isocode'];
-    $english_name = str_replace(' ', '_', $english_name);
+    $english_name = api_replace_dangerous_char($_POST['english_name']);
     $isocode = str_replace(' ', '_', $isocode);
 
     $sublanguage_available = $_POST['sub_language_is_visible'];

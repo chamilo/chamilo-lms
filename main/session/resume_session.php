@@ -57,6 +57,12 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $url_id = api_get_current_access_url_id();
 
 switch ($action) {
+    case 'export_certified_course_users':
+        $courseCode = $_GET['course_code'] ?? null;
+        if (!empty($courseCode)) {
+            SessionManager::exportCourseSessionReport($sessionId, $courseCode);
+        }
+        break;
     case 'move_up':
         SessionManager::moveUp($sessionId, $_GET['course_id']);
         header('Location: resume_session.php?id_session='.$sessionId);
@@ -293,6 +299,12 @@ if ($session->getNbrCourses() === 0) {
             Display::return_icon('export_csv.png', get_lang('ExportUsersOfACourse')),
             $codePath."user/user_export.php?file_type=csv&course_session={$course->getCode()}:$sessionId&addcsvheader=1"
         );
+
+        $courseItem .= Display::url(
+            Display::return_icon('excel.png', get_lang('ExportCertifiedUsersExcel')),
+            api_get_self()."?id_session=$sessionId&action=export_certified_course_users&course_code=".$course->getCode()
+        );
+
         $courseItem .= Display::url(
             Display::return_icon('statistics.gif', get_lang('Tracking')),
             $codePath."tracking/courseLog.php?id_session=$sessionId&cidReq={$course->getCode()}$orig_param&hide_course_breadcrumb=1"

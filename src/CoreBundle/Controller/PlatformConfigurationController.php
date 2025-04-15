@@ -95,6 +95,7 @@ class PlatformConfigurationController extends AbstractController
                 'attendance.enable_sign_attendance_sheet',
                 'exercise.allow_exercise_auto_launch',
                 'course.access_url_specific_files',
+                'platform.course_catalog_hide_private',
             ];
 
             $user = $this->userHelper->getCurrent();

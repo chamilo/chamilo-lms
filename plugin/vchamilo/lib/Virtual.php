@@ -954,6 +954,8 @@ class Virtual
             $template = '';
         }
 
+        $data->main_database = Database::clearDatabaseName($data->main_database);
+
         $mainDatabase = api_get_configuration_value('main_database');
 
         if ($mainDatabase == $data->main_database) {
@@ -964,7 +966,7 @@ class Virtual
             return;
         }
 
-        $databaseName = Database::clearDatabaseName($data->main_database);
+        $databaseName = $data->main_database;
         $data->main_database = '';
         $connection = self::getConnectionFromInstance($data);
         $data->main_database = $databaseName;

@@ -76,6 +76,7 @@ class CourseDescriptionController
         $course_description->set_session_id($session_id);
         $descriptions = $course_description->get_description_data();
 
+        $data['descriptions'] = [];
         foreach ($descriptions as $description) {
             $description_data = [
                 'iid' => $description->getIid(),

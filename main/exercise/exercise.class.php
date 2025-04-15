@@ -206,7 +206,7 @@ class Exercise
             $this->saveCorrectAnswers = $object->save_correct_answers;
             $this->randomByCat = $object->random_by_category;
             $this->text_when_finished = $object->text_when_finished;
-            $this->text_when_finished_failure = $object->text_when_finished_failure;
+            $this->text_when_finished_failure = isset($object->text_when_finished_failure) ? $object->text_when_finished_failure : null;
             $this->display_category_name = $object->display_category_name;
             $this->pass_percentage = $object->pass_percentage;
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);

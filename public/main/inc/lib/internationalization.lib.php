@@ -30,6 +30,7 @@ define('DATE_TIME_FORMAT_SHORT', 6); // Aug 25, 2009 at 03:28 PM
 define('DATE_TIME_FORMAT_SHORT_TIME_FIRST', 7); // 03:28 PM, Aug 25 2009
 define('DATE_FORMAT_NUMBER_NO_YEAR', 8); // 25.08 dd-mm
 define('DATE_FORMAT_ONLY_DAYNAME', 9); // Monday, Sunday, etc
+define('DATE_TIME_FORMAT_SHORT_LOCALIZED', 11);
 
 // Formatting person's name.
 // Formatting a person's name using the pattern as it has been
@@ -478,6 +479,10 @@ function api_format_date($time, $format = null, $language = null)
                 $datetype = IntlDateFormatter::FULL;
                 $timetype = IntlDateFormatter::SHORT;
 
+                break;
+            case DATE_TIME_FORMAT_SHORT_LOCALIZED:
+                $datetype = IntlDateFormatter::SHORT;
+                $timetype = IntlDateFormatter::SHORT;
                 break;
             default:
                 $datetype = IntlDateFormatter::FULL;

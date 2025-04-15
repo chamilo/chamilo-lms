@@ -556,7 +556,8 @@ switch ($action) {
         $count = AnnouncementManager::getNumberAnnouncements($cid, $sid);
         break;
     case 'get_work_teacher':
-        $count = getWorkListTeacher(0, $limit, null, null, $whereCondition, true);
+        $countResult = getWorkListTeacher(0, $limit, null, null, $whereCondition, true);
+        $count = is_array($countResult) ? count($countResult) : (int) $countResult;
         break;
     case 'get_work_student':
         $count = getWorkListStudent(0, $limit, null, null, $whereCondition, true);

@@ -28090,3 +28090,6 @@ msgstr "When this feature is enabled on a multi-URL configuration, you can go to
 
 msgid "Project manager"
 msgstr "Project manager"
+
+msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."

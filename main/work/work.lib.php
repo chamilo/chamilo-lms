@@ -2690,11 +2690,11 @@ function getAllWork(
 
     $courseQueryToString = implode(' OR ', $courseQuery);
 
-    //try {
-    $compilatio = new Compilatio();
-    //} catch (Exception $e) {
-    //    $compilatio = null;
-    //}
+    try {
+        $compilatio = new Compilatio();
+    } catch (Exception $e) {
+        $compilatio = null;
+    }
 
     if ($getCount) {
         if (empty($courseQuery)) {

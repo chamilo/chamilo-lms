@@ -145,7 +145,7 @@ class SurveyLink extends AbstractLink
 
         if ($studentId) {
             $user = api_get_user_entity($studentId);
-            $answered = $repo->hasUserAnswered($survey, $course, $session, $user);
+            $answered = $repo->hasUserAnswered($survey, $course, $user, $session);
 
             return [$answered ? $max_score : 0, $max_score];
         }

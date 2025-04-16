@@ -5,7 +5,7 @@
     <img
       :src="course.illustrationUrl"
       :alt="course.title"
-      class="w-full h-40 object-cover"
+      class="w-full object-cover"
     />
     <div class="p-4 flex flex-col flex-grow gap-2">
       <h3 class="text-xl font-semibold text-gray-800">{{ course.title }}</h3>

@@ -6,9 +6,18 @@ export default {
 
   /**
    * @param {Object} searchParams
+   * @param {boolean} disablePagination
    * @returns {Promise<{totalItems, items}>}
    */
-  listAll: async (searchParams = {}) => await baseService.getCollection("/api/courses", searchParams),
+  listAll: async (searchParams = {}, disablePagination = false) => {
+    const params = { ...searchParams }
+
+    if (disablePagination) {
+      params.pagination = false
+    }
+
+    return await baseService.getCollection("/api/courses", params)
+  },
 
   /**
    * @param {number} cid

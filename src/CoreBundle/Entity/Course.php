@@ -47,7 +47,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     filters: [
         'course.sticky_boolean_filter',
     ],
-    security: "is_granted('ROLE_USER')"
+    paginationClientEnabled: true,
+    security: "is_granted('ROLE_USER')",
 )]
 #[ORM\Table(name: 'course')]
 #[ORM\Index(columns: ['sticky'], name: 'idx_course_sticky')]

@@ -279,10 +279,10 @@ foreach ($categories as $category) {
             $start_time = $end_time = '';
             if ($is_allowed_to_edit) {
                 if (!empty($details['published_on'])) {
-                    $start_time = api_convert_and_format_date($details['published_on'], DATE_TIME_FORMAT_SHORT);
+                    $start_time = api_convert_and_format_date($details['published_on'], DATE_TIME_FORMAT_SHORT_LOCALIZED);
                 }
                 if (!empty($details['expired_on'])) {
-                    $end_time = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_SHORT);
+                    $end_time = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_SHORT_LOCALIZED);
                 }
             } else {
                 $time_limits = false;

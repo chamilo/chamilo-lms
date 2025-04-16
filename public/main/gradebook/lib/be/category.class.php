@@ -520,6 +520,8 @@ class Category implements GradebookItem
             $category = new GradebookCategory();
             $category->setTitle($this->name);
             $category->setDescription($this->description);
+            $userId = is_numeric($this->user_id) ? (int) $this->user_id : api_get_user_id();
+            $category->setUser(api_get_user_entity($userId));
             $category->setUser(api_get_user_entity($this->user_id));
             $category->setCourse($course);
             $category->setParent($parent);
@@ -613,7 +615,8 @@ class Category implements GradebookItem
 
         $category->setTitle($this->name);
         $category->setDescription($this->description);
-        $category->setUser(api_get_user_entity($this->user_id));
+        $userId = is_numeric($this->user_id) ? (int) $this->user_id : api_get_user_id();
+        $category->setUser(api_get_user_entity($userId));
         $category->setCourse($course);
         $category->setParent($parent);
         $category->setWeight($this->weight);

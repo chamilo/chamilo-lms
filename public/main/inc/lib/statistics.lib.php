@@ -2,8 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\TrackEAccess;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
@@ -1943,5 +1947,74 @@ class Statistics
             'eventType1' => ParameterType::STRING,
             'eventType2' => ParameterType::STRING,
         ])->fetchAllAssociative();
+    }
+
+    /**
+     * Returns users who have activity in open courses without being officially enrolled.
+     */
+    public static function getUsersWithActivityButNotRegistered(int $sessionId = 0): array
+    {
+        $em = Database::getManager();
+
+        $qb = $em->createQueryBuilder();
+        $qb->select('t.accessUserId AS userId, t.cId AS courseId, MAX(t.accessDate) AS lastAccess')
+            ->from(TrackEAccess::class, 't')
+            ->where('t.accessUserId IS NOT NULL')
+            ->andWhere('t.cId IS NOT NULL')
+            ->groupBy('t.accessUserId, t.cId');
+
+        if ($sessionId > 0) {
+            $qb->andWhere('t.sessionId = :sessionId')
+                ->setParameter('sessionId', $sessionId);
+        }
+
+        $results = $qb->getQuery()->getArrayResult();
+
+        $nonRegistered = [];
+
+        foreach ($results as $row) {
+            $userId = $row['userId'];
+            $courseId = $row['courseId'];
+
+            $course = $em->getRepository(Course::class)->find($courseId);
+            if (!$course) {
+                continue;
+            }
+
+            if (!\in_array($course->getVisibility(), [Course::OPEN_PLATFORM, Course::OPEN_WORLD], true)) {
+                continue;
+            }
+
+            $isRegistered = $em->createQueryBuilder()
+                ->select('1')
+                ->from(CourseRelUser::class, 'cu')
+                ->where('cu.user = :userId AND cu.course = :courseId')
+                ->setParameter('userId', $userId)
+                ->setParameter('courseId', $courseId);
+
+            if ($sessionId > 0) {
+                $isRegistered->andWhere('cu.session = :sessionId')
+                    ->setParameter('sessionId', $sessionId);
+            }
+
+            if (empty($isRegistered->getQuery()->getResult())) {
+                $user = $em->getRepository(User::class)->find($userId);
+                if (!$user) {
+                    continue;
+                }
+
+                $nonRegistered[] = [
+                    'id' => $user->getId(),
+                    'firstname' => $user->getFirstname(),
+                    'lastname' => $user->getLastname(),
+                    'email' => $user->getEmail(),
+                    'courseTitle' => $course->getTitle(),
+                    'courseCode' => $course->getCode(),
+                    'lastAccess' => $row['lastAccess'] ? (new \DateTime($row['lastAccess']))->format('Y-m-d H:i:s') : '',
+                ];
+            }
+        }
+
+        return $nonRegistered;
     }
 }

@@ -138,9 +138,9 @@ class StudentPublicationLink extends AbstractLink
         $sumResult = 0;
 
         foreach ($scores as $data) {
-            if (!array_key_exists($data->getUserId(), $students)) {
+            if (!array_key_exists($data->getUser()->getId(), $students)) {
                 if (0 != $assignment->getQualification()) {
-                    $students[$data->getUserId()] = $data->getQualification();
+                    $students[$data->getUser()->getId()] = $data->getQualification();
                     $rescount++;
                     $sum += $data->getQualification() / $assignment->getQualification();
                     $sumResult += $data->getQualification();

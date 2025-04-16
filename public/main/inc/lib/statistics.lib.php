@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\DBAL\ParameterType;
 
 /**
  * This class provides some functions for statistics.
@@ -1894,5 +1895,53 @@ class Statistics
             }
         }
         return $results;
+    }
+
+    /**
+     * Returns the number of user subscriptions grouped by day.
+     */
+    public static function getSubscriptionsByDay(string $startDate, string $endDate): array
+    {
+        $conn = Database::getManager()->getConnection();
+        $sql = "
+        SELECT DATE(default_date) AS date, COUNT(default_id) AS count
+        FROM track_e_default
+        WHERE default_event_type = :eventType
+        AND default_date BETWEEN :start AND :end
+        GROUP BY DATE(default_date)
+        ORDER BY DATE(default_date)
+    ";
+
+        return $conn->executeQuery($sql, [
+            'eventType' => 'user_subscribed',
+            'start' => $startDate.' 00:00:00',
+            'end' => $endDate.' 23:59:59',
+        ])->fetchAllAssociative();
+    }
+
+    /**
+     * Returns the number of user unsubscriptions grouped by day.
+     */
+    public static function getUnsubscriptionsByDay(string $startDate, string $endDate): array
+    {
+        $conn = Database::getManager()->getConnection();
+        $sql = "
+        SELECT DATE(default_date) AS date, COUNT(default_id) AS count
+        FROM track_e_default
+        WHERE default_event_type IN (:eventType1, :eventType2)
+        AND default_date BETWEEN :start AND :end
+        GROUP BY DATE(default_date)
+        ORDER BY DATE(default_date)
+    ";
+
+        return $conn->executeQuery($sql, [
+            'eventType1' => 'user_unsubscribed',
+            'eventType2' => 'session_user_deleted',
+            'start' => $startDate.' 00:00:00',
+            'end' => $endDate.' 23:59:59',
+        ], [
+            'eventType1' => ParameterType::STRING,
+            'eventType2' => ParameterType::STRING,
+        ])->fetchAllAssociative();
     }
 }

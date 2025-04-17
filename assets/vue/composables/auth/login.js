@@ -32,8 +32,8 @@ export function useLogin() {
     try {
       const responseData = await securityService.login(payload)
 
-      if (responseData.requires2FA) {
-        return { success: true, requires2FA: true };
+      if (responseData.error) {
+        return { success: false, requires2FA: true, error: responseData.error }
       }
 
       if (route.query.redirect) {

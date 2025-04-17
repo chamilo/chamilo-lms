@@ -5818,7 +5818,7 @@ msgstr "التسجيل المتعدد"
 msgid "Full-text search feature"
 msgstr "خاصية البحث الكامل للنص"
 
-msgid "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr "Xapian اختر \"نعم\" لتمكين هذه الخاصية مع ملاحظة بان هذه الخاصية تعتمد على وجود الاضافة"
 
 msgid "Find a training session"
@@ -19375,31 +19375,31 @@ msgstr "Create your Facebook Application"
 msgid "Announcement for a group"
 msgstr "تبليغ للمجموعة"
 
-msgid "Language priority 1"
+msgid "Highest priority language"
 msgstr "اولوية اللغة 1"
 
-msgid "Language priority 2"
+msgid "Secondary priority language"
 msgstr "اولوية اللغة 2"
 
-msgid "Language priority 3"
+msgid "Third priority language"
 msgstr "اولوية اللغة 3"
 
-msgid "Language priority 4"
+msgid "Fourth priority language"
 msgstr "اولوية اللغة 4"
 
 msgid "Language priority 5"
 msgstr "اولوية اللغة 5"
 
-msgid "The language with the highest priority"
+msgid "Primary language selected when multiple language contexts are set."
 msgstr "اللغة ذات الاولوية الاعلى"
 
-msgid "The second language priority"
+msgid "Secondary fallback language if first priority is unavailable or out of context."
 msgstr "اللغة الثانية في الاولوية"
 
-msgid "The third language priority"
+msgid "Tertiary language fallback if higher priorities fail."
 msgstr "اللغة الثالثة في الاولوية"
 
-msgid "The fourth language priority"
+msgid "Last language fallback option by order of priority."
 msgstr "اللغة الرابعة في الاولوية"
 
 msgid "The lowest language priority"
@@ -20050,7 +20050,7 @@ msgstr "ان تفعيل هذا الخيار سوف يعرض مقياس لقوة 
 msgid "CAPTCHA"
 msgstr "رموز التحقق"
 
-msgid "Enable a CAPTCHA on the login form to avoid password hammering"
+msgid "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering"
 msgstr "تفعيل رموز التحقق اثناء تسجيل الدخول لمنع تجريب رمز المرور"
 
 msgid "CAPTCHA mistakes allowance"
@@ -20125,7 +20125,7 @@ msgstr "عدد الايام الافتراضية التي يمكن فيها لل
 msgid "PDF header logo"
 msgstr "الشعار في رأس الصفحة في ملفات بي دي اف"
 
-msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
 msgstr "يتيح فيما اذا يمكن استخدام الشعار في راس الصفحة لملفات البي دي اف التي يتم تصديرها، بدلا من الشعار الاعتيادي للنظام، ملاحظة مسار الصورة هو"
 
 msgid "Order users by official code"
@@ -21076,7 +21076,7 @@ msgstr "Google's Firebase Console ارسال اشعارات باستخدام خ�
 msgid "Sender ID of Firebase Console for Cloud Messaging"
 msgstr "Firebase Console هوية المرسل للمراسلة السحابية في خدمة"
 
-msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
+msgid "You need register a project on <a href='https://console.firebase.google.com/'>Google Firebase Console</a>"
 msgstr "Google Firebase Console يجب عليك تسجيل مشروع في"
 
 msgid "Server key of Firebase Console for Cloud Messaging"

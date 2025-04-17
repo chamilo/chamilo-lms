@@ -5817,7 +5817,7 @@ msgstr "Iscrizione multipla"
 msgid "Full-text search feature"
 msgstr "Abilita ricerca testuale"
 
-msgid "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr "Selezionando \"Sì\" sarà abilitata la ricerca testuale libera. La ricerca sarà possibile se nel server è installata almeno la versione 1.x dell'estensione PHP Xapian."
 
 msgid "Find a training session"
@@ -19374,31 +19374,31 @@ msgstr "Per iniziare, devi creare una Facebook Application (vedi https://develop
 msgid "Announcement for a group"
 msgstr "Avviso per un gruppo"
 
-msgid "Language priority 1"
+msgid "Highest priority language"
 msgstr "Priorità della Lingua 1"
 
-msgid "Language priority 2"
+msgid "Secondary priority language"
 msgstr "Priorità della Lingua 2"
 
-msgid "Language priority 3"
+msgid "Third priority language"
 msgstr "Priorità della Lingua 3"
 
-msgid "Language priority 4"
+msgid "Fourth priority language"
 msgstr "Priorità della Lingua 4"
 
 msgid "Language priority 5"
 msgstr "Priorità della Lingua 5"
 
-msgid "The language with the highest priority"
+msgid "Primary language selected when multiple language contexts are set."
 msgstr "Lingua con la priorità più alta"
 
-msgid "The second language priority"
+msgid "Secondary fallback language if first priority is unavailable or out of context."
 msgstr "Secondo livello di priorità lingua"
 
-msgid "The third language priority"
+msgid "Tertiary language fallback if higher priorities fail."
 msgstr "Terzo livello di priorità lingua"
 
-msgid "The fourth language priority"
+msgid "Last language fallback option by order of priority."
 msgstr "Quarto livello di priorità lingua"
 
 msgid "The lowest language priority"
@@ -20049,7 +20049,7 @@ msgstr "Abilita l'opzione per attivare un indicatore di forza della password qua
 msgid "CAPTCHA"
 msgstr "CAPTCHA"
 
-msgid "Enable a CAPTCHA on the login form to avoid password hammering"
+msgid "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering"
 msgstr "Abilita il CAPTCHA al login per evitare che robots forzino le password."
 
 msgid "CAPTCHA mistakes allowance"
@@ -20124,8 +20124,8 @@ msgstr "Numero predefinito di giorni in cui un istruttore può accedere alla pro
 msgid "PDF header logo"
 msgstr "Logo PDF"
 
-msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
-msgstr "Utilizzabile come immagine in css/themes/[your-css]/images/pdf_logo_header.png, ma anche come logo PDF per le esportazioni in PDF (sostituendo il logo del portale)"
+msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgstr "Utilizzabile come immagine in var/themes/[your-css]/images/pdf_logo_header.png, ma anche come logo PDF per le esportazioni in PDF (sostituendo il logo del portale)"
 
 msgid "Order users by official code"
 msgstr "Ordina gli utenti in base al codice"
@@ -21075,7 +21075,7 @@ msgstr "Inviare notifiche tramite Firebase Console di Google"
 msgid "Sender ID of Firebase Console for Cloud Messaging"
 msgstr "ID del mittente di Firebase Console per Messaggistica Cloud"
 
-msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
+msgid "You need register a project on <a href='https://console.firebase.google.com/'>Google Firebase Console</a>"
 msgstr "Devi registrare un progetto su Google Firebase Console"
 
 msgid "Server key of Firebase Console for Cloud Messaging"

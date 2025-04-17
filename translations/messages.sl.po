@@ -5818,7 +5818,7 @@ msgstr "Večkratna registracija"
 msgid "Full-text search feature"
 msgstr "Zmožnost iskanja po vsebini"
 
-msgid "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr "Izberi \"Da\" za omogočitev te zmožnosti. Delovanje zmožnosti je odvisno od Xapian razširitve PHP-ja in ne bo delovala v primeru, da razširitev ni nameščena ali da njena različica ni vsaj 1.x."
 
 msgid "Find a training session"
@@ -19375,31 +19375,31 @@ msgstr "Najprej morate ustvariti Facebook Aplikacijo ( glej <a href=\"https://de
 msgid "Announcement for a group"
 msgstr "Obvestilo za skupino"
 
-msgid "Language priority 1"
+msgid "Highest priority language"
 msgstr "Jezik-prioriteta 1"
 
-msgid "Language priority 2"
+msgid "Secondary priority language"
 msgstr "Jezik-prioriteta 2"
 
-msgid "Language priority 3"
+msgid "Third priority language"
 msgstr "Jezik-prioriteta 3"
 
-msgid "Language priority 4"
+msgid "Fourth priority language"
 msgstr "Jezik-prioriteta 4"
 
 msgid "Language priority 5"
 msgstr "Jezik-prioriteta 5"
 
-msgid "The language with the highest priority"
+msgid "Primary language selected when multiple language contexts are set."
 msgstr "Jezik z najvišjo prioriteto"
 
-msgid "The second language priority"
+msgid "Secondary fallback language if first priority is unavailable or out of context."
 msgstr "Jezik z drugo najvišjo prioriteto"
 
-msgid "The third language priority"
+msgid "Tertiary language fallback if higher priorities fail."
 msgstr "Jezik s prioriteto 3"
 
-msgid "The fourth language priority"
+msgid "Last language fallback option by order of priority."
 msgstr "Jezik s prioriteto 4"
 
 msgid "The lowest language priority"
@@ -20050,7 +20050,7 @@ msgstr "Omogočite to možnost v primeru, da želite prikazati vizulni indikator
 msgid "CAPTCHA"
 msgstr "CAPTCHA"
 
-msgid "Enable a CAPTCHA on the login form to avoid password hammering"
+msgid "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering"
 msgstr "Omogoči rabo CAPTCHA v prijavni formi"
 
 msgid "CAPTCHA mistakes allowance"
@@ -20125,8 +20125,8 @@ msgstr "Privzeto število dni, v katerih učitelj še lahko dostopa do svje seje
 msgid "PDF header logo"
 msgstr "Logotip glave PDF dokumenta"
 
-msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
-msgstr "Določa, ali se uporabi slika iz css/themes/[tvoj-css]/images/pdf_logo_header.png kot logotip zaglavja PDF datoteke v vseh PDF izvozih (namesto običajnega logotipa definiranega s pdefinicijo v portalu)"
+msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgstr "Določa, ali se uporabi slika iz var/themes/[tvoj-css]/images/pdf_logo_header.png kot logotip zaglavja PDF datoteke v vseh PDF izvozih (namesto običajnega logotipa definiranega s pdefinicijo v portalu)"
 
 msgid "Order users by official code"
 msgstr "Uredi uporabnike po uradni kodi"
@@ -21076,7 +21076,7 @@ msgstr "Pošlji potisno sporočilo preko  Google Firebase Console (Firebase Clou
 msgid "Sender ID of Firebase Console for Cloud Messaging"
 msgstr "Številka projekta Google Developer Console"
 
-msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
+msgid "You need register a project on <a href='https://console.firebase.google.com/'>Google Firebase Console</a>"
 msgstr "Projekt MORATE registrirati na <a href=\"https://console.developers.google.com/\">Google Developer Console</a>"
 
 msgid "Server key of Firebase Console for Cloud Messaging"

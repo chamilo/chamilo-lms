@@ -5818,7 +5818,7 @@ msgstr "Kolektīvs reģistrs"
 msgid "Full-text search feature"
 msgstr "Pilna teksta meklēšanas funkcija"
 
-msgid "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr "Izvēlieties \"Jā\", lai nodrošinātu šo funkciju.<br> Funkcijas darbība ir ļoti atkarīga no Xapian paplašinājuma PHP, tāpēc tā nevar darboties, ja šis paplašinājuma nav instalēts jūsu serverī. Minimālā versija 1.x ."
 
 msgid "Find a training session"
@@ -19375,31 +19375,31 @@ msgstr ""
 msgid "Announcement for a group"
 msgstr "Paziņojums Grupai"
 
-msgid "Language priority 1"
+msgid "Highest priority language"
 msgstr ""
 
-msgid "Language priority 2"
+msgid "Secondary priority language"
 msgstr ""
 
-msgid "Language priority 3"
+msgid "Third priority language"
 msgstr ""
 
-msgid "Language priority 4"
+msgid "Fourth priority language"
 msgstr ""
 
 msgid "Language priority 5"
 msgstr ""
 
-msgid "The language with the highest priority"
+msgid "Primary language selected when multiple language contexts are set."
 msgstr ""
 
-msgid "The second language priority"
+msgid "Secondary fallback language if first priority is unavailable or out of context."
 msgstr ""
 
-msgid "The third language priority"
+msgid "Tertiary language fallback if higher priorities fail."
 msgstr ""
 
-msgid "The fourth language priority"
+msgid "Last language fallback option by order of priority."
 msgstr ""
 
 msgid "The lowest language priority"
@@ -20050,7 +20050,7 @@ msgstr ""
 msgid "CAPTCHA"
 msgstr ""
 
-msgid "Enable a CAPTCHA on the login form to avoid password hammering"
+msgid "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering"
 msgstr ""
 
 msgid "CAPTCHA mistakes allowance"
@@ -20125,7 +20125,7 @@ msgstr ""
 msgid "PDF header logo"
 msgstr ""
 
-msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
 msgstr ""
 
 msgid "Order users by official code"
@@ -21076,7 +21076,7 @@ msgstr ""
 msgid "Sender ID of Firebase Console for Cloud Messaging"
 msgstr ""
 
-msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
+msgid "You need register a project on <a href='https://console.firebase.google.com/'>Google Firebase Console</a>"
 msgstr ""
 
 msgid "Server key of Firebase Console for Cloud Messaging"

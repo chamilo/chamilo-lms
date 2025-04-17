@@ -5995,7 +5995,7 @@ msgstr "Inscription multiple"
 msgid "Full-text search feature"
 msgstr "Fonctionnalité de recherche full-text"
 
-msgid "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr "Sélectionnez \"Oui\" pour activer la fonctionnalité de recherche et d'indexation full-text. Cette fonctionnalité nécessite l'installation sur votre serveur de l'extension Xapian pour PHP, en version 1.x ou supérieure. Cette fonctionnalité ne fonctionnera pas si ce pré-requis n'est pas satisfait."
 
 msgid "Find a training session"
@@ -19975,31 +19975,31 @@ msgstr "<p><h5>Créez votre application Facebook</h5>Vous devez, d'abord, créer
 msgid "Announcement for a group"
 msgstr "Annonce pour un groupe"
 
-msgid "Language priority 1"
+msgid "Highest priority language"
 msgstr "Langue priorité 1"
 
-msgid "Language priority 2"
+msgid "Secondary priority language"
 msgstr "Langue priorité 2"
 
-msgid "Language priority 3"
+msgid "Third priority language"
 msgstr "Langue priorité 3"
 
-msgid "Language priority 4"
+msgid "Fourth priority language"
 msgstr "Langue priorité 4"
 
 msgid "Language priority 5"
 msgstr "Langue priorité 5"
 
-msgid "The language with the highest priority"
+msgid "Primary language selected when multiple language contexts are set."
 msgstr "Langue prioritaire"
 
-msgid "The second language priority"
+msgid "Secondary fallback language if first priority is unavailable or out of context."
 msgstr "Deuxième langue prioritaire"
 
-msgid "The third language priority"
+msgid "Tertiary language fallback if higher priorities fail."
 msgstr "Troisième langue prioritaire"
 
-msgid "The fourth language priority"
+msgid "Last language fallback option by order of priority."
 msgstr "Quatrième langue prioritaire"
 
 msgid "The lowest language priority"
@@ -20654,7 +20654,7 @@ msgstr "L'activation de cette option fera apparaître un indicateur de complexit
 msgid "CAPTCHA"
 msgstr "CAPTCHA"
 
-msgid "Enable a CAPTCHA on the login form to avoid password hammering"
+msgid "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering"
 msgstr "Activer cette option fera apparaître un CAPTCHA dans le formulaire de login pour éviter les tentatives de pénétration par force brute."
 
 msgid "CAPTCHA mistakes allowance"
@@ -20729,8 +20729,8 @@ msgstr "Le nombre par défaut de jours postérieurs à la fin d'une session, dur
 msgid "PDF header logo"
 msgstr "Logo d'en-tête PDF"
 
-msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
-msgstr "Activer cette option pour utiliser l'image dans css/themes/[votre-css]/images/pdf_logo_header.png comme logo d'en-tête de tous les exports au format PDF (au lieu du logo normal du portail)"
+msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgstr "Activer cette option pour utiliser l'image dans var/themes/[votre-css]/images/pdf_logo_header.png comme logo d'en-tête de tous les exports au format PDF (au lieu du logo normal du portail)"
 
 msgid "Order users by official code"
 msgstr "Ordonner les utilisateurs par code officiel"
@@ -21699,7 +21699,7 @@ msgstr "Envoyer notifications Push mobiles via Google Cloud Messaging"
 msgid "Sender ID of Firebase Console for Cloud Messaging"
 msgstr "Numéro de projet de la Google Developer Console"
 
-msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
+msgid "You need register a project on <a href='https://console.firebase.google.com/'>Google Firebase Console</a>"
 msgstr "Vous devez enregistrer un projet sur <a href=\"https://console.developers.google.com/\">Google Developer Console</a>"
 
 msgid "Server key of Firebase Console for Cloud Messaging"
@@ -27316,7 +27316,7 @@ msgstr "Afficher uniquement les cours correspondants dans le catalogue"
 msgid "Prevent teacher from modifying assignment scores"
 msgstr "Empêcher le formateur de modifier les scores des travaux"
 
-msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 msgstr ""
 "Activez pour utiliser un tableau pour définir quels rôles doivent être "
 "clairement affichés et lesquels doivent être cachés."
@@ -27372,7 +27372,7 @@ msgstr ""
 "d'apprentissage si l'apprenant est inscrit au parcours d'apprentissage donné "
 "et y a accès."
 
-msgid "An array of role = > number which represents the number of days an account has before expiration, depending on the role."
+msgid "An array of role = > number which represents the number of days an account has before expiration, depending on the role.<br><pre> [ 'COURSEMANAGER' => 365, 'STUDENT' => 31, 'DRH' => 31, 'SESSIONADMIN' => 60, 'STUDENT_BOSS' => 60, 'INVITEE' => 31 ] </pre>"
 msgstr ""
 "Un tableau de rôle => nombre qui représente le nombre de jours restants "
 "avant l'expiration d'un compte, en fonction du rôle."
@@ -28174,7 +28174,7 @@ msgstr ""
 msgid "Enable only if you are using the Redirection plugin"
 msgstr "Activez uniquement si vous utilisez le plugin de Redirection"
 
-msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it.<br><pre> [ 'stream_context_create' => [ 'http' => [ 'proxy' => 'tcp://example.com:8080', 'request_fulluri' => true ] ], 'curl_setopt_array' => [ 'CURLOPT_PROXY' => 'http://example.com', 'CURLOPT_PROXYPORT' => '8080' ] ] </pre>"
 msgstr ""
 "Certaines fonctionnalités de Chamilo se connecteront à l'extérieur depuis le "
 "serveur. Par exemple, pour vérifier qu'un contenu externe existe lors de la "
@@ -28469,7 +28469,7 @@ msgstr ""
 "Activez cette option pour permettre aux apprenants de télécharger les "
 "parcours d'apprentissage en tant que packages SCORM."
 
-msgid "Array defining host and port for the LDAP server."
+msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 msgstr "Tableau définissant l'hôte et le port pour le serveur LDAP."
 
 msgid "Array of relationships between user extra fields and session extra fields, so the session can be pre-filled with data matching the user's data."
@@ -28492,7 +28492,7 @@ msgstr "Utilisateurs anonymes multiples"
 msgid "Enable edition of course work time"
 msgstr "Activer l'édition du temps de travail du cours"
 
-msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500].<br><pre> ['options' => [50, 100, 200, 500]] </pre>"
 msgstr ""
 "Définissez les options que vous souhaitez voir apparaître dans la navigation "
 "autour d'un tableau pour afficher moins ou plus de lignes sur une page. Ex. ["
@@ -28793,7 +28793,7 @@ msgstr "Police de sécurité concernant les informations des sites référents"
 msgid "Enable X-sendfile headers"
 msgstr "Activer les en-têtes X-sendfile"
 
-msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video.<br><pre> ['features' => ['speed']] </pre>"
 msgstr ""
 "Tableau des fonctionnalités supplémentaires que vous pouvez activer pour le "
 "lecteur vidéo dans Chamilo. Les options incluent 'speed', qui vous permet de "
@@ -28866,7 +28866,7 @@ msgstr ""
 "Ajouter des informations de visibilité pour les parcours d'apprentissage sur "
 "la page de suivi des apprenants"
 
-msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in.<br><pre> [ 'days' => 0, 'months' => 0, ] </pre>"
 msgstr ""
 "Tableau établissant les jours ('days') et les mois ('months') pour "
 "déterminer la date d'expiration du compte lors de la première connexion de "

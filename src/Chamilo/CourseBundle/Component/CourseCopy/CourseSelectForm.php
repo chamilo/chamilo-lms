@@ -19,10 +19,7 @@ use Display;
  */
 class CourseSelectForm
 {
-    /**
-     * @return array
-     */
-    public static function getResourceTitleList()
+    public static function getResourceTitleList(): array
     {
         $list = [];
         $list[RESOURCE_LEARNPATH_CATEGORY] = get_lang('Learnpath').' '.get_lang('Category');
@@ -57,14 +54,14 @@ class CourseSelectForm
     /**
      * Display the form.
      *
-     * @param array $course
+     * @param Course $course
      * @param array $hidden_fields     hidden fields to add to the form
      * @param bool  $avoidSerialize    the document array will be serialize.
      *                                 This is used in the course_copy.php file
      * @param bool  $avoidCourseInForm
      */
     public static function display_form(
-        $course,
+        Course $course,
         $hidden_fields = null,
         $avoidSerialize = false,
         $avoidCourseInForm = false
@@ -281,7 +278,6 @@ class CourseSelectForm
         }
 
         if ($avoidCourseInForm === false) {
-            /** @var Course $course */
             $courseSerialized = base64_encode(Course::serialize($course));
             echo '<input type="hidden" name="course" value="'.$courseSerialized.'"/>';
         }
@@ -292,29 +288,25 @@ class CourseSelectForm
             }
         }
 
-        $recycleOption = isset($_POST['recycle_option']) ? true : false;
+        $recycleOption = isset($_POST['recycle_option']);
         if (empty($element_count)) {
             echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
+        } elseif (!empty($hidden_fields['destination_session'])) {
+            echo '<br />
+                  <button
+                    class="save"
+                    type="submit"
+                    onclick="javascript:if(!confirm(' . "'" . addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)) . "'" . ')) return false;" >' .
+                get_lang('Ok') . '</button>';
+        } elseif ($recycleOption) {
+            echo '<br /><button class="save" type="submit">' . get_lang('Ok') . '</button>';
         } else {
-            if (!empty($hidden_fields['destination_session'])) {
-                echo '<br />
-                      <button
-                        class="save"
+            echo '<br />
+                  <button
+                        class="save btn btn-primary"
                         type="submit"
-                        onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
-                    get_lang('Ok').'</button>';
-            } else {
-                if ($recycleOption) {
-                    echo '<br /><button class="save" type="submit">'.get_lang('Ok').'</button>';
-                } else {
-                    echo '<br />
-                          <button
-                                class="save btn btn-primary"
-                                type="submit"
-                                onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
-                    get_lang('Ok').'</button>';
-                }
-            }
+                        onclick="checkLearnPath(\'' . addslashes(get_lang('DocumentsWillBeAddedToo')) . '\')">' .
+                get_lang('Ok') . '</button>';
         }
 
         self::display_hidden_quiz_questions($course);
@@ -385,22 +377,16 @@ class CourseSelectForm
 
                         if ($type == RESOURCE_LEARNPATH) {
                             echo Display::return_message(
-                                get_lang(
-                                    'ToExportLearnpathWithQuizYouHaveToSelectQuiz'
-                                ),
+                                get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'),
                                 'warning'
                             );
                             echo Display::return_message(
-                                get_lang(
-                                    'IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments'
-                                ),
+                                get_lang('IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments'),
                                 'warning'
                             );
                             if ($enableScormSelection) {
                                 echo Display::return_message(
-                                     get_lang(
-                                         'IfYourLPsAreScormsYouShouldSelectThemFromTheScorms'
-                                     ),
+                                     get_lang('IfYourLPsAreScormsYouShouldSelectThemFromTheScorms'),
                                      'warning'
                                  );
                             }
@@ -409,9 +395,7 @@ class CourseSelectForm
                         if ($type == RESOURCE_DOCUMENT) {
                             if (api_get_setting('show_glossary_in_documents') != 'none') {
                                 echo Display::return_message(
-                                    get_lang(
-                                        'ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'
-                                    ),
+                                    get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'),
                                     'warning'
                                 );
                             }
@@ -473,20 +457,23 @@ class CourseSelectForm
      */
     public static function display_hidden_quiz_questions($course)
     {
-        if (is_array($course->resources)) {
-            foreach ($course->resources as $type => $resources) {
-                if (!empty($resources) && count($resources) > 0) {
-                    switch ($type) {
-                        case RESOURCE_QUIZQUESTION:
-                            foreach ($resources as $id => $resource) {
-                                echo '<input
-                                    type="hidden"
-                                    name="resource['.RESOURCE_QUIZQUESTION.']['.$id.']"
-                                    id="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" value="On" />';
-                            }
-                            break;
+        if (!is_array($course->resources)) {
+            return;
+        }
+
+        foreach ($course->resources as $type => $resources) {
+            if (empty($resources) || count($resources) <= 0) {
+                continue;
+            }
+            switch ($type) {
+                case RESOURCE_QUIZQUESTION:
+                    foreach ($resources as $id => $resource) {
+                        echo '<input
+                            type="hidden"
+                            name="resource['.RESOURCE_QUIZQUESTION.']['.$id.']"
+                            id="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" value="On" />';
                     }
-                }
+                    break;
             }
         }
     }
@@ -496,21 +483,23 @@ class CourseSelectForm
      */
     public static function display_hidden_scorm_directories($course)
     {
-        if (!api_get_configuration_value('course_backup_allow_scorm_selection_in_select_form')) {
-            if (is_array($course->resources)) {
-                foreach ($course->resources as $type => $resources) {
-                    if (!empty($resources) && count($resources) > 0) {
-                        switch ($type) {
-                            case RESOURCE_SCORM:
-                                foreach ($resources as $id => $resource) {
-                                    echo '<input
-                                        type="hidden"
-                                        name="resource['.RESOURCE_SCORM.']['.$id.']"
-                                        id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
-                                }
-                                break;
+        if (!api_get_configuration_value('course_backup_allow_scorm_selection_in_select_form')
+            && is_array($course->resources)
+        ) {
+            foreach ($course->resources as $type => $resources) {
+                if (empty($resources) || count($resources) <= 0) {
+                    continue;
+                }
+
+                switch ($type) {
+                    case RESOURCE_SCORM:
+                        foreach ($resources as $id => $resource) {
+                            echo '<input
+                                type="hidden"
+                                name="resource['.RESOURCE_SCORM.']['.$id.']"
+                                id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
                         }
-                    }
+                        break;
                 }
             }
         }
@@ -519,7 +508,7 @@ class CourseSelectForm
     /**
      * Get the posted course with all its selected resources.
      *
-     * @param string $from         who calls the function?
+     * @param string|null $from    who calls the function?
      *                             It can be copy_course, create_backup, import_backup or recycle_course
      * @param int    $session_id
      * @param string $course_code
@@ -528,7 +517,7 @@ class CourseSelectForm
      * @return Course The course-object with all resources selected by the user
      *                in the form given by display_form(...)
      */
-    public static function get_posted_course($from = '', $session_id = 0, $course_code = '', $postedCourse = null)
+    public static function get_posted_course(?string $from = '', $session_id = 0, $course_code = '', $postedCourse = null)
     {
         $course = $postedCourse;
         if (empty($postedCourse)) {
@@ -552,53 +541,53 @@ class CourseSelectForm
 
         // Searching the documents resource that have been set to null because
         // $avoidSerialize is true in the display_form() function
-        if ($from === 'copy_course') {
-            if (is_array($resource)) {
-                $resource = array_keys($resource);
-                foreach ($resource as $resource_item) {
-                    $conditionSession = '';
-                    if (!empty($session_id)) {
-                        $session_id = (int) $session_id;
-                        $conditionSession = ' AND d.session_id ='.$session_id;
-                    }
+        if ($from === 'copy_course' && is_array($resource)) {
+            $resource = array_keys($resource);
+            foreach ($resource as $resource_item) {
+                $whereConditions = [
+                    'd.c_id = ?' => [$course_id],
+                    'tool = ?' => [TOOL_DOCUMENT],
+                    'p.visibility <> ?' => [2],
+                    'd.id = ?' => [$resource_item],
+                ];
 
-                    $sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-                            FROM '.$table_doc.' d
-                            INNER JOIN '.$table_prop.' p
-                            ON (d.c_id = p.c_id)
-                            WHERE
-                                d.c_id = '.$course_id.' AND
-                                p.c_id = '.$course_id.' AND
-                                tool = \''.TOOL_DOCUMENT.'\' AND
-                                p.ref = d.id AND p.visibility != 2 AND
-                                d.id = '.$resource_item.$conditionSession.'
-                            ORDER BY path';
-                    $db_result = Database::query($sql);
-                    while ($obj = Database::fetch_object($db_result)) {
-                        $doc = new Document(
-                            $obj->id,
-                            $obj->path,
-                            $obj->comment,
-                            $obj->title,
-                            $obj->filetype,
-                            $obj->size
-                        );
-                        if ($doc) {
-                            $course->add_resource($doc);
-                            // adding item property
-                            $sql = "SELECT * FROM $table_prop
-                                    WHERE
-                                        c_id = $course_id AND
-                                        tool = '".RESOURCE_DOCUMENT."' AND
-                                        ref = $resource_item ";
-                            $res = Database::query($sql);
-                            $all_properties = [];
-                            while ($item_property = Database::fetch_array($res, 'ASSOC')) {
-                                $all_properties[] = $item_property;
-                            }
-                            $course->resources[RESOURCE_DOCUMENT][$resource_item]->item_properties = $all_properties;
-                        }
-                    }
+                if (!empty($session_id)) {
+                    $session_id = (int) $session_id;
+                    $whereConditions['d.session_id = ?'] = [$session_id];
+                }
+
+                $db_result = Database::select(
+                    ['d.id', 'd.path', 'd.comment', 'd.title', 'd.filetype', 'd.size'],
+                    'FROM '.$table_doc.' d INNER JOIN '.$table_prop.' p ON (d.c_id = p.c_id AND p.ref = d.id)',
+                    [
+                        'where' => $whereConditions,
+                        'order' => 'path',
+                    ]
+                );
+
+                foreach ($db_result as $obj) {
+                    $doc = new Document(
+                        $obj['id'],
+                        $obj['path'],
+                        $obj['comment'],
+                        $obj['title'],
+                        $obj['filetype'],
+                        $obj['size']
+                    );
+                    $course->add_resource($doc);
+                    // adding item property
+                    $all_properties = Database::select(
+                        '*',
+                        $table_prop,
+                        [
+                            'where' => [
+                                'c_id = ?' => $course_id,
+                                'tool = ?' => RESOURCE_DOCUMENT,
+                                'ref = ?' => $resource_item,
+                            ],
+                        ]
+                    );
+                    $course->resources[RESOURCE_DOCUMENT][$resource_item]->item_properties = $all_properties;
                 }
             }
         }
@@ -712,10 +701,11 @@ class CourseSelectForm
                                     }
                                 }
                                 // quiz question can be, not attached to an exercise
-                                if ($type != RESOURCE_QUIZQUESTION) {
-                                    if (!isset($_POST['resource'][$type][$id]) && !$resource_is_used_elsewhere) {
-                                        unset($course->resources[$type][$id]);
-                                    }
+                                if ($type != RESOURCE_QUIZQUESTION
+                                    && !isset($_POST['resource'][$type][$id])
+                                    && !$resource_is_used_elsewhere
+                                ) {
+                                    unset($course->resources[$type][$id]);
                                 }
                             }
                         }

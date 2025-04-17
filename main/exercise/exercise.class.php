@@ -206,7 +206,7 @@ class Exercise
             $this->saveCorrectAnswers = $object->save_correct_answers;
             $this->randomByCat = $object->random_by_category;
             $this->text_when_finished = $object->text_when_finished;
-            $this->text_when_finished_failure = $object->text_when_finished_failure;
+            $this->text_when_finished_failure = isset($object->text_when_finished_failure) ? $object->text_when_finished_failure : null;
             $this->display_category_name = $object->display_category_name;
             $this->pass_percentage = $object->pass_percentage;
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
@@ -3958,7 +3958,8 @@ class Exercise
             $answerType == ORAL_EXPRESSION ||
             $answerType == CALCULATED_ANSWER ||
             $answerType == ANNOTATION ||
-            $answerType == UPLOAD_ANSWER
+            $answerType == UPLOAD_ANSWER ||
+            $answerType == ANSWER_IN_OFFICE_DOC
         ) {
             $nbrAnswers = 1;
         }
@@ -4762,6 +4763,7 @@ class Exercise
                     break;
                 case UPLOAD_ANSWER:
                 case FREE_ANSWER:
+                case ANSWER_IN_OFFICE_DOC:
                     if ($from_database) {
                         $sql = "SELECT answer, marks FROM $TBL_TRACK_ATTEMPT
                                  WHERE
@@ -5423,6 +5425,18 @@ class Exercise
                                 $questionScore,
                                 $results_disabled
                             );
+                        } elseif ($answerType == ANSWER_IN_OFFICE_DOC) {
+                            $exe_info = Event::get_exercise_results_by_attempt($exeId);
+                            $exe_info = $exe_info[$exeId] ?? null;
+                            ExerciseShowFunctions::displayOnlyOfficeAnswer(
+                                $feedback_type,
+                                $exeId,
+                                $exe_info['exe_user_id'] ?? api_get_user_id(),
+                                $this->iid,
+                                $questionId,
+                                $questionScore,
+                                true
+                            );
                         } elseif ($answerType == ORAL_EXPRESSION) {
                             // to store the details of open questions in an array to be used in mail
                             /** @var OralExpression $objQuestionTmp */
@@ -5819,6 +5833,18 @@ class Exercise
                                 $questionId,
                                 $questionScore,
                                 $results_disabled
+                            );
+                            break;
+                        case ANSWER_IN_OFFICE_DOC:
+                            $exe_info = Event::get_exercise_results_by_attempt($exeId);
+                            $exe_info = $exe_info[$exeId] ?? null;
+                            ExerciseShowFunctions::displayOnlyOfficeAnswer(
+                                $feedback_type,
+                                $exeId,
+                                $exe_info['exe_user_id'] ?? api_get_user_id(),
+                                $this->iid,
+                                $questionId,
+                                $questionScore
                             );
                             break;
                         case ORAL_EXPRESSION:
@@ -6462,6 +6488,24 @@ class Exercise
                     $this->iid,
                     false,
                     $questionDuration
+                );
+            } elseif ($answerType == ANSWER_IN_OFFICE_DOC) {
+                $answer = $choice;
+                $exerciseId = $this->iid;
+                $questionId = $quesId;
+                $originalFilePath = $objQuestionTmp->getFileUrl();
+                $originalExtension = !empty($originalFilePath) ? pathinfo($originalFilePath, PATHINFO_EXTENSION) : 'docx';
+                $fileName = "response_{$exeId}.{$originalExtension}";
+                Event::saveQuestionAttempt(
+                    $questionScore,
+                    $answer,
+                    $questionId,
+                    $exeId,
+                    0,
+                    $exerciseId,
+                    false,
+                    $questionDuration,
+                    $fileName
                 );
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;

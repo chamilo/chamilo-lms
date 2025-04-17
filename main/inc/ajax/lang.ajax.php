@@ -23,7 +23,10 @@ switch ($action) {
         Security::clear_token();
         if (isset($_REQUEST['new_language']) && isset($_REQUEST['variable_language']) && isset($_REQUEST['category_id'])) {
             $newLanguage = Security::remove_XSS($_REQUEST['new_language']);
-            $langVariable = Security::remove_XSS($_REQUEST['variable_language']);
+            $langVariable = ltrim(
+                Security::remove_XSS($_REQUEST['variable_language']),
+                '$'
+            );
             $categoryId = (int) $_REQUEST['category_id'];
             $languageId = (int) $_REQUEST['id'];
             $subLanguageId = (int) $_REQUEST['sub'];
@@ -41,10 +44,7 @@ switch ($action) {
             $returnValue = SubLanguageManager::add_file_in_language_directory($pathFolder);
 
             //update variable language
-            // Replace double quotes to avoid parse errors
-            $newLanguage = str_replace('"', '\"', $newLanguage);
-            $newLanguage = str_replace("\n", "\\n", $newLanguage);
-            $allFileOfDirectory[$langVariable] = "\"".$newLanguage."\";";
+            $allFileOfDirectory[$langVariable] = $newLanguage;
 
             $resultArray = [];
             foreach ($allFileOfDirectory as $key => $value) {

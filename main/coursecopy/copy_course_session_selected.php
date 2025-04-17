@@ -33,7 +33,7 @@ if (!api_is_coach()) {
     api_not_allowed(true);
 }
 
-$action = isset($_POST['action']) ? $_POST['action'] : '';
+$action = $_POST['action'] ?? '';
 
 $courseId = api_get_course_int_id();
 $courseInfo = api_get_course_info_by_id($courseId);
@@ -52,10 +52,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Maintenance'),
 ];
 
-/**
- * @param string $name
- */
-function make_select_session_list($name, $sessions, $attr = [])
+function make_select_session_list($name, $sessions, $attr = []): string
 {
     $attrs = '';
     if (count($attr) > 0) {
@@ -184,7 +181,7 @@ function displayForm()
     echo $html;
 }
 
-function searchCourses($idSession, $type)
+function searchCourses($idSession, $type): xajaxResponse
 {
     $xajaxResponse = new xajaxResponse();
     $return = null;
@@ -193,6 +190,7 @@ function searchCourses($idSession, $type)
     if (!empty($type)) {
         $idSession = (int) $idSession;
         $courseList = SessionManager::get_course_list_by_session_id($idSession);
+        $course_list_destination = [];
 
         $return .= '<select id="destination" name="SessionCoursesListDestination[]" style="width:380px;" >';
 
@@ -292,8 +290,6 @@ if (($action === 'course_select_form') ||
         $cr = new CourseRestorer($course);
         $cr->restore($destinationCourse, $destinationSession);
         echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
-
-        displayForm();
     } else {
         $arrCourseOrigin = [];
         $arrCourseDestination = [];
@@ -334,15 +330,16 @@ if (($action === 'course_select_form') ||
                 echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
             }
 
-            displayForm();
         } else {
             echo Display::return_message(
                 get_lang('YouMustSelectACourseFromOriginalSession'),
                 'error'
             );
-            displayForm();
         }
+
     }
+
+    displayForm();
 } elseif (isset($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
     // Else, if a CourseSelectForm is requested, show it
     if (api_get_setting('show_glossary_in_documents') != 'none') {

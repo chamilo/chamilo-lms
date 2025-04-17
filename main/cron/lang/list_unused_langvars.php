@@ -20,7 +20,7 @@ $list = SubLanguageManager::get_lang_folder_files_list($path);
 foreach ($list as $entry) {
     $file = $path.'/'.$entry;
     if (is_file($file)) {
-        $terms = array_merge($terms, SubLanguageManager::get_all_language_variable_in_file($file, true));
+        $terms = array_merge($terms, SubLanguageManager::get_all_language_variable_in_file($file));
     }
 }
 // get only the array keys (the language variables defined in language files)

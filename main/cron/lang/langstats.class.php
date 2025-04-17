@@ -190,10 +190,7 @@ class langstats
         $vars = [];
         $priority = ['trad4all'];
         foreach ($priority as $file) {
-            $list = SubLanguageManager::get_all_language_variable_in_file(
-                $path.$file.'.inc.php',
-                true
-            );
+            $list = SubLanguageManager::get_all_language_variable_in_file($path.$file.'.inc.php');
             foreach ($list as $var => $trad) {
                 $vars[$var] = $file.'.inc.php';
             }
@@ -203,10 +200,7 @@ class langstats
             if (substr($file, 0, 1) == '.' or in_array($file, $priority)) {
                 continue;
             }
-            $list = SubLanguageManager::get_all_language_variable_in_file(
-                $path.$file,
-                true
-            );
+            $list = SubLanguageManager::get_all_language_variable_in_file($path.$file);
             foreach ($list as $var => $trad) {
                 $vars[$var] = $file;
             }

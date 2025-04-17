@@ -19,7 +19,7 @@ ini_set('memory_limit','128M');
 $referenceTerms = array();
 $file = $path . $referenceLanguage . '/trad4all.inc.php';
 if (is_file($file)) {
-    $referenceTerms = array_merge($referenceTerms, SubLanguageManager::get_all_language_variable_in_file($file,true));
+    $referenceTerms = array_merge($referenceTerms, SubLanguageManager::get_all_language_variable_in_file($file));
 }
 // get only the array keys (the language variables defined in language files)
 $definedTerms = array_keys($referenceTerms);
@@ -32,7 +32,7 @@ $nonMissingTerms = array();
 $l = strlen(api_get_path(SYS_PATH));
 $file = $path . $language . '/trad4all.inc.php';
 if (is_file($file)) {
-    $nonMissingTerms = array_merge($nonMissingTerms, SubLanguageManager::get_all_language_variable_in_file($file,true));
+    $nonMissingTerms = array_merge($nonMissingTerms, SubLanguageManager::get_all_language_variable_in_file($file));
 }
 $nonMissingTerms = array_keys($nonMissingTerms);
 //print_r($nonMissingTerms);

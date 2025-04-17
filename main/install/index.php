@@ -767,7 +767,7 @@ if (@$_POST['step2']) {
                 $dbPortForm
             );
 
-            $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
+            $dbNameForm = Database::clearDatabaseName($dbNameForm);
 
             // Drop and create the database anyways
             $manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);

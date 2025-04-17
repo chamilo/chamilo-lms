@@ -2628,3 +2628,10 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 
 // Set the following parameter to true to enable a session lifetime controller that notifies users that their session is about to expire
 //$_configuration['session_lifetime_controller'] = false;
+
+// Extra fields to include in session course excel report on main/session/resume_session.php
+/*$_configuration['session_course_excel_export'] = [
+    'session_fields' => ['session_extrafield1','session_extrafield2',],
+    'user_fields_before' => ['DNI'],
+    'user_fields_after' => ['user_extrafield1','user_extrafield2',],
+];*/

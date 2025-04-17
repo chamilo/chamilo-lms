@@ -20,7 +20,7 @@ class AzureSyncUsersCommand extends AzureCommand
 
         foreach ($this->getAzureUsers() as $azureUserInfo) {
             try {
-                $userId = $this->plugin->registerUser($azureUserInfo, 'id');
+                $userId = $this->plugin->registerUser($azureUserInfo);
             } catch (Exception $e) {
                 yield $e->getMessage();
 

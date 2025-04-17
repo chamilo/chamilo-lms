@@ -351,6 +351,7 @@ $tools = [
         'report=users_active' => get_lang('Users statistics'),
         'report=users_online' => get_lang('Users online'),
         'report=new_user_registrations' => get_lang('New users registrations'),
+        'report=subscription_by_day' => get_lang('Course/Session subscriptions by day'),
     ],
     get_lang('System') => [
         'report=activities' => get_lang('Important activities'),
@@ -370,6 +371,85 @@ $tools = [
 $content = '';
 
 switch ($report) {
+    case 'subscription_by_day':
+        $form = new FormValidator('subscription_by_day', 'get', api_get_self());
+        $form->addDateRangePicker('daterange', get_lang('Date range'), true, [
+            'format' => 'YYYY-MM-DD',
+            'timePicker' => 'false',
+            'validate_format' => 'Y-m-d'
+        ]);
+        $form->addHidden('report', 'subscription_by_day');
+        $form->addButtonSearch(get_lang('Search'));
+        $validated = $form->validate() || isset($_REQUEST['daterange']);
+
+        if ($validated) {
+            $values = $form->getSubmitValues();
+            $dateStart = Security::remove_XSS($values['daterange_start']);
+            $dateEnd = Security::remove_XSS($values['daterange_end']);
+
+            $dates = [];
+            $period = new DatePeriod(
+                new DateTime($dateStart),
+                new DateInterval('P1D'),
+                (new DateTime($dateEnd))->modify('+1 day')
+            );
+            foreach ($period as $date) {
+                $key = $date->format('Y-m-d');
+                $dates[$key] = [
+                    'subscriptions' => 0,
+                    'unsubscriptions' => 0,
+                ];
+            }
+
+            $subscriptions = Statistics::getSubscriptionsByDay($dateStart, $dateEnd);
+            foreach ($subscriptions as $item) {
+                $dates[$item['date']]['subscriptions'] = $item['count'];
+            }
+
+            $unsubscriptions = Statistics::getUnsubscriptionsByDay($dateStart, $dateEnd);
+            foreach ($unsubscriptions as $item) {
+                $dates[$item['date']]['unsubscriptions'] = $item['count'];
+            }
+
+            $labels = array_keys($dates);
+            $subscriptionsData = array_map(fn($v) => $v['subscriptions'] ?? 0, $dates);
+            $unsubscriptionsData = array_map(fn($v) => $v['unsubscriptions'] ?? 0, $dates);
+
+            $chartData = [
+                'labels' => $labels,
+                'datasets' => [
+                    ['label' => get_lang('Subscriptions'), 'data' => $subscriptionsData],
+                    ['label' => get_lang('Unsubscriptions'), 'data' => $unsubscriptionsData],
+                ]
+            ];
+
+            $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                $chartData,
+                'bar',
+                'title: { text: "'.get_lang('Subscriptions vs Unsubscriptions by day').'", display: true }',
+                'subscriptions_chart',
+                true
+            );
+
+            $content .= '<canvas id="subscriptions_chart"></canvas>';
+            $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
+
+            $table->setHeaderContents(0, 0, get_lang('Date'));
+            $table->setHeaderContents(0, 1, get_lang('Subscriptions'));
+            $table->setHeaderContents(0, 2, get_lang('Unsubscriptions'));
+
+            $row = 1;
+            foreach ($dates as $date => $values) {
+                $table->setCellContents($row, 0, $date);
+                $table->setCellContents($row, 1, $values['subscriptions'] ?? 0);
+                $table->setCellContents($row, 2, $values['unsubscriptions'] ?? 0);
+                $row++;
+            }
+            $content .= $table->toHtml();
+        }
+
+        $content = $form->returnForm() . $content;
+        break;
     case 'session_by_date':
         $sessions = [];
         if ($validated) {
@@ -705,6 +785,49 @@ switch ($report) {
         }
         // courses for each course category
         $content .= Statistics::printStats(get_lang('Courses'), $courses);
+
+        $content .= '
+            <button class="btn btn--info mb-3" onclick="toggleNonRegisteredUsers()">
+                '.get_lang('Show/Hide users active in open courses (not enrolled)').'
+            </button>
+
+            <div id="non-registered-users-block" style="display: none; margin-top: 10px;">
+        ';
+
+        $sessionId = api_get_session_id();
+        $userList = Statistics::getUsersWithActivityButNotRegistered($sessionId);
+
+        if (!empty($userList)) {
+            $content .= Display::page_subheader2(get_lang('Users active in open courses (not enrolled)'));
+            $content .= Display::tag('p', get_lang('The following users have accessed one or more courses without being officially registered. They generated activity in open courses but are not listed in the course subscription tables.'));
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+            $table->setHeaderContents(0, 0, get_lang('Name'));
+            $table->setHeaderContents(0, 1, get_lang('Course'));
+            $table->setHeaderContents(0, 2, get_lang('Last access'));
+            $row = 1;
+            foreach ($userList as $user) {
+                $name = Display::tag('strong', $user['firstname'].' '.$user['lastname']);
+                $course = Display::tag('em', $user['courseTitle'].' ('.$user['courseCode'].')');
+                $access = Security::remove_XSS($user['lastAccess']);
+
+                $table->setCellContents($row, 0, $name);
+                $table->setCellContents($row, 1, $course);
+                $table->setCellContents($row, 2, $access);
+                $row++;
+            }
+            $content .= $table->toHtml();
+        } else {
+            $content .= Display::tag('p', get_lang('No users found with activity in open courses without enrollment.'));
+        }
+        $content .= '</div>';
+        $content .= '
+        <script>
+            function toggleNonRegisteredUsers() {
+                const block = document.getElementById("non-registered-users-block");
+                block.style.display = block.style.display === "none" ? "block" : "none";
+            }
+        </script>';
+
         break;
     case 'tools':
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';

@@ -4623,10 +4623,10 @@ msgstr "已匯出使用者清單"
 msgid "Download the file"
 msgstr "按這兒下載檔案"
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr "平台管理員：電話"
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr "平台管理員電話號碼"
 
 msgid "Send mail to new user"
@@ -16803,7 +16803,7 @@ msgstr ""
 msgid "Courses validation"
 msgstr ""
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr ""
 
 msgid "%s A request for additional information about the course request %s"
@@ -16827,7 +16827,7 @@ msgstr ""
 msgid "Course validation - a link to the terms and conditions"
 msgstr ""
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr ""
 
 msgid "The course has not been created due to an internal error."
@@ -16887,7 +16887,7 @@ msgstr ""
 msgid "WIRIS mathematical editor"
 msgstr ""
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr ""
 
 msgid "File export as"
@@ -17073,7 +17073,7 @@ msgstr ""
 msgid "Load the Mathjax library in all the system pages"
 msgstr ""
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr ""
 
 msgid "Hide tools from teachers"

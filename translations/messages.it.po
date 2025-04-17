@@ -4623,10 +4623,10 @@ msgstr "L'elenco utenti è stato esportato"
 msgid "Download the file"
 msgstr "Fai click! qui per scaricare il file"
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr "Amministratore della piattaforma: Telefono"
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr "Numero telefonico dell'amministratore della piattaforma"
 
 msgid "Send mail to new user"
@@ -16803,7 +16803,7 @@ msgstr "LE INFORMAZIONI RELATIVE ALLA RICHIESTA SONO CONFIDENZIALI. Per le norme
 msgid "Courses validation"
 msgstr "Conferma del corso"
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr "Attivando la \"Conferma del corso\" il docente può creare il corso solo dopo l'approvazione da parte dell'amministratore della piattaforma. La funzionalità richiede di poter inviare un messaggio di posta elettronica ad un indirizzo raggiungibile, per cui il server di posta deve essere in funzione."
 
 msgid "%s A request for additional information about the course request %s"
@@ -16827,7 +16827,7 @@ msgstr "Siamo spiacenti di comunicarLe che la Sua richiesta di creazione del cor
 msgid "Course validation - a link to the terms and conditions"
 msgstr "Conferma del corso - collegamento a termini e condizioni d'uso"
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr "Attivando il modulo per poter richiedere la creazione di un corso dovranno essere accettati i Termini e le Condizioni d'uso . La funzionalità richiede il collegamento ad un URL, che può anche essere quello interno di Chamilo."
 
 msgid "The course has not been created due to an internal error."
@@ -16887,7 +16887,7 @@ msgstr "In genere https:// - se consentito dal server - in quanto altri protocol
 msgid "WIRIS mathematical editor"
 msgstr "Editor matematico WIRIS"
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr "Abilitazione dell'editor di WIRIS"
 
 msgid "File export as"
@@ -17073,7 +17073,7 @@ msgstr "Maschile"
 msgid "Load the Mathjax library in all the system pages"
 msgstr "Il file ASCIIMathML.js dell'editor matematico viene incorporato in ogni documento"
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr "Attivando la funzionalità le formule matematiche ed i grafici basati su ASCIIMathML e ASCIIsvg saranno caricati in ogni file, non solo in documenti specifici."
 
 msgid "Hide tools from teachers"

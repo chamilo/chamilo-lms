@@ -4748,10 +4748,10 @@ msgstr "La liste des utilisateurs a été correctement exportée"
 msgid "Download the file"
 msgstr "Cliquer ICI pour télécharger le fichier"
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr "Administrateur de la plate-forme : téléphone"
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr "Coordonnées téléphoniques de l'administrateur de la plate-forme"
 
 msgid "Send mail to new user"
@@ -17357,7 +17357,7 @@ msgstr ""
 msgid "Courses validation"
 msgstr "Demandes de cours"
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr ""
 "Lorsque la fonctionnalité de demandes de cours est activée, un formateur ne "
 "peut plus créer de cours par lui-même. Il/elle est obligé(e) de formuler une "
@@ -17391,7 +17391,7 @@ msgstr "Nous sommes désolés de vous informer que votre demande pour le cours %
 msgid "Course validation - a link to the terms and conditions"
 msgstr "Demandes de cours - lien vers les conditions d'utilisation"
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr "URL vers un document de Conditions d'utilisation valide pour les demandes de cours. Si l'adresse est configurée, l'utilisateur devrait lire et accepter ces Conditions d'utilisation avant d'envoyer une demande de cours. Si vous activez la fonctionnalité \"Conditions d'utilisation\" de Chamilo et que vous voulez plutôt utiliser ceux-là, laissez le champ suivant vide."
 
 msgid "The course has not been created due to an internal error."
@@ -17455,7 +17455,7 @@ msgstr "Le protocole à préfixer au domaine du serveur Single Sign On (nous rec
 msgid "WIRIS mathematical editor"
 msgstr "Éditeur mathématique WIRIS"
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr "Activer l'éditeur mathématique WIRIS. En installant ce plugin, vous obtenez l'éditeur WIRIS et WIRIS CAS.<br/>Cette activation n'est totalement réalisée que si le <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\">plugin PHP pour CKeditor WIRIS</a> a été préalablement téléchargé et décompressé dans le répertoire de Chamilo main/inc/lib/javascript/ckeditor/plugins/.<br/>"
 
 msgid "File export as"
@@ -17655,7 +17655,7 @@ msgstr "Masculine"
 msgid "Load the Mathjax library in all the system pages"
 msgstr "Charger la librairie Mathjax sur toutes les pages du système"
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr "Activez ce paramètre si vous désirez pouvoir afficher des formules mathématiques basées sur MathML et des graphiques mathématiques basés sur ASCIIsvg, non seulement dans l'outil de cours, mais partout ailleurs sur la plateforme."
 
 msgid "Hide tools from teachers"
@@ -26503,7 +26503,7 @@ msgstr ""
 "qu'une fois que plus d'un utilisateur a répondu, de sorte qu'il reste "
 "difficile d'identifier qui a répondu quoi."
 
-msgid "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
+msgid "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
 msgstr ""
 "Sur la page des cours/sessions, le titre de la session peut être l'un des "
 "suivants : 0 = pas de lien (masquer le titre de la session) ; 1 = lier le "
@@ -29088,7 +29088,7 @@ msgstr ""
 "Identifiant interne de l'utilisateur utilisé pour envoyer des notifications "
 "de compte désactivé"
 
-msgid "When on screens where the left menu is visible, do not display the « Courses » section."
+msgid "When on screens where the left menu is visible, do not display the « Courses » section."
 msgstr ""
 "Lorsque vous êtes sur des écrans où le menu de gauche est visible, ne pas "
 "afficher la section « Cours »."

@@ -4615,10 +4615,10 @@ msgstr ""
 msgid "Download the file"
 msgstr ""
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr ""
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr ""
 
 msgid "Send mail to new user"
@@ -16789,7 +16789,7 @@ msgstr ""
 msgid "Courses validation"
 msgstr ""
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr ""
 
 msgid "%s A request for additional information about the course request %s"
@@ -16813,7 +16813,7 @@ msgstr ""
 msgid "Course validation - a link to the terms and conditions"
 msgstr ""
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr ""
 
 msgid "The course has not been created due to an internal error."
@@ -16873,7 +16873,7 @@ msgstr ""
 msgid "WIRIS mathematical editor"
 msgstr ""
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr ""
 
 msgid "File export as"
@@ -17059,7 +17059,7 @@ msgstr ""
 msgid "Load the Mathjax library in all the system pages"
 msgstr ""
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr ""
 
 msgid "Hide tools from teachers"
@@ -25470,7 +25470,7 @@ msgstr ""
 msgid "Hide courses block in the sidebar"
 msgstr ""
 
-msgid "When on screens where the left menu is visible, do not display the « Courses » section."
+msgid "When on screens where the left menu is visible, do not display the « Courses » section."
 msgstr ""
 
 msgid "Allow using extra fields in course catalogue"
@@ -25512,7 +25512,7 @@ msgstr ""
 msgid "Type of link for the session title"
 msgstr ""
 
-msgid "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
+msgid "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
 msgstr ""
 
 msgid "Hide course rating"
@@ -28078,4 +28078,28 @@ msgid "When this feature is enabled on a multi-URL configuration, you can go to 
 msgstr ""
 
 msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr ""
+
+msgid "Remove the checkbox to enable sending announcements"
+msgstr ""
+
+msgid "Remove the checkbox to enable sending announcements to users with HR roles (still requires to confirm in the announcements tool)."
+msgstr ""
+
+msgid "ID of the user who officially sends the agenda reminders"
+msgstr ""
+
+msgid "Sets which user appears as the sender of agenda reminder emails."
+msgstr ""
+
+msgid "Enable Multi-Level Attendance Grading"
+msgstr ""
+
+msgid "Allows grading attendance with multiple levels instead of a simple present/absent system."
+msgstr ""
+
+msgid "Show courses duration"
+msgstr ""
+
+msgid "Display the course duration next to the course title in the course catalogue and the courses list."
 msgstr ""

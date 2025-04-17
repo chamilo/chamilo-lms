@@ -4675,10 +4675,10 @@ msgstr "Die Nutzerliste wurde exportiert"
 msgid "Download the file"
 msgstr "Zum Download der Datei bitte hier klicken"
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr "Administrator Telefon"
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr "Die Telefonnummer des Administrators"
 
 msgid "Send mail to new user"
@@ -16855,7 +16855,7 @@ msgstr "Die Informationen über diese Kurserstellungsanfrage befindet sich in ei
 msgid "Courses validation"
 msgstr "Kurs-Freigabe"
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr "Wenn die Funktion 'Kurs-Freigabe' aktiviert ist, kann ein Kurs-Leiter Kurse nicht allein erstellen. Er/Sie muss erst eine Kurs-Erstellungsanfrage stellen. Der Adminstrator überprüfft die Anfrage und genehmigt bzw. lehnt die Kurserstellungsanfrage ab.<br />Diese Funktion basiert auf der automatischen Email-Benachrichtigung: Die Plattform muss einen Zugang zu einem Emaol-Server haben und über ein eigenes Email-Konto verfügen."
 
 msgid "%s A request for additional information about the course request %s"
@@ -16879,7 +16879,7 @@ msgstr "Es tut uns leid Ihnen mitteilen zu müssen, dass Ihre Kurserstellungsanf
 msgid "Course validation - a link to the terms and conditions"
 msgstr "Kurserstellungsanfrage: Nutzungsbedingungen"
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr "Die ist die URL für die Nutzungsbedingungen für eine Kurserstellungsanfrage. Wenn hier eine URL eingetragen ist, muss der Benutzer den Text lesen und den Nutzungsbedingungen zustimmen bevor er eine Kurserstellungsanfrage stellen kann. <br />Wenn Die die Funktion  'Nutzungsbedingungen / AGB ' für die gesamte Plattform aktivieren haben, lassen Sie dieses Feld leer."
 
 msgid "The course has not been created due to an internal error."
@@ -16939,7 +16939,7 @@ msgstr "Die Zeichenfolge für das Protokoll die vor die Domain des Master-Server
 msgid "WIRIS mathematical editor"
 msgstr "WYSIWYG Editor:  WIRIS"
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr "Den WIRIS mathematischen Editor aktivieren. Wenn SIe dieses Pligin installieren erhalten Sie den WIRIS Editor und WIRIS CAS. <br/>Diese Aktivierung kann nicht erfolgreich durchgeführt werden, wenn Sie nicht vorher das <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP Plugin für CKeditor WIRIS</a> und die entpackten Inhalte in das Chamilo-Verzeichnis  main/inc/lib/javascript/ckeditor/plugins/  kopiert haben.<br/>Dies ist noitwendig, das WIRIS eine properitäre Software ist und nur <a href='http://www.wiris.com/store/who-pays' target='_blank'>kommerzieller Service</a> angeboten wird. Um das Plugin anzupassen, bearbeiten Sie die configuration.ini-Datei oder ersetzen Sie ihren Inhalt mit dem Inhalt der Datei configuration.ini.default."
 
 msgid "File export as"
@@ -17125,7 +17125,7 @@ msgstr "männlich"
 msgid "Load the Mathjax library in all the system pages"
 msgstr "ASCIIMathML.js in alle Systemseiten einladen"
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr "Diese Einstellung aktivieren, wenn Sie ASCIIMathML-basiernde mathematische Formeln und ASCIIsvg basiernden mathematische Grafen nicht nur im Werkzeug 'Dokumente' verwenden wollen, sondern systemweit."
 
 msgid "Hide tools from teachers"
@@ -26141,7 +26141,7 @@ msgstr ""
 msgid "Minimum time to complete learning path"
 msgstr "Mindestzeit zum Absolvieren des Lernpfads"
 
-msgid "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
+msgid "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
 msgstr ""
 "Auf der Kurse/Sessions-Seite kann der Session-Titel folgende Werte haben: 0 "
 "= kein Link (Session-Titel ausblenden); 1 = Titel mit einem Link zu einer "
@@ -28396,7 +28396,7 @@ msgstr ""
 "Interne ID des Benutzers, die zum Senden von Benachrichtigungen über "
 "deaktivierte Konten verwendet wird"
 
-msgid "When on screens where the left menu is visible, do not display the « Courses » section."
+msgid "When on screens where the left menu is visible, do not display the « Courses » section."
 msgstr ""
 "Auf Bildschirmen, auf denen das linke Menü sichtbar ist, den Abschnitt « "
 "Kurse » nicht anzeigen."

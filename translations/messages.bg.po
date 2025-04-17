@@ -4623,10 +4623,10 @@ msgstr "Списъкът с потребителите е експортиран
 msgid "Download the file"
 msgstr "Щракнете тук, за да изтеглите файла."
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr "Администратор на системата: телефон"
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr "Телефонен номер, на който може да бъде намерен администраторът на системата."
 
 msgid "Send mail to new user"
@@ -16803,7 +16803,7 @@ msgstr "Информацията в тази заявка е защитена; �
 msgid "Courses validation"
 msgstr "Одобряване на новите курсове"
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr "Когато функцията \"Одобряване на новите курсове\" е активирана, преподавател не може да създава нов курс. Той/тя попълва заявка за нов курс. Администраторът на системата преглежда заявката и или я одобрява, или я отхвърля.<br />Тази функция силно зависи от автоматично генерирани e-mail съобщения; настройте достъп на системата до e-mail сървър чрез специално открит за нея акаунт."
 
 msgid "%s A request for additional information about the course request %s"
@@ -16827,7 +16827,7 @@ msgstr "За съжаление Вашата заявка за нов курс %
 msgid "Course validation - a link to the terms and conditions"
 msgstr "Одобряване на новите курсове - връзка към Условията за ползване"
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr "Това е URL на документа \"Условия за ползване\", който е валиден при подаване на заявка за нов курс. Ако адресът тук е зададен, преди потребителят да подаде заявката ще трябва да прочете и да се съгласи с условията за ползаване.<br />Ако активирате модула на Chamilo \"Условия за ползване\" и ако искате неговият URL да бъде използван - оставете в тази настройка празна стойност."
 
 msgid "The course has not been created due to an internal error."
@@ -16887,7 +16887,7 @@ msgstr ""
 msgid "WIRIS mathematical editor"
 msgstr ""
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr ""
 
 msgid "File export as"
@@ -17073,7 +17073,7 @@ msgstr "Мъжки"
 msgid "Load the Mathjax library in all the system pages"
 msgstr "Да се зарежда скрипта ASCIIMathML.js във всички страници на системата"
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr "Активирайте тази настройка, ако искате математическите формули (ASCIIMathML) и математическите графики (ASCIIsvg) да могат да се показват не само в инструмента \"Документи\", а и във всички останали страници на системата."
 
 msgid "Hide tools from teachers"

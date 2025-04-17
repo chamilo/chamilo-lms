@@ -4624,10 +4624,10 @@ msgstr " .لقد تم تصدير قائمة المستخدمين"
 msgid "Download the file"
 msgstr "تحميل الملف"
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr " رقم هاتف مدير النظام"
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr "  رقم هاتف مدير النظام"
 
 msgid "Send mail to new user"
@@ -16804,7 +16804,7 @@ msgstr "ان المعلومات حول طلب انشاء المقرر محمية
 msgid "Courses validation"
 msgstr "التحقق من المقرر"
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr "عندما يتم تفعيل خاصية \"التحقق من المقرر\"، فان المدرس سوف لن يكون له الحق في انشاء المقررات بشكل منفرد، وانما يقوم بملأ استمارة والتي سوف يراجعها مدير النظام وتتم الاجابة عليها بالرفض او القبول، وتعتمد هذه الخاصية على رسائل البريد التلقائية، ولذا يجب عليك السماح للنظام بالولوج الى خادم البريد واستخدام حساب خاص للبريد"
 
 msgid "%s A request for additional information about the course request %s"
@@ -16828,7 +16828,7 @@ msgstr "نأسف لاعلامك بان طلبك لانشاء المقرر %s ق�
 msgid "Course validation - a link to the terms and conditions"
 msgstr "التحقق من المقرر - رابط للشروط والاحكام"
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr "هذا الرابط لمستند \"الشروط والاحكام\" الذي يستخدم عند طلب انشاء مقرر، اذ انه عند وضع العنوان فان المستخدم سوف يقرأ ويوافق على الشروط والاحكام قبل ارسال طلب انشاء المقرر"
 
 msgid "The course has not been created due to an internal error."
@@ -16888,7 +16888,7 @@ msgstr "https:// البروتوكول الخاص بعنوان خادم تسجي�
 msgid "WIRIS mathematical editor"
 msgstr "WIRIS محرر المعادلات الرياضية"
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr "تفعيل محرر الرموز الرياضية من خلال تنصيب المكون الاضافي"
 
 msgid "File export as"
@@ -17074,7 +17074,7 @@ msgstr "ذكر"
 msgid "Load the Mathjax library in all the system pages"
 msgstr "تحميل مكتبة اداة المعادلات الرياضية في كافة صفحات النظام"
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr "قم بتفعيل هذه الاعدادات في حال اردت استخدام المعادلات الرياضية في كافة ارجاء النظام وليس فقط في اداة المستندات"
 
 msgid "Hide tools from teachers"

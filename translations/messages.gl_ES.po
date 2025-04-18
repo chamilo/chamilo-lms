@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:15+0000\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Galician <https://translation.chamilo.org/projects/chamilo/"
 "messages/gl/>\n"
@@ -386,12 +386,14 @@ msgstr "Verificar que os correos electrónicos sexan únicos"
 msgid "This email is already in use on the platform."
 msgstr "Este correo electrónico xa está rexistrado no sistema."
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Total de mensaxes en todos os foros"
 
 msgid "Add me as coach"
 msgstr "Agregarme como titor"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "Agregarme como profesor nos cursos importados"
 
@@ -413,11 +415,17 @@ msgstr "Usuario: %s - Sesión: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "A duración desta sesión é a mesma que o valor por defecto. Ignorando"
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "O primeiro acceso deste usuario á sesión foi o %s. Cunha duración de %s días, o acceso a esta sesión expirou o %s."
+msgstr ""
+"O primeiro acceso deste usuario á sesión foi o %s. Cunha duración de %s "
+"días, o acceso a esta sesión expirou o %s."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "O primeiro acceso deste usuario na sesión foi o %s. Cunha duración de %s días, a data límite desta configuración dentro de %s días"
+msgstr ""
+"O primeiro acceso deste usuario na sesión foi o %s. Cunha duración de %s "
+"días, a data límite desta configuración dentro de %s días"
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Este usuario nunca accedeu a esta sesión antes. A duración está configurada a %s días (dende a data do primeiro acceso)"
@@ -18379,7 +18387,12 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "Os contidos do cartafol archive/ foron eliminados satisfactoriamente."
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "Por algunha razón, non se puido limpar o cartafol archive/. Probablemente debido aos permisos. Pode limpar manualmente conectandose  ao servidor e eliminando todos os contidos do cartafol chamilo/archive/, excepto o ficherio htaccess."
+msgstr ""
+"Por algunha razón, non se puido limpar o directorio chamilo/var/cache/. Por "
+"favor, límpao manualmente: conecta ao servidor e elimina todos os arquivos e "
+"ligazóns simbólicas baixo o directorio chamilo/var/cache/, agás o arquivo ."
+"htaccess. En Linux: # find var/cache/ \\( -type f -or -type l \\) -not -name "
+".htaccess -exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "Usar tempo de publicación"

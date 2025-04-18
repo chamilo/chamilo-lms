@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:15+0000\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Hebrew <https://translation.chamilo.org/projects/chamilo/"
 "messages/he/>\n"
@@ -387,12 +387,14 @@ msgstr "בדוק דואר אלקטרוני ייחודי"
 msgid "This email is already in use on the platform."
 msgstr "אימייל זה אינו זמין"
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "סך כל ההודעות בכל הפורומים."
 
 msgid "Add me as coach"
 msgstr "הוסף אותי כמאמן"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "הוסף אותי כמורה בקורסים המיובאים."
 
@@ -414,11 +416,17 @@ msgstr "משתמש: %s - הפעלה: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "משך ההפעלה הנתון זהה לברירת המחדל עבור ההפעלה. מתעלמים."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "הגישה הראשונה של משתמש זה להפעלה הייתה ב-%s. עם משך הפעלה של %s ימים, הגישה להפעלה זו כבר פג ב-%s"
+msgstr ""
+"הגישה הראשונה של משתמש זה להפעלה הייתה ב-%s. עם משך הפעלה של %s ימים, הגישה "
+"להפעלה זו כבר פג ב-%s"
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "הגישה הראשונה של משתמש זה להפעלה הייתה ב-%s. עם משך הפעלה של %s ימים, תאריך הסיום מתוזמן בעוד %s ימים"
+msgstr ""
+"הגישה הראשונה של משתמש זה להפעלה הייתה ב-%s. עם משך הפעלה של %s ימים, תאריך "
+"הסיום מתוזמן בעוד %s ימים"
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "משתמש זה מעולם לא ניגש להפעלה זו לפני כן. משך הזמן מוגדר כעת ל-%s ימים (מתאריך הגישה הראשון)"
@@ -18380,7 +18388,11 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "ניקוי האפליקציה/מטמון/ספרייה בוצע בהצלחה."
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "מסיבה כלשהי, לא ניתן היה לנקות את ספריית האפליקציה/מטמון/. נא לנקות אותה על ידי חיבור ידני לשרת ומחק את כל הקבצים והקישורים הסמליים מתחת לספריית chamilo/app/cache/, מלבד ה-. קובץ htaccess. בלינוקס: # מצא את האפליקציה/מטמון/ \\( -סוג f -או -סוג l \\) -לא -שם .htaccess -exec echo rm -v \\{} \\;"
+msgstr ""
+"מסיבה כלשהי, לא ניתן היה לנקות את התיקייה chamilo/var/cache/. אנא נקה אותה "
+"באופן ידני: התחבר לשרת ומחק את כל הקבצים והקישורים הסימבוליים שנמצאים תחת "
+"התיקייה chamilo/var/cache/, למעט הקובץ .htaccess. בלינוקס: # find var/cache/ "
+"\\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "אפשר זמן התחלה"

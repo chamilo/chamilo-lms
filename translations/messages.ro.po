@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:15+0000\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Romanian <https://translation.chamilo.org/projects/chamilo/"
 "messages/ro/>\n"
@@ -387,12 +387,14 @@ msgstr "Verificați dacă e-mailuri sunt unice."
 msgid "This email is already in use on the platform."
 msgstr "Acest e-mail este deja înregistrat în sistem."
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Totalul mesajelor în toate forurile"
 
 msgid "Add me as coach"
 msgstr "Adaugăma ca un tutor"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "Adaugăma ca un profesor la cursuri importate."
 
@@ -414,11 +416,17 @@ msgstr "Utilizator: %si - Sesiune: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "Durata sesiunii este același ca implicită. Ignorarea."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "Primul acces a utilizatorului la această sesiune a fost %s. Cu o durată de %s zile, accesul la această sesiune a expirat la %s."
+msgstr ""
+"Primul acces a utilizatorului la această sesiune a fost %s. Cu o durată de "
+"%s zile, accesul la această sesiune a expirat la %s."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "Primul acces a utilizatorului a acestei sesiuni a fost %s. Cu o durată de %s zile, data de sfârșit este setată în %s zile."
+msgstr ""
+"Primul acces a utilizatorului a acestei sesiuni a fost %s. Cu o durată de %s "
+"zile, data de sfârșit este setată în %s zile."
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Acest utilizator nu a accesat înainte la această sesiune. Durata este setata la %s zile (de la data primului acces)."
@@ -18380,7 +18388,12 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "Conținutul directorului archive/ a fost eliminat."
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "Din anumite motive (probabil din cauza permisiuni insuficiente), nu a fost posibila curatirea a folderului archive/. Puteți curăța manual conectanduse la server și eliminarea tuturor conținutului din folderul chamilo / Arhiva / cu excepția fișierului .htaccess."
+msgstr ""
+"Din anumite motive, directorul chamilo/var/cache/ nu a putut fi curățat. Vă "
+"rugăm să-l curățați manual: conectați-vă la server și ștergeți toate "
+"fișierele și legăturile simbolice din directorul chamilo/var/cache/, cu "
+"excepția fișierului .htaccess. Pe Linux: # find var/cache/ \\( -type f -or -"
+"type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "Folositi timpul de publicare"

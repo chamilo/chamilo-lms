@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-14 08:43+0000\n"
-"Last-Translator: Rudy <rudy.willems@beeznest.com>\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
+"Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Dutch <https://translation.chamilo.org/projects/chamilo/"
 "messages/nl/>\n"
 "Language: nl\n"
@@ -394,12 +394,14 @@ msgstr "Controleer uniek e-mailadres"
 msgid "This email is already in use on the platform."
 msgstr "Dit e-mailadres is niet beschikbaar"
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Totaal aantal posts op alle fora"
 
 msgid "Add me as coach"
 msgstr "Voeg me toe als coach"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "Voeg me toe als docent aan de geïmporteerde cursussen."
 
@@ -421,11 +423,17 @@ msgstr "Gebruiker: %s -Sessie: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "De gegeven sessieduur is gelijk aan de standaard voor de sessie. Negeer."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "De eerste toegang van deze gebruiker tot de sessie was op %s. Met een sessieduur van %s dagen, is de toegang tot deze sessie al verlopen op %s."
+msgstr ""
+"De eerste toegang van deze gebruiker tot de sessie was op %s. Met een "
+"sessieduur van %s dagen, is de toegang tot deze sessie al verlopen op %s."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "De eerste toegang van deze gebruiker tot de sessie was op %s. Met een sessieduur van %s dagen, is de einddatum gepland over %s dagen."
+msgstr ""
+"De eerste toegang van deze gebruiker tot de sessie was op %s. Met een "
+"sessieduur van %s dagen, is de einddatum gepland over %s dagen."
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Deze gebruiker heeft niet eerder toegang gehad tot deze sessie. De sessieduur staat nu ingesteld op %s dagen (vanaf de eerste toegangsdatum)"
@@ -6831,7 +6839,7 @@ msgid "Group deleted"
 msgstr "De groep is verwijderd."
 
 msgid "Registered"
-msgstr "Ingeschreven"
+msgstr "geregistreerd"
 
 msgid "Learners are allowed to self-register in groups"
 msgstr "De gebruikers mogen zichzelf in de groepen inschrijven"
@@ -18475,14 +18483,13 @@ msgstr "Proceed with cleanup"
 msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "Het archief is succesvol opgeschoond"
 
-#, fuzzy
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 msgstr ""
-"Om een of andere reden kon de map app/cache/ niet worden opgeschoond. "
+"Om een of andere reden kon de map var/cache/ niet worden opgeschoond. "
 "Gelieve deze handmatig op te schonen door verbinding te maken met de server "
-"en alle bestanden en symbolische links in de map chamilo/app/cache/ te "
+"en alle bestanden en symbolische links in de map chamilo/var/cache/ te "
 "verwijderen, met uitzondering van het .htaccess-bestand. Op Linux: # find "
-"app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v "
+"var/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v "
 "\\{} \\;"
 
 msgid "Enable start time"
@@ -30064,3 +30071,268 @@ msgstr ""
 "Definieer een reeks van score-intervallen en kleuren om rapporten weer te "
 "geven volgens dit model. Hiermee kunt u kleuren tonen in plaats van "
 "numerieke cijfers."
+
+msgid "Unlock prerequisites after last test attempt"
+msgstr "Ontgrendel voorwaarden na laatste toetspoging"
+
+msgid "Enable Session Replication"
+msgstr "Sessiereplicatie inschakelen"
+
+msgid "Display colors for scores in the gradebook"
+msgstr "Toon kleuren voor scores in het puntenboekje"
+
+msgid "List of visible fields in profile"
+msgstr "Lijst van zichtbare velden in profiel"
+
+msgid "Send all e-mails from this e-mail address"
+msgstr "Stuur alle e-mails vanaf dit e-mailadres"
+
+msgid "Sets the default email address used in the \"from\" field of emails."
+msgstr ""
+"Stelt het standaard e-mailadres in dat wordt gebruikt in het \"van\" veld "
+"van e-mails."
+
+msgid "Generates images based on prompts or content using AI."
+msgstr ""
+"Genereert afbeeldingen op basis van prompts of inhoud met behulp van AI."
+
+msgid "AI providers connection data"
+msgstr "Aanbieders van AI-verbindinggegevens"
+
+msgid "ID of the user who officially sends the agenda reminders"
+msgstr "ID van de gebruiker die officieel de agendaherinneringen verstuurt"
+
+msgid "Provides students with an AI-powered tutoring assistant."
+msgstr "Biedt leerlingen een door AI aangedreven tutorassistent."
+
+msgid "Remove the checkbox to enable sending announcements to users with HR roles (still requires to confirm in the announcements tool)."
+msgstr ""
+"Verwijder het selectievakje om het verzenden van aankondigingen naar "
+"gebruikers met HR-rollen in te schakelen (vereist nog steeds bevestiging in "
+"het aankondigingengereedschap)."
+
+msgid "Topbarcertificate"
+msgstr "Certificaten in de bovenbalk"
+
+msgid "Enables all available AI-powered features in the platform."
+msgstr "Activeert alle beschikbare AI-gestuurde functies op het platform."
+
+msgid "Uses AI to evaluate and grade uploaded assignments."
+msgstr "Gebruikt AI om geüploade opdrachten te beoordelen en te becijferen."
+
+msgid "Dynamically creates new anonymous users to support high visitor traffic."
+msgstr ""
+"Creëert dynamisch nieuwe anonieme gebruikers om hoge bezoekersaantallen te "
+"ondersteunen."
+
+msgid "Tutor chatbot energized by AI"
+msgstr "Tutor-chatbot aangedreven door AI"
+
+msgid "Assigning skills to user: sub-skills auto-loading"
+msgstr ""
+"Toewijzen van vaardigheden aan gebruiker: subvaardigheden worden automatisch "
+"geladen"
+
+msgid "Activates popup or system notifications for important platform events."
+msgstr ""
+"Activeert pop-up of systeemmeldingen voor belangrijke platformgebeurtenissen."
+
+msgid "Configuration data to connect with external AI services."
+msgstr "Configuratiegegevens om te verbinden met externe AI-diensten."
+
+msgid "Overrides sender for all emails to appear from a unique address."
+msgstr ""
+"Stelt de afzender voor alle e-mails in om te verschijnen vanaf een uniek "
+"adres."
+
+msgid "Displays the current DB version to match the Chamilo core version."
+msgstr ""
+"Toont de huidige DB-versie om overeen te komen met de Chamilo core-versie."
+
+msgid "Allows users to continue in a learning path after using all quiz attempts of a test used as prerequisite for other items."
+msgstr ""
+"Staat gebruikers toe om verder te gaan in een lespad nadat alle pogingen van "
+"een oefening die als voorwaarde voor andere items dient, gebruikt zijn."
+
+msgid "Show courses duration"
+msgstr "Toon cursusduur"
+
+msgid "Menumyagenda"
+msgstr "Mijn agenda"
+
+msgid "Enable Automatic Reinscription"
+msgstr "Automatische herinschrijving inschakelen"
+
+msgid "When manually assigning skills to a user, the form can be set to automatically offer you to assign a sub-skill instead of the skill you selected."
+msgstr ""
+"Wanneer u handmatig vaardigheden toewijst aan een gebruiker, kan het "
+"formulier zo worden ingesteld dat het u automatisch aanbiedt om een "
+"subvaardigheid toe te wijzen in plaats van de vaardigheid die u heeft "
+"geselecteerd."
+
+msgid "Minimal password syntax requirements"
+msgstr "Minimale syntaxisvereisten voor wachtwoord"
+
+msgid "Image generator"
+msgstr "Afbeeldingengenerator"
+
+msgid "Removes the groups section from the social network view."
+msgstr "Verwijdert het groepengedeelte uit de weergave van het sociale netwerk."
+
+msgid "Allows grading attendance with multiple levels instead of a simple present/absent system."
+msgstr ""
+"Staat toe om aanwezigheid te beoordelen met meerdere niveaus in plaats van "
+"een simpel aanwezig/afwezig systeem."
+
+msgid "Enable the AI helper tool"
+msgstr "Activeer de AI-hulpfunctie"
+
+msgid "Main language, used by default when no user language is set."
+msgstr "Hoofdtaal, standaard gebruikt wanneer geen gebruikerstaal is ingesteld."
+
+msgid "Default platform language"
+msgstr "Standaard platformtaal"
+
+msgid "Menucampushomepage"
+msgstr "Campushoofdpagina"
+
+msgid "Menudiagnostics"
+msgstr "Diagnostiek"
+
+msgid "Limits online user visibility to specific user roles."
+msgstr "Beperkt online gebruikerszichtbaarheid tot specifieke gebruikersrollen."
+
+msgid "Sets which user appears as the sender of agenda reminder emails."
+msgstr ""
+"Bepaalt welke gebruiker als afzender van de agenda-herinneringse-mails "
+"verschijnt."
+
+msgid "Generates personalized tests with AI based on course content."
+msgstr ""
+"Genereert gepersonaliseerde oefeningen met AI op basis van cursusinhoud."
+
+msgid "Ai_helpers"
+msgstr "AI helpsters"
+
+msgid "Remove the checkbox to enable sending announcements"
+msgstr ""
+"Verwijder het vinkje om het versturen van aankondigingen in te schakelen"
+
+msgid "Menureporting"
+msgstr "Rapportage"
+
+msgid "Analyses learning materials to extract insights or improve quality."
+msgstr ""
+"Analyseert leermaterialen om inzichten te verkrijgen of de kwaliteit te "
+"verbeteren."
+
+msgid "Enable or disable automatic re-subscription when course validity expires. The related cron job must also be activated."
+msgstr ""
+"Automatische herinschrijving inschakelen of uitschakelen wanneer de "
+"geldigheid van de cursus verloopt. De gerelateerde cron-taak moet ook "
+"geactiveerd worden."
+
+msgid "Content analyser"
+msgstr "Inhoudsanalyseur"
+
+msgid "Enable Multi-Level Attendance Grading"
+msgstr "Meerlaagse aanwezigheidsbeoordeling inschakelen"
+
+msgid "Menucatalogue"
+msgstr "Cursus-/sessiecatalogus"
+
+msgid "Menuplatformadministration"
+msgstr "Platformbeheer"
+
+msgid "Open answers grader"
+msgstr "Open antwoorden beoordelaar"
+
+msgid "Enables color coding for better score visibility in the gradebook."
+msgstr ""
+"Maakt kleurcodering mogelijk voor betere zichtbaarheid van scores in het "
+"puntenboekje."
+
+msgid "Exercise generator"
+msgstr "Oefeningengenerator"
+
+msgid "Learning paths generator"
+msgstr "Leerpadgenerator"
+
+msgid "Menusocial"
+msgstr "Sociaal"
+
+msgid "Automatically grades open-ended answers using AI."
+msgstr "Automatisch open vragen beoordelen met AI."
+
+msgid "Menuvideoconference"
+msgstr "Videoconferentie"
+
+msgid "Display the course duration next to the course title in the course catalogue and the courses list."
+msgstr ""
+"Toon de cursusduur naast de cursustitel in de cursuscatalogus en de "
+"cursuslijst."
+
+msgid "Auto-provision more anonymous users"
+msgstr "Automatisch meer anonieme gebruikers voorzien"
+
+msgid "registered"
+msgstr "geregistreerd"
+
+msgid "Assignments grader"
+msgstr "Opdrachtenbeoordelaar"
+
+msgid "Hide groups block in social network"
+msgstr "Verberg groepenblok in sociaal netwerk"
+
+msgid "Current version of the database schema used by Chamilo"
+msgstr "Huidige versie van het databaseschema gebruikt door Chamilo"
+
+msgid "Enable or disable automatic session replication. The related cron job must also be activated."
+msgstr ""
+"Activeer of deactiveer automatische sessiereplicatie. De gerelateerde cron-"
+"taak moet ook geactiveerd worden."
+
+msgid "Filter users that can be seen as online"
+msgstr "Filter gebruikers die als online gezien kunnen worden"
+
+msgid "Controls which profile fields are visible to users and others."
+msgstr "Bepaalt welke profielvelden zichtbaar zijn voor gebruikers en anderen."
+
+msgid "Defines the required structure for user passwords."
+msgstr "Bepaalt de vereiste structuur voor gebruikerswachtwoorden."
+
+msgid "Send all e-mails as originating from this (organizational) name"
+msgstr "Verzend alle e-mails met deze (organisatie)naam als afzender"
+
+msgid "Allows duplication of resources that were created in the session when duplicating the session."
+msgstr ""
+"Staat het dupliceren van bronnen die in de sessie zijn gemaakt toe wanneer "
+"de sessie wordt gedupliceerd."
+
+msgid "Send all e-mails as one single sender"
+msgstr "Verstuur alle e-mails als één enkele afzender"
+
+msgid "Topbarskills"
+msgstr "Vaardigheden in de bovenbalk"
+
+msgid "Sets the default display name used for sending platform emails. e.g. \"Support team\"."
+msgstr ""
+"Stelt de standaard weergavenaam in die gebruikt wordt voor het verzenden van "
+"platform-e-mails. Bijv. \"Ondersteuningsteam\"."
+
+msgid "Generates personalized learning paths using AI suggestions."
+msgstr "Genereert gepersonaliseerde leerpaden met behulp van AI-suggesties."
+
+msgid "Enable the notification tool for a more impactful communication channel with students"
+msgstr ""
+"Activeer de notificatietool voor een effectiever communicatiekanaal met "
+"leerlingen"
+
+msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr ""
+"Selecteer klassen waarvoor deze cursus zichtbaar zal zijn voor inschrijving "
+"in de catalogus. Inschrijvingsregels zijn nog steeds van toepassing, "
+"afgezien van het feit dat het zichtbaar is in de catalogus."
+
+msgid "Menumycourses"
+msgstr "Mijn cursussen"

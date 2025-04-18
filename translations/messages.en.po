@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:14+0000\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: English <https://translation.chamilo.org/projects/chamilo/"
 "messages/en/>\n"
@@ -387,13 +387,13 @@ msgid "This email is already in use on the platform."
 msgstr "This email is already in use on the platform."
 
 msgid "Total posts in all forums."
-msgstr "Total posts in all forums."
+msgstr "Total posts in all forums"
 
 msgid "Add me as coach"
 msgstr "Add me as coach"
 
 msgid "Add me as teacher in the imported courses."
-msgstr "Add me as teacher in the imported courses."
+msgstr "Add me, as a teacher, to the imported courses"
 
 msgid "Progress of exercises taken by the student"
 msgstr "Progress of exercises taken by the student"
@@ -414,10 +414,14 @@ msgid "The given session duration is the same as the default for the session. Ig
 msgstr "The given session duration is the same as the default for the session. Ignoring."
 
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
+msgstr ""
+"This user's first access to the session was on %s. With a session duration "
+"of %s days, the access to this session already expired on %s."
 
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
+msgstr ""
+"This user's first access to the session was on %s. With a session duration "
+"of %s days, the end date is scheduled in %s days."
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
@@ -18378,7 +18382,12 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "The app/cache/ directory cleanup has been executed successfully."
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
+msgstr ""
+"For some reason, the chamilo/var/cache/ directory could not be cleaned up. "
+"Please clean it up by manually: connect to the server and delete all files "
+"and symbolic links under the chamilo/var/cache/ directory, except the ."
+"htaccess file. On Linux: # find var/cache/ \\( -type f -or -type l \\) -not -"
+"name .htaccess -exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "Enable start time"
@@ -28315,3 +28324,6 @@ msgstr "Topbar skills"
 
 msgid "Ai_helpers"
 msgstr "AI helpers"
+
+msgid "ID of the user who officially sends the agenda reminders"
+msgstr "ID of the user who officially sends the agenda reminders"

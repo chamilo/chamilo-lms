@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:14+0000\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Greek <https://translation.chamilo.org/projects/chamilo/"
 "messages/el/>\n"
@@ -386,12 +386,14 @@ msgstr "Επιλέξτε ένα email που να είναι μοναδικό"
 msgid "This email is already in use on the platform."
 msgstr "Αυτό το email δεν είναι διαθέσιμο"
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Συνολικές δημοσιεύσεις σε όλα τα φόρουμ."
 
 msgid "Add me as coach"
 msgstr "Προσθέστε με ως εκπαιδευτή"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "Προσθέστε με ως εκπαιδευτή στα εισαγόμενα μαθήματα"
 
@@ -413,11 +415,17 @@ msgstr "Χρήστης: % - Συνεδρία: %"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "Η χρονική διάρκεια της παρούσας συνεδρίας είναι η ίδια με της προεπιλεγμένης συνεδρίας. Αγνοήστε το μήνυμα."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "Η πρώτη πρόσβαση του χρήστη σε αυτήν τη συνεδρία έγινε στις %. Με διάρκεια συνεδρίας % ημέρες, η πρόσβαση σε αυτή τη συνεδρία έχει ήδη λήξει στις %"
+msgstr ""
+"Η πρώτη πρόσβαση του χρήστη σε αυτήν τη συνεδρία έγινε στις %. Με διάρκεια "
+"συνεδρίας % ημέρες, η πρόσβαση σε αυτή τη συνεδρία έχει ήδη λήξει στις %"
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "Η πρώτη πρόσβαση του χρήστη σε αυτήν τη συνεδρία έγινε στις %. Με διάρκεια συνεδρίας % ημέρες, η ημερομηνία λήξης είναι προγραμματισμένη σε % ημέρες."
+msgstr ""
+"Η πρώτη πρόσβαση του χρήστη σε αυτήν τη συνεδρία έγινε στις %. Με διάρκεια "
+"συνεδρίας % ημέρες, η ημερομηνία λήξης είναι προγραμματισμένη σε % ημέρες."
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Ο χρήστης δεν έχει εισέλθει σε αυτήν την συνεδρία ξανά. Η διάρκεια έχει οριστεί στις % ημέρες (από την πρώτη ημερομηνία πρόσβασης)."
@@ -18379,7 +18387,12 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "The archive/ directory cleanup has been executed successfully."
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "For some reason, the archive/ directory could not be cleaned up. Please clean it up by manually connecting to the server and deleting the contents of the chamilo/archive/ directory, except the .htaccess file."
+msgstr ""
+"Για κάποιο λόγο, ο κατάλογος chamilo/var/cache/ δεν μπόρεσε να καθαριστεί. "
+"Παρακαλώ καθαρίστε τον χειροκίνητα: συνδεθείτε στον διακομιστή και διαγράψτε "
+"όλα τα αρχεία και τους συμβολικούς συνδέσμους κάτω από τον κατάλογο chamilo/"
+"var/cache/, εκτός από το αρχείο .htaccess. Σε Linux: # find var/cache/ \\( -"
+"type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "Ενεργοποίηση Ώρας Έναρξης"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:15+0000\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Slovak <https://translation.chamilo.org/projects/chamilo/"
 "messages/sk/>\n"
@@ -386,12 +386,14 @@ msgstr "Skontrolovať jedinečnosť emailu"
 msgid "This email is already in use on the platform."
 msgstr "Tento email nie je k dispozícii"
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Celkom príspevkov vo všetkých fórach."
 
 msgid "Add me as coach"
 msgstr "Pridať ma ako trénera"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "Pridať ma ako lektora v importovaných kurzoch."
 
@@ -413,11 +415,17 @@ msgstr "Používateľ: %s - Stretnutie: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "Vzhľadom k trvaniu stretnutia je rovnaká ako predvolená pre stretnutie. Ignorovanie."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "Tento používateľ prvýkrát pristúpil do stretnutia %s. S dobou trvania stretnutia %s dní, prístup k tomuto stretnutiu už vypršala dňa %s"
+msgstr ""
+"Tento používateľ prvýkrát pristúpil do stretnutia %s. S dobou trvania "
+"stretnutia %s dní, prístup k tomuto stretnutiu už vypršala dňa %s"
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "Tento používateľ prvýkrát pristúpil do stretnutia %s. S dobou trvania stretnutia %s dní, dátum ukončenia je plánované v %s dní"
+msgstr ""
+"Tento používateľ prvýkrát pristúpil do stretnutia %s. S dobou trvania "
+"stretnutia %s dní, dátum ukončenia je plánované v %s dní"
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Tento používateľ nikdy nesprístupnil toto stretnutie pred. Doba trvania je momentálne nastavená na %s dní (od prvého dňa prístupu)"
@@ -18379,7 +18387,12 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "Vyčistenie archívu/ adresára bolo úspešne vykonané."
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "Z nejakého dôvodu, archive/ adresár nemohol byť vyčistený. Prosím vyčistiť ho ručne pripojením k serveru a zmazaním obsahu chamilo/archive/ adresára, okrem súboru .htaccess."
+msgstr ""
+"Z nejakého dôvodu sa nepodarilo vyčistiť adresár chamilo/var/cache/. Prosím, "
+"vyčistite ho ručne: pripojte sa k serveru a odstráňte všetky súbory a "
+"symbolické odkazy v adresári chamilo/var/cache/, okrem súboru .htaccess. Na "
+"Linuxe: # find var/cache/ \\( -type f -or -type l \\) -not -name .htaccess -"
+"exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "Povoliť čas začiatku"

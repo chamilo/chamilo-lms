@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:14+0000\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Arabic <https://translation.chamilo.org/projects/chamilo/"
 "messages/ar/>\n"
@@ -387,12 +387,14 @@ msgstr "التحقق من كون البريد مطابق"
 msgid "This email is already in use on the platform."
 msgstr "هذا البريد غير متوفر"
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "مجموع المنشورات في كافة المنتديات"
 
 msgid "Add me as coach"
 msgstr "اضفني كمعلم"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "اضفني كمدرس في المقررات المستوردة"
 
@@ -414,11 +416,17 @@ msgstr "المستخدم: %s - الدورة: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "ان مدة الدورة مطابقة للمدة الافتراضية للدورة. تجاهل"
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "كان اول دخول للمستخدم في الدورة في %s. مع مدة دورة قدرها %s يوم, وقد انتهت الدورة في %s"
+msgstr ""
+"كان اول دخول للمستخدم في الدورة في %s. مع مدة دورة قدرها %s يوم, وقد انتهت "
+"الدورة في %s"
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "كان اول دخول للمستخدم في الدورة في %s. مع مدة دورة قدرها %s يوم, تاريخ النهاية في %s يوم"
+msgstr ""
+"كان اول دخول للمستخدم في الدورة في %s. مع مدة دورة قدرها %s يوم, تاريخ "
+"النهاية في %s يوم"
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "لم يقم المستخدم بالولوج الى الدورة من قبل. المدة محددة بـ %s يوم - من اول يوم دخول"
@@ -18380,7 +18388,11 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "app/cache/ ان التنظيف بنجاح لمسار"
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "chamilo/app/cache/ لسبب ما فان عملية التنظيم لم تتم، يرجى القيام بهذه العملية يدويا من خلال حذف الملفات في المسار"
+msgstr ""
+"لسبب ما، لم يتم تنظيف دليل chamilo/var/cache/ بشكل صحيح. يرجى تنظيفه يدويًا: "
+"قم بالاتصال بالخادم وحذف جميع الملفات والروابط الرمزية تحت دليل chamilo/var/"
+"cache/، باستثناء ملف .htaccess. على لينكس: # find var/cache/ \\( -type f -or "
+"-type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "تفعيل وقت البدأ"

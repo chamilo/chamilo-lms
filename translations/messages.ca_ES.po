@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:14+0000\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Catalan <https://translation.chamilo.org/projects/chamilo/"
 "messages/ca/>\n"
@@ -386,12 +386,14 @@ msgstr "Verificar que els correus siguin únics"
 msgid "This email is already in use on the platform."
 msgstr "Aquest correu electrònic ja està registrat en el sistema"
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Total de missatges en tots els fòrums"
 
 msgid "Add me as coach"
 msgstr "Afegeix-me com a tutor"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "Afegeix-me com a professor en els cursos importats."
 
@@ -413,11 +415,17 @@ msgstr "Usuari: %s - Sessió: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr ""
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "El primer accés d'aquest usuari a la sessió va ser el %s. Amb una durada de %s dies, l'accés a aquesta secció va expirar el %s."
+msgstr ""
+"El primer accés d'aquest usuari a la sessió va ser el %s. Amb una durada de "
+"%s dies, l'accés a aquesta secció va expirar el %s."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "El primer accés d'aquest usuari a aquesta sessió va ser el %s. Amb una durada de %s dies, la data final està configurada en %s dies."
+msgstr ""
+"El primer accés d'aquest usuari a aquesta sessió va ser el %s. Amb una "
+"durada de %s dies, la data final està configurada en %s dies."
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Aquest usuari mai ha accedit abans a aquesta sessió. La durada està configurada a %s dies (des de la data del primer accés)."
@@ -18379,7 +18387,12 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "El contingut del directori archive/ ha estat eliminat."
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "Per alguna raó (potser per falta de permisos), no s'ha pogut netejar la carpeta archive/. Pot netejar manualment connectant-se al servidor i eliminant tot el contingut de la carpeta chamilo/archive/, excepte el fitxer .htaccess."
+msgstr ""
+"Per algun motiu, no s'ha pogut netejar el directori chamilo/var/cache/. Si "
+"us plau, netegeu-lo manualment: connecteu-vos al servidor i suprimiu tots "
+"els fitxers i enllaços simbòlics sota el directori chamilo/var/cache/, "
+"excepte el fitxer .htaccess. A Linux: # find var/cache/ \\( -type f -or -"
+"type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "Utilitza temps de publicació"

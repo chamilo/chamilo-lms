@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:15+0000\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Portuguese <https://translation.chamilo.org/projects/chamilo/"
 "messages/pt/>\n"
@@ -386,12 +386,14 @@ msgstr "Verifique se os e-mails são únicos."
 msgid "This email is already in use on the platform."
 msgstr "Este e-mail já está registrado no sistema."
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Total de mensagens em todos os fóruns"
 
 msgid "Add me as coach"
 msgstr "Adicionar-me como tutor"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "Adicione-me como um professor em cursos importados."
 
@@ -413,11 +415,17 @@ msgstr "Usuário: %s - Sessão: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "A duração da sessão dada é o mesmo que o padrão para a sessão. Ignorando"
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "Primeiro acesso do usuário para a sessão estava em %s. Com uma duração de sessão de %s dias, o acesso a esta sessão já expirou em %s"
+msgstr ""
+"Primeiro acesso do usuário para a sessão estava em %s. Com uma duração de "
+"sessão de %s dias, o acesso a esta sessão já expirou em %s"
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "Primeiro acesso do usuário para a sessão estava em %s. Com uma duração de dias de sessão %s, a data final está prevista para %s dias"
+msgstr ""
+"Primeiro acesso do usuário para a sessão estava em %s. Com uma duração de "
+"dias de sessão %s, a data final está prevista para %s dias"
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Este usuário nunca acessada esta sessão antes. A duração é definido como %s dias (a partir da primeira data de acesso)"

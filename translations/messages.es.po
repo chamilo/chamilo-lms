@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-12 04:25+0000\n"
+"PO-Revision-Date: 2025-04-18 10:38+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -389,12 +389,14 @@ msgstr "Verificar que los correos sean únicos."
 msgid "This email is already in use on the platform."
 msgstr "Este correo electrónico ya está registrado en el sistema."
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Total de mensajes en todos los foros"
 
 msgid "Add me as coach"
 msgstr "Agregarme como tutor"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "Agregarme como profesor en los cursos importados."
 
@@ -416,11 +418,17 @@ msgstr "Usuario: %s - Sesión: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "La duración de la sesión es la misma que el valor por defecto. Ignorando."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "El primer acceso de este usuario a la sesión fue el %s. Con una duración de %s días, el acceso a esta sesión expiró el %s."
+msgstr ""
+"El primer acceso de este usuario a la sesión fue el %s. Con una duración de "
+"%s días, el acceso a esta sesión expiró el %s."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "El primer acceso de este usuario a esta sesión fue el %s. Con una duración de %s días, la fecha de fin está configurada dentro de %s días."
+msgstr ""
+"El primer acceso de este usuario a esta sesión fue el %s. Con una duración "
+"de %s días, la fecha de fin está configurada dentro de %s días."
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Este usuario nunca ha accedido a esta sesión antes. La duración está configurada a %s días (desde la fecha de primer acceso)."
@@ -6810,7 +6818,7 @@ msgid "Group deleted"
 msgstr "Grupo borrado"
 
 msgid "Registered"
-msgstr "Inscritos"
+msgstr "registrado"
 
 msgid "Learners are allowed to self-register in groups"
 msgstr "Los propios usuarios pueden inscribirse en el grupo que quieran"
@@ -18401,7 +18409,12 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "El contenido del directorio app/cache/ ha sido eliminado."
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "Por alguna razón (quizá por falta de permisos), no se pudo limpiar la carpeta app/cache/. Puede limpiarla manualmente conectándose al servidor y eliminando todo el contenido de la carpeta chamilo/app/cache/, excepto el fichero .htaccess."
+msgstr ""
+"Por alguna razón, no se pudo limpiar el directorio chamilo/var/cache/. Por "
+"favor, límpielo manualmente: conéctese al servidor y elimine todos los "
+"archivos y enlaces simbólicos bajo el directorio chamilo/var/cache/, excepto "
+"el archivo .htaccess. En Linux: # find var/cache/ \\( -type f -or -type l \\)"
+" -not -name .htaccess -exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "Usar tiempo de publicación"
@@ -29084,3 +29097,281 @@ msgstr "Puerto de base de datos"
 
 msgid "Database driver"
 msgstr "Controlador de base de datos"
+
+msgid "Unlock prerequisites after last test attempt"
+msgstr "Desbloquear requisitos previos después del último intento de ejercicio"
+
+msgid "Enable Session Replication"
+msgstr "Habilitar la replicación de sesión"
+
+msgid "Display colors for scores in the gradebook"
+msgstr ""
+"Mostrar colores para las calificaciones en la herramienta de evaluaciones"
+
+msgid "List of visible fields in profile"
+msgstr "Lista de campos visibles en el perfil"
+
+msgid "Send all e-mails from this e-mail address"
+msgstr ""
+"Envíe todos los correos electrónicos desde esta dirección de correo "
+"electrónico"
+
+msgid "Sets the default email address used in the \"from\" field of emails."
+msgstr ""
+"Establece la dirección de correo electrónico predeterminada utilizada en el "
+"campo \"de\" de los correos electrónicos."
+
+msgid "Generates images based on prompts or content using AI."
+msgstr ""
+"Genera imágenes basadas en indicaciones o contenido utilizando inteligencia "
+"artificial."
+
+msgid "AI providers connection data"
+msgstr "Datos de conexión de proveedores de IA"
+
+msgid "ID of the user who officially sends the agenda reminders"
+msgstr "ID del usuario que envía oficialmente los recordatorios de la agenda"
+
+msgid "Provides students with an AI-powered tutoring assistant."
+msgstr ""
+"Proporciona a los alumnos un asistente de tutoría potenciado por "
+"inteligencia artificial."
+
+msgid "Remove the checkbox to enable sending announcements to users with HR roles (still requires to confirm in the announcements tool)."
+msgstr ""
+"Desmarque la casilla para habilitar el envío de anuncios a usuarios con "
+"roles de responsable RRHH (aún se requiere confirmar en la herramienta de "
+"anuncios)."
+
+msgid "Topbarcertificate"
+msgstr "Certificados (menu superior)"
+
+msgid "Enables all available AI-powered features in the platform."
+msgstr ""
+"Activa las funciones con inteligencia artificial disponibles en la "
+"plataforma."
+
+msgid "Uses AI to evaluate and grade uploaded assignments."
+msgstr ""
+"Utiliza inteligencia artificial para evaluar y calificar las tareas subidas."
+
+msgid "Dynamically creates new anonymous users to support high visitor traffic."
+msgstr ""
+"Crea dinámicamente nuevos usuarios anónimos para soportar un alto tráfico de "
+"visitantes."
+
+msgid "Tutor chatbot energized by AI"
+msgstr "Tutor chatbot impulsado por IA"
+
+msgid "Assigning skills to user: sub-skills auto-loading"
+msgstr "Asignación de competencias al usuario: auto-carga de sub-competencias"
+
+msgid "Activates popup or system notifications for important platform events."
+msgstr ""
+"Activa notificaciones emergentes o del sistema para eventos importantes de "
+"la plataforma."
+
+msgid "Configuration data to connect with external AI services."
+msgstr "Datos de configuración para conectar con servicios externos de IA."
+
+msgid "Overrides sender for all emails to appear from a unique address."
+msgstr "Establece un remitente único para todos los correos electrónicos."
+
+msgid "Displays the current DB version to match the Chamilo core version."
+msgstr ""
+"Muestra la versión actual de la base de datos para comparar con la versión "
+"principal de Chamilo."
+
+msgid "Allows users to continue in a learning path after using all quiz attempts of a test used as prerequisite for other items."
+msgstr ""
+"Permite a los usuarios continuar en una lección después de utilizar todos "
+"los intentos de un ejercicio utilizado como requisito previo para otros "
+"elementos."
+
+msgid "Show courses duration"
+msgstr "Mostrar duración de los cursos"
+
+msgid "Menumyagenda"
+msgstr "Mi agenda"
+
+msgid "Enable Automatic Reinscription"
+msgstr "Habilitar la reinscripción automática"
+
+msgid "When manually assigning skills to a user, the form can be set to automatically offer you to assign a sub-skill instead of the skill you selected."
+msgstr ""
+"Al asignar manualmente competencias a un usuario, el formulario puede "
+"configurarse para ofrecerle automáticamente asignar una subcompetencia en "
+"lugar de la competencia que seleccionó."
+
+msgid "Minimal password syntax requirements"
+msgstr "Requisitos mínimos de sintaxis de contraseña"
+
+msgid "Image generator"
+msgstr "Generador de imágenes"
+
+msgid "Removes the groups section from the social network view."
+msgstr "Elimina la sección de grupos de la vista de la red social."
+
+msgid "Allows grading attendance with multiple levels instead of a simple present/absent system."
+msgstr ""
+"Permite evaluar la asistencia con múltiples niveles en lugar de un simple "
+"sistema de presente/ausente."
+
+msgid "Enable the AI helper tool"
+msgstr "Habilitar la herramienta de asistente de IA"
+
+msgid "Main language, used by default when no user language is set."
+msgstr ""
+"Idioma principal, utilizado por defecto cuando no se ha establecido el "
+"idioma del usuario."
+
+msgid "Default platform language"
+msgstr "Idioma predeterminado de la plataforma"
+
+msgid "Menucampushomepage"
+msgstr "Página principal del campus"
+
+msgid "Menudiagnostics"
+msgstr "Diagnóstico"
+
+msgid "Limits online user visibility to specific user roles."
+msgstr ""
+"Limita la visibilidad de usuarios en línea a roles de usuario específicos."
+
+msgid "Sets which user appears as the sender of agenda reminder emails."
+msgstr ""
+"Establece qué usuario aparece como remitente de los correos electrónicos de "
+"recordatorio de agenda."
+
+msgid "Generates personalized tests with AI based on course content."
+msgstr ""
+"Genera ejercicios personalizados con inteligencia artificial basados en el "
+"contenido del curso."
+
+msgid "Ai_helpers"
+msgstr "Asistentes de IA"
+
+msgid "Remove the checkbox to enable sending announcements"
+msgstr "Desmarque la casilla para habilitar el envío de anuncios"
+
+msgid "Menureporting"
+msgstr "Informes"
+
+msgid "Analyses learning materials to extract insights or improve quality."
+msgstr ""
+"Analiza materiales de aprendizaje para extraer perspectivas o mejorar la "
+"calidad."
+
+msgid "Enable or disable automatic re-subscription when course validity expires. The related cron job must also be activated."
+msgstr ""
+"Activar o desactivar la reinscripción automática cuando caduca la validez "
+"del curso. También se debe activar la tarea cron relacionada."
+
+msgid "Content analyser"
+msgstr "Analizador de contenido"
+
+msgid "Enable Multi-Level Attendance Grading"
+msgstr "Habilitar calificación de asistencia multinivel"
+
+msgid "Menucatalogue"
+msgstr "Catálogo de cursos/sesiones"
+
+msgid "Menuplatformadministration"
+msgstr "Administración de la plataforma"
+
+msgid "Open answers grader"
+msgstr "Calificador de respuestas abiertas"
+
+msgid "Enables color coding for better score visibility in the gradebook."
+msgstr ""
+"Permite la codificación de colores para una mejor visibilidad de las "
+"calificaciones en la herramienta de evaluaciones."
+
+msgid "Exercise generator"
+msgstr "Generador de ejercicios"
+
+msgid "Learning paths generator"
+msgstr "Generador de lecciones"
+
+msgid "Menusocial"
+msgstr "Social"
+
+msgid "Automatically grades open-ended answers using AI."
+msgstr ""
+"Califica automáticamente respuestas abiertas utilizando inteligencia "
+"artificial."
+
+msgid "Menuvideoconference"
+msgstr "Videoconferencia"
+
+msgid "Display the course duration next to the course title in the course catalogue and the courses list."
+msgstr ""
+"Muestre la duración del curso junto al título del curso en el catálogo de "
+"cursos y la lista de cursos."
+
+msgid "Auto-provision more anonymous users"
+msgstr "Auto-provisionar más usuarios anónimos"
+
+msgid "registered"
+msgstr "registrado"
+
+msgid "Assignments grader"
+msgstr "Evaluador de tareas"
+
+msgid "Hide groups block in social network"
+msgstr "Ocultar bloque de grupos en red social"
+
+msgid "Current version of the database schema used by Chamilo"
+msgstr "Versión actual del esquema de la base de datos utilizado por Chamilo"
+
+msgid "Enable or disable automatic session replication. The related cron job must also be activated."
+msgstr ""
+"Habilite o deshabilite la replicación automática de sesiones. También se "
+"debe activar la tarea cron relacionada."
+
+msgid "Filter users that can be seen as online"
+msgstr "Filtrar usuarios que pueden verse en línea"
+
+msgid "Controls which profile fields are visible to users and others."
+msgstr "Controla qué campos de perfil son visibles para los usuarios y otros."
+
+msgid "Defines the required structure for user passwords."
+msgstr "Define la estructura requerida para las contraseñas de usuario."
+
+msgid "Send all e-mails as originating from this (organizational) name"
+msgstr ""
+"Envíe todos los correos electrónicos como si provinieran de este nombre "
+"(organizacional)"
+
+msgid "Allows duplication of resources that were created in the session when duplicating the session."
+msgstr ""
+"Al duplicar la lección, permite la duplicación de recursos que fueron "
+"creados específicamente en la lección de origen."
+
+msgid "Send all e-mails as one single sender"
+msgstr "Envíe todos los correos electrónicos como un único remitente"
+
+msgid "Topbarskills"
+msgstr "Competencias (menu superior)"
+
+msgid "Sets the default display name used for sending platform emails. e.g. \"Support team\"."
+msgstr ""
+"Establece el nombre para mostrar predeterminado utilizado para enviar "
+"correos electrónicos de la plataforma. Por ejemplo, \"Equipo de soporte\"."
+
+msgid "Generates personalized learning paths using AI suggestions."
+msgstr "Genera lecciones personalizadas utilizando sugerencias de IA."
+
+msgid "Enable the notification tool for a more impactful communication channel with students"
+msgstr ""
+"Active la herramienta de notificaciones para un canal de comunicación más "
+"impactante con los alumnos"
+
+msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr ""
+"Seleccione las clases para las cuales este curso será visible para la "
+"inscripción en el catálogo. Las reglas de inscripción siguen aplicando "
+"aparte de que sea visible en el catálogo."
+
+msgid "Menumycourses"
+msgstr "Mis cursos"

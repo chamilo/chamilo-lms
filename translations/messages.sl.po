@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-04 14:15+0000\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Slovenian <https://translation.chamilo.org/projects/chamilo/"
 "messages/sl/>\n"
@@ -387,12 +387,14 @@ msgstr "Preveri enoličnost e-poštnega naslova"
 msgid "This email is already in use on the platform."
 msgstr "Ta poštni naslov ni na voljo"
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Skupaj objav v vseh forumih"
 
 msgid "Add me as coach"
 msgstr "Dodaj me kot coach-a"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "Dodaj me kot učitelja v uvožene tečaje"
 
@@ -414,11 +416,17 @@ msgstr "Uporabnik: %s - Seja: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "Podano trajanje seje je enako kot privzeto trajanje seje. Zanemarjam."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "Prvi dostop uporabnika do seje je bil zabeležen dne %s. Z omejitvijo dolžine seje na %s dni, je dostop do te seje za uporabnika potekel dne %s ."
+msgstr ""
+"Prvi dostop uporabnika do seje je bil zabeležen dne %s. Z omejitvijo dolžine "
+"seje na %s dni, je dostop do te seje za uporabnika potekel dne %s ."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "Prvi dostop uporabnika do te seje se je izvršil dne %s. S trajanjem seje %s dni, je končni datum predviden čez %s dni"
+msgstr ""
+"Prvi dostop uporabnika do te seje se je izvršil dne %s. S trajanjem seje %s "
+"dni, je končni datum predviden čez %s dni"
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Ta uporabnik do sedaj še ni dostopil do seje. Trajanje je trenutno nastavljeno na %s dni (od datuma prvega dostopa)"
@@ -18380,7 +18388,12 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "čiščenje mape arhivov je bilo uspešno."
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "Iz neznanega razloge mape arhivov (archive/) ni bilo mogoče očistiti. Mapo 'chamilo/archive' očistite ročno, pustite nedotaknjeno zgolj datoteto .htaccess ."
+msgstr ""
+"Iz neznanega razloga mape chamilo/var/cache/ ni bilo mogoče očistiti. "
+"Prosimo, očistite jo ročno: povežite se s strežnikom in izbrišite vse "
+"datoteke ter simbolične povezave v mapi chamilo/var/cache/, razen datoteke ."
+"htaccess. V Linuxu: # find var/cache/ \\( -type f -or -type l \\) -not -name "
+".htaccess -exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "Omogoči čas začetka"

@@ -2294,12 +2294,15 @@ class DocumentManager
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceFiles', 'files')
+            ->innerJoin(CDocument::class, 'doc', 'WITH', 'doc.resourceNode = node')
             ->addSelect('files')
             ->where('type = :type')
             ->andWhere('links.course = :course')
-            ->setParameters(['type' => $type, 'course' => $course])
-            ->orderBy('node.parent', 'ASC')
-        ;
+            ->setParameters([
+                'type' => $type,
+                'course' => $course,
+            ])
+            ->orderBy('node.parent', 'ASC');
 
         $sessionId = api_get_session_id();
         if (empty($sessionId)) {

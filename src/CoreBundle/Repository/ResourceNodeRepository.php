@@ -37,7 +37,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SettingsManager $settingsManager
     ) {
-        $this->filesystem = $resourceFilesystem; // Asignar el filesystem correcto
+        $this->filesystem = $resourceFilesystem;
         parent::__construct($manager, $manager->getClassMetadata(ResourceNode::class));
     }
 

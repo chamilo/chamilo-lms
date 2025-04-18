@@ -30214,10 +30214,6 @@ msgstr ""
 msgid "Ai_helpers"
 msgstr "AI helpsters"
 
-msgid "Remove the checkbox to enable sending announcements"
-msgstr ""
-"Verwijder het vinkje om het versturen van aankondigingen in te schakelen"
-
 msgid "Menureporting"
 msgstr "Rapportage"
 

@@ -28106,9 +28106,6 @@ msgstr "Project manager"
 msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
 msgstr "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
 
-msgid "Remove the checkbox to enable sending announcements"
-msgstr "Remove the checkbox to enable sending announcements"
-
 msgid "Remove the checkbox to enable sending announcements to users with HR roles (still requires to confirm in the announcements tool)."
 msgstr "Remove the checkbox to enable sending announcements to users with HR roles (still requires to confirm in the announcements tool)."
 

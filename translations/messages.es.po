@@ -29251,9 +29251,6 @@ msgstr ""
 msgid "Ai_helpers"
 msgstr "Asistentes de IA"
 
-msgid "Remove the checkbox to enable sending announcements"
-msgstr "Desmarque la casilla para habilitar el envío de anuncios"
-
 msgid "Menureporting"
 msgstr "Informes"
 

@@ -30059,9 +30059,6 @@ msgid "Generates personalized tests with AI based on course content."
 msgstr ""
 "Génère des exercices personnalisés avec l'IA en fonction du contenu du cours."
 
-msgid "Remove the checkbox to enable sending announcements"
-msgstr "Décochez la case pour activer l'envoi d'annonces"
-
 msgid "Menureporting"
 msgstr "Rapports"
 

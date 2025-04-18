@@ -2,6 +2,7 @@
 
 namespace Chamilo\CoreBundle\Traits\Repository\ORM;
 
+use Gedmo\Exception\RuntimeException;
 use Gedmo\Tool\Wrapper\EntityWrapper;
 use Doctrine\ORM\Query;
 use Gedmo\Tree\Strategy;
@@ -668,12 +669,8 @@ trait NestedTreeRepositoryTrait
      * UNSAFE: be sure to backup before running this method when necessary
      *
      * Removes given $node from the tree and reparents its descendants
-     *
-     * @param object $node
-     *
-     * @throws \RuntimeException - if something fails in transaction
      */
-    public function removeFromTree($node)
+    public function removeFromTree(object $node): void
     {
         $meta = $this->getClassMetadata();
         $em = $this->getEntityManager();
@@ -684,6 +681,11 @@ trait NestedTreeRepositoryTrait
             $right = $wrapped->getPropertyValue($config['right']);
             $left = $wrapped->getPropertyValue($config['left']);
             $rootId = isset($config['root']) ? $wrapped->getPropertyValue($config['root']) : null;
+
+            if (!is_numeric($left) || !is_numeric($right)) {
+                $this->removeSingle($wrapped);
+                return;
+            }
 
             if ($right == $left + 1) {
                 $this->removeSingle($wrapped);
@@ -775,7 +777,7 @@ trait NestedTreeRepositoryTrait
             } catch (\Exception $e) {
                 $em->close();
                 $em->getConnection()->rollback();
-                throw new \Gedmo\Exception\RuntimeException('Transaction failed', null, $e);
+                throw new RuntimeException('Transaction failed', null, $e);
             }
         } else {
             throw new InvalidArgumentException("Node is not related to this repository");

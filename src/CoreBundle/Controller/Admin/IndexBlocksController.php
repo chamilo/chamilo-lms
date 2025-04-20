@@ -590,6 +590,12 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('File info'),
         ];
 
+        $items[] = [
+            'class' => 'item-resources-info',
+            'url' => '/admin/resources_info',
+            'label' => $this->translator->trans('Resources by type'),
+        ];
+
         return $items;
     }
 

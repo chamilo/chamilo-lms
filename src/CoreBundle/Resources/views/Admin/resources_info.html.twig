@@ -1,0 +1,59 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <div class="files-info-page">
+        <h1>{{ 'Resources by type'|trans }}</h1>
+        <p class="mt-2 mb-4 text-muted">
+            {{ 'This page shows all base and session courses that contain at least one item of the selected resource type.'|trans }}
+        </p>
+
+        <form method="get" action="{{ path('admin_resources_info') }}" style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+            <select name="type" class="form-control" onchange="this.form.submit()" style="margin-right: 10px;">
+                <option value="">{{ 'Choose a type'|trans }}</option>
+                {% for type in resourceTypes %}
+                    <option value="{{ type.id }}" {% if type.id == selectedType %}selected{% endif %}>{{ type.title }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn--primary">{{ 'Search'|trans }}</button>
+        </form>
+
+        {% if courses is empty and selectedType %}
+            <p>{{ 'No results found.'|trans }}</p>
+        {% elseif courses is not empty %}
+            <table class="data_table">
+                <thead>
+                <tr>
+                    <th>{{ 'Type'|trans }}</th>
+                    <th>{{ 'Title'|trans }}</th>
+                    <th>{{ 'Count'|trans }}</th>
+                    <th>{{ 'Resources'|trans }}</th>
+                    <th>{{ 'First created'|trans }}</th>
+                    <th>{{ 'Link'|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for course in courses %}
+                    <tr>
+                        <td>{{ course.type|capitalize }}</td>
+                        <td>{{ course.title }}</td>
+                        <td>{{ course.count }}</td>
+                        <td>
+                            <ul>
+                                {% set total = course.items|length %}
+                                {% for item in course.items|slice(0, 5) %}
+                                    <li>{{ item }}</li>
+                                {% endfor %}
+                                {% if total > 5 %}
+                                    <li class="text-muted">… {{ 'and'|trans }} {{ total - 5 }} {{ 'more'|trans }}</li>
+                                {% endif %}
+                            </ul>
+                        </td>
+                        <td>{{ course.firstCreatedAt|date('Y-m-d H:i') }}</td>
+                        <td><a href="{{ course.url }}" target="_blank">{{ 'Open'|trans }}</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

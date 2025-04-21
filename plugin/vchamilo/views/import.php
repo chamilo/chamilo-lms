@@ -129,12 +129,20 @@ if ($form->validate()) {
     $coursePath = $values['course_path'];
     $homePath = $values['home_path'];
     $confFile = $values['configuration_file'];
+    $uploadPath = $values['upload_path'];
 
-    if (is_dir($coursePath) &&
-        is_dir($homePath) &&
-        file_exists($confFile) &&
-        is_readable($confFile)
-    ) {
+    $isPharFile = str_starts_with($confFile, 'phar://')
+        || str_starts_with($coursePath, 'phar://')
+        || str_starts_with($homePath, 'phar://')
+        || str_starts_with($uploadPath, 'phar://');
+
+    $isWritable = is_dir($coursePath)
+        && is_dir($homePath)
+        && is_dir($uploadPath)
+        && file_exists($confFile)
+        && is_readable($confFile);
+
+    if (!$isPharFile && $isWritable) {
         $currentHost = api_get_configuration_value('db_host');
         $currentDatabase = api_get_configuration_value('main_database');
         $currentUser = api_get_configuration_value('db_user');

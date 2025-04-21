@@ -224,14 +224,17 @@ switch ($action) {
                 false,
                 'files'
             );
-            if ($result) {
-                $relativeUrl = str_replace(api_get_path(WEB_PATH), '/', $result['direct_url']);
-                $data = [
-                    'uploaded' => 1,
-                    'fileName' => $fileUpload['name'],
-                    'url' => $relativeUrl,
-                ];
+
+            if (!$result) {
+                exit;
             }
+
+            $relativeUrl = str_replace(api_get_path(WEB_PATH), '/', $result['direct_url']);
+            $data = [
+                'uploaded' => 1,
+                'fileName' => $fileUpload['name'],
+                'url' => $relativeUrl,
+            ];
         } else {
             $userId = api_get_user_id();
             $syspath = UserManager::getUserPathById($userId, 'system').'my_files';
@@ -246,15 +249,17 @@ switch ($action) {
                 $suffix = '_'.uniqid();
                 $fileUploadName = $fileName.$suffix.'.'.$extension;
             }
-            if (move_uploaded_file($fileUpload['tmp_name'], $syspath.$fileUploadName)) {
-                $url = $webpath.$fileUploadName;
-                $relativeUrl = str_replace(api_get_path(WEB_PATH), '/', $url);
-                $data = [
-                    'uploaded' => 1,
-                    'fileName' => $fileUploadName,
-                    'url' => $relativeUrl,
-                ];
+            if (!move_uploaded_file($fileUpload['tmp_name'], $syspath . $fileUploadName)) {
+                exit;
             }
+
+            $url = $webpath . $fileUploadName;
+            $relativeUrl = str_replace(api_get_path(WEB_PATH), '/', $url);
+            $data = [
+                'uploaded' => 1,
+                'fileName' => $fileUploadName,
+                'url' => $relativeUrl,
+            ];
         }
         echo json_encode($data);
         exit;

@@ -4,6 +4,9 @@
 /**
  * Responses to AJAX calls for the document upload.
  */
+
+use Chamilo\CoreBundle\Component\Editor\Driver\Driver;
+
 require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'];
@@ -199,6 +202,10 @@ switch ($action) {
         }
         break;
     case 'ck_uploadimage':
+        if (true !== api_get_configuration_value('enable_uploadimage_editor')) {
+            exit;
+        }
+
         api_protect_course_script(true);
 
         // it comes from uploaimage drag and drop ckeditor
@@ -210,6 +217,14 @@ switch ($action) {
 
         $data = [];
         $fileUpload = $_FILES['upload'];
+        $mimeType = mime_content_type($fileUpload['tmp_name']);
+
+        $isMimeAccepted = (new Driver())->mimeAccepted($mimeType, ['image']);
+
+        if (!$isMimeAccepted) {
+            exit;
+        }
+
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
         if ($isAllowedToEdit) {
             $globalFile = ['files' => $fileUpload];
@@ -249,7 +264,11 @@ switch ($action) {
                 $suffix = '_'.uniqid();
                 $fileUploadName = $fileName.$suffix.'.'.$extension;
             }
-            if (!move_uploaded_file($fileUpload['tmp_name'], $syspath . $fileUploadName)) {
+
+            $personalDriver = new PersonalDriver();
+            $uploadResult = $personalDriver->mimeAccepted(mime_content_type($fileUpload['tmp_name']), ['image']);
+
+            if (!$uploadResult || !move_uploaded_file($fileUpload['tmp_name'], $syspath . $fileUploadName)) {
                 exit;
             }
 

@@ -1285,7 +1285,7 @@ class DocumentManager
             $startDateAndEndDate = get_lang('From').' '.$first;
         } else {
             $startDateAndEndDate = sprintf(
-                get_lang('FromDateXToDateY'),
+                get_lang('From %s to %s'),
                 $first,
                 $last
             );

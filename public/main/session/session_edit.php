@@ -74,6 +74,8 @@ if ('catalogue_access' === $currentView) {
         api_get_self().'?id='.$id.'&view=catalogue_access'
     );
 
+    $formCatalogue->addElement('header', $session->getTitle());
+
     $groupEntities = $em->createQueryBuilder()
         ->select('ug')
         ->from(\Chamilo\CoreBundle\Entity\Usergroup::class, 'ug')

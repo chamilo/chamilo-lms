@@ -112,7 +112,7 @@ class AccountController extends BaseController
             $decryptedSecret = $this->decryptTOTPSecret($user->getMfaSecret(), $_ENV['APP_SECRET']);
             $totp = TOTP::create($decryptedSecret);
             $portalName = $settingsManager->getSetting('platform.institution');
-            $totp->setLabel($user->getEmail() . ' (' . $portalName . ')');
+            $totp->setLabel($portalName . ': '. $user->getEmail());
             $qrCodeResult = Builder::create()
                 ->writer(new PngWriter())
                 ->data($totp->getProvisioningUri())
@@ -164,7 +164,7 @@ class AccountController extends BaseController
                     }
 
                     $portalName = $settingsManager->getSetting('platform.institution');
-                    $totp->setLabel($user->getEmail() . ' (' . $portalName . ')');
+                    $totp->setLabel($portalName . ': '. $user->getEmail());
 
                     $qrCodeResult = Builder::create()
                         ->writer(new PngWriter())

@@ -3320,7 +3320,6 @@ function api_is_allowed_to_edit(
 ): bool {
     $allowSessionAdminEdit = 'true' === api_get_setting('session.session_admins_edit_courses_content');
     $sessionId = api_get_session_id();
-    $sessionVisibility = api_get_session_visibility($sessionId);
     $studentView = api_is_student_view_active();
     $isAllowed = false;
 
@@ -3351,6 +3350,8 @@ function api_is_allowed_to_edit(
     if (!$isCourseAdmin && $tutor) {
         $isCourseAdmin = api_is_course_tutor();
     }
+
+    $sessionVisibility = api_get_session_visibility($sessionId);
 
     if (!$isCourseAdmin && $coach) {
         if (SESSION_VISIBLE_READ_ONLY == $sessionVisibility) {

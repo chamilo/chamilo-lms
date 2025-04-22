@@ -275,6 +275,15 @@ class GradebookTable extends SortableTable
         return $defaultData;
     }
 
+    private function safeScore(array $score = null): array
+    {
+        $score = $score ?? [];
+        return [
+            $score[0] ?? 0,
+            $score[1] ?? 1
+        ];
+    }
+
     /**
      * Function used by SortableTable to generate the data to display.
      *
@@ -507,18 +516,21 @@ class GradebookTable extends SortableTable
                     $mode = SCORE_AVERAGE;
                     if ($userExerciseScoreInCategory) {
                         $mode = SCORE_SIMPLE;
-                        $result = ExerciseLib::convertScoreToPlatformSetting($totalAverage[0], $totalAverage[1]);
+                        list($avgScore, $avgWeight) = $this->safeScore($totalAverage);
+                        $result = ExerciseLib::convertScoreToPlatformSetting($avgScore, $avgWeight);
+
                         $totalAverage[0] = $result['score'];
                         $totalAverage[1] = $result['weight'];
 
-                        $result = ExerciseLib::convertScoreToPlatformSetting($totalResult[0], $totalResult[1]);
+                        list($resScore, $resWeight) = $this->safeScore($totalResult);
+                        $result = ExerciseLib::convertScoreToPlatformSetting($resScore, $resWeight);
+
                         $totalResult[0] = $result['score'];
                         $totalResult[1] = $result['weight'];
 
-                        $result = ExerciseLib::convertScoreToPlatformSetting(
-                            $data['result_score'][0],
-                            $data['result_score'][1]
-                        );
+                        list($safeScore, $safeWeight) = $this->safeScore($data['result_score'] ?? []);
+                        $result = ExerciseLib::convertScoreToPlatformSetting($safeScore, $safeWeight);
+
                         $data['my_result_no_float'][0] = $result['score'];
                     }
 

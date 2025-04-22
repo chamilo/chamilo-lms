@@ -28292,3 +28292,15 @@ msgstr ""
 
 msgid "Ai_helpers"
 msgstr ""
+
+msgid "Session expired. Redirecting to login…"
+msgstr ""
+
+msgid "Super admin"
+msgstr ""
+
+msgid "Global admin"
+msgstr ""
+
+msgid "Question manager"
+msgstr ""

@@ -27,8 +27,8 @@
                                 </div>
                             {% endif %}
                         </div>
-                        <div class="p-4">
-                            {{ description.content }}
+                        <div class="p-4 prose prose-sm w-full max-w-full">
+                        {{ description.content|raw }}
                         </div>
                     </div>
                 {% endif %}

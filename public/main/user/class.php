@@ -156,7 +156,7 @@ $columnModel = [
     ],
 ];
 // Autowidth
-$extraParams['width'] = '100%';
+$extraParams['autowidth'] = 'true';
 // height auto
 $extraParams['height'] = 'auto';
 

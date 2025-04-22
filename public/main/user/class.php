@@ -131,37 +131,32 @@ $columnModel = [
     [
         'name' => 'name',
         'index' => 'name',
-        'width' => '35',
         'align' => 'left',
     ],
     [
         'name' => 'users',
         'index' => 'users',
-        'width' => '15',
         'align' => 'left',
     ],
     [
         'name' => 'status',
         'index' => 'status',
-        'width' => '15',
         'align' => 'left',
     ],
     [
         'name' => 'group_type',
         'index' => 'group_type',
-        'width' => '15',
         'align' => 'center',
     ],
     [
         'name' => 'actions',
         'index' => 'actions',
-        'width' => '10',
         'align' => 'center',
         'sortable' => 'false',
     ],
 ];
 // Autowidth
-$extraParams['autowidth'] = 'true';
+$extraParams['width'] = '100%';
 // height auto
 $extraParams['height'] = 'auto';
 

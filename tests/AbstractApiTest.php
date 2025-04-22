@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Tests;
 
-use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
+use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
 use Chamilo\CoreBundle\Entity\User;
 

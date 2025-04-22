@@ -28336,3 +28336,6 @@ msgstr "Global admin"
 
 msgid "Question manager"
 msgstr "Question manager"
+
+msgid "Then enter the 6-digit code shown in your app at the bottom of the form."
+msgstr "Then enter the 6-digit code shown in your app at the bottom of the form."

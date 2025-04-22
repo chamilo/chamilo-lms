@@ -566,6 +566,8 @@ if ('catalogue_access' === $currentView) {
         'post',
         api_get_self().'?id='.$courseId.'&view=catalogue_access'
     );
+    
+    $formCatalogue->addElement('header', get_lang('Course').'  #'.$courseInfo['real_id'].' '.$course_code);
 
     $groupEntities = $em->createQueryBuilder()
         ->select('ug')

@@ -112,8 +112,6 @@ class SocialPostRepositoryTest extends AbstractApiTest
                 '@id' => $studentIri,
                 'username' => $student->getUsername(),
             ],
-            'userReceiver' => null,
-            'groupReceiver' => null,
         ]);
 
         $response = $client->request(
@@ -177,10 +175,8 @@ class SocialPostRepositoryTest extends AbstractApiTest
                 '@id' => $student1Iri,
                 'username' => $student1->getUsername(),
             ],
-            'userReceiver' => null,
             'content' => 'Hello world',
             'type' => SocialPost::TYPE_WALL_POST,
-            'groupReceiver' => null,
         ]);
 
         // student1 posts in student2's wall
@@ -210,7 +206,6 @@ class SocialPostRepositoryTest extends AbstractApiTest
                 '@id' => $student2Iri,
                 'username' => $student2->getUsername(),
             ],
-            'groupReceiver' => null,
         ]);
 
         // student1 views student2's wall

@@ -191,6 +191,9 @@ export function useSidebarMenu() {
             : [{ label: t("Users"), url: "/main/admin/user_list.php" }]),
           { label: t("Courses"), url: "/main/admin/course_list.php" },
           { label: t("Sessions"), url: "/main/session/session_list.php" },
+          ...(securityStore.isAdmin
+            ? [{ label: t("Settings"), url: "/admin/settings" }]
+            : []),
         ]
 
         items.push({

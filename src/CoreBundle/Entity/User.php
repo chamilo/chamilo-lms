@@ -1620,6 +1620,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->plainPassword = null;
     }
 
+    /**
+     * Returns whether a user can be admin of all multi-URL portals in the case of a multi-URL install
+     * @return bool
+     */
     public function isSuperAdmin(): bool
     {
         return $this->hasRole('ROLE_SUPER_ADMIN');

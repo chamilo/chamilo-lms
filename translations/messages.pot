@@ -4615,10 +4615,10 @@ msgstr ""
 msgid "Download the file"
 msgstr ""
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr ""
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr ""
 
 msgid "Send mail to new user"
@@ -5809,7 +5809,7 @@ msgstr ""
 msgid "Full-text search feature"
 msgstr ""
 
-msgid "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr ""
 
 msgid "Find a training session"
@@ -6797,6 +6797,9 @@ msgid "Group deleted"
 msgstr ""
 
 msgid "Registered"
+msgstr ""
+
+msgid "registered"
 msgstr ""
 
 msgid "Learners are allowed to self-register in groups"
@@ -16789,7 +16792,7 @@ msgstr ""
 msgid "Courses validation"
 msgstr ""
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr ""
 
 msgid "%s A request for additional information about the course request %s"
@@ -16813,7 +16816,7 @@ msgstr ""
 msgid "Course validation - a link to the terms and conditions"
 msgstr ""
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr ""
 
 msgid "The course has not been created due to an internal error."
@@ -16873,7 +16876,7 @@ msgstr ""
 msgid "WIRIS mathematical editor"
 msgstr ""
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr ""
 
 msgid "File export as"
@@ -17059,7 +17062,7 @@ msgstr ""
 msgid "Load the Mathjax library in all the system pages"
 msgstr ""
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr ""
 
 msgid "Hide tools from teachers"
@@ -19360,31 +19363,31 @@ msgstr ""
 msgid "Announcement for a group"
 msgstr ""
 
-msgid "Language priority 1"
+msgid "Highest priority language"
 msgstr ""
 
-msgid "Language priority 2"
+msgid "Secondary priority language"
 msgstr ""
 
-msgid "Language priority 3"
+msgid "Third priority language"
 msgstr ""
 
-msgid "Language priority 4"
+msgid "Fourth priority language"
 msgstr ""
 
 msgid "Language priority 5"
 msgstr ""
 
-msgid "The language with the highest priority"
+msgid "Primary language selected when multiple language contexts are set."
 msgstr ""
 
-msgid "The second language priority"
+msgid "Secondary fallback language if first priority is unavailable or out of context."
 msgstr ""
 
-msgid "The third language priority"
+msgid "Tertiary language fallback if higher priorities fail."
 msgstr ""
 
-msgid "The fourth language priority"
+msgid "Last language fallback option by order of priority."
 msgstr ""
 
 msgid "The lowest language priority"
@@ -20035,7 +20038,7 @@ msgstr ""
 msgid "CAPTCHA"
 msgstr ""
 
-msgid "Enable a CAPTCHA on the login form to avoid password hammering"
+msgid "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering"
 msgstr ""
 
 msgid "CAPTCHA mistakes allowance"
@@ -20110,7 +20113,7 @@ msgstr ""
 msgid "PDF header logo"
 msgstr ""
 
-msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
 msgstr ""
 
 msgid "Order users by official code"
@@ -21061,7 +21064,7 @@ msgstr ""
 msgid "Sender ID of Firebase Console for Cloud Messaging"
 msgstr ""
 
-msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
+msgid "You need register a project on <a href='https://console.firebase.google.com/'>Google Firebase Console</a>"
 msgstr ""
 
 msgid "Server key of Firebase Console for Cloud Messaging"
@@ -25470,7 +25473,7 @@ msgstr ""
 msgid "Hide courses block in the sidebar"
 msgstr ""
 
-msgid "When on screens where the left menu is visible, do not display the « Courses » section."
+msgid "When on screens where the left menu is visible, do not display the « Courses » section."
 msgstr ""
 
 msgid "Allow using extra fields in course catalogue"
@@ -25512,7 +25515,7 @@ msgstr ""
 msgid "Type of link for the session title"
 msgstr ""
 
-msgid "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
+msgid "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
 msgstr ""
 
 msgid "Hide course rating"
@@ -26670,19 +26673,19 @@ msgstr ""
 msgid "Proxy settings"
 msgstr ""
 
-msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it.<br><pre> [ 'stream_context_create' => [ 'http' => [ 'proxy' => 'tcp://example.com:8080', 'request_fulluri' => true ] ], 'curl_setopt_array' => [ 'CURLOPT_PROXY' => 'http://example.com', 'CURLOPT_PROXYPORT' => '8080' ] ] </pre>"
 msgstr ""
 
 msgid "Video features"
 msgstr ""
 
-msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video.<br><pre> ['features' => ['speed']] </pre>"
 msgstr ""
 
 msgid "Default offered pagination numbers in tables"
 msgstr ""
 
-msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500].<br><pre> ['options' => [50, 100, 200, 500]] </pre>"
 msgstr ""
 
 msgid "Webservices return user field"
@@ -26718,19 +26721,19 @@ msgstr ""
 msgid "LDAP connection configuration"
 msgstr ""
 
-msgid "Array defining host and port for the LDAP server."
+msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 msgstr ""
 
 msgid "Set expiration date on first login"
 msgstr ""
 
-msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in.<br><pre> [ 'days' => 0, 'months' => 0, ] </pre>"
 msgstr ""
 
 msgid "Selective display of roles"
 msgstr ""
 
-msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 msgstr ""
 
 msgid "Roles display options"
@@ -26742,7 +26745,7 @@ msgstr ""
 msgid "Default expiration days by role"
 msgstr ""
 
-msgid "An array of role = > number which represents the number of days an account has before expiration, depending on the role."
+msgid "An array of role = > number which represents the number of days an account has before expiration, depending on the role.<br><pre> [ 'COURSEMANAGER' => 365, 'STUDENT' => 31, 'DRH' => 31, 'SESSIONADMIN' => 60, 'STUDENT_BOSS' => 60, 'INVITEE' => 31 ] </pre>"
 msgstr ""
 
 msgid "Set an extra field as trigger for registration as ex-learner"
@@ -28075,4 +28078,250 @@ msgid "Enable URL-specific files"
 msgstr ""
 
 msgid "When this feature is enabled on a multi-URL configuration, you can go to the main URL and provide URL-specific versions of any file (in the documents tool). The original file will be replaced by the alternative whenever seeing it from a different URL. This allows you to customize each URL even further, while enjoying the advantage of re-using the same courses many times."
+msgstr ""
+
+msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr ""
+
+msgid "Remove the checkbox to enable sending announcements to users with HR roles (still requires to confirm in the announcements tool)."
+msgstr ""
+
+msgid "ID of the user who officially sends the agenda reminders"
+msgstr ""
+
+msgid "Sets which user appears as the sender of agenda reminder emails."
+msgstr ""
+
+msgid "Enable Multi-Level Attendance Grading"
+msgstr ""
+
+msgid "Allows grading attendance with multiple levels instead of a simple present/absent system."
+msgstr ""
+
+msgid "Show courses duration"
+msgstr ""
+
+msgid "Display the course duration next to the course title in the course catalogue and the courses list."
+msgstr ""
+
+msgid "Display colors for scores in the gradebook"
+msgstr ""
+
+msgid "Enables color coding for better score visibility in the gradebook."
+msgstr ""
+
+msgid "Default platform language"
+msgstr ""
+
+msgid "Main language, used by default when no user language is set."
+msgstr ""
+
+msgid "Unlock prerequisites after last test attempt"
+msgstr ""
+
+msgid "Allows users to continue in a learning path after using all quiz attempts of a test used as prerequisite for other items."
+msgstr ""
+
+msgid "Send all e-mails as one single sender"
+msgstr ""
+
+msgid "Overrides sender for all emails to appear from a unique address."
+msgstr ""
+
+msgid "Send all e-mails from this e-mail address"
+msgstr ""
+
+msgid "Sets the default email address used in the \"from\" field of emails."
+msgstr ""
+
+msgid "Send all e-mails as originating from this (organizational) name"
+msgstr ""
+
+msgid "Sets the default display name used for sending platform emails. e.g. \"Support team\"."
+msgstr ""
+
+msgid "Current version of the database schema used by Chamilo"
+msgstr ""
+
+msgid "Displays the current DB version to match the Chamilo core version."
+msgstr ""
+
+msgid "Enable the notification tool for a more impactful communication channel with students"
+msgstr ""
+
+msgid "Activates popup or system notifications for important platform events."
+msgstr ""
+
+msgid "List of visible fields in profile"
+msgstr ""
+
+msgid "Controls which profile fields are visible to users and others."
+msgstr ""
+
+msgid "Minimal password syntax requirements"
+msgstr ""
+
+msgid "Defines the required structure for user passwords."
+msgstr ""
+
+msgid "Filter users that can be seen as online"
+msgstr ""
+
+msgid "Limits online user visibility to specific user roles."
+msgstr ""
+
+msgid "Auto-provision more anonymous users"
+msgstr ""
+
+msgid "Dynamically creates new anonymous users to support high visitor traffic."
+msgstr ""
+
+msgid "Allows duplication of resources that were created in the session when duplicating the session."
+msgstr ""
+
+msgid "Enable Automatic Reinscription"
+msgstr ""
+
+msgid "Enable or disable automatic re-subscription when course validity expires. The related cron job must also be activated."
+msgstr ""
+
+msgid "Enable Session Replication"
+msgstr ""
+
+msgid "Enable or disable automatic session replication. The related cron job must also be activated."
+msgstr ""
+
+msgid "Assigning skills to user: sub-skills auto-loading"
+msgstr ""
+
+msgid "When manually assigning skills to a user, the form can be set to automatically offer you to assign a sub-skill instead of the skill you selected."
+msgstr ""
+
+msgid "Hide groups block in social network"
+msgstr ""
+
+msgid "Removes the groups section from the social network view."
+msgstr ""
+
+msgid "Enable the AI helper tool"
+msgstr ""
+
+msgid "Enables all available AI-powered features in the platform."
+msgstr ""
+
+msgid "AI providers connection data"
+msgstr ""
+
+msgid "Configuration data to connect with external AI services."
+msgstr ""
+
+msgid "Learning paths generator"
+msgstr ""
+
+msgid "Generates personalized learning paths using AI suggestions."
+msgstr ""
+
+msgid "Exercise generator"
+msgstr ""
+
+msgid "Generates personalized tests with AI based on course content."
+msgstr ""
+
+msgid "Open answers grader"
+msgstr ""
+
+msgid "Automatically grades open-ended answers using AI."
+msgstr ""
+
+msgid "Tutor chatbot energized by AI"
+msgstr ""
+
+msgid "Provides students with an AI-powered tutoring assistant."
+msgstr ""
+
+msgid "Assignments grader"
+msgstr ""
+
+msgid "Uses AI to evaluate and grade uploaded assignments."
+msgstr ""
+
+msgid "Content analyser"
+msgstr ""
+
+msgid "Analyses learning materials to extract insights or improve quality."
+msgstr ""
+
+msgid "Image generator"
+msgstr ""
+
+msgid "Generates images based on prompts or content using AI."
+msgstr ""
+
+msgid "Menucampushomepage"
+msgstr ""
+
+msgid "Menumycourses"
+msgstr ""
+
+msgid "Menureporting"
+msgstr ""
+
+msgid "Menuplatformadministration"
+msgstr ""
+
+msgid "Menumyagenda"
+msgstr ""
+
+msgid "Menusocial"
+msgstr ""
+
+msgid "Menuvideoconference"
+msgstr ""
+
+msgid "Menudiagnostics"
+msgstr ""
+
+msgid "Menucatalogue"
+msgstr ""
+
+msgid "Topbarcertificate"
+msgstr ""
+
+msgid "Topbarskills"
+msgstr ""
+
+msgid "Ai_helpers"
+msgstr ""
+
+msgid "Session expired. Redirecting to login…"
+msgstr ""
+
+msgid "Super admin"
+msgstr ""
+
+msgid "Global admin"
+msgstr ""
+
+msgid "Question manager"
+msgstr ""
+
+msgid "Then enter the 6-digit code shown in your app at the bottom of the form."
+msgstr ""
+
+msgid "Enter your 2FA code"
+msgstr ""
+
+msgid "Enable Two-Factor Authentication (2FA)"
+msgstr ""
+
+msgid "Confirm new password"
+msgstr ""
+
+msgid "Classes of session"
+msgstr ""
+
+msgid "Classes of course"
+msgstr ""
+
+msgid "Select a class"
 msgstr ""

@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CSurvey;
 
 /**
  * Gradebook link to a survey item.
@@ -11,8 +12,7 @@ use Chamilo\CoreBundle\Framework\Container;
  */
 class SurveyLink extends AbstractLink
 {
-    private $survey_table;
-    /** @var \Chamilo\CourseBundle\Entity\CSurvey */
+    /** @var CSurvey */
     private $survey_data;
 
     /**
@@ -24,50 +24,49 @@ class SurveyLink extends AbstractLink
         $this->set_type(LINK_SURVEY);
     }
 
-    /**
-     * @return string
-     */
-    public function get_name()
+    public function get_name(): string
     {
-        $this->get_survey_data();
+        $survey = $this->get_survey_data();
 
-        return $this->survey_data->getCode().': '.self::html_to_text($this->survey_data->getTitle());
+        if (!$survey instanceof CSurvey) {
+            return get_lang('Untitled Survey');
+        }
+
+        return $survey->getCode() . ': ' . self::html_to_text($survey->getTitle());
     }
 
-    /**
-     * @return string
-     */
-    public function get_description()
+    public function get_description(): string
     {
-        $this->get_survey_data();
+        $survey = $this->get_survey_data();
 
-        return $this->survey_data->getSubtitle();
+        if (!$survey instanceof CSurvey) {
+            return '';
+        }
+
+        return $survey->getSubtitle();
     }
 
-    /**
-     * @return string
-     */
-    public function get_type_name()
+    public function get_type_name(): string
     {
         return get_lang('Survey');
     }
 
-    public function is_allowed_to_change_name()
+    public function is_allowed_to_change_name(): bool
     {
         return false;
     }
 
-    public function needs_name_and_description()
+    public function needs_name_and_description(): bool
     {
         return false;
     }
 
-    public function needs_max()
+    public function needs_max(): bool
     {
         return false;
     }
 
-    public function needs_results()
+    public function needs_results(): bool
     {
         return false;
     }
@@ -77,27 +76,25 @@ class SurveyLink extends AbstractLink
      *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
-    public function get_all_links()
+    public function get_all_links(): array
     {
         if (empty($this->course_id)) {
-            exit('Error in get_all_links() : course ID not set');
+            return [];
         }
-        $sessionId = $this->get_session_id();
-        $course_id = $this->getCourseId();
 
+        $session = api_get_session_entity($this->get_session_id());
+        $course = api_get_course_entity($this->getCourseId());
         $repo = Container::getSurveyRepository();
-        $course = api_get_course_entity($course_id);
-        $session = !empty($sessionId) ? api_get_session_entity($sessionId) : null;
 
         $qb = $repo->getResourcesByCourse($course, $session);
         $surveys = $qb->getQuery()->getResult();
         $links = [];
-        /** @var \Chamilo\CourseBundle\Entity\CSurvey $survey */
+        /** @var CSurvey $survey */
         foreach ($surveys as $survey) {
             $links[] = [
                 $survey->getIid(),
                 api_trunc_str(
-                    $survey->getCode().': '.self::html_to_text($survey->getTitle()),
+                    $survey->getCode() . ': ' . self::html_to_text($survey->getTitle()),
                     80
                 ),
             ];
@@ -110,28 +107,20 @@ class SurveyLink extends AbstractLink
      * Has anyone done this survey yet?
      * Implementation of the AbstractLink class, mainly used dynamically in gradebook/lib/fe.
      */
-    public function has_results()
+    public function has_results(): bool
     {
-        $ref_id = $this->get_ref_id();
-        $sessionId = $this->get_session_id();
-        $courseId = $this->getCourseId();
+        $survey = $this->get_survey_data();
+        if (!$survey) {
+            return false;
+        }
 
-        $tbl_survey = Database::get_course_table(TABLE_SURVEY);
-        $table = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $sql = "SELECT
-                COUNT(i.answered)
-                FROM $tbl_survey AS s
-                INNER JOIN $table AS i
-                ON s.code = i.survey_code
-                WHERE
-                    i.c_id = $courseId AND
-                    s.iid = $ref_id AND
-                    i.session_id = $sessionId";
+        $repo = Container::getSurveyInvitationRepository();
+        $course = api_get_course_entity($this->course_id);
+        $session = api_get_session_entity($this->get_session_id());
 
-        $sql_result = Database::query($sql);
-        $data = Database::fetch_array($sql_result);
+        $results = $repo->getAnsweredInvitations($survey, $course, $session);
 
-        return 0 != $data[0];
+        return count($results) > 0;
     }
 
     /**
@@ -142,111 +131,62 @@ class SurveyLink extends AbstractLink
      *
      * @return array|null
      */
-    public function calc_score($studentId = null, $type = null)
+    public function calc_score($studentId = null, $type = null): ?array
     {
-        // Note: Max score is assumed to be always 1 for surveys,
-        // only student's participation is to be taken into account.
-        $max_score = 1;
-        $ref_id = $this->get_ref_id();
-        $sessionId = $this->get_session_id();
-        $courseId = $this->getCourseId();
-        $tbl_survey = Database::get_course_table(TABLE_SURVEY);
-        $tbl_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $get_individual_score = !is_null($studentId);
-
-        $sql = "SELECT i.answered
-                FROM $tbl_survey AS s
-                JOIN $tbl_survey_invitation AS i
-                ON s.code = i.survey_code
-                WHERE
-                    i.c_id = $courseId AND
-                    s.iid = $ref_id AND
-                    i.session_id = $sessionId
-                ";
-
-        if ($get_individual_score) {
-            $sql .= ' AND i.user = '.intval($studentId);
+        $survey = $this->get_survey_data();
+        if (!$survey) {
+            return [null, null];
         }
 
-        $sql_result = Database::query($sql);
+        $course = api_get_course_entity($this->course_id);
+        $session = api_get_session_entity($this->get_session_id());
+        $repo = Container::getSurveyInvitationRepository();
+        $max_score = 1;
 
-        if ($get_individual_score) {
-            // for 1 student
-            if ($data = Database::fetch_array($sql_result)) {
-                return [$data['answered'] ? $max_score : 0, $max_score];
-            }
+        if ($studentId) {
+            $user = api_get_user_entity($studentId);
+            $answered = $repo->hasUserAnswered($survey, $course, $user, $session);
 
-            return [0, $max_score];
-        } else {
-            // for all the students -> get average
-            $rescount = 0;
-            $sum = 0;
-            $bestResult = 0;
-            while ($data = Database::fetch_array($sql_result)) {
-                $sum += $data['answered'] ? $max_score : 0;
-                $rescount++;
-                if ($data['answered'] > $bestResult) {
-                    $bestResult = $data['answered'];
-                }
-            }
-            $sum = $sum / $max_score;
+            return [$answered ? $max_score : 0, $max_score];
+        }
 
-            if (0 == $rescount) {
-                return [null, null];
-            }
+        $results = $repo->getAnsweredInvitations($survey, $course, $session);
+        $rescount = count($results);
 
-            switch ($type) {
-                case 'best':
-                    return [$bestResult, $rescount];
-                    break;
-                case 'average':
-                    return [$sum, $rescount];
-                    break;
-                case 'ranking':
-                    return null;
-                    break;
-                default:
-                    return [$sum, $rescount];
-                    break;
-            }
+        if ($rescount === 0) {
+            return [null, null];
+        }
+
+        switch ($type) {
+            case 'best':
+            case 'average':
+            default:
+                return [$rescount, $rescount];
         }
     }
 
     /**
      * Check if this still links to a survey.
      */
-    public function is_valid_link()
+    public function is_valid_link(): bool
     {
-        $sessionId = $this->get_session_id();
-        $courseId = $this->getCourseId();
-
-        $sql = 'SELECT count(iid) FROM '.$this->get_survey_table().'
-                 WHERE
-                    c_id = '.$courseId.' AND
-                    iid = '.$this->get_ref_id().' AND
-                    session_id = '.$sessionId;
-        $result = Database::query($sql);
-        $number = Database::fetch_row($result);
-
-        return 0 != $number[0];
+        return null !== $this->get_survey_data();
     }
 
-    public function get_link()
+    public function get_link(): ?string
     {
         if ('true' === api_get_setting('survey.hide_survey_reporting_button')) {
             return null;
         }
 
         if (api_is_allowed_to_edit()) {
-            // Let students make access only through "Surveys" tool.
-            $sessionId = $this->get_session_id();
-            $courseId = $this->getCourseId();
             $survey = $this->get_survey_data();
-            if ($survey) {
-                $survey_id = $survey->getIid();
+            $sessionId = $this->get_session_id();
 
-                return api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.
-                    api_get_cidreq_params($this->getCourseId(), $sessionId).'&survey_id='.$survey_id;
+            if ($survey) {
+                return api_get_path(WEB_CODE_PATH) . 'survey/reporting.php?' .
+                    api_get_cidreq_params($this->getCourseId(), $sessionId) .
+                    '&survey_id=' . $survey->getIid();
             }
         }
 
@@ -255,36 +195,25 @@ class SurveyLink extends AbstractLink
 
     /**
      * Get the name of the icon for this tool.
-     *
-     * @return string
      */
-    public function get_icon_name()
+    public function get_icon_name(): string
     {
         return 'survey';
     }
 
     /**
-     * Lazy load function to get the database table of the surveys.
-     */
-    private function get_survey_table()
-    {
-        $this->survey_table = Database::get_course_table(TABLE_SURVEY);
-
-        return $this->survey_table;
-    }
-
-    /**
      * Get the survey data from the c_survey table with the current object id.
-     *
-     * @return \Chamilo\CourseBundle\Entity\CSurvey
      */
-    private function get_survey_data()
+    private function get_survey_data(): ?CSurvey
     {
         if (empty($this->survey_data)) {
-            $courseId = $this->getCourseId();
-            $sessionId = $this->get_session_id();
             $repo = Container::getSurveyRepository();
             $survey = $repo->find($this->get_ref_id());
+
+            if (!$survey instanceof CSurvey) {
+                return null;
+            }
+
             $this->survey_data = $survey;
         }
 
@@ -293,10 +222,8 @@ class SurveyLink extends AbstractLink
 
     /**
      * @param string $string
-     *
-     * @return string
      */
-    private static function html_to_text($string)
+    private static function html_to_text($string): string
     {
         return strip_tags($string);
     }

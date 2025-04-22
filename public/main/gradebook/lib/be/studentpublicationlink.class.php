@@ -46,28 +46,9 @@ class StudentPublicationLink extends AbstractLink
 
         $sessionId = $this->get_session_id();
         $session = api_get_session_entity($sessionId);
-        /*
-        if (empty($session_id)) {
-            $session_condition = api_get_session_condition(0, true);
-        } else {
-            $session_condition = api_get_session_condition($session_id, true, true);
-        }
-        $sql = "SELECT id, url, title FROM $tbl_grade_links
-                WHERE c_id = {$this->course_id}  AND filetype='folder' AND active = 1 $session_condition ";*/
-
-        //Only show works from the session
-        //AND has_properties != ''
         $repo = Container::getStudentPublicationRepository();
         $qb = $repo->findAllByCourse(api_get_course_entity($this->course_id), $session, null, 1, 'folder');
         $links = $qb->getQuery()->getResult();
-
-        /*$links = Container::getStudentPublicationRepository()
-            ->findBy([
-                'cId' => $this->course_id,
-                'active' => true,
-                'filetype' => 'folder',
-                'session' => $session,
-            ]);*/
         $cats = [];
         foreach ($links as $data) {
             $work_name = $data->getTitle();
@@ -93,10 +74,8 @@ class StudentPublicationLink extends AbstractLink
         $id = $studentPublication->getIid();
         $session = api_get_session_entity($this->get_session_id());
         $results = Container::getStudentPublicationRepository()
-            ->findBy([
-                'parentId' => $id,
-                'session' => $session,
-            ]);
+            ->getStudentAssignments($studentPublication, api_get_course_entity($this->course_id), $session);
+
 
         return 0 !== count($results);
     }
@@ -109,76 +88,30 @@ class StudentPublicationLink extends AbstractLink
     public function calc_score($studentId = null, $type = null)
     {
         $studentId = (int) $studentId;
-        $em = Database::getManager();
         $assignment = $this->getStudentPublication();
 
         if (empty($assignment)) {
             return [];
         }
         $session = api_get_session_entity($this->get_session_id());
+        $course = api_get_course_entity($this->course_id);
 
-        // @todo check session id / course id access
-        /*$id = $studentPublication->getIid();
-        $assignment = Container::getStudentPublicationRepository()
-            ->findOneBy([
-                'cId' => $this->course_id,
-                'iid' => $id,
-                'session' => $session,
-            ])
-        ;
-        $parentId = !$assignment ? 0 : $assignment->getId();
-        */
-
-        $parentId = $assignment->getIid();
-
-        if (empty($session)) {
-            $dql = 'SELECT a FROM ChamiloCourseBundle:CStudentPublication a
-                    WHERE
-                        a.active = :active AND
-                        a.publicationParent = :parent AND
-                        a.session is null AND
-                        a.qualificatorId <> 0
-                    ';
-            $params = [
-                'parent' => $parentId,
-                'active' => true,
-            ];
-        } else {
-            $dql = 'SELECT a FROM ChamiloCourseBundle:CStudentPublication a
-                    WHERE
-                        a.active = :active AND
-                        a.publicationParent = :parent AND
-                        a.session = :session AND
-                        a.qualificatorId <> 0
-                    ';
-
-            $params = [
-                'parent' => $parentId,
-                'session' => $session,
-                'active' => true,
-            ];
-        }
-
-        if (!empty($studentId)) {
-            $dql .= ' AND a.userId = :student ';
-            $params['student'] = $studentId;
-        }
+        $qb = Container::getStudentPublicationRepository()
+            ->getStudentAssignments($assignment, $course, $session, null, $studentId ? api_get_user_entity($studentId) : null);
 
         $order = api_get_setting('student_publication_to_take_in_gradebook');
 
         switch ($order) {
             case 'last':
-                // latest attempt
-                $dql .= ' ORDER BY a.sentDate DESC';
+                $qb->orderBy('resource.sentDate', 'DESC');
                 break;
             case 'first':
             default:
-                // first attempt
-                $dql .= ' ORDER BY a.iid';
+                $qb->orderBy('resource.iid', 'ASC');
                 break;
         }
 
-        $scores = $em->createQuery($dql)->execute($params);
+        $scores = $qb->getQuery()->getResult();
 
         // for 1 student
         if (!empty($studentId)) {
@@ -196,8 +129,8 @@ class StudentPublicationLink extends AbstractLink
             ];
         }
 
-        $students = []; // user list, needed to make sure we only
-        // take first attempts into account
+        // multiple students
+        $students = [];
         $rescount = 0;
         $sum = 0;
         $bestResult = 0;
@@ -205,9 +138,9 @@ class StudentPublicationLink extends AbstractLink
         $sumResult = 0;
 
         foreach ($scores as $data) {
-            if (!(array_key_exists($data->getUserId(), $students))) {
+            if (!array_key_exists($data->getUser()->getId(), $students)) {
                 if (0 != $assignment->getQualification()) {
-                    $students[$data->getUserId()] = $data->getQualification();
+                    $students[$data->getUser()->getId()] = $data->getQualification();
                     $rescount++;
                     $sum += $data->getQualification() / $assignment->getQualification();
                     $sumResult += $data->getQualification();
@@ -227,16 +160,12 @@ class StudentPublicationLink extends AbstractLink
         switch ($type) {
             case 'best':
                 return [$bestResult, $weight];
-                break;
             case 'average':
                 return [$sumResult / $rescount, $weight];
-                break;
             case 'ranking':
                 return AbstractLink::getCurrentUserRanking($studentId, $students);
-                break;
             default:
                 return [$sum, $rescount];
-                break;
         }
     }
 

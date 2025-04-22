@@ -540,13 +540,13 @@ class MessageRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
 
-        $id = $response->toArray()['@id'];
+        $messageIri = $response->toArray()['@id'];
         $messageId = $response->toArray()['id'];
 
         // Sender cannot delete a message already sent.
         $this->createClientWithCredentials($tokenFrom)->request(
             'DELETE',
-            $id,
+            $messageIri,
         );
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
@@ -566,6 +566,9 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
+
+        /** @var Message $message */
+        $message = $messageRepo->find($messageId);
 
         // Receiver deletes the message.
         $tokenTo = $this->getUserToken(

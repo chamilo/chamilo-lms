@@ -3,9 +3,9 @@
     <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
       <div>
         <strong>{{ $t("Total number of courses") }}:</strong>
-        {{ courses?.length || 0 }}<br />
+        {{ totalVisibleCourses }}<br />
         <strong>{{ $t("Matching courses") }}:</strong>
-        {{ filteredCourses.length }}
+        {{ totalVisibleCourses }}
       </div>
       <div class="flex gap-3">
         <Button
@@ -69,11 +69,13 @@ import { useSecurityStore } from "../../store/securityStore"
 import CatalogueCourseCard from "../../components/course/CatalogueCourseCard.vue"
 import * as userRelCourseVoteService from "../../services/userRelCourseVoteService"
 import { useRouter } from "vue-router"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { showErrorNotification } = useNotification()
 const { findByIsoCode } = useLanguage()
 const router = useRouter()
 const securityStore = useSecurityStore()
+const platformConfigStore = usePlatformConfig()
 
 if (!securityStore.user?.id) {
   router.push({ name: "Login" })
@@ -99,7 +101,7 @@ const onUserSubscribed = ({ courseId, newUser }) => {
 const load = async () => {
   status.value = true
   try {
-    const { items } = await courseService.listAll()
+    const { items } = await courseService.listAll({}, true)
     courses.value = items.map((course) => ({
       ...course,
       courseLanguage: findByIsoCode(course.courseLanguage)?.originalName || course.courseLanguage,
@@ -157,9 +159,24 @@ const filteredCourses = computed(() => {
   )
 })
 
-const visibleCourses = computed(() => {
-  return filteredCourses.value.slice(0, visibleCount.value)
+const visibleCoursesBase = computed(() => {
+  const hidePrivate = platformConfigStore.getSetting("platform.course_catalog_hide_private") === "true"
+
+  return filteredCourses.value
+    .filter((course) => {
+      const visibility = Number(course.visibility)
+      if (visibility === 0 || visibility === 4) return false
+      if (visibility === 1 && hidePrivate) return false
+      return true
+    })
+    .sort((a, b) => a.title.localeCompare(b.title, undefined, { numeric: true, sensitivity: "base" }))
 })
+
+const visibleCourses = computed(() => {
+  return visibleCoursesBase.value.slice(0, visibleCount.value)
+})
+
+const totalVisibleCourses = computed(() => visibleCoursesBase.value.length)
 
 const handleScroll = () => {
   if (loadingMore.value) return
@@ -170,7 +187,7 @@ const handleScroll = () => {
   const fullHeight = document.documentElement.scrollHeight
 
   if (scrollTop + viewportHeight + threshold >= fullHeight) {
-    if (visibleCount.value < filteredCourses.value.length) {
+    if (visibleCount.value < visibleCoursesBase.value.length) {
       loadingMore.value = true
       setTimeout(() => {
         visibleCount.value += rowsPerScroll

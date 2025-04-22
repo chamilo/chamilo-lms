@@ -28,7 +28,7 @@
     <div class="well well-sm text-center">
         <p class="lead">{{ current_embed.title }}</p>
         <p>
-            <small>{{ 'FromDateXToDateY'|get_lang|format(start_date, end_date) }}</small>
+            <small>{{ 'From %s to %s'|get_lang|format(start_date, end_date) }}</small>
         </p>
         <p>{{ current_link }}</p>
     </div>

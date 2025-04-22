@@ -1546,7 +1546,7 @@ function getWorkListTeacher(
     ?string $direction,
     ?string $where_condition,
     ?bool $getCount = false
-): array {
+): int|array {
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
     $group_id = api_get_group_id();

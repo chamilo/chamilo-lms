@@ -107,7 +107,7 @@ $form->applyFilter('department_url', 'html_filter');
 $languages = api_get_languages();
 if (1 === count($languages)) {
     // If there's only one language available, there's no point in asking
-    $form->addElement('hidden', 'course_language', $languages[0]);
+    $form->addElement('hidden', 'course_language', $languages);
 } else {
     $form->addSelectLanguage('course_language', get_lang('Language'));
 }
@@ -209,16 +209,8 @@ if ($form->validate()) {
 
     $course = CourseManager::create_course($courseData);
     if (null !== $course) {
-        Display::addFlash(
-            Display::return_message(
-                sprintf(
-                    get_lang('Course %s added'),
-                    Display::url($course->getTitle(), api_get_course_url($course->getId()))
-                ),
-                'confirmation',
-                false
-            )
-        );
+        header('Location: course_list.php?new_course_id=' . $course->getId());
+        exit;
     }
 
     header('Location: course_list.php');

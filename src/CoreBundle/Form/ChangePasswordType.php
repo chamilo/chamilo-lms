@@ -24,19 +24,19 @@ class ChangePasswordType extends AbstractType
     {
         $builder
             ->add('currentPassword', PasswordType::class, [
-                'label' => 'Current Password',
+                'label' => 'Current password',
                 'required' => false,
             ])
             ->add('newPassword', PasswordType::class, [
-                'label' => 'New Password',
+                'label' => 'New password',
                 'required' => false,
             ])
             ->add('confirmPassword', PasswordType::class, [
-                'label' => 'Confirm New Password',
+                'label' => 'Confirm new password',
                 'required' => false,
             ])
             ->add('enable2FA', CheckboxType::class, [
-                'label' => 'Enable Two-Factor Authentication (2FA)',
+                'label' => 'Enable two-factor authentication (2FA)',
                 'required' => false,
             ])
             ->add('confirm2FACode', TextType::class, [

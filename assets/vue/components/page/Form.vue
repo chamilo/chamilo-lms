@@ -8,6 +8,28 @@
       :label="t('Title')"
     />
 
+    <BaseInputText
+      id="slug"
+      v-model="v$.item.slug.$model"
+      :error-text="v$.item.slug.$errors.map((error) => error.$message).join('<br>')"
+      :is-invalid="v$.item.slug.$error"
+      :label="t('Friendly URL')"
+    />
+
+    <p
+      class="text-sm m-2 text-gray-500"
+      v-if="props.modelValue.slug || v$.item.slug.$model"
+    >
+      {{ t("Preview") }}:
+      <a
+        :href="`/page/${v$.item.slug.$model || props.modelValue.slug}`"
+        target="_blank"
+        class="text-blue-600 underline"
+      >
+        {{ window.location.origin + "/page/" + (v$.item.slug.$model || props.modelValue.slug) }}
+      </a>
+    </p>
+
     <BaseCheckbox
       id="enabled"
       v-model="v$.item.enabled.$model"
@@ -59,7 +81,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue"
+import { computed, nextTick, ref, watch } from "vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseDropdown from "../basecomponents/BaseDropdown.vue"
@@ -89,22 +111,6 @@ const findAllPageCategories = async () => (categories.value = await pageCategory
 
 findAllPageCategories()
 
-watch(
-  () => props.modelValue,
-  (newValue) => {
-    if (!newValue) {
-      return
-    }
-
-    if (!isEmpty(newValue.category) && !isEmpty(newValue.category["@id"])) {
-      emit("update:modelValue", {
-        ...newValue,
-        category: newValue.category["@id"],
-      })
-    }
-  },
-)
-
 const validations = {
   item: {
     title: {
@@ -122,10 +128,34 @@ const validations = {
     category: {
       required,
     },
+    slug: {
+      required,
+    },
   },
 }
 
 const v$ = useVuelidate(validations, { item: computed(() => props.modelValue) })
+
+watch(
+  () => props.modelValue,
+  async (newValue) => {
+    if (!newValue) return
+
+    await nextTick()
+
+    if (!v$.value.item.slug.$model && newValue.slug) {
+      v$.value.item.slug.$model = newValue.slug
+    }
+
+    if (!isEmpty(newValue.category) && !isEmpty(newValue.category["@id"])) {
+      emit("update:modelValue", {
+        ...newValue,
+        category: newValue.category["@id"],
+      })
+    }
+  },
+  { immediate: true },
+)
 
 function btnSaveOnClick() {
   const item = { ...props.modelValue, ...v$.value.item.$model }

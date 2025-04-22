@@ -54,7 +54,8 @@ class CalendarEventTransformer implements DataTransformerInterface
         }
 
         $eventType = $object->determineType();
-        $color = $this->determineEventColor($eventType);
+        $color = trim((string) $object->getColor());
+        $color = $color !== '' ? $color : $this->determineEventColor($eventType);
 
         $calendarEvent = new CalendarEvent(
             'calendar_event_'.$object->getIid(),
@@ -89,9 +90,11 @@ class CalendarEventTransformer implements DataTransformerInterface
     {
         \assert($object instanceof Session);
 
+        $course = null;
         /** @var ?SessionRelCourse $sessionRelCourse */
-        $sessionRelCourse = $object->getCourses()->first();
-        $course = $sessionRelCourse?->getCourse();
+        if ($object->getCourses()->first() instanceof SessionRelCourse) {
+            $course = $object->getCourses()->first()->getCourse();
+        }
 
         $sessionUrl = null;
 
@@ -115,10 +118,10 @@ class CalendarEventTransformer implements DataTransformerInterface
     private function determineEventColor(string $eventType): string
     {
         $defaultColors = [
-            'platform' => 'red',
+            'platform' => '#FF0000',
             'course' => '#458B00',
             'session' => '#00496D',
-            'personal' => 'steel blue',
+            'personal' => '#4682B4',
         ];
 
         $agendaColors = [];

@@ -222,6 +222,11 @@ const toast = useToast()
 const layoutMenuItems = inject("layoutMenuItems")
 
 onMounted(() => {
+  const { page, itemsPerPage } = router.currentRoute.value.query
+
+  if (page) options.value.page = parseInt(page)
+  if (itemsPerPage) options.value.itemsPerPage = parseInt(itemsPerPage)
+
   filters.value.loadNode = 0
 
   onUpdateOptions(options.value)

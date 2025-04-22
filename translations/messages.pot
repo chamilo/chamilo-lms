@@ -28316,3 +28316,12 @@ msgstr ""
 
 msgid "Confirm new password"
 msgstr ""
+
+msgid "Classes of session"
+msgstr ""
+
+msgid "Classes of course"
+msgstr ""
+
+msgid "Select a class"
+msgstr ""

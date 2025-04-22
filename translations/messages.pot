@@ -28325,3 +28325,6 @@ msgstr ""
 
 msgid "Select a class"
 msgstr ""
+
+msgid "Course %s added. You can access it directly %shere%s."
+msgstr ""

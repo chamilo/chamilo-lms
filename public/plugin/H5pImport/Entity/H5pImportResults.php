@@ -1,125 +1,67 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
 namespace Chamilo\PluginBundle\H5pImport\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CLpItemView;
-use Chamilo\UserBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * Class H5pImportResults.
- *
- * @ORM\Entity()
- *
- * @ORM\Table(name="plugin_h5p_import_results")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'plugin_h5p_import_results')]
 class H5pImportResults
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="start_time", type="integer", nullable=false)
-     */
-    protected $startTime;
+    #[ORM\Column(name: 'start_time', type: 'integer', nullable: false)]
+    protected int $startTime;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="total_time", type="integer", nullable=false)
-     */
-    protected $totalTime;
+    #[ORM\Column(name: 'total_time', type: 'integer', nullable: false)]
+    protected int $totalTime;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="iid", type="integer")
-     *
-     * @ORM\Id
-     *
-     * @ORM\GeneratedValue
-     */
-    private $iid;
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    private ?int $iid;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="score", type="integer")
-     */
-    private $score;
+    #[ORM\Column(name: 'score', type: 'integer')]
+    private int $score;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="max_score", type="integer")
-     */
-    private $maxScore;
+    #[ORM\Column(name: 'max_score', type: 'integer')]
+    private int $maxScore;
 
-    /**
-     * @var Course
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     *
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $course;
+    #[ORM\ManyToOne(targetEntity: Course::class)]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private Course $course;
 
-    /**
-     * @var null|Session
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     *
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
-     */
-    private $session;
+    #[ORM\ManyToOne(targetEntity: Session::class)]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
+    private ?Session $session;
 
-    /**
-     * @var H5pImport
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\H5pImport\Entity\H5pImport")
-     *
-     * @ORM\JoinColumn(name="plugin_h5p_import_id", referencedColumnName="iid", nullable=false, onDelete="CASCADE")
-     */
-    private $h5pImport;
+    #[ORM\ManyToOne(targetEntity: H5pImport::class)]
+    #[ORM\JoinColumn(name: 'plugin_h5p_import_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
+    private H5pImport $h5pImport;
 
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     *
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $user;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private User $user;
 
-    /**
-     * @var CLpItemView
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpItemView")
-     *
-     * @ORM\JoinColumn(name="c_lp_item_view_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
-     */
-    private $cLpItemView;
+    #[ORM\ManyToOne(targetEntity: CLpItemView::class)]
+    #[ORM\JoinColumn(name: 'c_lp_item_view_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
+    private ?CLpItemView $cLpItemView;
 
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="create")
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    private $createdAt;
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
+    private DateTime $createdAt;
 
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="update")
-     *
-     * @ORM\Column(name="modified_at", type="datetime", nullable=false)
-     */
-    private $modifiedAt;
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'modified_at', type: 'datetime', nullable: false)]
+    private DateTime $modifiedAt;
 
     public function getIid(): int
     {

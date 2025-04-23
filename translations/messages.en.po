@@ -28339,3 +28339,24 @@ msgstr "Question manager"
 
 msgid "Then enter the 6-digit code shown in your app at the bottom of the form."
 msgstr "Then enter the 6-digit code shown in your app at the bottom of the form."
+
+msgid "Enter your 2FA code"
+msgstr "Enter your 2FA code"
+
+msgid "Enable two-factor authentication (2FA)"
+msgstr "Enable fwo-factor authentication (2FA)"
+
+msgid "Confirm new password"
+msgstr "Confirm new password"
+
+msgid "Classes of session"
+msgstr "Classes of session"
+
+msgid "Classes of course"
+msgstr "Classes of course"
+
+msgid "Select a class"
+msgstr "Select a class"
+
+msgid "Course %s added. You can access it directly %shere%s."
+msgstr "Course %s added. You can access it directly %shere%s."

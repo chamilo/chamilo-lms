@@ -28307,3 +28307,24 @@ msgstr ""
 
 msgid "Then enter the 6-digit code shown in your app at the bottom of the form."
 msgstr ""
+
+msgid "Enter your 2FA code"
+msgstr ""
+
+msgid "Enable Two-Factor Authentication (2FA)"
+msgstr ""
+
+msgid "Confirm new password"
+msgstr ""
+
+msgid "Classes of session"
+msgstr ""
+
+msgid "Classes of course"
+msgstr ""
+
+msgid "Select a class"
+msgstr ""
+
+msgid "Course %s added. You can access it directly %shere%s."
+msgstr ""

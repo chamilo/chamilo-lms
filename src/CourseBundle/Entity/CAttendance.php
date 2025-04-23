@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\CAttendanceStateProcessor;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -78,11 +79,12 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_TEACHER')"
         ),
     ],
-    normalizationContext: ['groups' => ['attendance:read']],
+    normalizationContext: ['groups' => ['attendance:read', 'resource_node:read', 'resource_link:read']],
     denormalizationContext: ['groups' => ['attendance:write']],
     paginationEnabled: true,
 )]
 #[ApiFilter(SearchFilter::class, properties: ['active' => 'exact', 'title' => 'partial', 'resourceNode.parent' => 'exact'])]
+#[ApiFilter(filterClass: SidFilter::class)]
 #[ORM\Table(name: 'c_attendance')]
 #[ORM\Index(columns: ['active'], name: 'active')]
 #[ORM\Entity(repositoryClass: CAttendanceRepository::class)]

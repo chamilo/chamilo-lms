@@ -108,11 +108,13 @@ class AccountController extends BaseController
 
         $qrCodeBase64 = null;
         $showQRCode = false;
-        if ($user->getMfaEnabled() && 'TOTP' === $user->getMfaService() && $user->getMfaSecret()) {
-            $decryptedSecret = $this->decryptTOTPSecret($user->getMfaSecret(), $_ENV['APP_SECRET']);
-            $totp = TOTP::create($decryptedSecret);
+        $session = $request->getSession();
+        if ($form->get('enable2FA')->getData() && !$user->getMfaSecret() && $session->has('temporary_mfa_secret')) {
+            $secret = $session->get('temporary_mfa_secret');
+            $totp = TOTP::create($secret);
             $portalName = $settingsManager->getSetting('platform.institution');
-            $totp->setLabel($portalName . ' - '. $user->getEmail());
+            $totp->setLabel($portalName . ' - ' . $user->getEmail());
+
             $qrCodeResult = Builder::create()
                 ->writer(new PngWriter())
                 ->data($totp->getProvisioningUri())
@@ -120,8 +122,7 @@ class AccountController extends BaseController
                 ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
                 ->size(300)
                 ->margin(10)
-                ->build()
-            ;
+                ->build();
 
             $qrCodeBase64 = base64_encode($qrCodeResult->getString());
             $showQRCode = true;

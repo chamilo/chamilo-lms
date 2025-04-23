@@ -10,19 +10,19 @@ use Chamilo\CoreBundle\Framework\Container;
 use Database;
 use Doctrine\ORM\EntityManager;
 use Notification;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'app:send-notifications',
+    description: 'Send notifications',
+)]
 class SendNotificationsCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:send-notifications';
-
     public function __construct(
         private readonly EntityManager $em
     ) {
@@ -32,7 +32,6 @@ class SendNotificationsCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Send notifications')
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
             ->setHelp('This command sends notifications using the Notification class.')
         ;

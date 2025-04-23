@@ -6,11 +6,14 @@
  * If a default extra field doesn't exist, it will be created.
  * Extra field list as in 1.11.8
  */
+
+use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
+
 die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $em = Database::getManager();
-$repo = $em->getRepository('ChamiloCoreBundle:ExtraField');
+$repo = $em->getRepository(ExtraFieldEntity::class);
 $extraFields = $repo->findAll();
 
 $list = [
@@ -29,7 +32,7 @@ $list = [
 ];
 
 $extraFieldList = [];
-/** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
+/** @var ExtraFieldEntity $extraField */
 foreach ($extraFields as $extraField) {
     $extraFieldList[$extraField->getVariable()] =  $extraField;
 }

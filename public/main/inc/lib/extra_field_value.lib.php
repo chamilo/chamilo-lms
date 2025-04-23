@@ -1139,7 +1139,7 @@ class ExtraFieldValue extends Model
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
         $qb = $qb->select('fv')
-            ->from('ChamiloCoreBundle:ExtraFieldValues', 'fv')
+            ->from(ExtraFieldValues::class, 'fv')
             ->join('fv.field', 'f')
             ->where(
                 $qb->expr()->eq('fv.itemId', ':item')

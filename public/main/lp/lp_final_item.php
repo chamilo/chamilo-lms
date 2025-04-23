@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
@@ -233,7 +234,7 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
 
     if ($userSkills) {
         foreach ($userSkills as $userSkill) {
-            $skill = $em->find('ChamiloCoreBundle:Skill', $userSkill['skill_id']);
+            $skill = $em->find(Skill::class, $userSkill['skill_id']);
             if (!$skill) {
                 continue;
             }

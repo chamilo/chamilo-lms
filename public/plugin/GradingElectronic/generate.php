@@ -36,9 +36,9 @@ try {
     $em = Database::getManager();
 
     /** @var Course $course */
-    $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
+    $course = $em->find(Course::class, api_get_course_int_id());
     /** @var Session $session */
-    $session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
+    $session = $em->find(Session::class, api_get_session_id());
 
     $values = $form->exportValues();
 

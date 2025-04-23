@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
 use ChamiloSession as Session;
@@ -1333,7 +1334,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 $courseSelectOptions = [];
 
                 if (!empty($row['selected_value'])) {
-                    $course = $em->find('ChamiloCoreBundle:Course', $row['selected_value']);
+                    $course = $em->find(Course::class, $row['selected_value']);
 
                     $courseSelectOptions[$course->getId()] = $course->getTitle();
                 }

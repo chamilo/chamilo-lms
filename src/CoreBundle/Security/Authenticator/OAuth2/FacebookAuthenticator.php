@@ -67,7 +67,10 @@ class FacebookAuthenticator extends AbstractAuthenticator
             ->setUsername($this->changeToValidChamiloLogin($resourceOwner->getEmail()))
             ->setPlainPassword('facebook')
             ->setStatus(STUDENT)
-            ->setAuthSource('facebook')
+            ->addAuthSourceByAuthentication(
+                'facebook',
+                $this->urlHelper->getCurrent()
+            )
             ->setRoleFromStatus(STUDENT)
         ;
 

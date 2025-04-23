@@ -228,7 +228,10 @@ class UserRepositoryTest extends AbstractApiTest
             ->setExpired(false)
             ->setTeach('teach')
             ->setApiToken('tok')
-            ->setAuthSource('auth')
+            ->addAuthSourceByAuthentication(
+                'auth',
+                $this->getAccessUrl()
+            )
             ->setProductions('prod')
             ->setCompetences('comp')
             ->setDiplomas('diploma')

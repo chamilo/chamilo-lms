@@ -940,18 +940,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function getAuthSource(): ?string
-    {
-        return $this->authSource;
-    }
-
-    public function setAuthSource(string $authSource): self
-    {
-        $this->authSource = $authSource;
-
-        return $this;
-    }
-
     public function getEmail(): string
     {
         return $this->email;

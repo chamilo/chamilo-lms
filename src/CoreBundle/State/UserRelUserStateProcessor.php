@@ -13,6 +13,9 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @implements ProcessorInterface<UserRelUser, UserRelUser|void>
+ */
 final class UserRelUserStateProcessor implements ProcessorInterface
 {
     public function __construct(

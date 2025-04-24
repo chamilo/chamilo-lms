@@ -38,8 +38,6 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
-$page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
-
 // Checking for extra field with filter on
 $extra_field_list = UserManager::get_extra_fields();
 
@@ -701,7 +699,7 @@ $newLinks .= Display::url(
         ?>
     </div>
     <form name="formulaire" method="post"
-          action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
+          action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
             echo '&add=true';
         } ?>" <?php if ($ajax_search) {
             echo ' onsubmit="valide();"';

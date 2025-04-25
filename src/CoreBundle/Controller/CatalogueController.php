@@ -100,7 +100,7 @@ class CatalogueController extends AbstractController
                 $session = $rel->getSession();
                 $usergroup = $rel->getUsergroup();
 
-                if (null === $usergroup || in_array($usergroup->getId(), $userGroupIds)) {
+                if (null === $usergroup || \in_array($usergroup->getId(), $userGroupIds)) {
                     $visibleSessions[$session->getId()] = $session;
                 }
             }
@@ -143,7 +143,8 @@ class CatalogueController extends AbstractController
                 ->andWhere('v.course IS NULL')
                 ->setParameter('session', $session->getId())
                 ->getQuery()
-                ->getSingleScalarResult();
+                ->getSingleScalarResult()
+            ;
 
             return [
                 'id' => $session->getId(),

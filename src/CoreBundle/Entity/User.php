@@ -1609,8 +1609,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * Returns whether a user can be admin of all multi-URL portals in the case of a multi-URL install
-     * @return bool
+     * Returns whether a user can be admin of all multi-URL portals in the case of a multi-URL install.
      */
     public function isSuperAdmin(): bool
     {

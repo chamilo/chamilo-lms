@@ -48,11 +48,13 @@ class SidFilter extends AbstractFilter
     }
 
     /**
+     * @param mixed $value
+     *
      * @throws ReflectionException
      */
     protected function filterProperty(
         string $property,
-               $value,
+        $value,
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
@@ -75,11 +77,11 @@ class SidFilter extends AbstractFilter
 
         $joins = $queryBuilder->getDQLPart('join');
 
-        if (empty($joins[$alias]) || !array_filter($joins[$alias], fn($j) => $j->getAlias() === 'resourceNode')) {
-            $queryBuilder->leftJoin($alias . '.resourceNode', 'resourceNode');
+        if (empty($joins[$alias]) || !array_filter($joins[$alias], fn ($j) => 'resourceNode' === $j->getAlias())) {
+            $queryBuilder->leftJoin($alias.'.resourceNode', 'resourceNode');
         }
 
-        if (empty($joins['resourceNode']) || !array_filter($joins['resourceNode'], fn($j) => $j->getAlias() === 'resourceLink')) {
+        if (empty($joins['resourceNode']) || !array_filter($joins['resourceNode'], fn ($j) => 'resourceLink' === $j->getAlias())) {
             $queryBuilder->leftJoin('resourceNode.resourceLinks', 'resourceLink');
         }
 
@@ -100,7 +102,8 @@ class SidFilter extends AbstractFilter
         } else {
             $queryBuilder
                 ->andWhere('resourceLink.session = :session')
-                ->setParameter('session', $session->getId());
+                ->setParameter('session', $session->getId())
+            ;
         }
     }
 }

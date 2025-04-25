@@ -192,7 +192,7 @@ class BaseResourceFileAction
         Request $request,
         EntityManager $em,
         string $fileExistsOption = '',
-        TranslatorInterface $translator = null
+        ?TranslatorInterface $translator = null
     ): array {
         $contentData = $request->getContent();
 
@@ -270,7 +270,7 @@ class BaseResourceFileAction
                                     $existingDocument->setUploadFile($uploadedFile);
                                 }
 
-                                $resourceNode->setUpdatedAt(new \DateTime());
+                                $resourceNode->setUpdatedAt(new DateTime());
                                 $existingDocument->setResourceNode($resourceNode);
 
                                 $em->persist($existingDocument);

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Dto;
 
 use ApiPlatform\Metadata\ApiResource;
+use DateTime;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -30,22 +31,22 @@ class CreateSessionWithUsersAndCoursesInput
     private ?int $duration = 0;
 
     #[Groups(['write'])]
-    private ?\DateTime $displayStartDate = null;
+    private ?DateTime $displayStartDate = null;
 
     #[Groups(['write'])]
-    private ?\DateTime $displayEndDate = null;
+    private ?DateTime $displayEndDate = null;
 
     #[Groups(['write'])]
-    private ?\DateTime $accessStartDate = null;
+    private ?DateTime $accessStartDate = null;
 
     #[Groups(['write'])]
-    private ?\DateTime $accessEndDate = null;
+    private ?DateTime $accessEndDate = null;
 
     #[Groups(['write'])]
-    private ?\DateTime $coachAccessStartDate = null;
+    private ?DateTime $coachAccessStartDate = null;
 
     #[Groups(['write'])]
-    private ?\DateTime $coachAccessEndDate = null;
+    private ?DateTime $coachAccessEndDate = null;
 
     #[Groups(['write'])]
     private ?int $category = null;
@@ -105,62 +106,62 @@ class CreateSessionWithUsersAndCoursesInput
         $this->duration = $duration;
     }
 
-    public function getDisplayStartDate(): ?\DateTime
+    public function getDisplayStartDate(): ?DateTime
     {
         return $this->displayStartDate;
     }
 
-    public function setDisplayStartDate(?\DateTime $displayStartDate): void
+    public function setDisplayStartDate(?DateTime $displayStartDate): void
     {
         $this->displayStartDate = $displayStartDate;
     }
 
-    public function getDisplayEndDate(): ?\DateTime
+    public function getDisplayEndDate(): ?DateTime
     {
         return $this->displayEndDate;
     }
 
-    public function setDisplayEndDate(?\DateTime $displayEndDate): void
+    public function setDisplayEndDate(?DateTime $displayEndDate): void
     {
         $this->displayEndDate = $displayEndDate;
     }
 
-    public function getAccessStartDate(): ?\DateTime
+    public function getAccessStartDate(): ?DateTime
     {
         return $this->accessStartDate;
     }
 
-    public function setAccessStartDate(?\DateTime $accessStartDate): void
+    public function setAccessStartDate(?DateTime $accessStartDate): void
     {
         $this->accessStartDate = $accessStartDate;
     }
 
-    public function getAccessEndDate(): ?\DateTime
+    public function getAccessEndDate(): ?DateTime
     {
         return $this->accessEndDate;
     }
 
-    public function setAccessEndDate(?\DateTime $accessEndDate): void
+    public function setAccessEndDate(?DateTime $accessEndDate): void
     {
         $this->accessEndDate = $accessEndDate;
     }
 
-    public function getCoachAccessStartDate(): ?\DateTime
+    public function getCoachAccessStartDate(): ?DateTime
     {
         return $this->coachAccessStartDate;
     }
 
-    public function setCoachAccessStartDate(?\DateTime $coachAccessStartDate): void
+    public function setCoachAccessStartDate(?DateTime $coachAccessStartDate): void
     {
         $this->coachAccessStartDate = $coachAccessStartDate;
     }
 
-    public function getCoachAccessEndDate(): ?\DateTime
+    public function getCoachAccessEndDate(): ?DateTime
     {
         return $this->coachAccessEndDate;
     }
 
-    public function setCoachAccessEndDate(?\DateTime $coachAccessEndDate): void
+    public function setCoachAccessEndDate(?DateTime $coachAccessEndDate): void
     {
         $this->coachAccessEndDate = $coachAccessEndDate;
     }

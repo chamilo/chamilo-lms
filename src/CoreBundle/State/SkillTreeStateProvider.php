@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use Chamilo\CoreBundle\ApiResource\SkillTreeNode;
 use Chamilo\CoreBundle\DataTransformer\SkillTreeNodeTransformer;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Repository\SkillRepository;

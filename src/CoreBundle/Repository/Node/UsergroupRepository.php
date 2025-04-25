@@ -31,13 +31,15 @@ class UsergroupRepository extends ResourceRepository
         $qb = $this->createQueryBuilder('ug')
             ->innerJoin('ug.sessions', 'ugs')
             ->where('ugs.session = :session')
-            ->setParameter('session', $session);
+            ->setParameter('session', $session)
+        ;
 
         if ($checkAccessUrl && $this->accessUrlHelper->isMultiple()) {
             $accessUrl = $this->accessUrlHelper->getCurrent();
             $qb->innerJoin('ug.urls', 'url')
                 ->andWhere('url.url = :urlId')
-                ->setParameter('urlId', $accessUrl->getId());
+                ->setParameter('urlId', $accessUrl->getId())
+            ;
         }
 
         return $qb->getQuery()->getResult();
@@ -48,14 +50,16 @@ class UsergroupRepository extends ResourceRepository
         $qb = $this->createQueryBuilder('ug')
             ->innerJoin('ug.courses', 'ugc')
             ->where('ugc.course = :course')
-            ->setParameter('course', $course);
+            ->setParameter('course', $course)
+        ;
 
         if ($checkAccessUrl && $this->accessUrlHelper->isMultiple()) {
             $accessUrl = $this->accessUrlHelper->getCurrent();
 
             $qb->innerJoin('ug.urls', 'url')
                 ->andWhere('url.url = :urlId')
-                ->setParameter('urlId', $accessUrl->getId());
+                ->setParameter('urlId', $accessUrl->getId())
+            ;
         }
 
         return $qb->getQuery()->getResult();
@@ -199,7 +203,8 @@ class UsergroupRepository extends ResourceRepository
             ->innerJoin('g.users', 'gu')
             ->innerJoin('gu.user', 'u')
             ->where('g.id = :groupID')
-            ->setParameter('groupID', $groupID);
+            ->setParameter('groupID', $groupID)
+        ;
 
         $relationTypes = [
             Usergroup::GROUP_USER_PERMISSION_ADMIN,
@@ -213,7 +218,8 @@ class UsergroupRepository extends ResourceRepository
 
         $qb->andWhere('gu.relationType IN (:relationTypes)')
             ->setParameter('relationTypes', $relationTypes)
-            ->select('u.id, u.username, u.email, gu.relationType, u.pictureUri, u.firstname, u.lastname');
+            ->select('u.id, u.username, u.email, gu.relationType, u.pictureUri, u.firstname, u.lastname')
+        ;
 
         $results = $qb->getQuery()->getResult();
 

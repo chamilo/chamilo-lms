@@ -7,12 +7,9 @@ namespace Chamilo\CoreBundle\State;
 use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use Chamilo\CoreBundle\ApiResource\CalendarEvent;
 use Chamilo\CoreBundle\DataTransformer\CalendarEventTransformer;
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
@@ -21,7 +18,6 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -76,7 +72,7 @@ final class CalendarEventStateProvider implements ProviderInterface
         }
 
         return array_map(
-            fn($object) => $this->transformer->transform($object),
+            fn ($object) => $this->transformer->transform($object),
             array_merge($cCalendarEvents, $userSessions),
         );
     }

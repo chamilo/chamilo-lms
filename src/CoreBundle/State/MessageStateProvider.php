@@ -35,8 +35,6 @@ final class MessageStateProvider implements ProviderInterface
 
     /**
      * Provides data based on the operation type (collection or item).
-     *
-     * @return Paginator|Message|null
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): Paginator|Message|null
     {

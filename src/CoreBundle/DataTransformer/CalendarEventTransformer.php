@@ -45,7 +45,7 @@ readonly class CalendarEventTransformer
 
         $eventType = $object->determineType();
         $color = trim((string) $object->getColor());
-        $color = $color !== '' ? $color : $this->determineEventColor($eventType);
+        $color = '' !== $color ? $color : $this->determineEventColor($eventType);
 
         $calendarEvent = new CalendarEvent(
             'calendar_event_'.$object->getIid(),

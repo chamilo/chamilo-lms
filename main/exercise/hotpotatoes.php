@@ -236,7 +236,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
         exit;
     }
 
-    Display::display_header($nameTools, get_lang('Exercise'));
+    Display::display_header($nameTools, 'Exercise');
 
     echo '<div class="actions">';
     echo '<a href="exercise.php?show=test">'.

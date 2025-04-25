@@ -83,7 +83,7 @@ if ($exportXls) {
     Export::arrayToXls($tableXls, $fileName);
     exit;
 }
-Display::display_header($nameTools, get_lang('Exercise'));
+Display::display_header($nameTools, 'Exercise');
 $actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
     Display::return_icon(
         'back.png',

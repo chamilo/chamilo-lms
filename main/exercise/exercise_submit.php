@@ -1030,7 +1030,7 @@ if (false !== $quizKeepAlivePingInterval) {
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp', 'iframe'])) {
     //so we are not in learnpath tool
     SessionManager::addFlashSessionReadOnly();
-    Display::display_header(null, 'Exercises');
+    Display::display_header(null, 'Exercise');
 } else {
     Display::display_reduced_header();
     echo '<div style="height:10px">&nbsp;</div>';

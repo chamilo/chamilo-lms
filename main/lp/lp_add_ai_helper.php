@@ -9,7 +9,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('LearningPaths'),
 ];
 
-Display::display_header(get_lang('LpAiGenerator'), 'Learnpath');
+Display::display_header(get_lang('LpAiGenerator'), 'Path');
 
 echo '<div class="actions">';
 echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.

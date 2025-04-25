@@ -951,7 +951,7 @@ if (!empty($_GET['remind_inactive'])) {
 
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
     // We are not in the learning path
-    Display::display_header($nameTools, get_lang('Announcements'));
+    Display::display_header($nameTools, 'Announcements');
 }
 
 // Tool introduction

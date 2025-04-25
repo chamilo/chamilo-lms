@@ -39,7 +39,7 @@ $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_EXERCISES_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-Display::display_header($nameTools, get_lang('Exercise'));
+Display::display_header($nameTools, 'Exercise');
 
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], ['ExerciseEdited'])) {

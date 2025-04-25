@@ -60,7 +60,6 @@ class CQuizAnswer
         $this->ponderation = 0.0;
         $this->hotspotCoordinates = null;
         $this->hotspotType = null;
-        $this->destination = null;
         $this->answerCode = null;
     }
 

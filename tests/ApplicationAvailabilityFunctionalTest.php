@@ -17,7 +17,7 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function urlProvider()
+    public function urlProvider(): \Generator
     {
         yield ['/'];
         yield ['/login'];

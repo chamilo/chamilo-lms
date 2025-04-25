@@ -19,6 +19,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use const DIRECTORY_SEPARATOR;
 use const PHP_EOL;
 
+/**
+ * @implements ProcessorInterface<ColorTheme, ColorTheme|void>
+ */
 final class ColorThemeStateProcessor implements ProcessorInterface
 {
     public function __construct(
@@ -29,12 +32,7 @@ final class ColorThemeStateProcessor implements ProcessorInterface
         private readonly FilesystemOperator $filesystem,
     ) {}
 
-    /**
-     * @param mixed $data
-     *
-     * @throws FilesystemException
-     */
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?ColorTheme
     {
         \assert($data instanceof ColorTheme);
 

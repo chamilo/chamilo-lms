@@ -8385,6 +8385,8 @@ class SessionManager
         $operators = ['cn', 'nc'];
         $date_operators = ['gt', 'ge', 'lt', 'le'];
 
+        $columnModel = [];
+
         switch ($listType) {
             case 'my_space':
                 $columns = [

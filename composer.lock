@@ -3326,16 +3326,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v6.11.0",
+            "version": "v6.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "8f718f4dfc9c5d5f0c994cdfd103921b43592712"
+                "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/8f718f4dfc9c5d5f0c994cdfd103921b43592712",
-                "reference": "8f718f4dfc9c5d5f0c994cdfd103921b43592712",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
+                "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
                 "shasum": ""
             },
             "require": {
@@ -3383,9 +3383,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.11.0"
+                "source": "https://github.com/firebase/php-jwt/tree/v6.11.1"
             },
-            "time": "2025-01-23T05:11:06+00:00"
+            "time": "2025-04-09T20:32:01+00:00"
         },
         {
             "name": "friendsofphp/proxy-manager-lts",
@@ -3667,16 +3667,16 @@
         },
         {
             "name": "google/auth",
-            "version": "v1.46.0",
+            "version": "v1.47.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "7fafae99a41984cbfb92508174263cf7bf3049b9"
+                "reference": "d6389aae7c009daceaa8da9b7942d8df6969f6d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/7fafae99a41984cbfb92508174263cf7bf3049b9",
-                "reference": "7fafae99a41984cbfb92508174263cf7bf3049b9",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/d6389aae7c009daceaa8da9b7942d8df6969f6d9",
+                "reference": "d6389aae7c009daceaa8da9b7942d8df6969f6d9",
                 "shasum": ""
             },
             "require": {
@@ -3722,9 +3722,9 @@
             "support": {
                 "docs": "https://cloud.google.com/php/docs/reference/auth/latest",
                 "issues": "https://github.com/googleapis/google-auth-library-php/issues",
-                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.46.0"
+                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.47.0"
             },
-            "time": "2025-02-12T22:21:37+00:00"
+            "time": "2025-04-15T21:47:20+00:00"
         },
         {
             "name": "google/cloud-core",
@@ -3794,16 +3794,16 @@
         },
         {
             "name": "google/cloud-storage",
-            "version": "v1.47.0",
+            "version": "v1.48.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-storage.git",
-                "reference": "c8f130fab6a48dad9c486e93a07cd26123d006bb"
+                "reference": "e2d7a59290ab7fb69208c45058efa3946edbb793"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/c8f130fab6a48dad9c486e93a07cd26123d006bb",
-                "reference": "c8f130fab6a48dad9c486e93a07cd26123d006bb",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/e2d7a59290ab7fb69208c45058efa3946edbb793",
+                "reference": "e2d7a59290ab7fb69208c45058efa3946edbb793",
                 "shasum": ""
             },
             "require": {
@@ -3845,22 +3845,22 @@
             ],
             "description": "Cloud Storage Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.47.0"
+                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.48.0"
             },
-            "time": "2025-03-21T22:19:41+00:00"
+            "time": "2025-04-18T20:49:28+00:00"
         },
         {
             "name": "google/common-protos",
-            "version": "4.11.0",
+            "version": "4.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/common-protos-php.git",
-                "reference": "2554ed1f09aa20faae7b71b590e7063df97ff670"
+                "reference": "96f6873c65fb0289fcdb6ac3d5239f9c9e5750b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/common-protos-php/zipball/2554ed1f09aa20faae7b71b590e7063df97ff670",
-                "reference": "2554ed1f09aa20faae7b71b590e7063df97ff670",
+                "url": "https://api.github.com/repos/googleapis/common-protos-php/zipball/96f6873c65fb0289fcdb6ac3d5239f9c9e5750b0",
+                "reference": "96f6873c65fb0289fcdb6ac3d5239f9c9e5750b0",
                 "shasum": ""
             },
             "require": {
@@ -3904,9 +3904,9 @@
                 "google"
             ],
             "support": {
-                "source": "https://github.com/googleapis/common-protos-php/tree/v4.11.0"
+                "source": "https://github.com/googleapis/common-protos-php/tree/v4.12.0"
             },
-            "time": "2025-02-18T19:46:55+00:00"
+            "time": "2025-04-18T20:49:28+00:00"
         },
         {
             "name": "google/gax",
@@ -4951,20 +4951,20 @@
         },
         {
             "name": "jimmiw/php-time-ago",
-            "version": "3.2.4",
+            "version": "3.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jimmiw/php-time-ago.git",
-                "reference": "d5b37a93aee579962117310644965d0f7bf1302d"
+                "reference": "3c5bb2c9dce91070bd3f8442e97ffd3ca9082ef9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jimmiw/php-time-ago/zipball/d5b37a93aee579962117310644965d0f7bf1302d",
-                "reference": "d5b37a93aee579962117310644965d0f7bf1302d",
+                "url": "https://api.github.com/repos/jimmiw/php-time-ago/zipball/3c5bb2c9dce91070bd3f8442e97ffd3ca9082ef9",
+                "reference": "3c5bb2c9dce91070bd3f8442e97ffd3ca9082ef9",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0.0"
+                "php": ">=7.1.0"
             },
             "require-dev": {
                 "phpmd/phpmd": "@stable",
@@ -4997,9 +4997,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jimmiw/php-time-ago/issues",
-                "source": "https://github.com/jimmiw/php-time-ago/tree/3.2.4"
+                "source": "https://github.com/jimmiw/php-time-ago/tree/3.2.5"
             },
-            "time": "2022-09-02T12:39:13+00:00"
+            "time": "2025-04-15T08:24:23+00:00"
         },
         {
             "name": "jms/metadata",
@@ -8893,16 +8893,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.6.1",
+            "version": "5.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "e5e784149a09bd69d9a5e3b01c5cbd2e2bd653d8"
+                "reference": "92dde6a5919e34835c506ac8c523ef095a95ed62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/e5e784149a09bd69d9a5e3b01c5cbd2e2bd653d8",
-                "reference": "e5e784149a09bd69d9a5e3b01c5cbd2e2bd653d8",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/92dde6a5919e34835c506ac8c523ef095a95ed62",
+                "reference": "92dde6a5919e34835c506ac8c523ef095a95ed62",
                 "shasum": ""
             },
             "require": {
@@ -8951,9 +8951,9 @@
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.6.1"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.6.2"
             },
-            "time": "2024-12-07T09:39:29+00:00"
+            "time": "2025-04-13T19:20:35+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -10128,16 +10128,16 @@
         },
         {
             "name": "sabre/vobject",
-            "version": "4.5.6",
+            "version": "4.5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sabre-io/vobject.git",
-                "reference": "900266bb3bd448a9f7f41f82344ad0aba237cb27"
+                "reference": "ff22611a53782e90c97be0d0bc4a5f98a5c0a12c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sabre-io/vobject/zipball/900266bb3bd448a9f7f41f82344ad0aba237cb27",
-                "reference": "900266bb3bd448a9f7f41f82344ad0aba237cb27",
+                "url": "https://api.github.com/repos/sabre-io/vobject/zipball/ff22611a53782e90c97be0d0bc4a5f98a5c0a12c",
+                "reference": "ff22611a53782e90c97be0d0bc4a5f98a5c0a12c",
                 "shasum": ""
             },
             "require": {
@@ -10147,7 +10147,7 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "~2.17.1",
-                "phpstan/phpstan": "^0.12 || ^1.11",
+                "phpstan/phpstan": "^0.12 || ^1.12 || ^2.0",
                 "phpunit/php-invoker": "^2.0 || ^3.1",
                 "phpunit/phpunit": "^7.5 || ^8.5 || ^9.6"
             },
@@ -10228,7 +10228,7 @@
                 "issues": "https://github.com/sabre-io/vobject/issues",
                 "source": "https://github.com/fruux/sabre-vobject"
             },
-            "time": "2024-10-14T11:53:54+00:00"
+            "time": "2025-04-17T09:22:48+00:00"
         },
         {
             "name": "sabre/xml",
@@ -19442,16 +19442,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.12.23",
+            "version": "1.12.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "29201e7a743a6ab36f91394eab51889a82631428"
+                "reference": "338b92068f58d9f8035b76aed6cf2b9e5624c025"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/29201e7a743a6ab36f91394eab51889a82631428",
-                "reference": "29201e7a743a6ab36f91394eab51889a82631428",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/338b92068f58d9f8035b76aed6cf2b9e5624c025",
+                "reference": "338b92068f58d9f8035b76aed6cf2b9e5624c025",
                 "shasum": ""
             },
             "require": {
@@ -19496,7 +19496,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-23T14:57:32+00:00"
+            "time": "2025-04-16T13:01:53+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
@@ -21223,16 +21223,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.12.1",
+            "version": "3.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "ea16a1f3719783345febd3aab41beb55c8c84bfd"
+                "reference": "6d4cf6032d4b718f168c90a96e36c7d0eaacb2aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/ea16a1f3719783345febd3aab41beb55c8c84bfd",
-                "reference": "ea16a1f3719783345febd3aab41beb55c8c84bfd",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/6d4cf6032d4b718f168c90a96e36c7d0eaacb2aa",
+                "reference": "6d4cf6032d4b718f168c90a96e36c7d0eaacb2aa",
                 "shasum": ""
             },
             "require": {
@@ -21303,7 +21303,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-04-04T12:57:55+00:00"
+            "time": "2025-04-13T04:10:18+00:00"
         },
         {
             "name": "symfony/browser-kit",
@@ -21772,16 +21772,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "12.5.11",
+            "version": "12.5.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/easy-coding-standard/easy-coding-standard.git",
-                "reference": "1fa356963594227d0d1a87ed0b2b419d3a42a5d8"
+                "reference": "cb1ba037e756f8953d99789883879113daeb0ba9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/easy-coding-standard/easy-coding-standard/zipball/1fa356963594227d0d1a87ed0b2b419d3a42a5d8",
-                "reference": "1fa356963594227d0d1a87ed0b2b419d3a42a5d8",
+                "url": "https://api.github.com/repos/easy-coding-standard/easy-coding-standard/zipball/cb1ba037e756f8953d99789883879113daeb0ba9",
+                "reference": "cb1ba037e756f8953d99789883879113daeb0ba9",
                 "shasum": ""
             },
             "require": {
@@ -21817,7 +21817,7 @@
             ],
             "support": {
                 "issues": "https://github.com/easy-coding-standard/easy-coding-standard/issues",
-                "source": "https://github.com/easy-coding-standard/easy-coding-standard/tree/12.5.11"
+                "source": "https://github.com/easy-coding-standard/easy-coding-standard/tree/12.5.12"
             },
             "funding": [
                 {
@@ -21829,7 +21829,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-25T10:01:37+00:00"
+            "time": "2025-04-23T11:23:07+00:00"
         },
         {
             "name": "theofidry/alice-data-fixtures",

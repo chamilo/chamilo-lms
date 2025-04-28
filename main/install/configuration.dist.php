@@ -493,6 +493,14 @@ UPDATE agenda_event_invitee SET type = 'invitee';
 //$_configuration['agenda_reminders'] = false;
 // Sets the sender ID when using the cron main/cron/agenda_reminders.php to send reminders in course events.
 //$_configuration['agenda_reminders_sender_id'] = 0;
+//
+//In course agenda do not select any participant by default
+//$_configuration['course_agenda_set_default_send_to_with_none'] = false;
+//In course agenda add the current user has default participant
+//$_configuration['course_agenda_set_default_send_to_with_current_user'] = false;
+//In course agenda add the course teachers or the course session coach in session context has default participants
+//$_configuration['course_agenda_set_default_send_to_with_teachers'] = false;
+
 // ------
 //
 // Save some tool titles with HTML editor. Require DB changes:

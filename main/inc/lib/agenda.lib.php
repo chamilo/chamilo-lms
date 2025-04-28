@@ -3032,7 +3032,34 @@ class Agenda
             );
             $form->addElement('hidden', 'to', 'true');
         } else {
-            $sendTo = isset($params['send_to']) ? $params['send_to'] : ['everyone' => true];
+            $defaultSendTo = ['everyone' => true];
+            if (api_get_configuration_value('course_agenda_set_default_send_to_with_none')) {
+                $defaultSendTo = ['everyone' => false];
+            }
+            $defaultSendToCurrentUser = '';
+            if (api_get_configuration_value('course_agenda_set_default_send_to_with_current_user')) {
+                $defaultSendToCurrentUser = api_get_user_id();
+            }
+            if (api_get_configuration_value('course_agenda_set_default_send_to_with_teachers')) {
+                $currentCourseInfo = api_get_course_info();
+                $sessionId = api_get_session_id();
+                if ($sessionId) {
+                    $usersSendTo = SessionManager::getCoachesByCourseSession($sessionId, $currentCourseInfo['real_id']);
+               } else {
+                    $courseTeachers = CourseManager::get_teacher_list_from_course_code($currentCourseInfo['code']);
+                    $courseTeachersUid = [];
+                    foreach ($courseTeachers as $courseTeacher) {
+                        $courseTeachersUid[] = $courseTeacher['user_id'];
+                    }
+                    $usersSendTo = $courseTeachersUid;
+                }
+                $usersSendTo[] = $defaultSendToCurrentUser;
+                $defaultSendTo = ['users' => $usersSendTo];
+            } elseif ($defaultSendToCurrentUser) {
+                $defaultSendTo = ['users' => [$defaultSendToCurrentUser]];
+            }
+            $sendTo = isset($params['send_to']) ? $params['send_to'] : $defaultSendTo;
+
             if ($this->type == 'course') {
                 $this->showToForm($form, $sendTo, [], false, true);
             }

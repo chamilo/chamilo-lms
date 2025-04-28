@@ -7,9 +7,10 @@
       :label="t('Assignment name')"
     />
 
-    <BaseInputText
+    <BaseTinyEditor
       v-model="assignment.description"
       :label="t('Description')"
+      editor-id=""
     />
 
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
@@ -137,6 +138,7 @@ import { useI18n } from "vue-i18n"
 import { useCidReq } from "../../composables/cidReq"
 import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
+import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 
 const props = defineProps({
   defaultAssignment: {
@@ -198,7 +200,6 @@ watchEffect(() => {
 
   if (defaultAssignment.weight > 0) {
     chkAddToGradebook.value = true
-    //assignment.gradebookId.id = defaultAssignment.gradebookCategoryId
     assignment.weight = defaultAssignment.weight
   }
 

@@ -25,9 +25,12 @@
       field="title"
     >
       <template #body="slotProps">
-        <div class="flex items-center">
+        <RouterLink
+          class="text-blue-600 hover:underline"
+          :to="getAssignmentDetailLink(slotProps.data)"
+        >
           {{ slotProps.data.title }}
-        </div>
+        </RouterLink>
       </template>
     </Column>
     <Column
@@ -45,13 +48,21 @@
       field="assignment.expiresOn"
     >
       <template #body="slotProps">
-        {{ abbreviatedDatetime(slotProps.data.assignment.expiresOn) }}
+        <span v-if="slotProps.data.assignment">
+          {{ abbreviatedDatetime(slotProps.data.assignment.expiresOn) }}
+        </span>
+        <span
+          v-else
+          class="text-gray-400 italic"
+        >
+          No deadline
+        </span>
       </template>
     </Column>
     <Column :header="t('Number submitted')">
       <template #body="slotProps">
         <BaseTag
-          :label="`${slotProps.data.uniqueStudentAttemptsTotal} / ${slotProps.data.studentSubscribedToWork}`"
+          :label="`${slotProps.data.uniqueStudentAttemptsTotal || 0} / ${slotProps.data.studentSubscribedToWork || 0}`"
           type="success"
         />
       </template>
@@ -64,9 +75,9 @@
         <div v-if="canEdit(slotProps.data)">
           <BaseButton
             :icon="
-              RESOURCE_LINK_PUBLISHED === slotProps.data.firstResourceLink.visibility
+              RESOURCE_LINK_PUBLISHED === slotProps.data.firstResourceLink?.visibility
                 ? 'eye-on'
-                : RESOURCE_LINK_DRAFT === slotProps.data.firstResourceLink.visibility
+                : RESOURCE_LINK_DRAFT === slotProps.data.firstResourceLink?.visibility
                   ? 'eye-off'
                   : ''
             "
@@ -84,7 +95,7 @@
             type="black"
           />
           <BaseButton
-            :disabled="0 === slotProps.data.uniqueStudentAttemptsTotal"
+            :disabled="0 === (slotProps.data.uniqueStudentAttemptsTotal || 0)"
             :label="t('Save')"
             icon="download"
             only-icon
@@ -174,7 +185,13 @@ async function loadData() {
 
   try {
     const response = await cStudentPublicationService.findAll({
-      params: { ...loadParams, cid, sid, gid },
+      params: {
+        ...loadParams,
+        cid,
+        sid,
+        gid,
+        "publicationParent.iid": false,
+      },
     })
     const json = await response.json()
 
@@ -229,10 +246,25 @@ function onClickMultipleDelete() {
   })
 }
 
+function getAssignmentDetailLink(assignment) {
+  const assignmentId = parseInt(assignment["@id"].split("/").pop(), 10)
+  const nodeUrl = assignment.resourceNode
+  const nodeId = nodeUrl ? parseInt(nodeUrl.split("/").pop(), 10) : 0
+
+  return {
+    name: "AssignmentDetail",
+    params: {
+      node: nodeId,
+      id: assignmentId,
+    },
+    query: route.query,
+  }
+}
+
 async function onClickVisibility(assignment) {
-  if (RESOURCE_LINK_PUBLISHED === assignment.firstResourceLink.visibility) {
+  if (RESOURCE_LINK_PUBLISHED === assignment.firstResourceLink?.visibility) {
     assignment.firstResourceLink.visibility = RESOURCE_LINK_DRAFT
-  } else if (RESOURCE_LINK_DRAFT === assignment.firstResourceLink.visibility) {
+  } else if (RESOURCE_LINK_DRAFT === assignment.firstResourceLink?.visibility) {
     assignment.firstResourceLink.visibility = RESOURCE_LINK_PUBLISHED
   }
 
@@ -245,8 +277,6 @@ async function onClickVisibility(assignment) {
 
 function onClickEdit(assignment) {
   const assignmentId = parseInt(assignment["@id"].split("/").pop(), 10)
-
-  console.log("onClickEdit id :::", assignmentId)
 
   router.push({
     name: "AssignmentsUpdate",
@@ -266,8 +296,6 @@ const getSessionId = (item) => {
 
 const canEdit = (item) => {
   const sessionId = getSessionId(item)
-
-  console.log("sessionId ::: ", sessionId)
 
   const isSessionDocument = sessionId && sessionId === sid
   const isBaseCourse = !sessionId

@@ -7,13 +7,17 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class CStudentPublicationRepository extends ResourceRepository
@@ -141,5 +145,168 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->andWhere('resource.filetype = :filetype')
             ->setParameter('filetype', $fileType)
         ;
+    }
+
+    public function findVisibleAssignmentsForStudent(Course $course, ?Session $session = null): array
+    {
+        $qb = $this->createQueryBuilder('resource')
+            ->select('resource', 'COUNT(comment.iid) AS commentsCount', 'MAX(child.sentDate) AS lastUpload')
+            ->leftJoin('resource.comments', 'comment')
+            ->leftJoin('resource.children', 'child')
+            ->join('resource.resourceNode', 'rn')
+            ->join('rn.resourceLinks', 'rl')
+            ->where('resource.publicationParent IS NULL')
+            ->andWhere('resource.active IN (0, 1)')
+            ->andWhere('resource.filetype = :filetype')
+            ->setParameter('filetype', 'folder')
+            ->andWhere('rl.visibility = 2')
+            ->andWhere('rl.course = :course')
+            ->setParameter('course', $course)
+            ->groupBy('resource.iid')
+            ->orderBy('resource.sentDate', 'DESC');
+
+        if ($session) {
+            $qb->andWhere('rl.session = :session')
+                ->setParameter('session', $session);
+        } else {
+            $qb->andWhere('rl.session IS NULL');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findStudentProgressByCourse(Course $course, ?Session $session): array
+    {
+        $em = $this->getEntityManager();
+
+        $qb = $em->createQueryBuilder();
+        $qb->select('sp')
+            ->from(CStudentPublication::class, 'sp')
+            ->join('sp.resourceNode', 'rn')
+            ->join(ResourceLink::class, 'rl', 'WITH', 'rl.resourceNode = rn')
+            ->where('rl.course = :course')
+            ->andWhere($session ? 'rl.session = :session' : 'rl.session IS NULL')
+            ->andWhere('sp.active IN (0, 1)')
+            ->andWhere('sp.filetype = :filetype')
+            ->andWhere('sp.publicationParent IS NULL')
+            ->setParameter('course', $course)
+            ->setParameter('filetype', 'folder');
+
+        if ($session) {
+            $qb->setParameter('session', $session);
+        }
+
+        $workFolders = $qb->getQuery()->getResult();
+
+        if (empty($workFolders)) {
+            return [];
+        }
+
+        $workIds = array_map(fn (CStudentPublication $sp) => $sp->getIid(), $workFolders);
+
+        if ($session) {
+            $students = $em->getRepository(SessionRelCourseRelUser::class)->findBy([
+                'session' => $session,
+                'course' => $course,
+                'status' => Session::STUDENT,
+            ]);
+        } else {
+            $students = $em->getRepository(CourseRelUser::class)->findBy([
+                'course' => $course,
+                'status' => CourseRelUser::STUDENT,
+            ]);
+        }
+
+        if (empty($students)) {
+            return [];
+        }
+
+        $studentProgress = [];
+
+        foreach ($students as $studentRel) {
+            $user = $studentRel->getUser();
+
+            $qb = $em->createQueryBuilder();
+            $qb->select('COUNT(DISTINCT sp.publicationParent)')
+                ->from(CStudentPublication::class, 'sp')
+                ->where('sp.user = :user')
+                ->andWhere('sp.publicationParent IN (:workIds)')
+                ->andWhere('sp.active IN (0, 1)')
+                ->setParameter('user', $user)
+                ->setParameter('workIds', $workIds);
+
+            $submissionCount = (int) $qb->getQuery()->getSingleScalarResult();
+
+            $studentProgress[] = [
+                'id' => $user->getId(),
+                'firstname' => $user->getFirstname(),
+                'lastname' => $user->getLastname(),
+                'submissions' => $submissionCount,
+                'totalAssignments' => count($workIds),
+            ];
+        }
+
+        return $studentProgress;
+    }
+
+    public function findAssignmentSubmissionsPaginated(
+        int $assignmentId,
+        User $user,
+        int $page,
+        int $itemsPerPage,
+        array $order = []
+    ): array {
+        $qb = $this->createQueryBuilder('submission')
+            ->leftJoin('submission.resourceNode', 'resourceNode')
+            ->join('resourceNode.resourceLinks', 'resourceLink')
+            ->where('submission.publicationParent = :assignmentId')
+            ->andWhere('submission.filetype = :filetype')
+            ->andWhere('resourceLink.visibility = :publishedVisibility')
+            ->setParameter('assignmentId', $assignmentId)
+            ->setParameter('filetype', 'file')
+            ->setParameter('publishedVisibility', 2);
+
+        foreach ($order as $field => $direction) {
+            $qb->addOrderBy('submission.' . $field, $direction);
+        }
+
+        $qb->setFirstResult(($page - 1) * $itemsPerPage)
+            ->setMaxResults($itemsPerPage);
+
+        $paginator = new Paginator($qb);
+
+        return [
+            iterator_to_array($paginator),
+            count($paginator),
+        ];
+    }
+
+    public function findAllSubmissionsByAssignment(
+        int $assignmentId,
+        int $page,
+        int $itemsPerPage,
+        array $order = []
+    ): array {
+        $qb = $this->createQueryBuilder('submission')
+            ->leftJoin('submission.user', 'user')
+            ->addSelect('user')
+            ->where('submission.publicationParent = :assignmentId')
+            ->andWhere('submission.filetype = :filetype')
+            ->setParameter('assignmentId', $assignmentId)
+            ->setParameter('filetype', 'file');
+
+        foreach ($order as $field => $direction) {
+            $qb->addOrderBy('submission.' . $field, $direction);
+        }
+
+        $qb->setFirstResult(($page - 1) * $itemsPerPage)
+            ->setMaxResults($itemsPerPage);
+
+        $paginator = new Paginator($qb);
+
+        return [
+            iterator_to_array($paginator),
+            count($paginator),
+        ];
     }
 }

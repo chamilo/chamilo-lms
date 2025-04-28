@@ -15,12 +15,14 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Controller\Api\CreateStudentPublicationFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\ParentNullFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\CStudentPublicationPostStateProcessor;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
@@ -49,6 +51,13 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
             processor: CStudentPublicationPostStateProcessor::class
         ),
+        new Post(
+            uriTemplate: '/c_student_publications/upload',
+            controller: CreateStudentPublicationFileAction::class,
+            security: "is_granted('ROLE_STUDENT') or is_granted('ROLE_STUDENT_BOSS')",
+            validationContext: ['groups' => ['Default', 'c_student_publication:write']],
+            deserialize: false
+        ),
     ],
     normalizationContext: [
         'groups' => ['student_publication:read'],
@@ -67,17 +76,18 @@ use Symfony\Component\Validator\Constraints as Assert;
         'assingment.endsOn' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
     ]
 )]
+#[ApiFilter(ParentNullFilter::class, properties: ['publicationParent.iid' => null])]
 #[ApiFilter(filterClass: CidFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
 class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     public bool $addToGradebook = false;
 
     #[Groups(['c_student_publication:write'])]
     public int $gradebookCategoryId = 0;
 
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     public bool $addToCalendar = false;
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -90,7 +100,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
-    #[Groups(['c_student_publication:write', 'student_publication:item:get'])]
+    #[Groups(['c_student_publication:write', 'student_publication:item:get', 'student_publication:read'])]
     protected ?string $description;
 
     #[ORM\Column(name: 'author', type: 'string', length: 255, nullable: true)]
@@ -139,10 +149,12 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\OneToMany(mappedBy: 'publication', targetEntity: CStudentPublicationComment::class)]
     protected Collection $comments;
 
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid')]
     protected ?CStudentPublication $publicationParent;
 
+    #[Groups(['student_publication:read'])]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
@@ -438,6 +450,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
+    #[Groups(['student_publication:read'])]
     public function getCorrection(): ?ResourceNode
     {
         if ($this->hasResourceNode()) {
@@ -451,6 +464,12 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         }
 
         return null;
+    }
+
+    #[Groups(['student_publication:read'])]
+    public function getCorrectionTitle(): ?string
+    {
+        return $this->getExtensions();
     }
 
     /**
@@ -588,6 +607,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this->getIid();
     }
 
+    #[Groups(['student_publication:read'])]
     public function getIid(): ?int
     {
         return $this->iid;
@@ -622,8 +642,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
                 }
 
                 return $accumulator;
-            })
-        ;
+            }, 0);
 
         return $reduce ?: 0;
     }

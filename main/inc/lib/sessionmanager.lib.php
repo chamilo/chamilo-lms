@@ -10174,7 +10174,7 @@ class SessionManager
 
         foreach ($sessionFields as $field) {
             if (isset($extraDefsByVariable[$field])) {
-                $header1[] = $extraDefsByVariable[$field]['display_text'] ?? strtoupper($field);
+                $header1[] = $extraDefsByVariable[$field]['display_text'] ?? $field;
             }
         }
 
@@ -10195,13 +10195,12 @@ class SessionManager
         // 3. USER HEADER
         $header3 = [''];
         foreach ($userFieldsBefore as $field) {
-            $header3[] = strtoupper($field);
+            $header3[] = $field;
         }
         $header3[] = get_lang('FirstName');
         $header3[] = get_lang('LastName');
-        $header3[] = get_lang('OfficialCode');
         foreach ($userFieldsAfter as $field) {
-            $header3[] = strtoupper($field);
+            $header3[] = $field;
         }
 
         // 4. USERS WITH CERTIFICATE
@@ -10243,7 +10242,6 @@ class SessionManager
 
                 $row[] = $userInfo['firstname'];
                 $row[] = $userInfo['lastname'];
-                $row[] = $userInfo['official_code'] ?? '';
 
                 foreach ($userFieldsAfter as $field) {
                     $value = $userExtraMap[$field] ?? '';

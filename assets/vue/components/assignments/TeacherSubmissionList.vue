@@ -28,12 +28,31 @@
 
       <Column :header="t('Feedback')">
         <template #body="{ data }">
-          <div class="flex justify-center">
+          <div class="flex justify-center items-center gap-2">
             <span
-              v-if="data.feedback"
+              v-if="data.correctionTitle"
               class="text-green-600"
             >
-              <i class="pi pi-check-circle"></i>
+              <a
+                v-if="data.correctionDownloadUrl"
+                :href="data.correctionDownloadUrl"
+                target="_blank"
+                download
+                class="text-green-50 hover:underline"
+              >
+                <i class="pi pi-check-circle"></i>
+              </a>
+              <i
+                v-else
+                class="pi pi-check-circle"
+              ></i>
+            </span>
+            <span
+              v-if="data.comments && data.comments.length > 0"
+              class="flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
+              @click="openCommentDialog(data)"
+            >
+              <i class="pi pi-comment"></i> {{ data.comments.length }}
             </span>
           </div>
         </template>
@@ -75,19 +94,35 @@
           <div class="flex justify-center gap-2">
             <BaseButton
               icon="save"
-              size="small"
+              size="normal"
               only-icon
-              :label="t('Save')"
+              :label="t('Download')"
               @click="saveCorrection(data)"
               type="primary"
             />
             <BaseButton
+              icon="reply-all"
+              size="normal"
+              only-icon
+              :label="t('Correct & Rate')"
+              @click="correctAndRate(data)"
+              type="success"
+            />
+            <BaseButton
               icon="edit"
-              size="small"
+              size="normal"
               only-icon
               :label="t('Edit')"
               @click="editSubmission(data)"
               type=""
+            />
+            <BaseButton
+              icon="folder-move"
+              size="normal"
+              only-icon
+              :label="t('Move')"
+              @click="moveSubmission(data)"
+              type="info"
             />
             <BaseButton
               :icon="
@@ -99,13 +134,13 @@
               "
               :label="t('Visibility')"
               only-icon
-              size="small"
+              size="normal"
               type="black"
               @click="viewSubmission(data)"
             />
             <BaseButton
               icon="delete"
-              size="small"
+              size="normal"
               only-icon
               :label="t('Delete')"
               @click="deleteSubmission(data)"
@@ -130,10 +165,23 @@
     :item="editingItem"
     @updated="loadData"
   />
+
+  <CorrectAndRateModal
+    v-model="showCorrectAndRateDialog"
+    :item="correctingItem"
+    @commentSent="loadData"
+  />
+
+  <MoveSubmissionModal
+    v-model="showMoveDialog"
+    :submission="selectedSubmission"
+    :currentAssignmentId="props.assignmentId"
+    @moved="loadData"
+  />
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, watch } from "vue"
+import { nextTick, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
@@ -145,6 +193,8 @@ import UppyModalUploader from "./UppyModalUploader.vue"
 import resourceLinkService from "../../services/resourcelink"
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import EditStudentSubmissionForm from "./EditStudentSubmissionForm.vue"
+import CorrectAndRateModal from "./CorrectAndRateModal.vue"
+import MoveSubmissionModal from "./MoveSubmissionModal.vue"
 
 const props = defineProps({
   assignmentId: {
@@ -170,6 +220,9 @@ const showUploader = ref(false)
 const selectedSubmission = ref(null)
 const showEditDialog = ref(false)
 const editingItem = ref(null)
+const showCorrectAndRateDialog = ref(false)
+const correctingItem = ref(null)
+const showMoveDialog = ref(false)
 
 watch(loadParams, loadData)
 onMounted(loadData)
@@ -244,7 +297,6 @@ function closeUploader() {
 }
 
 async function viewSubmission(item) {
-
   if (!item || !item.firstResourceLink) {
     notification.showErrorNotification(t("Invalid submission"))
     return
@@ -286,7 +338,16 @@ async function viewSubmission(item) {
 }
 
 function saveCorrection(item) {
-  console.log("Save correction", item)
+  if (item?.downloadUrl) {
+    const link = document.createElement("a")
+    link.href = item.downloadUrl
+    link.download = ""
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  } else {
+    notification.showErrorNotification(t("No download available"))
+  }
 }
 
 function editSubmission(item) {
@@ -308,5 +369,26 @@ async function deleteSubmission(item) {
   } catch (error) {
     notification.showErrorNotification(error)
   }
+}
+
+function correctAndRate(item) {
+  correctingItem.value = null
+  nextTick(() => {
+    correctingItem.value = item
+    showCorrectAndRateDialog.value = true
+  })
+}
+
+function openCommentDialog(item) {
+  correctingItem.value = null
+  nextTick(() => {
+    correctingItem.value = item
+    showCorrectAndRateDialog.value = true
+  })
+}
+
+function moveSubmission(item) {
+  selectedSubmission.value = item
+  showMoveDialog.value = true
 }
 </script>

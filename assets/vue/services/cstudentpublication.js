@@ -39,13 +39,9 @@ async function getAssignmentDetailForTeacher({ assignmentId, page = 1, itemsPerP
 }
 
 async function uploadStudentAssignment(formData, queryParams) {
-  const response = await axios.post(
-    `${ENTRYPOINT}c_student_publications/upload?${queryParams}`,
-    formData,
-    {
-      headers: { "Content-Type": "multipart/form-data" },
-    }
-  )
+  const response = await axios.post(`${ENTRYPOINT}c_student_publications/upload?${queryParams}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  })
   return response.data
 }
 
@@ -64,6 +60,39 @@ async function updateSubmission(id, data) {
   await axios.patch(`/assignments/submissions/${id}/edit`, data)
 }
 
+async function uploadComment(submissionId, parentResourceNodeId, formData, sendMail = false) {
+  const queryParams = new URLSearchParams({
+    submissionId,
+    parentResourceNodeId,
+    filetype: "file",
+    sendMail: sendMail ? "1" : "0",
+  }).toString()
+
+  const response = await axios.post(`${ENTRYPOINT}c_student_publication_comments/upload?${queryParams}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  })
+  return response.data
+}
+
+async function loadComments(submissionId) {
+  try {
+    const response = await axios.get(`${ENTRYPOINT}c_student_publication_comments?publication.iid=${submissionId}`)
+    return response.data["hydra:member"] || []
+  } catch (error) {
+    console.error("Failed to load comments", error)
+    return []
+  }
+}
+
+async function moveSubmission(submissionId, newAssignmentId) {
+  const response = await axios.patch(`/assignments/submissions/${submissionId}/move`, {
+    newAssignmentId,
+  })
+  return response.data
+}
+
 export default {
   ...makeService("c_student_publications"),
   findStudentAssignments,
@@ -74,4 +103,7 @@ export default {
   getStudentProgress,
   deleteAssignmentSubmission,
   updateSubmission,
+  uploadComment,
+  loadComments,
+  moveSubmission,
 }

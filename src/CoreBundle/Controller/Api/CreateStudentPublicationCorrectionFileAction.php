@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -22,7 +22,7 @@ class CreateStudentPublicationCorrectionFileAction extends BaseResourceFileActio
         Request $request,
         CStudentPublicationCorrectionRepository $correctionRepo,
         CStudentPublicationRepository $publicationRepo,
-        EntityManagerInterface $em,
+        EntityManager $em,
         KernelInterface $kernel,
         TranslatorInterface $translator
     ): CStudentPublicationCorrection {

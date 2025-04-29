@@ -204,4 +204,39 @@ class StudentPublicationController extends AbstractController
 
         return new JsonResponse(['success' => true]);
     }
+
+    #[Route('/submissions/{id}/move', name: 'chamilo_core_student_submission_move', methods: ['PATCH'])]
+    public function moveSubmission(
+        int $id,
+        Request $request,
+        EntityManagerInterface $em,
+        CStudentPublicationRepository $repo
+    ): JsonResponse {
+        $submission = $repo->find($id);
+
+        if (!$submission) {
+            return new JsonResponse(['error' => 'Submission not found.'], 404);
+        }
+
+        $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
+
+        $data = json_decode($request->getContent(), true);
+        $newAssignmentId = $data['newAssignmentId'] ?? null;
+
+        if (!$newAssignmentId) {
+            return new JsonResponse(['error' => 'New assignment ID is required.'], 400);
+        }
+
+        $newParent = $repo->find($newAssignmentId);
+
+        if (!$newParent) {
+            return new JsonResponse(['error' => 'Target assignment not found.'], 404);
+        }
+
+        $submission->setPublicationParent($newParent);
+
+        $em->flush();
+
+        return new JsonResponse(['success' => true]);
+    }
 }

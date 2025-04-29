@@ -1261,7 +1261,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    #[Groups(['user:read', 'student_publication:read'])]
+    #[Groups(['user:read', 'student_publication:read', 'student_publication_comment:read'])]
     public function getFullname(): string
     {
         if (empty($this->fullName)) {

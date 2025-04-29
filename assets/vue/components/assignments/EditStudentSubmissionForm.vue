@@ -4,6 +4,7 @@
     modal
     :header="t('Edit Submission')"
     :style="{ width: '500px' }"
+    @hide="onHide"
   >
     <div class="space-y-4">
       <InputText
@@ -13,12 +14,15 @@
       />
 
       <div class="flex items-center gap-2">
-        <Button
-          icon="pi pi-download"
-          class="p-button-sm"
-          :label="t('Download')"
-          @click="downloadFile"
-        />
+        <a
+          v-if="props.item && props.item.downloadUrl"
+          :href="props.item.downloadUrl"
+          class="btn btn--primary"
+          target="_self"
+        >
+          <BaseIcon icon="download" />
+          {{ t("Download file") }}
+        </a>
       </div>
 
       <Textarea
@@ -59,6 +63,7 @@ import cStudentPublicationService from "../../services/cstudentpublication"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import { useI18n } from "vue-i18n"
 import Textarea from "primevue/textarea"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 
 const props = defineProps({
   modelValue: Boolean,
@@ -66,8 +71,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(["update:modelValue", "updated"])
-
-const notification = useNotification()
 
 const visible = ref(false)
 const form = ref({
@@ -77,6 +80,7 @@ const form = ref({
 })
 
 const { t } = useI18n()
+const notification = useNotification()
 
 watch(
   () => props.modelValue,
@@ -94,6 +98,10 @@ function cancel() {
   emit("update:modelValue", false)
 }
 
+function onHide() {
+  emit("update:modelValue", false)
+}
+
 async function submit() {
   try {
     await cStudentPublicationService.updateSubmission(props.item.iid, {
@@ -101,18 +109,11 @@ async function submit() {
       description: form.value.description,
       sendMail: form.value.sendMail,
     })
-    notification.showSuccessNotification("Submission updated!")
+    notification.showSuccessNotification(t("Submission updated!"))
     emit("updated")
     emit("update:modelValue", false)
   } catch (error) {
     notification.showErrorNotification(error)
-  }
-}
-
-function downloadFile() {
-  if (props.item && props.item.resourceNode) {
-    const id = props.item.resourceNode.split("/").pop()
-    window.open(`/document/download.php?id=${id}&cidreq=${props.item.cidreq || ""}`, "_blank")
   }
 }
 </script>

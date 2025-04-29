@@ -27,7 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER')",
             deserialize: false,
         ),
-    ]
+    ],
+    normalizationContext: ['groups' => ['c_student_publication_correction:read', 'student_publication:read']]
 )]
 class CStudentPublicationCorrection extends AbstractResource implements ResourceInterface, Stringable
 {

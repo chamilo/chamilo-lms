@@ -136,6 +136,30 @@ class ResourceNodeVoter extends Voter
             return true;
         }
 
+        $resourceTypeTitle = $resourceNode->getResourceType()->getTitle();
+        if (
+            \in_array($resourceTypeTitle, [
+                'student_publications',
+                'student_publications_corrections',
+                'student_publications_comments',
+            ], true)
+        ) {
+            if ($creator instanceof UserInterface
+                && $user instanceof UserInterface
+                && $user->getUserIdentifier() === $creator->getUserIdentifier()
+            ) {
+                return true;
+            }
+
+            if ($this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
+                || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+                || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
+                || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+            ) {
+                return true;
+            }
+        }
+
         // Checking links connected to this resource.
         $request = $this->requestStack->getCurrentRequest();
 

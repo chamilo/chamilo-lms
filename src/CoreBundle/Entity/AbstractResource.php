@@ -25,20 +25,20 @@ abstract class AbstractResource
     use UserCreatorTrait;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read'])]
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read', 'student_publication:read', 'student_publication_comment:read'])]
     public ?string $contentUrl = null;
 
     /**
      * Download URL of the Resource File Property set by ResourceNormalizer.php.
      */
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read'])]
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read', 'student_publication:read', 'student_publication_comment:read'])]
     public ?string $downloadUrl = null;
 
     /**
      * Content from ResourceFile - Property set by ResourceNormalizer.php.
      */
-    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'document:write', 'media_object_read'])]
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'document:write', 'media_object_read', 'student_publication:read'])]
     public ?string $contentFile = null;
 
     /**
@@ -72,6 +72,7 @@ abstract class AbstractResource
         'c_tool_intro:read',
         'attendance:read',
         'student_publication:read',
+        'student_publication_comment:read',
     ])]
     #[ORM\OneToOne(targetEntity: ResourceNode::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -98,7 +99,7 @@ abstract class AbstractResource
      */
     public $parentResource;
 
-    #[Groups(['resource_node:read', 'document:read', 'attendance:read', 'student_publication:read'])]
+    #[Groups(['resource_node:read', 'document:read', 'attendance:read', 'student_publication:read', 'student_publication_comment:read'])]
     public ?array $resourceLinkListFromEntity = null;
 
     /**
@@ -431,6 +432,7 @@ abstract class AbstractResource
 
     #[Groups([
         'student_publication:read',
+        'student_publication_comment:read',
     ])]
     public function getFirstResourceLink(): ?ResourceLink
     {

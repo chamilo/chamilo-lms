@@ -147,14 +147,15 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
      * @var Collection<int, CStudentPublicationComment>
      */
     #[ORM\OneToMany(mappedBy: 'publication', targetEntity: CStudentPublicationComment::class)]
+    #[Groups(['student_publication:read'])]
     protected Collection $comments;
 
-    #[Groups(['c_student_publication:write', 'student_publication:read'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read', 'student_publication_comment:read'])]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid')]
     protected ?CStudentPublication $publicationParent;
 
-    #[Groups(['student_publication:read'])]
+    #[Groups(['student_publication:read', 'student_publication_comment:read'])]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
@@ -453,11 +454,18 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[Groups(['student_publication:read'])]
     public function getCorrection(): ?ResourceNode
     {
-        if ($this->hasResourceNode()) {
-            $children = $this->getResourceNode()->getChildren();
-            foreach ($children as $child) {
-                $name = $child->getResourceType()->getTitle();
-                if ('student_publications_corrections' === $name) {
+        if (!$this->hasResourceNode()) {
+            return null;
+        }
+
+        $expectedTitle = $this->getExtensions();
+        $children = $this->getResourceNode()->getChildren();
+
+        foreach ($children as $child) {
+            $name = $child->getResourceType()->getTitle();
+
+            if ('student_publications_corrections' === $name) {
+                if ($child->getTitle() === $expectedTitle) {
                     return $child;
                 }
             }
@@ -669,6 +677,20 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         }
 
         return 0;
+    }
+
+    #[Groups(['student_publication:read'])]
+    public function getCorrectionDownloadUrl(): ?string
+    {
+        $correctionNode = $this->getCorrection();
+        if ($correctionNode && $correctionNode->getFirstResourceFile()) {
+            $uuid = $correctionNode->getUuid();
+            if ($uuid) {
+                return '/r/student_publication/student_publications_corrections/'.$uuid.'/download';
+            }
+        }
+
+        return null;
     }
 
     public function getGroupCategoryWorkId(): int

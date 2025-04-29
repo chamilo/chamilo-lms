@@ -9031,4 +9031,5 @@ $TheCorrectAnswerMustHaveAPositiveScore = "La réponse correcte doit avoir un sc
 $ACorrectAnswerIsRequired = "Une réponse doit être marquée comme correcte";
 $NoAdditionalComments = "Aucun commentaire additionnel";
 $TeacherFeedback = "Rétroalimentation du professeur";
+$Learners = "Apprenants";
 ?>

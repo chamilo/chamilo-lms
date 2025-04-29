@@ -9096,4 +9096,5 @@ $TheCorrectAnswerMustHaveAPositiveScore = "The correct answer must have a positi
 $ACorrectAnswerIsRequired = "An answer marked as correct is required";
 $NoAdditionalComments = "No additional comments";
 $TeacherFeedback = "Teacher feedback";
+$Learners = "Learners";
 ?>

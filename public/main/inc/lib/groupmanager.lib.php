@@ -404,11 +404,14 @@ class GroupManager
     /**
      * Create a group for every class subscribed to the current course.
      *
+     * @author Esteban Ristich <esteban.ristich@protonmail.com>
+     *
      * @param int $categoryId The category in which the groups should be created
+     * @param array $classIds  The ids of the classes to be created
      *
      * @return array
      */
-    public static function create_class_groups($categoryId, $classIds = [])
+    public static function create_class_groups(int $categoryId, array $classIds = []): array
     {
         $options['where'] = [' usergroup.course_id = ? ' => api_get_course_int_id()];
         $obj = new UserGroupModel();
@@ -438,15 +441,17 @@ class GroupManager
     /**
      * Create a group for every class subscribed to the current course
      *
+     * @todo: move part of doctrine query in repository for future
+     *
      * @author Esteban Ristich <esteban.ristich@protonmail.com>
      *
      * @param int $category_id The category in which the groups should be created
-     * @param $category_id
+     * @param array $classIds The ids of the classes to be created
      *
      * @return array
      * @throws \Doctrine\DBAL\DBALException
      */
-    public static function create_usergroup_consistent_groups($category_id = 0, $classIds = [])
+    public static function create_usergroup_consistent_groups(int $category_id = 0, array $classIds = []): array
     {
         // check if group is not duplicated in same category
         /** @var \Chamilo\CourseBundle\Repository\CGroupRelUsergroupRepository $relRepository */
@@ -532,19 +537,20 @@ class GroupManager
     }
 
     /**
-     * Get the usergroup linked to the group if it exists.
+     * Get the usergroup (class) linked to the group if it exists.
      *
      * @author Esteban Ristich <esteban.ristich@protonmail.com>
      *
-     * @param CGroup $groupId
+     * @param CGroup $group
+     *
      * @return Usergroup|null
      */
-    public static function get_usergroup_link(CGroup $groupId): ?Usergroup
+    public static function get_usergroup_link(CGroup $group): ?Usergroup
     {
         $em = Database::getManager();
         $repo = $em->getRepository(CGroupRelUsergroup::class);
         $criteria = [
-            'group' => $groupId,
+            'group' => $group,
         ];
 
         $rel = $repo->findOneBy($criteria);
@@ -555,6 +561,15 @@ class GroupManager
         }
     }
 
+    /**
+     * Check if a group has a consistent link to an usergroup.
+     *
+     * @author Esteban Ristich <esteban.ristich@protonmail.com>
+     *
+     * @param CGroup $group
+     *
+     * @return bool
+     */
     public static function is_group_linked_to_usergroup(CGroup $group): bool
     {
         $em = Database::getManager();
@@ -567,6 +582,15 @@ class GroupManager
         return $rel instanceof CGroupRelUsergroup;
     }
 
+    /**
+     * Remove the consistent link between usergroup and group.
+     *
+     * @author Esteban Ristich <esteban.ristich@protonmail.com>
+     *
+     * @param CGroup $group
+     *
+     * @return bool
+     */
     public static function remove_group_consistent_link(CGroup $group): bool
     {
         $em = Database::getManager();

@@ -979,6 +979,7 @@ class PortfolioController
     {
         $listByUser = false;
         $listHighlighted = $httpRequest->query->has('list_highlighted');
+        $listAlphabetical = $httpRequest->query->has('list_alphabetical');
 
         if ($httpRequest->query->has('user')) {
             $this->owner = api_get_user_entity($httpRequest->query->getInt('user'));
@@ -1041,7 +1042,7 @@ class PortfolioController
         $portfolio = [];
         if ($this->course) {
             $frmTagList = $this->createFormTagFilter($listByUser);
-            $frmStudentList = $this->createFormStudentFilter($listByUser, $listHighlighted);
+            $frmStudentList = $this->createFormStudentFilter($listByUser, $listHighlighted, $listAlphabetical);
             $frmStudentList->setDefaults(['user' => $this->owner->getId()]);
             // it translates the category title with the current user language
             $categories = $this->getCategoriesForIndex(null, 0);
@@ -1061,7 +1062,7 @@ class PortfolioController
         if ($listHighlighted) {
             $items = $this->getHighlightedItems();
         } else {
-            $items = $this->getItemsForIndex($listByUser, $frmTagList);
+            $items = $this->getItemsForIndex($listByUser, $frmTagList, $listAlphabetical);
 
             $foundComments = $this->getCommentsForIndex($frmTagList);
         }
@@ -3606,7 +3607,7 @@ class PortfolioController
     /**
      * @throws Exception
      */
-    private function createFormStudentFilter(bool $listByUser = false, bool $listHighlighted = false): FormValidator
+    private function createFormStudentFilter(bool $listByUser = false, bool $listHighlighted = false, bool $listAlphabeticalOrder = false): FormValidator
     {
         $frmStudentList = new FormValidator(
             'frm_student_list',
@@ -3674,6 +3675,21 @@ class PortfolioController
         }
 
         $frmStudentList->addHtml("<p>$link</p>");
+ 
+        if ($listAlphabeticalOrder) {
+            $link = Display::url(
+                get_lang('BackToDateOrder'),
+                $this->baseUrl
+            );
+        } else {
+            $link = Display::url(
+                get_lang('SeeAlphabeticalOrder'),
+                $this->baseUrl.http_build_query(['list_alphabetical' => true])
+            );
+        }
+
+        $frmStudentList->addHtml("<p>$link</p>");
+
 
         return $frmStudentList;
     }
@@ -3763,7 +3779,8 @@ class PortfolioController
 
     private function getItemsForIndex(
         bool $listByUser = false,
-        FormValidator $frmFilterList = null
+        FormValidator $frmFilterList = null,
+        bool $alphabeticalOrder = false
     ) {
         $currentUserId = api_get_user_id();
 
@@ -3902,7 +3919,11 @@ class PortfolioController
             }
 
             $queryBuilder->setParameter('current_user', $currentUserId);
-            $queryBuilder->orderBy('pi.creationDate', 'DESC');
+            if ($alphabeticalOrder) {
+                $queryBuilder->orderBy('pi.title', 'ASC');
+            } else {
+                $queryBuilder->orderBy('pi.creationDate', 'DESC');
+            }
 
             $items = $queryBuilder->getQuery()->getResult();
 

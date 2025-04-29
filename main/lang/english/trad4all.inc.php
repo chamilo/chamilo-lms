@@ -9097,4 +9097,6 @@ $ACorrectAnswerIsRequired = "An answer marked as correct is required";
 $NoAdditionalComments = "No additional comments";
 $TeacherFeedback = "Teacher feedback";
 $Learners = "Learners";
+$BackToDateOrder = "Return to the chronological order";
+$SeeAlphabeticalOrder = "View in alphabetical order";
 ?>

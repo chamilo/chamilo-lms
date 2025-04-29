@@ -9122,4 +9122,6 @@ $ACorrectAnswerIsRequired = "Una respuesta debe ser marcada como correcta";
 $NoAdditionalComments = "No hay comentarios adicionales";
 $TeacherFeedback = "Comentario del profesor";
 $Learners = "ASSISTANTES";
+$BackToDateOrder = "Retorno al orden cronológico";
+$SeeAlphabeticalOrder = "Ver en orden alfabético";
 ?>

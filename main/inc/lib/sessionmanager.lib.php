@@ -10193,14 +10193,18 @@ class SessionManager
         }
 
         // 3. USER HEADER
-        $header3 = [''];
+	$header3 = [''];
+	$extraFieldUser = new ExtraFieldModel('user');
+        $extraDefsUser = $extraFieldUser->get_all();
+        $extraDefsByVariableUser = array_column($extraDefsUser, null, 'variable');
+
         foreach ($userFieldsBefore as $field) {
-            $header3[] = $field;
+            $header3[] = $extraDefsByVariableUser[$field]['display_text'] ?? $field;
         }
         $header3[] = get_lang('FirstName');
         $header3[] = get_lang('LastName');
         foreach ($userFieldsAfter as $field) {
-            $header3[] = $field;
+            $header3[] = $extraDefsByVariableUser[$field]['display_text'] ?? $field;
         }
 
         // 4. USERS WITH CERTIFICATE

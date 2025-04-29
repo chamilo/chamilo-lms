@@ -9121,7 +9121,7 @@ $TheCorrectAnswerMustHaveAPositiveScore = "La respuesta correcta debe tener un s
 $ACorrectAnswerIsRequired = "Una respuesta debe ser marcada como correcta";
 $NoAdditionalComments = "No hay comentarios adicionales";
 $TeacherFeedback = "Comentario del profesor";
-$Learners = "ASSISTANTES";
+$Learners = "ASISTENTES";
 $BackToDateOrder = "Retorno al orden cronológico";
 $SeeAlphabeticalOrder = "Ver en orden alfabético";
 ?>

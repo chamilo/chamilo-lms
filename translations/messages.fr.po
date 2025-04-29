@@ -29606,3 +29606,18 @@ msgstr "Paramètres d'auto démarrage"
 
 msgid "Auto-launch"
 msgstr "Auto-démarrage"
+
+msgid "Link classes to created groups ?"
+msgstr "Lier les classes aux groupes crées ?"
+
+msgid "Info message about deactivation of consistent link"
+msgstr "Si elle est désactivé les classes lié à ce groupe sont simplement une copie des utilisateurs de la classe séléctionnée. A contrario si elle est activé, la classe séléctionnée est lié au groupe et les modifications de la classe sont répercuté sur le groupe (ce mode empêche la modification du groupe)"
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "Ce groupe est lié à la une classe. Les ajouts ou suppression de membres à la classe seront reportés sur le groupe. Vous ne pouvez pas ajouter ou ôter des membres à un groupe lié une classe. Vous pouvez cependant rompre ce lien en cliquant sur le bouton ci-dessous"
+
+msgid "Remove the group link with the class"
+msgstr "Rompre le lien du groupe avec la classe"
+
+msgid "Group is no longer linked to the course"
+msgstr "Le groupe n'esp plus lié au cours"

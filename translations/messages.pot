@@ -27812,3 +27812,18 @@ msgstr ""
 
 msgid "Auto-launch"
 msgstr ""
+
+msgid "Link classes to created groups ?"
+msgstr ""
+
+msgid "Info message about deactivation of consistent link"
+msgstr ""
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr ""
+
+msgid "Remove the group link with the class"
+msgstr ""
+
+msgid "Group is no longer linked to the course"
+msgstr ""

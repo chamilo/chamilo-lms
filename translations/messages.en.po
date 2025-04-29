@@ -27826,3 +27826,18 @@ msgstr "Autolaunch settings"
 
 msgid "Auto-launch"
 msgstr "Auto-launch"
+
+msgid "Link classes to created groups ?"
+msgstr "Link classes to created groups ?"
+
+msgid "Info message about deactivation of consistent link"
+msgstr "If desactivated, the classes linked to this group are simply a copy of the users of the selected class. But, if it is enabled, the selected class is linked to the group, and modifications to the class are reflected in the group (this mode prevents modification of the group)."
+
+msgid "Warning message to warn that the user cannot modify members of linked group"
+msgstr "This group is linked to a class. Any additions or deletions of members to the class will be push the group. You cannot add or remove members to a group linked to a class. However you can break this link by clicking on the button below"
+
+msgid "Remove the group link with the class"
+msgstr "Remove the group link with the class"
+
+msgid "Group is no longer linked to the course"
+msgstr "Group is no longer linked to the course"

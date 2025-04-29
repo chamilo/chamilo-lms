@@ -66,9 +66,9 @@ if (!$groupMember && !api_is_allowed_to_edit(false, true)) {
 
 // Message for group rel usergroup
 if (GroupManager::is_group_linked_to_usergroup($groupEntity)) {
-    $form->addHtml('<div class="alert alert-info">Ce groupe est lié à la '.$courseInfo['title'].'. Les ajouts ou suppression
-    de membres à la classe seront reportés sur le groupe. Vous ne pouvez pas ajouter ou ôter des membres à un groupe lié
-    à une classe. Vous pouvez cependant rompre ce lien en cliquant sur le bouton ci-dessous<br><a href="settings.php?'.api_get_cidreq().'&remove_consistent_link=true" class="btn p-button-sm p-button p-mr-2 mt-2 pointer">Rompre le lien du groupe avec la classe</a></div>');
+    $form->addHtml('<div class="alert alert-info">'.get_lang('Warning message to warn that the user cannot modify members of linked group').'<br>
+    <a href="settings.php?'.api_get_cidreq().'&remove_consistent_link=true" class="btn p-button-sm p-button p-mr-2 mt-2 pointer">'.get_lang('Remove the group link with the class').
+    '</a></div>');
 }
 
 if ('true' === api_get_setting('allow_group_categories')) {

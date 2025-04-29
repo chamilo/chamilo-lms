@@ -377,10 +377,10 @@ EOT;
 
         $classForm->addHtml('<div style="height: 1px; width: 100%; background-color: #e6e6e6; border-radius: 8px;" /><br>');
 
-        $classForm->addCheckBox('is_consistent_link', null, 'Lier les classes aux groupes crées ?',
-            ['title' => 'Si elle est désactivé les classes lié à ce groupe sont simplement une copie des utilisateurs de la classe séléctionnée. A contrario si elle est activé, la classe séléctionnée est lié au groupe et les modifications de la classe sont répercuté sur le groupe (ce mode empêche la modification du groupe)']
+        $classForm->addCheckBox('is_consistent_link', null, get_lang('Link classes to created groups ?'),
+            ['title' => get_lang('Info message about deactivation of consistent link')]
         );
-        $classForm->addHtml('<p class="alert alert-info">Si elle est désactivé les classes lié à ce groupe sont simplement une copie des utilisateurs de la classe séléctionnée. A contrario si elle est activé, la classe séléctionnée est lié au groupe et les modifications de la classe sont répercuté sur le groupe (ce mode empêche la modification du groupe)</p>');
+        $classForm->addHtml('<p class="alert alert-info">'.get_lang('Info message about deactivation of consistent link').'</p>');
 
         $classForm->addButtonSave(get_lang('Validate'));
         $defaults['action'] = 'create_class_groups';

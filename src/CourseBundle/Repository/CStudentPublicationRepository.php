@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -150,9 +151,10 @@ final class CStudentPublicationRepository extends ResourceRepository
     public function findVisibleAssignmentsForStudent(Course $course, ?Session $session = null): array
     {
         $qb = $this->createQueryBuilder('resource')
-            ->select('resource', 'COUNT(comment.iid) AS commentsCount', 'MAX(child.sentDate) AS lastUpload')
-            ->leftJoin('resource.comments', 'comment')
-            ->leftJoin('resource.children', 'child')
+            ->select('resource')
+            ->addSelect('(SELECT COUNT(comment.iid) FROM ' . CStudentPublicationComment::class . ' comment WHERE comment.publication = resource) AS commentsCount')
+            ->addSelect('(SELECT COUNT(c1.iid) FROM ' . CStudentPublication::class . ' c1 WHERE c1.publicationParent = resource AND c1.extensions IS NOT NULL AND c1.extensions <> \'\') AS correctionsCount')
+            ->addSelect('(SELECT MAX(c2.sentDate) FROM ' . CStudentPublication::class . ' c2 WHERE c2.publicationParent = resource) AS lastUpload')
             ->join('resource.resourceNode', 'rn')
             ->join('rn.resourceLinks', 'rl')
             ->where('resource.publicationParent IS NULL')
@@ -162,7 +164,6 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->andWhere('rl.visibility = 2')
             ->andWhere('rl.course = :course')
             ->setParameter('course', $course)
-            ->groupBy('resource.iid')
             ->orderBy('resource.sentDate', 'DESC');
 
         if ($session) {

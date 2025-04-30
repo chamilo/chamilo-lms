@@ -37,13 +37,17 @@ class StudentPublicationController extends AbstractController
 
         $data = array_map(function ($row) use ($serializer) {
             $publication = $row[0] ?? null;
-            $commentsCount = $row['commentsCount'] ?? 0;
+            $commentsCount = (int) ($row['commentsCount'] ?? 0);
+            $correctionsCount = (int) ($row['correctionsCount'] ?? 0);
+            $lastUpload = $row['lastUpload'] ?? null;
 
             $item = json_decode($serializer->serialize($publication, 'json', [
-                'groups' => ['student_publication:read']
+                'groups' => ['student_publication:read'],
             ]), true);
 
-            $item['commentsCount'] = (int) $commentsCount;
+            $item['commentsCount'] = $commentsCount;
+            $item['feedbackCount'] = $correctionsCount;
+            $item['lastUpload'] = $lastUpload;
 
             return $item;
         }, $assignments);

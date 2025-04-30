@@ -12,8 +12,11 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
 use ChamiloSession;
+use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\GenericResource;
 use Laminas\Permissions\Acl\Role\GenericRole;
@@ -45,7 +48,8 @@ class ResourceNodeVoter extends Voter
     public function __construct(
         private Security $security,
         private RequestStack $requestStack,
-        private SettingsManager $settingsManager
+        private SettingsManager $settingsManager,
+        private EntityManagerInterface $entityManager
     ) {}
 
     public static function getReaderMask(): int
@@ -157,6 +161,22 @@ class ResourceNodeVoter extends Voter
                 || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
             ) {
                 return true;
+            }
+        }
+
+        if ($resourceNode->getResourceType()->getTitle() === 'files') {
+            $document = $this->entityManager
+                ->getRepository(CDocument::class)
+                ->findOneBy(['resourceNode' => $resourceNode]);
+
+            if ($document) {
+                $exists = $this->entityManager
+                    ->getRepository(CStudentPublicationRelDocument::class)
+                    ->findOneBy(['document' => $document]);
+
+                if ($exists !== null) {
+                    return true;
+                }
             }
         }
 

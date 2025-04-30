@@ -35,7 +35,20 @@
 
     <Column :header="t('Feedback')">
       <template #body="slotProps">
-        <span v-if="slotProps.data.commentsCount > 0"> {{ slotProps.data.commentsCount }} 💬 </span>
+        <div
+          v-if="slotProps.data.feedbackCount > 0"
+          class="flex items-center gap-2"
+        >
+          <span class="bg-primary text-white text-tiny font-semibold px-2 py-0.5 rounded">
+            {{ slotProps.data.feedbackCount }} {{ t("Feedback") }}
+          </span>
+          <BaseIcon
+            icon="comment"
+            size="small"
+            class="cursor-pointer hover:text-primary"
+            @click="openCommentDialog(slotProps.data)"
+          />
+        </div>
         <span v-else>-</span>
       </template>
     </Column>
@@ -46,18 +59,26 @@
       </template>
     </Column>
   </DataTable>
+
+  <CorrectAndRateModal
+    v-model="showCorrectAndRateDialog"
+    :item="correctingItem"
+    @commentSent="loadAssignments"
+    @update:modelValue="handleDialogVisibility"
+  />
 </template>
 
 <script setup>
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
-import { ref, onMounted } from "vue"
+import { ref, onMounted, nextTick } from "vue"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
 import { useRouter } from "vue-router"
 import { useCidReq } from "../../composables/cidReq"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
+import CorrectAndRateModal from "./CorrectAndRateModal.vue"
 
 const { t } = useI18n()
 const { abbreviatedDatetime } = useFormatDate()
@@ -66,6 +87,24 @@ const { cid, sid } = useCidReq()
 
 const assignments = ref([])
 const loading = ref(false)
+
+const showCorrectAndRateDialog = ref(false)
+const correctingItem = ref(null)
+
+function openCommentDialog(item) {
+  correctingItem.value = null
+  nextTick(() => {
+    correctingItem.value = item
+    showCorrectAndRateDialog.value = true
+  })
+}
+
+function handleDialogVisibility(newVal) {
+  showCorrectAndRateDialog.value = newVal
+  if (!newVal) {
+    correctingItem.value = null
+  }
+}
 
 onMounted(async () => {
   loading.value = true

@@ -107,12 +107,6 @@
 
     <div class="flex justify-end space-x-2 mt-4">
       <BaseButton
-        :label="t('Back')"
-        icon="arrow-left"
-        type="white"
-        @click="goBack"
-      />
-      <BaseButton
         :disabled="isFormLoading"
         :label="t('Save')"
         icon="save"
@@ -317,9 +311,5 @@ const onSubmit = async () => {
   }
 
   emit("submit", publicationStudent)
-}
-
-function goBack() {
-  router.push({ name: "AssignmentsList", query: { cid, sid, gid } })
 }
 </script>

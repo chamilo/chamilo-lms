@@ -2,14 +2,17 @@
   <Dialog
     v-model:visible="visible"
     modal
-    :header="t('Correct & Comment')"
+    :header="t('Comments')"
     :style="{ width: '600px' }"
     @hide="onHide"
   >
     <div class="space-y-4">
       <div class="bg-gray-100 p-3 rounded">
         <h4 class="font-bold text-md">{{ props.item.title }}</h4>
-        <p class="text-sm text-gray-700 whitespace-pre-line">{{ props.item.description }}</p>
+        <div
+          class="text-sm text-gray-700 prose max-w-none"
+          v-html="props.item.description"
+        ></div>
       </div>
 
       <Textarea

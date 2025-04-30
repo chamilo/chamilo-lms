@@ -3,7 +3,7 @@
     <template #start>
       <BaseButton
         v-if="isAllowedToEdit"
-        icon="file-cloud-add"
+        icon="folder-plus"
         size="normal"
         @click="goToNewAssignment"
         type="black"

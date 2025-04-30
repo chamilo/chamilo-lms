@@ -32,7 +32,7 @@ abstract class AbstractResource
      * Download URL of the Resource File Property set by ResourceNormalizer.php.
      */
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read', 'student_publication:read', 'student_publication_comment:read'])]
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'media_object_read', 'message:read', 'student_publication:read', 'student_publication_comment:read', 'student_publication_rel_document:read'])]
     public ?string $downloadUrl = null;
 
     /**

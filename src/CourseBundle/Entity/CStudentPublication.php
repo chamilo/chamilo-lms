@@ -480,6 +480,14 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this->getExtensions();
     }
 
+    #[Groups(['student_publication:read'])]
+    public function getChildFileCount(): int
+    {
+        return $this->children
+            ->filter(fn (self $child) => $child->getFiletype() === 'file' && $child->getActive() !== 2)
+            ->count();
+    }
+
     /**
      * @return Collection<int, CStudentPublication>
      */

@@ -65,7 +65,6 @@
       </template>
     </div>
 
-
     <h2 class="text-2xl font-bold">{{ assignment?.title }}</h2>
 
     <div class="bg-gray-10 border border-gray-25 rounded-lg shadow-sm">
@@ -73,6 +72,26 @@
         class="p-4 text-gray-800 prose max-w-none"
         v-html="assignment?.description"
       />
+    </div>
+    <div
+      v-if="addedDocuments.length"
+      class="bg-gray-10 border-t border-gray-25 p-4 mt-0"
+    >
+      <h3 class="font-bold text-gray-90 mb-2">{{ t("Documents") }}</h3>
+      <ul class="space-y-2">
+        <li
+          v-for="doc in addedDocuments"
+          :key="doc.document.iid"
+        >
+          <a
+            :href="`${doc.document.downloadUrl}`"
+            class="text-primary hover:underline"
+            target="_blank"
+          >
+            {{ doc.document.title }}
+          </a>
+        </li>
+      </ul>
     </div>
     <div>
       <StudentSubmissionList
@@ -98,6 +117,8 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import StudentSubmissionList from "../../components/assignments/StudentSubmissionList.vue"
 import TeacherSubmissionList from "../../components/assignments/TeacherSubmissionList.vue"
+import { ENTRYPOINT } from "../../config/entrypoint"
+import axios from "axios"
 
 const { t } = useI18n()
 const { cid, sid, gid } = useCidReq()
@@ -109,11 +130,24 @@ const assignment = ref(null)
 
 const securityStore = useSecurityStore()
 const isEditor = securityStore.isCourseAdmin || securityStore.isTeacher
+const addedDocuments = ref([])
+
+async function loadAddedDocuments() {
+  try {
+    const response = await axios.get(`${ENTRYPOINT}c_student_publication_rel_documents`, {
+      params: { "publication.id": assignmentId },
+    })
+    addedDocuments.value = response.data["hydra:member"]
+  } catch (e) {
+    console.error("Error loading added documents", e)
+  }
+}
 
 onMounted(async () => {
   try {
     const response = await cStudentPublicationService.getAssignmentMetadata(assignmentId)
     assignment.value = response
+    await loadAddedDocuments()
   } catch (error) {
     console.error("Error loading assignment metadata", error)
   }
@@ -135,7 +169,15 @@ function uploadMyAssignment() {
 }
 
 function editAssignment() {
-  console.log("Edit clicked")
+  router.push({
+    name: "AssignmentsUpdate",
+    params: { id: assignment.value["@id"] },
+    query: {
+      ...route.query,
+      from: "AssignmentDetail",
+      node: route.params.node,
+    },
+  })
 }
 
 function exportPdf() {
@@ -147,7 +189,11 @@ function showUnsubmittedUsers() {
 }
 
 function addDocument() {
-  console.log("Add document clicked")
+  router.push({
+    name: "AssignmentAddDocument",
+    params: { id: assignmentId },
+    query: route.query,
+  })
 }
 
 function addUsers() {

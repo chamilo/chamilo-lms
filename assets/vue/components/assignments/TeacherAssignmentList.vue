@@ -31,6 +31,12 @@
         >
           {{ slotProps.data.title }}
         </RouterLink>
+        <BaseTag
+          v-if="slotProps.data.childFileCount > 0"
+          :label="`${slotProps.data.childFileCount}`"
+          type="success"
+          class="ml-2"
+        />
       </template>
     </Column>
     <Column
@@ -83,7 +89,7 @@
             "
             :label="t('Visibility')"
             only-icon
-            size="small"
+            size="normal"
             type="black"
             @click="onClickVisibility(slotProps.data)"
           />
@@ -91,7 +97,7 @@
             :label="t('Upload corrections')"
             icon="file-upload"
             only-icon
-            size="small"
+            size="normal"
             type="black"
           />
           <BaseButton
@@ -99,14 +105,14 @@
             :label="t('Save')"
             icon="download"
             only-icon
-            size="small"
+            size="normal"
             type="black"
           />
           <BaseButton
             :label="t('Edit')"
             icon="edit"
             only-icon
-            size="small"
+            size="normal"
             type="black"
             @click="onClickEdit(slotProps.data)"
           />
@@ -276,12 +282,13 @@ async function onClickVisibility(assignment) {
 }
 
 function onClickEdit(assignment) {
-  const assignmentId = parseInt(assignment["@id"].split("/").pop(), 10)
-
   router.push({
     name: "AssignmentsUpdate",
     params: { id: assignment["@id"] },
-    query: route.query,
+    query: {
+      ...route.query,
+      from: "AssignmentsList"
+    },
   })
 }
 

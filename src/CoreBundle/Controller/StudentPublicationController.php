@@ -6,15 +6,20 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
 use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Mpdf\Mpdf;
+use Mpdf\MpdfException;
+use Mpdf\Output\Destination;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -58,7 +63,7 @@ class StudentPublicationController extends AbstractController
         ]);
     }
 
-    #[Route('/progress', name: 'chamilo_core_student_progress', methods: ['GET'])]
+    #[Route('/progress', name: 'chamilo_core_assignment_student_progress', methods: ['GET'])]
     public function getStudentProgress(
         SerializerInterface $serializer
     ): JsonResponse {
@@ -73,7 +78,7 @@ class StudentPublicationController extends AbstractController
         ]);
     }
 
-    #[Route('/{assignmentId}/submissions', name: 'chamilo_core_student_submission_list', methods: ['GET'])]
+    #[Route('/{assignmentId}/submissions', name: 'chamilo_core_assignment_student_submission_list', methods: ['GET'])]
     public function getAssignmentSubmissions(
         int $assignmentId,
         Request $request,
@@ -108,7 +113,7 @@ class StudentPublicationController extends AbstractController
         ]);
     }
 
-    #[Route('/{assignmentId}/submissions/teacher', name: 'chamilo_core_teacher_submission_list', methods: ['GET'])]
+    #[Route('/{assignmentId}/submissions/teacher', name: 'chamilo_core_assignment_teacher_submission_list', methods: ['GET'])]
     public function getAssignmentSubmissionsForTeacher(
         int $assignmentId,
         Request $request,
@@ -138,7 +143,7 @@ class StudentPublicationController extends AbstractController
         ]);
     }
 
-    #[Route('/submissions/{id}', name: 'chamilo_core_student_submission_delete', methods: ['DELETE'])]
+    #[Route('/submissions/{id}', name: 'chamilo_core_assignment_student_submission_delete', methods: ['DELETE'])]
     public function deleteSubmission(
         int $id,
         EntityManagerInterface $em,
@@ -158,7 +163,7 @@ class StudentPublicationController extends AbstractController
         return new JsonResponse(null, 204);
     }
 
-    #[Route('/submissions/{id}/edit', name: 'chamilo_core_student_submission_edit', methods: ['PATCH'])]
+    #[Route('/submissions/{id}/edit', name: 'chamilo_core_assignment_student_submission_edit', methods: ['PATCH'])]
     public function editSubmission(
         int $id,
         Request $request,
@@ -209,7 +214,7 @@ class StudentPublicationController extends AbstractController
         return new JsonResponse(['success' => true]);
     }
 
-    #[Route('/submissions/{id}/move', name: 'chamilo_core_student_submission_move', methods: ['PATCH'])]
+    #[Route('/submissions/{id}/move', name: 'chamilo_core_assignment_student_submission_move', methods: ['PATCH'])]
     public function moveSubmission(
         int $id,
         Request $request,
@@ -242,5 +247,117 @@ class StudentPublicationController extends AbstractController
         $em->flush();
 
         return new JsonResponse(['success' => true]);
+    }
+
+    #[Route('/{assignmentId}/unsubmitted-users', name: 'chamilo_core_assignment_unsubmitted_users', methods: ['GET'])]
+    public function getUnsubmittedUsers(
+        int $assignmentId,
+        SerializerInterface $serializer,
+        CStudentPublicationRepository $repo
+    ): JsonResponse {
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+
+        $students = $session
+            ? $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT)
+            : $course->getStudentSubscriptions();
+
+        $studentIds = array_map(fn ($rel) => $rel->getUser()->getId(), $students->toArray());
+
+        $submittedUserIds = $repo->findUserIdsWithSubmissions($assignmentId);
+
+        $unsubmitted = array_filter(
+            $students->toArray(),
+            fn ($rel) => !in_array($rel->getUser()->getId(), $submittedUserIds, true)
+        );
+
+        $data = array_values(array_map(fn ($rel) => $rel->getUser(), $unsubmitted));
+
+        return $this->json([
+            'hydra:member' => $data,
+            'hydra:totalItems' => count($data),
+        ], 200, [], ['groups' => ['user:read']]);
+    }
+
+    #[Route('/{assignmentId}/unsubmitted-users/email', name: 'chamilo_core_assignment_unsubmitted_users_email', methods: ['POST'])]
+    public function emailUnsubmittedUsers(
+        int $assignmentId,
+        CStudentPublicationRepository $repo,
+        MessageHelper $messageHelper,
+        Security $security
+    ): JsonResponse {
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+
+        /* @var User $user */
+        $user = $security->getUser();
+        $senderId = $user?->getId();
+
+        $students = $session
+            ? $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT)
+            : $course->getStudentSubscriptions();
+
+        $submittedUserIds = $repo->findUserIdsWithSubmissions($assignmentId);
+
+        $unsubmitted = array_filter(
+            $students->toArray(),
+            fn ($rel) => !in_array($rel->getUser()->getId(), $submittedUserIds, true)
+        );
+
+        foreach ($unsubmitted as $rel) {
+            $user = $rel->getUser();
+            $messageHelper->sendMessageSimple(
+                $user->getId(),
+                "You have not submitted your assignment",
+                "Please submit your assignment as soon as possible.",
+                $senderId
+            );
+        }
+
+        return new JsonResponse(['success' => true, 'sent' => count($unsubmitted)]);
+    }
+
+    #[Route('/{id}/export/pdf', name: 'chamilo_core_assignment_export_pdf', methods: ['GET'])]
+    public function exportPdf(
+        int $id,
+        Request $request,
+        CStudentPublicationRepository $repo
+    ): Response {
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+
+        $assignment = $repo->find($id);
+
+        if (!$assignment) {
+            throw $this->createNotFoundException('Assignment not found');
+        }
+
+        [$submissions] = $repo->findAllSubmissionsByAssignment(
+            assignmentId: $assignment->getIid(),
+            page: 1,
+            itemsPerPage: 10000
+        );
+
+        $html = $this->renderView('@ChamiloCore/Work/pdf_export.html.twig', [
+            'assignment' => $assignment,
+            'course' => $course,
+            'session' => $session,
+            'submissions' => $submissions,
+        ]);
+
+        try {
+            $mpdf = new Mpdf([
+                'tempDir' => api_get_path(SYS_ARCHIVE_PATH) . 'mpdf/',
+            ]);
+            $mpdf->WriteHTML($html);
+
+            return new Response(
+                $mpdf->Output('', Destination::INLINE),
+                200,
+                ['Content-Type' => 'application/pdf']
+            );
+        } catch (MpdfException $e) {
+            throw new \RuntimeException('Failed to generate PDF: '.$e->getMessage(), 500, $e);
+        }
     }
 }

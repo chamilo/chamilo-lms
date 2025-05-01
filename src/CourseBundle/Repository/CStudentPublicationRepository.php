@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
+use Chamilo\CourseBundle\Entity\CStudentPublicationRelUser;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -150,6 +151,8 @@ final class CStudentPublicationRepository extends ResourceRepository
 
     public function findVisibleAssignmentsForStudent(Course $course, ?Session $session = null): array
     {
+        $userId = api_get_user_id();
+
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
             ->addSelect('(SELECT COUNT(comment.iid) FROM ' . CStudentPublicationComment::class . ' comment WHERE comment.publication = resource) AS commentsCount')
@@ -157,6 +160,7 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->addSelect('(SELECT MAX(c2.sentDate) FROM ' . CStudentPublication::class . ' c2 WHERE c2.publicationParent = resource) AS lastUpload')
             ->join('resource.resourceNode', 'rn')
             ->join('rn.resourceLinks', 'rl')
+            ->leftJoin(CStudentPublicationRelUser::class, 'rel', 'WITH', 'rel.publication = resource AND rel.user = :userId')
             ->where('resource.publicationParent IS NULL')
             ->andWhere('resource.active IN (0, 1)')
             ->andWhere('resource.filetype = :filetype')
@@ -164,6 +168,7 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->andWhere('rl.visibility = 2')
             ->andWhere('rl.course = :course')
             ->setParameter('course', $course)
+            ->setParameter('userId', $userId)
             ->orderBy('resource.sentDate', 'DESC');
 
         if ($session) {
@@ -172,6 +177,14 @@ final class CStudentPublicationRepository extends ResourceRepository
         } else {
             $qb->andWhere('rl.session IS NULL');
         }
+
+        $qb->andWhere('
+            NOT EXISTS (
+                SELECT 1 FROM '.CStudentPublicationRelUser::class.' rel_all
+                WHERE rel_all.publication = resource
+            )
+            OR rel.iid IS NOT NULL
+        ');
 
         return $qb->getQuery()->getResult();
     }
@@ -315,5 +328,17 @@ final class CStudentPublicationRepository extends ResourceRepository
             iterator_to_array($paginator),
             count($paginator),
         ];
+    }
+
+    public function findUserIdsWithSubmissions(int $assignmentId): array
+    {
+        $qb = $this->createQueryBuilder('sp')
+            ->select('DISTINCT u.id')
+            ->join('sp.user', 'u')
+            ->where('sp.publicationParent = :assignmentId')
+            ->andWhere('sp.active IN (0,1)')
+            ->setParameter('assignmentId', $assignmentId);
+
+        return array_column($qb->getQuery()->getArrayResult(), 'id');
     }
 }

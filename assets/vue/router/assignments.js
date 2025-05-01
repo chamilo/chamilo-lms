@@ -49,12 +49,6 @@ export default {
       props: true,
     },
     {
-      name: "AssignmentUploadCorrections",
-      path: ":id/corrections",
-      component: () => import("../views/assignments/AssignmentUploadCorrections.vue"),
-      props: true,
-    },
-    {
       name: "AssignmentMissing",
       path: ":id/missing",
       component: () => import("../views/assignments/AssignmentMissing.vue"),

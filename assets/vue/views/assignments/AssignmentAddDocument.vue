@@ -1,16 +1,17 @@
 <template>
-  <div class="space-y-6">
+  <div>
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold">{{ t("Add Documents") }} - {{ publicationTitle }}</h1>
-      <BaseButton
-        icon="arrow-left-bold"
-        type="secondary"
-        :label="t('Back')"
-        @click="$router.back()"
+      <BaseIcon
+        icon="back"
+        size="big"
+        @click="goBack"
+        :title="t('Back')"
       />
     </div>
+    <hr />
+    <h1 class="text-2xl font-bold">{{ t("Add Documents") }} - {{ publicationTitle }}</h1>
 
-    <div>
+    <div class="m-4">
       <h2 class="text-xl font-semibold mb-2">{{ t("Documents added") }}</h2>
       <div v-if="addedDocuments.length">
         <div
@@ -72,6 +73,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useNotification } from "../../composables/notification"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -160,5 +162,13 @@ async function removeDocument(relId) {
   } catch (e) {
     notification.showErrorNotification(t("Error removing document"))
   }
+}
+
+function goBack() {
+  router.push({
+    name: "AssignmentDetail",
+    params: { id: publicationId },
+    query: route.query,
+  })
 }
 </script>

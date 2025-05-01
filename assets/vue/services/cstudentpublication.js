@@ -93,6 +93,19 @@ async function moveSubmission(submissionId, newAssignmentId) {
   return response.data
 }
 
+async function getUnsubmittedUsers(assignmentId) {
+  const { sid, cid, gid } = useCidReq()
+  const params = new URLSearchParams({ cid, ...(sid && { sid }), ...(gid && { gid }) }).toString()
+  const response = await axios.get(`/assignments/${assignmentId}/unsubmitted-users?${params}`)
+  return response.data["hydra:member"]
+}
+
+async function sendEmailToUnsubmitted(assignmentId, queryParams = {}) {
+  const params = new URLSearchParams(queryParams).toString()
+  const response = await axios.post(`/assignments/${assignmentId}/unsubmitted-users/email?${params}`)
+  return response.data
+}
+
 export default {
   ...makeService("c_student_publications"),
   findStudentAssignments,
@@ -106,4 +119,6 @@ export default {
   uploadComment,
   loadComments,
   moveSubmission,
+  getUnsubmittedUsers,
+  sendEmailToUnsubmitted,
 }

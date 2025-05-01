@@ -27,7 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             'session_rel_course_rel_user:read',
         ],
         'enable_max_depth' => true,
-    ]
+    ],
+    paginationClientEnabled: true,
 )]
 #[ORM\Table(name: 'session_rel_course_rel_user')]
 #[ORM\Index(columns: ['user_id'], name: 'idx_session_rel_course_rel_user_id_user')]

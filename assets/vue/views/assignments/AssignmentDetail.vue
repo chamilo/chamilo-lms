@@ -22,26 +22,31 @@
         <BaseIcon
           icon="file-add"
           size="big"
+          :title="t('Add document')"
           @click="addDocument"
         />
         <BaseIcon
           icon="user-add"
           size="big"
+          :title="t('Add users')"
           @click="addUsers"
         />
         <BaseIcon
           icon="file-pdf"
           size="big"
+          :title="t('Export PDF')"
           @click="exportPdf"
         />
         <BaseIcon
           icon="edit"
           size="big"
+          :title="t('Edit assignment')"
           @click="editAssignment"
         />
         <BaseIcon
-          icon="eye-lock"
+          icon="list"
           size="big"
+          :title="t('Users without submission')"
           @click="showUnsubmittedUsers"
         />
         <BaseButton
@@ -119,6 +124,7 @@ import StudentSubmissionList from "../../components/assignments/StudentSubmissio
 import TeacherSubmissionList from "../../components/assignments/TeacherSubmissionList.vue"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import axios from "axios"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
 const { cid, sid, gid } = useCidReq()
@@ -131,6 +137,7 @@ const assignment = ref(null)
 const securityStore = useSecurityStore()
 const isEditor = securityStore.isCourseAdmin || securityStore.isTeacher
 const addedDocuments = ref([])
+const notification = useNotification()
 
 async function loadAddedDocuments() {
   try {
@@ -180,12 +187,31 @@ function editAssignment() {
   })
 }
 
-function exportPdf() {
-  console.log("Export PDF clicked")
+async function exportPdf() {
+  try {
+    const response = await axios.get(`/assignments/${assignmentId}/export/pdf`, {
+      params: { cid, ...(sid && { sid }), ...(gid && { gid }) },
+      responseType: "blob",
+    })
+    const url = window.URL.createObjectURL(new Blob([response.data], { type: "application/pdf" }))
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute("download", `assignment_${assignmentId}.pdf`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  } catch (error) {
+    notification.showErrorNotification(t("Failed to export PDF"))
+    console.error("PDF export error", error)
+  }
 }
 
 function showUnsubmittedUsers() {
-  console.log("Show users without task clicked")
+  router.push({
+    name: "AssignmentMissing",
+    params: { id: assignmentId },
+    query: { cid, sid, gid },
+  })
 }
 
 function addDocument() {
@@ -197,7 +223,11 @@ function addDocument() {
 }
 
 function addUsers() {
-  console.log("Add users clicked")
+  router.push({
+    name: "AssignmentAddUser",
+    params: { id: assignmentId },
+    query: route.query,
+  })
 }
 
 function downloadAssignments() {

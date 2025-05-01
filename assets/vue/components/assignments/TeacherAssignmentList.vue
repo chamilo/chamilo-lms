@@ -254,7 +254,7 @@ function onClickMultipleDelete() {
 
 function getAssignmentDetailLink(assignment) {
   const assignmentId = parseInt(assignment["@id"].split("/").pop(), 10)
-  const nodeUrl = assignment.resourceNode
+  const nodeUrl = assignment.resourceNode?.["@id"]
   const nodeId = nodeUrl ? parseInt(nodeUrl.split("/").pop(), 10) : 0
 
   return {

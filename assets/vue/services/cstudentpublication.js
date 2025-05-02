@@ -106,6 +106,44 @@ async function sendEmailToUnsubmitted(assignmentId, queryParams = {}) {
   return response.data
 }
 
+async function deleteAllCorrections(assignmentId) {
+  const { cid, sid } = useCidReq()
+  await axios.delete(`/assignments/${assignmentId}/corrections/delete`, {
+    params: { cid, ...(sid && { sid }) },
+  })
+}
+
+async function exportAssignmentPdf(assignmentId) {
+  const { cid, sid, gid } = useCidReq()
+  const params = { cid, ...(sid && { sid }), ...(gid && { gid }) }
+
+  const response = await axios.get(`/assignments/${assignmentId}/export/pdf`, {
+    params,
+    responseType: "blob",
+  })
+
+  return response.data
+}
+
+async function downloadAssignments(assignmentId) {
+  const response = await axios.get(`/assignments/${assignmentId}/download-package`, {
+    responseType: "blob",
+  })
+
+  return response.data
+}
+
+async function uploadCorrectionsPackage(assignmentId, file) {
+  const formData = new FormData()
+  formData.append("file", file)
+
+  const response = await axios.post(`/assignments/${assignmentId}/upload-corrections-package`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  })
+
+  return response.data
+}
+
 export default {
   ...makeService("c_student_publications"),
   findStudentAssignments,
@@ -121,4 +159,8 @@ export default {
   moveSubmission,
   getUnsubmittedUsers,
   sendEmailToUnsubmitted,
+  deleteAllCorrections,
+  exportAssignmentPdf,
+  downloadAssignments,
+  uploadCorrectionsPackage,
 }

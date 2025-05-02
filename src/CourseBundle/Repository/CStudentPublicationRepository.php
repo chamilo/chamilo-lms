@@ -341,4 +341,17 @@ final class CStudentPublicationRepository extends ResourceRepository
 
         return array_column($qb->getQuery()->getArrayResult(), 'id');
     }
+
+    public function findAllCorrectionsByAssignment(int $assignmentId): array
+    {
+        return $this->createQueryBuilder('correction')
+            ->leftJoin('correction.publicationParent', 'assignment')
+            ->where('assignment.iid = :assignmentId')
+            ->andWhere('correction.filetype = :filetype')
+            ->andWhere('correction.extensions IS NOT NULL')
+            ->setParameter('assignmentId', $assignmentId)
+            ->setParameter('filetype', 'file')
+            ->getQuery()
+            ->getResult();
+    }
 }

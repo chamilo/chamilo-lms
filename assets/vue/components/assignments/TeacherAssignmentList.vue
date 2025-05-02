@@ -94,19 +94,22 @@
             @click="onClickVisibility(slotProps.data)"
           />
           <BaseButton
-            :label="t('Upload corrections')"
-            icon="file-upload"
+            :label="t('Upload corrections package')"
+            icon="zip-unpack"
             only-icon
             size="normal"
-            type="black"
+            type="success"
+            :title="t('Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext')"
+            @click="() => uploadCorrections(slotProps.data)"
           />
           <BaseButton
             :disabled="0 === (slotProps.data.uniqueStudentAttemptsTotal || 0)"
-            :label="t('Save')"
-            icon="download"
+            :label="t('Download assignments package')"
+            icon="zip-pack"
             only-icon
             size="normal"
-            type="black"
+            type="primary"
+            @click="() => downloadAssignments(slotProps.data)"
           />
           <BaseButton
             :label="t('Edit')"
@@ -287,9 +290,52 @@ function onClickEdit(assignment) {
     params: { id: assignment["@id"] },
     query: {
       ...route.query,
-      from: "AssignmentsList"
+      from: "AssignmentsList",
     },
   })
+}
+
+async function downloadAssignments(assignment) {
+  const assignmentId = parseInt(assignment["@id"].split("/").pop(), 10)
+  try {
+    const blob = await cStudentPublicationService.downloadAssignments(assignmentId)
+    const url = window.URL.createObjectURL(new Blob([blob]))
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute("download", `assignments_${assignmentId}.zip`)
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+  } catch (error) {
+    notification.showErrorNotification(t("Failed to download package"))
+    console.error("Download error", error)
+  }
+}
+
+async function uploadCorrections(assignment) {
+  const assignmentId = parseInt(assignment["@id"].split("/").pop(), 10)
+
+  const input = document.createElement("input")
+  input.type = "file"
+  input.accept = ".zip"
+
+  input.addEventListener("change", async () => {
+    const file = input.files[0]
+    if (!file) return
+
+    try {
+      const result = await cStudentPublicationService.uploadCorrectionsPackage(assignmentId, file)
+      const uploaded = result.uploaded ?? 0
+      const skipped = result.skipped ?? 0
+      notification.showSuccessNotification(t(`Corrections uploaded: ${uploaded}. Skipped: ${skipped}.`))
+      await loadData()
+    } catch (error) {
+      console.error("Upload corrections error", error)
+      notification.showErrorNotification(t("Failed to upload corrections"))
+    }
+  })
+
+  input.click()
 }
 
 const getSessionId = (item) => {

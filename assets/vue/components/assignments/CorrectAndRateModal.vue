@@ -183,7 +183,15 @@ async function submit() {
 
 function getResourceNodeId(resourceNode) {
   if (!resourceNode) return 0
-  const match = resourceNode.match(/\/(\d+)$/)
+
+  if (typeof resourceNode === "object" && "id" in resourceNode) {
+    return parseInt(resourceNode.id, 10)
+  }
+
+  const idString = typeof resourceNode === "string" ? resourceNode : resourceNode["@id"]
+  if (!idString || typeof idString !== "string") return 0
+
+  const match = idString.match(/\/(\d+)$/)
   return match ? parseInt(match[1], 10) : 0
 }
 </script>

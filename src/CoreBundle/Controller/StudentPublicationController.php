@@ -8,8 +8,11 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
 use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
+use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
+use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Mpdf\Mpdf;
@@ -17,11 +20,14 @@ use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/assignments')]
 class StudentPublicationController extends AbstractController
@@ -134,7 +140,7 @@ class StudentPublicationController extends AbstractController
         $data = json_decode($serializer->serialize(
             $submissions,
             'json',
-            ['groups' => ['student_publication:read']]
+            ['groups' => ['student_publication:read', 'resource_node:read']]
         ), true);
 
         return new JsonResponse([
@@ -359,5 +365,187 @@ class StudentPublicationController extends AbstractController
         } catch (MpdfException $e) {
             throw new \RuntimeException('Failed to generate PDF: '.$e->getMessage(), 500, $e);
         }
+    }
+
+    #[Route('/{assignmentId}/corrections/delete', name: 'chamilo_core_assignment_delete_all_corrections', methods: ['DELETE'])]
+    public function deleteAllCorrections(
+        int $assignmentId,
+        EntityManagerInterface $em,
+        CStudentPublicationRepository $repo
+    ): JsonResponse {
+        $submissions = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000)[0];
+
+        $count = 0;
+
+        foreach ($submissions as $submission) {
+            $correctionNode = $submission->getCorrection();
+
+            if ($correctionNode !== null) {
+                $em->remove($correctionNode);
+                $submission->setExtensions(null);
+                $count++;
+            }
+        }
+
+        $em->flush();
+
+        return new JsonResponse([
+            'success' => true,
+            'deleted' => $count,
+        ]);
+    }
+
+    #[Route('/{assignmentId}/download-package', name: 'chamilo_core_assignment_download_package', methods: ['GET'])]
+    public function downloadAssignmentPackage(
+        int $assignmentId,
+        CStudentPublicationRepository $repo,
+        ResourceNodeRepository $resourceNodeRepository
+    ): Response {
+        $assignment = $repo->find($assignmentId);
+
+        if (!$assignment) {
+            throw $this->createNotFoundException('Assignment not found');
+        }
+
+        [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
+        $zipPath = api_get_path(SYS_ARCHIVE_PATH) . uniqid('assignment_', true) . '.zip';
+        $zip = new \ZipArchive();
+
+        if ($zip->open($zipPath, \ZipArchive::CREATE) !== true) {
+            throw new \RuntimeException('Cannot create zip archive');
+        }
+
+        foreach ($submissions as $submission) {
+            $resourceNode = $submission->getResourceNode();
+            $resourceFile = $resourceNode?->getFirstResourceFile();
+            $user = $submission->getUser();
+            $sentDate = $submission->getSentDate()?->format('Y-m-d_H-i') ?? 'unknown';
+
+            if ($resourceFile) {
+                try {
+                    $path = $resourceNodeRepository->getFilename($resourceFile);
+                    $content = $resourceNodeRepository->getFileSystem()->read($path);
+
+                    $filename = sprintf('%s_%s_%s', $sentDate, $user->getUsername(), $resourceFile->getOriginalName());
+                    $zip->addFromString($filename, $content);
+                } catch (\Throwable $e) {
+                    continue;
+                }
+            }
+        }
+
+        $zip->close();
+
+        return $this->file($zipPath, $assignment->getTitle() . '.zip')->deleteFileAfterSend();
+    }
+
+    #[Route('/{assignmentId}/upload-corrections-package', name: 'chamilo_core_assignment_upload_corrections_package', methods: ['POST'])]
+    public function uploadCorrectionsPackage(
+        int $assignmentId,
+        Request $request,
+        CStudentPublicationRepository $repo,
+        CStudentPublicationCorrectionRepository $correctionRepo,
+        EntityManagerInterface $em,
+        TranslatorInterface $translator
+    ): JsonResponse {
+        $file = $request->files->get('file');
+        if (!$file || $file->getClientOriginalExtension() !== 'zip') {
+            return new JsonResponse(['error' => 'Invalid file'], 400);
+        }
+
+        $folder = uniqid('corrections_', true);
+        $destinationDir = api_get_path(SYS_ARCHIVE_PATH) . $folder;
+        mkdir($destinationDir, 0777, true);
+
+        $zip = new \ZipArchive();
+        $zip->open($file->getPathname());
+        $zip->extractTo($destinationDir);
+        $zip->close();
+
+        [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
+
+        $matchMap = [];
+        foreach ($submissions as $submission) {
+            $date = $submission->getSentDate()?->format('Y-m-d_H-i') ?? 'unknown';
+            $username = $submission->getUser()?->getUsername() ?? 'unknown';
+            $title = $this->cleanFilename($submission->getTitle() ?? '');
+            $title = preg_replace('/_[a-f0-9]{10,}$/', '', pathinfo($title, PATHINFO_FILENAME));
+            $key = sprintf('%s_%s_%s', $date, $username, $title);
+            $matchMap[$key] = $submission;
+        }
+
+        $finder = new Finder();
+        $finder->files()->in($destinationDir);
+
+        $uploaded = 0;
+        $skipped = [];
+
+        foreach ($finder as $foundFile) {
+            $filename = $foundFile->getFilename();
+            $nameOnly = pathinfo($filename, PATHINFO_FILENAME);
+            $nameOnly = preg_replace('/_[a-f0-9]{10,}$/', '', $nameOnly);
+
+            $matched = false;
+            foreach ($matchMap as $prefix => $submission) {
+                if ($nameOnly === $prefix) {
+
+                    if ($submission->getCorrection()) {
+                        $em->remove($submission->getCorrection());
+                        $em->flush();
+                    }
+
+                    $uploadedFile = new UploadedFile(
+                        $foundFile->getRealPath(),
+                        $filename,
+                        null,
+                        null,
+                        true
+                    );
+
+                    $correction = new CStudentPublicationCorrection();
+                    $correction->setTitle($filename);
+                    $correction->setUploadFile($uploadedFile);
+                    $correction->setParentResourceNode($submission->getResourceNode()->getId());
+
+                    $em->persist($correction);
+
+                    $submission->setExtensions($filename);
+                    $submission->setDescription('Correction uploaded');
+                    $submission->setQualification(0);
+                    $submission->setDateOfQualification(new \DateTime());
+                    $submission->setAccepted(true);
+                    $em->persist($submission);
+
+                    $uploaded++;
+                    $matched = true;
+                    break;
+                }
+            }
+
+            if (!$matched) {
+                $skipped[] = $filename;
+            }
+        }
+
+        $em->flush();
+
+        return new JsonResponse([
+            'success' => true,
+            'uploaded' => $uploaded,
+            'skipped' => count($skipped),
+            'skipped_files' => $skipped,
+        ]);
+    }
+
+    /**
+     * Sanitize filenames.
+     */
+    private function cleanFilename(string $name): string
+    {
+        $name = str_replace([':', '\\', '/', '*', '?', '"', '<', '>', '|'], '_', $name);
+        $name = preg_replace('/\s+/', '_', $name);
+        $name = preg_replace('/[^\w\-\.]/u', '', $name);
+        $name = preg_replace('/_+/', '_', $name);
+        return trim($name, '_');
     }
 }

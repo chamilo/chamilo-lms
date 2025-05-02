@@ -50,15 +50,16 @@
           @click="showUnsubmittedUsers"
         />
         <BaseButton
-          icon="download"
+          icon="zip-pack"
           :label="t('Download assignments package')"
           type="primary"
           @click="downloadAssignments"
         />
         <BaseButton
-          icon="upload"
+          icon="zip-unpack"
           :label="t('Upload corrections package')"
           type="success"
+          :title="t('Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext')"
           @click="uploadCorrections"
         />
         <BaseButton
@@ -105,6 +106,7 @@
       />
       <TeacherSubmissionList
         v-else
+        :key="submissionListKey"
         :assignment-id="assignmentId"
       />
     </div>
@@ -112,7 +114,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useCidReq } from "../../composables/cidReq"
@@ -138,6 +140,7 @@ const securityStore = useSecurityStore()
 const isEditor = securityStore.isCourseAdmin || securityStore.isTeacher
 const addedDocuments = ref([])
 const notification = useNotification()
+const submissionListKey = ref(0)
 
 async function loadAddedDocuments() {
   try {
@@ -189,11 +192,8 @@ function editAssignment() {
 
 async function exportPdf() {
   try {
-    const response = await axios.get(`/assignments/${assignmentId}/export/pdf`, {
-      params: { cid, ...(sid && { sid }), ...(gid && { gid }) },
-      responseType: "blob",
-    })
-    const url = window.URL.createObjectURL(new Blob([response.data], { type: "application/pdf" }))
+    const data = await cStudentPublicationService.exportAssignmentPdf(assignmentId)
+    const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }))
     const link = document.createElement("a")
     link.href = url
     link.setAttribute("download", `assignment_${assignmentId}.pdf`)
@@ -230,15 +230,59 @@ function addUsers() {
   })
 }
 
-function downloadAssignments() {
-  console.log("Download assignments clicked")
+async function downloadAssignments() {
+  try {
+    const blob = await cStudentPublicationService.downloadAssignments(assignmentId)
+    const url = window.URL.createObjectURL(new Blob([blob]))
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute("download", `assignments_${assignmentId}.zip`)
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+  } catch (error) {
+    notification.showErrorNotification(t("Failed to download package"))
+    console.error("Download error", error)
+  }
 }
 
-function uploadCorrections() {
-  console.log("Upload corrections clicked")
+async function uploadCorrections() {
+  const input = document.createElement("input")
+  input.type = "file"
+  input.accept = ".zip"
+
+  input.addEventListener("change", async () => {
+    const file = input.files[0]
+    if (!file) return
+
+    try {
+      const result = await cStudentPublicationService.uploadCorrectionsPackage(assignmentId, file)
+      const uploaded = result.uploaded ?? 0
+      const skipped = result.skipped ?? 0
+      notification.showSuccessNotification(t(`Corrections uploaded: ${uploaded}. Skipped: ${skipped}.`))
+      submissionListKey.value++
+    } catch (error) {
+      console.error("Upload corrections error", error)
+      notification.showErrorNotification(t("Failed to upload corrections"))
+    }
+  })
+
+  input.click()
 }
 
-function deleteAllCorrections() {
-  console.log("Delete all corrections clicked")
+async function deleteAllCorrections() {
+  if (!confirm(t("Are you sure you want to delete all corrections?"))) return
+
+  try {
+    await cStudentPublicationService.deleteAllCorrections(assignmentId)
+    notification.showSuccessNotification(t("All corrections deleted"))
+
+    assignment.value = await cStudentPublicationService.getAssignmentMetadata(assignmentId)
+
+    submissionListKey.value++
+  } catch (error) {
+    console.error("Error deleting corrections", error)
+    notification.showErrorNotification(t("Failed to delete corrections"))
+  }
 }
 </script>

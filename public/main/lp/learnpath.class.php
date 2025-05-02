@@ -8026,11 +8026,23 @@ class learnpath
             case TOOL_USER:
                 return $main_dir_path.'user/user.php?'.$extraParams;
             case TOOL_STUDENTPUBLICATION:
-                if (!empty($rowItem->getPath())) {
-                    return $main_dir_path.'work/work_list.php?id='.$rowItem->getPath().'&'.$extraParams;
-                }
+                $repo = Container::getStudentPublicationRepository();
+                $publication = $repo->find($rowItem->getPath());
+                if ($publication && $publication->hasResourceNode()) {
+                    $nodeId = $publication->getResourceNode()->getId();
+                    $assignmentId = $publication->getIid();
 
-                return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;
+                    return api_get_path(WEB_PATH) .
+                        "resources/assignment/$nodeId/submission/$assignmentId?" .
+                        http_build_query([
+                            'cid' => $course_id,
+                            'sid' => $session_id,
+                            'gid' => 0,
+                            'origin' => 'learnpath',
+                            'isStudentView' => 'true',
+                        ]);
+                }
+                return '';
             case TOOL_SURVEY:
 
                 $surveyId = (int) $id;

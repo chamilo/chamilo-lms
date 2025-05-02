@@ -209,7 +209,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    #[Groups(['document:read', 'document:write', 'document:browse'])]
+    #[Groups(['document:read', 'document:write', 'document:browse', 'student_publication_rel_document:read'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;

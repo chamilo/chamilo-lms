@@ -4,6 +4,7 @@
     aria-hidden="true"
     @click="$emit('click', $event)"
     class="cursor-pointer"
+    :title="title"
   />
 </template>
 
@@ -15,22 +16,16 @@ const props = defineProps({
   icon: {
     type: String,
     required: true,
-    validator: (value) => {
-      if (typeof value !== "string") {
-        return false
-      }
-      return Object.keys(chamiloIconToClass).includes(value)
-    },
+    validator: (value) => typeof value === "string" && Object.keys(chamiloIconToClass).includes(value),
   },
   size: {
     type: String,
     default: "normal",
-    validator: (value) => {
-      if (typeof value !== "string") {
-        return false
-      }
-      return ["big", "normal", "small"].includes(value)
-    },
+    validator: (value) => ["big", "normal", "small"].includes(value),
+  },
+  title: {
+    type: String,
+    default: "",
   },
 })
 

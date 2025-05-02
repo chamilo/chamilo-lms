@@ -7,9 +7,10 @@
       :label="t('Assignment name')"
     />
 
-    <BaseInputText
+    <BaseTinyEditor
       v-model="assignment.description"
       :label="t('Description')"
+      editor-id=""
     />
 
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
@@ -106,12 +107,6 @@
 
     <div class="flex justify-end space-x-2 mt-4">
       <BaseButton
-        :label="t('Back')"
-        icon="arrow-left"
-        type="white"
-        @click="goBack"
-      />
-      <BaseButton
         :disabled="isFormLoading"
         :label="t('Save')"
         icon="save"
@@ -137,6 +132,7 @@ import { useI18n } from "vue-i18n"
 import { useCidReq } from "../../composables/cidReq"
 import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
+import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 
 const props = defineProps({
   defaultAssignment: {
@@ -198,7 +194,6 @@ watchEffect(() => {
 
   if (defaultAssignment.weight > 0) {
     chkAddToGradebook.value = true
-    //assignment.gradebookId.id = defaultAssignment.gradebookCategoryId
     assignment.weight = defaultAssignment.weight
   }
 
@@ -316,9 +311,5 @@ const onSubmit = async () => {
   }
 
   emit("submit", publicationStudent)
-}
-
-function goBack() {
-  router.push({ name: "AssignmentsList", query: { cid, sid, gid } })
 }
 </script>

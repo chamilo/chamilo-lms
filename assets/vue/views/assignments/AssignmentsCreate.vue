@@ -1,12 +1,19 @@
 <template>
-  <div class="field">
-    <h3 v-t="'Create assignment'" />
-  </div>
+  <div class="field space-y-2">
+    <BaseIcon
+      icon="back"
+      size="big"
+      @click="goBack"
+    />
+    <div class="field">
+      <h3 v-t="'Create assignment'" />
+    </div>
 
-  <AssignmentsForm
-    :is-form-loading="isFormLoading"
-    @submit="onSubmit"
-  />
+    <AssignmentsForm
+      :is-form-loading="isFormLoading"
+      @submit="onSubmit"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -18,6 +25,7 @@ import { ENTRYPOINT } from "../../config/entrypoint"
 import { useCidReq } from "../../composables/cidReq"
 import { useNotification } from "../../composables/notification"
 import { useRouter } from "vue-router"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 
 const { t } = useI18n()
 const { cid, sid, gid } = useCidReq()
@@ -37,9 +45,16 @@ function onSubmit(publicationStudent) {
 
       showSuccessNotification(t("Assignment created"))
 
-      router.push({ name: "AssignmentsList", query: { cid, sid, gid } })
+      goBack()
     })
     .catch((error) => showErrorNotification(error))
     .finally(() => (isFormLoading.value = false))
+}
+
+function goBack() {
+  router.push({
+    name: "AssignmentsList",
+    query: { cid, sid, gid },
+  })
 }
 </script>

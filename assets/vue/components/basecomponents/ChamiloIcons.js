@@ -138,4 +138,6 @@ export const chamiloIconToClass = {
   "lock": "mdi mdi-lock",
   "account-check": "mdi mdi-account-check",
   "account-cancel": "mdi mdi-account-cancel",
+  "zip-pack": "mdi mdi-archive",
+  "zip-unpack": "mdi mdi-archive-arrow-down",
 }

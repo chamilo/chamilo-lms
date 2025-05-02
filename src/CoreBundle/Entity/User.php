@@ -177,6 +177,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'social_post:read',
         'track_e_exercise:read',
         'user_subscriptions:sessions',
+        'student_publication_rel_user:read',
     ])]
     #[ORM\Column(name: 'username', type: 'string', length: 100, unique: true)]
     protected string $username;
@@ -186,11 +187,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     #[ApiProperty(iris: ['http://schema.org/name'])]
     #[Assert\NotBlank]
-    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions'])]
+    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions', 'student_publication_rel_user:read'])]
     #[ORM\Column(name: 'firstname', type: 'string', length: 64, nullable: true)]
     protected ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions'])]
+    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions', 'student_publication_rel_user:read'])]
     #[ORM\Column(name: 'lastname', type: 'string', length: 64, nullable: true)]
     protected ?string $lastname = null;
 
@@ -700,6 +701,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'course_rel_user:read',
         'message:read',
         'user_subscriptions:sessions',
+        'student_publication_rel_user:read',
     ])]
     protected string $fullName;
 
@@ -1261,6 +1263,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
+    #[Groups(['user:read', 'student_publication:read', 'student_publication_comment:read'])]
     public function getFullname(): string
     {
         if (empty($this->fullName)) {

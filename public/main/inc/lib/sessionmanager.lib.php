@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use ExtraField as ExtraFieldModel;
 use Monolog\Logger;
@@ -2948,31 +2949,42 @@ class SessionManager
                 }
 
                 if ($importAssignments) {
-                    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-                    $sql = " SELECT * FROM $workTable
-                             WHERE active = 1 AND
-                                   c_id = $courseId AND
-                                   parent_id = 0 AND
-                                   (session_id IS NULL OR session_id = 0)";
-                    $result = Database::query($sql);
-                    $workList = Database::store_result($result, 'ASSOC');
+                    $repo = Container::getStudentPublicationRepository();
+                    $course = api_get_course_entity($courseId);
+                    $session = api_get_session_entity($sessionId);
+                    $user = api_get_user_entity();
 
-                    foreach ($workList as $work) {
-                        $values = [
-                            'work_title' => $work['title'],
-                            'new_dir' => $work['url'].'_session_'.$sessionId,
-                            'description' => $work['description'],
-                            'qualification' => $work['qualification'],
-                            'allow_text_assignment' => $work['allow_text_assignment'],
-                        ];
-                        // @todo add addDir with resources
-                        /*addDir(
-                            $values,
-                            api_get_user_id(),
-                            $courseInfo,
-                            0,
-                            $sessionId
-                        );*/
+                    $qb = $repo->getResourcesByCourse($course, null);
+                    $qb
+                        ->andWhere('resource.active = 1')
+                        ->andWhere('resource.filetype = :filetype')
+                        ->andWhere('resource.publicationParent IS NULL')
+                        ->setParameter('filetype', 'folder');
+
+                    $baseAssignments = $qb->getQuery()->getResult();
+
+                    foreach ($baseAssignments as $originalAssignment) {
+                        if (!$originalAssignment instanceof CStudentPublication) {
+                            continue;
+                        }
+
+                        $newAssignment = new CStudentPublication();
+                        $newAssignment
+                            ->setTitle($originalAssignment->getTitle())
+                            ->setDescription($originalAssignment->getDescription() ?? '')
+                            ->setActive(1)
+                            ->setAccepted(true)
+                            ->setFiletype('folder')
+                            ->setPostGroupId(0)
+                            ->setSentDate(new \DateTime())
+                            ->setQualification($originalAssignment->getQualification())
+                            ->setWeight($originalAssignment->getWeight())
+                            ->setAllowTextAssignment($originalAssignment->getAllowTextAssignment())
+                            ->setUser($user)
+                            ->setParent($course)
+                            ->addCourseLink($course, $session, null);
+
+                        $repo->create($newAssignment);
                     }
                 }
                 // If the course isn't subscribed yet

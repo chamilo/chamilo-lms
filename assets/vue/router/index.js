@@ -257,6 +257,26 @@ router.beforeEach(async (to, from, next) => {
     sessionStorage.clear()
   }
 
+  const preservedParams = ['origin', 'isStudentView']
+  const mergedQuery = { ...to.query }
+
+  let shouldRedirect = false
+
+  for (const key of preservedParams) {
+    if (from.query[key] && !to.query[key]) {
+      mergedQuery[key] = from.query[key]
+      shouldRedirect = true
+    }
+  }
+
+  if (shouldRedirect) {
+    next({
+      ...to,
+      query: mergedQuery,
+    })
+    return
+  }
+
   let cid = parseInt(to.query?.cid ?? 0)
 
   if ("CourseHome" === to.name) {

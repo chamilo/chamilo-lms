@@ -28,7 +28,10 @@
         />
       </div>
 
-      <div v-if="requires2FA" class="field">
+      <div
+        v-if="requires2FA"
+        class="field"
+      >
         <InputText
           v-model="totp"
           :placeholder="t('Enter 2FA code')"
@@ -90,18 +93,19 @@ import { useI18n } from "vue-i18n"
 import { useLogin } from "../composables/auth/login"
 import LoginOAuth2Buttons from "./login/LoginOAuth2Buttons.vue"
 import { usePlatformConfig } from "../store/platformConfig"
+import { useRouter } from "vue-router"
 
 const { t } = useI18n()
+const router = useRouter()
 const platformConfigStore = usePlatformConfig()
 const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration"))
 
-const { redirectNotAuthenticated, performLogin, isLoading } = useLogin()
+const { redirectNotAuthenticated, performLogin, isLoading, requires2FA } = useLogin()
 
 const login = ref("")
 const password = ref("")
 const totp = ref("")
 const remember = ref(false)
-const requires2FA = ref(false)
 
 redirectNotAuthenticated()
 
@@ -112,11 +116,5 @@ async function onSubmitLoginForm() {
     totp: requires2FA.value ? totp.value : null,
     _remember_me: remember.value,
   })
-
-  if (response.requires2FA) {
-    requires2FA.value = true
-  } else {
-    router.replace({ name: "Home" })
-  }
 }
 </script>

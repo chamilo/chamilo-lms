@@ -37,6 +37,7 @@ class ExtraField extends Model
     public const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
     public const FIELD_TYPE_SELECT_WITH_TEXT_FIELD = 26;
     public const FIELD_TYPE_TRIPLE_SELECT = 27;
+    public const FIELD_TYPE_DURATION = 28;
 
     public $columns = [
         'id',
@@ -871,6 +872,9 @@ class ExtraField extends Model
                             $extra_data["extra_$variable"]["extra_{$variable}_second"] = $level2;
                             $extra_data["extra_$variable"]["extra_{$variable}_third"] = $level3;
                             break;
+                        case self::FIELD_TYPE_DURATION:
+                            $extra_data['extra_'.$field['variable']] = self::formatDuration((int) $field_value);
+                            break;
                         default:
                             $extra_data['extra_'.$field['variable']] = $field_value;
                             break;
@@ -887,6 +891,18 @@ class ExtraField extends Model
         }
 
         return $extra_data;
+    }
+
+    /**
+     * Formats a duration in seconds into hh:mm:ss.
+     */
+    private function formatDuration(int $seconds): string
+    {
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds % 3600) / 60);
+        $seconds = $seconds % 60;
+
+        return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
     }
 
     /**
@@ -1882,6 +1898,38 @@ class ExtraField extends Model
                             $freezeElement
                         );
                         break;
+                    case self::FIELD_TYPE_DURATION:
+                        $form->addElement(
+                            'text',
+                            'extra_'.$variable,
+                            $field_details['display_text'],
+                            ['class' => 'span2', 'placeholder' => 'hh:mm:ss']
+                        );
+
+                        $form->addRule(
+                            'extra_'.$variable,
+                            get_lang('Invalid format'),
+                            'callback',
+                            'validate_duration_format'
+                        );
+
+                        $form->applyFilter('extra_'.$variable, function ($value) {
+                            if (preg_match('/^(\d+):([0-5]?\d):([0-5]?\d)$/', $value, $matches)) {
+                                return ($matches[1] * 3600) + ($matches[2] * 60) + $matches[3];
+                            }
+                            return 0;
+                        });
+
+                        if (isset($extraData['extra_'.$variable]) && is_numeric($extraData['extra_'.$variable])) {
+                            $form->setDefaults([
+                                'extra_'.$variable => self::formatDuration((int) $extraData['extra_'.$variable])
+                            ]);
+                        }
+
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$variable);
+                        }
+                        break;
                 }
             }
         }
@@ -1890,6 +1938,14 @@ class ExtraField extends Model
         $return['jquery_ready_content'] = $jquery_ready_content;
 
         return $return;
+    }
+
+    /**
+     * Validates if a string is in the hh:mm:ss duration format.
+     */
+    function validate_duration_format($value): bool
+    {
+        return (bool) preg_match('/^(\d+):([0-5]?\d):([0-5]?\d)$/', $value);
     }
 
     /**
@@ -2012,6 +2068,7 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES] = get_lang('Geolocalization by coordinates');
         $types[self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD] = get_lang('Select with text field');
         $types[self::FIELD_TYPE_TRIPLE_SELECT] = get_lang('Triple select');
+        $types[self::FIELD_TYPE_DURATION] = get_lang('Duration (hh:mm:ss)');
 
         switch ($handler) {
             case 'course':
@@ -2540,11 +2597,20 @@ JAVASCRIPT;
             foreach ($fields as $field) {
                 $search_options = [];
                 $type = 'text';
-                if (in_array($field['value_type'], [self::FIELD_TYPE_SELECT, self::FIELD_TYPE_DOUBLE_SELECT])) {
-                    $type = 'select';
-                    $search_options['sopt'] = ['eq', 'ne']; //equal not equal
-                } else {
-                    $search_options['sopt'] = ['cn', 'nc']; //contains not contains
+                switch ($field['value_type']) {
+                    case self::FIELD_TYPE_SELECT:
+                    case self::FIELD_TYPE_DOUBLE_SELECT:
+                        $type = 'select';
+                        $search_options['sopt'] = ['eq', 'ne'];
+                        break;
+                    case self::FIELD_TYPE_DURATION:
+                        $type = 'text';
+                        $search_options['sopt'] = ['cn', 'nc'];
+                        break;
+                    default:
+                        $type = 'text';
+                        $search_options['sopt'] = ['cn', 'nc'];
+                        break;
                 }
 
                 $search_options['searchhidden'] = 'true';

@@ -88,6 +88,7 @@ class ExtraField
     public const FIELD_TYPE_FILE = 18;
     public const FIELD_TYPE_GEOLOCALIZATION = 24;
     public const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
+    public const FIELD_TYPE_DURATION = 28;
 
     #[Groups(['extra_field:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -253,7 +254,7 @@ class ExtraField
 
     public function isChangeable(): ?bool
     {
-        return $this->changeable;
+        return (bool) $this->changeable;
     }
 
     public function setChangeable(bool $changeable): self
@@ -265,7 +266,7 @@ class ExtraField
 
     public function isFilter(): bool
     {
-        return $this->filter;
+        return (bool) $this->filter;
     }
 
     public function setFilter(bool $filter): self
@@ -277,7 +278,7 @@ class ExtraField
 
     public function isVisibleToSelf(): bool
     {
-        return $this->visibleToSelf;
+        return (bool) $this->visibleToSelf;
     }
 
     public function setVisibleToSelf(bool $visibleToSelf): self
@@ -289,7 +290,7 @@ class ExtraField
 
     public function isVisibleToOthers(): bool
     {
-        return $this->visibleToOthers;
+        return (bool) $this->visibleToOthers;
     }
 
     public function setVisibleToOthers(bool $visibleToOthers): self

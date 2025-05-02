@@ -2,12 +2,13 @@
   <div class="space-y-6">
     <div class="flex items-center flex-wrap gap-2">
       <BaseIcon
+        v-if="!fromLearnpath"
         icon="back"
         size="big"
         @click="goBack"
       />
 
-      <template v-if="!isEditor">
+      <template v-if="forceStudentView">
         <div class="ml-auto">
           <BaseButton
             icon="upload"
@@ -101,7 +102,7 @@
     </div>
     <div>
       <StudentSubmissionList
-        v-if="!isEditor"
+        v-if="forceStudentView"
         :assignment-id="assignmentId"
       />
       <TeacherSubmissionList
@@ -132,12 +133,13 @@ const { t } = useI18n()
 const { cid, sid, gid } = useCidReq()
 const route = useRoute()
 const router = useRouter()
-const assignmentId = parseInt(route.params.id)
-
-const assignment = ref(null)
-
 const securityStore = useSecurityStore()
+const assignmentId = parseInt(route.params.id)
+const fromLearnpath = route.query.origin === "learnpath"
 const isEditor = securityStore.isCourseAdmin || securityStore.isTeacher
+const isStudentView = route.query.isStudentView === "true"
+const forceStudentView = !isEditor || isStudentView
+const assignment = ref(null)
 const addedDocuments = ref([])
 const notification = useNotification()
 const submissionListKey = ref(0)
@@ -145,7 +147,7 @@ const submissionListKey = ref(0)
 async function loadAddedDocuments() {
   try {
     const response = await axios.get(`${ENTRYPOINT}c_student_publication_rel_documents`, {
-      params: { publication: `/api/c_student_publications/${assignmentId}` }
+      params: { publication: `/api/c_student_publications/${assignmentId}` },
     })
     addedDocuments.value = response.data["hydra:member"]
   } catch (e) {

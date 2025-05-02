@@ -312,7 +312,7 @@ class Database
      * @throws \Doctrine\DBAL\Exception
      * @throws Exception
      */
-    public static function insert(string $table_name, array $attributes, bool $show_query = false): bool|int
+    public static function insert(string $table_name, array $attributes, bool $show_query = false, array $options = []): bool|int
     {
         if (empty($attributes) || empty($table_name)) {
             return false;
@@ -321,8 +321,9 @@ class Database
         $params = array_keys($attributes);
 
         if (!empty($params)) {
-            $sql = 'INSERT INTO '.$table_name.' ('.implode(',', $params).')
-                    VALUES (:'.implode(', :', $params).')';
+            $prefix = (!empty($options['ignore'])) ? 'INSERT IGNORE INTO' : 'INSERT INTO';
+            $sql = $prefix.' '.$table_name.' ('.implode(',', $params).')
+                VALUES (:'.implode(', :', $params).')';
 
             if ($show_query) {
                 var_dump($sql);

@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
@@ -25,6 +27,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['student_publication_rel_document:read']],
     denormalizationContext: ['groups' => ['student_publication_rel_document:write']]
 )]
+#[ApiFilter(SearchFilter::class, properties: [
+    'publication' => 'exact',
+    'publication.id' => 'exact',
+])]
 #[ORM\Table(name: 'c_student_publication_rel_document')]
 #[ORM\Entity]
 class CStudentPublicationRelDocument

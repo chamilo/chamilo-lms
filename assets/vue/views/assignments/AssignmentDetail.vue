@@ -145,7 +145,7 @@ const submissionListKey = ref(0)
 async function loadAddedDocuments() {
   try {
     const response = await axios.get(`${ENTRYPOINT}c_student_publication_rel_documents`, {
-      params: { "publication.id": assignmentId },
+      params: { publication: `/api/c_student_publications/${assignmentId}` }
     })
     addedDocuments.value = response.data["hydra:member"]
   } catch (e) {

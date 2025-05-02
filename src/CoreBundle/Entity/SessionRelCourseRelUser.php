@@ -78,6 +78,7 @@ class SessionRelCourseRelUser
         'user_subscriptions:sessions',
         'session:basic',
     ])]
+    #[MaxDepth(1)]
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'sessionRelCourseRelUsers')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;

@@ -103,7 +103,9 @@ async function loadPublicationMetadata() {
     })
     const data = response.data
     publicationTitle.value = data.title
-    parentResourceNodeId.value = extractIdFromIri(data.resourceNode?.parent?.["@id"])
+    parentResourceNodeId.value = extractIdFromIri(
+      data.resourceLinkListFromEntity?.[0]?.course?.resourceNode?.["@id"]
+    )
     if (parentResourceNodeId.value) {
       await loadAvailableDocuments()
     }
@@ -115,7 +117,7 @@ async function loadPublicationMetadata() {
 async function loadAddedDocuments() {
   try {
     const response = await axios.get(`${ENTRYPOINT}c_student_publication_rel_documents`, {
-      params: { "publication.id": publicationId },
+      params: { publication: `/api/c_student_publications/${publicationId}` },
     })
     addedDocuments.value = response.data["hydra:member"]
   } catch (e) {

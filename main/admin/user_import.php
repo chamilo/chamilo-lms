@@ -197,6 +197,21 @@ function validate_data($users, $checkUniqueEmail = false)
                 $user['has_error'] = true;
             }
         }
+
+        // 6. Check if extra fields are duplicated
+        $extraFields = api_get_configuration_value('extra_fields_to_validate_on_user_registration');
+        if (!empty($extraFields) && isset($extraFields['extra_fields'])) {
+            $extraFieldList = $extraFields['extra_fields'];
+            foreach ($extraFieldList as $extraFieldToCheck) {
+                if (isset($user[$extraFieldToCheck]) && !empty($user[$extraFieldToCheck])) {
+                    $valueExists = api_user_extra_field_validation($extraFieldToCheck, $user[$extraFieldToCheck]);
+                    if ($valueExists) {
+                        $user['message'] .= Display::return_message(get_lang('DuplicatedFieldAt').' '.$extraFieldToCheck, 'warning');
+                        $user['has_error'] = true;
+                    }
+                }
+            }
+        }
     }
 
     return $users;

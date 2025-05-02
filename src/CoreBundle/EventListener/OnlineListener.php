@@ -30,7 +30,7 @@ class OnlineListener
     /**
      * Update the user "lastActivity" on each request.
      */
-    public function __invoke(ControllerEvent $event): void
+    public function onKernelController(ControllerEvent $event): void
     {
         /*  Here we are checking that the current request is a "MASTER_REQUEST",
             and ignore any subrequest in the process (for example when doing a

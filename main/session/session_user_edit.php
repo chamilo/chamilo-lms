@@ -43,12 +43,17 @@ $userAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
     $userId
 );
 
+$extension = 0;
+
 if (count($userAccess) == 0) {
     // User never accessed the session. End date is still open
     $msg = sprintf(get_lang('UserNeverAccessedSessionDefaultDurationIsX'), $sessionInfo['duration']);
 } else {
     // The user already accessed the session. Show a clear detail of the days count.
+    $duration = $sessionInfo['duration'];
     $days = SessionManager::getDayLeftInSession($sessionInfo, $userId);
+    $userSubscription = SessionManager::getUserSession($userId, $sessionId);
+    $extension = $userSubscription['duration'];
     $firstAccess = api_strtotime($userAccess['login_course_date'], 'UTC');
     $firstAccessString = api_convert_and_format_date($userAccess['login_course_date'], DATE_FORMAT_SHORT, 'UTC');
     if ($days > 0) {
@@ -61,29 +66,74 @@ if (count($userAccess) == 0) {
 
         $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateInZDays'), $firstAccessString, $duration, $days);
     } else {
+        if (!empty($subscription['duration'])) {
+            $duration = $duration + $subscription['duration'];
+        }
         $endDateInSeconds = $firstAccess + $duration * 24 * 60 * 60;
         $last = api_convert_and_format_date($endDateInSeconds, DATE_FORMAT_SHORT);
         $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateWasZ'), $firstAccessString, $duration, $last);
     }
 }
-$form->addElement('html', sprintf(get_lang('UserXSessionY'), $userInfo['complete_name'], $sessionInfo['name']));
-$form->addElement('html', '<br>');
-$form->addElement('html', $msg);
 
-$form->addElement('text', 'duration', [get_lang('ExtraDurationForUser'), null, get_lang('Days')]);
+$header =  '<div class="row">';
+$header .= '<div class="col-sm-5">';
+$header .= '<div class="thumbnail">';
+$header .= Display::img($userInfo['avatar'], $userInfo['complete_name']);
+$header .= '</div>';
+$header .= '</div>';
+
+$header .= '<div class="col-sm-7">';
+
+$userData = $userInfo['complete_name']
+    .PHP_EOL
+    .$user_info['mail']
+    .PHP_EOL
+    .$user_info['official_code'];
+
+$header .= '<h3>Usuario: ' . Display::url(
+    $userData,
+    api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_info['user_id']
+) .'</h3>';
+
+$header .= '<p><h3>Sesión: ' . $sessionInfo['name'] . '<h3></p>';
+
+$header .= '</div>';
+$header .='</div>';
+
+$header .=  '<div class="row">';
+$header .= '<div class="col-sm-12">';
+
+$header .= $msg;
+$header .= '<p>'.'</p>';
+
+$header .= '</div>';
+$header .= '</div>';
+
+$form->addElement('html', $header);
+
+$formData =  '<div class="row">';
+$formData .= '<div class="col-sm-12">';
+
+$form->addElement('html', $formData);
+$form->addElement('number', 'duration', [get_lang('ExtraDurationForUser'), null, get_lang('Days')]);
 $form->addButtonSave(get_lang('Save'));
 
-$form->setDefaults(['duration' => 0]);
+$formData = '</div>';
+$formData .= '</div>';
+
+$form->addElement('html', $formData);
+
+$form->setDefaults(['duration' => $extension]);
 $message = null;
 if ($form->validate()) {
     $duration = $form->getSubmitValue('duration');
-    // Only update if the duration is different from the default duration
-    if ($duration != 0) {
-        SessionManager::editUserSessionDuration($duration, $userId, $sessionId);
-        $message = Display::return_message(get_lang('ItemUpdated'), 'confirmation');
-    } else {
-        $message = Display::return_message(get_lang('DurationIsSameAsDefault'), 'warning');
-    }
+
+    SessionManager::editUserSessionDuration($duration, $userId, $sessionId);
+    $message = Display::return_message(get_lang('ItemUpdated'), 'confirmation');
+
+    $url = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+    header("Location: " . $url);
+    exit();
 }
 
 // display the header

@@ -4623,7 +4623,9 @@ class SessionManager
             $s['duration'],
             $s['description'],
             $s['show_description'],
-            $extraFieldsValuesToCopy
+            $extraFieldsValuesToCopy,
+            0,
+            $s['send_subscription_notification']
         );
 
         if (!is_numeric($sid) || empty($sid)) {

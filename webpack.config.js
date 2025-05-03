@@ -136,6 +136,52 @@ Encore.copyFiles({
   to: "libs/select2/js/[name].[ext]",
 })
 
-const config = Encore.getWebpackConfig()
+const fs = require("fs")
+const path = require("path")
+class CopyUnhashedAssetsPlugin {
+  apply(compiler) {
+    compiler.hooks.afterEmit.tap("CopyUnhashedAssetsPlugin", (compilation) => {
+      const buildPath = path.resolve(__dirname, "public/build")
 
+      // === COPY legacy_document.js without hash ===
+      const legacyDocumentFile = fs.readdirSync(buildPath).find((f) =>
+        f.match(/^legacy_document\.[a-f0-9]+\.js$/)
+      )
+      if (legacyDocumentFile) {
+        fs.copyFileSync(
+          path.join(buildPath, legacyDocumentFile),
+          path.join(buildPath, "legacy_document.js")
+        )
+      }
+
+      // === COPY runtime.js without hash ===
+      const runtimeFile = fs.readdirSync(buildPath).find((f) =>
+        f.match(/^runtime\.[a-f0-9]+\.js$/)
+      )
+      if (runtimeFile) {
+        fs.copyFileSync(
+          path.join(buildPath, runtimeFile),
+          path.join(buildPath, "runtime.js")
+        )
+      }
+
+      // === COPY document.css without hash ===
+      const cssPath = path.join(buildPath, "css")
+      if (fs.existsSync(cssPath)) {
+        const documentCssFile = fs.readdirSync(cssPath).find((f) =>
+          f.match(/^document\.[a-f0-9]+\.css$/)
+        )
+        if (documentCssFile) {
+          fs.copyFileSync(
+            path.join(cssPath, documentCssFile),
+            path.join(cssPath, "document.css")
+          )
+        }
+      }
+    })
+  }
+}
+
+Encore.addPlugin(new CopyUnhashedAssetsPlugin())
+const config = Encore.getWebpackConfig()
 module.exports = config

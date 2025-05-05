@@ -1,7 +1,7 @@
 <template>
   <div class="field">
     <div class="p-float-label">
-      <Dropdown
+      <Select
         v-model="modelValue"
         :class="{ 'p-invalid': isInvalid }"
         :input-id="inputId"
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import Dropdown from "primevue/dropdown"
+import Select from "primevue/select"
 
 const modelValue = defineModel({
   type: String || Number || Object,

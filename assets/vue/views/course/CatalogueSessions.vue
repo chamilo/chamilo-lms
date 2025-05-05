@@ -61,7 +61,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
-import { FilterMatchMode } from "primevue/api"
+import { FilterMatchMode } from "@primevue/core/api"
 import axios from "axios"
 import CatalogueSessionCard from "../../components/session/CatalogueSessionCard.vue"
 import { useSecurityStore } from "../../store/securityStore"

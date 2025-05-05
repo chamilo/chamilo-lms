@@ -1401,7 +1401,7 @@ EOT;
         $element = $this->addElement('Number', $name, $label, $attributes);
 
         if ($required) {
-            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+            $this->addRule($name, get_lang('Required field'), 'required');
         }
 
         return $element;

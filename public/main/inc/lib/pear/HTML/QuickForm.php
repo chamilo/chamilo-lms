@@ -1925,7 +1925,7 @@ class HTML_QuickForm extends HTML_Common
     {
         $this->addRule(
             $element->getName(),
-            get_lang('ThisFieldIsRequired'),
+            get_lang('Required field'),
             'required'
         );
     }

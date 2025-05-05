@@ -117,6 +117,26 @@ if ($isTccEnabled) {
 
 $extraFieldsLoaded = false;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
+$registeringText = addslashes(get_lang('Registering'));
+$htmlHeadXtra[] = <<<EOD
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form[name="registration"]');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            const submitButtons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+            submitButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('disabled');
+                btn.innerText = '{$registeringText}';
+            });
+        });
+    }
+});
+</script>
+EOD;
+
+
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
 $isCreatingIntroPage = isset($_GET['create_intro_page']);
@@ -1204,7 +1224,7 @@ if ($form->validate()) {
             ['class' => 'btn btn--primary btn-large']
         ),
         'message' => '',
-        'action' => api_get_path(WEB_PATH).'user_portal.php',
+        'action' => api_get_path(WEB_PATH).'home',
         'go_button' => '',
     ];
 
@@ -1221,7 +1241,7 @@ if ($form->validate()) {
                 Session::erase('_course');
                 Session::erase('_cid');
             } else {
-                $formData['action'] = api_get_path(WEB_PATH).'user_portal.php';
+                $formData['action'] = api_get_path(WEB_PATH).'home';
             }
         }
     } else {
@@ -1230,10 +1250,12 @@ if ($form->validate()) {
             $textAfterRegistration .= '<p>'.get_lang('An e-mail has been sent to remind you of your login and password', $userEntity->getLocale()).'</p>';
             $diagnosticPath = '<a href="'.$linkDiagnostic.'" class="custom-link">'.$linkDiagnostic.'</a>';
             $textAfterRegistration .= '<p>';
-            $textAfterRegistration .= sprintf(
-                            get_lang('Welcome, please go to diagnostic at %s.', $userEntity->getLocale()),
-                            $diagnosticPath
-            );
+            if ('true' === api_get_setting('session.allow_search_diagnostic')) {
+                $textAfterRegistration .= sprintf(
+                    get_lang('Welcome, please go to diagnostic at %s.', $userEntity->getLocale()),
+                    $diagnosticPath
+                );
+            }
             $textAfterRegistration .= '</p>';
         }
 

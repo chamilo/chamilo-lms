@@ -38,7 +38,7 @@ import EmptyLayout from "./components/layout/EmptyLayout.vue"
 import PrimeVue from "primevue/config"
 import DataView from "primevue/dataview"
 import DataTable from "primevue/datatable"
-import Dropdown from "primevue/dropdown"
+import Select from "primevue/select"
 import Toolbar from "primevue/toolbar"
 import DataViewLayoutOptions from "primevue/dataviewlayoutoptions"
 
@@ -183,7 +183,7 @@ app.use(ConfirmationService)
 app.component("Dialog", Dialog)
 app.component("DataView", DataView)
 app.component("DataTable", DataTable)
-app.component("Dropdown", Dropdown)
+app.component("Dropdown", Select)
 app.component("DataViewLayoutOptions", DataViewLayoutOptions)
 app.component("InputText", InputText)
 app.component("Button", Button)

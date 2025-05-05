@@ -61,7 +61,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
-import { FilterMatchMode } from "primevue/api"
+import { FilterMatchMode } from "@primevue/core/api"
 import courseService from "../../services/courseService"
 import { useNotification } from "../../composables/notification"
 import { useLanguage } from "../../composables/language"

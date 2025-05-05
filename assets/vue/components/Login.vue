@@ -37,7 +37,7 @@
       </div>
 
       <div class="field login-section__remember-me">
-        <InputSwitch
+        <ToggleSwitch
           v-model="remember"
           input-id="binary"
           name="remember_me"
@@ -85,7 +85,7 @@ import { computed, ref } from "vue"
 import Button from "primevue/button"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
-import InputSwitch from "primevue/inputswitch"
+import ToggleSwitch from "primevue/toggleswitch"
 import { useI18n } from "vue-i18n"
 import { useLogin } from "../composables/auth/login"
 import LoginOAuth2Buttons from "./login/LoginOAuth2Buttons.vue"

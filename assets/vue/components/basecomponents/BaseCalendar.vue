@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue"
-import Calendar from "primevue/calendar"
+import DatePicker from "primevue/datepicker"
 import { calendarLocales } from "../../utils/calendarLocales"
 import { useLocale } from "../../composables/locale"
 import { usePrimeVue } from "primevue/config"
@@ -95,7 +95,7 @@ onMounted(() => {
 <template>
   <div class="field">
     <div class="p-float-label">
-      <Calendar
+      <DatePicker
         :id="id"
         v-model="model"
         :class="{ 'p-invalid': isInvalid }"

@@ -1,7 +1,7 @@
 <template>
   <div class="field">
     <div class="p-float-label">
-      <Calendar
+      <DatePicker
         :class="{ 'p-invalid': isInvalid }"
         :input-id="id"
         :model-value="modelValue"
@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import Calendar from "primevue/calendar"
+import DatePicker from "primevue/datepicker"
 
 defineProps({
   modelValue: {

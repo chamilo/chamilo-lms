@@ -1876,6 +1876,53 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@primeuix/styled@npm:^0.5.0, @primeuix/styled@npm:^0.5.1":
+  version: 0.5.1
+  resolution: "@primeuix/styled@npm:0.5.1"
+  dependencies:
+    "@primeuix/utils": "npm:^0.5.3"
+  checksum: 10c0/771b6600a63ada880808b76975de39cc5cb7f2b942d7832f5eb224e292e4da9475732864c8894d55a4ba205f2a694c1f731248e2aa157ee27528830e1d724845
+  languageName: node
+  linkType: hard
+
+"@primeuix/styles@npm:^1.0.0":
+  version: 1.0.3
+  resolution: "@primeuix/styles@npm:1.0.3"
+  dependencies:
+    "@primeuix/styled": "npm:^0.5.1"
+  checksum: 10c0/8f3bcd86d5cd54417859073d0cbb5f60faf25e15b508d1d29cfd76df662cef04dc429d82912444ffc0e24e849af99d7b03fb8007882ba6e751dfa9d6873c834f
+  languageName: node
+  linkType: hard
+
+"@primeuix/utils@npm:^0.5.1, @primeuix/utils@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "@primeuix/utils@npm:0.5.3"
+  checksum: 10c0/a856aedcb07ca6f8301c2d86ce28a38c0552fd938a0a839cf39230043ede9233349206a9eaf85aa9cef08d8af1aae5549d6a3f86bdb14a79c0e9e11883d24c65
+  languageName: node
+  linkType: hard
+
+"@primevue/core@npm:4.3.3":
+  version: 4.3.3
+  resolution: "@primevue/core@npm:4.3.3"
+  dependencies:
+    "@primeuix/styled": "npm:^0.5.0"
+    "@primeuix/utils": "npm:^0.5.1"
+  peerDependencies:
+    vue: ^3.5.0
+  checksum: 10c0/6adc540c3187f3159b44cc00c3898f0612c6f9b6065d3be8f0c302b8d0f0908ed972363e862811bccd29fb9556e6aeec184d299e4077b495fd6a49a25618cf5f
+  languageName: node
+  linkType: hard
+
+"@primevue/icons@npm:4.3.3":
+  version: 4.3.3
+  resolution: "@primevue/icons@npm:4.3.3"
+  dependencies:
+    "@primeuix/utils": "npm:^0.5.1"
+    "@primevue/core": "npm:4.3.3"
+  checksum: 10c0/73469b10d06553587378f496787928c52c699f3ed1ba0c83718bcb6fd55b9066233fe821fedcfdeff234211492a7caf0c4ae754ed7ee56483e572326ef085eb6
+  languageName: node
+  linkType: hard
+
 "@sinclair/typebox@npm:^0.27.8":
   version: 0.27.8
   resolution: "@sinclair/typebox@npm:0.27.8"
@@ -4216,9 +4263,9 @@ __metadata:
     prettier: "npm:3.5.3"
     prettier-plugin-tailwindcss: "npm:^0.6.11"
     pretty-bytes: "npm:^5.6.0"
-    primeflex: "npm:^3.3.1"
-    primeicons: "npm:^6.0.1"
-    primevue: "npm:^3.53.1"
+    primeflex: "npm:^4.0.0"
+    primeicons: "npm:^7.0.0"
+    primevue: "npm:^4.3.3"
     purgecss-webpack-plugin: "npm:^7.0.2"
     pwstrength-bootstrap: "npm:3.1.3"
     qtip2: "npm:3.0.3"
@@ -9336,26 +9383,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"primeflex@npm:^3.3.1":
-  version: 3.3.1
-  resolution: "primeflex@npm:3.3.1"
-  checksum: 10c0/6ab3e8fca36b2d0e1dfe7bfde2d80570f12ff6d8fbd43fe427e0dba29dfd4fe96b91a7b78c22023f01d142b11741811d9a2810e1e32c23c5da64a1462f66705b
+"primeflex@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "primeflex@npm:4.0.0"
+  checksum: 10c0/36516c2fc657aca018115bdceef601326d83f25b24c342c0b9bdc4ec92115e58735f0f628494d431ae9b9a441899bfbbca2159160954d70fa3ed7f6e2a95c8bf
   languageName: node
   linkType: hard
 
-"primeicons@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "primeicons@npm:6.0.1"
-  checksum: 10c0/9f59473d9b7f3b5aad1a3c7050fce8c06503f21586a67d3ed1fd362a9fad42a114c89b6e0f8fd7c94d71d090962b53181a086fe07a68a5535fa348fdbf63e641
+"primeicons@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "primeicons@npm:7.0.0"
+  checksum: 10c0/a7f6344d6db49e785d2040b35f8cae761d15bb8f8ee70ade8981d45438245414e913fe7235921122aade2b0a11a032c98b44dc527be2da11aa791ff145099c06
   languageName: node
   linkType: hard
 
-"primevue@npm:^3.53.1":
-  version: 3.53.1
-  resolution: "primevue@npm:3.53.1"
-  peerDependencies:
-    vue: ^3.0.0
-  checksum: 10c0/83b70a6233320c5455b0e01c54908fa71bb07b2c7ce7b1c1b9e4f7097b4639502da0f3b68222b4b7b3e27d551f98b4a0d63b404230e839fe56f70dd641bde564
+"primevue@npm:^4.3.3":
+  version: 4.3.3
+  resolution: "primevue@npm:4.3.3"
+  dependencies:
+    "@primeuix/styled": "npm:^0.5.0"
+    "@primeuix/styles": "npm:^1.0.0"
+    "@primeuix/utils": "npm:^0.5.1"
+    "@primevue/core": "npm:4.3.3"
+    "@primevue/icons": "npm:4.3.3"
+  checksum: 10c0/e07a03fe36625581d7357898bf56390f35148f6ab80ea64be8ed46f5d8009978a4dc3b65da52431d7e89265afc7854623ecc3a36b8bd04713b4101ee2a3a6b64
   languageName: node
   linkType: hard
 

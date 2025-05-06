@@ -12675,7 +12675,7 @@ EOD;
         //Setting elements that will be copied
         $cb->set_tools_specific_id_list(['learnpaths' => [$this->lp_id]]);
 
-        $course = $cb->build();
+        $course = $cb->build($this->lp_session_id);
 
         //Course restorer
         $course_restorer = new CourseRestorer($course);

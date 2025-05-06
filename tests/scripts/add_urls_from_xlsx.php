@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * This script adds URL to the access_url table from an XLSX file with a column
  * for the subdomain and a column for the description of that URL.

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Page;
 use Chamilo\CoreBundle\Entity\PageCategory;
+use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
 use Chamilo\CoreBundle\Event\Events;
@@ -371,6 +372,14 @@ class IndexBlocksController extends BaseController
             'class' => 'item-question-bank',
             'url' => $this->generateUrl('legacy_main', ['name' => 'admin/questions.php']),
             'label' => $this->translator->trans('Questions'),
+        ];
+        $items[] = [
+            'class' => 'item-resource-sequence',
+            'url' => $this->generateUrl('legacy_main', [
+                'name' => 'admin/resource_sequence.php',
+                'query' => ['type' => SequenceResource::COURSE_TYPE],
+            ]),
+            'label' => $this->translator->trans('Resources sequencing'),
         ];
 
         return $items;
@@ -818,7 +827,10 @@ class IndexBlocksController extends BaseController
             ];
             $items[] = [
                 'class' => 'item-resource-sequence',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/resource_sequence.php']),
+                'url' => $this->generateUrl('legacy_main', [
+                    'name' => 'admin/resource_sequence.php',
+                    'query' => ['type' => SequenceResource::SESSION_TYPE],
+                ]),
                 'label' => $this->translator->trans('Resources sequencing'),
             ];
             $items[] = [

@@ -3,315 +3,342 @@
 {% block content %}
     {% autoescape false %}
         <script>
-            var url = '{{ _p.web_ajax }}sequence.ajax.php';
-            var parentList = [];
-            var resourceId = 0;
-            var sequenceId = 0;
+          var url = '{{ _p.web_ajax }}sequence.ajax.php';
+          var parentList = [];
+          var resourceId = 0;
+          var sequenceId = 0;
 
-            function useAsReference(type, sequenceId, itemId) {
-                var id = itemId || $("#item option:selected").val();
+          function showPlaceholders() {
+            $('#parents').html(`<div class="text-center text-sm text-gray-400 italic">{{ 'No dependencies selected yet' | get_lang }}</div>`);
+            $('#resource').html(`<div class="bg-white border-2 border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-500"><div class="text-4xl mb-2">&#x1F50D;</div><div class="text-sm">{{ 'Please select a resource to preview the sequence' | get_lang }}</div></div>`);
+            $('#children').html(`<div class="text-center text-sm text-gray-400 italic">{{ 'No dependent items yet' | get_lang }}</div>`);
+            $('#show_graph').html('');
+          }
 
-                sequenceId = $("#sequence_id option:selected").val();
+          function showLoadingPreview() {
+            const loader = `<div class="flex justify-center items-center p-8 text-gray-500">
+                    <svg class="animate-spin h-6 w-6 mr-3 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                    </svg>
+                    <span>{{ "Loading..."|get_lang }}</span>
+                  </div>`;
 
-                // Cleaning parent list.
-                parentList = [];
+            $('#parents').html(loader);
+            $('#resource').html(loader);
+            $('#children').html(loader);
+            $('#show_graph').html(loader);
+          }
 
-                // Check if data exists and load parents
-                $.ajax({
-                    url: url + '?a=load_resource&load_resource_type=parent&id=' + id + '&type=' + type + '&sequence_id=' + sequenceId,
-                    success: function (data) {
-                        if (data) {
-                            var loadingResources = new Array(),
-                                listLoaded = data.split(',');
+          function useAsReference(type, sequenceId, itemId) {
+            const id = itemId || $("#item option:selected").val();
+            sequenceId = $("#sequence_id option:selected").val();
+            parentList = [];
+            showLoadingPreview();
 
-                            listLoaded.forEach(function (value) {
-                                var loadResource = $.ajax(url, {
-                                    data: {
-                                        a: 'get_icon',
-                                        id: value,
-                                        type: type,
-                                        sequence_id: sequenceId,
-                                        show_delete: 1
-                                    },
-                                    success: function () {
-                                        parentList.push(value);
-                                    }
-                                });
+            const loadingParents = $.ajax({
+              url: url + '?a=load_resource&load_resource_type=parent&id=' + id + '&type=' + type + '&sequence_id=' + sequenceId,
+            });
 
-                                loadingResources.push(loadResource);
-                            });
+            const loadingChildren = $.ajax({
+              url: url + '?a=load_resource&load_resource_type=children&id=' + id + '&type=' + type + '&sequence_id=' + sequenceId,
+            });
 
-                            if (loadingResources.length) {
-                                $.when.apply($, loadingResources).done(function () {
-                                    if (loadingResources.length === 1) {
-                                        $('#parents').append(arguments[0]);
+            const loadingCenter = $.ajax({
+              url: url + '?a=get_icon&id=' + id + '&type=' + type + '&sequence_id=' + sequenceId,
+            });
 
-                                        return;
-                                    }
+            const loadingGraph = $.ajax({
+              url: url + '?a=graph&type=' + type + '&sequence_id=' + sequenceId,
+            });
 
-                                    var i;
-
-                                    for (i = 0; i < arguments.length; i++) {
-                                        $('#parents').append(arguments[i][0]);
-
-                                        if (i !== arguments.length - 1) {
-                                            $('#parents').append('<em class="fa fa-plus fa-3x sequence-plus-icon"></em>');
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
-
-                // Check if data exists and load children
-                $.ajax({
-                    url: url + '?a=load_resource&load_resource_type=children&id=' + id + '&type=' + type + '&sequence_id=' + sequenceId,
-                    success: function (data) {
-                        if (data) {
-                            var listLoaded = data.split(',');
-                            listLoaded.forEach(function (value) {
-                                $.ajax({
-                                    url: url + '?a=get_icon&id=' + value + '&type=' + type + '&sequence_id=' + sequenceId,
-                                    success: function (data) {
-                                        $('#children').append(data);
-                                    }
-                                });
-                            });
-                        }
-                    }
-                });
-
-                // Cleaning
+            $.when(loadingParents, loadingChildren, loadingCenter, loadingGraph).done(function (parentsData, childrenData, resourceData, graphData) {
+              // Parents
+              if (parentsData[0]) {
                 $('#parents').html('');
-                $('#children').html('');
+                let parentIds = parentsData[0].split(',');
+                let promises = [];
 
-                $.ajax({
+                parentIds.forEach((value, idx) => {
+                  promises.push($.ajax({
+                    url: url,
+                    data: {
+                      a: 'get_icon',
+                      id: value,
+                      type: type,
+                      sequence_id: sequenceId,
+                      show_delete: 1
+                    },
+                    success: function (html) {
+                      $('#parents').append(html);
+                      if (idx < parentIds.length - 1) {
+                        $('#parents').append('<em class="fa fa-plus fa-3x sequence-plus-icon"></em>');
+                      }
+                      parentList.push(value);
+                    }
+                  }));
+                });
+              } else {
+                $('#parents').html(`<div class="text-center text-sm text-gray-400 italic">{{ 'No dependencies selected yet' | get_lang }}</div>`);
+              }
+
+              // Resource
+              $('#resource').html(resourceData[0]);
+              parentList.push(id);
+              resourceId = id;
+
+              // Children
+              if (childrenData[0]) {
+                $('#children').html('');
+                let childIds = childrenData[0].split(',');
+                childIds.forEach((value) => {
+                  $.ajax({
+                    url: url + '?a=get_icon&id=' + value + '&type=' + type + '&sequence_id=' + sequenceId,
+                    success: function (data) {
+                      $('#children').append(data);
+                    }
+                  });
+                });
+              } else {
+                $('#children').html(`<div class="text-center text-sm text-gray-400 italic">{{ 'No dependent items yet' | get_lang }}</div>`);
+              }
+
+              // Graph
+              if (graphData[0].trim()) {
+                $('#graph-wrapper').removeClass('hidden');
+                $('#show_graph').html(graphData[0]);
+              } else {
+                $('#graph-wrapper').addClass('hidden');
+                $('#show_graph').html('');
+              }
+            });
+          }
+
+          $(function () {
+            const type = $('input[name="sequence_type"]').val();
+
+            $('button[name="set_requirement"]').prop('disabled', true);
+            $('#requirements').prop('disabled', true);
+            $('button[name="save_resource"]').prop('disabled', true);
+
+            sequenceId = $("#sequence_id option:selected").val();
+
+            showPlaceholders();
+
+            const selectedText = $("#sequence_id option:selected").text();
+            $('#sequence_title').text(selectedText);
+
+            $.ajax({
+              url: url,
+              data: {
+                a: 'get_initial_resource',
+                type: type,
+                sequence_id: sequenceId
+              },
+              success: function (resourceId) {
+                if (resourceId) {
+                  useAsReference(type, sequenceId, resourceId);
+                  $('button[name="save_resource"]').prop('disabled', false);
+                }
+              }
+            });
+
+            $('#parents, #resource, #children').on('click', '.parent .sequence-id', function (e) {
+              e.preventDefault();
+              const itemId = $(this).parents('.parent').data('id') || 0;
+              if (!itemId) return;
+
+              $('button[name="set_requirement"]').prop('disabled', false);
+              $('#requirements').prop('disabled', false);
+              $('button[name="save_resource"]').prop('disabled', false);
+
+              useAsReference(type, sequenceId, itemId);
+            });
+
+            $('button[name="use_as_reference"]').on('click', function (e) {
+              e.preventDefault();
+              $('button[name="set_requirement"]').prop('disabled', false);
+              $('#requirements').prop('disabled', false).selectpicker('refresh');
+              $('button[name="save_resource"]').prop('disabled', false);
+
+              useAsReference(type, sequenceId);
+            });
+
+            $('button[name="set_requirement"]').click(function () {
+              $("#requirements option:selected").each(function () {
+                var id = $(this).val();
+                if ($.inArray(id, parentList) == -1) {
+                  $.ajax({
                     url: url + '?a=get_icon&id=' + id + '&type=' + type + '&sequence_id=' + sequenceId,
                     success: function (data) {
-                        $('#resource').html(data);
-                        parentList.push(id);
-                        resourceId = id;
+                      $('#parents').append(data);
+                      parentList.push(id);
                     }
-                });
-
-                $.ajax({
-                    url: url + '?a=graph&type=' + type + '&sequence_id=' + sequenceId,
-                    success: function (data) {
-                        $('#show_graph').html(data);
-                    }
-                });
-            }
-
-            $(function() {
-                var type = $('input[name="sequence_type"]').val();
-                // By default "set requirement" is set to false
-
-                $('button[name="set_requirement"]').prop('disabled', true);
-                $('#requirements').prop('disabled', true);
-                $('button[name="save_resource"]').prop('disabled', true);
-
-                sequenceId = $("#sequence_id option:selected").val();
-
-                // Load parents
-                $('#parents').on('click', 'a.delete_vertex, a.undo_delete', function (e) {
-                    e.preventDefault();
-
-                    var self = $(this),
-                        parent = self.parent(),
-                        vertexId = self.attr('data-id') || 0;
-
-                    if (!vertexId) {
-                        return;
-                    }
-
-                    if (self.is('.delete_vertex')) {
-                        self.hide();
-                        parent.find('.undo_delete').show();
-
-                        self.parents('.parent').addClass('parent-deleted');
-                    } else if (self.is('.undo_delete')) {
-                        self.hide();
-                        parent.find('.delete_vertex').show();
-
-                        self.parents('.parent').removeClass('parent-deleted');
-                    }
-                });
-
-                $('#parents, #resource, #children').on('click', '.parent .sequence-id', function (e) {
-                    e.preventDefault();
-
-                    var itemId = $(this).parents('.parent').data('id') || 0;
-
-                    if (!itemId) {
-                        return;
-                    }
-
-                    $('button[name="set_requirement"]').prop('disabled', false);
-                    $('#requirements').prop('disabled', false);
-                    $('button[name="save_resource"]').prop('disabled', false);
-
-                    useAsReference(type, sequenceId, itemId);
-                });
-
-                // Button use as reference
-
-                $('button[name="use_as_reference"]').click(function () {
-                    $('button[name="set_requirement"]').prop('disabled', false);
-                    $('#requirements').prop('disabled', false);
-                    $('#requirements').selectpicker('refresh');
-                    $('button[name="save_resource"]').prop('disabled', false);
-
-                    useAsReference(type, sequenceId);
-
-                    return false;
-                });
-
-                // Button set requirement
-
-                $('button[name="set_requirement"]').click(function () {
-                    $("#requirements option:selected").each(function () {
-                        var id = $(this).val();
-                        if ($.inArray(id, parentList) == -1) {
-                            $.ajax({
-                                url: url + '?a=get_icon&id=' + id + '&type=' + type + '&sequence_id=' + sequenceId,
-                                success: function (data) {
-                                    $('#parents').append(data);
-                                    parentList.push(id);
-                                }
-                            });
-                        }
-                    });
-                    return false;
-                });
-
-                // Button save
-                $('button[name="save_resource"]').click(function (e) {
-                    e.preventDefault();
-
-                    var self = $(this).prop('disabled', true);
-
-                    // parse to integer the parents IDs
-                    parentList = parentList.map(function (id) {
-                        return parseInt(id);
-                    });
-
-                    var deletingVertex = new Array();
-
-                    // Delete all vertex confirmed to be deleted.
-                    $('#parents .parent.parent-deleted').each(function () {
-                        var self = $(this),
-                            vertexId = self.data('id') || 0,
-                            deleteVertex;
-
-                        deleteVertex = $.ajax(url, {
-                            data: {
-                                a: 'delete_vertex',
-                                id: resourceId,
-                                vertex_id: vertexId,
-                                type: type,
-                                sequence_id: sequenceId
-                            },
-                            success: function () {
-                                parentList.splice($.inArray(vertexId, parentList), 1);
-                            }
-                        });
-
-                        deletingVertex.push(deleteVertex);
-                    });
-
-                    $.when.apply($, deletingVertex).done(function () {
-                        if (resourceId != 0) {
-                            var params = decodeURIComponent(parentList);
-
-                            var savingResource = $.ajax(url, {
-                                data: {
-                                    a: 'save_resource',
-                                    id: resourceId,
-                                    parents: params,
-                                    type: type,
-                                    sequence_id: sequenceId
-                                }
-                            });
-
-                            $.when(savingResource).done(function (response) {
-                                $('#global-modal')
-                                    .find('.modal-dialog')
-                                    .removeClass('modal-lg')
-                                    .addClass('modal-sm');
-                                $('#global-modal')
-                                    .find('.modal-body')
-                                    .html(response);
-                                $('#global-modal').modal('show');
-
-                                self.prop('disabled', false);
-
-                                useAsReference(type, sequenceId);
-                            });
-                        }
-                    });
-                });
-
-                $('select#sequence_id').on('change', function () {
-                    sequenceId = $(this).val();
-                });
+                  });
+                }
+              });
+              return false;
             });
+
+            $('button[name="save_resource"]').click(function (e) {
+              e.preventDefault();
+              const self = $(this).prop('disabled', true);
+              parentList = parentList.map(id => parseInt(id));
+
+              const deletingVertex = [];
+              $('#parents .parent.parent-deleted').each(function () {
+                const vertexId = $(this).data('id') || 0;
+                deletingVertex.push($.ajax({
+                  data: {
+                    a: 'delete_vertex',
+                    id: resourceId,
+                    vertex_id: vertexId,
+                    type: type,
+                    sequence_id: sequenceId
+                  },
+                  url: url,
+                  success: function () {
+                    parentList.splice($.inArray(vertexId, parentList), 1);
+                  }
+                }));
+              });
+
+              $.when.apply($, deletingVertex).done(function () {
+                if (resourceId !== 0) {
+                  const params = decodeURIComponent(parentList);
+                  $.ajax({
+                    url: url,
+                    data: {
+                      a: 'save_resource',
+                      id: resourceId,
+                      parents: params,
+                      type: type,
+                      sequence_id: sequenceId
+                    },
+                    success: function (response) {
+                      Swal.fire({
+                        icon: 'success',
+                        title: '{{ "Settings saved"|get_lang }}',
+                        text: '{{ "The dependency has been updated."|get_lang }}',
+                        confirmButtonColor: '#4CAF50'
+                      });
+                      useAsReference(type, sequenceId);
+                    },
+                    error: function () {
+                      Swal.fire({
+                        icon: 'error',
+                        title: '{{ "An error occurred"|get_lang }}',
+                        text: '{{ "The dependency could not be saved."|get_lang }}',
+                        confirmButtonColor: '#e53935'
+                      });
+                    },
+                    complete: function () {
+                      self.prop('disabled', false);
+                    }
+                  });
+                } else {
+                  Swal.fire({
+                    icon: 'warning',
+                    title: '{{ "No reference selected"|get_lang }}',
+                    text: '{{ "You must select a resource first."|get_lang }}',
+                    confirmButtonColor: '#f9a825'
+                  });
+                  self.prop('disabled', false);
+                }
+              });
+            });
+
+            $('select#sequence_id').on('change', function () {
+              sequenceId = $(this).val();
+              showPlaceholders();
+            });
+
+            $('#sequence_id').on('change', function () {
+              const selectedText = $(this).find('option:selected').text();
+              $('#sequence_title').text(selectedText);
+              sequenceId = $(this).val();
+              showPlaceholders();
+
+              $.ajax({
+                url: url,
+                data: {
+                  a: 'get_initial_resource',
+                  type: type,
+                  sequence_id: sequenceId
+                },
+                success: function (resourceId) {
+                  if (resourceId) {
+                    useAsReference(type, sequenceId, resourceId);
+                    $('button[name="save_resource"]').prop('disabled', false);
+                  }
+                }
+              });
+            });
+          });
         </script>
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="section-title-sequence">{{ 'Sequence selection' | get_lang }}</div>
-                <div class="row">
-                    <div class="col-md-6">
-                        {{ create_sequence }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ select_sequence }}
-                    </div>
+
+        {{ tabs|raw }}
+
+        <div class="bg-white rounded-lg shadow p-4 mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">{{ 'Sequence selection' | get_lang }}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    {{ create_sequence }}
+                </div>
+                <div>
+                    {{ select_sequence }}
                 </div>
             </div>
         </div>
 
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="section-title-sequence">{{ 'Sequence configuration' | get_lang }}</div>
-                <div class="row">
-
-                    {{ configure_sequence }}
-                </div>
-
+        <div class="bg-white rounded-lg shadow p-4 mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">
+                {{ 'Sequence configuration' | get_lang }}:
+                <span class="font-normal text-gray-600" id="sequence_title">{{ current_sequence_name }}</span>
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end">
+                {{ configure_sequence|raw }}
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="section-title-sequence">{{ 'Sequence preview' | get_lang }}</div>
-                <div class="row">
-                    <div class="col-md-9">
-                        <h4 class="title-sequence">
-                            {{ 'Items the reference depends on' | get_lang }}
-                        </h4>
-                        <div id="parents">
-                        </div>
-                        <div class="border-sequence">
-                            <div class="arrow-sequence"></div>
-                        </div>
-                        <h4 class="title-sequence">{{ 'Item' | get_lang }}</h4>
-                        <div id="resource">
-                        </div>
-                        <div class="border-sequence">
-                            <div class="arrow-sequence"></div>
-                        </div>
-                        <h4 class="title-sequence">{{ 'Items that depend on the reference' | get_lang }}</h4>
-                        <div id="children">
-                        </div>
 
-                    </div>
-                    <div class="col-md-3">
-                        <h4 class="title-sequence">{{ 'Dependency tree' | get_lang }}</h4>
-                        <div id="show_graph"></div>
+        <div class="bg-white border rounded-lg shadow p-4 space-y-6">
+            <h2 class="text-xl font-semibold border-b border-gray-200 pb-2 text-gray-800">{{ 'Sequence preview' | get_lang }}</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left: Main sequence -->
+                <div class="lg:col-span-9 space-y-6">
+                    <div>
+                        <h3 class="font-medium text-gray-700">{{ 'Items the reference depends on' | get_lang }}</h3>
+                        <div id="parents" class="min-h-[40px] bg-gray-10 p-2 border border-gray-25 rounded-md"></div>
                     </div>
 
+                    <div class="flex justify-center">
+                        <div class="text-gray-400 text-3xl">&#8595;</div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-medium text-gray-700">{{ 'Item' | get_lang }}</h3>
+                        <div id="resource" class="min-h-[40px] bg-gray-100 p-4 border rounded-md flex justify-center items-center text-center"></div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <div class="text-gray-400 text-3xl">&#8595;</div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-medium text-gray-700">{{ 'Items that depend on the reference' | get_lang }}</h3>
+                        <div id="children" class="min-h-[40px] bg-gray-10 p-2 border border-gray-25 rounded-md"></div>
+                    </div>
+
+                    <div class="pt-4">
+                        {{ save_sequence|raw }}
+                    </div>
                 </div>
-                {{ save_sequence }}
+
+                <!-- Right: Graph -->
+                <div id="graph-wrapper" class="lg:col-span-3 hidden">
+                    <h3 class="font-medium text-gray-700">{{ 'Dependency tree' | get_lang }}</h3>
+                    <div id="show_graph" class="min-h-[100px] bg-gray-15 p-2 border border-gray-25 rounded-md"></div>
+                </div>
             </div>
         </div>
     {% endautoescape %}

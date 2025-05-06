@@ -1,10 +1,9 @@
+{{ positioning_introduction|raw }}
 
-{{ positioning_introduction }}
-
-{{ table }}
+{{ table|raw }}
 
 {% if radars %}
-    {{ radars }}
-    <br>
-    {{ "ChartShowsAverageForAllStudentsUsingZeroForIncompleteTests"| get_plugin_lang('Positioning') }}
+{{ radars|raw }}
+<br>
+{{ "ChartShowsAverageForAllStudentsUsingZeroForIncompleteTests"|get_plugin_lang('Positioning') }}
 {% endif %}

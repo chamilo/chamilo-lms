@@ -71,6 +71,14 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
             $commentEntity->setFile($filename);
         }
 
+        $qualification = (float) $request->get('qualification', null);
+
+        if (null !== $qualification) {
+            $submission->setQualification($qualification);
+            $submission->setQualificatorId($user->getId());
+            $submission->setDateOfQualification(new \DateTime());
+        }
+
         $em->persist($commentEntity);
         $em->flush();
 

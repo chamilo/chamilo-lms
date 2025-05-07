@@ -11,6 +11,7 @@
       <template v-if="forceStudentView">
         <div class="ml-auto">
           <BaseButton
+            v-if="!isAfterDeadline"
             icon="upload"
             :label="t('Upload my assignment')"
             type="primary"
@@ -72,6 +73,13 @@
       </template>
     </div>
 
+    <div
+      v-if="forceStudentView && isAfterDeadline"
+      class="text-red-600 border border-red-300 p-4 rounded bg-red-50"
+    >
+      {{ t("You can no longer submit. The deadline has passed.") }}
+    </div>
+
     <h2 class="text-2xl font-bold">{{ assignment?.title }}</h2>
 
     <div class="bg-gray-10 border border-gray-25 rounded-lg shadow-sm">
@@ -115,7 +123,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useCidReq } from "../../composables/cidReq"
@@ -144,6 +152,16 @@ const addedDocuments = ref([])
 const notification = useNotification()
 const submissionListKey = ref(0)
 
+const isAfterDeadline = computed(() => {
+  if (!assignment.value?.assignment?.endsOn) {
+    return false
+  }
+
+  const now = new Date()
+  const deadline = new Date(assignment.value.assignment.endsOn)
+  return now > deadline
+})
+
 async function loadAddedDocuments() {
   try {
     const response = await axios.get(`${ENTRYPOINT}c_student_publication_rel_documents`, {
@@ -157,7 +175,7 @@ async function loadAddedDocuments() {
 
 onMounted(async () => {
   try {
-    const response = await cStudentPublicationService.getAssignmentMetadata(assignmentId)
+    const response = await cStudentPublicationService.getAssignmentMetadata(assignmentId, cid, sid, gid)
     assignment.value = response
     await loadAddedDocuments()
   } catch (error) {
@@ -194,7 +212,7 @@ function editAssignment() {
 
 async function exportPdf() {
   try {
-    const data = await cStudentPublicationService.exportAssignmentPdf(assignmentId)
+    const data = await cStudentPublicationService.exportAssignmentPdf(assignmentId, cid, sid, gid)
     const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }))
     const link = document.createElement("a")
     link.href = url
@@ -220,7 +238,7 @@ function addDocument() {
   router.push({
     name: "AssignmentAddDocument",
     params: { id: assignmentId },
-    query: route.query,
+    query: { cid, sid, gid },
   })
 }
 
@@ -228,7 +246,7 @@ function addUsers() {
   router.push({
     name: "AssignmentAddUser",
     params: { id: assignmentId },
-    query: route.query,
+    query: { cid, sid, gid },
   })
 }
 
@@ -276,10 +294,10 @@ async function deleteAllCorrections() {
   if (!confirm(t("Are you sure you want to delete all corrections?"))) return
 
   try {
-    await cStudentPublicationService.deleteAllCorrections(assignmentId)
+    await cStudentPublicationService.deleteAllCorrections(assignmentId, cid, sid)
     notification.showSuccessNotification(t("All corrections deleted"))
 
-    assignment.value = await cStudentPublicationService.getAssignmentMetadata(assignmentId)
+    assignment.value = await cStudentPublicationService.getAssignmentMetadata(assignmentId, cid, sid, gid)
 
     submissionListKey.value++
   } catch (error) {

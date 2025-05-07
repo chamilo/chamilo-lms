@@ -1,6 +1,15 @@
 <template>
-  <div class="p-4">
-    <h2 class="text-xl font-bold mb-4">{{ t("Upload your assignment") }}</h2>
+  <div>
+    <div class="flex items-center justify-between">
+      <BaseIcon
+        icon="back"
+        size="big"
+        @click="goBack"
+        :title="t('Back')"
+      />
+    </div>
+    <hr />
+    <h1 class="text-2xl font-bold">{{ t("Upload your assignment") }} - {{ publicationTitle }}</h1>
     <Dashboard
       :uppy="uppy"
       :props="{ width: '100%', height: 400 }"
@@ -9,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useCidReq } from "../../composables/cidReq"
 import { useI18n } from "vue-i18n"
@@ -20,6 +29,9 @@ import "@uppy/dashboard/dist/style.css"
 import { Dashboard } from "@uppy/vue"
 import Uppy from "@uppy/core"
 import XHRUpload from "@uppy/xhr-upload"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import axios from "axios"
+import { ENTRYPOINT } from "../../config/entrypoint"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -27,8 +39,26 @@ const router = useRouter()
 const { cid, sid, gid } = useCidReq()
 const { showSuccessNotification, showErrorNotification } = useNotification()
 const parentResourceNodeId = Number(route.params.node)
+const publicationId = parseInt(route.params.id)
+const publicationTitle = ref("")
 
 const queryParams = new URLSearchParams({ cid, ...(sid && { sid }), ...(gid && { gid }) }).toString()
+
+onMounted(() => {
+  loadPublicationMetadata()
+})
+
+async function loadPublicationMetadata() {
+  try {
+    const response = await axios.get(`${ENTRYPOINT}c_student_publications/${publicationId}`, {
+      params: { cid, ...(sid && { sid }), ...(gid && { gid }) },
+    })
+    const data = response.data
+    publicationTitle.value = data.title
+  } catch (e) {
+    console.error("Error loading publication metadata", e)
+  }
+}
 
 const uppy = ref(
   new Uppy({
@@ -66,4 +96,12 @@ uppy.value.on("file-added", async (file) => {
     showErrorNotification(error)
   }
 })
+
+function goBack() {
+  router.push({
+    name: "AssignmentDetail",
+    params: { id: publicationId },
+    query: route.query,
+  })
+}
 </script>

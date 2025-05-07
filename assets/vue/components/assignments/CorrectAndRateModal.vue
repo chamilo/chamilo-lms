@@ -23,6 +23,26 @@
       />
 
       <div class="flex flex-col gap-2">
+        <label>{{ t("Score") }}</label>
+
+        <template v-if="!forceStudentView">
+          <input
+            type="number"
+            v-model.number="qualification"
+            class="input border p-2 rounded"
+            min="0"
+            step="0.1"
+          />
+        </template>
+
+        <template v-else>
+          <span class="border p-2 rounded bg-gray-100 text-sm">
+            {{ qualification ?? t("Not graded yet") }}
+          </span>
+        </template>
+      </div>
+
+      <div class="flex flex-col gap-2">
         <label>{{ t("Attach file (optional)") }}</label>
         <input
           type="file"
@@ -98,6 +118,8 @@ import Button from "primevue/button"
 import Dialog from "primevue/dialog"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import cStudentPublicationService from "../../services/cstudentpublication"
+import { useRoute } from "vue-router"
+import { useSecurityStore } from "../../store/securityStore"
 
 const props = defineProps({
   modelValue: Boolean,
@@ -112,6 +134,13 @@ const sendMail = ref(false)
 const selectedFile = ref(null)
 const { t } = useI18n()
 const notification = useNotification()
+const qualification = ref(null)
+const route = useRoute()
+const parentResourceNodeId = parseInt(route.params.node)
+const securityStore = useSecurityStore()
+const isEditor = securityStore.isCourseAdmin || securityStore.isTeacher
+const isStudentView = route.query.isStudentView === "true"
+const forceStudentView = !isEditor || isStudentView
 
 watch(
   () => props.modelValue,
@@ -121,6 +150,7 @@ watch(
       comment.value = ""
       sendMail.value = false
       selectedFile.value = null
+      qualification.value = props.item.qualification ?? null
       comments.value = await cStudentPublicationService.loadComments(props.item.iid)
     }
   },
@@ -163,13 +193,9 @@ async function submit() {
       formData.append("uploadFile", selectedFile.value)
     }
     formData.append("comment", comment.value)
+    formData.append("qualification", qualification.value ?? "")
 
-    await cStudentPublicationService.uploadComment(
-      props.item.iid,
-      getResourceNodeId(props.item.resourceNode),
-      formData,
-      sendMail.value,
-    )
+    await cStudentPublicationService.uploadComment(props.item.iid, parentResourceNodeId, formData, sendMail.value)
 
     notification.showSuccessNotification(t("Comment added successfully"))
 
@@ -179,19 +205,5 @@ async function submit() {
   } catch (error) {
     notification.showErrorNotification(error)
   }
-}
-
-function getResourceNodeId(resourceNode) {
-  if (!resourceNode) return 0
-
-  if (typeof resourceNode === "object" && "id" in resourceNode) {
-    return parseInt(resourceNode.id, 10)
-  }
-
-  const idString = typeof resourceNode === "string" ? resourceNode : resourceNode["@id"]
-  if (!idString || typeof idString !== "string") return 0
-
-  const match = idString.match(/\/(\d+)$/)
-  return match ? parseInt(match[1], 10) : 0
 }
 </script>

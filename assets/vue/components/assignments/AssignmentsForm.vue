@@ -261,18 +261,11 @@ const v$ = useVuelidate(rules, assignment)
 
 const onSubmit = async () => {
   const result = await v$.value.$validate()
-
-  if (!result) {
-    return
-  }
+  if (!result) return
 
   const publicationStudent = {
     title: assignment.title,
     description: assignment.description,
-    assignment: {
-      expiresOn: null,
-      endsOn: null,
-    },
     parentResourceNode: route.params.node * 1,
     resourceLinkList: [
       {
@@ -282,32 +275,26 @@ const onSubmit = async () => {
         visibility: RESOURCE_LINK_PUBLISHED,
       },
     ],
+    qualification: assignment.qualification,
+    addToCalendar: assignment.addToCalendar,
+    allowTextAssignment: assignment.allowTextAssignment.value,
   }
 
-  if (showAdvancedSettings.value) {
-    publicationStudent.qualification = assignment.qualification
-
-    publicationStudent.addToCalendar = assignment.addToCalendar
-
-    if (chkAddToGradebook.value) {
-      publicationStudent.gradebookCategoryId = assignment.gradebookId.id
-      publicationStudent.weight = assignment.weight
-    }
-
-    if (chkExpiresOn.value) {
-      publicationStudent.assignment.expiresOn = assignment.expiresOn
-    }
-
-    if (chkEndsOn.value) {
-      publicationStudent.assignment.endsOn = assignment.endsOn
-    }
-
-    publicationStudent.allowTextAssignment = assignment.allowTextAssignment.value
+  if (chkAddToGradebook.value) {
+    publicationStudent.gradebookCategoryId = assignment.gradebookId.id
+    publicationStudent.weight = assignment.weight
   }
 
-  if (props.defaultAssignment) {
+  if (chkExpiresOn.value) {
+    publicationStudent.expiresOn = assignment.expiresOn.toISOString()
+  }
+
+  if (chkEndsOn.value) {
+    publicationStudent.endsOn = assignment.endsOn.toISOString()
+  }
+
+  if (props.defaultAssignment?.["@id"]) {
     publicationStudent["@id"] = props.defaultAssignment["@id"]
-    publicationStudent.assignment["@id"] = props.defaultAssignment.assignment["@id"]
   }
 
   emit("submit", publicationStudent)

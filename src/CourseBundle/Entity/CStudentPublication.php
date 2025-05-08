@@ -38,7 +38,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CStudentPublicationRepository::class)]
 #[ApiResource(
     operations: [
-        new Put(security: "is_granted('EDIT', object.resourceNode)"),
+        new Put(
+            security: "is_granted('EDIT', object.resourceNode)",
+            processor: CStudentPublicationPostStateProcessor::class
+        ),
         new Get(
             normalizationContext: [
                 'groups' => ['student_publication:read', 'student_publication:item:get'],
@@ -458,16 +461,18 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
             return null;
         }
 
-        $expectedTitle = $this->getExtensions();
         $children = $this->getResourceNode()->getChildren();
 
         foreach ($children as $child) {
-            $name = $child->getResourceType()->getTitle();
+            $resourceType = $child->getResourceType();
+            if (!$resourceType) {
+                continue;
+            }
+
+            $name = $resourceType->getTitle();
 
             if ('student_publications_corrections' === $name) {
-                if ($child->getTitle() === $expectedTitle) {
-                    return $child;
-                }
+                return $child;
             }
         }
 

@@ -6,11 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
 use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
@@ -377,13 +379,17 @@ class StudentPublicationController extends AbstractController
 
         $count = 0;
 
+        /* @var CStudentPublication $submission */
         foreach ($submissions as $submission) {
             $correctionNode = $submission->getCorrection();
 
             if ($correctionNode !== null) {
-                $em->remove($correctionNode);
-                $submission->setExtensions(null);
-                $count++;
+                $correctionNode = $em->getRepository(ResourceNode::class)->find($correctionNode->getId());
+                if ($correctionNode) {
+                    $em->remove($correctionNode);
+                    $submission->setExtensions(null);
+                    $count++;
+                }
             }
         }
 

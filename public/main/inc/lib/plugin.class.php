@@ -908,7 +908,7 @@ class Plugin
      *
      * @return bool True if plugin is installed/enabled, false otherwise
      */
-    public function isEnabled(bool $checkEnabled = false): bool
+    public function isEnabled(bool $checkEnabled = false)
     {
         $settings = $this->get_settings();
 

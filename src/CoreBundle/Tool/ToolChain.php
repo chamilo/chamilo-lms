@@ -209,7 +209,13 @@ class ToolChain
 
     public function getToolFromName(string $title): AbstractTool
     {
-        return $this->handlerCollection->getHandler($title);
+        foreach ($this->handlerCollection->getCollection() as $handler) {
+            if (strcasecmp($handler->getTitle(), $title) === 0) {
+                return $handler;
+            }
+        }
+
+        throw new \InvalidArgumentException("Tool handler not found for title: $title");
     }
 
     /*public function getToolFromEntity(string $entityClass): AbstractTool

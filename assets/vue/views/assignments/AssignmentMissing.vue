@@ -96,7 +96,7 @@ onMounted(async () => {
   loading.value = true
   try {
     users.value = await cstudentpublication.getUnsubmittedUsers(props.id)
-    assignment.value = await cstudentpublication.getAssignmentMetadata(props.id)
+    assignment.value = await cstudentpublication.getAssignmentMetadata(props.id, cid, sid, gid)
   } catch (error) {
     console.error("Error loading data", error)
   } finally {

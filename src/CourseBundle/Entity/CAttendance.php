@@ -24,6 +24,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -79,7 +80,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_TEACHER')"
         ),
     ],
-    normalizationContext: ['groups' => ['attendance:read', 'resource_node:read', 'resource_link:read']],
+    normalizationContext: [
+        'groups' => ['attendance:read', 'resource_node:read', 'resource_link:read'],
+        'enable_max_depth' => true
+    ],
     denormalizationContext: ['groups' => ['attendance:write']],
     paginationEnabled: true,
 )]
@@ -132,6 +136,7 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
      */
     #[ORM\OneToMany(mappedBy: 'attendance', targetEntity: CAttendanceCalendar::class, cascade: ['persist', 'remove'])]
     #[Groups(['attendance:read'])]
+    #[MaxDepth(1)]
     protected Collection $calendars;
 
     /**

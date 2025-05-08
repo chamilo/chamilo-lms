@@ -287,7 +287,7 @@ if ($visibilityChangeable) {
     );
 }
 
-$url = api_get_path(WEB_CODE_PATH)."auth/inscription.php?c=$course_code&e=1";
+$url = api_get_path(WEB_CODE_PATH)."auth/inscription.php?c=$course_code&";
 $url = Display::url($url, $url);
 $label = $form->addLabel(get_lang('DirectLink'), sprintf(get_lang('CourseSettingsRegisterDirectLink'), $url), true);
 

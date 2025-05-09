@@ -2639,7 +2639,33 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 
 // Extra fields to include in session course excel report on main/session/resume_session.php
 /*$_configuration['session_course_excel_export'] = [
-    'session_fields' => ['session_extrafield1','session_extrafield2',],
-    'user_fields_before' => ['DNI'],
-    'user_fields_after' => ['user_extrafield1','user_extrafield2',],
-];*/
+    'session_fields' => [
+        '0' => [
+            'header' => '1st session header',
+            'field' => 'modalidad'
+        ],
+        '1' => [
+            'header' => 'Sesion header without value',
+        ],
+        '2' => [
+            'header' => '3rd session header',
+            'field' => 'extrafieldvariable'
+        ],
+    ],
+    'user_fields_before' => [
+        '0' => [
+            'header' => 'DNI',
+            'field' => 'dni'
+        ],
+    ],
+    'user_fields_after' => [
+        '0' => [
+            'header' => 'User header 1',
+            'field' => 'userfield_after'
+        ],
+        '1' => [
+            'header' => 'User header 2',
+            'field' => 'userextrafieldvariable'
+        ],
+    ],
+]; */

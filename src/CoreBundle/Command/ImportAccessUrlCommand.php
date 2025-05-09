@@ -37,7 +37,7 @@ class ImportAccessUrlCommand extends Command
         $this
             ->addArgument('xlsx-file', InputArgument::REQUIRED, 'Path to the XLSX file')
             ->addArgument('base-url', InputArgument::REQUIRED, 'Base URL for subdomains (e.g., https://somedomain.com/)')
-            ->setHelp('This command imports AccessUrl entities from an XLSX file. The file must have a title row with "subdomain" and "description" columns. Subdomains are lowercased. The ResourceNode parent is set to AccessUrl ID = 1.');
+            ->setHelp('This command imports AccessUrl entities from an XLSX file. The file must have a title row with "subdomain" and "description" columns. Subdomains are lowercased. The ResourceNode parent is set to AccessUrl ID = 1. If needed, removing the created URLs manually will require cleaning the access_url_rel_user and resource_node tables.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

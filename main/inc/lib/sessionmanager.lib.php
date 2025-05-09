@@ -10159,6 +10159,10 @@ class SessionManager
         }
 
         $config = api_get_configuration_value('session_course_excel_export');
+        if (empty($config)) {
+            die('Configuration not set.');
+        }
+
         $sessionFields = $config['session_fields'] ?? [];
         $userFieldsBefore = $config['user_fields_before'] ?? [];
         $userFieldsAfter = $config['user_fields_after'] ?? [];
@@ -10168,14 +10172,8 @@ class SessionManager
         $header1[] = get_lang('StartDate');
         $header1[] = get_lang('EndDate');
 
-        $extraField = new ExtraFieldModel('session');
-        $extraDefs = $extraField->get_all();
-        $extraDefsByVariable = array_column($extraDefs, null, 'variable');
-
-        foreach ($sessionFields as $field) {
-            if (isset($extraDefsByVariable[$field])) {
-                $header1[] = $extraDefsByVariable[$field]['display_text'] ?? $field;
-            }
+        foreach ($sessionFields as $entry) {
+            $header1[] = $entry['header'] ?? '';
         }
 
         // 2. SESSION DATA
@@ -10187,24 +10185,27 @@ class SessionManager
         $sessionExtra = $extraValuesObj->getAllValuesByItem($sessionId);
         $sessionExtraMap = array_column($sessionExtra, 'value', 'variable');
 
-        foreach ($sessionFields as $field) {
-            $value = $sessionExtraMap[$field] ?? '';
+        foreach ($sessionFields as $entry) {
+            if (!empty($entry['field'])) {
+                $value = $sessionExtraMap[$entry['field']] ?? '';
+            } else {
+                $value = '';
+            }
             $row2[] = $value;
         }
 
         // 3. USER HEADER
-	$header3 = [''];
-	$extraFieldUser = new ExtraFieldModel('user');
-        $extraDefsUser = $extraFieldUser->get_all();
-        $extraDefsByVariableUser = array_column($extraDefsUser, null, 'variable');
+        $header3 = [''];
 
-        foreach ($userFieldsBefore as $field) {
-            $header3[] = $extraDefsByVariableUser[$field]['display_text'] ?? $field;
+        foreach ($userFieldsBefore as $entry) {
+            $header3[] = $entry['header'] ?? '';
         }
+
         $header3[] = get_lang('FirstName');
         $header3[] = get_lang('LastName');
-        foreach ($userFieldsAfter as $field) {
-            $header3[] = $extraDefsByVariableUser[$field]['display_text'] ?? $field;
+
+        foreach ($userFieldsAfter as $entry) {
+            $header3[] = $entry['header'] ?? '';
         }
 
         // 4. USERS WITH CERTIFICATE
@@ -10239,16 +10240,24 @@ class SessionManager
                 $userExtra = $userExtraObj->getAllValuesByItem($userId);
                 $userExtraMap = array_column($userExtra, 'value', 'variable');
 
-                foreach ($userFieldsBefore as $field) {
-                    $value = $userExtraMap[$field] ?? '';
+                foreach ($userFieldsBefore as $entry) {
+                    if (!empty($entry['field'])) {
+                        $value = $userExtraMap[$entry['field']] ?? '';
+                    } else {
+                        $value = '';
+                    }
                     $row[] = $value;
                 }
 
                 $row[] = $userInfo['firstname'];
                 $row[] = $userInfo['lastname'];
 
-                foreach ($userFieldsAfter as $field) {
-                    $value = $userExtraMap[$field] ?? '';
+                foreach ($userFieldsAfter as $entry) {
+                    if (!empty($entry['field'])) {
+                        $value = $userExtraMap[$entry['field']] ?? '';
+                    } else {
+                        $value = '';
+                    }
                     $row[] = $value;
                 }
 

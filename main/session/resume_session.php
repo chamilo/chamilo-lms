@@ -300,10 +300,13 @@ if ($session->getNbrCourses() === 0) {
             $codePath."user/user_export.php?file_type=csv&course_session={$course->getCode()}:$sessionId&addcsvheader=1"
         );
 
-        $courseItem .= Display::url(
-            Display::return_icon('excel.png', get_lang('ExportCertifiedUsersExcel')),
-            api_get_self()."?id_session=$sessionId&action=export_certified_course_users&course_code=".$course->getCode()
-        );
+        $config = api_get_configuration_value('session_course_excel_export');
+        if (!empty($config)) {
+            $courseItem .= Display::url(
+                Display::return_icon('excel.png', get_lang('ExportCertifiedUsersExcel')),
+                api_get_self()."?id_session=$sessionId&action=export_certified_course_users&course_code=".$course->getCode()
+            );
+        }
 
         $courseItem .= Display::url(
             Display::return_icon('statistics.gif', get_lang('Tracking')),

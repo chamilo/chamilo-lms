@@ -1,5 +1,8 @@
 <?php
-// src/CoreBundle/Command/ImportAccessUrlCommand.php
+
+declare(strict_types=1);
+
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Command;
 
@@ -8,16 +11,19 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'app:import-access-url',
+    description: 'Import AccessUrl entities from an XLSX file.',
+)]
 class ImportAccessUrlCommand extends Command
 {
-    protected static $defaultName = 'chamilo:import-access-url';
-
     private EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -29,7 +35,6 @@ class ImportAccessUrlCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Import AccessUrl entities from an XLSX file')
             ->addArgument('xlsx-file', InputArgument::REQUIRED, 'Path to the XLSX file')
             ->addArgument('base-url', InputArgument::REQUIRED, 'Base URL for subdomains (e.g., https://somedomain.com/)')
             ->setHelp('This command imports AccessUrl entities from an XLSX file. The file must have a title row with "subdomain" and "description" columns. Subdomains are lowercased. The ResourceNode parent is set to AccessUrl ID = 1.');

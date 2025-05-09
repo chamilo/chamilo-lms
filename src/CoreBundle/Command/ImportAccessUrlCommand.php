@@ -66,15 +66,10 @@ class ImportAccessUrlCommand extends Command
             return Command::FAILURE;
         }
 
-        // Get main AccessUrl (ID = 1) and its ResourceNode
-        $mainAccessUrl = $this->entityManager->getRepository(AccessUrl::class)->find(1);
+        // Get main AccessUrl (resource_node.parent = null) and its ResourceNode
+        $mainAccessUrl = $this->entityManager->getRepository(AccessUrl::class)->findOneBy(['parent' => null]);
         if (!$mainAccessUrl) {
-            $io->error("Main AccessUrl with ID = 1 not found.");
-            return Command::FAILURE;
-        }
-        $parentResourceNode = $mainAccessUrl->getResourceNode();
-        if (!$parentResourceNode) {
-            $io->error("Main AccessUrl (ID = 1) has no associated ResourceNode.");
+            $io->error("Main AccessUrl not found.");
             return Command::FAILURE;
         }
 
@@ -145,6 +140,7 @@ class ImportAccessUrlCommand extends Command
                 //$accessUrl->setResourceNode($resourceNode); // Assign ResourceNode
                 $accessUrl->addUser($user); // Associate user
                 $accessUrl->setCreator($user); // Temporary hack as AccessUrl should be able to set this automatically
+                $accessUrl->setParent($mainAccessUrl); // Set this URL as a child of the admin URL
 
                 // Persist entity
                 $this->entityManager->persist($accessUrl);

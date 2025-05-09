@@ -69,7 +69,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ],
             ],
         ),
-        new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new Get(security: "is_granted('ROLE_USER')"),
         new Post(
             denormalizationContext: ['groups' => ['attendance:write']],
             security: "is_granted('ROLE_TEACHER')",
@@ -150,6 +150,9 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
      */
     #[ORM\OneToMany(mappedBy: 'attendance', targetEntity: CAttendanceSheetLog::class, cascade: ['persist', 'remove'])]
     protected Collection $logs;
+
+    #[Groups(['attendance:read'])]
+    private ?int $doneCalendars = null;
 
     public function __construct()
     {
@@ -293,6 +296,19 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
     public function getLogs(): array|Collection
     {
         return $this->logs;
+    }
+
+    public function getDoneCalendars(): int
+    {
+        return $this->calendars
+            ->filter(fn (CAttendanceCalendar $calendar) => $calendar->getDoneAttendance())
+            ->count();
+    }
+
+    public function setDoneCalendars(?int $count): self
+    {
+        $this->doneCalendars = $count;
+        return $this;
     }
 
     /**

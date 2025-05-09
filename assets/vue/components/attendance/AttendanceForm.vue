@@ -92,13 +92,14 @@ import LayoutFormButtons from "../../components/layout/LayoutFormButtons.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useCidReq } from "../../composables/cidReq"
 import gradebookService from "../../services/gradebookService"
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const { sid, cid } = useCidReq()
 const emit = defineEmits(["backPressed"])
 const props = defineProps({
@@ -194,10 +195,22 @@ const submitForm = async () => {
   try {
     if (props.initialData?.id) {
       await attendanceService.updateAttendance(props.initialData.id, postData)
+      emit("backPressed", route.query)
     } else {
-      await attendanceService.createAttendance(postData)
+      const created = await attendanceService.createAttendance(postData)
+      router.push({
+        name: "AddCalendarEvent",
+        params: {
+          node: parentResourceNodeId.value,
+          id: created.id,
+        },
+        query: {
+          cid: route.query.cid,
+          sid: route.query.sid,
+          gid: route.query.gid,
+        },
+      })
     }
-    emit("backPressed", route.query)
   } catch (error) {
     console.error("Error submitting attendance:", error)
   }

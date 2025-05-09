@@ -127,3 +127,8 @@ services:
       class: Chamilo\CoreBundle\GraphQL\LoggingExecutor
       arguments:
         $logger: '@logger'
+
+    Chamilo\CourseBundle\Repository\CAttendanceCalendarRepository:
+      arguments:
+        $registry: '@doctrine'
+        $em: '@doctrine.orm.entity_manager'

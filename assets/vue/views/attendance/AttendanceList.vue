@@ -1,14 +1,17 @@
 <template>
   <div>
     <BaseToolbar>
-      <BaseButton
-        :label="t('Add Attendance')"
-        icon="plus"
-        type="black"
-        @click="redirectToCreateAttendance"
-      />
+      <template #start>
+        <BaseButton
+          v-if="!isStudent"
+          icon="file-add"
+          size="normal"
+          type="black"
+          :title="t('Add Attendance')"
+          @click="redirectToCreateAttendance"
+        />
+      </template>
     </BaseToolbar>
-
     <AttendanceTable
       :attendances="attendances"
       :loading="isLoading"
@@ -113,6 +116,7 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
       resourceLinkListFromEntity: item.resourceLinkListFromEntity,
       attendanceQualifyTitle: item.attendanceQualifyTitle,
       attendanceWeight: item.attendanceWeight,
+      doneCalendars: item.doneCalendars,
     }))
 
     if (isStudent.value) {

@@ -103,4 +103,15 @@ class CAttendanceSheet
 
         return $this;
     }
+
+    public static function getPresenceLabels(): array
+    {
+        return [
+            self::ABSENT => 'Absent',
+            self::PRESENT => 'Present',
+            self::LATE_LESS_THAN_15_MINUTES => 'Late < 15 min',
+            self::LATE_MORE_THAN_15_MINUTES => 'Late > 15 min',
+            self::ABSENT_BUT_JUSTIFIED => 'Absent, justified',
+        ];
+    }
 }

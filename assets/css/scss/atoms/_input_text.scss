@@ -1,78 +1,43 @@
 .p-inputtext {
-  @apply border border-support-3 px-4 py-2 bg-white rounded-lg text-gray-90 transition w-full duration-200 appearance-none font-sans
-      placeholder:text-support-3
-    hover:border-primary hover:text-gray-90 hover:outline-0 hover:ring-0
-    focus:border-primary focus:text-gray-90 focus:outline-0 focus:ring-0;
+  @apply text-body-2 text-gray-90 bg-white px-3 py-2.5 border border-solid border-gray-50 transition appearance-none rounded-lg outline-transparent w-full;
 
-  font-size: 14px;
-
-  &.p-invalid.p-component {
-    @apply border-error
-      placeholder:text-error;
+  &:enabled {
+    @apply hover:border-primary
+      focus:border-primary focus:outline-0 focus:outline-none;
   }
 
-  &.p-inputtext-sm {
-    @apply px-3 py-1.5 text-body-2;
+  &.p-invalid {
+    @apply border-danger;
+
+    &::placeholder {
+        @apply text-danger;
+    }
   }
 
-  &.p-inputtext-lg {
+  &.p-variant-filled {
+    &:enabled {
+      &:hover {}
+      &:focus {}
+    }
+  }
+
+  &:disabled {
+    @apply border-gray-50 text-gray-50;
+  }
+
+  &::placeholder {
+    @apply text-gray-50;
+  }
+
+  &-sm {
+    @apply px-3 py-1.5;
+  }
+
+  &-lg {
     @apply py-3;
   }
-}
 
-.p-icon-field {
-  @apply relative;
-
-  > .p-input-icon {
-    @apply absolute top-1/2 -mt-2;
-  }
-}
-
-.p-icon-field-left {
-  > .p-input-icon:first-of-type {
-    @apply left-3 text-primary;
-  }
-
-  > .p-inputtext {
-    @apply pl-9;
-  }
-}
-
-.p-icon-field-right {
-  > .p-input-icon:first-of-type {
-    @apply right-3 text-primary;
-  }
-
-  > .p-inputtext {
-    @apply pr-9;
-  }
-}
-
-.p-input-icon-right {
-  > i:last-of-type,
-  > svg:last-of-type {
-    @apply right-3;
-  }
-
-  > .p-inputtext {
-    @apply pr-10;
-  }
-}
-
-.p-inputnumber {
-  @apply inline-flex;
-}
-
-.p-inputnumber-input {
-  @apply flex-auto;
-}
-
-.p-inputtextarea {
-  &-resizable {
-    @apply overflow-hidden resize-none;
-  }
-
-  .p-fluid & {
-    @apply w-full;
+  &-fluid {
+    @apply w-full
   }
 }

@@ -13,7 +13,9 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\DataTransformer\CourseToolDataTranformer;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\ServiceHelper\PluginServiceHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Tool\AbstractPlugin;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\CourseFromRequestTrait;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -37,6 +39,7 @@ final class CToolStateProvider implements ProviderInterface
         private readonly Security $security,
         private readonly ToolChain $toolChain,
         protected RequestStack $requestStack,
+        private readonly PluginServiceHelper $pluginServiceHelper,
     ) {
         $this->transformer = new CourseToolDataTranformer(
             $this->requestStack,
@@ -51,23 +54,33 @@ final class CToolStateProvider implements ProviderInterface
         $result = $this->provider->provide($operation, $uriVariables, $context);
 
         $request = $this->requestStack->getMainRequest();
-
         $studentView = $request ? $request->getSession()->get('studentview') : 'studentview';
 
         /** @var User|null $user */
         $user = $this->security->getUser();
 
         $isAllowToEdit = $user && ($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER'));
-        $isAllowToEditBack = $user && ($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER'));
-        $isAllowToSessionEdit = $user && ($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
+        $isAllowToEditBack = $isAllowToEdit;
+        $isAllowToSessionEdit = $user && (
+                $user->hasRole('ROLE_ADMIN') ||
+                $user->hasRole('ROLE_CURRENT_COURSE_TEACHER') ||
+                $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+            );
 
         $allowVisibilityInSession = $this->settingsManager->getSetting('course.allow_edit_tool_visibility_in_session');
         $session = $this->getSession();
+        $course = $this->getCourse();
+
+        [$restrictToPositioning, $allowedToolName] = $this->shouldRestrictToPositioningOnly($user, $course->getId(), $session?->getId());
 
         $results = [];
 
         /** @var CTool $cTool */
         foreach ($result as $cTool) {
+            if ($restrictToPositioning && $cTool->getTool()->getTitle() !== $allowedToolName) {
+                continue;
+            }
+
             $toolModel = $this->toolChain->getToolFromName(
                 $cTool->getTool()->getTitle()
             );
@@ -106,5 +119,47 @@ final class CToolStateProvider implements ProviderInterface
         }
 
         return $results;
+    }
+
+    private function shouldRestrictToPositioningOnly(?User $user, int $courseId, ?int $sessionId): array
+    {
+        if (!$user || !$user->hasRole('ROLE_STUDENT')) {
+            return [false, null];
+        }
+
+        $tool = $this->toolChain->getToolFromName('positioning');
+
+        if (!$tool instanceof AbstractPlugin) {
+            return [false, null];
+        }
+
+        if (!$this->pluginServiceHelper->isPluginEnabled('positioning')) {
+            return [false, null];
+        }
+
+        $pluginInstance = $this->pluginServiceHelper->loadLegacyPlugin('Positioning');
+
+        if (!$pluginInstance || 'true' !== $pluginInstance->get('block_course_if_initial_exercise_not_attempted')) {
+            return [false, null];
+        }
+
+        $initialData = $pluginInstance->getInitialExercise($courseId, $sessionId);
+
+        if (!isset($initialData['exercise_id'])) {
+            return [false, null];
+        }
+
+        $results = \Event::getExerciseResultsByUser(
+            $user->getId(),
+            (int) $initialData['exercise_id'],
+            $courseId,
+            $sessionId
+        );
+
+        if (empty($results)) {
+            return [true, 'positioning'];
+        }
+
+        return [false, null];
     }
 }

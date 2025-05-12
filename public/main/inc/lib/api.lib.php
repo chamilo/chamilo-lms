@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\ServiceHelper\MailHelper;
 use Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper;
+use Chamilo\CoreBundle\ServiceHelper\PluginServiceHelper;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -994,39 +995,46 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
 
-    if ($is_visible && 'true' === api_get_plugin_setting('positioning', 'tool_enable')) {
-        $plugin = Positioning::create();
-        $block = $plugin->get('block_course_if_initial_exercise_not_attempted');
-        if ('true' === $block) {
-            $currentPath = $_SERVER['PHP_SELF'];
-            // Allowed only this course paths.
-            $paths = [
-                '/plugin/Positioning/start.php',
-                '/plugin/Positioning/start_student.php',
-                '/main/course_home/course_home.php',
-                '/main/exercise/overview.php',
+    $pluginHelper = Container::$container->get(PluginServiceHelper::class);
+
+    if ($pluginHelper->isPluginEnabled('Positioning')) {
+        $plugin = $pluginHelper->loadLegacyPlugin('Positioning');
+
+        if ($plugin && $plugin->get('block_course_if_initial_exercise_not_attempted') === 'true') {
+            $currentPath = $_SERVER['REQUEST_URI'];
+
+            $allowedPatterns = [
+                '#^/course/\d+/home#',
+                '#^/plugin/Positioning/#',
+                '#^/main/course_home/#',
+                '#^/main/exercise/#',
+                '#^/main/inc/ajax/exercise.ajax.php#',
             ];
 
-            if (!in_array($currentPath, $paths, true)) {
-                // Check if entering an exercise.
-                // @todo remove global $current_course_tool
-                /*global $current_course_tool;
-                if ('quiz' !== $current_course_tool) {
-                    $initialData = $plugin->getInitialExercise($course_info['real_id'], $session_id);
-                    if ($initialData && isset($initialData['exercise_id'])) {
-                        $results = Event::getExerciseResultsByUser(
-                            api_get_user_id(),
-                            $initialData['exercise_id'],
-                            $course_info['real_id'],
-                            $session_id
-                        );
-                        if (empty($results)) {
-                            api_not_allowed($print_headers);
+            $isWhitelisted = false;
+            foreach ($allowedPatterns as $pattern) {
+                if (preg_match($pattern, $currentPath)) {
+                    $isWhitelisted = true;
+                    break;
+                }
+            }
 
-                            return false;
-                        }
+            if (!$isWhitelisted) {
+                $initialData = $plugin->getInitialExercise($course_info['real_id'], $session_id);
+
+                if (!empty($initialData['exercise_id'])) {
+                    $results = Event::getExerciseResultsByUser(
+                        api_get_user_id(),
+                        (int) $initialData['exercise_id'],
+                        $course_info['real_id'],
+                        $session_id
+                    );
+
+                    if (empty($results)) {
+                        api_not_allowed($print_headers);
+                        return false;
                     }
-                }*/
+                }
             }
         }
     }

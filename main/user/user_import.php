@@ -44,7 +44,7 @@ $type = '';
 
 if ($form->validate()) {
     if (isset($_FILES['import_file']['size']) && $_FILES['import_file']['size'] !== 0) {
-        $unsubscribe_users = isset($_POST['unsubscribe_users']) ? true : false;
+        $unsubscribe_users = isset($_POST['unsubscribe_users']);
         //@todo : csvToArray deprecated
         $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
         $invalid_users = [];
@@ -57,12 +57,12 @@ if ($form->validate()) {
                 $user_data = array_change_key_case($user_data, CASE_LOWER);
 
                 // Checking "username" field
-                if (isset($user_data['username']) && !empty($user_data['username'])) {
+                if (!empty($user_data['username'])) {
                     $user_id = UserManager::get_user_id_from_username($user_data['username']);
                 }
 
                 // Checking "id" field
-                if (isset($user_data['id']) && !empty($user_data['id'])) {
+                if (!empty($user_data['id'])) {
                     $user_id = $user_data['id'];
                 }
 

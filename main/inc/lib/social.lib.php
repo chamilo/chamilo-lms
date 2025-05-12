@@ -497,6 +497,24 @@ class SocialManager extends UserManager
         return $list;
     }
 
+    public static function hasInvitationByUser(int $receiverId, int $senderId): bool
+    {
+        $result = Database::select(
+            'count(1) as count',
+            Database::get_main_table(TABLE_MESSAGE),
+            [
+                'where' => [
+                    'user_sender_id = ?' => $senderId,
+                    'AND user_receiver_id = ?' => $receiverId,
+                    'AND msg_status = ?' => MESSAGE_STATUS_INVITATION_PENDING,
+                ],
+            ],
+            'first'
+        );
+
+        return $result['count'] > 0;
+    }
+
     /**
      * Get count invitation sent by user.
      *

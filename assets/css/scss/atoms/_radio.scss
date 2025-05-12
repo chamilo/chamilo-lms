@@ -2,41 +2,32 @@
   @apply relative inline-flex select-none align-bottom w-4 h-4;
 
   &-input {
-    @apply cursor-pointer;
+    @apply cursor-pointer appearance-none absolute top-0 start-0 w-full h-full p-0 m-0 opacity-0 z-[1] outline-none outline-0 border-2 border-transparent rounded-full;
   }
 
   &-box {
-    @apply flex justify-center items-center;
+    @apply flex justify-center items-center rounded-full border border-gray-50 bg-white w-4 h-4 transition outline-transparent drop-shadow-none;
   }
 
   &-icon {
-    @apply rounded-full invisible;
-    -webkit-backface-visibility: hidden;
+    @apply duration-200 w-1.5 h-1.5 rounded-full transform-gpu;
     backface-visibility: hidden;
-    transform: translateZ(0) scale(0.1);
   }
 
-  &:has(&-input--legacy:checked) &-icon,
-  &.p-highlight &-icon {
-    @apply visible;
-    transform: translateZ(0) scale(1, 1);
+  &:not(.p-disabled) {
+    &:has(.p-radiobutton-input:hover) {
+      .p-radiobutton-box {
+        @apply border-primary;
+      }
+    }
   }
 
-  & &-input {
-    @apply appearance-none absolute top-0 left-0 w-full h-full p-0 m-0 opacity-0 z-[1] outline-none border-2 border-support-3;
+  &-checked &-box {
+    @apply border-gray-50 bg-white;
   }
 
-  & &-box {
-    @apply border-2 border-support-3 bg-white w-4 h-4 text-primary rounded-full transition-none outline-none;
-  }
-
-  & &-box &-icon {
-    @apply w-1.5 h-1.5 duration-200 bg-white;
-  }
-
-  &:has(&-input--legacy:checked) &-box,
-  &.p-highlight &-box {
-    @apply border-primary bg-primary;
+  &-checked &-box &-icon {
+    @apply bg-gray-90 transform-gpu visible;
   }
 
   &:not(.p-disabled):has(&-input:hover) {
@@ -44,19 +35,70 @@
       @apply border-primary;
     }
 
-    &:has(.p-radiobutton-input--legacy:checked) .p-radiobutton-box,
-    &.p-highlight .p-radiobutton-box {
-      @apply border-primary bg-primary text-white;
+    &.p-radiobutton-checked .p-radiobutton-box .p-radiobutton-icon {
+      @apply bg-primary;
     }
   }
 
-  &:not(.p-disabled):has(&-input:focus-visible) {
-    .p-radiobutton-box {
-      @apply outline-none drop-shadow-lg bg-primary;
+  &-checked:not(.p-disabled) {
+    &:has(.p-radiobutton-input:hover) .p-radiobutton-box {
+      @apply border-primary bg-white;
+    }
+
+    &:has(.p-radiobutton-input:focus-visible) .p-radiobutton-box {
+      @apply border-gray-50;
     }
   }
 
-  &.p-invalid > &-box {
-    @apply border-error;
+  &:not(.p-disabled):has(&-input:focus-visible) &-box {
+    @apply border-primary drop-shadow-lg outline-none outline-0;
+  }
+
+  .p-radiobutton.p-invalid > .p-radiobutton-box {
+    @apply border-danger;
+  }
+
+  &.p-variant-filled {
+    & .p-radiobutton-box {
+      @apply bg-white;
+    }
+
+    &.p-radiobutton-checked .p-radiobutton-box {
+      @apply bg-white;
+    }
+
+    &:not(.p-disabled):has(.p-radiobutton-input:hover).p-radiobutton-checked .p-radiobutton-box {
+      @apply bg-white;
+    }
+  }
+
+  &.p-disabled {
+    @apply opacity-100;
+  }
+
+  &.p-disabled &-box {
+    @apply bg-gray-50 border-gray-50
+  }
+
+  &-checked.p-disabled &-box &-icon {
+    @apply bg-gray-50;
+  }
+
+  &-sm,
+  &-sm &-box {
+    @apply w-2 h-2;
+  }
+
+  &-sm &-icon {
+    @apply text-body-2 w-1.5 h-1.5;
+  }
+
+  &-lg,
+  &-lg &-box {
+    @apply w-6 h-6;
+  }
+
+  &-lg &-icon {
+    @apply text-body-2 w-4 h-4;
   }
 }

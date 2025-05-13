@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Entity\CAttendance;
@@ -167,11 +169,20 @@ class AttendanceController extends AbstractController
 
         if ($sessionId) {
             $session = $this->em->getRepository(Session::class)->find($sessionId);
-            $teacher = $session?->getCourseCoachesSubscriptions()
+            $rel = $session?->getCourseCoachesSubscriptions()
                 ->filter(fn($rel) => $rel->getCourse()?->getId() === $courseId)
-                ->first()?->getUser()?->getFullname();
+                ->first();
+
+            $teacher = $rel instanceof SessionRelCourseRelUser
+                ? $rel->getUser()?->getFullname()
+                : null;
         } else {
-            $teacher = $course?->getTeachersSubscriptions()?->first()?->getUser()?->getFullname();
+            $rel = $course?->getTeachersSubscriptions()?->first();
+
+            $teacher = $rel instanceof CourseRelUser
+                ? $rel->getUser()?->getFullname()
+                : null;
+            ;
         }
 
         // Header

@@ -3293,23 +3293,27 @@ class DocumentManager
         }
 
         $sql = "SELECT SUM(size)
-                FROM $TABLE_ITEMPROPERTY AS props
-                INNER JOIN $TABLE_DOCUMENT AS docs
-                ON (docs.id = props.ref AND props.c_id = docs.c_id)
-                WHERE
-                    props.c_id = $course_id AND
-                    docs.c_id = $course_id AND
-                    props.tool = '".TOOL_DOCUMENT."' AND
-                    props.ref not in (
-                        SELECT ref
-                        FROM $TABLE_ITEMPROPERTY as cip
-                        WHERE
-                            cip.c_id = $course_id AND
-                            cip.tool = '".TOOL_DOCUMENT."' AND
-                            cip.visibility = 2
-                    )
-                    $group_condition
-                    $session_condition
+                FROM (
+                    SELECT ref, size
+                    FROM $TABLE_ITEMPROPERTY AS props
+                    INNER JOIN $TABLE_DOCUMENT AS docs
+                    ON (docs.id = props.ref AND props.c_id = docs.c_id)
+                    WHERE
+                        props.c_id = $course_id AND
+                        docs.c_id = $course_id AND
+                        props.tool = '".TOOL_DOCUMENT."' AND
+                        props.ref not in (
+                            SELECT ref
+                            FROM $TABLE_ITEMPROPERTY as cip
+                            WHERE
+                                cip.c_id = $course_id AND
+                                cip.tool = '".TOOL_DOCUMENT."' AND
+                                cip.visibility = 2
+                        )
+                        $group_condition
+                        $session_condition
+                    GROUP BY props.ref
+                    ) AS table1
                 ";
         $result = Database::query($sql);
 

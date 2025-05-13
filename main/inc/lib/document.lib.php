@@ -3300,7 +3300,14 @@ class DocumentManager
                     props.c_id = $course_id AND
                     docs.c_id = $course_id AND
                     props.tool = '".TOOL_DOCUMENT."' AND
-                    props.visibility <> 2
+                    props.ref not in (
+                        SELECT ref
+                        FROM $TABLE_ITEMPROPERTY as cip
+                        WHERE
+                            cip.c_id = $course_id AND
+                            cip.tool = '".TOOL_DOCUMENT."' AND
+                            cip.visibility = 2
+                    )
                     $group_condition
                     $session_condition
                 ";

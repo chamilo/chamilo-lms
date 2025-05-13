@@ -155,6 +155,28 @@ class Positioning extends Plugin
         return true;
     }
 
+    public function shouldBlockUser(int $userId, int $courseId, ?int $sessionId): bool
+    {
+        if ($this->get('block_course_if_initial_exercise_not_attempted') !== 'true') {
+            return false;
+        }
+
+        $initialData = $this->getInitialExercise($courseId, $sessionId);
+
+        if (empty($initialData['exercise_id'])) {
+            return false;
+        }
+
+        $results = \Event::getExerciseResultsByUser(
+            $userId,
+            (int) $initialData['exercise_id'],
+            $courseId,
+            $sessionId
+        );
+
+        return empty($results);
+    }
+
     public function getInitialExercise($courseId, $sessionId)
     {
         return $this->getCourseExercise($courseId, $sessionId, true, false);

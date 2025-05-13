@@ -19,4 +19,16 @@ class AccessUrlRelPluginRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, AccessUrlRelPlugin::class);
     }
+
+    public function findOneByPluginName(string $pluginTitle, int $accessUrlId): ?AccessUrlRelPlugin
+    {
+        return $this->createQueryBuilder('rel')
+            ->join('rel.plugin', 'p')
+            ->andWhere('p.title = :pluginTitle')
+            ->andWhere('rel.url = :accessUrlId')
+            ->setParameter('pluginTitle', $pluginTitle)
+            ->setParameter('accessUrlId', $accessUrlId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

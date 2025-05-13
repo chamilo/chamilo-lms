@@ -132,3 +132,9 @@ services:
       arguments:
         $registry: '@doctrine'
         $em: '@doctrine.orm.entity_manager'
+
+    Chamilo\CoreBundle\ServiceHelper\PluginServiceHelper:
+      arguments:
+        $parameterBag: '@parameter_bag'
+        $pluginRepo: '@Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository'
+        $accessUrlHelper: '@Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper'

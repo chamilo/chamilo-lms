@@ -6635,7 +6635,15 @@ class DocumentManager
                     docs.path LIKE '$path/%' AND
                     props.c_id = $course_id AND
                     props.tool = '$tool_document' AND
-                    $visibility_rule
+                    $visibility_rule AND
+                    props.ref not in (
+                        SELECT ref
+                        FROM $table_itemproperty as cip
+                        WHERE
+                            cip.c_id = $course_id AND
+                            cip.tool = '$tool_document' AND
+                            cip.visibility = 2
+                    )
                     $session_condition
                 GROUP BY ref
             ) as table1";

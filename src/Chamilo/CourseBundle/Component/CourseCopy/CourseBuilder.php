@@ -226,9 +226,8 @@ class CourseBuilder
      *
      * @param int    $session_id
      * @param string $courseCode
-     * @param bool   $withBaseContent   true if you want to get the elements that exists in the course and
-     *                                  in the session, (session_id = 0 or session_id = X)
-      * @param array $parseOnlyToolList
+     * @param bool   $withBaseContent true if you want to get the elements that exists in the course and
+     *                                in the session, (session_id = 0 or session_id = X)
      * @param array  $toolsFromPost
      *
      * @return Course The course object structure

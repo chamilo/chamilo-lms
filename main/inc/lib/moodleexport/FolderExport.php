@@ -69,7 +69,6 @@ class FolderExport extends ActivityExport
         ];
     }
 
-
     /**
      * Create the XML file for the folder.
      */

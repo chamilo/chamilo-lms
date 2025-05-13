@@ -3045,7 +3045,7 @@ class Agenda
                 $sessionId = api_get_session_id();
                 if ($sessionId) {
                     $usersSendTo = SessionManager::getCoachesByCourseSession($sessionId, $currentCourseInfo['real_id']);
-               } else {
+                } else {
                     $courseTeachers = CourseManager::get_teacher_list_from_course_code($currentCourseInfo['code']);
                     $courseTeachersUid = [];
                     foreach ($courseTeachers as $courseTeacher) {

@@ -54,7 +54,6 @@ class CourseSelectForm
     /**
      * Display the form.
      *
-     * @param Course $course
      * @param array $hidden_fields     hidden fields to add to the form
      * @param bool  $avoidSerialize    the document array will be serialize.
      *                                 This is used in the course_copy.php file
@@ -296,17 +295,17 @@ class CourseSelectForm
                   <button
                     class="save"
                     type="submit"
-                    onclick="javascript:if(!confirm(' . "'" . addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)) . "'" . ')) return false;" >' .
-                get_lang('Ok') . '</button>';
+                    onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
+                get_lang('Ok').'</button>';
         } elseif ($recycleOption) {
-            echo '<br /><button class="save" type="submit">' . get_lang('Ok') . '</button>';
+            echo '<br /><button class="save" type="submit">'.get_lang('Ok').'</button>';
         } else {
             echo '<br />
                   <button
                         class="save btn btn-primary"
                         type="submit"
-                        onclick="checkLearnPath(\'' . addslashes(get_lang('DocumentsWillBeAddedToo')) . '\')">' .
-                get_lang('Ok') . '</button>';
+                        onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
+                get_lang('Ok').'</button>';
         }
 
         self::display_hidden_quiz_questions($course);
@@ -508,11 +507,11 @@ class CourseSelectForm
     /**
      * Get the posted course with all its selected resources.
      *
-     * @param string|null $from    who calls the function?
-     *                             It can be copy_course, create_backup, import_backup or recycle_course
-     * @param int    $session_id
-     * @param string $course_code
-     * @param Course $postedCourse Course object as defined in the CourseCopy/Course.php script
+     * @param string|null $from         who calls the function?
+     *                                  It can be copy_course, create_backup, import_backup or recycle_course
+     * @param int         $session_id
+     * @param string      $course_code
+     * @param Course      $postedCourse Course object as defined in the CourseCopy/Course.php script
      *
      * @return Course The course-object with all resources selected by the user
      *                in the form given by display_form(...)

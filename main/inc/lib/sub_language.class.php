@@ -118,11 +118,12 @@ class SubLanguageManager
     /**
      * Get all information of chamilo file.
      *
-     * @param string $system_path_file    The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
+     * @param string $system_path_file The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
      *
      * @return array Contains all information of chamilo file
      */
-    public static function get_all_language_variable_in_file(string $system_path_file): array {
+    public static function get_all_language_variable_in_file(string $system_path_file): array
+    {
         ob_start();
 
         include $system_path_file;

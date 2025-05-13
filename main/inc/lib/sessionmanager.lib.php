@@ -9996,6 +9996,143 @@ class SessionManager
     }
 
     /**
+     * Export an Excel report for a specific course within a session.
+     *
+     * The report includes session details and a list of certified users
+     * with their extra field values.
+     *
+     * @param int    $sessionId  ID of the session
+     * @param string $courseCode Course code of the course in the session
+     */
+    public static function exportCourseSessionReport(int $sessionId, string $courseCode): void
+    {
+        $courseInfo = api_get_course_info($courseCode);
+        $sessionInfo = api_get_session_info($sessionId);
+
+        if (empty($courseInfo) || empty($sessionInfo)) {
+            exit('Invalid course or session.');
+        }
+
+        $config = api_get_configuration_value('session_course_excel_export');
+        if (empty($config)) {
+            exit('Configuration not set.');
+        }
+
+        $sessionFields = $config['session_fields'] ?? [];
+        $userFieldsBefore = $config['user_fields_before'] ?? [];
+        $userFieldsAfter = $config['user_fields_after'] ?? [];
+
+        // 1. SESSION HEADER
+        $header1 = [''];
+        $header1[] = get_lang('StartDate');
+        $header1[] = get_lang('EndDate');
+
+        foreach ($sessionFields as $entry) {
+            $header1[] = $entry['header'] ?? '';
+        }
+
+        // 2. SESSION DATA
+        $row2 = [$courseInfo['title']];
+        $row2[] = $sessionInfo['access_start_date'];
+        $row2[] = $sessionInfo['access_end_date'];
+
+        $extraValuesObj = new ExtraFieldValue('session');
+        $sessionExtra = $extraValuesObj->getAllValuesByItem($sessionId);
+        $sessionExtraMap = array_column($sessionExtra, 'value', 'variable');
+
+        foreach ($sessionFields as $entry) {
+            if (!empty($entry['field'])) {
+                $value = $sessionExtraMap[$entry['field']] ?? '';
+            } else {
+                $value = '';
+            }
+            $row2[] = $value;
+        }
+
+        // 3. USER HEADER
+        $header3 = [''];
+
+        foreach ($userFieldsBefore as $entry) {
+            $header3[] = $entry['header'] ?? '';
+        }
+
+        $header3[] = get_lang('FirstName');
+        $header3[] = get_lang('LastName');
+
+        foreach ($userFieldsAfter as $entry) {
+            $header3[] = $entry['header'] ?? '';
+        }
+
+        // 4. USERS WITH CERTIFICATE
+        $dataRows = [];
+
+        $tblCat = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = "
+            SELECT id FROM $tblCat
+            WHERE course_code = '".Database::escape_string($courseCode)."'
+            AND session_id = ".intval($sessionId)."
+            AND generate_certificates = 1
+            LIMIT 1
+        ";
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+        $catId = $row ? (int) $row['id'] : 0;
+
+        if ($catId > 0) {
+            $tableCertificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+            $sql = "SELECT DISTINCT user_id FROM $tableCertificate WHERE cat_id = $catId";
+            $res = Database::query($sql);
+
+            $rowIndex = 0;
+            while ($cert = Database::fetch_array($res)) {
+                $userId = $cert['user_id'];
+                $userInfo = api_get_user_info($userId);
+
+                $row = [];
+                $row[] = $rowIndex === 0 ? get_lang('Learners') : '';
+
+                $userExtraObj = new ExtraFieldValue('user');
+                $userExtra = $userExtraObj->getAllValuesByItem($userId);
+                $userExtraMap = array_column($userExtra, 'value', 'variable');
+
+                foreach ($userFieldsBefore as $entry) {
+                    if (!empty($entry['field'])) {
+                        $value = $userExtraMap[$entry['field']] ?? '';
+                    } else {
+                        $value = '';
+                    }
+                    $row[] = $value;
+                }
+
+                $row[] = $userInfo['firstname'];
+                $row[] = $userInfo['lastname'];
+
+                foreach ($userFieldsAfter as $entry) {
+                    if (!empty($entry['field'])) {
+                        $value = $userExtraMap[$entry['field']] ?? '';
+                    } else {
+                        $value = '';
+                    }
+                    $row[] = $value;
+                }
+
+                $dataRows[] = $row;
+                $rowIndex++;
+            }
+        }
+
+        // 5. EXPORT FINAL
+        $rows = [];
+        $rows[] = $header1;
+        $rows[] = $row2;
+        $rows[] = $header3;
+        $rows = array_merge($rows, $dataRows);
+
+        $filename = 'session_'.$sessionId.'_course_'.$courseCode;
+        Export::arrayToXls($rows, $filename);
+    }
+
+    /**
      * @param int $id
      *
      * @return bool
@@ -10138,142 +10275,5 @@ class SessionManager
         } else {
             return -1;
         }
-    }
-
-    /**
-     * Export an Excel report for a specific course within a session.
-     *
-     * The report includes session details and a list of certified users
-     * with their extra field values.
-     *
-     * @param int $sessionId   ID of the session
-     * @param string $courseCode  Course code of the course in the session
-     */
-    public static function exportCourseSessionReport(int $sessionId, string $courseCode): void
-    {
-        $courseInfo = api_get_course_info($courseCode);
-        $sessionInfo = api_get_session_info($sessionId);
-
-        if (empty($courseInfo) || empty($sessionInfo)) {
-            die('Invalid course or session.');
-        }
-
-        $config = api_get_configuration_value('session_course_excel_export');
-        if (empty($config)) {
-            die('Configuration not set.');
-        }
-
-        $sessionFields = $config['session_fields'] ?? [];
-        $userFieldsBefore = $config['user_fields_before'] ?? [];
-        $userFieldsAfter = $config['user_fields_after'] ?? [];
-
-        // 1. SESSION HEADER
-        $header1 = [''];
-        $header1[] = get_lang('StartDate');
-        $header1[] = get_lang('EndDate');
-
-        foreach ($sessionFields as $entry) {
-            $header1[] = $entry['header'] ?? '';
-        }
-
-        // 2. SESSION DATA
-        $row2 = [$courseInfo['title']];
-        $row2[] = $sessionInfo['access_start_date'];
-        $row2[] = $sessionInfo['access_end_date'];
-
-        $extraValuesObj = new ExtraFieldValue('session');
-        $sessionExtra = $extraValuesObj->getAllValuesByItem($sessionId);
-        $sessionExtraMap = array_column($sessionExtra, 'value', 'variable');
-
-        foreach ($sessionFields as $entry) {
-            if (!empty($entry['field'])) {
-                $value = $sessionExtraMap[$entry['field']] ?? '';
-            } else {
-                $value = '';
-            }
-            $row2[] = $value;
-        }
-
-        // 3. USER HEADER
-        $header3 = [''];
-
-        foreach ($userFieldsBefore as $entry) {
-            $header3[] = $entry['header'] ?? '';
-        }
-
-        $header3[] = get_lang('FirstName');
-        $header3[] = get_lang('LastName');
-
-        foreach ($userFieldsAfter as $entry) {
-            $header3[] = $entry['header'] ?? '';
-        }
-
-        // 4. USERS WITH CERTIFICATE
-        $dataRows = [];
-
-        $tblCat = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = "
-            SELECT id FROM $tblCat
-            WHERE course_code = '".Database::escape_string($courseCode)."'
-            AND session_id = ".intval($sessionId)."
-            AND generate_certificates = 1
-            LIMIT 1
-        ";
-        $res = Database::query($sql);
-        $row = Database::fetch_array($res);
-        $catId = $row ? (int) $row['id'] : 0;
-
-        if ($catId > 0) {
-            $tableCertificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-            $sql = "SELECT DISTINCT user_id FROM $tableCertificate WHERE cat_id = $catId";
-            $res = Database::query($sql);
-
-            $rowIndex = 0;
-            while ($cert = Database::fetch_array($res)) {
-                $userId = $cert['user_id'];
-                $userInfo = api_get_user_info($userId);
-
-                $row = [];
-                $row[] = $rowIndex === 0 ? get_lang('Learners') : '';
-
-                $userExtraObj = new ExtraFieldValue('user');
-                $userExtra = $userExtraObj->getAllValuesByItem($userId);
-                $userExtraMap = array_column($userExtra, 'value', 'variable');
-
-                foreach ($userFieldsBefore as $entry) {
-                    if (!empty($entry['field'])) {
-                        $value = $userExtraMap[$entry['field']] ?? '';
-                    } else {
-                        $value = '';
-                    }
-                    $row[] = $value;
-                }
-
-                $row[] = $userInfo['firstname'];
-                $row[] = $userInfo['lastname'];
-
-                foreach ($userFieldsAfter as $entry) {
-                    if (!empty($entry['field'])) {
-                        $value = $userExtraMap[$entry['field']] ?? '';
-                    } else {
-                        $value = '';
-                    }
-                    $row[] = $value;
-                }
-
-                $dataRows[] = $row;
-                $rowIndex++;
-            }
-        }
-
-        // 5. EXPORT FINAL
-        $rows = [];
-        $rows[] = $header1;
-        $rows[] = $row2;
-        $rows[] = $header3;
-        $rows = array_merge($rows, $dataRows);
-
-        $filename = 'session_'.$sessionId.'_course_'.$courseCode;
-        Export::arrayToXls($rows, $filename);
     }
 }

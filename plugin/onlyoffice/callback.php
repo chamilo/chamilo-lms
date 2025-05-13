@@ -23,7 +23,6 @@ use Onlyoffice\DocsIntegrationSdk\Models\CallbackDocStatus;
 $plugin = OnlyofficePlugin::create();
 
 if (isset($_GET['hash']) && !empty($_GET['hash'])) {
-
     @header('Content-Type: application/json; charset=utf-8');
     @header('X-Robots-Tag: noindex');
     @header('X-Content-Type-Options: nosniff');
@@ -149,7 +148,7 @@ function track(): array
                 return ['status' => 'error', 'error' => 'No file URL provided'];
             }
         }
-    } else if (!empty($docId)) {
+    } elseif (!empty($docId)) {
         $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
         if (!$docInfo || !file_exists($docInfo['absolute_path'])) {
             return ['status' => 'error', 'error' => 'File not found'];
@@ -213,7 +212,7 @@ function download()
     }
 
     if (!empty($docPath)) {
-        $filePath = api_get_path(SYS_COURSE_PATH) . urldecode($docPath);
+        $filePath = api_get_path(SYS_COURSE_PATH).urldecode($docPath);
 
         if (!file_exists($filePath)) {
             return ['status' => 'error', 'error' => 'File not found'];
@@ -223,7 +222,7 @@ function download()
             'title' => basename($filePath),
             'absolute_path' => $filePath,
         ];
-    } else if (!empty($docId) && !empty($courseCode)) {
+    } elseif (!empty($docId) && !empty($courseCode)) {
         $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
         if (!$docInfo || !file_exists($docInfo['absolute_path'])) {
             return ['status' => 'error', 'error' => 'File not found'];

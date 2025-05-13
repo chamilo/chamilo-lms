@@ -288,16 +288,16 @@ class ExerciseLib
                     if ('true' === OnlyofficePlugin::create()->get('enable_onlyoffice_plugin')) {
                         global $exe_id;
                         if (!empty($objQuestionTmp->extra)) {
-                            $fileUrl = api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/" . $objQuestionTmp->extra;
+                            $fileUrl = api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/".$objQuestionTmp->extra;
                             $documentUrl = OnlyofficeTools::getPathToView($fileUrl, false, $exe_id, $questionId);
                             echo '<div class="office-doc-container">';
                             echo "<iframe src='{$documentUrl}' width='100%' height='600' style='border:none;'></iframe>";
                             echo '</div>';
                         } else {
-                            echo '<p>' . get_lang('NoOfficeDocProvided') . '</p>';
+                            echo '<p>'.get_lang('NoOfficeDocProvided').'</p>';
                         }
                     } else {
-                        echo '<p>' . get_lang('OnlyOfficePluginRequired') . '</p>';
+                        echo '<p>'.get_lang('OnlyOfficePluginRequired').'</p>';
                     }
                     break;
                 case ORAL_EXPRESSION:
@@ -7420,20 +7420,6 @@ EOT;
         return false;
     }
 
-    private static function subscribeSessionWhenFinishedFailure(int $exerciseId): void
-    {
-        $failureSession = self::getSessionWhenFinishedFailure($exerciseId);
-
-        if ($failureSession) {
-            SessionManager::subscribeUsersToSession(
-                $failureSession->getId(),
-                [api_get_user_id()],
-                SESSION_VISIBLE_READ_ONLY,
-                false
-            );
-        }
-    }
-
     /**
      * Get formatted feedback comments for an exam attempt.
      */
@@ -7471,19 +7457,19 @@ EOT;
         }
 
         if (empty($commentsByQuestion)) {
-            return "<p>" . get_lang('NoAdditionalComments') . "</p>";
+            return "<p>".get_lang('NoAdditionalComments')."</p>";
         }
 
-        $output = "<h3>" . get_lang('TeacherFeedback') . "</h3>";
+        $output = "<h3>".get_lang('TeacherFeedback')."</h3>";
         $output .= "<table border='1' cellpadding='5' cellspacing='0' width='100%' style='border-collapse: collapse;'>";
 
         foreach ($commentsByQuestion as $questionId => $data) {
             $output .= "<tr>
-                        <td><b>" . get_lang('Question') . " #$questionId:</b> " . $data['title'] . "</td>
+                        <td><b>".get_lang('Question')." #$questionId:</b> ".$data['title']."</td>
                     </tr>";
             foreach ($data['comments'] as $comment) {
                 $output .= "<tr>
-                            <td style='padding-left: 20px;'><i>" . get_lang('Feedback') . ":</i> $comment</td>
+                            <td style='padding-left: 20px;'><i>".get_lang('Feedback').":</i> $comment</td>
                         </tr>";
             }
         }
@@ -7491,5 +7477,19 @@ EOT;
         $output .= "</table>";
 
         return $output;
+    }
+
+    private static function subscribeSessionWhenFinishedFailure(int $exerciseId): void
+    {
+        $failureSession = self::getSessionWhenFinishedFailure($exerciseId);
+
+        if ($failureSession) {
+            SessionManager::subscribeUsersToSession(
+                $failureSession->getId(),
+                [api_get_user_id()],
+                SESSION_VISIBLE_READ_ONLY,
+                false
+            );
+        }
     }
 }

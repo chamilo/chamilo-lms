@@ -964,9 +964,6 @@ class ExtraFieldValue extends Model
 
     /**
      * Return extra fields details for an item if the extra field is marked as filter.
-     * @param int $itemId
-     *
-     * @return array
      */
     public function getAllValuesByItem(int $itemId): array
     {

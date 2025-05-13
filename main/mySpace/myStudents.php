@@ -1274,7 +1274,7 @@ if (empty($details)) {
         echo '<tr>
             <th>'.get_lang('Course').'</th>
             <th>'.get_lang('Time').'</th>
-            <th>'.get_lang('Progress'). ' '. Display::return_icon('info3.gif', get_lang('progressBasedOnVisiblesLPsInEachCourse'), [], ICON_SIZE_TINY).' </th>
+            <th>'.get_lang('Progress').' '.Display::return_icon('info3.gif', get_lang('progressBasedOnVisiblesLPsInEachCourse'), [], ICON_SIZE_TINY).' </th>
             <th>'.get_lang('Score').'</th>
             <th>'.get_lang('AttendancesFaults').'</th>
             <th>'.get_lang('Evaluations').'</th>

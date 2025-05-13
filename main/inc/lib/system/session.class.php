@@ -135,9 +135,9 @@ class Session implements \ArrayAccess
      *
      * @return mixed (write offsetGet($offset): mixed on PHP 8 and & > )
      */
-    #if PHP_VERSION_ID >= 80000
+    //if PHP_VERSION_ID >= 80000
     #[\ReturnTypeWillChange]
-    #endif
+    //endif
     public function offsetGet($offset)
     {
         return self::read($offset);

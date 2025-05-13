@@ -188,6 +188,7 @@ class MultipleAnswer extends Question
      * Validate question answers before saving.
      *
      * @param object $form The form object.
+     *
      * @return array|bool True if valid, or an array with errors if invalid.
      */
     public function validateAnswers($form)

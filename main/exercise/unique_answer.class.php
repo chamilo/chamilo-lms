@@ -337,6 +337,7 @@ class UniqueAnswer extends Question
 
     /**
      * Validate question answers before saving.
+     *
      * @return bool|string True if valid, error message if invalid.
      */
     public function validateAnswers($form)
@@ -390,6 +391,7 @@ class UniqueAnswer extends Question
         $validationResult = $this->validateAnswers($form);
         if ($validationResult !== true) {
             Display::addFlash(Display::return_message(implode("<br>", $validationResult['errors']), 'error'));
+
             return;
         }
 

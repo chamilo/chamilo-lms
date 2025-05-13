@@ -329,14 +329,12 @@ if (($action === 'course_select_form') ||
                 $cr->restore($courseDestination, $destinationSession);
                 echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
             }
-
         } else {
             echo Display::return_message(
                 get_lang('YouMustSelectACourseFromOriginalSession'),
                 'error'
             );
         }
-
     }
 
     displayForm();

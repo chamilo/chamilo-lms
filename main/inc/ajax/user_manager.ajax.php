@@ -480,13 +480,13 @@ switch ($action) {
             }
 
             $updatedData = [
-                'firstname'      => $userData['firstname'] ?? $currentUserData['firstname'],
-                'lastname'       => $userData['lastname'] ?? $currentUserData['lastname'],
-                'email'          => $userData['email'] ?? $currentUserData['email'],
-                'phone'          => $userData['phone'] ?? $currentUserData['phone'],
-                'official_code'  => $userData['official_code'] ?? $currentUserData['official_code'],
-                'status'         => isset($userData['status']) ? (int) $userData['status'] : $currentUserData['status'],
-                'active'         => isset($userData['active']) ? (int) $userData['active'] : $currentUserData['active'],
+                'firstname' => $userData['firstname'] ?? $currentUserData['firstname'],
+                'lastname' => $userData['lastname'] ?? $currentUserData['lastname'],
+                'email' => $userData['email'] ?? $currentUserData['email'],
+                'phone' => $userData['phone'] ?? $currentUserData['phone'],
+                'official_code' => $userData['official_code'] ?? $currentUserData['official_code'],
+                'status' => isset($userData['status']) ? (int) $userData['status'] : $currentUserData['status'],
+                'active' => isset($userData['active']) ? (int) $userData['active'] : $currentUserData['active'],
             ];
 
             if (!empty($userData['password'])) {

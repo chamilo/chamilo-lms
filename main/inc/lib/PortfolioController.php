@@ -3675,7 +3675,7 @@ class PortfolioController
         }
 
         $frmStudentList->addHtml("<p>$link</p>");
- 
+
         if ($listAlphabeticalOrder) {
             $link = Display::url(
                 get_lang('BackToDateOrder'),
@@ -3689,7 +3689,6 @@ class PortfolioController
         }
 
         $frmStudentList->addHtml("<p>$link</p>");
-
 
         return $frmStudentList;
     }

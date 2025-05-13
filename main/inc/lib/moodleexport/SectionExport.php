@@ -274,7 +274,7 @@ class SectionExport
 
             case 'document':
                 if ($sectionId > 0) {
-                    $documentId = (int)$item['path'];
+                    $documentId = (int) $item['path'];
                     $document = \DocumentManager::get_document_data_by_id($documentId, $this->course->code);
 
                     // Determine the type of document and get the corresponding export class

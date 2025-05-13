@@ -258,7 +258,7 @@ function complete_missing_data(array $user): array
  */
 function save_data(
     array $users,
-    bool  $sendMail = false,
+    bool $sendMail = false,
     ?string $targetFolder = null
 ): array {
     global $inserted_in_course, $extra_fields;

@@ -189,15 +189,15 @@ class OnlyofficeTools
                 $docInfoGroup = api_get_item_property_info(api_get_course_int_id(), 'document', $documentId, $sessionId);
                 $isGroupAccess = GroupManager::allowUploadEditDocument($userId, $courseInfo['code'], $groupProperties, $docInfoGroup);
 
-                $urlToEdit.='?'.api_get_cidreq().'&';
+                $urlToEdit .= '?'.api_get_cidreq().'&';
             } else {
-                $urlToEdit.='?'.api_get_cidreq().'&';
+                $urlToEdit .= '?'.api_get_cidreq().'&';
             }
 
             $isMyDir = DocumentManager::is_my_shared_folder($userId, $docInfo['absolute_parent_path'], $sessionId);
             $accessRights = $isMyDir || $isGroupAccess;
 
-            $urlToEdit.='docId='.$documentId;
+            $urlToEdit .= 'docId='.$documentId;
             if (false === $showHeaders) {
                 $urlToEdit .= '&nh=1';
             }
@@ -210,11 +210,11 @@ class OnlyofficeTools
             if ($isExercise) {
                 $urlToEdit .= '&type=exercise';
                 if ($exeId) {
-                    $urlToEdit .= '&exeId=' . $exeId;
+                    $urlToEdit .= '&exeId='.$exeId;
                 }
 
                 if ($questionId) {
-                    $urlToEdit .= '&questionId=' . $questionId;
+                    $urlToEdit .= '&questionId='.$questionId;
                 }
             }
             if (false === $showHeaders) {

@@ -821,7 +821,7 @@ class Login
 
     /**
      * Returns the users that correspond to this username or email if exist else false.
-     * If many users correspond to this email or username the users as ordered by registration_date desc
+     * If many users correspond to this email or username the users as ordered by registration_date desc.
      *
      * @param string $username (email or username)
      *

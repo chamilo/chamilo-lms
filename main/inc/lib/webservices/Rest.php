@@ -2539,14 +2539,11 @@ class Rest extends WebService
     }
 
     /**
-     * Finds the session which has a specific value in a specific extra field and return its ID (only that)
+     * Finds the session which has a specific value in a specific extra field and return its ID (only that).
      *
-     * @param string $fieldName
-     * @param string $fieldValue
-     *
-     * @return int The matching session id, or an array with details about the session
      * @throws Exception when no session matched or more than one session matched
      *
+     * @return int The matching session id, or an array with details about the session
      */
     public function getSessionFromExtraField(string $fieldName, string $fieldValue)
     {
@@ -2575,14 +2572,11 @@ class Rest extends WebService
     }
 
     /**
-     * Finds the session which has a specific value in a specific extra field and return its details
+     * Finds the session which has a specific value in a specific extra field and return its details.
      *
-     * @param string $fieldName
-     * @param string $fieldValue
-     *
-     * @return array The matching session id, or an array with details about the session
      * @throws Exception when no session matched or more than one session matched
      *
+     * @return array The matching session id, or an array with details about the session
      */
     public function getSessionInfoFromExtraField(string $fieldName, string $fieldValue): array
     {
@@ -2618,7 +2612,7 @@ class Rest extends WebService
         $extraFields = $extraFieldValues->getAllValuesByItem($session['id']);
         // Only return these properties for each extra_field (the rest is not relevant to a webservice)
         $filter = ['variable', 'value', 'display_text'];
-        $bundle['extra_fields'] = array_map(function($item) use ($filter) {
+        $bundle['extra_fields'] = array_map(function ($item) use ($filter) {
             return array_intersect_key($item, array_flip($filter));
         }, $extraFields);
 
@@ -4349,6 +4343,45 @@ class Rest extends WebService
     }
 
     /**
+     * Returns the progress and time spent by the user in the session.
+     *
+     * @throws Exception
+     */
+    public function getUserProgressAndTimeInSession(int $userId, int $sessionId): array
+    {
+        $totalProgress = 0;
+        $totalTime = 0;
+        $nbCourses = 0;
+        $courses = SessionManager::getCoursesInSession($sessionId);
+        foreach ($courses as $courseId) {
+            $nbCourses++;
+            $totalTime += Tracking::get_time_spent_on_the_course(
+                $userId,
+                $courseId,
+                $sessionId
+            );
+            $courseInfo = api_get_course_info_by_id($courseId);
+            $totalProgress += Tracking::get_avg_student_progress(
+                $userId,
+                $courseInfo['code'],
+                [],
+                $sessionId
+            );
+        }
+        $userAverageCoursesTime = 0;
+        $userAverageProgress = 0;
+        if ($nbCourses != 0) {
+            $userAverageCoursesTime = $totalTime / $nbCourses;
+            $userAverageProgress = $totalProgress / $nbCourses;
+        }
+
+        return [
+            'userAverageCoursesTime' => $userAverageCoursesTime,
+            'userAverageProgress' => $userAverageProgress,
+        ];
+    }
+
+    /**
      * Generate an API key for webservices access for the given user ID.
      */
     protected static function generateApiKeyForUser(int $userId): string
@@ -4395,42 +4428,5 @@ class Rest extends WebService
 
         return api_get_self().'?'
             .http_build_query(array_merge($queryParams, $additionalParams));
-    }
-
-    /**
-     * Returns the progress and time spent by the user in the session
-     * @throws Exception
-     */
-    public function getUserProgressAndTimeInSession(int $userId, int $sessionId): array
-    {
-        $totalProgress = 0;
-        $totalTime = 0;
-        $nbCourses = 0;
-        $courses = SessionManager::getCoursesInSession($sessionId);
-        foreach ($courses as $courseId) {
-            $nbCourses++;
-            $totalTime += Tracking::get_time_spent_on_the_course(
-                $userId,
-                $courseId,
-                $sessionId
-            );
-            $courseInfo = api_get_course_info_by_id($courseId);
-            $totalProgress += Tracking::get_avg_student_progress(
-                $userId,
-                $courseInfo['code'],
-                [],
-                $sessionId
-            );
-        }
-        $userAverageCoursesTime = 0;
-        $userAverageProgress = 0;
-        if ($nbCourses != 0) {
-            $userAverageCoursesTime = $totalTime/$nbCourses;
-            $userAverageProgress = $totalProgress/$nbCourses;
-        }
-        return [
-            'userAverageCoursesTime' => $userAverageCoursesTime,
-            'userAverageProgress' => $userAverageProgress,
-        ];
     }
 }

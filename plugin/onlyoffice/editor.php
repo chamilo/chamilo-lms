@@ -53,10 +53,10 @@ $fileId = null;
 $fileUrl = null;
 
 if ($docPath) {
-    $filePath = api_get_path(SYS_COURSE_PATH) . $docPath;
+    $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
     if (!file_exists($filePath)) {
-        error_log("ERROR: Original file not found -> " . $filePath);
-        die("Error: Document not found.");
+        error_log("ERROR: Original file not found -> ".$filePath);
+        exit("Error: Document not found.");
     }
 
     $extension = pathinfo($filePath, PATHINFO_EXTENSION);
@@ -73,7 +73,7 @@ if ($docPath) {
                 mkdir(dirname($userFilePath), 0775, true);
             }
             if (!copy($filePath, $userFilePath)) {
-                die("Error: Failed to create a copy of the file.");
+                exit("Error: Failed to create a copy of the file.");
             }
         }
         $fileUrl = api_get_path(WEB_COURSE_PATH).$newDocPath;
@@ -81,7 +81,7 @@ if ($docPath) {
 
     $fileId = basename($newDocPath);
     $absolutePath = $userFilePath;
-    $absoluteParentPath = dirname($userFilePath) . '/';
+    $absoluteParentPath = dirname($userFilePath).'/';
     $data = [
         'type' => 'download',
         'doctype' => 'exercise',
@@ -94,11 +94,11 @@ if ($docPath) {
 
     $jwtManager = new OnlyofficeJwtManager($appSettings);
     $hashUrl = $jwtManager->getHash($data);
-    $callbackUrl = api_get_path(WEB_PLUGIN_PATH) . 'onlyoffice/callback.php?hash=' . $hashUrl;
+    $callbackUrl = api_get_path(WEB_PLUGIN_PATH).'onlyoffice/callback.php?hash='.$hashUrl;
     if ($exeId) {
-        $callbackUrl .= '&docPath=' . urlencode($newDocPath);
+        $callbackUrl .= '&docPath='.urlencode($newDocPath);
     } else {
-        $callbackUrl .= '&docPath=' . urlencode($newDocPath);
+        $callbackUrl .= '&docPath='.urlencode($newDocPath);
     }
 
     $docInfo = [
@@ -112,10 +112,10 @@ if ($docPath) {
         'size' => filesize($userFilePath),
         'readonly' => (int) $isReadOnly,
         'session_id' => $sessionId,
-        'url' => api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/editor.php?doc=" . urlencode($newDocPath) . ($exeId ? "&exeId={$exeId}" : "") . ($isReadOnly ? "&readOnly={$isReadOnly}" : ""),
+        'url' => api_get_path(WEB_PLUGIN_PATH)."onlyoffice/editor.php?doc=".urlencode($newDocPath).($exeId ? "&exeId={$exeId}" : "").($isReadOnly ? "&readOnly={$isReadOnly}" : ""),
         'document_url' => $callbackUrl,
         'absolute_path' => $absolutePath,
-        'absolute_path_from_document' => '/document/' . basename($userFilePath),
+        'absolute_path_from_document' => '/document/'.basename($userFilePath),
         'absolute_parent_path' => $absoluteParentPath,
         'direct_url' => $callbackUrl,
         'basename' => basename($userFilePath),
@@ -134,7 +134,7 @@ if ($docPath) {
 
 if (!$docInfo || !$fileId) {
     error_log("ERROR: Document not found.");
-    die("Error: Document not found.");
+    exit("Error: Document not found.");
 }
 
 $langInfo = LangManager::getLangUser();
@@ -160,7 +160,7 @@ $config = json_decode(json_encode($config), true);
 
 if (empty($config)) {
     error_log("ERROR: Failed to generate the configuration for OnlyOffice");
-    die("Error: Failed to generate the configuration for OnlyOffice.");
+    exit("Error: Failed to generate the configuration for OnlyOffice.");
 }
 
 $isMobileAgent = $configService->isMobileAgent($_SERVER['HTTP_USER_AGENT']);

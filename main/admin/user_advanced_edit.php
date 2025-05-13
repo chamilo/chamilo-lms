@@ -47,7 +47,7 @@ $statusOptions = [
     COURSEMANAGER => get_lang('Teacher'),
     DRH => get_lang('Drh'),
     SESSIONADMIN => get_lang('SessionsAdmin'),
-    PLATFORM_ADMIN => get_lang('Administrator')
+    PLATFORM_ADMIN => get_lang('Administrator'),
 ];
 $form->addElement('select', 'keywordStatus', get_lang('Profile'), $statusOptions);
 
@@ -110,7 +110,7 @@ if (!empty($users)) {
         'official_code' => get_lang('OfficialCode'),
         'status' => get_lang('Profile'),
         'active' => get_lang('ActiveAccount'),
-        'password' => get_lang('Password')
+        'password' => get_lang('Password'),
     ];
 
     foreach ($extraFields as $field) {
@@ -119,7 +119,7 @@ if (!empty($users)) {
 
     $form->addElement('select', 'editableFields', get_lang('FieldsToEdit'), $editableFields, [
         'multiple' => 'multiple',
-        'size' => 7
+        'size' => 7,
     ]);
     $form->addElement('submit', 'filter', get_lang('View'));
 }
@@ -151,7 +151,7 @@ if (!empty($users)) {
         'keywordFirstname' => 'firstname',
         'keywordLastname' => 'lastname',
         'keywordOfficialCode' => 'official_code',
-        'keywordStatus' => 'status'
+        'keywordStatus' => 'status',
     ];
 
     foreach ($filtersUsed as $filterKey => $fieldName) {
@@ -247,7 +247,7 @@ if (!empty($users)) {
 
                     case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                         if (is_array($value) && isset($value["extra_{$field}"]) && isset($value["extra_{$field}_second"])) {
-                            $formattedValue = $value["extra_{$field}"] . ',' . $value["extra_{$field}_second"];
+                            $formattedValue = $value["extra_{$field}"].','.$value["extra_{$field}_second"];
                         } else {
                             $formattedValue = '';
                         }
@@ -259,18 +259,16 @@ if (!empty($users)) {
                         $row[] = '<input type="text" name="extra_'.$field.'['.$user['id'].']" value="'.$value.'" class="form-control">';
                         break;
                 }
-            }
-            else {
+            } else {
                 if ($field === 'password') {
                     $row[] = '<input type="password" name="'.$field.'['.$user['id'].']" value="" class="form-control" placeholder="'.get_lang('Password').'">';
-                }
-                elseif ($field === 'status') {
+                } elseif ($field === 'status') {
                     $statusOptions = [
                         STUDENT => get_lang('Student'),
                         COURSEMANAGER => get_lang('Teacher'),
                         DRH => get_lang('Drh'),
                         SESSIONADMIN => get_lang('SessionsAdmin'),
-                        PLATFORM_ADMIN => get_lang('Administrator')
+                        PLATFORM_ADMIN => get_lang('Administrator'),
                     ];
                     $select = '<select name="status['.$user['id'].']" class="form-control">';
                     foreach ($statusOptions as $key => $label) {
@@ -279,14 +277,12 @@ if (!empty($users)) {
                     }
                     $select .= '</select>';
                     $row[] = $select;
-                }
-                elseif ($field === 'active') {
+                } elseif ($field === 'active') {
                     $checkedActive = ($user['active'] == 1) ? 'checked' : '';
                     $checkedInactive = ($user['active'] == 0) ? 'checked' : '';
                     $row[] = '<label><input type="radio" name="active['.$user['id'].']" value="1" '.$checkedActive.'> '.get_lang('Active').'</label>
                       <label><input type="radio" name="active['.$user['id'].']" value="0" '.$checkedInactive.'> '.get_lang('Inactive').'</label>';
-                }
-                else {
+                } else {
                     $row[] = '<input type="text" name="'.$field.'['.$user['id'].']" value="'.$value.'" class="form-control">';
                 }
             }
@@ -388,5 +384,5 @@ $formContent = $form->returnForm();
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);
 $tpl->assign('message', $message);
-$tpl->assign('content', $formContent . $fieldSelector . $tableResult . (!empty($users) ? '<button class="btn btn-success" id="saveAll">'.get_lang('SaveAll').'</button>' : ''));
+$tpl->assign('content', $formContent.$fieldSelector.$tableResult.(!empty($users) ? '<button class="btn btn-success" id="saveAll">'.get_lang('SaveAll').'</button>' : ''));
 $tpl->display_one_col_template();

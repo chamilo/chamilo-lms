@@ -16,7 +16,7 @@ class H5pImportCreateCourseHookObserver extends HookObserver implements HookCrea
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function hookCreateCourse(HookCreateCourseEventInterface $hook)
     {

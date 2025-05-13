@@ -500,10 +500,10 @@ class MoodleExport
                 }
                 // Handle course introduction (page)
                 elseif ($resourceType === RESOURCE_TOOL_INTRO && $resource->source_id == 'course_homepage') {
-                        $exportClass = PageExport::class;
-                        $moduleName = 'page';
-                        $id = 0;
-                        $title = get_lang('Introduction');
+                    $exportClass = PageExport::class;
+                    $moduleName = 'page';
+                    $id = 0;
+                    $title = get_lang('Introduction');
                 }
                 // Handle assignments (work)
                 elseif ($resourceType === RESOURCE_WORK && $resource->source_id > 0) {

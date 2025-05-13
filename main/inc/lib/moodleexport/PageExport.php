@@ -51,7 +51,6 @@ class PageExport extends ActivityExport
                 is_object($this->course->resources[RESOURCE_TOOL_INTRO]['course_homepage']) &&
                 !empty($this->course->resources[RESOURCE_TOOL_INTRO]['course_homepage']->intro_text)
             ) {
-
                 return [
                     'id' => 0,
                     'moduleid' => 0,

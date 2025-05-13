@@ -272,6 +272,20 @@ class H5pImportPlugin extends Plugin implements HookPluginInterface
         return $return;
     }
 
+    public function installHook()
+    {
+        HookCreateCourse::create()->attach(
+            H5pImportCreateCourseHookObserver::create()
+        );
+    }
+
+    public function uninstallHook()
+    {
+        HookCreateCourse::create()->detach(
+            H5pImportCreateCourseHookObserver::create()
+        );
+    }
+
     /**
      * Add course tools for all courses.
      */
@@ -306,19 +320,5 @@ class H5pImportPlugin extends Plugin implements HookPluginInterface
             $courseInfo = api_get_course_info_by_id($row['id']);
             $fs->remove($courseInfo['course_sys_path'].'/h5p');
         }
-    }
-
-    public function installHook()
-    {
-        HookCreateCourse::create()->attach(
-            H5pImportCreateCourseHookObserver::create()
-        );
-    }
-
-    public function uninstallHook()
-    {
-        HookCreateCourse::create()->detach(
-            H5pImportCreateCourseHookObserver::create()
-        );
     }
 }

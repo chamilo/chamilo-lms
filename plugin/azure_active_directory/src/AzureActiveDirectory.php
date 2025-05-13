@@ -247,7 +247,8 @@ class AzureActiveDirectory extends Plugin
     /**
      * @throws Exception
      */
-    public function registerUser(array $azureUserInfo) {
+    public function registerUser(array $azureUserInfo)
+    {
         if (empty($azureUserInfo)) {
             throw new Exception('Groups info not found.');
         }
@@ -402,7 +403,8 @@ class AzureActiveDirectory extends Plugin
     /**
      * @throws Exception
      */
-    private function formatUserData(array $azureUserInfo): array {
+    private function formatUserData(array $azureUserInfo): array
+    {
         $phone = null;
 
         if (isset($azureUserInfo['telephoneNumber'])) {

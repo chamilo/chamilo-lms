@@ -46,7 +46,7 @@ class AnswerInOfficeDoc extends Question
 
         $this->storePath = $this->generateDirectory();
         $this->fileName = $this->generateFileName();
-        $this->filePath = $this->storePath . $this->fileName;
+        $this->filePath = $this->storePath.$this->fileName;
     }
 
     /**
@@ -62,7 +62,7 @@ class AnswerInOfficeDoc extends Question
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',      // .xlsx
             'application/msword',                                                     // .doc
-            'application/vnd.ms-excel'                                                // .xls
+            'application/vnd.ms-excel',                                                // .xls
         ];
 
         $form->addElement('file', 'office_file', get_lang('UploadOfficeDoc'));
@@ -73,7 +73,7 @@ class AnswerInOfficeDoc extends Question
         $form->addElement('static', 'file_hint', get_lang('AllowedFormats'), "<p>{$allowedExtensions}</p>");
 
         if (!empty($this->extra)) {
-            $fileUrl = api_get_path(WEB_COURSE_PATH) . $this->getStoredFilePath();
+            $fileUrl = api_get_path(WEB_COURSE_PATH).$this->getStoredFilePath();
             $form->addElement('static', 'current_office_file', get_lang('CurrentOfficeDoc'), "<a href='{$fileUrl}' target='_blank'>{$this->extra}</a>");
         }
 
@@ -98,8 +98,8 @@ class AnswerInOfficeDoc extends Question
     {
         if (!empty($_FILES['office_file']['name'])) {
             $extension = pathinfo($_FILES['office_file']['name'], PATHINFO_EXTENSION);
-            $tempFilename = "office_" . uniqid() . "." . $extension;
-            $tempPath = sys_get_temp_dir() . '/' . $tempFilename;
+            $tempFilename = "office_".uniqid().".".$extension;
+            $tempPath = sys_get_temp_dir().'/'.$tempFilename;
 
             if (!move_uploaded_file($_FILES['office_file']['tmp_name'], $tempPath)) {
                 return;
@@ -117,7 +117,7 @@ class AnswerInOfficeDoc extends Question
             }
 
             $filename = "office_".$this->iid.".".$extension;
-            $filePath = $uploadDir . $filename;
+            $filePath = $uploadDir.$filename;
 
             if (!rename($tempPath, $filePath)) {
                 return;
@@ -126,20 +126,6 @@ class AnswerInOfficeDoc extends Question
             $this->extra = $filename;
             $this->save($exercise);
         }
-    }
-
-    /**
-     * Generate the necessary directory for OnlyOffice documents.
-     */
-    private function generateDirectory(): string
-    {
-        $exercisePath = api_get_path(SYS_COURSE_PATH).$this->course['path']."/exercises/onlyoffice/{$this->exerciseId}/{$this->iid}/";
-
-        if (!is_dir($exercisePath)) {
-            mkdir($exercisePath, 0775, true);
-        }
-
-        return rtrim($exercisePath, '/') . '/';
     }
 
     /**
@@ -184,7 +170,7 @@ class AnswerInOfficeDoc extends Question
 
         $filePath = $this->getStoredFilePath();
 
-        if (is_file(api_get_path(SYS_COURSE_PATH) . $filePath)) {
+        if (is_file(api_get_path(SYS_COURSE_PATH).$filePath)) {
             return $filePath;
         }
 
@@ -207,10 +193,24 @@ class AnswerInOfficeDoc extends Question
     }
 
     /**
+     * Generate the necessary directory for OnlyOffice documents.
+     */
+    private function generateDirectory(): string
+    {
+        $exercisePath = api_get_path(SYS_COURSE_PATH).$this->course['path']."/exercises/onlyoffice/{$this->exerciseId}/{$this->iid}/";
+
+        if (!is_dir($exercisePath)) {
+            mkdir($exercisePath, 0775, true);
+        }
+
+        return rtrim($exercisePath, '/').'/';
+    }
+
+    /**
      * Generate the file name for the OnlyOffice document.
      */
     private function generateFileName(): string
     {
-        return 'office_' . uniqid();
+        return 'office_'.uniqid();
     }
 }

@@ -268,11 +268,11 @@ switch ($action) {
             $personalDriver = new PersonalDriver();
             $uploadResult = $personalDriver->mimeAccepted(mime_content_type($fileUpload['tmp_name']), ['image']);
 
-            if (!$uploadResult || !move_uploaded_file($fileUpload['tmp_name'], $syspath . $fileUploadName)) {
+            if (!$uploadResult || !move_uploaded_file($fileUpload['tmp_name'], $syspath.$fileUploadName)) {
                 exit;
             }
 
-            $url = $webpath . $fileUploadName;
+            $url = $webpath.$fileUploadName;
             $relativeUrl = str_replace(api_get_path(WEB_PATH), '/', $url);
             $data = [
                 'uploaded' => 1,

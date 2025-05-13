@@ -1,38 +1,88 @@
 .p-message {
-  @apply mb-4 shadow-sm rounded-md border-0;
+  @apply rounded-md outline-none outline-0;
 
-  &-wrapper {
-    @apply flex items-center; // gap-3.5;
-  }
-
-  & &-wrapper {
-    @apply py-3 px-4;
+  &-content {
+    @apply flex items-center gap-4 py-3 px-4 h-full;
   }
 
   &-icon {
-    @apply shrink-0;
+    @apply shrink-0 text-body-1 w-6 h-6;
   }
 
-  & &-icon {
-    @apply text-body-1 mr-2;
+  &-close-button {
+    @apply flex items-center justify-center shrink-0 ms-auto overflow-hidden relative w-8 h-8 rounded-full bg-transparent transition outline-none cursor-pointer select-none;
 
-    &:not(.p-message-close-icon) {
-      @apply w-6 h-6;
+    &:focus-visible {
+      @apply outline-none outline-0;
     }
+
+    .p-message-info & { }
+
+    .p-message-success & { }
+
+    .p-message-warn & { }
+
+    .p-message-error & { }
+
+    .p-message-secondary & { }
+
+    .p-message-contrast & { }
   }
 
-  &-close {
-    @apply flex items-center justify-center shrink-0; // rounded-full transition duration-200 min-w-[1rem] min-h-[1rem];
-
-    &.p-link {
-      @apply ml-auto overflow-hidden relative;
-    }
+  &-close-icon {
+    @apply text-body-2 w-6 h-6;
   }
 
-  & &-close {
-    @apply w-8 h-8 rounded-full bg-transparent transition-none outline-transparent
-      hover:bg-white/50
-      focus-visible:outline-none focus-visible:outline-offset-0 focus-visible:drop-shadow-lg;
+  &-info {
+    @apply bg-info text-white outline-none;
+
+    &.p-message-outlined { }
+
+    &.p-message-simple { }
+  }
+
+  &-success {
+    @apply bg-success text-white outline-none;
+
+    &.p-message-outlined { }
+
+    &.p-message-simple { }
+  }
+
+  &-warn {
+    @apply bg-warning text-gray-90 outline-none;
+
+    &.p-message-outlined { }
+
+    &.p-message-simple { }
+  }
+
+  &-error {
+    @apply bg-danger text-white outline-none;
+
+    &.p-message-outlined { }
+
+    &.p-message-simple { }
+  }
+
+  &-secondary {
+    @apply bg-secondary text-white outline-none;
+
+    &.p-message-outlined { }
+
+    &.p-message-simple { }
+  }
+
+  &-contrast {
+    @apply bg-gray-90 text-white outline-none;
+
+    &.p-message-outlined { }
+
+    &.p-message-simple { }
+  }
+
+  &-text {
+    @apply text-body-2 font-normal;
   }
 
   &-enter-from {
@@ -40,70 +90,70 @@
   }
 
   &-enter-active {
-    @apply transition-opacity duration-300;
+    @apply transition-opacity duration-200;
   }
 
   &.p-message-leave-from {
-    @apply max-h-96;
+    @apply max-h-[1000px];
   }
 
-  &.p-message-leave-to {
+  &.p-message-leave-from {
     @apply max-h-0 opacity-0 m-0;
   }
 
   &-leave-active {
     @apply overflow-hidden transition;
-  }
 
-  &-leave-active &-close {
-    @apply hidden;
-  }
-
-  & &-text {
-    @apply text-body-2 w-full;
-
-    a {
-      @apply font-semibold;
+    & .p-message-close-button {
+      @apply opacity-0;
     }
   }
 
-  .p-message-icon {
-    @apply leading-normal;
-  }
+  &-sm {
+    & .p-message-content {
+      @apply p-2;
+    }
 
-  &.p-message-info {
-    @apply bg-info text-white;
+    & .p-message-text {
+      @apply text-body-2;
+    }
 
-    .p-message-icon,
-    .p-message-close {
-      @apply text-white;
+    & .p-message-icon {
+      @apply text-body-1 w-4 h-4;
+    }
+
+    &.p-message-close-icon {
+      @apply text-body-2 w-4 h-4;
     }
   }
 
-  &.p-message-success {
-    @apply bg-success text-white;
+  &-lg {
+    & .p-message-content {
+      @apply p-6;
+    }
 
-    .p-message-icon,
-    .p-message-close {
-      @apply text-white;
+    & .p-message-text {
+      @apply text-body-1;
+    }
+
+    & .p-message-icon {
+      @apply text-h5 w-8 h-8;
+    }
+
+    &.p-message-close-icon {
+      @apply text-body-2 w-6 h-6;
     }
   }
 
-  &.p-message-warn {
-    @apply bg-warning text-gray-90;
-
-    .p-message-icon,
-    .p-message-close {
-      @apply text-gray-90;
-    }
+  &-message-outlined {
+    @apply bg-transparent outline-none;
   }
 
-  &.p-message-error {
-    @apply bg-error text-white;
+  &-simple {
+    @apply bg-transparent outline-none;
 
-    .p-message-icon,
-    .p-message-close {
-      @apply text-white;
+    & .p-message-content {
+      @apply p-0;
     }
   }
 }

@@ -1,47 +1,51 @@
-.p-inputswitch {
-  @apply align-middle h-4 w-8;
+.p-toggleswitch {
+  @apply inline-block w-8 h-4;
 
-  .p-inputswitch-input {
-    @apply appearance-none absolute top-0 left-0 w-full h-full p-0 m-0 opacity-0  z-[1] outline-0 outline-none rounded-full;
+  &-input {
+    @apply cursor-pointer appearance-none absolute top-0 start-0 w-full h-full p-0 m-0 opacity-0 z-[1] outline-0 outline-none rounded-full;
   }
 
-  .p-inputswitch-slider {
-    @apply bg-gray-30 rounded-full transition-none outline-transparent
-      before:bg-white before:duration-200 before:h-3 before:left-0.5 before:-mt-1.5 before:rounded-full before:w-3;
-  }
+  &-slider {
+     @apply cursor-pointer w-full h-full border-0 border-none bg-gray-30 transition rounded-full drop-shadow-none;
 
-  &.p-highlight .p-inputswitch-slider {
-    @apply bg-secondary
-      before:bg-white before:translate-x-4;
-  }
-
-  &:not(.p-disabled) {
-    &:has(.p-inputswitch-input:hover) {
-      .p-inputswitch-slider {
-        @apply bg-gray-30;
-      }
-
-      &.p-highlight .p-inputswitch-slider {
-        @apply bg-secondary;
-      }
+    .p-toggleswitch.p-toggleswitch-checked & {
+      @apply bg-secondary;
     }
 
-    &:has(.p-inputswitch-input:focus-visible) .p-inputswitch-slider {
-      @apply outline-0 outline-none outline-offset-0 shadow-lg;
+    .p-toggleswitch:not(.p-disabled):has(.p-toggleswitch-input:hover) & {
+      @apply bg-gray-50;
+    }
+
+    .p-toggleswitch:not(.p-disabled):has(.p-toggleswitch-input:hover).p-toggleswitch-checked & {
+      @apply bg-secondary;
+    }
+
+    .p-toggleswitch:not(.p-disabled):has(.p-toggleswitch-input:focus-visible) & {
+      @apply outline-none outline-0;
+    }
+
+    .p-toggleswitch.p-disabled & { }
+
+    .p-toggleswitch.p-invalid > & {
+      @apply border border-solid border-danger;
     }
   }
 
-  &.p-invalid > .p-inputswitch-slider {
-    @apply border-error;
+  &-handle {
+    @apply absolute flex justify-center items-center bg-white text-gray-90 h-3 w-3 top-0.5 left-0.5 rounded-full transition-colors;
+
+    .p-toggleswitch.p-toggleswitch-checked & {
+      @apply translate-x-4;
+    }
+
+    .p-toggleswitch:not(.p-disabled):has(.p-toggleswitch-input:hover) & { }
+
+    .p-toggleswitch.p-disabled & { }
+
+    .p-toggleswitch:not(.p-disabled):has(.p-toggleswitch-input:hover).p-toggleswitch-checked & { }
+  }
+
+  &.p-disabled {
+    @apply opacity-100;
   }
 }
-
-.p-inputswitch-input {
-  @apply cursor-pointer;
-}
-
-.p-inputswitch-slider {
-  @apply absolute cursor-pointer top-0 left-0 right-0 bottom-0 border border-transparent
-    before:absolute before:content-[""] before:top-1/2;
-}
-

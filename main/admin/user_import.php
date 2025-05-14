@@ -695,7 +695,9 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $targetFolder = api_get_configuration_value('root_sys').'app/cache/backup/import_users';
             $targetFolder .= DIRECTORY_SEPARATOR.$userId.DIRECTORY_SEPARATOR.$today;
             $targetFolder = createDirectory($targetFolder).DIRECTORY_SEPARATOR;
-            $originalFile = $targetFolder.$_FILES['import_file']['name'];
+            $cleanFileName = api_replace_dangerous_char($_FILES['import_file']['name']);
+            $cleanFileName = disable_dangerous_file($cleanFileName);
+            $originalFile = $targetFolder.$cleanFileName;
             // save original file
             if (!file_exists($originalFile)) {
                 touch($originalFile);
@@ -706,7 +708,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
             $users = parse_csv_data(
                 $users,
-                $_FILES['import_file']['name'],
+                $cleanFileName,
                 $sendMail,
                 $checkUniqueEmail,
                 $resume

@@ -148,6 +148,12 @@ async function uploadCorrectionsPackage(assignmentId, file) {
   return response.data
 }
 
+async function updateScore(iid, qualification) {
+  return axios.put(`${ENTRYPOINT}c_student_publications/${iid}`, {
+    qualification: qualification,
+  })
+}
+
 export default {
   ...makeService("c_student_publications"),
   findStudentAssignments,
@@ -167,4 +173,5 @@ export default {
   exportAssignmentPdf,
   downloadAssignments,
   uploadCorrectionsPackage,
+  updateScore,
 }

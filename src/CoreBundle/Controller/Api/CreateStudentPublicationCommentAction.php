@@ -36,14 +36,24 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
 
         $commentEntity = new CStudentPublicationComment();
 
-        $result = $this->handleCreateCommentRequest(
-            $commentEntity,
-            $commentRepo,
-            $request,
-            $em,
-            $fileExistsOption,
-            $translator
-        );
+        $hasFile = $request->files->get('uploadFile');
+        $hasComment = trim((string) $request->get('comment')) !== '';
+
+        if ($hasFile || $hasComment) {
+            $result = $this->handleCreateCommentRequest(
+                $commentEntity,
+                $commentRepo,
+                $request,
+                $em,
+                $fileExistsOption,
+                $translator
+            );
+
+            $filename = $result['filename'] ?? null;
+            if (!empty($filename)) {
+                $commentEntity->setFile($filename);
+            }
+        }
 
         $commentText = $request->get('comment');
         $submissionId = (int) $request->get('submissionId');
@@ -62,24 +72,29 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         /** @var User $user */
         $user = $security->getUser();
 
-        $commentEntity->setUser($user);
-        $commentEntity->setPublication($submission);
-        $commentEntity->setComment($commentText ?? '');
+        $qualification = $request->get('qualification', null);
+        $hasQualification = $qualification !== null;
 
-        $filename = $result['filename'] ?? null;
-        if (!empty($filename)) {
-            $commentEntity->setFile($filename);
+        if ($hasFile || $hasComment) {
+            $commentEntity->setUser($user);
+            $commentEntity->setPublication($submission);
+            $commentEntity->setComment($commentText ?? '');
+
+            if (!empty($filename)) {
+                $commentEntity->setFile($filename);
+            }
+
+            $em->persist($commentEntity);
         }
 
-        $qualification = (float) $request->get('qualification', null);
-
-        if (null !== $qualification) {
-            $submission->setQualification($qualification);
+        if ($hasQualification) {
+            $submission->setQualification((float) $qualification);
             $submission->setQualificatorId($user->getId());
             $submission->setDateOfQualification(new \DateTime());
+
+            $em->persist($submission);
         }
 
-        $em->persist($commentEntity);
         $em->flush();
 
         if ($sendMail && $submission->getUser() instanceof User) {

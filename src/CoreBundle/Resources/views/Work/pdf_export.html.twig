@@ -20,7 +20,16 @@
             <td>{{ submission.user.fullName }}</td>
             <td>{{ submission.sentDate|date('Y-m-d H:i') }}</td>
             <td>{{ submission.title }}</td>
-            <td>{{ submission.score ?? '' }}</td>
+            <td>
+                {% if submission.qualification is not null %}
+                    {{ submission.qualification }}
+                    {% if submission.publicationParent is defined and submission.publicationParent.qualification is not null %}
+                        / {{ submission.publicationParent.qualification }}
+                    {% endif %}
+                {% else %}
+                    {{ 'Not graded yet'|trans }}
+                {% endif %}
+            </td>
             <td>
                 {% for comment in submission.comments %}
                     <p><strong>{{ comment.user.fullName }}</strong>: {{ comment.comment }}</p>

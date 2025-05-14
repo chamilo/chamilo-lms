@@ -1,5 +1,5 @@
 .p-inputtext {
-  @apply text-body-2 text-gray-90 bg-white px-3 py-2.5 border border-solid border-gray-50 transition appearance-none rounded-lg outline-transparent w-full;
+  @apply text-body-2 text-gray-90 bg-white px-3 py-2.5 border border-solid border-gray-50 transition-colors appearance-none rounded-lg outline-transparent w-full;
 
   &:enabled {
     @apply hover:border-primary
@@ -15,9 +15,12 @@
   }
 
   &.p-variant-filled {
-    &:enabled {
-      &:hover {}
-      &:focus {}
+    @apply bg-support-1;
+
+    &:enabled { }
+
+    &.p-filled {
+      @apply text-primary;
     }
   }
 

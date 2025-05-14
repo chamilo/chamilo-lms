@@ -6,7 +6,7 @@
     />
 
     <form
-      class="login-section__form p-input-filled"
+      class="login-section__form"
       @submit.prevent="onSubmitLoginForm"
     >
       <div class="field">
@@ -15,6 +15,7 @@
           v-model="login"
           :placeholder="t('Username')"
           type="text"
+          variant="filled"
         />
       </div>
 
@@ -25,14 +26,19 @@
           :placeholder="t('Password')"
           input-id="password"
           toggle-mask
+          variant="filled"
         />
       </div>
 
-      <div v-if="requires2FA" class="field">
+      <div
+        v-if="requires2FA"
+        class="field"
+      >
         <InputText
           v-model="totp"
           :placeholder="t('Enter 2FA code')"
           type="text"
+          variant="filled"
         />
       </div>
 

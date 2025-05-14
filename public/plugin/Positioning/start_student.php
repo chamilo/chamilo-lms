@@ -25,6 +25,8 @@ $radar = '';
 $initialResults = null;
 $exercisesToRadar = [];
 $exercisesToRadarLabel = [];
+$initialExercise = null;
+
 if ($initialData) {
     $exerciseId = $initialData['exercise_id'];
     $initialExercise = new Exercise();
@@ -89,13 +91,17 @@ if (!empty($initialExercise)) {
     }
 }
 
-$radars = $initialExercise->getRadarsFromUsers(
-    [$currentUserId],
-    $exercisesToRadar,
-    $exercisesToRadarLabel,
-    $courseId,
-    $sessionId
-);
+$radars = null;
+if ($initialExercise instanceof Exercise) {
+    $radars = $initialExercise->getRadarsFromUsers(
+        [$currentUserId],
+        $exercisesToRadar,
+        $exercisesToRadarLabel,
+        $courseId,
+        $sessionId
+    );
+}
+
 $nameTools = $plugin->get_lang('Positioning');
 
 $template = new Template($nameTools);

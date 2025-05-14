@@ -2996,8 +2996,6 @@ class Exercise
         $sourceId = $exerciseObject->iId;
         // Force the creation of a new exercise
         $exerciseObject->updateTitle($exerciseObject->selectTitle().' - '.get_lang('Copy'));
-        // Hides the new exercise
-        $exerciseObject->updateStatus(false);
         $exerciseObject->iId = 0;
         $exerciseObject->sessionId = api_get_session_id();
         $courseId = api_get_course_int_id();

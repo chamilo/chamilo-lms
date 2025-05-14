@@ -58,6 +58,28 @@
         </template>
       </Column>
 
+      <Column :header="t('Score')">
+        <template #body="{ data }">
+          <template v-if="data.qualification !== null && data.publicationParent?.qualification">
+            <span
+              :class="{
+                'bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded':
+                  data.qualification > data.publicationParent.qualification / 2,
+                'bg-danger/10 text-danger font-semibold text-sm px-2 py-1 rounded':
+                  data.qualification <= data.publicationParent.qualification / 2,
+              }"
+            >
+              {{ data.qualification.toFixed(1) }} / {{ data.publicationParent.qualification.toFixed(1) }}
+            </span>
+          </template>
+          <template v-else>
+            <span class="text-gray-50">
+              {{ t("Not graded yet") }}
+            </span>
+          </template>
+        </template>
+      </Column>
+
       <Column
         field="sentDate"
         :header="t('Date')"

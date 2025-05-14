@@ -31,8 +31,12 @@
             v-model.number="qualification"
             class="input border p-2 rounded"
             min="0"
+            :max="maxQualification"
             step="0.1"
           />
+          <template v-if="maxQualification">
+            <span class="text-xs text-gray-600"> {{ t("Max grade") }}: {{ maxQualification }} </span>
+          </template>
         </template>
 
         <template v-else>
@@ -67,6 +71,7 @@
         />
         <Button
           :label="t('Send')"
+          :disabled="submitting"
           @click="submit"
         />
       </div>
@@ -110,7 +115,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue"
+import { computed, ref, watch } from "vue"
 import { useNotification } from "../../composables/notification"
 import { useI18n } from "vue-i18n"
 import Textarea from "primevue/textarea"
@@ -141,6 +146,10 @@ const securityStore = useSecurityStore()
 const isEditor = securityStore.isCourseAdmin || securityStore.isTeacher
 const isStudentView = route.query.isStudentView === "true"
 const forceStudentView = !isEditor || isStudentView
+const maxQualification = computed(() =>
+  props.item?.publicationParent?.qualification ?? null
+)
+const submitting = ref(false)
 
 watch(
   () => props.modelValue,
@@ -182,28 +191,59 @@ function handleFileUpload(event) {
 }
 
 async function submit() {
-  if (!comment.value.trim()) {
-    notification.showErrorNotification(t("Comment is required"))
+  if (submitting.value) return
+  submitting.value = true
+
+  const trimmedComment = comment.value.trim()
+
+  const hasComment = trimmedComment.length > 0
+  const hasFile = !!selectedFile.value
+  const hasQualificationChange = qualification.value !== props.item.qualification
+
+  if (!hasComment && !hasFile && !hasQualificationChange) {
+    notification.showErrorNotification(t("Please add a comment, a grade or a file"))
+    submitting.value = false
+    return
+  }
+
+  if (!hasComment && !hasFile && hasQualificationChange) {
+    try {
+      await cStudentPublicationService.updateScore(props.item.iid, qualification.value)
+      notification.showSuccessNotification(t("Score updated successfully"))
+      emit("commentSent")
+      close()
+    } catch (error) {
+      notification.showErrorNotification(error)
+    } finally {
+      submitting.value = false
+    }
     return
   }
 
   try {
     const formData = new FormData()
+    formData.append("submissionId", props.item.iid)
+    formData.append("qualification", qualification.value ?? "")
+
     if (selectedFile.value) {
       formData.append("uploadFile", selectedFile.value)
     }
-    formData.append("comment", comment.value)
-    formData.append("qualification", qualification.value ?? "")
+
+    if (hasComment) {
+      formData.append("comment", trimmedComment)
+    }
 
     await cStudentPublicationService.uploadComment(props.item.iid, parentResourceNodeId, formData, sendMail.value)
 
     notification.showSuccessNotification(t("Comment added successfully"))
-
     comments.value = await cStudentPublicationService.loadComments(props.item.iid)
     comment.value = ""
     selectedFile.value = null
+    emit("commentSent")
   } catch (error) {
     notification.showErrorNotification(error)
+  } finally {
+    submitting.value = false
   }
 }
 </script>

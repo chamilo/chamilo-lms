@@ -67,6 +67,17 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         }
 
         $payload = $context['request']->toArray();
+
+        if (array_key_exists('qualification', $payload)) {
+            $publication->setQualification((float) $payload['qualification']);
+
+            $user = $this->security->getUser();
+            if ($user instanceof User) {
+                $publication->setQualificatorId($user->getId());
+                $publication->setDateOfQualification(new \DateTime());
+            }
+        }
+
         if (isset($payload['expiresOn'])) {
             $assignment->setExpiresOn(new \DateTime($payload['expiresOn']));
         }
@@ -85,11 +96,12 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
             $assignment->setEventCalendarId(0);
         }
 
+        if ($assignment->getIid() !== null) {
+            $publication->setHasProperties($assignment->getIid());
+        }
         $publication
-            ->setHasProperties($assignment->getIid())
             ->setViewProperties(true)
-            ->setUser($currentUser)
-        ;
+            ->setUser($currentUser);
 
         $this->entityManager->flush();
 

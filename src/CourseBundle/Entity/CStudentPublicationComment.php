@@ -141,8 +141,13 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
 
     public function getResourceName(): string
     {
-        $text = strip_tags($this->getComment());
+        $comment = trim((string) $this->getComment());
 
+        if ($comment === '') {
+            return 'comment-' . (new \DateTime())->format('Ymd-His');
+        }
+
+        $text = strip_tags($comment);
         $text = Slugify::create()->slugify($text);
 
         return substr($text, 0, 40);

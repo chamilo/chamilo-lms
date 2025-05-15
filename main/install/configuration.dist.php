@@ -2639,6 +2639,10 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 
 // Extra fields to include in session course excel report on main/session/resume_session.php
 /*$_configuration['session_course_excel_export'] = [
+    'session_start_date_header' => 'Fecha Inicio',
+    'session_end_date_header' => 'Fecha Fin',
+    'user_firstname_header' => 'Nombre',
+    'user_lastname_header' => 'Apellido 1',
     'session_fields' => [
         '0' => [
             'header' => '1st session header',

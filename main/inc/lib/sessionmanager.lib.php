@@ -10024,8 +10024,8 @@ class SessionManager
 
         // 1. SESSION HEADER
         $header1 = [''];
-        $header1[] = get_lang('StartDate');
-        $header1[] = get_lang('EndDate');
+        $header1[] = $config['session_start_date_header'] ?? get_lang('StartDate');
+        $header1[] = $config['session_end_date_header'] ?? get_lang('EndDate');
 
         foreach ($sessionFields as $entry) {
             $header1[] = $entry['header'] ?? '';
@@ -10056,8 +10056,8 @@ class SessionManager
             $header3[] = $entry['header'] ?? '';
         }
 
-        $header3[] = get_lang('FirstName');
-        $header3[] = get_lang('LastName');
+        $header3[] = $config['user_firstname_header'] ?? get_lang('FirstName');
+        $header3[] = $config['user_lastname_header'] ?? get_lang('LastName');
 
         foreach ($userFieldsAfter as $entry) {
             $header3[] = $entry['header'] ?? '';

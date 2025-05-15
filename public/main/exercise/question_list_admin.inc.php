@@ -144,11 +144,11 @@ if (isset($exerciseId) && $exerciseId > 0) {
         // In building mode show all questions not render by teacher order.
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $allowQuestionOrdering = true;
-        $showPagination = api_get_setting('exercise.show_question_pagination');
-        $length = api_get_setting('exercise.question_pagination_length');
+        $showPagination = 'true' === api_get_setting('exercise.show_question_pagination');
+        $length = (int) api_get_setting('exercise.question_pagination_length') ?: 30;
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
-        if (!empty($showPagination) && $nbrQuestions > $showPagination) {
+        if ($showPagination && $nbrQuestions > $length) {
             $allowQuestionOrdering = false;
             $start = ($page - 1) * $length;
             $questionList = $objExercise->selectQuestionList(true, true);
@@ -187,30 +187,30 @@ if (isset($exerciseId) && $exerciseId > 0) {
                 }
 
                 $clone_link = Display::url(
-                    Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Copy')),
+                    Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon-button', 'margin-bottom: 5px;', ICON_SIZE_TINY, get_lang('Copy')),
                     api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
-                    ['class' => 'btn btn--plain btn-sm']
+                    ['class' => 'btn btn--warning btn-sm']
                 );
 
                 $edit_link = CALCULATED_ANSWER == $objQuestionTmp->selectType() && $objQuestionTmp->isAnswered()
                     ? Display::span(
-                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, get_lang('Question edition is not available because the question has been already answered. However, you can copy and modify it.')),
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', 'margin-bottom: 5px;', ICON_SIZE_TINY, get_lang('Question edition is not available because the question has been already answered. However, you can copy and modify it.')),
                         ['class' => 'btn btn--plain btn-sm']
                     )
                     : Display::url(
-                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Edit')),
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-button', 'margin-bottom: 5px;', ICON_SIZE_TINY, get_lang('Edit')),
                         api_get_self().'?'.api_get_cidreq().'&'
                             .http_build_query([
                                 'type' => $objQuestionTmp->selectType(),
                                 'editQuestion' => $id,
                                 'page' => $page,
                             ]),
-                        ['class' => 'btn btn--plain btn-sm']
+                        ['class' => 'btn btn--warning btn-sm']
                     );
                 $delete_link = null;
                 if (true == $objExercise->edit_exercise_in_lp) {
                     $delete_link = Display::url(
-                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Remove from test')),
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-button', 'margin-bottom: 5px;', ICON_SIZE_TINY, get_lang('Remove from test')),
                         api_get_self().'?'.api_get_cidreq().'&'
                             .http_build_query([
                                 'id' => $exerciseId,
@@ -219,7 +219,7 @@ if (isset($exerciseId) && $exerciseId > 0) {
                             ]),
                         [
                             'id' => "delete_$id",
-                            'class' => 'delete-swal btn btn--plain btn-sm',
+                            'class' => 'delete-swal btn btn--danger btn-sm',
                             'data-title' => get_lang('Are you sure you want to delete'),
                             'title' => get_lang('Delete'),
                         ]
@@ -239,7 +239,7 @@ if (isset($exerciseId) && $exerciseId > 0) {
                 $title = strip_tags($title);
                 $move = '&nbsp;';
                 if ($allowQuestionOrdering) {
-                    $move = Display::getMdiIcon('cursor-move', 'moved');
+                    $move = Display::getMdiIcon('cursor-move', 'moved', null, ICON_SIZE_MEDIUM);
                 }
 
                 // Question name
@@ -310,13 +310,15 @@ if (isset($exerciseId) && $exerciseId > 0) {
 
         echo '</div>'; //question list div
         // Pagination navigation
-        $totalPages = ceil($nbrQuestions / $length);
-        echo '<div class="pagination flex justify-center mt-4">';
-        for ($i = 1; $i <= $totalPages; $i++) {
-            $isActive = ($i == $page) ? 'bg-primary text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-200';
-            echo '<a href="?'.http_build_query(array_merge($_GET, ['page' => $i])).'" class="mx-1 px-4 py-2 border '.$isActive.' rounded">'.$i.'</a>';
+        if ($showPagination && $nbrQuestions > $length) {
+            $totalPages = ceil($nbrQuestions / $length);
+            echo '<div class="pagination flex justify-center mt-4">';
+            for ($i = 1; $i <= $totalPages; $i++) {
+                $isActive = ($i == $page) ? 'bg-primary text-white' : 'border-gray-300 text-gray-700 hover:bg-gray-200';
+                echo '<a href="?' . http_build_query(array_merge($_GET, ['page' => $i])) . '" class="mx-1 px-4 py-2 border ' . $isActive . ' rounded">' . $i . '</a>';
+            }
+            echo '</div>';
         }
-        echo '</div>';
     } else {
         echo Display::return_message(get_lang('Questions list (there is no question so far).'), 'warning');
     }

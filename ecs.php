@@ -88,7 +88,6 @@ return static function (ECSConfig $ecsConfig): void {
     ]);
 
     $ecsConfig->skip([
-        __DIR__.'/src/CoreBundle/Hook/*',
         __DIR__.'/src/CoreBundle/Component/HTMLPurifier/Filter/AllowIframes.php',
         __DIR__.'/src/CoreBundle/Traits/Repository/*',
         __DIR__.'/src/CourseBundle/Component/*',

@@ -3,9 +3,13 @@
 
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Entity\PortfolioCategory;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\PortfolioItemAddedEvent;
 
 $categories = $em
-    ->getRepository('ChamiloCoreBundle:PortfolioCategory')
+    ->getRepository(PortfolioCategory::class)
     ->findBy([
         'user' => $user,
     ]);
@@ -36,13 +40,18 @@ if ($form->validate()) {
         ->setCourse($course)
         ->setSession($session)
         ->setCategory(
-            $em->find('ChamiloCoreBundle:PortfolioCategory', $values['category'])
+            $em->find(PortfolioCategory::class, $values['category'])
         )
         ->setCreationDate($currentTime)
         ->setUpdateDate($currentTime);
 
     $em->persist($portfolio);
     $em->flush();
+
+    Container::getEventDispatcher()->dispatch(
+        new PortfolioItemAddedEvent(['portfolio' => $portfolio]),
+        Events::PORTFOLIO_ITEM_ADDED
+    );
 
     Display::addFlash(
         Display::return_message(get_lang('Portfolio item added'), 'success')

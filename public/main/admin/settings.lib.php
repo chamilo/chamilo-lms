@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
 use ChamiloSession as Session;
 use Symfony\Component\Filesystem\Filesystem;
@@ -131,135 +133,116 @@ function handleExtensions()
 function handlePlugins()
 {
     Session::erase('plugin_data');
-    $plugin_obj = new AppPlugin();
-    $token = Security::get_token();
-    if (isset($_POST['submit_plugins'])) {
-        storePlugins();
-        // Add event to the system log.
-        $user_id = api_get_user_id();
-        $category = $_GET['category'];
-        Event::addEvent(
-            LOG_CONFIGURATION_SETTINGS_CHANGE,
-            LOG_CONFIGURATION_SETTINGS_CATEGORY,
-            $category,
-            api_get_utc_datetime(),
-            $user_id
-        );
-        echo Display::return_message(get_lang('The settings have been stored'), 'confirmation');
-    }
+    $pluginRepo = Container::getPluginRepository();
 
-    $all_plugins = $plugin_obj->read_plugins_from_path();
-    $installed_plugins = $plugin_obj->getInstalledPlugins();
+    $allPlugins = (new AppPlugin())->read_plugins_from_path();
 
-    // Plugins NOT installed
-    echo Display::page_subheader(get_lang('Plugins'));
-    echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token='.$token.'">';
-    echo '<table class="table table-hover table-striped table-bordered table-fixed">';
-    echo '<thead class="bg-gray-50">';
-    echo '<tr>';
-    echo '<th width="20px" class="px-6 py-2 uppercase font-normal leading-normal mt-0 mb-2 text-gray-500">';
-    echo get_lang('Action');
-    echo '</th><th class="px-6 py-2 uppercase font-normal leading-normal mt-0 mb-2 text-gray-500">';
-    echo get_lang('Description');
-    echo '</th>';
+    // Header
+    echo '<div class="mb-4 flex items-center justify-between">';
+    echo '<h2 class="text-2xl font-semibold text-gray-90">'.get_lang('Manage Plugins').'</h2>';
+    echo '<p class="text-gray-50 text-sm">'.get_lang('Install, activate or deactivate plugins easily.').'</p>';
+    echo '</div>';
+
+    echo '<table class="w-full border border-gray-25 rounded-lg shadow-md">';
+    echo '<thead>';
+    echo '<tr class="bg-gray-10 text-left">';
+    echo '<th class="p-3 border-b border-gray-25">'.get_lang('Plugin').'</th>';
+    echo '<th class="p-3 border-b border-gray-25">'.get_lang('Version').'</th>';
+    echo '<th class="p-3 border-b border-gray-25">'.get_lang('Status').'</th>';
+    echo '<th class="p-3 border-b border-gray-25 text-center">'.get_lang('Actions').'</th>';
     echo '</tr>';
     echo '</thead>';
+    echo '<tbody>';
 
-    /*$plugin_list = array();
-    $my_plugin_list = $plugin_obj->get_plugin_regions();
-    foreach($my_plugin_list as $plugin_item) {
-        $plugin_list[$plugin_item] = $plugin_item;
-    }*/
-    $installed = '';
-    $notInstalled = '';
-    foreach ($all_plugins as $pluginName) {
-        $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
-        if (file_exists($plugin_info_file)) {
-            $plugin_info = [];
-            require $plugin_info_file;
+    foreach ($allPlugins as $pluginName) {
+        $pluginInfoFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
 
-            $pluginRow = '';
-
-            if (in_array($pluginName, $installed_plugins)) {
-                $pluginRow .= '<tr class="row_selected whitespace-nowrap">';
-            } else {
-                $pluginRow .= '<tr class="whitespace-nowrap">';
-            }
-            $pluginRow .= '<td class="px-6 py-4 text-sm text-gray-500">';
-            // Checkbox
-            if (in_array($pluginName, $installed_plugins)) {
-                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked" class="border rounded">';
-            } else {
-                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" class="border rounded">';
-            }
-            $pluginRow .= '</td><td class="px-6 py-4 text-sm text-gray-500">';
-            $pluginRow .= '<h3 class="text-3xl font-normal leading-normal mt-0 mb-2">'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h3>';
-            $pluginRow .= '<p>'.$plugin_info['comment'].'</p>';
-            $pluginRow .= '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
-
-            $pluginRow .= '<div class="btn-group btn-group-sm mt-4">';
-            if (in_array($pluginName, $installed_plugins)) {
-                $pluginRow .= Display::url(
-                    '<em class="fa fa-cogs"></em> '.get_lang('Configure'),
-                    'configure_plugin.php?name='.$pluginName,
-                    ['class' => 'btn btn--primary']
-                );
-                $pluginRow .= Display::url(
-                    '<em class="fa fa-th-large"></em> '.get_lang('Regions'),
-                    'settings.php?category=Regions&name='.$pluginName,
-                    ['class' => 'btn btn--primary']
-                );
-            }
-
-            if (file_exists(api_get_path(SYS_PLUGIN_PATH).$pluginName.'/readme.txt')) {
-                $pluginRow .= Display::url(
-                    "<em class='fa fa-file-text-o'></em> readme.txt",
-                    api_get_path(WEB_PLUGIN_PATH).$pluginName."/readme.txt",
-                    [
-                        'class' => 'btn btn-blue ajax',
-                        'data-title' => $plugin_info['title'],
-                        'data-size' => 'lg',
-                        '_target' => '_blank',
-                    ]
-                );
-            }
-
-            $readmeFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/README.md';
-            if (file_exists($readmeFile)) {
-                $pluginRow .= Display::url(
-                    "<em class='fa fa-file-text-o'></em> README.md",
-                    api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$pluginName,
-                    [
-                        'class' => 'btn btn-blue ajax',
-                        'data-title' => $plugin_info['title'],
-                        'data-size' => 'lg',
-                        '_target' => '_blank',
-                    ]
-                );
-            }
-
-            $pluginRow .= '</div>';
-            $pluginRow .= '</td></tr>';
-
-            if (in_array($pluginName, $installed_plugins)) {
-                $installed .= $pluginRow;
-            } else {
-                $notInstalled .= $pluginRow;
-            }
+        if (!file_exists($pluginInfoFile)) {
+            continue;
         }
-    }
-    echo '<tbody class="bg-white">';
-    echo $installed;
-    echo $notInstalled;
-    echo '</tbody>';
-    echo '</table>';
 
-    echo '<div class="form-actions bottom_actions">';
-    echo '<button class="btn btn--primary" type="submit" name="submit_plugins">';
-    echo '<i class="fa fa-check" aria-hidden="true"></i> ';
-    echo get_lang('Enable the selected plugins').'</button>';
-    echo '</div>';
-    echo '</form>';
+        $plugin_info = [];
+
+        require $pluginInfoFile;
+
+        $plugin = $pluginRepo->findOneByTitle($pluginName);
+        $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlHelper()->getCurrent());
+        $isInstalled = $plugin && $plugin->isInstalled();
+        $isEnabled = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
+
+        // Status badge
+        $statusBadge = $isInstalled
+            ? ($isEnabled
+                ? '<span class="badge badge--success">'.get_lang('Enabled').'</span>'
+                : '<span class="badge badge--warning">'.get_lang('Disabled').'</span>')
+            : '<span class="badge badge--default">'.get_lang('Not Installed').'</span>';
+
+        echo '<tr class="border-t border-gray-25 hover:bg-gray-15 transition duration-200">';
+        echo '<td class="p-3 font-medium">'.$plugin_info['title'].'</td>';
+        echo '<td class="p-3">'.$plugin_info['version'].'</td>';
+        echo '<td class="p-3">'.$statusBadge.'</td>';
+        echo '<td class="p-3 text-center">';
+
+        echo '<div class="flex justify-center gap-2">';
+
+        if ($isInstalled) {
+            $toggleAction = $isEnabled ? 'disable' : 'enable';
+            $toggleText = $isEnabled ? get_lang('Disable') : get_lang('Enable');
+            $toggleColor = $isEnabled ? 'btn--plain' : 'btn--warning';
+
+            $toggleIcon = $isEnabled ? 'mdi mdi-toggle-switch-off-outline' : 'mdi mdi-toggle-switch-outline';
+
+            echo '<button class="plugin-action btn btn--sm '.$toggleColor.'"
+                    data-plugin="'.$pluginName.'" data-action="'.$toggleAction.'">
+                    <i class="'.$toggleIcon.'"></i> '.$toggleText.'
+                  </button>';
+
+            echo '<button class="plugin-action btn btn--sm btn--danger"
+                    data-plugin="'.$pluginName.'" data-action="uninstall">
+                    <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
+                  </button>';
+
+            $configureUrl = Container::getRouter()->generate(
+                'legacy_main',
+                ['name' => 'admin/configure_plugin.php', 'plugin' => $pluginName]
+            );
+
+            echo Display::url(
+                get_lang('Configure'),
+                $configureUrl,
+                ['class' => 'btn btn--info btn--sm']
+            );
+        } else {
+            echo '<button class="plugin-action btn btn--sm btn--success"
+                    data-plugin="'.$pluginName.'" data-action="install">
+                    <i class="mdi mdi-download"></i> '.get_lang('Install').'
+                  </button>';
+        }
+
+        echo '</div>';
+        echo '</td>';
+        echo '</tr>';
+    }
+
+    echo '</tbody></table>';
+
+    echo '<script>
+    $(document).ready(function () {
+        $(".plugin-action").click(function () {
+            var pluginName = $(this).data("plugin");
+            var action = $(this).data("action");
+
+            $.post("'.api_get_path(WEB_AJAX_PATH).'plugin.ajax.php", { a: action, plugin: pluginName }, function(response) {
+                var data = JSON.parse(response);
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert("Error: " + data.error);
+                }
+            });
+        });
+    });
+    </script>';
 }
 
 /**
@@ -430,36 +413,6 @@ function storeRegions()
                 }
             }
         }
-    }
-}
-
-/**
- * This function allows easy activating and inactivating of plugins.
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- */
-function storePlugins()
-{
-    $appPlugin = new AppPlugin();
-    // Get a list of all current 'Plugins' settings
-    $plugin_list = $appPlugin->read_plugins_from_path();
-    $installed_plugins = [];
-
-    foreach ($plugin_list as $plugin) {
-        if (isset($_POST['plugin_'.$plugin])) {
-            $appPlugin->install($plugin);
-            $installed_plugins[] = $plugin;
-        }
-    }
-
-    if (!empty($installed_plugins)) {
-        $remove_plugins = array_diff($plugin_list, $installed_plugins);
-    } else {
-        $remove_plugins = $plugin_list;
-    }
-
-    foreach ($remove_plugins as $plugin) {
-        $appPlugin->uninstall($plugin);
     }
 }
 
@@ -1381,7 +1334,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 $courseSelectOptions = [];
 
                 if (!empty($row['selected_value'])) {
-                    $course = $em->find('ChamiloCoreBundle:Course', $row['selected_value']);
+                    $course = $em->find(Course::class, $row['selected_value']);
 
                     $courseSelectOptions[$course->getId()] = $course->getTitle();
                 }

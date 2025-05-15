@@ -2392,7 +2392,7 @@ class Exercise
                     'extra_notifications',
                     get_lang('Notifications'),
                     $options,
-                    ['placeholder' => get_lang('SelectAnOption')]
+                    ['placeholder' => get_lang('Please select an option')]
                 );
             }
             $form->addElement('html', '</div>'); //End advanced setting
@@ -4851,13 +4851,16 @@ class Exercise
                         $resq = Database::query($query);
                         $row = Database::fetch_assoc($resq);
 
-                        $choice = $row['hotspot_correct'];
-                        $user_answer = $row['hotspot_coordinate'];
+                        if ($row && isset($row['hotspot_correct'], $row['hotspot_coordinate'])) {
+                            $choice = $row['hotspot_correct'];
+                            $user_answer = $row['hotspot_coordinate'];
+                            $coords = explode('/', $user_answer);
+                        } else {
+                            $choice = '';
+                            $user_answer = '';
+                            $coords = [];
+                        }
 
-                        // THIS is very important otherwise the poly_compile will throw an error!!
-                        // round-up the coordinates
-                        $coords = explode('/', $user_answer);
-                        $coords = array_filter($coords);
                         $user_array = '';
                         foreach ($coords as $coord) {
                             [$x, $y] = explode(';', $coord);
@@ -4870,7 +4873,7 @@ class Exercise
                             $newquestionList[] = $questionId;
                         }
 
-                        if (1 === $answerId) {
+                        if (1 === $answerId && isset($choice[$answerId])) {
                             $studentChoice = $choice[$answerId];
                             $questionScore += $answerWeighting;
                         }
@@ -5055,7 +5058,7 @@ class Exercise
                                 $studentChoice,
                                 $answerComment
                             );*/
-                        } elseif (HOT_SPOT_DELINEATION == $answerType) {
+                        } elseif (HOT_SPOT_DELINEATION == $answerType && isset($_SESSION['exerciseResultCoordinates'][$questionId])) {
                             $user_answer = $_SESSION['exerciseResultCoordinates'][$questionId];
 
                             // Round-up the coordinates
@@ -5739,9 +5742,11 @@ class Exercise
                         echo $message;
 
                         $_SESSION['hotspot_delineation_result'][$this->getId()][$questionId][0] = $message;
-                        $_SESSION['hotspot_delineation_result'][$this->getId()][$questionId][1] = $_SESSION['exerciseResultCoordinates'][$questionId];
+                        if (isset($_SESSION['exerciseResultCoordinates'][$questionId])) {
+                            $_SESSION['hotspot_delineation_result'][$this->getId()][$questionId][1] = $_SESSION['exerciseResultCoordinates'][$questionId];
+                        }
                     } else {
-                        echo $hotspot_delineation_result[0];
+                        echo $hotspot_delineation_result[0] ?? '';
                     }
 
                     // Save the score attempts
@@ -5761,7 +5766,7 @@ class Exercise
                             $quesId,
                             1,
                             $hotspotValue,
-                            $exerciseResultCoordinates[$quesId],
+                            $exerciseResultCoordinates[$quesId] ?? '',
                             false,
                             0,
                             $learnpath_id,
@@ -8792,6 +8797,13 @@ class Exercise
 
         $repo = Container::getQuizRepository();
 
+        $trackEExerciseRepo = Container::getTrackEExerciseRepository();
+        $pendingCorrections = $trackEExerciseRepo->getPendingCorrectionsByExercise($courseId);
+        $pendingAttempts = [];
+        foreach ($pendingCorrections as $correction) {
+            $pendingAttempts[$correction['exerciseId']] = $correction['pendingCount'];
+        }
+
         // 2. Get query builder from repo.
         $qb = $repo->getResourcesByCourse($course, $session);
 
@@ -9025,6 +9037,18 @@ class Exercise
                     if (ExerciseLib::isQuizEmbeddable($exerciseEntity)) {
                         $embeddableIcon = Display::getMdiIcon('book-music-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ThisQuizCanBeEmbeddable'));
                         $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
+                    }
+
+                    $pendingCount = $pendingAttempts[$exerciseId] ?? 0;
+                    if ($pendingCount > 0) {
+                        $pendingIcon = Display::getMdiIcon(
+                            ActionIcon::ALERT->value,
+                            'ch-tool-icon',
+                            null,
+                            ICON_SIZE_SMALL,
+                            get_lang('Pending attempts') . ": $pendingCount"
+                        );
+                        $url .= " $pendingIcon";
                     }
 
                     $currentRow['title'] = $url.$lp_blocked;

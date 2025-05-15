@@ -11,7 +11,7 @@ class Career extends Model
     public $table;
     public $columns = [
         'id',
-        'name',
+        'title',
         'description',
         'status',
         'created_at',
@@ -45,7 +45,7 @@ class Career extends Model
         return Database::select(
             '*',
             $this->table,
-            ['where' => $options, 'order' => 'name ASC']
+            ['where' => $options, 'order' => 'title ASC']
         );
     }
 
@@ -121,7 +121,7 @@ class Career extends Model
         $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
         $form->addHeader($header);
         $form->addHidden('id', $id);
-        $form->addElement('text', 'name', get_lang('Name'), ['size' => '70']);
+        $form->addText('name', get_lang('Name'), true, ['size' => '70']);
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
@@ -182,7 +182,7 @@ class Career extends Model
                 case 'id':
                 case 'updated_at':
                     break;
-                case 'name':
+                case 'title':
                     $val .= ' '.get_lang('Copy');
                     $new[$key] = $val;
                     break;

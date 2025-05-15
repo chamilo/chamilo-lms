@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
+use Chamilo\CoreBundle\Repository\GradebookResultRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\MessageRepository;
@@ -27,6 +28,7 @@ use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\PluginRepository;
 use Chamilo\CoreBundle\Repository\PromotionRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
@@ -41,6 +43,7 @@ use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -89,6 +92,7 @@ use Chamilo\LtiBundle\Repository\ExternalToolRepository;
 use Database;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -364,6 +368,11 @@ class Container
         return self::$container->get(GradebookCertificateRepository::class);
     }
 
+    public static function getGradebookResultRepository(): GradebookResultRepository
+    {
+        return self::$container->get(GradebookResultRepository::class);
+    }
+
     public static function getGroupRepository(): CGroupRepository
     {
         return self::$container->get(CGroupRepository::class);
@@ -482,6 +491,12 @@ class Container
     public static function getUsergroupRepository(): UsergroupRepository
     {
         return self::$container->get(UsergroupRepository::class);
+    }
+
+    public static function getPluginRepository(): PluginRepository
+    {
+        /** @var PluginRepository $pluginRepo */
+        return self::$container->get(PluginRepository::class);
     }
 
     public static function getUserToJsonNormalizer(): UserToJsonNormalizer
@@ -661,5 +676,17 @@ class Container
     public static function getGroupRelUsergroupRepository(): CGroupRelUsergroupRepository
     {
         return self::$container->get(CGroupRelUsergroupRepository::class);
+    }
+
+    public static function getAccessUrlHelper(): AccessUrlHelper
+    {
+        /** @var AccessUrlHelper $helper */
+        return self::$container->get(AccessUrlHelper::class);
+    }
+
+    public static function getEventDispatcher(): EventDispatcherInterface
+    {
+        /** @var EventDispatcherInterface $dispatcher */
+        return self::$container->get('event_dispatcher');
     }
 }

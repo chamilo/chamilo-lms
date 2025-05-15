@@ -45,7 +45,7 @@ class Ticket
     protected Course $course;
 
     #[ORM\ManyToOne(targetEntity: Session::class)]
-    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected Session $session;
 
     #[Assert\NotBlank]
@@ -92,6 +92,10 @@ class Ticket
 
     #[ORM\Column(name: 'lp_id', type: 'integer', nullable: true, unique: false)]
     protected int $lpId;
+
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class)]
+    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id', nullable: true)]
+    protected ?AccessUrl $accessUrl = null;
 
     public function __construct()
     {
@@ -220,6 +224,18 @@ class Ticket
     public function setLpId(int $lpId): self
     {
         $this->lpId = $lpId;
+
+        return $this;
+    }
+
+    public function getAccessUrl(): ?AccessUrl
+    {
+        return $this->accessUrl;
+    }
+
+    public function setAccessUrl(?AccessUrl $accessUrl): self
+    {
+        $this->accessUrl = $accessUrl;
 
         return $this;
     }

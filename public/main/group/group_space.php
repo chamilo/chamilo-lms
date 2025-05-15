@@ -222,10 +222,10 @@ if (api_is_allowed_to_edit(false, true) ||
 
     $enabled = api_get_plugin_setting('bbb', 'tool_enable');
     if ('true' === $enabled) {
-        $bbb = new bbb();
+        $bbb = new Bbb();
         if ($bbb->hasGroupSupport()) {
             $actions_array[] = [
-                'url' => api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?'.api_get_cidreq(),
+                'url' => api_get_path(WEB_PLUGIN_PATH).'Bbb/start.php?'.api_get_cidreq(),
                 'content' => Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Videoconference')),
             ];
         }

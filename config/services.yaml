@@ -89,6 +89,15 @@ services:
       tags:
         - { name: 'api_platform.state_processor' }
 
+    Chamilo\CoreBundle\State\CAttendanceStateProcessor:
+      arguments:
+        $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+        $entityManager: '@doctrine.orm.entity_manager'
+        $calendarRepo: '@Chamilo\CourseBundle\Repository\CAttendanceCalendarRepository'
+        $requestStack: '@request_stack'
+      tags:
+        - { name: 'api_platform.state_processor' }
+
     Chamilo\CoreBundle\State\ColorThemeStateProcessor:
       bind:
         $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
@@ -120,12 +129,16 @@ services:
             - setValidator: [ '@validator' ]
             - setSessionFactory: [ '@session.factory' ]
 
+    Chamilo\CoreBundle\Service\PluginEntityLoader:
+        arguments:
+            $pluginDir: '%kernel.project_dir%/public/plugin'
+
 cocur_slugify:
     lowercase: true
 
 imports:
     - { resource: ../src/CoreBundle/Resources/config/services.yml }
     - { resource: ../src/LtiBundle/Resources/config/services.yml }
-    - { resource: ./authentication.yaml }
-    - { resource: ./hosting_limits.yaml }
-    - { resource: ./plugin.yaml }
+    - { resource: ./authentication.yaml, ignore_errors: not_found }
+    - { resource: ./settings_overrides.yaml, ignore_errors: not_found }
+    - { resource: ./plugin.yaml, ignore_errors: not_found }

@@ -13,6 +13,8 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
@@ -22,6 +24,7 @@ use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelTag;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Datetime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -30,6 +33,7 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use InvalidArgumentException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -482,7 +486,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
         $qb->select('u')
             ->innerJoin(
-                'ChamiloCoreBundle:SessionRelCourseRelUser',
+                SessionRelCourseRelUser::class,
                 'scu',
                 Join::WITH,
                 'scu.user = u'
@@ -510,13 +514,13 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $qb
             ->distinct()
             ->innerJoin(
-                'ChamiloCoreBundle:SessionRelUser',
+                SessionRelUser::class,
                 'su',
                 Join::WITH,
                 'u = su.user'
             )
             ->innerJoin(
-                'ChamiloCoreBundle:SessionRelCourseRelUser',
+                SessionRelCourseRelUser::class,
                 'scu',
                 Join::WITH,
                 'su.session = scu.session'
@@ -1122,5 +1126,53 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function findUsersByContext(int $courseId, ?int $sessionId = null, ?int $groupId = null): array
+    {
+        $course = $this->_em->getRepository(Course::class)->find($courseId);
+        if (!$course) {
+            throw new InvalidArgumentException('Course not found.');
+        }
+
+        if (null !== $sessionId) {
+            $session = $this->_em->getRepository(Session::class)->find($sessionId);
+            if (!$session) {
+                throw new InvalidArgumentException('Session not found.');
+            }
+
+            $list = $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT);
+            $users = [];
+
+            if ($list) {
+                foreach ($list as $sessionCourseUser) {
+                    $users[$sessionCourseUser->getUser()->getId()] = $sessionCourseUser->getUser();
+                }
+            }
+
+            return array_values($users);
+        }
+
+        if (null !== $groupId) {
+            $qb = $this->_em->createQueryBuilder();
+            $qb->select('u')
+                ->from(CGroupRelUser::class, 'cgru')
+                ->innerJoin('cgru.user', 'u')
+                ->where('cgru.cId = :courseId')
+                ->andWhere('cgru.group = :groupId')
+                ->setParameters([
+                    'courseId' => $courseId,
+                    'groupId' => $groupId,
+                ])
+                ->orderBy('u.lastname', 'ASC')
+                ->addOrderBy('u.firstname', 'ASC')
+            ;
+
+            return $qb->getQuery()->getResult();
+        }
+
+        $queryBuilder = $this->_em->getRepository(Course::class)->getSubscribedStudents($course);
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

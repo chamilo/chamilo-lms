@@ -150,7 +150,7 @@ foreach ($skillRelUserComments as $comment) {
 }
 
 $acquiredLevel = [];
-$profile = $skillRepo->find($skillId)->getProfile();
+$profile = $skillRepo->find($skillId)->getLevelProfile();
 
 if (!$profile) {
     $skillRelSkill = new SkillRelSkillModel();
@@ -160,7 +160,7 @@ if (!$profile) {
 
     foreach ($parents as $parent) {
         $skillParentId = $parent['skill_id'];
-        $profile = $skillRepo->find($skillParentId)->getProfile();
+        $profile = $skillRepo->find($skillParentId)->getLevelProfile();
 
         if ($profile) {
             break;
@@ -271,6 +271,22 @@ if (api_is_student_boss() || api_is_platform_admin()) {
             ),
             'notice',
             false
+    );
+}
+
+if (isset($_SESSION['flash_message'])) {
+    $flashMessage = $_SESSION['flash_message'];
+    unset($_SESSION['flash_message']);
+    $returnMessage .= Display::return_message(
+        $flashMessage,
+        'success',
+        false
+    );
+} else {
+    $returnMessage .= Display::return_message(
+        get_lang('The skill has been successfully assigned.'),
+        'success',
+        false
     );
 }
 

@@ -189,7 +189,7 @@ $url_list = UrlManager::get_url_data();
 		<?php foreach ($noUserGroupList as $noItem) {
             ?>
 			<option value="<?php echo $noItem['id']; ?>">
-                <?php echo $noItem['name']; ?>
+                <?php echo $noItem['title']; ?>
             </option>
 		<?php
         } ?>
@@ -222,7 +222,7 @@ $url_list = UrlManager::get_url_data();
 foreach ($userGroupList as $item) {
         ?>
 	<option value="<?php echo $item['id']; ?>">
-        <?php echo $item['name']; ?>
+        <?php echo $item['tilte']; ?>
     </option>
 <?php
     }

@@ -46,7 +46,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Reso
     {
         $this->catComment = '';
         $this->locked = 0;
-        $this->catOrder = 0;
         $this->forums = new ArrayCollection();
     }
 

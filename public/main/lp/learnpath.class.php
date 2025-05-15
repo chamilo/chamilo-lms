@@ -7,10 +7,13 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -830,7 +833,7 @@ class learnpath
             api_get_session_id()
         );
 
-        if (false !== $link_info) {
+        if (!empty($link_info)) {
             GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
         }
 
@@ -2768,7 +2771,7 @@ class learnpath
             // then change the lp type to thread it as a normal Chamilo LP not a SCO.
             if (in_array(
                 $lp_item_type,
-                ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication']
+                ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication', 'survey']
             )
             ) {
                 $lp_type = CLp::LP_TYPE;
@@ -3729,6 +3732,13 @@ class learnpath
                 // Ignore errors as some tables might not have the progress field just yet.
                 Database::query($sql);
                 $this->progress_db = $progress;
+
+                if (100 == $progress) {
+                    Container::getEventDispatcher()->dispatch(
+                        new LearningPathEndedEvent(['lp_view_id' => $this->lp_view_id]),
+                        Events::LP_ENDED
+                    );
+                }
             }
         }
     }
@@ -8021,6 +8031,27 @@ class learnpath
                 }
 
                 return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;
+            case TOOL_SURVEY:
+
+                $surveyId = (int) $id;
+                $repo = Container::getSurveyRepository();
+                if (!empty($surveyId)) {
+                    /** @var CSurvey $survey */
+                    $survey = $repo->find($surveyId);
+                    $autoSurveyLink = SurveyUtil::generateFillSurveyLink(
+                        $survey,
+                        'auto',
+                        api_get_course_entity($course_id),
+                        $session_id
+                    );
+                    $lpParams = [
+                        'lp_id' => $learningPathId,
+                        'lp_item_id' => $id_in_path,
+                        'origin' => 'learnpath',
+                    ];
+
+                    return $autoSurveyLink.'&'.http_build_query($lpParams).'&'.$extraParams;
+                }
         }
 
         return $link;
@@ -8817,30 +8848,19 @@ class learnpath
             return;
         }
 
-        $lpItemIds = array_map(fn($item) => $item->getIid(), $lpItems);
-        $lpItemViewRepo = $em->getRepository(CLpItemView::class);
-        $lpItemViews = $lpItemViewRepo->createQueryBuilder('v')
-            ->where('v.item IN (:lpItemIds)')
-            ->setParameter('lpItemIds', $lpItemIds)
-            ->getQuery()
-            ->getResult();
-
-        if (empty($lpItemViews)) {
-            Display::addFlash(Display::return_message(get_lang('No item views found'), 'error'));
-            return;
+        $lpItemsById = [];
+        foreach ($lpItems as $item) {
+            $lpItemsById[$item->getIid()] = $item;
         }
 
-        $lpViewIds = array_map(fn($view) => $view->getIid(), $lpItemViews);
         $trackEExerciseRepo = $em->getRepository(TrackEExercise::class);
         $trackExercises = $trackEExerciseRepo->createQueryBuilder('te')
             ->where('te.origLpId = :lpId')
-            ->andWhere('te.origLpItemId IN (:lpItemIds)')
-            ->andWhere('te.origLpItemViewId IN (:lpViewIds)')
             ->andWhere('te.user = :userId')
+            ->andWhere('te.origLpItemId IN (:lpItemIds)')
             ->setParameter('lpId', $this->lp_id)
-            ->setParameter('lpItemIds', $lpItemIds)
-            ->setParameter('lpViewIds', $lpViewIds)
             ->setParameter('userId', $userId)
+            ->setParameter('lpItemIds', array_keys($lpItemsById))
             ->getQuery()
             ->getResult();
 
@@ -8851,12 +8871,21 @@ class learnpath
 
         foreach ($trackExercises as $trackExercise) {
             $exeId = $trackExercise->getExeId();
-            $exerciseId = $trackExercise->getQuiz()->getIid();
-            $courseId = $trackExercise->getCourse()->getId();
+            $lpItemId = $trackExercise->getOrigLpItemId();
 
-            $result = ExerciseLib::recalculateResult($exeId, $userId, $exerciseId, $courseId);
+            if (!isset($lpItemsById[$lpItemId])) {
+                continue;
+            }
 
-            if ($result) {
+            $lpItem = $lpItemsById[$lpItemId];
+            if ('quiz' !== $lpItem->getItemType()) {
+                continue;
+            }
+
+            $quizId = (int) $lpItem->getPath();
+            $courseId = (int) $trackExercise->getCourse()->getId();
+            $updatedExercise = ExerciseLib::recalculateResult($exeId, $userId, $quizId, $courseId);
+            if ($updatedExercise instanceof TrackEExercise) {
                 Display::addFlash(Display::return_message(get_lang('Results recalculated'), 'success'));
             } else {
                 Display::addFlash(Display::return_message(get_lang('Error recalculating results'), 'error'));

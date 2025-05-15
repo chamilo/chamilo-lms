@@ -9,10 +9,14 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Page;
 use Chamilo\CoreBundle\Entity\PageCategory;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
+use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -31,7 +35,8 @@ class IndexBlocksController extends BaseController
         private readonly SettingsManager $settingsManager,
         private readonly PageRepository $pageRepository,
         private readonly PageCategoryRepository $pageCategoryRepository,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface $serializer,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
         $this->extAuthSource = [
             'extldap' => [],
@@ -45,6 +50,13 @@ class IndexBlocksController extends BaseController
         $this->isSessionAdmin = $this->isGranted('ROLE_SESSION_MANAGER');
 
         $json = [];
+
+        $adminBlockEvent = new AdminBlockDisplayedEvent($json, AbstractEvent::TYPE_PRE);
+
+        $this->eventDispatcher->dispatch($adminBlockEvent, Events::ADMIN_BLOCK_DISPLAYED);
+
+        $json = $adminBlockEvent->getData();
+
         $json['users'] = [
             'id' => 'block-admin-users',
             'searchUrl' => $this->generateUrl('legacy_main', ['name' => 'admin/user_list.php']),
@@ -124,6 +136,12 @@ class IndexBlocksController extends BaseController
             'items' => $this->getItemsSessions(),
             'extraContent' => $this->getExtraContent('block-admin-sessions'),
         ];
+
+        $adminBlockEvent = new AdminBlockDisplayedEvent($json, AbstractEvent::TYPE_POST);
+
+        $this->eventDispatcher->dispatch($adminBlockEvent, Events::ADMIN_BLOCK_DISPLAYED);
+
+        $json = $adminBlockEvent->getData();
 
         return $this->json($json);
     }
@@ -406,7 +424,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-registration-page',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/configure_inscription.php']),
+            'url' => $this->generateUrl('legacy_main', ['name' => 'auth/inscription.php', 'create_intro_page' => 1]),
             'label' => $this->translator->trans('Setting the registration page'),
         ];
         $items[] = [
@@ -452,7 +470,7 @@ class IndexBlocksController extends BaseController
         if ('true' === api_get_plugin_setting('dictionary', 'enable_plugin_dictionary')) {
             $items[] = [
                 'class' => 'item-dictionary',
-                'url' => api_get_path(WEB_PLUGIN_PATH).'dictionary/terms.php',
+                'url' => api_get_path(WEB_PLUGIN_PATH).'Dictionary/terms.php',
                 'label' => $this->translator->trans('Dictionary'),
             ];
         }
@@ -484,7 +502,7 @@ class IndexBlocksController extends BaseController
         if ($allowJustification) {
             $items[] = [
                 'class' => 'item-justification-list',
-                'url' => api_get_path(WEB_PLUGIN_PATH).'justification/list.php',
+                'url' => api_get_path(WEB_PLUGIN_PATH).'Justification/list.php',
                 'label' => $this->translator->trans('Justification'),
             ];
         }
@@ -570,6 +588,12 @@ class IndexBlocksController extends BaseController
             'class' => 'item-file-info',
             'url' => '/admin/files_info',
             'label' => $this->translator->trans('File info'),
+        ];
+
+        $items[] = [
+            'class' => 'item-resources-info',
+            'url' => '/admin/resources_info',
+            'label' => $this->translator->trans('Resources by type'),
         ];
 
         return $items;
@@ -766,15 +790,13 @@ class IndexBlocksController extends BaseController
         $allowCareer = $this->settingsManager->getSetting('session.allow_session_admin_read_careers');
 
         if ($this->isAdmin || ('true' === $allowCareer && $this->isSessionAdmin)) {
-            // option only visible in development mode. Enable through code if required
-            if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
-                $items[] = [
-                    'class' => 'item-session-user-move-stats',
-                    'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_move_stats.php']),
-                    'label' => $this->translator->trans('Move users results from/to a session'),
-                ];
-            }
-
+            // Disabled until it is reemplemented to work with Chamilo 2
+            /*                $items[] = [
+                                'class' => 'item-session-user-move-stats',
+                                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_move_stats.php']),
+                                'label' => $this->translator->trans('Move users results from/to a session'),
+                            ];
+             */
             $items[] = [
                 'class' => 'item-session-user-move',
                 'url' => $this->generateUrl(

@@ -48,7 +48,7 @@ class survey_question
             'parent_id',
             get_lang('Parent'),
             $options,
-            ['id' => 'parent_id', 'placeholder' => get_lang('SelectAnOption')]
+            ['id' => 'parent_id', 'placeholder' => get_lang('Please select an option')]
         );
         $url = api_get_path(WEB_AJAX_PATH).
             'survey.ajax.php?'.api_get_cidreq().'&a=load_question_options&survey_id='.$surveyId;

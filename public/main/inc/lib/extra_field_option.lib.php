@@ -383,6 +383,11 @@ class ExtraFieldOption extends Model
             $order = $this->get_max_order($field_id);
             $params['option_order'] = $order;
         }
+
+        if (isset($params['id']) && empty($params['id'])) {
+            unset($params['id']);
+        }
+
         if ($insert_repeated) {
             parent::save($params, $show_query);
         } else {
@@ -611,15 +616,9 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Get options for a specific field as string split by ;.
-     *
-     * @param int    $field_id
-     * @param string $ordered_by Extra query bit for reordering
-     *
-     * @return string HTML string of options
-     * @assert (0, '') === null
+     * Get options for a specific field as string split by ;
      */
-    public function get_field_options_by_field_to_string($field_id, $ordered_by = null)
+    public function get_field_options_by_field_to_string(int $field_id, string $ordered_by = null): string
     {
         $field = new ExtraField($this->type);
         $field_info = $field->get($field_id);
@@ -638,16 +637,20 @@ class ExtraFieldOption extends Model
                     break;
                 default:
                     foreach ($options as $option) {
-                        $elements[] = $option['option_value'];
+                        // If option_value is empty, use display_text
+                        $value = !empty($option['option_value']) ? trim($option['option_value']) : trim($option['display_text']);
+                        if (!empty($value)) {
+                            $elements[] = $value;
+                        }
                     }
-                    $html = implode(';', $elements);
+                    $html = !empty($elements) ? implode(';', $elements) : get_lang("No options available");
                     break;
             }
 
             return $html;
         }
 
-        return null;
+        return get_lang("No options available");
     }
 
     /**

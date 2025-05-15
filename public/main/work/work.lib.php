@@ -1546,7 +1546,7 @@ function getWorkListTeacher(
     ?string $direction,
     ?string $where_condition,
     ?bool $getCount = false
-): array {
+): int|array {
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
     $group_id = api_get_group_id();
@@ -2650,7 +2650,7 @@ function getAllWork(
         //$visibility = api_get_item_visibility($courseInfo, 'work', $work['id'], $sessionId);
         $studentPublication = $repo->find($work['iid']);
         $workId = $studentPublication->getIid();
-        $isVisible = $studentPublication->isVisible($courseEntity, $sessionEntity);
+        $isVisible = $studentPublication->isVisible(api_get_course_entity(), api_get_session_entity());
         if (false === $isVisible) {
             continue;
         }
@@ -5776,7 +5776,7 @@ function getWorkUserListData(
     $workIdList = [];
     if (!empty($workParents)) {
         foreach ($workParents as $work) {
-            $workIdList[] = $work->id;
+            $workIdList[] = $work->getIid();
         }
     }
 
@@ -5832,7 +5832,13 @@ function getWorkUserListData(
  */
 function downloadFile($id, $course_info, $isCorrection)
 {
-    return getFile($id, $course_info, true, $isCorrection, true);
+    return getFile(
+        $id,
+        $course_info,
+        true,
+        $isCorrection,
+        api_is_course_admin() || api_is_coach()
+    );
 }
 
 /**
@@ -5917,7 +5923,7 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
         $forceAccessForCourseAdmins
     );
 
-    if (empty($isAllow)) {
+    if (!$isAllow) {
         return false;
     }
 
@@ -5955,9 +5961,9 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
     $is_editor = api_is_allowed_to_edit(true, true, true);
     $student_is_owner_of_work = user_is_author($studentPublication->getIid(), api_get_user_id());
 
-    if (($forceAccessForCourseAdmins && $isAllow) ||
-        $is_editor ||
+    if ($is_editor ||
         $student_is_owner_of_work ||
+        ($forceAccessForCourseAdmins && $isAllow) ||
         ($doc_visible_for_all && $work_is_visible)
     ) {
         $title = $studentPublication->getTitle();

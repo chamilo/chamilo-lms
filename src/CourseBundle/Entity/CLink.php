@@ -17,12 +17,14 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\CheckCLinkAction;
 use Chamilo\CoreBundle\Controller\Api\CLinkDetailsController;
+use Chamilo\CoreBundle\Controller\Api\CLinkImageController;
 use Chamilo\CoreBundle\Controller\Api\CreateCLinkAction;
 use Chamilo\CoreBundle\Controller\Api\GetLinksCollectionController;
 use Chamilo\CoreBundle\Controller\Api\UpdateCLinkAction;
 use Chamilo\CoreBundle\Controller\Api\UpdatePositionLink;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityLink;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
@@ -36,6 +38,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Put(
             controller: UpdateCLinkAction::class,
+            denormalizationContext: [
+                'groups' => ['link:write'],
+            ],
             security: "is_granted('EDIT', object.resourceNode)",
             validationContext: [
                 'groups' => ['media_object_create', 'link:write'],
@@ -54,27 +59,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false
         ),
-        new Get(security: "is_granted('VIEW', object.resourceNode)"),
-        new Get(
-            uriTemplate: '/links/{iid}/details',
-            controller: CLinkDetailsController::class,
-            openapiContext: [
-                'summary' => 'Gets the details of a link, including whether it is on the homepage',
-            ],
-            security: "is_granted('VIEW', object.resourceNode)"
-        ),
-        new Get(
-            uriTemplate: '/links/{iid}/check',
-            controller: CheckCLinkAction::class,
-            openapiContext: [
-                'summary' => 'Check if a link URL is valid',
-            ],
-            security: "is_granted('VIEW', object.resourceNode)"
-        ),
-        new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Post(
             controller: CreateCLinkAction::class,
             openapiContext: [
+                'summary' => 'Create a new link resource',
                 'requestBody' => [
                     'content' => [
                         'application/json' => [
@@ -110,6 +98,49 @@ use Symfony\Component\Validator\Constraints as Assert;
             validationContext: ['groups' => ['Default', 'media_object_create', 'link:write']],
             deserialize: false
         ),
+        new Post(
+            uriTemplate: '/links/{iid}/upload-image',
+            controller: CLinkImageController::class,
+            openapiContext: [
+                'summary' => 'Upload a custom image for a link',
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'customImage' => [
+                                        'type' => 'string',
+                                        'format' => 'binary',
+                                    ],
+                                ],
+                                'required' => ['customImage'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            security: "is_granted('EDIT', object.resourceNode)",
+            deserialize: false
+        ),
+        new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new Get(
+            uriTemplate: '/links/{iid}/details',
+            controller: CLinkDetailsController::class,
+            openapiContext: [
+                'summary' => 'Gets the details of a link, including whether it is on the homepage',
+            ],
+            security: "is_granted('VIEW', object.resourceNode)"
+        ),
+        new Get(
+            uriTemplate: '/links/{iid}/check',
+            controller: CheckCLinkAction::class,
+            openapiContext: [
+                'summary' => 'Check if a link URL is valid',
+            ],
+            security: "is_granted('VIEW', object.resourceNode)"
+        ),
+        new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new GetCollection(
             controller: GetLinksCollectionController::class,
             openapiContext: [
@@ -188,6 +219,11 @@ class CLink extends AbstractResource implements ResourceInterface, ResourceShowC
     #[Groups(['link:read', 'link:browse'])]
     protected bool $linkVisible = true;
 
+    #[Groups(['cshortcut:read'])]
+    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['remove'])]
+    #[ORM\JoinColumn(name: 'custom_image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    private ?Asset $customImage = null;
+
     public function __construct()
     {
         $this->description = '';
@@ -264,6 +300,18 @@ class CLink extends AbstractResource implements ResourceInterface, ResourceShowC
     public function setCategory(?CLinkCategory $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getCustomImage(): ?Asset
+    {
+        return $this->customImage;
+    }
+
+    public function setCustomImage(?Asset $customImage): self
+    {
+        $this->customImage = $customImage;
 
         return $this;
     }

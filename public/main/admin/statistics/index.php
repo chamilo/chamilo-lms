@@ -42,7 +42,7 @@ in_array(
             break;
         case 'tools':
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=tools_usage';
-            $reportName = 'PlatformToolAccess';
+            $reportName = 'Tools access';
             $reportType = 'pie';
             $reportOptions = '
                 legend: {
@@ -58,7 +58,7 @@ in_array(
             break;
         case 'courses':
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=courses';
-            $reportName = 'CountCours';
+            $reportName = 'Courses count';
             $reportType = 'pie';
             $reportOptions = '
                 legend: {
@@ -74,7 +74,7 @@ in_array(
             break;
         case 'coursebylanguage':
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=courses_by_language';
-            $reportName = 'CountCourseByLanguage';
+            $reportName = 'Courses count by language';
             $reportType = 'pie';
             $reportOptions = '
                 legend: {
@@ -334,6 +334,7 @@ $tools = [
     get_lang('Courses') => [
         'report=courses' => get_lang('Courses'),
         'report=tools' => get_lang('Tools access'),
+        'report=tool_usage' => get_lang('Tool-based resource count'),
         'report=courselastvisit' => get_lang('Latest access'),
         'report=coursebylanguage' => get_lang('Number of courses by language'),
     ],
@@ -350,6 +351,7 @@ $tools = [
         'report=users_active' => get_lang('Users statistics'),
         'report=users_online' => get_lang('Users online'),
         'report=new_user_registrations' => get_lang('New users registrations'),
+        'report=subscription_by_day' => get_lang('Course/Session subscriptions by day'),
     ],
     get_lang('System') => [
         'report=activities' => get_lang('Important activities'),
@@ -369,6 +371,85 @@ $tools = [
 $content = '';
 
 switch ($report) {
+    case 'subscription_by_day':
+        $form = new FormValidator('subscription_by_day', 'get', api_get_self());
+        $form->addDateRangePicker('daterange', get_lang('Date range'), true, [
+            'format' => 'YYYY-MM-DD',
+            'timePicker' => 'false',
+            'validate_format' => 'Y-m-d'
+        ]);
+        $form->addHidden('report', 'subscription_by_day');
+        $form->addButtonSearch(get_lang('Search'));
+        $validated = $form->validate() || isset($_REQUEST['daterange']);
+
+        if ($validated) {
+            $values = $form->getSubmitValues();
+            $dateStart = Security::remove_XSS($values['daterange_start']);
+            $dateEnd = Security::remove_XSS($values['daterange_end']);
+
+            $dates = [];
+            $period = new DatePeriod(
+                new DateTime($dateStart),
+                new DateInterval('P1D'),
+                (new DateTime($dateEnd))->modify('+1 day')
+            );
+            foreach ($period as $date) {
+                $key = $date->format('Y-m-d');
+                $dates[$key] = [
+                    'subscriptions' => 0,
+                    'unsubscriptions' => 0,
+                ];
+            }
+
+            $subscriptions = Statistics::getSubscriptionsByDay($dateStart, $dateEnd);
+            foreach ($subscriptions as $item) {
+                $dates[$item['date']]['subscriptions'] = $item['count'];
+            }
+
+            $unsubscriptions = Statistics::getUnsubscriptionsByDay($dateStart, $dateEnd);
+            foreach ($unsubscriptions as $item) {
+                $dates[$item['date']]['unsubscriptions'] = $item['count'];
+            }
+
+            $labels = array_keys($dates);
+            $subscriptionsData = array_map(fn($v) => $v['subscriptions'] ?? 0, $dates);
+            $unsubscriptionsData = array_map(fn($v) => $v['unsubscriptions'] ?? 0, $dates);
+
+            $chartData = [
+                'labels' => $labels,
+                'datasets' => [
+                    ['label' => get_lang('Subscriptions'), 'data' => $subscriptionsData],
+                    ['label' => get_lang('Unsubscriptions'), 'data' => $unsubscriptionsData],
+                ]
+            ];
+
+            $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                $chartData,
+                'bar',
+                'title: { text: "'.get_lang('Subscriptions vs Unsubscriptions by day').'", display: true }',
+                'subscriptions_chart',
+                true
+            );
+
+            $content .= '<canvas id="subscriptions_chart"></canvas>';
+            $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
+
+            $table->setHeaderContents(0, 0, get_lang('Date'));
+            $table->setHeaderContents(0, 1, get_lang('Subscriptions'));
+            $table->setHeaderContents(0, 2, get_lang('Unsubscriptions'));
+
+            $row = 1;
+            foreach ($dates as $date => $values) {
+                $table->setCellContents($row, 0, $date);
+                $table->setCellContents($row, 1, $values['subscriptions'] ?? 0);
+                $table->setCellContents($row, 2, $values['unsubscriptions'] ?? 0);
+                $row++;
+            }
+            $content .= $table->toHtml();
+        }
+
+        $content = $form->returnForm() . $content;
+        break;
     case 'session_by_date':
         $sessions = [];
         if ($validated) {
@@ -409,7 +490,7 @@ switch ($report) {
                 $sessionCount++;
             }
 
-            $content .= Display::page_subheader2(get_lang('GeneralStats'));
+            $content .= Display::page_subheader2(get_lang('Global statistics'));
             // Coach.
             $sql = "SELECT COUNT(DISTINCT(sru.user_id)) count
                     FROM $tableSession s
@@ -472,19 +553,19 @@ switch ($report) {
             $table->setCellContents($row, 1, $numberOfWeeks);
             $row++;
 
-            $table->setCellContents($row, 0, get_lang('SessionCount'));
+            $table->setCellContents($row, 0, get_lang('Sessions count'));
             $table->setCellContents($row, 1, $sessionCount);
             $row++;
 
-            $table->setCellContents($row, 0, get_lang('SessionsPerWeek'));
+            $table->setCellContents($row, 0, get_lang('Sessions per week'));
             $table->setCellContents($row, 1, $sessionAverage);
             $row++;
 
-            $table->setCellContents($row, 0, get_lang('AverageUserPerSession'));
+            $table->setCellContents($row, 0, get_lang('Average number of users per session'));
             $table->setCellContents($row, 1, $averageUser);
             $row++;
 
-            $table->setCellContents($row, 0, get_lang('AverageSessionPerGeneralCoach'));
+            $table->setCellContents($row, 0, get_lang('Average number of sessions per general session coach'));
             $table->setCellContents($row, 1, $averageCoach);
             $row++;
 
@@ -499,7 +580,7 @@ switch ($report) {
             $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
             $headers = [
                 get_lang('Course'),
-                get_lang('CountOfSessions'),
+                get_lang('Sessions count'),
             ];
 
             $row = 0;
@@ -536,12 +617,12 @@ switch ($report) {
         $table = new HTML_Table(['class' => 'table table-responsive']);
         $headers = [
             get_lang('Name'),
-            get_lang('StartDate'),
-            get_lang('EndDate'),
+            get_lang('Start date'),
+            get_lang('End date'),
             get_lang('Language'),
             get_lang('Status'),
         ];
-        $headers[] = get_lang('NumberOfStudents');
+        $headers[] = get_lang('Total number of students');
         $row = 0;
         $column = 0;
         foreach ($headers as $header) {
@@ -589,7 +670,7 @@ switch ($report) {
                 }
             }
             $link = Display::url(
-                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon').'&nbsp;'.get_lang('ExportAsXLS'),
+                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon').'&nbsp;'.get_lang('Export to XLS'),
                 $url,
                 ['class' => 'btn btn--plain']
             );
@@ -600,7 +681,7 @@ switch ($report) {
         break;
     case 'user_session':
         $form = new FormValidator('user_session', 'get');
-        $form->addDateRangePicker('range', get_lang('DateRange'), true);
+        $form->addDateRangePicker('range', get_lang('Date range'), true);
         $form->addHidden('report', 'user_session');
         $form->addButtonSearch(get_lang('Search'));
 
@@ -704,15 +785,118 @@ switch ($report) {
         }
         // courses for each course category
         $content .= Statistics::printStats(get_lang('Courses'), $courses);
+
+        $content .= '
+            <button class="btn btn--info mb-3" onclick="toggleNonRegisteredUsers()">
+                '.get_lang('Show/Hide users active in open courses (not enrolled)').'
+            </button>
+
+            <div id="non-registered-users-block" style="display: none; margin-top: 10px;">
+        ';
+
+        $sessionId = api_get_session_id();
+        $userList = Statistics::getUsersWithActivityButNotRegistered($sessionId);
+
+        if (!empty($userList)) {
+            $content .= Display::page_subheader2(get_lang('Users active in open courses (not enrolled)'));
+            $content .= Display::tag('p', get_lang('The following users have accessed one or more courses without being officially registered. They generated activity in open courses but are not listed in the course subscription tables.'));
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+            $table->setHeaderContents(0, 0, get_lang('Name'));
+            $table->setHeaderContents(0, 1, get_lang('Course'));
+            $table->setHeaderContents(0, 2, get_lang('Last access'));
+            $row = 1;
+            foreach ($userList as $user) {
+                $name = Display::tag('strong', $user['firstname'].' '.$user['lastname']);
+                $course = Display::tag('em', $user['courseTitle'].' ('.$user['courseCode'].')');
+                $access = Security::remove_XSS($user['lastAccess']);
+
+                $table->setCellContents($row, 0, $name);
+                $table->setCellContents($row, 1, $course);
+                $table->setCellContents($row, 2, $access);
+                $row++;
+            }
+            $content .= $table->toHtml();
+        } else {
+            $content .= Display::tag('p', get_lang('No users found with activity in open courses without enrollment.'));
+        }
+        $content .= '</div>';
+        $content .= '
+        <script>
+            function toggleNonRegisteredUsers() {
+                const block = document.getElementById("non-registered-users-block");
+                block.style.display = block.style.display === "none" ? "block" : "none";
+            }
+        </script>';
+
         break;
     case 'tools':
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         $content .= Statistics::printToolStats();
         break;
+    case 'tool_usage':
+        $courseTools = Statistics::getAvailableTools();
+
+        if (empty($courseTools)) {
+            $content .= '<div class="alert alert-info">'.get_lang('No tools available for this report').'</div>';
+            break;
+        }
+
+        $form = new FormValidator('tool_usage', 'get');
+        $form->addHeader(get_lang('Tool-based resource count'));
+        $form->addSelect(
+            'tool_ids',
+            get_lang('Select Tools'),
+            $courseTools,
+            ['multiple' => true, 'required' => true]
+        );
+        $form->addButtonSearch(get_lang('Generate report'));
+        $form->addHidden('report', 'tool_usage');
+
+        $content .= $form->returnForm();
+
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
+            $toolIds = $values['tool_ids'];
+            $reportData = Statistics::getToolUsageReportByTools($toolIds);
+
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table stats_table']);
+            $headers = [
+                get_lang('Tool'),
+                get_lang('Session'),
+                get_lang('Course'),
+                get_lang('Resource count'),
+                get_lang('Last updated'),
+            ];
+            $row = 0;
+
+            foreach ($headers as $index => $header) {
+                $table->setHeaderContents($row, $index, $header);
+            }
+            $row++;
+
+            foreach ($reportData as $data) {
+                $linkHtml = $data['link'] !== '-'
+                    ? sprintf(
+                        '<a href="%s" class="text-blue-500 underline hover:text-blue-700" target="_self">%s</a>',
+                        $data['link'],
+                        htmlspecialchars($data['tool_name'])
+                    )
+                    : htmlspecialchars($data['tool_name']);
+
+                $table->setCellContents($row, 0, $linkHtml);
+                $table->setCellContents($row, 1, htmlspecialchars($data['session_name']));
+                $table->setCellContents($row, 2, htmlspecialchars($data['course_name']));
+                $table->setCellContents($row, 3, (int) $data['resource_count']);
+                $table->setCellContents($row, 4, htmlspecialchars($data['last_updated']));
+                $row++;
+            }
+            $content .= $table->toHtml();
+        }
+        break;
     case 'coursebylanguage':
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         $result = Statistics::printCourseByLanguageStats();
-        $content .= Statistics::printStats(get_lang('CountCourseByLanguage'), $result, true);
+        $content .= Statistics::printStats(get_lang('Number of courses by language'), $result, true);
         break;
     case 'courselastvisit':
         $content .= Statistics::printCourseLastVisit();
@@ -747,7 +931,7 @@ switch ($report) {
             $extraConditions = '';
             if (!empty($startDate) && !empty($endDate)) {
                 // $extraConditions is already cleaned inside the function getUserListExtraConditions
-                $extraConditions .= " AND registration_date BETWEEN '$startDate' AND '$endDate' ";
+                $extraConditions .= " AND created_at BETWEEN '$startDate' AND '$endDate' ";
             }
 
             $totalCount = UserManager::getUserListExtraConditions(
@@ -784,16 +968,16 @@ switch ($report) {
             $headers = [
                 get_lang('FirstName'),
                 get_lang('LastName'),
-                get_lang('RegistrationDate'),
-                get_lang('UserNativeLanguage'),
-                get_lang('LangueCible'),
-                get_lang('ApprenticeshipContract'),
-                get_lang('UserResidenceCountry'),
+                get_lang('Registration date'),
+                get_lang('Native language'),
+                get_lang('Users by target language'),
+                get_lang('Apprenticeship contract'),
+                get_lang('Country of residence'),
                 get_lang('Career'),
                 get_lang('Status'),
                 get_lang('Active'),
                 get_lang('Certificate'),
-                get_lang('UserBirthday'),
+                get_lang('Birthday'),
             ];
 
             if (isset($_REQUEST['action_table']) && 'export' === $_REQUEST['action_table']) {
@@ -856,7 +1040,7 @@ switch ($report) {
                 $item = [];
                 $item[] = $user['firstname'];
                 $item[] = $user['lastname'];
-                $item[] = api_get_local_time($user['registration_date']);
+                $item[] = api_get_local_time($user['created_at']);
                 $item[] = $userLanguage;
                 $item[] = $languageTarget;
                 $item[] = $contract ? get_lang('Yes') : get_lang('No');
@@ -1007,7 +1191,7 @@ switch ($report) {
                     $item['display_text'] = $option['display_text'];
                     $all[$item['display_text']] = $count;
                 }
-                $all[get_lang('N/A')] = $total - $usersFound;
+                $all[get_lang('Not available')] = $total - $usersFound;
 
                 $data = Statistics::buildJsChartData($all, $reportName2);
                 $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
@@ -1092,7 +1276,7 @@ switch ($report) {
                     $item['display_text'] = get_lang(ucfirst(str_replace('2', '', strtolower($item['display_text']))));
                     $all[$item['display_text']] = $count;
                 }
-                $all[get_lang('N/A')] = $total - $usersFound;
+                $all[get_lang('Not available')] = $total - $usersFound;
 
                 $data = Statistics::buildJsChartData($all, $reportName4);
                 $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
@@ -1134,7 +1318,7 @@ switch ($report) {
                 $usersFound = 0;
                 $now = new DateTime();
                 $all = [
-                    //get_lang('N/A') => 0,
+                    //get_lang('Not available') => 0,
                     '16-17' => 0,
                     '18-25' => 0,
                     '26-30' => 0,
@@ -1213,7 +1397,7 @@ switch ($report) {
                     $usersFound += $count;
                 }
 
-                $all[get_lang('N/A')] = $total - $usersFound;
+                $all[get_lang('Not available')] = $total - $usersFound;
 
                 $data = Statistics::buildJsChartData($all, $reportName5);
                 $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
@@ -1371,7 +1555,7 @@ switch ($report) {
                                 <i class="fa fa-thermometer-2" aria-hidden="true"></i>
                             </span>
                             <div class="tracking-info">
-                                <div class="tracking-text">'.get_lang('UsersOnline').' (30\')</div>
+                                <div class="tracking-text">'.get_lang('Users online').' (30\')</div>
                                 <div class="tracking-number">'.getOnlineUsersCount(30).'</div>
                             </div>
                         </div>
@@ -1477,7 +1661,7 @@ switch ($report) {
                 if (Statistics::isMoreThanAMonth($dateStart, $dateEnd)) {
                     $textChart = get_lang('User registrations by month');
                     $all = Statistics::groupByMonth($registrations);
-                    $chartData = Statistics::buildJsChartData($all, get_lang('User Registrations by Month'));
+                    $chartData = Statistics::buildJsChartData($all, get_lang('User registrations by month'));
 
                     // Allow clicks only when showing by month
                     $onClickHandler = '
@@ -1504,7 +1688,7 @@ switch ($report) {
                         });
                     }';
                 } else {
-                    $textChart = get_lang('User registrations by days');
+                    $textChart = get_lang('User registrations by day');
                     foreach ($registrations as $registration) {
                         $date = $registration['date'];
                         if (isset($all[$date])) {
@@ -1539,7 +1723,7 @@ switch ($report) {
                                         var monthlyData = JSON.parse(response);
                                         chart.data.labels = monthlyData.labels;
                                         chart.data.datasets[0].data = monthlyData.data;
-                                        chart.data.datasets[0].label = "'.get_lang('User Registrations by month').'";
+                                        chart.data.datasets[0].label = "'.get_lang('User registrations by month').'";
                                         chart.update();
                                         $("#backButton").hide();
                                     }
@@ -1549,7 +1733,7 @@ switch ($report) {
                 );
 
                 $chartContent .= '<canvas id="user_registration_chart"></canvas>';
-                $chartContent .= '<button id="backButton" style="display:none;" class="btn btn--info">'.get_lang('Back to Months').'</button>';
+                $chartContent .= '<button id="backButton" style="display:none;" class="btn btn--info">'.get_lang('Back to months').'</button>';
 
                 $creators = Statistics::getUserRegistrationsByCreator($dateStart, $dateEnd);
                 if (!empty($creators)) {
@@ -1562,9 +1746,9 @@ switch ($report) {
                     }
 
                     $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
-                        ['labels' => $creatorLabels, 'datasets' => [['label' => get_lang('Registrations by Creator'), 'data' => $creatorData]]],
+                        ['labels' => $creatorLabels, 'datasets' => [['label' => get_lang('User registrations by creator'), 'data' => $creatorData]]],
                         'pie',
-                        'title: { text: "'.get_lang('User Registrations by Creator').'", display: true },
+                        'title: { text: "'.get_lang('User registrations by creator').'", display: true },
                         legend: { position: "top" },
                         layout: {
                             padding: { left: 10, right: 10, top: 10, bottom: 10 }
@@ -1632,8 +1816,8 @@ switch ($report) {
         $content .= $form->returnForm();
 
         $content .= '<canvas class="col-md-12" id="canvas" height="200px" style="margin-bottom: 20px"></canvas>';
-        $content .= Statistics::printRecentLoginStats(false, $sessionDuration);
-        $content .= Statistics::printRecentLoginStats(true, $sessionDuration);
+        $content .= Statistics::printRecentLoginStats(false, $sessionDuration?:0);
+        $content .= Statistics::printRecentLoginStats(true, $sessionDuration?:0);
         break;
     case 'logins':
         $content .= Statistics::printLoginStats($_GET['type']);

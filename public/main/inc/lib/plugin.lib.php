@@ -1,8 +1,10 @@
 <?php
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Class AppPlugin.
@@ -55,22 +57,18 @@ class AppPlugin
 
     /**
      * Read plugin from path.
-     *
-     * @return array
      */
-    public function read_plugins_from_path()
+    public function read_plugins_from_path(): array
     {
         /* We scan the plugin directory. Each folder is a potential plugin. */
         $pluginPath = api_get_path(SYS_PLUGIN_PATH);
+        $finder = (new Finder())->directories()->depth('== 0')->sortByName()->in($pluginPath);
+
         $plugins = [];
-        $handle = @opendir($pluginPath);
-        while (false !== ($file = readdir($handle))) {
-            if ('.' != $file && '..' != $file && is_dir(api_get_path(SYS_PLUGIN_PATH).$file)) {
-                $plugins[] = $file;
-            }
+
+        foreach ($finder as $file) {
+            $plugins[] = $file->getFilename();
         }
-        @closedir($handle);
-        sort($plugins);
 
         return $plugins;
     }
@@ -126,42 +124,21 @@ class AppPlugin
         return in_array($plugin, $list);
     }
 
-    /**
-     * @deprecated
-     */
-    public function get_installed_plugins($fromDatabase = true)
-    {
-        return $this->getInstalledPlugins($fromDatabase);
-    }
-
-    /**
-     * @param bool $fromDatabase
-     *
-     * @return array
-     */
-    public function getInstalledPlugins($fromDatabase = true)
+    public function getInstalledPlugins(bool $fromDatabase = true): array
     {
         static $installedPlugins = null;
 
-        if (false === $fromDatabase) {
-            if (is_array($installedPlugins)) {
-                return $installedPlugins;
-            }
+        if (false === $fromDatabase && is_array($installedPlugins)) {
+            return $installedPlugins;
         }
 
         if ($fromDatabase || null === $installedPlugins) {
             $installedPlugins = [];
-            $plugins = api_get_settings_params(
-                [
-                    'variable = ? AND selected_value = ? AND category = ? ' => ['status', 'installed', 'Plugins'],
-                ]
-            );
 
-            if (!empty($plugins)) {
-                foreach ($plugins as $row) {
-                    $installedPlugins[$row['subkey']] = true;
-                }
-                $installedPlugins = array_keys($installedPlugins);
+            $plugins = Container::getPluginRepository()->getInstalledPlugins();
+
+            foreach ($plugins as $plugin) {
+                $installedPlugins[] = $plugin->getTitle();
             }
         }
 
@@ -195,95 +172,72 @@ class AppPlugin
      *
      * @return array
      */
-    public function getOfficialPlugins()
+    public static function getOfficialPlugins(): array
     {
-        static $officialPlugins = null;
         // Please keep this list alphabetically sorted
-        $officialPlugins = [
-            'advanced_subscription',
-            'ai_helper',
-            'azure_active_directory',
-            'bbb',
-            'before_login',
-            'buycourses',
-            'card_game',
-            'check_extra_field_author_company',
-            'cleandeletedfiles',
-            'courseblock',
-            'coursehomenotify',
-            'courselegal',
-            'createdrupaluser',
-            'customcertificate',
-            'customfooter',
-            'dashboard',
-            'dictionary',
-            'embedregistry',
-            'exercise_signature',
-            'ext_auth_chamilo_logout_button_behaviour',
-            'externalnotificationconnect',
-            'extramenufromwebservice',
-            'google_maps',
-            'grading_electronic',
-            'h5pimport',
-            'hello_world',
-            'ims_lti',
-            'justification',
-            'learning_calendar',
-            'lti_provider',
-            'maintenancemode',
-            'migrationmoodle',
-            'mobidico',
-            'nosearchindex',
-            'notebookteacher',
-            'pausetraining',
-            'pens',
-            'positioning',
-            'questionoptionsevaluation',
-            'redirection',
-            'resubscription',
-            'rss',
-            'search_course',
-            'show_regions',
-            'show_user_info',
-            'static',
-            'studentfollowup',
-            'surveyexportcsv',
-            'surveyexporttxt',
-            'test2pdf',
-            'toplinks',
-            'tour',
-            'userremoteservice',
-            'zoom',
+        return [
+            'AzureActiveDirectory',
+            'Bbb',
+            'BeforeLogin',
+            'BuyCourses',
+            'CardGame',
+            'CheckExtraFieldAuthorCompany',
+            'CleanDeletedFiles',
+            'CourseBlock',
+            'CourseHomeNotify',
+            'CourseLegal',
+            'CustomCertificate',
+            'CustomFooter',
+            'Dashboard',
+            'Dictionary',
+            'EmbedRegistry',
+            'ExerciseSignature',
+            'ExtAuthChamiloLogoutButtonBehaviour',
+            'ExternalNotificationConnect',
+            'ExtraMenuFromWebservice',
+            'GoogleMaps',
+            'GradingElectronic',
+            'H5pImport',
+            'HelloWorld',
+            'ImsLti',
+            'Justification',
+            'LearningCalendar',
+            'LtiProvider',
+            'MaintenanceMode',
+            'MigrationMoodle',
+            'Mobidico',
+            'NoSearchIndex',
+            'NotebookTeacher',
+            'PauseTraining',
+            'Pens',
+            'Positioning',
+            'QuestionOptionsEvaluation',
+            'Redirection',
+            'Resubscription',
+            'Rss',
+            'SearchCourse',
+            'ShowRegions',
+            'ShowUserInfo',
+            'Static',
+            'StudentFollowUp',
+            'SurveyExportCsv',
+            'SurveyExportTxt',
+            'Test2Pdf',
+            'TopLinks',
+            'Tour',
+            'UserRemoteService',
+            'XApi',
+            'Zoom',
         ];
-
-        return $officialPlugins;
     }
 
-    /**
-     * @param string $pluginName
-     * @param int    $urlId
-     */
-    public function install($pluginName, $urlId = null)
+    public static function isOfficial(string $title): bool
     {
-        $urlId = (int) $urlId;
-        if (empty($urlId)) {
-            $urlId = api_get_current_access_url_id();
-        }
+        return in_array($title, self::getOfficialPlugins());
+    }
 
-        api_add_setting(
-            'installed',
-            'status',
-            $pluginName,
-            'setting',
-            'Plugins',
-            $pluginName,
-            '',
-            '',
-            '',
-            $urlId,
-            1
-        );
-
+    public function install(string $pluginName): void
+    {
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/install.php';
 
         if (is_file($pluginPath) && is_readable($pluginPath)) {
@@ -293,29 +247,15 @@ class AppPlugin
         }
     }
 
-    /**
-     * @param string $pluginName
-     * @param int    $urlId
-     */
-    public function uninstall($pluginName, $urlId = null)
+    public function uninstall(string $pluginName): void
     {
-        $urlId = (int) $urlId;
-        if (empty($urlId)) {
-            $urlId = api_get_current_access_url_id();
-        }
-
-        // First call the custom uninstall to allow full access to global settings
+        // First call the custom uninstallation to allow full access to global settings
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/uninstall.php';
         if (is_file($pluginPath) && is_readable($pluginPath)) {
             // Execute the uninstall procedure.
 
             require $pluginPath;
         }
-
-        // Second remove all remaining global settings
-        api_delete_settings_params(
-            ['category = ? AND access_url = ? AND subkey = ? ' => ['Plugins', $urlId, $pluginName]]
-        );
     }
 
     /**
@@ -523,32 +463,17 @@ class AppPlugin
                 require $plugin_file;
             }
 
-            // @todo check if settings are already added
-            // Extra options
-            $plugin_settings = api_get_settings_params(
-                [
-                    'subkey = ? AND category = ? AND type = ? AND access_url = ?' => [
-                        $pluginName,
-                        'Plugins',
-                        'setting',
-                        api_get_current_access_url_id(),
-                    ],
-                ]
-            );
+            $plugin = Container::getPluginRepository()->findOneByTitle($pluginName);
 
-            $settings_filtered = [];
-            foreach ($plugin_settings as $item) {
-                if (!empty($item['selected_value'])) {
-                    //if (unserialize($item['selected_value']) !== false) {
-                        //$item['selected_value'] = unserialize($item['selected_value']);
-                    //}
-                }
-                $settings_filtered[$item['variable']] = $item['selected_value'];
+            if (!$plugin) {
+                return [];
             }
 
-            $plugin_info['settings'] = $settings_filtered;
-            $pluginData[$pluginName] = $plugin_info;
-            //Session::write('plugin_data', $pluginData);
+            $configByUrl = $plugin->getConfigurationsByAccessUrl(
+                Container::getAccessUrlHelper()->getCurrent()
+            );
+
+            $plugin_info['settings'] = $configByUrl?->getConfiguration() ?? [];
 
             return $plugin_info;
         }

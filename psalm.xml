@@ -151,14 +151,12 @@
             <directory name="vendor"/>
 
             <directory name="src/CoreBundle/Component/Editor"/>
-            <directory name="src/CoreBundle/Hook"/>
             <directory name="src/CourseBundle/Component/CourseCopy"/>
             <directory name="src/LtiBundle"/>
 
             <file name="public/main/**/**"/>
 
             <file name="public/main/lp/openoffice_presentation.class.php"/>
-            <file name="public/main/lp/openoffice_document.class.php"/>
             <file name="public/main/lp/openoffice_text.class.php"/>
             <file name="public/main/lp/openoffice_text_document.class.php"/>
 

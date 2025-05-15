@@ -3,7 +3,7 @@ Contributing
 
 Chamilo LMS is a free software, community-driven project.
 
-Chamilo LMS is an LAMP-based e-learning web platform that focuses on providing an easy-to-use
+Chamilo LMS is a LAMP-based e-learning web platform that focuses on providing an easy-to-use
 environment for teachers to improve both the quality and availability of their
 educational material, and on providing students with an awesome learning platform.
 
@@ -15,7 +15,7 @@ to make sure they do not introduce security vulnerabilities or degrade the ease
 of use of the platform.
 
 1.11.x is a development branch for the 1.11.* releases. The master branch is used for the 2.* releases.
-1.10.x and 1.11.x are transitional branches that partially uses a series of Symfony 2 modules but rely
+1.10.x and 1.11.x are transitional branches that partially use a series of Symfony 2 modules but rely
 heavily on Composer to manage the dependencies towards common libraries. Version 
 2.0 is based on a deeper integration with Symfony 4.
 
@@ -35,7 +35,7 @@ https://guides.github.com/activities/contributing-to-open-source/
 
 As new major features are added, automated tests should be added that ensure that the feature continues to work in the foreseeable future.
 
-In Chamilo, we rely on "Behat":http://docs.behat.org/en/latest/ to do Automated Behaviour Testing. You can find examples and information on how to run Behat tests in the tests/behat/ folder of your Chamilo installation.
+In Chamilo, we rely on "Behat":http://docs.behat.org/en/latest/ to do Automated Behavior Testing. You can find examples and information on how to run Behat tests in the tests/behat/ folder of your Chamilo installation.
 
 Tests are run automatically for every new contribution, courtesy of "Travis-CI":https://travis-ci.org/, so you can follow your feature in time and see whether something breaks it. Check the Chamilo tests URL here: https://travis-ci.org/chamilo/chamilo-lms
 
@@ -71,8 +71,7 @@ For configuration settings, check https://github.com/chamilo/chamilo-lms/wiki/Ad
 # Testing through Docker
 
 *to be updated* 
-We are working on an official (production) image of Chamilo LMS for Docker.
-In the meantime, you can test development versions following more or less this procedure:
+We are currently developing an official (production)-ready image of Chamilo LMS for Docker. Until then, you can test development versions using the following procedure:
 ```
 host$ composer run -it ubuntu:14.04.2
 root@docker$ apt-get update
@@ -87,7 +86,7 @@ root@docker$ cd html
 root@docker$ chmod -R 0777 var/ vendor/ main/lang/ public/
 root@docker$ vim /etc/php5/apache2/php.ini
 ```
-Look for timezone and modify it to the best timezone that suits you:
+Look for the Time Zone setting and update it to match your preferred location:
 ```
 [Date]
 ; Defines the default timezone used by the date functions

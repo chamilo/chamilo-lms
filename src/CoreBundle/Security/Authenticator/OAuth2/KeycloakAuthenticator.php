@@ -44,7 +44,10 @@ class KeycloakAuthenticator extends AbstractAuthenticator
             ->setUsername($username)
             ->setPlainPassword('keycloak')
             ->setStatus(STUDENT)
-            ->setAuthSource('keycloak')
+            ->addAuthSourceByAuthentication(
+                'keycloak',
+                $this->urlHelper->getCurrent()
+            )
             ->setRoleFromStatus(STUDENT)
         ;
 

@@ -7,15 +7,19 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
@@ -59,6 +63,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function __construct(
         private readonly UserHelper $userHelper,
         private readonly ResourceNodeRepository $resourceNodeRepository,
+        private readonly ResourceFileRepository $resourceFileRepository
     ) {}
 
     #[Route(path: '/{tool}/{type}/{id}/disk_space', methods: ['GET', 'POST'], name: 'chamilo_core_resource_disk_space')]
@@ -136,21 +141,55 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * View file of a resource node.
      */
     #[Route('/{tool}/{type}/{id}/view', name: 'chamilo_core_resource_view', methods: ['GET'])]
-    public function view(Request $request, TrackEDownloadsRepository $trackEDownloadsRepository): Response
-    {
+    public function view(
+        Request $request,
+        TrackEDownloadsRepository $trackEDownloadsRepository,
+        SettingsManager $settingsManager,
+        AccessUrlHelper $accessUrlHelper
+    ): Response {
         $id = $request->get('id');
-        $filter = (string) $request->get('filter'); // See filters definitions in /config/services.yml.
+        $resourceFileId = $request->get('resourceFileId');
+        $filter = (string) $request->get('filter');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
 
         if (null === $resourceNode) {
             throw new FileNotFoundException($this->trans('Resource not found'));
         }
 
+        $resourceFile = null;
+        if ($resourceFileId) {
+            $resourceFile = $this->resourceFileRepository->find($resourceFileId);
+        }
+
+        if (!$resourceFile) {
+            $accessUrlSpecificFiles = $settingsManager->getSetting('course.access_url_specific_files') && $accessUrlHelper->isMultiple();
+            $currentUrl = $accessUrlHelper->getCurrent()?->getUrl();
+
+            $resourceFiles = $resourceNode->getResourceFiles();
+
+            if ($accessUrlSpecificFiles) {
+                foreach ($resourceFiles as $file) {
+                    if ($file->getAccessUrl() && $file->getAccessUrl()->getUrl() === $currentUrl) {
+                        $resourceFile = $file;
+
+                        break;
+                    }
+                }
+            }
+
+            if (!$resourceFile) {
+                $resourceFile = $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
+            }
+        }
+
+        if (!$resourceFile) {
+            throw new FileNotFoundException($this->trans('Resource file not found for the given resource node'));
+        }
+
         $user = $this->userHelper->getCurrent();
         $firstResourceLink = $resourceNode->getResourceLinks()->first();
-        $firstResourceFile = $resourceNode->getResourceFiles()->first();
-        if ($firstResourceLink && $user && $firstResourceFile) {
-            $url = $firstResourceFile->getOriginalName();
+        if ($firstResourceLink && $user) {
+            $url = $resourceFile->getOriginalName();
             $trackEDownloadsRepository->saveDownload($user, $firstResourceLink, $url);
         }
 
@@ -166,7 +205,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             );
         }
 
-        return $this->processFile($request, $resourceNode, 'show', $filter, $allUserInfo);
+        return $this->processFile($request, $resourceNode, 'show', $filter, $allUserInfo, $resourceFile);
     }
 
     /**
@@ -212,8 +251,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * Download file of a resource node.
      */
     #[Route('/{tool}/{type}/{id}/download', name: 'chamilo_core_resource_download', methods: ['GET'])]
-    public function download(Request $request, TrackEDownloadsRepository $trackEDownloadsRepository): Response
-    {
+    public function download(
+        Request $request,
+        TrackEDownloadsRepository $trackEDownloadsRepository,
+        SettingsManager $settingsManager,
+        AccessUrlHelper $accessUrlHelper
+    ): Response {
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
 
@@ -229,21 +272,39 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
+        $accessUrlSpecificFiles = $settingsManager->getSetting('course.access_url_specific_files') && $accessUrlHelper->isMultiple();
+        $currentUrl = $accessUrlHelper->getCurrent()?->getUrl();
+
+        $resourceFiles = $resourceNode->getResourceFiles();
+        $resourceFile = null;
+
+        if ($accessUrlSpecificFiles) {
+            foreach ($resourceFiles as $file) {
+                if ($file->getAccessUrl() && $file->getAccessUrl()->getUrl() === $currentUrl) {
+                    $resourceFile = $file;
+
+                    break;
+                }
+            }
+        }
+
+        $resourceFile ??= $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
+
         // If resource node has a file just download it. Don't download the children.
-        if ($resourceNode->hasResourceFile()) {
+        if ($resourceFile) {
             $user = $this->userHelper->getCurrent();
             $firstResourceLink = $resourceNode->getResourceLinks()->first();
-            if ($firstResourceLink) {
-                $url = $resourceNode->getResourceFiles()->first()->getOriginalName();
+
+            if ($firstResourceLink && $user) {
+                $url = $resourceFile->getOriginalName();
                 $trackEDownloadsRepository->saveDownload($user, $firstResourceLink, $url);
             }
 
             // Redirect to download single file.
-            return $this->processFile($request, $resourceNode, 'download');
+            return $this->processFile($request, $resourceNode, 'download', '', null, $resourceFile);
         }
 
         $zipName = $resourceNode->getSlug().'.zip';
-        // $rootNodePath = $resourceNode->getPathForDisplay();
         $resourceNodeRepo = $repo->getResourceNodeRepository();
         $type = $repo->getResourceType();
 
@@ -282,12 +343,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                 /** @var ResourceNode $node */
                 foreach ($children as $node) {
-                    $stream = $repo->getResourceNodeFileStream($node);
-                    $fileName = $node->getResourceFiles()->first()->getOriginalName();
-                    // $fileToDisplay = basename($node->getPathForDisplay());
-                    // $fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
-                    // error_log($fileToDisplay);
-                    $zip->addFileFromStream($fileName, $stream);
+                    $resourceFiles = $node->getResourceFiles();
+                    $resourceFile = $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
+
+                    if ($resourceFile) {
+                        $stream = $repo->getResourceNodeFileStream($node);
+                        $fileName = $resourceFile->getOriginalName();
+                        $zip->addFileFromStream($fileName, $stream);
+                    }
                 }
                 $zip->finish();
             }
@@ -458,7 +521,53 @@ class ResourceController extends AbstractResourceController implements CourseCon
         return new Response(null, Response::HTTP_NO_CONTENT);
     }
 
-    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', ?array $allUserInfo = null): mixed
+    #[Route('/resource_files/{resourceNodeId}/variants', name: 'chamilo_core_resource_files_variants', methods: ['GET'])]
+    public function getVariants(string $resourceNodeId, EntityManagerInterface $em): JsonResponse
+    {
+        $variants = $em->getRepository(ResourceFile::class)->createQueryBuilder('rf')
+            ->join('rf.resourceNode', 'rn')
+            ->leftJoin('rn.creator', 'creator')
+            ->where('rf.resourceNode = :resourceNodeId')
+            ->andWhere('rf.accessUrl IS NOT NULL')
+            ->setParameter('resourceNodeId', $resourceNodeId)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $data = [];
+
+        /** @var ResourceFile $variant */
+        foreach ($variants as $variant) {
+            $data[] = [
+                'id' => $variant->getId(),
+                'title' => $variant->getOriginalName(),
+                'mimeType' => $variant->getMimeType(),
+                'size' => $variant->getSize(),
+                'updatedAt' => $variant->getUpdatedAt()->format('Y-m-d H:i:s'),
+                'url' => $variant->getAccessUrl() ? $variant->getAccessUrl()->getUrl() : null,
+                'path' => $this->resourceNodeRepository->getResourceFileUrl($variant->getResourceNode(), [], null, $variant),
+                'creator' => $variant->getResourceNode()->getCreator() ? $variant->getResourceNode()->getCreator()->getFullName() : 'Unknown',
+            ];
+        }
+
+        return $this->json($data);
+    }
+
+    #[Route('/resource_files/{id}/delete_variant', methods: ['DELETE'], name: 'chamilo_core_resource_files_delete_variant')]
+    public function deleteVariant(int $id, EntityManagerInterface $em): JsonResponse
+    {
+        $variant = $em->getRepository(ResourceFile::class)->find($id);
+        if (!$variant) {
+            return $this->json(['error' => 'Variant not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $em->remove($variant);
+        $em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', ?array $allUserInfo = null, ?ResourceFile $resourceFile = null): mixed
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
@@ -466,7 +575,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised view access to resource')
         );
 
-        $resourceFile = $resourceNode->getResourceFiles()->first();
+        $resourceFile ??= $resourceNode->getResourceFiles()->first();
 
         if (!$resourceFile) {
             throw $this->createNotFoundException($this->trans('File not found for resource'));
@@ -523,7 +632,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                 // Modify the HTML content before displaying it.
                 if (str_contains($mimeType, 'html')) {
-                    $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
+                    $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode, $resourceFile);
 
                     if (null !== $allUserInfo) {
                         $tagsToReplace = $allUserInfo[0];
@@ -569,8 +678,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         $response = new StreamedResponse(
-            function () use ($resourceNode, $start, $length): void {
-                $this->streamFileContent($resourceNode, $start, $length);
+            function () use ($resourceNodeRepo, $resourceFile, $start, $length): void {
+                $this->streamFileContent($resourceNodeRepo, $resourceFile, $start, $length);
             }
         );
 
@@ -611,9 +720,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         return [$start, $end, $length];
     }
 
-    private function streamFileContent(ResourceNode $resourceNode, int $start, int $length): void
+    private function streamFileContent(ResourceNodeRepository $resourceNodeRepo, ResourceFile $resourceFile, int $start, int $length): void
     {
-        $stream = $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode);
+        $stream = $resourceNodeRepo->getResourceNodeFileStream($resourceFile->getResourceNode(), $resourceFile);
 
         fseek($stream, $start);
 

@@ -27,14 +27,17 @@ class CQuizRelQuestion
     protected int $questionOrder;
 
     #[Assert\NotBlank]
-    #[ORM\ManyToOne(targetEntity: CQuizQuestion::class, inversedBy: 'relQuizzes', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: CQuizQuestion::class, cascade: ['persist'], inversedBy: 'relQuizzes')]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuizQuestion $question;
 
     #[Assert\NotBlank]
-    #[ORM\ManyToOne(targetEntity: CQuiz::class, inversedBy: 'questions', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: CQuiz::class, cascade: ['persist'], inversedBy: 'questions')]
     #[ORM\JoinColumn(name: 'quiz_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuiz $quiz;
+
+    #[ORM\Column(name: 'destination', type: 'text', nullable: true)]
+    protected ?string $destination = null;
 
     public function setQuestionOrder(int $questionOrder): self
     {
@@ -73,6 +76,18 @@ class CQuizRelQuestion
     public function setQuiz(CQuiz $quiz): self
     {
         $this->quiz = $quiz;
+
+        return $this;
+    }
+
+    public function getDestination(): ?string
+    {
+        return $this->destination;
+    }
+
+    public function setDestination(?string $destination): self
+    {
+        $this->destination = $destination;
 
         return $this;
     }

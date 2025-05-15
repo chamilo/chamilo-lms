@@ -1,6 +1,9 @@
 .btn {
-  @apply cursor-default font-semibold gap-2 inline-flex justify-center px-6 py-2 rounded-md transition flex-none;
-  font-size: 16px;
+  @apply cursor-default font-semibold gap-2 inline-flex justify-center items-center px-6 py-2 rounded-md transition flex-none text-base;
+
+  .mdi {
+    @apply text-base;
+  }
 
   &--primary {
     @apply bg-primary text-white;
@@ -153,8 +156,9 @@
     }
   }
 
-  &-sm {
-    @apply px-4 py-2;
+  &-sm,
+  &--sm{
+    @apply px-3 py-1;
     font-size: 13px;
   }
 }
@@ -231,8 +235,6 @@ $border-color_12: #9333EA;
   @include filled-style('primary', 'support-4');
   @apply cursor-pointer font-semibold gap-2 inline-flex justify-center items-center px-4 py-2 rounded-md transition;
 
-  font-size: 16px;
-
   &:focus {
     @apply outline-none;
   }
@@ -259,16 +261,28 @@ $border-color_12: #9333EA;
 
   &.p-button-sm {
     @apply px-2 py-1;
-    font-size: 13px;
+
+    .p-button-icon,
+    .p-button-label {
+      font-size: 13px;
+    }
   }
 
   &.p-button-lg {
     @apply px-8 py-4;
-    font-size: 18px;
+
+    .p-button-icon,
+    .p-button-label {
+      font-size: 18px;
+    }
+  }
+
+  .p-button-icon {
+    @apply text-base;
   }
 
   .p-button-label {
-    @apply align-middle font-semibold;
+    @apply align-middle font-semibold text-base;
   }
 
   &.p-button-icon-only {
@@ -289,7 +303,7 @@ $border-color_12: #9333EA;
         @apply bg-gray-10;
 
         .p-button-label {
-          text-decoration: underline;
+          @apply underline;
         }
       }
     }

@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class PluginsController extends BaseController
 {
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/', name: 'chamilo_core_plugins', methods: ['GET', 'POST'])]
+    #[Route('/', name: 'chamilo_core_plugins_index', methods: ['GET', 'POST'])]
     public function index(): Response
     {
         $appPlugin = new AppPlugin();
@@ -31,7 +31,7 @@ class PluginsController extends BaseController
     }
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/add', name: 'chamilo_core_plugins', methods: ['GET', 'POST'])]
+    #[Route('/add', name: 'chamilo_core_plugins_add', methods: ['GET', 'POST'])]
     public function pluginsAdd(): Response
     {
         $appPlugin = new AppPlugin();

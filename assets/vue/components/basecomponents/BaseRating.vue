@@ -21,6 +21,6 @@ const emit = defineEmits(["change"])
     v-model="model"
     :cancel="false"
     :stars="stars"
-    @change="emit('change', $event, model)"
+    @change="emit('change', $event)"
   />
 </template>

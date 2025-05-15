@@ -1,9 +1,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"Language: sl_SI\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
+"Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
+"Language-Team: Slovenian <https://translation.chamilo.org/projects/chamilo/"
+"messages/sl/>\n"
+"Language: sl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 5.4.2\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Generirate lahko značke za veščine oz. kompetence, ki so jih osvojili vaši uporabniki in jim s tem izdate priznanje za njihov trud. Preko osvojenih značk bodo lahko pokazali pridobljene veščine in kompetence preko sličic v svojih profilih. Za več informacij obiščite OpenBadges preko povezave <a href=\"http://openbadges.org\">http://openbadges.org</a>."
@@ -380,12 +387,14 @@ msgstr "Preveri enoličnost e-poštnega naslova"
 msgid "This email is already in use on the platform."
 msgstr "Ta poštni naslov ni na voljo"
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Skupaj objav v vseh forumih"
 
 msgid "Add me as coach"
 msgstr "Dodaj me kot coach-a"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "Dodaj me kot učitelja v uvožene tečaje"
 
@@ -407,11 +416,17 @@ msgstr "Uporabnik: %s - Seja: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "Podano trajanje seje je enako kot privzeto trajanje seje. Zanemarjam."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "Prvi dostop uporabnika do seje je bil zabeležen dne %s. Z omejitvijo dolžine seje na %s dni, je dostop do te seje za uporabnika potekel dne %s ."
+msgstr ""
+"Prvi dostop uporabnika do seje je bil zabeležen dne %s. Z omejitvijo dolžine "
+"seje na %s dni, je dostop do te seje za uporabnika potekel dne %s ."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "Prvi dostop uporabnika do te seje se je izvršil dne %s. S trajanjem seje %s dni, je končni datum predviden čez %s dni"
+msgstr ""
+"Prvi dostop uporabnika do te seje se je izvršil dne %s. S trajanjem seje %s "
+"dni, je končni datum predviden čez %s dni"
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Ta uporabnik do sedaj še ni dostopil do seje. Trajanje je trenutno nastavljeno na %s dni (od datuma prvega dostopa)"
@@ -3218,7 +3233,7 @@ msgstr "npr."
 msgid "Database Host"
 msgstr "Strežnik podatkovne baze"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Uporabniško ime za dostop do podatk. baze"
 
 msgid "Database Password"
@@ -3248,9 +3263,7 @@ msgstr "Priimek upravitelja"
 msgid "Administrator login"
 msgstr "Uporabniško ime admin."
 
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Geslo administratorja (<font color=\"red\">verjetno ga želite spremeniti</font>)"
-
+#, fuzzy
 msgid "Project manager"
 msgstr "Upravnik izobraževanja"
 
@@ -4619,10 +4632,10 @@ msgstr "Seznam tečajnikov je bil izvožen."
 msgid "Download the file"
 msgstr "Prenesi datoteko"
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr "Upravitelj platforme: Telefon"
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr "Telefonska številka upravitelja platforme"
 
 msgid "Send mail to new user"
@@ -4856,10 +4869,10 @@ msgstr "Potrdi"
 msgid "Unsubscribe users from course"
 msgstr "Izpiši uporabnike iz tečaja"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Ime razreda je obvezno"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Ime razreda že obstaja"
 
 msgid "CSV file import location"
@@ -5813,7 +5826,7 @@ msgstr "Večkratna registracija"
 msgid "Full-text search feature"
 msgstr "Zmožnost iskanja po vsebini"
 
-msgid "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr "Izberi \"Da\" za omogočitev te zmožnosti. Delovanje zmožnosti je odvisno od Xapian razširitve PHP-ja in ne bo delovala v primeru, da razširitev ni nameščena ali da njena različica ni vsaj 1.x."
 
 msgid "Find a training session"
@@ -16799,7 +16812,7 @@ msgstr "Informacija o zahtevi po tečaju se smatra za ščiteno informacijo; upo
 msgid "Courses validation"
 msgstr "Vrednotenje tečajev"
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr "Kadar je zmožnost 'Vrednotenje tečaja' omogočena, učitelj ne more samostojno kreirati tečaja. Izpolniti mora zahtevo po kreiranju, nato upravitelj pregleda zahtevo in jo odobri ali zavrne. Zmožnost bazira na avtomatiziranem e-poštnem sporočanju, zato mora Chamilo biti zmožen dostopati do poštnega strežnika in uporabiti posebej za to funkcijo dodeljen e-poštni naslov."
 
 msgid "%s A request for additional information about the course request %s"
@@ -16823,7 +16836,7 @@ msgstr "Na našo žalost vas moramo obvestiti, da je bila vaša zahteva za kreir
 msgid "Course validation - a link to the terms and conditions"
 msgstr "Validacija tečajev - povezava k pogojem rabe"
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr "Predstavlja URL k dokumentu \"Pogoji rabe\", ki je veljaven ob zahtevi po kreiranju tečaja. V primeru, da je naslov podan, mora uporabnik pred pošiljanjem zahteve prebrati in sprejeti pogoje predstavljene v dokumentu.<br />"
 
 msgid "The course has not been created due to an internal error."
@@ -16883,7 +16896,7 @@ msgstr "Niz znakov, ki označuje protokol domene SSO strežnika (priporočamo ra
 msgid "WIRIS mathematical editor"
 msgstr "WIRIS matematični urejevalnik"
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr "Omogoči WIRIS urejevalnik matematičnih izrazov. Z namestitvijo teha vtičnika, dobite Wiris urejevalnik in Wiris CAS.<br />"
 
 msgid "File export as"
@@ -17069,7 +17082,7 @@ msgstr "Moški"
 msgid "Load the Mathjax library in all the system pages"
 msgstr "Naloži ASCIMathML.js z vsemi sistemskimi stranmi"
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr "Aktivirajte to možnost, če želite prikaz ASCIIMathML matematične izraze in ASCIIsvg matematične grafe; ne zgolj v orodju dokumentov, temveč povsod v okviru platforme."
 
 msgid "Hide tools from teachers"
@@ -18375,7 +18388,12 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "čiščenje mape arhivov je bilo uspešno."
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "Iz neznanega razloge mape arhivov (archive/) ni bilo mogoče očistiti. Mapo 'chamilo/archive' očistite ročno, pustite nedotaknjeno zgolj datoteto .htaccess ."
+msgstr ""
+"Iz neznanega razloga mape chamilo/var/cache/ ni bilo mogoče očistiti. "
+"Prosimo, očistite jo ročno: povežite se s strežnikom in izbrišite vse "
+"datoteke ter simbolične povezave v mapi chamilo/var/cache/, razen datoteke ."
+"htaccess. V Linuxu: # find var/cache/ \\( -type f -or -type l \\) -not -name "
+".htaccess -exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "Omogoči čas začetka"
@@ -19370,31 +19388,31 @@ msgstr "Najprej morate ustvariti Facebook Aplikacijo ( glej <a href=\"https://de
 msgid "Announcement for a group"
 msgstr "Obvestilo za skupino"
 
-msgid "Language priority 1"
+msgid "Highest priority language"
 msgstr "Jezik-prioriteta 1"
 
-msgid "Language priority 2"
+msgid "Secondary priority language"
 msgstr "Jezik-prioriteta 2"
 
-msgid "Language priority 3"
+msgid "Third priority language"
 msgstr "Jezik-prioriteta 3"
 
-msgid "Language priority 4"
+msgid "Fourth priority language"
 msgstr "Jezik-prioriteta 4"
 
 msgid "Language priority 5"
 msgstr "Jezik-prioriteta 5"
 
-msgid "The language with the highest priority"
+msgid "Primary language selected when multiple language contexts are set."
 msgstr "Jezik z najvišjo prioriteto"
 
-msgid "The second language priority"
+msgid "Secondary fallback language if first priority is unavailable or out of context."
 msgstr "Jezik z drugo najvišjo prioriteto"
 
-msgid "The third language priority"
+msgid "Tertiary language fallback if higher priorities fail."
 msgstr "Jezik s prioriteto 3"
 
-msgid "The fourth language priority"
+msgid "Last language fallback option by order of priority."
 msgstr "Jezik s prioriteto 4"
 
 msgid "The lowest language priority"
@@ -20045,7 +20063,7 @@ msgstr "Omogočite to možnost v primeru, da želite prikazati vizulni indikator
 msgid "CAPTCHA"
 msgstr "CAPTCHA"
 
-msgid "Enable a CAPTCHA on the login form to avoid password hammering"
+msgid "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering"
 msgstr "Omogoči rabo CAPTCHA v prijavni formi"
 
 msgid "CAPTCHA mistakes allowance"
@@ -20120,8 +20138,8 @@ msgstr "Privzeto število dni, v katerih učitelj še lahko dostopa do svje seje
 msgid "PDF header logo"
 msgstr "Logotip glave PDF dokumenta"
 
-msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
-msgstr "Določa, ali se uporabi slika iz css/themes/[tvoj-css]/images/pdf_logo_header.png kot logotip zaglavja PDF datoteke v vseh PDF izvozih (namesto običajnega logotipa definiranega s pdefinicijo v portalu)"
+msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgstr "Določa, ali se uporabi slika iz var/themes/[tvoj-css]/images/pdf_logo_header.png kot logotip zaglavja PDF datoteke v vseh PDF izvozih (namesto običajnega logotipa definiranega s pdefinicijo v portalu)"
 
 msgid "Order users by official code"
 msgstr "Uredi uporabnike po uradni kodi"
@@ -21071,7 +21089,7 @@ msgstr "Pošlji potisno sporočilo preko  Google Firebase Console (Firebase Clou
 msgid "Sender ID of Firebase Console for Cloud Messaging"
 msgstr "Številka projekta Google Developer Console"
 
-msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
+msgid "You need register a project on <a href='https://console.firebase.google.com/'>Google Firebase Console</a>"
 msgstr "Projekt MORATE registrirati na <a href=\"https://console.developers.google.com/\">Google Developer Console</a>"
 
 msgid "Server key of Firebase Console for Cloud Messaging"

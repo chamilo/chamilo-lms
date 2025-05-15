@@ -6,30 +6,39 @@
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2012
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 
-$pluginName = $_GET['name'];
-$appPlugin = new AppPlugin();
-$installedPlugins = $appPlugin->getInstalledPlugins();
-$pluginInfo = $appPlugin->getPluginInfo($pluginName, true);
+$pluginRepo = Container::getPluginRepository();
 
-if (!in_array($pluginName, $installedPlugins) || empty($pluginInfo)) {
+$plugin = $pluginRepo->getInstalledByName($_GET['plugin']);
+
+if (!$plugin) {
     api_not_allowed(true);
 }
 
+$accessUrl = Container::getAccessUrlHelper()->getCurrent();
+
+$pluginConfiguration = $plugin->getConfigurationsByAccessUrl($accessUrl);
+
+$appPlugin = new AppPlugin();
+$pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle(), true);
+
+$em = Container::getEntityManager();
+
 $content = '';
-$currentUrl = api_get_self()."?name=$pluginName";
+$currentUrl = api_get_self()."?plugin={$plugin->getTitle()}";
 
 if (isset($pluginInfo['settings_form'])) {
     /** @var FormValidator $form */
     $form = $pluginInfo['settings_form'];
-    if (isset($form)) {
-        // We override the form attributes
-        $attributes = ['action' => $currentUrl, 'method' => 'POST'];
-        $form->updateAttributes($attributes);
+    if (!empty($form)) {
+        $form->updateAttributes(['action' => $currentUrl, 'method' => 'POST']);
         if (isset($pluginInfo['settings'])) {
             $form->setDefaults($pluginInfo['settings']);
         }
@@ -47,58 +56,34 @@ if (isset($form)) {
         $values = $form->getSubmitValues();
 
         // Fix only for bbb
-        if ('bbb' == $pluginName) {
-            if (!isset($values['global_conference_allow_roles'])) {
-                $values['global_conference_allow_roles'] = [];
-            }
+        if ('bbb' == $plugin->getTitle() && !isset($values['global_conference_allow_roles'])) {
+            $values['global_conference_allow_roles'] = [];
         }
 
-        $accessUrlId = api_get_current_access_url_id();
-        api_delete_settings_params(
-            [
-                'category = ? AND access_url = ? AND subkey = ? AND type = ? and variable <> ?' => [
-                    'Plugins',
-                    $accessUrlId,
-                    $pluginName,
-                    'setting',
-                    'status',
-                ],
-            ]
+        /** @var Plugin $objPlugin */
+        $objPlugin = $pluginInfo['obj'];
+
+        /** @var array<int, string> $pluginFields */
+        $pluginFields = $objPlugin->getFieldNames();
+
+        $pluginConfiguration->setConfiguration(
+            array_intersect_key($values, array_flip($pluginFields))
         );
 
-        foreach ($values as $key => $value) {
-            api_add_setting(
-                $value,
-                $pluginName.'_'.$key,
-                $pluginName,
-                'setting',
-                'Plugins',
-                $pluginName,
-                '',
-                '',
-                '',
-                api_get_current_access_url_id(),
-                1
-            );
-        }
+        $em->flush();
 
         Event::addEvent(
             LOG_PLUGIN_CHANGE,
             LOG_PLUGIN_SETTINGS_CHANGE,
-            $pluginName,
+            $plugin->getTitle(),
             api_get_utc_datetime(),
             api_get_user_id()
         );
 
-        if (!empty($pluginInfo['plugin_class'])) {
-            /** @var \Plugin $objPlugin */
-            $objPlugin = $pluginInfo['plugin_class']::create();
-            $objPlugin->get_settings(true);
-            $objPlugin->performActionsAfterConfigure();
+        $objPlugin->performActionsAfterConfigure();
 
-            if (isset($values['show_main_menu_tab'])) {
-                $objPlugin->manageTab($values['show_main_menu_tab']);
-            }
+        if (isset($values['show_main_menu_tab'])) {
+            $objPlugin->manageTab($values['show_main_menu_tab']);
         }
 
         Display::addFlash(Display::return_message(get_lang('Update successful'), 'success'));
@@ -120,6 +105,6 @@ $interbreadcrumb[] = [
     'name' => get_lang('Plugins'),
 ];
 
-$tpl = new Template($pluginName, true, true, false, true, false);
+$tpl = new Template($plugin->getTitle(), true, true, false, true, false);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

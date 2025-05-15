@@ -6,9 +6,18 @@ export default {
 
   /**
    * @param {Object} searchParams
+   * @param {boolean} disablePagination
    * @returns {Promise<{totalItems, items}>}
    */
-  listAll: async (searchParams = {}) => await baseService.getCollection("/api/courses", searchParams),
+  listAll: async (searchParams = {}, disablePagination = false) => {
+    const params = { ...searchParams }
+
+    if (disablePagination) {
+      params.pagination = false
+    }
+
+    return await baseService.getCollection("/api/courses", params)
+  },
 
   /**
    * @param {number} cid
@@ -169,5 +178,13 @@ export default {
       console.error("Error fetching auto-launch LP ID:", error)
       return null
     }
+  },
+  /**
+   * Loads public catalogue courses filtered by access_url and usergroup rules.
+   * @returns {Promise<{items: Array}>}
+   */
+  listCatalogueCourses: async () => {
+    const response = await api.get("/catalogue/courses-list")
+    return response.data
   },
 }

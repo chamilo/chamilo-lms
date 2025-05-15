@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
@@ -17,6 +18,27 @@ use Psr\Log\LoggerInterface;
  */
 class Version20 extends AbstractMigrationChamilo
 {
+    // List of sublanguages to be excluded from updates, except those explicitly allowed.
+    public const ALLOWED_SUBLANGUAGES = [
+        'ast',
+        'ast_ES',
+        'ca',
+        'ca_ES',
+        'eo',
+        'gl',
+        'qu',
+        'quz_PE',
+        'qu_PE',
+        'zh-TW',
+        'zh_TW',
+        'pt-BR',
+        'pt_PT',
+        'fur',
+        'fur_IT',
+        'oc',
+        'oc_FR',
+    ];
+
     private PriorityMigrationHelper $priorityMigrationHelper;
 
     public function __construct(Connection $connection, LoggerInterface $logger)
@@ -162,18 +184,15 @@ class Version20 extends AbstractMigrationChamilo
 
         // Update language to ISO.
         $this->addSql('UPDATE language SET isocode = "en" WHERE isocode IS NULL');
-        $this->addSql('ALTER TABLE language CHANGE isocode isocode VARCHAR(10) NOT NULL');
+        $this->addSql('ALTER TABLE language CHANGE isocode isocode VARCHAR('.Language::ISO_MAX_LENGTH.') NOT NULL');
         $this->addSql('UPDATE language SET english_name = "english" WHERE english_name IS NULL');
         $this->addSql('ALTER TABLE language CHANGE english_name english_name VARCHAR(255) NOT NULL');
 
         $languages = LanguageFixtures::getLanguages();
         $languages = array_column($languages, 'isocode', 'english_name');
 
-        // List of sublanguages to be excluded from updates, except those explicitly allowed.
-        $allowedSubLanguages = ['ast', 'ast_ES', 'ca', 'ca_ES', 'eo', 'gl', 'qu', 'quz_PE', 'qu_PE', 'zh-TW', 'zh_TW', 'pt-BR', 'pt_PT', 'fur', 'fur_IT', 'oc', 'oc_FR'];
-
         // Selecting languages that are not sublanguages or are explicitly allowed.
-        $sql = "SELECT * FROM language WHERE parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."')";
+        $sql = "SELECT * FROM language WHERE parent_id IS NULL OR isocode IN ('".implode("', '", self::ALLOWED_SUBLANGUAGES)."')";
         $result = $this->connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
@@ -182,7 +201,7 @@ class Version20 extends AbstractMigrationChamilo
             $englishName = $item['english_name'];
             if (isset($languages[$englishName])) {
                 $newIso = $languages[$englishName];
-                $this->addSql("UPDATE language SET isocode = '$newIso' WHERE id = $id");
+                $this->addSql("UPDATE language SET isocode = '$newIso', parent_id = NULL WHERE id = $id");
             }
         }
 
@@ -200,7 +219,7 @@ class Version20 extends AbstractMigrationChamilo
                 SELECT isocode
                 FROM language
                 WHERE english_name = course_language
-                AND (parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."'))
+                AND (parent_id IS NULL OR isocode IN ('".implode("', '", self::ALLOWED_SUBLANGUAGES)."'))
             ), course_language)
         ");
 
@@ -210,7 +229,7 @@ class Version20 extends AbstractMigrationChamilo
                 SELECT isocode
                 FROM language
                 WHERE english_name = lang
-                AND (parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."'))
+                AND (parent_id IS NULL OR isocode IN ('".implode("', '", self::ALLOWED_SUBLANGUAGES)."'))
             ), lang)
         ");
 
@@ -220,7 +239,7 @@ class Version20 extends AbstractMigrationChamilo
                 SELECT isocode
                 FROM language
                 WHERE english_name = selected_value
-                AND (parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."'))
+                AND (parent_id IS NULL OR isocode IN ('".implode("', '", self::ALLOWED_SUBLANGUAGES)."'))
             ), selected_value)
             WHERE variable = 'platformLanguage'
         ");

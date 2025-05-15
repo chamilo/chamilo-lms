@@ -366,7 +366,10 @@ if (api_is_platform_admin()) {
     ];
     // Replaced by page blocks
     //$items[] = ['url' => 'configure_homepage.php', 'label' => get_lang('Edit portal homepage')];
-    $items[] = ['url' => 'configure_inscription.php', 'label' => get_lang('Setting the registration page')];
+    $items[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'auth/inscription.php?create_intro_page=1',
+        'label' => get_lang('Setting the registration page')
+    ];
     $items[] = ['url' => 'statistics/index.php', 'label' => get_lang('Statistics')];
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'my_space/company_reports.php',
@@ -392,7 +395,7 @@ if (api_is_platform_admin()) {
 
     if ('true' == api_get_plugin_setting('dictionary', 'enable_plugin_dictionary')) {
         $items[] = [
-            'url' => api_get_path(WEB_PLUGIN_PATH).'dictionary/terms.php',
+            'url' => api_get_path(WEB_PLUGIN_PATH).'Dictionary/terms.php',
             'label' => get_lang('Dictionary'),
         ];
     }
@@ -575,22 +578,6 @@ if (api_is_platform_admin()) {
 $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 
 $tpl = new Template();
-
-// Display the Site Use Cookie Warning Validation
-$useCookieValidation = api_get_setting('cookie_warning');
-if ('true' === $useCookieValidation) {
-    if (isset($_POST['acceptCookies'])) {
-        api_set_site_use_cookie_warning_cookie();
-    } elseif (!api_site_use_cookie_warning_cookie_exist()) {
-        if (Template::isToolBarDisplayedForUser()) {
-            $tpl->assign('toolBarDisplayed', true);
-        } else {
-            $tpl->assign('toolBarDisplayed', false);
-        }
-        $tpl->assign('displayCookieUsageWarning', true);
-    }
-}
-
 $tpl->assign('web_admin_ajax_url', $admin_ajax_url);
 $tpl->assign('blocks_admin', $blocks);
 

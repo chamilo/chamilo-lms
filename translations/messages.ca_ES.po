@@ -1,9 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"Language: ca\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
+"Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
+"Language-Team: Catalan <https://translation.chamilo.org/projects/chamilo/"
+"messages/ca/>\n"
+"Language: ca_ES\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.2\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Pot generar insígnies per reconéixer les habilitats apreses dels seus usuaris, donar un reconeixement pel seu assoliment, amb la qual cosa podran mostrar les seves capacitats i competències adquirides a través d'emblemes, que serán visualitzats en el seu perfil d'usuari. Per més informació sobre els Open Badges consulti http://openbadges.org/."
@@ -380,12 +386,14 @@ msgstr "Verificar que els correus siguin únics"
 msgid "This email is already in use on the platform."
 msgstr "Aquest correu electrònic ja està registrat en el sistema"
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Total de missatges en tots els fòrums"
 
 msgid "Add me as coach"
 msgstr "Afegeix-me com a tutor"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "Afegeix-me com a professor en els cursos importats."
 
@@ -407,11 +415,17 @@ msgstr "Usuari: %s - Sessió: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr ""
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "El primer accés d'aquest usuari a la sessió va ser el %s. Amb una durada de %s dies, l'accés a aquesta secció va expirar el %s."
+msgstr ""
+"El primer accés d'aquest usuari a la sessió va ser el %s. Amb una durada de "
+"%s dies, l'accés a aquesta secció va expirar el %s."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "El primer accés d'aquest usuari a aquesta sessió va ser el %s. Amb una durada de %s dies, la data final està configurada en %s dies."
+msgstr ""
+"El primer accés d'aquest usuari a aquesta sessió va ser el %s. Amb una "
+"durada de %s dies, la data final està configurada en %s dies."
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Aquest usuari mai ha accedit abans a aquesta sessió. La durada està configurada a %s dies (des de la data del primer accés)."
@@ -3218,7 +3232,7 @@ msgstr "ex:"
 msgid "Database Host"
 msgstr "Servidor de base de dades"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Nom d'usuari de la base de dades"
 
 msgid "Database Password"
@@ -3248,9 +3262,7 @@ msgstr "Cognoms de l'administrador"
 msgid "Administrator login"
 msgstr "Nom d'usuari de l'administrador"
 
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Contrasenya de l'administrador (<font color=\"red\">és recomanable canviar-la</font>)"
-
+#, fuzzy
 msgid "Project manager"
 msgstr "Responsable de continguts"
 
@@ -4619,10 +4631,10 @@ msgstr "La llista d'usuaris ha estat exportada"
 msgid "Download the file"
 msgstr "Cliqueu aquí per descarregar el fitxer"
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr "Administrador de la plataforma: telèfon"
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr "El número de telèfon de l'administrador de la plataforma"
 
 msgid "Send mail to new user"
@@ -4856,10 +4868,10 @@ msgstr "Confirmar"
 msgid "Unsubscribe users from course"
 msgstr "Anular la inscripció dels usuaris del curs"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Falta el nom de la classe"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Aquest nom de classe ja existeix"
 
 msgid "CSV file import location"
@@ -5813,7 +5825,7 @@ msgstr "Registre múltiple"
 msgid "Full-text search feature"
 msgstr "Funcionalitat de recerca de text complet"
 
-msgid "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr "Seleccioni \"Sí\" per habilitar aquesta funcionalitat. Aquesta utilitat depèn de l'extensió Xapian per a PHP, pel que no funcionarà si aquesta extensió no està instal·lada en el seu servidor, com a mmínim la versió 1.x"
 
 msgid "Find a training session"
@@ -16799,7 +16811,7 @@ msgstr "La informació d'aquesta sol·licitud de formació és considerada com a
 msgid "Courses validation"
 msgstr "Sol·licitud de cursos"
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr "Quan la sol·licitud de cursos està activada, un professor no podrà crear un curs per si mateix sinó que haurà d'emplenar una sol·licitud. L'administrador de la plataforma revisarà la sol·licitud i l'aprovarà o refusarà. Aquesta funcionalitat es basa en missatges de correu electrònic automàtics pel que s'ha d'assegurar que la seva instal·lació de Chamilo utilitza un servidor de correu i una adreça de correu electrònic dedicada a aquest fet."
 
 msgid "%s A request for additional information about the course request %s"
@@ -16823,7 +16835,7 @@ msgstr "Lamentem informar-lo que la sol·licitud del curs %s ha estat denegada d
 msgid "Course validation - a link to the terms and conditions"
 msgstr "Sol·licitud de cursos - enllaç a termes i condicions"
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr "La URL que enllaça el document \"Termes i Condicions\" que regeix la sol·licitud d'un curs. Si aquesta adreça està configurada, l'usuari haurà de llegir i acceptar els termes i condicions abans d'enviar una sol·licitud de curs. Si activa el mòdul \"Termes i condicions\" de Chamilo i vol utilitzar aquest enlloc de termes i condicions propis, deixi aquest camp buit."
 
 msgid "The course has not been created due to an internal error."
@@ -16883,7 +16895,7 @@ msgstr "Prefix que indica el protocol del domini del servidor de Single Sign On 
 msgid "WIRIS mathematical editor"
 msgstr "Editor matemàtic WIRIS"
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr "Activa l'editor matemàtic WIRIS. Instal·lant aquest connector obtindrà WIRIS editor i WIRIS CAS."
 
 msgid "File export as"
@@ -17069,7 +17081,7 @@ msgstr "Masculina"
 msgid "Load the Mathjax library in all the system pages"
 msgstr "Carrega el fitxer ASCIIMathML.js per a totes les pàgines de la plataforma"
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr "Activeu aquest paràmetre si desitja mostrar fórmules matemàtiques basades en ASCIIMathML i gràfics matemàtics basats en ASCIIsvg, no tan sols a l'eina \"Documents\", però també en d'altres eines de la plataforma."
 
 msgid "Hide tools from teachers"
@@ -18375,7 +18387,12 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "El contingut del directori archive/ ha estat eliminat."
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "Per alguna raó (potser per falta de permisos), no s'ha pogut netejar la carpeta archive/. Pot netejar manualment connectant-se al servidor i eliminant tot el contingut de la carpeta chamilo/archive/, excepte el fitxer .htaccess."
+msgstr ""
+"Per algun motiu, no s'ha pogut netejar el directori chamilo/var/cache/. Si "
+"us plau, netegeu-lo manualment: connecteu-vos al servidor i suprimiu tots "
+"els fitxers i enllaços simbòlics sota el directori chamilo/var/cache/, "
+"excepte el fitxer .htaccess. A Linux: # find var/cache/ \\( -type f -or -"
+"type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "Utilitza temps de publicació"
@@ -19370,31 +19387,31 @@ msgstr "En primer lloc, heu de crear una aplicació de Facebook (veure <a href=\
 msgid "Announcement for a group"
 msgstr "Anuncis per a un grup"
 
-msgid "Language priority 1"
+msgid "Highest priority language"
 msgstr "Prioritat d'idioma 1"
 
-msgid "Language priority 2"
+msgid "Secondary priority language"
 msgstr "Prioritat de l'idioma 2"
 
-msgid "Language priority 3"
+msgid "Third priority language"
 msgstr "Prioritat d'idioma 3"
 
-msgid "Language priority 4"
+msgid "Fourth priority language"
 msgstr "Prioritat d'idioma 4"
 
 msgid "Language priority 5"
 msgstr "Prioritat d'idioma 5"
 
-msgid "The language with the highest priority"
+msgid "Primary language selected when multiple language contexts are set."
 msgstr "L'idioma amb la prioritat més alta"
 
-msgid "The second language priority"
+msgid "Secondary fallback language if first priority is unavailable or out of context."
 msgstr "Prioritat de l'idioma 2"
 
-msgid "The third language priority"
+msgid "Tertiary language fallback if higher priorities fail."
 msgstr "Prioritat de l'idioma 3"
 
-msgid "The fourth language priority"
+msgid "Last language fallback option by order of priority."
 msgstr "Prioritat de l'idioma 4"
 
 msgid "The lowest language priority"
@@ -20045,7 +20062,7 @@ msgstr "En activar aquesta opció, apareixerà un indicador de complexitat de co
 msgid "CAPTCHA"
 msgstr "CAPTCHA"
 
-msgid "Enable a CAPTCHA on the login form to avoid password hammering"
+msgid "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering"
 msgstr "En activar aquesta opció, apareixerà un CAPTCHA en el formulari d'ingrés, per evitar els intents d'ingrés per força bruta"
 
 msgid "CAPTCHA mistakes allowance"
@@ -20120,7 +20137,7 @@ msgstr "Quantitat per defecte de dies posteriors a la data de finalització de l
 msgid "PDF header logo"
 msgstr ""
 
-msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
 msgstr ""
 
 msgid "Order users by official code"
@@ -21071,7 +21088,7 @@ msgstr "Enviar notificacions Push a través de Google Cloud Messaging"
 msgid "Sender ID of Firebase Console for Cloud Messaging"
 msgstr ""
 
-msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
+msgid "You need register a project on <a href='https://console.firebase.google.com/'>Google Firebase Console</a>"
 msgstr ""
 
 msgid "Server key of Firebase Console for Cloud Messaging"

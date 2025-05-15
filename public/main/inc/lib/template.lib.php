@@ -918,6 +918,42 @@ class Template
         return $html;
     }
 
+    public function enableCookieUsageWarning()
+    {
+        $form = new FormValidator(
+            'cookiewarning',
+            'post',
+            '',
+            '',
+            [
+                //'onsubmit' => "$(this).toggle('show')",
+            ],
+            FormValidator::LAYOUT_BOX_NO_LABEL
+        );
+        $form->addHidden('acceptCookies', '1');
+        $form->addHtml(
+            '<div class="cookieUsageValidation">
+                '.get_lang('YouAcceptCookies').'
+                <button class="btn btn-link" onclick="$(this).next().toggle(\'slow\'); $(this).toggle(\'slow\')" type="button">
+                    ('.get_lang('More').')
+                </button>
+                <div style="display:none; margin:20px 0;">
+                    '.get_lang('HelpCookieUsageValidation').'
+                </div>
+                <button class="btn btn-link" onclick="$(this).parents(\'form\').submit()" type="button">
+                    ('.get_lang('Accept').')
+                </button>
+            </div>'
+        );
+        $form->protect();
+
+        if ($form->validate()) {
+            api_set_site_use_cookie_warning_cookie();
+        } else {
+            $this->assign('frmDisplayCookieUsageWarning', $form->returnForm());
+        }
+    }
+
     /**
      * Returns the tutors names for the current course in session
      * Function to use in Twig templates.

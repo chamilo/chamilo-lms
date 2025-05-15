@@ -315,9 +315,15 @@ courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
 courseService
   .loadTools(course.value.id, session.value?.id)
   .then((data) => {
-    shortcuts.value = data.shortcuts
+    shortcuts.value = data.shortcuts.map((shortcut) => {
+      return {
+        ...shortcut,
+        customImageUrl: shortcut.customImageUrl || null,
+      }
+    })
   })
-  .catch((error) => console.log(error))
+  .catch((error) => console.error(error))
+
 
 const courseTMenu = ref(null)
 
@@ -423,6 +429,13 @@ onMounted(async () => {
 
 const onStudentViewChanged = async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()
+
+  courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
+    tools.value = cTools.map((element) => ({
+      ...element,
+      isEnabled: element.resourceNode?.resourceLinks[0]?.visibility === 2,
+    }))
+  })
 }
 
 const allowEditToolVisibilityInSession = computed(() => {

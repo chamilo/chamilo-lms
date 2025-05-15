@@ -3,26 +3,36 @@
     v-if="courses.length"
     class="mb-6"
   >
-    <h2 class="mb-2">{{ $t("Sticky courses") }}</h2>
+    <SectionHeader :title="t('Sticky courses')" />
     <div
       v-if="courses.length"
       class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2"
     >
       <CourseCardList :courses="courses" />
     </div>
+
+    <BaseDivider />
   </div>
 </template>
 
 <script setup>
-import CourseCardList from "../../../components/course/CourseCardList.vue"
 import { computed, ref, watchEffect } from "vue"
-import { GET_STICKY_COURSES } from "../../../graphql/queries/Course"
-import { useQuery } from "@vue/apollo-composable"
+import { useI18n } from "vue-i18n"
+import CourseCardList from "../../../components/course/CourseCardList.vue"
+import SectionHeader from "../../../components/layout/SectionHeader.vue"
+import BaseDivider from "../../../components/basecomponents/BaseDivider.vue"
+
 import { useSecurityStore } from "../../../store/securityStore"
+
+import { useQuery } from "@vue/apollo-composable"
+
+import { GET_STICKY_COURSES } from "../../../graphql/queries/Course"
 
 const securityStore = useSecurityStore()
 
 const queryResponse = ref({})
+
+const { t } = useI18n()
 
 if (securityStore.isAuthenticated) {
   const { result } = useQuery(GET_STICKY_COURSES)

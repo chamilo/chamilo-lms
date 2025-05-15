@@ -134,11 +134,6 @@ services:
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.profile, namespace: profile}
 
-    chamilo_core.settings.ppt_to_lp:
-        class: Chamilo\CoreBundle\Settings\PptToLpSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.ppt_to_lp, namespace: ppt_to_lp}
-
     chamilo_core.settings.registration:
         class: Chamilo\CoreBundle\Settings\RegistrationSettingsSchema
         tags:
@@ -193,3 +188,8 @@ services:
         class: Chamilo\CoreBundle\Settings\WebServiceSettingsSchema
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.webservice, namespace: webservice}
+
+    chamilo_core.settings.ai_helpers:
+      class: Chamilo\CoreBundle\Settings\AiHelpersSettingsSchema
+      tags:
+        - { name: sylius.settings_schema, alias: chamilo_core.settings.ai_helpers, namespace: ai_helpers }

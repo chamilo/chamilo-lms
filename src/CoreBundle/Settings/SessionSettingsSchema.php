@@ -80,6 +80,8 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'session_creation_form_set_extra_fields_mandatory' => '',
                     'session_model_list_field_ordered_by_id' => 'false',
                     'duplicate_specific_session_content_on_session_copy' => 'false',
+                    'enable_auto_reinscription' => 'false',
+                    'enable_session_replication' => 'false',
                 ]
             )
         ;
@@ -93,14 +95,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add(
-                'add_users_by_coach',
-                YesNoType::class,
-                [
-                    'label' => 'AddUsersByCoachTitle',
-                    'help' => 'AddUsersByCoachComment',
-                ]
-            )
+            ->add('add_users_by_coach', YesNoType::class)
             ->add('extend_rights_for_coach', YesNoType::class)
             ->add('show_session_coach', YesNoType::class)
             ->add('show_session_data', YesNoType::class)
@@ -110,14 +105,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('allow_session_admins_to_manage_all_sessions', YesNoType::class)
             ->add('allow_teachers_to_create_sessions', YesNoType::class)
             ->add('prevent_session_admins_to_manage_all_users', YesNoType::class)
-            ->add(
-                'session_course_ordering',
-                TextType::class,
-                [
-                    'label' => 'SessionCourseOrderingTitle',
-                    'help' => 'SessionCourseOrderingComment',
-                ]
-            )
+            ->add('session_course_ordering', TextType::class)
             ->add('limit_session_admin_role', YesNoType::class)
             ->add('allow_tutors_to_assign_students_to_session', YesNoType::class)
             ->add('drh_can_access_all_session_content', YesNoType::class)

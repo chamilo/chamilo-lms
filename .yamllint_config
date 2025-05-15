@@ -1,9 +1,8 @@
 ignore: |
     assets/*
     .travis.yml
-    .codeclimate.yml
     public/libs/*
-    public/plugin/test2pdf/*
+    public/plugin/Test2Pdf/*
 
 extends: default
 rules:

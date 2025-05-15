@@ -1,8 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
+use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\SessionResubscriptionEvent;
 use Doctrine\ORM\Query\Expr\Join;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
@@ -241,11 +252,11 @@ class CoursesAndSessionsCatalog
      * @param string $categoryCode
      * @param int    $randomValue
      * @param array  $limit        will be used if $randomValue is not set.
-     *                             This array should contains 'start' and 'length' keys
+     *                             This array should contain 'start' and 'length' keys
      *
      * @return array
      */
-    public static function getCoursesInCategory($categoryCode, $randomValue = null, $limit = [])
+    public static function getCoursesInCategory(string $categoryCode, $randomValue = null, $limit = [])
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $avoidCoursesCondition = self::getAvoidCourseCondition();
@@ -728,14 +739,14 @@ class CoursesAndSessionsCatalog
 
         $qb = $qb
             ->select('s')
-            ->from('ChamiloCoreBundle:Session', 's')
+            ->from(Session::class, 's')
             ->where(
                 $qb->expr()->in(
                     's',
                     $qb2
                         ->select('s2')
-                        ->from('ChamiloCoreBundle:AccessUrlRelSession', 'url')
-                        ->join('ChamiloCoreBundle:Session', 's2')
+                        ->from(AccessUrlRelSession::class, 'url')
+                        ->join(Session::class, 's2')
                         ->where(
                             $qb->expr()->eq('url.sessionId ', 's2.id')
                         )->andWhere(
@@ -809,8 +820,8 @@ class CoursesAndSessionsCatalog
                     's',
                     $qb3
                         ->select('s3')
-                        ->from('ChamiloCoreBundle:ExtraFieldValues', 'fv')
-                        ->innerJoin('ChamiloCoreBundle:Session', 's3', Join::WITH, 'fv.itemId = s3.id')
+                        ->from(ExtraFieldValues::class, 'fv')
+                        ->innerJoin(Session::class, 's3', Join::WITH, 'fv.itemId = s3.id')
                         ->where(
                             $qb->expr()->eq('fv.field', $extraFieldInfo['id'])
                         )->andWhere(
@@ -841,33 +852,33 @@ class CoursesAndSessionsCatalog
 
         $qb->select('s')
             ->distinct()
-            ->from('ChamiloCoreBundle:Session', 's')
+            ->from(Session::class, 's')
             ->innerJoin(
-                'ChamiloCoreBundle:SessionRelCourse',
+                SessionRelCourse::class,
                 'src',
                 Join::WITH,
                 's.id = src.session'
             )
             ->innerJoin(
-                'ChamiloCoreBundle:AccessUrlRelSession',
+                AccessUrlRelSession::class,
                 'url',
                 Join::WITH,
                 'url.sessionId = s.id'
             )
             ->innerJoin(
-                'ChamiloCoreBundle:ExtraFieldRelTag',
+                ExtraFieldRelTag::class,
                 'frt',
                 Join::WITH,
                 'src.course = frt.itemId'
             )
             ->innerJoin(
-                'ChamiloCoreBundle:Tag',
+                Tag::class,
                 't',
                 Join::WITH,
                 'frt.tagId = t.id'
             )
             ->innerJoin(
-                'ChamiloCoreBundle:ExtraField',
+                ExtraField::class,
                 'f',
                 Join::WITH,
                 'frt.fieldId = f.id'
@@ -917,15 +928,15 @@ class CoursesAndSessionsCatalog
 
         $qb->select('s')
             ->distinct()
-            ->from('ChamiloCoreBundle:Session', 's')
+            ->from(Session::class, 's')
             ->innerJoin(
-                'ChamiloCoreBundle:SessionRelCourse',
+                SessionRelCourse::class,
                 'src',
                 Join::WITH,
                 's.id = src.session'
             )
             ->innerJoin(
-                'ChamiloCoreBundle:AccessUrlRelSession',
+                AccessUrlRelSession::class,
                 'url',
                 Join::WITH,
                 'url.sessionId = s.id'
@@ -1264,17 +1275,10 @@ class CoursesAndSessionsCatalog
             );
         }
 
-        $hook = HookResubscribe::create();
-        if (!empty($hook)) {
-            $hook->setEventData([
-                'session_id' => $sessionId,
-            ]);
-            try {
-                $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);
-            } catch (Exception $exception) {
-                $result = $exception->getMessage();
-            }
-        }
+        Container::getEventDispatcher()->dispatch(
+            new SessionResubscriptionEvent(['session_id' => $sessionId], AbstractEvent::TYPE_PRE),
+            Events::SESSION_RESUBSCRIPTION
+        );
 
         return $result;
     }
@@ -1506,7 +1510,7 @@ class CoursesAndSessionsCatalog
      */
     public static function sessionsListByCoursesTag(array $limit)
     {
-        $searchTag = isset($_REQUEST['search_tag']) ? $_REQUEST['search_tag'] : '';
+        $searchTag = $_REQUEST['search_tag'] ? Security::remove_XSS($_REQUEST['search_tag']) : '';
         $searchDate = isset($_REQUEST['date']) ? $_REQUEST['date'] : date('Y-m-d');
         $courseUrl = self::getCatalogUrl(
             1,
@@ -1566,16 +1570,16 @@ class CoursesAndSessionsCatalog
         $userId = api_get_user_id();
         $sessionsBlocks = [];
         $entityManager = Database::getManager();
-        $sessionRelCourseRepo = $entityManager->getRepository('ChamiloCoreBundle:SessionRelCourse');
-        $extraFieldRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
-        $tagRepo = \Chamilo\CoreBundle\Framework\Container::getTagRepository();
+        $sessionRelCourseRepo = $entityManager->getRepository(SessionRelCourse::class);
+        $extraFieldRepo = $entityManager->getRepository(ExtraField::class);
+        $tagRepo = Container::getTagRepository();
 
         $tagsField = $extraFieldRepo->findOneBy([
-            'itemType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
+            'itemType' => ExtraField::COURSE_FIELD_TYPE,
             'variable' => 'tags',
         ]);
 
-        /** @var \Chamilo\CoreBundle\Entity\Session $session */
+        /** @var Session $session */
         foreach ($sessions as $session) {
             $sessionDates = SessionManager::parseSessionDates([
                 'display_start_date' => $session->getDisplayStartDate(),
@@ -1613,7 +1617,7 @@ class CoursesAndSessionsCatalog
             }
 
             /** @var SequenceResourceRepository $repo */
-            $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
+            $repo = $entityManager->getRepository(SequenceResource::class);
             $sequences = $repo->getRequirementsAndDependenciesWithinSequences(
                 $session->getId(),
                 SequenceResource::SESSION_TYPE
@@ -1854,7 +1858,7 @@ class CoursesAndSessionsCatalog
         $action = isset($action) ? Security::remove_XSS($action) : $requestAction;
         $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
         $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
-        $searchTag = isset($_REQUEST['search_tag']) ? $_REQUEST['search_tag'] : '';
+        $searchTag = $_REQUEST['search_tag'] ? Security::remove_XSS($_REQUEST['search_tag']) : '';
 
         if ('subscribe_user_with_password' === $action) {
             $action = 'subscribe';

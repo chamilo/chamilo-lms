@@ -1,9 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
+"PO-Revision-Date: 2025-04-18 10:22+0000\n"
+"Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
+"Language-Team: Italian <https://translation.chamilo.org/projects/chamilo/"
+"messages/it/>\n"
 "Language: it\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.2\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Puoi generare attestati di riconoscimento per le competenze acquisite dagli utenti, i quali potranno mostrarli come icone delle competenze e capacità acquisite, sui loro profili personali. Per ulteriori info su cos'è OpenBadges, visita:<a href=\"http://openbadges.org/\">http://openbadges.org/</a>"
@@ -380,12 +386,14 @@ msgstr "Controlla email unica"
 msgid "This email is already in use on the platform."
 msgstr "Questa email non è disponibile"
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Totale degli articoli in tutti i forum."
 
 msgid "Add me as coach"
 msgstr "Aggiungimi come istruttore"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
 msgstr "Aggiungimi come docente nei corsi importati."
 
@@ -407,11 +415,18 @@ msgstr "Utente: %s - Sessione: %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "Questa durata della sessione è la stessa di quella predefinita. Ignora."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "Il primo accesso di questo utente alla sessione è avvenuto il %s. Con una durata sessione pari a %s giorni, l'accesso a questa sessione  è già scaduto il %s"
+msgstr ""
+"Il primo accesso di questo utente alla sessione è avvenuto il %s. Con una "
+"durata sessione pari a %s giorni, l'accesso a questa sessione  è già scaduto "
+"il %s"
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "Il primo accesso di questo utente alla sessione è avvenuto il %s. Con una durata sessione pari a %s giorni, la data di fine è programmata in %s giorni."
+msgstr ""
+"Il primo accesso di questo utente alla sessione è avvenuto il %s. Con una "
+"durata sessione pari a %s giorni, la data di fine è programmata in %s giorni."
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Questo utente non ha mai avuto accesso a questa sessione prima d'ora. La durata è attualmente impostata su %s giorni (dalla prima data di accesso)"
@@ -3218,7 +3233,7 @@ msgstr "es."
 msgid "Database Host"
 msgstr "Database Host"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Database Username"
 
 msgid "Database Password"
@@ -3248,9 +3263,7 @@ msgstr "Cognome dell'amministratore"
 msgid "Administrator login"
 msgstr "login dell'Amministratore"
 
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "password dell'Amministratore (<font color=\"red\">puoi cambiarla</font>)"
-
+#, fuzzy
 msgid "Project manager"
 msgstr "Responsabile didattico"
 
@@ -4619,10 +4632,10 @@ msgstr "L'elenco utenti è stato esportato"
 msgid "Download the file"
 msgstr "Fai click! qui per scaricare il file"
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr "Amministratore della piattaforma: Telefono"
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr "Numero telefonico dell'amministratore della piattaforma"
 
 msgid "Send mail to new user"
@@ -4856,10 +4869,10 @@ msgstr "Conferma"
 msgid "Unsubscribe users from course"
 msgstr "Cancella l'utente dal corso"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Nome della classe mancante"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Il nome della classe non esiste"
 
 msgid "CSV file import location"
@@ -5813,7 +5826,7 @@ msgstr "Iscrizione multipla"
 msgid "Full-text search feature"
 msgstr "Abilita ricerca testuale"
 
-msgid "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr "Selezionando \"Sì\" sarà abilitata la ricerca testuale libera. La ricerca sarà possibile se nel server è installata almeno la versione 1.x dell'estensione PHP Xapian."
 
 msgid "Find a training session"
@@ -16799,7 +16812,7 @@ msgstr "LE INFORMAZIONI RELATIVE ALLA RICHIESTA SONO CONFIDENZIALI. Per le norme
 msgid "Courses validation"
 msgstr "Conferma del corso"
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr "Attivando la \"Conferma del corso\" il docente può creare il corso solo dopo l'approvazione da parte dell'amministratore della piattaforma. La funzionalità richiede di poter inviare un messaggio di posta elettronica ad un indirizzo raggiungibile, per cui il server di posta deve essere in funzione."
 
 msgid "%s A request for additional information about the course request %s"
@@ -16823,7 +16836,7 @@ msgstr "Siamo spiacenti di comunicarLe che la Sua richiesta di creazione del cor
 msgid "Course validation - a link to the terms and conditions"
 msgstr "Conferma del corso - collegamento a termini e condizioni d'uso"
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr "Attivando il modulo per poter richiedere la creazione di un corso dovranno essere accettati i Termini e le Condizioni d'uso . La funzionalità richiede il collegamento ad un URL, che può anche essere quello interno di Chamilo."
 
 msgid "The course has not been created due to an internal error."
@@ -16883,7 +16896,7 @@ msgstr "In genere https:// - se consentito dal server - in quanto altri protocol
 msgid "WIRIS mathematical editor"
 msgstr "Editor matematico WIRIS"
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr "Abilitazione dell'editor di WIRIS"
 
 msgid "File export as"
@@ -17069,7 +17082,7 @@ msgstr "Maschile"
 msgid "Load the Mathjax library in all the system pages"
 msgstr "Il file ASCIIMathML.js dell'editor matematico viene incorporato in ogni documento"
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr "Attivando la funzionalità le formule matematiche ed i grafici basati su ASCIIMathML e ASCIIsvg saranno caricati in ogni file, non solo in documenti specifici."
 
 msgid "Hide tools from teachers"
@@ -18375,7 +18388,12 @@ msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "La pulizia della cartella archivio è stata eseguita correttamente."
 
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
-msgstr "Per qualche motivo la cartella archivio non può essere ripulita. Puoi farlo manualmente da console connettendoti al server e cancellando tutti i file e alias dei collegamenti nel percorso chamilo/archive/directory, eccetto il file .htaccess. Su Linux: # find archive/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
+msgstr ""
+"Per qualche motivo, la directory chamilo/var/cache/ non è stata ripulita. Si "
+"prega di pulirla manualmente: connettersi al server ed eliminare tutti i "
+"file e i link simbolici presenti nella directory chamilo/var/cache/, eccetto "
+"il file .htaccess. Su Linux: # find var/cache/ \\( -type f -or -type l \\) -"
+"not -name .htaccess -exec echo rm -v \\{} \\;"
 
 msgid "Enable start time"
 msgstr "Abilita ora di inizio"
@@ -19370,31 +19388,31 @@ msgstr "Per iniziare, devi creare una Facebook Application (vedi https://develop
 msgid "Announcement for a group"
 msgstr "Avviso per un gruppo"
 
-msgid "Language priority 1"
+msgid "Highest priority language"
 msgstr "Priorità della Lingua 1"
 
-msgid "Language priority 2"
+msgid "Secondary priority language"
 msgstr "Priorità della Lingua 2"
 
-msgid "Language priority 3"
+msgid "Third priority language"
 msgstr "Priorità della Lingua 3"
 
-msgid "Language priority 4"
+msgid "Fourth priority language"
 msgstr "Priorità della Lingua 4"
 
 msgid "Language priority 5"
 msgstr "Priorità della Lingua 5"
 
-msgid "The language with the highest priority"
+msgid "Primary language selected when multiple language contexts are set."
 msgstr "Lingua con la priorità più alta"
 
-msgid "The second language priority"
+msgid "Secondary fallback language if first priority is unavailable or out of context."
 msgstr "Secondo livello di priorità lingua"
 
-msgid "The third language priority"
+msgid "Tertiary language fallback if higher priorities fail."
 msgstr "Terzo livello di priorità lingua"
 
-msgid "The fourth language priority"
+msgid "Last language fallback option by order of priority."
 msgstr "Quarto livello di priorità lingua"
 
 msgid "The lowest language priority"
@@ -20045,7 +20063,7 @@ msgstr "Abilita l'opzione per attivare un indicatore di forza della password qua
 msgid "CAPTCHA"
 msgstr "CAPTCHA"
 
-msgid "Enable a CAPTCHA on the login form to avoid password hammering"
+msgid "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering"
 msgstr "Abilita il CAPTCHA al login per evitare che robots forzino le password."
 
 msgid "CAPTCHA mistakes allowance"
@@ -20120,8 +20138,8 @@ msgstr "Numero predefinito di giorni in cui un istruttore può accedere alla pro
 msgid "PDF header logo"
 msgstr "Logo PDF"
 
-msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
-msgstr "Utilizzabile come immagine in css/themes/[your-css]/images/pdf_logo_header.png, ma anche come logo PDF per le esportazioni in PDF (sostituendo il logo del portale)"
+msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgstr "Utilizzabile come immagine in var/themes/[your-css]/images/pdf_logo_header.png, ma anche come logo PDF per le esportazioni in PDF (sostituendo il logo del portale)"
 
 msgid "Order users by official code"
 msgstr "Ordina gli utenti in base al codice"
@@ -21071,7 +21089,7 @@ msgstr "Inviare notifiche tramite Firebase Console di Google"
 msgid "Sender ID of Firebase Console for Cloud Messaging"
 msgstr "ID del mittente di Firebase Console per Messaggistica Cloud"
 
-msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
+msgid "You need register a project on <a href='https://console.firebase.google.com/'>Google Firebase Console</a>"
 msgstr "Devi registrare un progetto su Google Firebase Console"
 
 msgid "Server key of Firebase Console for Cloud Messaging"

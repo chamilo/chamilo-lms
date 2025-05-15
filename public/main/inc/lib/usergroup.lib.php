@@ -154,7 +154,7 @@ class UserGroupModel extends Model
             if ($showCalendar) {
                 $calendarPlugin = LearningCalendarPlugin::create();
             }
-            $url = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/calendar.php?';
+            $url = api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/calendar.php?';
             while ($data = Database::fetch_array($result)) {
                 $userId = $data['user_id'];
                 $userInfo = api_get_user_info($userId);
@@ -1543,6 +1543,8 @@ class UserGroupModel extends Model
         $params['updated_at'] = $params['created_at'] = api_get_utc_datetime();
         $params['group_type'] = isset($params['group_type']) ? Usergroup::SOCIAL_CLASS : Usergroup::NORMAL_CLASS;
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
+        $params['url'] = isset($params['url']) ? $params['url'] : "";
+        $params['visibility'] = isset($params['visibility']) ? $params['visibility'] : Usergroup::GROUP_PERMISSION_OPEN;
 
         $userGroupExists = $this->usergroup_exists(trim($params['title']));
         if (false === $userGroupExists) {
@@ -1812,10 +1814,7 @@ class UserGroupModel extends Model
         $form->addHeader($header);
 
         // Name
-        $form->addElement('text', 'title', get_lang('Title'), ['maxlength' => 255]);
-        $form->applyFilter('title', 'trim');
-
-        $form->addRule('title', get_lang('Required field'), 'required');
+        $form->addText('title', get_lang('Title'), true, ['maxlength' => 255]);
         $form->addRule('title', '', 'maxlength', 255);
 
         // Description
@@ -1840,8 +1839,7 @@ class UserGroupModel extends Model
         }
 
         // url
-        $form->addElement('text', 'url', get_lang('URL'));
-        $form->applyFilter('url', 'trim');
+        $form->addText('url', get_lang('Url'), false);
 
         // Picture
         //$allowed_picture_types = $this->getAllowedPictureExtensions();
@@ -1857,7 +1855,7 @@ class UserGroupModel extends Model
         if ($userGroup && $repo->hasIllustration($userGroup)) {
             $picture = $repo->getIllustrationUrl($userGroup);
             $img = '<img src="'.$picture.'" />';
-            $form->addElement('label', null, $img);
+            $form->addLabel(null, $img);
             $form->addElement('checkbox', 'delete_picture', '', get_lang('Remove picture'));
         }
 

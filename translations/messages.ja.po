@@ -1,354 +1,386 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
+"PO-Revision-Date: 2025-03-31 12:26+0000\n"
+"Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
+"Language-Team: Japanese <https://translation.chamilo.org/projects/chamilo/"
+"messages/ja/>\n"
 "Language: ja\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.4.2\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr ""
+"ユーザーが習得したスキルに対するバッジを生成して、彼らの努力を認識し、獲得し"
+"たスキルや能力をユーザープロファイルに表示されるアイコンでアピールできるよう"
+"にすることができます。OpenBadgesについての詳細は<a href='http://openbadges."
+"org'>http://openbadges.org/</a>をご覧ください。"
 
 msgid "You can now design skills learning badges for learning through your courses on this virtual campus."
-msgstr ""
+msgstr "あなたは今、このバーチャルキャンパスでのコースを通じてスキル学習バッジをデザ"
+"インすることができます。"
 
 msgid "Design a new badge, download it from the design tool and upload it on the platform."
-msgstr ""
+msgstr "デザインツールで新しいバッジをデザインし、ダウンロードしてプラットフォームに"
+"アップロードしてください。"
 
 msgid "The badges will be sent to this backpack"
-msgstr ""
+msgstr "このバッジはこのバックパックに送られます"
 
 msgid "Backpack details"
-msgstr ""
+msgstr "バックパックの詳細"
 
 msgid "Criteria to earn the badge"
-msgstr ""
+msgstr "バッジを獲得するための基準"
 
 msgid "Badge preview"
-msgstr ""
+msgstr "バッジプレビュー"
 
 msgid "Design a new badge"
-msgstr ""
+msgstr "デザイン新しいバッジ"
 
 msgid "Total: %s"
-msgstr ""
+msgstr "合計：%s"
 
 msgid "Download badges"
-msgstr ""
+msgstr "バッジをダウンロード"
 
 msgid "Badges issuer details"
-msgstr ""
+msgstr "バッジ発行者の詳細"
 
 msgid "Create badge"
-msgstr ""
+msgstr "バッジを作成する"
 
 msgid "Badges"
-msgstr ""
+msgstr "バッジ"
 
 msgid "Students who acquired skill %s"
-msgstr ""
+msgstr "学習者が習得したスキル %s"
 
 msgid "Skills acquired in course %s"
-msgstr ""
+msgstr "コース%sで習得したスキル"
 
 msgid "Skills report"
-msgstr ""
+msgstr "スキルレポート"
 
 msgid "Users assigned to their superior"
-msgstr ""
+msgstr "上司に割り当てられたユーザー"
 
 msgid "Assign users to superior"
-msgstr ""
+msgstr "ユーザーを上司に割り当てる"
 
 msgid "Student's superior"
-msgstr ""
+msgstr "学習者の上司"
 
 msgid "Cosecant:\t\t\t\tcsc(x)"
-msgstr ""
+msgstr "コセカント：\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr ""
+msgstr "ハイパボリックコセカント: csch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
-msgstr ""
+msgstr "逆余割:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr ""
+msgstr "双曲線逆余割:\t\tarccsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
-msgstr ""
+msgstr "正割: sec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr ""
+msgstr "双曲線セカント:\t\tsech(x)"
 
 msgid "Arcsecant:\t\t\tarcsec(x)"
-msgstr ""
+msgstr "逆正割:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr ""
+msgstr "双曲線逆セカント:\t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
-msgstr ""
+msgstr "余接:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr ""
+msgstr "双曲線余接: coth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
-msgstr ""
+msgstr "逆余接:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr ""
+msgstr "双曲線逆余接関数:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr ""
+"このサイトが機能し、コンテンツの使用状況を測定するために、このプラットフォー"
+"ムはクッキーを使用しています。<br /><br />\n"
+"必要に応じて、ブラウザのヘルプセクションがクッキーの設定方法を示しています。"
+"<br /><br />\n"
+"クッキーに関する詳細は、<a href=\"http://www.aboutcookies.org/\""
+">クッキーについて</a>のウェブサイトをご覧ください。"
 
 msgid "By continuing to use this site, you declare you accept its use of cookies."
-msgstr ""
+msgstr "このサイトを引き続き使用することにより、クッキーの使用を承諾したことになりま"
+"す。"
 
 msgid "An example certificate format"
-msgstr ""
+msgstr "証明書の例の形式"
 
 msgid "Certificate"
-msgstr ""
+msgstr "証明書"
 
 msgid "Results visibility"
-msgstr ""
+msgstr "結果の可視性"
 
 msgid "Download certificate"
-msgstr ""
+msgstr "証明書をダウンロード"
 
 msgid "Sorry, this installation has an active courses limit, which has now been reached. You can still create new courses, but only if you hide/disable at least one existing active course. To do this, edit a course from the administration courses list, and change the visibility to 'hidden', then try creating this course again. To increase the maximum number of active courses allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan."
 msgstr ""
+"このインストールにはアクティブなコースの制限があり、現在その制限に達していま"
+"す。新しいコースを作成することはできますが、少なくとも1つの既存のアクティブな"
+"コースを非表示/無効にする必要があります。これを行うには、管理コースリストから"
+"コースを編集し、可視性を「非表示」に変更してから、このコースの作成を再試行し"
+"てください。このChamiloインストールで許可されているアクティブなコースの最大数"
+"を増やすには、ホスティングプロバイダーに連絡するか、利用可能であれば上位のホ"
+"スティングプランにアップグレードしてください。"
 
 msgid "Welcome to the campus of %s"
-msgstr ""
+msgstr "%s のキャンパスへようこそ"
 
 msgid "Welcome to %s"
-msgstr ""
+msgstr "%s へようこそ"
 
 msgid "Request access"
-msgstr ""
+msgstr "アクセスをリクエストする"
 
 msgid "Formula"
-msgstr ""
+msgstr "数式"
 
 msgid "This user is already logged in"
-msgstr ""
+msgstr "このユーザーはすでにログインしています"
 
 msgid "Listen"
-msgstr ""
+msgstr "聞く"
 
 msgid "Audio file for item %s"
-msgstr ""
+msgstr "アイテム %s のオーディオファイル"
 
 msgid "There's a new feedback in work: %s <a href='%s'>Click here</a> to see it."
-msgstr ""
+msgstr "新しいフィードバックがあります：%s <a "
+"href='%s'>こちらをクリックしてください</a>。"
 
 msgid "There's a new feedback in work: %s"
-msgstr ""
+msgstr "作業中の新しいフィードバックがあります：%s"
 
 msgid "Last upload"
-msgstr ""
+msgstr "最後のアップロード"
 
 msgid "Edit users list"
-msgstr ""
+msgstr "ユーザーリストを編集"
 
 msgid "Number of hidden courses"
-msgstr ""
+msgstr "非表示のコース数"
 
 msgid "Post"
 msgstr ""
 
 msgid "Write"
-msgstr ""
+msgstr "書く"
 
 msgid "You have not yet achieved skills"
-msgstr ""
+msgstr "あなたはまだスキルを習得していません"
 
 msgid "Corn"
-msgstr ""
+msgstr "コーン"
 
 msgid "Gray"
-msgstr ""
+msgstr "グレー"
 
 msgid "Light blue"
-msgstr ""
+msgstr "ライトブルー"
 
 msgid "Black"
-msgstr ""
+msgstr "ブラック"
 
 msgid "White"
-msgstr ""
+msgstr "ホワイト"
 
 msgid "Display options"
-msgstr ""
+msgstr "表示オプション"
 
 msgid "Enter the skill name to search"
-msgstr ""
+msgstr "スキル名を入力して検索"
 
 msgid "Skills search"
-msgstr ""
+msgstr "スキル検索"
 
 msgid "Choose a background color"
-msgstr ""
+msgstr "背景色を選択してください"
 
 msgid "Write new comment"
-msgstr ""
+msgstr "新しいコメントを書く"
 
 msgid "What are you thinking about?"
-msgstr ""
+msgstr "何を考えていますか？"
 
 msgid "Delete comment"
-msgstr ""
+msgstr "コメントを削除"
 
 msgid "Social wall"
-msgstr ""
+msgstr "ソーシャルウォール"
 
 msgid "Buy courses"
-msgstr ""
+msgstr "コースを購入する"
 
 msgid "My sessions"
-msgstr ""
+msgstr "私のセッション"
 
 msgid "Activate audio recorder"
-msgstr ""
+msgstr "オーディオレコーダーを有効にする"
 
 msgid "Start speaking"
-msgstr ""
+msgstr "話し始める"
 
 msgid "Assigned courses"
-msgstr ""
+msgstr "割り当てられたコース"
 
 msgid "Question edition is not available because the question has been already answered. However, you can copy and modify it."
-msgstr ""
+msgstr "質問の編集はできません。すでに回答があるためです。しかし、コピーして変更する"
+"ことはできます。"
 
 msgid "The session duration allows you to set a number of days of access starting from the first access date of the user to the session. This way, you can set a session to 'last for 15 days' instead of starting at a fixed date for all students."
 msgstr ""
+"セッションの期間を設定することで、ユーザーがセッションに初めてアクセスした日"
+"から数えてアクセス可能な日数を設定できます。これにより、すべての学習者に固定"
+"の開始日を設ける代わりに、「15日間続く」セッションを設定することができます。"
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr ""
+msgstr "双曲線逆正接関数:\t\tarctanh(x)"
 
 msgid "Session duration"
-msgstr ""
+msgstr "セッションの期間"
 
 msgid "Arctangent:\t\t\tarctan(x)"
-msgstr ""
+msgstr "アークタンジェント：\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr ""
+msgstr "双曲線正接:\t\ttanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
-msgstr ""
+msgstr "正接：\t\t\ttan(x)"
 
 msgid "Coach and student"
-msgstr ""
+msgstr "コーチと生徒"
 
 msgid "Series"
 msgstr ""
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr ""
+msgstr "双曲線アークコサイン：arccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
-msgstr ""
+msgstr "アークコサイン：\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr ""
+msgstr "双曲線余弦:\t\tcosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
-msgstr ""
+msgstr "コサイン： cos(x)"
 
 msgid "Teachers time report"
-msgstr ""
+msgstr "講師の時間報告"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr ""
+msgstr "双曲線逆正弦:\t\tarcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
-msgstr ""
+msgstr "リストにご使用の言語が見つからない場合は、翻訳者としてのご協力をお願いします"
+"。info@chamilo.orgまでご連絡ください。"
 
 msgid "Arcsine:\t\t\tarcsin(x)"
-msgstr ""
+msgstr "Arcsine:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr ""
+msgstr "双曲線正弦:\t\tsinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
 msgstr ""
 
 msgid "Pi number:\t\t\tpi"
-msgstr ""
+msgstr "πの数:\t\t\tπ"
 
 msgid "E number:\t\t\te"
 msgstr ""
 
 msgid "Logarithm:\t\t\tlog(x)"
-msgstr ""
+msgstr "対数： log(x)"
 
 msgid "Natural logarithm:\t\tln(x)"
-msgstr ""
+msgstr "自然対数： ln(x)"
 
 msgid "Absolute value:\t\t\tabs(x)"
-msgstr ""
+msgstr "絶対値： abs(x)"
 
 msgid "Square root:\t\t\tsqrt(x)"
-msgstr ""
+msgstr "平方根： sqrt(x)"
 
 msgid "Exponentiation:\t\t\t^"
-msgstr ""
+msgstr "累乗：\t\t\t^"
 
 msgid "Division:\t\t\t/"
-msgstr ""
+msgstr "部門：/"
 
 msgid "Multiplication:\t\t\t*"
-msgstr ""
+msgstr "乗算：\t\t\t*"
 
 msgid "Substraction:\t\t\t-"
-msgstr ""
+msgstr "減算：\t\t\t-"
 
 msgid "Summation:\t\t\t+"
-msgstr ""
+msgstr "合計：\t\t\t+"
 
 msgid "Formula notation"
-msgstr ""
+msgstr "数式表記"
 
 msgid "Request subscription"
-msgstr ""
+msgstr "サブスクリプションをリクエストする"
 
 msgid "Please consider subscribing me to session"
-msgstr ""
+msgstr "セッションに登録してください。"
 
 msgid "Search active sessions"
-msgstr ""
+msgstr "アクティブなセッションを検索"
 
 msgid "The username cannot contain the '-' character"
-msgstr ""
+msgstr "ユーザー名には「-」文字を含めることはできません"
 
 msgid "If you want only integer values write both limits without decimals"
-msgstr ""
+msgstr "整数のみを希望する場合は、小数点なしで両方の限界値を記入してください。"
 
 msgid "Please, write how many question variations you want"
-msgstr ""
+msgstr "何種類の質問バリエーションをご希望ですか"
 
 msgid "Question variations"
-msgstr ""
+msgstr "質問のバリエーション"
 
 msgid "Please, write the formula"
-msgstr ""
+msgstr "教えてください、その公式を"
 
 msgid "Sincerely"
-msgstr ""
+msgstr "敬具"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr ""
+msgstr "数式の例：sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 
 msgid "Variable ranges"
-msgstr ""
+msgstr "変数範囲"
 
 msgid "Range value"
-msgstr ""
+msgstr "範囲値"
 
 msgid "Calculated question"
-msgstr ""
+msgstr "計算問題"
 
 msgid "The user is currently subscribed"
 msgstr ""
@@ -684,43 +716,44 @@ msgid "After %s"
 msgstr ""
 
 msgid "Export settings as XLS"
-msgstr ""
+msgstr "設定をXLSとしてエクスポート"
 
 msgid "Delete all items"
-msgstr ""
+msgstr "すべてのアイテムを削除"
 
 msgid "Delete this item"
-msgstr ""
+msgstr "このアイテムを削除"
 
 msgid "Record your voice"
-msgstr ""
+msgstr "録音してください"
 
 msgid "No recording available"
-msgstr ""
+msgstr "録音は利用できません"
 
 msgid "Works received"
-msgstr ""
+msgstr "受け取った作業"
 
 msgid "Class ID does not exist"
-msgstr ""
+msgstr "クラスIDが存在しません"
 
 msgid "Without category"
-msgstr ""
+msgstr "カテゴリなし"
 
 msgid "Incorrect score"
-msgstr ""
+msgstr "不正確なスコア"
 
 msgid "Correct score"
-msgstr ""
+msgstr "正しいスコア"
 
 msgid "Use custom score for all questions"
-msgstr ""
+msgstr "すべての質問にカスタムスコアを使用する"
 
 msgid "You should add some items to your learning path, otherwise you won't be able to attach audio files to them"
-msgstr ""
+msgstr "あなたの学習パスにいくつかの項目を追加してください。そうしないと、オーディオ"
+"ファイルを添付することができません。"
 
 msgid "Inactive days"
-msgstr ""
+msgstr "非アクティブな日数"
 
 msgid "Followed HR directors"
 msgstr ""
@@ -762,97 +795,134 @@ msgid "Available classes"
 msgstr ""
 
 msgid "Registered classes"
-msgstr ""
+msgstr "登録済みのクラス"
 
 msgid "Delete items not in file"
-msgstr ""
+msgstr "ファイルにない項目を削除"
 
 msgid "Import groups"
-msgstr ""
+msgstr "グループをインポート"
 
 msgid "Here is your feedback"
-msgstr ""
+msgstr "こちらがあなたのフィードバックです"
 
 msgid "Session Search"
-msgstr ""
+msgstr "セッション検索"
 
 msgid "Show system folders."
-msgstr ""
+msgstr "システムフォルダを表示する。"
 
 msgid "Select a date from the calendar"
-msgstr ""
+msgstr "カレンダーから日付を選択してください"
 
 msgid "Are you sure you want to clean results for this test before the selected date ?"
-msgstr ""
+msgstr "このテストの選択された日付より前の結果をクリアしてもよろしいですか？"
 
 msgid "Clean all results before a selected date"
-msgstr ""
+msgstr "選択した日付より前のすべての結果をクリアする"
 
 msgid "Glossary help"
-msgstr ""
+msgstr "用語集のヘルプ"
 
 msgid "This tool allows you to create glossary terms for this course, which can then be used from the documents tool"
-msgstr ""
+msgstr "このツールを使用すると、このコースの用語集を作成でき、ドキュメントツールから"
+"使用することができます。"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
 msgstr ""
+"フォーラムは、非同期の書面作業のための議論ツールです。電子メールとは異なり、"
+"フォーラムは公開または半公開のグループディスカッションのためのものです。</p>C"
+"hamiloフォーラムを使用するには、メンバーはブラウザを使用するだけで、特別なク"
+"ライアントソフトウェアは必要ありません。</p>フォーラムを整理するには、フォー"
+"ラムツールをクリックします。ディスカッションは次の構造に従って階層的に整理さ"
+"れます：</p><b>カテゴリ>フォーラム>トピック>投稿</b></p>メンバーがフォーラム"
+"に整然と効果的に参加できるようにするためには、まずカテゴリとフォーラムを作成"
+"することが不可欠です。その後、参加者がトピックと投稿を作成します。デフォルト"
+"では、フォーラムには1つの（公開）カテゴリ、例示トピック、例示投稿が含まれてい"
+"ます。カテゴリにフォーラムを追加したり、そのタイトルを変更したり、新しいフォ"
+"ーラムを作成するための他のカテゴリを作成することができます。（カテゴリとフォ"
+"ーラムを混同しないでください。フォーラムを含まないカテゴリは無用で表示されま"
+"せん。）</p>\n"
+"<p>フォーラムの説明には、そのメンバーのリスト、目的の定義、目標、タスク、テー"
+"マなどが含まれる場合があります。</p><p>グループフォーラムはフォーラムツールを"
+"介してではなく、グループツールを介して作成するべきです。そこでは、グループフ"
+"ォーラムをプライベートまたは公開にするかを決定し、同時にドキュメントのグルー"
+"プを共有する場所を提供します。</p><b>教育のヒント</b></p>学習フォーラムは、イ"
+"ンターネット上で見慣れたフォーラムとは少し異なります。例えば、一度公開された"
+"投稿を学習者が変更することはできません。なぜなら、過去に何が言われたかを追跡"
+"するために、コースは論理的にアーカイブされるからです。さらに、Chamiloフォーラ"
+"ムは教育に関連する特定の使用を可能にします。例えば、一部の教師/トレーナーは、"
+"次のようにフォーラム内で直接修正を公開します：<li>学習者にフォーラムに直接レ"
+"ポートを投稿するように依頼します。</li>教師が編集（黄色い鉛筆）をクリックして"
+"、グラフィックエディター（色、下線など）を使用してマークします。</li>最後に、"
+"他の学習者は、そのうちの1人の作品に行われた修正を見ることで利益を得ます。</li"
+">同じ原則が学習者間で適用されることもありますが、学生/研修生は互いの投稿を編"
+"集することができないため、同僚のメッセージをコピー＆ペーストする必要がありま"
+"す。</li></ul>"
 
 msgid "Forum help"
-msgstr ""
+msgstr "フォーラムヘルプ"
 
 msgid "Please login to go to this course"
-msgstr ""
+msgstr "このコースに進むためにログインしてください"
 
 msgid "Clear all learners results for every exercises ?"
-msgstr ""
+msgstr "すべての演習におけるすべての受講者の結果をクリアしますか"
 
 msgid "Are you sure to delete all test's results ?"
-msgstr ""
+msgstr "テストの結果をすべて削除してもよろしいですか"
 
 msgid "Additionally, a new announcement has been created and sent to selected users"
-msgstr ""
+msgstr "新しいアナウンスメントが作成され、選択されたユーザーに送信されました"
 
 msgid "Login date"
-msgstr ""
+msgstr "ログイン日"
 
 msgid "Choose start and end dates"
-msgstr ""
+msgstr "開始日と終了日を選択してください"
 
 msgid "This test is configured not to display feedback to learners. Comments will not be seen at the end of the test, but may be useful for you, as teacher, when reviewing the question details."
 msgstr ""
+"このテストは、受講者にフィードバックを表示しないように設定されています。コメ"
+"ントはテスト終了時には表示されませんが、質問の詳細を確認する際に、教師として"
+"役立つかもしれません。"
 
 msgid "Work added"
-msgstr ""
+msgstr "作業追加済み"
 
 msgid "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test. We recommend you try different options by editing your test options before having learners take it."
 msgstr ""
+"各質問に対するフィードバック/コメントをどのように表示するか、このオプションで"
+"定義します。テストを受ける受講者に表示される方法が決まります。受講者にテスト"
+"を受けさせる前に、テストオプションを編集して異なるオプションを試すことをお勧"
+"めします。"
 
 msgid "Users who's account has been disabled"
-msgstr ""
+msgstr "アカウントが無効にされたユーザー"
 
 msgid "Users with an active account"
-msgstr ""
+msgstr "アクティブなアカウントを持つユーザー"
 
 msgid "Surveys progress"
-msgstr ""
+msgstr "アンケートの進捗状況"
 
 msgid "Incomplete surveys"
-msgstr ""
+msgstr "未完了のアンケート"
 
 msgid "Completed surveys"
-msgstr ""
+msgstr "完了したアンケート"
 
 msgid "Total surveys"
-msgstr ""
+msgstr "合計アンケート数"
 
 msgid "Wiki pages reading progress"
-msgstr ""
+msgstr "Wiki ページの閲覧進捗"
 
 msgid "Wiki pages unread"
-msgstr ""
+msgstr "ウィキページ未読"
 
 msgid "Wiki pages read"
-msgstr ""
+msgstr "ウィキページを読む"
 
 msgid "Wiki pages revisions"
 msgstr ""
@@ -3218,7 +3288,7 @@ msgstr ""
 msgid "Database Host"
 msgstr ""
 
-msgid "Database Login"
+msgid "Database user"
 msgstr ""
 
 msgid "Database Password"
@@ -3246,9 +3316,6 @@ msgid "Surname of the Administrator"
 msgstr ""
 
 msgid "Administrator login"
-msgstr ""
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
 msgstr ""
 
 msgid "Project manager"
@@ -4619,10 +4686,10 @@ msgstr ""
 msgid "Download the file"
 msgstr ""
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr "プラットフォーム管理者: 電話"
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr "プラットフォーム管理者の電話番号です"
 
 msgid "Send mail to new user"
@@ -4856,10 +4923,10 @@ msgstr ""
 msgid "Unsubscribe users from course"
 msgstr ""
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr ""
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr ""
 
 msgid "CSV file import location"
@@ -5813,7 +5880,7 @@ msgstr ""
 msgid "Full-text search feature"
 msgstr ""
 
-msgid "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr ""
 
 msgid "Find a training session"
@@ -16799,7 +16866,7 @@ msgstr ""
 msgid "Courses validation"
 msgstr "コースの確認"
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr "\"コースの確認\" の機能を有効にした場合、教員はコースを単独で作成することはできません。教員はコースの要求を入力します。プラットフォーム管理者は要求を確認して承認または拒否します。<br />この機能は電子メール メッセージを自動的に送信します。専用のアカウントを使用して電子メール サーバーにアクセスするように Chamilo を設定します。"
 
 msgid "%s A request for additional information about the course request %s"
@@ -16823,7 +16890,7 @@ msgstr ""
 msgid "Course validation - a link to the terms and conditions"
 msgstr "コースの確認 - 利用規約のリンク"
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr "これはコースの要求を行うために有効な \"利用規約\" のドキュメントの URL です。アドレスをここに設定した場合、ユーザーはコースの要求を送信する前にこの利用規約を読んで同意しなければなりません。<br />Chamilo の \"利用規約\" モジュールを有効にしてその URL を使用する場合は、この設定を空のままにします。"
 
 msgid "The course has not been created due to an internal error."
@@ -16883,7 +16950,7 @@ msgstr ""
 msgid "WIRIS mathematical editor"
 msgstr ""
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr ""
 
 msgid "File export as"
@@ -17069,7 +17136,7 @@ msgstr ""
 msgid "Load the Mathjax library in all the system pages"
 msgstr ""
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr ""
 
 msgid "Hide tools from teachers"
@@ -19370,31 +19437,31 @@ msgstr ""
 msgid "Announcement for a group"
 msgstr ""
 
-msgid "Language priority 1"
+msgid "Highest priority language"
 msgstr "言語の優先度 1"
 
-msgid "Language priority 2"
+msgid "Secondary priority language"
 msgstr "言語の優先度 2"
 
-msgid "Language priority 3"
+msgid "Third priority language"
 msgstr "言語の優先度 3"
 
-msgid "Language priority 4"
+msgid "Fourth priority language"
 msgstr "言語の優先度 4"
 
 msgid "Language priority 5"
 msgstr ""
 
-msgid "The language with the highest priority"
+msgid "Primary language selected when multiple language contexts are set."
 msgstr "優先度の最も高い言語です"
 
-msgid "The second language priority"
+msgid "Secondary fallback language if first priority is unavailable or out of context."
 msgstr "2 番目の優先度の言語です"
 
-msgid "The third language priority"
+msgid "Tertiary language fallback if higher priorities fail."
 msgstr "3 番目の優先度の言語です"
 
-msgid "The fourth language priority"
+msgid "Last language fallback option by order of priority."
 msgstr "4 番目の優先度の言語です"
 
 msgid "The lowest language priority"
@@ -20045,7 +20112,7 @@ msgstr ""
 msgid "CAPTCHA"
 msgstr ""
 
-msgid "Enable a CAPTCHA on the login form to avoid password hammering"
+msgid "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering"
 msgstr ""
 
 msgid "CAPTCHA mistakes allowance"
@@ -20120,7 +20187,7 @@ msgstr ""
 msgid "PDF header logo"
 msgstr ""
 
-msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
 msgstr ""
 
 msgid "Order users by official code"
@@ -21071,7 +21138,7 @@ msgstr ""
 msgid "Sender ID of Firebase Console for Cloud Messaging"
 msgstr ""
 
-msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
+msgid "You need register a project on <a href='https://console.firebase.google.com/'>Google Firebase Console</a>"
 msgstr ""
 
 msgid "Server key of Firebase Console for Cloud Messaging"
@@ -25045,4 +25112,3 @@ msgstr ""
 
 msgid "%02d h %02d m %02d s"
 msgstr ""
-

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -58,7 +59,7 @@ class SkillRepository extends ServiceEntityRepository
 
         $qb
             ->innerJoin(
-                'ChamiloCoreBundle:SkillRelUser',
+                SkillRelUser::class,
                 'su',
                 Join::WITH,
                 's.id = su.skill'

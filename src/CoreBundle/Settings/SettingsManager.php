@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Settings;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\ServiceHelper\SettingsManagerHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
@@ -58,7 +59,8 @@ class SettingsManager implements SettingsManagerInterface
         EntityManager $manager,
         EntityRepository $repository,
         EventDispatcherInterface $eventDispatcher,
-        RequestStack $request
+        RequestStack $request,
+        protected readonly SettingsManagerHelper $settingsManagerHelper,
     ) {
         $this->schemaRegistry = $schemaRegistry;
         $this->manager = $manager;
@@ -143,6 +145,12 @@ class SettingsManager implements SettingsManagerInterface
     public function getSetting(string $name, bool $loadFromDb = false): mixed
     {
         $name = $this->validateSetting($name);
+
+        $overridden = $this->settingsManagerHelper->getOverride($name);
+
+        if (null !== $overridden) {
+            return $overridden;
+        }
 
         [$category, $name] = explode('.', $name);
 
@@ -393,9 +401,25 @@ class SettingsManager implements SettingsManagerInterface
         $parametersFromDb = $query->getQuery()->getResult();
         $parameters = [];
 
-        /** @var SettingsCurrent $parameter */
         foreach ($parametersFromDb as $parameter) {
-            $parameters[$parameter->getCategory()][] = $parameter;
+            /** @var SettingsCurrent $parameter */
+            $category = $parameter->getCategory();
+            $variable = $parameter->getVariable();
+
+            $hidden = [];
+            $serviceKey = 'chamilo_core.settings.'.$category;
+            if ($this->schemaRegistry->has($serviceKey)) {
+                $schema = $this->schemaRegistry->get($serviceKey);
+                if (method_exists($schema, 'getHiddenSettings')) {
+                    $hidden = $schema->getHiddenSettings();
+                }
+            }
+
+            if (\in_array($variable, $hidden, true)) {
+                continue;
+            }
+
+            $parameters[$category][] = $parameter;
         }
 
         return $parameters;
@@ -652,9 +676,7 @@ class SettingsManager implements SettingsManagerInterface
             'show_users_folders' => 'Tools',
             'show_default_folders' => 'Tools',
             'show_chat_folder' => 'Tools',
-            'enabled_text2audio' => 'Tools',
             'course_hide_tools' => 'Course',
-            'enabled_support_pixlr' => 'Tools',
             'show_groups_to_users' => 'Session',
             'accessibility_font_resize' => 'Platform',
             'hide_courses_in_sessions' => 'Session',
@@ -791,14 +813,11 @@ class SettingsManager implements SettingsManagerInterface
             'messaging_gdc_project_number' => 'WebServices',
             'messaging_gdc_api_key' => 'WebServices',
             'teacher_can_select_course_template' => 'Course',
-            'enable_record_audio' => 'Tools',
             'allow_show_skype_account' => 'Platform',
             'allow_show_linkedin_url' => 'Platform',
             'enable_profile_user_address_geolocalization' => 'User',
             'show_official_code_whoisonline' => 'Profile',
             'icons_mode_svg' => 'display',
-            'user_name_order' => 'display',
-            'user_name_sort_by' => 'display',
             'default_calendar_view' => 'agenda',
             'exercise_invisible_in_session' => 'exercise',
             'configure_exercise_visibility_in_course' => 'exercise',
@@ -951,10 +970,7 @@ class SettingsManager implements SettingsManagerInterface
             'show_default_folders' => 'document',
             'show_chat_folder' => 'chat',
             'enabled_support_svg' => 'editor',
-            'enabled_support_pixlr' => 'editor',
             'enable_webcam_clip' => 'document',
-            'enable_record_audio' => 'course',
-            'enabled_text2audio' => 'document',
             'permanently_remove_deleted_files' => 'document',
             'allow_delete_attendance' => 'attendance',
             'display_groups_forum_in_general_tool' => 'forum',

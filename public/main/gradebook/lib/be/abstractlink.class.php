@@ -366,6 +366,13 @@ abstract class AbstractLink implements GradebookItem
         $result = Database::query($sql);
         $links = self::create_objects_from_sql_result($result);
 
+        $em = Database::getManager();
+        $repo = $em->getRepository(GradebookLink::class);
+
+        foreach ($links as $link) {
+            $link->entity = $repo->find($link->get_id());
+        }
+
         return $links;
     }
 

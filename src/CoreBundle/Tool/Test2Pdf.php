@@ -10,12 +10,12 @@ class Test2Pdf extends AbstractPlugin
 {
     public function getTitle(): string
     {
-        return 'test2pdf';
+        return 'Test2Pdf';
     }
 
     public function getLink(): string
     {
-        return '/plugin/test2pdf/start.php';
+        return '/plugin/Test2Pdf/start.php';
     }
 
     public function getIcon(): string

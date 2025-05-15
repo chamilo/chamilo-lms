@@ -41,7 +41,7 @@ class AccessUrlRelUser implements EntityAccessUrlInterface, Stringable
         return (string) $this->id;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

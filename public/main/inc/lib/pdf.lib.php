@@ -7,7 +7,10 @@ use Chamilo\CoreBundle\Framework\Container;
 use Masterminds\HTML5;
 use Mpdf\HTMLParserMode;
 use Mpdf\Mpdf;
+use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
+use Mpdf\Utils\UtfString;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class PDF.
@@ -29,6 +32,8 @@ class PDF
      * @param string   $orientation orientation "P" = Portrait "L" = Landscape
      * @param array    $params
      * @param Template $template
+     *
+     * @throws MpdfException
      */
     public function __construct(
         $pageFormat = 'A4',
@@ -37,31 +42,31 @@ class PDF
         $template = null
     ) {
         $this->template = $template;
-        /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF */
+        /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=Mpdf */
         if (!in_array($orientation, ['P', 'L'])) {
             $orientation = 'P';
         }
         //left, right, top, bottom, margin_header, margin footer
 
-        $params['left'] = isset($params['left']) ? $params['left'] : 15;
-        $params['right'] = isset($params['right']) ? $params['right'] : 15;
-        $params['top'] = isset($params['top']) ? $params['top'] : 30;
-        $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 30;
-        $params['margin_footer'] = isset($params['margin_footer']) ? $params['margin_footer'] : 8;
+        $params['left'] = $params['left'] ?? 15;
+        $params['right'] = $params['right'] ?? 15;
+        $params['top'] = $params['top'] ?? 30;
+        $params['bottom'] = $params['bottom'] ?? 30;
+        $params['margin_footer'] = $params['margin_footer'] ?? 8;
 
-        $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
-        $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : '';
-        $this->params['course_info'] = isset($params['course_info']) ? $params['course_info'] : api_get_course_info();
-        $this->params['session_info'] = isset($params['session_info']) ? $params['session_info'] : api_get_session_info(api_get_session_id());
-        $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
-        $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : [];
-        $this->params['show_real_course_teachers'] = isset($params['show_real_course_teachers']) ? $params['show_real_course_teachers'] : false;
-        $this->params['student_info'] = isset($params['student_info']) ? $params['student_info'] : false;
-        $this->params['show_grade_generated_date'] = isset($params['show_grade_generated_date']) ? $params['show_grade_generated_date'] : false;
-        $this->params['show_teacher_as_myself'] = isset($params['show_teacher_as_myself']) ? $params['show_teacher_as_myself'] : true;
+        $this->params['filename'] = $params['filename'] ?? api_get_local_time();
+        $this->params['pdf_title'] = $params['pdf_title'] ?? '';
+        $this->params['course_info'] = $params['course_info'] ?? api_get_course_info();
+        $this->params['session_info'] = $params['session_info'] ?? api_get_session_info(api_get_session_id());
+        $this->params['course_code'] = $params['course_code'] ?? api_get_course_id();
+        $this->params['add_signatures'] = $params['add_signatures'] ?? [];
+        $this->params['show_real_course_teachers'] = $params['show_real_course_teachers'] ?? false;
+        $this->params['student_info'] = $params['student_info'] ?? false;
+        $this->params['show_grade_generated_date'] = $params['show_grade_generated_date'] ?? false;
+        $this->params['show_teacher_as_myself'] = $params['show_teacher_as_myself'] ?? true;
         $localTime = api_get_local_time();
-        $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_TIME_FORMAT_LONG);
-        $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
+        $this->params['pdf_date'] = $params['pdf_date'] ?? api_format_date($localTime, DATE_TIME_FORMAT_LONG);
+        $this->params['pdf_date_only'] = $params['pdf_date'] ?? api_format_date($localTime, DATE_FORMAT_LONG);
 
         $params = [
             'tempDir' => Container::getParameter('kernel.cache_dir').'/mpdf',
@@ -306,8 +311,22 @@ class PDF
                     $filename = basename($filename, '.htm');
                 }
 
+                $webPath = api_get_path(WEB_PATH);
+
                 $documentHtml = @file_get_contents($file);
                 $documentHtml = preg_replace($clean_search, '', $documentHtml);
+
+                $crawler = new Crawler($documentHtml);
+                $crawler
+                    ->filter('link[rel="stylesheet"]')
+                    ->each(function (Crawler $node) use ($webPath) {
+                        $linkUrl = $node->link()->getUri();
+                        if (!str_starts_with($linkUrl, $webPath)) {
+                            $node->getNode(0)->parentNode->removeChild($node->getNode(0));
+                        }
+                    })
+                ;
+                $documentHtml = $crawler->outerHtml();
 
                 //absolute path for frames.css //TODO: necessary?
                 $absolute_css_path = api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets.stylesheets').'/frames.css';
@@ -773,7 +792,7 @@ class PDF
                 }
                 if (!empty($watermark_text)) {
                     $this->pdf->SetWatermarkText(
-                        strcode2utf($watermark_text),
+                        UtfString::strcode2utf($watermark_text),
                         0.1
                     );
                     $this->pdf->showWatermarkText = true;
@@ -921,10 +940,24 @@ class PDF
 
         $documentPath = $courseInfo ? $sysCoursePath.$courseInfo['path'].'/document/' : '';
 
+        $notFoundImagePath = Display::return_icon(
+            'closed-circle.png',
+            get_lang('FileNotFound'),
+            [],
+            ICON_SIZE_TINY,
+            false,
+            true
+        );
+
         /** @var \DOMElement $element */
         foreach ($elements as $element) {
             $src = $element->getAttribute('src');
             $src = trim($src);
+
+            if (api_filename_has_blacklisted_stream_wrapper($src)) {
+                $element->setAttribute('src', $notFoundImagePath);
+                continue;
+            }
 
             if (false !== strpos($src, $protocol)) {
                 continue;

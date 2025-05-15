@@ -88,6 +88,22 @@ if ($is_allowed_to_edit) {
             ['title' => htmlentities(get_lang('Add category'))]
         );
     }
+
+    if (('true' === api_get_setting('ai_helpers.enable_ai_helpers'))  &&
+        ('true' === api_get_course_setting('learning_path_generator'))
+    ) {
+        $actionLeft .= Display::url(
+            Display::getMdiIcon(
+                'robot',
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Lp Ai Generator')
+            ),
+            api_get_self().'?'.api_get_cidreq().'&action=ai_helper'
+        );
+    }
+
     $actions = Display::toolbarAction('actions-lp', [$actionLeft]);
 }
 
@@ -263,10 +279,10 @@ foreach ($categories as $category) {
             $start_time = $end_time = '';
             if ($is_allowed_to_edit) {
                 if (!empty($details['published_on'])) {
-                    $start_time = api_convert_and_format_date($details['published_on'], DATE_TIME_FORMAT_SHORT);
+                    $start_time = api_convert_and_format_date($details['published_on'], DATE_TIME_FORMAT_SHORT_LOCALIZED);
                 }
                 if (!empty($details['expired_on'])) {
-                    $end_time = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_SHORT);
+                    $end_time = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_SHORT_LOCALIZED);
                 }
             } else {
                 $time_limits = false;

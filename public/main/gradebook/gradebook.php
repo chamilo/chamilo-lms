@@ -419,7 +419,7 @@ if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
             'url' => Category::getUrl().'selectcat='.$selectcat,
             'name' => get_lang('Assessments'),
         ];
-        Display :: display_header(get_lang('List View'));
+        Display :: display_header(get_lang('List view'));
     } elseif (isset($_GET['search'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl(),
@@ -542,28 +542,18 @@ if (!empty($keyword)) {
         $user = api_get_user_info($user_id);
         $scoredisplay = ScoreDisplay :: instance();
         $scorecourse = $category[0]->calc_score($user_id);
-        $scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse, SCORE_AVERAGE) : get_lang('NoResults and feedbackAvailable'));
+        $scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse, SCORE_AVERAGE) : get_lang('No result or feedback available.'));
 
         $cattotal = Category :: load(0);
         $scoretotal = $cattotal[0]->calc_score($user_id);
-        $scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal, SCORE_PERCENT) : get_lang('NoResults and feedbackAvailable'));
+        $scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal, SCORE_PERCENT) : get_lang('No result or feedback available.'));
 
         //prepare all necessary variables:
         $organization_name = api_get_setting('Institution');
         $portal_name = api_get_setting('siteName');
         $stud_fn = $user['firstname'];
         $stud_ln = $user['lastname'];
-        $certif_text = sprintf(get_lang('%s certifies that
-
- %s
-
-has successfully completed the course
-
- \'%s\'
-
-with a grade of
-
- \'%s\''), $organization_name, $stud_fn.' '.$stud_ln, $category[0]->get_name(), $scorecourse_display);
+        $certif_text = sprintf(get_lang("%s certifies that\n\n %s \n\nhas successfully completed the course \n\n '%s' \n\nwith a grade of\n\n '%s'"), $organization_name, $stud_fn.' '.$stud_ln, $category[0]->get_name(), $scorecourse_display);
         $certif_text = str_replace("\\n", "\n", $certif_text);
         $date = api_convert_and_format_date(null, DATE_FORMAT_SHORT);
         // @todo use pdf.lib.php
@@ -620,7 +610,7 @@ if (empty($allcat) && empty($alleval) && empty($alllink) &&
     !$is_platform_admin && $is_course_admin && !isset($_GET['selectcat']) && api_is_course_tutor()
 ) {
     echo Display::return_message(
-        get_lang('AssessmentsWelcomeMessage').
+        get_lang('Welcome to the Assessments tool. This tool allows you to assess competences in your organization. Generate Competences Reports by merging the score of various learning activities including classroom and online activities. This will typically fit in a blended learning environment.').
         '<br /><br />
         <form name="createcat" method="post" action="'.api_get_self().'?createallcategories=1">
         <input type="submit" value="'.get_lang('Create all the courses categories').'"></form>',

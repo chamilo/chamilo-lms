@@ -1,0 +1,11 @@
+parameters:
+    settings_overrides:
+        default:
+            hosting_limit:
+                users: 0
+                teachers: 0
+                courses: 0
+                sessions: 0
+                disk_space: 0
+                active_courses: 0
+                total_size: 0

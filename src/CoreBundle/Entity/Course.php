@@ -47,7 +47,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     filters: [
         'course.sticky_boolean_filter',
     ],
-    security: "is_granted('ROLE_USER')"
+    paginationClientEnabled: true,
+    security: "is_granted('ROLE_USER')",
 )]
 #[ORM\Table(name: 'course')]
 #[ORM\Index(columns: ['sticky'], name: 'idx_course_sticky')]
@@ -165,18 +166,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         orphanRemoval: true
     )]
     protected Collection $tools;
-
-    #[Groups(['course:read'])]
-    #[ORM\OneToOne(
-        mappedBy: 'course',
-        targetEntity: TrackCourseRanking::class,
-        cascade: [
-            'persist',
-            'remove',
-        ],
-        orphanRemoval: true
-    )]
-    protected ?TrackCourseRanking $trackCourseRanking = null;
 
     protected Session $currentSession;
 
@@ -312,10 +301,12 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected ?DateTime $expirationDate = null;
 
     #[Assert\NotNull]
+    #[Groups(['course:read'])]
     #[ORM\Column(name: 'subscribe', type: 'boolean', unique: false, nullable: false)]
     protected bool $subscribe;
 
     #[Assert\NotNull]
+    #[Groups(['course:read'])]
     #[ORM\Column(name: 'unsubscribe', type: 'boolean', unique: false, nullable: false)]
     protected bool $unsubscribe;
 
@@ -346,6 +337,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[Groups(['course:read', 'course_rel_user:read', 'course:write'])]
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $duration = null;
+
+    #[Groups(['course:read', 'course:write'])]
+    #[ORM\Column(name: 'popularity', type: 'integer', nullable: false, options: ['default' => 0])]
+    protected int $popularity = 0;
 
     public function __construct()
     {
@@ -438,18 +433,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     {
         $tool->setCourse($this);
         $this->tools->add($tool);
-
-        return $this;
-    }
-
-    public function getTrackCourseRanking(): ?TrackCourseRanking
-    {
-        return $this->trackCourseRanking;
-    }
-
-    public function setTrackCourseRanking(?TrackCourseRanking $trackCourseRanking): self
-    {
-        $this->trackCourseRanking = $trackCourseRanking;
 
         return $this;
     }
@@ -1187,6 +1170,18 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function setDuration(?int $duration): self
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getPopularity(): int
+    {
+        return $this->popularity;
+    }
+
+    public function setPopularity(int $popularity): self
+    {
+        $this->popularity = $popularity;
 
         return $this;
     }

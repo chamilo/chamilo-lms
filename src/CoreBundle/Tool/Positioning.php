@@ -10,12 +10,12 @@ class Positioning extends AbstractPlugin
 {
     public function getTitle(): string
     {
-        return 'positioning';
+        return 'Positioning';
     }
 
     public function getLink(): string
     {
-        return '/plugin/positioning/start.php';
+        return '/plugin/Positioning/start.php';
     }
 
     public function getIcon(): string

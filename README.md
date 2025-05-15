@@ -17,24 +17,78 @@ Chamilo is an e-learning platform, also called "LMS", published under the GNU/GP
 
 **Chamilo 2.0 is still in development. This installation procedure below is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch's README.md for details.**
 
+### Minimum server hardware requirements
+
+Chamilo 2.0 has been tested on a 2 vCPUs, 2GB RAM virtual machine under Ubuntu 24.04 and has been shown to work.
+At this stage, we haven't made any load testing to evaluate the number of users that could use the system simultaneously.
+Remember this is an alpha version. As such, it will run in "dev" mode (see the `.env` file), considerably more slowly the "prod" mode.
+
+### Software stack requirements
+
 We assume you already have:
 
 - composer 2.x - https://getcomposer.org/download/
-- yarn +4.x - https://yarnpkg.com/getting-started/install
+- yarn 4.x+ - https://yarnpkg.com/getting-started/install
 - Node >= v18+ (lts) - https://github.com/nodesource/distributions/blob/master/README.md
 - Configuring a virtualhost in a domain, not in a sub folder inside a domain.
-- A working LAMP/WAMP server with PHP 8.2+
+- A working LAMP/WAMP server with PHP 8.3+
 
 ### Software stack install (Ubuntu)
 
-You will need PHP8.2+ and NodeJS v18+ to run Chamilo 2.
+#### The easy way
 
-On Ubuntu 24.04+, the following should take care of most dependencies.
+These are local testing instructions for a fictitious domain name "my.chamilo.net" configured in your hosts file and
+pointing at a local machine's IP address. These instructions do NOT provide a secure environment.
+
+Spawn an Ubuntu Server 24.04 LTS Virtual Machine. Login as root (or `sudo -s` once connected) through SSH.
+Install the software stack and Chamilo using the commands below.
+
+~~~~
+apt update && apt -y upgrade
+apt install -y apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
+mysql -e "GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY 'chamilo2';"
+cd /var/www && wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-alpha.2/chamilo-2.0.0-alpha.2.tar.gz
+tar zxf chamilo-2.0.0-alpha.2.tar.gz
+mv chamilo-2.0.0-alpha.2 chamilo
+vim /etc/apache2/sites-available/my.chamilo.net.conf
+# copy-paste the following into the config file
+<VirtualHost *:80>
+  ServerName my.chamilo.net
+  DocumentRoot /var/www/chamilo/public/
+  RewriteEngine On
+  <Directory /var/www/chamilo/public>
+    AllowOverride All
+    Require all granted
+  </Directory>
+  php_value session.cookie_httponly 1
+  php_admin_value session.save_handler "redis"
+  php_admin_value session.save_path "tcp://127.0.0.1:6379"
+  php_admin_value upload_max_filesize 256M`
+  php_admin_value post_max_size 256M
+</VirtualHost>
+# exit with "escape, :, wq"
+a2ensite my.chamilo.net
+a2enmod rewrite ssl headers expires
+systemctl restart apache2
+# Open http://my.chamilo.net in your browser
+# Complete the installation information using DB credentials chamilo2/chamilo2/chamilo2 and the default host and port
+# Done
+~~~~
+
+By default, it is installed in "dev" mode to have more debugging features at hand. If you want to change it to "prod"
+mode, you will have to install yarn, run `yarn encore prod` and modify `/.env` to change `APP_ENV` to `'prod'`. See
+other installation methods below.
+
+#### The more detailed way
+
+You will need PHP8.3+ and NodeJS v18+ to run Chamilo 2.
+
+On Ubuntu 24.04+, the following should take care of all dependencies (certbot is optional).
 
 ~~~~
 sudo apt update
 sudo apt -y upgrade
-sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip
+sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
 sudo mysql
 mysql> GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost IDENTIFIED BY '{password}';
 mysql> exit
@@ -49,23 +103,23 @@ sudo apt -y upgrade
 sudo apt -y install ca-certificates curl gnupg software-properties-common
 sudo add-apt-repository ppa:ondrej/php
 sudo apt update
-sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis php-pear php8.3-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip
+sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis php-pear php8.3-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl
 ~~~~
 (replace 'chamilo' by the database name and user you want, and '{password}' by a more secure password)
 
 #### NodeJS, Yarn, Composer
 
 If you already have nodejs installed, check the version with `node -v`
-Otherwise, install node 18 or above.
+Otherwise, install Node.js 18 or above.
 
-The following lines use a static version from https://deb.nodesource.com/ (not very sustainable over time).
+The following lines use a static version of Node.js 20 from https://deb.nodesource.com/
 ~~~~
 cd ~
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
 sudo apt-get install -y nodejs
 ~~~~
 
-Another option to install nodejs is by using NVM (Node Version Manager). You can install it following the instructions [here](https://github.com/nvm-sh/nvm#installing-and-updating).
+Another option to install Node.js is by using NVM (Node Version Manager). You can install it following the instructions [here](https://github.com/nvm-sh/nvm#installing-and-updating).
 You can install the desired node version (preferably, the LTS version):
 ~~~~
 sudo nvm install --lts
@@ -78,16 +132,16 @@ sudo corepack enable
 cd ~
 ~~~~
 
-Follow the instructions at https://getcomposer.org/download/ to get Composer, then:
+Follow the instructions at https://getcomposer.org/download/ to get Composer, then add to the local binaries for easier use:
 ~~~~
 sudo mv composer.phar /usr/local/bin/composer
 ~~~~
 
 #### Apache tweaks
 
-Optionally, you might want this to enable a series of Apache modules, but only ``rewrite` is 100% necessary:
+Apache's rewrite module is mandatory. The rest is optional and depends on your needs.
 ~~~~
-sudo apt install libapache2-mod-xsendfile
+sudo apt install libapache2-mod-xsendfile #only for optimization if used in the vhost config
 sudo a2enmod rewrite ssl headers expires
 sudo systemctl restart apache2
 ~~~~
@@ -106,9 +160,7 @@ When asked whether you want to execute the recipes or install plugins for some o
 ~~~~
 yarn set version stable
 # delete yarn.lock if present, as it might contain restrictive packages from a different context
-yarn up
-yarn install
-yarn dev
+yarn up && yarn install && yarn dev
 # you can safely ignore any "warning" mentioned by yarn dev
 sudo touch .env
 sudo chown -R www-data: var/ .env config/
@@ -139,6 +191,8 @@ This should look similar to this very short excerpt (in your Apache vhost block)
   php_value session.cookie_httponly 1
   php_admin_value session.save_handler "redis"
   php_admin_value session.save_path "tcp://127.0.0.1:6379"
+  php_admin_value upload_max_filesize 256M
+  php_admin_value post_max_size 256M
 </VirtualHost>
 ~~~~
 Don't forget to reload your Apache configuration after each change:
@@ -148,7 +202,8 @@ sudo systemctl reload apache2
 
 ### Web installer
 
-Once the above is ready, use your browser to load the URL you have defined for your host, e.g. https://my.chamilo.net (this should redirect you to `main/install/index.php`) and follow the UI instructions (database, admin user settings, etc).
+Once the above is ready, use your browser to lo
+ad the URL you have defined for your host, e.g. https://my.chamilo.net (this should redirect you to `main/install/index.php`) and follow the UI instructions (database, admin user settings, etc).
 
 After the web install process, change the permissions back to a reasonably safe state:
 ~~~~
@@ -163,8 +218,7 @@ git pull
 composer install
 php bin/console doctrine:schema:update --force --complete
 php bin/console cache:clear
-yarn install
-yarn dev
+yarn install && yarn dev
 ~~~~
 
 Note for developers in alpha stage: the doctrine command will try to update

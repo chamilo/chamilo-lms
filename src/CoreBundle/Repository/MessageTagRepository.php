@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
@@ -10,6 +10,9 @@ use Chamilo\CoreBundle\Entity\MessageTag;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
+/**
+ * @template-extends SortableRepository<MessageTag>
+ */
 class MessageTagRepository extends SortableRepository
 {
     public function __construct(EntityManagerInterface $em)

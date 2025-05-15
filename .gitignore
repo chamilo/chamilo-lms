@@ -26,6 +26,10 @@ var/upload/*
 /config/configuration.php
 /main/inc/conf/configuration.php
 
+/config/authentication.yaml
+/config/settings_overrides.yaml
+/config/plugin.yaml
+
 # Home
 components/*
 
@@ -42,7 +46,7 @@ components/*
 nbproject/*
 
 # Plugins config files
-public/plugin/bbb/config.vm.php
+public/plugin/Bbb/config.vm.php
 
 # Cron temp files
 public/main/cron/incoming/*

@@ -953,9 +953,9 @@ class AddCourse
                         $message,
                         $siteName,
                         $recipient_email,
-                        null,
-                        null,
-                        null
+                        [],
+                        [],
+                        false
                     );
                 }
             }

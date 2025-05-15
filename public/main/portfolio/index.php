@@ -6,6 +6,11 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Event\AbstractEvent;
+use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\PortfolioItemDeletedEvent;
+use Chamilo\CoreBundle\Event\PortfolioItemVisibilityChangedEvent;
 
 // Make sure we void the course context if we are in the social network section
 if (empty($_GET['cidReq'])) {
@@ -77,7 +82,7 @@ switch ($action) {
         }
 
         /** @var PortfolioCategory $category */
-        $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
+        $category = $em->find(PortfolioCategory::class, $id);
 
         if (!$isValid($category)) {
             api_not_allowed(true);
@@ -94,7 +99,7 @@ switch ($action) {
         }
 
         /** @var PortfolioCategory $category */
-        $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
+        $category = $em->find(PortfolioCategory::class, $id);
 
         if (!$isValid($category)) {
             api_not_allowed(true);
@@ -119,7 +124,7 @@ switch ($action) {
         }
 
         /** @var PortfolioCategory $category */
-        $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
+        $category = $em->find(PortfolioCategory::class, $id);
 
         if (!$isValid($category)) {
             api_not_allowed(true);
@@ -145,7 +150,7 @@ switch ($action) {
         }
 
         /** @var CPortfolio $item */
-        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+        $item = $em->find(Portfolio::class, $id);
 
         if (!$isValid($item)) {
             api_not_allowed(true);
@@ -162,7 +167,7 @@ switch ($action) {
         }
 
         /** @var Portfolio $item */
-        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+        $item = $em->find(Portfolio::class, $id);
 
         if (!$isValid($item)) {
             api_not_allowed(true);
@@ -172,6 +177,11 @@ switch ($action) {
 
         $em->persist($item);
         $em->flush();
+
+        Container::getEventDispatcher()->dispatch(
+            new PortfolioItemVisibilityChangedEvent(['portfolio' => $item, 'visibility']),
+            Events::PORTFOLIO_ITEM_VISIBILITY_CHANGED
+        );
 
         Display::addFlash(
             Display::return_message(get_lang('The visibility has been changed.'), 'success')
@@ -187,11 +197,16 @@ switch ($action) {
         }
 
         /** @var Portfolio $item */
-        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+        $item = $em->find(Portfolio::class, $id);
 
         if (!$isValid($item)) {
             api_not_allowed(true);
         }
+
+        Container::getEventDispatcher()->dispatch(
+            new PortfolioItemDeletedEvent(['item' => $item], AbstractEvent::TYPE_PRE),
+            Events::PORTFOLIO_ITEM_DELETED
+        );
 
         $em->remove($item);
         $em->flush();

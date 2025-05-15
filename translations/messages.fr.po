@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-08-08 08:44+0000\n"
+"PO-Revision-Date: 2025-04-18 10:38+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
 "messages/fr/>\n"
@@ -110,7 +110,14 @@ msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
 msgstr "Arccotangente hyperbolique:\t\tarccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
-msgstr "Dans un soucis de bon fonctionnement et de mesure de fréquentation de la plateforme, Chamilo utilise les cookies.<br/><br/>Au besoin, la rubrique « Aide » des navigateurs vous indique comment paramétrer les cookies.<br/><br/>Pour plus d'informations sur les cookies, visitez le site de la <a href='http://www.cnil.fr/vos-obligations/sites-web-cookies-et-autres-traceurs/que-dit-la-loi/' target='_blank'>CNIL</a>."
+msgstr ""
+"Dans un soucis de bon fonctionnement et de mesure de fréquentation de la "
+"plateforme, Chamilo utilise les cookies.<br /><br />\n"
+"Au besoin, la rubrique « Aide » des navigateurs vous indique comment "
+"paramétrer les cookies.<br /><br />\n"
+"Pour plus d'informations sur les cookies, visitez le site de la <a href="
+"\"http://www.cnil.fr/vos-obligations/sites-web-cookies-et-autres-traceurs/"
+"que-dit-la-loi/\" target=\"_blank\">CNIL</a>."
 
 msgid "By continuing to use this site, you declare you accept its use of cookies."
 msgstr "En continuant votre navigation sur ce site, vous acceptez l’utilisation des cookies."
@@ -381,7 +388,9 @@ msgid "Session name"
 msgstr "Nom de la session"
 
 msgid "Mobile phone number is incomplete or contains invalid characters"
-msgstr "Le numéro de téléphone portable que vous avez indiqué est incomplet ou contient des caractères non valides."
+msgstr ""
+"Le numéro de téléphone portable que vous avez indiqué est incomplet ou "
+"contient des caractères non valides"
 
 msgid "Include the country dial code"
 msgstr "Inclure le préfixe d'appels du pays"
@@ -395,14 +404,16 @@ msgstr "Vérifier l'unicité des courriels"
 msgid "This email is already in use on the platform."
 msgstr "Ce courriel est déjà utilisé sur cette plateforme."
 
+#, fuzzy
 msgid "Total posts in all forums."
 msgstr "Total de réponses dans tous les forums"
 
 msgid "Add me as coach"
 msgstr "M'ajouter comme coach"
 
+#, fuzzy
 msgid "Add me as teacher in the imported courses."
-msgstr "Ajoutez-moi tant que professeur dans les cours"
+msgstr "M'ajouter en tant que professeur dans les cours importés"
 
 msgid "Progress of exercises taken by the student"
 msgstr "Progrès des exercices passés par l'étudiant"
@@ -422,11 +433,18 @@ msgstr "Utilisateur : %s - Session : %s"
 msgid "The given session duration is the same as the default for the session. Ignoring."
 msgstr "La durée configurée pour la session est celle par défaut. Valeur par défaut enregistrée."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s"
-msgstr "Le premier accès de cet étudiant à cette session a eu lieu le %s. D'une durée maximum de %s jours, la période d'accès à cette session est déjà expirée."
+msgstr ""
+"Le premier accès de cet étudiant à cette session a eu lieu le %s. D'une "
+"durée maximum de %s jours, la période d'accès à cette session a déjà expiré "
+"le %s."
 
+#, fuzzy
 msgid "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days"
-msgstr "Le premier accès de cet étudiant à cette session a eu lieu le %s. D'une durée maximum de %s jours, la fin est programmée pour dans %s jours."
+msgstr ""
+"Le premier accès de cet étudiant à cette session a eu lieu le %s. D'une "
+"durée maximum de %s jours, la fin est programmée pour dans %s jours."
 
 msgid "This user never accessed this session before. The duration is currently set to %s days (from the first access date)"
 msgstr "Cet utilisateur n'est jamais entré dans cette session auparavant. La durée est configurée pour %s jours (depuis la date de premier accès)."
@@ -1312,7 +1330,6 @@ msgstr "Hotpotatoes"
 msgid "-1 = All questions will be selected."
 msgstr "-1 = Toutes les questions seront sélectionnées. 0 = Aucune question ne sera sélectionnée."
 
-#, fuzzy
 msgid "You can customize the email sent to users when they finished the exercise. You can use tags like these:"
 msgstr ""
 "Vous pouvez adapter le courriel envoyé aux utilisateurs quand ils terminent "
@@ -1806,7 +1823,7 @@ msgid "Chamilo LIVE"
 msgstr "Vidéo"
 
 msgid "Contributions"
-msgstr "Travaux"
+msgstr "contributions"
 
 msgid "Course program"
 msgstr "Cahier des charges"
@@ -2127,7 +2144,7 @@ msgid "Import finished"
 msgstr "L'importation du fichier de sauvegarde est terminée"
 
 msgid "Tests"
-msgstr "Tests"
+msgstr "Exercices"
 
 msgid "Courses"
 msgstr "Cours"
@@ -3307,7 +3324,7 @@ msgstr "par ex."
 msgid "Database Host"
 msgstr "Hôte du serveur de bases de données"
 
-msgid "Database Login"
+msgid "Database user"
 msgstr "Utilisateur base de données"
 
 msgid "Database Password"
@@ -3337,11 +3354,8 @@ msgstr "Prénom de l'administrateur"
 msgid "Administrator login"
 msgstr "Identifiant de l'administrateur"
 
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
-msgstr "Mot de passe de l'administrateur (<font color=\"red\">en choisir un autre pourrait être une bonne idée</font>)"
-
 msgid "Project manager"
-msgstr "Responsable du contenu"
+msgstr "Chef de projet"
 
 msgid "Your portal name"
 msgstr "Nom du campus"
@@ -3380,7 +3394,7 @@ msgid "Main language"
 msgstr "Langue principale"
 
 msgid "License"
-msgstr "License"
+msgstr "Licence"
 
 msgid "Last check before install"
 msgstr "Dernière vérification avant installation"
@@ -4743,10 +4757,10 @@ msgstr "La liste des utilisateurs a été correctement exportée"
 msgid "Download the file"
 msgstr "Cliquer ICI pour télécharger le fichier"
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr "Administrateur de la plate-forme : téléphone"
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr "Coordonnées téléphoniques de l'administrateur de la plate-forme"
 
 msgid "Send mail to new user"
@@ -4935,7 +4949,7 @@ msgid "Chamilo RAPID is a Rapid Learning tool available in Chamilo Pro and Chami
 msgstr "Chamilo RAPID est un outil de Rapid Learning disponible dans Chamilo Pro et Chamilo Medical. Il vous permet de transformer en quelques clics de souris une présentation PowerPoint ou LibreOffice en un parcours d'apprentissage SCORM. Après la conversion, vous arriverez dans l'outil auteur et pourrez ajouter des commentaires audio. Chaque étape deviendra un objet d'apprentissage indépendent et extractible. Le cours complet générera aussi un reporting SCORM fiable pour évaluation ultérieure."
 
 msgid "Bandwidth statistics"
-msgstr "Bandwidth statistics"
+msgstr "Statistiques de bande passante"
 
 msgid "MRTG allow you to consult advanced statistics about the state of the server on the last 24 hours."
 msgstr "MRTG vous permet de consulter les statistiques détaillées de l'état de votre serveur sur les dernières 24 heures."
@@ -4985,10 +4999,10 @@ msgstr "Confirmer"
 msgid "Unsubscribe users from course"
 msgstr "Désinscrire des utilisateurs du cours"
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr "Nom de classe manquant"
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr "Ce nom de classe existe déjà"
 
 msgid "CSV file import location"
@@ -5380,10 +5394,10 @@ msgid "Whether you want to use the blacklist or whitelist filtering. See blackli
 msgstr "Utilisation de blacklist ou whitelist. Voir description de blacklist et whitelist ci-dessous pour plus de détails"
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr "Liste noire"
 
 msgid "Whitelist"
-msgstr "Whitelist"
+msgstr "Liste blanche"
 
 msgid "Blacklist - setting"
 msgstr "Blacklist - paramétrage"
@@ -5990,7 +6004,7 @@ msgstr "Inscription multiple"
 msgid "Full-text search feature"
 msgstr "Fonctionnalité de recherche full-text"
 
-msgid "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr "Sélectionnez \"Oui\" pour activer la fonctionnalité de recherche et d'indexation full-text. Cette fonctionnalité nécessite l'installation sur votre serveur de l'extension Xapian pour PHP, en version 1.x ou supérieure. Cette fonctionnalité ne fonctionnera pas si ce pré-requis n'est pas satisfait."
 
 msgid "Find a training session"
@@ -6802,7 +6816,7 @@ msgid "is already in use. Choose another one."
 msgstr "est déjà pris. Choisissez-en un autre."
 
 msgid "Coach"
-msgstr "Coach"
+msgstr "Tuteur"
 
 msgid "Groups management"
 msgstr "Gestion des groupes"
@@ -6991,7 +7005,7 @@ msgid "Group deleted"
 msgstr "Groupe supprimé"
 
 msgid "Registered"
-msgstr "Inscrits"
+msgstr "inscrit"
 
 msgid "Learners are allowed to self-register in groups"
 msgstr "Utilisateurs autorisés à s'inscrire eux-même dans les groupes"
@@ -8485,7 +8499,7 @@ msgid "Adaptative test with immediate feedback"
 msgstr "Test adaptatif avec feedback immédiat"
 
 msgid "Feedback"
-msgstr "Feedback"
+msgstr "Rétroalimentation"
 
 msgid "Scenario"
 msgstr "Scénario"
@@ -8792,7 +8806,7 @@ msgid "Dear"
 msgstr "Cher(ère)"
 
 msgid "archive"
-msgstr "archive"
+msgstr "fichier"
 
 msgid "Code"
 msgstr "Code de cours"
@@ -15630,7 +15644,7 @@ msgid "Installation"
 msgstr "Installation"
 
 msgid "Read the installation guide"
-msgstr "consultez le guide d'installation"
+msgstr "Consultez le guide d'installation"
 
 msgid "See blog"
 msgstr "Voir le blog"
@@ -17352,7 +17366,7 @@ msgstr ""
 msgid "Courses validation"
 msgstr "Demandes de cours"
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr ""
 "Lorsque la fonctionnalité de demandes de cours est activée, un formateur ne "
 "peut plus créer de cours par lui-même. Il/elle est obligé(e) de formuler une "
@@ -17386,7 +17400,7 @@ msgstr "Nous sommes désolés de vous informer que votre demande pour le cours %
 msgid "Course validation - a link to the terms and conditions"
 msgstr "Demandes de cours - lien vers les conditions d'utilisation"
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr "URL vers un document de Conditions d'utilisation valide pour les demandes de cours. Si l'adresse est configurée, l'utilisateur devrait lire et accepter ces Conditions d'utilisation avant d'envoyer une demande de cours. Si vous activez la fonctionnalité \"Conditions d'utilisation\" de Chamilo et que vous voulez plutôt utiliser ceux-là, laissez le champ suivant vide."
 
 msgid "The course has not been created due to an internal error."
@@ -17450,7 +17464,7 @@ msgstr "Le protocole à préfixer au domaine du serveur Single Sign On (nous rec
 msgid "WIRIS mathematical editor"
 msgstr "Éditeur mathématique WIRIS"
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr "Activer l'éditeur mathématique WIRIS. En installant ce plugin, vous obtenez l'éditeur WIRIS et WIRIS CAS.<br/>Cette activation n'est totalement réalisée que si le <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\">plugin PHP pour CKeditor WIRIS</a> a été préalablement téléchargé et décompressé dans le répertoire de Chamilo main/inc/lib/javascript/ckeditor/plugins/.<br/>"
 
 msgid "File export as"
@@ -17650,7 +17664,7 @@ msgstr "Masculine"
 msgid "Load the Mathjax library in all the system pages"
 msgstr "Charger la librairie Mathjax sur toutes les pages du système"
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr "Activez ce paramètre si vous désirez pouvoir afficher des formules mathématiques basées sur MathML et des graphiques mathématiques basés sur ASCIIsvg, non seulement dans l'outil de cours, mais partout ailleurs sur la plateforme."
 
 msgid "Hide tools from teachers"
@@ -18968,6 +18982,7 @@ msgstr "Vidanger"
 msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "Le répertoire app/cache/ a été vidangé."
 
+#, fuzzy
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 msgstr ""
 "Pour une raison inconnue, le répertoire var/cache/ n'a pas pu être vidé "
@@ -19970,31 +19985,31 @@ msgstr "<p><h5>Créez votre application Facebook</h5>Vous devez, d'abord, créer
 msgid "Announcement for a group"
 msgstr "Annonce pour un groupe"
 
-msgid "Language priority 1"
+msgid "Highest priority language"
 msgstr "Langue priorité 1"
 
-msgid "Language priority 2"
+msgid "Secondary priority language"
 msgstr "Langue priorité 2"
 
-msgid "Language priority 3"
+msgid "Third priority language"
 msgstr "Langue priorité 3"
 
-msgid "Language priority 4"
+msgid "Fourth priority language"
 msgstr "Langue priorité 4"
 
 msgid "Language priority 5"
 msgstr "Langue priorité 5"
 
-msgid "The language with the highest priority"
+msgid "Primary language selected when multiple language contexts are set."
 msgstr "Langue prioritaire"
 
-msgid "The second language priority"
+msgid "Secondary fallback language if first priority is unavailable or out of context."
 msgstr "Deuxième langue prioritaire"
 
-msgid "The third language priority"
+msgid "Tertiary language fallback if higher priorities fail."
 msgstr "Troisième langue prioritaire"
 
-msgid "The fourth language priority"
+msgid "Last language fallback option by order of priority."
 msgstr "Quatrième langue prioritaire"
 
 msgid "The lowest language priority"
@@ -20649,7 +20664,7 @@ msgstr "L'activation de cette option fera apparaître un indicateur de complexit
 msgid "CAPTCHA"
 msgstr "CAPTCHA"
 
-msgid "Enable a CAPTCHA on the login form to avoid password hammering"
+msgid "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering"
 msgstr "Activer cette option fera apparaître un CAPTCHA dans le formulaire de login pour éviter les tentatives de pénétration par force brute."
 
 msgid "CAPTCHA mistakes allowance"
@@ -20724,8 +20739,8 @@ msgstr "Le nombre par défaut de jours postérieurs à la fin d'une session, dur
 msgid "PDF header logo"
 msgstr "Logo d'en-tête PDF"
 
-msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
-msgstr "Activer cette option pour utiliser l'image dans css/themes/[votre-css]/images/pdf_logo_header.png comme logo d'en-tête de tous les exports au format PDF (au lieu du logo normal du portail)"
+msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgstr "Activer cette option pour utiliser l'image dans var/themes/[votre-css]/images/pdf_logo_header.png comme logo d'en-tête de tous les exports au format PDF (au lieu du logo normal du portail)"
 
 msgid "Order users by official code"
 msgstr "Ordonner les utilisateurs par code officiel"
@@ -21694,7 +21709,7 @@ msgstr "Envoyer notifications Push mobiles via Google Cloud Messaging"
 msgid "Sender ID of Firebase Console for Cloud Messaging"
 msgstr "Numéro de projet de la Google Developer Console"
 
-msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
+msgid "You need register a project on <a href='https://console.firebase.google.com/'>Google Firebase Console</a>"
 msgstr "Vous devez enregistrer un projet sur <a href=\"https://console.developers.google.com/\">Google Developer Console</a>"
 
 msgid "Server key of Firebase Console for Cloud Messaging"
@@ -21773,7 +21788,9 @@ msgid "Access data"
 msgstr "Données d'accès"
 
 msgid "Image dimensions do not match the requirements. Please check the suggestions next to the image field."
-msgstr "Dimensiones incorrectas de la imagen. Por favor, respete las sugerencias indicadas al lado del campo de imagen."
+msgstr ""
+"Les dimensions de l'image sont incorrectes. Merci de respecter les exigences "
+"indiquées près du champ de l'image."
 
 msgid "Could not reset password, contact your helpdesk."
 msgstr "Impossible de réinitialiser le mot de passe. Contactez votre équipe de support."
@@ -21919,7 +21936,7 @@ msgid "You must first fill your profile to enable the terms and conditions valid
 msgstr "Vous devez d'abord compléter votre profil pour activer la validation de l'accord légal."
 
 msgid "Diagnostic"
-msgstr "Diagnostic"
+msgstr "Diagnostique"
 
 msgid "Allow show the user Skype account"
 msgstr "Permettre l'affichage du compte Skype de l'utilisateur"
@@ -22964,7 +22981,6 @@ msgstr ""
 msgid "List of valid domains"
 msgstr "Liste des domaines valides"
 
-#, fuzzy
 msgid "URL field format invalid. Example of expected format: http://dropbox.com/sh/loremipsum/loremipsum?dl=0"
 msgstr ""
 "Format invalide du champ URL. Exemple de format attendu : https://dropbox."
@@ -25914,7 +25930,6 @@ msgstr ""
 "contact. La fourniture de ces données est obligatoire. En leur absence, il "
 "ne sera pas possible de traiter votre demande."
 
-#, fuzzy
 msgid "All attempts blocked because you did not reach the minimum score of %s % at one of your attempts."
 msgstr ""
 "Toutes les tentatives ont été bloquées car vous n'avez pas atteint le score "
@@ -26498,7 +26513,7 @@ msgstr ""
 "qu'une fois que plus d'un utilisateur a répondu, de sorte qu'il reste "
 "difficile d'identifier qui a répondu quoi."
 
-msgid "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
+msgid "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
 msgstr ""
 "Sur la page des cours/sessions, le titre de la session peut être l'un des "
 "suivants : 0 = pas de lien (masquer le titre de la session) ; 1 = lier le "
@@ -26531,7 +26546,6 @@ msgstr ""
 "cours. Et désactiver l'inscription pour les utilisateurs dans tous les cours "
 "depuis la page Reprendre la Session."
 
-#, fuzzy
 msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
 msgstr ""
 "Activer le paramètre samesite:None pour le cookie de session. Plus d'infos : "
@@ -26808,13 +26822,12 @@ msgstr ""
 "qui ne sont pas dans le bon panneau lors du clic sur soumettre. Conservez "
 "tous les utilisateurs."
 
-#, fuzzy
 msgid "In the announcements form, an option normally appears to allow teachers to send a copy of the announcement to the user's HRM. Set this to 'Yes' to remote the option (and *not* send the copy)."
 msgstr ""
 "Dans le formulaire des annonces, une option apparaît normalement pour "
 "permettre aux formateurs d'envoyer une copie de l'annonce au gestionnaire RH "
-"de l'utilisateur. Définissez cette option sur 'Oui' pour supprimer l'option ("
-"et *ne pas* envoyer la copie)."
+"de l'utilisateur. Choisissez 'Oui' pour supprimer l'option (et *ne pas* "
+"envoyer la copie)."
 
 msgid "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: 'strict-transport-security: max-age=63072000; includeSubDomains'. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the 'preload' suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
 msgstr ""
@@ -27313,7 +27326,7 @@ msgstr "Afficher uniquement les cours correspondants dans le catalogue"
 msgid "Prevent teacher from modifying assignment scores"
 msgstr "Empêcher le formateur de modifier les scores des travaux"
 
-msgid "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+msgid "An array of role => true/false that defines whether that role should be shown or hidden.<br><pre> [ 'COURSEMANAGER' => true, 'STUDENT' => true, 'DRH' => false, 'SESSIONADMIN' => false, 'STUDENT_BOSS' => false, 'INVITEE' => false ] </pre>"
 msgstr ""
 "Activez pour utiliser un tableau pour définir quels rôles doivent être "
 "clairement affichés et lesquels doivent être cachés."
@@ -27369,7 +27382,7 @@ msgstr ""
 "d'apprentissage si l'apprenant est inscrit au parcours d'apprentissage donné "
 "et y a accès."
 
-msgid "An array of role = > number which represents the number of days an account has before expiration, depending on the role."
+msgid "An array of role = > number which represents the number of days an account has before expiration, depending on the role.<br><pre> [ 'COURSEMANAGER' => 365, 'STUDENT' => 31, 'DRH' => 31, 'SESSIONADMIN' => 60, 'STUDENT_BOSS' => 60, 'INVITEE' => 31 ] </pre>"
 msgstr ""
 "Un tableau de rôle => nombre qui représente le nombre de jours restants "
 "avant l'expiration d'un compte, en fonction du rôle."
@@ -27819,9 +27832,8 @@ msgstr ""
 "Ajouter des infos sur les parcours d'apprentissage et les tests, au rapport "
 "de ticket"
 
-#, fuzzy
 msgid "Enable display of best score attempt"
-msgstr "Activer l'affichage du score de la meilleure tentative"
+msgstr "Activer l'affichage de la tentative au meilleur score"
 
 msgid "Enable subscription to learning paths and learning path categories to groups/classes."
 msgstr ""
@@ -27889,11 +27901,10 @@ msgstr ""
 "le nombre de questions dépasse ce paramètre. Réglez sur 0 pour désactiver la "
 "pagination."
 
-#, fuzzy
 msgid "Provide a list of courses and tests' IDs that will show the best score attempt for any learner in the reports. "
 msgstr ""
-"Fournissez une liste des identifiants de cours et de tests pour lesquels on "
-"affichera le score de la meilleure tentative pour tout apprenant dans les "
+"Fournissez une liste des identifiants de cours et de tests pour lesquels le "
+"score de la meilleure tentative sera affiché pour tout apprenant, dans les "
 "rapports. "
 
 msgid "Enable the selection of mandatory questions in a test when using random categories."
@@ -28171,9 +28182,9 @@ msgstr ""
 "les événements."
 
 msgid "Enable only if you are using the Redirection plugin"
-msgstr "Activez uniquement si vous utilisez le plugin de redirection"
+msgstr "Activez uniquement si vous utilisez le plugin de Redirection"
 
-msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it.<br><pre> [ 'stream_context_create' => [ 'http' => [ 'proxy' => 'tcp://example.com:8080', 'request_fulluri' => true ] ], 'curl_setopt_array' => [ 'CURLOPT_PROXY' => 'http://example.com', 'CURLOPT_PROXYPORT' => '8080' ] ] </pre>"
 msgstr ""
 "Certaines fonctionnalités de Chamilo se connecteront à l'extérieur depuis le "
 "serveur. Par exemple, pour vérifier qu'un contenu externe existe lors de la "
@@ -28271,7 +28282,6 @@ msgstr ""
 "retourner le champ de profil utilisé pour faire correspondre l'utilisateur "
 "avec le système d'authentification externe plutôt que user.id."
 
-#, fuzzy
 msgid "Enable recording of all answers (even temporary) in the track_e_attempt_recording table. This feautre is experimentaland can create issues in the reporting pages when attempting to grade a test."
 msgstr ""
 "Activez l'enregistrement de toutes les réponses (même temporaires) dans la "
@@ -28400,7 +28410,7 @@ msgstr ""
 "Désactiver l'ajout de classe dans le cours de la session pour les non-admins"
 
 msgid "X-Frame-Options"
-msgstr "X-Frame-Options"
+msgstr "En-tête X-Frame-Options"
 
 msgid "With this option enabled, if a course has public visibility and terms and conditions, those terms are disabled while the course is public."
 msgstr ""
@@ -28420,7 +28430,7 @@ msgid "Use virtual keyboard"
 msgstr "Utilisez le clavier virtuel"
 
 msgid "X-XSS-Protection"
-msgstr "X-XSS-Protection"
+msgstr "En-tête X-XSS-Protection"
 
 msgid "Array containing the names of the drivers for files access from the WYSIWYG editor."
 msgstr ""
@@ -28469,7 +28479,7 @@ msgstr ""
 "Activez cette option pour permettre aux apprenants de télécharger les "
 "parcours d'apprentissage en tant que packages SCORM."
 
-msgid "Array defining host and port for the LDAP server."
+msgid "Array defining host and port for the LDAP server.<br><pre> ['host' => '', 'port' => ''] </pre>"
 msgstr "Tableau définissant l'hôte et le port pour le serveur LDAP."
 
 msgid "Array of relationships between user extra fields and session extra fields, so the session can be pre-filled with data matching the user's data."
@@ -28492,7 +28502,7 @@ msgstr "Utilisateurs anonymes multiples"
 msgid "Enable edition of course work time"
 msgstr "Activer l'édition du temps de travail du cours"
 
-msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500].<br><pre> ['options' => [50, 100, 200, 500]] </pre>"
 msgstr ""
 "Définissez les options que vous souhaitez voir apparaître dans la navigation "
 "autour d'un tableau pour afficher moins ou plus de lignes sur une page. Ex. ["
@@ -28787,14 +28797,13 @@ msgstr ""
 msgid "Options for session import"
 msgstr "Options pour l'importation de session"
 
-#, fuzzy
 msgid "Security Referrer Policy"
-msgstr "Security Referrer Policy"
+msgstr "Police de sécurité concernant les informations des sites référents"
 
 msgid "Enable X-sendfile headers"
 msgstr "Activer les en-têtes X-sendfile"
 
-msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video.<br><pre> ['features' => ['speed']] </pre>"
 msgstr ""
 "Tableau des fonctionnalités supplémentaires que vous pouvez activer pour le "
 "lecteur vidéo dans Chamilo. Les options incluent 'speed', qui vous permet de "
@@ -28867,7 +28876,7 @@ msgstr ""
 "Ajouter des informations de visibilité pour les parcours d'apprentissage sur "
 "la page de suivi des apprenants"
 
-msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+msgid "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in.<br><pre> [ 'days' => 0, 'months' => 0, ] </pre>"
 msgstr ""
 "Tableau établissant les jours ('days') et les mois ('months') pour "
 "déterminer la date d'expiration du compte lors de la première connexion de "
@@ -28975,7 +28984,7 @@ msgstr ""
 "suivant."
 
 msgid "Content Security Policy"
-msgstr "Content Security Policy"
+msgstr "Politique de sécurité du contenu (CSP)"
 
 msgid "Enable time per question in tests"
 msgstr "Limite de temps par question dans les tests"
@@ -29089,7 +29098,7 @@ msgstr ""
 "Identifiant interne de l'utilisateur utilisé pour envoyer des notifications "
 "de compte désactivé"
 
-msgid "When on screens where the left menu is visible, do not display the « Courses » section."
+msgid "When on screens where the left menu is visible, do not display the « Courses » section."
 msgstr ""
 "Lorsque vous êtes sur des écrans où le menu de gauche est visible, ne pas "
 "afficher la section « Cours »."
@@ -29502,7 +29511,7 @@ msgstr ""
 msgid "Step 3 - License"
 msgstr "Étape 3 - Licence"
 
-msgid "Chamilo's installation wizard"
+msgid "Chamilo installation wizard"
 msgstr "Assistant d'installation de Chamilo"
 
 msgid "No course sessions for this user"
@@ -29525,9 +29534,6 @@ msgstr "Hôte du serveur de bases de données"
 
 msgid "Step 2 - Requirements"
 msgstr "Étape 2 - Pré-requis"
-
-msgid "read the installation guide"
-msgstr "consultez le guide d'installation"
 
 msgid "Step 4 - Database settings"
 msgstr "Étape 4 - Paramètres de base de données"
@@ -29621,3 +29627,577 @@ msgstr "Rompre le lien du groupe avec la classe"
 
 msgid "Group is no longer linked to the course"
 msgstr "Le groupe n'esp plus lié au cours"
+
+msgid "Reminders"
+msgstr "Notifications"
+
+msgid "Add reminder"
+msgstr "Ajouter une notification"
+
+msgid "Update introduction links"
+msgstr "Mettre à jour les liens de l'introduction"
+
+msgid "Conference Room"
+msgstr "Salle de conférence"
+
+msgid "Removed from catalogue"
+msgstr "Retiré du catalogue"
+
+msgid "Sign up"
+msgstr "Inscrivez-vous"
+
+msgid "Enter 2FA code"
+msgstr "Entrez le code 2FA"
+
+msgid "Resource count"
+msgstr "Nombre de ressources"
+
+msgid "Please wait, this could take a while..."
+msgstr "Veuillez patienter, cela pourrait prendre un certain temps..."
+
+msgid "Error saving the link"
+msgstr "Erreur lors de l'enregistrement du lien"
+
+msgid "Invalid server response"
+msgstr "Réponse invalide du serveur"
+
+msgid "Add to catalogue"
+msgstr "Ajouter au catalogue"
+
+msgid "Update settings"
+msgstr "Mettre à jour les paramètres"
+
+msgid "No items selected."
+msgstr "Aucun élément sélectionné."
+
+msgid "Back to months"
+msgstr "Retour aux mois"
+
+msgid "No file selected."
+msgstr "Aucun fichier sélectionné."
+
+msgid "Courses count"
+msgstr "Nombre de cours"
+
+msgid "Tool-based resource count"
+msgstr "Nombre de ressources par outil"
+
+msgid "Session coaches are coordinators for the session and can act as tutor for each of the course in the session. Only users with the teacher role can be selected as session coach."
+msgstr ""
+"Les tuteurs de session sont les coordinateurs de la session et peuvent agir "
+"en tant que tuteurs pour chacun des cours de la session. Seuls les "
+"utilisateurs ayant le rôle d'enseignant peuvent être sélectionnés comme "
+"tuteurs de session."
+
+msgid "%s's picture"
+msgstr "Photo de %s"
+
+msgid "Step 7 - Update process execution"
+msgstr "Étape 7 - Exécution du processus de mise à jour"
+
+msgid "User registrations by month"
+msgstr "Inscriptions d'utilisateurs par mois"
+
+msgid "An unexpected error occurred. Please try again later."
+msgstr "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
+
+msgid "Add test after each page"
+msgstr "Ajoutez un exercice après chaque page"
+
+msgid "Assessments visible"
+msgstr "Évaluations visibles"
+
+msgid "Add result"
+msgstr "Ajouter un résultat"
+
+msgid "Only files can be replaced."
+msgstr "Seuls les fichiers peuvent être remplacés."
+
+msgid "AI generator"
+msgstr "Générateur d'IA"
+
+msgid "Courses count by language"
+msgstr "Nombre de cours par langue"
+
+msgid "Add gradebook comment"
+msgstr "Ajouter un commentaire au cahier de notes"
+
+msgid "Passwords do not match"
+msgstr "Les mots de passe ne correspondent pas"
+
+msgid "No result or feedback available."
+msgstr "Aucun résultat ni retour disponible."
+
+msgid "Remove current icon"
+msgstr "Supprimer l'icône actuelle"
+
+msgid "Error creating learning path"
+msgstr "Erreur lors de la création du parcours d'apprentissage"
+
+msgid "Aiken Format Example"
+msgstr "Exemple de format Aiken"
+
+msgid "2FA disabled successfully."
+msgstr "L'authentification à deux facteurs a été désactivée."
+
+msgid "Student reports"
+msgstr "Rapports des apprenants"
+
+msgid "Request failed"
+msgstr "La requête a échoué"
+
+msgid "An unexpected error occurred. Please contact support."
+msgstr "Une erreur inattendue s'est produite. Veuillez contacter le support."
+
+msgid "AI provider"
+msgstr "Fournisseur d'IA"
+
+msgid "Choose item"
+msgstr "Choisissez un élément"
+
+msgid "Replace (files only)"
+msgstr "Remplacer (fichiers uniquement)"
+
+msgid "Assessments invisible"
+msgstr "Évaluations invisibles"
+
+msgid "Using AI provider %s"
+msgstr "Utilisation du fournisseur d'IA %s"
+
+msgid "QR code for 2FA"
+msgstr "Code QR pour l'authentification à deux facteurs"
+
+msgid "Please enter a valid number of questions"
+msgstr "Veuillez saisir un nombre valide de questions"
+
+msgid "Password updated successfully"
+msgstr "Mot de passe mis à jour avec succès"
+
+msgid "Loading courses. Please wait."
+msgstr "Chargement des cours. Veuillez patienter."
+
+msgid "Error downloading selected items."
+msgstr "Erreur lors du téléchargement des éléments sélectionnés."
+
+msgid "Private course"
+msgstr "Cours privé"
+
+msgid "Added to catalogue"
+msgstr "Ajouté au catalogue"
+
+msgid "Scan the QR code to enable 2FA"
+msgstr "Scannez le code QR pour activer l'authentification à deux facteurs"
+
+msgid "Error replacing file."
+msgstr "Erreur lors du remplacement du fichier."
+
+msgid "Submit code"
+msgstr "Soumettre le code"
+
+msgid "Number of questions"
+msgstr "Nombre de questions"
+
+msgid "Remove from catalogue"
+msgstr "Retirer du catalogue"
+
+msgid "No data available for the selected date range"
+msgstr "Aucune donnée disponible pour la période sélectionnée"
+
+msgid "This icon will show for the link displayed as a tool on the course homepage."
+msgstr ""
+"Cette icône s'affichera pour le lien présenté comme un outil sur la page "
+"d'accueil du cours."
+
+msgid "Results and feedback per user"
+msgstr "Résultats et retours par utilisateur"
+
+msgid "Download started"
+msgstr "Téléchargement commencé"
+
+msgid "The icon must be 120x120 pixels."
+msgstr "L'icône doit être de 120x120 pixels."
+
+msgid "Step 7 - Installation process execution"
+msgstr "Étape 7 - Exécution du processus d'installation"
+
+msgid "User registrations by day"
+msgstr "Inscriptions d'utilisateurs par jour"
+
+msgid "Generate Aiken"
+msgstr "Générer Aiken"
+
+msgid "Download selected items as ZIP"
+msgstr "Télécharger les éléments sélectionnés en ZIP"
+
+msgid "+%d"
+msgstr "+%d"
+
+msgid "Words count per page"
+msgstr "Nombre de mots par page"
+
+msgid "Not subscribed"
+msgstr "Non inscrit"
+
+msgid "Score display custom values"
+msgstr "Affichage personnalisé des scores"
+
+msgid "User registrations by creator"
+msgstr "Inscriptions d'utilisateurs par créateur"
+
+msgid "Select replacement file"
+msgstr "Sélectionnez le fichier de remplacement"
+
+msgid "End of test"
+msgstr "Fin du test"
+
+msgid "Introduction to registration"
+msgstr "Introduction à l'inscription"
+
+msgid "Welcome to the registration process."
+msgstr "Bienvenue dans le processus d'inscription."
+
+msgid "Other (custom URL)"
+msgstr "Autre (URL personnalisée)"
+
+msgid "Custom URL"
+msgstr "URL personnalisée"
+
+msgid "On success"
+msgstr "En cas de succès"
+
+msgid "On failure"
+msgstr "En cas d'échec"
+
+msgid "Select destination"
+msgstr "Sélectionnez la destination"
+
+msgid "Repeat question"
+msgstr "Repasser la question"
+
+msgid "Database name"
+msgstr "Nom de la base de données"
+
+msgid "Step 5 - Configuration settings"
+msgstr "Étape 5 - Paramètres de configuration"
+
+msgid "Select the default timezone for this portal. This will help set the timezone (if the feature is enabled) for each new user or for any user that has not set a specific timezone yet. Timezones help show all time-related information on screen in the specific timezone of each user."
+msgstr ""
+"Sélectionnez le fuseau horaire par défaut pour ce portail. Cela aidera à "
+"définir le fuseau horaire (si la fonctionnalité est activée) pour chaque "
+"nouvel utilisateur ou pour tout utilisateur n'ayant pas encore défini de "
+"fuseau horaire spécifique. Les fuseaux horaires permettent d'afficher toutes "
+"les informations liées au temps, à l'écran, dans le fuseau horaire "
+"spécifique de chaque utilisateur."
+
+msgid "Step 6 - Last check before install"
+msgstr "Étape 6 - Dernière vérification avant installation"
+
+msgid "Administrator password"
+msgstr "Mot de passe administrateur"
+
+msgid "Default timezone"
+msgstr "Fuseau horaire par défaut"
+
+msgid "Do not list this campus on chamilo.org"
+msgstr "Ne pas répertorier ce campus sur chamilo.org"
+
+msgid "Enable URL-specific files"
+msgstr "Activer les fichiers spécifiques à l'URL"
+
+msgid "By default, Chamilo portals are automatically registered in a public list at chamilo.org, just using the title you gave to this portal (not the URL nor any private data). Check this box to avoid having the title of your portal appear."
+msgstr ""
+"Par défaut, les portails Chamilo sont automatiquement enregistrés dans une "
+"liste publique sur chamilo.org, en utilisant uniquement le titre que vous "
+"avez donné à ce portail (pas l'URL ni aucune donnée privée). Cochez cette "
+"case pour éviter que le titre de votre portail n'apparaisse."
+
+msgid "When this feature is enabled on a multi-URL configuration, you can go to the main URL and provide URL-specific versions of any file (in the documents tool). The original file will be replaced by the alternative whenever seeing it from a different URL. This allows you to customize each URL even further, while enjoying the advantage of re-using the same courses many times."
+msgstr ""
+"Lorsque cette fonctionnalité est activée dans une configuration multi-URL, "
+"vous pouvez vous rendre sur l'URL principale et fournir des variations "
+"spécifiques à chaque URL de tout fichier (dans l'outil documents). Le "
+"fichier original sera remplacé par l'alternative chaque fois qu'il sera "
+"consulté depuis une URL différente. Cela vous permet de personnaliser "
+"davantage chaque URL, tout en profitant de l'avantage de réutiliser les "
+"mêmes cours à de nombreuses reprises."
+
+msgid "You may want to change this"
+msgstr "Vous devriez probablement modifier cette valeur"
+
+msgid "Database port"
+msgstr "Port de base de données"
+
+msgid "Database driver"
+msgstr "Pilote de base de données"
+
+msgid "Unlock prerequisites after last test attempt"
+msgstr "Débloquer les prérequis après la dernière tentative de travail"
+
+msgid "Enable Session Replication"
+msgstr "Activer la réplication de session"
+
+msgid "Display colors for scores in the gradebook"
+msgstr "Afficher les couleurs pour les scores dans le cahier de notes"
+
+msgid "List of visible fields in profile"
+msgstr "Liste des champs visibles dans le profil"
+
+msgid "Send all e-mails from this e-mail address"
+msgstr "Envoyez tous les e-mails depuis cette adresse e-mail"
+
+msgid "Sets the default email address used in the \"from\" field of emails."
+msgstr ""
+"Définit l'adresse e-mail par défaut utilisée dans le champ \"de\" des "
+"e-mails."
+
+msgid "Generates images based on prompts or content using AI."
+msgstr ""
+"Génère des images à partir de consignes ou de contenu en utilisant l'IA."
+
+msgid "AI providers connection data"
+msgstr "Données de connexion des fournisseurs d'IA"
+
+msgid "ID of the user who officially sends the agenda reminders"
+msgstr "ID de l'utilisateur qui envoie officiellement les rappels d'agenda"
+
+msgid "Provides students with an AI-powered tutoring assistant."
+msgstr "Fournit aux apprenants un assistant de tutorat alimenté par l'IA."
+
+msgid "Remove the checkbox to enable sending announcements to users with HR roles (still requires to confirm in the announcements tool)."
+msgstr ""
+"Désactivez la case à cocher pour permettre l'envoi d'annonces aux "
+"utilisateurs ayant des rôles RH (nécessite toujours une confirmation dans "
+"l'outil d'annonces)."
+
+msgid "Enables all available AI-powered features in the platform."
+msgstr "Active toutes les fonctionnalités IA disponibles sur la plateforme."
+
+msgid "Uses AI to evaluate and grade uploaded assignments."
+msgstr ""
+"Utilise l'IA pour évaluer et noter les travaux envoyés par les apprenants."
+
+msgid "Dynamically creates new anonymous users to support high visitor traffic."
+msgstr ""
+"Crée dynamiquement de nouveaux utilisateurs anonymes pour gérer un trafic "
+"élevé de visiteurs."
+
+msgid "Tutor chatbot energized by AI"
+msgstr "Tuteur chatbot alimenté par l'IA"
+
+msgid "Assigning skills to user: sub-skills auto-loading"
+msgstr ""
+"Attribution de compétences à l'utilisateur : chargement automatique des sous-"
+"compétences"
+
+msgid "Activates popup or system notifications for important platform events."
+msgstr ""
+"Active les notifications par popup ou du système pour les événements "
+"importants de la plateforme."
+
+msgid "Configuration data to connect with external AI services."
+msgstr "Données de configuration pour se connecter aux services IA externes."
+
+msgid "Overrides sender for all emails to appear from a unique address."
+msgstr ""
+"L'expéditeur est remplacé pour tous les e-mails afin qu'ils semblent "
+"provenir d'une adresse unique."
+
+msgid "Displays the current DB version to match the Chamilo core version."
+msgstr ""
+"Affiche la version actuelle de la base de données pour la comparer à la "
+"dernière version stable de Chamilo."
+
+msgid "Allows users to continue in a learning path after using all quiz attempts of a test used as prerequisite for other items."
+msgstr ""
+"Permet aux utilisateurs de continuer dans un parcours d'apprentissage après "
+"avoir utilisé toutes les tentatives de quiz d'un exercice utilisé comme "
+"prérequis pour d'autres éléments."
+
+msgid "Show courses duration"
+msgstr "Afficher la durée des cours"
+
+msgid "Menumyagenda"
+msgstr "Mon agenda"
+
+msgid "Enable Automatic Reinscription"
+msgstr "Activer la réinscription automatique"
+
+msgid "When manually assigning skills to a user, the form can be set to automatically offer you to assign a sub-skill instead of the skill you selected."
+msgstr ""
+"Lors de l'attribution manuelle de compétences à un utilisateur, le "
+"formulaire peut être configuré pour vous proposer automatiquement "
+"d'attribuer une sous-compétence au lieu de la compétence que vous avez "
+"sélectionnée."
+
+msgid "Minimal password syntax requirements"
+msgstr "Exigences minimales de syntaxe du mot de passe"
+
+msgid "Image generator"
+msgstr "Générateur d'images"
+
+msgid "Removes the groups section from the social network view."
+msgstr "Supprime la section des groupes de la vue du réseau social."
+
+msgid "Allows grading attendance with multiple levels instead of a simple present/absent system."
+msgstr ""
+"Permet d'évaluer les présences avec plusieurs niveaux de présence, au lieu "
+"d'un simple système présent/absent."
+
+msgid "Enable the AI helper tool"
+msgstr "Activez l'outil d'assistance IA"
+
+msgid "Main language, used by default when no user language is set."
+msgstr ""
+"Langue principale, utilisée par défaut lorsque aucune langue utilisateur "
+"n'est définie."
+
+msgid "Default platform language"
+msgstr "Langue par défaut de la plateforme"
+
+msgid "Menucampushomepage"
+msgstr "Page d'accueil du campus"
+
+msgid "Menudiagnostics"
+msgstr "Diagnostic"
+
+msgid "Limits online user visibility to specific user roles."
+msgstr ""
+"Limite la visibilité des utilisateurs en ligne à des rôles d'utilisateur "
+"spécifiques."
+
+msgid "Sets which user appears as the sender of agenda reminder emails."
+msgstr ""
+"Définit quel utilisateur apparaît comme expéditeur des e-mails de rappel "
+"d'agenda."
+
+msgid "Generates personalized tests with AI based on course content."
+msgstr ""
+"Génère des exercices personnalisés avec l'IA en fonction du contenu du cours."
+
+msgid "Menureporting"
+msgstr "Rapports"
+
+msgid "Analyses learning materials to extract insights or improve quality."
+msgstr ""
+"Analyse les supports d'apprentissage pour en extraire des informations ou en "
+"améliorer la qualité."
+
+msgid "Enable or disable automatic re-subscription when course validity expires. The related cron job must also be activated."
+msgstr ""
+"Activez ou désactivez la réinscription automatique lorsque la validité du "
+"cours expire. La tâche cron associée doit également être activée."
+
+msgid "Content analyser"
+msgstr "Analyseur de contenu"
+
+msgid "Enable Multi-Level Attendance Grading"
+msgstr "Activer l'évaluation de la présence à plusieurs niveaux"
+
+msgid "Menucatalogue"
+msgstr "Catalogue des cours/sessions"
+
+msgid "Menuplatformadministration"
+msgstr "Administration de la plateforme"
+
+msgid "Open answers grader"
+msgstr "Ouvrir le correcteur de réponses ouvertes"
+
+msgid "Enables color coding for better score visibility in the gradebook."
+msgstr ""
+"Active le codage couleur pour une meilleure visibilité des scores dans le "
+"cahier de notes."
+
+msgid "Exercise generator"
+msgstr "Générateur de tests"
+
+msgid "Learning paths generator"
+msgstr "Générateur de parcours d'apprentissage"
+
+msgid "Menusocial"
+msgstr "Social"
+
+msgid "Automatically grades open-ended answers using AI."
+msgstr "Note automatiquement les réponses ouvertes à l'aide de l'IA."
+
+msgid "Menuvideoconference"
+msgstr "Vidéoconférence"
+
+msgid "Display the course duration next to the course title in the course catalogue and the courses list."
+msgstr ""
+"Affichez la durée du cours à côté du titre du cours dans le catalogue des "
+"cours et la liste des cours."
+
+msgid "Auto-provision more anonymous users"
+msgstr "Créer automatiquement plus d'utilisateurs anonymes"
+
+msgid "registered"
+msgstr "inscrit"
+
+msgid "Assignments grader"
+msgstr "Évaluateur de travaux"
+
+msgid "Hide groups block in social network"
+msgstr "Masquer le bloc de groupes dans le réseau social"
+
+msgid "Current version of the database schema used by Chamilo"
+msgstr "Version actuelle du schéma de base de données utilisé par Chamilo"
+
+msgid "Enable or disable automatic session replication. The related cron job must also be activated."
+msgstr ""
+"Activez ou désactivez la réplication automatique de session. La tâche cron "
+"associée doit également être activée."
+
+msgid "Filter users that can be seen as online"
+msgstr "Filtrer les utilisateurs pouvant être vus en ligne"
+
+msgid "Controls which profile fields are visible to users and others."
+msgstr ""
+"Contrôle quels champs de profil sont visibles par les utilisateurs et les "
+"autres."
+
+msgid "Defines the required structure for user passwords."
+msgstr "Définit la structure requise pour les mots de passe des utilisateurs."
+
+msgid "Send all e-mails as originating from this (organizational) name"
+msgstr ""
+"Envoyez tous les e-mails en tant qu'expéditeur de ce nom (organisationnel)"
+
+msgid "Allows duplication of resources that were created in the session when duplicating the session."
+msgstr ""
+"Permet la duplication des ressources qui ont été créées dans la session lors "
+"de la duplication de la session."
+
+msgid "Send all e-mails as one single sender"
+msgstr "Envoyez tous les e-mails en tant qu'expéditeur unique"
+
+msgid "Sets the default display name used for sending platform emails. e.g. \"Support team\"."
+msgstr ""
+"Définit le nom d'affichage par défaut utilisé pour l'envoi des e-mails de la "
+"plateforme. Par exemple, \"Équipe de support\"."
+
+msgid "Generates personalized learning paths using AI suggestions."
+msgstr ""
+"Génère des parcours d'apprentissage personnalisés à l'aide de suggestions IA."
+
+msgid "Enable the notification tool for a more impactful communication channel with students"
+msgstr ""
+"Activez l'outil de notification pour un canal de communication plus "
+"impactant avec les apprenants"
+
+msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr ""
+"Sélectionnez les classes pour lesquelles ce cours sera visible pour "
+"inscription depuis le catalogue. Les règles d'inscription s'appliquent "
+"toujours en plus de sa visibilité dans le catalogue."
+
+msgid "Menumycourses"
+msgstr "Mes cours"
+
+msgid "Topbarcertificate"
+msgstr "Certificats (barre supérieure)"
+
+msgid "Ai_helpers"
+msgstr "Assistants IA"
+
+msgid "Topbarskills"
+msgstr "Compétences (barre supérieure)"

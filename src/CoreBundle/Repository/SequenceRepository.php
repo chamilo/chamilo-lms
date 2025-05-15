@@ -46,7 +46,7 @@ class SequenceRepository extends ServiceEntityRepository
                 $sessionList = SessionManager::get_sessions_list();
                 if (!empty($sessionList)) {
                     foreach ($sessionList as $sessionItem) {
-                        $list[$sessionItem['id']] = $sessionItem['name'].' ('.$sessionItem['id'].')';
+                        $list[$sessionItem['id']] = $sessionItem['title'].' ('.$sessionItem['id'].')';
                     }
                 }
 
@@ -103,7 +103,7 @@ class SequenceRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('r');
         $qb
-            ->leftJoin('ChamiloCoreBundle:SequenceResource', 'sr', Join::WITH, 'sr.sequence = r')
+            ->leftJoin(SequenceResource::class, 'sr', Join::WITH, 'sr.sequence = r')
         ;
 
         $qb
@@ -113,7 +113,7 @@ class SequenceRepository extends ServiceEntityRepository
                     $qb->expr()->eq('sr.type', $type)
                 )
             )
-            ->orderBy('r.name')
+            ->orderBy('r.title')
         ;
 
         return $qb->getQuery()->getResult();

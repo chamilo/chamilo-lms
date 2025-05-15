@@ -12,27 +12,27 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
 use Notification;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Vich\UploaderBundle\Storage\FlysystemStorage;
 
-final class MessageProcessor implements ProcessorInterface
+/**
+ * @implements ProcessorInterface<Message, Message|void>
+ */
+final readonly class MessageProcessor implements ProcessorInterface
 {
     public function __construct(
-        private readonly ProcessorInterface $persistProcessor,
-        private readonly ProcessorInterface $removeProcessor,
-        private readonly FlysystemStorage $storage,
-        private readonly EntityManagerInterface $entityManager,
-        private readonly ResourceNodeRepository $resourceNodeRepository,
-        private readonly Security $security,
-        private readonly RequestStack $requestStack
+        private ProcessorInterface $persistProcessor,
+        private ProcessorInterface $removeProcessor,
+        private EntityManagerInterface $entityManager,
+        private ResourceNodeRepository $resourceNodeRepository,
+        private Security $security,
     ) {}
 
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?Message
     {
         if ($operation instanceof DeleteOperationInterface) {
             return $this->removeProcessor->process($data, $operation, $uriVariables, $context);
@@ -51,6 +51,7 @@ final class MessageProcessor implements ProcessorInterface
             }
         }
 
+        /** @var User $user */
         $user = $this->security->getUser();
         if (!$user) {
             throw new LogicException('User not found.');

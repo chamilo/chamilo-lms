@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
@@ -146,6 +147,29 @@ if ($submitAnswers || $buttonBack) {
             $objQuestion->updateWeighting($questionWeighting);
             $objQuestion->save($objExercise);
 
+            if (HOT_SPOT_DELINEATION == $answerType) {
+                $destination = [
+                    'success' => [
+                        'type' => $_POST['scenario_success_selector'] ?? '',
+                        'url' => $_POST['scenario_success_url'] ?? '',
+                    ],
+                    'failure' => [
+                        'type' => $_POST['scenario_failure_selector'] ?? '',
+                        'url' => $_POST['scenario_failure_url'] ?? '',
+                    ],
+                ];
+
+                $rel = Database::getManager()->getRepository(CQuizRelQuestion::class)->findOneBy([
+                    'question' => $objQuestion->iid,
+                    'exercise' => $exerciseId,
+                ]);
+
+                if ($rel) {
+                    $rel->setDestination(json_encode($destination));
+                    Database::getManager()->flush();
+                }
+            }
+
             $editQuestion = $questionId;
             unset($modifyAnswers);
             echo '<script type="text/javascript">window.location.href="'.$hotspot_admin_url
@@ -215,8 +239,6 @@ if ($submitAnswers || $buttonBack) {
             if (isset($select_question[$i]) && !empty($select_question[$i])) {
                 $question_str = $select_question[$i];
             }
-
-            $destination[$i] = $threadhold_total.'@@'.$try_str.'@@'.$lp_str.'@@'.$question_str.'@@'.$url_str;
 
             // checks if field is empty
             if (empty($reponse[$i]) && '0' != $reponse[$i]) {
@@ -323,6 +345,29 @@ if ($submitAnswers || $buttonBack) {
             $objQuestion->updateWeighting($questionWeighting);
             $objQuestion->save($objExercise);
 
+            if (HOT_SPOT_DELINEATION == $answerType) {
+                $destination = [
+                    'success' => [
+                        'type' => $_POST['scenario_success_selector'] ?? '',
+                        'url' => $_POST['scenario_success_url'] ?? '',
+                    ],
+                    'failure' => [
+                        'type' => $_POST['scenario_failure_selector'] ?? '',
+                        'url' => $_POST['scenario_failure_url'] ?? '',
+                    ],
+                ];
+
+                $rel = Database::getManager()->getRepository(CQuizRelQuestion::class)->findOneBy([
+                    'question' => $objQuestion->iid,
+                    'exercise' => $exerciseId,
+                ]);
+
+                if ($rel) {
+                    $rel->setDestination(json_encode($destination));
+                    Database::getManager()->flush();
+                }
+            }
+
             $editQuestion = $questionId;
             unset($modifyAnswers);
             echo '<script type="text/javascript">window.location.href="'.$hotspot_admin_url
@@ -413,19 +458,11 @@ if (isset($modifyAnswers)) {
     }
 
     if (HOT_SPOT_DELINEATION == $answerType) {
-        //added the noerror answer
-        $comment_noerror = $objAnswer->selectComment($nbrAnswers + 1);
-        $destination_noerror_list = $objAnswer->selectDestination($nbrAnswers + 1);
-
-        if (empty($destination_noerror_list)) {
-            $destination_noerror_list = '@@@@@@@@';
-        }
-
-        $destination_items = explode('@@', $destination_noerror_list);
-        $try_noerror = $destination_items[1];
-        $lp_noerror = $destination_items[2];
-        $selectQuestionNoError = $destination_items[3];
-        $url_noerror = $destination_items[4];
+        $destinationData = $objQuestion->getScenarioDestination($exerciseId);
+        $scenario_success_selector = $_POST['scenario_success_selector'] ?? ($destinationData['success']['type'] ?? '');
+        $scenario_success_url = $_POST['scenario_success_url'] ?? ($destinationData['success']['url'] ?? '');
+        $scenario_failure_selector = $_POST['scenario_failure_selector'] ?? ($destinationData['failure']['type'] ?? '');
+        $scenario_failure_url = $_POST['scenario_failure_url'] ?? ($destinationData['failure']['url'] ?? '');
     }
 
     $_SESSION['tmp_answers'] = [];
@@ -440,10 +477,10 @@ if (isset($modifyAnswers)) {
     $_SESSION['tmp_answers']['hotspot_type'] = $hotspot_type;
 
     if (HOT_SPOT_DELINEATION == $answerType) {
-        $_SESSION['tmp_answers']['destination'] = isset($destination) ? $destination : null;
+        $_SESSION['tmp_answers']['destination'] = $destination ?? null;
     }
 
-    $lessAnswers = isset($_POST['lessAnswers']) ? true : false;
+    $lessAnswers = isset($_POST['lessAnswers']);
     if ($lessAnswers) {
         if (HOT_SPOT_DELINEATION == $answerType) {
             $lest_answer = 1;
@@ -612,9 +649,6 @@ if (isset($modifyAnswers)) {
                     <?php
                     if (EXERCISE_FEEDBACK_TYPE_DIRECT == $objExercise->getFeedbackType()) {
                         echo '<th>'.get_lang('Comment').'</th>';
-                        if (HOT_SPOT_DELINEATION == $answerType) {
-                            echo '<th >'.get_lang('Scenario').'</th>';
-                        }
                     } else {
                         echo '<th colspan="2">'.get_lang('Comment').'</th>';
                     } ?>
@@ -737,50 +771,13 @@ if (isset($modifyAnswers)) {
                                 <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php
                                 echo empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]; ?>"/>
                             </td>
-                            <?php if (EXERCISE_FEEDBACK_TYPE_DIRECT == $objExercise->getFeedbackType()) {
-                                    ?>
-                                <td>
-                                    <div class="checkbox">
-                                        <p>
-                                            <label>
-                                                <input type="checkbox" class="checkbox" name="<?php echo 'try['.$i; ?>]"
-                                                <?php if (1 == $try[$i]) {
-                                        echo 'checked';
-                                    } ?> />
-                                                <?php echo get_lang('Try again'); ?>
-                                            </label>
-                                        </p>
-                                    </div>
-                                    <p>
-                                        <?php echo get_lang('Theory link'); ?>
-                                        <select class="form-control" name="lp[<?php echo $i; ?>]">
-                                            <?php echo $option_lp; ?>
-                                        </select>
-                                    </p>
-                                    <p>
-                                        <?php echo get_lang('Other'); ?>
-                                        <input class="form-control" name="url[<?php echo $i; ?>]"
-                                               value="<?php echo $url[$i]; ?>">
-                                    </p>
-                                    <p>
-                                        <?php echo get_lang('Select question'); ?>
-                                        <select class="form-control" name="select_question[<?php echo $i; ?>]">
-                                            <?php echo $option_feed; ?>
-                                        </select>
-                                    </p>
-                                </td>
                                 <?php
-                                } else {
-                                    ?>
-                                <td> &nbsp;</td>
-                                <?php
-                                }
+
             } elseif (false) {
                 ?>
                             <tr>
                                 <th colspan="2"><?php echo get_lang('If no error'); ?></th>
                                 <th colspan="3"><?php echo get_lang('Feedback'); ?></th>
-                                <!-- th colspan="1" ><?php echo get_lang('Scenario'); ?></th -->
                                 <th></th>
                             </tr>
                             <tr>
@@ -796,52 +793,6 @@ if (isset($modifyAnswers)) {
                                               name="comment[<?php echo $i; ?>]"
                                               style="width: 100%"><?php echo Security::remove_XSS($comment[$i]); ?></textarea>
                                 </td>
-                                <?php if (EXERCISE_FEEDBACK_TYPE_DIRECT == $objExercise->getFeedbackType()) {
-                    ?>
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <td>
-                                                    <div class="checkbox">
-                                                        <p>
-                                                            <label>
-                                                                <input type="checkbox" class="checkbox"
-                                                                       name="<?php echo 'try['
-                                                                           .$i; ?>]" <?php if (1 == $try[$i]) {
-                                                                               echo 'checked';
-                                                                           } ?> />
-                                                                <?php echo get_lang('Try again'); ?>
-                                                            </label>
-                                                        </p>
-                                                    </div>
-                                                    <p>
-                                                        <?php echo get_lang('Theory link'); ?>
-                                                        <select class="form-control" name="lp[<?php echo $i; ?>]">
-                                                            <?php echo $option_lp; ?>
-                                                        </select>
-                                                    </p>
-                                                    <p>
-                                                        <?php echo get_lang('Other'); ?> <br/>
-                                                        <input class="form-control" name="url[<?php echo $i; ?>]"
-                                                               value="<?php echo $url[$i]; ?>">
-                                                    </p>
-                                                    <p>
-                                                        <?php echo get_lang('Select question'); ?> <br/>
-                                                        <select class="form-control"
-                                                                name="select_question[<?php echo $i; ?>]">
-                                                            <?php echo $option_feed; ?>
-                                                        </select>
-                                                    </p>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <?php
-                } else {
-                    ?>
-                                    <td>&nbsp;</td>
-                                    <?php
-                } ?>
                             </tr>
                             <?php
             } elseif ('oar' == $_SESSION['tmp_answers']['hotspot_type'][$i]) {
@@ -854,9 +805,6 @@ if (isset($modifyAnswers)) {
                                     <?php if (EXERCISE_FEEDBACK_TYPE_DIRECT == $objExercise->getFeedbackType()) {
                         ?>
                                         <th colspan="2"><?php echo get_lang('Comment'); ?></th>
-                                        <th><?php if (HOT_SPOT_DELINEATION == $answerType) {
-                            echo get_lang('Scenario');
-                        } ?></th>
                                         <?php
                     } else {
                         ?>
@@ -884,44 +832,7 @@ if (isset($modifyAnswers)) {
                                 <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php
                                 echo empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]; ?>"/>
                             </td>
-                            <?php if (EXERCISE_FEEDBACK_TYPE_DIRECT == $objExercise->getFeedbackType()) {
-                                    ?>
-                                <td>
-                                    <div class="checkbox">
-                                        <p>
-                                            <label>
-                                                <input type="checkbox" class="checkbox"
-                                                       name="<?php echo 'try['.$i; ?>]" <?php if (isset($try[$i]) && 1 == $try[$i]) {
-                                        echo 'checked';
-                                    } ?> />
-                                                <?php echo get_lang('Try again'); ?>
-                                            </label>
-                                        </p>
-                                    </div>
-                                    <p>
-                                        <?php echo get_lang('Theory link'); ?>
-                                        <select class="form-control" name="lp[<?php echo $i; ?>]">
-                                            <?php echo $option_lp; ?>
-                                        </select>
-                                    </p>
-                                    <p>
-                                        <?php echo get_lang('Other'); ?>
-                                        <input class="form-control" name="url[<?php echo $i; ?>]"
-                                               value="<?php echo isset($url[$i]) ? $url[$i] : ''; ?>">
-                                    </p>
-                                    <p>
-                                        <?php echo get_lang('Select question'); ?>
-                                        <select class="form-control" name="select_question[<?php echo $i; ?>]">
-                                            <?php echo $option_feed; ?>
-                                        </select>
-                                    </p>
-                                </td>
                                 <?php
-                                } else {
-                                    ?>
-                                <td>&nbsp;</td>
-                                <?php
-                                }
             }
             //end if is delineation
         } else {
@@ -1033,7 +944,6 @@ if (isset($modifyAnswers)) {
                         <?php if (EXERCISE_FEEDBACK_TYPE_DIRECT == $objExercise->getFeedbackType()) {
             ?>
                             <th colspan="2"><?php echo get_lang('Feedback'); ?></th>
-                            <th><?php echo get_lang('Scenario'); ?></th>
                         <?php
         } else {
             ?>
@@ -1048,52 +958,89 @@ if (isset($modifyAnswers)) {
                         </td>
                         <td colspan="2" align="left">
                             <textarea class="form-control" wrap="virtual" rows="3" cols="25"
-                                      name="comment_noerror"><?php echo Security::remove_XSS($comment_noerror); ?></textarea>
+                                      name="comment_noerror"><?php echo isset($comment_noerror) ? Security::remove_XSS($comment_noerror): ''; ?></textarea>
                         </td>
-                        <?php if (EXERCISE_FEEDBACK_TYPE_DIRECT == $objExercise->getFeedbackType()) {
-            ?>
-                            <td>
-                                <div class="checkbox">
-                                    <p>
-                                        <label>
-                                            <input type="checkbox" class="checkbox"
-                                                   name="try_noerror" <?php if (1 == $try_noerror) {
-                echo 'checked';
-            } ?> />
-                                            <?php echo get_lang('Try again'); ?>
-                                        </label>
-                                    </p>
-                                </div>
-                                <p>
-                                    <?php echo get_lang('Theory link'); ?> <br/>
-                                    <select class="form-control" name="lp_noerror">
-                                        <?php echo $option_lp; ?>
-                                    </select>
-                                </p>
-                                <p>
-                                    <?php echo get_lang('Other'); ?> <br/>
-                                    <input class="form-control" name="url_noerror" value="<?php echo $url_noerror; ?>">
-                                </p>
-                                <p>
-                                    <?php echo get_lang('Select question'); ?> <br/>
-                                    <select class="form-control" name="select_question_noerror">
-                                        <?php echo $option_feed; ?>
-                                    </select>
-                                </p>
-                            </td>
-                            <td>&nbsp;</td>
-                        <?php
-        } else {
-            ?>
-                            <td colspan="2">&nbsp;</td>
-                        <?php
-        } ?>
                     </tr>
                 <?php
     } ?>
                 </tbody>
             </table>
         </div>
+
+        <?php if (HOT_SPOT_DELINEATION == $answerType): ?>
+            <div class="mt-4">
+                <h4><?php echo get_lang('Adaptive behavior (Success / Failure)'); ?></h4>
+                <div class="form-group">
+                    <label for="scenario_success_selector"><?php echo get_lang('On Success'); ?></label>
+                    <select class="form-control" name="scenario_success_selector" id="scenario_success_selector">
+                        <option value=""><?php echo get_lang('Select destination'); ?></option>
+                        <option value="repeat" <?php if ($scenario_success_selector === 'repeat') echo 'selected'; ?>><?php echo get_lang('Repeat question'); ?></option>
+                        <option value="-1" <?php if ($scenario_success_selector === '-1') echo 'selected'; ?>><?php echo get_lang('End of test'); ?></option>
+                        <option value="url" <?php if ($scenario_success_selector === 'url') echo 'selected'; ?>><?php echo get_lang('Other (manual URL)'); ?></option>
+                        <?php foreach ($objExercise->selectQuestionList() as $index => $qid):
+                            $q = Question::read($qid);
+                            $label = "Q$index: ".strip_tags($q->selectTitle()); ?>
+                            <option value="<?php echo $qid; ?>" <?php if ($scenario_success_selector == $qid) echo 'selected'; ?>>
+                                <?php echo $label; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group" id="scenario_success_url_block" style="display: none;">
+                    <label for="scenario_success_url"><?php echo get_lang('Custom URL'); ?></label>
+                    <input type="text" class="form-control" name="scenario_success_url" id="scenario_success_url" placeholder="/main/lp/134" value="<?php echo $scenario_success_url ?? ''; ?>">
+                </div>
+
+                <div class="form-group">
+                    <label for="scenario_failure_selector"><?php echo get_lang('On Failure'); ?></label>
+                    <select class="form-control" name="scenario_failure_selector" id="scenario_failure_selector">
+                        <option value=""><?php echo get_lang('Select destination'); ?></option>
+                        <option value="repeat" <?php if ($scenario_failure_selector === 'repeat') echo 'selected'; ?>><?php echo get_lang('Repeat question'); ?></option>
+                        <option value="-1" <?php if ($scenario_failure_selector === '-1') echo 'selected'; ?>><?php echo get_lang('End of test'); ?></option>
+                        <option value="url" <?php if ($scenario_failure_selector === 'url') echo 'selected'; ?>><?php echo get_lang('Other (manual URL)'); ?></option>
+                        <?php foreach ($objExercise->selectQuestionList() as $index => $qid):
+                            $q = Question::read($qid);
+                            $label = "Q$index: ".strip_tags($q->selectTitle()); ?>
+                            <option value="<?php echo $qid; ?>" <?php if ($scenario_failure_selector == $qid) echo 'selected'; ?>>
+                                <?php echo $label; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group" id="scenario_failure_url_block" style="display: none;">
+                    <label for="scenario_failure_url"><?php echo get_lang('Custom URL'); ?></label>
+                    <input type="text" class="form-control" name="scenario_failure_url" id="scenario_failure_url" placeholder="/main/lp/134" value="<?php echo $scenario_failure_url ?? ''; ?>">
+                </div>
+            </div>
+
+            <script>
+                function toggleScenarioUrlFields() {
+                    const success = document.getElementById("scenario_success_selector");
+                    const successUrlBlock = document.getElementById("scenario_success_url_block");
+                    const failure = document.getElementById("scenario_failure_selector");
+                    const failureUrlBlock = document.getElementById("scenario_failure_url_block");
+
+                    if (success && success.value === "url") {
+                        successUrlBlock.style.display = "block";
+                    } else {
+                        successUrlBlock.style.display = "none";
+                    }
+
+                    if (failure && failure.value === "url") {
+                        failureUrlBlock.style.display = "block";
+                    } else {
+                        failureUrlBlock.style.display = "none";
+                    }
+                }
+
+                document.addEventListener("DOMContentLoaded", toggleScenarioUrlFields);
+                document.getElementById("scenario_success_selector").addEventListener("change", toggleScenarioUrlFields);
+                document.getElementById("scenario_failure_selector").addEventListener("change", toggleScenarioUrlFields);
+            </script>
+        <?php endif; ?>
+
+
+
         <div class="row">
             <div class="col-xs-12">
                 <?php

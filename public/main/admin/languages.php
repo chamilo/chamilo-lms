@@ -59,15 +59,15 @@ $htmlHeadXtra[] = '<script>
     var disabledLang = "'.$disabledLang.'"
 
     if (msgLang == 1) {
-        $("#id_content_message").html("<div class=\"warning-message alert alert-warning\">'.get_lang('There are users currently using the following language. Please disable manually.').' <br /> " + disabledLang + "</div");
+        $("#id_content_message").html("<div class=\"warning-message alert alert-warning\">'.addslashes(get_lang('There are users currently using the following language. Please disable manually.')).' <br /> " + disabledLang + "</div");
     }
 
     $("#disable_all_except_default").click(function () {
-        if(confirm("'.get_lang('Please confirm your choice').'")) {
+        if(confirm("'.addslashes(get_lang('Please confirm your choice')).'")) {
             $.ajax({
                 contentType: "application/x-www-form-urlencoded",
                 beforeSend: function(myObject) {
-                    $("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  '.get_lang('Loading').'</div>");
+                    $("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  '.addslashes(get_lang('Loading')).'</div>");
                 },
                 type: "GET",
                 url: "../admin/languages.php",
@@ -93,7 +93,7 @@ $htmlHeadXtra[] = '<script>
             url: "../admin/languages.php",
             data: { id: link_id, visibility: currentIcon.hasClass("mdi-toggle-switch") ? 0 : 1, sent_http_request: 1 },
             beforeSend: function() {
-                $("#id_content_message").html("<div class=\'warning-message alert alert-warning\'><em class=\'fa fa-refresh fa-spin\'></em>'.get_lang('Loading'). '...</div>");
+                $("#id_content_message").html("<div class=\'warning-message alert alert-warning\'><em class=\'fa fa-refresh fa-spin\'></em>'.addslashes(get_lang('Loading')). '...</div>");
             },
             success: function(response) {
                 if (response === "set_visible" || response === "set_hidden") {
@@ -180,13 +180,15 @@ switch ($action) {
 
 if (isset($_POST['Submit']) && $_POST['Submit']) {
     // changing the name
-    $name = Database::escape_string($_POST['txt_name']);
+    $name = html_filter($_POST['txt_name']);
     $postId = (int) $_POST['edit_id'];
-    $sql = "UPDATE $tbl_admin_languages SET original_name='$name'
-            WHERE id='$postId'";
-    $result = Database::query($sql);
+    Database::update(
+        $tbl_admin_languages,
+        ['original_name' => $name],
+        ['id = ?' => $postId]
+    );
     // changing the Platform language
-    if ($_POST['platformlanguage'] && '' != $_POST['platformlanguage']) {
+    if (isset($_POST['platformlanguage']) && '' != $_POST['platformlanguage']) {
         api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, api_get_current_access_url_id());
         header("Location: $url");
         exit;
@@ -227,7 +229,7 @@ $tool_name = get_lang('Chamilo Portal Languages');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 // displaying the explanation for this tool
-Display::addFlash(Display::return_message(get_lang('Chamilo Portal LanguagesExplanation'), 'normal'));
+Display::addFlash(Display::return_message(get_lang('This tool manages the language selection menu on the login page. As a platform administrator you can decide which languages should be available for your users.'), 'normal'));
 
 // including the header file (which includes the banner itself)
 Display::display_header($tool_name);

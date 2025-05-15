@@ -17,9 +17,126 @@
 </head>
 <body>
 <h1>Security guide for Chamilo 2</h1>
+
+<p>We recommend you don't take security concerns lightly. Chamilo is security-audited at least once a year,
+    but you're never too sure. This list is a work in progress. Feel free to recommend additional measures by
+    sending us an e-mail at info@chamilo.org.</p>
+
+<h2><b>Contents</b></h2>
+<ol>
+    <li><a href="#1.Disclosing-server-info">Disclosing server info</a></li>
+    <li><a href="#2.Keeping-up-to-date">Keeping up to date</a></li>
+    <li><a href="#3.Using-safe-browsers">Using safe browsers</a></li>
+    <li><a href="#4.Files-permissions">Restricting files permissions</a></li>
+    <li><a href="#5.HSTS">HTTP Headers Security</a></li>
+    <li><a href="#6.SSL">SSL</a></li>
+</ol>
+
+<h2><a id="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
 <p>
-This page will present recommendations on how to strengthen your Chamilo 2 installation
-to reduce security risks.
+It is considered safer behaviour not to disclose server information from your Chamilo page. In order to avoid
+    both web server and PHP information disclosure, you might want to take the following actions:
 </p>
+<ul>
+<li>Locate the <i>ServerTokens</i> setting inside your Apache configuration and set it to "Prod"</li>
+<li>Locate the <i>ServerSignature</i> setting inside your Apache configuration and set it to "Off"</li>
+<li>Locate the <i>expose_php</i> setting inside your PHP configuration and set it to "Off"</li>
+<li>Reload Apache</li>
+</ul>
+
+If you are using Nginx, set <i>server_tokens off;</i> and PHP's expose_php to "Off".
+
+<h2><a id="2.Keeping-up-to-date"></a>2. Keeping up to date</h2>
+<p>
+Make sure you check <a href="https://github.com/chamilo/chamilo-lms/wiki/security-issues">our security issues page</a> regularly.
+Follow our security X/Twitter feed: <a href="https://x.com/chamilosecurity">http://twitter.com/chamilosecurity</a>.
+In Chamilo 2.0, we intend to send you security-related notifications through the "Chamilo News" block on the admin page. Make sure you enable it and check the page regularly.
+</p>
+
+<h2><a id="3.Using-safe-browsers"></a>3. Using safe browsers</h2>
+<p> Additionally to lacking the implementation of features that really improve the quality of your browsing the
+    Internet, older browsers tend to have many unresolved security flaws. Using an old browser, you put in danger the
+    security of your computer and the data it contains, but you can also put others in danger by letting crackers take
+    control of it and attacking others.</p>
+<p>To  avoid being a risk to yourself and others, you should download and install a recent browser. We recommend
+    <a href="https://getfirefox.com" target="_blank">the latest stable version of Firefox</a>.</p>
+
+<h2><a id="4.Files-permissions"></a>5. Restricting files permissions</h2>
+        <p>Making all the Chamilo files world-writable will help you install quickly, and it solves many
+        issues for people without much admin experience. However, it is much more
+        secure to make a distinct user owner of all the chamilo files and folders,
+        and only give read access to the web server to all files, and write access
+            only to the <em>var/</em>.</p>
+    <p>This way, these files need
+        only be readable and writable by the web server process owner, not by the
+        entire world. We also kindly recommend to make all writable directory
+        refuse the interpretation of PHP files.</p>
+    <p>Don't hesitate to hire an experienced administrator to do that,
+        it might be a bit more expensive now, but you'll be happy not to have to loose
+        all of your data to a hacker who attacked your site.</p>
+    <p>Only the following directory has required write
+        permissions from the web server:<br />
+        <ul>
+          <li>var/</li>
+        </ul>
+        <br />
+        Because this directory has "write by the web server" permissions,
+        it is important to prevent the execution of PHP scripts from it
+        (because a specially-crafted attack could end up allowing
+        the upload of a PHP script to it). To do that, taking into
+        account the fact that we authorize overrides through .htaccess, we need to set
+        something that the .htaccess file cannot revert. This can be done as follows inside
+        your VirtualHost definition in Apache, where "/var/www/URL/" is the path of your VirtualHost web root:<br />
+        <pre>
+  &lt;Directory /var/www/URL/var&gt;
+    php_admin_value engine Off
+  &lt;/Directory&gt;
+        </pre>
+
+        For Nginx, this would look like the following rule. However, do
+        remember that Nginx interprets rules in order of appearance, so this
+        rule would have to be at the top of your location rules to take the
+        highest priority:
+        <pre>
+  location ~ ^/var/.*/.*\.ph(p[3457]?|t|tml|ar)$ {
+    deny all;
+  }
+        </pre>
+    <br />
+<h2><a id="5.HSTS">HTTP Headers Security</a></h2>
+    <p>A valuable addition in web security, HTTP headers can be modified either
+    from the web server or from the application (like Chamilo) to increase the security
+        of your visitors.</p>
+    <p>This implies several aspects, from simple to complex, to deal with, from stuff like
+    indicating which websites you say media or libraries can be loaded from, to adding
+    extra info about your SSL certificate to make sure a hacked certification authority
+        will not immediately make your certificate useless.</p>
+    <p>In Chamilo 2.0, we have added several parameters, together with recommendations,
+    to the platform settings, Security section, that you are free to use or ignore,
+        depending on the level of security you want to achieve.</p>
+    <p>To check your portal for possible improvements in terms of headers security,
+        we highly recommend the <a href="https://securityheaders.io/">securityheaders.io</a>
+        website. If you want to read more about CSP and all related headers
+        security techniques, check <a href="https://scotthelme.co.uk/">Scott Helme's blog</a>.
+
+<h2><a id="6.SSL">SSL</a></h2>
+    <p>SSL helps you protect all communications from and to your Chamilo portal, and it is now considered such
+    a fundamental piece of a website's security that it is difficult to ignore. Some features like WebRTC even limit
+    their offer considerably if you don't use SSL</p>
+    <p>If you have a public URL, you can now easily ask for a free SSL certificate with certbot, which ends up
+    being something like this on a Linux server:</p>
+    <pre>certbot certonly -d {your domain here}</pre>
+    <p>And then editing your web server's configuration to use the freely generated certificate (don't forget to take
+    into account that it has to be renewed every 3 months and that your webserver should reload its configuration
+    right after the update, each time.</p>
+    <p>To test the level of security of your SSL certificate and its configuration in your web server, you can
+    use online checkers like <a href="https://www.ssllabs.com/ssltest/analyze.html">SSLLabs'</a>.</p>
+
+<hr />
+<h2>Authors</h2>
+<ul>
+<li>Yannick Warnier, Zend Certified PHP Engineer &amp; Certified ISO/IEC 27001 internal auditor, BeezNest Belgium SRL,
+    <a href="mailto:yannick.warnier@beeznest.com">yannick.warnier@beeznest.com</a></li>
+</ul>
 </body>
 </html>

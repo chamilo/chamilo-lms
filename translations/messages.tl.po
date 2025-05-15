@@ -3218,7 +3218,7 @@ msgstr ""
 msgid "Database Host"
 msgstr ""
 
-msgid "Database Login"
+msgid "Database user"
 msgstr ""
 
 msgid "Database Password"
@@ -3246,9 +3246,6 @@ msgid "Surname of the Administrator"
 msgstr ""
 
 msgid "Administrator login"
-msgstr ""
-
-msgid "Administrator password (<font color=\"red\">you may want to change this</font>)"
 msgstr ""
 
 msgid "Project manager"
@@ -4619,10 +4616,10 @@ msgstr ""
 msgid "Download the file"
 msgstr ""
 
-msgid "Portal Administrator: Telephone"
+msgid "Portal Administrator: Phone number"
 msgstr "Tagapangasiwa ng Portal: Telepono"
 
-msgid "The telephone number of the platform administrator"
+msgid "The phone number of the Platform Administrator (appears in the footer on the left)"
 msgstr "Ang numero ng telepono ng tagapangasiwa ng platform"
 
 msgid "Send mail to new user"
@@ -4856,10 +4853,10 @@ msgstr ""
 msgid "Unsubscribe users from course"
 msgstr ""
 
-msgid "Missing class name"
+msgid "Missing class title"
 msgstr ""
 
-msgid "Class name exists"
+msgid "Class title exists"
 msgstr ""
 
 msgid "CSV file import location"
@@ -5813,7 +5810,7 @@ msgstr ""
 msgid "Full-text search feature"
 msgstr ""
 
-msgid "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
 msgstr ""
 
 msgid "Find a training session"
@@ -16799,7 +16796,7 @@ msgstr ""
 msgid "Courses validation"
 msgstr "Balidasyon ng mga kurso"
 
-msgid "When the \"Courses validation\" feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
+msgid "When the 'Courses validation' feature is enabled, a teacher is not able to create a course alone. He/she fills a course request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messaging; set Chamilo to access an e-mail server and to use a dedicated an e-mail account."
 msgstr "Kapag ang tampok na 'Balidasyon ng kurso' ay pinagana, ang isang guro ay hindi maaaring makapaglikha ng isang kurso nang nag-iisa. Siya ay dapat magsulat ng isang kahilingan sa kurso. Ang tagapangasiwa ng platform ay niriripaso ang kahilingan at aaprubahan ito o tatanggihan.<br />Ang tampok na ito ay umaasa sa 'automated e-mail messaing'; i-set ang Chamilo upang mag-access sa isang server ng email at gumamit ng isang nakatalagang e-mail account."
 
 msgid "%s A request for additional information about the course request %s"
@@ -16823,7 +16820,7 @@ msgstr ""
 msgid "Course validation - a link to the terms and conditions"
 msgstr "Balidasyon ng kurso - isang link sa mga takda at mga kondisyon"
 
-msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
+msgid "This is the URL to the 'Terms and Conditions' document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's 'Terms and Conditions' module and if you want its URL to be used, then leave this setting empty."
 msgstr "Ito ang URL sa \"Mga Takda at Mga Kondisyon\" na dokumento na balido sa pagagawa ng kahilingan sa kurso. Kung ang address ay naitakda rito, ang gumagamit ay dapat basahin at sumang-ayon sa mga takda at mga kondisyon bago ipadala ang isang kahilingan sa kurso.<br />Kung iyong pagganahin ang module ng \"Mga Takda at Mga Kondisyon\" at kung nais mong gamitin ang URL nito, hayaang walang laman ang setting na ito."
 
 msgid "The course has not been created due to an internal error."
@@ -16883,7 +16880,7 @@ msgstr ""
 msgid "WIRIS mathematical editor"
 msgstr ""
 
-msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href=\"http://www.wiris.com/es/plugins3/ckeditor/download\" target=\"_blank\">PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
+msgid "Enable WIRIS mathematical editor. Installing this plugin you get WIRIS editor and WIRIS CAS.<br/>This activation is not fully realized unless it has been previously downloaded the <a href='http://www.wiris.com/es/plugins3/ckeditor/download' target='_blank'>PHP plugin for CKeditor WIRIS</a> and unzipped its contents in the Chamilo's directory main/inc/lib/javascript/ckeditor/plugins/.<br/>This is necessary because Wiris is proprietary software and his services are <a href='http://www.wiris.com/store/who-pays' target='_blank'>commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by the file configuration.ini.default shipped with Chamilo."
 msgstr ""
 
 msgid "File export as"
@@ -17069,7 +17066,7 @@ msgstr ""
 msgid "Load the Mathjax library in all the system pages"
 msgstr ""
 
-msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system."
+msgid "Activate this setting if you want to show MathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the 'Documents' tool, but elsewhere in the system."
 msgstr ""
 
 msgid "Hide tools from teachers"
@@ -19370,31 +19367,31 @@ msgstr ""
 msgid "Announcement for a group"
 msgstr ""
 
-msgid "Language priority 1"
+msgid "Highest priority language"
 msgstr "Priyoridad sa wika 1"
 
-msgid "Language priority 2"
+msgid "Secondary priority language"
 msgstr "Priyoridad sa wika 2"
 
-msgid "Language priority 3"
+msgid "Third priority language"
 msgstr "Priyoridad sa wika 3"
 
-msgid "Language priority 4"
+msgid "Fourth priority language"
 msgstr "Priyoridad sa wika 4"
 
 msgid "Language priority 5"
 msgstr ""
 
-msgid "The language with the highest priority"
+msgid "Primary language selected when multiple language contexts are set."
 msgstr "Ang wikang ito ang may pinakamataas na priyoridad"
 
-msgid "The second language priority"
+msgid "Secondary fallback language if first priority is unavailable or out of context."
 msgstr "Ang pangalawang wikang may priyoridad"
 
-msgid "The third language priority"
+msgid "Tertiary language fallback if higher priorities fail."
 msgstr "Ang pangatlong wikang may priyoridad"
 
-msgid "The fourth language priority"
+msgid "Last language fallback option by order of priority."
 msgstr "Ang pang-apat na wikang may priyoridad"
 
 msgid "The lowest language priority"
@@ -20045,7 +20042,7 @@ msgstr ""
 msgid "CAPTCHA"
 msgstr ""
 
-msgid "Enable a CAPTCHA on the login form to avoid password hammering"
+msgid "Enable a CAPTCHA on the login form, inscription form and lost password form to avoid password hammering"
 msgstr ""
 
 msgid "CAPTCHA mistakes allowance"
@@ -20120,7 +20117,7 @@ msgstr ""
 msgid "PDF header logo"
 msgstr ""
 
-msgid "Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
+msgid "Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)"
 msgstr ""
 
 msgid "Order users by official code"
@@ -21071,7 +21068,7 @@ msgstr ""
 msgid "Sender ID of Firebase Console for Cloud Messaging"
 msgstr ""
 
-msgid "You need register a project on <a href=\"https://console.firebase.google.com/\">Google Firebase Console</a>"
+msgid "You need register a project on <a href='https://console.firebase.google.com/'>Google Firebase Console</a>"
 msgstr ""
 
 msgid "Server key of Firebase Console for Cloud Messaging"

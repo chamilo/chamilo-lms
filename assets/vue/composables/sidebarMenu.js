@@ -148,36 +148,38 @@ export function useSidebarMenu() {
       })
     }
 
-    items.push(
-      createMenuItem(
-        "videoconference",
-        "mdi-video",
-        "Videoconference",
-        null,
-        platformConfigStore.plugins?.bbb?.show_global_conference_link
-          ? [
-              {
-                label: t("Conference Room"),
-                url: platformConfigStore.plugins.bbb.listingURL,
-              },
-            ]
-          : null,
-      ),
-    )
+    if (
+      showTabsSetting.includes("videoconference") > -1 &&
+      platformConfigStore.plugins?.bbb?.show_global_conference_link &&
+      platformConfigStore.plugins?.bbb?.listingURL
+    ) {
+      const conferenceItems = [
+        {
+          label: t("Conference Room"),
+          url: platformConfigStore.plugins.bbb.listingURL,
+        },
+      ]
 
-    items.push(
-      createMenuItem("diagnostics", "mdi-text-box-search", "Diagnosis Management", null, [
-        {
-          label: t("Diagnosis Management"),
-          url: "/main/search/load_search.php",
-          visible: securityStore.isStudentBoss,
-        },
-        {
-          label: t("Diagnostic Form"),
-          url: "/main/search/search.php",
-        },
-      ]),
-    )
+      if (conferenceItems.length > 0) {
+        items.push(createMenuItem("videoconference", "mdi-video", "Videoconference", null, conferenceItems))
+      }
+    }
+
+    if (showTabsSetting.indexOf("diagnostics") > -1) {
+      items.push(
+        createMenuItem("diagnostics", "mdi-text-box-search", "Diagnosis Management", null, [
+          {
+            label: t("Diagnosis Management"),
+            url: "/main/search/load_search.php",
+            visible: securityStore.isStudentBoss,
+          },
+          {
+            label: t("Diagnostic Form"),
+            url: "/main/search/search.php",
+          },
+        ]),
+      )
+    }
 
     if (showTabsSetting.indexOf("platform_administration") > -1) {
       if (securityStore.isAdmin || securityStore.isSessionAdmin) {
@@ -189,6 +191,9 @@ export function useSidebarMenu() {
             : [{ label: t("Users"), url: "/main/admin/user_list.php" }]),
           { label: t("Courses"), url: "/main/admin/course_list.php" },
           { label: t("Sessions"), url: "/main/session/session_list.php" },
+          ...(securityStore.isAdmin
+            ? [{ label: t("Settings"), url: "/admin/settings" }]
+            : []),
         ]
 
         items.push({

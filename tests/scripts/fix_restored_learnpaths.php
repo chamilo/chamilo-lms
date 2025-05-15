@@ -12,8 +12,8 @@ $em = Database::getManager();
 $qb1 = $em->createQueryBuilder();
 $result1 = $qb1
     ->select('lp')
-    ->from('ChamiloCourseBundle:CLp', 'lp')
-    ->innerJoin('ChamiloCourseBundle:CTool', 't', JOIN::WITH, 'lp.cId = t.cId AND lp.name = t.name')
+    ->from(CLp::class, 'lp')
+    ->innerJoin(CTool::class, 't', JOIN::WITH, 'lp.cId = t.cId AND lp.name = t.name')
     ->where(
         $qb1->expr()->eq('t.link', ':link')
     )
@@ -30,7 +30,7 @@ foreach ($result1 as $i => $lp) {
     /** @var CTool $tool */
     $tool = $qb2
         ->select('t')
-        ->from('ChamiloCourseBundle:CTool', 't')
+        ->from(CTool::class, 't')
         ->where(
             $qb2->expr()->andX(
                 $qb2->expr()->eq('t.link', ':link'),

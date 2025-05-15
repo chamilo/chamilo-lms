@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_attendance_result')]
@@ -21,6 +22,7 @@ class CAttendanceResult
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[Groups(['attendance:read'])]
     protected User $user;
 
     #[ORM\ManyToOne(targetEntity: CAttendance::class, inversedBy: 'results')]

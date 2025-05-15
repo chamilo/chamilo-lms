@@ -39,8 +39,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     'students_export2pdf' => 'true',
                     'show_users_folders' => 'true',
                     'show_default_folders' => 'true',
-                    'enabled_text2audio' => 'false',
-                    // 'enable_nanogong' => 'false',
                     'show_documents_preview' => 'false',
                     'enable_webcam_clip' => 'false',
                     'tool_visible_by_default_at_creation' => [
@@ -121,7 +119,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('students_export2pdf', YesNoType::class)
             ->add('show_users_folders', YesNoType::class)
             ->add('show_default_folders', YesNoType::class)
-            ->add('enabled_text2audio', YesNoType::class)
             // ->add('enable_nanogong', YesNoType::class)
             ->add('show_documents_preview', YesNoType::class)
             ->add('enable_webcam_clip', YesNoType::class)

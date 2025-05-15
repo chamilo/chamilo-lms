@@ -51,8 +51,8 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
                 $metaData = $this->entityManager->getClassMetadata($resourceClass);
                 if ($metaData->hasAssociation('course')) {
                     $queryBuilder
-                        ->innerJoin("$rootAlias.course", 'c')
-                        ->innerJoin('c.urls', 'url_rel')
+                        ->innerJoin("$rootAlias.course", 'co')
+                        ->innerJoin('co.urls', 'url_rel')
                         ->andWhere('url_rel.url = :access_url_id')
                         ->setParameter('access_url_id', $accessUrl->getId())
                     ;
@@ -60,20 +60,25 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
             }
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return;
-        }
-
         if (CourseRelUser::class === $resourceClass) {
             if ('collection_query' === $operation?->getName()) {
-                /** @var User|null $user */
-                if (null === $user = $this->security->getUser()) {
-                    throw new AccessDeniedException('Access Denied.');
-                }
-
                 $rootAlias = $queryBuilder->getRootAliases()[0];
-                $queryBuilder->andWhere(\sprintf('%s.user = :current_user', $rootAlias));
-                $queryBuilder->setParameter('current_user', $user->getId());
+                $queryBuilder->leftJoin("$rootAlias.course", 'c');
+                $queryBuilder
+                    ->orderBy('c.title', 'ASC')
+                    ->addOrderBy("$rootAlias.sort", 'ASC')
+                    ->addOrderBy("$rootAlias.userCourseCat", 'ASC')
+                ;
+
+                if (!$this->security->isGranted('ROLE_ADMIN')) {
+                    /** @var User|null $user */
+                    if (null === $user = $this->security->getUser()) {
+                        throw new AccessDeniedException('Access Denied.');
+                    }
+
+                    $queryBuilder->andWhere(\sprintf('%s.user = :current_user', $rootAlias));
+                    $queryBuilder->setParameter('current_user', $user->getId());
+                }
             }
         }
 

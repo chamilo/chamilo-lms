@@ -8,11 +8,11 @@
 
     <i18n-t
       class="mb-4"
-      keypath="For more details {0}"
+      keypath="For more details %s"
       tag="p"
     >
       <a
-        v-t="'read the installation guide'"
+        v-t="'Read the installation guide'"
         href="/main/documentation/installation_guide.html"
         target="_blank"
       />
@@ -48,13 +48,8 @@
       }}
     </Message>
 
-    <h3
-      class="install-requirement mb-8"
-      v-text="t('Server requirements information')"
-    />
-
     <div class="text-center mb-4">
-      <p class="text-body-2 font-semibold mb-2">{{ t("PHP version ") }} >= {{ installerData.phpRequiredVersion }}</p>
+      <p class="text-body-2 font-semibold mb-2">{{ t("PHP version") }} >= {{ installerData.phpRequiredVersion }}</p>
       <p
         v-if="installerData.stepData.isVersionPassed"
         class="text-success text-body-1 font-semibold"

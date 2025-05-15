@@ -16,6 +16,7 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,13 +26,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const PHP_EOL;
 
+#[AsCommand(
+    name: 'app:send-event-reminders',
+    description: 'Send notification messages to users that have reminders from events in their agenda.',
+)]
 class SendEventRemindersCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:send-event-reminders';
-
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly SettingsManager $settingsManager,
@@ -45,7 +45,6 @@ class SendEventRemindersCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Send notification messages to users that have reminders from events in their agenda.')
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
             ->setHelp('This command sends notifications to users who have pending reminders for calendar events.')
         ;

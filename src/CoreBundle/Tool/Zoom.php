@@ -10,12 +10,12 @@ class Zoom extends AbstractPlugin
 {
     public function getTitle(): string
     {
-        return 'zoom';
+        return 'Zoom';
     }
 
     public function getLink(): string
     {
-        return 'plugin/zoom/start.php';
+        return 'plugin/Zoom/start.php';
     }
 
     public function getIcon(): string

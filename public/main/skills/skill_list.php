@@ -116,7 +116,7 @@ switch ($action) {
         break;
     case 'list':
     default:
-        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+        $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
 
         $toolbar = Display::url(
             Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create skill')),

@@ -68,21 +68,6 @@ class GroupManager
     public const DOCUMENT_MODE_READ_ONLY = 1;
     public const DOCUMENT_MODE_COLLABORATION = 2;
 
-    /**
-     * Constant for the group category's naming rules
-     */
-    public const GROUP_ONLY_TEACHER_CAN_RENAME = 0;
-    public const GROUP_STUDENT_CAN_RENAME = 1;
-    public const GROUP_AUTO_RENAME_WITH_SELF_MEMBERS = 2;
-
-    /**
-     * Constant for the group category's visibility rules
-     */
-    public const GROUP_VISIBILITY_DEFAULT = 0;
-    public const GROUP_ONLY_FOR_THOSE_JOINED = 1;
-    public const GROUP_ONLY_FOR_THOSE_JOINED_WITHOUT_MEMBERS_INFOS = 2;
-
-
     public function __construct()
     {
     }
@@ -1095,9 +1080,7 @@ class GroupManager
         $selfUnRegistrationAllowed = 0,
         $maxStudent = 8,
         $groupsPerUser = 0,
-        $documentAccess = 0,
-        $namingRule = GroupManager::GROUP_ONLY_TEACHER_CAN_RENAME,
-        $visibilityRule = GroupManager::GROUP_VISIBILITY_DEFAULT
+        $documentAccess = 0
     ) {
         if (empty($title)) {
             return false;
@@ -1124,8 +1107,6 @@ class GroupManager
             ->setGroupsPerUser($groupsPerUser)
             ->setParent($course)
             ->addCourseLink($course, $session)
-            ->setAllowChangeGroupName($namingRule)
-            ->setOnlyMe($visibilityRule)
         ;
 
         $repo = Container::getGroupCategoryRepository();
@@ -1168,9 +1149,7 @@ class GroupManager
         $selfUnRegistrationAllowed,
         $maximum_number_of_students,
         $groups_per_user,
-        $documentAccess,
-        $namingRule = GroupManager::GROUP_ONLY_TEACHER_CAN_RENAME,
-        $visibilityRule = GroupManager::GROUP_VISIBILITY_DEFAULT
+        $documentAccess
     ) {
         $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $id = (int) $id;
@@ -1195,8 +1174,6 @@ class GroupManager
                     groups_per_user   = '".Database::escape_string($groups_per_user)."',
                     self_reg_allowed = '".Database::escape_string($selfRegistrationAllowed)."',
                     self_unreg_allowed = '".Database::escape_string($selfUnRegistrationAllowed)."',
-                    allow_change_group_name = '".Database::escape_string($namingRule)."',
-                    only_me = '".Database::escape_string($visibilityRule)."',
                     $documentCondition
                     max_student = ".intval($maximum_number_of_students)."
                 WHERE iid = $id";
@@ -2596,9 +2573,7 @@ class GroupManager
                         $data['self_unreg_allowed'],
                         $data['max_student'],
                         $data['groups_per_user'],
-                        $data['document_access'],
-                        $data['allow_change_group_name'],
-                        $data['only_me']
+                        $data['document_access']
                     );
                     $data['category_id'] = $categoryId;
                     $result['updated']['category'][] = $data;
@@ -2617,10 +2592,7 @@ class GroupManager
                         $data['self_reg_allowed'],
                         $data['self_unreg_allowed'],
                         $data['max_student'],
-                        $data['groups_per_user'],
-                        $data['document_access'] ?? 0,
-                        $data['allow_change_group_name'],
-                        $data['only_me']
+                        $data['groups_per_user']
                     );
 
                     if ($categoryId) {

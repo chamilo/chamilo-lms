@@ -6,7 +6,7 @@
     />
 
     <form
-      class="login-section__form p-input-filled"
+      class="login-section__form"
       @submit.prevent="onSubmitLoginForm"
     >
       <div class="field">
@@ -15,6 +15,7 @@
           v-model="login"
           :placeholder="t('Username')"
           type="text"
+          variant="filled"
         />
       </div>
 
@@ -25,6 +26,7 @@
           :placeholder="t('Password')"
           input-id="password"
           toggle-mask
+          variant="filled"
         />
       </div>
 
@@ -36,11 +38,12 @@
           v-model="totp"
           :placeholder="t('Enter 2FA code')"
           type="text"
+          variant="filled"
         />
       </div>
 
       <div class="field login-section__remember-me">
-        <InputSwitch
+        <ToggleSwitch
           v-model="remember"
           input-id="binary"
           name="remember_me"
@@ -89,7 +92,7 @@ import { useRouter } from "vue-router"
 import Button from "primevue/button"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
-import InputSwitch from "primevue/inputswitch"
+import ToggleSwitch from "primevue/toggleswitch"
 import { useI18n } from "vue-i18n"
 import { useLogin } from "../composables/auth/login"
 import LoginOAuth2Buttons from "./login/LoginOAuth2Buttons.vue"

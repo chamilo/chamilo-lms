@@ -198,7 +198,7 @@
       <!-- First parameter: language. -->
       <div class="field">
         <div class="p-float-label">
-          <Dropdown
+          <Select
             v-if="'update' !== installerData.installType"
             v-model="installerData.stepData.languageForm"
             :filter="true"
@@ -508,7 +508,7 @@ import { useI18n } from "vue-i18n"
 
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
-import Dropdown from "primevue/dropdown"
+import Select from "primevue/select"
 import Button from "primevue/button"
 import RadioButton from "primevue/radiobutton"
 import SectionHeader from "../layout/SectionHeader.vue"

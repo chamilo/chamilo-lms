@@ -2695,6 +2695,8 @@ class SessionManager
                                 $cat->set_weight($origCat->get_weight());
                                 $cat->set_visible(0);
                                 $cat->set_certificate_min_score($origCat->getCertificateMinScore());
+                                $cat->setGenerateCertificates($origCat->getGenerateCertificates());
+                                $cat->setIsRequirement($origCat->getIsRequirement());
                                 $cat->add();
                                 $sessionGradeBookCategoryId = $cat->get_id();
                                 $sessionCategoriesId[$origCat->get_id()] = $sessionGradeBookCategoryId;

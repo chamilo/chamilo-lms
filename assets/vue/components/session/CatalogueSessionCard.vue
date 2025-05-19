@@ -1,6 +1,6 @@
 <template>
   <div
-    class="course-card hover:shadow-lg transition duration-300 rounded-2xl overflow-hidden border border-gray-300 bg-white flex flex-col"
+    class="course-card relative hover:shadow-lg transition duration-300 rounded-2xl overflow-hidden border border-gray-300 bg-white flex flex-col"
   >
     <div
       v-if="!hasThumbnail"
@@ -15,15 +15,23 @@
       class="w-full h-40 object-cover"
       @error="onImageError"
     />
-
+    <Button
+      v-if="allowDescription"
+      icon="pi pi-info-circle"
+      @click="showDescriptionDialog = true"
+      class="absolute top-2 left-2 z-20"
+      size="small"
+      text
+      aria-label="Session info"
+    />
+    <span
+      v-if="languages.length"
+      class="absolute top-0 right-0 bg-primary text-white text-xs px-2 py-1 font-semibold rounded-bl-lg z-10"
+    >
+      {{ languages.length === 1 ? languages[0] : $t("Multilingual") }}
+    </span>
     <div class="p-4 flex flex-col flex-grow gap-2">
       <h3 class="text-xl font-semibold text-gray-800">{{ session.title }}</h3>
-      <p
-        v-if="session.description"
-        class="text-sm text-gray-600 line-clamp-3"
-        v-html="session.description"
-      />
-
       <div class="text-sm text-gray-700">
         <strong>{{ $t("Duration") }}:</strong> {{ duration }}
       </div>
@@ -48,13 +56,6 @@
         class="text-sm text-gray-700"
       >
         <strong>{{ $t("Category") }}:</strong> {{ session.category.title }}
-      </div>
-
-      <div
-        v-if="languages.length"
-        class="text-sm text-gray-700"
-      >
-        <strong>{{ $t("Languages") }}:</strong> {{ languages.join(", ") }}
       </div>
 
       <div
@@ -91,18 +92,19 @@
         />
 
         <Button
-          v-else-if="!session.isSubscribed"
-          :label="$t('Subscribe')"
-          icon="pi pi-user-plus"
+          v-else-if="allowAutoSubscription && !session.isSubscribed"
+          :label="isLoading ? $t('Subscribing...') : $t('Subscribe')"
+          :icon="isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-user-plus'"
           class="w-full p-button-success"
+          :disabled="isLoading"
           @click="subscribeToSession"
         />
 
         <Button
-          v-else-if="isFuture"
+          v-else-if="session.isSubscribed && isFuture"
           :label="$t('Registered')"
           icon="pi pi-check"
-          class="w-full p-button- p-button-outlined"
+          class="w-full p-button-outlined"
           disabled
         />
 
@@ -169,6 +171,17 @@
       </ul>
     </Dialog>
   </div>
+  <Dialog
+    v-model:visible="showDescriptionDialog"
+    :header="session.title"
+    modal
+    class="w-96"
+  >
+    <p
+      class="text-sm text-gray-700 whitespace-pre-line"
+      v-html="session.description || $t('No description available')"
+    />
+  </Dialog>
 </template>
 <script setup>
 import { ref, computed, watchEffect } from "vue"
@@ -177,6 +190,13 @@ import Button from "primevue/button"
 import Dialog from "primevue/dialog"
 import axios from "axios"
 import { useSecurityStore } from "../../store/securityStore"
+import { usePlatformConfig } from "../../store/platformConfig"
+
+const showDescriptionDialog = ref(false)
+const platformConfigStore = usePlatformConfig()
+const allowDescription = computed(
+  () => platformConfigStore.getSetting("course.show_courses_descriptions_in_catalog") !== "false",
+)
 
 const showGoDialog = ref(false)
 const isLoading = ref(false)
@@ -184,6 +204,10 @@ const emit = defineEmits(["rate", "subscribed"])
 const emitRating = (event) => {
   emit("rate", { value: event.value, session: props.session })
 }
+
+const allowAutoSubscription = computed(
+  () => platformConfigStore.getSetting("session.catalog_allow_session_auto_subscription") === "true",
+)
 
 const props = defineProps({
   session: Object,

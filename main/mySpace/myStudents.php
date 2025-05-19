@@ -664,7 +664,7 @@ $sql = 'SELECT DISTINCT sc.session_id, sc.c_id
         ON (scu.session_id = sc.session_id)
         WHERE s.id = scu.session_id
         AND user_id = '.$student_id.'
-        ORDER BY display_end_date DESC, position ASC
+        ORDER BY display_end_date DESC, sc.position ASC
         ';
 $rs = Database::query($sql);
 $tmp_sessions = [];

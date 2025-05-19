@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
@@ -932,13 +933,18 @@ function get_user_data($from, $number_of_items, $column, $direction)
                             $extraField['id']
                         );
                         if (isset($data['value'])) {
-                            $optionList = $extraFieldOption->get_field_option_by_field_and_option(
-                                $extraField['id'],
-                                $data['value']
+                            $optionList = $extraFieldOption->repo->getFieldOptionByFieldAndOption(
+                                (int) $extraField['id'],
+                                $data['value'],
+                                $extraFieldOption->extraField->getItemType()
                             );
-                            if (!empty($optionList)) {
-                                $options = implode(', ', array_column($optionList, 'display_text'));
-                                $temp[] = Security::remove_XSS($options);
+
+                            if ($optionList) {
+                                $optionList = array_map(
+                                    fn (ExtraFieldOptions $option) => Security::remove_XSS($option['display_text']),
+                                    $optionList
+                                );
+                                $temp[] = implode(', ', $optionList);
                             } else {
                                 $temp[] = Security::remove_XSS($data['value']);
                             }

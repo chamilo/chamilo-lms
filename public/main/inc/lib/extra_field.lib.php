@@ -3151,6 +3151,7 @@ JAVASCRIPT;
                         );
                     }
                     break;
+                case self::FIELD_TYPE_SELECT:
                 case self::FIELD_TYPE_SELECT_MULTIPLE:
                     $displayedValue = $valueData['value'] ?? $valueData['field_value'];
                     break;

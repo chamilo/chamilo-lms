@@ -24,7 +24,12 @@ async function subscribe({ userId, courseId }) {
   })
 }
 
+async function autoSubscribeCourse(courseId) {
+  return await baseService.post(`/catalogue/auto-subscribe-course/${courseId}`)
+}
+
 export default {
   findAll,
   subscribe,
+  autoSubscribeCourse,
 }

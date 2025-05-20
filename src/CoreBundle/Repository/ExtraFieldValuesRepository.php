@@ -199,6 +199,21 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getValueByVariableAndItem(string $variable, int $itemId, int $itemType): ?ExtraFieldValues
+    {
+        $qb = $this->createQueryBuilder('v')
+            ->innerJoin('v.field', 'f')
+            ->andWhere('f.variable = :variable')
+            ->andWhere('f.itemType = :itemType')
+            ->andWhere('v.itemId = :itemId')
+            ->setParameter('variable', $variable)
+            ->setParameter('itemType', $itemType)
+            ->setParameter('itemId', $itemId)
+            ->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     public function getByHandlerAndFieldId(int $itemId, int $fieldId, int $itemType, bool $transform = false): array
     {
         $qb = $this->createQueryBuilder('efv');
@@ -214,7 +229,6 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
                 'item_type' => $itemType,
             ])
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 }

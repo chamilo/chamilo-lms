@@ -15,6 +15,7 @@ export function useSidebarMenu() {
   const { items: socialItems } = useSocialMenuItems()
   const showTabsSetting = platformConfigStore.getSetting("platform.show_tabs")
   const showCatalogue = platformConfigStore.getSetting("platform.catalog_show_courses_sessions")
+  const allowStudentCatalogue = platformConfigStore.getSetting("display.allow_students_to_browse_courses") !== "false"
 
   const isActive = (item) => {
     if (item.route) {
@@ -81,13 +82,13 @@ export function useSidebarMenu() {
   const menuItemsAfterMyCourse = computed(() => {
     const items = []
 
-    if (showTabsSetting.indexOf("catalogue") > -1) {
-      if (showCatalogue == 0 || showCatalogue == 2) {
+    if (allowStudentCatalogue && showTabsSetting.indexOf("catalogue") > -1) {
+      if (showCatalogue === 0 || showCatalogue === 2) {
         items.push(createMenuItem("catalogue", "mdi-bookmark-multiple", "Explore more courses", "CatalogueCourses"))
       }
       if (showCatalogue > 0) {
         items.push(
-          createMenuItem("catalogue", "mdi-bookmark-multiple-outline", "Sessions catalogue", "CatalogueSessions"),
+          createMenuItem("catalogue", "mdi-bookmark-multiple-outline", "Sessions catalogue", "CatalogueSessions")
         )
       }
     }

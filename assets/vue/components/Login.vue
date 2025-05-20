@@ -113,17 +113,26 @@ const requires2FA = ref(false)
 redirectNotAuthenticated()
 
 async function onSubmitLoginForm() {
-  const response = await performLogin({
-    login: login.value,
-    password: password.value,
-    totp: requires2FA.value ? totp.value : null,
-    _remember_me: remember.value,
-  })
+  try {
+    const response = await performLogin({
+      login: login.value,
+      password: password.value,
+      totp: requires2FA.value ? totp.value : null,
+      _remember_me: remember.value,
+    })
 
-  if (response.requires2FA) {
-    requires2FA.value = true
-  } else {
-    await router.replace({ name: "Home" })
+    if (!response) {
+      console.warn("[Login] No response from performLogin.")
+      return
+    }
+
+    if (response.requires2FA) {
+      requires2FA.value = true
+    } else {
+      await router.replace({ name: "Home" })
+    }
+  } catch (error) {
+    console.error("[Login] performLogin failed:", error)
   }
 }
 </script>

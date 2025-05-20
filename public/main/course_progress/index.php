@@ -179,11 +179,6 @@ if (isset($_GET['isStudentView']) && 'true' === $_GET['isStudentView']) {
     $action = 'thematic_details';
 }
 
-$interbreadcrumb[] = [
-    'url' => $currentUrl,
-    'name' => get_lang('Thematic control'),
-];
-
 $actionLeft = '';
 // instance thematic object for using like library here
 $thematicManager = new Thematic();

@@ -25,12 +25,13 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue"
+import { computed, ref, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import Breadcrumb from "primevue/breadcrumb"
 import { useCidReqStore } from "../store/cidReq"
 import { storeToRefs } from "pinia"
+import { useStore } from "vuex"
 
 const legacyItems = ref(window.breadcrumb)
 
@@ -40,6 +41,9 @@ const router = useRouter()
 const { t } = useI18n()
 
 const { course, session } = storeToRefs(cidReqStore)
+
+const store = useStore()
+const resourceNode = computed(() => store.getters["resourcenode/getResourceNode"])
 
 const specialRouteNames = [
   "MyCourses",
@@ -62,6 +66,7 @@ watchEffect(() => {
 
   itemList.value = []
 
+  // Admin routes
   if (route.fullPath.startsWith("/admin")) {
     const parts = route.path.split("/").filter(Boolean)
     parts.forEach((part, index) => {
@@ -77,6 +82,7 @@ watchEffect(() => {
     })
   }
 
+  // Pages
   if (route.name && route.name.includes("Page")) {
     itemList.value.push({
       label: t("Pages"),
@@ -84,17 +90,20 @@ watchEffect(() => {
     })
   }
 
+  // Messages
   if (route.name && route.name.includes("Message")) {
     itemList.value.push({
       label: t("Messages"),
-      //disabled: route.path === path || lastItem.path === route.path,
       to: "/resources/messages",
     })
   }
 
+  // Home and special
   if (specialRouteNames.includes(route.name)) {
     return
   }
+
+  // My Courses or My Sessions
   if (course.value) {
     if (session.value) {
       itemList.value.push({
@@ -109,6 +118,7 @@ watchEffect(() => {
     }
   }
 
+  // Legacy breadcrumbs
   if (legacyItems.value.length > 0) {
     const mainUrl = window.location.href
     const mainPath = mainUrl.indexOf("main/")
@@ -137,6 +147,65 @@ watchEffect(() => {
       itemList.value.push({
         label: course.value.title,
         route: { name: "CourseHome", params: { id: course.value.id }, query: route.query },
+      })
+    }
+  }
+
+  const mainToolName = route.matched?.[0]?.name
+  if (mainToolName && mainToolName !== "documents") {
+    const formatToolName = (name) => {
+      return name
+        .replace(/([a-z])([A-Z])/g, "$1 $2")
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase())
+    }
+
+    itemList.value.push({
+      label: formatToolName(mainToolName),
+      route: { name: mainToolName, params: route.params, query: route.query },
+    })
+  }
+  if (mainToolName === "documents" && resourceNode.value) {
+    const folderTrail = []
+
+    let current = resourceNode.value
+    while (current?.parent && current.parent.title !== "courses") {
+      folderTrail.unshift({
+        label: current.title,
+        nodeId: current.id,
+      })
+      current = current.parent
+    }
+
+    if (folderTrail.length === 0) {
+      itemList.value.push({
+        label: t("Documents"),
+        route: {
+          name: "DocumentsList",
+          params: route.params,
+          query: route.query,
+        },
+      })
+    } else {
+      const first = folderTrail.shift()
+      itemList.value.push({
+        label: t("Documents"),
+        route: {
+          name: "DocumentsList",
+          params: { node: first.nodeId },
+          query: route.query,
+        },
+      })
+
+      folderTrail.forEach((folder) => {
+        itemList.value.push({
+          label: folder.label,
+          route: {
+            name: "DocumentsList",
+            params: { node: folder.nodeId },
+            query: route.query,
+          },
+        })
       })
     }
   }

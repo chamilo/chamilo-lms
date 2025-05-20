@@ -243,7 +243,6 @@ class Answer
                     position,
                     hotspot_coordinates,
                     hotspot_type,
-                    destination,
                     iid
                 FROM $TBL_ANSWER
                 WHERE

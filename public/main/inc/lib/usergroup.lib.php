@@ -1195,6 +1195,36 @@ class UserGroupModel extends Model
         }
     }
 
+    public function unsubscribe_only_courses_from_usergroup($usergroup_id, $delete_items, $sessionId = 0)
+    {
+        $sessionId = (int) $sessionId;
+        // Deleting items.
+        if (!empty($delete_items)) {
+            $user_list = $this->get_users_by_usergroup($usergroup_id);
+
+            $groupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+            foreach ($delete_items as $course_id) {
+                $course_info = api_get_course_info_by_id($course_id);
+                if ($course_info) {
+                    Database::delete(
+                        $this->usergroup_rel_course_table,
+                        [
+                            'usergroup_id = ? AND course_id = ?' => [
+                                $usergroup_id,
+                                $course_id,
+                            ],
+                        ]
+                    );
+                }
+                if (0 != $sessionId && 0 != $groupId) {
+                    $this->subscribe_sessions_to_usergroup($groupId, [0]);
+                } else {
+                    $s = $sessionId;
+                }
+            }
+        }
+    }
+
     /**
      * Subscribe users to a group.
      *

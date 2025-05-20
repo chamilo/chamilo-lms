@@ -2585,13 +2585,29 @@ switch ($action) {
                     $course_id,
                     api_get_session_id()
                 )) {
-                    $url = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq(
-                        ).'&id_session='.api_get_session_id();
-                    $icon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove'));
+                    $actions = [
+                        [
+                            'icon' => Display::getMdiIcon(ObjectIcon::USER_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Overview students subscribed to the class')),
+                            'url' => $urlUserGroup.'&id='.$group['id']
+                        ],
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove the class without removing students')),
+                            'url' => 'class.php?action=remove_only_class_from_course&id=' . $group['id'] . '&' . api_get_cidreq() . '&id_session=' . api_get_session_id(),
+                            'onclick' => "if (!confirm('". get_lang('Are you sure you want to remove the class without removing students') . "')) return false;"
+                        ],
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove')),
+                            'url' => 'class.php?action=remove_class_from_course&id=' . $group['id'] . '&' . api_get_cidreq() . '&id_session=' . api_get_session_id(),
+                            'onclick' => "if (!confirm('". get_lang('Are you sure you want to remove the class') . "')) return false;"
+                        ],
+                    ];
                 } else {
-                    $url = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq(
-                        ).'&type=not_registered';
-                    $icon = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add'));
+                    $actions = [
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add')),
+                            'url' => 'class.php?action=add_class_to_course&id=' . $group['id'] . '&' . api_get_cidreq() . '&type=not_registered',
+                        ]
+                    ];
                 }
 
                 switch ($group['group_type']) {
@@ -2609,12 +2625,19 @@ switch ($action) {
 
                 if ($isAllow) {
                     if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
-                        $group['actions'] .= Display::url(
+                        $group['actions'] = Display::url(
                                 Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Statistics')),
-                                $urlUserGroup.'&id='.$group['id']
-                            ).'&nbsp;';
+                                $urlUserGroup . '&id=' . $group['id']
+                            ) . '&nbsp;';
                     }
-                    $group['actions'] .= Display::url($icon, $url);
+
+                    for ($i = 0; $i < count($actions); $i++) {
+                        $group['actions'] .= Display::url(
+                            $actions[$i]['icon'],
+                            $actions[$i]['url'] ?? null,
+                            ['onclick' => $actions[$i]['onclick'] ??  '']
+                        );
+                    }
                 }
                 $new_result[] = $group;
             }

@@ -2441,7 +2441,7 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Create a document extra field with field label "can_be_downloaded" of type "Checkbox options".
 // $_configuration['documents_hide_download_icon'] = false;
 
-// It adds option to define the starting date of accessibility for un document.
+// It adds option to define the starting date of accessibility for a document.
 // Create a document extra field with field label "accessible_from" of type "Date and time".
 // $_configuration['document_enable_accessible_from_date'] = false;
 

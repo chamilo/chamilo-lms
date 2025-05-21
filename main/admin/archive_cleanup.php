@@ -49,16 +49,20 @@ if ($form->validate()) {
     $htaccess = <<<TEXT
 <IfModule mod_authz_core.c>
     Require all denied
+    # pChart generated files should be allowed
+    <FilesMatch "^[0-9a-f]+$">
+        require all granted
+    </FilesMatch>
 </IfModule>
 <IfModule !mod_authz_core.c>
     Order deny,allow
     Deny from all
+    # pChart generated files should be allowed
+    <FilesMatch "^[0-9a-f]+$">
+        order allow,deny
+        allow from all
+    </FilesMatch>
 </IfModule>
-# pChart generated files should be allowed
-<FilesMatch "^[0-9a-f]+$">
-    order allow,deny
-    allow from all
-</FilesMatch>
 php_flag engine off
 TEXT;
 

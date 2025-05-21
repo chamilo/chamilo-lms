@@ -178,6 +178,51 @@ class CopyUnhashedAssetsPlugin {
           )
         }
       }
+
+      // === COPY legacy_framereadyloader.js without hash ===
+      const frameReadyFile = fs.readdirSync(buildPath).find((f) =>
+        f.match(/^legacy_framereadyloader\.[a-f0-9]+\.js$/)
+      )
+      if (frameReadyFile) {
+        fs.copyFileSync(
+          path.join(buildPath, frameReadyFile),
+          path.join(buildPath, "legacy_framereadyloader.js")
+        )
+      }
+
+      // === COPY legacy_framereadyloader.css without hash ===
+      const frameReadyCssFile = fs.readdirSync(buildPath).find((f) =>
+        f.match(/^legacy_framereadyloader\.[a-f0-9]+\.css$/)
+      )
+      if (frameReadyCssFile) {
+        fs.copyFileSync(
+          path.join(buildPath, frameReadyCssFile),
+          path.join(buildPath, "legacy_framereadyloader.css")
+        )
+      }
+
+      // === COPY jquery.qtip.js without hash ===
+      const qtipFile = fs.readdirSync(buildPath + "/libs/qtip2/dist").find((f) =>
+        f.match(/^jquery\.qtip\.js$/)
+      )
+      if (qtipFile) {
+        fs.copyFileSync(
+          path.join(buildPath, "libs/qtip2/dist", qtipFile),
+          path.join(buildPath, "libs/qtip2/dist/jquery.qtip.js")
+        )
+      }
+
+      // === COPY jquery.qtip.css without hash ===
+      const qtipCssFile = fs.readdirSync(buildPath + "/libs/qtip2/dist").find((f) =>
+        f.match(/^jquery\.qtip\.css$/)
+      )
+      if (qtipCssFile) {
+        fs.copyFileSync(
+          path.join(buildPath, "libs/qtip2/dist", qtipCssFile),
+          path.join(buildPath, "libs/qtip2/dist/jquery.qtip.css")
+        )
+      }
+
     })
   }
 }

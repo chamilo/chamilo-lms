@@ -14,6 +14,8 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
 use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
@@ -124,7 +126,27 @@ class ResourceNodeVoter extends Voter
                     return true;
                 }
 
-                // no break
+                // Exception: allow access to hotspot question images if student can view the quiz
+                $questionRepo = $this->entityManager->getRepository(CQuizQuestion::class);
+                $question = $questionRepo->findOneBy(['resourceNode' => $resourceNode]);
+                if ($question) {
+                    // Check if it's a Hotspot-type question
+                    if (\in_array($question->getType(), [6, 7, 8], true)) { // HOT_SPOT, HOT_SPOT_ORDER, HOT_SPOT_DELINEATION
+                        $rel = $this->entityManager
+                            ->getRepository(CQuizRelQuestion::class)
+                            ->findOneBy(['question' => $question]);
+
+                        if ($rel && $rel->getQuiz()) {
+                            $quiz = $rel->getQuiz();
+                            // Allow if the user has VIEW rights on the quiz
+                            if ($this->security->isGranted('VIEW', $quiz)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+            // no break
             case self::EDIT:
                 break;
         }

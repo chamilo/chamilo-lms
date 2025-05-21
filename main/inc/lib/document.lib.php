@@ -1826,6 +1826,17 @@ class DocumentManager
 
         // 4. Checking document visibility (i'm repeating the code in order to be more clear when reading ) - jm
         if ($user_in_course) {
+            if (true === api_get_configuration_value('document_enable_accessible_from_date')) {
+                $extraFieldValue = new ExtraFieldValue('document');
+                $extraValue = $extraFieldValue->get_values_by_handler_and_field_variable($doc_id, 'accessible_from');
+                if (!empty($extraValue) && isset($extraValue['value'])) {
+                    $now = new DateTime();
+                    $accessibleDate = new DateTime($extraValue['value']);
+                    if ($now < $accessibleDate) {
+                        return false;
+                    }
+                }
+            }
             // 4.1 Checking document visibility for a Course
             if ($session_id == 0) {
                 $item_info = api_get_item_property_info(

@@ -141,6 +141,14 @@ if (api_is_allowed_to_edit(false, true) ||
         }
     }
 
+    // add edit tool
+    if (true) {
+        $actions_array[] = [
+            'url' => 'settings.php?'.api_get_cidreq(true, false).'&gid='.$group_id,
+            'content' => Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')),
+        ];
+    }
+
     if (GroupManager::TOOL_NOT_AVAILABLE != $groupEntity->getDocState()) {
         $params = [
             'toolName' => 'document',

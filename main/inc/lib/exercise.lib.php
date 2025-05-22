@@ -5386,12 +5386,15 @@ EOT;
         }
 
         $question_list_answers = [];
+        $mediaList = [];
         $category_list = [];
         $loadChoiceFromSession = false;
         $fromDatabase = true;
         $exerciseResult = null;
         $exerciseResultCoordinates = null;
         $delineationResults = null;
+        $tempParentId = null;
+        $mediaCounter = 0;
         if (true === $save_user_result && in_array(
             $objExercise->getFeedbackType(),
             [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP]
@@ -5581,16 +5584,38 @@ EOT;
 
                 $question_content = '';
                 if ($show_results) {
+                    $showMedia = false;
                     $question_content = '<div class="question_row_answer">';
                     if (false === $showQuestionScore) {
                         $score = [];
+                    }
+                    /*if ($objQuestionTmp->parent_id != 0 && !in_array($objQuestionTmp->parent_id, $mediaList)) {
+                        $showMedia = true;
+                        $mediaList[] = $objQuestionTmp->parent_id;
+                    }*/
+                    $counterToShow = $counter;
+
+                    if ($objQuestionTmp->parent_id != 0) {
+
+                        if (!in_array($objQuestionTmp->parent_id, $media_list)) {
+                            $media_list[] = $objQuestionTmp->parent_id;
+                            $show_media = true;
+                        }
+                        if ($tempParentId == $objQuestionTmp->parent_id) {
+                            $mediaCounter++;
+                        } else {
+                            $mediaCounter = 0;
+                        }
+                        $counterToShow = chr(97 + $mediaCounter);
+                        $tempParentId = $objQuestionTmp->parent_id;
                     }
 
                     // Shows question title an description
                     $question_content .= $objQuestionTmp->return_header(
                         $objExercise,
-                        $counter,
-                        $score
+                        $counterToShow,
+                        $score,
+                        $showMedia
                     );
                 }
                 $counter++;

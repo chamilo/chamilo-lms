@@ -196,6 +196,8 @@ $token = Security::get_token();
 //deletes a session when using don't know question type (ugly fix)
 Session::erase('less_answer');
 
+echo Question::getMediaLabels();
+
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
 if (!$inATest) {
@@ -379,14 +381,21 @@ if (!$inATest) {
                 // Question type
                 $typeImg = $objQuestionTmp->getTypePicture();
                 $typeExpl = $objQuestionTmp->getExplanation();
-                $questionType = Display::return_icon($typeImg, $typeExpl);
+
+                $question_media = null;
+                if (!empty($objQuestionTmp->parent_id)) {
+                     $objQuestionMedia = Question::read($objQuestionTmp->parent_id);
+                     $question_media  = ' '.Question::getMediaLabel($objQuestionMedia->question);
+                }
+
+                $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM).$question_media);
 
                 // Question category
                 $txtQuestionCat = Security::remove_XSS(
                     TestCategory::getCategoryNameForQuestion($objQuestionTmp->iid)
                 );
                 if (empty($txtQuestionCat)) {
-                    $txtQuestionCat = '-';
+                    $txtQuestionCat = '';
                 }
 
                 // Question level

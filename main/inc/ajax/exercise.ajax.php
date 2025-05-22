@@ -559,13 +559,6 @@ switch ($action) {
         $exercise_id = $exercise_stat_info['exe_exo_id'];
         $attemptList = [];
         // First time here we create an attempt (getting the exe_id).
-        if (!empty($exercise_stat_info)) {
-            // We know the user we get the exe_id.
-            $exeId = $exercise_stat_info['exe_id'];
-            $total_score = $exercise_stat_info['exe_result'];
-            // Getting the list of attempts
-            $attemptList = Event::getAllExerciseEventByExeId($exeId);
-        }
 
         // No exe id? Can't save answer.
         if (empty($exeId)) {
@@ -1264,6 +1257,29 @@ switch ($action) {
                 echo json_encode(['files' => $resultList]);
                 exit;
             }
+        }
+        break;
+    case 'get_categories_by_media':
+        $questionId = $_REQUEST['questionId'];
+        $mediaId = $_REQUEST['mediaId'];
+        $exerciseId = $_REQUEST['exerciseId'];
+        $question = Question::read($questionId);
+        if (empty($mediaId)) {
+            echo 0;
+            break;
+        }
+        $categoryId = $question->allQuestionWithMediaHaveTheSameCategory($exerciseId, $mediaId, null, null, true);
+
+        if (!empty($categoryId)) {
+            $category = new Testcategory($categoryId);
+            echo json_encode(
+                array(
+                    'title' => $category->title,
+                    'value' => $category->id
+                )
+            );
+        } else {
+            echo -1;
         }
         break;
     default:

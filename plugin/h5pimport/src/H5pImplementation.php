@@ -18,12 +18,32 @@ class H5pImplementation implements \H5PFrameworkInterface
         $this->h5pImportLibraries = $h5pImport->getLibraries();
     }
 
+    public function setContentHubMetadataChecked($time, $lang = 'en')
+    {
+        // TODO: Implement getPlatformInfo() method.
+    }
+
+    public function getContentHubMetadataChecked($lang = 'en')
+    {
+        // TODO: Implement getPlatformInfo() method.
+    }
+
+    public function getContentHubMetadataCache($lang = 'en')
+    {
+        // TODO: Implement getPlatformInfo() method.
+    }
+
+    public function replaceContentHubMetadataCache($metadata, $lang)
+    {
+        // TODO: Implement getPlatformInfo() method.
+    }
+
     public function getPlatformInfo()
     {
         // TODO: Implement getPlatformInfo() method.
     }
 
-    public function fetchExternalData($url, $data = null, $blocking = true, $stream = null)
+    public function fetchExternalData($url, $data = null, $blocking = true, $stream = null, $fullData = false, $headers = Array(), $files = Array(), $method = 'POST')
     {
         // TODO: Implement fetchExternalData() method.
     }

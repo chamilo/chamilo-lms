@@ -138,7 +138,7 @@ class Security
         return disable_dangerous_file($filename);
     }
 
-    public static function getTokenFromSession(string $prefix = ''): string
+    public static function getTokenFromSession(string $prefix = '')
     {
         $secTokenVariable = self::generateSecTokenVariable($prefix);
 

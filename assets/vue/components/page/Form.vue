@@ -18,15 +18,15 @@
 
     <p
       class="text-sm m-2 text-gray-500"
-      v-if="props.modelValue.slug || v$.item.slug.$model"
+      v-if="pageId"
     >
       {{ t("Preview") }}:
       <a
-        :href="`/page/${v$.item.slug.$model || props.modelValue.slug}`"
+        :href="`/pages/${pageId}/preview`"
         target="_blank"
         class="text-blue-600 underline"
       >
-        {{ window.location.origin + "/page/" + (v$.item.slug.$model || props.modelValue.slug) }}
+        {{ window.location.origin + `/pages/${pageId}/preview` }}
       </a>
     </p>
 
@@ -108,6 +108,13 @@ let locales = ref(window.languages)
 let categories = ref([])
 
 const findAllPageCategories = async () => (categories.value = await pageCategoryService.findAll())
+
+const pageId = computed(() => {
+  const rawId = props.modelValue?.["@id"]
+  if (!rawId) return null
+  const matches = rawId.match(/\/(\d+)$/)
+  return matches ? matches[1] : null
+})
 
 findAllPageCategories()
 

@@ -93,6 +93,7 @@ jobs:
 
             - name: Install chrome
               uses: browser-actions/setup-chrome@v1
+              id: setup-chrome
 
             - name: Start chrome
               run: |

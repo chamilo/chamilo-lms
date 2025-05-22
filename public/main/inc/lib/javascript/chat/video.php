@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ChatVideo;
+
 require_once __DIR__.'/../../../global.inc.php';
 
 if (api_is_anonymous()) {
@@ -11,7 +13,7 @@ $roomId = isset($_GET['room']) ? $_GET['room'] : null;
 
 $entityManager = Database::getManager();
 
-$chatVideo = $entityManager->find('ChamiloCoreBundle:ChatVideo', $roomId);
+$chatVideo = $entityManager->find(ChatVideo::class, $roomId);
 
 if (!$chatVideo) {
     header('Location: '.api_get_path(WEB_PATH));

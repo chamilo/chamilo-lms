@@ -8,15 +8,20 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
+use Chamilo\CourseBundle\Entity\CAttendanceResultComment;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class CAttendanceCalendarRepository extends ResourceRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $em;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em)
     {
         parent::__construct($registry, CAttendanceCalendar::class);
+        $this->em = $em;
     }
 
     /**
@@ -129,21 +134,36 @@ final class CAttendanceCalendarRepository extends ResourceRepository
             return [
                 'id' => $calendar->getIid(),
                 'label' => $calendar->getDateTime()->format('M d, Y - h:i A'),
+                'done' => $calendar->getDoneAttendance() === true,
             ];
         }, $calendars);
 
         $attendanceData = [];
+        $commentData = [];
+        $signatureData = [];
         foreach ($calendars as $calendar) {
-            /** @var CAttendanceSheet $sheet */
             foreach ($calendar->getSheets() as $sheet) {
-                $key = $sheet->getUser()->getId().'-'.$calendar->getIid();
-                $attendanceData[$key] = (int) $sheet->getPresence(); // Status: 1 (Present), 0 (Absent), null (No Status)
+                $userId = $sheet->getUser()->getId();
+                $calendarId = $calendar->getIid();
+                $key = "$userId-$calendarId";
+
+                $attendanceData[$key] = (int) $sheet->getPresence();
+
+                $commentEntity = $this->em->getRepository(CAttendanceResultComment::class)->findOneBy([
+                    'attendanceSheetId' => $sheet->getIid(),
+                    'userId' => $userId,
+                ]);
+
+                $commentData[$key] = $commentEntity?->getComment();
+                $signatureData[$key] = $sheet->getSignature();
             }
         }
 
         return [
             'attendanceDates' => $attendanceDates,
             'attendanceData' => $attendanceData,
+            'commentData' => $commentData,
+            'signatureData' => $signatureData,
         ];
     }
 

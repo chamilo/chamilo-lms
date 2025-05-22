@@ -40,6 +40,11 @@ class ExtraFieldOptionsRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * Get the complete row of a specific option for a specific field.
+     *
+     * @return array<int, ExtraFieldOptions>
+     */
     public function getFieldOptionByFieldAndOption(int $fieldId, string $optionValue, int $itemType): array
     {
         $qb = $this->createQueryBuilder('o');
@@ -54,17 +59,6 @@ class ExtraFieldOptionsRepository extends ServiceEntityRepository
             ])
         ;
 
-        $result = $qb->getQuery()->getResult();
-
-        $options = [];
-        foreach ($result as $option) {
-            $options[] = [
-                'id' => $option->getId(),
-                'value' => $option->getValue(),
-                'display_text' => $option->getDisplayText(),
-            ];
-        }
-
-        return $options;
+        return $qb->getQuery()->getResult();
     }
 }

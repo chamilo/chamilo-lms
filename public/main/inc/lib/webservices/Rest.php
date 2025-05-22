@@ -590,7 +590,7 @@ class Rest extends WebService
     {
         $em = Database::getManager();
         /** @var CNotebookRepository $notebooksRepo */
-        $notebooksRepo = $em->getRepository('ChamiloCourseBundle:CNotebook');
+        $notebooksRepo = $em->getRepository(CNotebook::class);
         $notebooks = $notebooksRepo->findByUser($this->user, $this->course, $this->session);
 
         return array_map(

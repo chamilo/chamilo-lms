@@ -7,9 +7,10 @@
       :label="t('Assignment name')"
     />
 
-    <BaseInputText
+    <BaseTinyEditor
       v-model="assignment.description"
       :label="t('Description')"
+      editor-id=""
     />
 
     <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
@@ -106,12 +107,6 @@
 
     <div class="flex justify-end space-x-2 mt-4">
       <BaseButton
-        :label="t('Back')"
-        icon="arrow-left"
-        type="white"
-        @click="goBack"
-      />
-      <BaseButton
         :disabled="isFormLoading"
         :label="t('Save')"
         icon="save"
@@ -137,6 +132,7 @@ import { useI18n } from "vue-i18n"
 import { useCidReq } from "../../composables/cidReq"
 import { useRoute, useRouter } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
+import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 
 const props = defineProps({
   defaultAssignment: {
@@ -198,7 +194,6 @@ watchEffect(() => {
 
   if (defaultAssignment.weight > 0) {
     chkAddToGradebook.value = true
-    //assignment.gradebookId.id = defaultAssignment.gradebookCategoryId
     assignment.weight = defaultAssignment.weight
   }
 
@@ -266,18 +261,11 @@ const v$ = useVuelidate(rules, assignment)
 
 const onSubmit = async () => {
   const result = await v$.value.$validate()
-
-  if (!result) {
-    return
-  }
+  if (!result) return
 
   const publicationStudent = {
     title: assignment.title,
     description: assignment.description,
-    assignment: {
-      expiresOn: null,
-      endsOn: null,
-    },
     parentResourceNode: route.params.node * 1,
     resourceLinkList: [
       {
@@ -287,38 +275,28 @@ const onSubmit = async () => {
         visibility: RESOURCE_LINK_PUBLISHED,
       },
     ],
+    qualification: assignment.qualification,
+    addToCalendar: assignment.addToCalendar,
+    allowTextAssignment: assignment.allowTextAssignment.value,
   }
 
-  if (showAdvancedSettings.value) {
-    publicationStudent.qualification = assignment.qualification
-
-    publicationStudent.addToCalendar = assignment.addToCalendar
-
-    if (chkAddToGradebook.value) {
-      publicationStudent.gradebookCategoryId = assignment.gradebookId.id
-      publicationStudent.weight = assignment.weight
-    }
-
-    if (chkExpiresOn.value) {
-      publicationStudent.assignment.expiresOn = assignment.expiresOn
-    }
-
-    if (chkEndsOn.value) {
-      publicationStudent.assignment.endsOn = assignment.endsOn
-    }
-
-    publicationStudent.allowTextAssignment = assignment.allowTextAssignment.value
+  if (chkAddToGradebook.value) {
+    publicationStudent.gradebookCategoryId = assignment.gradebookId.id
+    publicationStudent.weight = assignment.weight
   }
 
-  if (props.defaultAssignment) {
+  if (chkExpiresOn.value) {
+    publicationStudent.expiresOn = assignment.expiresOn.toISOString()
+  }
+
+  if (chkEndsOn.value) {
+    publicationStudent.endsOn = assignment.endsOn.toISOString()
+  }
+
+  if (props.defaultAssignment?.["@id"]) {
     publicationStudent["@id"] = props.defaultAssignment["@id"]
-    publicationStudent.assignment["@id"] = props.defaultAssignment.assignment["@id"]
   }
 
   emit("submit", publicationStudent)
-}
-
-function goBack() {
-  router.push({ name: "AssignmentsList", query: { cid, sid, gid } })
 }
 </script>

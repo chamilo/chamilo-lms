@@ -171,7 +171,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'multiple' => true,
-                    'choices' => self::$tabs
+                    'choices' => self::$tabs,
                 ],
             )
             ->add(

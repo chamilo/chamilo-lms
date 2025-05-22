@@ -52,17 +52,20 @@
 
     <!-- Column for # attended -->
     <Column
-      field="results.length"
+      field="doneCalendars"
       header="# attended"
       sortable
     >
       <template #body="slotProps">
-        <center>{{ slotProps.data.results ? slotProps.data.results.length : 0 }}</center>
+        <center>{{ slotProps.data.doneCalendars ?? 0 }}</center>
       </template>
     </Column>
 
     <!-- Column for Detail -->
-    <Column header="Detail">
+    <Column
+      v-if="isAdminOrTeacher"
+      header="Detail"
+    >
       <template #body="slotProps">
         <div class="flex gap-2 justify-center">
           <Button

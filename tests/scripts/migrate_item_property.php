@@ -47,10 +47,10 @@ $sql = "SELECT
 $result = Database::query($sql);
 
 $em = Database::getManager();
-$resourceType = $em->getRepository('ChamiloCoreBundle:ResourceType')->findOneBy(['name' => 'document']);
+$resourceType = $em->getRepository(ResourceType::class)->findOneBy(['name' => 'document']);
 $coursePath = api_get_path(SYS_PATH).'app/courses/';
 $mediaManager = Container::$container->get('sonata.media.manager.media');
-$documentManager = $em->getRepository('ChamiloCourseBundle:CDocument');
+$documentManager = $em->getRepository(CDocument::class);
 $contextManager = Container::$container->get('sonata.classification.manager.context');
 $defaultContext = $contextManager->findOneBy(['id' => 'default']);
 

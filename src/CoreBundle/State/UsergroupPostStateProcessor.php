@@ -12,6 +12,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * @implements ProcessorInterface<Usergroup, Usergroup>
+ */
 final class UsergroupPostStateProcessor implements ProcessorInterface
 {
     private ProcessorInterface $processor;
@@ -31,7 +34,7 @@ final class UsergroupPostStateProcessor implements ProcessorInterface
         $this->requestStack = $requestStack;
     }
 
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): Usergroup
     {
         /** @var Usergroup $usergroup */
         $usergroup = $this->processor->process($data, $operation, $uriVariables, $context);

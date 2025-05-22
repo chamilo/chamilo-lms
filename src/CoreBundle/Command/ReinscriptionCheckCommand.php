@@ -13,18 +13,18 @@ use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+    name: 'app:reinscription-check',
+    description: 'Checks for users who have validated all gradebooks and reinscribe them into new sessions if needed.',
+)]
 class ReinscriptionCheckCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:reinscription-check';
-
     private SessionRepository $sessionRepository;
     private GradebookCertificateRepository $certificateRepository;
     private EntityManagerInterface $entityManager;
@@ -43,7 +43,6 @@ class ReinscriptionCheckCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Checks for users who have validated all gradebooks and reinscribe them into new sessions if needed.')
             ->addOption(
                 'debug',
                 null,

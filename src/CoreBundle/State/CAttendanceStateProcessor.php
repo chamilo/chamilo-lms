@@ -18,6 +18,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * @implements ProcessorInterface<void, void>
+ */
 final class CAttendanceStateProcessor implements ProcessorInterface
 {
     public function __construct(

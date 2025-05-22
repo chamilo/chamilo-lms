@@ -3,14 +3,18 @@
 /**
  * Remove the current_settings duplicates from migration 1.9.x to 1.10.x
  */
+
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\Entity\SettingsOptions;
+
 die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 //api_protect_admin_script();
 
 $entityManager = Database::getManager();
-$settingsCurrentRepo = $entityManager->getRepository('ChamiloCoreBundle:SettingsCurrent');
-$settingsOptionsRepo = $entityManager->getRepository('ChamiloCoreBundle:SettingsOptions');
+$settingsCurrentRepo = $entityManager->getRepository(SettingsCurrent::class);
+$settingsOptionsRepo = $entityManager->getRepository(SettingsOptions::class);
 
 $settingsCurrent = $settingsCurrentRepo->findBy([], ['id' => 'ASC']);
 $cleanList = [];

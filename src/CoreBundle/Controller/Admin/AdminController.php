@@ -97,7 +97,8 @@ class AdminController extends BaseController
                 ->where('rn.resourceType = :type')
                 ->setParameter('type', $resourceTypeId)
                 ->getQuery()
-                ->getResult();
+                ->getResult()
+            ;
 
             $seen = [];
             foreach ($resourceLinks as $link) {
@@ -136,7 +137,7 @@ class AdminController extends BaseController
             }
 
             $courses = array_values($seen);
-            usort($courses, fn($a, $b) => strnatcasecmp($a['title'], $b['title']));
+            usort($courses, fn ($a, $b) => strnatcasecmp($a['title'], $b['title']));
         }
 
         return $this->render('@ChamiloCore/Admin/resources_info.html.twig', [

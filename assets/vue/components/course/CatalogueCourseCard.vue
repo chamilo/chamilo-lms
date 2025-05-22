@@ -1,16 +1,65 @@
 <template>
   <div
-    class="course-card hover:shadow-lg transition duration-300 rounded-2xl overflow-hidden border border-gray-300 bg-white flex flex-col"
+    class="course-card relative hover:shadow-lg transition duration-300 rounded-2xl overflow-hidden border border-gray-300 bg-white flex flex-col"
   >
+    <div
+      v-if="course.categories?.length"
+      class="absolute top-2 left-2 flex flex-wrap gap-1 z-30"
+    >
+      <span
+        v-for="cat in course.categories"
+        :key="cat.id"
+        class="bg-support-5 text-white text-xs font-bold px-2 py-0.5 rounded"
+      >
+        {{ cat.title }}
+      </span>
+    </div>
+    <span
+      v-if="course.courseLanguage"
+      class="absolute top-0 right-0 bg-support-4 text-white text-xs px-2 py-0.5 font-semibold rounded-bl-lg z-20"
+    >
+      {{ course.courseLanguage }}
+    </span>
+
+    <Button
+      v-if="allowDescription && showInfoPopup"
+      icon="pi pi-info-circle"
+      @click="showDescriptionDialog = true"
+      class="absolute top-10 left-2 z-20"
+      size="small"
+      text
+      aria-label="Course info"
+    />
+    <router-link
+      v-if="imageLink"
+      :to="imageLink"
+    >
+      <img
+        :src="course.illustrationUrl"
+        :alt="course.title"
+        class="w-full object-cover"
+      />
+    </router-link>
     <img
+      v-else
       :src="course.illustrationUrl"
       :alt="course.title"
       class="w-full object-cover"
     />
     <div class="p-4 flex flex-col flex-grow gap-2">
-      <h3 class="text-xl font-semibold text-gray-800">{{ course.title }}</h3>
-      <p class="text-sm text-gray-600 line-clamp-3">{{ course.description }}</p>
-
+      <router-link
+        v-if="showTitle && titleLink"
+        :to="titleLink"
+        class="text-xl font-semibold"
+      >
+        {{ course.title }}
+      </router-link>
+      <h3
+        v-else-if="showTitle"
+        class="text-xl font-semibold"
+      >
+        {{ course.title }}
+      </h3>
       <div
         v-if="course.duration"
         class="text-sm text-gray-700"
@@ -33,24 +82,6 @@
         <strong>{{ $t("Price") }}:</strong>
         {{ course.price > 0 ? "S/. " + course.price.toFixed(2) : $t("Free") }}
       </div>
-
-      <div
-        v-if="course.categories?.length"
-        class="flex flex-wrap gap-1"
-      >
-        <span
-          v-for="cat in course.categories"
-          :key="cat.id"
-          class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full"
-        >
-          {{ cat.title }}
-        </span>
-      </div>
-
-      <div class="text-sm text-gray-700">
-        <strong>{{ $t("Language") }}:</strong> {{ course.courseLanguage }}
-      </div>
-
       <div
         v-if="course.teachers?.length"
         class="text-sm text-gray-700"
@@ -58,8 +89,8 @@
         <strong>{{ $t("Teachers") }}:</strong>
         {{ course.teachers.map((t) => t.user.fullName).join(", ") }}
       </div>
-
       <Rating
+        v-if="props.currentUserId"
         :model-value="course.userVote?.vote || 0"
         :stars="5"
         :cancel="false"
@@ -77,6 +108,15 @@
           |
           {{ $t("Your vote") }} [{{ course.userVote.vote }}]
         </span>
+      </div>
+
+      <div
+        v-for="field in cardExtraFields"
+        :key="field.variable"
+        class="text-sm text-gray-700"
+      >
+        <strong>{{ field.display_text }}:</strong>
+        {{ course.extra_fields?.[field.variable] ?? "-" }}
       </div>
 
       <div class="mt-auto pt-2">
@@ -125,26 +165,55 @@
       </div>
     </div>
   </div>
+  <Dialog
+    v-model:visible="showDescriptionDialog"
+    :header="course.title"
+    modal
+    class="w-96"
+  >
+    <p class="text-sm text-gray-700 whitespace-pre-line">
+      {{ course.description || $t("No description available") }}
+    </p>
+  </Dialog>
 </template>
 <script setup>
 import Rating from "primevue/rating"
 import Button from "primevue/button"
 import { computed, ref } from "vue"
 import courseRelUserService from "../../services/courseRelUserService"
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useNotification } from "../../composables/notification"
+import Dialog from "primevue/dialog"
+import { usePlatformConfig } from "../../store/platformConfig"
+
+const platformConfigStore = usePlatformConfig()
+const showDescriptionDialog = ref(false)
+
+const allowDescription = computed(
+  () => platformConfigStore.getSetting("course.show_courses_descriptions_in_catalog") !== "false",
+)
 
 const props = defineProps({
   course: Object,
-  currentUserId: Number,
+  currentUserId: {
+    type: Number,
+    default: null,
+  },
+  showTitle: {
+    type: Boolean,
+    default: true,
+  },
+  cardExtraFields: { type: Array, default: () => [] },
 })
 
 const emit = defineEmits(["rate", "subscribed"])
 
 const router = useRouter()
+const route = useRoute()
 const { showErrorNotification, showSuccessNotification } = useNotification()
 
 const isUserInCourse = computed(() => {
+  if (!props.currentUserId) return false
   return props.course.users?.some((user) => user.user.id === props.currentUserId)
 })
 
@@ -160,21 +229,108 @@ const emitRating = (event) => {
 
 const subscribing = ref(false)
 const subscribeToCourse = async () => {
+  if (!props.currentUserId) {
+    showErrorNotification("You must be logged in to subscribe to a course.")
+    return
+  }
+
   try {
     subscribing.value = true
 
-    const response = await courseRelUserService.subscribe({
-      userId: props.currentUserId,
-      courseId: props.course.id,
-    })
+    const useAutoSession =
+      platformConfigStore.getSetting("session.catalog_course_subscription_in_user_s_session") === "true"
 
-    emit("subscribed", { courseId: props.course.id, newUser: response })
+    let sessionId = null
+
+    if (useAutoSession) {
+      const response = await courseRelUserService.autoSubscribeCourse(props.course.id)
+      sessionId = response?.sessionId
+
+      if (!sessionId) {
+        throw new Error("No session ID returned after subscription.")
+      }
+    } else {
+      const response = await courseRelUserService.subscribe({
+        userId: props.currentUserId,
+        courseId: props.course.id,
+      })
+
+      const userIdFromResponse = response?.user?.["@id"]?.split("/")?.pop()
+
+      emit("subscribed", {
+        courseId: props.course.id,
+        newUser: { user: { id: Number(userIdFromResponse) } },
+      })
+    }
+
     showSuccessNotification("You have successfully subscribed to this course.")
-    router.push({ name: "CourseHome", params: { id: props.course.id } })
+
+    await router.push({
+      name: "CourseHome",
+      params: {
+        id: props.course.id,
+      },
+      query: sessionId ? { sid: sessionId } : {},
+    })
   } catch (e) {
+    console.error("Subscription error:", e)
     showErrorNotification("Failed to subscribe to the course.")
   } finally {
     subscribing.value = false
   }
 }
+
+function routeExists(name) {
+  return router.getRoutes().some((route) => route.name === name)
+}
+
+const linkSettings = computed(() => {
+  const settings = platformConfigStore.getSetting("course.course_catalog_settings")
+  const result = settings?.link_settings ?? {}
+  console.log("Link settings:", result)
+  return result
+})
+
+const imageLink = computed(() => {
+  const routeName =
+    linkSettings.value.image_url === "course_home"
+      ? "CourseHome"
+      : linkSettings.value.image_url === "course_about"
+        ? "CourseAbout"
+        : null
+
+  if (routeName && routeExists(routeName)) {
+    return { name: routeName, params: { id: props.course.id } }
+  }
+
+  if (routeName) {
+    console.warn(`[CatalogueCourseCard] Route '${routeName}' does not exist.`)
+  }
+
+  return null
+})
+
+const titleLink = computed(() => {
+  const routeName = linkSettings.value.title_url === "course_home" ? "CourseHome" : null
+
+  if (routeName && routeExists(routeName)) {
+    return { name: routeName, params: { id: props.course.id } }
+  }
+
+  if (routeName) {
+    console.warn(`[CatalogueCourseCard] Route '${routeName}' does not exist.`)
+  }
+
+  return null
+})
+
+const showInfoPopup = computed(() => {
+  const allowed = ["course_description_popup"]
+  const value = linkSettings.value.info_url
+  if (value && !allowed.includes(value)) {
+    console.warn(`[CatalogueCourseCard] info_url '${value}' is not a recognized option.`)
+    return false
+  }
+  return value === "course_description_popup"
+})
 </script>

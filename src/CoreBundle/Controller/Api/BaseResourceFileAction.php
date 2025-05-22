@@ -184,6 +184,45 @@ class BaseResourceFileAction
     }
 
     /**
+     * Handles the creation logic for a student publication comment resource.
+     */
+    public function handleCreateCommentRequest(
+        AbstractResource $resource,
+        ResourceRepository $resourceRepository,
+        Request $request,
+        EntityManager $em,
+        string $fileExistsOption = '',
+        ?TranslatorInterface $translator = null
+    ): array {
+        $title = $request->get('comment', '');
+        $parentResourceNodeId = (int) $request->get('parentResourceNodeId');
+        $fileType = $request->get('filetype');
+        $uploadedFile = null;
+
+        if (empty($fileType)) {
+            throw new Exception('filetype needed: folder or file');
+        }
+
+        if (0 === $parentResourceNodeId) {
+            throw new Exception('parentResourceNodeId int value needed');
+        }
+
+        $resource->setParentResourceNode($parentResourceNodeId);
+
+        if ($request->files->count() > 0 && $request->files->has('uploadFile')) {
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $request->files->get('uploadFile');
+            $resource->setUploadFile($uploadedFile);
+        }
+
+        return [
+            'title' => $title,
+            'filename' => $uploadedFile?->getClientOriginalName(),
+            'filetype' => $fileType,
+        ];
+    }
+
+    /**
      * Function loaded when creating a resource using the api, then the ResourceListener is executed.
      */
     public function handleCreateFileRequest(
@@ -192,7 +231,7 @@ class BaseResourceFileAction
         Request $request,
         EntityManager $em,
         string $fileExistsOption = '',
-        TranslatorInterface $translator = null
+        ?TranslatorInterface $translator = null
     ): array {
         $contentData = $request->getContent();
 
@@ -270,7 +309,7 @@ class BaseResourceFileAction
                                     $existingDocument->setUploadFile($uploadedFile);
                                 }
 
-                                $resourceNode->setUpdatedAt(new \DateTime());
+                                $resourceNode->setUpdatedAt(new DateTime());
                                 $existingDocument->setResourceNode($resourceNode);
 
                                 $em->persist($existingDocument);

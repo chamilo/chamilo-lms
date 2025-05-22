@@ -120,7 +120,7 @@ class ResourceNode implements Stringable
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?User $creator;
 
-    #[Groups(['resource_node:read'])]
+    #[Groups(['resource_node:read', 'student_publication:read'])]
     #[MaxDepth(1)]
     #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: self::class, cascade: ['persist'], inversedBy: 'children')]

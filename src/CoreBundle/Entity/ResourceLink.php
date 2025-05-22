@@ -56,7 +56,7 @@ class ResourceLink implements Stringable
     #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: Session::class, cascade: ['persist'], inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
-    #[Groups(['resource_link:read', 'resource_link:write', 'student_publication:read'])]
+    #[Groups(['resource_link:read', 'resource_link:write', 'student_publication:read', 'student_publication_comment:read'])]
     protected ?Session $session = null;
 
     #[Gedmo\SortableGroup]

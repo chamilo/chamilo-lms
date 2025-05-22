@@ -12,6 +12,9 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @implements ProcessorInterface<AccessUrlRelColorTheme, AccessUrlRelColorTheme>
+ */
 final class AccessUrlRelColorThemeStateProcessor implements ProcessorInterface
 {
     public function __construct(

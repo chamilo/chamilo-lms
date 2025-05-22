@@ -63,7 +63,7 @@ $em = Database::getManager();
 if ('1' === $lp->getSubscribeUsers()) {
 
     /** @var CLpRelUserRepository $cLpRelUserRepo */
-    $cLpRelUserRepo = $em->getRepository('ChamiloCourseBundle:CLpRelUser');
+    $cLpRelUserRepo = $em->getRepository(CLpRelUser::class);
     $subscribedUsersInLp = $cLpRelUserRepo->getUsersSubscribedToItem(
         $entity,
         $course,

@@ -1029,7 +1029,7 @@ class DocumentManager
 
             $em = Database::getManager();
 
-            $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
+            $repo = $em->getRepository(CDocument::class);
             /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
             $document = $repo->find($row['iid']);
             if (ResourceLink::VISIBILITY_PUBLISHED === $document->getVisibility()) {

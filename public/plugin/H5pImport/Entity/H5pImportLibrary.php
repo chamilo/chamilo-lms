@@ -1,6 +1,8 @@
 <?php
 
-// For licensing terms, see /license.txt
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\H5pImport\Entity;
 
@@ -12,115 +14,65 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * Class H5pImportLibrary.
- *
- * @ORM\Entity()
- *
- * @ORM\Table(name="plugin_h5p_import_library")
- */
-class H5pImportLibrary extends EntityRepository
+#[ORM\Entity]
+#[ORM\Table(name: 'plugin_h5p_import_library')]
+class H5pImportLibrary
 {
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="create")
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    protected $createdAt;
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
+    protected DateTime $createdAt;
 
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="update")
-     *
-     * @ORM\Column(name="modified_at", type="datetime", nullable=false)
-     */
-    protected $modifiedAt;
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'modified_at', type: 'datetime', nullable: false)]
+    protected DateTime $modifiedAt;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="iid", type="integer")
-     *
-     * @ORM\Id
-     *
-     * @ORM\GeneratedValue
-     */
-    private $iid;
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    private ?int $iid;
 
-    /**
-     * @ORM\Column(name="title", type="string", nullable=true)
-     */
-    private $title;
+    #[ORM\Column(name: 'title', type: 'string', nullable: true)]
+    private ?string $title;
 
-    /**
-     * @ORM\Column(name="machine_name", type="string")
-     */
-    private $machineName;
+    #[ORM\Column(name: 'machine_name', type: 'string')]
+    private string $machineName;
 
-    /**
-     * @ORM\Column(name="major_version", type="integer")
-     */
-    private $majorVersion;
+    #[ORM\Column(name: 'major_version', type: 'integer')]
+    private int $majorVersion;
 
-    /**
-     * @ORM\Column(name="minor_version", type="integer")
-     */
-    private $minorVersion;
+    #[ORM\Column(name: 'minor_version', type: 'integer')]
+    private int $minorVersion;
 
-    /**
-     * @ORM\Column(name="patch_version", type="integer")
-     */
-    private $patchVersion;
+    #[ORM\Column(name: 'patch_version', type: 'integer')]
+    private int $patchVersion;
 
-    /**
-     * @ORM\Column(name="runnable", type="integer", nullable=true)
-     */
-    private $runnable;
+    #[ORM\Column(name: 'runnable', type: 'integer', nullable: true)]
+    private ?int $runnable;
 
-    /**
-     * @ORM\Column(name="embed_types", type="array", nullable=true)
-     */
-    private $embedTypes;
+    #[ORM\Column(name: 'embed_types', type: 'array', nullable: true)]
+    private ?array $embedTypes;
 
-    /**
-     * @ORM\Column(name="preloaded_js" , type="array", nullable=true)
-     */
-    private $preloadedJs;
+    #[ORM\Column(name: 'preloaded_js', type: 'array', nullable: true)]
+    private array $preloadedJs;
 
-    /**
-     * @ORM\Column(name="preloaded_css", type="array", nullable=true)
-     */
-    private $preloadedCss;
+    #[ORM\Column(name: 'preloaded_css', type: 'array', nullable: true)]
+    private array $preloadedCss;
 
-    /**
-     * @ORM\Column(name="library_path", type="string", length=255)
-     */
-    private $libraryPath;
+    #[ORM\Column(name: 'library_path', type: 'string', length: 255)]
+    private string $libraryPath;
 
     /**
      * @var Collection<int, H5pImport>
-     *
-     * @ORM\ManyToMany(targetEntity="H5pImport", inversedBy="libraries")
-     *
-     * @ORM\JoinTable(
-     *      name="plugin_h5p_import_rel_libraries",
-     *      joinColumns={@ORM\JoinColumn(name="h5p_import_library_id", referencedColumnName="iid", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="h5p_import_id", referencedColumnName="iid", onDelete="CASCADE")}
-     * )
      */
-    private $h5pImports;
+    #[ORM\ManyToMany(targetEntity: H5pImport::class, inversedBy: 'libraries')]
+    #[ORM\JoinTable(name: 'plugin_h5p_import_rel_libraries')]
+    #[ORM\JoinColumn(name: 'h5p_import_library_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'h5p_import_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
+    private Collection $h5pImports;
 
-    /**
-     * @var Course
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     *
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
-     */
-    private $course;
+    #[ORM\ManyToOne(targetEntity: Course::class)]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
+    private Course $course;
 
     public function __construct()
     {

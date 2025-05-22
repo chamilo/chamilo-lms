@@ -47,7 +47,7 @@ switch ($action) {
                 $graphImage = $graphviz->createImageSrc($graph);
                 echo Display::img(
                     $graphImage,
-                    get_lang('GraphDependencyTree'),
+                    get_lang('Graph Dependency Tree'),
                     ['class' => 'center-block'],
                     false
                 );
@@ -58,7 +58,7 @@ switch ($action) {
                     .' because GraphViz command "dot" could not be executed '
                     .'- Make sure graphviz is installed.'
                 );
-                echo '<p class="text-center"><small>'.get_lang('MissingChartLibraryPleaseCheckLog')
+                echo '<p class="text-center"><small>'.get_lang('Missing chart library please checkLog')
                     .'</small></p>';
             }
         }
@@ -69,14 +69,11 @@ switch ($action) {
         api_protect_admin_script();
 
         $showDelete = isset($_REQUEST['show_delete']) ? $_REQUEST['show_delete'] : false;
-        $image = Display::getMdiIcon('notebook', 'ch-tool-icon', null, ICON_SIZE_LARGE);
 
         if (empty($id)) {
             exit;
         }
 
-        $link = '';
-        $linkDelete = $linkUndo = '';
         $resourceName = '';
         switch ($type) {
             case SequenceResource::SESSION_TYPE:
@@ -97,42 +94,40 @@ switch ($action) {
             exit;
         }
 
+        $linkDelete = '';
+        $linkUndo = '';
         if (!empty($resourceData) && $showDelete) {
-            $linkDelete = Display::toolbarButton(
+            $linkDelete = Display::tag(
+                'button',
                 get_lang('Delete'),
-                '#',
-                'delete',
-                'default',
                 [
-                    'class' => 'delete_vertex btn btn-block btn-xs',
+                    'class' => 'delete_vertex text-xs text-red-600 hover:underline',
                     'data-id' => $id,
                 ]
             );
 
-            $linkUndo = Display::toolbarButton(
+            $linkUndo = Display::tag(
+                'button',
                 get_lang('Undo'),
-                '#',
-                'undo',
-                'default',
                 [
-                    'class' => 'undo_delete btn btn-block btn-xs',
-                    'style' => 'display: none;',
+                    'class' => 'undo_delete text-xs text-blue-600 hover:underline hidden',
                     'data-id' => $id,
                 ]
             );
         }
 
+        $image = Display::getMdiIcon('notebook', 'text-blue-500', null, ICON_SIZE_LARGE);
+
         $link = '<div class="parent" data-id="'.$id.'">';
-        $link .= '<div class="big-icon">';
+        $link .= '<div class="bg-yellow-100 border border-yellow-300 rounded-lg p-4 shadow-sm flex flex-col items-center justify-center space-y-2 text-center">';
         $link .= $image;
-        $link .= '<div class="sequence-course">'.$resourceName.'</div>';
         $link .= Display::tag(
             'button',
             $resourceName,
             [
-                'class' => 'sequence-id',
-                'title' => get_lang('UseAsReference'),
+                'class' => 'sequence-id text-gray-800 font-semibold text-sm hover:underline',
                 'type' => 'button',
+                'title' => get_lang('UseAsReference'),
             ]
         );
         $link .= $linkDelete;
@@ -453,4 +448,26 @@ switch ($action) {
         $view->display($template);
 
         break;
+    case 'get_initial_resource':
+        api_block_anonymous_users();
+        api_protect_admin_script();
+
+        /** @var Sequence $sequence */
+        $sequence = $sequenceRepository->find($sequenceId);
+
+        if (null === $sequence || !$sequence->hasGraph()) {
+            exit;
+        }
+
+        $graph = $sequence->getUnSerializeGraph();
+
+        foreach ($graph->getVertices() as $vertex) {
+            $vertexId = $vertex->getId();
+            if (!empty($vertexId)) {
+                echo (int) $vertexId;
+                exit;
+            }
+        }
+
+        exit;
 }

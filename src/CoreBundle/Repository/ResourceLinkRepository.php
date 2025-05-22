@@ -9,7 +9,9 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -81,9 +83,9 @@ class ResourceLinkRepository extends SortableRepository
         $queryBuilder = $this->_em->createQueryBuilder();
         $queryBuilder
             ->select('DISTINCT t.id, t.title')
-            ->from('ChamiloCoreBundle:ResourceLink', 'rl')
-            ->innerJoin('ChamiloCoreBundle:ResourceType', 'rt', 'WITH', 'rt.id = rl.resourceTypeGroup')
-            ->innerJoin('ChamiloCoreBundle:Tool', 't', 'WITH', 't.id = rt.tool')
+            ->from(ResourceLink::class, 'rl')
+            ->innerJoin(ResourceType::class, 'rt', 'WITH', 'rt.id = rl.resourceTypeGroup')
+            ->innerJoin(Tool::class, 't', 'WITH', 't.id = rt.tool')
             ->where('rl.course IS NOT NULL')
             ->andWhere('t.title IN (:toolList)')
             ->setParameter('toolList', array_keys($this->toolList))
@@ -119,11 +121,11 @@ class ResourceLinkRepository extends SortableRepository
                 's.title AS session_name',
                 'MAX(rl.updatedAt) AS last_updated'
             )
-            ->from('ChamiloCoreBundle:ResourceLink', 'rl')
-            ->innerJoin('ChamiloCoreBundle:ResourceType', 'rt', 'WITH', 'rt.id = rl.resourceTypeGroup')
-            ->innerJoin('ChamiloCoreBundle:Tool', 't', 'WITH', 't.id = rt.tool')
-            ->innerJoin('ChamiloCoreBundle:Course', 'c', 'WITH', 'c.id = rl.course')
-            ->leftJoin('ChamiloCoreBundle:Session', 's', 'WITH', 's.id = rl.session')
+            ->from(ResourceLink::class, 'rl')
+            ->innerJoin(ResourceType::class, 'rt', 'WITH', 'rt.id = rl.resourceTypeGroup')
+            ->innerJoin(Tool::class, 't', 'WITH', 't.id = rt.tool')
+            ->innerJoin(Course::class, 'c', 'WITH', 'c.id = rl.course')
+            ->leftJoin(Session::class, 's', 'WITH', 's.id = rl.session')
             ->where($queryBuilder->expr()->in('t.id', ':toolIds'))
             ->groupBy('rl.course, rl.session, t.title')
             ->orderBy('t.title', 'ASC')

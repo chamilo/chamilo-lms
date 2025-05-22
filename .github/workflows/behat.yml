@@ -91,13 +91,13 @@ jobs:
               run: |
                   yarn run encore production
 
+            - name: Install chrome
+              uses: browser-actions/setup-chrome@v1
+
             - name: Start chrome
               run: |
-                sudo apt-get install google-chrome-stable
-                google-chrome --version
-                google-chrome-stable --version
-                google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
-                whereis google-chrome-stable
+                ${{ steps.setup-chrome.outputs.chrome-path }} --version
+                ${{ steps.setup-chrome.outputs.chrome-path }} --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
             # https://github.com/marketplace/actions/setup-chromedriver
             - name: Start chromedriver

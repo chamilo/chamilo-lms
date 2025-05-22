@@ -200,6 +200,22 @@ Alpine.start()
 
 const pinia = createPinia()
 
-app.use(PrimeVue, { ripple: false }).use(VueFlatPickr).use(router).use(store).use(pinia).use(i18n)
+app
+  .use(PrimeVue, {
+    ripple: false,
+    theme: {
+      options: {
+        cssLayer: {
+          name: "primevue",
+          order: "app-styles, primevue",
+        },
+      },
+    },
+  })
+  .use(VueFlatPickr)
+  .use(router)
+  .use(store)
+  .use(pinia)
+  .use(i18n)
 
 app.mount("#app")

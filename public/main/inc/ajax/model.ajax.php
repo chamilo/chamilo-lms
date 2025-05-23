@@ -312,7 +312,7 @@ switch ($action) {
         break;
     case 'get_usergroups_users':
         $usergroup = new UserGroupModel();
-        $usergroup->protectScript(null, true, true);
+//        $usergroup->protectScript(null, true, true);
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
         $count = $usergroup->getUserGroupUsers($id, true);
         break;
@@ -2588,7 +2588,7 @@ switch ($action) {
                     $actions = [
                         [
                             'icon' => Display::getMdiIcon(ObjectIcon::USER_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Overview students subscribed to the class')),
-                            'url' => $urlUserGroup.'&id='.$group['id']
+                            'url' => 'overview_class.php?usergroup='.$group['id'].'&course='.$course_id,
                         ],
                         [
                             'icon' => Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove the class without removing students')),

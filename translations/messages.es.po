@@ -1700,7 +1700,7 @@ msgid "Message Sent"
 msgstr "Mensaje enviado"
 
 msgid "Settings"
-msgstr "Configuración del curso"
+msgstr "Ajustes"
 
 msgid "The information has been modified"
 msgstr "Las características han sido modificadas"

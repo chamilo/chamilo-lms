@@ -20,13 +20,12 @@ use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 use Endroid\QrCode\Writer\PngWriter;
 use OTPHP\TOTP;
 use Security;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -92,29 +91,50 @@ class AccountController extends BaseController
     }
 
     #[Route('/change-password', name: 'chamilo_core_account_change_password', methods: ['GET', 'POST'])]
-    public function changePassword(Request $request, UserRepository $userRepository, CsrfTokenManagerInterface $csrfTokenManager, SettingsManager $settingsManager): Response
-    {
+    public function changePassword(
+        Request $request,
+        UserRepository $userRepository,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        SettingsManager $settingsManager,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
 
+        // Ensure user is authenticated and has proper interface
         if (!\is_object($user) || !$user instanceof UserInterface) {
             throw $this->createAccessDeniedException('This user does not have access to this section');
         }
 
+        // Build the form and inject user-related options
         $form = $this->createForm(ChangePasswordType::class, [
             'enable2FA' => $user->getMfaEnabled(),
+        ], [
+            'user' => $user,
+            'portal_name' => $settingsManager->getSetting('platform.institution'),
+            'password_hasher' => $passwordHasher,
         ]);
-        $form->handleRequest($request);
 
+        $form->handleRequest($request);
+        $session = $request->getSession();
         $qrCodeBase64 = null;
         $showQRCode = false;
-        $session = $request->getSession();
-        if ($form->get('enable2FA')->getData() && !$user->getMfaSecret() && $session->has('temporary_mfa_secret')) {
-            $secret = $session->get('temporary_mfa_secret');
+
+        // Generate TOTP secret and QR code for 2FA activation
+        if ($form->get('enable2FA')->getData() && !$user->getMfaSecret()) {
+            if (!$session->has('temporary_mfa_secret')) {
+                $totp = TOTP::create();
+                $secret = $totp->getSecret();
+                $session->set('temporary_mfa_secret', $secret);
+            } else {
+                $secret = $session->get('temporary_mfa_secret');
+            }
+
             $totp = TOTP::create($secret);
             $portalName = $settingsManager->getSetting('platform.institution');
             $totp->setLabel($portalName . ' - ' . $user->getEmail());
 
+            // Build QR code image
             $qrCodeResult = Builder::create()
                 ->writer(new PngWriter())
                 ->data($totp->getProvisioningUri())
@@ -128,115 +148,52 @@ class AccountController extends BaseController
             $showQRCode = true;
         }
 
+        // Handle form submission
         if ($form->isSubmitted() && $form->isValid()) {
-            $submittedToken = $request->request->get('_token');
+            $newPassword = $form->get('newPassword')->getData();
+            $enable2FA = $form->get('enable2FA')->getData();
 
-            if (!$csrfTokenManager->isTokenValid(new CsrfToken('change_password', $submittedToken))) {
-                $form->addError(new FormError($this->translator->trans('CSRF token is invalid. Please try again.')));
-            } else {
-                $currentPassword = $form->get('currentPassword')->getData();
-                $newPassword = $form->get('newPassword')->getData();
-                $confirmPassword = $form->get('confirmPassword')->getData();
-                $enable2FA = $form->get('enable2FA')->getData();
+            // Enable 2FA and store encrypted secret
+            if ($enable2FA && !$user->getMfaSecret() && $session->has('temporary_mfa_secret')) {
+                $secret = $session->get('temporary_mfa_secret');
+                $encryptedSecret = $this->encryptTOTPSecret($secret, $_ENV['APP_SECRET']);
 
-                if ($user->getMfaEnabled()) {
-                    $enteredCode = $form->get('confirm2FACode')->getData();
-                    if (empty($enteredCode) || !$this->isTOTPValid($user, $enteredCode)) {
-                        $form->get('confirm2FACode')->addError(new FormError('The 2FA code is invalid.'));
-                        return $this->render('@ChamiloCore/Account/change_password.html.twig', [
-                            'form' => $form->createView(),
-                            'qrCode' => $qrCodeBase64,
-                            'user' => $user,
-                            'showQRCode' => $qrCodeBase64 !== null || ($form->isSubmitted() && $form->get('enable2FA')->getData()),
-                        ]);
-                    }
-                }
+                $user->setMfaSecret($encryptedSecret);
+                $user->setMfaEnabled(true);
+                $user->setMfaService('TOTP');
 
-                if ($enable2FA && !$user->getMfaSecret()) {
-                    $session = $request->getSession();
+                $userRepository->updateUser($user);
+                $session->remove('temporary_mfa_secret');
 
-                    if (!$session->has('temporary_mfa_secret')) {
-                        $totp = TOTP::create();
-                        $secret = $totp->getSecret();
-                        $session->set('temporary_mfa_secret', $secret);
-                    } else {
-                        $secret = $session->get('temporary_mfa_secret');
-                        $totp = TOTP::create($secret);
-                    }
+                $this->addFlash('success', '2FA activated successfully.');
+                return $this->redirectToRoute('chamilo_core_account_home');
+            }
 
-                    $portalName = $settingsManager->getSetting('platform.institution');
-                    $totp->setLabel($portalName . ' - '. $user->getEmail());
+            // Disable 2FA if it was previously enabled
+            if (!$enable2FA && $user->getMfaEnabled()) {
+                $user->setMfaEnabled(false);
+                $user->setMfaSecret(null);
 
-                    $qrCodeResult = Builder::create()
-                        ->writer(new PngWriter())
-                        ->data($totp->getProvisioningUri())
-                        ->encoding(new Encoding('UTF-8'))
-                        ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
-                        ->size(300)
-                        ->margin(10)
-                        ->build()
-                    ;
+                $userRepository->updateUser($user);
+                $this->addFlash('success', '2FA disabled successfully.');
+                return $this->redirectToRoute('chamilo_core_account_home');
+            }
 
-                    $qrCodeBase64 = base64_encode($qrCodeResult->getString());
-                    $enteredCode = $form->get('confirm2FACode')->getData();
-
-                    if (!$enteredCode) {
-                        return $this->render('@ChamiloCore/Account/change_password.html.twig', [
-                            'form' => $form->createView(),
-                            'qrCode' => $qrCodeBase64,
-                            'user' => $user,
-                            'showQRCode' => true,
-                        ]);
-                    }
-
-                    if (!$totp->verify($enteredCode)) {
-                        $form->get('confirm2FACode')->addError(new FormError('The code is incorrect.'));
-                        return $this->render('@ChamiloCore/Account/change_password.html.twig', [
-                            'form' => $form->createView(),
-                            'qrCode' => $qrCodeBase64,
-                            'user' => $user,
-                            'showQRCode' => true,
-                        ]);
-                    }
-
-                    $encryptedSecret = $this->encryptTOTPSecret($secret, $_ENV['APP_SECRET']);
-                    $user->setMfaSecret($encryptedSecret);
-                    $user->setMfaEnabled(true);
-                    $user->setMfaService('TOTP');
-                    $userRepository->updateUser($user);
-                    $session->remove('temporary_mfa_secret');
-                    $this->addFlash('success', '2FA activated successfully.');
-
-                    return $this->redirectToRoute('chamilo_core_account_home');
-                }
-                if (!$enable2FA) {
-                    $user->setMfaEnabled(false);
-                    $user->setMfaSecret(null);
-                    $userRepository->updateUser($user);
-                    $this->addFlash('success', '2FA disabled successfully.');
-                }
-
-                if ($newPassword || $confirmPassword || $currentPassword) {
-                    if (!$userRepository->isPasswordValid($user, $currentPassword)) {
-                        $form->get('currentPassword')->addError(new FormError($this->translator->trans('The current password is incorrect')));
-                    } elseif ($newPassword !== $confirmPassword) {
-                        $form->get('confirmPassword')->addError(new FormError($this->translator->trans('Passwords do not match')));
-                    } else {
-                        $user->setPlainPassword($newPassword);
-                        $userRepository->updateUser($user);
-                        $this->addFlash('success', 'Password updated successfully');
-                    }
-                }
-
+            // Update password if provided
+            if (!empty($newPassword)) {
+                $user->setPlainPassword($newPassword);
+                $userRepository->updateUser($user);
+                $this->addFlash('success', 'Password updated successfully.');
                 return $this->redirectToRoute('chamilo_core_account_home');
             }
         }
 
+        // Render form with optional QR code for 2FA
         return $this->render('@ChamiloCore/Account/change_password.html.twig', [
             'form' => $form->createView(),
             'qrCode' => $qrCodeBase64,
             'user' => $user,
-            'showQRCode' => $qrCodeBase64 !== null || ($form->isSubmitted() && $form->get('enable2FA')->getData()),
+            'showQRCode' => $showQRCode,
         ]);
     }
 

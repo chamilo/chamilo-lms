@@ -95,10 +95,7 @@ class ExtraFieldOptions
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDisplayText()
+    public function getDisplayText(): ?string
     {
         return $this->displayText;
     }

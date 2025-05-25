@@ -312,17 +312,15 @@ function LMSInitialize() {
             url: "lp_ajax_initialize.php" + courseUrl,
             data: params,
             dataType: 'script',
-            async: false,
+            async: true,
             success:function(data) {
                 $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
-            }
-        });
 
-        olms.lms_initialized = 1;
-        olms.switch_finished = 1;
+                olms.lms_initialized = 1;
+                olms.switch_finished = 1;
 
-        // log a more complete object dump when initializing, so we know what data hasn't been cleaned
-        var log = '\nitem             : '+ olms.lms_item_id
+                // log a more complete object dump when initializing, so we know what data hasn't been cleaned
+                var log = '\nitem             : '+ olms.lms_item_id
                  + '\nitem_type       : '+ olms.lms_item_type
                  + '\nscore           : '+ olms.score
                  + '\nmax             : '+ olms.max
@@ -342,48 +340,51 @@ function LMSInitialize() {
                  + '\nstatusSignalReceived : '+ olms.statusSignalReceived
                 ;
 
-        logit_scorm('LMSInitialize() with params: '+log);
+                logit_scorm('LMSInitialize() with params: '+log);
 
-        if(olms.lms_item_type == 'sco'){
-            $("#tab-iframe").removeClass();
-            $("#tab-iframe").addClass("tab-content iframe_"+olms.lms_item_type);
-        }
-
-        if (olms.lms_item_type != 'sco') {
-            xajax_start_timer();
-        }
-
-        if (olms.lms_item_type == 'quiz' || olms.lms_item_type == 'h5p') {
-            update_toc(olms.lesson_status, olms.lms_item_id);
-        }
-
-        <?php
-        $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
-        $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
-        $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
-        if ($showGlossary) {
-            if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
-                ?>
-                if (olms.lms_item_type == 'sco') {
-                    attach_glossary_into_scorm('automatic');
-                } else {
-                    attach_glossary_into_scorm('manual');
+                if(olms.lms_item_type == 'sco'){
+                    $("#tab-iframe").removeClass();
+                    $("#tab-iframe").addClass("tab-content iframe_"+olms.lms_item_type);
                 }
-                <?php
-            } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') {
-                ?>
-                attach_glossary_into_scorm('automatic');
-            <?php
-            } ?>
-        <?php
-        } ?>
 
-        <?php if ($fixLinkSetting) {
-            ?>
-            attach_glossary_into_scorm('fix_links');
-        <?php
-        } ?>
-        return('true');
+                if (olms.lms_item_type != 'sco') {
+                    xajax_start_timer();
+                }
+
+                if (olms.lms_item_type == 'quiz' || olms.lms_item_type == 'h5p') {
+                    update_toc(olms.lesson_status, olms.lms_item_id);
+                }
+
+                <?php
+                $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+                $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
+                $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
+                if ($showGlossary) {
+                if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
+                    ?>
+                    if (olms.lms_item_type == 'sco') {
+                        attach_glossary_into_scorm('automatic');
+                    } else {
+                        attach_glossary_into_scorm('manual');
+                    }
+                    <?php
+                } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') {
+                    ?>
+                    attach_glossary_into_scorm('automatic');
+                    <?php
+                } ?>
+                <?php
+                } ?>
+
+                <?php if ($fixLinkSetting) {
+                    ?>
+                    attach_glossary_into_scorm('fix_links');
+                <?php
+                } ?>
+                return('true');
+            }
+        });
+
     }
 }
 

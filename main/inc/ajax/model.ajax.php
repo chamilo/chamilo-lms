@@ -143,6 +143,8 @@ $accessStartDate = '';
 $accessEndDate = '';
 $overwriteColumnHeaderExport = [];
 
+$result = [];
+
 if (!empty($search)) {
     $search = 'true';
 }
@@ -215,7 +217,7 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                     }
                 }
 
-                $result = $extraField->getExtraFieldRules($filters, 'extra_');
+                $result = []; $extraField->getExtraFieldRules($filters, 'extra_');
 
                 $extra_fields = $result['extra_fields'];
                 $condition_array = $result['condition_array'];

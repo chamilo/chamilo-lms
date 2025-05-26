@@ -49,7 +49,7 @@ onMounted(async () => {
 
 const goBack = () => {
   router.push({
-    name: "CalendarList",
+    name: "AttendanceCalendarList",
     params: { node: route.params.node, id: route.params.id },
     query: {
       ...route.query,

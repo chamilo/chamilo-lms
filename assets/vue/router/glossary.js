@@ -8,6 +8,7 @@ export default {
     {
       name: "GlossaryList",
       path: "",
+      meta: { breadcrumb: "" },
       component: () => import("../views/glossary/GlossaryList.vue"),
     },
     {

@@ -23,7 +23,7 @@
           :to="{
             name: 'AttendanceSheetList',
             params: {
-              node: route.params.node,
+              node: getNodeId(slotProps.data.resourceNode),
               id: slotProps.data.id,
             },
             query: {
@@ -143,5 +143,11 @@ const getVisibilityClass = (attendance) => {
 const getVisibilityTooltip = (attendance) => {
   const visibility = attendance.resourceLinkListFromEntity?.[0]?.visibility || 0
   return visibility === 2 ? "Visible" : "Hidden"
+}
+
+function getNodeId(resourceNode) {
+  if (!resourceNode || !resourceNode["@id"]) return 0
+  const parts = resourceNode["@id"].split("/")
+  return parseInt(parts[parts.length - 1])
 }
 </script>

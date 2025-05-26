@@ -26,7 +26,7 @@ export default {
       component: () => import("../views/attendance/AttendanceSheetList.vue"),
     },
     {
-      name: "CalendarList",
+      name: "AttendanceCalendarList",
       path: ":id?/calendar",
       component: () => import("../views/attendance/AttendanceCalendarList.vue"),
     },

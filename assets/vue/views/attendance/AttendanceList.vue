@@ -117,6 +117,7 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
       attendanceQualifyTitle: item.attendanceQualifyTitle,
       attendanceWeight: item.attendanceWeight,
       doneCalendars: item.doneCalendars,
+      resourceNode: item.resourceNode,
     }))
 
     if (isStudent.value) {

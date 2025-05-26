@@ -2312,6 +2312,12 @@ class Exercise
                         null,
                         get_lang('HideCorrectAnsweredQuestions')
                     ),
+                    $form->createElement(
+                        'checkbox',
+                        'hide_comment',
+                        null,
+                        get_lang('HideComment')
+                    ),
                 ];
                 $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
             }
@@ -4082,7 +4088,12 @@ class Exercise
         $matchingCorrectAnswers = [];
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
-            $answerComment = $objAnswerTmp->selectComment($answerId);
+            $hideComment = (int) $this->getPageConfigurationAttribute('hide_comment');
+            if (1 === $hideComment) { 
+                $answerComment = null;
+            } else {
+                $answerComment = $objAnswerTmp->selectComment($answerId);
+            }
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
             $answerWeighting = (float) $objAnswerTmp->selectWeighting($answerId);
             $answerAutoId = $objAnswerTmp->selectId($answerId);
@@ -8938,6 +8949,7 @@ class Exercise
                 'hide_total_score' => $values['hide_total_score'] ?? '',
                 'hide_category_table' => $values['hide_category_table'] ?? '',
                 'hide_correct_answered_questions' => $values['hide_correct_answered_questions'] ?? '',
+                'hide_comment' => $values['hide_comment'] ?? '',
             ];
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();

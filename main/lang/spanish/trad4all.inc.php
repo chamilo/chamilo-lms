@@ -9124,4 +9124,5 @@ $TeacherFeedback = "Comentario del profesor";
 $Learners = "ASISTENTES";
 $BackToDateOrder = "Retorno al orden cronológico";
 $SeeAlphabeticalOrder = "Ver en orden alfabético";
+$HideComment = "Ocultar comentarios";
 ?>

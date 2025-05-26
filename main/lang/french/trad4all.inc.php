@@ -9034,4 +9034,5 @@ $TeacherFeedback = "Rétroalimentation du professeur";
 $Learners = "Apprenants";
 $BackToDateOrder = "Retour à l'ordre chronologique";
 $SeeAlphabeticalOrder = "Voir par ordre alphabétique";
+$HideComment = "Cacher les commentaires";
 ?>

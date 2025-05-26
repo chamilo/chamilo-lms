@@ -9099,4 +9099,5 @@ $TeacherFeedback = "Teacher feedback";
 $Learners = "Learners";
 $BackToDateOrder = "Return to the chronological order";
 $SeeAlphabeticalOrder = "View in alphabetical order";
+$HideComment = "Hide comments";
 ?>

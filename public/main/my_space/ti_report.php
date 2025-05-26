@@ -185,7 +185,7 @@ if ($form->validate()) {
                     $sessionArray[] = Display::url(
                         $name,
                         $url.'id_session='.$session['session_id'],
-                        ['class' => 'label label-success', 'target' => '_blank', 'title' => addslashes($session['name'])]
+                        ['class' => 'label label-success', 'target' => '_blank', 'title' => addslashes($session['title'])]
                     );
                 }
                 $value = implode('<br /><br />', $sessionArray);

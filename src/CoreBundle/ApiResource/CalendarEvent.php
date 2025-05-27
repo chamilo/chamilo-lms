@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 
 class CalendarEvent extends AbstractResource
 {
@@ -48,6 +49,7 @@ class CalendarEvent extends AbstractResource
         #[Groups(['calendar_event:read'])]
         public ?Collection $reminders = null,
         #[Groups(['calendar_event:read'])]
+        #[MaxDepth(1)]
         public ?ResourceNode $resourceNode = null,
         public ?array $resourceLinkListFromEntity = null,
         #[Groups(['calendar_event:read'])]

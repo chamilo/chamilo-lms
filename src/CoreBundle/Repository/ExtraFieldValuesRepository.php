@@ -209,7 +209,8 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
             ->setParameter('variable', $variable)
             ->setParameter('itemType', $itemType)
             ->setParameter('itemId', $itemId)
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         return $qb->getQuery()->getOneOrNullResult();
     }
@@ -229,6 +230,7 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
                 'item_type' => $itemType,
             ])
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 }

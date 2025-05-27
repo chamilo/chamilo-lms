@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\CourseFromRequestTrait;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManagerInterface;
+use Event;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -62,10 +63,10 @@ final class CToolStateProvider implements ProviderInterface
         $isAllowToEdit = $user && ($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER'));
         $isAllowToEditBack = $isAllowToEdit;
         $isAllowToSessionEdit = $user && (
-                $user->hasRole('ROLE_ADMIN') ||
-                $user->hasRole('ROLE_CURRENT_COURSE_TEACHER') ||
-                $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-            );
+            $user->hasRole('ROLE_ADMIN')
+                || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+                || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+        );
 
         $allowVisibilityInSession = $this->settingsManager->getSetting('course.allow_edit_tool_visibility_in_session');
         $session = $this->getSession();
@@ -149,7 +150,7 @@ final class CToolStateProvider implements ProviderInterface
             return [false, null];
         }
 
-        $results = \Event::getExerciseResultsByUser(
+        $results = Event::getExerciseResultsByUser(
             $user->getId(),
             (int) $initialData['exercise_id'],
             $courseId,

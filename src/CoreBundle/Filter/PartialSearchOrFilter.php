@@ -16,7 +16,7 @@ class PartialSearchOrFilter extends AbstractFilter
 {
     protected function filterProperty(
         string $property,
-               $value,
+        $value,
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
@@ -32,8 +32,8 @@ class PartialSearchOrFilter extends AbstractFilter
         }
 
         $alias = $queryBuilder->getRootAliases()[0];
-        $valueParameter = ':' . $queryNameGenerator->generateParameterName($property);
-        $queryBuilder->setParameter($valueParameter, '%' . $value . '%');
+        $valueParameter = ':'.$queryNameGenerator->generateParameterName($property);
+        $queryBuilder->setParameter($valueParameter, '%'.$value.'%');
 
         $ors = [];
 
@@ -41,10 +41,10 @@ class PartialSearchOrFilter extends AbstractFilter
             // Detect if field is a relation (e.g. "user.username")
             if (str_contains($field, '.')) {
                 [$relation, $subField] = explode('.', $field, 2);
-                $joinAlias = $relation . '_alias';
+                $joinAlias = $relation.'_alias';
 
                 // Ensure the join is only added once
-                if (!in_array($joinAlias, $queryBuilder->getAllAliases(), true)) {
+                if (!\in_array($joinAlias, $queryBuilder->getAllAliases(), true)) {
                     $queryBuilder->leftJoin("$alias.$relation", $joinAlias);
                 }
 

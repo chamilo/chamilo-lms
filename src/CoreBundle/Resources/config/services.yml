@@ -138,3 +138,7 @@ services:
         $parameterBag: '@parameter_bag'
         $pluginRepo: '@Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository'
         $accessUrlHelper: '@Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper'
+
+    Chamilo\CoreBundle\EventListener\AccessUrlValidationListener:
+      tags:
+        - { name: kernel.event_listener, event: kernel.request, priority: 255 }

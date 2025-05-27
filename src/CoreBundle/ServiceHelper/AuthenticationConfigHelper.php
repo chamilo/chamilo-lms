@@ -65,14 +65,14 @@ readonly class AuthenticationConfigHelper
 
     public function getAuthSources(?AccessUrl $url)
     {
-        $urlId = $url ?: $this->urlHelper->getCurrent();
+        $accessUrl = $url ?: $this->urlHelper->getCurrent();
 
         $authentication = $this->parameterBag->has('authentication')
             ? $this->parameterBag->get('authentication')
             : [];
 
-        if (isset($authentication[$urlId->getId()])) {
-            return $authentication[$urlId->getId()];
+        if ($accessUrl instanceof AccessUrl && isset($authentication[$accessUrl->getId()])) {
+            return $authentication[$accessUrl->getId()];
         }
 
         if (isset($authentication['default'])) {

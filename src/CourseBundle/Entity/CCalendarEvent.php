@@ -61,7 +61,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             processor: CCalendarEventStateProcessor::class
         ),
     ],
-    normalizationContext: ['groups' => ['calendar_event:read', 'resource_node:read']],
+    normalizationContext: [
+        'groups' => ['calendar_event:read', 'resource_node:read'],
+        'enable_max_depth' => true,
+    ],
     denormalizationContext: ['groups' => ['calendar_event:write']],
     security: "is_granted('ROLE_USER')"
 )]

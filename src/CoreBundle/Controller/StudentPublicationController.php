@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
 use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
@@ -16,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
@@ -261,21 +264,29 @@ class StudentPublicationController extends AbstractController
     public function getUnsubmittedUsers(
         int $assignmentId,
         SerializerInterface $serializer,
-        CStudentPublicationRepository $repo
+        CStudentPublicationRepository $repo,
+        CourseRelUserRepository $courseRelUserRepo
     ): JsonResponse {
         $course = $this->cidReqHelper->getCourseEntity();
         $session = $this->cidReqHelper->getSessionEntity();
 
         $students = $session
             ? $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT)
-            : $course->getStudentSubscriptions();
+            : $courseRelUserRepo->findBy([
+                'course' => $course,
+                'status' => CourseRelUser::STUDENT,
+            ]);
 
-        $studentIds = array_map(fn ($rel) => $rel->getUser()->getId(), $students->toArray());
+        $studentsArray = $students instanceof Collection
+            ? $students->toArray()
+            : $students;
+
+        $studentIds = array_map(fn ($rel) => $rel->getUser()->getId(), $studentsArray);
 
         $submittedUserIds = $repo->findUserIdsWithSubmissions($assignmentId);
 
         $unsubmitted = array_filter(
-            $students->toArray(),
+            $studentsArray,
             fn ($rel) => !in_array($rel->getUser()->getId(), $submittedUserIds, true)
         );
 

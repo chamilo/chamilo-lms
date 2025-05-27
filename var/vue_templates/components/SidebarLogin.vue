@@ -88,7 +88,7 @@ function onSubmitLoginForm() {
 
       <a
         id="forgot"
-        v-t="'Forgot your password ?'"
+        v-t="'Forgot your password?'"
         class="field"
         href="/main/auth/lostPassword.php"
         tabindex="5"

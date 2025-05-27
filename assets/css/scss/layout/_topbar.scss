@@ -1,16 +1,16 @@
 .app-topbar {
-  @apply bg-white border-b border-solid border-gray-25 fixed left-0 top-0 w-full z-10;
+  @apply flex bg-white border-b border-solid border-gray-25 fixed left-0 top-0 w-full z-10 py-4;
 
   .p-menubar {
-    @apply text-gray-90 container mx-auto
-      md:py-2;
+    @apply text-gray-90 container mx-auto;
 
     .p-menubar-start {
-      @apply mr-auto;
+      @apply ml-4 mr-auto
+        md:ml-0;
     }
 
     .p-menubar-button {
-      @apply w-6 h-6 text-gray-50 m-4 outline-none;
+      @apply w-6 h-6 text-gray-50 mx-4 my-2 outline-none;
 
       .p-icon {
         @apply w-[18px] h-[18px];
@@ -98,72 +98,89 @@
       }
     }
   }
-}
 
-.app-topbars__user-submenu {
-  .p-menubar-item-link {
-    @apply rounded-none py-1 px-4 transition-none select-none;
-
-    &:focus {
-      @apply outline-none outline-offset-0;
-    }
-
-    &:hover,
-    &:focus {
-      @apply text-primary;
-    }
-  }
-}
-
-.app-topbars .p-menubar-root-list {
-  .p-menubar-item-icon {
-    @apply mr-2;
-
-    &:empty {
-      @apply mx-0;
-    }
+  &__start {
+    @apply ml-4 mr-auto;
   }
 
-  > .p-menubar-item {
-    > .p-menubar-item-link {
+  &__items {
+    @apply flex grow justify-end items-center gap-6;
 
-      .p-submenu-icon {
-        @apply mr-2 -order-1;
+    .item-button {
+      @apply w-8 h-8 relative text-center;
+
+      .mdi,
+      &__icon {
+        @apply text-gray-50 inline-block transition-colors align-middle text-2xl leading-6 w-6 h-6
+        hover:text-gray-90;
+
+        &::before {
+          @apply text-2xl leading-6;
+        }
       }
+
+      &__badge {
+        @apply bg-error text-white rounded-full text-tiny font-semibold absolute text-center h-4 w-4 top-0 right-0;
+      }
+
+      &.router-link-exact-active .mdi {
+        @apply text-gray-90;
+      }
+    }
+  }
+
+  &__end {
+    @apply ml-6 mr-4 flex items-center gap-6;
+
+    .user-avatar {
+      @apply rounded-full w-8 h-8 text-white bg-primary leading-6 text-body-2 font-semibold;
+
+      img {
+        @apply rounded-full w-8 h-8;
+      }
+    }
+
+    .item-button {
+      @apply w-8 h-8 relative;
+
+      .mdi,
+      &__icon {
+        @apply text-gray-50 inline-block transition-colors align-middle text-2xl leading-6 w-6 h-6
+          hover:text-gray-90;
+
+        &::before {
+          @apply text-2xl leading-6;
+        }
+      }
+    }
+  }
+
+  &__user-submenu {
+    @apply mt-1 border-0 drop-shadow-lg rounded-lg;
+
+
+    ul.p-menu-list {
+      @apply outline-none;
+    }
+
+    .p-menu-submenu-label {
+      @apply text-body-1 font-semibold py-1 px-4;
+    }
+
+    .p-menu-item-link {
+      @apply rounded-none py-1 px-4 transition-none select-none flex gap-1;
 
       &:focus {
         @apply outline-none outline-offset-0;
       }
-    }
 
-    &.p-menubar-item-active {
-      > .p-menubar-item-link {
-        @apply text-primary;
-      }
-    }
-  }
-}
-
-.app-topbars__user-submenu {
-  @apply bg-white border-none rounded-lg drop-shadow-lg py-3 px-0 w-52 max-h-60 overflow-y-auto;
-
-  .p-submenu-header {
-    @apply rounded-t-none font-semibold m-0 py-3 px-4;
-  }
-
-  .p-menu-separator {
-    @apply border-t border-solid my-1 mx-0;
-  }
-
-  &.p-menu-overlay {
-    @apply border-none drop-shadow-lg;
-  }
-
-  .p-menubar-item {
-    .p-menubar-item-link {
       &:hover,
       &:focus {
-        @apply bg-support-1;
+        @apply text-primary bg-support-1;
+      }
+
+      .p-menu-item-label {
+        @apply text-body-1;
       }
     }
   }

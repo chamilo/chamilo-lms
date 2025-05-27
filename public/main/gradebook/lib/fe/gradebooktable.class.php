@@ -301,6 +301,7 @@ class GradebookTable extends SortableTable
         global $certificate_min_score;
 
         $isAllowedToEdit = api_is_allowed_to_edit();
+        $hideLinkForStudent = ('true' === api_get_setting('gradebook.gradebook_hide_link_to_item_for_student')) ?? false;
         // determine sorting type
         $col_adjust = $isAllowedToEdit ? 1 : 0;
         // By id
@@ -426,7 +427,15 @@ class GradebookTable extends SortableTable
                     $row[] = $invisibility_span_open.'<strong>'.$item->get_name().'</strong>'.$invisibility_span_close;
                     $main_categories[$item->get_id()]['name'] = $item->get_name();
                 } else {
-                    $name = $this->build_name_link($item, $type);
+                    // If the item type is 'Evaluation', or the user is not a student,
+                    // or 'gradebook_hide_link_to_item_for_student' it's true, make links
+                    if ($item->get_item_type() === 'E' || $isAllowedToEdit || !$hideLinkForStudent) {
+                        $name = Security::remove_XSS($this->build_name_link($item, $type));
+                    } else {
+                        $name = Security::remove_XSS(
+                            $item->get_name().' '.Display::label($item->get_type_name(), 'info')
+                        );
+                    }
                     $row[] = $invisibility_span_open.$name.$invisibility_span_close;
                     $main_categories[$item->get_id()]['name'] = $name;
                 }

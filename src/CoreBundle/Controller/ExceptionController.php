@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ExceptionController extends AbstractController
 {
@@ -89,6 +91,35 @@ class ExceptionController extends AbstractController
 
         return $this->render($templateToLoad, [
             'exception' => $exception,
+        ]);
+    }
+
+    #[Route(path: '/error/undefined-url', name: 'undefined_url_error')]
+    public function undefinedUrlError(
+        Request $request,
+        UrlGeneratorInterface $urlGenerator,
+        AccessUrlHelper $accessUrlHelper
+    ): Response {
+        $host = $request->getHost();
+
+        $accessUrl = $accessUrlHelper->getFirstAccessUrl();
+        $themeHost = rtrim($accessUrl?->getUrl() ?? '', '/');
+        $themeName = 'chamilo';
+
+        $cssUrl = $themeHost . $urlGenerator->generate('theme_asset', [
+                'name' => $themeName,
+                'path' => 'colors.css',
+            ], UrlGeneratorInterface::ABSOLUTE_PATH);
+
+        $logoUrl = $themeHost . $urlGenerator->generate('theme_asset', [
+                'name' => $themeName,
+                'path' => 'images/header-logo.svg',
+            ], UrlGeneratorInterface::ABSOLUTE_PATH);
+
+        return $this->render('@ChamiloCore/Exception/undefined_url.html.twig', [
+            'host' => $host,
+            'cssUrl' => $cssUrl,
+            'logoUrl' => $logoUrl,
         ]);
     }
 }

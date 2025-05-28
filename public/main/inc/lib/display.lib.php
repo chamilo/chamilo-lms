@@ -897,7 +897,7 @@ class Display
         $extra = '';
         $default_id = 'id="'.$name.'" ';
         $extra_attributes = array_merge(
-            ['class' => 'p-dropdown p-component p-inputwrapper p-inputwrapper-filled'],
+            ['class' => 'p-select p-component p-inputwrapper p-inputwrapper-filled'],
             $extra_attributes
         );
         foreach ($extra_attributes as $key => $parameter) {

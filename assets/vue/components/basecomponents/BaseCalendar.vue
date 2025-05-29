@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue"
 import DatePicker from "primevue/datepicker"
+import FloatLabel from "primevue/floatlabel"
 import { calendarLocales } from "../../utils/calendarLocales"
 import { useLocale } from "../../composables/locale"
 import { usePrimeVue } from "primevue/config"
@@ -94,20 +95,24 @@ onMounted(() => {
 </script>
 <template>
   <div class="field">
-    <div class="p-float-label">
+    <FloatLabel variant="on">
       <DatePicker
-        :id="id"
         v-model="model"
         :class="{ 'p-invalid': isInvalid }"
         :date-format="dateFormat"
+        :input-id="id"
         :locale="selectedLocale"
         :manual-input="type !== 'range'"
         :selection-mode="type"
         :show-icon="showIcon"
         :show-time="showTime"
+        fluid
+        icon-display="input"
       />
-      <label v-text="label" />
-    </div>
-    <small></small>
+      <label
+        :for="id"
+        v-text="label"
+      />
+    </FloatLabel>
   </div>
 </template>

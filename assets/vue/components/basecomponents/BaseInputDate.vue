@@ -1,18 +1,21 @@
 <template>
   <div class="field">
-    <div class="p-float-label">
+    <FloatLabel variant="on">
       <DatePicker
         :class="{ 'p-invalid': isInvalid }"
         :input-id="id"
         :model-value="modelValue"
         :show-time="showTime"
+        fluid
+        icon-display="input"
+        show-icon
         @update:model-value="$emit('update:modelValue', $event)"
       />
       <label
         :for="id"
         v-text="label"
       />
-    </div>
+    </FloatLabel>
     <small
       v-if="isInvalid"
       :class="{ 'p-error': isInvalid }"
@@ -22,6 +25,7 @@
 </template>
 
 <script setup>
+import FloatLabel from "primevue/floatlabel"
 import DatePicker from "primevue/datepicker"
 
 defineProps({

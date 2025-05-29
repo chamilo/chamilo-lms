@@ -228,8 +228,8 @@ const redirectToAttendanceSheet = () => {
 
 const redirectToAddCalendarEvent = () => {
   router.push({
-    name: "AddCalendarEvent",
-    params: { id: route.params.id },
+    name: "AttendanceAddCalendarEvent",
+    params: { node: route.params.node, id: route.params.id },
     query: { cid: route.query.cid, sid: route.query.sid, gid: route.query.gid },
   })
 }

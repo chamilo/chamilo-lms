@@ -82,7 +82,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     normalizationContext: [
         'groups' => ['attendance:read', 'resource_node:read', 'resource_link:read'],
-        'enable_max_depth' => true
+        'enable_max_depth' => true,
     ],
     denormalizationContext: ['groups' => ['attendance:write']],
     paginationEnabled: true,
@@ -302,12 +302,14 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
     {
         return $this->calendars
             ->filter(fn (CAttendanceCalendar $calendar) => $calendar->getDoneAttendance())
-            ->count();
+            ->count()
+        ;
     }
 
     public function setDoneCalendars(?int $count): self
     {
         $this->doneCalendars = $count;
+
         return $this;
     }
 

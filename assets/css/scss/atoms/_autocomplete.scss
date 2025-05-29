@@ -1,130 +1,139 @@
 .p-autocomplete {
-  @apply flex;
+  @apply inline-flex;
 
   &-loader {
     @apply absolute top-1/2 -mt-2 right-3;
   }
 
-  &-dd &-input {
+  &:has(&-dropdown) &-loader {
+    @apply pr-7;
+  }
+
+  &:has(&-dropdown) &-input {
     @apply flex-auto w-[1%];
   }
 
-  &-dd &-input,
-  &-dd &-multiple-container {
+  &:has(&-dropdown) &-input,
+  &:has(&-dropdown) &-input-multiple {
     @apply rounded-r-lg;
   }
 
-  &-dd &-dropdown {
-    @apply rounded-l-lg;
+  &-dropdown {
+    @apply cursor-pointer inline-flex select-none items-center justify-center overflow-hidden relative w-full bg-white transition-colors outline-none rounded-l-lg
+      focus-visible:outline-none;
+
+    &:not(:disabled) {
+      @apply
+      hover:bg-support-1
+      active:bg-support-1
+      focus:bg-support-1;
+    }
   }
 
-  & &-panel {
+  & &-overlay {
     @apply min-w-full;
   }
 
-  &-panel {
-    @apply absolute overflow-auto top-0 left-0 bg-white drop-shadow-lg rounded-lg border-none text-gray-90
+  &-overlay {
+    @apply absolute overflow-auto top-0 left-0 bg-white drop-shadow-lg rounded-lg border-none text-gray-90 mt-1
       before:content-[""] before:w-full before:block before:h-3 before:sticky before:bg-white before:z-[2] before:top-0 before:rounded-t-lg before:rounded-b-none
       after:content-[""] after:w-full after:block after:h-3 after:sticky after:bg-white after:z-[2] after:bottom-0 after:rounded-b-lg after:rounded-t-none;
-
-    .p-autocomplete-items {
-      @apply p-0;
-
-      .p-autocomplete-item {
-        @apply m-0 px-4 py-2 transition text-body-2 outline-0 outline-none text-gray-90 border-none bg-transparent rounded-none;
-
-        &:first-child {
-          @apply mt-0;
-        }
-
-        &:last-child {
-          @apply mb-0;
-        }
-
-        &.p-highlight {
-          @apply bg-support-3 text-primary;
-        }
-
-        &:not(.p-highlight):not(.p-disabled).p-focus {
-          @apply text-primary;
-        }
-
-        &-group {
-          @apply m-0 px-3 py-4 bg-white text-gray-90;
-        }
-      }
-    }
   }
 
-  &-items {
-    @apply m-0 p-0 list-none;
+  &-list-container {
+    @apply overflow-auto;
   }
 
-  &-item {
-    @apply cursor-pointer whitespace-nowrap relative overflow-hidden;
+  &-list {
+    @apply m-0 p-0 list-none flex flex-col gap-0;
   }
 
-  &-multiple-container {
-    @apply m-0 p-3 list-none cursor-text overflow-hidden flex items-center flex-wrap gap-2 outline-transparent;
-
-    .p-autocomplete-input-token {
-      @apply p-0;
-
-      input {
-        @apply p-0 m-0 text-gray-90;
-      }
-    }
-
-    .p-autocomplete-token {
-      @apply px-1.5 py-0 rounded-lg text-gray-90 bg-gray-20;
-
-      .p-autocomplete-token-icon {
-        @apply ml-2;
-      }
-
-      &.p-focus {
-        @apply text-primary;
-      }
-    }
+  &-option {
+    @apply cursor-pointer whitespace-nowrap relative overflow-hidden flex items-center border-0 text-gray-90 text-body-2 transition-colors px-4 py-2;
   }
 
-  &-token {
-    @apply cursor-default inline-flex items-center flex-initial;
-
-    &-icon {
-      @apply cursor-pointer inline-flex;
-    }
+  &-option:not(&-option-selected):not(.p-disabled).p-focus {
+    @apply text-primary bg-white;
   }
 
-  &-input-token {
-    @apply flex-1 inline-flex;
-
-    input {
-      @apply border-none outline-none bg-transparent m-0 p-0 shadow-none rounded-none w-full;
-    }
-  }
-
-  &.p-autocomplete-dd {
-    &.p-autocomplete-loader {
-      @apply right-[3.75rem];
-    }
-  }
-
-  &:not(.p-disabled) {
-    &:hover {
-      .p-autocomplete-multiple-container {
-        @apply border-primary;
-      }
-    }
+  &-option-selected {
+    @apply text-primary bg-support-1;
 
     &.p-focus {
-      .p-autocomplete-multiple-container {
-        @apply outline-none outline-offset-0 border-primary;
-      }
+      @apply text-primary bg-support-1;
     }
   }
 
-  &.p-invalid.p-component > .p-inputtext {
-    @apply border-error;
+  &-option-group {
+    @apply m-0 px-3 py-4 bg-white text-gray-90;
+  }
+
+  &-input-multiple {
+    @apply m-0 px-3 py-2 list-none cursor-text overflow-hidden flex items-center flex-wrap gap-2 outline-transparent transition-colors w-full border border-solid border-gray-50 rounded-lg;
+  }
+
+  &:not(.p-disabled):hover &-input-multiple {
+    @apply border-primary;
+  }
+
+  &:not(.p-disabled).p-focus &-input-multiple {
+    @apply border-primary outline-none;
+  }
+
+  &.p-invalid &-input-multiple {
+    @apply border-danger;
+  }
+
+  &.p-disabled &-input-multiple {
+    @apply opacity-100 border-gray-50 text-gray-50;
+  }
+
+  &-chip.p-chip {
+
+  }
+
+  &-input-multiple:has(&-chip) {
+
+  }
+
+  &-chip-item.p-focus &-chip {
+    @apply p-0;
+  }
+
+  &-input-chip {
+    @apply flex-auto inline-flex p-0;
+
+    input {
+      @apply border-none outline-none bg-transparent m-0 p-0 shadow-none rounded-none w-full
+        placeholder:text-gray-50;
+    }
+  }
+
+  &.p-invalid &-input-chip input {
+    @apply placeholder:text-danger;
+  }
+
+  &-empty-message {
+    @apply px-4 py-2;
+  }
+
+  &-fluid {
+    @apply flex;
+  }
+
+  &-fluid:has(&-dropdown) &-input {
+    @apply w-[1%];
+  }
+
+  &:has(.p-inputtext-sm) &-dropdown {
+    .p-icon {
+
+    }
+  }
+
+  &:has(.p-inputtext-lg) &-dropdown {
+    .p-icon {
+
+    }
   }
 }

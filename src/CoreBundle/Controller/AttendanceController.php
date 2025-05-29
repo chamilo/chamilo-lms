@@ -27,6 +27,7 @@ use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,12 +78,11 @@ class AttendanceController extends AbstractController
         }
 
         $calendars = $attendance->getCalendars();
-        $totalCalendars = count($calendars);
+        $totalCalendars = \count($calendars);
 
         $users = $userRepository->findUsersByContext($courseId, $sessionId, $groupId);
 
-        $formattedUsers = array_map(function ($user) use ($userRepository, $courseId, $groupId, $calendarRepository, $sheetRepository, $calendars) {
-
+        $formattedUsers = array_map(function ($user) use ($userRepository, $sheetRepository, $calendars) {
             $absences = 0;
 
             foreach ($calendars as $calendar) {
@@ -91,16 +91,16 @@ class AttendanceController extends AbstractController
                     'attendanceCalendar' => $calendar,
                 ]);
 
-                if (!$sheet || $sheet->getPresence() === null) {
+                if (!$sheet || null === $sheet->getPresence()) {
                     continue;
                 }
 
-                if ($sheet->getPresence() !== 1) {
+                if (1 !== $sheet->getPresence()) {
                     $absences++;
                 }
             }
 
-            $percentage = count($calendars) > 0 ? round(($absences * 100) / count($calendars)) : 0;
+            $percentage = \count($calendars) > 0 ? round(($absences * 100) / \count($calendars)) : 0;
 
             return [
                 'id' => $user->getId(),
@@ -109,7 +109,7 @@ class AttendanceController extends AbstractController
                 'email' => $user->getEmail(),
                 'username' => $user->getUsername(),
                 'photo' => $userRepository->getUserPicture($user->getId()),
-                'notAttended' => "$absences/" . count($calendars) . " ({$percentage}%)",
+                'notAttended' => "$absences/".\count($calendars)." ({$percentage}%)",
             ];
         }, $users);
 
@@ -159,7 +159,7 @@ class AttendanceController extends AbstractController
         }
 
         $calendars = $attendance->getCalendars();
-        $totalCalendars = count($calendars);
+        $totalCalendars = \count($calendars);
 
         $students = $this->em->getRepository(User::class)->findUsersByContext($courseId, $sessionId, $groupId);
         $sheetRepo = $this->em->getRepository(CAttendanceSheet::class);
@@ -170,8 +170,9 @@ class AttendanceController extends AbstractController
         if ($sessionId) {
             $session = $this->em->getRepository(Session::class)->find($sessionId);
             $rel = $session?->getCourseCoachesSubscriptions()
-                ->filter(fn($rel) => $rel->getCourse()?->getId() === $courseId)
-                ->first();
+                ->filter(fn ($rel) => $rel->getCourse()?->getId() === $courseId)
+                ->first()
+            ;
 
             $teacher = $rel instanceof SessionRelCourseRelUser
                 ? $rel->getUser()?->getFullname()
@@ -182,7 +183,6 @@ class AttendanceController extends AbstractController
             $teacher = $rel instanceof CourseRelUser
                 ? $rel->getUser()?->getFullname()
                 : null;
-            ;
         }
 
         // Header
@@ -212,15 +212,16 @@ class AttendanceController extends AbstractController
                     'attendanceCalendar' => $calendar,
                 ]);
 
-                if (!$sheetEntity || $sheetEntity->getPresence() === null) {
+                if (!$sheetEntity || null === $sheetEntity->getPresence()) {
                     $row[] = '';
+
                     continue;
                 }
 
                 $presence = $sheetEntity->getPresence();
                 $row[] = $stateLabels[$presence] ?? 'NP';
 
-                if ($presence === CAttendanceSheet::ABSENT) {
+                if (CAttendanceSheet::ABSENT === $presence) {
                     $absences++;
                 }
             }
@@ -242,26 +243,26 @@ class AttendanceController extends AbstractController
                 .np { color: red; font-weight: bold; }
             </style>
 
-            <h2>' . htmlspecialchars($attendance->getTitle()) . '</h2>
+            <h2>'.htmlspecialchars($attendance->getTitle()).'</h2>
 
             <table class="meta">
-                <tr><td><strong>Trainer:</strong></td><td>' . htmlspecialchars($teacher ?? '-') . '</td></tr>
-                <tr><td><strong>Course:</strong></td><td>' . htmlspecialchars($course?->getTitleAndCode() ?? '-') . '</td></tr>
-                <tr><td><strong>Date:</strong></td><td>' . date('F d, Y \a\t h:i A') . '</td></tr>
+                <tr><td><strong>Trainer:</strong></td><td>'.htmlspecialchars($teacher ?? '-').'</td></tr>
+                <tr><td><strong>Course:</strong></td><td>'.htmlspecialchars($course?->getTitleAndCode() ?? '-').'</td></tr>
+                <tr><td><strong>Date:</strong></td><td>'.date('F d, Y \a\t h:i A').'</td></tr>
             </table>
 
             <table class="attendance">
             <tr>';
         foreach ($dataTable[0] as $cell) {
-            $html .= '<th>' . htmlspecialchars((string) $cell) . '</th>';
+            $html .= '<th>'.htmlspecialchars((string) $cell).'</th>';
         }
         $html .= '</tr>';
 
-        foreach (array_slice($dataTable, 1) as $row) {
+        foreach (\array_slice($dataTable, 1) as $row) {
             $html .= '<tr>';
             foreach ($row as $cell) {
-                $class = $cell === 'NP' ? ' class="np"' : '';
-                $html .= "<td$class>" . htmlspecialchars((string) $cell) . "</td>";
+                $class = 'NP' === $cell ? ' class="np"' : '';
+                $html .= "<td$class>".htmlspecialchars((string) $cell).'</td>';
             }
             $html .= '</tr>';
         }
@@ -269,22 +270,22 @@ class AttendanceController extends AbstractController
         $html .= '</table>';
 
         try {
-            $mpdf = new \Mpdf\Mpdf([
+            $mpdf = new Mpdf([
                 'orientation' => 'L',
-                'tempDir' => api_get_path(SYS_ARCHIVE_PATH) . 'mpdf/',
+                'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
             ]);
             $mpdf->WriteHTML($html);
 
             return new Response(
-                $mpdf->Output('', \Mpdf\Output\Destination::INLINE),
+                $mpdf->Output('', Destination::INLINE),
                 200,
                 [
                     'Content-Type' => 'application/pdf',
-                    'Content-Disposition' => 'attachment; filename="attendance-' . $id . '.pdf"',
+                    'Content-Disposition' => 'attachment; filename="attendance-'.$id.'.pdf"',
                 ]
             );
-        } catch (\Mpdf\MpdfException $e) {
-            throw new \RuntimeException('Failed to generate PDF: ' . $e->getMessage(), 500, $e);
+        } catch (MpdfException $e) {
+            throw new RuntimeException('Failed to generate PDF: '.$e->getMessage(), 500, $e);
         }
     }
 
@@ -301,7 +302,7 @@ class AttendanceController extends AbstractController
         }
 
         $calendars = $attendance->getCalendars();
-        $totalCalendars = count($calendars);
+        $totalCalendars = \count($calendars);
         $students = $this->em->getRepository(User::class)->findUsersByContext($courseId, $sessionId, $groupId);
         $sheetRepo = $this->em->getRepository(CAttendanceSheet::class);
 
@@ -331,15 +332,16 @@ class AttendanceController extends AbstractController
                     'attendanceCalendar' => $calendar,
                 ]);
 
-                if (!$sheetEntity || $sheetEntity->getPresence() === null) {
+                if (!$sheetEntity || null === $sheetEntity->getPresence()) {
                     $row[] = '';
+
                     continue;
                 }
 
                 $presence = $sheetEntity->getPresence();
                 $row[] = $stateLabels[$presence] ?? 'NP';
 
-                if ($presence === CAttendanceSheet::ABSENT) {
+                if (CAttendanceSheet::ABSENT === $presence) {
                     $absences++;
                 }
             }
@@ -347,12 +349,12 @@ class AttendanceController extends AbstractController
             $percentage = $totalCalendars > 0 ? round(($absences * 100) / $totalCalendars) : 0;
             array_splice($row, 3, 0, "$absences/$totalCalendars ($percentage%)");
 
-            $sheet->fromArray($row, null, 'A' . $rowNumber++);
+            $sheet->fromArray($row, null, 'A'.$rowNumber++);
         }
 
         // Output
         $writer = new Xls($spreadsheet);
-        $response = new StreamedResponse(fn() => $writer->save('php://output'));
+        $response = new StreamedResponse(fn () => $writer->save('php://output'));
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             "attendance-$id.xls"
@@ -360,6 +362,7 @@ class AttendanceController extends AbstractController
 
         $response->headers->set('Content-Type', 'application/vnd.ms-excel');
         $response->headers->set('Content-Disposition', $disposition);
+
         return $response;
     }
 
@@ -373,7 +376,7 @@ class AttendanceController extends AbstractController
 
         $resourceNodeId = $attendance->getResourceNode()?->getParent()?->getId();
         if (!$resourceNodeId) {
-            throw new \RuntimeException('Missing resourceNode for course');
+            throw new RuntimeException('Missing resourceNode for course');
         }
 
         $sid = $request->query->get('sid');
@@ -388,17 +391,17 @@ class AttendanceController extends AbstractController
         }
 
         $url = "/resources/attendance/$resourceNodeId/$id/sheet-list?$query";
-        $fullUrl = $request->getSchemeAndHttpHost() . $url;
+        $fullUrl = $request->getSchemeAndHttpHost().$url;
 
         $result = Builder::create()
             ->data($fullUrl)
             ->size(300)
             ->margin(10)
-            ->build();
+            ->build()
+        ;
 
         return new Response($result->getString(), 200, ['Content-Type' => $result->getMimeType()]);
     }
-
 
     #[Route('/sheet/save', name: 'chamilo_core_attendance_sheet_save', methods: ['POST'])]
     public function saveAttendanceSheet(
@@ -554,7 +557,7 @@ class AttendanceController extends AbstractController
         $signatureData = [];
 
         foreach ($dates as $item) {
-            $key = $user->getId() . '-' . $item['id'];
+            $key = $user->getId().'-'.$item['id'];
             $attendanceData[$key] = $item['presence'];
             $signatureData[$key] = $item['signature'];
 

@@ -25,8 +25,7 @@ class LocaleSubscriber implements EventSubscriberInterface
         private SettingsManager $settingsManager,
         private ParameterBagInterface $parameterBag,
         private SettingsCourseManager $courseSettingsManager
-    ) {
-    }
+    ) {}
 
     public function onKernelRequest(RequestEvent $event): void
     {
@@ -74,7 +73,7 @@ class LocaleSubscriber implements EventSubscriberInterface
             $courseLocale = $course->getCourseLanguage();
 
             $this->courseSettingsManager->setCourse($course);
-            if ($this->courseSettingsManager->getCourseSettingValue('show_course_in_user_language') === '1' && $userLocale) {
+            if ('1' === $this->courseSettingsManager->getCourseSettingValue('show_course_in_user_language') && $userLocale) {
                 $localeList['course_lang'] = $userLocale;
             } elseif ($courseLocale) {
                 $localeList['course_lang'] = $courseLocale;
@@ -88,11 +87,11 @@ class LocaleSubscriber implements EventSubscriberInterface
 
         // 5. Resolve locale based on configured language priorities
         foreach ([
-                     'language_priority_1',
-                     'language_priority_2',
-                     'language_priority_3',
-                     'language_priority_4',
-                 ] as $settingKey) {
+            'language_priority_1',
+            'language_priority_2',
+            'language_priority_3',
+            'language_priority_4',
+        ] as $settingKey) {
             $priority = $this->settingsManager->getSetting("language.$settingKey");
             if (!empty($priority) && !empty($localeList[$priority])) {
                 return $localeList[$priority];

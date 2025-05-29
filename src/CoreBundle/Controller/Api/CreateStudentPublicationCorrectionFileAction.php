@@ -10,11 +10,12 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CreateStudentPublicationCorrectionFileAction extends BaseResourceFileAction
 {
@@ -55,7 +56,7 @@ class CreateStudentPublicationCorrectionFileAction extends BaseResourceFileActio
 
         $submission->setDescription('Correction uploaded');
         $submission->setQualification(0);
-        $submission->setDateOfQualification(new \DateTime());
+        $submission->setDateOfQualification(new DateTime());
         $submission->setAccepted(true);
 
         $submission->setExtensions($correction->getTitle());

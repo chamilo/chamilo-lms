@@ -1,0 +1,132 @@
+.p-select {
+  @apply inline-flex cursor-pointer relative select-none bg-white border border-gray-50 transition rounded-lg outline-none shadow-none drop-shadow-none w-full;
+
+  &:not(.p-disabled) {
+    @apply hover:border-primary hover:text-gray-90;
+
+    &.p-focus {
+      @apply border-primary text-gray-90 outline-0 outline-none
+    }
+  }
+
+  &.p-variant-filled {
+    &:not(.p-disabled) {
+      &:hover {}
+
+      &.p-focus {}
+    }
+  }
+
+  &.p-invalid {
+    @apply border-danger text-danger;
+  }
+
+  &.p-disabled {
+    @apply bg-gray-25 opacity-60;
+  }
+
+  &-clear-icon {
+    @apply absolute top-1/2 -mt-2;
+  }
+
+  &-dropdown {
+    @apply flex items-center justify-center shrink-0 bg-transparent rounded-r-lg pr-4 py-2 text-gray-90 text-body-2;
+
+    .p-select-sm & .p-icon {}
+
+    .p-select-lg & .p-icon {}
+  }
+
+  &-label {
+    @apply block whitespace-nowrap overflow-hidden flex-auto w-[1%] px-4 py-3 overflow-ellipsis cursor-pointer text-gray-90 text-body-2 bg-transparent border-none border-0 outline-none outline-0;
+
+    &.p-placeholder {
+      @apply text-gray-50;
+
+      .p-select.p-invalid & {}
+    }
+
+    .p-select:has(.p-select-clear-icon) & {}
+
+    .p-select.p-disabled & {
+      @apply text-gray-50;
+    }
+
+    &-empty {
+      @apply overflow-hidden opacity-0;
+    }
+
+    .p-select-sm & {
+    }
+
+    .p-select-lg & {}
+  }
+
+  input.p-select-label {
+    @apply cursor-default;
+  }
+
+  & &-overlay {
+    @apply cursor-default;
+  }
+
+  &-overlay {
+    @apply absolute top-0 left-0 mt-2 bg-white text-gray-90 border-0 border-none rounded-lg drop-shadow-lg;
+  }
+
+  &-header {}
+
+  &-filter {
+    @apply w-full;
+  }
+
+  &-list-container {
+    @apply overflow-auto;
+  }
+
+  &-option-group {
+
+  }
+
+  &-list {
+    @apply m-0 p-0 list-none gap-0 flex flex-col
+    before:content-[""] before:w-full before:block before:h-3 before:sticky before:bg-white before:z-[2] before:top-0 before:rounded-t-lg before:rounded-b-none
+    after:content-[""] after:w-full after:block after:h-3 after:sticky after:bg-white after:z-[2] after:bottom-0 after:rounded-b-lg after:rounded-t-none;
+  }
+
+  &-option {
+    @apply cursor-pointer text-body-2 whitespace-nowrap relative overflow-hidden flex items-center px-4 py-2 border-0 border-none text-gray-90 transition;
+
+    &:not(.p-select-option-selected):not(.p-disabled).p-focus {
+      @apply bg-white text-primary;
+    }
+
+    &.p-select-option-selected {
+      @apply bg-support-1 text-primary;
+
+      &.p-focus {
+        @apply bg-support-1 text-primary;
+      }
+    }
+  }
+
+  &-option-blank-icon {
+    @apply shrink-0
+  }
+
+  &-option-check-icon {
+    @apply relative shrink-0 text-support-3;
+  }
+
+  &-empty-message {
+    @apply px-4 py-2;
+  }
+
+  &-fluid {
+    @apply flex w-full;
+  }
+}
+
+select.p-select {
+  @apply px-4 py-2;
+}

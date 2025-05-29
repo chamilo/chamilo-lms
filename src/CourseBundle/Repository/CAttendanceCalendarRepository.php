@@ -9,7 +9,6 @@ namespace Chamilo\CourseBundle\Repository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Chamilo\CourseBundle\Entity\CAttendanceResultComment;
-use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -134,7 +133,7 @@ final class CAttendanceCalendarRepository extends ResourceRepository
             return [
                 'id' => $calendar->getIid(),
                 'label' => $calendar->getDateTime()->format('M d, Y - h:i A'),
-                'done' => $calendar->getDoneAttendance() === true,
+                'done' => true === $calendar->getDoneAttendance(),
             ];
         }, $calendars);
 

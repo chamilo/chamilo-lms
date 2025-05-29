@@ -134,7 +134,8 @@ class ResourceNodeVoter extends Voter
                     if (\in_array($question->getType(), [6, 7, 8], true)) { // HOT_SPOT, HOT_SPOT_ORDER, HOT_SPOT_DELINEATION
                         $rel = $this->entityManager
                             ->getRepository(CQuizRelQuestion::class)
-                            ->findOneBy(['question' => $question]);
+                            ->findOneBy(['question' => $question])
+                        ;
 
                         if ($rel && $rel->getQuiz()) {
                             $quiz = $rel->getQuiz();
@@ -146,7 +147,7 @@ class ResourceNodeVoter extends Voter
                     }
                 }
 
-            // no break
+                // no break
             case self::EDIT:
                 break;
         }
@@ -186,17 +187,19 @@ class ResourceNodeVoter extends Voter
             }
         }
 
-        if ($resourceNode->getResourceType()->getTitle() === 'files') {
+        if ('files' === $resourceNode->getResourceType()->getTitle()) {
             $document = $this->entityManager
                 ->getRepository(CDocument::class)
-                ->findOneBy(['resourceNode' => $resourceNode]);
+                ->findOneBy(['resourceNode' => $resourceNode])
+            ;
 
             if ($document) {
                 $exists = $this->entityManager
                     ->getRepository(CStudentPublicationRelDocument::class)
-                    ->findOneBy(['document' => $document]);
+                    ->findOneBy(['document' => $document])
+                ;
 
-                if ($exists !== null) {
+                if (null !== $exists) {
                     return true;
                 }
             }

@@ -34,7 +34,7 @@ class ParentNullFilter extends AbstractFilter
                 'property' => $property,
                 'type' => 'bool',
                 'required' => false,
-                'description' => sprintf('Filter on %s: IS NULL or IS NOT NULL', $property),
+                'description' => \sprintf('Filter on %s: IS NULL or IS NOT NULL', $property),
             ];
         }
 
@@ -43,14 +43,14 @@ class ParentNullFilter extends AbstractFilter
 
     protected function filterProperty(
         string $property,
-               $value,
+        $value,
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
         ?Operation $operation = null,
         array $context = [],
     ): void {
-        if (!array_key_exists($property, $this->properties)) {
+        if (!\array_key_exists($property, $this->properties)) {
             return;
         }
 
@@ -59,16 +59,16 @@ class ParentNullFilter extends AbstractFilter
         if (str_contains($property, '.')) {
             $parts = explode('.', $property);
             $joinAlias = $queryNameGenerator->generateJoinAlias($parts[0]);
-            $queryBuilder->leftJoin(sprintf('%s.%s', $alias, $parts[0]), $joinAlias);
-            $field = sprintf('%s.%s', $joinAlias, $parts[1]);
+            $queryBuilder->leftJoin(\sprintf('%s.%s', $alias, $parts[0]), $joinAlias);
+            $field = \sprintf('%s.%s', $joinAlias, $parts[1]);
         } else {
-            $field = sprintf('%s.%s', $alias, $property);
+            $field = \sprintf('%s.%s', $alias, $property);
         }
 
-        if ($value === 'true' || $value === true || $value === '1' || $value === 1) {
-            $queryBuilder->andWhere(sprintf('%s IS NOT NULL', $field));
+        if ('true' === $value || true === $value || '1' === $value || 1 === $value) {
+            $queryBuilder->andWhere(\sprintf('%s IS NOT NULL', $field));
         } else {
-            $queryBuilder->andWhere(sprintf('%s IS NULL', $field));
+            $queryBuilder->andWhere(\sprintf('%s IS NULL', $field));
         }
     }
 }

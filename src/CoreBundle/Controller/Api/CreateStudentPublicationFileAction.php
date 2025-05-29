@@ -9,11 +9,12 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
+use DateTime;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 
 class CreateStudentPublicationFileAction extends BaseResourceFileAction
 {
@@ -44,7 +45,7 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
         $studentPublication->setContainsFile(1);
         $studentPublication->setAccepted(true);
         $studentPublication->setActive(1);
-        $studentPublication->setSentDate(new \DateTime());
+        $studentPublication->setSentDate(new DateTime());
 
         /** @var User $user */
         $user = $security->getUser();

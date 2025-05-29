@@ -489,8 +489,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     public function getChildFileCount(): int
     {
         return $this->children
-            ->filter(fn (self $child) => $child->getFiletype() === 'file' && $child->getActive() !== 2)
-            ->count();
+            ->filter(fn (self $child) => 'file' === $child->getFiletype() && 2 !== $child->getActive())
+            ->count()
+        ;
     }
 
     /**
@@ -663,7 +664,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
                 }
 
                 return $accumulator;
-            }, 0);
+            }, 0)
+        ;
 
         return $reduce ?: 0;
     }

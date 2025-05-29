@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Throwable;
 
 #[Route('/platform-config')]
 class PlatformConfigurationController extends AbstractController
@@ -180,27 +181,28 @@ class PlatformConfigurationController extends AbstractController
     private function decodeSettingArray(mixed $setting): array
     {
         // Already an array, return as is
-        if (is_array($setting)) {
+        if (\is_array($setting)) {
             return $setting;
         }
 
         // Try to decode JSON string
-        if (is_string($setting)) {
+        if (\is_string($setting)) {
             $json = json_decode($setting, true);
-            if (is_array($json)) {
+            if (\is_array($json)) {
                 return $json;
             }
 
             // Try to evaluate PHP-style array string
             $trimmed = rtrim($setting, ';');
+
             try {
                 $evaluated = eval("return $trimmed;");
-                if (is_array($evaluated)) {
+                if (\is_array($evaluated)) {
                     return $evaluated;
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Log error and continue
-                error_log("Failed to eval setting value: " . $e->getMessage());
+                error_log('Failed to eval setting value: '.$e->getMessage());
             }
         }
 

@@ -155,9 +155,9 @@ final class CStudentPublicationRepository extends ResourceRepository
 
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            ->addSelect('(SELECT COUNT(comment.iid) FROM ' . CStudentPublicationComment::class . ' comment WHERE comment.publication = resource) AS commentsCount')
-            ->addSelect('(SELECT COUNT(c1.iid) FROM ' . CStudentPublication::class . ' c1 WHERE c1.publicationParent = resource AND c1.extensions IS NOT NULL AND c1.extensions <> \'\') AS correctionsCount')
-            ->addSelect('(SELECT MAX(c2.sentDate) FROM ' . CStudentPublication::class . ' c2 WHERE c2.publicationParent = resource) AS lastUpload')
+            ->addSelect('(SELECT COUNT(comment.iid) FROM '.CStudentPublicationComment::class.' comment WHERE comment.publication = resource) AS commentsCount')
+            ->addSelect('(SELECT COUNT(c1.iid) FROM '.CStudentPublication::class.' c1 WHERE c1.publicationParent = resource AND c1.extensions IS NOT NULL AND c1.extensions <> \'\') AS correctionsCount')
+            ->addSelect('(SELECT MAX(c2.sentDate) FROM '.CStudentPublication::class.' c2 WHERE c2.publicationParent = resource) AS lastUpload')
             ->join('resource.resourceNode', 'rn')
             ->join('rn.resourceLinks', 'rl')
             ->leftJoin(CStudentPublicationRelUser::class, 'rel', 'WITH', 'rel.publication = resource AND rel.user = :userId')
@@ -169,11 +169,13 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->andWhere('rl.course = :course')
             ->setParameter('course', $course)
             ->setParameter('userId', $userId)
-            ->orderBy('resource.sentDate', 'DESC');
+            ->orderBy('resource.sentDate', 'DESC')
+        ;
 
         if ($session) {
             $qb->andWhere('rl.session = :session')
-                ->setParameter('session', $session);
+                ->setParameter('session', $session)
+            ;
         } else {
             $qb->andWhere('rl.session IS NULL');
         }
@@ -204,7 +206,8 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->andWhere('sp.filetype = :filetype')
             ->andWhere('sp.publicationParent IS NULL')
             ->setParameter('course', $course)
-            ->setParameter('filetype', 'folder');
+            ->setParameter('filetype', 'folder')
+        ;
 
         if ($session) {
             $qb->setParameter('session', $session);
@@ -247,7 +250,8 @@ final class CStudentPublicationRepository extends ResourceRepository
                 ->andWhere('sp.publicationParent IN (:workIds)')
                 ->andWhere('sp.active IN (0, 1)')
                 ->setParameter('user', $user)
-                ->setParameter('workIds', $workIds);
+                ->setParameter('workIds', $workIds)
+            ;
 
             $submissionCount = (int) $qb->getQuery()->getSingleScalarResult();
 
@@ -256,7 +260,7 @@ final class CStudentPublicationRepository extends ResourceRepository
                 'firstname' => $user->getFirstname(),
                 'lastname' => $user->getLastname(),
                 'submissions' => $submissionCount,
-                'totalAssignments' => count($workIds),
+                'totalAssignments' => \count($workIds),
             ];
         }
 
@@ -282,20 +286,22 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->andWhere('resourceLink.visibility = :publishedVisibility')
             ->setParameter('assignmentId', $assignmentId)
             ->setParameter('filetype', 'file')
-            ->setParameter('publishedVisibility', 2);
+            ->setParameter('publishedVisibility', 2)
+        ;
 
         foreach ($order as $field => $direction) {
-            $qb->addOrderBy('submission.' . $field, $direction);
+            $qb->addOrderBy('submission.'.$field, $direction);
         }
 
         $qb->setFirstResult(($page - 1) * $itemsPerPage)
-            ->setMaxResults($itemsPerPage);
+            ->setMaxResults($itemsPerPage)
+        ;
 
         $paginator = new Paginator($qb);
 
         return [
             iterator_to_array($paginator),
-            count($paginator),
+            \count($paginator),
         ];
     }
 
@@ -313,20 +319,22 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->where('submission.publicationParent = :assignmentId')
             ->andWhere('submission.filetype = :filetype')
             ->setParameter('assignmentId', $assignmentId)
-            ->setParameter('filetype', 'file');
+            ->setParameter('filetype', 'file')
+        ;
 
         foreach ($order as $field => $direction) {
-            $qb->addOrderBy('submission.' . $field, $direction);
+            $qb->addOrderBy('submission.'.$field, $direction);
         }
 
         $qb->setFirstResult(($page - 1) * $itemsPerPage)
-            ->setMaxResults($itemsPerPage);
+            ->setMaxResults($itemsPerPage)
+        ;
 
         $paginator = new Paginator($qb);
 
         return [
             iterator_to_array($paginator),
-            count($paginator),
+            \count($paginator),
         ];
     }
 
@@ -337,7 +345,8 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->join('sp.user', 'u')
             ->where('sp.publicationParent = :assignmentId')
             ->andWhere('sp.active IN (0,1)')
-            ->setParameter('assignmentId', $assignmentId);
+            ->setParameter('assignmentId', $assignmentId)
+        ;
 
         return array_column($qb->getQuery()->getArrayResult(), 'id');
     }

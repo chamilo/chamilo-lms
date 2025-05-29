@@ -6,18 +6,18 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
-use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CreateStudentPublicationCommentAction extends BaseResourceFileAction
@@ -37,7 +37,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         $commentEntity = new CStudentPublicationComment();
 
         $hasFile = $request->files->get('uploadFile');
-        $hasComment = trim((string) $request->get('comment')) !== '';
+        $hasComment = '' !== trim((string) $request->get('comment'));
 
         if ($hasFile || $hasComment) {
             $result = $this->handleCreateCommentRequest(
@@ -73,7 +73,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         $user = $security->getUser();
 
         $qualification = $request->get('qualification', null);
-        $hasQualification = $qualification !== null;
+        $hasQualification = null !== $qualification;
 
         if ($hasFile || $hasComment) {
             $commentEntity->setUser($user);
@@ -90,7 +90,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         if ($hasQualification) {
             $submission->setQualification((float) $qualification);
             $submission->setQualificatorId($user->getId());
-            $submission->setDateOfQualification(new \DateTime());
+            $submission->setDateOfQualification(new DateTime());
 
             $em->persist($submission);
         }
@@ -102,8 +102,8 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
             $receiverUser = $submission->getUser();
             $senderUserId = $user?->getId() ?? 0;
 
-            $subject = sprintf('New feedback for your submission "%s"', $submission->getTitle());
-            $content = sprintf(
+            $subject = \sprintf('New feedback for your submission "%s"', $submission->getTitle());
+            $content = \sprintf(
                 'Hello %s, there is a new comment on your assignment submission "%s". Please review it in the platform.',
                 $receiverUser->getFullname(),
                 $submission->getTitle()

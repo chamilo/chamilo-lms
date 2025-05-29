@@ -7,12 +7,15 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CourseBundle\Entity\CLp;
-use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Doctrine\DBAL\Schema\Schema;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use ZipArchive;
 
 final class Version20250429144100 extends AbstractMigrationChamilo
 {
@@ -25,8 +28,8 @@ final class Version20250429144100 extends AbstractMigrationChamilo
     {
         $this->log('Starting SCORM migration...');
 
-        $assetRepo = $this->container->get( AssetRepository::class);
-        $lpRepo = $this->container->get(CLpRepository::class);;
+        $assetRepo = $this->container->get(AssetRepository::class);
+        $lpRepo = $this->container->get(CLpRepository::class);
 
         $courses = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c')->toIterable();
 
@@ -43,10 +46,12 @@ final class Version20250429144100 extends AbstractMigrationChamilo
                 ->setParameter('type', CLp::SCORM_TYPE)
                 ->setParameter('course', $course)
                 ->getQuery()
-                ->getResult();
+                ->getResult()
+            ;
 
             if (empty($scorms)) {
                 $this->log("No SCORMs found for course $courseDir");
+
                 continue;
             }
 
@@ -60,6 +65,7 @@ final class Version20250429144100 extends AbstractMigrationChamilo
 
                 if (!is_dir($folderPath)) {
                     $this->log("SCORM folder not found: $folderPath");
+
                     continue;
                 }
 
@@ -73,6 +79,7 @@ final class Version20250429144100 extends AbstractMigrationChamilo
 
                 if (!file_exists($tmpZipPath)) {
                     $this->log("Failed to create zip: $tmpZipPath");
+
                     continue;
                 }
 
@@ -82,14 +89,15 @@ final class Version20250429144100 extends AbstractMigrationChamilo
                 $asset->setCategory(Asset::SCORM)
                     ->setTitle($zipName)
                     ->setFile($file)
-                    ->setCompressed(true);
+                    ->setCompressed(true)
+                ;
 
                 $assetRepo->update($asset);
 
-                $this->log("Asset created: id=".$asset->getId());
+                $this->log('Asset created: id='.$asset->getId());
 
                 $assetRepo->unZipFile($asset, basename($path));
-                $this->log("Asset unzipped for: ".$asset->getTitle());
+                $this->log('Asset unzipped for: '.$asset->getTitle());
 
                 $lp->setAsset($asset);
                 $lp->setPath(basename($path).'/.');
@@ -105,20 +113,21 @@ final class Version20250429144100 extends AbstractMigrationChamilo
 
     private function zipFolder(string $folderPath, string $zipPath): void
     {
-        $zip = new \ZipArchive();
-        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+        $zip = new ZipArchive();
+        if (true !== $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
             $this->log("Cannot create ZIP file: $zipPath");
+
             return;
         }
 
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($folderPath, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::LEAVES_ONLY
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($folderPath, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::LEAVES_ONLY
         );
 
         foreach ($files as $file) {
             $filePath = $file->getRealPath();
-            $relativePath = substr($filePath, strlen($folderPath) + 1);
+            $relativePath = substr($filePath, \strlen($folderPath) + 1);
             $zip->addFile($filePath, $relativePath);
         }
 
@@ -127,7 +136,7 @@ final class Version20250429144100 extends AbstractMigrationChamilo
 
     private function log(string $message): void
     {
-        error_log('[SCORM Migration] ' . $message);
+        error_log('[SCORM Migration] '.$message);
     }
 
     public function down(Schema $schema): void {}

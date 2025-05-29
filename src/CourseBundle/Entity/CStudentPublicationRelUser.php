@@ -14,8 +14,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Entity\User;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Table(name: 'c_student_publication_rel_user')]
 #[ORM\Entity]
@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
         new Get(security: "is_granted('ROLE_USER')"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_SESSION_MANAGER')"),
-        new Delete(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_SESSION_MANAGER')")
+        new Delete(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_SESSION_MANAGER')"),
     ],
     normalizationContext: ['groups' => ['student_publication_rel_user:read']],
     denormalizationContext: ['groups' => ['student_publication_rel_user:write']],

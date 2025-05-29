@@ -122,12 +122,10 @@ const handlePanelHeaderClick = (event) => {
   const contentId = header.getAttribute("aria-controls")
   const contentPanel = document.getElementById(contentId)
 
-  if (contentPanel && contentPanel.querySelector(".p-toggleable-content")) {
-    if (!sidebarIsOpen.value) {
-      expandingDueToPanelClick.value = true
-      sidebarIsOpen.value = true
-      window.localStorage.setItem("sidebarIsOpen", "true")
-    }
+  if (contentPanel && !sidebarIsOpen.value) {
+    expandingDueToPanelClick.value = true
+    sidebarIsOpen.value = true
+    window.localStorage.setItem("sidebarIsOpen", "true")
   }
 }
 

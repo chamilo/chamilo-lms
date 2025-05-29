@@ -29,6 +29,7 @@ class AccessUrlRelPluginRepository extends ServiceEntityRepository
             ->setParameter('pluginTitle', $pluginTitle)
             ->setParameter('accessUrlId', $accessUrlId)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 }

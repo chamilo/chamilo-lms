@@ -567,7 +567,7 @@ const qrImageUrl = ref("")
 const redirectToCalendarList = () => {
   router.push({
     name: "AttendanceCalendarList",
-    params: { id: route.params.id },
+    params: { node: route.params.node, id: route.params.id },
     query: { sid, cid, gid },
   })
 }

@@ -93,6 +93,9 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, Strin
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
     protected ?int $duration = null;
 
+    #[ORM\Column(name: 'parent_media_id', type: 'integer', nullable: true)]
+    protected ?int $parentMediaId = null;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -363,6 +366,18 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, Strin
     public function setDuration(?int $duration): self
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getParentMediaId(): ?int
+    {
+        return $this->parentMediaId;
+    }
+
+    public function setParentMediaId(?int $parentMediaId): self
+    {
+        $this->parentMediaId = $parentMediaId;
 
         return $this;
     }

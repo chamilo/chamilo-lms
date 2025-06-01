@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Items from a learning path (LP).
  */
 #[ORM\Table(name: 'c_lp_item')]
-#[ORM\Index(name: 'lp_id', columns: ['lp_id'])]
+#[ORM\Index(columns: ['lp_id'], name: 'lp_id')]
 #[Gedmo\Tree(type: 'nested')]
 #[ORM\Entity(repositoryClass: CLpItemRepository::class)]
 class CLpItem implements Stringable

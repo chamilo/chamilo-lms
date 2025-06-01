@@ -1,9 +1,9 @@
 <template>
-  <div class="login-section">
-    <h2
-      v-t="'Sign in'"
-      class="login-section__title"
-    />
+  <div
+    v-if="!isInIframe"
+    class="login-section"
+  >
+    <h2 class="login-section__title">{{ t("Sign in") }}</h2>
 
     <form
       class="login-section__form p-input-filled"
@@ -84,6 +84,16 @@
 </template>
 
 <script setup>
+const isInIframe = window.self !== window.top
+if (isInIframe) {
+  try {
+    const parentUrl = window.top.location.href
+    window.top.location.href = "/login?redirect=" + encodeURIComponent(parentUrl)
+  } catch (e) {
+    window.top.location.href = "/login"
+  }
+}
+
 import { computed, ref } from "vue"
 import { useRouter } from "vue-router"
 import Button from "primevue/button"

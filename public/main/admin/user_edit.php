@@ -250,26 +250,21 @@ $group[] = $form->createElement(
 $form->addGroup($group, 'password', null, null, false);
 $form->addPasswordRule('password', 'password');
 
-// Status
-$status = [];
-$status[COURSEMANAGER] = get_lang('Trainer');
-$status[STUDENT] = get_lang('Learner');
-$status[DRH] = get_lang('Human Resources Manager');
-$status[SESSIONADMIN] = get_lang('Sessions administrator');
-$status[STUDENT_BOSS] = get_lang('Student\'s superior');
-$status[INVITEE] = get_lang('Invitee');
-
-$form->addSelect(
-    'status',
-    get_lang('Profile'),
-    $status,
+$form->addElement(
+    'select',
+    'roles',
+    get_lang('Roles'),
+    api_get_roles(),
     [
-        'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();',
+        'multiple' => 'multiple',
+        'size' => 8,
     ]
 );
 
-$display = isset($user_data['status']) && (STUDENT == $user_data['status'] || (isset($_POST['status']) && STUDENT == $_POST['status'])) ? 'block' : 'none';
+$display = 'none';
+if (isset($_POST['roles']) && is_array($_POST['roles'])) {
+    $display = in_array('ROLE_TEACHER', $_POST['roles']) || in_array('ROLE_SESSION_MANAGER', $_POST['roles']) ? 'block' : 'none';
+}
 
 // Platform admin
 if (api_is_platform_admin()) {
@@ -403,6 +398,9 @@ if (!$hideFields) {
         $user_data['expiration_date'] = api_get_local_time($expiration_date);
     }
 }
+$availableRoles = array_keys(api_get_roles());
+$userRoles = array_intersect($userObj->getRoles(), $availableRoles);
+$user_data['roles'] = $userRoles;
 $form->setDefaults($user_data);
 
 $error_drh = false;
@@ -417,8 +415,8 @@ if ($form->validate()) {
     }
 
     $is_user_subscribed_in_course = CourseManager::is_user_subscribed_in_course($user['user_id']);
-
-    if (DRH == $user['status'] && $is_user_subscribed_in_course) {
+    $roles = $user['roles'] ?? [];
+    if (in_array('ROLE_HR', $roles, true) && $is_user_subscribed_in_course) {
         $error_drh = true;
     } else {
         $picture_element = $form->getElement('picture');
@@ -441,12 +439,14 @@ if ($form->validate()) {
         $lastname = $user['lastname'];
         $firstname = $user['firstname'];
         $password = $user['password'];
-        $auth_source = $user['auth_source'] ?? $userInfo['auth_source'];
+        $auth_source = $user['auth_source'] ?? $userInfo['auth_source'] ?? [];
+        if (!is_array($auth_source)) {
+            $auth_source = [$auth_source];
+        }
         $official_code = $user['official_code'];
         $email = $user['email'];
         $phone = $user['phone'];
         $username = $user['username'] ?? $userInfo['username'];
-        $status = (int) $user['status'];
         $platform_admin = 0;
         // Only platform admin can change user status to admin.
         if (api_is_platform_admin()) {
@@ -463,16 +463,33 @@ if ($form->validate()) {
         }
         $active = isset($user['active']) ? (int) $user['active'] : USER_SOFT_DELETED;
 
-        //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1
-        if (1 == $platform_admin) {
-            $status = COURSEMANAGER;
-        }
-
         if ('true' === api_get_setting('login_is_email')) {
             $username = $email;
         }
 
         $template = $user['email_template_option'] ?? [];
+
+        $priorityRoles = [
+            'ROLE_SESSION_MANAGER' => SESSIONADMIN,
+            'ROLE_HR' => DRH,
+            'ROLE_TEACHER' => COURSEMANAGER,
+            'ROLE_STUDENT_BOSS' => STUDENT_BOSS,
+            'ROLE_INVITEE' => INVITEE,
+            'ROLE_STUDENT' => STUDENT,
+        ];
+
+        $status = STUDENT;
+        foreach ($priorityRoles as $role => $roleStatus) {
+            if (in_array($role, $roles, true)) {
+                $status = $roleStatus;
+                break;
+            }
+        }
+
+        //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1
+        if (1 == $platform_admin) {
+            $status = COURSEMANAGER;
+        }
 
         UserManager::update_user(
             $user_id,
@@ -499,7 +516,7 @@ if ($form->validate()) {
             $template
         );
 
-        $studentBossListSent = isset($user['student_boss']) ? $user['student_boss'] : [];
+        $studentBossListSent = $user['student_boss'] ?? [];
         UserManager::subscribeUserToBossList(
             $user_id,
             $studentBossListSent,
@@ -514,6 +531,13 @@ if ($form->validate()) {
             } else {
                 UserManager::removeUserAdmin($userObj);
             }
+        }
+
+        $repo = Container::getUserRepository();
+        $userEntity = $repo->find($user_id);
+        if ($userEntity) {
+            $userEntity->setRoles($roles);
+            $repo->updateUser($userEntity);
         }
 
         $extraFieldValue = new ExtraFieldValue('user');

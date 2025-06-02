@@ -2588,7 +2588,7 @@ switch ($action) {
                     $actions = [
                         [
                             'icon' => Display::getMdiIcon(ObjectIcon::USER_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Overview students subscribed to the class')),
-                            'url' => 'overview_class.php?usergroup='.$group['id'].'&course='.$course_id,
+                            'url' => 'overview?usergroup='.$group['id'].'&course='.$course_id,
                         ],
                         [
                             'icon' => Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove the class without removing students')),

@@ -1,9 +1,13 @@
 <?php
 
+//
+// FICHIER OBSOLETE
+// TODO Supprimer ce fichier
+//
+
 require_once __DIR__ . '/../inc/global.inc.php';
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 
 $idClasse = $_GET['usergroup'];
 $idCours = $_GET['course'];
@@ -67,7 +71,7 @@ if (curl_errno($ch)) {
                 echo "<b>" . get_lang('Users subscribed to the course') . "</b>";
                 echo "<ul style='list-style-type: disc; padding-left: 1.5vw;'>";
                 foreach ($usersSubscribedToCourse as $userSubscribedToCourse) {
-                    echo "<li>" . $userSubscribedToCourse[0]['firstname'] . ' ' . $userSubscribedToCourse[0]['lastname'] . ' ( ' . $userSubscribedToCourse[0]['email'] . " )</li>";
+                    echo "<li>" . ucfirst($userSubscribedToCourse[0]['firstname']) . ' ' . ucfirst($userSubscribedToCourse[0]['lastname']) . ' ( ' . $userSubscribedToCourse[0]['email'] . " )</li>";
                 }
                 echo "</ul>";
             }
@@ -76,7 +80,7 @@ if (curl_errno($ch)) {
                 echo "<b>" . get_lang('Users not subscribed to the course') . "</b>";
                 echo "<ul style='list-style-type: disc; padding-left: 1.5vw;'>";
                 foreach ($usersNotSubscribedToCourse as $userNotSubscribedToCourse) {
-                    echo "<li>" . $userNotSubscribedToCourse[0]['firstname'] . ' ' . $userNotSubscribedToCourse[0]['lastname'] . ' ( ' . $userNotSubscribedToCourse[0]['email'] . " )</li>";
+                    echo "<li>" . ucfirst($userNotSubscribedToCourse[0]['firstname']) . ' ' . ucfirst($userNotSubscribedToCourse[0]['lastname']) . ' ( ' . $userNotSubscribedToCourse[0]['email'] . " )</li>";
                 }
                 echo "</ul>";
             }
@@ -90,3 +94,4 @@ if (curl_errno($ch)) {
 curl_close($ch);
 
 Display::display_footer();
+

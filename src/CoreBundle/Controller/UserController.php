@@ -10,19 +10,41 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use UserGroupModel;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
-#[Route('/user')]
 class UserController extends AbstractController
 {
+    #[Route(path: '/main/user/overview', name: 'overview_class', methods: ['GET'])]
+    public function overview(Request $request): Response
+    {
+        $usergroupId = $request->query->get('usergroup');
+        $courseId = $request->query->get('course');
+
+        $usergroupLib = new UserGroupModel();
+        $usergroup = $usergroupLib->get($usergroupId);
+
+        $data = $usergroupLib->findUsersInAndOutOfCourse($usergroupId, $courseId);
+
+        return $this->render('@ChamiloCore/User/overview.html.twig', [
+            'courseId' => $courseId,
+            'usergroupName' => $usergroup['title'],
+            'usersSubscribedToCourse' => $data['usersSubscribedToCourse'],
+            'usersNotSubscribedToCourse' => $data['usersNotSubscribedToCourse'],
+            'error' => $data['errorMessage'],
+            'warning' => $data['warningMessage'],
+        ]);
+    }
+
     /**
      * Public profile.
      */
-    #[Route(path: '/{username}', methods: ['GET'], name: 'chamilo_core_user_profile')]
+    #[Route(path: '/user/{username}', name: 'chamilo_core_user_profile', methods: ['GET'])]
     public function profile(string $username, UserRepository $userRepository, IllustrationRepository $illustrationRepository): Response
     {
         $user = $userRepository->findByUsername($username);
@@ -38,4 +60,6 @@ class UserController extends AbstractController
             'illustration_url' => $url,
         ]);
     }
+
+
 }

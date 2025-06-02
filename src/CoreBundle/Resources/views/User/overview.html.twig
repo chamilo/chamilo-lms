@@ -1,0 +1,54 @@
+{% extends "@ChamiloCore/Layout/base-layout.html.twig" %}
+
+{% block chamilo_wrap %}
+
+    {%- include '@ChamiloCore/Layout/vue_setup.html.twig' %}
+
+    <section id="sectionMainContent" class="section-content">
+        {%- block content %}
+
+            <div style="display: flex; flex-direction: row; align-items: center">
+                <a href="/main/user/class.php?cid={{ courseId }}"
+                   title="{{ 'Go back to the list of classes subscribed to the course'|trans }}">
+                    <i class="ch-tool-icon mdi mdi-arrow-left-bold-box"
+                       style="font-size: 32px; display: flex"></i>
+                </a>
+                <p>{{ 'Overview class'|trans }} : {{ usergroupName }}</p>
+            </div>
+
+            <hr>
+
+            {% if error is not null %}
+                <div class="alert alert-danger">
+                    <p>{{ error }}</p>
+                </div>
+            {% endif %}
+
+            {% if warning is not null %}
+                <div class="alert alert-warning">
+                    <p>{{ warning }}</p>
+                </div>
+            {% endif %}
+
+            {% if usersSubscribedToCourse|length > 0 %}
+                <b>{{ 'Users subscribed to this course'|trans }}</b>
+                <ul style='list-style-type: disc; padding-left: 1.5vw;'>
+                    {% for user in usersSubscribedToCourse %}
+                        <li>{{ user.firstname }} {{ user.lastname }} ( {{ user.email }} )</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if usersNotSubscribedToCourse|length > 0 %}
+                <b>{{ 'Users not subscribed to this course'|trans }}</b>
+                <ul style='list-style-type: disc; padding-left: 1.5vw;'>
+                    {% for user in usersNotSubscribedToCourse %}
+                        <li>{{ user.firstname }} {{ user.lastname }} ( {{ user.email }} )</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+        {% endblock %}
+    </section>
+
+{% endblock %}

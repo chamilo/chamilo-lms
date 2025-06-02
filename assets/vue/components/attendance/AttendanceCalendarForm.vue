@@ -22,8 +22,6 @@
         v-model="formData.repeatType"
         :label="t('Repeat Type')"
         :options="repeatTypeOptions"
-        option-label="label"
-        option-value="value"
         required
       />
 
@@ -61,8 +59,6 @@
       v-model="formData.group"
       :label="t('Group')"
       :options="groupOptions"
-      option-label="label"
-      option-value="value"
       required
     />
 

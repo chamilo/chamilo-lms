@@ -5,7 +5,7 @@ import BaseCalendar from "../basecomponents/BaseCalendar.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
 import BaseDialogConfirmCancel from "../basecomponents/BaseDialogConfirmCancel.vue"
-import BaseDropdown from "../basecomponents/BaseDropdown.vue"
+import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseRadioButtons from "../basecomponents/BaseRadioButtons.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
@@ -136,24 +136,7 @@ provide("isCustomizing", isCustomizing)
           ref="menu"
           :model="menuItems"
         />
-        <BaseDropdown
-          v-model="dropdown"
-          :label="t('Dropdown')"
-          :options="[
-            {
-              label: t('Option 1'),
-              value: 'option_1',
-            },
-            {
-              label: t('Option 2'),
-              value: 'option_2',
-            },
-            {
-              label: t('Option 3'),
-              value: 'option_3',
-            },
-          ]"
-          class="w-36"
+        <BaseSelect
           input-id="dropdown"
           name="dropdown"
           option-label="label"

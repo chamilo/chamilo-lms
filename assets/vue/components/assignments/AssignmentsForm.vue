@@ -30,7 +30,7 @@
       />
 
       <div v-if="chkAddToGradebook">
-        <BaseDropdrown
+        <BaseSelect
           v-model="v$.gradebookId.$model"
           :error-text="v$.gradebookId.$errors.map((error) => error.$message).join('<br>')"
           :is-invalid="v$.gradebookId.$error"
@@ -92,7 +92,7 @@
         name="add_to_calendar"
       />
 
-      <BaseDropdrown
+      <BaseSelect
         v-model="v$.allowTextAssignment.$model"
         :error-text="v$.allowTextAssignment.$errors.map((error) => error.$message).join('<br>')"
         :is-invalid="v$.allowTextAssignment.$error"
@@ -122,7 +122,7 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
-import BaseDropdrown from "../basecomponents/BaseDropdown.vue"
+import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 import useVuelidate from "@vuelidate/core"
 import { computed, reactive, ref, watchEffect } from "vue"

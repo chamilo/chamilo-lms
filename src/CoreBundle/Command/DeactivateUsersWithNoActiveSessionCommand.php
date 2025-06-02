@@ -32,7 +32,8 @@ class DeactivateUsersWithNoActiveSessionCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Run without saving changes');
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Run without saving changes')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -42,7 +43,7 @@ class DeactivateUsersWithNoActiveSessionCommand extends Command
         $now = new DateTime('now', new DateTimeZone('UTC'));
 
         $io->title('Deactivating users without active sessions...');
-        $io->text('Checking users as of ' . $now->format('Y-m-d H:i:s'));
+        $io->text('Checking users as of '.$now->format('Y-m-d H:i:s'));
 
         // Subquery: user IDs with at least one session where end date is in the future
         $subQuery = $this->entityManager->createQueryBuilder()
@@ -50,7 +51,8 @@ class DeactivateUsersWithNoActiveSessionCommand extends Command
             ->from('Chamilo\CoreBundle\Entity\SessionRelUser', 'sru')
             ->join('sru.session', 's')
             ->where('s.displayEndDate > :now')
-            ->getDQL();
+            ->getDQL()
+        ;
 
         // Main query: get all active users not in the subquery
         $qb = $this->entityManager->createQueryBuilder();
@@ -61,11 +63,12 @@ class DeactivateUsersWithNoActiveSessionCommand extends Command
             ->andWhere($qb->expr()->notIn('u.id', $subQuery))
             ->setParameter('now', $now)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         $deactivatedCount = 0;
 
-        /* @var User $user */
+        /** @var User $user */
         foreach ($usersToDeactivate as $user) {
             $user->setActive(0);
             $this->entityManager->persist($user);

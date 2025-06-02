@@ -290,7 +290,8 @@ final class CStudentPublicationRepository extends ResourceRepository
         ;
 
         $qb->andWhere('submission.user = :user')
-            ->setParameter('user', $user);
+            ->setParameter('user', $user)
+        ;
 
         foreach ($order as $field => $direction) {
             $qb->addOrderBy('submission.'.$field, $direction);
@@ -364,6 +365,7 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->setParameter('assignmentId', $assignmentId)
             ->setParameter('filetype', 'file')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 }

@@ -2484,9 +2484,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function hasAuthSourceByAuthentication(string $authentication): bool
     {
         return $this->authSources->exists(
-            fn ($key, $authSource) =>
-                $authSource instanceof UserAuthSource &&
-                $authSource->getAuthentication() === $authentication
+            fn ($key, $authSource) => $authSource instanceof UserAuthSource
+                && $authSource->getAuthentication() === $authentication
         );
     }
 

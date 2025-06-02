@@ -13,7 +13,6 @@
       :initial-value="[item.startDate, item.endDate]"
       :is-invalid="v$.item.startDate.$invalid || v$.item.endDate.$invalid"
       :label="t('Date')"
-      show-icon
       show-time
       type="range"
     />

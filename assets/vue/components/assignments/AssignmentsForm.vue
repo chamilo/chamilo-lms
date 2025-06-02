@@ -59,7 +59,7 @@
         name="enableExpiryDate"
       />
 
-      <BaseInputDate
+      <BaseCalendar
         v-if="chkExpiresOn"
         id="expires_on"
         v-model="v$.expiresOn.$model"
@@ -76,14 +76,13 @@
         name="enableEndDate"
       />
 
-      <BaseInputDate
+      <BaseCalendar
         v-if="chkEndsOn"
         id="ends_on"
         v-model="v$.endsOn.$model"
         :error-text="v$.endsOn.$errors.map((error) => error.$message).join('<br>')"
         :is-invalid="v$.endsOn.$error"
         :label="t('Ends at (completely closed)')"
-        show-time
       />
 
       <BaseCheckbox
@@ -118,7 +117,7 @@
 </template>
 
 <script setup>
-import BaseInputDate from "../basecomponents/BaseInputDate.vue"
+import BaseCalendar from "../basecomponents/BaseCalendar.vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"

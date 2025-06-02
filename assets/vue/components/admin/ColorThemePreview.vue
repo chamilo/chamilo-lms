@@ -1,7 +1,7 @@
 <script setup>
 import { provide, ref } from "vue"
 import { useI18n } from "vue-i18n"
-import BaseInputDate from "../basecomponents/BaseInputDate.vue"
+import BaseCalendar from "../basecomponents/BaseCalendar.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
 import BaseDialogConfirmCancel from "../basecomponents/BaseDialogConfirmCancel.vue"
@@ -213,10 +213,10 @@ provide("isCustomizing", isCustomizing)
         :label="t('This is a form with an error')"
         :model-value="null"
       />
-      <BaseInputDate
-        id="date"
+      <BaseCalendar
+        id="dates"
         :label="t('Date')"
-        class="w-32"
+        show-time
       />
     </div>
 

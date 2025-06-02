@@ -64,8 +64,8 @@ const redirectToCreateAttendance = () => {
 
 const redirectToEditAttendance = (attendance) => {
   router.push({
-    name: "EditAttendance",
-    params: { id: attendance.id },
+    name: "AttendanceEditAttendance",
+    params: { node: getNodeId(attendance.resourceNode), id: attendance.id },
     query: { cid, sid, gid },
   })
 }
@@ -134,6 +134,12 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
   } finally {
     isLoading.value = false
   }
+}
+
+function getNodeId(resourceNode) {
+  if (!resourceNode || !resourceNode["@id"]) return 0
+  const parts = resourceNode["@id"].split("/")
+  return parseInt(parts[parts.length - 1])
 }
 
 onMounted(fetchAttendances)

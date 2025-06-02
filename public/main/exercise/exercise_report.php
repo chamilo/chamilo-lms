@@ -478,7 +478,7 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::getMdiIcon('content-save', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).'</a>';
         $actions .= Display::url(
-            Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Recalculate Results')),
+            Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Recalculate results')),
             api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
         );
         $actions .= Display::url(
@@ -520,7 +520,7 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
             );
         }
         $actions .= '<a class="btn btn--plain" href="question_stats.php?'.api_get_cidreq().'&id='.$exercise_id.'">'.
-            get_lang('QuestionStats').'</a>';
+            get_lang('Question stats').'</a>';
     }
 } else {
     $actions .= '<a href="exercise.php">'.

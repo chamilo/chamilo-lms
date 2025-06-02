@@ -210,10 +210,10 @@ const sessionState = reactive({
   showSessionDialog: false,
 })
 
-async function getCalendarEvents({ startStr, endStr }) {
+async function getCalendarEvents({ start, end }) {
   const params = {
-    "startDate[after]": startStr,
-    "endDate[before]": endStr,
+    "startDate[after]": start.toISOString(),
+    "endDate[before]": end.toISOString(),
   }
 
   if (course.value) {

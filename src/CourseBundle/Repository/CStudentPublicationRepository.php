@@ -289,6 +289,9 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->setParameter('publishedVisibility', 2)
         ;
 
+        $qb->andWhere('submission.user = :user')
+            ->setParameter('user', $user);
+
         foreach ($order as $field => $direction) {
             $qb->addOrderBy('submission.'.$field, $direction);
         }

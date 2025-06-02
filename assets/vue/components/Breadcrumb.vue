@@ -129,9 +129,10 @@ function watchResourceNodeLoader() {
       const currentRouteName = route.name || ""
       const isAssignmentRoute = currentRouteName.startsWith("Assignment")
       const isAttendanceRoute = currentRouteName.startsWith("Attendance")
+      const isDocumentRoute = currentRouteName.startsWith("Documents")
       const nodeId = route.params.node || route.query.node
 
-      if ((isAssignmentRoute || isAttendanceRoute) && nodeId) {
+      if ((isAssignmentRoute || isAttendanceRoute || isDocumentRoute) && nodeId) {
         try {
           store.commit("resourcenode/setResourceNode", null)
           const resourceApiId = nodeId.startsWith("/api/") ? nodeId : `/api/resource_nodes/${nodeId}`
@@ -172,6 +173,19 @@ function addDocumentBreadcrumb() {
       route: { name: "DocumentsList", params: { node: folder.nodeId }, query: route.query },
     })
   })
+
+  const currentMatched = route.matched.find((r) => r.name === route.name)
+  const label = currentMatched.meta?.breadcrumb
+  if (label !== "") {
+    const finalLabel = label || formatToolName(currentMatched.name)
+    const alreadyShown = itemList.value.some((item) => item.label === finalLabel)
+    if (!alreadyShown) {
+      itemList.value.push({
+        label: t(finalLabel),
+        route: { name: currentMatched.name, params: route.params, query: route.query },
+      })
+    }
+  }
 }
 
 // Watch route changes to dynamically rebuild the breadcrumb trail

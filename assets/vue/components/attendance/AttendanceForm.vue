@@ -199,9 +199,9 @@ const submitForm = async () => {
     } else {
       const created = await attendanceService.createAttendance(postData)
       router.push({
-        name: "AddCalendarEvent",
+        name: "AttendanceAddCalendarEvent",
         params: {
-          node: parentResourceNodeId.value,
+          node: getNodeId(created.resourceNode),
           id: created.id,
         },
         query: {
@@ -214,5 +214,11 @@ const submitForm = async () => {
   } catch (error) {
     console.error("Error submitting attendance:", error)
   }
+}
+
+function getNodeId(resourceNode) {
+  if (!resourceNode || !resourceNode["@id"]) return 0
+  const parts = resourceNode["@id"].split("/")
+  return parseInt(parts[parts.length - 1])
 }
 </script>

@@ -14,8 +14,25 @@ export function useSidebarMenu() {
   const enrolledStore = useEnrolledStore()
   const { items: socialItems } = useSocialMenuItems()
   const showTabsSetting = platformConfigStore.getSetting("platform.show_tabs")
-  const showCatalogue = platformConfigStore.getSetting("platform.catalog_show_courses_sessions")
-  const allowStudentCatalogue = platformConfigStore.getSetting("display.allow_students_to_browse_courses") !== "false"
+  const rawShowCatalogue = platformConfigStore.getSetting("platform.catalog_show_courses_sessions")
+  const showCatalogue = Number(rawShowCatalogue)
+  const isAnonymous = !securityStore.isAuthenticated
+  const isPrivilegedUser = securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
+  const allowStudentCatalogue = computed(() => {
+    if (isAnonymous) {
+      return platformConfigStore.getSetting("course.course_catalog_published") !== "false"
+    }
+
+    if (isPrivilegedUser) {
+      return true
+    }
+
+    if (securityStore.isStudent) {
+      return platformConfigStore.getSetting("display.allow_students_to_browse_courses") !== "false"
+    }
+
+    return false
+  })
 
   const isActive = (item) => {
     if (item.route) {
@@ -82,7 +99,7 @@ export function useSidebarMenu() {
   const menuItemsAfterMyCourse = computed(() => {
     const items = []
 
-    if (allowStudentCatalogue && showTabsSetting.indexOf("catalogue") > -1) {
+    if (allowStudentCatalogue.value && showTabsSetting.indexOf("catalogue") > -1) {
       if (showCatalogue === 0 || showCatalogue === 2) {
         items.push(createMenuItem("catalogue", "mdi-bookmark-multiple", "Explore more courses", "CatalogueCourses"))
       }

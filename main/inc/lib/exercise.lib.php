@@ -7497,7 +7497,7 @@ EOT;
     {
         $replacements = [
             Database::get_course_table(TABLE_QUIZ_TEST) => [
-                'iid' => ['title', 'description'],
+                'iid' => ['title', 'description', 'sound', 'text_when_finished_failure'],
             ],
             Database::get_course_table(TABLE_QUIZ_QUESTION) => [
                 'iid' => ['question', 'description'],
@@ -7505,7 +7505,316 @@ EOT;
             Database::get_course_table(TABLE_QUIZ_ANSWER) => [
                 'iid' => ['answer', 'comment'],
             ],
+            Database::get_course_table(TABLE_ANNOUNCEMENT) => [
+                'iid' => ['title', 'content'],
+            ],
+            Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT) => [
+                'iid' => ['path', 'comment'],
+            ],
+            Database::get_course_table(TABLE_ATTENDANCE) => [
+                'iid' => ['name', 'description', 'attendance_qualify_title'],
+            ],
+            Database::get_course_table(TABLE_BLOGS) => [
+                'iid' => ['blog_name', 'blog_subtitle'],
+            ],
+            Database::get_course_table(TABLE_BLOGS_ATTACHMENT) => [
+                'iid' => ['path', 'comment'],
+            ],
+            Database::get_course_table(TABLE_BLOGS_COMMENTS) => [
+                'iid' => ['title', 'comment'],
+            ],
+            Database::get_course_table(TABLE_BLOGS_POSTS) => [
+                'iid' => ['title', 'full_text'],
+            ],
+            Database::get_course_table(TABLE_BLOGS_TASKS) => [
+                'iid' => ['title', 'description'],
+            ],
+            Database::get_course_table(TABLE_AGENDA) => [
+                'iid' => ['title', 'content', 'comment'],
+            ],
+            Database::get_course_table(TABLE_AGENDA_ATTACHMENT) => [
+                'iid' => ['path', 'comment', 'filename'],
+            ],
+            Database::get_course_table(TABLE_COURSE_DESCRIPTION) => [
+                'iid' => ['title', 'content'],
+            ],
+            Database::get_course_table(TABLE_DOCUMENT) => [
+                'iid' => ['path', 'comment'],
+            ],
+            Database::get_course_table(TABLE_DROPBOX_FEEDBACK) => [
+                'iid' => ['feedback'],
+            ],
+            Database::get_course_table(TABLE_DROPBOX_FILE) => [
+                'iid' => ['title', 'description'],
+            ],
+            Database::get_course_table(TABLE_DROPBOX_POST) => [
+                'iid' => ['feedback'],
+            ],
+            Database::get_course_table(TABLE_FORUM_ATTACHMENT) => [
+                'iid' => ['path', 'comment', 'filename'],
+            ],
+            Database::get_course_table(TABLE_FORUM_CATEGORY) => [
+                'iid' => ['cat_title', 'cat_comment'],
+            ],
+            Database::get_course_table(TABLE_FORUM) => [
+                'iid' => ['forum_title', 'forum_comment', 'forum_image'],
+            ],
+            Database::get_course_table(TABLE_FORUM_POST) => [
+                'iid' => ['post_title', 'post_text', 'poster_name'],
+            ],
+            Database::get_course_table(TABLE_FORUM_THREAD) => [
+                'iid' => ['thread_title', 'thread_poster_name', 'thread_title_qualify'],
+            ],
+            Database::get_course_table(TABLE_GLOSSARY) => [
+                'iid' => ['name', 'description'],
+            ],
+            Database::get_course_table(TABLE_GROUP_CATEGORY) => [
+                'iid' => ['title', 'description'],
+            ],
+            Database::get_course_table(TABLE_GROUP) => [
+                'iid' => ['name', 'description', 'secret_directory'],
+            ],
+            Database::get_course_table(TABLE_LINK) => [
+                'iid' => ['description'],
+            ],
+            Database::get_course_table(TABLE_LINK_CATEGORY) => [
+                'iid' => ['category_title', 'description'],
+            ],
+            Database::get_course_table(TABLE_LP_MAIN) => [
+                'iid' => ['name', 'ref', 'description', 'path', 'content_license', 'preview_image', 'theme'],
+            ],
+            Database::get_course_table(TABLE_LP_CATEGORY) => [
+                'iid' => ['name'],
+            ],
+            Database::get_course_table(TABLE_LP_ITEM) => [
+                'iid' => ['prerequisite', 'description', 'title', 'parameters', 'launch_data', 'terms'],
+            ],
+            Database::get_course_table(TABLE_LP_ITEM_VIEW) => [
+                'iid' => ['suspend_data', 'lesson_location'],
+            ],
+            Database::get_course_table(TABLE_NOTEBOOK) => [
+                'iid' => ['title', 'description'],
+            ],
+            Database::get_course_table(TABLE_ONLINE_LINK) => [
+                'iid' => ['name'],
+            ],
+            Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY) => [
+                'iid' => ['title', 'description'],
+            ],
+            Database::get_course_table(TABLE_ROLE) => [
+                'iid' => ['role_name', 'role_comment'],
+            ],
+            Database::get_course_table(TABLE_STUDENT_PUBLICATION) => [
+                'iid' => ['title', 'title_correction', 'description'],
+            ],
+            Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT) => [
+                'iid' => ['comment', 'file'],
+            ],
+            Database::get_course_table(TABLE_SURVEY) => [
+                'iid' => ['title', 'subtitle', 'surveythanks', 'invite_mail', 'reminder_mail', 'mail_subject', 'access_condition', 'form_fields'],
+            ],
+            Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP) => [
+                'iid' => ['name', 'description'],
+            ],
+            Database::get_course_table(TABLE_SURVEY_QUESTION) => [
+                'iid' => ['survey_question', 'survey_question_comment'],
+            ],
+            Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION) => [
+                'iid' => ['option_text'],
+            ],
+            Database::get_course_table(TABLE_THEMATIC) => [
+                'iid' => ['content', 'title'],
+            ],
+            Database::get_course_table(TABLE_THEMATIC_ADVANCE) => [
+                'iid' => ['content'],
+            ],
+            Database::get_course_table(TABLE_THEMATIC_PLAN) => [
+                'iid' => ['description'],
+            ],
+            Database::get_course_table(TABLE_TOOL_LIST) => [
+                'iid' => ['description'],
+            ],
+            Database::get_course_table(TABLE_TOOL_INTRO) => [
+                'iid' => ['intro_text'],
+            ],
+            Database::get_course_table(TABLE_USER_INFO_DEF) => [
+                'iid' => ['comment'],
+            ],
+            Database::get_course_table(TABLE_WIKI) => [
+                'iid' => ['title', 'content', 'comment', 'progress', 'linksto'],
+            ],
+            Database::get_course_table(TABLE_WIKI_CONF) => [
+                'iid' => ['feedback1', 'feedback2', 'feedback3'],
+            ],
+            Database::get_course_table(TABLE_WIKI_DISCUSS) => [
+                'iid' => ['comment'],
+            ],
+            Database::get_main_table(TABLE_CAREER) => [
+                'id' => ['name', 'description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_CHAT) => [
+                'id' => ['message'],
+            ],
+            Database::get_main_table(TABLE_MAIN_CLASS) => [
+                'id' => ['name'],
+            ],
+            Database::get_main_table(TABLE_MAIN_COURSE_REQUEST) => [
+                'iid' => ['description', 'title', 'objetives', 'target_audience'],
+            ],
+            'course_type' => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE) => [
+                'id' => ['message', 'subject', 'event_type_name'],
+            ],
+            Database::get_main_table(TABLE_GRADE_MODEL) => [
+                'id' => ['name', 'description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY) => [
+                'id' => ['name', 'description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE) => [
+                'id' => ['path_certificate'],
+            ],
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION) => [
+                'id' => ['description', 'name'],
+            ],
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG) => [
+                'id' => ['name', 'description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_LEGAL) => [
+                'id' => ['content', 'changes'],
+            ],
+            Database::get_main_table(TABLE_MESSAGE) => [
+                'id' => ['content'],
+            ],
+            Database::get_main_table(TABLE_MESSAGE_ATTACHMENT) => [
+                'id' => ['path', 'comment', 'filename'],
+            ],
+            Database::get_main_table(TABLE_NOTIFICATION) => [
+                'id' => ['content'],
+            ],
+            Database::get_main_table(TABLE_PERSONAL_AGENDA) => [
+                'id' => ['title', 'text'],
+            ],
+            Database::get_main_table(TABLE_PROMOTION) => [
+                'id' => ['description'],
+            ],
+            'room' => [
+                'id' => ['description'],
+            ],
+            'sequence_condition' => [
+                'id' => ['description'],
+            ],
+            'sequence_method' => [
+                'id' => ['description', 'formula'],
+            ],
+            'sequence_rule' => [
+                'id' => ['description'],
+            ],
+            'sequence_type_entity' => [
+                'id' => ['description'],
+            ],
+            'sequence_variable' => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SESSION) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SHARED_SURVEY) => [
+                'survey_id' => ['subtitle', 'surveythanks', 'intro'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION) => [
+                'question_id' => ['survey_question', 'survey_question_comment'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION) => [
+                'question_option_id' => ['option_text'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SKILL) => [
+                'id' => ['name', 'description', 'criteria'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SKILL_PROFILE) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SKILL_REL_USER) => [
+                'id' => ['argumentation'],
+            ],
+            'skill_rel_user_comment' => [
+                'id' => ['feedback_text'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS) => [
+                'id' => ['content'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR) => [
+                'id' => ['content'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SYSTEM_TEMPLATE) => [
+                'id' => ['comment', 'content'],
+            ],
+            Database::get_main_table(TABLE_MAIN_TEMPLATES) => [
+                'id' => ['description', 'image'],
+            ],
+            Database::get_main_table(TABLE_TICKET_CATEGORY) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_TICKET_MESSAGE) => [
+                'id' => ['message'],
+            ],
+            Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS) => [
+                'id' => ['filename', 'path'],
+            ],
+            Database::get_main_table(TABLE_TICKET_PRIORITY) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_TICKET_PROJECT) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_TICKET_STATUS) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_TICKET_TICKET) => [
+                'id' => ['message'],
+            ],
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT) => [
+                'id' => ['answer', 'teacher_comment', 'filename'],
+            ],
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING) => [
+                'id' => ['teacher_comment'],
+            ],
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT) => [
+                'id' => ['default_value'],
+            ],
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) => [
+                'id' => ['data_tracking', 'questions_to_check'],
+            ],
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY) => [
+                'id' => ['content'],
+            ],
+            'track_e_open' => [
+                'id' => ['open_remote_host', 'open_agent', 'open_referer'],
+            ],
+            Database::get_main_table(TABLE_TRACK_STORED_VALUES) => [
+                'id' => ['sv_value'],
+            ],
+            Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK) => [
+                'id' => ['sv_value'],
+            ],
+            Database::get_main_table(TABLE_MAIN_USER_API_KEY) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_USERGROUP) => [
+                'id' => ['name', 'description', 'picture', 'url'],
+            ],
+            Database::get_main_table(TABLE_MAIN_BLOCK) => [
+                'id' => ['name', 'description', 'path'],
+            ]
         ];
+
+        if (api_get_configuration_value('attendance_allow_comments')) {
+            $replacements['c_attendance_result_comment'] = [
+                'iid' => ['comment'],
+            ];
+        }
 
         $changes = array_map(
             fn($table) => 0,

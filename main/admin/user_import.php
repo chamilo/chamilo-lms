@@ -50,8 +50,10 @@ Options -Indexes';
                 $fp = fopen($data.'/.htaccess', 'w');
                 if ($fp) {
                     fwrite($fp, $block);
+                    fclose($fp);
+                } else {
+                    error_log("Failed to open .htaccess file in $data for writing.");
                 }
-                fclose($fp);
             }
         }
     }

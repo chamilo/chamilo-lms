@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -259,8 +260,8 @@ class SequenceResourceRepository extends ServiceEntityRepository
                             $course = $sessionCourse->getCourse();
                             $categories = $gradebookCategoryRepo->findBy(
                                 [
-                                    'courseCode' => $course->getCode(),
-                                    'sessionId' => $resource->getId(),
+                                    'course' => $course,
+                                    'session' => $resource,
                                     'isRequirement' => true,
                                 ]
                             );
@@ -316,12 +317,14 @@ class SequenceResourceRepository extends ServiceEntityRepository
     public function checkCourseRequirements(int $userId, Course $course, int $sessionId = 0): bool
     {
         $em = $this->getEntityManager();
-
+        $session = $sessionId > 0
+            ? $em->getRepository(Session::class)->find($sessionId)
+            : null;
         $gradebookCategoryRepo = $em->getRepository(GradebookCategory::class);
         $categories = $gradebookCategoryRepo->findBy(
             [
-                'courseCode' => $course->getCode(),
-                'sessionId' => $sessionId,
+                'course' => $course,
+                'session' => $session,
                 'isRequirement' => true,
             ]
         );
@@ -364,6 +367,11 @@ class SequenceResourceRepository extends ServiceEntityRepository
     public function checkSequenceAreCompleted(array $sequences)
     {
         foreach ($sequences as $sequence) {
+
+            if (!isset($sequence['requirements'])) {
+                continue;
+            }
+
             $status = true;
 
             foreach ($sequence['requirements'] as $item) {
@@ -413,5 +421,157 @@ class SequenceResourceRepository extends ServiceEntityRepository
         }
 
         return $sessionVertices;
+    }
+
+    public function getDependents(int $resourceId, int $type): array
+    {
+        return $this->getRequirementsOrDependents($resourceId, $type, 'dependents');
+    }
+
+    public function checkDependentsForUser(array $sequences, int $type, int $userId, int $sessionId = 0): array
+    {
+        return $this->checkRequirementsOrDependentsForUser(
+            $sequences,
+            $type,
+            'dependents',
+            $userId,
+            $sessionId
+        );
+    }
+
+    private function getRequirementsOrDependents(int $resourceId, int $resourceType, string $itemType): array
+    {
+        $em = $this->getEntityManager();
+
+        $sequencesResource = $this->findBy(['resourceId' => $resourceId, 'type' => $resourceType]);
+        $result = [];
+
+        foreach ($sequencesResource as $sequenceResource) {
+            if (!$sequenceResource->hasGraph()) {
+                continue;
+            }
+
+            $sequence = $sequenceResource->getSequence();
+            $graph = $sequence->getUnSerializeGraph();
+            $vertex = $graph->getVertex($resourceId);
+
+            $edges = $itemType === 'requirements'
+                ? $vertex->getVerticesEdgeFrom()
+                : $vertex->getVerticesEdgeTo();
+
+            $sequenceInfo = [
+                'name' => $sequence->getTitle(),
+                $itemType => [],
+            ];
+
+            foreach ($edges as $edge) {
+                $vertexId = $edge->getId();
+                $resource = null;
+
+                switch ($resourceType) {
+                    case SequenceResource::SESSION_TYPE:
+                        $resource = $em->getRepository(Session::class)->find($vertexId);
+                        break;
+                    case SequenceResource::COURSE_TYPE:
+                        $resource = $em->getRepository(Course::class)->find($vertexId);
+                        break;
+                }
+
+                if (null === $resource) {
+                    continue;
+                }
+
+                $sequenceInfo[$itemType][$vertexId] = $resource;
+            }
+
+            $result[$sequence->getId()] = $sequenceInfo;
+        }
+
+        return $result;
+    }
+
+    private function checkRequirementsOrDependentsForUser(
+        array $sequences,
+        int $resourceType,
+        string $itemType,
+        int $userId,
+        int $sessionId = 0
+    ): array {
+        $sequenceList = [];
+        $em = $this->getEntityManager();
+        $gradebookCategoryRepo = $em->getRepository(GradebookCategory::class);
+
+        $sessionUserList = [];
+        $checkOnlySameSession = true; //api_get_configuration_value('course_sequence_valid_only_in_same_session');
+
+        if (SequenceResource::COURSE_TYPE === $resourceType) {
+            if ($checkOnlySameSession) {
+                $sessionUserList = [$sessionId];
+            } else {
+                $sessions = $em->getRepository(SessionRelUser::class)->findBy(['user' => $userId]);
+                foreach ($sessions as $sessionRelUser) {
+                    $sessionUserList[] = $sessionRelUser->getSession()->getId();
+                }
+            }
+        }
+
+        foreach ($sequences as $sequenceId => $sequence) {
+            $item = ['name' => $sequence['name'], $itemType => []];
+
+            foreach ($sequence[$itemType] as $resource) {
+                switch ($resourceType) {
+                    case SequenceResource::SESSION_TYPE:
+                        $id = $resource->getId();
+                        $resourceItem = ['name' => $resource->getName(), 'status' => true];
+
+                        /* @var SessionRelCourse $sessionCourse */
+                        foreach ($resource->getCourses() as $sessionCourse) {
+                            $course = $sessionCourse->getCourse();
+                            $session = $sessionCourse->getSession();
+                            $categories = $gradebookCategoryRepo->findBy([
+                                'course' => $course,
+                                'session' => $session,
+                                'isRequirement' => true,
+                            ]);
+
+                            foreach ($categories as $category) {
+                                $resourceItem['status'] = $resourceItem['status'] && Category::userFinishedCourse(
+                                        $userId,
+                                        $category
+                                    );
+                            }
+                        }
+                        break;
+
+                    case SequenceResource::COURSE_TYPE:
+                        $id = $resource->getId();
+                        $status = $this->checkCourseRequirements($userId, $resource, $sessionId);
+
+                        if (!$status) {
+                            foreach (SessionManager::get_session_by_course($id) as $session) {
+                                if (in_array($session['id'], $sessionUserList)) {
+                                    $status = $this->checkCourseRequirements($userId, $resource, $session['id']);
+                                    if ($status) break;
+                                }
+                            }
+                        }
+
+                        $resourceItem = [
+                            'name' => $resource->getTitle(),
+                            'code' => $resource->getCode(),
+                            'status' => $status,
+                        ];
+                        break;
+                }
+
+                if (!empty($id)) {
+                    $item[$itemType][$id] = $resourceItem;
+                }
+            }
+
+            $sequenceList[$sequenceId] = $item;
+        }
+
+        return $sequenceList;
     }
 }

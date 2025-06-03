@@ -143,10 +143,18 @@
         </div>
       </div>
 
-      <CourseIntroduction
-        ref="courseIntroEl"
-        :is-allowed-to-edit="isAllowedToEdit"
-      />
+      <div class="flex flex-col lg:flex-row gap-6">
+        <div class="w-full lg:w-[80%]">
+          <CourseIntroduction
+            ref="courseIntroEl"
+            :is-allowed-to-edit="isAllowedToEdit"
+          />
+        </div>
+
+        <div class="w-full lg:w-[20%] lg:border-l lg:pl-4">
+          <NextCourseSequence />
+        </div>
+      </div>
 
       <div
         v-if="isAllowedToEdit"
@@ -249,6 +257,7 @@ import CourseIntroduction from "../../components/course/CourseIntroduction.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCourseSettings } from "../../store/courseSettingStore"
+import NextCourseSequence from "../../components/course/NextCourseSequence.vue"
 
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()

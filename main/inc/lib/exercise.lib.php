@@ -7495,76 +7495,63 @@ EOT;
 
     public static function replaceTermsInContent(string $search, string $replace): array
     {
-        $quizCount = 0;
-        $questionCount = 0;
-        $answerCount = 0;
-        $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "SELECT iid, title, description FROM $tableQuiz WHERE title LIKE '%$search%' OR description LIKE '%$search%' ORDER BY iid";
-        $res = Database::query($sql);
-
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_assoc($res)) {
-                $title = preg_replace('#'.$search.'#',$replace, $row['title']);
-                $description = preg_replace('#'.$search.'#',$replace, $row['description']);
-                $sqlReplace = "UPDATE $tableQuiz SET title = '$title', description = '$description' WHERE iid = ".$row['iid'];
-
-                try {
-                    Database::query($sqlReplace);
-                } catch (Exception $e) {
-                    echo "Error executing $sqlReplace".PHP_EOL;
-                    Database::handleError($e);
-                }
-
-                $quizCount++;
-            }
-        }
-
-        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT iid, question, description FROM $tableQuestion WHERE question LIKE '%$search%' OR description LIKE '%$search%' ORDER BY iid";
-        $res = Database::query($sql);
-
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_assoc($res)) {
-                $question = preg_replace('#'.$search.'#',$replace, $row['question']);
-                $description = preg_replace('#'.$search.'#',$replace, $row['description']);
-                $sqlReplace = "UPDATE $tableQuestion SET question = '$question', description = '$description' WHERE iid = ".$row['iid'];
-
-                try {
-                    Database::query($sqlReplace);
-                } catch (Exception $e) {
-                    echo "Error executing $sqlReplace".PHP_EOL;
-                    Database::handleError($e);
-                }
-
-                $questionCount++;
-            }
-        }
-
-        $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $sql = "SELECT iid, answer, comment FROM $tableAnswer WHERE answer LIKE '%$search%' OR comment LIKE '%$search%' ORDER BY iid";
-        $res = Database::query($sql);
-
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_assoc($res)) {
-                $answer = preg_replace('#'.$search.'#',$replace, $row['answer']);
-                $comment = preg_replace('#'.$search.'#',$replace, $row['comment']);
-                $sqlReplace = "UPDATE $tableAnswer SET answer = '$answer', comment = '$comment' WHERE iid = ".$row['iid'];
-
-                try {
-                    Database::query($sqlReplace);
-                } catch (Exception $e) {
-                    echo "Error executing $sqlReplace".PHP_EOL;
-                    Database::handleError($e);
-                }
-
-                $answerCount++;
-            }
-        }
-
-        return [
-            'quizzes' => $quizCount,
-            'questions' => $questionCount,
-            'answers' => $answerCount,
+        $replacements = [
+            Database::get_course_table(TABLE_QUIZ_TEST) => [
+                'iid' => ['title', 'description'],
+            ],
+            Database::get_course_table(TABLE_QUIZ_QUESTION) => [
+                'iid' => ['question', 'description'],
+            ],
+            Database::get_course_table(TABLE_QUIZ_ANSWER) => [
+                'iid' => ['answer', 'comment'],
+            ],
         ];
+
+        $changes = array_map(
+            fn($table) => 0,
+            $replacements
+        );
+
+        foreach ($replacements as $table => $replacement) {
+            foreach ($replacement as $idColumn => $columns) {
+                $keys = array_map(fn($column) => "$column LIKE %?%", $columns);
+                $values = array_fill(0, count($columns), $search);
+
+                $result = Database::select(
+                    [$idColumn, ...$columns],
+                    $table,
+                    [
+                        'where' => [
+                            implode(' OR ', $keys) => $values,
+                        ],
+                        'order' => "$idColumn ASC"
+                    ]
+                );
+
+                foreach ($result as $row) {
+                    $attributes = array_combine(
+                        $columns,
+                        array_map(
+                            fn($column) => preg_replace('#'.$search.'#', $replace, $row[$column]),
+                            $columns
+                        )
+                    );
+
+                    try {
+                        Database::update(
+                            $table,
+                            $attributes,
+                            ["$idColumn = ?" => $row[$idColumn]]
+                        );
+                    } catch (Exception $e) {
+                        Database::handleError($e);
+                    }
+
+                    $changes[$table]++;
+                }
+            }
+        }
+
+        return $changes;
     }
 }

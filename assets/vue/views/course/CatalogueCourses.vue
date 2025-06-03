@@ -246,16 +246,30 @@ const applyAdvancedSearch = () => {
   visibleCount.value = rowsPerScroll
 }
 
+const isAnonymous = !securityStore.isAuthenticated
+const isPrivilegedUser =
+  securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
+
 const allowCatalogueAccess = computed(() => {
-  const allowStudents = platformConfigStore.getSetting("display.allow_students_to_browse_courses") !== "false"
-  const allowPublished = platformConfigStore.getSetting("course.course_catalog_published") !== "false"
-  return allowStudents && allowPublished
+  if (isAnonymous) {
+    return platformConfigStore.getSetting("course.course_catalog_published") !== "false"
+  }
+
+  if (isPrivilegedUser) {
+    return true
+  }
+
+  if (securityStore.isStudent) {
+    return platformConfigStore.getSetting("display.allow_students_to_browse_courses") !== "false"
+  }
+
+  return false
 })
 
 if (!allowCatalogueAccess.value) {
   if (!securityStore.user?.id) {
     router.push({ name: "Login" })
-  } else if (securityStore.user?.status === 5) {
+  } else if (securityStore.isStudent) {
     router.push({ name: "Home" })
   } else {
     router.push({ name: "Index" })

@@ -8,21 +8,20 @@ namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
-use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Delete;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-
 
 #[ApiResource(
     operations: [
         new Get(),
         new Delete(),
         new Post(),
-        new GetCollection()
+        new GetCollection(),
     ],
     normalizationContext: ['groups' => ['student_publication_rel_document:read']],
     denormalizationContext: ['groups' => ['student_publication_rel_document:write']]

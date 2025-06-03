@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
+use Event;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class PluginServiceHelper
@@ -20,7 +21,7 @@ class PluginServiceHelper
     public function loadLegacyPlugin(string $pluginName): ?object
     {
         $projectDir = $this->parameterBag->get('kernel.project_dir');
-        $pluginPath = $projectDir . '/public/plugin/' . $pluginName . '/src/' . $pluginName . '.php';
+        $pluginPath = $projectDir.'/public/plugin/'.$pluginName.'/src/'.$pluginName.'.php';
         $pluginClass = $pluginName;
 
         if (!file_exists($pluginPath)) {
@@ -69,7 +70,7 @@ class PluginServiceHelper
 
         $plugin = $this->loadLegacyPlugin('Positioning');
 
-        if (!$plugin || $plugin->get('block_course_if_initial_exercise_not_attempted') !== 'true') {
+        if (!$plugin || 'true' !== $plugin->get('block_course_if_initial_exercise_not_attempted')) {
             return false;
         }
 
@@ -79,7 +80,7 @@ class PluginServiceHelper
             return false;
         }
 
-        $results = \Event::getExerciseResultsByUser(
+        $results = Event::getExerciseResultsByUser(
             $userId,
             (int) $initialData['exercise_id'],
             $courseId,

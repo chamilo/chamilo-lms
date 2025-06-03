@@ -115,6 +115,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'session' => [
                 [
+                    'name' => 'session_list_view_remaining_days',
+                    'title' => 'Show remaining days in My Sessions',
+                    'comment' => 'If enabled, the session dates on the "My Sessions" page will be replaced by the number of remaining days.',
+                ],
+                [
                     'name' => 'add_users_by_coach',
                     'title' => 'Register users by Coach',
                     'comment' => 'Coach users may create users to the platform and subscribe users to a session.',

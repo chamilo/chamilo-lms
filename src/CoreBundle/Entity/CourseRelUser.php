@@ -53,7 +53,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(PartialSearchOrFilter::class, properties: [
     'user.username',
     'user.firstname',
-    'user.lastname'
+    'user.lastname',
 ])]
 class CourseRelUser implements Stringable
 {

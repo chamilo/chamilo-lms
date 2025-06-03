@@ -57,7 +57,7 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
 
-        $isUpdate = $publication->getIid() !== null;
+        $isUpdate = null !== $publication->getIid();
 
         if (!$assignment) {
             $assignment = new CStudentPublicationAssignment();
@@ -68,21 +68,21 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
 
         $payload = $context['request']->toArray();
 
-        if (array_key_exists('qualification', $payload)) {
+        if (\array_key_exists('qualification', $payload)) {
             $publication->setQualification((float) $payload['qualification']);
 
             $user = $this->security->getUser();
             if ($user instanceof User) {
                 $publication->setQualificatorId($user->getId());
-                $publication->setDateOfQualification(new \DateTime());
+                $publication->setDateOfQualification(new DateTime());
             }
         }
 
         if (isset($payload['expiresOn'])) {
-            $assignment->setExpiresOn(new \DateTime($payload['expiresOn']));
+            $assignment->setExpiresOn(new DateTime($payload['expiresOn']));
         }
         if (isset($payload['endsOn'])) {
-            $assignment->setEndsOn(new \DateTime($payload['endsOn']));
+            $assignment->setEndsOn(new DateTime($payload['endsOn']));
         }
 
         if (!$isUpdate || $publication->getQualification() > 0) {
@@ -96,12 +96,13 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
             $assignment->setEventCalendarId(0);
         }
 
-        if ($assignment->getIid() !== null) {
+        if (null !== $assignment->getIid()) {
             $publication->setHasProperties($assignment->getIid());
         }
         $publication
             ->setViewProperties(true)
-            ->setUser($currentUser);
+            ->setUser($currentUser)
+        ;
 
         $this->entityManager->flush();
 

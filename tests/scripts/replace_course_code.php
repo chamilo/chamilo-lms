@@ -95,6 +95,7 @@ function replaceCodes(array $list): Generator
         yield "Replacing course code in exercises content";
 
         ExerciseLib::replaceTermsInContent("/courses/$currentDirectory/", "/courses/$newDirectory/");
+        ExerciseLib::replaceTermsInContent("cidReq=$currentCode", "cidReq=$newCode");
 
         yield "Replacing course code in HTML files";
 

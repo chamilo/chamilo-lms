@@ -7497,7 +7497,7 @@ EOT;
     {
         $replacements = [
             Database::get_course_table(TABLE_QUIZ_TEST) => [
-                'iid' => ['title', 'description', 'sound', 'text_when_finished_failure'],
+                'iid' => ['title', 'description', 'sound'],
             ],
             Database::get_course_table(TABLE_QUIZ_QUESTION) => [
                 'iid' => ['question', 'description'],
@@ -7659,7 +7659,7 @@ EOT;
                 'id' => ['name'],
             ],
             Database::get_main_table(TABLE_MAIN_COURSE_REQUEST) => [
-                'iid' => ['description', 'title', 'objetives', 'target_audience'],
+                'id' => ['description', 'title', 'objetives', 'target_audience'],
             ],
             'course_type' => [
                 'id' => ['description'],
@@ -7782,16 +7782,16 @@ EOT;
                 'id' => ['teacher_comment'],
             ],
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT) => [
-                'id' => ['default_value'],
+                'default_id' => ['default_value'],
             ],
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) => [
-                'id' => ['data_tracking', 'questions_to_check'],
+                'exe_id' => ['data_tracking', 'questions_to_check'],
             ],
             Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY) => [
                 'id' => ['content'],
             ],
             'track_e_open' => [
-                'id' => ['open_remote_host', 'open_agent', 'open_referer'],
+                'open_id' => ['open_remote_host', 'open_agent', 'open_referer'],
             ],
             Database::get_main_table(TABLE_TRACK_STORED_VALUES) => [
                 'id' => ['sv_value'],
@@ -7814,6 +7814,10 @@ EOT;
             $replacements['c_attendance_result_comment'] = [
                 'iid' => ['comment'],
             ];
+        }
+
+        if (api_get_configuration_value('exercise_text_when_finished_failure')) {
+            $replacements[Database::get_course_table(TABLE_QUIZ_TEST)]['iid'][] = 'text_when_finished_failure';
         }
 
         $changes = array_map(

@@ -159,6 +159,42 @@ class BbbPlugin extends Plugin
         $entityManager->flush();
     }
 
+    public function canCurrentUserSeeGlobalConferenceLink(): bool
+    {
+        $allowedStatuses = $this->get('global_conference_allow_roles') ?? [];
+
+        if (empty($allowedStatuses)) {
+            return api_is_platform_admin();
+        }
+
+        foreach ($allowedStatuses as $status) {
+            switch ((int) $status) {
+                case PLATFORM_ADMIN:
+                    if (api_is_platform_admin()) {
+                        return true;
+                    }
+                    break;
+                case COURSEMANAGER:
+                    if (api_is_teacher()) {
+                        return true;
+                    }
+                    break;
+                case STUDENT:
+                    if (api_is_student()) {
+                        return true;
+                    }
+                    break;
+                case STUDENT_BOSS:
+                    if (api_is_student_boss()) {
+                        return true;
+                    }
+                    break;
+            }
+        }
+
+        return false;
+    }
+
     public function get_name(): string
     {
         return 'Bbb';

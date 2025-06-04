@@ -45,6 +45,9 @@ class GradebookCertificate
     #[ORM\Column(name: 'downloaded_at', type: 'datetime', nullable: true)]
     protected ?DateTime $downloadedAt = null;
 
+    #[ORM\Column(name: 'publish', type: 'boolean', options: ['default' => false])]
+    protected bool $publish = false;
+
     public function setScoreCertificate(float $scoreCertificate): self
     {
         $this->scoreCertificate = $scoreCertificate;
@@ -140,5 +143,17 @@ class GradebookCertificate
         $this->user = $user;
 
         return $this;
+    }
+
+    public function setPublish(bool $publish): self
+    {
+        $this->publish = $publish;
+
+        return $this;
+    }
+
+    public function getPublish(): bool
+    {
+        return $this->publish;
     }
 }

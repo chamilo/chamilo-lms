@@ -28,7 +28,8 @@ function replaceCodes(array $list): Generator
         $currentCodeExists = CourseManager::course_code_exists($currentCode);
 
         if (!$currentCodeExists) {
-            yield "Current course code '$currentCode' not exists";
+            yield "Current course code '$currentCode' does not exist.";
+            yield "Skipping conversion of '$currentCode' to '$newCode'. Please update codes mapping table to provide the correct code to be converted.";
 
             continue;
         }
@@ -36,7 +37,8 @@ function replaceCodes(array $list): Generator
         $newCodeExists = CourseManager::course_code_exists($newCode);
 
         if ($newCodeExists) {
-            yield "New course code '$currentCode' already exists";
+            yield "New course code '$newCode' already exists.";
+            yield "Skipping conversion of '$currentCode' to '$newCode'. Please update mapping table to provide a different code to be converted to.";
 
             continue;
         }

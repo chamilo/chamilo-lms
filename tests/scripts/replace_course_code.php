@@ -43,12 +43,30 @@ function replaceCodes(array $list): Generator
             continue;
         }
 
+        $currentCourseInfo = api_get_course_info($currentCode);
+        $currentDirectory = $currentCourseInfo['directory'];
+
+        $newCourseKeys = AddCourse::define_course_keys($newCode);
+
+        $newCode = $newCourseKeys['currentCourseCode'];
+        $newVisualCode = $newCourseKeys['currentCourseId'];
+        $newDirectory = $newCourseKeys['currentCourseRepository'];
+
         $newCode = CourseManager::generate_course_code($newCode);
 
-        yield "New code to use for '$currentCode' is '$newCode'";
+        yield "New code to use for '$currentCode' is '$newCode' and its directory is '$newDirectory'";
+
+        Database::update(
+            'course',
+            [
+                'code' => $newCode,
+                'visual_code' => $newVisualCode,
+                'directory' => $newDirectory,
+            ],
+            ['code = ?' => [$currentCode]]
+        );
 
         $tablesWithCode = [
-            'course' => ['code', 'visual_code', 'directory'],
             'course_rel_class' => ['course_code'],
             'course_request' => ['code'],
             'gradebook_category' => ['course_code'],
@@ -76,20 +94,20 @@ function replaceCodes(array $list): Generator
 
         yield "Replacing course code in exercises content";
 
-        ExerciseLib::replaceTermsInContent("/courses/$currentCode/", "/courses/$newCode/");
+        ExerciseLib::replaceTermsInContent("/courses/$currentDirectory/", "/courses/$newDirectory/");
 
         yield "Replacing course code in HTML files";
 
         $coursePath = api_get_path(SYS_COURSE_PATH);
 
-        exec('find '.$coursePath.$currentCode.'/document/ -type f -name "*.html" -exec sed -i '."'s#/courses/$currentCode/#/courses/$newCode/#g' {} +");
+        exec('find '.$coursePath.$currentDirectory.'/document/ -type f -name "*.html" -exec sed -i '."'s#/courses/$currentDirectory/#/courses/$newDirectory/#g' {} +");
 
         yield "Renaming course directory";
 
         $fs = new Filesystem();
         $fs->rename(
-            $coursePath.$currentCode,
-            $coursePath.$newCode
+            $coursePath.$currentDirectory,
+            $coursePath.$newDirectory
         );
     }
 

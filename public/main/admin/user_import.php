@@ -525,7 +525,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_fil
             $ext_import_file == $allowed_file_mimetype[0]
         ) {
             Session::erase('user_import_data_'.$userId);
-            $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
+            $users = Import::csvToArray($_FILES['import_file']['tmp_name'], ',');
             $users = parse_csv_data(
                 $users,
                 $_FILES['import_file']['name'],
@@ -747,24 +747,21 @@ if ('true' === api_get_setting('admin.plugin_redirection_enabled')) {
 }
 
 $content = '<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
-<blockquote>
+<blockquote class="w-full overflow-auto bg-gray-100 border-l-4 border-gray-400 p-4 rounded-md text-sm font-mono">
 <pre>
-<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;language;PhoneNumber;Status;ExpiryDate;<span style="color:red;">';
-
+<b>LastName</b>,<b>FirstName</b>,<b>Email</b>,UserName,Password,AuthSource,OfficialCode,language,PhoneNumber,Status,ExpiryDate,<span class="text-red-500">';
 if (count($list) > 0) {
-    $content .= implode(';', $list).';';
+    $content .= implode(',', $list).',';
 }
-$content .= '</span>Courses;Sessions;ClassId;
-<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;'.implode(
+$content .= '</span>Courses,Sessions,ClassId
+<b>xxx</b>,<b>xxx</b>,<b>xxx</b>,xxx,xxx,'.implode(
         '/',
         $defined_auth_sources
-    ).';xxx;english/spanish/(other);xxx;user/teacher/drh;0000-00-00 00:00:00;<span style="color:red;">';
-
+    ).',xxx,english/spanish/(other),xxx,user/teacher/drh,0000-00-00 00:00:00,<span class="text-red-500">';
 if (count($list_reponse) > 0) {
-    $content .= implode(';', $list_reponse).';';
+    $content .= implode(',', $list_reponse).',';
 }
-$content .= '
-</span>xxx1|xxx2|xxx3;sessionId|sessionId|sessionId;1;<br />
+$content .= '</span>xxx1|xxx2|xxx3,sessionId|sessionId|sessionId,1<br />
 </pre>
 </blockquote>
 <p>'.get_lang('The XML file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>

@@ -18,6 +18,8 @@ class IndexController extends BaseController
     #[Route('/sessions', name: 'sessions')]
     #[Route('/sessions/{extra}', name: 'sessions_options')]
     #[Route('/admin/configuration/colors', name: 'configuration_colors')]
+    #[Route('/admin/gdpr/third-parties', name: 'gdpr_thirdparties')]
+    #[Route('/admin/gdpr/data-exchanges', name: 'gdpr_data_exchanges')]
     #[Route('/home', name: 'home', options: ['expose' => true], methods: ['GET', 'POST'])]
     #[Route('/login', name: 'login', options: ['expose' => true], methods: ['GET', 'POST'])]
     #[Route('/faq', name: 'faq', options: ['expose' => true], methods: ['GET', 'POST'])]

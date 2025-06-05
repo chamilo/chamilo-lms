@@ -269,7 +269,7 @@ watchEffect(() => {
   }
 
   // Generic tool fallback
-  if (mainToolName && !["documents", "assignments", "attendance"].includes(mainToolName)) {
+  if (mainToolName && !["documents", "assignments", "attendance", "admin"].includes(mainToolName)) {
     const matchedRoutes = route.matched
     const toolBase = matchedRoutes[0]
     const currentMatched = matchedRoutes[matchedRoutes.length - 1]

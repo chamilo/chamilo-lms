@@ -121,7 +121,7 @@
 
       <div class="mt-auto pt-2">
         <router-link
-          v-if="course.visibility === 3 || (course.visibility === 2 && isUserInCourse)"
+          v-if="isUserInCourse && (course.visibility === 2 || course.visibility === 3)"
           :to="{ name: 'CourseHome', params: { id: course.id } }"
         >
           <Button
@@ -132,7 +132,15 @@
         </router-link>
 
         <Button
-          v-else-if="course.visibility === 2 && course.subscribe && !isUserInCourse"
+          v-else-if="hasDependencies && props.currentUserId"
+          :label="$t('Check requirements')"
+          icon="mdi mdi-shield-check"
+          class="w-full p-button-warning"
+          @click="showDependenciesModal = true"
+        />
+
+        <Button
+          v-else-if="course.subscribe && props.currentUserId"
           :label="$t('Subscribe')"
           icon="pi pi-sign-in"
           class="w-full"
@@ -140,7 +148,7 @@
         />
 
         <Button
-          v-else-if="course.visibility === 2 && !course.subscribe && !isUserInCourse"
+          v-else-if="course.visibility === 2 && !course.subscribe && props.currentUserId"
           :label="$t('Subscription not allowed')"
           icon="pi pi-ban"
           disabled
@@ -165,6 +173,11 @@
       </div>
     </div>
   </div>
+  <CatalogueRequirementModal
+    v-model="showDependenciesModal"
+    :course-id="course.id"
+    :session-id="course.sessionId || 0"
+  />
   <Dialog
     v-model:visible="showDescriptionDialog"
     :header="course.title"
@@ -179,15 +192,19 @@
 <script setup>
 import Rating from "primevue/rating"
 import Button from "primevue/button"
-import { computed, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import courseRelUserService from "../../services/courseRelUserService"
 import { useRoute, useRouter } from "vue-router"
 import { useNotification } from "../../composables/notification"
 import Dialog from "primevue/dialog"
 import { usePlatformConfig } from "../../store/platformConfig"
+import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
+import courseService from "../../services/courseService"
 
 const platformConfigStore = usePlatformConfig()
 const showDescriptionDialog = ref(false)
+const showDependenciesModal = ref(false)
+const hasDependencies = ref(false)
 
 const allowDescription = computed(
   () => platformConfigStore.getSetting("course.show_courses_descriptions_in_catalog") !== "false",
@@ -332,5 +349,17 @@ const showInfoPopup = computed(() => {
     return false
   }
   return value === "course_description_popup"
+})
+
+onMounted(async () => {
+  try {
+    const { sequenceList: list } = await courseService.getNextCourse(
+      props.course.id,
+      props.course.sessionId || 0
+    )
+    hasDependencies.value = list.length > 0
+  } catch (e) {
+    console.warn(`[CatalogueCourseCard] Failed to load dependencies for course ${props.course.id}`, e)
+  }
 })
 </script>

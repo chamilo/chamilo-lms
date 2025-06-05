@@ -12,6 +12,18 @@
         )
       }}
     </Message>
+    <Message
+      :closable="false"
+      class="mt-2"
+      icon="pi pi-exclamation-triangle"
+      severity="warn"
+    >
+      {{
+        t(
+          "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR.",
+        )
+      }}
+    </Message>
 
     <BaseToolbar showTopBorder>
       <div class="flex justify-between w-full items-center">
@@ -203,10 +215,6 @@ const previewTerms = () => {
   previewContent.value = termData.value.content
   dialogVisible.value = true
 }
-const closePreview = () => {
-  dialogVisible.value = false
-}
-
 function backToList() {
   router.push({ name: "TermsConditionsList" })
 }

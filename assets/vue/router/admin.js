@@ -28,5 +28,23 @@ export default {
       meta: { requiresAdmin: true, showBreadcrumb: true },
       component: () => import("../views/admin/DataExchangeManager.vue"),
     },
+    {
+      name: "TermsConditionsList",
+      path: "terms-conditions",
+      meta: { requiresAdmin: true, showBreadcrumb: true, },
+      component: () => import("../views/terms/TermsList.vue"),
+    },
+    {
+      name: "TermsConditionsEdit",
+      path: "terms-conditions/edit",
+      meta: { requiresAdmin: true, showBreadcrumb: true, },
+      component: () => import("../views/terms/TermsEdit.vue"),
+    },
+    {
+      name: "TermsConditionsView",
+      path: "terms-conditions/view",
+      meta: { requiresAdmin: true, showBreadcrumb: true, },
+      component: () => import("../views/terms/Terms.vue"),
+    },
   ],
 }

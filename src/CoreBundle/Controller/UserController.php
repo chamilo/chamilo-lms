@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use CourseManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,15 +30,19 @@ class UserController extends AbstractController
         $usergroupLib = new UserGroupModel();
         $usergroup = $usergroupLib->get($usergroupId);
 
+        $courseLib = new CourseManager();
+        $courseName = $courseLib->getCourseNameFromCode($courseLib->get_course_code_from_course_id($courseId));
+
         $data = $usergroupLib->findUsersInAndOutOfCourse($usergroupId, $courseId);
 
         return $this->render('@ChamiloCore/User/overview.html.twig', [
             'courseId' => $courseId,
+            'courseName' => $courseName,
             'usergroupName' => $usergroup['title'],
             'usersSubscribedToCourse' => $data['usersSubscribedToCourse'],
             'usersNotSubscribedToCourse' => $data['usersNotSubscribedToCourse'],
-            'error' => $data['errorMessage'],
-            'warning' => $data['warningMessage'],
+            'error' => $data['error'],
+            'warning' => $data['warning'],
         ]);
     }
 
@@ -60,6 +65,5 @@ class UserController extends AbstractController
             'illustration_url' => $url,
         ]);
     }
-
 
 }

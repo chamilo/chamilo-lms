@@ -3108,8 +3108,8 @@ class UserGroupModel extends Model
         $usersInUsergroup = $usergroupModel->get_users_by_usergroup($usergroupId);
 
         $data = [];
-        $data['errorMessage'] = null;
-        $data['warningMessage'] = null;
+        $data['error'] = null;
+        $data['warning'] = null;
         $data['usersSubscribedToCourse'] = [];
         $data['usersNotSubscribedToCourse'] = [];
 
@@ -3133,13 +3133,12 @@ class UserGroupModel extends Model
                     $usersSubscribedToCourse[] = $tempUser;
                 } else {
                     $usersNotSubscribedToCourse[] = $tempUser;
-
                 }
             }
             $data['usersSubscribedToCourse'] = $usersSubscribedToCourse;
             $data['usersNotSubscribedToCourse'] = $usersNotSubscribedToCourse;
         } else {
-            $data['warningMessage'] = get_lang('No user is subscribed to this class');
+            $data['warning'] = get_lang('No user is subscribed to this class');
         }
 
         return $data;

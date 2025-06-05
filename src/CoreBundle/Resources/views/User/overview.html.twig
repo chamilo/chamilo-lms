@@ -5,15 +5,44 @@
     {%- include '@ChamiloCore/Layout/vue_setup.html.twig' %}
 
     <section id="sectionMainContent" class="section-content">
+
         {%- block content %}
 
-            <div style="display: flex; flex-direction: row; align-items: center">
+            <div>
+                <div class="app-breadcrumb">
+                    <nav class="p-breadcrumb p-component">
+                        <ol class="p-breadcrumb-list">
+                            <li class="p-menuitem">
+                                <a href="/courses" class="p-menuitem-link">My courses</a>
+                            </li>
+                            /
+                            <li class="p-menuitem">
+                                <a href="/course/{{ courseId }}/home" class="p-menuitem-link">{{ courseName }}</a>
+                            </li>
+                            /
+                            <li class="p-menuitem">
+                                <a href="/main/user/user.php?cid={{ courseId }}" class="p-menuitem-link">Users</a>
+                            </li>
+                            /
+                            <li class="p-menuitem">
+                                <a href="/main/user/class.php?cid={{ courseId }}" class="p-menuitem-link">Classes</a>
+                            </li>
+                            /
+                            <li class="p-menuitem">
+                                {{ usergroupName }}
+                            </li>
+                            /
+                            <li class="p-menuitem">
+                                Overview
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
                 <a href="/main/user/class.php?cid={{ courseId }}"
                    title="{{ 'Go back to the list of classes subscribed to the course'|trans }}">
-                    <i class="ch-tool-icon mdi mdi-arrow-left-bold-box"
-                       style="font-size: 32px; display: flex"></i>
+                    <i class="ch-tool-icon mdi mdi-arrow-left-bold-box" style="font-size: 32px"></i>
                 </a>
-                <p>{{ 'Overview class'|trans }} : {{ usergroupName }}</p>
+                <h2>{{ 'Overview class'|trans }} : {{ usergroupName }}</h2>
             </div>
 
             <hr>
@@ -30,25 +59,50 @@
                 </div>
             {% endif %}
 
+            {% if (usersSubscribedToCourse|length + usersNotSubscribedToCourse|length) > 0 %}
+                <div style="display: flex">
+                    <input style="height: 32px; width: 20vw" id="search-input" type="text"
+                           placeholder="Barre de recherche">
+                    <i class="ch-tool-icon mdi mdi-account-search" style="font-size: 32px"></i>
+                </div>
+            {% endif %}
+
             {% if usersSubscribedToCourse|length > 0 %}
-                <b>{{ 'Users subscribed to this course'|trans }}</b>
-                <ul style='list-style-type: disc; padding-left: 1.5vw;'>
-                    {% for user in usersSubscribedToCourse %}
-                        <li>{{ user.firstname }} {{ user.lastname }} ( {{ user.email }} )</li>
-                    {% endfor %}
-                </ul>
+                <div>
+                    <b>{{ 'Users subscribed to this course'|trans }}</b>
+                    <ul style='list-style-type: disc; padding-left: 1.5vw;'>
+                        {% for user in usersSubscribedToCourse %}
+                            <li class="user-display">{{ user.firstname }} {{ user.lastname }} ( {{ user.email }} )</li>
+                        {% endfor %}
+                    </ul>
+                </div>
             {% endif %}
 
             {% if usersNotSubscribedToCourse|length > 0 %}
-                <b>{{ 'Users not subscribed to this course'|trans }}</b>
-                <ul style='list-style-type: disc; padding-left: 1.5vw;'>
-                    {% for user in usersNotSubscribedToCourse %}
-                        <li>{{ user.firstname }} {{ user.lastname }} ( {{ user.email }} )</li>
-                    {% endfor %}
-                </ul>
+                <div>
+                    <b>{{ 'Users not subscribed to this course'|trans }}</b>
+                    <ul style='list-style-type: disc; padding-left: 1.5vw;'>
+                        {% for user in usersNotSubscribedToCourse %}
+                            <li class="user-display">{{ user.firstname }} {{ user.lastname }} ( {{ user.email }} )</li>
+                        {% endfor %}
+                    </ul>
+                </div>
             {% endif %}
 
         {% endblock %}
+
     </section>
+
+    <script>
+      document.getElementById("search-input").addEventListener("input", function(e) {
+        const searchTerm = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        const users = document.querySelectorAll(".user-display")
+
+        users.forEach(user => {
+          const text = user.textContent.split("(")[0].trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+          user.style.display = text.includes(searchTerm) ? "" : "none"
+        })
+      })
+    </script>
 
 {% endblock %}

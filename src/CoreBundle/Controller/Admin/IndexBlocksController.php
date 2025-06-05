@@ -671,6 +671,11 @@ class IndexBlocksController extends BaseController
             'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_list_consent.php']),
             'label' => $this->translator->trans('User list'),
         ];
+        $items[] = [
+            'class' => 'item-gdpr-parties',
+            'route' => ['name' => 'ThirdPartyManager'],
+            'label' => $this->translator->trans('Third parties (GDPR)'),
+        ];
 
         return $items;
     }

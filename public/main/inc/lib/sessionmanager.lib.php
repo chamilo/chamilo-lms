@@ -2052,7 +2052,6 @@ class SessionManager
             'track_e_attempt_qualify',
             'track_e_access_complete',
             'track_e_uploads',
-            'track_course_ranking',
             'c_dropbox_file',
             'c_forum_thread_qualify_log',
             'c_dropbox_post',

@@ -73,6 +73,7 @@
     >
       <div class="p-fluid">
         <BaseCalendar
+          id="date_time"
           v-model="selectedEventDate"
           :label="t('Date')"
           :show-time="true"

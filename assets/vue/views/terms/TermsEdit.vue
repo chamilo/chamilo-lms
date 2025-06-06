@@ -27,14 +27,15 @@
 
     <BaseToolbar showTopBorder>
       <div class="flex justify-between w-full items-center">
-        <BaseDropdown
+        <BaseSelect
           v-model="selectedLanguage"
           :options="languages"
           class="w-96 mb-0"
-          inputId="language-dropdown"
+          input-id="language-dropdown"
           label="Language"
           name="language"
-          optionLabel="name"
+          option-value="id"
+          option-label="name"
           placeholder="Select a language"
         />
         <BaseButton
@@ -135,7 +136,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import Message from "primevue/message"
-import BaseDropdown from "../../components/basecomponents/BaseDropdown.vue"
+import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import { useI18n } from "vue-i18n"
@@ -165,7 +166,7 @@ const loadTermsByLanguage = async () => {
   if (!selectedLanguage.value) return
   termsLoaded.value = false
   try {
-    const response = await legalService.findAllByLanguage(selectedLanguage.value.id)
+    const response = await legalService.findAllByLanguage(selectedLanguage.value)
     if (response.ok) {
       const data = await response.json()
       const latestTerm = data["hydra:member"].length ? data["hydra:member"][0] : null
@@ -191,7 +192,7 @@ const loadTermsByLanguage = async () => {
 }
 const saveTerms = async () => {
   const payload = {
-    lang: selectedLanguage.value.id,
+    lang: selectedLanguage.value,
     content: termData.value.content,
     type: termData.value.type.toString(),
     changes: termData.value.changes,
@@ -224,7 +225,7 @@ const extraFields = ref([])
 function getFieldComponent(type) {
   const componentMap = {
     text: BaseInputText,
-    select: BaseDropdown,
+    select: BaseSelect,
     editor: BaseTinyEditor,
     // Add more mappings as needed
   }

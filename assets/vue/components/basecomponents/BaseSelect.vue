@@ -1,28 +1,38 @@
 <template>
   <div class="field">
-    <FloatLabel>
+    <FloatLabel variant="on">
       <Dropdown
-        :id="id"
+        v-model="modelValue"
         :disabled="disabled"
+        :input-id="id"
+        :invalid="isInvalid"
         :loading="isLoading"
-        :model-value="modelValue"
+        :name="name"
         :option-label="optionLabel"
         :option-value="optionValue"
         :options="realOptions"
+        :placeholder="placeholder"
         :show-clear="allowClear"
         @change="emit('change', $event)"
-        @update:model-value="emit('update:modelValue', $event)"
       >
         <template #emptyfilter>--</template>
         <template #empty>
-          <p class="pt-2 px-2">{{ t("No available options") }}</p>
+          {{ t("No available options") }}
         </template>
       </Dropdown>
       <label
-        v-t="label"
         :for="id"
+        v-text="label"
       />
     </FloatLabel>
+    <Message
+      v-if="isInvalid || messageText"
+      size="small"
+      :severity="isInvalid ? 'error' : 'contrast'"
+      variant="simple"
+    >
+      {{ messageText }}
+    </Message>
   </div>
 </template>
 
@@ -30,8 +40,14 @@
 import { useI18n } from "vue-i18n"
 import { computed } from "vue"
 import FloatLabel from "primevue/floatlabel"
+import Dropdown from "primevue/select"
+import Message from "primevue/message"
 
 const { t } = useI18n()
+
+const modelValue = defineModel({
+  type: [String, Number, Object],
+})
 
 const props = defineProps({
   id: {
@@ -39,14 +55,15 @@ const props = defineProps({
     require: true,
     default: "",
   },
+  name: {
+    type: String,
+    required: false,
+    default: undefined,
+  },
   label: {
     type: String,
     required: true,
     default: "",
-  },
-  modelValue: {
-    type: [String, Number, null],
-    required: true,
   },
   options: {
     type: Array,
@@ -54,11 +71,13 @@ const props = defineProps({
   },
   optionLabel: {
     type: String,
-    required: true,
+    required: false,
+    default: "label",
   },
   optionValue: {
     type: String,
-    required: true,
+    required: false,
+    default: "value",
   },
   isInvalid: {
     type: Boolean,
@@ -82,9 +101,19 @@ const props = defineProps({
     required: false,
     type: Boolean,
   },
+  placeholder: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  messageText: {
+    type: [String, null],
+    required: false,
+    default: null,
+  },
 })
 
-const emit = defineEmits(["update:modelValue", "change"])
+const emit = defineEmits(["change"])
 
 const realOptions = computed(() => {
   if (props.hastEmptyValue) {

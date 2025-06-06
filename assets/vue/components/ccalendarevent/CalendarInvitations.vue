@@ -117,8 +117,6 @@ const maxSubscriptionsDisabled = computed(() => 0 === subscriptionVisibilitySele
       v-model="subscriptionVisibilitySelected"
       :label="t('Allow subscriptions')"
       :options="subscriptionVisibilityList"
-      option-label="label"
-      option-value="value"
     />
     <BaseAutocomplete
       id="subscription_item"

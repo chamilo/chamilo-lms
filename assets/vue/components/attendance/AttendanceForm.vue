@@ -42,8 +42,6 @@
           v-model="formData.gradebookOption"
           :label="t('Select Gradebook Option')"
           :options="gradebookOptions"
-          option-label="label"
-          option-value="value"
         />
 
         <BaseInputText

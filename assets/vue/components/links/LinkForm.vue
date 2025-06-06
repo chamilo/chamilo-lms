@@ -39,8 +39,6 @@
         { label: 'Open parent', value: '_parent' },
         { label: 'Open top', value: '_top' },
       ]"
-      option-label="label"
-      option-value="value"
     />
 
     <div v-if="formData.showOnHomepage">

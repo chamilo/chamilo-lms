@@ -5,8 +5,6 @@
       v-model="selectedFormat"
       :label="t('Export format')"
       :options="formats"
-      option-label="label"
-      option-value="value"
     />
 
     <LayoutFormButtons>

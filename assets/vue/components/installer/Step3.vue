@@ -86,7 +86,7 @@
         :label="t('Your company\'s name')"
       />
 
-      <BaseDropdown
+      <BaseSelect
         v-model="contact.companyActivity"
         :label="t('Your company\'s activity')"
         :options="installerData.stepData.activitiesList"
@@ -96,7 +96,7 @@
         option-value="0"
       />
 
-      <BaseDropdown
+      <BaseSelect
         v-model="contact.jobRole"
         :label="t('Your job\'s description')"
         :options="installerData.stepData.rolesList"
@@ -106,7 +106,7 @@
         option-value="0"
       />
 
-      <BaseDropdown
+      <BaseSelect
         v-model="contact.companyCountry"
         :label="t('Your company\'s home country')"
         :options="installerData.stepData.countriesList"
@@ -122,7 +122,7 @@
         :label="t('Company city')"
       />
 
-      <BaseDropdown
+      <BaseSelect
         v-model="contact.contactLanguage"
         :label="t('Preferred contact language')"
         :options="installerData.stepData.languagesList"
@@ -214,7 +214,7 @@ import Fieldset from "primevue/fieldset"
 import RadioButton from "primevue/radiobutton"
 import Button from "primevue/button"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
-import BaseDropdown from "../basecomponents/BaseDropdown.vue"
+import BaseSelect from "../basecomponents/BaseSelect.vue"
 import SectionHeader from "../layout/SectionHeader.vue"
 
 const { t } = useI18n()

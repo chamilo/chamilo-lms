@@ -299,8 +299,8 @@ const calendarOptions = ref({
 
     item.value["@id"] = "/api/c_calendar_events/" + event.id.match(/\d+$/)[0]
     item.value["title"] = event.title
-    item.value["startDate"] = event.start
-    item.value["endDate"] = event.end
+    item.value["startDate"] = event.start ? new Date(event.start) : null
+    item.value["endDate"] = event.end ? new Date(event.end) : null
     item.value["parentResourceNodeId"] = event.extendedProps?.resourceNode?.creator?.id
 
     if (

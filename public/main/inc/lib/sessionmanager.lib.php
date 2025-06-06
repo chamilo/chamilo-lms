@@ -3730,14 +3730,18 @@ class SessionManager
             return Database::affected_rows($result) > 0;
         }
 
+        $em = Container::getEntityManager();
+        $em->clear();
+        $session = $em->getRepository(Session::class)->find($sessionId);
+        $course = api_get_course_entity($courseId);
+        if (!$session->hasCourse($course)) {
+            $session->addCourse($course);
+        }
         $sessionRepo = Container::getSessionRepository();
-
-        $session = api_get_session_entity($sessionId);
-
         $sessionRepo->addUserInCourse(
             Session::COURSE_COACH,
             api_get_user_entity($userId),
-            api_get_course_entity($courseId),
+            $course,
             $session
         );
 

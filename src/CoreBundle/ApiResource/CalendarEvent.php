@@ -69,4 +69,10 @@ class CalendarEvent extends AbstractResource
 
         return $this;
     }
+
+    #[Groups(['calendar_event:read'])]
+    public function getObjectType(): string
+    {
+        return preg_replace('/_\d+$/', '', $this->id);
+    }
 }

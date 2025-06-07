@@ -8073,7 +8073,7 @@ class Exercise
         if (0 != $sessionId) {
             $sql = "SELECT * FROM $track_exercises te
               INNER JOIN c_quiz cq
-              ON cq.iid = te.exe_exo_id AND te.c_id = cq.c_id
+              ON cq.iid = te.exe_exo_id
               WHERE
               te.c_id = %d AND
               te.session_id = %s AND
@@ -8083,7 +8083,7 @@ class Exercise
             $sql = sprintf($sql, $courseId, $sessionId, $ids);
         } else {
             $sql = "SELECT * FROM $track_exercises te
-              INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id AND te.c_id = cq.c_id
+              INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id
               WHERE
               te.c_id = %d AND
               cq.iid IN (%s)

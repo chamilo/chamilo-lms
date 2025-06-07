@@ -3,7 +3,7 @@ import { useI18n } from "vue-i18n"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import Fieldset from "primevue/fieldset"
 import InputNumber from "primevue/inputnumber"
-import Dropdown from "primevue/dropdown"
+import Select from "primevue/select"
 import { useCalendarReminders } from "../../composables/calendar/calendarReminders"
 
 const { t } = useI18n()
@@ -46,7 +46,7 @@ function addEmptyReminder() {
             :step="1"
             class="w-20"
           />
-          <Dropdown
+          <Select
             v-model="reminderItem.period"
             :options="periodList"
             option-label="label"

@@ -481,10 +481,10 @@ class IndexBlocksController extends BaseController
             ];
         }
 
-        if ('true' === $this->settingsManager->getSetting('registration.allow_terms_conditions')) {
+        if ('true' === $this->settingsManager->getSetting('registration.allow_terms_conditions', true)) {
             $items[] = [
                 'class' => 'item-terms-and-conditions',
-                'route' => ['name' => 'TermsConditions'],
+                'route' => ['name' => 'TermsConditionsList'],
                 'label' => $this->translator->trans('Terms and Conditions'),
             ];
         }
@@ -667,6 +667,11 @@ class IndexBlocksController extends BaseController
             'class' => 'item-privacy-consent',
             'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_list_consent.php']),
             'label' => $this->translator->trans('User list'),
+        ];
+        $items[] = [
+            'class' => 'item-gdpr-parties',
+            'route' => ['name' => 'ThirdPartyManager'],
+            'label' => $this->translator->trans('Third parties (GDPR)'),
         ];
 
         return $items;

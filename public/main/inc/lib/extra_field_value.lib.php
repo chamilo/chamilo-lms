@@ -528,7 +528,7 @@ class ExtraFieldValue extends Model
                 */
                 if (ExtraField::FIELD_TYPE_TAG == $extraFieldInfo['value_type']) {
                     $option = new ExtraFieldOption($this->type);
-                    $optionExists = $option->get($params['value']);
+                    $optionExists = $option->get($params['field_value']);
                     if (empty($optionExists)) {
                         $optionParams = [
                             'field_id' => $params['field_id'],

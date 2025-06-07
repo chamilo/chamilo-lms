@@ -1538,14 +1538,17 @@ class UserManager
         $order_by = [],
         $simple_like = false,
         $condition = 'AND',
-        $onlyThisUserList = []
+        $onlyThisUserList = [],
+        int $limit = 0,
+        int $offset = 0
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $tblAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $return_array = [];
-        $sql_query = "SELECT user.id FROM $user_table user ";
+        $sql_query = "SELECT user.id, user.username, user.firstname, user.lastname, user.official_code, user.status
+                  FROM $user_table user ";
 
-        if (api_is_multiple_url_enabled()) {
+        if (api_get_multiple_access_url()) {
             $sql_query .= " INNER JOIN $tblAccessUrlRelUser auru ON auru.user_id = user.id ";
         }
 
@@ -1556,37 +1559,47 @@ class UserManager
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
                 if ($simple_like) {
-                    $temp_conditions[] = $field." LIKE '$value%'";
+                    $temp_conditions[] = "$field LIKE '$value%'";
                 } else {
-                    $temp_conditions[] = $field.' LIKE \'%'.$value.'%\'';
+                    if (in_array($field, ['user.id', 'user.status'])) {
+                        $temp_conditions[] = "$field = '$value'";
+                    } else {
+                        $temp_conditions[] = "$field LIKE '%$value%'";
+                    }
                 }
             }
             if (!empty($temp_conditions)) {
-                $sql_query .= ' AND '.implode(' '.$condition.' ', $temp_conditions);
+                $sql_query .= ' AND '.implode(" $condition ", $temp_conditions);
             }
 
-            if (api_is_multiple_url_enabled()) {
+            if (api_get_multiple_access_url()) {
                 $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
             }
         } else {
-            if (api_is_multiple_url_enabled()) {
+            if (api_get_multiple_access_url()) {
                 $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
             }
         }
 
         if (!empty($onlyThisUserList)) {
-            $onlyThisUserListToString = implode("','", $onlyThisUserList);
+            $onlyThisUserListToString = implode("','", array_map('intval', $onlyThisUserList));
             $sql_query .= " AND user.id IN ('$onlyThisUserListToString') ";
         }
 
-        if (count($order_by) > 0) {
+        if (!empty($order_by)) {
             $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
+        }
+
+        if ($limit > 0) {
+            $sql_query .= ' LIMIT '.intval($limit);
+            if ($offset > 0) {
+                $sql_query .= ' OFFSET '.intval($offset);
+            }
         }
 
         $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
-            $userInfo = api_get_user_info($result['id']);
-            $return_array[] = $userInfo;
+            $return_array[] = $result;
         }
 
         return $return_array;

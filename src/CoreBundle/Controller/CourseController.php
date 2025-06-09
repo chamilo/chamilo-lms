@@ -270,29 +270,38 @@ class CourseController extends ToolBaseController
         SettingsManager $settingsManager,
         EntityManagerInterface $em
     ): JsonResponse {
-        if ('true' !== $settingsManager->getSetting('course.resource_sequence_show_dependency_in_course_intro', true)) {
-            return new JsonResponse([]);
-        }
-
         $sessionId = $request->query->getInt('sid');
+        $useDependents = $request->query->getBoolean('dependents', false);
         $user = $security->getUser();
         $userId = $user->getId();
 
-        $sequences = $repo->getDependents($courseId, SequenceResource::COURSE_TYPE);
-        if (empty($sequences)) {
-            return new JsonResponse([]);
+        if ($useDependents) {
+            $sequences = $repo->getDependents($courseId, SequenceResource::COURSE_TYPE);
+            $checked = $repo->checkDependentsForUser($sequences, SequenceResource::COURSE_TYPE, $userId, $sessionId);
+            $isUnlocked = $repo->checkSequenceAreCompleted($checked);
+            $sequenceResource = $repo->findRequirementForResource($courseId, SequenceResource::COURSE_TYPE);
+        } else {
+            $sequences = $repo->getRequirements($courseId, SequenceResource::COURSE_TYPE);
+
+            $hasValidRequirement = false;
+            foreach ($sequences as $sequence) {
+                foreach ($sequence['requirements'] ?? [] as $resource) {
+                    if ($resource instanceof Course) {
+                        $hasValidRequirement = true;
+                        break 2;
+                    }
+                }
+            }
+
+            if (!$hasValidRequirement) {
+                return new JsonResponse([]);
+            }
+
+            $checked = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $userId, $sessionId);
+            $isUnlocked = $repo->checkSequenceAreCompleted($checked);
+            $sequenceResource = $repo->findRequirementForResource($courseId, SequenceResource::COURSE_TYPE);
         }
 
-        $checked = $repo->checkDependentsForUser(
-            $sequences,
-            SequenceResource::COURSE_TYPE,
-            $userId,
-            $sessionId
-        );
-
-        $isUnlocked = $repo->checkSequenceAreCompleted($checked);
-
-        $sequenceResource = $repo->findRequirementForResource($courseId, SequenceResource::COURSE_TYPE);
         $graphImage = null;
 
         if ($sequenceResource && $sequenceResource->hasGraph()) {

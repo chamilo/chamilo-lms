@@ -83,6 +83,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'enable_auto_reinscription' => 'false',
                     'enable_session_replication' => 'false',
                     'session_list_view_remaining_days' => 'false',
+                    'user_session_display_mode' => 'card',
                 ]
             )
         ;
@@ -209,6 +210,12 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('session_model_list_field_ordered_by_id', YesNoType::class)
             ->add('duplicate_specific_session_content_on_session_copy', YesNoType::class)
             ->add('session_list_view_remaining_days', YesNoType::class)
+            ->add('user_session_display_mode', ChoiceType::class, [
+                'choices' => [
+                    'Card (visual blocks)' => 'card',
+                    'List (classic)' => 'list',
+                ],
+            ])
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

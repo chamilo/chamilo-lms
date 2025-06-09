@@ -1,27 +1,34 @@
-<template>
-  <SessionListCategoryWrapper :sessions="uncategorizedSessions" />
-  <SessionCategoryListWrapper
-    :categories="categories"
-    :category-with-sessions="categoriesWithSessions"
-  />
-</template>
-
 <script setup>
-import SessionCategoryListWrapper from "../../components/session/SessionCategoryListWrapper"
+import { computed } from "vue"
+import SessionCategoryListWrapper from "./SessionCategoryListWrapper.vue"
 import SessionListCategoryWrapper from "./SessionListCategoryWrapper.vue"
+import SessionListView from "./SessionListView.vue"
+import { usePlatformConfig } from "../../store/platformConfig"
 
-defineProps({
-  uncategorizedSessions: {
-    type: Array,
-    required: true,
-  },
-  categories: {
-    type: Array,
-    required: true,
-  },
-  categoriesWithSessions: {
-    type: Map,
-    required: true,
-  },
+const props = defineProps({
+  uncategorizedSessions: Array,
+  categories: Array,
+  categoriesWithSessions: Map,
 })
+
+const platformConfigStore = usePlatformConfig()
+const displayMode = computed(() => platformConfigStore.getSetting("session.user_session_display_mode") ?? "card")
 </script>
+
+<template>
+  <template v-if="displayMode === 'card'">
+    <SessionListCategoryWrapper :sessions="uncategorizedSessions" />
+    <SessionCategoryListWrapper
+      :categories="categories"
+      :category-with-sessions="categoriesWithSessions"
+    />
+  </template>
+
+  <template v-else>
+    <SessionListView
+      :uncategorized-sessions="uncategorizedSessions"
+      :categories="categories"
+      :categories-with-sessions="categoriesWithSessions"
+    />
+  </template>
+</template>

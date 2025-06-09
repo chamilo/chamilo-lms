@@ -144,14 +144,16 @@
       </div>
 
       <div class="flex flex-col lg:flex-row gap-6">
-        <div class="w-full lg:w-[80%]">
+        <div :class="showCourseSequence ? 'w-full lg:w-[80%]' : 'w-full'">
           <CourseIntroduction
             ref="courseIntroEl"
             :is-allowed-to-edit="isAllowedToEdit"
           />
         </div>
-
-        <div class="w-full lg:w-[20%] lg:border-l lg:pl-4">
+        <div
+          v-if="showCourseSequence"
+          class="w-full lg:w-[20%] lg:border-l lg:pl-4"
+        >
           <NextCourseSequence />
         </div>
       </div>
@@ -420,6 +422,9 @@ async function updateDisplayOrder(htmlItem, newIndex) {
 }
 
 const isAllowedToEdit = ref(false)
+const showCourseSequence = computed(() => {
+  return platformConfigStore.getSetting("course.resource_sequence_show_dependency_in_course_intro") === "true"
+})
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()

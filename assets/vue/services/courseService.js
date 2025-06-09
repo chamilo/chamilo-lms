@@ -205,17 +205,13 @@ export default {
     }
   },
 
-  /**
-   * Gets the next course in the sequence if available and validated.
-   * @param {number} courseId - The current course ID.
-   * @param {number=} sessionId - Optional session ID.
-   * @returns {Promise<{ available: boolean, nextCourse: object|null }>}
-   */
-  getNextCourse: async (courseId, sessionId = 0) => {
+  getNextCourse: async (courseId, sessionId = 0, dependents = false) => {
     const { data } = await api.get(`/course/${courseId}/next-course`, {
-      params: { sid: sessionId },
+      params: {
+        sid: sessionId,
+        dependents: dependents ? 1 : 0,
+      },
     })
-
     return data
-  },
+  }
 }

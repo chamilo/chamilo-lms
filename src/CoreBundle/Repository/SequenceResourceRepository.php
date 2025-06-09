@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Fhaculty\Graph\Set\Vertices;
@@ -21,8 +22,10 @@ use SessionManager;
 
 class SequenceResourceRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly SettingsManager $settingsManager
+    ) {
         parent::__construct($registry, SequenceResource::class);
     }
 
@@ -502,7 +505,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
         $gradebookCategoryRepo = $em->getRepository(GradebookCategory::class);
 
         $sessionUserList = [];
-        $checkOnlySameSession = true; //api_get_configuration_value('course_sequence_valid_only_in_same_session');
+        $checkOnlySameSession = $this->settingsManager->getSetting('course.course_sequence_valid_only_in_same_session', true);
 
         if (SequenceResource::COURSE_TYPE === $resourceType) {
             if ($checkOnlySameSession) {

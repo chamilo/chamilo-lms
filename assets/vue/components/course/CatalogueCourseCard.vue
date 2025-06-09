@@ -132,7 +132,7 @@
         </router-link>
 
         <Button
-          v-else-if="hasDependencies && props.currentUserId"
+          v-else-if="isLocked && hasRequirements"
           :label="$t('Check requirements')"
           icon="mdi mdi-shield-check"
           class="w-full p-button-warning"
@@ -177,6 +177,8 @@
     v-model="showDependenciesModal"
     :course-id="course.id"
     :session-id="course.sessionId || 0"
+    :requirements="requirementList"
+    :graph-image="graphImage"
   />
   <Dialog
     v-model:visible="showDescriptionDialog"
@@ -192,23 +194,14 @@
 <script setup>
 import Rating from "primevue/rating"
 import Button from "primevue/button"
-import { computed, onMounted, ref } from "vue"
-import courseRelUserService from "../../services/courseRelUserService"
+import Dialog from "primevue/dialog"
+import { computed, ref, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useNotification } from "../../composables/notification"
-import Dialog from "primevue/dialog"
 import { usePlatformConfig } from "../../store/platformConfig"
 import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
-import courseService from "../../services/courseService"
-
-const platformConfigStore = usePlatformConfig()
-const showDescriptionDialog = ref(false)
-const showDependenciesModal = ref(false)
-const hasDependencies = ref(false)
-
-const allowDescription = computed(
-  () => platformConfigStore.getSetting("course.show_courses_descriptions_in_catalog") !== "false",
-)
+import courseRelUserService from "../../services/courseRelUserService"
+import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
 
 const props = defineProps({
   course: Object,
@@ -228,6 +221,14 @@ const emit = defineEmits(["rate", "subscribed"])
 const router = useRouter()
 const route = useRoute()
 const { showErrorNotification, showSuccessNotification } = useNotification()
+const platformConfigStore = usePlatformConfig()
+
+const showDescriptionDialog = ref(false)
+const showDependenciesModal = ref(false)
+
+const allowDescription = computed(
+  () => platformConfigStore.getSetting("course.show_courses_descriptions_in_catalog") !== "false",
+)
 
 const isUserInCourse = computed(() => {
   if (!props.currentUserId) return false
@@ -303,9 +304,7 @@ function routeExists(name) {
 
 const linkSettings = computed(() => {
   const settings = platformConfigStore.getSetting("course.course_catalog_settings")
-  const result = settings?.link_settings ?? {}
-  console.log("Link settings:", result)
-  return result
+  return settings?.link_settings ?? {}
 })
 
 const imageLink = computed(() => {
@@ -320,10 +319,6 @@ const imageLink = computed(() => {
     return { name: routeName, params: { id: props.course.id } }
   }
 
-  if (routeName) {
-    console.warn(`[CatalogueCourseCard] Route '${routeName}' does not exist.`)
-  }
-
   return null
 })
 
@@ -334,32 +329,21 @@ const titleLink = computed(() => {
     return { name: routeName, params: { id: props.course.id } }
   }
 
-  if (routeName) {
-    console.warn(`[CatalogueCourseCard] Route '${routeName}' does not exist.`)
-  }
-
   return null
 })
 
 const showInfoPopup = computed(() => {
   const allowed = ["course_description_popup"]
   const value = linkSettings.value.info_url
-  if (value && !allowed.includes(value)) {
-    console.warn(`[CatalogueCourseCard] info_url '${value}' is not a recognized option.`)
-    return false
-  }
-  return value === "course_description_popup"
+  return value && allowed.includes(value)
 })
 
-onMounted(async () => {
-  try {
-    const { sequenceList: list } = await courseService.getNextCourse(
-      props.course.id,
-      props.course.sessionId || 0
-    )
-    hasDependencies.value = list.length > 0
-  } catch (e) {
-    console.warn(`[CatalogueCourseCard] Failed to load dependencies for course ${props.course.id}`, e)
-  }
+const { isLocked, hasRequirements, requirementList, graphImage, fetchStatus } = useCourseRequirementStatus(
+  props.course.id,
+  props.course.sessionId || 0,
+)
+
+onMounted(() => {
+  fetchStatus()
 })
 </script>

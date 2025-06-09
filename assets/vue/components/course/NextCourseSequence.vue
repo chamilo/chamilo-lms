@@ -87,7 +87,7 @@ const sequenceList = ref([])
 
 onMounted(async () => {
   try {
-    const { sequenceList: list, graph } = await courseService.getNextCourse(course.value.id, session.value?.id || 0)
+    const { sequenceList: list, graph } = await courseService.getNextCourse(course.value.id, session.value?.id || 0, true)
     sequenceList.value = list || []
     graphUrl.value = graph || null
   } catch (e) {

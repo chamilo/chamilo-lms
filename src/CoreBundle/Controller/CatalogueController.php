@@ -151,6 +151,9 @@ class CatalogueController extends AbstractController
                 ->getSingleScalarResult()
             ;
 
+            $buyCoursesPlugin = \BuyCoursesPlugin::create();
+            $buyData = $buyCoursesPlugin->getBuyCoursePluginPrice($session);
+
             return [
                 'id' => $session->getId(),
                 'title' => $session->getTitle(),
@@ -164,6 +167,8 @@ class CatalogueController extends AbstractController
                 'courses' => $courses,
                 'popularity' => $voteCount,
                 'isSubscribed' => $session->hasUserInSession($user, Session::STUDENT),
+                'priceHtml' => $buyData['html'] ?? '',
+                'buyButtonHtml' => $buyData['buy_button'] ?? '',
             ];
         }, $sessions);
 

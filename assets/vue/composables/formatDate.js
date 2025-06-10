@@ -4,20 +4,37 @@ import { useLocale } from "./locale"
 export function useFormatDate() {
   const { appParentLocale } = useLocale()
 
-  const abbreviatedDatetime = (datetime) => {
+  /**
+   * @param {Date|string} datetime
+   * @returns {DateTime|null}
+   */
+  function getDateTimeObject(datetime) {
     if (!datetime) {
-      return ""
+      return null
     }
 
-    return DateTime.fromISO(datetime)
-      .setLocale(appParentLocale.value)
-      .toLocaleString({
-        ...DateTime.DATETIME_MED,
-        month: "long",
-      })
+    let dt
+
+    if (typeof datetime === "string") {
+      dt = DateTime.fromISO(datetime)
+    } else if (typeof datetime === "object") {
+      dt = DateTime.fromJSDate(datetime)
+    }
+
+    if (!dt.isValid) {
+      return null
+    }
+
+    return dt.setLocale(appParentLocale.value)
   }
 
-  const relativeDatetime = (datetime) => DateTime.fromISO(datetime).setLocale(appParentLocale.value).toRelative()
+  const abbreviatedDatetime = (datetime) =>
+    getDateTimeObject(datetime)?.toLocaleString({
+      ...DateTime.DATETIME_MED,
+      month: "long",
+    })
+
+  const relativeDatetime = (datetime) => getDateTimeObject(datetime)?.toRelative()
 
   return {
     abbreviatedDatetime,

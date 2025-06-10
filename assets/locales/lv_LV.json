@@ -554,5 +554,7 @@
     "Private course": "Private course",
     "Not subscribed": "Not subscribed",
     "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "Savienojums ar datub\u0101zi nav izdevies. Tas galvenok\u0101rt ir saist\u012bts ar nepareizu lietot\u0101ja v\u0101rdu, nepareizu paroli vai nepareizu datu b\u0101zes prefiksu noteik\u0161anu iepriek\u0161. L\u016bdzu, p\u0101rskatiet \u0161os iestat\u012bjumus un m\u0113\u0123iniet v\u0113lreiz.",
+    "Accept Terms and Conditions": "Accept Terms and Conditions",
+    "You accepted these terms on": "You accepted these terms on",
     "Go to your newly created portal.": "Dodieties uz savu jaunizveidoto port\u0101lu"
 }

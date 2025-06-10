@@ -28360,3 +28360,9 @@ msgstr "Select a class"
 
 msgid "Course %s added. You can access it directly %shere%s."
 msgstr "Course %s added. You can access it directly %shere%s."
+
+msgid "Accept Terms and Conditions"
+msgstr "Accept Terms and Conditions"
+
+msgid "You accepted these terms on"
+msgstr "You accepted these terms on"

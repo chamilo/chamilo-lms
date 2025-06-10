@@ -29372,3 +29372,9 @@ msgstr ""
 
 msgid "Menumycourses"
 msgstr "Mis cursos"
+
+msgid "Accept Terms and Conditions"
+msgstr "Acepta los Términos y Condiciones"
+
+msgid "You accepted these terms on"
+msgstr "Aceptaste estos términos el"

@@ -30186,3 +30186,9 @@ msgstr "Assistants IA"
 
 msgid "Topbarskills"
 msgstr "Compétences (barre supérieure)"
+
+msgid "Accept Terms and Conditions"
+msgstr "Accepter les conditions d'utilisation"
+
+msgid "You accepted these terms on"
+msgstr "Vous avez accepté ces conditions le"

@@ -3123,17 +3123,35 @@ class UserGroupModel extends Model
 
             $usersSubscribedToCourse = [];
             $usersNotSubscribedToCourse = [];
+            $codeLangage = api_get_language_isocode();
+            $sortByLastName = _api_get_person_name_convention($codeLangage, 'sort_by');
             foreach ($usersInUsergroup as $userId) {
                 $user = $userRepository->find($userId);
                 $tempUser = [];
-                $tempUser['firstname'] = $user->getFirstName();
-                $tempUser['lastname'] = $user->getLastName();
+                $identity = api_get_person_name(ucfirst($user->getFirstName()), ucfirst($user->getLastName()));
+                $tempUser['identity'] = $identity;
                 $tempUser['email'] = $user->getEmail();
                 if (array_key_exists($userId, $usersInCourse)) {
                     $usersSubscribedToCourse[] = $tempUser;
                 } else {
                     $usersNotSubscribedToCourse[] = $tempUser;
                 }
+            }
+
+            if ($sortByLastName) {
+                usort($usersSubscribedToCourse, function($a, $b) {
+                    return strnatcmp(explode(' ', $a['identity'])[1], explode(' ', $b['identity'])[1]);
+                });
+                usort($usersNotSubscribedToCourse, function($a, $b) {
+                    return strnatcmp(explode(' ', $a['identity'])[1], explode(' ', $b['identity'])[1]);
+                });
+            } else {
+                usort($usersSubscribedToCourse, function($a, $b) {
+                    return strcmp($a['identity'], $b['identity']);
+                });
+                usort($usersNotSubscribedToCourse, function($a, $b) {
+                    return strcmp($a['identity'], $b['identity']);
+                });
             }
             $data['usersSubscribedToCourse'] = $usersSubscribedToCourse;
             $data['usersNotSubscribedToCourse'] = $usersNotSubscribedToCourse;

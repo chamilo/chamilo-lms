@@ -77,7 +77,8 @@ $(function () {
                 </td>
                 <td>
                     {% for certificate in student.certificates %}
-                        <a href="{{ _p.web }}certificates/index.php?id={{ certificate.id }}" class="btn btn--plain">
+                        {% set hash = certificate.path_certificate|split('.')|first %}
+                        <a href="{{ _p.web }}certificates/{{ hash }}.html" class="btn btn--plain">
                             <em class="fa fa-floppy-o"></em> {{ 'Certificate' | get_lang }}
                         </a>
                     {% endfor %}

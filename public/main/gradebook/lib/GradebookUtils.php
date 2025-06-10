@@ -717,7 +717,8 @@ class GradebookUtils
                     gc.path_certificate,
                     gc.cat_id,
                     gc.user_id,
-                    gc.id
+                    gc.id,
+                    gc.publish
                 FROM  '.$table_certificate.' gc
                 WHERE gc.user_id = "'.$user_id.'" ';
         if (!is_null($cat_id) && $cat_id > 0) {
@@ -1382,12 +1383,24 @@ class GradebookUtils
                 continue;
             }
 
+            $path = $certificateInfo['path_certificate'] ?? '';
+            $publish = $certificateInfo['publish'] ?? 0;
+            $hash = pathinfo($path, PATHINFO_FILENAME);
+
+            $link = '';
+            $pdf = '';
+
+            if (!empty($hash) && $publish) {
+                $link = api_get_path(WEB_PATH) . "certificates/{$hash}.html";
+                $pdf = api_get_path(WEB_PATH)."certificates/{$hash}.pdf";
+            }
+
             $courseList[] = [
                 'course' => $courseInfo['title'],
                 'score' => $certificateInfo['score_certificate'],
                 'date' => api_format_date($certificateInfo['created_at'], DATE_FORMAT_SHORT),
-                'link' => api_get_path(WEB_PATH)."certificates/index.php?id={$certificateInfo['id']}",
-                'pdf' => api_get_path(WEB_PATH)."certificates/index.php?id={$certificateInfo['id']}&user_id={$userId}&action=export",
+                'link' => $link,
+                'pdf' => $pdf,
             ];
         }
 
@@ -1461,13 +1474,13 @@ class GradebookUtils
                 if (empty($certificateInfo)) {
                     continue;
                 }
-
+                $hash = pathinfo($certificateInfo['path_certificate'], PATHINFO_FILENAME);
                 $sessionList[] = [
                     'session' => $session['session_name'],
                     'course' => $course['title'],
                     'score' => $certificateInfo['score_certificate'],
                     'date' => api_format_date($certificateInfo['created_at'], DATE_FORMAT_SHORT),
-                    'link' => api_get_path(WEB_PATH)."certificates/index.php?id={$certificateInfo['id']}",
+                    'link' => api_get_path(WEB_PATH)."certificates/{$hash}.html",
                 ];
             }
         }

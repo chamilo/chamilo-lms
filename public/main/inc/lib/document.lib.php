@@ -1245,7 +1245,10 @@ class DocumentManager
         $url = '';
         if ($info_grade_certificate) {
             $date_certificate = $info_grade_certificate['created_at'];
-            $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
+            if (!empty($info_grade_certificate['path_certificate'])) {
+                $hash = pathinfo($info_grade_certificate['path_certificate'], PATHINFO_FILENAME);
+                $url = api_get_path(WEB_PATH) . 'certificates/' . $hash . '.html';
+            }
         }
         $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         if (!empty($date_certificate)) {

@@ -300,8 +300,11 @@ class Certificate extends Model
         }
 
         $currentUserInfo = api_get_user_info();
-        $url = api_get_path(WEB_PATH).
-            'certificates/index.php?id='.$certificateInfo['id'].'&user_id='.$certificateInfo['user_id'];
+        $url = '';
+        if (!empty($certificateInfo['path_certificate'])) {
+            $hash = pathinfo($certificateInfo['path_certificate'], PATHINFO_FILENAME);
+            $url = api_get_path(WEB_PATH) . 'certificates/' . $hash . '.html';
+        }
         $link = Display::url($url, $url);
 
         $replace = [

@@ -879,6 +879,12 @@ class Display
             $attributes['value'] = $value;
         }
 
+        if ('text' === $type) {
+            $attributes['class'] = isset($attributes['class'])
+                ? $attributes['class'].' p-inputtext p-component '
+                : 'p-inputtext p-component ';
+        }
+
         return self::tag('input', '', $attributes);
     }
 

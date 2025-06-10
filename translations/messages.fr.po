@@ -30192,3 +30192,6 @@ msgstr "Accepter les conditions d'utilisation"
 
 msgid "You accepted these terms on"
 msgstr "Vous avez accepté ces conditions le"
+
+msgid "Revoke Acceptance"
+msgstr "Révoquer l'acceptation"

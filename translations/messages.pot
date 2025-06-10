@@ -28334,3 +28334,6 @@ msgstr ""
 
 msgid "You accepted these terms on"
 msgstr ""
+
+msgid "Revoke Acceptance"
+msgstr ""

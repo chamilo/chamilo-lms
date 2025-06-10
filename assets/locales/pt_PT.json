@@ -570,5 +570,6 @@
     "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "A liga\u00e7\u00e3o \u00e0 base-de-dados falhou. Geralmente \u00e9 devido a um login/acesso incorrecto ou senha/password incorrecta ou ainda o prefixo da base-de-dados  definido acima incorrecto. Por favor reveja as configura\u00e7\u00f5es e tente novamente.",
     "Accept Terms and Conditions": "Accept Terms and Conditions",
     "You accepted these terms on": "You accepted these terms on",
+    "Revoke Acceptance": "Revoke Acceptance",
     "Go to your newly created portal.": "Ir para o seu portal rec\u00e9m-criado."
 }

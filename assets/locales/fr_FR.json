@@ -607,5 +607,6 @@
     "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "La connexion \u00e0 la base de donn\u00e9es a \u00e9chou\u00e9. Ceci est g\u00e9n\u00e9ralement d\u00fb \u00e0 une mauvaise configuration de l'utilisateur, du mot de passe ou du pr\u00e9fixe de base de donn\u00e9es indiqu\u00e9s ci-dessus. Veuillez les r\u00e9viser attentivement et essayer \u00e0 nouveau.",
     "Accept Terms and Conditions": "Accepter les conditions d'utilisation",
     "You accepted these terms on": "Vous avez accept\u00e9 ces conditions le",
+    "Revoke Acceptance": "R\u00e9voquer l'acceptation",
     "Go to your newly created portal.": "Aller directement sur votre nouveau portail."
 }

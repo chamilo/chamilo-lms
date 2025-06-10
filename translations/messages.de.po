@@ -29574,3 +29574,6 @@ msgstr "Nutzungsbedingungen akzeptieren"
 
 msgid "You accepted these terms on"
 msgstr "Sie haben diese Nutzungsbedingungen akzeptiert am"
+
+msgid "Revoke Acceptance"
+msgstr "Zustimmung widerrufen"

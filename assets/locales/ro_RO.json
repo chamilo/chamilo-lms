@@ -575,5 +575,6 @@
     "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "Conexiunea cu baza de date a esuat.Poate numele de uzuar,pinul sau prefixul de la baza de date nu sunt corecte.Va rugam,revizati aceste date si incercati din nou",
     "Accept Terms and Conditions": "Accept Terms and Conditions",
     "You accepted these terms on": "You accepted these terms on",
+    "Revoke Acceptance": "Revoke Acceptance",
     "Go to your newly created portal.": "Mergeti la portalul proaspat creat."
 }

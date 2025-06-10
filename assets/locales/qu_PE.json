@@ -498,5 +498,6 @@
     "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "La conexi\u00f3n con la base de datos ha fallado. Puede que el nombre de usuario, la contrase\u00f1a o el prefijo de la base de datos sean incorrectos. Por favor, revise estos datos y vuelva a intentarlo.",
     "Accept Terms and Conditions": "Accept Terms and Conditions",
     "You accepted these terms on": "You accepted these terms on",
+    "Revoke Acceptance": "Revoke Acceptance",
     "Go to your newly created portal.": "Ir a la plataforma que acaba de crear."
 }

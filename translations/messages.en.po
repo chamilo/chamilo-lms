@@ -28366,3 +28366,6 @@ msgstr "Accept Terms and Conditions"
 
 msgid "You accepted these terms on"
 msgstr "You accepted these terms on"
+
+msgid "Revoke Acceptance"
+msgstr "Revoke Acceptance"

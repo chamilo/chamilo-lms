@@ -2959,7 +2959,7 @@ function api_get_session_visibility(
 
             $totalDuration = $firstAccess + $duration + $userDuration;
 
-            return $totalDuration > $currentTime ? SESSION_AVAILABLE : SESSION_VISIBLE_READ_ONLY;
+            return $totalDuration > $currentTime ? SESSION_AVAILABLE : $visibility;
         }
 
         return SESSION_AVAILABLE;

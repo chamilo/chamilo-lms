@@ -13,12 +13,8 @@
     <BaseTextArea
       v-model="formData.description"
       :label="t('Description')"
-    />
-    <BaseCheckbox
-      id="show-link-on-home-page"
-      v-model="formData.showOnHomepage"
-      :label="t('Show link on course homepage')"
-      name="show-link-on-home-page"
+      class="w-full min-h-[120px]"
+      rows="6"
     />
 
     <BaseSelect
@@ -41,36 +37,54 @@
       ]"
     />
 
-    <div v-if="formData.showOnHomepage">
+    <BaseCheckbox
+      id="show-link-on-home-page"
+      v-model="formData.showOnHomepage"
+      :label="t('Show link on course homepage')"
+      name="show-link-on-home-page"
+    />
+
+    <div
+      v-if="formData.showOnHomepage"
+      class="mt-4 space-y-4"
+    >
       <div
         v-if="formData.customImageUrl"
-        class="mb-4"
+        class="mb-2"
       >
-        <p class="text-gray-600">{{ t("Current icon") }}</p>
+        <p class="text-gray-600 font-semibold">{{ t("Current icon") }}</p>
         <img
           :src="formData.customImageUrl"
           alt="Custom Image"
-          class="w-24 h-24 object-cover"
+          class="w-24 h-24 object-cover rounded-xl border shadow"
         />
         <BaseButton
+          class="mt-2"
           :label="t('Remove current icon')"
           icon="trash"
           type="danger"
+          size="small"
           @click="removeCurrentImage"
         />
       </div>
 
-      <BaseFileUpload
-        id="custom-image"
-        :label="t('Custom icon')"
-        accept="image"
-        size="small"
-        @file-selected="selectedFile = $event"
+      <Dashboard
+        class="w-full max-w-3xl"
+        :uppy="uppy"
+        :props="{
+          proudlyDisplayPoweredByUppy: false,
+          height: 350,
+          hideUploadButton: true,
+          note: t('Click the image to crop it (1:1 ratio, 120x120 px recommended).'),
+        }"
       />
-      <p class="text-gray-600">
-        {{ t("This icon will show for the link displayed as a tool on the course homepage.") }}
+
+      <p class="text-sm text-gray-600">
+        {{ t("This icon will be displayed as a shortcut on the course homepage.") }}
       </p>
-      <p class="text-gray-600">{{ t("The icon must be 120x120 pixels.") }}</p>
+      <p class="text-sm text-gray-600">
+        {{ t("Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels.") }}
+      </p>
     </div>
 
     <LayoutFormButtons>
@@ -106,7 +120,12 @@ import BaseTextArea from "../basecomponents/BaseTextArea.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import { useNotification } from "../../composables/notification"
 import LayoutFormButtons from "../layout/LayoutFormButtons.vue"
-import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
+import "@uppy/core/dist/style.css"
+import "@uppy/dashboard/dist/style.css"
+import "@uppy/image-editor/dist/style.css"
+import Uppy from "@uppy/core"
+import ImageEditor from "@uppy/image-editor"
+import { Dashboard } from "@uppy/vue"
 
 const notification = useNotification()
 const { t } = useI18n()
@@ -114,6 +133,28 @@ const { cid, sid } = useCidReq()
 const router = useRouter()
 const route = useRoute()
 const selectedFile = ref(null)
+const uppy = new Uppy({ restrictions: { maxNumberOfFiles: 1, allowedFileTypes: ["image/*"] } })
+  .use(ImageEditor, {
+    actions: {
+      revert: true,
+      rotate: true,
+      cropSquare: true,
+      zoomIn: true,
+      zoomOut: true,
+    },
+  })
+  .on("file-added", async (file) => {
+    selectedFile.value = file.data
+    formData.removeImage = false
+
+    const imageEditor = uppy.getPlugin("ImageEditor")
+    if (imageEditor) {
+      await imageEditor.openEditor(file.id)
+    }
+  })
+  .on("file-removed", () => {
+    selectedFile.value = null
+  })
 
 const props = defineProps({
   linkId: {
@@ -223,32 +264,33 @@ const submitForm = async () => {
     resourceLinkList: resourceLinkList.value,
   }
   try {
+    let linkId = props.linkId
+
     if (props.linkId) {
       await linkService.updateLink(props.linkId, postData)
-
-      if (formData.showOnHomepage && (formData.removeImage || selectedFile.value instanceof File)) {
-        const formDataImage = new FormData()
-        formDataImage.append("removeImage", formData.removeImage ? "true" : "false")
-
-        if (selectedFile.value instanceof File) {
-          formDataImage.append("customImage", selectedFile.value)
-        }
-
-        await linkService.uploadImage(props.linkId, formDataImage)
-      }
     } else {
       const newLink = await linkService.createLink(postData)
+      linkId = newLink.iid
+    }
 
-      if (formData.showOnHomepage && (formData.removeImage || selectedFile.value instanceof File)) {
-        const formDataImage = new FormData()
-        formDataImage.append("removeImage", formData.removeImage ? "true" : "false")
+    if (formData.showOnHomepage && (formData.removeImage || selectedFile.value)) {
+      const formDataImage = new FormData()
 
-        if (selectedFile.value instanceof File) {
-          formDataImage.append("customImage", selectedFile.value)
+      formDataImage.append("removeImage", formData.removeImage ? "true" : "false")
+
+      if (selectedFile.value) {
+        let fileToUpload = selectedFile.value
+
+        if (!(fileToUpload instanceof File)) {
+          fileToUpload = new File([fileToUpload], "custom-icon.png", {
+            type: fileToUpload.type || "image/png",
+          })
         }
 
-        await linkService.uploadImage(newLink.iid, formDataImage)
+        formDataImage.append("customImage", fileToUpload)
       }
+
+      await linkService.uploadImage(linkId, formDataImage)
     }
 
     notification.showSuccessNotification(t("Link saved"))

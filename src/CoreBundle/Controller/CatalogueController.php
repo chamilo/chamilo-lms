@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\CatalogueCourseRelAccessUrlRelUsergroup;
 use Chamilo\CoreBundle\Entity\CatalogueSessionRelAccessUrlRelUsergroup;
@@ -151,7 +152,7 @@ class CatalogueController extends AbstractController
                 ->getSingleScalarResult()
             ;
 
-            $buyCoursesPlugin = \BuyCoursesPlugin::create();
+            $buyCoursesPlugin = BuyCoursesPlugin::create();
             $buyData = $buyCoursesPlugin->getBuyCoursePluginPrice($session);
 
             return [

@@ -33,7 +33,7 @@ class UserController extends AbstractController
         $courseLib = new CourseManager();
         $courseName = $courseLib->getCourseNameFromCode($courseLib->get_course_code_from_course_id($courseId));
 
-        $data = $usergroupLib->findUsersInAndOutOfCourse($usergroupId, $courseId);
+        $data = $usergroupLib->getUsersInAndOutOfCourse($usergroupId, $courseId);
 
         return $this->render('@ChamiloCore/User/overview.html.twig', [
             'courseId' => $courseId,

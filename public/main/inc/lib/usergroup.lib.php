@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Symfony\Polyfill\Intl\Normalizer\Normalizer;
 
 /**
  * Class UserGroup.
@@ -3101,7 +3102,7 @@ class UserGroupModel extends Model
         return Database::store_result($result, 'ASSOC');
     }
 
-    public function findUsersInAndOutOfCourse($usergroupId, $courseId): array
+    public function getUsersInAndOutOfCourse($usergroupId, $courseId): array
     {
         $usergroupModel = new UserGroupModel();
 
@@ -3157,6 +3158,81 @@ class UserGroupModel extends Model
             $data['usersNotSubscribedToCourse'] = $usersNotSubscribedToCourse;
         } else {
             $data['warning'] = get_lang('No user is subscribed to this class');
+        }
+
+        return $data;
+    }
+
+    public function getUsersAndCoursesSubscribedToAUserGroup($usergroupId):array
+    {
+        $data = [];
+        $data['error'] = null;
+        $data['warning'] = null;
+        $data['usersSubscribedToUsergroup'] = [];
+        $data['coursesSubscribedToUsergroup'] = [];
+
+        $usergroupLib = new UserGroupModel();
+
+        $userManager = new UserManager();
+        $userRepository = $userManager->getRepository();
+        $usersSubscribedToUsergroupIds = $usergroupLib->get_users_by_usergroup($usergroupId);
+        if (count($usersSubscribedToUsergroupIds) > 0) {
+            $usersSubscribedToUsergroup = [];
+            foreach ($usersSubscribedToUsergroupIds as $userId) {
+                $usersSubscribedToUsergroup[] = $userRepository->find($userId);
+            }
+            if (_api_get_person_name_convention(api_get_language_isocode(), 'sort_by')) {
+                usort($usersSubscribedToUsergroup, function ($a, $b) {
+                    $lastNameA = trim($a->getLastName(), " \t\n\r\0\x0B()");
+                    $lastNameA = preg_replace('/[\x{0300}-\x{036f}]/u', '', normalizer_normalize($lastNameA, Normalizer::FORM_D));
+                    $lastNameA = mb_strtolower($lastNameA, 'UTF-8');
+                    $lastNameB = trim($b->getLastName(), " \t\n\r\0\x0B()");
+                    $lastNameB = preg_replace('/[\x{0300}-\x{036f}]/u', '', normalizer_normalize($lastNameB, Normalizer::FORM_D));
+                    $lastNameB = mb_strtolower($lastNameB, 'UTF-8');
+                    return strcmp($lastNameA, $lastNameB);
+                });
+            } else {
+                usort($usersSubscribedToUsergroup, function ($a, $b) {
+                    $firstNameA = trim($a->getFirstName(), " \t\n\r\0\x0B()");
+                    $firstNameA = preg_replace('/[\x{0300}-\x{036f}]/u', '', normalizer_normalize($firstNameA, Normalizer::FORM_D));
+                    $firstNameA = mb_strtolower($firstNameA, 'UTF-8');
+                    $firstNameB = trim($b->getFirstName(), " \t\n\r\0\x0B()");
+                    $firstNameB = preg_replace('/[\x{0300}-\x{036f}]/u', '', normalizer_normalize($firstNameB, Normalizer::FORM_D));
+                    $firstNameB = mb_strtolower($firstNameB, 'UTF-8');
+                    return strcmp($firstNameA, $firstNameB);
+                });
+            }
+            $data['usersSubscribedToUsergroup'] = $usersSubscribedToUsergroup;
+        }
+
+        $courseManager = new CourseManager();
+        $coursesSubscribedToUsergroupIds = $usergroupLib->get_courses_by_usergroup($usergroupId);
+        if (count($coursesSubscribedToUsergroupIds) > 0) {
+            $coursesSubscribedToUsergroup = [];
+            foreach ($coursesSubscribedToUsergroupIds as $courseId) {
+                $tempCourse = [];
+                $tempCourse['code'] = $courseManager->get_course_code_from_course_id($courseId);
+                $tempCourse['name'] = $courseManager->getCourseNameFromCode($tempCourse['code']);;
+                $coursesSubscribedToUsergroup[] = $tempCourse;
+            }
+            usort($coursesSubscribedToUsergroup, function ($a, $b) {
+                $nameA = trim($a['name'], " \t\n\r\0\x0B()");
+                $nameA = preg_replace('/[\x{0300}-\x{036f}]/u', '', normalizer_normalize($nameA, Normalizer::FORM_D));
+                $nameA = mb_strtolower($nameA, 'UTF-8');
+                $nameB = trim($b['name'], " \t\n\r\0\x0B()");
+                $nameB = preg_replace('/[\x{0300}-\x{036f}]/u', '', normalizer_normalize($nameB, Normalizer::FORM_D));
+                $nameB = mb_strtolower($nameB, 'UTF-8');
+                return strcmp($nameA, $nameB);
+            });
+            $data['coursesSubscribedToUsergroup'] = $coursesSubscribedToUsergroup;
+        }
+
+        if (count($usersSubscribedToUsergroupIds) + count($coursesSubscribedToUsergroupIds) == 0) {
+            $data['warning'] = get_lang('No user and no course are subscribed to this class');
+        } else if (count($usersSubscribedToUsergroupIds) == 0) {
+            $data['warning'] = get_lang('No user are subscribed to this class');
+        } else if (count($coursesSubscribedToUsergroupIds) == 0) {
+            $data['warning'] = get_lang('No course are subscribed to this class');
         }
 
         return $data;

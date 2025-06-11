@@ -60,11 +60,13 @@ $extra_params['height'] = 'auto';
 $extra_params['sortname'] = 'title';
 $extra_params['sortorder'] = 'desc';
 // With this function we can add actions to the jgrid
+//
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
     return \''
     .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'">'.Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Subscribe users to class')).'</a>'
     .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'">'.Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Subscribe class to courses')).'</a>'
     .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'">'.Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Subscribe class to sessions')).'</a>'
+    .' <a href="/main/admin/classes/\'+options.rowId+\'/overview">'.Display::getMdiIcon(ObjectIcon::USER_LIST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Overview students and courses subscribed to the class')).'</a>'
     .' <a href="?action=edit&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>'
     .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>\';
 }';

@@ -7,8 +7,8 @@ Feature: Install portal
     Then I press "Next"
     Then I should see "Step 2 - Requirements"
     Then I press "New installation"
-    Then I should see "Step 3 - Licence"
-    Then I click the ".field-checkbox > label" element
+    Then I should see "Step 3 - License"
+    Then I click the "accept_licence" element
     Then I press "license-next"
     Then I should see "Step 4 - Database settings"
     Then I fill in the following:

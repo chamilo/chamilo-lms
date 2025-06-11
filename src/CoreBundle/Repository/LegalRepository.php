@@ -174,4 +174,27 @@ class LegalRepository extends ServiceEntityRepository
         // For example: return str_replace('[SITE_NAME]', 'YourSiteName', $content);
         return $content;
     }
+
+    /**
+     * Get a term and condition based on version and language.
+     */
+    public function findOneByVersionAndLanguage(int $versionId, int $languageId): ?Legal
+    {
+        $qb = $this->createQueryBuilder('l');
+        $qb->where('l.languageId = :languageId')
+            ->andWhere('l.version = :versionId')
+            ->setParameters([
+                'languageId' => $languageId,
+                'versionId' => $versionId,
+            ])
+            ->setMaxResults(1);
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        if ($result && $result->getContent()) {
+            $result->setContent($this->replaceTags($result->getContent()));
+        }
+
+        return $result;
+    }
 }

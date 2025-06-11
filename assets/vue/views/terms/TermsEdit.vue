@@ -31,7 +31,7 @@
           v-model="selectedLanguage"
           :options="languages"
           class="w-96 mb-0"
-          input-id="language-dropdown"
+          id="language-dropdown"
           label="Language"
           name="language"
           option-value="id"

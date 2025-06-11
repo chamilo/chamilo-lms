@@ -36,7 +36,7 @@
           :is-invalid="v$.gradebookId.$error"
           :label="t('Select assessment')"
           :options="gradebookCategories"
-          input-id="gradebook-gradebook-id"
+          id="gradebook-gradebook-id"
           name="gradebook_category_id"
           option-label="name"
         />
@@ -98,7 +98,7 @@
         :is-invalid="v$.allowTextAssignment.$error"
         :label="t('Document type')"
         :options="documentTypes"
-        input-id="allow-text-assignment"
+        id="allow-text-assignment"
         name="allow_text_assignment"
         option-label="name"
       />

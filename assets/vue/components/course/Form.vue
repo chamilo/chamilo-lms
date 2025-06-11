@@ -37,7 +37,7 @@
         v-model="courseLanguage"
         :label="t('Language')"
         :options="languageOptions"
-        input-id="language-dropdowns"
+        id="language-dropdowns"
         name="language"
         option-label="name"
         option-value="id"

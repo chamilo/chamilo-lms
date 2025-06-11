@@ -137,7 +137,7 @@ provide("isCustomizing", isCustomizing)
           :model="menuItems"
         />
         <BaseSelect
-          input-id="dropdown"
+          id="dropdown"
           name="dropdown"
           option-label="label"
           option-value="value"

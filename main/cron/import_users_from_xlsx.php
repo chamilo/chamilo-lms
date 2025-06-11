@@ -14,6 +14,8 @@
  * - Stops processing on two consecutive empty rows in XLSX
  * - Allows custom output directory for XLSX files via command line
  * - Always generates username using generateProposedLogin()
+ * - Username format: lastname + first letter of each firstname word; for active duplicates, append next letter from last firstname part
+ * - For 3+ occurrences of lastname + firstname, append increasing letters from last firstname part (e.g., jpii, jpiii)
  */
 
 // Ensure the script is run from the command line
@@ -113,15 +115,15 @@ function normalizeName($name)
 // Remove accents from strings
 function removeAccents($str) {
     $str = str_replace(
-        ['à','á','â','ã','ä','ç','è','é','ê','ë','ì','í','î','ï','ñ','ò','ó','ô','õ','ö','ù','ú','û','ü','ý','ÿ','À','Á','Â','Ã','Ä','Ç','È','É','Ê','Ë','Ì','Í','Î','Ï','Ñ','Ò','Ó','Ô','Õ','Ö','Ù','Ú','Û','Ü','Ý'],
-        ['a','a','a','a','a','c','e','e','e','e','i','i','i','i','n','o','o','o','o','o','u','u','u','u','y','y','A','A','A','A','A','C','E','E','E','E','I','I','I','I','N','O','O','O','O','O','U','U','U','U','Y'],
+        ['à','á','â','ã','ä','ç','è','é','ê','ë','ì','í','î','ï','ñ','ò','ó','ô','õ','ö','ù','ú','û','ü','ý','ÿ','À','Á','Â','Ã','Ä','Å','Ç','È','É','Ê','Ë','Ì','Í','Î','Ï','Ñ','Ò','Ó','Ô','Õ','Ö','Ù','Ú','Û','Ü','Ý'],
+        ['a','a','a','a','a','c','e','e','e','e','i','i','i','i','n','o','o','o','o','o','u','u','u','u','y','y','A','A','A','A','A','A','C','E','E','E','E','I','I','I','I','N','O','O','O','O','O','U','U','U','U','Y'],
         $str
     );
     return $str;
 }
 
 // Generate proposed login based on lastname and firstname
-function generateProposedLogin($xlsxLastname, $xlsxFirstname, &$usedLogins) {
+function generateProposedLogin($xlsxLastname, $xlsxFirstname, $isActive, &$usedLogins) {
     $lastname = strtolower(trim(removeAccents($xlsxLastname)));
     $lastname = preg_replace('/[\s-]+/', '', $lastname);
 
@@ -134,21 +136,54 @@ function generateProposedLogin($xlsxLastname, $xlsxFirstname, &$usedLogins) {
         }
     }
 
+    // Base username: lastname + first letter of each firstname word
     $baseLogin = $lastname . $firstLetters;
     $login = $baseLogin;
-    $extraChars = 0;
 
-    while (isset($usedLogins[$login])) {
-        $extraChars++;
-        $remainingLetters = strtolower(preg_replace('/[\s-]+/', '', $firstname));
-        $additionalLetters = '';
-        if ($extraChars <= strlen($remainingLetters) - strlen($firstLetters)) {
-            $additionalLetters = substr($remainingLetters, strlen($firstLetters), $extraChars);
+    // Get last part of firstname for duplicate resolution
+    $lastFirstnamePart = end($firstnameParts);
+    $lastPartLetters = strtolower(preg_replace('/[\s-]+/', '', $lastFirstnamePart));
+
+    // Create a unique key for lastname + firstname combination
+    $nameKey = normalizeName($lastname . ' ' . $firstname);
+
+    // Increment occurrence count for this name combination
+    $usedLogins['counts'][$nameKey] = isset($usedLogins['counts'][$nameKey]) ? $usedLogins['counts'][$nameKey] + 1 : 1;
+    $occurrence = $usedLogins['counts'][$nameKey];
+
+    // Handle duplicates
+    if (isset($usedLogins['logins'][$login])) {
+        // Only modify if both current and previous users are active
+        if ($isActive && $usedLogins['logins'][$login]['active']) {
+            if ($occurrence == 2) {
+                // Second occurrence: append next letter from last firstname part
+                if (strlen($lastPartLetters) > 1) {
+                    $login = $baseLogin . substr($lastPartLetters, 1, 1); // e.g., 'i' from 'Pierre'
+                } else {
+                    $login = $baseLogin . '1'; // Fallback if no more letters
+                }
+            } elseif ($occurrence >= 3) {
+                // Third+ occurrence: append increasing letters from last firstname part
+                $extraLetters = min($occurrence - 1, strlen($lastPartLetters) - 1); // e.g., 2 letters for 3rd, 3 for 4th
+                if ($extraLetters > 0) {
+                    $login = $baseLogin . substr($lastPartLetters, 1, $extraLetters); // e.g., 'ii', 'iii'
+                } else {
+                    $login = $baseLogin . ($occurrence - 1); // Fallback to number
+                }
+            }
         }
-        $login = $lastname . $firstLetters . $additionalLetters;
     }
 
-    $usedLogins[$login] = true;
+    // Ensure uniqueness by appending a number if still conflicting
+    $suffix = 1;
+    $originalLogin = $login;
+    while (isset($usedLogins['logins'][$login])) {
+        $login = $originalLogin . $suffix;
+        $suffix++;
+    }
+
+    // Store login with active status
+    $usedLogins['logins'][$login] = ['active' => $isActive];
     return $login;
 }
 
@@ -182,7 +217,7 @@ function createMissingFieldFile($filename, $rows, $columns) {
 }
 
 // Detect potential issues in XLSX file
-$usedLogins = [];
+$usedLogins = ['logins' => [], 'counts' => []];
 $generatedEmailCounts = [];
 $emptyRowCount = 0;
 foreach ($xlsxRows as $rowIndex => $xlsxRow) {
@@ -210,8 +245,9 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
         $xlsxUserData[$dbField] = $xlsxRow[$xlsxColumnIndices[$dbField]] ?? '';
     }
 
-    // Always generate username
-    $xlsxUserData['username'] = generateProposedLogin($xlsxUserData['lastname'], $xlsxUserData['firstname'], $usedLogins);
+    // Generate username
+    $isActive = !empty($xlsxUserData['active']);
+    $xlsxUserData['username'] = generateProposedLogin($xlsxUserData['lastname'], $xlsxUserData['firstname'], $isActive, $usedLogins);
 
     $rowData = [
         'Matricule' => $xlsxUserData['official_code'],
@@ -224,7 +260,7 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
         'Proposed login' => $xlsxUserData['username'],
     ];
 
-    if (!empty($xlsxUserData['active'])) {
+    if ($isActive) {
         if (empty($xlsxUserData['email']) && strpos($xlsxUserData['official_code'], '0009') === 0) {
             $emailLastnameParts = preg_split('/[\s-]+/', trim(removeAccents($xlsxUserData['lastname'])), -1, PREG_SPLIT_NO_EMPTY);
             $emailLastname = !empty($emailLastnameParts) ? strtolower($emailLastnameParts[0]) : '';
@@ -251,7 +287,7 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
         if (empty($xlsxUserData['lastname'])) {
             $lastnameMissing[] = $rowData;
         }
-        // All usernames are generated, so always include in usernameMissing
+        // All usernames are generated
         $usernameMissing[] = $rowData;
 
         $email = strtolower(trim($xlsxUserData['email']));
@@ -292,6 +328,7 @@ createMissingFieldFile($outputDir . 'duplicate_name.xlsx', $duplicateNames, $out
 // Process users: compare with database, log decisions, and update/insert if --proceed
 echo "\n=== Processing Users ===\n";
 $userManager = new UserManager();
+$usedLogins = ['logins' => [], 'counts' => []]; // Reset usedLogins to avoid false duplicates from first loop
 $emptyRowCount = 0;
 foreach ($xlsxRows as $rowIndex => $xlsxRow) {
     // Check for empty row
@@ -318,11 +355,12 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
         $xlsxUserData[$dbField] = $xlsxRow[$xlsxColumnIndices[$dbField]] ?? '';
     }
 
-    // Always generate username
-    $xlsxUserData['username'] = generateProposedLogin($xlsxUserData['lastname'], $xlsxUserData['firstname'], $usedLogins);
+    // Generate username
+    $isActive = !empty($xlsxUserData['active']);
+    $xlsxUserData['username'] = generateProposedLogin($xlsxUserData['lastname'], $xlsxUserData['firstname'], $isActive, $usedLogins);
     $dbUsername = Database::escape_string($xlsxUserData['username']);
 
-    // Check for existing user by username in database
+    // Check for existing user by username
     $sql = "SELECT user_id, firstname, lastname, email, official_code, phone, active
             FROM user
             WHERE username = '$dbUsername'";
@@ -408,7 +446,7 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
                 echo "   Sim mode: Updated user and external_user_id (username: $dbUsername)\n";
             }
         } else {
-            echo "Row " . ($rowIndex + 2) . ": No action - Existing user found, no updates needed (username: $dbUsername)\n";
+            echo "Row " . ($rowIndex + 2) . ": No action - no changes needed (username: $dbUsername)\n";
         }
     } else {
         // New user, only insert if 'Actif' is not empty
@@ -424,20 +462,20 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
                     $dbUsername,
                     $password,
                     $xlsxUserData['official_code'],
-                    '', // language (empty for default)
+                    '', // language
                     $xlsxUserData['phone'],
-                    '', // picture_uri
-                    1, // auth_source (1 = platform, adjust as needed)
+                    '', // extra fields
+                    null, // auth_source
                     $xlsxActive,
-                    0, // expiration_date (0 = never)
-                    0  // creator_id (0 = system)
+                    null, // expiration_date
+                    null  // creator_id
                 );
                 if ($userId) {
                     // Add extra field 'external_user_id'
                     UserManager::update_extra_field_value($userId, 'external_user_id', $xlsxMatricule);
                     echo "  Success: Created user and set external_user_id (username: $dbUsername)\n";
                 } else {
-                    echo "  Error: Failed to create user (username: $dbUsername)\n";
+                    echo "  Error: Could not create user (username: $dbUsername)\n";
                 }
             } catch (Exception $e) {
                 echo "  Error processing insert for user (username: $dbUsername): {$e->getMessage()}\n";

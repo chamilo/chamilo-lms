@@ -1343,4 +1343,23 @@ class UrlManager
 
         return $response;
     }
+
+    public static function remove_courses_from_urls(array $courseCodes, array $urlIds): void
+    {
+        if (empty($courseCodes) || empty($urlIds)) {
+            return;
+        }
+
+        $conn = Database::getManager()->getConnection();
+        $placeholdersCourses = implode(',', array_fill(0, count($courseCodes), '?'));
+        $placeholdersUrls = implode(',', array_fill(0, count($urlIds), '?'));
+
+        $sql = "DELETE FROM access_url_rel_course
+            WHERE c_id IN (
+                SELECT id FROM course WHERE code IN ($placeholdersCourses)
+            )
+            AND access_url_id IN ($placeholdersUrls)";
+
+        $conn->executeQuery($sql, array_merge($courseCodes, $urlIds));
+    }
 }

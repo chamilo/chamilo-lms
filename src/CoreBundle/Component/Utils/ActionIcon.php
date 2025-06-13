@@ -170,4 +170,7 @@ enum ActionIcon: string
     case ADD_FILE_VARIATION = 'file-replace';
 
     case CLOSE = 'close';
+
+    case MULTI_COURSE_URL_ASSIGN = 'playlist-plus';
+
 }

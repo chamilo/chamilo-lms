@@ -33,26 +33,27 @@ $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple a
 
 Display::display_header($tool_name);
 
-echo Display::toolbarAction(
-    'url',
-    [
-        Display::url(
-            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit users and URLs')),
-            api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
-        ),
-    ]
+echo '<div class="flex gap-2 items-center mb-4 mt-4">';
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to URL list')),
+    api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
 );
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit users and URLs')),
+    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
+);
+echo '</div>';
 
 Display::page_subheader2($tool_name);
 
 if (!empty($_POST['form_sent'])) {
     $form_sent = $_POST['form_sent'];
-    $users = is_array($_POST['user_list']) ? array_map('intval', $_POST['user_list']) : [];
-    $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : [];
-    $first_letter_user = $_POST['first_letter_user'];
+    $users = isset($_POST['user_list']) && is_array($_POST['user_list']) ? array_map('intval', $_POST['user_list']) : [];
+    $url_list = isset($_POST['url_list']) && is_array($_POST['url_list']) ? $_POST['url_list'] : [];
+    $first_letter_user = $_POST['first_letter_user'] ?? '';
 
     if (1 == $form_sent) {
-        if (0 == count($users) || 0 == count($url_list)) {
+        if (count($users) === 0 || count($url_list) === 0) {
             echo Display::return_message(
                 get_lang('You must select at least one user and one URL'),
                 'error'
@@ -93,63 +94,95 @@ $db_urls = Database::store_result($result);
 unset($result);
 ?>
 
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
- <input type="hidden" name="form_sent" value="1"/>
-  <table border="0" cellpadding="5" cellspacing="0" width="100%">
-   <tr>
-    <td width="40%" align="center">
-     <b><?php echo get_lang('User list'); ?></b>
-     <br/><br/>
-     <?php echo get_lang('Select').' '; echo 'firstname' == $target_name ? get_lang('First name') : get_lang('Last name'); ?>
-     <select name="first_letter_user" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
-      <option value="">--</option>
-      <?php
-        echo Display :: get_alphabet_options($first_letter_user);
-        ?>
-     </select>
-    </td>
-        <td width="20%">&nbsp;</td>
-    <td width="40%" align="center">
-     <b><?php echo get_lang('URL list'); ?> :</b>
-    </td>
-   </tr>
-   <tr>
-    <td width="40%" align="center">
-     <select name="user_list[]" multiple="multiple" size="20" style="width:380px;">
-        <?php
-        foreach ($db_users as $user) {
-            ?>
-            <option value="<?php echo $user['id']; ?>" <?php if (in_array($user['id'], $users)) {
-                echo 'selected="selected"';
-            } ?>>
-            <?php echo api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'; ?>
-            </option>
-        <?php
+    <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" class="space-y-6">
+        <input type="hidden" name="form_sent" value="1" />
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    <?php echo get_lang('Select').' '.('firstname' == $target_name ? get_lang('First name') : get_lang('Last name')); ?>
+                </label>
+                <select
+                    name="first_letter_user"
+                    onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();"
+                    class="rounded-md border border-gray-300 p-2 shadow-sm focus:border-primary focus:ring-primary"
+                >
+                    <option value="">--</option>
+                    <?php echo Display::get_alphabet_options($first_letter_user); ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2"><?php echo get_lang('User list'); ?></label>
+                <input
+                    type="text"
+                    id="userFilter"
+                    onkeyup="filterSelect('userFilter', 'userSelect')"
+                    placeholder="<?php echo get_lang('Search user'); ?>"
+                    class="mb-2 w-full rounded-md border border-gray-300 p-2 text-sm focus:outline-none"
+                />
+
+                <select
+                    id="userSelect"
+                    name="user_list[]"
+                    multiple
+                    size="20"
+                    class="w-full h-[400px] rounded-md border border-gray-300 p-2 text-sm focus:outline-none"
+                >
+                    <?php foreach ($db_users as $user): ?>
+                        <option value="<?php echo $user['id']; ?>" <?php if (in_array($user['id'], $users)) echo 'selected'; ?>>
+                            <?php echo api_get_person_name($user['firstname'], $user['lastname']) . ' (' . $user['username'] . ')'; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+                <button
+                    type="submit"
+                    class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2 text-white shadow hover:bg-primary/90 focus:outline-none focus:ring"
+                >
+                    <?php echo get_lang('Add users to that URL'); ?>
+                </button>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2"><?php echo get_lang('URL list'); ?></label>
+                <input
+                    type="text"
+                    id="urlFilter"
+                    onkeyup="filterSelect('urlFilter', 'urlSelect')"
+                    placeholder="<?php echo get_lang('Search URL'); ?>"
+                    class="mb-2 w-full rounded-md border border-gray-300 p-2 text-sm focus:outline-none"
+                />
+                <select
+                    id="urlSelect"
+                    name="url_list[]"
+                    multiple
+                    size="20"
+                    class="w-full h-[400px] rounded-md border border-gray-300 p-2 text-sm focus:outline-none"
+                >
+                    <?php foreach ($db_urls as $url_obj): ?>
+                        <option value="<?php echo $url_obj['id']; ?>" <?php if (in_array($url_obj['id'], $url_list)) echo 'selected'; ?>>
+                            <?php echo $url_obj['url']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+    </form>
+    <script>
+        function filterSelect(inputId, selectId) {
+            const input = document.getElementById(inputId);
+            const filter = input.value.toLowerCase();
+            const select = document.getElementById(selectId);
+            const options = select.options;
+
+            for (let i = 0; i < options.length; i++) {
+                const txt = options[i].text.toLowerCase();
+                options[i].style.display = txt.includes(filter) ? '' : 'none';
+            }
         }
-        ?>
-    </select>
-   </td>
-   <td width="20%" valign="middle" align="center">
-    <button type="submit" class="add"> <?php echo get_lang('Add users to that URL'); ?> </button>
-   </td>
-   <td width="40%" align="center">
-    <select name="url_list[]" multiple="multiple" size="20" style="width:230px;">
-		<?php
-        foreach ($db_urls as $url_obj) {
-            ?>
-			<option value="<?php echo $url_obj['id']; ?>" <?php if (in_array($url_obj['id'], $url_list)) {
-                echo 'selected="selected"';
-            } ?>>
-                <?php echo $url_obj['url']; ?>
-			</option>
-			<?php
-        }
-        ?>
-    </select>
-   </td>
-  </tr>
- </table>
-</form>
+    </script>
 <?php
 
 Display :: display_footer();

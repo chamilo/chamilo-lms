@@ -75,8 +75,7 @@ $message = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $UserList = !empty($_POST['sessionUsersList']) ?: [];
-
+    $UserList = $_POST['sessionUsersList'] ?? [];
     if (!is_array($UserList)) {
         $UserList = [];
     }
@@ -133,18 +132,24 @@ if (!empty($message)) {
     echo Display::return_message($message, 'normal', false);
 }
 
-echo Display::toolbarAction(
-    'url',
-    [
-        Display::url(
-            Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add user to this URL')),
-            api_get_path(WEB_CODE_PATH).'admin/access_url_add_users_to_url.php'
-        ),
-    ]
+echo '<div class="flex gap-2 items-center mb-4 mt-4">';
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to URL list')),
+    api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
 );
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add user to this URL')),
+    api_get_path(WEB_CODE_PATH).'admin/access_url_add_users_to_url.php'
+);
+echo '</div>';
+
 
 Display::page_subheader2($tool_name);
-
+?>
+    <h2 class="text-xl font-semibold text-gray-800 mt-4 mb-2">
+        <?php echo $tool_name; ?>
+    </h2>
+<?php
 $nosessionUsersList = $sessionUsersList = [];
 $ajax_search = 'unique' === $add_type ? true : false;
 
@@ -175,210 +180,206 @@ if ($ajax_search) {
         }
     }
 }
-
-if ('multiple' == $add_type) {
-    $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.get_lang('Single registration').'</a>';
-    $link_add_type_multiple = get_lang('Multiple registration');
-} else {
-    $link_add_type_unique = get_lang('Single registration');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.get_lang('Multiple registration').'</a>';
-}
+$total_users = count($nosessionUsersList) + count($sessionUsersList);
 $url_list = UrlManager::get_url_data();
+
+$url_selected = '';
+foreach ($url_list as $url_obj) {
+    if ($url_obj['id'] == $access_url_id) {
+        $url_selected = $url_obj['url'];
+        break;
+    }
+}
+
 ?>
+    <div class="flex space-x-2 border-gray-300 pb-2 mb-4">
+        <a href="<?php echo api_get_self(); ?>?add_type=unique&access_url_id=<?php echo $access_url_id; ?>"
+           class="text-sm px-4 py-2 transition <?php echo $add_type === 'unique'
+               ? 'border-b-2 border-primary text-primary font-semibold'
+               : 'text-gray-500 hover:text-primary'; ?>">
+            <?php echo get_lang('Single registration'); ?>
+        </a>
 
-<div style="text-align: left;">
-<?php echo $link_add_type_unique; ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple; ?>
-</div>
+        <a href="<?php echo api_get_self(); ?>?add_type=multiple&access_url_id=<?php echo $access_url_id; ?>"
+           class="text-sm px-4 py-2 transition <?php echo $add_type === 'multiple'
+               ? 'border-b-2 border-primary text-primary font-semibold'
+               : 'text-gray-500 hover:text-primary'; ?>">
+            <?php echo get_lang('Multiple registration'); ?>
+        </a>
+    </div>
+
 <br /><br />
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" <?php if ($ajax_search) {
-    echo ' onsubmit="valide();"';
-} ?> >
-    <?php echo get_lang('Select URL').' : '; ?>
-<select name="access_url_id" onchange="javascript:send();">
-<option value="0"> <?php echo get_lang('Select URL'); ?></option>
-        <?php
-        $url_selected = '';
-        foreach ($url_list as $url_obj) {
-            $checked = '';
-            if (!empty($access_url_id)) {
-                if ($url_obj['id'] == $access_url_id) {
-                    $checked = 'selected=true';
-                    $url_selected = $url_obj[1];
+    <form
+        name="formulaire"
+        method="post"
+        action="<?php echo api_get_self(); ?>"
+        class="space-y-6"
+        <?php if ($ajax_search) echo 'onsubmit="valide();"'; ?>
+    >
+        <input type="hidden" name="form_sent" value="1" />
+        <input type="hidden" name="add_type" value="<?php echo $add_type; ?>" />
+
+        <!-- URL selector -->
+        <div class="flex items-center space-x-4">
+            <label for="access_url_id" class="text-sm font-medium text-gray-700">
+                <?php echo get_lang('Select URL'); ?>
+            </label>
+            <select
+                name="access_url_id"
+                id="access_url_id"
+                onchange="send();"
+                class="w-1/2 rounded-md border border-gray-300 bg-white p-2 shadow-sm focus:border-primary focus:ring-primary"
+            >
+                <option value="0"><?php echo get_lang('Select URL'); ?></option>
+                <?php foreach ($url_list as $url_obj): ?>
+                    <?php
+                    $selected = (!empty($access_url_id) && $url_obj['id'] == $access_url_id) ? 'selected' : '';
+                    if ($url_obj['active'] == 1):
+                        ?>
+                        <option value="<?php echo $url_obj['id']; ?>" <?php echo $selected; ?>>
+                            <?php echo $url_obj['url']; ?>
+                        </option>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="text-sm text-gray-600">
+            <p><?php echo get_lang('Total available users') . ': ' . $total_users; ?></p>
+            <p class="mt-1"><?php echo get_lang('Portal users list') . ': ' . count($nosessionUsersList); ?></p>
+            <p class="mt-1"><?php echo get_lang('Users of') . ' ' . $url_selected . ': ' . count($sessionUsersList); ?></p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4">
+            <div>
+                <label class="block mb-2 text-sm font-medium text-gray-700"><?php echo get_lang('Available users'); ?></label>
+                <?php if ($ajax_search): ?>
+                    <input
+                        type="text"
+                        id="user_to_add"
+                        onkeyup="xajax_search_users(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)"
+                        class="w-full rounded-md border border-gray-300 p-2 text-sm focus:border-primary focus:ring-primary"
+                    />
+                    <div id="ajax_list_users" class="mt-2"></div>
+                <?php else: ?>
+                    <select
+                        id="origin_users"
+                        name="nosessionUsersList[]"
+                        multiple
+                        size="15"
+                        class="w-full h-[300px] rounded-md border border-gray-300 p-2 text-sm focus:outline-none"
+                    >
+                        <?php foreach ($nosessionUsersList as $user): ?>
+                            <option value="<?php echo $user['user_id']; ?>">
+                                <?php echo $user['username'] . ' - ' . api_get_person_name($user['firstname'], $user['lastname']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
+            </div>
+
+            <div class="flex flex-col items-center justify-center space-y-4">
+                <?php if (!$ajax_search): ?>
+                    <button
+                        type="button"
+                        onclick="moveSelectedOptions('origin_users', 'destination_users')"
+                        class="rounded-full bg-primary p-2 hover:bg-primary/80 focus:outline-none focus:ring"
+                    >
+                        <i class="mdi mdi-fast-forward-outline text-white text-2xl"></i>
+                    </button>
+                    <button
+                        type="button"
+                        onclick="moveSelectedOptions('destination_users', 'origin_users')"
+                        class="rounded-full bg-secondary p-2 hover:bg-secondary/80 focus:outline-none focus:ring"
+                    >
+                        <i class="mdi mdi-rewind-outline text-white text-2xl"></i>
+                    </button>
+                <?php else: ?>
+                    <button
+                        type="button"
+                        onclick="removeSelectedOptions('destination_users')"
+                        class="rounded-full bg-danger p-2 hover:bg-danger/80 focus:outline-none focus:ring"
+                    >
+                        <i class="mdi mdi-rewind-outline text-white text-2xl"></i>
+                    </button>
+                <?php endif; ?>
+            </div>
+
+            <div>
+                <label class="block mb-2 text-sm font-medium text-gray-700"><?php echo get_lang('Assigned users'); ?></label>
+                <select
+                    id="destination_users"
+                    name="sessionUsersList[]"
+                    multiple
+                    size="15"
+                    class="w-full h-[300px] rounded-md border border-gray-300 p-2 text-sm focus:outline-none"
+                >
+                    <?php foreach ($sessionUsersList as $user): ?>
+                        <option value="<?php echo $user['user_id']; ?>">
+                            <?php echo $user['username'] . ' - ' . api_get_person_name($user['firstname'], $user['lastname']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="text-center mt-6">
+            <button
+                type="button"
+                onclick="submitWithAllDestinationOptionsSelected('formulaire', 'destination_users')"
+                class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2 text-white shadow hover:bg-primary/90 focus:outline-none focus:ring"
+            >
+                <?php echo get_lang('Edit users and URLs'); ?>
+            </button>
+        </div>
+    </form>
+
+    <script>
+        function moveSelectedOptions(originSelectId, targetSelectId) {
+            const origin = document.getElementById(originSelectId);
+            const target = document.getElementById(targetSelectId);
+            const optionsToMove = [];
+
+            Array.from(origin.options).forEach(option => {
+                if (option.selected) {
+                    optionsToMove.push(new Option(option.text, option.value));
+                    option.remove();
                 }
-            }
-            if (1 == $url_obj['active']) {
-                ?>
-        		<option <?php echo $checked; ?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?></option>
-                <?php
-            }
+            });
+
+            optionsToMove.forEach(option => target.add(option));
+            sortSelectOptions(target);
+            target.selectedIndex = -1;
         }
-        ?>
-</select>
-<br /><br />
-<input type="hidden" name="form_sent" value="1" />
-<input type="hidden" name="add_type" value = "<?php echo $add_type; ?>" />
 
-
-<table border="0" cellpadding="5" cellspacing="0" width="100%">
-<tr>
-    <td>
-    <h3>
-    <?php
-        $total_users = count($nosessionUsersList) + count($sessionUsersList);
-        echo get_lang('Total available users').' '.$total_users;
-    ?>
-    </h3>
-    </td>
-</tr>
-<tr>
-  <td align="center"><b><?php echo get_lang('Portal users list'); ?> : <?php echo count($nosessionUsersList); ?></b>
-  </td>
-  <td></td>
-  <td align="center"><b><?php echo get_lang('Users of').' '.$url_selected; ?> : <?php echo count($sessionUsersList); ?></b></td>
-</tr>
-<tr>
-  <td align="center">
-  <div id="content_source">
-    <?php if ($ajax_search) {
-        ?>
-    <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
-    <div id="ajax_list_users"></div>
-    <?php
-    } else {
-        ?>
-    <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
-    <?php
-        foreach ($nosessionUsersList as $enreg) {
-            ?>
-    <option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?></option>
-    <?php
+        function removeSelectedOptions(selectId) {
+            const select = document.getElementById(selectId);
+            Array.from(select.options).forEach(option => {
+                if (option.selected) {
+                    option.remove();
+                }
+            });
         }
-        unset($nosessionUsersList); ?>
-    </select>
-        <?php
-    }
-    ?>
-  </div>
-  </td>
-  <td width="10%" valign="middle" align="center">
-    <?php if ($ajax_search) {
-        ?>
-        <button class="btn btn--plain" type="button" onclick="remove_item(document.getElementById('destination_users'))">
-            <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
-        </button>
-    <?php
-    } else {
-        ?>
-        <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" >
-            <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
-        </button>
-        <br /><br />
-        <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" >
-            <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
 
-        </button>
-    <?php
-    } ?>
-	<br /><br /><br /><br /><br /><br />
-  </td>
-  <td align="center">
-  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
-    <?php
-    foreach ($sessionUsersList as $enreg) {
-        ?>
-        <option value="<?php echo $enreg['user_id']; ?>">
-            <?php echo $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
-        </option>
-    <?php
-    }
-    unset($sessionUsersList);
-    ?>
-  </select></td>
-</tr>
-<tr>
-	<td colspan="3" align="center">
-		<br />
-        <?php
-        if (isset($_GET['add'])) {
-            echo '<button class="save" type="button" onclick="valide()" >'.get_lang('Add users to an URL').'</button>';
-        } else {
-            echo '<button class="save" type="button" onclick="valide()" >'.get_lang('Edit users and URLs').'</button>';
+        function sortSelectOptions(selectElement) {
+            const sortedOptions = Array.from(selectElement.options)
+                .sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()));
+
+            selectElement.innerHTML = '';
+            sortedOptions.forEach(option => selectElement.add(option));
         }
-        ?>
-	</td>
-</tr>
-</table>
-</form>
-<script>
-function moveItem(origin , destination) {
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
-}
 
-function sortOptions(options) {
-	newOptions = new Array();
-	for (i = 0 ; i<options.length ; i++)
-		newOptions[i] = options[i];
-	newOptions = newOptions.sort(mysort);
-	options.length = 0;
-	for(i = 0 ; i < newOptions.length ; i++)
-		options[i] = newOptions[i];
+        function submitWithAllDestinationOptionsSelected(formId, destinationSelectId) {
+            const form = document.forms[formId];
+            const select = document.getElementById(destinationSelectId);
 
-}
+            Array.from(select.options).forEach(option => {
+                option.selected = true;
+            });
 
-function mysort(a, b) {
-	if(a.text.toLowerCase() > b.text.toLowerCase()){
-		return 1;
-	}
-	if(a.text.toLowerCase() < b.text.toLowerCase()){
-		return -1;
-	}
-	return 0;
-}
+            form.submit();
+        }
+    </script>
 
-function valide() {
-	var options = document.getElementById('destination_users').options;
-	for (i = 0 ; i<options.length ; i++)
-		options[i].selected = true;
-	document.forms.formulaire.submit();
-}
-function loadUsersInSelect(select) {
-	var xhr_object = null;
-	if(window.XMLHttpRequest) // Firefox
-		xhr_object = new XMLHttpRequest();
-	else if(window.ActiveXObject) // Internet Explorer
-		xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
-	else  // XMLHttpRequest non supporté par le navigateur
-	alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
-
-	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	nosessionUsers = makepost(document.getElementById('origin_users'));
-	sessionUsers = makepost(document.getElementById('destination_users'));
-	nosessionClasses = makepost(document.getElementById('origin_classes'));
-	sessionClasses = makepost(document.getElementById('destination_classes'));
-	xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
-	xhr_object.onreadystatechange = function() {
-		if (xhr_object.readyState == 4) {
-			document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
-		}
-	}
-}
-
-function makepost(select){
-	var options = select.options;
-	var ret = "";
-	for (i = 0 ; i<options.length ; i++)
-		ret = ret + options[i].value +'::'+options[i].text+";;";
-	return ret;
-}
-</script>
 <?php
 Display::display_footer();

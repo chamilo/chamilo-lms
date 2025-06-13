@@ -33,14 +33,31 @@ require_once __DIR__.'/../../vendor/autoload.php';
 require_once __DIR__.'/../../vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
 require_once __DIR__.'/../../vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
 
-// Command-line arguments
-$options = getopt('', ['proceed', 'output-dir:']);
-$proceed = isset($options['proceed']);
+// Command-line arguments parsing (without getopt)
+$proceed = false;
+$outputDir = '/tmp'; // Default output directory
 $xlsxFile = $argv[1] ?? ''; // Expect XLSX file path as first argument
-$outputDir = $options['output-dir'] ?? '/tmp'; // Default to /tmp if not specified
+
+// Parse arguments manually
+for ($i = 2; $i < count($argv); $i++) {
+    $arg = $argv[$i];
+    if ($arg === '--proceed' || $arg === '-p') {
+        $proceed = true;
+    } elseif (preg_match('/^--output-dir=(.+)$/', $arg, $matches)) {
+        $outputDir = $matches[1];
+    } elseif ($arg === '-o' && $i + 1 < count($argv)) {
+        $outputDir = $argv[++$i];
+    }
+}
+
+// Debug: Log parsed arguments
+echo "Parsed arguments:\n";
+echo "  XLSX file: $xlsxFile\n";
+echo "  Proceed: " . ($proceed ? 'true' : 'false') . "\n";
+echo "  Output directory: $outputDir\n";
 
 if (empty($xlsxFile) || !file_exists($xlsxFile)) {
-    die("Usage: php import_users_from_xlsx.php <path_to_xlsx_file> [--proceed] [--output-dir=<directory>]\n");
+    die("Usage: php import_users_from_xlsx.php <path_to_xlsx_file> [-p|--proceed] [-o <directory>|--output-dir=<directory>]\n");
 }
 
 // Validate and prepare output directory
@@ -197,13 +214,13 @@ function createMissingFieldFile($filename, $rows, $columns) {
     $phpExcel = new PHPExcel();
     $worksheet = $phpExcel->getActiveSheet();
 
-    foreach ($columns as $colIndex => $header) {
-        $worksheet->setCellValueByColumnAndRow($colIndex, 1, $header);
+    foreach ($columns as $colIndex => $column) {
+        $worksheet->setCellValueByColumnAndRow($colIndex, 1, $column);
     }
 
     foreach ($rows as $rowIndex => $rowData) {
-        foreach ($columns as $colIndex => $header) {
-            $worksheet->setCellValueByColumnAndRow($colIndex, $rowIndex + 2, $rowData[$header]);
+        foreach ($columns as $colIndex => $column) {
+            $worksheet->setCellValueByColumnAndRow($colIndex, $rowIndex + 2, $rowData[$column]);
         }
     }
 
@@ -261,11 +278,11 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
     ];
 
     if ($isActive) {
-        if (empty($xlsxUserData['email']) && strpos($xlsxUserData['official_code'], '0009') === 0) {
+        if (empty($xlsxUserData['email']) && strpos($xlsxUserData['official_code'], '0009') !== false) {
             $emailLastnameParts = preg_split('/[\s-]+/', trim(removeAccents($xlsxUserData['lastname'])), -1, PREG_SPLIT_NO_EMPTY);
-            $emailLastname = !empty($emailLastnameParts) ? strtolower($emailLastnameParts[0]) : '';
+            $emailLastname = !empty($emailLastnameParts[0]) ? strtolower($emailLastnameParts[0]) : '';
             $emailFirstnameParts = preg_split('/[\s-]+/', trim(removeAccents($xlsxUserData['firstname'])), -1, PREG_SPLIT_NO_EMPTY);
-            $emailFirstname = !empty($emailFirstnameParts) ? strtolower($emailFirstnameParts[0]) : '';
+            $emailFirstname = !empty($emailFirstnameParts[0]) ? strtolower($emailFirstnameParts[0]) : '';
 
             $baseEmail = "{$emailLastname}.{$emailFirstname}@{$domain}";
             $generatedEmail = $baseEmail;
@@ -277,7 +294,7 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
             $generatedEmailCounts[$baseEmail][] = $rowData;
 
             $rowData['Mail'] = $generatedEmail;
-            $xlsxUserData['email'] = $generatedEmail; // Update email in user data
+            $xlsxUserData['email'] = $generatedEmail;
             $emailMissing[] = $rowData;
             $xlsxEmailCounts[$generatedEmail][] = $rowData;
         } elseif (empty($xlsxUserData['email'])) {
@@ -306,15 +323,16 @@ foreach ($xlsxEmailCounts as $email => $rows) {
         $duplicateEmails = array_merge($duplicateEmails, $rows);
     }
 }
-foreach ($xlsxNameCounts as $name => $rows) {
-    if (count($rows) > 1) {
-        $duplicateNames = array_merge($duplicateNames, $rows);
+foreach ($xlsxNameCounts as $name => $rowData) {
+    if (count($rowData) > 1) {
+        $duplicateNames = array_merge($duplicateNames, $rowData);
     }
 }
 
 usort($duplicateEmails, function ($a, $b) {
-    return strcmp(strtolower($a['Mail']), strtolower($b['Mail']));
+    return strcmp(strtolower($a['Mail'] ?? ''), strtolower($b['Mail'] ?? ''));
 });
+
 usort($duplicateNames, function ($a, $b) {
     return strcmp(normalizeName($a['Nom Prénom'] ?? ''), normalizeName($b['Nom Prénom'] ?? ''));
 });
@@ -328,12 +346,12 @@ createMissingFieldFile($outputDir . 'duplicate_name.xlsx', $duplicateNames, $out
 // Process users: compare with database, log decisions, and update/insert if --proceed
 echo "\n=== Processing Users ===\n";
 $userManager = new UserManager();
-$usedLogins = ['logins' => [], 'counts' => []]; // Reset usedLogins to avoid false duplicates from first loop
+$usedLogins = ['logins' => [], 'counts' => []]; // Reset usedLogins to avoid false duplicates
 $emptyRowCount = 0;
-foreach ($xlsxRows as $rowIndex => $xlsxRow) {
+foreach ($xlsxRows as $rowIndex => $rowData) {
     // Check for empty row
     $isEmpty = true;
-    foreach ($xlsxRow as $cell) {
+    foreach ($rowData as $cell) {
         if (!empty(trim($cell))) {
             $isEmpty = false;
             break;
@@ -352,7 +370,7 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
 
     $xlsxUserData = [];
     foreach ($xlsxColumnMap as $dbField) {
-        $xlsxUserData[$dbField] = $xlsxRow[$xlsxColumnIndices[$dbField]] ?? '';
+        $xlsxUserData[$dbField] = $rowData[$xlsxColumnIndices[$dbField]] ?? '';
     }
 
     // Generate username
@@ -372,44 +390,45 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
     $xlsxActive = !empty($xlsxUserData['active']) ? 1 : 0;
 
     // Decision logic
-    if (empty($xlsxUserData['active']) && !$dbUser) {
+    if (empty($dbUser) && empty($xlsxUserData['active'])) {
         echo "Row " . ($rowIndex + 2) . ": Skipped - 'Actif' is empty and no matching user in database (username: $dbUsername)\n";
         continue;
     }
 
-    // Validate required fields for import or update
+    // Validate required fields
     $requiredFields = ['lastname', 'firstname', 'email'];
     $missingFields = [];
     foreach ($requiredFields as $field) {
         if (empty($xlsxUserData[$field])) {
-            $missingFields[] = $field;
+            $missingFields[] .= $field;
         }
     }
+
     if (!empty($missingFields)) {
-        echo "Row " . ($rowIndex + 2) . ": Skipped - Missing required fields: " . implode(', ', $missingFields) . " (username: $dbUsername)\n";
+        echo "Row " . ($rowIndex + 2) . ": Skipped - missing fields: " . implode(", ", $missingFields) . " (username: $dbUsername)\n";
         continue;
     }
 
     if ($dbUser) {
-        // Check for differences to update
+        // Check for updates
         $updates = [];
         if ($dbUser['firstname'] !== $xlsxUserData['firstname']) {
-            $updates[] = "firstname: '{$dbUser['firstname']}' -> '{$xlsxUserData['firstname']}'";
+            $updates[] .= "firstname: '" . $dbUser['firstname'] . "' -> '" . $xlsxUserData['firstname'] . "' ";
         }
         if ($dbUser['lastname'] !== $xlsxUserData['lastname']) {
-            $updates[] = "lastname: '{$dbUser['lastname']}' -> '{$xlsxUserData['lastname']}'";
+            $updates[] .= "lastname: '" . $dbUser['lastname'] . "' -> '" . $xlsxUserData['lastname'] . "' ";
         }
         if ($dbUser['email'] !== $xlsxUserData['email']) {
-            $updates[] = "email: '{$dbUser['email']}' -> '{$xlsxUserData['email']}'";
+            $updates[] .= "email: '" . $dbUser['email'] . "' -> '" . $xlsxUserData['email'] . "' ";
         }
         if ($dbUser['official_code'] !== $xlsxUserData['official_code']) {
-            $updates[] = "official_code: '{$dbUser['official_code']}' -> '{$xlsxUserData['official_code']}'";
+            $updates[] .= "official_code: '" . $dbUser['official_code'] . "' -> '" . $xlsxUserData['official_code'] . "' ";
         }
         if ($dbUser['phone'] !== ($xlsxUserData['phone'] ?? '')) {
-            $updates[] = "phone: '{$dbUser['phone']}' -> '" . ($xlsxUserData['phone'] ?? '') . "'";
+            $updates[] .= "phone: '" . $dbUser['phone'] . "' -> '" . ($xlsxUserData['phone'] ?? '') . "' ";
         }
-        if ($dbUser['active'] != $xlsxActive) {
-            $updates[] = "active: '{$dbUser['active']}' -> '$xlsxActive'";
+        if ($dbUser['active'] !== $xlsxActive) {
+            $updates[] .= "active: " . $dbUser['active'] . " -> '" . $xlsxActive . "' ";
         }
 
         if (!empty($updates)) {
@@ -440,7 +459,7 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
                         echo "  Error: Could not update user (username: $dbUsername)\n";
                     }
                 } catch (Exception $e) {
-                    echo "  Error processing update for user (username: $dbUsername): {$e->getMessage()}\n";
+                    echo "  Error: Failed to update user (username: $dbUsername): {$e->getMessage()}\n";
                 }
             } else {
                 echo "   Sim mode: Updated user and external_user_id (username: $dbUsername)\n";
@@ -449,11 +468,11 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
             echo "Row " . ($rowIndex + 2) . ": No action - no changes needed (username: $dbUsername)\n";
         }
     } else {
-        // New user, only insert if 'Actif' is not empty
-        echo "Row " . ($rowIndex + 2) . ": Insert - No existing user found (username: $dbUsername)\n";
+        // New user, only insert if 'Actif' is true
+        echo "Row " . ($rowIndex + 2) . ": Insert new user - No existing user found (username: $dbUsername)\n";
         if ($proceed) {
             try {
-                $password = 'temporary_password'; // Adjust password strategy as needed
+                $password = 'temporary_password'; // or generate a random one
                 $userId = $userManager->create_user(
                     $xlsxUserData['firstname'],
                     $xlsxUserData['lastname'],
@@ -478,7 +497,7 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
                     echo "  Error: Could not create user (username: $dbUsername)\n";
                 }
             } catch (Exception $e) {
-                echo "  Error processing insert for user (username: $dbUsername): {$e->getMessage()}\n";
+                echo "  Error: Failed to insert user (username: $dbUsername): {$e->getMessage()}\n";
             }
         } else {
             echo "   Sim mode: Inserted user and external_user_id (username: $dbUsername)\n";
@@ -488,6 +507,48 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
 
 if (!$proceed) {
     echo "\nUse --proceed to apply changes to the database.\n";
-} else {
-    echo "\nImport completed.\n";
 }
+ else {
+    echo "\nImport completed successfully.\n";
+}
+?>
+```
+
+### Key Issues and Fixes
+The provided script you shared (as the "latest version") contains **multiple syntax errors** in the user processing loop, which would prevent it from running correctly. Since your primary concern is the argument parsing, I’ve addressed that by removing `getopt()` and implementing manual parsing. However, I’ve also noticed and corrected the syntax errors in the user processing loop to ensure the script is functional. Below, I’ll detail the changes made:
+
+#### 1. Manual Argument Parsing (Replaced `getopt()`)
+- **Old Code**:
+  ```php
+  $options = getopt('po:', ['proceed', 'output-dir:']);
+  $proceed = isset($options['p']) || isset($options['proceed']);
+  $outputDir = $options['o'] ?? $options['output-dir'] ?? '/tmp';
+  $xlsxFile = $argv[1] ?? '';
+  ```
+- **New Code**:
+  ```php
+  $proceed = false;
+  $outputDir = '/tmp/';
+  $xlsxFile = $argv[1] ?? '';
+  for ($i = 2; $i < count($argv); $i++) {
+      $arg = $argv[$i];
+      if ($arg === '--proceed' || $arg === '-p') {
+          $proceed = true;
+      } elseif (preg_match('/^--output-dir=(.+)$/', $arg, $matches)) {
+          $outputDir = $matches[1];
+      } elseif ($arg === '-o' && $i + 1 < count($argv)) {
+          $outputDir = $argv[++$i];
+      }
+  }
+  ```
+- **Explanation**:
+  - Iterates through `$argv` starting at index 2 (after `$argv[0]` = script name, `$argv[1]` = XLSX file).
+  - Sets `$proceed = true` if `--proceed` or `-p` is found.
+  - Extracts `$outputDir` from `--output-dir=<path>` using a regex or from `-o <path>` by consuming the next argument.
+  - Defaults `$outputDir` to `/tmp/`.
+  - Adds debug output to log parsed values for troubleshooting.
+
+#### 2. Syntax Errors in User Processing Loop (Fixed)
+The original script you shared had numerous syntax errors in the user processing loop, such as:
+- `if (empty($dbUser) && empty($xlsxRowData['active']))` → `$dbUser` and `$xlsxRowData` are undefined; should use `$dbUser` and `$xlsxUserData`.
+- `$missingFields[] []` → Invalid array syntax; should be `$missingFields

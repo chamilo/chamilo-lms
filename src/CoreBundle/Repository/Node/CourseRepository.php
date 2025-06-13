@@ -10,10 +10,15 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -231,5 +236,201 @@ class CourseRepository extends ResourceRepository
         $query = $qb->getQuery();
 
         return $query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
+    }
+
+    public function getPersonalSessionCourses(
+        User $user,
+        AccessUrl $url,
+        bool $isAllowedToCreateCourse,
+        ?int $sessionLimit = null,
+    ): array {
+        $em = $this->getEntityManager();
+
+        /** @var SessionRepository $sessionRepo */
+        $sessionRepo = $em->getRepository(Session::class);
+        $sessionCourseUserRepo = $em->getRepository(SessionRelCourseRelUser::class);
+
+        $qb = $em->createQueryBuilder();
+
+        $courseListSqlResult = $qb
+            ->select('c.id AS cid')
+            ->from(CourseRelUser::class, 'cru')
+            ->leftJoin('cru.course', 'c')
+            ->leftJoin('c.urls', 'urc')
+            ->where($qb->expr()->eq('cru.user', ':user'))
+            ->andWhere($qb->expr()->neq('cru.relationType', ':relationType'))
+            ->andWhere($qb->expr()->eq('urc.url', ':url'))
+            ->setParameters([
+                'user' => $user->getId(),
+                'relationType' => COURSE_RELATION_TYPE_RRHH,
+                'url' => $url->getId(),
+            ])
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $personalCourseList = $courseListSqlResult;
+
+        $sessionListFromCourseCoach = [];
+        // Getting sessions that are related to a coach in the session_rel_course_rel_user table
+        if ($isAllowedToCreateCourse) {
+            $sessionListFromCourseCoach = array_map(
+                fn(SessionRelCourseRelUser $srcru) => $srcru->getSession()->getId(),
+                $sessionCourseUserRepo->findBy(['user' => $user->getId(), 'status' => Session::COURSE_COACH])
+            );
+        }
+
+        // Get the list of sessions where the user is subscribed
+        // This is divided into two different queries
+        /** @var array<int, Session> $sessions */
+        $sessions = [];
+
+        $qb = $sessionRepo->createQueryBuilder('s');
+        $qbParams = [
+            'user' => $user->getId(),
+            'relationType' => Session::STUDENT,
+        ];
+
+        $qb
+            ->innerJoin('s.users', 'su')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('su.user', ':user'),
+                    $qb->expr()->neq('su.relationType', ':relationType')
+                )
+            )
+        ;
+
+        if ($sessionListFromCourseCoach) {
+            $qb->orWhere($qb->expr()->in('s.id', ':sessionListFromCourseCoach'));
+
+            $qbParams['coachCourseConditions'] = $sessionListFromCourseCoach;
+        }
+
+        $result = $qb
+            ->orderBy('s.accessStartDate')
+            ->addOrderBy('s.accessEndDate')
+            ->addOrderBy('s.title')
+            ->setMaxResults($sessionLimit)
+            ->setParameters($qbParams)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        /** @var Session $row */
+        foreach ($result as $row) {
+            $row->setAccessVisibilityByUser($user);
+
+            $sessions[$row->getId()] = $row;
+        }
+
+        $qb = $sessionRepo->createQueryBuilder('s');
+        $qbParams = [
+            'user' => $user->getId(),
+            'relationType' => Session::GENERAL_COACH,
+        ];
+
+        $qb
+            ->innerJoin('s.users', 'sru')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('sru.user', ':user'),
+                    $qb->expr()->neq('sru.relationType', ':relationType')
+                )
+            )
+        ;
+
+        if ($sessionListFromCourseCoach) {
+            $qb->orWhere($qb->expr()->in('s.id', ':sessionListFromCourseCoach'));
+
+            $qbParams['coachCourseConditions'] = $sessionListFromCourseCoach;
+        }
+
+        $result = $qb
+            ->orderBy('s.accessStartDate')
+            ->addOrderBy('s.accessEndDate')
+            ->addOrderBy('s.title')
+            ->setParameters($qbParams)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        /** @var Session $row */
+        foreach ($result as $row) {
+            $row->setAccessVisibilityByUser($user);
+
+            $sessions[$row->getId()] = $row;
+        }
+
+        if ($isAllowedToCreateCourse) {
+            foreach ($sessions as $enreg) {
+                if (Session::INVISIBLE == $enreg->getAccessVisibility()) {
+                    continue;
+                }
+
+                $coursesAsGeneralCoach = $sessionRepo->getSessionCoursesByStatusInUserSubscription(
+                    $user,
+                    $enreg,
+                    Session::GENERAL_COACH,
+                    $url
+                );
+                $coursesAsCourseCoach = $sessionRepo->getSessionCoursesByStatusInCourseSubscription(
+                    $user,
+                    $enreg,
+                    Session::COURSE_COACH,
+                    $url
+                );
+
+                // This query is horribly slow when more than a few thousand
+                // users and just a few sessions to which they are subscribed
+                $coursesInSession = array_merge($coursesAsGeneralCoach, $coursesAsCourseCoach);
+
+                /** @var SessionRelCourse $resultRow */
+                foreach ($coursesInSession as $resultRow) {
+                    $sid = $resultRow->getSession()->getId();
+                    $cid = $resultRow->getCourse()->getId();
+
+                    $personalCourseList["$sid - $cid"] = [
+                        'cid' => $cid,
+                        'sid' => $sid,
+                    ];
+                }
+            }
+        }
+
+        foreach ($sessions as $enreg) {
+            if (Session::INVISIBLE == $enreg->getAccessVisibility()) {
+                continue;
+            }
+
+            // This query is very similar to the above query,
+            // but it will check the session_rel_course_user table if there are courses registered to our user or not */
+            $qb = $sessionCourseUserRepo->createQueryBuilder('scu');
+
+            $result = $qb
+                ->select('c.id as cid', 's.id AS sid')
+                ->innerJoin('scu.course', 'c', Join::WITH, 'scu.session = :session')
+                ->innerJoin('scu.session', 's')
+                ->leftJoin('scu.user', 'u')
+                ->where($qb->expr()->eq('scu.user', ':user'))
+                ->orderBy('c.title')
+                ->setParameters([
+                    'session' => $enreg->getId(),
+                    'user' => $user->getId(),
+                ])
+                ->getQuery()
+                ->getResult()
+            ;
+
+            foreach ($result as $resultRow) {
+                $key = $resultRow['sid'].' - '.$resultRow['cid'];
+
+                if (!isset($personalCourseList[$key])) {
+                    $personalCourseList[$key] = $resultRow;
+                }
+            }
+        }
+
+        return $personalCourseList;
     }
 }

@@ -93,6 +93,9 @@ define('SEND_EMAIL_TEACHERS', 3);
 // SESSION VISIBILITY CONSTANTS
 define('SESSION_VISIBLE_READ_ONLY', 1);
 define('SESSION_VISIBLE', 2);
+/**
+ * @deprecated Use Session::INVISIBLE
+ */
 define('SESSION_INVISIBLE', 3); // not available
 define('SESSION_AVAILABLE', 4);
 
@@ -2502,6 +2505,8 @@ function api_get_session_info($id)
 
 /**
  * Gets the session visibility by session id.
+ *
+ * @deprecated Use Session::setAccessVisibilityByUser() instead.
  *
  * @param int  $session_id
  * @param int  $courseId

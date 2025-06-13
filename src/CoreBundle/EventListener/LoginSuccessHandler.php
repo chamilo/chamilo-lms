@@ -10,9 +10,12 @@ use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackELoginRecord;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\ServiceHelper\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\ServiceHelper\LoginAttemptLogger;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -20,6 +23,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use UserManager;
@@ -33,6 +37,9 @@ class LoginSuccessHandler
         private readonly EntityManagerInterface $entityManager,
         private readonly LoginAttemptLogger $loginAttemptLogger,
         private readonly UserHelper $userHelper,
+        private readonly CourseRepository $courseRepo,
+        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -104,12 +111,16 @@ class LoginSuccessHandler
         // Redirecting to a course or a session.
         if ('true' === $goToCourse) {
             // Get the course list
-            $personal_course_list = UserManager::get_personal_session_course_list($user->getId());
+            $personal_course_list = $this->courseRepo->getPersonalSessionCourses(
+                $user,
+                $this->accessUrlHelper->getCurrent(),
+                $this->isAllowedToEditHelper->canCreateCourse()
+            );
             $my_session_list = [];
             $count_of_courses_no_sessions = 0;
             foreach ($personal_course_list as $course) {
-                if (!empty($course['session_id'])) {
-                    $my_session_list[$course['session_id']] = true;
+                if (!empty($course['sid'])) {
+                    $my_session_list[$course['sid']] = true;
                 } else {
                     $count_of_courses_no_sessions++;
                 }
@@ -118,15 +129,25 @@ class LoginSuccessHandler
             $count_of_sessions = \count($my_session_list);
             if (1 === $count_of_sessions && 0 === $count_of_courses_no_sessions) {
                 $key = array_keys($personal_course_list);
-                $course_info = $personal_course_list[$key[0]]['course_info'];
-                $sessionId = $course_info['session_id'] ?? 0;
-                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid='.$sessionId;
+
+                $url = $this->router->generate(
+                    'chamilo_core_course_home',
+                    [
+                        'cid' => $personal_course_list[$key[0]]['cid'],
+                        'sid' => $personal_course_list[$key[0]]['sid'] ?? 0,
+                    ]
+                );
             }
 
             if (0 === $count_of_sessions && 1 === $count_of_courses_no_sessions) {
                 $key = array_keys($personal_course_list);
-                $course_info = $personal_course_list[$key[0]]['course_info'];
-                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid=0';
+                $url = $this->router->generate(
+                    'chamilo_core_course_home',
+                    [
+                        'cid' => $personal_course_list[$key[0]]['cid'],
+                        'sid' => 0,
+                    ]
+                );
             }
         }
 

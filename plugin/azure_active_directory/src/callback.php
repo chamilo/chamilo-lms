@@ -56,7 +56,6 @@ if (empty($_GET['state']) || ($_GET['state'] !== ChamiloSession::read('oauth2sta
 try {
     $token = $provider->getAccessToken('authorization_code', [
         'code' => $_GET['code'],
-        'resource' => 'https://graph.windows.net',
     ]);
 } catch (Exception $exception) {
     if ($exception->getMessage() == 'interaction_required') {

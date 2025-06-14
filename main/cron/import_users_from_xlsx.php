@@ -379,7 +379,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
     $dbUsername = Database::escape_string($xlsxUserData['username']);
 
     // Check for existing user by username
-    $sql = "SELECT user_id, firstname, lastname, email, official_code, phone, active
+    $sql = "SELECT id, firstname, lastname, email, official_code, phone, active
             FROM user
             WHERE username = '$dbUsername'";
     $stmt = $database->query($sql);
@@ -427,7 +427,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
         if ($dbUser['phone'] !== ($xlsxUserData['phone'] ?? '')) {
             $updates[] .= "phone: '" . $dbUser['phone'] . "' -> '" . ($xlsxUserData['phone'] ?? '') . "' ";
         }
-        if ($dbUser['active'] !== $xlsxActive) {
+        if ($dbUser['active'] != $xlsxActive) {
             $updates[] .= "active: " . $dbUser['active'] . " -> '" . $xlsxActive . "' ";
         }
 
@@ -437,10 +437,10 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
             if ($proceed) {
                 try {
                     $user = UserManager::update_user(
-                        $dbUser['user_id'],
+                        $dbUser['id'],
                         $xlsxUserData['firstname'],
                         $xlsxUserData['lastname'],
-                        null, // username not updated
+                        $xlsxUserData['username'], // username generated from lastname + firstname's first letter (although it should not change, it is required by the update_user method)
                         null, // password not updated
                         null, // auth_source
                         $xlsxUserData['email'],
@@ -449,11 +449,11 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                         $xlsxUserData['phone'],
                         null, // picture_uri
                         null, // expiration_date
-                        null  // creator_id
+                        $xlsxActive
                     );
                     if ($user) {
                         // Update extra field 'external_user_id'
-                        UserManager::update_extra_field_value($dbUser['user_id'], 'external_user_id', $xlsxMatricule);
+                        UserManager::update_extra_field_value($dbUser['id'], 'external_user_id', $xlsxMatricule);
                         echo "  Success: Updated user and external_user_id (username: $dbUsername)\n";
                     } else {
                         echo "  Error: Could not update user (username: $dbUsername)\n";
@@ -483,15 +483,16 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                     $xlsxUserData['official_code'],
                     '', // language
                     $xlsxUserData['phone'],
-                    '', // extra fields
-                    null, // auth_source
+                    '',
+                    null,
+                    null,
                     $xlsxActive,
-                    null, // expiration_date
+                    null,
                     null  // creator_id
                 );
                 if ($userId) {
                     // Add extra field 'external_user_id'
-                    UserManager::update_extra_field_value($userId, 'external_user_id', $xlsxMatricule);
+                    $userManager->update_extra_field_value($userId, 'external_user_id', $xlsxMatricule);
                     echo "  Success: Created user and set external_user_id (username: $dbUsername)\n";
                 } else {
                     echo "  Error: Could not create user (username: $dbUsername)\n";
@@ -511,44 +512,3 @@ if (!$proceed) {
  else {
     echo "\nImport completed successfully.\n";
 }
-?>
-```
-
-### Key Issues and Fixes
-The provided script you shared (as the "latest version") contains **multiple syntax errors** in the user processing loop, which would prevent it from running correctly. Since your primary concern is the argument parsing, I’ve addressed that by removing `getopt()` and implementing manual parsing. However, I’ve also noticed and corrected the syntax errors in the user processing loop to ensure the script is functional. Below, I’ll detail the changes made:
-
-#### 1. Manual Argument Parsing (Replaced `getopt()`)
-- **Old Code**:
-  ```php
-  $options = getopt('po:', ['proceed', 'output-dir:']);
-  $proceed = isset($options['p']) || isset($options['proceed']);
-  $outputDir = $options['o'] ?? $options['output-dir'] ?? '/tmp';
-  $xlsxFile = $argv[1] ?? '';
-  ```
-- **New Code**:
-  ```php
-  $proceed = false;
-  $outputDir = '/tmp/';
-  $xlsxFile = $argv[1] ?? '';
-  for ($i = 2; $i < count($argv); $i++) {
-      $arg = $argv[$i];
-      if ($arg === '--proceed' || $arg === '-p') {
-          $proceed = true;
-      } elseif (preg_match('/^--output-dir=(.+)$/', $arg, $matches)) {
-          $outputDir = $matches[1];
-      } elseif ($arg === '-o' && $i + 1 < count($argv)) {
-          $outputDir = $argv[++$i];
-      }
-  }
-  ```
-- **Explanation**:
-  - Iterates through `$argv` starting at index 2 (after `$argv[0]` = script name, `$argv[1]` = XLSX file).
-  - Sets `$proceed = true` if `--proceed` or `-p` is found.
-  - Extracts `$outputDir` from `--output-dir=<path>` using a regex or from `-o <path>` by consuming the next argument.
-  - Defaults `$outputDir` to `/tmp/`.
-  - Adds debug output to log parsed values for troubleshooting.
-
-#### 2. Syntax Errors in User Processing Loop (Fixed)
-The original script you shared had numerous syntax errors in the user processing loop, such as:
-- `if (empty($dbUser) && empty($xlsxRowData['active']))` → `$dbUser` and `$xlsxRowData` are undefined; should use `$dbUser` and `$xlsxUserData`.
-- `$missingFields[] []` → Invalid array syntax; should be `$missingFields

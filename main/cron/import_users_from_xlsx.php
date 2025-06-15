@@ -348,6 +348,7 @@ echo "\n=== Processing Users ===\n";
 $userManager = new UserManager();
 $usedLogins = ['logins' => [], 'counts' => []]; // Reset usedLogins to avoid false duplicates
 $emptyRowCount = 0;
+$userActions = []; // Initialize array to store user actions
 foreach ($xlsxRows as $rowIndex => $rowData) {
     // Check for empty row
     $isEmpty = true;
@@ -378,6 +379,21 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
     $xlsxUserData['username'] = generateProposedLogin($xlsxUserData['lastname'], $xlsxUserData['firstname'], $isActive, $usedLogins);
     $dbUsername = Database::escape_string($xlsxUserData['username']);
 
+    // Skip users with Matricule starting with 0009
+    if (strpos($xlsxUserData['official_code'], '0009') === 0) {
+        echo "Row " . ($rowIndex + 2) . ": Skipped - Matricule starts with 0009 (username: $dbUsername)\n";
+        $userActions[] = [
+            'Action Type' => 'skipped',
+            'User ID' => '',
+            'Username' => $dbUsername,
+            'Official Code' => $xlsxUserData['official_code'],
+            'E-mail' => $xlsxUserData['email'],
+            'External User ID' => $xlsxUserData['official_code'],
+            'Updated Fields' => 'Matricule 0009*',
+        ];
+        continue;
+    }
+
     // Check for existing user by username
     $sql = "SELECT id, firstname, lastname, email, official_code, phone, active
             FROM user
@@ -392,6 +408,15 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
     // Decision logic
     if (empty($dbUser) && empty($xlsxUserData['active'])) {
         echo "Row " . ($rowIndex + 2) . ": Skipped - 'Actif' is empty and no matching user in database (username: $dbUsername)\n";
+        $userActions[] = [
+            'Action Type' => 'skipped',
+            'User ID' => '',
+            'Username' => $dbUsername,
+            'Official Code' => $xlsxUserData['official_code'],
+            'E-mail' => $xlsxUserData['email'],
+            'External User ID' => $xlsxMatricule,
+            'Updated Fields' => '',
+        ];
         continue;
     }
 
@@ -406,6 +431,15 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
 
     if (!empty($missingFields)) {
         echo "Row " . ($rowIndex + 2) . ": Skipped - missing fields: " . implode(", ", $missingFields) . " (username: $dbUsername)\n";
+        $userActions[] = [
+            'Action Type' => 'skipped',
+            'User ID' => '',
+            'Username' => $dbUsername,
+            'Official Code' => $xlsxUserData['official_code'],
+            'E-mail' => $xlsxUserData['email'],
+            'External User ID' => $xlsxMatricule,
+            'Updated Fields' => '',
+        ];
         continue;
     }
 
@@ -455,17 +489,62 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                         // Update extra field 'external_user_id'
                         UserManager::update_extra_field_value($dbUser['id'], 'external_user_id', $xlsxMatricule);
                         echo "  Success: Updated user and external_user_id (username: $dbUsername)\n";
+                        $userActions[] = [
+                            'Action Type' => 'updated',
+                            'User ID' => $dbUser['id'],
+                            'Username' => $dbUsername,
+                            'Official Code' => $xlsxUserData['official_code'],
+                            'E-mail' => $xlsxUserData['email'],
+                            'External User ID' => $xlsxMatricule,
+                            'Updated Fields' => implode(', ', array_map(function($update) { return trim(explode(':', $update)[0]); }, $updates)),
+                        ];
                     } else {
                         echo "  Error: Could not update user (username: $dbUsername)\n";
+                        $userActions[] = [
+                            'Action Type' => 'skipped',
+                            'User ID' => $dbUser['id'],
+                            'Username' => $dbUsername,
+                            'Official Code' => $xlsxUserData['official_code'],
+                            'E-mail' => $xlsxUserData['email'],
+                            'External User ID' => $xlsxMatricule,
+                            'Updated Fields' => '',
+                        ];
                     }
                 } catch (Exception $e) {
                     echo "  Error: Failed to update user (username: $dbUsername): {$e->getMessage()}\n";
+                    $userActions[] = [
+                        'Action Type' => 'skipped',
+                        'User ID' => $dbUser['id'],
+                        'Username' => $dbUsername,
+                        'Official Code' => $xlsxUserData['official_code'],
+                        'E-mail' => $xlsxUserData['email'],
+                        'External User ID' => $xlsxMatricule,
+                        'Updated Fields' => '',
+                    ];
                 }
             } else {
                 echo "   Sim mode: Updated user and external_user_id (username: $dbUsername)\n";
+                $userActions[] = [
+                    'Action Type' => 'updated',
+                    'User ID' => $dbUser['id'],
+                    'Username' => $dbUsername,
+                    'Official Code' => $xlsxUserData['official_code'],
+                    'E-mail' => $xlsxUserData['email'],
+                    'External User ID' => $xlsxMatricule,
+                    'Updated Fields' => implode(', ', array_map(function($update) { return trim(explode(':', $update)[0]); }, $updates)),
+                ];
             }
         } else {
             echo "Row " . ($rowIndex + 2) . ": No action - no changes needed (username: $dbUsername)\n";
+            $userActions[] = [
+                'Action Type' => 'skipped',
+                'User ID' => $dbUser['id'],
+                'Username' => $dbUsername,
+                'Official Code' => $xlsxUserData['official_code'],
+                'E-mail' => $xlsxUserData['email'],
+                'External User ID' => $xlsxMatricule,
+                'Updated Fields' => '',
+            ];
         }
     } else {
         // New user, only insert if 'Actif' is true
@@ -494,17 +573,57 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                     // Add extra field 'external_user_id'
                     $userManager->update_extra_field_value($userId, 'external_user_id', $xlsxMatricule);
                     echo "  Success: Created user and set external_user_id (username: $dbUsername)\n";
+                    $userActions[] = [
+                        'Action Type' => 'created',
+                        'User ID' => $userId,
+                        'Username' => $dbUsername,
+                        'Official Code' => $xlsxUserData['official_code'],
+                        'E-mail' => $xlsxUserData['email'],
+                        'External User ID' => $xlsxMatricule,
+                        'Updated Fields' => '',
+                    ];
                 } else {
                     echo "  Error: Could not create user (username: $dbUsername)\n";
+                    $userActions[] = [
+                        'Action Type' => 'skipped',
+                        'User ID' => '',
+                        'Username' => $dbUsername,
+                        'Official Code' => $xlsxUserData['official_code'],
+                        'E-mail' => $xlsxUserData['email'],
+                        'External User ID' => $xlsxMatricule,
+                        'Updated Fields' => '',
+                    ];
                 }
             } catch (Exception $e) {
                 echo "  Error: Failed to insert user (username: $dbUsername): {$e->getMessage()}\n";
+                $userActions[] = [
+                    'Action Type' => 'skipped',
+                    'User ID' => '',
+                    'Username' => $dbUsername,
+                    'Official Code' => $xlsxUserData['official_code'],
+                    'E-mail' => $xlsxUserData['email'],
+                    'External User ID' => $xlsxMatricule,
+                    'Updated Fields' => '',
+                ];
             }
         } else {
             echo "   Sim mode: Inserted user and external_user_id (username: $dbUsername)\n";
+            $userActions[] = [
+                'Action Type' => 'created',
+                'User ID' => '',
+                'Username' => $dbUsername,
+                'Official Code' => $xlsxUserData['official_code'],
+                'E-mail' => $xlsxUserData['email'],
+                'External User ID' => $xlsxMatricule,
+                'Updated Fields' => '',
+            ];
         }
     }
 }
+
+// Generate user actions XLSX file
+$actionColumns = ['Action Type', 'User ID', 'Username', 'Official Code', 'E-mail', 'External User ID', 'Updated Fields'];
+createMissingFieldFile($outputDir . 'user_actions.xlsx', $userActions, $actionColumns);
 
 if (!$proceed) {
     echo "\nUse --proceed to apply changes to the database.\n";

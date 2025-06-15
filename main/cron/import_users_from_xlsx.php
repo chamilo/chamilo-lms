@@ -16,6 +16,7 @@
  * - Always generates username using generateProposedLogin()
  * - Username format: lastname + first letter of each firstname word; for active duplicates, append next letter from last firstname part
  * - For 3+ occurrences of lastname + firstname, append increasing letters from last firstname part (e.g., jpii, jpiii)
+ * - Generates unmatched_db_users.xlsx listing database users not found in the input XLSX based on username
  */
 
 // Ensure the script is run from the command line
@@ -109,7 +110,7 @@ foreach ($xlsxColumnMap as $xlsxHeader => $dbField) {
     $xlsxColumnIndices[$dbField] = $index;
 }
 
-// Initialize arrays to store rows with missing fields and duplicates
+// Initialize arrays to store rows with missing fields, duplicates, and XLSX usernames
 $emailMissing = [];
 $lastnameMissing = [];
 $usernameMissing = [];
@@ -117,6 +118,7 @@ $xlsxEmailCounts = [];
 $xlsxNameCounts = [];
 $duplicateEmails = [];
 $duplicateNames = [];
+$xlsxUsernames = []; // Store usernames from XLSX
 
 // Output columns for missing field and duplicate files
 $outputColumns = ['Matricule', 'Nom', 'Prénom', 'Nom Prénom', 'Mail', 'N° de badge', 'Actif', 'Proposed login'];
@@ -262,9 +264,10 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
         $xlsxUserData[$dbField] = $xlsxRow[$xlsxColumnIndices[$dbField]] ?? '';
     }
 
-    // Generate username
+    // Generate username and store it
     $isActive = !empty($xlsxUserData['active']);
     $xlsxUserData['username'] = generateProposedLogin($xlsxUserData['lastname'], $xlsxUserData['firstname'], $isActive, $usedLogins);
+    $xlsxUsernames[] = $xlsxUserData['username'];
 
     $rowData = [
         'Matricule' => $xlsxUserData['official_code'],
@@ -342,6 +345,23 @@ createMissingFieldFile($outputDir . 'lastname_missing.xlsx', $lastnameMissing, $
 createMissingFieldFile($outputDir . 'username_missing.xlsx', $usernameMissing, $outputColumns);
 createMissingFieldFile($outputDir . 'duplicate_email.xlsx', $duplicateEmails, $outputColumns);
 createMissingFieldFile($outputDir . 'duplicate_name.xlsx', $duplicateNames, $outputColumns);
+
+// Generate unmatched_db_users.xlsx
+$unmatchedUsers = [];
+$sql = "SELECT id, username, official_code, email FROM user";
+$stmt = $database->query($sql);
+while ($dbUser = $stmt->fetch()) {
+    if (!in_array($dbUser['username'], $xlsxUsernames) && !empty($dbUser['username'])) {
+        $unmatchedUsers[] = [
+            'Matricule' => $dbUser['official_code'],
+            'Username' => $dbUser['username'],
+            'User ID' => $dbUser['id'],
+            'E-mail' => $dbUser['email'],
+        ];
+    }
+}
+$unmatchedColumns = ['Matricule', 'Username', 'User ID', 'E-mail'];
+createMissingFieldFile($outputDir . 'unmatched_db_users.xlsx', $unmatchedUsers, $unmatchedColumns);
 
 // Process users: compare with database, log decisions, and update/insert if --proceed
 echo "\n=== Processing Users ===\n";

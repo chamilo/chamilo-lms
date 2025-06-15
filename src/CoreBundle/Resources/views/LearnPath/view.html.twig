@@ -226,11 +226,6 @@
                     </div>
                 </div>
             </div>
-            <div id="lp_loading_overlay" class="hidden loader-overlay-strong z-[9999]">
-                <div class="text-lg text-gray-90 font-medium animate-pulse">
-                    {{ 'Session expired. Redirecting to login…'|trans }}
-                </div>
-            </div>
             {# end right Zone #}
         </div>
 
@@ -391,35 +386,6 @@
             })
               {% endif %}
           })
-          $("#content_id").on("load", function () {
-            const iframe = document.getElementById("content_id");
-            let attempt = 0;
-            const maxAttempts = 10;
-            const interval = setInterval(() => {
-              attempt++;
-              try {
-                const contentDoc = iframe.contentWindow.document;
-                const foundLoginSection = contentDoc.querySelector(".login-section") !== null;
-                const foundLoginInput = contentDoc.querySelector("input[id='login']") !== null;
-                if (foundLoginSection && foundLoginInput) {
-                  clearInterval(interval);
-                  $("#lp_loading_overlay").removeClass("hidden").addClass("flex");
-                  const currentUrl = window.location.href;
-                  const redirectParam = encodeURIComponent(currentUrl);
-                  window.top.location.href = "{{ path('login') }}" + "?redirect=" + redirectParam;
-                  return;
-                }
-                if (attempt >= maxAttempts) {
-                  clearInterval(interval);
-                }
-              } catch (e) {
-                clearInterval(interval);
-                $("#lp_loading_overlay").removeClass("hidden").addClass("flex");
-                const redirectParam = encodeURIComponent(window.location.href);
-                window.top.location.href = "{{ path('login') }}" + "?redirect=" + redirectParam;
-              }
-            }, 300);
-          });
         </script>
     {% endautoescape %}
 {% endblock %}

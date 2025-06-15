@@ -27,11 +27,11 @@ if (php_sapi_name() !== 'cli') {
 $domain = 'example.com'; // Manually configured domain for generated emails
 
 // Include Chamilo bootstrap and necessary classes
-require_once __DIR__.'/../../main/inc/global.inc.php';
+require_once __DIR__ . '/../../main/inc/global.inc.php';
 // Include PHPExcel classes (assuming installed via Composer)
-require_once __DIR__.'/../../vendor/autoload.php';
-require_once __DIR__.'/../../vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
-require_once __DIR__.'/../../vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
+require_once __DIR__ . '/../../vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
 
 // Command-line arguments parsing (without getopt)
 $proceed = false;
@@ -472,7 +472,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
         echo "Row " . ($rowIndex + 2) . ": Insert new user - No existing user found (username: $dbUsername)\n";
         if ($proceed) {
             try {
-                $password = 'temporary_password'; // or generate a random one
+                $password = !empty($xlsxUserData['password']) ? $xlsxUserData['password'] : 'temporary_password';
                 $userId = $userManager->create_user(
                     $xlsxUserData['firstname'],
                     $xlsxUserData['lastname'],
@@ -509,6 +509,6 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
 if (!$proceed) {
     echo "\nUse --proceed to apply changes to the database.\n";
 }
- else {
+else {
     echo "\nImport completed successfully.\n";
 }

@@ -48,6 +48,8 @@ for ($i = 2; $i < count($argv); $i++) {
         $outputDir = $matches[1];
     } elseif ($arg === '-o' && $i + 1 < count($argv)) {
         $outputDir = $argv[++$i];
+    } elseif (preg_match('/^--mail-domain=(.+)$/', $arg, $matches)) {
+        $domain = $matches[1];
     }
 }
 

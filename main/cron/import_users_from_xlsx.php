@@ -121,7 +121,7 @@ $duplicateNames = [];
 $xlsxUsernames = []; // Store usernames from XLSX
 
 // Output columns for missing field and duplicate files
-$outputColumns = ['Matricule', 'Nom', 'Prénom', 'Nom Prénom', 'Mail', 'N° de badge', 'Actif', 'Proposed login'];
+$outputColumns = ['Matricule', 'Nom', 'Prénom', 'Nom Prénom', 'Mail', 'N° de badge', 'Actif', 'Generated login'];
 
 // Normalize string for duplicate detection
 function normalizeName($name)
@@ -141,7 +141,7 @@ function removeAccents($str) {
     return $str;
 }
 
-// Generate proposed login based on lastname and firstname
+// Generate login based on lastname and firstname
 function generateProposedLogin($xlsxLastname, $xlsxFirstname, $isActive, &$usedLogins) {
     $lastname = strtolower(trim(removeAccents($xlsxLastname)));
     $lastname = preg_replace('/[\s-]+/', '', $lastname);
@@ -277,7 +277,7 @@ foreach ($xlsxRows as $rowIndex => $xlsxRow) {
         'Mail' => $xlsxUserData['email'],
         'N° de badge' => $xlsxUserData['password'],
         'Actif' => $xlsxUserData['active'],
-        'Proposed login' => $xlsxUserData['username'],
+        'Generated login' => $xlsxUserData['username'],
     ];
 
     if ($isActive) {

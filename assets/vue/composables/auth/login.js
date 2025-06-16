@@ -22,7 +22,7 @@ export function useLogin() {
   const router = useRouter()
   const securityStore = useSecurityStore()
   const platformConfigurationStore = usePlatformConfig()
-  const { showSuccessNotification, showErrorNotification } = useNotification()
+  const { showErrorNotification } = useNotification()
 
   const isLoading = ref(false)
 
@@ -33,7 +33,7 @@ export function useLogin() {
       const responseData = await securityService.login(payload)
 
       if (responseData.requires2FA) {
-        return { success: true, requires2FA: true };
+        return { success: true, requires2FA: true }
       }
 
       if (route.query.redirect) {

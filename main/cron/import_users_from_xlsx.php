@@ -169,12 +169,9 @@ function generateProposedLogin($xlsxLastname, $xlsxFirstname, $isActive, &$usedL
     $lastFirstnamePart = end($firstnameParts);
     $lastPartLetters = strtolower(preg_replace('/[\s-]+/', '', $lastFirstnamePart));
 
-    // Create a unique key for lastname + firstname combination
-    $nameKey = normalizeName($lastname . ' ' . $firstname);
-
-    // Increment occurrence count for this name combination
-    $usedLogins['counts'][$nameKey] = isset($usedLogins['counts'][$nameKey]) ? $usedLogins['counts'][$nameKey] + 1 : 1;
-    $occurrence = $usedLogins['counts'][$nameKey];
+    // Increment occurrence count for this login
+    $usedLogins['counts'][$login] = isset($usedLogins['counts'][$login]) ? $usedLogins['counts'][$login] + 1 : 1;
+    $occurrence = $usedLogins['counts'][$login];
 
     // Handle duplicates
     if (isset($usedLogins['logins'][$login])) {

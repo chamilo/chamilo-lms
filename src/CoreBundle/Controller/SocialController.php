@@ -95,8 +95,8 @@ class SocialController extends AbstractController
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
         if ($value && !empty($value['value'])) {
-            [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
-            $term = $legalTermsRepo->find($legalId);
+            [$legalVersionId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
+            $term = $legalTermsRepo->findOneByVersionAndLanguage((int) $legalVersionId, (int) $legalLanguageId);
         } else {
             $term = $this->getLastConditionByLanguage($languageRepo, $isoCode, $legalTermsRepo, $settingsManager);
         }

@@ -820,6 +820,11 @@ form .field {
   }
 }
 
+img.course-tool__icon {
+  @apply w-full h-full shadow object-cover;
+  border-radius: 0.5rem;
+}
+
 .row {
   @apply flex flex-wrap -mx-4;
 }

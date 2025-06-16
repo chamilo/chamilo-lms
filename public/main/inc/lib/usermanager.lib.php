@@ -2721,10 +2721,12 @@ class UserManager
     /**
      * Gives a list of [session_id-course_code] => [status] for the current user.
      *
-     * @param int $user_id
-     * @param int $sessionLimit
+     * @param  int  $user_id
+     * @param  int  $sessionLimit
      *
      * @return array list of statuses (session_id-course_code => status)
+     *
+     * @throws Exception
      */
     public static function get_personal_session_course_list($user_id, $sessionLimit = null)
     {

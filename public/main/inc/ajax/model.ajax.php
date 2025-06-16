@@ -312,8 +312,8 @@ switch ($action) {
         break;
     case 'get_usergroups_users':
         $usergroup = new UserGroupModel();
-//        $usergroup->protectScript(null, true, true);
-        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+        $usergroup->protectScript(null, true, true);
+        $id = $_REQUEST['id'] ?? 0;
         $count = $usergroup->getUserGroupUsers($id, true);
         break;
     case 'get_learning_path_calendars':

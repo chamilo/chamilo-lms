@@ -60,7 +60,7 @@
                     <b>{{ 'Users subscribed to this course'|trans }}</b>
                     <ul style='list-style-type: disc; padding-left: 1.5vw;'>
                         {% for user in usersSubscribedToUsergroup %}
-                            <li class="user-display">{{ user.firstname }} {{ user.lastname }} ( {{ user.email }} )</li>
+                            <li class="user-display">{{ user.identity }} ( {{ user.email }} )</li>
                         {% endfor %}
                     </ul>
                 </div>

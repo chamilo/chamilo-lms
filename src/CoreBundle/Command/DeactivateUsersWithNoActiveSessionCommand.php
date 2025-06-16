@@ -44,7 +44,7 @@ class DeactivateUsersWithNoActiveSessionCommand extends Command
         $now = new DateTime('now', new DateTimeZone('UTC'));
 
         $io->title('Deactivating students without active sessions...');
-        $io->text('Checking as of ' . $now->format('Y-m-d H:i:s'));
+        $io->text('Checking as of '.$now->format('Y-m-d H:i:s'));
 
         // Subquery: user IDs with at least one session where endDate > now OR endDate is null
         $subQb = $this->entityManager->createQueryBuilder();
@@ -56,7 +56,8 @@ class DeactivateUsersWithNoActiveSessionCommand extends Command
                 's.accessEndDate > :now',
                 's.accessEndDate IS NULL'
             ))
-            ->getDQL();
+            ->getDQL()
+        ;
 
         // Main query: active students not in the subquery
         $qb = $this->entityManager->createQueryBuilder();
@@ -69,7 +70,8 @@ class DeactivateUsersWithNoActiveSessionCommand extends Command
             ->setParameter('now', $now, Types::DATETIME_MUTABLE)
             ->setParameter('studentRole', 5)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         $deactivatedCount = 0;
 

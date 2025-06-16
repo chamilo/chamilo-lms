@@ -309,7 +309,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'display_start_date', type: 'datetime', unique: false, nullable: true)]
-    protected ?DateTime $displayStartDate;
+    protected ?DateTime $displayStartDate = null;
 
     #[Groups([
         'session:read',
@@ -319,7 +319,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'display_end_date', type: 'datetime', unique: false, nullable: true)]
-    protected ?DateTime $displayEndDate;
+    protected ?DateTime $displayEndDate = null;
 
     #[Groups([
         'session:read',
@@ -328,7 +328,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session_rel_course_rel_user:read',
     ])]
     #[ORM\Column(name: 'access_start_date', type: 'datetime', unique: false, nullable: true)]
-    protected ?DateTime $accessStartDate;
+    protected ?DateTime $accessStartDate = null;
 
     #[Groups([
         'session:read',
@@ -337,7 +337,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session_rel_course_rel_user:read',
     ])]
     #[ORM\Column(name: 'access_end_date', type: 'datetime', unique: false, nullable: true)]
-    protected ?DateTime $accessEndDate;
+    protected ?DateTime $accessEndDate = null;
 
     #[Groups([
         'session:read',
@@ -346,7 +346,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session_rel_course_rel_user:read',
     ])]
     #[ORM\Column(name: 'coach_access_start_date', type: 'datetime', unique: false, nullable: true)]
-    protected ?DateTime $coachAccessStartDate;
+    protected ?DateTime $coachAccessStartDate = null;
 
     #[Groups([
         'session:read',
@@ -355,7 +355,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session_rel_course_rel_user:read',
     ])]
     #[ORM\Column(name: 'coach_access_end_date', type: 'datetime', unique: false, nullable: true)]
-    protected ?DateTime $coachAccessEndDate;
+    protected ?DateTime $coachAccessEndDate = null;
 
     #[ORM\Column(name: 'position', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $position;

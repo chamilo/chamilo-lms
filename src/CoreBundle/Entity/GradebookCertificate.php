@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Table(name: 'gradebook_certificate')]
-#[ORM\Index(name: 'idx_gradebook_certificate_user_id', columns: ['user_id'])]
+#[ORM\Index(columns: ['user_id'], name: 'idx_gradebook_certificate_user_id')]
 #[ORM\Entity(repositoryClass: GradebookCertificateRepository::class)]
 class GradebookCertificate
 {

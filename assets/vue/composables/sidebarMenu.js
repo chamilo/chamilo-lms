@@ -143,7 +143,7 @@ export function useSidebarMenu() {
       const styledSocialItems = socialItems.value.map((item) => {
         const newItem = {
           ...item,
-          class: isActive(item) ? "p-focus" : "",
+          class: `${isActive(item) ? "p-focus" : ""} pl-4`,
           icon: item.icon ? item.icon : undefined,
         }
 
@@ -198,6 +198,49 @@ export function useSidebarMenu() {
         ]),
       )
     }
+
+    if (securityStore.isAdmin || securityStore.isSessionAdmin) {
+        const sessionAdminItems = [
+        {
+          label: t("Dashboard"),
+          route: { name: "AdminDashboard" },
+          icon: "mdi mdi-view-dashboard-outline",
+          class: "pl-4",
+        },
+        {
+          label: t("Favorite courses"),
+          route: { name: "AdminFavoritesCourses" },
+          icon: "mdi mdi-star-outline",
+          class: "pl-4",
+        },
+        {
+          label: t("Completed courses"),
+          route: { name: "AdminCompletedCourses" },
+          icon: "mdi mdi-check-circle-outline",
+          class: "pl-4",
+        },
+        {
+          label: t("Incomplete courses"),
+          route: { name: "AdminIncompleteCourses" },
+          icon: "mdi mdi-progress-close",
+          class: "pl-4",
+        },
+        {
+          label: t("Courses to restart"),
+          route: { name: "AdminRestartCourses" },
+          icon: "mdi mdi-history",
+          class: "pl-4",
+        },
+      ]
+
+      items.push({
+        icon: "mdi mdi-account-cog",
+        label: t("Session admin"),
+        items: sessionAdminItems,
+        expanded: isActive({ items: sessionAdminItems }),
+      })
+    }
+
 
     if (showTabsSetting.indexOf("platform_administration") > -1) {
       if (securityStore.isAdmin || securityStore.isSessionAdmin) {

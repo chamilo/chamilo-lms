@@ -73,35 +73,9 @@ class LoginSuccessHandler
 
         // Setting last login datetime
         $requestSession->set('user_last_login_datetime', api_get_utc_datetime());
+        $url = $this->getRedirectAfterLoginUrl() ?? $this->router->generate('index');
 
         $response = null;
-        /* Possible values: index.php, user_portal.php, main/auth/courses.php */
-        $pageAfterLogin = $this->settingsManager->getSetting('registration.page_after_login');
-
-        $legacyIndex = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
-
-        // Default redirect:
-        $url = $legacyIndex;
-
-        if ($this->checker->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
-            switch ($pageAfterLogin) {
-                case 'index.php':
-                    $url = $legacyIndex;
-
-                    break;
-
-                case 'user_portal.php':
-                    $url = $legacyIndex.'user_portal.php';
-
-                    break;
-
-                case 'main/auth/courses.php':
-                    $url = $legacyIndex.'/'.$pageAfterLogin;
-
-                    break;
-            }
-        }
-
         $goToCourse = $this->settingsManager->getSetting('course.go_to_course_after_login');
 
         $requestSession->set('_uid', $user->getId());
@@ -188,5 +162,47 @@ class LoginSuccessHandler
         }
 
         return $response;
+    }
+
+    private function getRedirectAfterLoginUrl(): ?string
+    {
+        $json = $this->settingsManager->getSetting('registration.redirect_after_login', true);
+        if (empty($json)) {
+            return null;
+        }
+
+        $map = json_decode($json, true);
+        if (!is_array($map)) {
+            return null;
+        }
+
+        $profile = null;
+        if ($this->checker->isGranted('ROLE_ADMIN')) {
+            $profile = 'ADMIN';
+        } elseif ($this->checker->isGranted('ROLE_SESSION_ADMIN')) {
+            $profile = 'SESSIONADMIN';
+        } elseif ($this->checker->isGranted('ROLE_TEACHER')) {
+            $profile = 'COURSEMANAGER';
+        } elseif ($this->checker->isGranted('ROLE_STUDENT_BOSS')) {
+            $profile = 'STUDENT_BOSS';
+        } elseif ($this->checker->isGranted('ROLE_DRH')) {
+            $profile = 'DRH';
+        } elseif ($this->checker->isGranted('ROLE_INVITEE')) {
+            $profile = 'INVITEE';
+        } elseif ($this->checker->isGranted('ROLE_STUDENT')) {
+            $profile = 'STUDENT';
+        }
+
+        if ($profile !== null && isset($map[$profile]) && !empty($map[$profile])) {
+            $target = trim($map[$profile]);
+
+            return match ($target) {
+                'user_portal.php', 'index.php' => $this->router->generate('index'),
+                'main/auth/courses.php' => '/courses',
+                default => rtrim(api_get_path(WEB_PATH), '/') . '/' . ltrim($target, '/'),
+            };
+        }
+
+        return null;
     }
 }

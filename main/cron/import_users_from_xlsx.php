@@ -17,6 +17,7 @@
  * - Username format: lastname + first letter of each firstname word; for active duplicates, append next letter from last firstname part
  * - For 3+ occurrences of lastname + firstname, append increasing letters from last firstname part (e.g., jpii, jpiii)
  * - Generates unmatched_db_users.xlsx listing database users not found in the input XLSX based on username
+ * - Exports terminal output to import-yyyymmddhhiiss.log in the output directory
  */
 
 // Ensure the script is run from the command line
@@ -53,16 +54,6 @@ for ($i = 2; $i < count($argv); $i++) {
     }
 }
 
-// Debug: Log parsed arguments
-echo "Parsed arguments:\n";
-echo "  XLSX file: $xlsxFile\n";
-echo "  Proceed: " . ($proceed ? 'true' : 'false') . "\n";
-echo "  Output directory: $outputDir\n";
-
-if (empty($xlsxFile) || !file_exists($xlsxFile)) {
-    die("Usage: php import_users_from_xlsx.php <path_to_xlsx_file> [-p|--proceed] [-o <directory>|--output-dir=<directory>]\n");
-}
-
 // Validate and prepare output directory
 if (!is_dir($outputDir)) {
     if (!mkdir($outputDir, 0755, true)) {
@@ -74,6 +65,19 @@ if (!is_writable($outputDir)) {
 }
 // Ensure trailing slash for consistency
 $outputDir = rtrim($outputDir, '/') . '/';
+
+// Start output buffering to capture terminal output
+ob_start();
+
+// Debug: Log parsed arguments
+echo "Parsed arguments:\n";
+echo "  XLSX file: $xlsxFile\n";
+echo "  Proceed: " . ($proceed ? 'true' : 'false') . "\n";
+echo "  Output directory: $outputDir\n";
+
+if (empty($xlsxFile) || !file_exists($xlsxFile)) {
+    die("Usage: php import_users_from_xlsx.php <path_to_xlsx_file> [-p|--proceed] [-o <directory>|--output-dir=<directory>]\n");
+}
 
 // Initialize database connection
 global $database;
@@ -649,7 +653,17 @@ createMissingFieldFile($outputDir . 'user_actions.xlsx', $userActions, $actionCo
 
 if (!$proceed) {
     echo "\nUse --proceed to apply changes to the database.\n";
-}
-else {
+} else {
     echo "\nImport completed successfully.\n";
+}
+
+// Save terminal output to log file
+$output = ob_get_clean();
+echo $output; // Output to terminal
+$logTimestamp = (new DateTime())->format('YmdHis');
+$logFile = $outputDir . 'import-' . $logTimestamp . '.log';
+if (!file_put_contents($logFile, $output)) {
+    echo "Error: Could not write to log file $logFile\n";
+} else {
+    echo "Generated log file: $logFile\n";
 }

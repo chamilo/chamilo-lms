@@ -87,12 +87,11 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         if (0 == $access_url_id) {
             Display::addFlash(Display::return_message(get_lang('Select a URL')));
             header('Location: access_url_edit_users_to_url.php?');
+            exit;
         } elseif (is_array($list)) {
             UrlManager::updateUrlRelCourseCategory($list, $access_url_id);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
-            header('Location: access_url_edit_users_to_url.php');
         }
-        exit;
     }
 }
 
@@ -206,16 +205,31 @@ foreach ($url_list as $url_obj) {
             </div>
 
             <div class="flex flex-col items-center justify-center gap-4 my-6">
-                <button type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"
-                        class="btn btn--plain">
-                    <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
-                </button>
-                <button type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"
-                        class="btn btn--plain">
-                    <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
-                </button>
-            </div>
+                <?php if (!$ajax_search): ?>
+                    <button type="button"
+                            onclick="moveItem(
+              document.getElementById('origin_users'),
+              document.getElementById('destination_users'))"
+                            class="rounded-full bg-primary p-2 hover:bg-primary/80 focus:outline-none focus:ring">
+                        <i class="mdi mdi-fast-forward-outline text-white text-2xl"></i>
+                    </button>
 
+                    <button type="button"
+                            onclick="moveItem(
+              document.getElementById('destination_users'),
+              document.getElementById('origin_users'))"
+                            class="rounded-full bg-secondary p-2 hover:bg-secondary/80 focus:outline-none focus:ring">
+                        <i class="mdi mdi-rewind-outline text-white text-2xl"></i>
+                    </button>
+                <?php else: ?>
+                    <button type="button"
+                            onclick="remove_item(document.getElementById('destination_users'))"
+                            class="rounded-full bg-danger p-2 hover:bg-danger/80 focus:outline-none focus:ring"
+                            title="<?php echo get_lang('Remove from selection') ?>">
+                        <i class="mdi mdi-close text-white text-2xl"></i>
+                    </button>
+                <?php endif; ?>
+            </div>
 
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">
@@ -234,7 +248,6 @@ foreach ($url_list as $url_obj) {
 
         <div class="mt-6 text-center">
             <button type="submit" class="rounded-lg px-6 py-2 shadow focus:outline-none focus:ring btn--primary">
-                <i class="mdi mdi-content-save ch-tool-icon mr-2"></i>
                 <?php echo get_lang('Save'); ?>
             </button>
         </div>
@@ -242,16 +255,18 @@ foreach ($url_list as $url_obj) {
 
 <script>
 
-function moveItem(origin , destination) {
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
+function moveItem(origin, destination) {
+    if (!origin || !destination) return;
+    for (let i = 0; i < origin.options.length; i++) {
+        if (origin.options[i].selected) {
+            destination.options[destination.length] =
+                new Option(origin.options[i].text, origin.options[i].value);
+            origin.options[i] = null;
+            i--;
+        }
+    }
+    destination.selectedIndex = -1;
+    sortOptions(destination.options);
 }
 
 function sortOptions(options) {
@@ -300,7 +315,7 @@ function loadUsersInSelect(select) {
 	sessionClasses = makepost(document.getElementById('destination_classes'));
 	xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
 	xhr_object.onreadystatechange = function() {
-		if(xhr_object.readyState == 4) {
+		if(xhr_object.readyState === 4) {
 			document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
 		}
 	}
@@ -312,6 +327,15 @@ function makepost(select){
 	for (i = 0 ; i<options.length ; i++)
 		ret = ret + options[i].value +'::'+options[i].text+";;";
 	return ret;
+}
+
+function remove_item(origin) {
+    for(var i = 0 ; i<origin.options.length ; i++) {
+        if(origin.options[i].selected) {
+            origin.options[i]=null;
+            i = i-1;
+        }
+    }
 }
 </script>
 <?php

@@ -58,9 +58,12 @@ if (!empty($_POST['form_sent'])) {
                 get_lang('You must select at least one user and one URL'),
                 'error'
             );
-        } else {
+        } elseif (isset($_POST['add'])) {
             UrlManager::add_users_to_urls($users, $url_list);
             echo Display::return_message(get_lang('The user accounts are now attached to the URL'), 'confirm');
+        } elseif (isset($_POST['remove'])) {
+            UrlManager::remove_users_from_urls($users, $url_list);
+            echo Display::return_message(get_lang('The user accounts have been unassigned from the URL'), 'confirm');
         }
     }
 }
@@ -94,8 +97,8 @@ $db_urls = Database::store_result($result);
 unset($result);
 ?>
 
-    <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" class="space-y-6">
-        <input type="hidden" name="form_sent" value="1" />
+    <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" class="space-y-6" onsubmit="return confirmSubmission(event)">
+    <input type="hidden" name="form_sent" value="1" />
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -112,7 +115,7 @@ unset($result);
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2"><?php echo get_lang('User list'); ?></label>
                 <input
@@ -137,14 +140,7 @@ unset($result);
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="flex flex-col items-center justify-center">
-                <button
-                    type="submit"
-                    class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2 text-white shadow hover:bg-primary/90 focus:outline-none focus:ring"
-                >
-                    <?php echo get_lang('Add users to that URL'); ?>
-                </button>
-            </div>
+
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2"><?php echo get_lang('URL list'); ?></label>
                 <input
@@ -169,6 +165,24 @@ unset($result);
                 </select>
             </div>
         </div>
+        <div class="flex justify-center gap-4 mt-6 flex-wrap">
+            <button
+                type="submit"
+                name="add"
+                class="rounded-lg px-6 py-2 shadow focus:outline-none focus:ring btn--info"
+            >
+                <?php echo get_lang('Add users to selected URLs'); ?>
+            </button>
+
+            <button
+                type="submit"
+                name="remove"
+                class="rounded-lg px-6 py-2 shadow focus:outline-none focus:ring"
+                style="background: rgb(var(--color-danger-base)); color: rgb(var(--color-danger-button-text));"
+            >
+                <?php echo get_lang('Remove users from selected URLs'); ?>
+            </button>
+        </div>
     </form>
     <script>
         function filterSelect(inputId, selectId) {
@@ -181,6 +195,19 @@ unset($result);
                 const txt = options[i].text.toLowerCase();
                 options[i].style.display = txt.includes(filter) ? '' : 'none';
             }
+        }
+        function confirmSubmission(event) {
+            const form = event.target;
+            const addClicked = form.querySelector('[name="add"]')?.matches(':focus');
+            const removeClicked = form.querySelector('[name="remove"]')?.matches(':focus');
+
+            if (addClicked) {
+                return confirm("<?php echo get_lang('Are you sure you want to assign the selected users to the selected URLs?'); ?>");
+            }
+            if (removeClicked) {
+                return confirm("<?php echo get_lang('Are you sure you want to unassign the selected users from the selected URLs?'); ?>");
+            }
+            return true;
         }
     </script>
 <?php

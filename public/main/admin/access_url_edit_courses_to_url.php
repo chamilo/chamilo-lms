@@ -13,9 +13,41 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $xajax = new xajax();
-$xajax->registerFunction(
-    ['search_courses', 'Accessurleditcoursestourl', 'search_courses']
-);
+function search_courses($needle, $id)
+{
+    static $lastNeedle = '';
+    $response = new xajaxResponse();
+
+    if (trim($needle) === '' || $needle === $lastNeedle) {
+        return $response;
+    }
+
+    $lastNeedle = $needle;
+    $results = \UrlManager::searchCoursesByTitleOrCode($needle);
+    $output = '';
+    $i = 0;
+
+    foreach ($results as $course) {
+        $i++;
+        if ($i <= 10) {
+            $label = htmlspecialchars($course['title']) . ' (' . htmlspecialchars($course['code']) . ')';
+            $output .= '
+                <div class="hover:bg-gray-100 p-2 rounded cursor-pointer transition"
+                     onclick="add_user_to_url(' . $course['id'] . ', \'' . addslashes($label) . '\')">
+                    <div class="font-medium text-sm text-gray-800">' . $course['title'] . '</div>
+                    <div class="text-xs text-gray-500">' . $course['code'] . '</div>
+                </div>
+            ';
+        } else {
+            $output .= '<div class="text-xs text-gray-400 italic mt-1">...</div>';
+            break;
+        }
+    }
+
+    $response->addAssign('ajax_list_courses', 'innerHTML', api_utf8_encode($output));
+    return $response;
+}
+$xajax->registerFunction('search_courses');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -83,13 +115,12 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     if (1 == $form_sent) {
         if (0 == $access_url_id) {
             Display::addFlash(Display::return_message(get_lang('Select a URL')));
-            header('Location: access_url_edit_users_to_url.php?');
+            header('Location: access_url_edit_courses_to_url.php?');
+            exit;
         } elseif (is_array($course_list)) {
             UrlManager::update_urls_rel_course($course_list, $access_url_id);
             Display::addFlash(Display::return_message(get_lang('Courses updated successfully')));
-            header('Location: access_urls.php?');
         }
-        exit;
     }
 }
 
@@ -224,17 +255,17 @@ $url_list = UrlManager::get_url_data();
             <div class="flex flex-col justify-center items-center gap-2">
                 <?php if ($ajax_search): ?>
                     <button type="button" onclick="remove_item(document.getElementById('destination_users'))"
-                            class="btn btn--plain">
-                        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
+                            class="rounded-full bg-danger p-2 hover:bg-danger/80 focus:outline-none focus:ring">
+                        <i class="mdi mdi-close text-white text-2xl"></i>
                     </button>
                 <?php else: ?>
                     <button type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"
-                            class="btn btn--plain">
-                        <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
+                            class="rounded-full bg-primary p-2 hover:bg-primary/80 focus:outline-none focus:ring">
+                        <i class="mdi mdi-fast-forward-outline text-white text-2xl"></i>
                     </button>
                     <button type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"
-                            class="btn btn--plain">
-                        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
+                            class="rounded-full bg-secondary p-2 hover:bg-secondary/80 focus:outline-none focus:ring">
+                        <i class="mdi mdi-rewind-outline text-white text-2xl"></i>
                     </button>
                 <?php endif; ?>
             </div>
@@ -254,7 +285,7 @@ $url_list = UrlManager::get_url_data();
 
         <div class="mt-4 text-center">
             <?php
-            $label = isset($_GET['add']) ? get_lang('Add courses to an URL') : get_lang('Edit courses of an URL');
+            $label = get_lang('Save');
             echo '<button class="btn btn--primary" onclick="valide()">'.$label.'</button>';
             ?>
         </div>

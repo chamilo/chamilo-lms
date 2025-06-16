@@ -207,6 +207,20 @@ class UserGroupModel extends Model
     }
 
     /**
+     * Returns all user groups (id + title), ordered by title.
+     * This method ignores multi-URL restrictions because it's used
+     * for initial assignment of groups to access URLs.
+     */
+    public function getAllUserGroups(): array
+    {
+        $sql = "SELECT id, title FROM {$this->table} ORDER BY title";
+
+        $stmt = Database::getManager()->getConnection()->executeQuery($sql);
+
+        return Database::store_result($stmt, 'ASSOC');
+    }
+
+    /**
      * @param string $extraWhereCondition
      *
      * @return int
@@ -1505,29 +1519,32 @@ class UserGroupModel extends Model
      *
      * @return array
      */
-    public function getUserGroupNotInList($list)
+    public function getUserGroupNotInList(array $list): array
     {
-        if (empty($list)) {
-            return [];
-        }
+        $urlId = api_get_current_access_url_id();
+        $params = [];
 
-        $list = array_map('intval', $list);
-        $listToString = implode("','", $list);
+        $sql = "SELECT g.*
+            FROM $this->table g";
 
-        $sql = 'SELECT * ';
-        $urlCondition = '';
         if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
-            $sql .= " FROM $this->table g
-                    INNER JOIN $this->access_url_rel_usergroup a
-                    ON (g.id = a.usergroup_id)";
-            $urlCondition = " AND access_url_id = $urlId ";
+            $sql .= " LEFT JOIN $this->access_url_rel_usergroup a
+                    ON (g.id = a.usergroup_id AND a.access_url_id = ?)";
+            $params[] = $urlId;
+            $sql .= " WHERE a.usergroup_id IS NULL";
         } else {
-            $sql = " FROM $this->table g ";
+            $sql .= " WHERE 1=1";
         }
 
-        $sql .= " WHERE g.id NOT IN ('$listToString') $urlCondition ";
-        $result = Database::query($sql);
+        if (!empty($list)) {
+            $placeholders = implode(',', array_fill(0, count($list), '?'));
+            $sql .= " AND g.id NOT IN ($placeholders)";
+            $params = array_merge($params, array_map('intval', $list));
+        }
+
+        $sql .= " ORDER BY g.title";
+
+        $result = Database::getManager()->getConnection()->executeQuery($sql, $params);
 
         return Database::store_result($result, 'ASSOC');
     }

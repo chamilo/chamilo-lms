@@ -138,7 +138,7 @@ echo Display::url(
     api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
 );
 echo Display::url(
-    Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add user to this URL')),
+    Display::getMdiIcon(ActionIcon::MULTI_COURSE_URL_ASSIGN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add user to this URL')),
     api_get_path(WEB_CODE_PATH).'admin/access_url_add_users_to_url.php'
 );
 echo '</div>';
@@ -300,7 +300,7 @@ foreach ($url_list as $url_obj) {
                         onclick="removeSelectedOptions('destination_users')"
                         class="rounded-full bg-danger p-2 hover:bg-danger/80 focus:outline-none focus:ring"
                     >
-                        <i class="mdi mdi-rewind-outline text-white text-2xl"></i>
+                        <i class="mdi mdi-close text-white text-2xl"></i>
                     </button>
                 <?php endif; ?>
             </div>
@@ -329,7 +329,7 @@ foreach ($url_list as $url_obj) {
                 onclick="submitWithAllDestinationOptionsSelected('formulaire', 'destination_users')"
                 class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2 text-white shadow hover:bg-primary/90 focus:outline-none focus:ring"
             >
-                <?php echo get_lang('Edit users and URLs'); ?>
+                <?php echo get_lang('Save'); ?>
             </button>
         </div>
     </form>

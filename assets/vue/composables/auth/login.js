@@ -22,7 +22,7 @@ export function useLogin() {
   const router = useRouter()
   const securityStore = useSecurityStore()
   const platformConfigurationStore = usePlatformConfig()
-  const { showSuccessNotification, showErrorNotification } = useNotification()
+  const { showErrorNotification } = useNotification()
 
   const isLoading = ref(false)
 

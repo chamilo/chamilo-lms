@@ -42,11 +42,8 @@ class SecurityController extends AbstractController
     public function loginJson(Request $request, EntityManager $entityManager, SettingsManager $settingsManager, TokenStorageInterface $tokenStorage, TranslatorInterface $translator): Response
     {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->json(
-                [
-                    'error' => 'Invalid login request: check that the Content-Type header is "application/json".',
-                ],
-                400
+            throw $this->createAccessDeniedException(
+                $translator->trans('Invalid login request: check that the Content-Type header is "application/json".')
             );
         }
 
@@ -62,7 +59,7 @@ class SecurityController extends AbstractController
             $tokenStorage->setToken(null);
             $request->getSession()->invalidate();
 
-            return $this->json(['error' => $message], 401);
+            return $this->createAccessDeniedException($message);
         }
 
         if ($user->getMfaEnabled()) {
@@ -88,7 +85,7 @@ class SecurityController extends AbstractController
             $tokenStorage->setToken(null);
             $request->getSession()->invalidate();
 
-            return $this->json(['error' => $message], 401);
+            return $this->createAccessDeniedException($message);
         }
 
         $extraFieldValuesRepository = $this->entityManager->getRepository(ExtraFieldValues::class);
@@ -122,7 +119,7 @@ class SecurityController extends AbstractController
                     'load_terms' => true,
                 ];
 
-                return new JsonResponse($responseData, Response::HTTP_OK);
+                return $this->json($responseData);
             }
             $request->getSession()->remove('term_and_condition');
         }

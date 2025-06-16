@@ -36,21 +36,21 @@ export function useLogin() {
         return { success: true, requires2FA: true }
       }
 
-      if (route.query.redirect) {
+      if (route.query.redirect && isValidHttpUrl(route.query.redirect.toString())) {
         // Check if 'redirect' is an absolute URL
-        if (isValidHttpUrl(route.query.redirect.toString())) {
-          // If it's an absolute URL, redirect directly
-          window.location.href = route.query.redirect.toString()
+        // If it's an absolute URL, redirect directly
+        window.location.href = route.query.redirect.toString()
 
-          return
-        }
-      } else if (responseData.load_terms) {
+        return
+      }
+
+      if (responseData.redirect) {
         window.location.href = responseData.redirect
 
         return
       }
 
-      securityStore.user = responseData
+      securityStore.setUser(responseData)
 
       await platformConfigurationStore.initialize()
 

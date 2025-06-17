@@ -121,11 +121,45 @@
                     {% endif %}
 
                     {% if show_item %}
-                        <li class="{{ item.key }} {{ item.current }}">
-                            <a href="{{ item.url }}" {{ item.target ? 'target="' ~ item.target ~ '"' : '' }} title="{{ item.title }}">
-                                {{ item.title }}
-                            </a>
-                        </li>
+                        {% if item.items %}
+                            <li class="dropdown {{ item.key }} {{ item.current }}">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    {{ item.title }}
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    {% for subitem in item.items %}
+                                        <li>
+                                            <a href="{{ subitem.url }}" class="{{ subitem.key }}">
+                                                {{ subitem.title }}
+                                                {% if subitem.items|length > 0 %}
+                                                    <span class="caret"></span>
+                                                {% endif %}
+                                            </a>
+
+                                            {% if subitem.items|length > 0 %}
+                                                <ul class="dropdown-menu">
+                                                    {% for subsubitem in subitem.items %}
+                                                        <li>
+                                                            <a href="{{ subsubitem.url }}" class="{{ subsubitem.key }}">
+                                                                {{ subsubitem.title }}
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="{{ item.key }} {{ item.current }}">
+                                <a href="{{ item.url }}" {{ item.target ? 'target="' ~ item.target ~ '"' : '' }} title="{{ item.title }}">
+                                    {{ item.title }}
+                                </a>
+                            </li>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             </ul>

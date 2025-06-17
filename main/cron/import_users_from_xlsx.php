@@ -412,7 +412,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
             'Official Code' => $xlsxUserData['official_code'],
             'E-mail' => $xlsxUserData['email'],
             'External User ID' => $xlsxUserData['official_code'],
-            'Updated Fields' => 'Matricule 0009*',
+            'Updated Fields' => 'Matricule starts with 0009',
         ];
         continue;
     }
@@ -438,7 +438,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
             'Official Code' => $xlsxUserData['official_code'],
             'E-mail' => $xlsxUserData['email'],
             'External User ID' => $xlsxMatricule,
-            'Updated Fields' => '',
+            'Updated Fields' => 'Actif is empty and no matching user in database',
         ];
         continue;
     }
@@ -461,7 +461,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
             'Official Code' => $xlsxUserData['official_code'],
             'E-mail' => $xlsxUserData['email'],
             'External User ID' => $xlsxMatricule,
-            'Updated Fields' => '',
+            'Updated Fields' => 'Missing fields: ' . implode(', ', $missingFields),
         ];
         continue;
     }
@@ -530,7 +530,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                             'Official Code' => $xlsxUserData['official_code'],
                             'E-mail' => $xlsxUserData['email'],
                             'External User ID' => $xlsxMatricule,
-                            'Updated Fields' => '',
+                            'Updated Fields' => 'Could not update user',
                         ];
                     }
                 } catch (Exception $e) {
@@ -542,7 +542,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                         'Official Code' => $xlsxUserData['official_code'],
                         'E-mail' => $xlsxUserData['email'],
                         'External User ID' => $xlsxMatricule,
-                        'Updated Fields' => '',
+                        'Updated Fields' => 'Failed to update user: ' . $e->getMessage(),
                     ];
                 }
             } else {
@@ -566,7 +566,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                 'Official Code' => $xlsxUserData['official_code'],
                 'E-mail' => $xlsxUserData['email'],
                 'External User ID' => $xlsxMatricule,
-                'Updated Fields' => '',
+                'Updated Fields' => 'No changes needed',
             ];
         }
     } else {
@@ -614,7 +614,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                         'Official Code' => $xlsxUserData['official_code'],
                         'E-mail' => $xlsxUserData['email'],
                         'External User ID' => $xlsxMatricule,
-                        'Updated Fields' => '',
+                        'Updated Fields' => 'Could not create user',
                     ];
                 }
             } catch (Exception $e) {
@@ -626,7 +626,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                     'Official Code' => $xlsxUserData['official_code'],
                     'E-mail' => $xlsxUserData['email'],
                     'External User ID' => $xlsxMatricule,
-                    'Updated Fields' => '',
+                    'Updated Fields' => 'Failed to insert user: ' . $e->getMessage(),
                 ];
             }
         } else {

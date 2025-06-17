@@ -1418,13 +1418,13 @@ class PortfolioController
 
         $urlUserString = "";
         if (isset($urlUser)) {
-            $urlUserString = "user=" . $urlUser;
+            $urlUserString = "user=".$urlUser;
         }
 
         $actions = [];
         $actions[] = Display::url(
             Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-            $this->baseUrl . $urlUserString
+            $this->baseUrl.$urlUserString
         );
 
         if ($this->itemBelongToOwner($item)) {
@@ -3696,7 +3696,6 @@ class PortfolioController
             }
 
             $frmStudentList->addHtml("<p>$link</p>");
-
         }
 
         return $frmStudentList;

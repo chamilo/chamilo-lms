@@ -7479,20 +7479,6 @@ EOT;
         return $output;
     }
 
-    private static function subscribeSessionWhenFinishedFailure(int $exerciseId): void
-    {
-        $failureSession = self::getSessionWhenFinishedFailure($exerciseId);
-
-        if ($failureSession) {
-            SessionManager::subscribeUsersToSession(
-                $failureSession->getId(),
-                [api_get_user_id()],
-                SESSION_VISIBLE_READ_ONLY,
-                false
-            );
-        }
-    }
-
     public static function replaceTermsInContent(string $search, string $replace): array
     {
         $replacements = [
@@ -7807,7 +7793,7 @@ EOT;
             ],
             Database::get_main_table(TABLE_MAIN_BLOCK) => [
                 'id' => ['name', 'description', 'path'],
-            ]
+            ],
         ];
 
         if (api_get_configuration_value('attendance_allow_comments')) {
@@ -7821,13 +7807,13 @@ EOT;
         }
 
         $changes = array_map(
-            fn($table) => 0,
+            fn ($table) => 0,
             $replacements
         );
 
         foreach ($replacements as $table => $replacement) {
             foreach ($replacement as $idColumn => $columns) {
-                $keys = array_map(fn($column) => "$column LIKE %?%", $columns);
+                $keys = array_map(fn ($column) => "$column LIKE %?%", $columns);
                 $values = array_fill(0, count($columns), $search);
 
                 $result = Database::select(
@@ -7837,7 +7823,7 @@ EOT;
                         'where' => [
                             implode(' OR ', $keys) => $values,
                         ],
-                        'order' => "$idColumn ASC"
+                        'order' => "$idColumn ASC",
                     ]
                 );
 
@@ -7845,7 +7831,7 @@ EOT;
                     $attributes = array_combine(
                         $columns,
                         array_map(
-                            fn($column) => preg_replace('#'.$search.'#', $replace, $row[$column]),
+                            fn ($column) => preg_replace('#'.$search.'#', $replace, $row[$column]),
                             $columns
                         )
                     );
@@ -7866,5 +7852,19 @@ EOT;
         }
 
         return $changes;
+    }
+
+    private static function subscribeSessionWhenFinishedFailure(int $exerciseId): void
+    {
+        $failureSession = self::getSessionWhenFinishedFailure($exerciseId);
+
+        if ($failureSession) {
+            SessionManager::subscribeUsersToSession(
+                $failureSession->getId(),
+                [api_get_user_id()],
+                SESSION_VISIBLE_READ_ONLY,
+                false
+            );
+        }
     }
 }

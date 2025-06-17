@@ -4089,7 +4089,7 @@ class Exercise
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $hideComment = (int) $this->getPageConfigurationAttribute('hide_comment');
-            if (1 === $hideComment) { 
+            if (1 === $hideComment) {
                 $answerComment = null;
             } else {
                 $answerComment = $objAnswerTmp->selectComment($answerId);

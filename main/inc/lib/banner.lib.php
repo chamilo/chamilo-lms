@@ -512,7 +512,8 @@ function return_navigation_array()
     ];
 }
 
-function buildParentCourseCategoriesMenu(array &$navigation) {
+function buildParentCourseCategoriesMenu(array &$navigation)
+{
     if (!api_get_configuration_value('display_menu_use_course_categories')
         || 'true' !== api_get_setting('course_catalog_published')
     ) {

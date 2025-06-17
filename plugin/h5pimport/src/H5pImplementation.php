@@ -43,7 +43,7 @@ class H5pImplementation implements \H5PFrameworkInterface
         // TODO: Implement getPlatformInfo() method.
     }
 
-    public function fetchExternalData($url, $data = null, $blocking = true, $stream = null, $fullData = false, $headers = Array(), $files = Array(), $method = 'POST')
+    public function fetchExternalData($url, $data = null, $blocking = true, $stream = null, $fullData = false, $headers = [], $files = [], $method = 'POST')
     {
         // TODO: Implement fetchExternalData() method.
     }

@@ -120,7 +120,7 @@ class ScheduledAnnouncement extends Model
                 $id,
                 'use_base_progress'
             );
-            $form->addNumeric ('progress',
+            $form->addNumeric('progress',
                 get_lang('Progress'),
                 [
                     'step' => 1,
@@ -237,7 +237,7 @@ class ScheduledAnnouncement extends Model
         $form->addHtml('</div>');
 
         $form->addHtml('<div id="base_progress" style="display:none">');
-        $form->addNumeric ('progress',
+        $form->addNumeric('progress',
             get_lang('Progress'),
             [
                 'step' => 1,

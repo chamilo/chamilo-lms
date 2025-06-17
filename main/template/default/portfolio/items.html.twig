@@ -1,4 +1,4 @@
-{% macro display(items, category_id, _c, _u, _p) %}
+{% macro display(items, category_id, _c, _u, _p, user, listByUser) %}
     {% set edit_img = 'edit.png'|img(22, 'Edit'|get_lang) %}
     {% set visible_img = 'visible.png'|img(22, 'Invisible'|get_lang) %}
     {% set invisible_img = 'invisible.png'|img(22, 'Visible'|get_lang) %}
@@ -8,7 +8,11 @@
 
     <section class="portfolio-items">
         {% for item in items %}
-            {% set item_url = baseurl ~ {'action':'view', 'id':item.id}|url_encode %}
+            {% if listByUser %}
+                {% set item_url = baseurl ~ {'action':'view', 'id':item.id, 'user':user.id}|url_encode %}
+            {% else %}
+                {% set item_url = baseurl ~ {'action':'view', 'id':item.id}|url_encode %}
+            {% endif %}
             {% set comments = item.lastComments(3, is_advanced_sharing_enabled) %}
 
             {% if 'portfolio_show_base_course_post_in_sessions'|api_get_configuration_value %}

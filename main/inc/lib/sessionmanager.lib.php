@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\RemoveOnAttributes;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
@@ -3066,7 +3067,10 @@ class SessionManager
     ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
-        $name = Database::escape_string(trim($sname));
+        $name = trim($sname);
+        $name = html_filter($name);
+        $name = RemoveOnAttributes::filter($name);
+        $name = Database::escape_string($name);
 
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
@@ -3150,7 +3154,9 @@ class SessionManager
         $sday_end
     ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $name = html_filter(trim($sname));
+        $name = trim($sname);
+        $name = html_filter($name);
+        $name = RemoveOnAttributes::filter($name);
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
         $day_start = intval($sday_start);
@@ -3463,7 +3469,12 @@ class SessionManager
                 ORDER BY name ASC';
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
-            $data = Database::store_result($result, 'ASSOC');
+            $data = [];
+
+            while ($category = Database::fetch_assoc($result)) {
+                $category['name'] = Security::remove_XSS($category['name']);
+                $data[] = $category;
+            }
 
             return $data;
         }

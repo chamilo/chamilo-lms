@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -5045,49 +5046,30 @@ class SessionManager
     }
 
     /**
-     * @param string $file
-     * @param bool   $updateSession                                   true: if the session exists it will be updated.
-     *                                                                false: if session exists a new session will be created adding a counter session1, session2, etc
-     * @param int    $defaultUserId
-     * @param Logger $logger
-     * @param array  $extraFields                                     convert a file row to an extra field. Example in CSV file there's a SessionID
-     *                                                                then it will converted to extra_external_session_id if you set: array('SessionId' => 'extra_external_session_id')
-     * @param string $extraFieldId
-     * @param int    $daysCoachAccessBeforeBeginning
-     * @param int    $daysCoachAccessAfterBeginning
-     * @param int    $sessionVisibility
-     * @param array  $fieldsToAvoidUpdate
-     * @param bool   $deleteUsersNotInList
-     * @param bool   $updateCourseCoaches
-     * @param bool   $sessionWithCoursesModifier
-     * @param bool   $addOriginalCourseTeachersAsCourseSessionCoaches
-     * @param bool   $removeAllTeachersFromCourse
-     * @param int    $showDescription
-     * @param array  $teacherBackupList
-     * @param array  $groupBackup
+     * Imports sessions from a CSV file, creating or updating sessions with related users and courses.
      *
-     * @return array
+     * @return array Contains the import result with errors, counters, and session IDs.
      */
     public static function importCSV(
-        $file,
-        $updateSession,
-        $defaultUserId = null,
-        $logger = null,
-        $extraFields = [],
-        $extraFieldId = null,
-        $daysCoachAccessBeforeBeginning = null,
-        $daysCoachAccessAfterBeginning = null,
-        $sessionVisibility = 1,
-        $fieldsToAvoidUpdate = [],
-        $deleteUsersNotInList = false,
-        $updateCourseCoaches = false,
-        $sessionWithCoursesModifier = false,
-        $addOriginalCourseTeachersAsCourseSessionCoaches = true,
-        $removeAllTeachersFromCourse = true,
-        $showDescription = null,
-        &$teacherBackupList = [],
-        &$groupBackup = []
-    ) {
+        string $file,
+        bool $updateSession,
+        ?int $defaultUserId = null,
+        ?Logger $logger = null,
+        array $extraFields = [],
+        ?string $extraFieldId = null,
+        ?int $daysCoachAccessBeforeBeginning = null,
+        ?int $daysCoachAccessAfterBeginning = null,
+        int $sessionVisibility = 1,
+        array $fieldsToAvoidUpdate = [],
+        bool $deleteUsersNotInList = false,
+        bool $updateCourseCoaches = false,
+        bool $sessionWithCoursesModifier = false,
+        bool $addOriginalCourseTeachersAsCourseSessionCoaches = true,
+        bool $removeAllTeachersFromCourse = true,
+        ?int $showDescription = null,
+        array &$teacherBackupList = [],
+        array &$groupBackup = []
+    ): array {
         $content = file($file);
         $error_message = null;
         $session_counter = 0;
@@ -5142,9 +5124,9 @@ class SessionManager
                 $user_counter = 0;
                 $course_counter = 0;
 
-                if (isset($extraFields) && !empty($extraFields)) {
+                if (!empty($extraFields)) {
                     foreach ($extraFields as $original => $to) {
-                        $enreg[$to] = isset($enreg[$original]) ? $enreg[$original] : null;
+                        $enreg[$to] = $enreg[$original] ?? null;
                     }
                 }
 
@@ -5178,25 +5160,22 @@ class SessionManager
                     continue;
                 }
 
-                $displayAccessStartDate = isset($enreg['DisplayStartDate']) ? $enreg['DisplayStartDate'] : $enreg['DateStart'];
-                $displayAccessEndDate = isset($enreg['DisplayEndDate']) ? $enreg['DisplayEndDate'] : $enreg['DateEnd'];
-                $coachAccessStartDate = isset($enreg['CoachStartDate']) ? $enreg['CoachStartDate'] : $enreg['DateStart'];
-                $coachAccessEndDate = isset($enreg['CoachEndDate']) ? $enreg['CoachEndDate'] : $enreg['DateEnd'];
+                $displayAccessStartDate = $enreg['DisplayStartDate'] ?? $enreg['DateStart'];
+                $displayAccessEndDate = $enreg['DisplayEndDate'] ?? $enreg['DateEnd'];
+                $coachAccessStartDate = $enreg['CoachStartDate'] ?? $enreg['DateStart'];
+                $coachAccessEndDate = $enreg['CoachEndDate'] ?? $enreg['DateEnd'];
                 // We assume the dates are already in UTC
-                $dateStart = explode('/', $enreg['DateStart']);
-                $dateEnd = explode('/', $enreg['DateEnd']);
-                $dateStart = $dateStart[0].'-'.$dateStart[1].'-'.$dateStart[2].' 00:00:00';
-                $dateEnd = $dateEnd[0].'-'.$dateEnd[1].'-'.$dateEnd[2].' 23:59:59';
-                $displayAccessStartDate = explode('/', $displayAccessStartDate);
-                $displayAccessStartDate = implode('-', $displayAccessStartDate).' 00:00:00';
-                $displayAccessEndDate = explode('/', $displayAccessEndDate);
-                $displayAccessEndDate = implode('-', $displayAccessEndDate).' 23:59:59';
-                $coachAccessStartDate = explode('/', $coachAccessStartDate);
-                $coachAccessStartDate = implode('-', $coachAccessStartDate).' 00:00:00';
-                $coachAccessEndDate = explode('/', $coachAccessEndDate);
-                $coachAccessEndDate = implode('-', $coachAccessEndDate).' 23:59:59';
-                $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
-                $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
+
+                $dateStart = date('Y-m-d H:i:s', strtotime(trim($enreg['DateStart'])));
+                $displayAccessStartDate = date('Y-m-d H:i:s', strtotime(trim($displayAccessStartDate)));
+                $coachAccessStartDate = date('Y-m-d H:i:s', strtotime(trim($coachAccessStartDate)));
+
+                $dateEnd = self::normalizeDateEnd($enreg['DateEnd']);
+                $displayAccessEndDate = self::normalizeDateEnd($displayAccessEndDate);
+                $coachAccessEndDate = self::normalizeDateEnd($coachAccessEndDate);
+
+                $session_category_id = $enreg['SessionCategory'] ?? null;
+                $sessionDescription = $enreg['SessionDescription'] ?? null;
                 $classes = isset($enreg['Classes']) ? explode('|', $enreg['Classes']) : [];
                 $extraParams = [];
                 if (!is_null($showDescription)) {
@@ -6080,6 +6059,307 @@ class SessionManager
             'session_counter' => $session_counter,
             'session_list' => $sessionList,
         ];
+    }
+
+    /**
+     * Imports sessions from an XML file and returns the result of the operation.
+     */
+    public static function importXML(
+        string $file,
+        bool $updateSession = false,
+        int $defaultUserId = null,
+        bool $sendMail = false,
+        int $sessionVisibility = SESSION_VISIBLE,
+        array &$insertedInCourse = [],
+        ?string &$errorMessage = ''
+    ): array {
+        $defaultUserId = $defaultUserId ?? api_get_user_id();
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tblSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        $sessionCounter = 0;
+        $sessionList = [];
+
+        $content = file_get_contents($file);
+        $content = api_utf8_encode_xml($content);
+        $root = @simplexml_load_string($content);
+
+        if (!is_object($root)) {
+            $errorMessage .= get_lang('XML document is not valid');
+            return [];
+        }
+
+        // === USERS ===
+        if (isset($root->Users->User)) {
+            foreach ($root->Users->User as $nodeUser) {
+                $username = trim(api_utf8_decode($nodeUser->Username));
+                $password = api_utf8_decode($nodeUser->Password);
+                $firstname = api_utf8_decode($nodeUser->Firstname);
+                $lastname = api_utf8_decode($nodeUser->Lastname);
+                $email = trim(api_utf8_decode($nodeUser->Email));
+                $officialCode = trim(api_utf8_decode($nodeUser->OfficialCode));
+                $phone = trim(api_utf8_decode($nodeUser->Phone));
+                $statusStr = strtolower(trim(api_utf8_decode($nodeUser->Status)));
+                $status = $statusStr === 'teacher' ? 1 : 5;
+
+                if (UserManager::is_username_available($username)) {
+                    if (empty($password)) {
+                        $password = api_generate_password();
+                    }
+                    UserManager::create_user(
+                        $firstname,
+                        $lastname,
+                        $status,
+                        $email,
+                        $username,
+                        $password,
+                        $officialCode,
+                        null,
+                        $phone,
+                        null,
+                        [UserAuthSource::PLATFORM],
+                        null,
+                        1,
+                        0,
+                        null,
+                        null,
+                        $sendMail
+                    );
+                } else {
+                    $userId = UserManager::get_user_id_from_username($username);
+                    if ($userId) {
+                        UserManager::update_user(
+                            $userId,
+                            $firstname,
+                            $lastname,
+                            $username,
+                            $password,
+                            [],
+                            $email,
+                            $status,
+                            $officialCode,
+                            $phone,
+                            null,
+                            null,
+                            1,
+                            null,
+                            0
+                        );
+                    }
+                }
+            }
+        }
+
+        // === COURSES ===
+        if (isset($root->Courses->Course)) {
+            foreach ($root->Courses->Course as $nodeCourse) {
+                $courseCode = api_utf8_decode($nodeCourse->CourseCode);
+                $courseTitle = api_utf8_decode($nodeCourse->CourseTitle ?: $courseCode);
+                $courseLang = api_utf8_decode($nodeCourse->CourseLanguage);
+                $teacherUsername = trim(api_utf8_decode($nodeCourse->CourseTeacher));
+
+                $teacherId = UserManager::get_user_id_from_username($teacherUsername) ?: $defaultUserId;
+
+                if (!CourseManager::course_exists($courseCode)) {
+                    CourseManager::create_course([
+                        'wanted_code' => $courseCode,
+                        'title' => $courseTitle,
+                        'course_language' => $courseLang,
+                        'user_id' => $defaultUserId,
+                        'teachers' => $teacherId,
+                    ]);
+                }
+            }
+        }
+
+        // === SESSIONS ===
+        if (isset($root->Session)) {
+            foreach ($root->Session as $nodeSession) {
+                $sessionName = trim(api_utf8_decode($nodeSession->SessionName));
+                $coachUsername = trim(api_utf8_decode($nodeSession->Coach));
+                $coachId = UserManager::get_user_id_from_username($coachUsername) ?: $defaultUserId;
+                $dateStart = api_utf8_decode($nodeSession->DateStart);
+                $dateEnd = api_utf8_decode($nodeSession->DateEnd);
+                $sessionCategoryId = (int) trim(api_utf8_decode($nodeSession->SessionCategory));
+                $categoryExists = false;
+                if (!empty($sessionCategoryId)) {
+                    $result = Database::select(
+                        'id',
+                        Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY),
+                        ['where' => ['id = ?' => $sessionCategoryId]],
+                        'first'
+                    );
+
+                    $categoryExists = !empty($result);
+                }
+                if (!$categoryExists) {
+                    $sessionCategoryId = null;
+                }
+                $visibilityStr = strtolower(api_utf8_decode($nodeSession->VisibilityAfterExpiration));
+                $visibility = match ($visibilityStr) {
+                    'read_only' => SESSION_VISIBLE_READ_ONLY,
+                    'not_accessible' => SESSION_INVISIBLE,
+                    default => $sessionVisibility,
+                };
+
+                // Normalize dates
+                $dateStart = date('Y-m-d H:i:s', strtotime($dateStart));
+                $dateEnd = date('Y-m-d H:i:s', strtotime($dateEnd));
+
+                $sessionId = null;
+                $mySession = SessionManager::get_session_by_name($sessionName);
+
+                if ($updateSession && $mySession) {
+                    $sessionId = $mySession['id'];
+                    Database::update($tblSession, [
+                        'access_start_date' => $dateStart,
+                        'access_end_date' => $dateEnd,
+                        'visibility' => $visibility,
+                        'session_category_id' => $sessionCategoryId,
+                    ], ['id = ?' => $sessionId]);
+
+                    Database::query("DELETE FROM $tblSessionUser WHERE session_id = $sessionId");
+                    Database::query("DELETE FROM $tblSessionCourse WHERE session_id = $sessionId");
+                    Database::query("DELETE FROM $tblSessionCourseUser WHERE session_id = $sessionId");
+                } else {
+                    $sessionId = Database::insert($tblSession, [
+                        'title' => $sessionName,
+                        'access_start_date' => $dateStart,
+                        'access_end_date' => $dateEnd,
+                        'visibility' => $visibility,
+                        'nbr_users' => 0,
+                        'nbr_courses' => 0,
+                        'nbr_classes' => 0,
+                        'status' => 0,
+                        'duration' => 0,
+                        'session_category_id' => $sessionCategoryId,
+                    ]);
+                }
+
+                if ($sessionId) {
+                    Database::insert($tblSessionUser, [
+                        'user_id' => $coachId,
+                        'session_id' => $sessionId,
+                        'registered_at' => api_get_utc_datetime(),
+                        'relation_type' => Session::GENERAL_COACH,
+                        'duration' => 0,
+                    ], false, ['ignore' => true]);
+
+                    Database::insert($tblSessionUser, [
+                        'user_id' => $defaultUserId,
+                        'session_id' => $sessionId,
+                        'registered_at' => api_get_utc_datetime(),
+                        'relation_type' => Session::SESSION_ADMIN,
+                        'duration' => 0,
+                    ], false, ['ignore' => true]);
+                    $sessionCounter++;
+                    $sessionList[] = $sessionId;
+                }
+
+                // Add Users to session
+                foreach ($nodeSession->User as $nodeUser) {
+                    $username = UserManager::purify_username(api_utf8_decode($nodeUser));
+                    $userId = UserManager::get_user_id_from_username($username);
+                    if ($userId) {
+                        Database::insert($tblSessionUser, [
+                            'user_id' => $userId,
+                            'session_id' => $sessionId,
+                            'relation_type' => Session::STUDENT,
+                            'duration' => 0,
+                            'registered_at' => api_get_utc_datetime(),
+                        ], false, ['ignore' => true]);
+                    }
+                }
+
+                // Add Courses to session
+                foreach ($nodeSession->Course as $nodeCourse) {
+                    $courseCode = api_utf8_decode($nodeCourse->CourseCode);
+                    $courseInfo = api_get_course_info($courseCode);
+                    if ($courseInfo) {
+                        $courseId = $courseInfo['real_id'];
+                        Database::insert($tblSessionCourse, [
+                            'c_id' => $courseId,
+                            'session_id' => $sessionId,
+                            'nbr_users' => 0,
+                            'position' => 0,
+                        ]);
+                        $courseCoachUsernames = explode(',', $nodeCourse->Coach);
+                        foreach ($courseCoachUsernames as $coachUname) {
+                            $coachId = UserManager::get_user_id_from_username(trim($coachUname));
+                            if ($coachId) {
+                                Database::insert($tblSessionCourseUser, [
+                                    'user_id' => $coachId,
+                                    'c_id' => $courseId,
+                                    'session_id' => $sessionId,
+                                    'status' => Session::COURSE_COACH,
+                                    'visibility' => 1,
+                                    'legal_agreement' => 0,
+                                    'progress' => 0,
+                                ]);
+                            }
+                        }
+
+                        // Users in the course
+                        $userCounter = 0;
+                        foreach ($nodeCourse->User as $userNode) {
+                            $username = UserManager::purify_username(api_utf8_decode($userNode));
+                            $userId = UserManager::get_user_id_from_username($username);
+                            if ($userId) {
+                                Database::insert($tblSessionUser, [
+                                    'user_id' => $userId,
+                                    'session_id' => $sessionId,
+                                    'registered_at' => api_get_utc_datetime(),
+                                    'duration' => 0,
+                                    'relation_type' => Session::STUDENT
+                                ], false, ['ignore' => true]);
+                                Database::insert($tblSessionCourseUser, [
+                                    'user_id' => $userId,
+                                    'c_id' => $courseId,
+                                    'session_id' => $sessionId,
+                                    'status' => Session::STUDENT,
+                                    'visibility' => 1,
+                                    'legal_agreement' => 0,
+                                    'progress' => 0,
+                                ]);
+                                $userCounter++;
+                            }
+                        }
+
+                        Database::update(
+                            $tblSessionCourse,
+                            ['nbr_users' => $userCounter],
+                            ['c_id = ? AND session_id = ?' => [$courseId, $sessionId]],
+                        );
+                    }
+                }
+
+                Database::update($tblSession, [
+                    'nbr_users' => count($nodeSession->User),
+                    'nbr_courses' => count($nodeSession->Course),
+                ], ['id = ?' => $sessionId]);
+
+                UrlManager::add_session_to_url($sessionId, api_get_current_access_url_id());
+            }
+        }
+
+        return [
+            'session_counter' => $sessionCounter,
+            'session_list' => $sessionList,
+        ];
+    }
+
+    /**
+     * Normalizes the end date format to include time if missing.
+     */
+    private static function normalizeDateEnd(string $date): string
+    {
+        $dt = new \DateTime(trim($date));
+        if ($dt->format('H:i:s') === '00:00:00') {
+            $dt->setTime(23, 59, 59);
+        }
+        return $dt->format('Y-m-d H:i:s');
     }
 
     /**

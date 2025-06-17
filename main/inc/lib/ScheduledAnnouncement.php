@@ -207,7 +207,7 @@ class ScheduledAnnouncement extends Model
 
         $useBaseProgress = api_get_configuration_value('scheduled_announcements_use_base_progress');
         if ($useBaseProgress) {
-            $typeOptions['base_progress'] = get_lang('BaseProgress');
+            $typeOptions['base_progress'] = get_lang('Progress');
         }
 
         $form->addSelect(

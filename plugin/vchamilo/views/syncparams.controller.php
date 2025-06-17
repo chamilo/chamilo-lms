@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\DriverManager;
+
 api_protect_admin_script();
 
 $sql = "SELECT * FROM vchamilo";
@@ -34,27 +37,24 @@ switch ($action) {
 
             foreach ($vchamilos as $chm) {
                 $table = $chm['main_database'].".settings_current ";
-                $sql = " SELECT * FROM $table 
-                     WHERE 
-                        variable = '{{$setting['variable']}}' AND 
+                $sql = " SELECT * FROM $table
+                     WHERE
+                        variable = '{{$setting['variable']}}' AND
                         access_url = '{$setting['access_url']}'
                     ";
                 $result = Database::query($sql);
 
                 if (Database::num_rows($result)) {
-                    $sql = "UPDATE $table SET 
-                            selected_value = '$value'
-                      WHERE id = $settingId";
-                    Database::query($sql);
+                    Database::update($table, ['selected_Value' => $value, ['id' => $settingId]]);
                 }
             }
         }
         break;
     case 'syncthis':
-        $settingId = isset($_GET['settingid']) ? (int) $_GET['settingid'] : '';
+        $settingId = isset($_GET['settingid']) ? (int) $_GET['settingid'] : 0;
 
-        if (!empty($settingId) && is_numeric($settingId)) {
-            $deleteIfEmpty = isset($_REQUEST['del']) ? $_REQUEST['del'] : '';
+        if ($settingId) {
+            $deleteIfEmpty = $_REQUEST['del'] ?? '';
             $value = $_REQUEST['value'];
             // Getting the local setting record.
             $setting = api_get_settings_params_simple(['id = ?' => $settingId]);
@@ -76,7 +76,7 @@ switch ($action) {
             $errors = '';
             foreach ($vchamilos as $instance) {
                 $table = 'settings_current';
-                $config = new \Doctrine\DBAL\Configuration();
+                $config = new Configuration();
                 $connectionParams = [
                     'dbname' => $instance['main_database'],
                     'user' => $instance['db_user'],
@@ -84,40 +84,35 @@ switch ($action) {
                     'host' => $instance['db_host'],
                     'driver' => 'pdo_mysql',
                 ];
-                $connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
                 try {
+                    $connection = DriverManager::getConnection($connectionParams, $config);
+
                     $variable = $setting['variable'];
                     $subKey = $setting['subkey'];
                     $category = $setting['category'];
                     $accessUrl = $setting['access_url'];
 
                     if ($deleteIfEmpty && empty($value)) {
-                        $sql = "DELETE FROM $table 
-                                WHERE  
-                                    selected_value = '$value' AND   
-                                    variable = '$variable' AND 
-                                    access_url = '$accessUrl'
-                        ";
-                        $connection->executeQuery($sql);
+                        $connection->delete($table, ['selected_value' => $value, 'variable' => $variable, 'access_url' => $accessUrl]);
                         $case = 'delete';
                     } else {
-                        $sql = "SELECT * FROM $table 
-                                WHERE 
-                                    variable = '$variable' AND 
+                        $sql = "SELECT * FROM $table
+                                WHERE
+                                    variable = '$variable' AND
                                     access_url = '$accessUrl'
                                 ";
-                        $result = $connection->fetchAll($sql);
+                        $result = $connection->fetchAllAssociative($sql);
 
                         if (!empty($result)) {
                             //$sql = "UPDATE $table SET selected_value = '$value' WHERE id = $settingId";
-                            $sql = "UPDATE $table SET selected_value = '$value' WHERE variable = '$variable'";
+                            $criteria = ['variable' => $variable];
                             if (!empty($subKey)) {
-                                $sql .= " AND subkey = '$subKey' ";
+                                $criteria['subkey'] = $subKey;
                             }
                             if (!empty($category)) {
-                                $sql .= " AND category = '$category'";
+                                $criteria['category'] = $category;
                             }
-                            $connection->executeQuery($sql);
+                            $connection->update($table, ['selected_value' => $value], $criteria);
                         } else {
                             $connection->insert($table, $params);
                         }

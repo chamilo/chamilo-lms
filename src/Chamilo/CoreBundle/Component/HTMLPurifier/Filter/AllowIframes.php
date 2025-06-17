@@ -63,11 +63,22 @@ class AllowIframes extends HTMLPurifier_Filter
 
         $youTubeMatch = preg_match('#src="(https:)?//www.youtube(-nocookie)?.com/#i', $matches[1]);
         $vimeoMatch = preg_match('#://player.vimeo.com/#i', $matches[1]);
+        $googleMapsMatch = preg_match('#src="https://maps.google.com/#i', $matches[1]);
+        $slideShare = preg_match('#src="(https?:)?//www.slideshare.net/#', $matches[1]);
+        $geniallyMatch = preg_match('#src="https://view.genially.com/#i', $matches[1]);
+        $platformDomain = preg_match('#src="https?://(.+\.)?'.$hostName[1].'#i', $matches[1]);
 
-        if ($youTubeMatch) {
-            $extra .= ' allowfullscreen';
-        } elseif ($vimeoMatch) {
-            $extra .= ' webkitAllowFullScreen mozallowfullscreen allowFullScreen';
+        if ($youTubeMatch || $vimeoMatch || $googleMapsMatch || $slideShare || $geniallyMatch || $platformDomain) {
+            $extra = ' frameborder="0"';
+            if ($youTubeMatch || $geniallyMatch) {
+                $extra .= ' allowfullscreen';
+            } elseif ($vimeoMatch) {
+                $extra .= ' webkitAllowFullScreen mozallowfullscreen allowFullScreen';
+            }
+
+            return '<iframe '.$matches[1].$extra.'></iframe>';
+        } else {
+            return '';
         }
 
         return '<iframe '.$matches[1].$extra.'></iframe>';

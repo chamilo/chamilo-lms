@@ -1153,6 +1153,9 @@ ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062FC4CB679 FOREIGN KEY (duplicated
 CREATE INDEX IDX_A9ED1062FC4CB679 ON portfolio (duplicated_from);
 */
 //$_configuration['portfolio_show_base_course_post_in_sessions'] = false;
+//
+// Show all post in portfolio by alphabetical order instead of reverse date order.
+//$_configuration['portfolio_order_post_by_alphabetical_order'] = false;
 
 // DEPRECATED: gradebook_enable_best_score is deprecated. Use gradebook_display_extra_stats instead.
 // Enable best score column in gradebook. Previously called disable_gradebook_stats

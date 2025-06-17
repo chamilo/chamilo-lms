@@ -3676,16 +3676,18 @@ class PortfolioController
 
         $frmStudentList->addHtml("<p>$link</p>");
 
-        if ($listAlphabeticalOrder) {
-            $link = Display::url(
-                get_lang('BackToDateOrder'),
-                $this->baseUrl
-            );
-        } else {
-            $link = Display::url(
-                get_lang('SeeAlphabeticalOrder'),
-                $this->baseUrl.http_build_query(['list_alphabetical' => true])
-            );
+        if (true !== api_get_configuration_value('portfolio_order_post_by_alphabetical_order')) {
+            if ($listAlphabeticalOrder) {
+                $link = Display::url(
+                    get_lang('BackToDateOrder'),
+                    $this->baseUrl
+                );
+            } else {
+                $link = Display::url(
+                    get_lang('SeeAlphabeticalOrder'),
+                    $this->baseUrl.http_build_query(['list_alphabetical' => true])
+                );
+            }
         }
 
         $frmStudentList->addHtml("<p>$link</p>");
@@ -3918,7 +3920,7 @@ class PortfolioController
             }
 
             $queryBuilder->setParameter('current_user', $currentUserId);
-            if ($alphabeticalOrder) {
+            if ($alphabeticalOrder || true === api_get_configuration_value('portfolio_order_post_by_alphabetical_order')) {
                 $queryBuilder->orderBy('pi.title', 'ASC');
             } else {
                 $queryBuilder->orderBy('pi.creationDate', 'DESC');

@@ -6,7 +6,7 @@
  * This script imports users from an XLSX file, compares them to existing users in the Chamilo database,
  * updates or inserts users based on specific rules, and generates XLSX files for accounts with missing
  * email, lastname, or username, and exports accounts with duplicate Mail or Nom Prénom fields.
- * Uses 'Nom Prénom' column for name duplicates and includes 'Actif' and 'Nom Prénom' in exports.
+ * Uses 'Nom' and 'Prénom' columns for name duplicates and includes 'Actif' in exports.
  * - Skips import of users with empty 'Actif' unless they exist in DB (then updates, including inactive status)
  * - Updates existing users by username (always generated via generateProposedLogin) instead of importing as new
  * - Stores 'Matricule' as extra field 'external_user_id' without trimming leading zeros

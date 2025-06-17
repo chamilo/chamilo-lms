@@ -3921,7 +3921,7 @@ class PortfolioController
             }
 
             $queryBuilder->setParameter('current_user', $currentUserId);
-            if ($alphabeticalOrder || true === api_get_configuration_value('portfolio_order_post_by_alphabetical_order')) {
+            if (true === api_get_configuration_value('portfolio_order_post_by_alphabetical_order') || $alphabeticalOrder) {
                 $queryBuilder->orderBy('pi.title', 'ASC');
             } else {
                 $queryBuilder->orderBy('pi.creationDate', 'DESC');

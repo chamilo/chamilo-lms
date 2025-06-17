@@ -93,6 +93,7 @@ class ExtraFieldType extends AbstractType
             switch ($extraField->getValueType()) {
                 case \ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                 case \ExtraField::FIELD_TYPE_DIVIDER:
+                case \ExtraField::FIELD_TYPE_TIMEZONE:
                 case \ExtraField::FIELD_TYPE_FILE_IMAGE:
                 case \ExtraField::FIELD_TYPE_FILE:
                 case \ExtraField::FIELD_TYPE_LETTERS_SPACE:

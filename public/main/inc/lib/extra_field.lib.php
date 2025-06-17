@@ -20,6 +20,7 @@ class ExtraField extends Model
     public const FIELD_TYPE_DOUBLE_SELECT = 8;
     public const FIELD_TYPE_DIVIDER = 9;
     public const FIELD_TYPE_TAG = 10;
+    public const FIELD_TYPE_TIMEZONE = 11;
     public const FIELD_TYPE_SOCIAL_PROFILE = 12;
     public const FIELD_TYPE_CHECKBOX = 13;
     public const FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
@@ -1573,6 +1574,16 @@ class ExtraField extends Model
                         }
 
                         break;
+                    case self::FIELD_TYPE_TIMEZONE:
+                        $form->addSelect(
+                            'extra_'.$variable,
+                            $field_details['display_text'],
+                            api_get_timezones(),
+                        );
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$variable);
+                        }
+                        break;
                     case self::FIELD_TYPE_SOCIAL_PROFILE:
                         // get the social network's favicon
                         $extra_data_variable = isset($extraData['extra_'.$variable]) ? $extraData['extra_'.$variable] : null;
@@ -1984,6 +1995,7 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_DOUBLE_SELECT] = get_lang('Double select');
         $types[self::FIELD_TYPE_DIVIDER] = get_lang('Visual divider');
         $types[self::FIELD_TYPE_TAG] = get_lang('User tag');
+        $types[self::FIELD_TYPE_TIMEZONE] = get_lang('Timezone');
         $types[self::FIELD_TYPE_SOCIAL_PROFILE] = get_lang('Social network link');
         $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('Mobile phone number');
         $types[self::FIELD_TYPE_CHECKBOX] = get_lang('Checkbox');

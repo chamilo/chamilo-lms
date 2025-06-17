@@ -552,13 +552,12 @@ class SocialController extends AbstractController
                         ExtraField::USER_FIELD_TYPE
                     );
                     if (!empty($extraFieldOptions)) {
-                        $fieldValue = implode(
-                            ', ',
-                            array_map(
-                                fn (ExtraFieldOptions $opt) => $opt->getDisplayText(),
-                                $extraFieldOptions
-                            )
+                        $optionTexts = array_map(
+                            fn (ExtraFieldOptions $option) => $option['display_text'],
+                            $extraFieldOptions
                         );
+                        $fieldValue = implode(', ', $optionTexts);
+                        $fieldValue = $extraFieldOptions->getDisplayText();
                     }
 
                     break;

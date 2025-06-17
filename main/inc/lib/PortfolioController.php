@@ -3688,9 +3688,10 @@ class PortfolioController
                     $this->baseUrl.http_build_query(['list_alphabetical' => true])
                 );
             }
-        }
 
-        $frmStudentList->addHtml("<p>$link</p>");
+            $frmStudentList->addHtml("<p>$link</p>");
+
+        }
 
         return $frmStudentList;
     }

@@ -7,7 +7,7 @@ require_once __DIR__.'/../../../../vendor/autoload.php';
  * Test example to user API v2.php.
  *
  * Using Guzzle' HTTP client to call the API endpoint and make requests.
- * Change URL on the first lines of createUser() below to suit your needs.
+ * Change URL on the first lines of addCoursesToSession() below to suit your needs.
  */
 
 use GuzzleHttp\Client as Client;
@@ -61,7 +61,7 @@ function authenticate()
  *
  * @return int
  */
-function addUsersToSession($apiKey)
+function addCoursesToSession($apiKey)
 {
     global $webserviceURL;
     global $webserviceUsername;
@@ -73,13 +73,13 @@ function addUsersToSession($apiKey)
         'v2.php',
         [
             'form_params' => [
-                // data for the user who makes the request
-                'action' => 'add_users_session',
+                'action' => 'add_courses_session',
+                // data of the user who makes the request
                 'username' => $webserviceUsername,
                 'api_key' => $apiKey,
-                // data for users and session
+                // data of courses and session
                 'id_session' => 1,
-                'list_users' => [
+                'list_courses' => [
                     '5',
                     '6',
                     '7',
@@ -95,7 +95,7 @@ function addUsersToSession($apiKey)
     $jsonResponse = json_decode($response->getBody()->getContents());
 
     if ($jsonResponse->error) {
-        throw new Exception('Users not assigned to session because : '.$jsonResponse->message);
+        throw new Exception('Courses not assigned to session because : '.$jsonResponse->message);
     }
 
     return $jsonResponse->data[0];
@@ -103,7 +103,7 @@ function addUsersToSession($apiKey)
 
 $apiKey = authenticate();
 
-//adding users with id 5, 6, 7 to session with id 1
-if (addUsersToSession($apiKey)) {
-    echo 'Users successfully added';
+//adding courses with id 5, 6, 7 to session with id 1
+if (addCoursesToSession($apiKey)) {
+    echo 'Courses successfully added';
 }

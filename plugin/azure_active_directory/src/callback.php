@@ -7,6 +7,8 @@
 
 use Chamilo\UserBundle\Entity\User;
 
+$GLOBALS['noredirection'] = empty($_GET) || isset($_GET['code']) || isset($_GET['state']) || isset($_GET['session_state']) || isset($_GET['error']);
+
 require __DIR__.'/../../../main/inc/global.inc.php';
 
 if (!empty($_GET['error']) && !empty($_GET['state'])) {
@@ -54,7 +56,6 @@ if (empty($_GET['state']) || ($_GET['state'] !== ChamiloSession::read('oauth2sta
 try {
     $token = $provider->getAccessToken('authorization_code', [
         'code' => $_GET['code'],
-        'resource' => 'https://graph.windows.net',
     ]);
 } catch (Exception $exception) {
     if ($exception->getMessage() == 'interaction_required') {
@@ -70,7 +71,24 @@ try {
 $me = null;
 
 try {
-    $me = $provider->get('me', $token);
+    $userFields = [
+        'givenName',
+        'surname',
+        'mail',
+        'userPrincipalName',
+        'businessPhones',
+        'mobilePhone',
+        'accountEnabled',
+        'mailNickname',
+        'id',
+    ];
+
+    $querySelect = implode(',', $userFields);
+
+    $me = $provider->get(
+        sprintf('me?$select=%s', $querySelect),
+        $token
+    );
 
     if (empty($me)) {
         throw new Exception('Token not found.');
@@ -84,7 +102,7 @@ try {
     if (empty($me['mailNickname'])) {
         throw new Exception('The mailNickname field is empty in Azure AD and is needed to set the unique username for this user.');
     }
-    if (empty($me['objectId'])) {
+    if (empty($me['id'])) {
         throw new Exception('The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
     }
 
@@ -99,7 +117,7 @@ try {
 
         foreach ($roleGroups as $userRole => $groupUid) {
             foreach ($azureGroups as $azureGroup) {
-                $azureGroupUid = $azureGroup['objectId'];
+                $azureGroupUid = $azureGroup['id'];
                 if ($azureGroupUid === $groupUid) {
                     $roleActions[$userRole]($user);
 
@@ -142,4 +160,7 @@ ChamiloSession::write('redirect_after_not_allow_page', $redirectAfterNotAllowPag
 ChamiloSession::write('_user', $userInfo);
 ChamiloSession::write('_user_auth_source', 'azure_active_directory');
 Event::eventLogin($userInfo['user_id']);
+
+$GLOBALS['noredirection'] = false;
+
 Redirect::session_request_uri(true, $userInfo['user_id']);

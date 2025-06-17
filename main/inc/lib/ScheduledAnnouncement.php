@@ -112,6 +112,26 @@ class ScheduledAnnouncement extends Model
 
         $form->addHidden('session_id', $sessionInfo['id']);
         $form->addDateTimePicker('date', get_lang('Date'));
+
+        $useBaseProgress = api_get_configuration_value('scheduled_announcements_use_base_progress');
+        if ($useBaseProgress) {
+            $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
+            $baseProgress = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $id,
+                'use_base_progress'
+            );
+            $form->addNumeric('progress',
+                get_lang('Progress'),
+                [
+                    'step' => 1,
+                    'min' => 1,
+                    'max' => 100,
+                    'value' => $baseProgress['value'],
+                ],
+                true
+            );
+        }
+
         $form->addText('subject', get_lang('Subject'));
         $form->addHtmlEditor('message', get_lang('Message'));
 
@@ -185,6 +205,11 @@ class ScheduledAnnouncement extends Model
             $typeOptions['base_date'] = get_lang('BaseDate');
         }
 
+        $useBaseProgress = api_get_configuration_value('scheduled_announcements_use_base_progress');
+        if ($useBaseProgress) {
+            $typeOptions['base_progress'] = get_lang('Progress');
+        }
+
         $form->addSelect(
             'type',
             get_lang('Type'),
@@ -194,9 +219,15 @@ class ScheduledAnnouncement extends Model
                     if (this.options[this.selectedIndex].value == 'base_date') {
                         document.getElementById('options').style.display = 'block';
                         document.getElementById('specific_date').style.display = 'none';
-                    } else {
+                        document.getElementById('base_progress').style.display = 'none';
+                    } else if (this.options[this.selectedIndex].value == 'specific_date') {
                         document.getElementById('options').style.display = 'none';
                         document.getElementById('specific_date').style.display = 'block';
+                        document.getElementById('base_progress').style.display = 'none';
+                    } else {
+                        document.getElementById('options').style.display = 'block';
+                        document.getElementById('specific_date').style.display = 'none';
+                        document.getElementById('base_progress').style.display = 'block';
                     }
             ", ]
         );
@@ -204,6 +235,20 @@ class ScheduledAnnouncement extends Model
         $form->addHtml('<div id="specific_date">');
         $form->addDateTimePicker('date', get_lang('Date'));
         $form->addHtml('</div>');
+
+        $form->addHtml('<div id="base_progress" style="display:none">');
+        $form->addNumeric('progress',
+            get_lang('Progress'),
+            [
+                'step' => 1,
+                'min' => 1,
+                'max' => 100,
+                'value' => 100,
+            ],
+            true
+        );
+        $form->addHtml('</div>');
+
         $form->addHtml('<div id="options" style="display:none">');
 
         $startDate = $sessionInfo['access_start_date'];
@@ -344,7 +389,19 @@ class ScheduledAnnouncement extends Model
                             $coachList = array_unique($coachList);
                         }
 
-                        $this->update(['id' => $result['id'], 'sent' => 1]);
+                        $useBaseProgress = api_get_configuration_value('scheduled_announcements_use_base_progress');
+                        if ($useBaseProgress) {
+                            $baseProgress = $extraFieldValue->get_values_by_handler_and_field_variable(
+                                $result['id'],
+                                'use_base_progress'
+                            );
+                            if (empty($baseProgress) || empty($baseProgress['value']) || $baseProgress['value'] < 1) {
+                                $this->update(['id' => $result['id'], 'sent' => 1]);
+                            }
+                        } else {
+                            $this->update(['id' => $result['id'], 'sent' => 1]);
+                        }
+
                         $attachments = $this->getAttachmentToString($result['id']);
                         $subject = $result['subject'];
 
@@ -369,6 +426,44 @@ class ScheduledAnnouncement extends Model
                                     [],
                                     $sessionId
                                 );
+                            }
+
+                            if ($useBaseProgress) {
+                                $baseProgress = $extraFieldValue->get_values_by_handler_and_field_variable(
+                                    $result['id'],
+                                    'use_base_progress'
+                                );
+                                if (!empty($baseProgress) && !empty($baseProgress['value']) && $baseProgress['value'] >= 1) {
+                                    if ((is_numeric($progress) && $progress > $baseProgress['value']) || !is_numeric($progress)) {
+                                        continue;
+                                    } else {
+                                        $comment = json_decode($baseProgress['comment'], true);
+                                        if ($comment !== null && is_array($comment)) {
+                                            if (isset($comment['sended']) && is_array($comment['sended'])) {
+                                                $userFound = false;
+                                                foreach ($comment['sended'] as $item) {
+                                                    if (isset($item['user']) && $item['user'] === $user['user_id']) {
+                                                        $userFound = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if ($userFound) {
+                                                    continue;
+                                                } else {
+                                                    $comment['sended'][] = ['user' => $user['user_id'], 'send_date' => time(), 'progress_user' => $progress, 'progress_mark' => $baseProgress['value']];
+                                                    $newExtraFieldParams = $baseProgress;
+                                                    $newExtraFieldParams['comment'] = json_encode($comment);
+                                                    $extraFieldValue->save($newExtraFieldParams);
+                                                }
+                                            }
+                                        } else {
+                                            $comment['sended'][] = ['user' => $user['user_id'], 'send_date' => time(), 'progress_user' => $progress, 'progress_mark' => $baseProgress['value']];
+                                            $newExtraFieldParams = $baseProgress;
+                                            $newExtraFieldParams['comment'] = json_encode($comment);
+                                            $extraFieldValue->save($newExtraFieldParams);
+                                        }
+                                    }
+                                }
                             }
 
                             if (is_numeric($progress)) {

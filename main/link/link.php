@@ -88,7 +88,7 @@ if ($action === 'editlink') {
 Event::event_access_tool(TOOL_LINK);
 
 /*	Action Handling */
-$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 $scope = isset($_REQUEST['scope']) ? $_REQUEST['scope'] : null;
 $show = isset($_REQUEST['show']) && in_array(trim($_REQUEST['show']), ['all', 'none']) ? $_REQUEST['show'] : 'all';
 $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : '';

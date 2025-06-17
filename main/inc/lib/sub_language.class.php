@@ -118,32 +118,25 @@ class SubLanguageManager
     /**
      * Get all information of chamilo file.
      *
-     * @param string $system_path_file    The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
-     * @param bool   $get_as_string_index Whether we want to remove the '$' prefix in the results or not
+     * @param string $system_path_file The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
      *
      * @return array Contains all information of chamilo file
      */
-    public static function get_all_language_variable_in_file($system_path_file, $get_as_string_index = false)
+    public static function get_all_language_variable_in_file(string $system_path_file): array
     {
-        $res_list = [];
-        if (!is_readable($system_path_file)) {
-            return $res_list;
-        }
-        $info_file = file($system_path_file);
-        foreach ($info_file as $line) {
-            if (substr($line, 0, 1) != '$') {
-                continue;
-            }
-            list($var, $val) = explode('=', $line, 2);
-            $var = trim($var);
-            $val = trim($val);
-            if ($get_as_string_index) { //remove the prefix $
-                $var = substr($var, 1);
-            }
-            $res_list[$var] = $val;
-        }
+        ob_start();
 
-        return $res_list;
+        include $system_path_file;
+
+        ob_end_clean();
+
+        $variables = get_defined_vars();
+
+        unset($variables['system_path_file']);
+        unset($variables['get_as_string_index']);
+        unset($variables['php_errormsg']);
+
+        return $variables;
     }
 
     /**
@@ -171,16 +164,16 @@ class SubLanguageManager
      */
     public static function write_data_in_file($path_file, $new_term, $new_variable)
     {
+        // Replace double quotes to avoid parse errors
+        $new_term = addcslashes($new_term, "\$\"\\");
+        // Replace new line signs to avoid parse errors - see #6773
+        $new_term = str_replace("\n", "\\n", $new_term);
+
         $return_value = false;
-        $new_data = $new_variable.'='.$new_term;
+        $new_data = '$'.$new_variable.'="'.$new_term.'";'.PHP_EOL;
         $resource = @fopen($path_file, "a");
         if (file_exists($path_file) && $resource) {
-            if (fwrite($resource, $new_data.PHP_EOL) === false) {
-                //not allow to write
-                $return_value = false;
-            } else {
-                $return_value = true;
-            }
+            $return_value = !(fwrite($resource, $new_data) === false);
             fclose($resource);
         }
 
@@ -427,32 +420,44 @@ class SubLanguageManager
     /**
      * Set platform language.
      *
-     * @param int $language_id The language id
+     * @param int $languageId The language id
      *
      * @return bool
      */
-    public static function set_platform_language($language_id)
+    public static function set_platform_language($languageId)
     {
-        if (empty($language_id) || (intval($language_id) != $language_id)) {
+        if (empty($languageId) || intval($languageId) != $languageId) {
             return false;
         }
-        $language_id = intval($language_id);
-        $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        $sql = "SELECT english_name FROM $tbl_admin_languages
-                WHERE id = $language_id";
+
+        $languageId = intval($languageId);
+        $tblAdminLanguages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+
+        $sql = "SELECT english_name FROM $tblAdminLanguages WHERE id = $languageId";
         $result = Database::query($sql);
         $lang = Database::fetch_array($result);
-        $sql_update_2 = "UPDATE $tbl_settings_current SET selected_value = '".$lang['english_name']."'
-                         WHERE variable='platformLanguage'";
-        $result_2 = Database::query($sql_update_2);
-        Event::addEvent(
-            LOG_PLATFORM_LANGUAGE_CHANGE,
-            LOG_PLATFORM_LANGUAGE,
-            $lang['english_name']
-        );
 
-        return $result_2 !== false;
+        if ($lang) {
+            $success = api_set_setting(
+                'platformLanguage',
+                $lang['english_name'],
+                null,
+                null,
+                api_get_current_access_url_id()
+            );
+
+            if ($success) {
+                Event::addEvent(
+                    LOG_PLATFORM_LANGUAGE_CHANGE,
+                    LOG_PLATFORM_LANGUAGE,
+                    $lang['english_name']
+                );
+            }
+
+            return $success;
+        }
+
+        return false;
     }
 
     /**

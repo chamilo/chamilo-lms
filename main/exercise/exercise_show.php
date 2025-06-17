@@ -379,13 +379,6 @@ if (!empty($track_exercise_info['data_tracking'])) {
     $questionList = $question_list_from_database;
 }
 
-// Display the text when finished message if we are on a LP #4227
-$end_of_message = $objExercise->getTextWhenFinished();
-if (!empty($end_of_message) && ($origin === 'learnpath')) {
-    echo Display::return_message($end_of_message, 'normal', false);
-    echo "<div class='clear'>&nbsp;</div>";
-}
-
 // for each question
 $total_weighting = 0;
 foreach ($questionList as $questionId) {
@@ -416,7 +409,7 @@ if ($allowRecordAudio && $allowTeacherCommentAudio) {
 }
 
 foreach ($questionList as $questionId) {
-    $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : '';
+    $choice = $exerciseResult[$questionId] ?? '';
     // destruction of the Question object
     unset($objQuestionTmp);
     $questionWeighting = 0;
@@ -451,6 +444,7 @@ foreach ($questionList as $questionId) {
         case GLOBAL_MULTIPLE_ANSWER:
         case FREE_ANSWER:
         case UPLOAD_ANSWER:
+        case ANSWER_IN_OFFICE_DOC:
         case ORAL_EXPRESSION:
         case MATCHING:
         case MATCHING_COMBINATION:
@@ -619,7 +613,7 @@ foreach ($questionList as $questionId) {
         if ($isFeedbackAllowed && $action !== 'export') {
             $name = 'fckdiv'.$questionId;
             $marksname = 'marksName'.$questionId;
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER, ANSWER_IN_OFFICE_DOC])) {
                 $url_name = get_lang('EditCommentsAndMarks');
             } else {
                 $url_name = get_lang('AddComments');
@@ -696,7 +690,7 @@ foreach ($questionList as $questionId) {
         }
 
         if ($is_allowedToEdit && $isFeedbackAllowed && $action !== 'export') {
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER, ANSWER_IN_OFFICE_DOC])) {
                 $marksname = 'marksName'.$questionId;
                 $arrmarks[] = $questionId;
 
@@ -853,7 +847,7 @@ foreach ($questionList as $questionId) {
         }
     }
 
-    if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
+    if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER, ANSWER_IN_OFFICE_DOC])) {
         $scoreToReview = [
             'score' => $my_total_score,
             'comments' => isset($comnt) ? $comnt : null,
@@ -883,6 +877,13 @@ foreach ($questionList as $questionId) {
     $question_content .= '</div>';
     $exercise_content .= Display::panel($question_content);
 } // end of large foreach on questions
+
+// Display the text when finished message if we are on a LP #4227
+$end_of_message = $objExercise->getFinishText($totalScore, $totalWeighting);
+if (!empty($end_of_message) && ($origin === 'learnpath')) {
+    echo Display::return_message($end_of_message, 'normal', false);
+    echo "<div class='clear'>&nbsp;</div>";
+}
 
 $totalScoreText = '';
 if ($answerType != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {

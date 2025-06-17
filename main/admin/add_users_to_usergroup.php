@@ -175,11 +175,16 @@ if (ChamiloApi::isAjaxRequest() && $_SERVER['REQUEST_METHOD'] === 'POST' && isse
     $excludedUsers = isset($_POST['excludedUsers']) ? $_POST['excludedUsers'] : [];
     $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
 
+    $accessUrlId = api_get_current_access_url_id();
     $excludedIds = !empty($excludedUsers) ? implode(",", array_map('intval', $excludedUsers)) : '0';
     $sql = 'SELECT id, username, firstname, lastname
             FROM user
             WHERE status != '.ANONYMOUS.'
             AND id NOT IN ('.$excludedIds.')
+            AND u.id IN (
+                SELECT user_id
+                FROM access_url_rel_user
+                WHERE access_url_id ='.$accessUrlId.')
             ORDER BY id DESC
             LIMIT 10';
 
@@ -203,8 +208,8 @@ if (ChamiloApi::isAjaxRequest() && $_SERVER['REQUEST_METHOD'] === 'POST' && isse
 $first_letter_user = '';
 
 if ((isset($_POST['form_sent']) && $_POST['form_sent']) || isset($_REQUEST['firstLetterUser'])) {
-    $form_sent = $_POST['form_sent'];
-    $elements_posted = $_POST['elements_in_name'] ?? null;
+    $form_sent = $_POST['form_sent'] ?? 0;
+    $elements_posted = $_POST['elements_in_name'] ?? [];
     $first_letter_user = Security::remove_XSS($_REQUEST['firstLetterUser']);
 
     if (!is_array($elements_posted)) {
@@ -326,6 +331,7 @@ if (1 === $activeUser) {
 
 $filterData = [];
 if ($searchForm->validate()) {
+    $showAllStudentByDefault = true;
     $filterData = $searchForm->getSubmitValues();
 
     foreach ($filters as $filter) {

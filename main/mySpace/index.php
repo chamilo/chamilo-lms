@@ -314,6 +314,8 @@ $averageScore = null;
 $posts = null;
 
 if ($skipData === false) {
+    $averageTimeSpentPerStudent = '00:00:00';
+
     if (!empty($students)) {
         // Students
         $studentIds = array_values($students);
@@ -325,7 +327,7 @@ if ($skipData === false) {
         $numberAssignments = $countAssignments / $numberStudents;
         $avg_courses_per_student = $countCourses / $numberStudents;
         $totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds, 'ever');
-        $averageTimeSpentPerStudent = $totalTimeSpent / $numberStudents;
+        $averageTimeSpentPerStudent = api_time_to_hms($totalTimeSpent / $numberStudents);
         $posts = Tracking::count_student_messages($studentIds);
         $averageScore = Tracking::getAverageStudentScore($studentIds);
     }
@@ -379,9 +381,7 @@ if ($skipData === false) {
             ? ''
             : round($avg_courses_per_student, 3);
         $report['InactivesStudents'] = $nb_inactive_students;
-        $report['AverageTimeSpentOnThePlatform'] = is_null($averageTimeSpentPerStudent)
-            ? '00:00:00'
-            : api_time_to_hms($averageTimeSpentPerStudent);
+        $report['AverageTimeSpentOnThePlatform'] = $averageTimeSpentPerStudent;
         $report['AverageProgressInLearnpath'] = is_null($avgTotalProgress)
             ? ''
             : round($avgTotalProgress, 2).'%';

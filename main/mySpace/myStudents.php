@@ -655,6 +655,12 @@ while ($row = Database::fetch_array($rs)) {
 
 $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
+$sessionPositionOrder = '';
+$allowOrder = api_get_configuration_value('session_list_order');
+if ($allowOrder) {
+    $sessionPositionOrder = 's.position ASC, ';
+}
+
 // Get the list of sessions where the user is subscribed as student
 $sql = 'SELECT DISTINCT sc.session_id, sc.c_id
         FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE).' sc
@@ -664,7 +670,7 @@ $sql = 'SELECT DISTINCT sc.session_id, sc.c_id
         ON (scu.session_id = sc.session_id)
         WHERE s.id = scu.session_id
         AND user_id = '.$student_id.'
-        ORDER BY display_end_date DESC, position ASC
+        ORDER BY '.$sessionPositionOrder.'display_end_date DESC, sc.position ASC
         ';
 $rs = Database::query($sql);
 $tmp_sessions = [];
@@ -1274,7 +1280,7 @@ if (empty($details)) {
         echo '<tr>
             <th>'.get_lang('Course').'</th>
             <th>'.get_lang('Time').'</th>
-            <th>'.get_lang('Progress').'</th>
+            <th>'.get_lang('Progress').' '.Display::return_icon('info3.gif', get_lang('progressBasedOnVisiblesLPsInEachCourse'), [], ICON_SIZE_TINY).' </th>
             <th>'.get_lang('Score').'</th>
             <th>'.get_lang('AttendancesFaults').'</th>
             <th>'.get_lang('Evaluations').'</th>

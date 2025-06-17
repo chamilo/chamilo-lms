@@ -59,13 +59,9 @@ class OpenAi
      *
      * @return bool|string
      */
-    public function completion($opts, $stream = null)
+    public function completion(array $opts, callable $stream = null)
     {
-        if ($stream != null && array_key_exists('stream', $opts)) {
-            if (!$opts['stream']) {
-                throw new Exception('Please provide a stream function.');
-            }
-
+        if ($stream !== null && isset($opts['stream']) && $opts['stream']) {
             $this->streamMethod = $stream;
         }
 
@@ -287,14 +283,11 @@ class OpenAi
         $this->timeout = $timeout;
     }
 
-    private function sendRequest(
-        string $url,
-        string $method,
-        array $opts = []
-    ) {
+    private function sendRequest(string $url, string $method, array $opts = []): string
+    {
         $post_fields = json_encode($opts);
 
-        if (array_key_exists('file', $opts) || array_key_exists('image', $opts)) {
+        if (isset($opts['file']) || isset($opts['image'])) {
             $this->headers[0] = $this->contentTypes["multipart/form-data"];
             $post_fields = $opts;
         } else {
@@ -313,11 +306,11 @@ class OpenAi
             CURLOPT_HTTPHEADER => $this->headers,
         ];
 
-        if ($opts == []) {
+        if (empty($opts)) {
             unset($curl_info[CURLOPT_POSTFIELDS]);
         }
 
-        if (array_key_exists('stream', $opts) && $opts['stream']) {
+        if (isset($opts['stream']) && $opts['stream']) {
             $curl_info[CURLOPT_WRITEFUNCTION] = $this->streamMethod;
         }
 
@@ -325,7 +318,23 @@ class OpenAi
 
         curl_setopt_array($curl, $curl_info);
         $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        if (curl_errno($curl)) {
+            $errorMessage = curl_error($curl);
+            curl_close($curl);
+            throw new Exception("cURL Error: {$errorMessage}");
+        }
+
         curl_close($curl);
+
+        if ($httpCode === 429) {
+            throw new Exception("Insufficient quota. Please check your OpenAI account plan and billing details.");
+        }
+
+        if ($httpCode < 200 || $httpCode >= 300) {
+            throw new Exception("HTTP Error: {$httpCode}, Response: {$response}");
+        }
 
         return $response;
     }

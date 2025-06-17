@@ -152,13 +152,8 @@ class OnlyofficeTools
 
     /**
      * Return path to OnlyOffice viewer for a given file.
-     *
-     * @param int  $documentId  The ID from c_document.iid
-     * @param bool $showHeaders Whether to show Chamilo headers on top of the OnlyOffice frame or not
-     *
-     * @return string A link to open the OnlyOffice viewer
      */
-    public static function getPathToView(int $documentId, bool $showHeaders = true): string
+    public static function getPathToView($fileReference, bool $showHeaders = true, ?int $exeId = null, ?int $questionId = null, bool $isReadOnly = false): string
     {
         $plugin = OnlyofficePlugin::create();
         $appSettings = new OnlyofficeAppsettings($plugin);
@@ -170,40 +165,65 @@ class OnlyofficeTools
         }
 
         $urlToEdit = api_get_path(WEB_PLUGIN_PATH).'onlyoffice/editor.php';
+        $queryString = $_SERVER['QUERY_STRING'];
+        $isExercise = str_contains($queryString, 'exerciseId=');
 
-        $sessionId = api_get_session_id();
-        $courseInfo = api_get_course_info();
-        $userId = api_get_user_id();
+        if (is_numeric($fileReference)) {
+            $documentId = (int) $fileReference;
+            $courseInfo = api_get_course_info();
+            $sessionId = api_get_session_id();
+            $userId = api_get_user_id();
 
-        $docInfo = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code'], false, $sessionId);
+            $docInfo = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code'], false, $sessionId);
+            if (!$docInfo) {
+                return '';
+            }
 
-        $extension = strtolower(pathinfo($docInfo['path'], PATHINFO_EXTENSION));
-        $canView = null !== $documentManager->getFormatInfo($extension) ? $documentManager->getFormatInfo($extension)->isViewable() : false;
+            $extension = strtolower(pathinfo($docInfo['path'], PATHINFO_EXTENSION));
+            $canView = null !== $documentManager->getFormatInfo($extension) ? $documentManager->getFormatInfo($extension)->isViewable() : false;
 
-        $isGroupAccess = false;
-        $groupId = api_get_group_id();
-        if (!empty($groupId)) {
-            $groupProperties = GroupManager::get_group_properties($groupId);
-            $docInfoGroup = api_get_item_property_info(api_get_course_int_id(), 'document', $documentId, $sessionId);
-            $isGroupAccess = GroupManager::allowUploadEditDocument($userId, $courseInfo['code'], $groupProperties, $docInfoGroup);
+            $isGroupAccess = false;
+            $groupId = api_get_group_id();
+            if (!empty($groupId)) {
+                $groupProperties = GroupManager::get_group_properties($groupId);
+                $docInfoGroup = api_get_item_property_info(api_get_course_int_id(), 'document', $documentId, $sessionId);
+                $isGroupAccess = GroupManager::allowUploadEditDocument($userId, $courseInfo['code'], $groupProperties, $docInfoGroup);
 
-            $urlToEdit = $urlToEdit.'?groupId='.$groupId.'&';
+                $urlToEdit .= '?'.api_get_cidreq().'&';
+            } else {
+                $urlToEdit .= '?'.api_get_cidreq().'&';
+            }
+
+            $isMyDir = DocumentManager::is_my_shared_folder($userId, $docInfo['absolute_parent_path'], $sessionId);
+            $accessRights = $isMyDir || $isGroupAccess;
+
+            $urlToEdit .= 'docId='.$documentId;
+            if (false === $showHeaders) {
+                $urlToEdit .= '&nh=1';
+            }
+
+            if ($canView && !$accessRights) {
+                return $urlToEdit;
+            }
         } else {
-            $urlToEdit = $urlToEdit.'?';
-        }
-        error_log(__LINE__.' '.$urlToEdit);
+            $urlToEdit .= '?'.$queryString.'&doc='.urlencode($fileReference);
+            if ($isExercise) {
+                $urlToEdit .= '&type=exercise';
+                if ($exeId) {
+                    $urlToEdit .= '&exeId='.$exeId;
+                }
 
-        $isMyDir = DocumentManager::is_my_shared_folder($userId, $docInfo['absolute_parent_path'], $sessionId);
+                if ($questionId) {
+                    $urlToEdit .= '&questionId='.$questionId;
+                }
+            }
+            if (false === $showHeaders) {
+                $urlToEdit .= '&nh=1';
+            }
 
-        $accessRights = $isMyDir || $isGroupAccess;
-
-        $urlToEdit = $urlToEdit.'docId='.$documentId;
-        if (false === $showHeaders) {
-            $urlToEdit .= '&nh=1';
-        }
-
-        if ($canView && !$accessRights) {
-            error_log(__LINE__.' '.$urlToEdit);
+            if (true === $isReadOnly) {
+                $urlToEdit .= '&readOnly=1';
+            }
 
             return $urlToEdit;
         }

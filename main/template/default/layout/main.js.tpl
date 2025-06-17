@@ -741,14 +741,8 @@ function copyTextToClipBoard(elementId)
 
 function checkSessionTime()
 {
-    fetch('/main/inc/ajax/session_clock.ajax.php?action=time')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Server error: ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
+    $.getJSON(_p.web_ajax + 'session_clock.ajax.php?action=time')
+    .done(function (data) {
         if (data.sessionTimeLeft <= 0) {
             if (!document.getElementById('session-checker-overlay')) {
                 clearInterval(sessionCounterInterval);
@@ -793,18 +787,12 @@ function checkSessionTime()
             setTimeout(checkSessionTime, 60000);
         }
     })
-    .catch(error => console.error('Error:', error));
+    .fail(function (jqXHR, textStatus) { console.error('Error:', textStatus)} );
 }
 
 function extendSession() {
-    fetch('/main/inc/ajax/online.ajax.php')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Server error: ' + response.statusText);
-        }
-        return response;
-    })
-    .then(data => {
+    $.getJSON(_p.web_ajax + 'online.ajax.php')
+    .done(function (data) {
         console.log('Session extended');
 
         clearInterval(sessionCounterInterval);
@@ -814,7 +802,7 @@ function extendSession() {
             counterOverlay.remove();
         }
     })
-    .catch(error => console.error('Error:', error));
+    .fail(function (jqXHR, textStatus) { console.error('Error:', textStatus) });
 }
 
 function updateSessionTimeCounter() {
@@ -835,9 +823,8 @@ function updateSessionTimeCounter() {
                 document.getElementById('session-counter').innerHTML = '{{ 'SessionIsClosing' | get_lang | escape('js')}}';
 
                 setTimeout(function() {
-                    fetch('/main/inc/ajax/session_clock.ajax.php?action=logout')
-                    .then(response => response.json())
-                    .then(data => {
+                    $.getJSON(_p.web_ajax + 'session_clock.ajax.php?action=logout')
+                    .done(function (data) {
                         if (!document.getElementById('session-checker-overlay')) {
                             clearInterval(sessionCounterInterval);
 
@@ -858,8 +845,8 @@ function updateSessionTimeCounter() {
                             document.body.insertAdjacentHTML('afterbegin', '<div id="session-checker-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,1);display:flex;justify-content:center;align-items:center;z-index:1000;"><div id="session-checker-modal" style="background:white;padding:20px;border-radius:5px;box-shadow:0010pxrgba(0,0,0,0.5);width:35%;text-align:center;"><p style="margin-bottom:20px;">{{ 'SessionExpiredAt' | get_lang | escape('js')}} ' + dateTimeSessionExpired + '.</p><button class="btn btn-primary" onclick="window.location.pathname = \'/\';">OK</button></div></div>');
                         }
                     })
-                    .catch((error) => {
-                    console.error('Error:', error);
+                    .fail(function (jqXHR, textStatus) {
+                        console.error('Error:', textStatus);
                     });
                 }, 1000);
 
@@ -877,9 +864,8 @@ function updateSessionTimeCounter() {
                 document.getElementById('session-counter').innerHTML = '{{ 'SessionIsClosing' | get_lang | escape('js')}}';
 
                 setTimeout(function() {
-                    fetch('/main/inc/ajax/session_clock.ajax.php?action=logout')
-                    .then(response => response.json())
-                    .then(data => {
+                    $.getJSON(_p.web_ajax + 'session_clock.ajax.php?action=logout')
+                    .done(function(data) {
                         if (!document.getElementById('session-checker-overlay')) {
                             clearInterval(sessionCounterInterval);
 
@@ -900,8 +886,8 @@ function updateSessionTimeCounter() {
                             document.body.insertAdjacentHTML('afterbegin', '<div id="session-checker-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,1);display:flex;justify-content:center;align-items:center;z-index:1000;"><div id="session-checker-modal" style="background:white;padding:20px;border-radius:5px;box-shadow:0010pxrgba(0,0,0,0.5);width:35%;text-align:center;"><p style="margin-bottom:20px;">{{ 'SessionExpiredAt' | get_lang | escape('js')}} ' + dateTimeSessionExpired + '.</p><button class="btn btn-primary" onclick="window.location.pathname = \'/\';">OK</button></div></div>');
                         }
                     })
-                    .catch((error) => {
-                    console.error('Error:', error);
+                    .fail(function (jqXHR, textStatus) {
+                        console.error('Error:', textStatus);
                     });
                 }, 1000);
             }

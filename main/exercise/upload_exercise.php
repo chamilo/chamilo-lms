@@ -41,7 +41,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Exercises'),
 ];
 
-Display::display_header(get_lang('ImportExcelQuiz'), 'Exercises');
+Display::display_header(get_lang('ImportExcelQuiz'), 'Exercise');
 
 echo '<div class="actions">';
 echo lp_upload_quiz_actions();

@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
@@ -113,7 +114,7 @@ class ExerciseLib
                 }
             }
 
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, UPLOAD_ANSWER]) && $freeze) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, UPLOAD_ANSWER, ANSWER_IN_OFFICE_DOC]) && $freeze) {
                 return '';
             }
 
@@ -282,6 +283,22 @@ class ExerciseLib
                         </script>';
                     }
                     $s .= $multipleForm->returnForm();
+                    break;
+                case ANSWER_IN_OFFICE_DOC:
+                    if ('true' === OnlyofficePlugin::create()->get('enable_onlyoffice_plugin')) {
+                        global $exe_id;
+                        if (!empty($objQuestionTmp->extra)) {
+                            $fileUrl = api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/".$objQuestionTmp->extra;
+                            $documentUrl = OnlyofficeTools::getPathToView($fileUrl, false, $exe_id, $questionId);
+                            echo '<div class="office-doc-container">';
+                            echo "<iframe src='{$documentUrl}' width='100%' height='600' style='border:none;'></iframe>";
+                            echo '</div>';
+                        } else {
+                            echo '<p>'.get_lang('NoOfficeDocProvided').'</p>';
+                        }
+                    } else {
+                        echo '<p>'.get_lang('OnlyOfficePluginRequired').'</p>';
+                    }
                     break;
                 case ORAL_EXPRESSION:
                     // Add nanog
@@ -2575,7 +2592,7 @@ HOTSPOT;
                             FROM $TBL_EXERCISES_REL_QUESTION terq
                             LEFT JOIN $TBL_EXERCISES_QUESTION teq
                             ON terq.question_id = teq.iid
-                            WHERE teq.type in (".FREE_ANSWER.", ".ORAL_EXPRESSION.", ".ANNOTATION.", ".UPLOAD_ANSWER.")
+                            WHERE teq.type in (".FREE_ANSWER.", ".ORAL_EXPRESSION.", ".ANNOTATION.", ".UPLOAD_ANSWER.", ".ANSWER_IN_OFFICE_DOC.")
             ";
 
             $resultExerciseIds = Database::query($sqlExercise);
@@ -5368,21 +5385,6 @@ EOT;
             );
         }
 
-        // Display text when test is finished #4074 and for LP #4227
-        // Allows to do a remove_XSS for end text result of exercise with
-        // user status COURSEMANAGERLOWSECURITY BT#20194
-        if (true === api_get_configuration_value('exercise_result_end_text_html_strict_filtering')) {
-            $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished(), COURSEMANAGERLOWSECURITY);
-        } else {
-            $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished());
-        }
-        if (!empty($endOfMessage)) {
-            echo Display::div(
-                $endOfMessage,
-                ['id' => 'quiz_end_message']
-            );
-        }
-
         $question_list_answers = [];
         $category_list = [];
         $loadChoiceFromSession = false;
@@ -5399,7 +5401,7 @@ EOT;
             $exerciseResult = Session::read('exerciseResult');
             $exerciseResultCoordinates = Session::read('exerciseResultCoordinates');
             $delineationResults = Session::read('hotspot_delineation_result');
-            $delineationResults = isset($delineationResults[$objExercise->iid]) ? $delineationResults[$objExercise->iid] : null;
+            $delineationResults = $delineationResults[$objExercise->iid] ?? null;
         }
 
         $countPendingQuestions = 0;
@@ -5414,8 +5416,8 @@ EOT;
                 $choice = null;
                 $delineationChoice = null;
                 if ($loadChoiceFromSession) {
-                    $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : null;
-                    $delineationChoice = isset($delineationResults[$questionId]) ? $delineationResults[$questionId] : null;
+                    $choice = $exerciseResult[$questionId] ?? null;
+                    $delineationChoice = $delineationResults[$questionId] ?? null;
                 }
 
                 // We're inside *one* question. Go through each possible answer for this question
@@ -5555,7 +5557,7 @@ EOT;
                 if ($show_results) {
                     $score = $calculatedScore;
                 }
-                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
+                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER, ANSWER_IN_OFFICE_DOC])) {
                     $reviewScore = [
                         'score' => $my_total_score,
                         'comments' => Event::get_comments($exeId, $questionId),
@@ -5616,6 +5618,22 @@ EOT;
                     }
                 }
             }
+        }
+
+        // Display text when test is finished #4074 and for LP #4227
+        // Allows to do a remove_XSS for end text result of exercise with
+        // user status COURSEMANAGERLOWSECURITY BT#20194
+        $finishMessage = $objExercise->getFinishText($total_score, $total_weight);
+        if (true === api_get_configuration_value('exercise_result_end_text_html_strict_filtering')) {
+            $endOfMessage = Security::remove_XSS($finishMessage, COURSEMANAGERLOWSECURITY);
+        } else {
+            $endOfMessage = Security::remove_XSS($finishMessage);
+        }
+        if (!empty($endOfMessage)) {
+            echo Display::div(
+                $endOfMessage,
+                ['id' => 'quiz_end_message']
+            );
         }
 
         $totalScoreText = null;
@@ -5791,6 +5809,13 @@ EOT;
             $total_weight
         );
 
+        if ($save_user_result
+            && !$passed
+            && true === api_get_configuration_value('exercise_subscribe_session_when_finished_failure')
+        ) {
+            self::subscribeSessionWhenFinishedFailure($objExercise->iid);
+        }
+
         $percentage = 0;
         if (!empty($total_weight)) {
             $percentage = ($total_score / $total_weight) * 100;
@@ -5809,6 +5834,26 @@ EOT;
             'total_percentage' => $percentage,
             'count_pending_questions' => $countPendingQuestions,
         ];
+    }
+
+    public static function getSessionWhenFinishedFailure(int $exerciseId): ?SessionEntity
+    {
+        $objExtraField = new ExtraField('exercise');
+        $objExtraFieldValue = new ExtraFieldValue('exercise');
+
+        $subsSessionWhenFailureField = $objExtraField->get_handler_field_info_by_field_variable(
+            'subscribe_session_when_finished_failure'
+        );
+        $subsSessionWhenFailureValue = $objExtraFieldValue->get_values_by_handler_and_field_id(
+            $exerciseId,
+            $subsSessionWhenFailureField['id']
+        );
+
+        if (!empty($subsSessionWhenFailureValue['value'])) {
+            return api_get_session_entity((int) $subsSessionWhenFailureValue['value']);
+        }
+
+        return null;
     }
 
     /**
@@ -6390,6 +6435,7 @@ EOT;
             READING_COMPREHENSION,
             MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY,
             UPLOAD_ANSWER,
+            ANSWER_IN_OFFICE_DOC,
             MATCHING_COMBINATION,
             FILL_IN_BLANKS_COMBINATION,
             MULTIPLE_ANSWER_DROPDOWN,
@@ -7372,5 +7418,453 @@ EOT;
         }
 
         return false;
+    }
+
+    /**
+     * Get formatted feedback comments for an exam attempt.
+     */
+    public static function getFeedbackComments(int $examId): string
+    {
+        $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $TBL_QUIZ_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);
+
+        $sql = "SELECT ta.question_id, ta.teacher_comment, q.question AS title
+            FROM $TBL_TRACK_ATTEMPT ta
+            INNER JOIN $TBL_QUIZ_QUESTION q ON ta.question_id = q.iid
+            WHERE ta.exe_id = $examId
+            AND ta.teacher_comment IS NOT NULL
+            AND ta.teacher_comment != ''
+            GROUP BY ta.question_id
+            ORDER BY q.position ASC, ta.id ASC";
+
+        $result = Database::query($sql);
+        $commentsByQuestion = [];
+
+        while ($row = Database::fetch_array($result)) {
+            $questionId = $row['question_id'];
+            $questionTitle = Security::remove_XSS($row['title']);
+            $comment = Security::remove_XSS(trim(strip_tags($row['teacher_comment'])));
+
+            if (!empty($comment)) {
+                if (!isset($commentsByQuestion[$questionId])) {
+                    $commentsByQuestion[$questionId] = [
+                        'title' => $questionTitle,
+                        'comments' => [],
+                    ];
+                }
+                $commentsByQuestion[$questionId]['comments'][] = $comment;
+            }
+        }
+
+        if (empty($commentsByQuestion)) {
+            return "<p>".get_lang('NoAdditionalComments')."</p>";
+        }
+
+        $output = "<h3>".get_lang('TeacherFeedback')."</h3>";
+        $output .= "<table border='1' cellpadding='5' cellspacing='0' width='100%' style='border-collapse: collapse;'>";
+
+        foreach ($commentsByQuestion as $questionId => $data) {
+            $output .= "<tr>
+                        <td><b>".get_lang('Question')." #$questionId:</b> ".$data['title']."</td>
+                    </tr>";
+            foreach ($data['comments'] as $comment) {
+                $output .= "<tr>
+                            <td style='padding-left: 20px;'><i>".get_lang('Feedback').":</i> $comment</td>
+                        </tr>";
+            }
+        }
+
+        $output .= "</table>";
+
+        return $output;
+    }
+
+    public static function replaceTermsInContent(string $search, string $replace): array
+    {
+        $replacements = [
+            Database::get_course_table(TABLE_QUIZ_TEST) => [
+                'iid' => ['title', 'description', 'sound'],
+            ],
+            Database::get_course_table(TABLE_QUIZ_QUESTION) => [
+                'iid' => ['question', 'description'],
+            ],
+            Database::get_course_table(TABLE_QUIZ_ANSWER) => [
+                'iid' => ['answer', 'comment'],
+            ],
+            Database::get_course_table(TABLE_ANNOUNCEMENT) => [
+                'iid' => ['title', 'content'],
+            ],
+            Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT) => [
+                'iid' => ['path', 'comment'],
+            ],
+            Database::get_course_table(TABLE_ATTENDANCE) => [
+                'iid' => ['name', 'description', 'attendance_qualify_title'],
+            ],
+            Database::get_course_table(TABLE_BLOGS) => [
+                'iid' => ['blog_name', 'blog_subtitle'],
+            ],
+            Database::get_course_table(TABLE_BLOGS_ATTACHMENT) => [
+                'iid' => ['path', 'comment'],
+            ],
+            Database::get_course_table(TABLE_BLOGS_COMMENTS) => [
+                'iid' => ['title', 'comment'],
+            ],
+            Database::get_course_table(TABLE_BLOGS_POSTS) => [
+                'iid' => ['title', 'full_text'],
+            ],
+            Database::get_course_table(TABLE_BLOGS_TASKS) => [
+                'iid' => ['title', 'description'],
+            ],
+            Database::get_course_table(TABLE_AGENDA) => [
+                'iid' => ['title', 'content', 'comment'],
+            ],
+            Database::get_course_table(TABLE_AGENDA_ATTACHMENT) => [
+                'iid' => ['path', 'comment', 'filename'],
+            ],
+            Database::get_course_table(TABLE_COURSE_DESCRIPTION) => [
+                'iid' => ['title', 'content'],
+            ],
+            Database::get_course_table(TABLE_DOCUMENT) => [
+                'iid' => ['path', 'comment'],
+            ],
+            Database::get_course_table(TABLE_DROPBOX_FEEDBACK) => [
+                'iid' => ['feedback'],
+            ],
+            Database::get_course_table(TABLE_DROPBOX_FILE) => [
+                'iid' => ['title', 'description'],
+            ],
+            Database::get_course_table(TABLE_DROPBOX_POST) => [
+                'iid' => ['feedback'],
+            ],
+            Database::get_course_table(TABLE_FORUM_ATTACHMENT) => [
+                'iid' => ['path', 'comment', 'filename'],
+            ],
+            Database::get_course_table(TABLE_FORUM_CATEGORY) => [
+                'iid' => ['cat_title', 'cat_comment'],
+            ],
+            Database::get_course_table(TABLE_FORUM) => [
+                'iid' => ['forum_title', 'forum_comment', 'forum_image'],
+            ],
+            Database::get_course_table(TABLE_FORUM_POST) => [
+                'iid' => ['post_title', 'post_text', 'poster_name'],
+            ],
+            Database::get_course_table(TABLE_FORUM_THREAD) => [
+                'iid' => ['thread_title', 'thread_poster_name', 'thread_title_qualify'],
+            ],
+            Database::get_course_table(TABLE_GLOSSARY) => [
+                'iid' => ['name', 'description'],
+            ],
+            Database::get_course_table(TABLE_GROUP_CATEGORY) => [
+                'iid' => ['title', 'description'],
+            ],
+            Database::get_course_table(TABLE_GROUP) => [
+                'iid' => ['name', 'description', 'secret_directory'],
+            ],
+            Database::get_course_table(TABLE_LINK) => [
+                'iid' => ['description'],
+            ],
+            Database::get_course_table(TABLE_LINK_CATEGORY) => [
+                'iid' => ['category_title', 'description'],
+            ],
+            Database::get_course_table(TABLE_LP_MAIN) => [
+                'iid' => ['name', 'ref', 'description', 'path', 'content_license', 'preview_image', 'theme'],
+            ],
+            Database::get_course_table(TABLE_LP_CATEGORY) => [
+                'iid' => ['name'],
+            ],
+            Database::get_course_table(TABLE_LP_ITEM) => [
+                'iid' => ['prerequisite', 'description', 'title', 'parameters', 'launch_data', 'terms'],
+            ],
+            Database::get_course_table(TABLE_LP_ITEM_VIEW) => [
+                'iid' => ['suspend_data', 'lesson_location'],
+            ],
+            Database::get_course_table(TABLE_NOTEBOOK) => [
+                'iid' => ['title', 'description'],
+            ],
+            Database::get_course_table(TABLE_ONLINE_LINK) => [
+                'iid' => ['name'],
+            ],
+            Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY) => [
+                'iid' => ['title', 'description'],
+            ],
+            Database::get_course_table(TABLE_ROLE) => [
+                'iid' => ['role_name', 'role_comment'],
+            ],
+            Database::get_course_table(TABLE_STUDENT_PUBLICATION) => [
+                'iid' => ['title', 'title_correction', 'description'],
+            ],
+            Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT) => [
+                'iid' => ['comment', 'file'],
+            ],
+            Database::get_course_table(TABLE_SURVEY) => [
+                'iid' => ['title', 'subtitle', 'surveythanks', 'invite_mail', 'reminder_mail', 'mail_subject', 'access_condition', 'form_fields'],
+            ],
+            Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP) => [
+                'iid' => ['name', 'description'],
+            ],
+            Database::get_course_table(TABLE_SURVEY_QUESTION) => [
+                'iid' => ['survey_question', 'survey_question_comment'],
+            ],
+            Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION) => [
+                'iid' => ['option_text'],
+            ],
+            Database::get_course_table(TABLE_THEMATIC) => [
+                'iid' => ['content', 'title'],
+            ],
+            Database::get_course_table(TABLE_THEMATIC_ADVANCE) => [
+                'iid' => ['content'],
+            ],
+            Database::get_course_table(TABLE_THEMATIC_PLAN) => [
+                'iid' => ['description'],
+            ],
+            Database::get_course_table(TABLE_TOOL_LIST) => [
+                'iid' => ['description'],
+            ],
+            Database::get_course_table(TABLE_TOOL_INTRO) => [
+                'iid' => ['intro_text'],
+            ],
+            Database::get_course_table(TABLE_USER_INFO_DEF) => [
+                'iid' => ['comment'],
+            ],
+            Database::get_course_table(TABLE_WIKI) => [
+                'iid' => ['title', 'content', 'comment', 'progress', 'linksto'],
+            ],
+            Database::get_course_table(TABLE_WIKI_CONF) => [
+                'iid' => ['feedback1', 'feedback2', 'feedback3'],
+            ],
+            Database::get_course_table(TABLE_WIKI_DISCUSS) => [
+                'iid' => ['comment'],
+            ],
+            Database::get_main_table(TABLE_CAREER) => [
+                'id' => ['name', 'description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_CHAT) => [
+                'id' => ['message'],
+            ],
+            Database::get_main_table(TABLE_MAIN_CLASS) => [
+                'id' => ['name'],
+            ],
+            Database::get_main_table(TABLE_MAIN_COURSE_REQUEST) => [
+                'id' => ['description', 'title', 'objetives', 'target_audience'],
+            ],
+            'course_type' => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE) => [
+                'id' => ['message', 'subject', 'event_type_name'],
+            ],
+            Database::get_main_table(TABLE_GRADE_MODEL) => [
+                'id' => ['name', 'description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY) => [
+                'id' => ['name', 'description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE) => [
+                'id' => ['path_certificate'],
+            ],
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION) => [
+                'id' => ['description', 'name'],
+            ],
+            Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG) => [
+                'id' => ['name', 'description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_LEGAL) => [
+                'id' => ['content', 'changes'],
+            ],
+            Database::get_main_table(TABLE_MESSAGE) => [
+                'id' => ['content'],
+            ],
+            Database::get_main_table(TABLE_MESSAGE_ATTACHMENT) => [
+                'id' => ['path', 'comment', 'filename'],
+            ],
+            Database::get_main_table(TABLE_NOTIFICATION) => [
+                'id' => ['content'],
+            ],
+            Database::get_main_table(TABLE_PERSONAL_AGENDA) => [
+                'id' => ['title', 'text'],
+            ],
+            Database::get_main_table(TABLE_PROMOTION) => [
+                'id' => ['description'],
+            ],
+            'room' => [
+                'id' => ['description'],
+            ],
+            'sequence_condition' => [
+                'id' => ['description'],
+            ],
+            'sequence_method' => [
+                'id' => ['description', 'formula'],
+            ],
+            'sequence_rule' => [
+                'id' => ['description'],
+            ],
+            'sequence_type_entity' => [
+                'id' => ['description'],
+            ],
+            'sequence_variable' => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SESSION) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SHARED_SURVEY) => [
+                'survey_id' => ['subtitle', 'surveythanks', 'intro'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION) => [
+                'question_id' => ['survey_question', 'survey_question_comment'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION) => [
+                'question_option_id' => ['option_text'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SKILL) => [
+                'id' => ['name', 'description', 'criteria'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SKILL_PROFILE) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SKILL_REL_USER) => [
+                'id' => ['argumentation'],
+            ],
+            'skill_rel_user_comment' => [
+                'id' => ['feedback_text'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS) => [
+                'id' => ['content'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR) => [
+                'id' => ['content'],
+            ],
+            Database::get_main_table(TABLE_MAIN_SYSTEM_TEMPLATE) => [
+                'id' => ['comment', 'content'],
+            ],
+            Database::get_main_table(TABLE_MAIN_TEMPLATES) => [
+                'id' => ['description', 'image'],
+            ],
+            Database::get_main_table(TABLE_TICKET_CATEGORY) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_TICKET_MESSAGE) => [
+                'id' => ['message'],
+            ],
+            Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS) => [
+                'id' => ['filename', 'path'],
+            ],
+            Database::get_main_table(TABLE_TICKET_PRIORITY) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_TICKET_PROJECT) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_TICKET_STATUS) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_TICKET_TICKET) => [
+                'id' => ['message'],
+            ],
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT) => [
+                'id' => ['answer', 'teacher_comment', 'filename'],
+            ],
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING) => [
+                'id' => ['teacher_comment'],
+            ],
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT) => [
+                'default_id' => ['default_value'],
+            ],
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) => [
+                'exe_id' => ['data_tracking', 'questions_to_check'],
+            ],
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY) => [
+                'id' => ['content'],
+            ],
+            'track_e_open' => [
+                'open_id' => ['open_remote_host', 'open_agent', 'open_referer'],
+            ],
+            Database::get_main_table(TABLE_TRACK_STORED_VALUES) => [
+                'id' => ['sv_value'],
+            ],
+            Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK) => [
+                'id' => ['sv_value'],
+            ],
+            Database::get_main_table(TABLE_MAIN_USER_API_KEY) => [
+                'id' => ['description'],
+            ],
+            Database::get_main_table(TABLE_USERGROUP) => [
+                'id' => ['name', 'description', 'picture', 'url'],
+            ],
+            Database::get_main_table(TABLE_MAIN_BLOCK) => [
+                'id' => ['name', 'description', 'path'],
+            ],
+        ];
+
+        if (api_get_configuration_value('attendance_allow_comments')) {
+            $replacements['c_attendance_result_comment'] = [
+                'iid' => ['comment'],
+            ];
+        }
+
+        if (api_get_configuration_value('exercise_text_when_finished_failure')) {
+            $replacements[Database::get_course_table(TABLE_QUIZ_TEST)]['iid'][] = 'text_when_finished_failure';
+        }
+
+        $changes = array_map(
+            fn ($table) => 0,
+            $replacements
+        );
+
+        foreach ($replacements as $table => $replacement) {
+            foreach ($replacement as $idColumn => $columns) {
+                $keys = array_map(fn ($column) => "$column LIKE %?%", $columns);
+                $values = array_fill(0, count($columns), $search);
+
+                $result = Database::select(
+                    [$idColumn, ...$columns],
+                    $table,
+                    [
+                        'where' => [
+                            implode(' OR ', $keys) => $values,
+                        ],
+                        'order' => "$idColumn ASC",
+                    ]
+                );
+
+                foreach ($result as $row) {
+                    $attributes = array_combine(
+                        $columns,
+                        array_map(
+                            fn ($column) => preg_replace('#'.$search.'#', $replace, $row[$column]),
+                            $columns
+                        )
+                    );
+
+                    try {
+                        Database::update(
+                            $table,
+                            $attributes,
+                            ["$idColumn = ?" => $row[$idColumn]]
+                        );
+                    } catch (Exception $e) {
+                        Database::handleError($e);
+                    }
+
+                    $changes[$table]++;
+                }
+            }
+        }
+
+        return $changes;
+    }
+
+    private static function subscribeSessionWhenFinishedFailure(int $exerciseId): void
+    {
+        $failureSession = self::getSessionWhenFinishedFailure($exerciseId);
+
+        if ($failureSession) {
+            SessionManager::subscribeUsersToSession(
+                $failureSession->getId(),
+                [api_get_user_id()],
+                SESSION_VISIBLE_READ_ONLY,
+                false
+            );
+        }
     }
 }

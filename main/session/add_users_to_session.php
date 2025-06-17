@@ -38,8 +38,6 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
-$page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
-
 // Checking for extra field with filter on
 $extra_field_list = UserManager::get_extra_fields();
 
@@ -72,6 +70,7 @@ if (ChamiloApi::isAjaxRequest() && isset($_POST['action'])) {
     $excludedUsers = isset($_POST['excludedUsers']) ? $_POST['excludedUsers'] : [];
 
     $excludedUsersList = count($excludedUsers) > 0 ? implode(",", array_map('intval', $excludedUsers)) : '0';
+    $accessUrlId = api_get_current_access_url_id();
 
     if ($_POST['action'] == 'get_last_ten_users') {
         $sql = "SELECT u.id, u.username, u.firstname, u.lastname
@@ -79,6 +78,10 @@ if (ChamiloApi::isAjaxRequest() && isset($_POST['action'])) {
                 LEFT JOIN $tbl_session_rel_user sru ON (u.id = sru.user_id AND sru.session_id = $id_session)
                 WHERE sru.user_id IS NULL
                 AND u.id NOT IN ($excludedUsersList)
+                AND u.id IN (
+                    SELECT user_id
+                    FROM access_url_rel_user
+                    WHERE access_url_id ='$accessUrlId')
                 ORDER BY u.id DESC
                 LIMIT 10";
     } elseif ($_POST['action'] == 'get_all_users') {
@@ -87,6 +90,10 @@ if (ChamiloApi::isAjaxRequest() && isset($_POST['action'])) {
                 LEFT JOIN $tbl_session_rel_user sru ON (u.id = sru.user_id AND sru.session_id = $id_session)
                 WHERE sru.user_id IS NULL
                 AND u.id NOT IN ($excludedUsersList)
+                AND u.id IN (
+                    SELECT user_id
+                    FROM access_url_rel_user
+                    WHERE access_url_id ='$accessUrlId')
                 ORDER BY u.lastname ASC, u.firstname ASC";
     }
 
@@ -692,7 +699,7 @@ $newLinks .= Display::url(
         ?>
     </div>
     <form name="formulaire" method="post"
-          action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
+          action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
             echo '&add=true';
         } ?>" <?php if ($ajax_search) {
             echo ' onsubmit="valide();"';

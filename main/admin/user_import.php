@@ -21,12 +21,8 @@ set_time_limit(0);
 
 /**
  * Create directories and subdirectories for backup import csv data.
- *
- * @param null $path
- *
- * @return string|null
  */
-function createDirectory($path = null)
+function createDirectory(?string $path = null): ?string
 {
     if ($path == null) {
         return $path;
@@ -54,8 +50,10 @@ Options -Indexes';
                 $fp = fopen($data.'/.htaccess', 'w');
                 if ($fp) {
                     fwrite($fp, $block);
+                    fclose($fp);
+                } else {
+                    error_log("Failed to open .htaccess file in $data for writing.");
                 }
-                fclose($fp);
             }
         }
     }
@@ -63,13 +61,7 @@ Options -Indexes';
     return $data;
 }
 
-/**
- * @param array $users
- * @param bool  $checkUniqueEmail
- *
- * @return array
- */
-function validate_data($users, $checkUniqueEmail = false)
+function validate_data(array $users, bool $checkUniqueEmail = false): array
 {
     global $defined_auth_sources;
     $usernames = [];
@@ -94,7 +86,7 @@ function validate_data($users, $checkUniqueEmail = false)
             }
         }
 
-        $username = isset($user['UserName']) ? $user['UserName'] : '';
+        $username = $user['UserName'] ?? '';
         // 2. Check username, first, check whether it is empty.
         if (!UserManager::is_username_empty($username)) {
             // 2.1. Check whether username is too long.
@@ -204,14 +196,12 @@ function validate_data($users, $checkUniqueEmail = false)
 
 /**
  * Add missing user-information (which isn't required, like password, username etc).
- *
- * @param array $user
  */
-function complete_missing_data($user)
+function complete_missing_data(array $user): array
 {
     global $purification_option_for_usernames;
 
-    $username = isset($user['UserName']) ? $user['UserName'] : '';
+    $username = $user['UserName'] ?? '';
 
     // 1. Create a username if necessary.
     if (UserManager::is_username_empty($username)) {
@@ -265,17 +255,14 @@ function complete_missing_data($user)
 /**
  * Save the imported data.
  *
- * @param array $users    List of users
- * @param bool  $sendMail
- *
  * @uses \global variable $inserted_in_course, which returns the list of
  * courses the user was inserted in
  */
 function save_data(
-    $users,
-    $sendMail = false,
-    $targetFolder = null
-) {
+    array $users,
+    bool $sendMail = false,
+    ?string $targetFolder = null
+): array {
     global $inserted_in_course, $extra_fields;
 
     // Not all scripts declare the $inserted_in_course array (although they should).
@@ -290,113 +277,111 @@ function save_data(
     }
 
     $usergroup = new UserGroup();
-    if (is_array($users)) {
-        $efo = new ExtraFieldOption('user');
+    $efo = new ExtraFieldOption('user');
 
-        $optionsByField = [];
+    $optionsByField = [];
 
-        foreach ($users as &$user) {
-            if ($user['has_error']) {
-                $userError[] = $user;
-                continue;
-            }
-
-            $user = complete_missing_data($user);
-            $user['Status'] = api_status_key($user['Status']);
-            $redirection = isset($user['Redirection']) ? $user['Redirection'] : '';
-
-            $user_id = UserManager::create_user(
-                $user['FirstName'],
-                $user['LastName'],
-                $user['Status'],
-                $user['Email'],
-                $user['UserName'],
-                $user['Password'],
-                $user['OfficialCode'],
-                $user['language'],
-                $user['PhoneNumber'],
-                '',
-                $user['AuthSource'],
-                $user['ExpiryDate'],
-                1,
-                0,
-                null,
-                null,
-                $sendMail,
-                false,
-                '',
-                false,
-                null,
-                null,
-                null,
-                $redirection
-            );
-
-            if ($user_id) {
-                $returnMessage = Display::return_message(get_lang('UserAdded'), 'success');
-
-                if (isset($user['Courses']) && is_array($user['Courses'])) {
-                    foreach ($user['Courses'] as $course) {
-                        if (CourseManager::course_exists($course)) {
-                            $result = CourseManager::subscribeUser($user_id, $course, $user['Status']);
-                            if ($result) {
-                                $course_info = api_get_course_info($course);
-                                $inserted_in_course[$course] = $course_info['title'];
-                            }
-                        }
-                    }
-                }
-
-                if (isset($user['Sessions']) && is_array($user['Sessions'])) {
-                    foreach ($user['Sessions'] as $sessionId) {
-                        $sessionInfo = api_get_session_info($sessionId);
-                        if (!empty($sessionInfo)) {
-                            SessionManager::subscribeUsersToSession(
-                                $sessionId,
-                                [$user_id],
-                                SESSION_VISIBLE_READ_ONLY,
-                                false
-                            );
-                        }
-                    }
-                }
-
-                if (!empty($user['ClassId'])) {
-                    $classId = explode('|', trim($user['ClassId']));
-                    foreach ($classId as $id) {
-                        $usergroup->subscribe_users_to_usergroup($id, [$user_id], false);
-                    }
-                }
-
-                // We are sure that the extra field exists.
-                foreach ($extra_fields as $extras) {
-                    if (!isset($user[$extras[1]])) {
-                        continue;
-                    }
-
-                    $key = $extras[1];
-                    $value = $user[$key];
-
-                    if (!array_key_exists($key, $optionsByField)) {
-                        $optionsByField[$key] = $efo->getOptionsByFieldVariable($key);
-                    }
-
-                    /** @var ExtraFieldOptions $option */
-                    foreach ($optionsByField[$key] as $option) {
-                        if ($option->getDisplayText() === $value) {
-                            $value = $option->getValue();
-                        }
-                    }
-
-                    UserManager::update_extra_field_value($user_id, $key, $value);
-                }
-                $userSaved[] = $user;
-            } else {
-                $returnMessage = Display::return_message(get_lang('Error'), 'warning');
-                $userWarning[] = $user;
-            }
-            $user['message'] = $returnMessage;
+    foreach ($users as &$user) {
+        if ($user['has_error']) {
+            $userError[] = $user;
+            continue;
         }
+
+        $user = complete_missing_data($user);
+        $user['Status'] = api_status_key($user['Status']);
+        $redirection = $user['Redirection'] ?? '';
+
+        $user_id = UserManager::create_user(
+            $user['FirstName'],
+            $user['LastName'],
+            $user['Status'],
+            $user['Email'],
+            $user['UserName'],
+            $user['Password'],
+            $user['OfficialCode'],
+            $user['language'],
+            $user['PhoneNumber'],
+            '',
+            $user['AuthSource'],
+            $user['ExpiryDate'],
+            1,
+            0,
+            null,
+            null,
+            $sendMail,
+            false,
+            '',
+            false,
+            null,
+            null,
+            null,
+            $redirection
+        );
+
+        if ($user_id) {
+            $returnMessage = Display::return_message(get_lang('UserAdded'), 'success');
+
+            if (isset($user['Courses']) && is_array($user['Courses'])) {
+                foreach ($user['Courses'] as $course) {
+                    if (CourseManager::course_exists($course)) {
+                        $result = CourseManager::subscribeUser($user_id, $course, $user['Status']);
+                        if ($result) {
+                            $course_info = api_get_course_info($course);
+                            $inserted_in_course[$course] = $course_info['title'];
+                        }
+                    }
+                }
+            }
+
+            if (isset($user['Sessions']) && is_array($user['Sessions'])) {
+                foreach ($user['Sessions'] as $sessionId) {
+                    $sessionInfo = api_get_session_info($sessionId);
+                    if (!empty($sessionInfo)) {
+                        SessionManager::subscribeUsersToSession(
+                            $sessionId,
+                            [$user_id],
+                            SESSION_VISIBLE_READ_ONLY,
+                            false
+                        );
+                    }
+                }
+            }
+
+            if (!empty($user['ClassId'])) {
+                $classId = explode('|', trim($user['ClassId']));
+                foreach ($classId as $id) {
+                    $usergroup->subscribe_users_to_usergroup($id, [$user_id], false);
+                }
+            }
+
+            // We are sure that the extra field exists.
+            foreach ($extra_fields as $extras) {
+                if (!isset($user[$extras[1]])) {
+                    continue;
+                }
+
+                $key = $extras[1];
+                $value = $user[$key];
+
+                if (!array_key_exists($key, $optionsByField)) {
+                    $optionsByField[$key] = $efo->getOptionsByFieldVariable($key);
+                }
+
+                /** @var ExtraFieldOptions $option */
+                foreach ($optionsByField[$key] as $option) {
+                    if ($option->getDisplayText() === $value) {
+                        $value = $option->getValue();
+                    }
+                }
+
+                UserManager::update_extra_field_value($user_id, $key, $value);
+            }
+            $userSaved[] = $user;
+        } else {
+            $returnMessage = Display::return_message(get_lang('Error'), 'warning');
+            $userWarning[] = $user;
+        }
+        $user['message'] = $returnMessage;
     }
 
     // Save with success, error and warning users
@@ -417,12 +402,12 @@ function save_data(
             $csv_content[] = $csv_row;
             foreach ($userSaved as $userItem) {
                 $csv_row = [];
-                $csv_row[] = isset($userItem['id']) ? $userItem['id'] : '';
-                $csv_row[] = isset($userItem['FirstName']) ? $userItem['FirstName'] : '';
-                $csv_row[] = isset($userItem['LastName']) ? $userItem['LastName'] : '';
-                $csv_row[] = isset($userItem['Status']) ? $userItem['Status'] : '';
-                $csv_row[] = isset($userItem['Email']) ? $userItem['Email'] : '';
-                $csv_row[] = isset($userItem['UserName']) ? $userItem['UserName'] : '';
+                $csv_row[] = $userItem['id'] ?? '';
+                $csv_row[] = $userItem['FirstName'] ?? '';
+                $csv_row[] = $userItem['LastName'] ?? '';
+                $csv_row[] = $userItem['Status'] ?? '';
+                $csv_row[] = $userItem['Email'] ?? '';
+                $csv_row[] = $userItem['UserName'] ?? '';
                 $csv_row[] = isset($userItem['message']) ? strip_tags($userItem['message']) : '';
                 $csv_content[] = $csv_row;
             }
@@ -436,12 +421,12 @@ function save_data(
             $csv_content[] = $csv_row;
             foreach ($userError as $userItem) {
                 $csv_row = [];
-                $csv_row[] = isset($userItem['id']) ? $userItem['id'] : '';
-                $csv_row[] = isset($userItem['FirstName']) ? $userItem['FirstName'] : '';
-                $csv_row[] = isset($userItem['LastName']) ? $userItem['LastName'] : '';
-                $csv_row[] = isset($userItem['Status']) ? $userItem['Status'] : '-';
-                $csv_row[] = isset($userItem['Email']) ? $userItem['Email'] : '';
-                $csv_row[] = isset($userItem['UserName']) ? $userItem['UserName'] : '';
+                $csv_row[] = $userItem['id'] ?? '';
+                $csv_row[] = $userItem['FirstName'] ?? '';
+                $csv_row[] = $userItem['LastName'] ?? '';
+                $csv_row[] = $userItem['Status'] ?? '-';
+                $csv_row[] = $userItem['Email'] ?? '';
+                $csv_row[] = $userItem['UserName'] ?? '';
                 $csv_row[] = isset($userItem['message']) ? strip_tags($userItem['message']) : '';
                 $csv_content[] = $csv_row;
             }
@@ -455,12 +440,12 @@ function save_data(
             $csv_content[] = $csv_row;
             foreach ($userWarning as $userItem) {
                 $csv_row = [];
-                $csv_row[] = isset($userItem['id']) ? $userItem['id'] : '';
-                $csv_row[] = isset($userItem['FirstName']) ? $userItem['FirstName'] : '';
-                $csv_row[] = isset($userItem['LastName']) ? $userItem['LastName'] : '';
-                $csv_row[] = isset($userItem['Status']) ? $userItem['Status'] : '';
-                $csv_row[] = isset($userItem['Email']) ? $userItem['Email'] : '';
-                $csv_row[] = isset($userItem['UserName']) ? $userItem['UserName'] : '';
+                $csv_row[] = $userItem['id'] ?? '';
+                $csv_row[] = $userItem['FirstName'] ?? '';
+                $csv_row[] = $userItem['LastName'] ?? '';
+                $csv_row[] = $userItem['Status'] ?? '';
+                $csv_row[] = $userItem['Email'] ?? '';
+                $csv_row[] = $userItem['UserName'] ?? '';
                 $csv_row[] = isset($userItem['message']) ? strip_tags($userItem['message']) : '';
                 $csv_content[] = $csv_row;
             }
@@ -474,12 +459,8 @@ function save_data(
 
 /**
  * Save array to a specific file.
- *
- * @param array $data
- * @param $file
- * @param string $enclosure
  */
-function saveCsvFile($data = [], $file = 'example', $enclosure = '"')
+function saveCsvFile(array $data = [], string $file = 'example', string $enclosure = '"')
 {
     $filePath = $file.'.csv';
     $stream = fopen($filePath, 'w');
@@ -495,21 +476,15 @@ function saveCsvFile($data = [], $file = 'example', $enclosure = '"')
         $writer->writeItem($item);
     }
     $writer->finish();
-
-    return null;
 }
 
-/**
- * @param array  $users
- * @param string $fileName
- * @param int    $sendEmail
- * @param bool   $checkUniqueEmail
- * @param bool   $resumeImport
- *
- * @return array
- */
-function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = true, $resumeImport = false)
-{
+function parse_csv_data(
+    array $users,
+    string $fileName,
+    int $sendEmail = 0,
+    bool $checkUniqueEmail = true,
+    bool $resumeImport = false
+): array {
     $usersFromOrigin = $users;
     $allowRandom = api_get_configuration_value('generate_random_login');
     if ($allowRandom) {
@@ -559,19 +534,24 @@ function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = t
         }
 
         // Lastname is needed.
-        if (!isset($user['LastName']) || (isset($user['LastName']) && empty($user['LastName']))) {
+        if ((empty($user['LastName']))) {
             unset($users[$index]);
             continue;
         }
 
         // FirstName is needed.
-        if (!isset($user['FirstName']) || (isset($user['FirstName']) && empty($user['FirstName']))) {
+        if ((empty($user['FirstName']))) {
             unset($users[$index]);
             continue;
         }
 
         $users[$index] = $user;
     }
+
+    $users = array_map(
+        fn ($user) => Security::remove_XSS($user),
+        $users
+    );
 
     $globalCounter = $counter;
     if (!empty($importData)) {
@@ -601,7 +581,7 @@ function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = t
  *
  * @return array All user information read from the file
  */
-function parse_xml_data($file, $sendEmail = 0, $checkUniqueEmail = true)
+function parse_xml_data(string $file, $sendEmail = 0, $checkUniqueEmail = true): array
 {
     $crawler = Import::xml($file);
     $crawler = $crawler->filter('Contacts > Contact ');
@@ -631,12 +611,7 @@ function parse_xml_data($file, $sendEmail = 0, $checkUniqueEmail = true)
     return $array;
 }
 
-/**
- * @param array  $users
- * @param bool   $sendMail
- * @param string $targetFolder
- */
-function processUsers(&$users, $sendMail, $targetFolder = null)
+function processUsers(array &$users, bool $sendMail, ?string $targetFolder = null)
 {
     $users = save_data($users, $sendMail, $targetFolder);
 
@@ -703,10 +678,10 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     $allowed_file_mimetype = ['csv', 'xml'];
     $error_kind_file = true;
 
-    $checkUniqueEmail = isset($_POST['check_unique_email']) ? $_POST['check_unique_email'] : null;
-    $sendMail = $_POST['sendMail'] ? true : false;
-    $resume = isset($_POST['resume_import']) ? true : false;
-    $askNewPassword = isset($_POST['ask_new_password']) ? true : false;
+    $checkUniqueEmail = $_POST['check_unique_email'] ?? false;
+    $sendMail = (bool) $_POST['sendMail'];
+    $resume = isset($_POST['resume_import']);
+    $askNewPassword = isset($_POST['ask_new_password']);
     $uploadInfo = pathinfo($_FILES['import_file']['name']);
     $ext_import_file = $uploadInfo['extension'];
     $targetFolder = null;
@@ -722,7 +697,9 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $targetFolder = api_get_configuration_value('root_sys').'app/cache/backup/import_users';
             $targetFolder .= DIRECTORY_SEPARATOR.$userId.DIRECTORY_SEPARATOR.$today;
             $targetFolder = createDirectory($targetFolder).DIRECTORY_SEPARATOR;
-            $originalFile = $targetFolder.$_FILES['import_file']['name'];
+            $cleanFileName = api_replace_dangerous_char($_FILES['import_file']['name']);
+            $cleanFileName = disable_dangerous_file($cleanFileName);
+            $originalFile = $targetFolder.$cleanFileName;
             // save original file
             if (!file_exists($originalFile)) {
                 touch($originalFile);
@@ -733,7 +710,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
             $users = parse_csv_data(
                 $users,
-                $_FILES['import_file']['name'],
+                $cleanFileName,
                 $sendMail,
                 $checkUniqueEmail,
                 $resume
@@ -803,13 +780,13 @@ if (!empty($importData)) {
     }
     $formContinue->addHeader($label);
     if (isset($importData['filename'])) {
-        $formContinue->addLabel(get_lang('File'), $importData['filename'] ?? '');
+        $formContinue->addLabel(get_lang('File'), $importData['filename'] ?: '');
     }
 
     $resumeStop = true;
     if ($isResume) {
         $totalUsers = isset($importData['complete_list']) ? count($importData['complete_list']) : 0;
-        $counter = isset($importData['counter']) ? $importData['counter'] : 0;
+        $counter = $importData['counter'] ?? 0;
         $bar = '';
         if (!empty($totalUsers)) {
             $bar = Display::bar_progress($counter / $totalUsers * 100);
@@ -837,7 +814,7 @@ if (!empty($importData)) {
 
     if ($isResume) {
         $resumeStop = $importData['counter'] >= count($importData['complete_list']);
-        if ($resumeStop == false) {
+        if (!$resumeStop) {
             $formContinue->addButtonImport(get_lang('ContinueImport'), 'import_continue');
         }
     }
@@ -911,7 +888,7 @@ $form->addElement(
     get_lang('ResumeImport')
 );
 
-if (api_get_configuration_value('force_renew_password_at_first_login') == true) {
+if (api_get_configuration_value('force_renew_password_at_first_login')) {
     $form->addElement(
         'checkbox',
         'ask_new_password',
@@ -927,9 +904,7 @@ $defaults['sendMail'] = 0;
 $defaults['file_type'] = 'csv';
 
 $extraSettings = api_get_configuration_value('user_import_settings');
-if (!empty($extraSettings) && isset($extraSettings['options']) &&
-    isset($extraSettings['options']['send_mail_default_option'])
-) {
+if (isset($extraSettings['options']['send_mail_default_option']) && !empty($extraSettings)) {
     $defaults['sendMail'] = $extraSettings['options']['send_mail_default_option'];
 }
 

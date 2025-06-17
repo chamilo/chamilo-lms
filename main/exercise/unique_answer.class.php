@@ -336,10 +336,65 @@ class UniqueAnswer extends Question
     }
 
     /**
+     * Validate question answers before saving.
+     *
+     * @return bool|string True if valid, error message if invalid.
+     */
+    public function validateAnswers($form)
+    {
+        $correct = $form->getSubmitValue('correct');
+        $nb_answers = $form->getSubmitValue('nb_answers');
+        $hasCorrectAnswer = false;
+        $hasPositiveScore = false;
+        $errors = [];
+        $error_fields = [];
+
+        for ($i = 1; $i <= $nb_answers; $i++) {
+            $answer = trim($form->getSubmitValue("answer[$i]") ?? '');
+            $weighting = trim($form->getSubmitValue("weighting[$i]") ?? '');
+            $isCorrect = ($correct == $i);
+            if (empty($answer)) {
+                $errors[] = sprintf(get_lang('NoAnswerCanBeEmpty'), $i);
+                $error_fields[] = "answer[$i]";
+            }
+
+            if ($weighting === '' || !is_numeric($weighting)) {
+                $errors[] = sprintf(get_lang('ScoreMustBeNumeric'), $i);
+                $error_fields[] = "weighting[$i]";
+            }
+
+            if ($isCorrect) {
+                $hasCorrectAnswer = true;
+                if (floatval($weighting) > 0) {
+                    $hasPositiveScore = true;
+                }
+            }
+        }
+
+        if (!$hasCorrectAnswer) {
+            $errors[] = get_lang('ACorrectAnswerIsRequired');
+            $error_fields[] = "correct";
+        }
+
+        if (!$hasPositiveScore) {
+            $errors[] = get_lang('TheCorrectAnswerMustHaveAPositiveScore');
+        }
+
+        return empty($errors) ? true : ['errors' => $errors, 'error_fields' => $error_fields];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
+        $validationResult = $this->validateAnswers($form);
+        if ($validationResult !== true) {
+            Display::addFlash(Display::return_message(implode("<br>", $validationResult['errors']), 'error'));
+
+            return;
+        }
+
         $questionWeighting = $nbrGoodAnswers = 0;
         $correct = $form->getSubmitValue('correct');
         $objAnswer = new Answer($this->iid);

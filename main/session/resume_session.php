@@ -57,6 +57,12 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $url_id = api_get_current_access_url_id();
 
 switch ($action) {
+    case 'export_certified_course_users':
+        $courseCode = $_GET['course_code'] ?? null;
+        if (!empty($courseCode)) {
+            SessionManager::exportCourseSessionReport($sessionId, $courseCode);
+        }
+        break;
     case 'move_up':
         SessionManager::moveUp($sessionId, $_GET['course_id']);
         header('Location: resume_session.php?id_session='.$sessionId);
@@ -293,6 +299,15 @@ if ($session->getNbrCourses() === 0) {
             Display::return_icon('export_csv.png', get_lang('ExportUsersOfACourse')),
             $codePath."user/user_export.php?file_type=csv&course_session={$course->getCode()}:$sessionId&addcsvheader=1"
         );
+
+        $config = api_get_configuration_value('session_course_excel_export');
+        if (!empty($config)) {
+            $courseItem .= Display::url(
+                Display::return_icon('excel.png', get_lang('ExportCertifiedUsersExcel')),
+                api_get_self()."?id_session=$sessionId&action=export_certified_course_users&course_code=".$course->getCode()
+            );
+        }
+
         $courseItem .= Display::url(
             Display::return_icon('statistics.gif', get_lang('Tracking')),
             $codePath."tracking/courseLog.php?id_session=$sessionId&cidReq={$course->getCode()}$orig_param&hide_course_breadcrumb=1"
@@ -353,12 +368,33 @@ $userListToShow = Display::page_subheader(get_lang('UserList').$url);
 $userList = SessionManager::get_users_by_session($sessionId);
 
 if (!empty($userList)) {
+    $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : null;
+    $sortColumn = isset($_GET['sort']) ? Security::remove_XSS($_GET['sort']) : 'registration_date';
+    $sortOrder = isset($_GET['order']) && Security::remove_XSS($_GET['order']) === 'ASC' ? SORT_ASC : SORT_DESC;
+
+    $allowedColumns = ['user', 'registration_date'];
+    if (!in_array($sortColumn, $allowedColumns, true)) {
+        $sortColumn = 'registration_date';
+    }
+
+    usort($userList, function ($a, $b) use ($sortColumn, $sortOrder) {
+        if ($sortColumn === 'user') {
+            $valueA = strtolower(api_get_user_info($a['user_id'])['complete_name_with_username']);
+            $valueB = strtolower(api_get_user_info($b['user_id'])['complete_name_with_username']);
+        } else {
+            $valueA = strtotime($a['registered_at']);
+            $valueB = strtotime($b['registered_at']);
+        }
+
+        return $sortOrder === SORT_ASC ? $valueA <=> $valueB : $valueB <=> $valueA;
+    });
+
     $table = new HTML_Table(
         ['class' => 'table table-hover table-striped data_table', 'id' => 'session-user-list']
     );
-    $table->setHeaderContents(0, 0, get_lang('User'));
+    $table->setHeaderContents(0, 0, '<a href="?id_session='.$sessionId.'&sort=user&order='.($sortColumn === 'user' && $sortOrder === SORT_ASC ? 'DESC' : 'ASC').'">'.get_lang('User').'</a>');
     $table->setHeaderContents(0, 1, get_lang('Status'));
-    $table->setHeaderContents(0, 2, get_lang('RegistrationDate'));
+    $table->setHeaderContents(0, 2, '<a href="?id_session='.$sessionId.'&sort=registration_date&order='.($sortColumn === 'registration_date' && $sortOrder === SORT_ASC ? 'DESC' : 'ASC').'">'.get_lang('RegistrationDate').'</a>');
     $table->setHeaderContents(0, 3, get_lang('Actions'));
 
     $row = 1;

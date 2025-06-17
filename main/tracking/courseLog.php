@@ -694,6 +694,24 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $headers['training_time'] = get_lang('TrainingTime');
 
     $courseProgressHeadTitle = ($lpShowMaxProgress ? get_lang('ScormAndLPMaxProgress') : get_lang('ScormAndLPProgressTotalAverage'));
+    $userIdList = Session::read('user_id_list');
+    if (isset($userIdList[0])) {
+        $lpList = new LearnpathList(
+            $studentId,
+            $courseInfo,
+            $sessionId,
+            null,
+            false,
+            null,
+            true,
+            false,
+            true,
+            true
+        );
+        $lpList = $lpList->get_flat_list();
+        $NbVisibleLps = count($lpList);
+        $courseProgressHeadTitle .= '. '.sprintf(get_lang('progressBasedOnXVisiblesLPs'), $NbVisibleLps);
+    }
     $table->set_header(
         $headerCounter++,
         get_lang('CourseProgress').'&nbsp;'.
@@ -779,30 +797,26 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $table->set_header($headerCounter++, get_lang('QuizFinalizationDate'), false);
     $headers['quiz_finalization_date'] = get_lang('QuizFinalizationDate');
 
-    $counter = $headerCounter;
     if (api_get_setting('show_email_addresses') === 'true') {
-        $table->set_header($counter, get_lang('Email'), false);
+        $table->set_header($headerCounter++, get_lang('Email'), false);
         $headers['email'] = get_lang('Email');
-        $counter++;
     }
     if (isset($_GET['additional_profile_field'])) {
         foreach ($_GET['additional_profile_field'] as $fieldId) {
-            $table->set_header($counter, $extra_info[$fieldId]['display_text'], false);
+            $table->set_header($headerCounter++, $extra_info[$fieldId]['display_text'], false);
             $headers[$extra_info[$fieldId]['variable']] = $extra_info[$fieldId]['display_text'];
-            $counter++;
             $parameters['additional_profile_field'] = $fieldId;
         }
     }
     if (isset($defaultExtraFields)) {
         if (!empty($defaultExtraInfo)) {
             foreach ($defaultExtraInfo as $field) {
-                $table->set_header($counter, $field['display_text'], false);
+                $table->set_header($headerCounter++, $field['display_text'], false);
                 $headers[$field['variable']] = $field['display_text'];
-                $counter++;
             }
         }
     }
-    $table->set_header($counter, get_lang('Details'), false);
+    $table->set_header($headerCounter++, get_lang('Details'), false);
     $headers['Details'] = get_lang('Details');
 
     if (!empty($fields)) {

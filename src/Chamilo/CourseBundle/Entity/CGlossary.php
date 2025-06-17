@@ -213,4 +213,9 @@ class CGlossary
     {
         return $this->cId;
     }
+
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
 }

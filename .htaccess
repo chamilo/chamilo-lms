@@ -34,24 +34,22 @@ RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_ur
 # Rewrite everything in the document folder of a course to the download script
 # Except certificate resources, which might need to be accessible publicly to all
 RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
-# Note : since version 2.4.38-3 of Apache a security fix had a side effect that made redirection with space not to work.
+# Note : since version 2.4.38-3 of Apache a security fix had a side effect that broke redirections with spaces.
 # To fix this issue we did not have a common syntaxis but it work with one of those 2 options :
-# changing at the end of the following line [QSA,L] for [QSA,L,B=\x20?] or for "[QSA,L,B= ?,BNP]"
-RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+# changing at the end of the following line [QSA,L] for [QSA,L,B=\x20?] or for "[QSA,L,B= ?,BNP]" (with the quotes)
+# We have opted to use the latter by default. If you are encountering "Not found" issues when entering course homepages,
+# you might want to try either of the other 2 forms.
+RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 "[QSA,L,B= ?,BNP]"
 
 # Optimize load of custom per-course icons in courses (avoid download_uploaded_files.php)
 RewriteRule ^courses/([^/]+)/upload/course_home_icons/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 [QSA,L]
 # Course upload files
-# Note : since version 2.4.38-3 of Apache a security fix had a side effect that made redirection with space not to work.
-# To fix this issue we did not have a common syntaxis but it work with one of those 2 options :
-# changing at the end of the following line [QSA,L] for [QSA,L,B=\x20?] or for "[QSA,L,B= ?,BNP]"
-RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 [QSA,L]
+# See note on line 37
+RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 "[QSA,L,B= ?,BNP]"
 
 # Rewrite everything in the work folder
-# Note : since version 2.4.38-3 of Apache a security fix had a side effect that made redirection with space not to work.
-# To fix this issue we did not have a common syntaxis but it work with one of those 2 options :
-# changing at the end of the following line [QSA,L] for [QSA,L,B=\x20?] or for "[QSA,L,B= ?,BNP]"
-RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
+# See note on line 37
+RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 "[QSA,L,B= ?,BNP]"
 
 RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_source [QSA,L]
 RewriteRule ^courses/([^/]+)/course-pic.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_large_source [QSA,L]
@@ -87,10 +85,8 @@ RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?ser
 RewriteRule ^lti/os$ plugin/ims_lti/outcome_service.php [L]
 
 # Deny direct access to user my files
-# Note : since version 2.4.38-3 of Apache a security fix had a side effect that made redirection with space not to work.
-# To fix this issue we did not have a common syntaxis but it work with one of those 2 options :
-# changing at the end of the following line [QSA,L] for [QSA,L,B=\x20?] or for "[QSA,L,B= ?,BNP]"
-RewriteRule ^app/upload/users/([^/]+)/([^/]+)/my_files/(.*)$ main/social/download_my_files.php?user_id=$2&file=$3 [QSA,L]
+# See note on line 37
+RewriteRule ^app/upload/users/([^/]+)/([^/]+)/my_files/(.*)$ main/social/download_my_files.php?user_id=$2&file=$3 "[QSA,L,B= ?,BNP]"
 
 # Deny access
 RewriteRule ^(tests|.git) - [F,L,NC]

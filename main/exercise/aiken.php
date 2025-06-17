@@ -49,7 +49,7 @@ if ((api_is_allowed_to_edit(null, true))) {
     }
 }
 
-Display::display_header(get_lang('ImportAikenQuiz'), 'Exercises');
+Display::display_header(get_lang('ImportAikenQuiz'), 'Exercise');
 aiken_display_form();
 generateAikenForm();
 Display::display_footer();

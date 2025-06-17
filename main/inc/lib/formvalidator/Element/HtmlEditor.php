@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
+use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\RemoveOnAttributes;
 
 /**
  * A html editor field to use with QuickForm.
@@ -109,5 +110,10 @@ class HtmlEditor extends HTML_QuickForm_textarea
         }
 
         return $result;
+    }
+
+    public function getValue(): ?string
+    {
+        return RemoveOnAttributes::filter($this->_value);
     }
 }

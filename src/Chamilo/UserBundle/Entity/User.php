@@ -14,6 +14,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\UserInterface;
+use ReflectionClass;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -457,6 +458,26 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function __toString()
     {
         return $this->getUsername();
+    }
+
+    public function __serialize(): array
+    {
+        return get_object_vars($this);
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $reflection = new ReflectionClass($this);
+        $properties = $reflection->getProperties();
+        $propertyNames = array_map(fn ($prop) => $prop->getName(), $properties);
+
+        foreach ($data as $property => $value) {
+            if (in_array($property, $propertyNames)) {
+                $this->$property = $value;
+            } else {
+                // the attribute does not exist in this version of the class
+            }
+        }
     }
 
     /**

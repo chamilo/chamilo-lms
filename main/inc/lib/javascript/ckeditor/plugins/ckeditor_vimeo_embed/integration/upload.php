@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /LICENSE */
 
+use Vimeo\Exceptions\VimeoRequestException;
+use Vimeo\Exceptions\VimeoUploadException;
 use Vimeo\Vimeo;
 
 require __DIR__.'/../../../../../../global.inc.php';
@@ -10,7 +12,13 @@ $config = api_get_configuration_sub_value('ckeditor_vimeo_embed/config');
 if (false === $config ||
     empty($config['client_id']) || empty($config['client_secret']) || empty($config['access_token'])
 ) {
-    echo json_encode(['error' => true, 'message' => get_lang('NotAllowed')]);
+    $message = get_lang('NotAllowed');
+
+    if (empty($config['access_token'])) {
+        $message = 'You can not upload a file without an access token. You can find this token on your app page.';
+    }
+
+    echo json_encode(['error' => true, 'message' => $message]);
     exit;
 }
 
@@ -32,12 +40,6 @@ try {
 
     if ($_FILES['ve_file']['error'] !== UPLOAD_ERR_OK) {
         throw new Exception("File error ({$_FILES['ve_file']['error']}).");
-    }
-
-    if (empty($config['access_token'])) {
-        throw new Exception(
-            'You can not upload a file without an access token. You can find this token on your app page.'
-        );
     }
 
     $vimeo = new Vimeo($config['client_id'], $config['client_secret'], $config['access_token']);
@@ -82,21 +84,7 @@ try {
             'embed' => $embed,
         ]
     );
-} catch (VimeoUploadException $exception) {
-    echo json_encode(
-        [
-            'error' => true,
-            'message' => $e->getMessage(),
-        ]
-    );
-} catch (VimeoRequestException $exception) {
-    echo json_encode(
-        [
-            'error' => true,
-            'message' => $exception->getMessage(),
-        ]
-    );
-} catch (Exception $exception) {
+} catch (VimeoUploadException|VimeoRequestException|Exception $exception) {
     echo json_encode(
         [
             'error' => true,

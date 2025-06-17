@@ -63,7 +63,7 @@
 
         $("#sign_popup_save").on("click", function() {
             if (signaturePad.isEmpty()) {
-                alert('<?php echo get_lang('ProvideASignatureFirst'); ?>');
+                alert('<?php echo addslashes(get_lang('ProvideASignatureFirst')); ?>');
                 return false;
             }
             var selected = $("#sign-selected").val();

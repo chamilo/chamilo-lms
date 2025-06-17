@@ -544,6 +544,7 @@ define('HOT_SPOT_COMBINATION', 26);
 define('FILL_IN_BLANKS_COMBINATION', 27);
 define('MULTIPLE_ANSWER_DROPDOWN_COMBINATION', 28);
 define('MULTIPLE_ANSWER_DROPDOWN', 29);
+define('ANSWER_IN_OFFICE_DOC', 30);
 
 define('EXERCISE_CATEGORY_RANDOM_SHUFFLED', 1);
 define('EXERCISE_CATEGORY_RANDOM_ORDERED', 2);
@@ -591,6 +592,7 @@ define(
     MULTIPLE_ANSWER_TRUE_FALSE.':'.
     MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE.':'.
     ORAL_EXPRESSION.':'.
+    ANSWER_IN_OFFICE_DOC.':'.
     GLOBAL_MULTIPLE_ANSWER.':'.
     MEDIA_QUESTION.':'.
     CALCULATED_ANSWER.':'.
@@ -1449,7 +1451,7 @@ function api_protect_teacher_script()
 function api_block_anonymous_users($printHeaders = true)
 {
     $user = api_get_user_info();
-    if (!(isset($user['user_id']) && $user['user_id']) || api_is_anonymous($user['user_id'], true)) {
+    if (empty($user['user_id']) || api_is_anonymous($user['user_id'], true)) {
         api_not_allowed($printHeaders);
 
         return false;
@@ -2957,7 +2959,7 @@ function api_get_session_visibility(
 
             $totalDuration = $firstAccess + $duration + $userDuration;
 
-            return $totalDuration > $currentTime ? SESSION_AVAILABLE : SESSION_VISIBLE_READ_ONLY;
+            return $totalDuration > $currentTime ? SESSION_AVAILABLE : $visibility;
         }
 
         return SESSION_AVAILABLE;
@@ -4030,11 +4032,9 @@ function api_not_allowed(
 
     global $this_section;
 
-    if (CustomPages::enabled() && !isset($user_id)) {
-        if (empty($user_id)) {
-            // Why the CustomPages::enabled() need to be to set the request_uri
-            $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-        }
+    if (CustomPages::enabled() && (empty($user_id) || api_is_anonymous())) {
+        // Why the CustomPages::enabled() need to be to set the request_uri
+        $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
     }
 

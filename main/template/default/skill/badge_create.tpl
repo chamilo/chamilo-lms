@@ -7,18 +7,6 @@
     });
 
     $(document).on('ready', function () {
-        $('#btn-open-designer').on('click', function (e) {
-            e.preventDefault();
-
-            var designerUrl = 'https://www.openbadges.me/designer.html?origin={{ _p.web }}';
-            designerUrl = designerUrl + '&email={{ platformAdminEmail }}';
-            designerUrl = designerUrl + '&close=true';
-            designerUrl = designerUrl + '&hidePublish=true';
-
-            var windowOptions = 'width=1200,height=680,location=0,menubar=0,status=0,toolbar=0';
-            designer = window.open(designerUrl, '', windowOptions);
-        });
-
         $('#image').on('change', function () {
             var self = this;
 
@@ -687,9 +675,10 @@
         </div>
 
         <div class="create-openbadges">
-            <button id="btn-open-designer" class="help-badges btn btn-primary btn-large btn-block" data-toggle="tooltip" data-placement="bottom" title="{{ 'DesignANewBadgeComment' | get_lang }}" type="button">
+            <a id="btn-open-designer" href="https://badge.design" class="btn btn-primary btn-large btn-block"
+               target="_blank" title="{{ 'DesignANewBadgeComment' | get_lang }}">
                 <em class="fa fa-pencil"></em> {{ 'DesignNewBadge' | get_lang }}
-            </button>
+            </a>
         </div>
         <div class="create-openbadges">
             <button id="btn-open-badge-studio" class="help-badges btn btn-default btn-large btn-block" data-toggle="collapse" data-target="#badge-studio-frame" aria-expanded="false" aria-controls="badge-studio-frame" title="{{ 'DesignWithBadgeStudioComment' | get_lang }}" type="button">

@@ -1,7 +1,10 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\AzureActiveDirectory\AzureSyncState;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\Tools\ToolsException;
 use TheNetworg\OAuth2\Client\Provider\Azure;
 
 /**
@@ -28,6 +31,9 @@ class AzureActiveDirectory extends Plugin
     public const SETTING_EXISTING_USER_VERIFICATION_ORDER = 'existing_user_verification_order';
     public const SETTING_TENANT_ID = 'tenant_id';
     public const SETTING_DEACTIVATE_NONEXISTING_USERS = 'deactivate_nonexisting_users';
+    public const SETTING_GET_USERS_DELTA = 'script_users_delta';
+    public const SETTING_GET_USERGROUPS_DELTA = 'script_usergroups_delta';
+    public const SETTING_GROUP_FILTER = 'group_filter_regex';
 
     public const URL_TYPE_AUTHORIZE = 'login';
     public const URL_TYPE_LOGOUT = 'logout';
@@ -59,9 +65,12 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_EXISTING_USER_VERIFICATION_ORDER => 'text',
             self::SETTING_TENANT_ID => 'text',
             self::SETTING_DEACTIVATE_NONEXISTING_USERS => 'boolean',
+            self::SETTING_GET_USERS_DELTA => 'boolean',
+            self::SETTING_GET_USERGROUPS_DELTA => 'boolean',
+            self::SETTING_GROUP_FILTER => 'text',
         ];
 
-        parent::__construct('2.4', 'Angel Fernando Quiroz Campos, Yannick Warnier', $settings);
+        parent::__construct('2.5', 'Angel Fernando Quiroz Campos, Yannick Warnier', $settings);
     }
 
     /**
@@ -86,25 +95,20 @@ class AzureActiveDirectory extends Plugin
         return 'azure_active_directory';
     }
 
-    /**
-     * @return Azure
-     */
-    public function getProvider()
+    public function getProvider(): Azure
     {
-        $provider = new Azure([
+        return new Azure([
             'clientId' => $this->get(self::SETTING_APP_ID),
             'clientSecret' => $this->get(self::SETTING_APP_SECRET),
             'redirectUri' => api_get_path(WEB_PLUGIN_PATH).'azure_active_directory/src/callback.php',
+            'urlAPI' => 'https://graph.microsoft.com/v1.0/',
+            'resource' => 'https://graph.microsoft.com',
         ]);
-
-        return $provider;
     }
 
     public function getProviderForApiGraph(): Azure
     {
         $provider = $this->getProvider();
-        $provider->urlAPI = "https://graph.microsoft.com/v1.0/";
-        $provider->resource = "https://graph.microsoft.com/";
         $provider->tenant = $this->get(AzureActiveDirectory::SETTING_TENANT_ID);
         $provider->authWithResource = false;
 
@@ -131,6 +135,8 @@ class AzureActiveDirectory extends Plugin
 
     /**
      * Create extra fields for user when installing.
+     *
+     * @throws ToolsException
      */
     public function install()
     {
@@ -151,6 +157,35 @@ class AzureActiveDirectory extends Plugin
             ExtraField::FIELD_TYPE_TEXT,
             $this->get_lang('AzureUid'),
             ''
+        );
+
+        $em = Database::getManager();
+
+        if ($em->getConnection()->getSchemaManager()->tablesExist(['azure_ad_sync_state'])) {
+            return;
+        }
+
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema(
+            [
+                $em->getClassMetadata(AzureSyncState::class),
+            ]
+        );
+    }
+
+    public function uninstall()
+    {
+        $em = Database::getManager();
+
+        if (!$em->getConnection()->getSchemaManager()->tablesExist(['azure_ad_sync_state'])) {
+            return;
+        }
+
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->dropSchema(
+            [
+                $em->getClassMetadata(AzureSyncState::class),
+            ]
         );
     }
 
@@ -180,7 +215,7 @@ class AzureActiveDirectory extends Plugin
         return $defaultOrder;
     }
 
-    public function getUserIdByVerificationOrder(array $azureUserData, string $azureUidKey = 'objectId'): ?int
+    public function getUserIdByVerificationOrder(array $azureUserData): ?int
     {
         $selectedOrder = $this->getExistingUserVerificationOrder();
 
@@ -196,7 +231,7 @@ class AzureActiveDirectory extends Plugin
             ),
             3 => $extraFieldValue->get_item_id_from_field_variable_and_field_value(
                 AzureActiveDirectory::EXTRA_FIELD_AZURE_UID,
-                $azureUserData[$azureUidKey]
+                $azureUserData['id']
             ),
         ];
 
@@ -212,20 +247,18 @@ class AzureActiveDirectory extends Plugin
     /**
      * @throws Exception
      */
-    public function registerUser(
-        array $azureUserInfo,
-        string $azureUidKey = 'objectId'
-    ) {
+    public function registerUser(array $azureUserInfo)
+    {
         if (empty($azureUserInfo)) {
             throw new Exception('Groups info not found.');
         }
 
-        $userId = $this->getUserIdByVerificationOrder($azureUserInfo, $azureUidKey);
+        $userId = $this->getUserIdByVerificationOrder($azureUserInfo);
 
         if (empty($userId)) {
             // If we didn't find the user
             if ($this->get(self::SETTING_PROVISION_USERS) !== 'true') {
-                throw new Exception('User not found when checking the extra fields from '.$azureUserInfo['mail'].' or '.$azureUserInfo['mailNickname'].' or '.$azureUserInfo[$azureUidKey].'.');
+                throw new Exception('User not found when checking the extra fields from '.$azureUserInfo['mail'].' or '.$azureUserInfo['mailNickname'].' or '.$azureUserInfo['id'].'.');
             }
 
             [
@@ -237,7 +270,7 @@ class AzureActiveDirectory extends Plugin
                 $authSource,
                 $active,
                 $extra,
-            ] = $this->formatUserData($azureUserInfo, $azureUidKey);
+            ] = $this->formatUserData($azureUserInfo);
 
             // If the option is set to create users, create it
             $userId = UserManager::create_user(
@@ -277,7 +310,7 @@ class AzureActiveDirectory extends Plugin
                 $authSource,
                 $active,
                 $extra,
-            ] = $this->formatUserData($azureUserInfo, $azureUidKey);
+            ] = $this->formatUserData($azureUserInfo);
 
             $userId = UserManager::update_user(
                 $userId,
@@ -344,13 +377,34 @@ class AzureActiveDirectory extends Plugin
         ];
     }
 
+    public function getSyncState(string $title): ?AzureSyncState
+    {
+        $stateRepo = Database::getManager()->getRepository(AzureSyncState::class);
+
+        return $stateRepo->findOneBy(['title' => $title]);
+    }
+
+    public function saveSyncState(string $title, $value)
+    {
+        $state = $this->getSyncState($title);
+
+        if (!$state) {
+            $state = new AzureSyncState();
+            $state->setTitle($title);
+
+            Database::getManager()->persist($state);
+        }
+
+        $state->setValue($value);
+
+        Database::getManager()->flush();
+    }
+
     /**
      * @throws Exception
      */
-    private function formatUserData(
-        array $azureUserInfo,
-        string $azureUidKey
-    ): array {
+    private function formatUserData(array $azureUserInfo): array
+    {
         $phone = null;
 
         if (isset($azureUserInfo['telephoneNumber'])) {
@@ -371,7 +425,7 @@ class AzureActiveDirectory extends Plugin
         $extra = [
             'extra_'.self::EXTRA_FIELD_ORGANISATION_EMAIL => $azureUserInfo['mail'],
             'extra_'.self::EXTRA_FIELD_AZURE_ID => $azureUserInfo['mailNickname'],
-            'extra_'.self::EXTRA_FIELD_AZURE_UID => $azureUserInfo[$azureUidKey],
+            'extra_'.self::EXTRA_FIELD_AZURE_UID => $azureUserInfo['id'],
         ];
 
         return [

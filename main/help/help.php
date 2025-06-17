@@ -8,8 +8,27 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+$allowedHelp = [
+    'Blogs',
+    'Group',
+    'Groups',
+    'Announcements',
+    'Settings',
+    'Doc',
+    'Dropbox',
+    'Exercise',
+    'Tracking',
+    'User',
+    'Links',
+    'Path',
+    'Survey',
+    'Classes',
+    'Wiki',
+];
+
 $help_name = isset($_GET['open']) ? Security::remove_XSS($_GET['open']) : null;
-if (empty($help_name)) {
+
+if (empty($help_name) || !in_array($help_name, $allowedHelp)) {
     api_not_allowed(true);
 }
 

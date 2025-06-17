@@ -129,9 +129,10 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                 $unzip = 1;
             }
 
+            $filename = api_replace_dangerous_char(trim($_FILES['userFile']['name']));
+
             if ($finish == 0) {
                 // Generate new test folder if on first step of file upload.
-                $filename = api_replace_dangerous_char(trim($_FILES['userFile']['name']));
                 $fld = GenerateHpFolder($document_sys_path.$uploadPath.'/');
                 @mkdir($document_sys_path.$uploadPath.'/'.$fld, api_get_permissions_for_new_directories());
                 $doc_id = add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
@@ -142,9 +143,6 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     'FolderCreated',
                     api_get_user_id()
                 );
-            } else {
-                // It is not the first step... get the filename directly from the system params.
-                $filename = $_FILES['userFile']['name'];
             }
 
             $allow_output_on_success = false;
@@ -207,21 +205,21 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                 $select = "SELECT iid FROM $dbTable
                           WHERE c_id = $course_id
                           $sessionAnd
-                          AND path = '$path'";
+                          AND path = '".Database::escape_string($path)."'";
                 $query = Database::query($select);
                 if (Database::num_rows($query)) {
                     $row = Database::fetch_array($query);
-                    $hotPotatoesDocumentId = $row['iid'];
                     // Update the record with the 'comment' (HP title)
-                    $query = "UPDATE $dbTable
-                          SET comment = '".Database::escape_string($title)."'
-                          WHERE iid = $hotPotatoesDocumentId";
-                    Database::query($query);
+                    Database::update(
+                        $dbTable,
+                        ['comment' => $title],
+                        ['iid = ?' => $row['iid']]
+                    );
                     // Mark the addition of the HP quiz in the item_property table
                     api_item_property_update(
                         $_course,
                         TOOL_QUIZ,
-                        $hotPotatoesDocumentId,
+                        $row['iid'],
                         'QuizAdded',
                         api_get_user_id()
                     );
@@ -238,7 +236,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
         exit;
     }
 
-    Display::display_header($nameTools, get_lang('Exercise'));
+    Display::display_header($nameTools, 'Exercise');
 
     echo '<div class="actions">';
     echo '<a href="exercise.php?show=test">'.

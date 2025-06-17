@@ -24,29 +24,23 @@ class AgendaEventInvitee
     use TimestampableTypedEntity;
 
     /**
-     * @var int
-     *
      * @ORM\Id()
      * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue
      */
-    protected $id;
+    protected ?int $id;
 
     /**
-     * @var AgendaEventInvitation|null
-     *
      * @ORM\ManyToOne(targetEntity="AgendaEventInvitation", inversedBy="invitees")
      * @ORM\JoinColumn(name="invitation_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $invitation;
+    protected ?AgendaEventInvitation $invitation;
 
     /**
-     * @var User|null
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $user;
+    protected ?User $user;
 
     public function getId(): int
     {

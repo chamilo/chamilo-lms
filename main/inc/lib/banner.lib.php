@@ -454,6 +454,8 @@ function return_navigation_array()
             $navigation['follow_up']['icon'] = 'homepage.png';
         }
 
+        buildParentCourseCategoriesMenu($navigation);
+
         // Administration
         if (api_is_platform_admin(true)) {
             if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
@@ -481,6 +483,8 @@ function return_navigation_array()
             }
         }
     } else {
+        buildParentCourseCategoriesMenu($navigation);
+
         // Show custom tabs that are specifically marked as public
         $customTabs = getCustomTabs();
         if (!empty($customTabs)) {
@@ -506,6 +510,57 @@ function return_navigation_array()
         'navigation' => $navigation,
         'possible_tabs' => $possible_tabs,
     ];
+}
+
+function buildParentCourseCategoriesMenu(array &$navigation)
+{
+    if (!api_get_configuration_value('display_menu_use_course_categories')
+        || 'true' !== api_get_setting('course_catalog_published')
+    ) {
+        return;
+    }
+
+    foreach (CourseCategory::getCategoriesToDisplayInHomePage() as $category) {
+        $key = 'category_'.$category['code'];
+        $navigation[$key] = [
+            'url' => '#',
+            'title' => $category['name'],
+            'key' => $key,
+            'items' => buildChildrenCourseCategoriesMenu($category['code']),
+        ];
+    }
+}
+
+function buildChildrenCourseCategoriesMenu($parentCode = 0): array
+{
+    $baseCategoryUrl = api_get_path(WEB_CODE_PATH).'auth/courses.php?';
+
+    $commonParams = [
+        'search_term' => '',
+        'submit' => '_qf__s',
+    ];
+
+    $items = [];
+
+    foreach (CourseCategory::getChildren($parentCode, false) as $category) {
+        $commonParams['category_code'] = $category['code'];
+
+        $categoryItem = [
+            'title' => $category['name'],
+            'key' => 'category_'.$category['code'],
+            'url' => $baseCategoryUrl.http_build_query($commonParams),
+        ];
+
+        $children = buildChildrenCourseCategoriesMenu($category['code']);
+
+        if (!empty($children)) {
+            $categoryItem['items'] = $children;
+        }
+
+        $items[] = $categoryItem;
+    }
+
+    return $items;
 }
 
 /**

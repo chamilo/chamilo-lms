@@ -204,7 +204,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
     );
     // changing the Platform language
     if (isset($_POST['platformlanguage']) && $_POST['platformlanguage'] != '') {
-        api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, $_configuration['access_url']);
+        api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, api_get_current_access_url_id());
     }
 } elseif (isset($_POST['action'])) {
     switch ($_POST['action']) {
@@ -263,9 +263,8 @@ echo '<a
 $sql_select = "SELECT * FROM $tbl_admin_languages";
 $result_select = Database::query($sql_select);
 
-$sql_select_lang = "SELECT * FROM $tbl_settings_current WHERE category='Languages'";
-$result_select_lang = Database::query($sql_select_lang);
-$row_lang = Database::fetch_array($result_select_lang);
+$current_access_url = api_get_current_access_url_id();
+$platformLanguage = api_get_setting('platformLanguage');
 
 // the table data
 $language_data = [];
@@ -275,7 +274,7 @@ while ($row = Database::fetch_array($result_select)) {
     // the first column is the original name of the language OR a form containing the original name
     if ($action == 'edit' and $row['id'] == $_GET['id']) {
         $checked = '';
-        if ($row['english_name'] == api_get_setting('platformLanguage')) {
+        if ($row['english_name'] == $platformLanguage) {
             $checked = ' checked="checked" ';
         }
 
@@ -291,7 +290,7 @@ while ($row = Database::fetch_array($result_select)) {
     // the third column
     $row_td[] = $row['dokeos_folder'];
 
-    if ($row['english_name'] == $row_lang['selected_value']) {
+    if ($row['english_name'] == $platformLanguage) {
         $setplatformlanguage = Display::return_icon('languages.png', get_lang('CurrentLanguagesPortal'), '', ICON_SIZE_SMALL);
     } else {
         $setplatformlanguage = "<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault'))."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".Display::return_icon('languages_na.png', get_lang('SetLanguageAsDefault'), '', ICON_SIZE_SMALL)."</a>";
@@ -322,7 +321,7 @@ while ($row = Database::fetch_array($result_select)) {
         $allow_add_term_sub_language = '';
     }
 
-    if ($row['english_name'] == $row_lang['selected_value']) {
+    if ($row['english_name'] == $platformLanguage) {
         $row_td[] = Display::return_icon('visible.png', get_lang('Visible'))."<a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>
                      &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
     } else {

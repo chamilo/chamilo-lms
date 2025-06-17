@@ -979,6 +979,7 @@ class PortfolioController
     {
         $listByUser = false;
         $listHighlighted = $httpRequest->query->has('list_highlighted');
+        $listAlphabetical = $httpRequest->query->has('list_alphabetical');
 
         if ($httpRequest->query->has('user')) {
             $this->owner = api_get_user_entity($httpRequest->query->getInt('user'));
@@ -1041,7 +1042,7 @@ class PortfolioController
         $portfolio = [];
         if ($this->course) {
             $frmTagList = $this->createFormTagFilter($listByUser);
-            $frmStudentList = $this->createFormStudentFilter($listByUser, $listHighlighted);
+            $frmStudentList = $this->createFormStudentFilter($listByUser, $listHighlighted, $listAlphabetical);
             $frmStudentList->setDefaults(['user' => $this->owner->getId()]);
             // it translates the category title with the current user language
             $categories = $this->getCategoriesForIndex(null, 0);
@@ -1061,7 +1062,7 @@ class PortfolioController
         if ($listHighlighted) {
             $items = $this->getHighlightedItems();
         } else {
-            $items = $this->getItemsForIndex($listByUser, $frmTagList);
+            $items = $this->getItemsForIndex($listByUser, $frmTagList, $listAlphabetical);
 
             $foundComments = $this->getCommentsForIndex($frmTagList);
         }
@@ -1086,6 +1087,7 @@ class PortfolioController
 
         $template = new Template(null, false, false, false, false, false, false);
         $template->assign('user', $this->owner);
+        $template->assign('listByUser', $listByUser);
         $template->assign('course', $this->course);
         $template->assign('session', $this->session);
         $template->assign('portfolio', $portfolio);
@@ -1132,7 +1134,7 @@ class PortfolioController
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function view(Portfolio $item)
+    public function view(Portfolio $item, $urlUser)
     {
         global $interbreadcrumb;
 
@@ -1203,12 +1205,18 @@ class PortfolioController
             ;
         }
 
-        $comments = $commentsQueryBuilder
-            ->orderBy('comment.root, comment.lft', 'ASC')
-            ->setParameter('item', $item)
-            ->getQuery()
-            ->getArrayResult()
-        ;
+        if (true === api_get_configuration_value('portfolio_show_base_course_post_in_sessions')
+            && $this->session && !$item->getSession() && !$item->isDuplicatedInSession($this->session)
+        ) {
+            $comments = [];
+        } else {
+            $comments = $commentsQueryBuilder
+                ->orderBy('comment.root, comment.lft', 'ASC')
+                ->setParameter('item', $item)
+                ->getQuery()
+                ->getArrayResult()
+            ;
+        }
 
         $clockIcon = Display::returnFontAwesomeIcon('clock-o', '', true);
 
@@ -1408,10 +1416,15 @@ class PortfolioController
             $this->baseUrl.http_build_query(['action' => 'edit_item', 'id' => $item->getId()])
         );
 
+        $urlUserString = "";
+        if (isset($urlUser)) {
+            $urlUserString = "user=".$urlUser;
+        }
+
         $actions = [];
         $actions[] = Display::url(
             Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-            $this->baseUrl
+            $this->baseUrl.$urlUserString
         );
 
         if ($this->itemBelongToOwner($item)) {
@@ -3600,7 +3613,7 @@ class PortfolioController
     /**
      * @throws Exception
      */
-    private function createFormStudentFilter(bool $listByUser = false, bool $listHighlighted = false): FormValidator
+    private function createFormStudentFilter(bool $listByUser = false, bool $listHighlighted = false, bool $listAlphabeticalOrder = false): FormValidator
     {
         $frmStudentList = new FormValidator(
             'frm_student_list',
@@ -3668,6 +3681,22 @@ class PortfolioController
         }
 
         $frmStudentList->addHtml("<p>$link</p>");
+
+        if (true !== api_get_configuration_value('portfolio_order_post_by_alphabetical_order')) {
+            if ($listAlphabeticalOrder) {
+                $link = Display::url(
+                    get_lang('BackToDateOrder'),
+                    $this->baseUrl
+                );
+            } else {
+                $link = Display::url(
+                    get_lang('SeeAlphabeticalOrder'),
+                    $this->baseUrl.http_build_query(['list_alphabetical' => true])
+                );
+            }
+
+            $frmStudentList->addHtml("<p>$link</p>");
+        }
 
         return $frmStudentList;
     }
@@ -3757,11 +3786,15 @@ class PortfolioController
 
     private function getItemsForIndex(
         bool $listByUser = false,
-        FormValidator $frmFilterList = null
+        FormValidator $frmFilterList = null,
+        bool $alphabeticalOrder = false
     ) {
         $currentUserId = api_get_user_id();
 
         if ($this->course) {
+            $showBaseContentInSession = $this->session
+                && true === api_get_configuration_value('portfolio_show_base_course_post_in_sessions');
+
             $queryBuilder = $this->em->createQueryBuilder();
             $queryBuilder
                 ->select('pi')
@@ -3771,7 +3804,9 @@ class PortfolioController
             $queryBuilder->setParameter('course', $this->course);
 
             if ($this->session) {
-                $queryBuilder->andWhere('pi.session = :session');
+                $queryBuilder->andWhere(
+                    $showBaseContentInSession ? 'pi.session = :session OR pi.session IS NULL' : 'pi.session = :session'
+                );
                 $queryBuilder->setParameter('session', $this->session);
             } else {
                 $queryBuilder->andWhere('pi.session IS NULL');
@@ -3891,9 +3926,22 @@ class PortfolioController
             }
 
             $queryBuilder->setParameter('current_user', $currentUserId);
-            $queryBuilder->orderBy('pi.creationDate', 'DESC');
+            if ($alphabeticalOrder || true === api_get_configuration_value('portfolio_order_post_by_alphabetical_order')) {
+                $queryBuilder->orderBy('pi.title', 'ASC');
+            } else {
+                $queryBuilder->orderBy('pi.creationDate', 'DESC');
+            }
 
             $items = $queryBuilder->getQuery()->getResult();
+
+            if ($showBaseContentInSession) {
+                $items = array_filter(
+                    $items,
+                    fn (Portfolio $item) => !($this->session && !$item->getSession() && $item->isDuplicatedInSession($this->session))
+                );
+            }
+
+            return $items;
         } else {
             $itemsCriteria = [];
             $itemsCriteria['category'] = null;
@@ -3954,6 +4002,20 @@ class PortfolioController
         $form->addButtonSave(get_lang('Save'));
 
         if ($form->validate()) {
+            if ($this->session
+                && true === api_get_configuration_value('portfolio_show_base_course_post_in_sessions')
+                && !$item->getSession()
+            ) {
+                $duplicate = $item->duplicateInSession($this->session);
+
+                $this->em->persist($duplicate);
+                $this->em->flush();
+
+                $item = $duplicate;
+
+                $formAction = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $item->getId()]);
+            }
+
             $values = $form->exportValues();
 
             $parentComment = $this->em->find(PortfolioComment::class, $values['parent']);

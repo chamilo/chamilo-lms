@@ -128,13 +128,16 @@ class Session implements \ArrayAccess
     }
 
     /**
-     * It it exists returns the value stored at the specified offset.
-     * If offset does not exists returns null. Do not trigger a warning.
+     * If it exists, returns the value stored at the specified offset.
+     * If offset does not exist, returns null. Do not trigger a warning.
      *
      * @param string $offset
      *
      * @return mixed (write offsetGet($offset): mixed on PHP 8 and & > )
      */
+    //if PHP_VERSION_ID >= 80000
+    #[\ReturnTypeWillChange]
+    //endif
     public function offsetGet($offset)
     {
         return self::read($offset);

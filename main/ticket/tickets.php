@@ -180,7 +180,7 @@ if (!empty($projectId)) {
     }
 
     $admins = UserManager::getUserListLike(
-        ['status' => '1'],
+        [],
         ['username'],
         true
     );

@@ -16,11 +16,9 @@ class AgendaEventSubscription extends AgendaEventInvitation
     public const SUBSCRIPTION_CLASS = 2;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="max_attendees", type="integer", nullable=false, options={"default": 0})
      */
-    protected $maxAttendees = 0;
+    protected int $maxAttendees = 0;
 
     public function getMaxAttendees(): int
     {

@@ -600,7 +600,7 @@ if ($is_allowedToEdit) {
 
 if (!in_array($origin, ['learnpath', 'mobileapp'])) {
     //so we are not in learnpath tool
-    Display::display_header($nameTools, get_lang('Exercise'));
+    Display::display_header($nameTools, 'Exercise');
     if (isset($_GET['message']) && in_array($_GET['message'], ['ExerciseEdited'])) {
         echo Display::return_message(get_lang('ExerciseEdited'), 'confirmation');
     }

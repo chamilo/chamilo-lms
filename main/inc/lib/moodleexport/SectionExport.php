@@ -77,6 +77,7 @@ class SectionExport
             RESOURCE_WORK => 'source_id',
             RESOURCE_FORUM => 'source_id',
             RESOURCE_SURVEY => 'source_id',
+            RESOURCE_TOOL_INTRO => 'source_id',
         ];
 
         foreach ($resourceTypes as $resourceType => $idKey) {
@@ -110,7 +111,19 @@ class SectionExport
             'source_id' => 0,
         ];
 
-        return $this->getActivitiesForSection($generalLearnpath, true);
+        $activities = $this->getActivitiesForSection($generalLearnpath, true);
+
+        if (!in_array('folder', array_column($activities, 'modulename'))) {
+            $activities[] = [
+                'id' => 0,
+                'moduleid' => 0,
+                'modulename' => 'folder',
+                'name' => 'Documents',
+                'sectionid' => 0,
+            ];
+        }
+
+        return $activities;
     }
 
     /**
@@ -212,6 +225,18 @@ class SectionExport
      */
     private function addActivityToList(array $item, int $sectionId, array &$activities): void
     {
+        static $documentsFolderAdded = false;
+        if (!$documentsFolderAdded && $sectionId === 0) {
+            $activities[] = [
+                'id' => 0,
+                'moduleid' => 0,
+                'type' => 'folder',
+                'modulename' => 'folder',
+                'name' => 'Documents',
+            ];
+            $documentsFolderAdded = true;
+        }
+
         $activityData = null;
         $activityClassMap = [
             'quiz' => QuizExport::class,
@@ -221,11 +246,17 @@ class SectionExport
             'forum' => ForumExport::class,
             'page' => PageExport::class,
             'resource' => ResourceExport::class,
-            'folder' => FolderExport::class,
             'feedback' => FeedbackExport::class,
         ];
 
-        $itemType = $item['item_type'] === 'link' ? 'url' : ($item['item_type'] === 'work' ? 'assign' : ($item['item_type'] === 'survey' ? 'feedback' : $item['item_type']));
+        if ($item['id'] == 'course_homepage') {
+            $item['item_type'] = 'page';
+            $item['path'] = 0;
+        }
+
+        $itemType = $item['item_type'] === 'link' ? 'url' :
+            ($item['item_type'] === 'work' ? 'assign' :
+                ($item['item_type'] === 'survey' ? 'feedback' : $item['item_type']));
 
         switch ($itemType) {
             case 'quiz':
@@ -234,6 +265,7 @@ class SectionExport
             case 'url':
             case 'forum':
             case 'feedback':
+            case 'page':
                 $activityId = $itemType === 'glossary' ? 1 : (int) $item['path'];
                 $exportClass = $activityClassMap[$itemType];
                 $exportInstance = new $exportClass($this->course);
@@ -241,17 +273,19 @@ class SectionExport
                 break;
 
             case 'document':
-                $documentId = (int) $item['path'];
-                $document = \DocumentManager::get_document_data_by_id($documentId, $this->course->code);
+                if ($sectionId > 0) {
+                    $documentId = (int) $item['path'];
+                    $document = \DocumentManager::get_document_data_by_id($documentId, $this->course->code);
 
-                // Determine the type of document and get the corresponding export class
-                $documentType = $this->getDocumentType($document['filetype'], $document['path']);
-                if ($documentType) {
-                    $activityClass = $activityClassMap[$documentType];
-                    $exportInstance = new $activityClass($this->course);
-                    $activityData = $exportInstance->getData($item['path'], $sectionId);
+                    // Determine the type of document and get the corresponding export class
+                    $documentType = $this->getDocumentType($document['filetype'], $document['path']);
+                    if ($documentType) {
+                        $activityClass = $activityClassMap[$documentType];
+                        $exportInstance = new $activityClass($this->course);
+                        $activityData = $exportInstance->getData($item['path'], $sectionId);
+                    }
+                    break;
                 }
-                break;
         }
 
         // Add the activity to the list if the data exists
@@ -275,9 +309,9 @@ class SectionExport
             return 'page';
         } elseif ('file' === $filetype) {
             return 'resource';
-        } elseif ('folder' === $filetype) {
+        } /*elseif ('folder' === $filetype) {
             return 'folder';
-        }
+        }*/
 
         return null;
     }

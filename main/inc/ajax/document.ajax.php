@@ -4,6 +4,9 @@
 /**
  * Responses to AJAX calls for the document upload.
  */
+
+use Chamilo\CoreBundle\Component\Editor\Driver\Driver;
+
 require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'];
@@ -153,17 +156,8 @@ switch ($action) {
                 }
 
                 $resultList = [];
-                foreach ($fileList as $file) {
-                    if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
-                        // to rename and move the finished file
-                        $tmpFile = disable_dangerous_file(
-                            api_replace_dangerous_char($file['name'])
-                        );
-                        $chunkedFile = api_get_path(SYS_ARCHIVE_PATH).$tmpFile;
-                        $file['tmp_name'] = $chunkedFile;
-                        $file['size'] = filesize($chunkedFile);
-                        $file['copy_file'] = true;
-                    }
+                foreach ($fileList as $fileInfo) {
+                    $file = processChunkedFile($fileInfo);
 
                     $globalFile = [];
                     $globalFile['files'] = $file;
@@ -208,6 +202,10 @@ switch ($action) {
         }
         break;
     case 'ck_uploadimage':
+        if (true !== api_get_configuration_value('enable_uploadimage_editor')) {
+            exit;
+        }
+
         api_protect_course_script(true);
 
         // it comes from uploaimage drag and drop ckeditor
@@ -219,6 +217,14 @@ switch ($action) {
 
         $data = [];
         $fileUpload = $_FILES['upload'];
+        $mimeType = mime_content_type($fileUpload['tmp_name']);
+
+        $isMimeAccepted = (new Driver())->mimeAccepted($mimeType, ['image']);
+
+        if (!$isMimeAccepted) {
+            exit;
+        }
+
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
         if ($isAllowedToEdit) {
             $globalFile = ['files' => $fileUpload];
@@ -233,14 +239,17 @@ switch ($action) {
                 false,
                 'files'
             );
-            if ($result) {
-                $relativeUrl = str_replace(api_get_path(WEB_PATH), '/', $result['direct_url']);
-                $data = [
-                    'uploaded' => 1,
-                    'fileName' => $fileUpload['name'],
-                    'url' => $relativeUrl,
-                ];
+
+            if (!$result) {
+                exit;
             }
+
+            $relativeUrl = str_replace(api_get_path(WEB_PATH), '/', $result['direct_url']);
+            $data = [
+                'uploaded' => 1,
+                'fileName' => $fileUpload['name'],
+                'url' => $relativeUrl,
+            ];
         } else {
             $userId = api_get_user_id();
             $syspath = UserManager::getUserPathById($userId, 'system').'my_files';
@@ -255,15 +264,21 @@ switch ($action) {
                 $suffix = '_'.uniqid();
                 $fileUploadName = $fileName.$suffix.'.'.$extension;
             }
-            if (move_uploaded_file($fileUpload['tmp_name'], $syspath.$fileUploadName)) {
-                $url = $webpath.$fileUploadName;
-                $relativeUrl = str_replace(api_get_path(WEB_PATH), '/', $url);
-                $data = [
-                    'uploaded' => 1,
-                    'fileName' => $fileUploadName,
-                    'url' => $relativeUrl,
-                ];
+
+            $personalDriver = new PersonalDriver();
+            $uploadResult = $personalDriver->mimeAccepted(mime_content_type($fileUpload['tmp_name']), ['image']);
+
+            if (!$uploadResult || !move_uploaded_file($fileUpload['tmp_name'], $syspath.$fileUploadName)) {
+                exit;
             }
+
+            $url = $webpath.$fileUploadName;
+            $relativeUrl = str_replace(api_get_path(WEB_PATH), '/', $url);
+            $data = [
+                'uploaded' => 1,
+                'fileName' => $fileUploadName,
+                'url' => $relativeUrl,
+            ];
         }
         echo json_encode($data);
         exit;

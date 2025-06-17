@@ -171,6 +171,8 @@ if (isset($_POST) && $is_error) {
         case 'scorm':
             $oScorm = new scorm();
             $manifest = $oScorm->import_local_package($s, $current_dir);
+            // The file was treated, it can now be cleaned from the temp dir
+            unlink($s);
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
                 $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
@@ -192,6 +194,8 @@ if (isset($_POST) && $is_error) {
         case 'aicc':
             $oAICC = new aicc();
             $config_dir = $oAICC->import_local_package($s, $current_dir);
+            // The file was treated, it can now be cleaned from the temp dir
+            unlink($s);
             if (!empty($config_dir)) {
                 $oAICC->parse_config_files($config_dir);
                 $oAICC->import_aicc(api_get_course_id());
@@ -211,6 +215,10 @@ if (isset($_POST) && $is_error) {
             break;
         case '':
         default:
+            // There was an error, clean the file from the temp dir
+            if (is_file($s)) {
+                unlink($s);
+            }
             Display::addFlash(
                 Display::return_message(get_lang('ScormUnknownPackageFormat'), 'warning')
             );

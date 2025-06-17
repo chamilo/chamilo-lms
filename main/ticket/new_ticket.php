@@ -247,7 +247,7 @@ function save_ticket()
         $exercise_id,
         $lp_id
     )) {
-        header('Location:'.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
+        header('Location:'.api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$project_id);
         exit;
     } else {
         Display::addFlash(Display::return_message(get_lang('ThereWasAnErrorRegisteringTheTicket')));
@@ -255,7 +255,7 @@ function save_ticket()
 }
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId,
     'name' => get_lang('MyTickets'),
 ];
 
@@ -525,7 +525,7 @@ Display::display_header(get_lang('ComposeMessage'));
 echo '<div class="actions">';
 echo Display::url(
     Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH).'ticket/tickets.php'
+    api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId
 );
 echo '</div>';
 

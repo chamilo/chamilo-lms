@@ -184,6 +184,11 @@ This will prevent direct access to your settings and make it seem totally the sa
         but dangerous if you cannot trust people using these features. These features cannot be used by anonymous
         users, but portals allowing for open registration could be particularly vulnerable.
     </p>
+    <p>The inline editor in Chamilo 1.11 requires
+    the Content Security Policy (CSP) headers to include 'unsafe-inline' and 'unsafe-eval'. This is because the
+    editor includes a number of complex features that require those accesses. This means that your Chamilo install
+    will probably not validate as an "A+" score in standard CSP tests. We have no solution for this except to
+    prevent users from using the inline editor, which would remove a considerable level of usability from Chamilo.</p>
     <br />
 <hr />
 <h2><a id="7.Direct-web-access">Direct web access to files</a></h2>

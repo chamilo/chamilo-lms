@@ -75,6 +75,7 @@ abstract class Question
         UPLOAD_ANSWER => ['UploadAnswer.php', 'UploadAnswer'],
         MULTIPLE_ANSWER_DROPDOWN => ['MultipleAnswerDropdown.php', 'MultipleAnswerDropdown'],
         MULTIPLE_ANSWER_DROPDOWN_COMBINATION => ['MultipleAnswerDropdownCombination.php', 'MultipleAnswerDropdownCombination'],
+        ANSWER_IN_OFFICE_DOC => ['AnswerInOfficeDoc.php', 'AnswerInOfficeDoc'],
     ];
 
     /**
@@ -110,6 +111,7 @@ abstract class Question
             FILL_IN_BLANKS,
             FILL_IN_BLANKS_COMBINATION,
             FREE_ANSWER,
+            ANSWER_IN_OFFICE_DOC,
             ORAL_EXPRESSION,
             CALCULATED_ANSWER,
             ANNOTATION,
@@ -1663,6 +1665,9 @@ abstract class Question
             self::$questionTypes[HOT_SPOT_DELINEATION] = null;
             unset(self::$questionTypes[HOT_SPOT_DELINEATION]);
         }
+        if ('true' !== OnlyofficePlugin::create()->get('enable_onlyoffice_plugin')) {
+            unset(self::$questionTypes[ANSWER_IN_OFFICE_DOC]);
+        }
 
         return self::$questionTypes;
     }
@@ -2248,6 +2253,7 @@ abstract class Question
             case FREE_ANSWER:
             case UPLOAD_ANSWER:
             case ORAL_EXPRESSION:
+            case ANSWER_IN_OFFICE_DOC:
             case ANNOTATION:
                 $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
                 if ($score['revised'] == true) {

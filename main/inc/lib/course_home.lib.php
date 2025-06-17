@@ -721,10 +721,10 @@ class CourseHome
                     }
                     break;
                 case 'lp_category.gif':
-                    $lpCategory = self::getPublishedLpCategoryFromLink($temp_row['link']);
                     if ($showInvisibleLpsForStudents) {
                         $add = true;
                     } else {
+                        $lpCategory = self::getPublishedLpCategoryFromLink($temp_row['link']);
                         $add = learnpath::categoryIsVisibleForStudent($lpCategory, $user);
                     }
 
@@ -1384,18 +1384,19 @@ class CourseHome
 
     /**
      * Get published learning path category from link inside course home.
-     *
-     * @param string $link
-     *
-     * @return CLpCategory
      */
-    public static function getPublishedLpCategoryFromLink($link)
+    public static function getPublishedLpCategoryFromLink(string $link): ?CLpCategory
     {
         $query = parse_url($link, PHP_URL_QUERY);
         parse_str($query, $params);
         $id = isset($params['id']) ? (int) $params['id'] : 0;
+
+        if (empty($id)) {
+            return null;
+        }
+
         $em = Database::getManager();
-        /** @var CLpCategory $category */
+        /** @var ?CLpCategory $category */
         $category = $em->find('ChamiloCourseBundle:CLpCategory', $id);
 
         return $category;

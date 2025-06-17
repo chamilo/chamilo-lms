@@ -459,6 +459,11 @@ ALTER TABLE personal_agenda ADD agenda_event_invitation_id BIGINT DEFAULT NULL, 
 ALTER TABLE personal_agenda ADD CONSTRAINT FK_D8612460AF68C6B FOREIGN KEY (agenda_event_invitation_id) REFERENCES agenda_event_invitation (id) ON DELETE CASCADE;
 CREATE UNIQUE INDEX UNIQ_D8612460AF68C6B ON personal_agenda (agenda_event_invitation_id);
 */
+// After Chamilo v1.11.30 it's necessary to change the foreign key in agenda_event_invitee.user_id so that the record is deleted when deleting a user
+/*
+ALTER TABLE agenda_event_invitee DROP FOREIGN KEY FK_4F5757FEA76ED395;
+ALTER TABLE agenda_event_invitee ADD CONSTRAINT FK_4F5757FEA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+*/
 // Then add the "@" symbol to AgendaEventInvitation and AgendaEventInvitee classes in the ORM\Entity() line.
 // Then uncomment the "use EventCollectiveTrait;" line in the PersonalAgenda class.
 //$_configuration['agenda_collective_invitations'] = false;
@@ -488,6 +493,14 @@ UPDATE agenda_event_invitee SET type = 'invitee';
 //$_configuration['agenda_reminders'] = false;
 // Sets the sender ID when using the cron main/cron/agenda_reminders.php to send reminders in course events.
 //$_configuration['agenda_reminders_sender_id'] = 0;
+//
+//In course agenda do not select any participant by default
+//$_configuration['course_agenda_set_default_send_to_with_none'] = false;
+//In course agenda add the current user has default participant
+//$_configuration['course_agenda_set_default_send_to_with_current_user'] = false;
+//In course agenda add the course teachers or the course session coach in session context has default participants
+//$_configuration['course_agenda_set_default_send_to_with_teachers'] = false;
+
 // ------
 //
 // Save some tool titles with HTML editor. Require DB changes:
@@ -698,6 +711,9 @@ $_configuration['send_all_emails_to'] = [
         'admin2@example.com',
     ]
 ];*/
+// Add a new type of scheduled announcement, based on user course session progress
+// Requires a "use_base_progress" extra field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
+//$_configuration['scheduled_announcements_use_base_progress'] = false;
 // Allow ticket projects to be access by specific chamilo roles
 /*$_configuration['ticket_project_user_roles'] = [
     'permissions' => [
@@ -1132,6 +1148,17 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 // ALTER TABLE portfolio_comment ADD visibility SMALLINT DEFAULT 1 NOT NULL;
 // Then add the "@" symbol to the CPortfolioComment::$visibility property in the ORM\Column() line.
 //$_configuration['portfolio_advanced_sharing'] = false;
+// Show base course posts in session course. Requires DB changes and edit the Portfolio entity
+// adding the "@" symbol to the beginning of ORM\ManyToOne, ORM\JoinColumn, ORM\OneToMany lines for the Portfolio::$duplicatedFrom and Portfolio::$duplicates properties.
+/*
+ALTER TABLE portfolio ADD duplicated_from INT DEFAULT NULL;
+ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062FC4CB679 FOREIGN KEY (duplicated_from) REFERENCES portfolio (id) ON DELETE SET NULL;
+CREATE INDEX IDX_A9ED1062FC4CB679 ON portfolio (duplicated_from);
+*/
+//$_configuration['portfolio_show_base_course_post_in_sessions'] = false;
+//
+// Show all post in portfolio by alphabetical order instead of reverse date order.
+//$_configuration['portfolio_order_post_by_alphabetical_order'] = false;
 
 // DEPRECATED: gradebook_enable_best_score is deprecated. Use gradebook_display_extra_stats instead.
 // Enable best score column in gradebook. Previously called disable_gradebook_stats
@@ -1353,6 +1380,9 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
         'send_mail_default_option' => '1',
     ]
 ];*/
+
+// This option hide the old relationships in the session import view for drh users
+//$_configuration['session_import_drh_hide_old_relationships_check_box'] = false;
 
 /*
  * Fields visibility in the profile user page
@@ -2420,6 +2450,10 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Create a document extra field with field label "can_be_downloaded" of type "Checkbox options".
 // $_configuration['documents_hide_download_icon'] = false;
 
+// It adds option to define the starting date of accessibility for a document.
+// Create a document extra field with field label "accessible_from" of type "Date and time".
+// $_configuration['document_enable_accessible_from_date'] = false;
+
 // Add the username value to the "subscription to session" confirmation email
 //$_configuration['email_template_subscription_to_session_confirmation_username'] = false;
 
@@ -2495,6 +2529,9 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 // 3. Uncomment $parentId var in src/Chamilo/CoreBundle/Entity/Career.php
 // $_configuration['career_hierarchy_enable'] = false;
 
+// Use courses categories as top horizontal bar menu (#navbar) entries and submenus, to point to the catalogue with a filter on these categories
+//$_configuration['display_menu_use_course_categories'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Set to true to hide settings completely in a sub-URL if the setting is disabled in the
@@ -2541,6 +2578,19 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 
 // Add more speed options to reading comprehension question type (type id = 21) in words per minute
 //$_configuration['exercise_question_reading_comprehension_extra_speeds'] = ['speeds' => [70, 110, 170]];
+
+// Text appearing at the end of the test when the user has failed. Requires DB changes.
+/*
+ALTER TABLE c_quiz ADD text_when_finished_failure LONGTEXT DEFAULT NULL;
+*/
+// Then add the "@" symbol to the CQuiz class in the ORM\Column() line for its $textWhenFinishedFailure property.
+//$_configuration['exercise_text_when_finished_failure'] = false;
+
+// Add an option to subscribe the user at the end of test when the user has failed. Requires DB changes.
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES (17, 5, 'subscribe_session_when_finished_failure', 'SubscribeSessionWhenFinishedFailure', '', 0, 1, 0, 1, 0, NOW());
+*/
+//$_configuration['exercise_subscribe_session_when_finished_failure'] = false;
 
 //hide copy icon in LP's authoring options
 //$_configuration['lp_hide_copy_option'] = false;
@@ -2602,3 +2652,40 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 
 // Set the following parameter to true to enable a session lifetime controller that notifies users that their session is about to expire
 //$_configuration['session_lifetime_controller'] = false;
+
+// Extra fields to include in session course excel report on main/session/resume_session.php
+/*$_configuration['session_course_excel_export'] = [
+    'session_start_date_header' => 'Fecha Inicio',
+    'session_end_date_header' => 'Fecha Fin',
+    'user_firstname_header' => 'Nombre',
+    'user_lastname_header' => 'Apellido 1',
+    'session_fields' => [
+        '0' => [
+            'header' => '1st session header',
+            'field' => 'modalidad'
+        ],
+        '1' => [
+            'header' => 'Sesion header without value',
+        ],
+        '2' => [
+            'header' => '3rd session header',
+            'field' => 'extrafieldvariable'
+        ],
+    ],
+    'user_fields_before' => [
+        '0' => [
+            'header' => 'DNI',
+            'field' => 'dni'
+        ],
+    ],
+    'user_fields_after' => [
+        '0' => [
+            'header' => 'User header 1',
+            'field' => 'userfield_after'
+        ],
+        '1' => [
+            'header' => 'User header 2',
+            'field' => 'userextrafieldvariable'
+        ],
+    ],
+]; */

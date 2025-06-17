@@ -95,7 +95,7 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 }
 
-Display::display_header(get_lang('ImportQtiQuiz'), 'Exercises');
+Display::display_header(get_lang('ImportQtiQuiz'), 'Exercise');
 
 echo $message;
 

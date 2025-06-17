@@ -537,7 +537,8 @@ class MessageManager
         $status = 0,
         array $extraParams = [],
         $checkUrls = false,
-        $courseId = null
+        $courseId = null,
+        $only_local = false
     ) {
         $group_id = (int) $group_id;
         $receiverUserId = (int) $receiverUserId;
@@ -546,7 +547,7 @@ class MessageManager
         $topic_id = (int) $topic_id;
         $status = empty($status) ? MESSAGE_STATUS_UNREAD : (int) $status;
 
-        $sendEmail = true;
+        $sendEmail = !$only_local;
         if (!empty($receiverUserId)) {
             $receiverUserInfo = api_get_user_info($receiverUserId);
             if (empty($receiverUserInfo)) {
@@ -558,7 +559,7 @@ class MessageManager
                 'true' === api_get_plugin_setting('pausetraining', 'tool_enable') &&
                 'true' === api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation');
 
-            if ($allowPauseFormation) {
+            if ($allowPauseFormation && $sendEmail) {
                 $extraFieldValue = new ExtraFieldValue('user');
                 $disableEmails = $extraFieldValue->get_values_by_handler_and_field_variable(
                     $receiverUserId,

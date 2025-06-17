@@ -1082,7 +1082,7 @@ class TicketManager
         ];
 
         foreach ($keywords as $keyword => $sqlLabel) {
-            if (isset($_GET[$keyword])) {
+            if (!empty($_GET[$keyword])) {
                 $data = Database::escape_string(trim($_GET[$keyword]));
                 $sql .= " AND $sqlLabel = '$data' ";
             }

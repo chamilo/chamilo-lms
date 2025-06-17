@@ -51,8 +51,6 @@ if ($allowTutors == 'true') {
         $add_type = Security::remove_XSS($_REQUEST['add_type']);
     }
 
-    $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
-
     // Checking for extra field with filter on
     $extra_field_list = UserManager::get_extra_fields();
     $new_field_list = [];
@@ -291,9 +289,9 @@ if ($allowTutors == 'true') {
         $sql = "SELECT u.user_id, lastname, firstname, username, session_id
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user
-                ON 
-                    $tbl_session_rel_user.user_id = u.user_id AND 
-                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND 
+                ON
+                    $tbl_session_rel_user.user_id = u.user_id AND
+                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
                     $tbl_session_rel_user.session_id = ".intval($id_session)."
                 WHERE u.status <> ".DRH." AND u.status<>6 $order_clause";
 
@@ -304,11 +302,11 @@ if ($allowTutors == 'true') {
                 $sql = "SELECT u.user_id, lastname, firstname, username, session_id
                         FROM $tbl_user u
                         INNER JOIN $tbl_session_rel_user
-                        ON 
-                            $tbl_session_rel_user.user_id = u.user_id AND 
-                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND 
+                        ON
+                            $tbl_session_rel_user.user_id = u.user_id AND
+                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
                             $tbl_session_rel_user.session_id = ".intval($id_session)."
-                        INNER JOIN $tbl_user_rel_access_url url_user 
+                        INNER JOIN $tbl_user_rel_access_url url_user
                         ON (url_user.user_id=u.user_id)
                         WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
@@ -480,7 +478,7 @@ if ($allowTutors == 'true') {
         <?php echo $link_add_type_unique; ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple; ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
     </div>
     <form name="formulaire" method="post"
-          action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($_GET['add'])) {
+          action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?><?php if (!empty($_GET['add'])) {
                 echo '&add=true';
             } ?>" style="margin:0px;" <?php if ($ajax_search) {
                 echo ' onsubmit="valide();"';

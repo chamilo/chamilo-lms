@@ -178,6 +178,9 @@ class ExtraField extends Model
             case 'attendance_calendar':
                 $this->extraFieldType = EntityExtraField::ATTENDANCE_CALENDAR_TYPE;
                 break;
+            case 'attendance':
+                $this->extraFieldType = EntityExtraField::ATTENDANCE_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -213,6 +216,7 @@ class ExtraField extends Model
             'message',
             'document',
             'attendance_calendar',
+            'attendance',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -779,7 +783,6 @@ class ExtraField extends Model
 
         $itemId = (int) $itemId;
         $form->addHidden('item_id', $itemId);
-        $extraData = false;
         if (!empty($itemId)) {
             $extraData = $this->get_handler_extra_data($itemId);
             if (!empty($showOnlyTheseFields)) {
@@ -1103,6 +1106,12 @@ class ExtraField extends Model
                             'extra_'.$field_details['variable'],
                             'html_filter'
                         );
+                        if (!empty($field_details['default_value'])) {
+                            $defaults['extra_'.$field_details['variable']] = $field_details['default_value'];
+                        }
+                        if (!isset($form->_defaultValues['extra_'.$field_details['variable']])) {
+                            $form->setDefaults($defaults);
+                        }
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
                         }
@@ -1368,6 +1377,23 @@ class ExtraField extends Model
                                             ]
                                         );
                                         $selectedOptions[] = $tag['tag'];
+                                    }
+                                } else {
+                                    if (!empty($extraData) && isset($extraData['extra_'.$field_details['variable']])) {
+                                        $data = $extraData['extra_'.$field_details['variable']];
+                                        if (!empty($data)) {
+                                            foreach ($data as $option) {
+                                                $tagsSelect->addOption(
+                                                    $option,
+                                                    $option,
+                                                    [
+                                                        'selected' => 'selected',
+                                                        'class' => 'selected',
+                                                    ]
+                                                );
+                                                $selectedOptions[] = $option;
+                                            }
+                                        }
                                     }
                                 }
                                 $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';

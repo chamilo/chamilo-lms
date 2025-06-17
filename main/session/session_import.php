@@ -188,8 +188,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                     foreach ($root->Session as $node_session) {
                         $course_counter = 0;
                         $user_counter = 0;
-
-                        $session_name = trim(api_utf8_decode($node_session->SessionName));
+                        $session_name = trim(trim(api_utf8_decode($node_session->SessionName), '"'));
                         $coach = UserManager::purify_username(
                             api_utf8_decode($node_session->Coach),
                             $purification_option_for_usernames
@@ -345,6 +344,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         }
 
                         // Adding courses to a session.
+                        $position = 0;
                         foreach ($node_session->Course as $node_course) {
                             $course_code = Database::escape_string(trim(api_utf8_decode($node_course->CourseCode)));
                             // Verify that the course pointed by the course code node exists.
@@ -357,7 +357,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 if (!$session_course_relation) {
                                     $sql_course = "INSERT INTO $tbl_session_course SET
                                             c_id = $courseId,
-                                            session_id = $session_id";
+                                            session_id = $session_id,
+                                            position = $position";
                                     $rs_course = Database::query($sql_course);
                                     SessionManager::installCourse($session_id, $courseId);
                                 }
@@ -408,6 +409,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 $sql = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE c_id='$courseId'";
                                 Database::query($sql);
                                 $inserted_in_course[$course_code] = $course_info['title'];
+                                $position++;
                             }
                         }
                         Database::query("UPDATE $tbl_session SET nbr_users='$user_counter', nbr_courses='$course_counter' WHERE id='$session_id'");

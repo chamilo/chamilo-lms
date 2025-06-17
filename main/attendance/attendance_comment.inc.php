@@ -24,7 +24,7 @@
         $("#comment-popup-save").on("click", function() {
             var comment = $("#txt-comment").val();
             if (comment == '') {
-                alert('<?php echo get_lang('ProvideACommentFirst'); ?>');
+                alert('<?php echo addslashes(get_lang('ProvideACommentFirst')); ?>');
                 return false;
             }
             var selected = $("#comment-selected").val();

@@ -23,7 +23,7 @@ if (empty($savedRows)) {
 
 $sidx = $_REQUEST['sidx']; //index (field) to filter
 $sord = $_REQUEST['sord']; //asc or desc
-$exportFilename = isset($_REQUEST['export_filename']) ? $_REQUEST['export_filename'] : '';
+$exportFilename = $_REQUEST['export_filename'] ?? '';
 
 if (strpos(strtolower($sidx), 'asc') !== false) {
     $sidx = str_replace(['asc', ','], '', $sidx);
@@ -131,17 +131,19 @@ function getWhereClause($col, $oper, $val)
 
 // If there is no search request sent by jqgrid, $where should be empty
 $whereCondition = '';
-$operation = isset($_REQUEST['oper']) ? $_REQUEST['oper'] : false;
-$exportFormat = isset($_REQUEST['export_format']) ? $_REQUEST['export_format'] : 'csv';
-$searchField = isset($_REQUEST['searchField']) ? $_REQUEST['searchField'] : false;
-$searchOperator = isset($_REQUEST['searchOper']) ? $_REQUEST['searchOper'] : false;
-$searchString = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
-$search = isset($_REQUEST['_search']) ? $_REQUEST['_search'] : false;
-$forceSearch = isset($_REQUEST['_force_search']) ? $_REQUEST['_force_search'] : false;
+$operation = $_REQUEST['oper'] ?? false;
+$exportFormat = $_REQUEST['export_format'] ?? 'csv';
+$searchField = $_REQUEST['searchField'] ?? false;
+$searchOperator = $_REQUEST['searchOper'] ?? false;
+$searchString = $_REQUEST['searchString'] ?? false;
+$search = $_REQUEST['_search'] ?? false;
+$forceSearch = $_REQUEST['_force_search'] ?? false;
 $extra_fields = [];
 $accessStartDate = '';
 $accessEndDate = '';
 $overwriteColumnHeaderExport = [];
+
+$result = [];
 
 if (!empty($search)) {
     $search = 'true';
@@ -290,18 +292,18 @@ if (!$sidx) {
 switch ($action) {
     case 'get_exercise_categories':
         $manager = new ExerciseCategoryManager();
-        $courseId = isset($_REQUEST['c_id']) ? $_REQUEST['c_id'] : 0;
+        $courseId = $_REQUEST['c_id'] ?? 0;
         $count = $manager->getCourseCount($courseId);
         break;
     case 'get_calendar_users':
         $calendarPlugin = LearningCalendarPlugin::create();
-        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+        $id = $_REQUEST['id'] ?? 0;
         $count = $calendarPlugin->getUsersPerCalendarCount($id);
         break;
     case 'get_usergroups_users':
         $usergroup = new UserGroup();
         $usergroup->protectScript(null, true, true);
-        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+        $id = $_REQUEST['id'] ?? 0;
         $count = $usergroup->getUserGroupUsers($id, true);
         break;
     case 'get_learning_path_calendars':
@@ -324,9 +326,9 @@ switch ($action) {
         $count = $object->get_count();
         break;
     case 'get_group_reporting':
-        $course_id = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : null;
-        $group_id = isset($_REQUEST['gidReq']) ? $_REQUEST['gidReq'] : null;
-        $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : null;
+        $course_id = $_REQUEST['course_id'] ?? null;
+        $group_id = $_REQUEST['gidReq'] ?? null;
+        $sessionId = $_REQUEST['session_id'] ?? null;
         $count = Tracking::get_group_reporting(
             $course_id,
             $sessionId,
@@ -628,7 +630,7 @@ switch ($action) {
             return 0;
         }
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
-        $workId = isset($_GET['work_id']) ? $_GET['work_id'] : null;
+        $workId = $_GET['work_id'] ?? null;
         $count = getWorkUserListData(
             $workId,
             api_get_course_id(),
@@ -650,8 +652,8 @@ switch ($action) {
         $exerciseId = $_REQUEST['exercise_id'] ?? 0;
         $status = $_REQUEST['status'] ?? 0;
         $questionType = $_REQUEST['questionType'] ?? 0;
-        $showAttemptsInSessions = $_REQUEST['showAttemptsInSessions'] ? true : false;
-        if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
+        $showAttemptsInSessions = (bool) $_REQUEST['showAttemptsInSessions'];
+        if (!empty($_GET['filter_by_user'])) {
             $filter_user = (int) $_GET['filter_by_user'];
             if (empty($whereCondition)) {
                 $whereCondition .= " te.exe_user_id  = '$filter_user'";
@@ -660,7 +662,7 @@ switch ($action) {
             }
         }
 
-        if (isset($_GET['group_id_in_toolbar']) && !empty($_GET['group_id_in_toolbar'])) {
+        if (!empty($_GET['group_id_in_toolbar'])) {
             $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];
             if (!empty($groupIdFromToolbar)) {
                 if (empty($whereCondition)) {
@@ -695,7 +697,7 @@ switch ($action) {
     case 'get_exercise_results':
         $exercise_id = $_REQUEST['exerciseId'];
 
-        if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
+        if (!empty($_GET['filter_by_user'])) {
             $filter_user = (int) $_GET['filter_by_user'];
             if (empty($whereCondition)) {
                 $whereCondition .= " te.exe_user_id  = '$filter_user'";
@@ -704,7 +706,7 @@ switch ($action) {
             }
         }
 
-        if (isset($_GET['group_id_in_toolbar']) && !empty($_GET['group_id_in_toolbar'])) {
+        if (!empty($_GET['group_id_in_toolbar'])) {
             $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];
             if (!empty($groupIdFromToolbar)) {
                 if (empty($whereCondition)) {
@@ -723,8 +725,8 @@ switch ($action) {
         break;
     case 'get_exercise_results_report':
         api_protect_admin_script();
-        $exerciseId = isset($_REQUEST['exercise_id']) ? $_REQUEST['exercise_id'] : 0;
-        $courseId = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : 0;
+        $exerciseId = $_REQUEST['exercise_id'] ?? 0;
+        $courseId = $_REQUEST['course_id'] ?? 0;
 
         if (empty($exerciseId)) {
             exit;
@@ -733,7 +735,7 @@ switch ($action) {
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
         } else {
-            $courseCode = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : '';
+            $courseCode = $_REQUEST['cidReq'] ?? '';
             if (!empty($courseCode)) {
                 $courseInfo = api_get_course_info($courseCode);
             }
@@ -762,7 +764,7 @@ switch ($action) {
         $count = ExerciseLib::get_count_exam_hotpotatoes_results($hotpot_path);
         break;
     case 'get_sessions_tracking':
-        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
+        $keyword = $_REQUEST['keyword'] ?? '';
 
         $description = '';
         $setting = api_get_setting('show_session_description');
@@ -813,7 +815,7 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
-        $listType = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : SessionManager::getDefaultSessionTab();
+        $listType = $_REQUEST['list_type'] ?? SessionManager::getDefaultSessionTab();
 
         if ('custom' === $listType && api_get_configuration_value('allow_session_status')) {
             $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
@@ -947,9 +949,9 @@ switch ($action) {
     case 'get_usergroups_teacher':
         $obj = new UserGroup();
         $obj->protectScript(null, false, true);
-        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
+        $type = $_REQUEST['type'] ?? 'registered';
         $groupFilter = isset($_REQUEST['group_filter']) ? (int) $_REQUEST['group_filter'] : 0;
-        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
+        $keyword = $_REQUEST['keyword'] ?? '';
 
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
@@ -1349,8 +1351,8 @@ switch ($action) {
             'actions',
         ];
 
-        $titleToSearch = isset($_REQUEST['title_to_search']) ? $_REQUEST['title_to_search'] : '';
-        $userIdToSearch = isset($_REQUEST['user_id_to_search']) ? $_REQUEST['user_id_to_search'] : 0;
+        $titleToSearch = $_REQUEST['title_to_search'] ?? '';
+        $userIdToSearch = $_REQUEST['user_id_to_search'] ?? 0;
         $sidx = in_array($sidx, $columns) ? $sidx : 'title';
         $result = AnnouncementManager::getAnnouncements(
             null,
@@ -1439,8 +1441,6 @@ switch ($action) {
                 'qualificator_id',
                 'correction',
             ];
-            $columns = array_merge($columns, $plagiarismColumns);
-            $columns[] = 'actions';
         } else {
             $columns = [
                 'fullname',
@@ -1449,9 +1449,9 @@ switch ($action) {
                 'sent_date',
                 'correction',
             ];
-            $columns = array_merge($columns, $plagiarismColumns);
-            $columns[] = 'actions';
         }
+        $columns = array_merge($columns, $plagiarismColumns);
+        $columns[] = 'actions';
 
         $whereCondition = " AND $whereCondition ";
         $columnOrderValidList = array_merge(['firstname', 'lastname'], $columns);
@@ -1513,13 +1513,11 @@ switch ($action) {
             $columns = [
                 'type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];
-            $columns = array_merge($columns, $plagiarismColumns);
-            $columns[] = 'actions';
         } else {
             $columns = ['type', 'firstname', 'lastname', 'title', 'sent_date'];
-            $columns = array_merge($columns, $plagiarismColumns);
-            $columns[] = 'actions';
         }
+        $columns = array_merge($columns, $plagiarismColumns);
+        $columns[] = 'actions';
 
         if (trim($whereCondition) === '1 = 1') {
             $whereCondition = '';
@@ -1547,13 +1545,11 @@ switch ($action) {
             $columns = [
                 'type', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];
-            $columns = array_merge($columns, $plagiarismColumns);
-            $columns[] = 'actions';
         } else {
             $columns = ['type', 'title', 'qualification', 'sent_date'];
-            $columns = array_merge($columns, $plagiarismColumns);
-            $columns[] = 'actions';
         }
+        $columns = array_merge($columns, $plagiarismColumns);
+        $columns[] = 'actions';
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
         if (trim($whereCondition) === '1 = 1') {
@@ -2796,7 +2792,7 @@ if (in_array($action, $allowed_actions)) {
         foreach ($result as $row) {
             // if results tab give not id, set id to $i otherwise id="null"
             // for all <tr> of the jqgrid - ref #4235
-            if (!isset($row['id']) || isset($row['id']) && $row['id'] == '') {
+            if (!isset($row['id']) || $row['id'] == '') {
                 $response->rows[$i]['id'] = $i;
             } else {
                 $response->rows[$i]['id'] = $row['id'];
@@ -2804,7 +2800,7 @@ if (in_array($action, $allowed_actions)) {
             $array = [];
             foreach ($columns as $col) {
                 if (in_array($col, ['correction', 'actions'])) {
-                    $array[] = isset($row[$col]) ? $row[$col] : '';
+                    $array[] = $row[$col] ?? '';
                 } else {
                     $array[] = isset($row[$col]) ? Security::remove_XSS($row[$col]) : '';
                 }

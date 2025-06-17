@@ -3132,7 +3132,7 @@ function finishInstallation(
     $i = 1;
 
     /**
-     * @var string
+     * @var string $category
      * @var string $description
      */
     foreach ($categories as $category => $description) {

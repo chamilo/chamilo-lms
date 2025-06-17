@@ -843,4 +843,9 @@ class Database
     {
         return self::escape_string(preg_replace("/[^a-zA-Z0-9_.]/", '', $field));
     }
+
+    public static function clearDatabaseName(string $dbName): string
+    {
+        return preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbName);
+    }
 }

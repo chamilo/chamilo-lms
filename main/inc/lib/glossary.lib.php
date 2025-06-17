@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CGlossary;
 use ChamiloSession as Session;
 
 /**
@@ -82,8 +83,6 @@ class GlossaryManager
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
-        $sessionCondition = api_get_session_condition($session_id);
-
         $glossaryName = Security::remove_XSS($name);
         $glossaryName = api_convert_encoding($glossaryName, 'UTF-8', 'UTF-8');
         $glossaryName = trim($glossaryName);
@@ -95,16 +94,31 @@ class GlossaryManager
         }
 
         $sql = "SELECT * FROM $table
-		        WHERE
-		            c_id = $course_id AND
-		            (
-		                name LIKE '".Database::escape_string($glossaryName)."'
-		                OR
-		                name LIKE '".Database::escape_string($parsed)."'
-                    )
-                    $sessionCondition
-                LIMIT 1
-                ";
+            WHERE
+                c_id = $course_id AND
+                (
+                    name LIKE '".Database::escape_string($glossaryName)."' OR
+                    name LIKE '".Database::escape_string($parsed)."'
+                ) AND
+                session_id = $session_id
+            LIMIT 1";
+
+        $rs = Database::query($sql);
+
+        if (Database::num_rows($rs) > 0) {
+            return Database::fetch_array($rs, 'ASSOC');
+        }
+
+        $sql = "SELECT * FROM $table
+            WHERE
+                c_id = $course_id AND
+                (
+                    name LIKE '".Database::escape_string($glossaryName)."' OR
+                    name LIKE '".Database::escape_string($parsed)."'
+                ) AND
+                (session_id IS NULL OR session_id = 0)
+            LIMIT 1";
+
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -119,16 +133,16 @@ class GlossaryManager
      *
      * @param array $values Array of title + description (name => $title, description => $comment)
      *
-     * @return mixed Term id on success, false on failure
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return bool|int Term id on success, false on failure
      */
-    public static function save_glossary($values, $showMessage = true)
+    public static function save_glossary(array $values, bool $showMessage = true)
     {
-        if (!is_array($values) || !isset($values['name'])) {
+        if (!isset($values['name'])) {
             return false;
         }
-
-        // Database table definition
-        $table = Database::get_course_table(TABLE_GLOSSARY);
 
         // get the maximum display order of all the glossary items
         $max_glossary_item = self::get_max_glossary_item();
@@ -146,39 +160,38 @@ class GlossaryManager
             }
 
             return false;
-        } else {
-            $params = [
-                'glossary_id' => 0,
-                'c_id' => api_get_course_int_id(),
-                'name' => $values['name'],
-                'description' => isset($values['description']) ? $values['description'] : "",
-                'display_order' => $max_glossary_item + 1,
-                'session_id' => $session_id,
-            ];
-            $id = Database::insert($table, $params);
-
-            if ($id) {
-                $sql = "UPDATE $table SET glossary_id = $id WHERE iid = $id";
-                Database::query($sql);
-
-                //insert into item_property
-                api_item_property_update(
-                    api_get_course_info(),
-                    TOOL_GLOSSARY,
-                    $id,
-                    'GlossaryAdded',
-                    api_get_user_id()
-                );
-            }
-            // display the feedback message
-            if ($showMessage) {
-                Display::addFlash(
-                    Display::return_message(get_lang('TermAdded'))
-                );
-            }
-
-            return $id;
         }
+
+        $glossary = (new CGlossary())
+            ->setGlossaryId(0)
+            ->setCId(api_get_course_int_id())
+            ->setName($values['name'])
+            ->setDescription($values['description'] ?? "")
+            ->setDisplayOrder($max_glossary_item + 1)
+            ->setSessionId($session_id);
+
+        Database::getManager()->persist($glossary);
+        Database::getManager()->flush();
+
+        $glossary->setGlossaryId($glossary->getIid());
+        Database::getManager()->flush();
+
+        //insert into item_property
+        api_item_property_update(
+            api_get_course_info(),
+            TOOL_GLOSSARY,
+            $glossary->getIid(),
+            'GlossaryAdded',
+            api_get_user_id()
+        );
+        // display the feedback message
+        if ($showMessage) {
+            Display::addFlash(
+                Display::return_message(get_lang('TermAdded'))
+            );
+        }
+
+        return $glossary->getIid();
     }
 
     /**
@@ -663,8 +676,16 @@ class GlossaryManager
         $glossary_term = Security::remove_XSS(strip_tags($glossary_data['name']));
         if (api_is_allowed_to_edit(null, true)) {
             if ($glossary_data['session_id'] == api_get_session_id()) {
-                $return .= '<a href="'.api_get_self().'?action=delete_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.
-                    Display::return_icon('delete.png', get_lang('Delete'), '', 22).'</a>';
+                $return .= Display::url(
+                    Display::return_icon('delete.png', get_lang('Delete')),
+                    '#',
+                    [
+                        'data-item-title' => $glossary_term,
+                        'data-href' => api_get_self().'?action=delete_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq(),
+                        'data-toggle' => 'modal',
+                        'data-target' => '#confirm-delete',
+                    ]
+                );
             } else {
                 $return = get_lang('EditionNotAvailableFromSession');
             }

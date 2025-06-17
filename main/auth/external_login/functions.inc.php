@@ -165,32 +165,30 @@ function external_add_user($u)
  * Update the user in chamilo database. It upgrade only info that is present in the
  * new_user array.
  *
- * @param $new_user associative array with the value to upgrade
- *    WARNING user_id key is MANDATORY
- *    Possible keys are :
- *      - firstname
- *      - lastname
- *      - username
- *      - auth_source
- *      - email
- *      - status
- *      - official_code
- *      - phone
- *      - picture_uri
- *      - expiration_date
- *      - active
- *      - creator_id
- *      - hr_dept_id
- *      - extra : array of custom fields
- *      - language
- *      - courses : string of all courses code separated by '|'
- *      - admin : boolean
- *
- * @return bool|null
+ * @param array $new_user associative array with the value to upgrade
+ *                        WARNING user_id key is MANDATORY
+ *                        Possible keys are :
+ *                        - firstname
+ *                        - lastname
+ *                        - username
+ *                        - auth_source
+ *                        - email
+ *                        - status
+ *                        - official_code
+ *                        - phone
+ *                        - picture_uri
+ *                        - expiration_date
+ *                        - active
+ *                        - creator_id
+ *                        - hr_dept_id
+ *                        - extra : array of custom fields
+ *                        - language
+ *                        - courses : string of all courses code separated by '|'
+ *                        - admin : boolean
  *
  * @author ndiechburg <noel@cblue.be>
  * */
-function external_update_user($new_user)
+function external_update_user(array $new_user): void
 {
     $old_user = api_get_user_info($new_user['user_id']);
     $u = array_merge($old_user, $new_user);
@@ -214,7 +212,7 @@ function external_update_user($new_user)
         $u['language'],
         ''
     );
-    if (isset($u['courses']) && !empty($u['courses'])) {
+    if (!empty($u['courses'])) {
         $autoSubscribe = explode('|', $u['courses']);
         foreach ($autoSubscribe as $code) {
             if (CourseManager::course_exists($code)) {

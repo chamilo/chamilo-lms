@@ -518,7 +518,7 @@ class Certificate extends Model
             $qrCode->setSize(120);
             $qrCode->setMargin(5);
             $qrCode->setWriterByName('png');
-            $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::MEDIUM());
+            $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::MEDIUM);
             $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
             $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
             $qrCode->setValidateResult(false);

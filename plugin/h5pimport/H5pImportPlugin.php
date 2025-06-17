@@ -12,7 +12,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * Define the H5pImportPlugin class as an extension of Plugin
  * install/uninstall the plugin.
  */
-class H5pImportPlugin extends Plugin
+class H5pImportPlugin extends Plugin implements HookPluginInterface
 {
     public const TBL_H5P_IMPORT = 'plugin_h5p_import';
     public const TBL_H5P_IMPORT_LIBRARY = 'plugin_h5p_import_library';
@@ -134,6 +134,7 @@ class H5pImportPlugin extends Plugin
             ]
         );
         $this->addCourseTools();
+        $this->installHook();
     }
 
     public function addCourseTool(int $courseId)
@@ -152,6 +153,8 @@ class H5pImportPlugin extends Plugin
 
     public function uninstall()
     {
+        $this->uninstallHook();
+
         $em = Database::getManager();
 
         if (!$em->getConnection()
@@ -267,6 +270,20 @@ class H5pImportPlugin extends Plugin
         $return .= '</ul>';
 
         return $return;
+    }
+
+    public function installHook()
+    {
+        HookCreateCourse::create()->attach(
+            H5pImportCreateCourseHookObserver::create()
+        );
+    }
+
+    public function uninstallHook()
+    {
+        HookCreateCourse::create()->detach(
+            H5pImportCreateCourseHookObserver::create()
+        );
     }
 
     /**

@@ -129,48 +129,65 @@ if ($form->validate()) {
     $coursePath = $values['course_path'];
     $homePath = $values['home_path'];
     $confFile = $values['configuration_file'];
+    $uploadPath = $values['upload_path'];
 
-    if (is_dir($coursePath) &&
-        is_dir($homePath) &&
-        file_exists($confFile) &&
-        is_readable($confFile)
-    ) {
-        $currentHost = api_get_configuration_value('db_host');
-        $currentDatabase = api_get_configuration_value('main_database');
-        $currentUser = api_get_configuration_value('db_user');
-        $currentPassword = api_get_configuration_value('db_password');
+    $isPharFile = str_starts_with(strtolower($confFile), 'phar://')
+        || str_starts_with(strtolower($coursePath), 'phar://')
+        || str_starts_with(strtolower($homePath), 'phar://')
+        || str_starts_with(strtolower($uploadPath), 'phar://');
 
-        if ($values['to_main_database'] !== $currentDatabase &&
-            $values['to_db_user'] !== $currentUser &&
-            $values['to_db_password'] !== $currentPassword
-        ) {
-        } else {
-            Display::addFlash(
-                Display::return_message(
-                    $plugin->get_lang('DatabaseAccessShouldBeDifferentThanMasterChamilo'),
-                    'warning'
-                )
-            );
+    if ($isPharFile) {
+        Display::addFlash(
+            Display::return_message(
+                $plugin->get_lang('NotAllowed'),
+                'error'
+            )
+        );
+    } else {
+        $isWritable = is_dir($coursePath)
+            && is_dir($homePath)
+            && is_dir($uploadPath)
+            && file_exists($confFile)
+            && is_readable($confFile);
+
+        if ($isWritable) {
+            $currentHost = api_get_configuration_value('db_host');
+            $currentDatabase = api_get_configuration_value('main_database');
+            $currentUser = api_get_configuration_value('db_user');
+            $currentPassword = api_get_configuration_value('db_password');
+
+            if ($values['to_main_database'] !== $currentDatabase &&
+                $values['to_db_user'] !== $currentUser &&
+                $values['to_db_password'] !== $currentPassword
+            ) {
+            } else {
+                Display::addFlash(
+                    Display::return_message(
+                        $plugin->get_lang('DatabaseAccessShouldBeDifferentThanMasterChamilo'),
+                        'warning'
+                    )
+                );
+            }
+
+            $vchamilo = new stdClass();
+            $vchamilo->main_database = $values['main_database'];
+            $vchamilo->db_user = $values['db_user'];
+            $vchamilo->db_password = $values['db_password'];
+            $vchamilo->db_host = $values['db_host'];
+            $vchamilo->root_web = $values['root_web'];
+            $vchamilo->import_to_main_database = $values['to_main_database'];
+            $vchamilo->import_to_db_user = $values['to_db_user'];
+            $vchamilo->import_to_db_password = $values['to_db_password'];
+            $vchamilo->import_to_db_host = $values['to_db_host'];
+            $vchamilo->course_path = $values['course_path'];
+            $vchamilo->home_path = $values['home_path'];
+            $vchamilo->upload_path = $values['upload_path'];
+            $vchamilo->password_encryption = $values['password_encryption'];
+
+            Virtual::importInstance($vchamilo, $values['version']);
+
+            Virtual::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
         }
-
-        $vchamilo = new stdClass();
-        $vchamilo->main_database = $values['main_database'];
-        $vchamilo->db_user = $values['db_user'];
-        $vchamilo->db_password = $values['db_password'];
-        $vchamilo->db_host = $values['db_host'];
-        $vchamilo->root_web = $values['root_web'];
-        $vchamilo->import_to_main_database = $values['to_main_database'];
-        $vchamilo->import_to_db_user = $values['to_db_user'];
-        $vchamilo->import_to_db_password = $values['to_db_password'];
-        $vchamilo->import_to_db_host = $values['to_db_host'];
-        $vchamilo->course_path = $values['course_path'];
-        $vchamilo->home_path = $values['home_path'];
-        $vchamilo->upload_path = $values['upload_path'];
-        $vchamilo->password_encryption = $values['password_encryption'];
-
-        Virtual::importInstance($vchamilo, $values['version']);
-
-        Virtual::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
     }
 }
 

@@ -5,7 +5,7 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 
-$action = isset($_GET['what']) ? $_GET['what'] : '';
+$action = $_GET['what'] ?? '';
 define('CHAMILO_INTERNAL', true);
 
 $plugin = VChamiloPlugin::create();

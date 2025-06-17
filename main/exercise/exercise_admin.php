@@ -181,7 +181,7 @@ if ($form->validate()) {
         'name' => $objExercise->selectTitle(true),
     ];
 
-    Display::display_header($nameTools, get_lang('Exercise'));
+    Display::display_header($nameTools, 'Exercise');
 
     echo '<div class="actions">';
     if ($objExercise->iid != 0) {

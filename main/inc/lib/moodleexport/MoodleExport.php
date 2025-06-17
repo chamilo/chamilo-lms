@@ -4,6 +4,7 @@
 
 namespace moodleexport;
 
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Exception;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -25,7 +26,18 @@ class MoodleExport
      */
     public function __construct(object $course)
     {
+        // Build the complete course object
+        $cb = new CourseBuilder('complete');
+        $complete = $cb->build();
+
+        // Store the selected course
         $this->course = $course;
+
+        // Fill missing resources from learnpath
+        $this->fillResourcesFromLearnpath($complete);
+
+        // Fill missing quiz questions
+        $this->fillQuestionsFromQuiz($complete);
     }
 
     /**
@@ -175,6 +187,67 @@ class MoodleExport
     public static function getAdminUserData(): array
     {
         return self::$adminUserData;
+    }
+
+    /**
+     * Fills missing resources from the learnpath into the course structure.
+     *
+     * This method checks if the course has a learnpath and ensures that all
+     * referenced resources (documents, quizzes, etc.) exist in the course's
+     * resources array by pulling them from the complete course object.
+     */
+    private function fillResourcesFromLearnpath(object $complete): void
+    {
+        // Check if the course has learnpath
+        if (!isset($this->course->resources['learnpath'])) {
+            return;
+        }
+
+        foreach ($this->course->resources['learnpath'] as $learnpathId => $learnpath) {
+            if (!isset($learnpath->items)) {
+                continue;
+            }
+
+            foreach ($learnpath->items as $item) {
+                $type = $item['item_type']; // Resource type (document, quiz, etc.)
+                $resourceId = $item['path']; // Resource ID in resources
+
+                // Check if the resource exists in the complete object and is not yet in the course resources
+                if (isset($complete->resources[$type][$resourceId]) && !isset($this->course->resources[$type][$resourceId])) {
+                    // Add the resource directly to the original course resources structure
+                    $this->course->resources[$type][$resourceId] = $complete->resources[$type][$resourceId];
+                }
+            }
+        }
+    }
+
+    /**
+     * Fills missing exercise questions related to quizzes in the course.
+     *
+     * This method checks if the course has quizzes and ensures that all referenced
+     * questions exist in the course's resources array by pulling them from the complete
+     * course object.
+     */
+    private function fillQuestionsFromQuiz(object $complete): void
+    {
+        // Check if the course has quizzes
+        if (!isset($this->course->resources['quiz'])) {
+            return;
+        }
+
+        foreach ($this->course->resources['quiz'] as $quizId => $quiz) {
+            if (!isset($quiz->obj->question_ids)) {
+                continue;
+            }
+
+            foreach ($quiz->obj->question_ids as $questionId) {
+                // Check if the question exists in the complete object and is not yet in the course resources
+                if (isset($complete->resources['Exercise_Question'][$questionId]) && !isset($this->course->resources['Exercise_Question'][$questionId])) {
+                    // Add the question directly to the original course resources structure
+                    $this->course->resources['Exercise_Question'][$questionId] = $complete->resources['Exercise_Question'][$questionId];
+                }
+            }
+        }
     }
 
     /**
@@ -359,6 +432,14 @@ class MoodleExport
         $activities = [];
         $glossaryAdded = false;
 
+        $documentsFolder = [
+            'id' => 0,
+            'sectionid' => 0,
+            'modulename' => 'folder',
+            'moduleid' => 0,
+            'title' => 'Documents',
+        ];
+        $activities[] = $documentsFolder;
         foreach ($this->course->resources as $resourceType => $resources) {
             foreach ($resources as $resource) {
                 $exportClass = null;
@@ -403,17 +484,26 @@ class MoodleExport
                         $moduleName = 'page';
                         $id = $resource->source_id;
                         $title = $document['title'];
-                    } elseif ('file' === $resource->file_type) {
-                        $exportClass = ResourceExport::class;
-                        $moduleName = 'resource';
-                        $id = $resource->source_id;
-                        $title = $resource->title;
-                    } elseif ('folder' === $resource->file_type) {
-                        $exportClass = FolderExport::class;
-                        $moduleName = 'folder';
-                        $id = $resource->source_id;
-                        $title = $resource->title;
                     }
+                    if ('file' === $resource->file_type) {
+                        $resourceExport = new ResourceExport($this->course);
+                        if ($resourceExport->getSectionIdForActivity($resource->source_id, $resourceType) > 0) {
+                            $isRoot = substr_count($resource->path, '/') === 1;
+                            if ($isRoot) {
+                                $exportClass = ResourceExport::class;
+                                $moduleName = 'resource';
+                                $id = $resource->source_id;
+                                $title = $resource->title;
+                            }
+                        }
+                    }
+                }
+                // Handle course introduction (page)
+                elseif ($resourceType === RESOURCE_TOOL_INTRO && $resource->source_id == 'course_homepage') {
+                    $exportClass = PageExport::class;
+                    $moduleName = 'page';
+                    $id = 0;
+                    $title = get_lang('Introduction');
                 }
                 // Handle assignments (work)
                 elseif ($resourceType === RESOURCE_WORK && $resource->source_id > 0) {

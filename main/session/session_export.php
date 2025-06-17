@@ -162,10 +162,13 @@ if (isset($_POST['formSent'])) {
             }
 
             // Courses
-            $sql = "SELECT DISTINCT c.code, sc.c_id
-                    FROM $tbl_course c
-                    INNER JOIN $tbl_session_course_user sc
-                    ON c.id = sc.c_id AND sc.session_id = '".$row['id']."'";
+            $sql = "SELECT DISTINCT c.code, sc.c_id, sr.position
+            FROM $tbl_course c
+            INNER JOIN $tbl_session_course_user sc
+                ON c.id = sc.c_id AND sc.session_id = '".$row['id']."'
+            INNER JOIN $tbl_session_course sr
+                ON sc.session_id = sr.session_id AND sc.c_id = sr.c_id
+            ORDER BY sr.position ASC";
 
             $rsCourses = Database::query($sql);
 

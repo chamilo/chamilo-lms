@@ -50,7 +50,7 @@ class AzureSyncUsergroupsCommand extends AzureCommand
 
             try {
                 foreach ($this->getAzureGroupMembers($azureGroupUid) as $azureGroupMember) {
-                    if ($userId = $this->plugin->getUserIdByVerificationOrder($azureGroupMember, 'id')) {
+                    if ($userId = $this->plugin->getUserIdByVerificationOrder($azureGroupMember)) {
                         $newGroupMembers[] = $userId;
                     }
                 }

@@ -154,7 +154,12 @@ try {
             $receivers = $_POST['receivers'] ?? [];
             $subject = !empty($_POST['subject']) ? $_POST['subject'] : null;
             $text = !empty($_POST['text']) ? $_POST['text'] : null;
-            $data = $restApi->saveUserMessage($subject, $text, $receivers);
+            if (!empty($_POST['only_local']) && ('false' != $_POST['only_local'])) {
+                $only_local = true;
+            } else {
+                $only_local = false;
+            }
+            $data = $restApi->saveUserMessage($subject, $text, $receivers, $only_local);
             Event::addEvent(LOG_WS.$action, 'username', $username);
             $restResponse->setData($data);
             break;
@@ -548,6 +553,26 @@ try {
             $data = $restApi->getUsersCampus($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::GET_USER_INFO_FROM_USERNAME:
+            if (empty($_POST['loginname'])) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $item = api_get_user_info_from_username($_POST['loginname']);
+            $userInfo = [
+                'id' => $item['user_id'],
+                'firstname' => $item['firstname'],
+                'lastname' => $item['lastname'],
+                'email' => $item['email'],
+                'username' => $item['username'],
+                'active' => $item['active'],
+            ];
+            Event::addEvent(
+                LOG_WS.$action,
+                'username',
+                Database::escape_string($_POST['loginname'])
+            );
+            $restResponse->setData($userInfo);
+            break;
         case Rest::USERNAME_EXIST:
             Event::addEvent(LOG_WS.$action, 'username', $_POST['loginname']);
             $data = $restApi->usernameExist($_POST['loginname']);
@@ -655,6 +680,25 @@ try {
                 )
             );
             break;
+        case Rest::GET_USER_PROGRESS_AND_TIME_IN_SESSION:
+            $userId = (string) $_REQUEST['user_id'];
+            $sessionId = (string) $_REQUEST['session_id'];
+
+            if (empty($userId)) {
+                throw new Exception('user_id not provided');
+            }
+            if (empty($sessionId)) {
+                throw new Exception('session_id not provided');
+            }
+
+            Event::addEvent(LOG_WS.$action, 'user_id', $userId);
+            $restResponse->setData(
+                $restApi->getUserProgressAndTimeInSession(
+                    $userId,
+                    $sessionId
+                )
+            );
+            break;
         case Rest::GET_USER_SUB_GROUP:
             $userId = isset($_POST['user_id']) ? (int) $_POST['user_id'] : 0;
             if (empty($userId)) {
@@ -751,6 +795,18 @@ try {
             );
             $restResponse->setData([$idSession]);
             break;
+        case Rest::GET_SESSION_INFO_FROM_EXTRA_FIELD:
+            if (empty($_POST['field_name']) || empty($_POST['field_value'])) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $idSession = $restApi->getSessionInfoFromExtraField($_POST['field_name'], $_POST['field_value']);
+            Event::addEvent(
+                LOG_WS.$action,
+                'extra_field_name-extra_field_value',
+                Database::escape_string($_POST['field_name']).':'.Database::escape_string($_POST['field_value'])
+            );
+            $restResponse->setData([$idSession]);
+            break;
         case Rest::SAVE_SESSION:
             $data = $restApi->addSession($_POST);
             Event::addEvent(LOG_WS.$action, 'session_id', $data['id_session']);
@@ -794,8 +850,12 @@ try {
             if (!empty($_POST['id_campus'])) {
                 $campusId = (int) $_POST['id_campus'];
             }
+            $getExtraFields = false;
+            if (!empty($_POST['get_extra_fields']) && ('false' != $_POST['get_extra_fields'])) {
+                $getExtraFields = true;
+            }
             Event::addEvent(LOG_WS.$action, 'id_campus', $campusId);
-            $data = $restApi->getSessionsCampus($campusId);
+            $data = $restApi->getSessionsCampus($campusId, $getExtraFields);
             $restResponse->setData($data);
             break;
         case Rest::ADD_COURSES_SESSION:

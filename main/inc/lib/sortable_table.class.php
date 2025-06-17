@@ -444,12 +444,18 @@ class SortableTable extends HTML_Table
             foreach ($this->additional_parameters as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $subKey => $subValue) {
-                        $html .= '<input type="hidden" name ="'.Security::remove_XSS($subKey).'" value ="'
-                            .Security::remove_XSS($subValue).'" />';
+                        $html .= Display::input(
+                            'hidden',
+                            Security::remove_XSS($subKey),
+                            Security::remove_XSS($subValue)
+                        );
                     }
                 } else {
-                    $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'
-                        .Security::remove_XSS($value).'" />';
+                    $html .= Display::input(
+                        'hidden',
+                        Security::remove_XSS($key),
+                        Security::remove_XSS($value)
+                    );
                 }
             }
         }

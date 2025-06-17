@@ -8,7 +8,7 @@
 $cidReset = true;
 
 require_once __DIR__.'/../../inc/global.inc.php';
-api_protect_admin_script();
+api_protect_admin_script(true);
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('PlatformAdmin')];
 
@@ -18,6 +18,72 @@ $validated = false;
 $sessionStatusAllowed = api_get_configuration_value('allow_session_status');
 $invoicingMonth = isset($_GET['invoicing_month']) ? (int) $_GET['invoicing_month'] : '';
 $invoicingYear = isset($_GET['invoicing_year']) ? (int) $_GET['invoicing_year'] : '';
+$tool_name = get_lang('Statistics');
+if (api_is_platform_admin()) {
+    $tools = [
+        get_lang('Courses') => [
+            'report=courses' => get_lang('CountCours'),
+            'report=tools' => get_lang('PlatformToolAccess'),
+            'report=courselastvisit' => get_lang('LastAccess'),
+            'report=coursebylanguage' => get_lang('CountCourseByLanguage'),
+        ],
+        get_lang('Users') => [
+            'report=users' => get_lang('CountUsers'),
+            'report=recentlogins' => get_lang('Logins'),
+            'report=logins&amp;type=month' => get_lang('Logins').' ('.get_lang('PeriodMonth').')',
+            'report=logins&amp;type=day' => get_lang('Logins').' ('.get_lang('PeriodDay').')',
+            'report=logins&amp;type=hour' => get_lang('Logins').' ('.get_lang('PeriodHour').')',
+            'report=pictures' => get_lang('CountUsers').' ('.get_lang('UserPicture').')',
+            'report=logins_by_date' => get_lang('LoginsByDate'),
+            'report=no_login_users' => get_lang('StatsUsersDidNotLoginInLastPeriods'),
+            'report=zombies' => get_lang('Zombies'),
+            'report=users_active' => get_lang('UserStats'),
+            'report=users_online' => get_lang('UsersOnline'),
+            'report=invoicing' => get_lang('InvoicingByAccessUrl'),
+            'report=duplicated_users' => get_lang('DuplicatedUsers'),
+            'report=duplicated_users_by_mail' => get_lang('DuplicatedUsersByMail'),
+        ],
+        get_lang('System') => [
+            'report=activities' => get_lang('ImportantActivities'),
+            'report=user_session' => get_lang('PortalUserSessionStats'),
+            'report=courses_usage' => get_lang('CoursesUsage'),
+            'report=quarterly_report' => get_lang('QuarterlyReport'),
+        ],
+        get_lang('Social') => [
+            'report=messagereceived' => get_lang('MessagesReceived'),
+            'report=messagesent' => get_lang('MessagesSent'),
+            'report=friends' => get_lang('CountFriends'),
+        ],
+        get_lang('Session') => [
+            'report=session_by_date' => get_lang('SessionsByDate'),
+        ],
+    ];
+
+    if ('true' === api_get_plugin_setting('lti_provider', 'enabled')) {
+        $tools[get_lang('Users')]['report=lti_tool_lp'] = get_lang('LearningPathLTI');
+    }
+} elseif (api_is_session_admin()) {
+    $tools = [
+        get_lang('Session') => [
+            'report=session_by_date' => get_lang('SessionsByDate'),
+        ],
+    ];
+}
+
+// Get list of allowed reports based on role
+$allowedReports = [];
+foreach ($tools as $section => $items) {
+    foreach ($items as $key => $label) {
+        if (preg_match('/report=([a-zA-Z0-9_]+)/', $key, $matches)) {
+            $allowedReports[] = $matches[1];
+        }
+    }
+}
+
+// Ensure current report is valid for this user, or default to first available
+if (!in_array($report, $allowedReports)) {
+    $report = reset($allowedReports);
+}
 
 if (
 in_array(
@@ -332,50 +398,6 @@ if ('user_session' === $report) {
 
 if (isset($_GET['export'])) {
     ob_start();
-}
-
-$tool_name = get_lang('Statistics');
-$tools = [
-    get_lang('Courses') => [
-        'report=courses' => get_lang('CountCours'),
-        'report=tools' => get_lang('PlatformToolAccess'),
-        'report=courselastvisit' => get_lang('LastAccess'),
-        'report=coursebylanguage' => get_lang('CountCourseByLanguage'),
-    ],
-    get_lang('Users') => [
-        'report=users' => get_lang('CountUsers'),
-        'report=recentlogins' => get_lang('Logins'),
-        'report=logins&amp;type=month' => get_lang('Logins').' ('.get_lang('PeriodMonth').')',
-        'report=logins&amp;type=day' => get_lang('Logins').' ('.get_lang('PeriodDay').')',
-        'report=logins&amp;type=hour' => get_lang('Logins').' ('.get_lang('PeriodHour').')',
-        'report=pictures' => get_lang('CountUsers').' ('.get_lang('UserPicture').')',
-        'report=logins_by_date' => get_lang('LoginsByDate'),
-        'report=no_login_users' => get_lang('StatsUsersDidNotLoginInLastPeriods'),
-        'report=zombies' => get_lang('Zombies'),
-        'report=users_active' => get_lang('UserStats'),
-        'report=users_online' => get_lang('UsersOnline'),
-        'report=invoicing' => get_lang('InvoicingByAccessUrl'),
-        'report=duplicated_users' => get_lang('DuplicatedUsers'),
-        'report=duplicated_users_by_mail' => get_lang('DuplicatedUsersByMail'),
-    ],
-    get_lang('System') => [
-        'report=activities' => get_lang('ImportantActivities'),
-        'report=user_session' => get_lang('PortalUserSessionStats'),
-        'report=courses_usage' => get_lang('CoursesUsage'),
-        'report=quarterly_report' => get_lang('QuarterlyReport'),
-    ],
-    get_lang('Social') => [
-        'report=messagereceived' => get_lang('MessagesReceived'),
-        'report=messagesent' => get_lang('MessagesSent'),
-        'report=friends' => get_lang('CountFriends'),
-    ],
-    get_lang('Session') => [
-        'report=session_by_date' => get_lang('SessionsByDate'),
-    ],
-];
-
-if ('true' === api_get_plugin_setting('lti_provider', 'enabled')) {
-    $tools[get_lang('Users')]['report=lti_tool_lp'] = get_lang('LearningPathLTI');
 }
 
 $course_categories = Statistics::getCourseCategories();

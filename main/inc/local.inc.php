@@ -137,7 +137,7 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
 }
 
 // parameters passed via GET
-$logout = isset($_GET['logout']) ? $_GET['logout'] : '';
+$logout = $_GET['logout'] ?? '';
 $gidReq = isset($_GET['gidReq']) ? (int) $_GET['gidReq'] : '';
 
 // Keep a trace of the course and session from which we are getting out, to
@@ -167,7 +167,7 @@ $cidReset = isset($cidReset) ? (bool) $cidReset : false;
 
 // $cDir is a special url param sent from a redirection from /courses/[DIR]/index.php...
 // It replaces cidReq in some opportunities
-$cDir = isset($_GET['cDir']) && !empty($_GET['cDir']) ? $_GET['cDir'] : '';
+$cDir = !empty($_GET['cDir']) ? $_GET['cDir'] : '';
 
 // if there is a cDir parameter in the URL and $cidReq could not be determined
 if (!empty($cDir) && empty($cidReq)) {
@@ -189,11 +189,11 @@ if (empty($cidReset)) {
     $cidReq = null;
 }
 
-$gidReset = isset($gidReset) ? $gidReset : '';
+$gidReset = $gidReset ?? '';
 // $gidReset can be set in URL-parameter
 
 // parameters passed via POST
-$login = isset($_POST["login"]) ? $_POST["login"] : '';
+$login = $_POST["login"] ?? '';
 // register if the user is just logging in, in order to redirect him
 $logging_in = false;
 
@@ -484,7 +484,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     // Check captcha
                     $captchaText = $_POST['captcha'];
                     /** @var Text_CAPTCHA $obj */
-                    $obj = isset($_SESSION['template.lib']) ? $_SESSION['template.lib'] : null;
+                    $obj = $_SESSION['template.lib'] ?? null;
                     if ($obj) {
                         $obj->getPhrase();
                         if ($obj->getPhrase() != $captchaText) {
@@ -500,7 +500,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 }
 
                 // Redirect to login page
-                if ($captchaValidated == false) {
+                if (!$captchaValidated) {
                     $loginFailed = true;
                     Session::erase('_uid');
                     Session::write('loginFailed', '1');
@@ -512,7 +512,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 // Check if account is blocked by captcha user extra field see function api_block_account_captcha()
                 $blockedUntilDate = api_get_user_blocked_by_captcha($login);
 
-                if (isset($blockedUntilDate) && !empty($blockedUntilDate)) {
+                if (!empty($blockedUntilDate)) {
                     if (time() > api_strtotime($blockedUntilDate, 'UTC')) {
                         api_clean_account_captcha($login);
                     } else {
@@ -541,7 +541,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 if ($validPassword === false) {
                     // Use external webservice to
                     $options = api_get_configuration_value('webservice_validation');
-                    if (!empty($options) && isset($options['options']) && !empty($options['options'])) {
+                    if (!empty($options) && !empty($options['options'])) {
                         $options = $options['options'];
                         $soapclient = new nusoap_client($options['wsdl']);
                         $function = $options['check_login_function'];
@@ -588,7 +588,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         'update_type'
                     );
 
-                    $update_type = isset($update_type['update_type']) ? $update_type['update_type'] : '';
+                    $update_type = $update_type['update_type'] ?? '';
                     if (!empty($extAuthSource[$update_type]['updateUser'])
                         && file_exists($extAuthSource[$update_type]['updateUser'])
                     ) {
@@ -1084,7 +1084,7 @@ if (isset($use_anonymous) && $use_anonymous) {
 
 // if the requested course is different from the course in session
 if (!empty($cidReq) && (!isset($_SESSION['_cid']) ||
-    (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid']))
+    ($cidReq != $_SESSION['_cid']))
 ) {
     $cidReset = true;
     $gidReset = true; // As groups depend from courses, group id is reset
@@ -1141,8 +1141,8 @@ if (isset($uidReset) && $uidReset) {
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 } else { // continue with the previous values
     $_user = $_SESSION['_user'];
-    $is_platformAdmin = isset($_SESSION['is_platformAdmin']) ? $_SESSION['is_platformAdmin'] : false;
-    $is_allowedCreateCourse = isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
+    $is_platformAdmin = $_SESSION['is_platformAdmin'] ?? false;
+    $is_allowedCreateCourse = $_SESSION['is_allowedCreateCourse'] ?? false;
 }
 
 $logoutCourseCalled = false;
@@ -1153,7 +1153,7 @@ if (!isset($_SESSION['login_as'])) {
         // The value  $_dont_save_user_course_access should be added before
         // the call of global.inc.php see the main/inc/chat.ajax.php file
         // Disables the updates in the TRACK_E_COURSE_ACCESS table
-        if (isset($_dont_save_user_course_access) && $_dont_save_user_course_access == true) {
+        if (isset($_dont_save_user_course_access) && $_dont_save_user_course_access) {
             $save_course_access = false;
         } else {
             $logoutCourseCalled = true;
@@ -1238,7 +1238,7 @@ if ($cidReset) {
         }
     } else {
         // Leave a logout time in the track_e_course_access table if we were in a course
-        if ($logoutCourseCalled == false) {
+        if (!$logoutCourseCalled) {
             Event::courseLogout($logoutInfo);
         }
         Session::erase('_cid');
@@ -1250,15 +1250,24 @@ if ($cidReset) {
 
         if (!empty($_SESSION)) {
             foreach ($_SESSION as $key => $session_item) {
-                if (strpos($key, 'lp_autolaunch_') === false) {
-                    continue;
-                } else {
+                // Clear session keys related to SortableTable
+                if (strpos($key, 'table_') === 0 || strpos($key, 'sortable_table_') === 0) {
+                    if (isset($_SESSION[$key])) {
+                        Session::erase($key);
+                    }
+                }
+
+                // Clear session keys related to lp_autolaunch_
+                if (strpos($key, 'lp_autolaunch_') !== false) {
                     if (isset($_SESSION[$key])) {
                         Session::erase($key);
                     }
                 }
             }
         }
+
+        // Clear the general clean_sortable_table flag if it exists
+        Session::erase('clean_sortable_table');
 
         if (api_get_group_id()) {
             Session::erase('_gid');
@@ -1310,7 +1319,7 @@ if ($cidReset) {
 
 /*  COURSE / USER REL. INIT */
 $session_id = api_get_session_id();
-$user_id = isset($_user['user_id']) ? $_user['user_id'] : null;
+$user_id = $_user['user_id'] ?? null;
 
 //Course permissions
 //if this code is uncommented in some platforms the is_courseAdmin is not correctly saved see BT#5789
@@ -1725,7 +1734,6 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
 
     if (!$is_platformAdmin) {
         if (!$is_courseMember &&
-            isset($_course['registration_code']) &&
             !empty($_course['registration_code']) &&
             !Session::read('course_password_'.$_course['real_id'], false)
         ) {
@@ -1784,11 +1792,11 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
     Session::write('is_sessionAdmin', $is_sessionAdmin);
 } else {
     // Continue with the previous values
-    $is_courseAdmin = isset($_SESSION['is_courseAdmin']) ? $_SESSION['is_courseAdmin'] : false;
-    $is_courseTutor = isset($_SESSION['is_courseTutor']) ? $_SESSION['is_courseTutor'] : false;
-    $is_session_general_coach = isset($_SESSION['is_session_general_coach']) ? $_SESSION['is_session_general_coach'] : false;
-    $is_courseMember = isset($_SESSION['is_courseMember']) ? $_SESSION['is_courseMember'] : false;
-    $is_allowed_in_course = isset($_SESSION['is_allowed_in_course']) ? $_SESSION['is_allowed_in_course'] : false;
+    $is_courseAdmin = $_SESSION['is_courseAdmin'] ?? false;
+    $is_courseTutor = $_SESSION['is_courseTutor'] ?? false;
+    $is_session_general_coach = $_SESSION['is_session_general_coach'] ?? false;
+    $is_courseMember = $_SESSION['is_courseMember'] ?? false;
+    $is_allowed_in_course = $_SESSION['is_allowed_in_course'] ?? false;
 }
 
 //set variable according to student_view_enabled choices
@@ -1796,20 +1804,16 @@ if (api_get_setting('student_view_enabled') == "true") {
     $changed = false;
     if (isset($_GET['isStudentView'])) {
         if ($_GET['isStudentView'] == 'true') {
-            if (isset($_SESSION['studentview'])) {
-                if (!empty($_SESSION['studentview'])) {
-                    // switching to studentview
-                    $_SESSION['studentview'] = 'studentview';
-                    $changed = true;
-                }
+            if (!empty($_SESSION['studentview'])) {
+                // switching to studentview
+                $_SESSION['studentview'] = 'studentview';
+                $changed = true;
             }
         } elseif ($_GET['isStudentView'] == 'false') {
-            if (isset($_SESSION['studentview'])) {
-                if (!empty($_SESSION['studentview'])) {
-                    // switching to teacherview
-                    $_SESSION['studentview'] = 'teacherview';
-                    $changed = true;
-                }
+            if (!empty($_SESSION['studentview'])) {
+                // switching to teacherview
+                $_SESSION['studentview'] = 'teacherview';
+                $changed = true;
             }
         }
     } elseif (!empty($_SESSION['studentview'])) {

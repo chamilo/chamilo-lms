@@ -398,23 +398,20 @@ class CourseCategory
         return true;
     }
 
-    /**
-     * @param string $categoryCode
-     *
-     * @return array
-     */
-    public static function getChildren($categoryCode)
+    public static function getChildren(string $categoryCode, bool $getChildren = true): array
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryCode = Database::escape_string($categoryCode);
-        $sql = "SELECT code, id FROM $table
+        $sql = "SELECT name, code, id FROM $table
                 WHERE parent_id = '$categoryCode'";
         $result = Database::query($sql);
         $children = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $children[] = $row;
-            $subChildren = self::getChildren($row['code']);
-            $children = array_merge($children, $subChildren);
+            if ($getChildren) {
+                $subChildren = self::getChildren($row['code']);
+                $children = array_merge($children, $subChildren);
+            }
         }
 
         return $children;
@@ -591,7 +588,7 @@ class CourseCategory
     public static function getCategoriesToDisplayInHomePage()
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT name FROM $table
+        $sql = "SELECT name, code FROM $table
                 WHERE parent_id IS NULL
                 ORDER BY tree_pos";
 

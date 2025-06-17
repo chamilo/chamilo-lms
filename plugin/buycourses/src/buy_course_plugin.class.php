@@ -3323,7 +3323,7 @@ class BuyCoursesPlugin extends Plugin
                         $status,
                     ],
                 ],
-                'ORDER' => 'ss.service_id ASC',
+                'ORDER' => $defaultOrder,
             ];
         }
 

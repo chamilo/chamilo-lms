@@ -28,13 +28,16 @@ switch ($action) {
             }
 
             if (isset($_GET['friend_id'])) {
-                $my_current_friend = $_GET['friend_id'];
-                UserManager::relate_users($current_user_id, $my_current_friend, $relation_type);
-                UserManager::relate_users($my_current_friend, $current_user_id, $relation_type);
-                SocialManager::invitation_accepted($my_current_friend, $current_user_id);
-                Display::addFlash(
-                    Display::return_message(get_lang('AddedContactToList'), 'success')
-                );
+                $my_current_friend = (int) $_GET['friend_id'];
+
+                if (SocialManager::hasInvitationByUser($current_user_id, $my_current_friend)) {
+                    UserManager::relate_users($current_user_id, $my_current_friend, $relation_type);
+                    UserManager::relate_users($my_current_friend, $current_user_id, $relation_type);
+                    SocialManager::invitation_accepted($my_current_friend, $current_user_id);
+                    Display::addFlash(
+                        Display::return_message(get_lang('AddedContactToList'), 'success')
+                    );
+                }
             }
         }
 

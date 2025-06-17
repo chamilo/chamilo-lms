@@ -773,6 +773,14 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 $leftAll = "<br /><br /><button $attrStrAdd  /> <em class='fa fa-backward'></em></button>";
             }
 
+            $strHtmlAdd = "<div class='d-flex justify-content-center align-items-center' style='height: 100%; padding-top: 100px;'>
+                <button $attrStrAdd><em class='fa fa-arrow-right'></em></button>
+            </div>";
+
+            $strHtmlRemove = "<div class='d-flex justify-content-center align-items-center' style='padding-top: 10px;'>
+                <button $attrStrRemove><em class='fa fa-arrow-left'></em></button>
+            </div>";
+
             // build the select all button with all its attributes
             $strHtmlAll = '';
 
@@ -925,7 +933,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                             left: \''.$search.'\',
                             right: \''.$search.'\'
                         },
-                        fireSearch: function(value) {                        
+                        fireSearch: function(value) {
                             return value.length > 2;
                         }
                     });

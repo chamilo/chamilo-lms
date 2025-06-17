@@ -69,6 +69,10 @@ $outputDir = rtrim($outputDir, '/') . '/';
 // Start output buffering to capture terminal output
 ob_start();
 
+// Add start timestamp
+$startTime = new DateTime();
+echo '[' . $startTime->format('Y-m-d H:i:s') . "] Script started\n";
+
 // Debug: Log parsed arguments
 echo "Parsed arguments:\n";
 echo "  XLSX file: $xlsxFile\n";
@@ -402,9 +406,12 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
     $xlsxUserData['username'] = generateProposedLogin($xlsxUserData['lastname'], $xlsxUserData['firstname'], $isActive, $usedLogins);
     $dbUsername = Database::escape_string($xlsxUserData['username']);
 
+    // Get current time for row logging
+    $rowTime = new DateTime();
+
     // Skip users with Matricule starting with 0009
     if (strpos($xlsxUserData['official_code'], '0009') === 0) {
-        echo "Row " . ($rowIndex + 2) . ": Skipped - Matricule starts with 0009 (username: $dbUsername)\n";
+        echo '[' . $rowTime->format('H:i:s') . '] Row ' . ($rowIndex + 2) . ": Skipped - Matricule starts with 0009 (username: $dbUsername)\n";
         $userActions[] = [
             'Action Type' => 'skipped',
             'User ID' => '',
@@ -430,7 +437,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
 
     // Decision logic
     if (empty($dbUser) && empty($xlsxUserData['active'])) {
-        echo "Row " . ($rowIndex + 2) . ": Skipped - 'Actif' is empty and no matching user in database (username: $dbUsername)\n";
+        echo '[' . $rowTime->format('H:i:s') . '] Row ' . ($rowIndex + 2) . ": Skipped - 'Actif' is empty and no matching user in database (username: $dbUsername)\n";
         $userActions[] = [
             'Action Type' => 'skipped',
             'User ID' => '',
@@ -453,7 +460,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
     }
 
     if (!empty($missingFields)) {
-        echo "Row " . ($rowIndex + 2) . ": Skipped - missing fields: " . implode(", ", $missingFields) . " (username: $dbUsername)\n";
+        echo '[' . $rowTime->format('H:i:s') . '] Row ' . ($rowIndex + 2) . ': Skipped - missing fields: ' . implode(', ', $missingFields) . " (username: $dbUsername)\n";
         $userActions[] = [
             'Action Type' => 'skipped',
             'User ID' => '',
@@ -489,7 +496,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
         }
 
         if (!empty($updates)) {
-            echo "Row " . ($rowIndex + 2) . ": Update - Existing user found, updates needed (username: $dbUsername)\n";
+            echo '[' . $rowTime->format('H:i:s') . '] Row ' . ($rowIndex + 2) . ": Update - Existing user found, updates needed (username: $dbUsername)\n";
             echo "  Updates: " . implode(', ', $updates) . "\n";
             if ($proceed) {
                 try {
@@ -558,7 +565,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                 ];
             }
         } else {
-            echo "Row " . ($rowIndex + 2) . ": No action - no changes needed (username: $dbUsername)\n";
+            echo '[' . $rowTime->format('H:i:s') . '] Row ' . ($rowIndex + 2) . ": No action - no changes needed (username: $dbUsername)\n";
             $userActions[] = [
                 'Action Type' => 'skipped',
                 'User ID' => $dbUser['id'],
@@ -570,8 +577,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
             ];
         }
     } else {
-        // New user, only insert if 'Actif' is true
-        echo "Row " . ($rowIndex + 2) . ": Insert new user - No existing user found (username: $dbUsername)\n";
+        echo '[' . $rowTime->format('H:i:s') . '] Row ' . ($rowIndex + 2) . ": Insert new user - No existing user found (username: $dbUsername)\n";
         if ($proceed) {
             try {
                 $password = !empty($xlsxUserData['password']) ? $xlsxUserData['password'] : 'temporary_password';
@@ -657,7 +663,9 @@ if (!$proceed) {
 // Save terminal output to log file
 $output = ob_get_clean();
 echo $output; // Output to terminal
-$logTimestamp = (new DateTime())->format('YmdHis');
+$endTime = new DateTime();
+$output .= '[' . $endTime->format('Y-m-d H:i:s') . "] Script completed\n";
+$logTimestamp = $startTime->format('YmdHis');
 $logFile = $outputDir . 'import-' . $logTimestamp . '.log';
 if (!file_put_contents($logFile, $output)) {
     echo "Error: Could not write to log file $logFile\n";

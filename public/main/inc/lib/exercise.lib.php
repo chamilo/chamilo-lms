@@ -6201,7 +6201,7 @@ EOT;
         if (empty($mainPath) && !$exportOk) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('ExportExerciseNoResult'),
+                    get_lang('No result found for export in this test.'),
                     'warning',
                     false
                 )

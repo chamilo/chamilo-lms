@@ -560,5 +560,8 @@
     "Private course": "Private course",
     "Not subscribed": "Not subscribed",
     "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "Po\u0142\u0105czenie z baz\u0105 danych nie powiod\u0142o si\u0119. Zazwyczaj jest to spowodowane niew\u0142a\u015bciw\u0105 nazw\u0105 u\u017cytkownika, nieprawid\u0142owym has\u0142em lub niew\u0142a\u015bciwym przedrostkiem przed baz\u0105 danych. Prosz\u0119 przejrze\u0107 te ustawienia i spr\u00f3bowa\u0107 ponownie.",
+    "Accept Terms and Conditions": "Accept Terms and Conditions",
+    "You accepted these terms on": "You accepted these terms on",
+    "Revoke Acceptance": "Revoke Acceptance",
     "Go to your newly created portal.": "Przejd\u017a do nowo utworzonego portalu."
 }

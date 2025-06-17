@@ -275,7 +275,7 @@ $form->addRule(
 $form->applyFilter('argumentation', 'trim');
 $form->addHtml('<div class="flex space-x-4">');
 $form->addButton('save', get_lang('Save'), 'check', 'primary');
-$form->addButton('save_and_add_more', get_lang('Save and add more'), 'check', 'secondary');
+$form->addButton('save_and_add_more', get_lang('Save and add new item'), 'check', 'secondary');
 $form->addHtml('</div>');
 $form->setDefaults($formDefaultValues);
 
@@ -378,7 +378,7 @@ if ($form->validate()) {
     $_SESSION['flash_message'] = [
         'type' => 'success',
         'message' => sprintf(
-            get_lang('The skill %s has been successfully assigned to user %s'),
+            get_lang('The skill %s has been assigned to user %s'),
             $skill->getTitle(),
             UserManager::formatUserFullName($user)
         )

@@ -2996,8 +2996,6 @@ class Exercise
         $sourceId = $exerciseObject->iId;
         // Force the creation of a new exercise
         $exerciseObject->updateTitle($exerciseObject->selectTitle().' - '.get_lang('Copy'));
-        // Hides the new exercise
-        $exerciseObject->updateStatus(false);
         $exerciseObject->iId = 0;
         $exerciseObject->sessionId = api_get_session_id();
         $courseId = api_get_course_int_id();
@@ -8075,21 +8073,21 @@ class Exercise
         if (0 != $sessionId) {
             $sql = "SELECT * FROM $track_exercises te
               INNER JOIN c_quiz cq
-              ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
+              ON cq.iid = te.exe_exo_id
               WHERE
               te.c_id = %d AND
               te.session_id = %s AND
-              cq.id IN (%s)
-              ORDER BY cq.id";
+              cq.iid IN (%s)
+              ORDER BY cq.iid";
 
             $sql = sprintf($sql, $courseId, $sessionId, $ids);
         } else {
             $sql = "SELECT * FROM $track_exercises te
-              INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
+              INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id
               WHERE
               te.c_id = %d AND
-              cq.id IN (%s)
-              ORDER BY cq.id";
+              cq.iid IN (%s)
+              ORDER BY cq.iid";
             $sql = sprintf($sql, $courseId, $ids);
         }
         $result = Database::query($sql);

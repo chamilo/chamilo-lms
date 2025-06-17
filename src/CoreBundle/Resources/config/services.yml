@@ -93,6 +93,26 @@ services:
         arguments: [{'sticky': ~}]
         tags: [{name: 'api_platform.filter', id: 'course.sticky_boolean_filter'}]
 
+    session.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments:
+            $properties: { title: 'partial' }
+        tags: [ 'api_platform.filter' ]
+
+    session.property_filter:
+        parent: 'api_platform.serializer.property_filter'
+        tags: [ 'api_platform.filter' ]
+
+    session.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments:
+            $properties: { id: ~, title: ~ }
+        tags: [ 'api_platform.filter' ]
+
+    session.group_filter:
+        parent: 'api_platform.serializer.group_filter'
+        tags: [ 'api_platform.filter' ]
+
     _instanceof:
         Chamilo\CoreBundle\Tool\ToolInterface:
             tags: ['chamilo_core.tool_handler']

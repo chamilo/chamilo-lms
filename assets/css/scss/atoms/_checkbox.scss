@@ -1,53 +1,87 @@
 .p-checkbox {
-  @apply relative inline-flex select-none align-bottom h-4 w-4;
+  @apply relative inline-flex select-none align-bottom w-4 h-4;
 
   &-input {
-    @apply cursor-pointer;
+    @apply cursor-pointer appearance-none absolute start-0 w-full h-full p-0 m-0 opacity-0 z-[1] outline-none outline-0 border border-transparent rounded-full;
   }
 
   &-box {
-    @apply flex justify-center items-center;
+    @apply flex justify-center items-center rounded border border-gray-50 w-4 h-4 transition outline-transparent;
+
+    .p-checkbox-checked & {
+      @apply border-gray-50 bg-white;
+    }
+
+    .p-checkbox-checked:not(.p-disabled):has(.p-checkbox-input:hover) & {
+      @apply border-primary bg-white;
+    }
+
+    .p-checkbox:not(.p-disabled):has(.p-checkbox-input:focus-visible) & {
+      @apply border-primary drop-shadow-lg outline-none outline-0
+    }
+
+    .p-checkbox-checked:not(.p-disabled):has(.p-checkbox-input:focus-visible) & {
+      @apply border-primary;
+    }
+
+    .p-checkbox.p-variant-filled & { }
+
+    .p-checkbox-checked.p-variant-filled & {}
+
+    .p-checkbox-checked.p-variant-filled:not(.p-disabled):has(.p-checkbox-input:hover) & { }
   }
 
-  & &-input {
-    @apply appearance-none absolute top-0 left-0 w-full h-full p-0 m-0 opacity-0 z-[1] outline-none border-2 border-support-3 rounded;
+  &-icon {
+    @apply duration-200 text-gray-90 text-body-2 w-3 h-3;
+
+    .p-checkbox-checked & {
+      @apply text-gray-90;
+    }
+
+    .p-checkbox-checked:not(.p-disabled):has(.p-checkbox-input:hover) & {
+      @apply text-primary;
+    }
   }
 
-  & &-box {
-    @apply border-2 border-support-3 bg-white w-4 h-4 text-primary rounded transition-none outline-none;
-
-    .p-checkbox-icon {
-      @apply duration-200 text-white text-tiny;
-
-      &.p-icon {
-        @apply w-2.5 h-2.5;
+  &:not(.p-disabled) {
+    &:has(.p-checkbox-input:hover) {
+      .p-checkbox-box {
+        @apply border-primary;
       }
     }
   }
 
-  &:has(&-input--legacy:checked) &-box,
-  &.p-highlight &-box {
-    @apply border-primary bg-primary;
+  &.p-invalid > & {
+    @apply border-danger;
   }
 
-  &:not(.p-disabled):has(&-input:hover) {
-    .p-checkbox-box {
-      @apply border-primary;
-    }
+  &.p-disabled {
+    @apply opacity-100;
 
-    &:has(.p-checkbox-input--legacy:checked) .p-checkbox-box,
-    &.p-highlight .p-checkbox-box {
-      @apply border-primary bg-primary text-white;
-    }
-  }
+    & .p-checkbox-box {
+      @apply border-gray-50 bg-gray-20;
 
-  &:not(.p-disabled):has(&-input:focus-visible) {
-    .p-checkbox-box {
-      @apply outline-none drop-shadow-lg bg-primary;
+      .p-checkbox-icon {
+        @apply text-gray-50;
+      }
     }
   }
 
-  &.p-invalid > &-box {
-    @apply border-error;
+  &-sm,
+  &-sm &-box {
+    @apply w-2 h-2;
+  }
+
+  &-sm &-icon {
+    @apply text-body-2 w-2 h-2;
+  }
+
+  &-lg,
+  &-lg &-box {
+    @apply w-6 h-6;
+  }
+
+  &-lg &-icon {
+    @apply text-body-2 w-5 h-5;
   }
 }

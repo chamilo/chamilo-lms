@@ -63,6 +63,18 @@ const menuItems = computed(() => {
     })
   }
 
+  const showCatalogueLink =
+    platformConfigStore.getSetting("course.course_catalog_published") !== "false" &&
+    platformConfigStore.getSetting("course.catalog_hide_public_link") !== "true" &&
+    platformConfigStore.getSetting("display.allow_students_to_browse_courses") !== "false"
+
+  if (showCatalogueLink) {
+    items.splice(1, 0, {
+      label: t("Browse courses"),
+      url: router.resolve({ name: "CatalogueCourses" }).href,
+    })
+  }
+
   console.log("Menu Items:", items)
   return items
 })

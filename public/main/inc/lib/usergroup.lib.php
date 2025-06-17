@@ -3187,4 +3187,22 @@ class UserGroupModel extends Model
 
         return $data;
     }
+
+    public static function getRoleName($relation)
+    {
+        switch ((int) $relation) {
+            case GROUP_USER_PERMISSION_ADMIN:
+                return get_lang('Admin');
+            case GROUP_USER_PERMISSION_READER:
+                return get_lang('Reader');
+            case GROUP_USER_PERMISSION_PENDING_INVITATION:
+                return get_lang('Pending invitation');
+            case GROUP_USER_PERMISSION_MODERATOR:
+                return get_lang('Moderator');
+            case GROUP_USER_PERMISSION_HRM:
+                return get_lang('Human Resources Manager');
+            default:
+                return get_lang('Undefined role');
+        }
+    }
 }

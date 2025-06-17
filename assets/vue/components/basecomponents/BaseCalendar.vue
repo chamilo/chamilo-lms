@@ -1,18 +1,22 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue"
-import Calendar from "primevue/calendar"
+import DatePicker from "primevue/datepicker"
+import FloatLabel from "primevue/floatlabel"
+import Message from "primevue/message"
 import { calendarLocales } from "../../utils/calendarLocales"
 import { useLocale } from "../../composables/locale"
 import { usePrimeVue } from "primevue/config"
 
+const modelValue = defineModel({
+  type: [Date, Array, String, undefined, null],
+  required: false,
+  default: null,
+})
+
 const { appLocale } = useLocale()
 const localePrefix = ref(getLocalePrefix(appLocale.value))
-const props = defineProps({
-  modelValue: {
-    type: [String, Date, Array],
-    required: false,
-    default: null,
-  },
+
+defineProps({
   label: {
     type: String,
     required: true,
@@ -28,11 +32,6 @@ const props = defineProps({
     default: "single",
     validator: (value) => ["single", "range"].includes(value),
   },
-  showIcon: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
   showTime: {
     type: Boolean,
     required: false,
@@ -43,20 +42,11 @@ const props = defineProps({
     required: false,
     default: false,
   },
-})
-
-const model = ref(
-  props.modelValue
-    ? Array.isArray(props.modelValue)
-      ? props.modelValue.map((date) => new Date(date))
-      : new Date(props.modelValue)
-    : null,
-)
-
-const emit = defineEmits(["update:modelValue"])
-
-watch(model, (newValue) => {
-  emit("update:modelValue", newValue)
+  errorText: {
+    type: String,
+    required: false,
+    default: null,
+  },
 })
 
 function getLocalePrefix(locale) {
@@ -94,20 +84,32 @@ onMounted(() => {
 </script>
 <template>
   <div class="field">
-    <div class="p-float-label">
-      <Calendar
-        :id="id"
-        v-model="model"
-        :class="{ 'p-invalid': isInvalid }"
+    <FloatLabel variant="on">
+      <DatePicker
+        v-model="modelValue"
         :date-format="dateFormat"
+        :input-id="id"
+        :invalid="isInvalid"
         :locale="selectedLocale"
         :manual-input="type !== 'range'"
         :selection-mode="type"
-        :show-icon="showIcon"
         :show-time="showTime"
+        fluid
+        icon-display="input"
+        show-icon
       />
-      <label v-text="label" />
-    </div>
-    <small></small>
+      <label
+        :for="id"
+        v-text="label"
+      />
+    </FloatLabel>
+    <Message
+      v-if="isInvalid"
+      size="small"
+      severity="seconday"
+      variant="simple"
+    >
+      {{ errorText }}
+    </Message>
   </div>
 </template>

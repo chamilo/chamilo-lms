@@ -187,4 +187,21 @@ export default {
     const response = await api.get("/catalogue/courses-list")
     return response.data
   },
+  loadCourseCatalogue: async () => {
+    try {
+      const response = await fetch("/api/public_courses")
+      if (!response.ok) throw new Error("Failed to load catalogue courses")
+
+      const data = await response.json()
+      const items = Array.isArray(data) ? data : (data["hydra:member"] ?? data.items ?? [])
+      return items.map((course) => ({
+        ...course,
+        userVote: null,
+        extra_fields: course.extra_fields || {},
+      }))
+    } catch (e) {
+      console.error("loadCourseCatalogue error:", e)
+      return []
+    }
+  },
 }

@@ -1778,7 +1778,7 @@ msgid "Message Sent"
 msgstr "Message envoyé"
 
 msgid "Settings"
-msgstr "Propriétés du cours"
+msgstr "Paramètres"
 
 msgid "The information has been modified"
 msgstr "Les informations ont été modifiées"
@@ -30186,3 +30186,12 @@ msgstr "Assistants IA"
 
 msgid "Topbarskills"
 msgstr "Compétences (barre supérieure)"
+
+msgid "Accept Terms and Conditions"
+msgstr "Accepter les conditions d'utilisation"
+
+msgid "You accepted these terms on"
+msgstr "Vous avez accepté ces conditions le"
+
+msgid "Revoke Acceptance"
+msgstr "Révoquer l'acceptation"

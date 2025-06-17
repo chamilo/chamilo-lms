@@ -4,11 +4,15 @@
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use ChamiloSession as Session;
+use Doctrine\ORM\Exception\NotSupported;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -524,7 +528,7 @@ class ExtraFieldValue extends Model
                 */
                 if (ExtraField::FIELD_TYPE_TAG == $extraFieldInfo['value_type']) {
                     $option = new ExtraFieldOption($this->type);
-                    $optionExists = $option->get($params['value']);
+                    $optionExists = $option->get($params['field_value']);
                     if (empty($optionExists)) {
                         $optionParams = [
                             'field_id' => $params['field_id'],
@@ -563,23 +567,39 @@ class ExtraFieldValue extends Model
      *
      * @return mixed A structured array with the field_id and field_value, or false on error
      * @assert (-1,-1) === false
+     *
+     * @throws NotSupported
      */
     public function get_values_by_handler_and_field_id($item_id, $field_id, $transform = false)
     {
-        $field_id = (int) $field_id;
-        $item_id = Database::escape_string($item_id);
+        /** @var ExtraFieldValuesRepository $efvRepo */
+        $efvRepo = Database::getManager()->getRepository(ExtraFieldValues::class);
+        /** @var ExtraFieldOptionsRepository $efoRepo */
+        $efoRepo = Database::getManager()->getRepository(ExtraFieldOptions::class);
 
-        $sql = "SELECT s.*, value_type FROM {$this->table} s
-                INNER JOIN {$this->table_handler_field} sf
-                ON (s.field_id = sf.id)
-                WHERE
-                    item_id = '$item_id' AND
-                    field_id = $field_id AND
-                    sf.item_type = ".$this->getExtraField()->getItemType()."
-                ORDER BY id";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $result = Database::fetch_assoc($result);
+        $results = $efvRepo->getByHandlerAndFieldId(
+            (int) $item_id,
+            (int) $field_id,
+            $this->getExtraField()->getItemType(),
+            $transform
+        );
+
+        if ($results) {
+            /** @var ExtraFieldValues $efv */
+            $efv = current($results);
+
+            $result = [
+                'id' => $efv->getId(),
+                'field_id' => $efv->getField()->getId(),
+                'asset_id' => $efv->getAsset()?->getId(),
+                'field_value' => $efv->getFieldValue(),
+                'item_id' => $efv->getItemId(),
+                'comment' => $efv->getComment(),
+                'created_at' => $efv->getCreatedAt()->format('Y-m-d H:i:s'),
+                'updated_at' => $efv->getUpdatedAt()->format('Y-m-d H:i:s'),
+                'value_type' => $efv->getField()->getValueType(),
+            ];
+
             if ($transform) {
                 if (!empty($result['field_value'])) {
                     switch ($result['value_type']) {
@@ -613,14 +633,14 @@ class ExtraFieldValue extends Model
                             $result['value'] = implode(' <br /> ', $optionValues);
                             break;
                         case ExtraField::FIELD_TYPE_SELECT:
-                            $field_option = new ExtraFieldOption($this->type);
-                            $extra_field_option_result = $field_option->get_field_option_by_field_and_option(
-                                $result['field_id'],
-                                $result['field_value']
+                            $extra_field_option_result = $efoRepo->getFieldOptionByFieldAndOption(
+                                (int) $result['field_id'],
+                                (string) $result['field_value'],
+                                $this->getExtraField()->getItemType()
                             );
 
-                            if (isset($extra_field_option_result[0])) {
-                                $result['value'] = $extra_field_option_result[0]['display_text'];
+                            if ($extra_field_option_result) {
+                                $result['value'] = $extra_field_option_result[0]->getDisplayText();
                             }
 
                             break;
@@ -1166,7 +1186,7 @@ class ExtraFieldValue extends Model
             ->getQuery()
             ->getResult();
 
-        $fieldOptionsRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\ExtraFieldOptions::class);
+        $fieldOptionsRepo = $em->getRepository(ExtraFieldOptions::class);
 
         $valueList = [];
         /** @var ExtraFieldValues $fieldValue */

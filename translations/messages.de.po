@@ -29568,3 +29568,12 @@ msgstr "Datenbankport"
 
 msgid "Database driver"
 msgstr "Datenbanktreiber"
+
+msgid "Accept Terms and Conditions"
+msgstr "Nutzungsbedingungen akzeptieren"
+
+msgid "You accepted these terms on"
+msgstr "Sie haben diese Nutzungsbedingungen akzeptiert am"
+
+msgid "Revoke Acceptance"
+msgstr "Zustimmung widerrufen"

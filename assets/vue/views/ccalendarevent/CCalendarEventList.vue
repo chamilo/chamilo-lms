@@ -210,10 +210,10 @@ const sessionState = reactive({
   showSessionDialog: false,
 })
 
-async function getCalendarEvents({ startStr, endStr }) {
+async function getCalendarEvents({ start, end }) {
   const params = {
-    "startDate[after]": startStr,
-    "endDate[before]": endStr,
+    "startDate[after]": start.toISOString(),
+    "endDate[before]": end.toISOString(),
   }
 
   if (course.value) {
@@ -286,7 +286,7 @@ const calendarOptions = ref({
 
     let event = eventClickInfo.event.toPlainObject()
 
-    if (event.extendedProps["@type"] && event.extendedProps["@type"] === "Session") {
+    if (event.extendedProps["objectType"] && event.extendedProps["objectType"] === "session") {
       allowToEdit.value =
         allowUserEditAgenda.value && event.extendedProps.resourceNode.creator.id === securityStore.user.id
       sessionState.sessionAsEvent = event
@@ -297,9 +297,10 @@ const calendarOptions = ref({
 
     item.value = { ...event.extendedProps }
 
+    item.value["@id"] = "/api/c_calendar_events/" + event.id.match(/\d+$/)[0]
     item.value["title"] = event.title
-    item.value["startDate"] = event.start
-    item.value["endDate"] = event.end
+    item.value["startDate"] = event.start ? new Date(event.start) : null
+    item.value["endDate"] = event.end ? new Date(event.end) : null
     item.value["parentResourceNodeId"] = event.extendedProps?.resourceNode?.creator?.id
 
     if (

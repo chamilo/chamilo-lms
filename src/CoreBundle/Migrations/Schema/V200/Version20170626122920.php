@@ -20,7 +20,7 @@ class Version20170626122920 extends AbstractMigrationChamilo
     {
         $this->addSql('CREATE TABLE user_auth_source (id INT AUTO_INCREMENT NOT NULL, url_id INT NOT NULL, user_id INT NOT NULL, authentication VARCHAR(255) NOT NULL, INDEX IDX_D632110481CFDAE7 (url_id), INDEX IDX_D6321104A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC');
         $this->addSql('ALTER TABLE user_auth_source ADD CONSTRAINT FK_D632110481CFDAE7 FOREIGN KEY (url_id) REFERENCES access_url (id)');
-        $this->addSql('ALTER TABLE user_auth_source ADD CONSTRAINT FK_D6321104A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE user_auth_source ADD CONSTRAINT FK_D6321104A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
 
         $rows = $this->connection
             ->executeQuery(

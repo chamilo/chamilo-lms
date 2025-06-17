@@ -201,7 +201,20 @@ class SendEventRemindersCommand extends Command
         $messageSubject = $this->translator->trans('Reminder for event : %s', ['%s' => $event->getTitle()]);
         $messageContent = implode(PHP_EOL, $this->generateEventDetails($event));
 
-        $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
+        $this->messageHelper->sendMessage(
+            $user->getId(),
+            $messageSubject,
+            $messageContent,
+            [],
+            [],
+            0,
+            0,
+            0,
+            $senderId,
+            0,
+            false,
+            true
+        );
 
         if ($debug) {
             error_log("Message sent to user ID: {$user->getId()} for event: {$event->getTitle()}");

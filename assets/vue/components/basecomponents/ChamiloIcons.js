@@ -143,4 +143,5 @@ export const chamiloIconToClass = {
   "zip-unpack": "mdi mdi-archive-arrow-down",
   "clear-all": "mdi mdi-broom",
   "qrcode": "mdi mdi-qrcode",
+  "minus": "mdi mdi-minus",
 }

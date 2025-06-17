@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\Legal;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
@@ -94,8 +95,8 @@ class SocialController extends AbstractController
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
         if ($value && !empty($value['value'])) {
-            [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
-            $term = $legalTermsRepo->find($legalId);
+            [$legalVersionId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
+            $term = $legalTermsRepo->findOneByVersionAndLanguage((int) $legalVersionId, (int) $legalLanguageId);
         } else {
             $term = $this->getLastConditionByLanguage($languageRepo, $isoCode, $legalTermsRepo, $settingsManager);
         }
@@ -545,12 +546,18 @@ class SocialController extends AbstractController
             switch ($extraField['type']) {
                 case ExtraField::FIELD_TYPE_RADIO:
                 case ExtraField::FIELD_TYPE_SELECT:
-                    $extraFieldOptions = $extraFieldOptionsRepository->getFieldOptionByFieldAndOption($extraField['id'], $fieldValue, ExtraField::USER_FIELD_TYPE);
+                    $extraFieldOptions = $extraFieldOptionsRepository->getFieldOptionByFieldAndOption(
+                        $extraField['id'],
+                        $fieldValue,
+                        ExtraField::USER_FIELD_TYPE
+                    );
                     if (!empty($extraFieldOptions)) {
-                        $optionTexts = array_map(function ($option) {
-                            return $option['display_text'];
-                        }, $extraFieldOptions);
+                        $optionTexts = array_map(
+                            fn (ExtraFieldOptions $option) => $option['display_text'],
+                            $extraFieldOptions
+                        );
                         $fieldValue = implode(', ', $optionTexts);
+                        $fieldValue = $extraFieldOptions->getDisplayText();
                     }
 
                     break;

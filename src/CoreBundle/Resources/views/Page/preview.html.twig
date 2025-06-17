@@ -1,0 +1,13 @@
+{% extends '@ChamiloCore/Layout/layout_one_col.html.twig' %}
+
+{% block content %}
+    <section class="py-8 max-w-4xl mx-auto border border-yellow-300 bg-yellow-50 p-4 rounded">
+        <div class="text-sm text-yellow-700 mb-2">
+            {{ 'Page preview for administrators only'|trans }}
+        </div>
+        <h1 class="text-3xl font-bold mb-4">{{ page.title }}</h1>
+        <article class="prose prose-lg">
+            {{ page.content|raw }}
+        </article>
+    </section>
+{% endblock %}

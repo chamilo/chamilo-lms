@@ -106,4 +106,23 @@ readonly class IsAllowedToEditHelper
 
         return $isAllowed;
     }
+
+    /**
+     * Checks whether current user is allowed to create courses.
+     */
+    public function canCreateCourse(): bool
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        if ($user->isTeacher()) {
+            return 'true' === $this->settingsManager->getSetting('course.allow_users_to_create_courses');
+        }
+
+        return $this->requestStack->getSession()->get('is_allowedCreateCourse');
+    }
 }

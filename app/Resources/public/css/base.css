@@ -9615,6 +9615,23 @@ ul.dropdown-menu.inner > li > a {
     padding-bottom: 133.33%;
 }
 
+.dropdown-menu li a + .dropdown-menu {
+    display: block;
+    left: 0;
+    top: 0;
+    box-shadow: none;
+    margin-top: 0;
+    border: 0;
+    position: relative;
+    padding: 0;
+}
+
+.dropdown-menu li a + .dropdown-menu li a {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-right: 9px;
+}
+
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {

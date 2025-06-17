@@ -2523,6 +2523,9 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 // 3. Uncomment $parentId var in src/Chamilo/CoreBundle/Entity/Career.php
 // $_configuration['career_hierarchy_enable'] = false;
 
+// Use courses categories as top horizontal bar menu (#navbar) entries and submenus, to point to the catalogue with a filter on these categories
+//$_configuration['display_menu_use_course_categories'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Set to true to hide settings completely in a sub-URL if the setting is disabled in the

@@ -30,6 +30,8 @@ class IndexController extends BaseController
     #[Route('/account/home', name: 'chamilo_core_account_home', options: ['expose' => true])]
     #[Route('/social', name: 'chamilo_core_socialnetwork', options: ['expose' => true])]
     #[Route('/admin', name: 'admin', options: ['expose' => true])]
+    #[Route('/admin-dashboard', name: 'admin_dashboard_entry', options: ['expose' => true])]
+    #[Route('/admin-dashboard/{vueRouting}', name: 'admin_dashboard_vue_entry', requirements: ['vueRouting' => '.+'])]
     #[Route('/p/{slug}', name: 'public_page')]
     #[Route('/skill/wheel', name: 'skill_wheel')]
     public function index(): Response

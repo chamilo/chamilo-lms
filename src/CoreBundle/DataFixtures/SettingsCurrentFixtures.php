@@ -500,6 +500,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'registration' => [
                 [
+                    'name' => 'redirect_after_login',
+                    'title' => 'Redirect after login (per profile)',
+                    'comment' => 'Define redirection per profile after login using a JSON object like {"STUDENT":"", "ADMIN":"admin-dashboard"}',
+                ],
+                [
                     'name' => 'allow_lostpassword',
                     'title' => 'Lost password',
                     'comment' => 'Are users allowed to request their lost password?',
@@ -530,19 +535,9 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Which of the following fields of the portfolio are *required* in the user registration process? This requires that the portfolio option be enabled and that the field be also available in the registration form (see above).',
                 ],
                 [
-                    'name' => 'page_after_login',
-                    'title' => 'Page after login',
-                    'comment' => 'The page which is seen by the user entering the platform',
-                ],
-                [
                     'name' => 'drh_autosubscribe',
                     'title' => 'Human resources director autosubscribe',
                     'comment' => 'Human resources director autosubscribe - not yet available',
-                ],
-                [
-                    'name' => 'drh_page_after_login',
-                    'title' => 'Human resources manager page after login',
-                    'comment' => 'This page will load after login for all human resources managers',
                 ],
                 [
                     'name' => 'platform_unsubscribe_allowed',
@@ -555,29 +550,14 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Session administrator autosubscribe - not available yet',
                 ],
                 [
-                    'name' => 'sessionadmin_page_after_login',
-                    'title' => 'Session admin page after login',
-                    'comment' => 'Page to load after login for the session administrators',
-                ],
-                [
                     'name' => 'student_autosubscribe',
                     'title' => 'Learner autosubscribe',
                     'comment' => 'Learner autosubscribe - not yet available',
                 ],
                 [
-                    'name' => 'student_page_after_login',
-                    'title' => 'Learner page after login',
-                    'comment' => 'This page will appear to all learners after they login',
-                ],
-                [
                     'name' => 'teacher_autosubscribe',
                     'title' => 'Teacher autosubscribe',
                     'comment' => 'Teacher autosubscribe - not yet available',
-                ],
-                [
-                    'name' => 'teacher_page_after_login',
-                    'title' => 'Teacher page after login',
-                    'comment' => 'This page will be loaded after login for all teachers',
                 ],
             ],
             'message' => [

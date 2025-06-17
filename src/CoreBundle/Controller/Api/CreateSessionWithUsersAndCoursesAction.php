@@ -34,9 +34,20 @@ class CreateSessionWithUsersAndCoursesAction
     {
         $this->validator->validate($data);
 
+        // Ensure the session title is unique
+        $originalTitle = $data->getTitle();
+        $title = $originalTitle;
+        $counter = 1;
+
+        while (
+        $this->em->getRepository(Session::class)->findOneBy(['title' => $title])
+        ) {
+            $title = $originalTitle.' #'.$counter++;
+        }
+
         $session = new Session();
         $session
-            ->setTitle($data->getTitle())
+            ->setTitle($title)
             ->setDescription($data->getDescription() ?? '')
             ->setVisibility($data->getVisibility() ?? 1)
             ->setNbrCourses(\count($data->getCourseIds()))

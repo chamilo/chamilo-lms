@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
@@ -18,6 +19,8 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
+use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use CourseDescription;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,13 +31,23 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use SessionManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use UserManager;
 
 #[Route('/sessions')]
 class SessionController extends AbstractController
 {
+
+    public function __construct(
+        private readonly UserHelper $userHelper,
+        private readonly TranslatorInterface $translator,
+        private readonly RequestStack $requestStack
+    ) {}
+
+
     /**
      * @Entity("session", expr="repository.find(sid)")
      */
@@ -251,4 +264,94 @@ class SessionController extends AbstractController
 
         return $this->render('@ChamiloCore/Session/about.html.twig', $params);
     }
+
+    #[Route('/{id}/send-course-notification', name: 'chamilo_core_session_send_course_notification', methods: ['POST'])]
+    public function sendCourseNotification(
+        int $id,
+        Request $request,
+        UserRepository $userRepo,
+        EntityManagerInterface $em,
+        MessageHelper $messageHelper
+    ): Response {
+        $session = $em->getRepository(Session::class)->find($id);
+        $currentUser = $this->userHelper->getCurrent();
+
+        if (!$session) {
+            return $this->json(['error' => 'Session not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $studentId = $request->request->get('studentId');
+        if (!$studentId) {
+            return $this->json(['error' => 'Missing studentId'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $user = $userRepo->find($studentId);
+        if (!$user) {
+            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        if (!$user->isActive()) {
+            $user->setActive(1);
+            $em->persist($user);
+            $em->flush();
+        }
+
+        $now = new \DateTime();
+        $relSessions = $em->getRepository(SessionRelUser::class)->findBy([
+            'user' => $user,
+            'relationType' => Session::STUDENT,
+        ]);
+
+        $activeSessions = array_filter($relSessions, function (SessionRelUser $rel) use ($now) {
+            $s = $rel->getSession();
+            return $s->getAccessStartDate() <= $now && $s->getAccessEndDate() >= $now;
+        });
+
+        $sessionListHtml = '';
+        foreach ($activeSessions as $rel) {
+            $session = $rel->getSession();
+            $sessionListHtml .= '<li>' . htmlspecialchars($session->getTitle()) . '</li>';
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        $baseUrl = $request->getSchemeAndHttpHost().$request->getBasePath();
+        $sessionUrl = $baseUrl.'/sessions';
+
+        $subject = $this->translator->trans('You have been enrolled in a new course');
+
+        $body = $this->translator->trans(
+            'Hello %s,<br><br>'.
+            'You have been enrolled in a new session: <strong>%s</strong>.<br>'.
+            'You can access your courses from <a href="%s">here</a>.<br><br>'.
+            'Your current active sessions are:<br><ul>%s</ul><br>'.
+            'Best regards,<br>'.
+            'Chamilo'
+        );
+
+        $body = sprintf(
+            $body,
+            $user->getFullName(),
+            $session->getTitle(),
+            $sessionUrl,
+            $sessionListHtml
+        );
+
+        $messageHelper->sendMessage(
+            $user->getId(),
+            $subject,
+            $body,
+            [],
+            [],
+            0,
+            0,
+            0,
+            $currentUser->getId(),
+            0,
+            false,
+            true
+        );
+
+        return $this->json(['success' => true]);
+    }
+
 }

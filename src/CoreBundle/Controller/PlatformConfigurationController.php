@@ -112,6 +112,7 @@ class PlatformConfigurationController extends AbstractController
                 'course.show_courses_descriptions_in_catalog',
                 'session.session_automatic_creation_user_id',
                 'session.session_list_view_remaining_days',
+                'registration.redirect_after_login',
             ];
 
             $user = $this->userHelper->getCurrent();

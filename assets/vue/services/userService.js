@@ -40,10 +40,15 @@ async function findBySearchTerm(term) {
   return await baseService.getCollection("/api/users", { search: term })
 }
 
+async function createOnAccessUrl(payload) {
+  return baseService.post('/api/advanced/create-user-on-access-url', payload)
+}
+
 export default {
   find,
   findById,
   findAll,
   findByUsername,
   findBySearchTerm,
+  createOnAccessUrl,
 }

@@ -77,7 +77,7 @@ class UserRelCourseVote
     protected AccessUrl $url;
 
     #[ORM\Column(name: 'vote', type: 'integer', nullable: false)]
-    #[Groups(['userRelCourseVote:read', 'userRelCourseVote:write'])]
+    #[Groups(['userRelCourseVote:read', 'userRelCourseVote:write', 'course:read'])]
     protected int $vote;
 
     public function getId(): ?int

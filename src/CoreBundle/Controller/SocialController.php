@@ -552,16 +552,16 @@ class SocialController extends AbstractController
                         ExtraField::USER_FIELD_TYPE
                     );
                     if (!empty($extraFieldOptions)) {
-                        $optionTexts = array_map(
-                            fn (ExtraFieldOptions $option) => $option['display_text'],
-                            $extraFieldOptions
+                        $fieldValue = implode(
+                            ', ',
+                            array_map(
+                                fn (ExtraFieldOptions $opt) => $opt->getDisplayText(),
+                                $extraFieldOptions
+                            )
                         );
-                        $fieldValue = implode(', ', $optionTexts);
-                        $fieldValue = $extraFieldOptions->getDisplayText();
                     }
 
                     break;
-
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                     $geoData = explode('::', $fieldValue);

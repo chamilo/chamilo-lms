@@ -53,7 +53,7 @@ foreach ($userGroups as $item) {
     }
 }
 
-$noUserGroupList = $userGroup->getUserGroupNotInList(array_keys($userGroupList));
+$noUserGroupList = $userGroup->getUserGroupNotInList(array_keys($userGroupList), $access_url_id);
 $url_list        = UrlManager::get_url_data();
 
 $totalGroups         = count($userGroupList) + count($noUserGroupList);

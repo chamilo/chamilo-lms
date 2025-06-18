@@ -1514,23 +1514,18 @@ class UserGroupModel extends Model
 
     /**
      * Select user group not in list.
-     *
-     * @param array $list
-     *
-     * @return array
      */
-    public function getUserGroupNotInList(array $list): array
+    public function getUserGroupNotInList(array $list, int $accessUrlId): array
     {
-        $urlId = api_get_current_access_url_id();
         $params = [];
 
         $sql = "SELECT g.*
-            FROM $this->table g";
+            FROM {$this->table} g";
 
         if ($this->getUseMultipleUrl()) {
-            $sql .= " LEFT JOIN $this->access_url_rel_usergroup a
-                    ON (g.id = a.usergroup_id AND a.access_url_id = ?)";
-            $params[] = $urlId;
+            $sql .= " LEFT JOIN {$this->access_url_rel_usergroup} a
+                  ON (g.id = a.usergroup_id AND a.access_url_id = ?)";
+            $params[] = $accessUrlId;
             $sql .= " WHERE a.usergroup_id IS NULL";
         } else {
             $sql .= " WHERE 1=1";
@@ -1544,9 +1539,9 @@ class UserGroupModel extends Model
 
         $sql .= " ORDER BY g.title";
 
-        $result = Database::getManager()->getConnection()->executeQuery($sql, $params);
+        $stmt = Database::getManager()->getConnection()->executeQuery($sql, $params);
 
-        return Database::store_result($result, 'ASSOC');
+        return Database::store_result($stmt, 'ASSOC');
     }
 
     /**

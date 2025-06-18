@@ -192,29 +192,28 @@ function api_get_timezones()
  *
  * @return string The timezone chosen
  */
-function api_get_timezone()
+function api_get_timezone(): string
 {
     $timezone = Session::read('system_timezone');
     if (empty($timezone)) {
-        // First, get the default timezone of the server
+        // 1. Default server timezone
         $timezone = date_default_timezone_get();
-        // Second, see if a timezone has been chosen for the platform
-        $timezoneFromSettings = api_get_setting('platform.timezone', false, 'timezones');
 
-        if (null != $timezoneFromSettings) {
+        // 2. Platform-specific timezone setting (overrides server default)
+        $timezoneFromSettings = api_get_setting('platform.timezone', false, 'timezones');
+        if (!empty($timezoneFromSettings)) {
             $timezone = $timezoneFromSettings;
         }
 
-        // If allowed by the administrator
+        // 3. User-specific timezone if allowed
         $allowUserTimezones = api_get_setting('profile.use_users_timezone', false, 'timezones');
         $userId = api_get_user_id();
 
         if ('true' === $allowUserTimezones && !empty($userId)) {
-            // Get the timezone based on user preference, if it exists
-            $newExtraField = new ExtraFieldValue('user');
-            $data = $newExtraField->get_values_by_handler_and_field_variable($userId, 'timezone');
-            if (!empty($data) && isset($data['timezone']) && !empty($data['timezone'])) {
-                $timezone = $data['timezone'];
+            $user = api_get_user_entity($userId);
+
+            if ($user && $user->getTimezone()) {
+                $timezone = $user->getTimezone();
             }
         }
         Session::write('system_timezone', $timezone);

@@ -1,0 +1,19 @@
+{% extends '@ChamiloCore/Layout/layout_one_col.html.twig' %}
+
+{% block content %}
+    {% set style = {
+        'info':    { 'bg': 'bg-info',    'txt': 'text-white',    'icon': 'mdi mdi-information-outline' },
+        'success': { 'bg': 'bg-success', 'txt': 'text-white', 'icon': 'mdi mdi-check-circle-outline' },
+        'warning': { 'bg': 'bg-warning', 'txt': 'text-white', 'icon': 'mdi mdi-alert-outline' },
+        'danger':  { 'bg': 'bg-danger',  'txt': 'text-white',  'icon': 'mdi mdi-alert-octagon-outline' }
+    }[severity|default('info')] %}
+
+    <div class="container max-w-2xl mx-auto mt-10">
+        <div class="flex items-center gap-4 rounded-2xl p-6 {{ style.bg }} {{ style.txt }}/80 shadow text-bold">
+            <i class="{{ style.icon }} text-4xl {{ style.txt }}"></i>
+            <p class="font-extrabold text-xl {{ style.txt }}">
+                {{ message|trans }}
+            </p>
+        </div>
+    </div>
+{% endblock %}

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Controller\ExceptionController;
 use Chamilo\CoreBundle\EventListener\ExceptionListener;
+use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
@@ -92,18 +93,35 @@ if ($isCli) {
     $router->setContext($context);
 
     set_exception_handler(function ($exception) use ($kernel, $container, $request) {
-        if (\in_array($kernel->getEnvironment(), ['dev', 'test'], true)) {
+        if (
+            in_array($kernel->getEnvironment(), ['dev', 'test'], true) &&
+            !($exception instanceof NotAllowedException)
+        ) {
             throw $exception;
         }
 
-        $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST, $exception);
+        $event = new ExceptionEvent(
+            $kernel,
+            $request,
+            HttpKernelInterface::MAIN_REQUEST,
+            $exception
+        );
+
+        /** @var callable $listener */
         $listener = $container->get(ExceptionListener::class);
         if (is_callable($listener)) {
             $listener($event);
         }
         $response = $event->getResponse();
         if (!$response) {
-            $response = new Response('An error occurred', Response::HTTP_INTERNAL_SERVER_ERROR);
+            $statusCode = $exception instanceof NotAllowedException
+                ? Response::HTTP_OK
+                : Response::HTTP_INTERNAL_SERVER_ERROR;
+
+            $response = new Response(
+                $exception->getMessage(),
+                $statusCode
+            );
         }
         $response->send();
     });

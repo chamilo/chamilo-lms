@@ -177,7 +177,6 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                 0,
                 [],
                 true,
-                null,
                 MESSAGE_STATUS_PROMOTED
             );
 

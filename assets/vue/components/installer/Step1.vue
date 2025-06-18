@@ -16,7 +16,7 @@
       "
       :label="t('Please select installation language')"
       :options="availableLanguages"
-      input-id="language_list"
+      id="language_list"
       name="language_list_alt"
       option-label="english_name"
       option-value="isocode"

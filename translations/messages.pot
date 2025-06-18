@@ -28328,3 +28328,12 @@ msgstr ""
 
 msgid "Course %s added. You can access it directly %shere%s."
 msgstr ""
+
+msgid "Accept Terms and Conditions"
+msgstr ""
+
+msgid "You accepted these terms on"
+msgstr ""
+
+msgid "Revoke Acceptance"
+msgstr ""

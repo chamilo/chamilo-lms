@@ -90,7 +90,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'use_users_timezone',
                     'title' => 'Enable users timezones',
-                    'comment' => 'Enable the possibility for users to select their own timezone. The timezone field should be set to visible and changeable in the Profiling menu in the administration section before users can choose their own. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time.',
+                    'comment' => 'Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time.',
                 ],
                 [
                     'name' => 'allow_show_linkedin_url',

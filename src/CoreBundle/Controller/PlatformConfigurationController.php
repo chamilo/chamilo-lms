@@ -56,8 +56,10 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['display.allow_students_to_browse_courses'] = $settingsManager->getSetting('display.allow_students_to_browse_courses', true);
         $configuration['settings']['session.catalog_allow_session_auto_subscription'] = $settingsManager->getSetting('session.catalog_allow_session_auto_subscription', true);
         $configuration['settings']['session.catalog_course_subscription_in_user_s_session'] = $settingsManager->getSetting('session.catalog_course_subscription_in_user_s_session', true);
-        $rawSetting = $settingsManager->getSetting('course.course_catalog_settings', true);
-        $configuration['settings']['course.course_catalog_settings'] = $this->decodeSettingArray($rawSetting);
+        $rawCourseCatalogSetting = $settingsManager->getSetting('course.course_catalog_settings', true);
+        $configuration['settings']['course.course_catalog_settings'] = 'false' !== $rawCourseCatalogSetting ? $this->decodeSettingArray($rawCourseCatalogSetting) : 'false';
+        $rawSessionCatalogSetting = $settingsManager->getSetting('session.catalog_settings', true);
+        $configuration['settings']['session.catalog_settings'] = 'false' !== $rawSessionCatalogSetting ? $this->decodeSettingArray($rawSessionCatalogSetting) : 'false';
 
         $variables = [];
 
@@ -110,6 +112,7 @@ class PlatformConfigurationController extends AbstractController
                 'course.show_courses_descriptions_in_catalog',
                 'session.session_automatic_creation_user_id',
                 'session.session_list_view_remaining_days',
+                'profile.use_users_timezone',
                 'session.user_session_display_mode',
                 'course.resource_sequence_show_dependency_in_course_intro',
             ];

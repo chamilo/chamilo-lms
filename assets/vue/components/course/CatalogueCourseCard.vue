@@ -18,7 +18,7 @@
       v-if="course.courseLanguage"
       class="absolute top-0 right-0 bg-support-4 text-white text-xs px-2 py-0.5 font-semibold rounded-bl-lg z-20"
     >
-      {{ course.courseLanguage }}
+      {{ getOriginalLanguageName(course.courseLanguage) }}
     </span>
 
     <Button
@@ -202,6 +202,8 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
 import courseRelUserService from "../../services/courseRelUserService"
 import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
+import { useLocale } from "../../composables/locale"
+const { getOriginalLanguageName } = useLocale()
 
 const props = defineProps({
   course: Object,

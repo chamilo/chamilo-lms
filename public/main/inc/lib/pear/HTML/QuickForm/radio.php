@@ -132,9 +132,13 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
             $labelClass = $this->labelClass;
             $radioClass = $this->radioClass;
             $id = $this->getAttribute('id');
+            $this->setAttribute(
+                'onchange',
+                "$('input[name=\'".(str_replace(['[', ']'], ['\\[', '\\]'], $this->getName()))."\']').parent().removeClass('p-radiobutton-checked'); this.parentElement.classList.add('p-radiobutton-checked');"
+            );
 
             return '<div class="'.$radioClass.'">
-                <div class="p-radiobutton p-component">
+                <div class="p-radiobutton p-component '.($this->getChecked() ? 'p-radiobutton-checked' : '').'">
                     '.parent::toHtml().'
                     <div class="p-radiobutton-box" data-pc-section="box">
                         <div class="p-radiobutton-icon" data-pc-section="icon"></div>

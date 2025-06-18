@@ -54,13 +54,13 @@ final class Version20240806120000 extends AbstractMigrationChamilo
                 if (is_numeric($key) && \is_array($config)) {
                     // Handle configurations specific to URL IDs
                     $hostingLimits['settings_overrides'][$key]['hosting_limit'] = [
-                        ['users' => $config['hosting_limit_users'] ?? 0],
-                        ['teachers' => $config['hosting_limit_teachers'] ?? 0],
-                        ['courses' => $config['hosting_limit_courses'] ?? 0],
-                        ['sessions' => $config['hosting_limit_sessions'] ?? 0],
-                        ['disk_space' => $config['hosting_limit_disk_space'] ?? 0],
-                        ['active_courses' => $config['hosting_limit_active_courses'] ?? 0],
-                        ['total_size' => $_configuration['hosting_total_size_limit'] ?? 0],
+                        'users' => $config['hosting_limit_users'] ?? 0,
+                        'teachers' => $config['hosting_limit_teachers'] ?? 0,
+                        'courses' => $config['hosting_limit_courses'] ?? 0,
+                        'sessions' => $config['hosting_limit_sessions'] ?? 0,
+                        'disk_space' => $config['hosting_limit_disk_space'] ?? 0,
+                        'active_courses' => $config['hosting_limit_active_courses'] ?? 0,
+                        'total_size' => $_configuration['hosting_total_size_limit'] ?? 0,
                     ];
                 }
             }

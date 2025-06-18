@@ -18,7 +18,7 @@ final class Version20250604143900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $this->addSql("
+        $this->addSql('
             CREATE TABLE third_party (
                 id INT AUTO_INCREMENT NOT NULL,
                 name TEXT NOT NULL,
@@ -29,9 +29,9 @@ final class Version20250604143900 extends AbstractMigrationChamilo
                 recruiter TINYINT(1) NOT NULL,
                 PRIMARY KEY(id)
             );
-        ");
+        ');
 
-        $this->addSql("
+        $this->addSql('
             CREATE TABLE third_party_data_exchange (
                 id INT AUTO_INCREMENT NOT NULL,
                 third_party_id INT NOT NULL,
@@ -41,9 +41,9 @@ final class Version20250604143900 extends AbstractMigrationChamilo
                 PRIMARY KEY(id),
                 CONSTRAINT FK_TPDE_TP FOREIGN KEY (third_party_id) REFERENCES third_party(id) ON DELETE CASCADE
             );
-        ");
+        ');
 
-        $this->addSql("
+        $this->addSql('
             CREATE TABLE third_party_data_exchange_user (
                 id INT AUTO_INCREMENT NOT NULL,
                 third_party_data_exchange_id INT NOT NULL,
@@ -52,7 +52,7 @@ final class Version20250604143900 extends AbstractMigrationChamilo
                 CONSTRAINT FK_TPDEU_TPDE FOREIGN KEY (third_party_data_exchange_id) REFERENCES third_party_data_exchange(id) ON DELETE CASCADE,
                 CONSTRAINT FK_TPDEU_USER FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
             );
-        ");
+        ');
     }
 
     public function down(Schema $schema): void

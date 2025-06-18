@@ -4,7 +4,8 @@
       <Textarea
         :id="id"
         :aria-label="label"
-        :class="{ 'p-invalid': isInvalid }"
+        :class="['w-full', { 'p-invalid': isInvalid }, $attrs.class]"
+        v-bind="$attrs"
         :model-value="modelValue"
         type="text"
         @update:model-value="$emit('update:modelValue', $event)"

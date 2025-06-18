@@ -26,7 +26,7 @@ final class GroupMembersStateProvider implements ProviderInterface
         return Usergroup::class === $operation->getClass() && 'get_group_members' === $operation->getName();
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): iterable
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         $groupId = $uriVariables['id'] ?? null;
 

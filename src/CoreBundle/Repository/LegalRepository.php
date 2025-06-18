@@ -187,7 +187,8 @@ class LegalRepository extends ServiceEntityRepository
                 'languageId' => $languageId,
                 'versionId' => $versionId,
             ])
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         $result = $qb->getQuery()->getOneOrNullResult();
 

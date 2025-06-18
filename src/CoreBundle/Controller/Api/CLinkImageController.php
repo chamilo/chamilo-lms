@@ -47,7 +47,8 @@ class CLinkImageController
             $asset = new Asset();
             $asset->setFile($finalFile)
                 ->setCategory(Asset::LINK)
-                ->setTitle($file->getClientOriginalName());
+                ->setTitle($file->getClientOriginalName())
+            ;
 
             $this->entityManager->persist($asset);
             $this->entityManager->flush();

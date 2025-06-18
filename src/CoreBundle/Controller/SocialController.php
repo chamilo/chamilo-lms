@@ -479,12 +479,15 @@ class SocialController extends AbstractController
     ): JsonResponse {
         $user = $userRepository->find($userId);
         if (!$user) {
-            return $this->createNotFoundException('User not found');
+            throw $this->createNotFoundException('User not found');
         }
 
         $baseUrl = $requestStack->getCurrentRequest()->getBaseUrl();
         $profileFieldsVisibilityJson = $settingsManager->getSetting('profile.profile_fields_visibility');
-        $profileFieldsVisibility = json_decode($profileFieldsVisibilityJson, true)['options'] ?? [];
+        $decoded = json_decode($profileFieldsVisibilityJson, true);
+        $profileFieldsVisibility = (is_array($decoded) && isset($decoded['options']))
+            ? $decoded['options']
+            : [];
 
         $vCardUserLink = $profileFieldsVisibility['vcard'] ?? true ? $baseUrl.'/main/social/vcard_export.php?userId='.(int) $userId : '';
 
@@ -529,7 +532,10 @@ class SocialController extends AbstractController
         }
 
         $fieldVisibilityConfig = $settingsManager->getSetting('profile.profile_fields_visibility');
-        $fieldVisibility = ($fieldVisibilityConfig && 'false' !== $fieldVisibilityConfig) ? json_decode($fieldVisibilityConfig, true)['options'] : [];
+        $decoded = json_decode($fieldVisibilityConfig, true);
+        $fieldVisibility = (is_array($decoded) && isset($decoded['options']))
+            ? $decoded['options']
+            : [];
 
         $extraUserData = $userRepository->getExtraUserData($userId);
         $extraFieldsFormatted = [];
@@ -552,16 +558,16 @@ class SocialController extends AbstractController
                         ExtraField::USER_FIELD_TYPE
                     );
                     if (!empty($extraFieldOptions)) {
-                        $optionTexts = array_map(
-                            fn (ExtraFieldOptions $option) => $option['display_text'],
-                            $extraFieldOptions
+                        $fieldValue = implode(
+                            ', ',
+                            array_map(
+                                fn (ExtraFieldOptions $opt) => $opt->getDisplayText(),
+                                $extraFieldOptions
+                            )
                         );
-                        $fieldValue = implode(', ', $optionTexts);
-                        $fieldValue = $extraFieldOptions->getDisplayText();
                     }
 
                     break;
-
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                     $geoData = explode('::', $fieldValue);

@@ -214,13 +214,14 @@ const editorConfig = computed(() => ({
   ...defaultEditorConfig,
   ...props.editorConfig,
   file_picker_callback: filePickerCallback,
+  setup(editor) {
+    editor.on("GetContent", (e) => {
+      if (!e.content.includes("tiny-content")) {
+        e.content = `<div class="tiny-content">${e.content}</div>`
+      }
+    })
+  },
 }))
-
-watch(modelValue, (newValue) => {
-  if (newValue && !newValue.includes("tiny-content")) {
-    modelValue.value = `<div class="tiny-content">${newValue}</div>`
-  }
-})
 
 async function filePickerCallback(callback, value, meta) {
   let url = getUrlForTinyEditor()

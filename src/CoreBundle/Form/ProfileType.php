@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\Type\IllustrationType;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use DateTimeZone;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -31,35 +32,35 @@ class ProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $changeableOptions = $this->settingsManager->getSetting('profile.changeable_options', true) ?? [];
-        $visibleOptions    = $this->settingsManager->getSetting('profile.visible_options', true)    ?? [];
+        $visibleOptions = $this->settingsManager->getSetting('profile.visible_options', true) ?? [];
 
         $languages = array_flip($this->languageRepository->getAllAvailableToArray(true));
 
         $fieldsMap = [
-            'name'         => ['field' => 'firstname',     'type' => TextType::class,    'label' => 'Firstname'],
-            'officialcode' => ['field' => 'official_code', 'type' => TextType::class,    'label' => 'Official Code'],
-            'email'        => ['field' => 'email',         'type' => EmailType::class,   'label' => 'Email'],
-            'picture'      => [
-                'field'  => 'illustration',
-                'type'   => IllustrationType::class,
-                'label'  => 'Picture',
+            'name' => ['field' => 'firstname', 'type' => TextType::class, 'label' => 'Firstname'],
+            'officialcode' => ['field' => 'official_code', 'type' => TextType::class, 'label' => 'Official Code'],
+            'email' => ['field' => 'email', 'type' => EmailType::class, 'label' => 'Email'],
+            'picture' => [
+                'field' => 'illustration',
+                'type' => IllustrationType::class,
+                'label' => 'Picture',
                 'mapped' => false,
             ],
-            'login'    => ['field' => 'login',    'type' => TextType::class,    'label' => 'Login'],
+            'login' => ['field' => 'login', 'type' => TextType::class, 'label' => 'Login'],
             'password' => [
-                'field'    => 'password',
-                'type'     => PasswordType::class,
-                'label'    => 'Password',
-                'mapped'   => false,
+                'field' => 'password',
+                'type' => PasswordType::class,
+                'label' => 'Password',
+                'mapped' => false,
                 'required' => false,
             ],
             'language' => [
-                'field'      => 'locale',
-                'type'       => ChoiceType::class,
-                'label'      => 'Language',
-                'choices'    => $languages,
-                'required'   => true,
-                'placeholder'=> null,
+                'field' => 'locale',
+                'type' => ChoiceType::class,
+                'label' => 'Language',
+                'choices' => $languages,
+                'required' => true,
+                'placeholder' => null,
                 'choice_translation_domain' => false,
             ],
             'phone' => ['field' => 'phone', 'type' => TextType::class, 'label' => 'Phone Number'],
@@ -71,9 +72,9 @@ class ProfileType extends AbstractType
                 $isEditable = \in_array($key, $changeableOptions, true);
 
                 $options = [
-                    'label'    => $fieldConfig['label'],
+                    'label' => $fieldConfig['label'],
                     'required' => $fieldConfig['required'] ?? false,
-                    'mapped'   => $fieldConfig['mapped']   ?? true,
+                    'mapped' => $fieldConfig['mapped'] ?? true,
                 ];
 
                 if (isset($fieldConfig['choices'])) {
@@ -95,7 +96,7 @@ class ProfileType extends AbstractType
         }
 
         if ('true' === $this->settingsManager->getSetting('profile.use_users_timezone', true)) {
-            $timezones = \DateTimeZone::listIdentifiers();
+            $timezones = DateTimeZone::listIdentifiers();
             sort($timezones);
             $timezoneChoices = array_combine($timezones, $timezones);
 
@@ -103,8 +104,8 @@ class ProfileType extends AbstractType
                 'timezone',
                 ChoiceType::class,
                 [
-                    'label'    => 'Timezone',
-                    'choices'  => $timezoneChoices,
+                    'label' => 'Timezone',
+                    'choices' => $timezoneChoices,
                     'required' => false,
                     'placeholder' => '',
                     'choice_translation_domain' => false,

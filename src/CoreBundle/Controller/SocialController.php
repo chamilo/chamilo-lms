@@ -485,7 +485,7 @@ class SocialController extends AbstractController
         $baseUrl = $requestStack->getCurrentRequest()->getBaseUrl();
         $profileFieldsVisibilityJson = $settingsManager->getSetting('profile.profile_fields_visibility');
         $decoded = json_decode($profileFieldsVisibilityJson, true);
-        $profileFieldsVisibility = (is_array($decoded) && isset($decoded['options']))
+        $profileFieldsVisibility = (\is_array($decoded) && isset($decoded['options']))
             ? $decoded['options']
             : [];
 
@@ -533,7 +533,7 @@ class SocialController extends AbstractController
 
         $fieldVisibilityConfig = $settingsManager->getSetting('profile.profile_fields_visibility');
         $decoded = json_decode($fieldVisibilityConfig, true);
-        $fieldVisibility = (is_array($decoded) && isset($decoded['options']))
+        $fieldVisibility = (\is_array($decoded) && isset($decoded['options']))
             ? $decoded['options']
             : [];
 
@@ -568,6 +568,7 @@ class SocialController extends AbstractController
                     }
 
                     break;
+
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                     $geoData = explode('::', $fieldValue);

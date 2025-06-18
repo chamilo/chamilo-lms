@@ -150,6 +150,7 @@ import { useCalendarEvent } from "../../composables/calendar/calendarEvent"
 import resourceLinkService from "../../services/resourceLinkService"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCourseSettings } from "../../store/courseSettingStore"
+import { DateTime } from "luxon"
 
 const store = useStore()
 const securityStore = useSecurityStore()
@@ -157,9 +158,7 @@ const confirm = useConfirm()
 const cidReqStore = useCidReqStore()
 
 const { course, session, group } = storeToRefs(cidReqStore)
-
-const { abbreviatedDatetime } = useFormatDate()
-
+const { abbreviatedDatetime, getCurrentTimezone } = useFormatDate()
 const { showAddButton } = useCalendarActionButtons()
 
 const { isEditableByUser, allowSubscribeToEvent, allowUnsubscribeToEvent } = useCalendarEvent()
@@ -235,13 +234,15 @@ async function getCalendarEvents({ start, end }) {
   const calendarEvents = await cCalendarEventService.findAll({ params }).then((response) => response.json())
 
   return calendarEvents["hydra:member"].map((event) => {
-    let color = event.color || "#007BFF"
+    const timezone = getCurrentTimezone()
+    const start = DateTime.fromISO(event.startDate, { zone: "utc" }).setZone(timezone)
+    const end = DateTime.fromISO(event.endDate, { zone: "utc" }).setZone(timezone)
 
     return {
       ...event,
-      start: event.startDate,
-      end: event.endDate,
-      color,
+      start: start.toString(),
+      end: end.toString(),
+      color: event.color || "#007BFF",
     }
   })
 }
@@ -257,16 +258,9 @@ const showAddEventDialog = () => {
 
   dialog.value = true
 }
-
-const goToMyStudentsSchedule = () => {
-  window.location.href = "/main/calendar/planification.php"
-}
-
-const goToSessionPanning = () => {
-  window.location.href = "/main/my_space/calendar_plan.php"
-}
-
+const timezone = getCurrentTimezone()
 const calendarOptions = ref({
+  timeZone: timezone,
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
   locales: allLocales,
   locale: calendarLocale?.code ?? "en-GB",

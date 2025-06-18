@@ -568,7 +568,6 @@ class SocialController extends AbstractController
                     }
 
                     break;
-
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                     $geoData = explode('::', $fieldValue);

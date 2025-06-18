@@ -13,7 +13,7 @@
         />
 
         <div class="flex flex-col">
-          <div v-if="null === post.userReceiver || post.sender['@id'] === post.userReceiver['@id']">
+          <div v-if="!post.userReceiver || post.sender['@id'] === post.userReceiver?.['@id']">
             <BaseAppLink :to="{ name: 'SocialWall', query: { id: post.sender['@id'] } }">
               {{ post.sender.fullName }}
             </BaseAppLink>

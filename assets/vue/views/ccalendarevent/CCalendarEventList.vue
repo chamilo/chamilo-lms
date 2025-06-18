@@ -139,7 +139,6 @@ import CCalendarEventInfo from "../../components/ccalendarevent/CCalendarEventIn
 import allLocales from "@fullcalendar/core/locales-all"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useToast } from "primevue/usetoast"
-import cCalendarEventService from "../../services/ccalendarevent"
 import { useCidReqStore } from "../../store/cidReq"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useLocale, useParentLocale } from "../../composables/locale"
@@ -150,7 +149,6 @@ import { useCalendarEvent } from "../../composables/calendar/calendarEvent"
 import resourceLinkService from "../../services/resourceLinkService"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCourseSettings } from "../../store/courseSettingStore"
-import { DateTime } from "luxon"
 
 const store = useStore()
 const securityStore = useSecurityStore()
@@ -161,7 +159,7 @@ const { course, session, group } = storeToRefs(cidReqStore)
 const { abbreviatedDatetime, getCurrentTimezone } = useFormatDate()
 const { showAddButton } = useCalendarActionButtons()
 
-const { isEditableByUser, allowSubscribeToEvent, allowUnsubscribeToEvent } = useCalendarEvent()
+const { isEditableByUser, allowSubscribeToEvent, allowUnsubscribeToEvent, getCalendarEvents } = useCalendarEvent()
 
 const item = ref({})
 const dialog = ref(false)
@@ -208,43 +206,6 @@ const sessionState = reactive({
   },
   showSessionDialog: false,
 })
-
-/**
- * @param {Object} params
- * @returns {Promise<Array<Object>>}
- */
-async function getCalendarEvents(params) {
-  if (course.value) {
-    params.cid = course.value.id
-  }
-
-  if (session.value) {
-    params.sid = session.value.id
-  }
-
-  if (group.value) {
-    params.gid = group.value.id
-  }
-
-  if (route.query?.type === "global") {
-    params.type = "global"
-  }
-
-  const calendarEvents = await cCalendarEventService.findAll({ params }).then((response) => response.json())
-
-  return calendarEvents["hydra:member"].map((event) => {
-    const timezone = getCurrentTimezone()
-    const start = DateTime.fromISO(event.startDate, { zone: "utc" }).setZone(timezone)
-    const end = DateTime.fromISO(event.endDate, { zone: "utc" }).setZone(timezone)
-
-    return {
-      ...event,
-      start: start.toString(),
-      end: end.toString(),
-      color: event.color || "#007BFF",
-    }
-  })
-}
 
 const calendarLocale = allLocales.find(
   (calLocale) =>
@@ -330,36 +291,26 @@ const calendarOptions = ref({
 
     dialog.value = true
   },
-  async events(info, successCallback) {
-    const endingEventsPromise = getCalendarEvents({
-      "endDate[before]": info.end.toISOString(),
-      "endDate[after]": info.start.toISOString(),
-    })
+  events(info, successCallback) {
+    const commonParams = {}
 
-    const currentEventsPromise = getCalendarEvents({
-      "endDate[before]": info.end.toISOString(),
-      "startDate[after]": info.start.toISOString(),
-    })
+    if (course.value) {
+      commonParams.cid = course.value.id
+    }
 
-    const startingEventsPromise = getCalendarEvents({
-      "startDate[before]": info.end.toISOString(),
-      "startDate[after]": info.start.toISOString(),
-    })
+    if (session.value) {
+      commonParams.sid = session.value.id
+    }
 
-    const [endingEvents, currentEvents, startingEvents] = await Promise.all([
-      endingEventsPromise,
-      currentEventsPromise,
-      startingEventsPromise,
-    ])
+    if (group.value) {
+      commonParams.gid = group.value.id
+    }
 
-    const uniqueEventsMap = new Map()
+    if (route.query?.type === "global") {
+      commonParams.type = "global"
+    }
 
-    endingEvents
-      .concat(currentEvents)
-      .concat(startingEvents)
-      .forEach((event) => uniqueEventsMap.set(event.id, event))
-
-    successCallback(Array.from(uniqueEventsMap.values()))
+    getCalendarEvents(info.start, info.end, commonParams).then((events) => successCallback(events))
   },
 })
 

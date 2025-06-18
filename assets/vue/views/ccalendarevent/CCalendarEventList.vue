@@ -209,12 +209,11 @@ const sessionState = reactive({
   showSessionDialog: false,
 })
 
-async function getCalendarEvents({ start, end }) {
-  const params = {
-    "startDate[after]": start.toISOString(),
-    "endDate[before]": end.toISOString(),
-  }
-
+/**
+ * @param {Object} params
+ * @returns {Promise<Array<Object>>}
+ */
+async function getCalendarEvents(params) {
   if (course.value) {
     params.cid = course.value.id
   }
@@ -331,8 +330,36 @@ const calendarOptions = ref({
 
     dialog.value = true
   },
-  events(info, successCallback) {
-    getCalendarEvents(info).then((events) => successCallback(events))
+  async events(info, successCallback) {
+    const endingEventsPromise = getCalendarEvents({
+      "endDate[before]": info.end.toISOString(),
+      "endDate[after]": info.start.toISOString(),
+    })
+
+    const currentEventsPromise = getCalendarEvents({
+      "endDate[before]": info.end.toISOString(),
+      "startDate[after]": info.start.toISOString(),
+    })
+
+    const startingEventsPromise = getCalendarEvents({
+      "startDate[before]": info.end.toISOString(),
+      "startDate[after]": info.start.toISOString(),
+    })
+
+    const [endingEvents, currentEvents, startingEvents] = await Promise.all([
+      endingEventsPromise,
+      currentEventsPromise,
+      startingEventsPromise,
+    ])
+
+    const uniqueEventsMap = new Map()
+
+    endingEvents
+      .concat(currentEvents)
+      .concat(startingEvents)
+      .forEach((event) => uniqueEventsMap.set(event.id, event))
+
+    successCallback(Array.from(uniqueEventsMap.values()))
   },
 })
 

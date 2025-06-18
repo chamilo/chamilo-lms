@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Service\CourseService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -25,7 +27,9 @@ use Symfony\Component\Finder\Finder;
 
 #[AsCommand(
     name: 'app:create-courses-from-structured-file',
-    description: 'Create courses and learning paths from a folder containing files',
+    description: 'Create courses and learning paths from a folder containing files.
+If permissions like 0660/0770 are used, it is recommended to run this command as www-data:
+  sudo -u www-data php bin/console app:create-courses-from-structured-file /path/to/folder',
 )]
 class CreateCoursesFromStructuredFileCommand extends Command
 {
@@ -40,16 +44,33 @@ class CreateCoursesFromStructuredFileCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument(
-            'folder',
-            InputArgument::REQUIRED,
-            'Absolute path to the folder that contains course files'
-        );
+        $this
+            ->addArgument(
+                'folder',
+                InputArgument::REQUIRED,
+                'Absolute path to the folder that contains course files'
+            )
+            ->addOption(
+                'user',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Expected user owner of created files (e.g. www-data)',
+                'www-data'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io        = new SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
+
+        $expectedUser = $input->getOption('user');
+        $realUser = get_current_user();
+
+        if ($realUser !== $expectedUser) {
+            $io->warning("You are running this command as '$realUser', but expected user is '$expectedUser'.If file permissions are too restrictive (e.g. 0660), the web server may not be able to access the files.
+            To avoid this issue, consider running the command like this: sudo -u {$expectedUser} php bin/console app:create-courses-from-structured-file /path/to/folder");
+        }
+
         $adminUser = $this->getFirstAdmin();
         if (!$adminUser) {
             $io->error('No admin user found in the system.');
@@ -63,12 +84,8 @@ class CreateCoursesFromStructuredFileCommand extends Command
         }
 
         // Retrieve Unix permissions from platform settings
-        $dirPermOct  = octdec(
-            $this->settingsManager->getSetting('document.permissions_for_new_directories') ?? '0777'
-        );
-        $filePermOct = octdec(
-            $this->settingsManager->getSetting('document.permissions_for_new_files') ?? '0666'
-        );
+        $dirPermOct = octdec($this->settingsManager->getSetting('document.permissions_for_new_directories') ?? '0777');
+        $filePermOct = octdec($this->settingsManager->getSetting('document.permissions_for_new_files') ?? '0666');
 
         // Absolute base to /var/upload/resource
         $uploadBase = $this->parameterBag->get('kernel.project_dir') . '/var/upload/resource';
@@ -77,9 +94,9 @@ class CreateCoursesFromStructuredFileCommand extends Command
         $finder->files()->in($folder);
 
         foreach ($finder as $file) {
-            $basename   = $file->getBasename();
+            $basename = $file->getBasename();
             $courseCode = pathinfo($basename, PATHINFO_FILENAME);
-            $filePath   = $file->getRealPath();
+            $filePath = $file->getRealPath();
 
             // 1. Skip unsupported file extensions
             $allowedExtensions = ['pdf', 'html', 'htm', 'mp4'];
@@ -92,15 +109,15 @@ class CreateCoursesFromStructuredFileCommand extends Command
 
             // 2. Create course
             $course = $this->courseService->createCourse([
-                'title'               => $courseCode,
-                'wanted_code'         => $courseCode,
+                'title' => $courseCode,
+                'wanted_code' => $courseCode,
                 'add_user_as_teacher' => true,
-                'course_language'     => $this->settingsManager->getSetting('language.platform_language'),
-                'visibility'          => Course::OPEN_PLATFORM,
-                'subscribe'           => true,
-                'unsubscribe'         => true,
-                'disk_quota'          => $this->settingsManager->getSetting('document.default_document_quotum'),
-                'expiration_date'     => (new \DateTime('+1 year'))->format('Y-m-d H:i:s'),
+                'course_language' => $this->settingsManager->getSetting('language.platform_language'),
+                'visibility' => Course::OPEN_PLATFORM,
+                'subscribe' => true,
+                'unsubscribe' => true,
+                'disk_quota' => $this->settingsManager->getSetting('document.default_document_quotum'),
+                'expiration_date' => (new \DateTime('+1 year'))->format('Y-m-d H:i:s'),
             ]);
 
             if (!$course) {
@@ -139,9 +156,9 @@ class CreateCoursesFromStructuredFileCommand extends Command
 
             // 4.1  Apply permissions to the real file & its directory
             if ($resourceFile) {
-                $resourceNodeRepo = $this->em->getRepository(\Chamilo\CoreBundle\Entity\ResourceNode::class);
-                $relativePath = $resourceNodeRepo->getFilename($resourceFile); // e.g. /2025/06/16/abc.pdf
-                $fullPath     = realpath($uploadBase . $relativePath);
+                $resourceNodeRepo = $this->em->getRepository(ResourceNode::class);
+                $relativePath = $resourceNodeRepo->getFilename($resourceFile);
+                $fullPath = realpath($uploadBase . $relativePath);
 
                 if ($fullPath && is_file($fullPath)) {
                     @chmod($fullPath, $filePermOct);
@@ -154,7 +171,7 @@ class CreateCoursesFromStructuredFileCommand extends Command
 
             // 5. Ensure learning path root item exists
             $lpItemRepo = $this->em->getRepository(CLpItem::class);
-            $rootItem   = $lpItemRepo->getRootItem((int) $lp->getIid());
+            $rootItem = $lpItemRepo->getRootItem((int) $lp->getIid());
 
             if (!$rootItem) {
                 $rootItem = (new CLpItem())

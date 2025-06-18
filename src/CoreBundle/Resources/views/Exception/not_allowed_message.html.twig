@@ -12,7 +12,7 @@
         <div class="flex items-center gap-4 rounded-2xl p-6 {{ style.bg }} {{ style.txt }}/80 shadow text-bold">
             <i class="{{ style.icon }} text-4xl {{ style.txt }}"></i>
             <p class="font-extrabold text-xl {{ style.txt }}">
-                {{ message|trans }}
+                {{ message|trans|striptags|raw }}
             </p>
         </div>
     </div>

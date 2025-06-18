@@ -119,7 +119,7 @@ $userMultiSelect = $formUsers->addElement(
 
 $userMultiSelect->setLabel([
     get_lang('Users'),
-    get_lang('NotSubscribed'),
+    get_lang('UserNotSubscribed'),
     get_lang('Subscribed'),
 ]);
 $formUsers->addButtonSave(get_lang('Save'));
@@ -173,7 +173,7 @@ $groupMultiSelect = $form->addElement(
 
 $groupMultiSelect->setLabel([
     get_lang('Groups'),
-    get_lang('NotSubscribed'),
+    get_lang('UserNotSubscribed'),
     get_lang('Subscribed'),
 ]);
 $form->addButtonSave(get_lang('Save'));

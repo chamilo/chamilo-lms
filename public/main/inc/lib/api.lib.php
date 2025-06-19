@@ -3553,19 +3553,21 @@ function api_is_anonymous()
 
 /**
  * Displays message "You are not allowed here..." and exits the entire script.
- *
- * @param bool $print_headers Whether to print headers (default = false -> does not print them)
- * @param string $message
- * @param int $responseCode
- *
- * @throws Exception
  */
 function api_not_allowed(
-    $print_headers = false,
-    $message = null,
-    $responseCode = 0
+    bool $printHeaders = false,
+    string $message = null,
+    int $responseCode = 0,
+    string $severity = 'warning'
 ): never {
-    throw new NotAllowedException($message ?: 'You are not allowed', null, $responseCode);
+    throw new NotAllowedException(
+        $message ?: get_lang('You are not allowed'),
+        $severity,
+        403,
+        [],
+        $responseCode,
+        null
+    );
 }
 
 /**

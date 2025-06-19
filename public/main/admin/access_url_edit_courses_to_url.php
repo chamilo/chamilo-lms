@@ -13,9 +13,41 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $xajax = new xajax();
-$xajax->registerFunction(
-    ['search_courses', 'Accessurleditcoursestourl', 'search_courses']
-);
+function search_courses($needle, $id)
+{
+    static $lastNeedle = '';
+    $response = new xajaxResponse();
+
+    if (trim($needle) === '' || $needle === $lastNeedle) {
+        return $response;
+    }
+
+    $lastNeedle = $needle;
+    $results = \UrlManager::searchCoursesByTitleOrCode($needle);
+    $output = '';
+    $i = 0;
+
+    foreach ($results as $course) {
+        $i++;
+        if ($i <= 10) {
+            $label = htmlspecialchars($course['title']) . ' (' . htmlspecialchars($course['code']) . ')';
+            $output .= '
+                <div class="hover:bg-gray-100 p-2 rounded cursor-pointer transition"
+                     onclick="add_user_to_url(' . $course['id'] . ', \'' . addslashes($label) . '\')">
+                    <div class="font-medium text-sm text-gray-800">' . $course['title'] . '</div>
+                    <div class="text-xs text-gray-500">' . $course['code'] . '</div>
+                </div>
+            ';
+        } else {
+            $output .= '<div class="text-xs text-gray-400 italic mt-1">...</div>';
+            break;
+        }
+    }
+
+    $response->addAssign('ajax_list_courses', 'innerHTML', api_utf8_encode($output));
+    return $response;
+}
+$xajax->registerFunction('search_courses');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -83,30 +115,34 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     if (1 == $form_sent) {
         if (0 == $access_url_id) {
             Display::addFlash(Display::return_message(get_lang('Select a URL')));
-            header('Location: access_url_edit_users_to_url.php?');
+            header('Location: access_url_edit_courses_to_url.php?');
+            exit;
         } elseif (is_array($course_list)) {
             UrlManager::update_urls_rel_course($course_list, $access_url_id);
             Display::addFlash(Display::return_message(get_lang('Courses updated successfully')));
-            header('Location: access_urls.php?');
         }
-        exit;
     }
 }
 
 Display::display_header($tool_name);
 
-echo Display::toolbarAction(
-    'url',
-    [
-        Display::url(
-            Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add user to this URL')),
-            api_get_path(WEB_CODE_PATH).'admin/access_url_add_courses_to_url.php'
-        ),
-    ]
+echo '<div class="flex gap-2 items-center mb-4 mt-4">';
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to URL list')),
+    api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
 );
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::MULTI_COURSE_URL_ASSIGN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add course to this URL')),
+    api_get_path(WEB_CODE_PATH).'admin/access_url_add_courses_to_url.php'
+);
+echo '</div>';
 
 Display::page_subheader2($tool_name);
-
+?>
+    <h2 class="text-xl font-semibold text-gray-800 mt-6 mb-2">
+        <?php echo $tool_name; ?>
+    </h2>
+<?php
 $no_course_list = $course_list = [];
 $ajax_search = 'unique' == $add_type ? true : false;
 
@@ -137,21 +173,23 @@ if ($ajax_search) {
         }
     }
 }
-
-if ('multiple' == $add_type) {
-    $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.
-        get_lang('Single registration').'</a>';
-    $link_add_type_multiple = get_lang('Multiple registration');
-} else {
-    $link_add_type_unique = get_lang('Single registration');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.
-        get_lang('Multiple registration').'</a>';
-}
 $url_list = UrlManager::get_url_data();
 ?>
-<div style="text-align: left;">
-    <?php echo $link_add_type_unique; ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple; ?>
-</div>
+    <div class="flex space-x-2 border-gray-300 pb-2 mb-4">
+        <a href="<?php echo api_get_self(); ?>?add_type=unique&access_url_id=<?php echo $access_url_id; ?>"
+           class="text-sm px-4 py-2 transition <?php echo $add_type === 'unique'
+               ? 'border-b-2 border-primary text-primary font-semibold'
+               : 'text-gray-500 hover:text-primary'; ?>">
+            <?php echo get_lang('Single registration'); ?>
+        </a>
+
+        <a href="<?php echo api_get_self(); ?>?add_type=multiple&access_url_id=<?php echo $access_url_id; ?>"
+           class="text-sm px-4 py-2 transition <?php echo $add_type === 'multiple'
+               ? 'border-b-2 border-primary text-primary font-semibold'
+               : 'text-gray-500 hover:text-primary'; ?>">
+            <?php echo get_lang('Multiple registration'); ?>
+        </a>
+    </div>
 <br /><br />
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';
@@ -180,89 +218,79 @@ $url_list = UrlManager::get_url_data();
     <br /><br />
     <input type="hidden" name="form_sent" value="1" />
     <input type="hidden" name="add_type" value = "<?php echo $add_type; ?>" />
-    <table border="0" cellpadding="5" cellspacing="0" width="100%">
-        <!-- Users -->
-        <tr>
-            <td align="center"><b><?php echo get_lang('Courses list'); ?> :</b>
-            </td>
-            <td></td>
-            <td align="center"><b><?php echo get_lang('Courses of').' '.$url_selected; ?></b></td>
-        </tr>
-        <tr>
-            <td align="center">
-                <div id="content_source">
-                    <?php
-                    if ($ajax_search) {
-                        ?>
-                        <input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
-                        <div id="ajax_list_courses"></div>
-                    <?php
-                    } else {
-                        ?>
-                        <select id="origin_users" name="no_course_list[]" multiple="multiple" size="15" style="width:380px;">
-                            <?php
-                            foreach ($no_course_list as $no_course) {
-                                ?>
-                                <option value="<?php echo $no_course['id']; ?>"><?php echo $no_course['title'].' ('.$no_course['code'].')'; ?></option>
-                            <?php
-                            }
-                        unset($no_course_list); ?>
-                        </select>
-                    <?php
-                    }
-                    ?>
-                </div>
-            </td>
-            <td width="10%" valign="middle" align="center">
-                <?php
-                if ($ajax_search) {
-                    ?>
-                    <button class="btn btn--plain" type="button" onclick="remove_item(document.getElementById('destination_users'))" >
-                        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
+    <div class="flex flex-col gap-4">
+        <div class="flex justify-between gap-4 items-center text-sm text-gray-700 font-semibold">
+            <div class="w-1/2 text-center">
+                <?php echo get_lang('Courses list'); ?>:
+            </div>
+            <div class="w-10"></div>
+            <div class="w-1/2 text-center">
+                <?php echo get_lang('Courses of').' '.$url_selected; ?>
+            </div>
+        </div>
+
+        <div class="flex justify-between gap-4">
+            <div id="content_source" class="w-1/2">
+                <?php if ($ajax_search): ?>
+                    <input
+                        type="text"
+                        id="course_to_add"
+                        onkeyup="xajax_search_courses(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)"
+                        class="w-full border rounded px-2 py-1 mb-2"
+                        placeholder="<?php echo get_lang('Search course'); ?>"
+                    />
+                    <div id="ajax_list_courses" class="text-sm text-gray-600"></div>
+                <?php else: ?>
+                    <select id="origin_users" name="no_course_list[]" multiple size="15"
+                            class="w-full min-h-[360px] border rounded">
+                        <?php foreach ($no_course_list as $no_course): ?>
+                            <option value="<?php echo $no_course['id']; ?>">
+                                <?php echo $no_course['title'].' ('.$no_course['code'].')'; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
+            </div>
+
+            <div class="flex flex-col justify-center items-center gap-2">
+                <?php if ($ajax_search): ?>
+                    <button type="button" onclick="remove_item(document.getElementById('destination_users'))"
+                            class="rounded-full bg-danger p-2 hover:bg-danger/80 focus:outline-none focus:ring">
+                        <i class="mdi mdi-close text-white text-2xl"></i>
                     </button>
-                <?php
-                } else {
-                    ?>
-                    <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" >
-                        <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
+                <?php else: ?>
+                    <button type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"
+                            class="rounded-full bg-primary p-2 hover:bg-primary/80 focus:outline-none focus:ring">
+                        <i class="mdi mdi-fast-forward-outline text-white text-2xl"></i>
                     </button>
-                    <br /><br />
-                    <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" >
-                        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
+                    <button type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"
+                            class="rounded-full bg-secondary p-2 hover:bg-secondary/80 focus:outline-none focus:ring">
+                        <i class="mdi mdi-rewind-outline text-white text-2xl"></i>
                     </button>
-                <?php
-                }
-                ?>
-                <br /><br /><br /><br /><br /><br />
-            </td>
-            <td align="center">
-                <select id="destination_users" name="course_list[]" multiple="multiple" size="15" style="width:380px;">
-                    <?php
-                    foreach ($course_list as $course) {
+                <?php endif; ?>
+            </div>
+
+            <div class="w-1/2">
+                <select id="destination_users" name="course_list[]" multiple size="15"
+                        class="w-full min-h-[360px] border rounded">
+                    <?php foreach ($course_list as $course):
                         $courseInfo = api_get_course_info_by_id($course['id']); ?>
                         <option value="<?php echo $course['id']; ?>">
                             <?php echo $course['title'].' ('.$courseInfo['code'].')'; ?>
                         </option>
-                    <?php
-                    }
-                    unset($course_list);
-                    ?>
+                    <?php endforeach; ?>
                 </select>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3" align="center">
-                <br />
-                <?php
-                if (isset($_GET['add'])) {
-                    echo '<button class="btn btn--plain" onclick="valide()" >'.get_lang('Add courses to an URL').'</button>';
-                } else {
-                    echo '<button class="btn btn--plain" onclick="valide()" >'.get_lang('Edit courses of an URL').'</button>';
-                }
-                ?>
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+
+        <div class="mt-4 text-center">
+            <?php
+            $label = get_lang('Save');
+            echo '<button class="btn btn--primary" onclick="valide()">'.$label.'</button>';
+            ?>
+        </div>
+    </div>
+
 </form>
 
 <script>

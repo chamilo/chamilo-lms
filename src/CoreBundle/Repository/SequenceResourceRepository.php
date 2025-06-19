@@ -273,7 +273,10 @@ class SequenceResourceRepository extends ServiceEntityRepository
                                 if (!empty($userId)) {
                                     $resourceItem['status'] = $resourceItem['status'] && Category::userFinishedCourse(
                                         $userId,
-                                        $category
+                                        $category,
+                                            true,
+                                            $course->getId(),
+                                            $resource->getId()
                                     );
                                 }
                             }
@@ -324,13 +327,19 @@ class SequenceResourceRepository extends ServiceEntityRepository
             ? $em->getRepository(Session::class)->find($sessionId)
             : null;
         $gradebookCategoryRepo = $em->getRepository(GradebookCategory::class);
-        $categories = $gradebookCategoryRepo->findBy(
-            [
+        $categories = $gradebookCategoryRepo->findBy([
+            'course' => $course,
+            'session' => $session,
+            'isRequirement' => true,
+        ]);
+
+        if (empty($categories) && $sessionId > 0) {
+            $categories = $gradebookCategoryRepo->findBy([
                 'course' => $course,
-                'session' => $session,
+                'session' => null,
                 'isRequirement' => true,
-            ]
-        );
+            ]);
+        }
 
         if (empty($categories)) {
             return false;
@@ -341,16 +350,12 @@ class SequenceResourceRepository extends ServiceEntityRepository
             $userFinishedCourse = Category::userFinishedCourse(
                 $userId,
                 $category,
-                true
+                true,
+                $course->getId(),
+                $sessionId
             );
 
-            if (0 === $sessionId) {
-                if (!$userFinishedCourse) {
-                    $status = false;
-
-                    break;
-                }
-            } elseif (!$userFinishedCourse) {
+            if (!$userFinishedCourse) {
                 $status = false;
 
                 break;
@@ -540,7 +545,10 @@ class SequenceResourceRepository extends ServiceEntityRepository
                             foreach ($categories as $category) {
                                 $resourceItem['status'] = $resourceItem['status'] && Category::userFinishedCourse(
                                         $userId,
-                                        $category
+                                        $category,
+                                        true,
+                                        $course->getId(),
+                                        $sessionId
                                     );
                             }
                         }

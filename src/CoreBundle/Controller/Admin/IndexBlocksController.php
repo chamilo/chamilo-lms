@@ -375,10 +375,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-resource-sequence',
-            'url' => $this->generateUrl('legacy_main', [
-                'name' => 'admin/resource_sequence.php',
-                'query' => ['type' => SequenceResource::COURSE_TYPE],
-            ]),
+            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/resource_sequence.php', 'type' => SequenceResource::COURSE_TYPE]),
             'label' => $this->translator->trans('Resources sequencing'),
         ];
 
@@ -832,10 +829,7 @@ class IndexBlocksController extends BaseController
             ];
             $items[] = [
                 'class' => 'item-resource-sequence',
-                'url' => $this->generateUrl('legacy_main', [
-                    'name' => 'admin/resource_sequence.php',
-                    'query' => ['type' => SequenceResource::SESSION_TYPE],
-                ]),
+                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/resource_sequence.php', 'type' => SequenceResource::SESSION_TYPE]),
                 'label' => $this->translator->trans('Resources sequencing'),
             ];
             $items[] = [

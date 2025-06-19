@@ -2,9 +2,9 @@
   <Card class="course-card">
     <template #header>
       <img
-        v-if="disabled"
+        v-if="isLocked"
         :alt="course.title"
-        :src="course.illustrationUrl"
+        :src="course.illustrationUrl || '/img/session_default.svg'"
       />
       <BaseAppLink
         v-else
@@ -13,13 +13,13 @@
       >
         <img
           :alt="course.title"
-          :src="course.illustrationUrl"
+          :src="course.illustrationUrl || '/img/session_default.svg'"
         />
       </BaseAppLink>
     </template>
     <template #title>
-      <div class="course-card__title">
-        <div v-if="disabled">
+      <div class="course-card__title flex items-center gap-2">
+        <div v-if="isLocked">
           <div
             v-if="session"
             class="session__title"
@@ -43,27 +43,47 @@
           {{ course.title }}
         </BaseAppLink>
 
-        <div
-          v-if="sessionDisplayDate"
-          class="session__display-date"
-          v-text="sessionDisplayDate"
+        <BaseButton
+          v-if="isLocked && hasRequirements"
+          icon="shield-check"
+          type="black"
+          onlyIcon
+          size="large"
+          class="!bg-support-1 !text-support-3 !rounded-md !shadow-sm hover:!bg-support-2"
+          @click="openRequirementsModal"
         />
       </div>
+
+      <div
+        v-if="sessionDisplayDate"
+        class="session__display-date"
+        v-text="sessionDisplayDate"
+      />
     </template>
     <template #footer>
       <BaseAvatarList :users="teachers" />
     </template>
   </Card>
+
+  <CatalogueRequirementModal
+    v-model="showDependenciesModal"
+    :course-id="course.id"
+    :session-id="sessionId"
+    :requirements="requirementList"
+    :graph-image="graphImage"
+  />
 </template>
 
 <script setup>
 import Card from "primevue/card"
 import BaseAvatarList from "../basecomponents/BaseAvatarList.vue"
-import { computed } from "vue"
-import { isEmpty } from "lodash"
+import { computed, onMounted, ref } from "vue"
 import { useFormatDate } from "../../composables/formatDate"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useI18n } from "vue-i18n"
+import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
 
 const { abbreviatedDatetime } = useFormatDate()
 
@@ -89,14 +109,11 @@ const props = defineProps({
   },
 })
 
-const platformConfigStore = usePlatformConfig()
-const showCourseDuration = computed(() => "true" === platformConfigStore.getSetting("course.show_course_duration"))
-
 const { t } = useI18n()
-
-const showRemainingDays = computed(() => {
-  return platformConfigStore.getSetting("session.session_list_view_remaining_days") === "true"
-})
+const platformConfigStore = usePlatformConfig()
+const showRemainingDays = computed(
+  () => platformConfigStore.getSetting("session.session_list_view_remaining_days") === "true",
+)
 
 const daysRemainingText = computed(() => {
   if (!showRemainingDays.value || !props.session?.displayEndDate) return null
@@ -113,6 +130,8 @@ const daysRemainingText = computed(() => {
   return t("Expired")
 })
 
+const showCourseDuration = computed(() => platformConfigStore.getSetting("course.show_course_duration") === "true")
+
 const teachers = computed(() => {
   if (props.session?.courseCoachesSubscriptions) {
     return props.session.courseCoachesSubscriptions
@@ -120,7 +139,7 @@ const teachers = computed(() => {
       .map((srcru) => srcru.user)
   }
 
-  if (props.course.users && props.course.users.edges) {
+  if (props.course.users?.edges) {
     return props.course.users.edges.map((edge) => ({
       id: edge.node.id,
       ...edge.node.user,
@@ -131,22 +150,34 @@ const teachers = computed(() => {
 })
 
 const sessionDisplayDate = computed(() => {
-  if (daysRemainingText.value) {
-    return daysRemainingText.value
-  }
+  if (daysRemainingText.value) return daysRemainingText.value
 
-  const dateString = []
+  const parts = []
+  if (props.session?.displayStartDate) parts.push(abbreviatedDatetime(props.session.displayStartDate))
+  if (props.session?.displayEndDate) parts.push(abbreviatedDatetime(props.session.displayEndDate))
 
-  if (props.session) {
-    if (!isEmpty(props.session.displayStartDate)) {
-      dateString.push(abbreviatedDatetime(props.session.displayStartDate))
-    }
-
-    if (!isEmpty(props.session.displayEndDate)) {
-      dateString.push(abbreviatedDatetime(props.session.displayEndDate))
-    }
-  }
-
-  return dateString.join(" — ")
+  return parts.join(" — ")
 })
+
+const internalLocked = ref(false)
+const showDependenciesModal = ref(false)
+
+const { hasRequirements, requirementList, graphImage, fetchStatus } = useCourseRequirementStatus(
+  props.course.id,
+  props.sessionId,
+  (locked) => {
+    internalLocked.value = locked
+  },
+)
+
+const isLocked = computed(() => props.disabled || internalLocked.value)
+
+onMounted(() => {
+  if (props.course?.id) {
+    fetchStatus()
+  }
+})
+function openRequirementsModal() {
+  showDependenciesModal.value = true
+}
 </script>

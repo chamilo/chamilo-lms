@@ -10,19 +10,35 @@ const props = defineProps({
 })
 
 const { courses, isEnabled } = useSessionCard(props.session)
+
+function extractIdFromIri(iri) {
+  if (!iri) return undefined
+  const match = iri.match(/\/(\d+)$/)
+  return match ? parseInt(match[1], 10) : undefined
+}
+
+function normalizeCourse(course) {
+  return {
+    ...course,
+    id: course.id || course._id || extractIdFromIri(course["@id"]),
+  }
+}
 </script>
 
 <template>
-  <div
-    v-for="(course, index) in courses"
-    :key="index"
-    style="max-width: 540px"
-  >
-    <CourseCard
-      :course="course"
-      :disabled="!isEnabled"
-      :session="session"
-      :session-id="session.id"
-    />
+  <div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div
+        v-for="(course, index) in courses"
+        :key="normalizeCourse(course).id || index"
+      >
+        <CourseCard
+          :course="normalizeCourse(course)"
+          :disabled="!isEnabled"
+          :session="session"
+          :session-id="session.id"
+        />
+      </div>
+    </div>
   </div>
 </template>

@@ -8,6 +8,13 @@ export const useSecurityStore = defineStore("security", () => {
   const isLoading = ref(true)
   const isAuthenticated = computed(() => !isEmpty(user.value))
 
+  /**
+   * @param {Object} newUserInfo
+   */
+  function setUser(newUserInfo) {
+    user.value = newUserInfo
+  }
+
   const hasRole = computed(() => (role) => {
     if (user.value && user.value.roles) {
       return user.value.roles.indexOf(role) !== -1
@@ -66,6 +73,7 @@ export const useSecurityStore = defineStore("security", () => {
 
   return {
     user,
+    setUser,
     isLoading,
     isAuthenticated,
     hasRole,

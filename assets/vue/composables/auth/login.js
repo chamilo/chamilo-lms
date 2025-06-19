@@ -22,7 +22,7 @@ export function useLogin() {
   const router = useRouter()
   const securityStore = useSecurityStore()
   const platformConfigurationStore = usePlatformConfig()
-  const { showSuccessNotification, showErrorNotification } = useNotification()
+  const { showErrorNotification } = useNotification()
 
   const isLoading = ref(false)
 
@@ -33,24 +33,24 @@ export function useLogin() {
       const responseData = await securityService.login(payload)
 
       if (responseData.requires2FA) {
-        return { success: true, requires2FA: true };
+        return { success: true, requires2FA: true }
       }
 
-      if (route.query.redirect) {
+      if (route.query.redirect && isValidHttpUrl(route.query.redirect.toString())) {
         // Check if 'redirect' is an absolute URL
-        if (isValidHttpUrl(route.query.redirect.toString())) {
-          // If it's an absolute URL, redirect directly
-          window.location.href = route.query.redirect.toString()
+        // If it's an absolute URL, redirect directly
+        window.location.href = route.query.redirect.toString()
 
-          return
-        }
-      } else if (responseData.load_terms) {
+        return
+      }
+
+      if (responseData.redirect) {
         window.location.href = responseData.redirect
 
         return
       }
 
-      securityStore.user = responseData
+      securityStore.setUser(responseData)
 
       await platformConfigurationStore.initialize()
 

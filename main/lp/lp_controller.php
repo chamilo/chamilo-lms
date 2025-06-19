@@ -84,20 +84,45 @@ $htmlHeadXtra[] = '
     }
 
     $(function() {
-        $(".lp_resource").sortable({
-            items: ".lp_resource_element ",
-            handle: ".moved", //only the class "moved"
-            cursor: "move",
-            connectWith: "#lp_item_list",
-            placeholder: "ui-state-highlight", //defines the yellow highlight
-            start: function(event, ui) {
-                $(ui.item).css("width", "350px");
-                $(ui.item).find(".item_data").attr("style", "");
-            },
-            stop: function(event, ui) {
-                $(ui.item).css("width", "100%");
-            }
-        });
+
+        setTimeout(function(){
+            $("#subtab-1").find(".lp_resource").sortable({
+                items: ".lp_resource_element ",
+                handle: ".moved", //only the class "moved"
+                cursor: "move",
+                connectWith: "#lp_item_list",
+                placeholder: "ui-state-highlight", //defines the yellow highlight
+                start: function(event, ui) {
+                    $(ui.item).css("width", "350px");
+                    $(ui.item).find(".item_data").attr("style", "");
+                },
+                stop: function(event, ui) {
+                    $(ui.item).css("width", "100%");
+                }
+            });
+        }, 500);
+
+        setTimeout(function(){
+
+            let resourcesPanels = $("#resource_tab-2").find(".lp_resource")
+            .add($("#resource_tab-3").find(".lp_resource"))
+            .add($("#resource_tab-4").find(".lp_resource"));
+
+            resourcesPanels.sortable({
+                items: ".lp_resource_element ",
+                handle: ".moved", //only the class "moved"
+                cursor: "move",
+                connectWith: "#lp_item_list",
+                placeholder: "ui-state-highlight",
+                start: function(event, ui) {
+                    $(ui.item).css("width", "350px");
+                    $(ui.item).find(".item_data").attr("style", "");
+                },
+                stop: function(event, ui) {
+                    $(ui.item).css("width", "100%");
+                }
+            });
+        }, 2000);
 
         $(".li_container .order_items").click(function(e) {
             var dir = $(this).data("dir");
@@ -219,9 +244,7 @@ $htmlHeadXtra[] = '
                      break;
             }
 
-            //console.log("rebuild");
             buildLPtree($("#lp_item_list"), 0);
-
             var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
             $.post(
                 "'.$ajax_url.'",
@@ -233,58 +256,130 @@ $htmlHeadXtra[] = '
                 }
             );
         });
+        
+        setTimeout(function(){
+            initializeLpItemListSortable();
+        }, 200);
 
-        $("#lp_item_list").sortable({
-            items: "li",
-            handle: ".moved", //only the class "moved"
-            cursor: "move",
-            placeholder: "ui-state-highlight", //defines the yellow highlight
-            update: function(event, ui) {
-                buildLPtree($("#lp_item_list"), 0);
-                var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
-                $.post(
-                    "'.$ajax_url.'",
-                    order,
-                    function(reponse) {
-                        $("#message").html(reponse);
-                        order = "";
-                        newOrderData = "";
+        function initializeLpItemListSortable() {
+            const $lpItemList = $("#lp_item_list");
+            if (!$lpItemList.length) {
+                return;
+            }
+            let updateTimeout;
+            let isUpdating = false;
+            const $message = $("#message");
+            const ajaxUrl = "'.$ajax_url.'";
+            function debouncedUpdate(callback, delay = 300) {
+                clearTimeout(updateTimeout);
+                updateTimeout = setTimeout(callback, delay);
+            }
+            
+            function optimizedBuildLPtree() {
+                if (isUpdating) return;
+                isUpdating = true;
+                requestAnimationFrame(() => {
+                    try {
+                        buildLPtree($lpItemList, 0);
+                    } catch (error) {
+                    } finally {
+                        isUpdating = false;
                     }
-                );
-            },
-            receive: function(event, ui) {
-                var id = $(ui.item).attr("data_id");
-                var type = $(ui.item).attr("data_type");
-                var title = $(ui.item).attr("title");
-                processReceive = true;
-
-                if (ui.item.parent()[0]) {
-                    var parent_id = $(ui.item.parent()[0]).attr("id");
-                    var previous_id = $(ui.item.prev()).attr("id");
-
-                    if (parent_id) {
-                        parent_id = parent_id.split("_")[1];
-                        var params = {
+                });
+            }
+            
+            $lpItemList.sortable({
+                items: "li",
+                handle: ".moved",
+                cursor: "move",
+                placeholder: "ui-state-highlight",
+                tolerance: "pointer", 
+                delay: 100, 
+                distance: 10,
+                update: function(event, ui) {
+                    debouncedUpdate(() => {
+                        optimizedBuildLPtree();
+                        const order = "new_order=" + newOrderData + "&a=update_lp_item_order";
+                        $.ajax({
+                            type: "POST",
+                            url: ajaxUrl,
+                            data: order,
+                            timeout: 10000,
+                            beforeSend: function() {
+                                $message.addClass("updating");
+                            },
+                            success: function(response) {
+                                $message.removeClass("updating").html(response);
+                                order = "";
+                                newOrderData = "";
+                            },
+                            error: function(xhr, status, error) {
+                            }
+                        });
+                    }, 250);
+                },
+                receive: function(event, ui) {
+                    const $item = $(ui.item);
+                    const itemData = {
+                        id: $item.attr("data_id"),
+                        type: $item.attr("data_type"),
+                        title: $item.attr("title")
+                    };
+                    
+                    if (!itemData.id || !itemData.type) {
+                        return;
+                    }
+                    
+                    processReceive = true;
+                    
+                    const parent = ui.item.parent()[0];
+                    if (!parent) return;
+                    
+                    const $parent = $(parent);
+                    const parentId = $parent.attr("id");
+                    const $previous = $item.prev();
+                    const previousId = $previous.length ? $previous.attr("id") : null;
+                    
+                    if (parentId) {
+                        const cleanParentId = parentId.split("_")[1];
+                        
+                        const params = {
                             "a": "add_lp_item",
-                            "id": id,
-                            "parent_id": parent_id,
-                            "previous_id": previous_id,
-                            "type": type,
-                            "title" : title
+                            "id": itemData.id,
+                            "parent_id": cleanParentId,
+                            "previous_id": previousId,
+                            "type": itemData.type,
+                            "title": itemData.title
                         };
-
+                        
                         $.ajax({
                             type: "GET",
-                            url: "'.$ajax_url.'",
+                            url: ajaxUrl,
                             data: params,
+                            timeout: 10000,
+                            beforeSend: function() {
+                                $lpItemList.addClass("loading");
+                            },
                             success: function(data) {
-                                $("#lp_item_list").html(data);
+                                // Optimisation: mettre à jour seulement si les données ont changé
+                                if ($lpItemList.html() !== data) {
+                                    $lpItemList.removeClass("loading").html(data);
+                                    
+                                    setTimeout(() => {
+                                        initializeLpItemListSortable();
+                                    }, 100);
+                                } else {
+                                    $lpItemList.removeClass("loading");
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                $lpItemList.removeClass("loading");
                             }
                         });
                     }
                 }
-            } // End receive
-        });
+            });
+        }
         processReceive = false;
     });
 </script>';

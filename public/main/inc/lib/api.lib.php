@@ -2712,10 +2712,16 @@ function api_get_setting($variable, $isArray = false, $key = null)
             if (in_array($environment, $test)) {
                 return 'test';
             }
+            if ($environment === 'prod') {
+                return 'prod';
+            }
+
+            $settingValue = $settingsManager->getSetting('server_type');
+            if (!empty($settingValue)) {
+                return $settingValue;
+            }
 
             return 'prod';
-        // deprecated settings
-        // no break
         case 'openid_authentication':
         case 'service_ppt2lp':
         case 'formLogin_hide_unhide_label':

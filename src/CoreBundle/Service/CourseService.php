@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
@@ -59,7 +60,8 @@ class CourseService
         private readonly MailerInterface $mailer,
         private readonly EventLoggerService $eventLoggerService,
         private readonly ParameterBagInterface $parameterBag,
-        private readonly RequestStack $requestStack
+        private readonly RequestStack $requestStack,
+        private readonly AccessUrlHelper $accessUrlHelper
     ) {}
 
     public function createCourse(array $params): ?Course
@@ -90,11 +92,16 @@ class CourseService
     public function registerCourse(array $rawParams): ?Course
     {
         try {
-            /** @var User $currentUser */
+            /** @var User|null $currentUser */
             $currentUser = $this->security->getUser();
 
-            $params = $this->prepareAndValidateCourseData($rawParams);
+            // Fallback admin user if running from CLI
+            if (!$currentUser instanceof User) {
+                $currentUser = $this->getFallbackAdminUser();
+            }
 
+            $params = $this->prepareAndValidateCourseData($rawParams);
+            $accessUrl = $this->accessUrlHelper->getCurrent();
             $course = new Course();
             $course
                 ->setTitle($params['title'])
@@ -114,6 +121,7 @@ class CourseService
                 ->setUnsubscribe($params['unsubscribe'])
                 ->setCreator($currentUser)
             ;
+            $course->addAccessUrl($accessUrl);
 
             if (!empty($params['categories'])) {
                 foreach ($params['categories'] as $categoryId) {
@@ -125,7 +133,7 @@ class CourseService
             }
 
             $addTeacher = $params['add_user_as_teacher'] ?? true;
-            $user = $currentUser;
+            $user = $currentUser ?? $this->getFallbackAdminUser();
             if (!empty($params['user_id'])) {
                 $user = $this->userRepository->find((int) $params['user_id']);
             }
@@ -160,7 +168,7 @@ class CourseService
 
             $this->courseRepository->create($course);
 
-            if ($rawParams['exemplary_content']) {
+            if (!empty($rawParams['exemplary_content'])) {
                 $this->fillCourse($course, $params);
             }
 
@@ -173,7 +181,7 @@ class CourseService
 
             return $course;
         } catch (Exception $e) {
-            return null;
+            throw $e;
         }
     }
 
@@ -339,6 +347,10 @@ class CourseService
     {
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
+        if (!$currentUser instanceof User) {
+            $currentUser = $this->getFallbackAdminUser();
+        }
+
         if (!$currentUser) {
             throw new LogicException('There is no user currently authenticated..');
         }
@@ -366,6 +378,9 @@ class CourseService
     {
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
+        if (!$currentUser instanceof User) {
+            $currentUser = $this->getFallbackAdminUser();
+        }
 
         $files = [
             ['path' => '/audio', 'title' => $this->translator->trans('Audio'), 'filetype' => 'folder', 'size' => 0],
@@ -761,13 +776,37 @@ class CourseService
             $this->sendEmailToAdmin($course);
         }
 
+        $currentUser = $this->security->getUser();
+        if (!$currentUser instanceof User) {
+            $currentUser = $this->getFallbackAdminUser();
+        }
+
         $this->eventLoggerService->addEvent(
             'course_created',
             'course_id',
             $course->getId(),
             null,
-            $this->security->getUser()->getId(),
+            $currentUser->getId(),
             $course->getId()
         );
+    }
+
+    private function getFallbackAdminUser(): User
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+
+        $qb->select('u')
+            ->from(User::class, 'u')
+            ->where('u.roles LIKE :role')
+            ->setParameter('role', '%ROLE_ADMIN%')
+            ->setMaxResults(1);
+
+        $user = $qb->getQuery()->getOneOrNullResult();
+
+        if (!$user instanceof User) {
+            throw new \RuntimeException('No admin user found for fallback.');
+        }
+
+        return $user;
     }
 }

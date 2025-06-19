@@ -114,17 +114,30 @@ async function getCalendarEvents(startDate, endDate, commonParams) {
     "endDate[after]": startDate.toISOString(),
   })
 
+  const currentEventsPromise = requestCalendarEvents({
+    ...commonParams,
+    "startDate[before]": startDate.toISOString(),
+    "endDate[after]": endDate.toISOString(),
+  })
+
   const startingEventsPromise = requestCalendarEvents({
     ...commonParams,
     "startDate[before]": endDate.toISOString(),
     "startDate[after]": startDate.toISOString(),
   })
 
-  const [endingEvents, startingEvents] = await Promise.all([endingEventsPromise, startingEventsPromise])
+  const [endingEvents, currentEvents, startingEvents] = await Promise.all([
+    endingEventsPromise,
+    currentEventsPromise,
+    startingEventsPromise,
+  ])
 
   const uniqueEventsMap = new Map()
 
-  endingEvents.concat(startingEvents).forEach((event) => uniqueEventsMap.set(event.id, event))
+  endingEvents
+    .concat(startingEvents)
+    .concat(currentEvents)
+    .forEach((event) => uniqueEventsMap.set(event.id, event))
 
   return Array.from(uniqueEventsMap.values())
 }

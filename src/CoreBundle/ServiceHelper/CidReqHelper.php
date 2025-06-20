@@ -27,33 +27,39 @@ class CidReqHelper
         return $this->requestStack->getCurrentRequest();
     }
 
-    private function getSessionHandler(): SessionInterface
+    private function getSessionHandler(): ?SessionInterface
     {
-        return $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        return $request?->getSession();
     }
 
     public function getSessionId(): ?int
     {
-        return $this->getSessionHandler()->get('sid');
+        $session = $this->getSessionHandler();
+        return $session?->get('sid');
     }
 
     public function getSessionEntity(): ?Session
     {
-        return $this->getSessionHandler()->get('session');
+        $session = $this->getSessionHandler();
+        return $session?->get('session');
     }
 
-    public function getCourseId()
+    public function getCourseId(): mixed
     {
-        return $this->getSessionHandler()->get('cid');
+        $session = $this->getSessionHandler();
+        return $session?->get('cid');
     }
 
     public function getCourseEntity(): ?Course
     {
-        return $this->getSessionHandler()->get('course');
+        $session = $this->getSessionHandler();
+        return $session?->get('course');
     }
 
     public function getGroupId(): ?int
     {
-        return $this->getSessionHandler()->get('gid');
+        $session = $this->getSessionHandler();
+        return $session?->get('gid');
     }
 }

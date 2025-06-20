@@ -13,6 +13,8 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
@@ -484,7 +486,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
         $qb->select('u')
             ->innerJoin(
-                'ChamiloCoreBundle:SessionRelCourseRelUser',
+                SessionRelCourseRelUser::class,
                 'scu',
                 Join::WITH,
                 'scu.user = u'
@@ -512,13 +514,13 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $qb
             ->distinct()
             ->innerJoin(
-                'ChamiloCoreBundle:SessionRelUser',
+                SessionRelUser::class,
                 'su',
                 Join::WITH,
                 'u = su.user'
             )
             ->innerJoin(
-                'ChamiloCoreBundle:SessionRelCourseRelUser',
+                SessionRelCourseRelUser::class,
                 'scu',
                 Join::WITH,
                 'su.session = scu.session'

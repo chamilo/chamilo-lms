@@ -45,6 +45,17 @@ class ExceptionListener
 
                 return;
             }
+
+            $severity = $exception->getSeverity();
+            $message = $exception->getMessage();
+            if (in_array($severity, ['info', 'warning', 'success'], true)) {
+                $html = $this->twig->render('@ChamiloCore/Exception/not_allowed_message.html.twig', [
+                    'message' => $message,
+                    'severity' => $severity,
+                ]);
+                $event->setResponse(new Response($html, 200));
+                return;
+            }
         }
 
         if (isset($_SERVER['APP_ENV']) && \in_array($_SERVER['APP_ENV'], ['dev', 'test'], true)) {

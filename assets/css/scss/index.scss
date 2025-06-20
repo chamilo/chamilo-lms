@@ -35,19 +35,21 @@
 @include meta.load-css("atoms/checkbox");
 @include meta.load-css("atoms/color_picker");
 @include meta.load-css("atoms/divider");
-@include meta.load-css("atoms/dropdown");
 @include meta.load-css("atoms/fieldset");
+@include meta.load-css("atoms/float_label");
 @include meta.load-css("atoms/inline_message");
 @include meta.load-css("atoms/inputgroup");
 @include meta.load-css("atoms/input_switch");
 @include meta.load-css("atoms/input_text");
 @include meta.load-css("atoms/messages");
+@include meta.load-css("atoms/multiselect");
 @include meta.load-css("atoms/overlay");
 @include meta.load-css("atoms/password");
 @include meta.load-css("atoms/platform_logo");
 @include meta.load-css("atoms/progressbar");
 @include meta.load-css("atoms/radio");
 @include meta.load-css("atoms/rating");
+@include meta.load-css("atoms/select");
 @include meta.load-css("atoms/skeleton");
 @include meta.load-css("atoms/tags");
 @include meta.load-css("atoms/toast");
@@ -55,7 +57,6 @@
 
 @include meta.load-css("molecules/chip");
 @include meta.load-css("molecules/course_tool");
-@include meta.load-css("molecules/datepicker");
 @include meta.load-css("molecules/empty_state");
 @include meta.load-css("molecules/teacher_bar");
 @include meta.load-css("molecules/toolbar");
@@ -66,7 +67,7 @@
 @include meta.load-css("organisms/datatable");
 @include meta.load-css("organisms/dataview");
 @include meta.load-css("organisms/external_logins");
-@include meta.load-css("organisms/modals");
+@include meta.load-css("organisms/dialog");
 @include meta.load-css("organisms/menu");
 @include meta.load-css("organisms/sidebar");
 @include meta.load-css("organisms/section_header");

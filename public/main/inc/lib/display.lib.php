@@ -879,6 +879,12 @@ class Display
             $attributes['value'] = $value;
         }
 
+        if ('text' === $type) {
+            $attributes['class'] = isset($attributes['class'])
+                ? $attributes['class'].' p-inputtext p-component '
+                : 'p-inputtext p-component ';
+        }
+
         return self::tag('input', '', $attributes);
     }
 
@@ -897,7 +903,7 @@ class Display
         $extra = '';
         $default_id = 'id="'.$name.'" ';
         $extra_attributes = array_merge(
-            ['class' => 'p-dropdown p-component p-inputwrapper p-inputwrapper-filled'],
+            ['class' => 'p-select p-component p-inputwrapper p-inputwrapper-filled'],
             $extra_attributes
         );
         foreach ($extra_attributes as $key => $parameter) {

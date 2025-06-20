@@ -27,7 +27,7 @@ function removeExtraField()
 
     /** @var ExtraField $extraField */
     $extraField = $em
-        ->getRepository('ChamiloCoreBundle:ExtraField')
+        ->getRepository(ExtraField::class)
         ->findOneBy(['variable' => 'moodle_password', 'extraFieldType' => ExtraField::USER_FIELD_TYPE]);
 
     if ($extraField) {

@@ -7,6 +7,10 @@
  *
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
  */
+
+use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -26,7 +30,7 @@ if ($apiIsEnable) {
 }
 
 $em = Database::getManager();
-$extraField = $em->getRepository('ChamiloCoreBundle:ExtraField');
+$extraField = $em->getRepository(ExtraFieldEntity::class);
 
 $extraFieldNames = [];
 
@@ -38,7 +42,7 @@ $extraFieldValues = [];
 
 foreach ($extraFieldNames as $index => $fieldName) {
     if ($fieldName) {
-        $extraFieldRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldValues');
+        $extraFieldRepo = $em->getRepository(ExtraFieldValues::class);
         $extraFieldValues[] = $extraFieldRepo->findBy(['field' => $fieldName->getId()]);
     }
 }

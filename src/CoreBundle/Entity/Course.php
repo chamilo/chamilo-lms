@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\State\PublicCatalogueCourseStateProvider;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CTool;
 use DateTime;
@@ -35,20 +36,18 @@ use Symfony\Component\Validator\Constraints as Assert;
     types: ['https://schema.org/Course'],
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
-        new Post(),
-        new GetCollection(),
+        new Post(security: "is_granted('ROLE_USER')"),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(
+            uriTemplate: '/public_courses',
+            normalizationContext: ['groups' => ['course:read']],
+            provider: PublicCatalogueCourseStateProvider::class
+        ),
     ],
-    normalizationContext: [
-        'groups' => ['course:read'],
-    ],
-    denormalizationContext: [
-        'groups' => ['course:write'],
-    ],
-    filters: [
-        'course.sticky_boolean_filter',
-    ],
-    paginationClientEnabled: true,
-    security: "is_granted('ROLE_USER')",
+    normalizationContext: ['groups' => ['course:read']],
+    denormalizationContext: ['groups' => ['course:write']],
+    filters: ['course.sticky_boolean_filter'],
+    paginationClientEnabled: true
 )]
 #[ORM\Table(name: 'course')]
 #[ORM\Index(columns: ['sticky'], name: 'idx_course_sticky')]

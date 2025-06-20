@@ -12,8 +12,13 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
 use ChamiloSession;
+use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\GenericResource;
 use Laminas\Permissions\Acl\Role\GenericRole;
@@ -45,7 +50,8 @@ class ResourceNodeVoter extends Voter
     public function __construct(
         private Security $security,
         private RequestStack $requestStack,
-        private SettingsManager $settingsManager
+        private SettingsManager $settingsManager,
+        private EntityManagerInterface $entityManager
     ) {}
 
     public static function getReaderMask(): int
@@ -120,6 +126,27 @@ class ResourceNodeVoter extends Voter
                     return true;
                 }
 
+                // Exception: allow access to hotspot question images if student can view the quiz
+                $questionRepo = $this->entityManager->getRepository(CQuizQuestion::class);
+                $question = $questionRepo->findOneBy(['resourceNode' => $resourceNode]);
+                if ($question) {
+                    // Check if it's a Hotspot-type question
+                    if (\in_array($question->getType(), [6, 7, 8], true)) { // HOT_SPOT, HOT_SPOT_ORDER, HOT_SPOT_DELINEATION
+                        $rel = $this->entityManager
+                            ->getRepository(CQuizRelQuestion::class)
+                            ->findOneBy(['question' => $question])
+                        ;
+
+                        if ($rel && $rel->getQuiz()) {
+                            $quiz = $rel->getQuiz();
+                            // Allow if the user has VIEW rights on the quiz
+                            if ($this->security->isGranted('VIEW', $quiz)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
                 // no break
             case self::EDIT:
                 break;
@@ -134,6 +161,48 @@ class ResourceNodeVoter extends Voter
             && $user->getUserIdentifier() === $creator->getUserIdentifier()
         ) {
             return true;
+        }
+
+        $resourceTypeTitle = $resourceNode->getResourceType()->getTitle();
+        if (
+            \in_array($resourceTypeTitle, [
+                'student_publications',
+                'student_publications_corrections',
+                'student_publications_comments',
+            ], true)
+        ) {
+            if ($creator instanceof UserInterface
+                && $user instanceof UserInterface
+                && $user->getUserIdentifier() === $creator->getUserIdentifier()
+            ) {
+                return true;
+            }
+
+            if ($this->security->isGranted('ROLE_CURRENT_COURSE_STUDENT')
+                || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+                || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_STUDENT')
+                || $this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+            ) {
+                return true;
+            }
+        }
+
+        if ('files' === $resourceNode->getResourceType()->getTitle()) {
+            $document = $this->entityManager
+                ->getRepository(CDocument::class)
+                ->findOneBy(['resourceNode' => $resourceNode])
+            ;
+
+            if ($document) {
+                $exists = $this->entityManager
+                    ->getRepository(CStudentPublicationRelDocument::class)
+                    ->findOneBy(['document' => $document])
+                ;
+
+                if (null !== $exists) {
+                    return true;
+                }
+            }
         }
 
         // Checking links connected to this resource.

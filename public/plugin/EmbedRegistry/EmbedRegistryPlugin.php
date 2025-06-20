@@ -187,7 +187,7 @@ class EmbedRegistryPlugin extends Plugin
             api_convert_and_format_date($embed->getDisplayEndDate())
         );
 
-        return sprintf(get_lang('FromDateXToDateY'), $startDate, $endDate);
+        return sprintf(get_lang('From %s to %s'), $startDate, $endDate);
     }
 
     /**

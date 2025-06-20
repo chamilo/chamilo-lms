@@ -60,6 +60,7 @@ export const chamiloIconToClass = {
   "file-text": "mdi mdi-file-document",
   "file-upload": "mdi mdi-file-upload",
   "file-video": "mdi mdi-file-video",
+  "file-excel": "mdi mdi-file-excel-box",
   "filter": "mdi mdi-filter",
   "file-replace": "mdi mdi-file-replace",
   "fit-to-screen": "",
@@ -138,4 +139,9 @@ export const chamiloIconToClass = {
   "lock": "mdi mdi-lock",
   "account-check": "mdi mdi-account-check",
   "account-cancel": "mdi mdi-account-cancel",
+  "zip-pack": "mdi mdi-archive",
+  "zip-unpack": "mdi mdi-archive-arrow-down",
+  "clear-all": "mdi mdi-broom",
+  "qrcode": "mdi mdi-qrcode",
+  "minus": "mdi mdi-minus",
 }

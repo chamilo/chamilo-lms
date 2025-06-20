@@ -430,7 +430,7 @@ if ($oLP->current == $oLP->get_last()) {
             $minScore = $categories[0]->getCertificateMinScore();
             $userScore = $gradebookLinks[0]->calc_score($user_id, 'best');
             $categoryEntity = Container::getGradeBookCategoryRepository()->find($categories[0]->get_id());
-            if ($userScore[0] >= $minScore) {
+            if (isset($userScore) && $userScore[0] >= $minScore) {
                 Category::generateUserCertificate($categoryEntity, $user_id);
             }
         }

@@ -547,8 +547,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         // Change course to OPEN TO THE WORLD but the document is in DRAFT, "another" user cannot have access.
         $course = $courseRepo->find($courseId);
-        //$course->setVisibility(Course::OPEN_WORLD);
-        //$courseRepo->update($course);
+        // $course->setVisibility(Course::OPEN_WORLD);
+        // $courseRepo->update($course);
 
         $client->request(
             'GET',
@@ -559,7 +559,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-        //$this->assertResponseStatusCodeSame(403);
+        // $this->assertResponseStatusCodeSame(403);
     }
 
     public function testChangeVisibility(): void

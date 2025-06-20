@@ -78,10 +78,9 @@ class SurveyUtil
      *
      * @version January 2007
      */
-    public static function remove_answer($user, $survey_id, $question_id, $course_id, $lpItemId = 0): void
+    public static function remove_answer($user, $survey_id, $question_id, $lpItemId = 0): void
     {
         $sessionId = api_get_session_id();
-        $course_id = intval($course_id);
         // table definition
         $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
 

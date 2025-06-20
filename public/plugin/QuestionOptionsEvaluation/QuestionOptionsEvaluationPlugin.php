@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 
 /**
  * Class QuestionOptionsEvaluationPlugin.
@@ -150,7 +151,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        $eTrack = $em->find('ChamiloCoreBundle:TrackEExercises', $trackId);
+        $eTrack = $em->find(TrackEExercise::class, $trackId);
 
         $qTracks = $em
             ->createQuery(

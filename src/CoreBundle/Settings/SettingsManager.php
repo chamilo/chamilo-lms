@@ -415,7 +415,7 @@ class SettingsManager implements SettingsManagerInterface
                 }
             }
 
-            if (in_array($variable, $hidden, true)) {
+            if (\in_array($variable, $hidden, true)) {
                 continue;
             }
 

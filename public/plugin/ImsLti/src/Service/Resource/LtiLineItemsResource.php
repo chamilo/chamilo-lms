@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\PluginBundle\ImsLti\Entity\LineItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\OptimisticLockException;
@@ -122,7 +123,7 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
         $eval->set_visible(1);
         $eval->add();
 
-        $evaluation = $em->find('ChamiloCoreBundle:GradebookEvaluation', $eval->get_id());
+        $evaluation = $em->find(GradebookEvaluation::class, $eval->get_id());
 
         $lineItem = new LineItem();
         $lineItem

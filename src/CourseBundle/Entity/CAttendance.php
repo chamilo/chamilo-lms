@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\CAttendanceStateProcessor;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,6 +24,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -67,7 +69,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ],
             ],
         ),
-        new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new Get(security: "is_granted('ROLE_USER')"),
         new Post(
             denormalizationContext: ['groups' => ['attendance:write']],
             security: "is_granted('ROLE_TEACHER')",
@@ -78,11 +80,15 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_TEACHER')"
         ),
     ],
-    normalizationContext: ['groups' => ['attendance:read']],
+    normalizationContext: [
+        'groups' => ['attendance:read', 'resource_node:read', 'resource_link:read'],
+        'enable_max_depth' => true,
+    ],
     denormalizationContext: ['groups' => ['attendance:write']],
     paginationEnabled: true,
 )]
 #[ApiFilter(SearchFilter::class, properties: ['active' => 'exact', 'title' => 'partial', 'resourceNode.parent' => 'exact'])]
+#[ApiFilter(filterClass: SidFilter::class)]
 #[ORM\Table(name: 'c_attendance')]
 #[ORM\Index(columns: ['active'], name: 'active')]
 #[ORM\Entity(repositoryClass: CAttendanceRepository::class)]
@@ -130,6 +136,7 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
      */
     #[ORM\OneToMany(mappedBy: 'attendance', targetEntity: CAttendanceCalendar::class, cascade: ['persist', 'remove'])]
     #[Groups(['attendance:read'])]
+    #[MaxDepth(1)]
     protected Collection $calendars;
 
     /**
@@ -143,6 +150,9 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
      */
     #[ORM\OneToMany(mappedBy: 'attendance', targetEntity: CAttendanceSheetLog::class, cascade: ['persist', 'remove'])]
     protected Collection $logs;
+
+    #[Groups(['attendance:read'])]
+    private ?int $doneCalendars = null;
 
     public function __construct()
     {
@@ -286,6 +296,21 @@ class CAttendance extends AbstractResource implements ResourceInterface, Stringa
     public function getLogs(): array|Collection
     {
         return $this->logs;
+    }
+
+    public function getDoneCalendars(): int
+    {
+        return $this->calendars
+            ->filter(fn (CAttendanceCalendar $calendar) => $calendar->getDoneAttendance())
+            ->count()
+        ;
+    }
+
+    public function setDoneCalendars(?int $count): self
+    {
+        $this->doneCalendars = $count;
+
+        return $this;
     }
 
     /**

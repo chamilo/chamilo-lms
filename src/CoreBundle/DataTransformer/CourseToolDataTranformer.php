@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataTransformer;
 
-use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use Chamilo\CoreBundle\ApiResource\CourseTool;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Tool\AbstractTool;
@@ -16,7 +15,7 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class CourseToolDataTranformer implements DataTransformerInterface
+class CourseToolDataTranformer
 {
     use CourseFromRequestTrait;
 
@@ -26,10 +25,8 @@ class CourseToolDataTranformer implements DataTransformerInterface
         protected readonly ToolChain $toolChain,
     ) {}
 
-    public function transform($object, string $to, array $context = []): object
+    public function transform(CTool $object): CourseTool
     {
-        \assert($object instanceof CTool);
-
         $tool = $object->getTool();
 
         $toolModel = $this->toolChain->getToolFromName(
@@ -65,10 +62,5 @@ class CourseToolDataTranformer implements DataTransformerInterface
                 'sid' => $this->getSession()?->getId(),
                 'gid' => 0,
             ]);
-    }
-
-    public function supportsTransformation($data, string $to, array $context = []): bool
-    {
-        return $data instanceof CTool && CourseTool::class === $to;
     }
 }

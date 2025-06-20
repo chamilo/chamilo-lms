@@ -139,7 +139,6 @@ import CCalendarEventInfo from "../../components/ccalendarevent/CCalendarEventIn
 import allLocales from "@fullcalendar/core/locales-all"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useToast } from "primevue/usetoast"
-import cCalendarEventService from "../../services/ccalendarevent"
 import { useCidReqStore } from "../../store/cidReq"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useLocale, useParentLocale } from "../../composables/locale"
@@ -157,12 +156,10 @@ const confirm = useConfirm()
 const cidReqStore = useCidReqStore()
 
 const { course, session, group } = storeToRefs(cidReqStore)
-
-const { abbreviatedDatetime } = useFormatDate()
-
+const { abbreviatedDatetime, getCurrentTimezone } = useFormatDate()
 const { showAddButton } = useCalendarActionButtons()
 
-const { isEditableByUser, allowSubscribeToEvent, allowUnsubscribeToEvent } = useCalendarEvent()
+const { isEditableByUser, allowSubscribeToEvent, allowUnsubscribeToEvent, getCalendarEvents } = useCalendarEvent()
 
 const item = ref({})
 const dialog = ref(false)
@@ -210,42 +207,6 @@ const sessionState = reactive({
   showSessionDialog: false,
 })
 
-async function getCalendarEvents({ startStr, endStr }) {
-  const params = {
-    "startDate[after]": startStr,
-    "endDate[before]": endStr,
-  }
-
-  if (course.value) {
-    params.cid = course.value.id
-  }
-
-  if (session.value) {
-    params.sid = session.value.id
-  }
-
-  if (group.value) {
-    params.gid = group.value.id
-  }
-
-  if (route.query?.type === "global") {
-    params.type = "global"
-  }
-
-  const calendarEvents = await cCalendarEventService.findAll({ params }).then((response) => response.json())
-
-  return calendarEvents["hydra:member"].map((event) => {
-    let color = event.color || "#007BFF"
-
-    return {
-      ...event,
-      start: event.startDate,
-      end: event.endDate,
-      color,
-    }
-  })
-}
-
 const calendarLocale = allLocales.find(
   (calLocale) =>
     calLocale.code === appLocale.value.replace("_", "-") || calLocale.code === useParentLocale(appLocale.value),
@@ -257,16 +218,9 @@ const showAddEventDialog = () => {
 
   dialog.value = true
 }
-
-const goToMyStudentsSchedule = () => {
-  window.location.href = "/main/calendar/planification.php"
-}
-
-const goToSessionPanning = () => {
-  window.location.href = "/main/my_space/calendar_plan.php"
-}
-
+const timezone = getCurrentTimezone()
 const calendarOptions = ref({
+  timeZone: timezone,
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
   locales: allLocales,
   locale: calendarLocale?.code ?? "en-GB",
@@ -286,7 +240,7 @@ const calendarOptions = ref({
 
     let event = eventClickInfo.event.toPlainObject()
 
-    if (event.extendedProps["@type"] && event.extendedProps["@type"] === "Session") {
+    if (event.extendedProps["objectType"] && event.extendedProps["objectType"] === "session") {
       allowToEdit.value =
         allowUserEditAgenda.value && event.extendedProps.resourceNode.creator.id === securityStore.user.id
       sessionState.sessionAsEvent = event
@@ -297,9 +251,10 @@ const calendarOptions = ref({
 
     item.value = { ...event.extendedProps }
 
+    item.value["@id"] = "/api/c_calendar_events/" + event.id.match(/\d+$/)[0]
     item.value["title"] = event.title
-    item.value["startDate"] = event.start
-    item.value["endDate"] = event.end
+    item.value["startDate"] = event.start ? new Date(event.start) : null
+    item.value["endDate"] = event.end ? new Date(event.end) : null
     item.value["parentResourceNodeId"] = event.extendedProps?.resourceNode?.creator?.id
 
     if (
@@ -337,7 +292,25 @@ const calendarOptions = ref({
     dialog.value = true
   },
   events(info, successCallback) {
-    getCalendarEvents(info).then((events) => successCallback(events))
+    const commonParams = {}
+
+    if (course.value) {
+      commonParams.cid = course.value.id
+    }
+
+    if (session.value) {
+      commonParams.sid = session.value.id
+    }
+
+    if (group.value) {
+      commonParams.gid = group.value.id
+    }
+
+    if (route.query?.type === "global") {
+      commonParams.type = "global"
+    }
+
+    getCalendarEvents(info.start, info.end, commonParams).then((events) => successCallback(events))
   },
 })
 

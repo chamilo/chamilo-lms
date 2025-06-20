@@ -1385,17 +1385,17 @@ class SocialManager extends UserManager
                         case ExtraField::FIELD_TYPE_RADIO:
                             $objEfOption = new ExtraFieldOption('user');
                             $value = $data['extra_'.$extraFieldInfo['variable']];
-                            $optionInfo = $objEfOption->get_field_option_by_field_and_option(
-                                $extraFieldInfo['id'],
-                                $value
+                            $optionInfo = $objEfOption->repo->getFieldOptionByFieldAndOption(
+                                (int) $extraFieldInfo['id'],
+                                $value,
+                                $objEfOption->extraField->getItemType()
                             );
 
-                            if ($optionInfo && isset($optionInfo[0])) {
-                                $optionInfo = $optionInfo[0];
+                            if (!empty($optionInfo[0])) {
                                 $extraFieldItem = [
                                     'variable' => $extraFieldInfo['variable'],
                                     'label' => ucfirst($extraFieldInfo['display_text']),
-                                    'value' => $optionInfo['display_text'],
+                                    'value' => $optionInfo[0]->getDisplayText(),
                                 ];
                             } else {
                                 $extraFieldItem = [
@@ -1420,7 +1420,11 @@ class SocialManager extends UserManager
                     switch ($extraFieldInfo['value_type']) {
                         case ExtraField::FIELD_TYPE_RADIO:
                             $objEfOption = new ExtraFieldOption('user');
-                            $optionInfo = $objEfOption->get_field_option_by_field_and_option($extraFieldInfo['id'], $extraFieldInfo['value']);
+                            $optionInfo = $objEfOption->repo->getFieldOptionByFieldAndOption(
+                                (int) $extraFieldInfo['id'],
+                                $extraFieldInfo['value'],
+                                $objEfOption->extraField->getItemType()
+                            );
                             break;
                         case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                         case ExtraField::FIELD_TYPE_GEOLOCALIZATION:

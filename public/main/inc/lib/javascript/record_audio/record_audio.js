@@ -87,8 +87,6 @@ window.RecordAudio = (function () {
                     if (btnSave) {
                         btnSave.prop('disabled', true).text(btnSave.data('loadingtext'));
                     }
-
-                    $('.exercise_save_now_button button, .exercise_actions button').prop('disabled', true);
                 }
             }).done(function (response) {
                 $(response.message).insertAfter($(rtcInfo.blockId).find('.well'));
@@ -124,6 +122,8 @@ window.RecordAudio = (function () {
                 btnStart.prop('disabled', true).addClass('hidden');
                 btnPause.prop('disabled', false).removeClass('hidden');
                 tagAudio.removeClass('show').addClass('hidden');
+
+                $('.exercise  _save_now_button button, .exercise_actions button').prop('disabled', true);
             }
 
             function errorCallback(error) {

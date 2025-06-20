@@ -82,7 +82,7 @@ switch ($action) {
         }
 
         /** @var PortfolioCategory $category */
-        $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
+        $category = $em->find(PortfolioCategory::class, $id);
 
         if (!$isValid($category)) {
             api_not_allowed(true);
@@ -99,7 +99,7 @@ switch ($action) {
         }
 
         /** @var PortfolioCategory $category */
-        $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
+        $category = $em->find(PortfolioCategory::class, $id);
 
         if (!$isValid($category)) {
             api_not_allowed(true);
@@ -124,7 +124,7 @@ switch ($action) {
         }
 
         /** @var PortfolioCategory $category */
-        $category = $em->find('ChamiloCoreBundle:PortfolioCategory', $id);
+        $category = $em->find(PortfolioCategory::class, $id);
 
         if (!$isValid($category)) {
             api_not_allowed(true);
@@ -150,7 +150,7 @@ switch ($action) {
         }
 
         /** @var CPortfolio $item */
-        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+        $item = $em->find(Portfolio::class, $id);
 
         if (!$isValid($item)) {
             api_not_allowed(true);
@@ -167,7 +167,7 @@ switch ($action) {
         }
 
         /** @var Portfolio $item */
-        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+        $item = $em->find(Portfolio::class, $id);
 
         if (!$isValid($item)) {
             api_not_allowed(true);
@@ -197,7 +197,7 @@ switch ($action) {
         }
 
         /** @var Portfolio $item */
-        $item = $em->find('ChamiloCoreBundle:Portfolio', $id);
+        $item = $em->find(Portfolio::class, $id);
 
         if (!$isValid($item)) {
             api_not_allowed(true);

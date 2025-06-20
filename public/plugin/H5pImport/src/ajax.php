@@ -46,7 +46,7 @@ if ('set_finished' === $action && 0 !== $h5pId) {
         // If it comes from an LP, update in c_lp_item_view
         if (1 == $_REQUEST['learnpath'] && Session::has('oLP')) {
             $lpObject = Session::read('oLP');
-            $clpItemViewRepo = $em->getRepository('ChamiloCourseBundle:CLpItemView');
+            $clpItemViewRepo = $em->getRepository(CLpItemView::class);
 
             /** @var null|CLpItemView $lpItemView */
             $lpItemView = $clpItemViewRepo->findOneBy(
@@ -57,7 +57,7 @@ if ('set_finished' === $action && 0 !== $h5pId) {
             );
 
             /** @var null|CLpItem $lpItem */
-            $lpItem = $entityManager->find('ChamiloCourseBundle:CLpItem', $lpItemView->getLpItemId());
+            $lpItem = $entityManager->find(CLpItem::class, $lpItemView->getLpItemId());
             if ('h5p' !== $lpItem->getItemType()) {
                 return null;
             }

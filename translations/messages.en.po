@@ -28324,3 +28324,48 @@ msgstr "AI helpers"
 
 msgid "ID of the user who officially sends the agenda reminders"
 msgstr "ID of the user who officially sends the agenda reminders"
+
+msgid "Session expired. Redirecting to login…"
+msgstr "Session expired. Redirecting to login…"
+
+msgid "Super admin"
+msgstr "Super admin"
+
+msgid "Global admin"
+msgstr "Global admin"
+
+msgid "Question manager"
+msgstr "Question manager"
+
+msgid "Then enter the 6-digit code shown in your app at the bottom of the form."
+msgstr "Then enter the 6-digit code shown in your app at the bottom of the form."
+
+msgid "Enter your 2FA code"
+msgstr "Enter your 2FA code"
+
+msgid "Enable two-factor authentication (2FA)"
+msgstr "Enable fwo-factor authentication (2FA)"
+
+msgid "Confirm new password"
+msgstr "Confirm new password"
+
+msgid "Classes of session"
+msgstr "Classes of session"
+
+msgid "Classes of course"
+msgstr "Classes of course"
+
+msgid "Select a class"
+msgstr "Select a class"
+
+msgid "Course %s added. You can access it directly %shere%s."
+msgstr "Course %s added. You can access it directly %shere%s."
+
+msgid "Accept Terms and Conditions"
+msgstr "Accept Terms and Conditions"
+
+msgid "You accepted these terms on"
+msgstr "You accepted these terms on"
+
+msgid "Revoke Acceptance"
+msgstr "Revoke Acceptance"

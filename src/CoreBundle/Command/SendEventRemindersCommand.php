@@ -16,6 +16,7 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,13 +26,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const PHP_EOL;
 
+#[AsCommand(
+    name: 'app:send-event-reminders',
+    description: 'Send notification messages to users that have reminders from events in their agenda.',
+)]
 class SendEventRemindersCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:send-event-reminders';
-
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly SettingsManager $settingsManager,
@@ -45,7 +45,6 @@ class SendEventRemindersCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Send notification messages to users that have reminders from events in their agenda.')
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
             ->setHelp('This command sends notifications to users who have pending reminders for calendar events.')
         ;
@@ -202,7 +201,20 @@ class SendEventRemindersCommand extends Command
         $messageSubject = $this->translator->trans('Reminder for event : %s', ['%s' => $event->getTitle()]);
         $messageContent = implode(PHP_EOL, $this->generateEventDetails($event));
 
-        $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
+        $this->messageHelper->sendMessage(
+            $user->getId(),
+            $messageSubject,
+            $messageContent,
+            [],
+            [],
+            0,
+            0,
+            0,
+            $senderId,
+            0,
+            false,
+            true
+        );
 
         if ($debug) {
             error_log("Message sent to user ID: {$user->getId()} for event: {$event->getTitle()}");

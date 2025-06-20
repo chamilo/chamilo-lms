@@ -32,7 +32,6 @@ if (isset($_GET['isStudentView']) && 'true' === $_GET['isStudentView']) {
 }
 
 // interbreadcrumb
-$interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('Description')];
 if (1 == $description_type) {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Description')];
 }

@@ -57,8 +57,7 @@ $anonymizeUserAccountsDisbaledFor3Years = false;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
-use Chamilo\UserBundle\Entity\User;
-use Doctrine\DBAL\FetchMode;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\OptimisticLockException;
 
 if (php_sapi_name() !== 'cli') {
@@ -127,8 +126,8 @@ foreach ($accessUrls as $accessUrl) {
             $extraFieldMap = $tableFieldMap[EXTRA_ARRAY_KEY];
             unset($tableFieldMap[EXTRA_ARRAY_KEY]);
         }
-        $extraFieldRepository = Database::getManager()->getRepository('ChamiloCoreBundle:ExtraField');
-        $extraFieldValueRepository = Database::getManager()->getRepository('ChamiloCoreBundle:ExtraFieldValues');
+        $extraFieldRepository = Database::getManager()->getRepository(ExtraField::class);
+        $extraFieldValueRepository = Database::getManager()->getRepository(ExtraFieldValues::class);
         foreach ([false => $tableFieldMap, true => $extraFieldMap] as $areExtra => $fields) {
             foreach ($fields as $name => $value) {
                 $userField = (object)[
@@ -457,7 +456,7 @@ if ($anonymizeUserAccountsDisbaledFor3Years) {
         where default_event_type=\'user_disable\' and default_value_type=\'user_id\'
         group by default_value
         having max(default_date) < date_sub(now(), interval 3 year)'
-    )->fetchAll(FetchMode::COLUMN) as $userId) {
+    )->fetchFirstColumn() as $userId) {
         $longDisabledUserIds[] = $userId;
     }
     $anonymizedUserIds = [];
@@ -465,7 +464,7 @@ if ($anonymizeUserAccountsDisbaledFor3Years) {
         'select distinct default_value
         from track_e_default
         where default_event_type=\'user_anonymized\' and default_value_type=\'user_id\''
-    )->fetchAll(FetchMode::COLUMN) as $userId) {
+    )->fetchFirstColumn() as $userId) {
         $anonymizedUserIds[] = $userId;
     }
     foreach (array_diff($longDisabledUserIds, $anonymizedUserIds) as $userId) {

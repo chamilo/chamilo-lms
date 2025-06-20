@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataTransformer;
 
-use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use Chamilo\CoreBundle\ApiResource\CalendarEvent;
 use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Session;
@@ -14,20 +13,18 @@ use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
-use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class CalendarEventTransformer implements DataTransformerInterface
+readonly class CalendarEventTransformer
 {
     public function __construct(
-        private readonly RouterInterface $router,
-        private readonly UsergroupRepository $usergroupRepository,
-        private readonly CCalendarEventRepository $calendarEventRepository,
-        private readonly SettingsManager $settingsManager,
+        private RouterInterface $router,
+        private UsergroupRepository $usergroupRepository,
+        private SettingsManager $settingsManager,
     ) {}
 
-    public function transform($object, string $to, array $context = []): object
+    public function transform(CCalendarEvent|Session $object): object
     {
         if ($object instanceof Session) {
             return $this->mapSessionToDto($object);
@@ -36,15 +33,8 @@ class CalendarEventTransformer implements DataTransformerInterface
         return $this->mapCCalendarToDto($object);
     }
 
-    public function supportsTransformation($data, string $to, array $context = []): bool
+    private function mapCCalendarToDto(CCalendarEvent $object): CalendarEvent
     {
-        return ($data instanceof CCalendarEvent || $data instanceof Session) && CalendarEvent::class === $to;
-    }
-
-    private function mapCCalendarToDto(object $object): CalendarEvent
-    {
-        \assert($object instanceof CCalendarEvent);
-
         $object->setResourceLinkListFromEntity();
 
         $subscriptionItemTitle = null;
@@ -55,7 +45,7 @@ class CalendarEventTransformer implements DataTransformerInterface
 
         $eventType = $object->determineType();
         $color = trim((string) $object->getColor());
-        $color = $color !== '' ? $color : $this->determineEventColor($eventType);
+        $color = '' !== $color ? $color : $this->determineEventColor($eventType);
 
         $calendarEvent = new CalendarEvent(
             'calendar_event_'.$object->getIid(),
@@ -86,11 +76,10 @@ class CalendarEventTransformer implements DataTransformerInterface
         return $calendarEvent;
     }
 
-    private function mapSessionToDto(object $object): CalendarEvent
+    private function mapSessionToDto(Session $object): CalendarEvent
     {
-        \assert($object instanceof Session);
-
         $course = null;
+
         /** @var ?SessionRelCourse $sessionRelCourse */
         if ($object->getCourses()->first() instanceof SessionRelCourse) {
             $course = $object->getCourses()->first()->getCourse();

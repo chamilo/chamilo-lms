@@ -170,7 +170,10 @@ class GenericAuthenticator extends AbstractAuthenticator
                     $user->getEmail()
                 )
             )
-            ->setAuthSource('oauth2')
+            ->addAuthSourceByAuthentication(
+                'oauth2',
+                $this->urlHelper->getCurrent()
+            )
             ->setStatus($status)
             ->setRoleFromStatus($status)
         ;

@@ -6,10 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Serializer\Filter\GroupFilter;
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -17,7 +13,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use ApiPlatform\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\Api\CreateSessionWithUsersAndCoursesAction;
 use Chamilo\CoreBundle\Dto\CreateSessionWithUsersAndCoursesInput;
 use Chamilo\CoreBundle\Entity\Listener\SessionListener;
@@ -45,7 +40,15 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)"
         ),
         new Put(security: "is_granted('ROLE_ADMIN')"),
-        new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new GetCollection(
+            security: "is_granted('ROLE_ADMIN')",
+            filters: [
+                'session.search_filter',
+                'session.property_filter',
+                'session.order_filter',
+                'session.group_filter',
+            ]
+        ),
         new GetCollection(
             uriTemplate: '/users/{id}/session_subscriptions/past.{_format}',
             uriVariables: [
@@ -119,10 +122,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\EntityListeners([SessionListener::class])]
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
 #[UniqueEntity('title')]
-#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
-#[ApiFilter(PropertyFilter::class)]
-#[ApiFilter(OrderFilter::class, properties: ['id', 'title'])]
-#[ApiFilter(GroupFilter::class, arguments: ['parameterName' => 'groups'])]
 class Session implements ResourceWithAccessUrlInterface, Stringable
 {
     public const READ_ONLY = 1;

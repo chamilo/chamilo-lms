@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\PortfolioItemAddedEvent;
 
 $categories = $em
-    ->getRepository('ChamiloCoreBundle:PortfolioCategory')
+    ->getRepository(PortfolioCategory::class)
     ->findBy([
         'user' => $user,
     ]);

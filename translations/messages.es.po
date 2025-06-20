@@ -1700,7 +1700,7 @@ msgid "Message Sent"
 msgstr "Mensaje enviado"
 
 msgid "Settings"
-msgstr "Configuración del curso"
+msgstr "Ajustes"
 
 msgid "The information has been modified"
 msgstr "Las características han sido modificadas"
@@ -29372,3 +29372,12 @@ msgstr ""
 
 msgid "Menumycourses"
 msgstr "Mis cursos"
+
+msgid "Accept Terms and Conditions"
+msgstr "Acepta los Términos y Condiciones"
+
+msgid "You accepted these terms on"
+msgstr "Aceptaste estos términos el"
+
+msgid "Revoke Acceptance"
+msgstr "Revocar la aceptación"

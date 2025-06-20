@@ -6,7 +6,7 @@
     />
 
     <form
-      class="login-section__form p-input-filled"
+      class="login-section__form"
       @submit.prevent="onSubmitLoginForm"
     >
       <div class="field">
@@ -15,6 +15,7 @@
           v-model="login"
           :placeholder="t('Username')"
           type="text"
+          variant="filled"
         />
       </div>
 
@@ -25,19 +26,24 @@
           :placeholder="t('Password')"
           input-id="password"
           toggle-mask
+          variant="filled"
         />
       </div>
 
-      <div v-if="requires2FA" class="field">
+      <div
+        v-if="requires2FA"
+        class="field"
+      >
         <InputText
           v-model="totp"
           :placeholder="t('Enter 2FA code')"
           type="text"
+          variant="filled"
         />
       </div>
 
       <div class="field login-section__remember-me">
-        <InputSwitch
+        <ToggleSwitch
           v-model="remember"
           input-id="binary"
           name="remember_me"
@@ -82,16 +88,20 @@
 
 <script setup>
 import { computed, ref } from "vue"
+import { useRouter } from "vue-router"
 import Button from "primevue/button"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
-import InputSwitch from "primevue/inputswitch"
+import ToggleSwitch from "primevue/toggleswitch"
 import { useI18n } from "vue-i18n"
 import { useLogin } from "../composables/auth/login"
 import LoginOAuth2Buttons from "./login/LoginOAuth2Buttons.vue"
 import { usePlatformConfig } from "../store/platformConfig"
 
 const { t } = useI18n()
+
+const router = useRouter()
+
 const platformConfigStore = usePlatformConfig()
 const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration"))
 
@@ -106,17 +116,26 @@ const requires2FA = ref(false)
 redirectNotAuthenticated()
 
 async function onSubmitLoginForm() {
-  const response = await performLogin({
-    login: login.value,
-    password: password.value,
-    totp: requires2FA.value ? totp.value : null,
-    _remember_me: remember.value,
-  })
+  try {
+    const response = await performLogin({
+      login: login.value,
+      password: password.value,
+      totp: requires2FA.value ? totp.value : null,
+      _remember_me: remember.value,
+    })
 
-  if (response.requires2FA) {
-    requires2FA.value = true
-  } else {
-    router.replace({ name: "Home" })
+    if (!response) {
+      console.warn("[Login] No response from performLogin.")
+      return
+    }
+
+    if (response.requires2FA) {
+      requires2FA.value = true
+    } else {
+      await router.replace({ name: "Home" })
+    }
+  } catch (error) {
+    console.error("[Login] performLogin failed:", error)
   }
 }
 </script>

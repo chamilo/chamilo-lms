@@ -9,11 +9,13 @@ export default {
       name: "DocumentsList",
       path: "",
       component: () => import("../views/documents/DocumentsList.vue"),
+      meta: { breadcrumb: "" },
     },
     {
       name: "DocumentsCreate",
       path: "new",
       component: () => import("../views/documents/Create.vue"),
+      meta: { breadcrumb: "Create file" },
     },
     {
       name: "DocumentsCreateFile",

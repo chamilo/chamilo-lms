@@ -90,7 +90,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'use_users_timezone',
                     'title' => 'Enable users timezones',
-                    'comment' => 'Enable the possibility for users to select their own timezone. The timezone field should be set to visible and changeable in the Profiling menu in the administration section before users can choose their own. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time.',
+                    'comment' => 'Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time.',
                 ],
                 [
                     'name' => 'allow_show_linkedin_url',
@@ -114,6 +114,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'session' => [
+                [
+                    'name' => 'session_list_view_remaining_days',
+                    'title' => 'Show remaining days in My Sessions',
+                    'comment' => 'If enabled, the session dates on the "My Sessions" page will be replaced by the number of remaining days.',
+                ],
                 [
                     'name' => 'add_users_by_coach',
                     'title' => 'Register users by Coach',
@@ -246,7 +251,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'access_url_specific_files',
                     'title' => 'Enable URL-specific files',
-                    'comment' => 'When this feature is enabled on a multi-URL configuration, you can go to the main URL and provide URL-specific versions of any file (in the documents tool). The original file will be replaced by the alternative whenever seeing it from a different URL. This allows you to customize each URL even further, while enjoying the advantage of re-using the same courses many times.'
+                    'comment' => 'When this feature is enabled on a multi-URL configuration, you can go to the main URL and provide URL-specific versions of any file (in the documents tool). The original file will be replaced by the alternative whenever seeing it from a different URL. This allows you to customize each URL even further, while enjoying the advantage of re-using the same courses many times.',
                 ],
                 [
                     'name' => 'allow_course_theme',
@@ -1054,12 +1059,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'donotlistcampus',
                     'title' => 'Do not list this campus on chamilo.org',
-                    'comment' => 'By default, Chamilo portals are automatically registered in a public list at chamilo.org, just using the title you gave to this portal (not the URL nor any private data). Check this box to avoid having the title of your portal appear.'
+                    'comment' => 'By default, Chamilo portals are automatically registered in a public list at chamilo.org, just using the title you gave to this portal (not the URL nor any private data). Check this box to avoid having the title of your portal appear.',
                 ],
                 [
                     'name' => 'timezone',
                     'title' => 'Default timezone',
-                    'comment' => 'Select the default timezone for this portal. This will help set the timezone (if the feature is enabled) for each new user or for any user that has not set a specific timezone yet. Timezones help show all time-related information on screen in the specific timezone of each user.'
+                    'comment' => 'Select the default timezone for this portal. This will help set the timezone (if the feature is enabled) for each new user or for any user that has not set a specific timezone yet. Timezones help show all time-related information on screen in the specific timezone of each user.',
                 ],
                 [
                     'name' => 'chamilo_database_version',

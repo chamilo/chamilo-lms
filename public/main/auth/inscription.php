@@ -117,11 +117,41 @@ if ($isTccEnabled) {
 
 $extraFieldsLoaded = false;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
+$registeringText = addslashes(get_lang('Registering'));
+$htmlHeadXtra[] = <<<EOD
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form[name="registration"]');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            const submitButtons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+            submitButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('disabled');
+                btn.innerText = '{$registeringText}';
+            });
+        });
+    }
+});
+</script>
+EOD;
+
+
 // User is not allowed if Terms and Conditions are disabled and
 // registration is disabled too.
-$isNotAllowedHere = ('false' === api_get_setting('allow_terms_conditions') && 'false' === api_get_setting('allow_registration'));
-if ($isNotAllowedHere) {
-    api_not_allowed(true, get_lang('Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'));
+$isCreatingIntroPage = isset($_GET['create_intro_page']);
+$isPlatformAdmin = api_is_platform_admin();
+
+$isNotAllowedHere = (
+    'false' === api_get_setting('allow_terms_conditions') &&
+    'false' === api_get_setting('allow_registration')
+);
+
+if ($isNotAllowedHere && !($isCreatingIntroPage && $isPlatformAdmin)) {
+    api_not_allowed(
+        true,
+        get_lang('Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.')
+    );
 }
 
 $settingConditions = api_get_setting('profile.show_conditions_to_user', true);
@@ -633,16 +663,6 @@ if ('true' === api_get_setting('allow_terms_conditions') && $userAlreadyRegister
     $toolName = get_lang('Terms and Conditions');
 }
 
-// Forbidden to self-register
-if ($isNotAllowedHere) {
-    api_not_allowed(
-        true,
-        get_lang(
-            'Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'
-        )
-    );
-}
-
 if ('approval' === api_get_setting('allow_registration')) {
     $content .= Display::return_message(get_lang('Your account has to be approved'));
 }
@@ -658,7 +678,7 @@ $showTerms = false;
 // Terms and conditions
 $infoMessage = '';
 if ('true' === api_get_setting('allow_terms_conditions')) {
-    if (!api_is_platform_admin()) {
+    if (!$isPlatformAdmin) {
         if ('true' === api_get_setting('ticket.show_terms_if_profile_completed')) {
             $userId = api_get_user_id();
             if (empty($userId) && isset($termRegistered['user_id'])) {
@@ -1204,7 +1224,7 @@ if ($form->validate()) {
             ['class' => 'btn btn--primary btn-large']
         ),
         'message' => '',
-        'action' => api_get_path(WEB_PATH).'user_portal.php',
+        'action' => api_get_path(WEB_PATH).'home',
         'go_button' => '',
     ];
 
@@ -1221,7 +1241,7 @@ if ($form->validate()) {
                 Session::erase('_course');
                 Session::erase('_cid');
             } else {
-                $formData['action'] = api_get_path(WEB_PATH).'user_portal.php';
+                $formData['action'] = api_get_path(WEB_PATH).'home';
             }
         }
     } else {
@@ -1230,10 +1250,12 @@ if ($form->validate()) {
             $textAfterRegistration .= '<p>'.get_lang('An e-mail has been sent to remind you of your login and password', $userEntity->getLocale()).'</p>';
             $diagnosticPath = '<a href="'.$linkDiagnostic.'" class="custom-link">'.$linkDiagnostic.'</a>';
             $textAfterRegistration .= '<p>';
-            $textAfterRegistration .= sprintf(
-                            get_lang('Welcome, please go to diagnostic at %s.', $userEntity->getLocale()),
-                            $diagnosticPath
-            );
+            if ('true' === api_get_setting('session.allow_search_diagnostic')) {
+                $textAfterRegistration .= sprintf(
+                    get_lang('Welcome, please go to diagnostic at %s.', $userEntity->getLocale()),
+                    $diagnosticPath
+                );
+            }
             $textAfterRegistration .= '</p>';
         }
 
@@ -1381,7 +1403,7 @@ if ($form->validate()) {
                 . '</div>' . $content;
         }
 
-        if (isset($_GET['create_intro_page']) && api_is_platform_admin()) {
+        if ($isCreatingIntroPage && $isPlatformAdmin) {
             $user = api_get_user_entity();
 
             if ($introPage) {

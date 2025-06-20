@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'resource_type')]
+#[ORM\Index(columns: ['title'], name: 'idx_title')]
 #[ORM\Entity]
 class ResourceType implements Stringable
 {

@@ -2,25 +2,29 @@
   <div class="p-4">
     <!-- Toolbar -->
     <BaseToolbar>
-      <BaseButton
-        :label="t('Back to Attendance Sheet')"
-        icon="back"
-        type="info"
-        @click="redirectToAttendanceSheet"
-      />
-      <BaseButton
-        :label="t('Add Calendar Event')"
-        icon="plus"
-        type="success"
-        @click="redirectToAddCalendarEvent"
-      />
-
-      <BaseButton
-        :label="t('Clear All')"
-        icon="delete"
-        type="error"
-        @click="clearAllEvents"
-      />
+      <template #start>
+        <BaseButton
+          icon="back"
+          size="normal"
+          type="black"
+          @click="redirectToAttendanceSheet"
+          :title="t('Back to Attendance Sheet')"
+        />
+        <BaseButton
+          icon="plus"
+          size="normal"
+          type="black"
+          @click="redirectToAddCalendarEvent"
+          :title="t('Add Calendar Event')"
+        />
+        <BaseButton
+          icon="clear-all"
+          size="normal"
+          type="black"
+          @click="clearAllEvents"
+          :title="t('Clear All')"
+        />
+      </template>
     </BaseToolbar>
 
     <!-- Informative Message -->
@@ -69,6 +73,7 @@
     >
       <div class="p-fluid">
         <BaseCalendar
+          id="date_time"
           v-model="selectedEventDate"
           :label="t('Date')"
           :show-time="true"
@@ -224,8 +229,8 @@ const redirectToAttendanceSheet = () => {
 
 const redirectToAddCalendarEvent = () => {
   router.push({
-    name: "AddCalendarEvent",
-    params: { id: route.params.id },
+    name: "AttendanceAddCalendarEvent",
+    params: { node: route.params.node, id: route.params.id },
     query: { cid: route.query.cid, sid: route.query.sid, gid: route.query.gid },
   })
 }

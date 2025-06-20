@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -24,13 +25,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
+#[AsCommand(
+    name: 'app:lp-progress-reminder',
+    description: 'Send LP progress reminders to users based on "number_of_days_for_completion".',
+)]
 class LpProgressReminderCommand extends Command
 {
-    /**
-     * @var string|null
-     */
-    protected static $defaultName = 'app:lp-progress-reminder';
-
     private const NUMBER_OF_DAYS_TO_RESEND_NOTIFICATION = 3;
 
     public function __construct(
@@ -51,7 +51,6 @@ class LpProgressReminderCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Send LP progress reminders to users based on "number_of_days_for_completion".')
             ->addOption(
                 'debug',
                 null,

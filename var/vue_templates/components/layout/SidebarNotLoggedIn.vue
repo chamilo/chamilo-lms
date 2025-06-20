@@ -3,7 +3,7 @@ import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import PanelMenu from "primevue/panelmenu"
-import Dropdown from "primevue/dropdown"
+import Select from "primevue/select"
 import SidebarLogin from "../SidebarLogin.vue"
 import PageList from "../../../../assets/vue/components/page/PageList.vue"
 import { useLocale } from "../../../../assets/vue/composables/locale"
@@ -25,7 +25,6 @@ const languageItems = languageList.map((language) => ({
 
 const platformConfigStore = usePlatformConfig()
 const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration"))
-
 
 const menuItems = computed(() => {
   const items = [
@@ -92,7 +91,7 @@ watch(
 
       <div class="app-sidebar__panel flex flex-col">
         <div class="px-6 my-4">
-          <Dropdown
+          <Select
             v-model="selectedCity"
             :options="languageItems"
             option-label="label"

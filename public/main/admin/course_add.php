@@ -209,16 +209,8 @@ if ($form->validate()) {
 
     $course = CourseManager::create_course($courseData);
     if (null !== $course) {
-        Display::addFlash(
-            Display::return_message(
-                sprintf(
-                    get_lang('Course %s added'),
-                    Display::url($course->getTitle(), api_get_course_url($course->getId()))
-                ),
-                'confirmation',
-                false
-            )
-        );
+        header('Location: course_list.php?new_course_id=' . $course->getId());
+        exit;
     }
 
     header('Location: course_list.php');

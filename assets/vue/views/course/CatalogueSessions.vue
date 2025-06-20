@@ -6,15 +6,25 @@
         {{ sessions?.length || 0 }}<br />
         <strong>{{ $t("Matching sessions") }}:</strong>
         {{ filteredSessions.length }}
+        <div
+          v-if="filters['global'].value"
+          class="text-xs text-gray-500 italic mt-1"
+        >
+          {{ $t("Searching by") }}: {{ activeSearchFields.join(", ") }}
+        </div>
       </div>
-      <div class="flex gap-3">
+
+      <div class="flex gap-3 items-end">
         <Button
           :label="$t('Clear filter results')"
           class="p-button-outlined"
           icon="pi pi-filter-slash"
           @click="clearFilter()"
         />
-        <span class="p-input-icon-left">
+        <span
+          class="p-input-icon-left"
+          v-if="activeSearchFields.length"
+        >
           <i class="pi pi-search" />
           <InputText
             v-model="filters['global'].value"
@@ -61,12 +71,13 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
-import { FilterMatchMode } from "primevue/api"
+import { FilterMatchMode } from "@primevue/core/api"
 import axios from "axios"
 import CatalogueSessionCard from "../../components/session/CatalogueSessionCard.vue"
 import { useSecurityStore } from "../../store/securityStore"
 import * as userRelCourseVoteService from "../../services/userRelCourseVoteService"
 import { useRouter } from "vue-router"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const router = useRouter()
 const securityStore = useSecurityStore()
@@ -78,14 +89,30 @@ if (!securityStore.user?.id) {
 
 const currentUserId = securityStore.user.id
 const urlId = window.access_url_id
-
 const status = ref(false)
 const sessions = ref([])
 const filters = ref({ global: { value: null, matchMode: FilterMatchMode.CONTAINS } })
-
 const rowsPerScroll = 9
 const visibleCount = ref(rowsPerScroll)
 const loadingMore = ref(false)
+const platformConfigStore = usePlatformConfig()
+
+const sessionCatalogSettings = computed(() => {
+  const settings = platformConfigStore.getSetting("session.catalog_settings") || {}
+  return settings.sessions || {}
+})
+
+function isEnabled(field) {
+  return sessionCatalogSettings.value?.[field] === true
+}
+
+const activeSearchFields = computed(() => {
+  const list = []
+  if (isEnabled("by_title")) list.push("title")
+  if (isEnabled("by_tag")) list.push("tag")
+  if (isEnabled("by_date")) list.push("start date")
+  return list
+})
 
 const saveOrUpdateVote = async (session, value) => {
   try {
@@ -193,12 +220,22 @@ const filteredSessions = computed(() => {
   const keyword = filters.value.global.value?.toLowerCase()
   if (!keyword) return sessions.value
   return sessions.value.filter((session) => {
-    return (
-      session.title?.toLowerCase().includes(keyword) ||
-      session.description?.toLowerCase().includes(keyword) ||
-      session.category?.title?.toLowerCase().includes(keyword) ||
-      session.courses?.some((sc) => sc.courseLanguage?.toLowerCase().includes(keyword))
-    )
+    const terms = []
+
+    if (isEnabled("by_title") && session.title) {
+      terms.push(session.title.toLowerCase())
+    }
+
+    if (isEnabled("by_tag") && session.tags?.length) {
+      terms.push(...session.tags.map((tag) => tag.name?.toLowerCase()).filter(Boolean))
+    }
+
+    if (isEnabled("by_date") && session.startDate) {
+      const start = new Date(session.startDate).toLocaleDateString().toLowerCase()
+      terms.push(start)
+    }
+
+    return terms.some((t) => t.includes(keyword))
   })
 })
 
@@ -232,8 +269,3 @@ watch(
   },
 )
 </script>
-<style scoped>
-.catalogue-sessions {
-  width: 100%;
-}
-</style>

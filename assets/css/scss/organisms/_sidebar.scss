@@ -13,7 +13,7 @@
   }
 
   &__panel {
-    @apply pt-8 px-0 overflow-x-hidden overflow-y-auto flex-1 overscroll-none
+    @apply pt-8 px-0 overflow-x-hidden overflow-y-auto flex-1 overscroll-none flex flex-col gap-1
       sm:pt-5;
   }
 
@@ -50,102 +50,135 @@
       @apply border-primary;
     }
 
-    &.p-button.p-button-icon-only {
-      @apply h-8 p-0 w-8;
-    }
-
-    .p-button-label {
+    .p-togglebutton-label {
       @apply hidden;
-    }
-
-    .p-togglebutton-input {
-      @apply appearance-none absolute top-0 left-0 w-full h-full p-0 m-0 opacity-0 outline-0 outline-none;
-      z-index: 1;
-    }
-
-    .p-button {
-      @apply bg-white p-0 text-primary;
     }
   }
 
   .p-panelmenu {
+    @apply flex flex-col gap-1;
 
     .p-panelmenu-header-action {
-      @apply flex items-center gap-2 select-none cursor-pointer relative pl-9 py-3 pr-6 mb-1 overflow-hidden;
+      @apply flex items-center gap-2 select-none cursor-pointer relative pl-9 py-3 pr-6 overflow-hidden outline-none text-body-2 font-semibold;
     }
 
     .p-menuitem-link {
       @apply flex items-center select-none cursor-pointer relative overflow-hidden;
     }
+  }
 
-    .p-panelmenu-header {
-      @apply outline-none;
+  .p-panelmenu-panel {
 
-      &.p-highlight,
-      &:hover {
-        @apply bg-support-1 border-l-4 border-primary border-solid text-primary;
+    &:first-child {
+    }
 
-        .p-panelmenu-header-action {
-          @apply pl-8;
-        }
+    &:last-child {
+    }
+  }
+
+  .p-panelmenu-header {
+    @apply outline-none;
+
+    &.p-panelmenu-header-active,
+    &:hover {
+      @apply bg-support-1 border-l-4 border-primary border-solid text-primary;
+
+      .p-panelmenu-header-action {
+        @apply pl-8;
       }
+    }
 
-      .p-panelmenu-header-content {
+    .p-panelmenu-header-content {
 
-        .p-panelmenu-header-action {
+      .p-panelmenu-header-action {
 
-          .p-submenu-icon {
-            @apply order-3 text-body-2 font-semibold;
-          }
-
-          .p-menuitem-icon {
-            @apply order-1 text-body-2 font-semibold;
-          }
-        }
-      }
-
-      > .p-panelmenu-header-content a {
-        .p-menuitem-text {
-          @apply order-2 grow text-body-2 font-semibold;
+        .p-submenu-icon {
+          @apply ml-auto text-body-2 font-semibold;
         }
       }
     }
 
-    .p-panelmenu-content {
+    > .p-panelmenu-header-content a {
+      .p-menuitem-text {
+        @apply order-2 grow text-body-2 font-semibold;
+      }
+    }
+  }
 
-      .p-menuitem {
+  .p-panelmenu-header-content {
+  }
+
+  .p-panelmenu-header-link {
+  }
+
+  .p-panelmenu-header-icon,
+  .p-panelmenu-item-icon {
+    // @apply text-gray-50;
+  }
+
+  .p-panelmenu-submenu-icon {
+    // @apply text-gray-50;
+    @apply rtl:rotate-180;
+  }
+
+  .p-panelmenu-header:not(.p-disabled):focus-visible .p-panelmenu-header-content {
+  }
+
+  .p-panelmenu-header:not(.p-disabled):focus-visible .p-panelmenu-header-content .p-panelmenu-header-icon {
+  }
+
+  .p-panelmenu-header:not(.p-disabled):focus-visible .p-panelmenu-header-content .p-panelmenu-submenu-icon {
+  }
+
+  .p-panelmenu-submenu {
+    @apply m-0 p-0 outline-none;
+
+    .p-menuitem-link {
+      @apply flex items-center gap-2 select-none cursor-pointer relative pl-9 py-3 pr-6 overflow-hidden outline-none text-body-2;
+    }
+  }
+
+  .p-panelmenu-header:not(.p-disabled) .p-panelmenu-header-content:hover {
+  }
+
+  .p-panelmenu-content {
+
+    .p-menuitem {
+
+      > .p-menuitem-content {
+
+        .p-menuitem-link {
+          @apply pl-8 py-3 pr-6;
+
+          .p-menuitem-icon {
+            @apply mr-2 leading-none;
+          }
+
+          .p-menuitem-text {
+            @apply text-body-2
+              hover:text-primary;
+          }
+        }
+      }
+
+      &.router-link-exact-active,
+      &.p-focus {
 
         > .p-menuitem-content {
 
           .p-menuitem-link {
-            @apply pl-8 py-3 pr-6;
-
-            .p-menuitem-icon {
-              @apply mr-2 leading-none;
-            }
 
             .p-menuitem-text {
-              @apply text-body-2
-                hover:text-primary;
-            }
-          }
-        }
-
-        &.p-highlight,
-        &.p-focus {
-
-          > .p-menuitem-content {
-
-            .p-menuitem-link {
-
-              .p-menuitem-text {
-                @apply text-primary;
-              }
+              @apply text-primary;
             }
           }
         }
       }
     }
+  }
+
+  .router-link-active {
+    @apply text-primary;
   }
 }
 
@@ -169,7 +202,7 @@
             @apply sm:hidden;
           }
 
-          .p-menuitem-text {
+          .p-panelmenu-header-label {
             @apply sm:hidden;
           }
         }

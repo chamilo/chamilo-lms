@@ -1,9 +1,15 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
+use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -746,7 +752,7 @@ class BuyCoursesPlugin extends Plugin
     public function getCourseInfo($courseId)
     {
         $entityManager = Database::getManager();
-        $course = $entityManager->find('ChamiloCoreBundle:Course', $courseId);
+        $course = $entityManager->find(Course::class, $courseId);
 
         if (empty($course)) {
             return [];
@@ -761,7 +767,7 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $courseDescription = $entityManager->getRepository('ChamiloCourseBundle:CCourseDescription')
+        $courseDescription = $entityManager->getRepository(CCourseDescription::class)
             ->findOneBy(
                 [
                     'cId' => $course->getId(),
@@ -816,7 +822,7 @@ class BuyCoursesPlugin extends Plugin
     public function getSessionInfo($sessionId)
     {
         $entityManager = Database::getManager();
-        $session = $entityManager->find('ChamiloCoreBundle:Session', $sessionId);
+        $session = $entityManager->find(Session::class, $sessionId);
 
         if (empty($session)) {
             return [];
@@ -908,7 +914,7 @@ class BuyCoursesPlugin extends Plugin
 
         $productName = '';
         if (self::PRODUCT_TYPE_COURSE == $item['product_type']) {
-            $course = $entityManager->find('ChamiloCoreBundle:Course', $item['product_id']);
+            $course = $entityManager->find(Course::class, $item['product_id']);
 
             if (empty($course)) {
                 return false;
@@ -916,7 +922,7 @@ class BuyCoursesPlugin extends Plugin
 
             $productName = $course->getTitle();
         } elseif (self::PRODUCT_TYPE_SESSION == $item['product_type']) {
-            $session = $entityManager->find('ChamiloCoreBundle:Session', $item['product_id']);
+            $session = $entityManager->find(Session::class, $item['product_id']);
 
             if (empty($session)) {
                 return false;
@@ -2834,16 +2840,16 @@ class BuyCoursesPlugin extends Plugin
 
         $qb = $qb
             ->select('c')
-            ->from('ChamiloCoreBundle:Course', 'c')
+            ->from(Course::class, 'c')
             ->where(
                 $qb->expr()->notIn(
                     'c',
                     $qb2
                         ->select('course2')
-                        ->from('ChamiloCoreBundle:SessionRelCourse', 'sc')
+                        ->from(SessionRelCourse::class, 'sc')
                         ->join('sc.course', 'course2')
                         ->innerJoin(
-                            'ChamiloCoreBundle:AccessUrlRelSession',
+                            AccessUrlRelSession::class,
                             'us',
                             Join::WITH,
                             'us.sessionId = sc.session'
@@ -2857,7 +2863,7 @@ class BuyCoursesPlugin extends Plugin
                     'c',
                     $qb3
                         ->select('course3')
-                        ->from('ChamiloCoreBundle:AccessUrlRelCourse', 'uc')
+                        ->from(AccessUrlRelCourse::class, 'uc')
                         ->join('uc.course', 'course3')
                         ->where(
                             $qb3->expr()->eq('uc.url ', $urlId)
@@ -2886,7 +2892,7 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $entityManager = Database::getManager();
-        $scuRepo = $entityManager->getRepository('ChamiloCoreBundle:SessionRelCourseRelUser');
+        $scuRepo = $entityManager->getRepository(SessionRelCourseRelUser::class);
 
         $buySaleTable = Database::get_main_table(self::TABLE_SALE);
 
@@ -2939,7 +2945,7 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $entityManager = Database::getManager();
-        $cuRepo = $entityManager->getRepository('ChamiloCoreBundle:CourseRelUser');
+        $cuRepo = $entityManager->getRepository(CourseRelUser::class);
         $buySaleTable = Database::get_main_table(self::TABLE_SALE);
 
         // Check if user bought the course
@@ -3053,7 +3059,7 @@ class BuyCoursesPlugin extends Plugin
 
         foreach ($sessionIds as $sessionId) {
             $sessions[] = Database::getManager()->find(
-                'ChamiloCoreBundle:Session',
+                Session::class,
                 $sessionId
             );
         }
@@ -3124,7 +3130,7 @@ class BuyCoursesPlugin extends Plugin
         $courses = [];
         foreach ($courseIds as $courseId) {
             $courses[] = Database::getManager()->find(
-                'ChamiloCoreBundle:Course',
+                Course::class,
                 $courseId
             );
         }

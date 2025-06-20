@@ -761,7 +761,7 @@ class CourseController extends ToolBaseController
 
         $title = $courseData['name'] ?? null;
         $wantedCode = $courseData['code'] ?? null;
-        $courseLanguage = $courseData['language']['id'] ?? null;
+        $courseLanguage = $courseData['language'] ?? null;
         $categoryCode = $courseData['category'] ?? null;
         $exemplaryContent = $courseData['fillDemoContent'] ?? false;
         $template = $courseData['template'] ?? '';

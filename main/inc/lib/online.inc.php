@@ -217,6 +217,10 @@ function online_logout($user_id = null, $logout_redirect = false)
     }
 
     api_delete_firstpage_parameter();
+    // If we were using "login_as", make sure this doesn't stick to the session
+    if (Session::read('login_as') !== null) {
+        Session::erase('login_as');
+    }
     Session::erase('last_id');
     CourseChatUtils::exitChat($user_id);
     session_regenerate_id();

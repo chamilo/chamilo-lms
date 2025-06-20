@@ -461,6 +461,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             $login = $_POST['login'];
             $password = $_POST['password'];
         }
+        // unset the "login_as" flag if we just connected with a username and password.
+        Session::erase('login_as');
 
         $userManager = UserManager::getManager();
         $userRepository = UserManager::getRepository();

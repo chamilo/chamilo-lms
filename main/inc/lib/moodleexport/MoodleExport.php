@@ -440,6 +440,7 @@ class MoodleExport
             'title' => 'Documents',
         ];
         $activities[] = $documentsFolder;
+        $htmlPageIds = [];
         foreach ($this->course->resources as $resourceType => $resources) {
             foreach ($resources as $resource) {
                 $exportClass = null;
@@ -479,13 +480,14 @@ class MoodleExport
                 // Handle documents (HTML pages)
                 elseif ($resourceType === RESOURCE_DOCUMENT && $resource->source_id > 0) {
                     $document = \DocumentManager::get_document_data_by_id($resource->source_id, $this->course->code);
-                    if ('html' === pathinfo($document['path'], PATHINFO_EXTENSION)) {
+                    if ('html' === pathinfo($document['path'], PATHINFO_EXTENSION) && substr_count($resource->path, '/') === 1) {
                         $exportClass = PageExport::class;
                         $moduleName = 'page';
                         $id = $resource->source_id;
                         $title = $document['title'];
+                        $htmlPageIds[] = $id;
                     }
-                    if ('file' === $resource->file_type) {
+                    if ('file' === $resource->file_type && !in_array($resource->source_id, $htmlPageIds)) {
                         $resourceExport = new ResourceExport($this->course);
                         if ($resourceExport->getSectionIdForActivity($resource->source_id, $resourceType) > 0) {
                             $isRoot = substr_count($resource->path, '/') === 1;

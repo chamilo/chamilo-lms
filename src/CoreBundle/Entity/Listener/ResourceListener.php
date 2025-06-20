@@ -110,6 +110,9 @@ class ResourceListener
         $entityClass = $eventArgs->getObject()::class;
 
         $name = $this->toolChain->getResourceTypeNameByEntity($entityClass);
+        if (empty($name)) {
+            return;
+        }
 
         $resourceType = $resourceTypeRepo->findOneBy([
             'title' => $name,

@@ -108,7 +108,9 @@ class TrackEDefaultRepository extends ServiceEntityRepository
     public function registerResourceEvent(
         ResourceNode $resourceNode,
         string $eventType,
-        ?int $userId = null
+        ?int $userId = null,
+        ?int $courseId = null,
+        ?int $sessionId = null
     ): void {
         if (!$userId) {
             $user = $this->security->getUser();
@@ -117,9 +119,24 @@ class TrackEDefaultRepository extends ServiceEntityRepository
             }
         }
 
-        $link = $resourceNode->getResourceLinks()->first();
-        $courseId = $link?->getCourse()?->getId();
-        $sessionId = $link?->getSession()?->getId();
+        if (null === $courseId || null === $sessionId) {
+            $link = $resourceNode->getResourceLinks()->first();
+            if (!$link) {
+                return;
+            }
+
+            if (null === $courseId && $link->getCourse()) {
+                $courseId = $link->getCourse()->getId();
+            }
+            if (null === $sessionId && $link->getSession()) {
+                $sessionId = $link->getSession()->getId();
+            }
+        }
+
+        $resourceTypeTitle = $resourceNode->getResourceType()?->getTitle();
+        if (null === $resourceTypeTitle) {
+            $resourceTypeTitle = $resourceNode ? (new \ReflectionClass($resourceNode))->getShortName() : 'undefined';
+        }
 
         $event = new TrackEDefault();
         $event->setDefaultUserId($userId ?? 0);
@@ -127,7 +144,7 @@ class TrackEDefaultRepository extends ServiceEntityRepository
         $event->setSessionId($sessionId);
         $event->setDefaultDate(new \DateTime());
         $event->setDefaultEventType($eventType);
-        $event->setDefaultValueType('resource_type_' . ($resourceNode->getResourceType()?->getTitle() ?? 'unknown'));
+        $event->setDefaultValueType('resource_type_' . $resourceTypeTitle);
         $event->setDefaultValue((string) $resourceNode->getId());
 
         $this->_em->persist($event);

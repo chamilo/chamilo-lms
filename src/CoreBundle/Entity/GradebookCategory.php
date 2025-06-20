@@ -309,11 +309,17 @@ class GradebookCategory
         return $this->generateCertificates;
     }
 
+    /**
+     * Get number of days the linked certificate is valid after attribution
+     */
     public function getCertificateValidityPeriod(): ?int
     {
         return $this->certificateValidityPeriod;
     }
 
+    /**
+     * Set number of days the linked certificate is valid after attribution
+     */
     public function setCertificateValidityPeriod(?int $certificateValidityPeriod): self
     {
         $this->certificateValidityPeriod = $certificateValidityPeriod;

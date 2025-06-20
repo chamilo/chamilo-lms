@@ -9,9 +9,9 @@
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

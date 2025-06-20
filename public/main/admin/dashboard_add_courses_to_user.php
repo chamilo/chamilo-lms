@@ -5,8 +5,7 @@
  * Interface for assigning courses to Human Resources Manager.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 // resetting the course id
 $cidReset = true;

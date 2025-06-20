@@ -1,9 +1,8 @@
 <?php
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Symfony\Component\Finder\Finder;
 
 /**

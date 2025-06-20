@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Code.

@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Career as CareerEntity;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 class Career extends Model
 {

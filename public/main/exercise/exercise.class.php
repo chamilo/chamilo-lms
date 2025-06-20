@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
+use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
@@ -1849,6 +1850,21 @@ class Exercise
         );
         if (!empty($linkInfo)) {
             GradebookUtils::remove_resource_from_course_gradebook($linkInfo['id']);
+        }
+
+        // Register resource deletion manually because this is a soft delete (active = -1)
+        // and Doctrine does not trigger postRemove in this case.
+        /* @var TrackEDefaultRepository $trackRepo */
+        $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
+        $resourceNode = $exercise->getResourceNode();
+        if ($resourceNode) {
+            $trackRepo->registerResourceEvent(
+                $resourceNode,
+                'deletion',
+                api_get_user_id(),
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
         }
 
         return true;

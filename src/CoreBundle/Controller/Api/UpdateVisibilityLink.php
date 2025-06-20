@@ -23,8 +23,8 @@ class UpdateVisibilityLink extends AbstractController
     {
         $repo->toggleVisibilityPublishedDraft(
             $link,
-            $this->cidReqHelper->getCourseEntity(),
-            $this->cidReqHelper->getSessionEntity()
+            $this->cidReqHelper->getDoctrineCourseEntity(),
+            $this->cidReqHelper->getDoctrineSessionEntity()
         );
         $link->toggleVisibility();
 

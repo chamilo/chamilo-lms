@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\ValidationToken;
 use DateTime;
@@ -13,10 +14,11 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use RuntimeException;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class TrackEDefaultRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private readonly Security $security)
     {
         parent::__construct($registry, TrackEDefault::class);
     }
@@ -98,6 +100,52 @@ class TrackEDefaultRepository extends ServiceEntityRepository
         $event->setDefaultValueType('ticket_event');
         $event->setDefaultValue(json_encode(['user_id' => $userId, 'ticket_id' => $ticketId, 'action' => 'unsubscribe']));
         $event->setSessionId(null);
+
+        $this->_em->persist($event);
+        $this->_em->flush();
+    }
+
+    public function registerResourceEvent(
+        ResourceNode $resourceNode,
+        string $eventType,
+        ?int $userId = null,
+        ?int $courseId = null,
+        ?int $sessionId = null
+    ): void {
+        if (!$userId) {
+            $user = $this->security->getUser();
+            if ($user && method_exists($user, 'getId')) {
+                $userId = $user->getId();
+            }
+        }
+
+        if (null === $courseId || null === $sessionId) {
+            $link = $resourceNode->getResourceLinks()->first();
+            if (!$link) {
+                return;
+            }
+
+            if (null === $courseId && $link->getCourse()) {
+                $courseId = $link->getCourse()->getId();
+            }
+            if (null === $sessionId && $link->getSession()) {
+                $sessionId = $link->getSession()->getId();
+            }
+        }
+
+        $resourceTypeTitle = $resourceNode->getResourceType()?->getTitle();
+        if (null === $resourceTypeTitle) {
+            $resourceTypeTitle = $resourceNode ? (new \ReflectionClass($resourceNode))->getShortName() : 'undefined';
+        }
+
+        $event = new TrackEDefault();
+        $event->setDefaultUserId($userId ?? 0);
+        $event->setCId($courseId);
+        $event->setSessionId($sessionId);
+        $event->setDefaultDate(new \DateTime());
+        $event->setDefaultEventType($eventType);
+        $event->setDefaultValueType('resource_type_' . $resourceTypeTitle);
+        $event->setDefaultValue((string) $resourceNode->getId());
 
         $this->_em->persist($event);
         $this->_em->flush();

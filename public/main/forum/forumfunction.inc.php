@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -131,7 +132,7 @@ function handleForum($url)
                     if ('visible' === $action) {
                         $repo->setVisibilityPublished($resource, $course, $session);
                     } else {
-                        $repo->setVisibilityPending($resource);
+                        $repo->setVisibilityPending($resource, $course, $session);
                     }
 
                     if ('visible' === $action) {
@@ -149,6 +150,13 @@ function handleForum($url)
                 if ($resource) {
                     $linksRepo->removeByResourceInContext($resource, $course, $session);
 
+                    // Manually register thread deletion event because the resource is not removed via Doctrine
+                    $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
+                    $node = $resource->getResourceNode();
+                    if ($node) {
+                        $trackRepo->registerResourceEvent($node, 'deletion', api_get_user_id(), api_get_course_int_id(), api_get_session_id());
+                    }
+
                     Display::addFlash(
                         Display::return_message(get_lang('Forum category deleted'), 'confirmation', false)
                     );
@@ -159,6 +167,13 @@ function handleForum($url)
             case 'delete_forum':
                 if ($resource) {
                     $linksRepo->removeByResourceInContext($resource, $course, $session);
+
+                    // Register forum deletion manually as it's not deleted via Doctrine
+                    $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
+                    $node = $resource->getResourceNode();
+                    if ($node) {
+                        $trackRepo->registerResourceEvent($node, 'deletion', api_get_user_id(), api_get_course_int_id(), api_get_session_id());
+                    }
 
                     Display::addFlash(Display::return_message(get_lang('Forum deleted'), 'confirmation', false));
                 }
@@ -183,6 +198,14 @@ function handleForum($url)
                         $link_id = $link_info['id'];
                         GradebookUtils::remove_resource_from_course_gradebook($link_id);
                     }
+
+                    // Manually register thread deletion event because the resource is not removed via Doctrine
+                    $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
+                    $node = $resource->getResourceNode();
+                    if ($node) {
+                        $trackRepo->registerResourceEvent($node, 'deletion', api_get_user_id(), api_get_course_int_id(), api_get_session_id());
+                    }
+
                     Display::addFlash(Display::return_message(get_lang('Thread deleted'), 'confirmation', false));
                 }
 

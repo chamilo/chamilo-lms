@@ -23,8 +23,8 @@ class UpdateVisibilityLinkCategory extends AbstractController
     {
         $repo->toggleVisibilityPublishedDraft(
             $linkCategory,
-            $this->cidReqHelper->getCourseEntity(),
-            $this->cidReqHelper->getSessionEntity()
+            $this->cidReqHelper->getDoctrineCourseEntity(),
+            $this->cidReqHelper->getDoctrineSessionEntity()
         );
         $linkCategory->toggleVisibility();
 

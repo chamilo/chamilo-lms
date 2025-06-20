@@ -35,7 +35,7 @@ $interbreadcrumb[] = [
 
 $form = new FormValidator('edit', 'post', api_get_self().'?session_id='.$sessionId.'&user_id='.$userId);
 $form->addHeader(get_lang('EditUserSessionDuration'));
-$userInfo = api_get_user_info($userId);
+$userInfo = api_get_user_info($userId, false, false, false, false, true);
 
 // Show current end date for the session for this user, if any
 $userAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
@@ -78,7 +78,7 @@ if (count($userAccess) == 0) {
 $header =  '<div class="row">';
 $header .= '<div class="col-sm-5">';
 $header .= '<div class="thumbnail">';
-$header .= Display::img($userInfo['avatar'], $userInfo['complete_name']);
+$header .= Display::img($userInfo['avatar'], $userInfo['complete_name'], null, false);
 $header .= '</div>';
 $header .= '</div>';
 
@@ -131,7 +131,8 @@ if ($form->validate()) {
     SessionManager::editUserSessionDuration($duration, $userId, $sessionId);
     $message = Display::return_message(get_lang('ItemUpdated'), 'confirmation');
 
-    $url = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+    $url = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
+    $url = str_replace('&amp;', '&', $url);
     header("Location: " . $url);
     exit();
 }

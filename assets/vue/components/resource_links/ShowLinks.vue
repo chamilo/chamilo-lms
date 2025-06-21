@@ -9,15 +9,13 @@
       :class="{ 'text-right text-body-2': editStatus }"
     >
       <span class="mdi mdi-book"></span>
-      <BaseAppLink
+      <a
         v-if="clickableCourse"
-        :to="{
-          name: 'CourseHome',
-          params: { id: courseId(link.course) },
-        }"
+        :href="`/resources/ccalendarevent?cid=${courseId(link.course)}&gid=0${link.session ? `&sid=${sessionId(link.session)}` : ''}`"
+        class="text-primary hover:underline"
       >
         {{ $t("Course") }}: {{ link.course.resourceNode.title }}
-      </BaseAppLink>
+      </a>
       <span v-else>{{ $t("Course") }}: {{ link.course.resourceNode.title }}</span>
     </div>
 
@@ -66,6 +64,13 @@ import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/en
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()
+const courseId = (course) => {
+  return course["@id"] ? course["@id"].split("/").pop() : null
+}
+
+const sessionId = (session) => {
+  return session["@id"] ? session["@id"].split("/").pop() : null
+}
 
 defineProps({
   item: {
@@ -91,10 +96,6 @@ defineProps({
     default: false,
   },
 })
-
-const courseId = (course) => {
-  return course["@id"] ? course["@id"].split("/").pop() : null
-}
 
 const visibilityOptions = [
   { value: RESOURCE_LINK_PUBLISHED, label: t("Published") },

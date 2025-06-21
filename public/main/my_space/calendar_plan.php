@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Utils\ChamiloUtil;
 
 $cidReset = true;
 
@@ -52,7 +52,7 @@ if ('desc' === $currentOrder) {
 $userInfo = api_get_user_info();
 $userId = $userInfo['id'];
 
-$globalColors = ChamiloApi::getColorPalette(false, true, 500);
+$globalColors = ChamiloUtil::getColorPalette(false, true, 500);
 $sessionColors = [];
 $sessionColorName = [];
 
@@ -73,7 +73,7 @@ foreach ($students as &$student) {
         $counter++;
     }
     $student['sessions'] = $sessions;
-    //$colors = ChamiloApi::getColorPalette(false, true, count($sessions));
+    //$colors = ChamiloUtil::getColorPalette(false, true, count($sessions));
     //$student['colors'] = $colors;
 }
 

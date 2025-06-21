@@ -2,18 +2,17 @@
 
 /* See license terms in /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
-use Chamilo\CoreBundle\Entity\TrackEDownloads;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Utils\ChamiloUtil;
 use ChamiloSession as Session;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\Exception\NotSupported;
+use Doctrine\ORM\Exception\ORMException;
 
 /**
  * Class Event
@@ -2052,7 +2051,7 @@ class Event
         }
 
         $logoutDate = api_get_utc_datetime();
-        $loginDate = ChamiloApi::addOrSubTimeToDateTime(
+        $loginDate = ChamiloUtil::addOrSubTimeToDateTime(
             $virtualTime,
             $logoutDate,
             false

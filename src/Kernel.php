@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo;
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Utils\ChamiloUtil;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
@@ -31,7 +31,7 @@ class Kernel extends BaseKernel
 
     public function setApi(array $configuration): void
     {
-        new ChamiloApi($configuration);
+        new ChamiloUtil($configuration);
     }
 
     /**

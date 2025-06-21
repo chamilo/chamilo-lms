@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
@@ -11,6 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Utils\ChamiloUtil;
 use Doctrine\DBAL\ParameterType;
 
 /**
@@ -1448,7 +1448,7 @@ class Statistics
     public static function buildJsChartData(array $all, string $chartName): array
     {
         $list = [];
-        $palette = ChamiloApi::getColorPalette(true, true);
+        $palette = ChamiloUtil::getColorPalette(true, true);
         foreach ($all as $tick => $tock) {
             $list['labels'][] = $tick;
         }

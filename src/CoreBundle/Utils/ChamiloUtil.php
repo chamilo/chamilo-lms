@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Component\Utils;
+namespace Chamilo\CoreBundle\Utils;
 
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
@@ -18,7 +18,7 @@ use Template;
 
 use const PHP_SAPI;
 
-class ChamiloApi
+class ChamiloUtil
 {
     public const COURSE_MANAGER = 1;
     public const SESSION_ADMIN = 3;

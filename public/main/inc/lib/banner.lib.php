@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Utils\ChamiloUtil;
 use ChamiloSession as Session;
 
 /**
@@ -58,7 +58,7 @@ function return_logo($theme = '', $responsive = true)
         $class = '';
     }
 
-    return ChamiloApi::getPlatformLogo(
+    return ChamiloUtil::getPlatformLogo(
         $theme,
         [
             'title' => $siteName,

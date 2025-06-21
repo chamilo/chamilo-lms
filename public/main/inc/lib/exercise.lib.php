@@ -2,12 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Utils\ChamiloUtil;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -5342,7 +5342,7 @@ EOT;
             return false;
         }
 
-        $midnightTime = ChamiloApi::getServerMidnightTime();
+        $midnightTime = ChamiloUtil::getServerMidnightTime();
 
         $answeredQuestionsCount = self::countAnsweredQuestionsByUserAfterTime(
             $midnightTime,

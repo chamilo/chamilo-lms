@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Component\Utils\CreateUploadedFile;
 use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Utils\CreateUploadedFileUtil;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -147,7 +147,7 @@ class AssetRepository extends ServiceEntityRepository
 
     public function createFromString(Asset $asset, string $mimeType, string $content): Asset
     {
-        $file = CreateUploadedFile::fromString($asset->getTitle(), $mimeType, $content);
+        $file = CreateUploadedFileUtil::fromString($asset->getTitle(), $mimeType, $content);
         $asset->setFile($file);
         $this->getEntityManager()->persist($asset);
         $this->getEntityManager()->flush();

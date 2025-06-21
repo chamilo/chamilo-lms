@@ -6,17 +6,15 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Component\Utils\CreateUploadedFile;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Utils\CreateUploadedFileUtil;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
@@ -365,7 +363,7 @@ class BaseResourceFileAction
 
                 // Get data in content and create a HTML file.
                 if (!$fileParsed && $content) {
-                    $uploadedFile = CreateUploadedFile::fromString($title.'.html', 'text/html', $content);
+                    $uploadedFile = CreateUploadedFileUtil::fromString($title.'.html', 'text/html', $content);
                     $resource->setUploadFile($uploadedFile);
                     $fileParsed = true;
                 }

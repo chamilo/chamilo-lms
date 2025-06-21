@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Component\Utils;
+namespace Chamilo\CoreBundle\Utils;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class CreateUploadedFile
+class CreateUploadedFileUtil
 {
     public static function fromString(string $fileName, string $mimeType, string $content): UploadedFile
     {

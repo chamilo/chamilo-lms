@@ -702,6 +702,9 @@ INSERT INTO language (original_name, english_name, isocode, dokeos_folder, avail
 ('Ti&#7871;ng Vi&#7879;t','vietnamese','vi','vietnamese',0),
 ('isiXhosa', 'xhosa', 'xh', 'xhosa', 0),
 ('Yor&ugrave;b&aacute;','yoruba','yo','yoruba',0);
+-- Languages added after 1.11.0. Will be enabled in the next major version
+-- ('Eesti keel','estonian','et','estonian',0),
+-- ('&#1036;&#1086;&#1085;&#1075;&#1086;&#1083; &#1093;&#1101;&#1083;','mongolian','mn','mongolian',1);
 
 -- Set parent language to Spanish for all close-by languages, same for Italian, French, Portuguese and Chinese
 UPDATE language SET parent_id = 49 WHERE english_name = 'quechua_cusco';

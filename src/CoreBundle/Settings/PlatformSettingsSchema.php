@@ -167,6 +167,18 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add(
+                'server_type',
+                ChoiceType::class,
+                [
+                    'label' => 'Server Type',
+                    'choices' => [
+                        'Production' => 'prod',
+                        'Validation' => 'validation',
+                        'Test/Development' => 'test',
+                    ],
+                ]
+            )
+            ->add(
                 'show_tabs',
                 ChoiceType::class,
                 [

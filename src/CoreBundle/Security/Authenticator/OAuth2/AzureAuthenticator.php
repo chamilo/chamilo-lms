@@ -8,9 +8,9 @@ namespace Chamilo\CoreBundle\Security\Authenticator\OAuth2;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\ServiceHelper\AzureAuthenticatorHelper;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -29,7 +29,7 @@ class AzureAuthenticator extends AbstractAuthenticator
         RouterInterface $router,
         UserRepository $userRepository,
         AuthenticationConfigHelper $authenticationConfigHelper,
-        AccessUrlHelper $urlHelper,
+        AccessUrlUtil $urlHelper,
         EntityManagerInterface $entityManager,
         private readonly AzureAuthenticatorHelper $azureHelper,
     ) {

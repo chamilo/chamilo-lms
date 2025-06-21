@@ -12,7 +12,7 @@ use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -22,7 +22,7 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private readonly Security $security,
-        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlUtil $accessUrlUtil,
         private readonly EntityManagerInterface $entityManager
     ) {}
 
@@ -33,8 +33,8 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface
         ?Operation $operation = null,
         array $context = []
     ): void {
-        if ($this->accessUrlHelper->isMultiple()) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
+        if ($this->accessUrlUtil->isMultiple()) {
+            $accessUrl = $this->accessUrlUtil->getCurrent();
             $rootAlias = $queryBuilder->getRootAliases()[0];
             if (isset($context['filters']['sticky']) && $context['filters']['sticky']) {
                 $queryBuilder

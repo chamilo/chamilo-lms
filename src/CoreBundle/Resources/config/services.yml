@@ -157,7 +157,7 @@ services:
       arguments:
         $parameterBag: '@parameter_bag'
         $pluginRepo: '@Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository'
-        $accessUrlHelper: '@Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper'
+        $accessUrlUtil: '@Chamilo\CoreBundle\Utils\AccessUrlUtil'
 
     Chamilo\CoreBundle\ServiceHelper\CidReqHelper:
       arguments:

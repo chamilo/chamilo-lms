@@ -25,10 +25,10 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Service\CourseService;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CLink;
@@ -701,11 +701,11 @@ class CourseController extends ToolBaseController
     #[Route('/categories', name: 'chamilo_core_course_form_lists')]
     public function getCategories(
         SettingsManager $settingsManager,
-        AccessUrlHelper $accessUrlHelper,
+        AccessUrlUtil $accessUrlUtil,
         CourseCategoryRepository $courseCategoriesRepo
     ): JsonResponse {
         $allowBaseCourseCategory = 'true' === $settingsManager->getSetting('course.allow_base_course_category');
-        $accessUrlId = $accessUrlHelper->getCurrent()->getId();
+        $accessUrlId = $accessUrlUtil->getCurrent()->getId();
 
         $categories = $courseCategoriesRepo->findAllInAccessUrl(
             $accessUrlId,
@@ -732,11 +732,11 @@ class CourseController extends ToolBaseController
     #[Route('/search_templates', name: 'chamilo_core_course_search_templates')]
     public function searchCourseTemplates(
         Request $request,
-        AccessUrlHelper $accessUrlHelper,
+        AccessUrlUtil $accessUrlUtil,
         CourseRepository $courseRepository
     ): JsonResponse {
         $searchTerm = $request->query->get('search', '');
-        $accessUrl = $accessUrlHelper->getCurrent();
+        $accessUrl = $accessUrlUtil->getCurrent();
 
         $user = $this->userHelper->getCurrent();
 

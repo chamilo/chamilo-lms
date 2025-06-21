@@ -26,7 +26,7 @@ $illustrationRepo = Container::getIllustrationRepository();
 /** @var AuthenticationConfigHelper $authenticationConfigHelper */
 $authenticationConfigHelper = Container::$container->get(AuthenticationConfigHelper::class);
 
-$accessUrl = Container::getAccessUrlHelper()->getCurrent();
+$accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
 $htmlHeadXtra[] = '
 <script>

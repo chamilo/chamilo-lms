@@ -550,7 +550,7 @@ if ('catalogue_access' === $currentView) {
     );
 
     $em = Database::getManager();
-    $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+    $accessUrl = Container::getAccessUrlUtil()->getCurrent();
     $accessUrlId = $accessUrl->getId();
 
     /** @var Course|null $course */

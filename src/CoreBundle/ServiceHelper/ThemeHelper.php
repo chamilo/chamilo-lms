@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
@@ -22,7 +23,7 @@ final class ThemeHelper
     public const DEFAULT_THEME = 'chamilo';
 
     public function __construct(
-        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlUtil $accessUrlUtil,
         private readonly SettingsManager $settingsManager,
         private readonly UserHelper $userHelper,
         private readonly CidReqHelper $cidReqHelper,
@@ -46,7 +47,7 @@ final class ThemeHelper
             return $visualTheme;
         }
 
-        $accessUrl = $this->accessUrlHelper->getCurrent();
+        $accessUrl = $this->accessUrlUtil->getCurrent();
 
         $visualTheme = $accessUrl->getActiveColorTheme()?->getColorTheme()->getSlug();
 

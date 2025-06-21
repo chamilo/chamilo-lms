@@ -5994,11 +5994,11 @@ function api_get_course_url($courseId = null, $sessionId = null, $groupId = null
  */
 function api_get_multiple_access_url(): bool
 {
-    return Container::getAccessUrlHelper()->isMultiple();
+    return Container::getAccessUrlUtil()->isMultiple();
 }
 
 /**
- * @deprecated Use AccessUrlHelper::isMultiple
+ * @deprecated Use AccessUrlUtil::isMultiple
  */
 function api_is_multiple_url_enabled(): bool
 {

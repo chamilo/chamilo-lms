@@ -7,9 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,7 +23,7 @@ class NewsController extends BaseController
     use ControllerTrait;
 
     public function __construct(
-        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlUtil $accessUrlUtil,
         private readonly UserHelper $userHelper,
     ) {}
 
@@ -36,7 +36,7 @@ class NewsController extends BaseController
         if (null !== $user) {
             $list = $sysAnnouncementRepository->getAnnouncements(
                 $user,
-                $this->accessUrlHelper->getCurrent(),
+                $this->accessUrlUtil->getCurrent(),
                 $this->getRequest()->getLocale()
             );
         }

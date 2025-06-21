@@ -479,7 +479,7 @@ class AppPlugin
         }
 
         $configByUrl = $plugin->getConfigurationsByAccessUrl(
-            Container::getAccessUrlHelper()->getCurrent()
+            Container::getAccessUrlUtil()->getCurrent()
         );
 
         $plugin_info['settings'] = $configByUrl?->getConfiguration() ?? [];

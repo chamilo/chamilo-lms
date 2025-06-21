@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -21,14 +21,14 @@ class TrackEOnlineRepository extends ServiceEntityRepository
     public function __construct(
         ManagerRegistry $registry,
         private readonly SettingsManager $settingsManager,
-        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlUtil $accessUrlUtil,
     ) {
         parent::__construct($registry, TrackEOnline::class);
     }
 
     public function isUserOnline(int $userId): bool
     {
-        $accessUrl = $this->accessUrlHelper->getCurrent();
+        $accessUrl = $this->accessUrlUtil->getCurrent();
         $timeLimit = $this->settingsManager->getSetting('display.time_limit_whosonline');
 
         $onlineTime = new DateTime();

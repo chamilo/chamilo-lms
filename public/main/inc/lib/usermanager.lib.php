@@ -177,7 +177,7 @@ class UserManager
 
         $original_password = $password;
 
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
         $access_url_id = $accessUrl->getId();
 
         $hostingLimitUsers = get_hosting_limit($access_url_id, 'users');
@@ -885,7 +885,7 @@ class UserManager
             return false;
         }
 
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
         if (0 == $reset_password) {
             $password = null;

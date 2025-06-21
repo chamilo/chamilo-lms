@@ -7,13 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 readonly class SettingsManagerHelper
 {
     public function __construct(
         private ParameterBagInterface $parameterBag,
-        private AccessUrlHelper $accessUrlHelper,
+        private AccessUrlUtil $accessUrlUtil,
     ) {}
 
     public function isOverridden(string $name, ?AccessUrl $accessUrl = null): bool
@@ -29,7 +30,7 @@ readonly class SettingsManagerHelper
 
         $settingsOverrides = $this->parameterBag->get('settings_overrides');
 
-        $accessUrl ??= $this->accessUrlHelper->getCurrent();
+        $accessUrl ??= $this->accessUrlUtil->getCurrent();
 
         if (isset($settingsOverrides[$accessUrl->getId()][$name])) {
             return $settingsOverrides[$accessUrl->getId()][$name];

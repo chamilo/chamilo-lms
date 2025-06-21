@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Doctrine\DBAL\Schema\Schema;
 
 use const PASSWORD_DEFAULT;
@@ -51,7 +51,7 @@ class Version20230720142900 extends AbstractMigrationChamilo
             ->setOfficialCode('FALLBACK')
             ->addAuthSourceByAuthentication(
                 'platform',
-                $this->container->get(AccessUrlHelper::class)->getCurrent()
+                $this->container->get(AccessUrlUtil::class)->getCurrent()
             )
             ->setPhone('0000000000')
             ->setLocale('en')

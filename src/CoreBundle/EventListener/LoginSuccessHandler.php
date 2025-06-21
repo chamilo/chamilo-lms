@@ -9,16 +9,15 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackELoginRecord;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\ServiceHelper\LoginAttemptLogger;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -37,7 +36,7 @@ class LoginSuccessHandler
         private readonly LoginAttemptLogger $loginAttemptLogger,
         private readonly UserHelper $userHelper,
         private readonly CourseRepository $courseRepo,
-        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlUtil $accessUrlUtil,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
@@ -112,7 +111,7 @@ class LoginSuccessHandler
             // Get the course list
             $personal_course_list = $this->courseRepo->getPersonalSessionCourses(
                 $user,
-                $this->accessUrlHelper->getCurrent(),
+                $this->accessUrlUtil->getCurrent(),
                 $this->isAllowedToEditHelper->canCreateCourse()
             );
             $my_session_list = [];

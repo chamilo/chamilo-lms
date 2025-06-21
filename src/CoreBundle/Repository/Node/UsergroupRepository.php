@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
@@ -21,7 +21,7 @@ class UsergroupRepository extends ResourceRepository
     public function __construct(
         ManagerRegistry $registry,
         private readonly IllustrationRepository $illustrationRepository,
-        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlUtil $accessUrlUtil,
     ) {
         parent::__construct($registry, Usergroup::class);
     }
@@ -34,8 +34,8 @@ class UsergroupRepository extends ResourceRepository
             ->setParameter('session', $session)
         ;
 
-        if ($checkAccessUrl && $this->accessUrlHelper->isMultiple()) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
+        if ($checkAccessUrl && $this->accessUrlUtil->isMultiple()) {
+            $accessUrl = $this->accessUrlUtil->getCurrent();
             $qb->innerJoin('ug.urls', 'url')
                 ->andWhere('url.url = :urlId')
                 ->setParameter('urlId', $accessUrl->getId())
@@ -53,8 +53,8 @@ class UsergroupRepository extends ResourceRepository
             ->setParameter('course', $course)
         ;
 
-        if ($checkAccessUrl && $this->accessUrlHelper->isMultiple()) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
+        if ($checkAccessUrl && $this->accessUrlUtil->isMultiple()) {
+            $accessUrl = $this->accessUrlUtil->getCurrent();
 
             $qb->innerJoin('ug.urls', 'url')
                 ->andWhere('url.url = :urlId')
@@ -90,8 +90,8 @@ class UsergroupRepository extends ResourceRepository
             }
         }
 
-        if ($this->accessUrlHelper->isMultiple()) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
+        if ($this->accessUrlUtil->isMultiple()) {
+            $accessUrl = $this->accessUrlUtil->getCurrent();
 
             $qb->innerJoin('g.urls', 'u')
                 ->andWhere('u.url = :urlId')
@@ -129,8 +129,8 @@ class UsergroupRepository extends ResourceRepository
             ->setMaxResults($limit)
         ;
 
-        if ($this->accessUrlHelper->isMultiple()) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
+        if ($this->accessUrlUtil->isMultiple()) {
+            $accessUrl = $this->accessUrlUtil->getCurrent();
 
             $qb->innerJoin('g.urls', 'u')
                 ->andWhere('u.url = :urlId')
@@ -165,8 +165,8 @@ class UsergroupRepository extends ResourceRepository
             ->setMaxResults($limit)
         ;
 
-        if ($this->accessUrlHelper->isMultiple()) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
+        if ($this->accessUrlUtil->isMultiple()) {
+            $accessUrl = $this->accessUrlUtil->getCurrent();
 
             $qb->innerJoin('g.urls', 'u')
                 ->andWhere('u.url = :urlId')
@@ -360,8 +360,8 @@ class UsergroupRepository extends ResourceRepository
             $qb->select('g.id, g.title, g.description, g.url, g.picture');
         }
 
-        if ($this->accessUrlHelper->isMultiple()) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
+        if ($this->accessUrlUtil->isMultiple()) {
+            $accessUrl = $this->accessUrlUtil->getCurrent();
 
             $qb->innerJoin('g.accessUrls', 'a', 'WITH', 'g.id = a.usergroup')
                 ->andWhere('a.url = :urlId')

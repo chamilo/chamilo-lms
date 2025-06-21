@@ -11,8 +11,8 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use League\Flysystem\FilesystemOperator;
@@ -34,7 +34,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
         private readonly FlysystemStorage $storage,
         private readonly FilesystemOperator $resourceFilesystem,
         private readonly RouterInterface $router,
-        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlUtil $accessUrlUtil,
         private readonly SettingsManager $settingsManager
     ) {
         $this->filesystem = $resourceFilesystem; // Asignar el filesystem correcto

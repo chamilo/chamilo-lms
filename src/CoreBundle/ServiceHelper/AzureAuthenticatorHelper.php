@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -27,7 +28,7 @@ readonly class AzureAuthenticatorHelper
         private ExtraFieldRepository $extraFieldRepo,
         private UserRepository $userRepository,
         private EntityManagerInterface $entityManager,
-        private AccessUrlHelper $urlHelper,
+        private AccessUrlUtil $urlHelper,
     ) {}
 
     /**

@@ -7,15 +7,16 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Event;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class PluginServiceHelper
+readonly class PluginServiceHelper
 {
     public function __construct(
         private ParameterBagInterface $parameterBag,
         private AccessUrlRelPluginRepository $pluginRepo,
-        private AccessUrlHelper $accessUrlHelper,
+        private AccessUrlUtil $accessUrlUtil,
     ) {}
 
     public function loadLegacyPlugin(string $pluginName): ?object
@@ -52,7 +53,7 @@ class PluginServiceHelper
 
     public function isPluginEnabled(string $pluginName): bool
     {
-        $accessUrl = $this->accessUrlHelper->getCurrent();
+        $accessUrl = $this->accessUrlUtil->getCurrent();
         if (null === $accessUrl) {
             return false;
         }

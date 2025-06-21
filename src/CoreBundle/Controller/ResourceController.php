@@ -11,13 +11,11 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -25,6 +23,7 @@ use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Chamilo\CoreBundle\Traits\GradebookControllerTrait;
 use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
@@ -145,7 +144,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         Request $request,
         TrackEDownloadsRepository $trackEDownloadsRepository,
         SettingsManager $settingsManager,
-        AccessUrlHelper $accessUrlHelper
+        AccessUrlUtil $accessUrlUtil
     ): Response {
         $id = $request->get('id');
         $resourceFileId = $request->get('resourceFileId');
@@ -162,8 +161,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         if (!$resourceFile) {
-            $accessUrlSpecificFiles = $settingsManager->getSetting('course.access_url_specific_files') && $accessUrlHelper->isMultiple();
-            $currentUrl = $accessUrlHelper->getCurrent()?->getUrl();
+            $accessUrlSpecificFiles = $settingsManager->getSetting('course.access_url_specific_files') && $accessUrlUtil->isMultiple();
+            $currentUrl = $accessUrlUtil->getCurrent()?->getUrl();
 
             $resourceFiles = $resourceNode->getResourceFiles();
 
@@ -255,7 +254,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         Request $request,
         TrackEDownloadsRepository $trackEDownloadsRepository,
         SettingsManager $settingsManager,
-        AccessUrlHelper $accessUrlHelper
+        AccessUrlUtil $accessUrlUtil
     ): Response {
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
@@ -272,8 +271,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        $accessUrlSpecificFiles = $settingsManager->getSetting('course.access_url_specific_files') && $accessUrlHelper->isMultiple();
-        $currentUrl = $accessUrlHelper->getCurrent()?->getUrl();
+        $accessUrlSpecificFiles = $settingsManager->getSetting('course.access_url_specific_files') && $accessUrlUtil->isMultiple();
+        $currentUrl = $accessUrlUtil->getCurrent()?->getUrl();
 
         $resourceFiles = $resourceNode->getResourceFiles();
         $resourceFile = null;

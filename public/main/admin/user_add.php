@@ -20,7 +20,7 @@ api_protect_limit_for_session_admin();
 /** @var AuthenticationConfigHelper $authenticationConfigHelper */
 $authenticationConfigHelper = Container::$container->get(AuthenticationConfigHelper::class);
 
-$accessUrl = Container::getAccessUrlHelper()->getCurrent();
+$accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 

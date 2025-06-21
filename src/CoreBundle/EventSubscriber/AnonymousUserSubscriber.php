@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\EventSubscriber;
 
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -25,7 +25,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         private readonly Security $security,
         private readonly EntityManagerInterface $entityManager,
         private readonly SettingsManager $settingsManager,
-        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlUtil $accessUrlUtil,
     ) {}
 
     public function onKernelRequest(RequestEvent $event): void
@@ -36,7 +36,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
 
         $request = $event->getRequest();
         $userIp = $request->getClientIp() ?: '127.0.0.1';
-        $accessUrl = $this->accessUrlHelper->getCurrent();
+        $accessUrl = $this->accessUrlUtil->getCurrent();
 
         $anonymousUserId = $this->getOrCreateAnonymousUserId($userIp);
         if (null !== $anonymousUserId) {

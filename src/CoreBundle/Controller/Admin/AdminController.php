@@ -11,8 +11,8 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +26,7 @@ class AdminController extends BaseController
 
     public function __construct(
         private readonly ResourceNodeRepository $resourceNodeRepository,
-        private readonly AccessUrlHelper $accessUrlHelper
+        private readonly AccessUrlUtil $accessUrlUtil
     ) {}
 
     #[IsGranted('ROLE_ADMIN')]
@@ -36,7 +36,7 @@ class AdminController extends BaseController
         $requestData = $request->toArray();
         $doNotListCampus = (bool) $requestData['donotlistcampus'];
 
-        $settingsManager->setUrl($this->accessUrlHelper->getCurrent());
+        $settingsManager->setUrl($this->accessUrlUtil->getCurrent());
         $settingsManager->updateSetting('platform.registered', 'true');
 
         $settingsManager->updateSetting(

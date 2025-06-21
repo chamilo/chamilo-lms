@@ -14,8 +14,8 @@ use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -40,7 +40,7 @@ class GenericAuthenticator extends AbstractAuthenticator
         RouterInterface $router,
         UserRepository $userRepository,
         AuthenticationConfigHelper $authenticationConfigHelper,
-        AccessUrlHelper $urlHelper,
+        AccessUrlUtil $urlHelper,
         EntityManagerInterface $entityManager,
         protected readonly ExtraFieldRepository $extraFieldRepository,
         protected readonly ExtraFieldValuesRepository $extraFieldValuesRepository,

@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\ServiceHelper;
+namespace Chamilo\CoreBundle\Utils;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
@@ -12,11 +12,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 use const PHP_SAPI;
 
-class AccessUrlHelper
+readonly class AccessUrlUtil
 {
     public function __construct(
-        private readonly AccessUrlRepository $accessUrlRepository,
-        private readonly RequestStack $requestStack,
+        private AccessUrlRepository $accessUrlRepository,
+        private RequestStack $requestStack,
     ) {}
 
     public function isMultiple(): bool

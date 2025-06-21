@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -34,7 +35,7 @@ class MessageHelper
         private readonly MessageRepository $messageRepository,
         private readonly UserRepository $userRepository,
         private readonly RequestStack $requestStack,
-        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlUtil $accessUrlUtil,
         private readonly SettingsManager $settingsManager,
         private readonly MailerInterface $mailer
     ) {
@@ -77,7 +78,7 @@ class MessageHelper
         );
 
         if ($sendCopyToDrhUsers) {
-            $accessUrl = $this->accessUrlHelper->getCurrent();
+            $accessUrl = $this->accessUrlUtil->getCurrent();
             if (null !== $accessUrl) {
                 $drhList = $this->userRepository->getDrhListFromUser($receiverUserId, $accessUrl->getId());
                 if (!empty($drhList)) {

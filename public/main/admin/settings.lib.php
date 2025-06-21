@@ -164,7 +164,7 @@ function handlePlugins()
         require $pluginInfoFile;
 
         $plugin = $pluginRepo->findOneByTitle($pluginName);
-        $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlHelper()->getCurrent());
+        $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
         $isInstalled = $plugin && $plugin->isInstalled();
         $isEnabled = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
 

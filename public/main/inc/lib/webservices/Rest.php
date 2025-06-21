@@ -1790,7 +1790,7 @@ class Rest extends WebService
      */
     public function updateUserFromUserName($parameters)
     {
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
         // find user
         $userId = null;

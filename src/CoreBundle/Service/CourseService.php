@@ -18,8 +18,8 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
@@ -61,7 +61,7 @@ class CourseService
         private readonly EventLoggerService $eventLoggerService,
         private readonly ParameterBagInterface $parameterBag,
         private readonly RequestStack $requestStack,
-        private readonly AccessUrlHelper $accessUrlHelper
+        private readonly AccessUrlUtil $accessUrlUtil
     ) {}
 
     public function createCourse(array $params): ?Course
@@ -101,7 +101,7 @@ class CourseService
             }
 
             $params = $this->prepareAndValidateCourseData($rawParams);
-            $accessUrl = $this->accessUrlHelper->getCurrent();
+            $accessUrl = $this->accessUrlUtil->getCurrent();
             $course = new Course();
             $course
                 ->setTitle($params['title'])

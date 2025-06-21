@@ -17,8 +17,8 @@ $action = $_REQUEST['a'];
 $em = Database::getManager();
 $pluginRepository = $em->getRepository(Plugin::class);
 
-$accessUrlHelper = Container::getAccessUrlHelper();
-$currentAccessUrl = $accessUrlHelper->getCurrent();
+$accessUrlUtil = Container::getAccessUrlUtil();
+$currentAccessUrl = $accessUrlUtil->getCurrent();
 
 switch ($action) {
     case 'md_to_html':
@@ -56,7 +56,7 @@ switch ($action) {
 
         $criteria = ['title' => $pluginTitle];
 
-        if ($accessUrlHelper->isMultiple()) {
+        if ($accessUrlUtil->isMultiple()) {
             $criteria['accessUrlId'] = $currentAccessUrl->getId();
         }
 

@@ -53,7 +53,7 @@ if ($httpRequest->query->has('url_id')) {
 
 $form->addHidden(
     'parentResourceNodeId',
-    Container::getAccessUrlHelper()->getFirstAccessUrl()->resourceNode->getId()
+    Container::getAccessUrlUtil()->getFirstAccessUrl()->resourceNode->getId()
 );
 $form->addButtonCreate(get_lang('Save'));
 

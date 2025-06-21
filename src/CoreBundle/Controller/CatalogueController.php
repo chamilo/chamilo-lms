@@ -17,9 +17,9 @@ use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
@@ -33,7 +33,7 @@ class CatalogueController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly UserHelper $userHelper,
-        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlUtil $accessUrlUtil,
         private readonly CourseRepository $courseRepository,
         private readonly SessionRepository $sessionRepository
     ) {}
@@ -42,7 +42,7 @@ class CatalogueController extends AbstractController
     public function listCourses(): JsonResponse
     {
         $user = $this->userHelper->getCurrent();
-        $accessUrl = $this->accessUrlHelper->getCurrent();
+        $accessUrl = $this->accessUrlUtil->getCurrent();
 
         $relRepo = $this->em->getRepository(CatalogueCourseRelAccessUrlRelUsergroup::class);
         $userGroupRepo = $this->em->getRepository(UsergroupRelUser::class);
@@ -86,7 +86,7 @@ class CatalogueController extends AbstractController
     public function listSessions(): JsonResponse
     {
         $user = $this->userHelper->getCurrent();
-        $accessUrl = $this->accessUrlHelper->getCurrent();
+        $accessUrl = $this->accessUrlUtil->getCurrent();
 
         $relRepo = $this->em->getRepository(CatalogueSessionRelAccessUrlRelUsergroup::class);
         $userGroupRepo = $this->em->getRepository(UsergroupRelUser::class);
@@ -246,7 +246,7 @@ class CatalogueController extends AbstractController
             }
 
             $session->addUserInSession(Session::STUDENT, $user);
-            $session->addAccessUrl($this->accessUrlHelper->getCurrent());
+            $session->addAccessUrl($this->accessUrlUtil->getCurrent());
             $session->addCourse($course);
             $session->addUserInCourse(Session::STUDENT, $user, $course);
 

@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Serializer\Normalizer;
 
-use Chamilo\CoreBundle\Component\Utils\NameConvention;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Utils\NameConventionUtil;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -19,7 +19,7 @@ class UserNormalizer implements NormalizerInterface, NormalizerAwareInterface
     private const ALREADY_CALLED = 'USER_NORMALIZER_ALREADY_CALLED';
 
     public function __construct(
-        private readonly NameConvention $nameConvention,
+        private readonly NameConventionUtil $nameConvention,
     ) {}
 
     public function normalize($object, ?string $format = null, array $context = []): array

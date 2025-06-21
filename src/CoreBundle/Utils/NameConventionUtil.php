@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Component\Utils;
+namespace Chamilo\CoreBundle\Utils;
 
 use Chamilo\CoreBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class NameConvention
+class NameConventionUtil
 {
     protected RequestStack $requestStack;
     private ParameterBagInterface $parameterBag;

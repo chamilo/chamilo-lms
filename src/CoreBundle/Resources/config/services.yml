@@ -52,7 +52,7 @@ services:
         - { name: vich_uploader.namer, mapping: assets }
 
     Chamilo\CoreBundle\Component\Utils\CreateDefaultPages: ~
-    Chamilo\CoreBundle\Component\Utils\NameConvention: ~
+    Chamilo\CoreBundle\Utils\NameConventionUtil: ~
     Chamilo\CoreBundle\Utils\GlideUtil:
         arguments:
             - {source: '@oneup_flysystem.resource_filesystem', cache: '@oneup_flysystem.resource_cache_filesystem'}

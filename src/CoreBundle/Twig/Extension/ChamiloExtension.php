@@ -6,12 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Twig\Extension;
 
-use Chamilo\CoreBundle\Component\Utils\NameConvention;
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CoreBundle\Twig\SettingsHelper;
+use Chamilo\CoreBundle\Utils\NameConventionUtil;
 use Security;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -27,13 +27,13 @@ class ChamiloExtension extends AbstractExtension
     private IllustrationRepository $illustrationRepository;
     private SettingsHelper $helper;
     private RouterInterface $router;
-    private NameConvention $nameConvention;
+    private NameConventionUtil $nameConvention;
 
     public function __construct(
         IllustrationRepository $illustrationRepository,
         SettingsHelper $helper,
         RouterInterface $router,
-        NameConvention $nameConvention,
+        NameConventionUtil $nameConvention,
         private readonly ThemeHelper $themeHelper
     ) {
         $this->illustrationRepository = $illustrationRepository;

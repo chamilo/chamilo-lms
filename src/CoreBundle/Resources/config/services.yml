@@ -53,12 +53,12 @@ services:
 
     Chamilo\CoreBundle\Component\Utils\CreateDefaultPages: ~
     Chamilo\CoreBundle\Component\Utils\NameConvention: ~
-    Chamilo\CoreBundle\Component\Utils\Glide:
+    Chamilo\CoreBundle\Utils\GlideUtil:
         arguments:
             - {source: '@oneup_flysystem.resource_filesystem', cache: '@oneup_flysystem.resource_cache_filesystem'}
             - '%glide_media_filters%'
 
-    Chamilo\CoreBundle\Component\Utils\GlideAsset:
+    Chamilo\CoreBundle\Utils\GlideAssetUtil:
         arguments:
             - {source: '@oneup_flysystem.asset_filesystem', cache: '@oneup_flysystem.asset_cache_filesystem'}
             - '%glide_media_filters%'

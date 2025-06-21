@@ -6,13 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Traits;
 
-use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Utils\GlideUtil;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
@@ -49,7 +49,7 @@ trait ControllerTrait
     {
         $services = AbstractController::getSubscribedServices();
         $services['translator'] = TranslatorInterface::class;
-        $services['glide'] = Glide::class;
+        $services['glide'] = GlideUtil::class;
         // $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
 
         $services[] = SettingsManager::class;
@@ -114,7 +114,7 @@ trait ControllerTrait
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function getGlide(): Glide
+    public function getGlide(): GlideUtil
     {
         return $this->container->get('glide');
     }

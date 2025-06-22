@@ -159,7 +159,16 @@
             class="flex justify-between items-center border-b pb-1"
           >
             <span class="w-2/3 truncate">{{ item.title }}</span>
+            <Button
+              v-if="requirementStatus[item.id]?.isLocked && requirementStatus[item.id]?.hasRequirements"
+              icon="mdi mdi-shield-check"
+              size="small"
+              class="p-button-sm p-button-warning"
+              @click="openRequirement(item.id)"
+              :label="$t('Check requirements')"
+            />
             <a
+              v-else
               :href="`/course/${item.id}/home?sid=${session.id}`"
               target="_blank"
             >
@@ -189,9 +198,17 @@
       v-html="session.description || $t('No description available')"
     />
   </Dialog>
+  <CatalogueRequirementModal
+    v-if="selectedCourseId && requirementStatus[selectedCourseId]"
+    v-model="showRequirementModal"
+    :course-id="selectedCourseId"
+    :session-id="props.session.id"
+    :requirements="requirementStatus[selectedCourseId].requirementList"
+    :graph-image="requirementStatus[selectedCourseId].graphImage"
+  />
 </template>
 <script setup>
-import { ref, computed, watchEffect } from "vue"
+import { ref, computed, watchEffect, reactive, onMounted } from "vue"
 import Rating from "primevue/rating"
 import Button from "primevue/button"
 import Dialog from "primevue/dialog"
@@ -199,6 +216,8 @@ import axios from "axios"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useLocale } from "../../composables/locale"
+import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
+import CatalogueRequirementModal from "../course/CatalogueRequirementModal.vue"
 
 const showDescriptionDialog = ref(false)
 const platformConfigStore = usePlatformConfig()
@@ -234,8 +253,17 @@ const now = new Date()
 const startDate = computed(() => new Date(props.session.startDate))
 const endDate = computed(() => new Date(props.session.endDate))
 
-const isFuture = computed(() => startDate.value > now)
-const isPast = computed(() => endDate.value < now)
+const isPast = computed(() => {
+  if (!props.session.endDate) return false
+  const date = new Date(props.session.endDate)
+  return !isNaN(date) && date < now
+})
+
+const isFuture = computed(() => {
+  if (!props.session.startDate) return false
+  const date = new Date(props.session.startDate)
+  return !isNaN(date) && date > now
+})
 
 const onImageError = () => {
   fallback.value = true
@@ -295,8 +323,9 @@ const formattedStartDate = computed(() => {
 })
 
 const formattedEndDate = computed(() => {
+  if (!props.session.endDate) return "-"
   const d = new Date(props.session.endDate)
-  return isNaN(d) ? "-" : d.toLocaleDateString()
+  return isNaN(d.getTime()) ? "-" : d.toLocaleDateString()
 })
 
 const duration = computed(() => {
@@ -326,4 +355,21 @@ const teachers = computed(() => {
   }
   return [...new Set(all)]
 })
+
+const requirementStatus = reactive({})
+const selectedCourseId = ref(null)
+const showRequirementModal = ref(false)
+
+onMounted(() => {
+  for (const course of props.session.courses || []) {
+    const status = useCourseRequirementStatus(course.id, props.session.id)
+    status.fetchStatus()
+    requirementStatus[course.id] = status
+  }
+})
+
+function openRequirement(courseId) {
+  selectedCourseId.value = courseId
+  showRequirementModal.value = true
+}
 </script>

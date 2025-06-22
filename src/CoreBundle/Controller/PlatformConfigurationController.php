@@ -113,6 +113,8 @@ class PlatformConfigurationController extends AbstractController
                 'session.session_automatic_creation_user_id',
                 'session.session_list_view_remaining_days',
                 'profile.use_users_timezone',
+                'session.user_session_display_mode',
+                'course.resource_sequence_show_dependency_in_course_intro',
             ];
 
             $user = $this->userHelper->getCurrent();

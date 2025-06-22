@@ -204,4 +204,14 @@ export default {
       return []
     }
   },
+
+  getNextCourse: async (courseId, sessionId = 0, dependents = false) => {
+    const { data } = await api.get(`/course/${courseId}/next-course`, {
+      params: {
+        sid: sessionId,
+        dependents: dependents ? 1 : 0,
+      },
+    })
+    return data
+  }
 }

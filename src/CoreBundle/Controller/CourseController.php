@@ -25,10 +25,10 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Service\CourseService;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Utils\UserUtil;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CLink;
@@ -72,7 +72,7 @@ class CourseController extends ToolBaseController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly SerializerInterface $serializer,
-        private readonly UserHelper $userHelper,
+        private readonly UserUtil $userHelper,
     ) {}
 
     #[IsGranted('ROLE_USER')]

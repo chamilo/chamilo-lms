@@ -16,7 +16,6 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
@@ -24,6 +23,7 @@ use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Chamilo\CoreBundle\Traits\GradebookControllerTrait;
 use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Utils\UserUtil;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
@@ -60,7 +60,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     use ResourceControllerTrait;
 
     public function __construct(
-        private readonly UserHelper $userHelper,
+        private readonly UserUtil $userHelper,
         private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly ResourceFileRepository $resourceFileRepository
     ) {}

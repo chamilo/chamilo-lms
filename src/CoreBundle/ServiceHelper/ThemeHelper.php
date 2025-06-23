@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Utils\UserUtil;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
@@ -25,7 +26,7 @@ final class ThemeHelper
     public function __construct(
         private readonly AccessUrlUtil $accessUrlUtil,
         private readonly SettingsManager $settingsManager,
-        private readonly UserHelper $userHelper,
+        private readonly UserUtil $userHelper,
         private readonly CidReqHelper $cidReqHelper,
         private readonly SettingsCourseManager $settingsCourseManager,
         private readonly RouterInterface $router,

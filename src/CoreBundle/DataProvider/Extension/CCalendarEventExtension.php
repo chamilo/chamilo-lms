@@ -15,9 +15,9 @@ use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Utils\UserUtil;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Doctrine\ORM\QueryBuilder;
 use UserGroupModel;
@@ -26,7 +26,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private readonly CidReqHelper $cidReqHelper,
-        private readonly UserHelper $userHelper,
+        private readonly UserUtil $userHelper,
         private readonly AccessUrlUtil $accessUrlUtil,
         private readonly SettingsManager $settingsManager,
         private readonly CourseRepository $courseRepository,

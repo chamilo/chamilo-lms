@@ -25,8 +25,8 @@ use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Utils\UserUtil;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use DateTime;
 use DateTimeInterface;
@@ -51,7 +51,7 @@ use UserManager;
 class SocialController extends AbstractController
 {
     public function __construct(
-        private readonly UserHelper $userHelper,
+        private readonly UserUtil $userHelper,
     ) {}
 
     #[Route('/personal-data/{userId}', name: 'chamilo_core_social_personal_data')]

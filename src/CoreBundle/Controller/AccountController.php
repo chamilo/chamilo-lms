@@ -11,9 +11,9 @@ use Chamilo\CoreBundle\Form\ChangePasswordType;
 use Chamilo\CoreBundle\Form\ProfileType;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Chamilo\CoreBundle\Utils\UserUtil;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
@@ -39,7 +39,7 @@ class AccountController extends BaseController
     use ControllerTrait;
 
     public function __construct(
-        private readonly UserHelper $userHelper,
+        private readonly UserUtil $userHelper,
         private readonly TranslatorInterface $translator
     ) {}
 

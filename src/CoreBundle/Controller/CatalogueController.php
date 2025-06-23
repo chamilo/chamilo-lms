@@ -17,9 +17,9 @@ use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Utils\UserUtil;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
@@ -32,7 +32,7 @@ class CatalogueController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly UserHelper $userHelper,
+        private readonly UserUtil $userHelper,
         private readonly AccessUrlUtil $accessUrlUtil,
         private readonly CourseRepository $courseRepository,
         private readonly SessionRepository $sessionRepository

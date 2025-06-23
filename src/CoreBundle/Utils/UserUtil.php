@@ -4,16 +4,16 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\ServiceHelper;
+namespace Chamilo\CoreBundle\Utils;
 
 use Chamilo\CoreBundle\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserHelper
+readonly class UserUtil
 {
     public function __construct(
-        private readonly Security $security,
+        private Security $security,
     ) {}
 
     public function getCurrent(): ?User

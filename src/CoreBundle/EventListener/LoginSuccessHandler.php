@@ -15,9 +15,9 @@ use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\ServiceHelper\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\ServiceHelper\LoginAttemptLogger;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Utils\UserUtil;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -34,7 +34,7 @@ class LoginSuccessHandler
         private readonly SettingsManager $settingsManager,
         private readonly EntityManagerInterface $entityManager,
         private readonly LoginAttemptLogger $loginAttemptLogger,
-        private readonly UserHelper $userHelper,
+        private readonly UserUtil $userHelper,
         private readonly CourseRepository $courseRepo,
         private readonly AccessUrlUtil $accessUrlUtil,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,

@@ -11,8 +11,8 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Utils\UserUtil;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class UserSessionSubscriptionsStateProvider implements ProviderInterface
 {
     public function __construct(
-        private readonly UserHelper $userHelper,
+        private readonly UserUtil $userHelper,
         private readonly AccessUrlUtil $accessUrlUtil,
         private readonly UserRepository $userRepository,
         private readonly SessionRepository $sessionRepository,

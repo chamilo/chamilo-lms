@@ -9,8 +9,8 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Legal;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Utils\UserUtil;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,7 +35,7 @@ class SecurityController extends AbstractController
         private SettingsManager $settingsManager,
         private TokenStorageInterface $tokenStorage,
         private AuthorizationCheckerInterface $authorizationChecker,
-        private readonly UserHelper $userHelper,
+        private readonly UserUtil $userHelper,
     ) {}
 
     #[Route('/login_json', name: 'login_json', methods: ['POST'])]

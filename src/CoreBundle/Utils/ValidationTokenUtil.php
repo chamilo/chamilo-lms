@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\ServiceHelper;
+namespace Chamilo\CoreBundle\Utils;
 
 use Chamilo\CoreBundle\Entity\ValidationToken;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
 use InvalidArgumentException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ValidationTokenHelper
+class ValidationTokenUtil
 {
     // Define constants for the types
     public const TYPE_TICKET = 1;

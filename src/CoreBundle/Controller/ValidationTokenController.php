@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Repository\TicketRelUserRepository;
 use Chamilo\CoreBundle\Repository\TicketRepository;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
-use Chamilo\CoreBundle\ServiceHelper\ValidationTokenHelper;
+use Chamilo\CoreBundle\Utils\ValidationTokenUtil;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -26,7 +26,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class ValidationTokenController extends AbstractController
 {
     public function __construct(
-        private readonly ValidationTokenHelper $validationTokenHelper,
+        private readonly ValidationTokenUtil $validationTokenUtil,
         private readonly ValidationTokenRepository $tokenRepository,
         private readonly TrackEDefaultRepository $trackEDefaultRepository,
         private readonly TicketRepository $ticketRepository,
@@ -43,7 +43,7 @@ class ValidationTokenController extends AbstractController
         $userId = null !== $userId ? (int) $userId : null;
 
         $token = $this->tokenRepository->findOneBy([
-            'type' => $this->validationTokenHelper->getTypeId($type),
+            'type' => $this->validationTokenUtil->getTypeId($type),
             'hash' => $hash,
         ]);
 
@@ -74,7 +74,7 @@ class ValidationTokenController extends AbstractController
     #[Route('/test/generate-token/{type}/{resourceId}', name: 'test_generate_token')]
     public function testGenerateToken(string $type, int $resourceId): Response
     {
-        $typeId = $this->validationTokenHelper->getTypeId($type);
+        $typeId = $this->validationTokenUtil->getTypeId($type);
         $token = new ValidationToken($typeId, $resourceId);
         $this->tokenRepository->save($token, true);
 
@@ -92,7 +92,7 @@ class ValidationTokenController extends AbstractController
     private function processAction(ValidationToken $token, ?int $userId): void
     {
         switch ($token->getType()) {
-            case ValidationTokenHelper::TYPE_TICKET:
+            case ValidationTokenUtil::TYPE_TICKET:
                 $this->unsubscribeUserFromTicket($token->getResourceId(), $userId);
 
                 break;

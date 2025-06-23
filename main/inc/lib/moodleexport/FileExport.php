@@ -186,12 +186,23 @@ class FileExport
      */
     private function processDocument(array $filesData, object $document): array
     {
+        if (
+            $document->file_type === 'file' &&
+            pathinfo($document->path, PATHINFO_EXTENSION) === 'html' &&
+            substr_count($document->path, '/') === 1
+        ) {
+            return $filesData;
+        }
+
         if ($document->file_type === 'file') {
-            $fileData = $this->getFileData($document);
-            $fileData['filepath'] = '/Documents/';
-            $fileData['contextid'] = 0;
-            $fileData['component'] = 'mod_folder';
-            $filesData['files'][] = $fileData;
+            $extension = pathinfo($document->path, PATHINFO_EXTENSION);
+            if (!in_array(strtolower($extension), ['html', 'htm'])) {
+                $fileData = $this->getFileData($document);
+                $fileData['filepath'] = '/Documents/';
+                $fileData['contextid'] = 0;
+                $fileData['component'] = 'mod_folder';
+                $filesData['files'][] = $fileData;
+            }
         } elseif ($document->file_type === 'folder') {
             $folderFiles = \DocumentManager::getAllDocumentsByParentId($this->course->info, $document->source_id);
             foreach ($folderFiles as $file) {

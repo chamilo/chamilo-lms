@@ -273,19 +273,24 @@ class SectionExport
                 break;
 
             case 'document':
-                if ($sectionId > 0) {
-                    $documentId = (int) $item['path'];
-                    $document = \DocumentManager::get_document_data_by_id($documentId, $this->course->code);
+                $documentId = (int) $item['path'];
+                $document = \DocumentManager::get_document_data_by_id($documentId, $this->course->code);
 
-                    // Determine the type of document and get the corresponding export class
+                if ($document) {
+                    $isRoot = substr_count($document['path'], '/') === 1;
                     $documentType = $this->getDocumentType($document['filetype'], $document['path']);
-                    if ($documentType) {
+                    if ($documentType === 'page' && $isRoot) {
+                        $activityClass = $activityClassMap['page'];
+                        $exportInstance = new $activityClass($this->course);
+                        $activityData = $exportInstance->getData($item['path'], $sectionId);
+                    }
+                    elseif ($sectionId > 0 && $documentType && isset($activityClassMap[$documentType])) {
                         $activityClass = $activityClassMap[$documentType];
                         $exportInstance = new $activityClass($this->course);
                         $activityData = $exportInstance->getData($item['path'], $sectionId);
                     }
-                    break;
                 }
+                break;
         }
 
         // Add the activity to the list if the data exists

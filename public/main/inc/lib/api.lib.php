@@ -2704,35 +2704,30 @@ function api_get_setting($variable, $isArray = false, $key = null)
         return '';
     }
     $variable = trim($variable);
+    // Normalize setting name: keep full name for lookup, extract short name for switch matching
+    $full   = $variable;
+    $short  = str_contains($variable, '.') ? substr($variable, strrpos($variable, '.') + 1) : $variable;
 
-    switch ($variable) {
+    switch ($short) {
         case 'server_type':
-            $test = ['dev', 'test'];
-            $environment = Container::getEnvironment();
-            if (in_array($environment, $test)) {
-                return 'test';
-            }
-
-            return 'prod';
-        // deprecated settings
-        // no break
+            $settingValue = $settingsManager->getSetting($full, true);
+            return $settingValue ?: 'prod';
         case 'openid_authentication':
         case 'service_ppt2lp':
         case 'formLogin_hide_unhide_label':
             return false;
-            break;
         case 'tool_visible_by_default_at_creation':
-            $values = $settingsManager->getSetting($variable);
+            $values = $settingsManager->getSetting($full);
             $newResult = [];
             foreach ($values as $parameter) {
                 $newResult[$parameter] = 'true';
             }
 
             return $newResult;
-            break;
+
         default:
-            $settingValue = $settingsManager->getSetting($variable, true);
-            if (is_string($settingValue) && $isArray && !empty($settingValue)) {
+            $settingValue = $settingsManager->getSetting($full, true);
+            if (is_string($settingValue) && $isArray && $settingValue !== '') {
                 // Check if the value is a valid JSON string
                 $decodedValue = json_decode($settingValue, true);
 
@@ -2740,23 +2735,18 @@ function api_get_setting($variable, $isArray = false, $key = null)
                 if (is_array($decodedValue)) {
                     return $decodedValue;
                 }
-
-                // If it's not an array, continue with the normal flow
-                // Optional: If you need to evaluate the value using eval
-                $strArrayValue = rtrim($settingValue, ';');
-                $value = eval("return $strArrayValue;");
+                $value = eval('return ' . rtrim($settingValue, ';') . ';');
                 if (is_array($value)) {
                     return $value;
                 }
             }
 
             // If the value is not a JSON array or wasn't returned previously, continue with the normal flow
-            if (!empty($key) && isset($settingValue[$variable][$key])) {
+            if ($key !== null && isset($settingValue[$variable][$key])) {
                 return $settingValue[$variable][$key];
             }
 
             return $settingValue;
-            break;
     }
 }
 

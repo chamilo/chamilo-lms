@@ -46,7 +46,7 @@ class Login
                 }
                 $user_account_list = get_lang('YourRegistrationData')." : \n".
                     get_lang('UserName').' : '.$user['loginName']."\n".
-                    get_lang('ResetLink').' : '.$reset_link;
+                    get_lang('ResetLink').' : '.trim($reset_link);
 
                 if ($user_account_list) {
                     $user_account_list = "\n-----------------------------------------------\n".$user_account_list;
@@ -63,7 +63,7 @@ class Login
                     $user_account_list[] =
                         get_lang('YourRegistrationData')." : \n".
                         get_lang('UserName').' : '.$this_user['loginName']."\n".
-                        get_lang('ResetLink').' : '.$reset_link;
+                        get_lang('ResetLink').' : '.trim($reset_link);
                 }
                 if ($user_account_list) {
                     $user_account_list = implode("\n-----------------------------------------------\n", $user_account_list);
@@ -77,7 +77,7 @@ class Login
             $user_account_list =
                 get_lang('YourRegistrationData')." : \n".
                 get_lang('UserName').' : '.$user['loginName']."\n".
-                $reset_link.'';
+                trim($reset_link).'';
         }
 
         return $user_account_list;

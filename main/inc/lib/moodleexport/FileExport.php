@@ -188,6 +188,14 @@ class FileExport
     {
         if (
             $document->file_type === 'file' &&
+            isset($this->course->used_page_doc_ids) &&
+            in_array($document->source_id, $this->course->used_page_doc_ids)
+        ) {
+            return $filesData;
+        }
+
+        if (
+            $document->file_type === 'file' &&
             pathinfo($document->path, PATHINFO_EXTENSION) === 'html' &&
             substr_count($document->path, '/') === 1
         ) {
@@ -296,7 +304,7 @@ class FileExport
     /**
      * Get MIME type based on the file extension.
      */
-    private function getMimeType($filePath): string
+    public function getMimeType($filePath): string
     {
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
         $mimeTypes = $this->getMimeTypes();

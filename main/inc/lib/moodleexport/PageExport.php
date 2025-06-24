@@ -46,11 +46,50 @@ class PageExport extends ActivityExport
     {
         $contextid = $this->course->info['real_id'];
         if ($pageId === 0) {
-            if (
-                isset($this->course->resources[RESOURCE_TOOL_INTRO]['course_homepage']) &&
-                is_object($this->course->resources[RESOURCE_TOOL_INTRO]['course_homepage']) &&
-                !empty($this->course->resources[RESOURCE_TOOL_INTRO]['course_homepage']->intro_text)
-            ) {
+            $introText = trim($this->course->resources[RESOURCE_TOOL_INTRO]['course_homepage']->intro_text ?? '');
+
+            if (!empty($introText)) {
+                $files = [];
+                $resources = \DocumentManager::get_resources_from_source_html($introText);
+                $courseInfo = api_get_course_info($this->course->code);
+                $adminId = MoodleExport::getAdminUserData()['id'];
+
+                foreach ($resources as [$src]) {
+                    if (preg_match('#/document(/[^"\']+)#', $src, $matches)) {
+                        $path = $matches[1];
+                        $docId = \DocumentManager::get_document_id($courseInfo, $path);
+                        if ($docId) {
+                            $this->course->used_page_doc_ids[] = $docId;
+                            $document = \DocumentManager::get_document_data_by_id($docId, $this->course->code);
+                            if ($document) {
+                                $contenthash = hash('sha1', basename($document['path']));
+                                $mimetype = (new FileExport($this->course))->getMimeType($document['path']);
+
+                                $files[] = [
+                                    'id' => $document['id'],
+                                    'contenthash' => $contenthash,
+                                    'contextid' => $contextid,
+                                    'component' => 'mod_page',
+                                    'filearea' => 'content',
+                                    'itemid' => 1,
+                                    'filepath' => '/Documents/',
+                                    'documentpath' => 'document' . $document['path'],
+                                    'filename' => basename($document['path']),
+                                    'userid' => $adminId,
+                                    'filesize' => $document['size'],
+                                    'mimetype' => $mimetype,
+                                    'status' => 0,
+                                    'timecreated' => time() - 3600,
+                                    'timemodified' => time(),
+                                    'source' => $document['title'],
+                                    'author' => 'Unknown',
+                                    'license' => 'allrightsreserved',
+                                ];
+                            }
+                        }
+                    }
+                }
+
                 return [
                     'id' => 0,
                     'moduleid' => 0,
@@ -58,13 +97,13 @@ class PageExport extends ActivityExport
                     'contextid' => $contextid,
                     'name' => get_lang('Introduction'),
                     'intro' => '',
-                    'content' => trim($this->course->resources[RESOURCE_TOOL_INTRO]['course_homepage']->intro_text),
+                    'content' => $this->normalizeContent($introText),
                     'sectionid' => $sectionId,
                     'sectionnumber' => 1,
                     'display' => 0,
                     'timemodified' => time(),
                     'users' => [],
-                    'files' => [],
+                    'files' => $files,
                 ];
             }
         }
@@ -79,7 +118,7 @@ class PageExport extends ActivityExport
                     'contextid' => $contextid,
                     'name' => $page->title,
                     'intro' => $page->comment ?? '',
-                    'content' => $this->getPageContent($page),
+                    'content' => $this->normalizeContent($this->getPageContent($page)),
                     'sectionid' => $sectionId,
                     'sectionnumber' => 1,
                     'display' => 0,
@@ -115,6 +154,24 @@ class PageExport extends ActivityExport
         $xmlContent .= '</activity>';
 
         $this->createXmlFile('page', $xmlContent, $pageDir);
+    }
+
+    private function normalizeContent(string $html): string
+    {
+        return preg_replace_callback(
+            '#<img[^>]+src=["\'](?<url>[^"\']+)["\']#i',
+            function ($match) {
+                $src = $match['url'];
+
+                if (preg_match('#/courses/[^/]+/document/(.+)$#', $src, $parts)) {
+                    $filename = basename($parts[1]);
+                    return str_replace($src, '@@PLUGINFILE@@/Documents/' . $filename, $match[0]);
+                }
+
+                return $match[0];
+            },
+            $html
+        );
     }
 
     /**

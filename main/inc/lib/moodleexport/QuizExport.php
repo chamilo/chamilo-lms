@@ -172,11 +172,13 @@ class QuizExport extends ActivityExport
 
         foreach ($quizResources as $questionId => $questionData) {
             if (in_array($questionId, $this->course->resources[RESOURCE_QUIZ][$quizId]->obj->question_ids)) {
+                $categoryId = $questionData->question_category ?? 0;
+                $categoryId = $categoryId > 0 ? $categoryId : $this->getDefaultCategoryId();
                 $questions[] = [
                     'id' => $questionData->source_id,
                     'questiontext' => $questionData->question,
                     'qtype' => $this->mapQuestionType($questionData->quiz_type),
-                    'questioncategoryid' => $questionData->question_category ?? 0,
+                    'questioncategoryid' =>  $categoryId,
                     'answers' => $this->getAnswersForQuestion($questionData->source_id),
                     'maxmark' => $questionData->ponderation ?? 1,
                 ];
@@ -244,6 +246,11 @@ class QuizExport extends ActivityExport
         }
 
         return $feedbacks;
+    }
+
+    private function getDefaultCategoryId(): int
+    {
+        return 1;
     }
 
     /**

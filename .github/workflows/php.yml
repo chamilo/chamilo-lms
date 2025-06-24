@@ -192,16 +192,12 @@ jobs:
                   sudo php7.4 ${{ github.workspace }}/chash/chash.php fct --no-interaction
                   sudo chmod -R 777 app/cache app/logs app/courses app/upload web
                   bash tests/travis/post_installation.sh
-                  ls -la
-                  echo "Replace Apache config lost at some point in the process:"
+#                  ls -la
+#                  echo "Replace Apache config lost at some point in the process:"
                   sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
-                  cat /etc/apache2/sites-available/000-default.conf
                   sudo systemctl restart apache2
-                  cat /etc/apache2/sites-enabled/000-default.conf
-                  echo "web and web/build contents:"
-                  ls -la web
-                  ls -la web/build
-                  curl http://localhost/
+#                  ls -la web
+                  curl http://localhost/index.php
 
             - name: Behat tests
               run: |

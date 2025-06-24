@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\MailHelper;
+use Chamilo\CoreBundle\Utils\MailHelper;
 use Chamilo\CoreBundle\Utils\PermissionServiceHelper;
 use Chamilo\CoreBundle\Utils\PluginServiceHelper;
 use Chamilo\CoreBundle\Utils\ThemeHelper;

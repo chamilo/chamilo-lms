@@ -4,16 +4,15 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Service;
+namespace Chamilo\CoreBundle\Utils;
 
 use Chamilo\CoreBundle\Entity\TrackEDefault;
-use Chamilo\CoreBundle\Utils\CidReqHelper;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
-class EventLoggerService
+class EventLoggerHelper
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,

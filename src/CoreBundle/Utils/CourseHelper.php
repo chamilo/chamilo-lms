@@ -18,7 +18,6 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\Service\EventLoggerService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
@@ -58,7 +57,7 @@ class CourseHelper
         private readonly SettingsManager $settingsManager,
         private readonly TranslatorInterface $translator,
         private readonly MailerInterface $mailer,
-        private readonly EventLoggerService $eventLoggerService,
+        private readonly EventLoggerHelper $eventLoggerHelper,
         private readonly ParameterBagInterface $parameterBag,
         private readonly RequestStack $requestStack,
         private readonly AccessUrlUtil $accessUrlUtil
@@ -781,7 +780,7 @@ class CourseHelper
             $currentUser = $this->getFallbackAdminUser();
         }
 
-        $this->eventLoggerService->addEvent(
+        $this->eventLoggerHelper->addEvent(
             'course_created',
             'course_id',
             $course->getId(),

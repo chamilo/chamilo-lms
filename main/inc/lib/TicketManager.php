@@ -801,7 +801,7 @@ class TicketManager
         if (empty($userInfo)) {
             return [];
         }
-        $isAdmin = UserManager::is_admin($userId);
+        $isAdmin = UserManager::is_admin($userId) || (api_get_configuration_value('allow_session_admin_manage_tickets_and_export_ticket_report') && api_is_session_admin($userId));
 
         if (!isset($_GET['project_id'])) {
             return [];
@@ -893,6 +893,7 @@ class TicketManager
             'keyword_source' => 'ticket.source ',
             'keyword_status' => 'ticket.status_id',
             'keyword_priority' => 'ticket.priority_id',
+            'keyword_created_by' => 'ticket.sys_insert_user_id',
         ];
 
         foreach ($keywords as $keyword => $label) {
@@ -1079,6 +1080,7 @@ class TicketManager
             'keyword_source' => 'ticket.source',
             'keyword_status' => 'ticket.status_id',
             'keyword_priority' => 'ticket.priority_id',
+            'keyword_created_by' => 'ticket.sys_insert_user_id',
         ];
 
         foreach ($keywords as $keyword => $sqlLabel) {

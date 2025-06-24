@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Service;
+namespace Chamilo\CoreBundle\Utils;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\ScheduledAnnouncementRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Utils\MessageHelper;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Exception;
@@ -22,7 +21,7 @@ use ExtraFieldValue;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tracking;
 
-class ScheduledAnnouncementService
+class ScheduledAnnouncementHelper
 {
     public function __construct(
         private readonly ScheduledAnnouncementRepository $announcementRepository,

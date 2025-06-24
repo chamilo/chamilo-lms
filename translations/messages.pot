@@ -28337,3 +28337,6 @@ msgstr ""
 
 msgid "Revoke Acceptance"
 msgstr ""
+
+msgid "Confirmation"
+msgstr ""

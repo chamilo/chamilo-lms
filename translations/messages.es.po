@@ -29381,3 +29381,6 @@ msgstr "Aceptaste estos términos el"
 
 msgid "Revoke Acceptance"
 msgstr "Revocar la aceptación"
+
+msgid "Confirmation"
+msgstr "Confirmación"

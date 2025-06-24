@@ -29577,3 +29577,6 @@ msgstr "Sie haben diese Nutzungsbedingungen akzeptiert am"
 
 msgid "Revoke Acceptance"
 msgstr "Zustimmung widerrufen"
+
+msgid "Confirmation"
+msgstr "Bestätigung"

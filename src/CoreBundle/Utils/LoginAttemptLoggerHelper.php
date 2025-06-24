@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\ServiceHelper;
+namespace Chamilo\CoreBundle\Utils;
 
 use DateTime;
 use SplFileObject;
@@ -13,7 +13,7 @@ use const FILE_APPEND;
 use const LOCK_EX;
 use const PHP_INT_MAX;
 
-class LoginAttemptLogger
+class LoginAttemptLoggerHelper
 {
     private string $logDir;
     private TranslatorInterface $translator;

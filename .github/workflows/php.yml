@@ -44,9 +44,6 @@ jobs:
                 sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
                 sudo chmod 777 -R $HOME
                 cat /etc/apache2/sites-available/000-default.conf
-                ls -l /etc/apache2/sites-enabled
-                cat /etc/apache2/sites-enabled/000-default.conf
-                sudo service apache2 restart
                 sudo systemctl restart apache2
 
             - name: Setup PHP, with composer and extensions
@@ -193,17 +190,17 @@ jobs:
                   php7.4 ${{ github.workspace }}/chash/chash.php chash:chamilo_install 1.11.x ${{ github.workspace }} --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --dbpassword="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
                   sudo chmod -R 777 app/cache app/logs app/courses app/upload web
                   php7.4 ${{ github.workspace }}/chash/chash.php chash:chamilo_status
+                  php7.4 ${{ github.workspace }}/chash/chash.php chash:fct --no-interaction
                   bash tests/travis/post_installation.sh
-                  echo "Working directory:"
-                  pwd
                   ls -la
-                  echo "Active Apache config:"
-                  ls -l /etc/apache2/sites-enabled
+                  echo "Replace Apache config lost at some point in the process:"
+                  sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
+                  cat /etc/apache2/sites-available/000-default.conf
+                  sudo systemctl restart apache2
                   cat /etc/apache2/sites-enabled/000-default.conf
                   echo "web and web/build contents:"
                   ls -la web
                   ls -la web/build
-                  sudo systemctl restart apache2
                   curl http://localhost/
 
             - name: Behat tests

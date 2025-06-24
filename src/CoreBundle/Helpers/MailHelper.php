@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Utils;
+namespace Chamilo\CoreBundle\Helpers;
 
 use Exception;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;

@@ -46,14 +46,14 @@ class KeycloakAuthenticator extends AbstractAuthenticator
             ->setStatus(STUDENT)
             ->addAuthSourceByAuthentication(
                 'keycloak',
-                $this->urlHelper->getCurrent()
+                $this->accessUrlHelper->getCurrent()
             )
             ->setRoleFromStatus(STUDENT)
         ;
 
         $this->userRepository->updateUser($user);
 
-        $url = $this->urlHelper->getCurrent();
+        $url = $this->accessUrlHelper->getCurrent();
         $url->addUser($user);
 
         $this->entityManager->flush();

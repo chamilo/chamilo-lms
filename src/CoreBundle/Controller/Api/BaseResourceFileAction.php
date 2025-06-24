@@ -14,7 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Utils\CreateUploadedFileUtil;
+use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
@@ -363,7 +363,7 @@ class BaseResourceFileAction
 
                 // Get data in content and create a HTML file.
                 if (!$fileParsed && $content) {
-                    $uploadedFile = CreateUploadedFileUtil::fromString($title.'.html', 'text/html', $content);
+                    $uploadedFile = CreateUploadedFileHelper::fromString($title.'.html', 'text/html', $content);
                     $resource->setUploadFile($uploadedFile);
                     $fileParsed = true;
                 }

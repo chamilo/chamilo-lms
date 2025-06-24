@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Command;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Database;
 use DateInterval;
 use DateTime;
@@ -35,7 +35,7 @@ class ProcessUserDataRequestsCommand extends Command
 {
     public function __construct(
         private readonly Connection $connection,
-        private readonly AccessUrlUtil $accessUrlUtil,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SettingsManager $settingsManager,
         private readonly MailerInterface $mailer,
         private readonly EntityManager $em,
@@ -67,7 +67,7 @@ class ProcessUserDataRequestsCommand extends Command
         }
 
         $defaultSenderId = 1;
-        $accessUrl = $this->accessUrlUtil->getCurrent();
+        $accessUrl = $this->accessUrlHelper->getCurrent();
         $numberOfDays = 7;
         $date = new DateTime();
         $date->sub(new DateInterval('P'.$numberOfDays.'D'));
@@ -100,7 +100,7 @@ class ProcessUserDataRequestsCommand extends Command
             AND v.updated_at < :dateToString
         ';
 
-        if ($this->accessUrlUtil->isMultiple()) {
+        if ($this->accessUrlHelper->isMultiple()) {
             $sql .= ' AND EXISTS (
                         SELECT 1 FROM access_url_rel_user rel
                         WHERE u.id = rel.user_id

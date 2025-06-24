@@ -14,8 +14,8 @@ use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
-use Chamilo\CoreBundle\Utils\AuthenticationConfigUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -39,8 +39,8 @@ class GenericAuthenticator extends AbstractAuthenticator
         ClientRegistry $clientRegistry,
         RouterInterface $router,
         UserRepository $userRepository,
-        AuthenticationConfigUtil $authenticationConfigHelper,
-        AccessUrlUtil $urlHelper,
+        AuthenticationConfigHelper $authenticationConfigHelper,
+        AccessUrlHelper $urlHelper,
         EntityManagerInterface $entityManager,
         protected readonly ExtraFieldRepository $extraFieldRepository,
         protected readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
@@ -172,7 +172,7 @@ class GenericAuthenticator extends AbstractAuthenticator
             )
             ->addAuthSourceByAuthentication(
                 'oauth2',
-                $this->urlHelper->getCurrent()
+                $this->accessUrlHelper->getCurrent()
             )
             ->setStatus($status)
             ->setRoleFromStatus($status)
@@ -180,7 +180,7 @@ class GenericAuthenticator extends AbstractAuthenticator
 
         $this->userRepository->updateUser($user);
 
-        $url = $this->urlHelper->getCurrent();
+        $url = $this->accessUrlHelper->getCurrent();
         $url->addUser($user);
 
         $this->entityManager->flush();

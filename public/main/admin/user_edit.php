@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Utils\AuthenticationConfigUtil;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use ChamiloSession as Session;
 
 $cidReset = true;
@@ -23,8 +23,8 @@ $userInfo = api_get_user_info($user_id);
 $userObj = api_get_user_entity($user_id);
 $illustrationRepo = Container::getIllustrationRepository();
 
-/** @var AuthenticationConfigUtil $authenticationConfigHelper */
-$authenticationConfigHelper = Container::$container->get(AuthenticationConfigUtil::class);
+/** @var AuthenticationConfigHelper $authenticationConfigHelper */
+$authenticationConfigHelper = Container::$container->get(AuthenticationConfigHelper::class);
 
 $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 

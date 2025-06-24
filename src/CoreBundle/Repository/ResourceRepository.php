@@ -20,7 +20,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\NonResourceRepository;
 use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
-use Chamilo\CoreBundle\Utils\CreateUploadedFileUtil;
+use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -202,7 +202,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function addFileFromString(ResourceInterface $resource, string $fileName, string $mimeType, string $content, bool $flush = true): ?ResourceFile
     {
-        $file = CreateUploadedFileUtil::fromString($fileName, $mimeType, $content);
+        $file = CreateUploadedFileHelper::fromString($fileName, $mimeType, $content);
 
         return $this->addFile($resource, $file, '', $flush);
     }

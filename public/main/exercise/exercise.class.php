@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
-use Chamilo\CoreBundle\Utils\ChamiloUtil;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
@@ -10308,7 +10308,7 @@ class Exercise
 
         $labels = json_encode($labels);
 
-        $colorList = ChamiloUtil::getColorPalette(true, true);
+        $colorList = ChamiloHelper::getColorPalette(true, true);
 
         $dataSetToJson = [];
         $counter = 0;

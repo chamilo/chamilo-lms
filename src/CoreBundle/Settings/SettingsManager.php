@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Settings;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
-use Chamilo\CoreBundle\Utils\SettingsManagerHelper;
+use Chamilo\CoreBundle\Helpers\SettingsManagerHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;

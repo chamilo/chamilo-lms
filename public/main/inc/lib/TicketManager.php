@@ -14,7 +14,7 @@ use Chamilo\CoreBundle\Entity\ValidationToken;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Utils\ValidationTokenUtil;
+use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CourseBundle\Entity\CLp;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -2646,7 +2646,7 @@ class TicketManager
      */
     public static function generateUnsubscribeLink($ticketId, $userId): string
     {
-        $token = new ValidationToken(ValidationTokenUtil::TYPE_TICKET, $ticketId);
+        $token = new ValidationToken(ValidationTokenHelper::TYPE_TICKET, $ticketId);
         Database::getManager()->persist($token);
         Database::getManager()->flush();
 

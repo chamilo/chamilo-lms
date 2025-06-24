@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Chamilo\CoreBundle\Utils\ScheduledAnnouncementHelper;
+use Chamilo\CoreBundle\Helpers\ScheduledAnnouncementHelper;
 use Database;
 use Doctrine\ORM\EntityManager;
 use Exception;

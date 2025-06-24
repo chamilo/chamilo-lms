@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ObjectIcon;
-use Chamilo\CoreBundle\Utils\ChamiloUtil;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use ChamiloSession as Session;
 
 /**
@@ -58,7 +58,7 @@ function return_logo($theme = '', $responsive = true)
         $class = '';
     }
 
-    return ChamiloUtil::getPlatformLogo(
+    return ChamiloHelper::getPlatformLogo(
         $theme,
         [
             'title' => $siteName,

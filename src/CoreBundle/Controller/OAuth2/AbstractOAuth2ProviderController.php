@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\OAuth2;
 
-use Chamilo\CoreBundle\Utils\AuthenticationConfigUtil;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +16,7 @@ abstract class AbstractOAuth2ProviderController extends AbstractController
     protected function getStartResponse(
         string $providerName,
         ClientRegistry $clientRegistry,
-        AuthenticationConfigUtil $authenticationConfigHelper,
+        AuthenticationConfigHelper $authenticationConfigHelper,
     ): Response {
         if (!$authenticationConfigHelper->isOAuth2ProviderEnabled($providerName)) {
             throw $this->createAccessDeniedException();

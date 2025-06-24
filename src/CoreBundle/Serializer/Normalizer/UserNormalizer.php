@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Serializer\Normalizer;
 
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Utils\NameConventionUtil;
+use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -19,7 +19,7 @@ class UserNormalizer implements NormalizerInterface, NormalizerAwareInterface
     private const ALREADY_CALLED = 'USER_NORMALIZER_ALREADY_CALLED';
 
     public function __construct(
-        private readonly NameConventionUtil $nameConvention,
+        private readonly NameConventionHelper $nameConventionHelper,
     ) {}
 
     public function normalize($object, ?string $format = null, array $context = []): array
@@ -28,7 +28,7 @@ class UserNormalizer implements NormalizerInterface, NormalizerAwareInterface
 
         $data = $this->normalizer->normalize($object, $format, $context);
 
-        $data['fullName'] = $this->nameConvention->getPersonName($object);
+        $data['fullName'] = $this->nameConventionHelper->getPersonName($object);
 
         return $data;
     }

@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Utils\ChamiloUtil;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use ChamiloSession as Session;
 use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\Exception\ORMException;
@@ -2051,7 +2051,7 @@ class Event
         }
 
         $logoutDate = api_get_utc_datetime();
-        $loginDate = ChamiloUtil::addOrSubTimeToDateTime(
+        $loginDate = ChamiloHelper::addOrSubTimeToDateTime(
             $virtualTime,
             $logoutDate,
             false

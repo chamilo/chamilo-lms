@@ -45,9 +45,9 @@ use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
-use Chamilo\CoreBundle\Utils\ContainerHelper;
-use Chamilo\CoreBundle\Utils\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\ContainerHelper;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
@@ -672,9 +672,9 @@ class Container
         return self::$container->get(ThemeHelper::class);
     }
 
-    public static function getAccessUrlUtil(): AccessUrlUtil
+    public static function getAccessUrlUtil(): AccessUrlHelper
     {
-        return self::$container->get(AccessUrlUtil::class);
+        return self::$container->get(AccessUrlHelper::class);
     }
 
     public static function getEventDispatcher(): EventDispatcherInterface

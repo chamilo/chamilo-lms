@@ -15,9 +15,9 @@ use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
-use Chamilo\CoreBundle\Utils\CidReqHelper;
-use Chamilo\CoreBundle\Utils\UserUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Doctrine\ORM\QueryBuilder;
 use UserGroupModel;
@@ -26,8 +26,8 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private readonly CidReqHelper $cidReqHelper,
-        private readonly UserUtil $userHelper,
-        private readonly AccessUrlUtil $accessUrlUtil,
+        private readonly UserHelper $userHelper,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SettingsManager $settingsManager,
         private readonly CourseRepository $courseRepository,
         private readonly SessionRepository $sessionRepository,
@@ -58,7 +58,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         $sessionId = $this->cidReqHelper->getSessionId();
         $groupId = $this->cidReqHelper->getGroupId();
         $user = $this->userHelper->getCurrent();
-        $accessUrl = $this->accessUrlUtil->getCurrent();
+        $accessUrl = $this->accessUrlHelper->getCurrent();
 
         $inCourseBase = !empty($courseId);
         $inSession = !empty($sessionId);

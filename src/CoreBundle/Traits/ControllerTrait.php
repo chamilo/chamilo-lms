@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Utils\GlideUtil;
+use Chamilo\CoreBundle\Helpers\GlideHelper;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
@@ -49,7 +49,7 @@ trait ControllerTrait
     {
         $services = AbstractController::getSubscribedServices();
         $services['translator'] = TranslatorInterface::class;
-        $services['glide'] = GlideUtil::class;
+        $services['glide'] = GlideHelper::class;
         // $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
 
         $services[] = SettingsManager::class;
@@ -114,7 +114,7 @@ trait ControllerTrait
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function getGlide(): GlideUtil
+    public function getGlide(): GlideHelper
     {
         return $this->container->get('glide');
     }

@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Utils;
+namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 use const PHP_SAPI;
 
-readonly class AccessUrlUtil
+readonly class AccessUrlHelper
 {
     public function __construct(
         private AccessUrlRepository $accessUrlRepository,

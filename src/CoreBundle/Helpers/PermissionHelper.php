@@ -4,12 +4,12 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Utils;
+namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class PermissionServiceHelper
+class PermissionHelper
 {
     public function __construct(
         private ParameterBagInterface $parameterBag,

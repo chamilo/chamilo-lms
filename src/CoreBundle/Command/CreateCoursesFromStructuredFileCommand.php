@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Utils\CourseHelper;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -37,7 +37,7 @@ class CreateCoursesFromStructuredFileCommand extends Command
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly CourseHelper $courseService,
+        private readonly CourseHelper $courseHelper,
         private readonly SettingsManager $settingsManager,
         private readonly ParameterBagInterface $parameterBag,
     ) {
@@ -119,7 +119,7 @@ class CreateCoursesFromStructuredFileCommand extends Command
             $io->section("Creating course: $courseCode");
 
             // 2. Create course
-            $course = $this->courseService->createCourse([
+            $course = $this->courseHelper->createCourse([
                 'title' => $courseTitle,
                 'wanted_code' => $courseCode,
                 'add_user_as_teacher' => true,

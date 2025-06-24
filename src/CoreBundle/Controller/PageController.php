@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\PageRepository;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,13 +15,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class PageController extends AbstractController
 {
     public function __construct(
-        private readonly AccessUrlUtil $accessUrlUtil
+        private readonly AccessUrlHelper $accessUrlHelper
     ) {}
 
     #[Route('/{slug}', name: 'public_page_show', methods: ['GET'])]
     public function show(string $slug, PageRepository $pageRepo): Response
     {
-        $accessUrl = $this->accessUrlUtil->getCurrent();
+        $accessUrl = $this->accessUrlHelper->getCurrent();
 
         $page = $pageRepo->findOneBy([
             'slug' => $slug,

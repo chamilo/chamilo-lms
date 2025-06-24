@@ -11,7 +11,7 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Component\Utils\CreateDefaultPages;
 use Chamilo\CoreBundle\Entity\Page;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -19,7 +19,7 @@ final class PageExtension implements QueryCollectionExtensionInterface // , Quer
 {
     public function __construct(
         private readonly Security $security,
-        private readonly AccessUrlUtil $accessUrlUtil,
+        private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
     public function applyToCollection(
@@ -35,7 +35,7 @@ final class PageExtension implements QueryCollectionExtensionInterface // , Quer
 
         $alias = $queryBuilder->getRootAliases()[0];
 
-        $url = $this->accessUrlUtil->getCurrent();
+        $url = $this->accessUrlHelper->getCurrent();
 
         // Url filter by default.
         $queryBuilder

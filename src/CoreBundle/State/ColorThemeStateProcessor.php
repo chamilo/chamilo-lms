@@ -10,7 +10,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\ColorTheme;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -25,7 +25,7 @@ final readonly class ColorThemeStateProcessor implements ProcessorInterface
 {
     public function __construct(
         private ProcessorInterface $persistProcessor,
-        private AccessUrlUtil $accessUrlUtil,
+        private AccessUrlHelper $accessUrlHelper,
         private EntityManagerInterface $entityManager,
         #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
         private FilesystemOperator $filesystem,
@@ -39,14 +39,14 @@ final readonly class ColorThemeStateProcessor implements ProcessorInterface
         $colorTheme = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
         if ($colorTheme) {
-            $accessUrl = $this->accessUrlUtil->getCurrent();
+            $accessUrl = $this->accessUrlHelper->getCurrent();
 
             $accessUrlRelColorTheme = $accessUrl->getColorThemeByTheme($colorTheme);
 
             if (!$accessUrlRelColorTheme) {
                 $accessUrlRelColorTheme = (new AccessUrlRelColorTheme())->setColorTheme($colorTheme);
 
-                $this->accessUrlUtil->getCurrent()->addColorTheme($accessUrlRelColorTheme);
+                $this->accessUrlHelper->getCurrent()->addColorTheme($accessUrlRelColorTheme);
             }
 
             $this->entityManager->flush();

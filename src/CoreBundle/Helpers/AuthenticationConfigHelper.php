@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Utils;
+namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
@@ -14,11 +14,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use function Symfony\Component\String\u;
 
-readonly class AuthenticationConfigUtil
+readonly class AuthenticationConfigHelper
 {
     public function __construct(
         private ParameterBagInterface $parameterBag,
-        private AccessUrlUtil $urlHelper,
+        private AccessUrlHelper $accessUrlHelper,
         private UrlGeneratorInterface $urlGenerator,
     ) {}
 
@@ -65,7 +65,7 @@ readonly class AuthenticationConfigUtil
 
     public function getAuthSources(?AccessUrl $url)
     {
-        $urlId = $url ?: $this->urlHelper->getCurrent();
+        $urlId = $url ?: $this->accessUrlHelper->getCurrent();
 
         $authentication = $this->parameterBag->has('authentication')
             ? $this->parameterBag->get('authentication')

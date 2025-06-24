@@ -8,9 +8,9 @@ namespace Chamilo\CoreBundle\Security\Authenticator\OAuth2;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
-use Chamilo\CoreBundle\Utils\AuthenticationConfigUtil;
-use Chamilo\CoreBundle\Utils\AzureAuthenticatorUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\AzureAuthenticatorHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -28,10 +28,10 @@ class AzureAuthenticator extends AbstractAuthenticator
         ClientRegistry $clientRegistry,
         RouterInterface $router,
         UserRepository $userRepository,
-        AuthenticationConfigUtil $authenticationConfigHelper,
-        AccessUrlUtil $urlHelper,
+        AuthenticationConfigHelper $authenticationConfigHelper,
+        AccessUrlHelper $urlHelper,
         EntityManagerInterface $entityManager,
-        private readonly AzureAuthenticatorUtil $azureHelper,
+        private readonly AzureAuthenticatorHelper $azureHelper,
     ) {
         parent::__construct(
             $clientRegistry,

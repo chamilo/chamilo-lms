@@ -7,7 +7,7 @@ namespace Chamilo\CoreBundle\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\Common\Collections\Collection;
 
 /**
@@ -16,15 +16,15 @@ use Doctrine\Common\Collections\Collection;
 readonly class AccessUrlRelColorThemeStateProvider implements ProviderInterface
 {
     public function __construct(
-        private AccessUrlUtil $accessUrlUtil,
+        private AccessUrlHelper $accessUrlHelper,
     ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): Collection
     {
-        $colorThemes = $this->accessUrlUtil->getCurrent()->getColorThemes();
+        $colorThemes = $this->accessUrlHelper->getCurrent()->getColorThemes();
 
         if (0 == $colorThemes->count()) {
-            $colorThemes = $this->accessUrlUtil->getFirstAccessUrl()->getColorThemes();
+            $colorThemes = $this->accessUrlHelper->getFirstAccessUrl()->getColorThemes();
         }
 
         return $colorThemes;

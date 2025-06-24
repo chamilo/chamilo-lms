@@ -7,8 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
-use Chamilo\CoreBundle\Utils\CidReqHelper;
-use Chamilo\CoreBundle\Utils\UserUtil;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -21,7 +21,7 @@ class CourseAccessListener
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly CidReqHelper $cidReqHelper,
-        private readonly UserUtil $userHelper
+        private readonly UserHelper $userHelper
     ) {}
 
     public function onKernelRequest(RequestEvent $event): void

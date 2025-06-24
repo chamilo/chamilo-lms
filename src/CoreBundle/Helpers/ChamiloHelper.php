@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Utils;
+namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
@@ -18,7 +18,7 @@ use Template;
 
 use const PHP_SAPI;
 
-class ChamiloUtil
+class ChamiloHelper
 {
     public const COURSE_MANAGER = 1;
     public const SESSION_ADMIN = 3;
@@ -28,7 +28,7 @@ class ChamiloUtil
 
     private static array $configuration;
 
-    public function __construct(array $configuration)
+    public function setConfiguration(array $configuration)
     {
         self::$configuration = $configuration;
     }

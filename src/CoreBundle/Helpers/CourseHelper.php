@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Utils;
+namespace Chamilo\CoreBundle\Helpers;
 
 use Agenda;
 use AnnouncementManager;
@@ -60,7 +60,7 @@ class CourseHelper
         private readonly EventLoggerHelper $eventLoggerHelper,
         private readonly ParameterBagInterface $parameterBag,
         private readonly RequestStack $requestStack,
-        private readonly AccessUrlUtil $accessUrlUtil
+        private readonly AccessUrlHelper $accessUrlHelper
     ) {}
 
     public function createCourse(array $params): ?Course
@@ -100,7 +100,7 @@ class CourseHelper
             }
 
             $params = $this->prepareAndValidateCourseData($rawParams);
-            $accessUrl = $this->accessUrlUtil->getCurrent();
+            $accessUrl = $this->accessUrlHelper->getCurrent();
             $course = new Course();
             $course
                 ->setTitle($params['title'])

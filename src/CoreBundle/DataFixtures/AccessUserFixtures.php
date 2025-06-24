@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\DataFixtures;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Tool\ToolChain;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -22,7 +22,7 @@ class AccessUserFixtures extends Fixture
     public function __construct(
         private readonly ToolChain $toolChain,
         private readonly UserRepository $userRepository,
-        private readonly AccessUrlUtil $accessUrlUtil,
+        private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
     public function load(ObjectManager $manager): void
@@ -30,7 +30,7 @@ class AccessUserFixtures extends Fixture
         $timezone = 'Europe\Paris';
         $this->toolChain->createTools();
 
-        $accessUrl = $this->accessUrlUtil->getCurrent();
+        $accessUrl = $this->accessUrlHelper->getCurrent();
 
         // Defined in AccessGroupFixtures.php.
         // $group = $this->getReference('GROUP_ADMIN');

@@ -26,9 +26,9 @@ use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
-use Chamilo\CoreBundle\Utils\CourseHelper;
-use Chamilo\CoreBundle\Utils\UserUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CLink;
@@ -72,7 +72,7 @@ class CourseController extends ToolBaseController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly SerializerInterface $serializer,
-        private readonly UserUtil $userHelper,
+        private readonly UserHelper $userHelper,
     ) {}
 
     #[IsGranted('ROLE_USER')]
@@ -701,11 +701,11 @@ class CourseController extends ToolBaseController
     #[Route('/categories', name: 'chamilo_core_course_form_lists')]
     public function getCategories(
         SettingsManager $settingsManager,
-        AccessUrlUtil $accessUrlUtil,
+        AccessUrlHelper $accessUrlHelper,
         CourseCategoryRepository $courseCategoriesRepo
     ): JsonResponse {
         $allowBaseCourseCategory = 'true' === $settingsManager->getSetting('course.allow_base_course_category');
-        $accessUrlId = $accessUrlUtil->getCurrent()->getId();
+        $accessUrlId = $accessUrlHelper->getCurrent()->getId();
 
         $categories = $courseCategoriesRepo->findAllInAccessUrl(
             $accessUrlId,
@@ -732,7 +732,7 @@ class CourseController extends ToolBaseController
     #[Route('/search_templates', name: 'chamilo_core_course_search_templates')]
     public function searchCourseTemplates(
         Request $request,
-        AccessUrlUtil $accessUrlUtil,
+        AccessUrlHelper $accessUrlUtil,
         CourseRepository $courseRepository
     ): JsonResponse {
         $searchTerm = $request->query->get('search', '');
@@ -757,7 +757,7 @@ class CourseController extends ToolBaseController
     public function createCourse(
         Request $request,
         TranslatorInterface $translator,
-        CourseHelper $courseService
+        CourseHelper $courseHelper
     ): JsonResponse {
         $courseData = json_decode($request->getContent(), true);
 
@@ -781,7 +781,7 @@ class CourseController extends ToolBaseController
         }
 
         try {
-            $course = $courseService->createCourse($params);
+            $course = $courseHelper->createCourse($params);
             if ($course) {
                 return new JsonResponse([
                     'success' => true,

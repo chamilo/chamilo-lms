@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Utils\ChamiloUtil;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use PhpZip\ZipFile;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -228,7 +228,7 @@ function qti_parse_file($data)
 
     //parse XML question file
     //$data = str_replace(array('<p>', '</p>', '<front>', '</front>'), '', $data);
-    $data = ChamiloUtil::stripGivenTags($data, ['p', 'front']);
+    $data = ChamiloHelper::stripGivenTags($data, ['p', 'front']);
     $qtiVersion = [];
     $match = preg_match('/ims_qtiasiv(\d)p(\d)/', $data, $qtiVersion);
     $qtiMainVersion = 2; //by default, assume QTI version 2

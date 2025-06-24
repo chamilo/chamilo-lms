@@ -11,8 +11,8 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
-use Chamilo\CoreBundle\Utils\UserUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -23,8 +23,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class UserSessionSubscriptionsStateProvider implements ProviderInterface
 {
     public function __construct(
-        private readonly UserUtil $userHelper,
-        private readonly AccessUrlUtil $accessUrlUtil,
+        private readonly UserHelper $userHelper,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly UserRepository $userRepository,
         private readonly SessionRepository $sessionRepository,
     ) {}
@@ -41,7 +41,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         }
 
         $currentUser = $this->userHelper->getCurrent();
-        $url = $this->accessUrlUtil->getCurrent();
+        $url = $this->accessUrlHelper->getCurrent();
 
         $isAllowed = $user === $currentUser || $currentUser->isAdmin();
 

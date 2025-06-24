@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
-use Chamilo\CoreBundle\Utils\UserUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,8 +23,8 @@ class NewsController extends BaseController
     use ControllerTrait;
 
     public function __construct(
-        private readonly AccessUrlUtil $accessUrlUtil,
-        private readonly UserUtil $userHelper,
+        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly UserHelper $userHelper,
     ) {}
 
     #[Route('/list', name: 'news_index', methods: ['GET'])]
@@ -36,7 +36,7 @@ class NewsController extends BaseController
         if (null !== $user) {
             $list = $sysAnnouncementRepository->getAnnouncements(
                 $user,
-                $this->accessUrlUtil->getCurrent(),
+                $this->accessUrlHelper->getCurrent(),
                 $this->getRequest()->getLocale()
             );
         }

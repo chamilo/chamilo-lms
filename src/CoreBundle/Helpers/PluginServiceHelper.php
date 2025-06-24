@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Utils;
+namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
 use Event;
@@ -15,7 +15,7 @@ readonly class PluginServiceHelper
     public function __construct(
         private ParameterBagInterface $parameterBag,
         private AccessUrlRelPluginRepository $pluginRepo,
-        private AccessUrlUtil $accessUrlUtil,
+        private AccessUrlHelper $accessUrlHelper,
     ) {}
 
     public function loadLegacyPlugin(string $pluginName): ?object
@@ -52,7 +52,7 @@ readonly class PluginServiceHelper
 
     public function isPluginEnabled(string $pluginName): bool
     {
-        $accessUrl = $this->accessUrlUtil->getCurrent();
+        $accessUrl = $this->accessUrlHelper->getCurrent();
         if (null === $accessUrl) {
             return false;
         }

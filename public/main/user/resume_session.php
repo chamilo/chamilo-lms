@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Utils\NameConventionUtil;
+use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -35,7 +35,7 @@ if ('true' === $allowTutors) {
     $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
     $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-    $nameConvention = Container::$container->get(NameConventionUtil::class);
+    $nameConvention = Container::$container->get(NameConventionHelper::class);
 
     $session = api_get_session_entity($id_session);
 

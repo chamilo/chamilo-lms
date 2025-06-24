@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Utils\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -2293,10 +2293,10 @@ class Display
             }
             $enum = $matches[1];
             $case = $matches[2];
-            if (!class_exists('Chamilo\CoreBundle\Component\Utils\\'.$enum)) {
+            if (!class_exists('Chamilo\CoreBundle\Enums\\'.$enum)) {
                 throw new InvalidArgumentException("Class {$enum} does not exist.");
             }
-            $reflection = new ReflectionEnum('Chamilo\CoreBundle\Component\Utils\\'.$enum);
+            $reflection = new ReflectionEnum('Chamilo\CoreBundle\Enums\\'.$enum);
             // Check if the case exists in the Enum class
             if (!$reflection->hasCase($case)) {
                 throw new InvalidArgumentException("Case {$case} does not exist in enum class {$enum}.");

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DependencyInjection\Compiler;
 
-use Chamilo\CoreBundle\Utils\PluginEntityLoaderHelper;
+use Chamilo\CoreBundle\Helpers\PluginEntityLoaderHelper;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -15,9 +15,9 @@ class PluginEntityPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        /** @var PluginEntityLoaderHelper $pluginEntityLoader */
-        $pluginEntityLoader = $container->get(PluginEntityLoaderHelper::class);
-        $entityDirs = $pluginEntityLoader->getEntityDirectories();
+        /** @var PluginEntityLoaderHelper $pluginEntityLoaderHelper */
+        $pluginEntityLoaderHelper = $container->get(PluginEntityLoaderHelper::class);
+        $entityDirs = $pluginEntityLoaderHelper->getEntityDirectories();
 
         $metadataDriverDefinition = $container->getDefinition('doctrine.orm.default_metadata_driver');
 

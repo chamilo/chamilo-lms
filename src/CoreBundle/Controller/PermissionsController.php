@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\PermissionRelRole;
 use Chamilo\CoreBundle\Form\PermissionType;
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
 use Chamilo\CoreBundle\Repository\PermissionRepository;
-use Chamilo\CoreBundle\Utils\PermissionServiceHelper;
+use Chamilo\CoreBundle\Helpers\PermissionHelper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +23,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class PermissionsController extends AbstractController
 {
     public function __construct(
-        private PermissionServiceHelper $permissionServiceHelper
+        private PermissionHelper $permissionHelper
     ) {}
 
     #[IsGranted('ROLE_ADMIN')]
@@ -35,7 +35,7 @@ class PermissionsController extends AbstractController
         EntityManagerInterface $em
     ): Response {
         $permissions = $permissionRepo->findAll();
-        $roles = $this->permissionServiceHelper->getUserRoles();
+        $roles = $this->permissionHelper->getUserRoles();
 
         if ($request->isMethod('POST')) {
             $data = $request->request->all('permissions');

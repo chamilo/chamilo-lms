@@ -13,10 +13,10 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Utils\MailHelper;
-use Chamilo\CoreBundle\Utils\PermissionServiceHelper;
-use Chamilo\CoreBundle\Utils\PluginServiceHelper;
-use Chamilo\CoreBundle\Utils\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\MailHelper;
+use Chamilo\CoreBundle\Helpers\PermissionHelper;
+use Chamilo\CoreBundle\Helpers\PluginServiceHelper;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
@@ -6366,7 +6366,7 @@ function api_get_roles()
 
 function api_get_user_roles(): array
 {
-    $permissionService = Container::$container->get(PermissionServiceHelper::class);
+    $permissionService = Container::$container->get(PermissionHelper::class);
 
     $roles = $permissionService->getUserRoles();
 
@@ -7556,7 +7556,7 @@ function api_filename_has_blacklisted_stream_wrapper(string $filename) {
  */
 function api_get_permission(string $permissionSlug, array $roles): bool
 {
-    $permissionService = Container::$container->get(PermissionServiceHelper::class);
+    $permissionService = Container::$container->get(PermissionHelper::class);
 
     return $permissionService->hasPermission($permissionSlug, $roles);
 }

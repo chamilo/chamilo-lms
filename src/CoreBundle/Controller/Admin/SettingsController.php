@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
@@ -98,10 +98,10 @@ class SettingsController extends BaseController
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings/{namespace}', name: 'chamilo_platform_settings')]
-    public function updateSetting(Request $request, AccessUrlUtil $accessUrlUtil, string $namespace): Response
+    public function updateSetting(Request $request, AccessUrlHelper $accessUrlHelper, string $namespace): Response
     {
         $manager = $this->getSettingsManager();
-        $url = $accessUrlUtil->getCurrent();
+        $url = $accessUrlHelper->getCurrent();
         $manager->setUrl($url);
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $searchForm = $this->getSearchForm();
@@ -186,10 +186,10 @@ class SettingsController extends BaseController
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings_sync', name: 'sync_settings')]
-    public function syncSettings(AccessUrlUtil $accessUrlUtil): Response
+    public function syncSettings(AccessUrlHelper $accessUrlHelper): Response
     {
         $manager = $this->getSettingsManager();
-        $url = $accessUrlUtil->getCurrent();
+        $url = $accessUrlHelper->getCurrent();
         $manager->setUrl($url);
         $manager->installSchemas($url);
 

@@ -52,13 +52,13 @@ services:
         - { name: vich_uploader.namer, mapping: assets }
 
     Chamilo\CoreBundle\Component\Utils\CreateDefaultPages: ~
-    Chamilo\CoreBundle\Utils\NameConventionUtil: ~
-    Chamilo\CoreBundle\Utils\GlideUtil:
+    Chamilo\CoreBundle\Helpers\NameConventionUtil: ~
+    Chamilo\CoreBundle\Helpers\GlideHelper:
         arguments:
             - {source: '@oneup_flysystem.resource_filesystem', cache: '@oneup_flysystem.resource_cache_filesystem'}
             - '%glide_media_filters%'
 
-    Chamilo\CoreBundle\Utils\GlideAssetUtil:
+    Chamilo\CoreBundle\Helpers\GlideAssetUtil:
         arguments:
             - {source: '@oneup_flysystem.asset_filesystem', cache: '@oneup_flysystem.asset_cache_filesystem'}
             - '%glide_media_filters%'
@@ -124,23 +124,19 @@ services:
     Chamilo\CoreBundle\Filter\SocialWallFilter:
         tags: [ 'api_platform.filter' ]
 
-    Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper:
-      arguments:
-        $permissionRelRoleRepository: '@Chamilo\CoreBundle\Repository\PermissionRelRoleRepository'
-
-    Chamilo\CoreBundle\Service\AI\AiProviderFactory:
+    Chamilo\CoreBundle\AiProvider\AiProviderFactory:
       arguments:
         $httpClient: '@Symfony\Contracts\HttpClient\HttpClientInterface'
         $settingsManager: '@Chamilo\CoreBundle\Settings\SettingsManager'
         $aiRequestsRepository: '@Chamilo\CoreBundle\Repository\AiRequestsRepository'
         $security: '@security.helper'
 
-    Chamilo\CoreBundle\Service\AI\OpenAiProvider:
-      factory: [ '@Chamilo\CoreBundle\Service\AI\AiProviderFactory', 'getProvider' ]
+    Chamilo\CoreBundle\AiProvider\OpenAiProvider:
+      factory: [ '@Chamilo\CoreBundle\AiProvider\AiProviderFactory', 'getProvider' ]
       arguments: [ 'openai' ]
 
-    Chamilo\CoreBundle\Service\AI\DeepSeekAiProvider:
-      factory: [ '@Chamilo\CoreBundle\Service\AI\AiProviderFactory', 'getProvider' ]
+    Chamilo\CoreBundle\AiProvider\DeepSeekAiProvider:
+      factory: [ '@Chamilo\CoreBundle\AiProvider\AiProviderFactory', 'getProvider' ]
       arguments: [ 'deepseek' ]
 
     api_platform.graphql.executor:
@@ -153,11 +149,11 @@ services:
         $registry: '@doctrine'
         $em: '@doctrine.orm.entity_manager'
 
-    Chamilo\CoreBundle\ServiceHelper\PluginServiceHelper:
+    Chamilo\CoreBundle\Helpers\PluginServiceHelper:
       arguments:
         $parameterBag: '@parameter_bag'
         $pluginRepo: '@Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository'
-        $accessUrlUtil: '@Chamilo\CoreBundle\Utils\AccessUrlUtil'
+        $accessUrlHelper: '@Chamilo\CoreBundle\Helpers\AccessUrlHelper'
 
     Chamilo\CoreBundle\ServiceHelper\CidReqHelper:
       arguments:

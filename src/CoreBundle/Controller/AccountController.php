@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
-use Chamilo\CoreBundle\Utils\UserUtil;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
@@ -39,7 +39,7 @@ class AccountController extends BaseController
     use ControllerTrait;
 
     public function __construct(
-        private readonly UserUtil $userHelper,
+        private readonly UserHelper $userHelper,
         private readonly TranslatorInterface $translator
     ) {}
 

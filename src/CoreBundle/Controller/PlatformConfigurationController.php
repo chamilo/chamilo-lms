@@ -10,10 +10,10 @@ use Bbb;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
-use Chamilo\CoreBundle\Utils\AuthenticationConfigUtil;
-use Chamilo\CoreBundle\Utils\ThemeHelper;
-use Chamilo\CoreBundle\Utils\TicketProjectHelper;
-use Chamilo\CoreBundle\Utils\UserUtil;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,9 +29,9 @@ class PlatformConfigurationController extends AbstractController
 
     public function __construct(
         private readonly TicketProjectHelper $ticketProjectHelper,
-        private readonly UserUtil $userHelper,
+        private readonly UserHelper $userHelper,
         private readonly ThemeHelper $themeHelper,
-        private readonly AuthenticationConfigUtil $authenticationConfigHelper,
+        private readonly AuthenticationConfigHelper $authenticationConfigHelper,
     ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]

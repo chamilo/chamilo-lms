@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Utils;
+namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
@@ -22,9 +22,9 @@ final class ThemeHelper
     public const DEFAULT_THEME = 'chamilo';
 
     public function __construct(
-        private readonly AccessUrlUtil $accessUrlUtil,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SettingsManager $settingsManager,
-        private readonly UserUtil $userHelper,
+        private readonly UserHelper $userHelper,
         private readonly CidReqHelper $cidReqHelper,
         private readonly SettingsCourseManager $settingsCourseManager,
         private readonly RouterInterface $router,
@@ -46,7 +46,7 @@ final class ThemeHelper
             return $visualTheme;
         }
 
-        $accessUrl = $this->accessUrlUtil->getCurrent();
+        $accessUrl = $this->accessUrlHelper->getCurrent();
 
         $visualTheme = $accessUrl->getActiveColorTheme()?->getColorTheme()->getSlug();
 

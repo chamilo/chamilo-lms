@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ToolIcon;
-use Chamilo\CoreBundle\Utils\UserUtil;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
@@ -40,7 +40,7 @@ class CourseController extends ToolBaseController
     public function __construct(
         private readonly CShortcutRepository $shortcutRepository,
         private readonly ManagerRegistry $managerRegistry,
-        private readonly UserUtil $userHelper,
+        private readonly UserHelper $userHelper,
     ) {}
 
     #[Route(path: '/edit/{id}', name: 'chamilo_lti_edit', requirements: ['id' => '\d+'])]

@@ -14,10 +14,10 @@ use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
-use Chamilo\CoreBundle\Utils\IsAllowedToEditHelper;
-use Chamilo\CoreBundle\Utils\LoginAttemptLoggerHelper;
-use Chamilo\CoreBundle\Utils\UserUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\LoginAttemptLoggerHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -33,10 +33,10 @@ class LoginSuccessHandler
         private readonly AuthorizationCheckerInterface $checker,
         private readonly SettingsManager $settingsManager,
         private readonly EntityManagerInterface $entityManager,
-        private readonly LoginAttemptLoggerHelper $loginAttemptLogger,
-        private readonly UserUtil $userHelper,
+        private readonly LoginAttemptLoggerHelper $loginAttemptLoggerHelper,
+        private readonly UserHelper $userHelper,
         private readonly CourseRepository $courseRepo,
-        private readonly AccessUrlUtil $accessUrlUtil,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
@@ -111,7 +111,7 @@ class LoginSuccessHandler
             // Get the course list
             $personal_course_list = $this->courseRepo->getPersonalSessionCourses(
                 $user,
-                $this->accessUrlUtil->getCurrent(),
+                $this->accessUrlHelper->getCurrent(),
                 $this->isAllowedToEditHelper->canCreateCourse()
             );
             $my_session_list = [];
@@ -170,7 +170,7 @@ class LoginSuccessHandler
 
             // Log of connection attempts
             $trackELoginRecordRepository->addTrackLogin($user->getUsername(), $userIp, true);
-            $this->loginAttemptLogger->logAttempt(true, $user->getUsername(), $userIp);
+            $this->loginAttemptLoggerHelper->logAttempt(true, $user->getUsername(), $userIp);
 
             $requestSession->set('login_records_created', true);
         }

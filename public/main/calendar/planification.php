@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Utils\ChamiloUtil;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 
 $cidReset = true;
 
@@ -39,7 +39,7 @@ if ($count > 50) {
 
 $sessions = UserManager::getSessionsCalendarByYear($sessionsList, $searchYear);
 
-$colors = ChamiloUtil::getColorPalette(false, true, count($sessions));
+$colors = ChamiloHelper::getColorPalette(false, true, count($sessions));
 
 $agenda = new Agenda('personal');
 $actions = $agenda->displayActions('list', $userId);

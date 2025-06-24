@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Utils\ChamiloUtil;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
 
@@ -570,7 +570,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         uasort($userScoreList, 'sort_by_order');
         $averageStudentsTestScore = round($averageStudentsTestScore / $nbStudents);
 
-        $colors = ChamiloUtil::getColorPalette(true, true, 10);
+        $colors = ChamiloHelper::getColorPalette(true, true, 10);
         $tpl->assign('chart_colors', json_encode($colors));
         $tpl->assign('certificate_count', $certificateCount);
         $tpl->assign('score_distribution', json_encode($scoresDistribution));

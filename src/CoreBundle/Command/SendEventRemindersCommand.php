@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Utils\MessageHelper;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
 use DateTimeZone;

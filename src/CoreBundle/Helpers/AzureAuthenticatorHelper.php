@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Utils;
+namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-readonly class AzureAuthenticatorUtil
+readonly class AzureAuthenticatorHelper
 {
     public const EXTRA_FIELD_ORGANISATION_EMAIL = 'organisationemail';
     public const EXTRA_FIELD_AZURE_ID = 'azure_id';
@@ -27,7 +27,7 @@ readonly class AzureAuthenticatorUtil
         private ExtraFieldRepository $extraFieldRepo,
         private UserRepository $userRepository,
         private EntityManagerInterface $entityManager,
-        private AccessUrlUtil $urlHelper,
+        private AccessUrlHelper $accessUrlHelper,
     ) {}
 
     /**
@@ -69,7 +69,7 @@ readonly class AzureAuthenticatorUtil
             ->setStatus(STUDENT)
             ->addAuthSourceByAuthentication(
                 $authSource,
-                $this->urlHelper->getCurrent()
+                $this->accessUrlHelper->getCurrent()
             )
             ->setPhone($phone)
             ->setActive($active)
@@ -78,7 +78,7 @@ readonly class AzureAuthenticatorUtil
 
         $this->userRepository->updateUser($user);
 
-        $url = $this->urlHelper->getCurrent();
+        $url = $this->accessUrlHelper->getCurrent();
         $url->addUser($user);
 
         $this->entityManager->flush();

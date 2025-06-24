@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Utils\ChamiloUtil;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 
 /**
  * Action controller for the upload process. The display scripts (web forms) redirect
@@ -83,7 +83,7 @@ $form->addElement('header', get_lang("A PowerPoint to SCORM Courses converter"))
 $form->addElement('html', Display::return_message($message, 'info', false));
 $form->addElement('file', 'user_file', [Display::getMdiIcon('file-presentation-box', 'ch-tool-icon', null, ICON_SIZE_SMALL), $div_upload_limit]);
 $form->addElement('checkbox', 'take_slide_name', '', get_lang('Use the slides names as course learning object names'));
-$options = ChamiloUtil::getDocumentConversionSizes();
+$options = ChamiloHelper::getDocumentConversionSizes();
 $form->addSelect('slide_size', get_lang('Size of the slides'), $options);
 if ('true' === api_get_setting('search_enabled')) {
     $specific_fields = get_specific_field_list();

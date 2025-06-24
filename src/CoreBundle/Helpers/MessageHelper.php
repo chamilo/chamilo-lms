@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Utils;
+namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
@@ -34,7 +34,7 @@ class MessageHelper
         private readonly MessageRepository $messageRepository,
         private readonly UserRepository $userRepository,
         private readonly RequestStack $requestStack,
-        private readonly AccessUrlUtil $accessUrlUtil,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SettingsManager $settingsManager,
         private readonly MailerInterface $mailer
     ) {
@@ -77,7 +77,7 @@ class MessageHelper
         );
 
         if ($sendCopyToDrhUsers) {
-            $accessUrl = $this->accessUrlUtil->getCurrent();
+            $accessUrl = $this->accessUrlHelper->getCurrent();
             if (null !== $accessUrl) {
                 $drhList = $this->userRepository->getDrhListFromUser($receiverUserId, $accessUrl->getId());
                 if (!empty($drhList)) {

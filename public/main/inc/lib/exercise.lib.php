@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Utils\ChamiloUtil;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -5342,7 +5342,7 @@ EOT;
             return false;
         }
 
-        $midnightTime = ChamiloUtil::getServerMidnightTime();
+        $midnightTime = ChamiloHelper::getServerMidnightTime();
 
         $answeredQuestionsCount = self::countAnsweredQuestionsByUserAfterTime(
             $midnightTime,

@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -18,7 +18,7 @@ use Doctrine\ORM\EntityManagerInterface;
 final readonly class AccessUrlRelColorThemeStateProcessor implements ProcessorInterface
 {
     public function __construct(
-        private AccessUrlUtil $accessUrlUtil,
+        private AccessUrlHelper $accessUrlHelper,
         private EntityManagerInterface $entityManager,
     ) {}
 
@@ -26,7 +26,7 @@ final readonly class AccessUrlRelColorThemeStateProcessor implements ProcessorIn
     {
         \assert($data instanceof AccessUrlRelColorTheme);
 
-        $accessUrl = $this->accessUrlUtil->getCurrent();
+        $accessUrl = $this->accessUrlHelper->getCurrent();
         $accessUrl->getActiveColorTheme()?->setActive(false);
 
         $accessUrlRelColorTheme = $accessUrl->getColorThemeByTheme($data->getColorTheme());

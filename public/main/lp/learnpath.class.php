@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
-use Chamilo\CoreBundle\Utils\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;

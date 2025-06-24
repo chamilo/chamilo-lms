@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Utils;
+namespace Chamilo\CoreBundle\Helpers;
 
 use League\Glide\Responses\SymfonyResponseFactory;
 use League\Glide\Server;
 use League\Glide\ServerFactory;
 
-class GlideUtil
+class GlideHelper
 {
     protected Server $server;
     protected array $filters;

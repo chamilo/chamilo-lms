@@ -17,7 +17,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\AbstractPlugin;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\CourseFromRequestTrait;
-use Chamilo\CoreBundle\Utils\PluginServiceHelper;
+use Chamilo\CoreBundle\Helpers\PluginServiceHelper;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;

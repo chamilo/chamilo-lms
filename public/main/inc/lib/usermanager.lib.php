@@ -15,7 +15,7 @@ use Chamilo\CoreBundle\Event\UserCreatedEvent;
 use Chamilo\CoreBundle\Event\UserUpdatedEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\Utils\NameConventionUtil;
+use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -2744,7 +2744,7 @@ class UserManager
 
         $user = api_get_user_entity($user_id);
         $url = null;
-        $formattedUserName = Container::$container->get(NameConventionUtil::class)->getPersonName($user);
+        $formattedUserName = Container::$container->get(NameConventionHelper::class)->getPersonName($user);
 
         // We filter the courses from the URL
         $join_access_url = $where_access_url = '';

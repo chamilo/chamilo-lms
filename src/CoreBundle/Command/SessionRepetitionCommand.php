@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\Utils\MessageHelper;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;

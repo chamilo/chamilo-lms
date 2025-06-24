@@ -10,8 +10,8 @@ use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Twig\SettingsHelper;
-use Chamilo\CoreBundle\Utils\NameConventionUtil;
-use Chamilo\CoreBundle\Utils\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\NameConventionHelper;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Security;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -27,19 +27,19 @@ class ChamiloExtension extends AbstractExtension
     private IllustrationRepository $illustrationRepository;
     private SettingsHelper $helper;
     private RouterInterface $router;
-    private NameConventionUtil $nameConvention;
+    private NameConventionHelper $nameConventionHelper;
 
     public function __construct(
         IllustrationRepository $illustrationRepository,
         SettingsHelper $helper,
         RouterInterface $router,
-        NameConventionUtil $nameConvention,
+        NameConventionHelper $nameConventionHelper,
         private readonly ThemeHelper $themeHelper
     ) {
         $this->illustrationRepository = $illustrationRepository;
         $this->helper = $helper;
         $this->router = $router;
-        $this->nameConvention = $nameConvention;
+        $this->nameConventionHelper = $nameConventionHelper;
     }
 
     public function getFilters(): array
@@ -87,7 +87,7 @@ class ChamiloExtension extends AbstractExtension
             ]
         );
 
-        $name = $this->nameConvention->getPersonName($user);
+        $name = $this->nameConventionHelper->getPersonName($user);
 
         return "<a href=\"$url\" class=\"ajax\">$name</a>";
     }

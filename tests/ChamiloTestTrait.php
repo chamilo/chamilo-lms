@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\Utils\ContainerHelper;
+use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

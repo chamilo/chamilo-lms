@@ -893,7 +893,7 @@ class FillBlanks extends Question
                     // should always be
                     $i++;
                 }
-                $listAnswerResults['student_answer'][] = $listAnswerResults['words'][$i];
+                $listAnswerResults['student_answer'][] = Security::remove_XSS($listAnswerResults['words'][$i]);
                 if ($i + 1 < count($listAnswerResults['words'])) {
                     // should always be
                     $i++;
@@ -1238,13 +1238,13 @@ class FillBlanks extends Question
                     continue;
                 }
             }
-            $result .= isset($listStudentAnswerInfo['common_words'][$i]) ? $listStudentAnswerInfo['common_words'][$i] : '';
-            $studentLabel = isset($listStudentAnswerInfo['student_answer'][$i]) ? $listStudentAnswerInfo['student_answer'][$i] : '';
+            $result .= $listStudentAnswerInfo['common_words'][$i] ?? '';
+            $studentLabel = $listStudentAnswerInfo['student_answer'][$i] ?? '';
             $result .= $studentLabel;
         }
 
         // the last common word (should be </p>)
-        $result .= isset($listStudentAnswerInfo['common_words'][$i]) ? $listStudentAnswerInfo['common_words'][$i] : '';
+        $result .= $listStudentAnswerInfo['common_words'][$i] ?? '';
 
         return $result;
     }

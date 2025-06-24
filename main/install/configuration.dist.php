@@ -729,6 +729,11 @@ $_configuration['send_all_emails_to'] = [
 // ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EB5B2A0D6285C231 FOREIGN KEY (lp_id) REFERENCES c_lp (iid);
 // $_configuration['ticket_lp_quiz_info_add'] = false;
 
+// Allow session admins to manage tickets settings and report like global admins
+//$_configuration['allow_session_admin_manage_tickets_and_export_ticket_report'] = false;
+// Show ticket created by the user insted of ticket assigned to the user on MyTicket page.
+//$_configuration['ticket_show_ticket_created_by_user_on_my_ticket_page'] = false;
+
 // Exercises configuration settings
 // Send only quiz answer notifications to course coaches and not general coach
 //$_configuration['block_quiz_mail_notification_general_coach'] = false;

@@ -489,23 +489,22 @@ switch ($action) {
         }
 
         // "all" or "simple" strings means that there's one or all questions exercise type
-        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
+        $type = $_REQUEST['type'] ?? null;
 
         // Questions choices.
-        $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : [];
+        $choice = $_REQUEST['choice'] ?? [];
 
         // certainty degree choice
-        $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty']) ? $_REQUEST['choiceDegreeCertainty'] : [];
+        $choiceDegreeCertainty = $_REQUEST['choiceDegreeCertainty'] ?? [];
 
         // Hot spot coordinates from all questions.
-        $hot_spot_coordinates = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : [];
+        $hot_spot_coordinates = $_REQUEST['hotspot'] ?? [];
 
         // the filenames in upload answer type
-        $uploadAnswerFileNames = isset($_REQUEST['uploadChoice']) ? $_REQUEST['uploadChoice'] : [];
+        $uploadAnswerFileNames = $_REQUEST['uploadChoice'] ?? [];
 
         // There is a reminder?
-        $remind_list = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])
-            ? array_keys($_REQUEST['remind_list']) : [];
+        $remind_list = !empty($_REQUEST['remind_list']) ? array_keys($_REQUEST['remind_list']) : [];
 
         // Needed in manage_answer.
         $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
@@ -662,7 +661,7 @@ switch ($action) {
             if ($type === 'simple' && $question_id != $my_question_id) {
                 continue;
             }
-            $my_choice = isset($choice[$my_question_id]) ? $choice[$my_question_id] : null;
+            $my_choice = $choice[$my_question_id] ?? null;
             $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
             $myChoiceDegreeCertainty = null;
             if ($objQuestionTmp->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
@@ -700,8 +699,7 @@ switch ($action) {
 
             // This variable came from exercise_submit_modal.php.
             $hotspot_delineation_result = null;
-            if (isset($_SESSION['hotspot_delineation_result']) &&
-                isset($_SESSION['hotspot_delineation_result'][$objExercise->selectId()])
+            if (isset($_SESSION['hotspot_delineation_result'][$objExercise->selectId()])
             ) {
                 $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
             }

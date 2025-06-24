@@ -373,7 +373,7 @@ $form->addHtmlEditor(
     ]
 );
 
-if (api_is_platform_admin()) {
+if (api_is_platform_admin() || (api_get_configuration_value('allow_session_admin_manage_tickets_and_export_ticket_report') && api_is_session_admin())) {
     $form->addSelectAjax(
         'user_id',
         get_lang('Assign'),

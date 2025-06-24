@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\PermissionRelRole;
 use Chamilo\CoreBundle\Form\PermissionType;
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
 use Chamilo\CoreBundle\Repository\PermissionRepository;
-use Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper;
+use Chamilo\CoreBundle\Utils\PermissionServiceHelper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

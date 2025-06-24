@@ -8,11 +8,11 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CoreBundle\ServiceHelper\TicketProjectHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Chamilo\CoreBundle\Utils\AuthenticationConfigUtil;
 use Chamilo\CoreBundle\Utils\UserUtil;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,7 +31,7 @@ class PlatformConfigurationController extends AbstractController
         private readonly TicketProjectHelper $ticketProjectHelper,
         private readonly UserUtil $userHelper,
         private readonly ThemeHelper $themeHelper,
-        private readonly AuthenticationConfigHelper $authenticationConfigHelper,
+        private readonly AuthenticationConfigUtil $authenticationConfigHelper,
     ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]

@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\Security\Authenticator\OAuth2;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Utils\AuthenticationConfigUtil;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -26,7 +26,7 @@ class FacebookAuthenticator extends AbstractAuthenticator
         ClientRegistry $clientRegistry,
         RouterInterface $router,
         UserRepository $userRepository,
-        AuthenticationConfigHelper $authenticationConfigHelper,
+        AuthenticationConfigUtil $authenticationConfigHelper,
         AccessUrlUtil $urlHelper,
         EntityManagerInterface $entityManager,
         protected readonly SlugifyInterface $slugify,

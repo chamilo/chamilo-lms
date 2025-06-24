@@ -4,18 +4,17 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\ServiceHelper;
+namespace Chamilo\CoreBundle\Utils;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
 use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use function Symfony\Component\String\u;
 
-readonly class AuthenticationConfigHelper
+readonly class AuthenticationConfigUtil
 {
     public function __construct(
         private ParameterBagInterface $parameterBag,

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Decorator;
 
-use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Utils\AuthenticationConfigUtil;
 use InvalidArgumentException;
 use KnpU\OAuth2ClientBundle\DependencyInjection\ProviderFactory;
 use League\OAuth2\Client\Provider\AbstractProvider;
@@ -23,7 +23,7 @@ readonly class OAuth2ProviderFactoryDecorator
     public function __construct(
         #[AutowireDecorated]
         private ProviderFactory $inner,
-        private AuthenticationConfigHelper $authenticationConfigHelper,
+        private AuthenticationConfigUtil $authenticationConfigHelper,
     ) {}
 
     public function createProvider(

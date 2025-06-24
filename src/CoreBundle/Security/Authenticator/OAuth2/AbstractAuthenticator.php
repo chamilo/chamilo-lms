@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\Security\Authenticator\OAuth2;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Utils\AuthenticationConfigUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
@@ -36,7 +36,7 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
         protected readonly ClientRegistry $clientRegistry,
         protected readonly RouterInterface $router,
         protected readonly UserRepository $userRepository,
-        protected readonly AuthenticationConfigHelper $authenticationConfigHelper,
+        protected readonly AuthenticationConfigUtil $authenticationConfigHelper,
         protected readonly AccessUrlUtil $urlHelper,
         protected readonly EntityManagerInterface $entityManager,
     ) {

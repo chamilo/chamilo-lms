@@ -40,11 +40,11 @@ $queryString = 'i='.intval($_REQUEST['i']).'&t='.intval($_REQUEST['t']);
 $coupon = null;
 
 if (isset($_REQUEST['c'])) {
-    $couponCode = $_REQUEST['c'];
+    $couponId = (int) $_REQUEST['c'];
     if ($buyingCourse) {
-        $coupon = $plugin->getCouponByCode($couponCode, BuyCoursesPlugin::PRODUCT_TYPE_COURSE, $_REQUEST['i']);
+        $coupon = $plugin->getCoupon($couponId, BuyCoursesPlugin::PRODUCT_TYPE_COURSE, $_REQUEST['i']);
     } else {
-        $coupon = $plugin->getCouponByCode($couponCode, BuyCoursesPlugin::PRODUCT_TYPE_SESSION, $_REQUEST['i']);
+        $coupon = $plugin->getCoupon($couponId, BuyCoursesPlugin::PRODUCT_TYPE_SESSION, $_REQUEST['i']);
     }
 }
 
@@ -155,7 +155,7 @@ if ($formCoupon->validate()) {
         Display::return_message($plugin->get_lang('CouponRedeemed'), 'success', false)
     );
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$_REQUEST['i'].'&t='.$_REQUEST['t'].'&c='.$formCouponValues['coupon_code']);
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$_REQUEST['i'].'&t='.$_REQUEST['t'].'&c='.$coupon['id']);
 
     exit;
 }

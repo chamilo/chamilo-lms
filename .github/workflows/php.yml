@@ -100,20 +100,21 @@ jobs:
 #              with:
 #                  cmd: run encore dev
 
+            - name: Install chrome
+              uses: browser-actions/setup-chrome@v1
+              id: setup-chrome
+
             - name: Start chrome
               run: |
-                sudo apt-get install google-chrome-stable
-                google-chrome --version
-                google-chrome-stable --version
-                google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
-                whereis google-chrome-stable
+                ${{ steps.setup-chrome.outputs.chrome-path }} --version
+                ${{ steps.setup-chrome.outputs.chrome-path }} --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
             # https://github.com/marketplace/actions/setup-chromedriver
             - name: Start chromedriver
               uses: nanasess/setup-chromedriver@master
               with:
                   # Optional: do not specify to match Chrome's version
-                  chromedriver-version: '88.0.4324.96'
+                  chromedriver-version: '100.0.4896.60'
 
             - run: |
                 export DISPLAY=:99

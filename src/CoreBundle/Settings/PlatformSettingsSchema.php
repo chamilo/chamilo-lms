@@ -93,6 +93,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'redirect_index_to_url_for_logged_users' => '',
                     'default_menu_entry_for_course_or_session' => 'my_courses',
                     'notification_event' => 'false',
+                    'hosting_limit_identical_email' => '0',
                 ]
             )
             ->setTransformer(
@@ -282,6 +283,14 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('notification_event', YesNoType::class)
+            ->add(
+                'hosting_limit_identical_email',
+                TextType::class,
+                [
+                    'label' => 'Limit identical emails',
+                    'help' => 'Maximum number of accounts allowed with the same email. Set to 0 to disable limit.'
+                ]
+            )
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

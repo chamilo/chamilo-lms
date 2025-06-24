@@ -47,6 +47,7 @@ class Positioning extends Plugin
         Database::query($sql);
 
         // Installing course settings
+        $this->setCourseToolDefaultVisibility(false);
         $this->install_course_fields_in_all_courses(true, 'positioning.png');
     }
 

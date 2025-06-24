@@ -37,6 +37,7 @@ class Test2pdfPlugin extends Plugin
     public function install()
     {
         //Installing course settings
+        $this->setCourseToolDefaultVisibility(false);
         $this->install_course_fields_in_all_courses();
 
         $list = [
@@ -62,16 +63,6 @@ class Test2pdfPlugin extends Plugin
             To fix, give web server user permissions to write to main/img/ before enabling this plugin.';
             Display::addFlash(Display::return_message($warning, 'warning'));
         }
-    }
-
-    /**
-     * By default new icon is invisible.
-     *
-     * @return bool
-     */
-    public function isIconVisibleByDefault()
-    {
-        return false;
     }
 
     /**

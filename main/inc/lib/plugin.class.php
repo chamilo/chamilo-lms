@@ -27,6 +27,8 @@ class Plugin
     // Adds icon in the course home
     public $addCourseTool = true;
     public $hasPersonalEvents = false;
+    // Whether the tool created should be visible immediately or disabled first (defaults to visible)
+    public bool $courseToolDefaultVisibility = true;
 
     /**
      * When creating a new course, these settings are added to the course, in
@@ -987,16 +989,6 @@ class Plugin
     }
 
     /**
-     * Default tool icon visibility.
-     *
-     * @return bool
-     */
-    public function isIconVisibleByDefault()
-    {
-        return true;
-    }
-
-    /**
      * Get the admin URL for the plugin if Plugin::isAdminPlugin is true.
      *
      * @return string
@@ -1093,7 +1085,7 @@ class Plugin
         }
 
         $visibilityPerStatus = $this->getToolIconVisibilityPerUserStatus();
-        $visibility = $this->isIconVisibleByDefault();
+        $visibility = $this->getCourseToolDefaultVisibility();
 
         $em = Database::getManager();
 
@@ -1135,5 +1127,22 @@ class Plugin
         }
 
         return $tool;
+    }
+    /**
+     * Get whether the course tool should be visible by default or not
+     */
+    protected function getCourseToolDefaultVisibility(): bool
+    {
+        return $this->courseToolDefaultVisibility;
+    }
+
+    /**
+     * Set whether the tool created in the course must be visible or not
+     * @param bool $visibility
+     * @return void
+     */
+    protected function setCourseToolDefaultVisibility(bool $visibility)
+    {
+        $this->courseToolDefaultVisibility = $visibility;
     }
 }

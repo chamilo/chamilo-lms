@@ -61,6 +61,7 @@ class CustomCertificatePlugin extends Plugin
     public function install()
     {
         //Installing course settings
+        $this->setCourseToolDefaultVisibility(false);
         $this->install_course_fields_in_all_courses();
 
         $tablesToBeCompared = [self::TABLE_CUSTOMCERTIFICATE];
@@ -190,16 +191,6 @@ class CustomCertificatePlugin extends Plugin
 
             echo get_lang('MessageUpdate');
         }
-    }
-
-    /**
-     * By default new icon is invisible.
-     *
-     * @return bool
-     */
-    public function isIconVisibleByDefault()
-    {
-        return false;
     }
 
     /**

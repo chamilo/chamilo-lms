@@ -2255,7 +2255,7 @@ abstract class Question
             case ORAL_EXPRESSION:
             case ANSWER_IN_OFFICE_DOC:
             case ANNOTATION:
-                $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
+                $score['revised'] = $score['revised'] ?? false;
                 if ($score['revised'] == true) {
                     $scoreLabel = get_lang('Revised');
                     $class = '';
@@ -2304,8 +2304,8 @@ abstract class Question
         }
 
         $scoreCurrent = [
-            'used' => isset($score['score']) ? $score['score'] : '',
-            'missing' => isset($score['weight']) ? $score['weight'] : '',
+            'used' => $score['score'] ?? '',
+            'missing' => $score['weight'] ?? '',
         ];
 
         // Check whether we need to hide the question ID

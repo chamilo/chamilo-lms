@@ -82,8 +82,8 @@ $user_image_pdf_size = 80;
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'set_tutor':
-            if (!$canEdit) {
-                api_not_allowed();
+            if (!$canEdit || !Security::check_token('get', null, 'tutor')) {
+                api_not_allowed(true);
             }
             $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : null;
             $isTutor = isset($_GET['is_tutor']) ? (int) $_GET['is_tutor'] : 0;
@@ -100,6 +100,7 @@ if (isset($_GET['action'])) {
                         Display::addFlash(
                             Display::return_message(get_lang('Updated'))
                         );
+                        Security::clear_token('tutor');
                     } else {
                         Display::addFlash(
                             Display::return_message(
@@ -108,6 +109,10 @@ if (isset($_GET['action'])) {
                             )
                         );
                     }
+                    header(
+                        'Location: '.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type
+                    );
+                    exit;
                 }
             }
             break;
@@ -1052,7 +1057,13 @@ function modify_filter($user_id, $row, $data)
             if ($data['user_status_in_course'] == STUDENT) {
                 $result .= Display::url(
                     $text,
-                    'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
+                    'user.php?'.api_get_cidreq().'&'.http_build_query([
+                        'action' => 'set_tutor',
+                        'is_tutor' => $isTutor,
+                        'user_id' => $user_id,
+                        'type' => $type,
+                        'tutor_sec_token' => Security::get_existing_token('tutor'),
+                    ]),
                     ['class' => 'btn btn-default '.$disabled]
                 ).'&nbsp;';
             }

@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRelCourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
-use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
+use Chamilo\CoreBundle\Utils\MessageHelper;
 use DateTime;
 use DateTimeZone;
 use Exception;

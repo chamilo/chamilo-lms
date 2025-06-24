@@ -188,9 +188,9 @@ jobs:
             - name: Install chamilo
               run: |
                   php7.4 ${{ github.workspace }}/chash/chash.php chash:chamilo_install 1.11.x ${{ github.workspace }} --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --dbpassword="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
-                  sudo chmod -R 777 app/cache app/logs app/courses app/upload web
                   php7.4 ${{ github.workspace }}/chash/chash.php chash:chamilo_status
-                  php7.4 ${{ github.workspace }}/chash/chash.php chash:fct --no-interaction
+                  sudo php7.4 ${{ github.workspace }}/chash/chash.php fct --no-interaction
+                  sudo chmod -R 777 app/cache app/logs app/courses app/upload web
                   bash tests/travis/post_installation.sh
                   ls -la
                   echo "Replace Apache config lost at some point in the process:"

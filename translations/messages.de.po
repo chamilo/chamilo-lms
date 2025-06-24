@@ -4298,7 +4298,7 @@ msgid "Guest"
 msgstr "Gast"
 
 msgid "Login as"
-msgstr "Eingeloggt als"
+msgstr "Einloggen als"
 
 msgid "Login"
 msgstr "Einloggen als"

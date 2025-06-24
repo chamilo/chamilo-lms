@@ -34,7 +34,7 @@ if (api_is_anonymous()) {
 
     $renderer = &$form->defaultRenderer();
     $renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
-    $renderersetCustomElementTemplate->setCustomElementTemplate('<tr><td>{element}</td></tr>');
+    $renderer->setCustomElementTemplate('<tr><td>{element}</td></tr>');
 
     $form->addElement('html', $option1);
     $form->addElement('checkbox', 'left', null, get_lang('Yes'));

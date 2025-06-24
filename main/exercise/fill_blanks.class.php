@@ -893,7 +893,7 @@ class FillBlanks extends Question
                     // should always be
                     $i++;
                 }
-                $listAnswerResults['student_answer'][] = $listAnswerResults['words'][$i];
+                $listAnswerResults['student_answer'][] = Security::remove_XSS($listAnswerResults['words'][$i]);
                 if ($i + 1 < count($listAnswerResults['words'])) {
                     // should always be
                     $i++;

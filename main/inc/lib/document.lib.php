@@ -360,7 +360,7 @@ class DocumentManager
         $fixLinksHttpToHttps = false,
         $extraHeaders = []
     ) {
-        session_write_close(); //we do not need write access to session anymore
+        session_write_close(); //we do not need to write access to session anymore
         if (!is_file($full_file_name)) {
             return false;
         }
@@ -383,7 +383,7 @@ class DocumentManager
             // Force the browser to save the file instead of opening it
             if (isset($sendFileHeaders) &&
                 !empty($sendFileHeaders)) {
-                header("X-Sendfile: $filename");
+                header("X-Sendfile: $full_file_name");
             }
 
             header('Content-type: application/octet-stream');

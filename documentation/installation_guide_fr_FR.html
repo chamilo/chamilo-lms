@@ -720,14 +720,30 @@ Please note that, although Chamilo allows you to define its position, the "title
 <hr style="width: 100%; height: 2px;" />
 <h2><a id="14._Improving_files_download"></a>12. Améliorer la performance des téléchargements de fichiers</h2>
 <div>
-    File download can be very slow when passing through a PHP script to control permissions. One solution to this
-    is to use the X-Sendfile header, which depends on a module on the webserver. <a href="https://stackoverflow.com/a/3731639/1406662">Check https://stackoverflow.com/a/3731639/1406662 for more details on implementing Sendfile</a>.
-    Chamilo LMS 1.9.8 (and following versions) supports the X-Sendfile headers, but requires a specific line of configuration to be
-    added to configuration.php:
+Le téléchargement de fichiers peut &ecirc;tre très lent quand il passe au travers d'un script PHP qui contr&ocirc;le les permissions. One solution to this
+Une solution pour cela est d'utiliser les en-t&ecirc;tes X-Sendfile, qui dépendent d'un module du serveur web. <a href="https://stackoverflow.com/a/3731639/1406662">Lisez https://stackoverflow.com/a/3731639/1406662 pour plus de d&eacute;tails concernant son impl&eacut;mentation</a>.
+Chamilo LMS 1.9.8 (et les versions suivantes) supporte les en-t&ecirc;tes X-Sendfile, mais exige une ligne de configuration spéciale à ajouter à configuration.php :
 <pre>
 $_configuration['enable_x_sendfile_headers'] = true;
 </pre>
-If you have issues with files taking a long time to download, make sure you reconfigure your webserver and add this line. You should see a notable difference in download time.
+Si vous avez des soucis avec le téléchargement trop lent de fichiers, essayez cette option. Vous devriez observer une différence sensible dans les temps de téléchargement.
+
+Votre serveur web doit &ecirc;tre configuré pour supporter X-Sendfile, en activant le moédule correspondant ainsi qu'une configuration de votre vhost.<br>
+
+Si vous utilisez Apache 2.4 sur Ubuntu, par exemple, ça voudrait dire installer et activer le module X-Sendfile :
+<pre>
+    sudo apt install libapache2-mod-xsendfile
+    sudo a2enmod xsendfile
+</pre>
+Ensuite il faut configurer le vhost actif de Chamilo en ajoutant les lignes suivantes, où le path est le m&ecirc;me que votre DocumentRoot (nous utilisons /var/www/chamilo dans cet exemple) :
+<pre>
+    XSendFile On
+    XSendFilePath /var/www/chamilo
+</pre>
+Puis red&eacute;marrer Apache :
+<pre>
+    sudo systemctl restart apache2
+</pre>
 </div>
 <hr style="width: 100%; height: 2px;" />
 <h2><a id="15._Videoconference"></a>13. Vidéo-conférence</h2>

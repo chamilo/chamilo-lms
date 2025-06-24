@@ -674,7 +674,23 @@ Chamilo LMS 1.9.8 (and following versions) supports the X-Sendfile headers, but 
 <pre>
 $_configuration['enable_x_sendfile_headers'] = true;
 </pre>
-If you have issues with files taking a long time to download, make sure you reconfigure your webserver and add this line. You should see a notable difference in download time.
+If you have issues with files taking a long time to download, make sure you reconfigure your webserver and add this line. You should see a notable difference in download time.<br>
+
+Your webserver must be configured to support X-Sendfile, both by enabling the module and setting options in your web server's configuration.<br>
+If you are running Apache 2.4 on Ubuntu, for example, this would mean installing and enabling the module:
+<pre>
+    sudo apt install libapache2-mod-xsendfile
+    sudo a2enmod xsendfile
+</pre>
+Then in your active vhost for Chamilo, you would have to add the following lines, where the path is the same as your DocumentRoot (we use /var/www/chamilo in this example):
+<pre>
+    XSendFile On
+    XSendFilePath /var/www/chamilo
+</pre>
+Then restart Apache:
+<pre>
+    sudo systemctl restart apache2
+</pre>
 <hr style="width: 100%; height: 2px;" />
 <h2><a id="15._Videoconference"></a>13. Videoconference</h2>
 <p>

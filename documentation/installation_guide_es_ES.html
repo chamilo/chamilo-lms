@@ -796,6 +796,23 @@ específica de configuración para ser agregado a configuration.php:
 <pre>$_configuration['enable_x_sendfile_headers'] = true;</pre>
 Si tiene problemas con los archivos que tardan mucho tiempo en descargarse, asegúrese de reconfigurar su
 servidor web y agregar esta línea. Debería ver una diferencia notable en el tiempo de descarga.
+
+El servidor web tiene que ser configurado para soportar X-Sendfile, por activar el módulo y por configurar opciones en su configuración.<br>
+Si tiene Apache 2.4 en Ubuntu, por ejemplo, tendría que ser algo así:
+  <pre>
+    sudo apt install libapache2-mod-xsendfile
+    sudo a2enmod xsendfile
+</pre>
+De ahí, en su vhost para Chamilo, tendría que añadir las líneas siguientes, donde el path es el mismo que su DocumentRoot (usamos /var/www/chamilo en este ejemplo):
+<pre>
+    XSendFile On
+    XSendFilePath /var/www/chamilo
+</pre>
+Luego reiniciar Apache:
+<pre>
+    sudo systemctl restart apache2
+</pre>
+
 <hr style="width: 100%; height: 2px;" />
 
 <h2><a id="15._Videoconference"></a>13. Videoconferencia</h2>

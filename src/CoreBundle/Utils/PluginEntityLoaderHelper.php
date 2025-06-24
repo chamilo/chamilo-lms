@@ -4,11 +4,11 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Service;
+namespace Chamilo\CoreBundle\Utils;
 
 use Symfony\Component\Finder\Finder;
 
-readonly class PluginEntityLoader
+readonly class PluginEntityLoaderHelper
 {
     public function __construct(
         private string $pluginDir,

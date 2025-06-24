@@ -44,6 +44,8 @@ jobs:
                 sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
                 sudo chmod 777 -R $HOME
                 cat /etc/apache2/sites-available/000-default.conf
+                ls -l /etc/apache2/sites-enabled
+                cat /etc/apache2/sites-enabled/000-default.conf
                 sudo service apache2 restart
                 sudo systemctl restart apache2
 

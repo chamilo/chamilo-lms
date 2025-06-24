@@ -28,7 +28,7 @@ RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1
 
 # Rewrite everything in the scorm folder of a course to the download script
 # except JS, CSS and some image files, which can be served directly
-RewriteRule ^courses/([^/]+)/scorm/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/scorm/$2 [QSA,L]
+RewriteRule ^courses/([^/]+)/scorm/(.*\.(js|css|png|jpg|jpeg|gif))$ app/courses/$1/scorm/$2 [QSA,L]
 RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
 
 # Rewrite everything in the document folder of a course to the download script
@@ -42,7 +42,7 @@ RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document
 RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 "[QSA,L,B= ?,BNP]"
 
 # Optimize load of custom per-course icons in courses (avoid download_uploaded_files.php)
-RewriteRule ^courses/([^/]+)/upload/course_home_icons/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 [QSA,L]
+RewriteRule ^courses/([^/]+)/upload/course_home_icons/(.*\.(js|css|png|jpg|jpeg|gif))$ app/courses/$1/upload/course_home_icons/$2 [QSA,L]
 # Course upload files
 # See note on line 37
 RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 "[QSA,L,B= ?,BNP]"

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Service\AI;
+namespace Chamilo\CoreBundle\AiProvider;
 
 interface AiProviderInterface
 {

@@ -1089,7 +1089,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'server_type',
                     'title' => 'Server Type',
-                    'comment' => 'What sort of server is this? This enables or disables some specific options. On a development server there is a translation feature functional that inidcates untranslated strings',
+                    'comment' => 'Defines the environment type: "prod" (normal production), "validation" (like production but without reporting statistics), or "test" (debug mode with developer tools such as untranslated string indicators).',
                 ],
                 [
                     'name' => 'show_tabs',

@@ -698,7 +698,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                 if (false === $termActivated) {
                     $blockButton = true;
                     $infoMessage = Display::return_message(
-                            get_lang('The terms and conditions have not yet been validated by your tutor'),
+                            get_lang('The terms and conditions have not yet been validated by your tutor.'),
                             'warning',
                             false
                         );

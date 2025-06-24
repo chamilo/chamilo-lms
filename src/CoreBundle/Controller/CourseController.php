@@ -24,10 +24,10 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
-use Chamilo\CoreBundle\Service\CourseService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Utils\AccessUrlUtil;
+use Chamilo\CoreBundle\Utils\CourseHelper;
 use Chamilo\CoreBundle\Utils\UserUtil;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
@@ -757,7 +757,7 @@ class CourseController extends ToolBaseController
     public function createCourse(
         Request $request,
         TranslatorInterface $translator,
-        CourseService $courseService
+        CourseHelper $courseService
     ): JsonResponse {
         $courseData = json_decode($request->getContent(), true);
 

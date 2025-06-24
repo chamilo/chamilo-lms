@@ -69,7 +69,7 @@ jobs:
                   restore-keys: v1-${{ runner.os }}-composer-
 
             - name: Install dependencies with composer
-              run: composer install --prefer-dist --no-progress
+              run: php7.4 /usr/local/bin/composer install --prefer-dist --no-progress
 
 #            - name: Install assets
 #              run: php bin/console assets:install

@@ -28,7 +28,7 @@ class ReplaceFilePaths extends LoadedCourseLookup
 
         $doc = new \DOMDocument();
         $doc->loadHTML(
-            mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8')
+            htmlentities($content, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
         );
 
         foreach ($doc->getElementsByTagName('img') as $img) {

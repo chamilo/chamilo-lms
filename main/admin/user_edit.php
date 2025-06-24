@@ -421,7 +421,8 @@ $expiration_date = $user_data['expiration_date'];
 
 if (empty($expiration_date)) {
     $user_data['radio_expiration_date'] = 0;
-    $user_data['expiration_date'] = api_get_local_time();
+    $days = api_get_setting('account_valid_duration');
+    $user_data['expiration_date'] = api_get_local_time('+'.$days.' day');
 } else {
     $user_data['radio_expiration_date'] = 1;
     $user_data['expiration_date'] = api_get_local_time($expiration_date);

@@ -715,8 +715,6 @@ class ImportCsv
 
         if (!empty($data)) {
             $this->logger->addInfo(count($data)." records found.");
-            $expirationDateOnCreation = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserCreation)."years"));
-            $expirationDateOnUpdate = api_get_utc_datetime(strtotime("+".intval($this->expirationDateInUserUpdate)."years"));
 
             $batchSize = $this->batchSize;
             $em = Database::getManager();
@@ -752,7 +750,7 @@ class ImportCsv
                         $row['phone'],
                         null, //$row['picture'], //picture
                         $row['auth_source'], // ?
-                        $expirationDateOnCreation, //'0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
+                        null,
                         1, //active
                         0,
                         null, // extra
@@ -800,7 +798,7 @@ class ImportCsv
                         $userInfo['official_code'],
                         $userInfo['phone'],
                         $userInfo['picture_uri'],
-                        $expirationDateOnUpdate,
+                        null,
                         $userInfo['active'],
                         null, //$creator_id = null,
                         0, //$hr_dept_id = 0,
@@ -892,13 +890,6 @@ class ImportCsv
             $language = $this->defaultLanguage;
             $this->logger->addInfo(count($data)." records found.");
 
-            $expirationDateOnCreate = api_get_utc_datetime(
-                strtotime("+".intval($this->expirationDateInUserCreation)."years")
-            );
-            $expirationDateOnUpdate = api_get_utc_datetime(
-                strtotime("+".intval($this->expirationDateInUserUpdate)."years")
-            );
-
             $counter = 1;
             $secondsInYear = 365 * 24 * 60 * 60;
 
@@ -965,7 +956,7 @@ class ImportCsv
                         $row['phone'],
                         null, //$row['picture'], //picture
                         $row['auth_source'], // ?
-                        $expirationDateOnCreate,
+                        null,
                         1, //active
                         0,
                         null, // extra
@@ -998,11 +989,6 @@ class ImportCsv
                     if (empty($userInfo)) {
                         $this->logger->addError("Students - Can't update user :".$row['username']);
                         continue;
-                    }
-
-                    if (isset($row['action']) && $row['action'] === 'delete') {
-                        // Inactive one year later
-                        $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + $secondsInYear));
                     }
 
                     $password = $row['password']; // change password
@@ -1075,7 +1061,7 @@ class ImportCsv
                         $userInfo['official_code'],
                         $userInfo['phone'],
                         $userInfo['picture_uri'],
-                        $expirationDateOnUpdate,
+                        null,
                         $userInfo['active'],
                         null, //$creator_id = null,
                         0, //$hr_dept_id = 0,

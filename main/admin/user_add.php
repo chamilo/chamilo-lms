@@ -397,7 +397,13 @@ if ($form->validate()) {
         }
 
         if ($user['radio_expiration_date'] == '1') {
-            $expiration_date = $user['expiration_date'];
+            if (!empty($user['expiration_date'])) {
+                $expiration_date = $user['expiration_date'];
+            } else {
+                if (!empty($days)) {
+                    $expiration_date = api_get_local_time('+'.$days.' day');
+                }
+            }
         } else {
             $expiration_date = null;
         }

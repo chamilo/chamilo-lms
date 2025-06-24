@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
+use Chamilo\CoreBundle\Utils\CidReqHelper;
 use Chamilo\CoreBundle\Utils\MessageHelper;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;

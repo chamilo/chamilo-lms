@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Service;
 
 use Chamilo\CoreBundle\Entity\TrackEDefault;
-use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
+use Chamilo\CoreBundle\Utils\CidReqHelper;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;

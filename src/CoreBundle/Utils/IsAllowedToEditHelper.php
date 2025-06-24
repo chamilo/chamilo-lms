@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Utils;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use ExtraFieldValue;
 use Symfony\Bundle\SecurityBundle\Security;

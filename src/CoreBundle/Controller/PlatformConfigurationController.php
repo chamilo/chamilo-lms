@@ -8,10 +8,10 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Utils\AuthenticationConfigUtil;
+use Chamilo\CoreBundle\Utils\ThemeHelper;
 use Chamilo\CoreBundle\Utils\TicketProjectHelper;
 use Chamilo\CoreBundle\Utils\UserUtil;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;

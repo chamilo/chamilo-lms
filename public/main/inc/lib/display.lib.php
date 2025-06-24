@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
+use Chamilo\CoreBundle\Utils\ThemeHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
 

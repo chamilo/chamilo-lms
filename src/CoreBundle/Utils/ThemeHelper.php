@@ -4,11 +4,10 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\ServiceHelper;
+namespace Chamilo\CoreBundle\Utils;
 
+use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Utils\AccessUrlUtil;
-use Chamilo\CoreBundle\Utils\UserUtil;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;

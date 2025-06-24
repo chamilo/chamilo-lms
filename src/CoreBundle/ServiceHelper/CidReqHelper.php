@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\EventListener\CidReqListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @see CidReqListener::onKernelRequest()
@@ -20,6 +21,7 @@ class CidReqHelper
 {
     public function __construct(
         private readonly RequestStack $requestStack,
+        private readonly EntityManagerInterface $em,
     ) {}
 
     private function getRequest(): ?Request
@@ -61,5 +63,25 @@ class CidReqHelper
     {
         $session = $this->getSessionHandler();
         return $session?->get('gid');
+    }
+
+    public function getDoctrineCourseEntity(): ?Course
+    {
+        $courseId = $this->getCourseId();
+        if (empty($courseId)) {
+            return null;
+        }
+
+        return $this->em->getRepository(Course::class)->find((int) $courseId);
+    }
+
+    public function getDoctrineSessionEntity(): ?Session
+    {
+        $sessionId = $this->getSessionId();
+        if (empty($sessionId)) {
+            return null;
+        }
+
+        return $this->em->getRepository(Session::class)->find((int) $sessionId);
     }
 }

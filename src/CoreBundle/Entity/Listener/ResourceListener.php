@@ -19,10 +19,13 @@ use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Cocur\Slugify\SlugifyInterface;
+use Doctrine\ORM\Event\PostPersistEventArgs;
+use Doctrine\ORM\Event\PostRemoveEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -44,7 +47,8 @@ class ResourceListener
         protected SlugifyInterface $slugify,
         protected ToolChain $toolChain,
         protected RequestStack $request,
-        protected Security $security
+        protected Security $security,
+        protected TrackEDefaultRepository $trackEDefaultRepository
     ) {}
 
     /**
@@ -106,6 +110,9 @@ class ResourceListener
         $entityClass = $eventArgs->getObject()::class;
 
         $name = $this->toolChain->getResourceTypeNameByEntity($entityClass);
+        if (empty($name)) {
+            return;
+        }
 
         $resourceType = $resourceTypeRepo->findOneBy([
             'title' => $name,
@@ -265,6 +272,45 @@ class ResourceListener
         }
     }
 
+    public function postPersist(AbstractResource $resource, PostPersistEventArgs $event): void
+    {
+        $resourceNode = $resource->getResourceNode();
+
+        if ($resourceNode) {
+            $this->trackEDefaultRepository->registerResourceEvent(
+                $resourceNode,
+                'creation',
+                $this->security->getUser()?->getId()
+            );
+        }
+    }
+
+    public function postUpdate(AbstractResource $resource, PostUpdateEventArgs $event): void
+    {
+        $resourceNode = $resource->getResourceNode();
+
+        if ($resourceNode) {
+            $this->trackEDefaultRepository->registerResourceEvent(
+                $resourceNode,
+                'edition',
+                $this->security->getUser()?->getId()
+            );
+        }
+    }
+
+    public function postRemove(AbstractResource $resource, PostRemoveEventArgs $event): void
+    {
+        $resourceNode = $resource->getResourceNode();
+
+        if ($resourceNode) {
+            $this->trackEDefaultRepository->registerResourceEvent(
+                $resourceNode,
+                'deletion',
+                $this->security->getUser()?->getId()
+            );
+        }
+    }
+
     /**
      * When updating a Resource.
      */
@@ -279,13 +325,6 @@ class ResourceListener
 
         // error_log('Resource listener preUpdate');
         // $this->setLinks($resource, $eventArgs->getEntityManager());
-    }
-
-    public function postUpdate(AbstractResource $resource, PostUpdateEventArgs $eventArgs): void
-    {
-        // error_log('resource listener postUpdate');
-        // $em = $eventArgs->getEntityManager();
-        // $this->updateResourceName($resource, $resource->getResourceName(), $em);
     }
 
     public function updateResourceName(AbstractResource $resource): void

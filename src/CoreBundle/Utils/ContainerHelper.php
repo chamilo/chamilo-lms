@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\ServiceHelper;
+namespace Chamilo\CoreBundle\Utils;
 
 use Symfony\Component\HttpFoundation\Session\SessionFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;

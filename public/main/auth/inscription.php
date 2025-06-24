@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Entity\PageCategory;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
+use Chamilo\CoreBundle\Utils\ContainerHelper;
 use ChamiloSession as Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 

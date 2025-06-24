@@ -11,17 +11,15 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
+use Chamilo\CoreBundle\Utils\ContainerHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage;
 use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 trait ChamiloTestTrait

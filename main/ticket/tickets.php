@@ -302,7 +302,7 @@ if (!empty($projectId)) {
     $ticketLabel = get_lang('AllTickets');
     $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId;
 
-    if (!isset($_GET['keyword_assigned_to'])) {
+    if (!isset($_GET['keyword_assigned_to']) && !api_get_configuration_value('ticket_show_ticket_created_by_user_on_my_ticket_page')) {
         $ticketLabel = get_lang('MyTickets');
         $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId.'&keyword_assigned_to='.api_get_user_id();
     }

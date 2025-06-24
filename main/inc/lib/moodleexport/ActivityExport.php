@@ -33,6 +33,7 @@ abstract class ActivityExport
     {
         foreach ($this->course->resources[RESOURCE_LEARNPATH] as $learnpath) {
             foreach ($learnpath->items as $item) {
+                $item['item_type'] = $item['item_type'] === 'student_publication' ? 'work' : $item['item_type'];
                 if ($item['item_type'] == $itemType && $item['path'] == $activityId) {
                     return $learnpath->source_id;
                 }

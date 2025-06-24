@@ -255,7 +255,7 @@ class SectionExport
         }
 
         $itemType = $item['item_type'] === 'link' ? 'url' :
-            ($item['item_type'] === 'work' ? 'assign' :
+            ($item['item_type'] === 'work' || $item['item_type'] === 'student_publication' ? 'assign' :
                 ($item['item_type'] === 'survey' ? 'feedback' : $item['item_type']));
 
         switch ($itemType) {

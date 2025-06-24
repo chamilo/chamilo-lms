@@ -69,8 +69,15 @@ class MoodleExport
         $courseExport->exportCourse($tempDir);
 
         // Export files-related data and actual files
+        $pageExport = new PageExport($this->course);
+        $pageFiles = [];
+        $pageData = $pageExport->getData(0, 1);
+        if (!empty($pageData['files'])) {
+            $pageFiles = $pageData['files'];
+        }
         $fileExport = new FileExport($this->course);
         $filesData = $fileExport->getFilesData();
+        $filesData['files'] = array_merge($filesData['files'], $pageFiles);
         $fileExport->exportFiles($filesData, $tempDir);
 
         // Export sections of the course
@@ -98,8 +105,12 @@ class MoodleExport
         $xmlContent .= '<question_categories>'.PHP_EOL;
 
         foreach ($questionsData as $quiz) {
-            $categoryId = $quiz['questions'][0]['questioncategoryid'] ?? '0';
-
+            $categoryId = $quiz['questions'][0]['questioncategoryid'] ?? '1';
+            $hash = md5($categoryId . $quiz['name']);
+            if (isset($categoryHashes[$hash])) {
+              continue;
+            }
+            $categoryHashes[$hash] = true;
             $xmlContent .= '  <question_category id="'.$categoryId.'">'.PHP_EOL;
             $xmlContent .= '    <name>Default for '.htmlspecialchars($quiz['name'] ?? 'Unknown').'</name>'.PHP_EOL;
             $xmlContent .= '    <contextid>'.($quiz['contextid'] ?? '0').'</contextid>'.PHP_EOL;

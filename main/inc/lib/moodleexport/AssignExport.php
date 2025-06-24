@@ -49,6 +49,12 @@ class AssignExport extends ActivityExport
     {
         $work = $this->course->resources[RESOURCE_WORK][$assignId];
 
+        if (empty($work->params['id']) || empty($work->params['title'])) {
+            return null;
+        }
+
+        $sentDate = !empty($work->params['sent_date']) ? strtotime($work->params['sent_date']) : time();
+
         $workFiles = getAllDocumentToWork($assignId, $this->course->info['real_id']);
         $files = [];
         if (!empty($workFiles)) {
@@ -73,11 +79,11 @@ class AssignExport extends ActivityExport
             'contextid' => $this->course->info['real_id'],
             'sectionid' => $sectionId,
             'sectionnumber' => 0,
-            'name' => htmlspecialchars($work->params['title']),
-            'intro' => $work->params['description'],
-            'duedate' => strtotime($work->params['sent_date']),
-            'gradingduedate' => strtotime($work->params['sent_date']) + 86400 * 7,
-            'allowsubmissionsfromdate' => strtotime($work->params['sent_date']),
+            'name' => htmlspecialchars($work->params['title'], ENT_QUOTES),
+            'intro' => htmlspecialchars($work->params['description'], ENT_QUOTES),
+            'duedate' => $sentDate,
+            'gradingduedate' => $sentDate + 7 * 86400,
+            'allowsubmissionsfromdate' => $sentDate,
             'timemodified' => time(),
             'grade_item_id' => 0,
             'files' => $files,

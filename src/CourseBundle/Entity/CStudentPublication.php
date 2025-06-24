@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\ParentNullFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CoreBundle\State\CStudentPublicationDeleteProcessor;
 use Chamilo\CoreBundle\State\CStudentPublicationPostStateProcessor;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
@@ -49,7 +50,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('VIEW', object.resourceNode)",
         ),
         new GetCollection(),
-        new Delete(security: "is_granted('DELETE', object.resourceNode)"),
+        new Delete(
+            security: "is_granted('DELETE', object.resourceNode)",
+            processor: CStudentPublicationDeleteProcessor::class
+        ),
         new Post(
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
             processor: CStudentPublicationPostStateProcessor::class

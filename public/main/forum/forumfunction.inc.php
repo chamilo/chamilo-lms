@@ -879,22 +879,34 @@ function deletePost(CForumPost $post): void
     $em->remove($post);
     $em->flush();
 
-    $lastPostOfTheTread = getLastPostOfThread($post->getThread()->getIid());
+    $threadId = $post->getThread()->getIid();
+    $lastPostOfTheTread = getLastPostOfThread($threadId);
 
     if (!empty($lastPostOfTheTread)) {
-        // Decreasing the number of replies for this thread and also changing the last post information.
-        $sql = "UPDATE $table_threads
-                SET
-                    thread_replies = thread_replies - 1,
-                    thread_last_post = ".$lastPostOfTheTread['iid'].",
-                    thread_date = '".$lastPostOfTheTread['post_date']."'
-                WHERE iid = ".$post->getThread()->getIid();
+        // Decreasing the number of replies only if > 0
+        $threadReplies = Database::fetch_array(Database::query("SELECT thread_replies FROM $table_threads WHERE iid = $threadId"));
+        $replyCount = (int) $threadReplies['thread_replies'];
+
+        if ($replyCount > 0) {
+            $sql = "UPDATE $table_threads
+                    SET
+                        thread_replies = thread_replies - 1,
+                        thread_last_post = ".$lastPostOfTheTread['iid'].",
+                        thread_date = '".$lastPostOfTheTread['post_date']."'
+                    WHERE iid = $threadId";
+        } else {
+            $sql = "UPDATE $table_threads
+                    SET
+                        thread_last_post = ".$lastPostOfTheTread['iid'].",
+                        thread_date = '".$lastPostOfTheTread['post_date']."'
+                    WHERE iid = $threadId";
+        }
+
         Database::query($sql);
         Display::addFlash(Display::return_message(get_lang('Post has been deleted')));
     } else {
         // We deleted the very last post of the thread, so we need to delete the thread as well.
-        $sql = "DELETE FROM $table_threads
-                WHERE iid = ".$post->getThread()->getIid();
+        $sql = "DELETE FROM $table_threads WHERE iid = $threadId";
         Database::query($sql);
 
         Display::addFlash(Display::return_message(get_lang('Thread deleted')));
@@ -3161,22 +3173,24 @@ function updateThreadInfo($threadId, $lastPostId, $post_date)
     Database::query($sql);
 }
 
-function approvePost(CForumPost $post, $action)
+function approvePost(CForumPost $post, $action): string
 {
     if ('invisible' === $action) {
         $visibility = 0;
+        $message = 'PostMadeInvisible';
     }
 
     if ('visible' === $action) {
         $visibility = 1;
         handle_mail_cue('post', $post->getIid());
+        $message = 'PostMadeVisible';
     }
 
     $post->setVisible($visibility);
     Database::getManager()->persist($post);
     Database::getManager()->flush();
 
-    Display::addFlash(Display::return_message(get_lang('The visibility has been changed')));
+    return $message;
 }
 
 /**

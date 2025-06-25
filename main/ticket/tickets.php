@@ -82,7 +82,7 @@ switch ($action) {
                 null,
                 false
             ));
-            header('Location: '.api_get_self().'?project_id='.$projectId');
+            header('Location: '.api_get_self().'?project_id='.$projectId);
             exit;
         }
         break;

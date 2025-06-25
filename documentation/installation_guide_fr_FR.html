@@ -342,7 +342,7 @@
                 <li>php-pcre:  L'extension pcre partagée pour php</li>
                 <li>php-xml</li>
                 <li>php-json</li>
-                <li>php-iconv ou php5-mbstring (au choix)</li>
+                <li>php-iconv ou php-mbstring (au choix)</li>
                 <li>php-gd L'extension de manipulation d'images pour PHP</li>
                 <li>php-intl L'extension pour la gestion de l'internationalisation pour PHP</li>
             </ul>
@@ -803,11 +803,11 @@ ou, si vous travaillez avec Apache 2.4, la syntaxe est légèrement différente 
     RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
     RewriteRule ^courses/([^/]+)/?$ main/course_home/course_home.php?cDir=$1 [QSA,L]
     RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cDir=$1 [QSA,L]
-    RewriteRule ^courses/([^/]+)/scorm/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/scorm/$2 [QSA,L]
+    RewriteRule ^courses/([^/]+)/scorm/(.*\.(js|css|png|jpg|jpeg|gif))$ app/courses/$1/scorm/$2 [QSA,L]
     RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
     RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
     RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
-    RewriteRule ^courses/([^/]+)/upload/course_home_icons/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 [QSA,L]
+    RewriteRule ^courses/([^/]+)/upload/course_home_icons/(.*\.(js|css|png|jpg|jpeg|gif))$ app/courses/$1/upload/course_home_icons/$2 [QSA,L]
     RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 [QSA,L]
     RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
     RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_source [QSA,L]
@@ -858,7 +858,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
     rewrite ^certificates/$ certificates/index.php last;
     rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
     rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-    rewrite ^/courses/([^/]+)/scorm/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/scorm/$2 last;
+    rewrite ^/courses/([^/]+)/scorm/(.*\.(js|css|png|jpg|jpeg|gif))$ app/courses/$1/scorm/$2 last;
     rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
     # Alternatively, you can choose to give direct access to all SCORM files, which is much faster but less secure
     # rewrite "^/courses/([^/]+)/scorm/(.*)$" /app/courses/$1/scorm/$2 break;
@@ -867,7 +867,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
     rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
     rewrite ^/courses/([^/]+)/upload/([^/]+)/(.*)$ /main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 last;
     rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
-    rewrite ^/courses/([^/]+)/upload/course_home_icons/(.*([\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 last;
+    rewrite ^/courses/([^/]+)/upload/course_home_icons/(.*\.(png|jpg|jpeg|gif))$ app/courses/$1/upload/course_home_icons/$2 last;
     rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
     rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
     rewrite ^/course/([^/]+)/about/?$ /main/course_info/about.php?course_id=$1 last;
@@ -951,7 +951,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
                     &lt;action type="Rewrite" url="main/course_home/course_home.php?cDir={R:1}" /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule 4v" stopProcessing="true"&gt;
-                    &lt;match url="^courses/([^/]+)/scorm/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$" /&gt;
+                    &lt;match url="^courses/([^/]+)/scorm/(.*\.(js|css|png|jpg|jpeg|gif))$" /&gt;
                     &lt;action type="Rewrite" url="app/courses/{R:1}/scorm/{R:2}" /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule 5v" stopProcessing="true"&gt;
@@ -967,7 +967,7 @@ Ce sont uniquement les redirections à placer dans un bloc server{}, comme les a
                     &lt;action type="Rewrite" url="main/document/download.php?doc_url=/{R:2}&amp;cDir={R:1}" /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule v8" stopProcessing="true"&gt;
-                    &lt;match url="^courses/([^/]+)/upload/course_home_icons/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$" /&gt;
+                    &lt;match url="^courses/([^/]+)/upload/course_home_icons/(.*\.(js|css|png|jpg|jpeg|gif))$" /&gt;
                     &lt;action type="Rewrite" url="app/courses/{R:1}/upload/course_home_icons/{R:2}" /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule v9" stopProcessing="true"&gt;

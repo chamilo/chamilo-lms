@@ -32,7 +32,7 @@ use ZipStream\ZipStream;
 /**
  * This is a code library for Chamilo.
  * It is included by default in every Chamilo file (through including the global.inc.php)
- * This library is in process of being transferred to src/Chamilo/CoreBundle/Utils/ChamiloUtil.
+ * This library is in process of being transferred to src/Chamilo/CoreBundle/Helpers/ChamiloHelper.
  * Whenever a function is transferred to the ChamiloUtil class, the places where it is used should include
  * the "use Chamilo\CoreBundle\Utils\ChamiloUtil;" statement.
  */

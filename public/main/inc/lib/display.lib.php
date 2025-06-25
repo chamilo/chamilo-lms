@@ -2285,7 +2285,7 @@ class Display
         ?string $title = null
     ): string
     {
-        // If the string contains '::', we assume it is a reference to one of the icon Enum classes in src/CoreBundle/Component/Utils/
+        // If the string contains '::', we assume it is a reference to one of the icon Enum classes in src/CoreBundle/Enums/
         $matches = [];
         if (preg_match('/(\w*)::(\w*)/', $name, $matches)) {
             if (count($matches) != 3) {

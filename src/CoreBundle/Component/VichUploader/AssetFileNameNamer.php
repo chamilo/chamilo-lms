@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Component\Utils;
+namespace Chamilo\CoreBundle\Component\VichUploader;
 
 use Chamilo\CoreBundle\Entity\Asset;
 use InvalidArgumentException;

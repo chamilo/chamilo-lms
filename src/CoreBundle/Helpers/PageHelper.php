@@ -1,10 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Component\Utils;
+declare(strict_types=1);
+
+namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Page;
@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
 
-class CreateDefaultPages
+class PageHelper
 {
     protected PageRepository $pageRepository;
     protected PageCategoryRepository $pageCategoryRepository;

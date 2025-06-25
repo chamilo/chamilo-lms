@@ -38,20 +38,20 @@ services:
     Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor:
         arguments: ['@translator', '@router']
 
-    Chamilo\CoreBundle\Component\Utils\AssetDirectoryNamer:
+    Chamilo\CoreBundle\Component\VichUploader\AssetDirectoryNamer:
       arguments:
         - '@property_accessor'
         - '@Chamilo\CoreBundle\Repository\AssetRepository'
         - '@request_stack'
 
-    Chamilo\CoreBundle\Component\Utils\AssetFileNameNamer:
+    Chamilo\CoreBundle\Component\VichUploader\AssetFileNameNamer:
       arguments:
         - '@request_stack'
         - '@translator'
       tags:
         - { name: vich_uploader.namer, mapping: assets }
 
-    Chamilo\CoreBundle\Component\Utils\CreateDefaultPages: ~
+    Chamilo\CoreBundle\Helpers\PageHelper: ~
     Chamilo\CoreBundle\Helpers\NameConventionUtil: ~
     Chamilo\CoreBundle\Helpers\GlideHelper:
         arguments:

@@ -158,3 +158,8 @@ services:
         $parameterBag: '@parameter_bag'
         $pluginRepo: '@Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository'
         $accessUrlHelper: '@Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper'
+
+    Chamilo\CoreBundle\ServiceHelper\CidReqHelper:
+      arguments:
+        - '@request_stack'
+        - '@doctrine.orm.entity_manager'

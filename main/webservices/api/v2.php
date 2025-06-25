@@ -23,6 +23,20 @@ api_protect_webservices();
 
 $httpRequest = HttpRequest::createFromGlobals();
 
+$jsonContent = 'application/json' === $httpRequest->headers->get('Content-Type')
+    ? json_decode($httpRequest->getContent(), true)
+    : null;
+
+if ($jsonContent) {
+    foreach ($jsonContent as $key => $value) {
+        $value = Security::remove_XSS($value);
+
+        $httpRequest->query->set($key, $value);
+        $httpRequest->request->set($key, $value);
+        $httpRequest->overrideGlobals();
+    }
+}
+
 $hash = $httpRequest->query->get('hash');
 
 if ($hash) {

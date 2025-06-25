@@ -6,7 +6,7 @@ Feature: Settings update
   Scenario: Update 'profile' setting
     Given I am a platform administrator
     Then I am on "/main/admin/settings.php?search_field=profile&category=search_setting"
-    And I check "profile[name]"
+    And I check " Name"
     And I check "profile[email]"
     And I check "profile[login]"
     And I check "profile[officialcode]"

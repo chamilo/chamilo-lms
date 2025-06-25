@@ -33,6 +33,8 @@ If permissions like 0660/0770 are used, it is recommended to run this command as
 )]
 class CreateCoursesFromStructuredFileCommand extends Command
 {
+    private const MAX_COURSE_LENGTH_CODE = 40;
+
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly CourseService $courseService,
@@ -95,21 +97,30 @@ class CreateCoursesFromStructuredFileCommand extends Command
 
         foreach ($finder as $file) {
             $basename = $file->getBasename();
-            $courseCode = pathinfo($basename, PATHINFO_FILENAME);
+            $filename = pathinfo($basename, PATHINFO_FILENAME);
             $filePath = $file->getRealPath();
 
-            // 1. Skip unsupported file extensions
-            $allowedExtensions = ['pdf', 'html', 'htm', 'mp4'];
-            if (!in_array(strtolower($file->getExtension()), $allowedExtensions, true)) {
-                $io->warning("Skipping unsupported file: $basename");
+            // Parse filename: expected format "1234=Name-of-course"
+            $parts = explode('=', $filename, 2);
+            if (count($parts) !== 2) {
+                $io->warning("Invalid filename format (expected 'code=Name'): $basename");
                 continue;
             }
+            $codePart = $parts[0];
+            $namePart = $parts[1];
+
+            // Code: remove dashes/spaces, uppercase everything
+            $rawCode = $codePart . strtoupper(str_replace(['-', ' '], '', $namePart));
+            $courseCode = $this->generateUniqueCourseCode($rawCode);
+
+            // Title: replace dashes with spaces
+            $courseTitle = str_replace('-', ' ', $namePart);
 
             $io->section("Creating course: $courseCode");
 
             // 2. Create course
             $course = $this->courseService->createCourse([
-                'title' => $courseCode,
+                'title' => $courseTitle,
                 'wanted_code' => $courseCode,
                 'add_user_as_teacher' => true,
                 'course_language' => $this->settingsManager->getSetting('language.platform_language'),
@@ -127,7 +138,7 @@ class CreateCoursesFromStructuredFileCommand extends Command
             // 3. Create learning path
             $lp = (new CLp())
                 ->setLpType(1)
-                ->setTitle($courseCode)
+                ->setTitle($courseTitle)
                 ->setDescription('')
                 ->setPublishedOn(null)
                 ->setExpiredOn(null)
@@ -219,5 +230,40 @@ class CreateCoursesFromStructuredFileCommand extends Command
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * Generates a unique course code based on a base string, ensuring DB uniqueness.
+     */
+    private function generateUniqueCourseCode(string $baseCode): string
+    {
+        $baseCode = substr($baseCode, 0, self::MAX_COURSE_LENGTH_CODE);
+        $repository = $this->em->getRepository(Course::class);
+
+        $original = $baseCode;
+        $suffix = 0;
+        $tryLimit = 100;
+
+        do {
+            $codeToTry = $suffix > 0
+                ? substr($original, 0, self::MAX_COURSE_LENGTH_CODE - strlen((string) $suffix)) . $suffix
+                : $original;
+
+            $exists = $repository->createQueryBuilder('c')
+                ->select('1')
+                ->where('c.code = :code')
+                ->setParameter('code', $codeToTry)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (!$exists) {
+                return $codeToTry;
+            }
+
+            $suffix++;
+        } while ($suffix < $tryLimit);
+
+        throw new \RuntimeException("Unable to generate unique course code for base: $baseCode");
     }
 }

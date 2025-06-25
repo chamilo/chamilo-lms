@@ -72,6 +72,20 @@ if ($table->per_page == 0) {
 }
 
 switch ($action) {
+    case 'delete':
+        if (isset($_GET['ticket_id'])) {
+            TicketManager::deleteTicket((int)$_GET['ticket_id']);
+            Display::addFlash(Display::return_message(
+                sprintf(
+                    get_lang('TicketDeleted'),
+                ),
+                null,
+                false
+            ));
+            header('Location: '.api_get_self().'?project_id='.$projectId);
+            exit;
+        }
+        break;
     case 'alert':
         if (!$isAdmin && isset($_GET['ticket_id'])) {
             TicketManager::send_alert($_GET['ticket_id'], $user_id);
@@ -409,6 +423,7 @@ if ($isAdmin) {
     $table->set_header(5, get_lang('CreatedBy'), true);
     $table->set_header(6, get_lang('AssignedTo'), true);
     $table->set_header(7, get_lang('Message'), true);
+    $table->set_header(8, get_lang('Delete'), true);
 } else {
     if ($isAllow == false) {
         echo Display::page_subheader(get_lang('MyTickets'));

@@ -9125,4 +9125,6 @@ $Learners = "ASISTENTES";
 $BackToDateOrder = "Retorno al orden cronológico";
 $SeeAlphabeticalOrder = "Ver en orden alfabético";
 $HideComment = "Ocultar comentarios";
+$AreYouSureYouWantToDeleteThisTicket = "¿Estás seguro de que quieres eliminar este ticket?";
+$TicketDeleted = "Ticket eliminado";
 ?>

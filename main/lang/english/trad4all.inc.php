@@ -9100,4 +9100,6 @@ $Learners = "Learners";
 $BackToDateOrder = "Return to the chronological order";
 $SeeAlphabeticalOrder = "View in alphabetical order";
 $HideComment = "Hide comments";
+$AreYouSureYouWantToDeleteThisTicket = "Are you sure you want to delete this ticket ?";
+$TicketDeleted = "Ticket deleted";
 ?>

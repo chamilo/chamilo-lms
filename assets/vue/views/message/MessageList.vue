@@ -604,6 +604,8 @@ function showDlgConfirmDeleteSingle(dataOrItem) {
   confirm.require({
     header: t("Confirmation"),
     message: t("Are you sure you want to delete %s?", [item.title]),
+    acceptLabel: t("Yes"),
+    rejectLabel: t("No"),
     accept: async () => {
       await deleteMessage(item)
     },
@@ -614,6 +616,8 @@ function showDlgConfirmDeleteMultiple() {
   confirm.require({
     header: t("Confirmation"),
     message: t("Are you sure you want to delete the selected items?"),
+    acceptLabel: t("Yes"),
+    rejectLabel: t("No"),
     accept: async () => {
       for (const message of selectedItems.value) {
         await deleteMessage(message)

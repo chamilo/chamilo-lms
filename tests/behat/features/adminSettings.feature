@@ -7,7 +7,7 @@ Feature: Settings update
     Given I am a platform administrator
     Then I am on "/main/admin/settings.php?search_field=profile&category=search_setting"
     And wait for the page to be loaded
-    And I check "profile[name]"
+    And I check the checkbox matching xpath "//input[@name='profile[name]']"
     And I check "profile[email]"
     And I check "profile[login]"
     And I check "profile[officialcode]"

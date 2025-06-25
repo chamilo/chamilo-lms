@@ -118,6 +118,8 @@ class CourseController extends ToolBaseController
                 }
 
                 if ($redirect && !$this->isGranted('ROLE_ADMIN')) {
+                    $request->getSession()->remove('cid');
+                    $request->getSession()->remove('course');
                     $responseData = [
                         'redirect' => true,
                         'url' => '/main/auth/inscription.php',

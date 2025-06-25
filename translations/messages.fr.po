@@ -30195,3 +30195,6 @@ msgstr "Vous avez accepté ces conditions le"
 
 msgid "Revoke Acceptance"
 msgstr "Révoquer l'acceptation"
+
+msgid "Confirmation"
+msgstr "Confirmation"

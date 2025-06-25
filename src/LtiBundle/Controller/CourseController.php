@@ -33,6 +33,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UserManager;
 
 #[Route(path: '/courses/{cid}/lti')] // ;
@@ -373,9 +374,7 @@ class CourseController extends ToolBaseController
         );
     }
 
-    /**
-     * @Security("is_granted('ROLE_TEACHER')")
-     */
+    #[IsGranted('ROLE_TEACHER')]
     #[Route(path: '/', name: 'chamilo_lti_configure')]
     #[Route(path: '/add/{id}', name: 'chamilo_lti_configure_global', requirements: ['id' => '\d+'])]
     public function courseConfigure(?int $id, Request $request): Response
@@ -476,14 +475,8 @@ class CourseController extends ToolBaseController
         );
     }
 
-    /**
-     * @Security("is_granted('ROLE_TEACHER')")
-     *
-     * @param string $catId
-     *
-     * @throws Exception
-     */
     #[Route(path: '/grade/{catId}', name: 'chamilo_lti_grade', requirements: ['catId' => '\d+'])]
+    #[IsGranted('ROLE_TEACHER')]
     public function grade(int $catId): Response
     {
         $em = $this->managerRegistry->getManager();

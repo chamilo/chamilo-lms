@@ -18,7 +18,6 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -275,7 +274,7 @@ class CourseRepository extends ResourceRepository
         // Getting sessions that are related to a coach in the session_rel_course_rel_user table
         if ($isAllowedToCreateCourse) {
             $sessionListFromCourseCoach = array_map(
-                fn(SessionRelCourseRelUser $srcru) => $srcru->getSession()->getId(),
+                fn (SessionRelCourseRelUser $srcru) => $srcru->getSession()->getId(),
                 $sessionCourseUserRepo->findBy(['user' => $user->getId(), 'status' => Session::COURSE_COACH])
             );
         }

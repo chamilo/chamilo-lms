@@ -43,14 +43,21 @@ export function useSidebarMenu() {
     return false
   }
 
-  const createMenuItem = (key, icon, label, routeName, subItems = null) => {
+  const createMenuItem = (key, icon, label, opts = null) => {
     if (showTabsSetting.indexOf(key) > -1) {
       const item = {
         icon: `mdi ${icon}`,
         label: t(label),
       }
-      if (routeName) item.route = { name: routeName }
-      if (subItems) item.items = subItems
+
+      if (typeof opts === "string") {
+        item.route = { name: opts }
+      } else if (opts) {
+        if (opts.url) item.url = opts.url
+        if (opts.routeName) item.route = { name: opts.routeName }
+        if (opts.subItems) item.items = opts.subItems
+      }
+
       return item
     }
     return null
@@ -110,7 +117,11 @@ export function useSidebarMenu() {
       }
     }
 
-    items.push(createMenuItem("my_agenda", "mdi-calendar-text", "Events", "CCalendarEventList"))
+    items.push(
+      createMenuItem("my_agenda", "mdi-calendar-text", "Events", {
+        url: "/resources/ccalendarevent",
+      }),
+    )
 
     if (showTabsSetting.indexOf("reporting") > -1) {
       const subItems = []
@@ -179,24 +190,33 @@ export function useSidebarMenu() {
       ]
 
       if (conferenceItems.length > 0) {
-        items.push(createMenuItem("videoconference", "mdi-video", "Videoconference", null, conferenceItems))
+        items.push(createMenuItem("videoconference", "mdi-video", "Videoconference", {
+            subItems: conferenceItems,
+          })
+        )
       }
     }
 
     if (showTabsSetting.indexOf("diagnostics") > -1) {
-      items.push(
-        createMenuItem("diagnostics", "mdi-text-box-search", "Diagnosis Management", null, [
-          {
-            label: t("Diagnosis Management"),
-            url: "/main/search/load_search.php",
-            visible: securityStore.isStudentBoss,
-          },
-          {
-            label: t("Diagnostic Form"),
-            url: "/main/search/search.php",
-          },
-        ]),
-      )
+      const subItems = [
+        {
+          label: t("Diagnosis Management"),
+          url: "/main/search/load_search.php",
+          visible: securityStore.isStudentBoss,
+        },
+        {
+          label: t("Diagnostic Form"),
+          url: "/main/search/search.php",
+        },
+      ].filter((item) => item.visible !== false)
+
+      if (subItems.length > 0) {
+        items.push(
+          createMenuItem("diagnostics", "mdi-text-box-search", "Diagnosis Management", {
+            subItems,
+          })
+        )
+      }
     }
 
     if (securityStore.isAdmin || securityStore.isSessionAdmin) {

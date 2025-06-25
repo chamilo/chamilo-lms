@@ -91,7 +91,7 @@ if (isset($_POST) && !empty($_POST)) {
         }
     } else {
         foreach ($questions as $item) {
-            $questionId = $item['question_id'];
+            $questionId = $item->getIid();
             $question = $questionRepo->find($questionId);
             SurveyUtil::saveAnswer(
                 $userId,

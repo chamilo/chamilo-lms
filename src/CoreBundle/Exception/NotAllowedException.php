@@ -6,14 +6,27 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Exception;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class NotAllowedException extends HttpException
 {
-    public function __construct(?string $message = 'Not allowed', ?Throwable $previous = null, int $code = 0, array $headers = [])
+    private string $severity;
+
+    public function __construct(
+        string $message = 'Not allowed',
+        string $severity = 'warning',
+        int $statusCode = 403,
+        array $headers = [],
+        int $code = 0,
+        Throwable $previous = null
+    ) {
+        $this->severity = $severity;
+        parent::__construct($statusCode, $message, $previous, $headers, $code);
+    }
+
+    public function getSeverity(): string
     {
-        parent::__construct(Response::HTTP_FORBIDDEN, $message, $previous, $headers, $code);
+        return $this->severity;
     }
 }

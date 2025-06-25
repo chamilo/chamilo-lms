@@ -6,17 +6,18 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Framework\Container;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/certificates')]
 class CertificateController extends AbstractController
@@ -30,7 +31,7 @@ class CertificateController extends AbstractController
     public function view(string $hash): Response
     {
         // Build the expected certificate filename from the hash
-        $filename = $hash . '.html';
+        $filename = $hash.'.html';
 
         // Look up the certificate record by its path
         $certificate = $this->certificateRepository->findOneBy([
@@ -60,7 +61,7 @@ class CertificateController extends AbstractController
         $content = str_replace(' media="screen"', '', $content);
 
         // Return the certificate as a raw HTML response
-        return new Response('<!DOCTYPE html>' . $content, 200, [
+        return new Response('<!DOCTYPE html>'.$content, 200, [
             'Content-Type' => 'text/html; charset=UTF-8',
         ]);
     }
@@ -68,7 +69,7 @@ class CertificateController extends AbstractController
     #[Route('/{hash}.pdf', name: 'chamilo_certificate_public_pdf', methods: ['GET'])]
     public function downloadPdf(string $hash): Response
     {
-        $filename = $hash . '.html';
+        $filename = $hash.'.html';
 
         $certificate = $this->certificateRepository->findOneBy(['pathCertificate' => $filename]);
         if (!$certificate) {
@@ -95,6 +96,7 @@ class CertificateController extends AbstractController
                 'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
             ]);
             $mpdf->WriteHTML($html);
+
             return new Response(
                 $mpdf->Output('certificate.pdf', Destination::DOWNLOAD),
                 200,
@@ -104,7 +106,7 @@ class CertificateController extends AbstractController
                 ]
             );
         } catch (MpdfException $e) {
-            throw new \RuntimeException('Failed to generate PDF: '.$e->getMessage(), 500, $e);
+            throw new RuntimeException('Failed to generate PDF: '.$e->getMessage(), 500, $e);
         }
     }
 }

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\EventListener\CidReqListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @see CidReqListener::onKernelRequest()
@@ -20,6 +21,7 @@ class CidReqHelper
 {
     public function __construct(
         private readonly RequestStack $requestStack,
+        private readonly EntityManagerInterface $em,
     ) {}
 
     private function getRequest(): ?Request
@@ -27,33 +29,59 @@ class CidReqHelper
         return $this->requestStack->getCurrentRequest();
     }
 
-    private function getSessionHandler(): SessionInterface
+    private function getSessionHandler(): ?SessionInterface
     {
-        return $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        return $request?->getSession();
     }
 
     public function getSessionId(): ?int
     {
-        return $this->getSessionHandler()->get('sid');
+        $session = $this->getSessionHandler();
+        return $session?->get('sid');
     }
 
     public function getSessionEntity(): ?Session
     {
-        return $this->getSessionHandler()->get('session');
+        $session = $this->getSessionHandler();
+        return $session?->get('session');
     }
 
-    public function getCourseId()
+    public function getCourseId(): mixed
     {
-        return $this->getSessionHandler()->get('cid');
+        $session = $this->getSessionHandler();
+        return $session?->get('cid');
     }
 
     public function getCourseEntity(): ?Course
     {
-        return $this->getSessionHandler()->get('course');
+        $session = $this->getSessionHandler();
+        return $session?->get('course');
     }
 
     public function getGroupId(): ?int
     {
-        return $this->getSessionHandler()->get('gid');
+        $session = $this->getSessionHandler();
+        return $session?->get('gid');
+    }
+
+    public function getDoctrineCourseEntity(): ?Course
+    {
+        $courseId = $this->getCourseId();
+        if (empty($courseId)) {
+            return null;
+        }
+
+        return $this->em->getRepository(Course::class)->find((int) $courseId);
+    }
+
+    public function getDoctrineSessionEntity(): ?Session
+    {
+        $sessionId = $this->getSessionId();
+        if (empty($sessionId)) {
+            return null;
+        }
+
+        return $this->em->getRepository(Session::class)->find((int) $sessionId);
     }
 }

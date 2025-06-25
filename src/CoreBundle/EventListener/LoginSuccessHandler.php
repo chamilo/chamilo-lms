@@ -21,12 +21,11 @@ use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-use UserManager;
 
 class LoginSuccessHandler
 {
@@ -43,7 +42,7 @@ class LoginSuccessHandler
     ) {}
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke(InteractiveLoginEvent $event): RedirectResponse
     {

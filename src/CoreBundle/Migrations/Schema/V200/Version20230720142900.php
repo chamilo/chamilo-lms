@@ -7,9 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Doctrine\DBAL\Schema\Schema;
 
 use const PASSWORD_DEFAULT;

@@ -5,11 +5,9 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
-use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  *  Class DocumentManager

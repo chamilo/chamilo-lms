@@ -1,9 +1,8 @@
 <?php
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -480,7 +479,7 @@ class AppPlugin
         }
 
         $configByUrl = $plugin->getConfigurationsByAccessUrl(
-            Container::getAccessUrlHelper()->getCurrent()
+            Container::getAccessUrlUtil()->getCurrent()
         );
 
         $plugin_info['settings'] = $configByUrl?->getConfiguration() ?? [];

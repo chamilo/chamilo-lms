@@ -5,7 +5,7 @@
  * User move script (to move between courses and sessions).
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

@@ -2,12 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 use Chamilo\CoreBundle\Entity\ConferenceActivity;
 use Chamilo\CoreBundle\Entity\ConferenceMeeting;
 use Chamilo\CoreBundle\Entity\ConferenceRecording;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Repository\ConferenceActivityRepository;
 use Chamilo\CoreBundle\Repository\ConferenceMeetingRepository;
 use Chamilo\CoreBundle\Repository\ConferenceRecordingRepository;

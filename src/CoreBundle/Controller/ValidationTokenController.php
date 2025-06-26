@@ -8,12 +8,12 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\ValidationToken;
+use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TicketRelUserRepository;
 use Chamilo\CoreBundle\Repository\TicketRepository;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
-use Chamilo\CoreBundle\ServiceHelper\ValidationTokenHelper;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;

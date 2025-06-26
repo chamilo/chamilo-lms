@@ -10,12 +10,12 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\SessionResubscriptionEvent;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\Query\Expr\Join;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * @todo change class name

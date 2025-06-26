@@ -3,9 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Asset;
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 

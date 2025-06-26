@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Symfony\Component\Finder\Finder;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Class MailTemplateManager.

@@ -2,8 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code

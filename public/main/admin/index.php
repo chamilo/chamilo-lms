@@ -6,10 +6,10 @@
  * Index page of the admin tools.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 

@@ -2,8 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Shows the exercise results.

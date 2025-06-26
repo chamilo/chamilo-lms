@@ -1,16 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\TrackEAccess;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Doctrine\DBAL\ParameterType;
 
 /**
@@ -59,10 +59,10 @@ class Statistics
     {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $sql = "SELECT COUNT(*) AS number
                     FROM $courseTable AS c, $accessUrlRelCourseTable AS u
@@ -126,10 +126,10 @@ class Statistics
         }
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $sql = "SELECT COUNT(*) AS number
                     FROM $courseTable AS c, $accessUrlRelCourseTable AS u
@@ -191,10 +191,10 @@ class Statistics
 
         $where = implode(' AND ', $conditions);
 
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $sql = "SELECT COUNT(DISTINCT(u.id)) AS number
                 FROM $user_table as u
@@ -250,10 +250,10 @@ class Statistics
         $startDate = Database::escape_string($startDate);
         $endDate = Database::escape_string($endDate);
 
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $sql = "SELECT DISTINCT(t.c_id) FROM $table t , $access_url_rel_course_table a
                     WHERE
@@ -283,14 +283,14 @@ class Statistics
         $track_e_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
         if (is_array($courseId)) {
             // Usually when no param is given, we get an empty array from SortableTable
             $courseId = 0;
         }
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $sql = "SELECT count(default_id) AS total_number_of_items
                     FROM $track_e_default, $table_user user, $access_url_rel_user_table url
@@ -359,10 +359,10 @@ class Statistics
             $direction = 'DESC';
         }
 
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $sql = "SELECT
                         default_event_type  as col0,
@@ -564,10 +564,10 @@ class Statistics
         $where_url = null;
         $now = api_get_utc_datetime();
         $where_url_last = ' WHERE login_date > DATE_SUB("'.$now.'",INTERVAL 1 %s)';
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $table_url = ", $access_url_rel_user_table";
             $where_url = " WHERE login_user_id=user_id AND access_url_id = $urlId";
@@ -667,10 +667,10 @@ class Statistics
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $table_url = '';
         $where_url = '';
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $table_url = ", $access_url_rel_user_table";
             $where_url = " AND login_user_id=user_id AND access_url_id = $urlId";
@@ -760,10 +760,10 @@ class Statistics
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $table_url = '';
         $where_url = '';
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $table_url = ", $access_url_rel_user_table";
             $where_url = " AND login_user_id=user_id AND access_url_id = $urlId";
@@ -830,10 +830,10 @@ class Statistics
         foreach ($tools as $tool) {
             $tool_names[$tool] = get_lang(ucfirst($tool), '');
         }
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $sql = "SELECT access_tool, count( access_id ) AS number_of_logins
                     FROM $table t , $access_url_rel_course_table a
@@ -884,10 +884,10 @@ class Statistics
     {
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $sql = "SELECT course_language, count( c.code ) AS number_of_courses
                     FROM $table as c, $access_url_rel_course_table as u
@@ -919,10 +919,10 @@ class Statistics
         $url_condition = null;
         $url_condition2 = null;
         $table = null;
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $url_condition = ", $access_url_rel_user_table as url WHERE url.user_id=u.id AND access_url_id='".$urlId."'";
             $url_condition2 = " AND url.user_id=u.id AND access_url_id = $urlId";
@@ -1059,10 +1059,10 @@ class Statistics
         $values = $form->exportValues();
         $date_diff = $values['date_diff'];
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $sql = "SELECT * FROM $table t , $access_url_rel_course_table a
                    WHERE
@@ -1140,10 +1140,10 @@ class Statistics
                 break;
         }
 
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $sql = "SELECT u.lastname, u.firstname, u.username, COUNT(DISTINCT m.id) AS count_message
             FROM $messageTable m
@@ -1189,10 +1189,10 @@ class Statistics
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
                     FROM $access_url_rel_user_table as url, $user_friend_table uf
@@ -1233,10 +1233,10 @@ class Statistics
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $total = self::countUsers();
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $table_url = ", $access_url_rel_user_table";
             $where_url = " AND login_user_id=user_id AND access_url_id = $urlId";
@@ -1448,7 +1448,7 @@ class Statistics
     public static function buildJsChartData(array $all, string $chartName): array
     {
         $list = [];
-        $palette = ChamiloApi::getColorPalette(true, true);
+        $palette = ChamiloHelper::getColorPalette(true, true);
         foreach ($all as $tick => $tock) {
             $list['labels'][] = $tick;
         }
@@ -1646,10 +1646,10 @@ class Statistics
         $urlJoin = '';
         $urlWhere = '';
 
-        $accessUrlHelper = Container::getAccessUrlHelper();
+        $accessUrlUtil = Container::getAccessUrlUtil();
 
-        if ($accessUrlHelper->isMultiple()) {
-            $accessUrl = $accessUrlHelper->getCurrent();
+        if ($accessUrlUtil->isMultiple()) {
+            $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $tblUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
@@ -1867,10 +1867,10 @@ class Statistics
             $whereUrl = '';
             $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
             $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
-            $accessUrlHelper = Container::getAccessUrlHelper();
+            $accessUrlUtil = Container::getAccessUrlUtil();
 
-            if ($accessUrlHelper->isMultiple()) {
-                $accessUrl = $accessUrlHelper->getCurrent();
+            if ($accessUrlUtil->isMultiple()) {
+                $accessUrl = $accessUrlUtil->getCurrent();
                 $urlId = $accessUrl->getId();
                 $tableUrl = ", $accessUrlRelUserTable";
                 $whereUrl = " AND login_user_id = user_id AND access_url_id = $urlId";

@@ -21,8 +21,6 @@
  * @link        http://pear.php.net/package/HTML_QuickForm
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-
 /**
  * HTML class for a password type field
  *

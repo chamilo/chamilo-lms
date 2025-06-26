@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Decorator;
 
-use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use InvalidArgumentException;
 use KnpU\OAuth2ClientBundle\DependencyInjection\ProviderFactory;
 use League\OAuth2\Client\Provider\AbstractProvider;

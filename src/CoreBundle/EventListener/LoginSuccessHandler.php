@@ -9,16 +9,16 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackELoginRecord;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
+use Chamilo\CoreBundle\Helpers\LoginAttemptLoggerHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
-use Chamilo\CoreBundle\ServiceHelper\LoginAttemptLogger;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Routing\RouterInterface;
-use Chamilo\CoreBundle\Settings\PlatformSettingsManager;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
@@ -26,11 +26,11 @@ class LoginSuccessHandler
 {
     public function __construct(
         private readonly AuthorizationCheckerInterface $checker,
+        private readonly SettingsManager $settingsManager,
         private readonly EntityManagerInterface $entityManager,
-        private readonly LoginAttemptLogger $loginAttemptLogger,
+        private readonly LoginAttemptLoggerHelper $loginAttemptLoggerHelper,
         private readonly UserHelper $userHelper,
         private readonly RouterInterface $router,
-        private readonly PlatformSettingsManager $settingsManager,
     ) {}
 
     /**
@@ -74,7 +74,7 @@ class LoginSuccessHandler
             $this->entityManager->flush();
 
             $trackELoginRecordRepository->addTrackLogin($user->getUsername(), $userIp, true);
-            $this->loginAttemptLogger->logAttempt(true, $user->getUsername(), $userIp);
+            $this->loginAttemptLoggerHelper->logAttempt(true, $user->getUsername(), $userIp);
 
             $requestSession->set('login_records_created', true);
         }

@@ -2,7 +2,7 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 

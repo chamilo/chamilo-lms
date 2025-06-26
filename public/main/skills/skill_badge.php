@@ -6,7 +6,7 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 $cidReset = true;
 

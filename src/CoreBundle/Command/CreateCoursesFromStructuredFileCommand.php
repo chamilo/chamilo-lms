@@ -9,12 +9,14 @@ namespace Chamilo\CoreBundle\Command;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -24,6 +26,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Finder\Finder;
+
+use const PATHINFO_FILENAME;
 
 #[AsCommand(
     name: 'app:create-courses-from-structured-file',
@@ -58,7 +62,8 @@ class CreateCoursesFromStructuredFileCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'Expected user owner of created files (e.g. www-data)',
                 'www-data'
-            );
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -76,12 +81,14 @@ class CreateCoursesFromStructuredFileCommand extends Command
         $adminUser = $this->getFirstAdmin();
         if (!$adminUser) {
             $io->error('No admin user found in the system.');
+
             return Command::FAILURE;
         }
 
         $folder = $input->getArgument('folder');
         if (!is_dir($folder)) {
             $io->error("Invalid folder: $folder");
+
             return Command::FAILURE;
         }
 
@@ -90,7 +97,7 @@ class CreateCoursesFromStructuredFileCommand extends Command
         $filePermOct = octdec($this->settingsManager->getSetting('document.permissions_for_new_files') ?? '0666');
 
         // Absolute base to /var/upload/resource
-        $uploadBase = $this->parameterBag->get('kernel.project_dir') . '/var/upload/resource';
+        $uploadBase = $this->parameterBag->get('kernel.project_dir').'/var/upload/resource';
 
         $finder = new Finder();
         $finder->files()->in($folder);
@@ -102,15 +109,16 @@ class CreateCoursesFromStructuredFileCommand extends Command
 
             // Parse filename: expected format "1234=Name-of-course"
             $parts = explode('=', $filename, 2);
-            if (count($parts) !== 2) {
+            if (2 !== \count($parts)) {
                 $io->warning("Invalid filename format (expected 'code=Name'): $basename");
+
                 continue;
             }
             $codePart = $parts[0];
             $namePart = $parts[1];
 
             // Code: remove dashes/spaces, uppercase everything
-            $rawCode = $codePart . strtoupper(str_replace(['-', ' '], '', $namePart));
+            $rawCode = $codePart.strtoupper(str_replace(['-', ' '], '', $namePart));
             $courseCode = $this->generateUniqueCourseCode($rawCode);
 
             // Title: replace dashes with spaces
@@ -128,11 +136,11 @@ class CreateCoursesFromStructuredFileCommand extends Command
                 'subscribe' => true,
                 'unsubscribe' => true,
                 'disk_quota' => $this->settingsManager->getSetting('document.default_document_quotum'),
-                'expiration_date' => (new \DateTime('+1 year'))->format('Y-m-d H:i:s'),
+                'expiration_date' => (new DateTime('+1 year'))->format('Y-m-d H:i:s'),
             ]);
 
             if (!$course) {
-                throw new \RuntimeException("Course '$courseCode' could not be created.");
+                throw new RuntimeException("Course '$courseCode' could not be created.");
             }
 
             // 3. Create learning path
@@ -145,7 +153,8 @@ class CreateCoursesFromStructuredFileCommand extends Command
                 ->setCategory(null)
                 ->setParent($course)
                 ->addCourseLink($course)
-                ->setCreator($adminUser);
+                ->setCreator($adminUser)
+            ;
 
             $this->em->getRepository(CLp::class)->createLp($lp);
 
@@ -157,7 +166,8 @@ class CreateCoursesFromStructuredFileCommand extends Command
                 ->setReadonly(false)
                 ->setCreator($adminUser)
                 ->setParent($course)
-                ->addCourseLink($course);
+                ->addCourseLink($course)
+            ;
 
             $this->em->persist($document);
             $this->em->flush();
@@ -169,12 +179,12 @@ class CreateCoursesFromStructuredFileCommand extends Command
             if ($resourceFile) {
                 $resourceNodeRepo = $this->em->getRepository(ResourceNode::class);
                 $relativePath = $resourceNodeRepo->getFilename($resourceFile);
-                $fullPath = realpath($uploadBase . $relativePath);
+                $fullPath = realpath($uploadBase.$relativePath);
 
                 if ($fullPath && is_file($fullPath)) {
                     @chmod($fullPath, $filePermOct);
                 }
-                $fullDir = dirname($fullPath ?: '');
+                $fullDir = \dirname($fullPath ?: '');
                 if ($fullDir && is_dir($fullDir)) {
                     @chmod($fullDir, $dirPermOct);
                 }
@@ -189,7 +199,8 @@ class CreateCoursesFromStructuredFileCommand extends Command
                     ->setTitle('root')
                     ->setPath('root')
                     ->setLp($lp)
-                    ->setItemType('root');
+                    ->setItemType('root')
+                ;
                 $this->em->persist($rootItem);
                 $this->em->flush();
             }
@@ -207,7 +218,8 @@ class CreateCoursesFromStructuredFileCommand extends Command
                 ->setMaxScore(100)
                 ->setParent($rootItem)
                 ->setLvl(1)
-                ->setRoot($rootItem);
+                ->setRoot($rootItem)
+            ;
 
             $this->em->persist($lpItem);
             $this->em->flush();
@@ -229,7 +241,8 @@ class CreateCoursesFromStructuredFileCommand extends Command
             ->setParameter('role', '%ROLE_ADMIN%')
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     /**
@@ -246,7 +259,7 @@ class CreateCoursesFromStructuredFileCommand extends Command
 
         do {
             $codeToTry = $suffix > 0
-                ? substr($original, 0, self::MAX_COURSE_LENGTH_CODE - strlen((string) $suffix)) . $suffix
+                ? substr($original, 0, self::MAX_COURSE_LENGTH_CODE - \strlen((string) $suffix)).$suffix
                 : $original;
 
             $exists = $repository->createQueryBuilder('c')
@@ -255,7 +268,8 @@ class CreateCoursesFromStructuredFileCommand extends Command
                 ->setParameter('code', $codeToTry)
                 ->setMaxResults(1)
                 ->getQuery()
-                ->getOneOrNullResult();
+                ->getOneOrNullResult()
+            ;
 
             if (!$exists) {
                 return $codeToTry;
@@ -264,6 +278,6 @@ class CreateCoursesFromStructuredFileCommand extends Command
             $suffix++;
         } while ($suffix < $tryLimit);
 
-        throw new \RuntimeException("Unable to generate unique course code for base: $baseCode");
+        throw new RuntimeException("Unable to generate unique course code for base: $baseCode");
     }
 }

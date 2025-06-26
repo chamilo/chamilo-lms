@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventSubscriber;
 
-use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Helpers\LoginAttemptLoggerHelper;
+use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;

@@ -8,10 +8,10 @@ namespace Chamilo\CoreBundle\Twig\Extension;
 
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
-use Chamilo\CoreBundle\Twig\SettingsHelper;
 use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Twig\SettingsHelper;
 use Security;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Symfony\Component\Routing\RouterInterface;

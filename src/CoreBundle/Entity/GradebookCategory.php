@@ -310,7 +310,7 @@ class GradebookCategory
     }
 
     /**
-     * Get number of days the linked certificate is valid after attribution
+     * Get number of days the linked certificate is valid after attribution.
      */
     public function getCertificateValidityPeriod(): ?int
     {
@@ -318,7 +318,7 @@ class GradebookCategory
     }
 
     /**
-     * Set number of days the linked certificate is valid after attribution
+     * Set number of days the linked certificate is valid after attribution.
      */
     public function setCertificateValidityPeriod(?int $certificateValidityPeriod): self
     {

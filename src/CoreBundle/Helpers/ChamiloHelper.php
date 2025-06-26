@@ -28,7 +28,7 @@ class ChamiloHelper
 
     private static array $configuration;
 
-    public function setConfiguration(array $configuration)
+    public function setConfiguration(array $configuration): void
     {
         self::$configuration = $configuration;
     }

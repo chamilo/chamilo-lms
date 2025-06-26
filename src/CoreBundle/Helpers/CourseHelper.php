@@ -34,6 +34,7 @@ use InvalidArgumentException;
 use Link;
 use LogicException;
 use MultipleAnswer;
+use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Finder\Finder;
@@ -798,12 +799,13 @@ class CourseHelper
             ->from(User::class, 'u')
             ->where('u.roles LIKE :role')
             ->setParameter('role', '%ROLE_ADMIN%')
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         $user = $qb->getQuery()->getOneOrNullResult();
 
         if (!$user instanceof User) {
-            throw new \RuntimeException('No admin user found for fallback.');
+            throw new RuntimeException('No admin user found for fallback.');
         }
 
         return $user;

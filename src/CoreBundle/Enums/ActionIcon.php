@@ -172,5 +172,4 @@ enum ActionIcon: string
     case CLOSE = 'close';
 
     case MULTI_COURSE_URL_ASSIGN = 'playlist-plus';
-
 }

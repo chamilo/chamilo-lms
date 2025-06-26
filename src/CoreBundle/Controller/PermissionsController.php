@@ -8,9 +8,9 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\PermissionRelRole;
 use Chamilo\CoreBundle\Form\PermissionType;
+use Chamilo\CoreBundle\Helpers\PermissionHelper;
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
 use Chamilo\CoreBundle\Repository\PermissionRepository;
-use Chamilo\CoreBundle\Helpers\PermissionHelper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

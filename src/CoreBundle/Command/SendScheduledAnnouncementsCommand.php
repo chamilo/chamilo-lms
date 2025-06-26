@@ -7,8 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Helpers\ScheduledAnnouncementHelper;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Database;
 use Doctrine\ORM\EntityManager;
 use Exception;

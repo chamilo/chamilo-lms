@@ -11,8 +11,8 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
-use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 

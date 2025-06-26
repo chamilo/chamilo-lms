@@ -120,7 +120,7 @@ services:
       tags:
         - name: security.voter
 
-    Chamilo\CoreBundle\ServiceHelper\ContainerHelper:
+    Chamilo\CoreBundle\Helpers\ContainerHelper:
         calls:
             - setAuthorizationChecker: [ '@security.authorization_checker' ]
             - setTokenStorage: [ '@security.token_storage' ]
@@ -129,7 +129,7 @@ services:
             - setValidator: [ '@validator' ]
             - setSessionFactory: [ '@session.factory' ]
 
-    Chamilo\CoreBundle\Service\PluginEntityLoader:
+    Chamilo\CoreBundle\Helpers\PluginEntityLoaderHelper:
         arguments:
             $pluginDir: '%kernel.project_dir%/public/plugin'
 

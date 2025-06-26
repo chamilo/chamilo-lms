@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository\Node;
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
@@ -16,6 +15,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
@@ -192,7 +192,7 @@ class CourseRepository extends ResourceRepository
      */
     public function getSubscribedTeachers(Course $course)
     {
-        return $this->getSubscribedUsersByStatus($course, ChamiloApi::COURSE_MANAGER);
+        return $this->getSubscribedUsersByStatus($course, ChamiloHelper::COURSE_MANAGER);
     }
 
     /**

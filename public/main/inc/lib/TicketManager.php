@@ -11,12 +11,12 @@ use Chamilo\CoreBundle\Entity\TicketRelUser;
 use Chamilo\CoreBundle\Entity\TicketStatus;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\ValidationToken;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\ValidationTokenHelper;
+use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CourseBundle\Entity\CLp;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Class TicketManager.
@@ -58,7 +58,7 @@ class TicketManager
         $order = empty($order) ? 'category.total_tickets DESC' : $order;
         $order = Database::escape_string($order);
         $projectId = (int) $projectId;
-        $accessUrlId = Container::getAccessUrlHelper()->getCurrent()->getId();
+        $accessUrlId = Container::getAccessUrlUtil()->getCurrent()->getId();
 
         $sql = "SELECT
                     category.*,
@@ -374,7 +374,7 @@ class TicketManager
             'message' => $content,
             'code' => '',
             'total_messages' => 0,
-            'access_url_id' => Container::getAccessUrlHelper()->getCurrent()->getId(),
+            'access_url_id' => Container::getAccessUrlUtil()->getCurrent()->getId(),
         ];
 
         if (!empty($exerciseId)) {
@@ -812,7 +812,7 @@ class TicketManager
         $direction = !empty($direction) ? $direction : 'DESC';
         $userId = api_get_user_id();
         $userInfo = api_get_user_info($userId);
-        $accessUrlId = Container::getAccessUrlHelper()->getCurrent()->getId();
+        $accessUrlId = Container::getAccessUrlUtil()->getCurrent()->getId();
 
         if (empty($userInfo)) {
             return [];
@@ -1062,7 +1062,7 @@ class TicketManager
             return 0;
         }
 
-        $accessUrlId = Container::getAccessUrlHelper()->getCurrent()->getId();
+        $accessUrlId = Container::getAccessUrlUtil()->getCurrent()->getId();
 
         $sql = "SELECT COUNT(ticket.id) AS total
                 FROM $table_support_tickets ticket
@@ -1566,7 +1566,7 @@ class TicketManager
             $sql .= " AND user_id NOT IN (SELECT user_id FROM $table_main_admin)
                       AND ticket.status_id != '".self::STATUS_FORWARDED."'";
         }
-        $sql .= ' AND ticket.access_url_id = '.(int) Container::getAccessUrlHelper()->getCurrent()->getId();
+        $sql .= ' AND ticket.access_url_id = '.(int) Container::getAccessUrlUtil()->getCurrent()->getId();
         $sql .= "  AND ticket.project_id != '' ";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
@@ -1628,7 +1628,7 @@ class TicketManager
         $table = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
         $userId = api_get_user_id();
-        $accessUrlId = (int) Container::getAccessUrlHelper()->getCurrent()->getId();
+        $accessUrlId = (int) Container::getAccessUrlUtil()->getCurrent()->getId();
 
         $sql = "UPDATE $table
             SET
@@ -1733,7 +1733,7 @@ class TicketManager
                     AND ticket.priority_id = priority.id
                     AND ticket.status_id = status.id
                     AND user.user_id = ticket.request_user ";
-        $sql .= ' AND ticket.access_url_id = '.(int) Container::getAccessUrlHelper()->getCurrent()->getId();
+        $sql .= ' AND ticket.access_url_id = '.(int) Container::getAccessUrlUtil()->getCurrent()->getId();
 
         // Search simple
         if (isset($_GET['submit_simple'])) {
@@ -1913,7 +1913,7 @@ class TicketManager
      */
     public static function getStatusList()
     {
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
         $items = Database::getManager()
             ->getRepository(TicketStatus::class)
             ->findBy(['accessUrl' => $accessUrl]);
@@ -1968,7 +1968,7 @@ class TicketManager
      */
     public static function getPriorityList()
     {
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
         $priorities = Database::getManager()
             ->getRepository(TicketPriority::class)
             ->findBy(['accessUrl' => $accessUrl]);
@@ -1987,7 +1987,7 @@ class TicketManager
      */
     public static function getProjects()
     {
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
         $projects = Database::getManager()
             ->getRepository(TicketProject::class)
             ->findBy(['accessUrl' => $accessUrl]);
@@ -2012,7 +2012,7 @@ class TicketManager
      */
     public static function getProjectsSimple()
     {
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
         $projects = Database::getManager()
             ->getRepository(TicketProject::class)
             ->findBy(['accessUrl' => $accessUrl]);
@@ -2054,7 +2054,7 @@ class TicketManager
         $project->setTitle($params['title']);
         $project->setDescription($params['description']);
         $project->setInsertUserId(api_get_user_id());
-        $project->setAccessUrl(Container::getAccessUrlHelper()->getCurrent());
+        $project->setAccessUrl(Container::getAccessUrlUtil()->getCurrent());
 
         Database::getManager()->persist($project);
         Database::getManager()->flush();
@@ -2081,7 +2081,7 @@ class TicketManager
         $project->setDescription($params['description']);
         $project->setLastEditDateTime(new DateTime($params['sys_lastedit_datetime']));
         $project->setLastEditUserId($params['sys_lastedit_user_id']);
-        $project->setAccessUrl(Container::getAccessUrlHelper()->getCurrent());
+        $project->setAccessUrl(Container::getAccessUrlUtil()->getCurrent());
 
         Database::getManager()->persist($project);
         Database::getManager()->flush();
@@ -2119,7 +2119,7 @@ class TicketManager
      */
     public static function getStatusAdminList()
     {
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
         $items = Database::getManager()
             ->getRepository(TicketStatus::class)
             ->findBy(['accessUrl' => $accessUrl]);
@@ -2180,7 +2180,7 @@ class TicketManager
         $item->setCode(URLify::filter($params['title']));
         $item->setTitle($params['title']);
         $item->setDescription($params['description']);
-        $item->setAccessUrl(Container::getAccessUrlHelper()->getCurrent());
+        $item->setAccessUrl(Container::getAccessUrlUtil()->getCurrent());
 
         Database::getManager()->persist($item);
         Database::getManager()->flush();
@@ -2205,7 +2205,7 @@ class TicketManager
         $item = self::getStatus($id);
         $item->setTitle($params['title']);
         $item->setDescription($params['description']);
-        $item->setAccessUrl(Container::getAccessUrlHelper()->getCurrent());
+        $item->setAccessUrl(Container::getAccessUrlUtil()->getCurrent());
 
         Database::getManager()->persist($item);
         Database::getManager()->flush();
@@ -2243,7 +2243,7 @@ class TicketManager
      */
     public static function getPriorityAdminList(): array
     {
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
         $items = Database::getManager()
             ->getRepository(TicketPriority::class)
             ->findBy(['accessUrl' => $accessUrl]);
@@ -2288,7 +2288,7 @@ class TicketManager
             ->setColor('')
             ->setInsertUserId(api_get_user_id())
             ->setUrgency('')
-            ->setAccessUrl(Container::getAccessUrlHelper()->getCurrent());
+            ->setAccessUrl(Container::getAccessUrlUtil()->getCurrent());
 
         Database::getManager()->persist($item);
         Database::getManager()->flush();
@@ -2313,7 +2313,7 @@ class TicketManager
         $item = self::getPriority($id);
         $item->setTitle($params['title']);
         $item->setDescription($params['description']);
-        $item->setAccessUrl(Container::getAccessUrlHelper()->getCurrent());
+        $item->setAccessUrl(Container::getAccessUrlUtil()->getCurrent());
 
         Database::getManager()->persist($item);
         Database::getManager()->flush();

@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Chamilo\CoreBundle\Service\ScheduledAnnouncementService;
+use Chamilo\CoreBundle\Helpers\ScheduledAnnouncementHelper;
 use Database;
 use Doctrine\ORM\EntityManager;
 use Exception;
@@ -27,7 +27,7 @@ class SendScheduledAnnouncementsCommand extends Command
 {
     public function __construct(
         private readonly AccessUrlRepository $accessUrlRepository,
-        private readonly ScheduledAnnouncementService $scheduledAnnouncementService,
+        private readonly ScheduledAnnouncementHelper $scheduledAnnouncementHelper,
         private readonly EntityManager $em
     ) {
         parent::__construct();
@@ -62,7 +62,7 @@ class SendScheduledAnnouncementsCommand extends Command
             $io->writeln('Portal: #'.$urlId.' - '.$url->getUrl());
 
             try {
-                $messagesSent = $this->scheduledAnnouncementService->sendPendingMessages($urlId, $debug);
+                $messagesSent = $this->scheduledAnnouncementHelper->sendPendingMessages($urlId, $debug);
                 $io->writeln("Messages sent: $messagesSent");
 
                 if ($debug) {

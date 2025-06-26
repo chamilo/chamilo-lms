@@ -7,10 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\DataFixtures;
 
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 

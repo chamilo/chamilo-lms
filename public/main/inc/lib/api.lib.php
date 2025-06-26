@@ -9,12 +9,14 @@ use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\MailHelper;
-use Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper;
-use Chamilo\CoreBundle\ServiceHelper\PluginServiceHelper;
-use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\MailHelper;
+use Chamilo\CoreBundle\Helpers\PermissionHelper;
+use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
@@ -26,15 +28,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * This is a code library for Chamilo.
  * It is included by default in every Chamilo file (through including the global.inc.php)
- * This library is in process of being transferred to src/Chamilo/CoreBundle/Component/Utils/ChamiloApi.
- * Whenever a function is transferred to the ChamiloApi class, the places where it is used should include
- * the "use Chamilo\CoreBundle\Component\Utils\ChamiloApi;" statement.
+ * This library is in process of being transferred to src/Chamilo/CoreBundle/Helpers/ChamiloHelper.
+ * Whenever a function is transferred to the ChamiloUtil class, the places where it is used should include
+ * the "use Chamilo\CoreBundle\Utils\ChamiloUtil;" statement.
  */
 
 // PHP version requirement.
@@ -998,7 +998,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
 
-    $pluginHelper = Container::$container->get(PluginServiceHelper::class);
+    $pluginHelper = Container::$container->get(PluginHelper::class);
 
     if ($pluginHelper->isPluginEnabled('Positioning')) {
         $plugin = $pluginHelper->loadLegacyPlugin('Positioning');
@@ -5994,11 +5994,11 @@ function api_get_course_url($courseId = null, $sessionId = null, $groupId = null
  */
 function api_get_multiple_access_url(): bool
 {
-    return Container::getAccessUrlHelper()->isMultiple();
+    return Container::getAccessUrlUtil()->isMultiple();
 }
 
 /**
- * @deprecated Use AccessUrlHelper::isMultiple
+ * @deprecated Use AccessUrlUtil::isMultiple
  */
 function api_is_multiple_url_enabled(): bool
 {
@@ -6366,7 +6366,7 @@ function api_get_roles()
 
 function api_get_user_roles(): array
 {
-    $permissionService = Container::$container->get(PermissionServiceHelper::class);
+    $permissionService = Container::$container->get(PermissionHelper::class);
 
     $roles = $permissionService->getUserRoles();
 
@@ -7556,7 +7556,7 @@ function api_filename_has_blacklisted_stream_wrapper(string $filename) {
  */
 function api_get_permission(string $permissionSlug, array $roles): bool
 {
-    $permissionService = Container::$container->get(PermissionServiceHelper::class);
+    $permissionService = Container::$container->get(PermissionHelper::class);
 
     return $permissionService->hasPermission($permissionSlug, $roles);
 }

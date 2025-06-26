@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
-use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\PortfolioItemEditedEvent;
+use Chamilo\CoreBundle\Framework\Container;
 
 $categories = $em
     ->getRepository(PortfolioCategory::class)

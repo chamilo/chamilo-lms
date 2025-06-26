@@ -8,12 +8,12 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
-use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
-use Chamilo\CoreBundle\ServiceHelper\TicketProjectHelper;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

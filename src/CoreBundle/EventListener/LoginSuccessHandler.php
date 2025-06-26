@@ -9,16 +9,15 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackELoginRecord;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
-use Chamilo\CoreBundle\ServiceHelper\IsAllowedToEditHelper;
-use Chamilo\CoreBundle\ServiceHelper\LoginAttemptLogger;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\LoginAttemptLoggerHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -34,7 +33,7 @@ class LoginSuccessHandler
         private readonly AuthorizationCheckerInterface $checker,
         private readonly SettingsManager $settingsManager,
         private readonly EntityManagerInterface $entityManager,
-        private readonly LoginAttemptLogger $loginAttemptLogger,
+        private readonly LoginAttemptLoggerHelper $loginAttemptLoggerHelper,
         private readonly UserHelper $userHelper,
         private readonly CourseRepository $courseRepo,
         private readonly AccessUrlHelper $accessUrlHelper,
@@ -171,7 +170,7 @@ class LoginSuccessHandler
 
             // Log of connection attempts
             $trackELoginRecordRepository->addTrackLogin($user->getUsername(), $userIp, true);
-            $this->loginAttemptLogger->logAttempt(true, $user->getUsername(), $userIp);
+            $this->loginAttemptLoggerHelper->logAttempt(true, $user->getUsername(), $userIp);
 
             $requestSession->set('login_records_created', true);
         }

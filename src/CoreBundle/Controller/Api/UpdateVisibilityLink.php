@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

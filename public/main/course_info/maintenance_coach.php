@@ -7,7 +7,7 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 

@@ -9,9 +9,9 @@ namespace Chamilo\CoreBundle\DataProvider\Extension;
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
-use Chamilo\CoreBundle\Component\Utils\CreateDefaultPages;
 use Chamilo\CoreBundle\Entity\Page;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\PageHelper;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -52,7 +52,7 @@ final class PageExtension implements QueryCollectionExtensionInterface // , Quer
                 ->andWhere(
                     $queryBuilder->expr()->notIn(
                         'category.title',
-                        CreateDefaultPages::getCategoriesForAdminBlocks()
+                        PageHelper::getCategoriesForAdminBlocks()
                     )
                 )
             ;

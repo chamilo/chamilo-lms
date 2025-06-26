@@ -8,8 +8,8 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 // Resetting the course id.
 $cidReset = true;

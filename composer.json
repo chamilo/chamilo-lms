@@ -236,7 +236,7 @@
             "@auto-scripts"
         ],
         "pre-install-cmd": [
-            "Chamilo\\CoreBundle\\Component\\Utils\\ScriptHandler::deleteOldFilesFrom19x"
+            "Chamilo\\CoreBundle\\Component\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
         ],
         "pre-update-cmd": [
         ],

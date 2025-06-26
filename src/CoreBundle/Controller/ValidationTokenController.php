@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Repository\TicketRelUserRepository;
 use Chamilo\CoreBundle\Repository\TicketRepository;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
-use Chamilo\CoreBundle\ServiceHelper\ValidationTokenHelper;
+use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;

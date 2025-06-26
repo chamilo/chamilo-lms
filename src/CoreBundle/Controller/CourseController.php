@@ -24,11 +24,11 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
-use Chamilo\CoreBundle\Service\CourseService;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CLink;
@@ -732,11 +732,11 @@ class CourseController extends ToolBaseController
     #[Route('/search_templates', name: 'chamilo_core_course_search_templates')]
     public function searchCourseTemplates(
         Request $request,
-        AccessUrlHelper $accessUrlHelper,
+        AccessUrlHelper $accessUrlUtil,
         CourseRepository $courseRepository
     ): JsonResponse {
         $searchTerm = $request->query->get('search', '');
-        $accessUrl = $accessUrlHelper->getCurrent();
+        $accessUrl = $accessUrlUtil->getCurrent();
 
         $user = $this->userHelper->getCurrent();
 
@@ -757,7 +757,7 @@ class CourseController extends ToolBaseController
     public function createCourse(
         Request $request,
         TranslatorInterface $translator,
-        CourseService $courseService
+        CourseHelper $courseHelper
     ): JsonResponse {
         $courseData = json_decode($request->getContent(), true);
 
@@ -781,7 +781,7 @@ class CourseController extends ToolBaseController
         }
 
         try {
-            $course = $courseService->createCourse($params);
+            $course = $courseHelper->createCourse($params);
             if ($course) {
                 return new JsonResponse([
                     'success' => true,

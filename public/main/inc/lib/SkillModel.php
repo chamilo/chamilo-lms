@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Level;
 use Chamilo\CoreBundle\Entity\Skill;
@@ -14,6 +13,7 @@ use Chamilo\CoreBundle\Entity\SkillRelSkill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -24,7 +24,6 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 class SkillModel extends Model
 {

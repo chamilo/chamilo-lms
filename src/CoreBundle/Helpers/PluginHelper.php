@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
 use Event;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-readonly class PluginServiceHelper
+readonly class PluginHelper
 {
     public function __construct(
         private ParameterBagInterface $parameterBag,

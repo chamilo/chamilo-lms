@@ -51,8 +51,6 @@ services:
       tags:
         - { name: vich_uploader.namer, mapping: assets }
 
-    Chamilo\CoreBundle\Helpers\PageHelper: ~
-    Chamilo\CoreBundle\Helpers\NameConventionUtil: ~
     Chamilo\CoreBundle\Helpers\GlideHelper:
         arguments:
             - {source: '@oneup_flysystem.resource_filesystem', cache: '@oneup_flysystem.resource_cache_filesystem'}
@@ -148,14 +146,3 @@ services:
       arguments:
         $registry: '@doctrine'
         $em: '@doctrine.orm.entity_manager'
-
-    Chamilo\CoreBundle\Helpers\PluginServiceHelper:
-      arguments:
-        $parameterBag: '@parameter_bag'
-        $pluginRepo: '@Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository'
-        $accessUrlHelper: '@Chamilo\CoreBundle\Helpers\AccessUrlHelper'
-
-    Chamilo\CoreBundle\ServiceHelper\CidReqHelper:
-      arguments:
-        - '@request_stack'
-        - '@doctrine.orm.entity_manager'

@@ -15,7 +15,7 @@ use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Helpers\PermissionHelper;
-use Chamilo\CoreBundle\Helpers\PluginServiceHelper;
+use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -998,7 +998,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
 
-    $pluginHelper = Container::$container->get(PluginServiceHelper::class);
+    $pluginHelper = Container::$container->get(PluginHelper::class);
 
     if ($pluginHelper->isPluginEnabled('Positioning')) {
         $plugin = $pluginHelper->loadLegacyPlugin('Positioning');

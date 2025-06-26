@@ -17,7 +17,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\AbstractPlugin;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\CourseFromRequestTrait;
-use Chamilo\CoreBundle\Helpers\PluginServiceHelper;
+use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
@@ -40,7 +40,7 @@ final class CToolStateProvider implements ProviderInterface
         private readonly Security $security,
         private readonly ToolChain $toolChain,
         protected RequestStack $requestStack,
-        private readonly PluginServiceHelper $pluginServiceHelper,
+        private readonly PluginHelper $pluginHelper,
     ) {
         $this->transformer = new CourseToolDataTranformer(
             $this->requestStack,
@@ -134,11 +134,11 @@ final class CToolStateProvider implements ProviderInterface
             return [false, null];
         }
 
-        if (!$this->pluginServiceHelper->isPluginEnabled('positioning')) {
+        if (!$this->pluginHelper->isPluginEnabled('positioning')) {
             return [false, null];
         }
 
-        $pluginInstance = $this->pluginServiceHelper->loadLegacyPlugin('Positioning');
+        $pluginInstance = $this->pluginHelper->loadLegacyPlugin('Positioning');
 
         if (!$pluginInstance || 'true' !== $pluginInstance->get('block_course_if_initial_exercise_not_attempted')) {
             return [false, null];

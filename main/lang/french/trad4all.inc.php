@@ -9037,4 +9037,8 @@ $SeeAlphabeticalOrder = "Voir par ordre alphabétique";
 $HideComment = "Cacher les commentaires";
 $AreYouSureYouWantToDeleteThisTicket = "Êtes vous sûr de vouloir supprimer ce ticket ?";
 $TicketDeleted = "Ticket supprimé";
+$SubmittedDocument = "Document soumis";
+$AnswerInOfficeDoc = "Réponse comme document bureautique";
+$UploadOfficeDoc = "Envoyer un document bureautique";
+$AllowedFormats = "Formats supportés";
 ?>

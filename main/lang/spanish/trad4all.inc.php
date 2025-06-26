@@ -9127,4 +9127,8 @@ $SeeAlphabeticalOrder = "Ver en orden alfabético";
 $HideComment = "Ocultar comentarios";
 $AreYouSureYouWantToDeleteThisTicket = "¿Estás seguro de que quieres eliminar este ticket?";
 $TicketDeleted = "Ticket eliminado";
+$SubmittedDocument = "Documento entregado";
+$AnswerInOfficeDoc = "Respuesta como documento de ofimática";
+$UploadOfficeDoc = "Subir documento ofimático";
+$AllowedFormats = "Formatos soportados";
 ?>

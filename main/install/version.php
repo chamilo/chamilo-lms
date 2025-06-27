@@ -13,7 +13,7 @@
 /**
  * Variables used from the main/install/index.php.
  */
-$new_version = '1.11.30';
+$new_version = '1.11.32';
 $new_version_status = 'stable';
 $new_version_last_id = 0;
 $new_version_stable = true;

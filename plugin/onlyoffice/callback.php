@@ -1,6 +1,6 @@
 <?php
 /**
- * (c) Copyright Ascensio System SIA 2024.
+ * (c) Copyright Ascensio System SIA 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ if (isset($_GET['hash']) && !empty($_GET['hash'])) {
     $jwtManager = new OnlyofficeJwtManager($appSettings);
     list($hashData, $error) = $jwtManager->readHash($_GET['hash'], api_get_security_key());
     if (null === $hashData) {
-        error_log("ONLYOFFICE CALLBACK: ERROR - Hash inválido: ".$error);
+        error_log("ONLYOFFICE CALLBACK: ERROR - Invalid hash: ".$error);
         exit(json_encode(['status' => 'error', 'error' => $error]));
     }
 
@@ -42,6 +42,9 @@ if (isset($_GET['hash']) && !empty($_GET['hash'])) {
     $groupId = $hashData->groupId;
     $sessionId = $hashData->sessionId;
     $docPath = isset($_GET['docPath']) ? urldecode($_GET['docPath']) : ($hashData->docPath ?? null);
+    // Load courseCode for various uses from global scope in other functions
+    $courseInfo = api_get_course_info_by_id($courseId);
+    $courseCode = $courseInfo['code'];
 
     if (!empty($userId)) {
         $userInfo = api_get_user_info($userId);
@@ -196,7 +199,6 @@ function download()
     global $docId;
     global $groupId;
     global $docPath;
-    global $courseCode;
     global $sessionId;
     global $courseInfo;
     global $appSettings;

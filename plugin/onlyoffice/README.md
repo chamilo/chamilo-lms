@@ -1,8 +1,8 @@
-﻿# Chamilo ONLYOFFICE integration plugin
+﻿# ONLYOFFICE plugin for Chamilo
 
-This plugin allows users to edit office documents from [Chamilo](https://chamilo.org) using ONLYOFFICE Docs packaged as Document Server - [Community or Enterprise Edition](#onlyoffice-docs-editions).
+This plugin enables users to edit office documents from [Chamilo](https://chamilo.org) using ONLYOFFICE Docs packaged as Document Server - [Community or Enterprise Edition](#onlyoffice-docs-editions).
 
-The plugin is compatible with Chamilo v1.11.16 and later, although some features might only work on the [latest stable version](https://chamilo.org/download) of Chamilo. 
+The plugin is compatible with Chamilo v1.11.16 or newer. 
 
 ## Features
 
@@ -54,7 +54,12 @@ the third party, here is the recommended procedure:
     git submodule update --init --recursive
     ```
 
-3. Clean up
+3. Get plugin dependencies:
+    ```
+    composer install
+    ```
+
+4. Collect all files
     ```
     mkdir /tmp/onlyoffice-deploy
     mkdir /tmp/onlyoffice-deploy/onlyoffice
@@ -64,13 +69,13 @@ the third party, here is the recommended procedure:
     rm -rf */.git*
     ```
 
-4. Archive
+5. Archive
     ```
     cd ../
     zip onlyoffice.zip -r onlyoffice
     ```
 
-## Installing Chamilo ONLYOFFICE integration plugin
+## Installing ONLYOFFICE plugin for Chamilo
 
 The plugin has been integrated into Chamilo since version 1.11.16.
 
@@ -90,12 +95,12 @@ Then launch `composer install` from the Chamilo root folder.
 
 Return to the plugin list, select the ONLYOFFICE plugin, and click "Enable".
 
-## Configuring Chamilo ONLYOFFICE integration plugin
+## Configuring ONLYOFFICE plugin for Chamilo
 
 On the Plugins page, find ONLYOFFICE and click _Configure_. You'll see the _Settings_ page. Enable the plugin and specify the _Document Server address_. 
 
-Starting from version 7.2, JWT is enabled by default and the secret key is generated automatically to restrict the access to ONLYOFFICE Docs and for security reasons and data integrity. 
-Specify your own **Secret key** on the Chamilo **Settings** page. The key can be found on your OnlyOffice server, depending on the type of server. See the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/editors/signature/) page for more details.
+Starting from version 7.2, JWT is enabled by default and the secret key is generated automatically to restrict the access to ONLYOFFICE Docs and for security reasons and data integrity.
+Specify your own **Secret key** on the Chamilo **Settings** page. The key can be found on your OnlyOffice server, depending on the type of server. See the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/docs/docs-api/additional-api/signature/) page for more details.
 Specify the same secret key (search for a long hash string next to "secret") and save.
 
 The plugin will tell you if anything is wrong.
@@ -128,7 +133,7 @@ The plugin will tell you if anything is wrong.
 * Learners have access to a new ONLYOFFICE icon next to all documents supported by ONLYOFFICE in the documents tool.
 * In the learning paths, the viewer seamlessly integrates with Chamilo to open the supported documents.
 
-More information on integration ONLYOFFICE Docs can be found in the [API documentation](https://api.onlyoffice.com/editors/basic). 
+More information on integration ONLYOFFICE Docs can be found in the [API documentation](https://api.onlyoffice.com/docs/docs-api/get-started/basic-concepts/).
 
 ## ONLYOFFICE Docs editions
 

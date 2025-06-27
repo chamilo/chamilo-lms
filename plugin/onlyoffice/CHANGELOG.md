@@ -2,6 +2,10 @@
 
 This plugin is developed and maintained at https://github.com/ONLYOFFICE/onlyoffice-chamilo.
 
+##
+## Added
+- Catalan, Czech, Danish, Hungarian, Indonesian, Romanian, Albanian, Urdu empty file templates
+
 ## 1.5.0
 ## Added
 - support learning path

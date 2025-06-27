@@ -1042,6 +1042,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'By default, Chamilo portals are automatically registered in a public list at chamilo.org, just using the title you gave to this portal (not the URL nor any private data). Check this box to avoid having the title of your portal appear.',
                 ],
                 [
+                    'name' => 'session_admin_user_subscription_search_extra_field_to_search',
+                    'title' => 'Extra user field used to search and name sessions',
+                    'comment' => 'This setting defines the extra user field key (e.g., "company") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register.',
+                ],
+                [
                     'name' => 'timezone',
                     'title' => 'Default timezone',
                     'comment' => 'Select the default timezone for this portal. This will help set the timezone (if the feature is enabled) for each new user or for any user that has not set a specific timezone yet. Timezones help show all time-related information on screen in the specific timezone of each user.',

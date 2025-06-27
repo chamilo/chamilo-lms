@@ -76,11 +76,12 @@ const loading = ref(false)
 async function loadMore() {
   loading.value = true
   const response = await courseService.getCompletedCourses(offset.value, limit.value)
+  const items = response?.items || []
 
-  if (response?.items?.length) {
-    certificates.value.push(...response.items)
+  if (items.length > 0) {
+    certificates.value.push(...items)
     offset.value += limit.value
-    hasMore.value = response.count === limit.value
+    hasMore.value = items.length >= limit.value
   } else {
     hasMore.value = false
   }

@@ -64,7 +64,7 @@ export function useLogin() {
 
           const getProfile = () => {
             if (roles.includes("ROLE_ADMIN")) return "ADMIN"
-            if (roles.includes("ROLE_SESSION_ADMIN")) return "SESSIONADMIN"
+            if (roles.includes("ROLE_SESSION_MANAGER")) return "SESSIONADMIN"
             if (roles.includes("ROLE_TEACHER")) return "COURSEMANAGER"
             if (roles.includes("ROLE_STUDENT_BOSS")) return "STUDENT_BOSS"
             if (roles.includes("ROLE_DRH")) return "DRH"

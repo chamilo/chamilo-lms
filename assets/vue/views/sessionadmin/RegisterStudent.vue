@@ -36,8 +36,9 @@
           class="w-full"
         />
         <InputText
-          v-model="form.tempId"
-          :placeholder="t('Temporary ID')"
+          v-if="extraFieldKey"
+          v-model="dynamicExtraField.value"
+          :placeholder="extraFieldKey"
           class="w-full"
         />
       </div>
@@ -157,12 +158,18 @@ import userService from "../../services/userService"
 import courseService from "../../services/courseService"
 import sessionService from "../../services/sessionService"
 import { useNotification } from "../../composables/notification"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 const { showErrorNotification, showSuccessNotification } = useNotification()
 const route = useRoute()
 const courseId = parseInt(route.params.courseId, 10)
 const PLACEHOLDER = "/img/session_default.svg"
+const dynamicExtraField = ref("")
+const platformConfigStore = usePlatformConfig()
+const extraFieldKey = platformConfigStore.getSetting(
+  "platform.session_admin_user_subscription_search_extra_field_to_search",
+)
 
 const course = ref({
   title: "Loading...",
@@ -184,7 +191,7 @@ const createLoading = ref(false)
 loadCourse()
 async function loadCourse() {
   try {
-    course.value = await courseService.findById(courseId)
+    course.value = await courseService.findCourseForSessionAdmin(courseId)
   } catch (e) {
     console.error("[RegisterStudent] course load failed:", e)
   }
@@ -204,7 +211,7 @@ async function searchStudent() {
   const filters = {
     lastname: form.value.lastname,
     firstname: form.value.firstname,
-    extraFilters: form.value.tempId ? { temp_id: form.value.tempId } : undefined,
+    extraFilters: extraFieldKey && dynamicExtraField.value ? { [extraFieldKey]: dynamicExtraField.value } : undefined,
     pagination: false,
   }
 
@@ -228,7 +235,7 @@ async function sendCourseTo(user) {
   oneWeekLater.setDate(today.getDate() + 7)
 
   const payload = {
-    title: `${user.lastname} ${user.firstname} (${form.value.tempId}) ${course.value.title}`,
+    title: `${user.lastname} ${user.firstname} (${user.extra?.[extraFieldKey] || dynamicExtraField.value}) ${course.value.title}`,
     accessStartDate: today.toISOString(),
     accessEndDate: oneWeekLater.toISOString(),
     displayStartDate: today.toISOString(),

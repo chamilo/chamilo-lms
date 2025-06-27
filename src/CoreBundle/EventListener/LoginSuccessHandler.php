@@ -17,8 +17,6 @@ use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Component\Routing\RouterInterface;
-use Chamilo\CoreBundle\Settings\PlatformSettingsManager;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
@@ -28,9 +26,7 @@ class LoginSuccessHandler
         private readonly AuthorizationCheckerInterface $checker,
         private readonly EntityManagerInterface $entityManager,
         private readonly LoginAttemptLogger $loginAttemptLogger,
-        private readonly UserHelper $userHelper,
-        private readonly RouterInterface $router,
-        private readonly PlatformSettingsManager $settingsManager,
+        private readonly UserHelper $userHelper
     ) {}
 
     /**
@@ -78,47 +74,5 @@ class LoginSuccessHandler
 
             $requestSession->set('login_records_created', true);
         }
-    }
-
-    private function getRedirectAfterLoginUrl(): ?string
-    {
-        $json = $this->settingsManager->getSetting('registration.redirect_after_login', true);
-        if (empty($json)) {
-            return null;
-        }
-
-        $map = json_decode($json, true);
-        if (!is_array($map)) {
-            return null;
-        }
-
-        $profile = null;
-        if ($this->checker->isGranted('ROLE_ADMIN')) {
-            $profile = 'ADMIN';
-        } elseif ($this->checker->isGranted('ROLE_SESSION_ADMIN')) {
-            $profile = 'SESSIONADMIN';
-        } elseif ($this->checker->isGranted('ROLE_TEACHER')) {
-            $profile = 'COURSEMANAGER';
-        } elseif ($this->checker->isGranted('ROLE_STUDENT_BOSS')) {
-            $profile = 'STUDENT_BOSS';
-        } elseif ($this->checker->isGranted('ROLE_DRH')) {
-            $profile = 'DRH';
-        } elseif ($this->checker->isGranted('ROLE_INVITEE')) {
-            $profile = 'INVITEE';
-        } elseif ($this->checker->isGranted('ROLE_STUDENT')) {
-            $profile = 'STUDENT';
-        }
-
-        if ($profile !== null && isset($map[$profile]) && !empty($map[$profile])) {
-            $target = trim($map[$profile]);
-
-            return match ($target) {
-                'user_portal.php', 'index.php' => $this->router->generate('index'),
-                'main/auth/courses.php' => '/courses',
-                default => rtrim(api_get_path(WEB_PATH), '/') . '/' . ltrim($target, '/'),
-            };
-        }
-
-        return null;
     }
 }

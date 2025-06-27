@@ -45,17 +45,27 @@ async function loadFavorites() {
   loading.value = true
 
   const userId = securityStore.user.id
-  const favoritesRaw = await courseService.listFavoriteCourses(userId)
-  const courseIds = favoritesRaw
-    .map((iri) => parseInt(iri.split("/").pop()))
-    .filter((id) => !isNaN(id))
-  const coursePromises = courseIds.map((id) => courseService.findById(id))
-  const courseData = await Promise.all(coursePromises)
+  const isSessionAdmin = securityStore.isSessionAdmin
 
-  favorites.value = courseData.map((course) => ({
-    ...course,
-    userVote: 1,
-  }))
+  const favoritesRaw = await courseService.listFavoriteCourses(userId)
+  const courseIds = favoritesRaw.map((iri) => parseInt(iri.split("/").pop())).filter((id) => !isNaN(id))
+
+  const results = await Promise.allSettled(
+    courseIds.map((id) => (isSessionAdmin ? courseService.findCourseForSessionAdmin(id) : courseService.findById(id))),
+  )
+
+  favorites.value = results
+    .filter((r) => r.status === "fulfilled" && r.value !== null)
+    .map((r) => ({
+      ...r.value,
+      userVote: 1,
+    }))
+
+  results
+    .filter((r) => r.status === "rejected")
+    .forEach((r, idx) => {
+      console.error(`Error loading favorite course ID ${courseIds[idx]}:`, r.reason)
+    })
 
   loading.value = false
 }

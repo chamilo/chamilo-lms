@@ -228,4 +228,22 @@ class SessionAdminController extends BaseController
 
         return $this->json(['success' => true, 'message' => 'Session extended by one week.', 'newEndDate' => $newEndDate->format('Y-m-d')]);
     }
+
+    #[Route('/courses/{id}', name: 'chamilo_core_admin_sessionadmin_course_view', methods: ['GET'])]
+    public function getCourseForSessionAdmin(int $id): JsonResponse
+    {
+        $course = $this->courseRepository->find($id);
+
+        if (!$course) {
+            return $this->json(['error' => 'Course not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->json([
+            'id' => $course->getId(),
+            'title' => $course->getTitle(),
+            'code' => $course->getCode(),
+            'description' => $course->getDescription(),
+            'illustrationUrl' => method_exists($course, 'getIllustrationUrl') ? $course->getIllustrationUrl() : null,
+        ]);
+    }
 }

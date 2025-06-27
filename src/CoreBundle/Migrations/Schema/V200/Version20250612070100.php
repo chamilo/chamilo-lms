@@ -18,6 +18,7 @@ final class Version20250612070100 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        // Remove deprecated per-role login redirection settings
         $this->connection->executeStatement("
             DELETE FROM settings
             WHERE variable IN (
@@ -29,34 +30,19 @@ final class Version20250612070100 extends AbstractMigrationChamilo
             )
         ");
 
-        $jsonValue = json_encode([
-            'COURSEMANAGER' => '',
-            'STUDENT' => '',
-            'DRH' => '',
-            'SESSIONADMIN' => 'admin-dashboard',
-            'STUDENT_BOSS' => '',
-            'INVITEE' => '',
-            'ADMIN' => 'admin-dashboard',
-        ]);
-
+        // Create the new setting only if it does not exist, with no default value
         $existing = $this->connection->fetchOne("
             SELECT COUNT(*)
             FROM settings
             WHERE variable = 'redirect_after_login'
         ");
 
-        if ($existing > 0) {
-            $this->connection->executeStatement("
-                UPDATE settings
-                SET selected_value = :value
-                WHERE variable = 'redirect_after_login'
-            ", ['value' => $jsonValue]);
-        } else {
+        if ($existing == 0) {
             $this->connection->insert('settings', [
                 'variable' => 'redirect_after_login',
                 'type' => 'textfield',
                 'category' => 'registration',
-                'selected_value' => $jsonValue,
+                'selected_value' => '',
                 'title' => 'Redirect after login (per profile)',
                 'comment' => 'Define redirection per profile after login using a JSON object',
                 'scope' => null,

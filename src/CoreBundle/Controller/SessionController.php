@@ -290,6 +290,11 @@ class SessionController extends AbstractController
             return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
 
+        $email = $user->getEmail();
+        if (empty($email)) {
+            return $this->json(['error' => 'User has no email address.'], Response::HTTP_BAD_REQUEST);
+        }
+
         if (!$user->isActive()) {
             $user->setActive(1);
             $em->persist($user);

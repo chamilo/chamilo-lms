@@ -105,7 +105,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/advanced/create-session-with-courses-and-users',
             controller: CreateSessionWithUsersAndCoursesAction::class,
             denormalizationContext: ['groups' => ['write']],
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')",
             input: CreateSessionWithUsersAndCoursesInput::class,
             output: Session::class,
             deserialize: true,

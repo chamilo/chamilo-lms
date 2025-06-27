@@ -110,13 +110,62 @@
 
     </table>
 
+    <div class="version" aria-label="1.11.32">
+        <a id="1.11.32"></a>
+        <h1>Chamilo 1.11.32 - Tikal, 27/06/2025</h1>
+        <h3>Release notes - summary</h3>
+        <p>Chamilo 1.11.32 is a micro corrective release on top of 1.11.30. For any significant change, please check the 1.11.30 release notes.</p>
+        <h3>Release name</h3>
+        <p><a href="https://en.wikipedia.org/wiki/Huaral">Huaral</a> a city in Peru, capital of the Huaral Province in the Department of Lima, on the path to the ancient city of Caral. 1.11.32 being a minor corrective release on top of 1.11.30 (called "Caral"), relating to a small city geographically close to Caral is a subtle wink to the Chamilo community there.</p>
+        <h3>Security fixes</h3>
+        <ul aria-live="off">
+            <li>No new vulnerability detected in this version</li>
+        </ul>
+        <h3>Important note</h3>
+        <p>Chamilo 1.11.30 comes with subtle changes in the root .htaccess file which could affect your system (for example by triggering "Not Found" errors on course homepages) if you use Apache &lt; 2.4.38-3. Please check line 37 of /.htaccess for more info.</p>
+        <h3>Notable new Features</h3>
+        <h4>For end-users, teachers and Chamilo admins</h4>
+        These features are immediately available to users through the web interface.<br />
+        <ul aria-live="off">
+            <li>No notable change</li>
+        </ul>
+        <h4>For developers and sysadmins</h4>
+        Although most features here will be used by teachers or Chamilo admins, they require sysadmin privileges to enable them on the server.
+        <ul aria-live="off">
+            <li>No notable change</li>
+        </ul>
+        <h3>Improvements (minor features) and debug</h3>
+        In reverse chronological order...
+        <ul aria-live="off">
+            <li>[2025-06-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/a039923b7065fb00d2b5b1cfd56e7d4fb2703dbd">a039923b</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6400">GH#6400</a>) Internal: Remove potential double conversion of quotes in api_htmlentites() (change introduced in 1.11.30 to increase support for PHP 8.3) - loosely refs</li>
+            <li>[2025-06-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/ef7c8b5eb65eb6ffeaa4422fbfbb690e920b28e9">ef7c8b5e</a>) Plugin: OnlyOffice: Bump version to 1.5.0 and merge with exercise-specific code + fix issues saving document details</li>
+        </ul>
+        <h3>Stylesheets and theming</h3>
+        <ul aria-live="off">
+            <li>No notable style change</li>
+        </ul>
+        <h3>Web services</h3>
+        <ul aria-live="off">
+            <li>[2025-06-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/ccaf0f6629e77b6ab5dc3e2ca068ec6e5dd0e7ab">ccaf0f66</a> - <a href="https://task.beeznest.com/issues/22611">BT#22611</a>) Webservice: Allow receiving body content in JSON format -</li>
+        </ul>
+        <h3>Removals</h3>
+        <ul aria-live="off">
+            <li>No notable removal</li>
+        </ul>
+        <h3>Known issues</h3>
+        <ul aria-live="off">
+            <li>No notable known issue</li>
+        </ul>
+    </div>
+
+
     <div class="version" aria-label="1.11.30">
         <a id="1.11.30"></a>
         <h1>Chamilo 1.11.30 - Caral, 25/06/2025</h1>
         <h3>Release notes - summary</h3>
         <p>Chamilo 1.11.30 is a patch release on top of 1.11.28.</p>
         <h3>Release name</h3>
-        <p><a href="https://en.wikipedia.org/wiki/Caral">Caral</a> is is an archaeological site in Peru where the remains of the main city of the Caral civilization are found. It is attributed an antiquity of 5,000 years and it is considered the oldest city in the Americas and one of the oldest in the world. We found this reference ironically related to Chamilo 1.11.30 as we are closing towards a 2.0 release.</p>
+        <p><a href="https://en.wikipedia.org/wiki/Caral">Caral</a> is an archaeological site in Peru where the remains of the main city of the Caral civilization are found. It is attributed an antiquity of 5,000 years and it is considered the oldest city in the Americas and one of the oldest in the world. We found this reference ironically related to Chamilo 1.11.30 as we are closing towards a 2.0 release.</p>
         <h3>Security fixes</h3>
         <ul aria-live="off">
             <li>[2024-09-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/387808b5e23963cea126414cf068b05e4c31ede8">387808b5</a>) Security: Social: Add sec_token when commenting posts Fix GHSA-33gm-vrgh-m239</li>
@@ -159,6 +208,7 @@
             <li>[2025-06-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/ead79db4eb034b8c11a3d6036759d083de37530c">ead79db4</a>) Security: Fix XSS in session category See advisory GHSA-p4m6-gwhg-x89f</li>
             <li>[2025-06-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/d672d11871628a68f9948b40d0a5ed1a87013bfa">d672d118</a>) Security: Set token validation to set a student as tutor</li>
             <li>[2025-06-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/1aaa53da9bc358c5493c5e6de71be825fd8de4f8">1aaa53da</a>) Security: Exercise: Remove XSS when displaying fill in blanks results</li>
+        </ul>
         <h3>Important note</h3>
         <p>Chamilo 1.11.30 comes with subtle changes in the root .htaccess file which could affect your system (for example by triggering "Not Found" errors on course homepages) if you use Apache &lt; 2.4.38-3. Please check line 37 of /.htaccess for more info.</p>
         <h3>Notable new Features</h3>

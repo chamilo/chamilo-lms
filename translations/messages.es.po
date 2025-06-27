@@ -29384,3 +29384,9 @@ msgstr "Revocar la aceptación"
 
 msgid "Confirmation"
 msgstr "Confirmación"
+
+msgid "Days"
+msgstr "Días"
+
+msgid "Notification to remind the event"
+msgstr "Notificación para recordar el evento"

@@ -29580,3 +29580,9 @@ msgstr "Zustimmung widerrufen"
 
 msgid "Confirmation"
 msgstr "Bestätigung"
+
+msgid "Days"
+msgstr "Tage"
+
+msgid "Notification to remind the event"
+msgstr "Benachrichtigung zur Erinnerung an das Ereignis"

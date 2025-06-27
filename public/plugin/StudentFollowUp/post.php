@@ -2,11 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\PluginBundle\StudentFollowUp\Entity\CarePost;
 use Doctrine\Common\Collections\Criteria;
 use Gaufrette\Adapter\Ftp as FtpAdapter;
 use Gaufrette\Filesystem;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 

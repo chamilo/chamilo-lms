@@ -368,21 +368,27 @@ function confirmDelete() {
     acceptLabel: t("Yes"),
     rejectLabel: t("Cancel"),
     accept() {
-      if (item.value["parentResourceNodeId"] === securityStore.user["id"]) {
+      const isOwner = item.value["parentResourceNodeId"] === securityStore.user["id"]
+      const isAdmin = securityStore.isCourseAdmin || securityStore.isSessionAdmin
+      if (isOwner || isAdmin) {
         store.dispatch("ccalendarevent/del", item.value).then(() => {
           dialogShow.value = false
           dialog.value = false
           reFetch()
         })
       } else {
-        let filteredLinks = item.value["resourceLinkListFromEntity"].filter(
-          (resourceLinkFromEntity) => resourceLinkFromEntity["user"]["id"] === securityStore.user["id"],
+        const resourceLinks = Array.isArray(item.value["resourceLinkListFromEntity"])
+          ? item.value["resourceLinkListFromEntity"]
+          : []
+
+        const userLink = resourceLinks.find(
+          (link) => link?.user?.id === securityStore.user["id"]
         )
 
-        if (filteredLinks.length > 0) {
+        if (userLink) {
           store
             .dispatch("resourcelink/del", {
-              "@id": `/api/resource_links/${filteredLinks[0]["id"]}`,
+              "@id": `/api/resource_links/${userLink["id"]}`,
             })
             .then(() => {
               currentEvent.remove()

@@ -9,11 +9,11 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackELoginRecord;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
+use Chamilo\CoreBundle\Helpers\LoginAttemptLoggerHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
-use Chamilo\CoreBundle\ServiceHelper\LoginAttemptLogger;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -25,7 +25,7 @@ class LoginSuccessHandler
     public function __construct(
         private readonly AuthorizationCheckerInterface $checker,
         private readonly EntityManagerInterface $entityManager,
-        private readonly LoginAttemptLogger $loginAttemptLogger,
+        private readonly LoginAttemptLoggerHelper $loginAttemptLogger,
         private readonly UserHelper $userHelper
     ) {}
 

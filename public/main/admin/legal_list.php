@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Legal;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Repository\LegalRepository;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Sessions list script.

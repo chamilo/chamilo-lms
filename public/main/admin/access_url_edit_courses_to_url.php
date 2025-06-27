@@ -5,7 +5,7 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 // resetting the course id
 $cidReset = true;

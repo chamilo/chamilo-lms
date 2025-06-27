@@ -2,10 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 // resetting the course id
-use Chamilo\CoreBundle\Entity\Usergroup;
 
 $cidReset = true;
 

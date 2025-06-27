@@ -19,7 +19,7 @@ class NotAllowedException extends HttpException
         int $statusCode = 403,
         array $headers = [],
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         $this->severity = $severity;
         parent::__construct($statusCode, $message, $previous, $headers, $code);

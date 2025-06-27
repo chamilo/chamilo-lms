@@ -5,8 +5,9 @@
 /**
  * List sessions in an efficient and usable way.
  */
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 $cidReset = true;
 

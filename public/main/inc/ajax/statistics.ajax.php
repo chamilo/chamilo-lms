@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 
 /**
  * Responses to AJAX calls.
@@ -198,7 +198,7 @@ switch ($action) {
         // Give a JSON array to the stats page main/admin/statistics/index.php
         // for global tools usage (number of clicks)
         $list = [];
-        $palette = ChamiloApi::getColorPalette(true, true);
+        $palette = ChamiloHelper::getColorPalette(true, true);
         if ('tools_usage' == $action) {
             $statsName = 'Tools';
             $all = Statistics::getToolsStats();
@@ -284,7 +284,7 @@ switch ($action) {
         break;
     case 'users_active':
         $list = [];
-        $palette = ChamiloApi::getColorPalette(true, true);
+        $palette = ChamiloHelper::getColorPalette(true, true);
 
         $statsName = 'Number of users';
         $filter = $_REQUEST['filter'];
@@ -615,7 +615,7 @@ switch ($action) {
 
     case 'session_by_date':
         $list = [];
-        $palette = ChamiloApi::getColorPalette(true, true);
+        $palette = ChamiloHelper::getColorPalette(true, true);
 
         $statsName = 'Number of users';
         $filter = $_REQUEST['filter'];

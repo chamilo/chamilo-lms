@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataFixtures;
 
-use Chamilo\CoreBundle\Component\Utils\CreateDefaultPages;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\PageHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class PageFixtures extends Fixture
 {
     public function __construct(
-        private readonly CreateDefaultPages $createDefaultPages,
+        private readonly PageHelper $createDefaultPages,
         private readonly TranslatorInterface $translator,
     ) {}
 

@@ -15,19 +15,18 @@ use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
-use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use CourseDescription;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Essence\Essence;
 use ExtraFieldValue;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use SessionManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,10 +46,6 @@ class SessionController extends AbstractController
         private readonly RequestStack $requestStack
     ) {}
 
-
-    /**
-     * @Entity("session", expr="repository.find(sid)")
-     */
     #[Route(path: '/{sid}/about', name: 'chamilo_core_session_about')]
     public function about(
         Request $request,

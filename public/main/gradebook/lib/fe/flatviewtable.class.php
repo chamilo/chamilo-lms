@@ -3,10 +3,10 @@
 
 set_time_limit(0);
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Class FlatViewTable

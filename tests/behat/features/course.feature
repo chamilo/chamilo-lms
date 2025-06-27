@@ -11,7 +11,7 @@ Feature: Course tools basic testing
   Scenario: See the courses list
     Given I am on "/main/admin/course_list.php"
     Then I should see "Course list"
-    And I should not see "not authorized"
+    And I should not see "not allowed"
 
   Scenario: See the course creation link on the admin page
     Given I am on "/main/admin/index.php"
@@ -19,7 +19,7 @@ Feature: Course tools basic testing
 
   Scenario: Access the course creation page
     Given I am on "/main/admin/course_add.php"
-    Then I should not see "not authorized"
+    Then I should not see "not allowed"
 
   Scenario: Create a private course before testing
     Given I am on "/main/admin/course_add.php"

@@ -42,10 +42,10 @@ class CreateUserOnAccessUrlInput
     private int $accessUrlId;
 
     #[Groups(['write'])]
-    private ?string $locale;
+    private ?string $locale = null;
 
     #[Groups(['write'])]
-    private ?string $timezone;
+    private ?string $timezone = null;
 
     #[Groups(['write'])]
     private ?int $status = null;

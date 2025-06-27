@@ -6,13 +6,17 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Legal;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use OTPHP\TOTP;
@@ -21,6 +25,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -36,18 +41,19 @@ class SecurityController extends AbstractController
         private TokenStorageInterface $tokenStorage,
         private AuthorizationCheckerInterface $authorizationChecker,
         private readonly UserHelper $userHelper,
+        private readonly RouterInterface $router,
+        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     #[Route('/login_json', name: 'login_json', methods: ['POST'])]
-    public function loginJson(Request $request, EntityManager $entityManager, SettingsManager $settingsManager, TokenStorageInterface $tokenStorage, TranslatorInterface $translator): Response
-    {
+    public function loginJson(
+        Request $request,
+        TokenStorageInterface $tokenStorage,
+        TranslatorInterface $translator,
+    ): Response {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->json(
-                [
-                    'error' => 'Invalid login request: check that the Content-Type header is "application/json".',
-                ],
-                400
-            );
+            throw $this->createAccessDeniedException($translator->trans('Invalid login request: check that the Content-Type header is "application/json".'));
         }
 
         $user = $this->userHelper->getCurrent();
@@ -62,7 +68,7 @@ class SecurityController extends AbstractController
             $tokenStorage->setToken(null);
             $request->getSession()->invalidate();
 
-            return $this->json(['error' => $message], 401);
+            return $this->createAccessDeniedException($message);
         }
 
         if ($user->getMfaEnabled()) {
@@ -88,7 +94,7 @@ class SecurityController extends AbstractController
             $tokenStorage->setToken(null);
             $request->getSession()->invalidate();
 
-            return $this->json(['error' => $message], 401);
+            return $this->createAccessDeniedException($message);
         }
 
         $extraFieldValuesRepository = $this->entityManager->getRepository(ExtraFieldValues::class);
@@ -119,12 +125,22 @@ class SecurityController extends AbstractController
 
                 $responseData = [
                     'redirect' => '/main/auth/inscription.php',
-                    'load_terms' => true,
                 ];
 
-                return new JsonResponse($responseData, Response::HTTP_OK);
+                return $this->json($responseData);
             }
             $request->getSession()->remove('term_and_condition');
+        }
+
+        $redirectUrl = $this->calculateRedirectUrl(
+            $user,
+            $this->entityManager->getRepository(Course::class),
+        );
+
+        if (null !== $redirectUrl) {
+            return $this->json([
+                'redirect' => $redirectUrl,
+            ]);
         }
 
         $data = null;
@@ -177,5 +193,73 @@ class SecurityController extends AbstractController
 
             return '';
         }
+    }
+
+    private function calculateRedirectUrl(
+        User $user,
+        CourseRepository $courseRepo,
+    ): ?string {
+        /* Possible values: index.php, user_portal.php, main/auth/courses.php */
+        $pageAfterLogin = $this->settingsManager->getSetting('registration.page_after_login');
+
+        $url = null;
+
+        if ($user->isStudent() && !empty($pageAfterLogin)) {
+            $url = match ($pageAfterLogin) {
+                'index.php' => null,
+                'user_portal.php' => $this->router->generate('courses', [], RouterInterface::ABSOLUTE_URL),
+                'main/auth/courses.php' => $this->router->generate('catalogue', ['slug' => 'courses'], RouterInterface::ABSOLUTE_URL),
+                default => null,
+            };
+        }
+
+        if ('true' !== $this->settingsManager->getSetting('course.go_to_course_after_login')) {
+            return $url;
+        }
+
+        $personalCourseList = $courseRepo->getPersonalSessionCourses(
+            $user,
+            $this->accessUrlHelper->getCurrent(),
+            $this->isAllowedToEditHelper->canCreateCourse()
+        );
+
+        $mySessionList = [];
+        $countOfCoursesNoSessions = 0;
+
+        foreach ($personalCourseList as $course) {
+            if (!empty($course['sid'])) {
+                $mySessionList[$course['sid']] = true;
+            } else {
+                $countOfCoursesNoSessions++;
+            }
+        }
+
+        $countOfSessions = \count($mySessionList);
+
+        if (1 === $countOfSessions && 0 === $countOfCoursesNoSessions) {
+            $key = array_keys($personalCourseList);
+
+            return $this->router->generate(
+                'chamilo_core_course_home',
+                [
+                    'cid' => $personalCourseList[$key[0]]['cid'],
+                    'sid' => $personalCourseList[$key[0]]['sid'] ?? 0,
+                ]
+            );
+        }
+
+        if (0 === $countOfSessions && 1 === $countOfCoursesNoSessions) {
+            $key = array_keys($personalCourseList);
+
+            return $this->router->generate(
+                'chamilo_core_course_home',
+                [
+                    'cid' => $personalCourseList[$key[0]]['cid'],
+                    'sid' => 0,
+                ]
+            );
+        }
+
+        return null;
     }
 }

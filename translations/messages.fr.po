@@ -30198,3 +30198,9 @@ msgstr "Révoquer l'acceptation"
 
 msgid "Confirmation"
 msgstr "Confirmation"
+
+msgid "Days"
+msgstr "Jours"
+
+msgid "Notification to remind the event"
+msgstr "Notification de rappel de l'évènement"

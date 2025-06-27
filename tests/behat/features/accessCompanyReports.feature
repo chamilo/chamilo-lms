@@ -12,12 +12,12 @@ Feature: Access to portal reports as admin
   Scenario: Access the company report
     Given I am a platform administrator
     And I am on "/main/mySpace/company_reports.php"
-    Then I should not see "not authorized"
+    Then I should not see "not allowed"
 
   Scenario: Access the resumed version of the company report
     Given I am a platform administrator
     And I am on "/main/mySpace/company_reports_resumed.php"
-    Then I should not see "not authorized"
+    Then I should not see "not allowed"
 
   Scenario: See the company reports link on the admin page
     Given I am a platform administrator
@@ -27,7 +27,7 @@ Feature: Access to portal reports as admin
   Scenario: See the company reports link on the admin page
     Given I am a platform administrator
     And I am on "/main/admin/teacher_time_report.php"
-    Then I should not see "not authorized"
+    Then I should not see "not allowed"
 
   Scenario: See the company reports link on the admin page
     Given I am a platform administrator
@@ -37,4 +37,4 @@ Feature: Access to portal reports as admin
   Scenario: See the company reports link on the admin page
     Given I am a platform administrator
     And I am on "/main/admin/teachers_time_by_session_report.php"
-    Then I should not see "not authorized"
+    Then I should not see "not allowed"

@@ -2003,6 +2003,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'platform' => [
                 [
+                    'name' => 'hosting_limit_identical_email',
+                    'title' => 'Limit identical email usage',
+                    'comment' => 'Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit.',
+                ],
+                [
                     'name' => 'allow_double_validation_in_registration',
                     'title' => 'Double validation for registration process',
                     'comment' => 'Simply display a confirmation request on the registration page before going forward with the user creation.',

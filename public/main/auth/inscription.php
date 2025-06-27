@@ -288,6 +288,15 @@ if (false === $userAlreadyRegisteredShowTerms &&
 
     $form->addEmailRule('email');
 
+    $form->addRule(
+        'email',
+        get_lang('This e-mail address has already been used by the maximum number of allowed accounts. Please use another.'),
+        'callback',
+        function ($email) {
+            return !api_email_reached_registration_limit($email);
+        }
+    );
+
     // USERNAME
     if ('true' != api_get_setting('login_is_email')) {
         $form->addText(

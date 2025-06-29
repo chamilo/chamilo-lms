@@ -28337,3 +28337,12 @@ msgstr ""
 
 msgid "Revoke Acceptance"
 msgstr ""
+
+msgid "Confirmation"
+msgstr ""
+
+msgid "Days"
+msgstr ""
+
+msgid "Notification to remind the event"
+msgstr ""

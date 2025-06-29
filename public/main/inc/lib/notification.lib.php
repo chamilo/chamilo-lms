@@ -379,7 +379,8 @@ class Notification extends Model
         $newMessageText = $linkToNewMessage = '';
         $showEmail = ('true' === api_get_setting('mail.show_user_email_in_notification'));
         $senderInfoName = '';
-        $baseUrl = $baseUrl ?: rtrim(api_get_path(WEB_PATH), '/');
+        $baseUrl = $baseUrl ?: api_get_path(WEB_PATH);
+        $baseUrl = rtrim($baseUrl, '/');
 
         if (!empty($senderInfo) && isset($senderInfo['complete_name'])) {
             $senderInfoName = $senderInfo['complete_name'];

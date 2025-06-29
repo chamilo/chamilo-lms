@@ -6,7 +6,8 @@
 /**
  * Responses to AJAX calls.
  */
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 $action = $_GET['a'];
 

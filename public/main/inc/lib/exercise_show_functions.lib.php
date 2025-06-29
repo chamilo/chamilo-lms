@@ -2,8 +2,8 @@
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 class ExerciseShowFunctions
 {

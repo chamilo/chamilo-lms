@@ -4,11 +4,11 @@
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Class UserGroup.
@@ -204,6 +204,20 @@ class UserGroupModel extends Model
 
             return $list;
         }
+    }
+
+    /**
+     * Returns all user groups (id + title), ordered by title.
+     * This method ignores multi-URL restrictions because it's used
+     * for initial assignment of groups to access URLs.
+     */
+    public function getAllUserGroups(): array
+    {
+        $sql = "SELECT id, title FROM {$this->table} ORDER BY title";
+
+        $stmt = Database::getManager()->getConnection()->executeQuery($sql);
+
+        return Database::store_result($stmt, 'ASSOC');
     }
 
     /**
@@ -1500,36 +1514,34 @@ class UserGroupModel extends Model
 
     /**
      * Select user group not in list.
-     *
-     * @param array $list
-     *
-     * @return array
      */
-    public function getUserGroupNotInList($list)
+    public function getUserGroupNotInList(array $list, int $accessUrlId): array
     {
-        if (empty($list)) {
-            return [];
-        }
+        $params = [];
 
-        $list = array_map('intval', $list);
-        $listToString = implode("','", $list);
+        $sql = "SELECT g.*
+            FROM {$this->table} g";
 
-        $sql = 'SELECT * ';
-        $urlCondition = '';
         if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
-            $sql .= " FROM $this->table g
-                    INNER JOIN $this->access_url_rel_usergroup a
-                    ON (g.id = a.usergroup_id)";
-            $urlCondition = " AND access_url_id = $urlId ";
+            $sql .= " LEFT JOIN {$this->access_url_rel_usergroup} a
+                  ON (g.id = a.usergroup_id AND a.access_url_id = ?)";
+            $params[] = $accessUrlId;
+            $sql .= " WHERE a.usergroup_id IS NULL";
         } else {
-            $sql = " FROM $this->table g ";
+            $sql .= " WHERE 1=1";
         }
 
-        $sql .= " WHERE g.id NOT IN ('$listToString') $urlCondition ";
-        $result = Database::query($sql);
+        if (!empty($list)) {
+            $placeholders = implode(',', array_fill(0, count($list), '?'));
+            $sql .= " AND g.id NOT IN ($placeholders)";
+            $params = array_merge($params, array_map('intval', $list));
+        }
 
-        return Database::store_result($result, 'ASSOC');
+        $sql .= " ORDER BY g.title";
+
+        $stmt = Database::getManager()->getConnection()->executeQuery($sql, $params);
+
+        return Database::store_result($stmt, 'ASSOC');
     }
 
     /**

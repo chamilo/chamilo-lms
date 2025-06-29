@@ -5,9 +5,9 @@
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
-use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 class ExtraField extends Model
 {
     public const FIELD_TYPE_TEXT = 1;

@@ -15,6 +15,9 @@ use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
@@ -24,9 +27,6 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
-use Chamilo\CoreBundle\Service\CourseService;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
@@ -118,6 +118,8 @@ class CourseController extends ToolBaseController
                 }
 
                 if ($redirect && !$this->isGranted('ROLE_ADMIN')) {
+                    $request->getSession()->remove('cid');
+                    $request->getSession()->remove('course');
                     $responseData = [
                         'redirect' => true,
                         'url' => '/main/auth/inscription.php',
@@ -730,11 +732,11 @@ class CourseController extends ToolBaseController
     #[Route('/search_templates', name: 'chamilo_core_course_search_templates')]
     public function searchCourseTemplates(
         Request $request,
-        AccessUrlHelper $accessUrlHelper,
+        AccessUrlHelper $accessUrlUtil,
         CourseRepository $courseRepository
     ): JsonResponse {
         $searchTerm = $request->query->get('search', '');
-        $accessUrl = $accessUrlHelper->getCurrent();
+        $accessUrl = $accessUrlUtil->getCurrent();
 
         $user = $this->userHelper->getCurrent();
 
@@ -755,7 +757,7 @@ class CourseController extends ToolBaseController
     public function createCourse(
         Request $request,
         TranslatorInterface $translator,
-        CourseService $courseService
+        CourseHelper $courseHelper
     ): JsonResponse {
         $courseData = json_decode($request->getContent(), true);
 
@@ -779,7 +781,7 @@ class CourseController extends ToolBaseController
         }
 
         try {
-            $course = $courseService->createCourse($params);
+            $course = $courseHelper->createCourse($params);
             if ($course) {
                 return new JsonResponse([
                     'success' => true,

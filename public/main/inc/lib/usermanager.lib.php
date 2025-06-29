@@ -1,27 +1,23 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\NameConvention;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
-use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues as EntityExtraFieldValues;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
-use Chamilo\CoreBundle\Entity\SkillRelUser;
-use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\UserRelUser;
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Event\UserCreatedEvent;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\UserCreatedEvent;
 use Chamilo\CoreBundle\Event\UserUpdatedEvent;
-use Chamilo\CoreBundle\Repository\GroupRepository;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues as EntityExtraFieldValues;
-use Chamilo\CoreBundle\Entity\GradebookCategory;
 
 /**
  * This library provides functions for user management.
@@ -181,7 +177,7 @@ class UserManager
 
         $original_password = $password;
 
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
         $access_url_id = $accessUrl->getId();
 
         $hostingLimitUsers = get_hosting_limit($access_url_id, 'users');
@@ -889,7 +885,7 @@ class UserManager
             return false;
         }
 
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
         if (0 == $reset_password) {
             $password = null;
@@ -2721,10 +2717,12 @@ class UserManager
     /**
      * Gives a list of [session_id-course_code] => [status] for the current user.
      *
-     * @param int $user_id
-     * @param int $sessionLimit
+     * @param  int  $user_id
+     * @param  int  $sessionLimit
      *
      * @return array list of statuses (session_id-course_code => status)
+     *
+     * @throws Exception
      */
     public static function get_personal_session_course_list($user_id, $sessionLimit = null)
     {
@@ -2746,7 +2744,7 @@ class UserManager
 
         $user = api_get_user_entity($user_id);
         $url = null;
-        $formattedUserName = Container::$container->get(NameConvention::class)->getPersonName($user);
+        $formattedUserName = Container::$container->get(NameConventionHelper::class)->getPersonName($user);
 
         // We filter the courses from the URL
         $join_access_url = $where_access_url = '';

@@ -5,7 +5,8 @@
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

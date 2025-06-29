@@ -3,8 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * @author Bart Mollet

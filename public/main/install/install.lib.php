@@ -1498,7 +1498,7 @@ function finishInstallationWithContainer(
     /** @var User $admin */
     $admin = $repo->findOneBy(['username' => 'admin']);
 
-    $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+    $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
     $admin
         ->setLastname($adminLastName)

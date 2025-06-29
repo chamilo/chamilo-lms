@@ -8,6 +8,9 @@ namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Editor;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\ContainerHelper;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CareerRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
@@ -43,9 +46,6 @@ use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
-use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
-use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
@@ -672,9 +672,8 @@ class Container
         return self::$container->get(ThemeHelper::class);
     }
 
-    public static function getAccessUrlHelper(): AccessUrlHelper
+    public static function getAccessUrlUtil(): AccessUrlHelper
     {
-        /** @var AccessUrlHelper $helper */
         return self::$container->get(AccessUrlHelper::class);
     }
 

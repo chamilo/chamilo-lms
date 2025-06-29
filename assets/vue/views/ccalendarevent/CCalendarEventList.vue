@@ -139,7 +139,6 @@ import CCalendarEventInfo from "../../components/ccalendarevent/CCalendarEventIn
 import allLocales from "@fullcalendar/core/locales-all"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useToast } from "primevue/usetoast"
-import cCalendarEventService from "../../services/ccalendarevent"
 import { useCidReqStore } from "../../store/cidReq"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useLocale, useParentLocale } from "../../composables/locale"
@@ -157,12 +156,10 @@ const confirm = useConfirm()
 const cidReqStore = useCidReqStore()
 
 const { course, session, group } = storeToRefs(cidReqStore)
-
-const { abbreviatedDatetime } = useFormatDate()
-
+const { abbreviatedDatetime, getCurrentTimezone } = useFormatDate()
 const { showAddButton } = useCalendarActionButtons()
 
-const { isEditableByUser, allowSubscribeToEvent, allowUnsubscribeToEvent } = useCalendarEvent()
+const { isEditableByUser, allowSubscribeToEvent, allowUnsubscribeToEvent, getCalendarEvents } = useCalendarEvent()
 
 const item = ref({})
 const dialog = ref(false)
@@ -210,42 +207,6 @@ const sessionState = reactive({
   showSessionDialog: false,
 })
 
-async function getCalendarEvents({ start, end }) {
-  const params = {
-    "startDate[after]": start.toISOString(),
-    "endDate[before]": end.toISOString(),
-  }
-
-  if (course.value) {
-    params.cid = course.value.id
-  }
-
-  if (session.value) {
-    params.sid = session.value.id
-  }
-
-  if (group.value) {
-    params.gid = group.value.id
-  }
-
-  if (route.query?.type === "global") {
-    params.type = "global"
-  }
-
-  const calendarEvents = await cCalendarEventService.findAll({ params }).then((response) => response.json())
-
-  return calendarEvents["hydra:member"].map((event) => {
-    let color = event.color || "#007BFF"
-
-    return {
-      ...event,
-      start: event.startDate,
-      end: event.endDate,
-      color,
-    }
-  })
-}
-
 const calendarLocale = allLocales.find(
   (calLocale) =>
     calLocale.code === appLocale.value.replace("_", "-") || calLocale.code === useParentLocale(appLocale.value),
@@ -257,16 +218,9 @@ const showAddEventDialog = () => {
 
   dialog.value = true
 }
-
-const goToMyStudentsSchedule = () => {
-  window.location.href = "/main/calendar/planification.php"
-}
-
-const goToSessionPanning = () => {
-  window.location.href = "/main/my_space/calendar_plan.php"
-}
-
+const timezone = getCurrentTimezone()
 const calendarOptions = ref({
+  timeZone: timezone,
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
   locales: allLocales,
   locale: calendarLocale?.code ?? "en-GB",
@@ -338,7 +292,25 @@ const calendarOptions = ref({
     dialog.value = true
   },
   events(info, successCallback) {
-    getCalendarEvents(info).then((events) => successCallback(events))
+    const commonParams = {}
+
+    if (course.value) {
+      commonParams.cid = course.value.id
+    }
+
+    if (session.value) {
+      commonParams.sid = session.value.id
+    }
+
+    if (group.value) {
+      commonParams.gid = group.value.id
+    }
+
+    if (route.query?.type === "global") {
+      commonParams.type = "global"
+    }
+
+    getCalendarEvents(info.start, info.end, commonParams).then((events) => successCallback(events))
   },
 })
 
@@ -396,21 +368,27 @@ function confirmDelete() {
     acceptLabel: t("Yes"),
     rejectLabel: t("Cancel"),
     accept() {
-      if (item.value["parentResourceNodeId"] === securityStore.user["id"]) {
+      const isOwner = item.value["parentResourceNodeId"] === securityStore.user["id"]
+      const isAdmin = securityStore.isCourseAdmin || securityStore.isSessionAdmin
+      if (isOwner || isAdmin) {
         store.dispatch("ccalendarevent/del", item.value).then(() => {
           dialogShow.value = false
           dialog.value = false
           reFetch()
         })
       } else {
-        let filteredLinks = item.value["resourceLinkListFromEntity"].filter(
-          (resourceLinkFromEntity) => resourceLinkFromEntity["user"]["id"] === securityStore.user["id"],
+        const resourceLinks = Array.isArray(item.value["resourceLinkListFromEntity"])
+          ? item.value["resourceLinkListFromEntity"]
+          : []
+
+        const userLink = resourceLinks.find(
+          (link) => link?.user?.id === securityStore.user["id"]
         )
 
-        if (filteredLinks.length > 0) {
+        if (userLink) {
           store
             .dispatch("resourcelink/del", {
-              "@id": `/api/resource_links/${filteredLinks[0]["id"]}`,
+              "@id": `/api/resource_links/${userLink["id"]}`,
             })
             .then(() => {
               currentEvent.remove()

@@ -2,9 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 $cidReset = true;
 
@@ -23,7 +21,6 @@ $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)
 
 $toolName = get_lang('Import sessions list');
 
-//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Administration'));
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 
 set_time_limit(0);
@@ -37,500 +34,79 @@ $updatesession = null;
 $userInfo = api_get_user_info();
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-    if (isset($_FILES['import_file']['tmp_name']) &&
-        !empty($_FILES['import_file']['tmp_name'])
-    ) {
-        $formSent = $_POST['formSent'];
-        $fileType = isset($_POST['file_type']) ? $_POST['file_type'] : null;
-        $sendMail = isset($_POST['sendMail']) && $_POST['sendMail'] ? 1 : 0;
-        $isOverwrite = isset($_POST['overwrite']) && $_POST['overwrite'] ? true : false;
-        $deleteUsersNotInList = isset($_POST['delete_users_not_in_list']) ? true : false;
-        $sessions = [];
-        $sessionCounter = 0;
+    if (!empty($_FILES['import_file']['tmp_name'])) {
+        $fileType = $_POST['file_type'] ?? null;
 
-        if ('xml' === $fileType) {
-            // XML
-            // SimpleXML for PHP5 deals with various encodings, but how many they are, what are version issues,
-            // do we need to waste time with configuration options?
-            // For avoiding complications we go some sort of "PHP4 way" - we convert the input xml-file into UTF-8
-            // before passing it to the parser.
-            // Instead of:
-            // $root = @simplexml_load_file($_FILES['import_file']['tmp_name']);
-            // we may use the following construct:
-            // $root = @simplexml_load_string(api_utf8_encode_xml(file_get_contents($_FILES['import_file']['tmp_name'])));
-            // To ease debugging let us use:
-            $content = file_get_contents($_FILES['import_file']['tmp_name']);
+        $allowedExtensions = [
+            'csv' => ['csv'],
+            'xml' => ['xml'],
+        ];
 
-            $content = api_utf8_encode_xml($content);
-            $root = @simplexml_load_string($content);
-            unset($content);
+        $uploadedFileName = $_FILES['import_file']['name'];
+        $uploadedExtension = strtolower(pathinfo($uploadedFileName, PATHINFO_EXTENSION));
 
-            if (is_object($root)) {
-                if (count($root->Users->User) > 0) {
-                    // Creating/updating users from <Sessions> <Users> base node.
-                    foreach ($root->Users->User as $nodeUser) {
-                        $username = $usernameOld = trim(api_utf8_decode($nodeUser->Username));
-                        if (UserManager::is_username_available($username)) {
-                            $password = api_utf8_decode($nodeUser->Password);
-                            if (empty($password)) {
-                                $password = api_generate_password();
-                            }
-                            switch ($nodeUser->Status) {
-                                case 'student':
-                                    $status = 5;
-                                    break;
-                                case 'teacher':
-                                    $status = 1;
-                                    break;
-                                default:
-                                    $status = 5;
-                                    $errorMessage .= get_lang('Learner status has been given to').' : '.$username.'<br />';
-                            }
+        if (!in_array($uploadedExtension, $allowedExtensions[$fileType] ?? [])) {
+            $errorMessage = get_lang('The uploaded file does not match the selected file type.');
+        } else {
+            $sendMail = !empty($_POST['sendMail']);
+            $isOverwrite = !empty($_POST['overwrite']);
+            $deleteUsersNotInList = !empty($_POST['delete_users_not_in_list']);
 
-                            $result = UserManager::create_user(
-                                api_utf8_decode($nodeUser->Firstname),
-                                api_utf8_decode($nodeUser->Lastname),
-                                $status,
-                                api_utf8_decode($nodeUser->Email),
-                                $username,
-                                $password,
-                                api_utf8_decode($nodeUser->OfficialCode),
-                                null,
-                                api_utf8_decode($nodeUser->Phone),
-                                null,
-                                [UserAuthSource::PLATFORM],
-                                null,
-                                1,
-                                0,
-                                null,
-                                null,
-                                $sendMail
-                            );
-                        } else {
-                            $lastname = trim(api_utf8_decode($nodeUser->Lastname));
-                            $firstname = trim(api_utf8_decode($nodeUser->Firstname));
-                            $password = api_utf8_decode($nodeUser->Password);
-                            $email = trim(api_utf8_decode($nodeUser->Email));
-                            $officialCode = trim(api_utf8_decode($nodeUser->OfficialCode));
-                            $phone = trim(api_utf8_decode($nodeUser->Phone));
-                            $status = trim(api_utf8_decode($nodeUser->Status));
-                            switch ($status) {
-                                case 'student':
-                                    $status = 5;
-                                    break;
-                                case 'teacher':
-                                    $status = 1;
-                                    break;
-                                default:
-                                    $status = 5;
-                                    $errorMessage .= get_lang('Learner status has been given to').' : '.$username.'<br />';
-                            }
+            $insertedInCourse = [];
+            $errorMessage = '';
 
-                            $userId = UserManager::get_user_id_from_username($username);
-
-                            if (!empty($userId)) {
-                                UserManager::update_user(
-                                    $userId,
-                                    $firstname,
-                                    $lastname,
-                                    $username,
-                                    $password,
-                                    [],
-                                    $email,
-                                    $status,
-                                    $officialCode,
-                                    $phone,
-                                    null, //$picture_uri,
-                                    null, //$expiration_date,
-                                    null, //$active,
-                                    null, //$creator_id = null,
-                                    0,
-                                    null, //$extra = null,
-                                    null, //$language = 'english',
-                                    null, //$encrypt_method = '',
-                                    false,
-                                    0 //$reset_password = 0
-                                );
-                            }
-                        }
-                    }
-                }
-
-                // Creating  courses from <Sessions> <Courses> base node.
-                if (count($root->Courses->Course) > 0) {
-                    foreach ($root->Courses->Course as $courseNode) {
-                        $params = [];
-                        if (empty($courseNode->CourseTitle)) {
-                            $params['title'] = api_utf8_decode($courseNode->CourseCode);
-                        } else {
-                            $params['title'] = api_utf8_decode($courseNode->CourseTitle);
-                        }
-                        $params['wanted_code'] = api_utf8_decode($courseNode->CourseCode);
-                        $params['tutor_name'] = null;
-                        $params['course_category'] = null;
-                        $params['course_language'] = api_utf8_decode($courseNode->CourseLanguage);
-                        $params['user_id'] = api_get_user_id();
-
-                        // Looking up for the teacher.
-                        $username = trim(api_utf8_decode($courseNode->CourseTeacher));
-                        $rs = Database::select(
-                            ['id', 'lastname', 'firstname'],
-                            $tblUser,
-                            ['where' => ['username = ?' => $username]],
-                            'first',
-                            'NUM'
-                        );
-                        [$userId, $lastname, $firstname] = $rs;
-                        if ($userId > 0) {
-                            $params['teachers'] = $userId;
-                        } else {
-                            $params['teachers'] = api_get_user_id();
-                        }
-                        CourseManager::create_course($params);
-                    }
-                }
-
-                // Creating sessions from <Sessions> base node.
-                if (count($root->Session) > 0) {
-                    foreach ($root->Session as $nodeSession) {
-                        $courseCounter = 0;
-                        $userCounter = 0;
-
-                        $sessionName = trim(api_utf8_decode($nodeSession->SessionName));
-                        $coach = UserManager::purify_username(
-                            api_utf8_decode($nodeSession->Coach),
-                            $purificationOptionForUsernames
-                        );
-
-                        if (!empty($coach)) {
-                            $coachId = UserManager::get_user_id_from_username($coach);
-                            if (false === $coachId) {
-                                $errorMessage .= get_lang('This user doesn\'t exist').' : '.$coach.'<br />';
-                                // Forcing the coach id if user does not exist.
-                                $coachId = api_get_user_id();
-                            }
-                        } else {
-                            // Forcing the coach id.
-                            $coachId = api_get_user_id();
-                        }
-
-                        // Just in case - encoding conversion.
-                        $dStart = trim(api_utf8_decode($nodeSession->DateStart));
-
-                        if (!empty($dStart)) {
-                            [$yearStart, $monthStart, $dayStart] = explode('/', $dStart);
-                            if (empty($yearStart) || empty($monthStart) || empty($dayStart)) {
-                                $errorMessage .= get_lang('Wrong date format (yyyy-mm-dd)').' : '.$dStart.'<br />';
-                                break;
-                            } else {
-                                $timeStart = mktime(0, 0, 0, (int) $monthStart, (int) $dayStart, (int) $yearStart);
-                            }
-
-                            $dateEnd = trim(api_utf8_decode($nodeSession->DateEnd));
-                            if (!empty($dStart)) {
-                                [$yearEnd, $monthEnd, $dayEnd] = explode('/', $dateEnd);
-                                if (empty($yearEnd) || empty($monthEnd) || empty($dayEnd)) {
-                                    $errorMessage .= get_lang('Error').' : '.$dateEnd.'<br />';
-                                    break;
-                                } else {
-                                    $timeEnd = mktime(0, 0, 0, $monthEnd, $dayEnd, $yearEnd);
-                                }
-                            }
-                            if ($timeEnd - $timeStart < 0) {
-                                $errorMessage .= get_lang('The first date should be before the end date').' : '.$dateEnd.'<br />';
-                            }
-                        }
-
-                        // Default visibility
-                        $visibilityAfterExpirationPerSession = 1;
-                        if (isset($nodeSession->VisibilityAfterExpiration)) {
-                            $visibility = trim(api_utf8_decode($nodeSession->VisibilityAfterExpiration));
-                            switch ($visibility) {
-                                case 'read_only':
-                                    $visibilityAfterExpirationPerSession = SESSION_VISIBLE_READ_ONLY;
-                                    break;
-                                case 'accessible':
-                                    $visibilityAfterExpirationPerSession = SESSION_VISIBLE;
-                                    break;
-                                case 'not_accessible':
-                                    $visibilityAfterExpirationPerSession = SESSION_INVISIBLE;
-                                    break;
-                            }
-                        }
-                        $sessionCategoryId = trim(api_utf8_decode($nodeSession->SessionCategory));
-
-                        if (!$isOverwrite) {
-                            // Always create a session.
-                            $uniqueName = false; // This MUST be initializead.
-                            $i = 0;
-                            $suffix = '';
-                            // Change session name, verify that session doesn't exist.
-                            while (!$uniqueName) {
-                                if ($i > 1) {
-                                    $suffix = ' - '.$i;
-                                }
-                                $sql = 'SELECT id FROM '.$tblSession.'
-                                        WHERE title = "'.Database::escape_string($sessionName.$suffix).'"';
-                                $rs = Database::query($sql);
-                                if (Database::result($rs, 0, 0)) {
-                                    $i++;
-                                } else {
-                                    $uniqueName = true;
-                                    $sessionName .= $suffix;
-                                }
-                            }
-
-                            // Creating the session.
-                            $sqlSession = "INSERT IGNORE INTO $tblSession SET
-                                    title = '".Database::escape_string($sessionName)."',
-                                    access_start_date = '$dStart',
-                                    access_end_date = '$dateEnd',
-                                    visibility = '$visibilityAfterExpirationPerSession',
-                                    nbr_users = 0,
-                                    nbr_courses = 0,
-                                    nbr_classes = 0,
-                                    status = 0,
-                                    duration = 0,
-                                    session_category_id = '$sessionCategoryId'";
-                            $rsSession = Database::query($sqlSession);
-                            $sessionId = Database::insert_id();
-                            Database::insert(
-                                $tblSessionUser,
-                                [
-                                    'relation_type' => Session::GENERAL_COACH,
-                                    'duration' => 0,
-                                    'registered_at' => api_get_utc_datetime(),
-                                    'user_id' => $coachId,
-                                    'session_id' => $sessionId,
-                                ]
-                            );
-                            Database::insert(
-                                $tblSessionUser,
-                                [
-                                    'relation_type' => Session::SESSION_ADMIN,
-                                    'duration' => 0,
-                                    'registered_at' => api_get_utc_datetime(),
-                                    'user_id' => (int) $userInfo['user_id'],
-                                    'session_id' => $sessionId,
-                                ]
-                            );
-                            $sessionCounter++;
-                        } else {
-                            // Update the session if it is needed.
-                            $mySessionResult = SessionManager::get_session_by_name($sessionName);
-                            if (false === $mySessionResult) {
-                                // Creating the session.
-                                $sqlSession = "INSERT IGNORE INTO $tblSession SET
-                                        title = '".Database::escape_string($sessionName)."',
-                                        access_start_date = '$dStart',
-                                        access_end_date = '$dateEnd',
-                                        visibility = '$visibilityAfterExpirationPerSession',
-                                        nbr_users = 0,
-                                        nbr_courses = 0,
-                                        nbr_classes = 0,
-                                        status = 0,
-                                        duration = 0,
-                                        session_category_id = '$sessionCategoryId'";
-                                $rsSession = Database::query($sqlSession);
-                                $sessionId = Database::insert_id();
-                                Database::insert(
-                                    $tblSessionUser,
-                                    [
-                                        'relation_type' => Session::GENERAL_COACH,
-                                        'duration' => 0,
-                                        'registered_at' => api_get_utc_datetime(),
-                                        'user_id' => $coachId,
-                                        'session_id' => $sessionId,
-                                    ]
-                                );
-                                Database::insert(
-                                    $tblSessionUser,
-                                    [
-                                        'relation_type' => Session::SESSION_ADMIN,
-                                        'duration' => 0,
-                                        'registered_at' => api_get_utc_datetime(),
-                                        'user_id' => (int) $userInfo['user_id'],
-                                        'session_id' => $sessionId,
-                                    ]
-                                );
-                                $sessionCounter++;
-                            } else {
-                                // if the session already exists - update it.
-                                $sqlSession = "UPDATE $tblSession SET
-                                        access_start_date = '$dStart',
-                                        access_end_date = '$dateEnd',
-                                        visibility = '$visibilityAfterExpirationPerSession',
-                                        session_category_id = '$sessionCategoryId'
-                                    WHERE title = '$sessionName'";
-                                $rsSession = Database::query($sqlSession);
-                                $sessionId = Database::query("SELECT id FROM $tblSession WHERE title='$sessionName'");
-                                [$sessionId] = Database::fetch_array($sessionId);
-                                Database::query("DELETE FROM $tblSessionUser WHERE session_id ='$sessionId'");
-                                Database::query("DELETE FROM $tblSessionCourse WHERE session_id='$sessionId'");
-                                Database::query("DELETE FROM $tblSessionCourseUser WHERE session_id='$sessionId'");
-                                Database::insert(
-                                    $tblSessionUser,
-                                    [
-                                        'relation_type' => Session::GENERAL_COACH,
-                                        'duration' => 0,
-                                        'registered_at' => api_get_utc_datetime(),
-                                        'user_id' => $coachId,
-                                        'session_id' => $sessionId,
-                                    ]
-                                );
-                            }
-                        }
-
-                        // Associate the session with access_url.
-                        if (api_is_multiple_url_enabled()) {
-                            $accessUrlId = api_get_current_access_url_id();
-                            UrlManager::add_session_to_url($sessionId, $accessUrlId);
-                        } else {
-                            // We fill by default the access_url_rel_session table.
-                            UrlManager::add_session_to_url($sessionId, 1);
-                        }
-
-                        // Adding users to the new session.
-                        foreach ($nodeSession->User as $nodeUser) {
-                            $username = UserManager::purify_username(api_utf8_decode($nodeUser), $purificationOptionForUsernames);
-                            $userId = UserManager::get_user_id_from_username($username);
-                            if (false !== $userId) {
-                                $sql = "INSERT IGNORE INTO $tblSessionUser SET
-                                        user_id ='$userId',
-                                        session_id = '$sessionId',
-                                        registered_at = '".api_get_utc_datetime()."'";
-                                $rsUser = Database::query($sql);
-                                $userCounter++;
-                            }
-                        }
-
-                        // Adding courses to a session.
-                        foreach ($nodeSession->Course as $nodeCourse) {
-                            $course_code = Database::escape_string(trim(api_utf8_decode($nodeCourse->CourseCode)));
-                            // Verify that the course pointed by the course code node exists.
-                            if (CourseManager::course_exists($course_code)) {
-                                // If the course exists we continue.
-                                $course_info = api_get_course_info($course_code);
-                                $courseId = $course_info['real_id'];
-
-                                $sessionCourseRelation = SessionManager::relation_session_course_exist(
-                                    $sessionId,
-                                    $courseId
-                                );
-                                if (!$sessionCourseRelation) {
-                                    $sql_course = "INSERT INTO $tblSessionCourse SET
-                                            c_id = $courseId,
-                                            session_id = $sessionId";
-                                    $rs_course = Database::query($sql_course);
-                                    SessionManager::installCourse($sessionId, $courseId);
-                                }
-
-                                $courseCoaches = explode(',', $nodeCourse->Coach);
-
-                                // Adding coachs to session course user
-                                foreach ($courseCoaches as $course_coach) {
-                                    //$coachId = UserManager::purify_username(api_utf8_decode($course_coach), $purification_option_for_usernames);
-                                    $coachId = UserManager::get_user_id_from_username($course_coach);
-                                    if (false !== $coachId) {
-                                        $sql = "INSERT IGNORE INTO $tblSessionCourseUser SET
-                                                user_id='$coachId',
-                                                c_id = '$courseId',
-                                                session_id = '$sessionId',
-                                                status = ".Session::COURSE_COACH;
-                                        $rs_coachs = Database::query($sql);
-                                    } else {
-                                        $errorMessage .= get_lang('This user doesn\'t exist').' : '.$coachId.'<br />';
-                                    }
-                                }
-
-                                // Adding users.
-                                $courseCounter++;
-                                $usersInCourseCounter = 0;
-                                foreach ($nodeCourse->User as $nodeUser) {
-                                    $username = UserManager::purify_username(api_utf8_decode($nodeUser), $purificationOptionForUsernames);
-                                    $userId = UserManager::get_user_id_from_username($username);
-                                    if (false !== $userId) {
-                                        // Adding to session_rel_user table.
-                                        $sql = "INSERT IGNORE INTO $tblSessionUser SET
-                                                user_id ='$userId',
-                                                session_id = '$sessionId',
-                                                registered_at = '".api_get_utc_datetime()."'";
-                                        $rsUser = Database::query($sql);
-                                        $userCounter++;
-                                        // Adding to session_rel_user_rel_course table.
-                                        $sql = "INSERT IGNORE INTO $tblSessionCourseUser SET
-                                                user_id = '$userId',
-                                                c_id = '$courseId',
-                                                session_id = '$sessionId'";
-                                        $rsUsers = Database::query($sql);
-                                        $usersInCourseCounter++;
-                                    } else {
-                                        $errorMessage .= get_lang('This user doesn\'t exist').' : '.$username.'<br />';
-                                    }
-                                }
-                                $sql = "UPDATE $tblSessionCourse SET nbr_users='$usersInCourseCounter' WHERE c_id='$courseId'";
-                                Database::query($sql);
-                                $insertedInCourse[$course_code] = $course_info['title'];
-                            }
-                        }
-                        Database::query("UPDATE $tblSession SET nbr_users='$userCounter', nbr_courses='$courseCounter' WHERE id='$sessionId'");
-                    }
-                }
-                if (empty($root->Users->User) && empty($root->Courses->Course) && empty($root->Session)) {
-                    $errorMessage = get_lang('The specified file doesn\'t contain all needed data !');
-                }
+            if ($fileType === 'xml') {
+                $result = SessionManager::importXML(
+                    $_FILES['import_file']['tmp_name'],
+                    $isOverwrite,
+                    api_get_user_id(),
+                    $sendMail,
+                    SESSION_VISIBLE,
+                    $insertedInCourse,
+                    $errorMessage
+                );
             } else {
-                $errorMessage .= get_lang('XML document is not valid');
+                $result = SessionManager::importCSV(
+                    $_FILES['import_file']['tmp_name'],
+                    $isOverwrite,
+                    api_get_user_id(),
+                    null,
+                    [],
+                    null,
+                    null,
+                    null,
+                    SESSION_VISIBLE,
+                    [],
+                    $deleteUsersNotInList,
+                    !empty($_POST['update_course_coaches']),
+                    false,
+                    !empty($_POST['add_me_as_coach']),
+                    false
+                );
             }
-        } else {
-            // CSV
-            $updateCourseCoaches = isset($_POST['update_course_coaches']) ? true : false;
-            $addOriginalCourseTeachersAsCourseSessionCoaches = isset($_POST['add_me_as_coach']) ? true : false;
 
-            $result = SessionManager::importCSV(
-                $_FILES['import_file']['tmp_name'],
-                $isOverwrite,
-                api_get_user_id(),
-                null,
-                [],
-                null,
-                null,
-                null,
-                1,
-                [],
-                $deleteUsersNotInList,
-                $updateCourseCoaches,
-                false,
-                $addOriginalCourseTeachersAsCourseSessionCoaches,
-                false
-            );
-            $sessionList = $result['session_list'];
-            $errorMessage = $result['error_message'];
-            $sessionCounter = $result['session_counter'];
-        }
+            $sessionCounter = $result['session_counter'] ?? 0;
+            $sessionList = $result['session_list'] ?? [];
 
-        if (!empty($errorMessage)) {
-            $errorMessage = get_lang('but problems occured').' :<br />'.$errorMessage;
-        }
-
-        if (!empty($insertedInCourse) && count($insertedInCourse) > 1) {
-            $warn = get_lang('Several courses were subscribed to the session because of a duplicate course code').': ';
-            foreach ($insertedInCourse as $code => $title) {
-                $warn .= ' '.$title.' ('.$code.'),';
+            if (!empty($result['error_message'])) {
+                $errorMessage .= get_lang('but problems occured') . ' :<br />' . $result['error_message'];
             }
-            $warn = substr($warn, 0, -1);
-        }
-        if (1 == $sessionCounter) {
-            if ('csv' === $fileType) {
-                $sessionId = current($sessionList);
+
+            if (!empty($insertedInCourse) && count($insertedInCourse) > 1) {
+                $warn = get_lang('Several courses were subscribed to the session because of a duplicate course code') . ': ' .
+                    implode(', ', array_map(fn($code, $title) => "$title ($code)", array_keys($insertedInCourse), $insertedInCourse));
             }
-            Display::addFlash(Display::return_message($warn));
-            header('Location: resume_session.php?id_session='.$sessionId);
-            exit;
-        } else {
-            Display::addFlash(Display::return_message(get_lang('File imported').' '.$errorMessage));
-            header('Location: session_list.php');
-            exit;
+
+            if (empty($errorMessage)) {
+                if ($sessionCounter === 1 && $fileType === 'csv') {
+                    $sessionId = current($sessionList);
+                    header('Location: resume_session.php?id_session=' . $sessionId);
+                    exit;
+                } else {
+                    header('Location: session_list.php');
+                    exit;
+                }
+            }
         }
     } else {
         $errorMessage = get_lang('No file was sent');
@@ -544,7 +120,7 @@ $actions = '<a href="../session/session_list.php">'.
 echo Display::toolbarAction('session_import', [$actions]);
 
 if (!empty($errorMessage)) {
-    echo Display::return_message($errorMessage, 'normal', false);
+    echo Display::return_message($errorMessage, 'error');
 }
 
 $form = new FormValidator('import_sessions', 'post', api_get_self(), null, ['enctype' => 'multipart/form-data']);
@@ -610,71 +186,89 @@ Display::return_message(
     )
 );
 $form->display();
+echo '<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const csvExample = document.getElementById("csv-example");
+    const xmlExample = document.getElementById("xml-example");
 
+    function toggleExamples(fileType) {
+        if (fileType === "csv") {
+            csvExample.classList.remove("hidden");
+            xmlExample.classList.add("hidden");
+        } else if (fileType === "xml") {
+            csvExample.classList.add("hidden");
+            xmlExample.classList.remove("hidden");
+        }
+    }
+
+    const radios = document.querySelectorAll("input[name=\'file_type\']");
+    radios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            toggleExamples(this.value.toLowerCase());
+        });
+
+        if (radio.checked) {
+            toggleExamples(radio.value.toLowerCase());
+        }
+    });
+});
+</script>';
 ?>
-<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
-<pre>
+    <div id="csv-example" class="mt-6 rounded-lg border border-gray-300 bg-gray-100 p-4 overflow-auto">
+        <h3 class="font-bold text-lg mb-2"><?php echo get_lang('Example CSV file'); ?>:</h3>
+        <pre class="whitespace-nowrap text-sm">
 <strong>SessionName</strong>;Coach;<strong>DateStart</strong>;<strong>DateEnd</strong>;Users;Courses;VisibilityAfterExpiration;DisplayStartDate;DisplayEndDate;CoachStartDate;CoachEndDate;Classes
-<strong>Example 1</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,...]|course2[coach1][username1,...];read_only;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;class1|class2
-<strong>Example 2</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,...]|course2[coach1][username1,...];accessible;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;class3|class4
-<strong>Example 3</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,...]|course2[coach1][username1,...];not_accessible;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;class5|class6
-</pre>
-<p><?php echo get_lang('The XML file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
-<pre>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+<strong>Example 1</strong>;username;<strong>2025/04/01</strong>;<strong>2025/04/30</strong>;username1|username2;course1[coach1][username1,...];read_only;2025/04/01;2025/04/30;2025/04/01;2025/04/30;class1
+<strong>Example 2</strong>;username;<strong>2025-04-01</strong>;<strong>2025-04-30</strong>;username1|username2;course1[coach1][username1,...];accessible;2025-04-01;2025-04-30;2025-04-01;2025-04-30;class2
+<strong>Example 3</strong>;username;<strong>2025/04/01 08:00:00</strong>;<strong>2025/04/30 23:59:59</strong>;username1|username2;course1[coach1][username1,...];not_accessible;2025/04/01 08:00:00;2025/04/30 23:59:59;2025/04/01 08:00:00;2025/04/30 23:59:59;class3
+    </pre>
+    </div>
+    <div id="xml-example" class="mt-6 rounded-lg border border-gray-300 bg-gray-100 p-4 overflow-auto hidden">
+        <h3 class="font-bold text-lg mb-2"><?php echo get_lang('Example XML file'); ?>:</h3>
+        <pre class="whitespace-nowrap text-sm">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;Sessions&gt;
-    &lt;Users&gt;
-        &lt;User&gt;
-            &lt;Username&gt;<strong>username1</strong>&lt;/Username&gt;
-            &lt;Lastname&gt;xxx&lt;/Lastname&gt;
-            &lt;Firstname&gt;xxx&lt;/Firstname&gt;
-            &lt;Password&gt;xxx&lt;/Password&gt;
-            &lt;Email&gt;xxx@xx.xx&lt;/Email&gt;
-            &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
-            &lt;Phone&gt;xxx&lt;/Phone&gt;
-            &lt;Status&gt;student|teacher&lt;/Status&gt;
-        &lt;/User&gt;
-    &lt;/Users&gt;
-    &lt;Courses&gt;
-        &lt;Course&gt;
-            &lt;CourseCode&gt;<strong>xxx</strong>&lt;/CourseCode&gt;
-            &lt;CourseTeacher&gt;<strong>teacher_username</strong>&lt;/CourseTeacher&gt;
-            &lt;CourseLanguage&gt;xxx&lt;/CourseLanguage&gt;
-            &lt;CourseTitle&gt;xxx&lt;/CourseTitle&gt;
-            &lt;CourseDescription&gt;xxx&lt;/CourseDescription&gt;
-        &lt;/Course&gt;
-    &lt;/Courses&gt;
     &lt;Session&gt;
-        <strong>&lt;SessionName&gt;xxx&lt;/SessionName&gt;</strong>
-        &lt;Coach&gt;xxx&lt;/Coach&gt;
-        <strong>&lt;DateStart&gt;yyyy/mm/dd&lt;/DateStart&gt;</strong>
-        <strong>&lt;DateEnd&gt;yyyy/mm/dd&lt;/DateEnd&gt;</strong>
-        &lt;User&gt;xxx&lt;/User&gt;
-        &lt;User&gt;xxx&lt;/User&gt;
+        &lt;SessionName&gt;<strong>Example 1</strong>&lt;/SessionName&gt;
+        &lt;Coach&gt;username&lt;/Coach&gt;
+        &lt;DateStart&gt;<strong>2025/04/01</strong>&lt;/DateStart&gt;
+        &lt;DateEnd&gt;<strong>2025/04/30</strong>&lt;/DateEnd&gt;
+        &lt;User&gt;username1&lt;/User&gt;
         &lt;Course&gt;
             &lt;CourseCode&gt;coursecode1&lt;/CourseCode&gt;
             &lt;Coach&gt;coach1&lt;/Coach&gt;
-        &lt;User&gt;username1&lt;/User&gt;
-        &lt;User&gt;username2&lt;/User&gt;
+            &lt;User&gt;username2&lt;/User&gt;
         &lt;/Course&gt;
     &lt;/Session&gt;
 
     &lt;Session&gt;
-        <strong>&lt;SessionName&gt;xxx&lt;/SessionName&gt;</strong>
-        &lt;Coach&gt;xxx&lt;/Coach&gt;
-        <strong>&lt;DateStart&gt;xxx&lt;/DateStart&gt;</strong>
-        <strong>&lt;DateEnd&gt;xxx&lt;/DateEnd&gt;</strong>
-        &lt;User&gt;xxx&lt;/User&gt;
-        &lt;User&gt;xxx&lt;/User&gt;
-        &lt;Course&gt;
-            &lt;CourseCode&gt;coursecode1&lt;/CourseCode&gt;
-            &lt;Coach&gt;coach1&lt;/Coach&gt;
+        &lt;SessionName&gt;<strong>Example 2</strong>&lt;/SessionName&gt;
+        &lt;Coach&gt;username&lt;/Coach&gt;
+        &lt;DateStart&gt;<strong>2025-04-01</strong>&lt;/DateStart&gt;
+        &lt;DateEnd&gt;<strong>2025-04-30</strong>&lt;/DateEnd&gt;
         &lt;User&gt;username1&lt;/User&gt;
-        &lt;User&gt;username2&lt;/User&gt;
+        &lt;Course&gt;
+            &lt;CourseCode&gt;coursecode2&lt;/CourseCode&gt;
+            &lt;Coach&gt;coach2&lt;/Coach&gt;
+            &lt;User&gt;username2&lt;/User&gt;
+        &lt;/Course&gt;
+    &lt;/Session&gt;
+
+    &lt;Session&gt;
+        &lt;SessionName&gt;<strong>Example 3</strong>&lt;/SessionName&gt;
+        &lt;Coach&gt;username&lt;/Coach&gt;
+        &lt;DateStart&gt;<strong>2025/04/01 08:00:00</strong>&lt;/DateStart&gt;
+        &lt;DateEnd&gt;<strong>2025/04/30 23:59:59</strong>&lt;/DateEnd&gt;
+        &lt;User&gt;username1&lt;/User&gt;
+        &lt;Course&gt;
+            &lt;CourseCode&gt;coursecode3&lt;/CourseCode&gt;
+            &lt;Coach&gt;coach3&lt;/Coach&gt;
+            &lt;User&gt;username2&lt;/User&gt;
         &lt;/Course&gt;
     &lt;/Session&gt;
 &lt;/Sessions&gt;
-</pre>
+    </pre>
+    </div>
 <?php
 
 Display::display_footer();

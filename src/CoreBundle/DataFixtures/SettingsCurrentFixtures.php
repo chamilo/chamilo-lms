@@ -90,7 +90,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'use_users_timezone',
                     'title' => 'Enable users timezones',
-                    'comment' => 'Enable the possibility for users to select their own timezone. The timezone field should be set to visible and changeable in the Profiling menu in the administration section before users can choose their own. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time.',
+                    'comment' => 'Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time.',
                 ],
                 [
                     'name' => 'allow_show_linkedin_url',
@@ -1089,7 +1089,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'server_type',
                     'title' => 'Server Type',
-                    'comment' => 'What sort of server is this? This enables or disables some specific options. On a development server there is a translation feature functional that inidcates untranslated strings',
+                    'comment' => 'Defines the environment type: "prod" (normal production), "validation" (like production but without reporting statistics), or "test" (debug mode with developer tools such as untranslated string indicators).',
                 ],
                 [
                     'name' => 'show_tabs',

@@ -36,7 +36,7 @@ export function useDatatableList(servicePrefix) {
     if (!isEmpty(route.query.filetype) && route.query.filetype === "certificate") {
       filters.value.filetype = "certificate"
     } else {
-      filters.value.filetype = ["file", "folder"]
+      filters.value.filetype = ["file", "folder", "video"]
     }
 
     let params = { ...filters.value }

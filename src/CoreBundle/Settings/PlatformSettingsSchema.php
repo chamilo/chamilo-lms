@@ -93,6 +93,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'redirect_index_to_url_for_logged_users' => '',
                     'default_menu_entry_for_course_or_session' => 'my_courses',
                     'notification_event' => 'false',
+                    'push_notification_settings' => '',
                 ]
             )
             ->setTransformer(
@@ -282,6 +283,20 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('notification_event', YesNoType::class)
+            ->add(
+                'push_notification_settings',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => '<pre>{
+    "gotify_url": "http://localhost:8080",
+    "gotify_token": "A0yWWfe_8YRLv_B",
+    "enabled": true,
+    "vapid_public_key": "BNg54MTyDZSdyFq99EmppT606jKVDS5o7jGVxMLW3Qir937A98sxtrK4VMt1ddNlK93MUenK0kM3aiAMu9HRcjQ=",
+    "vapid_private_key": "UgS5-xSneOcSyNJVq4c9wmEGaCoE1Y8oh-7ZGXPgs8o"
+}</pre>',
+                ]
+            )
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

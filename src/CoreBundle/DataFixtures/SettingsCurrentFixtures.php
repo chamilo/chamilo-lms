@@ -1057,6 +1057,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'platform' => [
                 [
+                    'name' => 'push_notification_settings',
+                    'title' => 'Push Notification Settings (JSON)',
+                    'comment' => 'JSON configuration for Push Notifications integration. Example: {"gotify_url":"http://localhost:8080","gotify_token":"yourtoken","enabled":true}. Leave empty if you do not want to use push notifications.',
+                ],
+                [
                     'name' => 'donotlistcampus',
                     'title' => 'Do not list this campus on chamilo.org',
                     'comment' => 'By default, Chamilo portals are automatically registered in a public list at chamilo.org, just using the title you gave to this portal (not the URL nor any private data). Check this box to avoid having the title of your portal appear.',

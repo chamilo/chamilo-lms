@@ -96,6 +96,73 @@
       </div>
 
       <Divider />
+      <div
+        v-if="pushEnabled"
+        class="mt-4 w-full text-center"
+      >
+        <p
+          v-if="loading"
+          class="text-gray-500 text-sm"
+        >
+          <i class="mdi mdi-loading mdi-spin mr-2"></i>
+          {{ t("Checking push subscription...") }}
+        </p>
+
+        <div v-else>
+          <template v-if="isSubscribed">
+            <div class="flex flex-col items-center text-green-700">
+              <i class="mdi mdi-bell-ring-outline text-4xl mb-2"></i>
+              <p class="text-sm font-semibold">
+                {{ t("You’re subscribed to push notifications in this browser.") }}
+              </p>
+              <BaseButton
+                :label="t('Unsubscribe')"
+                class="mt-2"
+                icon="bell-off"
+                type="danger"
+                size="small"
+                @click="handleUnsubscribe"
+                :loading="loading"
+              />
+
+              <button
+                class="mt-2 text-xs underline text-gray-600 hover:text-gray-800"
+                @click="toggleDetails"
+              >
+                {{ showDetails ? t("Hide Details") : t("Show Details") }}
+              </button>
+
+              <div
+                v-if="showDetails"
+                class="mt-2 bg-gray-100 rounded p-2 text-gray-800 text-xs break-all max-w-full"
+              >
+                <strong>{{ t("Endpoint") }}:</strong>
+                <br />
+                {{ subscriptionInfo?.endpoint }}
+              </div>
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="flex flex-col items-center text-red-700">
+              <i class="mdi mdi-bell-off-outline text-4xl mb-2"></i>
+              <p class="text-sm">
+                {{ t("Push notifications are not enabled in this browser.") }}
+              </p>
+              <BaseButton
+                :label="t('Enable Notifications')"
+                class="mt-2"
+                icon="bell"
+                type="primary"
+                size="small"
+                @click="handleSubscribe"
+                :loading="loading"
+              />
+            </div>
+          </template>
+        </div>
+      </div>
+
       <BaseButton
         v-if="isCurrentUser || securityStore.isAdmin"
         :label="t('Edit profile')"
@@ -117,7 +184,7 @@
 </template>
 
 <script setup>
-import { computed, inject, ref, watchEffect } from "vue"
+import { computed, inject, onMounted, ref, watchEffect } from "vue"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
@@ -125,6 +192,7 @@ import Divider from "primevue/divider"
 import axios from "axios"
 import { useSecurityStore } from "../../store/securityStore"
 import BaseUserAvatar from "../basecomponents/BaseUserAvatar.vue"
+import { usePushSubscription } from "../../composables/usePushSubscription"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()
@@ -138,17 +206,31 @@ const showFullProfile = computed(() => isCurrentUser.value || securityStore.isAd
 const languageInfo = ref(null)
 const vCardUserLink = ref("")
 const visibility = ref({})
-watchEffect(() => {
-  if (user.value && user.value.id) {
-    fetchUserProfile(user.value.id)
-  }
-})
 
-const editProfile = () => {
+const {
+  isSubscribed,
+  subscriptionInfo,
+  subscribe,
+  unsubscribe,
+  loading,
+  checkSubscription,
+  loadVapidKey,
+  vapidPublicKey,
+  pushEnabled,
+  registerServiceWorker,
+} = usePushSubscription()
+
+const showDetails = ref(false)
+
+function toggleDetails() {
+  showDetails.value = !showDetails.value
+}
+
+function editProfile() {
   window.location = "/account/edit"
 }
 
-const changePassword = () => {
+function changePassword() {
   window.location = "/account/change-password"
 }
 
@@ -170,8 +252,42 @@ async function fetchUserProfile(userId) {
 
 function flagIconExists(code) {
   const mdiFlagIcons = ["us", "fr", "de", "es", "it", "pl"]
-  return mdiFlagIcons.includes(code.toLowerCase())
+  return mdiFlagIcons.includes(code?.toLowerCase())
 }
 
 function chatWith(userId, completeName, isOnline, avatarSmall) {}
+
+onMounted(async () => {
+  loadVapidKey()
+
+  if (user.value?.id) {
+    console.log("[Push] Detected user loaded, registering SW and checking subscription...", user.value.id)
+    await registerServiceWorker()
+    await checkSubscription(user.value.id)
+  } else {
+    console.log("[Push] User is undefined on mount, cannot check subscription yet.")
+  }
+})
+
+watchEffect(() => {
+  if (user.value && user.value.id) {
+    fetchUserProfile(user.value.id)
+  }
+})
+
+async function handleSubscribe() {
+  if (user.value?.id) {
+    await subscribe(user.value.id)
+  } else {
+    console.error("[Push] No user id for subscription.")
+  }
+}
+
+async function handleUnsubscribe() {
+  if (user.value?.id) {
+    await unsubscribe(user.value.id)
+  } else {
+    console.error("[Push] No user id for unsubscription.")
+  }
+}
 </script>

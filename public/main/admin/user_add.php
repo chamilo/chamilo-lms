@@ -5,7 +5,7 @@
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -20,7 +20,7 @@ api_protect_limit_for_session_admin();
 /** @var AuthenticationConfigHelper $authenticationConfigHelper */
 $authenticationConfigHelper = Container::$container->get(AuthenticationConfigHelper::class);
 
-$accessUrl = Container::getAccessUrlHelper()->getCurrent();
+$accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 

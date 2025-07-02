@@ -7,8 +7,8 @@
  * and names.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

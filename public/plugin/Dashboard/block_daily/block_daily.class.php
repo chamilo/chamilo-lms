@@ -11,7 +11,7 @@
  * required files for getting data.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 /**
  * This class is used like controller for this course block plugin,

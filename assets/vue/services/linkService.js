@@ -68,8 +68,8 @@ export default {
    */
   toggleLinkVisibility: async (linkId, visible, cid, sid) => {
     const endpoint = `${ENTRYPOINT}links/${linkId}/toggle_visibility?cid=${cid}&sid=${sid}`
-
-    return baseService.put(endpoint, { visible })
+    const response = await axios.put(endpoint, { visible })
+    return response.data
   },
 
   /**

@@ -9,17 +9,17 @@ namespace Chamilo\CoreBundle\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @implements ProcessorInterface<AccessUrlRelColorTheme, AccessUrlRelColorTheme>
  */
-final class AccessUrlRelColorThemeStateProcessor implements ProcessorInterface
+final readonly class AccessUrlRelColorThemeStateProcessor implements ProcessorInterface
 {
     public function __construct(
-        private readonly AccessUrlHelper $accessUrlHelper,
-        private readonly EntityManagerInterface $entityManager,
+        private AccessUrlHelper $accessUrlHelper,
+        private EntityManagerInterface $entityManager,
     ) {}
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): AccessUrlRelColorTheme

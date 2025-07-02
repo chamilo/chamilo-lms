@@ -53,6 +53,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         }
 
         $host = $request->getSchemeAndHttpHost().'/';
+
         /** @var AccessUrl $accessUrl */
         $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $host]) ?? $this->accessUrlRepository->find(1);
         $courses = $this->courseRepository->createQueryBuilder('c')

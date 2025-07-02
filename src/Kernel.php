@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo;
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
@@ -27,11 +26,6 @@ class Kernel extends BaseKernel
     public function getConfigurationFile()
     {
         return $this->getProjectDir().'/config/configuration.php';
-    }
-
-    public function setApi(array $configuration): void
-    {
-        new ChamiloApi($configuration);
     }
 
     /**

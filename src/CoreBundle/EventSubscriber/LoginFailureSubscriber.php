@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventSubscriber;
 
+use Chamilo\CoreBundle\Helpers\LoginAttemptLoggerHelper;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
-use Chamilo\CoreBundle\ServiceHelper\LoginAttemptLogger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -18,7 +18,7 @@ class LoginFailureSubscriber implements EventSubscriberInterface
     public function __construct(
         private readonly TrackELoginRecordRepository $trackELoginRecordingRepository,
         private readonly RequestStack $requestStack,
-        private readonly LoginAttemptLogger $loginAttemptLogger
+        private readonly LoginAttemptLoggerHelper $loginAttemptLoggerHelper
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -41,6 +41,6 @@ class LoginFailureSubscriber implements EventSubscriberInterface
 
         // Log of connection attempts
         $this->trackELoginRecordingRepository->addTrackLogin($username, $userIp, false);
-        $this->loginAttemptLogger->logAttempt(false, $username, $userIp);
+        $this->loginAttemptLoggerHelper->logAttempt(false, $username, $userIp);
     }
 }

@@ -46,13 +46,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use UserManager;
 
-/**
- * EquatableInterface is needed to check if the user needs to be refreshed.
- */
 #[ApiResource(
     types: ['http://schema.org/Person'],
     operations: [
-        new Get(security: "is_granted('VIEW', object)"),
+        new Get(
+            openapiContext: [
+                'description' => "Get details of one specific user, including name, e-mail and role.",
+            ],
+            security: "is_granted('VIEW', object)",
+        ),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),
         new GetCollection(security: "is_granted('ROLE_USER')"),

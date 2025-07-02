@@ -7,20 +7,19 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Tool\ToolChain;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/tool')]
 class ToolController extends AbstractController
 {
     /**
      * Updates the table tool and resource_type with the content of tools.yml.
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
      */
     #[Route(path: '/update', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function profile(ToolChain $toolChain): Response
     {
         $toolChain->createTools();

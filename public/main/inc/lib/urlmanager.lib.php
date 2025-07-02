@@ -556,6 +556,23 @@ class UrlManager
         return $result_array;
     }
 
+    public static function remove_users_from_urls(array $userIds, array $urlIds): void
+    {
+        if (empty($userIds) || empty($urlIds)) {
+            return;
+        }
+
+        $conn = Database::getManager()->getConnection();
+        $placeholdersUsers = implode(',', array_fill(0, count($userIds), '?'));
+        $placeholdersUrls = implode(',', array_fill(0, count($urlIds), '?'));
+
+        $sql = "DELETE FROM access_url_rel_user
+            WHERE user_id IN ($placeholdersUsers)
+            AND access_url_id IN ($placeholdersUrls)";
+
+        $conn->executeQuery($sql, array_merge($userIds, $urlIds));
+    }
+
     /**
      * Add a group of courses into a group of URLs.
      *
@@ -628,6 +645,33 @@ class UrlManager
         }
 
         return $resultArray;
+    }
+
+    /**
+     * Remove a list of user groups from a list of URLs.
+     *
+     * @param array $userGroupList List of user group IDs
+     * @param array $urlList       List of access_url IDs
+     *
+     * @return void
+     */
+    public static function removeUserGroupListFromUrl(array $userGroupList, array $urlList): void
+    {
+        if (empty($userGroupList) || empty($urlList)) {
+            return;
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
+
+        $placeholdersGroups = implode(',', array_fill(0, count($userGroupList), '?'));
+        $placeholdersUrls = implode(',', array_fill(0, count($urlList), '?'));
+
+        $sql = "DELETE FROM $table
+            WHERE usergroup_id IN ($placeholdersGroups)
+            AND access_url_id IN ($placeholdersUrls)";
+
+        $params = array_merge($userGroupList, $urlList);
+        Database::getManager()->getConnection()->executeQuery($sql, $params);
     }
 
     /**
@@ -1084,26 +1128,32 @@ class UrlManager
      * @param array $userGroupList user list
      * @param int   $urlId
      * */
-    public static function update_urls_rel_usergroup($userGroupList, $urlId)
+    public static function update_urls_rel_usergroup(array $userGroupList, int $urlId): void
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
-
-        $sql = "SELECT usergroup_id FROM $table
-                WHERE access_url_id = ".intval($urlId);
-        $result = Database::query($sql);
-        $existingItems = [];
-        while ($row = Database::fetch_array($result)) {
-            $existingItems[] = $row['usergroup_id'];
+        if ($urlId <= 0) {
+            return;
         }
 
-        // Adding
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
+
+        if (!is_array($userGroupList) || empty($userGroupList)) {
+            return;
+        }
+
+        $sql = "SELECT usergroup_id FROM $table WHERE access_url_id = ".intval($urlId);
+        $result = Database::query($sql);
+
+        $existingItems = array_map(
+            fn ($row) => $row['usergroup_id'],
+            Database::store_result($result)
+        );
+
         foreach ($userGroupList as $userGroupId) {
             if (!in_array($userGroupId, $existingItems)) {
                 self::addUserGroupToUrl($userGroupId, $urlId);
             }
         }
 
-        // Deleting old items
         foreach ($existingItems as $userGroupId) {
             if (!in_array($userGroupId, $userGroupList)) {
                 self::delete_url_rel_usergroup($userGroupId, $urlId);
@@ -1317,7 +1367,7 @@ class UrlManager
             $sql = 'SELECT id, u.title
                     FROM '.Database::get_main_table(TABLE_MAIN_CATEGORY).' u
                     WHERE
-                        name LIKE "'.$needle.'%" AND
+                        u.title LIKE "'.$needle.'%" AND
                         (parent_id IS NULL or parent_id = 0)
                     ORDER BY u.title
                     LIMIT 11';
@@ -1328,7 +1378,7 @@ class UrlManager
                 if ($i <= 10) {
                     $return .= '<a
                     href="javascript: void(0);"
-                    onclick="javascript: add_user_to_url(\''.addslashes($data['id']).'\',\''.addslashes($data['name']).' \')">'.$data['title'].' </a><br />';
+                    onclick="javascript: add_user_to_url(\''.addslashes($data['id']).'\',\''.addslashes($data['title']).' \')">'.$data['title'].' </a><br />';
                 } else {
                     $return .= '...<br />';
                 }
@@ -1342,5 +1392,42 @@ class UrlManager
         );
 
         return $response;
+    }
+
+    public static function remove_courses_from_urls(array $courseCodes, array $urlIds): void
+    {
+        if (empty($courseCodes) || empty($urlIds)) {
+            return;
+        }
+
+        $conn = Database::getManager()->getConnection();
+        $placeholdersCourses = implode(',', array_fill(0, count($courseCodes), '?'));
+        $placeholdersUrls = implode(',', array_fill(0, count($urlIds), '?'));
+
+        $sql = "DELETE FROM access_url_rel_course
+            WHERE c_id IN (
+                SELECT id FROM course WHERE code IN ($placeholdersCourses)
+            )
+            AND access_url_id IN ($placeholdersUrls)";
+
+        $conn->executeQuery($sql, array_merge($courseCodes, $urlIds));
+    }
+
+    public static function searchCoursesByTitleOrCode(string $needle): array
+    {
+        $tbl = Database::get_main_table(TABLE_MAIN_COURSE);
+        $charset = api_get_system_encoding();
+        $needle = api_convert_encoding($needle, $charset, 'utf-8');
+        $needle = Database::escape_string($needle);
+
+        $sql = "
+        SELECT id, code, title
+        FROM $tbl
+        WHERE title LIKE '$needle%' OR code LIKE '$needle%'
+        ORDER BY title, code
+        LIMIT 11
+    ";
+
+        return Database::store_result(Database::query($sql));
     }
 }

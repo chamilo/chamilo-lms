@@ -9,12 +9,14 @@ use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\MailHelper;
-use Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper;
-use Chamilo\CoreBundle\ServiceHelper\PluginServiceHelper;
-use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\MailHelper;
+use Chamilo\CoreBundle\Helpers\PermissionHelper;
+use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
@@ -26,15 +28,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * This is a code library for Chamilo.
  * It is included by default in every Chamilo file (through including the global.inc.php)
- * This library is in process of being transferred to src/Chamilo/CoreBundle/Component/Utils/ChamiloApi.
- * Whenever a function is transferred to the ChamiloApi class, the places where it is used should include
- * the "use Chamilo\CoreBundle\Component\Utils\ChamiloApi;" statement.
+ * This library is in process of being transferred to src/Chamilo/CoreBundle/Helpers/ChamiloHelper.
+ * Whenever a function is transferred to the ChamiloUtil class, the places where it is used should include
+ * the "use Chamilo\CoreBundle\Utils\ChamiloUtil;" statement.
  */
 
 // PHP version requirement.
@@ -998,7 +998,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
 
-    $pluginHelper = Container::$container->get(PluginServiceHelper::class);
+    $pluginHelper = Container::$container->get(PluginHelper::class);
 
     if ($pluginHelper->isPluginEnabled('Positioning')) {
         $plugin = $pluginHelper->loadLegacyPlugin('Positioning');
@@ -2704,35 +2704,30 @@ function api_get_setting($variable, $isArray = false, $key = null)
         return '';
     }
     $variable = trim($variable);
+    // Normalize setting name: keep full name for lookup, extract short name for switch matching
+    $full   = $variable;
+    $short  = str_contains($variable, '.') ? substr($variable, strrpos($variable, '.') + 1) : $variable;
 
-    switch ($variable) {
+    switch ($short) {
         case 'server_type':
-            $test = ['dev', 'test'];
-            $environment = Container::getEnvironment();
-            if (in_array($environment, $test)) {
-                return 'test';
-            }
-
-            return 'prod';
-        // deprecated settings
-        // no break
+            $settingValue = $settingsManager->getSetting($full, true);
+            return $settingValue ?: 'prod';
         case 'openid_authentication':
         case 'service_ppt2lp':
         case 'formLogin_hide_unhide_label':
             return false;
-            break;
         case 'tool_visible_by_default_at_creation':
-            $values = $settingsManager->getSetting($variable);
+            $values = $settingsManager->getSetting($full);
             $newResult = [];
             foreach ($values as $parameter) {
                 $newResult[$parameter] = 'true';
             }
 
             return $newResult;
-            break;
+
         default:
-            $settingValue = $settingsManager->getSetting($variable, true);
-            if (is_string($settingValue) && $isArray && !empty($settingValue)) {
+            $settingValue = $settingsManager->getSetting($full, true);
+            if (is_string($settingValue) && $isArray && $settingValue !== '') {
                 // Check if the value is a valid JSON string
                 $decodedValue = json_decode($settingValue, true);
 
@@ -2740,23 +2735,18 @@ function api_get_setting($variable, $isArray = false, $key = null)
                 if (is_array($decodedValue)) {
                     return $decodedValue;
                 }
-
-                // If it's not an array, continue with the normal flow
-                // Optional: If you need to evaluate the value using eval
-                $strArrayValue = rtrim($settingValue, ';');
-                $value = eval("return $strArrayValue;");
+                $value = eval('return ' . rtrim($settingValue, ';') . ';');
                 if (is_array($value)) {
                     return $value;
                 }
             }
 
             // If the value is not a JSON array or wasn't returned previously, continue with the normal flow
-            if (!empty($key) && isset($settingValue[$variable][$key])) {
+            if ($key !== null && isset($settingValue[$variable][$key])) {
                 return $settingValue[$variable][$key];
             }
 
             return $settingValue;
-            break;
     }
 }
 
@@ -3553,19 +3543,21 @@ function api_is_anonymous()
 
 /**
  * Displays message "You are not allowed here..." and exits the entire script.
- *
- * @param bool $print_headers Whether to print headers (default = false -> does not print them)
- * @param string $message
- * @param int $responseCode
- *
- * @throws Exception
  */
 function api_not_allowed(
-    $print_headers = false,
-    $message = null,
-    $responseCode = 0
+    bool $printHeaders = false,
+    string $message = null,
+    int $responseCode = 0,
+    string $severity = 'warning'
 ): never {
-    throw new NotAllowedException($message ?: 'You are not allowed', null, $responseCode);
+    throw new NotAllowedException(
+        $message ?: get_lang('You are not allowed'),
+        $severity,
+        403,
+        [],
+        $responseCode,
+        null
+    );
 }
 
 /**
@@ -6002,11 +5994,11 @@ function api_get_course_url($courseId = null, $sessionId = null, $groupId = null
  */
 function api_get_multiple_access_url(): bool
 {
-    return Container::getAccessUrlHelper()->isMultiple();
+    return Container::getAccessUrlUtil()->isMultiple();
 }
 
 /**
- * @deprecated Use AccessUrlHelper::isMultiple
+ * @deprecated Use AccessUrlUtil::isMultiple
  */
 function api_is_multiple_url_enabled(): bool
 {
@@ -6374,7 +6366,7 @@ function api_get_roles()
 
 function api_get_user_roles(): array
 {
-    $permissionService = Container::$container->get(PermissionServiceHelper::class);
+    $permissionService = Container::$container->get(PermissionHelper::class);
 
     $roles = $permissionService->getUserRoles();
 
@@ -7564,7 +7556,7 @@ function api_filename_has_blacklisted_stream_wrapper(string $filename) {
  */
 function api_get_permission(string $permissionSlug, array $roles): bool
 {
-    $permissionService = Container::$container->get(PermissionServiceHelper::class);
+    $permissionService = Container::$container->get(PermissionHelper::class);
 
     return $permissionService->hasPermission($permissionSlug, $roles);
 }

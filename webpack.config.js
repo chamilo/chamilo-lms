@@ -154,6 +154,17 @@ class CopyUnhashedAssetsPlugin {
         )
       }
 
+      // === COPY legacy_exercise.js without hash ===
+      const legacyExerciseFile = fs.readdirSync(buildPath).find((f) =>
+        f.match(/^legacy_exercise\.[a-f0-9]+\.js$/)
+      )
+      if (legacyExerciseFile) {
+        fs.copyFileSync(
+          path.join(buildPath, legacyExerciseFile),
+          path.join(buildPath, "legacy_exercise.js")
+        )
+      }
+
       // === COPY runtime.js without hash ===
       const runtimeFile = fs.readdirSync(buildPath).find((f) =>
         f.match(/^runtime\.[a-f0-9]+\.js$/)

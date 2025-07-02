@@ -6,10 +6,11 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
+use Chamilo\CoreBundle\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -372,7 +373,7 @@ if (!empty($sessionRelUsers)) {
     $userListToShow .= $table->toHtml();
 }
 
-/** @var SequenceResourceRepository $repo */
+/** @var SequenceRepository $repo */
 $repo = $em->getRepository(SequenceResource::class);
 $requirementAndDependencies = $repo->getRequirementAndDependencies(
     $sessionId,

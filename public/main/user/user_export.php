@@ -10,7 +10,7 @@ $this_section = SECTION_COURSES;
 
 api_protect_admin_script(true, true);
 
-$accessUrlHelper = Container::getAccessUrlHelper();
+$accessUrlUtil = Container::getAccessUrlUtil();
 
 $encryption = api_get_configuration_value('password_encryption');
 
@@ -54,8 +54,8 @@ if (is_array($courseSessionValue) && isset($courseSessionValue[1])) {
 
 $extraUrlJoin = '';
 $extraUrlCondition = '';
-$accessUrl = $accessUrlHelper->getCurrent();
-if ($accessUrlHelper->isMultiple()) {
+$accessUrl = $accessUrlUtil->getCurrent();
+if ($accessUrlUtil->isMultiple()) {
     $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = $accessUrl->getId();
     if (-1 != $access_url_id) {
@@ -112,7 +112,7 @@ if (strlen($course_code) > 0) {
 					ORDER BY lastname,firstname";
     $filename = 'export_users_'.$sessionInfo['name'].'_'.api_get_local_time();
 } else {
-    if ($accessUrlHelper->isMultiple()) {
+    if ($accessUrlUtil->isMultiple()) {
         $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = $accessUrl->getId();
         if (-1 != $access_url_id) {

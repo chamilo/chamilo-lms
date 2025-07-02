@@ -128,6 +128,10 @@ class GradebookCategory
     #[ORM\Column(name: 'generate_certificates', type: 'boolean', nullable: false)]
     protected bool $generateCertificates;
 
+    #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
+    #[ORM\Column(name: 'certificate_validity_period', type: 'integer', nullable: true)]
+    protected ?int $certificateValidityPeriod = null;
+
     #[ORM\Column(name: 'is_requirement', type: 'boolean', nullable: false, options: ['default' => 0])]
     protected bool $isRequirement;
 
@@ -303,6 +307,24 @@ class GradebookCategory
     public function getGenerateCertificates()
     {
         return $this->generateCertificates;
+    }
+
+    /**
+     * Get number of days the linked certificate is valid after attribution.
+     */
+    public function getCertificateValidityPeriod(): ?int
+    {
+        return $this->certificateValidityPeriod;
+    }
+
+    /**
+     * Set number of days the linked certificate is valid after attribution.
+     */
+    public function setCertificateValidityPeriod(?int $certificateValidityPeriod): self
+    {
+        $this->certificateValidityPeriod = $certificateValidityPeriod;
+
+        return $this;
     }
 
     public function setIsRequirement(bool $isRequirement): self

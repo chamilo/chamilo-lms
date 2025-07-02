@@ -1,17 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Symfony\Component\Filesystem\Filesystem;
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Entity\Asset;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Library of the settings.php file.
@@ -166,7 +164,7 @@ function handlePlugins()
         require $pluginInfoFile;
 
         $plugin = $pluginRepo->findOneByTitle($pluginName);
-        $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlHelper()->getCurrent());
+        $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
         $isInstalled = $plugin && $plugin->isInstalled();
         $isEnabled = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
 

@@ -189,6 +189,7 @@ class SurveyUtil
         // User report
         if (isset($_GET['action']) && 'userreport' == $_GET['action']) {
             if (0 == $survey_data['anonymous']) {
+                //TODO fix that this may trigger 'PHP Warning:  Undefined array key "anonymous"'
                 foreach ($people_filled as $key => &$value) {
                     $people_filled_userids[] = $value['invited_user'];
                 }

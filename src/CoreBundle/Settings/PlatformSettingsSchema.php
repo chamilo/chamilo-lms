@@ -94,7 +94,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'redirect_index_to_url_for_logged_users' => '',
                     'default_menu_entry_for_course_or_session' => 'my_courses',
                     'notification_event' => 'false',
-                    'show_tabs_per_role' => '',
+                    'show_tabs_per_role' => '{}',
                     'session_admin_user_subscription_search_extra_field_to_search' => '',
                 ]
             )
@@ -112,7 +112,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             'gravatar_type' => ['string'],
             'show_tabs' => ['array', 'null'],
             'show_tabs_per_role' => ['string', 'null'],
-            'session_admin_user_subscription_search_extra_field_to_search' => ['string'],
+            'session_admin_user_subscription_search_extra_field_to_search' => ['string', 'null'],
         ];
 
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -300,6 +300,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 TextType::class,
                 [
                     'required' => false,
+                    'empty_data' => '',
                     'help' => 'User extra field key to use when searching and naming sessions from /admin-dashboard/register.',
                 ]
             )

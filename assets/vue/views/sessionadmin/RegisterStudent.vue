@@ -37,7 +37,7 @@
         />
         <InputText
           v-if="extraFieldKey"
-          v-model="dynamicExtraField.value"
+          v-model="dynamicExtraField"
           :placeholder="extraFieldKey"
           class="w-full"
         />
@@ -211,14 +211,18 @@ async function searchStudent() {
   const filters = {
     lastname: form.value.lastname,
     firstname: form.value.firstname,
-    extraFilters: extraFieldKey && dynamicExtraField.value ? { [extraFieldKey]: dynamicExtraField.value } : undefined,
     pagination: false,
   }
 
-  try {
-    const { items } = await userService.findAll(filters)
+  if (extraFieldKey && dynamicExtraField.value) {
+    filters[`extraFilters[${extraFieldKey}]`] = dynamicExtraField.value
+  }
 
-    if (items.length > 0) {
+  try {
+    const response = await userService.findUsersForSessionAdmin(filters)
+    const items = response.items
+
+    if (items && items.length > 0) {
       matches.value = items
     } else {
       searchAttempted.value = true

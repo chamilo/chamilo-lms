@@ -12,9 +12,14 @@ use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRelCourseRelUserRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -29,7 +34,8 @@ class SessionAdminController extends BaseController
 {
     public function __construct(
         private readonly CourseRepository $courseRepository,
-        private readonly AccessUrlHelper $accessUrlHelper
+        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly SettingsManager $settingsManager
     ) {}
 
     #[Route('/courses', name: 'chamilo_core_admin_sessionadmin_courses', methods: ['GET'])]
@@ -74,7 +80,15 @@ class SessionAdminController extends BaseController
         $mapCertificate = function (GradebookCertificate $gc) {
             $sessionRel = $gc->getCategory()->getCourse()->getSessions()[0] ?? null;
             $session = $sessionRel?->getSession();
-            $hash = pathinfo($gc->getPathCertificate(), PATHINFO_FILENAME);
+            $path = $gc->getPathCertificate();
+
+            $hash = null;
+            $downloadUrl = null;
+
+            if (!empty($path)) {
+                $hash = pathinfo($path, PATHINFO_FILENAME);
+                $downloadUrl = '/certificates/'.$hash.'.pdf';
+            }
 
             return [
                 'id'        => $gc->getId(),
@@ -91,7 +105,7 @@ class SessionAdminController extends BaseController
                     'id'    => $session->getId(),
                     'title' => $session->getTitle(),
                 ] : null,
-                'downloadUrl' => '/certificates/'.$hash.'.pdf',
+                'downloadUrl' => $downloadUrl,
             ];
         };
 
@@ -244,6 +258,66 @@ class SessionAdminController extends BaseController
             'code' => $course->getCode(),
             'description' => $course->getDescription(),
             'illustrationUrl' => method_exists($course, 'getIllustrationUrl') ? $course->getIllustrationUrl() : null,
+        ]);
+    }
+
+    #[Route('/users', name: 'chamilo_core_admin_sessionadmin_search_users', methods: ['GET'])]
+    public function searchUsers(
+        Request $request,
+        UserRepository $userRepo,
+        ExtraFieldRepository $extraFieldRepo,
+        ExtraFieldValuesRepository $extraFieldValuesRepo,
+        AccessUrlHelper $accessUrlHelper,
+        SettingsManager $settingsManager,
+    ): JsonResponse {
+        $lastname = $request->query->get('lastname');
+        $firstname = $request->query->get('firstname');
+        $extraFilters = $request->query->all('extraFilters');
+
+        $configuredExtraFieldVariable = $settingsManager->getSetting('platform.session_admin_user_subscription_search_extra_field_to_search', true);
+
+        $filters = [];
+        if ($lastname) {
+            $filters['lastname'] = $lastname;
+        }
+        if ($firstname) {
+            $filters['firstname'] = $firstname;
+        }
+        if ($configuredExtraFieldVariable && !empty($extraFilters[$configuredExtraFieldVariable])) {
+            $filters['extraFilters'] = [
+                $configuredExtraFieldVariable => $extraFilters[$configuredExtraFieldVariable],
+            ];
+        }
+
+        $users = $userRepo->findUsersForSessionAdmin(
+            $filters['lastname'] ?? null,
+            $filters['firstname'] ?? null,
+            $filters['extraFilters'] ?? [],
+            $accessUrlHelper->getCurrent(),
+        );
+
+        $data = [];
+        foreach ($users as $user) {
+            $extraValue = $extraFieldValuesRepo->getValueByVariableAndItem(
+                $configuredExtraFieldVariable,
+                $user->getId(),
+                ExtraField::USER_FIELD_TYPE
+            );
+
+            $extra[$configuredExtraFieldVariable] = $extraValue->getFieldValue();
+
+            $data[] = [
+                'id' => $user->getId(),
+                'lastname' => $user->getLastname(),
+                'firstname' => $user->getFirstname(),
+                'fullname' => trim($user->getFirstname() . ' ' . $user->getLastname()),
+                'email' => $user->getEmail(),
+                'extra' => $extra,
+            ];
+        }
+
+        return $this->json([
+            'items' => $data,
         ]);
     }
 }

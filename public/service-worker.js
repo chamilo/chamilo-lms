@@ -1,4 +1,39 @@
+/**
+ * Chamilo Service Worker
+ * Handles:
+ * - Offline caching
+ * - Push notifications
+ */
+
+// PWA: Cache basic files on install
+self.addEventListener('install', (event) => {
+  console.log('[Service Worker] Install event');
+
+  event.waitUntil(
+    caches.open('chamilo-cache-v1').then((cache) => {
+      return cache.addAll([
+        '/',
+        '/manifest.json',
+        '/img/pwa-icons/icon-192.png',
+        '/img/pwa-icons/icon-512.png',
+      ]);
+    })
+  );
+});
+
+//PWA: Serve from cache if available
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      return cachedResponse || fetch(event.request);
+    })
+  );
+});
+
+// PUSH NOTIFICATIONS
 self.addEventListener('push', function (event) {
+  console.log('[Service Worker] Push received.');
+
   let data = {};
   if (event.data) {
     data = event.data.json();
@@ -6,7 +41,7 @@ self.addEventListener('push', function (event) {
 
   const options = {
     body: data.message || 'No message payload',
-    icon: '/img/logo.png',
+    icon: '/img/pwa-icons/icon-192.png',
     data: {
       url: data.url || '/',
     },

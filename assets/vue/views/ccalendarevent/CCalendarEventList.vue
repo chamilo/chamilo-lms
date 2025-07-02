@@ -283,12 +283,20 @@ const calendarOptions = ref({
       return
     }
 
-    const startDate = new Date(info.start)
-    startDate.setHours(0, 0, 0, 0)
+    let startDate
+    let endDate
 
-    const endDate = new Date(info.end)
-    endDate.setDate(endDate.getDate() - 1)
-    endDate.setHours(23, 59, 0, 0)
+    if (info.allDay) {
+      startDate = new Date(info.start)
+      startDate.setHours(0, 0, 0, 0)
+
+      endDate = new Date(info.end)
+      endDate.setDate(endDate.getDate() - 1)
+      endDate.setHours(23, 59, 0, 0)
+    } else {
+      startDate = new Date(info.start)
+      endDate = new Date(info.end)
+    }
 
     item.value = {}
     item.value["parentResourceNode"] = securityStore.user.resourceNode["id"]

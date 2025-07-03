@@ -2,43 +2,52 @@
   <Dialog
     v-model:visible="visible"
     modal
-    :header="t('Required courses')"
+    :header="t('Session requirements and dependencies')"
     class="w-[30rem] z-[99999] !block !opacity-100"
   >
-    <div v-if="sequenceList.length">
+    <div v-if="hasData">
       <div
-        v-for="item in sequenceList"
-        :key="item.name"
+        v-for="section in requirements"
+        :key="section.name"
         class="mb-4"
       >
-        <h4 class="font-semibold text-gray-700 mb-2">{{ item.name }}</h4>
-        <ul>
+        <h4 class="font-semibold text-gray-700 mb-2">
+          {{ section.name }}
+        </h4>
+        <ul class="list-disc pl-5 text-sm text-gray-700">
           <li
-            v-for="(req, id) in item.requirements"
-            :key="id"
+            v-for="req in section.requirements"
+            :key="req.name"
             class="flex items-center gap-2"
           >
-            <i :class="req.status ? 'mdi mdi-check-circle text-green-500' : 'mdi mdi-alert-circle text-red-500'" />
-            <span>{{ req.name }}</span>
+            <i
+              v-if="req.status !== null"
+              :class="req.status
+            ? 'mdi mdi-check-circle text-green-500'
+            : 'mdi mdi-alert-circle text-red-500'"
+            ></i>
+            <span v-html="req.adminLink || req.name"></span>
           </li>
         </ul>
       </div>
+
+      <div
+        v-if="graphImage"
+        class="mt-4 text-center"
+      >
+        <img
+          :src="graphImage"
+          alt="Graph"
+          class="max-w-full max-h-96 mx-auto border rounded"
+        />
+      </div>
     </div>
+
     <div
       v-else
       class="text-sm text-gray-500"
     >
       {{ t("No dependencies") }}
-    </div>
-    <div
-      v-if="graphImage"
-      class="mb-4 text-center"
-    >
-      <img
-        :src="graphImage"
-        alt="Graph"
-        class="max-w-full max-h-96 mx-auto border rounded"
-      />
     </div>
   </Dialog>
 </template>
@@ -55,6 +64,7 @@ const props = defineProps({
   courseId: Number,
   sessionId: Number,
   requirements: Array,
+  dependencies: Array,
   graphImage: String,
 })
 
@@ -65,5 +75,10 @@ const visible = computed({
   set: (value) => emit("update:modelValue", value),
 })
 
-const sequenceList = computed(() => props.requirements || [])
+const requirements = computed(() => props.requirements || [])
+const dependencies = computed(() => props.dependencies || [])
+
+const hasData = computed(() => {
+  return requirements.value.length > 0 || dependencies.value.length > 0
+})
 </script>

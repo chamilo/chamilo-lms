@@ -568,6 +568,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
                         }
 
                         $resourceItem = [
+                            'id' => $resource->getId(),
                             'name' => $resource->getTitle(),
                             'code' => $resource->getCode(),
                             'status' => $status,

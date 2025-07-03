@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use CourseDescription;
@@ -24,9 +25,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Essence\Essence;
 use ExtraFieldValue;
+use Graphp\GraphViz\GraphViz;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use SessionManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -250,5 +254,63 @@ class SessionController extends AbstractController
         ];
 
         return $this->render('@ChamiloCore/Session/about.html.twig', $params);
+    }
+
+    #[Route('/{sessionId}/next-session', name: 'chamilo_session_next_session')]
+    public function getNextSession(
+        int $sessionId,
+        Request $request,
+        SequenceResourceRepository $repo,
+        Security $security
+    ): JsonResponse {
+
+        $requirementAndDependencies = $repo->getRequirementAndDependencies(
+            $sessionId,
+            SequenceResource::SESSION_TYPE
+        );
+
+        $requirements = [];
+        $dependencies = [];
+
+        if (!empty($requirementAndDependencies['requirements'])) {
+            foreach ($requirementAndDependencies['requirements'] as $requirement) {
+                $requirements[] = [
+                    'id' => $requirement['id'],
+                    'name' => $requirement['name'],
+                    'admin_link' => $requirement['admin_link'],
+                ];
+            }
+        }
+
+        if (!empty($requirementAndDependencies['dependencies'])) {
+            foreach ($requirementAndDependencies['dependencies'] as $dependency) {
+                $dependencies[] = [
+                    'id' => $dependency['id'],
+                    'name' => $dependency['name'],
+                    'admin_link' => $dependency['admin_link'],
+                ];
+            }
+        }
+
+        $sequenceResource = $repo->findRequirementForResource(
+            $sessionId,
+            SequenceResource::SESSION_TYPE
+        );
+
+        $graphImage = null;
+        if ($sequenceResource && $sequenceResource->hasGraph()) {
+            $graph = $sequenceResource->getSequence()->getUnSerializeGraph();
+            if ($graph !== null) {
+                $graph->setAttribute('graphviz.node.fontname', 'arial');
+                $graphviz = new GraphViz();
+                $graphImage = $graphviz->createImageSrc($graph);
+            }
+        }
+
+        return new JsonResponse([
+            'requirements' => $requirements,
+            'dependencies' => $dependencies,
+            'graph' => $graphImage,
+        ]);
     }
 }

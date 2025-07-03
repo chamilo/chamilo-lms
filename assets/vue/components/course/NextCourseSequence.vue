@@ -25,17 +25,16 @@
             <i class="mdi mdi-book-open-page-variant text-5xl text-blue-600"></i>
 
             <p class="mt-2 text-sm font-semibold">
-              <template v-if="course.status && course.url">
-                <a
-                  :href="course.url"
-                  class="text-green-700 hover:underline"
-                >
-                  {{ course.name }}
-                </a>
-              </template>
-              <template v-else>
+              <span
+                @click="goToCourse(course.id)"
+                :class="
+                  course.status
+                    ? 'text-green-700 cursor-pointer hover:underline'
+                    : 'text-red-700 cursor-pointer hover:underline'
+                "
+              >
                 {{ course.name }}
-              </template>
+              </span>
             </p>
 
             <span
@@ -87,11 +86,19 @@ const sequenceList = ref([])
 
 onMounted(async () => {
   try {
-    const { sequenceList: list, graph } = await courseService.getNextCourse(course.value.id, session.value?.id || 0, true)
+    const { sequenceList: list, graph } = await courseService.getNextCourse(
+      course.value.id,
+      session.value?.id || 0,
+      true,
+    )
     sequenceList.value = list || []
     graphUrl.value = graph || null
   } catch (e) {
     console.warn("No sequence data available", e)
   }
 })
+
+function goToCourse(courseId) {
+  window.location.href = `/course/${courseId}/home?sid=${session.value?.id || 0}`
+}
 </script>

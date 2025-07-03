@@ -84,7 +84,15 @@
 
       <div class="mt-auto pt-2">
         <Button
-          v-if="isPast"
+          v-if="requirementStatusLoading"
+          :label="$t('Loading...')"
+          icon="pi pi-spin pi-spinner"
+          class="w-full"
+          disabled
+        />
+
+        <Button
+          v-else-if="isPast"
           :label="$t('Not available')"
           icon="pi pi-lock"
           class="w-full"
@@ -97,6 +105,14 @@
             class="w-full text-center mb-2"
           ></div>
         </template>
+
+        <Button
+          v-else-if="isSessionLocked"
+          :label="$t('Check requirements')"
+          icon="mdi mdi-shield-check"
+          class="w-full p-button-warning"
+          @click="openSessionRequirementModal"
+        />
 
         <Button
           v-else-if="allowAutoSubscription && !session.isSubscribed"
@@ -159,16 +175,7 @@
             class="flex justify-between items-center border-b pb-1"
           >
             <span class="w-2/3 truncate">{{ item.title }}</span>
-            <Button
-              v-if="requirementStatus[item.id]?.isLocked && requirementStatus[item.id]?.hasRequirements"
-              icon="mdi mdi-shield-check"
-              size="small"
-              class="p-button-sm p-button-warning"
-              @click="openRequirement(item.id)"
-              :label="$t('Check requirements')"
-            />
             <a
-              v-else
               :href="`/course/${item.id}/home?sid=${session.id}`"
               target="_blank"
             >
@@ -199,16 +206,19 @@
     />
   </Dialog>
   <CatalogueRequirementModal
-    v-if="selectedCourseId && requirementStatus[selectedCourseId]"
+    v-if="!requirementStatusLoading && isSessionLocked"
     v-model="showRequirementModal"
-    :course-id="selectedCourseId"
+    :course-id="null"
     :session-id="props.session.id"
-    :requirements="requirementStatus[selectedCourseId].requirementList"
-    :graph-image="requirementStatus[selectedCourseId].graphImage"
+    :requirements="[
+      ...(sessionRequirementStatus.requirementList.value || []),
+      ...(sessionRequirementStatus.dependencyList.value || []),
+    ]"
+    :graph-image="sessionRequirementStatus.graphImage.value"
   />
 </template>
 <script setup>
-import { ref, computed, watchEffect, reactive, onMounted } from "vue"
+import { ref, computed, watchEffect, onMounted } from "vue"
 import Rating from "primevue/rating"
 import Button from "primevue/button"
 import Dialog from "primevue/dialog"
@@ -216,10 +226,18 @@ import axios from "axios"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useLocale } from "../../composables/locale"
-import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
 import CatalogueRequirementModal from "../course/CatalogueRequirementModal.vue"
+import { useSessionRequirementStatus } from "../../composables/session/useSessionRequirementStatus"
+
+const props = defineProps({
+  session: Object,
+})
 
 const showDescriptionDialog = ref(false)
+const showCourseDialog = ref(false)
+const showRequirementModal = ref(false)
+const fallback = ref(false)
+
 const platformConfigStore = usePlatformConfig()
 const allowDescription = computed(
   () => platformConfigStore.getSetting("course.show_courses_descriptions_in_catalog") !== "false",
@@ -228,31 +246,13 @@ const { getOriginalLanguageName } = useLocale()
 
 const showGoDialog = ref(false)
 const isLoading = ref(false)
-const emit = defineEmits(["rate", "subscribed"])
-const emitRating = (event) => {
-  emit("rate", { value: event.value, session: props.session })
-}
-
-const allowAutoSubscription = computed(
-  () => platformConfigStore.getSetting("session.catalog_allow_session_auto_subscription") === "true",
-)
-
-const props = defineProps({
-  session: Object,
-})
 
 const securityStore = useSecurityStore()
-
-const showCourseDialog = ref(false)
-const fallback = ref(false)
 
 const thumbnail = computed(() => (!fallback.value ? props.session.imageUrl || null : null))
 const hasThumbnail = computed(() => !!props.session.imageUrl && !fallback.value)
 
 const now = new Date()
-const startDate = computed(() => new Date(props.session.startDate))
-const endDate = computed(() => new Date(props.session.endDate))
-
 const isPast = computed(() => {
   if (!props.session.endDate) return false
   const date = new Date(props.session.endDate)
@@ -275,41 +275,6 @@ watchEffect(() => {
     props.session.courses.forEach((c, i) => console.log(`Course[${i}]`, c.course?.title))
   }
 })
-
-const subscribeToSession = async () => {
-  isLoading.value = true
-  try {
-    const userId = securityStore.user.id
-    const sessionId = props.session.id
-
-    await axios.post("/api/session_rel_users", {
-      user: `/api/users/${userId}`,
-      session: `/api/sessions/${sessionId}`,
-      relationType: 0,
-      duration: 0,
-    })
-
-    const promises = (props.session.courses || []).map((c) =>
-      axios.post("/api/session_rel_course_rel_users", {
-        user: `/api/users/${userId}`,
-        session: `/api/sessions/${sessionId}`,
-        course: `/api/courses/${c.id}`,
-        status: 0,
-        visibility: 1,
-        legalAgreement: 0,
-        progress: 0,
-      }),
-    )
-
-    await Promise.all(promises)
-    emit("subscribed", props.session.id)
-  } catch (error) {
-    console.error("Error subscribing to session:", error)
-    alert("There was an error subscribing. Please try again.")
-  } finally {
-    isLoading.value = false
-  }
-}
 
 const validCourses = computed(() => {
   return (props.session.courses || []).filter((item) => item.title)
@@ -356,20 +321,64 @@ const teachers = computed(() => {
   return [...new Set(all)]
 })
 
-const requirementStatus = reactive({})
-const selectedCourseId = ref(null)
-const showRequirementModal = ref(false)
+const requirementStatusLoading = ref(true)
+const sessionRequirementStatus = useSessionRequirementStatus(props.session.id)
 
-onMounted(() => {
-  for (const course of props.session.courses || []) {
-    const status = useCourseRequirementStatus(course.id, props.session.id)
-    status.fetchStatus()
-    requirementStatus[course.id] = status
-  }
+onMounted(async () => {
+  requirementStatusLoading.value = true
+  await sessionRequirementStatus.fetchStatus()
+  requirementStatusLoading.value = false
 })
 
-function openRequirement(courseId) {
-  selectedCourseId.value = courseId
+const isSessionLocked = computed(() => {
+  return !requirementStatusLoading.value && !sessionRequirementStatus.allowSubscription.value
+})
+
+const emit = defineEmits(["rate", "subscribed"])
+const emitRating = (event) => {
+  emit("rate", { value: event.value, session: props.session })
+}
+
+const allowAutoSubscription = computed(
+  () => platformConfigStore.getSetting("session.catalog_allow_session_auto_subscription") === "true",
+)
+
+const subscribeToSession = async () => {
+  isLoading.value = true
+  try {
+    const userId = securityStore.user.id
+    const sessionId = props.session.id
+
+    await axios.post("/api/session_rel_users", {
+      user: `/api/users/${userId}`,
+      session: `/api/sessions/${sessionId}`,
+      relationType: 0,
+      duration: 0,
+    })
+
+    const promises = (props.session.courses || []).map((c) =>
+      axios.post("/api/session_rel_course_rel_users", {
+        user: `/api/users/${userId}`,
+        session: `/api/sessions/${sessionId}`,
+        course: `/api/courses/${c.id}`,
+        status: 0,
+        visibility: 1,
+        legalAgreement: 0,
+        progress: 0,
+      }),
+    )
+
+    await Promise.all(promises)
+    emit("subscribed", props.session.id)
+  } catch (error) {
+    console.error("Error subscribing to session:", error)
+    alert("There was an error subscribing. Please try again.")
+  } finally {
+    isLoading.value = false
+  }
+}
+
+function openSessionRequirementModal() {
   showRequirementModal.value = true
 }
 </script>

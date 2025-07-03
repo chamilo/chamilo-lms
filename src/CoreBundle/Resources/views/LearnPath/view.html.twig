@@ -4,7 +4,8 @@
 
 {% block content %}
     {% autoescape false %}
-        <div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }}">
+        <div id="learning_path_main"
+             class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }}">
             {% if show_left_column == 1 %}
                 <div id="learning_path_left_zone" class="sidebar-scorm">
                     <div class="lp-view-zone-container">
@@ -56,27 +57,23 @@
                                         }
                                     </style>
                                     <script>
-                                      $(function() {
+                                      $(function () {
                                         var timerData = {
                                           hour: parseInt($("#hour").text()),
                                           minute: parseInt($("#minute").text()),
                                           second: parseInt($("#second").text())
                                         }
                                         clearInterval(window.timerInterval)
-                                        window.timerInterval = setInterval(function() {
-                                          // Seconds
+                                        window.timerInterval = setInterval(function () {
                                           timerData.second++
                                           if (timerData.second >= 60) {
                                             timerData.second = 0
                                             timerData.minute++
                                           }
-
-                                          // Minutes
                                           if (timerData.minute >= 60) {
                                             timerData.minute = 0
                                             timerData.hour++
                                           }
-
                                           $("#hour").text(timerData.hour < 10 ? "0" + timerData.hour : timerData.hour)
                                           $("#minute").text(timerData.minute < 10 ? "0" + timerData.minute : timerData.minute)
                                           $("#second").text(timerData.second < 10 ? "0" + timerData.second : timerData.second)
@@ -85,9 +82,7 @@
                                     </script>
                                     <div class="row">
                                         <div class="col-xs-4">
-                                            <b>
-                                                {{ "Progress"|trans|format(lp_accumulate_work_time) }}
-                                            </b>
+                                            <b>{{ "Progress"|trans|format(lp_accumulate_work_time) }}</b>
                                         </div>
                                         <div class="col-xs-8">
                                             <div id="progress_bar">
@@ -97,9 +92,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-4">
-                                            <b>
-                                                {{ "Time spent in the learning path"|trans|format(lp_accumulate_work_time) }}
-                                            </b>
+                                            <b>{{ "Time spent in the learning path"|trans|format(lp_accumulate_work_time) }}</b>
                                         </div>
                                         <div class="col-xs-8">
                                             <div id="timer">
@@ -125,7 +118,6 @@
                                 {% endif %}
 
                                 {% if gamification_mode == 1 %}
-                                    <!--- gamification -->
                                     <div id="scorm-gamification">
                                         <div class="row">
                                             <div class="col-xs-6">
@@ -134,7 +126,6 @@
                                                         <i class="level mdi-star-face mdi" aria-hidden="true"></i>
                                                     {% endfor %}
                                                 {% endif %}
-
                                                 {% if gamification_stars < 4 %}
                                                     {% for i in 1..4 - gamification_stars %}
                                                         <i class="mdi-home-outline mdi" aria-hidden="true"></i>
@@ -151,7 +142,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--- end gamification -->
                                 {% else %}
                                     {{ lp_progress }}
                                 {% endif %}
@@ -159,9 +149,8 @@
                                 {{ teacher_toc_buttons }}
                             </div>
                         </div>
-                        {# TOC layout #}
+
                         <div id="toc_id" class="scorm-body" name="toc_name">
-                            {# div#flab-mobile is to know when the user is on mobile view. Don't delete. #}
                             <div id="flag-mobile" class="visible-xs-block" aria-hidden="true"></div>
                             {% include '@ChamiloCore/LearnPath/scorm_list.html.twig' %}
                         </div>
@@ -169,8 +158,8 @@
                 </div>
             {% endif %}
 
-            {# Right zone #}
-            <div id="learning_path_right_zone" class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
+            <div id="learning_path_right_zone"
+                 class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
                 <div class="lp-view-zone-container">
                     <div class="lp-view-tabs">
                         <div id="navTabBar" class="nav-tabs-bar">
@@ -182,22 +171,6 @@
                                     {% endfor %}
                                 </div>
                             </div>
-                            <!--ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
-                            <li role="presentation" class="active">
-                                <a href="#lp-view-content" title="{{ 'Lesson'|trans }}"
-                                   aria-controls="lp-view-content" role="tab" data-toggle="tab">
-                                    <i class="mdi-book mdi" aria-hidden="true"></i>
-                                    <span class="sr-only">{{ 'Lesson'|trans }}</span>
-                                </a>
-                            </li>
-                            <li role="presentation">
-                                <a href="#lp-view-forum" title="{{ 'Forum'|trans }}"
-                                   aria-controls="lp-view-forum" role="tab" data-toggle="tab">
-                                    <i class="mdi-message-reply-text mdi" aria-hidden="true"></i>
-                                    <span class="sr-only">{{ 'Forum'|trans }}</span>
-                                </a>
-                            </li>
-                        </ul-->
                         </div>
 
                         {% include '@ChamiloCore/LearnPath/menubar.html.twig' %}
@@ -209,19 +182,16 @@
                                         <iframe id="content_id_blank" name="content_name_blank" src="blank.php"
                                                 style="width:100%; height:100%" border="0" frameborder="0"
                                                 allowfullscreen="true" webkitallowfullscreen="true"
-                                                mozallowfullscreen="true">
-                                        </iframe>
+                                                mozallowfullscreen="true"></iframe>
                                     {% else %}
                                         <iframe id="content_id" name="content_name" src="{{ iframe_src }}"
                                                 style="width:100%; height:100%" border="0" frameborder="0"
                                                 allowfullscreen="true" webkitallowfullscreen="true"
-                                                mozallowfullscreen="true">
-                                        </iframe>
+                                                mozallowfullscreen="true"></iframe>
                                     {% endif %}
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="lp-view-forum">
-                            </div>
+                            <div role="tabpanel" class="tab-pane" id="lp-view-forum"></div>
                         </div>
                     </div>
                 </div>
@@ -422,4 +392,7 @@
           });
         </script>
     {% endautoescape %}
+    <script>
+      window.lpCurrentItemId = {{ lp_current_item_id }};
+    </script>
 {% endblock %}

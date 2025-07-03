@@ -57,7 +57,10 @@ export default {
   },
   mixins: [CreateMixin],
   data() {
-    const filetype = this.$route.query.filetype === "certificate" ? "certificate" : "file"
+    const allowedFiletypes = ["file", "video", "audio", "certificate"]
+    const filetypeQuery = this.$route.query.filetype
+    const filetype = allowedFiletypes.includes(filetypeQuery) ? filetypeQuery : "file"
+
     const finalTags = this.getCertificateTags()
     return {
       item: {

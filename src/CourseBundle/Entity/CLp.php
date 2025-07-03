@@ -158,6 +158,9 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
     protected ?int $duration = null;
 
+    #[ORM\Column(name: 'auto_forward_video', type: 'boolean', options: ['default' => 0])]
+    protected bool $autoForwardVideo = false;
+
     public function __construct()
     {
         $now = new DateTime();
@@ -643,6 +646,18 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     public function setDuration(?int $duration): self
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getAutoForwardVideo(): bool
+    {
+        return $this->autoForwardVideo;
+    }
+
+    public function setAutoForwardVideo(bool $autoForwardVideo): self
+    {
+        $this->autoForwardVideo = $autoForwardVideo;
 
         return $this;
     }

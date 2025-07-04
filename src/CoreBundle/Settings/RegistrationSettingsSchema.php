@@ -24,14 +24,9 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                     'allow_registration' => 'false',
                     'allow_registration_as_teacher' => 'false',
                     'allow_lostpassword' => 'true',
-                    'page_after_login' => 'user_portal.php',
                     'extendedprofile_registration' => [],
                     'extendedprofile_registrationrequired' => [],
                     'allow_terms_conditions' => 'false',
-                    'student_page_after_login' => '',
-                    'teacher_page_after_login' => '',
-                    'drh_page_after_login' => '',
-                    'sessionadmin_page_after_login' => '',
                     'student_autosubscribe' => '',
                     'teacher_autosubscribe' => '',
                     'drh_autosubscribe' => '',
@@ -40,6 +35,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                     'required_extra_fields_in_inscription' => '',
                     'allow_fields_inscription' => '',
                     'send_inscription_msg_to_inbox' => 'false',
+                    'redirect_after_login' => '',
                 ]
             )
             ->setTransformer(
@@ -104,17 +100,6 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
             ->add('allow_registration_as_teacher', YesNoType::class)
             ->add('allow_lostpassword', YesNoType::class)
             ->add(
-                'page_after_login',
-                ChoiceType::class,
-                [
-                    'choices' => [
-                        'Campus homepage' => 'index.php',
-                        'My courses' => 'user_portal.php',
-                        'Course catalogue' => 'main/auth/courses.php',
-                    ],
-                ]
-            )
-            ->add(
                 'extendedprofile_registration',
                 ChoiceType::class,
                 [
@@ -131,10 +116,6 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('allow_terms_conditions', YesNoType::class)
-            ->add('student_page_after_login')
-            ->add('teacher_page_after_login')
-            ->add('drh_page_after_login')
-            ->add('sessionadmin_page_after_login')
             ->add('student_autosubscribe')// ?
             ->add('teacher_autosubscribe')// ?
             ->add('drh_autosubscribe')// ?
@@ -157,6 +138,15 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('send_inscription_msg_to_inbox', YesNoType::class)
+            ->add(
+                'redirect_after_login',
+                TextareaType::class,
+                [
+                    'required' => false,
+                    'help_html' => true,
+                    'help' => $this->settingArrayHelpValue('redirect_after_login'),
+                ]
+            )
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
@@ -207,6 +197,17 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                         'langue_cible'
                     ]
                 ]
+                </pre>",
+            'redirect_after_login' => "<pre>
+                    {
+                        \"COURSEMANAGER\": \"\",
+                        \"STUDENT\": \"\",
+                        \"DRH\": \"\",
+                        \"SESSIONADMIN\": \"admin-dashboard\",
+                        \"STUDENT_BOSS\": \"\",
+                        \"INVITEE\": \"\",
+                        \"ADMIN\": \"admin-dashboard\"
+                    }
                 </pre>",
         ];
 

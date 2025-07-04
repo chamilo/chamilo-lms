@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\PersonalFile;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -146,5 +148,105 @@ class GradebookCertificateRepository extends ServiceEntityRepository
         $em->flush();
 
         return true;
+    }
+
+    public function findCertificatesWithContext(
+        int $urlId,
+        int $offset = 0,
+        int $limit  = 50
+    ): array {
+        return $this->createQueryBuilder('gc')
+            ->join('gc.category',   'cat')
+            ->join('cat.course',    'course')
+            ->join('course.urls',   'curl')
+            ->join('curl.url',      'url')
+            ->leftJoin('course.sessions', 'src')
+            ->leftJoin('src.session',     'session')
+            ->where('url.id = :urlId')
+            ->setParameter('urlId', $urlId)
+            ->orderBy('gc.createdAt', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findIncompleteCertificates(int $urlId): array
+    {
+        $today = new \DateTimeImmutable();
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('sru', 'u', 's', 'src', 'c')
+        ->from(SessionRelUser::class, 'sru')
+            ->join('sru.user',    'u')
+            ->join('sru.session', 's')
+            ->join('s.courses',   'src')
+            ->join('src.course',  'c')
+            ->join('c.urls',      'curl')
+            ->join('curl.url',    'url')
+            ->where('url.id = :urlId')
+            ->andWhere('s.accessStartDate <= :today')
+            ->andWhere('s.accessEndDate   IS NULL OR s.accessEndDate > :today')
+            ->andWhere(
+                $qb->expr()->not(
+                    $qb->expr()->exists(
+                        $em->createQueryBuilder()
+                            ->select('gc2.id')
+                            ->from(GradebookCertificate::class, 'gc2')
+                            ->join('gc2.category', 'cat2')
+                            ->join('cat2.course',  'cc')
+                            ->where('gc2.user = u')
+                            ->andWhere('cc = c')
+                            ->getDQL()
+                    )
+                )
+            )
+            ->setParameter('urlId', $urlId)
+            ->setParameter('today', $today)
+            ->orderBy('s.accessStartDate', 'DESC');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findRestartableSessions(
+        int $urlId,
+        int $offset = 0,
+        int $limit  = 10
+    ): array {
+        $today = new \DateTimeImmutable();
+
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('srcu')
+            ->from(SessionRelCourseRelUser::class, 'srcu')
+            ->join('srcu.session', 's')
+            ->join('srcu.course',  'c')
+            ->join('c.urls',       'curl')
+            ->join('curl.url',     'url')
+            ->where('url.id = :urlId')
+            ->andWhere('s.accessEndDate IS NOT NULL')
+            ->andWhere('s.accessEndDate < :today')
+            ->andWhere(
+                $qb->expr()->not(
+                    $qb->expr()->exists(
+                        $this->_em->createQueryBuilder()
+                            ->select('gc2.id')
+                            ->from(GradebookCertificate::class, 'gc2')
+                            ->join('gc2.category', 'cat2')
+                            ->join('cat2.course',  'cc')
+                            ->where('gc2.user = srcu.user')
+                            ->andWhere('cc = c')
+                            ->getDQL()
+                    )
+                )
+            )
+            ->orderBy('s.accessEndDate', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('urlId', $urlId)
+            ->setParameter('today', $today);
+
+        return $qb->getQuery()->getResult();
     }
 }

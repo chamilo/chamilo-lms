@@ -948,11 +948,11 @@ class TicketManager
         $keyword_range = !empty($keyword_start_date_start) && !empty($keyword_start_date_end);
 
         if ($keyword_range == false && $keyword_start_date_start != '') {
-            $sql .= " AND DATE_FORMAT(ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start' ";
+            $sql .= " AND ticket.start_date >= '$keyword_start_date_start' ";
         }
         if ($keyword_range && $keyword_start_date_start != '' && $keyword_start_date_end != '') {
-            $sql .= " AND DATE_FORMAT(ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start'
-                      AND DATE_FORMAT(ticket.start_date,'%d/%m/%Y') <= '$keyword_start_date_end'";
+            $sql .= " AND ticket.start_date >= '$keyword_start_date_start'
+                      AND ticket.start_date <= '$keyword_start_date_end'";
         }
 
         if ($keyword_course != '') {
@@ -1141,11 +1141,11 @@ class TicketManager
         $keyword_course = isset($_GET['keyword_course']) ? Database::escape_string(trim($_GET['keyword_course'])) : '';
 
         if ($keyword_range == false && $keyword_start_date_start != '') {
-            $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') = '$keyword_start_date_start' ";
+            $sql .= " AND ticket.start_date >= '$keyword_start_date_start' ";
         }
         if ($keyword_range && $keyword_start_date_start != '' && $keyword_start_date_end != '') {
-            $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start'
-                      AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') <= '$keyword_start_date_end'";
+            $sql .= " AND ticket.start_date >= '$keyword_start_date_start'
+                      AND ticket.start_date <= '$keyword_start_date_end'";
         }
         if ($keyword_course != '') {
             $course_table = Database::get_main_table(TABLE_MAIN_COURSE);

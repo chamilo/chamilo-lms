@@ -1674,6 +1674,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => "Hide 'my certificate' link",
                     'comment' => 'Hide the certificates page for non-admin users.',
                 ],
+                [
+                    'name' => 'session_admin_can_download_all_certificates',
+                    'title' => 'Allow session admins to download private certificates',
+                    'comment' => 'If enabled, session administrators can download certificates even if they are not publicly published.',
+                ],
             ],
             'admin' => [
                 [

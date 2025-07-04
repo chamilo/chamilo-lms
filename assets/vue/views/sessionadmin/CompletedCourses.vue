@@ -28,10 +28,11 @@
           >
             <td class="p-2">{{ cert.user.name }}</td>
             <td class="p-2">{{ cert.course.title }}</td>
-            <td class="p-2">{{ cert.session?.title || '-' }}</td>
+            <td class="p-2">{{ cert.session?.title || "-" }}</td>
             <td class="p-2">{{ cert.issuedAt }}</td>
             <td class="p-2 text-right">
               <a
+                v-if="cert.isDownloadAllowed"
                 :href="cert.downloadUrl"
                 target="_blank"
                 rel="noopener"
@@ -39,6 +40,13 @@
               >
                 <i class="pi pi-download" />
               </a>
+              <span
+                v-else
+                class="text-gray-400 cursor-not-allowed"
+                title="Certificate not accessible."
+              >
+                <i class="pi pi-download" />
+              </span>
             </td>
           </tr>
         </tbody>

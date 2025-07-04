@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
@@ -35,7 +36,8 @@ class SessionAdminController extends BaseController
     public function __construct(
         private readonly CourseRepository $courseRepository,
         private readonly AccessUrlHelper $accessUrlHelper,
-        private readonly SettingsManager $settingsManager
+        private readonly SettingsManager $settingsManager,
+        private readonly UserHelper $userHelper
     ) {}
 
     #[Route('/courses', name: 'chamilo_core_admin_sessionadmin_courses', methods: ['GET'])]
@@ -76,18 +78,27 @@ class SessionAdminController extends BaseController
         // Retrieve certificates with associated session and course context
         $certs = $repo->findCertificatesWithContext($url->getId(), $offset, $limit);
 
+        $user = $this->userHelper->getCurrent();
+
+        $allowPublic = 'true' === $this->settingsManager->getSetting('course.allow_public_certificates', true);
+        $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
+        $isSessionAdmin = $user && $user->hasRole('ROLE_SESSION_MANAGER');
+
         // Transform the certificate entities into a frontend-friendly structure
-        $mapCertificate = function (GradebookCertificate $gc) {
+        $mapCertificate = function (GradebookCertificate $gc) use ($allowPublic, $allowSessionAdmin, $isSessionAdmin) {
             $sessionRel = $gc->getCategory()->getCourse()->getSessions()[0] ?? null;
             $session = $sessionRel?->getSession();
             $path = $gc->getPathCertificate();
 
             $hash = null;
             $downloadUrl = null;
+            $isDownloadAllowed = false;
 
             if (!empty($path)) {
                 $hash = pathinfo($path, PATHINFO_FILENAME);
                 $downloadUrl = '/certificates/'.$hash.'.pdf';
+                $isPublic = $allowPublic && $gc->getPublish();
+                $isDownloadAllowed = $isPublic || ($isSessionAdmin && $allowSessionAdmin);
             }
 
             return [
@@ -105,7 +116,8 @@ class SessionAdminController extends BaseController
                     'id'    => $session->getId(),
                     'title' => $session->getTitle(),
                 ] : null,
-                'downloadUrl' => $downloadUrl,
+                'downloadUrl'        => $downloadUrl,
+                'isDownloadAllowed'  => $isDownloadAllowed,
             ];
         };
 

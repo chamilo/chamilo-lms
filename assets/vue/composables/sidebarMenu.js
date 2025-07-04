@@ -319,7 +319,27 @@ export function useSidebarMenu() {
       }
     }
 
-    return items.filter(Boolean)
+    const filteredItems = items.filter(Boolean)
+
+    if (filteredItems.length === 1) {
+      const singleItem = filteredItems[0]
+      if (singleItem.items && !singleItem.expanded) {
+        singleItem.expanded = true
+      }
+    }
+
+    ensureKeys(filteredItems)
+
+    return filteredItems
+  })
+
+  const hasOnlyOneItem = computed(() => {
+    const totalItems =
+      (menuItemsBeforeMyCourse.value?.length || 0) +
+      (menuItemMyCourse.value?.length || 0) +
+      (menuItemsAfterMyCourse.value?.length || 0)
+
+    return totalItems === 1
   })
 
   async function initialize() {
@@ -330,6 +350,18 @@ export function useSidebarMenu() {
     menuItemsBeforeMyCourse,
     menuItemMyCourse,
     menuItemsAfterMyCourse,
+    hasOnlyOneItem,
     initialize,
+  }
+}
+
+function ensureKeys(items) {
+  for (const item of items) {
+    if (!item.key) {
+      item.key = item.label?.toLowerCase().replace(/\s+/g, "_") || Math.random().toString(36).slice(2)
+    }
+    if (item.items) {
+      ensureKeys(item.items)
+    }
   }
 }

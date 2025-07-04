@@ -69,7 +69,7 @@ use UserManager;
             uriTemplate: '/advanced/create-user-on-access-url',
             controller: CreateUserOnAccessUrlAction::class,
             denormalizationContext: ['groups' => ['write']],
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')",
             input: CreateUserOnAccessUrlInput::class,
             output: User::class,
             deserialize: true,

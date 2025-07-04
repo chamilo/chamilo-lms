@@ -50,6 +50,9 @@ class CreateUserOnAccessUrlInput
     #[Groups(['write'])]
     private ?int $status = null;
 
+    #[Groups(['write'])]
+    public ?array $extraFields = null;
+
     public function getUsername(): string
     {
         return $this->username;

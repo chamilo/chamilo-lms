@@ -176,17 +176,28 @@ $url = Display::url(
     Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
     "add_courses_to_session.php?page=resume_session.php&id_session=$sessionId"
 );
+
+$theoreticalTimeEnabled = api_get_configuration_value('display_theoretical_time');
 $courseListToShow = Display::page_subheader(get_lang('CourseList').$url);
 
 $courseListToShow .= '<table id="session-list-course" class="table table-hover table-striped data_table">
-<thead>
-<tr>
-  <th></th>
-  <th width="35%">'.get_lang('CourseTitle').'</th>
-  <th width="30%">'.get_lang('CourseCoach').'</th>
-  <th width="10%">'.get_lang('UsersNumber').'</th>
-  <th width="25%">'.get_lang('Actions').'</th>
-</tr></thead><tbody id="sortable-course-list">';
+<thead>+<tr>';
+if ($theoreticalTimeEnabled) {
+    $courseListToShow .=   '<th></th>
+      <th width="30%">'.get_lang('CourseTitle').'</th>
+      <th width="20%">'.get_lang('TheoreticalTime').'</th>
+      <th width="15%">'.get_lang('CourseCoach').'</th>
+      <th width="10%">'.get_lang('UsersNumber').'</th>
+      <th width="25%">'.get_lang('Actions').'</th>
+    </tr></thead><tbody id="sortable-course-list">';
+} else {
+    $courseListToShow .=   '<th></th>
+      <th width="35%">'.get_lang('CourseTitle').'</th>
+      <th width="30%">'.get_lang('CourseCoach').'</th>
+      <th width="10%">'.get_lang('UsersNumber').'</th>
+      <th width="25%">'.get_lang('Actions').'</th>
+    </tr></thead><tbody id="sortable-course-list">';
+}
 
 if ($session->getNbrCourses() === 0) {
     $courseListToShow .= '<tr>
@@ -227,6 +238,8 @@ if ($session->getNbrCourses() === 0) {
         $courseList = $newCourseList;
     }
 
+    $totalTheoreticalTime = 0;
+
     /** @var Course $course */
     foreach ($courseList as $course) {
         // Select the number of users
@@ -245,6 +258,18 @@ if ($session->getNbrCourses() === 0) {
 
         $courseUrl = api_get_course_url($course->getCode(), $sessionId);
         $courseBaseUrl = api_get_course_url($course->getCode());
+ 
+        if ($theoreticalTimeEnabled) {
+            $theoreticalTime = CourseManager::get_course_extra_field_value('theoretical_time',$course->getCode());
+            if (is_numeric($theoreticalTime) && (float)$theoreticalTime != 0) {
+                $totalTheoreticalTime += (float)$theoreticalTime;
+                $hours = floor($theoreticalTime / 60);
+                $minutes = $theoreticalTime % 60;
+                $theoreticalTimeDisplay = sprintf('%02d:%02d', $hours, $minutes);
+            } else {
+                $theoreticalTimeDisplay = '00:00';
+            }
+        }
 
         // hide_course_breadcrumb the parameter has been added to hide the name
         // of the course, that appeared in the default $interbreadcrumb
@@ -256,6 +281,9 @@ if ($session->getNbrCourses() === 0) {
                 $courseUrl
             )
             .'</td>';
+        if ($theoreticalTimeEnabled) {
+            $courseItem .= '<td>'.$theoreticalTimeDisplay.'</td>';
+        }
         $courseItem .= '<td>'.($namesOfCoaches ? implode('<br>', $namesOfCoaches) : get_lang('None')).'</td>';
         $courseItem .= '<td>'.$numberOfUsers.'</td>';
         $courseItem .= '<td>';
@@ -327,9 +355,20 @@ if ($session->getNbrCourses() === 0) {
         $courseItem .= '</td></tr>';
         $count++;
     }
+    if ($theoreticalTimeEnabled) {
+        $totalHours = floor($totalTheoreticalTime / 60);
+        $totalMinutes = $totalTheoreticalTime % 60;
+        $totalTheoreticalTimeDisplay = sprintf('%02d:%02d', $totalHours, $totalMinutes);
+        $courseItem .= '<tr style="font-weight:bold"><td></td><td>Total</td>';
+        $courseItem .= '<td>'.$totalTheoreticalTimeDisplay.'</td>';
+        $courseItem .= '<td>-</td>';
+        $courseItem .= '<td>-</td>';
+        $courseItem .= '<td>-</td></tr>';
+    }
+
     $courseListToShow .= $courseItem;
 }
-$courseListToShow .= '</table><br />';
+$courseListToShow .= '</tbody></table><br />';
 
 $url = '&nbsp;'.Display::url(
     Display::return_icon('user_subscribe_session.png', get_lang('Add')),

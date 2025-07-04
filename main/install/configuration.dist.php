@@ -1948,6 +1948,10 @@ $_configuration['auth_password_links'] = [
 
 // Default items per page in main/mySpace/users.php
 // $_configuration['my_space_users_items_per_page'] = 10;
+ 
+//Add an expected theorical time spent in a course to show in main/mySpace/myStudents.php and main/session/resume_session.php
+//Create an extra field for courses with identifier "theoretical_time"
+//$_configuration['display_theoretical_time'] = false;
 
 // Add teachers column in course list.
 // $_configuration['add_teachers_in_course_list'] = false;

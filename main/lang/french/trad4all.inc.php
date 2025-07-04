@@ -9041,4 +9041,5 @@ $SubmittedDocument = "Document soumis";
 $AnswerInOfficeDoc = "Réponse comme document bureautique";
 $UploadOfficeDoc = "Envoyer un document bureautique";
 $AllowedFormats = "Formats supportés";
+$TheoreticalTime = "Temps théorique";
 ?>

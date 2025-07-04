@@ -9131,4 +9131,5 @@ $SubmittedDocument = "Documento entregado";
 $AnswerInOfficeDoc = "Respuesta como documento de ofimática";
 $UploadOfficeDoc = "Subir documento ofimático";
 $AllowedFormats = "Formatos soportados";
+$TheoreticalTime = "Tiempo teórico";
 ?>

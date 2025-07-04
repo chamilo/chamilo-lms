@@ -9106,4 +9106,5 @@ $SubmittedDocument = "Submitted document";
 $AnswerInOfficeDoc = "Answer as office document";
 $UploadOfficeDoc = "Upload office document";
 $AllowedFormats = "Supported formats";
+$TheoreticalTime = "Theoretical time";
 ?>

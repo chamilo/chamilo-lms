@@ -126,7 +126,12 @@
           :placeholder="t('Password (leave blank to auto)')"
           class="col-span-2"
         />
-
+        <InputText
+          v-if="extraFieldKey"
+          v-model="createForm[extraFieldKey]"
+          :placeholder="extraFieldKey"
+          class="w-full"
+        />
         <div class="flex justify-end gap-2">
           <Button
             text
@@ -184,6 +189,7 @@ const createForm = ref({
   email: "",
   password: "",
   accessUrlId: 1,
+  [extraFieldKey]: "",
 })
 
 const createLoading = ref(false)
@@ -282,8 +288,22 @@ async function handleCreateUser() {
     accessUrlId: createForm.value.accessUrlId,
   }
 
+  if (extraFieldKey && createForm.value[extraFieldKey]) {
+    payload.extraFields = {
+      [extraFieldKey]: createForm.value[extraFieldKey],
+    }
+  }
+
   try {
     const newUser = await userService.createOnAccessUrl(payload)
+    if (extraFieldKey && createForm.value[extraFieldKey]) {
+      newUser.extra = {
+        [extraFieldKey]: createForm.value[extraFieldKey],
+      }
+    } else {
+      newUser.extra = {}
+    }
+
     showCreateModal.value = false
     showSuccessNotification(t("User created") + `: ${newUser.email}\n${t("Password")}: ${pwd}`)
     matches.value.unshift(newUser)

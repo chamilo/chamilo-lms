@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
@@ -25,6 +26,7 @@ use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -50,7 +52,10 @@ use Event;
 use Exception;
 use Exercise;
 use ExtraFieldValue;
+use Fhaculty\Graph\Graph;
+use Graphp\GraphViz\GraphViz;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -257,6 +262,64 @@ class CourseController extends ToolBaseController
                 'Content-type' => 'application/json',
             ]
         );
+    }
+    #[Route('/{courseId}/next-course', name: 'chamilo_course_next_course')]
+    public function getNextCourse(
+        int $courseId,
+        Request $request,
+        SequenceResourceRepository $repo,
+        Security $security,
+        SettingsManager $settingsManager,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $sessionId = $request->query->getInt('sid');
+        $useDependents = $request->query->getBoolean('dependents', false);
+        $user = $security->getUser();
+        $userId = $user->getId();
+
+        if ($useDependents) {
+            $sequences = $repo->getDependents($courseId, SequenceResource::COURSE_TYPE);
+            $checked = $repo->checkDependentsForUser($sequences, SequenceResource::COURSE_TYPE, $userId, $sessionId);
+            $isUnlocked = $repo->checkSequenceAreCompleted($checked);
+            $sequenceResource = $repo->findRequirementForResource($courseId, SequenceResource::COURSE_TYPE);
+        } else {
+            $sequences = $repo->getRequirements($courseId, SequenceResource::COURSE_TYPE);
+
+            $hasValidRequirement = false;
+            foreach ($sequences as $sequence) {
+                foreach ($sequence['requirements'] ?? [] as $resource) {
+                    if ($resource instanceof Course) {
+                        $hasValidRequirement = true;
+                        break 2;
+                    }
+                }
+            }
+
+            if (!$hasValidRequirement) {
+                return new JsonResponse([]);
+            }
+
+            $checked = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $userId, $sessionId);
+            $isUnlocked = $repo->checkSequenceAreCompleted($checked);
+            $sequenceResource = $repo->findRequirementForResource($courseId, SequenceResource::COURSE_TYPE);
+        }
+
+        $graphImage = null;
+
+        if ($sequenceResource && $sequenceResource->hasGraph()) {
+            $graph = $sequenceResource->getSequence()->getUnSerializeGraph();
+            if ($graph !== null) {
+                $graph->setAttribute('graphviz.node.fontname', 'arial');
+                $graphviz = new GraphViz();
+                $graphImage = $graphviz->createImageSrc($graph);
+            }
+        }
+
+        return new JsonResponse([
+            'sequenceList' => array_values($checked),
+            'allowSubscription' => $isUnlocked,
+            'graph' => $graphImage,
+        ]);
     }
 
     /**

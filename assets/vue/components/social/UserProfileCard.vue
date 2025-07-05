@@ -101,7 +101,7 @@
         class="mt-4 w-full text-center"
       >
         <p
-          v-if="loading"
+          v-if="loading || isSubscribed === null"
           class="text-gray-500 text-sm"
         >
           <i class="mdi mdi-loading mdi-spin mr-2"></i>
@@ -124,14 +124,6 @@
                 @click="handleUnsubscribe"
                 :loading="loading"
               />
-
-              <button
-                class="mt-2 text-xs underline text-gray-600 hover:text-gray-800"
-                @click="toggleDetails"
-              >
-                {{ showDetails ? t("Hide Details") : t("Show Details") }}
-              </button>
-
               <div
                 v-if="showDetails"
                 class="mt-2 bg-gray-100 rounded p-2 text-gray-800 text-xs break-all max-w-full"
@@ -257,21 +249,12 @@ function flagIconExists(code) {
 
 function chatWith(userId, completeName, isOnline, avatarSmall) {}
 
-onMounted(async () => {
-  loadVapidKey()
-
-  if (user.value?.id) {
-    console.log("[Push] Detected user loaded, registering SW and checking subscription...", user.value.id)
-    await registerServiceWorker()
-    await checkSubscription(user.value.id)
-  } else {
-    console.log("[Push] User is undefined on mount, cannot check subscription yet.")
-  }
-})
-
-watchEffect(() => {
+watchEffect(async () => {
   if (user.value && user.value.id) {
     fetchUserProfile(user.value.id)
+    loadVapidKey()
+    await registerServiceWorker()
+    await checkSubscription(user.value.id)
   }
 })
 

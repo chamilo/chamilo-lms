@@ -4,7 +4,7 @@ import { arrayBufferToBase64, urlBase64ToUint8Array } from "../utils/pushUtils.j
 import axios from "axios"
 
 export function usePushSubscription() {
-  const isSubscribed = ref(false)
+  const isSubscribed = ref(null)
   const subscriptionInfo = ref(null)
   const loading = ref(false)
   const vapidPublicKey = ref("")
@@ -98,10 +98,17 @@ export function usePushSubscription() {
         subscriptionInfo.value = null
       }
     } catch (e) {
-      console.error("Error checking backend push subscription:", e)
+      if (e.response) {
+        console.error("[Push] Backend returned error:", e.response.status, e.response.data)
+      } else {
+        console.error("[Push] Network or unexpected error:", e.message)
+      }
       isSubscribed.value = false
       subscriptionInfo.value = null
     } finally {
+      if (isSubscribed.value === null) {
+        isSubscribed.value = false
+      }
       loading.value = false
     }
   }

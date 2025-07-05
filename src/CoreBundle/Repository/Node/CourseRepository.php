@@ -432,4 +432,20 @@ class CourseRepository extends ResourceRepository
 
         return $personalCourseList;
     }
+
+    /**
+     * Returns all courses assigned to a specific AccessUrl.
+     *
+     * @return Course[]
+     */
+    public function getCoursesByAccessUrl(AccessUrl $url): array
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.urls', 'u')
+            ->where('u.url = :url')
+            ->setParameter('url', $url)
+            ->orderBy('c.title', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

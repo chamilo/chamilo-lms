@@ -205,6 +205,92 @@ export default {
     }
   },
 
+  fetchDashboardCourses: async () => {
+    const { data } = await api.get("/admin/sessionadmin/courses")
+    console.log("[courseService] dashboard payload →", data)
+
+    return data
+  },
+
+  toggleFavorite: async (courseId, userId) => {
+    // Check if the vote already exists
+    const { data } = await api.get("/api/user_rel_course_votes", {
+      params: { "user.id": userId, "course.id": courseId },
+    })
+
+    if (data["hydra:totalItems"] > 0) {
+      // Already favorite → remove
+      await api.delete(data["hydra:member"][0]["@id"])
+
+      return false
+    }
+
+    // Not favorite → create
+    await api.post("/api/user_rel_course_votes", {
+      user:   `/api/users/${userId}`,
+      course: `/api/courses/${courseId}`,
+      vote:   1,
+      url:    `/api/access_urls/${window.access_url_id ?? 1}`,
+    })
+
+    return true
+  },
+
+  listFavoriteCourses: async (userId) => {
+    const { data } = await api.get("/api/user_rel_course_votes", {
+      params: { "user.id": userId, vote: 1, pagination: false },
+    })
+
+    return data["hydra:member"].map((vote) => vote.course)
+  },
+
+  getCompletedCourses: async (offset = 0, limit = 10) => {
+    const res = await api.get("/admin/sessionadmin/courses/completed", {
+      params: { offset, limit },
+    })
+
+    return res.data
+  },
+
+  getIncompleteCourses: async () => {
+    const res = await api.get("/admin/sessionadmin/courses/incomplete")
+
+    return res.data
+  },
+
+  getRestartableCourses: async (offset = 0, limit = 10) => {
+    const { data } = await api.get("/admin/sessionadmin/courses/restartable", {
+      params: { offset, limit },
+    })
+
+    return data
+  },
+
+  extendSessionByWeek: async (sessionId, userId, courseId) => {
+    const { data } = await api.post("/admin/sessionadmin/courses/extend_week", {
+      sessionId,
+      userId,
+      courseId,
+    })
+
+    return data
+  },
+
+  findCourseForSessionAdmin: async (cid) => {
+    const response = await fetch(`/admin/sessionadmin/courses/${cid}`)
+    if (!response.ok) {
+      throw new Error("Failed to fetch course")
+    }
+
+    const data = await response.json()
+
+    if (!data || typeof data !== "object" || !data.id) {
+      throw new Error("Failed to load course for session admin")
+    }
+
+    return data
+  }
+
   getNextCourse: async (courseId, sessionId = 0, dependents = false) => {
     const { data } = await api.get(`/course/${courseId}/next-course`, {
       params: {

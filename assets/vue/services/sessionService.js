@@ -10,6 +10,17 @@ async function findUserSubscriptions(userIri, listType) {
   return baseService.getCollection(`${userIri}/session_subscriptions/${listType}`)
 }
 
+async function createWithCoursesAndUsers(payload) {
+  return await baseService.post("/api/advanced/create-session-with-courses-and-users", payload)
+}
+
+async function sendCourseNotification(sessionId, studentId) {
+  const payload = new FormData()
+  payload.append('studentId', studentId)
+
+  return await api.post(`/sessions/${sessionId}/send-course-notification`, payload)
+}
+
 export default {
   /**
    * @param {string} iri
@@ -40,4 +51,6 @@ export default {
     const { data } = await api.get(`/sessions/${sessionId}/next-session`)
     return data
   },
+  createWithCoursesAndUsers,
+  sendCourseNotification,
 }

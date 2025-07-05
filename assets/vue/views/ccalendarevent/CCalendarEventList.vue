@@ -283,11 +283,26 @@ const calendarOptions = ref({
       return
     }
 
+    let startDate
+    let endDate
+
+    if (info.allDay) {
+      startDate = new Date(info.start)
+      startDate.setHours(0, 0, 0, 0)
+
+      endDate = new Date(info.end)
+      endDate.setDate(endDate.getDate() - 1)
+      endDate.setHours(23, 59, 0, 0)
+    } else {
+      startDate = new Date(info.start)
+      endDate = new Date(info.end)
+    }
+
     item.value = {}
     item.value["parentResourceNode"] = securityStore.user.resourceNode["id"]
     item.value["allDay"] = info.allDay
-    item.value["startDate"] = info.start
-    item.value["endDate"] = info.end
+    item.value["startDate"] = startDate
+    item.value["endDate"] = endDate
 
     dialog.value = true
   },

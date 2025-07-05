@@ -38,9 +38,7 @@ export function useSessionRequirementStatus(sessionId) {
 
     graphImage.value = data.graph || null
 
-    allowSubscription.value =
-      requirementList.value.length === 0 &&
-      dependencyList.value.length === 0
+    allowSubscription.value = requirementList.value.length === 0
   }
 
   return {

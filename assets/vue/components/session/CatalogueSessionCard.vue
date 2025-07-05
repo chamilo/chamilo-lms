@@ -132,11 +132,19 @@
         />
 
         <Button
-          v-else
+          v-else-if="session.isSubscribed"
           :label="$t('Go to the session')"
           icon="pi pi-external-link"
           class="w-full"
           @click="showGoDialog = true"
+        />
+
+        <Button
+          v-else
+          :label="$t('Not available')"
+          icon="pi pi-lock"
+          class="w-full"
+          disabled
         />
       </div>
     </div>

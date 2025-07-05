@@ -127,7 +127,7 @@ const securityStore = useSecurityStore()
 const notification = useNotification()
 
 if (!isEmpty(window.user)) {
-  securityStore.user = window.user
+  securityStore.setUser(window.user)
 }
 
 onUpdated(() => {

@@ -11,11 +11,11 @@
         <BaseSidebarPanelMenu v-model="menuItemsBeforeMyCourse" />
 
         <BaseSidebarPanelMenu
-          v-if="enrolledStore.isInitialized"
+          v-if="menuItemMyCourse.length > 0 && enrolledStore.isInitialized"
           v-model="menuItemMyCourse"
         />
         <div
-          v-else
+          v-else-if="!hasOnlyOneItem && !enrolledStore.isInitialized"
           class="flex mx-7 my-1.5 py-2 ml-8 gap-4"
         >
           <BaseIcon
@@ -86,7 +86,8 @@ const { t } = useI18n()
 const securityStore = useSecurityStore()
 const enrolledStore = useEnrolledStore()
 
-const { menuItemsBeforeMyCourse, menuItemMyCourse, menuItemsAfterMyCourse, initialize } = useSidebarMenu()
+const { menuItemsBeforeMyCourse, menuItemMyCourse, menuItemsAfterMyCourse, hasOnlyOneItem, initialize } =
+  useSidebarMenu()
 
 const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
 const expandingDueToPanelClick = ref(false)

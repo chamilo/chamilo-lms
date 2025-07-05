@@ -1175,4 +1175,48 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function findUsersForSessionAdmin(
+        ?string $lastname,
+        ?string $firstname,
+        ?array $extraFilters,
+        AccessUrl $accessUrl
+    ): array {
+        $qb = $this->createQueryBuilder('u');
+
+        $qb->join('u.portals', 'p')
+            ->andWhere('p.url = :url')
+            ->setParameter('url', $accessUrl);
+
+        if (!empty($lastname)) {
+            $qb->andWhere('u.lastname LIKE :lastname')
+                ->setParameter('lastname', '%' . $lastname . '%');
+        }
+
+        if (!empty($firstname)) {
+            $qb->andWhere('u.firstname LIKE :firstname')
+                ->setParameter('firstname', '%' . $firstname . '%');
+        }
+
+        if (!empty($extraFilters)) {
+            foreach ($extraFilters as $field => $value) {
+                $qb->andWhere(sprintf(
+                    'EXISTS (
+                    SELECT 1
+                    FROM Chamilo\CoreBundle\Entity\ExtraFieldValues efv
+                    JOIN efv.field ef
+                    WHERE efv.itemId = u.id
+                      AND ef.variable = :field_%s
+                      AND efv.fieldValue LIKE :value_%s
+                )',
+                    $field,
+                    $field
+                ));
+                $qb->setParameter('field_' . $field, $field);
+                $qb->setParameter('value_' . $field, '%' . $value . '%');
+            }
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

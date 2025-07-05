@@ -13,11 +13,48 @@ export function useSidebarMenu() {
   const platformConfigStore = usePlatformConfig()
   const enrolledStore = useEnrolledStore()
   const { items: socialItems } = useSocialMenuItems()
-  const showTabsSetting = platformConfigStore.getSetting("platform.show_tabs")
+  const showTabs = computed(() => {
+    const defaultTabs = platformConfigStore.getSetting("platform.show_tabs") || []
+    const tabsPerRoleJson = platformConfigStore.getSetting("platform.show_tabs_per_role") || ""
+
+    let tabsPerRole = {}
+    try {
+      tabsPerRole = JSON.parse(tabsPerRoleJson)
+    } catch (e) {
+      console.warn("[Sidebar] Invalid JSON in platform.show_tabs_per_role", e)
+    }
+
+    const roleMap = {
+      ROLE_ADMIN: "ADMIN",
+      ROLE_SESSION_MANAGER: "SESSIONADMIN",
+      ROLE_TEACHER: "COURSEMANAGER",
+      ROLE_STUDENT_BOSS: "STUDENT_BOSS",
+      ROLE_DRH: "DRH",
+      ROLE_INVITEE: "INVITEE",
+      ROLE_STUDENT: "STUDENT",
+    }
+
+    const roles = securityStore.user?.roles || []
+    console.debug("[Sidebar] User roles:", roles)
+    console.debug("[Sidebar] tabsPerRole:", tabsPerRole)
+
+    for (const role of roles) {
+      const mappedRole = roleMap[role] || role
+      if (tabsPerRole[mappedRole]) {
+        console.debug("[Sidebar] Matched role:", mappedRole, "tabs:", tabsPerRole[mappedRole])
+        return tabsPerRole[mappedRole]
+      }
+    }
+
+    console.debug("[Sidebar] No matched role, using defaultTabs:", defaultTabs)
+    return defaultTabs
+  })
+
   const rawShowCatalogue = platformConfigStore.getSetting("platform.catalog_show_courses_sessions")
   const showCatalogue = Number(rawShowCatalogue)
   const isAnonymous = !securityStore.isAuthenticated
-  const isPrivilegedUser = securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
+  const isPrivilegedUser =
+    securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
   const allowStudentCatalogue = computed(() => {
     if (isAnonymous) {
       return platformConfigStore.getSetting("course.course_catalog_published") !== "false"
@@ -44,7 +81,7 @@ export function useSidebarMenu() {
   }
 
   const createMenuItem = (key, icon, label, opts = null) => {
-    if (showTabsSetting.indexOf(key) > -1) {
+    if (showTabs.value.indexOf(key) > -1) {
       const item = {
         icon: `mdi ${icon}`,
         label: t(label),
@@ -72,7 +109,7 @@ export function useSidebarMenu() {
   const menuItemMyCourse = computed(() => {
     const items = []
 
-    if (securityStore.isAuthenticated && showTabsSetting.indexOf("my_courses") > -1) {
+    if (securityStore.isAuthenticated && showTabs.value.indexOf("my_courses") > -1) {
       const courseItems = []
 
       if (enrolledStore.isEnrolledInCourses) {
@@ -106,13 +143,13 @@ export function useSidebarMenu() {
   const menuItemsAfterMyCourse = computed(() => {
     const items = []
 
-    if (allowStudentCatalogue.value && showTabsSetting.indexOf("catalogue") > -1) {
+    if (allowStudentCatalogue.value && showTabs.value.indexOf("catalogue") > -1) {
       if (showCatalogue === 0 || showCatalogue === 2) {
         items.push(createMenuItem("catalogue", "mdi-bookmark-multiple", "Explore more courses", "CatalogueCourses"))
       }
       if (showCatalogue > 0) {
         items.push(
-          createMenuItem("catalogue", "mdi-bookmark-multiple-outline", "Sessions catalogue", "CatalogueSessions")
+          createMenuItem("catalogue", "mdi-bookmark-multiple-outline", "Sessions catalogue", "CatalogueSessions"),
         )
       }
     }
@@ -123,7 +160,7 @@ export function useSidebarMenu() {
       }),
     )
 
-    if (showTabsSetting.indexOf("reporting") > -1) {
+    if (showTabs.value.indexOf("reporting") > -1) {
       const subItems = []
 
       if (securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin) {
@@ -150,11 +187,11 @@ export function useSidebarMenu() {
       })
     }
 
-    if (showTabsSetting.indexOf("social") > -1) {
+    if (showTabs.value.indexOf("social") > -1) {
       const styledSocialItems = socialItems.value.map((item) => {
         const newItem = {
           ...item,
-          class: isActive(item) ? "p-focus" : "",
+          class: `${isActive(item) ? "p-focus" : ""} pl-4`,
           icon: item.icon ? item.icon : undefined,
         }
 
@@ -178,7 +215,7 @@ export function useSidebarMenu() {
     }
 
     if (
-      showTabsSetting.includes("videoconference") > -1 &&
+      showTabs.value.includes("videoconference") > -1 &&
       platformConfigStore.plugins?.bbb?.show_global_conference_link &&
       platformConfigStore.plugins?.bbb?.listingURL
     ) {
@@ -190,14 +227,15 @@ export function useSidebarMenu() {
       ]
 
       if (conferenceItems.length > 0) {
-        items.push(createMenuItem("videoconference", "mdi-video", "Videoconference", {
+        items.push(
+          createMenuItem("videoconference", "mdi-video", "Videoconference", {
             subItems: conferenceItems,
-          })
+          }),
         )
       }
     }
 
-    if (showTabsSetting.indexOf("diagnostics") > -1) {
+    if (showTabs.value.indexOf("diagnostics") > -1) {
       const subItems = [
         {
           label: t("Diagnosis Management"),
@@ -214,12 +252,53 @@ export function useSidebarMenu() {
         items.push(
           createMenuItem("diagnostics", "mdi-text-box-search", "Diagnosis Management", {
             subItems,
-          })
+          }),
         )
       }
     }
 
-    if (showTabsSetting.indexOf("platform_administration") > -1) {
+    if (showTabs.value.includes("session_admin") && (securityStore.isAdmin || securityStore.isSessionAdmin)) {
+      const sessionAdminItems = [
+        {
+          label: t("Dashboard"),
+          route: { name: "AdminDashboard" },
+          icon: "mdi mdi-view-dashboard-outline",
+          class: "pl-4",
+        },
+        {
+          label: t("Favorite courses"),
+          route: { name: "AdminFavoritesCourses" },
+          icon: "mdi mdi-star-outline",
+          class: "pl-4",
+        },
+        {
+          label: t("Completed courses"),
+          route: { name: "AdminCompletedCourses" },
+          icon: "mdi mdi-check-circle-outline",
+          class: "pl-4",
+        },
+        {
+          label: t("Incomplete courses"),
+          route: { name: "AdminIncompleteCourses" },
+          icon: "mdi mdi-progress-close",
+          class: "pl-4",
+        },
+        {
+          label: t("Courses to restart"),
+          route: { name: "AdminRestartCourses" },
+          icon: "mdi mdi-history",
+          class: "pl-4",
+        },
+      ]
+
+      items.push({
+        icon: "mdi mdi-account-cog",
+        label: t("Session admin"),
+        items: sessionAdminItems,
+      })
+    }
+
+    if (showTabs.value.indexOf("platform_administration") > -1) {
       if (securityStore.isAdmin || securityStore.isSessionAdmin) {
         const adminItems = [
           { label: t("Administration"), route: { name: "AdminIndex" } },
@@ -229,9 +308,7 @@ export function useSidebarMenu() {
             : [{ label: t("Users"), url: "/main/admin/user_list.php" }]),
           { label: t("Courses"), url: "/main/admin/course_list.php" },
           { label: t("Sessions"), url: "/main/session/session_list.php" },
-          ...(securityStore.isAdmin
-            ? [{ label: t("Settings"), url: "/admin/settings" }]
-            : []),
+          ...(securityStore.isAdmin ? [{ label: t("Settings"), url: "/admin/settings" }] : []),
         ]
 
         items.push({
@@ -242,7 +319,27 @@ export function useSidebarMenu() {
       }
     }
 
-    return items.filter(Boolean)
+    const filteredItems = items.filter(Boolean)
+
+    if (filteredItems.length === 1) {
+      const singleItem = filteredItems[0]
+      if (singleItem.items && !singleItem.expanded) {
+        singleItem.expanded = true
+      }
+    }
+
+    ensureKeys(filteredItems)
+
+    return filteredItems
+  })
+
+  const hasOnlyOneItem = computed(() => {
+    const totalItems =
+      (menuItemsBeforeMyCourse.value?.length || 0) +
+      (menuItemMyCourse.value?.length || 0) +
+      (menuItemsAfterMyCourse.value?.length || 0)
+
+    return totalItems === 1
   })
 
   async function initialize() {
@@ -253,6 +350,18 @@ export function useSidebarMenu() {
     menuItemsBeforeMyCourse,
     menuItemMyCourse,
     menuItemsAfterMyCourse,
+    hasOnlyOneItem,
     initialize,
+  }
+}
+
+function ensureKeys(items) {
+  for (const item of items) {
+    if (!item.key) {
+      item.key = item.label?.toLowerCase().replace(/\s+/g, "_") || Math.random().toString(36).slice(2)
+    }
+    if (item.items) {
+      ensureKeys(item.items)
+    }
   }
 }

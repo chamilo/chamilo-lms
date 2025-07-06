@@ -66,7 +66,7 @@ define('SESSION_STUDENT', 15); //student subscribed in a session course
 define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
 define('STUDENT_BOSS', 17); // student is boss
 define('INVITEE', 20);
-define('HRM_REQUEST', 21); //HRM has request for vinculation with user
+define('HRM_REQUEST', 21); //HRM has request for linking with user
 
 // COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */

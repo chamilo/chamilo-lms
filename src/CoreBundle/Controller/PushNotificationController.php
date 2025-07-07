@@ -138,7 +138,7 @@ class PushNotificationController extends AbstractController
         ]);
     }
 
-    #[Route('/send-gotify', name: 'chamilo_core_push_notification_send_gotify')]
+    #[Route('/send-gotify', name: '_core_push_notification_send_gotify')]
     public function sendGotify(): JsonResponse
     {
         $user = $this->userHelper->getCurrent();
@@ -171,7 +171,7 @@ class PushNotificationController extends AbstractController
         // Prepare the payload for Gotify
         $payload = [
             'title' => $user->getEmail(),
-            'message' => $this->translator->trans('This is a test notification sent to Gotify from Chamilo.'),
+            'message' => $this->translator->trans('This is a test notification sent to Gotify from this platform.'),
             'priority' => 5,
         ];
 

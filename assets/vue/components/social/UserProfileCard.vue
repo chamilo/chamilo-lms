@@ -113,7 +113,7 @@
             <div class="flex flex-col items-center text-green-700">
               <i class="mdi mdi-bell-ring-outline text-4xl mb-2"></i>
               <p class="text-sm font-semibold">
-                {{ t("You’re subscribed to push notifications in this browser.") }}
+                {{ t("You're subscribed to push notifications in this browser.") }}
               </p>
               <BaseButton
                 :label="t('Unsubscribe')"

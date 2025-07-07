@@ -142,7 +142,7 @@
                 {{ t("Push notifications are not enabled in this browser.") }}
               </p>
               <BaseButton
-                :label="t('Enable Notifications')"
+                :label="t('Enable notifications')"
                 class="mt-2"
                 icon="bell"
                 type="primary"

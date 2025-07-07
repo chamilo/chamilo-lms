@@ -96,6 +96,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'notification_event' => 'false',
                     'show_tabs_per_role' => '{}',
                     'session_admin_user_subscription_search_extra_field_to_search' => '',
+                    'push_notification_settings' => '',
                 ]
             )
             ->setTransformer(
@@ -302,6 +303,20 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'required' => false,
                     'empty_data' => '',
                     'help' => 'User extra field key to use when searching and naming sessions from /admin-dashboard/register.',
+                ]
+            )
+            ->add(
+                'push_notification_settings',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => '<pre>{
+    "gotify_url": "http://localhost:8080",
+    "gotify_token": "A0yWWfe_8YRLv_B",
+    "enabled": true,
+    "vapid_public_key": "BNg54MTyDZSdyFq99EmppT606jKVDS5o7jGVxMLW3Qir937A98sxtrK4VMt1ddNlK93MUenK0kM3aiAMu9HRcjQ=",
+    "vapid_private_key": "UgS5-xSneOcSyNJVq4c9wmEGaCoE1Y8oh-7ZGXPgs8o"
+}</pre>',
                 ]
             )
         ;

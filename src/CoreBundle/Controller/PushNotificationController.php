@@ -104,8 +104,8 @@ class PushNotificationController extends AbstractController
                 ]);
 
                 $payload = json_encode([
-                    'title' => $this->translator->trans('Chamilo Notification'),
-                    'message' => $this->translator->trans('This is a test push notification from Chamilo.'),
+                    'title' => $this->translator->trans('Push notification test'),
+                    'message' => $this->translator->trans("This is a test push notification from this platform to the user's browser or app."),
                     'url' => '/account/edit'
                 ]);
 

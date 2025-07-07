@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -329,15 +329,6 @@ if (!empty($sessionRelUsers)) {
         );
 
         $addUserToUrlLink = '';
-        /*if ($isMultipleUrl) {
-            if ($user['access_url_id'] != $url_id) {
-                $userLink .= ' '.Display::getMdiIcon(StateIcon::WARNING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Users not added to the URL'));
-                $add = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add a userToURL'));
-                $addUserToUrlLink = '<a href="resume_session.php?action=add_user_to_url&id_session='.$sessionId
-                    .'&user_id='.$user['user_id'].'">'.$add.'</a>';
-            }
-        }*/
-
         $editUrl = null;
         /*
         if (isset($sessionInfo['duration']) && !empty($sessionInfo['duration'])) {
@@ -372,7 +363,7 @@ if (!empty($sessionRelUsers)) {
     $userListToShow .= $table->toHtml();
 }
 
-/** @var SequenceRepository $repo */
+/** @var SequenceResourceRepository $repo */
 $repo = $em->getRepository(SequenceResource::class);
 $requirementAndDependencies = $repo->getRequirementAndDependencies(
     $sessionId,

@@ -189,7 +189,7 @@ class PushNotificationController extends AbstractController
             $content = $response->toArray(false);
 
             return new JsonResponse([
-                'message' => $this->translator->trans('Gotify notification has been sent.'),
+                'message' => $this->translator->trans('Notification sent to Gotify.'),
                 'status' => $statusCode,
                 'response' => $content,
             ]);

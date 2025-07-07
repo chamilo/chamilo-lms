@@ -52,7 +52,7 @@ class PushNotificationController extends AbstractController
 
         if (!$user) {
             return new JsonResponse([
-                'error' => $this->translator->trans('The user does not exist.'),
+                'error' => $this->translator->trans("This user doesn't exist"),
             ], 404);
         }
 
@@ -60,7 +60,7 @@ class PushNotificationController extends AbstractController
 
         if (empty($settings)) {
             return new JsonResponse([
-                'error' => $this->translator->trans('No push notification settings configured.'),
+                'error' => $this->translator->trans('No push notification setting configured.'),
             ], 500);
         }
 

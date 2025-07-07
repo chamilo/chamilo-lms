@@ -432,6 +432,11 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Pages'),
         ];
         $items[] = [
+            'class' => 'item-page-layouts',
+            'route' => ['name' => 'PageLayoutList'],
+            'label' => $this->translator->trans('Page Layouts'),
+        ];
+        $items[] = [
             'class' => 'item-registration-page',
             'url' => $this->generateUrl('legacy_main', ['name' => 'auth/inscription.php', 'create_intro_page' => 1]),
             'label' => $this->translator->trans('Setting the registration page'),

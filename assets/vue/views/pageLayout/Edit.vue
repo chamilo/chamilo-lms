@@ -146,7 +146,7 @@ onMounted(async () => {
     templateOptionsData.value = parsedTemplates
     await loadLayout(route.params.id)
   } catch (e) {
-    console.error("❌ Error loading templates or layout:", e)
+    console.error("Error loading templates or layout:", e)
   } finally {
     loadingTemplates.value = false
   }
@@ -170,7 +170,7 @@ async function loadLayout(id) {
       }
     }
   } catch (e) {
-    console.error("❌ Error loading layout:", e)
+    console.error("Error loading layout:", e)
   }
 }
 
@@ -218,7 +218,6 @@ async function saveLayout() {
     await pageService.updatePageLayout(`/api/page_layouts/${route.params.id}`, payload)
     router.push({ name: "PageLayoutList" })
   } catch (e) {
-    console.error("❌ Error saving layout:", e)
     alert("Error saving page layout.")
   }
 }

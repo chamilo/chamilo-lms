@@ -66,9 +66,8 @@ onMounted(async () => {
     } else {
       layoutJson.value = null
     }
-
   } catch (e) {
-    console.error("❌ Error loading layout:", e)
+    console.error("Error loading layout:", e)
   }
 })
 

@@ -131,7 +131,6 @@ const layoutJson = ref({
 onMounted(async () => {
   try {
     const templates = await pageService.getPageLayoutTemplates()
-    console.log("✅ Templates from API:", templates)
 
     // Build options with IRI as value
     const parsedTemplates = templates.map((tpl) => {
@@ -149,10 +148,8 @@ onMounted(async () => {
     }))
 
     templateOptionsData.value = parsedTemplates
-
-    console.log("✅ templateOptions built:", templateOptions.value)
   } catch (e) {
-    console.error("❌ Error loading templates:", e)
+    console.error("Error loading templates:", e)
   } finally {
     loadingTemplates.value = false
   }
@@ -174,7 +171,6 @@ watch(
     const selected = templateOptionsData.value.find((tpl) => tpl.value === newTemplate)
 
     if (selected) {
-      console.log("✅ Loaded template into editor:", selected)
       layoutJson.value = JSON.parse(JSON.stringify(selected.data))
     }
   },
@@ -201,7 +197,6 @@ async function saveLayout() {
     await pageService.createPageLayout(payload)
     router.push({ name: "PageLayoutList" })
   } catch (e) {
-    console.error("❌ Error saving layout:", e)
     alert("Error saving page layout.")
   }
 }

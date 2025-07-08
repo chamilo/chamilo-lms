@@ -102,8 +102,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->setTransformer(
                 'show_tabs',
                 new ArrayToIdentifierTransformer()
-            )
-        ;
+            );
+
         $allowedTypes = [
             'institution' => ['string'],
             'institution_url' => ['string'],
@@ -160,7 +160,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('use_custom_pages', YesNoType::class)
             ->add('pdf_logo_header')
             ->add('allow_my_files', YesNoType::class)
-            // old settings with no category
             ->add('chamilo_database_version')
             ->add(
                 'load_term_conditions_section',
@@ -192,18 +191,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'choices' => self::$tabs,
                 ],
             )
-            ->add(
-                'show_tabs_per_role',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => '<pre>{"SESSIONADMIN": ["session_admin", "my_courses"], "ADMIN": ["platform_administration"]}</pre>',
-                ]
-            )
-            ->add(
-                'unoconv_binaries',
-                TextType::class
-            )
+            ->add('show_tabs_per_role', TextareaType::class)
+            ->add('unoconv_binaries', TextType::class)
             ->add('hide_main_navigation_menu', YesNoType::class)
             ->add('pdf_img_dpi', TextType::class)
             ->add('tracking_skip_generic_data', YesNoType::class)
@@ -213,68 +202,19 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('block_my_progress_page', YesNoType::class)
             ->add('generate_random_login', YesNoType::class)
             ->add('timepicker_increment', TextType::class)
-            ->add(
-                'proxy_settings',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('proxy_settings'),
-                ]
-            )
-            ->add(
-                'video_features',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('video_features'),
-                ]
-            )
-            ->add(
-                'table_row_list',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('table_row_list'),
-                ]
-            )
+            ->add('proxy_settings', TextareaType::class)
+            ->add('video_features', TextareaType::class)
+            ->add('table_row_list', TextareaType::class)
             ->add('webservice_return_user_field', TextType::class)
             ->add('multiple_url_hide_disabled_settings', YesNoType::class)
             ->add('login_max_attempt_before_blocking_account', TextType::class)
             ->add('force_renew_password_at_first_login', YesNoType::class)
             ->add('hide_breadcrumb_if_not_allowed', YesNoType::class)
-            ->add(
-                'extldap_config',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('extldap_config'),
-                ]
-            )
-            ->add(
-                'update_student_expiration_x_date',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('update_student_expiration_x_date'),
-                ]
-            )
+            ->add('extldap_config', TextareaType::class)
+            ->add('update_student_expiration_x_date', TextareaType::class)
             ->add('user_status_show_options_enabled', YesNoType::class)
-            ->add(
-                'user_status_show_option',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('user_status_show_option'),
-                ]
-            )
-            ->add(
-                'user_number_of_days_for_default_expiration_date_per_role',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('user_number_of_days_for_default_expiration_date_per_role'),
-                ]
-            )
+            ->add('user_status_show_option', TextareaType::class)
+            ->add('user_number_of_days_for_default_expiration_date_per_role', TextareaType::class)
             ->add('user_edition_extra_field_to_check', TextType::class)
             ->add('user_hide_never_expire_option', YesNoType::class)
             ->add('platform_logo_url', TextType::class)
@@ -305,94 +245,15 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'help' => 'User extra field key to use when searching and naming sessions from /admin-dashboard/register.',
                 ]
             )
-            ->add(
-                'push_notification_settings',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => '<pre>{
-    "gotify_url": "http://localhost:8080",
-    "gotify_token": "A0yWWfe_8YRLv_B",
-    "enabled": true,
-    "vapid_public_key": "BNg54MTyDZSdyFq99EmppT606jKVDS5o7jGVxMLW3Qir937A98sxtrK4VMt1ddNlK93MUenK0kM3aiAMu9HRcjQ=",
-    "vapid_private_key": "UgS5-xSneOcSyNJVq4c9wmEGaCoE1Y8oh-7ZGXPgs8o"
-}</pre>',
-                ]
-            )
-        ;
+            ->add('push_notification_settings', TextareaType::class);
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
-    /**
-     * Returns the list of internal settings that should be hidden from forms and search.
-     */
     public function getHiddenSettings(): array
     {
         return [
             'registered',
         ];
-    }
-
-    private function settingArrayHelpValue(string $variable): string
-    {
-        $values = [
-            'proxy_settings' => "<pre>
-                [
-                    'stream_context_create' => [
-                        'http' => [
-                            'proxy' => 'tcp://example.com:8080',
-                            'request_fulluri' => true
-                        ]
-                    ],
-                    'curl_setopt_array' => [
-                        'CURLOPT_PROXY' => 'http://example.com',
-                        'CURLOPT_PROXYPORT' => '8080'
-                    ]
-                ]
-                </pre>",
-            'video_features' => "<pre>
-                ['features' => ['speed']]
-                </pre>",
-            'table_row_list' => "<pre>
-                ['options' => [50, 100, 200, 500]]
-                </pre>",
-            'extldap_config' => "<pre>
-                ['host' => '', 'port' => '']
-                </pre>",
-            'update_student_expiration_x_date' => "<pre>
-                [
-                    'days' => 0,
-                    'months' => 0,
-                ]
-                </pre>",
-            'user_status_show_option' => "<pre>
-                [
-                    'COURSEMANAGER' => true,
-                    'STUDENT' => true,
-                    'DRH' => false,
-                    'SESSIONADMIN' => false,
-                    'STUDENT_BOSS' => false,
-                    'INVITEE' => false
-                ]
-                </pre>",
-            'user_number_of_days_for_default_expiration_date_per_role' => "<pre>
-                [
-                    'COURSEMANAGER' => 365,
-                    'STUDENT' => 31,
-                    'DRH' => 31,
-                    'SESSIONADMIN' => 60,
-                    'STUDENT_BOSS' => 60,
-                    'INVITEE' => 31
-                ]
-                </pre>",
-        ];
-
-        $returnValue = [];
-        if (isset($values[$variable])) {
-            $returnValue = $values[$variable];
-        }
-
-        return $returnValue;
     }
 }

@@ -12,10 +12,18 @@ use Chamilo\CoreBundle\Entity\Role;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class PermissionFixtures extends Fixture implements FixtureGroupInterface
+class PermissionFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
+    public function getDependencies(): array
+    {
+        return [
+            RoleFixtures::class,
+        ];
+    }
+
     public static function getGroups(): array
     {
         return ['permissions'];

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ConferenceMeeting;
+use Chamilo\CoreBundle\Entity\ConferenceRecording;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CoreBundle\Entity\Course;
 
@@ -60,6 +62,7 @@ class BbbPlugin extends Plugin
                 'bbb_force_record_generation' => 'checkbox',
                 'disable_course_settings' => 'boolean',
                 'meeting_duration' => 'text',
+                'delete_recordings_on_course_delete' => 'boolean',
             ]
         );
 
@@ -157,6 +160,128 @@ class BbbPlugin extends Plugin
         }
 
         $entityManager->flush();
+    }
+
+    // Hook called when a course is deleted
+    public function doWhenDeletingCourse($courseId): void
+    {
+        // Check if the setting is enabled
+        if ($this->get('delete_recordings_on_course_delete') !== 'true') {
+            return;
+        }
+
+        $this->removeBbbRecordingsForCourse($courseId);
+    }
+
+    // Hook called when a session is deleted
+    public function doWhenDeletingSession($sessionId): void
+    {
+        // Check if the setting is enabled
+        if ($this->get('delete_recordings_on_course_delete') !== 'true') {
+            return;
+        }
+
+        $this->removeBbbRecordingsForSession($sessionId);
+    }
+
+    // Remove BBB recordings linked to a specific course
+    private function removeBbbRecordingsForCourse(int $courseId): void
+    {
+        $em = Database::getManager();
+        $meetingRepo = $em->getRepository(ConferenceMeeting::class);
+        $recordingRepo = $em->getRepository(ConferenceRecording::class);
+
+        // Get all BBB meetings for this course
+        $meetings = $meetingRepo->createQueryBuilder('m')
+            ->where('m.course = :cid')
+            ->andWhere('m.serviceProvider = :sp')
+            ->setParameters(['cid' => $courseId, 'sp' => 'bbb'])
+            ->getQuery()
+            ->getResult();
+
+        foreach ($meetings as $meeting) {
+            // Get all recordings of this meeting
+            $recordings = $recordingRepo->findBy([
+                'meeting' => $meeting,
+                'formatType' => 'bbb',
+            ]);
+
+            foreach ($recordings as $rec) {
+                // Try to extract the record ID from the URL
+                if ($recordId = $this->extractRecordId($rec->getResourceUrl())) {
+                    $this->deleteRecording($recordId); // Call BBB API to delete
+                }
+
+                $em->remove($rec); // Remove local record
+            }
+
+            $em->remove($meeting); // Optionally remove the meeting entity
+        }
+
+        $em->flush(); // Save all removals
+    }
+
+    // Remove BBB recordings linked to a specific session
+    private function removeBbbRecordingsForSession(int $sessionId): void
+    {
+        $em = Database::getManager();
+        $meetingRepo = $em->getRepository(ConferenceMeeting::class);
+        $recordingRepo = $em->getRepository(ConferenceRecording::class);
+
+        // Get all BBB meetings for this session
+        $meetings = $meetingRepo->findBy([
+            'session' => $sessionId,
+            'serviceProvider' => 'bbb',
+        ]);
+
+        foreach ($meetings as $meeting) {
+            $recordings = $recordingRepo->findBy([
+                'meeting' => $meeting,
+                'formatType' => 'bbb',
+            ]);
+
+            foreach ($recordings as $rec) {
+                if ($recordId = $this->extractRecordId($rec->getResourceUrl())) {
+                    $this->deleteRecording($recordId);
+                }
+
+                $em->remove($rec);
+            }
+
+            $em->remove($meeting);
+        }
+
+        $em->flush();
+    }
+
+    // Extracts the recordID from the BBB recording URL
+    private function extractRecordId(string $url): ?string
+    {
+        // Match parameter ?recordID=xxx
+        if (preg_match('/[?&]recordID=([\w-]+)/', $url, $matches)) {
+            return $matches[1];
+        }
+
+        // Optional: match paths like .../recordingID-123456
+        if (preg_match('/recordingID[-=](\d+)/', $url, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
+    }
+
+    // Sends a deleteRecordings API request to BigBlueButton
+    private function deleteRecording(string $recordId): void
+    {
+        $host = rtrim($this->get('host'), '/');
+        $salt = $this->get('salt');
+
+        $query = "recordID={$recordId}";
+        $checksum = sha1('deleteRecordings' . $query . $salt);
+        $url = "{$host}/bigbluebutton/api/deleteRecordings?{$query}&checksum={$checksum}";
+
+        // Send the request (silently)
+        @file_get_contents($url);
     }
 
     public function get_name(): string

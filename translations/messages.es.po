@@ -29390,3 +29390,9 @@ msgstr "Días"
 
 msgid "Notification to remind the event"
 msgstr "Notificación para recordar el evento"
+
+msgid "Checking push subscription..."
+msgstr "Verificación de suscripción push..."
+
+msgid "You're subscribed to push notifications in this browser."
+msgstr "You're subscribed to push notifications in this browser."

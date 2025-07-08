@@ -116,6 +116,7 @@ class PlatformConfigurationController extends AbstractController
                 'registration.redirect_after_login',
                 'platform.show_tabs_per_role',
                 'platform.session_admin_user_subscription_search_extra_field_to_search',
+                'platform.push_notification_settings',
             ];
 
             $user = $this->userHelper->getCurrent();

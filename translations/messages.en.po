@@ -28378,3 +28378,57 @@ msgstr "Days"
 
 msgid "Notification to remind the event"
 msgstr "Notification to remind the event"
+
+msgid "Checking push subscription..."
+msgstr "Checking push subscription..."
+
+msgid "You're subscribed to push notifications in this browser."
+msgstr "You're subscribed to push notifications in this browser."
+
+msgid "Endpoint"
+msgstr "Endpoint"
+
+msgid "Push notifications are not enabled in this browser."
+msgstr "Push notifications are not enabled in this browser."
+
+msgid "Enable Notifications"
+msgstr "Enable Notifications"
+
+msgid "You do not have permission to send notifications to other users."
+msgstr "You do not have permission to send notifications to other users."
+
+msgid "No push notification setting configured."
+msgstr "No push notification setting configured."
+
+msgid "VAPID keys are missing in the configuration."
+msgstr "VAPID keys are missing in the configuration."
+
+msgid "No push subscriptions found for this user."
+msgstr "No push subscriptions found for this user."
+
+msgid "Push notification test"
+msgstr "Push notification test"
+
+msgid "This is a test push notification from this platform to the user's browser or app."
+msgstr "This is a test push notification from this platform to the user's browser or app."
+
+msgid "Push notifications have been processed."
+msgstr "Push notifications have been processed."
+
+msgid "Gotify configuration is missing."
+msgstr "Gotify configuration is missing."
+
+msgid "This is a test notification sent to Gotify from this platform."
+msgstr "This is a test notification sent to Gotify from this platform."
+
+msgid "Notification sent to Gotify."
+msgstr "Notification sent to Gotify."
+
+msgid "Error sending notification to Gotify: "
+msgstr "Error sending notification to Gotify: "
+
+msgid "Push notification settings (JSON)"
+msgstr "Push notification settings (JSON)"
+
+msgid "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications."
+msgstr "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications."

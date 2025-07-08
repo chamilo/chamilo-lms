@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Form\PermissionType;
 use Chamilo\CoreBundle\Helpers\PermissionHelper;
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
 use Chamilo\CoreBundle\Repository\PermissionRepository;
+use Chamilo\CoreBundle\Repository\RoleRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,33 +23,37 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/permissions')]
 class PermissionsController extends AbstractController
 {
-    public function __construct(
-        private PermissionHelper $permissionHelper
-    ) {}
-
     #[IsGranted('ROLE_ADMIN')]
     #[Route('', name: 'permissions')]
     public function index(
         PermissionRepository $permissionRepo,
         PermissionRelRoleRepository $permissionRelRoleRepo,
-        Request $request,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        RoleRepository $roleRepo,
+        Request $request
     ): Response {
         $permissions = $permissionRepo->findAll();
-        $roles = $this->permissionHelper->getUserRoles();
+
+        $roles = $roleRepo->findAll();
 
         if ($request->isMethod('POST')) {
             $data = $request->request->all('permissions');
+
             foreach ($permissions as $permission) {
                 foreach ($roles as $role) {
-                    $checkboxValue = isset($data[$permission->getSlug()][$role]);
-                    $permRelRole = $permissionRelRoleRepo->findOneBy(['permission' => $permission, 'roleCode' => $role]);
+                    $roleCode = $role->getCode();
+                    $checkboxValue = isset($data[$permission->getSlug()][$roleCode]);
+
+                    $permRelRole = $permissionRelRoleRepo->findOneBy([
+                        'permission' => $permission,
+                        'role' => $role,
+                    ]);
 
                     if ($checkboxValue) {
                         if (!$permRelRole) {
                             $permRelRole = new PermissionRelRole();
                             $permRelRole->setPermission($permission);
-                            $permRelRole->setRoleCode($role);
+                            $permRelRole->setRole($role);
                         }
                         $permRelRole->setChangeable(true);
                         $permRelRole->setUpdatedAt(new DateTime());
@@ -68,12 +73,22 @@ class PermissionsController extends AbstractController
         $forms = [];
         foreach ($permissions as $permission) {
             $defaultData = [];
+
             foreach ($roles as $role) {
-                $permRelRole = $permissionRelRoleRepo->findOneBy(['permission' => $permission, 'roleCode' => $role]);
-                $defaultData[$role] = $permRelRole ? $permRelRole->isChangeable() : false;
+                $roleCode = $role->getCode();
+
+                $permRelRole = $permissionRelRoleRepo->findOneBy([
+                    'permission' => $permission,
+                    'role' => $role,
+                ]);
+
+                $defaultData[$roleCode] = $permRelRole ? $permRelRole->isChangeable() : false;
             }
 
-            $form = $this->createForm(PermissionType::class, $defaultData, ['roles' => $roles]);
+            $form = $this->createForm(PermissionType::class, $defaultData, [
+                'roles' => array_map(fn($r) => $r->getCode(), $roles),
+            ]);
+
             $forms[$permission->getSlug()] = $form->createView();
         }
 

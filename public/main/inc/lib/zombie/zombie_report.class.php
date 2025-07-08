@@ -2,8 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Description of zombie_report.
  *

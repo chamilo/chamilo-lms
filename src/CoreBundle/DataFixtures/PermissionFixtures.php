@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\DataFixtures;
 
 use Chamilo\CoreBundle\Entity\Permission;
 use Chamilo\CoreBundle\Entity\PermissionRelRole;
+use Chamilo\CoreBundle\Entity\Role;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -42,9 +43,18 @@ class PermissionFixtures extends Fixture implements FixtureGroupInterface
 
             foreach ($roles as $roleName => $roleCode) {
                 if (\in_array($roleCode, $permissionsMapping[$permData['slug']])) {
+
+                    $roleEntity = $manager->getRepository(Role::class)->findOneBy([
+                        'code' => substr($roleName, 5),
+                    ]);
+
+                    if (!$roleEntity) {
+                        throw new \RuntimeException("Role entity not found for code: " . $roleName);
+                    }
+
                     $permRelRole = new PermissionRelRole();
                     $permRelRole->setPermission($permission);
-                    $permRelRole->setRoleCode($roleName);
+                    $permRelRole->setRole($roleEntity);
                     $permRelRole->setChangeable(true);
                     $permRelRole->setUpdatedAt(new DateTime());
                     $manager->persist($permRelRole);

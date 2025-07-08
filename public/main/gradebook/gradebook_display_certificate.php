@@ -2,9 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
@@ -335,7 +335,11 @@ if (0 == count($certificate_list)) {
             echo '<td width="50%">'.get_lang('Score').' : '.$valueCertificate['score_certificate'].'</td>';
             echo '<td width="30%">'.get_lang('Date').' : '.api_convert_and_format_date($valueCertificate['created_at']).'</td>';
             echo '<td width="20%">';
-            $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$valueCertificate['id'].'&user_id='.$value['user_id'];
+            $url = '';
+            if (!empty($valueCertificate['path_certificate']) && $valueCertificate['publish']) {
+                $hash = pathinfo($valueCertificate['path_certificate'], PATHINFO_FILENAME);
+                $url = api_get_path(WEB_PATH).'certificates/'.$hash.'.html';
+            }
             $certificateUrl = Display::url(
                 get_lang('Certificate'),
                 $url,

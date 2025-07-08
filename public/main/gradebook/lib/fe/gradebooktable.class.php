@@ -2,8 +2,8 @@
 
 /* For licensing terms, see license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
@@ -301,6 +301,7 @@ class GradebookTable extends SortableTable
         global $certificate_min_score;
 
         $isAllowedToEdit = api_is_allowed_to_edit();
+        $hideLinkForStudent = ('true' === api_get_setting('gradebook.gradebook_hide_link_to_item_for_student')) ?? false;
         // determine sorting type
         $col_adjust = $isAllowedToEdit ? 1 : 0;
         // By id
@@ -426,7 +427,15 @@ class GradebookTable extends SortableTable
                     $row[] = $invisibility_span_open.'<strong>'.$item->get_name().'</strong>'.$invisibility_span_close;
                     $main_categories[$item->get_id()]['name'] = $item->get_name();
                 } else {
-                    $name = $this->build_name_link($item, $type);
+                    // If the item type is 'Evaluation', or the user is not a student,
+                    // or 'gradebook_hide_link_to_item_for_student' it's true, make links
+                    if ($item->get_item_type() === 'E' || $isAllowedToEdit || !$hideLinkForStudent) {
+                        $name = Security::remove_XSS($this->build_name_link($item, $type));
+                    } else {
+                        $name = Security::remove_XSS(
+                            $item->get_name().' '.Display::label($item->get_type_name(), 'info')
+                        );
+                    }
                     $row[] = $invisibility_span_open.$name.$invisibility_span_close;
                     $main_categories[$item->get_id()]['name'] = $name;
                 }
@@ -1048,50 +1057,43 @@ class GradebookTable extends SortableTable
      */
     public function getGraph()
     {
+        // Retrieve the data needed for the graph (student scores, average, categories)
         $data = $this->getDataForGraph();
+
         if (!empty($data) &&
             isset($data['categories']) &&
             isset($data['my_result']) &&
             isset($data['average'])
         ) {
+            // Prepare the data set with student's result, average, and categories
             $dataSet = new pData();
             $dataSet->addPoints($data['my_result'], get_lang('Me'));
-            // In order to generate random values
-            // $data['average'] = array(rand(0,50), rand(0,50));
             $dataSet->addPoints($data['average'], get_lang('Average'));
             $dataSet->addPoints($data['categories'], 'categories');
             $dataSet->setAbscissa('categories');
+
+            // Create the graph image
             $xSize = 700;
             $ySize = 500;
             $pChart = new pImage($xSize, $ySize, $dataSet);
-            /* Turn of Antialiasing */
+
+            // Set visual options: disable antialiasing, draw border and title
             $pChart->Antialias = false;
+            $pChart->drawRectangle(0, 0, $xSize - 1, $ySize - 1, ["R" => 0, "G" => 0, "B" => 0]);
+            $pChart->drawText(80, 16, get_lang('Results and feedback'), [
+                "FontSize" => 11,
+                "Align" => TEXT_ALIGN_BOTTOMMIDDLE,
+            ]);
 
-            /* Add a border to the picture */
-            $pChart->drawRectangle(
-                0,
-                0,
-                $xSize - 1,
-                $ySize - 1,
-                ["R" => 0, "G" => 0, "B" => 0]
-            );
-            $pChart->drawText(
-                80,
-                16,
-                get_lang('Results and feedback'),
-                ["FontSize" => 11, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]
-            );
+            // Define graph area and font properties
             $pChart->setGraphArea(50, 30, $xSize - 50, $ySize - 70);
-            $pChart->setFontProperties(
-                [
-                    'FontName' => api_get_path(SYS_FONTS_PATH).'Harmattan/Harmattan-Regular.ttf',
-                    /*'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',*/
-                    'FontSize' => 10,
-                ]
-            );
+            $pChart->setFontProperties([
+                'FontName' => api_get_path(SYS_FONTS_PATH).'Harmattan/Harmattan-Regular.ttf',
+                'FontSize' => 10,
+            ]);
 
-            /* Draw the scale */
-            $scaleSettings = [
+            // Draw axes and data
+            $pChart->drawScale([
                 "XMargin" => AUTO,
                 "YMargin" => 10,
                 "Floating" => true,
@@ -1101,52 +1103,53 @@ class GradebookTable extends SortableTable
                 "DrawSubTicks" => true,
                 "CycleBackground" => true,
                 'LabelRotation' => 10,
-            ];
-            $pChart->drawScale($scaleSettings);
-
-            /* Draw the line chart */
+            ]);
             $pChart->drawLineChart();
-            $pChart->drawPlotChart(
-                [
-                    "DisplayValues" => true,
-                    "PlotBorder" => true,
-                    "BorderSize" => 2,
-                    "Surrounding" => -60,
-                    "BorderAlpha" => 80,
-                ]
-            );
+            $pChart->drawPlotChart([
+                "DisplayValues" => true,
+                "PlotBorder" => true,
+                "BorderSize" => 2,
+                "Surrounding" => -60,
+                "BorderAlpha" => 80,
+            ]);
 
-            /* Write the chart legend */
-            $pChart->drawLegend(
-                $xSize - 180,
-                9,
-                [
-                    "Style" => LEGEND_NOBORDER,
-                    "Mode" => LEGEND_HORIZONTAL,
-                    "FontR" => 0,
-                    "FontG" => 0,
-                    "FontB" => 0,
-                ]
-            );
+            // Add a legend to the graph
+            $pChart->drawLegend($xSize - 180, 9, [
+                "Style" => LEGEND_NOBORDER,
+                "Mode" => LEGEND_HORIZONTAL,
+                "FontR" => 0,
+                "FontG" => 0,
+                "FontB" => 0,
+            ]);
 
-            $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-            $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
+            // Define a path to store the generated image file
+            $cachePath = api_get_path(SYS_ARCHIVE_PATH).'chart/';
+            if (!file_exists($cachePath)) {
+                mkdir($cachePath, 0755, true);
+            }
+            if (!is_writable($cachePath)) {
+                chmod($cachePath, 0755);
+            }
+
+            // Cache the chart to avoid regenerating the same image
+            $myCache = new pCache(['CacheFolder' => rtrim($cachePath, '/')]);
             $chartHash = $myCache->getHash($dataSet);
+            $imgSysPath = $cachePath.$chartHash;
 
             $myCache->writeToCache($chartHash, $pChart);
-            $imgSysPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
             $myCache->saveFromCache($chartHash, $imgSysPath);
-            $imgWebPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
 
+            // Read the image and encode it as base64 to embed directly into HTML
             if (file_exists($imgSysPath)) {
-                $result = '<br /><div id="contentArea" style="text-align: center;" >';
-                $result .= '<img src="'.$imgWebPath.'" >';
-                $result .= '</div>';
+                $base64 = base64_encode(file_get_contents($imgSysPath));
 
-                return $result;
+                return '<br /><div id="contentArea" style="text-align: center;">
+                        <img src="data:image/png;base64,'.$base64.'" />
+                    </div>';
             }
         }
 
+        // Return empty if data is missing or graph could not be created
         return '';
     }
 

@@ -30,8 +30,9 @@ final class Version20250501000100 extends AbstractMigrationChamilo
         $root = $kernel->getProjectDir();
 
         $courses = $this->entityManager
-            ->createQuery('SELECT c FROM Chamilo\\CoreBundle\\Entity\\Course c')
-            ->toIterable();
+            ->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c')
+            ->toIterable()
+        ;
 
         foreach ($courses as $course) {
             $courseDir = $course->getDirectory();
@@ -46,7 +47,8 @@ final class Version20250501000100 extends AbstractMigrationChamilo
                 ->setParameter('course', $course)
                 ->setParameter('file', 'file')
                 ->getQuery()
-                ->getResult();
+                ->getResult()
+            ;
 
             foreach ($publications as $publication) {
                 if (!$publication instanceof CStudentPublication || !$publication->getResourceNode()) {
@@ -99,7 +101,8 @@ final class Version20250501000100 extends AbstractMigrationChamilo
                 ->andWhere('c.file IS NOT NULL')
                 ->setParameter('course', $course)
                 ->getQuery()
-                ->getResult();
+                ->getResult()
+            ;
 
             foreach ($comments as $comment) {
                 if (!$comment instanceof CStudentPublicationComment || !$comment->getResourceNode()) {
@@ -139,6 +142,7 @@ final class Version20250501000100 extends AbstractMigrationChamilo
                 return true;
             }
         }
+
         return false;
     }
 }

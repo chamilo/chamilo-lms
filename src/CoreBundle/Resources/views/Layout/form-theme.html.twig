@@ -33,7 +33,7 @@ vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig #}
 {%- endblock form_widget_simple -%}
 
 {%- block choice_widget_collapsed -%}
-    {%- set attr = attr|merge({ class: attr.class|default('p-dropdown p-component p-inputwrapper p-inputwrapper-filled') }) -%}
+    {%- set attr = attr|merge({ class: attr.class|default('p-select p-component p-inputwrapper p-inputwrapper-filled') }) -%}
     {{- parent() -}}
 {%- endblock -%}
 

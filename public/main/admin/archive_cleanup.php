@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ScriptHandler;
+use Chamilo\CoreBundle\Component\Composer\ScriptHandler;
 
 $cidReset = true;
 

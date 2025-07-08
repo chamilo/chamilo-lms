@@ -338,7 +338,6 @@
     "Pages deleted": "Pages deleted",
     "Go to Explore to find a topic of interest, or wait for someone to subscribe you": "Go to Explore to find a topic of interest, or wait for someone to subscribe you",
     "You don\\'t have any course yet": "You don\\'t have any course yet",
-    "Personal Data: Introduction": "Personal Data: Introduction",
     "Why you want to delete your Legal Agreement": "Why you want to delete your Legal Agreement",
     "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible": "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible",
     "Delete Account": "Delete Account",
@@ -401,5 +400,10 @@
     "Scan the QR code to enable 2FA": "Scan the QR code to enable 2FA",
     "QR code for 2FA": "QR code for 2FA",
     "Private course": "Private course",
-    "Not subscribed": "Not subscribed"
+    "Not subscribed": "Not subscribed",
+    "Accept Terms and Conditions": "Accept Terms and Conditions",
+    "You accepted these terms on": "You accepted these terms on",
+    "Revoke Acceptance": "Revoke Acceptance",
+    "Minutes": "Minutes",
+    "Days": "Days"
 }

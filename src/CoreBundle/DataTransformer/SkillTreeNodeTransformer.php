@@ -16,7 +16,7 @@ readonly class SkillTreeNodeTransformer
         private SettingsManager $settingsManager,
     ) {}
 
-    public function transform(Skill $object, string $to, array $context = []): SkillTreeNode
+    public function transform(Skill $object): SkillTreeNode
     {
         $skillNode = new SkillTreeNode();
         $skillNode->id = $object->getId();
@@ -32,7 +32,7 @@ readonly class SkillTreeNodeTransformer
         }
 
         $skillNode->children = $object->getChildSkills()
-            ->map(fn (Skill $childSkill) => $this->transform($childSkill, $to, $context))
+            ->map(fn (Skill $childSkill) => $this->transform($childSkill))
             ->toArray()
         ;
 

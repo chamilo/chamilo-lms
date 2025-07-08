@@ -2,14 +2,14 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -879,6 +879,12 @@ class Display
             $attributes['value'] = $value;
         }
 
+        if ('text' === $type) {
+            $attributes['class'] = isset($attributes['class'])
+                ? $attributes['class'].' p-inputtext p-component '
+                : 'p-inputtext p-component ';
+        }
+
         return self::tag('input', '', $attributes);
     }
 
@@ -897,7 +903,7 @@ class Display
         $extra = '';
         $default_id = 'id="'.$name.'" ';
         $extra_attributes = array_merge(
-            ['class' => 'p-dropdown p-component p-inputwrapper p-inputwrapper-filled'],
+            ['class' => 'p-select p-component p-inputwrapper p-inputwrapper-filled'],
             $extra_attributes
         );
         foreach ($extra_attributes as $key => $parameter) {
@@ -2279,7 +2285,7 @@ class Display
         ?string $title = null
     ): string
     {
-        // If the string contains '::', we assume it is a reference to one of the icon Enum classes in src/CoreBundle/Component/Utils/
+        // If the string contains '::', we assume it is a reference to one of the icon Enum classes in src/CoreBundle/Enums/
         $matches = [];
         if (preg_match('/(\w*)::(\w*)/', $name, $matches)) {
             if (count($matches) != 3) {
@@ -2287,10 +2293,10 @@ class Display
             }
             $enum = $matches[1];
             $case = $matches[2];
-            if (!class_exists('Chamilo\CoreBundle\Component\Utils\\'.$enum)) {
+            if (!class_exists('Chamilo\CoreBundle\Enums\\'.$enum)) {
                 throw new InvalidArgumentException("Class {$enum} does not exist.");
             }
-            $reflection = new ReflectionEnum('Chamilo\CoreBundle\Component\Utils\\'.$enum);
+            $reflection = new ReflectionEnum('Chamilo\CoreBundle\Enums\\'.$enum);
             // Check if the case exists in the Enum class
             if (!$reflection->hasCase($case)) {
                 throw new InvalidArgumentException("Case {$case} does not exist in enum class {$enum}.");

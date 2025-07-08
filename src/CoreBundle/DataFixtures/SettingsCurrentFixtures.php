@@ -90,7 +90,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'use_users_timezone',
                     'title' => 'Enable users timezones',
-                    'comment' => 'Enable the possibility for users to select their own timezone. The timezone field should be set to visible and changeable in the Profiling menu in the administration section before users can choose their own. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time.',
+                    'comment' => 'Enable the possibility for users to select their own timezone. Once configured, users will be able to see assignment deadlines and other time references in their own timezone, which will reduce errors at delivery time.',
                 ],
                 [
                     'name' => 'allow_show_linkedin_url',
@@ -114,6 +114,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'session' => [
+                [
+                    'name' => 'session_list_view_remaining_days',
+                    'title' => 'Show remaining days in My Sessions',
+                    'comment' => 'If enabled, the session dates on the "My Sessions" page will be replaced by the number of remaining days.',
+                ],
                 [
                     'name' => 'add_users_by_coach',
                     'title' => 'Register users by Coach',
@@ -495,6 +500,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'registration' => [
                 [
+                    'name' => 'redirect_after_login',
+                    'title' => 'Redirect after login (per profile)',
+                    'comment' => 'Define redirection per profile after login using a JSON object like {"STUDENT":"", "ADMIN":"admin-dashboard"}',
+                ],
+                [
                     'name' => 'allow_lostpassword',
                     'title' => 'Lost password',
                     'comment' => 'Are users allowed to request their lost password?',
@@ -525,19 +535,9 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Which of the following fields of the portfolio are *required* in the user registration process? This requires that the portfolio option be enabled and that the field be also available in the registration form (see above).',
                 ],
                 [
-                    'name' => 'page_after_login',
-                    'title' => 'Page after login',
-                    'comment' => 'The page which is seen by the user entering the platform',
-                ],
-                [
                     'name' => 'drh_autosubscribe',
                     'title' => 'Human resources director autosubscribe',
                     'comment' => 'Human resources director autosubscribe - not yet available',
-                ],
-                [
-                    'name' => 'drh_page_after_login',
-                    'title' => 'Human resources manager page after login',
-                    'comment' => 'This page will load after login for all human resources managers',
                 ],
                 [
                     'name' => 'platform_unsubscribe_allowed',
@@ -550,29 +550,14 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Session administrator autosubscribe - not available yet',
                 ],
                 [
-                    'name' => 'sessionadmin_page_after_login',
-                    'title' => 'Session admin page after login',
-                    'comment' => 'Page to load after login for the session administrators',
-                ],
-                [
                     'name' => 'student_autosubscribe',
                     'title' => 'Learner autosubscribe',
                     'comment' => 'Learner autosubscribe - not yet available',
                 ],
                 [
-                    'name' => 'student_page_after_login',
-                    'title' => 'Learner page after login',
-                    'comment' => 'This page will appear to all learners after they login',
-                ],
-                [
                     'name' => 'teacher_autosubscribe',
                     'title' => 'Teacher autosubscribe',
                     'comment' => 'Teacher autosubscribe - not yet available',
-                ],
-                [
-                    'name' => 'teacher_page_after_login',
-                    'title' => 'Teacher page after login',
-                    'comment' => 'This page will be loaded after login for all teachers',
                 ],
             ],
             'message' => [
@@ -1052,9 +1037,19 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'platform' => [
                 [
+                    'name' => 'push_notification_settings',
+                    'title' => 'Push notification settings (JSON)',
+                    'comment' => "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications.",
+                ],
+                [
                     'name' => 'donotlistcampus',
                     'title' => 'Do not list this campus on chamilo.org',
                     'comment' => 'By default, Chamilo portals are automatically registered in a public list at chamilo.org, just using the title you gave to this portal (not the URL nor any private data). Check this box to avoid having the title of your portal appear.',
+                ],
+                [
+                    'name' => 'session_admin_user_subscription_search_extra_field_to_search',
+                    'title' => 'Extra user field used to search and name sessions',
+                    'comment' => 'This setting defines the extra user field key (e.g., "company") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register.',
                 ],
                 [
                     'name' => 'timezone',
@@ -1084,7 +1079,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'server_type',
                     'title' => 'Server Type',
-                    'comment' => 'What sort of server is this? This enables or disables some specific options. On a development server there is a translation feature functional that inidcates untranslated strings',
+                    'comment' => 'Defines the environment type: "prod" (normal production), "validation" (like production but without reporting statistics), or "test" (debug mode with developer tools such as untranslated string indicators).',
                 ],
                 [
                     'name' => 'show_tabs',
@@ -1683,6 +1678,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'hide_my_certificate_link',
                     'title' => "Hide 'my certificate' link",
                     'comment' => 'Hide the certificates page for non-admin users.',
+                ],
+                [
+                    'name' => 'session_admin_can_download_all_certificates',
+                    'title' => 'Allow session admins to download private certificates',
+                    'comment' => 'If enabled, session administrators can download certificates even if they are not publicly published.',
                 ],
             ],
             'admin' => [

@@ -33,14 +33,14 @@
         :maxlength="40"
         validation-message="Only letters (a-z) and numbers (0-9) are allowed."
       />
-      <BaseDropdown
+      <BaseSelect
         v-model="courseLanguage"
         :label="t('Language')"
         :options="languageOptions"
-        :placeholder="t('Select Language')"
-        input-id="language-dropdown"
+        id="language-dropdowns"
         name="language"
         option-label="name"
+        option-value="id"
       />
       <BaseCheckbox
         id="demo-content"
@@ -78,7 +78,7 @@
 import { onMounted, ref } from "vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
-import BaseDropdown from "../basecomponents/BaseDropdown.vue"
+import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useRouter } from "vue-router"

@@ -5,7 +5,6 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 
 /**

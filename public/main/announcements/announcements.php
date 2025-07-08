@@ -2,11 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
@@ -686,8 +686,8 @@ switch ($action) {
                 get_lang('Add event in course calendar')
             );
             $form->addHtml('<div id="add_event_options" style="display:none;">');
-            $form->addDateTimePicker('event_date_start', get_lang('Date start'));
-            $form->addDateTimePicker('event_date_end', get_lang('Date end'));
+            $form->addDateTimePicker('event_date_start', get_lang('Start date'));
+            $form->addDateTimePicker('event_date_end', get_lang('End date'));
 
             $form->addHtml('<hr><div id="notification_list"></div>');
             $form

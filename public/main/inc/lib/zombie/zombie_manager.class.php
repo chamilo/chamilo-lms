@@ -53,8 +53,8 @@ class ZombieManager
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        $accessUrlHelper = Container::getAccessUrlHelper();
-        $accessUrl = $accessUrlHelper->getCurrent();
+        $accessUrlUtil = Container::getAccessUrlUtil();
+        $accessUrl = $accessUrlUtil->getCurrent();
 
         $sql = 'SELECT
                     user.id,
@@ -68,7 +68,7 @@ class ZombieManager
                     user.active,
                     access.login_date';
 
-        if ($accessUrlHelper->isMultiple()) {
+        if ($accessUrlUtil->isMultiple()) {
             $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $current_url_id = $accessUrl->getId();
 

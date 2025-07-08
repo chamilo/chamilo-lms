@@ -1,261 +1,271 @@
 <script>
 
-var DraggableAnswer = {
+  var DraggableAnswer = {
     gallery: null,
     trash: null,
     deleteItem: function (item, insertHere) {
-        if (insertHere.find(".exercise-draggable-answer-option").length > 0) {
-            return false;
-        }
+      if (insertHere.find(".exercise-draggable-answer-option").length > 0) {
+        return false;
+      }
 
-        item.fadeOut(function () {
-            var $list = $('<ul>').addClass('gallery ui-helper-reset').appendTo(insertHere);
+      item.fadeOut(function () {
+        var $list = $('ul', insertHere).length
+          ? $('ul', insertHere)
+          : $('<ul>').addClass('gallery list-unstyled').appendTo(insertHere);
 
-            var droppedId = item.attr('id'),
-                dropedOnId = insertHere.attr('id'),
-                originSelectId = 'window_' + droppedId + '_select',
-                value = dropedOnId.split('_')[2];
+        var droppedId = item.attr('id'),
+          dropedOnId = insertHere.attr('id'),
+          originSelectId = 'window_' + droppedId + '_select',
+          value = dropedOnId.split('_')[2];
 
-            $('#' + originSelectId + ' option')
-                .filter(function (index) {
-                    var position = insertHere.prop('id').split('_')[2];
+        $('#' + originSelectId + ' option')
+          .filter(function (index) {
+            var position = insertHere.prop('id').split('_')[2];
+            return index === parseInt(position);
+          })
+          .prop("selected", true);
 
-                    return index === parseInt(position);
-                })
-                .prop("selected", true);
-
-            item.appendTo($list).fadeIn();
-        });
+        item.appendTo($list).fadeIn();
+      });
     },
     recycleItem: function (item) {
-        var droppedId = item.attr('id'),
-            originSelectId = 'window_' + droppedId + '_select',
-            idParts = droppedId.split('_'),
-            questionId = parseInt(idParts[0]) || 0;
+      var droppedId = item.attr('id'),
+        originSelectId = 'window_' + droppedId + '_select',
+        idParts = droppedId.split('_'),
+        questionId = parseInt(idParts[0]) || 0;
 
-        if (!questionId) {
-            return;
-        }
+      if (!questionId) {
+        return;
+      }
 
-        item.fadeOut(function () {
-            item
-                .appendTo(DraggableAnswer.gallery.filter('[data-question="' + questionId + '"]'))
-                .fadeIn();
+      item.fadeOut(function () {
+        item
+          .appendTo(DraggableAnswer.gallery.filter('[data-question="' + questionId + '"]'))
+          .fadeIn();
 
-            DraggableAnswer.trash.children('.gallery').each(function () {
-                var $el = $(this);
-
-                if ($el.children().length === 0) {
-                    $el.remove();
-                }
-            });
+        DraggableAnswer.trash.children('.gallery').each(function () {
+          var $el = $(this);
+          if ($el.children().length === 0) {
+            $el.remove();
+          }
         });
+      });
 
-        $('#' + originSelectId + ' option').prop('selected', false);
-        $('#' + originSelectId + ' option:first').prop('selected', true);
+      $('#' + originSelectId + ' option').prop('selected', false);
+      $('#' + originSelectId + ' option:first').prop('selected', true);
     },
     init: function (gallery, trash) {
-        this.gallery = gallery;
-        this.trash = trash;
+      this.gallery = gallery;
+      this.trash = trash;
 
-        $("li", DraggableAnswer.gallery).draggable({
-            cancel: "a.ui-icon",
-            revert: "invalid",
-            containment: "document",
-            helper: "clone",
-            cursor: "move"
-        });
+      $("li", DraggableAnswer.gallery).draggable({
+        cancel: "a.ui-icon",
+        revert: "invalid",
+        containment: "document",
+        helper: "clone",
+        cursor: "move"
+      });
 
-        DraggableAnswer.trash.droppable({
-            accept: ".exercise-draggable-answer > li",
-            hoverClass: "ui-state-active",
-            drop: function (e, ui) {
-                DraggableAnswer.deleteItem(ui.draggable, $(this));
-            }
-        });
+      DraggableAnswer.trash.droppable({
+        accept: ".exercise-draggable-answer > li.touch-items",
+        tolerance: "pointer",
+        drop: function (e, ui) {
+          DraggableAnswer.deleteItem(ui.draggable, $(this));
+        }
+      });
 
-        DraggableAnswer.gallery.droppable({
-            drop: function (e, ui) {
-                DraggableAnswer.recycleItem(ui.draggable, $(this));
-            }
-        });
+      DraggableAnswer.gallery.droppable({
+        tolerance: "pointer",
+        drop: function (e, ui) {
+          DraggableAnswer.recycleItem(ui.draggable, $(this));
+        }
+      });
     }
-};
+  };
 
-var MatchingDraggable = {
+  var MatchingDraggable = {
     colorDestination: '#316B31',
     curviness: 0,
     connectorType: 'Straight',
     initialized: false,
     instances: {},
     init: function (questionId) {
-        var instance = jsPlumb.getInstance();
+      var instance = jsPlumb.getInstance();
+      MatchingDraggable.instances[questionId] = instance;
 
-        MatchingDraggable.instances[questionId] = instance;
+      var windowQuestionSelector = '.window' + questionId + '_question',
+        countConnections = $(windowQuestionSelector).length,
+        colorArray = [],
+        colorArrayDestination = [];
 
-        var windowQuestionSelector = '.window' + questionId + '_question',
-            countConnections = $(windowQuestionSelector).length,
-            colorArray = [],
-            colorArrayDestination = [];
-
-        if (countConnections > 0) {
-            colorArray = $.xcolor.analogous("#da0", countConnections);
-            colorArrayDestination = $.xcolor.analogous("#51a351", countConnections);
-        } else {
-            colorArray = $.xcolor.analogous("#da0", 10);
-            colorArrayDestination = $.xcolor.analogous("#51a351", 10);
-        }
-
-        var scope = questionId + "_scope";
-
-        var exampleDropOptions = {
-            tolerance: 'touch'
-        };
-
-        var destinationEndPoint = {
-            endpoint: ["Dot", {radius: 15}],
-            paintStyle: {fill: MatchingDraggable.colorDestination},
-            isSource: false,
-            connectorStyle: {stroke: MatchingDraggable.colorDestination, strokeWidth: 8},
-            connector: [
-                MatchingDraggable.connectorType,
-                {curviness: MatchingDraggable.curviness}
-            ],
-            maxConnections: 1000,
-            isTarget: true,
-            dropOptions: exampleDropOptions,
-            scope: scope,
-            beforeDrop: function (params) {
-                instance.selectEndpoints().each(function (endpoint) {
-                    var sourceId = endpoint.elementId;
-                    if (originalColors[sourceId]) {
-                        endpoint.setPaintStyle({fill: originalColors[sourceId]});
-                    }
-                });
-                instance.select({source: params.sourceId}).each(function (connection) {
-                    instance.detach(connection);
-                });
-
-                var selectId = params.sourceId + "_select";
-                var value = params.targetId.split("_")[2];
-
-                $("#" + selectId + " option")
-                    .removeAttr('selected')
-                    .filter(function (index) {
-                        return index === parseInt(value);
-                    })
-                    .attr("selected", true);
-
-                return true;
-            }
-        };
-
-        var sourceEndPoint = {
-            endpoint: [
-                "Dot",
-                {radius: 15}
-            ],
-            paintStyle: {
-                fill: MatchingDraggable.colorDestination
-            },
-            isSource: true,
-            connectorStyle: {
-                stroke: "#8a8888",
-                strokeWidth: 8
-            },
-            connector: [
-                MatchingDraggable.connectorType,
-                {curviness: MatchingDraggable.curviness}
-            ],
-            maxConnections: 1,
-            isTarget: false,
-            dropOptions: exampleDropOptions,
-            scope: scope
-        };
-
-        var originalColors = {};
-        $(windowQuestionSelector).each(function (index) {
-            var windowId = $(this).attr("id");
-            sourceEndPoint.paintStyle.fill = colorArray[index].getHex();
-
-            instance.addEndpoint(
-                windowId,
-                {
-                    anchor: ['RightMiddle', 'RightMiddle', 'RightMiddle', 'RightMiddle']
-                },
-                sourceEndPoint
-            );
-
-            originalColors[windowId] = colorArray[index].getHex();
-        });
-
-        $(windowQuestionSelector).each(function (index) {
-            var windowDestinationId = $(this).attr("id");
-            destinationEndPoint.paintStyle.fill = colorArrayDestination[index].getHex();
-
-            instance.addEndpoint(
-                windowDestinationId + "_answer",
-                {
-                    anchors: ['LeftMiddle', 'LeftMiddle', 'LeftMiddle', 'LeftMiddle']
-                },
-                destinationEndPoint
-            );
-        });
-
-        MatchingDraggable.attachBehaviour();
-    },
-    attachBehaviour: function () {
-        if (!MatchingDraggable.initialized) {
-            MatchingDraggable.initialized = true;
-        }
-    }
-};
-
-jsPlumb.ready(function () {
-    if ($(".drag_question").length > 0) {
-        $(document).scroll(function () {
-            jsPlumb.repaintEverything();
-        });
-
-        $(window).resize(function () {
-            jsPlumb.repaintEverything();
-        });
-    }
-});
-
-$(function () {
-  DraggableAnswer.init(
-    $(".exercise-draggable-answer"),
-    $(".droppable")
-  );
-
-  // if shuffle answers
-  if ('{{ shuffle_answers }}' == '1') {
-    $('.exercise-draggable-answer').each(function() {
-      var $ul = $(this);
-      var $liArr = $ul.children('li').toArray();
-
-      function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
+      if (countConnections > 0) {
+        colorArray = $.xcolor.analogous("#da0", countConnections);
+        colorArrayDestination = $.xcolor.analogous("#51a351", countConnections);
+      } else {
+        colorArray = $.xcolor.analogous("#da0", 10);
+        colorArrayDestination = $.xcolor.analogous("#51a351", 10);
       }
 
-      var previousOrder = $liArr.map(item => item.id).join();
-      var newOrder;
+      var scope = questionId + "_scope";
 
-      do {
-        shuffle($liArr);
-        newOrder = $liArr.map(item => item.id).join();
-      } while (newOrder === previousOrder);
+      var exampleDropOptions = {
+        tolerance: 'touch',
+        hoverClass: 'dropHover',
+        activeClass: 'dragActive'
+      };
 
-      // Detach and append list items to preserve event handlers
-      $.each($liArr, function(index, item) {
-        $ul.append($(item).detach());
+      var destinationEndPoint = {
+        endpoint: ["Dot", {radius: 15}],
+        paintStyle: {fill: MatchingDraggable.colorDestination},
+        isSource: false,
+        connectorStyle: {stroke: MatchingDraggable.colorDestination, strokeWidth: 8},
+        connector: [
+          MatchingDraggable.connectorType,
+          {curviness: MatchingDraggable.curviness}
+        ],
+        maxConnections: 1000,
+        isTarget: true,
+        dropOptions: exampleDropOptions,
+        scope: scope,
+        beforeDrop: function (params) {
+          instance.selectEndpoints().each(function (endpoint) {
+            var sourceId = endpoint.elementId;
+            if (originalColors[sourceId]) {
+              endpoint.setPaintStyle({fill: originalColors[sourceId]});
+            }
+          });
+          instance.select({source: params.sourceId}).each(function (connection) {
+            instance.detach(connection);
+          });
+
+          var selectId = params.sourceId + "_select";
+          var value = params.targetId.split("_")[2];
+
+          $("#" + selectId + " option")
+            .removeAttr('selected')
+            .filter(function (index) {
+              return index === parseInt(value);
+            })
+            .attr("selected", true);
+
+          return true;
+        }
+      };
+
+      var originalColors = {};
+
+      $(windowQuestionSelector).each(function (index) {
+        var windowId = $(this).attr("id");
+        var color = colorArray[index].getHex();
+
+        var sourceEndPoint = {
+          endpoint: [
+            "Dot",
+            {radius: 15}
+          ],
+          paintStyle: {
+            fill: color
+          },
+          isSource: true,
+          connectorStyle: {
+            stroke: "#8a8888",
+            strokeWidth: 8
+          },
+          connector: [
+            MatchingDraggable.connectorType,
+            {curviness: MatchingDraggable.curviness}
+          ],
+          maxConnections: 1,
+          isTarget: false,
+          dropOptions: exampleDropOptions,
+          scope: scope
+        };
+
+        instance.addEndpoint(
+          windowId,
+          {
+            anchor: ['RightMiddle', 'RightMiddle', 'RightMiddle', 'RightMiddle']
+          },
+          sourceEndPoint
+        );
+
+        originalColors[windowId] = color;
       });
-    });
+
+      $(windowQuestionSelector).each(function (index) {
+        var windowDestinationId = $(this).attr("id");
+        destinationEndPoint.paintStyle.fill = colorArrayDestination[index].getHex();
+
+        instance.addEndpoint(
+          windowDestinationId + "_answer",
+          {
+            anchors: ['LeftMiddle', 'LeftMiddle', 'LeftMiddle', 'LeftMiddle']
+          },
+          destinationEndPoint
+        );
+      });
+
+      MatchingDraggable.attachBehaviour();
+    },
+    attachBehaviour: function () {
+      if (!MatchingDraggable.initialized) {
+        MatchingDraggable.initialized = true;
+        setTimeout(function () {
+          repaintAllJsPlumbInstances();
+        }, 500);
+      }
+    }
+  };
+
+  jsPlumb.ready(function () {
+    if ($(".drag_question").length > 0) {
+
+      $(window).on('resize orientationchange', function () {
+        repaintAllJsPlumbInstances();
+      });
+
+      $(document).on('scroll', function () {
+        repaintAllJsPlumbInstances();
+      });
+    }
+  });
+
+  function repaintAllJsPlumbInstances() {
+    if (typeof MatchingDraggable.instances !== "undefined") {
+      Object.values(MatchingDraggable.instances).forEach(function (instance) {
+        instance.repaintEverything();
+      });
+    } else {
+      jsPlumb.repaintEverything();
+    }
   }
-});
+
+  function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+  }
+
+  $(function () {
+    if ('{{ shuffle_answers }}' === '1') {
+      $('.exercise-draggable-answer').each(function () {
+        var $ul = $(this);
+        var li = $ul.find('.touch-items');
+        var liContents = [];
+        li.each(function () {
+          liContents.push($(this));
+        });
+        shuffleArray(liContents);
+        $ul.empty().html(liContents);
+      });
+    }
+
+    DraggableAnswer.init(
+      $(".exercise-draggable-answer"),
+      $(".droppable")
+    );
+  });
 </script>

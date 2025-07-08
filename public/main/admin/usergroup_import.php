@@ -55,7 +55,9 @@ function save_data($classes)
                 $userIdList = [];
                 foreach ($usersToAddList as $username) {
                     $userInfo = api_get_user_info_from_username($username);
-                    $userIdList[] = $userInfo['user_id'];
+                    if (false !== $userInfo) {
+                        $userIdList[] = $userInfo['user_id'];
+                    }
                 }
                 if (!empty($userIdList)) {
                     $usergroup->subscribe_users_to_usergroup(

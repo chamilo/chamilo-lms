@@ -5,15 +5,14 @@
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use ChamiloSession as Session;
 use Laminas\Feed\Reader\Entry\Rss;
 use Laminas\Feed\Reader\Reader;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Class SocialManager.

@@ -7,9 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
-use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 

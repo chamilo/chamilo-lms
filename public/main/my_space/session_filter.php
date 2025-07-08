@@ -6,7 +6,7 @@
  * Report for current courses followed by the user.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -383,9 +383,8 @@ if (0 == count($certificateList)) {
             echo get_lang('Date').' : '.api_convert_and_format_date($valueCertificate['created_at']);
             echo '</td>';
             echo '<td width="20%">';
-            $url = api_get_path(WEB_PATH).'certificates/index.php?'.
-                'id='.$valueCertificate['id'].
-                '&user_id='.$value['user_id'];
+            $hash = pathinfo($valueCertificate['path_certificate'], PATHINFO_FILENAME);
+            $url = api_get_path(WEB_PATH)."certificates/{$hash}.html";
             $certificateUrl = Display::url(
                 get_lang('Certificate'),
                 $url,

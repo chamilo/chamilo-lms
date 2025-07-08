@@ -1,10 +1,10 @@
 <script setup>
-import {computed, ref} from "vue"
+import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
 import Button from "primevue/button"
-import InputSwitch from "primevue/inputswitch"
+import ToggleSwitch from "primevue/toggleswitch"
 import { useLogin } from "../../../assets/vue/composables/auth/login"
 import {usePlatformConfig} from "../../../assets/vue/store/platformConfig"
 
@@ -58,7 +58,7 @@ function onSubmitLoginForm() {
       </div>
 
       <div class="mb-3 flex flex-row gap-2">
-        <InputSwitch
+        <ToggleSwitch
           v-model="remember"
           input-id="binary"
           name="remember_me"
@@ -88,7 +88,7 @@ function onSubmitLoginForm() {
 
       <a
         id="forgot"
-        v-t="'Forgot your password ?'"
+        v-t="'Forgot your password?'"
         class="field"
         href="/main/auth/lostPassword.php"
         tabindex="5"

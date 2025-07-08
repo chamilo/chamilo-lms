@@ -4,9 +4,9 @@
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 class CourseCategory
 {

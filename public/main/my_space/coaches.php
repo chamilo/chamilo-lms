@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 ob_start();
 $cidReset = true;

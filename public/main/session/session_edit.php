@@ -58,7 +58,7 @@ if ('catalogue_access' === $currentView) {
     );
 
     $em = Database::getManager();
-    $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+    $accessUrl = Container::getAccessUrlUtil()->getCurrent();
     $accessUrlId = $accessUrl->getId();
     $sessionEntity = $em->getRepository(Session::class)->find($id);
 

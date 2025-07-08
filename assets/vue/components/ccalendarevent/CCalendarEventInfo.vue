@@ -35,16 +35,13 @@
 <script setup>
 import { useFormatDate } from "../../composables/formatDate"
 import ShowLinks from "../resource_links/ShowLinks"
-import { useCalendarInvitations } from "../../composables/calendar/calendarInvitations"
 import { type } from "../../constants/entity/ccalendarevent"
 import CalendarEventSubscriptionsInfo from "./CalendarEventSubscriptionsInfo.vue"
 import CalendarEventInvitationsInfo from "./CalendarEventInvitationsInfo.vue"
 import CalendarRemindersInfo from "./CalendarRemindersInfo.vue"
 
 const { abbreviatedDatetime } = useFormatDate()
-const { allowCollectiveInvitations } = useCalendarInvitations()
 
-// eslint-disable-next-line no-undef
 defineProps({
   event: {
     type: Object,

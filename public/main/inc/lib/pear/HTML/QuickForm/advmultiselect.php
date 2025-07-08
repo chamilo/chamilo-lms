@@ -231,9 +231,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 
         // add multiple selection attribute by default if missing
         $class = '
-                block appearance-none border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none
-                focus:bg-white focus:border-gray-500 w-full mt-1 overflow-auto w-full border
-                bg-white rounded px-3 py-2 outline-none text-gray-700';
+                p-select p-component p-inputwrapper p-inputwrapper-filled';
 
         $this->updateAttributes(['multiple' => 'multiple']);
 
@@ -473,10 +471,10 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         } else {
             $this->_elementTemplate = '
             {javascript}
-            <div class="grid grid-cols-3 advmultiselect">
-              <div><!-- BEGIN label_2 -->{label_2}<!-- END label_2 --> {unselected}</div>
-              <div><div class="text-center">{add}{remove}</div></div>
-              <div><!-- BEGIN label_3 -->{label_3}<!-- END label_3 -->{selected}</div>
+            <div class="flex gap-8 justify-between advmultiselect">
+              <div class="flex-auto flex flex-col gap-4"><!-- BEGIN label_2 -->{label_2}<!-- END label_2 --> {unselected}</div>
+              <div class="flex flex-col gap-8">{add}{remove}</div>
+              <div class="flex-auto flex flex-col gap-4"><!-- BEGIN label_3 -->{label_3}<!-- END label_3 -->{selected}</div>
             </div>
             ';
         }
@@ -545,7 +543,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         $leftAll = '';
 
         // placeholder {unselected} existence determines if we will render
-        if (strpos($this->_elementTemplate, '{unselected}') === false) {
+        if (!str_contains($this->_elementTemplate, '{unselected}')) {
             // ... a single multi-select with checkboxes
             $id = $this->getAttribute('name');
 
@@ -739,7 +737,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $attributes = array('id' => $selectId.'_rightSelected');
             $this->_addButtonAttributes = array_merge($this->_addButtonAttributes, $attributes);
             $attrStrAdd = $this->_getAttrString($this->_addButtonAttributes);
-            $strHtmlAdd = "<button $attrStrAdd  /> <em class='mdi mdi-chevron-right'></em></button><br /><br />";
+            $strHtmlAdd = "<button $attrStrAdd  /> <em class='mdi mdi-chevron-right'></em></button>";
 
             if ($this->selectAllCheckBox) {
                 $attributes = array('id' => $selectId.'_rightAll');
@@ -895,8 +893,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
     {
         $name = $this->getName();
         $js = '';
-        $search =
-        '<input type="text" name="q" class="form-control mb-3" placeholder="'.addslashes(get_lang('Search')).'" />';
+        $search = Display::input('text', 'q', '', ['placeholder' => get_lang('Search')]);
 
         $js .= '<script>
                 $(function() {

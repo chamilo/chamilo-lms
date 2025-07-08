@@ -1,7 +1,7 @@
 <template>
   <div class="terms-layout">
     <header>
-      <h1>{{ t("Terms and conditions") }}</h1>
+      <h1>{{ t("Terms and Conditions") }}</h1>
     </header>
 
     <main>

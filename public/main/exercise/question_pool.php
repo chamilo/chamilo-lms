@@ -2,14 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use ChamiloSession as Session;
 use Doctrine\ORM\NoResultException;
 use Knp\Component\Pager\Paginator;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Question Pool

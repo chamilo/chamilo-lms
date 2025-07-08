@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\CatalogueCourseRelAccessUrlRelUsergroup;
 use Chamilo\CoreBundle\Entity\CatalogueSessionRelAccessUrlRelUsergroup;
@@ -14,12 +15,14 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use ExtraField;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -149,6 +152,9 @@ class CatalogueController extends AbstractController
                 ->getSingleScalarResult()
             ;
 
+            $buyCoursesPlugin = BuyCoursesPlugin::create();
+            $buyData = $buyCoursesPlugin->getBuyCoursePluginPrice($session);
+
             return [
                 'id' => $session->getId(),
                 'title' => $session->getTitle(),
@@ -162,6 +168,8 @@ class CatalogueController extends AbstractController
                 'courses' => $courses,
                 'popularity' => $voteCount,
                 'isSubscribed' => $session->hasUserInSession($user, Session::STUDENT),
+                'priceHtml' => $buyData['html'] ?? '',
+                'buyButtonHtml' => $buyData['buy_button'] ?? '',
             ];
         }, $sessions);
 
@@ -175,7 +183,7 @@ class CatalogueController extends AbstractController
             return $this->json([]);
         }
 
-        $extraField = new \ExtraField('course');
+        $extraField = new ExtraField('course');
         $fields = $extraField->get_all(['filter' => 1]);
 
         $result = array_map(function ($field) {
@@ -199,15 +207,15 @@ class CatalogueController extends AbstractController
             return $this->json(['error' => 'Course or user not found'], 400);
         }
 
-        $useAutoSession = $settings->getSetting('session.catalog_course_subscription_in_user_s_session', true) === 'true';
+        $useAutoSession = 'true' === $settings->getSetting('session.catalog_course_subscription_in_user_s_session', true);
 
         if ($useAutoSession) {
             $session = new Session();
-            $timestamp = (new \DateTime())->format('Ymd_His');
-            $sessionTitle = sprintf('%s %s - Session %s', $user->getFirstname(), $user->getLastname(), $timestamp);
+            $timestamp = (new DateTime())->format('Ymd_His');
+            $sessionTitle = \sprintf('%s %s - Session %s', $user->getFirstname(), $user->getLastname(), $timestamp);
             $session->setTitle($sessionTitle);
 
-            $session->setAccessStartDate(new \DateTime());
+            $session->setAccessStartDate(new DateTime());
             $session->setAccessEndDate(null);
             $session->setCoachAccessEndDate(null);
             $session->setDisplayEndDate(null);

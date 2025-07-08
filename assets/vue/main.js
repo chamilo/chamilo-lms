@@ -38,9 +38,8 @@ import EmptyLayout from "./components/layout/EmptyLayout.vue"
 import PrimeVue from "primevue/config"
 import DataView from "primevue/dataview"
 import DataTable from "primevue/datatable"
-import Dropdown from "primevue/dropdown"
+import Select from "primevue/select"
 import Toolbar from "primevue/toolbar"
-import DataViewLayoutOptions from "primevue/dataviewlayoutoptions"
 
 import Dialog from "primevue/dialog"
 import InputText from "primevue/inputtext"
@@ -51,7 +50,6 @@ import ToastService from "primevue/toastservice"
 import ConfirmationService from "primevue/confirmationservice"
 import BaseAppLink from "./components/basecomponents/BaseAppLink.vue"
 
-import "primevue/resources/primevue.min.css"
 // import 'primeflex/primeflex.css';
 import "primeicons/primeicons.css"
 import Alpine from "alpinejs"
@@ -184,8 +182,7 @@ app.use(ConfirmationService)
 app.component("Dialog", Dialog)
 app.component("DataView", DataView)
 app.component("DataTable", DataTable)
-app.component("Dropdown", Dropdown)
-app.component("DataViewLayoutOptions", DataViewLayoutOptions)
+app.component("Dropdown", Select)
 app.component("InputText", InputText)
 app.component("Button", Button)
 app.component("Column", Column)
@@ -203,6 +200,22 @@ Alpine.start()
 
 const pinia = createPinia()
 
-app.use(PrimeVue, { ripple: false }).use(VueFlatPickr).use(router).use(store).use(pinia).use(i18n)
+app
+  .use(PrimeVue, {
+    ripple: false,
+    theme: {
+      options: {
+        cssLayer: {
+          name: "primevue",
+          order: "app-styles, primevue",
+        },
+      },
+    },
+  })
+  .use(VueFlatPickr)
+  .use(router)
+  .use(store)
+  .use(pinia)
+  .use(i18n)
 
 app.mount("#app")

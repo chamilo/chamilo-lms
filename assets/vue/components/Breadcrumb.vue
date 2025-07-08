@@ -10,6 +10,7 @@
           :to="item.route"
           :url="item.url"
           v-bind="props.action"
+          @click="handleBreadcrumbClick(item)"
         >
           {{ item.label }}
         </BaseAppLink>
@@ -129,9 +130,10 @@ function watchResourceNodeLoader() {
       const currentRouteName = route.name || ""
       const isAssignmentRoute = currentRouteName.startsWith("Assignment")
       const isAttendanceRoute = currentRouteName.startsWith("Attendance")
+      const isDocumentRoute = currentRouteName.startsWith("Documents")
       const nodeId = route.params.node || route.query.node
 
-      if ((isAssignmentRoute || isAttendanceRoute) && nodeId) {
+      if ((isAssignmentRoute || isAttendanceRoute || isDocumentRoute) && nodeId) {
         try {
           store.commit("resourcenode/setResourceNode", null)
           const resourceApiId = nodeId.startsWith("/api/") ? nodeId : `/api/resource_nodes/${nodeId}`
@@ -172,6 +174,19 @@ function addDocumentBreadcrumb() {
       route: { name: "DocumentsList", params: { node: folder.nodeId }, query: route.query },
     })
   })
+
+  const currentMatched = route.matched.find((r) => r.name === route.name)
+  const label = currentMatched.meta?.breadcrumb
+  if (label !== "") {
+    const finalLabel = label || formatToolName(currentMatched.name)
+    const alreadyShown = itemList.value.some((item) => item.label === finalLabel)
+    if (!alreadyShown) {
+      itemList.value.push({
+        label: t(finalLabel),
+        route: { name: currentMatched.name, params: route.params, query: route.query },
+      })
+    }
+  }
 }
 
 // Watch route changes to dynamically rebuild the breadcrumb trail
@@ -179,18 +194,7 @@ watchEffect(() => {
   if ("/" === route.fullPath) return
   itemList.value = []
 
-  // Admin panel routes (e.g. /admin/settings/users)
-  if (route.fullPath.startsWith("/admin")) {
-    const parts = route.path.split("/").filter(Boolean)
-    parts.forEach((part, index) => {
-      const path = `/${parts.slice(0, index + 1).join("/")}`
-      const matchedRoute = router.getRoutes().find((r) => r.path === path)
-      if (matchedRoute) {
-        const label = matchedRoute.meta?.breadcrumb || t(part.charAt(0).toUpperCase() + part.slice(1))
-        itemList.value.push({ label: t(label), route: { path } })
-      }
-    })
-  }
+  if (buildManualBreadcrumbIfNeeded()) return
 
   // Static route categories
   if (route.name?.includes("Page")) {
@@ -291,5 +295,57 @@ function cleanIdParam(id) {
   if (!id) return undefined
   const match = id.toString().match(/(\d+)$/)
   return match ? match[1] : id
+}
+
+function buildManualBreadcrumbIfNeeded() {
+  const whitelist = ["admin"]
+  const overrides = {
+    admin: "AdminIndex",
+    gdpr: null,
+  }
+  const pathSegments = route.path.split("/").filter(Boolean)
+  const baseSegment = pathSegments[0]
+
+  if (!whitelist.includes(baseSegment)) {
+    return false
+  }
+
+  const fullPath = "/" + pathSegments.join("/")
+  const hasMatchedRoute = router.getRoutes().some((r) => r.path === fullPath)
+
+  if (hasMatchedRoute) {
+    return false
+  }
+
+  pathSegments.forEach((segment, index) => {
+    const label = t(segment.charAt(0).toUpperCase() + segment.slice(1))
+    const override = overrides[segment]
+    if (override === null) {
+      itemList.value.push({ label })
+    } else if (override) {
+      itemList.value.push({
+        label,
+        route: { name: override, params: route.params, query: route.query },
+      })
+    } else {
+      const partialPath = "/" + pathSegments.slice(0, index + 1).join("/")
+      itemList.value.push({
+        label,
+        route: { path: partialPath },
+      })
+    }
+  })
+
+  return true
+}
+
+function handleBreadcrumbClick(item) {
+  const allowedSegments = ["admin"]
+  const currentSegment = route.path.split("/").filter(Boolean)[0]
+  const itemSegment = router.resolve(item.route).path.split("/").filter(Boolean)[0]
+
+  if (itemSegment === currentSegment && allowedSegments.includes(itemSegment)) {
+    window.location.href = router.resolve(item.route).href
+  }
 }
 </script>

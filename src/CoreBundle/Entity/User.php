@@ -46,13 +46,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use UserManager;
 
-/**
- * EquatableInterface is needed to check if the user needs to be refreshed.
- */
 #[ApiResource(
     types: ['http://schema.org/Person'],
     operations: [
-        new Get(security: "is_granted('VIEW', object)"),
+        new Get(
+            openapiContext: [
+                'description' => "Get details of one specific user, including name, e-mail and role.",
+            ],
+            security: "is_granted('VIEW', object)",
+        ),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
@@ -67,7 +69,7 @@ use UserManager;
             uriTemplate: '/advanced/create-user-on-access-url',
             controller: CreateUserOnAccessUrlAction::class,
             denormalizationContext: ['groups' => ['write']],
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')",
             input: CreateUserOnAccessUrlInput::class,
             output: User::class,
             deserialize: true,
@@ -2483,9 +2485,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function hasAuthSourceByAuthentication(string $authentication): bool
     {
-        return $this->authSources
-            ->exists(fn (UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication)
-        ;
+        return $this->authSources->exists(
+            fn ($key, $authSource) => $authSource instanceof UserAuthSource
+                && $authSource->getAuthentication() === $authentication
+        );
     }
 
     public function getAuthSourceByAuthentication(string $authentication): UserAuthSource

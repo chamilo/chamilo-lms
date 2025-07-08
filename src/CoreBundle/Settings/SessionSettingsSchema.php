@@ -82,6 +82,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'duplicate_specific_session_content_on_session_copy' => 'false',
                     'enable_auto_reinscription' => 'false',
                     'enable_session_replication' => 'false',
+                    'session_list_view_remaining_days' => 'false',
                 ]
             )
         ;
@@ -207,6 +208,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             )
             ->add('session_model_list_field_ordered_by_id', YesNoType::class)
             ->add('duplicate_specific_session_content_on_session_copy', YesNoType::class)
+            ->add('session_list_view_remaining_days', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

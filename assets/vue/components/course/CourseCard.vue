@@ -63,6 +63,7 @@ import { computed } from "vue"
 import { isEmpty } from "lodash"
 import { useFormatDate } from "../../composables/formatDate"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useI18n } from "vue-i18n"
 
 const { abbreviatedDatetime } = useFormatDate()
 
@@ -91,6 +92,27 @@ const props = defineProps({
 const platformConfigStore = usePlatformConfig()
 const showCourseDuration = computed(() => "true" === platformConfigStore.getSetting("course.show_course_duration"))
 
+const { t } = useI18n()
+
+const showRemainingDays = computed(() => {
+  return platformConfigStore.getSetting("session.session_list_view_remaining_days") === "true"
+})
+
+const daysRemainingText = computed(() => {
+  if (!showRemainingDays.value || !props.session?.displayEndDate) return null
+
+  const endDate = new Date(props.session.displayEndDate)
+  if (isNaN(endDate)) return null
+
+  const today = new Date()
+  const diff = Math.floor((endDate - today) / (1000 * 60 * 60 * 24))
+
+  if (diff > 1) return `${diff} days remaining`
+  if (diff === 1) return t("Ends tomorrow")
+  if (diff === 0) return t("Ends today")
+  return t("Expired")
+})
+
 const teachers = computed(() => {
   if (props.session?.courseCoachesSubscriptions) {
     return props.session.courseCoachesSubscriptions
@@ -109,6 +131,10 @@ const teachers = computed(() => {
 })
 
 const sessionDisplayDate = computed(() => {
+  if (daysRemainingText.value) {
+    return daysRemainingText.value
+  }
+
   const dateString = []
 
   if (props.session) {

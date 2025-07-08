@@ -28,6 +28,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
         'MenuVideoConference' => 'videoconference',
         'MenuDiagnostics' => 'diagnostics',
         'MenuCatalogue' => 'catalogue',
+        'MenuSessionAdmin' => 'session_admin',
         'TopbarCertificate' => 'topbar_certificate',
         'TopbarSkills' => 'topbar_skills',
     ];
@@ -93,6 +94,9 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'redirect_index_to_url_for_logged_users' => '',
                     'default_menu_entry_for_course_or_session' => 'my_courses',
                     'notification_event' => 'false',
+                    'show_tabs_per_role' => '{}',
+                    'session_admin_user_subscription_search_extra_field_to_search' => '',
+                    'push_notification_settings' => '',
                 ]
             )
             ->setTransformer(
@@ -108,6 +112,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             'gravatar_enabled' => ['string'],
             'gravatar_type' => ['string'],
             'show_tabs' => ['array', 'null'],
+            'show_tabs_per_role' => ['string', 'null'],
+            'session_admin_user_subscription_search_extra_field_to_search' => ['string', 'null'],
         ];
 
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -167,12 +173,32 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add(
+                'server_type',
+                ChoiceType::class,
+                [
+                    'label' => 'Server Type',
+                    'choices' => [
+                        'Production' => 'prod',
+                        'Validation' => 'validation',
+                        'Test/Development' => 'test',
+                    ],
+                ]
+            )
+            ->add(
                 'show_tabs',
                 ChoiceType::class,
                 [
                     'multiple' => true,
                     'choices' => self::$tabs,
                 ],
+            )
+            ->add(
+                'show_tabs_per_role',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => '<pre>{"SESSIONADMIN": ["session_admin", "my_courses"], "ADMIN": ["platform_administration"]}</pre>',
+                ]
             )
             ->add(
                 'unoconv_binaries',
@@ -270,6 +296,29 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('notification_event', YesNoType::class)
+            ->add(
+                'session_admin_user_subscription_search_extra_field_to_search',
+                TextType::class,
+                [
+                    'required' => false,
+                    'empty_data' => '',
+                    'help' => 'User extra field key to use when searching and naming sessions from /admin-dashboard/register.',
+                ]
+            )
+            ->add(
+                'push_notification_settings',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => '<pre>{
+    "gotify_url": "http://localhost:8080",
+    "gotify_token": "A0yWWfe_8YRLv_B",
+    "enabled": true,
+    "vapid_public_key": "BNg54MTyDZSdyFq99EmppT606jKVDS5o7jGVxMLW3Qir937A98sxtrK4VMt1ddNlK93MUenK0kM3aiAMu9HRcjQ=",
+    "vapid_private_key": "UgS5-xSneOcSyNJVq4c9wmEGaCoE1Y8oh-7ZGXPgs8o"
+}</pre>',
+                ]
+            )
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

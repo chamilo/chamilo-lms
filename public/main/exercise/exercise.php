@@ -2,10 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.

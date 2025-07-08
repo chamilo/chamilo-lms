@@ -1,14 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- *  This script allows platform admins to add users to urls.
- *  It displays a list of users and a list of courses;
- *  you can select multiple users and courses and then click on.
- *
- *  @author Julio Montoya <gugli100@gmail.com>
+ * This script allows platform admins to assign user groups to multiple URLs.
+ * It supports bulk assignment and removal of groups from URLs.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -22,9 +20,6 @@ if (!api_get_multiple_access_url()) {
 
 $userGroup = new UserGroupModel();
 $firstLetterUserGroup = null;
-$courses = [];
-$url_list = [];
-
 $tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 $tool_name = get_lang('Add group to URL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
@@ -32,100 +27,105 @@ $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple a
 
 Display::display_header($tool_name);
 
-echo Display::toolbarAction(
-    'url',
-    [
-        Display::url(
-            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit groups for one URL')),
-            api_get_path(WEB_CODE_PATH).'admin/access_url_edit_usergroup_to_url.php'
-        ),
-    ]
+echo '<div class="flex gap-2 items-center mb-4 mt-4">';
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to URL list')),
+    api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
 );
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit groups for one URL')),
+    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_usergroup_to_url.php'
+);
+echo '</div>';
 
 Display::page_subheader2($tool_name);
+?>
+    <h2 class="text-xl font-semibold text-gray-800 mt-6 mb-2">
+        <?php echo $tool_name; ?>
+    </h2>
+<?php
+if (!empty($_POST['form_sent'])) {
+    $userGroups = isset($_POST['user_group_list']) && is_array($_POST['user_group_list']) ? $_POST['user_group_list'] : [];
+    $urlList = isset($_POST['url_list']) && is_array($_POST['url_list']) ? $_POST['url_list'] : [];
 
-if (isset($_POST['form_sent']) && $_POST['form_sent']) {
-    $form_sent = $_POST['form_sent'];
-    $userGroups = is_array($_POST['user_group_list']) ? $_POST['user_group_list'] : [];
-    $urlList = is_array($_POST['url_list']) ? $_POST['url_list'] : [];
-    $firstLetterUserGroup = $_POST['first_letter_user_group'];
-
-    if (1 == $form_sent) {
-        if (0 == count($userGroups) || 0 == count($urlList)) {
-            echo Display::return_message(get_lang('You need to select at least one group and one site'), 'error');
-        } else {
+    if (empty($userGroups) || empty($urlList)) {
+        echo Display::return_message(get_lang('You need to select at least one group and one site'), 'error');
+    } else {
+        if (isset($_POST['add'])) {
             UrlManager::addUserGroupListToUrl($userGroups, $urlList);
             echo Display::return_message(get_lang('The group now belongs to the selected site'), 'confirm');
+        } elseif (isset($_POST['remove'])) {
+            UrlManager::removeUserGroupListFromUrl($userGroups, $urlList);
+            echo Display::return_message(get_lang('The group has been removed from the selected site'), 'confirm');
         }
     }
 }
 
-$firstLetterUser = null;
-if ($userGroup->getTotalCount() > 1000) {
-    //if there are too much num_courses to gracefully handle with the HTML select list,
-    // assign a default filter on users names
-    $firstLetterUser = 'A';
-}
+$dbUserGroups = $userGroup->getAllUserGroups();
 
-$dbUserGroups = $userGroup->filterByFirstLetter($firstLetterUserGroup);
-
-$sql = "SELECT id, url FROM $tbl_access_url  WHERE active = 1 ORDER BY url";
-$result = Database::query($sql);
-$db_urls = Database::store_result($result);
+$sql = "SELECT id, url FROM $tbl_access_url WHERE active = 1 ORDER BY url";
+$db_urls = Database::store_result(Database::query($sql));
 ?>
 
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
-    <input type="hidden" name="form_sent" value="1"/>
-    <table border="0" cellpadding="5" cellspacing="0" width="100%">
-    <tr>
-        <td width="40%" align="center">
-            <b><?php echo get_lang('User groups list'); ?></b>
-            <br/><br/>
-             <?php echo get_lang('First letter'); ?> :
-             <select name="first_letter_user_group" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
-                <option value="">--</option>
-                <?php
-                    echo Display::get_alphabet_options($firstLetterUserGroup);
-                    echo Display::get_numeric_options(0, 9, $firstLetterUserGroup);
-                ?>
-            </select>
-        </td>
-        <td width="20%">&nbsp;</td>
-        <td width="40%" align="center">
-            <b><?php echo get_lang('URL list'); ?> :</b>
-        </td>
-   </tr>
-   <tr>
-        <td width="40%" align="center">
-        <select name="user_group_list[]" multiple="multiple" size="20" style="width:400px;">
-		<?php foreach ($dbUserGroups as $item) {
-                    ?>
-			<option value="<?php echo $item['id']; ?>" <?php if (in_array($item['id'], $courses)) {
-                        echo 'selected="selected"';
-                    } ?>><?php echo $item['name']; ?>
-            </option>
-        <?php
-                } ?>
-    </select>
-   </td>
-   <td width="20%" valign="middle" align="center">
-    <button type="submit" class="add"> <?php echo get_lang('Add user group to this URL'); ?> </button>
-   </td>
-   <td width="40%" align="center">
-    <select name="url_list[]" multiple="multiple" size="20" style="width:300px;">
-        <?php foreach ($db_urls as $url_obj) {
-                    ?>
-        <option value="<?php echo $url_obj['id']; ?>" <?php if (in_array($url_obj['id'], $url_list)) {
-                        echo 'selected="selected"';
-                    } ?>><?php echo $url_obj['url']; ?>
-        </option>
-		<?php
-                } ?>
-    </select>
-   </td>
-  </tr>
- </table>
-</form>
-<?php
+    <form method="post" class="space-y-6" onsubmit="return confirmSubmission(event)">
+        <input type="hidden" name="form_sent" value="1" />
 
-Display :: display_footer();
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2"><?php echo get_lang('User groups list'); ?></label>
+                <input type="text" id="groupFilter" onkeyup="filterSelect('groupFilter', 'groupSelect')" class="mb-2 w-full p-2 border rounded" placeholder="<?php echo get_lang('Search group'); ?>">
+                <select name="user_group_list[]" id="groupSelect" multiple size="20" class="w-full h-[400px] p-2 border rounded">
+                    <?php foreach ($dbUserGroups as $item): ?>
+                        <option value="<?php echo $item['id']; ?>"><?php echo $item['title']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2"><?php echo get_lang('URL list'); ?></label>
+                <input type="text" id="urlFilter" onkeyup="filterSelect('urlFilter', 'urlSelect')" class="mb-2 w-full p-2 border rounded" placeholder="<?php echo get_lang('Search URL'); ?>">
+                <select name="url_list[]" id="urlSelect" multiple size="20" class="w-full h-[400px] p-2 border rounded">
+                    <?php foreach ($db_urls as $url_obj): ?>
+                        <option value="<?php echo $url_obj['id']; ?>"><?php echo $url_obj['url']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+        <div class="flex justify-center gap-4 mt-6 flex-wrap">
+            <button name="add" class="rounded-lg px-6 py-2 shadow btn--info">
+                <?php echo get_lang('Add user group to selected URLs'); ?>
+            </button>
+            <button name="remove" class="rounded-lg px-6 py-2 shadow"
+                    style="background: rgb(var(--color-danger-base)); color: rgb(var(--color-danger-button-text));">
+                <?php echo get_lang('Remove user group from selected URLs'); ?>
+            </button>
+        </div>
+    </form>
+    <script>
+        function filterSelect(inputId, selectId) {
+            const input = document.getElementById(inputId);
+            const filter = input.value.toLowerCase();
+            const select = document.getElementById(selectId);
+            const options = select.options;
+
+            for (let i = 0; i < options.length; i++) {
+                const txt = options[i].text.toLowerCase();
+                options[i].style.display = txt.includes(filter) ? '' : 'none';
+            }
+        }
+
+        function confirmSubmission(event) {
+            const form = event.target;
+            const addClicked = form.querySelector('[name="add"]').matches(':focus');
+            const removeClicked = form.querySelector('[name="remove"]').matches(':focus');
+
+            if (addClicked) {
+                return confirm("<?php echo get_lang('Are you sure you want to assign the selected groups to the selected URLs?'); ?>");
+            }
+            if (removeClicked) {
+                return confirm("<?php echo get_lang('Are you sure you want to unassign the selected groups from the selected URLs?'); ?>");
+            }
+            return true;
+        }
+    </script>
+<?php
+Display::display_footer();

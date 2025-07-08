@@ -17,7 +17,7 @@ class IndexController extends BaseController
     #[Route('/', name: 'index', options: ['expose' => true], methods: ['GET', 'POST'])]
     #[Route('/sessions', name: 'sessions')]
     #[Route('/sessions/{extra}', name: 'sessions_options')]
-    #[Route('/admin/configuration/colors', name: 'configuration_colors')]
+    #[Route('/admin/{vueRouting}', name: 'admin_vue_entrypoint', requirements: ['vueRouting' => '.+'])]
     #[Route('/home', name: 'home', options: ['expose' => true], methods: ['GET', 'POST'])]
     #[Route('/login', name: 'login', options: ['expose' => true], methods: ['GET', 'POST'])]
     #[Route('/faq', name: 'faq', options: ['expose' => true], methods: ['GET', 'POST'])]
@@ -30,6 +30,8 @@ class IndexController extends BaseController
     #[Route('/account/home', name: 'chamilo_core_account_home', options: ['expose' => true])]
     #[Route('/social', name: 'chamilo_core_socialnetwork', options: ['expose' => true])]
     #[Route('/admin', name: 'admin', options: ['expose' => true])]
+    #[Route('/admin-dashboard', name: 'admin_dashboard_entry', options: ['expose' => true])]
+    #[Route('/admin-dashboard/{vueRouting}', name: 'admin_dashboard_vue_entry', requirements: ['vueRouting' => '.+'])]
     #[Route('/p/{slug}', name: 'public_page')]
     #[Route('/skill/wheel', name: 'skill_wheel')]
     public function index(): Response

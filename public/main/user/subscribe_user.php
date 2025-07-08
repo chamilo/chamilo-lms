@@ -3,9 +3,9 @@
 /* For licensing terms, see /license.txt*/
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use ExtraField as ExtraFieldModel;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * This script allows teachers to subscribe existing users

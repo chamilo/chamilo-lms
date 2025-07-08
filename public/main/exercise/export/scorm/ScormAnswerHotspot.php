@@ -1,0 +1,99 @@
+<?php
+
+/* For licensing terms, see /license.txt */
+
+/**
+ * This class handles the SCORM export of hotpot questions.
+ */
+class ScormAnswerHotspot extends Answer
+{
+    /**
+     * Returns the javascript code that goes with HotSpot exercises.
+     *
+     * @return string The JavaScript code
+     */
+    public function get_js_header()
+    {
+        $header = '<script>';
+        $header .= file_get_contents(api_get_path(SYS_CODE_PATH).'inc/lib/javascript/hotspot/js/hotspot.js');
+        $header .= '</script>';
+
+        if ($this->standalone) {
+            //because this header closes so many times the <script> tag, we have to reopen our own
+            $header .= '<script>';
+            $header .= 'questions_answers['.$this->questionJSId.'] = new Array();'."\n";
+            $header .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();'."\n";
+            $header .= 'questions_types['.$this->questionJSId.'] = \'hotspot\';'."\n";
+            $jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
+            $jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
+            $jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0;'.";\n";
+            $header .= $jstmpw;
+        } else {
+            $header = '';
+            $header .= 'questions_answers['.$this->questionJSId.'] = new Array();'."\n";
+            $header .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();'."\n";
+            $header .= 'questions_types['.$this->questionJSId.'] = \'hotspot\';'."\n";
+            $jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
+            $jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
+            $jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0;'."\n";
+            $header .= $jstmpw;
+        }
+
+        return $header;
+    }
+
+    /**
+     * Export the text with missing words.
+     *
+     * As a side effect, it stores two lists in the class :
+     * the missing words and their respective weightings.
+     */
+    public function export()
+    {
+        $js = $this->get_js_header();
+        $html = '<tr><td colspan="2"><table width="100%">';
+        // some javascript must be added for that kind of questions
+        $html .= '';
+
+        // Get the answers, make a list
+        $nbrAnswers = $this->selectNbrAnswers();
+
+        $answerList = '<div
+            style="padding: 10px;
+            margin-left: -8px;
+            border: 1px solid #4271b5;
+            height: 448px;
+            width: 200px;"><b>'.get_lang('Image zones').'</b><ol>';
+        for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+            $answerList .= '<li>'.$this->selectAnswer($answerId).'</li>';
+        }
+        $answerList .= '</ol></div>';
+        $relPath = api_get_path(REL_PATH);
+        $html .= <<<HTML
+            <tr>
+                <td>
+                    <div id="hotspot-{$this->questionJSId}"></div>
+                    <script>
+                        document.addEventListener('DOMContentListener', function () {
+                            new HotspotQuestion({
+                                questionId: {$this->questionJSId},
+                                selector: '#hotspot-{$this->questionJSId}',
+                                for: 'user',
+                                relPath: '$relPath'
+                            });
+                        });
+                    </script>
+                </td>
+                <td>
+                    $answerList
+                </td>
+            <tr>
+HTML;
+        $html .= '</table></td></tr>';
+
+        // currently the free answers cannot be displayed, so ignore the textarea
+        $html = '<tr><td colspan="2">'.get_lang('This learning object or activity is not SCORM compliant. That\'s why it is not exportable.').'</td></tr>';
+
+        return [$js, $html];
+    }
+}

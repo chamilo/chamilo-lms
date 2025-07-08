@@ -9,8 +9,8 @@ namespace Chamilo\CoreBundle\Command;
 use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
@@ -201,7 +201,20 @@ class SendEventRemindersCommand extends Command
         $messageSubject = $this->translator->trans('Reminder for event : %s', ['%s' => $event->getTitle()]);
         $messageContent = implode(PHP_EOL, $this->generateEventDetails($event));
 
-        $this->messageHelper->sendMessageSimple($user->getId(), $messageSubject, $messageContent, $senderId);
+        $this->messageHelper->sendMessage(
+            $user->getId(),
+            $messageSubject,
+            $messageContent,
+            [],
+            [],
+            0,
+            0,
+            0,
+            $senderId,
+            0,
+            false,
+            true
+        );
 
         if ($debug) {
             error_log("Message sent to user ID: {$user->getId()} for event: {$event->getTitle()}");

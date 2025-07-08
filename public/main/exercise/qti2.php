@@ -9,7 +9,8 @@
  *
  * @version $Id: qti2.php  2010-03-12 12:14:25Z $
  */
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 

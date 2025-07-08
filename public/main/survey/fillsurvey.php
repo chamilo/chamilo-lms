@@ -382,7 +382,6 @@ if (count($_POST) > 0) {
                     $survey_invitation['user_id'],
                     $survey_invitation['survey_id'],
                     $survey_question_id,
-                    api_get_course_int_id(),
                     $lpItemId
                 );
 

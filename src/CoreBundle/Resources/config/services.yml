@@ -38,27 +38,25 @@ services:
     Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor:
         arguments: ['@translator', '@router']
 
-    Chamilo\CoreBundle\Component\Utils\AssetDirectoryNamer:
+    Chamilo\CoreBundle\Component\VichUploader\AssetDirectoryNamer:
       arguments:
         - '@property_accessor'
         - '@Chamilo\CoreBundle\Repository\AssetRepository'
         - '@request_stack'
 
-    Chamilo\CoreBundle\Component\Utils\AssetFileNameNamer:
+    Chamilo\CoreBundle\Component\VichUploader\AssetFileNameNamer:
       arguments:
         - '@request_stack'
         - '@translator'
       tags:
         - { name: vich_uploader.namer, mapping: assets }
 
-    Chamilo\CoreBundle\Component\Utils\CreateDefaultPages: ~
-    Chamilo\CoreBundle\Component\Utils\NameConvention: ~
-    Chamilo\CoreBundle\Component\Utils\Glide:
+    Chamilo\CoreBundle\Helpers\GlideHelper:
         arguments:
             - {source: '@oneup_flysystem.resource_filesystem', cache: '@oneup_flysystem.resource_cache_filesystem'}
             - '%glide_media_filters%'
 
-    Chamilo\CoreBundle\Component\Utils\GlideAsset:
+    Chamilo\CoreBundle\Helpers\GlideAssetUtil:
         arguments:
             - {source: '@oneup_flysystem.asset_filesystem', cache: '@oneup_flysystem.asset_cache_filesystem'}
             - '%glide_media_filters%'
@@ -93,6 +91,26 @@ services:
         arguments: [{'sticky': ~}]
         tags: [{name: 'api_platform.filter', id: 'course.sticky_boolean_filter'}]
 
+    session.search_filter:
+        parent: 'api_platform.doctrine.orm.search_filter'
+        arguments:
+            $properties: { title: 'partial' }
+        tags: [ 'api_platform.filter' ]
+
+    session.property_filter:
+        parent: 'api_platform.serializer.property_filter'
+        tags: [ 'api_platform.filter' ]
+
+    session.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments:
+            $properties: { id: ~, title: ~ }
+        tags: [ 'api_platform.filter' ]
+
+    session.group_filter:
+        parent: 'api_platform.serializer.group_filter'
+        tags: [ 'api_platform.filter' ]
+
     _instanceof:
         Chamilo\CoreBundle\Tool\ToolInterface:
             tags: ['chamilo_core.tool_handler']
@@ -104,23 +122,19 @@ services:
     Chamilo\CoreBundle\Filter\SocialWallFilter:
         tags: [ 'api_platform.filter' ]
 
-    Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper:
-      arguments:
-        $permissionRelRoleRepository: '@Chamilo\CoreBundle\Repository\PermissionRelRoleRepository'
-
-    Chamilo\CoreBundle\Service\AI\AiProviderFactory:
+    Chamilo\CoreBundle\AiProvider\AiProviderFactory:
       arguments:
         $httpClient: '@Symfony\Contracts\HttpClient\HttpClientInterface'
         $settingsManager: '@Chamilo\CoreBundle\Settings\SettingsManager'
         $aiRequestsRepository: '@Chamilo\CoreBundle\Repository\AiRequestsRepository'
         $security: '@security.helper'
 
-    Chamilo\CoreBundle\Service\AI\OpenAiProvider:
-      factory: [ '@Chamilo\CoreBundle\Service\AI\AiProviderFactory', 'getProvider' ]
+    Chamilo\CoreBundle\AiProvider\OpenAiProvider:
+      factory: [ '@Chamilo\CoreBundle\AiProvider\AiProviderFactory', 'getProvider' ]
       arguments: [ 'openai' ]
 
-    Chamilo\CoreBundle\Service\AI\DeepSeekAiProvider:
-      factory: [ '@Chamilo\CoreBundle\Service\AI\AiProviderFactory', 'getProvider' ]
+    Chamilo\CoreBundle\AiProvider\DeepSeekAiProvider:
+      factory: [ '@Chamilo\CoreBundle\AiProvider\AiProviderFactory', 'getProvider' ]
       arguments: [ 'deepseek' ]
 
     api_platform.graphql.executor:
@@ -132,13 +146,3 @@ services:
       arguments:
         $registry: '@doctrine'
         $em: '@doctrine.orm.entity_manager'
-
-    Chamilo\CoreBundle\ServiceHelper\PluginServiceHelper:
-      arguments:
-        $parameterBag: '@parameter_bag'
-        $pluginRepo: '@Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository'
-        $accessUrlHelper: '@Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper'
-
-    Chamilo\CoreBundle\EventListener\AccessUrlValidationListener:
-      tags:
-        - { name: kernel.event_listener, event: kernel.request, priority: 255 }

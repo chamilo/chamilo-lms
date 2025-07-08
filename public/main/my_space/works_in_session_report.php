@@ -5,7 +5,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 

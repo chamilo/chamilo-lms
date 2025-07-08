@@ -2,10 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CSurvey;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -91,7 +91,7 @@ if (isset($_POST) && !empty($_POST)) {
         }
     } else {
         foreach ($questions as $item) {
-            $questionId = $item['question_id'];
+            $questionId = $item->getIid();
             $question = $questionRepo->find($questionId);
             SurveyUtil::saveAnswer(
                 $userId,

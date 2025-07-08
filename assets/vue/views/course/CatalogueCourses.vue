@@ -3,7 +3,7 @@
     <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
       <div>
         <strong>{{ $t("Total number of courses") }}:</strong>
-        {{ totalVisibleCourses }}<br />
+        {{ courses.length }}<br />
         <strong>{{ $t("Matching courses") }}:</strong>
         {{ totalVisibleCourses }}
       </div>
@@ -37,6 +37,12 @@
             class="pl-10 w-64"
           />
         </div>
+        <Button
+          :label="$t('Search')"
+          icon="pi pi-search"
+          class="p-button-sm p-button-primary"
+          @click="applyAdvancedSearch"
+        />
       </div>
     </div>
     <div
@@ -78,15 +84,6 @@
           />
         </template>
       </div>
-
-      <div class="text-right">
-        <Button
-          :label="$t('Search')"
-          icon="pi pi-search"
-          class="p-button-sm p-button-primary"
-          @click="applyAdvancedSearch"
-        />
-      </div>
     </div>
     <div
       v-if="status"
@@ -126,7 +123,7 @@
 import { computed, onMounted, ref, watch } from "vue"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
-import { FilterMatchMode } from "primevue/api"
+import { FilterMatchMode } from "@primevue/core/api"
 import { useNotification } from "../../composables/notification"
 import { useLanguage } from "../../composables/language"
 import { useSecurityStore } from "../../store/securityStore"
@@ -246,16 +243,30 @@ const applyAdvancedSearch = () => {
   visibleCount.value = rowsPerScroll
 }
 
+const isAnonymous = !securityStore.isAuthenticated
+const isPrivilegedUser =
+  securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
+
 const allowCatalogueAccess = computed(() => {
-  const allowStudents = platformConfigStore.getSetting("display.allow_students_to_browse_courses") !== "false"
-  const allowPublished = platformConfigStore.getSetting("course.course_catalog_published") !== "false"
-  return allowStudents && allowPublished
+  if (isAnonymous) {
+    return platformConfigStore.getSetting("course.course_catalog_published") !== "false"
+  }
+
+  if (isPrivilegedUser) {
+    return true
+  }
+
+  if (securityStore.isStudent) {
+    return platformConfigStore.getSetting("display.allow_students_to_browse_courses") !== "false"
+  }
+
+  return false
 })
 
 if (!allowCatalogueAccess.value) {
   if (!securityStore.user?.id) {
     router.push({ name: "Login" })
-  } else if (securityStore.user?.status === 5) {
+  } else if (securityStore.isStudent) {
     router.push({ name: "Home" })
   } else {
     router.push({ name: "Index" })

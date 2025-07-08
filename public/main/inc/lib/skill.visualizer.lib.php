@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-
 /**
  * @todo lib not use. Only the class variables not the functions
  */

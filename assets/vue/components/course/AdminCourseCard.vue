@@ -24,12 +24,6 @@
         >
           {{ course.title }}
         </span>
-        <span
-          class="text-xs text-gray-500 truncate"
-          :title="course.code"
-        >
-          {{ course.code }}
-        </span>
       </div>
     </template>
 

@@ -118,8 +118,7 @@ class CreateCoursesFromStructuredFileCommand extends Command
             $namePart = $parts[1];
 
             // Code: remove dashes/spaces, uppercase everything
-            $rawCode = $codePart.strtoupper(str_replace(['-', ' '], '', $namePart));
-            $courseCode = $this->generateUniqueCourseCode($rawCode);
+            $courseCode = $this->generateUniqueCourseCode($codePart);
 
             // Title: replace dashes with spaces
             $courseTitle = str_replace('-', ' ', $namePart);

@@ -43,16 +43,29 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         $currentUser = $this->userHelper->getCurrent();
         $url = $this->accessUrlHelper->getCurrent();
 
-        $isAllowed = $user === $currentUser || $currentUser->isAdmin();
+        $isAllowed = $user === $currentUser || ($currentUser && $currentUser->isAdmin());
 
         if (!$isAllowed) {
             throw new AccessDeniedException();
         }
 
+        $currentPage = (int) ($context['filters']['page'] ?? 1);
+        $itemsPerPage = (int) ($context['filters']['itemsPerPage'] ?? 10);
+
         return match ($operation->getName()) {
             'user_session_subscriptions_past' => $this->sessionRepository->getPastSessionsOfUserInUrl($user, $url),
-            'user_session_subscriptions_current' => $this->sessionRepository->getCurrentSessionsOfUserInUrl($user, $url),
-            'user_session_subscriptions_upcoming' => $this->sessionRepository->getUpcomingSessionsOfUserInUrl($user, $url),
+            'user_session_subscriptions_current' => $this->sessionRepository->getCurrentSessionsOfUserInUrl(
+                $user,
+                $url,
+                $currentPage,
+                $itemsPerPage
+            ),
+            'user_session_subscriptions_upcoming' => $this->sessionRepository->getUpcomingSessionsOfUserInUrl(
+                $user,
+                $url,
+                $currentPage,
+                $itemsPerPage
+            ),
         };
     }
 }

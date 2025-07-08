@@ -130,55 +130,31 @@ class SessionRepository extends ServiceEntityRepository
      *
      * @throws Exception
      */
-    public function getCurrentSessionsOfUserInUrl(User $user, AccessUrl $url): array
-    {
-        $sessions = $this->getSubscribedSessionsOfUserInUrl($user, $url);
+    public function getCurrentSessionsOfUserInUrl(
+        User $user,
+        AccessUrl $url,
+        int $currentPage = 1,
+        int $itemsPerPage = 10
+    ): array {
+        $qb = $this->getSessionsByUser($user, $url);
 
-        $filterCurrentSessions = function (Session $session) use ($user, $url) {
-            $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
-            if (!$userIsGeneralCoach) {
-                $coursesAsCoach = $this->getSessionCoursesByStatusInCourseSubscription($user, $session, Session::COURSE_COACH, $url);
-                $coursesAsStudent = $this->getSessionCoursesByStatusInCourseSubscription($user, $session, Session::STUDENT, $url);
-                $validCourses = array_merge($coursesAsCoach, $coursesAsStudent);
-
-                if (empty($validCourses)) {
-                    return false;
-                }
-                $session->setCourses(new ArrayCollection($validCourses));
-            }
-
-            $userIsCoach = $session->hasCoach($user);
-
-            // Check if session has a duration
-            if ($session->getDuration() > 0) {
-                $daysLeft = $session->getDaysLeftByUser($user);
-
-                return $daysLeft >= 0 || $userIsCoach;
-            }
-
-            // Determine the start date based on whether the user is a coach
-            $sessionStartDate = $userIsCoach && $session->getCoachAccessStartDate()
-                ? $session->getCoachAccessStartDate()
-                : $session->getAccessStartDate();
-
-            // If there is no start date, consider the session current
-            if (!$sessionStartDate) {
-                return true;
-            }
-
-            // Get the current date and time
-            $now = new DateTime();
-
-            // Determine the end date based on whether the user is a coach
-            $sessionEndDate = $userIsCoach && $session->getCoachAccessEndDate()
-                ? $session->getCoachAccessEndDate()
-                : $session->getAccessEndDate();
-
-            // Check if the current date is within the start and end dates
-            return $now >= $sessionStartDate && (!$sessionEndDate || $now <= $sessionEndDate);
-        };
-
-        return array_filter($sessions, $filterCurrentSessions);
+        return $qb
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->isNull('sru.accessStartDate'),
+                    $qb->expr()->isNull('sru.accessEndDate'),
+                    $qb->expr()->andX(
+                        $qb->expr()->lte('sru.accessStartDate', ':now'),
+                        $qb->expr()->gte('sru.accessEndDate', ':now'),
+                    ),
+                )
+            )
+            ->setParameter('now', new DateTime())
+            ->setFirstResult(($currentPage - 1) * $itemsPerPage)
+            ->setMaxResults($itemsPerPage)
+            ->getQuery()
+            ->getResult();
+        ;
     }
 
     /**
@@ -186,36 +162,24 @@ class SessionRepository extends ServiceEntityRepository
      *
      * @throws Exception
      */
-    public function getUpcomingSessionsOfUserInUrl(User $user, AccessUrl $url): array
-    {
-        $sessions = $this->getSubscribedSessionsOfUserInUrl($user, $url);
+    public function getUpcomingSessionsOfUserInUrl(
+        User $user,
+        AccessUrl $url,
+        int $currentPage = 1,
+        int $itemsPerPage = 10
+    ): array {
+        $qb = $this->getSessionsByUser($user, $url);
 
-        $filterUpcomingSessions = function (Session $session) use ($user) {
-            $now = new DateTime();
-
-            // All session with access by duration call be either current or past
-            if ($session->getDuration() > 0) {
-                return false;
-            }
-
-            // Determine if the user is a coach
-            $userIsCoach = $session->hasCoach($user);
-
-            // Get the appropriate start date based on whether the user is a coach
-            $sessionStartDate = $userIsCoach && $session->getCoachAccessStartDate()
-                ? $session->getCoachAccessStartDate()
-                : $session->getAccessStartDate();
-
-            // If there's no start date, the session is not considered future
-            if (!$sessionStartDate) {
-                return false;
-            }
-
-            // Check if the current date is before the start date
-            return $now < $sessionStartDate;
-        };
-
-        return array_filter($sessions, $filterUpcomingSessions);
+        return $qb
+            ->andWhere(
+                $qb->expr()->gt('sru.accessStartDate', ':now'),
+            )
+            ->setParameter('now', new DateTime())
+            ->setFirstResult(($currentPage - 1) * $itemsPerPage)
+            ->setMaxResults($itemsPerPage)
+            ->getQuery()
+            ->getResult();
+        ;
     }
 
     public function addUserInCourse(int $relationType, User $user, Course $course, Session $session): void

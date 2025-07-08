@@ -73,7 +73,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromClass: User::class,
                 ),
             ],
-            paginationEnabled: false,
             normalizationContext: [
                 'groups' => [
                     'user_subscriptions:sessions',
@@ -90,7 +89,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromClass: User::class,
                 ),
             ],
-            paginationEnabled: false,
             normalizationContext: [
                 'groups' => [
                     'user_subscriptions:sessions',
@@ -860,6 +858,20 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             ->setUser($user)
             ->setRelationType($relationType)
         ;
+
+        if ($this->duration <= 0) {
+            $isCoach = $this->hasCoach($user);
+
+            $sessionRelUser
+                ->setAccessStartDate(
+                    $isCoach && $this->coachAccessStartDate ? $this->coachAccessStartDate : $this->accessStartDate
+                )
+                ->setAccessEndDate(
+                    $isCoach && $this->coachAccessEndDate ? $this->coachAccessEndDate : $this->accessEndDate
+                )
+            ;
+        }
+
         $this->addUserSubscription($sessionRelUser);
 
         return $this;

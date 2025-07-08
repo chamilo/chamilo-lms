@@ -2161,10 +2161,8 @@ class SessionManager
             if (empty($session_visibility)) {
                 $session_visibility = SESSION_VISIBLE_READ_ONLY;
             }
-        } else {
-            if (!in_array($session_visibility, [SESSION_VISIBLE_READ_ONLY, SESSION_VISIBLE, SESSION_INVISIBLE])) {
-                $session_visibility = SESSION_VISIBLE_READ_ONLY;
-            }
+        } elseif (!in_array($session_visibility, [SESSION_VISIBLE_READ_ONLY, SESSION_VISIBLE, SESSION_INVISIBLE])) {
+            $session_visibility = SESSION_VISIBLE_READ_ONLY;
         }
 
         $sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
@@ -2330,8 +2328,13 @@ class SessionManager
             $isUserSubscribed = self::isUserSubscribedAsStudent($sessionId, $enreg_user);
             if (false === $isUserSubscribed) {
                 $enreg_user = (int) $enreg_user;
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
+                if ($session->getDuration() > 0) {
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
                         VALUES (".Session::STUDENT.", $sessionId, $enreg_user, '".api_get_utc_datetime()."')";
+                } else {
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at, access_start_date, access_end_date)
+                            VALUES (".Session::STUDENT.", $sessionId, $enreg_user, '".api_get_utc_datetime()."', '".$session->getAccessStartDate()->format('Y-m-d H:i:s')."', '".$session->getAccessEndDate()->format('Y-m-d H:i:s')."')";
+                }
                 Database::query($sql);
                 Event::addEvent(
                     LOG_SESSION_ADD_USER,
@@ -3774,6 +3777,7 @@ class SessionManager
         }
 
         $userId = $userInfo['user_id'];
+        $user = api_get_user_entity();
 
         // Only subscribe DRH users.
         $rolesAllowed = [
@@ -3821,23 +3825,11 @@ class SessionManager
         // Inserting new sessions list.
         if (!empty($sessions_list) && is_array($sessions_list)) {
             foreach ($sessions_list as $session_id) {
-                $session_id = intval($session_id);
-                $sql = "SELECT session_id
-                        FROM $tbl_session_rel_user
-                        WHERE
-                            session_id = $session_id AND
-                            user_id = $userId AND
-                            relation_type = '".Session::DRH."'";
-                $result = Database::query($sql);
-                if (0 == Database::num_rows($result)) {
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, relation_type, registered_at)
-                            VALUES (
-                                $session_id,
-                                $userId,
-                                '".Session::DRH."',
-                                '".api_get_utc_datetime()."'
-                            )";
-                    Database::query($sql);
+                $session = api_get_session_entity($session_id);
+
+                if (!$session->hasUserInSession($user, Session::DRH)) {
+                    $session->addUserInSession(Session::DRH, $user);
+
                     $affected_rows++;
                 }
             }
@@ -5072,6 +5064,7 @@ class SessionManager
         $error_message = null;
         $session_counter = 0;
         $defaultUserId = empty($defaultUserId) ? api_get_user_id() : (int) $defaultUserId;
+        $defaultUser = api_get_user_entity($defaultUserId);
 
         $eol = PHP_EOL;
         if (PHP_SAPI != 'cli') {
@@ -5224,6 +5217,8 @@ class SessionManager
                     $coach_id = $defaultUserId;
                 }
 
+                $coach = api_get_user_entity($coach_id);
+
                 $users = explode('|', $enreg['Users']);
                 $courses = explode('|', $enreg['Courses']);
 
@@ -5277,27 +5272,12 @@ class SessionManager
                     }
                     // Creating the session.
                     $session_id = Database::insert($tbl_session, $sessionParams);
+                    $session = api_get_session_entity($session_id);
                     if ($session_id) {
-                        Database::insert(
-                            $tbl_session_user,
-                            [
-                                'relation_type' => Session::GENERAL_COACH,
-                                'duration' => 0,
-                                'registered_at' => api_get_utc_datetime(),
-                                'user_id' => $coach_id,
-                                'session_id' => $session_id,
-                            ]
-                        );
-                        Database::insert(
-                            $tbl_session_user,
-                            [
-                                'relation_type' => Session::GENERAL_COACH,
-                                'duration' => 0,
-                                'registered_at' => api_get_utc_datetime(),
-                                'user_id' => $defaultUserId,
-                                'session_id' => $session_id,
-                            ]
-                        );
+                        $session->addUserInSession(Session::GENERAL_COACH, $coach);
+                        $session->addUserInSession(Session::GENERAL_COACH, $defaultUser);
+                        Database::getManager()->flush();
+
                         foreach ($enreg as $key => $value) {
                             if ('extra_' === substr($key, 0, 6)) { //an extra field
                                 self::update_session_extra_field_value($session_id, substr($key, 6), $value);
@@ -5361,26 +5341,14 @@ class SessionManager
                         $session_id = Database::insert($tbl_session, $sessionParams);
 
                         if ($session_id) {
-                            Database::insert(
-                                $tbl_session_user,
-                                [
-                                    'relation_type' => Session::GENERAL_COACH,
-                                    'duration' => 0,
-                                    'registered_at' => api_get_utc_datetime(),
-                                    'user_id' => $coach_id,
-                                    'session_id' => $session_id,
-                                ]
-                            );
-                            Database::insert(
-                                $tbl_session_user,
-                                [
-                                    'relation_type' => Session::GENERAL_COACH,
-                                    'duration' => 0,
-                                    'registered_at' => api_get_utc_datetime(),
-                                    'user_id' => $defaultUserId,
-                                    'session_id' => $session_id,
-                                ]
-                            );
+                            $session = api_get_session_entity($session_id);
+
+                            $session
+                                ->addUserInSession(Session::GENERAL_COACH, $coach)
+                                ->addUserInSession(Session::GENERAL_COACH, $defaultUser)
+                            ;
+                            Database::getManager()->flush();
+
                             foreach ($enreg as $key => $value) {
                                 if ('extra_' == substr($key, 0, 6)) { //an extra field
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
@@ -5481,7 +5449,7 @@ class SessionManager
 
                         if ($session_id) {
                             $sessionInfo = api_get_session_info($session_id);
-                            $params['show_description'] = isset($sessionInfo['show_description']) ? $sessionInfo['show_description'] : intval($showDescription);
+                            $params['show_description'] = $sessionInfo['show_description'] ?? intval($showDescription);
 
                             if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
                                 if (empty($sessionInfo['nb_days_access_before_beginning']) ||
@@ -5504,16 +5472,9 @@ class SessionManager
                                 $tbl_session_user,
                                 ['session_id = ? AND relation_type = ?' => [$session_id, Session::GENERAL_COACH]]
                             );
-                            Database::insert(
-                                $tbl_session_user,
-                                [
-                                    'relation_type' => Session::GENERAL_COACH,
-                                    'duration' => 0,
-                                    'registered_at' => api_get_utc_datetime(),
-                                    'user_id' => $coach_id,
-                                    'session_id' => $session_id,
-                                ]
-                            );
+                            api_get_session_entity($session_id)->addUserInSession(Session::GENERAL_COACH, $coach);
+
+                            Database::getManager()->flush();
 
                             foreach ($enreg as $key => $value) {
                                 if ('extra_' == substr($key, 0, 6)) { //an extra field

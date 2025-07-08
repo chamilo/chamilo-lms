@@ -125,17 +125,8 @@ class SessionRepository extends ServiceEntityRepository
         return array_filter($sessions, $filterPastSessions);
     }
 
-    /**
-     * @return array<int, Session>
-     *
-     * @throws Exception
-     */
-    public function getCurrentSessionsOfUserInUrl(
-        User $user,
-        AccessUrl $url,
-        int $currentPage = 1,
-        int $itemsPerPage = 10
-    ): array {
+    public function getCurrentSessionsOfUserInUrl(User $user, AccessUrl $url): QueryBuilder
+    {
         $qb = $this->getSessionsByUser($user, $url);
 
         return $qb
@@ -149,25 +140,12 @@ class SessionRepository extends ServiceEntityRepository
                     ),
                 )
             )
-            ->setParameter('now', new DateTime())
-            ->setFirstResult(($currentPage - 1) * $itemsPerPage)
-            ->setMaxResults($itemsPerPage)
-            ->getQuery()
-            ->getResult();
+            ->setParameter('now', new DateTime());
         ;
     }
 
-    /**
-     * @return array<int, Session>
-     *
-     * @throws Exception
-     */
-    public function getUpcomingSessionsOfUserInUrl(
-        User $user,
-        AccessUrl $url,
-        int $currentPage = 1,
-        int $itemsPerPage = 10
-    ): array {
+    public function getUpcomingSessionsOfUserInUrl(User $user, AccessUrl $url): QueryBuilder
+    {
         $qb = $this->getSessionsByUser($user, $url);
 
         return $qb
@@ -175,10 +153,6 @@ class SessionRepository extends ServiceEntityRepository
                 $qb->expr()->gt('sru.accessStartDate', ':now'),
             )
             ->setParameter('now', new DateTime())
-            ->setFirstResult(($currentPage - 1) * $itemsPerPage)
-            ->setMaxResults($itemsPerPage)
-            ->getQuery()
-            ->getResult();
         ;
     }
 

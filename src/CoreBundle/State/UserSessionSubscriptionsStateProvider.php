@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\State;
 
+use ApiPlatform\Doctrine\Orm\Extension\PaginationExtension;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Session;
@@ -27,12 +29,13 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly UserRepository $userRepository,
         private readonly SessionRepository $sessionRepository,
+        private readonly PaginationExtension $paginationExtension,
     ) {}
 
     /**
      * @throws Exception
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): iterable
     {
         $user = $this->userRepository->find($uriVariables['id']);
 
@@ -49,23 +52,29 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
             throw new AccessDeniedException();
         }
 
-        $currentPage = (int) ($context['filters']['page'] ?? 1);
-        $itemsPerPage = (int) ($context['filters']['itemsPerPage'] ?? 10);
+        if ('user_session_subscriptions_past' === $operation->getName()) {
+            return $this->sessionRepository->getPastSessionsOfUserInUrl($user, $url);
+        }
 
-        return match ($operation->getName()) {
-            'user_session_subscriptions_past' => $this->sessionRepository->getPastSessionsOfUserInUrl($user, $url),
+        $qb = match ($operation->getName()) {
             'user_session_subscriptions_current' => $this->sessionRepository->getCurrentSessionsOfUserInUrl(
                 $user,
-                $url,
-                $currentPage,
-                $itemsPerPage
+                $url
             ),
             'user_session_subscriptions_upcoming' => $this->sessionRepository->getUpcomingSessionsOfUserInUrl(
                 $user,
-                $url,
-                $currentPage,
-                $itemsPerPage
+                $url
             ),
         };
+
+        $this->paginationExtension->applyToCollection(
+            $qb,
+            new QueryNameGenerator(),
+            Session::class,
+            $operation,
+            $context
+        );
+
+        return $this->paginationExtension->getResult($qb, Session::class, $operation, $context);
     }
 }

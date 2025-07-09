@@ -23,6 +23,7 @@ use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelTag;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Helpers\QueryCacheHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Datetime;
@@ -54,7 +55,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     public function __construct(
         ManagerRegistry $registry,
         private readonly IllustrationRepository $illustrationRepository,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly QueryCacheHelper $queryCacheHelper
     ) {
         parent::__construct($registry, User::class);
     }
@@ -443,6 +445,21 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $user;
     }
 
+    public function findAllUsers(bool $useCache = false): array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        if ($useCache) {
+            return $this->queryCacheHelper->run(
+                $qb,
+                'findAllUsers',
+                []
+            );
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     /**
      * Get a filtered list of user by role and (optionally) access url.
      *
@@ -451,8 +468,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
      *
      * @return User[]
      */
-    public function findByRole(string $role, string $keyword, int $accessUrlId = 0)
-    {
+    public function findByRole(
+        string $role,
+        string $keyword,
+        int $accessUrlId = 0,
+        bool $useCache = false
+    ) {
         $qb = $this->createQueryBuilder('u');
 
         $this->addActiveAndNotAnonUserQueryBuilder($qb);
@@ -460,17 +481,45 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $this->addRoleQueryBuilder($role, $qb);
         $this->addSearchByKeywordQueryBuilder($keyword, $qb);
 
+        if ($useCache) {
+            return $this->queryCacheHelper->run(
+                $qb,
+                'findByRole',
+                [
+                    'role' => $role,
+                    'keyword' => $keyword,
+                    'accessUrlId' => $accessUrlId
+                ]
+            );
+        }
+
         return $qb->getQuery()->getResult();
     }
 
-    public function findByRoleList(array $roleList, string $keyword, int $accessUrlId = 0)
-    {
+    public function findByRoleList(
+        array $roleList,
+        string $keyword,
+        int $accessUrlId = 0,
+        bool $useCache = false
+    ) {
         $qb = $this->createQueryBuilder('u');
 
         $this->addActiveAndNotAnonUserQueryBuilder($qb);
         $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
         $this->addRoleListQueryBuilder($roleList, $qb);
         $this->addSearchByKeywordQueryBuilder($keyword, $qb);
+
+        if ($useCache) {
+            return $this->queryCacheHelper->run(
+                $qb,
+                'findByRoleList',
+                [
+                    'roles' => $roleList,
+                    'keyword' => $keyword,
+                    'accessUrlId' => $accessUrlId,
+                ]
+            );
+        }
 
         return $qb->getQuery()->getResult();
     }
@@ -703,11 +752,13 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     public function addAccessUrlQueryBuilder(int $accessUrlId, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-        $qb
-            ->innerJoin('u.portals', 'p')
-            ->andWhere('p.url = :url')
-            ->setParameter('url', $accessUrlId, Types::INTEGER)
-        ;
+
+        if ($accessUrlId > 0) {
+            $qb
+                ->innerJoin('u.portals', 'p')
+                ->andWhere('p.url = :url')
+                ->setParameter('url', $accessUrlId, Types::INTEGER);
+        }
 
         return $qb;
     }

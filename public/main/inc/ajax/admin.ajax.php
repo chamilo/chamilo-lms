@@ -282,7 +282,7 @@ function getLatestNews()
     );
 
     if (200 !== $response->getStatusCode()) {
-        throw new Exception(get_lang('Deny access'));
+        throw new Exception(get_lang('Access denied'));
     }
 
     return $response->getBody()->getContents();
@@ -312,7 +312,7 @@ function getProSupport()
     );
 
     if (200 !== $response->getStatusCode()) {
-        throw new Exception(get_lang('Deny access'));
+        throw new Exception(get_lang('Access denied'));
     }
 
     return $response->getBody()->getContents();

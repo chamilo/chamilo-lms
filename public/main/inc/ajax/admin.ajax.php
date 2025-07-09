@@ -159,7 +159,11 @@ function check_system_version()
         $versionDetails = include($versionFile);
         $system_version = trim($versionDetails['new_version']);
         if (!empty($versionDetails['new_version_status']) &&  $versionDetails['new_version_status'] != 'stable') {
-            $versionStatus = ' ('.$versionDetails['new_version_status'].')';
+            $versionLastId = '';
+            if (!empty($versionDetails['new_version_last_id'])) {
+                $versionLastId = ' '.$versionDetails['new_version_last_id'];
+            }
+            $versionStatus = ' ('.$versionDetails['new_version_status'].$versionLastId.')';
         }
     }
 

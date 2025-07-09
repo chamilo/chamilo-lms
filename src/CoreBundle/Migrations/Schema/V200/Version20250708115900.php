@@ -23,7 +23,7 @@ class Version20250708115900 extends AbstractMigrationChamilo
 
         foreach ($templates as $category => $settings) {
             foreach ($settings as $setting) {
-                $name = $setting['name'];
+                $variable = $setting['variable'];
                 $jsonExample = json_encode(
                     $setting['json_example'],
                     JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
@@ -31,8 +31,8 @@ class Version20250708115900 extends AbstractMigrationChamilo
 
                 // Check if template already exists
                 $templateId = $this->connection->fetchOne(
-                    'SELECT id FROM settings_value_template WHERE name = ?',
-                    [$name]
+                    'SELECT id FROM settings_value_template WHERE variable = ?',
+                    [$variable]
                 );
 
                 if ($templateId) {
@@ -42,8 +42,8 @@ class Version20250708115900 extends AbstractMigrationChamilo
                     );
                 } else {
                     $this->connection->executeStatement(
-                        'INSERT INTO settings_value_template (name, json_example, created_at, updated_at) VALUES (?, ?, NOW(), NOW())',
-                        [$name, $jsonExample]
+                        'INSERT INTO settings_value_template (variable, json_example, created_at, updated_at) VALUES (?, ?, NOW(), NOW())',
+                        [$variable, $jsonExample]
                     );
 
                     $templateId = $this->connection->lastInsertId();
@@ -54,10 +54,11 @@ class Version20250708115900 extends AbstractMigrationChamilo
                         'UPDATE settings
                          SET value_template_id = ?
                          WHERE variable = ?',
-                        [$templateId, $name]
+                        [$templateId, $variable]
                     );
+                    $this->write("Updated {$updatedRows} rows in settings for variable '{$variable}'");
                 } else {
-                    echo "[DEBUG] ERROR: Template ID still NULL for name={$name}\n";
+                    echo "[DEBUG] ERROR: Template ID still NULL for variable={$variable}\n";
                 }
             }
         }
@@ -69,11 +70,11 @@ class Version20250708115900 extends AbstractMigrationChamilo
 
         foreach ($templates as $category => $settings) {
             foreach ($settings as $setting) {
-                $name = $setting['name'];
+                $variable = $setting['variable'];
 
                 $templateId = $this->connection->fetchOne(
-                    'SELECT id FROM settings_value_template WHERE name = ?',
-                    [$name]
+                    'SELECT id FROM settings_value_template WHERE variable = ?',
+                    [$variable]
                 );
 
                 if ($templateId) {
@@ -88,6 +89,7 @@ class Version20250708115900 extends AbstractMigrationChamilo
                         'DELETE FROM settings_value_template WHERE id = ?',
                         [$templateId]
                     );
+                    $this->write("Deleted template with ID {$templateId} for variable {$variable}");
                 }
             }
         }

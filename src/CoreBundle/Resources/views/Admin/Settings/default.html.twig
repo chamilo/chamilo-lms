@@ -115,7 +115,7 @@
               .then(response => response.json())
               .then(data => {
                 if (data.json_example) {
-                  document.getElementById('jsonTemplateModalLabel').innerText = data.name || '{{ "JSON Template"|trans }}';
+                  document.getElementById('jsonTemplateModalLabel').innerText = data.variable || '{{ "JSON Template"|trans }}';
                   document.getElementById('jsonTemplateDescription').innerText = data.description || '';
                   try {
                     const jsonObject = JSON.parse(data.json_example);
@@ -124,7 +124,6 @@
                     document.getElementById('jsonTemplateContent').innerText = data.json_example;
                   }
 
-                  // Show overlay + modal
                   document.getElementById('jsonTemplateOverlay').classList.remove('hidden');
                   document.getElementById('jsonTemplateModal').classList.remove('hidden');
                 } else {

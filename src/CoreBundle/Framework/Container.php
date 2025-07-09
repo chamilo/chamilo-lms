@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CareerRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
@@ -280,6 +281,11 @@ class Container
     public static function getAccessUrlRepository(): AccessUrlRepository
     {
         return self::$container->get(AccessUrlRepository::class);
+    }
+
+    public static function getAccessUrlRelPluginRepository(): AccessUrlRelPluginRepository
+    {
+        return self::$container->get(AccessUrlRelPluginRepository::class);
     }
 
     public static function getAnnouncementAttachmentRepository(): CAnnouncementAttachmentRepository

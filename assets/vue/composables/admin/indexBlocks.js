@@ -27,8 +27,12 @@ export function useIndexBlocks() {
     } else {
       loadVersion()
     }
-    if ("false" === platformConfigStore.getSetting("admin.admin_chamilo_announcements_disable")) {
+
+    if ("true" === platformConfigStore.getSetting("admin.chamilo_support")) {
       loadSupport()
+    }
+
+    if ("true" === platformConfigStore.getSetting("admin.chamilo_latest_news")) {
       loadNews()
     }
   })

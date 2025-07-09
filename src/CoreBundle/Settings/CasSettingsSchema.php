@@ -26,10 +26,6 @@ class CasSettingsSchema extends AbstractSettingsSchema
                     'update_user_info_cas_with_ldap' => '',
                 ]
             )
-//            ->setAllowedTypes(
-//                array(
-//                )
-//            )
         ;
     }
 

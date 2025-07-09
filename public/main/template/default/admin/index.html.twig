@@ -1,8 +1,7 @@
-{% set admin_chamilo_announcements_disable = 'admin.admin_chamilo_announcements_disable'|api_get_setting == 'true' %}
-
+{% set admin_chamilo_latest_news = 'admin.chamilo_latest_news'|api_get_setting == 'true' %}
 {% block content %}
     {% autoescape false %}
-        {% if not admin_chamilo_announcements_disable %}
+        {% if admin_chamilo_latest_news %}
             <div class="p-message p-component p-message-info" role="alert" style="display: none;">
                 <div class="p-message-wrapper">
                     <span class="p-message-icon pi pi-info-circle"></span>
@@ -56,40 +55,30 @@
                     </div>
                 </section>
             {% endfor %}
-
-{#            <div class="row">#}
-{#                {% for role in app.user.roles %}#}
-{#                    {% set role = role | lower | replace ({ 'role_' : ''}) %}#}
-{#                    {% if role in ['global_admin'] %}#}
-{#                        {% include '@ChamiloCore/Admin/' ~ role ~ '/role_index.html.twig' %}#}
-{#                    {% endif %}#}
-{#                {% endfor %}#}
-{#            </div>#}
         </div>
 
         {% if is_granted('ROLE_ADMIN') %}
             <script>
-                $(function () {
-                    $.ajax({
-                        url: '{{ web_admin_ajax_url }}?a=version',
-                        success: function (version) {
-                            $(".admin-block-version").html(version);
-                        }
-                    });
-
-                    {% if not admin_chamilo_announcements_disable %}
-                        $('#chamilo-news-content').load(
-                            '{{ web_admin_ajax_url }}?a=get_latest_news',
-                            function (response) {
-                                if (!response.length) {
-                                    return;
-                                }
-                                $('#chamilo-news-content').parents('.p-message').show();
-                            }
-                        );
-
-                    {% endif %}
+              $(function () {
+                $.ajax({
+                  url: '{{ web_admin_ajax_url }}?a=version',
+                  success: function (version) {
+                    $(".admin-block-version").html(version);
+                  }
                 });
+
+                  {% if admin_chamilo_latest_news %}
+                $('#chamilo-news-content').load(
+                  '{{ web_admin_ajax_url }}?a=get_latest_news',
+                  function (response) {
+                    if (!response.length) {
+                      return;
+                    }
+                    $('#chamilo-news-content').parents('.p-message').show();
+                  }
+                );
+                  {% endif %}
+              });
             </script>
 
         {% endif %}

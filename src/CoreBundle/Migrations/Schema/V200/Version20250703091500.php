@@ -21,6 +21,6 @@ class Version20250703091500 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema): void
     {
-        $this->addSql("CREATE TABLE azure_sync_state (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, value LONGTEXT NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+        $this->addSql("CREATE TABLE IF NOT EXISTS azure_sync_state (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, value LONGTEXT NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
     }
 }

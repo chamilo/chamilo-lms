@@ -67,6 +67,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'table_default_row' => '0',
                     'allow_double_validation_in_registration' => 'false',
                     'block_my_progress_page' => 'false',
+                    'hosting_limit_users_per_course' => '0',
                     'generate_random_login' => 'false',
                     'timepicker_increment' => '5',
                     'proxy_settings' => '',
@@ -211,6 +212,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('table_default_row', TextType::class)
             ->add('allow_double_validation_in_registration', YesNoType::class)
             ->add('block_my_progress_page', YesNoType::class)
+            ->add('hosting_limit_users_per_course', TextType::class)
             ->add('generate_random_login', YesNoType::class)
             ->add('timepicker_increment', TextType::class)
             ->add(

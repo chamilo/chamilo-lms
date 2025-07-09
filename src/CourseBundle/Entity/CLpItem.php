@@ -117,6 +117,9 @@ class CLpItem implements Stringable
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
     protected ?int $duration = null;
 
+    #[ORM\Column(name: 'export_allowed', type: 'boolean', options: ['default' => false])]
+    protected bool $exportAllowed = false;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -543,6 +546,18 @@ class CLpItem implements Stringable
     public function setDuration(?int $duration): self
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function isExportAllowed(): bool
+    {
+        return $this->exportAllowed;
+    }
+
+    public function setExportAllowed(bool $exportAllowed): self
+    {
+        $this->exportAllowed = $exportAllowed;
 
         return $this;
     }

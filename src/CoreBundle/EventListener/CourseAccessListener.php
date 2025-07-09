@@ -33,6 +33,10 @@ class CourseAccessListener
 
         $courseId = (int) $this->cidReqHelper->getCourseId();
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $sessionId = 0;
+        if (!empty($session)) {
+            $sessionId = $session->getId();
+        }
 
         if ($courseId <= 0) {
             return;
@@ -46,12 +50,12 @@ class CourseAccessListener
 
         $ip = $event->getRequest()->getClientIp();
         $accessRepository = $this->em->getRepository(TrackECourseAccess::class);
-        $access = $accessRepository->findExistingAccess($user, $courseId, $session->getId());
+        $access = $accessRepository->findExistingAccess($user, $courseId, $sessionId);
 
         if ($access) {
             $accessRepository->updateAccess($access);
         } else {
-            if ($session->getDuration() > 0) {
+            if (!empty($session) && $session->getDuration() > 0) {
                 $subscription = $user->getSubscriptionToSession($session);
                 $duration = $session->getDuration() + $subscription->getDuration();
 
@@ -66,7 +70,7 @@ class CourseAccessListener
                 $this->em->flush();
             }
 
-            $accessRepository->recordAccess($user, $courseId, $session->getId(), $ip);
+            $accessRepository->recordAccess($user, $courseId, $sessionId, $ip);
         }
 
         // Set a flag on the request to indicate that access has been checked

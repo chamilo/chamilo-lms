@@ -12,17 +12,13 @@ use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\LtiBundle\Form\ExternalToolType;
 use Chamilo\LtiBundle\Repository\ExternalToolRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-/**
- * Class AdminController.
- *
- * @Security("is_granted('ROLE_ADMIN')")
- */
 #[Route(path: '/admin/lti')]
+#[IsGranted('ROLE_ADMIN')]
 class AdminController extends BaseController
 {
     use ControllerTrait;

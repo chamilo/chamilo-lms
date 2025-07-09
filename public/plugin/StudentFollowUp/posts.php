@@ -2,9 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 

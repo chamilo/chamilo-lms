@@ -1,4 +1,10 @@
+import { DateTime } from "luxon"
+
+import cCalendarEventService from "../../services/ccalendarevent"
+const { getCurrentTimezone } = useFormatDate()
+
 import { subscriptionVisibility, type } from "../../constants/entity/ccalendarevent"
+import { useFormatDate } from "../formatDate"
 
 export function useCalendarEvent() {
   return {
@@ -8,6 +14,7 @@ export function useCalendarEvent() {
     canSubscribeToEvent,
     allowSubscribeToEvent,
     allowUnsubscribeToEvent,
+    getCalendarEvents,
   }
 }
 
@@ -71,4 +78,66 @@ function allowUnsubscribeToEvent(event, userId) {
   }
 
   return !!findUserLink(event, userId)
+}
+
+/**
+ * @param {Object} params
+ * @returns {Promise<Object[]>}
+ */
+async function requestCalendarEvents(params) {
+  const calendarEvents = await cCalendarEventService.findAll({ params }).then((response) => response.json())
+
+  return calendarEvents["hydra:member"].map((event) => {
+    const timezone = getCurrentTimezone()
+    const start = DateTime.fromISO(event.startDate, { zone: "utc" }).setZone(timezone)
+    const end = DateTime.fromISO(event.endDate, { zone: "utc" }).setZone(timezone)
+
+    return {
+      ...event,
+      start: start.toString(),
+      end: end.toString(),
+      color: event.color || "#007BFF",
+    }
+  })
+}
+
+/**
+ * @param {Object} startDate
+ * @param {Object} endDate
+ * @param {Object} commonParams
+ * @returns {Promise<Object[]>}
+ */
+async function getCalendarEvents(startDate, endDate, commonParams) {
+  const endingEventsPromise = requestCalendarEvents({
+    ...commonParams,
+    "endDate[before]": endDate.toISOString(),
+    "endDate[after]": startDate.toISOString(),
+  })
+
+  const currentEventsPromise = requestCalendarEvents({
+    ...commonParams,
+    "startDate[before]": startDate.toISOString(),
+    "endDate[after]": endDate.toISOString(),
+  })
+
+  const startingEventsPromise = requestCalendarEvents({
+    ...commonParams,
+    "startDate[before]": endDate.toISOString(),
+    "startDate[after]": startDate.toISOString(),
+  })
+
+  const [endingEvents, currentEvents, startingEvents] = await Promise.all([
+    endingEventsPromise,
+    currentEventsPromise,
+    startingEventsPromise,
+  ])
+
+  const uniqueEventsMap = new Map()
+
+  endingEvents
+    .concat(startingEvents)
+    .concat(currentEvents)
+    .forEach((event) => uniqueEventsMap.set(event.id, event))
+
+  return Array.from(uniqueEventsMap.values())
 }

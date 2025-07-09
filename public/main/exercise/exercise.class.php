@@ -2,20 +2,21 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
-use Chamilo\CourseBundle\Entity\CQuizCategory;
+use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 
 /**
@@ -1849,6 +1850,21 @@ class Exercise
         );
         if (!empty($linkInfo)) {
             GradebookUtils::remove_resource_from_course_gradebook($linkInfo['id']);
+        }
+
+        // Register resource deletion manually because this is a soft delete (active = -1)
+        // and Doctrine does not trigger postRemove in this case.
+        /* @var TrackEDefaultRepository $trackRepo */
+        $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
+        $resourceNode = $exercise->getResourceNode();
+        if ($resourceNode) {
+            $trackRepo->registerResourceEvent(
+                $resourceNode,
+                'deletion',
+                api_get_user_id(),
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
         }
 
         return true;
@@ -8073,7 +8089,7 @@ class Exercise
         if (0 != $sessionId) {
             $sql = "SELECT * FROM $track_exercises te
               INNER JOIN c_quiz cq
-              ON cq.iid = te.exe_exo_id AND te.c_id = cq.c_id
+              ON cq.iid = te.exe_exo_id
               WHERE
               te.c_id = %d AND
               te.session_id = %s AND
@@ -8083,7 +8099,7 @@ class Exercise
             $sql = sprintf($sql, $courseId, $sessionId, $ids);
         } else {
             $sql = "SELECT * FROM $track_exercises te
-              INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id AND te.c_id = cq.c_id
+              INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id
               WHERE
               te.c_id = %d AND
               cq.iid IN (%s)
@@ -10292,7 +10308,7 @@ class Exercise
 
         $labels = json_encode($labels);
 
-        $colorList = ChamiloApi::getColorPalette(true, true);
+        $colorList = ChamiloHelper::getColorPalette(true, true);
 
         $dataSetToJson = [];
         $counter = 0;

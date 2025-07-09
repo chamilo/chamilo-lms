@@ -9,7 +9,17 @@ const app = createApp(AppInstaller)
 const pinia = createPinia()
 
 app
-  .use(PrimeVue, { ripple: false })
+  .use(PrimeVue, {
+    ripple: false,
+    theme: {
+      options: {
+        cssLayer: {
+          name: "primevue",
+          order: "app-styles, primevue",
+        },
+      },
+    },
+  })
   .use(i18n)
   .use(pinia)
 

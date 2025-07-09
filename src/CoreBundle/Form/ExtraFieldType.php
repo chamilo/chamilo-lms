@@ -223,6 +223,9 @@ class ExtraFieldType extends AbstractType
 
                 case \ExtraField::FIELD_TYPE_RADIO:
                 case \ExtraField::FIELD_TYPE_SELECT:
+                    $defaultOptions['attr']['class'] = 'p-select p-component p-inputwrapper p-inputwrapper-filled';
+
+                    // no break
                 case \ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     if (empty($value)) {
                         $defaultOptions['data'] = null;

@@ -4298,7 +4298,7 @@ msgid "Guest"
 msgstr "Gast"
 
 msgid "Login as"
-msgstr "Eingeloggt als"
+msgstr "Einloggen als"
 
 msgid "Login"
 msgstr "Einloggen als"
@@ -29568,3 +29568,21 @@ msgstr "Datenbankport"
 
 msgid "Database driver"
 msgstr "Datenbanktreiber"
+
+msgid "Accept Terms and Conditions"
+msgstr "Nutzungsbedingungen akzeptieren"
+
+msgid "You accepted these terms on"
+msgstr "Sie haben diese Nutzungsbedingungen akzeptiert am"
+
+msgid "Revoke Acceptance"
+msgstr "Zustimmung widerrufen"
+
+msgid "Confirmation"
+msgstr "Bestätigung"
+
+msgid "Days"
+msgstr "Tage"
+
+msgid "Notification to remind the event"
+msgstr "Benachrichtigung zur Erinnerung an das Ereignis"

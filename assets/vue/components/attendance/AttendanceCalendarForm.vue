@@ -2,10 +2,11 @@
   <form class="flex flex-col gap-6 mt-6">
     <!-- Start Date -->
     <BaseCalendar
+      id="date_time"
       v-model="formData.startDate"
       :label="t('Start Date')"
-      :show-time="true"
       required
+      show-time
     />
 
     <!-- Repeat Date -->
@@ -21,8 +22,6 @@
         v-model="formData.repeatType"
         :label="t('Repeat Type')"
         :options="repeatTypeOptions"
-        option-label="label"
-        option-value="value"
         required
       />
 
@@ -39,6 +38,7 @@
 
       <!-- Repeat End Date -->
       <BaseCalendar
+        id="end_date_time"
         v-model="formData.repeatEndDate"
         :label="t('Repeat End Date')"
         :show-time="true"
@@ -59,8 +59,6 @@
       v-model="formData.group"
       :label="t('Group')"
       :options="groupOptions"
-      option-label="label"
-      option-value="value"
       required
     />
 
@@ -152,7 +150,6 @@ const submitForm = async () => {
     console.error("Error adding attendance calendar entry:", error)
   }
 }
-
 
 const loadGroups = async () => {
   try {

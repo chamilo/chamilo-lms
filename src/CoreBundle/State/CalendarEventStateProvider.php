@@ -11,9 +11,9 @@ use Chamilo\CoreBundle\DataTransformer\CalendarEventTransformer;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -30,7 +30,7 @@ final class CalendarEventStateProvider implements ProviderInterface
     public function __construct(
         private readonly CollectionProvider $collectionProvider,
         private readonly Security $security,
-        private readonly AccessUrlHelper $accessUrlService,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SessionRepository $sessionRepository,
         private readonly RequestStack $requestStack,
         private readonly SettingsManager $settingsManager,
@@ -49,7 +49,7 @@ final class CalendarEventStateProvider implements ProviderInterface
         /** @var User|null $user */
         $user = $this->security->getUser();
 
-        $accessUrl = $this->accessUrlService->getCurrent();
+        $accessUrl = $this->accessUrlHelper->getCurrent();
 
         /** @var array<CCalendarEvent> $cCalendarEvents */
         $cCalendarEvents = $this->collectionProvider->provide($operation, $uriVariables, $context);

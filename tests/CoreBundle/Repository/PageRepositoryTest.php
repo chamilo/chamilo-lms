@@ -6,10 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Component\Utils\CreateDefaultPages;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Page;
 use Chamilo\CoreBundle\Entity\PageCategory;
+use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -309,8 +309,8 @@ class PageRepositoryTest extends AbstractApiTest
         /** @var PageRepository $pageRepo */
         $pageRepo = self::getContainer()->get(PageRepository::class);
 
-        /** @var CreateDefaultPages $createDefaultPages */
-        $createDefaultPages = self::getContainer()->get(CreateDefaultPages::class);
+        /** @var PageHelper $createDefaultPages */
+        $createDefaultPages = self::getContainer()->get(PageHelper::class);
 
         $admin = $this->getAdmin();
 
@@ -318,7 +318,7 @@ class PageRepositoryTest extends AbstractApiTest
         $this->assertTrue($result);
         $this->assertSame(2, $pageRepo->count([]));
         $this->assertSame(
-            8 + \count(CreateDefaultPages::getCategoriesForAdminBlocks()),
+            8 + \count(PageHelper::getCategoriesForAdminBlocks()),
             $pageCategoryRepo->count([])
         );
 

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Component\Utils\CreateUploadedFile;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -18,16 +17,15 @@ use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\NonResourceRepository;
 use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
-use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Exception;
 use LogicException;
@@ -204,7 +202,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function addFileFromString(ResourceInterface $resource, string $fileName, string $mimeType, string $content, bool $flush = true): ?ResourceFile
     {
-        $file = CreateUploadedFile::fromString($fileName, $mimeType, $content);
+        $file = CreateUploadedFileHelper::fromString($fileName, $mimeType, $content);
 
         return $this->addFile($resource, $file, '', $flush);
     }

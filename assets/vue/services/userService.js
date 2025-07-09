@@ -24,6 +24,10 @@ async function findAll(searchParams) {
   return await baseService.getCollection("/api/users", searchParams)
 }
 
+async function findUsersForSessionAdmin(searchParams) {
+  return await baseService.get("/admin/sessionadmin/users", searchParams)
+}
+
 /**
  * @param {string} username
  * @returns {Promise<{totalItems, items}>}
@@ -40,10 +44,16 @@ async function findBySearchTerm(term) {
   return await baseService.getCollection("/api/users", { search: term })
 }
 
+async function createOnAccessUrl(payload) {
+  return baseService.post("/api/advanced/create-user-on-access-url", payload)
+}
+
 export default {
   find,
   findById,
   findAll,
+  findUsersForSessionAdmin,
   findByUsername,
   findBySearchTerm,
+  createOnAccessUrl,
 }

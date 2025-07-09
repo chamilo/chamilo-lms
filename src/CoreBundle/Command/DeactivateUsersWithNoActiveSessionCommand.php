@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Command;
 use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use DateTimeZone;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -19,7 +20,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:deactivate-users-with-no-active-session',
-    description: 'Deactivate users who are not part of any active session (where session end date has passed).'
+    description: 'Deactivate users with role "student" who are not part of any active session (session endDate is null or in the future).'
 )]
 class DeactivateUsersWithNoActiveSessionCommand extends Command
 {
@@ -42,26 +43,32 @@ class DeactivateUsersWithNoActiveSessionCommand extends Command
         $dryRun = $input->getOption('dry-run');
         $now = new DateTime('now', new DateTimeZone('UTC'));
 
-        $io->title('Deactivating users without active sessions...');
-        $io->text('Checking users as of '.$now->format('Y-m-d H:i:s'));
+        $io->title('Deactivating students without active sessions...');
+        $io->text('Checking as of '.$now->format('Y-m-d H:i:s'));
 
-        // Subquery: user IDs with at least one session where end date is in the future
-        $subQuery = $this->entityManager->createQueryBuilder()
+        // Subquery: user IDs with at least one session where endDate > now OR endDate is null
+        $subQb = $this->entityManager->createQueryBuilder();
+        $subQuery = $subQb
             ->select('IDENTITY(sru.user)')
             ->from('Chamilo\CoreBundle\Entity\SessionRelUser', 'sru')
             ->join('sru.session', 's')
-            ->where('s.displayEndDate > :now')
+            ->where($subQb->expr()->orX(
+                's.accessEndDate > :now',
+                's.accessEndDate IS NULL'
+            ))
             ->getDQL()
         ;
 
-        // Main query: get all active users not in the subquery
+        // Main query: active students not in the subquery
         $qb = $this->entityManager->createQueryBuilder();
         $usersToDeactivate = $qb
             ->select('u')
             ->from(User::class, 'u')
             ->where('u.active = 1')
+            ->andWhere('u.status = :studentRole')
             ->andWhere($qb->expr()->notIn('u.id', $subQuery))
-            ->setParameter('now', $now)
+            ->setParameter('now', $now, Types::DATETIME_MUTABLE)
+            ->setParameter('studentRole', 5)
             ->getQuery()
             ->getResult()
         ;
@@ -80,7 +87,7 @@ class DeactivateUsersWithNoActiveSessionCommand extends Command
             $io->warning("Dry run mode enabled. {$deactivatedCount} users would be deactivated.");
         } else {
             $this->entityManager->flush();
-            $io->success("Successfully deactivated {$deactivatedCount} users without active sessions.");
+            $io->success("Successfully deactivated {$deactivatedCount} students without active sessions.");
         }
 
         return Command::SUCCESS;

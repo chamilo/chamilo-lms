@@ -18,7 +18,7 @@
       v-if="course.courseLanguage"
       class="absolute top-0 right-0 bg-support-4 text-white text-xs px-2 py-0.5 font-semibold rounded-bl-lg z-20"
     >
-      {{ course.courseLanguage }}
+      {{ getOriginalLanguageName(course.courseLanguage) }}
     </span>
 
     <Button
@@ -185,9 +185,10 @@ import { useRoute, useRouter } from "vue-router"
 import { useNotification } from "../../composables/notification"
 import Dialog from "primevue/dialog"
 import { usePlatformConfig } from "../../store/platformConfig"
-
+import { useLocale } from "../../composables/locale"
 const platformConfigStore = usePlatformConfig()
 const showDescriptionDialog = ref(false)
+const { getOriginalLanguageName } = useLocale()
 
 const allowDescription = computed(
   () => platformConfigStore.getSetting("course.show_courses_descriptions_in_catalog") !== "false",

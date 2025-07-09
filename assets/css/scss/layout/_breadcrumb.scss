@@ -1,43 +1,57 @@
 .app-breadcrumb {
   @apply bg-white mb-3 text-tiny font-semibold leading-4 space-y-1;
 
-  .p-breadcrumb {
-    @apply overflow-x-auto bg-white;
-
-    &-list {
-      @apply p-0 flex gap-1 text-gray-90 list-none items-center flex-nowrap;
-
-      li {
-        .p-menuitem-link {
-          @apply outline-transparent
-            focus-visible:outline-none;
-        }
-
-        &:last-child .p-menuitem-text,
-        &:last-child .p-menuitem-icon {
-          @apply text-gray-50;
-        }
-      }
-    }
-
-    .p-menuitem {
-      &-text,
-      &-icon {
-        @apply text-black leading-none;
-      }
-
-      &-link,
-      &-separator {
-        @apply flex items-center text-black;
-      }
-    }
-
-    &::-webkit-scrollbar {
-      @apply hidden;
-    }
+  .p-breadcrumb-item-link {
+    @apply text-tiny font-semibold;
   }
 
   &__session-title {
     @apply text-tiny font-semibold text-gray-50 uppercase;
+  }
+}
+
+.p-breadcrumb {
+  @apply overflow-x-auto bg-white;
+
+  &-list {
+    @apply p-0 m-0 flex gap-1 text-gray-90 list-none items-center flex-nowrap;
+
+    li {
+      .p-menuitem-link {
+        @apply outline-transparent
+        focus-visible:outline-none;
+      }
+
+      &:last-child .p-menuitem-text,
+      &:last-child .p-menuitem-icon {
+        @apply text-gray-50;
+      }
+    }
+  }
+
+  &-separator {
+    @apply flex items-center text-gray-90;
+
+    &-icon {
+      @apply rtl:rotate-180;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    @apply hidden;
+  }
+
+  &-item-link {
+    @apply no-underline flex items-center text-black gap-0 outline-none outline-0
+      focus-visible:outline-none focus-visible:drop-shadow-none
+      hover:text-black;
+  }
+
+  &-item-label {
+    @apply transition-colors;
+  }
+
+  &-item-icon {
+    @apply text-gray-90 transition-colors;
   }
 }

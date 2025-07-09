@@ -448,7 +448,6 @@
     "Pages deleted": "Pages deleted",
     "Go to Explore to find a topic of interest, or wait for someone to subscribe you": "Go to Explore to find a topic of interest, or wait for someone to subscribe you",
     "You don\\'t have any course yet": "You don\\'t have any course yet",
-    "Personal Data: Introduction": "Personal Data: Introduction",
     "Terms and Conditions": "\u0634\u0631\u0627\u06cc\u0637 \u0648 \u0636\u0648\u0627\u0628\u0637",
     "Read the Terms and Conditions": "\u0645\u0637\u0627\u0644\u0639\u0647 \u0634\u0631\u0627\u06cc\u0637 \u0648 \u0636\u0648\u0627\u0628\u0637",
     "Date": "\u062a\u0627\u0631\u06cc\u062e",
@@ -517,5 +516,10 @@
     "Scan the QR code to enable 2FA": "Scan the QR code to enable 2FA",
     "QR code for 2FA": "QR code for 2FA",
     "Private course": "Private course",
-    "Not subscribed": "Not subscribed"
+    "Not subscribed": "Not subscribed",
+    "Accept Terms and Conditions": "Accept Terms and Conditions",
+    "You accepted these terms on": "You accepted these terms on",
+    "Revoke Acceptance": "Revoke Acceptance",
+    "Minutes": "\u062f\u0642\u06cc\u0642\u0647",
+    "Days": "Days"
 }

@@ -29372,3 +29372,27 @@ msgstr ""
 
 msgid "Menumycourses"
 msgstr "Mis cursos"
+
+msgid "Accept Terms and Conditions"
+msgstr "Acepta los Términos y Condiciones"
+
+msgid "You accepted these terms on"
+msgstr "Aceptaste estos términos el"
+
+msgid "Revoke Acceptance"
+msgstr "Revocar la aceptación"
+
+msgid "Confirmation"
+msgstr "Confirmación"
+
+msgid "Days"
+msgstr "Días"
+
+msgid "Notification to remind the event"
+msgstr "Notificación para recordar el evento"
+
+msgid "Checking push subscription..."
+msgstr "Verificación de suscripción push..."
+
+msgid "You're subscribed to push notifications in this browser."
+msgstr "You're subscribed to push notifications in this browser."

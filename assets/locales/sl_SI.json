@@ -517,7 +517,7 @@
     "Pages deleted": "Pages deleted",
     "Go to Explore to find a topic of interest, or wait for someone to subscribe you": "Go to Explore to find a topic of interest, or wait for someone to subscribe you",
     "You don\\'t have any course yet": "You don\\'t have any course yet",
-    "Personal Data: Introduction": "Personal Data: Introduction",
+    "Personal data: introduction": "Osebni podatki: uvod",
     "Personal data we keep about you": "Osebni podatki, ki jih o vas hranimo",
     "Terms and Conditions": "Pogoji rabe",
     "Read the Terms and Conditions": "Preberite pogoje rabe",
@@ -604,5 +604,13 @@
     "Private course": "Private course",
     "Not subscribed": "Not subscribed",
     "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "Povezava s podatkovno bazo ni uspela. V splo\u0161nem se ta napaka pojavi zaradi napa\u010dnega uporabni\u0161kega imena, gesla, imena podatkovne baze ali njene predpone. Preverite nastavitve in poskusite ponovno.",
+    "Accept Terms and Conditions": "Accept Terms and Conditions",
+    "You accepted these terms on": "You accepted these terms on",
+    "Revoke Acceptance": "Revoke Acceptance",
+    "Minutes": "Minut",
+    "Days": "Days",
+    "Notification to remind the event": "Obvestilo v opomin na dogodek",
+    "Before": "Pred",
+    "We respect your privacy!": "Mi spo\u0161tujemo va\u0161o zasebnost! Ta stran vklju\u010duje vse vidike, ki se ti\u010dejo osebnih podatkov, ki jih morebiti zbiramo in se ti\u010dejo va\u0161e osebe, kako ravnamo z njimi, za kak\u0161no njih obravnavo ste pooblastili, kdo smo,... vse, da bi zagotovili skladnost z vsemi zakoni, ki se ti\u010dejo varstva osebnih podatkov. Prosimo, da to informacijo pazljivo preberete, in \u010de imate kakr\u0161nokoli vpra\u0161anje, posredujte kontaktne podatke preko spodnje forme in povpra\u0161ajte o temi, ki vas zanima.",
     "Go to your newly created portal.": "Pojdi na novo ustvarjen portal."
 }

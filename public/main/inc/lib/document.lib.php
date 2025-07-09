@@ -5,11 +5,9 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
-use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  *  Class DocumentManager
@@ -1245,7 +1243,10 @@ class DocumentManager
         $url = '';
         if ($info_grade_certificate) {
             $date_certificate = $info_grade_certificate['created_at'];
-            $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
+            if (!empty($info_grade_certificate['path_certificate'])) {
+                $hash = pathinfo($info_grade_certificate['path_certificate'], PATHINFO_FILENAME);
+                $url = api_get_path(WEB_PATH) . 'certificates/' . $hash . '.html';
+            }
         }
         $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         if (!empty($date_certificate)) {

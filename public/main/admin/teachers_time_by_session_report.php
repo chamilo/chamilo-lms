@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\Common\Collections\Criteria;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Generate a teacher time report in platform by session only.

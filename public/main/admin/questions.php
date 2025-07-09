@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -10,7 +11,6 @@ use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\Event\Subscriber\Paginate\PaginationSubscriber;
 use Knp\Component\Pager\Event\Subscriber\Sortable\SortableSubscriber;
 use Knp\Component\Pager\Paginator;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 $cidReset = true;

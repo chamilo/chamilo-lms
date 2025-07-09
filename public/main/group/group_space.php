@@ -2,10 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * This script shows the group space for one specific group, possibly displaying

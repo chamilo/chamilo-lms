@@ -4,7 +4,8 @@
 /**
  * This script displays a help window.
  */
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $help_name = isset($_GET['open']) ? Security::remove_XSS($_GET['open']) : null;

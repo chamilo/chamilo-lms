@@ -5,9 +5,9 @@ exit;
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.

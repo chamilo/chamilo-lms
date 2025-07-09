@@ -28328,3 +28328,78 @@ msgstr ""
 
 msgid "Course %s added. You can access it directly %shere%s."
 msgstr ""
+
+msgid "Accept Terms and Conditions"
+msgstr ""
+
+msgid "You accepted these terms on"
+msgstr ""
+
+msgid "Revoke Acceptance"
+msgstr ""
+
+msgid "Confirmation"
+msgstr ""
+
+msgid "Days"
+msgstr ""
+
+msgid "Notification to remind the event"
+msgstr ""
+
+msgid "Checking push subscription..."
+msgstr ""
+
+msgid "You're subscribed to push notifications in this browser."
+msgstr ""
+
+msgid "Endpoint"
+msgstr ""
+
+msgid "Push notifications are not enabled in this browser."
+msgstr ""
+
+msgid "Enable notifications"
+msgstr ""
+
+msgid "You do not have permission to send notifications to other users."
+msgstr ""
+
+msgid "No push notification setting configured."
+msgstr ""
+
+msgid "VAPID keys are missing in the configuration."
+msgstr ""
+
+msgid "No push subscriptions found for this user."
+msgstr ""
+
+msgid "Push notification test"
+msgstr ""
+
+msgid "This is a test push notification from this platform to the user's browser or app."
+msgstr ""
+
+msgid "Push notifications have been processed."
+msgstr ""
+
+msgid "Gotify configuration is missing."
+msgstr ""
+
+msgid "This is a test notification sent to Gotify from this platform."
+msgstr ""
+
+msgid "Notification sent to Gotify."
+msgstr ""
+
+msgid "Error sending notification to Gotify: "
+msgstr ""
+
+msgid "Push notification settings (JSON)"
+msgstr ""
+
+msgid "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications."
+msgstr ""
+
+msgid "Access denied"
+msgstr ""

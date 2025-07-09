@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
@@ -17,6 +18,9 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+/**
+ * @implements ProviderInterface<Course>
+ */
 readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 {
     public function __construct(
@@ -28,7 +32,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         private TokenStorageInterface $tokenStorage
     ) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         $user = $this->tokenStorage->getToken()?->getUser();
         $isAuthenticated = \is_object($user);
@@ -49,12 +53,14 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         }
 
         $host = $request->getSchemeAndHttpHost().'/';
+
+        /** @var AccessUrl $accessUrl */
         $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $host]) ?? $this->accessUrlRepository->find(1);
         $courses = $this->courseRepository->createQueryBuilder('c')
             ->innerJoin('c.urls', 'url_rel')
             ->andWhere('url_rel.url = :accessUrl')
             ->andWhere('c.visibility IN (:visibilities)')
-            ->setParameter('accessUrl', $accessUrl)
+            ->setParameter('accessUrl', $accessUrl->getId())
             ->setParameter('visibilities', [Course::OPEN_WORLD, Course::OPEN_PLATFORM])
             ->orderBy('c.title', 'ASC')
             ->getQuery()

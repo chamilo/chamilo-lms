@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\CatalogueCourseRelAccessUrlRelUsergroup;
 use Chamilo\CoreBundle\Entity\CatalogueSessionRelAccessUrlRelUsergroup;
@@ -14,10 +15,10 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -151,6 +152,9 @@ class CatalogueController extends AbstractController
                 ->getSingleScalarResult()
             ;
 
+            $buyCoursesPlugin = BuyCoursesPlugin::create();
+            $buyData = $buyCoursesPlugin->getBuyCoursePluginPrice($session);
+
             return [
                 'id' => $session->getId(),
                 'title' => $session->getTitle(),
@@ -164,6 +168,8 @@ class CatalogueController extends AbstractController
                 'courses' => $courses,
                 'popularity' => $voteCount,
                 'isSubscribed' => $session->hasUserInSession($user, Session::STUDENT),
+                'priceHtml' => $buyData['html'] ?? '',
+                'buyButtonHtml' => $buyData['buy_button'] ?? '',
             ];
         }, $sessions);
 

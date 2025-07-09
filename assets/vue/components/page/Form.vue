@@ -37,25 +37,25 @@
       name="enabled"
     />
 
-    <BaseDropdown
+    <BaseSelect
       v-model="v$.item.category.$model"
       :error-text="v$.item.category.$errors.map((error) => error.$message).join('<br>')"
       :is-invalid="v$.item.category.$error"
       :label="t('Category')"
       :options="categories"
-      input-id="category"
+      id="category"
       name="category"
       option-label="title"
       option-value="@id"
     />
 
-    <BaseDropdown
+    <BaseSelect
       v-model="v$.item.locale.$model"
       :error-text="v$.item.locale.$errors.map((error) => error.$message).join('<br>')"
       :is-invalid="v$.item.locale.$error"
       :label="t('Locale')"
       :options="locales"
-      input-id="locale"
+      id="locale"
       name="locale"
       option-label="originalName"
       option-value="isocode"
@@ -84,7 +84,7 @@
 import { computed, nextTick, ref, watch } from "vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
-import BaseDropdown from "../basecomponents/BaseDropdown.vue"
+import BaseSelect from "../basecomponents/BaseSelect.vue"
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 import isEmpty from "lodash/isEmpty"

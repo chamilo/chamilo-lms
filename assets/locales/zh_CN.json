@@ -411,7 +411,6 @@
     "Pages deleted": "Pages deleted",
     "Go to Explore to find a topic of interest, or wait for someone to subscribe you": "Go to Explore to find a topic of interest, or wait for someone to subscribe you",
     "You don\\'t have any course yet": "You don\\'t have any course yet",
-    "Personal Data: Introduction": "Personal Data: Introduction",
     "Date": "\u65e5\u671f",
     "Why you want to delete your Legal Agreement": "Why you want to delete your Legal Agreement",
     "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible": "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible",
@@ -480,5 +479,10 @@
     "QR code for 2FA": "QR code for 2FA",
     "Private course": "Private course",
     "Not subscribed": "Not subscribed",
+    "Accept Terms and Conditions": "Accept Terms and Conditions",
+    "You accepted these terms on": "You accepted these terms on",
+    "Revoke Acceptance": "Revoke Acceptance",
+    "Minutes": "\u5206",
+    "Days": "Days",
     "Go to your newly created portal.": "\u8bbf\u95ee\u4f60\u65b0\u521b\u5efa\u7684\u5165\u95e8\u7f51\u7ad9\u3002"
 }

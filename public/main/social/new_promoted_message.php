@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -177,7 +177,6 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                 0,
                 [],
                 true,
-                null,
                 MESSAGE_STATUS_PROMOTED
             );
 

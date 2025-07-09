@@ -84,6 +84,11 @@ export function useLocale() {
     window.location.href = newUrl.fullPath
   }
 
+  function getOriginalLanguageName(isoCode) {
+    const lang = languageList.find((l) => l.isocode === isoCode)
+    return lang?.originalName ?? isoCode.toUpperCase()
+  }
+
   const appParentLocale = computed(() => useParentLocale(appLocale.value))
 
   return {
@@ -92,6 +97,7 @@ export function useLocale() {
     languageList,
     currentLanguageFromList,
     reloadWithLocale,
+    getOriginalLanguageName,
   }
 }
 

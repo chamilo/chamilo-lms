@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Copy resources from one course in a session to another one.

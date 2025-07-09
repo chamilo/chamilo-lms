@@ -3,7 +3,7 @@
     <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
       <div>
         <strong>{{ $t("Total number of courses") }}:</strong>
-        {{ totalVisibleCourses }}<br />
+        {{ courses.length }}<br />
         <strong>{{ $t("Matching courses") }}:</strong>
         {{ totalVisibleCourses }}
       </div>
@@ -37,6 +37,12 @@
             class="pl-10 w-64"
           />
         </div>
+        <Button
+          :label="$t('Search')"
+          icon="pi pi-search"
+          class="p-button-sm p-button-primary"
+          @click="applyAdvancedSearch"
+        />
       </div>
     </div>
     <div
@@ -78,15 +84,6 @@
           />
         </template>
       </div>
-
-      <div class="text-right">
-        <Button
-          :label="$t('Search')"
-          icon="pi pi-search"
-          class="p-button-sm p-button-primary"
-          @click="applyAdvancedSearch"
-        />
-      </div>
     </div>
     <div
       v-if="status"
@@ -126,7 +123,7 @@
 import { computed, onMounted, ref, watch } from "vue"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
-import { FilterMatchMode } from "primevue/api"
+import { FilterMatchMode } from "@primevue/core/api"
 import { useNotification } from "../../composables/notification"
 import { useLanguage } from "../../composables/language"
 import { useSecurityStore } from "../../store/securityStore"

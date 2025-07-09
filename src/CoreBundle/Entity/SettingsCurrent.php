@@ -64,6 +64,10 @@ class SettingsCurrent
     #[ORM\Column(name: 'access_url_locked', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $accessUrlLocked = 0;
 
+    #[ORM\ManyToOne(targetEntity: SettingsValueTemplate::class)]
+    #[ORM\JoinColumn(name: 'value_template_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?SettingsValueTemplate $valueTemplate = null;
+
     public function __construct()
     {
         $this->accessUrlLocked = 0;
@@ -215,6 +219,18 @@ class SettingsCurrent
     public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getValueTemplate(): ?SettingsValueTemplate
+    {
+        return $this->valueTemplate;
+    }
+
+    public function setValueTemplate(?SettingsValueTemplate $template): self
+    {
+        $this->valueTemplate = $template;
 
         return $this;
     }

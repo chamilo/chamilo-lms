@@ -24,9 +24,6 @@ class AttendanceSettingsSchema extends AbstractSettingsSchema
                     'multilevel_grading' => 'false',
                 ]
             )
-//            ->setAllowedTypes(
-//                array()
-//            )
         ;
     }
 

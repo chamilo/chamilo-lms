@@ -38,13 +38,6 @@ class AdminSettingsSchema extends AbstractSettingsSchema
                 ]
             )
         ;
-        //            ->setAllowedTypes(
-        //                array(
-        //                    //'administrator_email' => array('string'),
-        //                    //'administrator_name' => array('string'),
-        //                    //'administrator_surname' => array('string'),
-        //                )
-        //            );
     }
 
     public function buildForm(FormBuilderInterface $builder): void
@@ -69,34 +62,10 @@ class AdminSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('user_status_option_show_only_for_admin'),
                 ]
             )
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
-    }
-
-    private function settingArrayHelpValue(string $variable): string
-    {
-        $values = [
-            'user_status_option_show_only_for_admin' => "<pre>
-                [
-                    'COURSEMANAGER' => false,
-                    'STUDENT' => false,
-                    'DRH' => false,
-                    'SESSIONADMIN' => true,
-                    'STUDENT_BOSS' => false,
-                    'INVITEE' => false,
-                ]
-                </pre>",
-        ];
-
-        $returnValue = [];
-        if (isset($values[$variable])) {
-            $returnValue = $values[$variable];
-        }
-
-        return $returnValue;
     }
 }

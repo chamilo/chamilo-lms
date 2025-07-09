@@ -54,14 +54,8 @@ class AdminSettingsSchema extends AbstractSettingsSchema
             ->add('max_anonymous_users', TextType::class)
             ->add('send_inscription_notification_to_general_admin_only', YesNoType::class)
             ->add('plugin_redirection_enabled', YesNoType::class)
-            ->add('chamilo_latest_news', YesNoType::class, [
-                'label' => 'Latest news',
-                'help' => 'Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators.',
-            ])
-            ->add('chamilo_support', YesNoType::class, [
-                'label' => 'Chamilo support block',
-                'help' => 'Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page.',
-            ])
+            ->add('chamilo_latest_news', YesNoType::class)
+            ->add('chamilo_support', YesNoType::class)
             ->add('usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe', YesNoType::class)
             ->add('usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe', YesNoType::class)
             ->add('usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe', YesNoType::class)

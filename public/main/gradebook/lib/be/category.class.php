@@ -2008,8 +2008,8 @@ class Category implements GradebookItem
      */
     public static function generateUserCertificate(
         GradebookCategory $category,
-        int               $user_id,
-        bool              $sendNotification = false,
+        int $user_id,
+        bool $sendNotification = false,
         bool $skipGenerationIfExists = false
     ) {
         $user_id = (int) $user_id;
@@ -2096,7 +2096,13 @@ class Category implements GradebookItem
                 }
             }
 
-            if (!empty($fileWasGenerated) && !empty($my_certificate['publish'])) {
+            $isOwner = api_get_user_id() == $user_id;
+            $isPlatformAdmin = api_is_platform_admin();
+            $isCourseAdmin = api_is_course_admin($courseId);
+
+            $canViewCertificate = $isOwner || $isPlatformAdmin || $isCourseAdmin || !empty($my_certificate['publish']);
+
+            if (!empty($fileWasGenerated) && $canViewCertificate) {
                 $certificates = '';
                 $exportToPDF = null;
                 $pdfUrl = null;

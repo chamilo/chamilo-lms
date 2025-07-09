@@ -21,7 +21,7 @@ final class Version20250709010000 extends AbstractMigrationChamilo
         $this->addSql("
             UPDATE user
             SET timezone = 'Europe/Paris'
-            WHERE timezone = 'Europe\Paris'
+            WHERE username in ('anon', 'fallback_user')
         ");
         $this->write("Fixed bad timezone introduced in alpha <3 for some default users.");
     }

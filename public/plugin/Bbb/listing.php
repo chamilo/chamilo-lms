@@ -448,6 +448,8 @@ $tpl->assign('message', $message);
 $tpl->assign('form', $formToString);
 $tpl->assign('enter_conference_links', $urlList);
 $tpl->assign('can_see_share_link', $canSeeShareableConferenceLink);
+$tpl->assign('plugin', $plugin);
+$tpl->assign('is_course_context', api_get_course_int_id() > 0);
 
 $content = $tpl->fetch('Bbb/view/listing.tpl');
 

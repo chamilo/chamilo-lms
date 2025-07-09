@@ -17,12 +17,17 @@
     <div class="text-center space-y-4">
         {{ form }}
 
-        {% if show_join_button and can_see_share_link %}
+        {% set hide_conference_link = plugin.get('hide_conference_link')|trim|lower|default('false') %}
+        {% set can_see_share_link = (not is_course_context|default(false)) or (is_course_context and hide_conference_link != 'true') %}
+
+        {% if show_join_button %}
         <a href="{{ conference_url }}" target="_blank"
            class="inline-block bg-primary text-white font-semibold px-6 py-2 rounded-lg shadow hover:opacity-90 transition">
             {{ 'EnterConference'|get_plugin_lang('BBBPlugin') }}
         </a>
+        {% endif %}
 
+        {% if show_join_button and can_see_share_link %}
         <h3 class="mt-4 text-lg font-semibold text-gray-90">
             {{ 'UrlMeetingToShare'|get_plugin_lang('BBBPlugin') }}
         </h3>
@@ -38,6 +43,7 @@
                 <i class="fa fa-copy mr-1"></i> {{ 'Copy text' | get_lang }}
             </button>
         </div>
+        {% endif %}
 
         <p class="mt-2 text-sm text-gray-90">
           <span id="users_online" class="inline-block bg-warning text-warning-button-text px-2 py-1 rounded-full">
@@ -49,7 +55,6 @@
         <p class="text-sm mt-1 text-danger">
             {{ 'MaxXUsersWarning' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}
         </p>
-        {% endif %}
         {% elseif max_users_limit > 0 %}
         <p class="text-sm mt-1 text-danger">
             {% if conference_manager %}
@@ -86,12 +91,12 @@
                     <td class="px-4 py-2">
                         {% if meeting.status == 1 %}
                         <span class="inline-block bg-success text-success-button-text px-2 py-1 rounded-full">
-                    {{ 'MeetingOpened'|get_plugin_lang('BBBPlugin') }}
-                  </span>
+                            {{ 'MeetingOpened'|get_plugin_lang('BBBPlugin') }}
+                        </span>
                         {% else %}
                         <span class="inline-block bg-info text-info-button-text px-2 py-1 rounded-full">
-                    {{ 'MeetingClosed'|get_plugin_lang('BBBPlugin') }}
-                  </span>
+                            {{ 'MeetingClosed'|get_plugin_lang('BBBPlugin') }}
+                        </span>
                         {% endif %}
                     </td>
                     <td class="px-4 py-2">

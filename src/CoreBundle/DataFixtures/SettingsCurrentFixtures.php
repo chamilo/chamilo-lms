@@ -1702,6 +1702,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => '',
                 ],
                 [
+                    'name' => 'chamilo_latest_news',
+                    'title' => 'Latest news',
+                    'comment' => 'Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators.',
+                ],
+                [
+                    'name' => 'chamilo_support',
+                    'title' => 'Chamilo support block',
+                    'comment' => 'Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page.',
+                ],
+                [
                     'name' => 'send_inscription_notification_to_general_admin_only',
                     'title' => 'Notify global admin only of new users',
                     'comment' => '',

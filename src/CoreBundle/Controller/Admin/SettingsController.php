@@ -235,8 +235,9 @@ class SettingsController extends BaseController
         }
 
         return $this->json([
-            'name' => $template->getName(),
+            'variable' => $template->getVariable(),
             'json_example' => $template->getJsonExample(),
+            'description' => $template->getDescription(),
         ]);
     }
 

@@ -23,17 +23,17 @@ final class Version20250708002500 extends AbstractMigrationChamilo
         // Create table settings_value_template
         if (!$schemaManager->tablesExist(['settings_value_template'])) {
             $this->addSql("
-            CREATE TABLE settings_value_template (
-                id INT UNSIGNED AUTO_INCREMENT NOT NULL,
-                name VARCHAR(190) NOT NULL,
-                description LONGTEXT DEFAULT NULL,
-                json_example LONGTEXT DEFAULT NULL,
-                created_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)',
-                updated_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)',
-                UNIQUE INDEX UNIQ_settings_value_template_name (name),
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
-        ");
+                CREATE TABLE settings_value_template (
+                    id INT UNSIGNED AUTO_INCREMENT NOT NULL,
+                    variable VARCHAR(190) NOT NULL,
+                    description LONGTEXT DEFAULT NULL,
+                    json_example LONGTEXT DEFAULT NULL,
+                    created_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)',
+                    updated_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)',
+                    UNIQUE INDEX UNIQ_settings_value_template_variable (variable),
+                    PRIMARY KEY(id)
+                ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
+            ");
             $this->write("Created table settings_value_template.");
         }
 
@@ -41,8 +41,8 @@ final class Version20250708002500 extends AbstractMigrationChamilo
         $columns = $schemaManager->listTableColumns('settings');
         if (!isset($columns['value_template_id'])) {
             $this->addSql("
-            ALTER TABLE settings ADD value_template_id INT UNSIGNED DEFAULT NULL;
-        ");
+                ALTER TABLE settings ADD value_template_id INT UNSIGNED DEFAULT NULL;
+            ");
             $this->write("Added value_template_id column to settings table.");
         }
 
@@ -58,15 +58,15 @@ final class Version20250708002500 extends AbstractMigrationChamilo
 
         if (!$fkExists) {
             $this->addSql("
-            ALTER TABLE settings
+                ALTER TABLE settings
                 ADD CONSTRAINT FK_E545A0C5C72FB79B
                 FOREIGN KEY (value_template_id) REFERENCES settings_value_template (id) ON DELETE SET NULL;
-        ");
+            ");
             $this->write("Added foreign key constraint from settings to settings_value_template.");
 
             $this->addSql("
-            CREATE INDEX IDX_E545A0C5C72FB79B ON settings (value_template_id);
-        ");
+                CREATE INDEX IDX_E545A0C5C72FB79B ON settings (value_template_id);
+            ");
             $this->write("Created index IDX_E545A0C5C72FB79B on settings.value_template_id.");
         }
     }
@@ -88,16 +88,16 @@ final class Version20250708002500 extends AbstractMigrationChamilo
             }
 
             $this->addSql("
-            DROP INDEX IF EXISTS IDX_E545A0C5C72FB79B ON settings;
-        ");
+                DROP INDEX IF EXISTS IDX_E545A0C5C72FB79B ON settings;
+            ");
             $this->write("Dropped index IDX_E545A0C5C72FB79B on settings.");
         }
 
         $columns = $schemaManager->listTableColumns('settings');
         if (isset($columns['value_template_id'])) {
             $this->addSql("
-            ALTER TABLE settings DROP COLUMN value_template_id;
-        ");
+                ALTER TABLE settings DROP COLUMN value_template_id;
+            ");
             $this->write("Dropped value_template_id column from settings table.");
         }
 

@@ -27,7 +27,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
         return [
             'platform' => [
                 [
-                    'name' => 'push_notification_settings',
+                    'variable' => 'push_notification_settings',
                     'json_example' => [
                         'gotify_url' => 'http://localhost:8080',
                         'gotify_token' => 'A0yWWfe_8YRLv_B',
@@ -37,7 +37,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ]
                 ],
                 [
-                    'name' => 'proxy_settings',
+                    'variable' => 'proxy_settings',
                     'json_example' => [
                         'stream_context_create' => [
                             'http' => [
@@ -52,33 +52,33 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ]
                 ],
                 [
-                    'name' => 'video_features',
+                    'variable' => 'video_features',
                     'json_example' => [
                         'features' => ['speed']
                     ]
                 ],
                 [
-                    'name' => 'table_row_list',
+                    'variable' => 'table_row_list',
                     'json_example' => [
                         'options' => [50, 100, 200, 500]
                     ]
                 ],
                 [
-                    'name' => 'extldap_config',
+                    'variable' => 'extldap_config',
                     'json_example' => [
                         'host' => '',
                         'port' => ''
                     ]
                 ],
                 [
-                    'name' => 'update_student_expiration_x_date',
+                    'variable' => 'update_student_expiration_x_date',
                     'json_example' => [
                         'days' => 0,
                         'months' => 0
                     ]
                 ],
                 [
-                    'name' => 'user_status_show_option',
+                    'variable' => 'user_status_show_option',
                     'json_example' => [
                         'COURSEMANAGER' => true,
                         'STUDENT' => true,
@@ -89,7 +89,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ]
                 ],
                 [
-                    'name' => 'user_number_of_days_for_default_expiration_date_per_role',
+                    'variable' => 'user_number_of_days_for_default_expiration_date_per_role',
                     'json_example' => [
                         'COURSEMANAGER' => 365,
                         'STUDENT' => 31,
@@ -100,7 +100,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ]
                 ],
                 [
-                    'name' => 'show_tabs_per_role',
+                    'variable' => 'show_tabs_per_role',
                     'json_example' => [
                         'SESSIONADMIN' => ['session_admin', 'my_courses'],
                         'ADMIN' => ['platform_administration']
@@ -109,14 +109,14 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'agenda' => [
                 [
-                    'name' => 'agenda_legend',
+                    'variable' => 'agenda_legend',
                     'json_example' => [
                         'red' => 'red caption',
                         '#f0f' => 'another caption'
                     ],
                 ],
                 [
-                    'name' => 'agenda_colors',
+                    'variable' => 'agenda_colors',
                     'json_example' => [
                         'platform' => 'red',
                         'course' => '#458B00',
@@ -128,7 +128,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'agenda_on_hover_info',
+                    'variable' => 'agenda_on_hover_info',
                     'json_example' => [
                         'options' => [
                             'comment' => true,
@@ -137,7 +137,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'fullcalendar_settings',
+                    'variable' => 'fullcalendar_settings',
                     'json_example' => [
                         'settings' => [
                             'businessHours' => [
@@ -152,7 +152,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'admin' => [
                 [
-                    'name' => 'user_status_option_show_only_for_admin',
+                    'variable' => 'user_status_option_show_only_for_admin',
                     'json_example' => [
                         'COURSEMANAGER' => false,
                         'STUDENT' => false,
@@ -165,7 +165,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'aihelpers' => [
                 [
-                    'name' => 'ai_providers',
+                    'variable' => 'ai_providers',
                     'json_example' => [
                         'openai' => [
                             'url' => 'https://api.openai.com/v1/chat/completions',
@@ -188,7 +188,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'announcement' => [
                 [
-                    'name' => 'send_all_emails_to',
+                    'variable' => 'send_all_emails_to',
                     'json_example' => [
                         'emails' => [
                             'admin1@example.com',
@@ -199,11 +199,11 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'course' => [
                 [
-                    'name' => 'course_log_hide_columns',
+                    'variable' => 'course_log_hide_columns',
                     'json_example' => ['columns' => [1, 9]],
                 ],
                 [
-                    'name' => 'course_student_info',
+                    'variable' => 'course_student_info',
                     'json_example' => [
                         'score' => false,
                         'progress' => false,
@@ -211,7 +211,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'course_catalog_settings',
+                    'variable' => 'course_catalog_settings',
                     'json_example' => [
                         'link_settings' => [
                             'info_url' => 'course_description_popup',
@@ -237,27 +237,27 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'course_log_default_extra_fields',
+                    'variable' => 'course_log_default_extra_fields',
                     'json_example' => ['extra_fields' => ['office_address', 'office_phone_extension']],
                 ],
                 [
-                    'name' => 'courses_catalogue_show_only_category',
+                    'variable' => 'courses_catalogue_show_only_category',
                     'json_example' => ['Cat1', 'Cat2'],
                 ],
                 [
-                    'name' => 'course_creation_by_teacher_extra_fields_to_show',
+                    'variable' => 'course_creation_by_teacher_extra_fields_to_show',
                     'json_example' => ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']],
                 ],
                 [
-                    'name' => 'course_creation_form_set_extra_fields_mandatory',
+                    'variable' => 'course_creation_form_set_extra_fields_mandatory',
                     'json_example' => ['fields' => ['fieldLabel1', 'fieldLabel2']],
                 ],
                 [
-                    'name' => 'course_configuration_tool_extra_fields_to_show_and_edit',
+                    'variable' => 'course_configuration_tool_extra_fields_to_show_and_edit',
                     'json_example' => ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']],
                 ],
                 [
-                    'name' => 'course_creation_user_course_extra_field_relation_to_prefill',
+                    'variable' => 'course_creation_user_course_extra_field_relation_to_prefill',
                     'json_example' => [
                         'fields' => [
                             'CourseExtrafieldLabel1' => 'UserExtrafieldLabel1',
@@ -268,7 +268,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'document' => [
                 [
-                    'name' => 'compilatio_tool',
+                    'variable' => 'compilatio_tool',
                     'json_example' => [
                         'settings' => [
                             'key' => '',
@@ -284,7 +284,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'documents_custom_cloud_link_list',
+                    'variable' => 'documents_custom_cloud_link_list',
                     'json_example' => [
                         'links' => ['example.com', 'example2.com'],
                     ],
@@ -292,11 +292,11 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'editor' => [
                 [
-                    'name' => 'editor_driver_list',
+                    'variable' => 'editor_driver_list',
                     'json_example' => ['PersonalDriver', 'CourseDriver'],
                 ],
                 [
-                    'name' => 'editor_settings',
+                    'variable' => 'editor_settings',
                     'json_example' => [
                         'config' => [
                             'youtube_responsive' => true,
@@ -305,7 +305,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'video_player_renderers',
+                    'variable' => 'video_player_renderers',
                     'json_example' => [
                         'renderers' => ['dailymotion', 'facebook', 'twitch', 'vimeo', 'youtube'],
                     ],
@@ -313,13 +313,13 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'exercise' => [
                 [
-                    'name' => 'exercise_additional_teacher_modify_actions',
+                    'variable' => 'exercise_additional_teacher_modify_actions',
                     'json_example' => [
                         'myplugin' => ['MyPlugin', 'urlGeneratorCallback'],
                     ],
                 ],
                 [
-                    'name' => 'quiz_image_zoom',
+                    'variable' => 'quiz_image_zoom',
                     'json_example' => [
                         'options' => [
                             'zoomWindowWidth' => 400,
@@ -328,7 +328,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'add_exercise_best_attempt_in_report',
+                    'variable' => 'add_exercise_best_attempt_in_report',
                     'json_example' => [
                         'courses' => [
                             'ABC' => [88, 89],
@@ -336,42 +336,42 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'exercise_category_report_user_extra_fields',
+                    'variable' => 'exercise_category_report_user_extra_fields',
                     'json_example' => [
                         'fields' => ['skype', 'rssfeeds'],
                     ],
                 ],
                 [
-                    'name' => 'score_grade_model',
+                    'variable' => 'score_grade_model',
                     'json_example' => [
                         'models' => [
                             [
                                 'id' => 1,
-                                'name' => 'ThisIsMyModel',
+                                'variable' => 'ThisIsMyModel',
                                 'score_list' => [
                                     [
-                                        'name' => 'VeryBad',
+                                        'variable' => 'VeryBad',
                                         'css_class' => 'btn-danger',
                                         'min' => 0,
                                         'max' => 20,
                                         'score_to_qualify' => 0,
                                     ],
                                     [
-                                        'name' => 'Bad',
+                                        'variable' => 'Bad',
                                         'css_class' => 'btn-danger',
                                         'min' => 21,
                                         'max' => 50,
                                         'score_to_qualify' => 25,
                                     ],
                                     [
-                                        'name' => 'Good',
+                                        'variable' => 'Good',
                                         'css_class' => 'btn-warning',
                                         'min' => 51,
                                         'max' => 70,
                                         'score_to_qualify' => 60,
                                     ],
                                     [
-                                        'name' => 'VeryGood',
+                                        'variable' => 'VeryGood',
                                         'css_class' => 'btn-success',
                                         'min' => 71,
                                         'max' => 100,
@@ -383,7 +383,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'exercise_embeddable_extra_types',
+                    'variable' => 'exercise_embeddable_extra_types',
                     'json_example' => [
                         'types' => [],
                     ],
@@ -391,32 +391,32 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'gradebook' => [
                 [
-                    'name' => 'gradebook_dependency_mandatory_courses',
+                    'variable' => 'gradebook_dependency_mandatory_courses',
                     'json_example' => [
                         'courses' => [1, 2],
                     ],
                 ],
                 [
-                    'name' => 'gradebook_badge_sidebar',
+                    'variable' => 'gradebook_badge_sidebar',
                     'json_example' => [
                         'gradebooks' => [1, 2, 3],
                     ],
                 ],
                 [
-                    'name' => 'gradebook_flatview_extrafields_columns',
+                    'variable' => 'gradebook_flatview_extrafields_columns',
                     'json_example' => [
                         'variables' => [],
                     ],
                 ],
                 [
-                    'name' => 'gradebook_pdf_export_settings',
+                    'variable' => 'gradebook_pdf_export_settings',
                     'json_example' => [
                         'hide_score_weight' => true,
                         'hide_feedback_textarea' => true,
                     ],
                 ],
                 [
-                    'name' => 'gradebook_display_extra_stats',
+                    'variable' => 'gradebook_display_extra_stats',
                     'json_example' => [
                         'columns' => [1, 2, 3],
                     ],
@@ -424,7 +424,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'learningpath' => [
                 [
-                    'name' => 'lp_subscription_settings',
+                    'variable' => 'lp_subscription_settings',
                     'json_example' => [
                         'options' => [
                             'allow_add_users_to_lp' => true,
@@ -433,7 +433,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'lp_view_settings',
+                    'variable' => 'lp_view_settings',
                     'json_example' => [
                         'display' => [
                             'show_reporting_icon' => true,
@@ -444,7 +444,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'download_files_after_all_lp_finished',
+                    'variable' => 'download_files_after_all_lp_finished',
                     'json_example' => [
                         'courses' => [
                             'ABC' => [1, 100],
@@ -452,7 +452,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'my_progress_course_tools_order',
+                    'variable' => 'my_progress_course_tools_order',
                     'json_example' => [
                         'order' => ['quizzes', 'learning_paths', 'skills'],
                     ],
@@ -460,7 +460,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'mail' => [
                 [
-                    'name' => 'cron_notification_help_desk',
+                    'variable' => 'cron_notification_help_desk',
                     'json_example' => [
                         'emails' => [
                             'email@example.com',
@@ -469,7 +469,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'notifications_extended_footer_message',
+                    'variable' => 'notifications_extended_footer_message',
                     'json_example' => [
                         'english' => [
                             'paragraphs' => [
@@ -481,19 +481,19 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'profile' => [
                 [
-                    'name' => 'hide_user_field_from_list',
+                    'variable' => 'hide_user_field_from_list',
                     'json_example' => [
                         'fields' => ['username'],
                     ],
                 ],
                 [
-                    'name' => 'send_notification_when_user_added',
+                    'variable' => 'send_notification_when_user_added',
                     'json_example' => [
                         'admins' => [1],
                     ],
                 ],
                 [
-                    'name' => 'show_conditions_to_user',
+                    'variable' => 'show_conditions_to_user',
                     'json_example' => [
                         'conditions' => [
                             [
@@ -510,7 +510,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'profile_fields_visibility',
+                    'variable' => 'profile_fields_visibility',
                     'json_example' => [
                         'options' => [
                             'vcard' => false,
@@ -531,7 +531,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'user_import_settings',
+                    'variable' => 'user_import_settings',
                     'json_example' => [
                         'options' => [
                             'send_mail_default_option' => '1',
@@ -539,19 +539,19 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'user_search_on_extra_fields',
+                    'variable' => 'user_search_on_extra_fields',
                     'json_example' => [
                         'extra_fields' => ['variable1', 'variable2'],
                     ],
                 ],
                 [
-                    'name' => 'community_managers_user_list',
+                    'variable' => 'community_managers_user_list',
                     'json_example' => [
                         'users' => [1],
                     ],
                 ],
                 [
-                    'name' => 'allow_social_map_fields',
+                    'variable' => 'allow_social_map_fields',
                     'json_example' => [
                         'fields' => ['terms_villedustage', 'terms_ville'],
                     ],
@@ -559,7 +559,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'registration' => [
                 [
-                    'name' => 'required_extra_fields_in_inscription',
+                    'variable' => 'required_extra_fields_in_inscription',
                     'json_example' => [
                         'options' => [
                             'terms_adresse',
@@ -575,7 +575,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'allow_fields_inscription',
+                    'variable' => 'allow_fields_inscription',
                     'json_example' => [
                         'fields' => [
                             'lastname',
@@ -604,7 +604,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'redirect_after_login',
+                    'variable' => 'redirect_after_login',
                     'json_example' => [
                         'COURSEMANAGER' => '',
                         'STUDENT' => '',
@@ -618,7 +618,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'security' => [
                 [
-                    'name' => 'password_requirements',
+                    'variable' => 'password_requirements',
                     'json_example' => [
                         'min' => [
                             'lowercase' => 2,
@@ -629,7 +629,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'allow_online_users_by_status',
+                    'variable' => 'allow_online_users_by_status',
                     'json_example' => [
                         'status' => [1, 5],
                     ],
@@ -637,14 +637,14 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'session' => [
                 [
-                    'name' => 'my_courses_session_order',
+                    'variable' => 'my_courses_session_order',
                     'json_example' => [
                         'field' => 'end_date',
                         'order' => 'desc',
                     ],
                 ],
                 [
-                    'name' => 'session_import_settings',
+                    'variable' => 'session_import_settings',
                     'json_example' => [
                         'options' => [
                             'session_exists_default_option' => '1',
@@ -653,7 +653,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'catalog_settings',
+                    'variable' => 'catalog_settings',
                     'json_example' => [
                         'sessions' => [
                             'by_title' => true,
@@ -668,7 +668,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'tracking_columns',
+                    'variable' => 'tracking_columns',
                     'json_example' => [
                         'course_session' => [
                             'course_title' => true,
@@ -711,7 +711,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'session_creation_user_course_extra_field_relation_to_prefill',
+                    'variable' => 'session_creation_user_course_extra_field_relation_to_prefill',
                     'json_example' => [
                         'fields' => [
                             'client' => 'client',
@@ -720,7 +720,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'name' => 'session_creation_form_set_extra_fields_mandatory',
+                    'variable' => 'session_creation_form_set_extra_fields_mandatory',
                     'json_example' => [
                         'fields' => ['client', 'region'],
                     ],
@@ -728,7 +728,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'skill' => [
                 [
-                    'name' => 'skill_levels_names',
+                    'variable' => 'skill_levels_names',
                     'json_example' => [
                         'levels' => [
                             1 => 'Skills',
@@ -740,13 +740,13 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'survey' => [
                 [
-                    'name' => 'hide_survey_edition',
+                    'variable' => 'hide_survey_edition',
                     'json_example' => [
                         'codes' => [],
                     ],
                 ],
                 [
-                    'name' => 'survey_additional_teacher_modify_actions',
+                    'variable' => 'survey_additional_teacher_modify_actions',
                     'json_example' => [
                         'myplugin' => ['MyPlugin', 'urlGeneratorCallback'],
                     ],
@@ -754,7 +754,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'ticket' => [
                 [
-                    'name' => 'ticket_project_user_roles',
+                    'variable' => 'ticket_project_user_roles',
                     'json_example' => [
                         'permissions' => [
                             1 => [17, 1],
@@ -775,7 +775,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
         foreach ($groupedTemplates as $category => $templates) {
             foreach ($templates as $data) {
                 // Check if the template already exists
-                $template = $templateRepo->findOneBy(['name' => $data['name']]);
+                $template = $templateRepo->findOneBy(['variable' => $data['variable']]);
 
                 if (!$template) {
                     $template = new SettingsValueTemplate();
@@ -783,7 +783,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                 }
 
                 $template
-                    ->setName($data['name'])
+                    ->setVariable($data['variable'])
                     ->setJsonExample(json_encode($data['json_example'], JSON_PRETTY_PRINT))
                     ->setUpdatedAt(new \DateTime());
 
@@ -791,7 +791,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                 $manager->flush(); // ensure ID is generated for linking
 
                 // Now update the settings table to link this template
-                $settings = $settingsRepo->findBy(['variable' => $data['name']]);
+                $settings = $settingsRepo->findBy(['variable' => $data['variable']]);
 
                 foreach ($settings as $setting) {
                     if ($setting->getValueTemplate()?->getId() !== $template->getId()) {

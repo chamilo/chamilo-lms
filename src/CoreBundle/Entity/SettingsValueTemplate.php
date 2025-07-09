@@ -11,28 +11,28 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'settings_value_template', options: ['row_format' => 'DYNAMIC'])]
-#[ORM\UniqueConstraint(name: 'UNIQ_settings_value_template_name', columns: ['name'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_settings_value_template_variable', columns: ['variable'])]
 class SettingsValueTemplate
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
+    #[ORM\Column(name: 'id', type: 'integer', options: ['unsigned' => true])]
     protected ?int $id = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(type: 'string', length: 190, unique: true)]
-    protected string $name;
+    #[ORM\Column(name: 'variable', type: 'string', length: 190, unique: true, nullable: false)]
+    protected string $variable;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(name: 'json_example', type: 'text', nullable: true)]
     protected ?string $jsonExample = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: true)]
     protected ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: true)]
     protected ?\DateTimeInterface $updatedAt = null;
 
     public function getId(): ?int
@@ -40,14 +40,14 @@ class SettingsValueTemplate
         return $this->id;
     }
 
-    public function getName(): string
+    public function getVariable(): string
     {
-        return $this->name;
+        return $this->variable;
     }
 
-    public function setName(string $name): self
+    public function setVariable(string $variable): self
     {
-        $this->name = $name;
+        $this->variable = $variable;
 
         return $this;
     }

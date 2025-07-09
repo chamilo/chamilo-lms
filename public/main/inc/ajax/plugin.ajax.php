@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\AccessUrlRelPlugin;
 use Chamilo\CoreBundle\Framework\Container;
 use Michelf\MarkdownExtra;
 use Chamilo\CoreBundle\Entity\Plugin;
@@ -79,6 +78,7 @@ switch ($action) {
         $appPlugin = new AppPlugin();
 
         if ($action === 'install') {
+            // Call the install logic inside the plugin itself.
             $appPlugin->install($pluginTitle);
 
             $plugin
@@ -91,7 +91,8 @@ switch ($action) {
                 $plugin->setSource(Plugin::SOURCE_OFFICIAL);
             }
 
-            $em->persist($plugin);
+            // ✅ Removed: persist($plugin) here
+            // The install() method of the plugin handles persistence already.
         } elseif ($plugin && $action === 'uninstall') {
             $appPlugin->uninstall($pluginTitle);
 

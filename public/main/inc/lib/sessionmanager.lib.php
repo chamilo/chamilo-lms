@@ -220,11 +220,9 @@ class SessionManager
             }
 
             if ($ready_to_create) {
-                $sessionAdminId = !empty($sessionAdminId) ? $sessionAdminId : api_get_user_id();
                 $session = new Session();
                 $session
                     ->setTitle($name)
-                    ->addSessionAdmin(api_get_user_entity($sessionAdminId))
                     ->setVisibility($visibility)
                     ->setDescription($description)
                     ->setShowDescription(1 === $showDescription)
@@ -234,50 +232,40 @@ class SessionManager
                     ->setDaysToReinscription((int) $daysBeforeFinishingForReinscription)
                     ->setLastRepetition($lastRepetition)
                     ->setDaysToNewRepetition((int) $daysBeforeFinishingToCreateNewRepetition)
-                    ->setValidityInDays((int) $validityInDays);
+                    ->setValidityInDays((int) $validityInDays)
+                    ->setStatus($status)
+                ;
+
+                if (!empty($duration)) {
+                    $session->setDuration((int) $duration);
+                } else {
+                    $startDate = $startDate ? api_get_utc_datetime($startDate, true, true) : null;
+                    $endDate = $endDate ? api_get_utc_datetime($endDate, true, true) : null;
+                    $displayStartDate = $displayStartDate ? api_get_utc_datetime($displayStartDate, true, true) : null;
+                    $displayEndDate = $displayEndDate ? api_get_utc_datetime($displayEndDate, true, true) : null;
+                    $coachStartDate = $coachStartDate ? api_get_utc_datetime($coachStartDate, true, true) : null;
+                    $coachEndDate = $coachEndDate ? api_get_utc_datetime($coachEndDate, true, true) : null;
+
+                    $session->setAccessStartDate($startDate);
+                    $session->setAccessEndDate($endDate);
+                    $session->setDisplayStartDate($displayStartDate);
+                    $session->setDisplayEndDate($displayEndDate);
+                    $session->setCoachAccessStartDate($coachStartDate);
+                    $session->setCoachAccessEndDate($coachEndDate);
+                }
 
                 foreach ($coachesId as $coachId) {
                     $session->addGeneralCoach(api_get_user_entity($coachId));
                 }
 
-                $startDate = $startDate ? api_get_utc_datetime($startDate, true, true) : null;
-                $endDate = $endDate ? api_get_utc_datetime($endDate, true, true) : null;
-                $displayStartDate = $displayStartDate ? api_get_utc_datetime($displayStartDate, true, true) : null;
-                $displayEndDate = $displayEndDate ? api_get_utc_datetime($displayEndDate, true, true) : null;
-                $coachStartDate = $coachStartDate ? api_get_utc_datetime($coachStartDate, true, true) : null;
-                $coachEndDate = $coachEndDate ? api_get_utc_datetime($coachEndDate, true, true) : null;
+                $sessionAdminId = !empty($sessionAdminId) ? $sessionAdminId : api_get_user_id();
 
-                $session->setAccessStartDate($startDate);
-                $session->setAccessEndDate($endDate);
-                $session->setDisplayStartDate($displayStartDate);
-                $session->setDisplayEndDate($displayEndDate);
-                $session->setCoachAccessStartDate($coachStartDate);
-                $session->setCoachAccessEndDate($coachEndDate);
-                $session->setStatus($status);
-
+                $session->addSessionAdmin(api_get_user_entity($sessionAdminId));
 
                 $em = Database::getManager();
                 $em->persist($session);
                 $em->flush();
                 $session_id = $session->getId();
-                $duration = (int) $duration;
-                if (!empty($duration)) {
-                    $sql = "UPDATE $tbl_session SET
-                        access_start_date = NULL,
-                        access_end_date = NULL,
-                        display_start_date = NULL,
-                        display_end_date = NULL,
-                        coach_access_start_date = NULL,
-                        coach_access_end_date = NULL,
-                        duration = $duration
-                    WHERE id = $session_id";
-                    Database::query($sql);
-                } else {
-                    $sql = "UPDATE $tbl_session
-                            SET duration = 0
-                            WHERE id = $session_id";
-                    Database::query($sql);
-                }
 
                 if (!empty($session_id)) {
                     $extraFields['item_id'] = $session_id;

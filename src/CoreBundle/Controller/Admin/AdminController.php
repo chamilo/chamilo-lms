@@ -150,6 +150,7 @@ class AdminController extends BaseController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/test-cache-all-users', name: 'chamilo_core_user_test_cache_all_users')]
     public function testCacheAllUsers(UserRepository $userRepository): JsonResponse
     {
@@ -181,6 +182,7 @@ class AdminController extends BaseController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route(path: '/test-cache-all-users/invalidate', name: 'chamilo_core_user_test_cache_all_users_invalidate')]
     public function invalidateCacheAllUsers(QueryCacheHelper $queryCacheHelper): JsonResponse
     {

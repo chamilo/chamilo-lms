@@ -2,8 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelPlugin;
 use Chamilo\CoreBundle\Entity\ConferenceMeeting;
 use Chamilo\CoreBundle\Entity\ConferenceRecording;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CoreBundle\Entity\Course;
 
@@ -63,6 +65,7 @@ class BbbPlugin extends Plugin
                 'disable_course_settings' => 'boolean',
                 'meeting_duration' => 'text',
                 'delete_recordings_on_course_delete' => 'boolean',
+                'hide_conference_link' => 'boolean',
             ]
         );
 
@@ -282,6 +285,115 @@ class BbbPlugin extends Plugin
 
         // Send the request (silently)
         @file_get_contents($url);
+    }
+
+    /**
+     * Installs the plugin
+     */
+    public function install(): void
+    {
+        $entityManager = Database::getManager();
+
+        $pluginRepo = Container::getPluginRepository();
+        $plugin = $pluginRepo->findOneByTitle($this->get_name());
+
+        if (!$plugin) {
+            // Create the plugin only if it does not exist
+            $plugin = new \Chamilo\CoreBundle\Entity\Plugin();
+            $plugin->setTitle($this->get_name());
+            $plugin->setInstalled(true);
+            $plugin->setInstalledVersion($this->get_version());
+            $plugin->setSource(\Chamilo\CoreBundle\Entity\Plugin::SOURCE_OFFICIAL);
+
+            $entityManager->persist($plugin);
+            $entityManager->flush();
+        } else {
+            // Ensure Doctrine manages it in the current UnitOfWork
+            $plugin = $entityManager->merge($plugin);
+        }
+
+        // Check if the plugin has relations for access URLs
+        $accessUrlRepo = Container::getAccessUrlRepository();
+        $accessUrlRelPluginRepo = Container::getAccessUrlRelPluginRepository();
+
+        $accessUrls = $accessUrlRepo->findAll();
+
+        foreach ($accessUrls as $accessUrl) {
+            $rel = $accessUrlRelPluginRepo->findOneBy([
+                'plugin' => $plugin,
+                'url' => $accessUrl,
+            ]);
+
+            if (!$rel) {
+                $rel = new AccessUrlRelPlugin();
+                $rel->setPlugin($plugin);
+                $rel->setUrl($accessUrl);
+                $rel->setActive(true);
+
+                $configuration = [];
+                foreach ($this->fields as $name => $type) {
+                    $defaultValue = '';
+
+                    if (is_array($type)) {
+                        $defaultValue = $type['type'] === 'boolean' ? 'false' : '';
+                    } else {
+                        switch ($type) {
+                            case 'boolean':
+                            case 'checkbox':
+                                $defaultValue = 'false';
+                                break;
+                            default:
+                                $defaultValue = '';
+                                break;
+                        }
+                    }
+
+                    $configuration[$name] = $defaultValue;
+                }
+
+                $rel->setConfiguration($configuration);
+
+                $entityManager->persist($rel);
+            }
+        }
+
+        $entityManager->flush();
+    }
+
+    public function canCurrentUserSeeGlobalConferenceLink(): bool
+    {
+        $allowedStatuses = $this->get('global_conference_allow_roles') ?? [];
+
+        if (empty($allowedStatuses)) {
+            return api_is_platform_admin();
+        }
+
+        foreach ($allowedStatuses as $status) {
+            switch ((int) $status) {
+                case PLATFORM_ADMIN:
+                    if (api_is_platform_admin()) {
+                        return true;
+                    }
+                    break;
+                case COURSEMANAGER:
+                    if (api_is_teacher()) {
+                        return true;
+                    }
+                    break;
+                case STUDENT:
+                    if (api_is_student()) {
+                        return true;
+                    }
+                    break;
+                case STUDENT_BOSS:
+                    if (api_is_student_boss()) {
+                        return true;
+                    }
+                    break;
+            }
+        }
+
+        return false;
     }
 
     public function get_name(): string

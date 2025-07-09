@@ -29,6 +29,8 @@ class AdminSettingsSchema extends AbstractSettingsSchema
                     'max_anonymous_users' => '0',
                     'send_inscription_notification_to_general_admin_only' => 'false',
                     'plugin_redirection_enabled' => 'false',
+                    'chamilo_latest_news' => 'true',
+                    'chamilo_support' => 'true',
                     'usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe' => 'false',
                     'usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe' => 'false',
                     'usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe' => 'false',
@@ -52,6 +54,8 @@ class AdminSettingsSchema extends AbstractSettingsSchema
             ->add('max_anonymous_users', TextType::class)
             ->add('send_inscription_notification_to_general_admin_only', YesNoType::class)
             ->add('plugin_redirection_enabled', YesNoType::class)
+            ->add('chamilo_latest_news', YesNoType::class)
+            ->add('chamilo_support', YesNoType::class)
             ->add('usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe', YesNoType::class)
             ->add('usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe', YesNoType::class)
             ->add('usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe', YesNoType::class)

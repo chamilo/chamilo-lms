@@ -60,6 +60,8 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['course.course_catalog_settings'] = 'false' !== $rawCourseCatalogSetting ? $this->decodeSettingArray($rawCourseCatalogSetting) : 'false';
         $rawSessionCatalogSetting = $settingsManager->getSetting('session.catalog_settings', true);
         $configuration['settings']['session.catalog_settings'] = 'false' !== $rawSessionCatalogSetting ? $this->decodeSettingArray($rawSessionCatalogSetting) : 'false';
+        $configuration['settings']['admin.chamilo_latest_news'] = $settingsManager->getSetting('admin.chamilo_latest_news', true);
+        $configuration['settings']['admin.chamilo_support'] = $settingsManager->getSetting('admin.chamilo_support', true);
 
         $variables = [];
 

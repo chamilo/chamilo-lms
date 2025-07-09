@@ -279,29 +279,42 @@ class Bbb
         }
         $courseLimit = 0;
         $sessionLimit = 0;
-        // Check the extra fields for this course and session
-        // Session limit takes priority over course limit
-        // Course limit takes priority over global limit
+
+        // Check course extra field
         if (!empty($this->courseId)) {
             $extraField = new ExtraField('course');
-            $fieldId = $extraField->get_all(
+            $fieldIdList = $extraField->get_all(
                 array('variable = ?' => 'plugin_bbb_course_users_limit')
             );
-            $extraValue = new ExtraFieldValue('course');
-            $value = $extraValue->get_values_by_handler_and_field_id($this->courseId, $fieldId[0]['id']);
-            if (!empty($value['value'])) {
-                $courseLimit = (int) $value['value'];
+
+            if (!empty($fieldIdList)) {
+                $fieldId = $fieldIdList[0]['id'] ?? null;
+                if ($fieldId) {
+                    $extraValue = new ExtraFieldValue('course');
+                    $value = $extraValue->get_values_by_handler_and_field_id($this->courseId, $fieldId);
+                    if (!empty($value['value'])) {
+                        $courseLimit = (int) $value['value'];
+                    }
+                }
             }
         }
+
+        // Check session extra field
         if (!empty($this->sessionId)) {
             $extraField = new ExtraField('session');
-            $fieldId = $extraField->get_all(
+            $fieldIdList = $extraField->get_all(
                 array('variable = ?' => 'plugin_bbb_session_users_limit')
             );
-            $extraValue = new ExtraFieldValue('session');
-            $value = $extraValue->get_values_by_handler_and_field_id($this->sessionId, $fieldId[0]['id']);
-            if (!empty($value['value'])) {
-                $sessionLimit = (int) $value['value'];
+
+            if (!empty($fieldIdList)) {
+                $fieldId = $fieldIdList[0]['id'] ?? null;
+                if ($fieldId) {
+                    $extraValue = new ExtraFieldValue('session');
+                    $value = $extraValue->get_values_by_handler_and_field_id($this->sessionId, $fieldId);
+                    if (!empty($value['value'])) {
+                        $sessionLimit = (int) $value['value'];
+                    }
+                }
             }
         }
 

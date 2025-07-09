@@ -14,7 +14,6 @@ export function useSession(type) {
 
   let paginationParams = {
     page: 1,
-    itemsPerPage: 1,
   }
 
   function getUncategorizedSessions(sessions) {

@@ -7576,28 +7576,18 @@ function api_calculate_increment_percent(int $newValue, int $oldValue): string
 }
 
 /**
- * Checks whether the number of accounts using the given email has reached the configured limit.
- *
- * @param string $email The email address to check.
- *
- * @return bool True if limit has been reached, false otherwise.
+ * @todo Move to UserRegistrationHelper when migrating inscription.php to Symfony
  */
 function api_email_reached_registration_limit(string $email): bool
 {
     $limit = (int) api_get_setting('platform.hosting_limit_identical_email');
 
     if ($limit <= 0 || empty($email)) {
-        return false; // No limit or invalid email
-    }
-
-    $sql = "SELECT COUNT(*) FROM user WHERE email = '".Database::escape_string($email)."'";
-    $result = Database::query($sql);
-
-    if (!$result) {
         return false;
     }
 
-    $count = (int) $result->fetchOne();
+    $repo = Container::getUserRepository();
+    $count = $repo->countUsersByEmail($email);
 
     return $count >= $limit;
 }

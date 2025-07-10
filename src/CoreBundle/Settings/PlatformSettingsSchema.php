@@ -98,6 +98,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'show_tabs_per_role' => '{}',
                     'session_admin_user_subscription_search_extra_field_to_search' => '',
                     'push_notification_settings' => '',
+                    'hosting_limit_identical_email' => '0',
                 ]
             )
             ->setTransformer(
@@ -161,6 +162,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('use_custom_pages', YesNoType::class)
             ->add('pdf_logo_header')
             ->add('allow_my_files', YesNoType::class)
+            // old settings with no category
             ->add('chamilo_database_version')
             ->add(
                 'load_term_conditions_section',
@@ -247,7 +249,16 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'help' => 'User extra field key to use when searching and naming sessions from /admin-dashboard/register.',
                 ]
             )
-            ->add('push_notification_settings', TextareaType::class);
+            ->add('push_notification_settings', TextareaType::class)
+            ->add(
+                'hosting_limit_identical_email',
+                TextType::class,
+                [
+                    'label' => 'Limit identical emails',
+                    'help' => 'Maximum number of accounts allowed with the same email. Set to 0 to disable limit.'
+                ]
+            )
+        ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }

@@ -7574,3 +7574,21 @@ function api_calculate_increment_percent(int $newValue, int $oldValue): string
     }
     return $result;
 }
+
+/**
+ * @todo Move to UserRegistrationHelper when migrating inscription.php to Symfony
+ */
+function api_email_reached_registration_limit(string $email): bool
+{
+    $limit = (int) api_get_setting('platform.hosting_limit_identical_email');
+
+    if ($limit <= 0 || empty($email)) {
+        return false;
+    }
+
+    $repo = Container::getUserRepository();
+    $count = $repo->countUsersByEmail($email);
+
+    return $count >= $limit;
+}
+

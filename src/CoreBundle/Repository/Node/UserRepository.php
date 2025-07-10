@@ -1270,4 +1270,21 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * Returns the number of users registered with a given email.
+     *
+     * @param string $email
+     *
+     * @return int
+     */
+    public function countUsersByEmail(string $email): int
+    {
+        return (int) $this->createQueryBuilder('u')
+            ->select('COUNT(u.id)')
+            ->where('u.email = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

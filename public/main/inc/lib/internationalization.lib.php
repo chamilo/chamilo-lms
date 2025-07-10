@@ -219,6 +219,9 @@ function api_get_timezone(): string
         Session::write('system_timezone', $timezone);
     }
 
+    // Replace backslashes by forward slashes in case of wrong timezone format
+    $timezone = str_replace('\\', '/', $timezone);
+
     return $timezone;
 }
 

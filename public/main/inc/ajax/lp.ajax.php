@@ -95,6 +95,7 @@ switch ($action) {
                     $title = Exercise::format_title_variable($title);
                     break;
                 case TOOL_DOCUMENT:
+                case 'video':
                     $repo = Container::getDocumentRepository();
                     /** @var CDocument $document */
                     $document = $repo->getResourceFromResourceNode($id);

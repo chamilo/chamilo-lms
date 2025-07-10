@@ -5,7 +5,7 @@
  * @author Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;

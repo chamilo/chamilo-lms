@@ -28,6 +28,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
         'MenuVideoConference' => 'videoconference',
         'MenuDiagnostics' => 'diagnostics',
         'MenuCatalogue' => 'catalogue',
+        'MenuSessionAdmin' => 'session_admin',
         'TopbarCertificate' => 'topbar_certificate',
         'TopbarSkills' => 'topbar_skills',
     ];
@@ -66,6 +67,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'table_default_row' => '0',
                     'allow_double_validation_in_registration' => 'false',
                     'block_my_progress_page' => 'false',
+                    'hosting_limit_users_per_course' => '0',
                     'generate_random_login' => 'false',
                     'timepicker_increment' => '5',
                     'proxy_settings' => '',
@@ -93,14 +95,17 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'redirect_index_to_url_for_logged_users' => '',
                     'default_menu_entry_for_course_or_session' => 'my_courses',
                     'notification_event' => 'false',
+                    'show_tabs_per_role' => '{}',
+                    'session_admin_user_subscription_search_extra_field_to_search' => '',
+                    'push_notification_settings' => '',
                     'hosting_limit_identical_email' => '0',
                 ]
             )
             ->setTransformer(
                 'show_tabs',
                 new ArrayToIdentifierTransformer()
-            )
-        ;
+            );
+
         $allowedTypes = [
             'institution' => ['string'],
             'institution_url' => ['string'],
@@ -109,6 +114,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             'gravatar_enabled' => ['string'],
             'gravatar_type' => ['string'],
             'show_tabs' => ['array', 'null'],
+            'show_tabs_per_role' => ['string', 'null'],
+            'session_admin_user_subscription_search_extra_field_to_search' => ['string', 'null'],
         ];
 
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -187,10 +194,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'choices' => self::$tabs,
                 ],
             )
-            ->add(
-                'unoconv_binaries',
-                TextType::class
-            )
+            ->add('show_tabs_per_role', TextareaType::class)
+            ->add('unoconv_binaries', TextType::class)
             ->add('hide_main_navigation_menu', YesNoType::class)
             ->add('pdf_img_dpi', TextType::class)
             ->add('tracking_skip_generic_data', YesNoType::class)
@@ -198,70 +203,22 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('table_default_row', TextType::class)
             ->add('allow_double_validation_in_registration', YesNoType::class)
             ->add('block_my_progress_page', YesNoType::class)
+            ->add('hosting_limit_users_per_course', TextType::class)
             ->add('generate_random_login', YesNoType::class)
             ->add('timepicker_increment', TextType::class)
-            ->add(
-                'proxy_settings',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('proxy_settings'),
-                ]
-            )
-            ->add(
-                'video_features',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('video_features'),
-                ]
-            )
-            ->add(
-                'table_row_list',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('table_row_list'),
-                ]
-            )
+            ->add('proxy_settings', TextareaType::class)
+            ->add('video_features', TextareaType::class)
+            ->add('table_row_list', TextareaType::class)
             ->add('webservice_return_user_field', TextType::class)
             ->add('multiple_url_hide_disabled_settings', YesNoType::class)
             ->add('login_max_attempt_before_blocking_account', TextType::class)
             ->add('force_renew_password_at_first_login', YesNoType::class)
             ->add('hide_breadcrumb_if_not_allowed', YesNoType::class)
-            ->add(
-                'extldap_config',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('extldap_config'),
-                ]
-            )
-            ->add(
-                'update_student_expiration_x_date',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('update_student_expiration_x_date'),
-                ]
-            )
+            ->add('extldap_config', TextareaType::class)
+            ->add('update_student_expiration_x_date', TextareaType::class)
             ->add('user_status_show_options_enabled', YesNoType::class)
-            ->add(
-                'user_status_show_option',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('user_status_show_option'),
-                ]
-            )
-            ->add(
-                'user_number_of_days_for_default_expiration_date_per_role',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('user_number_of_days_for_default_expiration_date_per_role'),
-                ]
-            )
+            ->add('user_status_show_option', TextareaType::class)
+            ->add('user_number_of_days_for_default_expiration_date_per_role', TextareaType::class)
             ->add('user_edition_extra_field_to_check', TextType::class)
             ->add('user_hide_never_expire_option', YesNoType::class)
             ->add('platform_logo_url', TextType::class)
@@ -284,6 +241,16 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             )
             ->add('notification_event', YesNoType::class)
             ->add(
+                'session_admin_user_subscription_search_extra_field_to_search',
+                TextType::class,
+                [
+                    'required' => false,
+                    'empty_data' => '',
+                    'help' => 'User extra field key to use when searching and naming sessions from /admin-dashboard/register.',
+                ]
+            )
+            ->add('push_notification_settings', TextareaType::class)
+            ->add(
                 'hosting_limit_identical_email',
                 TextType::class,
                 [
@@ -296,75 +263,10 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
         $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
-    /**
-     * Returns the list of internal settings that should be hidden from forms and search.
-     */
     public function getHiddenSettings(): array
     {
         return [
             'registered',
         ];
-    }
-
-    private function settingArrayHelpValue(string $variable): string
-    {
-        $values = [
-            'proxy_settings' => "<pre>
-                [
-                    'stream_context_create' => [
-                        'http' => [
-                            'proxy' => 'tcp://example.com:8080',
-                            'request_fulluri' => true
-                        ]
-                    ],
-                    'curl_setopt_array' => [
-                        'CURLOPT_PROXY' => 'http://example.com',
-                        'CURLOPT_PROXYPORT' => '8080'
-                    ]
-                ]
-                </pre>",
-            'video_features' => "<pre>
-                ['features' => ['speed']]
-                </pre>",
-            'table_row_list' => "<pre>
-                ['options' => [50, 100, 200, 500]]
-                </pre>",
-            'extldap_config' => "<pre>
-                ['host' => '', 'port' => '']
-                </pre>",
-            'update_student_expiration_x_date' => "<pre>
-                [
-                    'days' => 0,
-                    'months' => 0,
-                ]
-                </pre>",
-            'user_status_show_option' => "<pre>
-                [
-                    'COURSEMANAGER' => true,
-                    'STUDENT' => true,
-                    'DRH' => false,
-                    'SESSIONADMIN' => false,
-                    'STUDENT_BOSS' => false,
-                    'INVITEE' => false
-                ]
-                </pre>",
-            'user_number_of_days_for_default_expiration_date_per_role' => "<pre>
-                [
-                    'COURSEMANAGER' => 365,
-                    'STUDENT' => 31,
-                    'DRH' => 31,
-                    'SESSIONADMIN' => 60,
-                    'STUDENT_BOSS' => 60,
-                    'INVITEE' => 31
-                ]
-                </pre>",
-        ];
-
-        $returnValue = [];
-        if (isset($values[$variable])) {
-            $returnValue = $values[$variable];
-        }
-
-        return $returnValue;
     }
 }

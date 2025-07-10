@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository\Node;
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
@@ -14,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -192,7 +192,7 @@ class CourseRepository extends ResourceRepository
      */
     public function getSubscribedTeachers(Course $course)
     {
-        return $this->getSubscribedUsersByStatus($course, ChamiloApi::COURSE_MANAGER);
+        return $this->getSubscribedUsersByStatus($course, ChamiloHelper::COURSE_MANAGER);
     }
 
     /**
@@ -431,5 +431,21 @@ class CourseRepository extends ResourceRepository
         }
 
         return $personalCourseList;
+    }
+
+    /**
+     * Returns all courses assigned to a specific AccessUrl.
+     *
+     * @return Course[]
+     */
+    public function getCoursesByAccessUrl(AccessUrl $url): array
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.urls', 'u')
+            ->where('u.url = :url')
+            ->setParameter('url', $url)
+            ->orderBy('c.title', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Service\AI\AiProviderFactory;
+use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

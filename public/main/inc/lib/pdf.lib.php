@@ -2,7 +2,6 @@
 
 /* See license terms in /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Framework\Container;
 use Masterminds\HTML5;
 use Mpdf\HTMLParserMode;

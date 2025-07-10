@@ -471,6 +471,7 @@
       </div>
     </div>
 
+    <EmailSettings />
     <hr />
 
     <div class="formgroup-inline">
@@ -514,6 +515,7 @@ import RadioButton from "primevue/radiobutton"
 import SectionHeader from "../layout/SectionHeader.vue"
 
 import languages from "../../utils/languages"
+import EmailSettings from "./EmailSettings.vue"
 
 const { t } = useI18n()
 

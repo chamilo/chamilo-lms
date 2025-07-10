@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Mpdf\Mpdf;
@@ -24,7 +25,8 @@ class CertificateController extends AbstractController
 {
     public function __construct(
         private readonly GradebookCertificateRepository $certificateRepository,
-        private readonly SettingsManager $settingsManager
+        private readonly SettingsManager $settingsManager,
+        private readonly UserHelper $userHelper
     ) {}
 
     #[Route('/{hash}.html', name: 'chamilo_certificate_public_view', methods: ['GET'])]
@@ -44,7 +46,14 @@ class CertificateController extends AbstractController
 
         // Check if public access is globally allowed and certificate is marked as published
         $allowPublic = 'true' === $this->settingsManager->getSetting('course.allow_public_certificates', true);
-        if (!$allowPublic || !$certificate->getPublish()) {
+        $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
+        $user = $this->userHelper->getCurrent();
+        $isOwner = ($user->getId() === $this->getUser()->getId());
+
+        if (!$isOwner
+            && (!$allowPublic || !$certificate->getPublish())
+            && (!$allowSessionAdmin || !$user->hasRole('ROLE_SESSION_MANAGER'))
+        ) {
             throw new AccessDeniedHttpException('The requested certificate is not public.');
         }
 
@@ -77,7 +86,13 @@ class CertificateController extends AbstractController
         }
 
         $allowPublic = 'true' === $this->settingsManager->getSetting('course.allow_public_certificates', true);
-        if (!$allowPublic || !$certificate->getPublish()) {
+        $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
+        $user = $this->userHelper->getCurrent();
+
+        if (
+            (!$allowPublic || !$certificate->getPublish())
+            && (!$allowSessionAdmin || !$user->hasRole('ROLE_SESSION_MANAGER'))
+        ) {
             throw $this->createAccessDeniedException('The requested certificate is not public.');
         }
 

@@ -19,6 +19,7 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
                 [
                     'hide_my_certificate_link' => 'false',
                     'add_certificate_pdf_footer' => 'false',
+                    'session_admin_can_download_all_certificates' => 'false',
                 ]
             )
         ;
@@ -34,6 +35,7 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add('hide_my_certificate_link', YesNoType::class)
             ->add('add_certificate_pdf_footer', YesNoType::class)
+            ->add('session_admin_can_download_all_certificates', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

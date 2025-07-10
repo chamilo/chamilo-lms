@@ -64,7 +64,6 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('agenda_legend'),
                 ]
             )
             ->add(
@@ -72,7 +71,6 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('agenda_colors'),
                 ]
             )
             ->add(
@@ -80,7 +78,6 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('agenda_on_hover_info'),
                 ]
             )
             ->add('agenda_reminders_sender_id', TextType::class)
@@ -89,63 +86,11 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('fullcalendar_settings'),
                 ]
             )
             ->add('allow_careers_in_global_agenda', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
-    }
-
-    private function settingArrayHelpValue(string $variable): string
-    {
-        $values = [
-            'agenda_legend' => "<pre>
-                [
-                    'red' => 'red caption',
-                    '#f0f' => 'another caption'
-                ]
-                </pre>",
-            'agenda_colors' => "<pre>
-                [
-                    'platform' => 'red',
-                    'course' => '#458B00',
-                    'group' => '#A0522D',
-                    'session' => '#00496D',
-                    'other_session' => '#999',
-                    'personal' => 'steel blue',
-                    'student_publication' => '#FF8C00'
-                ]
-                </pre>",
-            'agenda_on_hover_info' => "<pre>
-                [
-                    'options' => [
-                        'comment' => true,
-                        'description' => true,
-                    ]
-                ]
-                </pre>",
-            'fullcalendar_settings' => "<pre>
-                [
-                    'settings' => [
-                        'businessHours' => [
-                            // days of week. an array of zero-based day of week integers (0=Sunday)
-                            'dow' => [0, 1, 2, 3, 4], // Sunday - Thursday
-                            'start'  => '10:00',
-                            'end' => '18:00',
-                        ],
-                        'firstDay' => 0, // 0 = Sunday, 1 = Monday
-                    ]
-                ]
-                </pre>",
-        ];
-
-        $returnValue = [];
-        if (isset($values[$variable])) {
-            $returnValue = $values[$variable];
-        }
-
-        return $returnValue;
     }
 }

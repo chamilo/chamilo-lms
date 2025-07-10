@@ -4,39 +4,36 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
-use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
-use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
-use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CourseBundle\Entity\CSurvey;
-use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
+use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CTool;
-use \Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use PhpZip\ZipFile;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Class learnpath
@@ -124,6 +121,7 @@ class learnpath
     public $categoryId;
     public $scormUrl;
     public $entity;
+    public $auto_forward_video = 1;
 
     public function __construct(CLp $entity = null, $course_info, $user_id)
     {
@@ -162,6 +160,7 @@ class learnpath
             $this->created_on = $entity->getCreatedOn()->format('Y-m-d H:i:s');
             $this->modified_on = $entity->getModifiedOn()->format('Y-m-d H:i:s');
             $this->ref = $entity->getRef();
+            $this->auto_forward_video = $entity->getAutoForwardVideo();
             $this->categoryId = 0;
             if ($entity->getCategory()) {
                 $this->categoryId = $entity->getCategory()->getIid();
@@ -5227,6 +5226,7 @@ class learnpath
                 $return .= $this->getSavedFinalItem();
                 break;
             case TOOL_DOCUMENT:
+            case 'video':
             case TOOL_READOUT_TEXT:
                 $repo = Container::getDocumentRepository();
                 /** @var CDocument $document */
@@ -5271,6 +5271,7 @@ class learnpath
                 break;
             case TOOL_LP_FINAL_ITEM:
             case TOOL_DOCUMENT:
+            case 'video':
             case TOOL_READOUT_TEXT:
                 $return .= $this->displayItemMenu($lpItem);
                 $return .= $this->displayDocumentForm('edit', $lpItem);
@@ -6017,6 +6018,7 @@ class learnpath
                     );
                     break;
                 case TOOL_DOCUMENT:
+                case 'video':
                     $return .= $this->displayItemMenu($lpItem);
                     $return .= $this->displayDocumentForm('move', $lpItem);
                     break;
@@ -6334,7 +6336,13 @@ class learnpath
             null,
             null,
             $showInvisibleFiles,
-            true
+            true,
+            false,
+            true,
+            false,
+            [],
+            [],
+            ['file', 'folder']
         );
 
         $form = new FormValidator(
@@ -6410,23 +6418,45 @@ class learnpath
         ;
         $new = $this->displayDocumentForm('add', $lpItem);
 
-        /*$lpItem = new CLpItem();
-        $lpItem->setItemType(TOOL_READOUT_TEXT);
-        $frmReadOutText = $this->displayDocumentForm('add');*/
-
+        $videosTree = $this->get_videos();
         $headers = [
             get_lang('Files'),
+            get_lang('Videos'),
             get_lang('Create a new document'),
-            //get_lang('Create read-out text'),
             get_lang('Upload'),
         ];
 
         return Display::tabs(
             $headers,
-            [$documentTree, $new, $form->returnForm()],
+            [$documentTree, $videosTree, $new, $form->returnForm()],
             'subtab',
             ['class' => 'mt-2']
         );
+    }
+
+    public function get_videos()
+    {
+        $sessionId = api_get_session_id();
+
+        $documentTree = DocumentManager::get_document_preview(
+            api_get_course_entity(),
+            $this->lp_id,
+            null,
+            $sessionId,
+            true,
+            null,
+            null,
+            false,
+            false,
+            false,
+            true,
+            false,
+            [],
+            [],
+            'video'
+        );
+
+        return $documentTree ?: get_lang('No videos found');
     }
 
     /**
@@ -7980,6 +8010,7 @@ class learnpath
                 return api_get_path(WEB_CODE_PATH).
                     'lp/readout_text.php?&id='.$id.'&lp_id='.$learningPathId.'&'.$extraParams;
             case TOOL_DOCUMENT:
+            case 'video':
                 $repo = Container::getDocumentRepository();
                 $document = $repo->find($rowItem->getPath());
                 if ($document) {
@@ -8160,6 +8191,7 @@ class learnpath
                 break;
             case 'dir':
             case TOOL_DOCUMENT:
+            case 'video':
                 $title = $row_item['title'];
                 $output = '-';
                 if (!empty($title)) {
@@ -8885,5 +8917,43 @@ class learnpath
                 Display::addFlash(Display::return_message(get_lang('Error recalculating results'), 'error'));
             }
         }
+    }
+
+    /**
+     * Returns the video player HTML for a video-type document LP item.
+     *
+     * @param int $lpItemId
+     * @param string $autostart
+     *
+     * @return string
+     */
+    public function getVideoPlayer(CDocument $document, string $autostart = 'true'): string
+    {
+        $resourceNode = $document->getResourceNode();
+        $resourceFile = $resourceNode?->getFirstResourceFile();
+
+        if (!$resourceNode || !$resourceFile) {
+            return '';
+        }
+
+        $resourceNodeRepository = Container::getResourceNodeRepository();
+        $videoUrl = $resourceNodeRepository->getResourceFileUrl($resourceNode);
+
+        if (empty($videoUrl)) {
+            return '';
+        }
+
+        $fileName = $resourceFile->getTitle();
+        $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+        $mimeType = $resourceFile->getMimeType() ?: 'video/mp4';
+        $autoplayAttr = ($autostart === 'true') ? 'autoplay muted playsinline' : '';
+
+        $html = '';
+        $html .= '
+        <video id="lp-video" width="100%" height="auto" controls '.$autoplayAttr.'>
+            <source src="'.$videoUrl.'" type="$mimeType">
+        </video>';
+
+        return $html;
     }
 }

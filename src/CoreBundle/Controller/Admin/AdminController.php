@@ -9,11 +9,14 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceType;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\QueryCacheHelper;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -144,6 +147,51 @@ class AdminController extends BaseController
             'resourceTypes' => $resourceTypes,
             'selectedType' => $resourceTypeId,
             'courses' => $courses,
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/test-cache-all-users', name: 'chamilo_core_user_test_cache_all_users')]
+    public function testCacheAllUsers(UserRepository $userRepository): JsonResponse
+    {
+        // Without cache
+        $startNoCache = microtime(true);
+        $usersNoCache = $userRepository->findAllUsers(false);
+        $timeNoCache = microtime(true) - $startNoCache;
+
+        // With cache
+        $startCache = microtime(true);
+        $resultCached = $userRepository->findAllUsers(true);
+        $timeCache = microtime(true) - $startCache;
+
+        // Check if we have a key (we do if cache was used)
+        $usersCache = $resultCached['data'] ?? $resultCached;
+
+        $cacheKey = $resultCached['cache_key'] ?? null;
+
+        return $this->json([
+            'without_cache' => [
+                'count' => count($usersNoCache),
+                'execution_time' => $timeNoCache,
+            ],
+            'with_cache' => [
+                'count' => count($usersCache),
+                'execution_time' => $timeCache,
+                'cache_key' => $cacheKey,
+            ],
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route(path: '/test-cache-all-users/invalidate', name: 'chamilo_core_user_test_cache_all_users_invalidate')]
+    public function invalidateCacheAllUsers(QueryCacheHelper $queryCacheHelper): JsonResponse
+    {
+        $cacheKey = $queryCacheHelper->getCacheKey('findAllUsers', []);
+        $queryCacheHelper->invalidate('findAllUsers');
+
+        return $this->json([
+            'message' => 'Cache for users invalidated!',
+            'invalidated_cache_key' => $cacheKey,
         ]);
     }
 }

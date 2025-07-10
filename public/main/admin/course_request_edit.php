@@ -8,7 +8,7 @@
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
  */
 
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

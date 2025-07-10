@@ -283,11 +283,26 @@ const calendarOptions = ref({
       return
     }
 
+    let startDate
+    let endDate
+
+    if (info.allDay) {
+      startDate = new Date(info.start)
+      startDate.setHours(0, 0, 0, 0)
+
+      endDate = new Date(info.end)
+      endDate.setDate(endDate.getDate() - 1)
+      endDate.setHours(23, 59, 0, 0)
+    } else {
+      startDate = new Date(info.start)
+      endDate = new Date(info.end)
+    }
+
     item.value = {}
     item.value["parentResourceNode"] = securityStore.user.resourceNode["id"]
     item.value["allDay"] = info.allDay
-    item.value["startDate"] = info.start
-    item.value["endDate"] = info.end
+    item.value["startDate"] = startDate
+    item.value["endDate"] = endDate
 
     dialog.value = true
   },
@@ -368,21 +383,27 @@ function confirmDelete() {
     acceptLabel: t("Yes"),
     rejectLabel: t("Cancel"),
     accept() {
-      if (item.value["parentResourceNodeId"] === securityStore.user["id"]) {
+      const isOwner = item.value["parentResourceNodeId"] === securityStore.user["id"]
+      const isAdmin = securityStore.isCourseAdmin || securityStore.isSessionAdmin
+      if (isOwner || isAdmin) {
         store.dispatch("ccalendarevent/del", item.value).then(() => {
           dialogShow.value = false
           dialog.value = false
           reFetch()
         })
       } else {
-        let filteredLinks = item.value["resourceLinkListFromEntity"].filter(
-          (resourceLinkFromEntity) => resourceLinkFromEntity["user"]["id"] === securityStore.user["id"],
+        const resourceLinks = Array.isArray(item.value["resourceLinkListFromEntity"])
+          ? item.value["resourceLinkListFromEntity"]
+          : []
+
+        const userLink = resourceLinks.find(
+          (link) => link?.user?.id === securityStore.user["id"]
         )
 
-        if (filteredLinks.length > 0) {
+        if (userLink) {
           store
             .dispatch("resourcelink/del", {
-              "@id": `/api/resource_links/${filteredLinks[0]["id"]}`,
+              "@id": `/api/resource_links/${userLink["id"]}`,
             })
             .then(() => {
               currentEvent.remove()

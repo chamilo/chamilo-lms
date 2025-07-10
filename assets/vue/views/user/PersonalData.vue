@@ -6,12 +6,12 @@
     >
       <template #header>
         <div class="px-4 py-2 -mb-2 bg-gray-15">
-          <h2 class="text-h5">{{ t("Personal Data: Introduction") }}</h2>
+          <h2 class="text-h5">{{ t("Personal data: introduction") }}</h2>
         </div>
       </template>
       <hr class="-mt-2 mb-4 -mx-4" />
       <div>
-        {{ t("We respect your personal data! This page...") }}
+        {{ t("We respect your privacy!") }}
       </div>
     </BaseCard>
 

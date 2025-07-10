@@ -4,7 +4,8 @@
 /**
  * Responses to AJAX calls.
  */
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
+use Chamilo\CoreBundle\Enums\StateIcon;
 
 require_once __DIR__.'/../global.inc.php';
 

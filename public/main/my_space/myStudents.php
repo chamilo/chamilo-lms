@@ -4,19 +4,19 @@
 
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Usergroup;
-use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\MyStudentsLpTrackingEvent;
 use Chamilo\CoreBundle\Event\MyStudentsQuizTrackingEvent;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 if (!isset($_GET['course'])) {
     $cidReset = true;

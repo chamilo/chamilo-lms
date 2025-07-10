@@ -494,7 +494,6 @@
     "Pages deleted": "Pages deleted",
     "Go to Explore to find a topic of interest, or wait for someone to subscribe you": "Go to Explore to find a topic of interest, or wait for someone to subscribe you",
     "You don\\'t have any course yet": "You don\\'t have any course yet",
-    "Personal Data: Introduction": "Personal Data: Introduction",
     "Terms and Conditions": "Termeni si conditii",
     "Read the Terms and Conditions": "Cititi conditiile serviciului",
     "Legal agreement accepted": "Conditii legale acceptate",
@@ -576,5 +575,7 @@
     "Accept Terms and Conditions": "Accept Terms and Conditions",
     "You accepted these terms on": "You accepted these terms on",
     "Revoke Acceptance": "Revoke Acceptance",
+    "Minutes": "Minute",
+    "Days": "Days",
     "Go to your newly created portal.": "Mergeti la portalul proaspat creat."
 }

@@ -5,7 +5,7 @@
  * Edit course categories (user groups) assigned to an Access URL.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

@@ -2,9 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * This script displays an area where teachers can edit the group properties and member list.

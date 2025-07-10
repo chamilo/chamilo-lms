@@ -1,8 +1,9 @@
 <?php
 
 /* For licensing terms, see /license.txt */
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 $cidReset = true;
 

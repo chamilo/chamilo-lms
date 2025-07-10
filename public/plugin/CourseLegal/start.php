@@ -2,8 +2,6 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-
 require_once __DIR__.'/config.php';
 
 // Course legal

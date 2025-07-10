@@ -2,13 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -570,7 +570,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         uasort($userScoreList, 'sort_by_order');
         $averageStudentsTestScore = round($averageStudentsTestScore / $nbStudents);
 
-        $colors = ChamiloApi::getColorPalette(true, true, 10);
+        $colors = ChamiloHelper::getColorPalette(true, true, 10);
         $tpl->assign('chart_colors', json_encode($colors));
         $tpl->assign('certificate_count', $certificateCount);
         $tpl->assign('score_distribution', json_encode($scoresDistribution));

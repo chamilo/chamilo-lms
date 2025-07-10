@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router"
 import adminRoutes from "./admin"
+import sessionAdminRoutes from "./sessionAdmin"
 import courseRoutes from "./course"
 import accountRoutes from "./account"
 import personalFileRoutes from "./personalfile"
@@ -245,6 +246,7 @@ const router = createRouter({
     pageRoutes,
     publicPageRoutes,
     skillRoutes,
+    sessionAdminRoutes,
   ],
 })
 

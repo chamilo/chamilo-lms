@@ -6,7 +6,7 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
@@ -53,7 +53,7 @@ if ($httpRequest->query->has('url_id')) {
 
 $form->addHidden(
     'parentResourceNodeId',
-    Container::getAccessUrlHelper()->getFirstAccessUrl()->resourceNode->getId()
+    Container::getAccessUrlUtil()->getFirstAccessUrl()->resourceNode->getId()
 );
 $form->addButtonCreate(get_lang('Save'));
 

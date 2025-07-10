@@ -4,7 +4,7 @@
  * Edition script for sessions categories.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 // resetting the course id
 $cidReset = true;

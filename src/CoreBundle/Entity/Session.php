@@ -73,7 +73,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromClass: User::class,
                 ),
             ],
-            paginationEnabled: false,
             normalizationContext: [
                 'groups' => [
                     'user_subscriptions:sessions',
@@ -90,7 +89,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromClass: User::class,
                 ),
             ],
-            paginationEnabled: false,
             normalizationContext: [
                 'groups' => [
                     'user_subscriptions:sessions',
@@ -105,7 +103,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/advanced/create-session-with-courses-and-users',
             controller: CreateSessionWithUsersAndCoursesAction::class,
             denormalizationContext: ['groups' => ['write']],
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')",
             input: CreateSessionWithUsersAndCoursesInput::class,
             output: Session::class,
             deserialize: true,
@@ -309,7 +307,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'display_start_date', type: 'datetime', unique: false, nullable: true)]
-    protected ?DateTime $displayStartDate;
+    protected ?DateTime $displayStartDate = null;
 
     #[Groups([
         'session:read',
@@ -319,7 +317,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'display_end_date', type: 'datetime', unique: false, nullable: true)]
-    protected ?DateTime $displayEndDate;
+    protected ?DateTime $displayEndDate = null;
 
     #[Groups([
         'session:read',
@@ -328,7 +326,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session_rel_course_rel_user:read',
     ])]
     #[ORM\Column(name: 'access_start_date', type: 'datetime', unique: false, nullable: true)]
-    protected ?DateTime $accessStartDate;
+    protected ?DateTime $accessStartDate = null;
 
     #[Groups([
         'session:read',
@@ -337,7 +335,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session_rel_course_rel_user:read',
     ])]
     #[ORM\Column(name: 'access_end_date', type: 'datetime', unique: false, nullable: true)]
-    protected ?DateTime $accessEndDate;
+    protected ?DateTime $accessEndDate = null;
 
     #[Groups([
         'session:read',
@@ -346,7 +344,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session_rel_course_rel_user:read',
     ])]
     #[ORM\Column(name: 'coach_access_start_date', type: 'datetime', unique: false, nullable: true)]
-    protected ?DateTime $coachAccessStartDate;
+    protected ?DateTime $coachAccessStartDate = null;
 
     #[Groups([
         'session:read',
@@ -355,7 +353,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session_rel_course_rel_user:read',
     ])]
     #[ORM\Column(name: 'coach_access_end_date', type: 'datetime', unique: false, nullable: true)]
-    protected ?DateTime $coachAccessEndDate;
+    protected ?DateTime $coachAccessEndDate = null;
 
     #[ORM\Column(name: 'position', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $position;
@@ -860,6 +858,20 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             ->setUser($user)
             ->setRelationType($relationType)
         ;
+
+        if ($this->duration <= 0) {
+            $isCoach = $this->hasCoach($user);
+
+            $sessionRelUser
+                ->setAccessStartDate(
+                    $isCoach && $this->coachAccessStartDate ? $this->coachAccessStartDate : $this->accessStartDate
+                )
+                ->setAccessEndDate(
+                    $isCoach && $this->coachAccessEndDate ? $this->coachAccessEndDate : $this->accessEndDate
+                )
+            ;
+        }
+
         $this->addUserSubscription($sessionRelUser);
 
         return $this;

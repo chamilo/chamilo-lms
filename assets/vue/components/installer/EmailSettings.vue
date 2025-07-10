@@ -224,6 +224,8 @@
           :label="t('Test send e-mail')"
           class="p-button-success"
           icon="mdi mdi-email-send"
+          :loading="isTesting"
+          :disabled="isTesting"
           @click="testSmtp"
         />
       </div>
@@ -242,6 +244,7 @@ import axios from "axios"
 
 const { t } = useI18n()
 const installerData = inject("installerData", ref({}))
+const isTesting = ref(false)
 
 const mailerOptions = [
   { label: "mail", value: "mail" },
@@ -250,6 +253,7 @@ const mailerOptions = [
 ]
 
 async function testSmtp() {
+  isTesting.value = true
   try {
     if (!installerData?.value?.stepData) {
       alert(t("Installer data is missing."))
@@ -292,6 +296,8 @@ async function testSmtp() {
     }
   } catch (e) {
     alert(t("Error during test email: ") + e.message)
+  } finally {
+    isTesting.value = false
   }
 }
 

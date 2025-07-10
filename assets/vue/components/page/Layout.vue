@@ -1,5 +1,5 @@
 <template>
-  <SectionHeader :title="t('Pages')">
+  <SectionHeader :title="computedTitle">
     <BaseButton
       v-if="menuItems.length"
       icon="dots-vertical"
@@ -23,7 +23,7 @@
 <script setup>
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
-import { provide, ref, watch } from "vue"
+import { provide, ref, watch, computed } from "vue"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import SectionHeader from "../layout/SectionHeader.vue"
@@ -42,8 +42,16 @@ watch(
   () => {
     menuItems.value = []
   },
-  { inmediate: true },
+  { immediate: true }
 )
+
+const computedTitle = computed(() => {
+  if (route.path.includes("/resources/pages/layouts")) {
+    return ''
+  }
+
+  return t("Pages")
+})
 
 const toggleMenu = (event) => menu.value.toggle(event)
 </script>

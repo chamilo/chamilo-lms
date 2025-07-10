@@ -11,6 +11,7 @@ import userRelUserRoutes from "./userreluser"
 import calendarEventRoutes from "./ccalendarevent"
 import toolIntroRoutes from "./ctoolintro"
 import pageRoutes from "./page"
+import pageLayoutRoutes from "./pageLayout"
 import publicPageRoutes from "./publicPage"
 import socialNetworkRoutes from "./social"
 import fileManagerRoutes from "./filemanager"
@@ -244,6 +245,7 @@ const router = createRouter({
     calendarEventRoutes,
     toolIntroRoutes,
     pageRoutes,
+    pageLayoutRoutes,
     publicPageRoutes,
     skillRoutes,
     sessionAdminRoutes,

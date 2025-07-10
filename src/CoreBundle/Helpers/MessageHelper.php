@@ -301,11 +301,7 @@ class MessageHelper
             throw new Exception('The receiver does not have a valid email address.');
         }
 
-        $smtpFromEmail = $sender->getEmail();
-        if ('true' === $this->settingsManager->getSetting('mail.smtp_unique_sender') && !empty($this->settingsManager->getSetting('mail.smtp_from_email'))) {
-            $smtpFromEmail = $this->settingsManager->getSetting('mail.smtp_from_email');
-        }
-
+        $smtpFromEmail = $this->settingsManager->getSetting('mail.smtp_from_email');
         $email = (new Email())
             ->from($smtpFromEmail)
             ->to($receiver->getEmail())

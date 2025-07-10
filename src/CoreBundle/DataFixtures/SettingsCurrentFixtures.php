@@ -3019,11 +3019,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'mail' => [
                 [
-                    'name' => 'smtp_unique_sender',
-                    'title' => 'Send all e-mails as one single sender',
-                    'comment' => 'Overrides sender for all emails to appear from a unique address.',
-                ],
-                [
                     'name' => 'smtp_from_email',
                     'title' => 'Send all e-mails from this e-mail address',
                     'comment' => 'Sets the default email address used in the "from" field of emails.',

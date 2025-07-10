@@ -46,9 +46,7 @@ if ($form->validate()) {
         $values['subject'],
         $values['content'],
         UserManager::formatUserFullName($user),
-        'true' === $settingsManager->getSetting('mail.smtp_unique_sender')
-            ? $settingsManager->getSetting('mail.smtp_from_email')
-            : $user->getEmail()
+        $settingsManager->getSetting('mail.smtp_from_email')
     );
 
     Display::addFlash(

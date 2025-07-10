@@ -7155,12 +7155,9 @@ function api_set_noreply_and_from_address_to_mailer(
         }
     }
 
-    if ('true' === api_get_setting('mail.smtp_unique_sender')) {
-        $senderName = $defaultSenderName;
-        $senderEmail = $defaultSenderEmail;
-
-        $email->sender(new Address($senderEmail, $senderName));
-    }
+    $senderName = $defaultSenderName;
+    $senderEmail = $defaultSenderEmail;
+    $email->sender(new Address($senderEmail, $senderName));
 
     if ($senderEmail) {
         $email->from(new Address($senderEmail, $senderName));

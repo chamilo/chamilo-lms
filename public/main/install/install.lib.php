@@ -1203,8 +1203,20 @@ function updateDirAndFilesPermissions()
 
 function compare_setting_values(string $current_value, string $wanted_value): array
 {
+    $tail = substr($current_value, -1, 1);
     $current_value_string = $current_value;
-    $current_value = (float) $current_value;
+    switch ($tail) {
+        case 'T':
+            $current_value = ((float) substr($current_value, 0, -1)) * 1024 * 1024;
+            break;
+        case 'G':
+            $current_value = ((float) substr($current_value, 0, -1)) * 1024;
+            break;
+        case 'M':
+        default:
+            $current_value = (float) $current_value;
+        break;
+    }
     $wanted_value = (float) $wanted_value;
 
     return $current_value >= $wanted_value

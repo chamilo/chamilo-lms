@@ -1037,6 +1037,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'platform' => [
                 [
+                    'name' => 'hosting_limit_users_per_course',
+                    'title' => 'Global limit of users per course',
+                    'comment' => 'Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals.',
+                ],
+                [
                     'name' => 'push_notification_settings',
                     'title' => 'Push notification settings (JSON)',
                     'comment' => "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications.",
@@ -1700,6 +1705,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'plugin_redirection_enabled',
                     'title' => 'Enable only if you are using the Redirection plugin',
                     'comment' => '',
+                ],
+                [
+                    'name' => 'chamilo_latest_news',
+                    'title' => 'Latest news',
+                    'comment' => 'Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators.',
+                ],
+                [
+                    'name' => 'chamilo_support',
+                    'title' => 'Chamilo support block',
+                    'comment' => 'Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page.',
                 ],
                 [
                     'name' => 'send_inscription_notification_to_general_admin_only',

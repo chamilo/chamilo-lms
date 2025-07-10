@@ -383,9 +383,20 @@ class BaseResourceFileAction
             $resource->setResourceLinkArray($resourceLinkList);
         }
 
+        // Detect if file is a video
+        $filetypeResult = $fileType;
+
+        if (isset($uploadedFile) && $uploadedFile instanceof UploadedFile) {
+            $mimeType = $uploadedFile->getMimeType();
+            if (str_starts_with($mimeType, 'video/')) {
+                $filetypeResult = 'video';
+                $comment = trim($comment . ' [video]');
+            }
+        }
+
         return [
             'title' => $title,
-            'filetype' => $fileType,
+            'filetype' => $filetypeResult,
             'comment' => $comment,
         ];
     }
@@ -565,6 +576,14 @@ class BaseResourceFileAction
                         $filePath,
                         $fileName
                     );
+
+                    $mimeType = $uploadedFile->getMimeType();
+                    if (str_starts_with($mimeType, 'video/')) {
+                        $document->setFiletype('video');
+                        $document->setComment('[video]');
+                    } else {
+                        $document->setFiletype('file');
+                    }
 
                     $document->setUploadFile($uploadedFile);
                     $em->persist($document);

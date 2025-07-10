@@ -4,10 +4,11 @@ import baseService from "./baseService"
 /**
  * @param {string} userIri
  * @param {string} listType
- * @returns {Promise<{totalItems, items}>}
+ * @param {params}
+ * @returns {Promise<{totalItems: number, items: Object[], nextPageParams: ({page: number, itemsPerPage: number}|null)}>}
  */
-async function findUserSubscriptions(userIri, listType) {
-  return baseService.getCollection(`${userIri}/session_subscriptions/${listType}`)
+async function findUserSubscriptions(userIri, listType, params = {}) {
+  return baseService.getCollection(`${userIri}/session_subscriptions/${listType}`, params)
 }
 
 async function createWithCoursesAndUsers(payload) {
@@ -16,7 +17,7 @@ async function createWithCoursesAndUsers(payload) {
 
 async function sendCourseNotification(sessionId, studentId) {
   const payload = new FormData()
-  payload.append('studentId', studentId)
+  payload.append("studentId", studentId)
 
   return await api.post(`/sessions/${sessionId}/send-course-notification`, payload)
 }

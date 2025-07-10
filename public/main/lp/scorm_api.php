@@ -204,6 +204,7 @@ olms.userfname = '<?php echo addslashes(trim($user['firstname'])); ?>';
 olms.userlname = '<?php echo addslashes(trim($user['lastname'])); ?>';
 olms.execute_stats = false;
 olms.lms_lp_item_parents = '';
+olms.lms_auto_forward_video = <?php echo (int) $oLP->auto_forward_video; ?>;
 
 var courseUrl = '?cid='+olms.lms_course_id+'&sid='+olms.lms_session_id;
 var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats';
@@ -292,7 +293,7 @@ function LMSInitialize() {
             'start_time': 0
         };
 
-        if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+        if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document' || olms.lms_item_type == 'video') {
             params['start_time'] = 1;
             //xajax_start_timer();
         }
@@ -305,6 +306,16 @@ function LMSInitialize() {
             async: false,
             success:function(data) {
                 $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+                if (olms.lms_item_type === 'video') {
+                    var cont_f = document.getElementById("content_id");
+                    if (cont_f && (cont_f.contentDocument || cont_f.contentWindow.document).readyState === "complete") {
+                        onIframeLoaded(cont_f);
+                    } else {
+                        $("#content_id").on("load", function() {
+                            onIframeLoaded(this);
+                        });
+                    }
+                }
             }
         });
 
@@ -366,6 +377,96 @@ function LMSInitialize() {
         } ?>
         return('true');
     }
+}
+
+/**
+* Handles post-processing once the SCORM content iframe has loaded.
+* Specifically, detects video elements and attaches logic to
+* automatically display a MediaElement postroll and switch to
+* the next learning path item 10 seconds after the video ends.
+*
+* @param {HTMLIFrameElement} iframe - The iframe DOM element containing the SCORM content.
+*/
+function onIframeLoaded(iframe) {
+    var contentDocument = iframe.contentDocument || iframe.contentWindow.document;
+    var $video = $("video:not(.skip)", contentDocument);
+    if ($video.length > 0) {
+        $video.each(function() {
+            var videoElement = this;
+
+            // Create overlay DIV in iframe
+            var overlayHtml = `
+            <div id="postroll-overlay" style="
+                                    position: absolute;
+                                    top: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    height: 100%;
+                                    background: rgba(0, 0, 0, 0.8);
+                                    color: white;
+                                    text-align: center;
+                                    display: none;
+                                    justify-content: center;
+                                    align-items: center;
+                                    flex-direction: column;
+                                    z-index: 9999;
+                                ">
+                <p style="font-size: 24px; margin-bottom: 10px;"><?php echo get_lang('Video finished!') ?></p>
+                `;
+
+                if (olms.lms_auto_forward_video == 1) {
+                    overlayHtml += `
+                    <p style="font-size: 18px;"><?php echo get_lang('Advancing in') ?> <span id="postroll-counter">10</span> <?php echo get_lang('seconds') ?>...</p>
+                    `;
+                }
+
+                overlayHtml += `
+                    <button id="postroll-next-btn" style="
+                                            margin-top: 20px;
+                                            padding: 10px 20px;
+                                            font-size: 18px;
+                                            background-color: #337ab7;
+                                            border: none;
+                                            color: white;
+                                            cursor: pointer;
+                                        "><?php echo get_lang('Next lesson') ?></button>
+                    </div>
+                `;
+
+            var $overlay = $(overlayHtml);
+            $(contentDocument.body).append($overlay);
+            videoElement.addEventListener("ended", function () {
+                $overlay.show();
+                if (olms.lms_auto_forward_video == 1) {
+                    startPostrollCountdown(contentDocument);
+                } else {
+                    console.log("Auto-forward disabled, waiting for user click.");
+                }
+            });
+
+            // Click on next button
+            $(contentDocument).on("click", "#postroll-next-btn", function () {
+                switch_item(olms.lms_item_id, olms.lms_next_item);
+            });
+        });
+    }
+}
+
+/**
+* Starts the countdown timer displayed in the postroll overlay.
+*
+* @param {Document} doc - The iframe's document where the countdown is displayed.
+*/
+function startPostrollCountdown(doc) {
+    var seconds = 10;
+    var interval = setInterval(function() {
+        seconds--;
+        $(doc).find("#postroll-counter").text(seconds);
+        if (seconds <= 0) {
+            clearInterval(interval);
+            switch_item(olms.lms_item_id, olms.lms_next_item);
+        }
+    }, 1000);
 }
 
 /**
@@ -1115,7 +1216,7 @@ function addListeners(){
         return;
     }
     //assign event handlers to objects
-    if (olms.lms_lp_type==1 || olms.lms_item_type=='asset' || olms.lms_item_type == 'document') {
+    if (olms.lms_lp_type==1 || olms.lms_item_type=='asset' || olms.lms_item_type == 'document' || olms.lms_item_type == 'video') {
         logit_lms('Chamilo LP or asset');
         //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
@@ -1171,7 +1272,7 @@ function lms_save_asset() {
     }
 
     //For scorms do not show stats
-    if (olms.lms_lp_type == 2 && olms.lms_lp_item_type != 'document') {
+    if (olms.lms_lp_type == 2 && olms.lms_lp_item_type != 'document' && olms.lms_lp_item_type != 'video') {
        olms.execute_stats = false;
     }
 
@@ -1179,7 +1280,7 @@ function lms_save_asset() {
         olms.execute_stats = true;
     }
 
-    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document' || olms.lms_item_type == 'video') {
         logit_lms('lms_save_asset');
         logit_lms('execute_stats :'+ olms.execute_stats);
         xajax_save_item(
@@ -1685,7 +1786,7 @@ function switch_item(current_item, next_item)
     } ?>
 
     let startTime = 0;
-    if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+    if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document' || olms.lms_item_type == 'video') {
         startTime = 1;
         //xajax_start_timer();
     }
@@ -1902,7 +2003,7 @@ function xajax_save_item(
     params += '&switch_next='+switchNext;
     params += '&load_nav='+loadNav;
 
-    if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'asset') {
+    if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'video' || item_type == 'asset') {
         logit_lms('xajax_save_item with params:' + params, 3);
         return $.ajax({
             type:"POST",

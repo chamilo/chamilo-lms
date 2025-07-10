@@ -32,24 +32,48 @@ class CourseAccessListener
         }
 
         $courseId = (int) $this->cidReqHelper->getCourseId();
-        $sessionId = (int) $this->cidReqHelper->getSessionId();
-
-        if ($courseId > 0) {
-            $user = $this->userHelper->getCurrent();
-            if ($user) {
-                $ip = $event->getRequest()->getClientIp();
-                $accessRepository = $this->em->getRepository(TrackECourseAccess::class);
-                $access = $accessRepository->findExistingAccess($user, $courseId, $sessionId);
-
-                if ($access) {
-                    $accessRepository->updateAccess($access);
-                } else {
-                    $accessRepository->recordAccess($user, $courseId, $sessionId, $ip);
-                }
-
-                // Set a flag on the request to indicate that access has been checked
-                $event->getRequest()->attributes->set('access_checked', true);
-            }
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $sessionId = 0;
+        if (!empty($session)) {
+            $sessionId = $session->getId();
         }
+
+        if ($courseId <= 0) {
+            return;
+        }
+
+        $user = $this->userHelper->getCurrent();
+
+        if (!$user) {
+            return;
+        }
+
+        $ip = $event->getRequest()->getClientIp();
+        $accessRepository = $this->em->getRepository(TrackECourseAccess::class);
+        $access = $accessRepository->findExistingAccess($user, $courseId, $sessionId);
+
+        if ($access) {
+            $accessRepository->updateAccess($access);
+        } else {
+            if (!empty($session) && $session->getDuration() > 0) {
+                $subscription = $user->getSubscriptionToSession($session);
+                $duration = $session->getDuration() + $subscription->getDuration();
+
+                $startDate = new \DateTime();
+                $endDate = (clone $startDate)->modify("+$duration days");
+
+                $subscription
+                    ->setAccessStartDate($startDate)
+                    ->setAccessEndDate($endDate)
+                ;
+
+                $this->em->flush();
+            }
+
+            $accessRepository->recordAccess($user, $courseId, $sessionId, $ip);
+        }
+
+        // Set a flag on the request to indicate that access has been checked
+        $event->getRequest()->attributes->set('access_checked', true);
     }
 }

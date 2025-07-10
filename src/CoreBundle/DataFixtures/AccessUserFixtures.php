@@ -27,7 +27,7 @@ class AccessUserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $timezone = 'Europe\Paris';
+        $timezone = 'Europe/Paris';
         $this->toolChain->createTools();
 
         $accessUrl = $this->accessUrlHelper->getCurrent();

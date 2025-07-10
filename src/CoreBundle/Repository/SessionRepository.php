@@ -16,7 +16,6 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -140,7 +139,7 @@ class SessionRepository extends ServiceEntityRepository
                     ),
                 )
             )
-            ->setParameter('now', new DateTime());
+            ->setParameter('now', new DateTime())
         ;
     }
 

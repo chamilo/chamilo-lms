@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -64,7 +65,7 @@ class CreateUserOnAccessUrlAction
                 ]);
 
                 if (!$extraField) {
-                    throw new \RuntimeException("ExtraField '{$variable}' not found for users.");
+                    throw new RuntimeException("ExtraField '{$variable}' not found for users.");
                 }
 
                 $this->extraFieldValuesRepo->updateItemData(

@@ -25,16 +25,16 @@ class PermissionHelper
     {
         $roles = $this->roleRepository->findAll();
 
-        return array_map(fn($r) => $r->getCode(), $roles);
+        return array_map(fn ($r) => $r->getCode(), $roles);
     }
 
     /**
      * Checks if any of the given roles has the specified permission slug.
      *
-     * @param string $permissionSlug The permission slug to check (e.g. "user:create")
-     * @param string[] $roles        A list of role codes to check against.
+     * @param string   $permissionSlug The permission slug to check (e.g. "user:create")
+     * @param string[] $roles          a list of role codes to check against
      *
-     * @return bool True if at least one role has the permission, false otherwise.
+     * @return bool true if at least one role has the permission, false otherwise
      */
     public function hasPermission(string $permissionSlug, array $roles): bool
     {

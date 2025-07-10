@@ -62,6 +62,7 @@ class Role
     public function setCode(string $code): self
     {
         $this->code = $code;
+
         return $this;
     }
 
@@ -73,6 +74,7 @@ class Role
     public function setConstantValue(int $constantValue): self
     {
         $this->constantValue = $constantValue;
+
         return $this;
     }
 
@@ -84,6 +86,7 @@ class Role
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -95,6 +98,7 @@ class Role
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -106,6 +110,7 @@ class Role
     public function setSystemRole(bool $systemRole): self
     {
         $this->systemRole = $systemRole;
+
         return $this;
     }
 
@@ -117,6 +122,7 @@ class Role
     public function setCreatedAt(?DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -128,6 +134,7 @@ class Role
     public function setCreatedBy(?int $createdBy): self
     {
         $this->createdBy = $createdBy;
+
         return $this;
     }
 
@@ -139,6 +146,7 @@ class Role
     public function setUpdatedAt(?DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
@@ -150,6 +158,7 @@ class Role
     public function setUpdatedBy(?int $updatedBy): self
     {
         $this->updatedBy = $updatedBy;
+
         return $this;
     }
 }

@@ -68,6 +68,8 @@ final class FileHelper
      * Writes a stream resource to a file.
      *
      * Equivalent to fwrite() when working with streams.
+     *
+     * @param mixed $stream
      */
     public function writeStream(string $path, $stream): void
     {
@@ -79,8 +81,8 @@ final class FileHelper
      *
      * Equivalent to UploadedFile->move().
      *
-     * @param string $tempPath Local temporary path of the uploaded file.
-     * @param string $targetPath Target path in the filesystem.
+     * @param string $tempPath   local temporary path of the uploaded file
+     * @param string $targetPath target path in the filesystem
      */
     public function moveUploadedFile(string $tempPath, string $targetPath): void
     {
@@ -118,16 +120,15 @@ final class FileHelper
      *
      * Equivalent to scandir(), opendir(), readdir().
      *
-     * @param string $path Path to list (empty string = root).
-     * @param bool $deep true = recursive listing, false = shallow listing.
-     *
-     * @return array
+     * @param string $path path to list (empty string = root)
+     * @param bool   $deep true = recursive listing, false = shallow listing
      */
     public function listContents(string $path = '', bool $deep = false): array
     {
         return $this->resourceFilesystem
             ->listContents($path, $deep)
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     /**

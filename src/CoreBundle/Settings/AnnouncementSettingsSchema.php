@@ -27,7 +27,8 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
                 'allow_careers_in_global_announcements' => 'false',
                 'allow_coach_to_edit_announcements' => 'false',
                 'course_announcement_scheduled_by_date' => 'false',
-            ]);
+            ])
+        ;
 
         $allowedTypes = [
             'hide_global_announcements_when_not_connected' => ['string'],
@@ -49,7 +50,8 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
             ])
             ->add('allow_careers_in_global_announcements', YesNoType::class)
             ->add('allow_coach_to_edit_announcements', YesNoType::class)
-            ->add('course_announcement_scheduled_by_date', YesNoType::class);
+            ->add('course_announcement_scheduled_by_date', YesNoType::class)
+        ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }

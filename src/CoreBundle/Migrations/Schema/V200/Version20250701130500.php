@@ -18,9 +18,6 @@ class Version20250701130500 extends AbstractMigrationChamilo
         return 'Add access start and end dates to session_rel_user table and migrate dates from first course access';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $this->addSql("ALTER TABLE session_rel_user ADD access_start_date DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)'");
@@ -57,10 +54,10 @@ class Version20250701130500 extends AbstractMigrationChamilo
 
         foreach ($sessions as $session) {
             $sRUs = $this->getSessionRelUsers($session['id']);
-            
+
             foreach ($sRUs as $sru) {
                 $duration = (int) $session['duration'] + (int) $sru['duration'];
-                
+
                 $firstAccessToSession = $this->getFirstAccessToSession($session['id'], $sru['user_id']);
 
                 $calculatedLastAccessToSession = $firstAccessToSession + $duration * 24 * 60 * 60;

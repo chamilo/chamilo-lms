@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PermissionRelRoleRepository::class)]
 #[ORM\Table(name: 'permission_rel_role')]

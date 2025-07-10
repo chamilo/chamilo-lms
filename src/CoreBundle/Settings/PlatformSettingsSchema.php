@@ -104,7 +104,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->setTransformer(
                 'show_tabs',
                 new ArrayToIdentifierTransformer()
-            );
+            )
+        ;
 
         $allowedTypes = [
             'institution' => ['string'],
@@ -255,7 +256,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 TextType::class,
                 [
                     'label' => 'Limit identical emails',
-                    'help' => 'Maximum number of accounts allowed with the same email. Set to 0 to disable limit.'
+                    'help' => 'Maximum number of accounts allowed with the same email. Set to 0 to disable limit.',
                 ]
             )
         ;

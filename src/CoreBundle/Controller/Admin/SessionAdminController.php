@@ -8,11 +8,11 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
-use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
@@ -29,6 +29,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use const PATHINFO_FILENAME;
+
 #[Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')")]
 #[Route('/admin/sessionadmin')]
 class SessionAdminController extends BaseController
@@ -43,16 +45,16 @@ class SessionAdminController extends BaseController
     #[Route('/courses', name: 'chamilo_core_admin_sessionadmin_courses', methods: ['GET'])]
     public function listCourses(): JsonResponse
     {
-        $url     = $this->accessUrlHelper->getCurrent();
+        $url = $this->accessUrlHelper->getCurrent();
         $courses = $this->courseRepository->getCoursesByAccessUrl($url);
 
         $data = array_map(static function (Course $course) {
             return [
-                'id'          => $course->getId(),
-                'title'       => $course->getTitle(),
+                'id' => $course->getId(),
+                'title' => $course->getTitle(),
                 'code' => $course->getCode(),
                 'description' => $course->getDescription(),
-                'visibility'  => $course->getVisibility(),
+                'visibility' => $course->getVisibility(),
                 'illustrationUrl' => method_exists($course, 'getIllustrationUrl')
                     ? $course->getIllustrationUrl()
                     : null,
@@ -70,7 +72,7 @@ class SessionAdminController extends BaseController
     ): JsonResponse {
         // Extract and validate pagination parameters from the query
         $offset = max(0, (int) $request->query->get('offset', 0));
-        $limit  = max(1, (int) $request->query->get('limit', 50));
+        $limit = max(1, (int) $request->query->get('limit', 50));
 
         // Determine current access URL context
         $url = $accessUrlHelper->getCurrent();
@@ -102,22 +104,22 @@ class SessionAdminController extends BaseController
             }
 
             return [
-                'id'        => $gc->getId(),
-                'issuedAt'  => $gc->getCreatedAt()->format('Y-m-d H:i:s'),
-                'user'      => [
-                    'id'   => $gc->getUser()->getId(),
+                'id' => $gc->getId(),
+                'issuedAt' => $gc->getCreatedAt()->format('Y-m-d H:i:s'),
+                'user' => [
+                    'id' => $gc->getUser()->getId(),
                     'name' => $gc->getUser()->getFullName(),
                 ],
-                'course'    => [
-                    'id'    => $gc->getCategory()->getCourse()->getId(),
+                'course' => [
+                    'id' => $gc->getCategory()->getCourse()->getId(),
                     'title' => $gc->getCategory()->getCourse()->getTitle(),
                 ],
-                'session'   => $session ? [
-                    'id'    => $session->getId(),
+                'session' => $session ? [
+                    'id' => $session->getId(),
                     'title' => $session->getTitle(),
                 ] : null,
-                'downloadUrl'        => $downloadUrl,
-                'isDownloadAllowed'  => $isDownloadAllowed,
+                'downloadUrl' => $downloadUrl,
+                'isDownloadAllowed' => $isDownloadAllowed,
             ];
         };
 
@@ -125,10 +127,10 @@ class SessionAdminController extends BaseController
 
         // Return JSON response with pagination metadata and certificate list
         return $this->json([
-            'items'  => $items,
+            'items' => $items,
             'offset' => $offset,
-            'limit'  => $limit,
-            'count'  => \count($items),
+            'limit' => $limit,
+            'count' => \count($items),
         ]);
     }
 
@@ -152,18 +154,18 @@ class SessionAdminController extends BaseController
 
                 $courseItems[] = [
                     'user' => [
-                        'id'   => $user->getId(),
+                        'id' => $user->getId(),
                         'name' => $user->getFullName(),
                     ],
                     'course' => [
-                        'id'    => $course->getId(),
+                        'id' => $course->getId(),
                         'title' => $course->getTitle(),
                     ],
                     'session' => [
-                        'id'    => $session->getId(),
+                        'id' => $session->getId(),
                         'title' => $session->getTitle(),
                         'startDate' => $session->getAccessStartDate()?->format('Y-m-d'),
-                        'endDate'   => $session->getAccessEndDate()?->format('Y-m-d'),
+                        'endDate' => $session->getAccessEndDate()?->format('Y-m-d'),
                     ],
                 ];
             }
@@ -175,7 +177,7 @@ class SessionAdminController extends BaseController
 
         return $this->json([
             'items' => $flatItems,
-            'count' => count($flatItems),
+            'count' => \count($flatItems),
         ]);
     }
 
@@ -185,35 +187,35 @@ class SessionAdminController extends BaseController
         GradebookCertificateRepository $repo,
         AccessUrlHelper $accessUrlHelper
     ): JsonResponse {
-        $offset = max(0,  (int) $request->query->get('offset', 0));
-        $limit  = max(1,  (int) $request->query->get('limit', 10));
+        $offset = max(0, (int) $request->query->get('offset', 0));
+        $limit = max(1, (int) $request->query->get('limit', 10));
 
-        $urlId  = $accessUrlHelper->getCurrent()->getId();
+        $urlId = $accessUrlHelper->getCurrent()->getId();
 
         /** @var SessionRelCourseRelUser[] $rows */
         $rows = $repo->findRestartableSessions($urlId, $offset, $limit);
 
         $items = array_map(static function (SessionRelCourseRelUser $srcu) {
             $session = $srcu->getSession();
-            $course  = $srcu->getCourse();
-            $user    = $srcu->getUser();
+            $course = $srcu->getCourse();
+            $user = $srcu->getUser();
 
             return [
-                'user'    => ['id' => $user->getId(),   'name' => $user->getFullName()],
-                'course'  => ['id' => $course->getId(), 'title'=> $course->getTitle()],
+                'user' => ['id' => $user->getId(), 'name' => $user->getFullName()],
+                'course' => ['id' => $course->getId(), 'title' => $course->getTitle()],
                 'session' => [
-                    'id'      => $session->getId(),
-                    'title'   => $session->getTitle(),
+                    'id' => $session->getId(),
+                    'title' => $session->getTitle(),
                     'endDate' => $session->getAccessEndDate()?->format('Y-m-d'),
                 ],
             ];
         }, $rows);
 
         return $this->json([
-            'items'  => $items,
+            'items' => $items,
             'offset' => $offset,
-            'limit'  => $limit,
-            'count'  => \count($items),
+            'limit' => $limit,
+            'count' => \count($items),
         ]);
     }
 
@@ -222,8 +224,8 @@ class SessionAdminController extends BaseController
     {
         $data = json_decode($request->getContent(), true);
         $sessionId = (int) ($data['sessionId'] ?? 0);
-        $userId    = (int) ($data['userId'] ?? 0);
-        $courseId  = (int) ($data['courseId'] ?? 0);
+        $userId = (int) ($data['userId'] ?? 0);
+        $courseId = (int) ($data['courseId'] ?? 0);
 
         if (!$sessionId || !$userId || !$courseId) {
             return $this->json(['error' => 'Missing data'], Response::HTTP_BAD_REQUEST);
@@ -322,7 +324,7 @@ class SessionAdminController extends BaseController
                 'id' => $user->getId(),
                 'lastname' => $user->getLastname(),
                 'firstname' => $user->getFirstname(),
-                'fullname' => trim($user->getFirstname() . ' ' . $user->getLastname()),
+                'fullname' => trim($user->getFirstname().' '.$user->getLastname()),
                 'email' => $user->getEmail(),
                 'extra' => $extra,
             ];

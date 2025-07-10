@@ -35,16 +35,16 @@ class Version20250630093000 extends AbstractMigrationChamilo
         );
 
         $this->addSql(
-            "ALTER TABLE push_subscription
+            'ALTER TABLE push_subscription
                 ADD CONSTRAINT FK_562830F3A76ED395
                 FOREIGN KEY (user_id)
                 REFERENCES user (id)
-                ON DELETE CASCADE;"
+                ON DELETE CASCADE;'
         );
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql("DROP TABLE push_subscription;");
+        $this->addSql('DROP TABLE push_subscription;');
     }
 }

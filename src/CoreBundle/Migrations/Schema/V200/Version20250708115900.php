@@ -10,6 +10,9 @@ use Chamilo\CoreBundle\DataFixtures\SettingsValueTemplateFixtures;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 class Version20250708115900 extends AbstractMigrationChamilo
 {
     public function getDescription(): string

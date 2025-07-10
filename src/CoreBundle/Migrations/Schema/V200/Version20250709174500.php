@@ -27,7 +27,7 @@ final class Version20250709174500 extends AbstractMigrationChamilo
         ];
 
         // Check if the setting exists for access_url = 1
-        $sqlCheck = sprintf(
+        $sqlCheck = \sprintf(
             "SELECT COUNT(*) as count
              FROM settings
              WHERE variable = '%s'
@@ -39,9 +39,9 @@ final class Version20250709174500 extends AbstractMigrationChamilo
         $stmt = $this->connection->executeQuery($sqlCheck);
         $result = $stmt->fetchAssociative();
 
-        if ($result && (int)$result['count'] > 0) {
+        if ($result && (int) $result['count'] > 0) {
             // UPDATE existing setting
-            $this->addSql(sprintf(
+            $this->addSql(\sprintf(
                 "UPDATE settings
                  SET selected_value = '%s',
                      title = '%s',
@@ -56,10 +56,10 @@ final class Version20250709174500 extends AbstractMigrationChamilo
                 addslashes($setting['category']),
                 addslashes($setting['variable'])
             ));
-            $this->write(sprintf("Updated setting: %s", $setting['variable']));
+            $this->write(\sprintf('Updated setting: %s', $setting['variable']));
         } else {
             // INSERT new setting
-            $this->addSql(sprintf(
+            $this->addSql(\sprintf(
                 "INSERT INTO settings
                     (variable, subkey, type, category, selected_value, title, comment, access_url_changeable, access_url_locked, access_url)
                  VALUES
@@ -70,7 +70,7 @@ final class Version20250709174500 extends AbstractMigrationChamilo
                 addslashes($setting['title']),
                 addslashes($setting['comment'])
             ));
-            $this->write(sprintf("Inserted setting: %s", $setting['variable']));
+            $this->write(\sprintf('Inserted setting: %s', $setting['variable']));
         }
     }
 
@@ -83,6 +83,6 @@ final class Version20250709174500 extends AbstractMigrationChamilo
                AND access_url = 1
         ");
 
-        $this->write("Removed setting: hosting_limit_users_per_course.");
+        $this->write('Removed setting: hosting_limit_users_per_course.');
     }
 }

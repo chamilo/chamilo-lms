@@ -446,6 +446,7 @@ class CourseRepository extends ResourceRepository
             ->setParameter('url', $url)
             ->orderBy('c.title', 'ASC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 }

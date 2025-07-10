@@ -8,9 +8,12 @@ namespace Chamilo\CoreBundle\DataFixtures;
 
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsValueTemplate;
+use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
+
+use const JSON_PRETTY_PRINT;
 
 class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInterface
 {
@@ -33,8 +36,8 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'gotify_token' => 'A0yWWfe_8YRLv_B',
                         'enabled' => true,
                         'vapid_public_key' => 'BNg54MTyDZSdyFq99EmppT606jKVDS5o7jGVxMLW3Qir937A98sxtrK4VMt1ddNlK93MUenK0kM3aiAMu9HRcjQ=',
-                        'vapid_private_key' => 'UgS5-xSneOcSyNJVq4c9wmEGaCoE1Y8oh-7ZGXPgs8o'
-                    ]
+                        'vapid_private_key' => 'UgS5-xSneOcSyNJVq4c9wmEGaCoE1Y8oh-7ZGXPgs8o',
+                    ],
                 ],
                 [
                     'variable' => 'proxy_settings',
@@ -42,40 +45,40 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'stream_context_create' => [
                             'http' => [
                                 'proxy' => 'tcp://example.com:8080',
-                                'request_fulluri' => true
-                            ]
+                                'request_fulluri' => true,
+                            ],
                         ],
                         'curl_setopt_array' => [
                             'CURLOPT_PROXY' => 'http://example.com',
-                            'CURLOPT_PROXYPORT' => '8080'
-                        ]
-                    ]
+                            'CURLOPT_PROXYPORT' => '8080',
+                        ],
+                    ],
                 ],
                 [
                     'variable' => 'video_features',
                     'json_example' => [
-                        'features' => ['speed']
-                    ]
+                        'features' => ['speed'],
+                    ],
                 ],
                 [
                     'variable' => 'table_row_list',
                     'json_example' => [
-                        'options' => [50, 100, 200, 500]
-                    ]
+                        'options' => [50, 100, 200, 500],
+                    ],
                 ],
                 [
                     'variable' => 'extldap_config',
                     'json_example' => [
                         'host' => '',
-                        'port' => ''
-                    ]
+                        'port' => '',
+                    ],
                 ],
                 [
                     'variable' => 'update_student_expiration_x_date',
                     'json_example' => [
                         'days' => 0,
-                        'months' => 0
-                    ]
+                        'months' => 0,
+                    ],
                 ],
                 [
                     'variable' => 'user_status_show_option',
@@ -85,8 +88,8 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'DRH' => false,
                         'SESSIONADMIN' => false,
                         'STUDENT_BOSS' => false,
-                        'INVITEE' => false
-                    ]
+                        'INVITEE' => false,
+                    ],
                 ],
                 [
                     'variable' => 'user_number_of_days_for_default_expiration_date_per_role',
@@ -96,15 +99,15 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'DRH' => 31,
                         'SESSIONADMIN' => 60,
                         'STUDENT_BOSS' => 60,
-                        'INVITEE' => 31
-                    ]
+                        'INVITEE' => 31,
+                    ],
                 ],
                 [
                     'variable' => 'show_tabs_per_role',
                     'json_example' => [
                         'SESSIONADMIN' => ['session_admin', 'my_courses'],
-                        'ADMIN' => ['platform_administration']
-                    ]
+                        'ADMIN' => ['platform_administration'],
+                    ],
                 ],
             ],
             'agenda' => [
@@ -112,7 +115,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     'variable' => 'agenda_legend',
                     'json_example' => [
                         'red' => 'red caption',
-                        '#f0f' => 'another caption'
+                        '#f0f' => 'another caption',
                     ],
                 ],
                 [
@@ -779,13 +782,14 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
 
                 if (!$template) {
                     $template = new SettingsValueTemplate();
-                    $template->setCreatedAt(new \DateTime());
+                    $template->setCreatedAt(new DateTime());
                 }
 
                 $template
                     ->setVariable($data['variable'])
                     ->setJsonExample(json_encode($data['json_example'], JSON_PRETTY_PRINT))
-                    ->setUpdatedAt(new \DateTime());
+                    ->setUpdatedAt(new DateTime())
+                ;
 
                 $manager->persist($template);
                 $manager->flush(); // ensure ID is generated for linking

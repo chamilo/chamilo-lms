@@ -23,6 +23,7 @@ use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use CourseDescription;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Essence\Essence;
@@ -39,7 +40,6 @@ use UserManager;
 #[Route('/sessions')]
 class SessionController extends AbstractController
 {
-
     public function __construct(
         private readonly UserHelper $userHelper,
         private readonly TranslatorInterface $translator,
@@ -296,7 +296,7 @@ class SessionController extends AbstractController
             $em->flush();
         }
 
-        $now = new \DateTime();
+        $now = new DateTime();
         $relSessions = $em->getRepository(SessionRelUser::class)->findBy([
             'user' => $user,
             'relationType' => Session::STUDENT,
@@ -304,13 +304,14 @@ class SessionController extends AbstractController
 
         $activeSessions = array_filter($relSessions, function (SessionRelUser $rel) use ($now) {
             $s = $rel->getSession();
+
             return $s->getAccessStartDate() <= $now && $s->getAccessEndDate() >= $now;
         });
 
         $sessionListHtml = '';
         foreach ($activeSessions as $rel) {
             $session = $rel->getSession();
-            $sessionListHtml .= '<li>' . htmlspecialchars($session->getTitle()) . '</li>';
+            $sessionListHtml .= '<li>'.htmlspecialchars($session->getTitle()).'</li>';
         }
 
         $request = $this->requestStack->getCurrentRequest();
@@ -328,7 +329,7 @@ class SessionController extends AbstractController
             'Chamilo'
         );
 
-        $body = sprintf(
+        $body = \sprintf(
             $body,
             $user->getFullName(),
             $session->getTitle(),
@@ -353,5 +354,4 @@ class SessionController extends AbstractController
 
         return $this->json(['success' => true]);
     }
-
 }

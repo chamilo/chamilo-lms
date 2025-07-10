@@ -24,22 +24,22 @@ final class Version20250709182000 extends AbstractMigrationChamilo
         $columns = $schemaManager->listTableColumns('settings_value_template');
 
         if (isset($columns['name'])) {
-            $this->addSql("
+            $this->addSql('
                 ALTER TABLE settings_value_template
                 CHANGE COLUMN name variable VARCHAR(190) NOT NULL;
-            ");
-            $this->write("Renamed column name → variable in settings_value_template.");
+            ');
+            $this->write('Renamed column name → variable in settings_value_template.');
         }
 
         // Drop old index and recreate with new name
         $indexes = $schemaManager->listTableIndexes('settings_value_template');
         if (isset($indexes['UNIQ_settings_value_template_name'])) {
-            $this->addSql("
+            $this->addSql('
                 ALTER TABLE settings_value_template
                 DROP INDEX UNIQ_settings_value_template_name,
                 ADD UNIQUE INDEX UNIQ_settings_value_template_variable (variable);
-            ");
-            $this->write("Recreated unique index for variable column.");
+            ');
+            $this->write('Recreated unique index for variable column.');
         }
     }
 
@@ -50,21 +50,21 @@ final class Version20250709182000 extends AbstractMigrationChamilo
         $columns = $schemaManager->listTableColumns('settings_value_template');
 
         if (isset($columns['variable'])) {
-            $this->addSql("
+            $this->addSql('
                 ALTER TABLE settings_value_template
                 CHANGE COLUMN variable name VARCHAR(190) NOT NULL;
-            ");
-            $this->write("Renamed column variable → name in settings_value_template.");
+            ');
+            $this->write('Renamed column variable → name in settings_value_template.');
         }
 
         $indexes = $schemaManager->listTableIndexes('settings_value_template');
         if (isset($indexes['UNIQ_settings_value_template_variable'])) {
-            $this->addSql("
+            $this->addSql('
                 ALTER TABLE settings_value_template
                 DROP INDEX UNIQ_settings_value_template_variable,
                 ADD UNIQUE INDEX UNIQ_settings_value_template_name (name);
-            ");
-            $this->write("Recreated unique index for name column.");
+            ');
+            $this->write('Recreated unique index for name column.');
         }
     }
 }

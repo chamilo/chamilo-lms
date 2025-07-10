@@ -126,7 +126,8 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
             ->add('student_follow_page_include_not_subscribed_lp_students', YesNoType::class)
             ->add('my_progress_course_tools_order', TextareaType::class)
             ->add('lp_enable_flow', YesNoType::class)
-            ->add('lp_item_prerequisite_dates', YesNoType::class);
+            ->add('lp_item_prerequisite_dates', YesNoType::class)
+        ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }

@@ -171,11 +171,11 @@ class AdminController extends BaseController
 
         return $this->json([
             'without_cache' => [
-                'count' => count($usersNoCache),
+                'count' => \count($usersNoCache),
                 'execution_time' => $timeNoCache,
             ],
             'with_cache' => [
-                'count' => count($usersCache),
+                'count' => \count($usersCache),
                 'execution_time' => $timeCache,
                 'cache_key' => $cacheKey,
             ],

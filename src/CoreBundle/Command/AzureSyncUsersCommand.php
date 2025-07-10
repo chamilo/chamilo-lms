@@ -1,5 +1,9 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\User;
@@ -40,7 +44,7 @@ class AzureSyncUsersCommand extends AzureSyncAbstractCommand
                 $azureCreatedUserIdList[$azureUserInfo['id']] = $user->getId();
 
                 $io->text(
-                    sprintf('User (ID %d) with received info: %s ', $user->getId(), serialize($azureUserInfo))
+                    \sprintf('User (ID %d) with received info: %s ', $user->getId(), serialize($azureUserInfo))
                 );
             }
         } catch (Exception $e) {
@@ -78,7 +82,7 @@ class AzureSyncUsersCommand extends AzureSyncAbstractCommand
                     $roleActions[$userRole]($user);
 
                     $io->text(
-                        sprintf('User (ID %d) status %s', $userId, $userRole)
+                        \sprintf('User (ID %d) status %s', $userId, $userRole)
                     );
                 }
             }
@@ -94,7 +98,7 @@ class AzureSyncUsersCommand extends AzureSyncAbstractCommand
             $users = $this->userRepository->findByAuthsource(UserAuthSource::AZURE);
 
             $chamiloUserIdList = array_map(
-                fn(User $user) => $user->getId(),
+                fn (User $user) => $user->getId(),
                 $users
             );
 
@@ -103,7 +107,7 @@ class AzureSyncUsersCommand extends AzureSyncAbstractCommand
             $this->userRepository->deactivateUsers($nonExistingUsers);
 
             $io->text(
-                sprintf(
+                \sprintf(
                     'Deactivated users IDs: %s',
                     implode(', ', $nonExistingUsers)
                 )

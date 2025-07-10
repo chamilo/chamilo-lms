@@ -230,7 +230,7 @@ class SettingsController extends BaseController
 
         if (!$template) {
             return $this->json([
-                'error' => $this->translator->trans('Template not found.')
+                'error' => $this->translator->trans('Template not found.'),
             ], Response::HTTP_NOT_FOUND);
         }
 

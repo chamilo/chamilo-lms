@@ -14,8 +14,7 @@ class PushNotificationHelper
     public function __construct(
         private readonly PushSubscriptionRepository $subscriptionRepository,
         private readonly SettingsManager $settingsManager
-    ) {
-    }
+    ) {}
 
     public function sendNotification(User $user, string $title, string $message, string $url = '/'): void
     {

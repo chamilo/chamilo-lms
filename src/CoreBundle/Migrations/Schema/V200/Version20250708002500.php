@@ -34,40 +34,41 @@ final class Version20250708002500 extends AbstractMigrationChamilo
                     PRIMARY KEY(id)
                 ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
             ");
-            $this->write("Created table settings_value_template.");
+            $this->write('Created table settings_value_template.');
         }
 
         // Add column value_template_id to settings
         $columns = $schemaManager->listTableColumns('settings');
         if (!isset($columns['value_template_id'])) {
-            $this->addSql("
+            $this->addSql('
                 ALTER TABLE settings ADD value_template_id INT UNSIGNED DEFAULT NULL;
-            ");
-            $this->write("Added value_template_id column to settings table.");
+            ');
+            $this->write('Added value_template_id column to settings table.');
         }
 
         // Add FK constraint
         $foreignKeys = $schemaManager->listTableForeignKeys('settings');
         $fkExists = false;
         foreach ($foreignKeys as $fk) {
-            if (in_array('value_template_id', $fk->getLocalColumns(), true)) {
+            if (\in_array('value_template_id', $fk->getLocalColumns(), true)) {
                 $fkExists = true;
+
                 break;
             }
         }
 
         if (!$fkExists) {
-            $this->addSql("
+            $this->addSql('
                 ALTER TABLE settings
                 ADD CONSTRAINT FK_E545A0C5C72FB79B
                 FOREIGN KEY (value_template_id) REFERENCES settings_value_template (id) ON DELETE SET NULL;
-            ");
-            $this->write("Added foreign key constraint from settings to settings_value_template.");
+            ');
+            $this->write('Added foreign key constraint from settings to settings_value_template.');
 
-            $this->addSql("
+            $this->addSql('
                 CREATE INDEX IDX_E545A0C5C72FB79B ON settings (value_template_id);
-            ");
-            $this->write("Created index IDX_E545A0C5C72FB79B on settings.value_template_id.");
+            ');
+            $this->write('Created index IDX_E545A0C5C72FB79B on settings.value_template_id.');
         }
     }
 
@@ -78,32 +79,32 @@ final class Version20250708002500 extends AbstractMigrationChamilo
         if ($schemaManager->tablesExist(['settings'])) {
             $foreignKeys = $schemaManager->listTableForeignKeys('settings');
             foreach ($foreignKeys as $fk) {
-                if (in_array('value_template_id', $fk->getLocalColumns(), true)) {
-                    $this->addSql(sprintf(
-                        "ALTER TABLE settings DROP FOREIGN KEY %s",
+                if (\in_array('value_template_id', $fk->getLocalColumns(), true)) {
+                    $this->addSql(\sprintf(
+                        'ALTER TABLE settings DROP FOREIGN KEY %s',
                         $fk->getName()
                     ));
-                    $this->write("Dropped foreign key from settings to settings_value_template.");
+                    $this->write('Dropped foreign key from settings to settings_value_template.');
                 }
             }
 
-            $this->addSql("
+            $this->addSql('
                 DROP INDEX IF EXISTS IDX_E545A0C5C72FB79B ON settings;
-            ");
-            $this->write("Dropped index IDX_E545A0C5C72FB79B on settings.");
+            ');
+            $this->write('Dropped index IDX_E545A0C5C72FB79B on settings.');
         }
 
         $columns = $schemaManager->listTableColumns('settings');
         if (isset($columns['value_template_id'])) {
-            $this->addSql("
+            $this->addSql('
                 ALTER TABLE settings DROP COLUMN value_template_id;
-            ");
-            $this->write("Dropped value_template_id column from settings table.");
+            ');
+            $this->write('Dropped value_template_id column from settings table.');
         }
 
         if ($schemaManager->tablesExist(['settings_value_template'])) {
-            $this->addSql("DROP TABLE settings_value_template");
-            $this->write("Dropped table settings_value_template.");
+            $this->addSql('DROP TABLE settings_value_template');
+            $this->write('Dropped table settings_value_template.');
         }
     }
 }

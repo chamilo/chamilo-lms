@@ -23,6 +23,8 @@ use League\OAuth2\Client\Token\AccessTokenInterface;
 use Symfony\Component\Console\Command\Command;
 use TheNetworg\OAuth2\Client\Provider\Azure;
 
+use const PHP_URL_QUERY;
+
 abstract class AzureSyncAbstractCommand extends Command
 {
     protected AzureClient $client;
@@ -82,9 +84,9 @@ abstract class AzureSyncAbstractCommand extends Command
 
             $query = $usersDeltaLink
                 ? $usersDeltaLink->getValue()
-                : sprintf('$select=%s', implode(',', $userFields));
+                : \sprintf('$select=%s', implode(',', $userFields));
         } else {
-            $query = sprintf(
+            $query = \sprintf(
                 '$top=%d&$select=%s',
                 AzureSyncState::API_PAGE_SIZE,
                 implode(',', $userFields)
@@ -152,21 +154,21 @@ abstract class AzureSyncAbstractCommand extends Command
     public function getUpdateActionByRole(): array
     {
         return [
-            'admin' => function (User $user) {
+            'admin' => function (User $user): void {
                 $user
                     ->setStatus(COURSEMANAGER)
                     ->addUserAsAdmin()
                     ->setRoleFromStatus(COURSEMANAGER)
                 ;
             },
-            'sessionAdmin' => function (User $user) {
+            'sessionAdmin' => function (User $user): void {
                 $user
                     ->setStatus(SESSIONADMIN)
                     ->removeUserAsAdmin()
                     ->setRoleFromStatus(SESSIONADMIN)
                 ;
             },
-            'teacher' => function (User $user) {
+            'teacher' => function (User $user): void {
                 $user
                     ->setStatus(COURSEMANAGER)
                     ->removeUserAsAdmin()
@@ -187,7 +189,7 @@ abstract class AzureSyncAbstractCommand extends Command
             'id',
         ];
 
-        $query = sprintf(
+        $query = \sprintf(
             '$top=%d&$select=%s',
             AzureSyncState::API_PAGE_SIZE,
             implode(',', $userFields)

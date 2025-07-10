@@ -390,7 +390,7 @@ class BaseResourceFileAction
             $mimeType = $uploadedFile->getMimeType();
             if (str_starts_with($mimeType, 'video/')) {
                 $filetypeResult = 'video';
-                $comment = trim($comment . ' [video]');
+                $comment = trim($comment.' [video]');
             }
         }
 

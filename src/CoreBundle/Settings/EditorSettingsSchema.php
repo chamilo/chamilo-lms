@@ -79,7 +79,8 @@ class EditorSettingsSchema extends AbstractSettingsSchema
             ->add('video_context_menu_hidden', YesNoType::class)
             ->add('video_player_renderers', TextareaType::class, [
                 'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
-            ]);
+            ])
+        ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }

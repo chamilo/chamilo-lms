@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -59,7 +60,7 @@ class CourseAccessListener
                 $subscription = $user->getSubscriptionToSession($session);
                 $duration = $session->getDuration() + $subscription->getDuration();
 
-                $startDate = new \DateTime();
+                $startDate = new DateTime();
                 $endDate = (clone $startDate)->modify("+$duration days");
 
                 $subscription

@@ -11,8 +11,6 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
- * QueryCacheHelper
- *
  * Helper for caching Doctrine query results.
  *
  * Features:
@@ -65,10 +63,8 @@ class QueryCacheHelper
     private int $defaultTtl;
 
     /**
-     * Constructor.
-     *
-     * @param CacheInterface $cache      The cache adapter to store results.
-     * @param int            $defaultTtl Default TTL (in seconds) for cached queries.
+     * @param CacheInterface $cache      the cache adapter to store results
+     * @param int            $defaultTtl default TTL (in seconds) for cached queries
      */
     public function __construct(CacheInterface $cache, int $defaultTtl = 600)
     {
@@ -79,11 +75,11 @@ class QueryCacheHelper
     /**
      * Runs a Doctrine QueryBuilder and caches its results.
      *
-     * @param QueryBuilder     $qb             The Doctrine QueryBuilder to execute.
-     * @param string|null      $operationName  Operation name for generating cache key.
-     * @param array            $parameters     Parameters affecting the query (included in cache key).
-     * @param int|null         $ttl            Time-to-live for cache in seconds.
-     * @param bool             $returnKey      Whether to return the cache key alongside data.
+     * @param QueryBuilder $qb            the Doctrine QueryBuilder to execute
+     * @param string|null  $operationName operation name for generating cache key
+     * @param array        $parameters    parameters affecting the query (included in cache key)
+     * @param int|null     $ttl           time-to-live for cache in seconds
+     * @param bool         $returnKey     whether to return the cache key alongside data
      *
      * @return array|mixed Either:
      *                     - array with keys ['data' => ..., 'cache_key' => ...] if $returnKey is true
@@ -101,6 +97,7 @@ class QueryCacheHelper
 
         $result = $this->cache->get($cacheKey, function (ItemInterface $item) use ($qb, $ttl) {
             $item->expiresAfter($ttl ?? $this->defaultTtl);
+
             return $qb->getQuery()->getResult();
         });
 
@@ -118,13 +115,6 @@ class QueryCacheHelper
      * Runs a Doctrine QueryBuilder and caches the result with tags.
      *
      * IMPORTANT: Tagging requires a TagAwareAdapter (e.g. Redis).
-     *
-     * @param QueryBuilder $qb
-     * @param string|null  $operationName
-     * @param array        $parameters
-     * @param array        $tags
-     * @param int|null     $ttl
-     * @param bool         $returnKey
      *
      * @return array|mixed
      */
@@ -163,9 +153,6 @@ class QueryCacheHelper
 
     /**
      * Invalidates the cache for a specific operation and parameters.
-     *
-     * @param string $operationName
-     * @param array  $parameters
      */
     public function invalidate(string $operationName, array $parameters = []): void
     {
@@ -177,8 +164,6 @@ class QueryCacheHelper
      * Invalidates all cached entries associated with a specific tag.
      *
      * Requires a TagAwareAdapter (e.g. Redis) to be configured.
-     *
-     * @param string $tag
      */
     public function invalidateByTag(string $tag): void
     {
@@ -189,11 +174,6 @@ class QueryCacheHelper
 
     /**
      * Builds a unique cache key from the operation name and parameters.
-     *
-     * @param string $operationName
-     * @param array  $parameters
-     *
-     * @return string
      */
     public function buildCacheKey(string $operationName, array $parameters): string
     {
@@ -201,17 +181,12 @@ class QueryCacheHelper
             return $operationName;
         }
 
-        return $operationName . '_' . md5(json_encode($parameters));
+        return $operationName.'_'.md5(json_encode($parameters));
     }
 
     /**
      * Generates a cache key for an operation, without executing any query.
      * Useful for debugging or manual cache clearing.
-     *
-     * @param string $operationName
-     * @param array  $parameters
-     *
-     * @return string
      */
     public function getCacheKey(string $operationName, array $parameters = []): string
     {

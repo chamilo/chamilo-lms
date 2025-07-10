@@ -162,7 +162,8 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             ->add('quiz_hide_attempts_table_on_start_page', YesNoType::class)
             ->add('quiz_hide_question_number', YesNoType::class)
             ->add('quiz_keep_alive_ping_interval', TextType::class)
-            ->add('exercise_embeddable_extra_types', TextareaType::class);
+            ->add('exercise_embeddable_extra_types', TextareaType::class)
+        ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }

@@ -65,7 +65,8 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->setTransformer(
                 'tool_visible_by_default_at_creation',
                 new ArrayToIdentifierTransformer()
-            );
+            )
+        ;
 
         $allowedTypes = [
             'tool_visible_by_default_at_creation' => ['array'],
@@ -157,7 +158,8 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('enable_x_sendfile_headers', YesNoType::class)
             ->add('documents_custom_cloud_link_list', TextareaType::class, [
                 'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
-            ]);
+            ])
+        ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }

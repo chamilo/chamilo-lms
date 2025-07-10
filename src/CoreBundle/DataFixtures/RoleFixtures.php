@@ -89,7 +89,8 @@ class RoleFixtures extends Fixture
 
         foreach ($roles as $roleData) {
             $existing = $manager->getRepository(Role::class)
-                ->findOneBy(['code' => $roleData['code']]);
+                ->findOneBy(['code' => $roleData['code']])
+            ;
 
             if ($existing) {
                 continue;

@@ -488,7 +488,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 [
                     'role' => $role,
                     'keyword' => $keyword,
-                    'accessUrlId' => $accessUrlId
+                    'accessUrlId' => $accessUrlId,
                 ]
             );
         }
@@ -757,7 +757,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $qb
                 ->innerJoin('u.portals', 'p')
                 ->andWhere('p.url = :url')
-                ->setParameter('url', $accessUrlId, Types::INTEGER);
+                ->setParameter('url', $accessUrlId, Types::INTEGER)
+            ;
         }
 
         return $qb;
@@ -1237,21 +1238,24 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
         $qb->join('u.portals', 'p')
             ->andWhere('p.url = :url')
-            ->setParameter('url', $accessUrl);
+            ->setParameter('url', $accessUrl)
+        ;
 
         if (!empty($lastname)) {
             $qb->andWhere('u.lastname LIKE :lastname')
-                ->setParameter('lastname', '%' . $lastname . '%');
+                ->setParameter('lastname', '%'.$lastname.'%')
+            ;
         }
 
         if (!empty($firstname)) {
             $qb->andWhere('u.firstname LIKE :firstname')
-                ->setParameter('firstname', '%' . $firstname . '%');
+                ->setParameter('firstname', '%'.$firstname.'%')
+            ;
         }
 
         if (!empty($extraFilters)) {
             foreach ($extraFilters as $field => $value) {
-                $qb->andWhere(sprintf(
+                $qb->andWhere(\sprintf(
                     'EXISTS (
                     SELECT 1
                     FROM Chamilo\CoreBundle\Entity\ExtraFieldValues efv
@@ -1263,8 +1267,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                     $field,
                     $field
                 ));
-                $qb->setParameter('field_' . $field, $field);
-                $qb->setParameter('value_' . $field, '%' . $value . '%');
+                $qb->setParameter('field_'.$field, $field);
+                $qb->setParameter('value_'.$field, '%'.$value.'%');
             }
         }
 
@@ -1273,10 +1277,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
     /**
      * Returns the number of users registered with a given email.
-     *
-     * @param string $email
-     *
-     * @return int
      */
     public function countUsersByEmail(string $email): int
     {
@@ -1285,7 +1285,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->where('u.email = :email')
             ->setParameter('email', $email)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
     }
 
     public function findByAuthsource(string $authentication): array
@@ -1303,7 +1304,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
     }
 
-    public function deactivateUsers(array $ids)
+    public function deactivateUsers(array $ids): void
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 

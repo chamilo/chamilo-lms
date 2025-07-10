@@ -14,6 +14,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use RuntimeException;
 
 class PermissionFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
@@ -51,13 +52,12 @@ class PermissionFixtures extends Fixture implements FixtureGroupInterface, Depen
 
             foreach ($roles as $roleName => $roleCode) {
                 if (\in_array($roleCode, $permissionsMapping[$permData['slug']])) {
-
                     $roleEntity = $manager->getRepository(Role::class)->findOneBy([
                         'code' => substr($roleName, 5),
                     ]);
 
                     if (!$roleEntity) {
-                        throw new \RuntimeException("Role entity not found for code: " . $roleName);
+                        throw new RuntimeException('Role entity not found for code: '.$roleName);
                     }
 
                     $permRelRole = new PermissionRelRole();

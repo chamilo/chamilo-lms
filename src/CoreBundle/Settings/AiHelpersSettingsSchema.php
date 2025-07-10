@@ -26,7 +26,8 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
                 'task_grader' => 'false',
                 'content_analyser' => 'false',
                 'image_generator' => 'false',
-            ]);
+            ])
+        ;
     }
 
     public function buildForm(FormBuilderInterface $builder): void
@@ -45,7 +46,8 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
             ->add('tutor_chatbot', YesNoType::class)
             ->add('task_grader', YesNoType::class)
             ->add('content_analyser', YesNoType::class)
-            ->add('image_generator', YesNoType::class);
+            ->add('image_generator', YesNoType::class)
+        ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }

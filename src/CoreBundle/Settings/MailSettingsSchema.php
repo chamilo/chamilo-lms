@@ -53,7 +53,8 @@ class MailSettingsSchema extends AbstractSettingsSchema
             ->add('notifications_extended_footer_message', TextareaType::class)
             ->add('smtp_unique_sender', YesNoType::class)
             ->add('smtp_from_email', EmailType::class)
-            ->add('smtp_from_name', TextType::class);
+            ->add('smtp_from_name', TextType::class)
+        ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }

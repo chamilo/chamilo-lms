@@ -137,7 +137,8 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->setTransformer(
                 'course_creation_use_template',
                 new ResourceToIdentifierTransformer($this->courseRepository, 'id')
-            );
+            )
+        ;
 
         $allowedTypes = [
             'active_tools_on_create' => ['array'],
@@ -284,7 +285,8 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ])
             ->add('allow_edit_tool_visibility_in_session', YesNoType::class)
             ->add('show_course_duration', YesNoType::class)
-            ->add('access_url_specific_files', YesNoType::class);
+            ->add('access_url_specific_files', YesNoType::class)
+        ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }

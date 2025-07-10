@@ -51,7 +51,7 @@ use UserManager;
     operations: [
         new Get(
             openapiContext: [
-                'description' => "Get details of one specific user, including name, e-mail and role.",
+                'description' => 'Get details of one specific user, including name, e-mail and role.',
             ],
             security: "is_granted('VIEW', object)",
         ),

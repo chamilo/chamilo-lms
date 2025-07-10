@@ -36,7 +36,7 @@ final class Version20250706105000 extends AbstractMigrationChamilo
                 PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC
         ");
-        $this->write("Created table role.");
+        $this->write('Created table role.');
 
         // 2. Populate role table
         $roles = PermissionFixtures::getRoles();
@@ -49,7 +49,7 @@ final class Version20250706105000 extends AbstractMigrationChamilo
             $title = $this->getRoleTitle($code);
             $description = $this->getRoleDescription($code);
 
-            $values[] = sprintf(
+            $values[] = \sprintf(
                 "(%d, '%s', %d, '%s', '%s', %d, NOW())",
                 $id,
                 $code,
@@ -63,55 +63,56 @@ final class Version20250706105000 extends AbstractMigrationChamilo
         }
 
         if (!empty($values)) {
-            $this->addSql("
+            $this->addSql(
+                '
                 INSERT INTO role
                     (id, code, constant_value, title, description, system_role, created_at)
-                VALUES " . implode(", ", $values)
+                VALUES '.implode(', ', $values)
             );
-            $this->write("Inserted role data from fixtures.");
+            $this->write('Inserted role data from fixtures.');
         }
 
         // 3. Add nullable role_id
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE permission_rel_role
                 ADD role_id INT UNSIGNED DEFAULT NULL
-        ");
-        $this->write("Added role_id column as nullable.");
+        ');
+        $this->write('Added role_id column as nullable.');
 
         // 4. Migrate existing data
-        $this->addSql("
+        $this->addSql('
             UPDATE permission_rel_role prr
             JOIN role r ON r.code = SUBSTRING(prr.role_code, 6)
             SET prr.role_id = r.id
-        ");
-        $this->write("Migrated data from role_code to role_id.");
+        ');
+        $this->write('Migrated data from role_code to role_id.');
 
         // 5. Drop old role_code
         $schemaManager = $this->connection->createSchemaManager();
         $columns = $schemaManager->listTableColumns('permission_rel_role');
         if (isset($columns['role_code'])) {
-            $this->addSql("
+            $this->addSql('
                 ALTER TABLE permission_rel_role DROP COLUMN role_code
-            ");
-            $this->write("Dropped column role_code.");
+            ');
+            $this->write('Dropped column role_code.');
         }
 
         // 6. Set role_id NOT NULL
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE permission_rel_role
                 MODIFY role_id INT UNSIGNED NOT NULL
-        ");
-        $this->write("Set role_id column to NOT NULL.");
+        ');
+        $this->write('Set role_id column to NOT NULL.');
 
         // 7. Add FK and index
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE permission_rel_role
                 ADD CONSTRAINT FK_14B93D3DD60322AC FOREIGN KEY (role_id) REFERENCES role (id)
-        ");
-        $this->addSql("
+        ');
+        $this->addSql('
             CREATE INDEX IDX_14B93D3DD60322AC ON permission_rel_role (role_id)
-        ");
-        $this->write("Added FK constraint and index for role_id.");
+        ');
+        $this->write('Added FK constraint and index for role_id.');
     }
 
     public function down(Schema $schema): void
@@ -121,22 +122,22 @@ final class Version20250706105000 extends AbstractMigrationChamilo
         if ($schemaManager->tablesExist(['permission_rel_role'])) {
             $foreignKeys = $schemaManager->listTableForeignKeys('permission_rel_role');
             foreach ($foreignKeys as $fk) {
-                if ($fk->getForeignTableName() === 'role') {
-                    $this->addSql(sprintf(
-                        "ALTER TABLE permission_rel_role DROP FOREIGN KEY %s",
+                if ('role' === $fk->getForeignTableName()) {
+                    $this->addSql(\sprintf(
+                        'ALTER TABLE permission_rel_role DROP FOREIGN KEY %s',
                         $fk->getName()
                     ));
                 }
             }
-            $this->addSql("DROP INDEX IF EXISTS IDX_14B93D3DD60322AC ON permission_rel_role");
+            $this->addSql('DROP INDEX IF EXISTS IDX_14B93D3DD60322AC ON permission_rel_role');
             $columns = $schemaManager->listTableColumns('permission_rel_role');
             if (isset($columns['role_id'])) {
-                $this->addSql("ALTER TABLE permission_rel_role DROP COLUMN role_id");
+                $this->addSql('ALTER TABLE permission_rel_role DROP COLUMN role_id');
             }
         }
 
-        $this->addSql("DROP TABLE IF EXISTS role");
-        $this->write("Rolled back migration: dropped role table and role_id column.");
+        $this->addSql('DROP TABLE IF EXISTS role');
+        $this->write('Rolled back migration: dropped role table and role_id column.');
     }
 
     private function getRoleConstantValue(string $code): int

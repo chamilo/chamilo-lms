@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\PermissionRelRole;
 use Chamilo\CoreBundle\Form\PermissionType;
-use Chamilo\CoreBundle\Helpers\PermissionHelper;
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
 use Chamilo\CoreBundle\Repository\PermissionRepository;
 use Chamilo\CoreBundle\Repository\RoleRepository;
@@ -86,7 +85,7 @@ class PermissionsController extends AbstractController
             }
 
             $form = $this->createForm(PermissionType::class, $defaultData, [
-                'roles' => array_map(fn($r) => $r->getCode(), $roles),
+                'roles' => array_map(fn ($r) => $r->getCode(), $roles),
             ]);
 
             $forms[$permission->getSlug()] = $form->createView();

@@ -30,7 +30,8 @@ class PushSubscriptionRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->orderBy('p.createdAt', 'DESC')
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
@@ -42,7 +43,8 @@ class PushSubscriptionRepository extends ServiceEntityRepository
             ->where('p.endpoint = :endpoint')
             ->setParameter('endpoint', $endpoint)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     /**
@@ -55,7 +57,8 @@ class PushSubscriptionRepository extends ServiceEntityRepository
             ->where('p.user = :user')
             ->setParameter('user', $user)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**

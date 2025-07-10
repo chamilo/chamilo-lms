@@ -253,7 +253,7 @@ class SessionRelUser
         return $this->accessStartDate;
     }
 
-    public function setAccessStartDate(?DateTime $accessStartDate): SessionRelUser
+    public function setAccessStartDate(?DateTime $accessStartDate): self
     {
         $this->accessStartDate = $accessStartDate;
 
@@ -265,7 +265,7 @@ class SessionRelUser
         return $this->accessEndDate;
     }
 
-    public function setAccessEndDate(?DateTime $accessEndDate): SessionRelUser
+    public function setAccessEndDate(?DateTime $accessEndDate): self
     {
         $this->accessEndDate = $accessEndDate;
 

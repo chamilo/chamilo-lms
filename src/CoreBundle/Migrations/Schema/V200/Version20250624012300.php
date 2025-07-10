@@ -9,6 +9,9 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
+
 class Version20250624012300 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -29,7 +32,7 @@ class Version20250624012300 extends AbstractMigrationChamilo
             // Only update if the decoded value is different
             if ($decoded !== $lang['original_name']) {
                 $this->addSql(
-                    "UPDATE language SET original_name = :decoded WHERE id = :id",
+                    'UPDATE language SET original_name = :decoded WHERE id = :id',
                     [
                         'decoded' => $decoded,
                         'id' => $lang['id'],

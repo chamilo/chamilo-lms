@@ -10,14 +10,15 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\PushSubscriptionRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
+use Minishlink\WebPush\WebPush;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 #[Route('/push-notifications')]
 class PushNotificationController extends AbstractController
@@ -85,7 +86,7 @@ class PushNotificationController extends AbstractController
 
         $webPush = new WebPush([
             'VAPID' => [
-                'subject' => 'mailto:' . $user->getEmail(),
+                'subject' => 'mailto:'.$user->getEmail(),
                 'publicKey' => $vapidPublicKey,
                 'privateKey' => $vapidPrivateKey,
             ],
@@ -98,7 +99,7 @@ class PushNotificationController extends AbstractController
             try {
                 $subscription = Subscription::create([
                     'endpoint' => $subEntity->getEndpoint(),
-                    'publicKey' =>  $subEntity->getPublicKey(),
+                    'publicKey' => $subEntity->getPublicKey(),
                     'authToken' => $subEntity->getAuthToken(),
                     'contentEncoding' => $subEntity->getContentEncoding() ?? 'aesgcm',
                 ]);
@@ -106,7 +107,7 @@ class PushNotificationController extends AbstractController
                 $payload = json_encode([
                     'title' => $this->translator->trans('Push notification test'),
                     'message' => $this->translator->trans("This is a test push notification from this platform to the user's browser or app."),
-                    'url' => '/account/edit'
+                    'url' => '/account/edit',
                 ]);
 
                 $report = $webPush->sendOneNotification(
@@ -123,7 +124,7 @@ class PushNotificationController extends AbstractController
                         'statusCode' => $report->getResponse()->getStatusCode(),
                     ];
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $failures[] = [
                     'endpoint' => $subEntity->getEndpoint(),
                     'reason' => $e->getMessage(),
@@ -178,7 +179,7 @@ class PushNotificationController extends AbstractController
         $client = HttpClient::create();
 
         try {
-            $response = $client->request('POST', rtrim($gotifyUrl, '/') . '/message', [
+            $response = $client->request('POST', rtrim($gotifyUrl, '/').'/message', [
                 'headers' => [
                     'X-Gotify-Key' => $gotifyToken,
                 ],
@@ -193,9 +194,9 @@ class PushNotificationController extends AbstractController
                 'status' => $statusCode,
                 'response' => $content,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return new JsonResponse([
-                'error' => $this->translator->trans('Error sending notification to Gotify: ') . $e->getMessage(),
+                'error' => $this->translator->trans('Error sending notification to Gotify: ').$e->getMessage(),
             ], 500);
         }
     }

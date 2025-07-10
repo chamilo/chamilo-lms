@@ -183,12 +183,15 @@
             @click="openMoveDialog(slotProps.data)"
           />
           <BaseButton
-            :disabled="slotProps.data.filetype !== 'file'"
-            :title="slotProps.data.filetype !== 'file' ? t('Replace (files only)') : t('Replace file')"
+            :disabled="!(slotProps.data.filetype === 'file' || slotProps.data.filetype === 'video')"
+            :title="getReplaceButtonTitle(slotProps.data)"
             icon="file-swap"
             size="small"
             type="secondary"
-            @click="slotProps.data.filetype === 'file' && openReplaceDialog(slotProps.data)"
+            @click="
+              (slotProps.data.filetype === 'file' || slotProps.data.filetype === 'video') &&
+              openReplaceDialog(slotProps.data)
+            "
           />
           <BaseButton
             :title="t('Information')"
@@ -486,7 +489,9 @@ const router = useRouter()
 const securityStore = useSecurityStore()
 
 const platformConfigStore = usePlatformConfig()
-const allowAccessUrlFiles = computed(() => "false" !== platformConfigStore.getSetting("course.access_url_specific_files"))
+const allowAccessUrlFiles = computed(
+  () => "false" !== platformConfigStore.getSetting("course.access_url_specific_files"),
+)
 
 const { t } = useI18n()
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents")
@@ -570,6 +575,7 @@ const documentToReplace = ref(null)
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
   filters.value.loadNode = 1
+  filters.value.filetype = ["file", "folder", "video"]
 
   // Set resource node.
   let nodeId = route.params.node
@@ -610,7 +616,7 @@ const showBackButtonIfNotRootFolder = computed(() => {
 function goToAddVariation(item) {
   const resourceFileId = item.resourceNode.firstResourceFile.id
   router.push({
-    name: 'DocumentsAddVariation',
+    name: "DocumentsAddVariation",
     params: { resourceFileId, node: route.params.node },
     query: { cid, sid, gid },
   })
@@ -677,6 +683,16 @@ function confirmDeleteItem(itemToDelete) {
   isDeleteItemDialogVisible.value = true
 }
 
+function getReplaceButtonTitle(item) {
+  if (item.filetype === "file") {
+    return t("Replace file")
+  }
+  if (item.filetype === "video") {
+    return t("Replace video")
+  }
+  return t("Replace (files or videos only)")
+}
+
 async function downloadSelectedItems() {
   if (!selectedItems.value.length) {
     notification.showErrorNotification(t("No items selected."))
@@ -688,8 +704,8 @@ async function downloadSelectedItems() {
   try {
     const response = await axios.post(
       "/api/documents/download-selected",
-      { ids: selectedItems.value.map(item => item.iid) },
-      { responseType: "blob" }
+      { ids: selectedItems.value.map((item) => item.iid) },
+      { responseType: "blob" },
     )
 
     const url = window.URL.createObjectURL(new Blob([response.data]))
@@ -705,7 +721,7 @@ async function downloadSelectedItems() {
     console.error("Error downloading selected items:", error)
     notification.showErrorNotification(t("Error downloading selected items."))
   } finally {
-    isDownloading.value = false;
+    isDownloading.value = false
   }
 }
 
@@ -884,19 +900,19 @@ async function replaceDocument() {
     return
   }
 
-  if (documentToReplace.value.filetype !== 'file') {
-    notification.showErrorNotification(t("Only files can be replaced."))
+  if (!(documentToReplace.value.filetype === "file" || documentToReplace.value.filetype === "video")) {
+    notification.showErrorNotification(t("Only files or videos can be replaced."))
     return
   }
 
   const formData = new FormData()
   console.log(selectedReplaceFile.value)
-  formData.append('file', selectedReplaceFile.value)
+  formData.append("file", selectedReplaceFile.value)
 
   try {
     await axios.post(`/api/documents/${documentToReplace.value.iid}/replace`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     })
     notification.showSuccessNotification(t("File replaced"))
@@ -911,7 +927,7 @@ async function replaceDocument() {
 async function fetchFolders(nodeId = null, parentPath = "") {
   const foldersList = [
     {
-      label: t('Documents'),
+      label: t("Documents"),
       value: nodeId || route.params.node || route.query.node || "root-node-id",
     },
   ]

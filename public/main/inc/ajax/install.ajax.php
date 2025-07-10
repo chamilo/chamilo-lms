@@ -2,7 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
-use GuzzleHttp\Client;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 /**
  * Responses to AJAX calls for install.
@@ -78,6 +81,62 @@ switch ($action) {
                 if ('200' == $res->getStatusCode()) {
                     echo '1';
                 }
+            }
+        }
+        break;
+
+    case 'test_smtp':
+        if (!empty($_POST)) {
+            $smtpHost = $_POST['smtpHost'] ?? '';
+            $smtpPort = $_POST['smtpPort'] ?? 25;
+            $smtpAuth = $_POST['smtpAuth'] ?? false;
+            $smtpUser = $_POST['smtpUser'] ?? '';
+            $smtpPass = $_POST['smtpPass'] ?? '';
+            $smtpSecure = $_POST['smtpSecure'] ?? '';
+            $smtpCharset = $_POST['smtpCharset'] ?? 'UTF-8';
+            $fromEmail = $_POST['fromEmail'] ?? '';
+            $fromName = $_POST['fromName'] ?? '';
+
+            $mailerScheme = 'smtp';
+            $query = '';
+
+            if (!empty($smtpSecure)) {
+                if ($smtpSecure === 'ssl') {
+                    $mailerScheme = 'smtps';
+                } elseif ($smtpSecure === 'tls') {
+                    $query = '?encryption=tls';
+                }
+            }
+
+            $dsn = sprintf(
+                '%s://%s%s@%s:%s%s',
+                $mailerScheme,
+                $smtpAuth ? $smtpUser : '',
+                $smtpAuth ? ':' . $smtpPass : '',
+                $smtpHost,
+                $smtpPort,
+                $query
+            );
+
+            try {
+                $transport = Transport::fromDsn($dsn);
+
+                $mailer = new Mailer($transport);
+
+                $email = (new Email())
+                    ->from(new Address(
+                        $fromEmail ?: 'test@example.com',
+                        $fromName ?: 'Test Sender'
+                    ))
+                    ->to($fromEmail ?: 'test@example.com')
+                    ->subject('Chamilo SMTP Test')
+                    ->text('This is a test e-mail sent from Chamilo installation wizard.');
+
+                $mailer->send($email);
+
+                echo json_encode(['success' => true]);
+            } catch (\Throwable $e) {
+                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             }
         }
         break;

@@ -1037,6 +1037,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'platform' => [
                 [
+                    'name' => 'hosting_limit_users_per_course',
+                    'title' => 'Global limit of users per course',
+                    'comment' => 'Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals.',
+                ],
+                [
                     'name' => 'push_notification_settings',
                     'title' => 'Push notification settings (JSON)',
                     'comment' => "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications.",
@@ -2007,6 +2012,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'platform' => [
+                [
+                    'name' => 'hosting_limit_identical_email',
+                    'title' => 'Limit identical email usage',
+                    'comment' => 'Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit.',
+                ],
                 [
                     'name' => 'allow_double_validation_in_registration',
                     'title' => 'Double validation for registration process',
@@ -3013,11 +3023,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'mail' => [
-                [
-                    'name' => 'smtp_unique_sender',
-                    'title' => 'Send all e-mails as one single sender',
-                    'comment' => 'Overrides sender for all emails to appear from a unique address.',
-                ],
                 [
                     'name' => 'smtp_from_email',
                     'title' => 'Send all e-mails from this e-mail address',

@@ -7155,12 +7155,9 @@ function api_set_noreply_and_from_address_to_mailer(
         }
     }
 
-    if ('true' === api_get_setting('mail.smtp_unique_sender')) {
-        $senderName = $defaultSenderName;
-        $senderEmail = $defaultSenderEmail;
-
-        $email->sender(new Address($senderEmail, $senderName));
-    }
+    $senderName = $defaultSenderName;
+    $senderEmail = $defaultSenderEmail;
+    $email->sender(new Address($senderEmail, $senderName));
 
     if ($senderEmail) {
         $email->from(new Address($senderEmail, $senderName));
@@ -7577,3 +7574,21 @@ function api_calculate_increment_percent(int $newValue, int $oldValue): string
     }
     return $result;
 }
+
+/**
+ * @todo Move to UserRegistrationHelper when migrating inscription.php to Symfony
+ */
+function api_email_reached_registration_limit(string $email): bool
+{
+    $limit = (int) api_get_setting('platform.hosting_limit_identical_email');
+
+    if ($limit <= 0 || empty($email)) {
+        return false;
+    }
+
+    $repo = Container::getUserRepository();
+    $count = $repo->countUsersByEmail($email);
+
+    return $count >= $limit;
+}
+

@@ -2159,6 +2159,15 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
+    public function removeUserAsAdmin(): self
+    {
+        $this->admin->setUser(null);
+        $this->admin = null;
+        $this->removeRole('ROLE_ADMIN');
+
+        return $this;
+    }
+
     public function getSessionsByStatusInCourseSubscription(int $status): ReadableCollection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('status', $status));

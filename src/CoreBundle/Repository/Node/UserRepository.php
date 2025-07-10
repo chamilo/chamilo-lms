@@ -1287,4 +1287,36 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function findByAuthsource(string $authentication): array
+    {
+        $qb = $this->getOrCreateQueryBuilder(null, 'u');
+
+        $qb
+            ->innerJoin('u.authSources', 'as')
+            ->where(
+                $qb->expr()->eq('as.authentication', ':authentication')
+            )
+            ->setParameter('authentication', $authentication)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function deactivateUsers(array $ids)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb
+            ->update(User::class, 'u')
+            ->set('u.active', ':active')
+            ->where(
+                $qb->expr()->in('u.id', ':ids')
+            )
+            ->setParameters([
+                'active' => false,
+                'ids' => $ids,
+            ])
+        ;
+    }
 }

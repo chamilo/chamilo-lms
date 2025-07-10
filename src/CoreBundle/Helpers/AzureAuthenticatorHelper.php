@@ -104,7 +104,7 @@ readonly class AzureAuthenticatorHelper
         return $user;
     }
 
-    private function getOrganizationEmailField()
+    private function getOrganizationEmailField(): ExtraField
     {
         return $this->extraFieldRepo->findByVariable(
             ExtraField::USER_FIELD_TYPE,
@@ -112,7 +112,7 @@ readonly class AzureAuthenticatorHelper
         );
     }
 
-    private function getAzureIdField()
+    private function getAzureIdField(): ExtraField
     {
         return $this->extraFieldRepo->findByVariable(
             ExtraField::USER_FIELD_TYPE,
@@ -120,7 +120,7 @@ readonly class AzureAuthenticatorHelper
         );
     }
 
-    private function getAzureUidField()
+    private function getAzureUidField(): ExtraField
     {
         return $this->extraFieldRepo->findByVariable(
             ExtraField::USER_FIELD_TYPE,

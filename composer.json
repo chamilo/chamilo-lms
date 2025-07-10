@@ -111,6 +111,7 @@
         "nelmio/cors-bundle": "^2.2",
         "nesbot/carbon": "^2.33",
         "oneup/flysystem-bundle": "~4.0",
+        "onlyoffice/docs-integration-sdk": "^1.2",
         "pagerfanta/pagerfanta": "~3.1",
         "paragonie/random-lib": "~2.0",
         "php-ffmpeg/php-ffmpeg": "~1.2.0",

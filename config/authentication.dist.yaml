@@ -49,3 +49,4 @@ parameters:
                     title: 'Azure'
                     client_id: ''
                     client_secret: ''
+                    url_api: 'https://graph.microsoft.com'

@@ -22,6 +22,18 @@ readonly class AzureAuthenticatorHelper
     public const EXTRA_FIELD_AZURE_ID = 'azure_id';
     public const EXTRA_FIELD_AZURE_UID = 'azure_uid';
 
+    public const QUERY_FIELDS = [
+        'givenName',
+        'surname',
+        'mail',
+        'userPrincipalName',
+        'businessPhones',
+        'mobilePhone',
+        'accountEnabled',
+        'mailNickname',
+        'id',
+    ];
+
     public function __construct(
         private ExtraFieldValuesRepository $extraFieldValuesRepo,
         private ExtraFieldRepository $extraFieldRepo,
@@ -33,7 +45,7 @@ readonly class AzureAuthenticatorHelper
     /**
      * @throws NonUniqueResultException
      */
-    public function registerUser(array $azureUserInfo, string $azureUidKey = 'objectId'): User
+    public function registerUser(array $azureUserInfo): User
     {
         if (empty($azureUserInfo)) {
             throw new UnauthorizedHttpException('User info not found.');
@@ -48,9 +60,9 @@ readonly class AzureAuthenticatorHelper
             $authSource,
             $active,
             $extra,
-        ] = $this->formatUserData($azureUserInfo, $azureUidKey);
+        ] = $this->formatUserData($azureUserInfo);
 
-        $userId = $this->getUserIdByVerificationOrder($azureUserInfo, $azureUidKey);
+        $userId = $this->getUserIdByVerificationOrder($azureUserInfo);
 
         if (empty($userId)) {
             $user = (new User())
@@ -131,7 +143,7 @@ readonly class AzureAuthenticatorHelper
     /**
      * @throws NonUniqueResultException
      */
-    public function getUserIdByVerificationOrder(array $azureUserData, string $azureUidKey = 'objectId'): ?int
+    public function getUserIdByVerificationOrder(array $azureUserData): ?int
     {
         $selectedOrder = $this->getExistingUserVerificationOrder();
 
@@ -143,7 +155,7 @@ readonly class AzureAuthenticatorHelper
         $positionsAndFields = [
             1 => $this->extraFieldValuesRepo->findByVariableAndValue($organisationEmailField, $azureUserData['mail']),
             2 => $this->extraFieldValuesRepo->findByVariableAndValue($azureIdField, $azureUserData['mailNickname']),
-            3 => $this->extraFieldValuesRepo->findByVariableAndValue($azureUidField, $azureUserData[$azureUidKey]),
+            3 => $this->extraFieldValuesRepo->findByVariableAndValue($azureUidField, $azureUserData['id']),
         ];
 
         foreach ($selectedOrder as $position) {
@@ -160,10 +172,7 @@ readonly class AzureAuthenticatorHelper
         return [1, 2, 3];
     }
 
-    private function formatUserData(
-        array $azureUserData,
-        string $azureUidKey
-    ): array {
+    private function formatUserData(array $azureUserData): array {
         $phone = null;
 
         if (isset($azureUserData['telephoneNumber'])) {
@@ -184,7 +193,7 @@ readonly class AzureAuthenticatorHelper
         $extra = [
             'extra_'.self::EXTRA_FIELD_ORGANISATION_EMAIL => $azureUserData['mail'],
             'extra_'.self::EXTRA_FIELD_AZURE_ID => $azureUserData['mailNickname'],
-            'extra_'.self::EXTRA_FIELD_AZURE_UID => $azureUserData[$azureUidKey],
+            'extra_'.self::EXTRA_FIELD_AZURE_UID => $azureUserData['id'],
         ];
 
         return [

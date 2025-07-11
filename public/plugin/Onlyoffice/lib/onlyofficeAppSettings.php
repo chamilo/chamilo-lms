@@ -101,7 +101,7 @@ class OnlyofficeAppsettings extends SettingsManager
             }
 
             if (empty($value)) {
-                $prefix = $this->plugin->getPluginName();
+                $prefix = $this->plugin->get_name();
 
                 if (substr($settingName, 0, strlen($prefix)) == $prefix) {
                     $settingNameWithoutPrefix = substr($settingName, strlen($prefix) + 1);
@@ -121,8 +121,8 @@ class OnlyofficeAppsettings extends SettingsManager
         switch ($settingName) {
             case $this->jwtHeader:
                 $settings = api_get_setting($settingName);
-                $value = is_array($settings) && array_key_exists($this->plugin->getPluginName(), $settings)
-                    ? $settings[$this->plugin->getPluginName()]
+                $value = is_array($settings) && array_key_exists($this->plugin->get_name(), $settings)
+                    ? $settings[$this->plugin->get_name()]
                     : null;
 
                 if (empty($value)) {
@@ -131,7 +131,7 @@ class OnlyofficeAppsettings extends SettingsManager
                 break;
             case $this->documentServerInternalUrl:
                 $settings = api_get_setting($settingName);
-                $value = is_array($settings) ? ($settings[$this->plugin->getPluginName()] ?? null) : null;
+                $value = is_array($settings) ? ($settings[$this->plugin->get_name()] ?? null) : null;
                 break;
             case $this->useDemoName:
                 $value = $configuration ? ($configuration[$settingName] ?: null) : null;
@@ -180,7 +180,7 @@ class OnlyofficeAppsettings extends SettingsManager
             return;
         }
 
-        $prefix = $this->plugin->getPluginName();
+        $prefix = $this->plugin->get_name();
         if (!(substr($settingName, 0, strlen($prefix)) == $prefix)) {
             $settingName = $prefix.'_'.$settingName;
         }

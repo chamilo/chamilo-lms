@@ -28447,3 +28447,9 @@ msgstr "Select items to export:"
 
 msgid "No exportable items found."
 msgstr "No exportable items found."
+
+msgid "Invalid format"
+msgstr "Invalid format"
+
+msgid "Duration (hh:mm:ss)"
+msgstr "Duration (hh:mm:ss)"

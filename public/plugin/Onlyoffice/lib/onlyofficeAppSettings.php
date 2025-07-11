@@ -14,6 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+use Chamilo\CoreBundle\Entity\AccessUrlRelPlugin;
+use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
+use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\ORM\Exception\NotSupported;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Onlyoffice\DocsIntegrationSdk\Manager\Settings\SettingsManager;
 
 class OnlyofficeAppsettings extends SettingsManager
@@ -140,10 +147,31 @@ class OnlyofficeAppsettings extends SettingsManager
         return $value;
     }
 
-    public function setSetting($settingName, $value, $createSetting = false)
+    /**
+     * @throws OptimisticLockException
+     * @throws NotSupported
+     * @throws ORMException
+     */
+    public function setSetting($settingName, $value, $createSetting = false): void
     {
         if (($settingName === $this->useDemoName) && $createSetting) {
-            api_add_setting($value, $settingName, null, 'setting', 'Plugins');
+            $em = Database::getManager();
+
+            $pluginConfig = $em->getRepository(PluginEntity::class)
+                ->findOneBy(['title' => 'Onlyoffice'])
+                ?->getConfigurationsByAccessUrl(
+                    Container::getAccessUrlUtil()->getCurrent()
+                )
+            ;
+
+            if ($pluginConfig) {
+                $settings = $pluginConfig->getConfiguration();
+                $settings[$this->useDemoName] = $value;
+
+                $pluginConfig->setConfiguration($settings);
+
+                $em->flush();
+            }
 
             return;
         }

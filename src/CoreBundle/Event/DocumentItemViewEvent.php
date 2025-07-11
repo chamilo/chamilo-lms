@@ -14,4 +14,16 @@ class DocumentItemViewEvent extends AbstractEvent
     {
         return $this->data['document'] ?? null;
     }
+
+    public function addLink(string $link): static
+    {
+        $this->data['links'][] = $link;
+
+        return $this;
+    }
+
+    public function getLinks(): array
+    {
+        return $this->data['links'] ?? [];
+    }
 }

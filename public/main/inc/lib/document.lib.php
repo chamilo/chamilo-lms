@@ -2298,6 +2298,7 @@ class DocumentManager
                 'WITH',
                 'doc.resourceNode = node'
             )
+            ->addSelect('files')
             ->where('type = :type')
             ->andWhere('links.course = :course')
             ->setParameters([
@@ -2305,7 +2306,6 @@ class DocumentManager
                 'course' => $course,
             ])
             ->orderBy('node.parent', 'ASC');
-
 
         $sessionId = api_get_session_id();
         if (empty($sessionId)) {

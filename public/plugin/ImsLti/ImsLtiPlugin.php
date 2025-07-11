@@ -133,7 +133,7 @@ class ImsLtiPlugin extends Plugin
     public function findCourseToolByLink(Course $course, ImsLtiTool $ltiTool)
     {
         $em = Database::getManager();
-        $toolRepo = $em->getRepository('ChamiloCourseBundle:CTool');
+        $toolRepo = $em->getRepository(CTool::class);
 
         /** @var CTool $cTool */
         $cTool = $toolRepo->findOneBy(

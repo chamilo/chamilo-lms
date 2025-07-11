@@ -6,17 +6,15 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Component\Utils\CreateUploadedFile;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
@@ -184,6 +182,45 @@ class BaseResourceFileAction
     }
 
     /**
+     * Handles the creation logic for a student publication comment resource.
+     */
+    public function handleCreateCommentRequest(
+        AbstractResource $resource,
+        ResourceRepository $resourceRepository,
+        Request $request,
+        EntityManager $em,
+        string $fileExistsOption = '',
+        ?TranslatorInterface $translator = null
+    ): array {
+        $title = $request->get('comment', '');
+        $parentResourceNodeId = (int) $request->get('parentResourceNodeId');
+        $fileType = $request->get('filetype');
+        $uploadedFile = null;
+
+        if (empty($fileType)) {
+            throw new Exception('filetype needed: folder or file');
+        }
+
+        if (0 === $parentResourceNodeId) {
+            throw new Exception('parentResourceNodeId int value needed');
+        }
+
+        $resource->setParentResourceNode($parentResourceNodeId);
+
+        if ($request->files->count() > 0 && $request->files->has('uploadFile')) {
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $request->files->get('uploadFile');
+            $resource->setUploadFile($uploadedFile);
+        }
+
+        return [
+            'title' => $title,
+            'filename' => $uploadedFile?->getClientOriginalName(),
+            'filetype' => $fileType,
+        ];
+    }
+
+    /**
      * Function loaded when creating a resource using the api, then the ResourceListener is executed.
      */
     public function handleCreateFileRequest(
@@ -192,7 +229,7 @@ class BaseResourceFileAction
         Request $request,
         EntityManager $em,
         string $fileExistsOption = '',
-        TranslatorInterface $translator = null
+        ?TranslatorInterface $translator = null
     ): array {
         $contentData = $request->getContent();
 
@@ -270,7 +307,7 @@ class BaseResourceFileAction
                                     $existingDocument->setUploadFile($uploadedFile);
                                 }
 
-                                $resourceNode->setUpdatedAt(new \DateTime());
+                                $resourceNode->setUpdatedAt(new DateTime());
                                 $existingDocument->setResourceNode($resourceNode);
 
                                 $em->persist($existingDocument);
@@ -326,7 +363,7 @@ class BaseResourceFileAction
 
                 // Get data in content and create a HTML file.
                 if (!$fileParsed && $content) {
-                    $uploadedFile = CreateUploadedFile::fromString($title.'.html', 'text/html', $content);
+                    $uploadedFile = CreateUploadedFileHelper::fromString($title.'.html', 'text/html', $content);
                     $resource->setUploadFile($uploadedFile);
                     $fileParsed = true;
                 }
@@ -346,9 +383,20 @@ class BaseResourceFileAction
             $resource->setResourceLinkArray($resourceLinkList);
         }
 
+        // Detect if file is a video
+        $filetypeResult = $fileType;
+
+        if (isset($uploadedFile) && $uploadedFile instanceof UploadedFile) {
+            $mimeType = $uploadedFile->getMimeType();
+            if (str_starts_with($mimeType, 'video/')) {
+                $filetypeResult = 'video';
+                $comment = trim($comment.' [video]');
+            }
+        }
+
         return [
             'title' => $title,
-            'filetype' => $fileType,
+            'filetype' => $filetypeResult,
             'comment' => $comment,
         ];
     }
@@ -528,6 +576,14 @@ class BaseResourceFileAction
                         $filePath,
                         $fileName
                     );
+
+                    $mimeType = $uploadedFile->getMimeType();
+                    if (str_starts_with($mimeType, 'video/')) {
+                        $document->setFiletype('video');
+                        $document->setComment('[video]');
+                    } else {
+                        $document->setFiletype('file');
+                    }
 
                     $document->setUploadFile($uploadedFile);
                     $em->persist($document);

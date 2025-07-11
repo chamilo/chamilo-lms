@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -148,7 +149,7 @@ if ($typeUser) {
     $checker = false;
     foreach ($courses as $course) {
         // Now get all the courses lp's
-        $thisLpList = $em->getRepository('ChamiloCourseBundle:CLp')->findBy(['cId' => $course->getCourse()->getId()]);
+        $thisLpList = $em->getRepository(CLp::class)->findBy(['cId' => $course->getCourse()->getId()]);
         foreach ($thisLpList as $lp) {
             $courseLpList[$lp->getCId()] = $lp->getTitle().' ('.$course->getCourse()->getTitle().')';
         }
@@ -163,7 +164,7 @@ if ($typeUser) {
 
         // Here check all the lpItems
         foreach ($thisLpList as $lp) {
-            $thisLpItems = $em->getRepository('ChamiloCourseBundle:CLpItem')->findBy(['lpId' => $lp->getId()]);
+            $thisLpItems = $em->getRepository(CLpItem::class)->findBy(['lpId' => $lp->getId()]);
 
             foreach ($thisLpItems as $item) {
                 //Now only we need the final item and return the current LP
@@ -174,11 +175,11 @@ if ($typeUser) {
             }
         }
 
-        $thisLpList = $em->getRepository('ChamiloCourseBundle:CLp')->findBy(['cId' => $session->getCourse()->getId()]);
+        $thisLpList = $em->getRepository(CLp::class)->findBy(['cId' => $session->getCourse()->getId()]);
 
         // Here check all the lpItems
         foreach ($thisLpList as $lp) {
-            $thisLpItems = $em->getRepository('ChamiloCourseBundle:CLpItem')->findBy(['lpId' => $lp->getId()]);
+            $thisLpItems = $em->getRepository(CLpItem::class)->findBy(['lpId' => $lp->getId()]);
             foreach ($thisLpItems as $item) {
                 //Now only we need the final item and return the current LP
                 if (TOOL_LP_FINAL_ITEM == $item->getItemType()) {

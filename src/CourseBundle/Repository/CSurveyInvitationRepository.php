@@ -56,11 +56,13 @@ final class CSurveyInvitationRepository extends ResourceRepository
             ->andWhere('i.course = :course')
             ->andWhere('i.answered = 1')
             ->setParameter('survey', $survey)
-            ->setParameter('course', $course);
+            ->setParameter('course', $course)
+        ;
 
         if ($session) {
             $qb->andWhere('i.session = :session')
-                ->setParameter('session', $session);
+                ->setParameter('session', $session)
+            ;
         } else {
             $qb->andWhere('i.session IS NULL');
         }
@@ -85,11 +87,13 @@ final class CSurveyInvitationRepository extends ResourceRepository
                 'survey' => $survey,
                 'user' => $user,
                 'course' => $course,
-            ]);
+            ])
+        ;
 
         if ($session) {
             $qb->andWhere('i.session = :session')
-                ->setParameter('session', $session);
+                ->setParameter('session', $session)
+            ;
         } else {
             $qb->andWhere('i.session IS NULL');
         }

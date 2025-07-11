@@ -2,13 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -178,11 +178,6 @@ if (isset($_POST['action']) && 'thematic_delete_select' === $_POST['action']) {
 if (isset($_GET['isStudentView']) && 'true' === $_GET['isStudentView']) {
     $action = 'thematic_details';
 }
-
-$interbreadcrumb[] = [
-    'url' => $currentUrl,
-    'name' => get_lang('Thematic control'),
-];
 
 $actionLeft = '';
 // instance thematic object for using like library here

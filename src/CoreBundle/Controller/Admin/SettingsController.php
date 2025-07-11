@@ -7,21 +7,31 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\Entity\SettingsValueTemplate;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Exception\ValidatorException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/admin')]
 class SettingsController extends BaseController
 {
     use ControllerTrait;
+
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly TranslatorInterface $translator
+    ) {}
 
     #[Route('/settings', name: 'admin_settings')]
     public function index(): Response
@@ -108,6 +118,7 @@ class SettingsController extends BaseController
 
         $keyword = '';
         $settingsFromKeyword = null;
+
         $searchForm->handleRequest($request);
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             $values = $searchForm->getData();
@@ -157,6 +168,7 @@ class SettingsController extends BaseController
             }
 
             $this->addFlash($messageType, $message);
+
             if (!empty($keyword)) {
                 return $this->redirectToRoute('chamilo_platform_settings_search', [
                     'keyword' => $keyword,
@@ -167,7 +179,19 @@ class SettingsController extends BaseController
                 'namespace' => $namespace,
             ]);
         }
+
         $schemas = $manager->getSchemas();
+
+        $templateMap = [];
+        $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
+
+        $settingsWithTemplate = $settingsRepo->findBy(['url' => $url]);
+
+        foreach ($settingsWithTemplate as $s) {
+            if ($s->getValueTemplate()) {
+                $templateMap[$s->getVariable()] = $s->getValueTemplate()->getId();
+            }
+        }
 
         return $this->render(
             '@ChamiloCore/Admin/Settings/default.html.twig',
@@ -177,6 +201,7 @@ class SettingsController extends BaseController
                 'form' => $form->createView(),
                 'keyword' => $keyword,
                 'search_form' => $searchForm,
+                'template_map' => $templateMap,
             ]
         );
     }
@@ -194,6 +219,26 @@ class SettingsController extends BaseController
         $manager->installSchemas($url);
 
         return new Response('Updated');
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/settings/template/{id}', name: 'chamilo_platform_settings_template')]
+    public function getTemplateExample(int $id): JsonResponse
+    {
+        $repo = $this->entityManager->getRepository(SettingsValueTemplate::class);
+        $template = $repo->find($id);
+
+        if (!$template) {
+            return $this->json([
+                'error' => $this->translator->trans('Template not found.'),
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->json([
+            'variable' => $template->getVariable(),
+            'json_example' => $template->getJsonExample(),
+            'description' => $template->getDescription(),
+        ]);
     }
 
     /**

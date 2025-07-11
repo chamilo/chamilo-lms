@@ -7,12 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\Legal;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
@@ -24,7 +26,6 @@ use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use DateTime;
@@ -94,8 +95,8 @@ class SocialController extends AbstractController
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
         if ($value && !empty($value['value'])) {
-            [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
-            $term = $legalTermsRepo->find($legalId);
+            [$legalVersionId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
+            $term = $legalTermsRepo->findOneByVersionAndLanguage((int) $legalVersionId, (int) $legalLanguageId);
         } else {
             $term = $this->getLastConditionByLanguage($languageRepo, $isoCode, $legalTermsRepo, $settingsManager);
         }
@@ -478,12 +479,15 @@ class SocialController extends AbstractController
     ): JsonResponse {
         $user = $userRepository->find($userId);
         if (!$user) {
-            return $this->createNotFoundException('User not found');
+            throw $this->createNotFoundException('User not found');
         }
 
         $baseUrl = $requestStack->getCurrentRequest()->getBaseUrl();
         $profileFieldsVisibilityJson = $settingsManager->getSetting('profile.profile_fields_visibility');
-        $profileFieldsVisibility = json_decode($profileFieldsVisibilityJson, true)['options'] ?? [];
+        $decoded = json_decode($profileFieldsVisibilityJson, true);
+        $profileFieldsVisibility = (\is_array($decoded) && isset($decoded['options']))
+            ? $decoded['options']
+            : [];
 
         $vCardUserLink = $profileFieldsVisibility['vcard'] ?? true ? $baseUrl.'/main/social/vcard_export.php?userId='.(int) $userId : '';
 
@@ -528,7 +532,10 @@ class SocialController extends AbstractController
         }
 
         $fieldVisibilityConfig = $settingsManager->getSetting('profile.profile_fields_visibility');
-        $fieldVisibility = ($fieldVisibilityConfig && 'false' !== $fieldVisibilityConfig) ? json_decode($fieldVisibilityConfig, true)['options'] : [];
+        $decoded = json_decode($fieldVisibilityConfig, true);
+        $fieldVisibility = (\is_array($decoded) && isset($decoded['options']))
+            ? $decoded['options']
+            : [];
 
         $extraUserData = $userRepository->getExtraUserData($userId);
         $extraFieldsFormatted = [];
@@ -545,12 +552,19 @@ class SocialController extends AbstractController
             switch ($extraField['type']) {
                 case ExtraField::FIELD_TYPE_RADIO:
                 case ExtraField::FIELD_TYPE_SELECT:
-                    $extraFieldOptions = $extraFieldOptionsRepository->getFieldOptionByFieldAndOption($extraField['id'], $fieldValue, ExtraField::USER_FIELD_TYPE);
+                    $extraFieldOptions = $extraFieldOptionsRepository->getFieldOptionByFieldAndOption(
+                        $extraField['id'],
+                        $fieldValue,
+                        ExtraField::USER_FIELD_TYPE
+                    );
                     if (!empty($extraFieldOptions)) {
-                        $optionTexts = array_map(function ($option) {
-                            return $option['display_text'];
-                        }, $extraFieldOptions);
-                        $fieldValue = implode(', ', $optionTexts);
+                        $fieldValue = implode(
+                            ', ',
+                            array_map(
+                                fn (ExtraFieldOptions $opt) => $opt->getDisplayText(),
+                                $extraFieldOptions
+                            )
+                        );
                     }
 
                     break;

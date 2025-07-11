@@ -106,7 +106,7 @@ class ExtraFieldType extends AbstractType
                 case \ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                 case \ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                     if (!$geolocalization) {
-                        break 2;
+                        break;
                     }
 
                     $defaultOptions['data'] = [];
@@ -223,6 +223,9 @@ class ExtraFieldType extends AbstractType
 
                 case \ExtraField::FIELD_TYPE_RADIO:
                 case \ExtraField::FIELD_TYPE_SELECT:
+                    $defaultOptions['attr']['class'] = 'p-select p-component p-inputwrapper p-inputwrapper-filled';
+
+                    // no break
                 case \ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     if (empty($value)) {
                         $defaultOptions['data'] = null;

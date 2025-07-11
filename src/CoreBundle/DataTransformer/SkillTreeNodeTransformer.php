@@ -6,21 +6,18 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataTransformer;
 
-use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use Chamilo\CoreBundle\ApiResource\SkillTreeNode;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 
-readonly class SkillTreeNodeTransformer implements DataTransformerInterface
+readonly class SkillTreeNodeTransformer
 {
     public function __construct(
         private SettingsManager $settingsManager,
     ) {}
 
-    public function transform($object, string $to, array $context = [])
+    public function transform(Skill $object): SkillTreeNode
     {
-        \assert($object instanceof Skill);
-
         $skillNode = new SkillTreeNode();
         $skillNode->id = $object->getId();
         $skillNode->title = $object->getTitle();
@@ -35,15 +32,10 @@ readonly class SkillTreeNodeTransformer implements DataTransformerInterface
         }
 
         $skillNode->children = $object->getChildSkills()
-            ->map(fn (Skill $childSkill) => $this->transform($childSkill, $to, $context))
+            ->map(fn (Skill $childSkill) => $this->transform($childSkill))
             ->toArray()
         ;
 
         return $skillNode;
-    }
-
-    public function supportsTransformation($data, string $to, array $context = []): bool
-    {
-        return $data instanceof Skill && SkillTreeNode::class === $to;
     }
 }

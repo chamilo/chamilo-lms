@@ -228,7 +228,10 @@ class UserRepositoryTest extends AbstractApiTest
             ->setExpired(false)
             ->setTeach('teach')
             ->setApiToken('tok')
-            ->setAuthSource('auth')
+            ->addAuthSourceByAuthentication(
+                'auth',
+                $this->getAccessUrl()
+            )
             ->setProductions('prod')
             ->setCompetences('comp')
             ->setDiplomas('diploma')
@@ -279,7 +282,7 @@ class UserRepositoryTest extends AbstractApiTest
                     'biography' => '',
                     'locale' => 'en',
                     'plainPassword' => 'test',
-                    'timezone' => 'Europe\Paris',
+                    'timezone' => 'Europe/Paris',
                     'email' => 'test@example.com',
                     'phone' => '123456',
                     'address' => 'Paris',
@@ -459,7 +462,7 @@ class UserRepositoryTest extends AbstractApiTest
                     'biography' => '',
                     'locale' => 'en',
                     'plainPassword' => 'test',
-                    'timezone' => 'Europe\Paris',
+                    'timezone' => 'Europe/Paris',
                     'email' => 'test@example.com',
                     'phone' => '123456',
                     'address' => 'Paris',

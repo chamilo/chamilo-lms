@@ -29,7 +29,7 @@ final class UsergroupStateProvider implements ProviderInterface
     /**
      * @throws Exception
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): iterable
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         $operationName = $operation->getName();
         if ('get_usergroup' === $operationName) {

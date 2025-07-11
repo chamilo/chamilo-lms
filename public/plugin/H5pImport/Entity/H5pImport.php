@@ -1,6 +1,8 @@
 <?php
 
-// For licensing terms, see /license.txt
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\H5pImport\Entity;
 
@@ -12,105 +14,52 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * Class H5pImport.
- *
- * @ORM\Entity()
- *
- * @ORM\Table(name="plugin_h5p_import")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'plugin_h5p_import')]
 class H5pImport
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="path", type="text", nullable=false)
-     */
-    protected $path;
+    #[ORM\Column(name: 'path', type: 'text', nullable: false)]
+    protected string $path;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="relative_path", type="text", nullable=false)
-     */
-    protected $relativePath;
+    #[ORM\Column(name: 'relative_path', type: 'text', nullable: false)]
+    protected string $relativePath;
 
-    /**
-     * @var DateTime
-     *
-     * @Gedmo\Timestampable(on="create")
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    protected $createdAt;
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
+    protected DateTime $createdAt;
 
-    /**
-     * @var DateTime
-     *
-     * @Gedmo\Timestampable(on="update")
-     *
-     * @ORM\Column(name="modified_at", type="datetime", nullable=false)
-     */
-    protected $modifiedAt;
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'modified_at', type: 'datetime', nullable: false)]
+    protected DateTime $modifiedAt;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="iid", type="integer")
-     *
-     * @ORM\Id
-     *
-     * @ORM\GeneratedValue
-     */
-    private $iid;
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    private ?int $iid;
 
-    /**
-     * @var Course
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     *
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
-     */
-    private $course;
+    #[ORM\ManyToOne(targetEntity: Course::class)]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
+    private Course $course;
 
-    /**
-     * @var null|Session
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     *
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
-     */
-    private $session;
+    #[ORM\ManyToOne(targetEntity: Session::class)]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
+    private ?Session $session;
 
-    /**
-     * @var null|string
-     *
-     * @ORM\Column(name="name", type="text", nullable=true)
-     */
-    private $name;
+    #[ORM\Column(name: 'name', type: 'text', nullable: true)]
+    private ?string $name;
 
-    /**
-     * @var null|string
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
-    private $description;
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
+    private ?string $description;
 
     /**
      * @var Collection<int, H5pImportLibrary>
-     *
-     * @ORM\ManyToMany(targetEntity="H5pImportLibrary", mappedBy="h5pImports", cascade={"persist"})
      */
-    private $libraries;
+    #[ORM\ManyToMany(targetEntity: H5pImportLibrary::class, mappedBy: 'h5pImports', cascade: ['persist'])]
+    private Collection $libraries;
 
-    /**
-     * @var H5pImportLibrary
-     *
-     * @ORM\ManyToOne(targetEntity="H5pImportLibrary")
-     *
-     * @ORM\JoinColumn(name="main_library_id", referencedColumnName="iid", onDelete="SET NULL")
-     */
-    private $mainLibrary;
+    #[ORM\ManyToOne(targetEntity: H5pImportLibrary::class)]
+    #[ORM\JoinColumn(name: 'main_library_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
+    private H5pImportLibrary $mainLibrary;
 
     public function __construct()
     {

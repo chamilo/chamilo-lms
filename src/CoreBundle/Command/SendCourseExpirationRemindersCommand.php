@@ -12,6 +12,7 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,13 +21,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 
+#[AsCommand(
+    name: 'app:send-course-expiration-reminders',
+    description: 'Send course expiration reminders to users.',
+)]
 class SendCourseExpirationRemindersCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:send-course-expiration-reminders';
-
     public function __construct(
         private readonly Connection $connection,
         private readonly MailerInterface $mailer,
@@ -38,7 +38,6 @@ class SendCourseExpirationRemindersCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Send course expiration reminders to users.')
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
             ->setHelp('This command sends email reminders to users before their course access expires.')
         ;

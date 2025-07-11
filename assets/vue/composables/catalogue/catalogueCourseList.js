@@ -4,7 +4,7 @@ import courseService from "../../services/courseService"
 import { useLanguage } from "../language"
 import { useNotification } from "../notification"
 
-import { FilterMatchMode } from "primevue/api"
+import { FilterMatchMode } from "@primevue/core/api"
 
 import * as trackCourseRanking from "../../services/trackCourseRankingService"
 

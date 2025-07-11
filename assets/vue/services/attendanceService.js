@@ -164,14 +164,9 @@ export default {
     }
   },
 
-  /**
-   * Fetches users related to attendance based on course, session, or group.
-   * @param {Object} params - Object with courseId, sessionId, and/or groupId.
-   * @returns {Promise<Array>} - List of users.
-   */
-  getAttendanceSheetUsers: async (params) => {
+  getAttendanceSheetUsers: async (attendanceId, params) => {
     try {
-      const response = await axios.get(`/attendance/users/context`, { params })
+      const response = await axios.get(`/attendance/${attendanceId}/users/context`, { params })
       return response.data
     } catch (error) {
       console.error("Error fetching attendance sheet users:", error)
@@ -215,27 +210,36 @@ export default {
     return response.data
   },
 
-  /**
-   * Exports an attendance list to PDF format.
-   * @param {Number|String} attendanceId - ID of the attendance list.
-   * @returns {Promise<Blob>} - PDF file of the attendance list.
-   */
-  exportAttendanceToPdf: async (attendanceId) => {
-    const response = await axios.get(`${ENTRYPOINT}attendances/${attendanceId}/export/pdf`, {
-      responseType: "blob",
-    })
+  exportAttendanceToPdf: async (attendanceId, { cid, sid, gid }) => {
+    const response = await axios.get(
+      `/attendance/${attendanceId}/export/pdf`,
+      {
+        params: { cid, sid, gid },
+        responseType: "blob",
+      }
+    )
     return response.data
   },
 
-  /**
-   * Exports an attendance list to XLS format.
-   * @param {Number|String} attendanceId - ID of the attendance list.
-   * @returns {Promise<Blob>} - XLS file of the attendance list.
-   */
-  exportAttendanceToXls: async (attendanceId) => {
-    const response = await axios.get(`${ENTRYPOINT}attendances/${attendanceId}/export/xls`, {
-      responseType: "blob",
-    })
+  exportAttendanceToXls: async (attendanceId, { cid, sid, gid }) => {
+    const response = await axios.get(
+      `/attendance/${attendanceId}/export/xls`,
+      {
+        params: { cid, sid, gid },
+        responseType: "blob",
+      }
+    )
+    return response.data
+  },
+
+  generateQrCode: async (attendanceId, { cid, sid, gid }) => {
+    const response = await axios.get(
+      `/attendance/${attendanceId}/qrcode`,
+      {
+        params: { cid, sid, gid },
+        responseType: "blob",
+      }
+    )
     return response.data
   },
 
@@ -247,6 +251,21 @@ export default {
       return response.data
     } catch (error) {
       console.error("Error saving attendance sheet:", error)
+      throw error
+    }
+  },
+
+  getAttendancesWithDoneCount: async (params) => {
+    const response = await axios.get(`/attendance/list_with_done_count`, { params });
+    return response.data;
+  },
+
+  getStudentAttendanceData: async (attendanceId) => {
+    try {
+      const response = await axios.get(`/attendance/${attendanceId}/student-dates`)
+      return response.data
+    } catch (error) {
+      console.error("Error fetching student attendance data:", error)
       throw error
     }
   },

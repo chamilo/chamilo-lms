@@ -1,9 +1,8 @@
 <?php
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -451,32 +450,41 @@ class AppPlugin
      */
     public function getPluginInfo($pluginName, $forced = false)
     {
-        //$pluginData = Session::read('plugin_data');
-        if (0) {
-            //if (isset($pluginData[$pluginName]) && $forced == false) {
-            return $pluginData[$pluginName];
-        } else {
-            $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$pluginName/plugin.php";
+        $plugin_info = [];
+        $pluginPath = api_get_path(SYS_PLUGIN_PATH);
+        $pluginDirs = [
+            $pluginName,
+            strtolower($pluginName),
+            ucfirst(strtolower($pluginName)),
+        ];
 
-            $plugin_info = [];
-            if (file_exists($plugin_file)) {
-                require $plugin_file;
+        $plugin_file = null;
+
+        foreach ($pluginDirs as $dir) {
+            $path = $pluginPath . "$dir/plugin.php";
+            if (file_exists($path)) {
+                $plugin_file = $path;
+                break;
             }
-
-            $plugin = Container::getPluginRepository()->findOneByTitle($pluginName);
-
-            if (!$plugin) {
-                return [];
-            }
-
-            $configByUrl = $plugin->getConfigurationsByAccessUrl(
-                Container::getAccessUrlHelper()->getCurrent()
-            );
-
-            $plugin_info['settings'] = $configByUrl?->getConfiguration() ?? [];
-
-            return $plugin_info;
         }
+
+        if ($plugin_file) {
+            require $plugin_file;
+        }
+
+        $plugin = Container::getPluginRepository()->findOneByTitle($pluginName);
+
+        if (!$plugin) {
+            return [];
+        }
+
+        $configByUrl = $plugin->getConfigurationsByAccessUrl(
+            Container::getAccessUrlUtil()->getCurrent()
+        );
+
+        $plugin_info['settings'] = $configByUrl?->getConfiguration() ?? [];
+
+        return $plugin_info;
     }
 
     /**

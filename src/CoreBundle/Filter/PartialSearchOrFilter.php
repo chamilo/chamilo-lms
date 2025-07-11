@@ -33,23 +33,34 @@ class PartialSearchOrFilter extends AbstractFilter
 
         $alias = $queryBuilder->getRootAliases()[0];
         $valueParameter = ':'.$queryNameGenerator->generateParameterName($property);
+        $queryBuilder->setParameter($valueParameter, '%'.$value.'%');
 
         $ors = [];
 
         foreach (array_keys($this->properties) as $field) {
-            $ors[] = $queryBuilder->expr()->like(
-                "$alias.$field",
-                (string) $queryBuilder->expr()->concat("'%'", $valueParameter, "'%'")
-            );
+            // Detect if field is a relation (e.g. "user.username")
+            if (str_contains($field, '.')) {
+                [$relation, $subField] = explode('.', $field, 2);
+                $joinAlias = $relation.'_alias';
 
-            $queryBuilder->setParameter($valueParameter, $value);
+                // Ensure the join is only added once
+                if (!\in_array($joinAlias, $queryBuilder->getAllAliases(), true)) {
+                    $queryBuilder->leftJoin("$alias.$relation", $joinAlias);
+                }
+
+                $ors[] = $queryBuilder->expr()->like(
+                    "$joinAlias.$subField",
+                    $valueParameter
+                );
+            } else {
+                $ors[] = $queryBuilder->expr()->like(
+                    "$alias.$field",
+                    $valueParameter
+                );
+            }
         }
 
-        $queryBuilder
-            ->andWhere(
-                $queryBuilder->expr()->orX(...$ors)
-            )
-        ;
+        $queryBuilder->andWhere($queryBuilder->expr()->orX(...$ors));
     }
 
     public function getDescription(string $resourceClass): array
@@ -59,7 +70,7 @@ class PartialSearchOrFilter extends AbstractFilter
                 'property' => null,
                 'type' => 'string',
                 'required' => false,
-                'description' => 'It does a "Search OR" using `LIKE %text%` to search for fields that contain `text`',
+                'description' => 'It does a "Search OR" using LIKE %%text%% on the listed fields (supports nested like user.username)',
             ],
         ];
     }

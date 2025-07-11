@@ -26,7 +26,7 @@ final class MessageByGroupStateProvider implements ProviderInterface
         return Message::class === $operation->getClass() && 'get_messages_by_group' === $operation->getName();
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): iterable
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         $groupId = $context['filters']['groupId'] ?? null;
 

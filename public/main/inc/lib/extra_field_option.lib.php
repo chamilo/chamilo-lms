@@ -3,8 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
 
 /**
  * Handles the extra fields for various objects (users, sessions, courses).
@@ -25,6 +26,9 @@ class ExtraFieldOption extends Model
     public $extraField;
     public $fieldId;
 
+    /** @var ExtraFieldOptionsRepository */
+    public $repo;
+
     /**
      * Gets the table for the type of object for which we are using an extra field.
      *
@@ -38,6 +42,7 @@ class ExtraFieldOption extends Model
         $this->extraField = $extraField;
         $this->table = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
         $this->tableExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $this->repo = Database::getManager()->getRepository(ExtraFieldOptions::class);
     }
 
     /**
@@ -128,12 +133,13 @@ class ExtraFieldOption extends Model
      */
     public function saveOptions($params, $showQuery = false)
     {
-        $optionInfo = $this->get_field_option_by_field_and_option(
-            $params['field_id'],
-            $params['option_value']
+        $optionInfo = $this->repo->getFieldOptionByFieldAndOption(
+            (int) $params['field_id'],
+            (string) $params['option_value'],
+            $this->extraField->getItemType()
         );
 
-        if (false == $optionInfo) {
+        if (!$optionInfo) {
             $optionValue = api_replace_dangerous_char($params['option_value']);
             $order = $this->get_max_order($params['field_id']);
             $newParams = [
@@ -327,13 +333,17 @@ class ExtraFieldOption extends Model
                 $list = explode(';', $params['field_options']);
 
                 foreach ($list as $option) {
-                    $option_info = $this->get_field_option_by_field_and_option($field_id, $option);
+                    $option_info = $this->repo->getFieldOptionByFieldAndOption(
+                        $field_id,
+                        $option,
+                        $this->extraField->getItemType()
+                    );
 
                     // Use URLify only for new items
                     $optionValue = api_replace_dangerous_char($option);
                     $option = trim($option);
 
-                    if (false != $option_info) {
+                    if ($option_info) {
                         continue;
                     }
 
@@ -366,7 +376,7 @@ class ExtraFieldOption extends Model
      */
     public function save_one_item($params, $show_query = false, $insert_repeated = true)
     {
-        $field_id = intval($params['field_id']);
+        $field_id = (int) $params['field_id'];
         if (empty($field_id)) {
             return false;
         }
@@ -391,47 +401,17 @@ class ExtraFieldOption extends Model
         if ($insert_repeated) {
             parent::save($params, $show_query);
         } else {
-            $check = $this->get_field_option_by_field_and_option(
+            $check = $this->repo->getFieldOptionByFieldAndOption(
                 $field_id,
-                $params['option_value']
+                $params['option_value'],
+                $this->extraField->getItemType()
             );
-            if (false == $check) {
+            if (!$check) {
                 parent::save($params, $show_query);
             }
         }
 
         return true;
-    }
-
-    /**
-     * Get the complete row of a specific option of a specific field.
-     *
-     * @param int    $field_id
-     * @param string $option_value Value of the option
-     *
-     * @return mixed The row on success or false on failure
-     * @assert (0,'') === false
-     */
-    public function get_field_option_by_field_and_option($field_id, $option_value)
-    {
-        $field_id = (int) $field_id;
-        $option_value = Database::escape_string($option_value);
-        $extraFieldType = $this->getExtraField()->getItemType();
-
-        $sql = "SELECT s.* FROM {$this->table} s
-                INNER JOIN {$this->tableExtraField} sf
-                ON (s.field_id = sf.id)
-                WHERE
-                    field_id = $field_id AND
-                    option_value = '".$option_value."' AND
-                    sf.item_type = $extraFieldType
-                ";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            return Database::store_result($result, 'ASSOC');
-        }
-
-        return false;
     }
 
     /**

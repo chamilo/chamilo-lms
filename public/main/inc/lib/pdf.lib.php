@@ -2,7 +2,6 @@
 
 /* See license terms in /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Framework\Container;
 use Masterminds\HTML5;
 use Mpdf\HTMLParserMode;
@@ -243,46 +242,45 @@ class PDF
 
         $counter = 1;
         foreach ($htmlFileArray as $file) {
-            //Add a page break per file
-            $pageBreak = '<pagebreak>';
-            if ($counter == count($htmlFileArray)) {
-                $pageBreak = '';
-            }
+            $pageBreak = ($counter === count($htmlFileArray)) ? '' : '<pagebreak>';
+            $htmlTitle = '';
+            $filePath = null;
+            $content = null;
 
-            //if the array provided contained subarrays with 'title' entry,
-            // then print the title in the PDF
-            if (is_array($file) && isset($file['title'])) {
-                $htmlTitle = $file['title'];
-                $file = $file['path'];
+            if (is_array($file)) {
+                $htmlTitle = $file['title'] ?? '';
+                $content = $file['content'] ?? null;
+                $filePath = $file['path'] ?? null;
             } else {
-                //we suppose we've only been sent a file path
+                $filePath = $file;
                 $htmlTitle = basename($file);
             }
 
-            $counter++;
-
-            if (empty($file) && !empty($htmlTitle)) {
-                // this is a chapter, print title & skip the rest
-                if (2 === $counter && !empty($mainTitle)) {
-                    $this->pdf->WriteHTML(
-                        '<html><body><h2 style="text-align: center">'.$mainTitle.'</h2></body></html>'
-                    );
-                }
-                if ($printTitle) {
-                    $this->pdf->WriteHTML(
-                        '<html><body><h3>'.$htmlTitle.'</h3></body></html>'.$pageBreak
-                    );
-                }
-                continue;
-            } else {
-                if (2 === $counter && !empty($mainTitle)) {
-                    $this->pdf->WriteHTML(
-                        '<html><body><h2 style="text-align: center">'.$mainTitle.'</h2></body></html>'
-                    );
-                }
+            if ($counter === 1 && !empty($mainTitle)) {
+                $this->pdf->WriteHTML('<html><body><h2 style="text-align: center">'.$mainTitle.'</h2></body></html>');
             }
 
-            if (!file_exists($file)) {
+            // New support for direct HTML content
+            if (!empty($content)) {
+                if ($printTitle && !empty($htmlTitle)) {
+                    $this->pdf->WriteHTML('<html><body><h3>'.$htmlTitle.'</h3></body></html>', 2);
+                }
+                $this->pdf->WriteHTML($content.$pageBreak, 2);
+                $counter++;
+                continue;
+            }
+
+            // Original logic for physical files
+            if (empty($filePath)) {
+                if ($printTitle && !empty($htmlTitle)) {
+                    $this->pdf->WriteHTML('<html><body><h3>'.$htmlTitle.'</h3></body></html>'.$pageBreak);
+                }
+                $counter++;
+                continue;
+            }
+
+            if (!file_exists($filePath)) {
+                $counter++;
                 continue;
             }
 
@@ -292,28 +290,21 @@ class PDF
                 $this->pdf->WriteHTML($css, 1);
             }
 
-            //it's not a chapter but the file exists, print its title
-            if ($printTitle) {
+            if ($printTitle && !empty($htmlTitle)) {
                 $this->pdf->WriteHTML('<html><body><h3>'.$htmlTitle.'</h3></body></html>', 2);
             }
 
-            $file_info = pathinfo($file);
+            $file_info = pathinfo($filePath);
             $extension = $file_info['extension'];
 
             if (in_array($extension, ['html', 'htm'])) {
                 $dirName = $file_info['dirname'];
-                $filename = $file_info['basename'];
-                $filename = str_replace('_', ' ', $filename);
-
-                if ('html' === $extension) {
-                    $filename = basename($filename, '.html');
-                } elseif ('htm' === $extension) {
-                    $filename = basename($filename, '.htm');
-                }
+                $filename = str_replace('_', ' ', $file_info['basename']);
+                $filename = basename($filename, '.'.$extension);
 
                 $webPath = api_get_path(WEB_PATH);
 
-                $documentHtml = @file_get_contents($file);
+                $documentHtml = @file_get_contents($filePath);
                 $documentHtml = preg_replace($clean_search, '', $documentHtml);
 
                 $crawler = new Crawler($documentHtml);
@@ -342,25 +333,17 @@ class PDF
                     );
                 }
 
-                //$documentHtml = self::fixImagesPaths($documentHtml, $courseInfo, $dirName);
-                // The library mPDF expects UTF-8 encoded input data.
                 api_set_encoding_html($documentHtml, 'UTF-8');
-                // TODO: Maybe it is better idea the title to be passed through
-                $title = api_get_title_html($documentHtml, 'UTF-8', 'UTF-8');
-                // $_GET[] too, as it is done with file name.
-                // At the moment the title is retrieved from the html document itself.
-                if (empty($title)) {
-                    $title = $filename; // Here file name is expected to contain ASCII symbols only.
-                }
 
                 if (!empty($documentHtml)) {
                     $this->pdf->WriteHTML($documentHtml.$pageBreak, 2);
                 }
             } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                // Images
-                $image = Display::img($file);
+                $image = Display::img($filePath);
                 $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$pageBreak, 2);
             }
+
+            $counter++;
         }
 
         $outputFile = 'pdf_'.api_get_local_time().'.pdf';

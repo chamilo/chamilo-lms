@@ -430,7 +430,7 @@ if ($oLP->current == $oLP->get_last()) {
             $minScore = $categories[0]->getCertificateMinScore();
             $userScore = $gradebookLinks[0]->calc_score($user_id, 'best');
             $categoryEntity = Container::getGradeBookCategoryRepository()->find($categories[0]->get_id());
-            if ($userScore[0] >= $minScore) {
+            if (isset($userScore) && $userScore[0] >= $minScore) {
                 Category::generateUserCertificate($categoryEntity, $user_id);
             }
         }
@@ -561,6 +561,13 @@ $template->assign('menu_location', $menuLocation);
 $template->assign('disable_js_in_lp_view', (int) ('true' === api_get_setting('lp.disable_js_in_lp_view')));
 $template->assign('lp_preview_image', '<img src="'.$lpPreviewImagePath.'" alt="'.$oLP->getNameNoTags().'" />');
 
+if ('video' === $itemType) {
+    $src = api_get_path(WEB_CODE_PATH)
+        . "lp/lp_video_view.php?lp_id=$lp_id&lp_item_id=$lpCurrentItemId&" . api_get_cidreq();
+}
+$htmlHeadXtra[] = '<script>
+    olms.lms_item_types["i'.$lpCurrentItemId.'"] = "'.$itemType.'";
+</script>';
 $frameReady = Display::getFrameReadyBlock(
     '#content_id, #content_id_blank',
     $itemType,

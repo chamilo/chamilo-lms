@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\NonUniqueResultException;
@@ -44,7 +43,8 @@ class UserRelCourseVoteListener
             ->where('v.course = :course')
             ->setParameter('course', $course->getId())
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
 
         $course->setPopularity($uniqueUsers);
         $entityManager->persist($course);

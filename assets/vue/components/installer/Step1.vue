@@ -7,16 +7,16 @@
     />
     <SectionHeader :title="t('Step 1 - Installation Language')" />
 
-    <BaseDropdown
+    <BaseSelect
       v-model="installerData.langIso"
-      :help-text="
+      :message-text="
         t('Cannot find your language in the list? Contact us at {0} to contribute as a translator.', [
           'info@chamilo.org',
         ])
       "
       :label="t('Please select installation language')"
       :options="availableLanguages"
-      input-id="language_list"
+      id="language_list"
       name="language_list_alt"
       option-label="english_name"
       option-value="isocode"
@@ -78,7 +78,7 @@ import { inject } from "vue"
 import { useI18n } from "vue-i18n"
 
 import Message from "primevue/message"
-import BaseDropdown from "../basecomponents/BaseDropdown.vue"
+import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import SectionHeader from "../layout/SectionHeader.vue"
 

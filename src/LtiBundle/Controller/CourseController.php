@@ -7,11 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\LtiBundle\Controller;
 
 use Category;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
+use Chamilo\CoreBundle\Enums\ToolIcon;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
@@ -22,16 +23,15 @@ use Display;
 use Doctrine\Persistence\ManagerRegistry;
 use EvalForm;
 use Evaluation;
-use Exception;
 use HTML_QuickForm_select;
 use OAuthConsumer;
 use OAuthRequest;
 use OAuthSignatureMethod_HMAC_SHA1;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UserManager;
 
 #[Route(path: '/courses/{cid}/lti')] // ;
@@ -372,9 +372,7 @@ class CourseController extends ToolBaseController
         );
     }
 
-    /**
-     * @Security("is_granted('ROLE_TEACHER')")
-     */
+    #[IsGranted('ROLE_TEACHER')]
     #[Route(path: '/', name: 'chamilo_lti_configure')]
     #[Route(path: '/add/{id}', name: 'chamilo_lti_configure_global', requirements: ['id' => '\d+'])]
     public function courseConfigure(?int $id, Request $request): Response
@@ -475,14 +473,8 @@ class CourseController extends ToolBaseController
         );
     }
 
-    /**
-     * @Security("is_granted('ROLE_TEACHER')")
-     *
-     * @param string $catId
-     *
-     * @throws Exception
-     */
     #[Route(path: '/grade/{catId}', name: 'chamilo_lti_grade', requirements: ['catId' => '\d+'])]
+    #[IsGranted('ROLE_TEACHER')]
     public function grade(int $catId): Response
     {
         $em = $this->managerRegistry->getManager();
@@ -575,7 +567,7 @@ class CourseController extends ToolBaseController
         $eval->set_visible(empty($values['visible']) ? 0 : 1);
         $eval->add();
 
-        $gradebookEval = $em->find('ChamiloCoreBundle:GradebookEvaluation', $eval->get_id());
+        $gradebookEval = $em->find(GradebookEvaluation::class, $eval->get_id());
 
         $tool->setGradebookEval($gradebookEval);
 

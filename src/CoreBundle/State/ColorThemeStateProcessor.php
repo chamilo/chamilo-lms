@@ -10,31 +10,28 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\ColorTheme;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
-use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 use const DIRECTORY_SEPARATOR;
 use const PHP_EOL;
 
-final class ColorThemeStateProcessor implements ProcessorInterface
+/**
+ * @implements ProcessorInterface<ColorTheme, ColorTheme|void>
+ */
+final readonly class ColorThemeStateProcessor implements ProcessorInterface
 {
     public function __construct(
-        private readonly ProcessorInterface $persistProcessor,
-        private readonly AccessUrlHelper $accessUrlHelper,
-        private readonly EntityManagerInterface $entityManager,
+        private ProcessorInterface $persistProcessor,
+        private AccessUrlHelper $accessUrlHelper,
+        private EntityManagerInterface $entityManager,
         #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
-        private readonly FilesystemOperator $filesystem,
+        private FilesystemOperator $filesystem,
     ) {}
 
-    /**
-     * @param mixed $data
-     *
-     * @throws FilesystemException
-     */
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?ColorTheme
     {
         \assert($data instanceof ColorTheme);
 
@@ -49,7 +46,7 @@ final class ColorThemeStateProcessor implements ProcessorInterface
             if (!$accessUrlRelColorTheme) {
                 $accessUrlRelColorTheme = (new AccessUrlRelColorTheme())->setColorTheme($colorTheme);
 
-                $this->accessUrlHelper->getCurrent()->addColorTheme($accessUrlRelColorTheme);
+                $accessUrl->addColorTheme($accessUrlRelColorTheme);
             }
 
             $this->entityManager->flush();

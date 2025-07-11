@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 $form = new FormValidator('edit_category', 'post', $baseUrl."action=edit_category&id={$category->getId()}");
 if ('true' === api_get_setting('editor.save_titles_as_html')) {

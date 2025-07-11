@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Component\Utils\GlideAsset;
+use Chamilo\CoreBundle\Helpers\GlideAssetHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use League\MimeTypeDetection\ExtensionMimeTypeDetector;
@@ -27,7 +27,7 @@ class AssetController
         string $category,
         string $path,
         AssetRepository $assetRepository,
-        GlideAsset $glide,
+        GlideAssetHelper $glide,
         RequestStack $requestStack
     ): Response {
         $filePath = $category.'/'.$path;

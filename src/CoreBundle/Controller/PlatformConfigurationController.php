@@ -7,11 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Bbb;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
-use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
-use Chamilo\CoreBundle\ServiceHelper\TicketProjectHelper;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Throwable;
 
 #[Route('/platform-config')]
 class PlatformConfigurationController extends AbstractController
@@ -47,6 +48,20 @@ class PlatformConfigurationController extends AbstractController
         ];
 
         $configuration['settings']['registration.allow_registration'] = $settingsManager->getSetting('registration.allow_registration', true);
+        $configuration['settings']['course.course_catalog_published'] = $settingsManager->getSetting('course.course_catalog_published', true);
+        $configuration['settings']['course.catalog_hide_public_link'] = $settingsManager->getSetting('course.catalog_hide_public_link', true);
+        $configuration['settings']['course.allow_course_extra_field_in_catalog'] = $settingsManager->getSetting('course.allow_course_extra_field_in_catalog', true);
+        $configuration['settings']['course.course_catalog_display_in_home'] = $settingsManager->getSetting('course.course_catalog_display_in_home', true);
+        $configuration['settings']['course.courses_catalogue_show_only_category'] = $settingsManager->getSetting('course.courses_catalogue_show_only_category', true);
+        $configuration['settings']['display.allow_students_to_browse_courses'] = $settingsManager->getSetting('display.allow_students_to_browse_courses', true);
+        $configuration['settings']['session.catalog_allow_session_auto_subscription'] = $settingsManager->getSetting('session.catalog_allow_session_auto_subscription', true);
+        $configuration['settings']['session.catalog_course_subscription_in_user_s_session'] = $settingsManager->getSetting('session.catalog_course_subscription_in_user_s_session', true);
+        $rawCourseCatalogSetting = $settingsManager->getSetting('course.course_catalog_settings', true);
+        $configuration['settings']['course.course_catalog_settings'] = 'false' !== $rawCourseCatalogSetting ? $this->decodeSettingArray($rawCourseCatalogSetting) : 'false';
+        $rawSessionCatalogSetting = $settingsManager->getSetting('session.catalog_settings', true);
+        $configuration['settings']['session.catalog_settings'] = 'false' !== $rawSessionCatalogSetting ? $this->decodeSettingArray($rawSessionCatalogSetting) : 'false';
+        $configuration['settings']['admin.chamilo_latest_news'] = $settingsManager->getSetting('admin.chamilo_latest_news', true);
+        $configuration['settings']['admin.chamilo_support'] = $settingsManager->getSetting('admin.chamilo_support', true);
 
         $variables = [];
 
@@ -96,6 +111,14 @@ class PlatformConfigurationController extends AbstractController
                 'exercise.allow_exercise_auto_launch',
                 'course.access_url_specific_files',
                 'platform.course_catalog_hide_private',
+                'course.show_courses_descriptions_in_catalog',
+                'session.session_automatic_creation_user_id',
+                'session.session_list_view_remaining_days',
+                'profile.use_users_timezone',
+                'registration.redirect_after_login',
+                'platform.show_tabs_per_role',
+                'platform.session_admin_user_subscription_search_extra_field_to_search',
+                'platform.push_notification_settings',
             ];
 
             $user = $this->userHelper->getCurrent();
@@ -157,5 +180,43 @@ class PlatformConfigurationController extends AbstractController
         ];
 
         return new JsonResponse(['settings' => $settings]);
+    }
+
+    /**
+     * Attempts to decode a setting value that may be stored as:
+     * - native PHP array
+     * - JSON string
+     * - PHP array code string
+     */
+    private function decodeSettingArray(mixed $setting): array
+    {
+        // Already an array, return as is
+        if (\is_array($setting)) {
+            return $setting;
+        }
+
+        // Try to decode JSON string
+        if (\is_string($setting)) {
+            $json = json_decode($setting, true);
+            if (\is_array($json)) {
+                return $json;
+            }
+
+            // Try to evaluate PHP-style array string
+            $trimmed = rtrim($setting, ';');
+
+            try {
+                $evaluated = eval("return $trimmed;");
+                if (\is_array($evaluated)) {
+                    return $evaluated;
+                }
+            } catch (Throwable $e) {
+                // Log error and continue
+                error_log('Failed to eval setting value: '.$e->getMessage());
+            }
+        }
+
+        // Return empty array as fallback
+        return [];
     }
 }

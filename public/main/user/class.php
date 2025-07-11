@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -131,31 +131,26 @@ $columnModel = [
     [
         'name' => 'name',
         'index' => 'name',
-        'width' => '35',
         'align' => 'left',
     ],
     [
         'name' => 'users',
         'index' => 'users',
-        'width' => '15',
         'align' => 'left',
     ],
     [
         'name' => 'status',
         'index' => 'status',
-        'width' => '15',
         'align' => 'left',
     ],
     [
         'name' => 'group_type',
         'index' => 'group_type',
-        'width' => '15',
         'align' => 'center',
     ],
     [
         'name' => 'actions',
         'index' => 'actions',
-        'width' => '10',
         'align' => 'center',
         'sortable' => 'false',
     ],

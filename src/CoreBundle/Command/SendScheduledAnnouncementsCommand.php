@@ -7,27 +7,27 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ScheduledAnnouncementHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Chamilo\CoreBundle\Service\ScheduledAnnouncementService;
 use Database;
 use Doctrine\ORM\EntityManager;
 use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'app:send-scheduled-announcements',
+    description: 'Send scheduled announcements to all users.',
+)]
 class SendScheduledAnnouncementsCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:send-scheduled-announcements';
-
     public function __construct(
         private readonly AccessUrlRepository $accessUrlRepository,
-        private readonly ScheduledAnnouncementService $scheduledAnnouncementService,
+        private readonly ScheduledAnnouncementHelper $scheduledAnnouncementHelper,
         private readonly EntityManager $em
     ) {
         parent::__construct();
@@ -36,7 +36,6 @@ class SendScheduledAnnouncementsCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Send scheduled announcements to all users.')
             ->addOption('debug', null, InputOption::VALUE_NONE, 'If set, debug messages will be shown.')
         ;
     }
@@ -63,7 +62,7 @@ class SendScheduledAnnouncementsCommand extends Command
             $io->writeln('Portal: #'.$urlId.' - '.$url->getUrl());
 
             try {
-                $messagesSent = $this->scheduledAnnouncementService->sendPendingMessages($urlId, $debug);
+                $messagesSent = $this->scheduledAnnouncementHelper->sendPendingMessages($urlId, $debug);
                 $io->writeln("Messages sent: $messagesSent");
 
                 if ($debug) {

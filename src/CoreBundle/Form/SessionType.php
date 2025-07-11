@@ -6,7 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Form;
 
+use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionCategory;
+use Chamilo\CoreBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,7 +27,7 @@ class SessionType extends AbstractType
                 'general_coach',
                 'entity',
                 [
-                    'class' => 'ChamiloCoreBundle:User',
+                    'class' => User::class,
                     'property' => 'username',
                 ]
             )
@@ -32,7 +35,7 @@ class SessionType extends AbstractType
                 'session_admin_id',
                 'entity',
                 [
-                    'class' => 'ChamiloCoreBundle:User',
+                    'class' => User::class,
                     'property' => 'username',
                 ]
             )
@@ -47,7 +50,7 @@ class SessionType extends AbstractType
                 'session_category_id',
                 'entity',
                 [
-                    'class' => 'ChamiloCoreBundle:SessionCategory',
+                    'class' => SessionCategory::class,
                     'property' => 'name',
                 ]
             )
@@ -55,7 +58,7 @@ class SessionType extends AbstractType
                 'promotion_id',
                 'entity',
                 [
-                    'class' => 'ChamiloCoreBundle:Promotion',
+                    'class' => Promotion::class,
                     'property' => 'name',
                 ]
             )

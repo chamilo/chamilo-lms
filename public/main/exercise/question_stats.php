@@ -30,7 +30,7 @@ if (empty($result)) {
     api_not_allowed(true);
 }
 
-$nameTools = get_lang('ExerciseManagement');
+$nameTools = get_lang('Tests management');
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises'),
@@ -42,7 +42,7 @@ $interbreadcrumb[] = [
 
 $interbreadcrumb[] = [
     'url' => 'exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise->iId,
-    'name' => get_lang('StudentScore'),
+    'name' => get_lang('Learner score'),
 ];
 $courseId = api_get_course_int_id();
 

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router"
 import adminRoutes from "./admin"
+import sessionAdminRoutes from "./sessionAdmin"
 import courseRoutes from "./course"
 import accountRoutes from "./account"
 import personalFileRoutes from "./personalfile"
@@ -12,7 +13,6 @@ import toolIntroRoutes from "./ctoolintro"
 import pageRoutes from "./page"
 import publicPageRoutes from "./publicPage"
 import socialNetworkRoutes from "./social"
-import termsRoutes from "./terms"
 import fileManagerRoutes from "./filemanager"
 import skillRoutes from "./skill"
 
@@ -225,7 +225,6 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     fileManagerRoutes,
-    termsRoutes,
     socialNetworkRoutes,
     catalogue,
     adminRoutes,
@@ -247,6 +246,7 @@ const router = createRouter({
     pageRoutes,
     publicPageRoutes,
     skillRoutes,
+    sessionAdminRoutes,
   ],
 })
 
@@ -255,6 +255,26 @@ router.beforeEach(async (to, from, next) => {
 
   if (!securityStore.isAuthenticated) {
     sessionStorage.clear()
+  }
+
+  const preservedParams = ['origin', 'isStudentView']
+  const mergedQuery = { ...to.query }
+
+  let shouldRedirect = false
+
+  for (const key of preservedParams) {
+    if (from.query[key] && !to.query[key]) {
+      mergedQuery[key] = from.query[key]
+      shouldRedirect = true
+    }
+  }
+
+  if (shouldRedirect) {
+    next({
+      ...to,
+      query: mergedQuery,
+    })
+    return
   }
 
   let cid = parseInt(to.query?.cid ?? 0)

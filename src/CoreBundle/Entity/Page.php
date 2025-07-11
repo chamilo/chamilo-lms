@@ -70,6 +70,7 @@ class Page
     #[ORM\Column(name: 'content', type: 'text')]
     protected string $content;
 
+    #[Groups(['page:read', 'page:write'])]
     #[Gedmo\Slug(fields: ['title'], updatable: true, unique: true)]
     #[ORM\Column(name: 'slug', type: 'string', length: 255)]
     protected string $slug;

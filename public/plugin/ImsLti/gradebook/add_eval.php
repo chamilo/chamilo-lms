@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
 
@@ -17,8 +18,8 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : null;
 $is_allowedToEdit = $is_courseAdmin;
 
 $em = Database::getManager();
-/** @var \Chamilo\CoreBundle\Entity\Course $course */
-$course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
+/** @var Course $course */
+$course = $em->find(Course::class, api_get_course_int_id());
 $ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 
 $categories = Category::load(null, null, $course->getCode(), null, null, $sessionId);
@@ -98,7 +99,7 @@ if ($form->validate()) {
     $eval->add();
 
     /** @var GradebookEvaluation $gradebookEval */
-    $gradebookEval = $em->find('ChamiloCoreBundle:GradebookEvaluation', $eval->get_id());
+    $gradebookEval = $em->find(GradebookEvaluation::class, $eval->get_id());
     $ltiTool->setGradebookEval($gradebookEval);
 
     $em->persist($ltiTool);

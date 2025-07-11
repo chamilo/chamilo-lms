@@ -11,22 +11,23 @@ use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[AsCommand(
+    name: 'app:session-repetition',
+    description: 'Automatically duplicates sessions that meet the repetition criteria.',
+)]
 class SessionRepetitionCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:session-repetition';
     private string $baseUrl;
 
     public function __construct(
@@ -41,7 +42,6 @@ class SessionRepetitionCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Automatically duplicates sessions that meet the repetition criteria.')
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
             ->addOption('base-url', null, InputOption::VALUE_REQUIRED, 'Base URL for generating session links')
         ;

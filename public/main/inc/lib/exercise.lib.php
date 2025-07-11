@@ -2,15 +2,15 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
 
 /**
@@ -1600,78 +1600,60 @@ HOTSPOT;
     }
 
     /**
-     * Get an HTML string with the list of exercises where the given question
-     * is being used.
-     *
-     * @param int $questionId    The iid of the question being observed
-     * @param int $excludeTestId If defined, exclude this (current) test from the list of results
-     *
-     * @return string An HTML string containing a div and a table
+     * Displays a table listing the quizzes where a question is used.
      */
-    public static function showTestsWhereQuestionIsUsed(int $questionId, int $excludeTestId = 0)
+    public static function showTestsWhereQuestionIsUsed(int $questionId, int $excludeTestId = 0): void
     {
-        $questionId = (int) $questionId;
-        $excludeTestId = (int) $excludeTestId;
+        $em = Database::getManager();
+        $quizRepo = $em->getRepository(CQuiz::class);
+        $quizzes = $quizRepo->findQuizzesUsingQuestion($questionId, $excludeTestId);
 
-        $sql = "SELECT qz.title quiz_title,
-                        c.title course_title,
-                        s.title session_name,
-                        qz.iid as quiz_id,
-                        qz.c_id,
-                        qz.session_id
-                FROM c_quiz qz,
-                    c_quiz_rel_question qq,
-                    course c,
-                    session s
-                WHERE qz.c_id = c.id AND
-                    (qz.session_id = s.id OR qz.session_id = 0) AND
-                    qq.quiz_id = qz.iid AND ";
-        if (!empty($excludeTestId)) {
-            $sql .= " qz.iid != $excludeTestId AND ";
+        if (empty($quizzes)) {
+            echo '';
+            return;
         }
-        $sql .= "     qq.question_id = $questionId
-                GROUP BY qq.iid";
 
         $result = [];
-        $html = "";
 
-        $sqlResult = Database::query($sql);
+        foreach ($quizzes as $quiz) {
+            $link = $quiz->getFirstResourceLink();
+            $course = $link?->getCourse();
+            $session = $link?->getSession();
+            $courseId = $course?->getId() ?? 0;
+            $sessionId = $session?->getId() ?? 0;
 
-        if (0 != Database::num_rows($sqlResult)) {
-            while ($row = Database::fetch_assoc($sqlResult)) {
-                $tmp = [];
-                $tmp[0] = $row['course_title'];
-                $tmp[1] = $row['session_name'];
-                $tmp[2] = $row['quiz_title'];
-                // Send do other test with r=1 to reset current test session variables
-                $urlToQuiz = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$row['quiz_id'].'&r=1';
-                $tmp[3] = '<a href="'.$urlToQuiz.'">'.Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
-                if (0 == (int) $row['session_id']) {
-                    $tmp[1] = '-';
-                }
+            $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.
+                'cid='.$courseId.'&sid='.$sessionId.'&gid=0&gradebook=0&origin='.
+                '&exerciseId='.$quiz->getIid().'&r=1';
 
-                $result[] = $tmp;
-            }
 
-            $headers = [
-                get_lang('Course'),
-                get_lang('Session'),
-                get_lang('Quiz'),
-                get_lang('LinkToTestEdition'),
+            $result[] = [
+                $course?->getTitle() ?? '-',
+                $session?->getTitle() ?? '-',
+                $quiz->getTitle(),
+                '<a href="'.$url.'">'.Display::getMdiIcon(
+                    'order-bool-ascending-variant',
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Edit')
+                ).'</a>',
             ];
-
-            $title = Display::div(
-                get_lang('QuestionAlsoUsedInTheFollowingTests'),
-                [
-                    'class' => 'section-title',
-                    'style' => 'margin-top: 25px; border-bottom: none',
-                ]
-            );
-
-            $html = $title.Display::table($headers, $result);
         }
 
-        echo $html;
+        $headers = [
+            get_lang('Course'),
+            get_lang('Session'),
+            get_lang('Quiz'),
+            get_lang('Link to test edition'),
+        ];
+
+        $title = Display::div(
+            get_lang('Question also used in the following tests'),
+            ['class' => 'section-title', 'style' => 'margin-top: 25px; border-bottom: none']
+        );
+
+        echo $title.Display::table($headers, $result);
     }
 
     /**
@@ -5360,7 +5342,7 @@ EOT;
             return false;
         }
 
-        $midnightTime = ChamiloApi::getServerMidnightTime();
+        $midnightTime = ChamiloHelper::getServerMidnightTime();
 
         $answeredQuestionsCount = self::countAnsweredQuestionsByUserAfterTime(
             $midnightTime,
@@ -6219,7 +6201,7 @@ EOT;
         if (empty($mainPath) && !$exportOk) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('ExportExerciseNoResult'),
+                    get_lang('No result found for export in this test.'),
                     'warning',
                     false
                 )

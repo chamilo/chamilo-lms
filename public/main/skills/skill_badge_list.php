@@ -9,7 +9,7 @@
  * @deprecated use skill_list.php
  */
 
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 $cidReset = true;
 

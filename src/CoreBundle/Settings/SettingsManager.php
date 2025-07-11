@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Settings;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
-use Chamilo\CoreBundle\ServiceHelper\SettingsManagerHelper;
+use Chamilo\CoreBundle\Helpers\SettingsManagerHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
@@ -415,7 +415,7 @@ class SettingsManager implements SettingsManagerInterface
                 }
             }
 
-            if (in_array($variable, $hidden, true)) {
+            if (\in_array($variable, $hidden, true)) {
                 continue;
             }
 

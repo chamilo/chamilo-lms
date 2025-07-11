@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
@@ -1270,7 +1271,7 @@ class ImportCsv
                 /* Check if event changed of course code */
                 if (!empty($item) && isset($item['item_id']) && !empty($item['item_id'])) {
                     /** @var CCalendarEvent $calendarEvent */
-                    $calendarEvent = $em->getRepository('ChamiloCourseBundle:CCalendarEvent')->find($item['item_id']);
+                    $calendarEvent = $em->getRepository(CCalendarEvent::class)->find($item['item_id']);
                 }
 
                 if ($calendarEvent) {
@@ -1288,7 +1289,7 @@ class ImportCsv
                         ];
                         /** @var CItemProperty $itemProperty */
                         $itemProperty = $em->getRepository('ChamiloCourseBundle:CItemProperty')->findOneBy($criteria);
-                        $courseEntity = $em->getRepository('ChamiloCoreBundle:Course')->find($courseInfo['real_id']);
+                        $courseEntity = $em->getRepository(Course::class)->find($courseInfo['real_id']);
                         if ($itemProperty && $courseEntity) {
                             $itemProperty->setCourse($courseEntity);
                             $em->persist($itemProperty);

@@ -60,7 +60,7 @@ final class Version20250403121200 extends AbstractMigrationChamilo
             $this->entityManager->commit();
         } catch (Exception $e) {
             $this->entityManager->rollBack();
-            error_log('[Migration] Failed to set default AccessUrl: ' . $e->getMessage());
+            error_log('[Migration] Failed to set default AccessUrl: '.$e->getMessage());
         }
     }
 

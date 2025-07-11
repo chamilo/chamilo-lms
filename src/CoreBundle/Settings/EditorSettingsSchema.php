@@ -15,42 +15,34 @@ class EditorSettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
-        $builder
-            ->setDefaults(
-                [
-                    'allow_email_editor' => '',
-                    'math_asciimathML' => '',
-                    'enabled_asciisvg' => '',
-                    'include_asciimathml_script' => '',
-                    'youtube_for_students' => '',
-                    'block_copy_paste_for_students' => '',
-                    'more_buttons_maximized_mode' => 'true',
-                    'enabled_wiris' => '',
-                    'allow_spellcheck' => '',
-                    'force_wiki_paste_as_plain_text' => '',
-                    'enabled_googlemaps' => '',
-                    'enabled_imgmap' => '',
-                    'enabled_support_svg' => '',
-                    'enabled_insertHtml' => '',
-                    'htmlpurifier_wiki' => '',
-                    'enable_iframe_inclusion' => '',
-                    'enabled_mathjax' => '',
-                    'translate_html' => 'false',
-                    'save_titles_as_html' => 'false',
-                    'full_ckeditor_toolbar_set' => 'false',
-                    'ck_editor_block_image_copy_paste' => 'false',
-                    'editor_driver_list' => '',
-                    'enable_uploadimage_editor' => 'false',
-                    'editor_settings' => '',
-                    'video_context_menu_hidden' => 'false',
-                    'video_player_renderers' => '',
-                ]
-            )
-            /*->setAllowedTypes(
-                array(//'allow_personal_agenda' => array('string')
-                )
-            )*/
-        ;
+        $builder->setDefaults([
+            'allow_email_editor' => '',
+            'math_asciimathML' => '',
+            'enabled_asciisvg' => '',
+            'include_asciimathml_script' => '',
+            'youtube_for_students' => '',
+            'block_copy_paste_for_students' => '',
+            'more_buttons_maximized_mode' => 'true',
+            'enabled_wiris' => '',
+            'allow_spellcheck' => '',
+            'force_wiki_paste_as_plain_text' => '',
+            'enabled_googlemaps' => '',
+            'enabled_imgmap' => '',
+            'enabled_support_svg' => '',
+            'enabled_insertHtml' => '',
+            'htmlpurifier_wiki' => '',
+            'enable_iframe_inclusion' => '',
+            'enabled_mathjax' => '',
+            'translate_html' => 'false',
+            'save_titles_as_html' => 'false',
+            'full_ckeditor_toolbar_set' => 'false',
+            'ck_editor_block_image_copy_paste' => 'false',
+            'editor_driver_list' => '',
+            'enable_uploadimage_editor' => 'false',
+            'editor_settings' => '',
+            'video_context_menu_hidden' => 'false',
+            'video_player_renderers' => '',
+        ]);
     }
 
     public function buildForm(FormBuilderInterface $builder): void
@@ -77,56 +69,19 @@ class EditorSettingsSchema extends AbstractSettingsSchema
             ->add('save_titles_as_html', YesNoType::class)
             ->add('full_ckeditor_toolbar_set', YesNoType::class)
             ->add('ck_editor_block_image_copy_paste', YesNoType::class)
-            ->add(
-                'editor_driver_list',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('editor_driver_list'),
-                ]
-            )
+            ->add('editor_driver_list', TextareaType::class, [
+                'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
+            ])
             ->add('enable_uploadimage_editor', YesNoType::class)
-            ->add(
-                'editor_settings',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('editor_settings'),
-                ]
-            )
+            ->add('editor_settings', TextareaType::class, [
+                'attr' => ['rows' => 5, 'style' => 'font-family: monospace;'],
+            ])
             ->add('video_context_menu_hidden', YesNoType::class)
-            ->add(
-                'video_player_renderers',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('video_player_renderers'),
-                ]
-            )
+            ->add('video_player_renderers', TextareaType::class, [
+                'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
+            ])
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
-    }
-
-    private function settingArrayHelpValue(string $variable): string
-    {
-        $values = [
-            'editor_driver_list' => "<pre>
-                ['PersonalDriver', 'CourseDriver']
-                </pre>",
-            'editor_settings' => "<pre>
-                ['config' => ['youtube_responsive' => true, 'image_responsive' => true]]
-                </pre>",
-            'video_player_renderers' => "<pre>
-                ['renderers' => ['dailymotion', 'facebook', 'twitch', 'vimeo', 'youtube']]
-                </pre>",
-        ];
-
-        $returnValue = [];
-        if (isset($values[$variable])) {
-            $returnValue = $values[$variable];
-        }
-
-        return $returnValue;
     }
 }

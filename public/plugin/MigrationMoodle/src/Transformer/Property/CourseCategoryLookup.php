@@ -3,6 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
+use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseCategoriesTask;
 
 /**
@@ -29,7 +30,7 @@ class CourseCategoryLookup extends LoadedKeyLookup
     {
         $categoryId = parent::transform($data);
 
-        $category = \Database::getManager()->find('ChamiloCoreBundle:CourseCategory', $categoryId);
+        $category = \Database::getManager()->find(CourseCategory::class, $categoryId);
 
         if (empty($category)) {
             return null;

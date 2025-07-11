@@ -46,13 +46,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use UserManager;
 
-/**
- * EquatableInterface is needed to check if the user needs to be refreshed.
- */
 #[ApiResource(
     types: ['http://schema.org/Person'],
     operations: [
-        new Get(security: "is_granted('VIEW', object)"),
+        new Get(
+            openapiContext: [
+                'description' => 'Get details of one specific user, including name, e-mail and role.',
+            ],
+            security: "is_granted('VIEW', object)",
+        ),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
@@ -67,7 +69,7 @@ use UserManager;
             uriTemplate: '/advanced/create-user-on-access-url',
             controller: CreateUserOnAccessUrlAction::class,
             denormalizationContext: ['groups' => ['write']],
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')",
             input: CreateUserOnAccessUrlInput::class,
             output: User::class,
             deserialize: true,
@@ -177,6 +179,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'social_post:read',
         'track_e_exercise:read',
         'user_subscriptions:sessions',
+        'student_publication_rel_user:read',
     ])]
     #[ORM\Column(name: 'username', type: 'string', length: 100, unique: true)]
     protected string $username;
@@ -186,11 +189,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     #[ApiProperty(iris: ['http://schema.org/name'])]
     #[Assert\NotBlank]
-    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions'])]
+    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions', 'student_publication_rel_user:read'])]
     #[ORM\Column(name: 'firstname', type: 'string', length: 64, nullable: true)]
     protected ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions'])]
+    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions', 'student_publication_rel_user:read'])]
     #[ORM\Column(name: 'lastname', type: 'string', length: 64, nullable: true)]
     protected ?string $lastname = null;
 
@@ -700,6 +703,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'course_rel_user:read',
         'message:read',
         'user_subscriptions:sessions',
+        'student_publication_rel_user:read',
     ])]
     protected string $fullName;
 
@@ -741,7 +745,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->biography = '';
         $this->website = '';
         $this->locale = 'en';
-        $this->timezone = 'Europe\Paris';
+        $this->timezone = 'Europe/Paris';
         $this->status = CourseRelUser::STUDENT;
         $this->salt = sha1(uniqid('', true));
         $this->active = 1;
@@ -936,18 +940,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setClasses(Collection $classes): self
     {
         $this->classes = $classes;
-
-        return $this;
-    }
-
-    public function getAuthSource(): ?string
-    {
-        return $this->authSource;
-    }
-
-    public function setAuthSource(string $authSource): self
-    {
-        $this->authSource = $authSource;
 
         return $this;
     }
@@ -1273,6 +1265,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
+    #[Groups(['user:read', 'student_publication:read', 'student_publication_comment:read'])]
     public function getFullname(): string
     {
         if (empty($this->fullName)) {
@@ -1620,6 +1613,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->plainPassword = null;
     }
 
+    /**
+     * Returns whether a user can be admin of all multi-URL portals in the case of a multi-URL install.
+     */
     public function isSuperAdmin(): bool
     {
         return $this->hasRole('ROLE_SUPER_ADMIN');
@@ -2163,6 +2159,15 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
+    public function removeUserAsAdmin(): self
+    {
+        $this->admin->setUser(null);
+        $this->admin = null;
+        $this->removeRole('ROLE_ADMIN');
+
+        return $this;
+    }
+
     public function getSessionsByStatusInCourseSubscription(int $status): ReadableCollection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('status', $status));
@@ -2489,9 +2494,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function hasAuthSourceByAuthentication(string $authentication): bool
     {
-        return $this->authSources
-            ->exists(fn (UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication)
-        ;
+        return $this->authSources->exists(
+            fn ($key, $authSource) => $authSource instanceof UserAuthSource
+                && $authSource->getAuthentication() === $authentication
+        );
     }
 
     public function getAuthSourceByAuthentication(string $authentication): UserAuthSource

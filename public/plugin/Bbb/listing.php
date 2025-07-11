@@ -20,6 +20,7 @@ if ($isGlobalPerUser || $isGlobal) {
 require_once __DIR__.'/config.php';
 
 $plugin = BbbPlugin::create();
+$canSeeShareableConferenceLink = $plugin->canCurrentUserSeeGlobalConferenceLink();
 $tool_name = $plugin->get_lang('Videoconference');
 $em = Database::getManager();
 $meetingRepository = $em->getRepository(ConferenceMeeting::class);
@@ -446,6 +447,9 @@ $tpl->assign('show_join_button', $showJoinButton);
 $tpl->assign('message', $message);
 $tpl->assign('form', $formToString);
 $tpl->assign('enter_conference_links', $urlList);
+$tpl->assign('can_see_share_link', $canSeeShareableConferenceLink);
+$tpl->assign('plugin', $plugin);
+$tpl->assign('is_course_context', api_get_course_int_id() > 0);
 
 $content = $tpl->fetch('Bbb/view/listing.tpl');
 

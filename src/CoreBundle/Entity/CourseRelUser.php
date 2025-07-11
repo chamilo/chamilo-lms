@@ -12,11 +12,13 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use Chamilo\CoreBundle\Filter\PartialSearchOrFilter;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -32,7 +34,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['course_rel_user:read'],
         'enable_max_depth' => true,
     ],
-    security: "is_granted('ROLE_USER')"
+    paginationClientEnabled: true,
+    security: "is_granted('ROLE_USER')",
 )]
 #[ORM\Table(name: 'course_rel_user')]
 #[ORM\Index(columns: ['id', 'user_id'], name: 'course_rel_user_user_id')]
@@ -44,8 +47,14 @@ use Symfony\Component\Validator\Constraints as Assert;
         'status' => 'exact',
         'user' => 'exact',
         'user.username' => 'partial',
+        'course' => 'exact',
     ]
 )]
+#[ApiFilter(PartialSearchOrFilter::class, properties: [
+    'user.username',
+    'user.firstname',
+    'user.lastname',
+])]
 class CourseRelUser implements Stringable
 {
     use UserTrait;
@@ -61,11 +70,13 @@ class CourseRelUser implements Stringable
     protected ?int $id = null;
 
     #[Groups(['course:read', 'user:read', 'course_rel_user:read'])]
+    #[MaxDepth(1)]
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'courses')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
     #[Groups(['course_rel_user:read'])]
+    #[MaxDepth(1)]
     #[ORM\ManyToOne(targetEntity: Course::class, cascade: ['persist'], inversedBy: 'users')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;

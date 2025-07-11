@@ -465,7 +465,7 @@ switch ($action) {
             if (BuyCoursesPlugin::SERVICE_TYPE_COURSE == $nodeType) {
                 $nodeType = get_lang('Course');
                 /** @var Course $course */
-                $course = $em->find('ChamiloCoreBundle:Course', $serviceSale['node_id']);
+                $course = $em->find(Course::class, $serviceSale['node_id']);
                 $nodeName = $course ? $course->getTitle() : null;
             } else {
                 if (BuyCoursesPlugin::SERVICE_TYPE_SESSION == $nodeType) {
@@ -476,7 +476,7 @@ switch ($action) {
                     if (BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM == $nodeType) {
                         $nodeType = get_lang('TemplateTitleCertificate');
                         /** @var CLp $lp */
-                        $lp = $em->find('ChamiloCourseBundle:CLp', $serviceSale['node_id']);
+                        $lp = $em->find(CLp::class, $serviceSale['node_id']);
                         $nodeName = $lp ? $lp->getTitle() : null;
                     }
                 }

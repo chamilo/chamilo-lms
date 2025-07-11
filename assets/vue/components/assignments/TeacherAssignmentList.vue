@@ -25,9 +25,18 @@
       field="title"
     >
       <template #body="slotProps">
-        <div class="flex items-center">
+        <RouterLink
+          class="text-blue-600 hover:underline"
+          :to="getAssignmentDetailLink(slotProps.data)"
+        >
           {{ slotProps.data.title }}
-        </div>
+        </RouterLink>
+        <BaseTag
+          v-if="slotProps.data.childFileCount > 0"
+          :label="`${slotProps.data.childFileCount}`"
+          type="success"
+          class="ml-2"
+        />
       </template>
     </Column>
     <Column
@@ -45,13 +54,21 @@
       field="assignment.expiresOn"
     >
       <template #body="slotProps">
-        {{ abbreviatedDatetime(slotProps.data.assignment.expiresOn) }}
+        <span v-if="slotProps.data.assignment">
+          {{ abbreviatedDatetime(slotProps.data.assignment.expiresOn) }}
+        </span>
+        <span
+          v-else
+          class="text-gray-400 italic"
+        >
+          No deadline
+        </span>
       </template>
     </Column>
     <Column :header="t('Number submitted')">
       <template #body="slotProps">
         <BaseTag
-          :label="`${slotProps.data.uniqueStudentAttemptsTotal} / ${slotProps.data.studentSubscribedToWork}`"
+          :label="`${slotProps.data.uniqueStudentAttemptsTotal || 0} / ${slotProps.data.studentSubscribedToWork || 0}`"
           type="success"
         />
       </template>
@@ -64,38 +81,41 @@
         <div v-if="canEdit(slotProps.data)">
           <BaseButton
             :icon="
-              RESOURCE_LINK_PUBLISHED === slotProps.data.firstResourceLink.visibility
+              RESOURCE_LINK_PUBLISHED === slotProps.data.firstResourceLink?.visibility
                 ? 'eye-on'
-                : RESOURCE_LINK_DRAFT === slotProps.data.firstResourceLink.visibility
+                : RESOURCE_LINK_DRAFT === slotProps.data.firstResourceLink?.visibility
                   ? 'eye-off'
                   : ''
             "
             :label="t('Visibility')"
             only-icon
-            size="small"
+            size="normal"
             type="black"
             @click="onClickVisibility(slotProps.data)"
           />
           <BaseButton
-            :label="t('Upload corrections')"
-            icon="file-upload"
+            :label="t('Upload corrections package')"
+            icon="zip-unpack"
             only-icon
-            size="small"
-            type="black"
+            size="normal"
+            type="success"
+            :title="t('Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext')"
+            @click="() => uploadCorrections(slotProps.data)"
           />
           <BaseButton
-            :disabled="0 === slotProps.data.uniqueStudentAttemptsTotal"
-            :label="t('Save')"
-            icon="download"
+            :disabled="0 === (slotProps.data.uniqueStudentAttemptsTotal || 0)"
+            :label="t('Download assignments package')"
+            icon="zip-pack"
             only-icon
-            size="small"
-            type="black"
+            size="normal"
+            type="primary"
+            @click="() => downloadAssignments(slotProps.data)"
           />
           <BaseButton
             :label="t('Edit')"
             icon="edit"
             only-icon
-            size="small"
+            size="normal"
             type="black"
             @click="onClickEdit(slotProps.data)"
           />
@@ -174,7 +194,13 @@ async function loadData() {
 
   try {
     const response = await cStudentPublicationService.findAll({
-      params: { ...loadParams, cid, sid, gid },
+      params: {
+        ...loadParams,
+        cid,
+        sid,
+        gid,
+        "publicationParent.iid": false,
+      },
     })
     const json = await response.json()
 
@@ -229,10 +255,25 @@ function onClickMultipleDelete() {
   })
 }
 
+function getAssignmentDetailLink(assignment) {
+  const assignmentId = parseInt(assignment["@id"].split("/").pop(), 10)
+  const nodeUrl = assignment.resourceNode?.["@id"]
+  const nodeId = nodeUrl ? parseInt(nodeUrl.split("/").pop(), 10) : 0
+
+  return {
+    name: "AssignmentDetail",
+    params: {
+      node: nodeId,
+      id: assignmentId,
+    },
+    query: route.query,
+  }
+}
+
 async function onClickVisibility(assignment) {
-  if (RESOURCE_LINK_PUBLISHED === assignment.firstResourceLink.visibility) {
+  if (RESOURCE_LINK_PUBLISHED === assignment.firstResourceLink?.visibility) {
     assignment.firstResourceLink.visibility = RESOURCE_LINK_DRAFT
-  } else if (RESOURCE_LINK_DRAFT === assignment.firstResourceLink.visibility) {
+  } else if (RESOURCE_LINK_DRAFT === assignment.firstResourceLink?.visibility) {
     assignment.firstResourceLink.visibility = RESOURCE_LINK_PUBLISHED
   }
 
@@ -244,15 +285,57 @@ async function onClickVisibility(assignment) {
 }
 
 function onClickEdit(assignment) {
-  const assignmentId = parseInt(assignment["@id"].split("/").pop(), 10)
-
-  console.log("onClickEdit id :::", assignmentId)
-
   router.push({
     name: "AssignmentsUpdate",
     params: { id: assignment["@id"] },
-    query: route.query,
+    query: {
+      ...route.query,
+      from: "AssignmentsList",
+    },
   })
+}
+
+async function downloadAssignments(assignment) {
+  const assignmentId = parseInt(assignment["@id"].split("/").pop(), 10)
+  try {
+    const blob = await cStudentPublicationService.downloadAssignments(assignmentId)
+    const url = window.URL.createObjectURL(new Blob([blob]))
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute("download", `assignments_${assignmentId}.zip`)
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+  } catch (error) {
+    notification.showErrorNotification(t("Failed to download package"))
+    console.error("Download error", error)
+  }
+}
+
+async function uploadCorrections(assignment) {
+  const assignmentId = parseInt(assignment["@id"].split("/").pop(), 10)
+
+  const input = document.createElement("input")
+  input.type = "file"
+  input.accept = ".zip"
+
+  input.addEventListener("change", async () => {
+    const file = input.files[0]
+    if (!file) return
+
+    try {
+      const result = await cStudentPublicationService.uploadCorrectionsPackage(assignmentId, file)
+      const uploaded = result.uploaded ?? 0
+      const skipped = result.skipped ?? 0
+      notification.showSuccessNotification(t(`Corrections uploaded: ${uploaded}. Skipped: ${skipped}.`))
+      await loadData()
+    } catch (error) {
+      console.error("Upload corrections error", error)
+      notification.showErrorNotification(t("Failed to upload corrections"))
+    }
+  })
+
+  input.click()
 }
 
 const getSessionId = (item) => {
@@ -266,8 +349,6 @@ const getSessionId = (item) => {
 
 const canEdit = (item) => {
   const sessionId = getSessionId(item)
-
-  console.log("sessionId ::: ", sessionId)
 
   const isSessionDocument = sessionId && sessionId === sid
   const isBaseCourse = !sessionId

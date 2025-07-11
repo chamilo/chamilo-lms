@@ -2,20 +2,21 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
-use Chamilo\CourseBundle\Entity\CQuizCategory;
+use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 
 /**
@@ -1851,6 +1852,21 @@ class Exercise
             GradebookUtils::remove_resource_from_course_gradebook($linkInfo['id']);
         }
 
+        // Register resource deletion manually because this is a soft delete (active = -1)
+        // and Doctrine does not trigger postRemove in this case.
+        /* @var TrackEDefaultRepository $trackRepo */
+        $trackRepo = Container::$container->get(TrackEDefaultRepository::class);
+        $resourceNode = $exercise->getResourceNode();
+        if ($resourceNode) {
+            $trackRepo->registerResourceEvent(
+                $resourceNode,
+                'deletion',
+                api_get_user_id(),
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+        }
+
         return true;
     }
 
@@ -2996,8 +3012,6 @@ class Exercise
         $sourceId = $exerciseObject->iId;
         // Force the creation of a new exercise
         $exerciseObject->updateTitle($exerciseObject->selectTitle().' - '.get_lang('Copy'));
-        // Hides the new exercise
-        $exerciseObject->updateStatus(false);
         $exerciseObject->iId = 0;
         $exerciseObject->sessionId = api_get_session_id();
         $courseId = api_get_course_int_id();
@@ -8075,21 +8089,21 @@ class Exercise
         if (0 != $sessionId) {
             $sql = "SELECT * FROM $track_exercises te
               INNER JOIN c_quiz cq
-              ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
+              ON cq.iid = te.exe_exo_id
               WHERE
               te.c_id = %d AND
               te.session_id = %s AND
-              cq.id IN (%s)
-              ORDER BY cq.id";
+              cq.iid IN (%s)
+              ORDER BY cq.iid";
 
             $sql = sprintf($sql, $courseId, $sessionId, $ids);
         } else {
             $sql = "SELECT * FROM $track_exercises te
-              INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
+              INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id
               WHERE
               te.c_id = %d AND
-              cq.id IN (%s)
-              ORDER BY cq.id";
+              cq.iid IN (%s)
+              ORDER BY cq.iid";
             $sql = sprintf($sql, $courseId, $ids);
         }
         $result = Database::query($sql);
@@ -8988,18 +9002,6 @@ class Exercise
                     }
                 }
 
-                // Blocking empty start times see BT#2800
-                // @todo replace global
-                /*global $_custom;
-                if (isset($_custom['exercises_hidden_when_no_start_date']) &&
-                    $_custom['exercises_hidden_when_no_start_date']
-                ) {
-                    if (empty($startTime)) {
-                        $time_limits = true;
-                        $is_actived_time = false;
-                    }
-                }*/
-
                 $cut_title = $exercise->getCutTitle();
                 $alt_title = '';
                 if ($cut_title != $exerciseEntity->getTitle()) {
@@ -9035,7 +9037,7 @@ class Exercise
                         '</a>'.$sessionStar;
 
                     if (ExerciseLib::isQuizEmbeddable($exerciseEntity)) {
-                        $embeddableIcon = Display::getMdiIcon('book-music-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ThisQuizCanBeEmbeddable'));
+                        $embeddableIcon = Display::getMdiIcon('book-music-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('This quiz can be embeddable'));
                         $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
                     }
 
@@ -9118,7 +9120,7 @@ class Exercise
                         if (true === $allowClean) {
                             if (!$locked) {
                                 $clean = Display::url(
-                                    Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CleanStudentResults')
+                                    Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Clean student results')
                                     ),
                                     '',
                                     [
@@ -9134,7 +9136,7 @@ class Exercise
                                     ]
                                 );
                             } else {
-                                $clean = Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('ResourceLockedByGradebook')
+                                $clean = Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Resource locked by gradebook')
                                 );
                             }
                         }
@@ -9190,14 +9192,14 @@ class Exercise
                         $actions .= $export;
                     } else {
                         // not session
-                        $actions = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('ExerciseEditionNotAvailableInSession')
+                        $actions = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Exercise edition not available in session')
                         );
 
                         // Check if this exercise was added in a LP
                         $visibility = '';
                         if (api_is_platform_admin()) {
                             if ($exercise->exercise_was_added_in_lp) {
-                                $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
+                                $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Added to learnpath cannot be accessed')
                                 );
                             } else {
                                 if (0 === $exerciseEntity->getActive() || 0 == $visibility) {
@@ -9291,14 +9293,14 @@ class Exercise
                                 $random_number_of_question
                             );
                             $number_of_questions = $nbQuestionsTotal.' ';
-                            $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang('QuestionsLowerCase') : get_lang(
-                                'QuestionLowerCase'
+                            $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang('Questions lower case') : get_lang(
+                                'Question lower case'
                             );
                             $number_of_questions .= ' - ';
                             $number_of_questions .= min(
                                     TestCategory::getNumberMaxQuestionByCat($exerciseId),
                                     $random_number_of_question
-                                ).' '.get_lang('QuestionByCategory');
+                                ).' '.get_lang('Question by category');
                         } else {
                             $random_label = ' ('.get_lang('Random').') ';
                             $number_of_questions = $random_number_of_question.' '.$random_label.' / '.$rowi;
@@ -9391,14 +9393,14 @@ class Exercise
                                 $today = time();
                                 if ($today < $start_time) {
                                     $attempt_text = sprintf(
-                                        get_lang('ExerciseWillBeActivatedFromXToY'),
+                                        get_lang('Exercise will be activated from %s to %s'),
                                         api_convert_and_format_date($start_time),
                                         api_convert_and_format_date($end_time)
                                     );
                                 } else {
                                     if ($today > $end_time) {
                                         $attempt_text = sprintf(
-                                            get_lang('ExerciseWasActivatedFromXToY'),
+                                            get_lang('Exercise was activated from %s to %s'),
                                             api_convert_and_format_date($start_time),
                                             api_convert_and_format_date($end_time)
                                         );
@@ -9407,13 +9409,13 @@ class Exercise
                             } else {
                                 if (!empty($startTime)) {
                                     $attempt_text = sprintf(
-                                        get_lang('ExerciseAvailableFromX'),
+                                        get_lang('Exercise available from %s'),
                                         api_convert_and_format_date($start_time)
                                     );
                                 }
                                 if (!empty($endTime)) {
                                     $attempt_text = sprintf(
-                                        get_lang('ExerciseAvailableUntilX'),
+                                        get_lang('Exercise available until %s'),
                                         api_convert_and_format_date($end_time)
                                     );
                                 }
@@ -9452,6 +9454,7 @@ class Exercise
                 }
 
                 $currentRow['attempt'] = $attempt_text;
+                $currentRow['iid'] = $exerciseId;
 
                 if ($is_allowedToEdit) {
                     $additionalActions = ExerciseLib::getAdditionalTeacherActions($exerciseId);
@@ -9461,7 +9464,7 @@ class Exercise
                     }
 
                     if (!empty($myActions) && is_callable($myActions)) {
-                        $actions = $myActions($row);
+                        $actions = $myActions($currentRow);
                     }
                     $currentRow = [
                         $exerciseId,
@@ -10305,7 +10308,7 @@ class Exercise
 
         $labels = json_encode($labels);
 
-        $colorList = ChamiloApi::getColorPalette(true, true);
+        $colorList = ChamiloHelper::getColorPalette(true, true);
 
         $dataSetToJson = [];
         $counter = 0;

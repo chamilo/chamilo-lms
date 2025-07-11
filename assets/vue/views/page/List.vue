@@ -66,24 +66,24 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="text-right space-x-2">
-          <!--          <Button-->
-          <!--            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"-->
-          <!--            icon="mdi mdi-information"-->
-          <!--            @click="showHandler(slotProps.data)"-->
-          <!--          />-->
-
           <Button
             v-if="securityStore.isAuthenticated"
             class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
             icon="mdi mdi-pencil"
             @click="goToEditItem(slotProps.data)"
           />
-
           <Button
             v-if="securityStore.isAuthenticated"
             class="p-button-icon-only p-button-danger p-button-outlined p-button-sm"
             icon="mdi mdi-delete"
             @click="confirmDeleteItem(slotProps.data)"
+          />
+          <Button
+            v-if="slotProps.data.enabled && slotProps.data.slug"
+            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
+            icon="mdi mdi-link-variant"
+            :title="t('Show public link')"
+            @click="showPublicLinkDialog(slotProps.data)"
           />
         </div>
       </template>
@@ -121,16 +121,17 @@
 
     <template #footer>
       <Button
-        class="p-button-text"
-        icon="pi pi-times"
-        label="Cancel"
-        @click="hideDialog"
+        v-if="securityStore.isAuthenticated"
+        class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
+        icon="mdi mdi-pencil"
+        @click="goToEditItem(slotProps.data)"
       />
+
       <Button
-        class="p-button-text"
-        icon="pi pi-check"
-        label="Save"
-        @click="saveItem"
+        v-if="securityStore.isAuthenticated"
+        class="p-button-icon-only p-button-danger p-button-outlined p-button-sm"
+        icon="mdi mdi-delete"
+        @click="confirmDeleteItem(slotProps.data)"
       />
     </template>
   </Dialog>
@@ -198,6 +199,24 @@
       />
     </template>
   </Dialog>
+
+  <Dialog
+    v-model:visible="publicLinkDialogVisible"
+    :header="t('Public link')"
+    :modal="true"
+    :style="{ width: '500px' }"
+  >
+    <div class="text-center">
+      <p class="text-sm mb-2">{{ t("You can share or copy this link:") }}</p>
+      <InputText
+        v-model="publicLink"
+        readonly
+        class="w-full mb-3 cursor-pointer"
+        @focus="$event.target.select()"
+      />
+      <p class="text-xs text-gray-500 italic">{{ t("Select the link above and press Ctrl+C to copy it") }}</p>
+    </div>
+  </Dialog>
 </template>
 
 <script setup>
@@ -222,6 +241,11 @@ const toast = useToast()
 const layoutMenuItems = inject("layoutMenuItems")
 
 onMounted(() => {
+  const { page, itemsPerPage } = router.currentRoute.value.query
+
+  if (page) options.value.page = parseInt(page)
+  if (itemsPerPage) options.value.itemsPerPage = parseInt(itemsPerPage)
+
   filters.value.loadNode = 0
 
   onUpdateOptions(options.value)
@@ -237,8 +261,6 @@ onMounted(() => {
 })
 
 const items = computed(() => store.state["page"].recents)
-
-// const deletedPage = computed(() => store.state['page'].deleted);
 const isLoading = computed(() => store.state["page"].isLoading)
 const totalItems = computed(() => store.state["page"].totalItems)
 
@@ -265,31 +287,6 @@ const sortingChanged = (event) => {
   onUpdateOptions(options.value)
 }
 
-/*const openNew = () => {
-  item.value = {};
-  submitted.value = false;
-  itemDialog.value = true;
-};*/
-
-const saveItem = () => {
-  submitted.value = true
-
-  if (item.value.title.trim()) {
-    if (!item.value.id) {
-      // item.value.creator
-      //createCategory.value(item.value);
-      toast.add({
-        severity: "success",
-        detail: t("Saved"),
-        life: 3500,
-      })
-    }
-
-    itemDialog.value = false
-    item.value = {}
-  }
-}
-
 const deleteMultipleItems = () => {
   console.log("deleteMultipleItems".selectedItems.value)
 
@@ -306,25 +303,10 @@ const deleteMultipleItems = () => {
 
   onUpdateOptions(options.value)
 }
-
-const hideDialog = () => {
-  itemDialog.value = false
-  submitted.value = false
-}
-
-/*const editItem = (item) => {
-  item.value = { ...item };
-  itemDialog.value = true;
-};*/
-
 const confirmDeleteItem = (itemToDelete) => {
   item.value = itemToDelete
   deleteItemDialog.value = true
 }
-
-/*const confirmDeleteMultiple = () => {
-  deleteMultipleDialog.value = true;
-};*/
 
 const btnCofirmSingleDeleteOnClick = () => {
   deleteItem(item)
@@ -332,5 +314,14 @@ const btnCofirmSingleDeleteOnClick = () => {
   item.value = {}
 
   deleteItemDialog.value = false
+}
+
+const publicLinkDialogVisible = ref(false)
+const publicLink = ref("")
+
+const showPublicLinkDialog = (item) => {
+  if (!item.slug) return
+  publicLink.value = `${window.location.origin}/pages/${item.slug}`
+  publicLinkDialogVisible.value = true
 }
 </script>

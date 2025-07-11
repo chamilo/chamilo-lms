@@ -7,9 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authenticator\OAuth2;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
-use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -67,13 +67,16 @@ class FacebookAuthenticator extends AbstractAuthenticator
             ->setUsername($this->changeToValidChamiloLogin($resourceOwner->getEmail()))
             ->setPlainPassword('facebook')
             ->setStatus(STUDENT)
-            ->setAuthSource('facebook')
+            ->addAuthSourceByAuthentication(
+                'facebook',
+                $this->accessUrlHelper->getCurrent()
+            )
             ->setRoleFromStatus(STUDENT)
         ;
 
         $this->userRepository->updateUser($user);
 
-        $url = $this->urlHelper->getCurrent();
+        $url = $this->accessUrlHelper->getCurrent();
         $url->addUser($user);
 
         $this->entityManager->flush();

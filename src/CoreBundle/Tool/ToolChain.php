@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**
@@ -209,7 +210,13 @@ class ToolChain
 
     public function getToolFromName(string $title): AbstractTool
     {
-        return $this->handlerCollection->getHandler($title);
+        foreach ($this->handlerCollection->getCollection() as $handler) {
+            if (0 === strcasecmp($handler->getTitle(), $title)) {
+                return $handler;
+            }
+        }
+
+        throw new InvalidArgumentException("Tool handler not found for title: $title");
     }
 
     /*public function getToolFromEntity(string $entityClass): AbstractTool

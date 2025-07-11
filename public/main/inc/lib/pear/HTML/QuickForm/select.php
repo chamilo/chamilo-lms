@@ -70,7 +70,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         }
 
         if (isset($attributes['multiple'])) {
-            $attributes['class'] = 'overflow-auto w-full border bg-white rounded px-3 py-2 outline-none text-gray-700';
+            $attributes['class'] = ' ';
         }
 
 
@@ -397,7 +397,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             }
 
             if (FormValidator::LAYOUT_HORIZONTAL === $this->getLayout()) {
-                $this->_attributes['class'] .= 'p-dropdown p-component p-inputwrapper p-inputwrapper-filled';
+                $this->_attributes['class'] .= ' p-select p-component p-inputwrapper p-inputwrapper-filled';
             }
 
             if (!$this->getMultiple()) {

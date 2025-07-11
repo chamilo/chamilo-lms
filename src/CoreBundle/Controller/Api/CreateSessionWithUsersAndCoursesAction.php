@@ -11,11 +11,13 @@ use Chamilo\CoreBundle\Dto\CreateSessionWithUsersAndCoursesInput;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
-use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
@@ -32,27 +34,39 @@ class CreateSessionWithUsersAndCoursesAction
     {
         $this->validator->validate($data);
 
+        // Ensure the session title is unique
+        $originalTitle = $data->getTitle();
+        $title = $originalTitle;
+        $counter = 1;
+
+        while (
+            $this->em->getRepository(Session::class)->findOneBy(['title' => $title])
+        ) {
+            $title = $originalTitle.' #'.$counter++;
+        }
+
         $session = new Session();
         $session
-            ->setTitle($data->getTitle())
+            ->setTitle($title)
             ->setDescription($data->getDescription() ?? '')
             ->setVisibility($data->getVisibility() ?? 1)
-            ->setNbrCourses(count($data->getCourseIds()))
-            ->setNbrUsers(count($data->getStudentIds()) + count($data->getTutorIds()))
+            ->setNbrCourses(\count($data->getCourseIds()))
+            ->setNbrUsers(\count($data->getStudentIds()) + \count($data->getTutorIds()))
             ->setShowDescription($data->getShowDescription() ?? false)
             ->setDuration($data->getDuration() ?? 0)
-            ->setDisplayStartDate($data->getDisplayStartDate() ?? new \DateTime())
-            ->setDisplayEndDate($data->getDisplayEndDate() ?? new \DateTime())
-            ->setAccessStartDate($data->getAccessStartDate() ?? new \DateTime())
-            ->setAccessEndDate($data->getAccessEndDate() ?? new \DateTime())
-            ->setCoachAccessStartDate($data->getCoachAccessStartDate() ?? new \DateTime())
-            ->setCoachAccessEndDate($data->getCoachAccessEndDate() ?? new \DateTime())
-            ->setValidityInDays($data->getValidityInDays() ?? 0);
+            ->setDisplayStartDate($data->getDisplayStartDate() ?? new DateTime())
+            ->setDisplayEndDate($data->getDisplayEndDate() ?? new DateTime())
+            ->setAccessStartDate($data->getAccessStartDate() ?? new DateTime())
+            ->setAccessEndDate($data->getAccessEndDate() ?? new DateTime())
+            ->setCoachAccessStartDate($data->getCoachAccessStartDate() ?? new DateTime())
+            ->setCoachAccessEndDate($data->getCoachAccessEndDate() ?? new DateTime())
+            ->setValidityInDays($data->getValidityInDays() ?? 0)
+        ;
 
         if ($data->getCategory()) {
             $category = $this->em->getRepository(SessionCategory::class)->find($data->getCategory());
             if (!$category) {
-                throw new \RuntimeException("Invalid category ID: " . $data->getCategory());
+                throw new RuntimeException('Invalid category ID: '.$data->getCategory());
             }
             $session->setCategory($category);
         }
@@ -88,7 +102,8 @@ class CreateSessionWithUsersAndCoursesAction
             $rel
                 ->setSession($session)
                 ->setUser($user)
-                ->setRelationType(Session::STUDENT);
+                ->setRelationType(Session::STUDENT)
+            ;
 
             $this->em->persist($rel);
 
@@ -101,7 +116,8 @@ class CreateSessionWithUsersAndCoursesAction
                     ->setStatus(Session::STUDENT)
                     ->setVisibility(1)
                     ->setProgress(0)
-                    ->setLegalAgreement(0);
+                    ->setLegalAgreement(0)
+                ;
 
                 $this->em->persist($relCourseUser);
 
@@ -123,7 +139,8 @@ class CreateSessionWithUsersAndCoursesAction
             $rel
                 ->setSession($session)
                 ->setUser($user)
-                ->setRelationType(Session::SESSION_ADMIN);
+                ->setRelationType(Session::SESSION_ADMIN)
+            ;
 
             $this->em->persist($rel);
         }

@@ -30,6 +30,44 @@ $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
 switch ($action) {
+    case 'get_lp_export_items':
+        $lpItems = [];
+        if ($lp) {
+            $items = learnpath::get_flat_ordered_items_list($lp);
+            $lpItemRepo = Container::getLpItemRepository();
+            $documentRepo = Container::getDocumentRepository();
+            foreach ($items as $itemId) {
+                $item = $lpItemRepo->find($itemId);
+
+                if ('document' !== $item->getItemType()) {
+                    continue;
+                }
+
+                $document = $documentRepo->find((int) $item->getPath());
+                if (!$document instanceof CDocument) {
+                    continue;
+                }
+
+                // Only export if it's a valid HTML file
+                try {
+                    $content = $documentRepo->getResourceFileContent($document);
+                    if (!is_string($content) || !preg_match('/^\s*<(?!!--|!doctype|html|body)/i', $content)) {
+                        continue;
+                    }
+
+                    $lpItems[] = [
+                        'id' => $item->getIid(),
+                        'title' => $item->getTitle(),
+                    ];
+                } catch (\Throwable $e) {
+                    // Skip silently
+                }
+            }
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode(['items' => $lpItems]);
+        exit;
     case 'get_lp_list_by_course':
         $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;
         $session_id = (isset($_GET['session_id']) && !empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
@@ -95,6 +133,7 @@ switch ($action) {
                     $title = Exercise::format_title_variable($title);
                     break;
                 case TOOL_DOCUMENT:
+                case 'video':
                     $repo = Container::getDocumentRepository();
                     /** @var CDocument $document */
                     $document = $repo->getResourceFromResourceNode($id);

@@ -2,7 +2,7 @@
   <div class="field">
     <div class="p-float-label">
       <InputNumber
-        :id="id"
+        :input-id="id"
         :class="{ 'p-invalid': isInvalid }"
         :disabled="disabled"
         :max="max"

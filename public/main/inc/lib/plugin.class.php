@@ -370,7 +370,7 @@ class Plugin
 
         if ($plugin && empty($this->settings) || $forceFromDB) {
             $configByUrl = $plugin->getConfigurationsByAccessUrl(
-                Container::getAccessUrlHelper()->getCurrent()
+                Container::getAccessUrlUtil()->getCurrent()
             );
 
             $this->settings = $configByUrl?->getConfiguration() ?? [];
@@ -908,41 +908,24 @@ class Plugin
      *
      * @return bool True if plugin is installed/enabled, false otherwise
      */
-    public function isEnabled($checkEnabled = false)
+    public function isEnabled(bool $checkEnabled = false)
     {
-        $settings = api_get_settings_params_simple(
-            [
-                "subkey = ? AND category = ? AND type = ? AND variable = 'status' " => [
-                    $this->get_name(),
-                    'Plugins',
-                    'setting',
-                ],
-            ]
-        );
-        if (is_array($settings) && isset($settings['selected_value']) && 'installed' == $settings['selected_value']) {
-            // The plugin is installed
-            // If we need a check on whether it is enabled, also check for
-            // *plugin*_tool_enable and make sure it is *NOT* false
-            if ($checkEnabled) {
-                $enabled = api_get_settings_params_simple(
-                    [
-                        "variable = ? AND subkey = ? AND category = 'Plugins' " => [
-                            $this->get_name().'_tool_enable',
-                            $this->get_name(),
-                        ],
-                    ]
-                );
-                if (is_array($enabled) && isset($enabled['selected_value']) && 'false' == $enabled['selected_value']) {
-                    // Only return false if the setting exists and it is
-                    // *specifically* set to false
-                    return false;
-                }
-            }
+        $settings = $this->get_settings();
 
-            return true;
+        if (empty($settings)) {
+            return false;
         }
 
-        return false;
+        if ($checkEnabled) {
+            if (
+                isset($settings['tool_enable']) &&
+                strtolower($settings['tool_enable']) === 'false'
+            ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

@@ -2,6 +2,8 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -72,7 +74,7 @@ $actions = function ($row) use ($plugin, $url, $courseId, $sessionId) {
     return $actions;
 };
 
-$table = Exercise::exerciseGrid(
+$table = Exercise::exerciseGridResource(
     0,
     null,
     null,
@@ -142,7 +144,7 @@ if (!empty($users) && $initialData && $initialData['exercise_id']) {
 
 $template->assign(
     'positioning_introduction',
-    Display::return_message($plugin->get_lang('PositioningIntroduction'))
+    Display::return_message($plugin->get_lang('PositioningIntroduction'), false)
 );
 $template->assign('table', $exercisesToString);
 $template->assign('radars', $radars);

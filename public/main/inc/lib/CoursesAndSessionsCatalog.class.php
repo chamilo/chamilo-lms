@@ -1,14 +1,21 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
+use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\SessionResubscriptionEvent;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\Query\Expr\Join;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * @todo change class name
@@ -732,14 +739,14 @@ class CoursesAndSessionsCatalog
 
         $qb = $qb
             ->select('s')
-            ->from('ChamiloCoreBundle:Session', 's')
+            ->from(Session::class, 's')
             ->where(
                 $qb->expr()->in(
                     's',
                     $qb2
                         ->select('s2')
-                        ->from('ChamiloCoreBundle:AccessUrlRelSession', 'url')
-                        ->join('ChamiloCoreBundle:Session', 's2')
+                        ->from(AccessUrlRelSession::class, 'url')
+                        ->join(Session::class, 's2')
                         ->where(
                             $qb->expr()->eq('url.sessionId ', 's2.id')
                         )->andWhere(
@@ -813,8 +820,8 @@ class CoursesAndSessionsCatalog
                     's',
                     $qb3
                         ->select('s3')
-                        ->from('ChamiloCoreBundle:ExtraFieldValues', 'fv')
-                        ->innerJoin('ChamiloCoreBundle:Session', 's3', Join::WITH, 'fv.itemId = s3.id')
+                        ->from(ExtraFieldValues::class, 'fv')
+                        ->innerJoin(Session::class, 's3', Join::WITH, 'fv.itemId = s3.id')
                         ->where(
                             $qb->expr()->eq('fv.field', $extraFieldInfo['id'])
                         )->andWhere(
@@ -845,33 +852,33 @@ class CoursesAndSessionsCatalog
 
         $qb->select('s')
             ->distinct()
-            ->from('ChamiloCoreBundle:Session', 's')
+            ->from(Session::class, 's')
             ->innerJoin(
-                'ChamiloCoreBundle:SessionRelCourse',
+                SessionRelCourse::class,
                 'src',
                 Join::WITH,
                 's.id = src.session'
             )
             ->innerJoin(
-                'ChamiloCoreBundle:AccessUrlRelSession',
+                AccessUrlRelSession::class,
                 'url',
                 Join::WITH,
                 'url.sessionId = s.id'
             )
             ->innerJoin(
-                'ChamiloCoreBundle:ExtraFieldRelTag',
+                ExtraFieldRelTag::class,
                 'frt',
                 Join::WITH,
                 'src.course = frt.itemId'
             )
             ->innerJoin(
-                'ChamiloCoreBundle:Tag',
+                Tag::class,
                 't',
                 Join::WITH,
                 'frt.tagId = t.id'
             )
             ->innerJoin(
-                'ChamiloCoreBundle:ExtraField',
+                ExtraField::class,
                 'f',
                 Join::WITH,
                 'frt.fieldId = f.id'
@@ -921,15 +928,15 @@ class CoursesAndSessionsCatalog
 
         $qb->select('s')
             ->distinct()
-            ->from('ChamiloCoreBundle:Session', 's')
+            ->from(Session::class, 's')
             ->innerJoin(
-                'ChamiloCoreBundle:SessionRelCourse',
+                SessionRelCourse::class,
                 'src',
                 Join::WITH,
                 's.id = src.session'
             )
             ->innerJoin(
-                'ChamiloCoreBundle:AccessUrlRelSession',
+                AccessUrlRelSession::class,
                 'url',
                 Join::WITH,
                 'url.sessionId = s.id'
@@ -1563,16 +1570,16 @@ class CoursesAndSessionsCatalog
         $userId = api_get_user_id();
         $sessionsBlocks = [];
         $entityManager = Database::getManager();
-        $sessionRelCourseRepo = $entityManager->getRepository('ChamiloCoreBundle:SessionRelCourse');
-        $extraFieldRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraField');
+        $sessionRelCourseRepo = $entityManager->getRepository(SessionRelCourse::class);
+        $extraFieldRepo = $entityManager->getRepository(ExtraField::class);
         $tagRepo = Container::getTagRepository();
 
         $tagsField = $extraFieldRepo->findOneBy([
-            'itemType' => Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE,
+            'itemType' => ExtraField::COURSE_FIELD_TYPE,
             'variable' => 'tags',
         ]);
 
-        /** @var \Chamilo\CoreBundle\Entity\Session $session */
+        /** @var Session $session */
         foreach ($sessions as $session) {
             $sessionDates = SessionManager::parseSessionDates([
                 'display_start_date' => $session->getDisplayStartDate(),
@@ -1610,7 +1617,7 @@ class CoursesAndSessionsCatalog
             }
 
             /** @var SequenceResourceRepository $repo */
-            $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
+            $repo = $entityManager->getRepository(SequenceResource::class);
             $sequences = $repo->getRequirementsAndDependenciesWithinSequences(
                 $session->getId(),
                 SequenceResource::SESSION_TYPE

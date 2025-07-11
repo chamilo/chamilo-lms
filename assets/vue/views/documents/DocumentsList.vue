@@ -183,12 +183,15 @@
             @click="openMoveDialog(slotProps.data)"
           />
           <BaseButton
-            :disabled="slotProps.data.filetype !== 'file'"
-            :title="slotProps.data.filetype !== 'file' ? t('Replace (files only)') : t('Replace file')"
+            :disabled="!(slotProps.data.filetype === 'file' || slotProps.data.filetype === 'video')"
+            :title="getReplaceButtonTitle(slotProps.data)"
             icon="file-swap"
             size="small"
             type="secondary"
-            @click="slotProps.data.filetype === 'file' && openReplaceDialog(slotProps.data)"
+            @click="
+              (slotProps.data.filetype === 'file' || slotProps.data.filetype === 'video') &&
+              openReplaceDialog(slotProps.data)
+            "
           />
           <BaseButton
             :title="t('Information')"
@@ -602,6 +605,7 @@ const documentToReplace = ref(null)
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
   filters.value.loadNode = 1
+  filters.value.filetype = ["file", "folder", "video"]
 
   // Set resource node.
   let nodeId = route.params.node
@@ -739,6 +743,16 @@ async function forceDeleteItem() {
     console.error("Error deleting documents forcibly:", error)
     notification.showErrorNotification(t("Error deleting document(s)."))
   }
+}
+
+function getReplaceButtonTitle(item) {
+  if (item.filetype === "file") {
+    return t("Replace file")
+  }
+  if (item.filetype === "video") {
+    return t("Replace video")
+  }
+  return t("Replace (files or videos only)")
 }
 
 async function downloadSelectedItems() {
@@ -994,7 +1008,7 @@ async function replaceDocument() {
     return
   }
 
-  if (documentToReplace.value.filetype !== "file") {
+  if (!(documentToReplace.value.filetype === "file" || documentToReplace.value.filetype === "video")) {
     notification.showErrorNotification(t("Only files can be replaced."))
     return
   }

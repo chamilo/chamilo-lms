@@ -3,6 +3,8 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
+use Chamilo\CourseBundle\Entity\CQuiz;
+
 /**
  * Class LearnPathItemViewQuizStatus.
  *
@@ -47,7 +49,7 @@ class LearnPathItemViewQuizStatus extends LoadedQuizLookup
      */
     private function findQuiz($quizId = 0)
     {
-        $quiz = \Database::getManager()->find('ChamiloCourseBundle:CQuiz', $quizId);
+        $quiz = \Database::getManager()->find(CQuiz::class, $quizId);
 
         if (!$quiz) {
             throw new \Exception("Quiz ($quizId) not found.");

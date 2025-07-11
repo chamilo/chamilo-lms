@@ -2,13 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use ChamiloSession as Session;
+use Doctrine\ORM\NoResultException;
 use Knp\Component\Pager\Paginator;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Question Pool
@@ -46,7 +47,7 @@ $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
 // by default when we go to the page for the first time, we select the current course
 if (!isset($_GET['selected_course']) && !isset($_GET['exerciseId'])) {
-    $selected_course = api_get_course_int_id();
+    $selected_course = -1;
 }
 
 $_course = api_get_course_info();
@@ -619,6 +620,40 @@ function getQuestions(
             ->setParameter('exerciseId', $exerciseId);
     } elseif ($exerciseId == -1) {
         $qb->andWhere($qb->expr()->isNull('qr.quiz'));
+    } elseif ($selectedCourse > 0) {
+        $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
+            $selectedCourse,
+            $sessionId ?? 0,
+            true
+        );
+
+        if (!empty($exerciseList)) {
+            $exerciseIds = array_column($exerciseList, 'iid');
+            $qb->andWhere($qb->expr()->in('qr.quiz', ':exerciseIds'))
+                ->setParameter('exerciseIds', $exerciseIds);
+        } else {
+            return $getCount ? 0 : [];
+        }
+    } elseif ($selectedCourse == -1 && $sessionId > 0) {
+        $sessionCourses = SessionManager::get_course_list_by_session_id($sessionId);
+        $courseIds = array_keys($sessionCourses);
+
+        if (!empty($courseIds)) {
+            $exerciseIds = [];
+            foreach ($courseIds as $courseId) {
+                $exercises = ExerciseLib::get_all_exercises_for_course_id($courseId, $sessionId, true);
+                $exerciseIds = array_merge($exerciseIds, array_column($exercises, 'iid'));
+            }
+
+            if (!empty($exerciseIds)) {
+                $qb->andWhere($qb->expr()->in('qr.quiz', ':exerciseIds'))
+                    ->setParameter('exerciseIds', $exerciseIds);
+            } else {
+                return $getCount ? 0 : [];
+            }
+        } else {
+            return $getCount ? 0 : [];
+        }
     }
 
     if ($courseCategoryId > 0) {
@@ -661,7 +696,7 @@ function getQuestions(
         $qb->select('COUNT(qq.iid)');
         try {
             return (int) $qb->getQuery()->getSingleScalarResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (NoResultException $e) {
             return 0;
         }
     } else {
@@ -673,14 +708,13 @@ function getQuestions(
 
         $questions = [];
         foreach ($results as $result) {
-            $question = [
+            $questions[] = [
                 'iid' => $result['id'],
                 'question' => $result['question'],
                 'type' => $result['type'],
                 'level' => $result['level'],
                 'exerciseId' => $result['exerciseId'],
             ];
-            $questions[] = $question;
         }
 
         return $questions;
@@ -803,7 +837,7 @@ if ($fromExercise <= 0) {
     // IN A TEST - NOT IN THE COURSE
     $actionLabel = get_lang('Re-use a copy inside the current test');
     $actionIcon1 = 'clone';
-    $actionIcon2 = '';
+    $actionIcon2 = 'add';
     $questionTagA = 0;
 
     if ($selected_course == api_get_course_int_id()) {

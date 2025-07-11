@@ -17,16 +17,25 @@ export default {
   /**
    * @param {string} endpoint
    * @param {Object} searchParams
-   * @returns {Promise<{totalItems, items}>}
+   * @returns {Promise<{totalItems: number, items: Object[], nextPageParams: {page: number, itemsPerPage: number}|null}>}
    */
   async getCollection(endpoint, searchParams = {}) {
     const { data } = await api.get(endpoint, {
       params: searchParams,
     })
 
+    let nextPageParams = null
+
+    if (data["hydra:view"] && data["hydra:view"]["hydra:next"]) {
+      const queryString = data["hydra:view"]["hydra:next"].split("?")[1]
+
+      nextPageParams = Object.fromEntries(new URLSearchParams(queryString))
+    }
+
     return {
       totalItems: data.totalItems,
       items: data["hydra:member"],
+      nextPageParams,
     }
   },
 

@@ -2,11 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Class Category
@@ -2009,8 +2008,8 @@ class Category implements GradebookItem
      */
     public static function generateUserCertificate(
         GradebookCategory $category,
-        int               $user_id,
-        bool              $sendNotification = false,
+        int $user_id,
+        bool $sendNotification = false,
         bool $skipGenerationIfExists = false
     ) {
         $user_id = (int) $user_id;
@@ -2097,23 +2096,40 @@ class Category implements GradebookItem
                 }
             }
 
-            if (!empty($fileWasGenerated)) {
-                $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$my_certificate['id'].'&user_id='.$user_id;
-                $certificates = Display::toolbarButton(
-                    get_lang('Display certificate'),
-                    $url,
-                    'eye',
-                    'primary',
-                    ['target' => '_blank']
-                );
+            $isOwner = api_get_user_id() == $user_id;
+            $isPlatformAdmin = api_is_platform_admin();
+            $isCourseAdmin = api_is_course_admin($courseId);
 
-                $exportToPDF = Display::url(
-                    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
-                    "$url&action=export"
-                );
+            $canViewCertificate = $isOwner || $isPlatformAdmin || $isCourseAdmin || !empty($my_certificate['publish']);
 
-                $hideExportLink = api_get_setting('hide_certificate_export_link');
-                $hideExportLinkStudent = api_get_setting('hide_certificate_export_link_students');
+            if (!empty($fileWasGenerated) && $canViewCertificate) {
+                $certificates = '';
+                $exportToPDF = null;
+                $pdfUrl = null;
+
+                if (!empty($my_certificate['pathCertificate'])) {
+                    $hash = pathinfo($my_certificate['pathCertificate'], PATHINFO_FILENAME);
+
+                    $url = api_get_path(WEB_PATH) . 'certificates/' . $hash . '.html';
+                    $pdfUrl = api_get_path(WEB_PATH) . 'certificates/' . $hash . '.pdf';
+
+                    $certificates = Display::toolbarButton(
+                        get_lang('Display certificate'),
+                        $url,
+                        'eye',
+                        'primary',
+                        ['target' => '_blank']
+                    );
+
+                    $exportToPDF = Display::url(
+                        Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
+                        $pdfUrl,
+                        ['target' => '_blank']
+                    );
+                }
+
+                $hideExportLink = api_get_setting('gradebook.hide_certificate_export_link');
+                $hideExportLinkStudent = api_get_setting('gradebook.hide_certificate_export_link_students');
                 if ('true' === $hideExportLink || (api_is_student() && 'true' === $hideExportLinkStudent)) {
                     $exportToPDF = null;
                 }
@@ -2121,7 +2137,7 @@ class Category implements GradebookItem
                 $html = [
                     'certificate_link' => $certificates,
                     'pdf_link' => $exportToPDF,
-                    'pdf_url' => "$url&action=export",
+                    'pdf_url' => $pdfUrl,
                 ];
             }
 

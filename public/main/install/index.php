@@ -127,6 +127,26 @@ $adminPhoneForm = '(000) 001 02 03';
 $institutionForm = 'My Organisation';
 $session_lifetime = 360000;
 $installationGuideLink = '../../documentation/installation_guide.html';
+$fromEmail = $_POST['fromEmail'] ?? '';
+$fromName = $_POST['fromName'] ?? '';
+$mailer = $_POST['mailer'] ?? '';
+$smtpHost = $_POST['smtpHost'] ?? '';
+$smtpPort = $_POST['smtpPort'] ?? '';
+$smtpAuth = $_POST['smtpAuth'] ?? '';
+$smtpSecure = $_POST['smtpSecure'] ?? '';
+$smtpUniqueReplyTo = $_POST['smtpUniqueReplyTo'] ?? '';
+$smtpCharset = $_POST['smtpCharset'] ?? 'UTF-8';
+$smtpDebug = $_POST['smtpDebug'] ?? '';
+$smtpUser = $_POST['smtpUser'] ?? '';
+$smtpPass = $_POST['smtpPass'] ?? '';
+$mailerDsn = sprintf(
+    '%s://%s:%s@%s:%s',
+    $mailer,
+    urlencode($smtpUser),
+    urlencode($smtpPass),
+    $smtpHost,
+    $smtpPort
+);
 
 // Setting the error reporting levels.
 error_reporting(E_ALL);
@@ -330,6 +350,19 @@ if (isset($_POST['step2'])) {
             '{{PACKAGER}}' => 'chamilo',
             '{{DEFAULT_TEMPLATE}}' => 'default',
             '{{ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE}}' => '0',
+            '{{MAILER}}' => $mailer,
+            '{{SMTP_HOST}}' => $smtpHost,
+            '{{SMTP_PORT}}' => $smtpPort,
+            '{{SMTP_AUTH}}' => $smtpAuth,
+            '{{SMTP_USER}}' => $smtpUser,
+            '{{SMTP_PASS}}' => $smtpPass,
+            '{{SMTP_SECURE}}' => $smtpSecure,
+            '{{SMTP_CHARSET}}' => $smtpCharset,
+            '{{SMTP_UNIQUE_REPLY_TO}}' => $smtpUniqueReplyTo,
+            '{{SMTP_DEBUG}}' => $smtpDebug,
+            '{{MAILER_DSN}}' => $mailerDsn,
+            '{{MAILER_FROM_EMAIL}}' => $fromEmail,
+            '{{MAILER_FROM_NAME}}' => $fromName,
         ];
         error_log('Update env file');
         updateEnvFile($distFile, $envFile, $params);
@@ -437,6 +470,18 @@ if (isset($_POST['step2'])) {
     $stepData['adminLastName'] = $adminLastName;
     $stepData['emailForm'] = $emailForm;
     $stepData['adminPhoneForm'] = $adminPhoneForm;
+    $stepData['fromEmail'] = $fromEmail;
+    $stepData['fromName'] = $fromName;
+    $stepData['mailer'] = $mailer;
+    $stepData['smtpHost'] = $smtpHost;
+    $stepData['smtpPort'] = $smtpPort;
+    $stepData['smtpAuth'] = $smtpAuth;
+    $stepData['smtpUser'] = $smtpUser;
+    $stepData['smtpPass'] = $smtpPass;
+    $stepData['smtpSecure'] = $smtpSecure;
+    $stepData['smtpCharset'] = $smtpCharset;
+    $stepData['smtpUniqueReplyTo'] = $smtpUniqueReplyTo;
+    $stepData['smtpDebug'] = $smtpDebug;
 
     $allowSelfRegistrationLiteral = match ($allowSelfReg) {
         'true' => get_lang('Yes'),
@@ -544,6 +589,19 @@ if (isset($_POST['step2'])) {
             '{{PACKAGER}}' => 'chamilo',
             '{{DEFAULT_TEMPLATE}}' => 'default',
             '{{ADMIN_CHAMILO_ANNOUNCEMENTS_DISABLE}}' => '0',
+            '{{MAILER}}' => $mailer,
+            '{{SMTP_HOST}}' => $smtpHost,
+            '{{SMTP_PORT}}' => $smtpPort,
+            '{{SMTP_AUTH}}' => $smtpAuth,
+            '{{SMTP_USER}}' => $smtpUser,
+            '{{SMTP_PASS}}' => $smtpPass,
+            '{{SMTP_SECURE}}' => $smtpSecure,
+            '{{SMTP_CHARSET}}' => $smtpCharset,
+            '{{SMTP_UNIQUE_REPLY_TO}}' => $smtpUniqueReplyTo,
+            '{{SMTP_DEBUG}}' => $smtpDebug,
+            '{{MAILER_DSN}}' => $mailerDsn,
+            '{{MAILER_FROM_EMAIL}}' => $fromEmail,
+            '{{MAILER_FROM_NAME}}' => $fromName,
         ];
 
         updateEnvFile($distFile, $envFile, $params);

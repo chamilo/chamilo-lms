@@ -9,11 +9,11 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Templates;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
 use Chamilo\CoreBundle\Repository\TemplatesRepository;
-use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -134,11 +134,34 @@ class TemplateController extends AbstractController
                 $imageUrl = $assetRepository->getAssetUrl($template->getImage());
             }
 
+            $content = $template->getContent();
+            $content = str_replace('<table', '<table class="responsive-table"', $content);
+            $content = str_replace(
+                '{CSS}',
+                '<style>
+                .responsive-table {
+                    width: 100%;
+                    max-width: 100%;
+                    overflow-x: auto;
+                    display: block;
+                    border-collapse: collapse;
+                }
+                .responsive-table th,
+                .responsive-table td {
+                    padding: 8px;
+                    text-align: left;
+                    word-wrap: break-word;
+                    border: 1px solid #ccc;
+                }
+            </style>',
+                $content
+            );
+
             return [
                 'id' => $template->getId(),
                 'title' => $template->getTitle(),
                 'comment' => $template->getComment(),
-                'content' => $template->getContent(),
+                'content' => $content,
                 'image' => $imageUrl,
             ];
         }, $systemTemplates);

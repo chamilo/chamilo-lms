@@ -11,8 +11,6 @@ if (!$plugin->isEnabled()) {
     api_not_allowed(true);
 }
 
-//$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
-
 $currentUrl = api_get_self().'?'.api_get_cidreq();
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
@@ -27,6 +25,8 @@ $radar = '';
 $initialResults = null;
 $exercisesToRadar = [];
 $exercisesToRadarLabel = [];
+$initialExercise = null;
+
 if ($initialData) {
     $exerciseId = $initialData['exercise_id'];
     $initialExercise = new Exercise();
@@ -45,11 +45,14 @@ if ($initialData) {
     }
 }
 
+$course = api_get_course_entity($courseId);
+$session = $sessionId ? api_get_session_entity($sessionId) : null;
+
 $studentAverage = Tracking::get_avg_student_progress(
     $currentUserId,
-    $courseCode,
+    $course,
     [],
-    $sessionId
+    $session
 );
 
 $averageToUnlock = (float) $plugin->get('average_percentage_to_unlock_final_exercise');
@@ -88,13 +91,17 @@ if (!empty($initialExercise)) {
     }
 }
 
-$radars = $initialExercise->getRadarsFromUsers(
-    [$currentUserId],
-    $exercisesToRadar,
-    $exercisesToRadarLabel,
-    $courseId,
-    $sessionId
-);
+$radars = null;
+if ($initialExercise instanceof Exercise) {
+    $radars = $initialExercise->getRadarsFromUsers(
+        [$currentUserId],
+        $exercisesToRadar,
+        $exercisesToRadarLabel,
+        $courseId,
+        $sessionId
+    );
+}
+
 $nameTools = $plugin->get_lang('Positioning');
 
 $template = new Template($nameTools);

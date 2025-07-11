@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PermissionRelRoleRepository::class)]
 #[ORM\Table(name: 'permission_rel_role')]
@@ -29,9 +28,9 @@ class PermissionRelRole
     #[ORM\JoinColumn(nullable: false)]
     private Permission $permission;
 
-    #[Assert\NotBlank]
-    #[ORM\Column(type: 'string', length: 50)]
-    private string $roleCode;
+    #[ORM\ManyToOne(targetEntity: Role::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private Role $role;
 
     #[ORM\Column(type: 'boolean')]
     private bool $changeable;
@@ -56,14 +55,14 @@ class PermissionRelRole
         return $this;
     }
 
-    public function getRoleCode(): string
+    public function getRole(): Role
     {
-        return $this->roleCode;
+        return $this->role;
     }
 
-    public function setRoleCode(string $roleCode): self
+    public function setRole(Role $role): self
     {
-        $this->roleCode = $roleCode;
+        $this->role = $role;
 
         return $this;
     }

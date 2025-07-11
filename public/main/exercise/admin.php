@@ -2,8 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Exercise administration
@@ -445,8 +445,7 @@ if ($newQuestion || $editQuestion) {
             echo '</div>';
         } else {
             require 'question_admin.inc.php';
-            // @todo
-            //ExerciseLib::showTestsWhereQuestionIsUsed($objQuestion->iid, $objExercise->getId());
+            ExerciseLib::showTestsWhereQuestionIsUsed($objQuestion->iid, $objExercise->getId());
         }
     }
 }

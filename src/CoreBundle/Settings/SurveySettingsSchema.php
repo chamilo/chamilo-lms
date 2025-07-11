@@ -16,43 +16,30 @@ class SurveySettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
-        $builder
-            ->setDefaults(
-                [
-                    'survey_email_sender_noreply' => 'coach',
-                    'extend_rights_for_coach_on_survey' => 'true',
-                    'hide_survey_reporting_button' => 'false',
-                    'survey_mark_question_as_required' => 'false',
-                    'survey_anonymous_show_answered' => 'false',
-                    'survey_allow_answered_question_edit' => 'false',
-                    'survey_duplicate_order_by_name' => 'true',
-                    'survey_backwards_enable' => 'false',
-                    'hide_survey_edition' => '',
-                    'survey_additional_teacher_modify_actions' => '',
-                    'show_surveys_base_in_sessions' => 'false',
-                ]
-            )
-        ;
-        //            ->setAllowedTypes(
-        //                array(
-        //                    //'survey_email_sender_noreply' => array('string'),
-        //                )
-        //            );
+        $builder->setDefaults([
+            'survey_email_sender_noreply' => 'coach',
+            'extend_rights_for_coach_on_survey' => 'true',
+            'hide_survey_reporting_button' => 'false',
+            'survey_mark_question_as_required' => 'false',
+            'survey_anonymous_show_answered' => 'false',
+            'survey_allow_answered_question_edit' => 'false',
+            'survey_duplicate_order_by_name' => 'true',
+            'survey_backwards_enable' => 'false',
+            'hide_survey_edition' => '',
+            'survey_additional_teacher_modify_actions' => '',
+            'show_surveys_base_in_sessions' => 'false',
+        ]);
     }
 
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add(
-                'survey_email_sender_noreply',
-                ChoiceType::class,
-                [
-                    'choices' => [
-                        'Course coach email sender' => 'coach',
-                        'No reply email sender' => 'noreply',
-                    ],
-                ]
-            )
+            ->add('survey_email_sender_noreply', ChoiceType::class, [
+                'choices' => [
+                    'Course coach email sender' => 'coach',
+                    'No reply email sender' => 'noreply',
+                ],
+            ])
             ->add('extend_rights_for_coach_on_survey', YesNoType::class)
             ->add('hide_survey_reporting_button', YesNoType::class)
             ->add('survey_mark_question_as_required', YesNoType::class)
@@ -60,44 +47,11 @@ class SurveySettingsSchema extends AbstractSettingsSchema
             ->add('survey_allow_answered_question_edit', YesNoType::class)
             ->add('survey_duplicate_order_by_name', YesNoType::class)
             ->add('survey_backwards_enable', YesNoType::class)
-            ->add(
-                'hide_survey_edition',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('hide_survey_edition'),
-                ]
-            )
-            ->add(
-                'survey_additional_teacher_modify_actions',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('survey_additional_teacher_modify_actions'),
-                ]
-            )
+            ->add('hide_survey_edition', TextareaType::class)
+            ->add('survey_additional_teacher_modify_actions', TextareaType::class)
             ->add('show_surveys_base_in_sessions', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
-    }
-
-    private function settingArrayHelpValue(string $variable): string
-    {
-        $values = [
-            'hide_survey_edition' => "<pre>
-                ['codes' => []]
-                </pre>",
-            'survey_additional_teacher_modify_actions' => "<pre>
-                    ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]
-                </pre>",
-        ];
-
-        $returnValue = [];
-        if (isset($values[$variable])) {
-            $returnValue = $values[$variable];
-        }
-
-        return $returnValue;
     }
 }

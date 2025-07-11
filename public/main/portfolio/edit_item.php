@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Entity\PortfolioCategory;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\PortfolioItemEditedEvent;
+use Chamilo\CoreBundle\Framework\Container;
 
 $categories = $em
-    ->getRepository('ChamiloCoreBundle:PortfolioCategory')
+    ->getRepository(PortfolioCategory::class)
     ->findBy([
         'user' => $user,
     ]);
@@ -37,7 +38,7 @@ if ($form->validate()) {
         ->setContent($values['content'])
         ->setUpdateDate($currentTime)
         ->setCategory(
-            $em->find('ChamiloCoreBundle:PortfolioCategory', $values['category'])
+            $em->find(PortfolioCategory::class, $values['category'])
         );
 
     $em->persist($item);

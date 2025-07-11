@@ -4,6 +4,10 @@
 /**
  * Configuration script for the Buy Courses plugin.
  */
+
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+
 $cidReset = true;
 
 require_once '../config.php';
@@ -43,7 +47,7 @@ if (empty($currency)) {
 $currencyIso = null;
 
 if ($editingCourse) {
-    $course = $entityManager->find('ChamiloCoreBundle:Course', $id);
+    $course = $entityManager->find(Course::class, $id);
 
     if (!$course) {
         api_not_allowed(true);
@@ -96,7 +100,7 @@ if ($editingCourse) {
         api_not_allowed(true);
     }
 
-    $session = $entityManager->find('ChamiloCoreBundle:Session', $id);
+    $session = $entityManager->find(Session::class, $id);
     if (!$session) {
         api_not_allowed(true);
     }

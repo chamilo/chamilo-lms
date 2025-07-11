@@ -9,11 +9,11 @@ declare(strict_types=1);
  * and names.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\CatalogueCourseRelAccessUrlRelUsergroup;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\CatalogueCourseRelAccessUrlRelUsergroupRepository;
 
@@ -471,6 +471,23 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
 
         api_location(api_get_self());
     }
+
+    if (isset($_GET['new_course_id'])) {
+        $courseId = (int) $_GET['new_course_id'];
+        $course = api_get_course_entity($courseId);
+        if ($course) {
+            $link = api_get_course_url($course->getId());
+            $msg = sprintf(
+                get_lang('Course %s added. You can access it directly %shere%s.'),
+                '<strong>'.Security::remove_XSS($course->getTitle()).'</strong>',
+                '<a href="'.$link.'" class="text-primary">',
+                '</a>'
+            );
+
+            $content .=  Display::return_message($msg, 'confirmation', false);
+        }
+    }
+
     // Create a search-box
     $form = new FormValidator(
         'search_simple',

@@ -2,10 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @author Julio Montoya <gugli100@gmail.com>
+ * Edit course categories (user groups) assigned to an Access URL.
  */
 
-// resetting the course id
+use Chamilo\CoreBundle\Enums\ActionIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -86,18 +87,29 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         if (0 == $access_url_id) {
             Display::addFlash(Display::return_message(get_lang('Select a URL')));
             header('Location: access_url_edit_users_to_url.php?');
+            exit;
         } elseif (is_array($list)) {
             UrlManager::updateUrlRelCourseCategory($list, $access_url_id);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
-            header('Location: access_urls.php');
         }
-        exit;
     }
 }
 
 Display::display_header($tool_name);
-Display::page_subheader2($tool_name);
 
+echo '<div class="flex gap-2 items-center mb-4 mt-4">';
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to URL list')),
+    api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
+);
+echo '</div>';
+
+Display::page_subheader2($tool_name);
+?>
+    <h2 class="text-xl font-semibold text-gray-800 mt-6 mb-2">
+        <?php echo $tool_name; ?>
+    </h2>
+<?php
 $noUserGroupList = $userGroupList = [];
 $ajax_search = 'unique' == $add_type ? true : false;
 
@@ -128,134 +140,133 @@ if ('multiple' == $add_type) {
 }
 
 $url_list = UrlManager::get_url_data();
-?>
-<div style="text-align: left;">
-	<?php echo $link_add_type_unique; ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple; ?>
-</div>
-<br /><br />
-<form
-    name="formulaire"
-    method="post"
-    action="<?php echo api_get_self(); ?>"
-    style="margin:0px;" <?php if ($ajax_search) {
-    echo ' onsubmit="valide();"';
-} ?>
->
-<?php echo get_lang('Select URL').' : '; ?>
-<select name="access_url_id" onchange="javascript:send();">
-<option value="0">-- <?php echo get_lang('Select URL'); ?> -- </option>
-	<?php
-    $url_selected = '';
-    foreach ($url_list as $url_obj) {
-        $checked = '';
-        if (!empty($access_url_id)) {
-            if ($url_obj[0] == $access_url_id) {
-                $checked = 'selected=true';
-                $url_selected = $url_obj[1];
-            }
-        }
-        if (1 == $url_obj['active']) {
-            ?>
-            <option <?php echo $checked; ?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?>
-            </option>
-        <?php
-        }
+$url_selected = '';
+foreach ($url_list as $url_obj) {
+    if ((int) $url_obj[0] === $access_url_id) {
+        $url_selected = $url_obj[1];
+        break;
     }
+}
 ?>
-</select>
-<br /><br />
-<input type="hidden" name="form_sent" value="1" />
-<input type="hidden" name="add_type" value = "<?php echo $add_type; ?>" />
-<table border="0" cellpadding="5" cellspacing="0" width="100%">
-<!-- Users -->
-<tr>
-  <td align="center"><b><?php echo get_lang('Course categories available'); ?> :</b>
-  </td>
-  <td></td>
-  <td align="center"><b><?php printf(get_lang('Course categories in %s site:'), $url_selected); ?></b></td>
-</tr>
+    <div class="flex space-x-2 border-gray-300 pb-2 mb-4">
+        <a href="<?php echo api_get_self(); ?>?add_type=unique&access_url_id=<?php echo $access_url_id; ?>"
+           class="text-sm px-4 py-2 transition <?php echo $add_type === 'unique'
+               ? 'border-b-2 border-primary text-primary font-semibold'
+               : 'text-gray-500 hover:text-primary'; ?>">
+            <?php echo get_lang('Single registration'); ?>
+        </a>
 
-<tr>
-  <td align="center">
-  <div id="content_source">
-    <?php if ($ajax_search) {
-    ?>
-		<input type="text" id="course_to_add" onkeyup="xajax_searchCourseCategoryAjax(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
-		<div id="ajax_list_courses"></div>
-    <?php
-} else {
-        ?>
-	  <select id="origin_users" name="no_course_list[]" multiple="multiple" size="15" style="width:380px;">
-		<?php foreach ($noUserGroupList as $noItem) {
-            ?>
-			<option value="<?php echo $noItem['id']; ?>">
-                <?php echo $noItem['title']; ?>
-            </option>
-		<?php
-        } ?>
-	  </select>
-    <?php
-    } ?>
-  </div>
-  </td>
-  <td width="10%" valign="middle" align="center">
-  <?php if ($ajax_search) {
-        ?>
-	<button class="btn btn--plain" type="button" onclick="remove_item(document.getElementById('destination_users'))" ></button>
-  <?php
-    } else {
-        ?>
-	<button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" >
-           <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
-    </button>
-	<br /><br />
-	<button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" >
-        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
-    </button>
-   <?php
-    } ?>
-	<br /><br /><br /><br /><br /><br />
-  </td>
-  <td align="center">
-  <select id="destination_users" name="course_list[]" multiple="multiple" size="15" style="width:380px;">
-<?php
-foreach ($userGroupList as $item) {
-        ?>
-	<option value="<?php echo $item['id']; ?>">
-        <?php echo $item['tilte']; ?>
-    </option>
-<?php
-    }
-?>
-  </select>
-  </td>
-</tr>
-<tr>
-	<td colspan="3" align="center">
-		<br />
-		<?php
-        if (isset($_GET['add'])) {
-            echo '<button class="save" onclick="valide()" >'.get_lang('Add').'</button>';
-        } else {
-            echo '<button class="save" onclick="valide()" >'.get_lang('Edit').'</button>';
-        }
-        ?>
-	</td>
-</tr>
-</table>
-</form>
+        <a href="<?php echo api_get_self(); ?>?add_type=multiple&access_url_id=<?php echo $access_url_id; ?>"
+           class="text-sm px-4 py-2 transition <?php echo $add_type === 'multiple'
+               ? 'border-b-2 border-primary text-primary font-semibold'
+               : 'text-gray-500 hover:text-primary'; ?>">
+            <?php echo get_lang('Multiple registration'); ?>
+        </a>
+    </div>
+    <br /><br />
+    <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" onsubmit="valide()">
+        <input type="hidden" name="form_sent" value="1" />
+        <input type="hidden" name="add_type" value="<?php echo $add_type; ?>" />
+
+        <div class="mb-4">
+            <label for="access_url_id" class="block text-sm font-bold text-gray-800 mb-1"><?php echo get_lang('Select URL'); ?></label>
+            <select name="access_url_id" id="access_url_id" onchange="send()" class="w-full p-2 border border-gray-300 rounded-md">
+                <option value="0">-- <?php echo get_lang('Select URL'); ?> -- </option>
+                <?php foreach ($url_list as $url_obj): ?>
+                    <?php if ($url_obj['active'] == 1): ?>
+                        <option value="<?php echo $url_obj[0]; ?>" <?php if ($url_obj[0] == $access_url_id) echo 'selected'; ?>>
+                            <?php echo $url_obj[1]; ?>
+                        </option>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <?php echo get_lang('Course categories available'); ?>
+                </label>
+                <?php if ($ajax_search): ?>
+                    <input type="text" id="course_to_add"
+                           class="w-full mb-2 p-2 border border-gray-300 rounded-md"
+                           onkeyup="xajax_searchCourseCategoryAjax(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
+                    <div id="ajax_list_courses"></div>
+                <?php else: ?>
+                    <select id="origin_users" name="no_course_list[]" multiple size="15"
+                            class="w-full h-[400px] p-2 border border-gray-300 rounded-md">
+                        <?php foreach ($noUserGroupList as $noItem): ?>
+                            <option value="<?php echo $noItem['id']; ?>">
+                                <?php echo $noItem['title']; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
+            </div>
+
+            <div class="flex flex-col items-center justify-center gap-4 my-6">
+                <?php if (!$ajax_search): ?>
+                    <button type="button"
+                            onclick="moveItem(
+              document.getElementById('origin_users'),
+              document.getElementById('destination_users'))"
+                            class="rounded-full bg-primary p-2 hover:bg-primary/80 focus:outline-none focus:ring">
+                        <i class="mdi mdi-fast-forward-outline text-white text-2xl"></i>
+                    </button>
+
+                    <button type="button"
+                            onclick="moveItem(
+              document.getElementById('destination_users'),
+              document.getElementById('origin_users'))"
+                            class="rounded-full bg-secondary p-2 hover:bg-secondary/80 focus:outline-none focus:ring">
+                        <i class="mdi mdi-rewind-outline text-white text-2xl"></i>
+                    </button>
+                <?php else: ?>
+                    <button type="button"
+                            onclick="remove_item(document.getElementById('destination_users'))"
+                            class="rounded-full bg-danger p-2 hover:bg-danger/80 focus:outline-none focus:ring"
+                            title="<?php echo get_lang('Remove from selection') ?>">
+                        <i class="mdi mdi-close text-white text-2xl"></i>
+                    </button>
+                <?php endif; ?>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <?php printf(get_lang('Course categories in %s site:'), $url_selected); ?>
+                </label>
+                <select id="destination_users" name="course_list[]" multiple size="15"
+                        class="w-full h-[400px] p-2 border border-gray-300 rounded-md">
+                    <?php foreach ($userGroupList as $item): ?>
+                        <option value="<?php echo $item['id']; ?>">
+                            <?php echo $item['title']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="mt-6 text-center">
+            <button type="submit" class="rounded-lg px-6 py-2 shadow focus:outline-none focus:ring btn--primary">
+                <?php echo get_lang('Save'); ?>
+            </button>
+        </div>
+    </form>
+
 <script>
 
-function moveItem(origin , destination) {
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
+function moveItem(origin, destination) {
+    if (!origin || !destination) return;
+    for (let i = 0; i < origin.options.length; i++) {
+        if (origin.options[i].selected) {
+            destination.options[destination.length] =
+                new Option(origin.options[i].text, origin.options[i].value);
+            origin.options[i] = null;
+            i--;
+        }
+    }
+    destination.selectedIndex = -1;
+    sortOptions(destination.options);
 }
 
 function sortOptions(options) {
@@ -304,7 +315,7 @@ function loadUsersInSelect(select) {
 	sessionClasses = makepost(document.getElementById('destination_classes'));
 	xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
 	xhr_object.onreadystatechange = function() {
-		if(xhr_object.readyState == 4) {
+		if(xhr_object.readyState === 4) {
 			document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
 		}
 	}
@@ -316,6 +327,15 @@ function makepost(select){
 	for (i = 0 ; i<options.length ; i++)
 		ret = ret + options[i].value +'::'+options[i].text+";;";
 	return ret;
+}
+
+function remove_item(origin) {
+    for(var i = 0 ; i<origin.options.length ; i++) {
+        if(origin.options[i].selected) {
+            origin.options[i]=null;
+            i = i-1;
+        }
+    }
 }
 </script>
 <?php

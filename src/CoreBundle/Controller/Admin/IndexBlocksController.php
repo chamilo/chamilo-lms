@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Page;
 use Chamilo\CoreBundle\Entity\PageCategory;
+use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
 use Chamilo\CoreBundle\Event\Events;
@@ -372,6 +373,14 @@ class IndexBlocksController extends BaseController
             'url' => $this->generateUrl('legacy_main', ['name' => 'admin/questions.php']),
             'label' => $this->translator->trans('Questions'),
         ];
+        $items[] = [
+            'class' => 'item-resource-sequence',
+            'url' => $this->generateUrl('legacy_main', [
+                'name' => 'admin/resource_sequence.php',
+                'query' => ['type' => SequenceResource::COURSE_TYPE],
+            ]),
+            'label' => $this->translator->trans('Resources sequencing'),
+        ];
 
         return $items;
     }
@@ -475,10 +484,10 @@ class IndexBlocksController extends BaseController
             ];
         }
 
-        if ('true' === $this->settingsManager->getSetting('registration.allow_terms_conditions')) {
+        if ('true' === $this->settingsManager->getSetting('registration.allow_terms_conditions', true)) {
             $items[] = [
                 'class' => 'item-terms-and-conditions',
-                'route' => ['name' => 'TermsConditions'],
+                'route' => ['name' => 'TermsConditionsList'],
                 'label' => $this->translator->trans('Terms and Conditions'),
             ];
         }
@@ -590,6 +599,12 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('File info'),
         ];
 
+        $items[] = [
+            'class' => 'item-resources-info',
+            'url' => '/admin/resources_info',
+            'label' => $this->translator->trans('Resources by type'),
+        ];
+
         return $items;
     }
 
@@ -655,6 +670,11 @@ class IndexBlocksController extends BaseController
             'class' => 'item-privacy-consent',
             'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_list_consent.php']),
             'label' => $this->translator->trans('User list'),
+        ];
+        $items[] = [
+            'class' => 'item-gdpr-parties',
+            'route' => ['name' => 'ThirdPartyManager'],
+            'label' => $this->translator->trans('Third parties (GDPR)'),
         ];
 
         return $items;
@@ -812,7 +832,10 @@ class IndexBlocksController extends BaseController
             ];
             $items[] = [
                 'class' => 'item-resource-sequence',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/resource_sequence.php']),
+                'url' => $this->generateUrl('legacy_main', [
+                    'name' => 'admin/resource_sequence.php',
+                    'query' => ['type' => SequenceResource::SESSION_TYPE],
+                ]),
                 'label' => $this->translator->trans('Resources sequencing'),
             ];
             $items[] = [

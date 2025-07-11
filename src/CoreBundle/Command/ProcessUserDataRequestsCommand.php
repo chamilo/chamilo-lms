@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Database;
 use DateInterval;
@@ -17,6 +17,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use MessageManager;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -26,13 +27,12 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use UserManager;
 
+#[AsCommand(
+    name: 'app:process-user-data-requests',
+    description: 'Process user data requests for personal data actions.',
+)]
 class ProcessUserDataRequestsCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'app:process-user-data-requests';
-
     public function __construct(
         private readonly Connection $connection,
         private readonly AccessUrlHelper $accessUrlHelper,
@@ -47,7 +47,6 @@ class ProcessUserDataRequestsCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Process user data requests for personal data actions.')
             ->addOption('debug', null, InputOption::VALUE_NONE, 'Enable debug mode')
             ->setHelp('This command processes user data requests that require administrative action.')
         ;

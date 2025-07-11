@@ -1,0 +1,41 @@
+<h1>{{ assignment.title }}</h1>
+<p><strong>{{ 'Course'|trans }}:</strong> {{ course.title }}</p>
+{% if session %}
+    <p><strong>{{ 'Session'|trans }}:</strong> {{ session.name }}</p>
+{% endif %}
+
+<table border="1" cellspacing="0" cellpadding="5">
+    <thead>
+    <tr>
+        <th>{{ 'Student'|trans }}</th>
+        <th>{{ 'Sent Date'|trans }}</th>
+        <th>{{ 'File'|trans }}</th>
+        <th>{{ 'Score'|trans }}</th>
+        <th>{{ 'Feedback'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for submission in submissions %}
+        <tr>
+            <td>{{ submission.user.fullName }}</td>
+            <td>{{ submission.sentDate|date('Y-m-d H:i') }}</td>
+            <td>{{ submission.title }}</td>
+            <td>
+                {% if submission.qualification is not null %}
+                    {{ submission.qualification }}
+                    {% if submission.publicationParent is defined and submission.publicationParent.qualification is not null %}
+                        / {{ submission.publicationParent.qualification }}
+                    {% endif %}
+                {% else %}
+                    {{ 'Not graded yet'|trans }}
+                {% endif %}
+            </td>
+            <td>
+                {% for comment in submission.comments %}
+                    <p><strong>{{ comment.user.fullName }}</strong>: {{ comment.comment }}</p>
+                {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

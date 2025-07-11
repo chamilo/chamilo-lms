@@ -79,7 +79,9 @@ const router = useRouter()
 const { gid, sid, cid } = useCidReq()
 const { onCreated, onError } = useUpload()
 const { t } = useI18n()
-const filetype = route.query.filetype === "certificate" ? "certificate" : "file"
+const allowedFiletypes = ["file", "video", "certificate"]
+const filetypeQuery = route.query.filetype
+const filetype = allowedFiletypes.includes(filetypeQuery) ? filetypeQuery : "file"
 
 const showAdvancedSettings = ref(false)
 const isUncompressZipEnabled = ref(false)
@@ -155,8 +157,10 @@ uppy.value.setMeta({
 
 if (filetype === "certificate") {
   uppy.value.opts.restrictions.allowedFileTypes = [".html"]
-} else {
-  uppy.value.use(Webcam)
+} else if (filetype === "video") {
+  uppy.value.opts.restrictions.allowedFileTypes = ["video/*"]
+} else if (filetype === "file") {
+  uppy.value.opts.restrictions.allowedFileTypes = null
 }
 
 watch(isUncompressZipEnabled, () => {

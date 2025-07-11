@@ -423,7 +423,6 @@
     "Pages deleted": "Pages deleted",
     "Go to Explore to find a topic of interest, or wait for someone to subscribe you": "Go to Explore to find a topic of interest, or wait for someone to subscribe you",
     "You don\\'t have any course yet": "You don\\'t have any course yet",
-    "Personal Data: Introduction": "Personal Data: Introduction",
     "Date": "Fecha",
     "Why you want to delete your Legal Agreement": "Why you want to delete your Legal Agreement",
     "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible": "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible",
@@ -496,5 +495,10 @@
     "Private course": "Private course",
     "Not subscribed": "Not subscribed",
     "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "La conexi\u00f3n con la base de datos ha fallado. Puede que el nombre de usuario, la contrase\u00f1a o el prefijo de la base de datos sean incorrectos. Por favor, revise estos datos y vuelva a intentarlo.",
+    "Accept Terms and Conditions": "Accept Terms and Conditions",
+    "You accepted these terms on": "You accepted these terms on",
+    "Revoke Acceptance": "Revoke Acceptance",
+    "Minutes": "Huch'uy tuykuna",
+    "Days": "Days",
     "Go to your newly created portal.": "Ir a la plataforma que acaba de crear."
 }

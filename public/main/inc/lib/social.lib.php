@@ -5,15 +5,14 @@
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use ChamiloSession as Session;
 use Laminas\Feed\Reader\Entry\Rss;
 use Laminas\Feed\Reader\Reader;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Class SocialManager.
@@ -1385,17 +1384,17 @@ class SocialManager extends UserManager
                         case ExtraField::FIELD_TYPE_RADIO:
                             $objEfOption = new ExtraFieldOption('user');
                             $value = $data['extra_'.$extraFieldInfo['variable']];
-                            $optionInfo = $objEfOption->get_field_option_by_field_and_option(
-                                $extraFieldInfo['id'],
-                                $value
+                            $optionInfo = $objEfOption->repo->getFieldOptionByFieldAndOption(
+                                (int) $extraFieldInfo['id'],
+                                $value,
+                                $objEfOption->extraField->getItemType()
                             );
 
-                            if ($optionInfo && isset($optionInfo[0])) {
-                                $optionInfo = $optionInfo[0];
+                            if (!empty($optionInfo[0])) {
                                 $extraFieldItem = [
                                     'variable' => $extraFieldInfo['variable'],
                                     'label' => ucfirst($extraFieldInfo['display_text']),
-                                    'value' => $optionInfo['display_text'],
+                                    'value' => $optionInfo[0]->getDisplayText(),
                                 ];
                             } else {
                                 $extraFieldItem = [
@@ -1420,7 +1419,11 @@ class SocialManager extends UserManager
                     switch ($extraFieldInfo['value_type']) {
                         case ExtraField::FIELD_TYPE_RADIO:
                             $objEfOption = new ExtraFieldOption('user');
-                            $optionInfo = $objEfOption->get_field_option_by_field_and_option($extraFieldInfo['id'], $extraFieldInfo['value']);
+                            $optionInfo = $objEfOption->repo->getFieldOptionByFieldAndOption(
+                                (int) $extraFieldInfo['id'],
+                                $extraFieldInfo['value'],
+                                $objEfOption->extraField->getItemType()
+                            );
                             break;
                         case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                         case ExtraField::FIELD_TYPE_GEOLOCALIZATION:

@@ -2,141 +2,86 @@
 
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
+
 namespace Chamilo\PluginBundle\StudentFollowUp\Entity;
 
+use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User;
 use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * CarePost.
- *
- * @ORM\Table(name="sfu_post")
- * @ORM\Entity
- * @Gedmo\Tree(type="nested")
- */
+#[ORM\Table(name: 'sfu_post')]
+#[ORM\Entity]
+#[Gedmo\Tree(type: 'nested')]
 class CarePost
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
-    protected $title;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="content", type="text", nullable=true)
-     */
-    protected $content;
+    #[ORM\Column(name: 'content', type: 'text', nullable: true)]
+    protected string $content;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="external_care_id", type="string", nullable=true)
-     */
-    protected $externalCareId;
+    #[ORM\Column(name: 'external_care_id', type: 'string', nullable: true)]
+    protected ?string $externalCareId;
 
-    /**
-     * @ORM\Column(name="created_at", type="datetime", nullable=true)
-     */
-    protected $createdAt;
+    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
+    protected ?DateTime $createdAt;
 
-    /**
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
-     */
-    protected $updatedAt;
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: true)]
+    protected ?DateTime $updatedAt;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="private", type="boolean")
-     */
-    protected $private;
+    #[ORM\Column(name: 'private', type: 'boolean')]
+    protected bool $private;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="external_source", type="boolean")
-     */
-    protected $externalSource;
+    #[ORM\Column(name: 'external_source', type: 'boolean')]
+    protected bool $externalSource;
 
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="tags", type="array")
-     */
-    protected $tags;
+    #[ORM\Column(name: 'tags', type: 'array')]
+    protected array $tags;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="attachment", type="string", length=255)
-     */
-    protected $attachment;
+    #[ORM\Column(name: 'attachment', type: 'string', length: 255)]
+    protected string $attachment;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="insert_user_id", referencedColumnName="id", nullable=false)
-     */
-    private $insertUser;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
+    #[ORM\JoinColumn(name: 'insert_user_id', referencedColumnName: 'id', nullable: false)]
+    private User $insertUser;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
-    private $user;
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    private User $user;
 
-    /**
-     * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="CarePost", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    private $parent;
+    #[Gedmo\TreeParent]
+    #[ORM\ManyToOne(targetEntity: CarePost::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    private CarePost $parent;
 
-    /**
-     * @ORM\OneToMany(targetEntity="CarePost", mappedBy="parent")
-     * @ORM\OrderBy({"createdAt" = "DESC"})
-     */
-    private $children;
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: CarePost::class)]
+    #[ORM\OrderBy(['createdAt' => 'DESC'])]
+    private Collection $children;
 
-    /**
-     * @var int
-     * @Gedmo\TreeLeft
-     * @ORM\Column(name="lft", type="integer", nullable=true, unique=false)
-     */
-    private $lft;
+    #[Gedmo\TreeLeft]
+    #[ORM\Column(name: 'lft', type: 'integer', unique: false, nullable: true)]
+    private ?int $lft;
 
-    /**
-     * @var int
-     * @Gedmo\TreeRight
-     * @ORM\Column(name="rgt", type="integer", nullable=true, unique=false)
-     */
-    private $rgt;
+    #[Gedmo\TreeRight]
+    #[ORM\Column(name: 'rgt', type: 'integer', unique: false, nullable: true)]
+    private ?int $rgt;
 
-    /**
-     * @var int
-     * @Gedmo\TreeLevel
-     * @ORM\Column(name="lvl", type="integer", nullable=true, unique=false)
-     */
-    private $lvl;
+    #[Gedmo\TreeLevel]
+    #[ORM\Column(name: 'lvl', type: 'integer', unique: false, nullable: true)]
+    private ?int $lvl;
 
-    /**
-     * @var int
-     * @Gedmo\TreeRoot
-     * @ORM\Column(name="root", type="integer", nullable=true, unique=false)
-     */
-    private $root;
+    #[Gedmo\TreeRoot]
+    #[ORM\Column(name: 'root', type: 'integer', unique: false, nullable: true)]
+    private ?int $root;
 
     /**
      * Project constructor.
@@ -147,258 +92,173 @@ class CarePost
         $this->attachment = '';
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return $this
-     */
-    public function setId($id)
+    public function setId(int $id): static
     {
         $this->id = $id;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return CarePost
-     */
-    public function setTitle($title)
+    public function setTitle($title): static
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     *
-     * @return CarePost
-     */
-    public function setContent($content)
+    public function setContent(string $content): static
     {
         $this->content = $content;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getExternalCareId()
+    public function getExternalCareId(): ?string
     {
         return $this->externalCareId;
     }
 
-    /**
-     * @param string $externalCareId
-     *
-     * @return CarePost
-     */
-    public function setExternalCareId($externalCareId)
+    public function setExternalCareId(?string $externalCareId): static
     {
         $this->externalCareId = $externalCareId;
 
         return $this;
     }
 
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @return CarePost
-     */
-    public function setUser($user)
+    public function setUser($user): static
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isPrivate()
+    public function isPrivate(): bool
     {
         return $this->private;
     }
 
-    /**
-     * @param bool $private
-     *
-     * @return CarePost
-     */
-    public function setPrivate($private)
+    public function setPrivate(bool $private): static
     {
         $this->private = $private;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isExternalSource()
+    public function isExternalSource(): bool
     {
         return $this->externalSource;
     }
 
-    /**
-     * @param bool $externalSource
-     *
-     * @return CarePost
-     */
-    public function setExternalSource($externalSource)
+    public function setExternalSource(bool $externalSource): static
     {
         $this->externalSource = $externalSource;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getAttachment()
+    public function getAttachment(): string
     {
         return $this->attachment;
     }
 
-    /**
-     * @param string $attachment
-     *
-     * @return CarePost
-     */
-    public function setAttachment($attachment)
+    public function setAttachment(string $attachment): static
     {
         $this->attachment = $attachment;
 
         return $this;
     }
 
-    public function getParent()
+    public function getParent(): CarePost
     {
         return $this->parent;
     }
 
-    /**
-     * @return CarePost
-     */
-    public function setParent($parent)
+    public function setParent(CarePost $parent): static
     {
         $this->parent = $parent;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function hasParent()
+    public function hasParent(): int
     {
         return !empty($this->parent) ? 1 : 0;
     }
 
-    public function getChildren()
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
-    /**
-     * @return CarePost
-     */
-    public function setChildren($children)
+    public function setChildren(Collection $children): static
     {
         $this->children = $children;
 
         return $this;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @return CarePost
-     */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(?DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt()
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    /**
-     * @return CarePost
-     */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(?DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getTags()
+    public function getTags(): array
     {
         return $this->tags;
     }
 
-    /**
-     * @param array $tags
-     *
-     * @return CarePost
-     */
-    public function setTags($tags)
+    public function setTags(array $tags): static
     {
         $this->tags = $tags;
 
         return $this;
     }
 
-    public function getInsertUser()
+    public function getInsertUser(): User
     {
         return $this->insertUser;
     }
 
-    /**
-     * @return CarePost
-     */
-    public function setInsertUser($insertUser)
+    public function setInsertUser(User $insertUser): static
     {
         $this->insertUser = $insertUser;
 

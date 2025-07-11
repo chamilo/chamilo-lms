@@ -28453,3 +28453,12 @@ msgstr "Invalid format"
 
 msgid "Duration (hh:mm:ss)"
 msgstr "Duration (hh:mm:ss)"
+
+msgid "The following documents are used in learning paths:"
+msgstr "The following documents are used in learning paths:"
+
+msgid "Do you still want to delete them?"
+msgstr "Do you still want to delete them"
+
+msgid "Documents deleted"
+msgstr "Documents deleted"

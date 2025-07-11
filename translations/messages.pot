@@ -28421,3 +28421,12 @@ msgstr ""
 
 msgid "Duration (hh:mm:ss)"
 msgstr ""
+
+msgid "The following documents are used in learning paths:"
+msgstr ""
+
+msgid "Do you still want to delete them?"
+msgstr ""
+
+msgid "Documents deleted"
+msgstr ""

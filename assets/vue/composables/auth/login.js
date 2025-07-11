@@ -36,6 +36,11 @@ export function useLogin() {
         return { success: true, requires2FA: true }
       }
 
+      if (responseData.rotate_password && responseData.redirect) {
+        window.location.href = responseData.redirect
+        return
+      }
+
       if (route.query.redirect && isValidHttpUrl(route.query.redirect.toString())) {
         window.location.href = route.query.redirect.toString()
         return

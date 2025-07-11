@@ -25,6 +25,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -70,6 +72,7 @@ class AccountController extends BaseController
                 $password = $form['password']->getData();
                 if ($password) {
                     $user->setPlainPassword($password);
+                    $user->setPasswordUpdateAt(new \DateTimeImmutable());
                 }
             }
 
@@ -92,17 +95,40 @@ class AccountController extends BaseController
     }
 
     #[Route('/change-password', name: 'chamilo_core_account_change_password', methods: ['GET', 'POST'])]
-    public function changePassword(Request $request, UserRepository $userRepository, CsrfTokenManagerInterface $csrfTokenManager): Response
-    {
-        /** @var User $user */
+    public function changePassword(
+        Request $request,
+        UserRepository $userRepository,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        TokenStorageInterface $tokenStorage,
+    ): Response {
+        /** @var ?User $user */
         $user = $this->getUser();
 
-        if (!\is_object($user) || !$user instanceof UserInterface) {
-            throw $this->createAccessDeniedException('This user does not have access to this section');
+        if (!$user || !$user instanceof UserInterface) {
+            $userId = $request->query->get('userId');
+            error_log("User not logged in. Received userId from query: " . $userId);
+
+            if (!$userId || !ctype_digit($userId)) {
+                error_log("Access denied: Missing or invalid userId.");
+                throw $this->createAccessDeniedException('This user does not have access to this section.');
+            }
+
+            $user = $userRepository->find((int)$userId);
+
+            if (!$user || !$user instanceof UserInterface) {
+                error_log("Access denied: User not found with ID $userId");
+                throw $this->createAccessDeniedException('User not found or invalid.');
+            }
+
+            error_log("Loaded user by ID: " . $user->getId());
         }
+
+        $isRotation = $request->query->getBoolean('rotate', false);
 
         $form = $this->createForm(ChangePasswordType::class, [
             'enable2FA' => $user->getMfaEnabled(),
+        ], [
+            'enable_2fa_field' => !$isRotation,
         ]);
         $form->handleRequest($request);
 
@@ -119,71 +145,92 @@ class AccountController extends BaseController
                 ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
                 ->size(300)
                 ->margin(10)
-                ->build()
-            ;
+                ->build();
 
             $qrCodeBase64 = base64_encode($qrCodeResult->getString());
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $submittedToken = $request->request->get('_token');
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $submittedToken = $request->request->get('_token');
+                if (!$csrfTokenManager->isTokenValid(new CsrfToken('change_password', $submittedToken))) {
+                    $form->addError(new FormError($this->translator->trans('CSRF token is invalid. Please try again.')));
+                } else {
+                    $currentPassword = $form->get('currentPassword')->getData();
+                    $newPassword = $form->get('newPassword')->getData();
+                    $confirmPassword = $form->get('confirmPassword')->getData();
+                    $enable2FA = !$isRotation && $form->has('enable2FA')
+                        ? $form->get('enable2FA')->getData()
+                        : false;
 
-            if (!$csrfTokenManager->isTokenValid(new CsrfToken('change_password', $submittedToken))) {
-                $form->addError(new FormError($this->translator->trans('CSRF token is invalid. Please try again.')));
-            } else {
-                $currentPassword = $form->get('currentPassword')->getData();
-                $newPassword = $form->get('newPassword')->getData();
-                $confirmPassword = $form->get('confirmPassword')->getData();
-                $enable2FA = $form->get('enable2FA')->getData();
-
-                if ($enable2FA && !$user->getMfaSecret()) {
-                    $totp = TOTP::create();
-                    $totp->setLabel($user->getEmail());
-                    $encryptedSecret = $this->encryptTOTPSecret($totp->getSecret(), $_ENV['APP_SECRET']);
-                    $user->setMfaSecret($encryptedSecret);
-                    $user->setMfaEnabled(true);
-                    $user->setMfaService('TOTP');
-                    $userRepository->updateUser($user);
-
-                    $qrCodeResult = Builder::create()
-                        ->writer(new PngWriter())
-                        ->data($totp->getProvisioningUri())
-                        ->encoding(new Encoding('UTF-8'))
-                        ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
-                        ->size(300)
-                        ->margin(10)
-                        ->build()
-                    ;
-
-                    $qrCodeBase64 = base64_encode($qrCodeResult->getString());
-
-                    return $this->render('@ChamiloCore/Account/change_password.html.twig', [
-                        'form' => $form->createView(),
-                        'qrCode' => $qrCodeBase64,
-                        'user' => $user,
-                    ]);
-                }
-                if (!$enable2FA) {
-                    $user->setMfaEnabled(false);
-                    $user->setMfaSecret(null);
-                    $userRepository->updateUser($user);
-                    $this->addFlash('success', '2FA disabled successfully.');
-                }
-
-                if ($newPassword || $confirmPassword || $currentPassword) {
-                    if (!$userRepository->isPasswordValid($user, $currentPassword)) {
-                        $form->get('currentPassword')->addError(new FormError($this->translator->trans('The current password is incorrect')));
-                    } elseif ($newPassword !== $confirmPassword) {
-                        $form->get('confirmPassword')->addError(new FormError($this->translator->trans('Passwords do not match')));
-                    } else {
-                        $user->setPlainPassword($newPassword);
+                    if ($enable2FA && !$user->getMfaSecret()) {
+                        $totp = TOTP::create();
+                        $totp->setLabel($user->getEmail());
+                        $encryptedSecret = $this->encryptTOTPSecret($totp->getSecret(), $_ENV['APP_SECRET']);
+                        $user->setMfaSecret($encryptedSecret);
+                        $user->setMfaEnabled(true);
+                        $user->setMfaService('TOTP');
                         $userRepository->updateUser($user);
-                        $this->addFlash('success', 'Password updated successfully');
+
+                        $qrCodeResult = Builder::create()
+                            ->writer(new PngWriter())
+                            ->data($totp->getProvisioningUri())
+                            ->encoding(new Encoding('UTF-8'))
+                            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+                            ->size(300)
+                            ->margin(10)
+                            ->build();
+
+                        $qrCodeBase64 = base64_encode($qrCodeResult->getString());
+
+                        return $this->render('@ChamiloCore/Account/change_password.html.twig', [
+                            'form' => $form->createView(),
+                            'qrCode' => $qrCodeBase64,
+                            'user' => $user,
+                        ]);
+                    }
+
+                    if (!$isRotation && !$enable2FA && $user->getMfaEnabled()) {
+                        $user->setMfaEnabled(false);
+                        $user->setMfaSecret(null);
+                        $userRepository->updateUser($user);
+                        $this->addFlash('success', '2FA disabled successfully.');
+                    }
+
+                    if ($newPassword || $confirmPassword || $currentPassword) {
+                        if (!$userRepository->isPasswordValid($user, $currentPassword)) {
+                            $form->get('currentPassword')->addError(new FormError(
+                                $this->translator->trans('The current password is incorrect.')
+                            ));
+                        } elseif ($newPassword !== $confirmPassword) {
+                            $form->get('confirmPassword')->addError(new FormError(
+                                $this->translator->trans('Passwords do not match.')
+                            ));
+                        } else {
+                            $user->setPlainPassword($newPassword);
+                            $user->setPasswordUpdateAt(new \DateTimeImmutable());
+                            $userRepository->updateUser($user);
+                            $this->addFlash('success', 'Password updated successfully');
+
+                            if (!$this->getUser()) {
+                                $token = new UsernamePasswordToken(
+                                    $user,
+                                    'main',
+                                    $user->getRoles()
+                                );
+                                $tokenStorage->setToken($token);
+                                $request->getSession()->set('_security_main', serialize($token));
+                            }
+
+                            return $this->redirectToRoute('chamilo_core_account_home');
+                        }
                     }
                 }
-
-                return $this->redirectToRoute('chamilo_core_account_home');
+            } else {
+                error_log("Form is NOT valid.");
             }
+        } else {
+            error_log("Form NOT submitted yet.");
         }
 
         return $this->render('@ChamiloCore/Account/change_password.html.twig', [

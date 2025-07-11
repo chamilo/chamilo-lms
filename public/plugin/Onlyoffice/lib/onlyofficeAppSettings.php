@@ -89,6 +89,11 @@ class OnlyofficeAppsettings extends SettingsManager
 
     public function getSetting($settingName)
     {
+        $plugin = Database::getManager()->getRepository(PluginEntity::class)->findOneBy(['title' => 'Onlyoffice']);
+        $configuration = $plugin?->getConfigurationsByAccessUrl(
+            Container::getAccessUrlUtil()->getCurrent()
+        );
+
         $value = null;
         if (null !== $this->newSettings) {
             if (isset($this->newSettings[$settingName])) {
@@ -129,8 +134,7 @@ class OnlyofficeAppsettings extends SettingsManager
                 $value = is_array($settings) ? ($settings[$this->plugin->getPluginName()] ?? null) : null;
                 break;
             case $this->useDemoName:
-                $settings = api_get_setting($settingName);
-                $value = is_array($settings) ? ($settings[0] ?? null) : null;
+                $value = $configuration ? ($configuration[$settingName] ?: null) : null;
                 break;
             case $this->jwtPrefix:
                 $value = 'Bearer ';

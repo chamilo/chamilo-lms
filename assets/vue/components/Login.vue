@@ -88,7 +88,6 @@
 
 <script setup>
 import { computed, ref } from "vue"
-import { useRouter } from "vue-router"
 import Button from "primevue/button"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
@@ -97,45 +96,28 @@ import { useI18n } from "vue-i18n"
 import { useLogin } from "../composables/auth/login"
 import LoginOAuth2Buttons from "./login/LoginOAuth2Buttons.vue"
 import { usePlatformConfig } from "../store/platformConfig"
+import { useRouter } from "vue-router"
 
 const { t } = useI18n()
-
 const router = useRouter()
-
 const platformConfigStore = usePlatformConfig()
 const allowRegistration = computed(() => "false" !== platformConfigStore.getSetting("registration.allow_registration"))
 
-const { redirectNotAuthenticated, performLogin, isLoading } = useLogin()
+const { redirectNotAuthenticated, performLogin, isLoading, requires2FA } = useLogin()
 
 const login = ref("")
 const password = ref("")
 const totp = ref("")
 const remember = ref(false)
-const requires2FA = ref(false)
 
 redirectNotAuthenticated()
 
 async function onSubmitLoginForm() {
-  try {
-    const response = await performLogin({
-      login: login.value,
-      password: password.value,
-      totp: requires2FA.value ? totp.value : null,
-      _remember_me: remember.value,
-    })
-
-    if (!response) {
-      console.warn("[Login] No response from performLogin.")
-      return
-    }
-
-    if (response.requires2FA) {
-      requires2FA.value = true
-    } else {
-      await router.replace({ name: "Home" })
-    }
-  } catch (error) {
-    console.error("[Login] performLogin failed:", error)
-  }
+  const response = await performLogin({
+    login: login.value,
+    password: password.value,
+    totp: requires2FA.value ? totp.value : null,
+    _remember_me: remember.value,
+  })
 }
 </script>

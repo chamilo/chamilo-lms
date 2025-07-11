@@ -506,7 +506,6 @@
     "Pages deleted": "Pages deleted",
     "Go to Explore to find a topic of interest, or wait for someone to subscribe you": "Go to Explore to find a topic of interest, or wait for someone to subscribe you",
     "You don\\'t have any course yet": "You don\\'t have any course yet",
-    "Personal Data: Introduction": "Personal Data: Introduction",
     "Terms and Conditions": "Termini e Condizioni",
     "Read the Terms and Conditions": "Leggi i Termini e le Condizioni",
     "Legal agreement accepted": "Licenza d'uso e termini accettati",
@@ -589,5 +588,10 @@
     "Private course": "Private course",
     "Not subscribed": "Not subscribed",
     "The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.": "La connessione al database \u00e8 fallita. In genere c'\u00e8 un errore nell'username o nella password o ancora nel prefisso selezionato. Controlla questi valori e riprova.",
+    "Accept Terms and Conditions": "Accept Terms and Conditions",
+    "You accepted these terms on": "You accepted these terms on",
+    "Revoke Acceptance": "Revoke Acceptance",
+    "Minutes": "Minuti",
+    "Days": "Days",
     "Go to your newly created portal.": "Vai direttamente al portale appena creato"
 }

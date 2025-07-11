@@ -5,11 +5,9 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
-use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  *  Class DocumentManager
@@ -1030,7 +1028,7 @@ class DocumentManager
             $em = Database::getManager();
 
             $repo = $em->getRepository(CDocument::class);
-            /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
+            /** @var CDocument $document */
             $document = $repo->find($row['iid']);
             if (ResourceLink::VISIBILITY_PUBLISHED === $document->getVisibility()) {
                 $is_visible = api_is_allowed_in_course() || api_is_platform_admin();
@@ -1245,7 +1243,10 @@ class DocumentManager
         $url = '';
         if ($info_grade_certificate) {
             $date_certificate = $info_grade_certificate['created_at'];
-            $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
+            if (!empty($info_grade_certificate['path_certificate'])) {
+                $hash = pathinfo($info_grade_certificate['path_certificate'], PATHINFO_FILENAME);
+                $url = api_get_path(WEB_PATH) . 'certificates/' . $hash . '.html';
+            }
         }
         $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         if (!empty($date_certificate)) {
@@ -2211,18 +2212,20 @@ class DocumentManager
      */
     public static function get_document_preview(
         Course $course,
-        $lp_id = false,
-        $target = '',
-        $session_id = 0,
-        $add_move_button = false,
-        $filter_by_folder = null,
-        $overwrite_url = '',
-        $showInvisibleFiles = false,
-        $showOnlyFolders = false,
-        $folderId = false,
-        $addCloseButton = true,
-        $addAudioPreview = false,
-        $filterByExtension = []
+               $lp_id = false,
+               $target = '',
+               $session_id = 0,
+               $add_move_button = false,
+               $filter_by_folder = null,
+               $overwrite_url = '',
+               $showInvisibleFiles = false,
+               $showOnlyFolders = false,
+               $folderId = false,
+               $addCloseButton = true,
+               $addAudioPreview = false,
+               $filterByExtension = [],
+               $excludeByExtension = [],
+               $filterByFiletype = null
     ) {
         $repo = Container::getDocumentRepository();
         $nodeRepository = $repo->getResourceNodeRepository();
@@ -2230,41 +2233,36 @@ class DocumentManager
         $icon = '<i class="mdi-cursor-move mdi ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" title="'.htmlentities(get_lang('Move')).'"></i>';
         $folderIcon = Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', null, ICON_SIZE_SMALL);
 
+        $lpItemType = ($filterByFiletype === 'video') ? 'video' : 'document';
         $options = [
             'decorate' => true,
             'rootOpen' => '<ul id="doc_list" class="list-group lp_resource">',
             'rootClose' => '</ul>',
-            //'childOpen' => '<li class="doc_resource lp_resource_element ">',
-            'childOpen' => function ($child) {;
+            'childOpen' => function ($child) {
                 $id = $child['id'];
                 $disableDrag = '';
-                if (!$child['resourceFiles']) {
+                if (empty($child['resourceFiles'])) {
                     $disableDrag = ' disable_drag ';
                 }
 
                 return '<li
-                    id="'.$id.'"
-                    data-id="'.$id.'"
-                    class=" '.$disableDrag.' list-group-item nested-'.$child['level'].'"
-                >';
+                id="'.$id.'"
+                data-id="'.$id.'"
+                class="'.$disableDrag.' list-group-item nested-'.$child['level'].'"
+            >';
             },
             'childClose' => '</li>',
-            'nodeDecorator' => function ($node) use ($icon, $folderIcon) {
+            'nodeDecorator' => function ($node) use ($icon, $folderIcon, $lpItemType) {
                 $disableDrag = '';
-                if (!$node['resourceFiles']) {
+                if (empty($node['resourceFiles'])) {
                     $disableDrag = ' disable_drag ';
                 }
 
                 $link = '<div class="flex flex-row gap-1 h-4 item_data '.$disableDrag.' ">';
-                $file = $node['resourceFiles'] ? current($node['resourceFiles']) : null;
-                $extension = '';
-                if ($file) {
-                    $extension = pathinfo($file['title'], PATHINFO_EXTENSION);
-                }
-
+                $file = !empty($node['resourceFiles']) ? current($node['resourceFiles']) : null;
                 $folder = $folderIcon;
 
-                if ($node['resourceFiles']) {
+                if (!empty($node['resourceFiles'])) {
                     $link .= '<a class="moved ui-sortable-handle" href="#">';
                     $link .= $icon;
                     $link .= '</a>';
@@ -2272,10 +2270,10 @@ class DocumentManager
                 }
 
                 $link .= '<a
-                    data_id="'.$node['id'].'"
-                    data_type="document"
-                    class="moved ui-sortable-handle link_with_id"
-                >';
+                data_id="'.$node['id'].'"
+                data_type="'.$lpItemType.'"
+                class="moved ui-sortable-handle link_with_id"
+            >';
                 $link .= $folder.'&nbsp;';
                 $link .= '</a>';
                 $link .= cut(addslashes($node['title']), 30);
@@ -2289,17 +2287,25 @@ class DocumentManager
         $em = Database::getManager();
         $qb = $em
             ->createQueryBuilder()
-            ->select('node')
+            ->select('node, files')
             ->from(ResourceNode::class, 'node')
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceFiles', 'files')
+            ->innerJoin(
+                CDocument::class,
+                'doc',
+                'WITH',
+                'doc.resourceNode = node'
+            )
             ->addSelect('files')
             ->where('type = :type')
             ->andWhere('links.course = :course')
-            ->setParameters(['type' => $type, 'course' => $course])
-            ->orderBy('node.parent', 'ASC')
-        ;
+            ->setParameters([
+                'type' => $type,
+                'course' => $course,
+            ])
+            ->orderBy('node.parent', 'ASC');
 
         $sessionId = api_get_session_id();
         if (empty($sessionId)) {
@@ -2307,18 +2313,46 @@ class DocumentManager
         } else {
             $qb
                 ->andWhere('links.session = :session')
-                ->setParameter('session', $sessionId)
-            ;
+                ->setParameter('session', $sessionId);
+        }
+
+        if ($filterByFiletype !== null) {
+            if (is_array($filterByFiletype)) {
+                $qb->andWhere('doc.filetype IN (:filetypes)');
+                $qb->setParameter('filetypes', $filterByFiletype);
+            } else {
+                $qb->andWhere('doc.filetype = :filetype');
+                $qb->setParameter('filetype', $filterByFiletype);
+            }
         }
 
         if (!empty($filterByExtension)) {
             $orX = $qb->expr()->orX();
             foreach ($filterByExtension as $extension) {
-                $orX->add($qb->expr()->like('file.originalName', ':'.$extension));
-                $qb->setParameter($extension, '%'.$extension);
+                $paramName = 'ext_' . $extension;
+                $orX->add(
+                    $qb->expr()->like(
+                        'LOWER(files.originalName)',
+                        ':' . $paramName
+                    )
+                );
+                $qb->setParameter($paramName, '%.' . strtolower($extension));
             }
             $qb->andWhere($orX);
         }
+
+        if (!empty($excludeByExtension)) {
+            foreach ($excludeByExtension as $extension) {
+                $qb->andWhere(
+                    $qb->expr()->notLike(
+                        'LOWER(files.originalName)',
+                        ':exclude_' . $extension
+                    )
+                );
+                $qb->setParameter('exclude_' . $extension, '%.' . strtolower($extension));
+            }
+        }
+
         $query = $qb->getQuery();
 
         return $nodeRepository->buildTree($query->getArrayResult(), $options);

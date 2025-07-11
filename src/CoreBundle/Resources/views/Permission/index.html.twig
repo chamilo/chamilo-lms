@@ -11,8 +11,8 @@
                     <th>{{ 'Permission '|trans }} <br> ({{ 'slug'|trans }})</th>
                     {% for role in roles %}
                         <th>
-                            {{ role|trans }}<br>
-                            <input type="checkbox" class="select-all" data-role="{{ role }}" style="margin-top: 5px;">
+                            {{ role.title|trans }}<br>
+                            <input type="checkbox" class="select-all" data-role="{{ role.code }}" style="margin-top: 5px;">
                         </th>
                     {% endfor %}
                 </tr>
@@ -23,8 +23,8 @@
                         <td>{{ permission.title|trans }} <br> ({{ permission.slug }})</td>
                         {% for role in roles %}
                             <td>
-                                <input type="checkbox" name="permissions[{{ permission.slug }}][{{ role }}]"
-                                       {% if forms[permission.slug].vars.value[role] %}checked="checked"{% endif %}>
+                                <input type="checkbox" name="permissions[{{ permission.slug }}][{{ role.code }}]"
+                                       {% if forms[permission.slug].vars.value[role.code] %}checked="checked"{% endif %}>
                             </td>
                         {% endfor %}
                     </tr>

@@ -2,10 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 // resetting the course id
-use Chamilo\CoreBundle\Entity\Usergroup;
 
 $cidReset = true;
 
@@ -16,7 +16,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-$relation = isset($_REQUEST['relation']) ? (int) $_REQUEST['relation'] : '';
+$relation = isset($_REQUEST['relation']) && is_numeric($_REQUEST['relation']) ? (int) $_REQUEST['relation'] : null;
 $usergroup = new UserGroupModel();
 $groupInfo = $usergroup->get($id);
 $usergroup->protectScript($groupInfo);
@@ -117,13 +117,13 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     // If "social group" you need to select a role
     if (1 == $groupInfo['group_type'] && empty($relation)) {
-        Display::addFlash(Display::return_message(get_lang('Select role'), 'warning'));
+        $_SESSION['usergroup_flash_message'] = get_lang('Select role');
+        $_SESSION['usergroup_flash_type'] = 'warning';
         header('Location: '.api_get_self().'?id='.$id);
         exit;
     }
 
     if (1 == $form_sent) {
-        Display::addFlash(Display::return_message(get_lang('Update successful')));
         // Added a parameter to send emails when registering a user
         $usergroup->subscribe_users_to_usergroup(
             $id,
@@ -131,6 +131,8 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             true,
             $relation
         );
+        $_SESSION['usergroup_flash_message'] = get_lang('Update successful');
+        $_SESSION['usergroup_flash_type'] = 'success';
         header('Location: usergroups.php');
         exit;
     }
@@ -243,7 +245,7 @@ $complete_user_list = UserManager::getUserListLike([], $order, false, 'AND');
 if (!empty($complete_user_list)) {
     foreach ($complete_user_list as $item) {
         if ($use_extra_fields) {
-            if (!in_array($item['user_id'], $final_result)) {
+            if (!in_array($item['id'], $final_result)) {
                 continue;
             }
         }
@@ -253,23 +255,24 @@ if (!empty($complete_user_list)) {
             continue;
         }
 
-        if (in_array($item['user_id'], $list_in)) {
-            $officialCode = !empty($item['official_code']) ? ' - '.$item['official_code'] : null;
+        $list_in_map = array_flip($list_in);
+        if (isset($list_in_map[$item['id']])) {
+            $officialCode = !empty($item['official_code']) ? ' - ' . $item['official_code'] : null;
             $person_name = api_get_person_name(
-                $item['firstname'],
-                $item['lastname']
-            ).' ('.$item['username'].') '.$officialCode;
+                    $item['firstname'],
+                    $item['lastname']
+                ) . ' (' . $item['username'] . ') ' . $officialCode;
 
             $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
             if ('true' === $orderListByOfficialCode) {
-                $officialCode = !empty($item['official_code']) ? $item['official_code'].' - ' : '? - ';
-                $person_name = $officialCode.api_get_person_name(
-                    $item['firstname'],
-                    $item['lastname']
-                ).' ('.$item['username'].') ';
+                $officialCode = !empty($item['official_code']) ? $item['official_code'] . ' - ' : '? - ';
+                $person_name = $officialCode . api_get_person_name(
+                        $item['firstname'],
+                        $item['lastname']
+                    ) . ' (' . $item['username'] . ') ';
             }
 
-            $elements_in[$item['user_id']] = $person_name;
+            $elements_in[$item['id']] = $person_name;
         }
     }
 }
@@ -279,7 +282,7 @@ if ($user_with_any_group) {
     $user_list = UserManager::getUserListLike($conditions, $order, true, 'AND');
     $new_user_list = [];
     foreach ($user_list as $item) {
-        if (!in_array($item['user_id'], $list_all)) {
+        if (!in_array($item['id'], $list_all)) {
             $new_user_list[] = $item;
         }
     }
@@ -291,7 +294,7 @@ if ($user_with_any_group) {
 if (!empty($user_list)) {
     foreach ($user_list as $item) {
         if ($use_extra_fields) {
-            if (!in_array($item['user_id'], $final_result)) {
+            if (!in_array($item['id'], $final_result)) {
                 continue;
             }
         }
@@ -316,8 +319,8 @@ if (!empty($user_list)) {
             ).' ('.$item['username'].') ';
         }
 
-        if (!in_array($item['user_id'], $list_in)) {
-            $elements_not_in[$item['user_id']] = $person_name;
+        if (!in_array($item['id'], $list_in)) {
+            $elements_not_in[$item['id']] = $person_name;
         }
     }
 }
@@ -346,7 +349,13 @@ echo '<div id="advanced_search_options" style="display:none">';
 $searchForm->display();
 echo '</div>';
 echo Display::page_header($tool_name.': '.$data['title']);
-
+if (!empty($_SESSION['usergroup_flash_message'])) {
+    echo Display::return_message(
+        $_SESSION['usergroup_flash_message'],
+        $_SESSION['usergroup_flash_type']
+    );
+    unset($_SESSION['usergroup_flash_message'], $_SESSION['usergroup_flash_type']);
+}
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) {
     echo '&add=true';
@@ -382,101 +391,99 @@ echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);
 
 ?>
-<table border="0" cellpadding="5" cellspacing="0" width="100%">
-    <tbody>
-        <tr>
-            <td width="40%" align="center">
-                <?php if (Usergroup::SOCIAL_CLASS == $data['group_type']) {
-                    ?>
-                    <select name="relation" id="relation">
-                        <option value=""><?php echo get_lang('Relation type selection'); ?></option>
-                        <option value="<?php echo GROUP_USER_PERMISSION_ADMIN; ?>" <?php echo isset($relation) && GROUP_USER_PERMISSION_ADMIN == $relation ? 'selected=selected' : ''; ?> >
-                            <?php echo get_lang('Admin'); ?></option>
-                        <option value="<?php echo GROUP_USER_PERMISSION_READER; ?>" <?php echo isset($relation) && GROUP_USER_PERMISSION_READER == $relation ? 'selected=selected' : ''; ?> >
-                            <?php echo get_lang('Reader'); ?></option>
-                        <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION; ?>" <?php echo isset($relation) && GROUP_USER_PERMISSION_PENDING_INVITATION == $relation ? 'selected=selected' : ''; ?> >
-                            <?php echo get_lang('Pending invitation'); ?></option>
-                        <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR; ?>" <?php echo isset($relation) && GROUP_USER_PERMISSION_MODERATOR == $relation ? 'selected=selected' : ''; ?> >
-                            <?php echo get_lang('Moderator'); ?></option>
-                        <option value="<?php echo GROUP_USER_PERMISSION_HRM; ?>" <?php echo isset($relation) && GROUP_USER_PERMISSION_HRM == $relation ? 'selected=selected' : ''; ?> >
-                            <?php echo get_lang('Human Resources Manager'); ?></option>
-                    </select>
-                    <?php
-                } ?>
+    <div class="flex flex-col md:flex-row items-center gap-6 p-4 bg-white shadow rounded-lg">
+        <div class="w-full md:w-1/2">
+            <?php if (Usergroup::SOCIAL_CLASS == $data['group_type']) { ?>
+                <select name="relation" id="relation" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value=""><?php echo get_lang('Relation type selection'); ?></option>
+                    <option value="<?php echo GROUP_USER_PERMISSION_ADMIN; ?>" <?php echo isset($relation) && GROUP_USER_PERMISSION_ADMIN == $relation ? 'selected=selected' : ''; ?>><?php echo get_lang('Admin'); ?></option>
+                    <option value="<?php echo GROUP_USER_PERMISSION_READER; ?>" <?php echo isset($relation) && GROUP_USER_PERMISSION_READER == $relation ? 'selected=selected' : ''; ?>><?php echo get_lang('Reader'); ?></option>
+                    <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION; ?>" <?php echo isset($relation) && GROUP_USER_PERMISSION_PENDING_INVITATION == $relation ? 'selected=selected' : ''; ?>><?php echo get_lang('Pending invitation'); ?></option>
+                    <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR; ?>" <?php echo isset($relation) && GROUP_USER_PERMISSION_MODERATOR == $relation ? 'selected=selected' : ''; ?>><?php echo get_lang('Moderator'); ?></option>
+                    <option value="<?php echo GROUP_USER_PERMISSION_HRM; ?>" <?php echo isset($relation) && GROUP_USER_PERMISSION_HRM == $relation ? 'selected=selected' : ''; ?>><?php echo get_lang('Human Resources Manager'); ?></option>
+                </select>
+                <br><br>
+            <?php } ?>
 
-                <div class="multiple_select_header">
-                    <b><?php echo get_lang('Users on platform'); ?> :</b>
-                    <?php echo get_lang('First letter (last name)'); ?> :
-                    <select id="first_letter_user" name="firstLetterUser" onchange="change_select();" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value = "%">--</option>
-                        <?php
-                        echo Display :: get_alphabet_options($first_letter_user);
-                        ?>
-                    </select>
-                </div>
-                <?php
-                echo Display::select(
-                    'elements_not_in_name',
-                    $elements_not_in,
-                    '',
-                    [
-                        'class' => 'form-multiselect block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm',
-                        'multiple' => 'multiple',
-                        'id' => 'elements_not_in',
-                        'size' => '15px',
-                    ],
-                    false
-                );
-                ?>
-                <br />
-                <label class="control-label">
-                    <input type="checkbox" <?php if ($user_with_any_group) {
-                        echo 'checked="checked"';
-                    } ?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id">
-                    <?php echo get_lang('Users registered in any group'); ?>
-                </label>
-            </td>
-            <td width="20%" align="center">
-                <div style="padding-top:54px;width:auto;text-align: center;">
-                    <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))">
-                        <i class="mdi mdi-fast-forward-outline ch-tool-icon"></i>
-                    </button>
-                    <br /><br />
-                    <button class="btn btn--plain" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))">
-                        <i class="mdi mdi-rewind-outline ch-tool-icon"></i>
-                    </button>
-                </div>
-            </td>
-            <td width="40%" align="center">
-                <div class="multiple_select_header">
-                    <b><?php echo get_lang('Users in group'); ?> :</b>
-                </div>
-                <?php
-                echo Display::select(
-                    'elements_in_name[]',
-                    $elements_in,
-                    '',
-                    [
-                        'class' => 'form-multiselect block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm',
-                        'multiple' => 'multiple',
-                        'id' => 'elements_in',
-                        'size' => '15px',
-                    ],
-                    false
-                );
-                ?>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3" align="center">
-                <?php
-                echo '<button class="btn btn--primary" type="button" value="" onclick="valide()" ><em class="fa fa-check"></em>'.
-                    get_lang('Subscribe users to class').'</button>';
-                ?>
-            </td>
-        </tr>
-    </tbody>
-</table>
+            <div class="mb-2">
+                <strong><?php echo get_lang('Users on platform'); ?></strong><br>
+                <label for="first_letter_user" class="text-sm"><?php echo get_lang('First letter (last name)'); ?>:</label>
+                <select id="first_letter_user" name="firstLetterUser" onchange="change_select();" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="%">--</option>
+                    <?php echo Display::get_alphabet_options($first_letter_user); ?>
+                </select>
+            </div>
+            <?php echo Display::select(
+                'elements_not_in_name',
+                $elements_not_in,
+                '',
+                [
+                    'class' => 'form-multiselect block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm',
+                    'multiple' => 'multiple',
+                    'id' => 'elements_not_in',
+                    'size' => '15',
+                ],
+                false
+            ); ?>
+
+            <label class="inline-flex items-center mt-2">
+                <input type="checkbox" name="user_with_any_group" id="user_with_any_group_id"
+                    <?php echo $user_with_any_group ? 'checked="checked"' : ''; ?>
+                       onchange="checked_in_no_group(this.checked);"
+                       class="form-checkbox text-primary focus:ring-primary">
+                <span class="ml-2 text-sm"><?php echo get_lang('Users registered in any group'); ?></span>
+            </label>
+        </div>
+        <div class="flex flex-col items-center justify-center gap-4">
+            <button type="button"
+                    onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))"
+                    class="w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 shadow flex items-center justify-center">
+                <i class="mdi mdi-fast-forward-outline text-gray-700"></i>
+            </button>
+            <button type="button"
+                    onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))"
+                    class="w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 shadow flex items-center justify-center">
+                <i class="mdi mdi-rewind-outline text-gray-700"></i>
+            </button>
+        </div>
+        <div class="w-full md:w-1/2 mt-[90px]">
+            <div class="invisible mb-4">
+                <select class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <option>Relation type selection</option>
+                </select>
+            </div>
+            <div class="invisible mb-2">
+                <label class="text-sm">First letter (last name):</label>
+                <select class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option>--</option>
+                </select>
+            </div>
+            <strong><?php echo get_lang('Users in group'); ?></strong>
+            <?php if(!empty($relation)) { ?>
+                <span class="text-sm mb-1 text-gray-600">
+                    - <?php echo get_lang('Currently showing users for role').': <strong>'.UserGroupModel::getRoleName($relation).'</strong>'; ?>
+                </span>
+            <?php } ?>
+            <?php echo Display::select(
+                'elements_in_name[]',
+                $elements_in,
+                '',
+                [
+                    'class' => 'form-multiselect block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm',
+                    'multiple' => 'multiple',
+                    'id' => 'elements_in',
+                    'size' => '15',
+                ],
+                false
+            ); ?>
+        </div>
+    </div>
+
+    <div class="mt-6 flex justify-center">
+        <button class="bg-primary text-white px-6 py-2 rounded-lg shadow hover:bg-primary/90 flex items-center gap-2" type="button" onclick="valide()">
+            <em class="fa fa-check"></em> <?php echo get_lang('Subscribe users to class'); ?>
+        </button>
+    </div>
 </form>
 <script>
 function moveItem(origin , destination) {

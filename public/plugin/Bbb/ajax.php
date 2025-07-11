@@ -3,8 +3,8 @@
  * This script initiates a video conference session, calling the BigBlueButton API.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\ConferenceMeeting;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Repository\ConferenceMeetingRepository;
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables

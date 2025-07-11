@@ -22,7 +22,7 @@ if (!$plugin) {
     api_not_allowed(true);
 }
 
-$accessUrl = Container::getAccessUrlHelper()->getCurrent();
+$accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
 $pluginConfiguration = $plugin->getConfigurationsByAccessUrl($accessUrl);
 

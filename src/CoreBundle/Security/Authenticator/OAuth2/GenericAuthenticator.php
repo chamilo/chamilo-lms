@@ -10,12 +10,12 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
-use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -172,7 +172,7 @@ class GenericAuthenticator extends AbstractAuthenticator
             )
             ->addAuthSourceByAuthentication(
                 'oauth2',
-                $this->urlHelper->getCurrent()
+                $this->accessUrlHelper->getCurrent()
             )
             ->setStatus($status)
             ->setRoleFromStatus($status)
@@ -180,7 +180,7 @@ class GenericAuthenticator extends AbstractAuthenticator
 
         $this->userRepository->updateUser($user);
 
-        $url = $this->urlHelper->getCurrent();
+        $url = $this->accessUrlHelper->getCurrent();
         $url->addUser($user);
 
         $this->entityManager->flush();

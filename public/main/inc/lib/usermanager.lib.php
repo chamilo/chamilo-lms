@@ -1,27 +1,23 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\NameConvention;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
-use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues as EntityExtraFieldValues;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
-use Chamilo\CoreBundle\Entity\SkillRelUser;
-use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\UserRelUser;
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Event\UserCreatedEvent;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Event\UserCreatedEvent;
 use Chamilo\CoreBundle\Event\UserUpdatedEvent;
-use Chamilo\CoreBundle\Repository\GroupRepository;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues as EntityExtraFieldValues;
-use Chamilo\CoreBundle\Entity\GradebookCategory;
 
 /**
  * This library provides functions for user management.
@@ -181,7 +177,7 @@ class UserManager
 
         $original_password = $password;
 
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
         $access_url_id = $accessUrl->getId();
 
         $hostingLimitUsers = get_hosting_limit($access_url_id, 'users');
@@ -889,7 +885,7 @@ class UserManager
             return false;
         }
 
-        $accessUrl = Container::getAccessUrlHelper()->getCurrent();
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
         if (0 == $reset_password) {
             $password = null;
@@ -1538,14 +1534,17 @@ class UserManager
         $order_by = [],
         $simple_like = false,
         $condition = 'AND',
-        $onlyThisUserList = []
+        $onlyThisUserList = [],
+        int $limit = 0,
+        int $offset = 0
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $tblAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $return_array = [];
-        $sql_query = "SELECT user.id FROM $user_table user ";
+        $sql_query = "SELECT user.id, user.username, user.firstname, user.lastname, user.official_code, user.status
+                  FROM $user_table user ";
 
-        if (api_is_multiple_url_enabled()) {
+        if (api_get_multiple_access_url()) {
             $sql_query .= " INNER JOIN $tblAccessUrlRelUser auru ON auru.user_id = user.id ";
         }
 
@@ -1556,37 +1555,47 @@ class UserManager
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
                 if ($simple_like) {
-                    $temp_conditions[] = $field." LIKE '$value%'";
+                    $temp_conditions[] = "$field LIKE '$value%'";
                 } else {
-                    $temp_conditions[] = $field.' LIKE \'%'.$value.'%\'';
+                    if (in_array($field, ['user.id', 'user.status'])) {
+                        $temp_conditions[] = "$field = '$value'";
+                    } else {
+                        $temp_conditions[] = "$field LIKE '%$value%'";
+                    }
                 }
             }
             if (!empty($temp_conditions)) {
-                $sql_query .= ' AND '.implode(' '.$condition.' ', $temp_conditions);
+                $sql_query .= ' AND '.implode(" $condition ", $temp_conditions);
             }
 
-            if (api_is_multiple_url_enabled()) {
+            if (api_get_multiple_access_url()) {
                 $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
             }
         } else {
-            if (api_is_multiple_url_enabled()) {
+            if (api_get_multiple_access_url()) {
                 $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
             }
         }
 
         if (!empty($onlyThisUserList)) {
-            $onlyThisUserListToString = implode("','", $onlyThisUserList);
+            $onlyThisUserListToString = implode("','", array_map('intval', $onlyThisUserList));
             $sql_query .= " AND user.id IN ('$onlyThisUserListToString') ";
         }
 
-        if (count($order_by) > 0) {
+        if (!empty($order_by)) {
             $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
+        }
+
+        if ($limit > 0) {
+            $sql_query .= ' LIMIT '.intval($limit);
+            if ($offset > 0) {
+                $sql_query .= ' OFFSET '.intval($offset);
+            }
         }
 
         $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
-            $userInfo = api_get_user_info($result['id']);
-            $return_array[] = $userInfo;
+            $return_array[] = $result;
         }
 
         return $return_array;
@@ -2708,10 +2717,12 @@ class UserManager
     /**
      * Gives a list of [session_id-course_code] => [status] for the current user.
      *
-     * @param int $user_id
-     * @param int $sessionLimit
+     * @param  int  $user_id
+     * @param  int  $sessionLimit
      *
      * @return array list of statuses (session_id-course_code => status)
+     *
+     * @throws Exception
      */
     public static function get_personal_session_course_list($user_id, $sessionLimit = null)
     {
@@ -2733,7 +2744,7 @@ class UserManager
 
         $user = api_get_user_entity($user_id);
         $url = null;
-        $formattedUserName = Container::$container->get(NameConvention::class)->getPersonName($user);
+        $formattedUserName = Container::$container->get(NameConventionHelper::class)->getPersonName($user);
 
         // We filter the courses from the URL
         $join_access_url = $where_access_url = '';

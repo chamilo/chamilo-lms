@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Items from a learning path (LP).
  */
 #[ORM\Table(name: 'c_lp_item')]
-#[ORM\Index(name: 'lp_id', columns: ['lp_id'])]
+#[ORM\Index(columns: ['lp_id'], name: 'lp_id')]
 #[Gedmo\Tree(type: 'nested')]
 #[ORM\Entity(repositoryClass: CLpItemRepository::class)]
 class CLpItem implements Stringable
@@ -116,6 +116,9 @@ class CLpItem implements Stringable
 
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
     protected ?int $duration = null;
+
+    #[ORM\Column(name: 'export_allowed', type: 'boolean', options: ['default' => false])]
+    protected bool $exportAllowed = false;
 
     public function __construct()
     {
@@ -543,6 +546,18 @@ class CLpItem implements Stringable
     public function setDuration(?int $duration): self
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function isExportAllowed(): bool
+    {
+        return $this->exportAllowed;
+    }
+
+    public function setExportAllowed(bool $exportAllowed): self
+    {
+        $this->exportAllowed = $exportAllowed;
 
         return $this;
     }

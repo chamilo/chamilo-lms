@@ -12,107 +12,122 @@
 </style>
 
 {% autoescape false %}
-<div class ="row">
-{% if bbb_status == true %}
-    <div class ="col-md-12" style="text-align:center">
+<div class="w-full px-4">
+    {% if bbb_status %}
+    <div class="text-center space-y-4">
         {{ form }}
-        {% if show_join_button == true %}
-            {{ enter_conference_links.0 }}
-            <br />
-            <strong>{{ 'UrlMeetingToShare'| get_plugin_lang('BBBPlugin') }}</strong>
-            <div class="well">
-                <div class="form--inline">
-                    <div class="form-group">
-                        <input id="share_button"
-                               type="text"
-                               style="width:600px"
-                               class="form-control" readonly value="{{ conference_url }}">
-                        <button onclick="copyTextToClipBoard('share_button');" class="btn btn--plain">
-                            <span class="fa fa-copy"></span> {{ 'Copy text' | get_lang }}
-                        </button>
-                    </div>
-                </div>
-            </div>
 
-            <p>
-                <span id="users_online" class="label label-warning">
-                    {{ 'XUsersOnLine'| get_plugin_lang('BBBPlugin') | format(users_online) }}
-                </span>
-            </p>
+        {% set hide_conference_link = plugin.get('hide_conference_link')|trim|lower|default('false') %}
+        {% set can_see_share_link = (not is_course_context|default(false)) or (is_course_context and hide_conference_link != 'true') %}
 
-            {% if max_users_limit > 0 %}
-                {% if conference_manager == true %}
-                    <p>{{ 'MaxXUsersWarning' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}</p>
-                {% elseif users_online >= max_users_limit/2 %}
-                    <p>{{ 'MaxXUsersWarning' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}</p>
-                {% endif %}
-            {% endif %}
+        {% if show_join_button %}
+        <a href="{{ conference_url }}" target="_blank"
+           class="inline-block bg-primary text-white font-semibold px-6 py-2 rounded-lg shadow hover:opacity-90 transition">
+            {{ 'EnterConference'|get_plugin_lang('BBBPlugin') }}
+        </a>
+        {% endif %}
+
+        {% if show_join_button and can_see_share_link %}
+        <h3 class="mt-4 text-lg font-semibold text-gray-90">
+            {{ 'UrlMeetingToShare'|get_plugin_lang('BBBPlugin') }}
+        </h3>
+
+        <div class="flex justify-center items-center gap-2 mt-2">
+            <input id="share_button"
+                   type="text"
+                   value="{{ conference_url }}"
+                   readonly
+                   class="w-full max-w-xl px-4 py-2 border border-gray-25 rounded-lg shadow-sm text-gray-90 text-sm bg-white">
+            <button onclick="copyTextToClipBoard('share_button');"
+                    class="px-4 py-2 bg-gray-15 hover:bg-gray-20 rounded-lg text-sm font-medium text-gray-90">
+                <i class="fa fa-copy mr-1"></i> {{ 'Copy text' | get_lang }}
+            </button>
         </div>
+        {% endif %}
+
+        <p class="mt-2 text-sm text-gray-90">
+          <span id="users_online" class="inline-block bg-warning text-warning-button-text px-2 py-1 rounded-full">
+            {{ 'XUsersOnLine'| get_plugin_lang('BBBPlugin') | format(users_online) }}
+          </span>
+        </p>
+
+        {% if max_users_limit > 0 %}
+        <p class="text-sm mt-1 text-danger">
+            {{ 'MaxXUsersWarning' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}
+        </p>
         {% elseif max_users_limit > 0 %}
-            {% if conference_manager == true %}
-                <p>{{ 'MaxXUsersReachedManager' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}</p>
+        <p class="text-sm mt-1 text-danger">
+            {% if conference_manager %}
+            {{ 'MaxXUsersReachedManager' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}
             {% elseif users_online > 0 %}
-                <p>{{ 'MaxXUsersReached' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}</p>
+            {{ 'MaxXUsersReached' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}
             {% endif %}
+        </p>
         {% endif %}
     </div>
 
-    <div class ="col-md-12">
-        <div class="page-header">
-            <h2>{{ 'RecordList'| get_plugin_lang('BBBPlugin') }}</h2>
-        </div>
-        <table class="table">
-            <tr>
-                <th>{{ 'CreatedAt'| get_plugin_lang('BBBPlugin') }}</th>
-                <th>{{ 'Status'| get_lang }}</th>
-                <th>{{ 'Records'| get_plugin_lang('BBBPlugin') }}</th>
-                {% if allow_to_edit  %}
-                    <th>{{ 'Actions'| get_lang }}</th>
-                {% endif %}
-            </tr>
-            {% for meeting in meetings %}
-            <tr>
-                <!-- td>{{ meeting.id }}</td -->
-                {% if meeting.visibility == 0 %}
-                    <td class="muted">{{ meeting.created_at }}</td>
-                {% else %}
-                    <td>{{ meeting.created_at }}</td>
-                {% endif %}
-                <td>
-                    {% if meeting.status == 1 %}
-                        <span class="label label-success">{{ 'MeetingOpened'|get_plugin_lang('BBBPlugin') }}</span>
-                    {% else %}
-                        <span class="label label-info">{{ 'MeetingClosed'|get_plugin_lang('BBBPlugin') }}</span>
+    <div class="mt-10">
+        <h2 class="text-xl font-bold border-b border-gray-25 pb-2 mb-4 text-gray-90">
+            {{ 'RecordList'| get_plugin_lang('BBBPlugin') }}
+        </h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full border text-sm text-left text-gray-90 bg-white shadow rounded-lg">
+                <thead class="bg-gray-15">
+                <tr>
+                    <th class="px-4 py-2">{{ 'CreatedAt'| get_plugin_lang('BBBPlugin') }}</th>
+                    <th class="px-4 py-2">{{ 'Status'| get_lang }}</th>
+                    <th class="px-4 py-2">{{ 'Records'| get_plugin_lang('BBBPlugin') }}</th>
+                    {% if allow_to_edit %}
+                    <th class="px-4 py-2">{{ 'Actions'| get_lang }}</th>
                     {% endif %}
-                </td>
-                <td>
-                    {% if meeting.record == 1 %}
-                        {# Record list #}
+                </tr>
+                </thead>
+                <tbody>
+                {% for meeting in meetings %}
+                <tr class="border-t border-gray-25">
+                    <td class="px-4 py-2 {% if meeting.visibility == 0 %} text-fontdisabled {% endif %}">
+                        {{ meeting.created_at }}
+                    </td>
+                    <td class="px-4 py-2">
+                        {% if meeting.status == 1 %}
+                        <span class="inline-block bg-success text-success-button-text px-2 py-1 rounded-full">
+                            {{ 'MeetingOpened'|get_plugin_lang('BBBPlugin') }}
+                        </span>
+                        {% else %}
+                        <span class="inline-block bg-info text-info-button-text px-2 py-1 rounded-full">
+                            {{ 'MeetingClosed'|get_plugin_lang('BBBPlugin') }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-2">
+                        {% if meeting.record == 1 %}
                         {{ meeting.show_links }}
-                    {% else %}
-                        {{ 'NoRecording'|get_plugin_lang('BBBPlugin') }}
-                    {% endif %}
-                </td>
-                {% if allow_to_edit %}
-                    <td>
-                    {% if meeting.status == 1 %}
-                        <a class="btn btn--plain" href="{{ meeting.end_url }} ">
+                        {% else %}
+                        <span class="text-fontdisabled">{{ 'NoRecording'|get_plugin_lang('BBBPlugin') }}</span>
+                        {% endif %}
+                    </td>
+                    {% if allow_to_edit %}
+                    <td class="px-4 py-2 space-x-2">
+                        {% if meeting.status == 1 %}
+                        <a href="{{ meeting.end_url }}"
+                           class="text-danger hover:underline">
                             {{ 'CloseMeeting'|get_plugin_lang('BBBPlugin') }}
                         </a>
-                    {% endif %}
-                    {{ meeting.action_links }}
+                        {% endif %}
+                        {{ meeting.action_links }}
                     </td>
-                {% endif %}
-
-            </tr>
-            {% endfor %}
-        </table>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-{% else %}
-    <div class ="col-md-12" style="text-align:center">
-        {{ 'ServerIsNotRunning' | get_plugin_lang('BBBPlugin')  }}
+    {% else %}
+    <div class="text-center text-danger font-semibold mt-8">
+        {{ 'ServerIsNotRunning' | get_plugin_lang('BBBPlugin') }}
     </div>
-{% endif %}
+    {% endif %}
 </div>
 
 {% endautoescape %}

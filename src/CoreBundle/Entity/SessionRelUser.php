@@ -111,6 +111,12 @@ class SessionRelUser
     #[ORM\Column(name: 'new_subscription_session_id', type: 'integer', nullable: true)]
     protected ?int $newSubscriptionSessionId = null;
 
+    #[ORM\Column(name: 'access_start_date', type: 'datetime', unique: false, nullable: true)]
+    protected ?DateTime $accessStartDate;
+
+    #[ORM\Column(name: 'access_end_date', type: 'datetime', unique: false, nullable: true)]
+    protected ?DateTime $accessEndDate;
+
     /**
      * @throws Exception
      */
@@ -238,6 +244,30 @@ class SessionRelUser
     public function setNewSubscriptionSessionId(?int $newSubscriptionSessionId): self
     {
         $this->newSubscriptionSessionId = $newSubscriptionSessionId;
+
+        return $this;
+    }
+
+    public function getAccessStartDate(): ?DateTime
+    {
+        return $this->accessStartDate;
+    }
+
+    public function setAccessStartDate(?DateTime $accessStartDate): self
+    {
+        $this->accessStartDate = $accessStartDate;
+
+        return $this;
+    }
+
+    public function getAccessEndDate(): ?DateTime
+    {
+        return $this->accessEndDate;
+    }
+
+    public function setAccessEndDate(?DateTime $accessEndDate): self
+    {
+        $this->accessEndDate = $accessEndDate;
 
         return $this;
     }

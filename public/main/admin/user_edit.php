@@ -4,10 +4,10 @@
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -26,7 +26,7 @@ $illustrationRepo = Container::getIllustrationRepository();
 /** @var AuthenticationConfigHelper $authenticationConfigHelper */
 $authenticationConfigHelper = Container::$container->get(AuthenticationConfigHelper::class);
 
-$accessUrl = Container::getAccessUrlHelper()->getCurrent();
+$accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
 $htmlHeadXtra[] = '
 <script>
@@ -441,7 +441,7 @@ if ($form->validate()) {
         $lastname = $user['lastname'];
         $firstname = $user['firstname'];
         $password = $user['password'];
-        $auth_source = $user['auth_source'] ?? $userInfo['auth_source'];
+        $auth_source = $user['auth_source'] ?? ($userInfo['auth_source'] ?? []);
         $official_code = $user['official_code'];
         $email = $user['email'];
         $phone = $user['phone'];
@@ -473,6 +473,50 @@ if ($form->validate()) {
         }
 
         $template = $user['email_template_option'] ?? [];
+
+        $incompatible = false;
+        $conflicts = [];
+        $oldStatus = $userObj->getStatus();
+        $newStatus = (int) $user['status'];
+        if ($oldStatus !== $newStatus) {
+            $isNowStudent = $newStatus === STUDENT;
+            if ($isNowStudent) {
+                $courseTeacherCount = $userObj->getCourses()->count();
+                $coachSessions = $userObj->getSessionsAsGeneralCoach();
+                $adminSessions = $userObj->getSessionsAsAdmin();
+
+                if ($courseTeacherCount > 0) {
+                    $conflicts[] = get_lang('User is teacher in some courses');
+                }
+
+                if (!empty($coachSessions)) {
+                    $conflicts[] = get_lang('User is general coach in some sessions');
+                }
+
+                if (!empty($adminSessions)) {
+                    $conflicts[] = get_lang('User is session admin in some sessions');
+                }
+
+                if (!empty($conflicts)) {
+                    $incompatible = true;
+                }
+            }
+        }
+        if ($incompatible) {
+            $conflictMessage = Display::return_message(
+                get_lang('Role change denied due to incompatible current assignments:').'<br>- '.implode('<br>- ', $conflicts),
+                'error',
+                false
+            );
+
+            $content = $conflictMessage;
+            $content .= $form->returnForm();
+
+            $tpl = new Template($tool_name);
+            $tpl->assign('content', $content);
+            $tpl->display_one_col_template();
+            exit;
+        }
 
         UserManager::update_user(
             $user_id,

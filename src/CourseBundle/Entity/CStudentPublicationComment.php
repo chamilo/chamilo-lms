@@ -8,7 +8,9 @@ namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Controller\Api\CreateStudentPublicationCommentAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
@@ -18,10 +20,8 @@ use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
-use Symfony\Component\Uid\Uuid;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Post;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 
 #[ApiResource(
     operations: [
@@ -143,8 +143,8 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     {
         $comment = trim((string) $this->getComment());
 
-        if ($comment === '') {
-            return 'comment-' . (new \DateTime())->format('Ymd-His');
+        if ('' === $comment) {
+            return 'comment-'.(new DateTime())->format('Ymd-His');
         }
 
         $text = strip_tags($comment);

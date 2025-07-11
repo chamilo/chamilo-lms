@@ -6,20 +6,25 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\MessageHelper;
+use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
-use Chamilo\CoreBundle\ServiceHelper\MessageHelper;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
+use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Finder\Finder;
@@ -30,6 +35,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
+use ZipArchive;
+
+use const PATHINFO_FILENAME;
 
 #[Route('/assignments')]
 class StudentPublicationController extends AbstractController
@@ -38,7 +47,6 @@ class StudentPublicationController extends AbstractController
         private readonly CStudentPublicationRepository $studentPublicationRepo,
         private readonly CidReqHelper $cidReqHelper
     ) {}
-
 
     #[Route('/student', name: 'chamilo_core_assignment_student_list', methods: ['GET'])]
     public function getStudentAssignments(SerializerInterface $serializer): JsonResponse
@@ -67,7 +75,7 @@ class StudentPublicationController extends AbstractController
 
         return new JsonResponse([
             'hydra:member' => $data,
-            'hydra:totalItems' => count($data),
+            'hydra:totalItems' => \count($data),
         ]);
     }
 
@@ -82,7 +90,7 @@ class StudentPublicationController extends AbstractController
 
         return new JsonResponse([
             'hydra:member' => $progressList,
-            'hydra:totalItems' => count($progressList),
+            'hydra:totalItems' => \count($progressList),
         ]);
     }
 
@@ -94,7 +102,7 @@ class StudentPublicationController extends AbstractController
         CStudentPublicationRepository $repo,
         Security $security
     ): JsonResponse {
-        /* @var User $user */
+        /** @var User $user */
         $user = $security->getUser();
 
         $page = (int) $request->query->get('page', 1);
@@ -192,10 +200,10 @@ class StudentPublicationController extends AbstractController
         $description = $data['description'] ?? null;
         $sendMail = $data['sendMail'] ?? false;
 
-        if ($title !== null) {
+        if (null !== $title) {
             $submission->setTitle($title);
         }
-        if ($description !== null) {
+        if (null !== $description) {
             $submission->setDescription($description);
         }
 
@@ -204,8 +212,8 @@ class StudentPublicationController extends AbstractController
         if ($sendMail) {
             $user = $submission->getUser();
             if ($user) {
-                $messageSubject = sprintf('Feedback updated for "%s"', $submission->getTitle());
-                $messageContent = sprintf(
+                $messageSubject = \sprintf('Feedback updated for "%s"', $submission->getTitle());
+                $messageContent = \sprintf(
                     'There is a new feedback update for your submission "%s". Please check it on the platform.',
                     $submission->getTitle()
                 );
@@ -261,29 +269,37 @@ class StudentPublicationController extends AbstractController
     public function getUnsubmittedUsers(
         int $assignmentId,
         SerializerInterface $serializer,
-        CStudentPublicationRepository $repo
+        CStudentPublicationRepository $repo,
+        CourseRelUserRepository $courseRelUserRepo
     ): JsonResponse {
         $course = $this->cidReqHelper->getCourseEntity();
         $session = $this->cidReqHelper->getSessionEntity();
 
         $students = $session
             ? $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT)
-            : $course->getStudentSubscriptions();
+            : $courseRelUserRepo->findBy([
+                'course' => $course,
+                'status' => CourseRelUser::STUDENT,
+            ]);
 
-        $studentIds = array_map(fn ($rel) => $rel->getUser()->getId(), $students->toArray());
+        $studentsArray = $students instanceof Collection
+            ? $students->toArray()
+            : $students;
+
+        $studentIds = array_map(fn ($rel) => $rel->getUser()->getId(), $studentsArray);
 
         $submittedUserIds = $repo->findUserIdsWithSubmissions($assignmentId);
 
         $unsubmitted = array_filter(
-            $students->toArray(),
-            fn ($rel) => !in_array($rel->getUser()->getId(), $submittedUserIds, true)
+            $studentsArray,
+            fn ($rel) => !\in_array($rel->getUser()->getId(), $submittedUserIds, true)
         );
 
         $data = array_values(array_map(fn ($rel) => $rel->getUser(), $unsubmitted));
 
         return $this->json([
             'hydra:member' => $data,
-            'hydra:totalItems' => count($data),
+            'hydra:totalItems' => \count($data),
         ], 200, [], ['groups' => ['user:read']]);
     }
 
@@ -297,7 +313,7 @@ class StudentPublicationController extends AbstractController
         $course = $this->cidReqHelper->getCourseEntity();
         $session = $this->cidReqHelper->getSessionEntity();
 
-        /* @var User $user */
+        /** @var User $user */
         $user = $security->getUser();
         $senderId = $user?->getId();
 
@@ -309,20 +325,20 @@ class StudentPublicationController extends AbstractController
 
         $unsubmitted = array_filter(
             $students->toArray(),
-            fn ($rel) => !in_array($rel->getUser()->getId(), $submittedUserIds, true)
+            fn ($rel) => !\in_array($rel->getUser()->getId(), $submittedUserIds, true)
         );
 
         foreach ($unsubmitted as $rel) {
             $user = $rel->getUser();
             $messageHelper->sendMessageSimple(
                 $user->getId(),
-                "You have not submitted your assignment",
-                "Please submit your assignment as soon as possible.",
+                'You have not submitted your assignment',
+                'Please submit your assignment as soon as possible.',
                 $senderId
             );
         }
 
-        return new JsonResponse(['success' => true, 'sent' => count($unsubmitted)]);
+        return new JsonResponse(['success' => true, 'sent' => \count($unsubmitted)]);
     }
 
     #[Route('/{id}/export/pdf', name: 'chamilo_core_assignment_export_pdf', methods: ['GET'])]
@@ -355,7 +371,7 @@ class StudentPublicationController extends AbstractController
 
         try {
             $mpdf = new Mpdf([
-                'tempDir' => api_get_path(SYS_ARCHIVE_PATH) . 'mpdf/',
+                'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
             ]);
             $mpdf->WriteHTML($html);
 
@@ -365,7 +381,7 @@ class StudentPublicationController extends AbstractController
                 ['Content-Type' => 'application/pdf']
             );
         } catch (MpdfException $e) {
-            throw new \RuntimeException('Failed to generate PDF: '.$e->getMessage(), 500, $e);
+            throw new RuntimeException('Failed to generate PDF: '.$e->getMessage(), 500, $e);
         }
     }
 
@@ -379,11 +395,11 @@ class StudentPublicationController extends AbstractController
 
         $count = 0;
 
-        /* @var CStudentPublication $submission */
+        /** @var CStudentPublication $submission */
         foreach ($submissions as $submission) {
             $correctionNode = $submission->getCorrection();
 
-            if ($correctionNode !== null) {
+            if (null !== $correctionNode) {
                 $correctionNode = $em->getRepository(ResourceNode::class)->find($correctionNode->getId());
                 if ($correctionNode) {
                     $em->remove($correctionNode);
@@ -414,11 +430,11 @@ class StudentPublicationController extends AbstractController
         }
 
         [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
-        $zipPath = api_get_path(SYS_ARCHIVE_PATH) . uniqid('assignment_', true) . '.zip';
-        $zip = new \ZipArchive();
+        $zipPath = api_get_path(SYS_ARCHIVE_PATH).uniqid('assignment_', true).'.zip';
+        $zip = new ZipArchive();
 
-        if ($zip->open($zipPath, \ZipArchive::CREATE) !== true) {
-            throw new \RuntimeException('Cannot create zip archive');
+        if (true !== $zip->open($zipPath, ZipArchive::CREATE)) {
+            throw new RuntimeException('Cannot create zip archive');
         }
 
         foreach ($submissions as $submission) {
@@ -432,9 +448,9 @@ class StudentPublicationController extends AbstractController
                     $path = $resourceNodeRepository->getFilename($resourceFile);
                     $content = $resourceNodeRepository->getFileSystem()->read($path);
 
-                    $filename = sprintf('%s_%s_%s', $sentDate, $user->getUsername(), $resourceFile->getOriginalName());
+                    $filename = \sprintf('%s_%s_%s', $sentDate, $user->getUsername(), $resourceFile->getOriginalName());
                     $zip->addFromString($filename, $content);
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     continue;
                 }
             }
@@ -442,7 +458,7 @@ class StudentPublicationController extends AbstractController
 
         $zip->close();
 
-        return $this->file($zipPath, $assignment->getTitle() . '.zip')->deleteFileAfterSend();
+        return $this->file($zipPath, $assignment->getTitle().'.zip')->deleteFileAfterSend();
     }
 
     #[Route('/{assignmentId}/upload-corrections-package', name: 'chamilo_core_assignment_upload_corrections_package', methods: ['POST'])]
@@ -455,15 +471,15 @@ class StudentPublicationController extends AbstractController
         TranslatorInterface $translator
     ): JsonResponse {
         $file = $request->files->get('file');
-        if (!$file || $file->getClientOriginalExtension() !== 'zip') {
+        if (!$file || 'zip' !== $file->getClientOriginalExtension()) {
             return new JsonResponse(['error' => 'Invalid file'], 400);
         }
 
         $folder = uniqid('corrections_', true);
-        $destinationDir = api_get_path(SYS_ARCHIVE_PATH) . $folder;
+        $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
         mkdir($destinationDir, 0777, true);
 
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $zip->open($file->getPathname());
         $zip->extractTo($destinationDir);
         $zip->close();
@@ -476,7 +492,7 @@ class StudentPublicationController extends AbstractController
             $username = $submission->getUser()?->getUsername() ?? 'unknown';
             $title = $this->cleanFilename($submission->getTitle() ?? '');
             $title = preg_replace('/_[a-f0-9]{10,}$/', '', pathinfo($title, PATHINFO_FILENAME));
-            $key = sprintf('%s_%s_%s', $date, $username, $title);
+            $key = \sprintf('%s_%s_%s', $date, $username, $title);
             $matchMap[$key] = $submission;
         }
 
@@ -494,7 +510,6 @@ class StudentPublicationController extends AbstractController
             $matched = false;
             foreach ($matchMap as $prefix => $submission) {
                 if ($nameOnly === $prefix) {
-
                     if ($submission->getCorrection()) {
                         $em->remove($submission->getCorrection());
                         $em->flush();
@@ -518,12 +533,13 @@ class StudentPublicationController extends AbstractController
                     $submission->setExtensions($filename);
                     $submission->setDescription('Correction uploaded');
                     $submission->setQualification(0);
-                    $submission->setDateOfQualification(new \DateTime());
+                    $submission->setDateOfQualification(new DateTime());
                     $submission->setAccepted(true);
                     $em->persist($submission);
 
                     $uploaded++;
                     $matched = true;
+
                     break;
                 }
             }
@@ -538,7 +554,7 @@ class StudentPublicationController extends AbstractController
         return new JsonResponse([
             'success' => true,
             'uploaded' => $uploaded,
-            'skipped' => count($skipped),
+            'skipped' => \count($skipped),
             'skipped_files' => $skipped,
         ]);
     }
@@ -552,6 +568,7 @@ class StudentPublicationController extends AbstractController
         $name = preg_replace('/\s+/', '_', $name);
         $name = preg_replace('/[^\w\-\.]/u', '', $name);
         $name = preg_replace('/_+/', '_', $name);
+
         return trim($name, '_');
     }
 }

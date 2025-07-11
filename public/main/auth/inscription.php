@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Entity\PageCategory;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
+use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use ChamiloSession as Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -287,6 +287,15 @@ if (false === $userAlreadyRegisteredShowTerms &&
     }
 
     $form->addEmailRule('email');
+
+    $form->addRule(
+        'email',
+        get_lang('This e-mail address has already been used by the maximum number of allowed accounts. Please use another.'),
+        'callback',
+        function ($email) {
+            return !api_email_reached_registration_limit($email);
+        }
+    );
 
     // USERNAME
     if ('true' != api_get_setting('login_is_email')) {
@@ -698,7 +707,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                 if (false === $termActivated) {
                     $blockButton = true;
                     $infoMessage = Display::return_message(
-                            get_lang('The terms and conditions have not yet been validated by your tutor'),
+                            get_lang('The terms and conditions have not yet been validated by your tutor.'),
                             'warning',
                             false
                         );

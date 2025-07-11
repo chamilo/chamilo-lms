@@ -7,9 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\ResourceType;
+use Chamilo\CoreBundle\Entity\User;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -37,7 +39,8 @@ class ImportAccessUrlCommand extends Command
         $this
             ->addArgument('xlsx-file', InputArgument::REQUIRED, 'Path to the XLSX file')
             ->addArgument('base-url', InputArgument::REQUIRED, 'Base URL for subdomains (e.g., https://somedomain.com/)')
-            ->setHelp('This command imports AccessUrl entities from an XLSX file. The file must have a title row with "subdomain" and "description" columns. Subdomains are lowercased. The ResourceNode parent is set to AccessUrl ID = 1. If needed, removing the created URLs manually will require cleaning the access_url_rel_user and resource_node tables.');
+            ->setHelp('This command imports AccessUrl entities from an XLSX file. The file must have a title row with "subdomain" and "description" columns. Subdomains are lowercased. The ResourceNode parent is set to AccessUrl ID = 1. If needed, removing the created URLs manually will require cleaning the access_url_rel_user and resource_node tables.')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -52,6 +55,7 @@ class ImportAccessUrlCommand extends Command
         $parsedUrl = parse_url($baseUrl);
         if (!isset($parsedUrl['host']) || !isset($parsedUrl['scheme'])) {
             $io->error("Invalid base URL: {$baseUrl}. Must include scheme and host (e.g., https://somedomain.com/).");
+
             return Command::FAILURE;
         }
         $mainDomain = $parsedUrl['host']; // e.g., 'somedomain.com'
@@ -60,6 +64,7 @@ class ImportAccessUrlCommand extends Command
         // Validate XLSX file
         if (!file_exists($xlsxFile) || !is_readable($xlsxFile)) {
             $io->error("XLSX file not found or not readable: {$xlsxFile}");
+
             return Command::FAILURE;
         }
 
@@ -68,13 +73,15 @@ class ImportAccessUrlCommand extends Command
         $user = $this->entityManager->getRepository(User::class)->find($defaultUserId);
         if (!$user) {
             $io->error("User with ID {$defaultUserId} not found. Cannot assign to URLs.");
+
             return Command::FAILURE;
         }
 
         // Get main AccessUrl (resource_node.parent = null) and its ResourceNode
         $mainAccessUrl = $this->entityManager->getRepository(AccessUrl::class)->findOneBy(['parent' => null]);
         if (!$mainAccessUrl) {
-            $io->error("Main AccessUrl not found.");
+            $io->error('Main AccessUrl not found.');
+
             return Command::FAILURE;
         }
 
@@ -83,6 +90,7 @@ class ImportAccessUrlCommand extends Command
         $resourceType = $resourceTypeRepo->findOneBy(['title' => 'urls']);
         if (!$resourceType) {
             $io->error("ResourceType 'urls' not found.");
+
             return Command::FAILURE;
         }
 
@@ -97,8 +105,9 @@ class ImportAccessUrlCommand extends Command
             $subdomainIndex = array_search('subdomain', $headerRow);
             $descriptionIndex = array_search('description', $headerRow);
 
-            if ($subdomainIndex === false || $descriptionIndex === false) {
+            if (false === $subdomainIndex || false === $descriptionIndex) {
                 $io->error("Columns 'subdomain' or 'description' not found in the Excel file.");
+
                 return Command::FAILURE;
             }
 
@@ -111,16 +120,18 @@ class ImportAccessUrlCommand extends Command
 
                 // Skip empty subdomain
                 if (empty($subdomain)) {
-                    $io->warning("Row " . ($rowNumber + 2) . ": Skipping due to empty subdomain.");
+                    $io->warning('Row '.($rowNumber + 2).': Skipping due to empty subdomain.');
                     $skippedCount++;
+
                     continue;
                 }
 
                 // Lowercase and validate subdomain
                 $subdomain = strtolower($subdomain);
                 if (!preg_match('/^[a-z0-9][a-z0-9\-]*[a-z0-9]$/', $subdomain)) {
-                    $io->warning("Row " . ($rowNumber + 2) . ": Invalid subdomain '$subdomain'. Skipping.");
+                    $io->warning('Row '.($rowNumber + 2).": Invalid subdomain '$subdomain'. Skipping.");
                     $skippedCount++;
+
                     continue;
                 }
 
@@ -130,8 +141,9 @@ class ImportAccessUrlCommand extends Command
                 // Check if the URL already exists
                 $existingUrl = $this->entityManager->getRepository(AccessUrl::class)->findOneBy(['url' => $subdomainUrl]);
                 if ($existingUrl) {
-                    $io->warning("Row " . ($rowNumber + 2) . ": URL {$subdomainUrl} already exists. Skipping.");
+                    $io->warning('Row '.($rowNumber + 2).": URL {$subdomainUrl} already exists. Skipping.");
                     $skippedCount++;
+
                     continue;
                 }
 
@@ -141,8 +153,8 @@ class ImportAccessUrlCommand extends Command
                 $accessUrl->setDescription($description);
                 $accessUrl->setActive(1); // Set as active
                 $accessUrl->setCreatedBy($defaultUserId); // Set created_by
-                $accessUrl->setTms(new \DateTime()); // Set timestamp
-                //$accessUrl->setResourceNode($resourceNode); // Assign ResourceNode
+                $accessUrl->setTms(new DateTime()); // Set timestamp
+                // $accessUrl->setResourceNode($resourceNode); // Assign ResourceNode
                 $accessUrl->addUser($user); // Associate user
                 $accessUrl->setCreator($user); // Temporary hack as AccessUrl should be able to set this automatically
                 $accessUrl->setParent($mainAccessUrl); // Set this URL as a child of the admin URL
@@ -150,7 +162,7 @@ class ImportAccessUrlCommand extends Command
                 // Persist entity
                 $this->entityManager->persist($accessUrl);
 
-                $io->success("Row " . ($rowNumber + 2) . ": Created URL: {$subdomainUrl} with description: {$description}, assigned to user ID: {$defaultUserId}, parent AccessUrl ID: 1");
+                $io->success('Row '.($rowNumber + 2).": Created URL: {$subdomainUrl} with description: {$description}, assigned to user ID: {$defaultUserId}, parent AccessUrl ID: 1");
                 $createdCount++;
             }
 
@@ -159,8 +171,9 @@ class ImportAccessUrlCommand extends Command
             $io->success("Import completed: {$createdCount} URLs created, {$skippedCount} rows skipped.");
 
             return Command::SUCCESS;
-        } catch (\Exception $e) {
-            $io->error("Error: " . $e->getMessage());
+        } catch (Exception $e) {
+            $io->error('Error: '.$e->getMessage());
+
             return Command::FAILURE;
         }
     }

@@ -10,8 +10,11 @@ use ApiPlatform\Validator\ValidatorInterface;
 use Chamilo\CoreBundle\Dto\CreateUserOnAccessUrlInput;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -23,7 +26,9 @@ class CreateUserOnAccessUrlAction
         private EntityManagerInterface $em,
         private AccessUrlRepository $accessUrlRepo,
         private ValidatorInterface $validator,
-        private UserPasswordHasherInterface $passwordHasher
+        private UserPasswordHasherInterface $passwordHasher,
+        private ExtraFieldValuesRepository $extraFieldValuesRepo,
+        private ExtraFieldRepository $extraFieldRepo
     ) {}
 
     public function __invoke(CreateUserOnAccessUrlInput $data): User
@@ -51,6 +56,25 @@ class CreateUserOnAccessUrlAction
 
         $this->em->persist($user);
         $this->em->flush();
+
+        if (!empty($data->extraFields)) {
+            foreach ($data->extraFields as $variable => $value) {
+                $extraField = $this->extraFieldRepo->findOneBy([
+                    'variable' => $variable,
+                    'itemType' => 1,
+                ]);
+
+                if (!$extraField) {
+                    throw new RuntimeException("ExtraField '{$variable}' not found for users.");
+                }
+
+                $this->extraFieldValuesRepo->updateItemData(
+                    $extraField,
+                    $user,
+                    $value
+                );
+            }
+        }
 
         $rel = new AccessUrlRelUser();
         $rel->setUser($user)->setUrl($url);

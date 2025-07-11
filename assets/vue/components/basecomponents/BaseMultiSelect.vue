@@ -1,11 +1,12 @@
 <template>
   <div class="field">
-    <div class="p-float-label">
+    <FloatLabel variant="on">
       <MultiSelect
-        id="multiSelect"
         v-model="selectedValues"
         :options="options"
         display="chip"
+        fluid
+        input-id="multiSelect"
         optionLabel="name"
         optionValue="id"
         panelClass="multi-select-panel"
@@ -17,7 +18,7 @@
         :for="inputId"
         v-text="label"
       />
-    </div>
+    </FloatLabel>
     <small
       v-if="isInvalid"
       :class="{ 'p-error': isInvalid }"
@@ -28,6 +29,7 @@
 
 <script setup>
 import { ref, watch } from "vue"
+import FloatLabel from "primevue/floatlabel"
 import MultiSelect from "primevue/multiselect"
 
 const props = defineProps({

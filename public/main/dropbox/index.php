@@ -4,7 +4,7 @@
 
 // The file that contains all the initialisation stuff (and includes all the configuration stuff)
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 require_once 'dropbox_init.inc.php';
 

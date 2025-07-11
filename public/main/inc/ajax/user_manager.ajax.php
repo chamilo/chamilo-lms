@@ -27,7 +27,7 @@ switch ($action) {
             $result = [];
             if (!empty($users)) {
                 foreach ($users as $user) {
-                    $result[] = ['id' => $user['id'], 'text' => $user['complete_name'].' ('.$user['username'].')'];
+                    $result[] = ['id' => $user['id'], 'text' => $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'];
                 }
                 $result['items'] = $result;
             }

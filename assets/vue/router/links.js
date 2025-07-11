@@ -8,6 +8,7 @@ export default {
     {
       name: "LinksList",
       path: "",
+      meta: { breadcrumb: "" },
       component: () => import("../views/links/LinksList.vue"),
     },
     {

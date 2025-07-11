@@ -13,13 +13,14 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\DataTransformer\CourseToolDataTranformer;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\ServiceHelper\PluginServiceHelper;
+use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\AbstractPlugin;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\CourseFromRequestTrait;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManagerInterface;
+use Event;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -39,7 +40,7 @@ final class CToolStateProvider implements ProviderInterface
         private readonly Security $security,
         private readonly ToolChain $toolChain,
         protected RequestStack $requestStack,
-        private readonly PluginServiceHelper $pluginServiceHelper,
+        private readonly PluginHelper $pluginHelper,
     ) {
         $this->transformer = new CourseToolDataTranformer(
             $this->requestStack,
@@ -62,10 +63,10 @@ final class CToolStateProvider implements ProviderInterface
         $isAllowToEdit = $user && ($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER'));
         $isAllowToEditBack = $isAllowToEdit;
         $isAllowToSessionEdit = $user && (
-                $user->hasRole('ROLE_ADMIN') ||
-                $user->hasRole('ROLE_CURRENT_COURSE_TEACHER') ||
-                $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-            );
+            $user->hasRole('ROLE_ADMIN')
+                || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
+                || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+        );
 
         $allowVisibilityInSession = $this->settingsManager->getSetting('course.allow_edit_tool_visibility_in_session');
         $session = $this->getSession();
@@ -133,11 +134,11 @@ final class CToolStateProvider implements ProviderInterface
             return [false, null];
         }
 
-        if (!$this->pluginServiceHelper->isPluginEnabled('positioning')) {
+        if (!$this->pluginHelper->isPluginEnabled('positioning')) {
             return [false, null];
         }
 
-        $pluginInstance = $this->pluginServiceHelper->loadLegacyPlugin('Positioning');
+        $pluginInstance = $this->pluginHelper->loadLegacyPlugin('Positioning');
 
         if (!$pluginInstance || 'true' !== $pluginInstance->get('block_course_if_initial_exercise_not_attempted')) {
             return [false, null];
@@ -149,7 +150,7 @@ final class CToolStateProvider implements ProviderInterface
             return [false, null];
         }
 
-        $results = \Event::getExerciseResultsByUser(
+        $results = Event::getExerciseResultsByUser(
             $user->getId(),
             (int) $initialData['exercise_id'],
             $courseId,

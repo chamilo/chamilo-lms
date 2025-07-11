@@ -161,7 +161,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('quiz', 'rn', 'rl', 'course', 'session')
-        ->from(CQuiz::class, 'quiz')
+            ->from(CQuiz::class, 'quiz')
             ->innerJoin('quiz.questions', 'rel')
             ->innerJoin('quiz.resourceNode', 'rn')
             ->leftJoin('rn.resourceLinks', 'rl')
@@ -169,11 +169,13 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
             ->leftJoin('rl.session', 'session')
             ->where('rel.question = :questionId')
             ->setParameter('questionId', $questionId)
-            ->groupBy('quiz.iid');
+            ->groupBy('quiz.iid')
+        ;
 
         if ($excludeQuizId > 0) {
             $qb->andWhere('quiz.iid != :excludeQuizId')
-                ->setParameter('excludeQuizId', $excludeQuizId);
+                ->setParameter('excludeQuizId', $excludeQuizId)
+            ;
         }
 
         return $qb->getQuery()->getResult();

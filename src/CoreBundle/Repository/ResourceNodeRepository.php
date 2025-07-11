@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
@@ -37,7 +37,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SettingsManager $settingsManager
     ) {
-        $this->filesystem = $resourceFilesystem; // Asignar el filesystem correcto
+        $this->filesystem = $resourceFilesystem;
         parent::__construct($manager, $manager->getClassMetadata(ResourceNode::class));
     }
 

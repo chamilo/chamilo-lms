@@ -30,7 +30,7 @@
           </video>
 
           <iframe
-            v-if="'text/html' === item.resourceNode.firstResourceFile.mimeType"
+            v-else-if="'text/html' === item.resourceNode.firstResourceFile.mimeType"
             :src="item['contentUrl']"
           />
         </div>

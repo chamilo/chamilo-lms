@@ -5,7 +5,7 @@
  *  Interface for assigning sessions to Human Resources Manager.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 // resetting the course id
 $cidReset = true;

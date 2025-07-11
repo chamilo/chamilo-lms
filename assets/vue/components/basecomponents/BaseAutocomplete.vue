@@ -1,6 +1,6 @@
 <template>
   <div class="field">
-    <FloatLabel>
+    <FloatLabel variant="on">
       <AutoComplete
         v-model="modelValue"
         :disabled="disabled"
@@ -9,6 +9,7 @@
         :multiple="isMultiple"
         :option-label="optionLabel"
         :suggestions="suggestions"
+        fluid
         force-selection
         @complete="onComplete"
         @item-select="$emit('item-select', $event)"

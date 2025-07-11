@@ -6,6 +6,7 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
@@ -31,8 +32,6 @@ $form->addFile('url_image_1', get_lang('Image'));
 
 $defaults['url'] = 'http://';
 $form->setDefaults($defaults);
-
-$submit_name = get_lang('Add URL');
 if ($httpRequest->query->has('url_id')) {
     $url_id = $httpRequest->query->getInt('url_id');
     $num_url_id = UrlManager::url_id_exist($url_id);
@@ -50,14 +49,13 @@ if ($httpRequest->query->has('url_id')) {
         $url_data['url'] = $https.$_SERVER['HTTP_HOST'].'/';
     }
     $form->setDefaults($url_data);
-    $submit_name = get_lang('Add URL');
 }
 
 $form->addHidden(
     'parentResourceNodeId',
-    Container::getAccessUrlHelper()->getFirstAccessUrl()->resourceNode->getId()
+    Container::getAccessUrlUtil()->getFirstAccessUrl()->resourceNode->getId()
 );
-$form->addButtonCreate($submit_name);
+$form->addButtonCreate(get_lang('Save'));
 
 //the first url with id = 1 will be always active
 if ($httpRequest->query->has('url_id') && 1 !== $httpRequest->query->getInt('url_id')) {
@@ -120,10 +118,21 @@ if ($form->validate()) {
     $form->setConstants(['sec_token' => $token]);
 }
 
-$tool_name = get_lang('Add URL');
+$tool_name =  isset($url_id) && $url_id > 0
+    ? get_lang('Edit URL')
+    : get_lang('Add URL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 Display::display_header($tool_name);
+echo '<div class="flex gap-2 items-center mb-4 mt-4">';
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to URL list')),
+    api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
+);
+echo '</div>';
+echo '<h2 class="text-xl font-semibold text-gray-800 mt-6 mb-6">';
+echo $tool_name;
+echo '</h2>';
 $form->display();
 Display::display_footer();

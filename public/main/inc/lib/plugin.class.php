@@ -370,7 +370,7 @@ class Plugin
 
         if ($plugin && empty($this->settings) || $forceFromDB) {
             $configByUrl = $plugin->getConfigurationsByAccessUrl(
-                Container::getAccessUrlHelper()->getCurrent()
+                Container::getAccessUrlUtil()->getCurrent()
             );
 
             $this->settings = $configByUrl?->getConfiguration() ?? [];

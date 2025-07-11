@@ -3,7 +3,7 @@
 
 // resetting the course id
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
 
 $cidReset = true;
 

@@ -217,6 +217,7 @@ const categoryToDelete = ref(null)
 const isLoading = ref(true)
 
 const linkValidationResults = ref({})
+const isToggling = ref({})
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
@@ -266,17 +267,28 @@ async function checkLink(id, url) {
 }
 
 async function toggleVisibility(link) {
+  if (isToggling.value[link.iid]) return
+  isToggling.value = { ...isToggling.value, [link.iid]: true }
+
   try {
-    const visibility = toggleVisibilityProperty(!link.linkVisible)
-    let newLink = await linkService.toggleLinkVisibility(link.iid, isVisible(visibility), cid, sid)
-    notifications.showSuccessNotification(t("Link visibility updated"))
-    Object.values(categories.value)
-      .map((c) => c.links)
-      .flat()
+    const newVisible = !isVisible(link.linkVisible)
+    const updatedLink = await linkService.toggleLinkVisibility(link.iid, newVisible, cid, sid)
+    const newFlagValue = visibilityFromBoolean(updatedLink.linkVisible)
+
+    linksWithoutCategory.value
       .filter((l) => l.iid === link.iid)
-      .forEach((l) => (l.linkVisible = visibilityFromBoolean(newLink.linkVisible)))
-  } catch (error) {
+      .forEach((l) => (l.linkVisible = newFlagValue))
+
+    categories.value
+      .flatMap((c) => c.links || [])
+      .filter((l) => l.iid === link.iid)
+      .forEach((l) => (l.linkVisible = newFlagValue))
+
+    notifications.showSuccessNotification(t("Link visibility updated"))
+  } catch (err) {
     notifications.showErrorNotification(t("Could not change visibility of link"))
+  } finally {
+    isToggling.value = { ...isToggling.value, [link.iid]: false }
   }
 }
 

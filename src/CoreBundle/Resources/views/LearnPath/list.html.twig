@@ -2,13 +2,50 @@
 {% block content %}
 {% autoescape false %}
     <script>
-        function confirmation(name) {
-            if (confirm("{{ "Are you sure to delete"|trans }} \"" + name + "\" ?")) {
-                return true;
-            } else {
-                return false;
-            }
+      function confirmation(name) {
+        if (confirm("{{ "Are you sure to delete"|trans }} \"" + name + "\" ?")) {
+          return true;
+        } else {
+          return false;
         }
+      }
+
+      function openExportPdfDialog(lpId) {
+        fetch('/main/inc/ajax/lp.ajax.php?{{ cid_req }}&a=get_lp_export_items&lp_id=' + lpId)
+          .then(response => response.json())
+          .then(data => {
+            if (!data.items || data.items.length === 0) {
+              Swal.fire('{{ "No exportable items found."|trans }}');
+              return;
+            }
+
+            let html = '<form id="export-pdf-form">';
+            html += '<input type="hidden" name="lp_id" value="'+lpId+'">';
+            html += '<p>{{ "Select items to export:"|trans }}</p>';
+            data.items.forEach(item => {
+              html += '<div style="text-align:left;"><label><input type="checkbox" name="items[]" value="'+item.id+'" checked> '+item.title+'</label></div>';
+            });
+            html += '</form>';
+
+            Swal.fire({
+              title: '{{ "Export to PDF"|trans }}',
+              html: html,
+              showCancelButton: true,
+              confirmButtonText: 'Export',
+              cancelButtonText: '{{ "Cancel"|trans }}',
+              preConfirm: () => {
+                const form = document.getElementById('export-pdf-form');
+                const formData = new FormData(form);
+                const selectedItems = formData.getAll('items[]');
+                if (selectedItems.length === 0) {
+                  Swal.showValidationMessage('{{ "Please select at least one item."|trans }}');
+                  return false;
+                }
+                window.location.href = 'lp_controller.php?{{ course_url_params }}&action=export_to_pdf&lp_id=' + lpId + '&items=' + selectedItems.join(',');
+              }
+            });
+          });
+      }
     </script>
     <div class="panel-group my-8" role="tablist">
         {% for lp_data in data %}

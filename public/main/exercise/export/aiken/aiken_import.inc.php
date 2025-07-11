@@ -10,7 +10,7 @@
  * @author César Perales <cesar.perales@gmail.com> Parse function for Aiken format
  */
 
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 
 /**
  * This function displays the form for import of the zip file with qti2.

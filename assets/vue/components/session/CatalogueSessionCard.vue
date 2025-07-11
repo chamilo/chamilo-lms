@@ -91,6 +91,13 @@
           disabled
         />
 
+        <template v-else-if="session.buyButtonHtml">
+          <div
+            v-html="session.buyButtonHtml"
+            class="w-full text-center mb-2"
+          ></div>
+        </template>
+
         <Button
           v-else-if="allowAutoSubscription && !session.isSubscribed"
           :label="isLoading ? $t('Subscribing...') : $t('Subscribe')"
@@ -191,12 +198,14 @@ import Dialog from "primevue/dialog"
 import axios from "axios"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useLocale } from "../../composables/locale"
 
 const showDescriptionDialog = ref(false)
 const platformConfigStore = usePlatformConfig()
 const allowDescription = computed(
   () => platformConfigStore.getSetting("course.show_courses_descriptions_in_catalog") !== "false",
 )
+const { getOriginalLanguageName } = useLocale()
 
 const showGoDialog = ref(false)
 const isLoading = ref(false)
@@ -303,7 +312,7 @@ const languages = computed(() => {
   const langs = new Set()
   for (const item of props.session.courses || []) {
     const lang = item.courseLanguage
-    if (lang) langs.add(lang)
+    if (lang) langs.add(getOriginalLanguageName(lang))
   }
   return [...langs]
 })

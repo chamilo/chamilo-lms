@@ -85,13 +85,43 @@ if ($isCli) {
         $currentBaseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
     }
 
-    $response = $kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
+    // Catch Symfony kernel exceptions (e.g. CidReqListener) in prod.
+    // Needed because set_exception_handler() won't catch them here.
+    try {
+        $response = $kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
+    } catch (\Throwable $exception) {
+        if (\in_array($kernel->getEnvironment(), ['dev', 'test'], true)) {
+            throw $exception;
+        }
+
+        $event = new ExceptionEvent(
+            $kernel,
+            $request,
+            HttpKernelInterface::MAIN_REQUEST,
+            $exception
+        );
+
+        $listener = $kernel->getContainer()->get(ExceptionListener::class);
+        if (is_callable($listener)) {
+            $listener($event);
+        }
+
+        $response = $event->getResponse();
+        if (!$response) {
+            $response = new Response('An error occurred', 500);
+        }
+
+        $response->send();
+        exit;
+    }
 
     $container = $kernel->getContainer();
     $router = $container->get('router');
     $context = $router->getContext();
     $router->setContext($context);
 
+    // Catch legacy exceptions after kernel execution.
+    // Complements the try/catch above for full coverage.
     set_exception_handler(function ($exception) use ($kernel, $container, $request) {
         if (
             in_array($kernel->getEnvironment(), ['dev', 'test'], true) &&

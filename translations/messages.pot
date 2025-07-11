@@ -28430,3 +28430,15 @@ msgstr ""
 
 msgid "Documents deleted"
 msgstr ""
+
+msgid "User is teacher in some courses"
+msgstr ""
+
+msgid "User is general coach in some sessions"
+msgstr ""
+
+msgid "User is session admin in some sessions"
+msgstr ""
+
+msgid "Role change denied due to incompatible current assignments:"
+msgstr ""

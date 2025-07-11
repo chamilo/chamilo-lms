@@ -28462,3 +28462,15 @@ msgstr "Do you still want to delete them"
 
 msgid "Documents deleted"
 msgstr "Documents deleted"
+
+msgid "User is teacher in some courses"
+msgstr "User is teacher in some courses"
+
+msgid "User is general coach in some sessions"
+msgstr "User is general coach in some sessions"
+
+msgid "User is session admin in some sessions"
+msgstr "User is session admin in some sessions"
+
+msgid "Role change denied due to incompatible current assignments:"
+msgstr "Role change denied due to incompatible current assignments:"

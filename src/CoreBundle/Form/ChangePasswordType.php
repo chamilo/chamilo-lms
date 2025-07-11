@@ -34,11 +34,14 @@ class ChangePasswordType extends AbstractType
                 'label' => 'Confirm new password',
                 'required' => false,
             ])
-            ->add('enable2FA', CheckboxType::class, [
+        ;
+
+        if ($options['enable_2fa_field']) {
+            $builder->add('enable2FA', CheckboxType::class, [
                 'label' => 'Enable two-factor authentication (2FA)',
                 'required' => false,
-            ])
-        ;
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -47,6 +50,7 @@ class ChangePasswordType extends AbstractType
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
             'csrf_token_id' => 'change_password',
+            'enable_2fa_field' => true,
         ]);
     }
 }

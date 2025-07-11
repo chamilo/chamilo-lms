@@ -451,6 +451,34 @@
       />
     </form>
   </BaseDialogConfirmCancel>
+  <BaseDialogConfirmCancel
+    v-model:is-visible="isDeleteWarningLpDialogVisible"
+    :title="t('Confirm deletion')"
+    @confirm-clicked="forceDeleteItem"
+    @cancel-clicked="isDeleteWarningLpDialogVisible = false"
+  >
+    <div class="confirmation-content">
+      <BaseIcon
+        class="mr-2"
+        icon="alert"
+        size="big"
+      />
+      <p class="mb-2">
+        {{ t("The following documents are used in learning paths:") }}
+      </p>
+      <ul class="pl-4 mb-4">
+        <li
+          v-for="lp in lpListWarning"
+          :key="lp.lpId + lp.documentTitle"
+        >
+          <b>{{ lp.documentTitle }}</b> → {{ lp.lpTitle }}
+        </li>
+      </ul>
+      <p class="mt-4 font-semibold">
+        {{ t("Do you still want to delete them?") }}
+      </p>
+    </div>
+  </BaseDialogConfirmCancel>
 </template>
 
 <script setup>
@@ -504,6 +532,8 @@ const isAllowedToEdit = ref(false)
 const folders = ref([])
 const selectedFolder = ref(null)
 const isDownloading = ref(false)
+const isDeleteWarningLpDialogVisible = ref(false)
+const lpListWarning = ref([])
 
 const {
   showNewDocumentButton,
@@ -678,9 +708,41 @@ function showDeleteMultipleDialog() {
   isDeleteMultipleDialogVisible.value = true
 }
 
-function confirmDeleteItem(itemToDelete) {
-  item.value = itemToDelete
-  isDeleteItemDialogVisible.value = true
+async function confirmDeleteItem(itemToDelete) {
+  try {
+    const response = await axios.get(`/api/documents/${itemToDelete.iid}/lp-usage`)
+    if (response.data.usedInLp) {
+      lpListWarning.value = response.data.lpList.map((lp) => ({
+        ...lp,
+        documentTitle: itemToDelete.title,
+        documentId: itemToDelete.iid,
+      }))
+      item.value = itemToDelete
+      isDeleteWarningLpDialogVisible.value = true
+    } else {
+      item.value = itemToDelete
+      isDeleteItemDialogVisible.value = true
+    }
+  } catch (error) {
+    console.error("Error checking LP usage for individual item:", error)
+  }
+}
+
+async function forceDeleteItem() {
+  try {
+    const docIdsToDelete = [...new Set(lpListWarning.value.map((lp) => lp.documentId))]
+
+    await Promise.all(docIdsToDelete.map((iid) => axios.delete(`/api/documents/${iid}`)))
+
+    notification.showSuccessNotification(t("Documents deleted"))
+    isDeleteWarningLpDialogVisible.value = false
+    item.value = {}
+    unselectAll()
+    onUpdateOptions(options.value)
+  } catch (error) {
+    console.error("Error deleting documents forcibly:", error)
+    notification.showErrorNotification(t("Error deleting document(s)."))
+  }
 }
 
 function getReplaceButtonTitle(item) {
@@ -726,10 +788,56 @@ async function downloadSelectedItems() {
 }
 
 async function deleteMultipleItems() {
-  await store.dispatch("documents/delMultiple", selectedItems.value)
+  const itemsWithoutLp = []
+  const documentsWithLpMap = {}
+
+  for (const item of selectedItems.value) {
+    try {
+      const response = await axios.get(`/api/documents/${item.iid}/lp-usage`)
+      if (response.data.usedInLp) {
+        if (!documentsWithLpMap[item.iid]) {
+          documentsWithLpMap[item.iid] = {
+            iid: item.iid,
+            title: item.title,
+            lpList: [],
+          }
+        }
+        documentsWithLpMap[item.iid].lpList.push(...response.data.lpList)
+      } else {
+        itemsWithoutLp.push(item)
+      }
+    } catch (error) {
+      console.error(`Error checking LP usage for document ${item.iid}:`, error)
+    }
+  }
+
+  const documentsWithLp = Object.values(documentsWithLpMap)
+
+  if (itemsWithoutLp.length > 0) {
+    try {
+      await store.dispatch("documents/delMultiple", itemsWithoutLp)
+    } catch (e) {
+      console.error("Error deleting documents without LP:", e)
+    }
+  }
+
+  if (documentsWithLp.length > 0) {
+    lpListWarning.value = documentsWithLp.flatMap((doc) =>
+      doc.lpList.map((lp) => ({
+        ...lp,
+        documentTitle: doc.title,
+        documentId: doc.iid,
+      })),
+    )
+
+    item.value = {}
+    isDeleteWarningLpDialogVisible.value = true
+  } else {
+    notification.showSuccessNotification(t("Documents deleted"))
+    unselectAll()
+  }
+
   isDeleteMultipleDialogVisible.value = false
-  notification.showSuccessNotification(t("Deleted"))
-  unselectAll()
   onUpdateOptions(options.value)
 }
 
@@ -901,7 +1009,7 @@ async function replaceDocument() {
   }
 
   if (!(documentToReplace.value.filetype === "file" || documentToReplace.value.filetype === "video")) {
-    notification.showErrorNotification(t("Only files or videos can be replaced."))
+    notification.showErrorNotification(t("Only files can be replaced."))
     return
   }
 

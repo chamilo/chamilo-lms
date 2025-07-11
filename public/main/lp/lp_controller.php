@@ -723,7 +723,8 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $result = ScormExport::exportToPdf($lpId, $courseInfo);
+            $selectedItems = isset($_GET['items']) ? explode(',', $_GET['items']) : [];
+            $result = ScormExport::exportToPdf($lpId, $courseInfo, $selectedItems);
             if (!$result) {
                 require 'lp_list.php';
             }

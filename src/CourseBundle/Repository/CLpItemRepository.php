@@ -51,4 +51,17 @@ final class CLpItemRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
+    public function findLearningPathsUsingDocument(int $resourceFileId): array
+    {
+        return $this->createQueryBuilder('i')
+            ->select('lp.iid AS lpId, lp.title AS lpTitle')
+            ->join('i.lp', 'lp')
+            ->where('i.itemType = :type')
+            ->andWhere('i.path = :path')
+            ->setParameter('type', 'document')
+            ->setParameter('path', $resourceFileId)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

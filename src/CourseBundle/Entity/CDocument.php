@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
+use Chamilo\CoreBundle\Controller\Api\DocumentLearningPathUsageAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\ReplaceDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
@@ -88,6 +89,13 @@ use Symfony\Component\Validator\Constraints as Assert;
             deserialize: false
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new Get(
+            uriTemplate: '/documents/{iid}/lp-usage',
+            controller: DocumentLearningPathUsageAction::class,
+            security: "is_granted('ROLE_USER')",
+            read: false,
+            name: 'api_documents_lp_usage'
+        ),
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Post(
             controller: CreateDocumentFileAction::class,

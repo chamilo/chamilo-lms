@@ -28406,3 +28406,39 @@ msgstr ""
 
 msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR."
 msgstr ""
+
+msgid "Please select at least one item."
+msgstr ""
+
+msgid "Select items to export:"
+msgstr ""
+
+msgid "No exportable items found."
+msgstr ""
+
+msgid "Invalid format"
+msgstr ""
+
+msgid "Duration (hh:mm:ss)"
+msgstr ""
+
+msgid "The following documents are used in learning paths:"
+msgstr ""
+
+msgid "Do you still want to delete them?"
+msgstr ""
+
+msgid "Documents deleted"
+msgstr ""
+
+msgid "User is teacher in some courses"
+msgstr ""
+
+msgid "User is general coach in some sessions"
+msgstr ""
+
+msgid "User is session admin in some sessions"
+msgstr ""
+
+msgid "Role change denied due to incompatible current assignments:"
+msgstr ""

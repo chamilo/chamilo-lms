@@ -146,3 +146,10 @@ services:
       arguments:
         $registry: '@doctrine'
         $em: '@doctrine.orm.entity_manager'
+
+    Chamilo\CoreBundle\EventListener\AccessUrlValidationListener:
+      arguments:
+        $accessUrlHelper: '@Chamilo\CoreBundle\Helpers\AccessUrlHelper'
+        $router: '@router'
+      tags:
+        - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 255 }

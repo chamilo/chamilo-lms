@@ -31,7 +31,7 @@ readonly class SettingsManagerHelper
 
         $accessUrl ??= $this->accessUrlHelper->getCurrent();
 
-        if (isset($settingsOverrides[$accessUrl->getId()][$name])) {
+        if ($accessUrl && isset($settingsOverrides[$accessUrl->getId()][$name])) {
             return $settingsOverrides[$accessUrl->getId()][$name];
         }
 

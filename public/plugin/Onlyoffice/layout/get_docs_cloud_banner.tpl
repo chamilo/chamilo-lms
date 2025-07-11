@@ -1,4 +1,4 @@
-<link href="/plugin/onlyoffice/resources/css/docsCloudBanner.css" rel="stylesheet" media="screen" type="text/css"/>
+<link href="/plugin/Onlyoffice/resources/css/docsCloudBanner.css" rel="stylesheet" media="screen" type="text/css"/>
 <div id="onlyofficeDocsCloudBannerWrapper">
     <div id="onlyofficeDocsCloudBannerPicWrapper">
         <div id="onlyofficeDocsCloudBannerPic">

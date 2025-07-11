@@ -94,7 +94,7 @@ if ($docPath) {
 
     $jwtManager = new OnlyofficeJwtManager($appSettings);
     $hashUrl = $jwtManager->getHash($data);
-    $callbackUrl = api_get_path(WEB_PLUGIN_PATH).'onlyoffice/callback.php?hash='.$hashUrl;
+    $callbackUrl = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$hashUrl;
     if ($exeId) {
         $callbackUrl .= '&docPath='.urlencode($newDocPath);
     } else {
@@ -112,7 +112,7 @@ if ($docPath) {
         'size' => filesize($userFilePath),
         'readonly' => (int) $isReadOnly,
         'session_id' => $sessionId,
-        'url' => api_get_path(WEB_PLUGIN_PATH)."onlyoffice/editor.php?doc=".urlencode($newDocPath).($exeId ? "&exeId={$exeId}" : "").($isReadOnly ? "&readOnly={$isReadOnly}" : ""),
+        'url' => api_get_path(WEB_PLUGIN_PATH)."Onlyoffice/editor.php?doc=".urlencode($newDocPath).($exeId ? "&exeId={$exeId}" : "").($isReadOnly ? "&readOnly={$isReadOnly}" : ""),
         'document_url' => $callbackUrl,
         'absolute_path' => $absolutePath,
         'absolute_path_from_document' => '/document/'.basename($userFilePath),
@@ -194,7 +194,7 @@ if (!empty($_GET['nh'])) {
     };
 
     var onRequestSaveAs = function (event) {
-        var url = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH)); ?> + "onlyoffice/ajax/saveas.php";
+        var url = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH)); ?> + "Onlyoffice/ajax/saveas.php";
         var folderId = <?php echo json_encode($docInfo['parent_id'] ?? 0); ?>;
         var saveData = {
             title: event.data.title,
@@ -228,7 +228,7 @@ if (!empty($_GET['nh'])) {
 
     var connectEditor = function () {
         var config = <?php echo json_encode($config); ?>;
-        var errorPage = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'onlyoffice/error.php'); ?>;
+        var errorPage = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/error.php'); ?>;
 
         var docsVersion = DocsAPI.DocEditor.version().split(".");
         if ((config.document.fileType === "pdf")

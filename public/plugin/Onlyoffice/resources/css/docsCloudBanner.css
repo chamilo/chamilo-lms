@@ -2,7 +2,7 @@
     max-width: 596px;
     min-height: 108px;
     text-align: center;
-    background-image: url("/plugin/onlyoffice/resources/get-editors-background.svg");
+    background-image: url("/plugin/Onlyoffice/resources/get-editors-background.svg");
     background-repeat: no-repeat;
     background-color: #FFFFFF;
     border: 1px solid #EFEFEF;
@@ -19,7 +19,7 @@
 }
 
 #onlyofficeDocsCloudBannerPic {
-    content: url("/plugin/onlyoffice/resources/get-editors-pic.svg");
+    content: url("/plugin/Onlyoffice/resources/get-editors-pic.svg");
 }
 
 #onlyofficeDocsCloudBannerContent {

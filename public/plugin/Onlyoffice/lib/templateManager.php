@@ -25,7 +25,7 @@ class TemplateManager
     {
         $langInfo = LangManager::getLangUser();
         $lang = $langInfo['isocode'];
-        $templateFolder = api_get_path(SYS_PLUGIN_PATH).'onlyoffice/assets/';
+        $templateFolder = api_get_path(SYS_PLUGIN_PATH).'Onlyoffice/assets/';
         if (!is_dir($templateFolder.$lang)) {
             $lang = 'default';
         }

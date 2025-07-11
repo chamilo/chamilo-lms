@@ -25,7 +25,7 @@ class OnlyofficePlugin extends Plugin
     /**
      * OnlyofficePlugin name.
      */
-    private string $pluginName = 'onlyoffice';
+    private string $pluginName = 'Onlyoffice';
 
     /**
      * OnlyofficePlugin constructor.

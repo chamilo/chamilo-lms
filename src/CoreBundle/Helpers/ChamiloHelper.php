@@ -8,13 +8,18 @@ namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
+use DateTime;
+use Display;
 use Database;
 use DateInterval;
-use DateTime;
 use DateTimeZone;
-use Display;
-use Exception;
+use Event;
+use ExtraFieldValue;
+use FormValidator;
+use LegalManager;
+use MessageManager;
 use Template;
+use UserManager;
 
 use const PHP_SAPI;
 
@@ -437,5 +442,213 @@ class ChamiloHelper
 
             exit;
         }
+    }
+
+    /**
+     * Checks if the current user has accepted the Terms & Conditions.
+     */
+    public static function userHasAcceptedTerms(): bool
+    {
+        $termRegistered = Session::read('term_and_condition');
+
+        return isset($termRegistered['user_id']);
+    }
+
+    /**
+     * Redirects to the Terms and Conditions page.
+     */
+    public static function redirectToTermsAndConditions(): void
+    {
+        $url = self::getTermsAndConditionsUrl();
+        self::redirectTo($url);
+    }
+
+    /**
+     * Returns the URL of the Terms and Conditions page.
+     */
+    public static function getTermsAndConditionsUrl(): string
+    {
+        return api_get_path(WEB_PATH) . 'main/auth/tc.php';
+    }
+
+    /**
+     * Returns the URL of the Registration page.
+     */
+    public static function getRegistrationUrl(): string
+    {
+        return api_get_path(WEB_PATH) . 'main/auth/registration.php';
+    }
+
+    /**
+     * Adds legal terms acceptance fields into a registration form.
+     */
+    public static function addLegalTermsFields(FormValidator $form, bool $userAlreadyRegisteredShowTerms): void
+    {
+        if ('true' !== api_get_setting('allow_terms_conditions') || $userAlreadyRegisteredShowTerms) {
+            return;
+        }
+
+        $languageIso  = api_get_language_isocode();
+        $languageId   = api_get_language_id($languageIso);
+        $termPreview  = LegalManager::get_last_condition($languageId);
+
+        if (!$termPreview) {
+            $platformLang  = api_get_setting('language.platform_language');
+            $languageId    = api_get_language_id($platformLang);
+            $termPreview   = LegalManager::get_last_condition($languageId);
+        }
+        if (!$termPreview) {
+            return;
+        }
+
+        // hidden inputs to track version/language
+        $form->addElement('hidden', 'legal_accept_type', $termPreview['version'] . ':' . $termPreview['language_id']);
+        $form->addElement('hidden', 'legal_info',        $termPreview['id']      . ':' . $termPreview['language_id']);
+
+        if (1 == $termPreview['type']) {
+            // simple checkbox linking out to full T&C
+            $form->addElement(
+                'checkbox',
+                'legal_accept',
+                null,
+                'I have read and agree to the <a href="tc.php" target="_blank">Terms and Conditions</a>'
+            );
+            $form->addRule('legal_accept', 'This field is required', 'required');
+        } else {
+            // full inline T&C panel with scroll
+            $preview = LegalManager::show_last_condition($termPreview);
+            $form->addHtml(
+                '<div style="
+                background-color: #f3f4f6;
+                border: 1px solid #d1d5db;
+                padding: 1rem;
+                max-height: 16rem;
+                overflow-y: auto;
+                border-radius: 0.375rem;
+                margin-bottom: 1rem;
+            ">'
+                . $preview .
+                '</div>'
+            );
+
+            // any extra labels
+            $extra  = new ExtraFieldValue('terms_and_condition');
+            $values = $extra->getAllValuesByItem($termPreview['id']);
+            foreach ($values as $value) {
+                if (!empty($value['field_value'])) {
+                    $form->addLabel($value['display_text'], $value['field_value']);
+                }
+            }
+
+            // acceptance checkbox
+            $form->addElement(
+                'checkbox',
+                'legal_accept',
+                null,
+                'I have read and agree to the Terms and Conditions'
+            );
+            $form->addRule('legal_accept', 'This field is required', 'required');
+        }
+    }
+
+
+    /**
+     * Saves the user’s acceptance of the Terms & Conditions.
+     */
+    /**
+     * Persist a user’s acceptance of the last T&C version.
+     */
+    /**
+     * Persists the user's acceptance of the terms & conditions.
+     *
+     * @param int    $userId
+     * @param string $legalAcceptType version:language_id
+     */
+    public static function saveUserTermsAcceptance(int $userId, string $legalAcceptType): void
+    {
+        // **Split and build the stored value**
+        [$version, $languageId] = explode(':', $legalAcceptType);
+        $timestamp = time();
+        $toSave = (int)$version . ':' . (int)$languageId . ':' . $timestamp;
+
+        // **Save in extra-field**
+        UserManager::update_extra_field_value($userId, 'legal_accept', $toSave);
+
+        // **Log event**
+        Event::addEvent(
+            LOG_TERM_CONDITION_ACCEPTED,
+            LOG_USER_OBJECT,
+            api_get_user_info($userId),
+            api_get_utc_datetime()
+        );
+
+        // **Notificar a tutores si hace falta**
+        $bossList = UserManager::getStudentBossList($userId);
+        if (!empty($bossList)) {
+            $bossIds = array_column($bossList, 'boss_id');
+            $current = api_get_user_info($userId);
+            $dateStr = api_get_local_time($timestamp);
+
+            foreach ($bossIds as $bossId) {
+                $subject = sprintf(get_lang('User %s signed the agreement.'), $current['complete_name']);
+                $content = sprintf(get_lang('User %s signed the agreement on %s.'), $current['complete_name'], $dateStr);
+                MessageManager::send_message_simple($bossId, $subject, $content, $userId);
+            }
+        }
+    }
+
+    /**
+     * Displays the Terms and Conditions page.
+     *
+     * @param string $returnUrl The URL to redirect back to after acceptance
+     */
+    public static function displayLegalTermsPage(string $returnUrl = 'index.php'): void
+    {
+        $iso   = api_get_language_isocode();
+        $langId = api_get_language_id($iso);
+        $term  = LegalManager::get_last_condition($langId)
+            ?: LegalManager::get_last_condition(api_get_language_id(api_get_setting('language.platform_language')));
+
+        Display::display_header(get_lang('Terms and Conditions'));
+
+        if (!empty($term['content'])) {
+            echo '<div class="max-w-3xl mx-auto bg-white shadow p-8 rounded">';
+            echo '<h1 class="text-2xl font-bold text-primary mb-6">' . get_lang('Terms and Conditions') . '</h1>';
+            echo '<div class="prose prose-sm max-w-none mb-6">' . $term['content'] . '</div>';
+
+            $extra = new ExtraFieldValue('terms_and_condition');
+            foreach ($extra->getAllValuesByItem($term['id']) as $field) {
+                if (!empty($field['field_value'])) {
+                    echo '<div class="mb-4">';
+                    echo '<h3 class="text-lg font-semibold text-primary">' . $field['display_text'] . '</h3>';
+                    echo '<p class="text-gray-90 mt-1">' . $field['field_value'] . '</p>';
+                    echo '</div>';
+                }
+            }
+
+            $hide = api_get_setting('registration.hide_legal_accept_checkbox') === 'true';
+
+            echo '<form method="post" action="tc.php?return=' . urlencode($returnUrl) . '" class="space-y-6">';
+            echo '<input type="hidden" name="legal_accept_type" value="' . $term['version'] . ':' . $term['language_id'] . '">';
+            echo '<input type="hidden" name="return" value="' . htmlspecialchars($returnUrl) . '">';
+
+            if (!$hide) {
+                echo '<label class="flex items-start space-x-2">';
+                echo '<input type="checkbox" name="legal_accept" value="1" required class="rounded border-gray-300 text-primary focus:ring-primary">';
+                echo '<span class="text-gray-90 text-sm">' . get_lang('I have read and agree to the') . ' ';
+                echo '<a href="tc.php?preview=1" target="_blank" class="text-primary hover:underline">' . get_lang('Terms and Conditions') . '</a>';
+                echo '</span>';
+                echo '</label>';
+            }
+
+            echo '<div><button type="submit" class="inline-block bg-primary text-white font-semibold px-6 py-3 rounded hover:opacity-90 transition">' . get_lang('Accept terms and conditions') . '</button></div>';
+            echo '</form>';
+            echo '</div>';
+        } else {
+            echo '<div class="text-center text-gray-90 text-lg">' . get_lang('Coming soon...') . '</div>';
+        }
+
+        Display::display_footer();
+        exit;
     }
 }

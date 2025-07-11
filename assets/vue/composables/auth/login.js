@@ -6,15 +6,12 @@ import securityService from "../../services/securityService"
 import { useNotification } from "../notification"
 
 function isValidHttpUrl(string) {
-  let url
-
   try {
-    url = new URL(string)
-  } catch (_) {
+    const url = new URL(string)
+    return url.protocol === "http:" || url.protocol === "https:"
+  } catch {
     return false
   }
-
-  return url.protocol === "http:" || url.protocol === "https:"
 }
 
 export function useLogin() {
@@ -26,19 +23,28 @@ export function useLogin() {
 
   const isLoading = ref(false)
 
-  async function performLogin(payload) {
+  async function performLogin({ login, password, _remember_me, totp = null }) {
     isLoading.value = true
 
     try {
-      const responseData = await securityService.login(payload)
-
-      if (responseData.requires2FA) {
-        return { success: true, requires2FA: true }
+      const payload = {
+        username: login,
+        password,
+        _remember_me,
+      }
+      if (totp) {
+        payload.totp = totp
+      }
+      const returnUrl = route.query.redirect?.toString() || null
+      if (returnUrl) {
+        payload.returnUrl = returnUrl
       }
 
-      if (route.query.redirect && isValidHttpUrl(route.query.redirect.toString())) {
-        window.location.href = route.query.redirect.toString()
-        return
+      const responseData = await securityService.login(payload)
+
+      // 2FA
+      if (responseData.requires2FA) {
+        return { success: true, requires2FA: true }
       }
 
       if (responseData.redirect) {
@@ -49,19 +55,17 @@ export function useLogin() {
       securityStore.setUser(responseData)
       await platformConfigurationStore.initialize()
 
-      if (route.query.redirect) {
+      if (route.query.redirect && isValidHttpUrl(route.query.redirect.toString())) {
         await router.replace({ path: route.query.redirect.toString() })
         return
       }
 
       const setting = platformConfigurationStore.getSetting("registration.redirect_after_login")
       let target = "/"
-
       if (setting && typeof setting === "string") {
         try {
           const map = JSON.parse(setting)
           const roles = responseData.roles || []
-
           const getProfile = () => {
             if (roles.includes("ROLE_ADMIN")) return "ADMIN"
             if (roles.includes("ROLE_SESSION_MANAGER")) return "SESSIONADMIN"
@@ -72,10 +76,8 @@ export function useLogin() {
             if (roles.includes("ROLE_STUDENT")) return "STUDENT"
             return null
           }
-
           const profile = getProfile()
           const value = profile && map[profile] ? map[profile] : ""
-
           switch (value) {
             case "user_portal.php":
             case "index.php":
@@ -109,7 +111,6 @@ export function useLogin() {
     if (!securityStore.isAuthenticated) {
       return
     }
-
     if (route.query.redirect) {
       await router.push({ path: route.query.redirect.toString() })
     } else {

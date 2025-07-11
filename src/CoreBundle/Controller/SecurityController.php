@@ -115,19 +115,19 @@ class SecurityController extends AbstractController
             }
 
             if (false === $termAndConditionStatus) {
-                $tempTermAndCondition = ['user_id' => $user->getId()];
-
+                /*$tempTermAndCondition = ['user_id' => $user->getId()];
                 $this->tokenStorage->setToken(null);
                 $request->getSession()->invalidate();
-
                 $request->getSession()->start();
                 $request->getSession()->set('term_and_condition', $tempTermAndCondition);
+                */
 
-                $responseData = [
-                    'redirect' => '/main/auth/inscription.php',
-                ];
+                $request->getSession()->set('term_and_condition', ['user_id' => $user->getId()]);
 
-                return $this->json($responseData);
+                return $this->json([
+                    'requiresTerms' => true,
+                    'redirect'     => '/main/auth/tc.php?return=' . urlencode('/'),
+                ]);
             }
             $request->getSession()->remove('term_and_condition');
         }

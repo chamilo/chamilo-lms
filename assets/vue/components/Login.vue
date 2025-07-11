@@ -66,7 +66,7 @@
           v-if="allowRegistration"
           v-t="'Sign up'"
           class="btn btn--primary-outline"
-          href="/main/auth/inscription.php"
+          href="/main/auth/registration.php"
           tabindex="3"
         />
       </div>

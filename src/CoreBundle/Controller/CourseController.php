@@ -122,7 +122,7 @@ class CourseController extends ToolBaseController
                     $request->getSession()->remove('course');
                     $responseData = [
                         'redirect' => true,
-                        'url' => '/main/auth/inscription.php',
+                        'url' => '/main/auth/tc.php',
                     ];
                 }
             } else {

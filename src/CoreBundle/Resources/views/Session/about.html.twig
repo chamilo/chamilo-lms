@@ -77,7 +77,7 @@
 {#                                        {{ subscribe_button }}#}
                                     {% elseif not is_granted('IS_AUTHENTICATED')  %}
                                         {% if 'allow_registration'|api_get_setting != 'false' %}
-                                            <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}"
+                                            <a href="{{ _p.web_main ~ 'auth/registration.php' ~ redirect_to_session }}"
                                                class="btn btn--success btn-block btn-lg">
                                                 <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|trans }}
                                             </a>

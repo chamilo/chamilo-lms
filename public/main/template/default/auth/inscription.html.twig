@@ -5,11 +5,37 @@
 %}
 
 {% block content %}
-    {% autoescape false %}
+    {# full‐height viewport, centered #}
+    <div class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+        {# full‐width container up to large screen #}
+        <div class="w-full max-w-screen-lg bg-white rounded-2xl shadow-lg p-8">
 
-    {{ inscription_header }}
-    {{ inscription_content }}
-    {{ form }}
-    {{ text_after_registration }}
-    {% endautoescape %}
+            {# header if present #}
+            {% if inscription_header %}
+                <div class="mb-6">
+                    {{ inscription_header|raw }}
+                </div>
+            {% endif %}
+
+            {# intro text or notices #}
+            {% if inscription_content %}
+                <div class="mb-6 text-gray-700">
+                    {{ inscription_content|raw }}
+                </div>
+            {% endif %}
+
+            {# registration form takes full width #}
+            <div class="w-full">
+                {{ form|raw }}
+            </div>
+
+            {# post‐registration message #}
+            {% if text_after_registration %}
+                <div class="mt-6 text-center text-gray-700">
+                    {{ text_after_registration|raw }}
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
 {% endblock %}

@@ -91,14 +91,14 @@
                                 <div class="session-subscribe mt-2">
                                     {% if not is_granted('IS_AUTHENTICATED') %}
                                         {% if 'allow_registration'|api_get_setting != 'false' %}
-                                            <a href="{{ base_url ~ '/main/auth/inscription.php?c=' ~ course.code }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">
+                                            <a href="{{ base_url ~ '/main/auth/registration.php?c=' ~ course.code }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">
                                                 <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'Sign Up'|trans }}
                                             </a>
                                         {% endif %}
                                     {% elseif subscription %}
                                         <a href="{{ base_url }}/course/{{ course.id }}/home?sid=0" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Course Homepage'|trans }}</a>
                                     {% elseif allow_subscribe %}
-                                        <a href="{{ base_url }}/main/auth/inscription.php?c={{ course.code }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Subscribe'|trans }}</a>
+                                        <a href="{{ base_url }}/main/auth/registration.php?c={{ course.code }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Subscribe'|trans }}</a>
                                     {% else %}
                                         <button class="btn btn--success w-full py-2 mt-2 text-white bg-gray-400 rounded" title="{{ 'Subscription is not allowed for this course'|trans }}" disabled>
                                             {{ 'Subscription Not Available'|trans }}

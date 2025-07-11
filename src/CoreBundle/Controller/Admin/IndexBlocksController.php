@@ -433,7 +433,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-registration-page',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'auth/inscription.php', 'create_intro_page' => 1]),
+            'url' => $this->generateUrl('legacy_main', ['name' => 'auth/registration.php', 'create_intro_page' => 1]),
             'label' => $this->translator->trans('Setting the registration page'),
         ];
         $items[] = [

@@ -20,12 +20,12 @@
  *
  * @author Asensio System SIA
  */
-class OnlyofficePlugin extends Plugin implements HookPluginInterface
+class OnlyofficePlugin extends Plugin
 {
     /**
      * OnlyofficePlugin name.
      */
-    private $pluginName = 'onlyoffice';
+    private string $pluginName = 'onlyoffice';
 
     /**
      * OnlyofficePlugin constructor.
@@ -57,11 +57,10 @@ class OnlyofficePlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * This method install the plugin tables.
+     * This method installs the plugin tables.
      */
     public function install()
     {
-        $this->installHook();
     }
 
     /**
@@ -69,37 +68,6 @@ class OnlyofficePlugin extends Plugin implements HookPluginInterface
      */
     public function uninstall()
     {
-        $this->uninstallHook();
-    }
-
-    /**
-     * Install the "create" hooks.
-     */
-    public function installHook()
-    {
-        $itemActionObserver = OnlyofficeItemActionObserver::create();
-        HookDocumentItemAction::create()->attach($itemActionObserver);
-
-        $actionObserver = OnlyofficeActionObserver::create();
-        HookDocumentAction::create()->attach($actionObserver);
-
-        $viewObserver = OnlyofficeItemViewObserver::create();
-        HookDocumentItemView::create()->attach($viewObserver);
-    }
-
-    /**
-     * Uninstall the "create" hooks.
-     */
-    public function uninstallHook()
-    {
-        $itemActionObserver = OnlyofficeItemActionObserver::create();
-        HookDocumentItemAction::create()->detach($itemActionObserver);
-
-        $actionObserver = OnlyofficeActionObserver::create();
-        HookDocumentAction::create()->detach($actionObserver);
-
-        $viewObserver = OnlyofficeItemViewObserver::create();
-        HookDocumentItemView::create()->detach($viewObserver);
     }
 
     /**

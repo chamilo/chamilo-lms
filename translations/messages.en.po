@@ -28486,3 +28486,24 @@ msgstr "If the problem persists, please contact support."
 
 msgid "Go to home page"
 msgstr "Go to home page"
+
+msgid "Session requirements and dependencies"
+msgstr "Session requirements and dependencies"
+
+msgid "Dependencies"
+msgstr "Dependencies"
+
+msgid "Sessions that depend on this session"
+msgstr "Sessions that depend on this session"
+
+msgid "My Sessions display mode"
+msgstr "My Sessions display mode"
+
+msgid "Choose how the \"My Sessions\" page is displayed: as a modern visual block (card) view or the classic list style."
+msgstr "Choose how the \"My Sessions\" page is displayed: as a modern visual block (card) view or the classic list style."
+
+msgid "Validate prerequisites only within the same session"
+msgstr "Validate prerequisites only within the same session"
+
+msgid "When enabled, a course will be considered validated only if passed within the current session. If disabled, courses passed in other sessions will also unlock dependent courses."
+msgstr "When enabled, a course will be considered validated only if passed within the current session. If disabled, courses passed in other sessions will also unlock dependent courses."

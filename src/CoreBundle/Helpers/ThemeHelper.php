@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use League\Flysystem\FilesystemException;
@@ -46,9 +47,12 @@ final class ThemeHelper
             return $visualTheme;
         }
 
+        $visualTheme = null;
         $accessUrl = $this->accessUrlHelper->getCurrent();
 
-        $visualTheme = $accessUrl->getActiveColorTheme()?->getColorTheme()->getSlug();
+        if ($accessUrl instanceof AccessUrl) {
+            $visualTheme = $accessUrl->getActiveColorTheme()?->getColorTheme()->getSlug();
+        }
 
         if ('true' == $this->settingsManager->getSetting('profile.user_selected_theme')) {
             $visualTheme = $this->userHelper->getCurrent()?->getTheme();

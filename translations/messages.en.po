@@ -28378,3 +28378,111 @@ msgstr "Days"
 
 msgid "Notification to remind the event"
 msgstr "Notification to remind the event"
+
+msgid "Checking push subscription..."
+msgstr "Checking push subscription..."
+
+msgid "You're subscribed to push notifications in this browser."
+msgstr "You're subscribed to push notifications in this browser."
+
+msgid "Endpoint"
+msgstr "Endpoint"
+
+msgid "Push notifications are not enabled in this browser."
+msgstr "Push notifications are not enabled in this browser."
+
+msgid "Enable Notifications"
+msgstr "Enable Notifications"
+
+msgid "You do not have permission to send notifications to other users."
+msgstr "You do not have permission to send notifications to other users."
+
+msgid "No push notification setting configured."
+msgstr "No push notification setting configured."
+
+msgid "VAPID keys are missing in the configuration."
+msgstr "VAPID keys are missing in the configuration."
+
+msgid "No push subscriptions found for this user."
+msgstr "No push subscriptions found for this user."
+
+msgid "Push notification test"
+msgstr "Push notification test"
+
+msgid "This is a test push notification from this platform to the user's browser or app."
+msgstr "This is a test push notification from this platform to the user's browser or app."
+
+msgid "Push notifications have been processed."
+msgstr "Push notifications have been processed."
+
+msgid "Gotify configuration is missing."
+msgstr "Gotify configuration is missing."
+
+msgid "This is a test notification sent to Gotify from this platform."
+msgstr "This is a test notification sent to Gotify from this platform."
+
+msgid "Notification sent to Gotify."
+msgstr "Notification sent to Gotify."
+
+msgid "Error sending notification to Gotify: "
+msgstr "Error sending notification to Gotify: "
+
+msgid "Push notification settings (JSON)"
+msgstr "Push notification settings (JSON)"
+
+msgid "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications."
+msgstr "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications."
+
+msgid "Access denied"
+msgstr "Access denied"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR."
+msgstr "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR."
+
+msgid "Please select at least one item."
+msgstr "Please select at least one item."
+
+msgid "Select items to export:"
+msgstr "Select items to export:"
+
+msgid "No exportable items found."
+msgstr "No exportable items found."
+
+msgid "Invalid format"
+msgstr "Invalid format"
+
+msgid "Duration (hh:mm:ss)"
+msgstr "Duration (hh:mm:ss)"
+
+msgid "The following documents are used in learning paths:"
+msgstr "The following documents are used in learning paths:"
+
+msgid "Do you still want to delete them?"
+msgstr "Do you still want to delete them"
+
+msgid "Documents deleted"
+msgstr "Documents deleted"
+
+msgid "User is teacher in some courses"
+msgstr "User is teacher in some courses"
+
+msgid "User is general coach in some sessions"
+msgstr "User is general coach in some sessions"
+
+msgid "User is session admin in some sessions"
+msgstr "User is session admin in some sessions"
+
+msgid "Role change denied due to incompatible current assignments:"
+msgstr "Role change denied due to incompatible current assignments:"
+
+msgid "Oops! URL not registered."
+msgstr "Oops! URL not registered."
+
+msgid "The address \"%host%\" is not configured in this portal instance."
+msgstr "The address \"%host%\" is not configured in this portal instance."
+
+msgid "If the problem persists, please contact support."
+msgstr "If the problem persists, please contact support."
+
+msgid "Go to home page"
+msgstr "Go to home page"

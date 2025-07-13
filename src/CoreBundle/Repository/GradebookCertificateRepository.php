@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NonUniqueResultException;
@@ -153,38 +154,39 @@ class GradebookCertificateRepository extends ServiceEntityRepository
     public function findCertificatesWithContext(
         int $urlId,
         int $offset = 0,
-        int $limit  = 50
+        int $limit = 50
     ): array {
         return $this->createQueryBuilder('gc')
-            ->join('gc.category',   'cat')
-            ->join('cat.course',    'course')
-            ->join('course.urls',   'curl')
-            ->join('curl.url',      'url')
+            ->join('gc.category', 'cat')
+            ->join('cat.course', 'course')
+            ->join('course.urls', 'curl')
+            ->join('curl.url', 'url')
             ->leftJoin('course.sessions', 'src')
-            ->leftJoin('src.session',     'session')
+            ->leftJoin('src.session', 'session')
             ->where('url.id = :urlId')
             ->setParameter('urlId', $urlId)
             ->orderBy('gc.createdAt', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function findIncompleteCertificates(int $urlId): array
     {
-        $today = new \DateTimeImmutable();
+        $today = new DateTimeImmutable();
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
 
         $qb->select('sru', 'u', 's', 'src', 'c')
-        ->from(SessionRelUser::class, 'sru')
-            ->join('sru.user',    'u')
+            ->from(SessionRelUser::class, 'sru')
+            ->join('sru.user', 'u')
             ->join('sru.session', 's')
-            ->join('s.courses',   'src')
-            ->join('src.course',  'c')
-            ->join('c.urls',      'curl')
-            ->join('curl.url',    'url')
+            ->join('s.courses', 'src')
+            ->join('src.course', 'c')
+            ->join('c.urls', 'curl')
+            ->join('curl.url', 'url')
             ->where('url.id = :urlId')
             ->andWhere('s.accessStartDate <= :today')
             ->andWhere('s.accessEndDate   IS NULL OR s.accessEndDate > :today')
@@ -195,7 +197,7 @@ class GradebookCertificateRepository extends ServiceEntityRepository
                             ->select('gc2.id')
                             ->from(GradebookCertificate::class, 'gc2')
                             ->join('gc2.category', 'cat2')
-                            ->join('cat2.course',  'cc')
+                            ->join('cat2.course', 'cc')
                             ->where('gc2.user = u')
                             ->andWhere('cc = c')
                             ->getDQL()
@@ -204,7 +206,8 @@ class GradebookCertificateRepository extends ServiceEntityRepository
             )
             ->setParameter('urlId', $urlId)
             ->setParameter('today', $today)
-            ->orderBy('s.accessStartDate', 'DESC');
+            ->orderBy('s.accessStartDate', 'DESC')
+        ;
 
         return $qb->getQuery()->getResult();
     }
@@ -212,18 +215,18 @@ class GradebookCertificateRepository extends ServiceEntityRepository
     public function findRestartableSessions(
         int $urlId,
         int $offset = 0,
-        int $limit  = 10
+        int $limit = 10
     ): array {
-        $today = new \DateTimeImmutable();
+        $today = new DateTimeImmutable();
 
         $qb = $this->_em->createQueryBuilder();
 
         $qb->select('srcu')
             ->from(SessionRelCourseRelUser::class, 'srcu')
             ->join('srcu.session', 's')
-            ->join('srcu.course',  'c')
-            ->join('c.urls',       'curl')
-            ->join('curl.url',     'url')
+            ->join('srcu.course', 'c')
+            ->join('c.urls', 'curl')
+            ->join('curl.url', 'url')
             ->where('url.id = :urlId')
             ->andWhere('s.accessEndDate IS NOT NULL')
             ->andWhere('s.accessEndDate < :today')
@@ -234,7 +237,7 @@ class GradebookCertificateRepository extends ServiceEntityRepository
                             ->select('gc2.id')
                             ->from(GradebookCertificate::class, 'gc2')
                             ->join('gc2.category', 'cat2')
-                            ->join('cat2.course',  'cc')
+                            ->join('cat2.course', 'cc')
                             ->where('gc2.user = srcu.user')
                             ->andWhere('cc = c')
                             ->getDQL()
@@ -245,7 +248,8 @@ class GradebookCertificateRepository extends ServiceEntityRepository
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->setParameter('urlId', $urlId)
-            ->setParameter('today', $today);
+            ->setParameter('today', $today)
+        ;
 
         return $qb->getQuery()->getResult();
     }

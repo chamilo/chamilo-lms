@@ -16,20 +16,18 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
-            ->setDefaults(
-                [
-                    'hide_global_announcements_when_not_connected' => 'false',
-                    'announcements_hide_send_to_hrm_users' => 'true',
-                    'disable_announcement_attachment' => 'false',
-                    'allow_scheduled_announcements' => 'false',
-                    'disable_delete_all_announcements' => 'false',
-                    'hide_announcement_sent_to_users_info' => 'false',
-                    'send_all_emails_to' => '',
-                    'allow_careers_in_global_announcements' => 'false',
-                    'allow_coach_to_edit_announcements' => 'false',
-                    'course_announcement_scheduled_by_date' => 'false',
-                ]
-            )
+            ->setDefaults([
+                'hide_global_announcements_when_not_connected' => 'false',
+                'announcements_hide_send_to_hrm_users' => 'true',
+                'disable_announcement_attachment' => 'false',
+                'allow_scheduled_announcements' => 'false',
+                'disable_delete_all_announcements' => 'false',
+                'hide_announcement_sent_to_users_info' => 'false',
+                'send_all_emails_to' => '',
+                'allow_careers_in_global_announcements' => 'false',
+                'allow_coach_to_edit_announcements' => 'false',
+                'course_announcement_scheduled_by_date' => 'false',
+            ])
         ;
 
         $allowedTypes = [
@@ -47,40 +45,14 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
             ->add('allow_scheduled_announcements', YesNoType::class)
             ->add('disable_delete_all_announcements', YesNoType::class)
             ->add('hide_announcement_sent_to_users_info', YesNoType::class)
-            ->add(
-                'send_all_emails_to',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('send_all_emails_to'),
-                ]
-            )
+            ->add('send_all_emails_to', TextareaType::class, [
+                'attr' => ['rows' => 5, 'style' => 'font-family: monospace;'],
+            ])
             ->add('allow_careers_in_global_announcements', YesNoType::class)
             ->add('allow_coach_to_edit_announcements', YesNoType::class)
             ->add('course_announcement_scheduled_by_date', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
-    }
-
-    private function settingArrayHelpValue(string $variable): string
-    {
-        $values = [
-            'send_all_emails_to' => "<pre>
-                [
-                    'emails' => [
-                        'admin1@example.com',
-                        'admin2@example.com',
-                    ]
-                ]
-                </pre>",
-        ];
-
-        $returnValue = [];
-        if (isset($values[$variable])) {
-            $returnValue = $values[$variable];
-        }
-
-        return $returnValue;
     }
 }

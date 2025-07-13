@@ -23,7 +23,9 @@ use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Cocur\Slugify\SlugifyInterface;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Event\PostRemoveEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
@@ -388,5 +390,25 @@ class ResourceListener
                 $em->persist($globalLink);
             }
         }
+    }
+
+    public function preRemove(AbstractResource $resource, LifecycleEventArgs $args): void
+    {
+        if (!$resource instanceof CDocument) {
+            return;
+        }
+
+        $em = $args->getObjectManager();
+        $resourceNode = $resource->getResourceNode();
+
+        if (!$resourceNode) {
+            return;
+        }
+
+        $docID = $resource->getIid();
+        $em->createQuery('DELETE FROM Chamilo\CourseBundle\Entity\CLpItem i WHERE i.path = :path AND i.itemType = :type')
+            ->setParameter('path', $docID)
+            ->setParameter('type', 'document')
+            ->execute();
     }
 }

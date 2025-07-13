@@ -135,53 +135,21 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('session_list_order', YesNoType::class)
             ->add('allow_user_session_collapsable', YesNoType::class)
             ->add('catalog_course_subscription_in_user_s_session', YesNoType::class)
-            ->add(
-                'default_session_list_view',
-                ChoiceType::class,
-                [
-                    'choices' => [
-                        'All' => 'all',
-                        'Close' => 'close',
-                        'Active' => 'active',
-                        'Custom' => 'custom',
-                    ],
-                ]
-            )
+            ->add('default_session_list_view', ChoiceType::class, [
+                'choices' => [
+                    'All' => 'all',
+                    'Close' => 'close',
+                    'Active' => 'active',
+                    'Custom' => 'custom',
+                ],
+            ])
             ->add('session_automatic_creation_user_id', TextType::class)
             ->add('user_s_session_duration', TextType::class)
-            ->add(
-                'my_courses_session_order',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('my_courses_session_order'),
-                ]
-            )
+            ->add('my_courses_session_order', TextareaType::class)
             ->add('session_courses_read_only_mode', YesNoType::class)
-            ->add(
-                'session_import_settings',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('session_import_settings'),
-                ]
-            )
-            ->add(
-                'catalog_settings',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('catalog_settings'),
-                ]
-            )
-            ->add(
-                'tracking_columns',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('tracking_columns'),
-                ]
-            )
+            ->add('session_import_settings', TextareaType::class)
+            ->add('catalog_settings', TextareaType::class)
+            ->add('tracking_columns', TextareaType::class)
             ->add('my_progress_session_show_all_courses', YesNoType::class)
             ->add('assignment_base_course_teacher_access_to_all_session', YesNoType::class)
             ->add('allow_session_admin_extra_access', YesNoType::class)
@@ -191,22 +159,8 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('session_course_users_subscription_limited_to_session_users', YesNoType::class)
             ->add('email_template_subscription_to_session_confirmation_username', YesNoType::class)
             ->add('email_template_subscription_to_session_confirmation_lost_password', YesNoType::class)
-            ->add(
-                'session_creation_user_course_extra_field_relation_to_prefill',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('session_creation_user_course_extra_field_relation_to_prefill'),
-                ]
-            )
-            ->add(
-                'session_creation_form_set_extra_fields_mandatory',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('session_creation_form_set_extra_fields_mandatory'),
-                ]
-            )
+            ->add('session_creation_user_course_extra_field_relation_to_prefill', TextareaType::class)
+            ->add('session_creation_form_set_extra_fields_mandatory', TextareaType::class)
             ->add('session_model_list_field_ordered_by_id', YesNoType::class)
             ->add('duplicate_specific_session_content_on_session_copy', YesNoType::class)
             ->add('session_list_view_remaining_days', YesNoType::class)

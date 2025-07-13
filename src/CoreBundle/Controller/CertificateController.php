@@ -48,9 +48,10 @@ class CertificateController extends AbstractController
         $allowPublic = 'true' === $this->settingsManager->getSetting('course.allow_public_certificates', true);
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
         $user = $this->userHelper->getCurrent();
+        $isOwner = ($user->getId() === $this->getUser()->getId());
 
-        if (
-            (!$allowPublic || !$certificate->getPublish())
+        if (!$isOwner
+            && (!$allowPublic || !$certificate->getPublish())
             && (!$allowSessionAdmin || !$user->hasRole('ROLE_SESSION_MANAGER'))
         ) {
             throw new AccessDeniedHttpException('The requested certificate is not public.');

@@ -209,6 +209,67 @@
           type="hidden"
         />
 
+        <input
+          v-model="installerData.stepData.fromEmail"
+          name="fromEmail"
+          type="hidden"
+        />
+        <input
+          v-model="installerData.stepData.fromName"
+          name="fromName"
+          type="hidden"
+        />
+        <input
+          v-model="installerData.stepData.mailer"
+          name="mailer"
+          type="hidden"
+        />
+        <input
+          v-model="installerData.stepData.smtpHost"
+          name="smtpHost"
+          type="hidden"
+        />
+        <input
+          v-model="installerData.stepData.smtpPort"
+          name="smtpPort"
+          type="hidden"
+        />
+        <input
+          v-model="installerData.stepData.smtpAuth"
+          name="smtpAuth"
+          type="hidden"
+        />
+        <input
+          v-model="installerData.stepData.smtpSecure"
+          name="smtpSecure"
+          type="hidden"
+        />
+        <input
+          v-model="installerData.stepData.smtpUniqueReplyTo"
+          name="smtpUniqueReplyTo"
+          type="hidden"
+        />
+        <input
+          v-model="installerData.stepData.smtpCharset"
+          name="smtpCharset"
+          type="hidden"
+        />
+        <input
+          v-model="installerData.stepData.smtpDebug"
+          name="smtpDebug"
+          type="hidden"
+        />
+        <input
+          v-model="installerData.stepData.smtpUser"
+          name="smtpUser"
+          type="hidden"
+        />
+        <input
+          v-model="installerData.stepData.smtpPass"
+          name="smtpPass"
+          type="hidden"
+        />
+
         <Step1 v-if="1 === installerData.currentStep" />
 
         <Step2 v-else-if="2 === installerData.currentStep" />
@@ -245,8 +306,24 @@ import Step6 from "./components/installer/Step6"
 import Step7 from "./components/installer/Step7"
 
 const { t } = useI18n()
-
 const installerData = ref(window.installerData)
+
+if (!installerData.value.stepData) {
+  installerData.value.stepData = {
+    fromEmail: "",
+    fromName: "",
+    mailer: "",
+    smtpHost: "",
+    smtpPort: "",
+    smtpAuth: "",
+    smtpUser: "",
+    smtpPass: "",
+    smtpSecure: "",
+    smtpCharset: "",
+    smtpUniqueReplyTo: "",
+    smtpDebug: "",
+  }
+}
 
 provide("installerData", installerData)
 

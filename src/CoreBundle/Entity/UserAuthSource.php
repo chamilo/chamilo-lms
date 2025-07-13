@@ -16,6 +16,7 @@ class UserAuthSource
     public const PLATFORM = 'platform';
     public const CAS = 'cas';
     public const LDAP = 'extldap';
+    public const AZURE = 'azure';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

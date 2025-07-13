@@ -1047,6 +1047,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'platform' => [
                 [
+                    'name' => 'hosting_limit_users_per_course',
+                    'title' => 'Global limit of users per course',
+                    'comment' => 'Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals.',
+                ],
+                [
+                    'name' => 'push_notification_settings',
+                    'title' => 'Push notification settings (JSON)',
+                    'comment' => "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications.",
+                ],
+                [
                     'name' => 'donotlistcampus',
                     'title' => 'Do not list this campus on chamilo.org',
                     'comment' => 'By default, Chamilo portals are automatically registered in a public list at chamilo.org, just using the title you gave to this portal (not the URL nor any private data). Check this box to avoid having the title of your portal appear.',
@@ -1707,6 +1717,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => '',
                 ],
                 [
+                    'name' => 'chamilo_latest_news',
+                    'title' => 'Latest news',
+                    'comment' => 'Get the latest news from Chamilo, including security vulnerabilities and events, directly inside your administration panel. These pieces of news will be checked on the Chamilo news server every time you load the administration page and are only visible to administrators.',
+                ],
+                [
+                    'name' => 'chamilo_support',
+                    'title' => 'Chamilo support block',
+                    'comment' => 'Get pro tips and an easy way to contact official service providers for professional support, directly from the makers of Chamilo. This block appears on your administration page, is only visible by administrators, and refreshes every time you load the administration page.',
+                ],
+                [
                     'name' => 'send_inscription_notification_to_general_admin_only',
                     'title' => 'Notify global admin only of new users',
                     'comment' => '',
@@ -2002,6 +2022,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'platform' => [
+                [
+                    'name' => 'hosting_limit_identical_email',
+                    'title' => 'Limit identical email usage',
+                    'comment' => 'Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit.',
+                ],
                 [
                     'name' => 'allow_double_validation_in_registration',
                     'title' => 'Double validation for registration process',
@@ -3008,11 +3033,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'mail' => [
-                [
-                    'name' => 'smtp_unique_sender',
-                    'title' => 'Send all e-mails as one single sender',
-                    'comment' => 'Overrides sender for all emails to appear from a unique address.',
-                ],
                 [
                     'name' => 'smtp_from_email',
                     'title' => 'Send all e-mails from this e-mail address',

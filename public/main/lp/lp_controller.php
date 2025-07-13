@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use ChamiloSession as Session;
@@ -304,7 +305,7 @@ switch ($action) {
 
         if (isset($_POST['submit_button']) && !empty($post_title)) {
             Session::write('post_time', $_POST['post_time']);
-            $directoryParentId = isset($_POST['directory_parent_id']) ? $_POST['directory_parent_id'] : 0;
+            $directoryParentId = $_POST['directory_parent_id'] ?? 0;
 
             if (empty($directoryParentId) || '/' === $directoryParentId) {
                 $result = $oLP->generate_lp_folder($courseInfo);
@@ -326,8 +327,8 @@ switch ($action) {
             $prerequisites = $_POST['prerequisites'] ?? '';
             $maxTimeAllowed = $_POST['maxTimeAllowed'] ?? '';
 
-            if (TOOL_DOCUMENT === $_POST['type']) {
-                if (isset($_POST['path']) && isset($_GET['id']) && !empty($_GET['id'])) {
+            if (in_array($_POST['type'], [TOOL_DOCUMENT, 'video'])) {
+                if (isset($_POST['path']) && !empty($_GET['id'])) {
                     $document_id = $_POST['path'];
                 } else {
                     if ($_POST['content_lp']) {
@@ -339,6 +340,12 @@ switch ($action) {
                             $directoryParentId
                         );
                     }
+                }
+
+                $documentRepo = Database::getManager()->getRepository(CDocument::class);
+                $document = $documentRepo->find((int)$document_id);
+                if ($document && $document->getFiletype() === 'video') {
+                    $type = 'video';
                 }
 
                 $oLP->add_item(
@@ -716,7 +723,8 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $result = ScormExport::exportToPdf($lpId, $courseInfo);
+            $selectedItems = isset($_GET['items']) ? explode(',', $_GET['items']) : [];
+            $result = ScormExport::exportToPdf($lpId, $courseInfo, $selectedItems);
             if (!$result) {
                 require 'lp_list.php';
             }

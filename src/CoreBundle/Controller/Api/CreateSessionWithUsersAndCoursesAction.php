@@ -40,7 +40,7 @@ class CreateSessionWithUsersAndCoursesAction
         $counter = 1;
 
         while (
-        $this->em->getRepository(Session::class)->findOneBy(['title' => $title])
+            $this->em->getRepository(Session::class)->findOneBy(['title' => $title])
         ) {
             $title = $originalTitle.' #'.$counter++;
         }

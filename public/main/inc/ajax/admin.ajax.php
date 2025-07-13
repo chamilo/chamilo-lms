@@ -159,7 +159,11 @@ function check_system_version()
         $versionDetails = include($versionFile);
         $system_version = trim($versionDetails['new_version']);
         if (!empty($versionDetails['new_version_status']) &&  $versionDetails['new_version_status'] != 'stable') {
-            $versionStatus = ' ('.$versionDetails['new_version_status'].')';
+            $versionLastId = '';
+            if (!empty($versionDetails['new_version_last_id'])) {
+                $versionLastId = ' '.$versionDetails['new_version_last_id'];
+            }
+            $versionStatus = ' ('.$versionDetails['new_version_status'].$versionLastId.')';
         }
     }
 
@@ -264,7 +268,7 @@ function check_system_version()
  */
 function getLatestNews()
 {
-    $url = 'https://version.chamilo.org/news-c2/latest.php';
+    $url = 'https://version.chamilo.org/c/news/latest.php';
 
     $client = new Client();
     $response = $client->request(
@@ -278,7 +282,7 @@ function getLatestNews()
     );
 
     if (200 !== $response->getStatusCode()) {
-        throw new Exception(get_lang('Deny access'));
+        throw new Exception(get_lang('Access denied'));
     }
 
     return $response->getBody()->getContents();
@@ -294,7 +298,7 @@ function getLatestNews()
  */
 function getProSupport()
 {
-    $url = 'https://version.chamilo.org/support/latest.php';
+    $url = 'https://version.chamilo.org/c/support/latest.php';
 
     $client = new Client();
     $response = $client->request(
@@ -308,7 +312,7 @@ function getProSupport()
     );
 
     if (200 !== $response->getStatusCode()) {
-        throw new Exception(get_lang('Deny access'));
+        throw new Exception(get_lang('Access denied'));
     }
 
     return $response->getBody()->getContents();

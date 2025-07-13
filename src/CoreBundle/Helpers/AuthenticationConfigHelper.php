@@ -71,7 +71,7 @@ readonly class AuthenticationConfigHelper
             ? $this->parameterBag->get('authentication')
             : [];
 
-        if (isset($authentication[$urlId->getId()])) {
+        if ($urlId && isset($authentication[$urlId->getId()])) {
             return $authentication[$urlId->getId()];
         }
 

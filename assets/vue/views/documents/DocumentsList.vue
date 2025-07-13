@@ -183,12 +183,15 @@
             @click="openMoveDialog(slotProps.data)"
           />
           <BaseButton
-            :disabled="slotProps.data.filetype !== 'file'"
-            :title="slotProps.data.filetype !== 'file' ? t('Replace (files only)') : t('Replace file')"
+            :disabled="!(slotProps.data.filetype === 'file' || slotProps.data.filetype === 'video')"
+            :title="getReplaceButtonTitle(slotProps.data)"
             icon="file-swap"
             size="small"
             type="secondary"
-            @click="slotProps.data.filetype === 'file' && openReplaceDialog(slotProps.data)"
+            @click="
+              (slotProps.data.filetype === 'file' || slotProps.data.filetype === 'video') &&
+              openReplaceDialog(slotProps.data)
+            "
           />
           <BaseButton
             :title="t('Information')"
@@ -448,6 +451,34 @@
       />
     </form>
   </BaseDialogConfirmCancel>
+  <BaseDialogConfirmCancel
+    v-model:is-visible="isDeleteWarningLpDialogVisible"
+    :title="t('Confirm deletion')"
+    @confirm-clicked="forceDeleteItem"
+    @cancel-clicked="isDeleteWarningLpDialogVisible = false"
+  >
+    <div class="confirmation-content">
+      <BaseIcon
+        class="mr-2"
+        icon="alert"
+        size="big"
+      />
+      <p class="mb-2">
+        {{ t("The following documents are used in learning paths:") }}
+      </p>
+      <ul class="pl-4 mb-4">
+        <li
+          v-for="lp in lpListWarning"
+          :key="lp.lpId + lp.documentTitle"
+        >
+          <b>{{ lp.documentTitle }}</b> → {{ lp.lpTitle }}
+        </li>
+      </ul>
+      <p class="mt-4 font-semibold">
+        {{ t("Do you still want to delete them?") }}
+      </p>
+    </div>
+  </BaseDialogConfirmCancel>
 </template>
 
 <script setup>
@@ -486,7 +517,9 @@ const router = useRouter()
 const securityStore = useSecurityStore()
 
 const platformConfigStore = usePlatformConfig()
-const allowAccessUrlFiles = computed(() => "false" !== platformConfigStore.getSetting("course.access_url_specific_files"))
+const allowAccessUrlFiles = computed(
+  () => "false" !== platformConfigStore.getSetting("course.access_url_specific_files"),
+)
 
 const { t } = useI18n()
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents")
@@ -499,6 +532,8 @@ const isAllowedToEdit = ref(false)
 const folders = ref([])
 const selectedFolder = ref(null)
 const isDownloading = ref(false)
+const isDeleteWarningLpDialogVisible = ref(false)
+const lpListWarning = ref([])
 
 const {
   showNewDocumentButton,
@@ -570,6 +605,7 @@ const documentToReplace = ref(null)
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
   filters.value.loadNode = 1
+  filters.value.filetype = ["file", "folder", "video"]
 
   // Set resource node.
   let nodeId = route.params.node
@@ -610,7 +646,7 @@ const showBackButtonIfNotRootFolder = computed(() => {
 function goToAddVariation(item) {
   const resourceFileId = item.resourceNode.firstResourceFile.id
   router.push({
-    name: 'DocumentsAddVariation',
+    name: "DocumentsAddVariation",
     params: { resourceFileId, node: route.params.node },
     query: { cid, sid, gid },
   })
@@ -672,9 +708,51 @@ function showDeleteMultipleDialog() {
   isDeleteMultipleDialogVisible.value = true
 }
 
-function confirmDeleteItem(itemToDelete) {
-  item.value = itemToDelete
-  isDeleteItemDialogVisible.value = true
+async function confirmDeleteItem(itemToDelete) {
+  try {
+    const response = await axios.get(`/api/documents/${itemToDelete.iid}/lp-usage`)
+    if (response.data.usedInLp) {
+      lpListWarning.value = response.data.lpList.map((lp) => ({
+        ...lp,
+        documentTitle: itemToDelete.title,
+        documentId: itemToDelete.iid,
+      }))
+      item.value = itemToDelete
+      isDeleteWarningLpDialogVisible.value = true
+    } else {
+      item.value = itemToDelete
+      isDeleteItemDialogVisible.value = true
+    }
+  } catch (error) {
+    console.error("Error checking LP usage for individual item:", error)
+  }
+}
+
+async function forceDeleteItem() {
+  try {
+    const docIdsToDelete = [...new Set(lpListWarning.value.map((lp) => lp.documentId))]
+
+    await Promise.all(docIdsToDelete.map((iid) => axios.delete(`/api/documents/${iid}`)))
+
+    notification.showSuccessNotification(t("Documents deleted"))
+    isDeleteWarningLpDialogVisible.value = false
+    item.value = {}
+    unselectAll()
+    onUpdateOptions(options.value)
+  } catch (error) {
+    console.error("Error deleting documents forcibly:", error)
+    notification.showErrorNotification(t("Error deleting document(s)."))
+  }
+}
+
+function getReplaceButtonTitle(item) {
+  if (item.filetype === "file") {
+    return t("Replace file")
+  }
+  if (item.filetype === "video") {
+    return t("Replace video")
+  }
+  return t("Replace (files or videos only)")
 }
 
 async function downloadSelectedItems() {
@@ -688,8 +766,8 @@ async function downloadSelectedItems() {
   try {
     const response = await axios.post(
       "/api/documents/download-selected",
-      { ids: selectedItems.value.map(item => item.iid) },
-      { responseType: "blob" }
+      { ids: selectedItems.value.map((item) => item.iid) },
+      { responseType: "blob" },
     )
 
     const url = window.URL.createObjectURL(new Blob([response.data]))
@@ -705,15 +783,61 @@ async function downloadSelectedItems() {
     console.error("Error downloading selected items:", error)
     notification.showErrorNotification(t("Error downloading selected items."))
   } finally {
-    isDownloading.value = false;
+    isDownloading.value = false
   }
 }
 
 async function deleteMultipleItems() {
-  await store.dispatch("documents/delMultiple", selectedItems.value)
+  const itemsWithoutLp = []
+  const documentsWithLpMap = {}
+
+  for (const item of selectedItems.value) {
+    try {
+      const response = await axios.get(`/api/documents/${item.iid}/lp-usage`)
+      if (response.data.usedInLp) {
+        if (!documentsWithLpMap[item.iid]) {
+          documentsWithLpMap[item.iid] = {
+            iid: item.iid,
+            title: item.title,
+            lpList: [],
+          }
+        }
+        documentsWithLpMap[item.iid].lpList.push(...response.data.lpList)
+      } else {
+        itemsWithoutLp.push(item)
+      }
+    } catch (error) {
+      console.error(`Error checking LP usage for document ${item.iid}:`, error)
+    }
+  }
+
+  const documentsWithLp = Object.values(documentsWithLpMap)
+
+  if (itemsWithoutLp.length > 0) {
+    try {
+      await store.dispatch("documents/delMultiple", itemsWithoutLp)
+    } catch (e) {
+      console.error("Error deleting documents without LP:", e)
+    }
+  }
+
+  if (documentsWithLp.length > 0) {
+    lpListWarning.value = documentsWithLp.flatMap((doc) =>
+      doc.lpList.map((lp) => ({
+        ...lp,
+        documentTitle: doc.title,
+        documentId: doc.iid,
+      })),
+    )
+
+    item.value = {}
+    isDeleteWarningLpDialogVisible.value = true
+  } else {
+    notification.showSuccessNotification(t("Documents deleted"))
+    unselectAll()
+  }
+
   isDeleteMultipleDialogVisible.value = false
-  notification.showSuccessNotification(t("Deleted"))
-  unselectAll()
   onUpdateOptions(options.value)
 }
 
@@ -884,19 +1008,19 @@ async function replaceDocument() {
     return
   }
 
-  if (documentToReplace.value.filetype !== 'file') {
+  if (!(documentToReplace.value.filetype === "file" || documentToReplace.value.filetype === "video")) {
     notification.showErrorNotification(t("Only files can be replaced."))
     return
   }
 
   const formData = new FormData()
   console.log(selectedReplaceFile.value)
-  formData.append('file', selectedReplaceFile.value)
+  formData.append("file", selectedReplaceFile.value)
 
   try {
     await axios.post(`/api/documents/${documentToReplace.value.iid}/replace`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     })
     notification.showSuccessNotification(t("File replaced"))
@@ -911,7 +1035,7 @@ async function replaceDocument() {
 async function fetchFolders(nodeId = null, parentPath = "") {
   const foldersList = [
     {
-      label: t('Documents'),
+      label: t("Documents"),
       value: nodeId || route.params.node || route.query.node || "root-node-id",
     },
   ]

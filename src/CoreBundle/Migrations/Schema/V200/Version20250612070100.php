@@ -37,7 +37,7 @@ final class Version20250612070100 extends AbstractMigrationChamilo
             WHERE variable = 'redirect_after_login'
         ");
 
-        if ($existing == 0) {
+        if (0 == $existing) {
             $this->connection->insert('settings', [
                 'variable' => 'redirect_after_login',
                 'type' => 'textfield',

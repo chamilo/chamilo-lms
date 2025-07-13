@@ -51,7 +51,7 @@ use UserManager;
     operations: [
         new Get(
             openapiContext: [
-                'description' => "Get details of one specific user, including name, e-mail and role.",
+                'description' => 'Get details of one specific user, including name, e-mail and role.',
             ],
             security: "is_granted('VIEW', object)",
         ),
@@ -745,7 +745,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->biography = '';
         $this->website = '';
         $this->locale = 'en';
-        $this->timezone = 'Europe\Paris';
+        $this->timezone = 'Europe/Paris';
         $this->status = CourseRelUser::STUDENT;
         $this->salt = sha1(uniqid('', true));
         $this->active = 1;
@@ -2155,6 +2155,15 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             $this->setAdmin($admin);
             $this->addRole('ROLE_ADMIN');
         }
+
+        return $this;
+    }
+
+    public function removeUserAsAdmin(): self
+    {
+        $this->admin->setUser(null);
+        $this->admin = null;
+        $this->removeRole('ROLE_ADMIN');
 
         return $this;
     }

@@ -12,4 +12,9 @@ class DocumentItemActionEvent extends AbstractEvent
     {
         return $this->data['action'] ?? [];
     }
+
+    public function getDocument(): ?array
+    {
+        return $this->data['document'] ?? null;
+    }
 }

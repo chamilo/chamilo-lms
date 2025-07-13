@@ -7,30 +7,42 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Chamilo\CoreBundle\Repository\RoleRepository;
 
 class PermissionHelper
 {
     public function __construct(
-        private ParameterBagInterface $parameterBag,
-        private PermissionRelRoleRepository $permissionRelRoleRepository
+        private PermissionRelRoleRepository $permissionRelRoleRepository,
+        private RoleRepository $roleRepository
     ) {}
 
+    /**
+     * Returns the list of role codes currently stored in the 'role' table.
+     *
+     * @return string[]
+     */
     public function getUserRoles(): array
     {
-        $roles = $this->parameterBag->get('security.role_hierarchy.roles');
+        $roles = $this->roleRepository->findAll();
 
-        return array_filter(array_keys($roles), function ($role) {
-            return !str_starts_with($role, 'ROLE_CURRENT_') && 'ROLE_ANONYMOUS' !== $role;
-        });
+        return array_map(fn ($r) => $r->getCode(), $roles);
     }
 
+    /**
+     * Checks if any of the given roles has the specified permission slug.
+     *
+     * @param string   $permissionSlug The permission slug to check (e.g. "user:create")
+     * @param string[] $roles          a list of role codes to check against
+     *
+     * @return bool true if at least one role has the permission, false otherwise
+     */
     public function hasPermission(string $permissionSlug, array $roles): bool
     {
         $queryBuilder = $this->permissionRelRoleRepository->createQueryBuilder('prr')
             ->innerJoin('prr.permission', 'p')
+            ->innerJoin('prr.role', 'r')
             ->where('p.slug = :permissionSlug')
-            ->andWhere('prr.roleCode IN (:roles)')
+            ->andWhere('r.code IN (:roles)')
             ->andWhere('prr.changeable = :changeable')
             ->setParameter('permissionSlug', $permissionSlug)
             ->setParameter('roles', $roles)

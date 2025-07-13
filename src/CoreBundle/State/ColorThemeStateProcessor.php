@@ -46,7 +46,7 @@ final readonly class ColorThemeStateProcessor implements ProcessorInterface
             if (!$accessUrlRelColorTheme) {
                 $accessUrlRelColorTheme = (new AccessUrlRelColorTheme())->setColorTheme($colorTheme);
 
-                $this->accessUrlHelper->getCurrent()->addColorTheme($accessUrlRelColorTheme);
+                $accessUrl->addColorTheme($accessUrlRelColorTheme);
             }
 
             $this->entityManager->flush();

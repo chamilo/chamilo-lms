@@ -2,9 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
+require_once __DIR__.'/../inc/global.inc.php';
 
 /**
  * This file was originally the copy of document.php, but many modifications happened since then ;
@@ -20,14 +22,12 @@ if (empty($lp_controller_touched) || 1 != $lp_controller_touched) {
     exit;
 }
 
-require_once __DIR__.'/../inc/global.inc.php';
-
 api_protect_course_script();
 
 // Extra javascript functions for in html head:
 $htmlHeadXtra[] = "<script>
 function confirmation(name) {
-    if (confirm(\" ".trim(get_lang('Are you sure to delete'))." \"+name+\"?\")) {
+    if (confirm(\" ".trim(get_lang('Are you sure to delete'))."\"+name+\"?\")) {
         return true;
     } else {
         return false;
@@ -170,9 +170,9 @@ $user = api_get_user_entity($userId);
 $ending = true;
 $allLpTimeValid = true;
 $isInvitee = api_is_invitee();
-$hideScormExportLink = api_get_setting('hide_scorm_export_link');
-$hideScormCopyLink = api_get_setting('hide_scorm_copy_link');
-$hideScormPdfLink = api_get_setting('hide_scorm_pdf_link');
+$hideScormExportLink = api_get_setting('course.hide_scorm_export_link');
+$hideScormCopyLink = api_get_setting('course.hide_scorm_copy_link');
+$hideScormPdfLink = api_get_setting('course.hide_scorm_pdf_link');
 $options = learnpath::getIconSelect();
 $cidReq = api_get_cidreq();
 
@@ -708,10 +708,14 @@ foreach ($categories as $category) {
                 }
 
                 // Export to PDF
-                $export_icon = Display::url(
-                    Display::getMdiIcon('pdf', 'ch-tool-icon', '', 22),
-                    api_get_self().'?'.$cidReq."&action=export_to_pdf&lp_id=$id",
-                    ['title' => htmlentities(get_lang('Export to PDF web pages and images'))]
+                $export_icon = Display::tag(
+                    'a',
+                    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', '', 22),
+                    [
+                        'href' => '#',
+                        'onclick' => "event.preventDefault(); openExportPdfDialog($id);",
+                        'title' => get_lang('Export to PDF web pages and images'),
+                    ]
                 );
 
                 /* Delete */
@@ -807,10 +811,14 @@ foreach ($categories as $category) {
                 }
             } else {
                 // Student
-                $export_icon = Display::url(
-                    Display::getMdiIcon('file-pdf-box', 'ch-tool-icon', '', 22),
-                    api_get_self().'?'.$cidReq."&action=export_to_pdf&lp_id=$id",
-                    ['title' => htmlentities(get_lang('Export to PDF'))]
+                $export_icon = Display::tag(
+                    'a',
+                    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', '', 22),
+                    [
+                        'href' => '#',
+                        'onclick' => "event.preventDefault(); openExportPdfDialog($id);",
+                        'title' => get_lang('Export to PDF web pages and images'),
+                    ]
                 );
             }
 
@@ -952,6 +960,7 @@ $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
 $template->assign('filtered_category', $filteredCategoryId);
 $template->assign('allow_min_time', $allowMinTime);
+$template->assign('cid_req', api_get_cidreq());
 
 $template->assign('no_data', '');
 if (false === $lpIsShown && api_is_allowed_to_edit()) {

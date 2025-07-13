@@ -54,7 +54,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults(
                 [
-                    // @todo check default value?
                     'active_tools_on_create' => $tools,
                     'display_coursecode_in_courselist' => 'false',
                     'display_teacher_in_courselist' => 'true',
@@ -158,44 +157,32 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         $tools = $this->getProcessedToolChain();
 
         $builder
-            ->add(
-                'active_tools_on_create',
-                ChoiceType::class,
-                [
-                    'choices' => $tools,
-                    'multiple' => true,
-                    'expanded' => true,
-                ]
-            )
+            ->add('active_tools_on_create', ChoiceType::class, [
+                'choices' => $tools,
+                'multiple' => true,
+                'expanded' => true,
+            ])
             ->add('display_coursecode_in_courselist', YesNoType::class)
             ->add('display_teacher_in_courselist', YesNoType::class)
             ->add('student_view_enabled', YesNoType::class)
             ->add('go_to_course_after_login', YesNoType::class)
-            ->add(
-                'show_navigation_menu',
-                ChoiceType::class,
-                [
-                    'choices' => [
-                        'No' => 'false',
-                        'Icons only' => 'icons',
-                        'Text only' => 'text',
-                        'Icons text' => 'iconstext',
-                    ],
-                ]
-            )
+            ->add('show_navigation_menu', ChoiceType::class, [
+                'choices' => [
+                    'No' => 'false',
+                    'Icons only' => 'icons',
+                    'Text only' => 'text',
+                    'Icons text' => 'iconstext',
+                ],
+            ])
             ->add('enable_tool_introduction', YesNoType::class)
-            ->add(
-                'breadcrumbs_course_homepage',
-                ChoiceType::class,
-                [
-                    'choices' => [
-                        'Course homepage' => 'course_home',
-                        'Course code' => 'course_code',
-                        'Course title' => 'course_title',
-                        'Session name and course title' => 'session_name_and_course_title',
-                    ],
-                ]
-            )
+            ->add('breadcrumbs_course_homepage', ChoiceType::class, [
+                'choices' => [
+                    'Course homepage' => 'course_home',
+                    'Course code' => 'course_code',
+                    'Course title' => 'course_title',
+                    'Session name and course title' => 'session_name_and_course_title',
+                ],
+            ])
             ->add('example_material_course_creation', YesNoType::class)
             ->add('allow_course_theme', YesNoType::class)
             ->add('allow_users_to_create_courses', YesNoType::class)
@@ -204,42 +191,30 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('allow_user_course_subscription_by_course_admin', YesNoType::class)
             ->add('course_validation', YesNoType::class)
             ->add('course_validation_terms_and_conditions_url', UrlType::class)
-            ->add(
-                'course_hide_tools',
-                ChoiceType::class,
-                [
-                    'choices' => $tools,
-                    'multiple' => true,
-                    'expanded' => true,
-                ]
-            )
+            ->add('course_hide_tools', ChoiceType::class, [
+                'choices' => $tools,
+                'multiple' => true,
+                'expanded' => true,
+            ])
             ->add('scorm_cumulative_session_time', YesNoType::class)
-            ->add(
-                'courses_default_creation_visibility',
-                ChoiceType::class,
-                [
-                    'choices' => [
-                        'Public' => '3',
-                        'Open' => '2',
-                        'Private' => '1',
-                        'Closed' => '0',
-                    ],
-                ]
-            )
+            ->add('courses_default_creation_visibility', ChoiceType::class, [
+                'choices' => [
+                    'Public' => '3',
+                    'Open' => '2',
+                    'Private' => '1',
+                    'Closed' => '0',
+                ],
+            ])
             ->add('allow_public_certificates', YesNoType::class)
             ->add('allow_lp_return_link', YesNoType::class)
-            ->add(
-                'course_creation_use_template',
-                EntityType::class,
-                [
-                    'class' => Course::class,
-                    'placeholder' => 'Choose ...',
-                    'empty_data' => null,
-                    'choice_label' => 'title',
-                    'choice_value' => 'id',
-                    'required' => false,
-                ]
-            )
+            ->add('course_creation_use_template', EntityType::class, [
+                'class' => Course::class,
+                'placeholder' => 'Choose ...',
+                'empty_data' => null,
+                'choice_label' => 'title',
+                'choice_value' => 'id',
+                'required' => false,
+            ])
             ->add('hide_scorm_export_link', YesNoType::class)
             ->add('hide_scorm_copy_link', YesNoType::class)
             ->add('hide_scorm_pdf_link', YesNoType::class)
@@ -265,43 +240,24 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('enable_unsubscribe_button_on_my_course_page', YesNoType::class)
             ->add('course_creation_donate_message_show', YesNoType::class)
             ->add('course_creation_donate_link', TextType::class)
-            ->add(
-                'courses_list_session_title_link',
-                ChoiceType::class,
-                [
-                    'choices' => [
-                        'No link' => '0',
-                        'Default' => '1',
-                        'Link' => '2',
-                        'Session link' => '3',
-                    ],
-                ]
-            )
+            ->add('courses_list_session_title_link', ChoiceType::class, [
+                'choices' => [
+                    'No link' => '0',
+                    'Default' => '1',
+                    'Link' => '2',
+                    'Session link' => '3',
+                ],
+            ])
             ->add('hide_course_rating', YesNoType::class)
-            ->add(
-                'course_log_hide_columns',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('course_log_hide_columns'),
-                ]
-            )
-            ->add(
-                'course_student_info',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('course_student_info'),
-                ]
-            )
-            ->add(
-                'course_catalog_settings',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('course_catalog_settings'),
-                ]
-            )
+            ->add('course_log_hide_columns', TextareaType::class, [
+                'attr' => ['rows' => 5, 'style' => 'font-family: monospace;'],
+            ])
+            ->add('course_student_info', TextareaType::class, [
+                'attr' => ['rows' => 5, 'style' => 'font-family: monospace;'],
+            ])
+            ->add('course_catalog_settings', TextareaType::class, [
+                'attr' => ['rows' => 10, 'style' => 'font-family: monospace;'],
+            ])
             ->add('resource_sequence_show_dependency_in_course_intro', YesNoType::class)
             ->add('course_sequence_valid_only_in_same_session', YesNoType::class)
             ->add('course_catalog_display_in_home', YesNoType::class)
@@ -310,133 +266,30 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('course_about_teacher_name_hide', YesNoType::class)
             ->add('course_visibility_change_only_admin', YesNoType::class)
             ->add('catalog_hide_public_link', YesNoType::class)
-            ->add(
-                'course_log_default_extra_fields',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('course_log_default_extra_fields'),
-                ]
-            )
+            ->add('course_log_default_extra_fields', TextareaType::class, [
+                'attr' => ['rows' => 5, 'style' => 'font-family: monospace;'],
+            ])
             ->add('show_courses_in_catalogue', YesNoType::class)
-            ->add(
-                'courses_catalogue_show_only_category',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('courses_catalogue_show_only_category'),
-                ]
-            )
-            ->add(
-                'course_creation_by_teacher_extra_fields_to_show',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('course_creation_by_teacher_extra_fields_to_show'),
-                ]
-            )
-            ->add(
-                'course_creation_form_set_extra_fields_mandatory',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('course_creation_form_set_extra_fields_mandatory'),
-                ]
-            )
-            ->add(
-                'course_configuration_tool_extra_fields_to_show_and_edit',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('course_configuration_tool_extra_fields_to_show_and_edit'),
-                ]
-            )
-            ->add(
-                'course_creation_user_course_extra_field_relation_to_prefill',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => $this->settingArrayHelpValue('course_creation_user_course_extra_field_relation_to_prefill'),
-                ]
-            )
+            ->add('courses_catalogue_show_only_category', TextareaType::class, [
+                'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
+            ])
+            ->add('course_creation_by_teacher_extra_fields_to_show', TextareaType::class, [
+                'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
+            ])
+            ->add('course_creation_form_set_extra_fields_mandatory', TextareaType::class, [
+                'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
+            ])
+            ->add('course_configuration_tool_extra_fields_to_show_and_edit', TextareaType::class, [
+                'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
+            ])
+            ->add('course_creation_user_course_extra_field_relation_to_prefill', TextareaType::class, [
+                'attr' => ['rows' => 5, 'style' => 'font-family: monospace;'],
+            ])
             ->add('allow_edit_tool_visibility_in_session', YesNoType::class)
             ->add('show_course_duration', YesNoType::class)
             ->add('access_url_specific_files', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
-    }
-
-    private function settingArrayHelpValue(string $variable): string
-    {
-        $values = [
-            'course_log_hide_columns' => "<pre>
-                ['columns' => [1, 9]]
-                </pre>",
-            'course_student_info' => "<pre>
-                [
-                    'score' => false,
-                    'progress' => false,
-                    'certificate' => false,
-                ]
-                </pre>",
-            'course_catalog_settings' => "<pre>
-                [
-                    'link_settings' => [
-                        'info_url' => 'course_description_popup', // course description popup page
-                        'title_url' => 'course_home', // Course home URL
-                        'image_url' => 'course_about', // Course about URL
-                    ],
-                    'hide_course_title' => false,
-                    'redirect_after_subscription' => 'course_home', // or 'course_catalog' to stay in the page
-                    'extra_fields_in_search_form' => ['variable1', 'variable2'],
-                    'extra_fields_in_course_block' => ['variable3', 'variable4'],
-                    'standard_sort_options' => [
-                        //  1 means allow sorting in ascending order
-                        // -1 means allow sorting in descending order
-                        'title' => 1,
-                        'creation_date' => -1,
-                        'count_users' => -1, // subscription count
-                        'point_info/point_average' => -1, // average score
-                        'point_info/total_score' => -1, // score sum
-                        'point_info/users' => -1, // vote count
-                    ],
-                    'extra_field_sort_options' => [
-                        'variable5' => -1,
-                        'variable6' => 1,
-                    ],
-                ]
-                </pre>",
-            'course_log_default_extra_fields' => "<pre>
-                ['extra_fields' => ['office_address', 'office_phone_extension']]
-                </pre>",
-            'courses_catalogue_show_only_category' => "<pre>
-                ['Cat1','Cat2']
-                </pre>",
-            'course_creation_by_teacher_extra_fields_to_show' => "<pre>
-                ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']]
-                </pre>",
-            'course_creation_form_set_extra_fields_mandatory' => "<pre>
-                ['fields' => ['fieldLabel1','fieldLabel2']]
-                </pre>",
-            'course_configuration_tool_extra_fields_to_show_and_edit' => "<pre>
-                ['fields' => ['ExtrafieldLabel1', 'ExtrafieldLabel2']]
-                </pre>",
-            'course_creation_user_course_extra_field_relation_to_prefill' => "<pre>
-                [
-                    'fields' => [
-                        'CourseExtrafieldLabel1' => 'UserExtrafieldLabel1',
-                        'CourseExtrafieldLabel2' => 'UserExtrafieldLabel2',
-                    ]
-                ]
-                </pre>",
-        ];
-
-        $returnValue = [];
-        if (isset($values[$variable])) {
-            $returnValue = $values[$variable];
-        }
-
-        return $returnValue;
     }
 }

@@ -26,7 +26,7 @@
           />
         </DocumentsForm>
         <Panel
-          v-if="$route.query.filetype === 'certificate'"
+          v-if="filetype === 'certificate'"
           :header="
             $t(
               'Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:',
@@ -93,11 +93,16 @@ export default {
     }
   },
   data() {
-    const finalTags = this.getCertificateTags()
+    const allowedFiletypes = ["file", "certificate", "video"]
+    const filetypeQuery = this.$route.query.filetype
+    const filetype = allowedFiletypes.includes(filetypeQuery) ? filetypeQuery : "file"
+    const finalTags = filetype === "certificate" ? this.getCertificateTags() : ""
+
     return {
       templates: [],
       finalTags,
       isAllowedToEdit: ref(false),
+      filetype,
     }
   },
   computed: {

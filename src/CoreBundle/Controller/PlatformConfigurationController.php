@@ -60,6 +60,8 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['course.course_catalog_settings'] = 'false' !== $rawCourseCatalogSetting ? $this->decodeSettingArray($rawCourseCatalogSetting) : 'false';
         $rawSessionCatalogSetting = $settingsManager->getSetting('session.catalog_settings', true);
         $configuration['settings']['session.catalog_settings'] = 'false' !== $rawSessionCatalogSetting ? $this->decodeSettingArray($rawSessionCatalogSetting) : 'false';
+        $configuration['settings']['admin.chamilo_latest_news'] = $settingsManager->getSetting('admin.chamilo_latest_news', true);
+        $configuration['settings']['admin.chamilo_support'] = $settingsManager->getSetting('admin.chamilo_support', true);
 
         $variables = [];
 
@@ -116,6 +118,7 @@ class PlatformConfigurationController extends AbstractController
                 'registration.redirect_after_login',
                 'platform.show_tabs_per_role',
                 'platform.session_admin_user_subscription_search_extra_field_to_search',
+                'platform.push_notification_settings',
                 'session.user_session_display_mode',
                 'course.resource_sequence_show_dependency_in_course_intro',
             ];

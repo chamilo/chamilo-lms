@@ -108,6 +108,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'course_student_info' => '',
                     'course_catalog_settings' => '',
                     'resource_sequence_show_dependency_in_course_intro' => 'false',
+                    'course_sequence_valid_only_in_same_session' => 'false',
                     'course_catalog_display_in_home' => 'false',
                     'course_creation_form_set_course_category_mandatory' => 'false',
                     'course_creation_form_hide_course_code' => 'false',
@@ -258,6 +259,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 'attr' => ['rows' => 10, 'style' => 'font-family: monospace;'],
             ])
             ->add('resource_sequence_show_dependency_in_course_intro', YesNoType::class)
+            ->add('course_sequence_valid_only_in_same_session', YesNoType::class)
             ->add('course_catalog_display_in_home', YesNoType::class)
             ->add('course_creation_form_set_course_category_mandatory', YesNoType::class)
             ->add('course_creation_form_hide_course_code', YesNoType::class)

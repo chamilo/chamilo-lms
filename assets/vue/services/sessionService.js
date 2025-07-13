@@ -41,6 +41,17 @@ export default {
   },
 
   findUserSubscriptions,
+
+  /**
+   * Get sequence requirements for a session
+   *
+   * @param {number} sessionId
+   * @returns {Promise<Object>}
+   */
+  async getNextSession(sessionId) {
+    const { data } = await api.get(`/sessions/${sessionId}/next-session`)
+    return data
+  },
   createWithCoursesAndUsers,
   sendCourseNotification,
 }

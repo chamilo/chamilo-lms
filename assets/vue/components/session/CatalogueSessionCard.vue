@@ -84,7 +84,15 @@
 
       <div class="mt-auto pt-2">
         <Button
-          v-if="isPast"
+          v-if="requirementStatusLoading"
+          :label="$t('Loading...')"
+          icon="pi pi-spin pi-spinner"
+          class="w-full"
+          disabled
+        />
+
+        <Button
+          v-else-if="isPast"
           :label="$t('Not available')"
           icon="pi pi-lock"
           class="w-full"
@@ -97,6 +105,14 @@
             class="w-full text-center mb-2"
           ></div>
         </template>
+
+        <Button
+          v-else-if="isSessionLocked"
+          :label="$t('Check requirements')"
+          icon="mdi mdi-shield-check"
+          class="w-full p-button-warning"
+          @click="openSessionRequirementModal"
+        />
 
         <Button
           v-else-if="allowAutoSubscription && !session.isSubscribed"
@@ -116,11 +132,19 @@
         />
 
         <Button
-          v-else
+          v-else-if="session.isSubscribed"
           :label="$t('Go to the session')"
           icon="pi pi-external-link"
           class="w-full"
           @click="showGoDialog = true"
+        />
+
+        <Button
+          v-else
+          :label="$t('Not available')"
+          icon="pi pi-lock"
+          class="w-full"
+          disabled
         />
       </div>
     </div>
@@ -189,9 +213,20 @@
       v-html="session.description || $t('No description available')"
     />
   </Dialog>
+  <CatalogueRequirementModal
+    v-if="!requirementStatusLoading && isSessionLocked"
+    v-model="showRequirementModal"
+    :course-id="null"
+    :session-id="props.session.id"
+    :requirements="[
+      ...(sessionRequirementStatus.requirementList.value || []),
+      ...(sessionRequirementStatus.dependencyList.value || []),
+    ]"
+    :graph-image="sessionRequirementStatus.graphImage.value"
+  />
 </template>
 <script setup>
-import { ref, computed, watchEffect } from "vue"
+import { ref, computed, watchEffect, onMounted } from "vue"
 import Rating from "primevue/rating"
 import Button from "primevue/button"
 import Dialog from "primevue/dialog"
@@ -199,8 +234,18 @@ import axios from "axios"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useLocale } from "../../composables/locale"
+import CatalogueRequirementModal from "../course/CatalogueRequirementModal.vue"
+import { useSessionRequirementStatus } from "../../composables/session/useSessionRequirementStatus"
+
+const props = defineProps({
+  session: Object,
+})
 
 const showDescriptionDialog = ref(false)
+const showCourseDialog = ref(false)
+const showRequirementModal = ref(false)
+const fallback = ref(false)
+
 const platformConfigStore = usePlatformConfig()
 const allowDescription = computed(
   () => platformConfigStore.getSetting("course.show_courses_descriptions_in_catalog") !== "false",
@@ -209,33 +254,24 @@ const { getOriginalLanguageName } = useLocale()
 
 const showGoDialog = ref(false)
 const isLoading = ref(false)
-const emit = defineEmits(["rate", "subscribed"])
-const emitRating = (event) => {
-  emit("rate", { value: event.value, session: props.session })
-}
-
-const allowAutoSubscription = computed(
-  () => platformConfigStore.getSetting("session.catalog_allow_session_auto_subscription") === "true",
-)
-
-const props = defineProps({
-  session: Object,
-})
 
 const securityStore = useSecurityStore()
-
-const showCourseDialog = ref(false)
-const fallback = ref(false)
 
 const thumbnail = computed(() => (!fallback.value ? props.session.imageUrl || null : null))
 const hasThumbnail = computed(() => !!props.session.imageUrl && !fallback.value)
 
 const now = new Date()
-const startDate = computed(() => new Date(props.session.startDate))
-const endDate = computed(() => new Date(props.session.endDate))
+const isPast = computed(() => {
+  if (!props.session.endDate) return false
+  const date = new Date(props.session.endDate)
+  return !isNaN(date) && date < now
+})
 
-const isFuture = computed(() => startDate.value > now)
-const isPast = computed(() => endDate.value < now)
+const isFuture = computed(() => {
+  if (!props.session.startDate) return false
+  const date = new Date(props.session.startDate)
+  return !isNaN(date) && date > now
+})
 
 const onImageError = () => {
   fallback.value = true
@@ -247,6 +283,73 @@ watchEffect(() => {
     props.session.courses.forEach((c, i) => console.log(`Course[${i}]`, c.course?.title))
   }
 })
+
+const validCourses = computed(() => {
+  return (props.session.courses || []).filter((item) => item.title)
+})
+
+const courseCount = computed(() => validCourses.value.length)
+
+const formattedStartDate = computed(() => {
+  const d = new Date(props.session.startDate)
+  return isNaN(d) ? "-" : d.toLocaleDateString()
+})
+
+const formattedEndDate = computed(() => {
+  if (!props.session.endDate) return "-"
+  const d = new Date(props.session.endDate)
+  return isNaN(d.getTime()) ? "-" : d.toLocaleDateString()
+})
+
+const duration = computed(() => {
+  const durations = (props.session.courses || []).map((item) => item.duration).filter((d) => typeof d === "number")
+
+  const total = durations.reduce((a, b) => a + b, 0)
+  const inHours = total / 3600
+  const hasMissing = (props.session.courses || []).some((item) => item.duration == null)
+  return hasMissing ? `${inHours.toFixed(2)}+ h` : `${inHours.toFixed(2)} h`
+})
+
+const languages = computed(() => {
+  const langs = new Set()
+  for (const item of props.session.courses || []) {
+    const lang = item.courseLanguage
+    if (lang) langs.add(getOriginalLanguageName(lang))
+  }
+  return [...langs]
+})
+
+const teachers = computed(() => {
+  const all = []
+  for (const item of props.session.courses || []) {
+    for (const t of item.teachers || []) {
+      if (t.fullName) all.push(t.fullName)
+    }
+  }
+  return [...new Set(all)]
+})
+
+const requirementStatusLoading = ref(true)
+const sessionRequirementStatus = useSessionRequirementStatus(props.session.id)
+
+onMounted(async () => {
+  requirementStatusLoading.value = true
+  await sessionRequirementStatus.fetchStatus()
+  requirementStatusLoading.value = false
+})
+
+const isSessionLocked = computed(() => {
+  return !requirementStatusLoading.value && !sessionRequirementStatus.allowSubscription.value
+})
+
+const emit = defineEmits(["rate", "subscribed"])
+const emitRating = (event) => {
+  emit("rate", { value: event.value, session: props.session })
+}
+
+const allowAutoSubscription = computed(
+  () => platformConfigStore.getSetting("session.catalog_allow_session_auto_subscription") === "true",
+)
 
 const subscribeToSession = async () => {
   isLoading.value = true
@@ -283,47 +386,7 @@ const subscribeToSession = async () => {
   }
 }
 
-const validCourses = computed(() => {
-  return (props.session.courses || []).filter((item) => item.title)
-})
-
-const courseCount = computed(() => validCourses.value.length)
-
-const formattedStartDate = computed(() => {
-  const d = new Date(props.session.startDate)
-  return isNaN(d) ? "-" : d.toLocaleDateString()
-})
-
-const formattedEndDate = computed(() => {
-  const d = new Date(props.session.endDate)
-  return isNaN(d) ? "-" : d.toLocaleDateString()
-})
-
-const duration = computed(() => {
-  const durations = (props.session.courses || []).map((item) => item.duration).filter((d) => typeof d === "number")
-
-  const total = durations.reduce((a, b) => a + b, 0)
-  const inHours = total / 3600
-  const hasMissing = (props.session.courses || []).some((item) => item.duration == null)
-  return hasMissing ? `${inHours.toFixed(2)}+ h` : `${inHours.toFixed(2)} h`
-})
-
-const languages = computed(() => {
-  const langs = new Set()
-  for (const item of props.session.courses || []) {
-    const lang = item.courseLanguage
-    if (lang) langs.add(getOriginalLanguageName(lang))
-  }
-  return [...langs]
-})
-
-const teachers = computed(() => {
-  const all = []
-  for (const item of props.session.courses || []) {
-    for (const t of item.teachers || []) {
-      if (t.fullName) all.push(t.fullName)
-    }
-  }
-  return [...new Set(all)]
-})
+function openSessionRequirementModal() {
+  showRequirementModal.value = true
+}
 </script>

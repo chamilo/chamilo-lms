@@ -28442,3 +28442,15 @@ msgstr ""
 
 msgid "Role change denied due to incompatible current assignments:"
 msgstr ""
+
+msgid "Oops! URL not registered."
+msgstr ""
+
+msgid "The address \"%host%\" is not configured in this portal instance."
+msgstr ""
+
+msgid "If the problem persists, please contact support."
+msgstr ""
+
+msgid "Go to home page"
+msgstr ""

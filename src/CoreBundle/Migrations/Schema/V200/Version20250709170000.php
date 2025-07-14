@@ -27,35 +27,57 @@ final class Version20250709170000 extends AbstractMigrationChamilo
         );
 
         if ($themeId) {
-            // a Chamilo style is already there, do nothing
+            $this->write("Default Chamilo CSS theme already exists. Skipping insert.");
         } else {
+            // Insert color theme
             $this->connection->executeStatement(
                 'INSERT INTO color_theme (title, variables, slug, created_at, updated_at)
-                VALUES (?, ?, ?, NOW(), NOW())',
+                 VALUES (?, ?, ?, NOW(), NOW())',
                 [
                     "Chamilo",
                     $json,
                     $name
                 ]
             );
+
+            // Get the new ID
+            $themeId = $this->connection->fetchOne(
+                'SELECT id FROM color_theme WHERE slug = ?',
+                [$name]
+            );
+
+            if (!$themeId) {
+                throw new \RuntimeException("Could not retrieve the ID of the newly inserted color theme.");
+            }
+
+            // Insert relation into access_url_rel_color_theme
             $this->connection->executeStatement(
                 'INSERT INTO access_url_rel_color_theme (url_id, color_theme_id, active, created_at, updated_at)
-                VALUES (?, ?, ?, NOW(), NOW())',
+                 VALUES (?, ?, ?, NOW(), NOW())',
                 [
                     1,
-                    1,
+                    $themeId,
                     1
                 ]
             );
+
+            $this->write("Added default Chamilo CSS theme and related access URL relation.");
         }
-        $this->write("Added default Chamilo CSS theme in the color_theme table.");
     }
 
     public function down(Schema $schema): void
     {
         $this->addSql("
+            DELETE FROM access_url_rel_color_theme
+            WHERE color_theme_id IN (
+                SELECT id FROM color_theme WHERE slug = 'chamilo'
+            )
+        ");
+
+        $this->addSql("
             DELETE FROM color_theme WHERE slug = 'chamilo'
         ");
-        $this->write("Removed default Chamilo CSS theme in the color_theme table.");
+
+        $this->write("Removed default Chamilo CSS theme and related access URL relation.");
     }
 }

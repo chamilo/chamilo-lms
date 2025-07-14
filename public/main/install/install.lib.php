@@ -1510,7 +1510,16 @@ function finishInstallationWithContainer(
     /** @var User $admin */
     $admin = $repo->findOneBy(['username' => 'admin']);
 
-    $accessUrl = Container::getAccessUrlUtil()->getCurrent();
+    $em = Container::getEntityManager();
+    $accessUrlRepo = $em->getRepository(AccessUrl::class);
+
+    $accessUrl = $accessUrlRepo->findOneBy([]);
+
+    if (!$accessUrl) {
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
+        $em->persist($accessUrl);
+        $em->flush();
+    }
 
     $admin
         ->setLastname($adminLastName)

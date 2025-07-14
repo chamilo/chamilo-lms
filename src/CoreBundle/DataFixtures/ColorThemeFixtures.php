@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataFixtures;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\ColorTheme;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
@@ -30,7 +31,6 @@ class ColorThemeFixtures extends Fixture implements FixtureGroupInterface
             ->findOneBy(['slug' => 'chamilo']);
 
         if ($existing) {
-            echo "Chamilo color theme already exists. Skipping fixture.\n";
             return;
         }
 
@@ -66,6 +66,11 @@ class ColorThemeFixtures extends Fixture implements FixtureGroupInterface
 
         $accessUrl = $this->accessUrlHelper->getCurrent();
 
+        if (!$accessUrl->getId()) {
+            $manager->persist($accessUrl);
+            $manager->flush();
+        }
+
         $accessUrlRel = (new AccessUrlRelColorTheme())
             ->setUrl($accessUrl)
             ->setColorTheme($theme)
@@ -76,7 +81,5 @@ class ColorThemeFixtures extends Fixture implements FixtureGroupInterface
         $manager->persist($theme);
         $manager->persist($accessUrlRel);
         $manager->flush();
-
-        echo "Chamilo color theme fixture loaded successfully.\n";
     }
 }

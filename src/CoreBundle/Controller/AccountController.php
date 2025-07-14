@@ -77,7 +77,7 @@ class AccountController extends BaseController
                 $password = $form['password']->getData();
                 if ($password) {
                     $user->setPlainPassword($password);
-                    $user->setPasswordUpdateAt(new \DateTimeImmutable());
+                    $user->setPasswordUpdatedAt(new \DateTimeImmutable());
                 }
             }
 
@@ -224,7 +224,7 @@ class AccountController extends BaseController
                             ));
                         } else {
                             $user->setPlainPassword($newPassword);
-                            $user->setPasswordUpdateAt(new \DateTimeImmutable());
+                            $user->setPasswordUpdatedAt(new \DateTimeImmutable());
                             $userRepository->updateUser($user);
                             $this->addFlash('success', 'Password updated successfully.');
 

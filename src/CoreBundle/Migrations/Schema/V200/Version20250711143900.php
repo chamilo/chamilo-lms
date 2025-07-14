@@ -13,13 +13,13 @@ final class Version20250711143900 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Add password_rotation_days setting and user.password_update_at column; migrate existing extra-field data and remove old extra-field';
+        return 'Add password_rotation_days setting and user.password_updated_at column; migrate existing extra-field data and remove old extra-field';
     }
 
     public function up(Schema $schema): void
     {
         // 1. Add new column to user table
-        $this->addSql("ALTER TABLE `user` ADD COLUMN `password_update_at` DATETIME DEFAULT NULL;");
+        $this->addSql("ALTER TABLE `user` ADD COLUMN `password_updated_at` DATETIME DEFAULT NULL;");
 
         // 2. Insert or update the new setting in settings table
         $setting = [
@@ -74,7 +74,7 @@ final class Version20250711143900 extends AbstractMigrationChamilo
 
         // 3. Migrate existing extra-field data into the new column (if tables exist)
         if ($schema->hasTable('extra_field_values') && $schema->hasTable('extra_field')) {
-            // Copy field_value into user.password_update_at for variable 'password_updated_at'
+            // Copy field_value into user.password_updated_at for variable 'password_updated_at'
             $this->addSql("
                 UPDATE `user` AS u
                 INNER JOIN `extra_field_values` AS efv
@@ -82,7 +82,7 @@ final class Version20250711143900 extends AbstractMigrationChamilo
                 INNER JOIN `extra_field` AS ef
                     ON ef.id = efv.field_id
                    AND ef.variable = 'password_updated_at'
-                SET u.password_update_at = efv.field_value
+                SET u.password_updated_at = efv.field_value
             ");
 
             // Delete the old extra_field_values entries
@@ -115,6 +115,6 @@ final class Version20250711143900 extends AbstractMigrationChamilo
         ");
 
         // 2. Drop the column from user table
-        $this->addSql("ALTER TABLE `user` DROP COLUMN `password_update_at`;");
+        $this->addSql("ALTER TABLE `user` DROP COLUMN `password_updated_at`;");
     }
 }

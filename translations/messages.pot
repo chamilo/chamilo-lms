@@ -28475,3 +28475,15 @@ msgstr ""
 
 msgid "When enabled, a course will be considered validated only if passed within the current session. If disabled, courses passed in other sessions will also unlock dependent courses."
 msgstr ""
+
+msgid "Password rotation interval (days)"
+msgstr ""
+
+msgid "Number of days before users must rotate their password (0 = disabled)."
+msgstr ""
+
+msgid "CSRF token is invalid. Please try again."
+msgstr ""
+
+msgid "User not found or invalid."
+msgstr ""

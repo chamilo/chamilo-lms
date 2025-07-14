@@ -738,7 +738,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     private Collection $authSources;
 
     #[Groups(['user:read', 'user:write'])]
-    #[ORM\Column(name: 'password_update_at', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'password_updated_at', type: 'datetime', nullable: true)]
     protected ?\DateTimeInterface $passwordUpdatedAt = null;
 
     public function __construct()

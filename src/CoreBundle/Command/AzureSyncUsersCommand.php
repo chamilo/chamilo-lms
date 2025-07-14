@@ -55,10 +55,13 @@ class AzureSyncUsersCommand extends AzureSyncAbstractCommand
 
         $io->section('Updating users status');
 
-        $roleGroups = $this->getGroupUidByRole();
-        $roleActions = $this->getUpdateActionByRole();
+        $roleActions = $this->azureHelper->getUpdateActionByRole();
 
-        foreach ($roleGroups as $userRole => $groupUid) {
+        foreach ($this->providerParams['group_id'] as $userRole => $groupUid) {
+            if (empty($groupUid)) {
+                continue;
+            }
+
             try {
                 $azureGroupMembersInfo = iterator_to_array($this->getAzureGroupMembers($groupUid));
             } catch (Exception $e) {
@@ -114,7 +117,7 @@ class AzureSyncUsersCommand extends AzureSyncAbstractCommand
             );
         }
 
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success('Done.');
 
         return Command::SUCCESS;
     }

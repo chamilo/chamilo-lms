@@ -172,7 +172,8 @@ readonly class AzureAuthenticatorHelper
         return [1, 2, 3];
     }
 
-    private function formatUserData(array $azureUserData): array {
+    private function formatUserData(array $azureUserData): array
+    {
         $phone = null;
 
         if (isset($azureUserData['telephoneNumber'])) {
@@ -205,6 +206,38 @@ readonly class AzureAuthenticatorHelper
             $authSource,
             $active,
             $extra,
+        ];
+    }
+
+    /**
+     * The keys are the user roles, as defined for the group_ip parameter in the authentication.yaml file for Azure.
+     *
+     * @return array<string, callable>
+     */
+    public function getUpdateActionByRole(): array
+    {
+        return [
+            'admin' => function (User $user): void {
+                $user
+                    ->setStatus(COURSEMANAGER)
+                    ->addUserAsAdmin()
+                    ->setRoleFromStatus(COURSEMANAGER)
+                ;
+            },
+            'session_admin' => function (User $user): void {
+                $user
+                    ->setStatus(SESSIONADMIN)
+                    ->removeUserAsAdmin()
+                    ->setRoleFromStatus(SESSIONADMIN)
+                ;
+            },
+            'teacher' => function (User $user): void {
+                $user
+                    ->setStatus(COURSEMANAGER)
+                    ->removeUserAsAdmin()
+                    ->setRoleFromStatus(COURSEMANAGER)
+                ;
+            },
         ];
     }
 }

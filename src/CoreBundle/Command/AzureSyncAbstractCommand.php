@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\AzureSyncState;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\AzureAuthenticatorHelper;
 use Chamilo\CoreBundle\Repository\AzureSyncStateRepository;
@@ -43,9 +42,12 @@ abstract class AzureSyncAbstractCommand extends Command
     ) {
         parent::__construct();
 
-        $this->client = $this->clientRegistry->getClient('azure');
-        $this->provider = $this->client->getOAuth2Provider();
         $this->providerParams = $configHelper->getProviderConfig('azure');
+
+        $this->client = $this->clientRegistry->getClient('azure');
+
+        $this->provider = $this->client->getOAuth2Provider();
+        $this->provider->tenant = $this->providerParams['tenant'] ?? null;
     }
 
     /**
@@ -67,29 +69,17 @@ abstract class AzureSyncAbstractCommand extends Command
      */
     protected function getAzureUsers(): Generator
     {
-        $userFields = [
-            'givenName',
-            'surname',
-            'mail',
-            'userPrincipalName',
-            'businessPhones',
-            'mobilePhone',
-            'accountEnabled',
-            'mailNickname',
-            'id',
-        ];
-
         if ($this->providerParams['script_users_delta']) {
             $usersDeltaLink = $this->syncStateRepo->findOneBy(['title' => AzureSyncState::USERS_DATALINK]);
 
             $query = $usersDeltaLink
                 ? $usersDeltaLink->getValue()
-                : \sprintf('$select=%s', implode(',', $userFields));
+                : \sprintf('$select=%s', implode(',', AzureAuthenticatorHelper::QUERY_FIELDS));
         } else {
             $query = \sprintf(
                 '$top=%d&$select=%s',
                 AzureSyncState::API_PAGE_SIZE,
-                implode(',', $userFields)
+                implode(',', AzureAuthenticatorHelper::QUERY_FIELDS)
             );
         }
 
@@ -99,16 +89,15 @@ abstract class AzureSyncAbstractCommand extends Command
             try {
                 $this->generateOrRefreshToken($token);
 
-                $azureUsersRequest = $this->provider->request(
-                    'get',
-                    $this->providerParams['script_users_delta'] ? "users/delta?$query" : "users?$query",
+                $azureUsersRequest = $this->provider->get(
+                    $this->providerParams['script_users_delta'] ? "/v1.0/users/delta?$query" : "/v1.0/users?$query",
                     $token
                 );
             } catch (GuzzleException|Exception $e) {
                 throw new Exception('Exception when requesting users from Azure: '.$e->getMessage());
             }
 
-            $azureUsersInfo = $azureUsersRequest['value'] ?? [];
+            $azureUsersInfo = $azureUsersRequest ?? [];
 
             foreach ($azureUsersInfo as $azureUserInfo) {
                 $azureUserInfo['mail'] = $azureUserInfo['mail'] ?? null;
@@ -132,50 +121,6 @@ abstract class AzureSyncAbstractCommand extends Command
                 );
             }
         } while ($hasNextLink);
-    }
-
-    /**
-     * @return array<string, string|false>
-     */
-    public function getGroupUidByRole(): array
-    {
-        $groupUidList = [
-            'admin' => $this->providerParams['group_id_admin'],
-            'sessionAdmin' => $this->providerParams['group_id_session_admin'],
-            'teacher' => $this->providerParams['group_id_teacher'],
-        ];
-
-        return array_filter($groupUidList);
-    }
-
-    /**
-     * @return array<string, callable>
-     */
-    public function getUpdateActionByRole(): array
-    {
-        return [
-            'admin' => function (User $user): void {
-                $user
-                    ->setStatus(COURSEMANAGER)
-                    ->addUserAsAdmin()
-                    ->setRoleFromStatus(COURSEMANAGER)
-                ;
-            },
-            'sessionAdmin' => function (User $user): void {
-                $user
-                    ->setStatus(SESSIONADMIN)
-                    ->removeUserAsAdmin()
-                    ->setRoleFromStatus(SESSIONADMIN)
-                ;
-            },
-            'teacher' => function (User $user): void {
-                $user
-                    ->setStatus(COURSEMANAGER)
-                    ->removeUserAsAdmin()
-                    ->setRoleFromStatus(COURSEMANAGER)
-                ;
-            },
-        ];
     }
 
     /**

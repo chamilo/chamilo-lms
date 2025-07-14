@@ -27,7 +27,7 @@ class ChangePasswordType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // Build form fields for password change and 2FA
+        // Add basic fields for password change
         $builder
             ->add('currentPassword', PasswordType::class, [
                 'label' => 'Current password',
@@ -43,18 +43,21 @@ class ChangePasswordType extends AbstractType
                 'label' => 'Confirm new password',
                 'required' => false,
                 'mapped' => false,
-            ])
-            ->add('enable2FA', CheckboxType::class, [
+            ]);
+
+        if ($options['enable_2fa_field']) {
+            $builder->add('enable2FA', CheckboxType::class, [
                 'label' => 'Enable two-factor authentication (2FA)',
                 'required' => false,
-            ])
-            ->add('confirm2FACode', TextType::class, [
+            ]);
+
+            $builder->add('confirm2FACode', TextType::class, [
                 'label' => 'Enter your 2FA code',
                 'required' => false,
                 'mapped' => false,
             ]);
+        }
 
-        // Add post-submit validation logic
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) use ($options) {
             $form = $event->getForm();
             $user = $form->getConfig()->getOption('user');
@@ -66,8 +69,12 @@ class ChangePasswordType extends AbstractType
             $currentPassword = $form->get('currentPassword')->getData();
             $newPassword = $form->get('newPassword')->getData();
             $confirmPassword = $form->get('confirmPassword')->getData();
-            $enable2FA = $form->get('enable2FA')->getData();
-            $code = $form->get('confirm2FACode')->getData();
+            $enable2FA = $form->has('enable2FA')
+                ? $form->get('enable2FA')->getData()
+                : false;
+            $code = $form->has('confirm2FACode')
+                ? $form->get('confirm2FACode')->getData()
+                : null;
             $passwordHasher = $form->getConfig()->getOption('password_hasher');
 
             // Validate current password and confirmation if user wants to update password
@@ -78,43 +85,41 @@ class ChangePasswordType extends AbstractType
                     $form->get('currentPassword')->addError(new FormError('The current password is incorrect.'));
                 }
 
-                // Apply password rules
                 foreach (self::validatePassword($newPassword) as $error) {
                     $form->get('newPassword')->addError(new FormError($error));
                 }
 
-                // Ensure confirmation matches
                 if (!empty($confirmPassword) && $newPassword !== $confirmPassword) {
                     $form->get('confirmPassword')->addError(new FormError('Passwords do not match.'));
                 }
             }
 
-            // If 2FA is enabled (or already active), validate the code
-            if ($user->getMfaEnabled() || $enable2FA) {
-                if (empty($code)) {
-                    $form->get('confirm2FACode')->addError(new FormError('The 2FA code is required.'));
-                } elseif ($user->getMfaSecret()) {
-                    $parts = explode('::', base64_decode($user->getMfaSecret()));
-                    if (count($parts) === 2) {
-                        [$iv, $encryptedData] = $parts;
-                        $decryptedSecret = openssl_decrypt(
-                            $encryptedData,
-                            'aes-256-cbc',
-                            $_ENV['APP_SECRET'],
-                            0,
-                            $iv
-                        );
+            if ($form->has('confirm2FACode')) {
+                if ($user->getMfaEnabled() || $enable2FA) {
+                    if (empty($code)) {
+                        $form->get('confirm2FACode')->addError(new FormError('The 2FA code is required.'));
+                    } elseif ($user->getMfaSecret()) {
+                        $parts = explode('::', base64_decode($user->getMfaSecret()));
+                        if (count($parts) === 2) {
+                            [$iv, $encryptedData] = $parts;
+                            $decryptedSecret = openssl_decrypt(
+                                $encryptedData,
+                                'aes-256-cbc',
+                                $_ENV['APP_SECRET'],
+                                0,
+                                $iv
+                            );
 
-                        // Validate 2FA code using decrypted TOTP secret
-                        $totp = TOTP::create($decryptedSecret);
-                        $portal = $options['portal_name'] ?? 'Chamilo';
-                        $totp->setLabel($portal . ' - ' . $user->getEmail());
+                            $totp = TOTP::create($decryptedSecret);
+                            $portal = $options['portal_name'] ?? 'Chamilo';
+                            $totp->setLabel($portal . ' - ' . $user->getEmail());
 
-                        if (!$totp->verify($code)) {
-                            $form->get('confirm2FACode')->addError(new FormError('The 2FA code is invalid or expired.'));
+                            if (!$totp->verify($code)) {
+                                $form->get('confirm2FACode')->addError(new FormError('The 2FA code is invalid or expired.'));
+                            }
+                        } else {
+                            $form->get('confirm2FACode')->addError(new FormError('Invalid 2FA configuration.'));
                         }
-                    } else {
-                        $form->get('confirm2FACode')->addError(new FormError('Invalid 2FA configuration.'));
                     }
                 }
             }
@@ -123,11 +128,11 @@ class ChangePasswordType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        // Define custom options required for validation logic
         $resolver->setDefaults([
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
             'csrf_token_id' => 'change_password',
+            'enable_2fa_field' => true,
             'user' => null,
             'portal_name' => 'Chamilo',
             'password_hasher' => null,

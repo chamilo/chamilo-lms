@@ -9,7 +9,7 @@ function isValidHttpUrl(string) {
   try {
     const url = new URL(string);
     return url.protocol === "http:" || url.protocol === "https:";
-  } catch {
+  } catch (_) {
     return false;
   }
 }
@@ -31,23 +31,31 @@ export function useLogin() {
     try {
       const responseData = await securityService.login(payload);
 
-      // Step 1: Handle 2FA
+      // Check if the backend demands 2FA and no TOTP was provided yet
       if (responseData.requires2FA && !payload.totp) {
         requires2FA.value = true;
         return { success: false, requires2FA: true };
       }
 
-      // Step 2: Handle explicit error message
+      // Check rotate password flow
+      if (responseData.rotate_password && responseData.redirect) {
+        window.location.href = responseData.redirect;
+        return { success: true, rotate: true };
+      }
+
+      // Handle explicit backend error message
       if (responseData.error) {
         showErrorNotification(responseData.error);
         return { success: false, error: responseData.error };
       }
 
-      // Step 3: Set user and load platform config
-      securityStore.setUser(responseData);
-      await platformConfigurationStore.initialize();
+      // Special flow for terms acceptance
+      if (responseData.load_terms && responseData.redirect) {
+        window.location.href = responseData.redirect;
+        return { success: true, redirect: responseData.redirect };
+      }
 
-      // Step 4: Honor a redirect query parameter
+      // Handle external redirect param
       const redirectParam = route.query.redirect?.toString();
       if (redirectParam) {
         if (isValidHttpUrl(redirectParam)) {
@@ -58,39 +66,43 @@ export function useLogin() {
         return { success: true };
       }
 
-      // Step 5: Handle "load terms" flow
-      if (responseData.load_terms && responseData.redirect) {
+      if (responseData.redirect) {
         window.location.href = responseData.redirect;
         return { success: true };
       }
 
-      // Step 6: Default post-login redirect based on roles
-      const setting = platformConfigurationStore.getSetting(
-        "registration.redirect_after_login"
-      );
+      securityStore.setUser(responseData);
+      await platformConfigurationStore.initialize();
+
+      // Handle redirect param again after login
+      if (route.query.redirect) {
+        await router.replace({ path: route.query.redirect.toString() });
+        return { success: true };
+      }
+
+      // Determine post-login route from settings
+      const setting = platformConfigurationStore.getSetting("registration.redirect_after_login");
       let target = "/";
 
       if (setting && typeof setting === "string") {
         try {
           const map = JSON.parse(setting);
           const roles = responseData.roles || [];
-          const profile = roles.includes("ROLE_ADMIN")
-            ? "ADMIN"
-            : roles.includes("ROLE_SESSION_MANAGER")
-              ? "SESSIONADMIN"
-              : roles.includes("ROLE_TEACHER")
-                ? "COURSEMANAGER"
-                : roles.includes("ROLE_STUDENT_BOSS")
-                  ? "STUDENT_BOSS"
-                  : roles.includes("ROLE_DRH")
-                    ? "DRH"
-                    : roles.includes("ROLE_INVITEE")
-                      ? "INVITEE"
-                      : roles.includes("ROLE_STUDENT")
-                        ? "STUDENT"
-                        : null;
 
+          const getProfile = () => {
+            if (roles.includes("ROLE_ADMIN")) return "ADMIN";
+            if (roles.includes("ROLE_SESSION_MANAGER")) return "SESSIONADMIN";
+            if (roles.includes("ROLE_TEACHER")) return "COURSEMANAGER";
+            if (roles.includes("ROLE_STUDENT_BOSS")) return "STUDENT_BOSS";
+            if (roles.includes("ROLE_DRH")) return "DRH";
+            if (roles.includes("ROLE_INVITEE")) return "INVITEE";
+            if (roles.includes("ROLE_STUDENT")) return "STUDENT";
+            return null;
+          };
+
+          const profile = getProfile();
           const value = profile && map[profile] ? map[profile] : "";
+
           switch (value) {
             case "user_portal.php":
             case "index.php":

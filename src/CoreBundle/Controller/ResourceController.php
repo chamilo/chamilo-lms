@@ -473,9 +473,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
             ->getResult()
         ;
 
-        $skipTools = ['course_tool', 
-            // 'chat', 
-            // 'notebook', 
+        $skipTools = ['course_tool',
+            // 'chat',
+            // 'notebook',
             // 'wiki'
         ];
 

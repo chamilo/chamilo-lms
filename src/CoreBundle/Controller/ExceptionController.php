@@ -106,15 +106,15 @@ class ExceptionController extends AbstractController
         $themeHost = rtrim($accessUrl?->getUrl() ?? '', '/');
         $themeName = 'chamilo';
 
-        $cssUrl = $themeHost . $urlGenerator->generate('theme_asset', [
-                'name' => $themeName,
-                'path' => 'colors.css',
-            ], UrlGeneratorInterface::ABSOLUTE_PATH);
+        $cssUrl = $themeHost.$urlGenerator->generate('theme_asset', [
+            'name' => $themeName,
+            'path' => 'colors.css',
+        ], UrlGeneratorInterface::ABSOLUTE_PATH);
 
-        $logoUrl = $themeHost . $urlGenerator->generate('theme_asset', [
-                'name' => $themeName,
-                'path' => 'images/header-logo.svg',
-            ], UrlGeneratorInterface::ABSOLUTE_PATH);
+        $logoUrl = $themeHost.$urlGenerator->generate('theme_asset', [
+            'name' => $themeName,
+            'path' => 'images/header-logo.svg',
+        ], UrlGeneratorInterface::ABSOLUTE_PATH);
 
         return $this->render('@ChamiloCore/Exception/undefined_url.html.twig', [
             'host' => $host,

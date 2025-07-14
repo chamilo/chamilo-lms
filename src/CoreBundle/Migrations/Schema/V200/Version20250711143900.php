@@ -19,18 +19,18 @@ final class Version20250711143900 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         // 1. Add new column to user table
-        $this->addSql("ALTER TABLE `user` ADD COLUMN `password_updated_at` DATETIME DEFAULT NULL;");
+        $this->addSql('ALTER TABLE `user` ADD COLUMN `password_updated_at` DATETIME DEFAULT NULL;');
 
         // 2. Insert or update the new setting in settings table
         $setting = [
-            'variable'       => 'password_rotation_days',
+            'variable' => 'password_rotation_days',
             'selected_value' => '0',
-            'title'          => 'Password rotation interval (days)',
-            'comment'        => 'Number of days before users must rotate their password (0 = disabled).',
-            'category'       => 'security',
+            'title' => 'Password rotation interval (days)',
+            'comment' => 'Number of days before users must rotate their password (0 = disabled).',
+            'category' => 'security',
         ];
 
-        $sqlCheck = sprintf(
+        $sqlCheck = \sprintf(
             "SELECT COUNT(*) AS count
                FROM settings
               WHERE variable = '%s'
@@ -42,7 +42,7 @@ final class Version20250711143900 extends AbstractMigrationChamilo
 
         if ($result && (int) $result['count'] > 0) {
             // UPDATE existing setting
-            $this->addSql(sprintf(
+            $this->addSql(\sprintf(
                 "UPDATE settings
                     SET selected_value = '%s',
                         title          = '%s',
@@ -59,7 +59,7 @@ final class Version20250711143900 extends AbstractMigrationChamilo
             ));
         } else {
             // INSERT new setting
-            $this->addSql(sprintf(
+            $this->addSql(\sprintf(
                 "INSERT INTO settings
                     (variable, subkey, type, category, selected_value, title, comment, access_url_changeable, access_url_locked, access_url)
                  VALUES
@@ -115,6 +115,6 @@ final class Version20250711143900 extends AbstractMigrationChamilo
         ");
 
         // 2. Drop the column from user table
-        $this->addSql("ALTER TABLE `user` DROP COLUMN `password_updated_at`;");
+        $this->addSql('ALTER TABLE `user` DROP COLUMN `password_updated_at`;');
     }
 }

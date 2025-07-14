@@ -71,6 +71,7 @@ class PushSubscriptionRepository extends ServiceEntityRepository
             ->where('p.endpoint = :endpoint')
             ->setParameter('endpoint', $endpoint)
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 }

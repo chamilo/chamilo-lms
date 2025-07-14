@@ -7,8 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['page_layout_template:read']],
@@ -45,6 +45,7 @@ class PageLayoutTemplate
     public function setName(?string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 

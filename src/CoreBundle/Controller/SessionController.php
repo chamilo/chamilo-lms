@@ -30,7 +30,6 @@ use Doctrine\ORM\EntityRepository;
 use Essence\Essence;
 use ExtraFieldValue;
 use Graphp\GraphViz\GraphViz;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use SessionManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -360,7 +359,6 @@ class SessionController extends AbstractController
         return $this->json(['success' => true]);
     }
 
-
     #[Route('/{sessionId}/next-session', name: 'chamilo_session_next_session')]
     public function getNextSession(
         int $sessionId,
@@ -368,7 +366,6 @@ class SessionController extends AbstractController
         SequenceResourceRepository $repo,
         Security $security
     ): JsonResponse {
-
         $requirementAndDependencies = $repo->getRequirementAndDependencies(
             $sessionId,
             SequenceResource::SESSION_TYPE
@@ -405,7 +402,7 @@ class SessionController extends AbstractController
         $graphImage = null;
         if ($sequenceResource && $sequenceResource->hasGraph()) {
             $graph = $sequenceResource->getSequence()->getUnSerializeGraph();
-            if ($graph !== null) {
+            if (null !== $graph) {
                 $graph->setAttribute('graphviz.node.fontname', 'arial');
                 $graphviz = new GraphViz();
                 $graphImage = $graphviz->createImageSrc($graph);

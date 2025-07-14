@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use RuntimeException;
 
 final class Version20250709170000 extends AbstractMigrationChamilo
 {
@@ -27,16 +28,16 @@ final class Version20250709170000 extends AbstractMigrationChamilo
         );
 
         if ($themeId) {
-            $this->write("Default Chamilo CSS theme already exists. Skipping insert.");
+            $this->write('Default Chamilo CSS theme already exists. Skipping insert.');
         } else {
             // Insert color theme
             $this->connection->executeStatement(
                 'INSERT INTO color_theme (title, variables, slug, created_at, updated_at)
                  VALUES (?, ?, ?, NOW(), NOW())',
                 [
-                    "Chamilo",
+                    'Chamilo',
                     $json,
-                    $name
+                    $name,
                 ]
             );
 
@@ -47,7 +48,7 @@ final class Version20250709170000 extends AbstractMigrationChamilo
             );
 
             if (!$themeId) {
-                throw new \RuntimeException("Could not retrieve the ID of the newly inserted color theme.");
+                throw new RuntimeException('Could not retrieve the ID of the newly inserted color theme.');
             }
 
             // Insert relation into access_url_rel_color_theme
@@ -57,11 +58,11 @@ final class Version20250709170000 extends AbstractMigrationChamilo
                 [
                     1,
                     $themeId,
-                    1
+                    1,
                 ]
             );
 
-            $this->write("Added default Chamilo CSS theme and related access URL relation.");
+            $this->write('Added default Chamilo CSS theme and related access URL relation.');
         }
     }
 
@@ -78,6 +79,6 @@ final class Version20250709170000 extends AbstractMigrationChamilo
             DELETE FROM color_theme WHERE slug = 'chamilo'
         ");
 
-        $this->write("Removed default Chamilo CSS theme and related access URL relation.");
+        $this->write('Removed default Chamilo CSS theme and related access URL relation.');
     }
 }

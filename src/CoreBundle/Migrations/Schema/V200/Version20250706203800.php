@@ -45,31 +45,31 @@ class Version20250706203800 extends AbstractMigrationChamilo
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
         ");
 
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE page_layout
                 ADD CONSTRAINT FK_PAGE_LAYOUT_TEMPLATE
                     FOREIGN KEY (page_layout_template_id) REFERENCES page_layout_template (id) ON DELETE SET NULL;
-        ");
+        ');
 
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE page_layout
                 ADD CONSTRAINT FK_PAGE_LAYOUT_CREATED_BY
                     FOREIGN KEY (created_by) REFERENCES user (id) ON DELETE SET NULL;
-        ");
+        ');
 
-        $this->addSql("
+        $this->addSql('
             ALTER TABLE page_layout
                 ADD CONSTRAINT FK_PAGE_LAYOUT_UPDATED_BY
                     FOREIGN KEY (updated_by) REFERENCES user (id) ON DELETE SET NULL;
-        ");
+        ');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql("ALTER TABLE page_layout DROP FOREIGN KEY FK_PAGE_LAYOUT_TEMPLATE;");
-        $this->addSql("ALTER TABLE page_layout DROP FOREIGN KEY FK_PAGE_LAYOUT_CREATED_BY;");
-        $this->addSql("ALTER TABLE page_layout DROP FOREIGN KEY FK_PAGE_LAYOUT_UPDATED_BY;");
-        $this->addSql("DROP TABLE IF EXISTS page_layout;");
-        $this->addSql("DROP TABLE IF EXISTS page_layout_template;");
+        $this->addSql('ALTER TABLE page_layout DROP FOREIGN KEY FK_PAGE_LAYOUT_TEMPLATE;');
+        $this->addSql('ALTER TABLE page_layout DROP FOREIGN KEY FK_PAGE_LAYOUT_CREATED_BY;');
+        $this->addSql('ALTER TABLE page_layout DROP FOREIGN KEY FK_PAGE_LAYOUT_UPDATED_BY;');
+        $this->addSql('DROP TABLE IF EXISTS page_layout;');
+        $this->addSql('DROP TABLE IF EXISTS page_layout_template;');
     }
 }

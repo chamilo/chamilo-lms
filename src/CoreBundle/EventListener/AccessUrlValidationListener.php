@@ -7,9 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\RouterInterface;
+use Throwable;
 
 /**
  * This event listener checks whether the current request is using a valid, registered AccessUrl.
@@ -63,9 +65,9 @@ class AccessUrlValidationListener
 
             // If it's null, throw an exception to trigger redirection
             if (null === $accessUrl) {
-                throw new \RuntimeException('AccessUrl not defined');
+                throw new RuntimeException('AccessUrl not defined');
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Log host and URI for debugging
             $host = $request->getHost();
             $uri = $request->getUri();

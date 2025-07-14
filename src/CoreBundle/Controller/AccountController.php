@@ -106,21 +106,21 @@ class AccountController extends BaseController
 
         if (!$user || !$user instanceof UserInterface) {
             $userId = $request->query->get('userId');
-            error_log("User not logged in. Received userId from query: " . $userId);
+            //error_log("User not logged in. Received userId from query: " . $userId);
 
             if (!$userId || !ctype_digit($userId)) {
-                error_log("Access denied: Missing or invalid userId.");
+                //error_log("Access denied: Missing or invalid userId.");
                 throw $this->createAccessDeniedException('This user does not have access to this section.');
             }
 
             $user = $userRepository->find((int)$userId);
 
             if (!$user || !$user instanceof UserInterface) {
-                error_log("Access denied: User not found with ID $userId");
+                //error_log("Access denied: User not found with ID $userId");
                 throw $this->createAccessDeniedException('User not found or invalid.');
             }
 
-            error_log("Loaded user by ID: " . $user->getId());
+            //error_log("Loaded user by ID: " . $user->getId());
         }
 
         $isRotation = $request->query->getBoolean('rotate', false);

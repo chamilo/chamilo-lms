@@ -204,7 +204,7 @@ class AccountController extends BaseController
                             ));
                         } elseif ($newPassword !== $confirmPassword) {
                             $form->get('confirmPassword')->addError(new FormError(
-                                $this->translator->trans('Passwords do not match.')
+                                $this->translator->trans('Passwords do not match')
                             ));
                         } else {
                             $user->setPlainPassword($newPassword);

@@ -56,7 +56,10 @@ class AzureAuthenticator extends AbstractAuthenticator
         /** @var Azure $provider */
         $provider = $this->client->getOAuth2Provider();
 
-        $me = $provider->get('/me', $accessToken);
+        $me = $provider->get(
+            \sprintf('/v1.0/me?$select=%s', implode(',', AzureAuthenticatorHelper::QUERY_FIELDS)),
+            $accessToken
+        );
 
         if (empty($me['mail'])) {
             throw new UnauthorizedHttpException('The mail field is empty in Azure AD and is needed to set the organisation email for this user.');
@@ -66,7 +69,7 @@ class AzureAuthenticator extends AbstractAuthenticator
             throw new UnauthorizedHttpException('The mailNickname field is empty in Azure AD and is needed to set the unique username for this user.');
         }
 
-        if (empty($me['objectId'])) {
+        if (empty($me['id'])) {
             throw new UnauthorizedHttpException('The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
         }
 

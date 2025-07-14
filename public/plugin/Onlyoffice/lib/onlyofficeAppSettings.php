@@ -14,6 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+use Chamilo\CoreBundle\Entity\AccessUrlRelPlugin;
+use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
+use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\ORM\Exception\NotSupported;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Onlyoffice\DocsIntegrationSdk\Manager\Settings\SettingsManager;
 
 class OnlyofficeAppsettings extends SettingsManager
@@ -82,6 +89,11 @@ class OnlyofficeAppsettings extends SettingsManager
 
     public function getSetting($settingName)
     {
+        $plugin = Database::getManager()->getRepository(PluginEntity::class)->findOneBy(['title' => 'Onlyoffice']);
+        $configuration = $plugin?->getConfigurationsByAccessUrl(
+            Container::getAccessUrlUtil()->getCurrent()
+        );
+
         $value = null;
         if (null !== $this->newSettings) {
             if (isset($this->newSettings[$settingName])) {
@@ -89,7 +101,7 @@ class OnlyofficeAppsettings extends SettingsManager
             }
 
             if (empty($value)) {
-                $prefix = $this->plugin->getPluginName();
+                $prefix = $this->plugin->get_name();
 
                 if (substr($settingName, 0, strlen($prefix)) == $prefix) {
                     $settingNameWithoutPrefix = substr($settingName, strlen($prefix) + 1);
@@ -109,8 +121,8 @@ class OnlyofficeAppsettings extends SettingsManager
         switch ($settingName) {
             case $this->jwtHeader:
                 $settings = api_get_setting($settingName);
-                $value = is_array($settings) && array_key_exists($this->plugin->getPluginName(), $settings)
-                    ? $settings[$this->plugin->getPluginName()]
+                $value = is_array($settings) && array_key_exists($this->plugin->get_name(), $settings)
+                    ? $settings[$this->plugin->get_name()]
                     : null;
 
                 if (empty($value)) {
@@ -119,11 +131,10 @@ class OnlyofficeAppsettings extends SettingsManager
                 break;
             case $this->documentServerInternalUrl:
                 $settings = api_get_setting($settingName);
-                $value = is_array($settings) ? ($settings[$this->plugin->getPluginName()] ?? null) : null;
+                $value = is_array($settings) ? ($settings[$this->plugin->get_name()] ?? null) : null;
                 break;
             case $this->useDemoName:
-                $settings = api_get_setting($settingName);
-                $value = is_array($settings) ? ($settings[0] ?? null) : null;
+                $value = $configuration ? ($configuration[$settingName] ?: null) : null;
                 break;
             case $this->jwtPrefix:
                 $value = 'Bearer ';
@@ -140,15 +151,36 @@ class OnlyofficeAppsettings extends SettingsManager
         return $value;
     }
 
-    public function setSetting($settingName, $value, $createSetting = false)
+    /**
+     * @throws OptimisticLockException
+     * @throws NotSupported
+     * @throws ORMException
+     */
+    public function setSetting($settingName, $value, $createSetting = false): void
     {
         if (($settingName === $this->useDemoName) && $createSetting) {
-            api_add_setting($value, $settingName, null, 'setting', 'Plugins');
+            $em = Database::getManager();
+
+            $pluginConfig = $em->getRepository(PluginEntity::class)
+                ->findOneBy(['title' => 'Onlyoffice'])
+                ?->getConfigurationsByAccessUrl(
+                    Container::getAccessUrlUtil()->getCurrent()
+                )
+            ;
+
+            if ($pluginConfig) {
+                $settings = $pluginConfig->getConfiguration();
+                $settings[$this->useDemoName] = $value;
+
+                $pluginConfig->setConfiguration($settings);
+
+                $em->flush();
+            }
 
             return;
         }
 
-        $prefix = $this->plugin->getPluginName();
+        $prefix = $this->plugin->get_name();
         if (!(substr($settingName, 0, strlen($prefix)) == $prefix)) {
             $settingName = $prefix.'_'.$settingName;
         }

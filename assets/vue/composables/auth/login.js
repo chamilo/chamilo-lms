@@ -1,7 +1,7 @@
-import { usePlatformConfig } from "../../store/platformConfig"
+import { ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
-import { ref } from "vue"
+import { usePlatformConfig } from "../../store/platformConfig"
 import securityService from "../../services/securityService"
 import { useNotification } from "../notification"
 
@@ -9,7 +9,7 @@ function isValidHttpUrl(string) {
   try {
     const url = new URL(string)
     return url.protocol === "http:" || url.protocol === "https:"
-  } catch {
+  } catch (_) {
     return false
   }
 }
@@ -22,19 +22,24 @@ export function useLogin() {
   const { showErrorNotification } = useNotification()
 
   const isLoading = ref(false)
+  const requires2FA = ref(false)
 
   async function performLogin({ login, password, _remember_me, totp = null }) {
     isLoading.value = true
+    requires2FA.value = false
 
     try {
+      // Build the payload using OFAJ style
       const payload = {
         username: login,
         password,
         _remember_me,
       }
+
       if (totp) {
         payload.totp = totp
       }
+
       const returnUrl = route.query.redirect?.toString() || null
       if (returnUrl) {
         payload.returnUrl = returnUrl
@@ -42,30 +47,65 @@ export function useLogin() {
 
       const responseData = await securityService.login(payload)
 
-      // 2FA
-      if (responseData.requires2FA) {
-        return { success: true, requires2FA: true }
+      // Handle 2FA
+      if (responseData.requires2FA && !payload.totp) {
+        requires2FA.value = true
+        return { success: false, requires2FA: true }
       }
 
+      // Handle rotate password flow
+      if (responseData.rotate_password && responseData.redirect) {
+        window.location.href = responseData.redirect
+        return { success: true, rotate: true }
+      }
+
+      // Handle backend explicit error
+      if (responseData.error) {
+        showErrorNotification(responseData.error)
+        return { success: false, error: responseData.error }
+      }
+
+      // Handle terms and conditions redirection
+      if (responseData.load_terms && responseData.redirect) {
+        window.location.href = responseData.redirect
+        return { success: true, redirect: responseData.redirect }
+      }
+
+      // External redirect parameter
+      if (route.query.redirect) {
+        const redirectParam = route.query.redirect.toString()
+        if (isValidHttpUrl(redirectParam)) {
+          window.location.href = redirectParam
+        } else {
+          await router.replace({ path: redirectParam })
+        }
+        return { success: true }
+      }
+
+      // Fallback redirect from backend
       if (responseData.redirect) {
         window.location.href = responseData.redirect
-        return
+        return { success: true }
       }
 
       securityStore.setUser(responseData)
       await platformConfigurationStore.initialize()
 
-      if (route.query.redirect && isValidHttpUrl(route.query.redirect.toString())) {
+      // Handle redirect param again after login
+      if (route.query.redirect) {
         await router.replace({ path: route.query.redirect.toString() })
-        return
+        return { success: true }
       }
 
+      // Handle post-login redirection based on platform config
       const setting = platformConfigurationStore.getSetting("registration.redirect_after_login")
       let target = "/"
+
       if (setting && typeof setting === "string") {
         try {
           const map = JSON.parse(setting)
           const roles = responseData.roles || []
+
           const getProfile = () => {
             if (roles.includes("ROLE_ADMIN")) return "ADMIN"
             if (roles.includes("ROLE_SESSION_MANAGER")) return "SESSIONADMIN"
@@ -76,8 +116,10 @@ export function useLogin() {
             if (roles.includes("ROLE_STUDENT")) return "STUDENT"
             return null
           }
+
           const profile = getProfile()
           const value = profile && map[profile] ? map[profile] : ""
+
           switch (value) {
             case "user_portal.php":
             case "index.php":
@@ -94,14 +136,18 @@ export function useLogin() {
               target = `/${value.replace(/^\/+/, "")}`
           }
         } catch (e) {
-          console.warn("[redirect_after_login] JSON malformado:", e)
+          console.warn("[redirect_after_login] Malformed JSON:", e)
         }
       }
 
       await router.replace({ path: target })
+
+      return { success: true }
     } catch (error) {
-      const errorMessage = error.response?.data?.error || "An error occurred during login."
+      const errorMessage =
+        error.response?.data?.error || "An error occurred during login."
       showErrorNotification(errorMessage)
+      return { success: false, error: errorMessage }
     } finally {
       isLoading.value = false
     }
@@ -111,8 +157,10 @@ export function useLogin() {
     if (!securityStore.isAuthenticated) {
       return
     }
-    if (route.query.redirect) {
-      await router.push({ path: route.query.redirect.toString() })
+
+    const redirectParam = route.query.redirect?.toString()
+    if (redirectParam) {
+      await router.push({ path: redirectParam })
     } else {
       await router.replace({ name: "Home" })
     }
@@ -120,6 +168,7 @@ export function useLogin() {
 
   return {
     isLoading,
+    requires2FA,
     performLogin,
     redirectNotAuthenticated,
   }

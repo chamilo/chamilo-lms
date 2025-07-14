@@ -49,3 +49,17 @@ parameters:
                     title: 'Azure'
                     client_id: ''
                     client_secret: ''
+                    url_api: 'https://graph.microsoft.com'
+                    tenant: '6d53d383-2e87-49dd-a756-d6156a484698'
+                    force_logout: false
+                    provisioning: false
+                    update_users: false
+                    group_id:
+                        admin: ''
+                        session_admin: ''
+                        teacher: ''
+                    existing_user_verification_order: ''
+                    deactivate_nonexisting_users: false
+                    script_users_delta: false
+                    script_usergroups_delta: false
+                    group_filter_regex: ''

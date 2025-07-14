@@ -62,6 +62,7 @@ final class CLpItemRepository extends ServiceEntityRepository
             ->setParameter('type', 'document')
             ->setParameter('path', $resourceFileId)
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
     }
 }

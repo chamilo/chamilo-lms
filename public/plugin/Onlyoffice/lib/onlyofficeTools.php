@@ -30,7 +30,7 @@ class OnlyofficeTools
             return '';
         }
 
-        $urlToEdit = api_get_path(WEB_PLUGIN_PATH).'onlyoffice/editor.php';
+        $urlToEdit = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php';
 
         $extension = strtolower(pathinfo($document_data['title'], PATHINFO_EXTENSION));
 
@@ -55,7 +55,7 @@ class OnlyofficeTools
 
             return Display::url(
                 Display::return_icon(
-                    '../../plugin/onlyoffice/resources/onlyoffice_edit.png',
+                    '../../plugin/Onlyoffice/resources/onlyoffice_edit.png',
                     $tooltip
                 ),
                 $urlToEdit
@@ -79,7 +79,7 @@ class OnlyofficeTools
             return '';
         }
 
-        $urlToEdit = api_get_path(WEB_PLUGIN_PATH).'onlyoffice/editor.php';
+        $urlToEdit = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php';
 
         $sessionId = api_get_session_id();
         $courseInfo = api_get_course_info();
@@ -111,7 +111,7 @@ class OnlyofficeTools
         $urlToEdit = $urlToEdit.'docId='.$documentId;
 
         if ($canView && !$accessRights) {
-            return Display::url(Display::return_icon('../../plugin/onlyoffice/resources/onlyoffice_view.png', $plugin->get_lang('openByOnlyoffice')), $urlToEdit, ['style' => 'float:right; margin-right:8px']);
+            return Display::url(Display::return_icon('../../plugin/Onlyoffice/resources/onlyoffice_view.png', $plugin->get_lang('openByOnlyoffice')), $urlToEdit, ['style' => 'float:right; margin-right:8px']);
         }
 
         return '';
@@ -134,7 +134,7 @@ class OnlyofficeTools
         $groupId = api_get_group_id();
         $userId = api_get_user_id();
 
-        $urlToCreate = api_get_path(WEB_PLUGIN_PATH).'onlyoffice/create.php'
+        $urlToCreate = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/create.php'
                                                         .'?folderId='.(empty($_GET['id']) ? '0' : (int) $_GET['id'])
                                                         .'&courseId='.$courseId
                                                         .'&groupId='.$groupId
@@ -143,7 +143,7 @@ class OnlyofficeTools
 
         return Display::url(
             Display::return_icon(
-                '../../plugin/onlyoffice/resources/onlyoffice_create.png',
+                '../../plugin/Onlyoffice/resources/onlyoffice_create.png',
                 $plugin->get_lang('createNew')
             ),
             $urlToCreate
@@ -164,7 +164,7 @@ class OnlyofficeTools
             return '';
         }
 
-        $urlToEdit = api_get_path(WEB_PLUGIN_PATH).'onlyoffice/editor.php';
+        $urlToEdit = api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/editor.php';
         $queryString = $_SERVER['QUERY_STRING'];
         $isExercise = str_contains($queryString, 'exerciseId=');
 

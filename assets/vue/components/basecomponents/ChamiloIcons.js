@@ -144,4 +144,5 @@ export const chamiloIconToClass = {
   "clear-all": "mdi mdi-broom",
   "qrcode": "mdi mdi-qrcode",
   "minus": "mdi mdi-minus",
+  "shield-check": "mdi mdi-shield-check",
 }

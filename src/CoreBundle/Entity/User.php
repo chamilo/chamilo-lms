@@ -737,6 +737,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserAuthSource::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $authSources;
 
+    #[Groups(['user:read', 'user:write'])]
+    #[ORM\Column(name: 'password_updated_at', type: 'datetime', nullable: true)]
+    protected ?DateTimeInterface $passwordUpdatedAt = null;
+
     public function __construct()
     {
         $this->skipResourceNode = false;
@@ -2586,6 +2590,21 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setMfaLastUsed(?DateTimeInterface $mfaLastUsed): self
     {
         $this->mfaLastUsed = $mfaLastUsed;
+
+        return $this;
+    }
+
+    public function getPasswordUpdatedAt(): ?DateTimeInterface
+    {
+        return $this->passwordUpdatedAt;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setPasswordUpdatedAt(?DateTimeInterface $date): self
+    {
+        $this->passwordUpdatedAt = $date;
 
         return $this;
     }

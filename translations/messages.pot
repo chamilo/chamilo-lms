@@ -28442,3 +28442,48 @@ msgstr ""
 
 msgid "Role change denied due to incompatible current assignments:"
 msgstr ""
+
+msgid "Oops! URL not registered."
+msgstr ""
+
+msgid "The address \"%host%\" is not configured in this portal instance."
+msgstr ""
+
+msgid "If the problem persists, please contact support."
+msgstr ""
+
+msgid "Go to home page"
+msgstr ""
+
+msgid "Session requirements and dependencies"
+msgstr ""
+
+msgid "Dependencies"
+msgstr ""
+
+msgid "Sessions that depend on this session"
+msgstr ""
+
+msgid "My Sessions display mode"
+msgstr ""
+
+msgid "Choose how the \"My Sessions\" page is displayed: as a modern visual block (card) view or the classic list style."
+msgstr ""
+
+msgid "Validate prerequisites only within the same session"
+msgstr ""
+
+msgid "When enabled, a course will be considered validated only if passed within the current session. If disabled, courses passed in other sessions will also unlock dependent courses."
+msgstr ""
+
+msgid "Password rotation interval (days)"
+msgstr ""
+
+msgid "Number of days before users must rotate their password (0 = disabled)."
+msgstr ""
+
+msgid "CSRF token is invalid. Please try again."
+msgstr ""
+
+msgid "User not found or invalid."
+msgstr ""

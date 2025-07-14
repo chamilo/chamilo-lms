@@ -61,7 +61,7 @@ if (!($isAllowToEdit || $isMyDir || $groupRights)) {
 $form = new FormValidator(
     'doc_create',
     'post',
-    api_get_path(WEB_PLUGIN_PATH).'onlyoffice/create.php?userId='.Security::remove_XSS($userId)
+    api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/create.php?userId='.Security::remove_XSS($userId)
                                                         .'&groupId='.Security::remove_XSS($groupId)
                                                         .'&courseId='.Security::remove_XSS($courseId)
                                                         .'&sessionId='.Security::remove_XSS($sessionId)

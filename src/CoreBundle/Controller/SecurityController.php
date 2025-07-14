@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use OTPHP\TOTP;
@@ -72,19 +73,21 @@ class SecurityController extends AbstractController
         }
 
         if ($user->getMfaEnabled()) {
-            $totpCode = null;
             $data = json_decode($request->getContent(), true);
-            if (isset($data['totp'])) {
-                $totpCode = $data['totp'];
-            }
+            $totpCode = $data['totp'] ?? null;
 
-            if (null === $totpCode || !$this->isTOTPValid($user, $totpCode)) {
+            if (null === $totpCode) {
                 $tokenStorage->setToken(null);
                 $request->getSession()->invalidate();
 
-                return $this->json([
-                    'requires2FA' => true,
-                ], 200);
+                return $this->json(['requires2FA' => true], 200);
+            }
+
+            if (!$this->isTOTPValid($user, $totpCode)) {
+                $tokenStorage->setToken(null);
+                $request->getSession()->invalidate();
+
+                return $this->json(['error' => 'Invalid 2FA code.'], 401);
             }
         }
 
@@ -141,6 +144,24 @@ class SecurityController extends AbstractController
             return $this->json([
                 'redirect' => $redirectUrl,
             ]);
+        }
+
+        // Password rotation check
+        $days = (int) $this->settingsManager->getSetting('security.password_rotation_days', true);
+        if ($days > 0) {
+            $lastUpdate = $user->getPasswordUpdatedAt() ?? $user->getCreatedAt();
+            $diffDays = (new DateTimeImmutable())->diff($lastUpdate)->days;
+
+            if ($diffDays > $days) {
+                // Clean token & session
+                $tokenStorage->setToken(null);
+                $request->getSession()->invalidate();
+
+                return $this->json([
+                    'rotate_password' => true,
+                    'redirect' => '/account/change-password?rotate=1&userId='.$user->getId(),
+                ]);
+            }
         }
 
         $data = null;

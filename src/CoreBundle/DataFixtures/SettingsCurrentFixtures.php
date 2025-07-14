@@ -115,6 +115,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'session' => [
                 [
+                    'name' => 'user_session_display_mode',
+                    'title' => 'My Sessions display mode',
+                    'comment' => 'Choose how the "My Sessions" page is displayed: as a modern visual block (card) view or the classic list style.',
+                ],
+                [
                     'name' => 'session_list_view_remaining_days',
                     'title' => 'Show remaining days in My Sessions',
                     'comment' => 'If enabled, the session dates on the "My Sessions" page will be replaced by the number of remaining days.',
@@ -248,6 +253,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'course' => [
+                [
+                    'name' => 'course_sequence_valid_only_in_same_session',
+                    'title' => 'Validate prerequisites only within the same session',
+                    'comment' => 'When enabled, a course will be considered validated only if passed within the current session. If disabled, courses passed in other sessions will also unlock dependent courses.',
+                ],
                 [
                     'name' => 'access_url_specific_files',
                     'title' => 'Enable URL-specific files',
@@ -3129,6 +3139,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'security' => [
+                [
+                    'name' => 'password_rotation_days',
+                    'title' => 'Password rotation interval (days)',
+                    'comment' => 'Number of days before users must rotate their password (0 = disabled).',
+                ],
                 [
                     'name' => 'password_requirements',
                     'title' => 'Minimal password syntax requirements',

@@ -70,7 +70,7 @@ class OnlyofficeDocumentManager extends DocumentManager
         $jwtManager = new OnlyofficeJwtManager($this->settingsManager);
         $hashUrl = $jwtManager->getHash($data);
 
-        return api_get_path(WEB_PLUGIN_PATH).$this->settingsManager->plugin->getPluginName().'/callback.php?hash='.$hashUrl;
+        return api_get_path(WEB_PLUGIN_PATH).$this->settingsManager->plugin->get_name().'/callback.php?hash='.$hashUrl;
     }
 
     public function getGroupId()
@@ -102,7 +102,7 @@ class OnlyofficeDocumentManager extends DocumentManager
         $jwtManager = new OnlyofficeJwtManager($this->settingsManager);
         $hashUrl = $jwtManager->getHash($data);
 
-        return api_get_path(WEB_PLUGIN_PATH).'onlyoffice/callback.php?hash='.$hashUrl;
+        return api_get_path(WEB_PLUGIN_PATH).'Onlyoffice/callback.php?hash='.$hashUrl;
     }
 
     public function getGobackUrl(string $fileId): string

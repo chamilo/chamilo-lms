@@ -102,6 +102,7 @@
     "vue-perfect-scrollbar": "^0.2.1",
     "vue-router": "4.5.1",
     "vue-toastification": "^2.0.0-rc.5",
+    "vuedraggable": "^4.1.0",
     "vuex": "^4.1.0",
     "vuex-map-fields": "^1.4.1"
   },
@@ -147,5 +148,5 @@
     "autoprefixer": "10.4.5"
   },
   "license": "GPL-3.0",
-  "packageManager": "yarn@4.9.1"
+  "packageManager": "yarn@4.9.2"
 }

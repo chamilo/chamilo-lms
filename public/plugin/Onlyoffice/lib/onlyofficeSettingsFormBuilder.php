@@ -21,7 +21,7 @@ class OnlyofficeSettingsFormBuilder
     /**
      * Directory with layouts.
      */
-    private const ONLYOFFICE_LAYOUT_DIR = '/onlyoffice/layout/';
+    private const ONLYOFFICE_LAYOUT_DIR = '/Onlyoffice/layout/';
 
     /**
      * Build OnlyofficePlugin settings form.

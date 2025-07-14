@@ -25,12 +25,12 @@ use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Cocur\Slugify\SlugifyInterface;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Event\PostRemoveEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -409,6 +409,7 @@ class ResourceListener
         $em->createQuery('DELETE FROM Chamilo\CourseBundle\Entity\CLpItem i WHERE i.path = :path AND i.itemType = :type')
             ->setParameter('path', $docID)
             ->setParameter('type', 'document')
-            ->execute();
+            ->execute()
+        ;
     }
 }

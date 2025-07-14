@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\CoreBundle\DataFixtures;
+
+use Chamilo\CoreBundle\Entity\ColorTheme;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
+
+class ColorThemeFixtures extends Fixture
+{
+    public function load(ObjectManager $manager): void
+    {
+        $date = api_get_utc_datetime(null, false, true);
+        $json = '{"--color-primary-base":"46 117 163","--color-primary-gradient":"-1 86 130","--color-primary-button-text":"46 117 163","--color-primary-button-alternative-text":"255 255 255","--color-secondary-base":"243 126 47","--color-secondary-gradient":"193 81 -31","--color-secondary-button-text":"255 255 255","--color-tertiary-base":"51 51 51","--color-tertiary-gradient":"103 103 103","--color-tertiary-button-text":"51 51 51","--color-success-base":"119 170 12","--color-success-gradient":"80 128 -43","--color-success-button-text":"255 255 255","--color-info-base":"13 123 253","--color-info-gradient":"-33 83 211","--color-info-button-text":"255 255 255","--color-warning-base":"245 206 1","--color-warning-gradient":"189 151 -65","--color-warning-button-text":"0 0 0","--color-danger-base":"223 59 59","--color-danger-gradient":"180 -13 20","--color-danger-button-text":"255 255 255","--color-form-base":"46 117 163"}';
+
+        // @todo check if we still need skill_rel_skill
+        $theme = (new ColorTheme())
+            ->setTitle('Chamilo')
+            ->setSlug('chamilo')
+            ->setVariables([$json])
+            ->setCreatedAt($date)
+            ->setUpdatedAt($date)
+        ;
+        $manager->persist($theme);
+
+        $manager->flush();
+    }
+}

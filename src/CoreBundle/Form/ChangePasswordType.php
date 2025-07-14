@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Form;
 
 use Chamilo\CoreBundle\Entity\User;
 use OTPHP\TOTP;
+use Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -43,7 +44,8 @@ class ChangePasswordType extends AbstractType
                 'label' => 'Confirm new password',
                 'required' => false,
                 'mapped' => false,
-            ]);
+            ])
+        ;
 
         if ($options['enable_2fa_field']) {
             $builder->add('enable2FA', CheckboxType::class, [
@@ -58,7 +60,7 @@ class ChangePasswordType extends AbstractType
             ]);
         }
 
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) use ($options) {
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) use ($options): void {
             $form = $event->getForm();
             $user = $form->getConfig()->getOption('user');
 
@@ -100,7 +102,7 @@ class ChangePasswordType extends AbstractType
                         $form->get('confirm2FACode')->addError(new FormError('The 2FA code is required.'));
                     } elseif ($user->getMfaSecret()) {
                         $parts = explode('::', base64_decode($user->getMfaSecret()));
-                        if (count($parts) === 2) {
+                        if (2 === \count($parts)) {
                             [$iv, $encryptedData] = $parts;
                             $decryptedSecret = openssl_decrypt(
                                 $encryptedData,
@@ -112,7 +114,7 @@ class ChangePasswordType extends AbstractType
 
                             $totp = TOTP::create($decryptedSecret);
                             $portal = $options['portal_name'] ?? 'Chamilo';
-                            $totp->setLabel($portal . ' - ' . $user->getEmail());
+                            $totp->setLabel($portal.' - '.$user->getEmail());
 
                             if (!$totp->verify($code)) {
                                 $form->get('confirm2FACode')->addError(new FormError('The 2FA code is invalid or expired.'));
@@ -145,22 +147,22 @@ class ChangePasswordType extends AbstractType
     private static function validatePassword(string $password): array
     {
         $errors = [];
-        $req = \Security::getPasswordRequirements()['min'];
+        $req = Security::getPasswordRequirements()['min'];
 
         if (\strlen($password) < $req['length']) {
-            $errors[] = 'Password must be at least ' . $req['length'] . ' characters long.';
+            $errors[] = 'Password must be at least '.$req['length'].' characters long.';
         }
         if ($req['lowercase'] > 0 && !preg_match('/[a-z]/', $password)) {
-            $errors[] = 'Password must contain at least ' . $req['lowercase'] . ' lowercase characters.';
+            $errors[] = 'Password must contain at least '.$req['lowercase'].' lowercase characters.';
         }
         if ($req['uppercase'] > 0 && !preg_match('/[A-Z]/', $password)) {
-            $errors[] = 'Password must contain at least ' . $req['uppercase'] . ' uppercase characters.';
+            $errors[] = 'Password must contain at least '.$req['uppercase'].' uppercase characters.';
         }
         if ($req['numeric'] > 0 && !preg_match('/[0-9]/', $password)) {
-            $errors[] = 'Password must contain at least ' . $req['numeric'] . ' numeric characters.';
+            $errors[] = 'Password must contain at least '.$req['numeric'].' numeric characters.';
         }
         if ($req['specials'] > 0 && !preg_match('/[\W]/', $password)) {
-            $errors[] = 'Password must contain at least ' . $req['specials'] . ' special characters.';
+            $errors[] = 'Password must contain at least '.$req['specials'].' special characters.';
         }
 
         return $errors;

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use DateTimeImmutable;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
@@ -77,7 +78,7 @@ class AccountController extends BaseController
                 $password = $form['password']->getData();
                 if ($password) {
                     $user->setPlainPassword($password);
-                    $user->setPasswordUpdatedAt(new \DateTimeImmutable());
+                    $user->setPasswordUpdatedAt(new DateTimeImmutable());
                 }
             }
 
@@ -113,21 +114,21 @@ class AccountController extends BaseController
 
         if (!$user || !$user instanceof UserInterface) {
             $userId = $request->query->get('userId');
-            //error_log("User not logged in. Received userId from query: " . $userId);
+            // error_log("User not logged in. Received userId from query: " . $userId);
 
             if (!$userId || !ctype_digit($userId)) {
-                //error_log("Access denied: Missing or invalid userId.");
+                // error_log("Access denied: Missing or invalid userId.");
                 throw $this->createAccessDeniedException('This user does not have access to this section.');
             }
 
-            $user = $userRepository->find((int)$userId);
+            $user = $userRepository->find((int) $userId);
 
             if (!$user || !$user instanceof UserInterface) {
-                //error_log("Access denied: User not found with ID $userId");
+                // error_log("Access denied: User not found with ID $userId");
                 throw $this->createAccessDeniedException('User not found or invalid.');
             }
 
-            //error_log("Loaded user by ID: " . $user->getId());
+            // error_log("Loaded user by ID: " . $user->getId());
         }
 
         $isRotation = $request->query->getBoolean('rotate', false);
@@ -163,7 +164,7 @@ class AccountController extends BaseController
 
             $totp = TOTP::create($secret);
             $portalName = $settingsManager->getSetting('platform.institution');
-            $totp->setLabel($portalName . ' - ' . $user->getEmail());
+            $totp->setLabel($portalName.' - '.$user->getEmail());
 
             $qrCodeResult = Builder::create()
                 ->writer(new PngWriter())
@@ -172,7 +173,8 @@ class AccountController extends BaseController
                 ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
                 ->size(300)
                 ->margin(10)
-                ->build();
+                ->build()
+            ;
 
             $qrCodeBase64 = base64_encode($qrCodeResult->getString());
             $showQRCode = true;
@@ -224,7 +226,7 @@ class AccountController extends BaseController
                             ));
                         } else {
                             $user->setPlainPassword($newPassword);
-                            $user->setPasswordUpdatedAt(new \DateTimeImmutable());
+                            $user->setPasswordUpdatedAt(new DateTimeImmutable());
                             $userRepository->updateUser($user);
                             $this->addFlash('success', 'Password updated successfully.');
 
@@ -244,10 +246,10 @@ class AccountController extends BaseController
                     }
                 }
             } else {
-                error_log("Form is NOT valid.");
+                error_log('Form is NOT valid.');
             }
         } else {
-            error_log("Form NOT submitted yet.");
+            error_log('Form NOT submitted yet.');
         }
 
         return $this->render('@ChamiloCore/Account/change_password.html.twig', [
@@ -267,7 +269,7 @@ class AccountController extends BaseController
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipherMethod));
         $encryptedSecret = openssl_encrypt($secret, $cipherMethod, $encryptionKey, 0, $iv);
 
-        return base64_encode($iv . '::' . $encryptedSecret);
+        return base64_encode($iv.'::'.$encryptedSecret);
     }
 
     /**

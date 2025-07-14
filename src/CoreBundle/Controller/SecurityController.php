@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use OTPHP\TOTP;
@@ -149,7 +150,7 @@ class SecurityController extends AbstractController
         $days = (int) $this->settingsManager->getSetting('security.password_rotation_days', true);
         if ($days > 0) {
             $lastUpdate = $user->getPasswordUpdatedAt() ?? $user->getCreatedAt();
-            $diffDays = (new \DateTimeImmutable())->diff($lastUpdate)->days;
+            $diffDays = (new DateTimeImmutable())->diff($lastUpdate)->days;
 
             if ($diffDays > $days) {
                 // Clean token & session
@@ -158,7 +159,7 @@ class SecurityController extends AbstractController
 
                 return $this->json([
                     'rotate_password' => true,
-                    'redirect' => '/account/change-password?rotate=1&userId=' . $user->getId(),
+                    'redirect' => '/account/change-password?rotate=1&userId='.$user->getId(),
                 ]);
             }
         }

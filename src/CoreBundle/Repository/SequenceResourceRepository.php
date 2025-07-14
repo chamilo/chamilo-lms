@@ -274,9 +274,9 @@ class SequenceResourceRepository extends ServiceEntityRepository
                                     $resourceItem['status'] = $resourceItem['status'] && Category::userFinishedCourse(
                                         $userId,
                                         $category,
-                                            true,
-                                            $course->getId(),
-                                            $resource->getId()
+                                        true,
+                                        $course->getId(),
+                                        $resource->getId()
                                     );
                                 }
                             }
@@ -375,7 +375,6 @@ class SequenceResourceRepository extends ServiceEntityRepository
     public function checkSequenceAreCompleted(array $sequences)
     {
         foreach ($sequences as $sequence) {
-
             if (!isset($sequence['requirements'])) {
                 continue;
             }
@@ -463,7 +462,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
             $graph = $sequence->getUnSerializeGraph();
             $vertex = $graph->getVertex($resourceId);
 
-            $edges = $itemType === 'requirements'
+            $edges = 'requirements' === $itemType
                 ? $vertex->getVerticesEdgeFrom()
                 : $vertex->getVerticesEdgeTo();
 
@@ -479,9 +478,12 @@ class SequenceResourceRepository extends ServiceEntityRepository
                 switch ($resourceType) {
                     case SequenceResource::SESSION_TYPE:
                         $resource = $em->getRepository(Session::class)->find($vertexId);
+
                         break;
+
                     case SequenceResource::COURSE_TYPE:
                         $resource = $em->getRepository(Course::class)->find($vertexId);
+
                         break;
                 }
 
@@ -532,7 +534,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
                         $id = $resource->getId();
                         $resourceItem = ['name' => $resource->getName(), 'status' => true];
 
-                        /* @var SessionRelCourse $sessionCourse */
+                        /** @var SessionRelCourse $sessionCourse */
                         foreach ($resource->getCourses() as $sessionCourse) {
                             $course = $sessionCourse->getCourse();
                             $session = $sessionCourse->getSession();
@@ -544,14 +546,15 @@ class SequenceResourceRepository extends ServiceEntityRepository
 
                             foreach ($categories as $category) {
                                 $resourceItem['status'] = $resourceItem['status'] && Category::userFinishedCourse(
-                                        $userId,
-                                        $category,
-                                        true,
-                                        $course->getId(),
-                                        $sessionId
-                                    );
+                                    $userId,
+                                    $category,
+                                    true,
+                                    $course->getId(),
+                                    $sessionId
+                                );
                             }
                         }
+
                         break;
 
                     case SequenceResource::COURSE_TYPE:
@@ -560,9 +563,11 @@ class SequenceResourceRepository extends ServiceEntityRepository
 
                         if (!$status) {
                             foreach (SessionManager::get_session_by_course($id) as $session) {
-                                if (in_array($session['id'], $sessionUserList)) {
+                                if (\in_array($session['id'], $sessionUserList)) {
                                     $status = $this->checkCourseRequirements($userId, $resource, $session['id']);
-                                    if ($status) break;
+                                    if ($status) {
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -573,6 +578,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
                             'code' => $resource->getCode(),
                             'status' => $status,
                         ];
+
                         break;
                 }
 

@@ -52,7 +52,6 @@ use Event;
 use Exception;
 use Exercise;
 use ExtraFieldValue;
-use Fhaculty\Graph\Graph;
 use Graphp\GraphViz\GraphViz;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -290,6 +289,7 @@ class CourseController extends ToolBaseController
                 foreach ($sequence['requirements'] ?? [] as $resource) {
                     if ($resource instanceof Course) {
                         $hasValidRequirement = true;
+
                         break 2;
                     }
                 }
@@ -308,7 +308,7 @@ class CourseController extends ToolBaseController
 
         if ($sequenceResource && $sequenceResource->hasGraph()) {
             $graph = $sequenceResource->getSequence()->getUnSerializeGraph();
-            if ($graph !== null) {
+            if (null !== $graph) {
                 $graph->setAttribute('graphviz.node.fontname', 'arial');
                 $graphviz = new GraphViz();
                 $graphImage = $graphviz->createImageSrc($graph);

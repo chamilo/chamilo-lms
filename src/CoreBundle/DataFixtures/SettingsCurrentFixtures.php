@@ -3140,8 +3140,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'security' => [
                 [
-                    'name'    => 'password_rotation_days',
-                    'title'   => 'Password rotation interval (days)',
+                    'name' => 'password_rotation_days',
+                    'title' => 'Password rotation interval (days)',
                     'comment' => 'Number of days before users must rotate their password (0 = disabled).',
                 ],
                 [

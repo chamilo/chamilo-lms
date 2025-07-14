@@ -72,19 +72,21 @@ class SecurityController extends AbstractController
         }
 
         if ($user->getMfaEnabled()) {
-            $totpCode = null;
             $data = json_decode($request->getContent(), true);
-            if (isset($data['totp'])) {
-                $totpCode = $data['totp'];
-            }
+            $totpCode = $data['totp'] ?? null;
 
-            if (null === $totpCode || !$this->isTOTPValid($user, $totpCode)) {
+            if (null === $totpCode) {
                 $tokenStorage->setToken(null);
                 $request->getSession()->invalidate();
 
-                return $this->json([
-                    'requires2FA' => true,
-                ], 200);
+                return $this->json(['requires2FA' => true], 200);
+            }
+
+            if (!$this->isTOTPValid($user, $totpCode)) {
+                $tokenStorage->setToken(null);
+                $request->getSession()->invalidate();
+
+                return $this->json(['error' => 'Invalid 2FA code.'], 401);
             }
         }
 

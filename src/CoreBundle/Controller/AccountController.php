@@ -24,6 +24,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -46,8 +47,12 @@ class AccountController extends BaseController
     ) {}
 
     #[Route('/edit', name: 'chamilo_core_account_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo, SettingsManager $settingsManager): Response
-    {
+    public function edit(
+        Request $request,
+        UserRepository $userRepository,
+        IllustrationRepository $illustrationRepo,
+        SettingsManager $settingsManager
+    ): Response {
         $user = $this->userHelper->getCurrent();
 
         if (!\is_object($user) || !$user instanceof UserInterface) {
@@ -99,6 +104,8 @@ class AccountController extends BaseController
         Request $request,
         UserRepository $userRepository,
         CsrfTokenManagerInterface $csrfTokenManager,
+        SettingsManager $settingsManager,
+        UserPasswordHasherInterface $passwordHasher,
         TokenStorageInterface $tokenStorage,
     ): Response {
         /** @var ?User $user */
@@ -128,15 +135,35 @@ class AccountController extends BaseController
         $form = $this->createForm(ChangePasswordType::class, [
             'enable2FA' => $user->getMfaEnabled(),
         ], [
+            'user' => $user,
+            'portal_name' => $settingsManager->getSetting('platform.institution'),
+            'password_hasher' => $passwordHasher,
             'enable_2fa_field' => !$isRotation,
         ]);
         $form->handleRequest($request);
 
+        $session = $request->getSession();
         $qrCodeBase64 = null;
-        if ($user->getMfaEnabled() && 'TOTP' === $user->getMfaService() && $user->getMfaSecret()) {
-            $decryptedSecret = $this->decryptTOTPSecret($user->getMfaSecret(), $_ENV['APP_SECRET']);
-            $totp = TOTP::create($decryptedSecret);
-            $totp->setLabel($user->getEmail());
+        $showQRCode = false;
+
+        // Build QR code preview if user opts to enable 2FA but hasn't saved yet
+        if (
+            $form->isSubmitted()
+            && $form->has('enable2FA')
+            && $form->get('enable2FA')->getData()
+            && !$user->getMfaSecret()
+        ) {
+            if (!$session->has('temporary_mfa_secret')) {
+                $totp = TOTP::create();
+                $secret = $totp->getSecret();
+                $session->set('temporary_mfa_secret', $secret);
+            } else {
+                $secret = $session->get('temporary_mfa_secret');
+            }
+
+            $totp = TOTP::create($secret);
+            $portalName = $settingsManager->getSetting('platform.institution');
+            $totp->setLabel($portalName . ' - ' . $user->getEmail());
 
             $qrCodeResult = Builder::create()
                 ->writer(new PngWriter())
@@ -148,6 +175,7 @@ class AccountController extends BaseController
                 ->build();
 
             $qrCodeBase64 = base64_encode($qrCodeResult->getString());
+            $showQRCode = true;
         }
 
         if ($form->isSubmitted()) {
@@ -164,30 +192,18 @@ class AccountController extends BaseController
                         : false;
 
                     if ($enable2FA && !$user->getMfaSecret()) {
-                        $totp = TOTP::create();
-                        $totp->setLabel($user->getEmail());
-                        $encryptedSecret = $this->encryptTOTPSecret($totp->getSecret(), $_ENV['APP_SECRET']);
+                        $secret = $session->get('temporary_mfa_secret');
+                        $encryptedSecret = $this->encryptTOTPSecret($secret, $_ENV['APP_SECRET']);
                         $user->setMfaSecret($encryptedSecret);
                         $user->setMfaEnabled(true);
                         $user->setMfaService('TOTP');
                         $userRepository->updateUser($user);
 
-                        $qrCodeResult = Builder::create()
-                            ->writer(new PngWriter())
-                            ->data($totp->getProvisioningUri())
-                            ->encoding(new Encoding('UTF-8'))
-                            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
-                            ->size(300)
-                            ->margin(10)
-                            ->build();
+                        $session->remove('temporary_mfa_secret');
 
-                        $qrCodeBase64 = base64_encode($qrCodeResult->getString());
+                        $this->addFlash('success', '2FA activated successfully.');
 
-                        return $this->render('@ChamiloCore/Account/change_password.html.twig', [
-                            'form' => $form->createView(),
-                            'qrCode' => $qrCodeBase64,
-                            'user' => $user,
-                        ]);
+                        return $this->redirectToRoute('chamilo_core_account_home');
                     }
 
                     if (!$isRotation && !$enable2FA && $user->getMfaEnabled()) {
@@ -210,8 +226,9 @@ class AccountController extends BaseController
                             $user->setPlainPassword($newPassword);
                             $user->setPasswordUpdateAt(new \DateTimeImmutable());
                             $userRepository->updateUser($user);
-                            $this->addFlash('success', 'Password updated successfully');
+                            $this->addFlash('success', 'Password updated successfully.');
 
+                            // Re-login if the user was not logged
                             if (!$this->getUser()) {
                                 $token = new UsernamePasswordToken(
                                     $user,
@@ -237,6 +254,7 @@ class AccountController extends BaseController
             'form' => $form->createView(),
             'qrCode' => $qrCodeBase64,
             'user' => $user,
+            'showQRCode' => $showQRCode,
         ]);
     }
 
@@ -249,7 +267,7 @@ class AccountController extends BaseController
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipherMethod));
         $encryptedSecret = openssl_encrypt($secret, $cipherMethod, $encryptionKey, 0, $iv);
 
-        return base64_encode($iv.'::'.$encryptedSecret);
+        return base64_encode($iv . '::' . $encryptedSecret);
     }
 
     /**

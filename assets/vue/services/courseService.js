@@ -154,6 +154,7 @@ export default {
       return null
     }
   },
+
   /**
    * Retrieves the ID of the auto-launchable learnpaths in a course, if configured.
    *
@@ -179,6 +180,7 @@ export default {
       return null
     }
   },
+
   /**
    * Loads public catalogue courses filtered by access_url and usergroup rules.
    * @returns {Promise<{items: Array}>}
@@ -227,10 +229,10 @@ export default {
 
     // Not favorite → create
     await api.post("/api/user_rel_course_votes", {
-      user:   `/api/users/${userId}`,
+      user: `/api/users/${userId}`,
       course: `/api/courses/${courseId}`,
-      vote:   1,
-      url:    `/api/access_urls/${window.access_url_id ?? 1}`,
+      vote: 1,
+      url: `/api/access_urls/${window.access_url_id ?? 1}`,
     })
 
     return true
@@ -289,5 +291,15 @@ export default {
     }
 
     return data
-  }
+  },
+
+  getNextCourse: async (courseId, sessionId = 0, dependents = false) => {
+    const { data } = await api.get(`/course/${courseId}/next-course`, {
+      params: {
+        sid: sessionId,
+        dependents: dependents ? 1 : 0,
+      },
+    })
+    return data
+  },
 }

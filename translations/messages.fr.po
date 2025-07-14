@@ -20179,7 +20179,7 @@ msgid "Event type name"
 msgstr "Nom du type d'événement"
 
 msgid "Hide campus from public platforms list"
-msgstr "Masquer le campus de la liste public des plates-formes"
+msgstr "Masquer le campus de la liste publique des plates-formes"
 
 msgid "Chamilo official services providers"
 msgstr "Fournisseurs officiels de Chamilo"

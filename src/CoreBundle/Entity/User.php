@@ -739,7 +739,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'password_update_at', type: 'datetime', nullable: true)]
-    protected ?\DateTimeInterface $passwordUpdateAt = null;
+    protected ?\DateTimeInterface $passwordUpdatedAt = null;
 
     public function __construct()
     {
@@ -2597,9 +2597,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return \DateTimeInterface|null
      */
-    public function getPasswordUpdateAt(): ?\DateTimeInterface
+    public function getPasswordUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->passwordUpdateAt;
+        return $this->passwordUpdatedAt;
     }
 
     /**
@@ -2607,9 +2607,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @return $this
      */
-    public function setPasswordUpdateAt(?\DateTimeInterface $date): self
+    public function setPasswordUpdatedAt(?\DateTimeInterface $date): self
     {
-        $this->passwordUpdateAt = $date;
+        $this->passwordUpdatedAt = $date;
         return $this;
     }
 }

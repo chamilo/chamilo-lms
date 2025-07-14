@@ -148,7 +148,7 @@ class SecurityController extends AbstractController
         // Password rotation check
         $days = (int) $this->settingsManager->getSetting('security.password_rotation_days', true);
         if ($days > 0) {
-            $lastUpdate = $user->getPasswordUpdateAt() ?? $user->getCreatedAt();
+            $lastUpdate = $user->getPasswordUpdatedAt() ?? $user->getCreatedAt();
             $diffDays = (new \DateTimeImmutable())->diff($lastUpdate)->days;
 
             if ($diffDays > $days) {

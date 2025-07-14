@@ -20,12 +20,16 @@ use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 use Endroid\QrCode\Writer\PngWriter;
 use OTPHP\TOTP;
 use Security;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -43,8 +47,12 @@ class AccountController extends BaseController
     ) {}
 
     #[Route('/edit', name: 'chamilo_core_account_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo, SettingsManager $settingsManager): Response
-    {
+    public function edit(
+        Request $request,
+        UserRepository $userRepository,
+        IllustrationRepository $illustrationRepo,
+        SettingsManager $settingsManager
+    ): Response {
         $user = $this->userHelper->getCurrent();
 
         if (!\is_object($user) || !$user instanceof UserInterface) {
@@ -69,6 +77,7 @@ class AccountController extends BaseController
                 $password = $form['password']->getData();
                 if ($password) {
                     $user->setPlainPassword($password);
+                    $user->setPasswordUpdateAt(new \DateTimeImmutable());
                 }
             }
 
@@ -96,32 +105,54 @@ class AccountController extends BaseController
         UserRepository $userRepository,
         CsrfTokenManagerInterface $csrfTokenManager,
         SettingsManager $settingsManager,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        TokenStorageInterface $tokenStorage,
     ): Response {
-        /** @var User $user */
+        /** @var ?User $user */
         $user = $this->getUser();
 
-        // Ensure user is authenticated and has proper interface
-        if (!\is_object($user) || !$user instanceof UserInterface) {
-            throw $this->createAccessDeniedException('This user does not have access to this section');
+        if (!$user || !$user instanceof UserInterface) {
+            $userId = $request->query->get('userId');
+            //error_log("User not logged in. Received userId from query: " . $userId);
+
+            if (!$userId || !ctype_digit($userId)) {
+                //error_log("Access denied: Missing or invalid userId.");
+                throw $this->createAccessDeniedException('This user does not have access to this section.');
+            }
+
+            $user = $userRepository->find((int)$userId);
+
+            if (!$user || !$user instanceof UserInterface) {
+                //error_log("Access denied: User not found with ID $userId");
+                throw $this->createAccessDeniedException('User not found or invalid.');
+            }
+
+            //error_log("Loaded user by ID: " . $user->getId());
         }
 
-        // Build the form and inject user-related options
+        $isRotation = $request->query->getBoolean('rotate', false);
+
         $form = $this->createForm(ChangePasswordType::class, [
             'enable2FA' => $user->getMfaEnabled(),
         ], [
             'user' => $user,
             'portal_name' => $settingsManager->getSetting('platform.institution'),
             'password_hasher' => $passwordHasher,
+            'enable_2fa_field' => !$isRotation,
         ]);
-
         $form->handleRequest($request);
+
         $session = $request->getSession();
         $qrCodeBase64 = null;
         $showQRCode = false;
 
-        // Generate TOTP secret and QR code for 2FA activation
-        if ($form->get('enable2FA')->getData() && !$user->getMfaSecret()) {
+        // Build QR code preview if user opts to enable 2FA but hasn't saved yet
+        if (
+            $form->isSubmitted()
+            && $form->has('enable2FA')
+            && $form->get('enable2FA')->getData()
+            && !$user->getMfaSecret()
+        ) {
             if (!$session->has('temporary_mfa_secret')) {
                 $totp = TOTP::create();
                 $secret = $totp->getSecret();
@@ -134,7 +165,6 @@ class AccountController extends BaseController
             $portalName = $settingsManager->getSetting('platform.institution');
             $totp->setLabel($portalName . ' - ' . $user->getEmail());
 
-            // Build QR code image
             $qrCodeResult = Builder::create()
                 ->writer(new PngWriter())
                 ->data($totp->getProvisioningUri())
@@ -148,47 +178,78 @@ class AccountController extends BaseController
             $showQRCode = true;
         }
 
-        // Handle form submission
-        if ($form->isSubmitted() && $form->isValid()) {
-            $newPassword = $form->get('newPassword')->getData();
-            $enable2FA = $form->get('enable2FA')->getData();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $submittedToken = $request->request->get('_token');
+                if (!$csrfTokenManager->isTokenValid(new CsrfToken('change_password', $submittedToken))) {
+                    $form->addError(new FormError($this->translator->trans('CSRF token is invalid. Please try again.')));
+                } else {
+                    $currentPassword = $form->get('currentPassword')->getData();
+                    $newPassword = $form->get('newPassword')->getData();
+                    $confirmPassword = $form->get('confirmPassword')->getData();
+                    $enable2FA = !$isRotation && $form->has('enable2FA')
+                        ? $form->get('enable2FA')->getData()
+                        : false;
 
-            // Enable 2FA and store encrypted secret
-            if ($enable2FA && !$user->getMfaSecret() && $session->has('temporary_mfa_secret')) {
-                $secret = $session->get('temporary_mfa_secret');
-                $encryptedSecret = $this->encryptTOTPSecret($secret, $_ENV['APP_SECRET']);
+                    if ($enable2FA && !$user->getMfaSecret()) {
+                        $secret = $session->get('temporary_mfa_secret');
+                        $encryptedSecret = $this->encryptTOTPSecret($secret, $_ENV['APP_SECRET']);
+                        $user->setMfaSecret($encryptedSecret);
+                        $user->setMfaEnabled(true);
+                        $user->setMfaService('TOTP');
+                        $userRepository->updateUser($user);
 
-                $user->setMfaSecret($encryptedSecret);
-                $user->setMfaEnabled(true);
-                $user->setMfaService('TOTP');
+                        $session->remove('temporary_mfa_secret');
 
-                $userRepository->updateUser($user);
-                $session->remove('temporary_mfa_secret');
+                        $this->addFlash('success', '2FA activated successfully.');
 
-                $this->addFlash('success', '2FA activated successfully.');
-                return $this->redirectToRoute('chamilo_core_account_home');
+                        return $this->redirectToRoute('chamilo_core_account_home');
+                    }
+
+                    if (!$isRotation && !$enable2FA && $user->getMfaEnabled()) {
+                        $user->setMfaEnabled(false);
+                        $user->setMfaSecret(null);
+                        $userRepository->updateUser($user);
+                        $this->addFlash('success', '2FA disabled successfully.');
+                    }
+
+                    if ($newPassword || $confirmPassword || $currentPassword) {
+                        if (!$userRepository->isPasswordValid($user, $currentPassword)) {
+                            $form->get('currentPassword')->addError(new FormError(
+                                $this->translator->trans('The current password is incorrect')
+                            ));
+                        } elseif ($newPassword !== $confirmPassword) {
+                            $form->get('confirmPassword')->addError(new FormError(
+                                $this->translator->trans('Passwords do not match')
+                            ));
+                        } else {
+                            $user->setPlainPassword($newPassword);
+                            $user->setPasswordUpdateAt(new \DateTimeImmutable());
+                            $userRepository->updateUser($user);
+                            $this->addFlash('success', 'Password updated successfully.');
+
+                            // Re-login if the user was not logged
+                            if (!$this->getUser()) {
+                                $token = new UsernamePasswordToken(
+                                    $user,
+                                    'main',
+                                    $user->getRoles()
+                                );
+                                $tokenStorage->setToken($token);
+                                $request->getSession()->set('_security_main', serialize($token));
+                            }
+
+                            return $this->redirectToRoute('chamilo_core_account_home');
+                        }
+                    }
+                }
+            } else {
+                error_log("Form is NOT valid.");
             }
-
-            // Disable 2FA if it was previously enabled
-            if (!$enable2FA && $user->getMfaEnabled()) {
-                $user->setMfaEnabled(false);
-                $user->setMfaSecret(null);
-
-                $userRepository->updateUser($user);
-                $this->addFlash('success', '2FA disabled successfully.');
-                return $this->redirectToRoute('chamilo_core_account_home');
-            }
-
-            // Update password if provided
-            if (!empty($newPassword)) {
-                $user->setPlainPassword($newPassword);
-                $userRepository->updateUser($user);
-                $this->addFlash('success', 'Password updated successfully.');
-                return $this->redirectToRoute('chamilo_core_account_home');
-            }
+        } else {
+            error_log("Form NOT submitted yet.");
         }
 
-        // Render form with optional QR code for 2FA
         return $this->render('@ChamiloCore/Account/change_password.html.twig', [
             'form' => $form->createView(),
             'qrCode' => $qrCodeBase64,
@@ -206,18 +267,7 @@ class AccountController extends BaseController
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipherMethod));
         $encryptedSecret = openssl_encrypt($secret, $cipherMethod, $encryptionKey, 0, $iv);
 
-        return base64_encode($iv.'::'.$encryptedSecret);
-    }
-
-    /**
-     * Validates the provided TOTP code for the given user.
-     */
-    private function isTOTPValid(User $user, string $totpCode): bool
-    {
-        $decryptedSecret = $this->decryptTOTPSecret($user->getMfaSecret(), $_ENV['APP_SECRET']);
-        $totp = TOTP::create($decryptedSecret);
-
-        return $totp->verify($totpCode);
+        return base64_encode($iv . '::' . $encryptedSecret);
     }
 
     /**

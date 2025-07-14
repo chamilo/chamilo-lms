@@ -42,6 +42,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'security_session_cookie_samesite_none' => 'false',
             'anonymous_autoprovisioning' => 'false',
             'access_to_personal_file_for_all' => 'false',
+            'password_rotation_days' => '0',
         ]);
 
         $allowedTypes = [
@@ -78,6 +79,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('security_session_cookie_samesite_none', YesNoType::class)
             ->add('anonymous_autoprovisioning', YesNoType::class)
             ->add('access_to_personal_file_for_all', YesNoType::class)
+            ->add('password_rotation_days', TextType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

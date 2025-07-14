@@ -28507,3 +28507,15 @@ msgstr "Validate prerequisites only within the same session"
 
 msgid "When enabled, a course will be considered validated only if passed within the current session. If disabled, courses passed in other sessions will also unlock dependent courses."
 msgstr "When enabled, a course will be considered validated only if passed within the current session. If disabled, courses passed in other sessions will also unlock dependent courses."
+
+msgid "Password rotation interval (days)"
+msgstr "Password rotation interval (days)"
+
+msgid "Number of days before users must rotate their password (0 = disabled)."
+msgstr "Number of days before users must rotate their password (0 = disabled)."
+
+msgid "CSRF token is invalid. Please try again."
+msgstr "CSRF token is invalid. Please try again."
+
+msgid "User not found or invalid."
+msgstr "User not found or invalid."

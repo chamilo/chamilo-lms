@@ -145,6 +145,24 @@ class SecurityController extends AbstractController
             ]);
         }
 
+        // Password rotation check
+        $days = (int) $this->settingsManager->getSetting('security.password_rotation_days', true);
+        if ($days > 0) {
+            $lastUpdate = $user->getPasswordUpdateAt() ?? $user->getCreatedAt();
+            $diffDays = (new \DateTimeImmutable())->diff($lastUpdate)->days;
+
+            if ($diffDays > $days) {
+                // Clean token & session
+                $tokenStorage->setToken(null);
+                $request->getSession()->invalidate();
+
+                return $this->json([
+                    'rotate_password' => true,
+                    'redirect' => '/account/change-password?rotate=1&userId=' . $user->getId(),
+                ]);
+            }
+        }
+
         $data = null;
         if ($user) {
             $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]);

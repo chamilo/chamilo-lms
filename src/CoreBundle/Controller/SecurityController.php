@@ -102,9 +102,10 @@ class SecurityController extends AbstractController
 
         $extraFieldValuesRepository = $this->entityManager->getRepository(ExtraFieldValues::class);
         $legalTermsRepo = $this->entityManager->getRepository(Legal::class);
-        if ($user->hasRole('ROLE_STUDENT')
-            && 'true' === $this->settingsManager->getSetting('allow_terms_conditions')
-            && 'login' === $this->settingsManager->getSetting('load_term_conditions_section')
+        if (
+            $user->hasRole('ROLE_STUDENT')
+            && 'true' === $this->settingsManager->getSetting('allow_terms_conditions', true)
+            && 'login' === $this->settingsManager->getSetting('load_term_conditions_section', true)
         ) {
             $termAndConditionStatus = false;
             $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
@@ -118,18 +119,15 @@ class SecurityController extends AbstractController
             }
 
             if (false === $termAndConditionStatus) {
-                /*$tempTermAndCondition = ['user_id' => $user->getId()];
+                $tempTermAndCondition = ['user_id' => $user->getId()];
                 $this->tokenStorage->setToken(null);
                 $request->getSession()->invalidate();
                 $request->getSession()->start();
                 $request->getSession()->set('term_and_condition', $tempTermAndCondition);
-                */
-
-                $request->getSession()->set('term_and_condition', ['user_id' => $user->getId()]);
 
                 return $this->json([
-                    'requiresTerms' => true,
-                    'redirect'     => '/main/auth/tc.php?return=' . urlencode('/'),
+                    'load_terms' => true,
+                    'redirect'   => '/main/auth/tc.php?return=' . urlencode('/home'),
                 ]);
             }
             $request->getSession()->remove('term_and_condition');

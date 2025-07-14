@@ -29,17 +29,15 @@ export function useLogin() {
     requires2FA.value = false
 
     try {
-      // Build the payload using OFAJ style
+      // Prepare payload as expected by securityService
       const payload = {
-        username: login,
+        login,
         password,
         _remember_me,
+        totp,
       }
 
-      if (totp) {
-        payload.totp = totp
-      }
-
+      // Add returnUrl if exists in query param
       const returnUrl = route.query.redirect?.toString() || null
       if (returnUrl) {
         payload.returnUrl = returnUrl
@@ -47,13 +45,13 @@ export function useLogin() {
 
       const responseData = await securityService.login(payload)
 
-      // Handle 2FA
+      // Handle 2FA flow
       if (responseData.requires2FA && !payload.totp) {
         requires2FA.value = true
         return { success: false, requires2FA: true }
       }
 
-      // Handle rotate password flow
+      // Handle forced password rotation
       if (responseData.rotate_password && responseData.redirect) {
         window.location.href = responseData.redirect
         return { success: true, rotate: true }
@@ -65,13 +63,13 @@ export function useLogin() {
         return { success: false, error: responseData.error }
       }
 
-      // Handle terms and conditions redirection
+      // Handle terms and conditions redirect
       if (responseData.load_terms && responseData.redirect) {
         window.location.href = responseData.redirect
         return { success: true, redirect: responseData.redirect }
       }
 
-      // External redirect parameter
+      // Handle external redirect param
       if (route.query.redirect) {
         const redirectParam = route.query.redirect.toString()
         if (isValidHttpUrl(redirectParam)) {
@@ -88,16 +86,17 @@ export function useLogin() {
         return { success: true }
       }
 
+      // Save user info
       securityStore.setUser(responseData)
       await platformConfigurationStore.initialize()
 
-      // Handle redirect param again after login
+      // Redirect again if redirect param still exists
       if (route.query.redirect) {
         await router.replace({ path: route.query.redirect.toString() })
         return { success: true }
       }
 
-      // Handle post-login redirection based on platform config
+      // Default platform redirect after login
       const setting = platformConfigurationStore.getSetting("registration.redirect_after_login")
       let target = "/"
 

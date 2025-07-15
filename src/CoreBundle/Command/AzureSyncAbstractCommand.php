@@ -97,7 +97,8 @@ abstract class AzureSyncAbstractCommand extends Command
             try {
                 $this->generateOrRefreshToken($token);
 
-                $azureUsersRequest = $this->provider->get(
+                $azureUsersRequest = $this->provider->request(
+                    'get',
                     $this->providerParams['script_users_delta'] ? "/v1.0/users/delta?$query" : "/v1.0/users?$query",
                     $token
                 );
@@ -105,7 +106,7 @@ abstract class AzureSyncAbstractCommand extends Command
                 throw new Exception('Exception when requesting users from Azure: '.$e->getMessage());
             }
 
-            $azureUsersInfo = $azureUsersRequest ?? [];
+            $azureUsersInfo = $azureUsersRequest['value'] ?? [];
 
             foreach ($azureUsersInfo as $azureUserInfo) {
                 $azureUserInfo['mail'] = $azureUserInfo['mail'] ?? null;
@@ -148,7 +149,8 @@ abstract class AzureSyncAbstractCommand extends Command
             try {
                 $this->generateOrRefreshToken($token);
 
-                $azureGroupMembersRequest = $this->provider->get(
+                $azureGroupMembersRequest = $this->provider->request(
+                    'get',
                     "/v1.0/groups/$groupUid/members?$query",
                     $token
                 );
@@ -198,7 +200,8 @@ abstract class AzureSyncAbstractCommand extends Command
             try {
                 $this->generateOrRefreshToken($token);
 
-                $azureGroupsRequest = $this->provider->get(
+                $azureGroupsRequest = $this->provider->request(
+                    'get',
                     $getUsergroupsDelta ? "/v1.0/groups/delta?$query" : "/v1.0/groups?$query",
                     $token
                 );

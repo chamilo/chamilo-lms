@@ -35,6 +35,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 'allow_fields_inscription' => '',
                 'send_inscription_msg_to_inbox' => 'false',
                 'redirect_after_login' => '',
+                'hide_legal_accept_checkbox' => 'false',
             ])
             ->setTransformer('required_profile_fields', new ArrayToIdentifierTransformer())
             ->setTransformer('extendedprofile_registration', new ArrayToIdentifierTransformer())
@@ -101,6 +102,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
             ->add('redirect_after_login', TextareaType::class, [
                 'required' => false,
             ])
+            ->add('hide_legal_accept_checkbox', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

@@ -107,8 +107,8 @@ function replaceCodes(array $list): Generator
         yield "Replacing course code in exercises content";
 
         if (false === $previewMode) {
-            ExerciseLib::replaceTermsInContent("/courses/$currentDirectory/", "/courses/$newDirectory/");
-            ExerciseLib::replaceTermsInContent("cidReq=$currentCode", "cidReq=$newCode");
+            api_replace_terms_in_content("/courses/$currentDirectory/", "/courses/$newDirectory/");
+            api_replace_terms_in_content("cidReq=$currentCode", "cidReq=$newCode");
         } else {
             yield "  Content replacement not executed: previewMode=true";
         }

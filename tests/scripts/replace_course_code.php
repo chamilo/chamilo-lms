@@ -17,6 +17,8 @@ require __DIR__.'/../../main/inc/global.inc.php';
 $list = [
     'CURRENTCODE' => 'NEWCODE',
 ];
+$previewMode = false;
+$updateFilesAndDirs = true;
 
 foreach (replaceCodes($list) as $message) {
     echo time()." -- $message".PHP_EOL;
@@ -24,6 +26,7 @@ foreach (replaceCodes($list) as $message) {
 
 function replaceCodes(array $list): Generator
 {
+    global $updateFilesAndDirs, $previewMode;
     foreach ($list as $currentCode => $newCode) {
         $currentCodeExists = CourseManager::course_code_exists($currentCode);
 
@@ -54,17 +57,22 @@ function replaceCodes(array $list): Generator
 
         $newCode = CourseManager::generate_course_code($newCode);
 
-        yield "New code to use for '$currentCode' is '$newCode' and its directory is '$newDirectory'";
+        yield "New code to use for '$currentCode' is '$newCode' and its (new) directory is '$newDirectory'";
 
-        Database::update(
-            'course',
-            [
-                'code' => $newCode,
-                'visual_code' => $newVisualCode,
-                'directory' => $newDirectory,
-            ],
-            ['code = ?' => [$currentCode]]
-        );
+        if (false === $previewMode) {
+            Database::update(
+                'course',
+                [
+                    'code' => $newCode,
+                    'visual_code' => $newVisualCode,
+                    'directory' => $newDirectory,
+                ],
+                ['code = ?' => [$currentCode]]
+            );
+        } else {
+            yield "  Course table not updated: previewMode=true";
+        }
+
 
         $tablesWithCode = [
             'course_rel_class' => ['course_code'],
@@ -82,34 +90,51 @@ function replaceCodes(array $list): Generator
 
         Database::query('SET foreign_key_checks = 0');
 
-        foreach ($tablesWithCode as $tblName => $fieldNames) {
-            foreach ($fieldNames as $fieldName) {
-                Database::update(
-                    $tblName,
-                    [$fieldName => $newCode],
-                    ["$fieldName = ?" => [$currentCode]]
-                );
+        if (false === $previewMode) {
+            foreach ($tablesWithCode as $tblName => $fieldNames) {
+                foreach ($fieldNames as $fieldName) {
+                        Database::update(
+                            $tblName,
+                            [$fieldName => $newCode],
+                            ["$fieldName = ?" => [$currentCode]]
+                        );
+                }
             }
+        } else {
+            yield "  Tables with course code not updated for $currentCode: previewMode=true";
         }
 
         yield "Replacing course code in exercises content";
 
-        ExerciseLib::replaceTermsInContent("/courses/$currentDirectory/", "/courses/$newDirectory/");
-        ExerciseLib::replaceTermsInContent("cidReq=$currentCode", "cidReq=$newCode");
+        if (false === $previewMode) {
+            ExerciseLib::replaceTermsInContent("/courses/$currentDirectory/", "/courses/$newDirectory/");
+            ExerciseLib::replaceTermsInContent("cidReq=$currentCode", "cidReq=$newCode");
+        } else {
+            yield "  Content replacement not executed: previewMode=true";
+        }
 
         yield "Replacing course code in HTML files";
 
         $coursePath = api_get_path(SYS_COURSE_PATH);
 
-        exec('find '.$coursePath.$currentDirectory.'/document/ -type f -name "*.html" -exec sed -i '."'s#/courses/$currentDirectory/#/courses/$newDirectory/#g' {} +");
+        if (false === $previewMode && true === $updateFilesAndDirs) {
+            exec('find '.$coursePath.$currentDirectory.'/document/ -type f -name "*.html" -exec sed -i '."'s#/courses/$currentDirectory/#/courses/$newDirectory/#g' {} +");
+            exec('find '.$coursePath.$currentDirectory.'/document/ -type f -name "*.html" -exec sed -i '."'s#cidReq=$currentCode#cidReq=$newCode#g' {} +");
+        } else {
+            yield "  File changes ignored (variable updateFilesAndDirs set to false)";
+        }
 
         yield "Renaming course directory";
 
-        $fs = new Filesystem();
-        $fs->rename(
-            $coursePath.$currentDirectory,
-            $coursePath.$newDirectory
-        );
+        if (false === $previewMode && true === $updateFilesAndDirs) {
+            $fs = new Filesystem();
+            $fs->rename(
+                $coursePath.$currentDirectory,
+                $coursePath.$newDirectory
+            );
+        } else {
+            yield "  Directory changes ignored (variable updateFilesAndDirs set to false)";
+        }
     }
 
     yield "Done";

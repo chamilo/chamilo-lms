@@ -1787,7 +1787,7 @@ msgid "Completely delete this course"
 msgstr "Détruire ce cours de manière définitive"
 
 msgid "Trainers"
-msgstr "Co-responsables"
+msgstr "Formateurs"
 
 msgid "Category"
 msgstr "Catégorie"
@@ -1862,7 +1862,7 @@ msgid "Groups"
 msgstr "Groupes"
 
 msgid "Trainer"
-msgstr "Responsable"
+msgstr "Formateur"
 
 msgid "Description"
 msgstr "Description"
@@ -2588,7 +2588,7 @@ msgid "This page allows users and groups to publish documents."
 msgstr "Cette page est un espace de publication. Elle permet à chaque membre ou groupe de membres d'envoyer un document (Word, Excel, HTML... ) afin de le rendre accessible aux autres membres ainsi qu'au responsable.Si vous passez par votre espace de groupe pour publier le document (option publier), l'outil Travaux fera un simple lien vers le document là où il se trouve dans votre répertoire de groupe sans le déplacer."
 
 msgid "This is an announcement example. Only trainers are allowed to publish announcements."
-msgstr "Ceci est un exemple d'annonce."
+msgstr "Ceci est un exemple d'annonce. Seuls les formateurs peuvent publier des annonces."
 
 msgid "You just created the course area"
 msgstr "Vous venez de créer le cours"
@@ -3316,7 +3316,7 @@ msgid "Use this script only after backup. The Chamilo team is not responsible fo
 msgstr "N'utilisez ce script qu'après avoir fait une sauvegarde. Chamilo ne pourrait être tenu responsable de perte ou de corruption de vos données."
 
 msgid "Allow self-registration as a trainer"
-msgstr "Autoriser l'auto-inscription en tant que créateur de cours"
+msgstr "Autoriser l'auto-inscription en tant que formateur"
 
 msgid "ex."
 msgstr "par ex."
@@ -6318,7 +6318,7 @@ msgid "Show teacher or tutor's e-mail address in the footer"
 msgstr "Afficher le courriel de l'enseignant ou du coach dans le pied de page"
 
 msgid "Show trainer or tutor's e-mail in footer ?"
-msgstr "Afficher le courriel de l'enseignant (ou du coach) dans le pied de page ?"
+msgstr "Afficher le courriel du formateur (ou du coach) dans le pied de page ?"
 
 msgid "Add a system announcement"
 msgstr "Ajouter une annonce système"
@@ -6681,7 +6681,7 @@ msgid "Clear list of announcements"
 msgstr "Supprimer toutes les annonces"
 
 msgid "Message from the trainer"
-msgstr "Message du responsable"
+msgstr "Message du formateur"
 
 msgid " and emailed to registered learners"
 msgstr " et envoyée par courriel aux utilisateurs"
@@ -8400,10 +8400,10 @@ msgid "Now click on : (...)"
 msgstr "Description de la zone"
 
 msgid "Examsheet viewed/corrected/commented by the trainer"
-msgstr "Exercice vu/corrigé/commenté par un professeur"
+msgstr "Exercice vu/corrigé/commenté par un formateur"
 
 msgid "Your following attempt has been viewed/commented/corrected by the trainer"
-msgstr "Votre tentative détaillée ci-dessous a été vue/corrigée/commentée par un professeur"
+msgstr "Votre tentative détaillée ci-dessous a été vue/corrigée/commentée par un formateur"
 
 msgid "Click the link below to access  your account and view your commented Examsheet."
 msgstr "Cliquez sur le lien ci-dessous pour accéder à votre compte et voir votre feuille d'examen corrigée."
@@ -8412,7 +8412,7 @@ msgid "Regards"
 msgstr "Cordialement"
 
 msgid "You attempt for the test %s has been viewed/commented/corrected by the trainer. Click the link below to access  your account and view your Examsheet."
-msgstr "Votre tentative pour l'exercice %s a été vue/commentée/corrigée par un responsable. Cliquez sur le ien suivant pour accéder à votre compte et voir la feuille d'examen."
+msgstr "Votre tentative pour l'exercice %s a été vue/commentée/corrigée par un formateur. Cliquez sur le ien suivant pour accéder à votre compte et voir la feuille d'examen."
 
 msgid "Dear learner,"
 msgstr "Cher étudiant,"
@@ -11714,7 +11714,7 @@ msgid "Learner paper"
 msgstr "Travail"
 
 msgid "Assignment proposed by the trainer"
-msgstr "Travail proposé par l'enseignant"
+msgstr "Travail proposé par le formateur"
 
 msgid "Text added"
 msgstr "Texte ajouté"
@@ -11768,7 +11768,7 @@ msgid "Export latest version of this page to Documents"
 msgstr "Exporter la dernière version de cette page vers la zone de documents du cours"
 
 msgid "Disabled by trainer"
-msgstr "Désactivé par l'enseignant"
+msgstr "Désactivé par le formateur"
 
 msgid "Pages that link to this page"
 msgstr "Pages qui lient vers celle-ci"
@@ -11783,10 +11783,10 @@ msgid "Now all members can rate this page"
 msgstr "Tous les membres peuvent à présent voter sur cette page"
 
 msgid "Now only trainers can rate this page"
-msgstr "Seuls les enseignants peuvent à présent voter sur cette page"
+msgstr "Seuls les formateurs peuvent à présent voter sur cette page"
 
 msgid "Now the page only is visible by trainer"
-msgstr "La page n'est plus visible que par les enseignants"
+msgstr "La page n'est plus visible que par les formateurs"
 
 msgid "Now the page is visible by all users"
 msgstr "La page est à présent visible par tous les utilisateurs"
@@ -11795,10 +11795,10 @@ msgid "The Main Page can be edited by a teacher only"
 msgstr "La page principale peut uniquement être modifiée par un enseignant"
 
 msgid "Acces to trainer page"
-msgstr "Accès à la page enseignant"
+msgstr "Accès à la page formateur"
 
 msgid "Now discussion is visible by trainers only"
-msgstr "Les discussions ne sont plus visibles que par les enseignants"
+msgstr "Les discussions ne sont plus visibles que par les formateurs"
 
 msgid "Now discussion is visible by all users"
 msgstr "Discussion à présent visible par tous les utilisateurs"
@@ -11810,7 +11810,7 @@ msgid "Now all members can add comments to this discussion"
 msgstr "Tous les membres peuvent à présent ajouter des commentaires à cette discussion"
 
 msgid "This page is an assignment proposed by a trainer"
-msgstr "Cette page est une tâche proposée par un enseignant"
+msgstr "Cette page est une tâche proposée par un formateur"
 
 msgid "This page is a learner work"
 msgstr "Cette page est le travail d'un apprenant"
@@ -11828,7 +11828,7 @@ msgid "Allow delayed sending"
 msgstr "Autoriser l'envoi retardé"
 
 msgid "This Wiki is frozen so far. A trainer must start it."
-msgstr "Ce wiki est inactif. Un enseignant doit le démarrer"
+msgstr "Ce wiki est inactif. Un formateur doit le démarrer"
 
 msgid "Notify by e-mail of new comments about this page is allowed"
 msgstr "La notification par courriel des nouveaux commentaires est activée"
@@ -12784,7 +12784,7 @@ msgid "Your instructor"
 msgstr "Votre formateur"
 
 msgid "Dialog on the bottom with a trainer"
-msgstr "Boîte de dialogue vers le bas avec prof"
+msgstr "Boîte de dialogue en bas avec un formateur"
 
 msgid "Production"
 msgstr "Production"
@@ -12850,7 +12850,7 @@ msgid "Schema with audio explain"
 msgstr "Schéma + explication audio"
 
 msgid "A schema explain by a trainer"
-msgstr "Schéma expliqué par prof"
+msgstr "Schéma expliqué par formateur"
 
 msgid "Video page"
 msgstr "Streaming vidéo"
@@ -12973,7 +12973,7 @@ msgid "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThis folder contains the defaul
 msgstr "Ce répertoire contient les fichiers par défaut. Vous pouvez supprimer des fichiers ou en ajouter de nouveaux, mais si un fichier invisible est inséré dans un document web, les apprenants ne pourront pas voir ce fichier dans le document. Lorsque vous insérez un fichier dans un document, assurez-vous qu'il soit visible. Les répertoires, eux, peuvent rester invisibles."
 
 msgid "This folder contains the files that other learners (or yourself) sent into a course through the editor (if they didn't do it from the groups tool). By default, they will be visible by any trainer, but will be hidden from other learners (unless they access the files directly). If you make one user folder visible, other users will see all its content."
-msgstr "Ce répertoire contient les fichiers que d'autres apprenants (ou vous-même) ont envoyé dans un cours au travers de l'éditeur en ligne (à l'exception de l'outil de groupe). Par défaut, ils seront visibles par tous les enseignants, mais resteront invisibles pour les autres apprenants (sauf par accès direct au fichier). Si vous rendez un répertoire apprenant visible, les autres apprenants pourront voir l'ensemble de son contenu."
+msgstr "Ce répertoire contient les fichiers que d'autres apprenants (ou vous-même) ont envoyé dans un cours au travers de l'éditeur en ligne (à l'exception de l'outil de groupe). Par défaut, ils seront visibles par tous les formateurs, mais resteront invisibles pour les autres apprenants (sauf par accès direct au fichier). Si vous rendez un répertoire apprenant visible, les autres apprenants pourront voir l'ensemble de son contenu."
 
 msgid "Template's icon"
 msgstr "Icône du modèle"
@@ -25306,7 +25306,7 @@ msgid "As a reminder, to access the training platform:<br/>1. Connect to the pla
 msgstr "Pour rappel, pour accéder à la plateforme de formation :<br/>1. Connectez-vous à la plateforme à l’adresse : %s <br/> 2. Renseignez ensuite :<br/>"
 
 msgid "The training center<p>%s</p>Trainers:<br/>%s"
-msgstr "Le centre de formation<p>%s</p><br/>%s"
+msgstr "Le centre de formation<p>%s</p>Formateurs :<br/>%s"
 
 msgid "Get embedable link"
 msgstr "Obtenir le lien d'intégration"

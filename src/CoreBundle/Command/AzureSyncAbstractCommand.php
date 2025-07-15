@@ -30,15 +30,13 @@ use const PHP_URL_QUERY;
 
 abstract class AzureSyncAbstractCommand extends Command
 {
-    protected AzureClient $client;
-
     protected Azure $provider;
 
-    protected array $providerParams = [];
+    protected array $providerParams;
 
     public function __construct(
         protected readonly ClientRegistry $clientRegistry,
-        readonly AuthenticationConfigHelper $configHelper,
+        AuthenticationConfigHelper $configHelper,
         readonly protected AzureAuthenticatorHelper $azureHelper,
         readonly protected AzureSyncStateRepository $syncStateRepo,
         protected readonly EntityManagerInterface $entityManager,
@@ -52,10 +50,7 @@ abstract class AzureSyncAbstractCommand extends Command
 
         $this->providerParams = $configHelper->getProviderConfig('azure');
 
-        $this->client = $this->clientRegistry->getClient('azure');
-
-        $this->provider = $this->client->getOAuth2Provider();
-        $this->provider->tenant = $this->providerParams['tenant'] ?? null;
+        $this->provider = $this->clientRegistry->getClient('azure')->getOAuth2Provider();
     }
 
     /**
@@ -158,7 +153,7 @@ abstract class AzureSyncAbstractCommand extends Command
                 throw new Exception('Exception when requesting group members from Azure: '.$e->getMessage());
             }
 
-            $azureGroupMembers = $azureGroupMembersRequest ?? [];
+            $azureGroupMembers = $azureGroupMembersRequest['value'] ?? [];
 
             foreach ($azureGroupMembers as $azureGroupMember) {
                 yield $azureGroupMember;
@@ -209,7 +204,7 @@ abstract class AzureSyncAbstractCommand extends Command
                 throw new Exception('Exception when requesting groups from Azure: '.$e->getMessage());
             }
 
-            $azureGroupsInfo = $azureGroupsRequest ?? [];
+            $azureGroupsInfo = $azureGroupsRequest['value'] ?? [];
 
             foreach ($azureGroupsInfo as $azureGroupInfo) {
                 if (!empty($this->providerParams['group_filter_regex']) &&

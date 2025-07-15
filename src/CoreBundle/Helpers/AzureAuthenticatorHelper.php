@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 readonly class AzureAuthenticatorHelper
@@ -45,16 +46,22 @@ readonly class AzureAuthenticatorHelper
         'id',
     ];
 
+    protected array $providerParams;
+
     public function __construct(
         private ExtraFieldValuesRepository $extraFieldValuesRepo,
         private ExtraFieldRepository $extraFieldRepo,
         private UserRepository $userRepository,
         private EntityManagerInterface $entityManager,
         private AccessUrlHelper $accessUrlHelper,
-    ) {}
+        AuthenticationConfigHelper $configHelper,
+    ) {
+        $this->providerParams = $configHelper->getProviderConfig('azure');
+    }
 
     /**
      * @throws NonUniqueResultException
+     * @throws Exception
      */
     public function registerUser(array $azureUserInfo): User
     {
@@ -76,11 +83,26 @@ readonly class AzureAuthenticatorHelper
         $userId = $this->getUserIdByVerificationOrder($azureUserInfo);
 
         if (empty($userId)) {
+            if (!$this->providerParams['provisioning']) {
+                throw new Exception(
+                    sprintf(
+                        'User not found when checking the extra fields from %s or %s or %s.',
+                        $azureUserInfo['mail'],
+                        $azureUserInfo['mailNickname'],
+                        $azureUserInfo['id']
+                    )
+                );
+            }
+
             $user = (new User())
                 ->setCreatorId($this->userRepository->getRootUser()->getId())
             ;
         } else {
             $user = $this->userRepository->find($userId);
+
+            if (!$this->providerParams['update_users']) {
+                return $user;
+            }
         }
 
         $user
@@ -180,7 +202,26 @@ readonly class AzureAuthenticatorHelper
 
     public function getExistingUserVerificationOrder(): array
     {
-        return [1, 2, 3];
+        $defaultOrder = [1, 2, 3];
+
+        $selectedOrder = array_filter(
+            array_map(
+                'trim',
+                explode(',', $this->providerParams['existing_user_verification_order'])
+            )
+        );
+
+        $selectedOrder = array_map('intval', $selectedOrder);
+        $selectedOrder = array_filter(
+            $selectedOrder,
+            fn($position): bool => in_array($position, $defaultOrder)
+        );
+
+        if ($selectedOrder) {
+            return $selectedOrder;
+        }
+
+        return $defaultOrder;
     }
 
     private function formatUserData(array $azureUserData): array

@@ -73,8 +73,33 @@ class AzureAuthenticator extends AbstractAuthenticator
             throw new UnauthorizedHttpException('The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
         }
 
-        $userId = $this->azureHelper->registerUser($me);
+        $providerParams = $this->authenticationConfigHelper->getProviderConfig($this->providerName);
 
-        return $this->userRepository->find($userId);
+        $user = $this->azureHelper->registerUser($me);
+
+        $roleActions = $this->azureHelper->getUpdateActionByRole();
+
+        if ($roleActions) {
+            $azureGroups = $provider->get('/v1.0/me/memberOf', $accessToken);
+
+            foreach ($providerParams['group_id'] as $userRole => $groupUid) {
+                if (empty($groupUid)) {
+                    continue;
+                }
+
+                foreach ($azureGroups as $azureGroup) {
+                    $azureGroupUid = $azureGroup['id'];
+                    if ($azureGroupUid === $groupUid) {
+                        $roleActions[$userRole]($user);
+
+                        break 2;
+                    }
+                }
+            }
+
+            $this->entityManager->flush();
+        }
+
+        return $user;
     }
 }

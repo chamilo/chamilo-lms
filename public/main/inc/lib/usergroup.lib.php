@@ -1317,6 +1317,8 @@ class UserGroupModel extends Model
     }
 
     /**
+     * @deprecated Use UsergroupRepository::getByTitleInUrl().
+     *
      * @param string $title
      *
      * @return bool
@@ -1555,8 +1557,8 @@ class UserGroupModel extends Model
         $params['updated_at'] = $params['created_at'] = api_get_utc_datetime();
         $params['group_type'] = isset($params['group_type']) ? Usergroup::SOCIAL_CLASS : Usergroup::NORMAL_CLASS;
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
-        $params['url'] = isset($params['url']) ? $params['url'] : "";
-        $params['visibility'] = isset($params['visibility']) ? $params['visibility'] : Usergroup::GROUP_PERMISSION_OPEN;
+        $params['url'] = $params['url'] ?? "";
+        $params['visibility'] = $params['visibility'] ?? Usergroup::GROUP_PERMISSION_OPEN;
 
         $userGroupExists = $this->usergroup_exists(trim($params['title']));
         if (false === $userGroupExists) {

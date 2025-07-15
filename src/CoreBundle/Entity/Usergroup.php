@@ -139,7 +139,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     /**
      * @var Collection<int, UsergroupRelUser>
      */
-    #[ORM\OneToMany(mappedBy: 'usergroup', targetEntity: UsergroupRelUser::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'usergroup', targetEntity: UsergroupRelUser::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $users;
 
     /**
@@ -226,10 +226,20 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
             $this->addUsers($user);
         }
     }
-    public function addUsers(UsergroupRelUser $user): self
+    public function addUsers(UsergroupRelUser $relUser): self
     {
-        $user->setUsergroup($this);
-        $this->users[] = $user;
+        $relUser->setUsergroup($this);
+        $this->users[] = $relUser;
+
+        $user = $relUser->getUser();
+
+        foreach ($this->courses as $relcourse) {
+            $relcourse->getCourse()->addUserAsStudent($user);
+        }
+
+        foreach ($this->sessions as $relSession) {
+            $relSession->getSession()->addUserInSession(Session::STUDENT, $user);
+        }
 
         return $this;
     }
@@ -240,6 +250,18 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
                 unset($this->users[$key]);
             }
         }
+    }
+
+    public function addUser(User $user, int $relationType = 0): static
+    {
+        $rel = (new UsergroupRelUser())
+            ->setUser($user)
+            ->setRelationType($relationType)
+        ;
+
+        $this->addUsers($rel);
+
+        return $this;
     }
 
     /**

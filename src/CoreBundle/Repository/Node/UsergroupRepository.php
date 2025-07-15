@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository\Node;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -471,5 +472,24 @@ class UsergroupRepository extends ResourceRepository
         // TODO: Implement the actual logic to obtain the current access URL ID.
         // For now, returning 1 as a default value.
         return 1;
+    }
+
+    public function getOneByTitleInUrl(string $title, AccessUrl $url): ?Usergroup
+    {
+        $qb = $this->getOrCreateQueryBuilder(null, 'g');
+
+        return $qb
+            ->innerJoin('g.urls', 'u')
+            ->where($qb->expr()->eq('g.title', ':title'))
+            ->andWhere($qb->expr()->eq('u.url', ':url'))
+            ->setMaxResults(1)
+            ->setParameters([
+                'title' => $title,
+                'url' => $url->getId()
+            ])
+            ->setParameter('title', $title)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 }

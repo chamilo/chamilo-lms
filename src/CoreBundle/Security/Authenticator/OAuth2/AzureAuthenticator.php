@@ -57,7 +57,7 @@ class AzureAuthenticator extends AbstractAuthenticator
         $provider = $this->client->getOAuth2Provider();
 
         $me = $provider->get(
-            \sprintf('/v1.0/me?$select=%s', implode(',', AzureAuthenticatorHelper::QUERY_FIELDS)),
+            \sprintf('/v1.0/me?$select=%s', implode(',', AzureAuthenticatorHelper::QUERY_USER_FIELDS)),
             $accessToken
         );
 

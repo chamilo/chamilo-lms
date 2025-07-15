@@ -22,7 +22,7 @@ readonly class AzureAuthenticatorHelper
     public const EXTRA_FIELD_AZURE_ID = 'azure_id';
     public const EXTRA_FIELD_AZURE_UID = 'azure_uid';
 
-    public const QUERY_FIELDS = [
+    public const QUERY_USER_FIELDS = [
         'givenName',
         'surname',
         'mail',
@@ -30,6 +30,17 @@ readonly class AzureAuthenticatorHelper
         'businessPhones',
         'mobilePhone',
         'accountEnabled',
+        'mailNickname',
+        'id',
+    ];
+    public const QUERY_GROUP_FIELDS = [
+        'id',
+        'displayName',
+        'description',
+    ];
+
+    public const QUERY_GROUP_MEMBERS_FIELDS = [
+        'mail',
         'mailNickname',
         'id',
     ];

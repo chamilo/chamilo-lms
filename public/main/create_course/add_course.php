@@ -231,7 +231,7 @@ if ($course_validation_feature) {
     // if it is activated.
     if (empty($terms_and_conditions_url)) {
         if ('true' === api_get_setting('allow_terms_conditions')) {
-            $terms_and_conditions_url = api_get_path(WEB_CODE_PATH).'auth/inscription.php?legal';
+            $terms_and_conditions_url = api_get_path(WEB_CODE_PATH).'auth/tc.php';
         }
     }
 

@@ -3458,6 +3458,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Send the welcome message to e-mail and inbox',
                     'comment' => "By default, the welcome message (with credentials) is sent only by e-mail. Enable this option to send it to the user's Chamilo inbox as well.",
                 ],
+                [
+                    'name' => 'hide_legal_accept_checkbox',
+                    'title' => 'Hide legal accept checkbox in Terms and Conditions page',
+                    'comment' => 'If set to true, removes the "I have read and accept" checkbox in the Terms and Conditions page flow.',
+                ],
             ],
             'work' => [
                 [

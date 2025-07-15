@@ -90,14 +90,16 @@ class CourseController extends ToolBaseController
     ): Response {
         $user = $this->userHelper->getCurrent();
         $course = $this->getCourse();
+        $sid = $this->getSessionId();
+
         $responseData = [
             'redirect' => false,
             'url' => '#',
         ];
 
         if ($user->hasRole('ROLE_STUDENT')
-            && 'true' === $settingsManager->getSetting('registration.allow_terms_conditions')
-            && 'course' === $settingsManager->getSetting('platform.load_term_conditions_section')
+            && 'true' === $settingsManager->getSetting('registration.allow_terms_conditions', true)
+            && 'course' === $settingsManager->getSetting('platform.load_term_conditions_section', true)
         ) {
             $termAndConditionStatus = false;
             $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
@@ -115,7 +117,7 @@ class CourseController extends ToolBaseController
 
                 $redirect = true;
 
-                if ('true' === $settingsManager->getSetting('course.allow_public_course_with_no_terms_conditions')
+                if ('true' === $settingsManager->getSetting('course.allow_public_course_with_no_terms_conditions', true)
                     && Course::OPEN_WORLD === $course->getVisibility()
                 ) {
                     $redirect = false;
@@ -124,9 +126,13 @@ class CourseController extends ToolBaseController
                 if ($redirect && !$this->isGranted('ROLE_ADMIN')) {
                     $request->getSession()->remove('cid');
                     $request->getSession()->remove('course');
+
+                    // Build return URL
+                    $returnUrl = '/course/' . $course->getId() . '/home?sid='.$sid;
+
                     $responseData = [
                         'redirect' => true,
-                        'url' => '/main/auth/inscription.php',
+                        'url' => '/main/auth/tc.php?return=' . urlencode($returnUrl),
                     ];
                 }
             } else {

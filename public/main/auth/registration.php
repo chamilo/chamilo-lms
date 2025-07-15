@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\PageCategory;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use ChamiloSession as Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -370,23 +371,23 @@ if (false === $userAlreadyRegisteredShowTerms &&
             ['size' => 20]
         );
         //if ('true' === api_get_setting('registration', 'phone')) {
-            $form->addRule(
-                'phone',
-                get_lang('Required field'),
-                'required'
-            );
+        $form->addRule(
+            'phone',
+            get_lang('Required field'),
+            'required'
+        );
         //}
     }
 
     // Language
     if (in_array('language', $allowedFields)) {
         //if ('true' === api_get_setting('registration', 'language')) {
-            $form->addSelectLanguage(
-                'language',
-                get_lang('Language'),
-                [],
-                ['id' => 'language']
-            );
+        $form->addSelectLanguage(
+            'language',
+            get_lang('Language'),
+            [],
+            ['id' => 'language']
+        );
         //}
     }
 
@@ -398,11 +399,11 @@ if (false === $userAlreadyRegisteredShowTerms &&
             ['size' => 40]
         );
         //if ('true' === api_get_setting('registration', 'officialcode')) {
-            $form->addRule(
-                'official_code',
-                get_lang('Required field'),
-                'required'
-            );
+        $form->addRule(
+            'official_code',
+            get_lang('Required field'),
+            'required'
+        );
         //}
     }
 
@@ -629,49 +630,9 @@ $user['language'] = 'french';
 $userInfo = api_get_user_info();
 if (!empty($userInfo)) {
     $langInfo = api_get_language_from_iso($userInfo['language']);
-//    $user['language'] = $langInfo->getEnglishName();
 }
 
 $toolName = get_lang('Registration');
-// Load terms & conditions from the current lang
-if ('true' === api_get_setting('allow_terms_conditions')) {
-    $get = array_keys($_GET);
-    if (isset($get)) {
-        if (isset($get[0]) && 'legal' == $get[0]) {
-            $language = api_get_language_isocode();
-            $language = api_get_language_id($language);
-            $termPreview = LegalManager::get_last_condition($language);
-            if (!$termPreview) {
-                //look for the default language
-                $language = api_get_setting('language.platform_language');
-                $language = api_get_language_id($language);
-                $termPreview = LegalManager::get_last_condition($language);
-            }
-
-            Display::display_header(get_lang('Terms and Conditions'));
-            if (!empty($termPreview['content'])) {
-                echo $termPreview['content'];
-
-                $termExtraFields = new ExtraFieldValue('terms_and_condition');
-                $values = $termExtraFields->getAllValuesByItem($termPreview['id']);
-                foreach ($values as $value) {
-                    if (!empty($value['field_value'])) {
-                        echo '<h3>' . $value['display_text'] . '</h3><br />' . $value['field_value'] . '<br />';
-                    }
-                }
-            } else {
-                echo get_lang('Coming soon...');
-            }
-            //Display::display_footer();
-            exit;
-        }
-    }
-}
-
-if ('true' === api_get_setting('allow_terms_conditions') && $userAlreadyRegisteredShowTerms) {
-    $toolName = get_lang('Terms and Conditions');
-}
-
 if ('approval' === api_get_setting('allow_registration')) {
     $content .= Display::return_message(get_lang('Your account has to be approved'));
 }
@@ -684,137 +645,7 @@ if (!empty($_GET['openid_msg']) && 'idnotfound' == $_GET['openid_msg']) {
 $blockButton = false;
 $termActivated = false;
 $showTerms = false;
-// Terms and conditions
 $infoMessage = '';
-if ('true' === api_get_setting('allow_terms_conditions')) {
-    if (!$isPlatformAdmin) {
-        if ('true' === api_get_setting('ticket.show_terms_if_profile_completed')) {
-            $userId = api_get_user_id();
-            if (empty($userId) && isset($termRegistered['user_id'])) {
-                $userId = (int) $termRegistered['user_id'];
-            }
-            $userInfo = api_get_user_info($userId);
-            if ($userInfo && ANONYMOUS != $userInfo['status']) {
-                $extraFieldValue = new ExtraFieldValue('user');
-                $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-                    $userId,
-                    'termactivated'
-                );
-                if (isset($value['value'])) {
-                    $termActivated = !empty($value['value']) && 1 === (int) $value['value'];
-                }
-
-                if (false === $termActivated) {
-                    $blockButton = true;
-                    $infoMessage = Display::return_message(
-                            get_lang('The terms and conditions have not yet been validated by your tutor.'),
-                            'warning',
-                            false
-                        );
-                }
-
-                if (false === $blockButton) {
-                    if (1 !== (int) $userInfo['profile_completed']) {
-                        $blockButton = true;
-                        $infoMessage .= Display::return_message(
-                                get_lang('You must first fill your profile to enable the terms and conditions validation.'),
-                                'warning',
-                                true
-                            );
-                    }
-                }
-            }
-        }
-    }
-
-    // Ofaj
-    if (!api_is_anonymous() || 'course' !== api_get_setting('platform.load_term_conditions_section')) {
-        $language = api_get_language_isocode();
-        if (isset($termRegistered['user_id'])) {
-            $userInfo = api_get_user_info($termRegistered['user_id']);
-            $language = $userInfo['locale'];
-        }
-        $language = api_get_language_id($language);
-        $termPreview = LegalManager::get_last_condition($language);
-        if (!$termPreview) {
-            //we load from the platform
-            $language = api_get_setting('language.platform_language');
-            $language = api_get_language_id($language);
-            if (!empty($language)) {
-                $termPreview = LegalManager::get_last_condition($language);
-            }
-            //if is false we load from english
-            if (!$termPreview) {
-                $language = api_get_language_id('en_US'); //this must work
-                $termPreview = LegalManager::get_last_condition($language);
-            }
-        }
-
-        if (!empty($termPreview)) {
-            // Version and language
-            $form->addElement(
-                'hidden',
-                'legal_accept_type',
-                $termPreview['version'] . ':' . $termPreview['language_id']
-            );
-            $form->addElement(
-                'hidden',
-                'legal_info',
-                $termPreview['id'] . ':' . $termPreview['language_id']
-            );
-            if (1 == $termPreview['type']) {
-                $form->addElement(
-                    'checkbox',
-                    'legal_accept',
-                    null,
-                    get_lang('I have read and agree to the') . '&nbsp;<a href="inscription.php?legal" target="_blank">' .
-                    get_lang('Terms and Conditions') . '</a>'
-                );
-                $form->addRule(
-                    'legal_accept',
-                    get_lang('Required field'),
-                    'required'
-                );
-            } else {
-                $preview = LegalManager::show_last_condition($termPreview);
-                $form->addElement('label', null, $preview);
-
-                $termExtraFields = new ExtraFieldValue('terms_and_condition');
-                $values = $termExtraFields->getAllValuesByItem($termPreview['id']);
-                foreach ($values as $value) {
-                    if (!empty($value['field_value'])) {
-                        $form->addLabel($value['display_text'], $value['field_value']);
-                    }
-                }
-                $form->addElement(
-                    'checkbox',
-                    'legal_accept',
-                    null,
-                    get_lang('I have read and agree to the') . ' ' . get_lang('Terms and Conditions')
-                );
-                $form->addRule(
-                    'legal_accept',
-                    get_lang('This field is required'),
-                    'required'
-                );
-            }
-        }
-    }
-}
-
-if (false === $userAlreadyRegisteredShowTerms) {
-    $form->addCheckBox(
-        'extra_platformuseconditions',
-        null,
-        get_lang('Platform use conditions')
-    );
-    $form->addRule(
-        'extra_platformuseconditions',
-        get_lang('Required field'),
-        'required'
-    );
-}
-
 
 if ($blockButton) {
     if (!empty($infoMessage)) {
@@ -832,7 +663,7 @@ if ($blockButton) {
     );
 } else {
     $allow = ('true' === api_get_setting('platform.allow_double_validation_in_registration'));
-
+    ChamiloHelper::addLegalTermsFields($form, $userAlreadyRegisteredShowTerms);
     if ($allow && !$termActivated) {
         $htmlHeadXtra[] = '<script>
             $(document).ready(function() {
@@ -914,257 +745,206 @@ if ($form->validate()) {
         $values['username'] = $values['email'];
     }
 
-    if ($userAlreadyRegisteredShowTerms &&
-        'true' === api_get_setting('allow_terms_conditions')
+    // Moved here to include extra fields when creating a user. Formerly placed after user creation
+    // Register extra fields
+    $extras = [];
+    $extraParams = [];
+    foreach ($values as $key => $value) {
+        if ('extra_' === substr($key, 0, 6)) {
+            //an extra field
+            $extras[substr($key, 6)] = $value;
+            $extraParams[$key] = $value;
+        }
+    }
+
+    $status = $values['status'] ?? STUDENT;
+    $phone = $values['phone'] ?? null;
+    $values['language'] = isset($values['language']) ? $values['language'] : api_get_language_isocode();
+    $values['address'] = $values['address'] ?? '';
+
+    // It gets a creator id when user is not logged
+    $creatorId = 0;
+    if (api_is_anonymous()) {
+        $adminList = UserManager::get_all_administrators();
+        $creatorId = 1;
+        if (!empty($adminList)) {
+            $adminInfo = current($adminList);
+            $creatorId = (int) $adminInfo['user_id'];
+        }
+    }
+
+    // Creates a new user
+    $userId = UserManager::create_user(
+        $values['firstname'],
+        $values['lastname'],
+        (int) $status,
+        $values['email'],
+        $values['username'],
+        $values['pass1'],
+        $values['official_code'],
+        $values['language'],
+        $phone,
+        null,
+        [UserAuthSource::PLATFORM],
+        null,
+        1,
+        0,
+        $extraParams,
+        null,
+        true,
+        false,
+        $values['address'],
+        true,
+        $form,
+        $creatorId
+    );
+
+    // save T&C acceptance
+    if ('true' === api_get_setting('allow_terms_conditions')
+        && !empty($values['legal_accept_type'])
     ) {
-        $userId = $termRegistered['user_id'];
-        $isAdmin = UserManager::is_admin($userId);
-        Session::write('is_platformAdmin', $isAdmin);
-    } else {
-        // Moved here to include extra fields when creating a user. Formerly placed after user creation
-        // Register extra fields
-        $extras = [];
-        $extraParams = [];
-        foreach ($values as $key => $value) {
-            if ('extra_' === substr($key, 0, 6)) {
-                //an extra field
-                $extras[substr($key, 6)] = $value;
-                $extraParams[$key] = $value;
-            }
-        }
+        ChamiloHelper::saveUserTermsAcceptance($userId, $values['legal_accept_type']);
+    }
 
-        $status = $values['status'] ?? STUDENT;
-        $phone = $values['phone'] ?? null;
-        $values['language'] = isset($values['language']) ? $values['language'] : api_get_language_isocode();
-        $values['address'] = $values['address'] ?? '';
-
-        // It gets a creator id when user is not logged
-        $creatorId = 0;
-        if (api_is_anonymous()) {
-            $adminList = UserManager::get_all_administrators();
-            $creatorId = 1;
-            if (!empty($adminList)) {
-                $adminInfo = current($adminList);
-                $creatorId = (int) $adminInfo['user_id'];
-            }
-        }
-
-        // Creates a new user
-        $userId = UserManager::create_user(
-            $values['firstname'],
-            $values['lastname'],
-            (int) $status,
-            $values['email'],
-            $values['username'],
-            $values['pass1'],
-            $values['official_code'],
-            $values['language'],
-            $phone,
-            null,
-            [UserAuthSource::PLATFORM],
-            null,
-            1,
-            0,
-            $extraParams,
-            null,
-            true,
-            false,
-            $values['address'],
-            true,
-            $form,
-            $creatorId
-        );
-
-        // Update the extra fields
-        $countExtraField = count($extras);
-        if ($countExtraField > 0 && is_int($userId)) {
-            foreach ($extras as $key => $value) {
-                // For array $value -> if exists key 'tmp_name' then must not be empty
-                // This avoid delete from user field value table when doesn't upload a file
-                if (is_array($value)) {
-                    if (array_key_exists('tmp_name', $value) && empty($value['tmp_name'])) {
-                        //Nothing to do
-                    } else {
-                        if (array_key_exists('tmp_name', $value)) {
-                            $value['tmp_name'] = Security::filter_filename($value['tmp_name']);
-                        }
-                        if (array_key_exists('name', $value)) {
-                            $value['name'] = Security::filter_filename($value['name']);
-                        }
-                        UserManager::update_extra_field_value($userId, $key, $value);
-                    }
+    // Update the extra fields
+    $countExtraField = count($extras);
+    if ($countExtraField > 0 && is_int($userId)) {
+        foreach ($extras as $key => $value) {
+            // For array $value -> if exists key 'tmp_name' then must not be empty
+            // This avoid delete from user field value table when doesn't upload a file
+            if (is_array($value)) {
+                if (array_key_exists('tmp_name', $value) && empty($value['tmp_name'])) {
+                    //Nothing to do
                 } else {
+                    if (array_key_exists('tmp_name', $value)) {
+                        $value['tmp_name'] = Security::filter_filename($value['tmp_name']);
+                    }
+                    if (array_key_exists('name', $value)) {
+                        $value['name'] = Security::filter_filename($value['name']);
+                    }
                     UserManager::update_extra_field_value($userId, $key, $value);
                 }
+            } else {
+                UserManager::update_extra_field_value($userId, $key, $value);
+            }
+        }
+    }
+
+    if ($userId) {
+        // Storing the extended profile
+        $store_extended = false;
+        $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET ";
+
+        if ('true' == api_get_setting('extended_profile') &&
+            'true' == api_get_setting('extendedprofile_registration', 'mycomptetences')
+        ) {
+            $sql_set[] = "competences = '".Database::escape_string($values['competences'])."'";
+            $store_extended = true;
+        }
+
+        if ('true' == api_get_setting('extended_profile') &&
+            'true' == api_get_setting('extendedprofile_registration', 'mydiplomas')
+        ) {
+            $sql_set[] = "diplomas = '".Database::escape_string($values['diplomas'])."'";
+            $store_extended = true;
+        }
+
+        if ('true' == api_get_setting('extended_profile') &&
+            'true' == api_get_setting('extendedprofile_registration', 'myteach')
+        ) {
+            $sql_set[] = "teach = '".Database::escape_string($values['teach'])."'";
+            $store_extended = true;
+        }
+
+        if ('true' == api_get_setting('extended_profile') &&
+            'true' == api_get_setting('extendedprofile_registration', 'mypersonalopenarea')
+        ) {
+            $sql_set[] = "openarea = '".Database::escape_string($values['openarea'])."'";
+            $store_extended = true;
+        }
+
+        if ($store_extended) {
+            $sql .= implode(',', $sql_set);
+            $sql .= " WHERE user_id = ".intval($userId)."";
+            Database::query($sql);
+        }
+
+        // Saving user to Session if it was set
+        if (!empty($sessionToRedirect) && !$sessionPremiumChecker) {
+            $sessionInfo = api_get_session_info($sessionToRedirect);
+            if (!empty($sessionInfo)) {
+                SessionManager::subscribeUsersToSession(
+                    $sessionToRedirect,
+                    [$userId],
+                    SESSION_VISIBLE_READ_ONLY,
+                    false
+                );
             }
         }
 
-        if ($userId) {
-            // Storing the extended profile
-            $store_extended = false;
-            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET ";
-
-            if ('true' == api_get_setting('extended_profile') &&
-                'true' == api_get_setting('extendedprofile_registration', 'mycomptetences')
-            ) {
-                $sql_set[] = "competences = '".Database::escape_string($values['competences'])."'";
-                $store_extended = true;
-            }
-
-            if ('true' == api_get_setting('extended_profile') &&
-                'true' == api_get_setting('extendedprofile_registration', 'mydiplomas')
-            ) {
-                $sql_set[] = "diplomas = '".Database::escape_string($values['diplomas'])."'";
-                $store_extended = true;
-            }
-
-            if ('true' == api_get_setting('extended_profile') &&
-                'true' == api_get_setting('extendedprofile_registration', 'myteach')
-            ) {
-                $sql_set[] = "teach = '".Database::escape_string($values['teach'])."'";
-                $store_extended = true;
-            }
-
-            if ('true' == api_get_setting('extended_profile') &&
-                'true' == api_get_setting('extendedprofile_registration', 'mypersonalopenarea')
-            ) {
-                $sql_set[] = "openarea = '".Database::escape_string($values['openarea'])."'";
-                $store_extended = true;
-            }
-
-            if ($store_extended) {
-                $sql .= implode(',', $sql_set);
-                $sql .= " WHERE user_id = ".intval($userId)."";
-                Database::query($sql);
-            }
-
-            // Saving user to Session if it was set
-            if (!empty($sessionToRedirect) && !$sessionPremiumChecker) {
-                $sessionInfo = api_get_session_info($sessionToRedirect);
-                if (!empty($sessionInfo)) {
-                    SessionManager::subscribeUsersToSession(
-                        $sessionToRedirect,
-                        [$userId],
-                        SESSION_VISIBLE_READ_ONLY,
-                        false
+        // Saving user to course if it was set.
+        if (!empty($course_code_redirect)) {
+            $course_info = api_get_course_info($course_code_redirect);
+            if (!empty($course_info)) {
+                if (in_array(
+                    $course_info['visibility'],
+                    [
+                        COURSE_VISIBILITY_OPEN_PLATFORM,
+                        COURSE_VISIBILITY_OPEN_WORLD,
+                    ]
+                )
+                ) {
+                    CourseManager::subscribeUser(
+                        $userId,
+                        $course_info['real_id']
                     );
                 }
             }
+        }
 
-            // Saving user to course if it was set.
-            if (!empty($course_code_redirect)) {
-                $course_info = api_get_course_info($course_code_redirect);
-                if (!empty($course_info)) {
-                    if (in_array(
-                        $course_info['visibility'],
-                        [
-                            COURSE_VISIBILITY_OPEN_PLATFORM,
-                            COURSE_VISIBILITY_OPEN_WORLD,
-                        ]
-                    )
-                    ) {
-                        CourseManager::subscribeUser(
-                            $userId,
-                            $course_info['real_id']
-                        );
-                    }
-                }
-            }
+        /* If the account has to be approved then we set the account to inactive,
+        sent a mail to the platform admin and exit the page.*/
+        if ('approval' === api_get_setting('allow_registration')) {
+            // 1. Send mail to all platform admin
+            $chamiloUser = api_get_user_entity($userId);
+            MessageManager::sendNotificationOfNewRegisteredUserApproval($chamiloUser);
 
-            /* If the account has to be approved then we set the account to inactive,
-            sent a mail to the platform admin and exit the page.*/
-            if ('approval' === api_get_setting('allow_registration')) {
-                // 1. Send mail to all platform admin
-                $chamiloUser = api_get_user_entity($userId);
-                MessageManager::sendNotificationOfNewRegisteredUserApproval($chamiloUser);
+            // 2. set account inactive
+            UserManager::disable($userId);
 
-                // 2. set account inactive
-                UserManager::disable($userId);
+            // 3. exit the page
+            unset($userId);
 
-                // 3. exit the page
-                unset($userId);
+            Display::display_header($toolName);
+            echo Display::page_header($toolName);
+            echo $content;
+            Display::display_footer();
+            exit;
+        } elseif ('confirmation' === api_get_setting('allow_registration')) {
+            // 1. Send mail to the user
+            $thisUser = api_get_user_entity($userId);
+            UserManager::sendUserConfirmationMail($thisUser);
 
-                Display::display_header($toolName);
-                echo Display::page_header($toolName);
-                echo $content;
-                Display::display_footer();
-                exit;
-            } elseif ('confirmation' === api_get_setting('allow_registration')) {
-                // 1. Send mail to the user
-                $thisUser = api_get_user_entity($userId);
-                UserManager::sendUserConfirmationMail($thisUser);
+            // 2. set account inactive
+            UserManager::disable($userId);
 
-                // 2. set account inactive
-                UserManager::disable($userId);
+            // 3. exit the page
+            unset($userId);
 
-                // 3. exit the page
-                unset($userId);
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('You need confirm your account via e-mail to access the platform'),
+                    'warning'
+                )
+            );
 
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('You need confirm your account via e-mail to access the platform'),
-                        'warning'
-                    )
-                );
-
-                Display::display_header($toolName);
-                //echo $content;
-                Display::display_footer();
-                exit;
-            }
+            Display::display_header($toolName);
+            //echo $content;
+            Display::display_footer();
+            exit;
         }
     }
 
-    // Terms & Conditions
-    if ('true' === api_get_setting('allow_terms_conditions')) {
-        // Update the terms & conditions.
-        if (isset($values['legal_accept_type'])) {
-            $cond_array = explode(':', $values['legal_accept_type']);
-            if (!empty($cond_array[0]) && !empty($cond_array[1])) {
-                $time = time();
-                // legal_accept is stored as version_id:language_id:timestamp
-                $conditionToSave = (int) $cond_array[0].':'.(int) $cond_array[1].':'.$time;
-                UserManager::update_extra_field_value(
-                    $userId,
-                    'legal_accept',
-                    $conditionToSave
-                );
-
-                Event::addEvent(
-                    LOG_TERM_CONDITION_ACCEPTED,
-                    LOG_USER_OBJECT,
-                    api_get_user_info($userId),
-                    api_get_utc_datetime()
-                );
-
-                $bossList = UserManager::getStudentBossList($userId);
-                if (!empty($bossList)) {
-                    $bossList = array_column($bossList, 'boss_id');
-                    $currentUserInfo = api_get_user_info($userId);
-                    $followUpPath = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$currentUserInfo['id'];
-                    foreach ($bossList as $bossId) {
-                        $subjectEmail = sprintf(
-                            get_lang('User %s signed the agreement.'),
-                            $currentUserInfo['complete_name']
-                        );
-                        $contentEmail = sprintf(
-                            get_lang('User %s signed the agreement the %s.'),
-                            $currentUserInfo['complete_name'],
-                            api_get_local_time($time)
-                        );
-
-                        MessageManager::send_message_simple(
-                            $bossId,
-                            $subjectEmail,
-                            $contentEmail,
-                            $userId
-                        );
-                    }
-                }
-            }
-        }
-        $values = api_get_user_info($userId);
-    }
 
     /* SESSION REGISTERING */
     /* @todo move this in a function */

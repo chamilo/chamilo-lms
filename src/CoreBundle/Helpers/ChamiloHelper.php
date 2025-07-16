@@ -488,15 +488,24 @@ class ChamiloHelper
             return;
         }
 
+        // Check if T&C should be shown during registration
+        $loadMode = api_get_setting('platform.load_term_conditions_section');
+
+        if ($loadMode === 'course') {
+            // skip adding terms on registration page
+            return;
+        }
+
         $languageIso  = api_get_language_isocode();
         $languageId   = api_get_language_id($languageIso);
+
         $termPreview  = LegalManager::get_last_condition($languageId);
 
         if (!$termPreview) {
-            $platformLang  = api_get_setting('language.platform_language');
-            $languageId    = api_get_language_id($platformLang);
-            $termPreview   = LegalManager::get_last_condition($languageId);
+            // Do NOT load fallback terms in another language
+            return;
         }
+
         if (!$termPreview) {
             return;
         }
@@ -551,13 +560,6 @@ class ChamiloHelper
         }
     }
 
-
-    /**
-     * Saves the user’s acceptance of the Terms & Conditions.
-     */
-    /**
-     * Persist a user’s acceptance of the last T&C version.
-     */
     /**
      * Persists the user's acceptance of the terms & conditions.
      *
@@ -566,15 +568,15 @@ class ChamiloHelper
      */
     public static function saveUserTermsAcceptance(int $userId, string $legalAcceptType): void
     {
-        // **Split and build the stored value**
+        // Split and build the stored value**
         [$version, $languageId] = explode(':', $legalAcceptType);
         $timestamp = time();
         $toSave = (int)$version . ':' . (int)$languageId . ':' . $timestamp;
 
-        // **Save in extra-field**
+        // Save in extra-field**
         UserManager::update_extra_field_value($userId, 'legal_accept', $toSave);
 
-        // **Log event**
+        // Log event
         Event::addEvent(
             LOG_TERM_CONDITION_ACCEPTED,
             LOG_USER_OBJECT,
@@ -582,7 +584,6 @@ class ChamiloHelper
             api_get_utc_datetime()
         );
 
-        // **Notificar a tutores si hace falta**
         $bossList = UserManager::getStudentBossList($userId);
         if (!empty($bossList)) {
             $bossIds = array_column($bossList, 'boss_id');
@@ -602,12 +603,21 @@ class ChamiloHelper
      *
      * @param string $returnUrl The URL to redirect back to after acceptance
      */
-    public static function displayLegalTermsPage(string $returnUrl = 'index.php'): void
+    public static function displayLegalTermsPage(string $returnUrl = '/home'): void
     {
         $iso   = api_get_language_isocode();
         $langId = api_get_language_id($iso);
-        $term  = LegalManager::get_last_condition($langId)
-            ?: LegalManager::get_last_condition(api_get_language_id(api_get_setting('language.platform_language')));
+        $term  = LegalManager::get_last_condition($langId);
+
+        if (!$term) {
+            // No T&C for current language → show a message
+            Display::display_header(get_lang('Terms and Conditions'));
+            echo '<div class="max-w-3xl mx-auto text-gray-90 text-lg text-center">'
+                . get_lang('No terms and conditions available for this language.')
+                . '</div>';
+            Display::display_footer();
+            exit;
+        }
 
         Display::display_header(get_lang('Terms and Conditions'));
 
@@ -632,7 +642,9 @@ class ChamiloHelper
             echo '<input type="hidden" name="legal_accept_type" value="' . $term['version'] . ':' . $term['language_id'] . '">';
             echo '<input type="hidden" name="return" value="' . htmlspecialchars($returnUrl) . '">';
 
-            if (!$hide) {
+            if ($hide) {
+                echo '<input type="hidden" name="legal_accept" value="1">';
+            } else {
                 echo '<label class="flex items-start space-x-2">';
                 echo '<input type="checkbox" name="legal_accept" value="1" required class="rounded border-gray-300 text-primary focus:ring-primary">';
                 echo '<span class="text-gray-90 text-sm">' . get_lang('I have read and agree to the') . ' ';

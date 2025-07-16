@@ -162,6 +162,13 @@
           :placeholder="extraFieldKey"
           class="w-full"
         />
+        <div class="flex items-center gap-2">
+          <Checkbox
+            v-model="createForm.sendEmail"
+            :binary="true"
+          />
+          <span>{{ t("Send access details to user by email") }}</span>
+        </div>
         <div class="flex justify-end gap-2">
           <Button
             text
@@ -189,6 +196,7 @@ import InputText from "primevue/inputtext"
 import Button from "primevue/button"
 import Dialog from "primevue/dialog"
 import Message from "primevue/message"
+import Checkbox from "primevue/checkbox"
 import userService from "../../services/userService"
 import courseService from "../../services/courseService"
 import sessionService from "../../services/sessionService"
@@ -219,6 +227,7 @@ const createForm = ref({
   email: "",
   password: "",
   accessUrlId: 1,
+  sendEmail: true,
   [extraFieldKey]: "",
 })
 
@@ -298,7 +307,7 @@ async function sendCourseTo(user) {
   try {
     const session = await sessionService.createWithCoursesAndUsers(payload)
     await sessionService.sendCourseNotification(session.id, user.id)
-
+    await searchStudent()
     showSuccessNotification(`${t("Course sent to")} ${user.email}`)
   } catch (e) {
     console.error(e)
@@ -320,6 +329,7 @@ async function handleCreateUser() {
     lastname: createForm.value.lastname,
     password: pwd,
     accessUrlId: createForm.value.accessUrlId,
+    sendEmail: createForm.value.sendEmail,
   }
 
   if (extraFieldKey && createForm.value[extraFieldKey]) {
@@ -340,6 +350,8 @@ async function handleCreateUser() {
 
     showCreateModal.value = false
     showSuccessNotification(t("User created") + `: ${newUser.email}\n${t("Password")}: ${pwd}`)
+    newUser.isActive = true
+    newUser.hasLocalAccess = true
     matches.value.unshift(newUser)
   } catch (e) {
     console.error(e)
@@ -357,6 +369,8 @@ watch(showCreateModal, (val) => {
       email: "",
       password: "",
       accessUrlId: window.access_url_id,
+      sendEmail: true,
+      [extraFieldKey]: "",
     }
   }
 })

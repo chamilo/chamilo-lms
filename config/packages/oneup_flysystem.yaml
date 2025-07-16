@@ -41,9 +41,6 @@ oneup_flysystem:
         themes_adapter:
             local:
                 location: '%kernel.project_dir%/var/themes'
-        themes_cache_adapter:
-            local:
-                location: '%kernel.project_dir%/var/cache/themes'
 
         themes_google_adapter:
             googlecloudstorage:
@@ -71,6 +68,3 @@ oneup_flysystem:
         themes:
             adapter: themes_adapter
             mount: themes
-        themes_cache:
-            adapter: themes_cache_adapter
-            mount: themes_cache

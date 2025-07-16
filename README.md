@@ -77,7 +77,7 @@ vim /etc/apache2/sites-available/my.chamilo.net.conf
   php_value session.cookie_httponly 1
   php_admin_value session.save_handler "redis"
   php_admin_value session.save_path "tcp://127.0.0.1:6379"
-  php_admin_value upload_max_filesize 256M`
+  php_admin_value upload_max_filesize 256M
   php_admin_value post_max_size 256M
 </VirtualHost>
 # exit with "escape, :, wq"

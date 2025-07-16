@@ -302,6 +302,15 @@ class MessageHelper
         }
 
         $smtpFromEmail = $this->settingsManager->getSetting('mail.smtp_from_email');
+
+        if (empty($smtpFromEmail)) {
+            $smtpFromEmail = $this->settingsManager->getSetting('platform.administrator_email');
+        }
+
+        if (empty($smtpFromEmail)) {
+            $smtpFromEmail = 'noreply@chamilo.local';
+        }
+
         $email = (new Email())
             ->from($smtpFromEmail)
             ->to($receiver->getEmail())

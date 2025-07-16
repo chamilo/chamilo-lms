@@ -53,6 +53,9 @@ class CreateUserOnAccessUrlInput
     #[Groups(['write'])]
     public ?array $extraFields = null;
 
+    #[Groups(['write'])]
+    private ?bool $sendEmail = true;
+
     public function getUsername(): string
     {
         return $this->username;
@@ -132,5 +135,15 @@ class CreateUserOnAccessUrlInput
     public function setStatus(?int $status): void
     {
         $this->status = $status;
+    }
+
+    public function getSendEmail(): ?bool
+    {
+        return $this->sendEmail;
+    }
+
+    public function setSendEmail(?bool $sendEmail): void
+    {
+        $this->sendEmail = $sendEmail;
     }
 }

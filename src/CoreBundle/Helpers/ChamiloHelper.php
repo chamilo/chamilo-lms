@@ -568,15 +568,15 @@ class ChamiloHelper
      */
     public static function saveUserTermsAcceptance(int $userId, string $legalAcceptType): void
     {
-        // **Split and build the stored value**
+        // Split and build the stored value**
         [$version, $languageId] = explode(':', $legalAcceptType);
         $timestamp = time();
         $toSave = (int)$version . ':' . (int)$languageId . ':' . $timestamp;
 
-        // **Save in extra-field**
+        // Save in extra-field**
         UserManager::update_extra_field_value($userId, 'legal_accept', $toSave);
 
-        // **Log event**
+        // Log event
         Event::addEvent(
             LOG_TERM_CONDITION_ACCEPTED,
             LOG_USER_OBJECT,
@@ -584,7 +584,6 @@ class ChamiloHelper
             api_get_utc_datetime()
         );
 
-        // **Notificar a tutores si hace falta**
         $bossList = UserManager::getStudentBossList($userId);
         if (!empty($bossList)) {
             $bossIds = array_column($bossList, 'boss_id');

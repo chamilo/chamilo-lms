@@ -92,7 +92,7 @@ jobs:
                   yarn run encore production
 
             - name: Install chrome
-              uses: browser-actions/setup-chrome@v1
+              uses: browser-actions/setup-chrome@v2
               id: setup-chrome
 
             - name: Start chrome

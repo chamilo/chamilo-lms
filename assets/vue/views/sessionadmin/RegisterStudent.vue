@@ -57,37 +57,67 @@
         />
       </div>
 
+      <p
+        v-if="platformSessionAdminAccessAllUrls"
+        class="text-gray-600 text-sm"
+      >
+        {{
+          t(
+            'This list displays users from all access URLs because the setting "session_admin_access_to_all_users_on_all_urls" is enabled.',
+          )
+        }}
+      </p>
       <div
         v-if="matches.length"
-        class="mt-6 border-t pt-4 space-y-3"
+        class="mt-6 border-t pt-4"
       >
-        <h4 class="font-medium text-gray-700">{{ t("Matching students") }} ({{ matches.length }})</h4>
-        <ul class="divide-y">
-          <li
-            v-for="user in matches"
-            :key="user.id"
-            class="flex items-center justify-between py-2"
-          >
-            <div class="flex items-center gap-3">
-              <img
-                :src="user.illustrationUrl || '/img/icons/32/unknown.png'"
-                :alt="user.fullname"
-                class="w-10 h-10 rounded-full object-cover border"
-              />
-              <div>
-                <p class="text-sm font-medium">{{ user.fullname }}</p>
-                <p class="text-xs text-gray-500">{{ user.email }}</p>
-              </div>
-            </div>
-
-            <Button
-              icon="pi pi-send"
-              size="small"
-              :label="t('Send course')"
-              @click="sendCourseTo(user)"
-            />
-          </li>
-        </ul>
+        <h4 class="font-medium text-gray-90">{{ t("Matching students") }} ({{ matches.length }})</h4>
+        <table class="min-w-full text-sm mt-4 border border-gray-25 rounded">
+          <thead class="bg-gray-20 text-gray-90 font-medium">
+            <tr>
+              <th class="px-4 py-2 text-left">{{ t("Full name") }}</th>
+              <th class="px-4 py-2 text-left">{{ t("Email") }}</th>
+              <th class="px-4 py-2 text-left">{{ t("Active") }}</th>
+              <th class="px-4 py-2 text-left">{{ t("Local user") }}</th>
+              <th class="px-4 py-2 text-right"></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-25">
+            <tr
+              v-for="user in matches"
+              :key="user.id"
+              class="hover:bg-gray-10 transition-colors"
+            >
+              <td class="px-4 py-2 text-gray-90">
+                {{ user.fullname }}
+              </td>
+              <td class="px-4 py-2 text-gray-90">
+                {{ user.email }}
+              </td>
+              <td class="px-4 py-2">
+                <span
+                  :class="user.isActive ? 'text-success' : 'text-danger'"
+                  class="font-semibold"
+                >
+                  {{ user.isActive ? t("Active") : t("Inactive") }}
+                </span>
+              </td>
+              <td class="px-4 py-2">
+                <span :class="user.hasLocalAccess ? 'text-green-600' : 'text-yellow-600'">
+                  {{ user.hasLocalAccess ? t("Local user") : t("External user") }}
+                </span>
+              </td>
+              <td class="px-4 py-2 text-right">
+                <Button
+                  icon="pi pi-send"
+                  size="small"
+                  :label="t('Send course invitation')"
+                  @click="sendCourseTo(user)"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <Message
@@ -132,6 +162,13 @@
           :placeholder="extraFieldKey"
           class="w-full"
         />
+        <div class="flex items-center gap-2">
+          <Checkbox
+            v-model="createForm.sendEmail"
+            :binary="true"
+          />
+          <span>{{ t("Send access details to user by email") }}</span>
+        </div>
         <div class="flex justify-end gap-2">
           <Button
             text
@@ -151,7 +188,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue"
+import { computed, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import Card from "primevue/card"
@@ -159,6 +196,7 @@ import InputText from "primevue/inputtext"
 import Button from "primevue/button"
 import Dialog from "primevue/dialog"
 import Message from "primevue/message"
+import Checkbox from "primevue/checkbox"
 import userService from "../../services/userService"
 import courseService from "../../services/courseService"
 import sessionService from "../../services/sessionService"
@@ -189,10 +227,15 @@ const createForm = ref({
   email: "",
   password: "",
   accessUrlId: 1,
+  sendEmail: true,
   [extraFieldKey]: "",
 })
 
 const createLoading = ref(false)
+
+const platformSessionAdminAccessAllUrls = computed(
+  () => platformConfigStore.getSetting("platform.session_admin_access_to_all_users_on_all_urls") === "true",
+)
 
 loadCourse()
 async function loadCourse() {
@@ -264,7 +307,7 @@ async function sendCourseTo(user) {
   try {
     const session = await sessionService.createWithCoursesAndUsers(payload)
     await sessionService.sendCourseNotification(session.id, user.id)
-
+    await searchStudent()
     showSuccessNotification(`${t("Course sent to")} ${user.email}`)
   } catch (e) {
     console.error(e)
@@ -286,6 +329,7 @@ async function handleCreateUser() {
     lastname: createForm.value.lastname,
     password: pwd,
     accessUrlId: createForm.value.accessUrlId,
+    sendEmail: createForm.value.sendEmail,
   }
 
   if (extraFieldKey && createForm.value[extraFieldKey]) {
@@ -306,6 +350,8 @@ async function handleCreateUser() {
 
     showCreateModal.value = false
     showSuccessNotification(t("User created") + `: ${newUser.email}\n${t("Password")}: ${pwd}`)
+    newUser.isActive = true
+    newUser.hasLocalAccess = true
     matches.value.unshift(newUser)
   } catch (e) {
     console.error(e)
@@ -323,6 +369,8 @@ watch(showCreateModal, (val) => {
       email: "",
       password: "",
       accessUrlId: window.access_url_id,
+      sendEmail: true,
+      [extraFieldKey]: "",
     }
   }
 })

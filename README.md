@@ -15,27 +15,41 @@ Chamilo is an e-learning platform, also called "LMS", published under the GNU/GP
 
 ## Quick install
 
-**Chamilo 2.0 is still in development. This installation procedure below is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch's README.md for details.**
+**Chamilo 2.0 is still in development. The installation procedure below is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch's README.md for details.**
 
-### Minimum server hardware requirements
+### Minimum hardware requirements
 
-Chamilo 2.0 has been tested on a 2 vCPUs, 2GB RAM virtual machine under Ubuntu 24.04 and has been shown to work.
+#### Server
+
+You will need (short version):
+- 2 vCPUs
+- 4GB RAM
+- 4GB free disk space
+
+Chamilo 2.0 has been tested on a 2 vCPUs, 2GB RAM virtual machine under Ubuntu 24.04 and has been shown to work, but to
+build the development environment, you will need at least 4GB RAM.
 At this stage, we haven't made any load testing to evaluate the number of users that could use the system simultaneously.
 Remember this is an alpha version. As such, it will run in "dev" mode (see the `.env` file), considerably more slowly the "prod" mode.
 
+#### Client
+
+Any recent computer with a recent (no older than 5y) browser should do.
+
 ### Software stack requirements
 
-We assume you already have:
+You should have:
 
-- composer 2.x - https://getcomposer.org/download/
-- yarn 4.x+ - https://yarnpkg.com/getting-started/install
-- Node >= v18+ (lts) - https://github.com/nodesource/distributions/blob/master/README.md
-- Configuring a virtualhost in a domain, not in a sub folder inside a domain.
-- A working LAMP/WAMP server with PHP 8.3+
+- Some Linux distribution (tests on Windows server have been very limited, with mitigated success)
+- Composer 2.x - https://getcomposer.org/download/
+- Yarn 4.x+ - https://yarnpkg.com/getting-started/install
+- NodeJS >= v18+ (lts) - https://github.com/nodesource/distributions/blob/master/README.md
+- A web server with a virtualhost in a domain or subdomain (not in a sub folder inside a domain with another application).
+- A working LAMP/WAMP server with PHP 8.2 or 8.3
+- A Redis server (for storing PHP sessions)
 
 ### Software stack install (Ubuntu)
 
-#### The easy way
+#### Installing from a packaged version
 
 These are local testing instructions for a fictitious domain name "my.chamilo.net" configured in your hosts file and
 pointing at a local machine's IP address. These instructions do NOT provide a secure environment.
@@ -70,30 +84,67 @@ vim /etc/apache2/sites-available/my.chamilo.net.conf
 a2ensite my.chamilo.net
 a2enmod rewrite ssl headers expires
 systemctl restart apache2
-# Open http://my.chamilo.net in your browser
+# Open http://my.chamilo.net in your browser to go through the installation wizard
 # Complete the installation information using DB credentials chamilo2/chamilo2/chamilo2 and the default host and port
 # Done
 ~~~~
 
 By default, it is installed in "dev" mode to have more debugging features at hand. If you want to change it to "prod"
-mode, you will have to install yarn, run `yarn encore prod` and modify `/.env` to change `APP_ENV` to `'prod'`. See
-other installation methods below.
+mode, you will have to install yarn (see below), run `yarn encore prod` and modify the `.env` file at the root of
+your chamilo folder to change `APP_ENV` to `'prod'` instead of the default `'dev'`. See other installation methods below.
 
-#### The more detailed way
+#### Installing from sources
 
-You will need PHP8.3+ and NodeJS v18+ to run Chamilo 2.
+##### Quick step-by-step
+
+You will need PHP8.2 or 8.3 and NodeJS v18+ to run Chamilo 2.
 
 On Ubuntu 24.04+, the following should take care of all dependencies (certbot is optional).
 
+Replace 'chamilo2' by the database name and user you want, and '{password}' by a more secure password.
+~~~~
+sudo apt update && apt -y upgrade
+sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
+sudo mysql
+mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY '{password}';
+mysql> exit
+cd ~
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
+sudo apt-get install -y nodejs
+sudo corepack enable
+cd ~
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
+sudo mv composer.phar /usr/local/bin/composer
+cd /var/www
+git clone -b master --depth=1 https://github.com/chamilo/chamilo-lms.git chamilo
+cd chamilo
+composer install
+sudo a2enmod rewrite ssl headers expires
+sudo cp public/main/install/apache.dist.conf /etc/apache2/sites-available/my.chamilo.net.conf
+# edit if you want to change the local domain name
+sudo a2ensite my.chamilo.net
+sudo systemctl restart apache2
+yarn set version stable
+yarn up && yarn install && yarn dev
+sudo touch .env
+sudo chown -R www-data: var/ .env config/
+# load http://my.chamilo.net in your browser and follow the installation wizard
+sudo chown -R root: .env config/
+~~~~
+
+##### Detailed procedure
+
+The following is the section above, but with more details and hedge cases.
 ~~~~
 sudo apt update
 sudo apt -y upgrade
 sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
 sudo mysql
-mysql> GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost IDENTIFIED BY '{password}';
+mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY '{password}';
 mysql> exit
 ~~~~
-(replace 'chamilo' by the database name and user you want, and '{password}' by a more secure password)
 
 On older Ubuntu versions (like 22.04), you have to install PHP through third-party sources:
 
@@ -104,42 +155,47 @@ sudo apt -y install ca-certificates curl gnupg software-properties-common
 sudo add-apt-repository ppa:ondrej/php
 sudo apt update
 sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis php-pear php8.3-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl
+sudo mysql
+mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY '{password}';
+mysql> exit
 ~~~~
-(replace 'chamilo' by the database name and user you want, and '{password}' by a more secure password)
+(replace 'chamilo2' by the database name and user you want, and '{password}' by a more secure password)
 
 #### NodeJS, Yarn, Composer
 
 If you already have nodejs installed, check the version with `node -v`
 Otherwise, install Node.js 18 or above.
 
-The following lines use a static version of Node.js 20 from https://deb.nodesource.com/
+Use the following lines to get a static version of Node.js 20 from https://deb.nodesource.com/ (recommended)
 ~~~~
 cd ~
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
 sudo apt-get install -y nodejs
 ~~~~
 
-Another option to install Node.js is by using NVM (Node Version Manager). You can install it following the instructions [here](https://github.com/nvm-sh/nvm#installing-and-updating).
+Alternative (not recommended): install Node.js by using NVM (Node Version Manager). You can install it following the
+instructions [here](https://github.com/nvm-sh/nvm#installing-and-updating).
 You can install the desired node version (preferably, the LTS version):
 ~~~~
 sudo nvm install --lts
 sudo nvm use --lts
 ~~~~
 
-With NodeJS installed, you must enable corepack and then continue with the requirements
+Once NodeJS is installed, you must enable `corepack` and then continue with the requirements
 ~~~~
 sudo corepack enable
 cd ~
 ~~~~
 
-Follow the instructions at https://getcomposer.org/download/ to get Composer, then add to the local binaries for easier use:
+Follow the instructions at https://getcomposer.org/download/ to get Composer, then add it to the local binaries
+for easier use:
 ~~~~
 sudo mv composer.phar /usr/local/bin/composer
 ~~~~
 
 #### Apache tweaks
 
-Apache's rewrite module is mandatory. The rest is optional and depends on your needs.
+Apache's rewrite module is mandatory if you use Apache. The rest is optional and depends on your needs.
 ~~~~
 sudo apt install libapache2-mod-xsendfile #only for optimization if used in the vhost config
 sudo a2enmod rewrite ssl headers expires
@@ -149,13 +205,14 @@ sudo systemctl restart apache2
 When your system is all set, you can use the following:
 ~~~~
 cd /var/www
-git clone https://github.com/chamilo/chamilo-lms.git chamilo
+git clone -b master --depth=1 https://github.com/chamilo/chamilo-lms.git chamilo
 cd chamilo
 composer install
 ~~~~
 
 We do not recommend running composer as the root user!
-When asked whether you want to execute the recipes or install plugins for some of the components, you can safely type 'n' (for 'no').
+When asked whether you want to execute the recipes or install plugins for some of the components,
+you can safely type 'n' (for 'no').
 
 ~~~~
 yarn set version stable
@@ -166,9 +223,11 @@ sudo touch .env
 sudo chown -R www-data: var/ .env config/
 ~~~~
 
-In your web server configuration, ensure you allow for the interpretation of .htaccess (`AllowOverride all` and `Require all granted`), and point the `DocumentRoot` to the `public/` subdirectory.
+In your web server configuration, ensure you allow for the interpretation of .htaccess (`AllowOverride all` or
+`Require all granted`), and point the `DocumentRoot` to the `public/` subdirectory.
 Finally, make sure your PHP config points at Redis for sessions management.
-This should look similar to this very short excerpt (in your Apache vhost block):
+This should look similar to the short excerpt below (in your Apache vhost block) if you use SSL.
+If you do not use SSL, you can remove the first block and change `*:443` by `*:80` for the second block.
 ~~~~
 <VirtualHost *:80>
   ServerName my.chamilo.net
@@ -202,45 +261,49 @@ sudo systemctl reload apache2
 
 ### Web installer
 
-Once the above is ready, use your browser to lo
-ad the URL you have defined for your host, e.g. https://my.chamilo.net (this should redirect you to `main/install/index.php`) and follow the UI instructions (database, admin user settings, etc).
+Once the above is ready, use your browser to load the URL you have defined for your host, e.g. https://my.chamilo.net
+(this should redirect you to `main/install/index.php`) and follow the UI instructions (database, admin user settings, etc).
 
 After the web install process, change the permissions back to a reasonably safe state:
 ~~~~
-chown -R root .env config/
+chown -R root: .env config/
 ~~~~
 
-## Quick update for development/testing purposes
+## Quick updates for development/testing purposes
 
 If you have already installed it and just want to update it from Git, do:
 ~~~~
-git pull
+git pull origin master
 composer install
-php bin/console doctrine:schema:update --force --complete
+# php bin/console doctrine:schema:update --force --complete (only recommended if you installed before beta 1)
 php bin/console cache:clear
 yarn install && yarn dev
 ~~~~
 
+The commands above will update the JS (yarn) in public/build/ and PHP (composer) dependencies in vendor/.
+
 Note for developers in alpha stage: the doctrine command will try to update
 your database schema to the expected database schema in a fresh installation.
+
 This is not always perfect, as Doctrine will take the fastest route to do this.
+
 For example, if you have a migration to rename a table (which would apply just
 fine to a system in Chamilo 1 being *migrated*), Doctrine might consider that
 the destination table does not exist and the original (which should not be
 there in a new installation) is still there, so it will just drop the old
 table and create a new one, losing all records in that table in the process.
+
 To avoid this, prefer executing migrations with the following instead.
 ```
 php bin/console doctrine:migrations:execute "Chamilo\CoreBundle\Migrations\Schema\V200\Version[date]"
 ```
 This will respect the migration logic and do the required data processing.
+You can see the version numbers in the list of updated or created files when launching `git pull`.
 
-The commands above will update the JS (yarn) in public/build/ and PHP (composer) dependencies in vendor/.
-
-Sometimes there are conflicts with existing files so, to avoid those, here are some hints :
-- for composer errors, you can remove the vendor folder and composer.lock file
-- for yarn errors, you can remove yarn.lock .yarn/cache/* node_modules/*
-- when opening Chamilo, if the page does not load, then you might want to delete var/cache/*
+Som`e updates might (rarely) cause conflicts with existing files so, to avoid those, here are some hints :
+- for composer errors, you can remove the vendor folder and composer.lock file, then launch `composer update`
+- for yarn errors, you can remove yarn.lock .yarn/cache/* node_modules/* and launch `yarn up`
+- when opening Chamilo, if the page does not load, then you might want to delete var/cache/* or launch `php bin/console cache:clear` from the root of Chamilo
 
 ### Refresh configuration settings
 
@@ -371,21 +434,24 @@ following commands can be used.
 
     git config core.hooksPath tests/scripts/git-hooks/
 
-## Changes from 1.x
+## Big changes from 1.x (for developers)
 
-* in general, the main/ folder has been moved to public/main/
-* a big part of the frontend has been migrated to VueJS + Tailwind CSS
-* app/Resources/public/assets moved to public/assets
-* main/inc/lib/javascript moved to public/js
-* main/img/ moved to public/img
-* main/template/default moved to src/CoreBundle/Resources/views
-* src/Chamilo/XXXBundle moved to src/CoreBundle or src/CourseBundle
-* bin/doctrine.php removed use bin/console doctrine:xyz options
-* Plugin images, CSS and JS libs are loaded inside the public/plugins folder
-  (composer update copies the content inside plugin_name/public inside web/plugins/plugin_name
-* Plugins templates use the ``asset()` function instead of using "_p.web_plugin"
-* `main/inc/local.inc.php` has been removed
-* Translations are managed through Gettext
+This is a list of structural changes to help developers/maintainers of Chamilo 1.11 find their way in Chamilo 2. It is *not* a features list (refer to `public/documentation/changelog.html` for that).
+
+* in general, the `main/` folder has been moved to `public/main/`
+* a big part of the frontend has been migrated to VueJS + Tailwind CSS (see `assets/vue/`)
+* `app/Resources/public/assets/` moved to `assets/`
+* `main/inc/lib/javascript/` moved to `assets/js/`
+* `main/img/` moved to `public/img/`
+* `main/template/default/` moved to `src/CoreBundle/Resources/views/`
+* `src/Chamilo/XXXBundle/` moved to `src/CoreBundle/` or `src/CourseBundle/`
+* `bin/doctrine.php` removed, use `bin/console doctrine:xyz` options
+* plugin images, CSS and JS libs are loaded inside the `public/plugin/` folder and the folder names have been renamed to CamelCase
+* plugins templates use the `asset()` function instead of using `_p.web_plugin`
+* `main/inc/local.inc.php` has been removed and `main/inc/global.inc.php` greatly reduced
+* translations are managed through Gettext, from the `translations/` directory for PHP code and from `assets/locales/` for VueJS code
+* files in `app/config/` have been restructured (to `.yaml`) and moved to `config/`
+* `app/config/configuration.php` has essentially been emptied to the `settings` table (accessible via the admin page in Chamilo), while the critical settings (database access etc) have been transferred to `.env`
 
 Libraries
 
@@ -432,9 +498,10 @@ See https://github.com/chamilo/chamilo-lms/projects/3
 If you want to submit new features or patches to Chamilo 2, please follow the
 Github contribution guide https://guides.github.com/activities/contributing-to-open-source/
 and our [CONTRIBUTING.md](CONTRIBUTING.md) file.
+
 In short, we ask you to send us Pull Requests based on a branch that you create
-with this purpose into your repository, forked from the original Chamilo repository (`master` branch).
+with this purpose into your own repository, forked from the original Chamilo repository (`master` branch).
 
 ## Documentation
 
-For more information on Chamilo, visit https://2.chamilo.org/documentation/index.html
+For more information on Chamilo 2, visit https://2.chamilo.org/documentation/index.html

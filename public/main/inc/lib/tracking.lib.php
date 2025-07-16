@@ -3915,8 +3915,8 @@ class Tracking
                     s.id,
                     title,
                     $injectExtraFields
-                    access_start_date,
-                    access_end_date
+                    s.access_start_date,
+                    s.access_end_date
                 FROM $tbl_session s
                 INNER JOIN $tbl_session_rel_access_url session_rel_url
                 ON (s.id = session_rel_url.session_id)

@@ -1047,6 +1047,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'platform' => [
                 [
+                    'name' => 'session_admin_access_to_all_users_on_all_urls',
+                    'title' => 'Allow session admins to see all users on all URLs',
+                    'comment' => 'If enabled, session admins can search and list users from all access URLs, regardless of their current URL.',
+                ],
+                [
                     'name' => 'hosting_limit_users_per_course',
                     'title' => 'Global limit of users per course',
                     'comment' => 'Defines a global maximum number of users (teachers included) allowed to be subscribed to any single course in the platform. Set this value to 0 to disable the limit. This helps avoid courses being overloaded in open portals.',

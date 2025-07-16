@@ -49,12 +49,15 @@ class CertificateController extends AbstractController
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
         $user = $this->userHelper->getCurrent();
         $isOwner = ($user->getId() === $this->getUser()->getId());
+        $isPlatformAdmin = $user->hasRole('ROLE_ADMIN');
 
-        if (!$isOwner
-            && (!$allowPublic || !$certificate->getPublish())
-            && (!$allowSessionAdmin || !$user->hasRole('ROLE_SESSION_MANAGER'))
-        ) {
-            throw new AccessDeniedHttpException('The requested certificate is not public.');
+        if (!$isOwner && !$isPlatformAdmin) {
+            if (
+                (!$allowPublic || !$certificate->getPublish()) &&
+                (!$allowSessionAdmin || !$user->hasRole('ROLE_SESSION_MANAGER'))
+            ) {
+                throw new AccessDeniedHttpException('The requested certificate is not public.');
+            }
         }
 
         // Fetch the actual certificate file from personal files using its title
@@ -88,12 +91,16 @@ class CertificateController extends AbstractController
         $allowPublic = 'true' === $this->settingsManager->getSetting('course.allow_public_certificates', true);
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
         $user = $this->userHelper->getCurrent();
+        $isOwner = ($user->getId() === $this->getUser()->getId());
+        $isPlatformAdmin = $user->hasRole('ROLE_ADMIN');
 
-        if (
-            (!$allowPublic || !$certificate->getPublish())
-            && (!$allowSessionAdmin || !$user->hasRole('ROLE_SESSION_MANAGER'))
-        ) {
-            throw $this->createAccessDeniedException('The requested certificate is not public.');
+        if (!$isOwner && !$isPlatformAdmin) {
+            if (
+                (!$allowPublic || !$certificate->getPublish()) &&
+                (!$allowSessionAdmin || !$user->hasRole('ROLE_SESSION_MANAGER'))
+            ) {
+                throw new AccessDeniedHttpException('The requested certificate is not public.');
+            }
         }
 
         $personalFileRepo = Container::getPersonalFileRepository();

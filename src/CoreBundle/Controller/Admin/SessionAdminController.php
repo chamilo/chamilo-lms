@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
@@ -87,7 +88,12 @@ class SessionAdminController extends BaseController
         $isSessionAdmin = $user && $user->hasRole('ROLE_SESSION_MANAGER');
 
         // Transform the certificate entities into a frontend-friendly structure
-        $mapCertificate = function (GradebookCertificate $gc) use ($allowPublic, $allowSessionAdmin, $isSessionAdmin) {
+        $mapCertificate = function (GradebookCertificate $gc) use (
+            $allowPublic,
+            $allowSessionAdmin,
+            $isSessionAdmin,
+            $user
+        ) {
             $sessionRel = $gc->getCategory()->getCourse()->getSessions()[0] ?? null;
             $session = $sessionRel?->getSession();
             $path = $gc->getPathCertificate();
@@ -99,8 +105,13 @@ class SessionAdminController extends BaseController
             if (!empty($path)) {
                 $hash = pathinfo($path, PATHINFO_FILENAME);
                 $downloadUrl = '/certificates/'.$hash.'.pdf';
+
+                $isPlatformAdmin = $user && $user->hasRole('ROLE_ADMIN');
                 $isPublic = $allowPublic && $gc->getPublish();
-                $isDownloadAllowed = $isPublic || ($isSessionAdmin && $allowSessionAdmin);
+
+                $isDownloadAllowed = $isPlatformAdmin
+                    || $isPublic
+                    || ($isSessionAdmin && $allowSessionAdmin);
             }
 
             return [
@@ -288,7 +299,12 @@ class SessionAdminController extends BaseController
         $firstname = $request->query->get('firstname');
         $extraFilters = $request->query->all('extraFilters');
 
-        $configuredExtraFieldVariable = $settingsManager->getSetting('platform.session_admin_user_subscription_search_extra_field_to_search', true);
+        $configuredExtraFieldVariable = $settingsManager->getSetting(
+            'platform.session_admin_user_subscription_search_extra_field_to_search',
+            true
+        );
+
+        $allUrlsAllowed = 'true' === $settingsManager->getSetting('platform.session_admin_access_to_all_users_on_all_urls', true);
 
         $filters = [];
         if ($lastname) {
@@ -303,11 +319,16 @@ class SessionAdminController extends BaseController
             ];
         }
 
+        $accessUrl = null;
+        if (!$allUrlsAllowed) {
+            $accessUrl = $accessUrlHelper->getCurrent();
+        }
+
         $users = $userRepo->findUsersForSessionAdmin(
             $filters['lastname'] ?? null,
             $filters['firstname'] ?? null,
             $filters['extraFilters'] ?? [],
-            $accessUrlHelper->getCurrent(),
+            $accessUrl
         );
 
         $data = [];
@@ -318,7 +339,15 @@ class SessionAdminController extends BaseController
                 ExtraField::USER_FIELD_TYPE
             );
 
-            $extra[$configuredExtraFieldVariable] = $extraValue->getFieldValue();
+            $extra[$configuredExtraFieldVariable] = $extraValue?->getFieldValue();
+
+            if ($allUrlsAllowed) {
+                $localAccess = $user->getPortals()->exists(
+                    fn ($key, AccessUrlRelUser $rel) => $rel->getUrl() === $accessUrl
+                );
+            } else {
+                $localAccess = true;
+            }
 
             $data[] = [
                 'id' => $user->getId(),
@@ -326,6 +355,8 @@ class SessionAdminController extends BaseController
                 'firstname' => $user->getFirstname(),
                 'fullname' => trim($user->getFirstname().' '.$user->getLastname()),
                 'email' => $user->getEmail(),
+                'isActive' => $user->getIsActive(),
+                'hasLocalAccess' => $localAccess,
                 'extra' => $extra,
             ];
         }
@@ -334,4 +365,5 @@ class SessionAdminController extends BaseController
             'items' => $data,
         ]);
     }
+
 }

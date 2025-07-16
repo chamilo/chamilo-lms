@@ -99,6 +99,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'session_admin_user_subscription_search_extra_field_to_search' => '',
                     'push_notification_settings' => '',
                     'hosting_limit_identical_email' => '0',
+                    'session_admin_access_to_all_users_on_all_urls' => 'false',
                 ]
             )
             ->setTransformer(
@@ -259,6 +260,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'help' => 'Maximum number of accounts allowed with the same email. Set to 0 to disable limit.',
                 ]
             )
+            ->add('session_admin_access_to_all_users_on_all_urls', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

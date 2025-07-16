@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use BuyCoursesPlugin;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
@@ -15,6 +16,7 @@ use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
@@ -270,7 +272,8 @@ class SessionController extends AbstractController
         Request $request,
         UserRepository $userRepo,
         EntityManagerInterface $em,
-        MessageHelper $messageHelper
+        MessageHelper $messageHelper,
+        AccessUrlHelper $accessUrlHelper
     ): Response {
         $session = $em->getRepository(Session::class)->find($id);
         $currentUser = $this->userHelper->getCurrent();
@@ -295,12 +298,29 @@ class SessionController extends AbstractController
         }
 
         if (!$user->isActive()) {
-            $user->setActive(1);
+            $user->setActive(User::ACTIVE);
             $em->persist($user);
-            $em->flush();
         }
 
-        $now = new DateTime();
+        $accessUrl = $accessUrlHelper->getCurrent();
+
+        if ($accessUrl) {
+            $hasAccess = $user->getPortals()->exists(
+                fn ($k, $rel) => $rel->getUrl()?->getId() === $accessUrl->getId()
+            );
+
+            if (!$hasAccess) {
+                $rel = new AccessUrlRelUser();
+                $rel->setUser($user);
+                $rel->setUrl($accessUrl);
+
+                $em->persist($rel);
+            }
+        }
+
+        $em->flush();
+
+        $now = new \DateTime();
         $relSessions = $em->getRepository(SessionRelUser::class)->findBy([
             'user' => $user,
             'relationType' => Session::STUDENT,
@@ -308,14 +328,13 @@ class SessionController extends AbstractController
 
         $activeSessions = array_filter($relSessions, function (SessionRelUser $rel) use ($now) {
             $s = $rel->getSession();
-
             return $s->getAccessStartDate() <= $now && $s->getAccessEndDate() >= $now;
         });
 
         $sessionListHtml = '';
         foreach ($activeSessions as $rel) {
-            $session = $rel->getSession();
-            $sessionListHtml .= '<li>'.htmlspecialchars($session->getTitle()).'</li>';
+            $s = $rel->getSession();
+            $sessionListHtml .= '<li>'.htmlspecialchars($s->getTitle()).'</li>';
         }
 
         $request = $this->requestStack->getCurrentRequest();
@@ -324,7 +343,7 @@ class SessionController extends AbstractController
 
         $subject = $this->translator->trans('You have been enrolled in a new course');
 
-        $body = $this->translator->trans(
+        $bodyTemplate = $this->translator->trans(
             'Hello %s,<br><br>'.
             'You have been enrolled in a new session: <strong>%s</strong>.<br>'.
             'You can access your courses from <a href="%s">here</a>.<br><br>'.
@@ -334,7 +353,7 @@ class SessionController extends AbstractController
         );
 
         $body = \sprintf(
-            $body,
+            $bodyTemplate,
             $user->getFullName(),
             $session->getTitle(),
             $sessionUrl,

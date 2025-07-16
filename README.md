@@ -64,23 +64,8 @@ mysql -e "GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY
 cd /var/www && wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-alpha.2/chamilo-2.0.0-alpha.2.tar.gz
 tar zxf chamilo-2.0.0-alpha.2.tar.gz
 mv chamilo-2.0.0-alpha.2 chamilo
-vim /etc/apache2/sites-available/my.chamilo.net.conf
-# copy-paste the following into the config file
-<VirtualHost *:80>
-  ServerName my.chamilo.net
-  DocumentRoot /var/www/chamilo/public/
-  RewriteEngine On
-  <Directory /var/www/chamilo/public>
-    AllowOverride All
-    Require all granted
-  </Directory>
-  php_value session.cookie_httponly 1
-  php_admin_value session.save_handler "redis"
-  php_admin_value session.save_path "tcp://127.0.0.1:6379"
-  php_admin_value upload_max_filesize 256M
-  php_admin_value post_max_size 256M
-</VirtualHost>
-# exit with "escape, :, wq"
+cd chamilo
+cp public/main/install/apache.dist.conf /etc/apache2/sites-available/my.chamilo.net.conf
 a2ensite my.chamilo.net
 a2enmod rewrite ssl headers expires
 systemctl restart apache2

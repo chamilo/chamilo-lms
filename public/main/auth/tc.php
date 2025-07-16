@@ -6,11 +6,14 @@ use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use ChamiloSession as Session;
 
-$return = $_POST['return'] ?? $_GET['return'] ?? 'index.php';
+$return = $_POST['return'] ?? $_GET['return'] ?? '/home';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'
     && !empty($_POST['legal_accept_type'])
-    && isset($_POST['legal_accept'])
+    && (
+        isset($_POST['legal_accept'])
+        || api_get_setting('registration.hide_legal_accept_checkbox') === 'true'
+    )
 ) {
     $userId = 0;
     $termData = Session::read('term_and_condition');

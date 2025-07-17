@@ -139,6 +139,11 @@ services:
                 projectId: '%env(GOOGLE_STORAGE_CLOUD_PROJECT_ID)%'
                 keyFilePath: '%env(resolve:GOOGLE_STORAGE_KEY_FILE_PATH)%'
 
+    MicrosoftAzure\Storage\Blob\BlobRestProxy:
+        factory: ['MicrosoftAzure\Storage\Blob\BlobRestProxy', 'createBlobService']
+        arguments:
+            - '%env(AZURE_STORAGE_CONNECTION_STRING)%'
+
 cocur_slugify:
     lowercase: true
 

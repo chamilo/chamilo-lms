@@ -7,6 +7,18 @@ oneup_flysystem:
             local:
                 location: '%kernel.project_dir%/var/cache/assets'
 
+        asset_azure_adapter:
+            azureblob:
+                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
+                container: '%env(AZURE_STORAGE_ASSET_CONTAINER)%'
+                prefix: '%env(AZURE_STORAGE_ASSET_PREFIX)%'
+
+        asset_cache_azure_adapter:
+            azureblob:
+                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
+                container: '%env(AZURE_STORAGE_ASSET_CACHE_CONTAINER)%'
+                prefix: '%env(AZURE_STORAGE_ASSET_CACHE_PREFIX)%'
+
         asset_google_adapter:
             googlecloudstorage:
                 client: 'Google\Cloud\Storage\StorageClient'
@@ -26,6 +38,18 @@ oneup_flysystem:
             local:
                 location: '%kernel.project_dir%/var/cache/resource'
 
+        resource_azure_adapter:
+            azureblob:
+                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
+                container: '%env(AZURE_STORAGE_RESOURCE_CONTAINER)%'
+                prefix: '%env(AZURE_STORAGE_RESOURCE_PREFIX)%'
+
+        resource_cache_azure_adapter:
+            azureblob:
+                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
+                container: '%env(AZURE_STORAGE_RESOURCE_CACHE_CONTAINER)%'
+                prefix: '%env(AZURE_STORAGE_RESOURCE_CACHE_PREFIX)%'
+
         resource_google_adapter:
             googlecloudstorage:
                 client: 'Google\Cloud\Storage\StorageClient'
@@ -41,6 +65,12 @@ oneup_flysystem:
         themes_adapter:
             local:
                 location: '%kernel.project_dir%/var/themes'
+
+        themes_azure_adapter:
+            azureblob:
+                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
+                container: '%env(AZURE_STORAGE_THEMES_CONTAINER)%'
+                prefix: '%env(AZURE_STORAGE_THEMES_PREFIX)%'
 
         themes_google_adapter:
             googlecloudstorage:

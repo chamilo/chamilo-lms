@@ -133,6 +133,29 @@ services:
         arguments:
             $pluginDir: '%kernel.project_dir%/public/plugin'
 
+    League\Flysystem\AwsS3V3\PortableVisibilityConverter: ~
+
+    chamilo.storage.awss3_client:
+        class: Aws\S3\S3Client
+        arguments:
+            -
+                version: '%env(AWS_S3_STORAGE_VERSION)%'
+                region: '%env(AWS_S3_STORAGE_REGION)%'
+                credentials:
+                    key: '%env(AWS_S3_STORAGE_ACCESS_KEY)%'
+                    secret: '%env(AWS_S3_STORAGE_ACCESS_SECRET)%'
+
+    Google\Cloud\Storage\StorageClient:
+        arguments:
+            $config:
+                projectId: '%env(GOOGLE_STORAGE_CLOUD_PROJECT_ID)%'
+                keyFilePath: '%env(resolve:GOOGLE_STORAGE_KEY_FILE_PATH)%'
+
+    MicrosoftAzure\Storage\Blob\BlobRestProxy:
+        factory: ['MicrosoftAzure\Storage\Blob\BlobRestProxy', 'createBlobService']
+        arguments:
+            - '%env(AZURE_STORAGE_CONNECTION_STRING)%'
+
 cocur_slugify:
     lowercase: true
 

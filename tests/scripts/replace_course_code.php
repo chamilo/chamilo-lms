@@ -108,7 +108,7 @@ function replaceCodes(array $list): Generator
 
         if (false === $previewMode) {
             api_replace_terms_in_content("/courses/$currentDirectory/", "/courses/$newDirectory/");
-            api_replace_terms_in_content("cidReq=$currentCode", "cidReq=$newCode");
+            api_replace_terms_in_content("cidReq=$currentCode&", "cidReq=$newCode&");
         } else {
             yield "  Content replacement not executed: previewMode=true";
         }
@@ -119,7 +119,7 @@ function replaceCodes(array $list): Generator
 
         if (false === $previewMode && true === $updateFilesAndDirs) {
             exec('find '.$coursePath.$currentDirectory.'/document/ -type f -name "*.html" -exec sed -i '."'s#/courses/$currentDirectory/#/courses/$newDirectory/#g' {} +");
-            exec('find '.$coursePath.$currentDirectory.'/document/ -type f -name "*.html" -exec sed -i '."'s#cidReq=$currentCode#cidReq=$newCode#g' {} +");
+            exec('find '.$coursePath.$currentDirectory.'/document/ -type f -name "*.html" -exec sed -i '."'s#cidReq=$currentCode&#cidReq=$newCode&#g' {} +");
         } else {
             yield "  File changes ignored (variable updateFilesAndDirs set to false)";
         }

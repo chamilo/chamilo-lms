@@ -69,6 +69,7 @@ function replaceCodes(array $list): Generator
                 ],
                 ['code = ?' => [$currentCode]]
             );
+            yield "  Course table updated with new code and directory $newCode/$newDirectory";
         } else {
             yield "  Course table not updated: previewMode=true";
         }

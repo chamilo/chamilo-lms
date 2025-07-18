@@ -86,7 +86,7 @@ function replaceCodes(array $list): Generator
             'templates' => ['course_code'],
         ];
 
-        yield "Updating database tables new code";
+        yield "Updating database tables. Replacing $currentCode with new code $newCode...";
 
         Database::query('SET foreign_key_checks = 0');
 

@@ -113,7 +113,10 @@ class ProfileType extends AbstractType
             );
         }
 
-        $builder->add('extra_fields', ExtraFieldType::class, ['mapped' => false]);
+        $builder->add('extra_fields', ExtraFieldType::class, [
+            'mapped' => false,
+            'label' => false,
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

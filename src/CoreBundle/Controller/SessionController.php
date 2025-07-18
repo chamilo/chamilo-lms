@@ -320,7 +320,7 @@ class SessionController extends AbstractController
 
         $em->flush();
 
-        $now = new \DateTime();
+        $now = new DateTime();
         $relSessions = $em->getRepository(SessionRelUser::class)->findBy([
             'user' => $user,
             'relationType' => Session::STUDENT,
@@ -328,6 +328,7 @@ class SessionController extends AbstractController
 
         $activeSessions = array_filter($relSessions, function (SessionRelUser $rel) use ($now) {
             $s = $rel->getSession();
+
             return $s->getAccessStartDate() <= $now && $s->getAccessEndDate() >= $now;
         });
 

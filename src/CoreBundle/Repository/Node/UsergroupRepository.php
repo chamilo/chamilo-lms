@@ -485,7 +485,7 @@ class UsergroupRepository extends ResourceRepository
             ->setMaxResults(1)
             ->setParameters([
                 'title' => $title,
-                'url' => $url->getId()
+                'url' => $url->getId(),
             ])
             ->setParameter('title', $title)
             ->getQuery()

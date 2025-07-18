@@ -365,5 +365,4 @@ class SessionAdminController extends BaseController
             'items' => $data,
         ]);
     }
-
 }

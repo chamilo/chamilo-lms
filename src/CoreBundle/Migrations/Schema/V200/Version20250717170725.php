@@ -16,9 +16,6 @@ class Version20250717170725 extends AbstractMigrationChamilo
         return 'Prepare access_url table for login-only URLs';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE access_url ADD is_login_only TINYINT(1) DEFAULT 0 NOT NULL');

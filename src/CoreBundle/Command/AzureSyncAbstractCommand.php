@@ -20,7 +20,6 @@ use Exception;
 use Generator;
 use GuzzleHttp\Exception\GuzzleException;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use KnpU\OAuth2ClientBundle\Client\Provider\AzureClient;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 use Symfony\Component\Console\Command\Command;
@@ -180,9 +179,9 @@ abstract class AzureSyncAbstractCommand extends Command
 
             $query = $usergroupsDeltaLink
                 ? $usergroupsDeltaLink->getValue()
-                : sprintf('$select=%s', implode(',', AzureAuthenticatorHelper::QUERY_GROUP_FIELDS));
+                : \sprintf('$select=%s', implode(',', AzureAuthenticatorHelper::QUERY_GROUP_FIELDS));
         } else {
-            $query = sprintf(
+            $query = \sprintf(
                 '$top=%d&$select=%s',
                 AzureSyncState::API_PAGE_SIZE,
                 implode(',', AzureAuthenticatorHelper::QUERY_GROUP_FIELDS)
@@ -207,8 +206,8 @@ abstract class AzureSyncAbstractCommand extends Command
             $azureGroupsInfo = $azureGroupsRequest['value'] ?? [];
 
             foreach ($azureGroupsInfo as $azureGroupInfo) {
-                if (!empty($this->providerParams['group_filter_regex']) &&
-                    !preg_match("/{$this->providerParams['group_filter_regex']}/", $azureGroupInfo['displayName'])
+                if (!empty($this->providerParams['group_filter_regex'])
+                    && !preg_match("/{$this->providerParams['group_filter_regex']}/", $azureGroupInfo['displayName'])
                 ) {
                     continue;
                 }

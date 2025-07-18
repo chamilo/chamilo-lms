@@ -40,7 +40,7 @@ class AzureSyncUsergroupsCommand extends AzureSyncAbstractCommand
                     $userGroup->getUsers()->clear();
 
                     $io->text(
-                        sprintf(
+                        \sprintf(
                             'Class exists, all users unsubscribed: %s (ID %d)',
                             $userGroup->getTitle(),
                             $userGroup->getId()
@@ -63,7 +63,7 @@ class AzureSyncUsergroupsCommand extends AzureSyncAbstractCommand
 
                     $this->usergroupRepository->create($userGroup);
 
-                    $io->text(sprintf('Class created: %s (ID %d)', $userGroup->getTitle(), $userGroup->getId()));
+                    $io->text(\sprintf('Class created: %s (ID %d)', $userGroup->getTitle(), $userGroup->getId()));
                 }
 
                 $groupIdByUid[$azureGroupInfo['id']] = $userGroup;
@@ -79,7 +79,7 @@ class AzureSyncUsergroupsCommand extends AzureSyncAbstractCommand
         foreach ($groupIdByUid as $azureGroupUid => $group) {
             $newGroupMembers = [];
 
-            $io->text(sprintf('Obtaining members for group (ID %d)', $group->getId()));
+            $io->text(\sprintf('Obtaining members for group (ID %d)', $group->getId()));
 
             try {
                 foreach ($this->getAzureGroupMembers($azureGroupUid) as $azureGroupMember) {
@@ -100,7 +100,7 @@ class AzureSyncUsergroupsCommand extends AzureSyncAbstractCommand
             }
 
             $io->text(
-                sprintf(
+                \sprintf(
                     'User IDs subscribed in class (ID %d): %s',
                     $group->getId(),
                     implode(', ', $newGroupMembers)

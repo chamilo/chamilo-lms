@@ -128,11 +128,11 @@ class CourseController extends ToolBaseController
                     $request->getSession()->remove('course');
 
                     // Build return URL
-                    $returnUrl = '/course/' . $course->getId() . '/home?sid='.$sid;
+                    $returnUrl = '/course/'.$course->getId().'/home?sid='.$sid;
 
                     $responseData = [
                         'redirect' => true,
-                        'url' => '/main/auth/tc.php?return=' . urlencode($returnUrl),
+                        'url' => '/main/auth/tc.php?return='.urlencode($returnUrl),
                     ];
                 }
             } else {

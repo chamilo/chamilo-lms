@@ -53,8 +53,8 @@ class CertificateController extends AbstractController
 
         if (!$isOwner && !$isPlatformAdmin) {
             if (
-                (!$allowPublic || !$certificate->getPublish()) &&
-                (!$allowSessionAdmin || !$user->isSessionAdmin())
+                (!$allowPublic || !$certificate->getPublish())
+                && (!$allowSessionAdmin || !$user->isSessionAdmin())
             ) {
                 throw new AccessDeniedHttpException('The requested certificate is not public.');
             }
@@ -96,8 +96,8 @@ class CertificateController extends AbstractController
 
         if (!$isOwner && !$isPlatformAdmin) {
             if (
-                (!$allowPublic || !$certificate->getPublish()) &&
-                (!$allowSessionAdmin || !$user->isSessionAdmin())
+                (!$allowPublic || !$certificate->getPublish())
+                && (!$allowSessionAdmin || !$user->isSessionAdmin())
             ) {
                 throw new AccessDeniedHttpException('The requested certificate is not public.');
             }

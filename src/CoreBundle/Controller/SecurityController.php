@@ -127,7 +127,7 @@ class SecurityController extends AbstractController
 
                 return $this->json([
                     'load_terms' => true,
-                    'redirect'   => '/main/auth/tc.php?return=' . urlencode('/home'),
+                    'redirect' => '/main/auth/tc.php?return='.urlencode('/home'),
                 ]);
             }
             $request->getSession()->remove('term_and_condition');

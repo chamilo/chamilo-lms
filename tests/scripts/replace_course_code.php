@@ -105,7 +105,7 @@ function replaceCodes(array $list): Generator
             yield "  Tables with course code not updated for $currentCode: previewMode=true";
         }
 
-        yield "Replacing course code in exercises content";
+        yield "Replacing course code in database content";
 
         if (false === $previewMode) {
             api_replace_terms_in_content("/courses/$currentDirectory/", "/courses/$newDirectory/");

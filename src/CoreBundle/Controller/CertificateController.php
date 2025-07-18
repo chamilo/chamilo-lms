@@ -49,12 +49,12 @@ class CertificateController extends AbstractController
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
         $user = $this->userHelper->getCurrent();
         $isOwner = ($user->getId() === $this->getUser()->getId());
-        $isPlatformAdmin = $user->hasRole('ROLE_ADMIN');
+        $isPlatformAdmin = $user->isAdmin();
 
         if (!$isOwner && !$isPlatformAdmin) {
             if (
                 (!$allowPublic || !$certificate->getPublish()) &&
-                (!$allowSessionAdmin || !$user->hasRole('ROLE_SESSION_MANAGER'))
+                (!$allowSessionAdmin || !$user->isSessionAdmin())
             ) {
                 throw new AccessDeniedHttpException('The requested certificate is not public.');
             }
@@ -92,12 +92,12 @@ class CertificateController extends AbstractController
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
         $user = $this->userHelper->getCurrent();
         $isOwner = ($user->getId() === $this->getUser()->getId());
-        $isPlatformAdmin = $user->hasRole('ROLE_ADMIN');
+        $isPlatformAdmin = $user->isAdmin();
 
         if (!$isOwner && !$isPlatformAdmin) {
             if (
                 (!$allowPublic || !$certificate->getPublish()) &&
-                (!$allowSessionAdmin || !$user->hasRole('ROLE_SESSION_MANAGER'))
+                (!$allowSessionAdmin || !$user->isSessionAdmin())
             ) {
                 throw new AccessDeniedHttpException('The requested certificate is not public.');
             }

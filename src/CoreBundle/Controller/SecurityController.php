@@ -103,7 +103,7 @@ class SecurityController extends AbstractController
         $extraFieldValuesRepository = $this->entityManager->getRepository(ExtraFieldValues::class);
         $legalTermsRepo = $this->entityManager->getRepository(Legal::class);
         if (
-            $user->hasRole('ROLE_STUDENT')
+            $user->isStudent()
             && 'true' === $this->settingsManager->getSetting('allow_terms_conditions', true)
             && 'login' === $this->settingsManager->getSetting('load_term_conditions_section', true)
         ) {

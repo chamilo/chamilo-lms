@@ -97,7 +97,7 @@ class CourseController extends ToolBaseController
             'url' => '#',
         ];
 
-        if ($user->hasRole('ROLE_STUDENT')
+        if ($user->isStudent()
             && 'true' === $settingsManager->getSetting('registration.allow_terms_conditions', true)
             && 'course' === $settingsManager->getSetting('platform.load_term_conditions_section', true)
         ) {
@@ -191,7 +191,7 @@ class CourseController extends ToolBaseController
         $courseCode = $course->getCode();
         $courseId = $course->getId();
 
-        if ($user && $user->hasRole('ROLE_INVITEE')) {
+        if ($user && $user->isInvitee()) {
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
                 $userId,
                 $courseCode,

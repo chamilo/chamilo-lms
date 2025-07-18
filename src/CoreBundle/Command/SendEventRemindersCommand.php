@@ -229,7 +229,7 @@ class SendEventRemindersCommand extends Command
     {
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([]);
 
-        return $admin && ($admin->hasRole('ROLE_ADMIN') || $admin->hasRole('ROLE_SUPER_ADMIN'))
+        return $admin && ($admin->isAdmin() || $admin->isSuperAdmin())
             ? $admin->getId()
             : 1;
     }

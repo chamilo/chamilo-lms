@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
@@ -375,8 +376,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         SerializerInterface $serializer,
         Security $security,
     ): Response {
+        /** @var User $user */
         $user = $security->getUser();
-        $isAdmin = ($user->hasRole('ROLE_SUPER_ADMIN') || $user->hasRole('ROLE_ADMIN'));
+        $isAdmin = ($user->isSuperAdmin() || $user->isAdmin());
         $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
 
         if (!($isCourseTeacher || $isAdmin)) {
@@ -448,8 +450,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         EntityManagerInterface $entityManager,
         Security $security
     ): Response {
+        /** @var User $user */
         $user = $security->getUser();
-        $isAdmin = ($user->hasRole('ROLE_SUPER_ADMIN') || $user->hasRole('ROLE_ADMIN'));
+        $isAdmin = ($user->isSuperAdmin() || $user->isAdmin());
         $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
 
         if (!($isCourseTeacher || $isAdmin)) {

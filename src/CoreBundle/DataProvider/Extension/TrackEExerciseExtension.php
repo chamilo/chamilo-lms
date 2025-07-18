@@ -49,7 +49,7 @@ final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
             throw new AccessDeniedException();
         }
 
-        if ($user->hasRole('ROLE_STUDENT')) {
+        if ($user->isStudent()) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq("$alias.user", ':user')
             );

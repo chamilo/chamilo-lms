@@ -1016,7 +1016,7 @@ class SocialController extends AbstractController
             return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $isAdmin = $user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SUPER_ADMIN');
+        $isAdmin = $user->isAdmin() || $user->isSuperAdmin();
 
         $termActivated = false;
         $blockButton = false;

@@ -85,7 +85,7 @@ class SessionAdminController extends BaseController
 
         $allowPublic = 'true' === $this->settingsManager->getSetting('course.allow_public_certificates', true);
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
-        $isSessionAdmin = $user && $user->hasRole('ROLE_SESSION_MANAGER');
+        $isSessionAdmin = $user && $user->isSessionAdmin();
 
         // Transform the certificate entities into a frontend-friendly structure
         $mapCertificate = function (GradebookCertificate $gc) use (
@@ -106,7 +106,7 @@ class SessionAdminController extends BaseController
                 $hash = pathinfo($path, PATHINFO_FILENAME);
                 $downloadUrl = '/certificates/'.$hash.'.pdf';
 
-                $isPlatformAdmin = $user && $user->hasRole('ROLE_ADMIN');
+                $isPlatformAdmin = $user && $user->isAdmin();
                 $isPublic = $allowPublic && $gc->getPublish();
 
                 $isDownloadAllowed = $isPlatformAdmin

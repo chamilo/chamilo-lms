@@ -3662,7 +3662,7 @@ class SessionManager
 
         $user = api_get_user_entity($userId);
 
-        if (!$user->hasRole('ROLE_TEACHER')) {
+        if (!$user->isTeacher()) {
             return false;
         }
 

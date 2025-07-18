@@ -56,6 +56,14 @@ services:
             - {source: '@oneup_flysystem.resource_filesystem', cache: '@oneup_flysystem.resource_cache_filesystem'}
             - '%glide_media_filters%'
 
+    Chamilo\CoreBundle\Helpers\GlideAssetHelper:
+      arguments:
+        $config:
+          source: '@oneup_flysystem.asset_filesystem'
+          cache: '@oneup_flysystem.asset_cache_filesystem'
+          driver: 'gd'
+        $filters: [ ]
+
     Chamilo\CoreBundle\Helpers\GlideAssetUtil:
         arguments:
             - {source: '@oneup_flysystem.asset_filesystem', cache: '@oneup_flysystem.asset_cache_filesystem'}

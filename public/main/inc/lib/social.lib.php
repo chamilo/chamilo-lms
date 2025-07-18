@@ -11,8 +11,6 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use Laminas\Feed\Reader\Entry\Rss;
-use Laminas\Feed\Reader\Reader;
 
 /**
  * Class SocialManager.
@@ -420,69 +418,6 @@ class SocialManager extends UserManager
         Database::query($sql);
 
         return true;
-    }
-
-    /**
-     * Get user's feeds.
-     *
-     * @param int $user  User ID
-     * @param int $limit Limit of posts per feed
-     *
-     * @return string HTML section with all feeds included
-     *
-     * @author  Yannick Warnier
-     *
-     * @since   Dokeos 1.8.6.1
-     */
-    public static function getUserRssFeed($user, $limit = 5)
-    {
-        $feed = UserManager::get_extra_user_data_by_field($user, 'rssfeeds');
-
-        if (empty($feed)) {
-            return '';
-        }
-        $feeds = explode(';', $feed['rssfeeds']);
-        if (0 == count($feeds)) {
-            return '';
-        }
-        $res = '';
-        foreach ($feeds as $url) {
-            if (empty($url)) {
-                continue;
-            }
-            try {
-                $channel = Reader::import($url);
-                $i = 1;
-                if (!empty($channel)) {
-                    $iconRss = '';
-                    if (!empty($feed)) {
-                        $iconRss = Display::url(
-                            Display::getMdiIcon('rss', 'ch-tool-icon', null, ICON_SIZE_SMALL),
-                            Security::remove_XSS($feed['rssfeeds']),
-                            ['target' => '_blank']
-                        );
-                    }
-
-                    $res .= '<h3 class="title-rss">'.$iconRss.' '.$channel->getTitle().'</h3>';
-                    $res .= '<div class="rss-items">';
-                    /** @var Rss $item */
-                    foreach ($channel as $item) {
-                        if ($limit >= 0 and $i > $limit) {
-                            break;
-                        }
-                        $res .= '<h4 class="rss-title"><a href="'.$item->getLink().'">'.$item->getTitle().'</a></h4>';
-                        $res .= '<div class="rss-date">'.api_get_local_time($item->getDateCreated()).'</div>';
-                        $res .= '<div class="rss-content"><p>'.$item->getDescription().'</p></div>';
-                        $i++;
-                    }
-                    $res .= '</div>';
-                }
-            } catch (Exception $e) {
-                error_log($e->getMessage());
-            }
-        }
-
-        return $res;
     }
 
     /**

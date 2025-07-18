@@ -48,12 +48,6 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'value_type' => ExtraField::FIELD_TYPE_TAG,
             ],
             [
-                'variable' => 'rssfeeds',
-                'display_text' => 'RSS',
-                'item_type' => ExtraField::USER_FIELD_TYPE,
-                'value_type' => ExtraField::FIELD_TYPE_TEXT,
-            ],
-            [
                 'variable' => 'dashboard',
                 'display_text' => 'Dashboard',
                 'item_type' => ExtraField::USER_FIELD_TYPE,

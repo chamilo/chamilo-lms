@@ -10700,6 +10700,16 @@ function api_encrypt_hash($data, $secret)
     return base64_encode($iv).base64_encode($encrypted.$tag);
 }
 
+/**
+ * Replace a specific term by another in all course-related text elements in the database.
+ * Does not rename directories or replace content of files on disk. Check tests/scripts/replace_course_code.php if
+ * you are looking for this.
+ * The replacement can replace bits in larger strings, requiring the search string to be very specific to avoid
+ * excess replacements.
+ * @param string $search
+ * @param string $replace
+ * @return array The number of changes executed in each table
+ */
 function api_replace_terms_in_content(string $search, string $replace): array
 {
     $replacements = [

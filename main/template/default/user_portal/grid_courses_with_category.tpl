@@ -9,7 +9,7 @@
             <div class="panel-body">
                 <div class="row">
                     {% for item in category.courses %}
-                        <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="col-xs-12 col-sm-6 col-md-3">
                             <div class="items">
                                 <div class="image">
                                     {% set title %}

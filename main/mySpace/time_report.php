@@ -83,6 +83,13 @@ $reportTypeValues = [
 ];
 $formValidator->addElement('select', 'report_type', get_lang('ReportType'), $reportTypeValues);
 
+// Export format selector allows XLS or PDF output
+$formatValues = [
+    'xls' => get_lang('ExportExcel'),
+    'pdf' => get_lang('ExportToPDF'),
+];
+$formValidator->addElement('select', 'export_format', get_lang('Format'), $formatValues);
+
 // Button to generate the report
 $formValidator->addButtonSend(get_lang('GenerateReport'));
 
@@ -91,6 +98,9 @@ $formValidator->addRule('start_date', get_lang('ThisFieldIsRequired'), 'required
 $formValidator->addRule('end_date', get_lang('ThisFieldIsRequired'), 'required');
 $formValidator->addRule('users', get_lang('ThisFieldIsRequired'), 'required');
 $formValidator->addRule('report_type', get_lang('ThisFieldIsRequired'), 'required');
+$formValidator->addRule('export_format', get_lang('ThisFieldIsRequired'), 'required');
+
+$formValidator->setDefaults(['export_format' => 'xls']);
 
 if ($formValidator->validate()) {
     $values = $formValidator->exportValues();
@@ -98,7 +108,7 @@ if ($formValidator->validate()) {
     $startDate = $values['start_date'];
     $endDate = $values['end_date'];
     $reportType = $values['report_type'];
-    $exportXls = isset($_POST['export']);
+    $format = $values['export_format'];
 
     if (empty($users)) {
         Display::addFlash(Display::return_message(get_lang('NoUsersSelected'), 'warning'));
@@ -111,7 +121,12 @@ if ($formValidator->validate()) {
             $rows = $data['rows'];
             array_unshift($rows, $headers);
             $fileName = get_lang('Export').'-'.$reportTypeValues[$reportType].'_'.api_get_local_time();
-            Export::arrayToCsv($rows, $fileName);
+            if ($format === 'pdf') {
+                $html = Export::convert_array_to_html($rows);
+                Export::export_html_to_pdf($html, ['filename' => $fileName]);
+            } else {
+                Export::arrayToCsv($rows, $fileName);
+            }
         }
     }
 }

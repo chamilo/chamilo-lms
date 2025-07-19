@@ -45,6 +45,10 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
     #[Groups(['cshortcut:read'])]
     private ?string $customImageUrl = null;
 
+    #[Groups(['cshortcut:read'])]
+    public ?string $target = null;
+
+
     public function __toString(): string
     {
         return $this->getTitle();

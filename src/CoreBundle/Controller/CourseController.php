@@ -242,6 +242,8 @@ class CourseController extends ToolBaseController
                             ? $assetRepository->getAssetUrl($cLink->getCustomImage())
                             : null
                     );
+
+                    $shortcut->target = $cLink->getTarget();
                 } else {
                     $shortcut->setCustomImageUrl(null);
                 }

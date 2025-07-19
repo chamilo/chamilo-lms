@@ -2,6 +2,8 @@
   <div class="course-tool">
     <BaseAppLink
       :url="url"
+      :target="props.shortcut.target || '_self'"
+      rel="noopener"
       class="course-tool__link"
     >
       <img
@@ -12,6 +14,8 @@
     </BaseAppLink>
     <BaseAppLink
       :url="url"
+      :target="props.shortcut.target || '_self'"
+      rel="noopener"
       class="course-tool__title"
     >
       {{ shortcut.title }}

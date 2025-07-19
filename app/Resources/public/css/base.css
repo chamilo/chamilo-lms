@@ -6742,6 +6742,7 @@ div#chat-remote-video video {
     position: absolute;
     bottom: 115px;
     right: -10px;
+    top: 10px;
     background-color: #3379b6;
     color: #fff;
     padding: 5px 10px;
@@ -6781,6 +6782,7 @@ div#chat-remote-video video {
 
 .grid-courses .items .cribbon-course-language {
     bottom: 105px;
+    top: 30px;
 }
 
 .grid-courses .items .cribbon-course-language-catalog {

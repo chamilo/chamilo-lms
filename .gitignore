@@ -16,7 +16,6 @@ app/logs/*
 /app/config/mail.conf.php
 /app/config/profile.conf.php
 /app/config/configuration.php
-composer.lock
 
 # Courses
 app/courses/*

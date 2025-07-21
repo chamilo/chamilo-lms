@@ -7,10 +7,16 @@
       class="course-tool__link"
     >
       <img
+        v-if="shortcut.customImageUrl"
         :alt="shortcut.title"
-        :src="shortcut.customImageUrl || `/img/tools/${shortcut.type}.png`"
+        :src="shortcut.customImageUrl"
         class="course-tool__icon"
       />
+      <i
+        v-else
+        class="mdi-file-link bg-gradient-to-b from-gray-50 to-gray-25 course-tool__icon mdi"
+        :title="shortcut.title"
+      ></i>
     </BaseAppLink>
     <BaseAppLink
       :url="url"

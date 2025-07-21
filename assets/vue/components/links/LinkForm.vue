@@ -170,6 +170,8 @@ const uppy = new Uppy({
     formData.removeImage = false
 
     const editor = uppy.getPlugin("ImageEditor")
+    selectedFile.value = file.data
+
     if (editor?.openEditor) await editor.openEditor(file.id)
   })
   .on("file-editor:complete", (updatedFile) => {

@@ -95,6 +95,7 @@ switch ($action) {
         $data = [
             [
                 '#',
+                get_lang('Subject'),
                 get_lang('Status'),
                 get_lang('Date'),
                 get_lang('LastUpdate'),
@@ -106,10 +107,26 @@ switch ($action) {
             ],
         ];
         $datos = $table->get_clean_html();
+        $ticketTable = Database::get_main_table(TABLE_TICKET_TICKET);
         foreach ($datos as $ticket) {
-            $ticket[0] = substr(strip_tags($ticket[0]), 0, 12);
+            $ticketId = 0;
+            if (preg_match('/ticket_id=(\d+)/', $ticket[0], $matches)) {
+                $ticketId = (int) $matches[1];
+            }
+            $ticketCode = '';
+            $ticketTitle = '';
+            if ($ticketId > 0) {
+                $sql = "SELECT code, subject FROM $ticketTable WHERE id = $ticketId";
+                $rs = Database::query($sql);
+                if ($row = Database::fetch_array($rs)) {
+                    $ticketCode = $row['code'];
+                    $ticketTitle = $row['subject'];
+                }
+            }
+
             $ticket_rem = [
-                utf8_decode(strip_tags($ticket[0])),
+                utf8_decode($ticketCode),
+                utf8_decode($ticketTitle),
                 utf8_decode(api_html_entity_decode($ticket[1])),
                 utf8_decode(strip_tags($ticket[2])),
                 utf8_decode(strip_tags($ticket[3])),

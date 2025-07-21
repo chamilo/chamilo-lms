@@ -301,7 +301,7 @@ class MessageHelper
             throw new Exception('The receiver does not have a valid email address.');
         }
 
-        $smtpFromEmail = $this->settingsManager->getSetting('mail.smtp_from_email');
+        $smtpFromEmail = $this->settingsManager->getSetting('mail.mailer_from_name');
 
         if (empty($smtpFromEmail)) {
             $smtpFromEmail = $this->settingsManager->getSetting('platform.administrator_email');

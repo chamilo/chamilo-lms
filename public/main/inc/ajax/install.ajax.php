@@ -8,7 +8,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
 /**
- * Responses to AJAX calls for install.
+ * Responses to AJAX calls for installation.
  */
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
@@ -85,51 +85,24 @@ switch ($action) {
         }
         break;
 
-    case 'test_smtp':
+    case 'test_mailer':
         if (!empty($_POST)) {
-            $smtpHost = $_POST['smtpHost'] ?? '';
-            $smtpPort = $_POST['smtpPort'] ?? 25;
-            $smtpAuth = $_POST['smtpAuth'] ?? false;
-            $smtpUser = $_POST['smtpUser'] ?? '';
-            $smtpPass = $_POST['smtpPass'] ?? '';
-            $smtpSecure = $_POST['smtpSecure'] ?? '';
-            $smtpCharset = $_POST['smtpCharset'] ?? 'UTF-8';
-            $fromEmail = $_POST['fromEmail'] ?? '';
-            $fromName = $_POST['fromName'] ?? '';
-
-            $mailerScheme = 'smtp';
-            $query = '';
-
-            if (!empty($smtpSecure)) {
-                if ($smtpSecure === 'ssl') {
-                    $mailerScheme = 'smtps';
-                } elseif ($smtpSecure === 'tls') {
-                    $query = '?encryption=tls';
-                }
-            }
-
-            $dsn = sprintf(
-                '%s://%s%s@%s:%s%s',
-                $mailerScheme,
-                $smtpAuth ? $smtpUser : '',
-                $smtpAuth ? ':' . $smtpPass : '',
-                $smtpHost,
-                $smtpPort,
-                $query
-            );
+            $mailerDsn = $_POST['mailerDsn'] ?? '';
+            $mailerFromEmail = $_POST['mailerFromEmail'] ?? '';
+            $mailerFromName = $_POST['mailerFromName'] ?? '';
 
             try {
-                $transport = Transport::fromDsn($dsn);
+                $transport = Transport::fromDsn($mailerDsn);
 
                 $mailer = new Mailer($transport);
 
                 $email = (new Email())
                     ->from(new Address(
-                        $fromEmail ?: 'test@example.com',
-                        $fromName ?: 'Test Sender'
+                        $mailerFromEmail ?: 'test@example.com',
+                        $mailerFromName ?: 'Test Sender'
                     ))
-                    ->to($fromEmail ?: 'test@example.com')
-                    ->subject('Chamilo SMTP Test')
+                    ->to($mailerFromEmail ?: 'test@example.com')
+                    ->subject('Chamilo Mail Test')
                     ->text('This is a test e-mail sent from Chamilo installation wizard.');
 
                 $mailer->send($email);

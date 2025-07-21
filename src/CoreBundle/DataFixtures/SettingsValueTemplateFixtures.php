@@ -481,6 +481,30 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         ],
                     ],
                 ],
+                [
+                    'variable' => 'mailer_dkim',
+                    'json_example' => [
+                        'enable' => 1,
+                        'selector' => 'chamilo',
+                        'domain' => 'mydomain.com',
+                        'private_key_string' => '',
+                        'private_key' => '',
+                        'passphrase' => '',
+                    ],
+                ],
+                [
+                    'variable' => 'mailer_xoauth2',
+                    'json_example' => [
+                        'method' => false,
+                        'url_authorize' => 'https://provider.example/oauth2/auth',
+                        'url_access_token' => 'https://provider.example/token',
+                        'url_resource_owner_details' => 'https://provider.example/userinfo',
+                        'scopes' => '',
+                        'client_id' => '',
+                        'client_secret' => '',
+                        'refresh_token' => ''
+                    ],
+                ],
             ],
             'profile' => [
                 [

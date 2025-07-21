@@ -319,10 +319,8 @@ class SessionAdminController extends BaseController
             ];
         }
 
-        $accessUrl = null;
-        if (!$allUrlsAllowed) {
-            $accessUrl = $accessUrlHelper->getCurrent();
-        }
+        $currentUrl = $accessUrlHelper->getCurrent();
+        $accessUrl = $allUrlsAllowed ? null : $currentUrl;
 
         $users = $userRepo->findUsersForSessionAdmin(
             $filters['lastname'] ?? null,
@@ -333,6 +331,7 @@ class SessionAdminController extends BaseController
 
         $data = [];
         foreach ($users as $user) {
+            $extra = [];
             $extraValue = $extraFieldValuesRepo->getValueByVariableAndItem(
                 $configuredExtraFieldVariable,
                 $user->getId(),
@@ -341,12 +340,12 @@ class SessionAdminController extends BaseController
 
             $extra[$configuredExtraFieldVariable] = $extraValue?->getFieldValue();
 
-            if ($allUrlsAllowed) {
-                $localAccess = $user->getPortals()->exists(
-                    fn ($key, AccessUrlRelUser $rel) => $rel->getUrl() === $accessUrl
-                );
-            } else {
+            if (!$allUrlsAllowed) {
                 $localAccess = true;
+            } else {
+                $localAccess = $user->getPortals()->exists(
+                    fn ($key, AccessUrlRelUser $rel) => $rel->getUrl() === $currentUrl
+                );
             }
 
             $data[] = [

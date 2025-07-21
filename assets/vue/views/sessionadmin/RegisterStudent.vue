@@ -320,7 +320,10 @@ async function handleCreateUser() {
   createLoading.value = true
 
   const pwd = createForm.value.password || randomPassword()
-  const username = slugify(`${createForm.value.firstname}.${createForm.value.lastname}`)
+  const loginIsEmail = platformConfigStore.getSetting("profile.login_is_email") === "true"
+  const username = loginIsEmail
+    ? createForm.value.email
+    : slugify(`${createForm.value.firstname}.${createForm.value.lastname}`)
 
   const payload = {
     username,

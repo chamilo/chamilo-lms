@@ -2668,10 +2668,12 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
     'session_end_date_header' => 'Fecha Fin',
     'user_firstname_header' => 'Nombre',
     'user_lastname_header' => 'Apellido 1',
+    'course_field_value' => 'CURSO',
     'session_fields' => [
         '0' => [
             'header' => '1st session header',
-            'field' => 'modalidad'
+            'field' => 'modalidad',
+            'numberOfLetter' => 3
         ],
         '1' => [
             'header' => 'Sesion header without value',

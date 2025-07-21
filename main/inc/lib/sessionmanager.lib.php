@@ -10047,9 +10047,9 @@ class SessionManager
         }
 
         // 2. SESSION DATA
-        $row2 = [$courseInfo['title']];
-        $row2[] = $sessionInfo['access_start_date'];
-        $row2[] = $sessionInfo['access_end_date'];
+        $row2 = $config['course_field_value'] ? [$config['course_field_value']] : [$courseInfo['title']];
+        $row2[] = (new DateTime($sessionInfo['access_start_date']))->format('d/m/Y');
+        $row2[] = (new DateTime($sessionInfo['access_end_date']))->format('d/m/T');
 
         $extraValuesObj = new ExtraFieldValue('session');
         $sessionExtra = $extraValuesObj->getAllValuesByItem($sessionId);
@@ -10058,6 +10058,9 @@ class SessionManager
         foreach ($sessionFields as $entry) {
             if (!empty($entry['field'])) {
                 $value = $sessionExtraMap[$entry['field']] ?? '';
+                if (!empty($entry['numberOfLetter']) && $entry['numberOfLetter'] > 0) {
+                    $value = mb_substr($value, 0, $entry['numberOfLetter']);
+                }
             } else {
                 $value = '';
             }
@@ -10104,7 +10107,7 @@ class SessionManager
                 $userInfo = api_get_user_info($userId);
 
                 $row = [];
-                $row[] = $rowIndex === 0 ? get_lang('Learners') : '';
+                $row[] = get_lang('Learners');
 
                 $userExtraObj = new ExtraFieldValue('user');
                 $userExtra = $userExtraObj->getAllValuesByItem($userId);

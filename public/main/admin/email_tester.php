@@ -20,18 +20,18 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $toolName = get_lang('E-mail tester');
 
 $form = new FormValidator('email_tester');
-$form->addText('smtp_host', get_lang('Host'), false, ['cols-size' => [2, 8, 2]]);
-$form->addText('smtp_port', get_lang('Port'), false, ['cols-size' => [2, 8, 2]]);
-$form->addText('destination', get_lang('Destination'), true, ['cols-size' => [2, 8, 2]]);
-$form->addText('subject', get_lang('Subject'), true, ['cols-size' => [2, 8, 2]]);
+$form->addText('mailer_dsn', get_lang('Mailer DSN'));
+$form->addText('destination', get_lang('Destination'));
+$form->addText('subject', get_lang('Subject'));
 $form->addHtmlEditor(
     'content',
     get_lang('Message'),
     true,
     false,
-    ['ToolbarSet' => 'Minimal', 'cols-size' => [2, 8, 2]]
+    ['ToolbarSet' => 'Minimal']
 );
-$form->addButtonSend(get_lang('Send message'), 'submit', false, ['cols-size' => [2, 8, 2]]);
+$form->addButtonSend(get_lang('Send message'));
+$form->freeze(['mailer_dsn']);
 
 $errorsInfo = MessageManager::failedSentMailErrors();
 
@@ -56,6 +56,10 @@ if ($form->validate()) {
     header('Location: '.api_get_self());
     exit;
 }
+
+$form->setDefaults([
+    'mailer_dsn' => $settingsManager->getSetting('mail.mailer_dsn'),
+]);
 
 $view = new Template($toolName);
 $view->assign('form', $form->returnForm());

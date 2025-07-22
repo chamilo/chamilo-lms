@@ -42,6 +42,7 @@ final class Version20250707212800 extends AbstractMigrationChamilo
         global $platform_email;
 
         $mailerScheme = 'null';
+        $smtpSecure = $platform_email['SMTP_SECURE'] ?? '';
         $query = '';
 
         if (!empty($smtpSecure)) {

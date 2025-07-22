@@ -69,7 +69,7 @@ abstract class Question
         DRAGGABLE => ['Draggable.php', 'Draggable'],
         MATCHING_DRAGGABLE => ['MatchingDraggable.php', 'MatchingDraggable'],
         MATCHING_DRAGGABLE_COMBINATION => ['MatchingDraggableCombination.php', 'MatchingDraggableCombination'],
-        //MEDIA_QUESTION => array('media_question.class.php' , 'MediaQuestion')
+        MEDIA_QUESTION => ['media_question.class.php' , 'MediaQuestion'],
         ANNOTATION => ['Annotation.php', 'Annotation'],
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
         UPLOAD_ANSWER => ['UploadAnswer.php', 'UploadAnswer'],
@@ -179,6 +179,7 @@ abstract class Question
                 $objQuestion->course = $course_info;
                 $objQuestion->feedback = isset($object->feedback) ? $object->feedback : '';
                 $objQuestion->code = isset($object->code) ? $object->code : '';
+                $objQuestion->parent_id = $object->parent_id;
                 $categoryInfo = TestCategory::getCategoryInfoForQuestion($id, $course_id);
 
                 if (!empty($categoryInfo)) {
@@ -1022,6 +1023,7 @@ abstract class Question
         $extra = $this->extra;
         $c_id = $this->course['real_id'];
         $categoryId = $this->category;
+        $parent_id = $this->parent_id;
 
         // question already exists
         if (!empty($id)) {
@@ -1034,6 +1036,7 @@ abstract class Question
                 'picture' => $picture,
                 'extra' => $extra,
                 'level' => $level,
+                'parent_id' => $parent_id,
             ];
             if ($exercise->questionFeedbackEnabled) {
                 $params['feedback'] = $this->feedback;
@@ -1088,6 +1091,7 @@ abstract class Question
                 'picture' => $picture,
                 'extra' => $extra,
                 'level' => $level,
+                'parent_id' => $parent_id,
             ];
 
             if ($exercise->questionFeedbackEnabled) {
@@ -1445,6 +1449,18 @@ abstract class Question
 
         $id = (int) $this->iid;
 
+        if ($this->type == MEDIA_QUESTION) {
+            // Removing media for attached questions
+
+            $sql = "UPDATE $TBL_QUESTIONS SET parent_id = '' WHERE parent_id = $id";
+            Database::query($sql);
+
+            $sql = "DELETE FROM $TBL_QUESTIONS WHERE c_id = $courseId AND iid= ".Database::escape_string($id);
+            Database::query($sql);
+            return true;
+        }
+
+
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
             $courseFilter = " AND c_id = $courseId";
@@ -1568,6 +1584,7 @@ abstract class Question
         $type = $this->type;
         $level = (int) $this->level;
         $extra = $this->extra;
+        $parent_id = $this->parent_id;
 
         // Using the same method used in the course copy to transform URLs
         if ($this->course['id'] != $courseInfo['id']) {
@@ -1598,6 +1615,7 @@ abstract class Question
             'type' => $type,
             'level' => $level,
             'extra' => $extra,
+            'parent_id' => $parent_id,
         ];
         $newQuestionId = Database::insert($questionTable, $params);
 
@@ -1814,6 +1832,9 @@ abstract class Question
             $editorConfig
         );
 
+        // hidden value
+        $form->addElement('hidden', 'myid', intval($_REQUEST['myid']));
+
         if ($this->type != MEDIA_QUESTION) {
             // Advanced parameters.
             $form->addElement(
@@ -1829,6 +1850,16 @@ abstract class Question
                 'questionCategory',
                 get_lang('Category'),
                 TestCategory::getCategoriesIdAndName()
+            );
+
+            // Media
+            $course_medias = Question::prepare_course_media_select(api_get_course_int_id());
+            $form->addElement(
+                'select',
+                'parent_id',
+                get_lang('AttachToMedia'),
+                $course_medias,
+                ['id' => 'parent_id']
             );
 
             if (EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $exercise->getQuestionSelectionType() &&
@@ -1934,7 +1965,7 @@ abstract class Question
 
         // default values
 
-        // Came from he question pool
+        // Came from the question pool
         if (isset($_GET['fromExercise'])
             || (!isset($_GET['newQuestion']) || $isContent)
         ) {
@@ -1986,6 +2017,7 @@ abstract class Question
      */
     public function processCreation($form, $exercise)
     {
+        //$this->updateParentId($form->getSubmitValue('parent_id'));
         $this->updateTitle($form->getSubmitValue('questionName'));
         $this->updateDescription($form->getSubmitValue('questionDescription'));
         $this->updateLevel($form->getSubmitValue('questionLevel'));
@@ -2219,7 +2251,7 @@ abstract class Question
      *
      * @return string HTML string with the header of the question (before the answers table)
      */
-    public function return_header(Exercise $exercise, $counter = null, $score = [])
+    public function return_header(Exercise $exercise, $counter = null, $score = [], $showMedia = false)
     {
         $counterLabel = '';
         if (!empty($counter)) {
@@ -2298,8 +2330,7 @@ abstract class Question
         if ($exercise->display_category_name) {
             $header = TestCategory::returnCategoryAndTitle($this->iid);
         }
-        $show_media = '';
-        if ($show_media) {
+        if ($showMedia) {
             $header .= $this->show_media_content();
         }
 
@@ -2862,5 +2893,123 @@ abstract class Question
         }
 
         return false;
+    }
+
+    public static function getMediaLabels() {
+        // Shows media questions
+        $courseMedias = Question::prepare_course_media_select(api_get_course_int_id());
+        $labels = null;
+        if (!empty($courseMedias)) {
+            $labels .= get_lang('MediaQuestion').' ';
+            foreach ($courseMedias as $mediaId => $media) {
+
+                $editLink  = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.MEDIA_QUESTION.'&myid=1&editQuestion='.$mediaId.'">'.Display::return_icon('edit.png',get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
+                $deleteLink = '<a id="delete_'.$mediaId.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&deleteQuestion='.$mediaId.'" >'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+
+                if (!empty($mediaId)) {
+                    $labels .= Display::label($media).$editLink.$deleteLink.' ';
+                }
+            }
+        }
+
+        return $labels;
+    }
+
+    static function getMediaLabel($title) {
+        return Display::label($title, 'warning');
+    }
+
+    /**
+     * @param $exerciseId
+     * @param $mediaId
+     * @return array|bool
+     */
+    public function getQuestionsPerMediaWithCategories($exerciseId, $mediaId)
+    {
+        $exerciseId = intval($exerciseId);
+        $mediaId = intval($mediaId);
+        $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $questionRelExerciseTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+
+        $sql = "SELECT * FROM $questionTable q INNER JOIN $questionRelExerciseTable r ON (q.iid = r.question_id)
+                WHERE (r.exercise_id = $exerciseId AND q.parent_id = $mediaId) ";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            return Database::store_result($result);
+        }
+        return false;
+    }
+    /**
+     * @param int $exerciseId
+     * @param int $mediaId
+     * @return array
+     */
+    public function getQuestionCategoriesOfMediaQuestions($exerciseId, $mediaId)
+    {
+        $questions = $this->getQuestionsPerMediaWithCategories($exerciseId, $mediaId);
+        $questionCategoryList = array();
+        if (!empty($questions)) {
+            foreach ($questions as $question) {
+                $categories = TestCategory::getCategoryForQuestionWithCategoryData($question['iid']);
+                if (!empty($categories)) {
+                    foreach ($categories as $category) {
+                        $questionCategoryList[$question['iid']][] = $category['iid'];
+                    }
+                }
+            }
+        }
+        return $questionCategoryList;
+    }
+
+    /**
+     * @param int $exerciseId
+     * @param int $mediaId
+     * @return array
+     */
+    public function allQuestionWithMediaHaveTheSameCategory($exerciseId, $mediaId, $categoryListToCompare = array(), $ignoreQuestionId = null, $returnCategoryId = false)
+    {
+        $questions = $this->getQuestionCategoriesOfMediaQuestions($exerciseId, $mediaId);
+        $result = false;
+        $categoryId = null;
+        if (empty($questions)) {
+            $result = true;
+        } else {
+            $tempArray = array();
+            foreach ($questions as $categories) {
+                $diff = array_diff($tempArray, $categories);
+                $categoryId = $categories[0];
+                $tempArray = $categories;
+                if (empty($diff)) {
+                    $result = true;
+                    continue;
+                } else {
+                    $result = false;
+                    break;
+                }
+            }
+        }
+        if (isset($categoryListToCompare) && !empty($categoryListToCompare)) {
+            $result = false;
+            foreach ($questions as $questionId => $categories) {
+                if ($ignoreQuestionId == $questionId) {
+                    continue;
+                }
+                $diff = array_diff($categoryListToCompare, $categories);
+                $categoryId = $categories[0];
+                if (empty($diff)) {
+                    $result = true;
+                    continue;
+                } else {
+                    $result = false;
+                    break;
+                }
+            }
+        }
+
+        if ($returnCategoryId) {
+            return $categoryId;
+        }
+        return $result;
     }
 }

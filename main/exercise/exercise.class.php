@@ -3520,7 +3520,15 @@ class Exercise
         int $lpItemId = 0,
         int $lpItemViewId = 0
     ) {
+
         $nbrQuestions = $this->countQuestionsInExercise();
+        $media_questions = $this->get_media_list();
+        $media_active = $this->media_is_activated($media_questions);
+
+        if ($media_active) {
+            $nbrQuestions = $this->get_count_questions_when_using_medias();
+         }
+
         $buttonList = [];
         $html = $label = '';
         $hotspotGet = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']) : null;
@@ -7575,9 +7583,9 @@ class Exercise
             return $questionList;
         }
 
-        // Problem, random by category has been selected and
+        // Problem, random by category has been selected, and
         // we have no $this->isRandom number of question selected
-        // Should not happened
+        // Should not happen
 
         return [];
     }
@@ -12257,8 +12265,6 @@ class Exercise
     private function setMediaList($questionList)
     {
         $mediaList = [];
-        /*
-         * Media feature is not activated in 1.11.x
         if (!empty($questionList)) {
             foreach ($questionList as $questionId) {
                 $objQuestionTmp = Question::read($questionId, $this->course_id);
@@ -12270,7 +12276,7 @@ class Exercise
                     $mediaList[999][] = $objQuestionTmp->iid;
                 }
             }
-        }*/
+        }
 
         $this->mediaList = $mediaList;
     }
@@ -12405,5 +12411,11 @@ class Exercise
             null,
             get_lang('ShowResultsToStudents')
         );
+    }
+    public function get_count_questions_when_using_medias() {
+        $media_questions = $this->getMediaList();
+        $questions_with_no_group = isset($media_questions[999]) ? count($media_questions[999]) : 0;
+
+        return count($media_questions) - 1 + $questions_with_no_group;
     }
 }

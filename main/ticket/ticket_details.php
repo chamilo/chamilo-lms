@@ -134,10 +134,14 @@ $userIsAllowInProject = TicketManager::userIsAllowInProject($userInfo, $projectI
 $allowEdition = $ticket['ticket']['assigned_last_user'] == $user_id ||
     $ticket['ticket']['sys_insert_user_id'] == $user_id ||
     $isAdmin;
+$allowCategory = TicketManager::userIsAssignedToCategory(
+    $user_id,
+    $ticket['ticket']['category_id']
+);
 
 if (false === $userIsAllowInProject) {
-    // make sure it's either a user assigned to this ticket, or the reporter, or and admin
-    if (false === $allowEdition) {
+    // make sure it's either a user assigned to this ticket, the reporter, an admin or the category manager
+    if (false === $allowEdition && false === $allowCategory) {
         api_not_allowed(true);
     }
 }

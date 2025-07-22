@@ -243,6 +243,39 @@ class TicketManager
     }
 
     /**
+     * Returns the list of category IDs assigned to a user.
+     *
+     * @param int $userId
+     * @param int $projectId
+     *
+     * @return int[]
+     */
+    public static function getCategoryIdsByUser($userId, $projectId = 0)
+    {
+        $tableRel = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
+        $tableCat = Database::get_main_table(TABLE_TICKET_CATEGORY);
+        $userId = (int) $userId;
+        $projectId = (int) $projectId;
+
+        $sql = "SELECT rel.category_id
+                FROM $tableRel rel
+                INNER JOIN $tableCat cat ON (rel.category_id = cat.id)
+                WHERE rel.user_id = $userId";
+
+        if (!empty($projectId)) {
+            $sql .= " AND cat.project_id = $projectId";
+        }
+
+        $result = Database::query($sql);
+        $categories = [];
+        while ($row = Database::fetch_array($result)) {
+            $categories[] = (int) $row['category_id'];
+        }
+
+        return $categories;
+    }
+
+    /**
      * @param int $categoryId
      */
     public static function deleteAllUserInCategory($categoryId)
@@ -902,7 +935,14 @@ class TicketManager
 
         // Check if a role was set to the project
         if ($userIsAllowInProject == false) {
-            $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
+            $categoryList = self::getCategoryIdsByUser($userId, $projectId);
+            $categoryCondition = '';
+            if (!empty($categoryList)) {
+                $categoryIds = implode(',', array_map('intval', $categoryList));
+                $categoryCondition = " OR ticket.category_id IN ($categoryIds)";
+            }
+
+            $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId".$categoryCondition.")";
         }
 
         // Search simple
@@ -1094,11 +1134,25 @@ class TicketManager
         // Check if a role was set to the project
         if (!empty($allowRoleList) && is_array($allowRoleList)) {
             if (!in_array($userInfo['status'], $allowRoleList)) {
-                $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
+                $categoryList = self::getCategoryIdsByUser($userId, $projectId);
+                $categoryCondition = '';
+                if (!empty($categoryList)) {
+                    $categoryIds = implode(',', array_map('intval', $categoryList));
+                    $categoryCondition = " OR ticket.category_id IN ($categoryIds)";
+                }
+
+                $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId".$categoryCondition.")";
             }
         } else {
             if (!api_is_platform_admin()) {
-                $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
+                $categoryList = self::getCategoryIdsByUser($userId, $projectId);
+                $categoryCondition = '';
+                if (!empty($categoryList)) {
+                    $categoryIds = implode(',', array_map('intval', $categoryList));
+                    $categoryCondition = " OR ticket.category_id IN ($categoryIds)";
+                }
+
+                $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId".$categoryCondition.")";
             }
         }
 

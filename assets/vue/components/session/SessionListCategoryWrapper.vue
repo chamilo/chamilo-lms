@@ -6,6 +6,7 @@
     <div
       v-for="session in sessions"
       :key="session.id"
+      class="overflow-hidden"
     >
       <SessionCardSimple :session="session" />
     </div>

@@ -51,7 +51,7 @@
       </div>
       <div
         v-if="expandedSessions.has(session.id)"
-        class="px-6 pb-6"
+        class="px-6 pb-6 overflow-hidden"
       >
         <SessionCardSimple :session="session" />
       </div>

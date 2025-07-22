@@ -26,12 +26,17 @@
 
             <p class="mt-2 text-sm font-semibold">
               <span
+                v-if="course.status"
                 @click="goToCourse(course.id)"
-                :class="
-                  course.status
-                    ? 'text-green-700 cursor-pointer hover:underline'
-                    : 'text-red-700 cursor-pointer hover:underline'
-                "
+                class="text-green-700 cursor-pointer hover:underline"
+              >
+                {{ course.name }}
+              </span>
+
+              <span
+                v-else
+                class="text-red-700 cursor-not-allowed opacity-60"
+                :title="t('Course is locked due to prerequisites')"
               >
                 {{ course.name }}
               </span>

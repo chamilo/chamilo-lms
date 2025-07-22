@@ -386,40 +386,55 @@ class SessionController extends AbstractController
         SequenceResourceRepository $repo,
         Security $security
     ): JsonResponse {
+        $user = $security->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
+
         $requirementAndDependencies = $repo->getRequirementAndDependencies(
             $sessionId,
             SequenceResource::SESSION_TYPE
         );
 
+        $sequences = $repo->getRequirements($sessionId, SequenceResource::SESSION_TYPE);
+        $requirementsStatus = $repo->checkRequirementsForUser(
+            $sequences,
+            SequenceResource::SESSION_TYPE,
+            $user->getId()
+        );
+        $isUnlocked = $repo->checkSequenceAreCompleted($requirementsStatus);
+
         $requirements = [];
-        $dependencies = [];
-
-        if (!empty($requirementAndDependencies['requirements'])) {
-            foreach ($requirementAndDependencies['requirements'] as $requirement) {
-                $requirements[] = [
-                    'id' => $requirement['id'],
-                    'name' => $requirement['name'],
-                    'admin_link' => $requirement['admin_link'],
-                ];
-            }
+        foreach ($requirementAndDependencies['requirements'] ?? [] as $requirement) {
+            $requirements[] = [
+                'id' => $requirement['id'],
+                'name' => $requirement['name'],
+                'admin_link' => $requirement['admin_link'],
+            ];
         }
 
-        if (!empty($requirementAndDependencies['dependencies'])) {
-            foreach ($requirementAndDependencies['dependencies'] as $dependency) {
-                $dependencies[] = [
-                    'id' => $dependency['id'],
-                    'name' => $dependency['name'],
-                    'admin_link' => $dependency['admin_link'],
-                ];
-            }
-        }
-
-        $sequenceResource = $repo->findRequirementForResource(
-            $sessionId,
-            SequenceResource::SESSION_TYPE
+        $dependents = $repo->getDependents($sessionId, SequenceResource::SESSION_TYPE);
+        $dependentsStatus = $repo->checkDependentsForUser(
+            $dependents,
+            SequenceResource::SESSION_TYPE,
+            $user->getId(),
+            $sessionId
         );
 
+        $dependencies = [];
+        foreach ($dependentsStatus as $sequence) {
+            foreach ($sequence['dependents'] as $id => $item) {
+                $dependencies[] = [
+                    'id' => $id,
+                    'name' => $item['name'],
+                    'admin_link' => $item['adminLink'] ?? null,
+                    'unlocked' => (bool) $item['status'],
+                ];
+            }
+        }
+
         $graphImage = null;
+        $sequenceResource = $repo->findRequirementForResource($sessionId, SequenceResource::SESSION_TYPE);
         if ($sequenceResource && $sequenceResource->hasGraph()) {
             $graph = $sequenceResource->getSequence()->getUnSerializeGraph();
             if (null !== $graph) {
@@ -433,6 +448,7 @@ class SessionController extends AbstractController
             'requirements' => $requirements,
             'dependencies' => $dependencies,
             'graph' => $graphImage,
+            'unlocked' => $isUnlocked,
         ]);
     }
 }

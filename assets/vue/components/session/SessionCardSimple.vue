@@ -26,19 +26,19 @@ function normalizeCourse(course) {
 </script>
 
 <template>
-  <div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-      <div
-        v-for="(course, index) in courses"
-        :key="normalizeCourse(course).id || index"
-      >
-        <CourseCard
-          :course="normalizeCourse(course)"
-          :disabled="!isEnabled"
-          :session="session"
-          :session-id="session.id"
-        />
-      </div>
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
+    <div
+      v-for="(course, index) in courses"
+      :key="normalizeCourse(course).id || index"
+      class="w-full"
+      style="max-width: 540px"
+    >
+      <CourseCard
+        :course="normalizeCourse(course)"
+        :disabled="!isEnabled"
+        :session="session"
+        :session-id="session.id"
+      />
     </div>
   </div>
 </template>

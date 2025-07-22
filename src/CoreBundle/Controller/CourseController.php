@@ -286,7 +286,7 @@ class CourseController extends ToolBaseController
 
         if ($useDependents) {
             $sequences = $repo->getDependents($courseId, SequenceResource::COURSE_TYPE);
-            $checked = $repo->checkDependentsForUser($sequences, SequenceResource::COURSE_TYPE, $userId, $sessionId);
+            $checked = $repo->checkDependentsForUser($sequences, SequenceResource::COURSE_TYPE, $userId, $sessionId, $courseId);
             $isUnlocked = $repo->checkSequenceAreCompleted($checked);
             $sequenceResource = $repo->findRequirementForResource($courseId, SequenceResource::COURSE_TYPE);
         } else {

@@ -435,14 +435,15 @@ class SequenceResourceRepository extends ServiceEntityRepository
         return $this->getRequirementsOrDependents($resourceId, $type, 'dependents');
     }
 
-    public function checkDependentsForUser(array $sequences, int $type, int $userId, int $sessionId = 0): array
+    public function checkDependentsForUser(array $sequences, int $type, int $userId, int $sessionId = 0, int $originCourseId = 0): array
     {
         return $this->checkRequirementsOrDependentsForUser(
             $sequences,
             $type,
             'dependents',
             $userId,
-            $sessionId
+            $sessionId,
+            $originCourseId
         );
     }
 
@@ -505,7 +506,8 @@ class SequenceResourceRepository extends ServiceEntityRepository
         int $resourceType,
         string $itemType,
         int $userId,
-        int $sessionId = 0
+        int $sessionId = 0,
+        int $originCourseId = 0
     ): array {
         $sequenceList = [];
         $em = $this->getEntityManager();
@@ -532,7 +534,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
                 switch ($resourceType) {
                     case SequenceResource::SESSION_TYPE:
                         $id = $resource->getId();
-                        $resourceItem = ['name' => $resource->getName(), 'status' => true];
+                        $resourceItem = ['name' => $resource->getTitle(), 'status' => true];
 
                         /** @var SessionRelCourse $sessionCourse */
                         foreach ($resource->getCourses() as $sessionCourse) {
@@ -559,12 +561,14 @@ class SequenceResourceRepository extends ServiceEntityRepository
 
                     case SequenceResource::COURSE_TYPE:
                         $id = $resource->getId();
-                        $status = $this->checkCourseRequirements($userId, $resource, $sessionId);
+                        $prerequisiteCourseId = $originCourseId;
+                        $prerequisiteCourse = $em->getRepository(Course::class)->find($prerequisiteCourseId);
+                        $status = $this->checkCourseRequirements($userId, $prerequisiteCourse, $sessionId);
 
                         if (!$status) {
-                            foreach (SessionManager::get_session_by_course($id) as $session) {
+                            foreach (SessionManager::get_session_by_course($prerequisiteCourseId) as $session) {
                                 if (\in_array($session['id'], $sessionUserList)) {
-                                    $status = $this->checkCourseRequirements($userId, $resource, $session['id']);
+                                    $status = $this->checkCourseRequirements($userId, $prerequisiteCourse, $session['id']);
                                     if ($status) {
                                         break;
                                     }

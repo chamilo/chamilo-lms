@@ -34,42 +34,45 @@ class Version20250721200725 extends AbstractMigrationChamilo
         $dotenv = new Dotenv();
         $dotenv->loadEnv($envFile);
 
-        $mailerScheme = 'null';
-        $smtpSecure = $_ENV['SMTP_SECURE'] ?? '';
-        $query = '';
+        $settings = [];
+        $settings['mailer_dkim'] = '';
+        $settings['mailer_xoauth2'] = '';
 
-        if (!empty($smtpSecure)) {
-            $mailerScheme = 'smtp';
+        if (isset($_ENV['MAILER'])) {
+            $mailerScheme = 'null';
+            $smtpSecure = $_ENV['SMTP_SECURE'] ?? '';
+            $query = '';
 
-            if ($smtpSecure === 'ssl') {
-                $mailerScheme = 'smtps';
-            } elseif ($smtpSecure === 'tls') {
-                $query = '?encryption=tls';
+            if (!empty($smtpSecure)) {
+                $mailerScheme = 'smtp';
+
+                if ($smtpSecure === 'ssl') {
+                    $mailerScheme = 'smtps';
+                } elseif ($smtpSecure === 'tls') {
+                    $query = '?encryption=tls';
+                }
             }
+
+            $dsn = sprintf(
+                '%s://%s%s@%s:%s%s',
+                $mailerScheme,
+                !empty($_ENV['SMTP_AUTH']) ? ($_ENV['SMTP_USER'] ?? '') : '',
+                !empty($_ENV['SMTP_AUTH']) ? ':'.($_ENV['SMTP_PASS'] ?? '') : '',
+                $_ENV['SMTP_HOST'] ?? '',
+                $_ENV['SMTP_PORT'] ?? '',
+                $query
+            );
+
+            $settings['mailer_from_email'] = $_ENV['SMTP_FROM_EMAIL'] ?? '';
+            $settings['mailer_from_name'] = $_ENV['SMTP_FROM_NAME'] ?? '';
+            $settings['mailer_dsn'] = $dsn;
+            $settings['mailer_mails_charset'] = $_ENV['SMTP_CHARSET'] ?? 'UTF-8';
+            $settings['mailer_debug_enable'] = !empty($_ENV['SMTP_DEBUG']) ? 'true' : 'false';
         }
 
-        $dsn = sprintf(
-            '%s://%s%s@%s:%s%s',
-            $mailerScheme,
-            !empty($_ENV['SMTP_AUTH']) ? ($_ENV['SMTP_USER'] ?? '') : '',
-            !empty($_ENV['SMTP_AUTH']) ? ':'.($_ENV['SMTP_PASS'] ?? '') : '',
-            $_ENV['SMTP_HOST'] ?? '',
-            $_ENV['SMTP_PORT'] ?? '',
-            $query
-        );
-
-        $settings = [
-            'mailer_from_email' => $_ENV['SMTP_FROM_EMAIL'] ?? '',
-            'mailer_from_name' => $_ENV['SMTP_FROM_NAME'] ?? '',
-            'mailer_dsn' => $dsn,
-            'mailer_mails_charset' => $_ENV['SMTP_CHARSET'] ?? 'UTF-8',
-            'mailer_debug_enable' => !empty($_ENV['SMTP_DEBUG']) ? 'true' : 'false',
-            'mailer_exclude_json' => $platform_email['EXCLUDE_JSON'] ?? false,
-            'mailer_dkim' => '',
-            'mailer_xoauth2' => '',
-        ];
-
         if ($legacyMailConfig) {
+            $settings['mailer_exclude_json'] = $platform_email['EXCLUDE_JSON'] ?? false;
+
             $dkim = [
                 'enable' => $platform_email['DKIM'] ?? false,
                 'selector' => $platform_email['DKIM_SELECTOR'] ?? '',
@@ -92,8 +95,8 @@ class Version20250721200725 extends AbstractMigrationChamilo
 
             $settings['mailer_dkim'] = json_encode($dkim);
             $settings['mailer_xoauth2'] = json_encode($xoauth2);
-
         }
+
         foreach ($settings as $variable => $value) {
             $this->addSql(
                 sprintf(

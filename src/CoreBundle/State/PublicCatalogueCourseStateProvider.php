@@ -53,6 +53,10 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         }
 
         $host = $request->getSchemeAndHttpHost().'/';
+        $hidePrivateCourses = 'true' === $this->settingsManager->getSetting('platform.course_catalog_hide_private', true);
+        $visibilities = $hidePrivateCourses
+            ? [Course::OPEN_WORLD, Course::OPEN_PLATFORM]
+            : [Course::OPEN_WORLD, Course::OPEN_PLATFORM, Course::REGISTERED];
 
         /** @var AccessUrl $accessUrl */
         $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $host]) ?? $this->accessUrlRepository->find(1);
@@ -61,7 +65,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             ->andWhere('url_rel.url = :accessUrl')
             ->andWhere('c.visibility IN (:visibilities)')
             ->setParameter('accessUrl', $accessUrl->getId())
-            ->setParameter('visibilities', [Course::OPEN_WORLD, Course::OPEN_PLATFORM])
+            ->setParameter('visibilities', $visibilities)
             ->orderBy('c.title', 'ASC')
             ->getQuery()
             ->getResult()

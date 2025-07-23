@@ -1174,6 +1174,50 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'mail' => [
                 [
+                    'name' => 'mailer_dsn',
+                    'title' => 'Mail DSN',
+                    'comment' => sprintf(
+                        'The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. Here are a few examples of supported DSN syntaxes: %s',
+                        'https://symfony.com/doc/6.4/mailer.html#using-built-in-transports',
+                        'https://symfony.com/doc/6.4/mailer.html#using-a-3rd-party-transport'
+                    ),
+                ],
+                [
+                    'name' => 'mailer_from_email',
+                    'title' => "Mail: 'From' address",
+                    'comment' => "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header. We recommend using a 'no-reply' e-mail address here, to avoid excessive filling of an e-mail box. The support e-mail address defined in the Platform section should be used to contact you, but replying to automatic notifications should not be encouraged.",
+                ],
+                [
+                    'name' => 'mailer_from_name',
+                    'title' => "Mail: 'From' name",
+                    'comment' => 'The name that appears as the sender (next to the From e-mail address) when the platform sends an e-mail.',
+                ],
+                [
+                    'name' => 'mailer_mails_charset',
+                    'title' => 'Mail: character set',
+                    'comment' => "In case you need to define the charset to use when sending those e-mails. Leave empty if you're not sure.",
+                ],
+                [
+                    'name' => 'mailer_debug_enable',
+                    'title' => 'Mail: Debug',
+                    'comment' => 'Select whether you want to enable the e-mail sending debug logs. These will give you more information on what is happening when connecting to the mail service, but are not elegant and might break page design. Only use when there is not user activity.',
+                ],
+                [
+                    'name' => 'mailer_exclude_json',
+                    'title' => 'Mail: Avoid using LD+JSON',
+                    'comment' => "Some e-mail clients do not understand the descriptive LD+JSON format, showing it as a loose JSON string to the final user. If this is your case, you might want to set the variable below to 'false' to disable this header.",
+                ],
+                [
+                    'name' => 'mailer_dkim',
+                    'title' => 'Mail: DKIM headers',
+                    'comment' => 'Enter a JSON array of your DKIM configuration settings (see example).',
+                ],
+                [
+                    'name' => 'mailer_xoauth2',
+                    'title' => 'Mail: XOAuth2 options',
+                    'comment' => 'If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting.',
+                ],
+                [
                     'name' => 'noreply_email_address',
                     'title' => 'No-reply e-mail address',
                     'comment' => 'This is the e-mail address to be used when an e-mail has to be sent specifically requesting that no answer be sent in return. Generally, this e-mail address should be configured on your server to drop/ignore any incoming e-mail.',
@@ -3039,12 +3083,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'mail' => [
                 [
-                    'name' => 'smtp_from_email',
+                    'name' => 'mailer_from_name',
                     'title' => 'Send all e-mails from this e-mail address',
                     'comment' => 'Sets the default email address used in the "from" field of emails.',
                 ],
                 [
-                    'name' => 'smtp_from_name',
+                    'name' => 'mailer_from_email',
                     'title' => 'Send all e-mails as originating from this (organizational) name',
                     'comment' => 'Sets the default display name used for sending platform emails. e.g. "Support team".',
                 ],

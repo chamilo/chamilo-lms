@@ -120,7 +120,7 @@ if ($form->validate()) {
             if (-1 != $access_url_id) {
                 $sql .= " FROM $user_table u
                           INNER JOIN $tbl_user_rel_access_url as user_rel_url
-                          ON (u.user_id= user_rel_url.user_id)
+                          ON (u.id = user_rel_url.user_id)
                           WHERE access_url_id = $access_url_id
                           ORDER BY lastname,firstname";
             }

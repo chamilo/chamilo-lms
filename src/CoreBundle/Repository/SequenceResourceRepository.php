@@ -116,7 +116,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function getRequirements(int $resourceId, int $type)
+    public function getRequirements(int $resourceId, int $type): array
     {
         $sequencesResource = $this->findBy([
             'resourceId' => $resourceId,
@@ -222,7 +222,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function checkRequirementsForUser(array $sequences, int $type, int $userId)
+    public function checkRequirementsForUser(array $sequences, int $type, int $userId): array
     {
         $sequenceList = [];
         $em = $this->getEntityManager();
@@ -372,7 +372,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
      *
      * @return bool
      */
-    public function checkSequenceAreCompleted(array $sequences)
+    public function checkSequenceAreCompleted(array $sequences): bool
     {
         foreach ($sequences as $sequence) {
             if (!isset($sequence['requirements'])) {

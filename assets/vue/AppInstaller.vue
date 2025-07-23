@@ -210,63 +210,18 @@
         />
 
         <input
-          v-model="installerData.stepData.fromEmail"
-          name="fromEmail"
+          v-model="installerData.stepData.mailerFromEmail"
+          name="mailerFromEmail"
           type="hidden"
         />
         <input
-          v-model="installerData.stepData.fromName"
-          name="fromName"
+          v-model="installerData.stepData.mailerFromName"
+          name="mailerFromName"
           type="hidden"
         />
         <input
-          v-model="installerData.stepData.mailer"
-          name="mailer"
-          type="hidden"
-        />
-        <input
-          v-model="installerData.stepData.smtpHost"
-          name="smtpHost"
-          type="hidden"
-        />
-        <input
-          v-model="installerData.stepData.smtpPort"
-          name="smtpPort"
-          type="hidden"
-        />
-        <input
-          v-model="installerData.stepData.smtpAuth"
-          name="smtpAuth"
-          type="hidden"
-        />
-        <input
-          v-model="installerData.stepData.smtpSecure"
-          name="smtpSecure"
-          type="hidden"
-        />
-        <input
-          v-model="installerData.stepData.smtpUniqueReplyTo"
-          name="smtpUniqueReplyTo"
-          type="hidden"
-        />
-        <input
-          v-model="installerData.stepData.smtpCharset"
-          name="smtpCharset"
-          type="hidden"
-        />
-        <input
-          v-model="installerData.stepData.smtpDebug"
-          name="smtpDebug"
-          type="hidden"
-        />
-        <input
-          v-model="installerData.stepData.smtpUser"
-          name="smtpUser"
-          type="hidden"
-        />
-        <input
-          v-model="installerData.stepData.smtpPass"
-          name="smtpPass"
+          v-model="installerData.stepData.mailerDsn"
+          name="mailerDsn"
           type="hidden"
         />
 
@@ -310,18 +265,9 @@ const installerData = ref(window.installerData)
 
 if (!installerData.value.stepData) {
   installerData.value.stepData = {
-    fromEmail: "",
-    fromName: "",
-    mailer: "",
-    smtpHost: "",
-    smtpPort: "",
-    smtpAuth: "",
-    smtpUser: "",
-    smtpPass: "",
-    smtpSecure: "",
-    smtpCharset: "",
-    smtpUniqueReplyTo: "",
-    smtpDebug: "",
+    mailerFromEmail: "",
+    mailerFromName: "",
+    mailerDsn: "",
   }
 }
 

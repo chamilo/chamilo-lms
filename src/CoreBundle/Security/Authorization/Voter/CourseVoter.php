@@ -7,14 +7,17 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @extends Voter<'VIEW'|'EDIT'|'DELETE', Course>
@@ -30,6 +33,7 @@ class CourseVoter extends Voter
 
     public function __construct(
         private readonly Security $security,
+        private readonly TranslatorInterface $translator,
         RequestStack $requestStack,
         EntityManagerInterface $entityManager
     ) {
@@ -58,10 +62,6 @@ class CourseVoter extends Voter
     {
         /** @var User $user */
         $user = $token->getUser();
-        // Anons can enter a course depending on the course visibility.
-        /*if (!$user instanceof UserInterface) {
-            return false;
-        }*/
 
         // Admins have access to everything.
         if ($this->security->isGranted('ROLE_ADMIN')) {
@@ -93,9 +93,15 @@ class CourseVoter extends Voter
                 // "Open to the world" no need to check if user is registered or if user exists.
                 // Course::OPEN_WORLD
                 if ($course->isPublic()) {
-                    /*$user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
-                    $token->setUser($user);*/
-
+                    if ($this->isStudent($user, $course, $session)) {
+                        if ($this->isCourseLockedForUser($user, $course, $session?->getId() ?? 0)) {
+                            throw new NotAllowedException(
+                                $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
+                                'warning',
+                                403
+                            );
+                        }
+                    }
                     return true;
                 }
 
@@ -106,20 +112,16 @@ class CourseVoter extends Voter
 
                 // If user is logged in and is open platform, allow access.
                 if (Course::OPEN_PLATFORM === $course->getVisibility()) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
-
-                    if ($course->hasUserAsTeacher($user)) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
+                    if ($this->isStudent($user, $course, $session)) {
+                        if ($this->isCourseLockedForUser($user, $course, $session?->getId() ?? 0)) {
+                            throw new NotAllowedException(
+                                $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
+                                'warning',
+                                403
+                            );
+                        }
                     }
 
-                    $token->setUser($user);
-
-                    return true;
-                }
-
-                // Course::REGISTERED
-                // User must be subscribed in the course no matter if is teacher/student
-                if ($course->hasSubscriptionByUser($user)) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
 
                     if ($course->hasUserAsTeacher($user)) {
@@ -137,23 +139,45 @@ class CourseVoter extends Voter
                     $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $course);
                     $userIsStudent = $session->hasUserInCourse($user, $course, Session::STUDENT);
 
-                    if ($userIsGeneralCoach) {
+                    if ($userIsGeneralCoach || $userIsCourseCoach) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-
-                        return true;
-                    }
-
-                    if ($userIsCourseCoach) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-
                         return true;
                     }
 
                     if ($userIsStudent) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
+                        if ($this->isCourseLockedForUser($user, $course, $session->getId())) {
+                            throw new NotAllowedException(
+                                $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
+                                'warning',
+                                403
+                            );
+                        }
 
                         return true;
                     }
+                }
+
+                // Course::REGISTERED
+                // User must be subscribed in the course no matter if is teacher/student
+                if ($course->hasSubscriptionByUser($user)) {
+                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
+
+                    if ($course->hasUserAsTeacher($user)) {
+                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
+                    }
+
+                    if ($this->isCourseLockedForUser($user, $course)) {
+                        throw new NotAllowedException(
+                            $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
+                            'warning',
+                            403
+                        );
+                    }
+
+                    $token->setUser($user);
+
+                    return true;
                 }
 
                 break;
@@ -172,5 +196,40 @@ class CourseVoter extends Voter
         }
 
         return false;
+    }
+
+    /**
+     * Checks whether the given course is locked for the user
+     * due to unmet prerequisite sequences.
+     */
+    private function isCourseLockedForUser(User $user, Course $course, int $sessionId = 0): bool
+    {
+        $sequenceRepo = $this->entityManager->getRepository(SequenceResource::class);
+
+        $sequences = $sequenceRepo->getRequirements(
+            $course->getId(),
+            SequenceResource::COURSE_TYPE
+        );
+
+        if (empty($sequences)) {
+            return false;
+        }
+
+        $statusList = $sequenceRepo->checkRequirementsForUser(
+            $sequences,
+            SequenceResource::COURSE_TYPE,
+            $user->getId()
+        );
+
+        return !$sequenceRepo->checkSequenceAreCompleted($statusList);
+    }
+
+    private function isStudent(User $user, Course $course, ?Session $session): bool
+    {
+        if ($session) {
+            return $session->hasUserInCourse($user, $course, Session::STUDENT);
+        }
+
+        return $course->hasUserAsStudent($user);
     }
 }

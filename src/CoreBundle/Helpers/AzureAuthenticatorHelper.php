@@ -84,14 +84,7 @@ readonly class AzureAuthenticatorHelper
 
         if (empty($userId)) {
             if (!$this->providerParams['provisioning']) {
-                throw new Exception(
-                    sprintf(
-                        'User not found when checking the extra fields from %s or %s or %s.',
-                        $azureUserInfo['mail'],
-                        $azureUserInfo['mailNickname'],
-                        $azureUserInfo['id']
-                    )
-                );
+                throw new Exception(\sprintf('User not found when checking the extra fields from %s or %s or %s.', $azureUserInfo['mail'], $azureUserInfo['mailNickname'], $azureUserInfo['id']));
             }
 
             $user = (new User())
@@ -214,7 +207,7 @@ readonly class AzureAuthenticatorHelper
         $selectedOrder = array_map('intval', $selectedOrder);
         $selectedOrder = array_filter(
             $selectedOrder,
-            fn($position): bool => in_array($position, $defaultOrder)
+            fn ($position): bool => \in_array($position, $defaultOrder)
         );
 
         if ($selectedOrder) {

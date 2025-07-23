@@ -211,7 +211,7 @@ class CourseController extends ToolBaseController
             $params['lis_person_contact_email_primary'] = $user->getEmail();
         }
 
-        if ($user->hasRole('ROLE_HR')) {
+        if ($user->isHRM()) {
             $scopeMentor = $ltiUtil->generateRoleScopeMentor($user);
 
             if (!empty($scopeMentor)) {

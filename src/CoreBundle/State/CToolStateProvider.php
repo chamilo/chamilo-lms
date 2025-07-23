@@ -60,10 +60,10 @@ final class CToolStateProvider implements ProviderInterface
         /** @var User|null $user */
         $user = $this->security->getUser();
 
-        $isAllowToEdit = $user && ($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER'));
+        $isAllowToEdit = $user && ($user->isAdmin() || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER'));
         $isAllowToEditBack = $isAllowToEdit;
         $isAllowToSessionEdit = $user && (
-            $user->hasRole('ROLE_ADMIN')
+            $user->isAdmin()
                 || $user->hasRole('ROLE_CURRENT_COURSE_TEACHER')
                 || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
         );
@@ -124,7 +124,7 @@ final class CToolStateProvider implements ProviderInterface
 
     private function shouldRestrictToPositioningOnly(?User $user, int $courseId, ?int $sessionId): array
     {
-        if (!$user || !$user->hasRole('ROLE_STUDENT')) {
+        if (!$user || !$user->isStudent()) {
             return [false, null];
         }
 

@@ -1194,9 +1194,7 @@ class ExtraField extends Model
                         break;
                     case self::FIELD_TYPE_RADIO:
                         $group = [];
-                        if (isset($field_details['options']) &&
-                            !empty($field_details['options'])
-                        ) {
+                        if (isset($field_details['options']) && !empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
                                 $options[$option_details['option_value']] = $option_details['display_text'];
                                 $group[] = $form->createElement(
@@ -1206,6 +1204,33 @@ class ExtraField extends Model
                                     get_lang($option_details['display_text']).'<br />',
                                     $option_details['option_value']
                                 );
+                            }
+                        } else {
+                            // Fallback: Yes/No
+                            $currentValue = $extraData["extra_$variable"] ?? null;
+
+                            $group[] = $form->createElement(
+                                'radio',
+                                'extra_'.$variable,
+                                '1',
+                                get_lang('Yes').'<br />',
+                                '1'
+                            );
+                            $group[] = $form->createElement(
+                                'radio',
+                                'extra_'.$variable,
+                                '0',
+                                get_lang('No').'<br />',
+                                '0'
+                            );
+
+                            // Select default if nothing set
+                            if (!isset($currentValue)) {
+                                if (!empty($field_details['default_value'])) {
+                                    $form->setDefaults(['extra_'.$variable => $field_details['default_value']]);
+                                } else {
+                                    $form->setDefaults(['extra_'.$variable => '0']);
+                                }
                             }
                         }
                         $form->addGroup(

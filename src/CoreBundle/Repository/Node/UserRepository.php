@@ -1236,23 +1236,27 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     ): array {
         $qb = $this->createQueryBuilder('u');
 
-        if ($accessUrl !== null) {
+        if (null !== $accessUrl) {
             $qb->join('u.portals', 'p')
                 ->andWhere('p.url = :url')
-                ->setParameter('url', $accessUrl);
+                ->setParameter('url', $accessUrl)
+            ;
         }
 
         $qb->andWhere('u.active != :softDeleted')
-            ->setParameter('softDeleted', -2);
+            ->setParameter('softDeleted', -2)
+        ;
 
         if (!empty($lastname)) {
             $qb->andWhere('u.lastname LIKE :lastname')
-                ->setParameter('lastname', '%'.$lastname.'%');
+                ->setParameter('lastname', '%'.$lastname.'%')
+            ;
         }
 
         if (!empty($firstname)) {
             $qb->andWhere('u.firstname LIKE :firstname')
-                ->setParameter('firstname', '%'.$firstname.'%');
+                ->setParameter('firstname', '%'.$firstname.'%')
+            ;
         }
 
         if (!empty($extraFilters)) {

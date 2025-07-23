@@ -30,15 +30,14 @@ export function useSessionRequirementStatus(sessionId) {
         name: "Sessions that depend on this session",
         requirements: data.dependencies.map((item) => ({
           name: item.name,
-          status: null,
+          status: item.unlocked ?? null,
           adminLink: item.admin_link,
         })),
       })
     }
 
     graphImage.value = data.graph || null
-
-    allowSubscription.value = requirementList.value.length === 0
+    allowSubscription.value = requirementList.value.length === 0 || data.unlocked === true
   }
 
   return {

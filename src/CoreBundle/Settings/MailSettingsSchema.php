@@ -29,9 +29,14 @@ class MailSettingsSchema extends AbstractSettingsSchema
             'send_notification_score_in_percentage' => 'false',
             'cron_notification_help_desk' => '',
             'notifications_extended_footer_message' => '',
-            'smtp_unique_sender' => 'false',
-            'smtp_from_email' => '',
-            'smtp_from_name' => '',
+            'mailer_from_name' => '',
+            'mailer_from_email' => '',
+            'mailer_dsn' => 'null://null',
+            'mailer_mails_charset' => 'UTF-8',
+            'mailer_debug_enable' => 'false',
+            'mailer_exclude_json' => 'false',
+            'mailer_dkim' => '',
+            'mailer_xoauth2' => '',
         ]);
 
         // $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -51,9 +56,14 @@ class MailSettingsSchema extends AbstractSettingsSchema
             ->add('send_notification_score_in_percentage', YesNoType::class)
             ->add('cron_notification_help_desk', TextareaType::class)
             ->add('notifications_extended_footer_message', TextareaType::class)
-            ->add('smtp_unique_sender', YesNoType::class)
-            ->add('smtp_from_email', EmailType::class)
-            ->add('smtp_from_name', TextType::class)
+            ->add('mailer_from_name', EmailType::class)
+            ->add('mailer_from_email', TextType::class)
+            ->add('mailer_dsn', TextType::class)
+            ->add('mailer_mails_charset', TextType::class)
+            ->add('mailer_debug_enable', YesNoType::class)
+            ->add('mailer_exclude_json', YesNoType::class)
+            ->add('mailer_dkim', TextareaType::class)
+            ->add('mailer_xoauth2', TextareaType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

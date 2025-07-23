@@ -159,6 +159,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     #[ORM\OneToMany(mappedBy: 'url', targetEntity: AccessUrlRelPlugin::class, fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     private Collection $plugins;
 
+    #[ORM\Column(options: ['default' => false])]
+    private bool $isLoginOnly = false;
+
     public function __construct()
     {
         $this->description = '';
@@ -581,6 +584,18 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
                 $plugin->setUrl(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isLoginOnly(): bool
+    {
+        return $this->isLoginOnly;
+    }
+
+    public function setIsLoginOnly(bool $isLoginOnly): static
+    {
+        $this->isLoginOnly = $isLoginOnly;
 
         return $this;
     }

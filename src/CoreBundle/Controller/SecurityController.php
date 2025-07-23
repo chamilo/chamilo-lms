@@ -59,8 +59,8 @@ class SecurityController extends AbstractController
 
         $user = $this->userHelper->getCurrent();
 
-        if (1 !== $user->getActive()) {
-            if (0 === $user->getActive()) {
+        if (User::ACTIVE !== $user->getActive()) {
+            if (User::INACTIVE === $user->getActive()) {
                 $message = $translator->trans('Account not activated.');
             } else {
                 $message = $translator->trans('Invalid credentials. Please try again or contact support if you continue to experience issues.');
@@ -103,7 +103,7 @@ class SecurityController extends AbstractController
         $extraFieldValuesRepository = $this->entityManager->getRepository(ExtraFieldValues::class);
         $legalTermsRepo = $this->entityManager->getRepository(Legal::class);
         if (
-            $user->hasRole('ROLE_STUDENT')
+            $user->isStudent()
             && 'true' === $this->settingsManager->getSetting('allow_terms_conditions', true)
             && 'login' === $this->settingsManager->getSetting('load_term_conditions_section', true)
         ) {
@@ -127,7 +127,7 @@ class SecurityController extends AbstractController
 
                 return $this->json([
                     'load_terms' => true,
-                    'redirect'   => '/main/auth/tc.php?return=' . urlencode('/home'),
+                    'redirect' => '/main/auth/tc.php?return='.urlencode('/home'),
                 ]);
             }
             $request->getSession()->remove('term_and_condition');

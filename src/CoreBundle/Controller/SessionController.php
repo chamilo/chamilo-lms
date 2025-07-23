@@ -320,7 +320,7 @@ class SessionController extends AbstractController
 
         $em->flush();
 
-        $now = new \DateTime();
+        $now = new DateTime();
         $relSessions = $em->getRepository(SessionRelUser::class)->findBy([
             'user' => $user,
             'relationType' => Session::STUDENT,
@@ -328,6 +328,7 @@ class SessionController extends AbstractController
 
         $activeSessions = array_filter($relSessions, function (SessionRelUser $rel) use ($now) {
             $s = $rel->getSession();
+
             return $s->getAccessStartDate() <= $now && $s->getAccessEndDate() >= $now;
         });
 
@@ -338,8 +339,8 @@ class SessionController extends AbstractController
         }
 
         $request = $this->requestStack->getCurrentRequest();
-        $baseUrl = $request->getSchemeAndHttpHost().$request->getBasePath();
-        $sessionUrl = $baseUrl.'/sessions';
+        $baseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
+        $sessionUrl = rtrim($baseUrl, '/') . '/sessions';
 
         $subject = $this->translator->trans('You have been enrolled in a new course');
 
@@ -385,40 +386,55 @@ class SessionController extends AbstractController
         SequenceResourceRepository $repo,
         Security $security
     ): JsonResponse {
+        $user = $security->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
+
         $requirementAndDependencies = $repo->getRequirementAndDependencies(
             $sessionId,
             SequenceResource::SESSION_TYPE
         );
 
+        $sequences = $repo->getRequirements($sessionId, SequenceResource::SESSION_TYPE);
+        $requirementsStatus = $repo->checkRequirementsForUser(
+            $sequences,
+            SequenceResource::SESSION_TYPE,
+            $user->getId()
+        );
+        $isUnlocked = $repo->checkSequenceAreCompleted($requirementsStatus);
+
         $requirements = [];
-        $dependencies = [];
-
-        if (!empty($requirementAndDependencies['requirements'])) {
-            foreach ($requirementAndDependencies['requirements'] as $requirement) {
-                $requirements[] = [
-                    'id' => $requirement['id'],
-                    'name' => $requirement['name'],
-                    'admin_link' => $requirement['admin_link'],
-                ];
-            }
+        foreach ($requirementAndDependencies['requirements'] ?? [] as $requirement) {
+            $requirements[] = [
+                'id' => $requirement['id'],
+                'name' => $requirement['name'],
+                'admin_link' => $requirement['admin_link'],
+            ];
         }
 
-        if (!empty($requirementAndDependencies['dependencies'])) {
-            foreach ($requirementAndDependencies['dependencies'] as $dependency) {
-                $dependencies[] = [
-                    'id' => $dependency['id'],
-                    'name' => $dependency['name'],
-                    'admin_link' => $dependency['admin_link'],
-                ];
-            }
-        }
-
-        $sequenceResource = $repo->findRequirementForResource(
-            $sessionId,
-            SequenceResource::SESSION_TYPE
+        $dependents = $repo->getDependents($sessionId, SequenceResource::SESSION_TYPE);
+        $dependentsStatus = $repo->checkDependentsForUser(
+            $dependents,
+            SequenceResource::SESSION_TYPE,
+            $user->getId(),
+            $sessionId
         );
 
+        $dependencies = [];
+        foreach ($dependentsStatus as $sequence) {
+            foreach ($sequence['dependents'] as $id => $item) {
+                $dependencies[] = [
+                    'id' => $id,
+                    'name' => $item['name'],
+                    'admin_link' => $item['adminLink'] ?? null,
+                    'unlocked' => (bool) $item['status'],
+                ];
+            }
+        }
+
         $graphImage = null;
+        $sequenceResource = $repo->findRequirementForResource($sessionId, SequenceResource::SESSION_TYPE);
         if ($sequenceResource && $sequenceResource->hasGraph()) {
             $graph = $sequenceResource->getSequence()->getUnSerializeGraph();
             if (null !== $graph) {
@@ -432,6 +448,7 @@ class SessionController extends AbstractController
             'requirements' => $requirements,
             'dependencies' => $dependencies,
             'graph' => $graphImage,
+            'unlocked' => $isUnlocked,
         ]);
     }
 }

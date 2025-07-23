@@ -7,6 +7,44 @@ oneup_flysystem:
             local:
                 location: '%kernel.project_dir%/var/cache/assets'
 
+        asset_azure_adapter:
+            azureblob:
+                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
+                container: '%env(AZURE_STORAGE_ASSET_CONTAINER)%'
+                prefix: '%env(AZURE_STORAGE_ASSET_PREFIX)%'
+
+        asset_cache_azure_adapter:
+            azureblob:
+                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
+                container: '%env(AZURE_STORAGE_ASSET_CACHE_CONTAINER)%'
+                prefix: '%env(AZURE_STORAGE_ASSET_CACHE_PREFIX)%'
+
+        asset_awss3_adapter:
+            awss3v3:
+                client: chamilo.storage.awss3_client
+                bucket: '%env(AWS_S3_STORAGE_ASSET_BUCKET)%'
+                prefix: '%env(AWS_S3_STORAGE_ASSET_PREFIX)%'
+                visibilityConverter: League\Flysystem\AwsS3V3\PortableVisibilityConverter
+
+        asset_cache_awss3_adapter:
+            awss3v3:
+                client: chamilo.storage.awss3_client
+                bucket: '%env(AWS_S3_STORAGE_ASSET_CACHE_BUCKET)%'
+                prefix: '%env(AWS_S3_STORAGE_ASSET_CACHE_PREFIX)%'
+                visibilityConverter: League\Flysystem\AwsS3V3\PortableVisibilityConverter
+
+        asset_google_adapter:
+            googlecloudstorage:
+                client: 'Google\Cloud\Storage\StorageClient'
+                bucket: '%env(GOOGLE_STORAGE_ASSET_BUCKET)%'
+                prefix: '%env(GOOGLE_STORAGE_ASSET_PREFIX)%'
+
+        asset_cache_google_adapter:
+            googlecloudstorage:
+                client: 'Google\Cloud\Storage\StorageClient'
+                bucket: '%env(GOOGLE_STORAGE_ASSET_CACHE_BUCKET)%'
+                prefix: '%env(GOOGLE_STORAGE_ASSET_CACHE_PREFIX)%'
+
         resource_adapter:
             local:
                 location: '%kernel.project_dir%/var/upload/resource'
@@ -14,12 +52,66 @@ oneup_flysystem:
             local:
                 location: '%kernel.project_dir%/var/cache/resource'
 
+        resource_azure_adapter:
+            azureblob:
+                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
+                container: '%env(AZURE_STORAGE_RESOURCE_CONTAINER)%'
+                prefix: '%env(AZURE_STORAGE_RESOURCE_PREFIX)%'
+
+        resource_cache_azure_adapter:
+            azureblob:
+                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
+                container: '%env(AZURE_STORAGE_RESOURCE_CACHE_CONTAINER)%'
+                prefix: '%env(AZURE_STORAGE_RESOURCE_CACHE_PREFIX)%'
+
+        resource_google_adapter:
+            googlecloudstorage:
+                client: 'Google\Cloud\Storage\StorageClient'
+                bucket: '%env(GOOGLE_STORAGE_RESOURCE_BUCKET)%'
+                prefix: '%env(GOOGLE_STORAGE_RESOURCE_PREFIX)%'
+
+        resource_cache_google_adapter:
+            googlecloudstorage:
+                client: 'Google\Cloud\Storage\StorageClient'
+                bucket: '%env(GOOGLE_STORAGE_RESOURCE_CACHE_BUCKET)%'
+                prefix: '%env(GOOGLE_STORAGE_RESOURCE_CACHE_PREFIX)%'
+
+        resource_awss3_adapter:
+            awss3v3:
+                client: chamilo.storage.awss3_client
+                bucket: '%env(AWS_S3_STORAGE_RESOURCE_BUCKET)%'
+                prefix: '%env(AWS_S3_STORAGE_RESOURCE_PREFIX)%'
+                visibilityConverter: League\Flysystem\AwsS3V3\PortableVisibilityConverter
+
+        resource_cache_awss3_adapter:
+            awss3v3:
+                client: chamilo.storage.awss3_client
+                bucket: '%env(AWS_S3_STORAGE_RESOURCE_CACHE_BUCKET)%'
+                prefix: '%env(AWS_S3_STORAGE_RESOURCE_CACHE_PREFIX)%'
+                visibilityConverter: League\Flysystem\AwsS3V3\PortableVisibilityConverter
+
         themes_adapter:
             local:
                 location: '%kernel.project_dir%/var/themes'
-        themes_cache_adapter:
-            local:
-                location: '%kernel.project_dir%/var/cache/themes'
+
+        themes_azure_adapter:
+            azureblob:
+                client: 'MicrosoftAzure\Storage\Blob\BlobRestProxy'
+                container: '%env(AZURE_STORAGE_THEMES_CONTAINER)%'
+                prefix: '%env(AZURE_STORAGE_THEMES_PREFIX)%'
+
+        themes_awss3_adapter:
+            awss3v3:
+                client: chamilo.storage.awss3_client
+                bucket: '%env(AWS_S3_STORAGE_THEMES_BUCKET)%'
+                prefix: '%env(AWS_S3_STORAGE_THEMES_PREFIX)%'
+                visibilityConverter: League\Flysystem\AwsS3V3\PortableVisibilityConverter
+
+        themes_google_adapter:
+            googlecloudstorage:
+                client: 'Google\Cloud\Storage\StorageClient'
+                bucket: '%env(GOOGLE_STORAGE_THEMES_BUCKET)%'
+                prefix: '%env(GOOGLE_STORAGE_THEMES_PREFIX)%'
 
     filesystems:
         asset:
@@ -41,6 +133,3 @@ oneup_flysystem:
         themes:
             adapter: themes_adapter
             mount: themes
-        themes_cache:
-            adapter: themes_cache_adapter
-            mount: themes_cache

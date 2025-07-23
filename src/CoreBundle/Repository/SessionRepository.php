@@ -185,7 +185,7 @@ class SessionRepository extends ServiceEntityRepository
 
         switch ($relationType) {
             case Session::DRH:
-                if ($user->hasRole('ROLE_HR')) {
+                if ($user->isHRM()) {
                     $session->addUserInSession(Session::DRH, $user);
                 }
 
@@ -200,7 +200,7 @@ class SessionRepository extends ServiceEntityRepository
                 break;
 
             case Session::COURSE_COACH:
-                if ($user->hasRole('ROLE_TEACHER')) {
+                if ($user->isTeacher()) {
                     $session
                         ->addUserInSession(Session::COURSE_COACH, $user)
                         ->addUserInCourse(

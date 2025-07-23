@@ -1248,7 +1248,10 @@ function installSettings(
     $language,
     $allowRegistration,
     $allowTeacherSelfRegistration,
-    $installationProfile = ''
+    $installationProfile = '',
+    $mailerDsn = '',
+    $mailerFromEmail = '',
+    $mailerFromName = '',
 ) {
     error_log('installSettings');
     $allowTeacherSelfRegistration = $allowTeacherSelfRegistration ? 'true' : 'false';
@@ -1263,6 +1266,9 @@ function installSettings(
         'platform_language' => $language,
         'allow_registration' => $allowRegistration,
         'allow_registration_as_teacher' => $allowTeacherSelfRegistration,
+        'mailer_dsn' => $mailerDsn,
+        'mailer_from_email' => $mailerFromEmail,
+        'mailer_from_name' => $mailerFromName,
     ];
 
     foreach ($settings as $variable => $value) {
@@ -1499,6 +1505,9 @@ function finishInstallationWithContainer(
     $allowSelfReg,
     $allowSelfRegProf,
     $installationProfile = '',
+    $mailerDsn,
+    $mailerFromEmail,
+    $mailerFromName,
     \Chamilo\Kernel $kernel
 ) {
     Container::setContainer($container);
@@ -1567,7 +1576,10 @@ function finishInstallationWithContainer(
         $languageForm,
         $allowSelfReg,
         $allowSelfRegProf,
-        $installationProfile
+        $installationProfile,
+        $mailerDsn,
+        $mailerFromEmail ?: $emailForm,
+        $mailerFromName,
     );
     lockSettings();
     updateDirAndFilesPermissions();

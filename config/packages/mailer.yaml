@@ -1,6 +1,6 @@
 framework:
     mailer:
-        dsn: '%env(MAILER_DSN)%'
+        dsn: 'null://null'
 
 when@dev:
     framework:

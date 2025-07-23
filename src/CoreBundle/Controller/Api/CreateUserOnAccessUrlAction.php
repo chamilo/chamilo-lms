@@ -15,8 +15,10 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -34,7 +36,9 @@ class CreateUserOnAccessUrlAction
         private ExtraFieldRepository $extraFieldRepo,
         private MessageHelper $messageHelper,
         private TranslatorInterface $translator,
-        private UserHelper $userHelper
+        private UserHelper $userHelper,
+        private readonly RequestStack $requestStack,
+        private readonly SettingsManager $settingsManager
     ) {}
 
     public function __invoke(CreateUserOnAccessUrlInput $data): User
@@ -96,28 +100,36 @@ class CreateUserOnAccessUrlAction
         }
 
         if ($data->getSendEmail()) {
-            $subject = $this->translator->trans('You have been enrolled in a new course');
-
-            $sessionUrl = '/sessions';
+            $request = $this->requestStack->getCurrentRequest();
+            $baseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
+            $sessionUrl = rtrim($baseUrl, '/') . '/sessions';
+            $platformName = $this->settingsManager->getSetting('platform.site_name', true);
             $password = $data->getPassword();
 
+            $subject = \sprintf(
+                $this->translator->trans('You are registered to %s'),
+                $platformName
+            );
+
             $body = $this->translator->trans(
-                'Hello %s,<br><br>'.
-                'You have been enrolled in the Chamilo platform.<br>'.
-                'You can access your account from <a href="%s">here</a>.<br><br>'.
-                'Your login credentials are:<br>'.
-                'Username: <strong>%s</strong><br>'.
-                'Password: <strong>%s</strong><br><br>'.
-                'Best regards,<br>'.
-                'Chamilo'
+                'Hello %s,<br><br>' .
+                'You are registered to %s.<br>' .
+                'You can access your account from <a href="%s">here</a>.<br><br>' .
+                'Your login credentials are:<br>' .
+                'Username: <strong>%s</strong><br>' .
+                'Password: <strong>%s</strong><br><br>' .
+                'Best regards,<br>' .
+                '%s'
             );
 
             $body = \sprintf(
                 $body,
                 $user->getFullname(),
+                $platformName,
                 $sessionUrl,
                 $user->getUsername(),
-                $password
+                $password,
+                $platformName
             );
 
             $currentUser = $this->userHelper->getCurrent();

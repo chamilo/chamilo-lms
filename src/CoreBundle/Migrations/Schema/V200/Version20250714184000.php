@@ -24,7 +24,7 @@ final class Version20250714184000 extends AbstractMigrationChamilo
         $title = 'Hide legal accept checkbox in Terms and Conditions page';
         $comment = 'If set to true, removes the "I have read and accept" checkbox in the Terms and Conditions page flow.';
 
-        $sqlCheck = sprintf(
+        $sqlCheck = \sprintf(
             "SELECT COUNT(*) as count
              FROM settings
              WHERE variable = '%s'
@@ -37,7 +37,7 @@ final class Version20250714184000 extends AbstractMigrationChamilo
         $result = $stmt->fetchAssociative();
 
         if ($result && (int) $result['count'] > 0) {
-            $this->addSql(sprintf(
+            $this->addSql(\sprintf(
                 "UPDATE settings
                  SET selected_value = '%s',
                      title = '%s',
@@ -52,9 +52,9 @@ final class Version20250714184000 extends AbstractMigrationChamilo
                 addslashes($category),
                 addslashes($variable)
             ));
-            $this->write(sprintf('Updated setting: %s', $variable));
+            $this->write(\sprintf('Updated setting: %s', $variable));
         } else {
-            $this->addSql(sprintf(
+            $this->addSql(\sprintf(
                 "INSERT INTO settings
                     (variable, subkey, type, category, selected_value, title, comment, access_url_changeable, access_url_locked, access_url)
                  VALUES
@@ -65,7 +65,7 @@ final class Version20250714184000 extends AbstractMigrationChamilo
                 addslashes($title),
                 addslashes($comment)
             ));
-            $this->write(sprintf('Inserted setting: %s', $variable));
+            $this->write(\sprintf('Inserted setting: %s', $variable));
         }
     }
 
@@ -73,13 +73,13 @@ final class Version20250714184000 extends AbstractMigrationChamilo
     {
         $variable = 'hide_legal_accept_checkbox';
 
-        $this->addSql(sprintf(
+        $this->addSql(\sprintf(
             "DELETE FROM settings
              WHERE variable = '%s'
                AND subkey IS NULL
                AND access_url = 1",
             addslashes($variable)
         ));
-        $this->write(sprintf('Removed setting: %s.', $variable));
+        $this->write(\sprintf('Removed setting: %s.', $variable));
     }
 }

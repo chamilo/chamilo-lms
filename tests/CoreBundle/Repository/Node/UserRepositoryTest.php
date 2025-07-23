@@ -134,7 +134,7 @@ class UserRepositoryTest extends AbstractApiTest
         $student->addRole('ROLE_STUDENT');
         $userRepo->update($student);
 
-        $this->assertTrue($student->hasRole('ROLE_STUDENT'));
+        $this->assertTrue($student->isStudent());
         $this->assertTrue($student->isEqualTo($student));
 
         $this->assertCount(2, $student->getRoles());

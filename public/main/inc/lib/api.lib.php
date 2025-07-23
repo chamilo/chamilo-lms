@@ -2631,7 +2631,7 @@ function api_get_session_image($sessionId, User $user)
 {
     $sessionId = (int) $sessionId;
     $image = '';
-    if (!$user->hasRole('ROLE_STUDENT')) {
+    if (!$user->isStudent()) {
         // Check whether is not a student
         if ($sessionId > 0) {
             $image = '&nbsp;&nbsp;'.Display::getMdiIcon(
@@ -2879,17 +2879,17 @@ function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
         return false;
     }
 
-    $isAdmin = $currentUser->hasRole('ROLE_ADMIN') || $currentUser->hasRole('ROLE_SUPER_ADMIN');
+    $isAdmin = $currentUser->isAdmin() || $currentUser->isSuperAdmin();
 
     if ($isAdmin) {
         return true;
     }
 
-    if ($allowSessionAdmins && $currentUser->hasRole('ROLE_SESSION_MANAGER')) {
+    if ($allowSessionAdmins && $currentUser->isSessionAdmin()) {
         return true;
     }
 
-    if ($allowDrh && $currentUser->hasRole('ROLE_HR')) {
+    if ($allowDrh && $currentUser->isHRM()) {
         return true;
     }
 
@@ -5454,7 +5454,7 @@ function api_global_admin_can_edit_admin(
 
     if ($allow_session_admin && !$is_platform_admin) {
         $user = api_get_user_entity($userId);
-        $is_platform_admin = $user->hasRole('ROLE_SESSION_MANAGER');
+        $is_platform_admin = $user->isSessionAdmin();
     }
 
     if ($is_platform_admin) {

@@ -56,11 +56,11 @@ class Utils
      */
     public static function generateUserRoles(User $user)
     {
-        if ($user->hasRole('ROLE_HR')) {
+        if ($user->isHRM()) {
             return 'urn:lti:role:ims/lis/Mentor';
         }
 
-        // if ($user->hasRole('ROLE_INVITEE')) {
+        // if ($user->isInvitee()) {
         //    return 'Learner,urn:lti:role:ims/lis/Learner/GuestLearner';
         // }
 
@@ -72,7 +72,7 @@ class Utils
 
         $roles = ['Instructor'];
 
-        if ($user->hasRole('ROLE_ADMIN')) {
+        if ($user->isAdmin()) {
             $roles[] = 'urn:lti:role:ims/lis/Administrator';
         }
 

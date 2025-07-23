@@ -97,7 +97,7 @@ class CourseController extends ToolBaseController
             'url' => '#',
         ];
 
-        if ($user->hasRole('ROLE_STUDENT')
+        if ($user->isStudent()
             && 'true' === $settingsManager->getSetting('registration.allow_terms_conditions', true)
             && 'course' === $settingsManager->getSetting('platform.load_term_conditions_section', true)
         ) {
@@ -128,11 +128,11 @@ class CourseController extends ToolBaseController
                     $request->getSession()->remove('course');
 
                     // Build return URL
-                    $returnUrl = '/course/' . $course->getId() . '/home?sid='.$sid;
+                    $returnUrl = '/course/'.$course->getId().'/home?sid='.$sid;
 
                     $responseData = [
                         'redirect' => true,
-                        'url' => '/main/auth/tc.php?return=' . urlencode($returnUrl),
+                        'url' => '/main/auth/tc.php?return='.urlencode($returnUrl),
                     ];
                 }
             } else {
@@ -191,7 +191,7 @@ class CourseController extends ToolBaseController
         $courseCode = $course->getCode();
         $courseId = $course->getId();
 
-        if ($user && $user->hasRole('ROLE_INVITEE')) {
+        if ($user && $user->isInvitee()) {
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
                 $userId,
                 $courseCode,
@@ -242,6 +242,8 @@ class CourseController extends ToolBaseController
                             ? $assetRepository->getAssetUrl($cLink->getCustomImage())
                             : null
                     );
+
+                    $shortcut->target = $cLink->getTarget();
                 } else {
                     $shortcut->setCustomImageUrl(null);
                 }
@@ -284,7 +286,7 @@ class CourseController extends ToolBaseController
 
         if ($useDependents) {
             $sequences = $repo->getDependents($courseId, SequenceResource::COURSE_TYPE);
-            $checked = $repo->checkDependentsForUser($sequences, SequenceResource::COURSE_TYPE, $userId, $sessionId);
+            $checked = $repo->checkDependentsForUser($sequences, SequenceResource::COURSE_TYPE, $userId, $sessionId, $courseId);
             $isUnlocked = $repo->checkSequenceAreCompleted($checked);
             $sequenceResource = $repo->findRequirementForResource($courseId, SequenceResource::COURSE_TYPE);
         } else {

@@ -162,6 +162,10 @@ enum ActionIcon: string
     case EXIT = 'exit-run';
     // Edit badges/skills
     case EDIT_BADGE = 'shield-edit-outline';
+    // Import users from CSV to Access URL
+    case IMPORT_USERS_TO_URL = 'file-import';
+    // Remove users from Access URL using CSV
+    case REMOVE_USERS_FROM_URL = 'file-remove';
 
     case ADD_EVENT_REMINDER = 'alarm-plus';
 

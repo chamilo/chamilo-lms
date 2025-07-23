@@ -1,0 +1,42 @@
+<form method="post" enctype="multipart/form-data" class="mt-4 space-y-6 max-w-xl">
+    <div>
+        <label for="csv_file" class="block text-sm font-medium text-gray-700">
+            {{ 'Select CSV file'|trans }}
+        </label>
+        <input type="file" name="csv_file" id="csv_file" accept=".csv"
+               class="mt-1 block w-full rounded-md border border-gray-300 p-2 text-sm shadow-sm"
+               required />
+    </div>
+
+    {% if confirmMessage is defined %}
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function (e) {
+              if (!confirm("{{ confirmMessage|e('js') }}")) {
+                e.preventDefault();
+              }
+            });
+          });
+        </script>
+    {% endif %}
+
+    <div>
+        <button type="submit" class="btn btn--primary">
+            {{ submitLabel|default('Submit'|trans) }}
+        </button>
+    </div>
+</form>
+
+{% if report is defined and report is not empty %}
+    <div class="mt-8 border border-gray-300 rounded-md p-4 bg-gray-10">
+        <h3 class="text-md font-semibold mb-3">{{ 'Import report'|trans }}</h3>
+        <ul class="list-none pl-0 text-sm text-gray-700 space-y-2">
+            {% for line in report %}
+                <li class="flex items-start gap-2">
+                    {{ line|raw }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

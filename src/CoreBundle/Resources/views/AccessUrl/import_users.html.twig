@@ -1,0 +1,24 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <div class="mb-6">
+        <a href="{{ url('legacy_main', { 'name' : 'admin/access_url_edit_users_to_url.php' }) }}"
+           class="inline-flex items-center gap-2 text-sm text-primary hover:underline">
+            <i class="mdi mdi-arrow-left"></i>
+            {{ 'Back to user assignment page'|trans }}
+        </a>
+    </div>
+
+    <div class="section-header section-header--h2 mb-4">
+        <h2 class="section-header__title">{{ title }}</h2>
+    </div>
+
+    <p class="text-sm text-gray-700 mb-4 max-w-3xl">
+        {{ 'Upload a CSV file with two columns: username and url. Each url must start with https:// and end with /. Existing assignments will not be removed.'|trans }}
+    </p>
+
+    {% include "@ChamiloCore/AccessUrl/_import_form.twig" with {
+        'report': report,
+        'submitLabel': 'Assign users'|trans
+    } %}
+{% endblock %}

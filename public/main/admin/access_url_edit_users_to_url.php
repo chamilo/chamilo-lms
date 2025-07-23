@@ -7,6 +7,7 @@
  */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 
@@ -140,6 +141,18 @@ echo Display::url(
 echo Display::url(
     Display::getMdiIcon(ActionIcon::MULTI_COURSE_URL_ASSIGN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add user to this URL')),
     api_get_path(WEB_CODE_PATH).'admin/access_url_add_users_to_url.php'
+);
+
+$urlAddCsv = Container::getRouter()->generate('chamilo_core_access_url_users_import');
+$urlRemoveCsv = Container::getRouter()->generate('chamilo_core_access_url_users_remove');
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::IMPORT_USERS_TO_URL, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign users from CSV')),
+    $urlAddCsv
+);
+
+echo Display::url(
+    Display::getMdiIcon(ActionIcon::REMOVE_USERS_FROM_URL, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Remove users from CSV')),
+    $urlRemoveCsv
 );
 echo '</div>';
 

@@ -255,14 +255,13 @@ function complete_missing_data(array $user): array
 /**
  * Save the imported data.
  *
- * @uses \global variable $inserted_in_course, which returns the list of
- * courses the user was inserted in
+ * @uses   global $inserted_in_course, which returns the list of courses the user was inserted in
+ * @param  array       $users
+ * @param  bool        $sendMail
+ * @param  string|null $targetFolder
+ * @return array       The $users array, with 'message' and (for reused users) 'id' set
  */
-function save_data(
-    array $users,
-    bool $sendMail = false,
-    ?string $targetFolder = null
-): array {
+function save_data(array $users, bool $sendMail = false, ?string $targetFolder = null): array {
     global $inserted_in_course, $extra_fields;
 
     // Not all scripts declare the $inserted_in_course array (although they should).
@@ -281,107 +280,150 @@ function save_data(
 
     $optionsByField = [];
 
+    // which extra‑field variable are we validating on?
+    $uniqueField = api_get_configuration_value('extra_field_to_validate_on_user_registration');
+
     foreach ($users as &$user) {
         if ($user['has_error']) {
             $userError[] = $user;
             continue;
         }
 
-        $user = complete_missing_data($user);
-        $user['Status'] = api_status_key($user['Status']);
-        $redirection = $user['Redirection'] ?? '';
+        $returnMessage = '';
+        $user_id       = null;
 
-        $user_id = UserManager::create_user(
-            $user['FirstName'],
-            $user['LastName'],
-            $user['Status'],
-            $user['Email'],
-            $user['UserName'],
-            $user['Password'],
-            $user['OfficialCode'],
-            $user['language'],
-            $user['PhoneNumber'],
-            '',
-            $user['AuthSource'],
-            $user['ExpiryDate'],
-            1,
-            0,
-            null,
-            null,
-            $sendMail,
-            false,
-            '',
-            false,
-            null,
-            null,
-            null,
-            $redirection
-        );
-
-        if ($user_id) {
-            $returnMessage = Display::return_message(get_lang('UserAdded'), 'success');
-
-            if (isset($user['Courses']) && is_array($user['Courses'])) {
-                foreach ($user['Courses'] as $course) {
-                    if (CourseManager::course_exists($course)) {
-                        $result = CourseManager::subscribeUser($user_id, $course, $user['Status']);
-                        if ($result) {
-                            $course_info = api_get_course_info($course);
-                            $inserted_in_course[$course] = $course_info['title'];
-                        }
-                    }
-                }
+        // 1) If the CSV row has that unique extra‑field, try to look up an existing user
+        if (!empty($uniqueField) && !empty($user[$uniqueField])) {
+            // pass true to getUserId mode
+            $existing = UserManager::isExtraFieldValueUniquePerUrl($user[$uniqueField], true);
+            if ($existing !== null) {
+                // existing user found → reuse
+                $user_id       = $existing;
+                $returnMessage = Display::return_message(
+                    sprintf(
+                        'An existing user with the same %s was found (ID %d), enrolling instead of creating.',
+                        $uniqueField,
+                        $existing
+                    ),
+                    'info'
+                );
             }
-
-            if (isset($user['Sessions']) && is_array($user['Sessions'])) {
-                foreach ($user['Sessions'] as $sessionId) {
-                    $sessionInfo = api_get_session_info($sessionId);
-                    if (!empty($sessionInfo)) {
-                        SessionManager::subscribeUsersToSession(
-                            $sessionId,
-                            [$user_id],
-                            SESSION_VISIBLE_READ_ONLY,
-                            false
-                        );
-                    }
-                }
-            }
-
-            if (!empty($user['ClassId'])) {
-                $classId = explode('|', trim($user['ClassId']));
-                foreach ($classId as $id) {
-                    $usergroup->subscribe_users_to_usergroup($id, [$user_id], false);
-                }
-            }
-
-            // We are sure that the extra field exists.
-            foreach ($extra_fields as $extras) {
-                if (!isset($user[$extras[1]])) {
-                    continue;
-                }
-
-                $key = $extras[1];
-                $value = $user[$key];
-
-                if (!array_key_exists($key, $optionsByField)) {
-                    $optionsByField[$key] = $efo->getOptionsByFieldVariable($key);
-                }
-
-                /** @var ExtraFieldOptions $option */
-                foreach ($optionsByField[$key] as $option) {
-                    if ($option->getDisplayText() === $value) {
-                        $value = $option->getValue();
-                    }
-                }
-
-                UserManager::update_extra_field_value($user_id, $key, $value);
-            }
-            $userSaved[] = $user;
-        } else {
-            $returnMessage = Display::return_message(get_lang('Error'), 'warning');
-            $userWarning[] = $user;
         }
+
+        // 2) If not found, go through normal creation
+        if ($user_id === null) {
+            // fill in missing fields, generate password, etc.
+            $user = complete_missing_data($user);
+            $user['Status'] = api_status_key($user['Status']);
+            $redirection    = $user['Redirection'] ?? '';
+
+            $user_id = UserManager::create_user(
+                $user['FirstName'],
+                $user['LastName'],
+                $user['Status'],
+                $user['Email'],
+                $user['UserName'],
+                $user['Password'],
+                $user['OfficialCode'],
+                $user['language'],
+                $user['PhoneNumber'],
+                '',
+                $user['AuthSource'],
+                $user['ExpiryDate'],
+                1,
+                0,
+                null,
+                null,
+                $sendMail,
+                false,
+                '',
+                false,
+                null,
+                null,
+                null,
+                $redirection
+            );
+
+            if ($user_id) {
+                $returnMessage = Display::return_message(get_lang('UserAdded'), 'success');
+            } else {
+                $returnMessage = Display::return_message(get_lang('Error'), 'error');
+                $userWarning[] = $user;
+                $user['message'] = $returnMessage;
+                continue;
+            }
+        }
+
+        // 3) At this point $user_id is either reused or newly created.
+        //    Enroll in courses:
+        if (isset($user['Courses']) && is_array($user['Courses'])) {
+            foreach ($user['Courses'] as $course) {
+                if (CourseManager::course_exists($course)) {
+                    $result = CourseManager::subscribeUser($user_id, $course, $user['Status']);
+                    if ($result) {
+                        $info = api_get_course_info($course);
+                        $inserted_in_course[$course] = $info['title'];
+                    }
+                }
+            }
+        }
+
+        // 4) Enroll in sessions:
+        if (isset($user['Sessions']) && is_array($user['Sessions'])) {
+            foreach ($user['Sessions'] as $sessionId) {
+                $sessionInfo = api_get_session_info($sessionId);
+                if (!empty($sessionInfo)) {
+                    SessionManager::subscribeUsersToSession(
+                        $sessionId,
+                        [$user_id],
+                        SESSION_VISIBLE_READ_ONLY,
+                        false
+                    );
+                }
+            }
+        }
+
+        // 5) Subscribe to usergroups:
+        if (!empty($user['ClassId'])) {
+            $classIds = explode('|', trim($user['ClassId']));
+            foreach ($classIds as $id) {
+                $usergroup->subscribe_users_to_usergroup($id, [$user_id], false);
+            }
+        }
+
+        // 6) Update extra‑field values (for newly created or even reused users):
+        foreach ($extra_fields as $extras) {
+            $fieldVar = $extras[1];
+            $matchedKey = null;
+            foreach ($user as $colName => $colVal) {
+                if (strtolower($colName) === strtolower($fieldVar)) {
+                    $matchedKey = $colName;
+                    break;
+                }
+            }
+            if ($matchedKey === null) {
+                continue;
+            }
+
+            $value = $user[$matchedKey];
+            if (!array_key_exists($matchedKey, $optionsByField)) {
+                $optionsByField[$matchedKey] = $efo->getOptionsByFieldVariable($matchedKey);
+            }
+            /** @var ExtraFieldOptions $option */
+            foreach ($optionsByField[$matchedKey] as $option) {
+                if ($option->getDisplayText() === $value) {
+                    $value = $option->getValue();
+                    break;
+                }
+            }
+
+            UserManager::update_extra_field_value($user_id, $matchedKey, $value);
+        }
+
+        // 7) Record success
+        $user['id']      = $user_id;
         $user['message'] = $returnMessage;
+        $userSaved[]     = $user;
     }
 
     // Save with success, error and warning users
@@ -708,6 +750,25 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
 
             Session::erase('user_import_data_'.$userId);
             $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
+
+            $uniqueField = api_get_configuration_value('extra_field_to_validate_on_user_registration');
+            if (!empty($uniqueField) && !empty($users)) {
+                $firstRow = reset($users);
+                $csvHeader = array_keys($firstRow);
+                $csvHeaderLower = array_map('trim', array_map('strtolower', $csvHeader));
+
+                if (!in_array($uniqueField, $csvHeaderLower, true)) {
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf('The column "%s" is required in the CSV for this platform', $uniqueField),
+                            'error'
+                        )
+                    );
+                    header('Location: ' . api_get_self());
+                    exit;
+                }
+            }
+
             $users = parse_csv_data(
                 $users,
                 $cleanFileName,

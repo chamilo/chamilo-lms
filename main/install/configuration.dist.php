@@ -1948,7 +1948,7 @@ $_configuration['auth_password_links'] = [
 
 // Default items per page in main/mySpace/users.php
 // $_configuration['my_space_users_items_per_page'] = 10;
- 
+
 //Add an expected theorical time spent in a course to show in main/mySpace/myStudents.php and main/session/resume_session.php
 //Create an extra field for courses with identifier "theoretical_time"
 //$_configuration['display_theoretical_time'] = false;
@@ -2700,3 +2700,5 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
         ],
     ],
 ]; */
+// Extra field variable name to validate as unique per URL during user registration (e.g. 'dni')
+//$_configuration['extra_field_to_validate_on_user_registration'] = ''; // set in admin or directly (e.g. 'dni')

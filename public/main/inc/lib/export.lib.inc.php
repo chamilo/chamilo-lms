@@ -36,7 +36,7 @@ class Export
 
         $enclosure = !empty($enclosure) ? $enclosure : '"';
         $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
-        $writer = new CsvWriter($filePath, ';', $enclosure, true);
+        $writer = new CsvWriter($filePath, ',', $enclosure, true);
 
         $source = new ArraySourceIterator($data);
         $handler = Handler::create($source, $writer);
@@ -66,11 +66,11 @@ class Export
         }
 
         if (!empty($header)) {
-            fputcsv($handle, $header, ';');
+            fputcsv($handle, $header, ',');
         }
 
         foreach ($data as $row) {
-            fputcsv($handle, (array)$row, ';');
+            fputcsv($handle, (array)$row, ',');
         }
 
         fclose($handle);

@@ -41,7 +41,7 @@ class Import
      *
      * @return array returns an array (in the system encoding) that contains all data from the CSV-file
      */
-    public static function csvToArray($filename, $delimiter = ';'): array
+    public static function csvToArray($filename, $delimiter = ','): array
     {
         if (empty($filename)) {
             return [];

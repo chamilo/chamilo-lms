@@ -353,19 +353,6 @@ if (in_array('apikeys', $profileList)) {
 }
 //    SUBMIT
 $form->addButtonUpdate(get_lang('Save settings'), 'apply_change');
-
-// Student cannot modified their user conditions
-$extraConditions = api_get_setting('profile.show_conditions_to_user', true);
-if ($extraConditions && isset($extraConditions['conditions'])) {
-    $extraConditions = $extraConditions['conditions'];
-    foreach ($extraConditions as $condition) {
-        $element = $form->getElement('extra_'.$condition['variable']);
-        if ($element) {
-            $element->freeze();
-        }
-    }
-}
-
 $form->setDefaults($user_data);
 
 $filtered_extension = false;

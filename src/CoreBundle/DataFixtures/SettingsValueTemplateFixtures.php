@@ -520,23 +520,6 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'variable' => 'show_conditions_to_user',
-                    'json_example' => [
-                        'conditions' => [
-                            [
-                                'variable' => 'gdpr',
-                                'display_text' => 'GDPRTitle',
-                                'text_area' => 'GDPRTextArea',
-                            ],
-                            [
-                                'variable' => 'my_terms',
-                                'display_text' => 'My test conditions',
-                                'text_area' => 'This is a long text area, with lot of terms and conditions ... ',
-                            ],
-                        ],
-                    ],
-                ],
-                [
                     'variable' => 'profile_fields_visibility',
                     'json_example' => [
                         'options' => [

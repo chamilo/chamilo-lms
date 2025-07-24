@@ -155,30 +155,6 @@ if ($isNotAllowedHere && !($isCreatingIntroPage && $isPlatformAdmin)) {
     );
 }
 
-$settingConditions = api_get_setting('profile.show_conditions_to_user', true);
-$extraConditions = 'false' !== $settingConditions ? $settingConditions : [];
-if ($extraConditions && isset($extraConditions['conditions'])) {
-    // Create user extra fields for the conditions
-    $userExtraField = new ExtraField('user');
-    $extraConditions = $extraConditions['conditions'];
-    foreach ($extraConditions as $condition) {
-        $exists = $userExtraField->get_handler_field_info_by_field_variable($condition['variable']);
-        if (false == $exists) {
-            $params = [
-                'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-                'variable' => $condition['variable'],
-                'display_text' => $condition['display_text'],
-                'default_value' => '',
-                'visible_to_self' => 0,
-                'visible_to_others' => 0,
-                'changeable' => 0,
-                'filter' => 0,
-            ];
-            $userExtraField->save($params);
-        }
-    }
-}
-
 $form = new FormValidator('registration');
 $userAlreadyRegisteredShowTerms = false;
 $termRegistered = Session::read('term_and_condition');
@@ -697,33 +673,6 @@ if ($blockButton) {
 
 $course_code_redirect = Session::read('course_redirect');
 $sessionToRedirect = Session::read('session_redirect');
-
-if ($extraConditions && $extraFieldsLoaded) {
-    // Set conditions as "required" and also change the labels
-    foreach ($extraConditions as $condition) {
-        /** @var HTML_QuickForm_group $element */
-        $element = $form->getElement('extra_'.$condition['variable']);
-        if ($element) {
-            $children = $element->getElements();
-            /** @var HTML_QuickForm_checkbox $child */
-            foreach ($children as $child) {
-                $child->setText(get_lang($condition['display_text']));
-            }
-            $form->setRequired($element);
-            if (!empty($condition['text_area'])) {
-                $element->setLabel(
-                    [
-                        '',
-                        '<div class="form-control" disabled=disabled style="height: 100px; overflow: auto;">'.
-                        get_lang(nl2br($condition['text_area'])).
-                        '</div>',
-                    ]
-                );
-            }
-        }
-    }
-}
-
 $tpl = new Template($toolName);
 $textAfterRegistration = '';
 if ($form->validate()) {

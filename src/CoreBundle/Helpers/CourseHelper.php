@@ -620,7 +620,7 @@ class CourseHelper
 
         $gradebookLink->setType(1);
         $gradebookLink->setRefId($refId);
-        $gradebookLink->setUser(api_get_user_entity());
+        $gradebookLink->setUserScoreList([]);
         $gradebookLink->setCourse($course);
         $gradebookLink->setCategory($childGradebookCategory);
         $gradebookLink->setCreatedAt(new DateTime());

@@ -74,6 +74,7 @@ class GradebookLink
     {
         $this->locked = 0;
         $this->visible = 1;
+        $this->userScoreList = [];
     }
 
     public function setType(int $type): self

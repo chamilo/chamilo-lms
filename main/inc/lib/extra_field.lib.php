@@ -788,8 +788,8 @@ class ExtraField extends Model
             if (!empty($showOnlyTheseFields)) {
                 $setData = [];
                 foreach ($showOnlyTheseFields as $variable) {
-                    $extraName = 'extra_'.$variable;
-                    if (in_array($extraName, array_keys($extraData))) {
+                    $extraName = 'extra_' . $variable;
+                    if (array_key_exists($extraName, $extraData)) {
                         $setData[$extraName] = $extraData[$extraName];
                     }
                 }
@@ -824,13 +824,26 @@ class ExtraField extends Model
             $help
         );
 
-        if (!empty($requiredFields)) {
-            /** @var HTML_QuickForm_input $element */
-            foreach ($form->getElements() as $element) {
-                $name = str_replace('extra_', '', $element->getName());
-                if (in_array($name, $requiredFields)) {
-                    $form->setRequired($element);
-                }
+        $requiredFields = is_array($requiredFields) ? $requiredFields : [];
+
+        $uniqueField = api_get_configuration_value('extra_field_to_validate_on_user_registration');
+        if (!empty($uniqueField) && !in_array($uniqueField, $requiredFields, true)) {
+            $requiredFields[] = $uniqueField;
+        }
+
+        /** @var HTML_QuickForm_element $element */
+        foreach ($form->getElements() as $element) {
+            $name = str_replace('extra_', '', $element->getName());
+            if (in_array($name, $requiredFields, true)) {
+                $form->setRequired($element);
+            }
+            if (!empty($uniqueField) && $name === $uniqueField) {
+                $form->addRule(
+                    'extra_' . $name,
+                    sprintf(get_lang('A user with the same %s already exists in this portal'), $name),
+                    'callback',
+                    ['UserManager', 'isExtraFieldValueUniquePerUrl']
+                );
             }
         }
 

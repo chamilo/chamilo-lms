@@ -121,7 +121,7 @@
 
       <div class="mt-auto pt-2">
         <router-link
-          v-if="isUserInCourse && (course.visibility === 2 || course.visibility === 3)"
+          v-if="course.subscribed"
           :to="{ name: 'CourseHome', params: { id: course.id } }"
         >
           <Button
@@ -231,11 +231,6 @@ const showDependenciesModal = ref(false)
 const allowDescription = computed(
   () => platformConfigStore.getSetting("course.show_courses_descriptions_in_catalog") !== "false",
 )
-
-const isUserInCourse = computed(() => {
-  if (!props.currentUserId) return false
-  return props.course.users?.some((user) => user.user.id === props.currentUserId)
-})
 
 const durationInHours = computed(() => {
   if (!props.course.duration) return "-"

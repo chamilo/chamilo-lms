@@ -28519,3 +28519,36 @@ msgstr "CSRF token is invalid. Please try again."
 
 msgid "User not found or invalid."
 msgstr "User not found or invalid."
+
+msgid "Email Settings"
+msgstr "Email Settings"
+
+msgid "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. Here are a few examples of supported DSN syntaxes: %s"
+msgstr "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. Here are a few examples of supported DSN syntaxes: %s"
+
+msgid "Mail DSN"
+msgstr "Mail DSN"
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header. We recommend using a 'no-reply' e-mail address here, to avoid excessive filling of an e-mail box. The support e-mail address defined in the Platform section should be used to contact you, but replying to automatic notifications should not be encouraged."
+msgstr "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header. We recommend using a 'no-reply' e-mail address here, to avoid excessive filling of an e-mail box. The support e-mail address defined in the Platform section should be used to contact you, but replying to automatic notifications should not be encouraged."
+
+msgid "Mail: 'From' address"
+msgstr "Mail: 'From' address"
+
+msgid "The name that appears as the sender (next to the From e-mail address) when the platform sends an e-mail."
+msgstr "The name that appears as the sender (next to the From e-mail address) when the platform sends an e-mail."
+
+msgid "Mail: 'From' name"
+msgstr "Mail: 'From' name"
+
+msgid "Installer data is missing."
+msgstr "Installer data is missing."
+
+msgid "Test email sent successfully"
+msgstr "Test email sent successfully"
+
+msgid "Test email failed: "
+msgstr "Test email failed: "
+
+msgid "Error during test email: "
+msgstr "Error during test email: "

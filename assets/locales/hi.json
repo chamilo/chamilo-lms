@@ -297,5 +297,16 @@
     "Accept Terms and Conditions": "Accept Terms and Conditions",
     "You accepted these terms on": "You accepted these terms on",
     "Revoke Acceptance": "Revoke Acceptance",
-    "Days": "Days"
+    "Days": "Days",
+    "Email Settings": "Email Settings",
+    "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. Here are a few examples of supported DSN syntaxes: %s": "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at {0}. Here are a few examples of supported DSN syntaxes: {1}",
+    "Mail DSN": "Mail DSN",
+    "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header. We recommend using a 'no-reply' e-mail address here, to avoid excessive filling of an e-mail box. The support e-mail address defined in the Platform section should be used to contact you, but replying to automatic notifications should not be encouraged.": "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header. We recommend using a 'no-reply' e-mail address here, to avoid excessive filling of an e-mail box. The support e-mail address defined in the Platform section should be used to contact you, but replying to automatic notifications should not be encouraged.",
+    "Mail: 'From' address": "Mail: 'From' address",
+    "The name that appears as the sender (next to the From e-mail address) when the platform sends an e-mail.": "The name that appears as the sender (next to the From e-mail address) when the platform sends an e-mail.",
+    "Mail: 'From' name": "Mail: 'From' name",
+    "Installer data is missing.": "Installer data is missing.",
+    "Test email sent successfully": "Test email sent successfully",
+    "Test email failed: ": "Test email failed: ",
+    "Error during test email: ": "Error during test email: "
 }

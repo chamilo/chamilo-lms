@@ -219,7 +219,7 @@ class SecurityController extends AbstractController
         CourseRepository $courseRepo,
     ): ?string {
         /* Possible values: index.php, user_portal.php, main/auth/courses.php */
-        $pageAfterLogin = $this->settingsManager->getSetting('registration.page_after_login');
+        $pageAfterLogin = $this->settingsManager->getSetting('registration.redirect_after_login');
 
         $url = null;
 

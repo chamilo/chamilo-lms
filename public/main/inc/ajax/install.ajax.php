@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Address;
@@ -12,21 +15,23 @@ use Symfony\Component\Mime\Email;
  */
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
-$action = $_GET['a'];
+$request = Request::createFromGlobals();
+
+$action = $request->query->getString('a');
 
 switch ($action) {
     case 'send_contact_information':
-        if (!empty($_POST)) {
+        if ($request->isXmlHttpRequest()) {
             // get params from contact form
-            $person_name = $_POST['person_name'];
-            $person_email = $_POST['person_email'];
-            $person_role = $_POST['person_role'];
-            $financial_decision = $_POST['financial_decision'];
-            $contact_language = $_POST['language'];
-            $company_name = $_POST['company_name'];
-            $company_activity = $_POST['company_activity'];
-            $company_country = $_POST['company_country'];
-            $company_city = $_POST['company_city'];
+            $person_name = $request->request->get('person_name');
+            $person_email = $request->request->get('person_email');
+            $person_role = $request->request->get('person_role');
+            $financial_decision = $request->request->get('financial_decision');
+            $contact_language = $request->request->get('language');
+            $company_name = $request->request->get('company_name');
+            $company_activity = $request->request->get('company_activity');
+            $company_country = $request->request->get('company_country');
+            $company_city = $request->request->get('company_city');
 
             // validating required fields
             $a_required_fields = [$person_name, $person_role, $company_name, $company_activity, $company_country];
@@ -58,7 +63,7 @@ switch ($action) {
                     if ('200' == $res->getStatusCode() || '301' == $res->getStatusCode()) {
                         $urlValidated = true;
                     }
-                } catch (Exception $e) {
+                } catch (Exception|GuzzleException $e) {
                     error_log("Could not check $url from ".__FILE__);
                     break;
                 }
@@ -75,7 +80,7 @@ switch ($action) {
                     'company_city' => $company_city,
                 ];
 
-                $client = new GuzzleHttp\Client();
+                $client = new Client();
                 $options['query'] = $data;
                 $res = $client->request('GET', $url, $options);
                 if ('200' == $res->getStatusCode()) {
@@ -86,10 +91,11 @@ switch ($action) {
         break;
 
     case 'test_mailer':
-        if (!empty($_POST)) {
-            $mailerDsn = $_POST['mailerDsn'] ?? '';
-            $mailerFromEmail = $_POST['mailerFromEmail'] ?? '';
-            $mailerFromName = $_POST['mailerFromName'] ?? '';
+        if ($request->isXmlHttpRequest()) {
+            $mailerDsn = $request->request->get('mailerDsn');
+            $mailerTestFrom = $request->request->get('mailerTestFrom');
+            $mailerFromEmail = $request->request->get('mailerFromEmail');
+            $mailerFromName = $request->request->get('mailerFromName');
 
             try {
                 $transport = Transport::fromDsn($mailerDsn);
@@ -97,10 +103,7 @@ switch ($action) {
                 $mailer = new Mailer($transport);
 
                 $email = (new Email())
-                    ->from(new Address(
-                        $mailerFromEmail ?: 'test@example.com',
-                        $mailerFromName ?: 'Test Sender'
-                    ))
+                    ->from(new Address($mailerTestFrom))
                     ->to($mailerFromEmail ?: 'test@example.com')
                     ->subject('Chamilo Mail Test')
                     ->text('This is a test e-mail sent from Chamilo installation wizard.');

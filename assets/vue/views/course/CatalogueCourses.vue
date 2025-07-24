@@ -20,6 +20,13 @@
           icon="pi pi-sliders-h"
           @click="showAdvancedSearch = !showAdvancedSearch"
         />
+        <Button
+          v-if="showAdvancedSearch"
+          :label="$t('Apply advanced filters')"
+          icon="pi pi-check"
+          class="p-button-sm p-button-success"
+          @click="applyAdvancedSearch"
+        />
         <Dropdown
           v-if="allSortOptions.length"
           v-model="sortField"
@@ -37,12 +44,6 @@
             class="pl-10 w-64"
           />
         </div>
-        <Button
-          :label="$t('Search')"
-          icon="pi pi-search"
-          class="p-button-sm p-button-primary"
-          @click="applyAdvancedSearch"
-        />
       </div>
     </div>
     <div
@@ -51,15 +52,17 @@
     >
       <div class="grid sm:grid-cols-3 gap-4 mb-4">
         <InputText
+          v-if="courseCatalogueSettings.filters?.by_title"
           v-model="advancedFilters.title"
           :placeholder="$t('Filter by title')"
         />
         <InputText
+          v-if="courseCatalogueSettings.filters?.by_category"
           v-model="advancedFilters.category"
           :placeholder="$t('Filter by category')"
         />
         <Dropdown
-          v-if="languages.length > 1"
+          v-if="courseCatalogueSettings.filters?.by_language && languages.length > 1"
           v-model="advancedFilters.language"
           :options="languages"
           optionLabel="originalName"
@@ -78,9 +81,31 @@
           :key="field.variable"
         >
           <InputText
-            v-if="field.value_type === 'text'"
+            v-if="[1, 15, 17].includes(field.value_type)"
             v-model="advancedFilters[field.variable]"
-            :placeholder="field.display_text"
+            :placeholder="formatLabel(field)"
+            class="w-full"
+          />
+          <Textarea
+            v-else-if="field.value_type === 2"
+            v-model="advancedFilters[field.variable]"
+            :placeholder="formatLabel(field)"
+            class="w-full"
+            autoResize
+          />
+          <Calendar
+            v-else-if="field.value_type === 6"
+            v-model="advancedFilters[field.variable]"
+            :placeholder="formatLabel(field)"
+            class="w-full"
+            dateFormat="yy-mm-dd"
+            showIcon
+          />
+          <InputText
+            v-else
+            v-model="advancedFilters[field.variable]"
+            :placeholder="formatLabel(field)"
+            class="w-full"
           />
         </template>
       </div>
@@ -137,6 +162,13 @@ import courseService from "../../services/courseService"
 const { t } = useI18n()
 const sortField = ref("title")
 
+const formatLabel = (field) => {
+  if (field.display_text) return field.display_text
+  return field.variable
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (l) => l.toUpperCase())
+}
+
 const standardSortOptions = computed(() => {
   return courseCatalogueSettings.value.standard_sort_options ?? {}
 })
@@ -182,10 +214,18 @@ const securityStore = useSecurityStore()
 
 const platformConfigStore = usePlatformConfig()
 const courseCatalogueSettings = computed(() => {
-  const raw = platformConfigStore.getSetting("course.course_catalog_settings")
-  if (raw === false || raw === "false") return {}
+  let raw = platformConfigStore.getSetting("course.course_catalog_settings")
+  if (!raw || raw === false || raw === "false") return {}
   try {
-    return typeof raw === "string" ? JSON.parse(raw) : (raw ?? {})
+    if (typeof raw === "string") {
+      raw = JSON.parse(raw)
+    }
+
+    if (typeof raw.courses === "object") {
+      return raw.courses
+    }
+
+    return raw
   } catch (e) {
     console.error("Invalid catalogue settings format", e)
     return {}
@@ -204,9 +244,21 @@ const redirectAfterSubscription = computed(
 )
 
 const onUserSubscribed = ({ courseId, newUser }) => {
-  const course = courses.value.find((c) => c.id === courseId)
-  if (course) {
-    course.users.push(newUser)
+  const index = courses.value.findIndex((c) => c.id === courseId)
+  if (index !== -1) {
+    const oldCourse = courses.value[index]
+    const updatedCourse = {
+      ...oldCourse,
+      subscribed: true,
+      users: [...(oldCourse.users || []), newUser],
+    }
+
+    courses.value[index] = updatedCourse
+    const filteredIndex = filteredCourses.value.findIndex((c) => c.id === courseId)
+    if (filteredIndex !== -1) {
+      filteredCourses.value[filteredIndex] = updatedCourse
+    }
+    applyAdvancedSearch()
     if (redirectAfterSubscription.value === "course_home") {
       router.push({ name: "CourseHome", params: { id: courseId } })
     }
@@ -325,10 +377,11 @@ const load = async () => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener("scroll", handleScroll)
-  load().then(() => applyAdvancedSearch())
-  loadExtraFields()
+  await loadExtraFields()
+  await load()
+  applyAdvancedSearch()
 })
 
 const clearFilter = () => {

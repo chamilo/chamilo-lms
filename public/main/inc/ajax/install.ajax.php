@@ -91,29 +91,27 @@ switch ($action) {
         break;
 
     case 'test_mailer':
-        if ($request->isXmlHttpRequest()) {
-            $mailerDsn = $request->request->get('mailerDsn');
-            $mailerTestFrom = $request->request->get('mailerTestFrom');
-            $mailerFromEmail = $request->request->get('mailerFromEmail');
-            $mailerFromName = $request->request->get('mailerFromName');
+        $mailerDsn = $request->request->get('mailerDsn');
+        $mailerTestDestination = $request->request->get('mailerTestDestination');
+        $mailerFromEmail = $request->request->get('mailerFromEmail');
+        $mailerFromName = $request->request->get('mailerFromName');
 
-            try {
-                $transport = Transport::fromDsn($mailerDsn);
+        try {
+            $transport = Transport::fromDsn($mailerDsn);
 
-                $mailer = new Mailer($transport);
+            $mailer = new Mailer($transport);
 
-                $email = (new Email())
-                    ->from(new Address($mailerTestFrom))
-                    ->to($mailerFromEmail ?: 'test@example.com')
-                    ->subject('Chamilo Mail Test')
-                    ->text('This is a test e-mail sent from Chamilo installation wizard.');
+            $email = (new Email())
+                ->from(new Address($mailerFromEmail, $mailerFromName))
+                ->to($mailerTestDestination ?: 'test@example.com')
+                ->subject('Chamilo Mail Test')
+                ->text('This is a test e-mail sent from Chamilo installation wizard.');
 
-                $mailer->send($email);
+            $mailer->send($email);
 
-                echo json_encode(['success' => true]);
-            } catch (\Throwable $e) {
-                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
-            }
+            echo json_encode(['success' => true]);
+        } catch (\Throwable $e) {
+            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
         break;
     default:

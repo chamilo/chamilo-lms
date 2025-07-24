@@ -267,7 +267,7 @@ if (!installerData.value.stepData) {
   installerData.value.stepData = {
     mailerFromEmail: "",
     mailerFromName: "",
-    mailerDsn: "",
+    mailerDsn: "native://default",
   }
 }
 

@@ -10,7 +10,7 @@
       id="mailerDsn"
       :help-text="
         t(
-          'The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. Here are a few examples of supported DSN syntaxes: %s',
+          'The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. The default value is null://null and will disable e-mail sending. Use native://default to use the default PHP configuration on your server. Here are a few examples of supported DSN syntaxes: %s.',
           [
             'https://symfony.com/doc/6.4/mailer.html#using-built-in-transports',
             'https://symfony.com/doc/6.4/mailer.html#using-a-3rd-party-transport',
@@ -40,21 +40,32 @@
       :label="t('Mail: \'From\' name')"
     />
 
-    <BaseButton
-      type="info"
-      icon="send"
-      :label="t('Test send e-mail')"
-      :is-loading="isTesting"
-      :disabled="isTesting"
-      @click="testSmtp"
-    />
+    <div class="field">
+      <InputGroup>
+        <InputText
+          v-model="mailerTestDestination"
+          :placeholder="t('Destination of test e-mail')"
+        />
+        <InputGroupAddon>
+          <BaseButton
+            type="info"
+            icon="send"
+            :label="t('Test send e-mail')"
+            :is-loading="isTesting"
+            :disabled="!mailerTestDestination || isTesting"
+            @click="testSmtp"
+          />
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
   </div>
 </template>
 <script setup>
 import { inject, ref, onMounted } from "vue"
 import { useI18n } from "vue-i18n"
 import InputText from "primevue/inputtext"
-import RadioButton from "primevue/radiobutton"
+import InputGroup from "primevue/inputgroup"
+import InputGroupAddon from "primevue/inputgroupaddon"
 import axios from "axios"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -62,6 +73,8 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 const { t } = useI18n()
 const installerData = inject("installerData", ref({}))
 const isTesting = ref(false)
+
+const mailerTestDestination = ref("")
 
 async function testSmtp() {
   isTesting.value = true
@@ -72,16 +85,11 @@ async function testSmtp() {
       return
     }
 
-    const smtpFields = ["mailerDsn", "mailerFromEmail", "mailerFromName"]
     const formData = new FormData()
-
-    smtpFields.forEach((field) => {
-      const value = installerData.value.stepData[field]
-
-      if (value !== undefined) {
-        formData.append(field, value)
-      }
-    })
+    formData.append("mailerDsn", installerData.value.stepData.mailerDsn)
+    formData.append("mailerFromEmail", installerData.value.stepData.mailerFromEmail)
+    formData.append("mailerFromName", installerData.value.stepData.mailerFromName)
+    formData.append("mailerTestDestination", mailerTestDestination.value)
 
     const { data } = await axios.post("/main/inc/ajax/install.ajax.php?a=test_mailer", formData)
 

@@ -588,5 +588,6 @@
     "Installer data is missing.": "Installer data is missing.",
     "Test email sent successfully": "Test email sent successfully",
     "Test email failed: ": "Test email failed: ",
-    "Error during test email: ": "Error during test email: "
+    "Error during test email: ": "Error during test email: ",
+    "Destination of test e-mail": "Destination of test e-mail"
 }

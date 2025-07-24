@@ -28520,3 +28520,6 @@ msgstr ""
 
 msgid "Error during test email: "
 msgstr ""
+
+msgid "Destination of test e-mail"
+msgstr ""

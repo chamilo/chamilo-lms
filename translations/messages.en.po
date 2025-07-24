@@ -28552,3 +28552,6 @@ msgstr "Test email failed: "
 
 msgid "Error during test email: "
 msgstr "Error during test email: "
+
+msgid "Destination of test e-mail"
+msgstr "Destination of test e-mail"

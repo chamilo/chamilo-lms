@@ -15,28 +15,21 @@
             />
         {% endif %}
 
-        <div style="background-color: rgb(var(--color-danger-base)); color: rgb(var(--color-danger-button-text));"
-             class="mx-auto p-6 rounded-lg shadow-md md:w-3/4 lg:w-1/2">
-            <p style="font-size: 1.5rem; font-weight: bold;" class="mb-4">
+        <div
+                class="mx-auto p-6 rounded-lg shadow-md md:w-3/4 lg:w-1/2"
+                style="background-color: rgb(var(--color-danger-base)); color: rgb(var(--color-danger-button-text));"
+        >
+            <p class="mb-4" style="font-size: 1.5rem; font-weight: bold;">
                 {{ 'Oops! URL not registered.'|trans }}
             </p>
 
-            <p style="font-size: 1.2rem;" class="mb-4">
+            <p class="mb-4" style="font-size: 1.2rem;">
                 {{ 'The address "%host%" is not configured in this portal instance.'|trans({'%host%': host}) }}
             </p>
 
-            <p style="font-size: 1rem;" class="mb-6">
+            <p class="mb-6" style="font-size: 1rem;">
                 {{ 'If the problem persists, please contact support.'|trans }}
             </p>
-
-            <a href="/"
-               class="inline-block px-6 py-2 rounded"
-               style="
-                   background-color: rgb(var(--color-primary-base));
-                   color: rgb(var(--color-primary-button-alternative-text));
-               ">
-                {{ 'Go to home page'|trans }}
-            </a>
         </div>
     </div>
 {% endblock %}

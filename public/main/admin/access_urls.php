@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
-
-//api_protect_admin_script();
 api_protect_global_admin_script();
 
 $httpRequest = HttpRequest::createFromGlobals();
@@ -36,12 +34,11 @@ if ($httpRequest->query->has('action')) {
 
     switch ($httpRequest->query->get('action')) {
         case 'delete_url':
-            $result = UrlManager::delete($url_id);
-            if ($result) {
-                echo Display::return_message(get_lang('URL deleted.'), 'normal');
-            } else {
-                echo Display::return_message(get_lang('Cannot delete this URL.'), 'error');
-            }
+            $ok = UrlManager::delete($url_id);
+            echo Display::return_message(
+                $ok ? get_lang('URL deleted.') : get_lang('Cannot delete this URL.'),
+                $ok ? 'normal' : 'error'
+            );
 
             break;
         case 'lock':
@@ -55,22 +52,19 @@ if ($httpRequest->query->has('action')) {
 
             break;
         case 'register':
-            // we are going to register the admin
-            if (api_is_platform_admin()) {
-                if (-1 != $current_access_url_id) {
-                    $url_str = '';
-                    foreach ($url_list as $my_url) {
-                        if (!in_array($my_url['id'], $my_user_url_list)) {
-                            UrlManager::add_user_to_url(api_get_user_id(), $my_url['id']);
-                            $url_str .= $my_url['url'].' <br />';
-                        }
+            if (api_is_platform_admin() && -1 != $current_access_url_id) {
+                $url_str = '';
+                foreach ($url_list as $u) {
+                    if (!in_array($u['id'], $my_user_url_list)) {
+                        UrlManager::add_user_to_url(api_get_user_id(), $u['id']);
+                        $url_str .= $u['url'] . '<br />';
                     }
-                    echo Display::return_message(
-                        get_lang('Admin user assigned to this URL').': '.$url_str.'<br />',
-                        'normal',
-                        false
-                    );
                 }
+                echo Display::return_message(
+                    get_lang('Admin user assigned to this URL') . ': ' . $url_str,
+                    'normal',
+                    false
+                );
             }
 
             break;
@@ -81,15 +75,14 @@ $parameters['sec_token'] = Security::get_token();
 
 // Checking if the admin is registered in all sites
 $url_string = '';
-$my_user_url_list = api_get_access_url_from_user(api_get_user_id());
-foreach ($url_list as $my_url) {
-    if (!in_array($my_url['id'], $my_user_url_list)) {
-        $url_string .= $my_url['url'].' <br />';
+foreach ($url_list as $u) {
+    if (!in_array($u['id'], $my_user_url_list)) {
+        $url_string .= $u['url'] . '<br />';
     }
 }
 if (!empty($url_string)) {
     echo Display::return_message(
-        get_lang('Admin user should be registered here').'<br />'.$url_string,
+        get_lang('Admin user should be registered here') . '<br />' . $url_string,
         'warning',
         false
     );
@@ -98,28 +91,59 @@ if (!empty($url_string)) {
 // checking the current installation
 if (-1 == $current_access_url_id) {
     echo Display::return_message(
-        get_lang('URL not configured yet, please add this URL :').': '.api_get_path(WEB_PATH),
+        get_lang('URL not configured yet, please add this URL :') . ' ' . api_get_path(WEB_PATH),
         'warning'
     );
 } elseif (api_is_platform_admin()) {
-    $quant = UrlManager::relation_url_user_exist(
-        api_get_user_id(),
-        $current_access_url_id
-    );
+    $quant = UrlManager::relation_url_user_exist(api_get_user_id(), $current_access_url_id);
     if (0 == $quant) {
         echo Display::return_message(
-            '<a href="'.api_get_self().'?action=register&sec_token='.$parameters['sec_token'].'">'.
-            get_lang('Click here to register the admin into all sites').'</a>',
+            '<a href="' . api_get_self() . '?action=register&sec_token=' . $parameters['sec_token'] . '">' .
+            get_lang('Click here to register the admin into all sites') .
+            '</a>',
             'warning',
             false
         );
     }
 }
 
+// 1) Find the default URL (ID = 1)
+$defaultUrl = 'http://localhost/';
+foreach ($url_list as $u) {
+    if ((string)$u['id'] === '1') {
+        $defaultUrl = trim($u['url']);
+        break;
+    }
+}
+
+// 2) Tooltip message (in English, per spec)
+$tooltip     = 'Adding new URLs requires you to first set the first URL to a value different than localhost.';
+$isLocalhost = ($defaultUrl === 'http://localhost/');
+
+// 3) Decide link href and base attributes
+$attributes = ['id' => 'add-url-button'];
+if ($isLocalhost) {
+    // Block the link and apply a “disabled” style
+    $attributes['class'] = 'ch-disabled';
+    $linkHref = '#';
+} else {
+    $linkHref = api_get_path(WEB_CODE_PATH) . 'admin/access_url_edit.php';
+}
+
+// 4) Build the “Add URL” action
 $actions = Display::url(
-    Display::getMdiIcon('web-plus', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add URL')),
-    api_get_path(WEB_CODE_PATH).'admin/access_url_edit.php'
+    Display::getMdiIcon(
+        'web-plus',
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_MEDIUM,
+        get_lang('Add URL')
+    ),
+    $linkHref,
+    $attributes
 );
+
+// 5) Append the other “Manage” actions as before
 if (api_get_multiple_access_url()) {
     $actions .= Display::url(
         Display::getMdiIcon('account', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage users')),
@@ -143,51 +167,59 @@ if (api_get_multiple_access_url()) {
     );
 }
 
-echo Display::toolbarAction('urls', [$actions]);
-
-$data = UrlManager::get_url_data();
-$urls = [];
-foreach ($data as $row) {
-    // Title
-    $url = Display::url($row['url'], $row['url'], ['target' => '_blank']);
-    $description = $row['description'];
-    $createdAt = api_get_local_time($row['tms']);
-
-    //Status
-    $active = $row['active'];
-    $action = 'unlock';
-    $image = StateIcon::INACTIVE;
-    if ('1' == $active) {
-        $action = 'lock';
-        $image = StateIcon::ACTIVE;
-    }
-    // you cannot lock the default
-    if ('1' == $row['id']) {
-        $status = Display::getMdiIcon($image, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang(ucfirst($action)));
-    } else {
-        $status = '<a href="access_urls.php?action='.$action.'&amp;url_id='.$row['id'].'">'.
-            Display::getMdiIcon($image, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang(ucfirst($action))).'</a>';
-    }
-    // Actions
-    $url_id = $row['id'];
-    $actions = Display::url(
-        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
-        "access_url_edit.php?url_id=$url_id"
-    );
-    if ('1' != $url_id) {
-        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;">'.
-            Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
-    }
-    $urls[] = [$url, $description, $status, $createdAt, $actions];
+// 6) If still localhost, show the tooltip inline next to the button
+$toolbarItems = [$actions];
+if ($isLocalhost) {
+    $toolbarItems[] = '<span style="
+        margin-left: 8px;
+        font-size: 0.9em;
+        color: #666;
+    ">'.$tooltip.'</span>';
 }
 
-$table = new SortableTableFromArrayConfig($urls, 2, 50, 'urls');
+// 7) Render the toolbar
+echo Display::toolbarAction('urls', $toolbarItems);
+
+$rows = [];
+foreach ($url_list as $u) {
+    $link   = Display::url($u['url'], $u['url'], ['target' => '_blank']);
+    $desc   = $u['description'];
+    $ts     = api_get_local_time($u['tms']);
+    $active = ($u['active'] === '1');
+
+    $iconAction = $active ? 'lock' : 'unlock';
+    $stateIcon  = $active ? StateIcon::ACTIVE : StateIcon::INACTIVE;
+
+    if ((string)$u['id'] === '1') {
+        $status = Display::getMdiIcon($stateIcon, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang(ucfirst($iconAction)));
+    } else {
+        $status = '<a href="access_urls.php?action=' . $iconAction . '&url_id=' . $u['id'] . '">' .
+            Display::getMdiIcon($stateIcon, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang(ucfirst($iconAction))) .
+            '</a>';
+    }
+
+    $rowActions = Display::url(
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
+        "access_url_edit.php?url_id={$u['id']}"
+    );
+
+    if ((string)$u['id'] !== '1') {
+        $rowActions .= '<a href="access_urls.php?action=delete_url&url_id=' . $u['id'] . '" ' .
+            'onclick="return confirm(\'' . addslashes(get_lang('Please confirm your choice')) . '\');">' .
+            Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')) .
+            '</a>';
+    }
+
+    $rows[] = [$link, $desc, $status, $ts, $rowActions];
+}
+
+$table = new SortableTableFromArrayConfig($rows, 2, 50, 'urls');
 $table->set_additional_parameters($parameters);
 $table->set_header(0, 'URL');
 $table->set_header(1, get_lang('Description'));
-$table->set_header(2, get_lang('active'));
+$table->set_header(2, get_lang('Active'));
 $table->set_header(3, get_lang('Created at'));
 $table->set_header(4, get_lang('Edit'), false);
 $table->display();
 
-Display :: display_footer();
+Display::display_footer();

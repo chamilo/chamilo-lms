@@ -72,6 +72,14 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         ;
 
         if (!$onlyShowMatching && !$onlyShowCoursesWithCategory) {
+            if ($isAuthenticated) {
+                foreach ($courses as $course) {
+                    if ($course instanceof Course) {
+                        $course->subscribed = $course->hasSubscriptionByUser($user);
+                    }
+                }
+            }
+
             return $courses;
         }
 
@@ -94,6 +102,10 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             }
 
             if ($passesExtraField && $passesCategory) {
+                if ($isAuthenticated && $course instanceof Course) {
+                    $course->subscribed = $course->hasSubscriptionByUser($user);
+                }
+
                 $filtered[] = $course;
             }
         }

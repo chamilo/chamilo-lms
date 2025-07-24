@@ -341,6 +341,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[ORM\Column(name: 'popularity', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $popularity = 0;
 
+    #[Groups(['course:read'])]
+    public bool $subscribed = false;
+
     public function __construct()
     {
         $this->visibility = self::OPEN_PLATFORM;

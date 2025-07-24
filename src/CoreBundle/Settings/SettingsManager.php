@@ -904,7 +904,6 @@ class SettingsManager implements SettingsManagerInterface
             'example_material_course_creation' => 'course',
             'login_is_email' => 'profile',
             'noreply_email_address' => 'mail',
-            'page_after_login' => 'registration',
             'pdf_export_watermark_by_course' => 'document',
             'pdf_export_watermark_enable' => 'document',
             'pdf_export_watermark_text' => 'document',

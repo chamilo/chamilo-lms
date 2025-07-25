@@ -18,7 +18,6 @@ class MailSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder->setDefaults([
-            'noreply_email_address' => 'no_reply@example.com',
             'update_users_email_to_dummy_except_admins' => 'false',
             'mail_header_style' => '',
             'mail_content_style' => '',
@@ -45,7 +44,6 @@ class MailSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add('noreply_email_address', EmailType::class)
             ->add('update_users_email_to_dummy_except_admins', YesNoType::class)
             ->add('mail_header_style', TextType::class)
             ->add('mail_content_style', TextType::class)

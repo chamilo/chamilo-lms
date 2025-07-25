@@ -6,13 +6,17 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Exception;
+use Notification;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\BodyRendererInterface;
 use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class MailHelper
 {
@@ -20,7 +24,49 @@ final class MailHelper
         private readonly MailerInterface $mailer,
         private readonly BodyRendererInterface $bodyRenderer,
         private readonly ThemeHelper $themeHelper,
+        private readonly ValidatorInterface $validator,
+        private readonly SettingsManager $settingsManager,
     ) {}
+
+    private function setNoreplyAndFromAddress(
+        TemplatedEmail $email,
+        array $sender,
+        array $replyToAddress = []
+    ): void {
+        $emailConstraint = new Assert\Email();
+
+        // Default values
+        $notification = new Notification();
+        $defaultSenderName = $notification->getDefaultPlatformSenderName();
+        $defaultSenderEmail = $notification->getDefaultPlatformSenderEmail();
+
+        // If the parameter is set, don't use the admin.
+        $senderName = !empty($sender['name']) ? $sender['name'] : $defaultSenderName;
+        $senderEmail = !empty($sender['email']) ? $sender['email'] : $defaultSenderEmail;
+
+        // Send errors to the platform admin
+        $adminEmail = $this->settingsManager->getSetting('admin.administrator_email');
+
+        $adminEmailValidation = $this->validator->validate($adminEmail, $emailConstraint);
+
+        if (!empty($adminEmail) && 0 === $adminEmailValidation->count()) {
+            $email
+                ->getHeaders()
+                ->addIdHeader('Errors-To', $adminEmail)
+            ;
+        }
+
+        // Reply to first
+        if (!empty($replyToAddress)) {
+            $replyToEmailValidation = $this->validator->validate($replyToAddress['mail'], $emailConstraint);
+
+            if (0 === $replyToEmailValidation->count()) {
+                $email->addReplyTo(new Address($replyToAddress['mail'], $replyToAddress['name']));
+            }
+        }
+
+        $email->from(new Address($senderEmail, $senderName));
+    }
 
     public function send(
         string $recipientName,
@@ -41,7 +87,7 @@ final class MailHelper
 
         $templatedEmail = new TemplatedEmail();
 
-        api_set_noreply_and_from_address_to_mailer(
+        $this->setNoreplyAndFromAddress(
             $templatedEmail,
             ['name' => $senderName, 'email' => $senderEmail],
             !empty($extra_headers['reply_to']) ? $extra_headers['reply_to'] : []
@@ -86,12 +132,7 @@ final class MailHelper
                 }
             }
 
-            $noReply = api_get_setting('noreply_email_address');
-            $automaticEmailText = '';
-
-            if (!empty($noReply)) {
-                $automaticEmailText = '<br />'.get_lang('This is an automatic email message. Please do not reply to it.');
-            }
+            $automaticEmailText = '<br />'.get_lang('This is an automatic email message. Please do not reply to it.');
 
             $params = [
                 'mail_header_style' => api_get_setting('mail.mail_header_style'),

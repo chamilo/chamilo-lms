@@ -132,7 +132,7 @@
     "Confirmation": "Confirmation",
     "Are you sure you want to delete the selected items?": "Are you sure you want to delete the selected items?",
     "Assignments deleted": "Assignments deleted",
-    "We\\'re sorry, your browser does not support using a microphone": "We\\'re sorry, your browser does not support using a microphone",
+    "We're sorry, your browser does not support using a microphone": "We're sorry, your browser does not support using a microphone",
     "Permission to use the microphone is not enabled, please enable it in your browser to record audio": "Permission to use the microphone is not enabled, please enable it in your browser to record audio",
     "Hide advanced settings": "Hide advanced settings",
     "Show advanced settings": "Show advanced settings",
@@ -176,7 +176,6 @@
     "Printable version": "Versi cetak",
     "I accept": "Saya Setuju",
     "CC website": "CC website",
-    "Your job\\'s description": "Your job\\'s description",
     "Check database connection": "Periksa koneksi database",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -221,7 +220,7 @@
     "Save category": "Save category",
     "Link name": "Nama Link",
     "Show link on course homepage": "Tampilkan link di homepage",
-    "Link\\'s target": "Link\\'s target",
+    "Link's target": "Target Link",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
     "Link is not valid": "Link is not valid",
@@ -349,7 +348,7 @@
     "New page": "New page",
     "Pages deleted": "Pages deleted",
     "Go to Explore to find a topic of interest, or wait for someone to subscribe you": "Go to Explore to find a topic of interest, or wait for someone to subscribe you",
-    "You don\\'t have any course yet": "You don\\'t have any course yet",
+    "You don't have any course yet": "You don't have any course yet",
     "Why you want to delete your Legal Agreement": "Why you want to delete your Legal Agreement",
     "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible": "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible",
     "Delete Account": "Delete Account",
@@ -434,5 +433,7 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Beberapa direktori dan file yang disertakan harus dapat ditulis/writeable oleh server web agar Chamilo berjalan (misal saat siswa meng-upload file dll).  Ini dapat saja membutuhkan perubahan sevara manual di server anda (diluar interface ini)."
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Beberapa direktori dan file yang disertakan harus dapat ditulis/writeable oleh server web agar Chamilo berjalan (misal saat siswa meng-upload file dll).  Ini dapat saja membutuhkan perubahan sevara manual di server anda (diluar interface ini).",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted.",
+    "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "Ketika memasukkan kampus anda untuk pertama kali, cara terbaik untuk mengertinya adalah dengan mendaftar dengan opsi 'Buat area mata kuliah' dan ikuti langkah selanjutnya."
 }

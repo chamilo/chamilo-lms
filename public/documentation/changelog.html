@@ -18,7 +18,7 @@
 <body>
 <div class="version" aria-label="2.0">
     <a id="2.0-alpha.3"></a>
-    <h1>Chamilo 2.0 alpha 3 - Aquarium, 2025-07-24</h1>
+    <h1>Chamilo 2.0 alpha 3 - Aquarium, 2025-07-25</h1>
     <h3>Release notes - summary</h3>
     <p>
         Chamilo 2.0 (stable) will be a major release, a new branch for the Chamilo software.
@@ -115,11 +115,15 @@
         <li>[2025-07-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/ebd2668dea3a33f1880fcc8906294c0b79bac870">ebd2668d</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6477">GH#6477</a>) Mail: Use mailer DSN as setting and adapt migrations accordingly</li>
         <li>[2025-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/6eed7c6c36adfe112216c1da17afd8699bda6ecc">6eed7c6c</a>) Admin: Update legacy CSV import format to use ',' instead of ';'</li>
         <li>[2025-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/8cbbf8bc7ac8356248d997b4ce1ef122d42d9add">8cbbf8bc</a>) Admin: Update legacy CSV export format to use ',' instead of ';'</li>
+        <li>[2025-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/5d31c1c2e95819fe03e0efacbcc2d67f11305702">5d31c1c2</a> - <a href="https://task.beeznest.com/issues/22255">BT#22255</a>) Catalog: Refactor and update catalog settings (new "Catalogue" section in settings)</li>
     </ul>
 
     <h3>Fixed</h3>
 
     <ul aria-live="off">
+        <li>[2025-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/b581b5f67413da5e45ee77cd77e1d22fae78d1fa">b581b5f6</a>) Language: Remove single-quote escaping in Vue's locales</li>
+        <li>[2025-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/2f48a5a8529be4983ec6545aa5bfd3542d9569ec">2f48a5a8</a>) Internal: Fix check_path for API login</li>
+        <li>[2025-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/caa7e17d2a27836927445b7f7cbb86ec4c8c318a">caa7e17d</a>) Admin: Refactor and update catalog settings</li>
         <li>[2025-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/fa08ce4213dce06815d24daf753ab08aeb31e0f0">fa08ce42</a> - <a href="https://task.beeznest.com/issues/22255">BT#22255</a>) Catalog: Refactor and update catalog settings schema</li>
         <li>[2025-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/1f25b2a8be8d848df572db9e04ca1e2dd5f7e8da">1f25b2a8</a>) Internal: Refactor contact information handling in install.ajax.php</li>
         <li>[2025-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/015ba8fae33b59e344d9def2bfcd09f2df9145d1">015ba8fa</a>) Internal: Enhance test email functionality by adding destination field to test mail sent</li>
@@ -453,6 +457,7 @@
         <li>[2025-06-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/cb3d4ac7ccb86ea2860e5a2875cd9ac1584c06ce">cb3d4ac7</a>) Display: Remove BaseInputDate component in favor of BaseCalendar</li>
         <li>[2025-07-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/0cd756c3d02e258d74a88874bc18c15357325a05">0cd756c3</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6428">GH#6428</a>) Internal: Remove SMTP_UNIQUE_SENDER setting and migrate mail config to .env</li>
         <li>[2025-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/9100a935787037eaebc94be51f5ab01629d8cb78">9100a935</a>) Internal: Add migration to remove show_conditions_to_user and gdpr/my_terms extra fields</li>
+        <li>[2025-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/83717b71de9369b260c355fd52d97cf777bfacf2">83717b71</a>) Admin: Remove setting 'noreply_email_address' (use 'mail.mailer_from_email')</li>
     </ul>
 
     <h3>Known issues</h3>

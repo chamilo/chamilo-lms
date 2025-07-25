@@ -147,7 +147,7 @@
     "Confirmation": "Confirmation",
     "Are you sure you want to delete the selected items?": "Are you sure you want to delete the selected items?",
     "Assignments deleted": "Assignments deleted",
-    "We\\'re sorry, your browser does not support using a microphone": "We\\'re sorry, your browser does not support using a microphone",
+    "We're sorry, your browser does not support using a microphone": "We're sorry, your browser does not support using a microphone",
     "Permission to use the microphone is not enabled, please enable it in your browser to record audio": "Permission to use the microphone is not enabled, please enable it in your browser to record audio",
     "Hide advanced settings": "Hide advanced settings",
     "Show advanced settings": "Show advanced settings",
@@ -196,7 +196,6 @@
     "I accept": "\u6211\u63a5\u53d7",
     "CC website": "CC website",
     "Dear user": "\u89aa\u611b\u7684\u4f7f\u7528\u8005",
-    "Your job\\'s description": "Your job\\'s description",
     "Check database connection": "\u6e2c\u8a66\u6578\u64da\u5eab\u9023\u7dda",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -243,7 +242,7 @@
     "Save category": "Save category",
     "Link name": "\u93c8\u63a5\u540d\u7a31",
     "Show link on course homepage": "\u4e3b\u9801\u4e2d\u986f\u793a",
-    "Link\\'s target": "Link\\'s target",
+    "Link's target": "\u9023\u7d50\u76ee\u6a19",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
     "Link is not valid": "Link is not valid",
@@ -383,7 +382,7 @@
     "New page": "New page",
     "Pages deleted": "Pages deleted",
     "Go to Explore to find a topic of interest, or wait for someone to subscribe you": "Go to Explore to find a topic of interest, or wait for someone to subscribe you",
-    "You don\\'t have any course yet": "You don\\'t have any course yet",
+    "You don't have any course yet": "You don't have any course yet",
     "Why you want to delete your Legal Agreement": "Why you want to delete your Legal Agreement",
     "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible": "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible",
     "Delete Account": "Delete Account",
@@ -468,5 +467,7 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "\u57f7\u884c\u67d0\u4e9b Chamilo \u529f\u80fd(\u5982\uff1a\u5b78\u751f\u4e0a\u8f09\u6a94\u6848\u3001\u9996\u9801 html \u6a94...)\u6642\uff0c\u90e8\u4efd\u76ee\u9304\u53ca\u5176\u4e2d\u7684\u6a94\u6848\u9808\u8a2d\u5b9a\u70ba\u53ef\u5beb\u5165\u3002\u4f60\u6216\u9808\u8981\u65bc\u4f60\u7684\u4f3a\u670d\u5668\u4e0a(\u672c\u5e73\u53f0\u4ee5\u5916)\u9032\u884c\u624b\u52d5\u8a2d\u5b9a\u3002"
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "\u57f7\u884c\u67d0\u4e9b Chamilo \u529f\u80fd(\u5982\uff1a\u5b78\u751f\u4e0a\u8f09\u6a94\u6848\u3001\u9996\u9801 html \u6a94...)\u6642\uff0c\u90e8\u4efd\u76ee\u9304\u53ca\u5176\u4e2d\u7684\u6a94\u6848\u9808\u8a2d\u5b9a\u70ba\u53ef\u5beb\u5165\u3002\u4f60\u6216\u9808\u8981\u65bc\u4f60\u7684\u4f3a\u670d\u5668\u4e0a(\u672c\u5e73\u53f0\u4ee5\u5916)\u9032\u884c\u624b\u52d5\u8a2d\u5b9a\u3002",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted.",
+    "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "\u7576\u4f60\u9996\u6b21\u9032\u5165\u7684\u5b78\u5712\u6642\uff0c\u77ad\u89e3\u5b83\u7684\u6700\u4f73\u8fa6\u6cd5\u662f\u9078\u8ab2\u7a0b\u5275\u5efa\u8005\u7684\u8eab\u4efd\u8a3b\u518a\uff0c\u7136\u5f8c\u6309\u6b65\u53bb\u505a\u3002"
 }

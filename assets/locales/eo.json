@@ -136,7 +136,7 @@
     "Confirmation": "Confirmation",
     "Are you sure you want to delete the selected items?": "Are you sure you want to delete the selected items?",
     "Assignments deleted": "Assignments deleted",
-    "We\\'re sorry, your browser does not support using a microphone": "We\\'re sorry, your browser does not support using a microphone",
+    "We're sorry, your browser does not support using a microphone": "We're sorry, your browser does not support using a microphone",
     "Permission to use the microphone is not enabled, please enable it in your browser to record audio": "Permission to use the microphone is not enabled, please enable it in your browser to record audio",
     "Hide advanced settings": "Hide advanced settings",
     "Show advanced settings": "Show advanced settings",
@@ -175,7 +175,6 @@
     "Step 3 - License": "Step 3 - License",
     "Printable version": "Presebla versio",
     "CC website": "CC website",
-    "Your job\\'s description": "Your job\\'s description",
     "Check database connection": "Kontroli datumbankan konekton",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -221,7 +220,7 @@
     "Save category": "Save category",
     "Link name": "Nomo",
     "Show link on course homepage": "En startpa\u011do",
-    "Link\\'s target": "Link\\'s target",
+    "Link's target": "Ligila celo",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
     "Link is not valid": "Link is not valid",
@@ -350,7 +349,7 @@
     "New page": "New page",
     "Pages deleted": "Pages deleted",
     "Go to Explore to find a topic of interest, or wait for someone to subscribe you": "Go to Explore to find a topic of interest, or wait for someone to subscribe you",
-    "You don\\'t have any course yet": "You don\\'t have any course yet",
+    "You don't have any course yet": "You don't have any course yet",
     "Date": "Dato",
     "Why you want to delete your Legal Agreement": "Why you want to delete your Legal Agreement",
     "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible": "Please tell us why you want to withdraw the rights you previously gave us, to let us make it in the smoothest way possible",
@@ -433,5 +432,6 @@
     "Test email sent successfully": "Test email sent successfully",
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
-    "Destination of test e-mail": "Destination of test e-mail"
+    "Destination of test e-mail": "Destination of test e-mail",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

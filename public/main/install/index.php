@@ -90,6 +90,13 @@ if ($httpRequest->request->get('language_list')) {
 // Set translation
 $translator = new Translator($installationLanguage);
 $translator->addLoader('po', new PoFileLoader());
+
+$langResourceFile = api_get_path(SYMFONY_SYS_PATH).'translations/messages.'.(explode('_', $installationLanguage, 2)[0]).'.po';
+
+if (file_exists($langResourceFile)) {
+    $translator->addResource('po', $langResourceFile, $installationLanguage);
+}
+
 Container::$translator = $translator;
 
 // The function api_get_setting() might be called within the installation scripts.

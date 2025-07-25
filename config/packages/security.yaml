@@ -76,7 +76,7 @@ security:
             context: main
             provider: app_user_provider
             json_login:
-                check_path: authentication_token
+                check_path: /api/authentication_token
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 #            guard:

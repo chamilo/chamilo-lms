@@ -116,11 +116,14 @@
         <li>[2025-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/6eed7c6c36adfe112216c1da17afd8699bda6ecc">6eed7c6c</a>) Admin: Update legacy CSV import format to use ',' instead of ';'</li>
         <li>[2025-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/8cbbf8bc7ac8356248d997b4ce1ef122d42d9add">8cbbf8bc</a>) Admin: Update legacy CSV export format to use ',' instead of ';'</li>
         <li>[2025-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/5d31c1c2e95819fe03e0efacbcc2d67f11305702">5d31c1c2</a> - <a href="https://task.beeznest.com/issues/22255">BT#22255</a>) Catalog: Refactor and update catalog settings (new "Catalogue" section in settings)</li>
+        <li>[2025-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/857f97be7a3d979c49ab4b5d1b05761b1dd23afe">857f97be</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6355">GH#6355</a>) User: Switch CSV delimiter to comma for export, user update & class import</li>
     </ul>
 
     <h3>Fixed</h3>
 
     <ul aria-live="off">
+        <li>[2025-07-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/1ed707445104fab46497810ad980612879a131cb">1ed70744</a>) Language: Update language term related to the owner of the information of portal administrators during install</li>
+        <li>[2025-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/21282fdf403d4a62c9698f6d12b2f2c1d7035f40">21282fdf</a>) Install: Add language resource to load terms in installer</li>
         <li>[2025-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/b581b5f67413da5e45ee77cd77e1d22fae78d1fa">b581b5f6</a>) Language: Remove single-quote escaping in Vue's locales</li>
         <li>[2025-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/2f48a5a8529be4983ec6545aa5bfd3542d9569ec">2f48a5a8</a>) Internal: Fix check_path for API login</li>
         <li>[2025-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/caa7e17d2a27836927445b7f7cbb86ec4c8c318a">caa7e17d</a>) Admin: Refactor and update catalog settings</li>
@@ -473,20 +476,6 @@
     <a id="2.0-alpha.2"></a>
     <h1>Chamilo 2.0 alpha 2 - Petibonum, 2025-04-04</h1>
     <h3>Release notes - summary</h3>
-    <p>
-        Chamilo 2.0 (stable) will be a major release, a new branch for the Chamilo software.
-        It is based on Chamilo 1.11.10 and includes tons of backend changes that will make
-        developing Chamilo more "mainstream" and (hopefully) faster in the future,
-        by adopting more widely-known libraries, with the notable inclusions of Symfony 6
-        as a main controller and framework (except for some legacy tools not yet converted),
-        VueJS as our main frontend framework and TailwindCSS as our CSS framework.
-    </p>
-    <p>
-        For the first time in almost 15 years (since its launch in 2010),
-        Chamilo considerably changes appearance, with a new, foldable left menu (meant
-        to improve space usage on mobile devices), with a streamlined (and open source) set of
-        icons, and with a design that will allow more flexibility and speed across devices.
-    </p>
     <p>
         This is an ALPHA release, meaning it is NOT finished and it is meant for testing and development
         only. It should *NOT* be used in production unless you have a full-time dedicated IT team or official

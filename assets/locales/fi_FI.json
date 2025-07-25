@@ -211,7 +211,7 @@
     "CC website": "CC website",
     "Dear user": "Hyv\u00e4 k\u00e4ytt\u00e4j\u00e4",
     "Your company's name": "Yhti\u00f6n nimi:",
-    "Your job's description": "Your job's description",
+    "Your job's description": "Teht\u00e4v\u00e4n kuvaus",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
     "Database name": "Database name",
@@ -253,7 +253,7 @@
     "Save category": "Save category",
     "Link name": "Linkin nimi",
     "Show link on course homepage": "N\u00e4yt\u00e4 linkki kotisivulla",
-    "Link's target": "Link's target",
+    "Link's target": "Linkin kohde",
     "Save link": "Tallenna linkki",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -490,5 +490,6 @@
     "Test email sent successfully": "Test email sent successfully",
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
-    "Destination of test e-mail": "Destination of test e-mail"
+    "Destination of test e-mail": "Destination of test e-mail",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

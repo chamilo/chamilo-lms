@@ -197,7 +197,6 @@
     "I accept": "I accept",
     "CC website": "CC website",
     "Dear user": "Dear user",
-    "Your job's description": "Your job's description",
     "Check database connection": "Check database connection",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -244,7 +243,7 @@
     "Save category": "Save category",
     "Link name": "Nuorodos vardas",
     "Show link on course homepage": "Rodyti nam\u0173 puslapio nuorod\u0105",
-    "Link's target": "Link's target",
+    "Link's target": "Nuoroda",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
     "Link is not valid": "Link is not valid",
@@ -466,5 +465,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Some directories and the files they include must be writeable by the web server in order for Chamilo to run (students uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)."
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Some directories and the files they include must be writeable by the web server in order for Chamilo to run (students uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

@@ -275,7 +275,7 @@
     "E-mail": "E-mail",
     "Your company's name": "Il nome della tua organizzazione",
     "Your company's activity": "Settore della tua organizzazione",
-    "Your job's description": "Your job's description",
+    "Your job's description": "Descrizione della tua posizione",
     "Your company's home country": "Sede centrale dell'organizzazione",
     "Company city": "Citt\u00e0 dell'organizzazione",
     "Preferred contact language": "Lingua di contatto preferita",
@@ -335,7 +335,7 @@
     "Link name": "Nome",
     "Show link on course homepage": "Mostra il collegamento sulla pagina iniziale",
     "Select a category": "Seleziona una categoria",
-    "Link's target": "Link's target",
+    "Link's target": "Destinazione del collegamento",
     "Save link": "Salva il collegamento",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -604,5 +604,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Alcune directory e files all'interno di esse devono essere riscrivibili da parte del server web per permettere a Chamilo di funzionare (documenti caricati dai corsisti, file html della pagina d'accoglienza,...). Ci\u00f2 pu\u00f2 comportare la necessit\u00e0 di cambiare manualmente i permessi con strumenti diversi da Chamilo"
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Alcune directory e files all'interno di esse devono essere riscrivibili da parte del server web per permettere a Chamilo di funzionare (documenti caricati dai corsisti, file html della pagina d'accoglienza,...). Ci\u00f2 pu\u00f2 comportare la necessit\u00e0 di cambiare manualmente i permessi con strumenti diversi da Chamilo",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

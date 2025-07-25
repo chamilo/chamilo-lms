@@ -216,7 +216,6 @@
     "I accept": "\u6211\u63a5\u53d7",
     "CC website": "CC website",
     "Dear user": "\u4eb2\u7231\u7684\u7528\u6237",
-    "Your job's description": "Your job's description",
     "Check database connection": "\u68c0\u67e5\u6570\u636e\u5e93\u8fde\u63a5",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -263,7 +262,7 @@
     "Save category": "Save category",
     "Link name": "\u94fe\u63a5\u540d\u79f0",
     "Show link on course homepage": "\u4e3b\u9875\u4e2d\u663e\u793a",
-    "Link's target": "Link's target",
+    "Link's target": "\u94fe\u63a5\u76ee\u6807",
     "Save link": "\u4fdd\u5b58\u94fe\u63a5",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -495,5 +494,6 @@
     "Test email sent successfully": "Test email sent successfully",
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
-    "Destination of test e-mail": "Destination of test e-mail"
+    "Destination of test e-mail": "Destination of test e-mail",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

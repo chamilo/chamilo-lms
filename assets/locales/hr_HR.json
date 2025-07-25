@@ -216,7 +216,6 @@
     "I accept": "Prihva\u0107am",
     "CC website": "CC website",
     "Dear user": "Po\u0161tovani korisni\u010de",
-    "Your job's description": "Your job's description",
     "Check database connection": "Provjeri povezanost prema bazi podataka",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -263,7 +262,7 @@
     "Save category": "Save category",
     "Link name": "Naziv poveznice",
     "Show link on course homepage": "Prika\u017ei poveznicu na po\u010detnoj stranici",
-    "Link's target": "Link's target",
+    "Link's target": "Odredi\u0161te poveznice",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
     "Link is not valid": "Link is not valid",
@@ -491,5 +490,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Neke mape i datoteke koji oni uklju\u010duju moraju imati dozvolu za pisanje od strane web poslu\u017eitelja da bi Chamilo mogao ispravno raditi (po\u010detne stranice html datoteka, u\u010ditane datoteke od strane studenata....). Ovo mo\u017ee podrazumjevati dodatne promjene na va\u0161em poslu\u017eitelju (izvan ovog izbornika)."
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Neke mape i datoteke koji oni uklju\u010duju moraju imati dozvolu za pisanje od strane web poslu\u017eitelja da bi Chamilo mogao ispravno raditi (po\u010detne stranice html datoteka, u\u010ditane datoteke od strane studenata....). Ovo mo\u017ee podrazumjevati dodatne promjene na va\u0161em poslu\u017eitelju (izvan ovog izbornika).",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

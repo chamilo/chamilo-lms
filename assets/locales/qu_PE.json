@@ -223,7 +223,6 @@
     "I accept": "Acepto",
     "CC website": "CC website",
     "Dear user": "Estimado usuario",
-    "Your job's description": "Your job's description",
     "Check database connection": "Comprobar la conexi\u00f3n con la base de datos",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -273,7 +272,7 @@
     "Save category": "Save category",
     "Link name": "Waskhanaq sutin",
     "Show link on course homepage": "Qhawachinkichu wataqta yachachinaq raphi qallariyninpi?",
-    "Link's target": "Link's target",
+    "Link's target": "Waskhanaq chayanan",
     "Save link": "Allchay wataqta",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -512,5 +511,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Algunos directorios y los ficheros que contienen deben tener habilitados los permisos de escritura en el servidor web para que Chamilo pueda funcionar (env\u00edo de ficheros por parte de los estudiantes, ficheros html de la p\u00e1gina principal,...). Esto puede suponer un cambio manual en su servidor (debe realizarse fuera de este interfaz)."
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Algunos directorios y los ficheros que contienen deben tener habilitados los permisos de escritura en el servidor web para que Chamilo pueda funcionar (env\u00edo de ficheros por parte de los estudiantes, ficheros html de la p\u00e1gina principal,...). Esto puede suponer un cambio manual en su servidor (debe realizarse fuera de este interfaz).",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

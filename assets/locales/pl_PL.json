@@ -260,7 +260,7 @@
     "Dear user": "Szanowny u\u017cytkowniku",
     "Your company's name": "Nazwa Twojej firmy",
     "Your company's activity": "Dzia\u0142alno\u015b\u0107 Twojej firmy",
-    "Your job's description": "Your job's description",
+    "Your job's description": "Opis stanowiska pracy",
     "Your company's home country": "Kraj pochodzenia Twojej firmy",
     "Company city": "Miasto, w kt\u00f3rym znajduje si\u0119 firma",
     "Preferred contact language": "Preferowany j\u0119zyk kontaktu",
@@ -320,7 +320,7 @@
     "Link name": "Nazwa linka/odno\u015bnika",
     "Show link on course homepage": "Poka\u017c link na stronie domowej",
     "Select a category": "Wybierz kategori\u0119",
-    "Link's target": "Link's target",
+    "Link's target": "Cel linka",
     "Save link": "Zapisz odno\u015bnik",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -575,5 +575,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Niekt\u00f3re katalogi i pliki w nich zawarte, musz\u0105 by\u0107 zapisane przez serwer WWW, aby uruchomi\u0107  Chamilo ( pliki przes\u0142ane przez u\u017cytkownik\u00f3w, Strona, pliki HTML, ...). Mo\u017ce to oznacza\u0107, r\u0119czn\u0105 zmian\u0119 na serwerze (poza interfejsem)."
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Niekt\u00f3re katalogi i pliki w nich zawarte, musz\u0105 by\u0107 zapisane przez serwer WWW, aby uruchomi\u0107  Chamilo ( pliki przes\u0142ane przez u\u017cytkownik\u00f3w, Strona, pliki HTML, ...). Mo\u017ce to oznacza\u0107, r\u0119czn\u0105 zmian\u0119 na serwerze (poza interfejsem).",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

@@ -278,7 +278,7 @@
     "E-mail": "E-mail",
     "Your company's name": "Naam van de onderneming",
     "Your company's activity": "Bedrijfsactiviteit",
-    "Your job's description": "Your job's description",
+    "Your job's description": "Jobomschrijving",
     "Your company's home country": "Thuisland van het bedrijf",
     "Company city": "Thuisstad onderneming",
     "Preferred contact language": "Voorkeurtaal",
@@ -338,7 +338,7 @@
     "Link name": "Naam",
     "Show link on course homepage": "Toon link op cursushoofdpagina",
     "Select a category": "Kies een categorie",
-    "Link's target": "Link's target",
+    "Link's target": "Linkbestemming",
     "Save link": "Koppeling bewaren",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -625,5 +625,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Sommige mappen en de bestanden erin moeten overschrijfbaar zijn door de web server opdat Chamilo zou kunnen werken (door studenten ge\u00fcploade bestanden, HTML-bestanden voor de startpagina,...). Dit vraagt mogelijk een manuele wijziging op uw server (buiten deze interface)."
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Sommige mappen en de bestanden erin moeten overschrijfbaar zijn door de web server opdat Chamilo zou kunnen werken (door studenten ge\u00fcploade bestanden, HTML-bestanden voor de startpagina,...). Dit vraagt mogelijk een manuele wijziging op uw server (buiten deze interface).",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

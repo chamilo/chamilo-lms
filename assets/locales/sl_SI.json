@@ -278,7 +278,7 @@
     "E-mail": "E-po\u0161ta",
     "Your company's name": "Naziv organizacije/podjetja",
     "Your company's activity": "Aktivnosti tvojega podjetja",
-    "Your job's description": "Your job's description",
+    "Your job's description": "Opis va\u0161ega dela",
     "Your company's home country": "Dr\u017eava va\u0161e organizacije/podjetja",
     "Company city": "Mesto organizacije/podjetja",
     "Preferred contact language": "\u017delen jezik pri kontaktu",
@@ -338,7 +338,7 @@
     "Link name": "Ime povezave",
     "Show link on course homepage": "Prika\u017ei povezavo na doma\u010di strani te\u010daja",
     "Select a category": "Izberi kategorijo",
-    "Link's target": "Link's target",
+    "Link's target": "Cilj povezave",
     "Save link": "Shrani povezavo",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -623,5 +623,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Nekatere mape in datoteke morajo biti zapisljive s strani stre\u017enika, da bi Chamilo normalno deloval (potrebne za prepis datotek, spreminjanje html datotek doma\u010dih strani, ...). Sprememba lahko zahteva ro\u010dno posredovanje oz. nastavitev (na nivoju operacijskega sistema, ne preko tega vmesnika)."
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Nekatere mape in datoteke morajo biti zapisljive s strani stre\u017enika, da bi Chamilo normalno deloval (potrebne za prepis datotek, spreminjanje html datotek doma\u010dih strani, ...). Sprememba lahko zahteva ro\u010dno posredovanje oz. nastavitev (na nivoju operacijskega sistema, ne preko tega vmesnika).",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

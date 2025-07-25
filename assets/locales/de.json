@@ -278,7 +278,7 @@
     "E-mail": "E-Mail",
     "Your company's name": "Name der  Firma / Organisation",
     "Your company's activity": "T\u00e4tigkeitsbereich Ihrer Firma / Organisation",
-    "Your job's description": "Your job's description",
+    "Your job's description": "Ihr Job",
     "Your company's home country": "Land Ihrer Firma / Organisation",
     "Company city": "Ort Ihrer  Firma / Organisation",
     "Preferred contact language": "Bevorzugte Kontakt-Sprache",
@@ -338,7 +338,7 @@
     "Link name": "Link-Name",
     "Show link on course homepage": "Link auf Homepage anzeigen",
     "Select a category": "W\u00e4hlen Sie eine Kategorie",
-    "Link's target": "Link's target",
+    "Link's target": "Link-Ziel",
     "Save link": "Link speichern",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -625,5 +625,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Einige Verzeichnisse und die darin befindlichen Dateien m\u00fcssen Schreiberlaubnis f\u00fcr den Webserver haben, damit Chamilo l\u00e4uft (die von Teilnehmern hochgeladenen Dateien, Homepage html Dateien, ...). Es mag notwendig sein, die notwendigen \u00c4nderungen von Hand (ausserhalb dieses Bildschirms) auf Ihrem Server vorzunehmen."
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Einige Verzeichnisse und die darin befindlichen Dateien m\u00fcssen Schreiberlaubnis f\u00fcr den Webserver haben, damit Chamilo l\u00e4uft (die von Teilnehmern hochgeladenen Dateien, Homepage html Dateien, ...). Es mag notwendig sein, die notwendigen \u00c4nderungen von Hand (ausserhalb dieses Bildschirms) auf Ihrem Server vorzunehmen.",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

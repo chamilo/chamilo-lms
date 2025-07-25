@@ -214,7 +214,6 @@
     "I accept": "Elfogadom",
     "CC website": "CC website",
     "Dear user": "Kedves felhaszn\u00e1l\u00f3",
-    "Your job's description": "Your job's description",
     "Check database connection": "Adatb\u00e1zis kapcsolat ellen\u0151rz\u00e9se",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -263,7 +262,7 @@
     "Save category": "Save category",
     "Link name": "Hivatkoz\u00e1s neve",
     "Show link on course homepage": "A hivatkoz\u00e1s megjelen\u00edt\u00e9se a kezd\u0151oldalon.",
-    "Link's target": "Link's target",
+    "Link's target": "Hivatkoz\u00e1s c\u00e9lja",
     "Save link": "Hivatkoz\u00e1s ment\u00e9se",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -499,5 +498,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Egyes k\u00f6nyvt\u00e1raknak \u00e9s a benn\u00fck tal\u00e1lhat\u00f3 \u00e1llom\u00e1nyoknak a web szerver sz\u00e1m\u00e1ra \u00edrhat\u00f3aknak kell lenni\u00fck, hogy a Chamilo  egyes funkci\u00f3i zavartalanul m\u0171k\u00f6dhessenek (hallgat\u00f3i \u00e1llom\u00e1nyok felt\u00f6lt\u00e9se, html \u00e1llom\u00e1nyok szerkeszt\u00e9se,stb. ). Lehets\u00e9ges, hogy ehhez a szerveren egyes be\u00e1ll\u00edt\u00e1sokat k\u00e9zzel kell m\u00f3dos\u00edtani (amelyre ez a fel\u00fclet nem ad lehet\u0151s\u00e9get)."
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Egyes k\u00f6nyvt\u00e1raknak \u00e9s a benn\u00fck tal\u00e1lhat\u00f3 \u00e1llom\u00e1nyoknak a web szerver sz\u00e1m\u00e1ra \u00edrhat\u00f3aknak kell lenni\u00fck, hogy a Chamilo  egyes funkci\u00f3i zavartalanul m\u0171k\u00f6dhessenek (hallgat\u00f3i \u00e1llom\u00e1nyok felt\u00f6lt\u00e9se, html \u00e1llom\u00e1nyok szerkeszt\u00e9se,stb. ). Lehets\u00e9ges, hogy ehhez a szerveren egyes be\u00e1ll\u00edt\u00e1sokat k\u00e9zzel kell m\u00f3dos\u00edtani (amelyre ez a fel\u00fclet nem ad lehet\u0151s\u00e9get).",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

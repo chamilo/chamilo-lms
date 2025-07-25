@@ -230,7 +230,6 @@
     "I accept": "Aceuto",
     "CC website": "CC website",
     "Dear user": "Estim\u00e1u usuariu",
-    "Your job's description": "Your job's description",
     "Check database connection": "Comprobar la conesi\u00f3n cola base de datos",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
@@ -281,7 +280,7 @@
     "Save category": "Save category",
     "Link name": "Nome del enllaz",
     "Show link on course homepage": "\u00bf Amosar l'enllaz na p\u00e1xina d'entamu del cursu",
-    "Link's target": "Link's target",
+    "Link's target": "Dest\u00edn del enllaz",
     "Save link": "Guardar l'enllaz",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -523,5 +522,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Dellos direutorios y los ficheros que t\u00e1n dientro tienen de tener establec\u00edos permisos d'escritura nel servidor web pa que Chamilo pueda funcionar (unv\u00edu de ficheros por parte los estudiantes, ficheros html de la p\u00e1xina d'entamu, etc.) Esto igual sup\u00f3n qu'haya que facer cambios na configuraci\u00f3n del servidor que tienen de facese fuera d'esti interfaz)"
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Dellos direutorios y los ficheros que t\u00e1n dientro tienen de tener establec\u00edos permisos d'escritura nel servidor web pa que Chamilo pueda funcionar (unv\u00edu de ficheros por parte los estudiantes, ficheros html de la p\u00e1xina d'entamu, etc.) Esto igual sup\u00f3n qu'haya que facer cambios na configuraci\u00f3n del servidor que tienen de facese fuera d'esti interfaz)",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

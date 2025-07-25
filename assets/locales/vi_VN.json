@@ -129,7 +129,6 @@
     "Step 3 - License": "Step 3 - License",
     "Printable version": "Printable version",
     "CC website": "CC website",
-    "Your job's description": "Your job's description",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
     "Database name": "Database name",
@@ -163,7 +162,6 @@
     "Demo": "Demo",
     "Save category": "Save category",
     "Link name": "T\u00ean li\u00ean k\u1ebft",
-    "Link's target": "Link's target",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
     "Link is not valid": "Link is not valid",
@@ -353,5 +351,6 @@
     "Test email sent successfully": "Test email sent successfully",
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
-    "Destination of test e-mail": "Destination of test e-mail"
+    "Destination of test e-mail": "Destination of test e-mail",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

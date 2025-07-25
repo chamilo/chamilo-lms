@@ -271,7 +271,7 @@
     "Dear user": "V\u00e1\u017een\u00fd pou\u017e\u00edvate\u013e",
     "Your company's name": "N\u00e1zov spolo\u010dnosti",
     "Your company's activity": "Aktivita va\u0161ej spolo\u010dnosti",
-    "Your job's description": "Your job's description",
+    "Your job's description": "Popis pr\u00e1ce",
     "Your company's home country": "Domovsk\u00e1 krajina va\u0161ej spolo\u010dnosti",
     "Company city": "Mesto kde s\u00eddli va\u0161a spolo\u010dnos\u0165",
     "Preferred contact language": "Preferovan\u00fd kontaktn\u00fd jazyk",
@@ -331,7 +331,7 @@
     "Link name": "N\u00e1zov odkazu",
     "Show link on course homepage": "Zobrazi\u0165 tento odkaz na domovskej str\u00e1nke",
     "Select a category": "Vybra\u0165 kateg\u00f3riu",
-    "Link's target": "Link's target",
+    "Link's target": "Cie\u013e odkazu",
     "Save link": "Ulo\u017ei\u0165 odkaz",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -597,5 +597,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Niektor\u00e9 adres\u00e1re a s\u00fabory, ktor\u00e9 obsahuj\u00fa, musia by\u0165 zapisovate\u013en\u00e9 webov\u00fdm serverom, aby ich Chamilo spustil (pou\u017e\u00edvate\u013e nahral s\u00fabory, domovsk\u00e9 s\u00fabory html, ...). Toto by mohlo znamena\u0165, vykona\u0165 ru\u010dn\u00e9 zmeny na va\u0161om serveri (mimo toto rozhranie)."
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Niektor\u00e9 adres\u00e1re a s\u00fabory, ktor\u00e9 obsahuj\u00fa, musia by\u0165 zapisovate\u013en\u00e9 webov\u00fdm serverom, aby ich Chamilo spustil (pou\u017e\u00edvate\u013e nahral s\u00fabory, domovsk\u00e9 s\u00fabory html, ...). Toto by mohlo znamena\u0165, vykona\u0165 ru\u010dn\u00e9 zmeny na va\u0161om serveri (mimo toto rozhranie).",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

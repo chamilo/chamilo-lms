@@ -261,7 +261,7 @@
     "Dear user": "Erabiltzaile estimatu hori",
     "Your company's name": "Enpresaren izena",
     "Your company's activity": "Enpresaren arloa",
-    "Your job's description": "Your job's description",
+    "Your job's description": "Lanpostuaren deskripzioa",
     "Your company's home country": "Enpresa egoitzaren Estatua",
     "Company city": "Enpresaren hiria",
     "Preferred contact language": "Zer hizkuntza nahiago duzu harremanetan?",
@@ -321,7 +321,7 @@
     "Link name": "Loturaren izena",
     "Show link on course homepage": "Ikastaroaren orri nagusian lotura erakutsi?",
     "Select a category": "Hautatu kategoria bat",
-    "Link's target": "Link's target",
+    "Link's target": "Loturaren helburua",
     "Save link": "Gorde lotura",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -576,5 +576,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Direktorio batzuek eta hauen barruan diren fitxategiek idazteko aukera eduki behar dute erabilgarri web zerbitzarian, horrela Chamilo ongi ibiltzeko (erabiltzaileek fitxategiak kargatzeko, orri nagusiaren html fitxategiak,...). Eskakizun honek eskuz egin beharreko aldaketa ekarri dezake zure zerbitzarian (interfaze honetatik kanpo egingo da)."
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Direktorio batzuek eta hauen barruan diren fitxategiek idazteko aukera eduki behar dute erabilgarri web zerbitzarian, horrela Chamilo ongi ibiltzeko (erabiltzaileek fitxategiak kargatzeko, orri nagusiaren html fitxategiak,...). Eskakizun honek eskuz egin beharreko aldaketa ekarri dezake zure zerbitzarian (interfaze honetatik kanpo egingo da).",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

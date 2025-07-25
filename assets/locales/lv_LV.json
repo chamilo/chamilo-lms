@@ -258,7 +258,7 @@
     "Dear user": "Cien\u012bjamais Kursant,",
     "Your company's name": "J\u016bsu uz\u0146\u0113muma nosaukums",
     "Your company's activity": "J\u016bsu uz\u0146\u0113muma darb\u012bbas veids",
-    "Your job's description": "Your job's description",
+    "Your job's description": "J\u016bsu darba apraksts",
     "Your company's home country": "J\u016bsu uz\u0146\u0113muma m\u012btnes valsts",
     "Company city": "Pils\u0113ta, kur\u0101 atrodas Uz\u0146\u0113mums",
     "Preferred contact language": "V\u0113lam\u0101 kontaktu valoda",
@@ -316,7 +316,7 @@
     "URL": "URL",
     "Link name": "Hipersaites nosaukums",
     "Show link on course homepage": "R\u0101d\u012bt hipersaiti s\u0101kumlap\u0101",
-    "Link's target": "Link's target",
+    "Link's target": "Hipersaitei j\u0101atveras",
     "Save link": "Saglab\u0101t hipersaiti",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -569,5 +569,6 @@
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
-    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Da\u017ei katalogi un faili, ko tie satur, ir rakst\u0101mi web server\u012b, lai Chamilo tos palaistu (lietot\u0101ju aug\u0161upiel\u0101d\u0113to failu, m\u0101jas lapu html failus, ...). Tas var\u0113tu noz\u012bm\u0113t man\u0101ulas izmai\u0146as j\u016bsu server\u012b (\u0101rpus \u0161\u012b saskarnes)."
+    "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Da\u017ei katalogi un faili, ko tie satur, ir rakst\u0101mi web server\u012b, lai Chamilo tos palaistu (lietot\u0101ju aug\u0161upiel\u0101d\u0113to failu, m\u0101jas lapu html failus, ...). Tas var\u0113tu noz\u012bm\u0113t man\u0101ulas izmai\u0146as j\u016bsu server\u012b (\u0101rpus \u0161\u012b saskarnes).",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

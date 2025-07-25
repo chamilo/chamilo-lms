@@ -167,7 +167,6 @@
     "Contact information": "Impormasyong matatawagan",
     "Step 3 - License": "Step 3 - License",
     "CC website": "CC website",
-    "Your job's description": "Your job's description",
     "Step 4 - Database settings": "Step 4 - Database settings",
     "Database host": "Database host",
     "Database name": "Database name",
@@ -195,7 +194,7 @@
     "Demo": "Demo",
     "Save category": "Save category",
     "Show link on course homepage": "Ipakita ang link sa homepage ng pagsasanay",
-    "Link's target": "Link's target",
+    "Link's target": "I-link ang target",
     "Save link": "I-save ang link",
     "Link saved": "Link saved",
     "Link is valid": "Link is valid",
@@ -404,5 +403,6 @@
     "Test email sent successfully": "Test email sent successfully",
     "Test email failed: ": "Test email failed: ",
     "Error during test email: ": "Error during test email: ",
-    "Destination of test e-mail": "Destination of test e-mail"
+    "Destination of test e-mail": "Destination of test e-mail",
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
 }

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Decorator;
 
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use SensitiveParameter;
 use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 use Symfony\Component\DependencyInjection\Attribute\AutowireDecorated;
 use Symfony\Component\Mailer\Transport;
@@ -21,7 +22,7 @@ class MailTransportDecorator
         private readonly SettingsManager $settingsManager,
     ) {}
 
-    public function fromStrings(#[\SensitiveParameter] array $dsns): Transports
+    public function fromStrings(#[SensitiveParameter] array $dsns): Transports
     {
         $dsn = $this->settingsManager->getSetting('mail.mailer_dsn');
 

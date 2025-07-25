@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,12 +38,13 @@ class AccessUrlController extends AbstractController
             while (($data = fgetcsv($handle, 1000, ',')) !== false) {
                 $lineNumber++;
 
-                if ($lineNumber === 1 && strtolower(trim($data[0])) === 'username') {
+                if (1 === $lineNumber && 'username' === strtolower(trim($data[0]))) {
                     continue; // Skip header
                 }
 
-                if (count($data) < 2) {
+                if (\count($data) < 2) {
                     $report[] = $this->formatReport('alert-circle', 'Line %s: invalid format. Two columns expected.', [$lineNumber]);
+
                     continue;
                 }
 
@@ -51,12 +52,13 @@ class AccessUrlController extends AbstractController
 
                 if (!$username || !$url) {
                     $report[] = $this->formatReport('alert-circle', 'Line %s: missing username or URL.', [$lineNumber]);
+
                     continue;
                 }
 
                 // Normalize URL
                 if (!str_starts_with($url, 'http')) {
-                    $url = 'https://' . $url;
+                    $url = 'https://'.$url;
                 }
                 if (!str_ends_with($url, '/')) {
                     $url .= '/';
@@ -65,12 +67,14 @@ class AccessUrlController extends AbstractController
                 $user = $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
                 if (!$user) {
                     $report[] = $this->formatReport('close-circle', "Line %s: user '%s' not found.", [$lineNumber, $username]);
+
                     continue;
                 }
 
                 $accessUrl = $this->em->getRepository(AccessUrl::class)->findOneBy(['url' => $url]);
                 if (!$accessUrl) {
                     $report[] = $this->formatReport('close-circle', "Line %s: URL '%s' not found.", [$lineNumber, $url]);
+
                     continue;
                 }
 
@@ -107,7 +111,7 @@ class AccessUrlController extends AbstractController
             while (($data = fgetcsv($handle, 1000, ',')) !== false) {
                 $lineNumber++;
 
-                if ($lineNumber === 1 && strtolower(trim($data[0])) === 'username') {
+                if (1 === $lineNumber && 'username' === strtolower(trim($data[0]))) {
                     continue; // Skip header
                 }
 
@@ -115,11 +119,12 @@ class AccessUrlController extends AbstractController
 
                 if (!$username || !$url) {
                     $report[] = $this->formatReport('alert-circle', 'Line %s: empty fields.', [$lineNumber]);
+
                     continue;
                 }
 
                 if (!str_starts_with($url, 'http')) {
-                    $url = 'https://' . $url;
+                    $url = 'https://'.$url;
                 }
                 if (!str_ends_with($url, '/')) {
                     $url .= '/';
@@ -128,12 +133,14 @@ class AccessUrlController extends AbstractController
                 $user = $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
                 if (!$user) {
                     $report[] = $this->formatReport('close-circle', "Line %s: user '%s' not found.", [$lineNumber, $username]);
+
                     continue;
                 }
 
                 $accessUrl = $this->em->getRepository(AccessUrl::class)->findOneBy(['url' => $url]);
                 if (!$accessUrl) {
                     $report[] = $this->formatReport('close-circle', "Line %s: URL '%s' not found.", [$lineNumber, $url]);
+
                     continue;
                 }
 
@@ -141,6 +148,7 @@ class AccessUrlController extends AbstractController
                     if ($rel->getUser()->getId() === $user->getId()) {
                         $this->em->remove($rel);
                         $report[] = $this->formatReport('account-remove-outline', "Line %s: user '%s' removed from '%s'.", [$lineNumber, $username, $url]);
+
                         continue 2;
                     }
                 }
@@ -154,13 +162,14 @@ class AccessUrlController extends AbstractController
 
         return $this->render('@ChamiloCore/AccessUrl/remove_users.html.twig', [
             'report' => $report,
-            'title' => $this->translator->trans('Remove users from URLs from CSV')
+            'title' => $this->translator->trans('Remove users from URLs from CSV'),
         ]);
     }
 
     private function formatReport(string $icon, string $message, array $params): string
     {
         $text = vsprintf($this->translator->trans($message), $params);
-        return sprintf('<i class="mdi mdi-%s text-base me-1"></i> %s', $icon, $text);
+
+        return \sprintf('<i class="mdi mdi-%s text-base me-1"></i> %s', $icon, $text);
     }
 }

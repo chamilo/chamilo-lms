@@ -10,6 +10,9 @@ use Chamilo\CoreBundle\DataFixtures\SettingsValueTemplateFixtures;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 final class Version20250724180700 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -22,95 +25,95 @@ final class Version20250724180700 extends AbstractMigrationChamilo
         // 1) Insert or update catalog settings
         $settings = [
             [
-                'variable'       => 'course_catalog_settings',
+                'variable' => 'course_catalog_settings',
                 'selected_value' => '',
-                'title'          => 'Course Catalog Settings',
-                'comment'        => 'JSON configuration for course catalog: link settings, filters, sort options, and more.',
-                'category'       => 'catalog',
+                'title' => 'Course Catalog Settings',
+                'comment' => 'JSON configuration for course catalog: link settings, filters, sort options, and more.',
+                'category' => 'catalog',
             ],
             [
-                'variable'       => 'session_catalog_settings',
+                'variable' => 'session_catalog_settings',
                 'selected_value' => '',
-                'title'          => 'Session Catalog Settings',
-                'comment'        => 'JSON configuration for session catalog: filters and display options.',
-                'category'       => 'catalog',
+                'title' => 'Session Catalog Settings',
+                'comment' => 'JSON configuration for session catalog: filters and display options.',
+                'category' => 'catalog',
             ],
             [
-                'variable'       => 'show_courses_descriptions_in_catalog',
+                'variable' => 'show_courses_descriptions_in_catalog',
                 'selected_value' => 'false',
-                'title'          => 'Show Course Descriptions',
-                'comment'        => 'Display course descriptions within the catalog listing.',
-                'category'       => 'catalog',
+                'title' => 'Show Course Descriptions',
+                'comment' => 'Display course descriptions within the catalog listing.',
+                'category' => 'catalog',
             ],
             [
-                'variable'       => 'course_catalog_published',
+                'variable' => 'course_catalog_published',
                 'selected_value' => 'false',
-                'title'          => 'Published Courses Only',
-                'comment'        => 'Limit the catalog to only courses marked as published.',
-                'category'       => 'catalog',
+                'title' => 'Published Courses Only',
+                'comment' => 'Limit the catalog to only courses marked as published.',
+                'category' => 'catalog',
             ],
             [
-                'variable'       => 'course_catalog_display_in_home',
+                'variable' => 'course_catalog_display_in_home',
                 'selected_value' => 'true',
-                'title'          => 'Display Catalog on Homepage',
-                'comment'        => 'Show the course catalog block on the platform homepage.',
-                'category'       => 'catalog',
+                'title' => 'Display Catalog on Homepage',
+                'comment' => 'Show the course catalog block on the platform homepage.',
+                'category' => 'catalog',
             ],
             [
-                'variable'       => 'hide_public_link',
+                'variable' => 'hide_public_link',
                 'selected_value' => 'false',
-                'title'          => 'Hide Public Link',
-                'comment'        => 'Remove the public URL link from course cards.',
-                'category'       => 'catalog',
+                'title' => 'Hide Public Link',
+                'comment' => 'Remove the public URL link from course cards.',
+                'category' => 'catalog',
             ],
             [
-                'variable'       => 'only_show_selected_courses',
+                'variable' => 'only_show_selected_courses',
                 'selected_value' => 'false',
-                'title'          => 'Only Selected Courses',
-                'comment'        => 'Show only manually selected courses in the catalog.',
-                'category'       => 'catalog',
+                'title' => 'Only Selected Courses',
+                'comment' => 'Show only manually selected courses in the catalog.',
+                'category' => 'catalog',
             ],
             [
-                'variable'       => 'only_show_course_from_selected_category',
+                'variable' => 'only_show_course_from_selected_category',
                 'selected_value' => '',
-                'title'          => 'Only show matching categories in courses catalogue',
-                'comment'        => 'When not empty, only the courses from the given categories will appear in the courses catalogue.',
-                'category'       => 'catalog',
+                'title' => 'Only show matching categories in courses catalogue',
+                'comment' => 'When not empty, only the courses from the given categories will appear in the courses catalogue.',
+                'category' => 'catalog',
             ],
             [
-                'variable'       => 'allow_students_to_browse_courses',
+                'variable' => 'allow_students_to_browse_courses',
                 'selected_value' => 'true',
-                'title'          => 'Allow Student Browsing',
-                'comment'        => 'Permit students to browse and filter the course catalog.',
-                'category'       => 'catalog',
+                'title' => 'Allow Student Browsing',
+                'comment' => 'Permit students to browse and filter the course catalog.',
+                'category' => 'catalog',
             ],
             [
-                'variable'       => 'course_catalog_hide_private',
+                'variable' => 'course_catalog_hide_private',
                 'selected_value' => 'true',
-                'title'          => 'Hide Private Courses',
-                'comment'        => 'Exclude private courses from the catalog display.',
-                'category'       => 'catalog',
+                'title' => 'Hide Private Courses',
+                'comment' => 'Exclude private courses from the catalog display.',
+                'category' => 'catalog',
             ],
             [
-                'variable'       => 'show_courses_sessions',
+                'variable' => 'show_courses_sessions',
                 'selected_value' => 'true',
-                'title'          => 'Show Courses & Sessions',
-                'comment'        => 'Include both courses and sessions in catalog results.',
-                'category'       => 'catalog',
+                'title' => 'Show Courses & Sessions',
+                'comment' => 'Include both courses and sessions in catalog results.',
+                'category' => 'catalog',
             ],
             [
-                'variable'       => 'allow_session_auto_subscription',
+                'variable' => 'allow_session_auto_subscription',
                 'selected_value' => 'false',
-                'title'          => 'Auto Session Subscription',
-                'comment'        => 'Enable automatic subscription to sessions for users.',
-                'category'       => 'catalog',
+                'title' => 'Auto Session Subscription',
+                'comment' => 'Enable automatic subscription to sessions for users.',
+                'category' => 'catalog',
             ],
             [
-                'variable'       => 'course_subscription_in_user_s_session',
+                'variable' => 'course_subscription_in_user_s_session',
                 'selected_value' => 'false',
-                'title'          => 'Subscription in Session View',
-                'comment'        => 'Allow users to subscribe to courses directly from their session page.',
-                'category'       => 'catalog',
+                'title' => 'Subscription in Session View',
+                'comment' => 'Allow users to subscribe to courses directly from their session page.',
+                'category' => 'catalog',
             ],
         ];
 
@@ -125,7 +128,7 @@ final class Version20250724180700 extends AbstractMigrationChamilo
 
             if ($count > 0) {
                 // UPDATE existing setting
-                $this->addSql(sprintf(
+                $this->addSql(\sprintf(
                     "UPDATE settings
                         SET selected_value = '%s',
                             title = '%s',
@@ -143,7 +146,7 @@ final class Version20250724180700 extends AbstractMigrationChamilo
                 $this->write("Updated setting: {$variable}");
             } else {
                 // INSERT new setting
-                $this->addSql(sprintf(
+                $this->addSql(\sprintf(
                     "INSERT INTO settings
                         (variable, subkey, type, category, selected_value, title, comment,
                          access_url_changeable, access_url_locked, access_url)
@@ -165,7 +168,7 @@ final class Version20250724180700 extends AbstractMigrationChamilo
 
         foreach ($catalogTemplates as $templateData) {
             $fullVariable = $templateData['variable'];  // e.g. "catalog.course_catalog_settings"
-            $jsonExample  = json_encode(
+            $jsonExample = json_encode(
                 $templateData['json_example'],
                 JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
             );
@@ -191,7 +194,7 @@ final class Version20250724180700 extends AbstractMigrationChamilo
                      VALUES (?, ?, NOW(), NOW())',
                     [$fullVariable, $jsonExample]
                 );
-                $templateId = (int)$this->connection->lastInsertId();
+                $templateId = (int) $this->connection->lastInsertId();
                 $this->write("Inserted JSON template for '{$fullVariable}'.");
             }
 
@@ -200,11 +203,11 @@ final class Version20250724180700 extends AbstractMigrationChamilo
 
             // Link the template to the matching settings rows
             $linkedRows = $this->connection->executeStatement(
-                "UPDATE settings
+                'UPDATE settings
                     SET value_template_id = ?
                   WHERE variable = ?
                     AND subkey IS NULL
-                    AND access_url = 1",
+                    AND access_url = 1',
                 [$templateId, $strippedVar]
             );
             $this->write("Linked {$linkedRows} settings rows to template '{$fullVariable}'.");

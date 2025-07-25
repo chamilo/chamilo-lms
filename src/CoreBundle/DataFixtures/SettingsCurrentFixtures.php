@@ -1039,7 +1039,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'push_notification_settings',
                     'title' => 'Push notification settings (JSON)',
-                    'comment' => "JSON configuration for Push notifications integration.",
+                    'comment' => 'JSON configuration for Push notifications integration.',
                 ],
                 [
                     'name' => 'donotlistcampus',
@@ -1146,7 +1146,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'mailer_dsn',
                     'title' => 'Mail DSN',
-                    'comment' => sprintf(
+                    'comment' => \sprintf(
                         'The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. Here are a few examples of supported DSN syntaxes: %s',
                         'https://symfony.com/doc/6.4/mailer.html#using-built-in-transports',
                         'https://symfony.com/doc/6.4/mailer.html#using-a-3rd-party-transport'
@@ -1502,68 +1502,68 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
         return [
             'catalog' => [
                 [
-                    'name'    => 'course_catalog_settings',
-                    'title'   => 'Course Catalog Settings',
+                    'name' => 'course_catalog_settings',
+                    'title' => 'Course Catalog Settings',
                     'comment' => 'JSON configuration for course catalog: link settings, filters, sort options, and more.',
                 ],
                 [
-                    'name'    => 'session_catalog_settings',
-                    'title'   => 'Session Catalog Settings',
+                    'name' => 'session_catalog_settings',
+                    'title' => 'Session Catalog Settings',
                     'comment' => 'JSON configuration for session catalog: filters and display options.',
                 ],
                 [
-                    'name'    => 'show_courses_descriptions_in_catalog',
-                    'title'   => 'Show Course Descriptions',
+                    'name' => 'show_courses_descriptions_in_catalog',
+                    'title' => 'Show Course Descriptions',
                     'comment' => 'Display course descriptions within the catalog listing.',
                 ],
                 [
-                    'name'    => 'course_catalog_published',
-                    'title'   => 'Published Courses Only',
+                    'name' => 'course_catalog_published',
+                    'title' => 'Published Courses Only',
                     'comment' => 'Limit the catalog to only courses marked as published.',
                 ],
                 [
-                    'name'    => 'course_catalog_display_in_home',
-                    'title'   => 'Display Catalog on Homepage',
+                    'name' => 'course_catalog_display_in_home',
+                    'title' => 'Display Catalog on Homepage',
                     'comment' => 'Show the course catalog block on the platform homepage.',
                 ],
                 [
-                    'name'    => 'hide_public_link',
-                    'title'   => 'Hide Public Link',
+                    'name' => 'hide_public_link',
+                    'title' => 'Hide Public Link',
                     'comment' => 'Remove the public URL link from course cards.',
                 ],
                 [
-                    'name'    => 'only_show_selected_courses',
-                    'title'   => 'Only Selected Courses',
+                    'name' => 'only_show_selected_courses',
+                    'title' => 'Only Selected Courses',
                     'comment' => 'Show only manually selected courses in the catalog.',
                 ],
                 [
-                    'name'    => 'only_show_course_from_selected_category',
-                    'title'   => 'Only show matching categories in courses catalogue',
+                    'name' => 'only_show_course_from_selected_category',
+                    'title' => 'Only show matching categories in courses catalogue',
                     'comment' => 'When not empty, only the courses from the given categories will appear in the courses catalogue.',
                 ],
                 [
-                    'name'    => 'allow_students_to_browse_courses',
-                    'title'   => 'Allow Student Browsing',
+                    'name' => 'allow_students_to_browse_courses',
+                    'title' => 'Allow Student Browsing',
                     'comment' => 'Permit students to browse and filter the course catalog.',
                 ],
                 [
-                    'name'    => 'course_catalog_hide_private',
-                    'title'   => 'Hide Private Courses',
+                    'name' => 'course_catalog_hide_private',
+                    'title' => 'Hide Private Courses',
                     'comment' => 'Exclude private courses from the catalog display.',
                 ],
                 [
-                    'name'    => 'show_courses_sessions',
-                    'title'   => 'Show Courses & Sessions',
+                    'name' => 'show_courses_sessions',
+                    'title' => 'Show Courses & Sessions',
                     'comment' => 'Include both courses and sessions in catalog results.',
                 ],
                 [
-                    'name'    => 'allow_session_auto_subscription',
-                    'title'   => 'Auto Session Subscription',
+                    'name' => 'allow_session_auto_subscription',
+                    'title' => 'Auto Session Subscription',
                     'comment' => 'Enable automatic subscription to sessions for users.',
                 ],
                 [
-                    'name'    => 'course_subscription_in_user_s_session',
-                    'title'   => 'Subscription in Session View',
+                    'name' => 'course_subscription_in_user_s_session',
+                    'title' => 'Subscription in Session View',
                     'comment' => 'Allow users to subscribe to courses directly from their session page.',
                 ],
             ],

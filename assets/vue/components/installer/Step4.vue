@@ -128,6 +128,7 @@
       v-if="installerData.stepData.dbExists"
       :closable="false"
       severity="warn"
+      style="margin-bottom: 8px;"
     >
       <span v-html="t('A database with the name already exists. It will be <b>deleted</b>.')" />
     </Message>

@@ -26,6 +26,7 @@
       <Message
         :closable="false"
         severity="warn"
+        style="margin-bottom: 8px;"
       >
         <strong v-t="'Security advice'" />
 
@@ -34,7 +35,7 @@
           tag="p"
         >
           <code>config/</code>
-          <code>main/install/</code>
+          <code>public/main/install/</code>
         </i18n-t>
       </Message>
 

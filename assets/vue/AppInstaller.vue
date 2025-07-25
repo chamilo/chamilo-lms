@@ -242,7 +242,7 @@
     </main>
   </div>
   <footer class="text-center">
-    <p v-html="installerData.poweredBy" />
+    <p class="text-white" v-html="installerData.poweredBy" />
   </footer>
 </template>
 

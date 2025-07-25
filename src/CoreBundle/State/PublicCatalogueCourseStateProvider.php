@@ -45,7 +45,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         }
 
         $onlyShowMatching = 'true' === $this->settingsManager->getSetting('catalog.only_show_selected_courses', true);
-        $onlyShowCoursesWithCategory = 'true' === $this->settingsManager->getSetting('catalog.only_show_course_from_selected_category', true);
+        $onlyShowCoursesWithCategory = $this->settingsManager->getSetting('catalog.only_show_course_from_selected_category', true);
 
         $request = $this->requestStack->getCurrentRequest();
         if (!$request) {

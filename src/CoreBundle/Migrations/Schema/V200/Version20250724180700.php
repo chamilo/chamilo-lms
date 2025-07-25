@@ -72,9 +72,9 @@ final class Version20250724180700 extends AbstractMigrationChamilo
             ],
             [
                 'variable'       => 'only_show_course_from_selected_category',
-                'selected_value' => 'false',
-                'title'          => 'Only Selected Category',
-                'comment'        => 'Show only courses from a specific selected category.',
+                'selected_value' => '',
+                'title'          => 'Only show matching categories in courses catalogue',
+                'comment'        => 'When not empty, only the courses from the given categories will appear in the courses catalogue.',
                 'category'       => 'catalog',
             ],
             [

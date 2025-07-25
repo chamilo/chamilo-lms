@@ -179,7 +179,7 @@ class CatalogueController extends AbstractController
     #[Route('/course-extra-fields', name: 'chamilo_core_catalogue_course_extra_fields', methods: ['GET'])]
     public function getCourseExtraFields(SettingsManager $settingsManager): JsonResponse
     {
-        if (empty($settingsManager->getSetting('catalog.course_catalog_settings'))) {
+        if (empty($settingsManager->getSetting('catalog.course_catalog_settings')['extra_fields_in_search_form'])) {
             return $this->json([]);
         }
 

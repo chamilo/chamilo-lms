@@ -30,6 +30,10 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
         return [
             'catalog' => [
                 [
+                    'variable' => 'only_show_course_from_selected_category',
+                    'json_example' => ['Cat1', 'Cat2'],
+                ],
+                [
                     'variable'     => 'course_catalog_settings',
                     'json_example' => [
                         'link_settings' => [

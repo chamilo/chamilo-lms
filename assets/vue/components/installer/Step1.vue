@@ -18,7 +18,7 @@
       :options="availableLanguages"
       id="language_list"
       name="language_list_alt"
-      option-label="english_name"
+      option-label="original_name"
       option-value="isocode"
     />
 

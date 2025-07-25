@@ -19326,9 +19326,6 @@ msgstr "Inloggen: %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "Database <b>%s</b> zal worden aangemaakt"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "Er <b>bestaat al</b> een database met de naam."
-
 #, fuzzy
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "Gebruiker <b>%s</b> heeft geen toegang tot de database <b>%s</b>"

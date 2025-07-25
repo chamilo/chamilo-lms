@@ -19174,9 +19174,6 @@ msgstr "تسجيل الدخول: %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "قاعدة البيانات %s سوف يتم انشاءها"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "توجد قاعدة بيانات بنفس الاسم مسبقا"
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "المستخدم %s ليس له وصول الى قاعدة البيانات %s"
 

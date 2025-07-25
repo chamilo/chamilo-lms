@@ -19169,9 +19169,6 @@ msgstr "Login: %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "Database <b>%s</b> will be created"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "A database with the same name <b>already exists</b>."
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 
@@ -28555,3 +28552,6 @@ msgstr "Error during test email: "
 
 msgid "Destination of test e-mail"
 msgstr "Destination of test e-mail"
+
+msgid "A database with the same name already exists. It will be deleted."
+msgstr "A database with the same name already exists. It will be deleted."

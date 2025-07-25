@@ -19167,9 +19167,6 @@ msgstr "Zaloguj się: %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "Baza danych %s zostanie utworzona"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "Bazy danych o tej samej nazwie już istnieje."
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "Użytkownik <b>%s</b> nie ma dostępu do bazy danych <b>%s</b>"
 

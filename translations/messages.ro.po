@@ -19175,9 +19175,6 @@ msgstr "Nume de utilizator: %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "Baza de date <b> %s </b> se va crea"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "O baza de date cu acelasi nume <b>deja exista</b>.Continutul bazei de date se vor pierde"
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "Uzuarul <b>%s</b> nu are acces la baza de date <b>%s</b>"
 

@@ -19772,9 +19772,6 @@ msgstr "Identifiant : %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "La base de donnée %s va être créée"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "Une base de donnée du même nom existe déjà. Si vous utilisez cette base, son contenu actuel sera écrasé."
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "L'utilisateur %s n'a pas accès à la base de donnée %s"
 

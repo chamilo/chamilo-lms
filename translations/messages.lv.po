@@ -19162,9 +19162,6 @@ msgstr "Ielogoties: %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "Datubāze %s tiks izveidota"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "Datubāze ar šādu nosaukumu, jau eksistē"
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "Lietotājam %s nav pieeja datubāzei %s"
 

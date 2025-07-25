@@ -30356,11 +30356,8 @@ msgstr "Activer l'authentification à deux facteurs (2FA)"
 msgid "Mail: 'From' address"
 msgstr "Courriel : adresse de l'expéditeur"
 
-msgid "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications."
-msgstr ""
-"Configuration JSON pour l'intégration des notifications push. Exemple : {'got"
-"ify_url':'http://localhost:8080','gotify_token':'votretoken','enabled':true}"
-". Laissez vide si vous ne souhaitez pas utiliser les notifications push."
+msgid "JSON configuration for Push notifications integration."
+msgstr "Configuration JSON pour l'intégration des notifications push."
 
 msgid "User is teacher in some courses"
 msgstr "L'utilisateur est formateur dans certains cours"

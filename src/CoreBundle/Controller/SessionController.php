@@ -339,8 +339,8 @@ class SessionController extends AbstractController
         }
 
         $request = $this->requestStack->getCurrentRequest();
-        $baseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
-        $sessionUrl = rtrim($baseUrl, '/') . '/sessions';
+        $baseUrl = $request->getSchemeAndHttpHost().$request->getBasePath();
+        $sessionUrl = rtrim($baseUrl, '/').'/sessions';
 
         $subject = $this->translator->trans('You have been enrolled in a new course');
 

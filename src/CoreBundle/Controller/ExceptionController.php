@@ -29,18 +29,18 @@ class ExceptionController extends AbstractController
             throw new HttpException($exception->getCode(), $exception->getMessage());
         }
 
-        $name    = 'exception';
-        $code    = $exception->getCode();
-        $format  = 'html';
-        $loader  = $this->container->get('twig')->getLoader();
-        $templateToLoad = sprintf('@ChamiloCore/Exception/%s.html.twig', 'exception_full');
+        $name = 'exception';
+        $code = $exception->getCode();
+        $format = 'html';
+        $loader = $this->container->get('twig')->getLoader();
+        $templateToLoad = \sprintf('@ChamiloCore/Exception/%s.html.twig', 'exception_full');
 
-        $candidate = sprintf('@ChamiloCore/Exception/%s%s.%s.twig', $name, $code, $format);
+        $candidate = \sprintf('@ChamiloCore/Exception/%s%s.%s.twig', $name, $code, $format);
         if ($loader->exists($candidate)) {
             $templateToLoad = $candidate;
         }
 
-        $candidate = sprintf('@ChamiloCore/Exception/%s.%s.twig', $name, $format);
+        $candidate = \sprintf('@ChamiloCore/Exception/%s.%s.twig', $name, $format);
         if ($loader->exists($candidate)) {
             $templateToLoad = $candidate;
         }
@@ -59,18 +59,18 @@ class ExceptionController extends AbstractController
 
         $exception->setMessage($message);
 
-        $name    = 'exception';
-        $code    = $exception->getCode();
-        $format  = 'html';
-        $loader  = $this->container->get('twig')->getLoader();
-        $templateToLoad = sprintf('@ChamiloCore/Exception/%s.html.twig', 'exception_full');
+        $name = 'exception';
+        $code = $exception->getCode();
+        $format = 'html';
+        $loader = $this->container->get('twig')->getLoader();
+        $templateToLoad = \sprintf('@ChamiloCore/Exception/%s.html.twig', 'exception_full');
 
-        $candidate = sprintf('@ChamiloCore/Exception/%s%s.%s.twig', $name, $code, $format);
+        $candidate = \sprintf('@ChamiloCore/Exception/%s%s.%s.twig', $name, $code, $format);
         if ($loader->exists($candidate)) {
             $templateToLoad = $candidate;
         }
 
-        $candidate = sprintf('@ChamiloCore/Exception/%s.%s.twig', $name, $format);
+        $candidate = \sprintf('@ChamiloCore/Exception/%s.%s.twig', $name, $format);
         if ($loader->exists($candidate)) {
             $templateToLoad = $candidate;
         }
@@ -90,20 +90,20 @@ class ExceptionController extends AbstractController
         $themeName = 'chamilo';
 
         $cssUrl = $themeHost
-            . $this->urlGenerator->generate('theme_asset', [
+            .$this->urlGenerator->generate('theme_asset', [
                 'name' => $themeName,
                 'path' => 'colors.css',
             ], UrlGeneratorInterface::ABSOLUTE_PATH);
 
         $logoUrl = $themeHost
-            . $this->urlGenerator->generate('theme_asset', [
+            .$this->urlGenerator->generate('theme_asset', [
                 'name' => $themeName,
                 'path' => 'images/header-logo.svg',
             ], UrlGeneratorInterface::ABSOLUTE_PATH);
 
         return $this->render('@ChamiloCore/Exception/undefined_url.html.twig', [
-            'host'    => $host,
-            'cssUrl'  => $cssUrl,
+            'host' => $host,
+            'cssUrl' => $cssUrl,
             'logoUrl' => $logoUrl,
         ]);
     }

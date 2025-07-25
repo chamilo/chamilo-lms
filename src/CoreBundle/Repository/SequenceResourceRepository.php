@@ -113,8 +113,6 @@ class SequenceResourceRepository extends ServiceEntityRepository
      *
      * @param int $resourceId The resource ID
      * @param int $type       The type of sequence resource
-     *
-     * @return array
      */
     public function getRequirements(int $resourceId, int $type): array
     {
@@ -219,8 +217,6 @@ class SequenceResourceRepository extends ServiceEntityRepository
      *
      * @param array $sequences The sequences
      * @param int   $type      The type of sequence resource
-     *
-     * @return array
      */
     public function checkRequirementsForUser(array $sequences, int $type, int $userId): array
     {
@@ -369,8 +365,6 @@ class SequenceResourceRepository extends ServiceEntityRepository
      * Check if at least one sequence are completed.
      *
      * @param array $sequences The sequences
-     *
-     * @return bool
      */
     public function checkSequenceAreCompleted(array $sequences): bool
     {

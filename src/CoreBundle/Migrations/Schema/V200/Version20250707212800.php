@@ -9,9 +9,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-use const FILE_IGNORE_NEW_LINES;
-use const PHP_EOL;
-
 final class Version20250707212800 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -48,14 +45,14 @@ final class Version20250707212800 extends AbstractMigrationChamilo
         if (!empty($smtpSecure)) {
             $mailerScheme = 'smtp';
 
-            if ($smtpSecure === 'ssl') {
+            if ('ssl' === $smtpSecure) {
                 $mailerScheme = 'smtps';
-            } elseif ($smtpSecure === 'tls') {
+            } elseif ('tls' === $smtpSecure) {
                 $query = '?encryption=tls';
             }
         }
 
-        $dsn = sprintf(
+        $dsn = \sprintf(
             '%s://%s%s@%s:%s%s',
             $mailerScheme,
             !empty($platform_email['SMTP_AUTH']) ? ($platform_email['SMTP_USER'] ?? '') : '',
@@ -103,7 +100,7 @@ final class Version20250707212800 extends AbstractMigrationChamilo
     {
         foreach ($envSettings as $variable => $value) {
             $this->addSql(
-                sprintf(
+                \sprintf(
                     "UPDATE settings SET selected_value = '%s' WHERE variable = '%s' AND category = 'mail'",
                     $value,
                     $variable

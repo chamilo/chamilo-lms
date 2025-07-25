@@ -12,9 +12,6 @@ use Symfony\Component\Dotenv\Dotenv;
 
 class Version20250721200725 extends AbstractMigrationChamilo
 {
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $projectDir = $this->container->getParameter('kernel.project_dir');
@@ -46,14 +43,14 @@ class Version20250721200725 extends AbstractMigrationChamilo
             if (!empty($smtpSecure)) {
                 $mailerScheme = 'smtp';
 
-                if ($smtpSecure === 'ssl') {
+                if ('ssl' === $smtpSecure) {
                     $mailerScheme = 'smtps';
-                } elseif ($smtpSecure === 'tls') {
+                } elseif ('tls' === $smtpSecure) {
                     $query = '?encryption=tls';
                 }
             }
 
-            $dsn = sprintf(
+            $dsn = \sprintf(
                 '%s://%s%s@%s:%s%s',
                 $mailerScheme,
                 !empty($_ENV['SMTP_AUTH']) ? ($_ENV['SMTP_USER'] ?? '') : '',
@@ -99,7 +96,7 @@ class Version20250721200725 extends AbstractMigrationChamilo
 
         foreach ($settings as $variable => $value) {
             $this->addSql(
-                sprintf(
+                \sprintf(
                     "INSERT IGNORE INTO settings (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable, access_url_locked) VALUES ('%s', null, null, 'mail', '%s', '%s', null, '', null, 1, 1, 1)",
                     $variable,
                     $value,

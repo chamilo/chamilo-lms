@@ -13,7 +13,7 @@ class Version20250725104800 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return "Remove noreply_email_address setting";
+        return 'Remove noreply_email_address setting';
     }
 
     public function up(Schema $schema): void

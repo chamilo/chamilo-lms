@@ -95,13 +95,10 @@ class CourseVoter extends Voter
                 if ($course->isPublic()) {
                     if ($this->isStudent($user, $course, $session)) {
                         if ($this->isCourseLockedForUser($user, $course, $session?->getId() ?? 0)) {
-                            throw new NotAllowedException(
-                                $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
-                                'warning',
-                                403
-                            );
+                            throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
                         }
                     }
+
                     return true;
                 }
 
@@ -114,11 +111,7 @@ class CourseVoter extends Voter
                 if (Course::OPEN_PLATFORM === $course->getVisibility()) {
                     if ($this->isStudent($user, $course, $session)) {
                         if ($this->isCourseLockedForUser($user, $course, $session?->getId() ?? 0)) {
-                            throw new NotAllowedException(
-                                $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
-                                'warning',
-                                403
-                            );
+                            throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
                         }
                     }
 
@@ -141,17 +134,14 @@ class CourseVoter extends Voter
 
                     if ($userIsGeneralCoach || $userIsCourseCoach) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
+
                         return true;
                     }
 
                     if ($userIsStudent) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
                         if ($this->isCourseLockedForUser($user, $course, $session->getId())) {
-                            throw new NotAllowedException(
-                                $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
-                                'warning',
-                                403
-                            );
+                            throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
                         }
 
                         return true;
@@ -168,11 +158,7 @@ class CourseVoter extends Voter
                     }
 
                     if ($this->isCourseLockedForUser($user, $course)) {
-                        throw new NotAllowedException(
-                            $this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'),
-                            'warning',
-                            403
-                        );
+                        throw new NotAllowedException($this->translator->trans('This course is locked. You must complete the prerequisite(s) first.'), 'warning', 403);
                     }
 
                     $token->setUser($user);

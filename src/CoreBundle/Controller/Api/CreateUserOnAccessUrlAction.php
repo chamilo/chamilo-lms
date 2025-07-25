@@ -101,8 +101,8 @@ class CreateUserOnAccessUrlAction
 
         if ($data->getSendEmail()) {
             $request = $this->requestStack->getCurrentRequest();
-            $baseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
-            $sessionUrl = rtrim($baseUrl, '/') . '/sessions';
+            $baseUrl = $request->getSchemeAndHttpHost().$request->getBasePath();
+            $sessionUrl = rtrim($baseUrl, '/').'/sessions';
             $platformName = $this->settingsManager->getSetting('platform.site_name', true);
             $password = $data->getPassword();
 
@@ -112,13 +112,13 @@ class CreateUserOnAccessUrlAction
             );
 
             $body = $this->translator->trans(
-                'Hello %s,<br><br>' .
-                'You are registered to %s.<br>' .
-                'You can access your account from <a href="%s">here</a>.<br><br>' .
-                'Your login credentials are:<br>' .
-                'Username: <strong>%s</strong><br>' .
-                'Password: <strong>%s</strong><br><br>' .
-                'Best regards,<br>' .
+                'Hello %s,<br><br>'.
+                'You are registered to %s.<br>'.
+                'You can access your account from <a href="%s">here</a>.<br><br>'.
+                'Your login credentials are:<br>'.
+                'Username: <strong>%s</strong><br>'.
+                'Password: <strong>%s</strong><br><br>'.
+                'Best regards,<br>'.
                 '%s'
             );
 

@@ -1217,11 +1217,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Mail: XOAuth2 options',
                     'comment' => 'If you use some XOAuth2-based e-mail service, use this setting in JSON to save your specific configuration (see example) and select XOAuth2 in the mail service setting.',
                 ],
-                [
-                    'name' => 'noreply_email_address',
-                    'title' => 'No-reply e-mail address',
-                    'comment' => 'This is the e-mail address to be used when an e-mail has to be sent specifically requesting that no answer be sent in return. Generally, this e-mail address should be configured on your server to drop/ignore any incoming e-mail.',
-                ],
             ],
             'search' => [
                 [

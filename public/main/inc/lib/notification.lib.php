@@ -73,7 +73,7 @@ class Notification extends Model
             }
         } else {
             // Default no-reply email
-            $this->adminEmail = api_get_setting('mail.noreply_email_address');
+            $this->adminEmail = api_get_setting('mail.mailer_from_email');
             $this->adminName = api_get_setting('platform.site_name');
             $this->titlePrefix = '['.api_get_setting('platform.site_name').'] ';
 

@@ -605,7 +605,6 @@ class SettingsManager implements SettingsManagerInterface
             'show_tabs' => 'Platform',
             'default_forum_view' => 'Course',
             'platform_charset' => 'Languages',
-            'noreply_email_address' => 'Platform',
             'survey_email_sender_noreply' => 'Course',
             'gradebook_enable' => 'Gradebook',
             'gradebook_score_display_coloring' => 'Gradebook',

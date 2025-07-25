@@ -2660,19 +2660,10 @@ class SurveyUtil
         }
 
         // Sending the mail
-        $sender_name = api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
-        $sender_email = $_user['mail'];
         $sender_user_id = api_get_user_id();
 
-        $replyto = [];
         if ('noreply' === api_get_setting('survey_email_sender_noreply')) {
-            $noreply = api_get_setting('noreply_email_address');
-            if (!empty($noreply)) {
-                $replyto['Reply-to'] = $noreply;
-                $sender_name = $noreply;
-                $sender_email = $noreply;
-                $sender_user_id = null;
-            }
+            $sender_user_id = null;
         }
 
         // Optionally: finding the e-mail of the course user
@@ -2696,9 +2687,6 @@ class SurveyUtil
                 $invitedUser,
                 $invitation_title,
                 $full_invitation_text,
-                $sender_name,
-                $sender_email,
-                $replyto
             );
         }
     }

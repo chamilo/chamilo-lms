@@ -2673,12 +2673,12 @@ class Display
     public static function prose(string $contents): string
     {
         return "
-            <div class=''>
-                <div class='prose prose-blue'>
-                $contents
-                </div>
-            </div>
-            ";
+    <div class='w-full my-8'>
+      <div class='prose prose-blue max-w-none px-6 py-4 bg-white rounded-lg shadow'>
+        $contents
+      </div>
+    </div>
+    ";
     }
 
     public static function getFrameReadyBlock(

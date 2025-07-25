@@ -273,22 +273,22 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 
-$tool_name = get_lang('UpdateUserListXMLCSV');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$tool_name = get_lang('Update user list fromm XML/CSV');
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Platform admin')];
 
 set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 
 $form = new FormValidator('user_update_import', 'post', api_get_self());
 $form->addHeader($tool_name);
-$form->addFile('import_file', get_lang('ImportFileLocation'), ['accept' => 'text/csv', 'id' => 'import_file']);
-$form->addCheckBox('reset_password', '', get_lang('AutoGeneratePassword'));
+$form->addFile('import_file', get_lang('Import file location'), ['accept' => 'text/csv', 'id' => 'import_file']);
+$form->addCheckBox('reset_password', '', get_lang('Auto-generate password'));
 
 $group = [
     $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1),
     $form->createElement('radio', 'sendMail', null, get_lang('No'), 0),
 ];
-$form->addGroup($group, '', get_lang('SendMailToUsers'));
+$form->addGroup($group, '', get_lang('Send mail to users'));
 $defaults['sendMail'] = 0;
 
 if ($form->validate()) {
@@ -305,7 +305,7 @@ if ($form->validate()) {
 
         if ('csv' !== $uploadInfo['extension']) {
             Display::addFlash(
-                Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error')
+                Display::return_message(get_lang('You must import a file according to selected option'), 'error')
             );
 
             header('Location: '.api_get_self());
@@ -338,7 +338,7 @@ if ($form->validate()) {
 
         if (empty($errors)) {
             Display::addFlash(
-                Display::return_message(get_lang('FileImported'), 'success')
+                Display::return_message(get_lang('File imported'), 'success')
             );
         } else {
             $warningMessage = '';
@@ -348,7 +348,7 @@ if ($form->validate()) {
             }
 
             Display::addFlash(
-                Display::return_message(get_lang('FileImportedJustUsersThatAreNotRegistered'), 'warning')
+                Display::return_message(get_lang('File imported just users that are not registered'), 'warning')
             );
             Display::addFlash(Display::return_message($warningMessage, 'warning', false));
         }
@@ -356,7 +356,7 @@ if ($form->validate()) {
         header('Location: '.api_get_self());
         exit;
     } else {
-        Display::addFlash(Display::return_message(get_lang('LinkExpired'), 'warning', false));
+        Display::addFlash(Display::return_message(get_lang('Link expired'), 'warning', false));
         header('Location: '.api_get_self());
         exit;
     }
@@ -388,20 +388,22 @@ if ($count_fields > 0) {
     }
 }
 
-$content = '<p>'.get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').') :</p>
-    <blockquote>
-    <pre>
-        <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
-        xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;
-        <span style="color:red;">';
-if (count($list_reponse) > 0) {
-    $content .= implode(';', $list_reponse).';';
-} else {
-    $content .= '</span>xxx1|xxx2|xxx3;1;<br/>
-    </pre>
-    </blockquote>
-    <p>
-    ';
-}
+$content = '
+<div class="max-w-full mb-8">
+  <div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
+    <h2 class="text-xl font-bold mb-4">'
+    . get_lang('CSV must look like') .
+    ' <span class="font-medium">(' . get_lang('Mandatory fields') . ')</span>
+    </h2>
+    <div class="overflow-x-auto bg-gray-20 p-4 rounded-md">
+      <pre class="bg-gray-100 text-gray-800 p-4 font-mono text-sm whitespace-pre-wrap mb-0">
+UserName,LastName,FirstName,Email,NewUserName,Password,AuthSource,OfficialCode,PhoneNumber,Status,ExpiryDate,Active,Language,Courses,ClassId
+xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,user/teacher/drh,YYYY-MM-DD 00:00:00,0/1,xxx,<span class="text-red-600">'
+    . implode(',', $list_reponse) .
+    '</span>
+      </pre>
+    </div>
+  </div>
+</div>';
 echo Display::prose($content);
 Display::display_footer();

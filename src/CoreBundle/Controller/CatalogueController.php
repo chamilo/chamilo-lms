@@ -179,7 +179,7 @@ class CatalogueController extends AbstractController
     #[Route('/course-extra-fields', name: 'chamilo_core_catalogue_course_extra_fields', methods: ['GET'])]
     public function getCourseExtraFields(SettingsManager $settingsManager): JsonResponse
     {
-        if ('true' !== $settingsManager->getSetting('course.allow_course_extra_field_in_catalog')) {
+        if (empty($settingsManager->getSetting('catalog.course_catalog_settings'))) {
             return $this->json([]);
         }
 
@@ -207,7 +207,7 @@ class CatalogueController extends AbstractController
             return $this->json(['error' => 'Course or user not found'], 400);
         }
 
-        $useAutoSession = 'true' === $settings->getSetting('session.catalog_course_subscription_in_user_s_session', true);
+        $useAutoSession = 'true' === $settings->getSetting('catalog.course_subscription_in_user_s_session', true);
 
         if ($useAutoSession) {
             $session = new Session();

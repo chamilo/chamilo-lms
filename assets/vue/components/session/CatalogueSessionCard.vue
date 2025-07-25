@@ -248,7 +248,7 @@ const fallback = ref(false)
 
 const platformConfigStore = usePlatformConfig()
 const allowDescription = computed(
-  () => platformConfigStore.getSetting("course.show_courses_descriptions_in_catalog") !== "false",
+  () => platformConfigStore.getSetting("catalog.show_courses_descriptions_in_catalog") !== "false",
 )
 const { getOriginalLanguageName } = useLocale()
 
@@ -348,7 +348,7 @@ const emitRating = (event) => {
 }
 
 const allowAutoSubscription = computed(
-  () => platformConfigStore.getSetting("session.catalog_allow_session_auto_subscription") === "true",
+  () => platformConfigStore.getSetting("catalog.allow_session_auto_subscription") === "true",
 )
 
 const subscribeToSession = async () => {

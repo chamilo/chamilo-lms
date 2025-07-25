@@ -49,8 +49,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'order_user_list_by_official_code' => 'false',
                     'cookie_warning' => 'false',
                     'donotlistcampus' => 'false',
-                    'catalog_show_courses_sessions' => '0',
-                    'course_catalog_hide_private' => 'false',
                     'use_custom_pages' => 'false',
                     'pdf_logo_header' => '',
                     'allow_my_files' => 'true',
@@ -148,19 +146,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('order_user_list_by_official_code', YesNoType::class)
             ->add('cookie_warning', YesNoType::class)
             ->add('donotlistcampus', YesNoType::class)
-            ->add('course_catalog_hide_private', YesNoType::class)
-            ->add(
-                'catalog_show_courses_sessions',
-                ChoiceType::class,
-                [
-                    'choices' => [
-                        'Hide catalogue' => '-1',
-                        'Show only courses' => '0',
-                        'Show only sessions' => '1',
-                        'Show courses and sessions' => '2',
-                    ],
-                ]
-            )
             ->add('use_custom_pages', YesNoType::class)
             ->add('pdf_logo_header')
             ->add('allow_my_files', YesNoType::class)

@@ -517,7 +517,7 @@ class CourseManager
                 );
             }
         }
-        if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
+        if ('true' === api_get_setting('catalog.course_subscription_in_user_s_session')) {
             // Also unlink the course from the users' currently accessible sessions
             /** @var Course $course */
             $course = Container::getCourseRepository()->findOneBy([
@@ -602,7 +602,7 @@ class CourseManager
 
         $userId = api_get_user_id();
 
-        if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
+        if ('true' === api_get_setting('catalog.course_subscription_in_user_s_session')) {
             $user = api_get_user_entity($userId);
             $sessions = $user->getCurrentlyAccessibleSessions();
             if (empty($sessions)) {
@@ -767,7 +767,7 @@ class CourseManager
             }
         }
 
-        if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
+        if ('true' === api_get_setting('catalog.course_subscription_in_user_s_session')) {
             $user = api_get_user_entity($userId);
             $sessions = $user->getCurrentlyAccessibleSessions();
             if (empty($sessions) && $user->getSessionsAsStudent()) {
@@ -1217,7 +1217,7 @@ class CourseManager
         $userId = (int) $userId;
         $session_id = (int) $session_id;
 
-        if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
+        if ('true' === api_get_setting('catalog.course_subscription_in_user_s_session')) {
             // with this option activated, only check whether the course is in one of the users' sessions
             $course = Container::getCourseRepository()->findOneBy([
                 'code' => $course_code,
@@ -5005,7 +5005,7 @@ class CourseManager
     {
         $visibilityCondition = '';
         if ($checkHidePrivate) {
-            $hidePrivateSetting = api_get_setting('course_catalog_hide_private');
+            $hidePrivateSetting = api_get_setting('catalog.course_catalog_hide_private');
             if ('true' === $hidePrivateSetting) {
                 $visibilityCondition .= " AND $courseTableAlias.visibility <> ".Course::REGISTERED;
             }
@@ -6388,7 +6388,7 @@ class CourseManager
         }
 
         $class = '';
-        if ('true' === api_get_setting('show_courses_descriptions_in_catalog')) {
+        if ('true' === api_get_setting('catalog.show_courses_descriptions_in_catalog')) {
             $title = $course['title'];
             if (empty($url)) {
                 $class = 'ajax';

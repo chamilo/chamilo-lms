@@ -229,7 +229,7 @@ const showDescriptionDialog = ref(false)
 const showDependenciesModal = ref(false)
 
 const allowDescription = computed(
-  () => platformConfigStore.getSetting("course.show_courses_descriptions_in_catalog") !== "false",
+  () => platformConfigStore.getSetting("catalog.show_courses_descriptions_in_catalog") !== "false",
 )
 
 const durationInHours = computed(() => {
@@ -253,7 +253,7 @@ const subscribeToCourse = async () => {
     subscribing.value = true
 
     const useAutoSession =
-      platformConfigStore.getSetting("session.catalog_course_subscription_in_user_s_session") === "true"
+      platformConfigStore.getSetting("catalog.course_subscription_in_user_s_session") === "true"
 
     let sessionId = null
 
@@ -300,7 +300,7 @@ function routeExists(name) {
 }
 
 const linkSettings = computed(() => {
-  const settings = platformConfigStore.getSetting("course.course_catalog_settings")
+  const settings = platformConfigStore.getSetting("catalog.course_catalog_settings")
   return settings?.link_settings ?? {}
 })
 

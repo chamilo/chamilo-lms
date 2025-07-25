@@ -14,7 +14,6 @@ watch(
   () => modelValue.value,
   (val) => {
     expandedKeys.value = buildExpandedKeys(val || [])
-    console.debug("[Sidebar] expandedKeys (from items):", expandedKeys.value)
   },
   { immediate: true }
 )

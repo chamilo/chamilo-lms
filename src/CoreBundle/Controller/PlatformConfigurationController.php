@@ -48,18 +48,17 @@ class PlatformConfigurationController extends AbstractController
         ];
 
         $configuration['settings']['registration.allow_registration'] = $settingsManager->getSetting('registration.allow_registration', true);
-        $configuration['settings']['course.course_catalog_published'] = $settingsManager->getSetting('course.course_catalog_published', true);
-        $configuration['settings']['course.catalog_hide_public_link'] = $settingsManager->getSetting('course.catalog_hide_public_link', true);
-        $configuration['settings']['course.allow_course_extra_field_in_catalog'] = $settingsManager->getSetting('course.allow_course_extra_field_in_catalog', true);
-        $configuration['settings']['course.course_catalog_display_in_home'] = $settingsManager->getSetting('course.course_catalog_display_in_home', true);
-        $configuration['settings']['course.courses_catalogue_show_only_category'] = $settingsManager->getSetting('course.courses_catalogue_show_only_category', true);
-        $configuration['settings']['display.allow_students_to_browse_courses'] = $settingsManager->getSetting('display.allow_students_to_browse_courses', true);
-        $configuration['settings']['session.catalog_allow_session_auto_subscription'] = $settingsManager->getSetting('session.catalog_allow_session_auto_subscription', true);
-        $configuration['settings']['session.catalog_course_subscription_in_user_s_session'] = $settingsManager->getSetting('session.catalog_course_subscription_in_user_s_session', true);
-        $rawCourseCatalogSetting = $settingsManager->getSetting('course.course_catalog_settings', true);
-        $configuration['settings']['course.course_catalog_settings'] = 'false' !== $rawCourseCatalogSetting ? $this->decodeSettingArray($rawCourseCatalogSetting) : 'false';
-        $rawSessionCatalogSetting = $settingsManager->getSetting('session.catalog_settings', true);
-        $configuration['settings']['session.catalog_settings'] = 'false' !== $rawSessionCatalogSetting ? $this->decodeSettingArray($rawSessionCatalogSetting) : 'false';
+        $configuration['settings']['catalog.course_catalog_published'] = $settingsManager->getSetting('catalog.course_catalog_published', true);
+        $configuration['settings']['catalog.hide_public_link'] = $settingsManager->getSetting('catalog.hide_public_link', true);
+        $configuration['settings']['catalog.course_catalog_display_in_home'] = $settingsManager->getSetting('catalog.course_catalog_display_in_home', true);
+        $configuration['settings']['catalog.only_show_course_from_selected_category'] = $settingsManager->getSetting('catalog.only_show_course_from_selected_category', true);
+        $configuration['settings']['catalog.allow_students_to_browse_courses'] = $settingsManager->getSetting('catalog.allow_students_to_browse_courses', true);
+        $configuration['settings']['catalog.allow_session_auto_subscription'] = $settingsManager->getSetting('catalog.allow_session_auto_subscription', true);
+        $configuration['settings']['catalog.course_subscription_in_user_s_session'] = $settingsManager->getSetting('catalog.course_subscription_in_user_s_session', true);
+        $rawCourseCatalogSetting = $settingsManager->getSetting('catalog.course_catalog_settings', true);
+        $configuration['settings']['catalog.course_catalog_settings'] = 'false' !== $rawCourseCatalogSetting ? $this->decodeSettingArray($rawCourseCatalogSetting) : 'false';
+        $rawSessionCatalogSetting = $settingsManager->getSetting('catalog.session_catalog_settings', true);
+        $configuration['settings']['catalog.session_catalog_settings'] = 'false' !== $rawSessionCatalogSetting ? $this->decodeSettingArray($rawSessionCatalogSetting) : 'false';
         $configuration['settings']['admin.chamilo_latest_news'] = $settingsManager->getSetting('admin.chamilo_latest_news', true);
         $configuration['settings']['admin.chamilo_support'] = $settingsManager->getSetting('admin.chamilo_support', true);
         $configuration['settings']['platform.session_admin_access_to_all_users_on_all_urls'] = $settingsManager->getSetting('platform.session_admin_access_to_all_users_on_all_urls', true);
@@ -76,7 +75,7 @@ class PlatformConfigurationController extends AbstractController
                 'platform.load_term_conditions_section',
                 'platform.cookie_warning',
                 'platform.show_tabs',
-                'platform.catalog_show_courses_sessions',
+                'catalog.show_courses_sessions',
                 'admin.administrator_name',
                 'admin.administrator_surname',
                 'editor.enabled_mathjax',
@@ -112,8 +111,7 @@ class PlatformConfigurationController extends AbstractController
                 'attendance.enable_sign_attendance_sheet',
                 'exercise.allow_exercise_auto_launch',
                 'course.access_url_specific_files',
-                'platform.course_catalog_hide_private',
-                'course.show_courses_descriptions_in_catalog',
+                'catalog.show_courses_descriptions_in_catalog',
                 'session.session_automatic_creation_user_id',
                 'session.session_list_view_remaining_days',
                 'profile.use_users_timezone',

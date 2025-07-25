@@ -1022,7 +1022,7 @@ if ($form->validate()) {
                     ).'</a>';
             }
         } else {
-            if ('true' == api_get_setting('allow_students_to_browse_courses')) {
+            if ('true' == api_get_setting('catalog.allow_students_to_browse_courses')) {
                 $formData['action'] = 'courses.php?action=subscribe';
                 $formData['message'] = '<p>'.get_lang('You can now select, in the list, the course you want access to').".</p>";
             } else {

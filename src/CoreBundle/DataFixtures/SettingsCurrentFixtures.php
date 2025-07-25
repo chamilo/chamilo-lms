@@ -1039,7 +1039,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'push_notification_settings',
                     'title' => 'Push notification settings (JSON)',
-                    'comment' => "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications.",
+                    'comment' => "JSON configuration for Push notifications integration.",
                 ],
                 [
                     'name' => 'donotlistcampus',

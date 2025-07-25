@@ -851,7 +851,7 @@ class ExtraField extends Model
             }
 
             // 2) If this is the special extra field on a user form, add uniqueness validation
-            if ($this->type === 'user') {
+            if ($this->type === 'user' && !empty($uniqueField) && $name === $uniqueField) {
                 $this->applyExtraFieldUniquenessRule(
                     $form,
                     $name,

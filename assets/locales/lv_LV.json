@@ -570,5 +570,6 @@
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Da\u017ei katalogi un faili, ko tie satur, ir rakst\u0101mi web server\u012b, lai Chamilo tos palaistu (lietot\u0101ju aug\u0161upiel\u0101d\u0113to failu, m\u0101jas lapu html failus, ...). Tas var\u0113tu noz\u012bm\u0113t man\u0101ulas izmai\u0146as j\u016bsu server\u012b (\u0101rpus \u0161\u012b saskarnes).",
-    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted.",
+    "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "Kad j\u016bs ieiesiet sav\u0101 port\u0101l\u0101 pirmo reizi, lab\u0101kais veids, k\u0101 to izprast, ir re\u0123istr\u0113t  opciju \"Izveidot jaunu kursu\" un p\u0113c tam sekojiet nor\u0101d\u0113m."
 }

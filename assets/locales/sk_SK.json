@@ -598,5 +598,6 @@
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Niektor\u00e9 adres\u00e1re a s\u00fabory, ktor\u00e9 obsahuj\u00fa, musia by\u0165 zapisovate\u013en\u00e9 webov\u00fdm serverom, aby ich Chamilo spustil (pou\u017e\u00edvate\u013e nahral s\u00fabory, domovsk\u00e9 s\u00fabory html, ...). Toto by mohlo znamena\u0165, vykona\u0165 ru\u010dn\u00e9 zmeny na va\u0161om serveri (mimo toto rozhranie).",
-    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted.",
+    "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "Ke\u010f prv\u00fdkr\u00e1t vst\u00fapite na port\u00e1l, najlep\u0161\u00ed sp\u00f4sob, ako ho pochopi\u0165, je vytvori\u0165 kurz s \"Vytvori\u0165 kurz\" odkazom v menu a pohrajte sa s n\u00edm trochu."
 }

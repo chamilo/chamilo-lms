@@ -626,5 +626,6 @@
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Sommige mappen en de bestanden erin moeten overschrijfbaar zijn door de web server opdat Chamilo zou kunnen werken (door studenten ge\u00fcploade bestanden, HTML-bestanden voor de startpagina,...). Dit vraagt mogelijk een manuele wijziging op uw server (buiten deze interface).",
-    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted.",
+    "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "Wanneer u de campus voor het eerst gebruikt, is de beste werkwijze om de werking te begrijpen een nieuwe cursus aan te maken en de opties te verkennen."
 }

@@ -485,5 +485,6 @@
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "En del mappar och filer i vissa mappar m\u00e5ste vara skrivbara f\u00f6r webbservern f\u00f6r att Chamilo ska kunna fungera (anv\u00e4ndarnas filuppladdning, skapandet av kursdelar, mm). Det kan inneb\u00e4ra att r\u00e4ttigheterna m\u00e5ste st\u00e4llas in manuellt (utanf\u00f6r installationsprogrammet).",
-    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted.",
+    "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "N\u00e4r du kommer till din kursplats f\u00f6rsta g\u00e5ngen \u00e4r det enklast att l\u00e4ra k\u00e4nna den om du registrerar dig med valet 'Skapa kurs' och sedan forts\u00e4tta d\u00e4r."
 }

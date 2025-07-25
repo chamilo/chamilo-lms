@@ -577,5 +577,6 @@
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Direktorio batzuek eta hauen barruan diren fitxategiek idazteko aukera eduki behar dute erabilgarri web zerbitzarian, horrela Chamilo ongi ibiltzeko (erabiltzaileek fitxategiak kargatzeko, orri nagusiaren html fitxategiak,...). Eskakizun honek eskuz egin beharreko aldaketa ekarri dezake zure zerbitzarian (interfaze honetatik kanpo egingo da).",
-    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted.",
+    "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "Zure atarian lehenengo aldiz sartzen zarenean, berataz jabetzeko modurik onena ikastaro bat sortzea da, menuan irakasleentzako \"Sortu ikastaroa\" lotura aukeratu eta agindutakoei jarraituz."
 }

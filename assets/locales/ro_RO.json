@@ -589,5 +589,6 @@
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Unele foldere si fisierele pe care le includ trebuieb sa fie inscriptibile pentru serverul de web pentru ca platforma sa functioneze(fisiere uploadate de studenti, fisiere html pagina de inceput). Aceasta poate implica o schimbare manuala pe serverul dvs(in afara acestei interfete).",
-    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted.",
+    "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "Cand intrati in campus pt prima oara, cea mai buna metoda de a-l intelege este sa va inregistrati cu optiunea \"Creaza aria cursului\" si apoi urmati calea."
 }

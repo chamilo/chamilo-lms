@@ -626,5 +626,6 @@
     "Error during test email: ": "Error durante el env\u00edo del correo de prueba: ",
     "Destination of test e-mail": "Destino del correo electr\u00f3nico de prueba",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Algunos directorios y los ficheros que contienen deben tener habilitados los permisos de escritura en el servidor web para que Chamilo pueda funcionar (env\u00edo de ficheros por parte de los estudiantes, ficheros html de la p\u00e1gina principal,...). Esto puede suponer un cambio manual en su servidor (debe realizarse fuera de este interfaz).",
-    "A database with the same name already exists. It will be deleted.": "Una base de datos con el mismo nombre ya existe. Ser\u00e1 eliminada."
+    "A database with the same name already exists. It will be deleted.": "Una base de datos con el mismo nombre ya existe. Ser\u00e1 eliminada.",
+    "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "Cuando entra en su plataforma por primera vez, la mejor manera de entenderla es registrarse con la opci\u00f3n 'Profesor (crear un curso)' y seguir las instrucciones."
 }

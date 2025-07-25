@@ -626,5 +626,6 @@
     "Error during test email: ": "Erreur lors de l'envoi du courriel de test\u202f: ",
     "Destination of test e-mail": "Adresse de r\u00e9ception du courriel de test",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Certains r\u00e9pertoires et les fichiers qu'ils contiennent doivent permettre l'\u00e9criture par le serveur web pour que Chamilo puisse fonctionner (fichiers envoy\u00e9s par les \u00e9tudiants, pages d'accueil du campus en HTML, ...). Ceci n\u00e9cessite g\u00e9n\u00e9ralement une modification manuelle sur le serveur.",
-    "A database with the same name already exists. It will be deleted.": "Une base de donn\u00e9es portant le m\u00eame nom existe d\u00e9j\u00e0. Elle sera supprim\u00e9e."
+    "A database with the same name already exists. It will be deleted.": "Une base de donn\u00e9es portant le m\u00eame nom existe d\u00e9j\u00e0. Elle sera supprim\u00e9e.",
+    "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "Lorsque vous entrez pour la premi\u00e8re fois sur votre campus, la meilleure fa\u00e7on de vous y retrouver est de vous cr\u00e9er un compte avec l'option 'Cr\u00e9er des cours' et ensuite de suivre les indications."
 }

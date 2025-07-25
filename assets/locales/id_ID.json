@@ -434,5 +434,6 @@
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Beberapa direktori dan file yang disertakan harus dapat ditulis/writeable oleh server web agar Chamilo berjalan (misal saat siswa meng-upload file dll).  Ini dapat saja membutuhkan perubahan sevara manual di server anda (diluar interface ini).",
-    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted.",
+    "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "Ketika memasukkan kampus anda untuk pertama kali, cara terbaik untuk mengertinya adalah dengan mendaftar dengan opsi 'Buat area mata kuliah' dan ikuti langkah selanjutnya."
 }

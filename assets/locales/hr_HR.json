@@ -491,5 +491,6 @@
     "Error during test email: ": "Error during test email: ",
     "Destination of test e-mail": "Destination of test e-mail",
     "Some directories and the files they include must be writable by the web server in order for Chamilo to run (user uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface).": "Neke mape i datoteke koji oni uklju\u010duju moraju imati dozvolu za pisanje od strane web poslu\u017eitelja da bi Chamilo mogao ispravno raditi (po\u010detne stranice html datoteka, u\u010ditane datoteke od strane studenata....). Ovo mo\u017ee podrazumjevati dodatne promjene na va\u0161em poslu\u017eitelju (izvan ovog izbornika).",
-    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted."
+    "A database with the same name already exists. It will be deleted.": "A database with the same name already exists. It will be deleted.",
+    "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little.": "Kad pristupite va\u0161em portalu po prvi put, najbolji na\u010din da ga shvatite je da se registrirate sa postavkom 'Izradi okru\u017eenje kolegija' i zatim pratite upute."
 }

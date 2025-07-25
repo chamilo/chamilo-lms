@@ -26,6 +26,10 @@ class MailTransportDecorator
     {
         $dsn = $this->settingsManager->getSetting('mail.mailer_dsn');
 
+        if (empty($dsn)) {
+            $dsn = 'null://null';
+        }
+
         return new Transports([
             $this->inner->fromString($dsn),
         ]);

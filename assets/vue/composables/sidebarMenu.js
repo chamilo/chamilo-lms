@@ -35,29 +35,24 @@ export function useSidebarMenu() {
     }
 
     const roles = securityStore.user?.roles || []
-    console.debug("[Sidebar] User roles:", roles)
-    console.debug("[Sidebar] tabsPerRole:", tabsPerRole)
-
     for (const role of roles) {
       const mappedRole = roleMap[role] || role
       if (tabsPerRole[mappedRole]) {
-        console.debug("[Sidebar] Matched role:", mappedRole, "tabs:", tabsPerRole[mappedRole])
         return tabsPerRole[mappedRole]
       }
     }
 
-    console.debug("[Sidebar] No matched role, using defaultTabs:", defaultTabs)
     return defaultTabs
   })
 
-  const rawShowCatalogue = platformConfigStore.getSetting("platform.catalog_show_courses_sessions")
+  const rawShowCatalogue = platformConfigStore.getSetting("catalog.show_courses_sessions")
   const showCatalogue = Number(rawShowCatalogue)
   const isAnonymous = !securityStore.isAuthenticated
   const isPrivilegedUser =
     securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
   const allowStudentCatalogue = computed(() => {
     if (isAnonymous) {
-      return platformConfigStore.getSetting("course.course_catalog_published") !== "false"
+      return platformConfigStore.getSetting("catalog.course_catalog_published") !== "false"
     }
 
     if (isPrivilegedUser) {
@@ -65,7 +60,7 @@ export function useSidebarMenu() {
     }
 
     if (securityStore.isStudent) {
-      return platformConfigStore.getSetting("display.allow_students_to_browse_courses") !== "false"
+      return platformConfigStore.getSetting("catalog.allow_students_to_browse_courses") !== "false"
     }
 
     return false

@@ -19,7 +19,7 @@ switch ($action) {
         $course_info = api_get_course_info($_GET['code']);
         $content = get_lang('No description');
         if (!empty($course_info)) {
-            if ('true' === api_get_setting('course_catalog_hide_private') &&
+            if ('true' === api_get_setting('catalog.course_catalog_hide_private') &&
                 COURSE_VISIBILITY_REGISTERED == $course_info['visibility']
             ) {
                 echo get_lang('Private access');

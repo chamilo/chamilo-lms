@@ -38,14 +38,14 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         $isAuthenticated = \is_object($user);
 
         if (!$isAuthenticated) {
-            $showCatalogue = 'false' !== $this->settingsManager->getSetting('course.course_catalog_published', true);
+            $showCatalogue = 'false' !== $this->settingsManager->getSetting('catalog.course_catalog_published', true);
             if (!$showCatalogue) {
                 return [];
             }
         }
 
-        $onlyShowMatching = 'true' === $this->settingsManager->getSetting('course.show_courses_in_catalogue', true);
-        $onlyShowCoursesWithCategory = 'true' === $this->settingsManager->getSetting('course.courses_catalogue_show_only_category', true);
+        $onlyShowMatching = 'true' === $this->settingsManager->getSetting('catalog.only_show_selected_courses', true);
+        $onlyShowCoursesWithCategory = 'true' === $this->settingsManager->getSetting('catalog.only_show_course_from_selected_category', true);
 
         $request = $this->requestStack->getCurrentRequest();
         if (!$request) {
@@ -53,7 +53,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         }
 
         $host = $request->getSchemeAndHttpHost().'/';
-        $hidePrivateCourses = 'true' === $this->settingsManager->getSetting('platform.course_catalog_hide_private', true);
+        $hidePrivateCourses = 'true' === $this->settingsManager->getSetting('catalog.course_catalog_hide_private', true);
         $visibilities = $hidePrivateCourses
             ? [Course::OPEN_WORLD, Course::OPEN_PLATFORM]
             : [Course::OPEN_WORLD, Course::OPEN_PLATFORM, Course::REGISTERED];

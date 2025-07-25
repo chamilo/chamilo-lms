@@ -214,7 +214,7 @@ const securityStore = useSecurityStore()
 
 const platformConfigStore = usePlatformConfig()
 const courseCatalogueSettings = computed(() => {
-  let raw = platformConfigStore.getSetting("course.course_catalog_settings")
+  let raw = platformConfigStore.getSetting("catalog.course_catalog_settings")
   if (!raw || raw === false || raw === "false") return {}
   try {
     if (typeof raw === "string") {
@@ -301,7 +301,7 @@ const isPrivilegedUser =
 
 const allowCatalogueAccess = computed(() => {
   if (isAnonymous) {
-    return platformConfigStore.getSetting("course.course_catalog_published") !== "false"
+    return platformConfigStore.getSetting("catalog.course_catalog_published") !== "false"
   }
 
   if (isPrivilegedUser) {
@@ -309,7 +309,7 @@ const allowCatalogueAccess = computed(() => {
   }
 
   if (securityStore.isStudent) {
-    return platformConfigStore.getSetting("display.allow_students_to_browse_courses") !== "false"
+    return platformConfigStore.getSetting("catalog.allow_students_to_browse_courses") !== "false"
   }
 
   return false
@@ -391,7 +391,7 @@ const clearFilter = () => {
 
 const filteredCourses = ref([])
 const visibleCoursesBase = computed(() => {
-  const hidePrivate = platformConfigStore.getSetting("platform.course_catalog_hide_private") === "true"
+  const hidePrivate = platformConfigStore.getSetting("catalog.course_catalog_hide_private") === "true"
   const sortOpt = allSortOptions.value.find((opt) => opt.value === sortField.value)
 
   let list = filteredCourses.value.filter((course) => {

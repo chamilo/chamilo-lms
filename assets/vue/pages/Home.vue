@@ -57,7 +57,7 @@ if (typeof redirectValue === "string" && redirectValue.trim() !== "") {
   router.replace(`/${redirectValue}`)
 }
 
-const showCatalogue = computed(() => platformConfigStore.getSetting("course.course_catalog_display_in_home") === "true")
+const showCatalogue = computed(() => platformConfigStore.getSetting("catalog.course_catalog_display_in_home") === "true")
 const allCourses = ref([])
 const visibleCourses = ref([])
 const pageSize = 8

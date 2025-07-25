@@ -34,7 +34,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'limit_session_admin_role' => 'false',
                     'allow_tutors_to_assign_students_to_session' => 'false',
                     'drh_can_access_all_session_content' => 'true',
-                    'catalog_allow_session_auto_subscription' => 'false',
                     'allow_session_course_copy_for_teachers' => 'false',
                     'my_courses_view_by_session' => 'false',
                     'session_days_after_coach_access' => '',
@@ -57,14 +56,12 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'allow_session_admin_read_careers' => 'false',
                     'session_list_order' => 'false',
                     'allow_user_session_collapsable' => 'false',
-                    'catalog_course_subscription_in_user_s_session' => 'false',
                     'default_session_list_view' => 'all',
                     'session_automatic_creation_user_id' => '1',
                     'user_s_session_duration' => '1095',
                     'my_courses_session_order' => '',
                     'session_courses_read_only_mode' => 'false',
                     'session_import_settings' => '',
-                    'catalog_settings' => '',
                     'tracking_columns' => '',
                     'my_progress_session_show_all_courses' => 'false',
                     'assignment_base_course_teacher_access_to_all_session' => 'false',
@@ -111,7 +108,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('limit_session_admin_role', YesNoType::class)
             ->add('allow_tutors_to_assign_students_to_session', YesNoType::class)
             ->add('drh_can_access_all_session_content', YesNoType::class)
-            ->add('catalog_allow_session_auto_subscription', YesNoType::class)
             ->add('allow_session_course_copy_for_teachers', YesNoType::class)
             ->add('my_courses_view_by_session', YesNoType::class)
             ->add('session_days_after_coach_access')
@@ -134,7 +130,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('allow_session_admin_read_careers', YesNoType::class)
             ->add('session_list_order', YesNoType::class)
             ->add('allow_user_session_collapsable', YesNoType::class)
-            ->add('catalog_course_subscription_in_user_s_session', YesNoType::class)
             ->add('default_session_list_view', ChoiceType::class, [
                 'choices' => [
                     'All' => 'all',
@@ -148,7 +143,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('my_courses_session_order', TextareaType::class)
             ->add('session_courses_read_only_mode', YesNoType::class)
             ->add('session_import_settings', TextareaType::class)
-            ->add('catalog_settings', TextareaType::class)
             ->add('tracking_columns', TextareaType::class)
             ->add('my_progress_session_show_all_courses', YesNoType::class)
             ->add('assignment_base_course_teacher_access_to_all_session', YesNoType::class)
@@ -173,96 +167,5 @@ class SessionSettingsSchema extends AbstractSettingsSchema
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
-    }
-
-    private function settingArrayHelpValue(string $variable): string
-    {
-        $values = [
-            'my_courses_session_order' => '<pre>
-                ["field" => "end_date", "order" => "desc"]
-                </pre>',
-            'session_import_settings' => "<pre>
-                [
-                    'options' =>  [
-                        'session_exists_default_option' => '1',
-                        'send_mail_default_option' => '1',
-                    ]
-                ]
-                </pre>",
-            'catalog_settings' => "<pre>
-                [
-                    'sessions' => [
-                        'by_title' => true,
-                        'by_date' => true,
-                        'by_tag' => true,
-                        'show_session_info' => true,
-                        'show_session_date' => true,
-                    ],
-                    'courses' => [
-                        'by_title' => true,
-                    ],
-                ]
-                </pre>",
-            'tracking_columns' => "<pre>
-                [
-                    'course_session' => [
-                        'course_title' => true,
-                        'published_exercises' => true,
-                        'new_exercises' => true,
-                        'my_average' => true,
-                        'average_exercise_result' => true,
-                        'time_spent' => true,
-                        'lp_progress' => true,
-                        'score' => true,
-                        'best_score' => true,
-                        'last_connection' => true,
-                        'details' => true,
-                    ],
-                    'my_students_lp' => [
-                        'lp' => true,
-                        'time' => true,
-                        'best_score' => true,
-                        'latest_attempt_avg_score' => true,
-                        'progress' => true,
-                        'last_connection' => true,
-                    ],
-                    'my_progress_lp' => [
-                        'lp' => true,
-                        'time' => true,
-                        'progress' => true,
-                        'score' => true,
-                        'best_score' => true,
-                        'last_connection' => true,
-                    ],
-                    'my_progress_courses' => [
-                        'course_title' => true,
-                        'time_spent' => true,
-                        'progress' => true,
-                        'best_score_in_lp' => true,
-                        'best_score_not_in_lp' => true,
-                        'latest_login' => true,
-                        'details' => true
-                    ]
-                ]
-                </pre>",
-            'session_creation_user_course_extra_field_relation_to_prefill' => "<pre>
-                [
-                    'fields' => [
-                        'client' => 'client',
-                        'region' => 'region',
-                    ]
-                ]
-                </pre>",
-            'session_creation_form_set_extra_fields_mandatory' => "<pre>
-                ['fields' => ['client','region']]
-                </pre>",
-        ];
-
-        $returnValue = [];
-        if (isset($values[$variable])) {
-            $returnValue = $values[$variable];
-        }
-
-        return $returnValue;
     }
 }

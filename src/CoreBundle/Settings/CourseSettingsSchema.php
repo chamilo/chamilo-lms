@@ -65,7 +65,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'example_material_course_creation' => 'true',
                     'allow_course_theme' => 'true',
                     'allow_users_to_create_courses' => 'true',
-                    'show_courses_descriptions_in_catalog' => 'true',
                     'send_email_to_admin_when_create_course' => 'false',
                     'allow_user_course_subscription_by_course_admin' => 'true',
                     'course_validation' => 'false',
@@ -80,7 +79,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'hide_scorm_export_link' => 'false',
                     'hide_scorm_copy_link' => 'false',
                     'hide_scorm_pdf_link' => 'true',
-                    'course_catalog_published' => 'false',
                     'course_images_in_courses_list' => 'true',
                     'teacher_can_select_course_template' => 'true',
                     'show_toolshortcuts' => '',
@@ -96,7 +94,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'disabled_edit_session_coaches_course_editing_course' => 'false',
                     'allow_base_course_category' => 'false',
                     'hide_course_sidebar' => 'true',
-                    'allow_course_extra_field_in_catalog' => 'false',
                     'multiple_access_url_show_shared_course_marker' => 'false',
                     'course_category_code_to_use_as_model' => 'MY_CATEGORY',
                     'enable_unsubscribe_button_on_my_course_page' => 'false',
@@ -106,18 +103,13 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'hide_course_rating' => 'false',
                     'course_log_hide_columns' => '',
                     'course_student_info' => '',
-                    'course_catalog_settings' => '',
                     'resource_sequence_show_dependency_in_course_intro' => 'false',
                     'course_sequence_valid_only_in_same_session' => 'false',
-                    'course_catalog_display_in_home' => 'false',
                     'course_creation_form_set_course_category_mandatory' => 'false',
                     'course_creation_form_hide_course_code' => 'false',
                     'course_about_teacher_name_hide' => 'false',
                     'course_visibility_change_only_admin' => 'false',
-                    'catalog_hide_public_link' => 'false',
                     'course_log_default_extra_fields' => '',
-                    'show_courses_in_catalogue' => 'false',
-                    'courses_catalogue_show_only_category' => '',
                     'course_creation_by_teacher_extra_fields_to_show' => '',
                     'course_creation_form_set_extra_fields_mandatory' => '',
                     'course_configuration_tool_extra_fields_to_show_and_edit' => '',
@@ -186,7 +178,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('example_material_course_creation', YesNoType::class)
             ->add('allow_course_theme', YesNoType::class)
             ->add('allow_users_to_create_courses', YesNoType::class)
-            ->add('show_courses_descriptions_in_catalog', YesNoType::class)
             ->add('send_email_to_admin_when_create_course', YesNoType::class)
             ->add('allow_user_course_subscription_by_course_admin', YesNoType::class)
             ->add('course_validation', YesNoType::class)
@@ -218,7 +209,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('hide_scorm_export_link', YesNoType::class)
             ->add('hide_scorm_copy_link', YesNoType::class)
             ->add('hide_scorm_pdf_link', YesNoType::class)
-            ->add('course_catalog_published', YesNoType::class)
             ->add('course_images_in_courses_list', YesNoType::class)
             ->add('teacher_can_select_course_template', YesNoType::class)
             ->add('show_toolshortcuts', YesNoType::class)
@@ -234,7 +224,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('disabled_edit_session_coaches_course_editing_course', YesNoType::class)
             ->add('allow_base_course_category', YesNoType::class)
             ->add('hide_course_sidebar', YesNoType::class)
-            ->add('allow_course_extra_field_in_catalog', YesNoType::class)
             ->add('multiple_access_url_show_shared_course_marker', YesNoType::class)
             ->add('course_category_code_to_use_as_model', TextType::class)
             ->add('enable_unsubscribe_button_on_my_course_page', YesNoType::class)
@@ -255,23 +244,14 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('course_student_info', TextareaType::class, [
                 'attr' => ['rows' => 5, 'style' => 'font-family: monospace;'],
             ])
-            ->add('course_catalog_settings', TextareaType::class, [
-                'attr' => ['rows' => 10, 'style' => 'font-family: monospace;'],
-            ])
             ->add('resource_sequence_show_dependency_in_course_intro', YesNoType::class)
             ->add('course_sequence_valid_only_in_same_session', YesNoType::class)
-            ->add('course_catalog_display_in_home', YesNoType::class)
             ->add('course_creation_form_set_course_category_mandatory', YesNoType::class)
             ->add('course_creation_form_hide_course_code', YesNoType::class)
             ->add('course_about_teacher_name_hide', YesNoType::class)
             ->add('course_visibility_change_only_admin', YesNoType::class)
-            ->add('catalog_hide_public_link', YesNoType::class)
             ->add('course_log_default_extra_fields', TextareaType::class, [
                 'attr' => ['rows' => 5, 'style' => 'font-family: monospace;'],
-            ])
-            ->add('show_courses_in_catalogue', YesNoType::class)
-            ->add('courses_catalogue_show_only_category', TextareaType::class, [
-                'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
             ])
             ->add('course_creation_by_teacher_extra_fields_to_show', TextareaType::class, [
                 'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],

@@ -130,12 +130,25 @@ Display::display_header($tool_name);
 
 $form->display();
 ?>
-<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
+<div class="max-w-full mb-8">
+  <div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
+    <h2 class="text-lg font-semibold mb-4">
+      <?php
+        echo get_lang('The CSV file must look like this')
+          . ' (<span class="font-medium">'
+          . get_lang('Fields in <strong>bold</strong> are mandatory.')
+          . '</span>)';
+      ?>
+    </h2>
+    <div class="overflow-x-auto bg-gray-20 p-4 rounded-md">
+      <pre class="bg-gray-100 p-4 font-mono text-sm text-gray-800 whitespace-pre-wrap mb-0">
+<b>title,description,</b>users
+"User group 1","Description",admin,username1,username2
+      </pre>
+    </div>
+  </div>
+</div>
 
-<pre>
-<b>title;description;</b>users
-"User group 1";"Description";admin,username1,username2
-</pre>
 <?php
 // Displaying the footer.
 Display::display_footer();

@@ -185,11 +185,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'When enabled, course coaches/tutors in sessions can subscribe new users to their session. This option is otherwise only available to administrators and session administrators.',
                 ],
                 [
-                    'name' => 'catalog_allow_session_auto_subscription',
-                    'title' => 'Auto-subscription in sessions catalogue',
-                    'comment' => 'Auto-subscription in sessions catalogue',
-                ],
-                [
                     'name' => 'drh_can_access_all_session_content',
                     'title' => 'HR directors access all session content',
                     'comment' => 'If enabled, human resources directors will get access to all content and users from the sessions (s)he follows.',
@@ -309,11 +304,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Send an email to the platform administrator each time a teacher creates a new course',
                 ],
                 [
-                    'name' => 'show_courses_descriptions_in_catalog',
-                    'title' => 'Show the courses descriptions in the catalog',
-                    'comment' => 'Show the courses descriptions as an integrated popup when clicking on a course info icon in the courses catalog',
-                ],
-                [
                     'name' => 'show_navigation_menu',
                     'title' => 'Display course navigation menu',
                     'comment' => 'Display a navigation menu that quickens access to the tools',
@@ -367,11 +357,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'allow_lp_return_link',
                     'title' => 'Show learning paths return link',
                     'comment' => "Disable this option to hide the 'Return to homepage' button in the learning paths",
-                ],
-                [
-                    'name' => 'course_catalog_published',
-                    'title' => 'Publish course catalogue',
-                    'comment' => 'Make the courses catalogue available to anonymous users (the general public) without the need to login.',
                 ],
                 [
                     'name' => 'course_creation_use_template',
@@ -612,11 +597,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'display' => [
-                [
-                    'name' => 'allow_students_to_browse_courses',
-                    'title' => 'Learners access to courses catalogue',
-                    'comment' => 'Allow learners to browse the courses catalogue and subscribe to available courses',
-                ],
                 [
                     'name' => 'allow_user_headings',
                     'title' => 'Allow users profiling inside courses',
@@ -1059,7 +1039,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'push_notification_settings',
                     'title' => 'Push notification settings (JSON)',
-                    'comment' => "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications.",
+                    'comment' => "JSON configuration for Push notifications integration.",
                 ],
                 [
                     'name' => 'donotlistcampus',
@@ -1122,19 +1102,9 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Allow users to upload files to a personal space on the platform.',
                 ],
                 [
-                    'name' => 'catalog_show_courses_sessions',
-                    'title' => 'Sessions and courses catalogue',
-                    'comment' => 'Whether you want to show only courses, only sessions or both courses *and* sessions in the courses catalogue.',
-                ],
-                [
                     'name' => 'cookie_warning',
                     'title' => 'Cookie privacy notification',
                     'comment' => 'If enabled, this option shows a banner on top of your platform that asks users to acknowledge that the platform is using cookies necessary to provide the user experience. The banner can easily be acknowledged and hidden by the user. This allows Chamilo to comply with EU web cookies regulations.',
-                ],
-                [
-                    'name' => 'course_catalog_hide_private',
-                    'title' => 'Hide private courses from catalogue',
-                    'comment' => 'Whether to hide the private courses from the courses catalogue. This makes sense when you use the course catalogue mainly to allow students to auto-subscribe to the courses.',
                 ],
                 [
                     'name' => 'gamification_mode',
@@ -1535,6 +1505,73 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
     public static function getNewConfigurationSettings(): array
     {
         return [
+            'catalog' => [
+                [
+                    'name'    => 'course_catalog_settings',
+                    'title'   => 'Course Catalog Settings',
+                    'comment' => 'JSON configuration for course catalog: link settings, filters, sort options, and more.',
+                ],
+                [
+                    'name'    => 'session_catalog_settings',
+                    'title'   => 'Session Catalog Settings',
+                    'comment' => 'JSON configuration for session catalog: filters and display options.',
+                ],
+                [
+                    'name'    => 'show_courses_descriptions_in_catalog',
+                    'title'   => 'Show Course Descriptions',
+                    'comment' => 'Display course descriptions within the catalog listing.',
+                ],
+                [
+                    'name'    => 'course_catalog_published',
+                    'title'   => 'Published Courses Only',
+                    'comment' => 'Limit the catalog to only courses marked as published.',
+                ],
+                [
+                    'name'    => 'course_catalog_display_in_home',
+                    'title'   => 'Display Catalog on Homepage',
+                    'comment' => 'Show the course catalog block on the platform homepage.',
+                ],
+                [
+                    'name'    => 'hide_public_link',
+                    'title'   => 'Hide Public Link',
+                    'comment' => 'Remove the public URL link from course cards.',
+                ],
+                [
+                    'name'    => 'only_show_selected_courses',
+                    'title'   => 'Only Selected Courses',
+                    'comment' => 'Show only manually selected courses in the catalog.',
+                ],
+                [
+                    'name'    => 'only_show_course_from_selected_category',
+                    'title'   => 'Only show matching categories in courses catalogue',
+                    'comment' => 'When not empty, only the courses from the given categories will appear in the courses catalogue.',
+                ],
+                [
+                    'name'    => 'allow_students_to_browse_courses',
+                    'title'   => 'Allow Student Browsing',
+                    'comment' => 'Permit students to browse and filter the course catalog.',
+                ],
+                [
+                    'name'    => 'course_catalog_hide_private',
+                    'title'   => 'Hide Private Courses',
+                    'comment' => 'Exclude private courses from the catalog display.',
+                ],
+                [
+                    'name'    => 'show_courses_sessions',
+                    'title'   => 'Show Courses & Sessions',
+                    'comment' => 'Include both courses and sessions in catalog results.',
+                ],
+                [
+                    'name'    => 'allow_session_auto_subscription',
+                    'title'   => 'Auto Session Subscription',
+                    'comment' => 'Enable automatic subscription to sessions for users.',
+                ],
+                [
+                    'name'    => 'course_subscription_in_user_s_session',
+                    'title'   => 'Subscription in Session View',
+                    'comment' => 'Allow users to subscribe to courses directly from their session page.',
+                ],
+            ],
             'course' => [
                 [
                     'name' => 'active_tools_on_create',
@@ -1545,11 +1582,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'allow_base_course_category',
                     'title' => 'Use course categories from top URL',
                     'comment' => 'In multi-URL settings, allow admins and teachers to assign categories from the top URL to courses in the children URLs.',
-                ],
-                [
-                    'name' => 'allow_course_extra_field_in_catalog',
-                    'title' => 'Allow using extra fields in course catalogue',
-                    'comment' => 'Add new search fields dynamically to the course catalogue based on searchable course extra fields.',
                 ],
                 [
                     'name' => 'allow_edit_tool_visibility_in_session',
@@ -1567,24 +1599,9 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => "Only show public courses. Do not allow registered users to access courses with 'open' visibility unless they are subscribed to each of these courses.",
                 ],
                 [
-                    'name' => 'catalog_hide_public_link',
-                    'title' => 'Hide course catalogue’s public link',
-                    'comment' => 'Hides the link to the course catalogue in the menu when the catalogue is public.',
-                ],
-                [
                     'name' => 'course_about_teacher_name_hide',
                     'title' => 'Hide course teacher info on course details page',
                     'comment' => 'On the course details page, hide the teacher information.',
-                ],
-                [
-                    'name' => 'course_catalog_display_in_home',
-                    'title' => 'Display course catalogue on homepage',
-                    'comment' => '',
-                ],
-                [
-                    'name' => 'course_catalog_settings',
-                    'title' => 'Course catalogue settings',
-                    'comment' => 'This array gives you the possibility to configure many aspects of the course catalogue.',
                 ],
                 [
                     'name' => 'course_category_code_to_use_as_model',
@@ -1657,11 +1674,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Remove the possibility for non-admins to change the course visibility. Visibility can be an issue when there are too many teachers to control directly. Forcing visibilities allows the organization to better manage courses catalogues.',
                 ],
                 [
-                    'name' => 'courses_catalogue_show_only_category',
-                    'title' => 'Only show matching categories in courses catalogue',
-                    'comment' => 'When not empty, only the courses from the given categories will appear in the courses catalogue.',
-                ],
-                [
                     'name' => 'courses_list_session_title_link',
                     'title' => 'Type of link for the session title',
                     'comment' => 'On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title).',
@@ -1710,11 +1722,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'show_all_sessions_on_my_course_page',
                     'title' => "Show all sessions on 'My courses' page",
                     'comment' => 'If enabled, this option show all sessions of the user in calendar-based view.',
-                ],
-                [
-                    'name' => 'show_courses_in_catalogue',
-                    'title' => 'Only show matching courses in catalogue',
-                    'comment' => 'When enabled, only the courses with the extra field ‘show_in_catalogue’ set to 1 will appear in the catalogue.',
                 ],
                 [
                     'name' => 'show_simple_session_info',
@@ -3319,16 +3326,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'assignment_base_course_teacher_access_to_all_session',
                     'title' => 'Base course teacher can see assignments from all sessions',
                     'comment' => 'Show all learner publications (from base course and from all sessions) in the work/pending.php page of the base course.',
-                ],
-                [
-                    'name' => 'catalog_course_subscription_in_user_s_session',
-                    'title' => 'Auto-create single-user session on course auto-subscription',
-                    'comment' => 'When a user subscribes to an open course through the courses catalogue, create a single-user session instead of subscribing him/her to the base course.',
-                ],
-                [
-                    'name' => 'catalog_settings',
-                    'title' => 'Fields to search by in catalogue',
-                    'comment' => 'Set preferences for the courses and sessions catalogues search options. If defined, this array will be used as a strict list of fields to let users search by.',
                 ],
                 [
                     'name' => 'default_session_list_view',

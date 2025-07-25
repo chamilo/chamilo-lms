@@ -19174,9 +19174,6 @@ msgstr "כניסה: %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "מסד נתונים <b>%s</b> ייווצר"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "מסד נתונים עם אותו שם <b>כבר קיים</b>."
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "למשתמש <b>%s</b> אין גישה במסד הנתונים <b>%s</b>"
 

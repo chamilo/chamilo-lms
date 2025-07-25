@@ -98,7 +98,7 @@ const loadingMore = ref(false)
 const platformConfigStore = usePlatformConfig()
 
 const sessionCatalogSettings = computed(() => {
-  const settings = platformConfigStore.getSetting("session.catalog_settings") || {}
+  const settings = platformConfigStore.getSetting("catalog.session_catalog_settings") || {}
   return settings.sessions || {}
 })
 

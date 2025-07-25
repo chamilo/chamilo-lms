@@ -28,6 +28,50 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
     public static function getTemplatesGrouped(): array
     {
         return [
+            'catalog' => [
+                [
+                    'variable' => 'only_show_course_from_selected_category',
+                    'json_example' => ['Cat1', 'Cat2'],
+                ],
+                [
+                    'variable'     => 'course_catalog_settings',
+                    'json_example' => [
+                        'link_settings' => [
+                            'info_url'  => 'course_description_popup',
+                            'title_url' => 'course_home',
+                            'image_url' => 'course_about',
+                        ],
+                        'hide_course_title'            => false,
+                        'search_by_title'              => true,
+                        'redirect_after_subscription'  => 'course_home',
+                        'extra_fields_in_search_form'  => ['variable1', 'variable2'],
+                        'extra_fields_in_course_block' => ['variable3', 'variable4'],
+                        'standard_sort_options'        => [
+                            'title'                    => 1,
+                            'creation_date'            => -1,
+                            'count_users'              => -1,
+                            'point_info/point_average' => -1,
+                            'point_info/total_score'   => -1,
+                            'point_info/users'         => -1,
+                        ],
+                        'extra_field_sort_options'     => [
+                            'variable5' => -1,
+                            'variable6' => 1,
+                        ],
+                        'pre_filter_on_language'       => 1,
+                    ],
+                ],
+                [
+                    'variable'     => 'session_catalog_settings',
+                    'json_example' => [
+                        'by_title'          => true,
+                        'by_date'           => true,
+                        'by_tag'            => true,
+                        'show_session_info' => true,
+                        'show_session_date' => true,
+                    ],
+                ],
+            ],
             'platform' => [
                 [
                     'variable' => 'push_notification_settings',
@@ -214,38 +258,8 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'variable' => 'course_catalog_settings',
-                    'json_example' => [
-                        'link_settings' => [
-                            'info_url' => 'course_description_popup',
-                            'title_url' => 'course_home',
-                            'image_url' => 'course_about',
-                        ],
-                        'hide_course_title' => false,
-                        'redirect_after_subscription' => 'course_home',
-                        'extra_fields_in_search_form' => ['variable1', 'variable2'],
-                        'extra_fields_in_course_block' => ['variable3', 'variable4'],
-                        'standard_sort_options' => [
-                            'title' => 1,
-                            'creation_date' => -1,
-                            'count_users' => -1,
-                            'point_info/point_average' => -1,
-                            'point_info/total_score' => -1,
-                            'point_info/users' => -1,
-                        ],
-                        'extra_field_sort_options' => [
-                            'variable5' => -1,
-                            'variable6' => 1,
-                        ],
-                    ],
-                ],
-                [
                     'variable' => 'course_log_default_extra_fields',
                     'json_example' => ['extra_fields' => ['office_address', 'office_phone_extension']],
-                ],
-                [
-                    'variable' => 'courses_catalogue_show_only_category',
-                    'json_example' => ['Cat1', 'Cat2'],
                 ],
                 [
                     'variable' => 'course_creation_by_teacher_extra_fields_to_show',
@@ -659,21 +673,6 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'options' => [
                             'session_exists_default_option' => '1',
                             'send_mail_default_option' => '1',
-                        ],
-                    ],
-                ],
-                [
-                    'variable' => 'catalog_settings',
-                    'json_example' => [
-                        'sessions' => [
-                            'by_title' => true,
-                            'by_date' => true,
-                            'by_tag' => true,
-                            'show_session_info' => true,
-                            'show_session_date' => true,
-                        ],
-                        'courses' => [
-                            'by_title' => true,
                         ],
                     ],
                 ],

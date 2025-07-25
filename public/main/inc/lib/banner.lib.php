@@ -180,7 +180,7 @@ function return_navigation_array()
         $menu_navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
     }
 
-    if ('true' == api_get_setting('course_catalog_published') && api_is_anonymous()) {
+    if ('true' == api_get_setting('catalog.course_catalog_published') && api_is_anonymous()) {
         $navigation[SECTION_CATALOG] = $possible_tabs[SECTION_CATALOG];
     }
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-18 10:22+0000\n"
+"PO-Revision-Date: 2025-07-25 15:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: English <https://translation.chamilo.org/projects/chamilo/"
 "messages/en/>\n"
@@ -19169,9 +19169,6 @@ msgstr "Login: %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "Database <b>%s</b> will be created"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "A database with the same name <b>already exists</b>."
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 
@@ -28344,7 +28341,7 @@ msgid "Enter your 2FA code"
 msgstr "Enter your 2FA code"
 
 msgid "Enable two-factor authentication (2FA)"
-msgstr "Enable fwo-factor authentication (2FA)"
+msgstr "Enable two-factor authentication (2FA)"
 
 msgid "Confirm new password"
 msgstr "Confirm new password"
@@ -28391,8 +28388,8 @@ msgstr "Endpoint"
 msgid "Push notifications are not enabled in this browser."
 msgstr "Push notifications are not enabled in this browser."
 
-msgid "Enable Notifications"
-msgstr "Enable Notifications"
+msgid "Enable notifications"
+msgstr "Enable notifications"
 
 msgid "You do not have permission to send notifications to other users."
 msgstr "You do not have permission to send notifications to other users."
@@ -28430,8 +28427,8 @@ msgstr "Error sending notification to Gotify: "
 msgid "Push notification settings (JSON)"
 msgstr "Push notification settings (JSON)"
 
-msgid "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications."
-msgstr "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications."
+msgid "JSON configuration for Push notifications integration."
+msgstr "JSON configuration for Push notifications integration."
 
 msgid "Access denied"
 msgstr "Access denied"
@@ -28555,3 +28552,6 @@ msgstr "Error during test email: "
 
 msgid "Destination of test e-mail"
 msgstr "Destination of test e-mail"
+
+msgid "A database with the same name already exists. It will be deleted."
+msgstr "A database with the same name already exists. It will be deleted."

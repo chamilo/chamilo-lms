@@ -19166,9 +19166,6 @@ msgstr "Identifikatzailea: %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "%s datu basea sortuko da"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "Bada lehendik izen bereko datu base bat."
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "%s erabiltzaileak ez du %s datu basean sartzeko baimenik"
 

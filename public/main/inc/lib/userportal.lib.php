@@ -780,7 +780,7 @@ class IndexManager
             $show_create_link = true;
         }
 
-        if ('true' === api_get_setting('allow_students_to_browse_courses')) {
+        if ('true' === api_get_setting('catalog.allow_students_to_browse_courses')) {
             $show_course_link = true;
         }
 

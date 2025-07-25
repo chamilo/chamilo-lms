@@ -19150,9 +19150,6 @@ msgstr ""
 msgid "Database <b>%s</b> will be created"
 msgstr ""
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr ""
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr ""
 
@@ -28311,7 +28308,7 @@ msgstr ""
 msgid "Enter your 2FA code"
 msgstr ""
 
-msgid "Enable Two-Factor Authentication (2FA)"
+msgid "Enable two-factor authentication (2FA)"
 msgstr ""
 
 msgid "Confirm new password"
@@ -28398,7 +28395,7 @@ msgstr ""
 msgid "Push notification settings (JSON)"
 msgstr ""
 
-msgid "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications."
+msgid "JSON configuration for Push notifications integration."
 msgstr ""
 
 msgid "Access denied"
@@ -28522,4 +28519,7 @@ msgid "Error during test email: "
 msgstr ""
 
 msgid "Destination of test e-mail"
+msgstr ""
+
+msgid "A database with the same name already exists. It will be deleted."
 msgstr ""

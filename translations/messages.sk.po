@@ -19174,9 +19174,6 @@ msgstr "Prihlásenie: %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "Databáza %s bude vytvorená"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "Databáza s rovnakým názvom <strong>už existuje.</strong>"
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "Používateľ %s nemá prístup do databázy %s"
 

@@ -19174,9 +19174,6 @@ msgstr "Nom d'usuari: %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "La base de dades %s es crearà"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "Una base de dades amb el mateix nom <b>ja existeix</b>. El contingut de la base de dades es perdrà."
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "L'usuari <b>%s</b> no té accés a la base de dades <b>%s</b>"
 

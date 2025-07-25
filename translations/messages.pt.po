@@ -19169,9 +19169,6 @@ msgstr ""
 msgid "Database <b>%s</b> will be created"
 msgstr ""
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr ""
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr ""
 

@@ -35,7 +35,7 @@ class CoursesAndSessionsCatalog
      */
     public static function is($value = CATALOG_COURSES)
     {
-        $showCoursesSessions = (int) api_get_setting('catalog_show_courses_sessions');
+        $showCoursesSessions = (int) api_get_setting('catalog.show_courses_sessions');
         if ($showCoursesSessions == $value) {
             return true;
         }
@@ -52,7 +52,7 @@ class CoursesAndSessionsCatalog
      */
     public static function showSessions()
     {
-        $catalogShow = (int) api_get_setting('catalog_show_courses_sessions');
+        $catalogShow = (int) api_get_setting('catalog.show_courses_sessions');
 
         if (CATALOG_SESSIONS == $catalogShow || CATALOG_COURSES_SESSIONS == $catalogShow) {
             return true;
@@ -70,7 +70,7 @@ class CoursesAndSessionsCatalog
      */
     public static function showCourses()
     {
-        $catalogShow = (int) api_get_setting('catalog_show_courses_sessions');
+        $catalogShow = (int) api_get_setting('catalog.show_courses_sessions');
 
         if (CATALOG_COURSES == $catalogShow || CATALOG_COURSES_SESSIONS == $catalogShow) {
             return true;
@@ -1232,7 +1232,7 @@ class CoursesAndSessionsCatalog
         }
 
         $catalogSessionAutoSubscriptionAllowed = false;
-        if ('true' === api_get_setting('catalog_allow_session_auto_subscription')) {
+        if ('true' === api_get_setting('catalog.allow_session_auto_subscription')) {
             $catalogSessionAutoSubscriptionAllowed = true;
         }
 
@@ -1450,7 +1450,7 @@ class CoursesAndSessionsCatalog
 
     public static function getCatalogSearchSettings()
     {
-        $settings = api_get_setting('session.catalog_settings', true);
+        $settings = api_get_setting('catalog.session_catalog_settings', true);
         if (empty($settings)) {
             // Default everything is visible
             $settings = [

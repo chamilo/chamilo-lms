@@ -17,16 +17,17 @@ $limit = CoursesAndSessionsCatalog::getLimitArray();
 // Section for the tabs.
 $this_section = SECTION_CATALOG;
 
-if ('true' !== api_get_setting('course_catalog_published')) {
+if ('true' !== api_get_setting('catalog.course_catalog_published')) {
     // Access rights: anonymous users can't do anything useful here.
     api_block_anonymous_users();
 }
 
-$allowExtraFields = ('true' === api_get_setting('course.allow_course_extra_field_in_catalog'));
+$catalogSettings = api_get_setting('catalog.course_catalog_settings');
+$allowExtraFields = !empty($catalogSettings['extra_fields_in_search_form']);
 
 // For students
 $userCanViewPage = true;
-if ('false' === api_get_setting('allow_students_to_browse_courses')) {
+if ('false' === api_get_setting('catalog.allow_students_to_browse_courses')) {
     $userCanViewPage = false;
 }
 
@@ -69,7 +70,7 @@ $courseCatalogSettings = [
 ];
 
 $redirectAfterSubscription = 'course_home';
-$settings = api_get_setting('course.course_catalog_settings', true);
+$settings = api_get_setting('catalog.course_catalog_settings', true);
 // By default all extra fields are shown (visible and filterable)
 $extraFieldsInSearchForm = [];
 $extraFieldsInCourseBlock = [];
@@ -116,7 +117,7 @@ switch ($action) {
             CourseManager::autoSubscribeToCourse($courseCodeToSubscribe);
             if ('course_home' === $redirectAfterSubscription) {
                 $redirectionTarget = $courseInfo['course_public_url'];
-                if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
+                if ('true' === api_get_setting('catalog.course_subscription_in_user_s_session')) {
                     $user = api_get_user_entity(api_get_user_id());
                     if ($user) {
                         foreach ($user->getCurrentlyAccessibleSessions() as $session) {
@@ -164,7 +165,7 @@ switch ($action) {
 
                 if ('course_home' === $redirectAfterSubscription) {
                     $redirectionTarget = $courseInfo['course_public_url'];
-                    if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
+                    if ('true' === api_get_setting('catalog.course_subscription_in_user_s_session')) {
                         $user = api_get_user_entity(api_get_user_id());
                         if ($user) {
                             foreach ($user->getCurrentlyAccessibleSessions() as $session) {
@@ -318,7 +319,7 @@ switch ($action) {
         }
 
         $catalogShowCoursesSessions = 0;
-        $showCoursesSessions = (int) api_get_setting('catalog_show_courses_sessions');
+        $showCoursesSessions = (int) api_get_setting('catalog.show_courses_sessions');
         if ($showCoursesSessions > 0) {
             $catalogShowCoursesSessions = $showCoursesSessions;
         }
@@ -610,7 +611,7 @@ switch ($action) {
             exit;
         }
 
-        $registrationAllowed = api_get_setting('catalog_allow_session_auto_subscription');
+        $registrationAllowed = api_get_setting('catalog.allow_session_auto_subscription');
         if ('true' === $registrationAllowed) {
             $entityManager = Database::getManager();
             $repository = $entityManager->getRepository(SequenceResource::class);

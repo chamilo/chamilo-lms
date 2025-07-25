@@ -19174,9 +19174,6 @@ msgstr "Login: %s"
 msgid "Database <b>%s</b> will be created"
 msgstr "O banco de dados %s será criado"
 
-msgid "A database with the same name <b>already exists</b>."
-msgstr "Um banco de dados com o mesmo nome já existe."
-
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
 msgstr "O usuário %s não tem acesso ao banco de dados %s"
 

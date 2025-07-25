@@ -84,7 +84,7 @@ import SectionHeader from "../layout/SectionHeader.vue"
 
 import languages from "../../utils/languages"
 
-const availableLanguages = languages.filter((language) => ["en_US", "fr_FR", "es", "de"].includes(language.isocode))
+const availableLanguages = languages.filter((language) => ["en_US", "fr_FR", "es", "de", "nl", "ar"].includes(language.isocode))
 
 const { t } = useI18n()
 

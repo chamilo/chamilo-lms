@@ -22,7 +22,8 @@ if ('true' !== api_get_setting('catalog.course_catalog_published')) {
     api_block_anonymous_users();
 }
 
-$allowExtraFields = !empty(api_get_setting('catalog.course_catalog_settings'));
+$catalogSettings = api_get_setting('catalog.course_catalog_settings');
+$allowExtraFields = !empty($catalogSettings['extra_fields_in_search_form']);
 
 // For students
 $userCanViewPage = true;

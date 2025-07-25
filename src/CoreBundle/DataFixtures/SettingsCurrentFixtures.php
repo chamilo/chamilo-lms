@@ -1543,8 +1543,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name'    => 'only_show_course_from_selected_category',
-                    'title'   => 'Only Selected Category',
-                    'comment' => 'Show only courses from a specific selected category.',
+                    'title'   => 'Only show matching categories in courses catalogue',
+                    'comment' => 'When not empty, only the courses from the given categories will appear in the courses catalogue.',
                 ],
                 [
                     'name'    => 'allow_students_to_browse_courses',

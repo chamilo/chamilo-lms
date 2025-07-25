@@ -28308,7 +28308,7 @@ msgstr ""
 msgid "Enter your 2FA code"
 msgstr ""
 
-msgid "Enable Two-Factor Authentication (2FA)"
+msgid "Enable two-factor authentication (2FA)"
 msgstr ""
 
 msgid "Confirm new password"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-18 10:38+0000\n"
+"PO-Revision-Date: 2025-07-25 15:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -29393,3 +29393,248 @@ msgstr "Verificación de suscripción push..."
 
 msgid "You're subscribed to push notifications in this browser."
 msgstr "You're subscribed to push notifications in this browser."
+
+msgid "User is session admin in some sessions"
+msgstr "El usuario es administrador de sesión en algunas sesiones"
+
+msgid "Destination of test e-mail"
+msgstr "Destino del correo electrónico de prueba"
+
+msgid "Error during test email: "
+msgstr "Error durante el envío del correo de prueba: "
+
+msgid "Push notification test"
+msgstr "Prueba de notificación push"
+
+msgid "This is a test push notification from this platform to the user's browser or app."
+msgstr ""
+"Esta es una notificación push de prueba de esta plataforma al navegador o "
+"aplicación del usuario."
+
+msgid "Role change denied due to incompatible current assignments:"
+msgstr "Cambio de rol denegado debido a asignaciones actuales incompatibles:"
+
+msgid "You do not have permission to send notifications to other users."
+msgstr "No tiene permiso para enviar notificaciones a otros usuarios."
+
+msgid "User not found or invalid."
+msgstr "Usuario no encontrado o inválido."
+
+msgid "Access denied"
+msgstr "Acceso denegado"
+
+msgid "Push notifications have been processed."
+msgstr "Las notificaciones push han sido procesadas."
+
+msgid "Validate prerequisites only within the same session"
+msgstr "Validar los prerrequisitos solo dentro de la misma sesión"
+
+msgid "Classes of course"
+msgstr "Clases del curso"
+
+msgid "Test email sent successfully"
+msgstr "Correo de prueba enviado con éxito"
+
+msgid "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. The default value is null://null and will disable e-mail sending. Use native://default to use the default PHP configuration on your server. Here are a few examples of supported DSN syntaxes: %s."
+msgstr ""
+"El DSN incluye completamente todos los parámetros necesarios para conectarse "
+"al servicio de correo. Puede obtener más información en %s. El valor "
+"predeterminado es null://null y desactivará el envío de correos "
+"electrónicos. Utilice native://default para usar la configuración PHP "
+"predeterminada en su servidor. Aquí hay algunos ejemplos de sintaxis DSN "
+"compatibles: %s."
+
+msgid "CSRF token is invalid. Please try again."
+msgstr "El token CSRF no es válido. Por favor, intente de nuevo."
+
+msgid "Enter your 2FA code"
+msgstr "Introduzca su código de 2FA"
+
+msgid "A database with the same name already exists. It will be deleted."
+msgstr "Una base de datos con el mismo nombre ya existe. Será eliminada."
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header. We recommend using a 'no-reply' e-mail address here, to avoid excessive filling of an e-mail box. The support e-mail address defined in the Platform section should be used to contact you, but replying to automatic notifications should not be encouraged."
+msgstr ""
+"La dirección de correo electrónico desde la cual se enviarán los correos "
+"cuando la plataforma envíe un e-mail, también utilizada como cabecera 'reply-"
+"to'. Recomendamos utilizar una dirección de correo 'no-reply' aquí, para "
+"evitar el llenado excesivo de una bandeja de entrada. La dirección de correo "
+"de soporte definida en la sección de la Plataforma debe ser utilizada para "
+"contactarle, pero no se debe fomentar la respuesta a notificaciones "
+"automáticas."
+
+msgid "VAPID keys are missing in the configuration."
+msgstr "Las claves VAPID no están presentes en la configuración."
+
+msgid "Error sending notification to Gotify: "
+msgstr "Error al enviar la notificación a Gotify: "
+
+msgid "Select items to export:"
+msgstr "Seleccione los elementos a exportar:"
+
+msgid "This is a test notification sent to Gotify from this platform."
+msgstr ""
+"Esta es una notificación de prueba enviada a Gotify desde esta plataforma."
+
+msgid "Push notification settings (JSON)"
+msgstr "Configuración de notificaciones push (JSON)"
+
+msgid "My Sessions display mode"
+msgstr "Mi modo de visualización de Session"
+
+msgid "Number of days before users must rotate their password (0 = disabled)."
+msgstr ""
+"Número de días antes de que los usuarios deban cambiar su contraseña (0 = "
+"desactivado)."
+
+msgid "Test email failed: "
+msgstr "El envío del correo de prueba ha fallado: "
+
+msgid "Dependencies"
+msgstr "Dependencias"
+
+msgid "Installer data is missing."
+msgstr "Los datos del instalador no están disponibles."
+
+msgid "Session expired. Redirecting to login…"
+msgstr "La sesión ha expirado. Redirigiendo al formulario de login…"
+
+msgid "Classes of session"
+msgstr "Clases de la sesión"
+
+msgid "User is general coach in some sessions"
+msgstr "El usuario es tutor general en algunas sesiones"
+
+msgid "Select a class"
+msgstr "Seleccione una clase"
+
+msgid "The address \"%host%\" is not configured in this portal instance."
+msgstr ""
+"La dirección \"%host%\" no está configurada en esta instancia del portal."
+
+msgid "Choose how the \"My Sessions\" page is displayed: as a modern visual block (card) view or the classic list style."
+msgstr ""
+"Elija cómo se muestra la página \"Mis sesiones\": como un bloque visual "
+"moderno (grilla) o el estilo clásico de lista."
+
+msgid "Sessions that depend on this session"
+msgstr "Sesiones que dependen de esta sesión"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR."
+msgstr ""
+"Recuerde que las modificaciones de los términos relacionados con el RGPD le "
+"obligan a informar de dichas modificaciones a terceros a quienes haya "
+"proporcionado información personal sobre sus usuarios, según lo establecido "
+"en el Artículo 19 del RGPD."
+
+msgid "Course %s added. You can access it directly %shere%s."
+msgstr "Curso %s añadido. Puede acceder directamente %saquí%s."
+
+msgid "Push notifications are not enabled in this browser."
+msgstr "Las notificaciones push no están habilitadas en este navegador."
+
+msgid "Enable two-factor authentication (2FA)"
+msgstr "Activar la autenticación de 2 factores (2FA)"
+
+msgid "Mail: 'From' address"
+msgstr "Correo: dirección 'De'"
+
+msgid "JSON configuration for Push notifications integration. Example: {'gotify_url':'http://localhost:8080','gotify_token':'yourtoken','enabled':true}. Leave empty if you do not want to use push notifications."
+msgstr ""
+"Configuración JSON para la integración de notificaciones push. Ejemplo: {'got"
+"ify_url':'http://localhost:8080','gotify_token':'sutoken','enabled':true}. "
+"Deje vacío si no desea utilizar notificaciones push."
+
+msgid "User is teacher in some courses"
+msgstr "El usuario es profesor en algunos cursos"
+
+msgid "Email Settings"
+msgstr "Configuración de correos"
+
+msgid "If the problem persists, please contact support."
+msgstr "Si el problema persiste, por favor contacte al soporte."
+
+msgid "Confirm new password"
+msgstr "Confirmar nueva contraseña"
+
+msgid "Session requirements and dependencies"
+msgstr "Requisitos y dependencias de la sesión"
+
+msgid "Then enter the 6-digit code shown in your app at the bottom of the form."
+msgstr ""
+"Luego ingrese el código de 6 dígitos que se muestra en su aplicación en la "
+"parte inferior del formulario."
+
+msgid "Go to home page"
+msgstr "Ir a la página principal"
+
+msgid "Gotify configuration is missing."
+msgstr "La configuración de Gotify es incompleta."
+
+msgid "The name that appears as the sender (next to the From e-mail address) when the platform sends an e-mail."
+msgstr ""
+"El nombre que aparece como remitente (junto a su dirección de correo "
+"electrónico) cuando la plataforma envía un correo electrónico."
+
+msgid "The following documents are used in learning paths:"
+msgstr "Los siguientes documentos se utilizan en lecciones:"
+
+msgid "Global admin"
+msgstr "Administrador global"
+
+msgid "Please select at least one item."
+msgstr "Por favor, seleccione al menos un elemento."
+
+msgid "Mail DSN"
+msgstr "DSN de correo"
+
+msgid "Oops! URL not registered."
+msgstr "¡Vaya! URL no registrada."
+
+msgid "Do you still want to delete them?"
+msgstr "¿Todavía desea eliminarlos?"
+
+msgid "No push subscriptions found for this user."
+msgstr "No se encontraron suscripciones push para este usuario."
+
+msgid "No exportable items found."
+msgstr "No se encontraron elementos exportables."
+
+msgid "Duration (hh:mm:ss)"
+msgstr "Duración (hh:mm:ss)"
+
+msgid "When enabled, a course will be considered validated only if passed within the current session. If disabled, courses passed in other sessions will also unlock dependent courses."
+msgstr ""
+"Cuando esté habilitado, un curso se considerará validado solo si se aprueba "
+"dentro de la misma sesión. Si está deshabilitado, los cursos aprobados en "
+"otras sesiones también desbloquearán los cursos dependientes."
+
+msgid "Mail: 'From' name"
+msgstr "Correo: nombre del remitente"
+
+msgid "Notification sent to Gotify."
+msgstr "Notificación enviada a Gotify."
+
+msgid "Password rotation interval (days)"
+msgstr "Intervalo de rotación de contraseña (días)"
+
+msgid "Question manager"
+msgstr "Administrador de preguntas"
+
+msgid "Invalid format"
+msgstr "Formato no válido"
+
+msgid "Endpoint"
+msgstr "Endpoint"
+
+msgid "Super admin"
+msgstr "Superadministrador"
+
+msgid "Enable notifications"
+msgstr "Activar notificaciones"
+
+msgid "No push notification setting configured."
+msgstr "No se ha configurado la opción de notificaciones push."
+
+msgid "Documents deleted"
+msgstr "Documentos eliminados"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-18 10:22+0000\n"
+"PO-Revision-Date: 2025-07-25 15:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: English <https://translation.chamilo.org/projects/chamilo/"
 "messages/en/>\n"
@@ -28341,7 +28341,7 @@ msgid "Enter your 2FA code"
 msgstr "Enter your 2FA code"
 
 msgid "Enable two-factor authentication (2FA)"
-msgstr "Enable fwo-factor authentication (2FA)"
+msgstr "Enable two-factor authentication (2FA)"
 
 msgid "Confirm new password"
 msgstr "Confirm new password"
@@ -28388,8 +28388,8 @@ msgstr "Endpoint"
 msgid "Push notifications are not enabled in this browser."
 msgstr "Push notifications are not enabled in this browser."
 
-msgid "Enable Notifications"
-msgstr "Enable Notifications"
+msgid "Enable notifications"
+msgstr "Enable notifications"
 
 msgid "You do not have permission to send notifications to other users."
 msgstr "You do not have permission to send notifications to other users."

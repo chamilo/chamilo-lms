@@ -2441,6 +2441,8 @@ HOTSPOT;
         $courseId = $values['course_id'] ?? 0;
         $exerciseId = $values['exercise_id'] ?? 0;
         $status = $values['status'] ?? 0;
+        $questionType = $values['questionType'] ?? ($values['questionTypeId'] ?? 0);
+        $showAttemptsInSessions = api_get_configuration_value('show_exercise_attempts_in_all_user_sessions');
         $whereCondition = '';
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
             $filter_user = (int) $_GET['filter_by_user'];
@@ -2486,7 +2488,10 @@ HOTSPOT;
             false,
             false,
             true,
-            $status
+            $status,
+            $showAttemptsInSessions,
+            $questionType,
+            true
         );
 
         if (!empty($result)) {

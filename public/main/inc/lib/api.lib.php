@@ -7111,59 +7111,6 @@ function api_format_time($time, $originFormat = 'php')
     return $formattedTime;
 }
 
-function api_set_noreply_and_from_address_to_mailer(
-    TemplatedEmail $email,
-    array $sender,
-    array $replyToAddress = []
-): void {
-    $validator = Container::getLegacyHelper()->getValidator();
-    $emailConstraint = new Assert\Email();
-
-    $noReplyAddress = api_get_setting('noreply_email_address');
-    $avoidReplyToAddress = false;
-
-    if (!empty($noReplyAddress)) {
-        // $avoidReplyToAddress = api_get_configuration_value('mail_no_reply_avoid_reply_to');
-    }
-
-    // Default values
-    $notification = new Notification();
-    $defaultSenderName = $notification->getDefaultPlatformSenderName();
-    $defaultSenderEmail = $notification->getDefaultPlatformSenderEmail();
-
-    // If the parameter is set don't use the admin.
-    $senderName = !empty($sender['name']) ? $sender['name'] : $defaultSenderName;
-    $senderEmail = !empty($sender['email']) ? $sender['email'] : $defaultSenderEmail;
-
-    // Send errors to the platform admin
-    $adminEmail = api_get_setting('admin.administrator_email');
-
-    $adminEmailValidation = $validator->validate($adminEmail, $emailConstraint);
-
-    if (!empty($adminEmail) && 0 === $adminEmailValidation->count()) {
-        $email
-            ->getHeaders()
-            ->addIdHeader('Errors-To', $adminEmail)
-        ;
-    }
-
-    if (!$avoidReplyToAddress && !empty($replyToAddress)) {
-        $replyToEmailValidation = $validator->validate($replyToAddress['mail'], $emailConstraint);
-
-        if (0 === $replyToEmailValidation->count()) {
-            $email->addReplyTo(new Address($replyToAddress['mail'], $replyToAddress['name']));
-        }
-    }
-
-    $senderName = $defaultSenderName;
-    $senderEmail = $defaultSenderEmail;
-    $email->sender(new Address($senderEmail, $senderName));
-
-    if ($senderEmail) {
-        $email->from(new Address($senderEmail, $senderName));
-    }
-}
-
 /**
  * Sends an email
  * Sender name and email can be specified, if not specified

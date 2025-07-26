@@ -6,6 +6,10 @@ use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
 
+// --- FILTRES DATE ---
+$search_start_date = isset($_REQUEST['start_date']) && !empty($_REQUEST['start_date']) ? $_REQUEST['start_date'] : null;
+$search_end_date = isset($_REQUEST['end_date']) && !empty($_REQUEST['end_date']) ? $_REQUEST['end_date'] : null;
+
 // 1. Setting variables needed by jqgrid
 $action = $_GET['a'];
 $page = (int) $_REQUEST['page']; //page
@@ -661,6 +665,66 @@ switch ($action) {
                 $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
             }
         }
+
+    case 'get_exercise_pending_results':
+    if ((false === api_is_teacher()) && (false === api_is_session_admin())) {
+        exit;
+    }
+
+    $courseId = $_REQUEST['course_id'] ?? 0;
+    $exerciseId = $_REQUEST['exercise_id'] ?? 0;
+    $status = $_REQUEST['status'] ?? 0;
+    $questionType = $_REQUEST['questionType'] ?? 0;
+    $showAttemptsInSessions = $_REQUEST['showAttemptsInSessions'] ? true : false;
+    if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
+        $filter_user = (int) $_GET['filter_by_user'];
+        if (empty($whereCondition)) {
+            $whereCondition .= " te.exe_user_id  = '$filter_user'";
+        } else {
+            $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
+        }
+    }
+
+    if (isset($_GET['group_id_in_toolbar']) && !empty($_GET['group_id_in_toolbar'])) {
+        $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];
+        if (!empty($groupIdFromToolbar)) {
+            if (empty($whereCondition)) {
+                $whereCondition .= " te.group_id  = '$groupIdFromToolbar'";
+            } else {
+                $whereCondition .= " AND group_id  = '$groupIdFromToolbar'";
+            }
+        }
+    }
+
+    if (!empty($whereCondition)) {
+        $whereCondition = " AND $whereCondition";
+    }
+
+    if (!empty($courseId)) {
+        $whereCondition .= " AND te.c_id = $courseId";
+    }
+
+    // Filtrage sur la date de fin d'exercice (exe_date)
+if (!empty($search_start_date)) {
+    $whereCondition .= " AND te.exe_date >= '".Database::escape_string($search_start_date)." 00:00:00'";
+}
+if (!empty($search_end_date)) {
+    $whereCondition .= " AND te.exe_date <= '".Database::escape_string($search_end_date)." 23:59:59'";
+}
+    // -------------------------------
+    $count = ExerciseLib::get_count_exam_results(
+        $exerciseId,
+        $whereCondition,
+        '',
+        false,
+        true,
+        $status,
+        $showAttemptsInSessions,
+        $questionType,
+        true
+    );
+
+    break;
 
         if (!empty($_GET['group_id_in_toolbar'])) {
             $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];

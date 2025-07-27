@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-18 10:22+0000\n"
+"PO-Revision-Date: 2025-07-27 22:57+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -6866,7 +6866,7 @@ msgid "Group deleted"
 msgstr "Gruppe gelöscht"
 
 msgid "Registered"
-msgstr "Registriert"
+msgstr "registriert"
 
 msgid "Learners are allowed to self-register in groups"
 msgstr "Teilnehmer können sich selber in den Gruppen eintragen"
@@ -29580,3 +29580,61 @@ msgstr "Tage"
 
 msgid "Notification to remind the event"
 msgstr "Benachrichtigung zur Erinnerung an das Ereignis"
+
+msgid "Unlock prerequisites after last test attempt"
+msgstr "Entsperren Sie die Voraussetzungen nach dem letzten Testversuch"
+
+msgid "Display colors for scores in the gradebook"
+msgstr "Anzeige der Farben für Punktzahlen im Notenbuch"
+
+msgid "ID of the user who officially sends the agenda reminders"
+msgstr "Benutzer-ID des offiziellen Absenders der Agenda-Erinnerungen"
+
+msgid "Remove the checkbox to enable sending announcements to users with HR roles (still requires to confirm in the announcements tool)."
+msgstr ""
+"Entfernen Sie das Kontrollkästchen, um das Senden von Ankündigungen an "
+"Benutzer mit HR-Rollen zu aktivieren (erfordert immer noch eine Bestätigung "
+"im Ankündigungstool)."
+
+msgid "Show courses duration"
+msgstr "Kursdauer anzeigen"
+
+msgid "Allows grading attendance with multiple levels instead of a simple present/absent system."
+msgstr ""
+"Ermöglicht die Bewertung der Anwesenheit mit mehreren Stufen anstelle eines "
+"einfachen Anwesend/Abwesend-Systems."
+
+msgid "Main language, used by default when no user language is set."
+msgstr ""
+"Hauptsprache, die standardmäßig verwendet wird, wenn keine Benutzersprache "
+"festgelegt ist."
+
+msgid "Default platform language"
+msgstr "Standard-Plattformsprache"
+
+msgid "Sets which user appears as the sender of agenda reminder emails."
+msgstr ""
+"Legt fest, welcher Benutzer als Absender von Erinnerungs-E-Mails für Termine "
+"erscheint."
+
+msgid "Enable Multi-Level Attendance Grading"
+msgstr "Aktivieren Sie die mehrstufige Anwesenheitsbewertung"
+
+msgid "Enables color coding for better score visibility in the gradebook."
+msgstr ""
+"Aktiviert Farbkodierung für eine bessere Sichtbarkeit der Bewertungen im "
+"Notenbuch."
+
+msgid "Display the course duration next to the course title in the course catalogue and the courses list."
+msgstr ""
+"Zeigen Sie die Kursdauer neben dem Kurstitel im Kurskatalog und in der "
+"Kursliste an."
+
+msgid "registered"
+msgstr "registriert"
+
+msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr ""
+"Wählen Sie Klassen aus, für die dieser Kurs im Katalog sichtbar sein wird, "
+"um ein Abonnement zu ermöglichen. Abonnementregeln gelten weiterhin, "
+"abgesehen davon, dass er im Katalog sichtbar ist."

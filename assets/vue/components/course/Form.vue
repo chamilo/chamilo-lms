@@ -153,7 +153,7 @@ onMounted(async () => {
     const languagesResponse = await languageService.findAll()
     const data = await languagesResponse.json()
     languageOptions.value = data["hydra:member"].map((language) => ({
-      name: language.englishName,
+      name: language.originalName,
       id: language.isocode,
     }))
   } catch (error) {

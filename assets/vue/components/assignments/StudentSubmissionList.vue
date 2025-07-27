@@ -52,12 +52,17 @@
             </span>
 
             <span
-              v-if="data.comments && data.comments.length > 0"
+              v-if="flags.allowText && data.comments && data.comments.length > 0"
               class="flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
               @click="openCommentDialog(data)"
             >
               <i class="pi pi-comment"></i> {{ data.comments.length }}
             </span>
+            <span
+              v-else
+              class="text-gray-400"
+              >—</span
+            >
           </div>
         </template>
       </Column>
@@ -97,21 +102,26 @@
         <template #body="{ data }">
           <div class="flex justify-center gap-2">
             <BaseButton
+              v-if="flags.allowFile"
               icon="save"
-              size="normal"
               only-icon
               :label="t('Download')"
               @click="downloadSubmission(data)"
               type="primary"
             />
             <BaseButton
+              v-if="flags.allowText"
               icon="reply-all"
-              size="normal"
               only-icon
               :label="t('Comment')"
               @click="correctAndRate(data)"
               type="success"
             />
+            <span
+              v-if="!flags.allowFile && !flags.allowText"
+              class="text-gray-400"
+              >—</span
+            >
           </div>
         </template>
       </Column>
@@ -120,6 +130,7 @@
     <CorrectAndRateModal
       v-model="showCorrectAndRateDialog"
       :item="correctingItem"
+      :flags="flags"
       @commentSent="loadData"
       @update:modelValue="handleDialogVisibility"
     />
@@ -138,9 +149,10 @@ import { useNotification } from "../../composables/notification"
 import cStudentPublicationService from "../../services/cstudentpublication"
 
 const props = defineProps({
-  assignmentId: {
-    type: Number,
-    required: true,
+  assignmentId: { type: Number, required: true },
+  flags: {
+    type: Object,
+    default: () => ({ allowText: true, allowFile: true }),
   },
 })
 

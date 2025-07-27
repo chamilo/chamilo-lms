@@ -16,19 +16,23 @@
             v-if="isCurrentUser"
             ref="requestList"
             @accept-friend="reloadHandler"
+            @reject-friend="reloadHandler"
           />
         </div>
       </BaseCard>
     </div>
     <div class="md:basis-3/4 lg:basis-5/6 2xl:basis-7/8">
-      <router-view @friend-request-sent="reloadRequestsList"></router-view>
+      <router-view
+        ref="friendsListView"
+        @friend-request-sent="reloadRequestsList"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import UserProfileCard from "../social/UserProfileCard.vue"
-import { nextTick, onMounted, provide, ref } from "vue"
+import { nextTick, onMounted, provide, ref, watch } from "vue"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 import UserRelUserRequestsList from "./UserRelUserRequestsList.vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
@@ -45,18 +49,19 @@ provide("group-info", groupInfo)
 provide("is-group", isGroup)
 
 const requestList = ref(null)
+const friendsListView = ref(null)
 const items = ref([])
 const loadingFriends = ref(true)
 const notification = useNotification()
 
 const friendFilter = {
   user: user.id,
-  relationType: 3, // friend status
+  relationType: 3,
 }
 
 const friendBackFilter = {
   friend: user.id,
-  relationType: 3, // friend status
+  relationType: 3,
 }
 
 const reloadHandler = async () => {
@@ -64,34 +69,41 @@ const reloadHandler = async () => {
   items.value = []
 
   try {
-    const [friendshipResponse, friendshipBackResponse] = await Promise.all([
+    const [resp1, resp2] = await Promise.all([
       userRelUserService.findAll({ params: friendFilter }),
       userRelUserService.findAll({ params: friendBackFilter }),
     ])
-    const [friendshipJson, friendshipBackJson] = await Promise.all([
-      friendshipResponse.json(),
-      friendshipBackResponse.json(),
-    ])
-    items.value.push(...friendshipJson["hydra:member"], ...friendshipBackJson["hydra:member"])
+
+    const [json1, json2] = await Promise.all([resp1.json(), resp2.json()])
+    const seen = new Set()
+    items.value = [...json1["hydra:member"], ...json2["hydra:member"]].filter((item) => {
+      const otherId = item.user["@id"] === user["@id"] ? item.friend["@id"] : item.user["@id"]
+      if (seen.has(otherId)) return false
+      seen.add(otherId)
+      return true
+    })
   } catch (e) {
     notification.showErrorNotification(e)
   } finally {
     loadingFriends.value = false
-    if (requestList.value) {
-      await nextTick()
-      requestList.value.loadRequests()
-    }
+    requestList.value?.loadRequests()
+    await nextTick()
+    friendsListView.value?.reloadHandler?.()
   }
 }
 
 const reloadRequestsList = () => {
-  if (requestList.value) {
-    requestList.value.loadRequests()
-  }
+  requestList.value?.loadRequests()
 }
 
 onMounted(async () => {
   await loadUser()
   await reloadHandler()
+})
+
+watch(user, (newVal) => {
+  if (newVal && newVal.id) {
+    reloadHandler()
+  }
 })
 </script>

@@ -29,6 +29,7 @@ class IndexController extends BaseController
     #[Route('/resources/document/{nodeId}/manager', name: 'resources_filemanager', methods: ['GET'])]
     #[Route('/account/home', name: 'chamilo_core_account_home', options: ['expose' => true])]
     #[Route('/social', name: 'chamilo_core_socialnetwork', options: ['expose' => true])]
+    #[Route('/social/{vueRouting}', name: 'chamilo_core_socialnetwork_vue_entrypoint', requirements: ['vueRouting' => '.+'], options: ['expose' => true])]
     #[Route('/admin', name: 'admin', options: ['expose' => true])]
     #[Route('/admin-dashboard', name: 'admin_dashboard_entry', options: ['expose' => true])]
     #[Route('/admin-dashboard/{vueRouting}', name: 'admin_dashboard_vue_entry', requirements: ['vueRouting' => '.+'])]

@@ -191,4 +191,6 @@ function onClickDeleteFriend(friendship) {
     },
   })
 }
+
+defineExpose({ reloadHandler })
 </script>

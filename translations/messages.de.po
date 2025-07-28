@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-07-27 22:57+0000\n"
+"PO-Revision-Date: 2025-07-28 11:16+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -29638,3 +29638,184 @@ msgstr ""
 "Wählen Sie Klassen aus, für die dieser Kurs im Katalog sichtbar sein wird, "
 "um ein Abonnement zu ermöglichen. Abonnementregeln gelten weiterhin, "
 "abgesehen davon, dass er im Katalog sichtbar ist."
+
+msgid "Enable Session Replication"
+msgstr "Aktivieren der Session-Replikation"
+
+msgid "List of visible fields in profile"
+msgstr "Liste der sichtbaren Felder im Profil"
+
+msgid "Send all e-mails from this e-mail address"
+msgstr "Senden Sie alle E-Mails von dieser E-Mail-Adresse"
+
+msgid "Sets the default email address used in the \"from\" field of emails."
+msgstr ""
+"Legt die Standard-E-Mail-Adresse fest, die im \"Von\"-Feld von E-Mails "
+"verwendet wird."
+
+msgid "Generates images based on prompts or content using AI."
+msgstr "Erzeugt Bilder basierend auf Vorgaben oder Inhalten mittels KI."
+
+msgid "AI providers connection data"
+msgstr "Anbieterverbindung für KI-Daten"
+
+msgid "Provides students with an AI-powered tutoring assistant."
+msgstr "Bietet Schülern einen KI-gesteuerten Tutoring-Assistenten."
+
+msgid "Enables all available AI-powered features in the platform."
+msgstr "Aktiviert alle verfügbaren KI-gestützten Funktionen auf der Plattform."
+
+msgid "Uses AI to evaluate and grade uploaded assignments."
+msgstr "Verwendet KI, um hochgeladene Arbeiten zu bewerten und zu benoten."
+
+msgid "Dynamically creates new anonymous users to support high visitor traffic."
+msgstr ""
+"Erstellt dynamisch neue anonyme Benutzer, um hohen Besucherverkehr zu "
+"unterstützen."
+
+msgid "Tutor chatbot energized by AI"
+msgstr "Tutor-Chatbot mit KI-Unterstützung"
+
+msgid "Assigning skills to user: sub-skills auto-loading"
+msgstr ""
+"Fähigkeiten dem Benutzer zuweisen: Automatisches Laden von Teilfähigkeiten"
+
+msgid "Activates popup or system notifications for important platform events."
+msgstr ""
+"Aktiviert Popup- oder Systembenachrichtigungen für wichtige "
+"Plattformereignisse."
+
+msgid "Configuration data to connect with external AI services."
+msgstr "Konfigurationsdaten zur Verbindung mit externen KI-Diensten."
+
+msgid "Overrides sender for all emails to appear from a unique address."
+msgstr ""
+"Überschreibt den Absender für alle E-Mails, sodass sie von einer "
+"einzigartigen Adresse zu stammen scheinen."
+
+msgid "Displays the current DB version to match the Chamilo core version."
+msgstr ""
+"Zeigt die aktuelle DB-Version an, um mit der Chamilo-Core-Version "
+"übereinzustimmen."
+
+msgid "Allows users to continue in a learning path after using all quiz attempts of a test used as prerequisite for other items."
+msgstr ""
+"Ermöglicht Benutzern die Fortsetzung eines Lernpfads, nachdem alle Versuche "
+"eines als Voraussetzung für andere Elemente verwendeten Tests aufgebraucht "
+"wurden."
+
+msgid "Enable Automatic Reinscription"
+msgstr "Automatische Wiedereinschreibung aktivieren"
+
+msgid "When manually assigning skills to a user, the form can be set to automatically offer you to assign a sub-skill instead of the skill you selected."
+msgstr ""
+"Beim manuellen Zuweisen von Kompetenzen an einen Benutzer kann das Formular "
+"so eingestellt werden, dass automatisch angeboten wird, eine Teilkompetenz "
+"anstelle der ausgewählten Kompetenz zuzuweisen."
+
+msgid "Minimal password syntax requirements"
+msgstr "Minimale Anforderungen an das Passwortformat"
+
+msgid "Image generator"
+msgstr "Bildgenerator"
+
+msgid "Removes the groups section from the social network view."
+msgstr "Entfernt den Gruppenbereich aus der Ansicht des sozialen Netzwerks."
+
+msgid "Enable the AI helper tool"
+msgstr "Aktivieren Sie das KI-Hilfswerkzeug"
+
+msgid "Menucampushomepage"
+msgstr "Campus-Startseite"
+
+msgid "Limits online user visibility to specific user roles."
+msgstr ""
+"Beschränkt die Online-Sichtbarkeit von Benutzern auf spezifische "
+"Benutzerrollen."
+
+msgid "Generates personalized tests with AI based on course content."
+msgstr "Erzeugt personalisierte Übungen mit KI basierend auf dem Kursinhalt."
+
+msgid "Menureporting"
+msgstr "Berichterstattung"
+
+msgid "Analyses learning materials to extract insights or improve quality."
+msgstr ""
+"Analysiert Lernmaterialien, um Einsichten zu gewinnen oder die Qualität zu "
+"verbessern."
+
+msgid "Enable or disable automatic re-subscription when course validity expires. The related cron job must also be activated."
+msgstr ""
+"Aktivieren oder deaktivieren Sie die automatische Wiedereinschreibung, wenn "
+"die Kursgültigkeit abläuft. Der zugehörige Cron-Job muss ebenfalls aktiviert "
+"werden."
+
+msgid "Content analyser"
+msgstr "Inhaltsanalysator"
+
+msgid "Open answers grader"
+msgstr "Antwortenbewerter öffnen"
+
+msgid "Exercise generator"
+msgstr "Übungsgenerator"
+
+msgid "Learning paths generator"
+msgstr "Lernpfadgenerator"
+
+msgid "Automatically grades open-ended answers using AI."
+msgstr "Bewertet offene Antworten automatisch mit KI."
+
+msgid "Auto-provision more anonymous users"
+msgstr "Automatische Bereitstellung weiterer anonymer Benutzer"
+
+msgid "Assignments grader"
+msgstr "Aufgabenbewerter"
+
+msgid "Hide groups block in social network"
+msgstr "Gruppenblock im sozialen Netzwerk ausblenden"
+
+msgid "Current version of the database schema used by Chamilo"
+msgstr "Aktuelle Version des Datenbankschemas, das von Chamilo verwendet wird"
+
+msgid "Enable or disable automatic session replication. The related cron job must also be activated."
+msgstr ""
+"Aktivieren oder deaktivieren Sie die automatische Session-Replikation. Der "
+"zugehörige Cron-Job muss ebenfalls aktiviert werden."
+
+msgid "Filter users that can be seen as online"
+msgstr "Filtern Sie Benutzer, die als online angezeigt werden können"
+
+msgid "Controls which profile fields are visible to users and others."
+msgstr "Steuert, welche Profilfelder für Benutzer und andere sichtbar sind."
+
+msgid "Defines the required structure for user passwords."
+msgstr "Definiert die erforderliche Struktur für Benutzerpasswörter."
+
+msgid "Send all e-mails as originating from this (organizational) name"
+msgstr ""
+"Senden Sie alle E-Mails, sodass sie von diesem (organisatorischen) Namen "
+"stammen"
+
+msgid "Allows duplication of resources that were created in the session when duplicating the session."
+msgstr ""
+"Ermöglicht die Duplizierung von Ressourcen, die in der Session erstellt "
+"wurden, beim Duplizieren der Session."
+
+msgid "Send all e-mails as one single sender"
+msgstr "Senden Sie alle E-Mails als einen einzigen Absender"
+
+msgid "Sets the default display name used for sending platform emails. e.g. \"Support team\"."
+msgstr ""
+"Legt den Standardanzeigennamen fest, der für das Senden von Plattform-E-"
+"Mails verwendet wird. z.B. \"Support-Team\"."
+
+msgid "Generates personalized learning paths using AI suggestions."
+msgstr "Erstellt personalisierte Lernpfade mithilfe von KI-Vorschlägen."
+
+msgid "Enable the notification tool for a more impactful communication channel with students"
+msgstr ""
+"Aktivieren Sie das Benachrichtigungstool für einen wirkungsvolleren "
+"Kommunikationskanal mit den Lernenden."
+
+msgid "Menumycourses"
+msgstr "Meine Kurse"

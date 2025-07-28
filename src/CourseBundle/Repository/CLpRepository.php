@@ -137,4 +137,19 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
 
         return null;
     }
+
+    public function findScormByCourse(Course $course): array
+    {
+        return $this->createQueryBuilder('lp')
+            ->innerJoin('lp.resourceNode', 'rn')
+            ->innerJoin('rn.resourceLinks', 'rl')
+            ->andWhere('rl.course = :course')
+            ->andWhere('lp.lpType = :scormType')
+            ->setParameters([
+                'course'    => $course,
+                'scormType' => CLp::SCORM_TYPE
+            ])
+            ->getQuery()
+            ->getResult();
+    }
 }

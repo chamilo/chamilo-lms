@@ -111,7 +111,7 @@ if (-1 == $current_access_url_id) {
 }
 
 // 1) Find the default URL (ID = 1)
-$defaultUrl = 'http://localhost/';
+$defaultUrl = AccessUrl::DEFAULT_ACCESS_URL;
 foreach ($url_list as $u) {
     if ($u->getId() === 1) {
         $defaultUrl = trim($u->getUrl());
@@ -121,7 +121,7 @@ foreach ($url_list as $u) {
 
 // 2) Tooltip message (in English, per spec)
 $tooltip     = 'Adding new URLs requires you to first set the first URL to a value different than localhost.';
-$isLocalhost = ($defaultUrl === 'http://localhost/');
+$isLocalhost = ($defaultUrl === AccessUrl::DEFAULT_ACCESS_URL);
 
 // 3) Decide link href and base attributes
 $attributes = ['id' => 'add-url-button'];

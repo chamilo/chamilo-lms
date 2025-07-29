@@ -54,8 +54,10 @@ function isTotalPortalSizeBiggerThanLimit($debug = true)
         $hostingData['updated_at'] = time();
         $hostingData['size'] = $totalSize;
 
-        $writer = new Laminas\Config\Writer\PhpArray();
-        $phpCode = $writer->toString($hostingData);
+        $phpCode = "<?php\n"
+            .'return '
+            .var_export($hostingData, true)
+            .";\n";
         file_put_contents($file, $phpCode);
         $log .= "File saved in $file \n";
     } else {

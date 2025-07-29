@@ -204,7 +204,7 @@
             :filter="true"
             :options="languages"
             input-id="language_form_list"
-            option-label="english_name"
+            option-label="original_name"
             option-value="isocode"
           />
           <InputText

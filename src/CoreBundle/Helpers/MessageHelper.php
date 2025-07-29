@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
 use const PHP_SAPI;
@@ -295,40 +296,55 @@ class MessageHelper
         }
     }
 
-    private function sendEmailNotification(User $receiver, User $sender, string $subject, string $content, array $attachmentList): void
-    {
-        if (empty($receiver->getEmail())) {
-            throw new Exception('The receiver does not have a valid email address.');
-        }
-
+    private function sendEmailNotification(
+        User $receiver,
+        User $sender,
+        string $subject,
+        string $content,
+        array $attachmentList
+    ): void {
+        // 1. Attempt to get the "from" email and name from settings
         $smtpFromEmail = $this->settingsManager->getSetting('mail.mailer_from_name');
+        $smtpFromName  = $this->settingsManager->getSetting('platform.administrator_email');
 
-        if (empty($smtpFromEmail)) {
-            $smtpFromEmail = $this->settingsManager->getSetting('platform.administrator_email');
+        // 2. If no valid "from" is configured, fall back to the system user
+        if (empty($smtpFromEmail) || empty($smtpFromName)) {
+            $fallback = $this->userRepository->getFallbackUser();
+            if ($fallback) {
+                $smtpFromEmail = $fallback->getEmail();
+                $smtpFromName  = $fallback->getFullname();
+            } else {
+                $smtpFromEmail = 'noreply@chamilo.local';
+                $smtpFromName  = 'Chamilo Platform';
+            }
         }
 
-        if (empty($smtpFromEmail)) {
-            $smtpFromEmail = 'noreply@chamilo.local';
-        }
-
+        // 3. Build the email including the display name
         $email = (new Email())
-            ->from($smtpFromEmail)
+            ->from(new Address($smtpFromEmail, $smtpFromName))
+            // 4. Set Reply-To so replies go to the actual sender
+            ->replyTo(new Address($sender->getEmail(), $sender->getFullname()))
             ->to($receiver->getEmail())
             ->subject($subject)
             ->text($content)
             ->html($content)
         ;
 
+        // 5. Attach any uploaded files
         foreach ($attachmentList as $attachment) {
             if ($attachment instanceof UploadedFile) {
-                $email->attachFromPath($attachment->getRealPath(), $attachment->getClientOriginalName());
+                $email->attachFromPath(
+                    $attachment->getRealPath(),
+                    $attachment->getClientOriginalName()
+                );
             }
         }
 
+        // 6. Send and log any failures
         try {
             $this->mailer->send($email);
         } catch (Exception $e) {
-            error_log('Failed to send email: '.$e->getMessage());
+            error_log('Failed to send email: ' . $e->getMessage());
         }
     }
 

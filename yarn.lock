@@ -4738,7 +4738,7 @@ __metadata:
     js-cookie: "npm:^2.2.1"
     jspdf: "npm:^3.0.1"
     jsplumb: "npm:^2.15.6"
-    linkifyjs: "npm:3.0.5"
+    linkifyjs: "npm:4.3.2"
     litepicker: "npm:^2.0.12"
     lodash: "npm:^4.17.21"
     luxon: "npm:^2.5.2"
@@ -8062,10 +8062,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"linkifyjs@npm:3.0.5":
-  version: 3.0.5
-  resolution: "linkifyjs@npm:3.0.5"
-  checksum: 10c0/a5d6565e457fabcae73400923f9999cf0651108378e61bb112b0d651d0d260450d22107d31127fcc38cfe9c3604bb59dfcc25db388a1eeabc09d53a5177da7fc
+"linkifyjs@npm:4.3.2":
+  version: 4.3.2
+  resolution: "linkifyjs@npm:4.3.2"
+  checksum: 10c0/1a85e6b368304a4417567fe5e38651681e3e82465590836942d1b4f3c834cc35532898eb1e2479f6337d9144b297d418eb708b6be8ed0b3dc3954a3588e07971
   languageName: node
   linkType: hard
 

@@ -6,6 +6,7 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
@@ -44,7 +45,7 @@ if ($httpRequest->query->has('url_id')) {
     // If we're still with localhost (should only happen at the very beginning)
     // offer the current URL by default. Once this has been saved, no more
     // magic will happen, ever.
-    if ($url_data['id'] === 1 && $url_data['url'] === 'http://localhost/') {
+    if ($url_data['id'] === 1 && $url_data['url'] === AccessUrl::DEFAULT_ACCESS_URL) {
         $https = api_is_https() ? 'https://' : 'http://';
         $url_data['url'] = $https.$_SERVER['HTTP_HOST'].'/';
     }

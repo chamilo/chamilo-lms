@@ -8709,12 +8709,15 @@ class Tracking
             $session = api_get_session_info($row['session_id']);
             $course = api_get_course_info_by_id($row['c_id']);
 
+            $sessionName = $session['name'] ?? '';
+            $courseTitle = $course['title'] ?? '';
+
             if ($reportType == 'time_report') {
                 $rows[] = [
                     $user['lastname'],
                     $user['firstname'],
-                    $session['name'],
-                    $course['title'],
+                    $sessionName,
+                    $courseTitle,
                     api_get_local_time($row['login_course_date']),
                     api_get_local_time($row['logout_course_date']),
                     gmdate('H:i:s', $row['time']),
@@ -8724,8 +8727,8 @@ class Tracking
                 $rows[] = [
                     $user['lastname'],
                     $user['firstname'],
-                    $session['name'],
-                    $course['title'],
+                    $sessionName,
+                    $courseTitle,
                     $row['lp_name'],
                     api_get_local_time(date('Y-m-d H:i:s', $row['start_time'])),
                     $extraFieldValue['value'] ?? '',

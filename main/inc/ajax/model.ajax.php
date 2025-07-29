@@ -647,24 +647,6 @@ switch ($action) {
             true
         );
         break;
-    case 'get_exercise_pending_results':
-        if ((false === api_is_teacher()) && (false === api_is_session_admin())) {
-            exit;
-        }
-
-        $courseId = $_REQUEST['course_id'] ?? 0;
-        $exerciseId = $_REQUEST['exercise_id'] ?? 0;
-        $status = $_REQUEST['status'] ?? 0;
-        $questionType = $_REQUEST['questionType'] ?? 0;
-        $showAttemptsInSessions = (bool) $_REQUEST['showAttemptsInSessions'];
-        if (!empty($_GET['filter_by_user'])) {
-            $filter_user = (int) $_GET['filter_by_user'];
-            if (empty($whereCondition)) {
-                $whereCondition .= " te.exe_user_id  = '$filter_user'";
-            } else {
-                $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
-            }
-        }
 
     case 'get_exercise_pending_results':
     if ((false === api_is_teacher()) && (false === api_is_session_admin())) {

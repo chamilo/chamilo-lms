@@ -9,8 +9,10 @@
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 $cidReset = true;
@@ -26,7 +28,8 @@ Display :: display_header($tool_name);
 
 $my_user_url_list = api_get_access_url_from_user(api_get_user_id());
 $current_access_url_id = api_get_current_access_url_id();
-$url_list = UrlManager::get_url_data();
+/** @var array<int, AccessUrl> $url_list */
+$url_list = Container::getAccessUrlRepository()->findAll();
 
 // Actions
 if ($httpRequest->query->has('action')) {
@@ -55,9 +58,9 @@ if ($httpRequest->query->has('action')) {
             if (api_is_platform_admin() && -1 != $current_access_url_id) {
                 $url_str = '';
                 foreach ($url_list as $u) {
-                    if (!in_array($u['id'], $my_user_url_list)) {
-                        UrlManager::add_user_to_url(api_get_user_id(), $u['id']);
-                        $url_str .= $u['url'] . '<br />';
+                    if (!in_array($u->getId(), $my_user_url_list)) {
+                        UrlManager::add_user_to_url(api_get_user_id(), $u->getId());
+                        $url_str .= $u->getUrl() . '<br />';
                     }
                 }
                 echo Display::return_message(
@@ -76,8 +79,8 @@ $parameters['sec_token'] = Security::get_token();
 // Checking if the admin is registered in all sites
 $url_string = '';
 foreach ($url_list as $u) {
-    if (!in_array($u['id'], $my_user_url_list)) {
-        $url_string .= $u['url'] . '<br />';
+    if (!in_array($u->getId(), $my_user_url_list)) {
+        $url_string .= $u->getUrl() . '<br />';
     }
 }
 if (!empty($url_string)) {
@@ -110,8 +113,8 @@ if (-1 == $current_access_url_id) {
 // 1) Find the default URL (ID = 1)
 $defaultUrl = 'http://localhost/';
 foreach ($url_list as $u) {
-    if ((string)$u['id'] === '1') {
-        $defaultUrl = trim($u['url']);
+    if ($u->getId() === 1) {
+        $defaultUrl = trim($u->getUrl());
         break;
     }
 }
@@ -182,29 +185,29 @@ echo Display::toolbarAction('urls', $toolbarItems);
 
 $rows = [];
 foreach ($url_list as $u) {
-    $link   = Display::url($u['url'], $u['url'], ['target' => '_blank']);
-    $desc   = $u['description'];
-    $ts     = api_get_local_time($u['tms']);
-    $active = ($u['active'] === '1');
+    $link   = Display::url($u->getUrl(), $u->getUrl(), ['target' => '_blank']);
+    $desc   = $u->getDescription();
+    $ts     = api_get_local_time($u->getTms());
+    $active = ($u->getActive() === 1);
 
     $iconAction = $active ? 'lock' : 'unlock';
     $stateIcon  = $active ? StateIcon::ACTIVE : StateIcon::INACTIVE;
 
-    if ((string)$u['id'] === '1') {
+    if ($u->getId() === 1) {
         $status = Display::getMdiIcon($stateIcon, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang(ucfirst($iconAction)));
     } else {
-        $status = '<a href="access_urls.php?action=' . $iconAction . '&url_id=' . $u['id'] . '">' .
+        $status = '<a href="access_urls.php?action=' . $iconAction . '&url_id=' . $u->getId() . '">' .
             Display::getMdiIcon($stateIcon, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang(ucfirst($iconAction))) .
             '</a>';
     }
 
     $rowActions = Display::url(
         Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
-        "access_url_edit.php?url_id={$u['id']}"
+        "access_url_edit.php?url_id={$u->getId()}"
     );
 
-    if ((string)$u['id'] !== '1') {
-        $rowActions .= '<a href="access_urls.php?action=delete_url&url_id=' . $u['id'] . '" ' .
+    if ($u->getId() !== 1) {
+        $rowActions .= '<a href="access_urls.php?action=delete_url&url_id=' . $u->getId() . '" ' .
             'onclick="return confirm(\'' . addslashes(get_lang('Please confirm your choice')) . '\');">' .
             Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')) .
             '</a>';

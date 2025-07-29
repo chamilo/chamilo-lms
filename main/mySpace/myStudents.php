@@ -1339,7 +1339,7 @@ if (empty($details)) {
             $totalScore = 0;
             $totalProgress = 0;
             $gradeBookTotal = [0, 0];
-            $totalCourses = count($courses);
+            $totalCourses = 0;
             $scoreDisplay = ScoreDisplay::instance();
             $theoreticalTime = 0;
             $totalTheoreticalTime = 0;
@@ -1364,6 +1364,7 @@ if (empty($details)) {
                 }
 
                 if ($isSubscribed) {
+                    $totalCourses++;
                     $timeInSeconds = Tracking::get_time_spent_on_the_course(
                         $student_id,
                         $courseId,

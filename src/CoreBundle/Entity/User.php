@@ -1476,6 +1476,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
+    /**
+     * @return Collection<int, AccessUrlRelUser>
+     */
     public function getPortals(): Collection
     {
         return $this->portals;

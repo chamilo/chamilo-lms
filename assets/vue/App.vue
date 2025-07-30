@@ -10,6 +10,8 @@
       ref="legacyContainer"
     />
     <ConfirmDialog />
+
+    <AccessUrlChooser />
   </component>
   <Toast position="top-center">
     <template #message="slotProps">
@@ -56,6 +58,7 @@ import EmptyLayout from "./components/layout/EmptyLayout.vue"
 import { useMediaElementLoader } from "./composables/mediaElementLoader"
 
 import apolloClient from "./config/apolloClient"
+import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
 
 provide(DefaultApolloClient, apolloClient)
 

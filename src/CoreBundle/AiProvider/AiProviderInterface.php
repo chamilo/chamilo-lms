@@ -33,4 +33,14 @@ interface AiProviderInterface
      * @return array|null returns the generated learning path data or null on failure
      */
     public function generateLearnPath(string $topic, int $chaptersCount, string $language, int $wordsCount, bool $addTests, int $numQuestions): ?array;
+
+    /**
+     * Grade a single open‑answer.
+     *
+     * @param string $prompt    El prompt completo con idioma, pregunta, contexto y respuesta.
+     * @param string $toolName  Una etiqueta, p.ej. 'open_answer_grade'.
+     *
+     * @return string|null       El texto bruto de la respuesta: "X\nFeedback…"
+     */
+    public function gradeOpenAnswer(string $prompt, string $toolName): ?string;
 }

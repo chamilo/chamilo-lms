@@ -5676,26 +5676,21 @@ class learnpath
 
         $data = $this->generate_lp_folder($courseInfo);
 
-        // 1) Campos estándar de documento
         if (null !== $lpItem) {
             LearnPathItemForm::setForm($form, $action, $this, $lpItem);
         }
 
-        // 2) Sólo en edición, añade el checkbox y su valor por defecto
         if ($action === 'edit' && $lpItem !== null) {
-            // Label con get_lang(), sin envoltorios extra
             $form->addElement(
                 'checkbox',
                 'export_allowed',
                 get_lang('Allow PDF export for this item')
             );
-            // Asigna sólo este valor, QuickForm lo fusiona con los demás defaults
             $form->setDefaults([
                 'export_allowed' => $lpItem->isExportAllowed() ? 1 : 0
             ]);
         }
 
-        // 3) Selector de carpetas en modo “add”
         switch ($action) {
             case 'add':
                 $folders = DocumentManager::get_all_document_folders(
@@ -5719,7 +5714,6 @@ class learnpath
                 break;
         }
 
-        // 4) Botón Guardar
         $form->addButtonSave(get_lang('Save'), 'submit_button');
 
         return $form->returnForm();

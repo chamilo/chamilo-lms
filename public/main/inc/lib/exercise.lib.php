@@ -6125,80 +6125,87 @@ EOT;
     }
 
     /**
-     * Export all results of *one* exercise to a ZIP file containing individual PDFs.
-     *
-     * @return false|void
-     * @throws Exception
+     * Returns the HTML for a specific exercise attempt, ready for PDF generation.
      */
-    public static function exportExerciseAllResultsZip(
-        int $sessionId,
-        int $courseId,
-        int $exerciseId,
-        array $filterDates = [],
-        string $mainPath = ''
-    ) {
-        $objExerciseTmp = new Exercise($courseId);
-        $exeResults = $objExerciseTmp->getExerciseAndResult(
-            $courseId,
-            $sessionId,
-            $exerciseId
+    public static function getAttemptPdfHtml(int $exeId, int $courseId, int $sessionId): string
+    {
+        $_GET = [
+            'id'           => $exeId,
+            'action'       => 'export',
+            'export_type'  => 'all_results',
+            'cid'          => $courseId,
+            'sid'          => $sessionId,
+            'gid'          => 0,
+            'gradebook'    => 0,
+            'origin'       => '',
+        ];
+        $_REQUEST = $_GET + $_REQUEST;
+
+        ob_start();
+        include __DIR__ . '/../../exercise/exercise_show.php';
+        return ob_get_clean();
+    }
+
+    /**
+     * Generates and saves a PDF for a single exercise attempt
+     */
+    public static function saveFileExerciseResultPdfDirect(
+        int    $exeId,
+        int    $courseId,
+        int    $sessionId,
+        string $exportFolderPath
+    ): void {
+        // 1) Retrieve the HTML for this attempt and convert it to PDF
+        $html = self::getAttemptPdfHtml($exeId, $courseId, $sessionId);
+
+        // 2) Determine filename and path based on user information
+        $track   = self::get_exercise_track_exercise_info($exeId);
+        $userId  = $track['exe_user_id'] ?? 0;
+        $user    = api_get_user_info($userId);
+        $pdfName = api_replace_dangerous_char(
+            ($user['firstname'] ?? 'user') . '_' .
+            ($user['lastname']  ?? 'unknown') .
+            '_attempt' . $exeId . '.pdf'
         );
+        $filePath = rtrim($exportFolderPath, '/') . '/' . $pdfName;
 
-        $exportOk = false;
-        if (!empty($exeResults)) {
-            $exportName = 'S'.$sessionId.'-C'.$courseId.'-T'.$exerciseId;
-            $baseDir = api_get_path(SYS_ARCHIVE_PATH);
-            $folderName = 'pdfexport-'.$exportName;
-            $exportFolderPath = $baseDir.$folderName;
-
-            // 1. Cleans the export folder if it exists.
-            if (is_dir($exportFolderPath)) {
-                rmdirr($exportFolderPath);
-            }
-
-            // 2. Create the pdfs inside a new export folder path.
-            foreach ($exeResults as $exeResult) {
-                $exeId = (int) $exeResult['exe_id'];
-                self::saveFileExerciseResultPdf($exeId, $courseId, $sessionId);
-            }
-
-            // 3. If export folder is not empty will be zipped.
-            $isFolderPathEmpty = (file_exists($exportFolderPath) && 2 == count(scandir($exportFolderPath)));
-            if (is_dir($exportFolderPath) && !$isFolderPathEmpty) {
-                $exportOk = true;
-                $exportFilePath = $baseDir.$exportName.'.zip';
-                $zip = new \ZipArchive();
-                if ($zip->open($exportFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
-                    $files = new RecursiveIteratorIterator(
-                        new RecursiveDirectoryIterator($exportFolderPath),
-                        RecursiveIteratorIterator::LEAVES_ONLY
-                    );
-
-                    foreach ($files as $name => $file) {
-                        if (!$file->isDir()) {
-                            $filePath = $file->getRealPath();
-                            $relativePath = substr($filePath, strlen($exportFolderPath) + 1);
-                            $zip->addFile($filePath, $relativePath);
-                        }
-                    }
-
-                    $zip->close();
-                } else {
-                    throw new Exception('Failed to create ZIP file');
-                }
-
-                rmdirr($exportFolderPath);
-
-                if (!empty($mainPath) && file_exists($exportFilePath)) {
-                    @rename($exportFilePath, $mainPath.'/'.$exportName.'.zip');
-                } else {
-                    DocumentManager::file_send_for_download($exportFilePath, true, $exportName.'.zip');
-                    exit;
-                }
-            }
+        // 3) Ensure the directory exists
+        $dir = dirname($filePath);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
         }
 
-        if (empty($mainPath) && !$exportOk) {
+        // 4) Use Chamilo's PDF class to generate and save the file
+        $params = [
+            'filename'    => $pdfName,
+            'course_code' => api_get_course_id(),
+        ];
+        $pdf = new PDF('A4', 'P', $params);
+        $pdf->html_to_pdf_with_template(
+            $html,
+            true,
+            false,
+            true,
+            [],
+            'F',
+            $filePath
+        );
+    }
+
+    /**
+     * Exports all results of an exercise to a ZIP archive by generating PDFs on disk and then sending the ZIP to the browser.
+     */
+    public static function exportExerciseAllResultsZip(
+        int   $sessionId,
+        int   $courseId,
+        int   $exerciseId,
+        array $filterDates = [],
+        string $mainPath    = ''
+    ) {
+        // 1) Retrieve all attempt records for this exercise
+        $exerciseObj = new Exercise($courseId);
+        $results     = $exerciseObj->getExerciseAndResult($courseId, $sessionId, $exerciseId);
+        if (empty($results)) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('No result found for export in this test.'),
@@ -6206,40 +6213,73 @@ EOT;
                     false
                 )
             );
+            return false;
         }
 
-        return false;
-    }
+        // 2) Prepare a temporary folder for the PDFs
+        $exportName       = 'S' . $sessionId . '-C' . $courseId . '-T' . $exerciseId;
+        $baseDir          = api_get_path(SYS_ARCHIVE_PATH);
+        $exportFolderPath = $baseDir . 'pdfexport-' . $exportName;
+        if (is_dir($exportFolderPath)) {
+            rmdirr($exportFolderPath);
+        }
+        mkdir($exportFolderPath, 0755, true);
 
-    /**
-     * Generates and saves a PDF file for a specific exercise attempt result.
-     */
-    public static function saveFileExerciseResultPdf(
-        int $exeId,
-        int $courseId,
-        int $sessionId
-    ): void
-    {
-        $cidReq = 'cid='.$courseId.'&sid='.$sessionId.'&gid=0&gradebook=0';
-        $url = api_get_path(WEB_PATH).'main/exercise/exercise_show.php?'.$cidReq.'&id='.$exeId.'&action=export&export_type=all_results';
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_COOKIE, session_id());
-        curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-        curl_setopt($ch, CURLOPT_COOKIESESSION, true);
-        curl_setopt($ch, CURLOPT_FAILONERROR, false);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        $result = curl_exec($ch);
-
-        if (false === $result) {
-            error_log('saveFileExerciseResultPdf error: '.curl_error($ch));
+        // 3) Generate a PDF for each attempt
+        foreach ($results as $row) {
+            $exeId = (int) $row['exe_id'];
+            self::saveFileExerciseResultPdfDirect(
+                $exeId,
+                $courseId,
+                $sessionId,
+                $exportFolderPath
+            );
         }
 
-        curl_close($ch);
+        // 4) Create the ZIP archive containing all generated PDFs
+        $zipFilePath = $baseDir . 'pdfexport-' . $exportName . '.zip';
+        $zip = new \ZipArchive();
+        if ($zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+            throw new \Exception('Failed to create ZIP file');
+        }
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($exportFolderPath),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+        foreach ($files as $file) {
+            if (!$file->isDir()) {
+                $filePath     = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($exportFolderPath) + 1);
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+        $zip->close();
+        rmdirr($exportFolderPath);
+
+        // 5) Send the ZIP file to the browser or move it to mainPath
+        if (!empty($mainPath)) {
+            @rename($zipFilePath, $mainPath . '/pdfexport-' . $exportName . '.zip');
+        } else {
+            // close session and clear output buffers
+            session_write_close();
+            while (ob_get_level()) {
+                @ob_end_clean();
+            }
+
+            // send download headers
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/zip');
+            header('Content-Disposition: attachment; filename="pdfexport-' . $exportName . '.zip"');
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($zipFilePath));
+
+            // output the file and remove it
+            readfile($zipFilePath);
+            @unlink($zipFilePath);
+            exit;
+        }
     }
 }

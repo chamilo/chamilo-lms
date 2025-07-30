@@ -85,6 +85,19 @@ if (empty($sessionId)) {
     }
 }
 
+if ($action === 'export_all_results') {
+    if (
+        api_is_platform_admin()   ||
+        api_is_course_admin()     ||
+        api_is_course_tutor()     ||
+        api_is_session_general_coach()
+    ) {
+        $blockPage = false;
+    } else {
+       api_not_allowed(true);
+    }
+}
+
 if ($blockPage) {
     api_not_allowed(true);
 }
@@ -106,11 +119,12 @@ switch ($action) {
         echo 1;
         exit;
     case 'export_all_results':
+        ignore_user_abort(true);
+        set_time_limit(0);
         $sessionId = api_get_session_id();
-        $courseId = api_get_course_int_id();
+        $courseId  = api_get_course_int_id();
         ExerciseLib::exportExerciseAllResultsZip($sessionId, $courseId, $exercise_id);
-
-        break;
+        exit;
     case 'export_pdf':
         $exerciseId = (int) $_GET['exerciseId'];
         $attemptId = (int) $_GET['attemptId'];

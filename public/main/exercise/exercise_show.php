@@ -119,6 +119,8 @@ if (!empty($sessionId) && !$is_allowedToEdit) {
 
 $allowCoachFeedbackExercises = 'true' === api_get_setting('allow_coach_feedback_exercises');
 $maxEditors = (int) api_get_setting('exercise_max_ckeditors_in_page');
+$enableAi     = 'true' === api_get_setting('ai_helpers.enable_ai_helpers');
+$openAnsGrader= 'true' === api_get_setting('ai_helpers.open_answers_grader');
 $isCoachAllowedToEdit = api_is_allowed_to_edit(false, true);
 $isFeedbackAllowed = false;
 
@@ -611,16 +613,29 @@ foreach ($questionList as $questionId) {
                     $url_name = get_lang('Edit individual feedback');
                 }
             }
-            echo '<p>';
+            echo '<p class="d-flex align-items-center">';
+            // Botón de feedback normal
             echo Display::button(
                 'show_ck',
                 $url_name,
                 [
-                    'type' => 'button',
+                    'type'  => 'button',
                     'class' => 'btn btn--plain',
-                    'onclick' => "showfck('".$name."', '".$marksname."');",
+                    'onclick' => "showfck('{$name}','{$marksname}');",
                 ]
             );
+            if ($enableAi && $openAnsGrader) {
+                echo Display::url(
+                    Display::getMdiIcon('robot-outline','mr-1') . get_lang('Suggest with AI'),
+                    '#',
+                    [
+                        'class'            => 'btn btn--plain ml-2 ai-grade-btn',
+                        'data-exe-id'      => $id,
+                        'data-question-id' => $questionId,
+                        'data-course-id' => api_get_course_int_id()
+                    ]
+                );
+            }
             echo '</p>';
 
             echo '<div id="feedback_'.$name.'" class="show">';
@@ -1111,7 +1126,110 @@ if ('student_progress' == $origin) {
     </button>
     <?php
     }
+?>
+<?php if ($enableAi && $openAnsGrader) { ?>
+    <div id="aiSuggestionOverlay" class="hidden fixed inset-0 bg-black/50 z-50"></div>
+    <div id="aiSuggestionModal" class="hidden fixed inset-0 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md">
+            <h2 class="text-xl font-semibold mb-4"><?= get_lang('AI suggestion') ?></h2>
+            <p class="mb-2">
+                <strong><?= get_lang('Suggested score') ?>:</strong>
+                <span id="aiScorePreview" class="ml-1"></span>
+            </p>
+            <p class="mb-1"><strong><?= get_lang('Suggested feedback') ?>:</strong></p>
+            <div id="aiFeedbackPreview"
+                 class="border border-gray-200 p-4 rounded-md mb-6 max-h-60 overflow-y-auto text-body-2"
+                 style="white-space: pre-wrap;"></div>
+            <div class="flex justify-end space-x-2">
+                <button id="aiCancelBtn"
+                        class="px-4 py-2 rounded-md bg-gray-10 text-gray-90 hover:bg-gray-15">
+                    <?= get_lang('Cancel') ?>
+                </button>
+                <button id="aiApplyBtn"
+                        class="px-4 py-2 rounded-md bg-primary hover:bg-primary/90 text-white">
+                    <?= get_lang('Apply suggestion') ?>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function(){
+            const overlay = document.getElementById('aiSuggestionOverlay');
+            const modal   = document.getElementById('aiSuggestionModal');
+            let currentQid;
 
+            function showModal(){
+                // show overlay and modal
+                overlay.classList.remove('hidden');
+                modal.classList.remove('hidden');
+            }
+            function hideModal(){
+                // hide overlay and modal
+                overlay.classList.add('hidden');
+                modal.classList.add('hidden');
+            }
+
+            document.querySelectorAll('.ai-grade-btn').forEach(btn => {
+                btn.addEventListener('click', async e => {
+                    e.preventDefault();
+                    currentQid = btn.dataset.questionId;
+                    btn.disabled = true;
+                    btn.textContent = 'Consulting AI…';
+
+                    try {
+                        const res = await fetch('/ai/open_answer_grade', {
+                            method: 'POST',
+                            headers: {'Content-Type':'application/x-www-form-urlencoded'},
+                            body: new URLSearchParams({
+                                exeId: btn.dataset.exeId,
+                                questionId: currentQid,
+                                courseId: btn.dataset.courseId
+                            })
+                        });
+                        const data = await res.json();
+                        if (!res.ok) throw new Error(data.error || 'Unknown error');
+
+                        // populate preview fields
+                        document.getElementById('aiScorePreview').textContent    = data.score;
+                        document.getElementById('aiFeedbackPreview').textContent = data.feedback;
+                        showModal();
+                    }
+                    catch(err) {
+                        alert('Error getting AI suggestion: ' + err.message);
+                    }
+                    finally {
+                        btn.disabled = false;
+                        btn.textContent = 'Suggest with AI';
+                    }
+                });
+            });
+
+            document.getElementById('aiCancelBtn').addEventListener('click', hideModal);
+            document.getElementById('aiApplyBtn').addEventListener('click', () => {
+                // 1) Fill in the score
+                const scoreInput = document.getElementById('select_marks_' + currentQid);
+                if (scoreInput) scoreInput.value = document.getElementById('aiScorePreview').textContent;
+
+                // 2) Fill feedback into TinyMCE or textarea
+                const feedback = document.getElementById('aiFeedbackPreview').textContent;
+                const tiny = window.tinyMCE?.get('comments_' + currentQid);
+                if (tiny) {
+                    tiny.setContent(feedback);
+                } else {
+                    const ta = document.querySelector("[name='comments_" + currentQid + "']");
+                    if (ta) ta.value = feedback;
+                }
+
+                // 3) Expand the individual feedback block
+                showfck('fckdiv' + currentQid, 'marksName' + currentQid);
+
+                // 4) Hide the modal
+                hideModal();
+            });
+        })();
+    </script>
+<?php
+}
 if ('learnpath' != $origin) {
     //we are not in learnpath tool
     Display::display_footer();

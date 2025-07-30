@@ -1020,15 +1020,25 @@ EOD;
         $courseCode = $courseInfo['code'];
         $scormPath = null;
 
-        $orderedItemIds = learnpath::get_flat_ordered_items_list($lp);
+        $entries     = learnpath::get_flat_ordered_items_list($lp, 0, true);
 
-        foreach ($orderedItemIds as $itemId) {
+        foreach ($entries as $entry) {
+            $itemId = is_array($entry) ? (int) $entry['iid'] : (int) $entry;
+
             if (!empty($selectedItems) && !in_array($itemId, $selectedItems)) {
+                continue;
+            }
+
+            if (is_array($entry) && empty($entry['export_allowed'])) {
                 continue;
             }
 
             /** @var CLpItem $item */
             $item = $lpItemRepo->find($itemId);
+            if (!$item) {
+                continue;
+            }
+
             $type = $item->getItemType();
 
             switch ($type) {
@@ -1048,7 +1058,7 @@ EOD;
                     try {
                         $content = $documentRepo->getResourceFileContent($document);
 
-                        if (!is_string($content) || !preg_match('/^\s*<(?!!--|!doctype|html|body)/i', $content)) {
+                        if (!is_string($content) || stripos(ltrim($content), '<') !== 0) {
                             break;
                         }
 

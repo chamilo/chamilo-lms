@@ -1012,7 +1012,7 @@ if ('export' === $action) {
         $pdf->html_to_pdf_with_template($content, false, false, true);
     }
 
-    exit;
+    return;
 }
 
 if ($isFeedbackAllowed) {

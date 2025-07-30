@@ -22,6 +22,8 @@ api_protect_global_admin_script();
 
 $httpRequest = HttpRequest::createFromGlobals();
 
+$translator = Container::$container->get('translator');;
+
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $tool_name = get_lang('Multiple access URL / Branding');
 Display :: display_header($tool_name);
@@ -213,7 +215,14 @@ foreach ($url_list as $u) {
             '</a>';
     }
 
-    $rows[] = [$link, $desc, $status, $ts, $rowActions];
+    $rows[] = [
+        $link,
+        $desc,
+        $status,
+        $u->isLoginOnly() ? $translator->trans('Yes') : $translator->trans('No'),
+        $ts,
+        $rowActions,
+    ];
 }
 
 $table = new SortableTableFromArrayConfig($rows, 2, 50, 'urls');
@@ -221,8 +230,9 @@ $table->set_additional_parameters($parameters);
 $table->set_header(0, 'URL');
 $table->set_header(1, get_lang('Description'));
 $table->set_header(2, get_lang('Active'));
-$table->set_header(3, get_lang('Created at'));
-$table->set_header(4, get_lang('Edit'), false);
+$table->set_header(3, get_lang('Is login only'));
+$table->set_header(4, get_lang('Created at'));
+$table->set_header(5, get_lang('Edit'), false);
 $table->display();
 
 Display::display_footer();

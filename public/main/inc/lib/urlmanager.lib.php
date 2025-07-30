@@ -21,7 +21,7 @@ class UrlManager
      * @param string $description The description of the site
      * @param int    $active      is active or not
      */
-    public static function add($url, $description, $active): ?AccessUrl
+    public static function add($url, $description, $active, bool $isLoginOnly = false): ?AccessUrl
     {
         $repo = Container::getAccessUrlRepository();
 
@@ -37,6 +37,7 @@ class UrlManager
             ->setActive($active)
             ->setUrl($url)
             ->setCreatedBy(api_get_user_id())
+            ->setIsLoginOnly($isLoginOnly)
         ;
 
         $repo->create($accessUrl);
@@ -56,23 +57,25 @@ class UrlManager
      *
      * @return bool if success
      */
-    public static function update($urlId, $url, $description, $active)
+    public static function update($urlId, $url, $description, $active, bool $isLoginOnly = false)
     {
         $urlId = (int) $urlId;
         $active = (int) $active;
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "UPDATE $table
-                SET url 	= '".Database::escape_string($url)."',
-                description = '".Database::escape_string($description)."',
-                active 		= '".$active."',
-                created_by 	= '".api_get_user_id()."',
-                tms 		= '".api_get_utc_datetime()."'
-                WHERE id = '$urlId'";
 
-        $result = Database::query($sql);
-
-        return $result;
+        return Database::update(
+            $table,
+            [
+                'url' => $url,
+                'description' => $description,
+                'active' => $active,
+                'created_by' => api_get_user_id(),
+                'tms' => api_get_utc_datetime(),
+                'is_login_only' => $isLoginOnly,
+            ],
+            ['id = ?' => [$urlId]]
+        );
     }
 
     /**

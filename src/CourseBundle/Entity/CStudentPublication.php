@@ -181,9 +181,10 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected float $weight = 0;
 
     #[ORM\Column(name: 'allow_text_assignment', type: 'integer', nullable: false)]
-    #[Groups(['c_student_publication:write', 'student_publication:item:get'])]
+    #[Groups(['c_student_publication:write','student_publication:item:get','student_publication:read'])]
     protected int $allowTextAssignment;
 
+    #[Groups(['student_publication:read'])]
     #[ORM\Column(name: 'contains_file', type: 'integer', nullable: false)]
     protected int $containsFile;
 

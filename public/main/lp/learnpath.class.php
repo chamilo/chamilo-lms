@@ -2559,7 +2559,7 @@ class learnpath
      *
      * @return array Ordered list of item IDs (empty array on error)
      */
-    public static function get_flat_ordered_items_list(CLp $lp, $parent = 0)
+    public static function get_flat_ordered_items_list(CLp $lp, $parent = 0, $withExportFlag = false)
     {
         $parent = (int) $parent;
         $lpItemRepo = Container::getLpItemRepository();
@@ -2577,32 +2577,41 @@ class learnpath
         $criteria = new Criteria();
         $criteria
             ->where($criteria->expr()->neq('path', 'root'))
-            ->orderBy(
-                [
-                    'displayOrder' => Criteria::ASC,
-                ]
-            );
+            ->orderBy(['displayOrder' => Criteria::ASC]);
         $items = $lp->getItems()->matching($criteria);
-        $items = $items->filter(
-            function (CLpItem $element) use ($parent) {
-                if ('root' === $element->getPath()) {
-                    return false;
-                }
-
-                if (null !== $element->getParent()) {
-                    return $element->getParent()->getIid() === $parent;
-                }
+        $items = $items->filter(function (CLpItem $element) use ($parent) {
+            if ('root' === $element->getPath()) {
                 return false;
-
             }
-        );
+            if (null !== $element->getParent()) {
+                return $element->getParent()->getIid() === $parent;
+            }
+            return false;
+        });
+
+        if (!$withExportFlag) {
+            $ids = [];
+            foreach ($items as $item) {
+                $itemId = $item->getIid();
+                $ids[] = $itemId;
+                $subIds = self::get_flat_ordered_items_list($lp, $itemId, false);
+                foreach ($subIds as $subId) {
+                    $ids[] = $subId;
+                }
+            }
+            return $ids;
+        }
+
         $list = [];
         foreach ($items as $item) {
             $itemId = $item->getIid();
-            $sublist = self::get_flat_ordered_items_list($lp, $itemId);
-            $list[] = $itemId;
-            foreach ($sublist as $subItem) {
-                $list[] = $subItem;
+            $list[] = [
+                'iid'            => $itemId,
+                'export_allowed' => $item->isExportAllowed() ? 1 : 0,
+            ];
+            $subList = self::get_flat_ordered_items_list($lp, $itemId, true);
+            foreach ($subList as $subEntry) {
+                $list[] = $subEntry;
             }
         }
 
@@ -5667,10 +5676,26 @@ class learnpath
 
         $data = $this->generate_lp_folder($courseInfo);
 
+        // 1) Campos estándar de documento
         if (null !== $lpItem) {
             LearnPathItemForm::setForm($form, $action, $this, $lpItem);
         }
 
+        // 2) Sólo en edición, añade el checkbox y su valor por defecto
+        if ($action === 'edit' && $lpItem !== null) {
+            // Label con get_lang(), sin envoltorios extra
+            $form->addElement(
+                'checkbox',
+                'export_allowed',
+                get_lang('Allow PDF export for this item')
+            );
+            // Asigna sólo este valor, QuickForm lo fusiona con los demás defaults
+            $form->setDefaults([
+                'export_allowed' => $lpItem->isExportAllowed() ? 1 : 0
+            ]);
+        }
+
+        // 3) Selector de carpetas en modo “add”
         switch ($action) {
             case 'add':
                 $folders = DocumentManager::get_all_document_folders(
@@ -5686,18 +5711,21 @@ class learnpath
                     $form,
                     'directory_parent_id'
                 );
-
                 if ($data) {
-                    $defaults['directory_parent_id'] = $data->getIid();
+                    $form->setDefaults([
+                        'directory_parent_id' => $data->getIid()
+                    ]);
                 }
-
                 break;
         }
 
+        // 4) Botón Guardar
         $form->addButtonSave(get_lang('Save'), 'submit_button');
 
         return $form->returnForm();
     }
+
+
 
     /**
      * @param array  $courseInfo

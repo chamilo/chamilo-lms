@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -37,7 +38,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['user_id'], name: 'user_id')]
 #[ORM\Index(columns: ['question_id'], name: 'question_id')]
 #[ORM\Index(columns: ['tms'], name: 'idx_track_e_attempt_tms')]
-#[ORM\Entity]
 #[ApiFilter(
     filterClass: SearchFilter::class,
     properties: [
@@ -47,6 +47,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'marks' => 'exact',
     ]
 )]
+#[ORM\Entity(repositoryClass: TrackEAttemptRepository::class)]
 class TrackEAttempt
 {
     use UserTrait;

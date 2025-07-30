@@ -237,10 +237,16 @@ class OpenAiProvider implements AiProviderInterface
 
             return null;
         } catch (Exception $e) {
-            error_log('ERROR - OpenAI Request failed: '.$e->getMessage());
+            error_log("[AI][OpenAI] Exception: " . $e->getMessage());
+
 
             return null;
         }
+    }
+
+    public function gradeOpenAnswer(string $prompt, string $toolName): ?string
+    {
+        return $this->requestOpenAI($prompt, $toolName);
     }
 
     private function getUserId(): ?int

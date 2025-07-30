@@ -243,10 +243,15 @@ class DeepSeekAiProvider implements AiProviderInterface
 
             return null;
         } catch (Exception $e) {
-            error_log('ERROR - DeepSeek Request failed: '.$e->getMessage());
+            error_log("[AI][DeepSeek] Exception: " . $e->getMessage());
 
             return null;
         }
+    }
+
+    public function gradeOpenAnswer(string $prompt, string $toolName): ?string
+    {
+        return $this->requestDeepSeekAI($prompt, $toolName);
     }
 
     private function getUserId(): ?int

@@ -37,8 +37,19 @@
       {{ request.user.username }}
 
       <BaseButton
-        :tooltip="t('Accept invitation')"
         class="ml-auto"
+        icon="alert"
+        only-icon
+        type="danger"
+        :tooltip="
+          t(
+            'By accepting this invitation, you will become linked to the requesting user in a way that will make some or all of your profile data available for reading by the requesting user. Please make sure you do not share too much by checking your profile with users you already trust.',
+          )
+        "
+      />
+
+      <BaseButton
+        :tooltip="t('Accept invitation')"
         icon="user-add"
         only-icon
         type="black"

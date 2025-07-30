@@ -17,6 +17,7 @@
       v-else
       :data-type="dataType"
       :url="data.contentUrl"
+      download
       class="flex align-center"
     >
       <ResourceIcon

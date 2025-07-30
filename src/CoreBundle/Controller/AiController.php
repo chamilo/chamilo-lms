@@ -7,7 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
+use Chamilo\CoreBundle\Entity\TrackEDefault;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Question;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,10 +25,12 @@ use const FILTER_VALIDATE_BOOLEAN;
  * Controller to handle AI-related functionalities.
  */
 #[Route('/ai')]
-class AiController
+class AiController  extends AbstractController
 {
     public function __construct(
-        private readonly AiProviderFactory $aiProviderFactory
+        private readonly AiProviderFactory        $aiProviderFactory,
+        private readonly TrackEAttemptRepository  $attemptRepo,
+        private readonly EntityManagerInterface   $em
     ) {}
 
     #[Route('/generate_aiken', name: 'chamilo_core_ai_generate_aiken', methods: ['POST'])]
@@ -66,38 +75,96 @@ class AiController
         }
     }
 
-    #[Route('/generate_learnpath', name: 'chamilo_core_ai_generate_learnpath', methods: ['POST'])]
-    public function generateLearnPath(Request $request): JsonResponse
+    #[Route("/open_answer_grade", name:"chamilo_core_ai_open_answer_grade", methods:["POST"])]
+    public function openAnswerGrade(Request $request): JsonResponse
     {
-        try {
-            $data = json_decode($request->getContent(), true);
-            $topic = trim((string) ($data['lp_name'] ?? ''));
-            $chaptersCount = (int) ($data['nro_items'] ?? 5);
-            $language = (string) ($data['language'] ?? 'en');
-            $wordsCount = (int) ($data['words_count'] ?? 500);
-            $addTests = filter_var($data['add_tests'] ?? false, FILTER_VALIDATE_BOOLEAN);
-            $numQuestions = (int) ($data['nro_questions'] ?? 0);
-            $aiProvider = $data['ai_provider'] ?? null;
+        $exeId      = $request->request->getInt('exeId', 0);
+        $questionId = $request->request->getInt('questionId', 0);
+        $courseId   = $request->request->getInt('courseId', 0);
 
-            if (empty($topic)) {
-                return new JsonResponse(['success' => false, 'text' => 'Invalid parameters.'], 400);
-            }
-
-            $aiService = $this->aiProviderFactory->getProvider($aiProvider);
-            $lpData = $aiService->generateLearnPath($topic, $chaptersCount, $language, $wordsCount, $addTests, $numQuestions);
-
-            if (!$lpData['success']) {
-                return new JsonResponse(['success' => false, 'text' => 'Failed to generate learning path.'], 500);
-            }
-
-            return new JsonResponse([
-                'success' => true,
-                'data' => $lpData,
-            ]);
-        } catch (Exception $e) {
-            error_log('ERROR: '.$e->getMessage());
-
-            return new JsonResponse(['success' => false, 'text' => 'An error occurred.'], 500);
+        if (0 === $exeId || 0 === $questionId || 0 === $courseId) {
+            return $this->json(['error' => 'Missing parameters'], 400);
         }
+
+        /** @var TrackEExercise $trackExercise */
+        $trackExercise = $this->em
+            ->getRepository(TrackEExercise::class)
+            ->find($exeId);
+        if (null === $trackExercise) {
+            return $this->json(['error' => 'Exercise attempt not found'], 404);
+        }
+
+        $attempt = $this->attemptRepo->findOneBy([
+            'trackExercise' => $trackExercise,
+            'questionId'    => $questionId,
+            'user'          => $trackExercise->getUser()
+        ]);
+        if (null === $attempt) {
+            return $this->json(['error' => 'Attempt not found'], 404);
+        }
+
+        $answerText = $attempt->getAnswer();
+
+        if (ctype_digit($answerText)) {
+            $cqa = $this->em
+                ->getRepository(CQuizAnswer::class)
+                ->find((int) $answerText);
+            if ($cqa) {
+                $answerText = $cqa->getAnswer();
+            }
+        }
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if (empty($courseInfo['real_id'])) {
+            return $this->json(['error' => 'Course info not found'], 500);
+        }
+
+        $question = Question::read($questionId, $courseInfo);
+        if (false === $question) {
+            return $this->json(['error' => 'Question not found'], 404);
+        }
+
+        $language     = $courseInfo['language'] ?? 'en';
+        $courseTitle  = $courseInfo['title']    ?? '';
+        $maxScore     = $question->selectWeighting();
+        $questionText = $question->selectTitle();
+        $prompt = sprintf(
+            "In language %s, for the question: '%s', in the context of %s, provide a score between 0 and %d on one line, then feedback on the next line for the following answer: '%s'.",
+            $language, $questionText, $courseTitle, $maxScore, $answerText
+        );
+
+        $raw = trim((string) $this->aiProviderFactory
+            ->getProvider()
+            ->gradeOpenAnswer($prompt, 'open_answer_grade'));
+
+        if ('' === $raw) {
+            return $this->json(['error' => 'AI request failed'], 500);
+        }
+
+        if (false !== strpos($raw, "\n")) {
+            [$scoreLine, $feedback] = explode("\n", $raw, 2);
+        } else {
+            $scoreLine = (string) $maxScore;
+            $feedback  = $raw;
+        }
+
+        $score = (int) filter_var($scoreLine, FILTER_SANITIZE_NUMBER_INT);
+
+        $track = new TrackEDefault();
+        $track
+            ->setDefaultUserId($this->getUser()->getId())
+            ->setDefaultEventType('ai_use_question_feedback')
+            ->setDefaultValueType('attempt_id')
+            ->setDefaultValue((string)$attempt->getId())
+            ->setDefaultDate(new \DateTime())
+            ->setCId($courseId)
+            ->setSessionId(api_get_session_id());
+        $this->em->persist($track);
+        $this->em->flush();
+
+        return $this->json([
+            'score'    => $score,
+            'feedback' => $feedback
+        ]);
     }
 }

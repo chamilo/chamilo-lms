@@ -6,6 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use Chamilo\CoreBundle\Controller\Api\VideoConferenceCallbackController;
 use Chamilo\CoreBundle\Repository\ConferenceActivityRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,8 +16,19 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Conference Activity entity.
  */
-#[ORM\Table(name: 'conference_activity')]
+#[ApiResource(
+    operations: [
+        new Post(
+            uriTemplate: '/videoconference/callback',
+            controller: VideoConferenceCallbackController::class,
+            read: false,
+            deserialize: false,
+            validate: false
+        )
+    ]
+)]
 #[ORM\Entity(repositoryClass: ConferenceActivityRepository::class)]
+#[ORM\Table(name: 'conference_activity')]
 class ConferenceActivity
 {
     #[ORM\Id]

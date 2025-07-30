@@ -291,9 +291,12 @@ function get_config_param($param, $updatePath = '')
         !is_dir($updatePath.$updateFromConfigFile)
     ) {
         require $updatePath.$updateFromConfigFile;
-        $config = new Laminas\Config\Config($_configuration);
 
-        return $config->get($param);
+        if (isset($_configuration) && array_key_exists($param, $_configuration)) {
+            return $_configuration[$param];
+        }
+
+        return null;
     }
 
     error_log('Config array could not be found in get_config_param()', 0);

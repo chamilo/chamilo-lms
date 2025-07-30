@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-18 10:22+0000\n"
+"PO-Revision-Date: 2025-07-27 22:07+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Dutch <https://translation.chamilo.org/projects/chamilo/"
 "messages/nl/>\n"
@@ -9492,7 +9492,7 @@ msgid "years"
 msgstr "jaren"
 
 msgid "days"
-msgstr "dagen"
+msgstr "Dagen"
 
 msgid "Please stand by..."
 msgstr "Even geduld aub"
@@ -30326,3 +30326,299 @@ msgstr ""
 
 msgid "Menumycourses"
 msgstr "Mijn cursussen"
+
+msgid "Confirmation"
+msgstr "Bevestiging"
+
+msgid "User is session admin in some sessions"
+msgstr "Gebruiker is sessiebeheerder in sommige sessies"
+
+msgid "You're subscribed to push notifications in this browser."
+msgstr "U bent geabonneerd op pushmeldingen in deze browser."
+
+msgid "Destination of test e-mail"
+msgstr "Bestemming van test-e-mail"
+
+msgid "Error during test email: "
+msgstr "Fout tijdens test e-mail: "
+
+msgid "Push notification test"
+msgstr "Pushmelding test"
+
+msgid "This is a test push notification from this platform to the user's browser or app."
+msgstr ""
+"Dit is een test pushmelding van dit platform naar de browser of app van de "
+"gebruiker."
+
+msgid "Role change denied due to incompatible current assignments:"
+msgstr "Rolwijziging geweigerd vanwege incompatibele huidige opdrachten:"
+
+msgid "You do not have permission to send notifications to other users."
+msgstr "U hebt geen toestemming om meldingen naar andere gebruikers te sturen."
+
+msgid "User not found or invalid."
+msgstr "Gebruiker niet gevonden of ongeldig."
+
+msgid "Access denied"
+msgstr "Toegang geweigerd"
+
+msgid "Push notifications have been processed."
+msgstr "Pushmeldingen zijn verwerkt."
+
+msgid "Validate prerequisites only within the same session"
+msgstr "Valideer voorwaarden alleen binnen dezelfde sessie"
+
+msgid "You are about to start using one of the best Open Source e-learning platforms on the market. Like many other Open Source projects, Chamilo is backed up by a large community of students, teachers, developers, content creators and businesses who would like to promote the project better."
+msgstr ""
+"U staat op het punt om een van de beste Open Source e-learningplatformen op "
+"de markt te gebruiken. Net als veel andere Open Source projecten, wordt "
+"Chamilo ondersteund door een grote gemeenschap van leerlingen, trainers, "
+"ontwikkelaars, contentmakers en bedrijven die het project graag beter willen "
+"promoten."
+
+msgid "Classes of course"
+msgstr "Cursusklassen"
+
+msgid "Revoke Acceptance"
+msgstr "Intrekken Acceptatie"
+
+msgid "Test email sent successfully"
+msgstr "E-mail met test verzonden"
+
+msgid "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. The default value is null://null and will disable e-mail sending. Use native://default to use the default PHP configuration on your server. Here are a few examples of supported DSN syntaxes: %s."
+msgstr ""
+"De DSN bevat alle parameters die nodig zijn om verbinding te maken met de "
+"mailservice. U kunt meer leren op %s. De standaardwaarde is null://null en "
+"zal het verzenden van e-mails uitschakelen. Gebruik native://default om de "
+"standaard PHP-configuratie op uw server te gebruiken. Hier zijn een paar "
+"voorbeelden van ondersteunde DSN-syntaxen: %s."
+
+msgid "CSRF token is invalid. Please try again."
+msgstr "Het CSRF-token is ongeldig. Probeer het opnieuw."
+
+msgid "Enter your 2FA code"
+msgstr "Voer uw 2FA-code in"
+
+msgid "A database with the same name already exists. It will be deleted."
+msgstr ""
+"Er bestaat al een database met dezelfde naam. Deze zal worden verwijderd."
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header. We recommend using a 'no-reply' e-mail address here, to avoid excessive filling of an e-mail box. The support e-mail address defined in the Platform section should be used to contact you, but replying to automatic notifications should not be encouraged."
+msgstr ""
+"Het e-mailadres waarvan e-mails worden verzonden wanneer het platform een e-"
+"mail verstuurt, wordt ook gebruikt als 'reply-to' header. We raden aan hier "
+"een 'no-reply' e-mailadres te gebruiken, om overmatige vulling van een e-"
+"mailbox te voorkomen. Het ondersteunings-e-mailadres dat in de sectie "
+"Platform is gedefinieerd, moet worden gebruikt om contact met u op te nemen, "
+"maar het beantwoorden van automatische meldingen moet niet worden "
+"aangemoedigd."
+
+msgid "VAPID keys are missing in the configuration."
+msgstr "VAPID-sleutels ontbreken in de configuratie."
+
+msgid "Error sending notification to Gotify: "
+msgstr "Fout bij het versturen van de notificatie naar Gotify: "
+
+msgid "Select items to export:"
+msgstr "Selecteer items om te exporteren:"
+
+msgid "This is a test notification sent to Gotify from this platform."
+msgstr "Dit is een testmelding verzonden naar Gotify vanaf dit platform."
+
+msgid "Push notification settings (JSON)"
+msgstr "Instellingen voor pushmeldingen (JSON)"
+
+msgid "My Sessions display mode"
+msgstr "Mijn sessies weergavemodus"
+
+msgid "Checking push subscription..."
+msgstr "Controle van push-abonnement..."
+
+msgid "Number of days before users must rotate their password (0 = disabled)."
+msgstr ""
+"Aantal dagen voordat gebruikers hun wachtwoord moeten wijzigen (0 = "
+"uitgeschakeld)."
+
+msgid "Test email failed: "
+msgstr "Test e-mail mislukt: "
+
+msgid "Dependencies"
+msgstr "Afhankelijkheden"
+
+msgid "Installer data is missing."
+msgstr "Installatiegegevens ontbreken."
+
+msgid "Enable two-factor authentication (2FA)"
+msgstr "Schakel tweefactorauthenticatie (2FA) in"
+
+msgid "Session expired. Redirecting to login…"
+msgstr "Sessie verlopen. Doorverwijzen naar login…"
+
+msgid "Classes of session"
+msgstr "Sessieklassen"
+
+msgid "By knowing a little bit more about you, a platform administrator, one of the most important user type for us, who will manage this e-learning system, we will be able to let people know, statistically, how our software is used while respecting your privacy. We will also be able to let you know when we organize events that might be relevant to you or offer additional services that might be of value to your organisation."
+msgstr ""
+"Door iets meer over u te weten te komen, een platformbeheerder, een van de "
+"belangrijkste gebruikerstypen voor ons, die dit e-learning systeem zal "
+"beheren, kunnen we mensen statistisch laten weten hoe onze software wordt "
+"gebruikt met respect voor uw privacy. We kunnen u ook informeren wanneer we "
+"evenementen organiseren die voor u relevant kunnen zijn of aanvullende "
+"diensten aanbieden die waardevol kunnen zijn voor uw organisatie."
+
+msgid "User is general coach in some sessions"
+msgstr "Gebruiker is algemene coach in sommige sessies"
+
+msgid "Select a class"
+msgstr "Selecteer een klas"
+
+msgid "The address \"%host%\" is not configured in this portal instance."
+msgstr "Het adres \"%host%\" is niet geconfigureerd in deze portaalinstantie."
+
+msgid "Choose how the \"My Sessions\" page is displayed: as a modern visual block (card) view or the classic list style."
+msgstr ""
+"Kies hoe de pagina \"Mijn Sessies\" wordt weergegeven: als een moderne "
+"visuele blokweergave (kaart) of de klassieke lijststijl."
+
+msgid "By filling this form, you agree that the editor of Chamilo, the %s company, registered in Belgium, and/or members of its network of partners (exclusively Chamilo services providers) might occasionally send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flows, with a thorough respect of your time and your privacy."
+msgstr ""
+"Door dit formulier in te vullen, gaat u ermee akkoord dat de uitgever van "
+"Chamilo, het %s bedrijf, geregistreerd in België, en/of leden van zijn "
+"netwerk van partners (uitsluitend dienstverleners van Chamilo) u mogelijk af "
+"en toe informatie per e-mail sturen over belangrijke evenementen of updates "
+"in de Chamilo-software of -gemeenschap. Dit zal de gemeenschap helpen "
+"groeien als een georganiseerde entiteit waar informatie stroomt, met grondig "
+"respect voor uw tijd en uw privacy."
+
+msgid "Sessions that depend on this session"
+msgstr "Sessies die afhankelijk zijn van deze sessie"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR."
+msgstr ""
+"Houd er rekening mee dat wijzigingen in de voorwaarden met betrekking tot de "
+"AVG vereisen dat u die wijzigingen meldt aan derden aan wie u persoonlijke "
+"informatie over uw gebruikers hebt verstrekt, zoals vermeld in Artikel 19 "
+"van de AVG."
+
+msgid "Course %s added. You can access it directly %shere%s."
+msgstr "Cursus %s toegevoegd. U kunt er direct %shier%s toegang toe krijgen."
+
+msgid "Push notifications are not enabled in this browser."
+msgstr "Pushmeldingen zijn niet ingeschakeld in deze browser."
+
+msgid "Mail: 'From' address"
+msgstr "E-mail: 'Van' adres"
+
+msgid "User is teacher in some courses"
+msgstr "Gebruiker is trainer in sommige cursussen"
+
+msgid "Email Settings"
+msgstr "E-mailinstellingen"
+
+msgid "If the problem persists, please contact support."
+msgstr "Indien het probleem aanhoudt, neem dan contact op met de ondersteuning."
+
+msgid "Confirm new password"
+msgstr "Bevestig nieuw wachtwoord"
+
+msgid "Session requirements and dependencies"
+msgstr "Sessievereisten en afhankelijkheden"
+
+msgid "Please note that you are NOT REQUIRED to fill this form. If you want to remain anonymous, we will lose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click Next."
+msgstr ""
+"Let op: het is NIET VERPLICHT om dit formulier in te vullen. Als u anoniem "
+"wilt blijven, verliezen we de mogelijkheid om u alle privileges van een "
+"geregistreerde portaalbeheerder te bieden, maar we respecteren uw "
+"beslissing. Laat dit formulier leeg en klik op Volgende."
+
+msgid "Then enter the 6-digit code shown in your app at the bottom of the form."
+msgstr ""
+"Voer dan de 6-cijferige code in die in uw app onderaan het formulier wordt "
+"weergegeven."
+
+msgid "JSON configuration for Push notifications integration."
+msgstr "JSON-configuratie voor integratie van pushmeldingen."
+
+msgid "Go to home page"
+msgstr "Ga naar de startpagina"
+
+msgid "Gotify configuration is missing."
+msgstr "De configuratie van Gotify ontbreekt."
+
+msgid "The name that appears as the sender (next to the From e-mail address) when the platform sends an e-mail."
+msgstr ""
+"De naam die verschijnt als afzender (naast het e-mailadres van de afzender) "
+"wanneer het platform een e-mail verstuurt."
+
+msgid "The following documents are used in learning paths:"
+msgstr "De volgende documenten worden gebruikt in leerroutes:"
+
+msgid "Global admin"
+msgstr "Globale beheerder"
+
+msgid "Please select at least one item."
+msgstr "Selecteer ten minste één item."
+
+msgid "Mail DSN"
+msgstr "E-mail DSN"
+
+msgid "Oops! URL not registered."
+msgstr "Oeps! URL niet geregistreerd."
+
+msgid "Do you still want to delete them?"
+msgstr "Wilt u ze nog steeds verwijderen"
+
+msgid "No push subscriptions found for this user."
+msgstr "Geen push-abonnementen gevonden voor deze gebruiker."
+
+msgid "No exportable items found."
+msgstr "Geen exporteerbare items gevonden."
+
+msgid "Duration (hh:mm:ss)"
+msgstr "Duur (uu:mm:ss)"
+
+msgid "Days"
+msgstr "Dagen"
+
+msgid "When enabled, a course will be considered validated only if passed within the current session. If disabled, courses passed in other sessions will also unlock dependent courses."
+msgstr ""
+"Wanneer ingeschakeld, wordt een cursus alleen als gevalideerd beschouwd als "
+"deze binnen de huidige sessie is gehaald. Indien uitgeschakeld, zullen ook "
+"cursussen die in andere sessies zijn gehaald afhankelijke cursussen "
+"ontgrendelen."
+
+msgid "Mail: 'From' name"
+msgstr "E-mail: 'Van' naam"
+
+msgid "Notification sent to Gotify."
+msgstr "Melding verzonden naar Gotify."
+
+msgid "Password rotation interval (days)"
+msgstr "Wachtwoordrotatie-interval (dagen)"
+
+msgid "Question manager"
+msgstr "Vragenbeheerder"
+
+msgid "Invalid format"
+msgstr "Ongeldig formaat"
+
+msgid "Endpoint"
+msgstr "Eindpunt"
+
+msgid "Accept Terms and Conditions"
+msgstr "Accepteer de Algemene Voorwaarden"
+
+msgid "You accepted these terms on"
+msgstr "U heeft deze voorwaarden geaccepteerd op"
+
+msgid "Super admin"
+msgstr "Superbeheerder"
+
+msgid "Enable notifications"
+msgstr "Schakel meldingen in"
+
+msgid "No push notification setting configured."
+msgstr "Geen instelling voor pushmeldingen geconfigureerd."
+
+msgid "Documents deleted"
+msgstr "Documenten verwijderd"

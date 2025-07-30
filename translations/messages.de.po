@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-04-18 10:22+0000\n"
+"PO-Revision-Date: 2025-07-28 22:06+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -6866,7 +6866,7 @@ msgid "Group deleted"
 msgstr "Gruppe gelöscht"
 
 msgid "Registered"
-msgstr "Registriert"
+msgstr "registriert"
 
 msgid "Learners are allowed to self-register in groups"
 msgstr "Teilnehmer können sich selber in den Gruppen eintragen"
@@ -29580,3 +29580,550 @@ msgstr "Tage"
 
 msgid "Notification to remind the event"
 msgstr "Benachrichtigung zur Erinnerung an das Ereignis"
+
+msgid "Unlock prerequisites after last test attempt"
+msgstr "Entsperren Sie die Voraussetzungen nach dem letzten Testversuch"
+
+msgid "Display colors for scores in the gradebook"
+msgstr "Anzeige der Farben für Punktzahlen im Notenbuch"
+
+msgid "ID of the user who officially sends the agenda reminders"
+msgstr "Benutzer-ID des offiziellen Absenders der Agenda-Erinnerungen"
+
+msgid "Remove the checkbox to enable sending announcements to users with HR roles (still requires to confirm in the announcements tool)."
+msgstr ""
+"Entfernen Sie das Kontrollkästchen, um das Senden von Ankündigungen an "
+"Benutzer mit HR-Rollen zu aktivieren (erfordert immer noch eine Bestätigung "
+"im Ankündigungstool)."
+
+msgid "Show courses duration"
+msgstr "Kursdauer anzeigen"
+
+msgid "Allows grading attendance with multiple levels instead of a simple present/absent system."
+msgstr ""
+"Ermöglicht die Bewertung der Anwesenheit mit mehreren Stufen anstelle eines "
+"einfachen Anwesend/Abwesend-Systems."
+
+msgid "Main language, used by default when no user language is set."
+msgstr ""
+"Hauptsprache, die standardmäßig verwendet wird, wenn keine Benutzersprache "
+"festgelegt ist."
+
+msgid "Default platform language"
+msgstr "Standard-Plattformsprache"
+
+msgid "Sets which user appears as the sender of agenda reminder emails."
+msgstr ""
+"Legt fest, welcher Benutzer als Absender von Erinnerungs-E-Mails für Termine "
+"erscheint."
+
+msgid "Enable Multi-Level Attendance Grading"
+msgstr "Aktivieren Sie die mehrstufige Anwesenheitsbewertung"
+
+msgid "Enables color coding for better score visibility in the gradebook."
+msgstr ""
+"Aktiviert Farbkodierung für eine bessere Sichtbarkeit der Bewertungen im "
+"Notenbuch."
+
+msgid "Display the course duration next to the course title in the course catalogue and the courses list."
+msgstr ""
+"Zeigen Sie die Kursdauer neben dem Kurstitel im Kurskatalog und in der "
+"Kursliste an."
+
+msgid "registered"
+msgstr "registriert"
+
+msgid "Select classes for which this course will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr ""
+"Wählen Sie Klassen aus, für die dieser Kurs im Katalog sichtbar sein wird, "
+"um ein Abonnement zu ermöglichen. Abonnementregeln gelten weiterhin, "
+"abgesehen davon, dass er im Katalog sichtbar ist."
+
+msgid "Enable Session Replication"
+msgstr "Aktivieren der Session-Replikation"
+
+msgid "List of visible fields in profile"
+msgstr "Liste der sichtbaren Felder im Profil"
+
+msgid "Send all e-mails from this e-mail address"
+msgstr "Senden Sie alle E-Mails von dieser E-Mail-Adresse"
+
+msgid "Sets the default email address used in the \"from\" field of emails."
+msgstr ""
+"Legt die Standard-E-Mail-Adresse fest, die im \"Von\"-Feld von E-Mails "
+"verwendet wird."
+
+msgid "Generates images based on prompts or content using AI."
+msgstr "Erzeugt Bilder basierend auf Vorgaben oder Inhalten mittels KI."
+
+msgid "AI providers connection data"
+msgstr "Anbieterverbindung für KI-Daten"
+
+msgid "Provides students with an AI-powered tutoring assistant."
+msgstr "Bietet Schülern einen KI-gesteuerten Tutoring-Assistenten."
+
+msgid "Enables all available AI-powered features in the platform."
+msgstr "Aktiviert alle verfügbaren KI-gestützten Funktionen auf der Plattform."
+
+msgid "Uses AI to evaluate and grade uploaded assignments."
+msgstr "Verwendet KI, um hochgeladene Arbeiten zu bewerten und zu benoten."
+
+msgid "Dynamically creates new anonymous users to support high visitor traffic."
+msgstr ""
+"Erstellt dynamisch neue anonyme Benutzer, um hohen Besucherverkehr zu "
+"unterstützen."
+
+msgid "Tutor chatbot energized by AI"
+msgstr "Tutor-Chatbot mit KI-Unterstützung"
+
+msgid "Assigning skills to user: sub-skills auto-loading"
+msgstr ""
+"Fähigkeiten dem Benutzer zuweisen: Automatisches Laden von Teilfähigkeiten"
+
+msgid "Activates popup or system notifications for important platform events."
+msgstr ""
+"Aktiviert Popup- oder Systembenachrichtigungen für wichtige "
+"Plattformereignisse."
+
+msgid "Configuration data to connect with external AI services."
+msgstr "Konfigurationsdaten zur Verbindung mit externen KI-Diensten."
+
+msgid "Overrides sender for all emails to appear from a unique address."
+msgstr ""
+"Überschreibt den Absender für alle E-Mails, sodass sie von einer "
+"einzigartigen Adresse zu stammen scheinen."
+
+msgid "Displays the current DB version to match the Chamilo core version."
+msgstr ""
+"Zeigt die aktuelle DB-Version an, um mit der Chamilo-Core-Version "
+"übereinzustimmen."
+
+msgid "Allows users to continue in a learning path after using all quiz attempts of a test used as prerequisite for other items."
+msgstr ""
+"Ermöglicht Benutzern die Fortsetzung eines Lernpfads, nachdem alle Versuche "
+"eines als Voraussetzung für andere Elemente verwendeten Tests aufgebraucht "
+"wurden."
+
+msgid "Enable Automatic Reinscription"
+msgstr "Automatische Wiedereinschreibung aktivieren"
+
+msgid "When manually assigning skills to a user, the form can be set to automatically offer you to assign a sub-skill instead of the skill you selected."
+msgstr ""
+"Beim manuellen Zuweisen von Kompetenzen an einen Benutzer kann das Formular "
+"so eingestellt werden, dass automatisch angeboten wird, eine Teilkompetenz "
+"anstelle der ausgewählten Kompetenz zuzuweisen."
+
+msgid "Minimal password syntax requirements"
+msgstr "Minimale Anforderungen an das Passwortformat"
+
+msgid "Image generator"
+msgstr "Bildgenerator"
+
+msgid "Removes the groups section from the social network view."
+msgstr "Entfernt den Gruppenbereich aus der Ansicht des sozialen Netzwerks."
+
+msgid "Enable the AI helper tool"
+msgstr "Aktivieren Sie das KI-Hilfswerkzeug"
+
+msgid "Menucampushomepage"
+msgstr "Campus-Startseite"
+
+msgid "Limits online user visibility to specific user roles."
+msgstr ""
+"Beschränkt die Online-Sichtbarkeit von Benutzern auf spezifische "
+"Benutzerrollen."
+
+msgid "Generates personalized tests with AI based on course content."
+msgstr "Erzeugt personalisierte Übungen mit KI basierend auf dem Kursinhalt."
+
+msgid "Menureporting"
+msgstr "Berichterstattung"
+
+msgid "Analyses learning materials to extract insights or improve quality."
+msgstr ""
+"Analysiert Lernmaterialien, um Einsichten zu gewinnen oder die Qualität zu "
+"verbessern."
+
+msgid "Enable or disable automatic re-subscription when course validity expires. The related cron job must also be activated."
+msgstr ""
+"Aktivieren oder deaktivieren Sie die automatische Wiedereinschreibung, wenn "
+"die Kursgültigkeit abläuft. Der zugehörige Cron-Job muss ebenfalls aktiviert "
+"werden."
+
+msgid "Content analyser"
+msgstr "Inhaltsanalysator"
+
+msgid "Open answers grader"
+msgstr "Antwortenbewerter öffnen"
+
+msgid "Exercise generator"
+msgstr "Übungsgenerator"
+
+msgid "Learning paths generator"
+msgstr "Lernpfadgenerator"
+
+msgid "Automatically grades open-ended answers using AI."
+msgstr "Bewertet offene Antworten automatisch mit KI."
+
+msgid "Auto-provision more anonymous users"
+msgstr "Automatische Bereitstellung weiterer anonymer Benutzer"
+
+msgid "Assignments grader"
+msgstr "Aufgabenbewerter"
+
+msgid "Hide groups block in social network"
+msgstr "Gruppenblock im sozialen Netzwerk ausblenden"
+
+msgid "Current version of the database schema used by Chamilo"
+msgstr "Aktuelle Version des Datenbankschemas, das von Chamilo verwendet wird"
+
+msgid "Enable or disable automatic session replication. The related cron job must also be activated."
+msgstr ""
+"Aktivieren oder deaktivieren Sie die automatische Session-Replikation. Der "
+"zugehörige Cron-Job muss ebenfalls aktiviert werden."
+
+msgid "Filter users that can be seen as online"
+msgstr "Filtern Sie Benutzer, die als online angezeigt werden können"
+
+msgid "Controls which profile fields are visible to users and others."
+msgstr "Steuert, welche Profilfelder für Benutzer und andere sichtbar sind."
+
+msgid "Defines the required structure for user passwords."
+msgstr "Definiert die erforderliche Struktur für Benutzerpasswörter."
+
+msgid "Send all e-mails as originating from this (organizational) name"
+msgstr ""
+"Senden Sie alle E-Mails, sodass sie von diesem (organisatorischen) Namen "
+"stammen"
+
+msgid "Allows duplication of resources that were created in the session when duplicating the session."
+msgstr ""
+"Ermöglicht die Duplizierung von Ressourcen, die in der Session erstellt "
+"wurden, beim Duplizieren der Session."
+
+msgid "Send all e-mails as one single sender"
+msgstr "Senden Sie alle E-Mails als einen einzigen Absender"
+
+msgid "Sets the default display name used for sending platform emails. e.g. \"Support team\"."
+msgstr ""
+"Legt den Standardanzeigennamen fest, der für das Senden von Plattform-E-"
+"Mails verwendet wird. z.B. \"Support-Team\"."
+
+msgid "Generates personalized learning paths using AI suggestions."
+msgstr "Erstellt personalisierte Lernpfade mithilfe von KI-Vorschlägen."
+
+msgid "Enable the notification tool for a more impactful communication channel with students"
+msgstr ""
+"Aktivieren Sie das Benachrichtigungstool für einen wirkungsvolleren "
+"Kommunikationskanal mit den Lernenden."
+
+msgid "Menumycourses"
+msgstr "Meine Kurse"
+
+msgid "User is session admin in some sessions"
+msgstr "Benutzer ist Session-Administrator in einigen Sessions"
+
+msgid "You're subscribed to push notifications in this browser."
+msgstr "Sie sind in diesem Browser für Push-Benachrichtigungen angemeldet."
+
+msgid "Destination of test e-mail"
+msgstr "Ziel der Test-E-Mail"
+
+msgid "Error during test email: "
+msgstr "Fehler beim Test-E-Mail-Versand: "
+
+msgid "Push notification test"
+msgstr "Push-Benachrichtigungstest"
+
+msgid "This is a test push notification from this platform to the user's browser or app."
+msgstr ""
+"Dies ist eine Test-Push-Benachrichtigung von dieser Plattform an den Browser "
+"oder die App des Benutzers."
+
+msgid "Role change denied due to incompatible current assignments:"
+msgstr "Rollenänderung aufgrund inkompatibler aktueller Zuweisungen abgelehnt:"
+
+msgid "You do not have permission to send notifications to other users."
+msgstr ""
+"Sie haben keine Berechtigung, Benachrichtigungen an andere Benutzer zu "
+"senden."
+
+msgid "User not found or invalid."
+msgstr "Benutzer nicht gefunden oder ungültig."
+
+msgid "Access denied"
+msgstr "Zugriff verweigert"
+
+msgid "Push notifications have been processed."
+msgstr "Push Benachrichtigungen wurden verarbeitet."
+
+msgid "Validate prerequisites only within the same session"
+msgstr "Überprüfen Sie die Voraussetzungen nur innerhalb derselben Session"
+
+msgid "You are about to start using one of the best Open Source e-learning platforms on the market. Like many other Open Source projects, Chamilo is backed up by a large community of students, teachers, developers, content creators and businesses who would like to promote the project better."
+msgstr ""
+"Sie stehen kurz davor, eine der besten Open-Source-E-Learning-Plattformen "
+"auf dem Markt zu nutzen. Wie viele andere Open-Source-Projekte wird Chamilo "
+"von einer großen Gemeinschaft aus Lernenden, Lehrenden, Entwicklern, "
+"Inhaltsproduzenten und Unternehmen unterstützt, die das Projekt gerne besser "
+"fördern möchten."
+
+msgid "Classes of course"
+msgstr "Klassen der Kurs"
+
+msgid "Test email sent successfully"
+msgstr "Test-E-Mail erfolgreich gesendet"
+
+msgid "The DSN fully includes all parameters needed to connect to the mail service. You can learn more at %s. The default value is null://null and will disable e-mail sending. Use native://default to use the default PHP configuration on your server. Here are a few examples of supported DSN syntaxes: %s."
+msgstr ""
+"Die DSN enthält alle notwendigen Parameter, um eine Verbindung zum E-Mail-"
+"Dienst herzustellen. Weitere Informationen finden Sie unter %s. Der "
+"Standardwert ist null://null und deaktiviert das Senden von E-Mails. "
+"Verwenden Sie native://default, um die Standard-PHP-Konfiguration auf Ihrem "
+"Server zu nutzen. Hier sind einige Beispiele für unterstützte DSN-Syntax: %s."
+
+msgid "CSRF token is invalid. Please try again."
+msgstr "Das CSRF-Token ist ungültig. Bitte versuchen Sie es erneut."
+
+msgid "Enter your 2FA code"
+msgstr "Geben Sie Ihren 2FA-Code ein"
+
+msgid "A database with the same name already exists. It will be deleted."
+msgstr ""
+"Eine Datenbank mit demselben Namen existiert bereits. Sie wird gelöscht."
+
+msgid "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header. We recommend using a 'no-reply' e-mail address here, to avoid excessive filling of an e-mail box. The support e-mail address defined in the Platform section should be used to contact you, but replying to automatic notifications should not be encouraged."
+msgstr ""
+"Die E-Mail-Adresse, von der aus E-Mails verschickt werden, wenn die "
+"Plattform eine E-Mail sendet, wird auch als 'Antwort-an'-Kopfzeile "
+"verwendet. Wir empfehlen hier die Verwendung einer 'no-reply'-E-Mail-"
+"Adresse, um das übermäßige Füllen eines E-Mail-Postfachs zu vermeiden. Die "
+"im Plattformbereich definierte Support-E-Mail-Adresse sollte zur "
+"Kontaktaufnahme verwendet werden, aber das Antworten auf automatische "
+"Benachrichtigungen sollte nicht gefördert werden."
+
+msgid "VAPID keys are missing in the configuration."
+msgstr "In der Konfiguration fehlen die VAPID-Schlüssel."
+
+msgid "Error sending notification to Gotify: "
+msgstr "Fehler beim Senden der Benachrichtigung an Gotify: "
+
+msgid "Select items to export:"
+msgstr "Wählen Sie Elemente zum Exportieren aus:"
+
+msgid "This is a test notification sent to Gotify from this platform."
+msgstr ""
+"Dies ist eine Testbenachrichtigung, die von dieser Plattform an Gotify "
+"gesendet wurde."
+
+msgid "Push notification settings (JSON)"
+msgstr "Einstellungen für Push-Benachrichtigungen (JSON)"
+
+msgid "My Sessions display mode"
+msgstr "Meine Sessions Anzeigemodus"
+
+msgid "Checking push subscription..."
+msgstr "Überprüfung des Push-Abonnements..."
+
+msgid "Number of days before users must rotate their password (0 = disabled)."
+msgstr ""
+"Anzahl der Tage, bevor Benutzer ihr Passwort ändern müssen (0 = deaktiviert)."
+
+msgid "Test email failed: "
+msgstr "Die Test-E-Mail ist fehlgeschlagen: "
+
+msgid "Dependencies"
+msgstr "Abhängigkeiten"
+
+msgid "Installer data is missing."
+msgstr "Installationsdaten fehlen."
+
+msgid "Enable two-factor authentication (2FA)"
+msgstr "Aktivieren Sie die Zwei-Faktor-Authentifizierung (2FA)"
+
+msgid "Session expired. Redirecting to login…"
+msgstr "Session abgelaufen. Weiterleitung zum Login…"
+
+msgid "Classes of session"
+msgstr "Klassen der Session"
+
+msgid "By knowing a little bit more about you, a platform administrator, one of the most important user type for us, who will manage this e-learning system, we will be able to let people know, statistically, how our software is used while respecting your privacy. We will also be able to let you know when we organize events that might be relevant to you or offer additional services that might be of value to your organisation."
+msgstr ""
+"Indem wir ein wenig mehr über Sie als Plattformadministrator erfahren, einer "
+"der wichtigsten Nutzertypen für uns, der dieses E-Learning-System verwalten "
+"wird, können wir statistisch darstellen, wie unsere Software genutzt wird, "
+"während wir Ihre Privatsphäre respektieren. Wir können Sie auch informieren, "
+"wenn wir Veranstaltungen organisieren, die für Sie relevant sein könnten, "
+"oder zusätzliche Dienstleistungen anbieten, die für Ihre Organisation von "
+"Wert sein könnten."
+
+msgid "Menumyagenda"
+msgstr "Meine Agenda"
+
+msgid "User is general coach in some sessions"
+msgstr "Benutzer ist allgemeiner Tutor in einigen Sessions"
+
+msgid "Select a class"
+msgstr "Wählen Sie eine Klasse"
+
+msgid "The address \"%host%\" is not configured in this portal instance."
+msgstr "Die Adresse \"%host%\" ist in dieser Portalinstanz nicht konfiguriert."
+
+msgid "Choose how the \"My Sessions\" page is displayed: as a modern visual block (card) view or the classic list style."
+msgstr ""
+"Wählen Sie, wie die Seite \"Meine Sessions\" angezeigt wird: als moderne "
+"visuelle Blockansicht (Karte) oder im klassischen Listenstil."
+
+msgid "By filling this form, you agree that the editor of Chamilo, the %s company, registered in Belgium, and/or members of its network of partners (exclusively Chamilo services providers) might occasionally send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flows, with a thorough respect of your time and your privacy."
+msgstr ""
+"Indem Sie dieses Formular ausfüllen, erklären Sie sich damit einverstanden, "
+"dass der Herausgeber von Chamilo, das %s Unternehmen, eingetragen in "
+"Belgien, und/oder Mitglieder seines Netzwerks von Partnern (ausschließlich "
+"Dienstleister von Chamilo) Ihnen gelegentlich Informationen per E-Mail über "
+"wichtige Ereignisse oder Aktualisierungen in der Chamilo-Software oder -"
+"Gemeinschaft zusenden dürfen. Dies wird der Gemeinschaft helfen, als "
+"organisierte Einheit zu wachsen, in der Informationen fließen, mit "
+"gründlichem Respekt für Ihre Zeit und Ihre Privatsphäre."
+
+msgid "Sessions that depend on this session"
+msgstr "Sessions, die von dieser Session abhängen"
+
+msgid "Menudiagnostics"
+msgstr "Diagnose"
+
+msgid "Please remember that modifications to the terms related to GDPR require you to report those modifications to third parties to whom you have provided personal information about your users, as stated in Article 19 of GDPR."
+msgstr ""
+"Bitte beachten Sie, dass Änderungen an den Begriffen im Zusammenhang mit der "
+"DSGVO Sie dazu verpflichten, diese Änderungen Dritten zu melden, denen Sie "
+"personenbezogene Daten Ihrer Nutzer zur Verfügung gestellt haben, wie in "
+"Artikel 19 der DSGVO festgelegt."
+
+msgid "Course %s added. You can access it directly %shere%s."
+msgstr "Kurs %s hinzugefügt. Sie können direkt %shier%s darauf zugreifen."
+
+msgid "Push notifications are not enabled in this browser."
+msgstr "Push-Benachrichtigungen sind in diesem Browser nicht aktiviert."
+
+msgid "Mail: 'From' address"
+msgstr "E-Mail: 'Von'-Adresse"
+
+msgid "Ai_helpers"
+msgstr "KI-Helfer"
+
+msgid "User is teacher in some courses"
+msgstr "Der Benutzer ist Trainer in einigen Kursen"
+
+msgid "Email Settings"
+msgstr "E-Mail-Einstellungen"
+
+msgid "If the problem persists, please contact support."
+msgstr "Wenn das Problem weiterhin besteht, kontaktieren Sie bitte den Support."
+
+msgid "Confirm new password"
+msgstr "Bestätigen Sie das neue Passwort"
+
+msgid "Session requirements and dependencies"
+msgstr "Anforderungen und Abhängigkeiten der Session"
+
+msgid "Please note that you are NOT REQUIRED to fill this form. If you want to remain anonymous, we will lose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click Next."
+msgstr ""
+"Bitte beachten Sie, dass Sie NICHT VERPFLICHTET sind, dieses Formular "
+"auszufüllen. Wenn Sie anonym bleiben möchten, verpassen wir die Gelegenheit, "
+"Ihnen alle Privilegien eines registrierten Portaladministrators anzubieten, "
+"aber wir werden Ihre Entscheidung respektieren. Lassen Sie dieses Formular "
+"einfach leer und klicken Sie auf Weiter."
+
+msgid "Then enter the 6-digit code shown in your app at the bottom of the form."
+msgstr ""
+"Geben Sie dann den 6-stelligen Code ein, der in Ihrer App unten im Formular "
+"angezeigt wird."
+
+msgid "JSON configuration for Push notifications integration."
+msgstr "JSON-Konfiguration für die Integration von Push-Benachrichtigungen."
+
+msgid "Go to home page"
+msgstr "Gehe zur Startseite"
+
+msgid "Menucatalogue"
+msgstr "Kurs-/Session-Katalog"
+
+msgid "Menuplatformadministration"
+msgstr "Plattformverwaltung"
+
+msgid "Gotify configuration is missing."
+msgstr "Die Konfiguration von Gotify fehlt."
+
+msgid "The name that appears as the sender (next to the From e-mail address) when the platform sends an e-mail."
+msgstr ""
+"Der Name, der als Absender (neben der Absender-E-Mail-Adresse) erscheint, "
+"wenn die Plattform eine E-Mail sendet."
+
+msgid "The following documents are used in learning paths:"
+msgstr "Die folgenden Dokumente werden in Lernpfaden verwendet:"
+
+msgid "Global admin"
+msgstr "Globaler Administrator"
+
+msgid "Please select at least one item."
+msgstr "Bitte wählen Sie mindestens einen Element aus."
+
+msgid "Menusocial"
+msgstr "Sozial"
+
+msgid "Mail DSN"
+msgstr "E-Mail-Zustellungsstatusbenachrichtigung"
+
+msgid "Menuvideoconference"
+msgstr "Videokonferenz"
+
+msgid "Oops! URL not registered."
+msgstr "Hoppla! URL nicht registriert."
+
+msgid "Do you still want to delete them?"
+msgstr "Möchten Sie sie wirklich löschen"
+
+msgid "No push subscriptions found for this user."
+msgstr "Für diesen Benutzer wurden keine Push-Abonnements gefunden."
+
+msgid "No exportable items found."
+msgstr "Keine exportierbaren Elemente gefunden."
+
+msgid "Duration (hh:mm:ss)"
+msgstr "Dauer (hh:mm:ss)"
+
+msgid "When enabled, a course will be considered validated only if passed within the current session. If disabled, courses passed in other sessions will also unlock dependent courses."
+msgstr ""
+"Wenn aktiviert, gilt ein Kurs nur dann als bestanden, wenn er innerhalb der "
+"aktuellen Session absolviert wurde. Ist diese Option deaktiviert, werden "
+"auch in anderen Sessions bestandene Kurse zum Freischalten abhängiger Kurse "
+"anerkannt."
+
+msgid "Mail: 'From' name"
+msgstr "E-Mail: 'Von' Name"
+
+msgid "Notification sent to Gotify."
+msgstr "Benachrichtigung an Gotify gesendet."
+
+msgid "Password rotation interval (days)"
+msgstr "Passwortwechselintervall (Tage)"
+
+msgid "Question manager"
+msgstr "Fragenmanager"
+
+msgid "Invalid format"
+msgstr "Ungültiges Format"
+
+msgid "Endpoint"
+msgstr "Endpunkt"
+
+msgid "Super admin"
+msgstr "Superadministrator"
+
+msgid "Enable notifications"
+msgstr "Aktivieren Sie Benachrichtigungen"
+
+msgid "No push notification setting configured."
+msgstr "Es ist keine Konfiguration für Push-Benachrichtigungen eingerichtet."
+
+msgid "Documents deleted"
+msgstr "Dokumente gelöscht"

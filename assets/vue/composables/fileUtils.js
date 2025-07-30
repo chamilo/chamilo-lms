@@ -13,8 +13,7 @@ export function useFileUtils() {
 
   const isAudio = (fileData) => {
     const mimeType = fileData.resourceNode.firstResourceFile.mimeType
-    const isAudio = mimeType.split("/")[0].toLowerCase() === "audio"
-    return isFile(fileData) && isAudio
+    return isFile(fileData) && mimeType.split("/")[0].toLowerCase() === "audio"
   }
 
   const isHtml = (fileData) => {
@@ -26,9 +25,10 @@ export function useFileUtils() {
   }
 
   const isPreviewable = (fileData) => {
-    const mimeType = fileData.resourceNode.firstResourceFile.mimeType.toLowerCase()
     return (
-      isImage(fileData) || isVideo(fileData) || isAudio(fileData) || isHtml(fileData) || mimeType === "application/pdf"
+      isImage(fileData) ||
+      isVideo(fileData) ||
+      isAudio(fileData)
     )
   }
 

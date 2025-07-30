@@ -37,6 +37,7 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
             ->add('ai_providers', TextareaType::class, [
                 'attr' => [
                     'rows' => 10,
+                    'cols' => 100,
                     'style' => 'font-family: monospace;',
                 ],
             ])

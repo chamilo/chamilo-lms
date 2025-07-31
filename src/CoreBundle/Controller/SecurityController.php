@@ -18,11 +18,13 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
+use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use OTPHP\TOTP;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,6 +34,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -185,6 +189,26 @@ class SecurityController extends AbstractController
         }
 
         throw $this->createAccessDeniedException();
+    }
+
+    #[Route('/login/token/request', name: 'login_token_request', methods: ['GET'])]
+    public function loginTokenRequest(JWTTokenManagerInterface $jwtManager): JsonResponse
+    {
+        $user = $this->userHelper->getCurrent();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return new JsonResponse([
+            'token' => $jwtManager->create($user),
+        ]);
+    }
+
+    #[Route('/login/token/check', name: 'login_token_check', methods: ['POST'])]
+    public function loginTokenCheck(): Response
+    {
+        return new Response(null, Response::HTTP_NO_CONTENT);
     }
 
     /**

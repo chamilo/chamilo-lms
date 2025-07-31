@@ -1,40 +1,16 @@
 <script setup>
-import { ref } from "vue"
 import { useI18n } from "vue-i18n"
 import Dialog from "primevue/dialog"
-import { findUserActivePortals } from "../../services/accessurlService"
-import { useSecurityStore } from "../../store/securityStore"
-import { useNotification } from "../../composables/notification"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
+import { useAccessUrlChooser } from "../../composables/accessurl/accessUrlChooser"
 
-const securityStore = useSecurityStore()
 const { t } = useI18n()
-const { showErrorNotification } = useNotification()
 
-const isLoading = ref(true)
-const accessUrls = ref([])
-
-if (securityStore.showAccessUrlChooser) {
-  findUserActivePortals(securityStore.user["@id"])
-    .then((items) => {
-      accessUrls.value = items
-
-      if (1 === items.length) {
-        window.location.href = items[0].url
-      }
-    })
-    .catch((error) => showErrorNotification(error))
-    .finally(() => {
-      if (1 !== accessUrls.value.length) {
-        isLoading.value = false
-      }
-    })
-}
+const { visible, isLoading, accessUrls, doRedirectToPortal } = useAccessUrlChooser()
 </script>
 
 <template>
   <Dialog
-    v-model:visible="securityStore.showAccessUrlChooser"
+    v-model:visible="visible"
     :modal="true"
     :closable="false"
     :header="t('Access URL')"
@@ -52,8 +28,9 @@ if (securityStore.showAccessUrlChooser) {
         v-for="accessUrl in accessUrls"
         :key="accessUrl.id"
         class="text-center"
+        @click="doRedirectToPortal(accessUrl.url)"
       >
-        <BaseAppLink :url="accessUrl.url">{{ accessUrl.url }}</BaseAppLink>
+        {{ accessUrl.url }}
         <p
           v-if="accessUrl.description"
           v-text="accessUrl.description"

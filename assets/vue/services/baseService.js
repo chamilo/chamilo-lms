@@ -43,18 +43,21 @@ export default {
    * @param {string} endpoint
    * @param {Object} [params={}]
    * @param {boolean} [addContentType=false]
+   * @param {Object} [additionalHeaders={}]
+   * @param {Object} [options={}]
    * @returns {Promise<Object>}
    */
-  async post(endpoint, params = {}, addContentType = false) {
-    const config = addContentType
-      ? {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      : {}
+  async post(endpoint, params = {}, addContentType = false, additionalHeaders = {}, options = {}) {
+    const headers = {}
 
-    const { data } = await api.post(endpoint, params, config)
+    if (addContentType) {
+      headers["Content-Type"] = "application/json"
+    }
+
+    const { data } = await api.post(endpoint, params, {
+      headers: { ...headers, ...additionalHeaders },
+      ...options,
+    })
 
     return data
   },

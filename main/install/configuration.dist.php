@@ -1954,7 +1954,7 @@ $_configuration['auth_password_links'] = [
 //$_configuration['display_theoretical_time'] = false;
 
 // Enable improved tracking section in main/mySpace/myStudents.php
-$_configuration['improve_tracking_in_mystudent_php'] = true;
+//$_configuration['improve_tracking_in_mystudent_php'] = false;
 
 // Add teachers column in course list.
 // $_configuration['add_teachers_in_course_list'] = false;

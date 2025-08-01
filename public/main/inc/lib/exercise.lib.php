@@ -76,6 +76,17 @@ class ExerciseLib
         }
 
         $answerType = $objQuestionTmp->selectType();
+
+        if (PAGE_BREAK === $answerType) {
+            $description = $objQuestionTmp->selectDescription();
+            if (!$only_questions && !empty($description)) {
+                echo '<div class="page-break-content wysiwyg">'
+                    . $description .
+                    '</div>';
+            }
+            return 0;
+        }
+
         $s = '';
         if (HOT_SPOT != $answerType &&
             HOT_SPOT_DELINEATION != $answerType &&

@@ -3143,6 +3143,14 @@ class Exercise
             $clock_expired_time = null;
         }
 
+        $questionList = array_filter(
+            $questionList,
+            function (int $qid) {
+                $q = Question::read($qid);
+                return $q && $q->type !== PAGE_BREAK;
+            }
+        );
+
         $questionList = array_map('intval', $questionList);
         $em = Database::getManager();
 
@@ -5885,6 +5893,9 @@ class Exercise
         // Store results directly in the database
         // For all in one page exercises, the results will be
         // stored by exercise_results.php (using the session)
+        if ($objQuestionTmp->type === PAGE_BREAK) {
+            $save_results = false;
+        }
         if ($save_results) {
             if ($debug) {
                 error_log("Save question results $save_results");

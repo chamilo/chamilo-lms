@@ -71,6 +71,7 @@ abstract class Question
         //MEDIA_QUESTION => array('media_question.class.php' , 'MediaQuestion')
         ANNOTATION => ['Annotation.php', 'Annotation'],
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
+        PAGE_BREAK       => ['PageBreakQuestion.php', 'PageBreakQuestion'],
     ];
 
     /**

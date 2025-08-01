@@ -694,3 +694,20 @@ function create_unexisting_directory(
 
     return false;
 }
+
+function processChunkedFile(array $file): array
+{
+    if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
+        // to rename and move the finished file
+        $tmpFile = disable_dangerous_file(
+            api_replace_dangerous_char($file['name'])
+        );
+
+        $chunkedFile = api_get_path(SYS_ARCHIVE_PATH).$tmpFile;
+        $file['tmp_name'] = $chunkedFile;
+        $file['size'] = filesize($chunkedFile);
+        $file['copy_file'] = true;
+    }
+
+    return $file;
+}

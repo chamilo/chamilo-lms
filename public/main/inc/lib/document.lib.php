@@ -2276,7 +2276,7 @@ class DocumentManager
             >';
                 $link .= $folder.'&nbsp;';
                 $link .= '</a>';
-                $link .= cut(addslashes($node['title']), 30);
+                $link .= cut(addslashes($node['title']), 150);
                 $link .= '</div>';
 
                 return $link;

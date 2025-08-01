@@ -6,7 +6,7 @@ use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
 
-// --- FILTRES DATE ---
+// --- DATE FILTERS ---
 $search_start_date = isset($_REQUEST['start_date']) && !empty($_REQUEST['start_date']) ? $_REQUEST['start_date'] : null;
 $search_end_date = isset($_REQUEST['end_date']) && !empty($_REQUEST['end_date']) ? $_REQUEST['end_date'] : null;
 

@@ -55,4 +55,18 @@ class AccessUrlRepository extends ResourceRepository
             ->getResult()
         ;
     }
+
+    public function getUserActivePortals(User $user): QueryBuilder
+    {
+        /** @var QueryBuilder $qb */
+        $qb = $this->createQueryBuilder('url');
+
+        return $qb
+            ->join('url.users', 'users')
+            ->where($qb->expr()->eq('users.user', ':user'))
+            ->andWhere($qb->expr()->eq('url.active', true))
+            ->andWhere($qb->expr()->neq('url.isLoginOnly', true))
+            ->setParameter('user', $user->getId())
+        ;
+    }
 }

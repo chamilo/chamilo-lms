@@ -1805,16 +1805,12 @@ EOT;
         );
     }
 
-    /**
-     * @param string $url           page that will handle the upload
-     * @param string $inputName
-     * @param string $urlToRedirect
-     */
-    private function addMultipleUploadJavascript($url, $inputName, $urlToRedirect = '')
+    private function addMultipleUploadJavascript(string $url, string $inputName, string $urlToRedirect = ''): void
     {
-        $redirectCondition = '';
+        $toastText = addslashes(get_lang('Files uploaded. Reloading in 5 seconds...'));
+        $redirectJs = '';
         if (!empty($urlToRedirect)) {
-            $redirectCondition = "window.location.replace('$urlToRedirect'); ";
+            $redirectJs = "window.location.replace('$urlToRedirect');";
         }
         $icon = Display::getMdiIcon('text-box-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL);
         $this->addHtml("
@@ -1861,6 +1857,7 @@ EOT;
                 previewCrop: true,
                 dropzone: $('#dropzone'),
             }).on('fileuploadadd', function (e, data) {
+                $('#progress .progress-bar').css('width', '0%');
                 data.context = $('<div class=\"row\" />').appendTo('#files');
                 $.each(data.files, function (index, file) {
                     var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);
@@ -1915,7 +1912,17 @@ EOT;
                     $(data.context.children()[index]).parent().append(message);
                 });
                 $('#dropzone').removeClass('hover');
-                ".$redirectCondition."
+
+                var toast = $('<div id=\"upload-toast\" class=\"fixed bottom-4 right-4 bg-primary text-white px-4 py-2 rounded shadow-lg\">{$toastText}</div>');
+                $('body').append(toast);
+                setTimeout(function(){
+                    $('#upload-toast').fadeOut(300, function(){
+                        $(this).remove();
+                        location.reload();
+                    });
+                }, 2000);
+
+                ".$redirectJs."
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
                     var failedMessage = '".addslashes(get_lang('The file upload has failed.'))."';

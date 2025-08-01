@@ -1195,6 +1195,111 @@ if (api_get_configuration_value('allow_career_users')) {
     echo MyStudents::userCareersTable($student_id);
 }
 
+// Session progress section
+if (api_get_configuration_value('improve_tracking_in_mystudent_php')) {
+    $orderCondition = null;
+    if (api_get_configuration_value('session_list_order')) {
+        $orderCondition = ' ORDER BY s.position ASC';
+    }
+    $sessions = SessionManager::getSessionsFollowedByUser(
+        $student_id,
+        null,
+        null,
+        null,
+        false,
+        false,
+        false,
+        $orderCondition
+    );
+    $sessionProgressTitle = get_lang('synthesis');
+    $sessionProgressHeading = '<h3 class="panel-title text-center"><strong>'.$sessionProgressTitle.'</strong></h3>';
+    $sessionProgressList = [];
+    $totalSessionsProgress = 0;
+    foreach ($sessions as $sessionItem) {
+        $courses = SessionManager::get_course_list_by_session_id($sessionItem['id']);
+        $courseProgressSum = 0;
+        $courseCount = 0;
+        foreach ($courses as $courseItem) {
+            $courseInfoItem = api_get_course_info_by_id($courseItem['real_id']);
+            $courseCodeItem = $courseInfoItem['code'];
+            if (CourseManager::is_user_subscribed_in_course($student_id, $courseCodeItem, true, $sessionItem['id'])) {
+                $progressValue = Tracking::get_avg_student_progress(
+                    $student_id,
+                    $courseCodeItem,
+                    [],
+                    $sessionItem['id']
+                );
+                if (is_numeric($progressValue)) {
+                    $courseProgressSum += $progressValue;
+                }
+                $courseCount++;
+            }
+        }
+        $progress = $courseCount > 0 ? round($courseProgressSum / $courseCount, 2) : 0;
+        $sessionProgressList[] = [
+            'name' => $sessionItem['name'],
+            'progress' => $progress,
+        ];
+        $totalSessionsProgress += $progress;
+    }
+    $avgSessionsProgress = !empty($sessionProgressList) ? round($totalSessionsProgress / count($sessionProgressList), 2) : 0;
+
+    // Calculate last week's time spent in courses using Tracking::generateReport
+    $aLastWeek = get_last_week();
+    $startWeek = date('Y-m-d', $aLastWeek[0]);
+    $endWeek = date('Y-m-d', $aLastWeek[6]);
+    $report = Tracking::generateReport('time_report', [$student_id], $startWeek, $endWeek);
+    $timeSeconds = 0;
+    foreach ($report['rows'] as $reportRow) {
+        $timeParts = explode(':', $reportRow[6]);
+        if (count($timeParts) === 3) {
+            [$hours, $minutes, $seconds] = array_map('intval', $timeParts);
+            $timeSeconds += ($hours * 3600) + ($minutes * 60) + $seconds;
+        }
+    }
+    $timeSpentLastWeek = api_time_to_hms($timeSeconds);
+    $timeContent  = '<div class="text-center">';
+    $timeContent .= Display::return_icon('clock.png', get_lang('TimeSpentLastWeek'), [], ICON_SIZE_MEDIUM);
+    $timeContent .= ' '.$timeSpentLastWeek;
+    $timeContent .= '</div>';
+    $timePanel = Display::panel($timeContent, get_lang('TimeSpentInCoursesLastWeek'));
+
+    $donutContent  = '<div class="easy-donut text-center">';
+    $donutContent .= '<div id="easypiechart-session-avg" class="easypiechart" data-percent="'.$avgSessionsProgress.'">';
+    $donutContent .= '<span class="percent">'.$avgSessionsProgress.'%</span>';
+    $donutContent .= '</div>';
+    $donutContent .= '</div>';
+    $donutPanel = Display::panel($donutContent, get_lang('AverageProgressInSessions'));
+
+    $sessionBars = '';
+    foreach ($sessionProgressList as $item) {
+        $sessionBars .= '<p>'.Security::remove_XSS($item['name']).'</p>';
+        $sessionBars .= '<div class="progress">';
+        $sessionBars .= '<div class="progress-bar progress-bar-success" role="progressbar" style="width: '.$item['progress'].'%;">'.$item['progress'].'%</div>';
+        $sessionBars .= '</div>';
+    }
+    $sessionBarsPanel = Display::panel($sessionBars);
+
+    $sessionProgressHtml  = '<div class="row session-progress-section">';
+    $sessionProgressHtml .= '<div class="col-md-6">'.$sessionBarsPanel.'</div>';
+    $sessionProgressHtml .= '<div class="col-md-6 text-center">';
+    $sessionProgressHtml .= $donutPanel;
+    $sessionProgressHtml .= $timePanel;
+    $sessionProgressHtml .= '</div>';
+    $sessionProgressHtml .= '</div>';
+    echo Display::panel($sessionProgressHtml, '', '', 'default', $sessionProgressHeading);
+    echo "<script>
+        $(function () {
+            $('#easypiechart-session-avg').easyPieChart({
+                scaleColor: false,
+                barColor: '#30a5ff',
+                lineWidth: 8,
+                trackColor: '#f2f2f2'
+            });
+        });
+    </script>";
+}
+
 echo MyStudents::getBlockForSkills(
     $student_id,
     $courseInfo ? $courseInfo['real_id'] : 0,

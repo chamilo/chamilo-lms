@@ -684,12 +684,12 @@ switch ($action) {
     }
 
     // Filtrage sur la date de fin d'exercice (exe_date)
-if (!empty($search_start_date)) {
-    $whereCondition .= " AND te.exe_date >= '".Database::escape_string($search_start_date)." 00:00:00'";
-}
-if (!empty($search_end_date)) {
-    $whereCondition .= " AND te.exe_date <= '".Database::escape_string($search_end_date)." 23:59:59'";
-}
+    if (!empty($search_start_date)) {
+        $whereCondition .= " AND te.exe_date >= '".Database::escape_string($search_start_date)." 00:00:00'";
+    }
+    if (!empty($search_end_date)) {
+        $whereCondition .= " AND te.exe_date <= '".Database::escape_string($search_end_date)." 23:59:59'";
+    }
     // -------------------------------
     $count = ExerciseLib::get_count_exam_results(
         $exerciseId,

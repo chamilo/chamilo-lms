@@ -440,6 +440,8 @@ function action_formatter(cellvalue, options, rowObject) {
     // rowObject is firstname,lastname,login,... get the third word
     var loginx = "'.api_htmlentities(sprintf(get_lang('LoginX'), ':::'), ENT_QUOTES).'";
     var tabLoginx = loginx.split(/:::/);
+    // tabLoginx[0] is before and tabLoginx[1] is after :::
+    // may be empty string but is defined
     return "<span title=\""+tabLoginx[0]+rowObject[2]+tabLoginx[1]+"\">"+cellvalue+"</span>";
 }';
 

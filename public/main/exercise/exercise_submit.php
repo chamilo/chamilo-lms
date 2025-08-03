@@ -370,7 +370,11 @@ if (ONE_PER_PAGE == $objExercise->type) {
     $filtered = [];
     foreach ($questionListUncompressed as $qid) {
         $q = Question::read($qid);
-        if ($q && $q->type !== PAGE_BREAK) {
+        if (
+            $q
+            && $q->type !== PAGE_BREAK
+            && $q->type !== MEDIA_QUESTION
+        ) {
             $filtered[] = $qid;
         }
     }
@@ -484,11 +488,13 @@ if (!isset($questionListInSession)) {
     // Selects the list of question ID
     $questionList = $objExercise->getQuestionList();
 
-    // Media questions.
-    $media_is_activated = $objExercise->mediaIsActivated();
+    $questionList = array_filter($questionList, function(int $qid) {
+        $q = Question::read($qid);
+        return $q && $q->type !== MEDIA_QUESTION;
+    });
 
     // Getting order from random
-    if (false == $media_is_activated &&
+    if (
         (
             $objExercise->isRandom() ||
             !empty($objExercise->getRandomByCategory()) ||
@@ -498,6 +504,10 @@ if (!isset($questionListInSession)) {
         !empty($exercise_stat_info['data_tracking'])
     ) {
         $questionList = explode(',', $exercise_stat_info['data_tracking']);
+        $questionList = array_filter($questionList, function(int $qid) {
+            $q = Question::read($qid);
+            return $q && $q->type !== MEDIA_QUESTION;
+        });
         $categoryList = [];
         if ($allowBlockCategory) {
             foreach ($questionList as $question) {
@@ -662,23 +672,71 @@ while (count($questionList) > 0) {
     }
 }
 
-$pages      = [[]];
-$breakIds   = [null];  // for each page, which PAGE_BREAK qid intro to show
-if (ALL_ON_ONE_PAGE == $objExercise->type) {
-    foreach ($questionList as $qid) {
+$hasMediaWithChildren = false;
+$mediaQids = array_filter($objExercise->getQuestionOrderedList(), function(int $qid) {
+    $q = Question::read($qid);
+    return $q && $q->type === MEDIA_QUESTION;
+});
+
+if (!empty($mediaQids)) {
+    foreach ($questionListUncompressed as $qid) {
         $q = Question::read($qid);
-        if ($q && $q->type === PAGE_BREAK) {
-            $pages[]    = [];
-            $breakIds[] = $qid;
-        } else {
-            $pages[count($pages)-1][] = $qid;
+        if ($q && in_array($q->parent_id, $mediaQids, true)) {
+            $hasMediaWithChildren = true;
+            break;
         }
     }
+}
 
-    $totalPages = count($pages);
-    $page       = min(max(1, (int)($_GET['page'] ?? 1)), $totalPages);
-    $questionList = $pages[$page-1];
-    $currentBreakId = ($page > 1 ? $breakIds[$page-1] : null);
+$forceGrouped = (ONE_PER_PAGE === $objExercise->type && $hasMediaWithChildren);
+if ($forceGrouped) {
+    $objExercise->type = ALL_ON_ONE_PAGE;
+}
+
+if (ALL_ON_ONE_PAGE === $objExercise->type || $forceGrouped) {
+    $flat = array_filter($questionList, function(int $qid) {
+        $q = Question::read($qid);
+        return $q && $q->type !== MEDIA_QUESTION;
+    });
+
+    if ($hasMediaWithChildren) {
+        $groups  = [];
+        $seen    = [];
+        foreach ($flat as $qid) {
+            $q = Question::read($qid);
+            if ($q->parent_id > 0) {
+                $pid = $q->parent_id;
+                $groups[$pid]['questions'][] = $qid;
+                $seen[$qid] = true;
+            }
+        }
+        foreach ($flat as $qid) {
+            if (!isset($seen[$qid])) {
+                $groups[$qid]['questions'] = [$qid];
+            }
+        }
+        $pages = array_values($groups);
+        $totalPages = count($pages);
+        $page       = min(max(1, $page), $totalPages);
+        $questionList  = $pages[$page - 1]['questions'];
+        $currentBreakId = null;
+    } else {
+        $pages    = [[]];
+        $breakIds = [null];
+        foreach ($flat as $qid) {
+            $q = Question::read($qid);
+            if ($q->type === PAGE_BREAK) {
+                $pages[]    = [];
+                $breakIds[] = $qid;
+            } else {
+                $pages[count($pages) - 1][] = $qid;
+            }
+        }
+        $totalPages    = count($pages);
+        $page          = min(max(1, $page), $totalPages);
+        $questionList  = $pages[$page - 1];
+        $currentBreakId = ($page > 1 ? $breakIds[$page - 1] : null);
+    }
 }
 
 $isLastQuestionInCategory = 0;
@@ -1367,7 +1425,7 @@ if ($allowBlockCategory &&
         }
 
         var page = '.(int) $page.';
-        var totalPages = '.(int) $totalPages.';
+        var totalPages = '.(int) ($totalPages ?? 1).';
         function navigateNext() {
             var url;
             if (page === totalPages) {
@@ -1736,6 +1794,7 @@ echo '<form id="exercise_form" method="post" action="'
         );
     }
 
+    $prevParent = null;
     foreach ($questionList as $questionId) {
         // for sequential exercises
         if (ONE_PER_PAGE == $objExercise->type) {
@@ -1833,6 +1892,25 @@ echo '<form id="exercise_form" method="post" action="'
             }
         }
 
+        $q = Question::read($questionId);
+        $currentParent = $q->parent_id > 0 ? $q->parent_id : null;
+        if ($currentParent !== $prevParent) {
+            if ($prevParent !== null) {
+                echo "</div>\n";
+            }
+            if ($currentParent !== null) {
+                echo '<div class="media-group" style="border:1px dashed #aaa; padding:15px; margin:20px 0;">';
+                ExerciseLib::showQuestion(
+                    $objExercise,
+                    $currentParent,
+                    false,
+                    $origin,
+                    '',
+                    false
+                );
+            }
+        }
+
         echo '<div id="question_div_'.$questionId.'" class="main-question '.$remind_highlight.'" >';
 
         $showQuestion = true;
@@ -1865,39 +1943,41 @@ echo '<form id="exercise_form" method="post" action="'
         }
 
         // Button save and continue
-        switch ($objExercise->type) {
-            case ONE_PER_PAGE:
-                $exerciseActions .= $objExercise->show_button(
-                    $questionId,
-                    $current_question,
-                    [],
-                    [],
-                $myRemindList,
-                $showPreviousButton
-                );
-
-                break;
-            case ALL_ON_ONE_PAGE:
-                if (api_is_allowed_to_session_edit()) {
-                    $button = [
-                        Display::button(
-                            'save_now',
-                            get_lang('Save and continue'),
-                            [
-                                'type' => 'button',
-                                'class' => 'btn btn--info',
-                                'data-question' => $questionId,
-                            ]
-                        ),
-                        '<span id="save_for_now_'.$questionId.'"></span>&nbsp;',
-                    ];
-                    $exerciseActions .= Display::div(
-                        implode(PHP_EOL, $button),
-                        ['class' => 'exercise_save_now_button mb-4']
+        if (!$hasMediaWithChildren) {
+            switch ($objExercise->type) {
+                case ONE_PER_PAGE:
+                    $exerciseActions .= $objExercise->show_button(
+                        $questionId,
+                        $current_question,
+                        [],
+                        [],
+                        $myRemindList,
+                        $showPreviousButton
                     );
-                }
 
-                break;
+                    break;
+                case ALL_ON_ONE_PAGE:
+                    if (api_is_allowed_to_session_edit()) {
+                        $button = [
+                            Display::button(
+                                'save_now',
+                                get_lang('Save and continue'),
+                                [
+                                    'type' => 'button',
+                                    'class' => 'btn btn--info',
+                                    'data-question' => $questionId,
+                                ]
+                            ),
+                            '<span id="save_for_now_' . $questionId . '"></span>&nbsp;',
+                        ];
+                        $exerciseActions .= Display::div(
+                            implode(PHP_EOL, $button),
+                            ['class' => 'exercise_save_now_button mb-4']
+                        );
+                    }
+
+                    break;
+            }
         }
 
         // Checkbox review answers
@@ -1924,6 +2004,8 @@ echo '<form id="exercise_form" method="post" action="'
         echo '</div>';
 
         $i++;
+        $prevParent = $currentParent;
+
         // for sequential exercises
         if (ONE_PER_PAGE == $objExercise->type) {
             // quits the loop
@@ -1931,9 +2013,15 @@ echo '<form id="exercise_form" method="post" action="'
         }
     }
 
-    if (ALL_ON_ONE_PAGE == $objExercise->type) {
-        $currentPageIds = implode(',', $pages[$page - 1]);
-        echo '<div class="form-actions exercise-pagination mb-4">';
+if ($prevParent !== null) {
+    echo "</div>\n";
+}
+
+
+if (ALL_ON_ONE_PAGE == $objExercise->type || $forceGrouped) {
+        //$currentPageIds = implode(',', $pages[$page - 1]);
+    $currentPageIds = implode(',', $questionList);
+    echo '<div class="form-actions exercise-pagination mb-4">';
         if ($page > 1) {
             $prevUrl = api_get_self() . '?' . api_get_cidreq()
                 . "&exerciseId=$exerciseId&page=" . ($page - 1)

@@ -3147,7 +3147,12 @@ class Exercise
             $questionList,
             function (int $qid) {
                 $q = Question::read($qid);
-                return $q && $q->type !== PAGE_BREAK;
+                return $q
+                    && !in_array(
+                        $q->type,
+                        [PAGE_BREAK, MEDIA_QUESTION],
+                        true
+                    );
             }
         );
 
@@ -5893,7 +5898,11 @@ class Exercise
         // Store results directly in the database
         // For all in one page exercises, the results will be
         // stored by exercise_results.php (using the session)
-        if ($objQuestionTmp->type === PAGE_BREAK) {
+        if (in_array(
+            $objQuestionTmp->type,
+            [PAGE_BREAK, MEDIA_QUESTION],
+            true
+        )) {
             $save_results = false;
         }
         if ($save_results) {

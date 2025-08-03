@@ -369,14 +369,18 @@ class Event
         }
 
         if (!empty($questionsList)) {
+            $questionsList = array_map('intval', $questionsList);
             $questionsList = array_filter(
                 $questionsList,
                 function (int $qid) {
                     $q = Question::read($qid);
-                    return $q && $q->type !== PAGE_BREAK;
+                    return $q && !in_array(
+                            $q->type,
+                            [PAGE_BREAK, MEDIA_QUESTION],
+                            true
+                        );
                 }
             );
-            $questionsList = array_map('intval', $questionsList);
         }
 
         if (!empty($remindList)) {

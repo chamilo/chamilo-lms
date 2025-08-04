@@ -19,6 +19,7 @@ api_protect_global_admin_script();
 
 $httpRequest = HttpRequest::createFromGlobals();
 $urlRepo = Container::getAccessUrlRepository();
+$urlHelper = Container::getAccessUrlUtil();
 
 $form = new FormValidator('add_url');
 
@@ -63,17 +64,17 @@ if ($httpRequest->query->has('url_id')) {
 
 $form->addHidden(
     'parentResourceNodeId',
-    Container::getAccessUrlUtil()->getFirstAccessUrl()->resourceNode->getId()
+    $urlHelper->getFirstAccessUrl()->resourceNode->getId()
 );
 
 //the first url with id = 1 will be always active
 if ($httpRequest->query->has('url_id')) {
-    if (1 !== $httpRequest->query->getInt('url_id')) {
+    if ($urlHelper->getFirstAccessUrl()?->getId() !== $httpRequest->query->getInt('url_id')) {
         $form->addElement('checkbox', 'active', null, get_lang('active'));
     }
-} else {
-    $form->addCheckBox('login_only', get_lang('Login only'), get_lang('Yes'));
 }
+
+$form->addCheckBox('login_only', get_lang('Login only'), get_lang('Yes'));
 
 $form->addButtonCreate(get_lang('Save'));
 
@@ -105,7 +106,7 @@ if ($form->validate()) {
                 ->setDescription($description)
                 ->setActive($active)
                 ->setCreatedBy(api_get_user_id())
-                ->setTms(api_get_utc_datetime())
+                ->setTms(api_get_utc_datetime(null, false, true))
                 ->setIsLoginOnly($isLoginOnly)
             ;
 

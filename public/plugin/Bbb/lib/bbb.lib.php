@@ -463,6 +463,7 @@ class Bbb
             'maxParticipants' => $max,
             'record' => $record,
             'duration' => $duration,
+            'documents' => $params['documents'],
         ];
 
         $status = false;

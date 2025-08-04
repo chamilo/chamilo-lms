@@ -38,6 +38,7 @@ Versions:
 */
 
 use BigBlueButton\BigBlueButton;
+use BigBlueButton\Parameters\Config\DocumentOptionsStore;
 use BigBlueButton\Parameters\CreateMeetingParameters;
 use BigBlueButton\Parameters\JoinMeetingParameters;
 use BigBlueButton\Parameters\EndMeetingParameters;
@@ -106,14 +107,28 @@ class BigBlueButtonBN
         $cp = new CreateMeetingParameters($p['meetingId'], $p['meetingName']);
         $cp->setAttendeePassword($p['attendeePw']);
         $cp->setModeratorPassword($p['moderatorPw']);
-        if (!empty($p['welcomeMsg']))     $cp->setWelcomeMessage($p['welcomeMsg']);
-        if (isset($p['dialNumber']))      $cp->setDialNumber($p['dialNumber']);
-        if (isset($p['voiceBridge']))     $cp->setVoiceBridge((int)$p['voiceBridge']);
-        if (isset($p['webVoice']))        $cp->setWebVoice($p['webVoice']);
-        if (isset($p['logoutUrl']))       $cp->setLogoutUrl($p['logoutUrl']);
+        if (!empty($p['welcomeMsg']))  $cp->setWelcomeMessage($p['welcomeMsg']);
+        if (isset($p['dialNumber']))   $cp->setDialNumber($p['dialNumber']);
+        if (isset($p['voiceBridge']))  $cp->setVoiceBridge((int)$p['voiceBridge']);
+        if (isset($p['webVoice']))     $cp->setWebVoice($p['webVoice']);
+        if (isset($p['logoutUrl']))    $cp->setLogoutUrl($p['logoutUrl']);
         if (isset($p['maxParticipants'])) $cp->setMaxParticipants((int)$p['maxParticipants']);
-        if (isset($p['record']))          $cp->setRecord((bool)$p['record']);
-        if (isset($p['duration']))        $cp->setDuration((int)$p['duration']);
+        if (isset($p['record']))       $cp->setRecord((bool)$p['record']);
+        if (isset($p['duration']))     $cp->setDuration((int)$p['duration']);
+
+        if (!empty($p['documents']) && is_array($p['documents'])) {
+            foreach ($p['documents'] as $doc) {
+                $options = new DocumentOptionsStore();
+                $options->addAttribute('removable', (bool) $doc['removable']);
+                $cp->addPresentation(
+                    $doc['filename'],
+                    file_get_contents($doc['url']),
+                    $doc['filename'],
+                    $options
+                );
+
+            }
+        }
 
         /** @var CreateMeetingResponse $r */
         $r   = $this->client->createMeeting($cp);

@@ -8,6 +8,7 @@
 
 use Chamilo\CoreBundle\Entity\ConferenceActivity;
 use Chamilo\CoreBundle\Entity\ConferenceMeeting;
+use Chamilo\CourseBundle\Entity\CGroup;
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $isGlobal = isset($_GET['global']) ? true : false;
@@ -408,7 +409,7 @@ if (false === $bbb->isGlobalConference() &&
         $meetingsGroup = array_column($meetingsInGroup, 'status', 'group_id');
         $groupList[0] = get_lang('Select');
         foreach ($groups as $groupData) {
-            if ($groupData instanceof \Chamilo\CourseBundle\Entity\CGroup) {
+            if ($groupData instanceof CGroup) {
                 $itemGroupId = $groupData->getIid();
                 $name = $groupData->getTitle();
             } else {
@@ -427,12 +428,75 @@ if (false === $bbb->isGlobalConference() &&
     }
 }
 
-// Default URL
-$urlList[] = Display::url(
-    $plugin->get_lang('EnterConference'),
-    $conferenceUrl,
-    ['target' => '_blank', 'class' => 'btn btn--primary btn-large']
-);
+$urlList[] = '';
+if ($conferenceManager && $allowToEdit) {
+    $form = new FormValidator('start_conference', 'post', $conferenceUrl);
+    $form->addElement('hidden', 'action', 'start');
+    $ajaxUrl = api_get_path(WEB_PATH).'main/inc/ajax/plugin.ajax.php?plugin=bbb&a=list_documents';
+
+    $preuploadHtml = '
+    <details id="preupload-documents" class="mt-4 border rounded p-3 bg-gray-100">
+      <summary class="font-semibold cursor-pointer">' . get_lang('Pre-upload Documents') . '</summary>
+      <div class="mt-2 text-gray-700">
+        <p class="text-sm mb-2">' . get_lang('Select the PDF or PPTX files you want to pre-load as slides for the conference.') . '</p>
+        <div id="preupload-list">' . get_lang('Loading') . '…</div>
+      </div>
+    </details>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var det = document.getElementById("preupload-documents");
+      if (!det) return;
+      det.addEventListener("toggle", function once() {
+        if (!det.open) return;
+        det.removeEventListener("toggle", once);
+        fetch("' . $ajaxUrl . '", {credentials:"same-origin"})
+          .then(r => r.json())
+          .then(docs => {
+            var c = document.getElementById("preupload-list");
+            if (!docs.length) {
+              c.innerHTML = \'<p class="text-sm text-gray-500">' . addslashes(get_lang('No documents found.')) . '</p>\';
+              return;
+            }
+            var filtered = docs.filter(function(doc){
+              return doc.filename.match(/\\.pdf$/i) || doc.filename.match(/\\.pptx$/i);
+            });
+            if (!filtered.length) {
+              c.innerHTML = \'<p class="text-sm text-gray-500">' . addslashes(get_lang('No documents found.')) . '</p>\';
+              return;
+            }
+            c.innerHTML = filtered.map(function(doc){
+              var data = JSON.stringify({url:doc.url, filename:doc.filename})
+                             .replace(/"/g, "&quot;");
+              return \'<label class="block"><input type="checkbox" name="documents[]" value="\' +
+                     data +
+                     \'"> \' + doc.filename + \'</label>\';
+            }).join("");
+          })
+          .catch(function() {
+            document.getElementById("preupload-list").innerHTML =
+              \'<p class="text-sm text-red-500">' . addslashes(get_lang('Failed to load documents.')) . '</p>\';
+          });
+      });
+    });
+    </script>
+    ';
+
+    $form->addElement('html', $preuploadHtml);
+    $form->addElement(
+        'submit',
+        'start_meeting',
+        $plugin->get_lang('EnterConference'),
+        'class="btn btn--primary btn-large"'
+    );
+    $formToString = $form->returnForm();
+}
+else {
+    $urlList[] = Display::url(
+        $plugin->get_lang('EnterConference'),
+        $conferenceUrl,
+        ['target' => '_blank', 'class' => 'btn btn--primary btn-large']
+    );
+}
 
 $tpl = new Template($tool_name);
 

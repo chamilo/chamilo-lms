@@ -1,7 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Michelf\MarkdownExtra;
 use Chamilo\CoreBundle\Entity\Plugin;
 
@@ -112,7 +114,53 @@ switch ($action) {
 
         echo json_encode(['success' => true, 'message' => "Plugin action '$action' applied to '$pluginTitle'."]);
         break;
+    case 'list_documents':
+        $courseId = api_get_course_int_id();
+        $em       = Database::getManager();
+        $repo     = $em->getRepository(ResourceNode::class);
 
+        $qb = $em->createQueryBuilder()
+            ->select('DISTINCT d')
+            ->from(CDocument::class, 'd')
+            ->innerJoin('d.resourceNode','rn')
+            ->innerJoin('rn.resourceFiles','rf')
+            ->where('d.filetype = :type')
+            ->setParameter('type','file');
+
+        if ($courseId > 0) {
+            $qb->innerJoin('rn.resourceLinks','rl')
+                ->andWhere('rl.course = :c')
+                ->setParameter('c',$courseId);
+        }
+
+        $docs = $qb->getQuery()->getResult();
+        $out  = [];
+
+        foreach ($docs as $doc) {
+            $files = $doc->getResourceNode()->getResourceFiles();
+            if ($files->isEmpty()) continue;
+
+            $file = $files->first();
+            $orig = $file->getOriginalName();
+            $ext  = strtolower(pathinfo($orig, PATHINFO_EXTENSION));
+            if (! in_array($ext, ['pdf','ppt','pptx','odp'], true)) {
+                continue;
+            }
+
+            $path      = '/var/upload/resource'.$repo->getFilename($file);
+            $base      = str_replace('/public/', '', api_get_path(SYS_PATH));
+            $sysPath = $base . $path;
+
+            $out[] = [
+                'id'       => $doc->getIid(),
+                'url'      => $sysPath,
+                'filename' => $orig,
+            ];
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($out);
+        exit;
     default:
         echo json_encode(['error' => 'Invalid action']);
 }

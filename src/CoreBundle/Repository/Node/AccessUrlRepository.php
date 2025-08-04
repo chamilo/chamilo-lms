@@ -69,4 +69,9 @@ class AccessUrlRepository extends ResourceRepository
             ->setParameter('user', $user->getId())
         ;
     }
+
+    public function getOnlyLoginAccessUrl(): ?AccessUrl
+    {
+        return $this->findOneBy(['isLoginOnly' => true]);
+    }
 }

@@ -31,7 +31,6 @@ $form->addTextarea('description', get_lang('Description'));
 $form->addFile('url_image_1', get_lang('Image'));
 //$form->addElement('file', 'url_image_2', 'URL Image 2 (PNG)');
 //$form->addElement('file', 'url_image_3', 'URL Image 3 (PNG)');
-$form->addCheckBox('login_only', get_lang('Login only'), get_lang('Yes'));
 
 $defaults['url'] = 'http://';
 $form->setDefaults($defaults);
@@ -66,12 +65,17 @@ $form->addHidden(
     'parentResourceNodeId',
     Container::getAccessUrlUtil()->getFirstAccessUrl()->resourceNode->getId()
 );
-$form->addButtonCreate(get_lang('Save'));
 
 //the first url with id = 1 will be always active
-if ($httpRequest->query->has('url_id') && 1 !== $httpRequest->query->getInt('url_id')) {
-    $form->addElement('checkbox', 'active', null, get_lang('active'));
+if ($httpRequest->query->has('url_id')) {
+    if (1 !== $httpRequest->query->getInt('url_id')) {
+        $form->addElement('checkbox', 'active', null, get_lang('active'));
+    }
+} else {
+    $form->addCheckBox('login_only', get_lang('Login only'), get_lang('Yes'));
 }
+
+$form->addButtonCreate(get_lang('Save'));
 
 if ($form->validate()) {
     $check = Security::check_token('post');

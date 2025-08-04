@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use Chamilo\CoreBundle\Controller\Api\UserAccessUrlsController;
+use Chamilo\CoreBundle\Entity\Listener\AccessUrlListener;
+use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,6 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'access_url')]
 #[Gedmo\Tree(type: 'nested')]
 #[ORM\Entity(repositoryClass: AccessUrlRepository::class)]
+#[ORM\EntityListeners([AccessUrlListener::class, ResourceListener::class])]
 #[ApiResource(
     uriTemplate: '/users/{id}/access_urls',
     operations: [new GetCollection(controller: UserAccessUrlsController::class)],
@@ -611,5 +614,17 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         $this->isLoginOnly = $isLoginOnly;
 
         return $this;
+    }
+
+    public function setSuperior(?AccessUrl $accessUrl): static
+    {
+        $this->parent = $accessUrl;
+
+        return $this;
+    }
+
+    public function getSuperior(): ?AccessUrl
+    {
+        return $this->parent;
     }
 }

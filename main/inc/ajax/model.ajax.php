@@ -659,53 +659,12 @@ switch ($action) {
             $filter_user = (int) $_GET['filter_by_user'];
             if (empty($whereCondition)) {
                 $whereCondition .= " te.exe_user_id  = '$filter_user'";
-        } else {
-            $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
-        }
-    }
-
-    if (isset($_GET['group_id_in_toolbar']) && !empty($_GET['group_id_in_toolbar'])) {
-        $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];
-        if (!empty($groupIdFromToolbar)) {
-            if (empty($whereCondition)) {
-                $whereCondition .= " te.group_id  = '$groupIdFromToolbar'";
             } else {
-                $whereCondition .= " AND group_id  = '$groupIdFromToolbar'";
+                $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
             }
         }
-    }
 
-    if (!empty($whereCondition)) {
-        $whereCondition = " AND $whereCondition";
-    }
-
-    if (!empty($courseId)) {
-        $whereCondition .= " AND te.c_id = $courseId";
-    }
-
-    // Filtrage sur la date de fin d'exercice (exe_date)
-    if (!empty($search_start_date)) {
-        $whereCondition .= " AND te.exe_date >= '".Database::escape_string($search_start_date)." 00:00:00'";
-    }
-    if (!empty($search_end_date)) {
-        $whereCondition .= " AND te.exe_date <= '".Database::escape_string($search_end_date)." 23:59:59'";
-    }
-    // -------------------------------
-    $count = ExerciseLib::get_count_exam_results(
-        $exerciseId,
-        $whereCondition,
-        '',
-        false,
-        true,
-        $status,
-        $showAttemptsInSessions,
-        $questionType,
-        true
-    );
-
-    break;
-
-        if (!empty($_GET['group_id_in_toolbar'])) {
+        if (isset($_GET['group_id_in_toolbar']) && !empty($_GET['group_id_in_toolbar'])) {
             $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];
             if (!empty($groupIdFromToolbar)) {
                 if (empty($whereCondition)) {
@@ -722,6 +681,14 @@ switch ($action) {
 
         if (!empty($courseId)) {
             $whereCondition .= " AND te.c_id = $courseId";
+        }
+
+        // Filtrage sur la date de fin d'exercice (exe_date)
+        if (!empty($search_start_date)) {
+            $whereCondition .= " AND te.exe_date >= '".Database::escape_string($search_start_date)." 00:00:00'";
+        }
+        if (!empty($search_end_date)) {
+            $whereCondition .= " AND te.exe_date <= '".Database::escape_string($search_end_date)." 23:59:59'";
         }
 
         $count = ExerciseLib::get_count_exam_results(

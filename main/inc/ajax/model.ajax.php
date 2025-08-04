@@ -643,17 +643,19 @@ switch ($action) {
             true
         );
         break;
+
     case 'get_exercise_pending_results':
         if ((false === api_is_teacher()) && (false === api_is_session_admin())) {
             exit;
         }
-
+        $search_start_date = isset($_REQUEST['start_date']) && !empty($_REQUEST['start_date']) ? $_REQUEST['start_date'] : null;
+        $search_end_date = isset($_REQUEST['end_date']) && !empty($_REQUEST['end_date']) ? $_REQUEST['end_date'] : null;
         $courseId = $_REQUEST['course_id'] ?? 0;
         $exerciseId = $_REQUEST['exercise_id'] ?? 0;
         $status = $_REQUEST['status'] ?? 0;
         $questionType = $_REQUEST['questionType'] ?? 0;
-        $showAttemptsInSessions = (bool) $_REQUEST['showAttemptsInSessions'];
-        if (!empty($_GET['filter_by_user'])) {
+        $showAttemptsInSessions = $_REQUEST['showAttemptsInSessions'] ? true : false;
+        if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
             $filter_user = (int) $_GET['filter_by_user'];
             if (empty($whereCondition)) {
                 $whereCondition .= " te.exe_user_id  = '$filter_user'";
@@ -662,7 +664,7 @@ switch ($action) {
             }
         }
 
-        if (!empty($_GET['group_id_in_toolbar'])) {
+        if (isset($_GET['group_id_in_toolbar']) && !empty($_GET['group_id_in_toolbar'])) {
             $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];
             if (!empty($groupIdFromToolbar)) {
                 if (empty($whereCondition)) {
@@ -679,6 +681,14 @@ switch ($action) {
 
         if (!empty($courseId)) {
             $whereCondition .= " AND te.c_id = $courseId";
+        }
+
+        // Filtrage sur la date de fin d'exercice (exe_date)
+        if (!empty($search_start_date)) {
+            $whereCondition .= " AND te.exe_date >= '".Database::escape_string($search_start_date)." 00:00:00'";
+        }
+        if (!empty($search_end_date)) {
+            $whereCondition .= " AND te.exe_date <= '".Database::escape_string($search_end_date)." 23:59:59'";
         }
 
         $count = ExerciseLib::get_count_exam_results(

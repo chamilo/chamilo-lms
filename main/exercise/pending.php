@@ -16,6 +16,8 @@ $statusId = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
 $questionTypeId = isset($_REQUEST['questionTypeId']) ? (int) $_REQUEST['questionTypeId'] : 0;
 $exportXls = isset($_REQUEST['export_xls']) && !empty($_REQUEST['export_xls']) ? (int) $_REQUEST['export_xls'] : 0;
 $action = $_REQUEST['a'] ?? null;
+$startDate = isset($_REQUEST['start_date']) ? $_REQUEST['start_date'] : '';
+$endDate = isset($_REQUEST['end_date']) ? $_REQUEST['end_date'] : '';
 
 api_block_anonymous_users();
 
@@ -170,6 +172,14 @@ $htmlHeadXtra[] = '<script>
     }
 </script>';
 
+$htmlHeadXtra[] = '<script>
+$(function() {
+    $(".datepicker").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+});
+</script>';
+
 if ($exportXls) {
     ExerciseLib::exportPendingAttemptsToExcel($_REQUEST);
 }
@@ -293,15 +303,26 @@ $status = [
     4 => get_lang('Unclosed'),
     5 => get_lang('Ongoing'),
 ];
-
 $form->addSelect('status', get_lang('Status'), $status);
 
 $questionType = [
     0 => get_lang('All'),
     1 => get_lang('QuestionsWithNoAutomaticCorrection'),
 ];
-
 $form->addSelect('questionTypeId', get_lang('QuestionType'), $questionType);
+
+$form->addElement(
+    'text',
+    'start_date',
+    get_lang('StartDate'),
+    ['id' => 'start_date', 'class' => 'datepicker', 'autocomplete' => 'off', 'style' => 'width:120px']
+);
+$form->addElement(
+    'text',
+    'end_date',
+    get_lang('EndDate'),
+    ['id' => 'end_date', 'class' => 'datepicker', 'autocomplete' => 'off', 'style' => 'width:120px']
+);
 
 $form->addButtonSearch(get_lang('Search'), 'pendingSubmit');
 $content = $form->returnForm();
@@ -315,7 +336,9 @@ if (empty($statusId)) {
 
 $url = api_get_path(WEB_AJAX_PATH).
     'model.ajax.php?a=get_exercise_pending_results&filter_by_user='.$filter_user.
-    '&course_id='.$courseId.'&exercise_id='.$exerciseId.'&status='.$statusId.'&questionType='.$questionTypeId.'&showAttemptsInSessions='.$showAttemptsInSessions;
+    '&course_id='.$courseId.'&exercise_id='.$exerciseId.'&status='.$statusId.'&questionType='.$questionTypeId.
+    '&showAttemptsInSessions='.$showAttemptsInSessions.
+    '&start_date='.$startDate.'&end_date='.$endDate;
 $action_links = '';
 
 $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
@@ -375,16 +398,6 @@ $column_model = [
         'align' => 'left',
         'search' => 'false',
         'sortable' => 'false',
-        //'stype' => 'select',
-        //for the bottom bar
-        /*'searchoptions' => [
-            'defaultValue' => '',
-            'value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated'),
-        ],*/
-        //for the top bar
-        /*'editoptions' => [
-            'value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated'),
-        ],*/
     ],
     [
         'name' => 'qualificator_fullname',

@@ -885,6 +885,25 @@ class SessionManager
         foreach ($sessions as $session) {
             if ($showCountUsers) {
                 $session['users'] = self::get_users_by_session($session['id'], 0, true);
+                $usersLang = self::getCountUsersLangBySession($session['id'], api_get_current_access_url_id(), Session::STUDENT);
+                $tooltipUserLangs = '';
+                if (!empty($usersLang)) {
+                    $tooltipUserLangs = implode(' | ', $usersLang);
+                }
+                $session['users'] = '<a href="#" title="'.$tooltipUserLangs.'">'.$session['users'].'</a>';
+                $courses = self::getCoursesInSession($session['id']);
+                $teachers = '';
+                foreach ($courses as $courseId) {
+                    $courseInfo = api_get_course_info_by_id($courseId);
+
+                    // Ofaj
+                    $teachers = CourseManager::get_coachs_from_course_to_string($session['id'], $courseInfo['real_id']);
+                }
+                // ofaj
+                $session['teachers'] = '';
+                if (!empty($teachers)) {
+                    $session['teachers'] = Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_SMALL, addslashes($teachers));
+                }
             }
             $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
             if ($extraFieldsToLoad || api_is_drh()) {

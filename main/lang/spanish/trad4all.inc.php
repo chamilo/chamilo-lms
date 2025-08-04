@@ -9132,4 +9132,9 @@ $AnswerInOfficeDoc = "Respuesta como documento de ofimática";
 $UploadOfficeDoc = "Subir documento ofimático";
 $AllowedFormats = "Formatos soportados";
 $TheoreticalTime = "Tiempo teórico";
+$AverageProgressInSessions = "Progreso medio en las sesiones";
+$TimeSpentInCoursesLastWeek = "Tiempo dedicado en los cursos la semana pasada";
+$ProgressionInSessions = "Progreso en las sesiones";
+$synthesis = "Síntesis";
+$WeeklyTimeSummary = "Resumen de tiempo dedicado por semana";
 ?>

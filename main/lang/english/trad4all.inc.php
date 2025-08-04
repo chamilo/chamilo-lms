@@ -9107,4 +9107,9 @@ $AnswerInOfficeDoc = "Answer as office document";
 $UploadOfficeDoc = "Upload office document";
 $AllowedFormats = "Supported formats";
 $TheoreticalTime = "Theoretical time";
+$AverageProgressInSessions = "Average progress in sessions";
+$TimeSpentInCoursesLastWeek = "Time spent in courses last week";
+$ProgressionInSessions = "Session progress";
+$synthesis = "Synthesis";
+$WeeklyTimeSummary = "Weekly time spent summary";
 ?>

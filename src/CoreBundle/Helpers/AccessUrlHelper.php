@@ -37,11 +37,6 @@ readonly class AccessUrlHelper
         return $this->accessUrlRepository->find($urlId) ?: null;
     }
 
-    public function getOnlyLoginAccessUrl(): ?AccessUrl
-    {
-        return $this->accessUrlRepository->findOneBy(['isLoginOnly' => true]);
-    }
-
     public function getCurrent(): ?AccessUrl
     {
         static $accessUrl;

@@ -150,7 +150,7 @@ class Bbb
             define('CONFIG_SERVER_BASE_URL', $this->url);
             define('CONFIG_SERVER_PROTOCOL', $this->protocol);
 
-            $this->api = new BigBlueButtonBN();
+            $this->api = new BigBlueButtonBN(CONFIG_SERVER_URL_WITH_PROTOCOL, CONFIG_SECURITY_SALT);
             $this->pluginEnabled = true;
             $this->logoutUrl = $this->getListingUrl();
         }
@@ -636,9 +636,15 @@ class Bbb
                 'username' => $this->userCompleteName,
                 'password' => $pass,
                 'userID' => api_get_user_id(),
+                'moderatorPw' => $this->getModMeetingPassword(),
+                'userID'      => api_get_user_id(),
                 'webVoiceConf' => '',
             ];
             $url = $this->api->getJoinMeetingURL($joinParams);
+            if (preg_match('#^https?://#i', $url)) {
+                return $url;
+            }
+
             return $this->protocol . $url;
         }
 

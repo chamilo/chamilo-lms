@@ -109,4 +109,5 @@ if ($bbb->pluginEnabled) {
 }
 
 $tpl->assign('message', $message);
+$tpl->assign('content', $message);
 $tpl->display_one_col_template();

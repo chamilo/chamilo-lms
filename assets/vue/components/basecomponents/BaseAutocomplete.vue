@@ -33,13 +33,13 @@
         </template>
       </AutoComplete>
       <label
-        v-t="label"
+        v-t="Label"
         :for="id"
       />
     </FloatLabel>
     <small
       v-if="isInvalid"
-      v-t="helpText"
+      v-t="Error message"
       class="p-error"
     />
   </div>

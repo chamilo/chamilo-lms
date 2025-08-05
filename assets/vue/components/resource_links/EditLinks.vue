@@ -14,7 +14,7 @@
       :loading="isLoading"
       :multiple="true"
       :options="users"
-      :placeholder="$t('Share with User')"
+      :placeholder="$t('Share with user')"
       :searchable="true"
       label="username"
       track-by="id"

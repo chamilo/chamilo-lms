@@ -11,14 +11,14 @@
         @update:model-value="$emit('update:modelValue', $event)"
       />
       <label
-        v-t="label"
+        v-t="Label"
         :for="id"
       />
     </div>
     <slot name="errors">
       <small
         v-if="isInvalid"
-        v-t="errorText"
+        v-t="Error message"
         class="p-error"
       />
     </slot>

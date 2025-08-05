@@ -28651,3 +28651,36 @@ msgstr "No terms and conditions available for this language."
 
 msgid "Client"
 msgstr "Client"
+
+msgid "Hide advanced settings"
+msgstr "Hide advanced settings"
+
+msgid "Show advanced settings"
+msgstr "Show advanced settings"
+
+msgid "Are you sure you want to delete this item?"
+msgstr "Are you sure you want to delete this item?"
+
+msgid "No available options"
+msgstr "No available options"
+
+msgid "Cc"
+msgstr "Cc"
+
+msgid "Send"
+msgstr "Send"
+
+msgid "Draft"
+msgstr "Draft"
+
+msgid "Share with user"
+msgstr "Share with user"
+
+msgid "Multilingual"
+msgstr "Multilingual"
+
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "Subscribing..."
+msgstr "Subscribing..."

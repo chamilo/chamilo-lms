@@ -48,7 +48,7 @@
         class="text-sm text-blue-600 cursor-pointer underline"
         @click="showCourseDialog = true"
       >
-        {{ courseCount }} {{ $t("course") }}<span v-if="courseCount !== 1">s</span>
+        {{ courseCount }} {{ $t("Course") }}<span v-if="courseCount !== 1">s</span>
       </div>
 
       <div

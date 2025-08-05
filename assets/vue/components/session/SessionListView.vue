@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6">
-    <h2 class="text-xl font-bold text-gray-90">{{ t("My Sessions") }}</h2>
+    <h2 class="text-xl font-bold text-gray-90">{{ t("My sessions") }}</h2>
     <div
       v-for="session in props.uncategorizedSessions.filter((s) => s.courses?.length > 0)"
       :key="session.id"

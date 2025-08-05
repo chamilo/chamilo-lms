@@ -78,7 +78,7 @@ class ContactType extends AbstractType
                 ],
             ])
             ->add('captcha', CaptchaType::class, [
-                'label' => $this->translator->trans('Verification'),
+                'label' => $this->translator->trans('Security check'),
                 'width' => 200,
                 'height' => 50,
                 'length' => 6,
@@ -89,12 +89,12 @@ class ContactType extends AbstractType
                 'as_url' => true,
                 'attr' => [
                     'class' => 'captcha_image',
-                    'placeholder' => $this->translator->trans('Type the letters'),
+                    'placeholder' => $this->translator->trans('Please type the text'),
                 ],
                 'invalid_message' => $this->translator->trans('The security code entered was incorrect.'),
             ])
             ->add('submit', SubmitType::class, [
-                'label' => $this->translator->trans('Send'),
+                'label' => $this->translator->trans('Submit'),
                 'attr' => [
                     'class' => 'btn btn--primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer',
                     'style' => 'border: none;',

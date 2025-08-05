@@ -24593,8 +24593,8 @@ msgstr "Hello %s"
 msgid "You are registered in the training %s since the %s"
 msgstr "You are registered in the training %s since the %s"
 
-msgid "You are receiving this message because you have completed a learning path with a %s% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
-msgstr "You are receiving this message because you have completed a learning path with a %s% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
+msgid "You are receiving this message because you have completed a learning path with a %s%% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
+msgstr "You are receiving this message because you have completed a learning path with a %s%% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
 
 msgid "As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary."
 msgstr "As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary."
@@ -28609,3 +28609,30 @@ msgstr "External tool deleted"
 
 msgid "You passed the time limit to see the results"
 msgstr "You passed the time limit to see the results"
+
+msgid "You're not allowed in this course"
+msgstr "You're not allowed in this course"
+
+msgid "Group not found"
+msgstr "Group not found"
+
+msgid "Session not found"
+msgstr "Session not found"
+
+msgid "You're not allowed in this session"
+msgstr "You're not allowed in this session"
+
+msgid "Course does not exist"
+msgstr "Course does not exist"
+
+msgid "The security code entered was incorrect."
+msgstr "The security code entered was incorrect."
+
+msgid "Security check"
+msgstr "Security check"
+
+msgid "New instance of recurring session created"
+msgstr "New instance of recurring session created"
+
+msgid "A new instance of the recurring session <em>%s</em> has been created. Please review the details: %s"
+msgstr "A new instance of the recurring session <em>%s</em> has been created. Please review the details: %s"

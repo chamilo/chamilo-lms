@@ -215,9 +215,9 @@ class SessionRepetitionCommand extends Command
     {
         $generalCoach = $newSession->getGeneralCoaches()->first();
         if ($generalCoach) {
-            $messageSubject = $this->translator->trans('New Session Repetition Created');
+            $messageSubject = $this->translator->trans('New instance of recurring session created');
             $messageContent = \sprintf(
-                'A new repetition of the session "%s" has been created. Please review the details: %s',
+                $this->translator->trans('A new instance of the recurring session <em>%s</em> has been created. Please review the details: %s'),
                 $newSession->getTitle(),
                 $this->generateSessionSummaryLink($newSession)
             );

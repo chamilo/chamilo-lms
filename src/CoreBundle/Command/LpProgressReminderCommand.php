@@ -272,7 +272,7 @@ class LpProgressReminderCommand extends Command
 
         $hello = $this->translator->trans('Hello %s');
         $youAreRegCourse = $this->translator->trans('You are registered in the training %s since the %s');
-        $thisMessageIsAbout = $this->translator->trans('You are receiving this message because you have completed a learning path with a %s progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer.');
+        $thisMessageIsAbout = $this->translator->trans('You are receiving this message because you have completed a learning path with a %s%% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer.');
         $stepsToRemind = $this->translator->trans("As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary.");
         $lpRemindFooter = $this->translator->trans('The training center<p>%s</p>Trainers:<br/>%s');
 

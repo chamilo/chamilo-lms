@@ -28535,3 +28535,45 @@ msgstr ""
 
 msgid "Please note that you are NOT REQUIRED to fill this form. If you want to remain anonymous, we will lose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click Next."
 msgstr ""
+
+msgid "In person"
+msgstr ""
+
+msgid "Blended learning"
+msgstr ""
+
+msgid "Centralised"
+msgstr ""
+
+msgid "Score for user %d is %s"
+msgstr ""
+
+msgid "Score not set"
+msgstr ""
+
+msgid "Evaluation for external tool added"
+msgstr ""
+
+msgid "External tool"
+msgstr ""
+
+msgid "External tool added"
+msgstr ""
+
+msgid "Add external tool"
+msgstr ""
+
+msgid "External tool added: %s"
+msgstr ""
+
+msgid "External tool edited"
+msgstr ""
+
+msgid "Edit external tool"
+msgstr ""
+
+msgid "External tool deleted"
+msgstr ""
+
+msgid "You passed the time limit to see the results"
+msgstr ""

@@ -28567,3 +28567,45 @@ msgstr "By filling this form, you agree that the editor of Chamilo, the %s compa
 
 msgid "Please note that you are NOT REQUIRED to fill this form. If you want to remain anonymous, we will lose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click Next."
 msgstr "Please note that you are NOT REQUIRED to fill this form. If you want to remain anonymous, we will lose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click Next."
+
+msgid "In person"
+msgstr "In person"
+
+msgid "Blended learning"
+msgstr "Blended learning"
+
+msgid "Centralised"
+msgstr "Centralised"
+
+msgid "Score for user %d is %s"
+msgstr "Score for user %d is %s"
+
+msgid "Score not set"
+msgstr "Score not set"
+
+msgid "Evaluation for external tool added"
+msgstr "Evaluation for external tool added"
+
+msgid "External tool"
+msgstr "External tool"
+
+msgid "External tool added"
+msgstr "External tool added"
+
+msgid "Add external tool"
+msgstr "Add external tool"
+
+msgid "External tool added: %s"
+msgstr "External tool added: %s"
+
+msgid "External tool edited"
+msgstr "External tool edited"
+
+msgid "Edit external tool"
+msgstr "Edit external tool"
+
+msgid "External tool deleted"
+msgstr "External tool deleted"
+
+msgid "You passed the time limit to see the results"
+msgstr "You passed the time limit to see the results"

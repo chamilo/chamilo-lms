@@ -35,7 +35,7 @@ function fill_users()
             null,
             $user['active']
         );
-    	$output[$i]['line-info'] = $res ? get_lang('Inserted') : get_lang('Not Inserted');
+    	$output[$i]['line-info'] = $res ? get_lang('Inserted') : get_lang('Not inserted');
     }
 
     return $output;

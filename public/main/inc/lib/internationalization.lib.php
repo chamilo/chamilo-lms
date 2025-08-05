@@ -263,9 +263,7 @@ function api_get_utc_datetime($time = null, $returnNullIfInvalidDate = false, $r
         return $time;
     }
     try {
-        $fromTimezone = api_get_timezone();
-        $date = new DateTime($time, new DateTimezone($fromTimezone));
-        $date->setTimezone(new DateTimeZone('UTC'));
+        $date = new DateTime($time, new DateTimezone('UTC'));
         if ($returnObj) {
             return $date;
         } else {

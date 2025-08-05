@@ -28652,3 +28652,48 @@ msgstr ""
 
 msgid "Subscribing..."
 msgstr ""
+
+msgid "You are receiving a copy because you are one of the course coaches"
+msgstr ""
+
+msgid "You are receiving a copy because you are the course coach"
+msgstr ""
+
+msgid "This group is closed."
+msgstr ""
+
+msgid "Your request has been received."
+msgstr ""
+
+msgid "Legal consent revoked successfully."
+msgstr ""
+
+msgid "User ID not provided"
+msgstr ""
+
+msgid "Terms accepted successfully."
+msgstr ""
+
+msgid "File not found for resource"
+msgstr ""
+
+msgid "Resource not found"
+msgstr ""
+
+msgid "No files"
+msgstr ""
+
+msgid "Unauthorised access to resource"
+msgstr ""
+
+msgid "Resource file not found for the given resource node"
+msgstr ""
+
+msgid "You have been enrolled in a new course"
+msgstr ""
+
+msgid "Remove users from URLs with a CSV file"
+msgstr ""
+
+msgid "Assign users to URLs from CSV"
+msgstr ""

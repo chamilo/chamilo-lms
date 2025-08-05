@@ -14353,7 +14353,7 @@ msgid "You should write a message"
 msgstr "You should write a message"
 
 msgid "This message is to inform you that has created a new course on platform"
-msgstr "This message is to inform you that has created a new course on platform"
+msgstr "This message is to inform you that a new course has been created on the platform"
 
 msgid "New course created in"
 msgstr "New course created in"
@@ -28684,3 +28684,48 @@ msgstr "Loading..."
 
 msgid "Subscribing..."
 msgstr "Subscribing..."
+
+msgid "You are receiving a copy because you are one of the course coaches"
+msgstr "You are receiving a copy because you are one of the course coaches"
+
+msgid "You are receiving a copy because you are the course coach"
+msgstr "You are receiving a copy because you are the course coach"
+
+msgid "This group is closed."
+msgstr "This group is closed."
+
+msgid "Your request has been received."
+msgstr "Your request has been received."
+
+msgid "Legal consent revoked successfully."
+msgstr "Legal consent revoked successfully."
+
+msgid "User ID not provided"
+msgstr "User ID not provided"
+
+msgid "Terms accepted successfully."
+msgstr "Terms accepted successfully."
+
+msgid "File not found for resource"
+msgstr "File not found for resource"
+
+msgid "Resource not found"
+msgstr "Resource not found"
+
+msgid "No files"
+msgstr "No files"
+
+msgid "Unauthorised access to resource"
+msgstr "Unauthorised access to resource"
+
+msgid "Resource file not found for the given resource node"
+msgstr "Resource file not found for the given resource node"
+
+msgid "You have been enrolled in a new course"
+msgstr "You have been enrolled in a new course"
+
+msgid "Remove users from URLs with a CSV file"
+msgstr "Remove users from URLs with a CSV file"
+
+msgid "Assign users to URLs from CSV"
+msgstr "Assign users to URLs from CSV"

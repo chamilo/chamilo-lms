@@ -124,7 +124,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }*/
 
         $used = array_sum($data);
-        $labels[] = $this->trans('Free');
+        $labels[] = $this->trans('Free space on disk');
         $data[] = $totalSize - $used;
 
         return $this->render(

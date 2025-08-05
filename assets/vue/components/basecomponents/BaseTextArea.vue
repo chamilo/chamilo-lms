@@ -10,28 +10,26 @@
         type="text"
         @update:model-value="$emit('update:modelValue', $event)"
       />
-      <label
-        v-t="Label"
-        :for="id"
-      />
+      <label :for="id">{{ t(label) }}</label>
     </div>
     <slot name="errors">
-      <small
-        v-if="isInvalid"
-        v-t="Error message"
-        class="p-error"
-      />
+      <small v-if="isInvalid" class="p-error">
+        {{ t(errorText || 'Error message') }}
+      </small>
     </slot>
   </div>
 </template>
 
 <script setup>
 import Textarea from "primevue/textarea"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const props = defineProps({
   id: {
     type: String,
-    require: true,
+    required: true,
     default: "",
   },
   label: {

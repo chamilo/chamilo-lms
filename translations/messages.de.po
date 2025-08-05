@@ -14747,10 +14747,10 @@ msgid "Export courses"
 msgstr "Kurse exportieren"
 
 msgid "Is administrator"
-msgstr "Ist Admininstrator"
+msgstr "Ist Administrator"
 
 msgid "Is not administrator"
-msgstr "Ist nicht Admininstrator"
+msgstr "Ist nicht Administrator"
 
 msgid "Add time limit"
 msgstr "Zeit-Limit hinzufügen"
